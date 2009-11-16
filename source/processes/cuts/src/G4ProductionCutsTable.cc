@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.25 2009-11-11 03:20:22 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.26 2009-11-16 07:59:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -251,9 +251,9 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
   }
   if (verboseLevel>2) {
     timer.Stop();
-    std::cout << "G4ProductionCutsTable::UpdateCoupleTable "
+    G4cout << "G4ProductionCutsTable::UpdateCoupleTable "
 	      << "  elapsed time for calculation of  energy cuts " << G4endl;
-    std::cout << timer <<G4endl;
+    G4cout << timer <<G4endl;
   }
 
   // resize Range/Energy cuts double vectors if new couple is made
