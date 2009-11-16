@@ -66,7 +66,6 @@ Setup for analysis with iAIDA : for details, see Appendix 2 of the Users Guide f
 Definition of environment variables (assuming AIDA_INSTALL is the directory where you installed iAIDA):
 
 setenv PATH ${PATH}:"$AIDA_INSTALL/bin"
-eval `aida-config -r csh`                                                        |
 
 The following keywords can be used in UltraAnalysisManager.cc, 
 in order to produce HBOOK, AIDA or ROOT histograms.
@@ -108,5 +107,5 @@ to run it :  $G4WORKDIR/bin/Linux-g++/Ultra Visualisation.mac
 for comments and questions: bernardo@lip.pt
 for more info http://www.ge.infn.it/geant4/examples/
 
-last modified:  B. Tome 15/05/2009
+last modified:  B. Tome 16/11/2009
 created by   :  B. Tome and M.C. Espirito Santo 20/05/2004
