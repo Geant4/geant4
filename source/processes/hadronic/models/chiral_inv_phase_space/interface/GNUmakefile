@@ -25,6 +25,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \

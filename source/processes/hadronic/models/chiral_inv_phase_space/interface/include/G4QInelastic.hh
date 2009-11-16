@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.hh,v 1.18 2009-10-30 10:49:34 mkossov Exp $
+// $Id: G4QInelastic.hh,v 1.1 2009-11-16 18:43:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ---------------- G4QCollision header ----------------
+//      ---------------- G4QInelastic header ----------------
 //                 by Mikhail Kossov, December 2003.
-//  Header of G4QCollision class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
+//  Header of G4QInelastic class (mu-,pi-,K-) of the CHIPS Simulation Branch in GEANT4
 // -------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Hadron-Nuclear Inelastic Interaction Prosesses.
 // -------------------------------------------------------------------------------
@@ -71,8 +71,8 @@
 // nuclear interactions within the framework of the CHIPS model.
 // ---------------------------------------------------------------------------
 
-#ifndef G4QCollision_hh
-#define G4QCollision_hh
+#ifndef G4QInelastic_hh
+#define G4QInelastic_hh
 
 // GEANT4 Headers
 #include "globals.hh"
@@ -116,21 +116,21 @@
 #include "G4QANuANuNuclearCrossSection.hh"
 #include "G4QNeutronNuclearCrossSection.hh"
 #include "G4QNeutronCaptureRatio.hh"
-#include "G4QInelastic.hh"
+#include "G4QIonIonCollision.hh"
 #include "G4QFragmentation.hh"
 #include "G4QuasiFreeRatios.hh"
 #include "G4QPDGToG4Particle.hh"
 #include <vector>
 
-class G4QCollision : public G4VDiscreteProcess
+class G4QInelastic : public G4VDiscreteProcess
 {
 public:
 
   // Constructor
-  G4QCollision(const G4String& processName ="CHIPSNuclearCollision");
+  G4QInelastic(const G4String& processName ="CHIPS_Inelastic");
 
   // Destructor
-  ~G4QCollision();
+  ~G4QInelastic();
 
   G4bool IsApplicable(const G4ParticleDefinition& particle);
 
@@ -177,10 +177,10 @@ public:
 private:
 
   // Hide assignment operator as private 
-  G4QCollision& operator=(const G4QCollision &right);
+  G4QInelastic& operator=(const G4QInelastic &right);
 
   // Copy constructor
-  G4QCollision(const G4QCollision&);
+  G4QInelastic(const G4QInelastic&);
 
   // Random direction in two dimentions pair(first=sin(phi), second=cos(phi))
   std::pair<G4double,G4double> Random2DDirection();
