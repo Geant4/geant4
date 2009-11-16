@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2009-11-13 15:37:34 bmorgan Exp $
+$Id: History,v 1.28 2009-11-16 12:20:41 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16th November 2009 Ben Morgan
+- Configure: Regenerated following changes below.
+- U/g4_14_g3tog4: Cernlib not required for build, so remove comment about this
+in user question.
+
 13th November 2009 Ben Morgan
 - Configure: Regenerated following changes below.
 - U/Qt.U: Fix of Bug #1079, prevents selection of lib64 on true 32bit
