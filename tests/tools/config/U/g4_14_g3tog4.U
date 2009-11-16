@@ -17,7 +17,6 @@ g4message=`cat << EOM
 
 The utility module 'g3tog4' will be built by setting this variable. 
 NOTE: it requires a valid FORTRAN compiler to be installed on your system.
-
 Enable build of G3toG4 module?
 EOM`
 
