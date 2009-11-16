@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2009-10-29 16:19:59 maire Exp $
+$Id: History,v 1.32 2009-11-16 17:51:44 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-09 mma (fano-V09-02-03)
+- PhysListEmStandard_option3 : use UrbanMscModel93
      
 29-10-09 mma (fano-V09-02-02)
 - new PhysListEmStandard_GS for GoudsmitSaundersonMsc model

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_option3.cc,v 1.1 2009-10-25 19:06:26 maire Exp $
+// $Id: PhysListEmStandard_option3.cc,v 1.2 2009-11-16 17:51:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
+#include "G4UrbanMscModel93.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -92,21 +93,25 @@ void PhysListEmStandard_option3::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
+            
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
                          
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
 	    
     } else if (particleName == "e+") {
       //positron
-      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
+            
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
                                
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(pIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 3);
