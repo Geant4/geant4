@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2009-11-16 16:33:26 gunter Exp $
+$Id: History,v 1.43 2009-11-16 16:57:31 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.42 2009-11-16 16:33:26 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Nov 2009  G.Folger                (testtools-QMtest-V09-02-34)
+- update name of executable for test60, as changed in tag test60-V09-02-05
 
 16-Nov 2009  G.Folger                (testtools-QMtest-V09-02-33)
 - in test12 add testing QGS_BIC
