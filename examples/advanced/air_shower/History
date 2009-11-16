@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2009-05-15 00:46:33 tomezb Exp $
+$Id: History,v 1.22 2009-11-16 23:37:41 tomezb Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,8 +7,14 @@ $Id: History,v 1.21 2009-05-15 00:46:33 tomezb Exp $
 
                            History file
                            ------------
+16.11.2009 -- B. Tomé,
+              Tag air_shower-V09-02-00
+              Changed UltraPhysicsList.cc to use new processes G4eMultipleScattering, G4MuMultipleScattering
+              and G4hMultipleScattering 
+              Tested example air_shower with Geant4 tag geant4-09-02-ref-10
+
 15.05.2009 -- B. Tomé, 
-              Updated README file. Tag air_shower-V09-02-00
+              Updated README file. Tag air_shower-V09-01-00
               Tested example with Geant4 tag geant4-09-02-ref-04 and iAIDA-1.0.14
 
 10.12.2008 -- G.A.P.Cirrone, Tag: air_shower-V09-01-05
