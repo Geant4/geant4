@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.90 2009-11-14 17:10:43 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.91 2009-11-16 13:51:08 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,9 +117,11 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 }
 
 G4VSceneHandler::~G4VSceneHandler () {
-  G4ViewerListIterator i;
-  for (i = fViewerList.begin(); i != fViewerList.end(); ++i) {
-    delete *i;
+  G4VViewer* last;
+  while( ! fViewerList.empty() ) {
+    last = fViewerList.back();
+    fViewerList.pop_back();
+    delete last;
   }
 }
 
