@@ -8,6 +8,8 @@
     <set>
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT</text>
       <text>bench-calo-HadCalCMS-run1-QGS_BIC</text>
+      <text>bench-calo-FullCMS-run1-QGSP_BERT</text>
+      <text>bench-calo-FullCMS-run1-LHEP</text>
       <text>exam-adv-amsEcal-run</text>
       <text>exam-adv-cosmicray_charging-run</text>
       <text>exam-adv-microbeam-run</text>

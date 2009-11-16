@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2009-11-09 17:33:42 gunter Exp $
+$Id: History,v 1.41 2009-11-16 10:20:01 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.40 2009-11-09 17:33:42 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Nov 2009  G.Folger                (testtools-QMtest-V09-02-32)
+- correct input file name to run1.g4 for simplified calorimeter in benchmarks
+- add FullCMS calorimeter from benchmarks
 
 09-Nov 2009  G.Folger                (testtools-QMtest-V09-02-31)
 - added simplified calo from benchmarks, using run1.in for QGSP_BERT & QGS_BIC
