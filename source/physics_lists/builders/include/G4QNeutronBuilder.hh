@@ -43,7 +43,7 @@
 #include "globals.hh"
 
 #include "G4NeutronInelasticProcess.hh"
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
 #include "G4QDiscProcessMixer.hh"
 #include "G4VNeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"
@@ -66,7 +66,7 @@ private:
   G4QDiscProcessMixer*             theProcessMixer;
   std::vector<G4VNeutronBuilder *> theModelCollections;
   G4NeutronInelasticProcess*       theNeutronInelastic;
-  G4QCollision*                    theCHIPSInelastic;    
+  G4QInelastic*                    theCHIPSInelastic;    
   
   G4bool wasActivated;
 

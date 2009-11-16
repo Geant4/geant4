@@ -23,51 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QProtonBuilder.cc,v 1.4 2009-11-16 19:12:10 mkossov Exp $
+// $Id: G4QCaptureAtRestPhysics.cc,v 1.1 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QProtonBuilder
+// ClassName:   G4QCaptureAtRestPhysics
 //
-// Author: 2009 M. Kosov
+// Author: 16 Nov 2009 M. Kosov
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
-// Short description: for G4QDiscProcessMixer use in the QGSC_CHIPS physics list
-//-----------------------------------------------------------------------------
 //
-#include "G4QProtonBuilder.hh"
 
-G4QProtonBuilder::G4QProtonBuilder(): wasActivated(false)  
+#include "G4QCaptureAtRestPhysics.hh"
+
+G4QCaptureAtRestPhysics::G4QCaptureAtRestPhysics(const G4String& name, G4int ver)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
-  theProtonInelastic = new G4ProtonInelasticProcess;
-  theCHIPSInelastic  = new G4QInelastic;
-  const G4String& processName = "MixedProtonInelasticProcess";
-  const G4ParticleDefinition* proj = G4Proton::Proton();
-  theProcessMixer= new G4QDiscProcessMixer(processName, proj);
+  if(verbose > 1) G4cout << "###> G4QCaptureAtRestPhysics is initialized" << G4endl;
 }
 
-G4QProtonBuilder::~G4QProtonBuilder() 
+G4QCaptureAtRestPhysics::~G4QCaptureAtRestPhysics()
 {
-  delete theProcessMixer;
-  delete theCHIPSInelastic;
-  delete theProtonInelastic;
+  if(wasActivated) delete captureProcess;
 }
 
-void G4QProtonBuilder::Build()
+void G4QCaptureAtRestPhysics::ConstructParticle()
 {
+// G4cout << "G4QCaptureAtRestPhysics::ConstructParticle" << G4endl;
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
+
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
+
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
+
+}
+
+void G4QCaptureAtRestPhysics::ConstructProcess()
+{
+  if(verbose>1) G4cout<<"###> G4QCaptureAtRestPhysics::ConstructProcess: "<<wasActivated
+                      <<G4endl;
+  if(wasActivated) return;
   wasActivated = true;
-  std::vector<G4VProtonBuilder *>::iterator i;
-  for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
+  captureProcess = new G4QCaptureAtRest();
+
+  // Add Stopping Process
+  G4ParticleDefinition* particle=0;
+  G4ProcessManager* pmanager=0;
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )
   {
-    (*i)->Build(theProtonInelastic);
+    particle = theParticleIterator->value();
+    pmanager = particle->GetProcessManager();
+    if(particle->GetPDGCharge() < 0. && particle != G4Electron::Electron() &&
+       !(particle->IsShortLived()) && captureProcess->IsApplicable(*particle) ) 
+    { 
+      pmanager->AddRestProcess(captureProcess);
+      if(verbose > 1) G4cout << "###> G4QCaptureAtRestPhysics is added for " 
+                             <<particle->GetParticleName() << G4endl;
+    }
   }
-  G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-  theProcessMixer->AddDiscreteProcess(theProtonInelastic, 1.E8); // the second part is fake
-  theProcessMixer->AddDiscreteProcess(theCHIPSInelastic, 290*megaelectronvolt);
-  theProcMan->AddDiscreteProcess(theProcessMixer);
 }
 
-// 2009 by M. Kosov
+

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPhotoNuclearPhysics.cc,v 1.1 2009-11-13 18:50:14 mkossov Exp $
+// $Id: G4QPhotoNuclearPhysics.cc,v 1.2 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -48,6 +48,15 @@ G4QPhotoNuclearPhysics::G4QPhotoNuclearPhysics(const G4String& name):
 {
   theMessenger = G4QMessenger::GetPointer();
   theMessenger->Add(this);
+}
+
+G4QPhotoNuclearPhysics::~G4QPhotoNuclearPhysics()
+{
+  if(wasBuilt)
+  {
+    delete inelastic;
+    if(synchrOn) delete synchrad;
+  }
 }
 
 void G4QPhotoNuclearPhysics::SetSynchRadOnOff(G4String& newSwitch)
@@ -106,12 +115,23 @@ void G4QPhotoNuclearPhysics::ConstructParticle()
   G4MuonMinus::MuonMinus();
   G4TauPlus::TauPlus();
   G4TauMinus::TauMinus();
+  if (synchrOn)
+  {
+    G4MesonConstructor pMesonConstructor;
+    pMesonConstructor.ConstructParticle();
+
+    G4BaryonConstructor pBaryonConstructor;
+    pBaryonConstructor.ConstructParticle();
+  }
 }
 
 void G4QPhotoNuclearPhysics::ConstructProcess()
 {
   if(wasBuilt) return;
   wasBuilt = true;
+
+  inelastic = new G4QInelastic("photoNuclear");
+  inelastic->SetPhotNucBias(photoNucBias);
 
   if (synchrOn)   BuildSynchRad();
   if (gamNucOn)   BuildGammaNuclear();
@@ -124,12 +144,8 @@ void G4QPhotoNuclearPhysics::BuildGammaNuclear()
 {
   if(GamNucActivated) return;
   GamNucActivated = true;
-  G4ProcessManager * pManager = 0;
-
-  pManager  = G4Gamma::Gamma()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("gammaNuclear");
-  process->SetPhotNucBias(photoNucBias);
-  pManager->AddDiscreteProcess(process);
+  G4ProcessManager* pManager  = G4Gamma::Gamma()->GetProcessManager();
+  pManager->AddDiscreteProcess(inelastic);
 }
 
 void G4QPhotoNuclearPhysics::BuildElectroNuclear()
@@ -139,13 +155,10 @@ void G4QPhotoNuclearPhysics::BuildElectroNuclear()
   G4ProcessManager * pManager = 0;
 
   pManager  = G4Electron::Electron()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("electronNuclear");
-  process->SetPhotNucBias(photoNucBias); // enough only once (static)
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 
   pManager  = G4Positron::Positron()->GetProcessManager();
-  process = new G4QCollision("positronNuclear");
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 }
 
 void G4QPhotoNuclearPhysics::BuildMuonNuclear()
@@ -155,13 +168,10 @@ void G4QPhotoNuclearPhysics::BuildMuonNuclear()
   G4ProcessManager * pManager = 0;
 
   pManager  = G4MuonPlus::MuonPlus()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("muPlusNuclear");
-  process->SetPhotNucBias(photoNucBias); // enough only once (static)
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 
   pManager  = G4MuonMinus::MuonMinus()->GetProcessManager();
-  process = new G4QCollision("muMinusNuclear");
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 }
 
 void G4QPhotoNuclearPhysics::BuildTauNuclear()
@@ -171,13 +181,10 @@ void G4QPhotoNuclearPhysics::BuildTauNuclear()
   G4ProcessManager * pManager = 0;
 
   pManager  = G4TauPlus::TauPlus()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("tauPlusNuclear");
-  process->SetPhotNucBias(photoNucBias); // enough only once (static)
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 
   pManager  = G4TauMinus::TauMinus()->GetProcessManager();
-  process = new G4QCollision("muMinusNuclear");
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 }
 
 // The CHIPS Synchrotron radiation process is working for all charged particles
@@ -185,7 +192,7 @@ void G4QPhotoNuclearPhysics::BuildSynchRad()
 {
   if(SynchRActivated) return;
   SynchRActivated = true;
-
+  synchrad = new G4QSynchRad();
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -193,8 +200,7 @@ void G4QPhotoNuclearPhysics::BuildSynchRad()
     if(charge != 0.0)
     {
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4QSynchRad* sr = new G4QSynchRad();
-      pmanager->AddDiscreteProcess(sr);
+      pmanager->AddDiscreteProcess(synchrad);
     }
   }
 }

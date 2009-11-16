@@ -23,51 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QProtonBuilder.cc,v 1.4 2009-11-16 19:12:10 mkossov Exp $
+// $Id: G4QCaptureAtRestPhysics.hh,v 1.1 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QProtonBuilder
+// ClassName:   G4QCaptureAtRestPhysics
 //
-// Author: 2009 M. Kosov
+// Author: 16 Nov 2009 M. Kosov
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
-// Short description: for G4QDiscProcessMixer use in the QGSC_CHIPS physics list
-//-----------------------------------------------------------------------------
 //
-#include "G4QProtonBuilder.hh"
 
-G4QProtonBuilder::G4QProtonBuilder(): wasActivated(false)  
+#ifndef G4QCaptureAtRestPhysics_h
+#define G4QCaptureAtRestPhysics_h 1
+
+#include "globals.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Electron.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4QCaptureAtRest.hh"
+
+class G4QCaptureAtRest;
+
+class G4QCaptureAtRestPhysics : public G4VPhysicsConstructor
 {
-  theProtonInelastic = new G4ProtonInelasticProcess;
-  theCHIPSInelastic  = new G4QInelastic;
-  const G4String& processName = "MixedProtonInelasticProcess";
-  const G4ParticleDefinition* proj = G4Proton::Proton();
-  theProcessMixer= new G4QDiscProcessMixer(processName, proj);
-}
+public: 
+  G4QCaptureAtRestPhysics(const G4String& name = "nuclear_capture", G4int ver = 1);
+  virtual ~G4QCaptureAtRestPhysics();
 
-G4QProtonBuilder::~G4QProtonBuilder() 
-{
-  delete theProcessMixer;
-  delete theCHIPSInelastic;
-  delete theProtonInelastic;
-}
+public: 
+  // This method will be invoked in the Construct() method. 
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  virtual void ConstructProcess();
 
-void G4QProtonBuilder::Build()
-{
-  wasActivated = true;
-  std::vector<G4VProtonBuilder *>::iterator i;
-  for(i=theModelCollections.begin(); i!=theModelCollections.end(); i++)
-  {
-    (*i)->Build(theProtonInelastic);
-  }
-  G4ProcessManager * theProcMan = G4Proton::Proton()->GetProcessManager();
-  theProcessMixer->AddDiscreteProcess(theProtonInelastic, 1.E8); // the second part is fake
-  theProcessMixer->AddDiscreteProcess(theCHIPSInelastic, 290*megaelectronvolt);
-  theProcMan->AddDiscreteProcess(theProcessMixer);
-}
+private:
 
-// 2009 by M. Kosov
+  G4QCaptureAtRest* captureProcess;
+
+  G4int    verbose;
+  G4bool   wasActivated;
+};
+
+#endif

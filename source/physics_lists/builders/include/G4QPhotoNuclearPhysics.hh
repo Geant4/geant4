@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPhotoNuclearPhysics.hh,v 1.1 2009-11-13 18:50:14 mkossov Exp $
+// $Id: G4QPhotoNuclearPhysics.hh,v 1.2 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "G4QMessenger.hh"
 
 #include "G4QSynchRad.hh"
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -57,6 +57,8 @@
 #include "G4MuonMinus.hh"
 #include "G4TauPlus.hh"
 #include "G4TauMinus.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4ProcessManager.hh"
 
 
@@ -64,7 +66,7 @@ class G4QPhotoNuclearPhysics : public G4VPhysicsConstructor
 {
 public:
   G4QPhotoNuclearPhysics(const G4String& name = "CHIPS photo-nuclear");
-  virtual ~G4QPhotoNuclearPhysics() {}
+  virtual ~G4QPhotoNuclearPhysics();
 
   void ConstructParticle();
   void ConstructProcess();
@@ -105,6 +107,8 @@ private:
   G4bool   tauNucOn;                    // Switch flag for the electron-nuclear process
   G4double photoNucBias;                // Biasing factor for photo-nuclear processes
 
+  G4QInelastic*           inelastic;
+  G4QSynchRad*            synchrad;
   G4QMessenger*           theMessenger;
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QNeutrinoPhysics.hh,v 1.1 2009-11-13 18:50:14 mkossov Exp $
+// $Id: G4QNeutrinoPhysics.hh,v 1.2 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,7 +45,7 @@
 
 #include "G4QMessenger.hh"
 
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
 
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
@@ -60,7 +60,7 @@ class G4QNeutrinoPhysics : public G4VPhysicsConstructor
 {
 public:
   G4QNeutrinoPhysics(const G4String& name = "CHIPS neutrino-nuclear");
-  virtual ~G4QNeutrinoPhysics() {}
+  virtual ~G4QNeutrinoPhysics();
 
   void ConstructParticle();
   void ConstructProcess();
@@ -89,6 +89,7 @@ private:
   G4bool nuTauOn;
   G4double nuNucBias;                // Biasing factor for neutrino-nuclear processes
 
+  G4QInelastic*            inelastic;
   G4QMessenger*            theMessenger;
 };
 

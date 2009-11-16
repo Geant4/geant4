@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QNeutrinoPhysics.cc,v 1.1 2009-11-13 18:50:14 mkossov Exp $
+// $Id: G4QNeutrinoPhysics.cc,v 1.2 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -46,6 +46,11 @@ G4QNeutrinoPhysics::G4QNeutrinoPhysics(const G4String& name):
 {
   theMessenger = G4QMessenger::GetPointer();
   theMessenger->Add(this);
+}
+
+G4QNeutrinoPhysics::~G4QNeutrinoPhysics()
+{
+  if(wasBuilt) delete inelastic;
 }
 
 void G4QNeutrinoPhysics::ConstructParticle()
@@ -90,6 +95,8 @@ void G4QNeutrinoPhysics::ConstructProcess()
   if(wasBuilt) return;
   wasBuilt = true;
 
+  inelastic = new G4QInelastic("neutrinoNuclear");
+  inelastic->SetWeakNucBias(nuNucBias); // enough only once (static)
   if (nuEleOn)   BuildNuEleNuclear();
   if (nuMuoOn)   BuildNuMuoNuclear();
   if (nuTauOn)   BuildNuTauNuclear();
@@ -102,13 +109,10 @@ void G4QNeutrinoPhysics::BuildNuEleNuclear()
   G4ProcessManager * pManager = 0;
 
   pManager  = G4NeutrinoE::NeutrinoE()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("nuENuclear");
-  process->SetWeakNucBias(nuNucBias); // enough only once (static)
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 
   pManager  = G4AntiNeutrinoE::AntiNeutrinoE()->GetProcessManager();
-  process = new G4QCollision("antiNuENuclear");
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 }
 
 void G4QNeutrinoPhysics::BuildNuMuoNuclear()
@@ -118,13 +122,10 @@ void G4QNeutrinoPhysics::BuildNuMuoNuclear()
   G4ProcessManager * pManager = 0;
 
   pManager  = G4NeutrinoMu::NeutrinoMu()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("nuMuNuclear");
-  process->SetWeakNucBias(nuNucBias); // enough only once (static)
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 
   pManager  = G4AntiNeutrinoMu::AntiNeutrinoMu()->GetProcessManager();
-  process = new G4QCollision("antiNuMuNuclear");
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 }
 
 void G4QNeutrinoPhysics::BuildNuTauNuclear()
@@ -134,11 +135,8 @@ void G4QNeutrinoPhysics::BuildNuTauNuclear()
   G4ProcessManager * pManager = 0;
 
   pManager  = G4NeutrinoTau::NeutrinoTau()->GetProcessManager();
-  G4QCollision* process = new G4QCollision("nuTauNuclear");
-  process->SetWeakNucBias(nuNucBias); // enough only once (static)
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 
   pManager  = G4AntiNeutrinoTau::AntiNeutrinoTau()->GetProcessManager();
-  process = new G4QCollision("antiNuTauNuclear");
-  pManager->AddDiscreteProcess(process);
+  pManager->AddDiscreteProcess(inelastic);
 }

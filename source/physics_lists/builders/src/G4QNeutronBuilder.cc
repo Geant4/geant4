@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QNeutronBuilder.cc,v 1.3 2009-05-25 18:24:23 mkossov Exp $
+// $Id: G4QNeutronBuilder.cc,v 1.4 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -43,7 +43,7 @@
 G4QNeutronBuilder::G4QNeutronBuilder(): wasActivated(false) 
 {
   theNeutronInelastic = new G4NeutronInelasticProcess;
-  theCHIPSInelastic  = new G4QCollision;
+  theCHIPSInelastic  = new G4QInelastic;
   const G4String& processName = "MixedNeutronInelasticProcess";
   const G4ParticleDefinition* proj = G4Neutron::Neutron();
   theProcessMixer= new G4QDiscProcessMixer(processName, proj);

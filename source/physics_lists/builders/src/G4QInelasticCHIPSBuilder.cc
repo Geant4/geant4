@@ -33,12 +33,12 @@
 //
 //----------------------------------------------------------------------------
 //
-// Short comment: This is a physics list of only one model G4QCollision for
+// Short comment: This is a physics list of only one model G4QInelastic for
 // all hadron-nuclear interactions at all energies. There is no model- or
 // process-mixing, while it is possible to merge (G4QProcessMixer) the G4_HP
-// processes at low energies if the G4QCollision, which includes all necessary
+// processes at low energies if the G4QInelastic, which includes all necessary
 // nA inelastic processes, is found to be not saficient for some applications.
-// In this particular builder the G4QCollision process is attached to all
+// In this particular builder the G4QInelastic process is attached to all
 // hadrons other than nucleons or pi and K-mesons. Previously it could be done
 // only using the LHEP parameterized package or in a temporary form by the
 // QGSC model conditionally extended (just not crashing) to low energies.
@@ -56,25 +56,22 @@ G4QInelasticCHIPSBuilder::G4QInelasticCHIPSBuilder(G4int ver):
   theParticleIterator = theParticleTable->GetIterator();
 }
 
-G4QInelasticCHIPSBuilder::~G4QInelasticCHIPSBuilder() {}
+G4QInelasticCHIPSBuilder::~G4QInelasticCHIPSBuilder()
+{
+  if(wasActivated) delete inelastic;
+}
 
 void G4QInelasticCHIPSBuilder::Build()
 {
+  if(wasActivated) return;
   wasActivated = true;
-
   theParticleIterator->reset();
+  inelastic = new G4QInelastic();
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4String pname = particle->GetParticleName();
-    //if(pname == "kaon-" || pname == "kaon+" || pname == "kaon0S"  ||  pname == "kaon0L"||
-    //   pname == "pi-"   || pname == "pi+"   || pname == "neutron" ||  pname == "proton" )
-    //{
-    //  if(verbose>1)G4cout<<"** G4QInelCHIPSBuilder: "<<pname<<" already defined"<<G4endl;
-    //}
-    //else if(
-    if(
-       pname == "kaon-" || pname == "kaon+" || pname == "kaon0S"  ||  pname == "kaon0L" ||
+    if(pname == "kaon-" || pname == "kaon+" || pname == "kaon0S"  ||  pname == "kaon0L" ||
        pname == "pi-"   || pname == "pi+"   || pname == "neutron" ||  pname == "proton" ||
        pname == "lambda"       || pname == "sigma+"       || pname == "sigma0"       ||
        pname == "sigma-"       || pname == "xi0" || pname == "xi-" || pname == "omega-" ||
@@ -84,10 +81,9 @@ void G4QInelasticCHIPSBuilder::Build()
     {
       if(verbose>1)G4cout<< "__G4QInelCHIPSBuilder: "<< pname <<" is defined here"<<G4endl;
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4QCollision* hp = new G4QCollision();
-      pmanager->AddDiscreteProcess(hp);
-      if(verbose>1)
-      G4cout<<"^G4QInelCHIPSBuilder: "<<hp->GetProcessName()<<" added for "<<pname<<G4endl;
+      pmanager->AddDiscreteProcess(inelastic);
+      if(verbose>1) G4cout<<"###> G4QInelasticCHIPSBuilder: "<<inelastic->GetProcessName()
+                          <<" is added for "<<pname<<G4endl;
     }
   }
 }

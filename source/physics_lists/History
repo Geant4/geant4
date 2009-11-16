@@ -1,4 +1,4 @@
-q$Id: History,v 1.107 2009-11-13 18:50:14 mkossov Exp $
+q$Id: History,v 1.108 2009-11-16 19:12:10 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-11-2009, M.Kosov                       (phys-lists-V09-02-35)
+- dependencies on split CHIPS-body and new class G4QCaptureAtRestPhysics
 
 13-11-2009, M.Kosov                       (phys-lists-V09-02-34)
 - two builders G4QNeutrinoPhysics & G4QPhotoNuclearPhysics with

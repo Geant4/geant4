@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QEmExtraPhysics.hh,v 1.1 2007-05-23 17:38:35 vnivanch Exp $
+// $Id: G4QEmExtraPhysics.hh,v 1.2 2009-11-16 19:12:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //
 // Author: 11 April 2006 V. Ivanchenko
 //
-// Modified:
+// Modified: 19 Nov 2009 M.Kosov: G4QInelastic instead of G4QCollision
 //
 //----------------------------------------------------------------------------
 //
@@ -43,7 +43,7 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class G4QCollision;
+class G4QInelastic;
 
 class G4QEmExtraPhysics : public G4VPhysicsConstructor
 {
@@ -63,7 +63,7 @@ public:
 
 private:
 
-  G4QCollision* hProcess;
+  G4QInelastic* hProcess;
 
   G4int    verbose;
   G4bool   wasActivated;

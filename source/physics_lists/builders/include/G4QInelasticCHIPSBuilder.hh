@@ -35,12 +35,12 @@
 //
 //----------------------------------------------------------------------------
 //
-// Short comment: This is a physics list of only one model G4QCollision for
+// Short comment: This is a physics list of only one model G4QInelastic for
 // all hadron-nuclear interactions at all energies. There is no model- or
 // process-mixing, while it is possible to merge (G4QProcessMixer) the G4_HP
-// processes at low energies if the G4QCollision, which includes all necessary
+// processes at low energies if the G4QInelastic, which includes all necessary
 // nA inelastic processes, is found to be not saficient for some applications.
-// In this particular builder the G4QCollision process is attached to all
+// In this particular builder the G4QInelastic process is attached to all
 // hadrons other than nucleons or pi and K-mesons. Previously it could be done
 // only using the LHEP parameterized package or in a temporary form by the
 // QGSC model conditionally extended (just not crashing) to low energies.
@@ -54,7 +54,7 @@
 #include "globals.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -77,6 +77,7 @@ class G4QInelasticCHIPSBuilder
  private:
   G4int  verbose;
   G4bool wasActivated;
+  G4QInelastic* inelastic;
 };
 // 2009 by M. Kossov
 
