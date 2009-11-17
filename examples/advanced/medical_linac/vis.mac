@@ -1,0 +1,60 @@
+/vis/scene/create
+/vis/open OGLIX
+
+/vis/drawVolume 
+
+#/vis/scene/add/volume
+
+/vis/viewer/set/viewpointThetaPhi 45 45 deg
+/vis/viewer/zoom 1
+/vis/viewer/flush
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+
+/run/beamOn 100
+# acceleratorBox
+# targetA
+# targetB
+# BeWTubePV
+# ionizationChamberTubeW1PV
+# ionizationChamberTubeP1PV
+# ionizationChamberTubeW2PV
+# ionizationChamberTubeP2PV
+# ionizationChamberTubeW3PV
+# ionizationChamberTubeP3PV
+# FFL1A_1PV
+# FFL2_1PV
+# MirrorTubePV
+# UpperCollimator
+# CylMinusCone
+# leafA0
+# leafA1
+# leafA2
+# leafA3
+# leafA4
+# leafA5
+# leafA6
+# leafA7
+# leafA8
+# leafA9
+# leafB0
+# leafB1
+# leafB2
+# leafB3
+# leafB4
+# leafB5
+# leafB6
+# leafB7
+# leafB8
+# leafB9
+# Jaws1XPV
+# Jaws2XPV
+# Jaws1YPV
+# Jaws2YPV
+# killerPlaneKPV
+
+# phmWorldPV
+# BoxInsidePV
+# boxPMMAPV
+# OutMinusInBoxPV
+

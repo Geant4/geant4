@@ -1,0 +1,53 @@
+/OnlyVisio true
+
+
+/convergence/bCompareExp true
+/convergence/fileExperimentalData Water_20x20.txt
+/convergence/minNumberOfEvents 13
+
+/general/centrePhaseSpace 0 0 215 mm
+/general/halfSizePhaseSpace 150 150 1  mm
+
+/general/bSavePhaseSpace false
+/general/bStopAtPhaseSpace false
+/general/bSaveROG true
+/general/ROGOutFile ROGHomoAcc1
+/general/PhaseSpaceOutFile PhSpA
+/general/nBeam 100000
+/general/nMaxParticlesInRamPlanePhaseSpace 10000
+/general/saving_in_Selected_Voxels_every_events 10000
+/general/saving_in_ROG_Voxels_every_events 10000
+/general/max_N_particles_in_PhSp_File 10000
+
+/primaryParticleData/nMaxParticlesInRamPhaseSpace 10000
+/primaryParticleData/nIdenticalParticles 1
+/primaryParticleData/GunMeanEnegy 6 MeV
+/primaryParticleData/GunStdEnegy 0.127 MeV
+/primaryParticleData/GunRadious 0.5 mm
+/primaryParticleData/sourceTypeName randomTarget
+/primaryParticleData/calculatedPhaseSpaceFileIN PhSp10.txt
+
+/phantom/PhantomName fullWater
+/phantom/PhantomSpecficationsFileName phan1.mac
+
+/accelerator/AcceleratorName acc1
+/accelerator/AcceleratorSpecficationsFileName acc1.mac
+
+
+####################	INFO ######################################
+
+# All possible choices
+
+# particle source
+# randomTarget // random from target
+# phaseSpace // from phase space
+
+#    Accelerators
+# acc1 // non real accelearator but working
+# 
+
+#    Phantoms
+# fullWater // water box
+# BoxInBox  // box in a box with a layer of PMMA at the exposed surface
+
+
