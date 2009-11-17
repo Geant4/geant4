@@ -582,7 +582,7 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4do
   static const std::pair<G4int, const G4double*> Z29N34=std::make_pair(34,pZ29N34);
   static const G4double pZ29N36[4]={.2E-9, 23., .01, 2.E-4};
   static const std::pair<G4int, const G4double*> Z29N36=std::make_pair(36,pZ29N36);
-  static const std::pair<G4int, const G4double*> Z29[N29]={Z29N34, Z29N34};
+  static const std::pair<G4int, const G4double*> Z29[N29]={Z29N34, Z29N36};
   //==> Zn(Z=30)
   static const G4int N30=5;
   static const G4double pZ30N34[4]={.2E-9, 140., .02, 8.E-6}; // *** only NAT mix ***
