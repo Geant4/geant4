@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.367 2009-11-17 12:07:05 gcosmo Exp $
+cvs log $Id: History,v 1.368 2009-11-17 15:17:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 2009  Gabriele Cosmo (config-V09-02-14)
+- Added include paths to new CHIPS modules.
 
 17th November 2009  Gabriele Cosmo (config-V09-02-13)
 - G4VIS_USE.gmk: fixed dependency issues on WIN32-VC for gl2ps utility
