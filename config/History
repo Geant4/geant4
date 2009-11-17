@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.365 2009-11-05 10:59:53 gcosmo Exp $
+cvs log $Id: History,v 1.366 2009-11-17 11:58:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 2009  Gabriele Cosmo (config-V09-02-13)
+- G4VIS_USE.gmk: fixed dependency issues on WIN32-VC for gl2ps utility
+  library in visualization.
+- WIN32-VC.gmk: added use32.lib to OGLLIBS to fix problems of linking
+  when G4LIB_BUILD/USE_WIN32_SESSION is not set (L.Garnier).
+- binmake.gmk: corrected inclusion of G4zlib library in link list for
+  the case of global libraries.
+- Updated Configure script and internal scripts to add new data libraries.
 
 5th November 2009  John Allison (config-V09-02-12)
 - Removed references to obsolete GAGTREE driver.
