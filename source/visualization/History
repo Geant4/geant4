@@ -1,4 +1,4 @@
-$Id: History,v 1.457 2009-11-17 17:35:31 allison Exp $
+$Id: History,v 1.458 2009-11-17 17:48:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,7 +29,9 @@ History file for visualization category
   o Many small bug fixes.
   o Enhanced functionality for gMocren driver:
     . Introduced the concept of end-of-run model.
-- opengl-V09-02-10: Fixes build problem on Windows.
+- opengl-V09-02-10: Fixes build problem with gl2ps on Windows.
+- openinventor-V09-02-03: Fixes build problem with gl2ps on Windows.
+- Tagged for vis tag.
 - visexternal-V09-02-05:
   o gl2ps: Added dependency on zlib if G4LIB_BUILD_ZLIB is set.
 
