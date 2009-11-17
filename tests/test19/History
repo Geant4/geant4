@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2009-10-12 19:30:10 mkossov Exp $
+$Id: History,v 1.10 2009-11-17 17:04:48 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 17th, 2009  Mikhail Kossov (test19-V09-02-09)
+- Magnetic field and G4QCollision -> G4QInelastic
 
 Oct 12th, 2009  Mikhail Kossov (test19-V09-02-08)
 - Inelastic cross-sections improvement
