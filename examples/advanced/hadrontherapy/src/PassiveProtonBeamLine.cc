@@ -87,14 +87,17 @@ PassiveProtonBeamLine::PassiveProtonBeamLine():
 PassiveProtonBeamLine::~PassiveProtonBeamLine()
 {
   delete passiveMessenger;
+  delete hadrontherapyDetectorConstruction;
 }
 
 G4VPhysicalVolume* PassiveProtonBeamLine::Construct()
 { 
+  // Sets default geometry and materials
   SetDimensions();
+  // Construct the whole Passive Beam Line 
   ConstructPassiveProtonBeamLine();
-  // Now H...DetectorConstruction build ONLY phantom and detector  
-  // with its associated ROGeometry
+
+  // HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
   hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom); 
 
   return physicalTreatmentRoom;
@@ -1392,7 +1395,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamFinalCollimator()
 
   logicFinalCollimator -> SetVisAttributes(yellow); 
 }
-
+/////////////////////////// MESSENGER ///////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::SetRangeShifterXPosition(G4double value)
 {

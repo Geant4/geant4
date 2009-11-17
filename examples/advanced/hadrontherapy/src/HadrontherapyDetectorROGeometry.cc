@@ -54,19 +54,22 @@
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorROGeometry::HadrontherapyDetectorROGeometry(G4String aString,
-							       G4double detectorDimX,
-							       G4double detectorDimY,
-							       G4double detectorDimZ,
-							       G4int numberOfVoxelsX,
-							       G4int numberOfVoxelsY,
-							       G4int numberOfVoxelsZ):
-  G4VReadOutGeometry(aString),
-  detectorSizeX(detectorDimX),
-  detectorSizeY(detectorDimY),
-  detectorSizeZ(detectorDimZ),
-  numberOfVoxelsAlongX(numberOfVoxelsX),
-  numberOfVoxelsAlongY(numberOfVoxelsY),
-  numberOfVoxelsAlongZ(numberOfVoxelsZ)
+								 G4ThreeVector detectorToWorldPosition,
+								 G4double detectorDimX,
+								 G4double detectorDimY,
+								 G4double detectorDimZ,
+								 G4int numberOfVoxelsX,
+								 G4int numberOfVoxelsY,
+								 G4int numberOfVoxelsZ):
+   
+    G4VReadOutGeometry(aString),
+    detectorToWorldPosition(detectorToWorldPosition),
+    detectorSizeX(detectorDimX),
+    detectorSizeY(detectorDimY),
+    detectorSizeZ(detectorDimZ),
+    numberOfVoxelsAlongX(numberOfVoxelsX),
+    numberOfVoxelsAlongY(numberOfVoxelsY),
+    numberOfVoxelsAlongZ(numberOfVoxelsZ)
 {
 }
 
@@ -118,16 +121,14 @@ G4VPhysicalVolume* HadrontherapyDetectorROGeometry::Build()
 						      0,0,0);
   
   G4VPhysicalVolume *RODetectorPhys = new G4PVPlacement(0,
-							G4ThreeVector(20.0 *mm,
-								      0.0 *mm, 
-								      0.0 *mm),
+                            detectorToWorldPosition,
 							"DetectorPhys",
 							RODetectorLog,
 							ROWorldPhys,
 							false,0);
   
   
-  // Division along X axis: the detector is devided in slices along the X axis
+  // Division along X axis: the detector is divided in slices along the X axis
   
   G4double halfXVoxelSizeX = halfDetectorSizeX/numberOfVoxelsAlongX;
   G4double halfXVoxelSizeY = halfDetectorSizeY;
@@ -151,9 +152,9 @@ G4VPhysicalVolume* HadrontherapyDetectorROGeometry::Build()
                                                               numberOfVoxelsAlongX,
                                                               voxelXThickness);
 
-  // Division along Y axis: the slices along the X axis are devided along the Y axis
+  // Division along Y axis: the slices along the X axis are divided along the Y axis
 
-  G4double halfYVoxelSizeX =  halfXVoxelSizeX;
+  G4double halfYVoxelSizeX = halfXVoxelSizeX;
   G4double halfYVoxelSizeY = halfDetectorSizeY/numberOfVoxelsAlongY;
   G4double halfYVoxelSizeZ = halfDetectorSizeZ;
   G4double voxelYThickness = 2*halfYVoxelSizeY;
@@ -175,7 +176,7 @@ G4VPhysicalVolume* HadrontherapyDetectorROGeometry::Build()
 							      numberOfVoxelsAlongY,
 							      voxelYThickness);
   
-  // Division along Z axis: the slices along the Y axis are devided along the Z axis
+  // Division along Z axis: the slices along the Y axis are divided along the Z axis
 
   G4double halfZVoxelSizeX = halfXVoxelSizeX;
   G4double halfZVoxelSizeY = halfYVoxelSizeY;

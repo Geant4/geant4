@@ -314,6 +314,9 @@ void  IAEADetectorConstruction::ConstructSensitiveDetector()
       // The Read Out Geometry is instantiated
       G4String ROGeometryName = "DetectorROGeometry";
       detectorROGeometry = new HadrontherapyDetectorROGeometry(ROGeometryName,
+							     G4ThreeVector(20. *mm, // detector to world position!
+								               0. *mm, 
+								               0. *mm),
 							     phantomDepth/2,
 							     detectorSizeY,
 							     detectorSizeZ,

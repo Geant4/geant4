@@ -64,14 +64,14 @@ HadrontherapyDetectorSD::~HadrontherapyDetectorSD()
 }
 
 void HadrontherapyDetectorSD::Initialize(G4HCofThisEvent*)
-{ 
+{
   HitsCollection = new HadrontherapyDetectorHitsCollection(sensitiveDetectorName,
 							  collectionName[0]);
 }
 
 G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
-  //The code doesen't seem to get here if we use the IAEA geometry. FIXME
+  //The code doesn't seem to get here if we use the IAEA geometry. FIXME
   if(!ROhist)
     return false;
  
@@ -91,13 +91,10 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
   G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> 
                            GetDefinition() -> GetParticleName();
 
-  if(energyDeposit != 0)                       
-    {  
-      // Create a hit with the information of position is in the detector     
-      HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
-      detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
-      HitsCollection -> insert(detectorHit);
-    }
+  // Create a hit with the information of position is in the detector     
+  HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
+  detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
+  HitsCollection -> insert(detectorHit);
 
   // Energy deposit of secondary particles along X (integrated on Y and Z)
 
@@ -105,9 +102,6 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
  HadrontherapyAnalysisManager* analysis = 
 			HadrontherapyAnalysisManager::getInstance();
 
- if(energyDeposit != 0)                       
-    {  
-   
  if(aStep -> GetTrack() -> GetTrackID()!= 1)
    {
      if (particleName == "proton")
@@ -134,7 +128,6 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
     if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
        analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
    }
-    }
 #endif
 
   return true;

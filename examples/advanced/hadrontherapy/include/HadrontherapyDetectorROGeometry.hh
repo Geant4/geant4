@@ -54,6 +54,7 @@ class HadrontherapyDetectorROGeometry : public G4VReadOutGeometry
 {
 public:
   HadrontherapyDetectorROGeometry(G4String aString,
+		         G4ThreeVector detectorPos,
 				 G4double detectorDimX,
 				 G4double detectorDimY,
 				 G4double detectorDimZ,
@@ -67,6 +68,7 @@ private:
   G4VPhysicalVolume* Build();
 
 private:  
+  const G4ThreeVector detectorToWorldPosition; 
   const G4double detectorSizeX;
   const G4double detectorSizeY; 
   const G4double detectorSizeZ;

@@ -57,10 +57,10 @@ HadrontherapyEventActionMessenger::HadrontherapyEventActionMessenger(Hadronthera
  
   DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none,charged, all");
+  DrawCmd->SetGuidance("  Choice : none,charged, all, neutral");
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
+  DrawCmd->SetCandidates("none charged all neutral");
   DrawCmd->AvailableForStates(G4State_Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/event/printEventNumber",this);

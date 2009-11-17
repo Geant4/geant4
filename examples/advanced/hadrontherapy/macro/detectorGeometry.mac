@@ -1,0 +1,107 @@
+# S.E. Mazzaglia Nov 14, 2009
+
+# Example macro file to show how to change geometric properties and voxelization of the phantom/detector
+
+#######################
+# Set of the verboses # 
+#######################
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+
+##########################
+#       Physic models    #
+##########################
+/physic/addPhysics emstandard_opt3                     # Electromagnetic model
+/physic/addPhysics elastic                             # Hadronic elastic model
+/physic/addPhysics binary                              # Hadronic inelastic model
+/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+
+# Initialize geometry and physic 
+/run/initialize
+
+# Initialize graphic system
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 30 140 deg
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate -1 # this accumulate infinite tracks 
+# zoom to phantom...
+#/vis/viewer/panTo 1.5 0.5
+#/vis/viewer/zoomTo 3
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+/physic/setCuts 0.01 mm
+/Step/waterPhantomStepMax 0.01 mm 
+
+#########################
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -2700 mm
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 10
+#########################
+
+####################################
+# Change Phantom/Detector geometry #
+####################################
+
+
+############################
+# Change Phantom geometry  #              
+############################
+# Move Phantom 10 cm forward the default position (20, 0 , 0 cm)
+# Position refers to center of phantom box respect to the center of the World
+/changePhantom/position 30. 0. 0. cm
+
+# Enlarge Phantom to (42, 40, 40 cm) respect to the default sizes (40, 40, 40 cm)
+# Null or negative parameters mean "leave it unchanged"
+/changePhantom/size 42. 0. 0. cm
+#
+/run/beamOn 300
+#
+############################
+# Change Detector geometry #
+############################
+# Change detector size along X dimension
+# "0" parameter means "leave it unchanged"
+/changeDetector/size 41. 0. 0. cm
+
+# The following line moves the detector 1 cm forward, respect to the default position inside the phantom (0, 18, 18 cm)
+# Displacement parameters refer to the lower left corner of the detector respect to that of the phantom
+# by the point of view of the beam.
+# Negative parameters means "leave it unchanged"
+/changeDetector/displacement 1. -1. -1. cm
+#
+/run/beamOn 300
+#
+###########################
+# Change Detector Voxels  #
+###########################
+#
+# Use the following line if you need more slabs along the X direction, leaving unchanged the other sizes
+# Null or negative parameters mean "leave it unchanged"
+/changeDetector/voxelSize 100. 0. 0. um
+# StepMax SHOULD not be bigger than 5% of the dose slice thickness
+/Step/waterPhantomStepMax 0.005 mm 
+
+#/vis/viewer/refresh
+/run/beamOn 300 
+

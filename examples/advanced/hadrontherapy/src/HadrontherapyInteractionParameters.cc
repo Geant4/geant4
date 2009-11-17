@@ -31,7 +31,6 @@
 #include "HadrontherapyParameterMessenger.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 
-#include "G4NistMaterialBuilder.hh"
 #include "G4UnitsTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
@@ -56,173 +55,169 @@
 
 
 HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(): 
-	data(std::cout.rdbuf()), emCal(new G4EmCalculator),
-	pMessenger(new HadrontherapyParameterMessenger(this)) 
+    nistEle(new G4NistElementBuilder(0)),													  
+    nistMat(new G4NistMaterialBuilder(nistEle, 0)),										  
+    data(std::cout.rdbuf()), emCal(new G4EmCalculator),
+    pMessenger(new HadrontherapyParameterMessenger(this)), 
+    beamFlag(false)
 {
 }
 
 HadrontherapyInteractionParameters::~HadrontherapyInteractionParameters()
 {
-	delete emCal;
     delete pMessenger; 
+    delete emCal;
+    delete nistMat; 
+    delete nistEle; 
 }
-bool HadrontherapyInteractionParameters::GetStoppingTable(G4String vararg)
+bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg)
 {
-	// load & check arguments
-	if ( !ParseArg(vararg)) { return false; }
+	// Check arguments
+	if ( !ParseArg(vararg)) return false;
 
-	// check data for writing and  kinEmax > kinEmin > 0 && npoints > 1, integer 
-	// define two dimensional dinamic array for energy-stopping power
-    
 	std::vector<G4double> energy;
 	std::vector<G4double> massDedx;
-	G4double dedxtot ;
+	G4double dedxtot;
 
-
-	// log scale (remember to add linear scale algo also)
-    
-	// compute data
-	if (kinEmin != kinEmax){
-        G4double logmin = std::log10(kinEmin);
+	// log scale 
+	if (kinEmin != kinEmax && npoints >1)
+	{
+	    G4double logmin = std::log10(kinEmin);
 	    G4double logmax = std::log10(kinEmax); 
 	    G4double en;
 		// uniform logarithm space
-    for (G4double c = 0; c <npoints; c++ ){
-		en = std::pow(10, logmin + ( c*(logmax-logmin)  / (npoints - 1)) );  
-	    energy.push_back(en);
-		dedxtot =  emCal -> ComputeTotalDEDX (en, particle, material);
-		massDedx.push_back ( dedxtot / density );
-	   }
+            for (G4double c = 0.; c < npoints; c++)
+	       {
+		    en = std::pow(10., logmin + ( c*(logmax-logmin)  / (npoints - 1.)) );  
+		    energy.push_back(en);
+		    dedxtot =  emCal -> ComputeTotalDEDX (en, particle, material);
+		    massDedx.push_back ( dedxtot / density );
+	       }
 	}
-	
-	//data <<  particle << " (into " << material << ")" << std::setw(12) << G4BestUnit(density,"Volumic Mass") << G4endl;
+	else // one point only
+	{
+	    energy.push_back(kinEmin);
+	    dedxtot =  emCal -> ComputeTotalDEDX (kinEmin, particle, material);
+	    massDedx.push_back ( dedxtot / density );
+	}
+
+    G4cout.precision(6);  
+    data <<  "MeV             " << "MeV*cm2/g      " << particle << " (into " << 
+		     material << ", density = " << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+    data << G4endl;
     data << std::left << std::setfill(' ');
     for (size_t i=0; i<energy.size(); i++){
-		data << std::setw(12) << energy[i]/MeV << std::setw(12) << massDedx[i]/(MeV*cm2/g) << G4endl;
-		//data << std::left << std::setw(10) << G4BestUnit(energy[i],"Energy") << 
-		//std::right << std::setw(17) <<  G4BestUnit(massDedx[i],"Energy*Surface/Mass") << G4endl;
+		data << std::setw(16) << energy[i]/MeV << massDedx[i]/(MeV*cm2/g) << G4endl;
 	}
-
-	outfile.close();
-	return true;
-
+    outfile.close();
+    G4String ofName = (filename == "") ? "User terminal": filename;
+    G4cout << "User choice:\n";
+    G4cout << "Kinetic energy lower limit= "<< G4BestUnit(kinEmin,"Energy") << ", Kinetic energy upper limit= " << G4BestUnit(kinEmax,"Energy") << 
+	         ", npoints= "<< npoints << ", particle= \"" << particle << "\", material= \"" << material <<
+		 "\", filename= \""<< ofName << "\"" << G4endl;
+    return true;
 }
 
-
-// search for user material choice inside G4NistManager database
+// Search for user material choice inside G4NistManager database
 G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String material)
 {
     Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(material);
-    if (Pmaterial) {
-		density = Pmaterial -> GetDensity();}
-	return Pmaterial;
+    if (Pmaterial)
+    {
+	density = Pmaterial -> GetDensity(); 
+    }
+    return Pmaterial;
 }
-
-
+// Parse arguments line
 bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
 {
-  
-  kinEmin = kinEmax = npoints = 0;
+  kinEmin = kinEmax = npoints = 0.;
   particle = material = filename = "";
   // set internal variables
   std::istringstream strParam(vararg);
-  // here check for number and parameter consistency!! 
+  // TODO here check for number and parameter consistency!! 
   strParam >> std::skipws >> material >> kinEmin >> kinEmax >> npoints >> particle >> filename;
-  // npoints must be an integer
+  // npoints must be an integer!
   npoints = std::floor(npoints); 
 
-		// check energy range 
-	if (kinEmax == 0 && kinEmin == 0) {}// Set NIST points!
-	else if (kinEmax == 0) kinEmax = kinEmin;
-	else if (kinEmax < kinEmin) {
-    G4cout << "WARNING: kinEmin must not exceed kinEmax!" << G4endl;
-    //G4cout << "Usage: /parameter/command  material [kinetic Emin, kinetic Emax nPoints] [particle] [output filename]" << G4endl; 	
-    G4cout << "Usage: /parameter/command  material kinetic Emin kinetic Emax nPoints [particle] [output filename]" << G4endl; 	
-    return false;
-	if (npoints < 2){
-		    G4cout << "WARNING: you must request at least 2 points!" << G4endl;
-		    return false;
-	        }       
-	}
-	// check if material is here!
-	
-	if (!GetNistMaterial(material) ){
-        G4cout << "WARNING: material \"" << material << "\" doesn't exist in NIST materials table [source/materials/src/G4NistMaterialBuilder.cc]" << G4endl; 
-        G4cout << "Type /parameter/materials to see full materials list" << G4endl; 
-		return false;}
-    // check if particle is any of: alpha, proton, e-
-    if (particle == "") particle = "proton";
-		else if (particle != "proton" && particle != "alpha" && particle != "e-"){
-		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported" << G4endl;
-		return false;
-		}
-    
+// Check that  kinEmax >= kinEmin > 0 &&  npoints >= 1 
+// TODO NIST points and linear scale
+   if (kinEmax == 0. && kinEmin > 0. ) kinEmax = kinEmin;
+   if (kinEmax == 0. && kinEmin == 0. ) kinEmax = kinEmin = 1.*MeV;
+   if (kinEmax < kinEmin) 
+   {
+     G4cout << "WARNING: kinEmin must not exceed kinEmax!" << G4endl;
+     G4cout << "Usage: /parameter/command  material kinetic Emin kinetic Emax nPoints [particle] [output filename]" << G4endl; 	
+     return false;
+   }
+  if (npoints < 1) npoints = 1;
 
-    // start physic
-	BeamOn();
-
-    // Set output file
-    // check data for writing and [ inf > kinEmax > kinEmin > 0 ] [ npoints > 1 integer ]
-	// define two dimensional dinamic array for energy-stopping power
-	if( filename != "" ) 
+    // check if element/material is here!
+    if (!GetNistMaterial(material) )
 	   {
-	      outfile.open(filename,std::ios_base::trunc); // overwrite existing file
-	      data.rdbuf(outfile.rdbuf());
+	     G4cout << "WARNING: material \"" << material << "\" doesn't exist in NIST elements/materials"
+	 	       " table [$G4INSTALL/source/materials/src/G4NistMaterialBuilder.cc]" << G4endl; 
+	     G4cout << "Use command \"/parameter/nist\" to see full materials list" << G4endl; 
+	     return false;
+	   }
+    // Check for particle
+    if (particle == "") particle = "proton"; // default to "proton"
+    else if ( !emCal->FindParticle(particle) )
+	   {
+		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported" << G4endl;
+		G4cout << "Try the command \"/particle/list\" to get full supported particles list" << G4endl;
+		G4cout << "If you are interested in an ion that isn't in this list you must give it to the particle gun."
+		          "\nTry the commands \n/gun/particle ion"
+			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl;
+		return false;
+	   }
+    // start physics by forcing a beamOn(): 
+    BeamOn();
+    // Set output file
+    if( filename != "" ) 
+       {
+          outfile.open(filename,std::ios_base::trunc); // overwrite existing file
+          data.rdbuf(outfile.rdbuf());
        }
-	else data.rdbuf(std::cout.rdbuf());	// output is G4cout                
-
-  G4cout << "User choice:\n";
-  G4cout << "kinEmin= "<< G4BestUnit(kinEmin,"Energy") << " kinEmax= " << G4BestUnit(kinEmax,"Energy") << 
-	         " npoints= "<< npoints << " particle=\"" << particle << "\" material=\"" << material <<
-			 "\" filename=\"" << filename <<"\""<< G4endl;
-  G4cout.precision(6);  
-  return true;
+    else data.rdbuf(std::cout.rdbuf());	// output is G4cout                
+    return true;
 }
-// Initialize physic
-//
-bool HadrontherapyInteractionParameters::beamFlag(false);
+// Force physics tables build
 void HadrontherapyInteractionParameters::BeamOn()
 {
-	// first check if RunManager is in G4State_Idle 
-	//
-	G4StateManager* mState = G4StateManager::GetStateManager();
+    // first check if RunManager is above G4State_Idle 
+    G4StateManager* mState = G4StateManager::GetStateManager();
     G4ApplicationState  aState = mState -> GetCurrentState(); 
-	if ( aState <= G4State_Idle ){
-    if (beamFlag == false){ 
-//  G4cout << "Run State " << mState -> GetStateString( aState ) << G4endl; 
-    G4RunManager::GetRunManager() -> BeamOn(0);
-    //G4UImanager* UI = G4UImanager::GetUIpointer();  
-    //UI -> ApplyCommand("/run/beamOn");
-	beamFlag = true;
-	}
-	}
+    if ( aState <= G4State_Idle && beamFlag == false)
+	 {
+	    //  G4cout << "Run State " << mState -> GetStateString( aState ) << G4endl; 
+	    G4RunManager::GetRunManager() -> BeamOn(0);
+	    beamFlag = true;
+	 }
 
 }
-// print full list of Nist elements and materials
-void HadrontherapyInteractionParameters::ListOfNistMaterials()
+// print a list of Nist elements and materials
+void HadrontherapyInteractionParameters::ListOfNistMaterials(const G4String& vararg)
 {
-	
-	//source/materials/src/G4NistMaterialBuilder.cc
-	//~/cvs/geant4-09-02-ref-04/source/materials/src/G4NistElementBuilder.cc
-    //./global/management/src/G4UnitsTable.cc	
-	//
-	G4NistMaterialBuilder* nistmat = new G4NistMaterialBuilder(new G4NistElementBuilder(0), 0);
-
-	const std::vector<G4String>& vec =  nistmat -> GetMaterialNames(); 
-    for (size_t i=0; i<vec.size(); i++){
-		//G4cout << std::setw(24) << std::left << vec[i] ;
-		G4cout << std::setw(24) << std::left << i+1 << vec[i] << G4endl;
-	}
-	G4cout << G4endl;
 /*
-    // full list (formula, density, etc)
-    nistmat -> ListMaterials("simple");
-	G4cout << "....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......\n";
-    nistmat -> ListMaterials("compound");
-	G4cout << "....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......\n";
-    nistmat -> ListMaterials("hep");
-	G4cout << "....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......\n";
+ $G4INSTALL/source/materials/src/G4NistElementBuilder.cc
+ You can also construct a new material by the ConstructNewMaterial method:
+ see $G4INSTALL/source/materials/src/G4NistMaterialBuilder.cc
 */
+    // Get simplest full list
+     if (vararg =="list")
+	  {
+	    const std::vector<G4String>& vec =  nistMat -> GetMaterialNames(); 
+	    for (size_t i=0; i<vec.size(); i++)
+	     {
+	        G4cout << std::setw(12) << std::left << i+1 << vec[i] << G4endl;
+	     }
+	    G4cout << G4endl;
+          }
+    else if (vararg =="all" || vararg =="simple" || vararg =="compound" || vararg =="hep" )
+	{
+		nistMat -> ListMaterials(vararg);
+	}
 }
 
 

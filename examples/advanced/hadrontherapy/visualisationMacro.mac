@@ -45,18 +45,27 @@
 
 /run/initialize
 
-# SET OF THE VISUALISATION CHARACTERISTICS
-/vis/scene/create
-/vis/open OGLIX
-/vis/viewer/flush
+/vis/open DAWNFILE
+/vis/drawVolume
+/vis/viewer/reset 
+/vis/viewer/zoom              1.5
+/vis/viewer/set/viewpointThetaPhi 70 20
 
-/vis/viewer/set/viewpointThetaPhi 0 180 deg
-/vis/viewer/zoom 8
-/vis/viewer/pan -90  80 cm
 /tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+# SET OF THE VISUALISATION CHARACTERISTICS
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
+
+#/vis/viewer/set/viewpointThetaPhi 0 180 deg
+#/vis/viewer/zoom 8
+#/vis/viewer/pan -90  80 cm
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
 #/vis/specify RODetectorLog 1
-/vis/viewer/update
+#/vis/viewer/update
+
+
 
 # SETTING FOR THE RANGE SHIFTER 
 #/beamLine/RangeShifter/thickness 0.01 mm

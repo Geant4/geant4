@@ -50,7 +50,7 @@ class HadrontherapyEventActionMessenger;
 class HadrontherapyEventAction : public G4UserEventAction
 {
 public:
-  HadrontherapyEventAction(HadrontherapyMatrix*);
+  HadrontherapyEventAction();
   ~HadrontherapyEventAction();
 
 public:

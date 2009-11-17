@@ -33,6 +33,8 @@
 #define HadrontherapyInteractionParameters_H 1
 
 #include "G4EmCalculator.hh"
+#include "G4NistMaterialBuilder.hh"
+#include "G4NistElementBuilder.hh"
 
 class HadrontherapyDetectorConstruction;
 class HadrontherapyParameterMessenger; 
@@ -43,35 +45,30 @@ public:
     HadrontherapyInteractionParameters();
 	~HadrontherapyInteractionParameters();
 
-	//G4double GetProtonStopping(G4String mat, G4double kinEnergy);
-
-// Get table for Mass SP (MeV*cm2/g)  fnd CSDA Range for (proton, alpha and e-) 
+// Get data for Mass SP (MeV*cm2/g)   
 // into G4NistMaterialBuilder class materials
-// User must provide: material (mandatory argument from G4NistMaterialBuilder) , [kinetic energy min, max, nPoints],
+// User must provide: material kinetic energy lower limit, kinetic energy upper limit, number of points to retrieve,
 // [particle], [output filename].
 
-	bool GetStoppingTable (G4String vararg);
-    void ListOfNistMaterials ();
+	bool GetStoppingTable (const G4String& vararg);
+    void ListOfNistMaterials (const G4String& vararg);
     void BeamOn();
     bool ParseArg (const G4String& vararg);	
 
 private:
 	G4Material* GetNistMaterial(G4String material);
-//	struct vararg{
-		G4double kinEmin;
-		G4double kinEmax;
-		G4double npoints;
-		G4String particle; 
-		G4String material; 
-		G4String filename; 
-//	};
+
+	G4NistElementBuilder* nistEle;
+	G4NistMaterialBuilder* nistMat;
+	G4double kinEmin, kinEmax, npoints;
+	G4String particle, material, filename; 
 	std::ofstream outfile;
 	std::ostream data;
     G4Material* Pmaterial;
 	G4double density;
     G4EmCalculator* emCal;
     HadrontherapyParameterMessenger* pMessenger; 
-	static bool beamFlag;
+	bool beamFlag;
 };
 #endif
 

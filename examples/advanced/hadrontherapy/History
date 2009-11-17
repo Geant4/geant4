@@ -9,6 +9,13 @@ $Id: History, 2004/02/27  G.A.P. Cirrone,
 
                       Category History file
 
+17.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-34
+	   - Added some functionalities in order to change, via messengers, the geometry, 
+	     the voxelization of the detector, and the disposition in the space of the detector/phantom.
+	   - Added the possibility to calculate the stopping powers for ions too.
+	   - Modified the HadrontherapyDetectorROGeometry class constructor.
+	   - Various additions and fixes to the matrix class.
+
 10.11.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-33
            - Added the possibility to make a graphical user interface (GUI) using the QT libraries. 
              To start a GUI the correct enviroment variables must be configured (see the Geant4 installation 

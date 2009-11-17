@@ -39,7 +39,7 @@
 	changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
 	changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
 	
-	changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
+    changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
 	changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
 	changeTheBeamLineNameCmd -> SetParameterName("List",false);
 	changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
@@ -92,7 +92,7 @@
   rangeShifterXPositionCmd -> AvailableForStates(G4State_Idle);
   
   firstScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil1/thickness",this);
-  firstScatteringFoilXSizeCmd -> SetGuidance("Set hlaf thickness of first scattering foil");
+  firstScatteringFoilXSizeCmd -> SetGuidance("Set half thickness of first scattering foil");
   firstScatteringFoilXSizeCmd -> SetParameterName("Size",false);
   firstScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
   firstScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
@@ -148,30 +148,30 @@ void PassiveProtonBeamLineMessenger::SetNewValue(G4UIcommand* command,G4String n
     { passiveProton -> SetModulatorAngle
            (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
 
-  if( command == rangeShifterMatCmd )
+  else if( command == rangeShifterMatCmd )
     { passiveProton -> SetRSMaterial(newValue);}
 
-  if( command == rangeShifterXSizeCmd )
+  else if( command == rangeShifterXSizeCmd )
     { passiveProton -> SetRangeShifterXSize
             (rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
 
-  if( command == rangeShifterXPositionCmd )
+  else if( command == rangeShifterXPositionCmd )
     { passiveProton -> SetRangeShifterXPosition
                   (rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
 
-  if( command == firstScatteringFoilXSizeCmd )
+  else if( command == firstScatteringFoilXSizeCmd )
     { passiveProton -> SetFirstScatteringFoilXSize
                   (firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
-  if( command == secondScatteringFoilXSizeCmd )
+  else if( command == secondScatteringFoilXSizeCmd )
     { passiveProton -> SetSecondScatteringFoilXSize
                   (secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
-  if( command == outerRadiusStopperCmd )
+  else if( command == outerRadiusStopperCmd )
     { passiveProton -> SetOuterRadiusStopper(
                     outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
 
-  if( command == innerRadiusFinalCollimatorCmd )
+  else if( command == innerRadiusFinalCollimatorCmd )
     { passiveProton -> SetInnerRadiusFinalCollimator
                   (innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
 }

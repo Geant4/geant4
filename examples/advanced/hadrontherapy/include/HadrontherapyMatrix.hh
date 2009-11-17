@@ -42,6 +42,7 @@
 #define HadrontherapyMatrix_H 1
 
 #include "globals.hh"
+#include <vector>
 
 // The information: energy deposit and position in the phantom
 // is stored in a matrix
@@ -49,19 +50,21 @@
 class HadrontherapyMatrix 
 {
 private:
-  HadrontherapyMatrix(); //< this is supposed to be a singleton
+  HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ); //< this is supposed to be a singleton
 
 public:
 
   ~HadrontherapyMatrix();
- 
+// Get object instance only
   static HadrontherapyMatrix* getInstance();
+// Make & Get instance
+  static HadrontherapyMatrix* getInstance(G4int nX, G4int nY, G4int nZ);
  
- void flush();
+  void flush();
  
   void Initialize(); 
   // All the elements of the matrix are initialised to zero
- 
+   
   void Fill(G4int i, G4int j, G4int k, G4double energyDeposit);
   // The matrix is filled with the energy deposit 
   // in the element corresponding to the voxel of the phantom where
@@ -70,8 +73,12 @@ public:
   void TotalEnergyDeposit();
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
+  
+  inline G4int Index(G4int i, G4int j, G4int k){ return (i * numberVoxelY + j) * numberVoxelZ + k; } 
+  // Get a unique index from three dimensional voxel information
 
 private:
+
   static HadrontherapyMatrix* instance;
   G4int numberVoxelX;
   G4int numberVoxelY;

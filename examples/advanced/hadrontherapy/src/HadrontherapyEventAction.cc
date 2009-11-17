@@ -57,11 +57,10 @@
 #include "HadrontherapyEventActionMessenger.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* matrixPointer) :
+HadrontherapyEventAction::HadrontherapyEventAction() :
   drawFlag("all" ),printModulo(1000), pointerEventMessenger(0)
 { 
   hitsCollectionID = -1;
-  matrix = matrixPointer; 
   pointerEventMessenger = new HadrontherapyEventActionMessenger(this);
 }
 
@@ -89,7 +88,7 @@ void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 {  
   if(hitsCollectionID < 0)
-    return;
+  return;
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
  
   if(HCE)
@@ -97,6 +96,7 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
     HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
     if(CHC)
      {
+	   matrix = HadrontherapyMatrix::getInstance();	 
        if(matrix)
 	  { 
 	      // Fill the matrix with the information: voxel and associated energy deposit 
