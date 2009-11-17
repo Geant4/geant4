@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2009-03-05 11:17:42 lgarnier Exp $
+# $Id: GNUmakefile,v 1.11 2009-11-17 11:32:38 gcosmo Exp $
 
 name := G4OpenGL
 
@@ -12,8 +12,8 @@ MOC_MACRO = -DG4VIS_BUILD_OPENGLQT_DRIVER
 # For debug mode
 # CPPFLAGS += -DG4DEBUG_VIS_OGL
 
-GLOBLIBS  = libG4vis_management.lib libG4modeling.lib
-GLOBLIBS += libG4interfaces.lib libG4run.lib libG4event.lib
+GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4gl2ps.lib
+GLOBLIBS += libG4zlib.lib libG4interfaces.lib libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
@@ -36,8 +36,6 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
-
-INTYLIBS += -L$(G4LIBDIR) -lG4gl2ps
 
 include $(G4INSTALL)/config/moc.gmk
 include $(G4INSTALL)/config/common.gmk

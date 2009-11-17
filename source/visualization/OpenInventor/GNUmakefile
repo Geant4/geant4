@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2009-02-16 15:31:05 lgarnier Exp $
+# $Id: GNUmakefile,v 1.10 2009-11-17 11:33:18 gcosmo Exp $
 
 name := G4OpenInventor
 
@@ -6,8 +6,8 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-GLOBLIBS  = libG4vis_management.lib libG4modeling.lib
-GLOBLIBS += libG4interfaces.lib libG4run.lib libG4event.lib
+GLOBLIBS  = libG4vis_management.lib libG4modeling.lib libG4gl2ps.lib
+GLOBLIBS += libG4zlib.lib libG4interfaces.lib libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
 GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
@@ -32,8 +32,6 @@ CPPFLAGS += -I$(G4BASE)/materials/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
-
-INTYLIBS += -L$(G4LIBDIR) -lG4gl2ps
 
 include $(G4INSTALL)/config/common.gmk
 
