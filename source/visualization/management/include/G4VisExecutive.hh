@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.8 2009-03-14 11:43:42 allison Exp $
+// $Id: G4VisExecutive.hh,v 1.9 2009-11-17 15:34:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,6 @@
 // #endif
 //
 // Notes:
-
 // (a) After instantiation, all references to this object should be as
 //     a G4VisManager.  The functions RegisterGraphicsSystems and
 //     RegisterModelFactories defined in G4VisExecutive.icc are
