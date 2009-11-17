@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2009-11-02 14:54:31 lgarnier Exp $
+$Id: History,v 1.11 2009-11-17 11:26:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Nov 2009, John Allison, Gabriele Cosmo
+ - Added dependency on zlib if G4LIB_BUILD_ZLIB is set and corrected
+   inclusion of zlib.h in gl2ps.cc
 
 2 Nov 2009, Laurent Garnier 
  - Add debug flag in GNUMakefile

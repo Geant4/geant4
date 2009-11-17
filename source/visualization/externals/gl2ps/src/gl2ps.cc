@@ -98,10 +98,8 @@
 #include <time.h>
 #include <float.h>
 
-#if defined(G4LIB_USE_ZLIB)
 #define GL2PS_HAVE_ZLIB
 #include <zlib.h>
-#endif
 
 #if defined(GL2PS_HAVE_LIBPNG)
 #include <png.h>
