@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.25 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4VViewer.cc,v 1.26 2009-11-17 14:37:06 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,9 @@ fNeedKernelVisit (true)
   fShortName.strip ();
 }
 
-G4VViewer::~G4VViewer () {}
+G4VViewer::~G4VViewer () {
+  fSceneHandler.RemoveViewerFromList(this);
+}
 
 void G4VViewer::SetName (const G4String& name) {
   fName = name;

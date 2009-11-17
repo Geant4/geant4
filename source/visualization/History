@@ -1,4 +1,4 @@
-$Id: History,v 1.455 2009-11-06 16:05:08 allison Exp $
+$Id: History,v 1.456 2009-11-17 14:37:06 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+17th November 2009  Laurent Garnier
+- Fix SceneHandler removing viewer if class destructor call 
+  before G4VSceneHandler calls it
 
 6th November 2009  John Allison
  - vistest-V09-02-01: test19.cc: Use G4UIExecutive.
@@ -56,6 +60,13 @@ History file for visualization category
   o raytracer-V09-02-01
   o VRML-V09-02-01
   o visXXX-V09-02-00
+
+15st October 2009 Laurent Garnier
+ - G4OpenGLViewer.cc : Fix a problem with printing.
+
+13st October 2009 Laurent Garnier
+ - G4OpenGLQtViewer.cc/G4OpenGLStoreQtViewer.cc : Fix problems with 
+   mac OS X 10.6
 
 10th October 2009 Joseph Perl (vis-V09-02-06)
 - new global tag for vis, in preparation for  addition of gMocren file driver

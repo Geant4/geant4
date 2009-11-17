@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2009-11-16 13:51:08 lgarnier Exp $
+$Id: History,v 1.134 2009-11-17 14:37:06 lgarnier Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+17th November 2009  Laurent Garnier
+- G4VViewer::Fix SceneHandler removing viewer if class destructor call 
+  before G4VSceneHandler calls it
 
 16th November 2009  Laurent Garnier
 -G4VSceneHandler.cc: Bug fix: Deleting G4VSceneHandler null pointer exception fix.
