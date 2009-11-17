@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2009-11-17 11:31:20 mkossov Exp $
+# $Id: GNUmakefile,v 1.2 2009-11-17 11:33:53 mkossov Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -27,6 +27,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/management/include/ \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include/ \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include/ \
+            -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/materials/include
