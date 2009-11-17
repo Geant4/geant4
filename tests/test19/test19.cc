@@ -65,6 +65,7 @@
 //#define ranseed
 //--- Flags of models (only one must be chosen), CHIPS is a default for System Testing ---
 #define chips
+//#define synch
 //#define lep
 //#define hep
 //#define preco
@@ -91,7 +92,8 @@
 #include "G4ParticleChange.hh"
 #include "G4GenericIon.hh"
 
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
+#include "G4QSynchRad.hh"
 #include "G4QDiffraction.hh"
 #include "G4QLowEnergy.hh"
 #include "G4TheoFSGenerator.hh"
@@ -163,14 +165,18 @@
 
 #include "G4UImanager.hh" 
 
-#include "Test19Physics.hh"
+//#include "Test19Physics.hh"
 #include "Test19PhysicsList.hh"
+#include "Test19MagneticField.hh"
 
 //#include "G4HadronCrossSections.hh"
 //#include "G4VCrossSectionDataSet.hh"
 //#include "G4ProtonInelasticCrossSection.hh"
 //#include "G4NeutronInelasticCrossSection.hh"
 //#include "G4HadronInelasticDataSet.hh"
+
+#include "G4SynchrotronRadiation.hh"
+#include "G4SynchrotronRadiationInMat.hh"
 
 // *** M o d e l s ****
 #include "G4LEProtonInelastic.hh"
@@ -291,6 +297,9 @@ int main()
   // Run manager
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new Test19PhysicsList);
+  Test19MagneticField* fpMagField = new Test19MagneticField();
+  G4double fieldValue=10.*tesla/3.;  // For all tests the B-field=(3.333*tesla, 0., 0.) 
+  fpMagField->SetFieldValue(fieldValue);
   G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
 #ifdef debug
   G4cout<<"Test19: Prepare G4QHBook files or ntuples"<<G4endl;
@@ -326,8 +335,8 @@ int main()
   G4QCHIPSWorld* theW=G4QCHIPSWorld::Get();
   theW->GetParticles(nop);           // Create CHIPS World of nop particles
   //G4Exception("***CHIPStest: TMP");
-  G4QCollision::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
-  G4QCollision::SetManual();
+  G4QInelastic::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
+  G4QInelastic::SetManual();
   // ********** Now momb is a momentum of the incident particle, if =0 => LOOP ************
 //#ifdef chips
 //#else
@@ -407,7 +416,7 @@ int main()
   if(!pPDG) npart=nPr;                                 // Make a LOOP ove all particles
 #ifdef chips
   // *************** CHIPS process definition starts here *******************************
-  G4QCollision* proc = new G4QCollision;               // A general CHIPS process
+  G4QInelastic* proc = new G4QInelastic;               // A general CHIPS process
   ///G4QDiffraction* proc = new G4QDiffraction;           // A diffraction CHIPS process
   ///G4QLowEnergy* proc = new G4QLowEnergy;               // fragment-nucleus universal
 #endif
@@ -474,11 +483,19 @@ int main()
 #ifdef chips
   if(!proc)
   {
-    G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
+    G4cout<<"Tst19: there is no G4QInelastic process"<<G4endl;
     exit(1);
   }
-  // Comment for G4QLowEnergies or G4QDiffraction (not G4QCollision)
+  // Comment for G4QLowEnergies or G4QDiffraction (not G4QInelastic)
   //proc->SetParameters(temperature, ssin2g, eteps, fN, fD, cP, rM, nop, sA);
+#else
+#ifdef synch
+  G4double s_n=0.;
+  G4double s_s=0.;
+  G4double s_d=0.;
+  G4QSynchRad* proc = new G4QSynchRad;           // CHIPS Synchrotron Radiation process
+  //G4SynchrotronRadiation* proc = new G4SynchrotronRadiation; // GHadSynchratRad process 1
+  //G4SynchrotronRadiationInMat* proc = new G4SynchrotronRadiationInMat; // GHadSR process2
 #else
   G4HadronInelasticProcess* proc = 0;
   if     (pPDG==2212) proc = new G4ProtonInelasticProcess;
@@ -495,6 +512,7 @@ int main()
   else if(pPDG==211||pPDG==-211) theCS = new G4PiNuclearCrossSection;
   else theCS = new G4HadronInelasticDataSet; // For kaons anti-protons and others...
   proc->AddDataSet(theCS);   // Can not be skipped for the event generator
+#endif
 #endif
 #ifdef debug
   G4cout<<"Test19:--***-- process is created --***--" << G4endl; // only one run
@@ -760,7 +778,7 @@ int main()
      // -----> For GHAD muons
      ///G4MuNuclearInteraction* HadrPR = new G4MuNuclearInteraction;// GHAD MuNuclear Proc.
      ///HadrPR->SetPhysicsTableBining(.01*GeV, 7.e8*GeV, 1000); // For the table
-     ///HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QCollision
+     ///HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QInelastic
      // -----> For GHAD hadrons
      G4PiNuclearCrossSection  barashPiXS;      // Barashenkov parameterization of pion-A XS
      G4CrossSectionDataStore  theElasticXS;    // GEISHA Elastic hadron-A XS
@@ -771,7 +789,7 @@ int main()
      theInelasticXS.AddDataSet(&theInelasticData); // Put parameterization in the XS class
      // -----> For CHIPS
      // ..... CHIPS on the Process level
-     ///G4QCollision* HadrPR = new G4QCollision(); // CHIPS MuNuc
+     ///G4QInelastic* HadrPR = new G4QInelastic(); // CHIPS MuNuc
      // ..... CHIPS on the Cross-Section level
      G4VQCrossSection* HadrCS = 0;             // ProtoPointer to CHIPS CrossSections
      if(pPDG==13 || pPDG==-13) HadrCS = G4QMuonNuclearCrossSection::GetPointer(); // MuNuc
@@ -928,12 +946,10 @@ int main()
 #ifdef debug
       G4cout<<"Test19: Before the fake proc->GetMeanFreePath call"<<G4endl;
 #endif
-//#ifdef chips
-//#else
-      proc->GetMeanFreePath(*gTrack,0.1,cond); // Fake call to avoid complains of GHAD
-//#endif
-#ifdef debug
-      G4cout<<"Test19: Before PostStepDoIt"<<G4endl;
+      proc->GetMeanFreePath(*gTrack,0.1,cond);
+#ifdef pdebug
+      G4double mfp=proc->GetMeanFreePath(*gTrack,0.1,cond);
+      G4cout<<"Test19: Before PostStepDoIt MeanFreePath="<<mfp/meter<<" [m]"<<G4endl;
 #endif
       aChange = static_cast<G4ParticleChange*>(proc->PostStepDoIt(*gTrack,*step)); // Up
       G4int nSec = aChange->GetNumberOfSecondaries();
@@ -1089,6 +1105,11 @@ int main()
             m   = pd->GetPDGMass();
             mom = sec->GetMomentumDirection();
             e   = sec->GetKineticEnergy();
+#ifdef synch
+             s_n+=1.;
+             s_s+=e;
+             s_d+=e*e;
+#endif
 #ifdef debug
             G4cout<<"Test19:SecPt#"<<i<<",T="<<e<<",m="<<m<<",PDG="<<c<<",C="<<cCG<<G4endl;
 #endif
@@ -1471,8 +1492,13 @@ int main()
           <<std::setw(9)<<dPzH[jh]<<std::setw(9)<<dPrH[jh]<<G4endl;
   }
 #endif
+#ifdef synch
+  s_s/=s_n;
+  s_d=std::sqrt(s_d/s_n-s_s*s_s);
+  G4cout<<"SynchroRadiation: Mean="<<s_s<<", RMS="<<s_d<<", nEv="<<s_n<<G4endl;
+#endif
 #ifdef pverb
-  G4cout << "###### End of Test19 #####" << G4endl;
+  G4cout<<"###### End of Test19 #####"<<G4endl;
 #endif
   //exit(1); // Never do this !
   //return no_of_errors;
