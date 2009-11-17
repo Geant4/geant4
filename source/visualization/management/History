@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2009-11-17 14:37:06 lgarnier Exp $
+$Id: History,v 1.135 2009-11-17 15:34:42 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -26,9 +26,13 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+17th November 2009  John Allison  (visman-V09-02-07)
+
 17th November 2009  Laurent Garnier
-- G4VViewer::Fix SceneHandler removing viewer if class destructor call 
-  before G4VSceneHandler calls it
+- Allow arbitrary viewer deletion (fixes crash).
+  o G4VViewer::~G4VViewer: Removes itself from viewer list.
+  o G4VSceneHandler::~G4VSceneHandler: better algorithm for removing viewers
+  to handle viewer self removal.
 
 16th November 2009  Laurent Garnier
 -G4VSceneHandler.cc: Bug fix: Deleting G4VSceneHandler null pointer exception fix.
