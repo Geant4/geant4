@@ -1,4 +1,0 @@
-/vis/sceneHandler/create RayTracer DefaultHandler
-/vis/viewer/create DefaultHandler DefaultView 500
-/vis/scene/create DefaultScene
-/vis/scene/endOfEventAction accumulate

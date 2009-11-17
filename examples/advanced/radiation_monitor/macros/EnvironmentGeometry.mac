@@ -1,6 +1,0 @@
-/radmon/detector/SetEnvironmentType FlatVolume
-/radmon/detector/SetEnvironmentAttribute Width '5 cm'
-/radmon/detector/SetEnvironmentAttribute Height '5 cm'
-/radmon/detector/SetEnvironmentAttribute Thickness '5 cm'
-/radmon/detector/SetEnvironmentAttribute Material Air
-/radmon/detector/EnableEnvironment
