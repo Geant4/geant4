@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2009-09-29 21:23:36 allison Exp $
+$Id: History,v 1.103 2009-11-17 17:44:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+17th November 2009  John Allison  (openinventor-V09-02-03)
+- Tagged for vis tag.
+
+17th November 2009  Gabriele Cosmo
+- Fixed GNUmakefile.
 
 29 September 2009  John Allison  (openinventor-V09-02-02)
 - Tagged.
