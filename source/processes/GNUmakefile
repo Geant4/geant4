@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.44 2009-06-02 13:23:56 gcosmo Exp $
+# $Id: GNUmakefile,v 1.45 2009-11-17 15:24:24 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -51,7 +51,11 @@ SUBDIRS += hadronic/models/cascade/cascade
 SUBDIRS += hadronic/models/cascade/evaporation
 SUBDIRS += hadronic/models/cascade/utils
 SUBDIRS += hadronic/models/chiral_inv_phase_space/body
+SUBDIRS += hadronic/models/chiral_inv_phase_space/cross_sections
+SUBDIRS += hadronic/models/chiral_inv_phase_space/fragmentation
 SUBDIRS += hadronic/models/chiral_inv_phase_space/interface
+SUBDIRS += hadronic/models/chiral_inv_phase_space/processes
+SUBDIRS += hadronic/models/chiral_inv_phase_space/xs_dependent
 SUBDIRS += hadronic/models/coherent_elastic
 SUBDIRS += hadronic/models/de_excitation/ablation
 SUBDIRS += hadronic/models/de_excitation/evaporation
@@ -114,7 +118,11 @@ SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_incl_cascade
 SUBLIBS +=  G4hadronic_body_ci
+SUBLIBS +=  G4hadronic_crosec_ci
+SUBLIBS +=  G4hadronic_fragm_ci
 SUBLIBS +=  G4hadronic_interface_ci
+SUBLIBS +=  G4hadronic_proc_ci
+SUBLIBS +=  G4hadronic_xsint_ci
 SUBLIBS +=  G4hadronic_deex_evaporation
 SUBLIBS +=  G4hadronic_deex_fermi_breakup
 SUBLIBS +=  G4hadronic_deex_fission
