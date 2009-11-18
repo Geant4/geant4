@@ -24,28 +24,45 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEMPhysics.cc,v 1.4 2006-06-29 15:56:36 gunter Exp $
+// $Id: GammaRayTelEMstdPhysics.cc,v 1.1 2009-11-18 15:59:05 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#include "GammaRayTelEMPhysics.hh"
+#include "GammaRayTelEMstdPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>   
 
+// gamma
 
-GammaRayTelEMPhysics::GammaRayTelEMPhysics(const G4String& name)
+#include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+
+
+// e-
+#include "G4eMultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+
+// e+
+#include "G4eIonisation.hh" 
+#include "G4eBremsstrahlung.hh" 
+#include "G4eplusAnnihilation.hh"
+
+
+GammaRayTelEMstdPhysics::GammaRayTelEMstdPhysics(const G4String& name)
                :  G4VPhysicsConstructor(name)
 {
 }
 
-GammaRayTelEMPhysics::~GammaRayTelEMPhysics()
+GammaRayTelEMstdPhysics::~GammaRayTelEMstdPhysics()
 {
 }
 
-void GammaRayTelEMPhysics::ConstructParticle()
+void GammaRayTelEMstdPhysics::ConstructParticle()
 {
 }
 
@@ -53,60 +70,35 @@ void GammaRayTelEMPhysics::ConstructParticle()
 #include "G4ProcessManager.hh"
 
 
-void GammaRayTelEMPhysics::ConstructProcess()
+void GammaRayTelEMstdPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   
   // Gamma Physics
   pManager = G4Gamma::Gamma()->GetProcessManager();
 
-  // std
+  pManager->AddDiscreteProcess(new G4PhotoElectricEffect);
+  pManager->AddDiscreteProcess(new G4ComptonScattering);
+  pManager->AddDiscreteProcess(new G4GammaConversion);
 
-  pManager->AddDiscreteProcess(&thePhotoEffect);
-  pManager->AddDiscreteProcess(&theComptonEffect);
-  pManager->AddDiscreteProcess(&thePairProduction);
-
-  // lowe
-
-  pManager->AddDiscreteProcess(&theLowEnPhoto);
-  pManager->AddDiscreteProcess(&theLowEnCompton);
-  pManager->AddDiscreteProcess(&theLowEnPair);
-  pManager->AddDiscreteProcess(&theLowEnRayleigh);
-  
+     
   // Electron Physics
+
   pManager = G4Electron::Electron()->GetProcessManager();
 
-   // add processes
+  pManager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(new G4eIonisation,         -1, 2, 2);
+  pManager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+	    
+  // Positron Physics
 
-  pManager->AddDiscreteProcess(&theElectronBremsStrahlung);  
-  pManager->AddProcess(&theElectronIonisation, ordInActive,2, 2);
-
-  pManager->AddDiscreteProcess(&theLowEnBremss);
-  pManager->AddProcess(&theLowEnIon, ordInActive,2, 2);
-
-
-  pManager->AddProcess(&theElectronMultipleScattering);
-  pManager->SetProcessOrdering(&theElectronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&theElectronMultipleScattering, idxPostStep,  1);
-
-
-
-  //Positron Physics
   pManager = G4Positron::Positron()->GetProcessManager();
-  // add processes
-  pManager->AddDiscreteProcess(&thePositronBremsStrahlung);
 
-  pManager->AddDiscreteProcess(&theAnnihilation);
-
-  pManager->AddRestProcess(&theAnnihilation);
-
-  pManager->AddProcess(&thePositronIonisation, ordInActive,2, 2);
-
-  pManager->AddProcess(&thePositronMultipleScattering);
-  pManager->SetProcessOrdering(&thePositronMultipleScattering, idxAlongStep,  1);
-  pManager->SetProcessOrdering(&thePositronMultipleScattering, idxPostStep,  1);
+  pManager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+  pManager->AddProcess(new G4eIonisation,         -1, 2, 2);
+  pManager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
+  pManager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
 
 }
-
 
 

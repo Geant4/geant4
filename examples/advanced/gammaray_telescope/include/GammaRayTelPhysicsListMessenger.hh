@@ -23,38 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef GammaRayTelPhysicsList_h
-#define GammaRayTelPhysicsList_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VModularPhysicsList.hh"
+#ifndef GammaRayTelPhysicsListMessenger_h
+#define GammaRayTelPhysicsListMessenger_h 1
+
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class GammaRayTelPhysicsListMessenger;
+class GammaRayTelPhysicsList;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
 
-class GammaRayTelPhysicsList: public G4VModularPhysicsList
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class GammaRayTelPhysicsListMessenger: public G4UImessenger
 {
-public:
-  GammaRayTelPhysicsList();
-  virtual ~GammaRayTelPhysicsList();
+  public:
   
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-  void SetRegionCut(G4double);
-  void AddPhysicsList(const G4String& name);
-  // void ConstructProcess();
-
+    GammaRayTelPhysicsListMessenger(GammaRayTelPhysicsList* );
+   ~GammaRayTelPhysicsListMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
   
-private:
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  GammaRayTelPhysicsListMessenger* pMessenger;
+  GammaRayTelPhysicsList* pPhysicsList;
+    
+  G4UIdirectory*             physDir;        
+  G4UIcmdWithADoubleAndUnit* allCutCmd;    
+  G4UIcmdWithAString*        pListCmd;
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

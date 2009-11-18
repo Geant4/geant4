@@ -23,38 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef GammaRayTelPhysicsList_h
-#define GammaRayTelPhysicsList_h 1
+//
+// $Id: GammaRayTelEMlowePhysics.hh,v 1.1 2009-11-18 15:57:21 flongo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//
+// ------------------------------------------- 
+//	History
+//        first version                   12 Nov. 2000 by H.Kurashige 
+// ------------------------------------------------------------
+#ifndef GammaRayTelEMlowePhysics_h
+#define GammaRayTelEMlowePhysics_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 
-class GammaRayTelPhysicsListMessenger;
+#include "G4VPhysicsConstructor.hh"
 
-class GammaRayTelPhysicsList: public G4VModularPhysicsList
+
+class GammaRayTelEMlowePhysics : public G4VPhysicsConstructor
 {
-public:
-  GammaRayTelPhysicsList();
-  virtual ~GammaRayTelPhysicsList();
-  
-public:
-  // SetCuts() 
-  virtual void SetCuts();
-  void SetRegionCut(G4double);
-  void AddPhysicsList(const G4String& name);
-  // void ConstructProcess();
+  public: 
+    GammaRayTelEMlowePhysics(const G4String& name ="LowE EM");
+    virtual ~GammaRayTelEMlowePhysics();
 
-  
-private:
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  GammaRayTelPhysicsListMessenger* pMessenger;
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 
 };
 
 
 #endif
+
+
 
 
 
