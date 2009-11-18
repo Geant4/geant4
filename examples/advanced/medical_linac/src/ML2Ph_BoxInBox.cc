@@ -80,7 +80,8 @@ bool CML2Ph_BoxInBox::Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_
 
 
 // BOX INSIDE
-	G4Material *boxInSideMaterial=G4NistManager::Instance()->FindOrBuildMaterial("G4_MUSCLE_SKELETAL_ICRP"); // changable
+	G4Material *boxInSideMaterial;
+
 	boxInSideMaterial=PMMA;
 	std::cout <<"boxInSideMaterial name "<<boxInSideMaterial->GetName() <<" density "<< boxInSideMaterial->GetDensity()/(g/cm3) <<" g/cm3"<< G4endl;
 

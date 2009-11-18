@@ -68,10 +68,15 @@ CML2SDWithParticle::CML2SDWithParticle(G4int idType, G4int max_N_particles_in_Ph
 	sprintf(a,"%d", seed);
 	seedName=(G4String)a;
 
+	this->fullOutFileData=PhaseSpaceOutFile+"_"+seedName+".txt";
+#ifdef G4MYFILEOUT
+	this->fullOutFileData=PhaseSpaceOutFile+"_"+seedName+".txt";
 	char *MyDirOut=new char[1000];
 	MyDirOut=getenv("G4MYFILEOUT");
 	G4String myDirOut=(G4String) MyDirOut;
 	this->fullOutFileData=myDirOut+"/"+PhaseSpaceOutFile+"_"+seedName+".txt";
+#endif
+
 }
 CML2SDWithParticle::~CML2SDWithParticle()
 {
@@ -134,7 +139,6 @@ G4bool CML2SDWithParticle::ProcessHits(G4Step *aStep, G4TouchableHistory *ROHist
 				this->particles[this->nParticle].partPDGE=aStep->GetTrack()->GetDefinition()->GetPDGEncoding();
 				this->particles[this->nParticle].primaryParticlePDGE=this->primaryParticleData->partPDGE;
 				this->particles[this->nParticle].nPrimaryPart=this->primaryParticleData->nPrimaryParticle;
-
 				this->nParticle++;
 				this->nTotalParticles++;
 				this->primaryParticleData->nParticlesInPhSp++;

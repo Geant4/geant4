@@ -23,6 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// The code was written by :
+//	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
+//      *Barbara Caccia barbara.caccia@iss.it
+//      with the support of Pablo Cirrone (LNS, INFN Catania Italy)
+//
+// ^ISPESL and INFN Roma, gruppo collegato Sanità, Italy
+// *Istituto Superiore di Sanità and INFN Roma, gruppo collegato Sanità, Italy
+//  Viale Regina Elena 299, 00161 Roma (Italy)
+//  tel (39) 06 49902246
+//  fax (39) 06 49387075
+//
+// more information:
+// http://g4advancedexamples.lngs.infn.it/Examples/medical-linac
+//
+
+
 #include "ML2PhysicsListMessenger.hh"
 
 #include "ML2PhysicsList.hh"
@@ -85,6 +101,7 @@ ML2PhysicsListMessenger::~ML2PhysicsListMessenger()
   delete allCutCmd;
   delete pListCmd;
   delete physDir;    
+  delete packageListCmd;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,6 +128,9 @@ void ML2PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
+
+  if( command == packageListCmd )
+   { pPhysicsList->AddPackage(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

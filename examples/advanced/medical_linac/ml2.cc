@@ -85,13 +85,23 @@ void visio()
 
 int main(int argc, char* argv[])
 {
+	CML2CInputData *myInputData;
+	myInputData=new CML2CInputData();
+	if (argc==1)
+	{
+		myInputData->inputData.generalData.seed=1;
+		myInputData->inputData.generalData.StartFileInputData="ml2.mac";
+	}
+	if (argc==2)
+	{
+		myInputData->inputData.generalData.seed=1;
+		myInputData->inputData.generalData.StartFileInputData=(G4String)argv[1];
+	}
 	if (argc==3)
 	{
-// record launch data
-		CML2CInputData *myInputData;
-		myInputData=new CML2CInputData();
 		sscanf(argv[2],"%d", &myInputData->inputData.generalData.seed);
 		myInputData->inputData.generalData.StartFileInputData=(G4String)argv[1];
+	}
 
 		G4RunManager *runManager=new G4RunManager();
 		ML2PhysicsList *physics=new ML2PhysicsList();
@@ -127,13 +137,11 @@ int main(int argc, char* argv[])
 
 		CML2EventAction *ML2EventAction = new CML2EventAction();
 		runManager->SetUserAction(ML2EventAction);
-std::cout <<"6 UI->ApplyCommand(command+m" << G4endl;
 
 		runManager->SetUserAction(new CML2TrackingAction);
 
 		runManager->Initialize();
 
-std::cout <<"7 UI->ApplyCommand(command+m" << G4endl;
 		int nLoop=0;
 		G4Timer MyTime, MyTimeStop;
 		G4double loopElapsedTime;
@@ -168,7 +176,6 @@ std::cout <<"7 UI->ApplyCommand(command+m" << G4endl;
 //		delete G4MainMessenger;
 		delete myWorld;
 //		delete runManager;
-	}
 	return 0;
 }
 

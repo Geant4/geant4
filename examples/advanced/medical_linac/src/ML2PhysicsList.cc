@@ -38,7 +38,7 @@
 // http://g4advancedexamples.lngs.infn.it/Examples/medical-linac
 //
 //*******************************************************//
-
+//
 // This class provides all the physic models that can be activated inside ML2;
 // Each model can be setted via macro commands;
 // Inside ML2 the models can be activate with three different complementar methods:
@@ -52,7 +52,7 @@
 //    For ML2 applications we suggest the use of the QGSP_BIC package
 //    for proton beams. The same can be used
 //    also for ligth ion beam.
-//    Example of use of package can be found in the packageQGSP_BIC.mac file.
+//   
 //
 // 2. Use of the *Physic Lists*.
 //    Physic lists are also already ready to use inside the Geant4 distribution
@@ -68,8 +68,7 @@
 //    /physic/addPhysic/binary (hadronic inelastic models for proton and neutrons)
 //    /physic/addPhysic/binary_ion (hadronic inelastic models for ions)
 //
-//    Example of the use of physics lists can be found in the macro files included in the
-//    'macro' folder .
+//    Example of the use of physics lists can be found in the macro files 
 //
 
 
@@ -151,6 +150,7 @@ void ML2PhysicsList::AddPackage(const G4String& name)
 	  elem= phys->GetPhysics(++i) ;
 	  tmp = const_cast<G4VPhysicsConstructor*> (elem);
 	}
+    G4cout << "THE FOLLOWING PHYSICS PACKEGE LIST HAS BEEN ACTIVATED: "<<name<< G4endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -61,10 +61,13 @@ CML2SDWithVoxels::CML2SDWithVoxels(G4String name, G4int saving_in_ROG_Voxels_eve
 	seedName=(G4String)a;
 
 
+	this->fullOutFileData=ROGOutFile+"_"+seedName+".txt";
+#ifdef G4MYFILEOUT
 	char *MyDirOut=new char[1000];
 	MyDirOut=getenv("G4MYFILEOUT");
 	G4String myDirOut=(G4String) MyDirOut;
 	this->fullOutFileData=myDirOut+"/"+ROGOutFile+"_"+seedName+".txt";
+#endif
 
 	if(this->bSaveROG)
 	{

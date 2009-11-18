@@ -48,17 +48,22 @@ CML2ExpVoxels::CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Select
 	this->seedName=(G4String)a;
 	this->saving_in_Selected_Voxels_every_events=saving_in_Selected_Voxels_every_events;
 
-
+	this->fullFileOut="EXP_seed_"+this->seedName+".m";
+#ifdef G4MYFILEOUT
 // full path of the output data
 	char *MyDir=new char[1000];
 	MyDir=getenv("G4MYFILEOUT");
 	G4String myDir=(G4String) MyDir;
 	this->fullFileOut=myDir+"/EXP_seed_"+this->seedName+".m";
+#endif
 
+	this->fullFileIn=FileExperimentalData;
+#ifdef G4MYFILEIN
 // full path of the experimental data
 	MyDir=getenv("G4MYFILEIN");
 	myDir=(G4String) MyDir;
 	this->fullFileIn=myDir+"/"+FileExperimentalData;
+#endif
 
 	this->nParticle=this->nTotalEvents=0;
 

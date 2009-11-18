@@ -106,7 +106,9 @@ void CML2PrimaryGenerationActionMessenger::SetNewValue(G4UIcommand* cmd, G4Strin
 
 
 	if (cmd==this->nMaxParticlesInRamPhaseSpace)
-	{this->pML2PrimaryGenerationAction->setNMaxParticlesInRamPhaseSpace(this->nMaxParticlesInRamPhaseSpace->GetNewIntValue(newValue));}
+	{
+		this->pML2PrimaryGenerationAction->setNMaxParticlesInRamPhaseSpace(this->nMaxParticlesInRamPhaseSpace->GetNewIntValue(newValue));
+	}
 
 
 	if (cmd==this->nIdenticalParticles)
