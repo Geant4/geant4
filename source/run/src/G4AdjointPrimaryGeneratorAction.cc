@@ -1,3 +1,39 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointPrimaryGeneratorAction.cc,v 1.2 2009-11-18 18:02:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+/////////////////////////////////////////////////////////////////////////////
+//      Class Name:	G4AdjointCrossSurfChecker
+//	Author:       	L. Desorgher
+// 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
+// 	Customer:     	ESA/ESTEC
+/////////////////////////////////////////////////////////////////////////////
+
 #include "G4AdjointPrimaryGeneratorAction.hh"
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
@@ -9,45 +45,33 @@
 //
 G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
 {
-  
-  
   theAdjointPrimaryGenerator= new G4AdjointPrimaryGenerator();
 
-  
   PrimariesConsideredInAdjointSim[G4String("e-")]=false;
   PrimariesConsideredInAdjointSim[G4String("gamma")]=false;
   PrimariesConsideredInAdjointSim[G4String("proton")]=false;
   PrimariesConsideredInAdjointSim[G4String("ion")]=false;
 
-
   ListOfPrimaryFwdParticles.clear();
   ListOfPrimaryAdjParticles.clear();
-	
- 
-  
- 
-  
+
   last_generated_part_was_adjoint=false;
   index_particle=100000;
   
   ion_name="not_defined";
   fwd_ion = 0;
   adj_ion = 0;
-  
-
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointPrimaryGeneratorAction::~G4AdjointPrimaryGeneratorAction()
-{delete theAdjointPrimaryGenerator;
+{
+  delete theAdjointPrimaryGenerator;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{  
-  
-   
-   
+{
    if ( !last_generated_part_was_adjoint ) {
 	 
 	 index_particle++;
@@ -70,11 +94,7 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	 theAdjointPrimaryGenerator->GenerateAdjointPrimaryVertex(anEvent,
 	 							  ListOfPrimaryAdjParticles[index_particle],
 								  E1,E2);
-	
-	
-  	
-
-  	  G4PrimaryVertex* aPrimVertex = anEvent->GetPrimaryVertex();
+	 G4PrimaryVertex* aPrimVertex = anEvent->GetPrimaryVertex();
   
   
   	  p=aPrimVertex->GetPrimary()->GetMomentum();
@@ -94,9 +114,9 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	  last_generated_part_was_adjoint =true;
 	  G4AdjointSimManager::GetInstance()->SetAdjointTrackingMode(true);
 	  G4AdjointSimManager::GetInstance()->RegisterAdjointPrimaryWeight(adjoint_weight);
-   
    }
-   else { //fwd particle equivalent to the last generated adjoint particle ios generated	
+   else {
+          //fwd particle equivalent to the last generated adjoint particle ios generated	
   	  G4PrimaryVertex* aPrimVertex = new G4PrimaryVertex();
 	  aPrimVertex->SetPosition(pos.x(),pos.y(),pos.z());
   	  aPrimVertex->SetT0(0.);
@@ -112,24 +132,28 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::SetEmin(G4double val)
-{ Emin=val;
+{
+  Emin=val;
   EminIon=val;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::SetEmax(G4double val)
-{ Emax=val;
+{
+  Emax=val;
   EmaxIon=val;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::SetEminIon(G4double val)
-{ EminIon=val;
+{
+  EminIon=val;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::SetEmaxIon(G4double val)
-{ EmaxIon=val;
+{
+  EmaxIon=val;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -159,28 +183,28 @@ void G4AdjointPrimaryGeneratorAction::SetSphericalAdjointPrimarySource(G4double 
   center_spherical_source = center_pos;
   type_of_adjoint_source ="Spherical";
   theAdjointPrimaryGenerator->SetSphericalAdjointPrimarySource(radius,center_pos);
- 
-  
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-void G4AdjointPrimaryGeneratorAction::SetAdjointPrimarySourceOnAnExternalSurfaceOfAVolume(G4String volume_name)
-{ type_of_adjoint_source ="ExternalSurfaceOfAVolume";
-  theAdjointPrimaryGenerator->SetAdjointPrimarySourceOnAnExternalSurfaceOfAVolume(volume_name); 
- 
+void G4AdjointPrimaryGeneratorAction::SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(const G4String& volume_name)
+{
+  type_of_adjoint_source ="ExternalSurfaceOfAVolume";
+  theAdjointPrimaryGenerator->SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(volume_name);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-void G4AdjointPrimaryGeneratorAction::ConsiderParticleAsPrimary(G4String particle_name)
-{ if (PrimariesConsideredInAdjointSim.find(particle_name) != PrimariesConsideredInAdjointSim.end()){
+void G4AdjointPrimaryGeneratorAction::ConsiderParticleAsPrimary(const G4String& particle_name)
+{
+  if (PrimariesConsideredInAdjointSim.find(particle_name) != PrimariesConsideredInAdjointSim.end()){
   	PrimariesConsideredInAdjointSim[particle_name]=true;
   }
   UpdateListOfPrimaryParticles();
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-void G4AdjointPrimaryGeneratorAction::NeglectParticleAsPrimary(G4String particle_name)
-{ if (PrimariesConsideredInAdjointSim.find(particle_name) != PrimariesConsideredInAdjointSim.end()){
+void G4AdjointPrimaryGeneratorAction::NeglectParticleAsPrimary(const G4String& particle_name)
+{
+  if (PrimariesConsideredInAdjointSim.find(particle_name) != PrimariesConsideredInAdjointSim.end()){
   	PrimariesConsideredInAdjointSim[particle_name]= false;
   }
   UpdateListOfPrimaryParticles();
@@ -188,7 +212,8 @@ void G4AdjointPrimaryGeneratorAction::NeglectParticleAsPrimary(G4String particle
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::UpdateListOfPrimaryParticles()
-{   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+{
+    G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
     ListOfPrimaryFwdParticles.clear();
     ListOfPrimaryAdjParticles.clear();
     std::map<G4String, G4bool>::iterator iter;
@@ -212,15 +237,16 @@ void G4AdjointPrimaryGeneratorAction::UpdateListOfPrimaryParticles()
 				ListOfPrimaryAdjParticles.push_back(0);
 				
 			}	
-		}	
-			
+		}
 	}	
    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPrimaryGeneratorAction::SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon)
-{ fwd_ion = fwdIon;
+{
+  fwd_ion = fwdIon;
   adj_ion = adjointIon;
   UpdateListOfPrimaryParticles();
 }
+

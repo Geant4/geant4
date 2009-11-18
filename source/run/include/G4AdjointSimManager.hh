@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointSimManager.hh,v 1.2 2009-11-18 18:02:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSimManager.hh
 //	Author:       	L. Desorgher
@@ -57,7 +85,7 @@
 //			3) Modify the analysis part of the code to normalise the signal computed during the fwd phase to the weight of the last adjoint particle
 //			 that reaches the external surface. This is done by using the following method of G4AdjointSimManager.
 //					 
-//					 G4int GetIDOfLastAdjParticleReachingExternalSource()				     
+//					 G4int GetIDOfLastAdjParticleReachingExtSource()				     
 //    					 G4ThreeVector GetPositionAtEndOfLastAdjointTrack(){ return last_pos;}
 //					 G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(){ return last_direction;}
 //					 G4double GetEkinAtEndOfLastAdjointTrack(){ return last_ekin;} 
@@ -121,9 +149,8 @@ class G4PhysicsLogVector;
 
 class G4AdjointSimManager  
 {
-  public: //constructor and destructor
+  public:
     
-   ~G4AdjointSimManager();
     static G4AdjointSimManager* GetInstance();
 
   public: //publich methods
@@ -135,59 +162,47 @@ class G4AdjointSimManager
     void SetAdjointTrackingMode(G4bool aBool);
     inline G4bool GetAdjointTrackingMode(){return  adjoint_tracking_mode;} //true if an adjoint track is being processed
     inline G4bool GetAdjointSimMode(){return  adjoint_sim_mode;} //true if an adjoint simulation is running
-    
-    
-   
-    
-    
-    
-    
-    bool GetDidAdjParticleReachTheExternalSource();
+
+    G4bool GetDidAdjParticleReachTheExtSource();
     void RegisterAtEndOfAdjointTrack();
     void RegisterAdjointPrimaryWeight(G4double aWeight);
-  
-    
-    
-    inline G4int GetIDOfLastAdjParticleReachingExternalSource(){return ID_of_last_particle_that_reach_the_external_source;}; 				     
+
+    inline G4int GetIDOfLastAdjParticleReachingExtSource(){return ID_of_last_particle_that_reach_the_ext_source;}; 				     
     inline G4ThreeVector GetPositionAtEndOfLastAdjointTrack(){ return last_pos;}
     inline G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(){ return last_direction;}
     inline G4double GetEkinAtEndOfLastAdjointTrack(){ return last_ekin;} 
     inline G4double GetEkinNucAtEndOfLastAdjointTrack(){ return last_ekin_nuc;}
     inline G4double GetWeightAtEndOfLastAdjointTrack(){return last_weight;}
     inline G4double GetCosthAtEndOfLastAdjointTrack(){return last_cos_th;}
-    inline G4String GetFwdParticleNameAtEndOfLastAdjointTrack(){return last_fwd_part_name;}
+    inline const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack(){return last_fwd_part_name;}
     inline G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(){return last_fwd_part_PDGEncoding;}
     inline G4int GetFwdParticleIndexAtEndOfLastAdjointTrack(){return last_fwd_part_index;}
     
     std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles();
      
-    bool DefineSphericalExternalSource(G4double radius, G4ThreeVector pos);
-    bool DefineSphericalExternalSourceWithCentreAtTheCentreOfAVolume(G4double radius, G4String volume_name);
-    bool DefineExternalSourceOnTheExternalSurfaceOfAVolume(G4String volume_name);
-    void SetExternalSourceEmax(G4double Emax);
-    
+    G4bool DefineSphericalExtSource(G4double radius, G4ThreeVector pos);
+    G4bool DefineSphericalExtSourceWithCentreAtTheCentreOfAVolume(G4double radius, const G4String& volume_name);
+    G4bool DefineExtSourceOnTheExtSurfaceOfAVolume(const G4String& volume_name);
+    void SetExtSourceEmax(G4double Emax);
     
     //Definition of adjoint source
     //---------------------------- 
      
-    bool DefineSphericalAdjointSource(G4double radius, G4ThreeVector pos);
-    bool DefineSphericalAdjointSourceWithCentreAtTheCentreOfAVolume(G4double radius, G4String volume_name);
-    bool DefineAdjointSourceOnTheExternalSurfaceOfAVolume(G4String volume_name);
+    G4bool DefineSphericalAdjointSource(G4double radius, G4ThreeVector pos);
+    G4bool DefineSphericalAdjointSourceWithCentreAtTheCentreOfAVolume(G4double radius, const G4String& volume_name);
+    G4bool DefineAdjointSourceOnTheExtSurfaceOfAVolume(const G4String& volume_name);
     void SetAdjointSourceEmin(G4double Emin);
     void SetAdjointSourceEmax(G4double Emax);
     inline G4double GetAdjointSourceArea(){return area_of_the_adjoint_source;} 
-    void ConsiderParticleAsPrimary(G4String particle_name);
-    void NeglectParticleAsPrimary(G4String particle_name);
+    void ConsiderParticleAsPrimary(const G4String& particle_name);
+    void NeglectParticleAsPrimary(const G4String& particle_name);
     void SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon);
-    G4String GetPrimaryIonName();
+    const G4String& GetPrimaryIonName();
     
     inline void SetNormalisationMode(G4int n){normalisation_mode=n;};
-    int GetNormalisationMode(){return normalisation_mode;};
-    double GetNumberNucleonsInIon(){return nb_nuc;};
-    
-    
-    
-    
+    G4int GetNormalisationMode(){return normalisation_mode;};
+    G4double GetNumberNucleonsInIon(){return nb_nuc;};
+
     //Definition of user actions for the adjoint tracking phase
     //---------------------------- 
     void SetAdjointEventAction(G4UserEventAction* anAction);
@@ -196,14 +211,10 @@ class G4AdjointSimManager
     void SetAdjointTrackingAction(G4UserTrackingAction* anAction);
     void SetAdjointRunAction(G4UserRunAction* anAction); 
     
-    
     //Set methods for user run actions
     //--------------------------------
     inline void UseUserStackingActionInFwdTrackingPhase(G4bool aBool){use_user_StackingAction=aBool;}
-    
-     
-    
-    
+
     //Convergence test
     //-----------------------
    /*
@@ -212,15 +223,10 @@ class G4AdjointSimManager
     void DefinePowerLawPrimarySpectrumForConvergenceTest(G4ParticleDefinition* aPartDef, G4double alpha);
      
    */ 
-    
 
-    
-    
-  
   private: 
   
-    static G4AdjointSimManager* instance; 
-    
+    static G4AdjointSimManager* instance;
   
   private: // methods
     
@@ -230,17 +236,16 @@ class G4AdjointSimManager
     void ResetUserPrimaryRunAndStackingActions(); 
     void DefineUserActions();
 
-   private: //constructor
+  private: //constructor and destructor
   
-   G4AdjointSimManager();
-  
+    G4AdjointSimManager();
+   ~G4AdjointSimManager();
+
   private ://attributes
   
   //Messenger
   //----------
-  G4AdjointSimMessenger* theMessenger;
-  
-  
+    G4AdjointSimMessenger* theMessenger;
   
   //user defined actions for the normal fwd simulation. Taken from the G4RunManager
   //-------------------------------------------------
@@ -266,8 +271,7 @@ class G4AdjointSimManager
   //-------------
     G4bool adjoint_tracking_mode;
     G4bool adjoint_sim_mode;   
-    
-      
+
   //adjoint particle information on the external surface
   //----------------------------- 
     G4ThreeVector last_pos;
@@ -278,7 +282,7 @@ class G4AdjointSimManager
     G4int  last_fwd_part_PDGEncoding;
     G4int  last_fwd_part_index;
     G4double last_weight;
-    G4int ID_of_last_particle_that_reach_the_external_source;
+    G4int ID_of_last_particle_that_reach_the_ext_source;
       
     G4int nb_evt_of_last_run;
     G4int normalisation_mode;
@@ -288,9 +292,7 @@ class G4AdjointSimManager
     G4double area_of_the_adjoint_source; 
     G4double nb_nuc;
     G4double theAdjointPrimaryWeight;
-    
-    
-    
+
     //Weight Analysis
     //----------
     G4PhysicsLogVector* electron_last_weight_vector;

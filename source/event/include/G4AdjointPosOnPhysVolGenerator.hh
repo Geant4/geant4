@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointPosOnPhysVolGenerator.hh,v 1.2 2009-11-18 17:57:59 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPosOnPhysVolGenerator
 //	Author:       	L. Desorgher
@@ -26,13 +54,12 @@
 #ifndef G4AdjointPosOnPhysVolGenerator_h
 #define G4AdjointPosOnPhysVolGenerator_h 1
 
-
-
-class G4VSolid;
 #include "G4VPhysicalVolume.hh"
 #include "G4AffineTransform.hh"
-
 #include "G4ThreeVector.hh"
+
+class G4VSolid;
+
 class G4AdjointPosOnPhysVolGenerator 
 ///////////////////////
 {
@@ -41,45 +68,42 @@ class G4AdjointPosOnPhysVolGenerator
   public: //without description
 //--------
 
-// Constructor/Destructor
-   
    static  G4AdjointPosOnPhysVolGenerator* GetInstance();
-   
-   ~G4AdjointPosOnPhysVolGenerator();
    
 //--------
   public:  //public methods
 //--------
-  G4VPhysicalVolume* DefinePhysicalVolume(G4String aName);
-  void DefinePhysicalVolume1(G4String aName);
-  double ComputeAreaOfExternalSurface();
-  double ComputeAreaOfExternalSurface(G4int NStat);
-  double ComputeAreaOfExternalSurface(double epsilon);
-  double ComputeAreaOfExternalSurface(G4VSolid* aSolid);
-  double ComputeAreaOfExternalSurface(G4VSolid* aSolid,G4int NStat);
-  double ComputeAreaOfExternalSurface(G4VSolid* aSolid,double epsilon);
+  G4VPhysicalVolume* DefinePhysicalVolume(const G4String& aName);
+  void DefinePhysicalVolume1(const G4String& aName);
+  G4double ComputeAreaOfExtSurface();
+  G4double ComputeAreaOfExtSurface(G4int NStat);
+  G4double ComputeAreaOfExtSurface(G4double epsilon);
+  G4double ComputeAreaOfExtSurface(G4VSolid* aSolid);
+  G4double ComputeAreaOfExtSurface(G4VSolid* aSolid,G4int NStat);
+  G4double ComputeAreaOfExtSurface(G4VSolid* aSolid,G4double epsilon);
  
-  void GenerateAPositionOnTheExternalSurfaceOfASolid(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-  void GenerateAPositionOnTheExternalSurfaceOfTheSolid(G4ThreeVector& p, G4ThreeVector&  direction);
-  void GenerateAPositionOnTheExternalSurfaceOfThePhysicalVolume(G4ThreeVector& p, G4ThreeVector&  direction);
-  void GenerateAPositionOnTheExternalSurfaceOfThePhysicalVolume(G4ThreeVector& p, G4ThreeVector&  direction,
+  void GenerateAPositionOnTheExtSurfaceOfASolid(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
+  void GenerateAPositionOnTheExtSurfaceOfTheSolid(G4ThreeVector& p, G4ThreeVector&  direction);
+  void GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(G4ThreeVector& p, G4ThreeVector&  direction);
+  void GenerateAPositionOnTheExtSurfaceOfThePhysicalVolume(G4ThreeVector& p, G4ThreeVector&  direction,
   										G4double& costh_to_normal);
 
   //inline public methods
    
   inline void SetSolid(G4VSolid* aSolid){theSolid=aSolid;}
-  inline G4double GetAreaOfExternalSurfaceOfThePhysicalVolume(){return AreaOfExternalSurfaceOfThePhysicalVolume;}
+  inline G4double GetAreaOfExtSurfaceOfThePhysicalVolume(){return AreaOfExtSurfaceOfThePhysicalVolume;}
   inline G4double GetCosThDirComparedToNormal(){return CosThDirComparedToNormal;}
   
 //---------   
    private:   //private methods
 //---------  
    G4AdjointPosOnPhysVolGenerator();
-   double ComputeAreaOfExternalSurfaceStartingFromSphere(G4VSolid* aSolid,G4int NStat);
-   double ComputeAreaOfExternalSurfaceStartingFromBox(G4VSolid* aSolid,G4int NStat);
+  ~G4AdjointPosOnPhysVolGenerator();
+   G4double ComputeAreaOfExtSurfaceStartingFromSphere(G4VSolid* aSolid,G4int NStat);
+   G4double ComputeAreaOfExtSurfaceStartingFromBox(G4VSolid* aSolid,G4int NStat);
    void GenerateAPositionOnASolidBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-   double GenerateAPositionOnASphereBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
-   double GenerateAPositionOnABoxBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
+   G4double GenerateAPositionOnASphereBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
+   G4double GenerateAPositionOnABoxBoundary(G4VSolid* aSolid,G4ThreeVector& p, G4ThreeVector&  direction);
    void ComputeTransformationFromPhysVolToWorld();
 
 //---------   
@@ -89,21 +113,15 @@ class G4AdjointPosOnPhysVolGenerator
    G4VSolid* theSolid;
    G4VPhysicalVolume* thePhysicalVolume;
    G4int NStat;
-   double epsilon;
-   bool UseSphere;
+   G4double epsilon;
+   G4bool UseSphere;
    G4String ModelOfSurfaceSource;
-   double ExternalSourceRadius;
-   double ExternalSourceDx,ExternalSourceDy,ExternalSourceDz ;
+   G4double ExtSourceRadius;
+   G4double ExtSourceDx,ExtSourceDy,ExtSourceDz ;
    G4AffineTransform theTransformationFromPhysVolToWorld;
-   double AreaOfExternalSurfaceOfThePhysicalVolume;
-   double CosThDirComparedToNormal;
-   
-
- 
-   	
-
+   G4double AreaOfExtSurfaceOfThePhysicalVolume;
+   G4double CosThDirComparedToNormal;
 };
 
-
-
 #endif
+

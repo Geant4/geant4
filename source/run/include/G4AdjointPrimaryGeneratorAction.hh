@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointPrimaryGeneratorAction.hh,v 1.2 2009-11-18 18:02:06 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPosOnPhysVolGenerator
 //	Author:       	L. Desorgher
@@ -45,37 +73,39 @@ class G4ParticleGun;
 class G4Event;
 class G4AdjointPrimaryGenerator;
 class G4ParticleDefinition;
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public: //constructor, destructor
+
     G4AdjointPrimaryGeneratorAction();    
    ~G4AdjointPrimaryGeneratorAction();
 
   public: //public methods
     
     void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
+    void SetRndmFlag(const G4String& val) { rndmFlag = val;}
     void SetEmin(G4double val);
     void SetEmax(G4double val); 
     void SetEminIon(G4double val);
     void SetEmaxIon(G4double val);
     void SetSphericalAdjointPrimarySource(G4double radius, G4ThreeVector pos);
-    void SetAdjointPrimarySourceOnAnExternalSurfaceOfAVolume(G4String volume_name);
-    void ConsiderParticleAsPrimary(G4String particle_name);
-    void NeglectParticleAsPrimary(G4String particle_name);
+    void SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(const G4String& volume_name);
+    void ConsiderParticleAsPrimary(const G4String& particle_name);
+    void NeglectParticleAsPrimary(const G4String& particle_name);
     void SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon);
     void UpdateListOfPrimaryParticles();
     inline size_t GetNbOfAdjointPrimaryTypes(){return ListOfPrimaryAdjParticles.size();}
-    inline  std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles(){return ListOfPrimaryFwdParticles;}
-    inline G4String GetPrimaryIonName(){return ion_name;}
+    inline std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles(){return ListOfPrimaryFwdParticles;}
+    inline const G4String& GetPrimaryIonName(){return ion_name;}
 
   private: //private methods
+
     G4double ComputeEnergyDistWeight(G4double energy, G4double E1, G4double E2);
   
   private: //attributes
-    
     
     G4String  rndmFlag;	  //flag for a rndm impact point
     
@@ -88,22 +118,19 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double Emax;
     G4double EminIon;
     G4double EmaxIon;
-    
-    
+
     //List of type of primary adjoint and forward  particle used in the simulation
     //---------------------------------------------------------------------------
     std::vector<G4ParticleDefinition*> ListOfPrimaryFwdParticles;
     std::vector<G4ParticleDefinition*> ListOfPrimaryAdjParticles;
     std::map<G4String, G4bool> PrimariesConsideredInAdjointSim; //if true considered if false not considered
-    int NbOfAdjointPrimaryTypes;
-   
-  
-  
+    G4int NbOfAdjointPrimaryTypes;
+
     size_t index_particle;
     G4bool last_generated_part_was_adjoint;
     G4ThreeVector  pos,  direction, p; 
    
-    G4String type_of_adjoint_source; //Spherical ExternalSurfaceOfAVolume
+    G4String type_of_adjoint_source; //Spherical ExtSurfaceOfAVolume
     G4double radius_spherical_source;
     G4ThreeVector center_spherical_source;
     

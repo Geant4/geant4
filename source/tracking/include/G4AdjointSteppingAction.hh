@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointSteppingAction.hh,v 1.2 2009-11-18 18:04:11 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
 //	Author:       	L. Desorgher
@@ -25,10 +53,6 @@
 //			 when crossing the external source is registered and in the next event a forward primary is generated. In the other cases b) and c)
 //			The next generated fwd particle is killed before being tracked and the next tracking of an adjoint particle is started directly. 	
 //
-//	
-//
-//		
-//
 
 #ifndef G4AdjointSteppingAction_h
 #define G4AdjointSteppingAction_h 1
@@ -52,7 +76,7 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     
     inline void SetExtSourceEMax(G4double Emax){ext_sourceEMax=Emax;} 
     inline void SetStartEvent(G4bool aBool){start_event =aBool;}
-    inline bool GetDidAdjParticleReachTheExternalSource(){return did_adj_part_reach_external_source;}
+    inline G4bool GetDidAdjParticleReachTheExtSource(){return did_adj_part_reach_ext_source;}
     inline G4ThreeVector GetLastMomentum(){return last_momentum;}
     inline G4ThreeVector GetLastPosition(){return last_pos;}
     inline G4double GetLastEkin(){return last_ekin;}
@@ -67,7 +91,7 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     G4AdjointCrossSurfChecker* theG4AdjointCrossSurfChecker;
     G4bool start_event;
     
-    G4bool did_adj_part_reach_external_source;
+    G4bool did_adj_part_reach_ext_source;
     G4ThreeVector last_momentum, last_pos; 
     G4double last_ekin;
     G4double last_weight ;
@@ -77,3 +101,4 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
 
 };
 #endif
+
