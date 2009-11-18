@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.28 2009-11-05 14:34:18 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.29 2009-11-18 10:30:21 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -1125,6 +1125,16 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
 
         // do not pass by parent, it will disable widget tab focus !
         return true;
+#if QT_VERSION >= 0x040000
+        // L.Garnier : MetaModifier is CTRL for MAC, but I don't want to put a MAC 
+        // specific #ifdef
+      } else if (((e->modifiers () == Qt::ControlModifier) || (e->modifiers () == Qt::MetaModifier)) && (e->key() == Qt::Key_A)) {
+       fCommandArea->home(false);
+       return true;
+      } else if (((e->modifiers () == Qt::ControlModifier) || (e->modifiers () == Qt::MetaModifier)) && (e->key() == Qt::Key_E)) {
+       fCommandArea->end(false);
+       return true;
+#endif
       }
     }
   }
