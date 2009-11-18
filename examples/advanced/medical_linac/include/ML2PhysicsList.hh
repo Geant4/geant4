@@ -43,16 +43,24 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh" //
-#include "G4EmProcessOptions.hh" //
-#include "G4ComptonScattering.hh" //
-#include "G4GammaConversion.hh" //
-#include "G4PhotoElectricEffect.hh" //
-#include "G4LowEnergyRayleigh.hh" 
-#include "G4eMultipleScattering.hh" //
+#include "G4EmProcessOptions.hh"
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4UniversalFluctuation.hh"
 #include "G4hMultipleScattering.hh" //
 #include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4LivermoreIonisationModel.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4eBremsstrahlung.hh"
 #include "G4hBremsstrahlung.hh" // *
 #include "G4hPairProduction.hh" // *
 #include "G4hIonisation.hh" // *
@@ -60,7 +68,7 @@
 #include "G4Gamma.hh" // *
 #include "G4Electron.hh" // *
 #include "G4Positron.hh" // *
-
+#include "G4StepLimiter.hh"
 
 #include "G4VUserPhysicsList.hh"
 #include "G4ProductionCuts.hh"

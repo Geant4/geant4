@@ -104,22 +104,26 @@ int main(int argc, char* argv[])
 		CML2PrimaryGenerationAction *gun;
 		gun = new CML2PrimaryGenerationAction(&myInputData->inputData.primaryParticleData);
 
+std::cout<< "1 UI->ApplyCommand(command+m" << G4endl;
 		G4UImanager* UI = G4UImanager::GetUIpointer();
 		G4String command = "/control/execute ";
 		UI->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData); 
-
 // initialize the primary generator according to the choosen particle source
+std::cout <<"2 UI->ApplyCommand(command+m" << G4endl;
 		gun->design();
 
+std::cout <<"3 UI->ApplyCommand(command+m" << G4endl;
 		CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 		CLHEP::HepRandom :: setTheSeed(myInputData->inputData.generalData.seed);
 
 		myWorld->create(&myInputData->inputData);
 		
+std::cout <<"4 UI->ApplyCommand(command+m" << G4endl;
 		runManager->SetUserInitialization(myWorld);
 
 
 		runManager->SetUserAction(gun);
+std::cout <<"5 UI->ApplyCommand(command+m" << G4endl;
 
 // instantiate the convergence control class and assign it to myStepAction
 		CML2Convergence *convergence=new CML2Convergence(myInputData->inputData.generalData.seed, myInputData->inputData.generalData.saving_in_Selected_Voxels_every_events, myInputData->inputData.generalData.fileExperimentalData, myInputData->inputData.generalData.bCompareExp, myInputData->inputData.generalData.minNumberOfEvents);
@@ -128,11 +132,13 @@ int main(int argc, char* argv[])
 
 		CML2EventAction *ML2EventAction = new CML2EventAction();
 		runManager->SetUserAction(ML2EventAction);
+std::cout <<"6 UI->ApplyCommand(command+m" << G4endl;
 
 		runManager->SetUserAction(new CML2TrackingAction);
 
 		runManager->Initialize();
 
+std::cout <<"7 UI->ApplyCommand(command+m" << G4endl;
 		int nLoop=0;
 		G4Timer MyTime, MyTimeStop;
 		G4double loopElapsedTime;

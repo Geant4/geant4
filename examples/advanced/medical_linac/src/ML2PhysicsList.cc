@@ -61,7 +61,6 @@ void CML2PhysicsList::ConstructProcess()
 }
 void CML2PhysicsList::ConstructEM()
 {
- // Add standard EM Processes
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -71,20 +70,46 @@ void CML2PhysicsList::ConstructEM()
 
     if (particleName == "gamma") {
 
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
+	G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+	G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+	thePhotoElectricEffect->SetModel(theLivermorePhotoElectricModel);
+	pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+
+	G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+	G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
+	theComptonScattering->SetModel(theLivermoreComptonModel);
+	pmanager->AddDiscreteProcess(theComptonScattering);
+	
+	G4GammaConversion* theGammaConversion = new G4GammaConversion();
+	G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
+	theGammaConversion->SetModel(theLivermoreGammaConversionModel);
+	pmanager->AddDiscreteProcess(theGammaConversion);
+	
+	G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+	G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+	theRayleigh->SetModel(theRayleighModel);
+	pmanager->AddDiscreteProcess(theRayleigh);
+
 
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
+      
+      // Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
+      G4LivermoreIonisationModel* theLivermoreIonisationModel = new G4LivermoreIonisationModel();
+      eIoni->SetEmModel(theLivermoreIonisationModel);
+      eIoni->SetStepFunction(0.2, 100*um); //     
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
+      
+      // Bremsstrahlung
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      eBrem->SetEmModel(new G4LivermoreBremsstrahlungModel());
+      pmanager->AddProcess(eBrem,         -1,-3, 3);
+
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
 
     } else if (particleName == "e+") {
 
