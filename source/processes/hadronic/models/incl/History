@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.18 2009-10-17 19:14:34 kaitanie Exp $
+$Id: History,v 1.19 2009-11-18 10:43:14 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,12 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+18 November 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-01)
+---------------------------------------------------------
+- Added safeguard division by zero (or negative) energy in ABLA
+  fission fragment handling
+- Minor fix in the INCL particle reflection time calculation
 
 17 October 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-00)
 --------------------------------------------------------

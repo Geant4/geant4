@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.21 2009-10-17 19:14:34 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.22 2009-11-18 10:43:14 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -6882,7 +6882,7 @@ G4double G4Incl::transmissionProb(G4double E, G4double iz, G4double izn, G4doubl
   }
 }
 
-G4double G4Incl::ref(G4double x1, G4double x2, G4double x3, G4double p1, G4double p2, G4double p3, G4double E, G4double r2)
+G4double G4Incl::ref(G4double &x1, G4double &x2, G4double &x3, G4double p1, G4double p2, G4double p3, G4double E, G4double r2)
 {
   // Surface : modif de REF
   // REF=TIME NECESSARY FOR A NUCLEON TO REACH THE SURFACE

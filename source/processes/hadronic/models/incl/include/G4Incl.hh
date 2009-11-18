@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.14 2009-10-17 19:14:34 kaitanie Exp $ 
+// $Id: G4Incl.hh,v 1.15 2009-11-18 10:43:14 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -474,7 +474,7 @@ public: // Main INCL routines
    * @param r2 a double parameter
    * @return a double value
    */
-  G4double ref(G4double x1, G4double x2, G4double x3, G4double p1,
+  G4double ref(G4double &x1, G4double &x2, G4double &x3, G4double p1,
 		 G4double p2, G4double p3, G4double E, G4double r2);
 
   /**
