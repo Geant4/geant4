@@ -88,10 +88,10 @@ HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
   delete allCutCmd;
   delete pListCmd;
   delete physDir;    
+  delete packageListCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
@@ -114,6 +114,10 @@ void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
 
   if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
-}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+  if( command == packageListCmd )
+   { pPhysicsList->AddPackage(newValue);}
+
+
+}
