@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.368 2009-11-17 15:17:55 gcosmo Exp $
+cvs log $Id: History,v 1.369 2009-11-18 17:27:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th November 2009  Gabriele Cosmo (config-V09-02-15)
+- architecture.gmk: corrected inclusion of -lz for zlib.
 
 17th November 2009  Gabriele Cosmo (config-V09-02-14)
 - Added include paths to new CHIPS modules.
