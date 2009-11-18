@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.30 2009-11-04 18:18:27 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.31 2009-11-18 16:44:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -424,6 +424,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
 G4IonisParamMat::~G4IonisParamMat()
 {
   if (fShellCorrectionVector) delete [] fShellCorrectionVector;
+  delete fDensityData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
