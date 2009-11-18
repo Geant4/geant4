@@ -1,4 +1,4 @@
-q$Id: History,v 1.109 2009-11-17 11:58:51 mkossov Exp $
+q$Id: History,v 1.110 2009-11-18 09:35:11 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-11-2009, M.Kosov                       (phys-lists-V09-02-37)
+- bug fix in CHIPS.icc (call for G4QCaptureAtRestPhysics)
 
 17-11-2009, M.Kosov                       (phys-lists-V09-02-36)
 - improved dependencies on CHIPS
