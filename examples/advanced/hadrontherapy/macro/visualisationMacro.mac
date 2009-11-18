@@ -67,5 +67,4 @@
 # Start of the run
 #
 
-/control/execute gui.mac
-#/run/beamOn 100
+/run/beamOn 100

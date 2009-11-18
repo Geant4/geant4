@@ -23,21 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// ----------------------------------------------------------------------------
-// $Id: HadrontherapyAnalysisManager.hh; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-//
-// (a) Laboratori Nazionali del Sud
-//     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
-//
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyAnalysisManager.hh; May 2005
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef HADRONTHERAPYANALYSISMANAGER_HH
 #define HADRONTHERAPYANALYSISMANAGER_HH 1

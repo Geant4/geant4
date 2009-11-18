@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: passiveProtonBeamLineMessenger.cc;
+// passiveProtonBeamLineMessenger.cc;
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "PassiveProtonBeamLineMessenger.hh"
 #include "PassiveProtonBeamLine.hh"

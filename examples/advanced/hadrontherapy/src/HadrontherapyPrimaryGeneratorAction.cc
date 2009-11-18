@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // HadrontherapyPrimarygeneratorAction.cc;
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -36,7 +37,6 @@
 // 
 // * cirrone@lns.infn.it
 //
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
 // ------------------------------------------------------------------------------
 
 #include "HadrontherapyPrimaryGeneratorAction.hh"

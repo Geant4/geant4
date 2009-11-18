@@ -23,22 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // LocalINCLIonIonInelasticPhysic.cc
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F.Romano(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
-// ----------------------------------------------------------------------------
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef LOCALINCLIONINELASTICPHYSIC_H
 #define LOCALINCLIONIONINELASTICPHYSIC_H 1

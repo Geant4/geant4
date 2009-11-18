@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HadrontherapyParametersMessenger.hh;
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+// HadrontherapyParametersMessenger.hh;
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef HadrontherapyParameterMessenger_h
 #define HadrontherapyParameterMessenger_h 1

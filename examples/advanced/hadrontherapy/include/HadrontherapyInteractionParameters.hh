@@ -23,11 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id: HadrontherapyInteractionParameters.hh;
-//
-
-
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef HadrontherapyInteractionParameters_H
 #define HadrontherapyInteractionParameters_H 1

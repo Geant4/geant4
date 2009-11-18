@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// IAEAScorerWriter.hh
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef IAEAScoreWriter_h
 #define IAEAScoreWriter_h 1
@@ -45,8 +46,7 @@ public:
 
 public:
   // store a quantity into a file
-  void DumpQuantityToFile(G4String & psName, /*G4String & fileName,*/ G4String & option);
-
+  void DumpQuantityToFiles(G4String & psName, G4String & option);
 };
 
 #endif

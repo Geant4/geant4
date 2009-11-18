@@ -23,20 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPrimaryGeneratorAction.hh; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyPrimaryGeneratorAction.hh; May 2005
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef HadrontherapyPrimaryGeneratorAction_h
 #define HadrontherapyPrimaryGeneratorAction_h 1

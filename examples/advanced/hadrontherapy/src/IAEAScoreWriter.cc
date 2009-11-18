@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// IAEAScoreWriter.cc
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "IAEAScoreWriter.hh"
 
@@ -45,7 +47,7 @@ IAEAScoreWriter::~IAEAScoreWriter() {
   ;
 }
 
-void IAEAScoreWriter::DumpQuantityToFile(G4String & psName, /*G4String & fileName,*/ G4String & option) {
+void IAEAScoreWriter::DumpQuantityToFiles(G4String & psName, G4String & option) {
   //
   if(verboseLevel > 0) {
     G4cout << "User-defined DumpQuantityToFile() method is invoked."

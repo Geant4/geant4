@@ -22,27 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// HadrontherapyStepMaxMessenger.hh
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
-/**
-* @file HadrontherapyAnalysisFileMessenger.hh. 
-* @author Gillis Danielsen, HIP 
-* @date 6-10-09  
-*/ 
+// HadrontherapyAnalysisFileMessenger.hh.
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
 
 #ifndef HadrontherapyAnalysisFileMessenger_h
 #define HadrontherapyAnalysisFileMessenger_h 1

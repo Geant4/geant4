@@ -23,20 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
+// HadrontherapyAnalysisFileMessenger.cc
 //
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
-// G.A.P. Cirrone(a)*
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
 #include "HadrontherapyAnalysisFileMessenger.hh"
 #include "HadrontherapyAnalysisManager.hh"
 #include "G4UIcmdWithAString.hh"

@@ -24,21 +24,8 @@
 // ********************************************************************
 //
 // HadrontherapyStepMax.cc
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+
 #include "HadrontherapyStepMax.hh"
 #include "HadrontherapyStepMaxMessenger.hh"
 

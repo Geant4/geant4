@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// HadrontherapyPhysicsListMessenger.cc
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+
 #include "HadrontherapyPhysicsListMessenger.hh"
 
 #include "HadrontherapyPhysicsList.hh"

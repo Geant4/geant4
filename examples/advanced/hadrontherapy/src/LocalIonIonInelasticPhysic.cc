@@ -25,20 +25,7 @@
 //
 //
 // LocalIonIonInelasticPhysic.cc
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F.Romano(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
-// ----------------------------------------------------------------------------
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
 // In this class the models for ion-ion interactions at intermediate energies (0 - 1 GeV per nucleon)
 // can be activate. This class can be used alternatively to the "binary_ion" physics list

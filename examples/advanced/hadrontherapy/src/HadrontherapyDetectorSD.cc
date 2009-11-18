@@ -24,23 +24,7 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyDetectorSD.cc; 
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyAnalysisManager.hh"

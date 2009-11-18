@@ -23,22 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Hadrontherapy.cc Main of the Hadrontherapy example; 
-// Last modified: G.A.P.Cirrone 
+// Hadrontherapy.cc 
+//
+// Main of the Hadrontherapy example; 
+// Released with the Geant4 9.3 version (December 2009)
+//
+// Last modified: G.A.P.Cirrone
 // 
-// See more at: http://workgroup.lngs.infn.it/geant4lns/
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone
+// G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), E.Mazzaglia(a), F.Romano(a)
 // 
+// Contributor authors:
+// P.Kaitaniemi(d), A.Heikkinen(d), Gillis Danielsen (d)
+//
+// Past authors:
+// M.G.Pia(b), S.Guatelli(c), G.Russo(a), M.Russo(a), A.Lechner(e) 
+//
 // (a) Laboratori Nazionali del Sud 
 //     of the INFN, Catania, Italy
+//
+// (b) INFN Section of Genova, Italy
 // 
-// * cirrone@lns.infn.it
+// (c) University of Wallongong, Australia
+//
+// (d) Helsinki Institute of Physics, Helsinki, Finland
+//
+// (e) CERN, (CH)
+//
+//  *Corresponding author, email to cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 
 #include "G4RunManager.hh"

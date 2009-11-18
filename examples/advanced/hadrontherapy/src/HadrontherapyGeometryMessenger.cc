@@ -23,20 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyGeometryMessenger.cc;
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// $Id: HadrontherapyGeometrymessenger.cc; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyGeometryController.hh"

@@ -23,23 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.cc;
-//
-// See more at: http://workgroup.lngs.infn.it/geant4lns
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// --------------------------------------------------------------
+// $Id: HadrontherapyEventAction.cc; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
