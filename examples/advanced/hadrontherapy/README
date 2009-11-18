@@ -24,7 +24,7 @@ Please refer to the web-published version to know the last and future developmen
  G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), E.Mazzaglia(a), F.Romano(a)
  
  Contributor authors:
- P.Kaitaniemi(d), A.Heikkinen(d), Gillis Danielsen (d)
+ P.Kaitaniemi(d), A.Heikkinen(d), G.Danielsen (d)
 
  Past authors:
  M.G.Pia(b), S.Guatelli(c), G.Russo(a), M.Russo(a), A.Lechner(e) 
@@ -42,6 +42,7 @@ Please refer to the web-published version to know the last and future developmen
 
   *Corresponding author, email to cirrone@lns.infn.it
 -------------------------------------------------------------------------------------------------
+
 HADRONTHERAPY:
 WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
 Hadrontherapy is a Geant4-based application specifically developed to address typical needs related to the proton and ion therapy. 
