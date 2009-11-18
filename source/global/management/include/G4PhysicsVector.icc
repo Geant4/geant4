@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.22 2009-11-17 18:59:23 vnivanch Exp $
+// $Id: G4PhysicsVector.icc,v 1.23 2009-11-18 11:42:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,6 +158,7 @@ inline
 
   } else {
      lastBin = FindBinLocation(theEnergy); 
+     if(lastBin >= numberOfNodes-1) {lastBin = numberOfNodes-2;} 
      lastEnergy = theEnergy;
      Interpolation();
   }
