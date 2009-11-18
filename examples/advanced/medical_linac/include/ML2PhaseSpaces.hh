@@ -37,56 +37,36 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef CML2PhaseSpacesH
+#define CML2PhaseSpacesH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Box.hh"
+#include "G4VisAttributes.hh"
+#include "G4PVPlacement.hh"
+#include "G4NistManager.hh"
+
+#include "ML2SDWithParticle.hh"
+#include "ML2SDWithVoxels.hh"
 #include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "ML2SinputData.hh"
 
-
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+class CML2PhaseSpaces
 {
- }
-
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
-
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
-
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
+public:
+	CML2PhaseSpaces();
+	~CML2PhaseSpaces(void);
+	bool createPlane(G4VPhysicalVolume  *PVWorld, G4String name, G4ThreeVector centre, G4ThreeVector halfSize);
+	bool createPlane(G4int idSD_Type, G4int max_N_particles_in_PhSp_File, G4int seed, G4int nMaxParticlesInRamPhaseSpace, G4VPhysicalVolume  *PVWorld, G4String name, G4String PhaseSpaceOutFile, G4bool bSavePhaseSpace, G4bool bStopAtPhaseSpace, G4ThreeVector centre, G4ThreeVector halfSize, SPrimaryParticle *primaryParticleData);
+	G4int getCML2SensDetNParticle(){return this->sensDetParticle->getTotalNumberOfParticles();};
+	inline CML2SDWithParticle* getCML2SensitiveDetectorParticle(){return this->sensDetParticle->getCML2SensitiveDetectorParticle();};
+	inline bool getBContinueRun(){return this->sensDetParticle->getBContinueRun();};
+	CML2SDWithParticle *sensDetParticle;
+private:
+	CML2SDWithVoxels *sensDetVoxelized;
+	G4int nParticles;
+};
 
 
-		}
-    }
- }
+#endif

@@ -37,56 +37,31 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
-
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#ifndef CML2Acc1MessengerH
+#define CML2Acc1MessengerH
 
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class CML2Acc1;
+class G4UImessenger;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
+
+class CML2Acc1Messenger : public G4UImessenger 
 {
- }
+public:
+	CML2Acc1Messenger(CML2Acc1 *acc1);
+	~CML2Acc1Messenger(void);
+	void SetNewValue(G4UIcommand* cmd, G4String newValue);
+private:
+	CML2Acc1 *pAcc1;
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	G4UIcmdWithAnInteger *idEnergy;
+	G4UIcmdWithADoubleAndUnit *aperture1X,*aperture2X, *aperture1Y, *aperture2Y, *SSD, *leavesA, *leavesB;
+};
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+#endif
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
-
-
-		}
-    }
- }

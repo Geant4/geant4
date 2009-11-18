@@ -37,56 +37,32 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
-
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#ifndef CML2PhantomConstructionMessengerH
+#define CML2PhantomConstructionMessengerH
 
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class CML2PhantomConstruction;
+class G4UImessenger;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
+
+class CML2PhantomConstructionMessenger : public G4UImessenger 
 {
- }
+public:
+	CML2PhantomConstructionMessenger(CML2PhantomConstruction *phantomConstructor);
+	~CML2PhantomConstructionMessenger(void);
+	void SetNewValue(G4UIcommand* cmd, G4String newValue);
+private:
+	CML2PhantomConstruction *pPhantomConstructor;
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	G4UIcmdWithAnInteger *Phantom_nVoxelsX, *Phantom_nVoxelsY, *Phantom_nVoxelsZ;
+	G4UIcmdWithAString *PhantomName, *PhantomSpecficationsFileName;
+	G4UIcmdWithADoubleAndUnit *rotationX,  *rotationY,  *rotationZ;
+};
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+#endif
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
-
-
-		}
-    }
- }

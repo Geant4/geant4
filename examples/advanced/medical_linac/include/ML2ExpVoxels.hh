@@ -37,56 +37,41 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef CML2ReadOutGeometryVoxelsH
+#define CML2ReadOutGeometryVoxelsH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "G4ThreeVector.hh"
+#include "ML2SinputData.hh"
+#include "G4Step.hh"
 
-
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+class CML2ExpVoxels 
 {
- }
+public:
+	CML2ExpVoxels(G4bool bHasExperimentalData, G4int saving_in_Selected_Voxels_every_events, G4int seed, G4String FileExperimentalData);
+	~CML2ExpVoxels(void);
+	void add(G4ThreeVector pos, G4double depEnergy, G4double density);
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	inline std::vector <Svoxel> getVoxels(){return this->voxels;}
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+	G4int getMinNumberOfEvents();
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+	G4bool loadData();
+private:
+	void saveHeader(G4String fullOutFileName);
+	void saveResults(G4String fullOutFileName, std::vector <Svoxel> voxels);
+	void calculateNormalizedEd(std::vector <Svoxel> &voxels);
+	std::vector <Svoxel> voxels;
+	G4ThreeVector minZone, maxZone;
+	G4int nCurves;
+	G4int *startCurve, *stopCurve;
+	G4double *chi2Factor;
+	G4String headerText1, headerText2, fullFileIn, fullFileOut;
+	G4String seedName, loopName;
+	SGeneralData *generalData;
+	G4int nParticle;
+	G4int nTotalEvents, saving_in_Selected_Voxels_every_events;
+	G4bool bHasExperimentalData;
+};
 
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
+#endif
 
-
-		}
-    }
- }

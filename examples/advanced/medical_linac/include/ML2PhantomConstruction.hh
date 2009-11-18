@@ -37,56 +37,57 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef CML2PhantomConstructionH
+#define CML2PhantomConstructionH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "globals.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Box.hh"
 
+#include "ML2SinputData.hh"
+#include "ML2Ph_FullWater.hh"
+#include "ML2Ph_BoxInBox.hh"
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+class CML2PhantomConstructionMessenger;
+class CPh_HalfWaterAir;
+class CPh_FullWater;
+class CML2PhantomConstruction
 {
- }
+public:
+	CML2PhantomConstruction(void);
+	~CML2PhantomConstruction(void);
+	static CML2PhantomConstruction* GetInstance(void);
+	void Construct(G4VPhysicalVolume *PVWorld, G4int saving_in_ROG_Voxels_every_events, G4int seed, G4String ROGOutFile, G4bool bSaveROG);
+	inline G4int getTotalNumberOfEvents()
+	{
+		if (this->phantomName="fullWater")
+		{return this->Ph_fullWater->getTotalNumberOfEvents();}
+		else if (this->phantomName="BoxInBox")
+		{return this->Ph_BoxInBox->getTotalNumberOfEvents();}
+		return 0;
+	};
+	inline void setPhantomName(G4String val){this->phantomName=val;};
+	inline void setPhantom_nVoxelsX(G4int val){this->nVoxelsX=val;};
+	inline void setPhantom_nVoxelsY(G4int val){this->nVoxelsY=val;};
+	inline void setPhantom_nVoxelsZ(G4int val){this->nVoxelsZ=val;};
+	inline void setPhantomSpecficationsFileName(G4String val){this->PhantomSpecficationsFileName=val;};
+	inline void setPhantomRotationX(G4double val){this->rotationX=val;};
+	inline void setPhantomRotationY(G4double val){this->rotationY=val;};
+	inline void setPhantomRotationZ(G4double val){this->rotationZ=val;};
+private:
+	void design(void);
+	CML2PhantomConstructionMessenger *phantomContstructionMessenger;
+	static CML2PhantomConstruction * instance;
+	G4int nVoxelsX, nVoxelsY, nVoxelsZ;
+	G4String phantomName, PhantomSpecficationsFileName;
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	G4RotationMatrix *rotation;
+	G4VPhysicalVolume *PVPhmWorld;
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+	G4double rotationX, rotationY, rotationZ;
+	CML2Ph_FullWater *Ph_fullWater;
+	CML2Ph_BoxInBox *Ph_BoxInBox;
+};
+#endif
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
-
-
-		}
-    }
- }

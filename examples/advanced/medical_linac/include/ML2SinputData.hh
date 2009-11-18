@@ -37,56 +37,68 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef inputDataH
+#define inputDataH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "globals.hh"
+#include <vector>
+#include "G4RotationMatrix.hh"
 
-
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+enum idParticleSource
 {
- }
-
- 
-CML2EventAction::~CML2EventAction()
+	id_randomTarget=1,
+	id_phaseSpace=2
+};
+enum idTypeOfSensitiveDetector
 {
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
+	idSD_ComponentROG=1,
+	idSD_PhaseSpace=2,
+	idSD_KillerPlane=3
+};
+struct SStartInputData
 {
-}
+	G4String fileInputData;
+	G4int seed;
+};
+struct SGeneralData
+{
+	G4String WorldName, fileExperimentalData, StartFileInputData;
+	G4int seed, nBeam, nMaxParticlesInRamPlanePhaseSpace;
+	G4bool bSaveROG, bCompareExp;
+	G4String PhaseSpaceOutFile, ROGOutFile;
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+	G4bool bSavePhaseSpace;
+	G4bool bStopAtPhaseSpace;
+	G4ThreeVector centrePhaseSpace, halfSizePhaseSpace;
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+	G4int minNumberOfEvents;
+	int saving_in_Selected_Voxels_every_events;
+	int saving_in_ROG_Voxels_every_events;
+	int max_N_particles_in_PhSp_File; 
+};
 
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
-
-
-		}
-    }
- }
+struct Sparticle
+{
+	G4ThreeVector pos, dir;
+	G4double kinEnergy;
+	G4int nPrimaryPart, primaryParticlePDGE, partPDGE, volumeId;
+	G4String volumeName;
+};
+struct SPrimaryParticle
+{
+	G4int partPDGE, nPrimaryParticle;
+	G4int nParticlesInPhSp;
+};
+struct SInputData
+{
+	SGeneralData generalData;
+	SPrimaryParticle primaryParticleData;
+};
+struct Svoxel
+{
+	G4ThreeVector pos, halfSize;
+	G4double depEnergy, depEnergy2, expDose, depEnergyNorm, depEnergyNormError;
+	G4int nEvents;
+	G4String volumeName;
+};
+#endif

@@ -37,56 +37,32 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef CML2ConvergenceH
+#define CML2ConvergenceH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "G4Step.hh"
 
+#include "ML2SinputData.hh"
+#include "ML2ExpVoxels.hh"
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+class CML2Convergence
 {
- }
+public:
+	CML2Convergence(G4int seed, G4int saving_in_Selected_Voxels_every_events, G4String FileExperimentalData, G4bool bCompareExp, G4int minNumberOfEvents);
+	~CML2Convergence(void);
+	void add(const G4Step* aStep);
+	G4bool runAgain();
+private:
+	G4bool convergenceCriteria();
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	std::vector <Svoxel> voxels;
+	CML2ExpVoxels *ML2ExpVoxels;
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+	G4String fileExperimentalData;
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+	G4bool bCompareExp;
+	G4int minNumberOfEvents;
+};
 
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
+#endif
 
-
-		}
-    }
- }

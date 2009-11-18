@@ -37,56 +37,28 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
-
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#ifndef ML2Ph_BoxInBoxMessengerH
+#define ML2Ph_BoxInBoxMessengerH
 
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class CML2Ph_BoxInBox;
+class G4UImessenger;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
+
+class CML2Ph_BoxInBoxMessenger : public G4UImessenger 
 {
- }
+public:
+	CML2Ph_BoxInBoxMessenger(CML2Ph_BoxInBox *Ph_BoxInBox);
+	~CML2Ph_BoxInBoxMessenger(void);
+	void SetNewValue(G4UIcommand* cmd, G4String newValue);
+private:
+	CML2Ph_BoxInBox *pPh_BoxInBox;
+};
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+#endif
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
-
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
-
-
-		}
-    }
- }

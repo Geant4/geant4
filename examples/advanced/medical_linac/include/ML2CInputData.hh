@@ -37,56 +37,47 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef CML2InputDataH
+#define CML2InputDataH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "G4UImessenger.hh"
+#include "ML2MainMessenger.hh"
 
+class CML2MainMessenger;
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+class CML2CInputData
 {
- }
+public:
+	CML2CInputData(void);
+	~CML2CInputData(void);
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	inline void setbOnlyVisio(G4bool val){this->bOnlyVisio=val;};
+	inline void setPhaseSpaceCentre(G4ThreeVector val){this->inputData.generalData.centrePhaseSpace.set(val.getX(), val.getY(), val.getZ());};
+	inline void setPhaseSpaceHalfSize(G4ThreeVector val){this->inputData.generalData.halfSizePhaseSpace.set(val.getX(), val.getY(), val.getZ());};
+	inline void setbSavePhaseSPace(G4bool val){this->inputData.generalData.bSavePhaseSpace=val;};
+	inline void setbStopAtPhaseSpace(G4bool val){this->inputData.generalData.bStopAtPhaseSpace=val;};
+	inline void setPhaseSpaceOutFile(G4String val){this->inputData.generalData.PhaseSpaceOutFile=val;};
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+	inline void setbSaveROG(G4bool val){this->inputData.generalData.bSaveROG=val;};
+	inline void setROGOutFile(G4String val){this->inputData.generalData.ROGOutFile=val;};
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+	inline void setMinNumberOfEvents(G4double val){this->inputData.generalData.minNumberOfEvents=val;};
 
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
+	inline void setBCompareExp(G4bool val){this->inputData.generalData.bCompareExp=val;};
+	inline void setFileExperimentalData(G4String val){this->inputData.generalData.fileExperimentalData=val;};
+	inline void setNBeams(G4int val){this->inputData.generalData.nBeam=val;};
+	inline void setNMaxParticlesInRamPlanePhaseSpace(G4int val){this->inputData.generalData.nMaxParticlesInRamPlanePhaseSpace=val;};
+
+	inline void setSaving_in_Selected_Voxels_every_events(G4int val){this->inputData.generalData.saving_in_Selected_Voxels_every_events=val;};
+	inline void setSaving_in_ROG_Voxels_every_events(G4int val){this->inputData.generalData.saving_in_ROG_Voxels_every_events=val;};
+	inline void setMax_N_particles_in_PhSp_File(G4int val){this->inputData.generalData.max_N_particles_in_PhSp_File=val;};
+
+	G4bool bOnlyVisio;
+	SInputData inputData;
+private:
+	CML2MainMessenger *ML2MainMessenger;
+};
 
 
-		}
-    }
- }
+#endif
+

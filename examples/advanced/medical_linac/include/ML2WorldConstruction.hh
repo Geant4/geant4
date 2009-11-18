@@ -37,56 +37,51 @@
 //*******************************************************//
 
 
-#include "ML2EventAction.hh"
+#ifndef CML2WorldConstructionH
+#define CML2WorldConstructionH
 
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4VHitsCollection.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4SDManager.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#include "ML2SinputData.hh"
+
+#include "G4VUserDetectorConstruction.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Box.hh"
+#include "G4VisAttributes.hh"
+#include "G4PVPlacement.hh"
+#include "G4NistManager.hh"
+
+#include "ML2AcceleratorConstruction.hh"
+#include "ML2PhantomConstruction.hh"
+#include "ML2PhaseSpaces.hh"
 
 
-CML2EventAction::CML2EventAction() :
-  drawFlag("all" )
+class G4VPhysicalVolume;
+class CML2PhantomConstruction;
+class CML2AcceleratorConstruction;
+class CML2PhaseSpaces;
+
+class CML2WorldConstruction : public G4VUserDetectorConstruction
 {
- }
+public:
+	CML2WorldConstruction(void);
+	~CML2WorldConstruction(void);
+	G4VPhysicalVolume* Construct();
+	void create(SInputData *inputData);
+	static CML2WorldConstruction* GetInstance(void);
+	G4int getNParticleBackScattered(){return this->backScatteredPlane->getCML2SensDetNParticle();};
+	G4int getNParticlePhaseSpace(){return this->phaseSpace->getCML2SensDetNParticle();};
+	inline G4int getTotalNumberOfEventsInPhantom(){return this->phantomEnv->getTotalNumberOfEvents();};
+	inline bool getBContinueRun(){return this->phaseSpace->getBContinueRun();};
+private:
+	void checkVolumeOverlap();
+	static CML2WorldConstruction * instance;
 
- 
-CML2EventAction::~CML2EventAction()
-{
- }
- 
-void CML2EventAction::BeginOfEventAction(const G4Event*)
-{
-}
+	CML2AcceleratorConstruction *acceleratorEnv;
+	CML2PhantomConstruction *phantomEnv;
+	G4VPhysicalVolume* PVWorld;
+	CML2PhaseSpaces *phaseSpace;
+	CML2PhaseSpaces *backScatteredPlane;
+};
 
- 
-void CML2EventAction::EndOfEventAction(const G4Event* evt)
-{  
- // extract the trajectories and draw them ...
+#endif
 
-  if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-
-      for (G4int i=0; i<n_trajectories; i++) 
-        {
-			G4Trajectory* trj = (G4Trajectory*)
-			((*(evt->GetTrajectoryContainer()))[i]);
-			if(drawFlag == "all") trj->DrawTrajectory(50);
-			else if((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-			trj->DrawTrajectory(50);
-			else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-			trj->DrawTrajectory(50);	
-
-
-		}
-    }
- }
