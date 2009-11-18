@@ -13,9 +13,9 @@
 /control/saveHistory
 /run/verbose 1
 /gun/sourceGen true
-/run/initialize
-
 /control/execute emstd.mac
+
+/run/initialize
 
 /particle/select gamma	
 /gun/vertexRadius 25. cm
