@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2009-11-18 16:44:32 vnivanch Exp $
+$Id: History,v 1.162 2009-11-18 17:42:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-11-09 G.Cosmo (materials-V09-02-18)
+- G4IonisParamMat - fix for usage of static data to allow for build of
+  DLLs libraries on Windows.
 
 18-11-09 V.Ivanchenko (materials-V09-02-17)
 - G4IonisParamMat - fixed minor memory leak due to G4DensityEffectData

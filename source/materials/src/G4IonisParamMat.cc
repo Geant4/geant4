@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.31 2009-11-18 16:44:32 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.32 2009-11-18 17:42:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,6 @@
 #include "G4Material.hh"
 #include "G4DensityEffectData.hh"
 
-G4double G4IonisParamMat::twoln10 = 2.*std::log(10.);
 G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -140,7 +139,7 @@ G4DensityEffectData* G4IonisParamMat::GetDensityEffectData()
                     
 void G4IonisParamMat::ComputeDensityEffect()
 {
-  //  const G4double twoln10 = 2.*std::log(10.);
+  static const G4double twoln10 = 2.*std::log(10.);
   G4State State = fMaterial->GetState();
 
   // Check if density effect data exist in the table
@@ -470,7 +469,6 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fLfactor                  = right.fLfactor;
       fBirks                    = right.fBirks;
       fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
-      twoln10                   = right.twoln10;
       fDensityData              = right.fDensityData;
     } 
   return *this;

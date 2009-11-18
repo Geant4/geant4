@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.16 2009-11-03 09:24:57 bagoulia Exp $
+// $Id: G4IonisParamMat.hh,v 1.17 2009-11-18 17:42:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -183,13 +183,13 @@ private:
   G4double fMeanEnergyPerIon;
 
   // static data created only once
-  static G4double twoln10;
   static G4DensityEffectData* fDensityData;
 };
 
   // x = log10(beta*gamma)  
 inline G4double G4IonisParamMat::DensityCorrection(G4double x)
 {
+  static const G4double twoln10 = 2.*std::log(10.);
   G4double y = 0.0;
   if(x < fX0density) {
     if(fD0density > 0.0) { y = fD0density*std::pow(10.,2*(x - fX0density)); }
