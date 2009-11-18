@@ -82,7 +82,6 @@
 #include "G4VPhysicsConstructor.hh"
 
 // Local physic directly implemented in the Hadronthrapy directory
-#include "LocalStandardICRU73EmPhysic.hh"            // This permits the use of the ICRU73 tables for stopping powers of ions
 #include "LocalIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes
 #include "LocalINCLIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes using INCL/ABLA
 
@@ -210,16 +209,6 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
-
-  } else if (name == "local_standardICRU73") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new LocalStandardICRU73EmPhysic(name);
-    em_config.SetExtraEmModel("GenericIon","ionIoni",
-			      new G4IonParametrisedLossModel(),
-			      "",0.0, 100.0*TeV,
-			      new G4IonFluctuations());
-    G4cout << "standardICRU73" << G4endl;
 
  } else if (name == "LowE_Livermore") {
     emName = name;

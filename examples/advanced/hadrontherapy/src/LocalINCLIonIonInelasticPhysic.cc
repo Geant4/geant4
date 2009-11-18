@@ -95,7 +95,7 @@ void LocalINCLIonIonInelasticPhysic::ConstructProcess()
   WilsonModel -> SetMinEnergy(0*MeV);
   WilsonModel -> SetMaxEnergy(10 *GeV);
 
-  G4InclAblaLightIonInterface* INCLIonModel = new G4InclAblaLightIonInterface();
+//  G4InclAblaLightIonInterface* INCLIonModel = new G4InclAblaLightIonInterface();
 
   G4TripathiCrossSection* TripatiCrossSections = new G4TripathiCrossSection;
   G4TripathiCrossSection* TripatiLightCrossSections = new G4TripathiCrossSection;
