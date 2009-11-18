@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2009-11-17 17:32:38 allison Exp $
+# $Id: GNUmakefile,v 1.5 2009-11-18 17:15:11 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for gl2ps.  Laurent Garnier, 6/2/09.
 
@@ -11,9 +11,7 @@ ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
 
-ifdef G4LIB_BUILD_ZLIB
-CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
-endif
+GLOBLIBS = libG4zlib.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk
