@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-
+//
 // The code was written by :
 //	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
 //      *Barbara Caccia barbara.caccia@iss.it
@@ -39,60 +39,65 @@
 //
 //*******************************************************//
 
-#ifndef ML2PhysicsList_h
-#define ML2PhysicsList_h 1
+// See more at: http://workgroup.lngs.infn.it/geant4lns/
+//
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - ML2 example
+// ----------------------------------------------------------------------------
+// Code developed by:
+//
+// G.A.P. Cirrone(a)*
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the INFN, Catania, Italy
+// 
+// * cirrone@lns.infn.it
+// ----------------------------------------------------------------------------
+#include "ML2StepMax.hh"
+#include "ML2StepMaxMessenger.hh"
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
-#include "globals.hh"
-
-class G4VPhysicsConstructor;
-class ML2StepMax;
-class ML2PhysicsListMessenger;
-
-class ML2PhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+ML2StepMax::ML2StepMax(const G4String& processName)
+ : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
 {
-public:
+  pMess = new ML2StepMaxMessenger(this);
+}
+ 
+/////////////////////////////////////////////////////////////////////////////
+ML2StepMax::~ML2StepMax() { delete pMess; }
 
-  ML2PhysicsList();
-  virtual ~ML2PhysicsList();
+/////////////////////////////////////////////////////////////////////////////
+G4bool ML2StepMax::IsApplicable(const G4ParticleDefinition& particle) 
+{ 
+  return (particle.GetPDGCharge() != 0.);
+}
 
-  void ConstructParticle();
+/////////////////////////////////////////////////////////////////////////////    
+void ML2StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
 
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+/////////////////////////////////////////////////////////////////////////////
+G4double ML2StepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
+                                                  G4double,
+                                                  G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  G4double ProposedStep = DBL_MAX;
 
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+  if((MaxChargedStep > 0.) &&
+     (aTrack.GetVolume() != 0) &&
+     (aTrack.GetVolume()->GetName() == "DetectorPhys"))
+     ProposedStep = MaxChargedStep;
 
-  void AddStepMax();
-  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
+  return ProposedStep;
+}
 
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  ML2StepMax* stepMaxProcess;
-
-  ML2PhysicsListMessenger* pMessenger;
-};
-
-#endif
+/////////////////////////////////////////////////////////////////////////////
+G4VParticleChange* ML2StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+   // do nothing
+   aParticleChange.Initialize(aTrack);
+   return &aParticleChange;
+}
 

@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-
+//
+// ML2StepMaxMessenger.cc
+//
 // The code was written by :
 //	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
 //      *Barbara Caccia barbara.caccia@iss.it
@@ -39,60 +41,31 @@
 //
 //*******************************************************//
 
-#ifndef ML2PhysicsList_h
-#define ML2PhysicsList_h 1
+#include "ML2StepMaxMessenger.hh"
+#include "ML2StepMax.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
-#include "globals.hh"
+/////////////////////////////////////////////////////////////////////////////
+ML2StepMaxMessenger::ML2StepMaxMessenger(ML2StepMax* stepM)
+:stepMax(stepM)
+{ 
+  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/Step/waterPhantomStepMax",this);
+  StepMaxCmd->SetGuidance("Set max allowed step length");
+  StepMaxCmd->SetParameterName("mxStep",false);
+  StepMaxCmd->SetRange("mxStep>0.");
+  StepMaxCmd->SetUnitCategory("Length");
+}
 
-class G4VPhysicsConstructor;
-class ML2StepMax;
-class ML2PhysicsListMessenger;
-
-class ML2PhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+ML2StepMaxMessenger::~ML2StepMaxMessenger()
 {
-public:
+  delete StepMaxCmd;
+}
 
-  ML2PhysicsList();
-  virtual ~ML2PhysicsList();
-
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  ML2StepMax* stepMaxProcess;
-
-  ML2PhysicsListMessenger* pMessenger;
-};
-
-#endif
+/////////////////////////////////////////////////////////////////////////////
+void ML2StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == StepMaxCmd)
+    { stepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
+}
 

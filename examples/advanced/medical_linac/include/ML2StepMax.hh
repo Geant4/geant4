@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-
+//
 // The code was written by :
 //	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
 //      *Barbara Caccia barbara.caccia@iss.it
@@ -39,59 +39,41 @@
 //
 //*******************************************************//
 
-#ifndef ML2PhysicsList_h
-#define ML2PhysicsList_h 1
+#ifndef ML2StepMax_h
+#define ML2StepMax_h 1
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
 #include "globals.hh"
+#include "G4VDiscreteProcess.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
 
-class G4VPhysicsConstructor;
-class ML2StepMax;
-class ML2PhysicsListMessenger;
+class ML2StepMaxMessenger;
 
-class ML2PhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+class ML2StepMax : public G4VDiscreteProcess
 {
-public:
+  public:     
 
-  ML2PhysicsList();
-  virtual ~ML2PhysicsList();
+     ML2StepMax(const G4String& processName ="UserStepMax");
+    ~ML2StepMax();
 
-  void ConstructParticle();
+     G4bool   IsApplicable(const G4ParticleDefinition&);    
+     void     SetMaxStep(G4double);
+     G4double GetMaxStep() {return MaxChargedStep;};
+     
+     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+			                     G4double   previousStepSize,
+			                     G4ForceCondition* condition);
 
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
+     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+       {return 0.;};     // it is not needed here !
 
-  void AddStepMax();
-  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
+  private:
 
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  ML2StepMax* stepMaxProcess;
-
-  ML2PhysicsListMessenger* pMessenger;
+     G4double    MaxChargedStep;
+     ML2StepMaxMessenger* pMess;
 };
 
 #endif

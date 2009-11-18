@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-
+//
 // The code was written by :
 //	^Claudio Andenna claudio.andenna@iss.infn.it, claudio.andenna@ispesl.it
 //      *Barbara Caccia barbara.caccia@iss.it
@@ -39,60 +39,28 @@
 //
 //*******************************************************//
 
-#ifndef ML2PhysicsList_h
-#define ML2PhysicsList_h 1
 
-#include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
+#ifndef ML2StepMaxMessenger_h
+#define ML2StepMaxMessenger_h 1
+
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VPhysicsConstructor;
 class ML2StepMax;
-class ML2PhysicsListMessenger;
+class G4UIcmdWithADoubleAndUnit;
 
-class ML2PhysicsList: public G4VModularPhysicsList
+/////////////////////////////////////////////////////////////////////////////
+class ML2StepMaxMessenger: public G4UImessenger
 {
-public:
-
-  ML2PhysicsList();
-  virtual ~ML2PhysicsList();
-
-  void ConstructParticle();
-
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
-
-  void AddStepMax();
-  ML2StepMax* GetStepMaxProcess() {return stepMaxProcess;};
-  void AddPackage(const G4String& name);
-
-private:
-
-  G4EmConfigurator em_config;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
-  G4bool locIonIonInelasticIsRegistered;
-
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-  ML2StepMax* stepMaxProcess;
-
-  ML2PhysicsListMessenger* pMessenger;
+  public:
+    ML2StepMaxMessenger(ML2StepMax*);
+   ~ML2StepMaxMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    ML2StepMax* stepMax;
+    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
 };
 
 #endif
-

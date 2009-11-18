@@ -34,6 +34,9 @@
 /accelerator/AcceleratorSpecficationsFileName acc1.mac
 
 
+/physic/addPhysics standard_opt3    # Standard Electromagnetic models
+#/physic/addPhysics LowE_Livermore  # Lowenergy-Livermore Electromagnetic models
+
 ####################	INFO ######################################
 
 # All possible choices
