@@ -1,6 +1,12 @@
                  History file
                  ------------
 
+19-Nov-2009 - A.Ribon (statAccepTest-V09-02-09)
+- Ready for December 2009 release testing (G4 9.3),
+  with the new approach of shipping binaries
+  (both 32-bits and 64-bits in the same tar-ball).
+
+
 10-Sep-2009 - A.Ribon (statAccepTest-V09-02-08)
 - Few fixes and improvements relevant only to the
   "trkvtx" analysis: fixed non-initialized counting 

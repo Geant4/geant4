@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 14-Aug-2009.
+# Last update: 19-Nov-2009.
 #
 # This Python script has the following input parameters:
 #
@@ -243,7 +243,7 @@ setupFile = open( "setup.sh", "w" )
 
 setupFile.write( "#!/bin/sh \n" )
 
-###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirAug09 \n" )   #***LOOKHERE***
+###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirDec09 \n" )   #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
@@ -309,7 +309,7 @@ setupFile.write( "  export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
 setupFile.write( "else \n")
 setupFile.write( "  export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation2.0 \n" )
 setupFile.write( "  export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadioactiveDecay3.2 \n" )
-setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW6.5 \n" )
+setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW6.9 \n" )
 setupFile.write( "  export G4NEUTRONHPDATA=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.13 \n")
 setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.13 \n")
 setupFile.write( "fi \n")
@@ -322,7 +322,10 @@ setupFile.write( "echo NeutronHPCrossSections=$NeutronHPCrossSections \n")
 setupFile.write( "echo G4NEUTRONHPDATA=$G4NEUTRONHPDATA \n")
 setupFile.write( "echo ---------------------- \n")
 #
-setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP \n" )
+if ( REFERENCE.find( "9.2" ) > -1 ) :
+    setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP-2.0.4.2 \n" )
+else :
+    setupFile.write( "export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP-2.0.4.4 \n" )
 #
 setupFile.write( "export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include \n" )
 setupFile.write( "export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib \n" )

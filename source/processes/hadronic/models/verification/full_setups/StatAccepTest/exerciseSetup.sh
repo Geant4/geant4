@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #----------------------------------------------------------------------------
-# Last update: 14-Aug-2009.
+# Last update: 19-Nov-2009.
 #
 # Setup script. 
 #----------------------------------------------------------------------------
@@ -32,7 +32,7 @@ export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations
 #
 export G4SYSTEM=Linux-g++
 #
-export G4_RELEASE=dirGeant4-9.2.p01
+export G4_RELEASE=dirGeant4-9.2.p02
 #
 export G4INSTALL=$DIR_INSTALLATIONS/$G4_RELEASE
 export G4LIB=$G4INSTALL/lib
@@ -43,7 +43,7 @@ export G4LEDATA=$DIR_INSTALLATIONS/data/G4EMLOW
 export NeutronHPCrossSections=$DIR_INSTALLATIONS/data/G4NDL
 export G4NEUTRONHPDATA=$DIR_INSTALLATIONS/data/G4NDL
 #
-export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP
+export CLHEP_BASE_DIR=$DIR_INSTALLATIONS/dirCLHEP-2.0.4.2
 export CLHEP_INCLUDE_DIR=$CLHEP_BASE_DIR/include
 export CLHEP_LIB_DIR=$CLHEP_BASE_DIR/lib
 export CLHEP_LIB=CLHEP
@@ -65,7 +65,7 @@ export PATH=$PATH:$G4WORKDIR/bin/$G4SYSTEM
 export G4ANALYSIS_USEROOT=1
 #
 # --- ROOT ---
-export ROOTSYS=/afs/cern.ch/sw/lcg/app/releases/ROOT/5.24.00/slc4_amd64_gcc34/root
+export ROOTSYS=$DIR_INSTALLATIONS/dirROOT
 export PATH=$PATH:$ROOTSYS/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ROOTSYS/lib
 #
