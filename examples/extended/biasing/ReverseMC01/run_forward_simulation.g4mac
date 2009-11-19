@@ -4,8 +4,8 @@
 #
 #Define some geometrical parameters
 ###############################################
-/RMC01/geometry/SetSensitiveVolumeHeight 5. cm
-/RMC01/geometry/SetSensitiveVolumeRadius 5. cm
+/RMC01/geometry/SetSensitiveVolumeHeight 1. mm
+/RMC01/geometry/SetSensitiveVolumeRadius 1. mm
 
 /RMC01/geometry/SetShieldingThickness 2. mm
 
@@ -47,6 +47,5 @@
 
 
 /run/verbose 1
-/random/setSeeds 41695 572675
 /tracking/verbose 0
 /run/beamOn 100000
