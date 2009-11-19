@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 Nov 2009 Vladimir Ivanchenko (hadr-cross-V09-02-13)
+------------------------------------------------------------
+- restored head version of hadr-cross-V09-02-06 for all files, added
+  bug fixes for G4BGGXX classes and added back new G4NeutronXXXS 
+  cross sections
+
 17 Nov 2009 Mikhail Kosov (hadr-cross-V09-02-12)
 ------------------------------------------------------------
 - CHIPS-cross_sections dependent classes are temporary moved to
