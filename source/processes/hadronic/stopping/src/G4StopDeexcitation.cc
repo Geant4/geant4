@@ -62,10 +62,10 @@ G4ReactionProductVector* G4StopDeexcitation::DoBreakUp(G4double A, G4double Z,
 						       G4double excitation, 
 						       const G4ThreeVector& p) const
 {
+  G4ReactionProductVector* v = 0;
   if (_algorithm != 0) 
     {
-      return _algorithm->BreakUp(A,Z,excitation,p);
+      v = _algorithm->BreakUp(A,Z,excitation,p);
     }
-  else 
-    return 0;
+  return v;
 }
