@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.20 2009-02-10 16:01:37 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.21 2009-11-19 10:18:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -41,6 +41,9 @@
 //                      - "never go back"  hipothesis (useNGB=true) 
 //                      -  CEM transition probabilities (useCEMtr=true)
 
+// 30.10.09 J.M.Quesada: CEM transition probabilities have been renormalized 
+//                       (IAEA benchmark)
+//
 #include "G4PreCompoundTransitions.hh"
 #include "G4HadronicException.hh"
 
@@ -153,6 +156,11 @@ CalculateProbability(const G4Fragment & aFragment)
     // Transition probability for \Delta n = +2
     
     TransitionProb1 = AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
+
+//JMQ 281009  phenomenological factor in order to increase equilibrium contribution
+   G4double factor=5.0;
+   TransitionProb1 *= factor;
+//
     if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
     
     G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
@@ -204,10 +212,9 @@ CalculateProbability(const G4Fragment & aFragment)
     G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
     // GE = g*E where E is Excitation Energy
     G4double GE = (6.0/pi2)*a*A*U;
-    
+ 
     G4double Kmfp=2.;
-     
-    
+        
     TransitionProb1=1./Kmfp*3./8.*1./c_light*1.0e-9*(1.4e+21*U-2./(N+1)*6.0e+18*U*U);
     if (TransitionProb1 < 0.0) TransitionProb1 = 0.0;
     
