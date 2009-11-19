@@ -123,6 +123,9 @@ ML2PhysicsList::ML2PhysicsList() : G4VModularPhysicsList()
   emPhysicsList = new G4EmStandardPhysics_option3(1);
   emName = G4String("emstandard_opt3");
 
+//  emPhysicsList = new G4EmLivermorePhysics();
+//  emName = G4String("LowE_Livermore");
+
   // Deacy physics and all particles
   decPhysicsList = new G4DecayPhysics();
 }

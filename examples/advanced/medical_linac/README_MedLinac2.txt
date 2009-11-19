@@ -46,7 +46,7 @@ The distance between the target and the surface of the phantom (SSD) is 100 cm.
 
 ----> 2.Setting up the environment variables
 
-The program uses two environmental variables called "G4MYFILEIN" and "G4MYFILEOUT" for the input and output files respectively.
+The program uses two environmental variables called "ML2FILEIN" and "ML2FILEOUT" for the input and output files respectively.
 If these environmental variables are not set the program works on the current directory
 
 ----> 3.How to run the example. 

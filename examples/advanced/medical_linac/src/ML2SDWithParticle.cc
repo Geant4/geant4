@@ -69,10 +69,10 @@ CML2SDWithParticle::CML2SDWithParticle(G4int idType, G4int max_N_particles_in_Ph
 	seedName=(G4String)a;
 
 	this->fullOutFileData=PhaseSpaceOutFile+"_"+seedName+".txt";
-#ifdef G4MYFILEOUT
+#ifdef ML2FILEOUT
 	this->fullOutFileData=PhaseSpaceOutFile+"_"+seedName+".txt";
 	char *MyDirOut=new char[1000];
-	MyDirOut=getenv("G4MYFILEOUT");
+	MyDirOut=getenv("ML2FILEOUT");
 	G4String myDirOut=(G4String) MyDirOut;
 	this->fullOutFileData=myDirOut+"/"+PhaseSpaceOutFile+"_"+seedName+".txt";
 #endif

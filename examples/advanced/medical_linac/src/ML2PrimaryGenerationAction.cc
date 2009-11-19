@@ -65,9 +65,9 @@ CML2PrimaryGenerationAction::CML2PrimaryGenerationAction(SPrimaryParticle *prima
 void CML2PrimaryGenerationAction::design()
 {
 	this->calculatedPhaseSpaceFileIN=this->calculatedPhaseSpaceFileIN;
-#ifdef G4MYFILEIN
+#ifdef ML2FILEIN
 	char *MyDirIn=new char[1000];
-	MyDirIn=getenv("G4MYFILEIN");
+	MyDirIn=getenv("ML2FILEIN");
 	G4String myDirIn=(G4String) MyDirIn;
 	this->calculatedPhaseSpaceFileIN=myDirIn+"/"+this->calculatedPhaseSpaceFileIN;
 #endif

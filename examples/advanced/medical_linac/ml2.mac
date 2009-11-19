@@ -34,8 +34,8 @@
 /accelerator/AcceleratorSpecficationsFileName acc1.mac	# macro file name containing specific setup data for the accelerator chosen
 
 
-/physic/addPhysics standard_opt3 			# Standard Electromagnetic models
-#/physic/addPhysics LowE_Livermore  		        # Lowenergy-Livermore Electromagnetic models
+#/physic/addPhysics standard_opt3 			# Standard Electromagnetic models
+/physic/addPhysics LowE_Livermore  		        # Lowenergy-Livermore Electromagnetic models
 #/physic/addPackage QGSP_BIC    		        # use of the Package Physic lists
 
 ####################	INFO   ######################################
