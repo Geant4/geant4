@@ -22,6 +22,7 @@ code and to keep track of all tags.
     in configuration weight inside G4FermiConfiguration
 -  V.Ivanchenko added a G4NeutronRadCapture model (a simple 1 gamma 
                 emission with 4-momentum balance)
+-  V.Ivanchenko return default setup of 9.2 for G4ExcitationHandler
 
 08 October 2009 Vladimir Ivanchenko (hadr-deex-V09-02-15)
 ----------------------------------------------------------
