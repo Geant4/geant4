@@ -96,7 +96,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
   G4double pEn=pMom;
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QPhCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
         <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
         <<colN.size()<<G4endl;
@@ -104,7 +104,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
   if(!pPDG)
   {
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QPhCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -126,13 +126,13 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       {
         lastI=i;
         lastTH =colTH[i];              // Last THreshold (A-dependent)
-#ifdef pdebug
+#ifdef debug
         G4cout<<"G4QPhCS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",j="<<j<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(pEn<=lastTH)
         {
-#ifdef pdebug
+#ifdef debug
           G4cout<<"G4QPhCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
           //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -142,7 +142,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         lastCS =colCS[i];              // Last CrossSect (A-dependent)
         if(lastP == pMom)
         {
-#ifdef pdebug
+#ifdef debug
           G4cout<<"G4QPhCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
 #endif
           CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // Update param's only
@@ -154,20 +154,20 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
         G4cout<<"G4QPhCS::G:UpdatDB P="<<pMom<<",f="<<fCS<<",lI="<<lastI<<",j="<<j<<G4endl;
 #endif
         lastCS=CalculateCrossSection(fCS,-1,j,lastPDG,lastZ,lastN,pMom); // read & update
-#ifdef pdebug
+#ifdef debug
         G4cout<<"G4QPhCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
         //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
         if(lastCS<=0. && pEn>lastTH)   // Correct the threshold
         {
-#ifdef pdebug
+#ifdef debug
           G4cout<<"G4QPhCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
         break;                         // Go out of the LOOP
       }
-#ifdef pdebug
+#ifdef debug
       G4cout<<"---G4QPhCrossSec::GetCrosSec:pPDG="<<pPDG<<",j="<<j<<",N="<<colN[i]
             <<",Z["<<i<<"]="<<colZ[i]<<",cPDG="<<colPDG[i]<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
@@ -176,7 +176,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     }
     if(!in)                            // This nucleus has not been calculated previously
     {
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QPhCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
       //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
@@ -184,18 +184,18 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       if(lastCS<=0.)
       {
         lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
-#ifdef pdebug
+#ifdef debug
         G4cout<<"G4QPhCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
 #endif
         if(pEn>lastTH)
         {
-#ifdef pdebug
+#ifdef debug
           G4cout<<"G4QPhCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
           lastTH=pEn;
         }
       }
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QPhCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -205,7 +205,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
       colP.push_back(pMom);
       colTH.push_back(lastTH);
       colCS.push_back(lastCS);
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QPhCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
       //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -213,7 +213,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
     } // End of creation of the new set of parameters
     else
     {
-#ifdef pdebug
+#ifdef debug
       G4cout<<"G4QPrCS::GetCS: Update lastI="<<lastI<<",j="<<j<<G4endl;
 #endif
       colP[lastI]=pMom;
@@ -223,7 +223,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   } // End of parameters udate
   else if(pEn<=lastTH)
   {
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QPhCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -231,7 +231,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   }
   else if(lastP == pMom)
   {
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QPhCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
     //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -239,13 +239,13 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
   }
   else
   {
-#ifdef pdebug
+#ifdef debug
     G4cout<<"G4QPhCS::GetCS:UpdatCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
 #endif
     lastCS=CalculateCrossSection(fCS,1,j,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
     lastP=pMom;
   }
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QPhCS::GetCroSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
   //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
@@ -292,7 +292,7 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
   G4double dP= mP +mProt - mT;
   G4double dN= mN +mNeut - mT;
   G4double dA= mA +mAlph - mT;
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QPhotoNucCS::ThreshEn: mP="<<mP<<",dP="<<dP<<",mN="<<mN<<",dN="<<dN<<",mA="
         <<mA<<",dA="<<dA<<",mT="<<mT<<",A="<<A<<",Z="<<Z<<G4endl;
 #endif
@@ -305,7 +305,7 @@ G4double G4QPhotonNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
                                           G4int, G4int targZ, G4int targN, G4double Energy)
 {
-#ifdef pdebug
+#ifdef debug
   G4cout<<"G4QPhotonNucCrossSection::CalculateCrossSection: ***Called***"<<G4endl;
 #endif
   static const G4double THmin=2.;    // minimum Energy Threshold
@@ -335,15 +335,15 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
         <<", N="<<targN<<", onlyCS="<<CS<<",E="<<Energy<<",th="<<THmin<<G4endl;
   if(F==-27) return 0.;
 #endif
-  if (Energy<THmin)
-  {
-    lastE=0.;
-    lastSig=0.;
-#ifdef pdebug
-    G4cout<<"---> G4QMuonNucCS::CalcCS: CS=0  as E="<<Energy<<" < "<<THmin<<G4endl;
+  //if (Energy<THmin)
+  //{
+  //  lastE=0.;
+  //  lastSig=0.;
+#ifdef debug
+  //  G4cout<<"---> G4QMuonNucCS::CalcCS: CS=0  as E="<<Energy<<" < "<<THmin<<G4endl;
 #endif
-    return 0.;                       // @@ This can be dangerouse for the heaviest nuc.!
-  }
+  //  return 0.;                       // @@ This can be dangerouse for the heaviest nuc.!
+  //}
   G4double sigma=0.;
   G4double A=targN+targZ;
   if(F<=0)                           // This isotope was not the last used isotop
@@ -369,8 +369,8 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
       lastHEN = new G4double[nH];    // Allocate memory for the new HEN cross sections
       G4int er=GetFunctions(A,lastGDR,lastHEN);// set newZeroPosition and fill theFunctions
       if(er<1) G4cerr<<"***G4QPhotNucCrosSec::CalcCrossSection: A="<<A<<" failed"<<G4endl;
-#ifdef debug
-      G4cout<<"G4QPhotonNuclearCrossSec::CalcCS:**GDR/HEN're made** GetFunEr="<<er<<G4endl;
+#ifdef pdebug
+      G4cout<<">>G4QPhotNucCS::CalcCS:**GDR/HEN're made for A="<<A<<"** GFEr="<<er<<G4endl;
 #endif
       // *** The synchronization check ***
       G4int sync=GDR->size();
@@ -382,12 +382,12 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   } // End of parameters udate
   // ============================== NOW the Magic Formula =================================
   if (Energy<lastTH) return 0.;             // It must be already checked in the interface
-  else if (Energy<Emin)                     // GDR region (approximated in E, not in lnE)
+  else if (Energy<=Emin)                    // GDR region (approximated in E, not in lnE)
   {
 #ifdef debug
     G4cout<<"G4QPhNCS::CalcCS:bGDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
 #endif
-    if(A<=1.) sigma=0.;
+    if(A<=1. || dE <= THmin) sigma=0.;
     else      sigma=EquLinearFit(Energy,nL,THmin,dE,lastGDR);
 #ifdef debugn
     if(sigma<0.)
@@ -397,10 +397,12 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
   else if (Energy<Emax)                     // High Energy region
   {
     G4double lE=std::log(Energy);
-#ifdef debug
-    G4cout<<"G4QPhotNucCS::CalcCS: before HEN nH="<<nH<<",iE="<<milE<<",dlE="<<dlE<<G4endl;
+#ifdef pdebug
+    G4cout<<"G4QPhotNucCS::CalcCS:lE="<<milE<<",n="<<nH<<",iE="<<milE<<",dE="<<dlE<<",HEN="
+          <<lastHEN<<",A="<<A<<G4endl;
 #endif
-    sigma=EquLinearFit(lE,nH,milE,dlE,lastHEN);
+    if(lE > milE) sigma=EquLinearFit(lE,nH,milE,dlE,lastHEN);
+    else          sigma=0.;
   }
   else                                      // UHE region (calculation, not frequent)
   {
@@ -412,7 +414,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 #ifdef debug
   G4cout<<"G4QPhotonNuclearCrossSection::CalcCS: sigma="<<sigma<<G4endl;
 #endif
-#ifdef pdebug
+#ifdef debug
   if(Energy>45000.&&Energy<60000.)
     G4cout<<"G4QPhotoNucCS::GetCS: A="<<A<<", E="<<Energy<<",CS="<<sigma<<G4endl;
 #endif

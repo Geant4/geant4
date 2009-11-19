@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.2 2009-11-19 16:32:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -49,7 +49,7 @@
 // Initialization of static vectors
 std::vector<G4int> G4QInelastic::ElementZ;            // Z of the element(i) in theLastCalc
 std::vector<G4double> G4QInelastic::ElProbInMat;      // SumProbabilityElements in Material
-std::vector<std::vector<G4int>*> G4QInelastic::ElIsoN;    // N of isotope(j) of Element(i)
+std::vector<std::vector<G4int>*> G4QInelastic::ElIsoN;// N of isotope(j) of Element(i)
 std::vector<std::vector<G4double>*>G4QInelastic::IsoProbInEl;//SumProbabIsotopes inElementI
 
 G4QInelastic::G4QInelastic(const G4String& processName): 
