@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc,v 1.6 2009-11-19 13:18:02 vnivanch Exp $
+// $Id: G4BGGNucleonInelasticXS.cc,v 1.7 2009-11-19 19:40:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,16 +90,12 @@ G4double G4BGGNucleonInelasticXS::GetIsoZACrossSection(const G4DynamicParticle* 
     cross = theCoulombFac[iz]*CoulombFactor(ekin, A);
   } else if(iz == 1) {
     if( A < 1.5) {
-      fHadron->GetHadronNucleonXscPDG(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscEL(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscVU(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscMK(dp, G4Proton::Proton());
+      fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
       cross = fHadron->GetInelasticHadronNucleonXsc();
     } else {
-      fHadron->GetHadronNucleonXscPDG(dp, G4Proton::Proton());
+      fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
       cross = fHadron->GetInelasticHadronNucleonXsc();
-      fHadron->GetHadronNucleonXscPDG(dp, G4Neutron::Neutron());
+      fHadron->GetHadronNucleonXscNS(dp, G4Neutron::Neutron());
       cross += fHadron->GetInelasticHadronNucleonXsc();
     }
   } else if(ekin > fGlauberEnergy) {
@@ -179,7 +175,7 @@ void G4BGGNucleonInelasticXS::Initialise()
 				<< " factor= " << theGlauberFac[iz] << G4endl; 
   }
   dp.SetKineticEnergy(fLowEnergy);
-  fHadron->GetHadronNucleonXscPDG(&dp, G4Proton::Proton());
+  fHadron->GetHadronNucleonXscNS(&dp, G4Proton::Proton());
   theCoulombFac[1] = 
     fHadron->GetInelasticHadronNucleonXsc()/CoulombFactor(fLowEnergy,1.0);
      
