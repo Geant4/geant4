@@ -163,8 +163,11 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
     */
     // production to be checked !!! edit MK xsc
 
-    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
-          (pZ*tN+pN*tZ)*GetHadronNucleonXscMK(theProton, pTkin, theNeutron);
+    //sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
+    //      (pZ*tN+pN*tZ)*GetHadronNucleonXscMK(theProton, pTkin, theNeutron);
+
+    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
+          (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
  
     ratio = sigma/nucleusSquare;
 
@@ -587,8 +590,11 @@ G4GGNuclNuclCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticle,
 
   if(Nt < 0.) Nt = 0.;
   
-  sumInelastic  = Zt*GetHadronNucleonXscMK(aParticle, theProton);
-  sumInelastic += Nt*GetHadronNucleonXscMK(aParticle, theNeutron);    
+  //sumInelastic  = Zt*GetHadronNucleonXscMK(aParticle, theProton);
+  //sumInelastic += Nt*GetHadronNucleonXscMK(aParticle, theNeutron);    
+
+  sumInelastic  = Zt*GetHadronNucleonXscPDG(aParticle, theProton);
+  sumInelastic += Nt*GetHadronNucleonXscPDG(aParticle, theNeutron);    
  
   return sumInelastic;
 }
@@ -657,7 +663,7 @@ G4GGNuclNuclCrossSection::GetHNinelasticXscVU(const G4DynamicParticle* aParticle
 //
 // Returns hadron-nucleon cross-section based on Mikhail Kossov CHIPS parametrisation of
 // data from G4QuasiFreeRatios class
-
+/*
 G4double 
 G4GGNuclNuclCrossSection::GetHadronNucleonXscMK(G4ParticleDefinition* pParticle, G4double pTkin,
                                                 G4ParticleDefinition* nucleon  )
@@ -782,7 +788,7 @@ G4GGNuclNuclCrossSection::GetHadronNucleonXscMK(G4ParticleDefinition* pParticle,
 
   return inelasticXsc;
 }
-
+*/
 ////////////////////////////////////////////////////////////////////////////////////
 //
 //

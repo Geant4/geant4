@@ -113,8 +113,8 @@ public:
 
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4double At, G4double Zt);
 
-  G4double GetHadronNucleonXscMK(G4ParticleDefinition* pParticle, G4double pTkin, 
-				 G4ParticleDefinition* nucleon  ); 
+  //  G4double GetHadronNucleonXscMK(G4ParticleDefinition* pParticle, G4double pTkin, 
+  //			 G4ParticleDefinition* nucleon  ); 
 
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 

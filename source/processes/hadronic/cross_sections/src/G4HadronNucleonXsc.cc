@@ -886,7 +886,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
 //
 // Returns hadron-nucleon cross-section based on Mikhail Kossov parametrisation of
 // data from G4QuasiFreeRatios class
-
+/*
 G4double 
 G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
@@ -1199,7 +1199,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle,
   return fTotalXsc;
 }
 
-
+*/
 
 
 

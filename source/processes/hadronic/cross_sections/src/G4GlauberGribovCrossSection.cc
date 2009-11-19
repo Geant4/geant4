@@ -1069,8 +1069,10 @@ G4GlauberGribovCrossSection::GetHNinelasticXsc(const G4DynamicParticle* aParticl
   }
   else
   {
-    sumInelastic  = Zt*GetHadronNucleonXscMK(aParticle, theProton);
-    sumInelastic += Nt*GetHadronNucleonXscMK(aParticle, theNeutron);    
+    //sumInelastic  = Zt*GetHadronNucleonXscMK(aParticle, theProton);
+    // sumInelastic += Nt*GetHadronNucleonXscMK(aParticle, theNeutron);    
+    sumInelastic  = Zt*GetHadronNucleonXscNS(aParticle, 1.0, 1.0);
+    sumInelastic += Nt*GetHadronNucleonXscNS(aParticle, 1.0, 0.0);    
   } 
   return sumInelastic;
 }
@@ -1292,7 +1294,7 @@ G4GlauberGribovCrossSection::GetHNinelasticXscVU(const G4DynamicParticle* aParti
 //
 // Returns hadron-nucleon cross-section based on Mikhail Kossov CHIPS parametrisation of
 // data from G4QuasiFreeRatios class
-
+/*
 G4double 
 G4GlauberGribovCrossSection::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
                                           const G4ParticleDefinition* nucleon  )
@@ -1605,7 +1607,7 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscMK(const G4DynamicParticle* aPar
 
   return inelasticXsc;
 }
-
+*/
 ////////////////////////////////////////////////////////////////////////////////////
 //
 //
