@@ -123,7 +123,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
   G4FragmentVector * theResult = 0;
   
   // Variables existing until end of method
-  G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
+  G4Fragment * theInitialStatePtr = const_cast<G4Fragment*>(&theInitialState);
+  //  G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
   G4Fragment theExcitedNucleus;              // object to be passed in BreakItUp methods
   G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
   std::list<G4Fragment*> theEvapList;        // list to apply Evaporation, SMF or Fermi Break-Up
@@ -179,7 +180,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 	  //  This memory release works with a list but not with a G4FragmentVector 
 	  //	 delete (*j);
 	}
-      theTempResult->clear();
+      delete theTempResult;
+      //theTempResult->clear();
       //
       // JMQ 150909: Further steps in de-excitation chain follow ..
       
