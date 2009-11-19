@@ -8,6 +8,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+19.11.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-37
+           - Minor revisions;
+
 18.11.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-36
            - Correction for a missing function in the HadrontherapyPhysicsListMessenger.cc class file
 
