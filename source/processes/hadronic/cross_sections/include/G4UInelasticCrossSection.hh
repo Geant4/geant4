@@ -23,51 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.hh,v 1.6 2009-11-19 11:44:46 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// Calculation of hadron elastic cross-sections using selected set of 
+// original componetns
 //
-// -------------------------------------------------------------------
+// 12.08.06 V.Ivanchenko - first implementation
+// 22.01.07 V.Ivanchenko - add GetIsoZACrossSection
+// 05.03.07 V.Ivanchenko - use G4NucleonNuclearCrossSection
+// 06.03.07 V.Ivanchenko - add Initialise function
 //
-// GEANT4 Class header file
-//
-//
-// File name:     G4BGGNucleonInelasticXS
-//
-// Author:        Vladimir Ivanchenko
-//
-// Creation date: 13.03.2007
-// Modifications:
-//
-//
-// Class Description:
-//
-// Wrapper of proton and neutron inelastic cross-sections using Barashenkov 
-// parametersation below 100 GeV and Glauber-Gribov model above
-//
-// -------------------------------------------------------------------
 //
 
-#ifndef G4BGGNucleonInelasticXS_h
-#define G4BGGNucleonInelasticXS_h
+#ifndef G4UInelasticCrossSection_h
+#define G4UInelasticCrossSection_h
 
 #include "globals.hh"
 #include "G4VCrossSectionDataSet.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Element.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4ParticleDefinition;
 class G4GlauberGribovCrossSection;
 class G4NucleonNuclearCrossSection;
-class G4HadronNucleonXsc;
+class G4UPiNuclearCrossSection;
+class G4HadronCrossSections;
+class G4ParticleDefinition;
 
-class G4BGGNucleonInelasticXS : public G4VCrossSectionDataSet
+class G4UInelasticCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4BGGNucleonInelasticXS (const G4ParticleDefinition*);
+  G4UInelasticCrossSection (const G4ParticleDefinition*);
 
-  virtual ~G4BGGNucleonInelasticXS();
+  virtual ~G4UInelasticCrossSection ();
    
   virtual
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
@@ -91,53 +78,19 @@ public:
 
 private:
 
-  void Initialise();
+  void Initialise(const G4ParticleDefinition*);
 
-  G4double CoulombFactor(G4double kinEnergy, G4double A);
+  G4bool   hasGlauber;
+  G4double thEnergy;  // threshold of Glauber model
+  G4double theFac[93];
 
-  G4double fGlauberEnergy;  
-  G4double fLowEnergy;  
-  G4double theGlauberFac[93];
-  G4double theCoulombFac[93];
-
-  const G4ParticleDefinition*     particle;
   G4GlauberGribovCrossSection*    fGlauber;
   G4NucleonNuclearCrossSection*   fNucleon;
-  G4HadronNucleonXsc*             fHadron;
-  G4bool                          isProton;
-  G4bool                          isInitialized;
+  G4UPiNuclearCrossSection*       fUPi;
+  G4HadronCrossSections*          fGheisha;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4bool G4BGGNucleonInelasticXS::IsApplicable(const G4DynamicParticle*, 
-					     const G4Element*)
-{
-  return true;
-  //  return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4bool G4BGGNucleonInelasticXS::IsZAApplicable(const G4DynamicParticle*, 
-					       G4double /*Z*/, G4double/* A*/)
-{
-  return false;
-  //  return (dp->GetDefinition() == particle);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4BGGNucleonInelasticXS::GetCrossSection(const G4DynamicParticle* dp, 
-						  const G4Element* elm, 
-						  G4double temp)
-{
-  return GetIsoZACrossSection(dp, elm->GetZ(), elm->GetN(), temp);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
