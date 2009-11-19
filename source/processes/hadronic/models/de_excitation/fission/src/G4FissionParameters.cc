@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.6 2009-07-27 10:21:27 vnivanch Exp $
+// $Id: G4FissionParameters.cc,v 1.7 2009-11-19 10:30:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
 //J. M. Quesada (May 2009): sigma_sym (SigmaS) tuned for spallation data.
+//J. M. Quesada (30.10.09): retuning for IAEA spallation data
 
 #include "G4FissionParameters.hh"
 #include "G4HadronicException.hh"
@@ -56,7 +57,9 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
     
     //JMQ 310509 
     //    if (SigmaS > 20.0) SigmaS = 20.0;
-    SigmaS*=1.3;
+    //   SigmaS*=1.3;
+    //JMQ 301009: retuning (after CEM transition prob.have been chosen as default)
+    SigmaS*=0.8;
     //
     
     G4double FasymAsym = 2.0*std::exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
