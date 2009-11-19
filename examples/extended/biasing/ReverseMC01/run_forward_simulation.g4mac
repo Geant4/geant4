@@ -1,0 +1,52 @@
+#/control/verbose 1
+
+
+#
+#Define some geometrical parameters
+###############################################
+/RMC01/geometry/SetSensitiveVolumeHeight 5. cm
+/RMC01/geometry/SetSensitiveVolumeRadius 5. cm
+
+/RMC01/geometry/SetShieldingThickness 2. mm
+
+
+#
+#Select physics list
+###############################################
+
+#/adjoint_physics/UseProtonIonisation true
+/adjoint_physics/UseGammaConversion false
+
+#Initialize geometry and physics
+###############################################
+/run/initialize
+
+#
+#Set cut
+###############################################
+
+/run/setCut 1.000e-02 mm
+
+
+
+#
+#Definition of parameters for the forward simulation
+##################################
+
+#define the source
+/gps/particle e-
+/gps/pos/type Surface
+/gps/pos/shape Sphere 
+/gps/pos/radius 1.000e+01  cm
+/gps/pos/centre 0.000e+00  0.000e+00   0.000e+00 cm
+/gps/ene/type Exp
+/gps/ene/ezero 1.
+/gps/ene/min  1. keV
+/gps/ene/max  1.000e+01 MeV
+/gps/ang/type cos
+
+
+/run/verbose 1
+/random/setSeeds 41695 572675
+/tracking/verbose 0
+/run/beamOn 100000
