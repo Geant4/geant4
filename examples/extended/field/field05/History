@@ -1,0 +1,20 @@
+// $Id: History,v 1.1 2009-11-19 22:21:21 gum Exp $
+// ------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    field05 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 19th, 2009 Peter Gumplinger - fieldex05-V09-02-00
+------------------------------------
+- First implementation.
