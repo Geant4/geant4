@@ -326,7 +326,9 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
 
   //--- If first slice, initiliaze fMateIDs
   if( fZSliceHeaders.size() == 1 ) {
-    fMateIDs = new unsigned int[fNoFiles*nVoxels];
+    //fMateIDs = new unsigned int[fNoFiles*nVoxels];
+    fMateIDs = new size_t[fNoFiles*nVoxels];
+
   }
 
   unsigned int mateID;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomNestedPhantomParameterisation.hh,v 1.4 2009-11-10 18:48:46 arce Exp $
+// $Id: DicomNestedPhantomParameterisation.hh,v 1.5 2009-11-19 16:15:23 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -77,7 +77,8 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
 
     unsigned int GetMaterialIndex( unsigned int nx, unsigned int ny, unsigned int nz) const;
     unsigned int GetMaterialIndex( unsigned int copyNo) const;
-    void SetMaterialIndices( unsigned int* matInd ) { fMaterialIndices = matInd; }
+    //void SetMaterialIndices( unsigned int* matInd ) { fMaterialIndices = matInd; }
+    void SetMaterialIndices( size_t* matInd ) { fMaterialIndices = matInd; }
     void SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz );
 
     void ComputeTransformation(const G4int no,
@@ -119,7 +120,7 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
     G4double fdX,fdY,fdZ;
     G4int fnX,fnY,fnZ;
     std::vector<G4Material*> fMaterials;
-    unsigned int* fMaterialIndices; // Index in materials corresponding to each voxel
+    size_t* fMaterialIndices; // Index in materials corresponding to each voxel
+//    unsigned int* fMaterialIndices; // Index in materials corresponding to each voxel
 };
-
 #endif

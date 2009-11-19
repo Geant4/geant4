@@ -95,7 +95,8 @@ protected:
   G4int fNoFiles; // number of DICOM files
   std::vector<G4Material*> fOriginalMaterials;  // list of original materials 
   std::vector<G4Material*> fMaterials;  // list of new materials created to distinguish different density voxels that have the same original materials
-  unsigned int* fMateIDs; // index of material of each voxel
+  size_t* fMateIDs; // index of material of each voxel
+ //unsigned int* fMateIDs; // index of material of each voxel
 
   std::map<G4int,G4double> fDensityDiffs; // Density difference to distinguish material for each original material (by index)
  
