@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.8 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgrVolume.cc,v 1.9 2009-11-19 13:27:40 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
