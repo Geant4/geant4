@@ -79,17 +79,22 @@ class G4Nucleon : public G4VKineticNucleon
     inline void Boost(const G4ThreeVector & beta){ theMomentum.boost(beta); } 
            void Boost(const G4LorentzVector & aMomentum);
 
-    inline void Hit(G4VSplitableHadron * ) { isHit=true;}
-    inline void Hit(G4int ) { isHit=true;}    
-    inline G4bool AreYouHit() const { return isHit;}
-  
+    inline void Hit(G4VSplitableHadron *aHit) { theSplitableHadron=aHit;}
+//    inline void Hit(G4int ) { isHit=true;}    
+    inline void Hit(G4int ) 
+    { 
+      theSplitableHadron=reinterpret_cast<G4VSplitableHadron *>(1111); 
+    }
+    inline G4VSplitableHadron * GetSplitableHadron() const { return theSplitableHadron;}
+    inline G4bool AreYouHit() const {  return theSplitableHadron!=0;}
+
   private:
 
     G4ThreeVector thePosition;
     G4LorentzVector theMomentum;
     G4double theBindingE;
     G4ParticleDefinition * theParticleType;
-    G4bool isHit;
+    G4VSplitableHadron * theSplitableHadron;
 
 
 };
@@ -111,7 +116,7 @@ inline const G4Nucleon& G4Nucleon::operator=(const G4Nucleon& right)
 	theMomentum=right.Get4Momentum();
 	theBindingE=right.GetBindingEnergy();
 	theParticleType=right.GetDefinition();
-	isHit=right.AreYouHit();
+	theSplitableHadron=right.GetSplitableHadron();
 
 	return *this;
 }

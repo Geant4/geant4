@@ -36,7 +36,7 @@
 // ------------------------------------------------------------
 
 G4Nucleon::G4Nucleon()
-: theBindingE(0.) , theParticleType(0), isHit(false)
+: theBindingE(0.) , theParticleType(0), theSplitableHadron(0)
 {}
 
 G4Nucleon::~G4Nucleon()
