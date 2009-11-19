@@ -38,7 +38,6 @@
 #include "G4tgbPlaceParamLinear.hh"
 #include "G4tgbPlaceParamSquare.hh"
 #include "G4tgbPlaceParamCircle.hh"
-#include "G4tgbPlaceParamPhantom.hh"
 
 #include "G4tgrSolid.hh"
 #include "G4tgrSolidBoolean.hh"
@@ -92,8 +91,12 @@
 #include "G4BREPSolidPCone.hh"
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4BREPSolidOpenPCone.hh"
-#include "G4VisExtent.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4TriangularFacet.hh"
+#include "G4QuadrangularFacet.hh"
+#include "G4ExtrudedSolid.hh"
 
+#include "G4VisExtent.hh"
 #include "G4Material.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ReflectionFactory.hh"
@@ -126,54 +129,49 @@ G4tgbVolume::G4tgbVolume( G4tgrVolume* vol)
 
 //-------------------------------------------------------------------
 void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
-                                      const G4LogicalVolume* parentLV,
-				      const G4int parallelID )
+                                      const G4LogicalVolume* parentLV )
 {
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << G4endl <<  "@@@ G4tgbVolume::ConstructG4Volumes - " << GetName() << G4endl;
-    if( place && parentLV ) G4cout << "   place in LV " << parentLV->GetName() << " " << parentLV << G4endl;
+    if( place && parentLV ) G4cout << "   place in LV " << parentLV->GetName() << G4endl;
   }
 #endif
-  G4bool bFirstCopy = false;
   G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
   G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( GetName() );
-  if( parentLV != 0 || parallelID == -1 ) {  // if parallel world top volume, G4 volumes are build in G4tgbParallelWorld
-    if( (logvol == 0) ) 
-      {
-	bFirstCopy = true;
-	if( theTgrVolume->GetType() != "VOLDivision" )
-	  {
-	    //--- If first time build solid and LogVol
-	    G4VSolid* solid = FindOrConstructG4Solid( theTgrVolume->GetSolid() ); 
-	    if( solid != 0 )   // for G4AssemblyVolume it is 0
-	      {
-		g4vmgr->RegisterMe( solid );
-		logvol = ConstructG4LogVol( solid );
-		g4vmgr->RegisterMe( logvol );
-		g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
-		
-	      }
-	  } 
-      } 
-    //--- Construct PhysVol
-    G4VPhysicalVolume* physvol = ConstructG4PhysVol( place, logvol, parentLV, parallelID );
-    if( physvol != 0 )  // 0 for G4AssemblyVolumes
-    {
-      g4vmgr->RegisterMe( physvol );
-      
-      if( logvol == 0 ) // case of divisions
-	{
-	  logvol = physvol->GetLogicalVolume();
-	}
-    }
-    else 
-    {
-      return;
-    }
-  } else {
+  G4bool bFirstCopy = false;
+  if( (logvol == 0) ) 
+  {
     bFirstCopy = true;
+    if( theTgrVolume->GetType() != "VOLDivision" )
+    {
+      //--- If first time build solid and LogVol
+      G4VSolid* solid = FindOrConstructG4Solid( theTgrVolume->GetSolid() ); 
+      if( solid != 0 )   // for G4AssemblyVolume it is 0
+      {
+	g4vmgr->RegisterMe( solid );
+	logvol = ConstructG4LogVol( solid );
+	g4vmgr->RegisterMe( logvol );
+	g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
+	
+      }
+    } 
+  } 
+  //--- Construct PhysVol
+  G4VPhysicalVolume* physvol = ConstructG4PhysVol( place, logvol, parentLV );
+  if( physvol != 0 )  // 0 for G4AssemblyVolumes
+  {
+    g4vmgr->RegisterMe( physvol );
+
+    if( logvol == 0 ) // case of divisions
+    {
+      logvol = physvol->GetLogicalVolume();
+    }
+  }
+  else 
+  {
+    return;
   }
 
   //--- If first copy build children placements in this LogVol
@@ -181,14 +179,13 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
   {
     std::pair<G4mmapspl::iterator, G4mmapspl::iterator> children
       = G4tgrVolumeMgr::GetInstance()->GetChildren( GetName() );
-    G4mmapspl::iterator cite;
+    G4mmapspl::iterator cite; 
     for( cite = children.first; cite != children.second; cite++ )
     {
       //----- Call G4tgrPlace ->constructG4Volumes 
       //---- find G4tgbVolume corresponding to the G4tgrVolume
       //     pointed by G4tgrPlace
       G4tgrPlace* pl = const_cast<G4tgrPlace*>((*cite).second);
-      if( pl->GetParallelID() != parallelID ) continue;
       G4tgbVolume* svol = g4vmgr->FindVolume( pl->GetVolume()->GetName() );
       //--- find copyNo
 #ifdef G4VERBOSE
@@ -197,7 +194,7 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 	G4cout << " G4tgbVolume::ConstructG4Volumes - construct daughter " <<  pl->GetVolume()->GetName() << " # " << pl->GetCopyNo() << G4endl;
       }
 #endif
-      svol->ConstructG4Volumes( pl, logvol, parallelID );
+      svol->ConstructG4Volumes( pl, logvol );
     }
   }
 
@@ -217,7 +214,8 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
     G4cout << " G4tgbVolume::FindOrConstructG4Solid():" << G4endl
-           << " Solid=  " << sol->GetName() << " of type " << sol->GetType()
+           << "   SOLID = " << sol << G4endl
+           << "   " << sol->GetName() << " of type " << sol->GetType()
            << G4endl;
   }
 #endif 
@@ -639,6 +637,113 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
                                       &((*z_p)[0]), &((*rmin_p)[0]),
                                       &((*rmax_p)[0]));
   }
+  else if( stype == "TESSELLATED" )
+  {
+    G4int nFacets = G4int(solParam[0]);
+    G4int jj = 0;
+    solid = new G4TessellatedSolid(sname);
+    G4TessellatedSolid* solidTS = (G4TessellatedSolid*)(solid);
+    G4VFacet* facet;
+    
+    for( G4int ii = 0; ii < nFacets; ii++){
+      G4int nPoints = G4int(solParam[jj+1]);
+      if( G4int(solParam.size()) < jj + nPoints*3 + 2 ) {
+	G4String Err1 = "Too small number of parameters in tesselated solid, it should be at least "  + G4UIcommand::ConvertToString(jj + nPoints*3 + 2 );
+	G4String Err2 = " facet number " + G4UIcommand::ConvertToString(ii);
+	G4String Err3 = " number of parameters is " + G4UIcommand::ConvertToString(G4int(solParam.size()));
+	G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		    "InvalidSetup", FatalException, ErrMessage);
+      }
+      
+      if( nPoints == 3 ) 
+      {
+	G4ThreeVector pt0(solParam[jj+2],solParam[jj+3],solParam[jj+4]);
+	G4ThreeVector vt1(solParam[jj+5],solParam[jj+6],solParam[jj+7]);
+	G4ThreeVector vt2(solParam[jj+8],solParam[jj+9],solParam[jj+10]);
+	G4FacetVertexType vertexType;
+	if( solParam[jj+11] == 0 ) 
+	{
+	  vertexType = ABSOLUTE;
+	} 
+	else if( solParam[jj+11] == 0 ) 
+	{
+	  vertexType = RELATIVE;
+	} 
+	else 
+	{
+	  G4String Err1 = "Wrong number of vertex type in tesselated solid, it should be 0 =ABSOLUTE) or 1 (=RELATIVE)";
+	  G4String Err2 = " facet number " + G4UIcommand::ConvertToString(G4int(ii));
+	  G4String Err3 = " vertex type is " + G4UIcommand::ConvertToString(solParam[jj+11]);
+	  G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	  G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		      "InvalidSetup", FatalException, ErrMessage);
+	}
+	facet = new G4TriangularFacet( pt0, vt1, vt2, vertexType );
+      } 
+      else if( nPoints == 4 ) 
+      {
+	G4ThreeVector pt0(solParam[jj+2],solParam[jj+3],solParam[jj+4]);
+	G4ThreeVector vt1(solParam[jj+5],solParam[jj+6],solParam[jj+7]);
+	G4ThreeVector vt2(solParam[jj+8],solParam[jj+9],solParam[jj+10]);
+	G4ThreeVector vt3(solParam[jj+11],solParam[jj+12],solParam[jj+13]);
+	G4FacetVertexType vertexType;
+	if( solParam[jj+14] == 0 ) 
+	{
+	  vertexType = ABSOLUTE;
+	}
+	else if( solParam[jj+14] == 0 ) 
+	{
+	  vertexType = RELATIVE;
+	} 
+	else 
+	{
+	  G4String Err1 = "Wrong number of vertex type in tesselated solid, it should be 0 =ABSOLUTE) or 1 (=RELATIVE)";
+	  G4String Err2 = " facet number " + G4UIcommand::ConvertToString(G4int(ii));
+	  G4String Err3 = " vertex type is " + G4UIcommand::ConvertToString(solParam[jj+14]);
+	  G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	  G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		      "InvalidSetup", FatalException, ErrMessage);
+	}
+	facet = new G4QuadrangularFacet( pt0, vt1, vt2, vt3, vertexType );
+      } 
+      else 
+      {
+	G4String Err1 = "Wrong number of points in tesselated solid, it should be 3 or 4";
+	G4String Err2 = " facet number " + G4UIcommand::ConvertToString(G4int(ii));
+	G4String Err3 = " number of points is " + G4UIcommand::ConvertToString(G4int(nPoints));
+	G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		    "InvalidSetup", FatalException, ErrMessage);
+      }
+      
+      solidTS->AddFacet( facet );
+      jj += nPoints*3 + 2;
+    }
+    
+  }  
+  else if( stype == "EXTRUDED" ) 
+  {
+    std::vector<G4TwoVector> polygonList;
+    std::vector<G4ExtrudedSolid::ZSection> zsectionList;
+    G4int nPolygons = G4int(solParam[0]);
+    G4int ii = 1;
+    G4int nMax = nPolygons*2+1;
+    for( ;ii < nMax; ii+=2 )
+    {
+      polygonList.push_back( G4TwoVector(solParam[ii],solParam[ii+1]) );
+    }
+    G4int nZSections = G4int(solParam[ii]);
+    nMax = nPolygons*2 + nZSections*4 + 2; 
+    ii++;
+    for( ; ii < nMax; ii+=4 )
+    {
+      G4TwoVector offset(solParam[ii+1],solParam[ii+2]);
+      zsectionList.push_back( G4ExtrudedSolid::ZSection(solParam[ii],offset,solParam[ii+3]) );
+    }
+    solid = new G4ExtrudedSolid( sname, polygonList, zsectionList );
+    
+  }
   else if( stype.substr(0,7) == "Boolean" )
   {
     const G4tgrSolidBoolean* solb = dynamic_cast<const G4tgrSolidBoolean*>(sol);
@@ -808,8 +913,7 @@ G4LogicalVolume* G4tgbVolume::ConstructG4LogVol( const G4VSolid* solid )
 G4VPhysicalVolume*
 G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
                                  const G4LogicalVolume* currentLV,
-                                 const G4LogicalVolume* parentLV,
-				 const G4int parallelID)
+                                 const G4LogicalVolume* parentLV )
 {
   G4VPhysicalVolume* physvol = 0;
   G4int copyNo;
@@ -820,7 +924,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 2 )
     {
-      G4cout << " G4tgbVolume::ConstructG4PhysVol() : "
+      G4cout << " G4tgbVolume::ConstructG4PhysVol() - World: "
              << GetName() << G4endl;
     }
 #endif
@@ -831,7 +935,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
-      G4cout << " Constructing new G4PVPlacement " 
+      G4cout << " Constructing new : G4PVPlacement " 
              << physvol->GetName() << G4endl;
     }
 #endif
@@ -933,112 +1037,62 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
         }
 #endif
         
-        if( dp->GetParamType() == "PHANTOM")
-	{
-	  G4tgbPlaceParamPhantom * param = new G4tgbPlaceParamPhantom(dp);
+        G4tgbPlaceParameterisation * param=0;
+        
+        if( (dp->GetParamType() == "CIRCLE")
+         || (dp->GetParamType() == "CIRCLE_XY")
+         || (dp->GetParamType() == "CIRCLE_XZ")
+         || (dp->GetParamType() == "CIRCLE_YZ") )
+        { 
+          param = new G4tgbPlaceParamCircle(dp);
+          
+        } 
+	else if( (dp->GetParamType() == "LINEAR")
+                || (dp->GetParamType() == "LINEAR_X")
+                || (dp->GetParamType() == "LINEAR_Y")
+                || (dp->GetParamType() == "LINEAR_Z") )
+        {   
+          param = new G4tgbPlaceParamLinear(dp);
+          
+        } 
+	else if( (dp->GetParamType() == "SQUARE")
+                || (dp->GetParamType() == "SQUARE_XY")
+                || (dp->GetParamType() == "SQUARE_XZ")
+                || (dp->GetParamType() == "SQUARE_YZ") )
+        {
+          param = new G4tgbPlaceParamSquare(dp);
+        }
+        else
+        {
+          G4String ErrMessage = "Parameterisation has wrong type, TYPE: "
+                              + G4String(dp->GetParamType()) + " !";
+          G4Exception("G4tgbVolume::ConstructG4PhysVol", "WrongArgument",
+                      FatalException, ErrMessage);
+        }
 #ifdef G4VERBOSE
-	  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	  {
-	    G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
-		   << "   New G4PVParameterised: " << GetName() << " vol "
-		   << currentLV->GetName() << " in vol " << parentLV->GetName()
-		   << " axis " << param->GetAxis() << " nCopies "
-		   << param->GetNCopies() << G4endl;
-	  }
+        if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+        {
+          G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
+                 << "   New G4PVParameterised: " << GetName() << " vol "
+                 << currentLV->GetName() << " in vol " << parentLV->GetName()
+                 << " axis " << param->GetAxis() << " nCopies "
+                 << param->GetNCopies() << G4endl;
+        }
 #endif
-	  G4int nCopies =  param->GetNCopies();
-	  G4Box* phantomBox = new G4Box(currentLV->GetName()
-					,param->GetVoxelHalfX()
-					,param->GetVoxelHalfY()
-					,param->GetVoxelHalfZ());
-	  G4LogicalVolume* currentLV_nc = const_cast<G4LogicalVolume*>(currentLV);
-	  currentLV_nc->SetSolid( phantomBox );
-
-	  physvol = new G4PVParameterised(GetName(),
-				  const_cast<G4LogicalVolume*>(currentLV),
-				  const_cast<G4LogicalVolume*>(parentLV),
-				  EAxis(param->GetAxis()),
-				  nCopies,param);
-	  G4PVParameterised* physvolParam = (G4PVParameterised*)(physvol);
-	  physvolParam->SetRegularStructureId(1);
-
-	  std::vector<G4Material*> thePatientMaterials;
-	  thePatientMaterials.push_back( currentLV->GetMaterial() );
-	  param->SetMaterials( thePatientMaterials );
-	  param->BuildContainerSolid(parentLV->GetSolid());
-	  if( parentLV->GetSolid()->GetEntityType() != "G4Box" ) {
-	    G4String ErrMessage = "Container is " +
-	      parentLV->GetSolid()->GetName() +
-	      " of type " + parentLV->GetSolid()->GetEntityType();
-	    G4Exception("G4tgbVolume::ConstructG4PhysVol",
-			"Phantom container is not a G4Box",
-			FatalException, ErrMessage);
-	  }
-	  G4Box* container_solid = (G4Box*)(parentLV->GetSolid());
-	  param->CheckVoxelsFillContainer( container_solid->GetXHalfLength(), 
-                                   container_solid->GetYHalfLength(), 
-                                   container_solid->GetZHalfLength() );
-
-	}
-        else 
-	{
-	  G4tgbPlaceParameterisation * param=0;
-	  
-	  if( (dp->GetParamType() == "CIRCLE")
-	      || (dp->GetParamType() == "CIRCLE_XY")
-	      || (dp->GetParamType() == "CIRCLE_XZ")
-	      || (dp->GetParamType() == "CIRCLE_YZ") )
-	  { 
-	    param = new G4tgbPlaceParamCircle(dp);
-	     
-	  } 
-	  else if( (dp->GetParamType() == "LINEAR")
-		   || (dp->GetParamType() == "LINEAR_X")
-		   || (dp->GetParamType() == "LINEAR_Y")
-		   || (dp->GetParamType() == "LINEAR_Z") )
-	  {   
-	    param = new G4tgbPlaceParamLinear(dp);
-	      
-	  } 
-	  else if( (dp->GetParamType() == "SQUARE")
-		   || (dp->GetParamType() == "SQUARE_XY")
-		   || (dp->GetParamType() == "SQUARE_XZ")
-		   || (dp->GetParamType() == "SQUARE_YZ") )
-	  {
-	    param = new G4tgbPlaceParamSquare(dp);
-	  }
-	  else
-	  {
-	    G4String ErrMessage = "Parameterisation has wrong type, TYPE: "
-	      + G4String(dp->GetParamType()) + " !";
-	    G4Exception("G4tgbVolume::ConstructG4PhysVol", "WrongArgument",
-			FatalException, ErrMessage);
-	  }
+        physvol = new G4PVParameterised(GetName(),
+                                        const_cast<G4LogicalVolume*>(currentLV),
+                                        const_cast<G4LogicalVolume*>(parentLV),
+                                        EAxis(param->GetAxis()),
+                                        param->GetNCopies(), param);
 #ifdef G4VERBOSE
-	  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	  {
-	    G4cout << " G4tgbVolume::ConstructG4PhysVol() -" << G4endl
-		   << "   New G4PVParameterised: " << GetName() << " vol "
-		   << currentLV->GetName() << " in vol " << parentLV->GetName()
-		   << " axis " << param->GetAxis() << " nCopies "
-		   << param->GetNCopies() << G4endl;
-	  }
+    if( G4tgrMessenger::GetVerboseLevel() >= 1 )
+    {
+      G4cout << " Constructing new G4PVParameterised: " 
+             << physvol->GetName() << " in volume " << parentLV->GetName() 
+	     << " N copies " << param->GetNCopies() 
+	     << " axis " << param->GetAxis() << G4endl;
+    }
 #endif
-	  physvol = new G4PVParameterised(GetName(),
-				  const_cast<G4LogicalVolume*>(currentLV),
-				  const_cast<G4LogicalVolume*>(parentLV),
-				  EAxis(param->GetAxis()),
-				  param->GetNCopies(), param);
-#ifdef G4VERBOSE
-	  if( G4tgrMessenger::GetVerboseLevel() >= 1 )
-	    {
-	      G4cout << " Constructing new G4PVParameterised: " 
-		     << physvol->GetName() << " in volume " << parentLV->GetName() 
-		     << " N copies " << param->GetNCopies() 
-		     << " axis " << param->GetAxis() << G4endl;
-	    }
-#endif
-	}
 
       }
       else if( place->GetType() == "PlaceReplica" )
@@ -1178,7 +1232,7 @@ G4tgbVolume::ConstructG4PhysVol( const G4tgrPlace* place,
           G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( lvname);
           if( logvol == 0 )
           {
-            g4vmgr->FindVolume( lvname )->ConstructG4Volumes( 0, 0, parallelID );
+            g4vmgr->FindVolume( lvname )->ConstructG4Volumes( 0, 0);
             logvol = g4vmgr->FindG4LogVol( lvname, true );
           }
           // Fill the assembly by the plates
