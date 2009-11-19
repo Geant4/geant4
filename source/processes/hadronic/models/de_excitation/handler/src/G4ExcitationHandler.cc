@@ -60,8 +60,8 @@ G4ExcitationHandler::G4ExcitationHandler():
   // JMQ 160909 Fermi BreakUp & MultiFrag are on by default 
   // This is needed for activation of such models when G4BinaryLightIonReaction is used
   //  since no interface (for external activation via macro input file) is still available in this case.
-  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
-  //maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
+  //maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
+  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
 {                                                                          
