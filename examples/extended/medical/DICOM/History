@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2009-02-25 14:52:00 gcosmo Exp $
+$Id: History,v 1.18 2009-11-19 14:34:05 chauvie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,8 @@ $Id: History,v 1.17 2009-02-25 14:52:00 gcosmo Exp $
 
                       Category History file
                       ---------------------
+19.11.2009- Stéphane Chauvie (DICOM-V09-02-03 )
+	    Changed DICOM Handler to read CT files coming from CONQUEST DICOM server
 
 05.02.2009 - Pedro Arce (DICOM-V09-02-01)
              Added report on dose per voxel.
