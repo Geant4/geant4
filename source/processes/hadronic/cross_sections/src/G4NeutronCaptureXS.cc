@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.1 2009-11-12 00:36:01 vnivanch Exp $
+// $Id: G4NeutronCaptureXS.cc,v 1.2 2009-11-19 12:36:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -174,7 +174,7 @@ G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
   data[Z] = new G4PhysicsLogVector();
 
   std::ostringstream ost;
-  ost << path << "/inelast" << Z ;
+  ost << path << "/cap" << Z ;
   std::ifstream filein(ost.str().c_str());
   if (!(filein)) {
     G4cout << " file " << ost << "  is not opened" << G4endl;
