@@ -137,7 +137,7 @@ examples/extended
     N03Con                   tkoi@slac.stanford.edu          Tatsumi Koi
   biasing
     B01, B02                 Alexander.Howard@cern.ch        Alexander Howard
-    ReverseMC                desorgher@spaceit.ch            Laurent Desorgher
+    ReverseMC01              desorgher@spaceit.ch            Laurent Desorgher
   electromagnetic:
     TestEm1,2,5,6,7,9        Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     TestEm3,4                Michel.Maire@lapp.in2p3.fr      Michel Maire
