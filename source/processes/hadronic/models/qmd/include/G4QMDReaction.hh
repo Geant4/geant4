@@ -49,6 +49,7 @@
 
 #include "G4IonsShenCrossSection.hh"
 #include "G4GeneralSpaceNNCrossSection.hh"
+#include "G4PiNuclearCrossSection.hh"
 
 #include "G4HadronicInteraction.hh"
 
@@ -113,6 +114,8 @@ class G4QMDReaction : public G4HadronicInteraction
 //090331
       G4IonsShenCrossSection* shenXS;
       G4GeneralSpaceNNCrossSection* genspaXS;
+
+      G4PiNuclearCrossSection* piNucXS;
 
       G4bool gem;
       G4bool frag;

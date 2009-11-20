@@ -51,6 +51,7 @@ G4QMDReaction::G4QMDReaction()
    //090331
    shenXS = new G4IonsShenCrossSection();
    //genspaXS = new G4GeneralSpaceNNCrossSection();
+   piNucXS = new G4PiNuclearCrossSection();
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
@@ -106,7 +107,13 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
      G4double aTemp = projectile.GetMaterial()->GetTemperature();
 
      //090331
-     G4double xs_0 = shenXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+  
+   G4VCrossSectionDataSet* theXS = shenXS;
+
+   if ( proj_pd->GetParticleType() == "meson" ) theXS = piNucXS;
+
+   G4double xs_0 = theXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+
      //G4double xs_0 = genspaXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
      G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
@@ -157,7 +164,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       //G4cout << "G4QMDRESULT bmax_0 = " << bmax_0/fermi << " fm, bmax = " << bmax << " fm , b = " << b  << " fm " << G4endl; 
 
       G4double plab = projectile.GetTotalMomentum()/GeV;
-      G4double elab = (projectile.GetKineticEnergy() + proj_pd->GetPDGMass() + targ_pd->GetPDGMass() )/GeV;
+      G4double elab = ( projectile.GetKineticEnergy() + proj_pd->GetPDGMass() + targ_pd->GetPDGMass() )/GeV;
 
       calcOffSetOfCollision( b , proj_pd , targ_pd , plab , elab , bmax , boostCMtoNN );
 
@@ -176,11 +183,12 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
          proj = new G4QMDGroundStateNucleus( proj_Z , proj_A );
          //proj->ShowParticipants();
 
-      }
 
-      meanField->SetSystem ( proj );
-      proj->SetTotalPotential( meanField->GetTotalPotential() );
-      proj->CalEnergyAndAngularMomentumInCM();
+         meanField->SetSystem ( proj );
+         proj->SetTotalPotential( meanField->GetTotalPotential() );
+         proj->CalEnergyAndAngularMomentumInCM();
+
+      }
 
 // Target
       G4int iz = int ( target.GetZ() );
@@ -219,7 +227,6 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4LorentzVector proj4pCM = CLHEP::boostOf ( proj4pLAB , boostToReac );
       G4LorentzVector targ4pCM = CLHEP::boostOf ( targ4p , boostToReac );
 
-
 //    Projectile
       if ( proj != NULL )
       {
@@ -250,27 +257,33 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
 //       projectile is particle
 
-         G4int i = targ->GetTotalNumberOfParticipant(); 
+         // avoid multiple set in "elastic" loop
+         if ( system->GetTotalNumberOfParticipant() == targ->GetTotalNumberOfParticipant() )
+         {
+
+            G4int i = targ->GetTotalNumberOfParticipant(); 
       
-         G4ThreeVector p0( 0 ); 
-         G4ThreeVector r0( 0 );
+            G4ThreeVector p0( 0 ); 
+            G4ThreeVector r0( 0 );
 
+            G4ThreeVector p ( p0.x() + coulomb_collision_px_proj 
+                            , p0.y() 
+                            , p0.z() * coulomb_collision_gamma_proj + coulomb_collision_pz_proj ); 
 
-         G4ThreeVector p ( p0.x() + coulomb_collision_px_proj 
-                         , p0.y() 
-                         , p0.z() * coulomb_collision_gamma_proj + coulomb_collision_pz_proj ); 
+            G4ThreeVector r ( r0.x() + coulomb_collision_rx_proj 
+                            , r0.y() 
+                            , r0.z() / coulomb_collision_gamma_proj + coulomb_collision_rz_proj ); 
 
-         G4ThreeVector r ( r0.x() + coulomb_collision_rx_proj 
-                         , r0.y() 
-                         , r0.z() / coulomb_collision_gamma_proj + coulomb_collision_rz_proj ); 
+            system->SetParticipant( new G4QMDParticipant( (G4ParticleDefinition*)projectile.GetDefinition() , p , r ) );
+            // This is not important becase only 1 projectile particle.
+            system->GetParticipant ( i )->SetProjectile();
+         }
 
-         system->SetParticipant( new G4QMDParticipant( (G4ParticleDefinition*)projectile.GetDefinition() , p , r ) );
-         system->GetParticipant ( i )->SetProjectile();
       }
+      //system->ShowParticipants();
 
       delete targ;
       delete proj;
-
 
    meanField->SetSystem ( system );
    collision->SetMeanField ( meanField );
@@ -610,6 +623,7 @@ G4ParticleDefinition* pd_proj ,
 G4ParticleDefinition* pd_targ , 
 G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
 {
+
    G4double mass_proj = pd_proj->GetPDGMass()/GeV;
    G4double mass_targ = pd_targ->GetPDGMass()/GeV;
   
@@ -622,10 +636,24 @@ G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
    G4double pzcc = pstt;
    G4double eccm = stot - ( mass_proj + mass_targ );
    
-   G4int zp = pd_proj->GetAtomicNumber();
-   G4int ap = pd_proj->GetAtomicMass();
+   G4int zp = 1;
+   G4int ap = 1;
+   if ( pd_proj->GetParticleType() == "nucleus" )
+   {
+      zp = pd_proj->GetAtomicNumber();
+      ap = pd_proj->GetAtomicMass();
+   }
+   else 
+   {
+      // proton, neutron, mesons
+      zp = int ( pd_proj->GetPDGCharge()/eplus + 0.5 );  
+      // ap = 1;
+   }
+   
+
    G4int zt = pd_targ->GetAtomicNumber();
    G4int at = pd_targ->GetAtomicMass();
+
 
    //G4double rmax0 = 8.0;  // T.K dicide parameter value  // for low energy
    G4double rmax0 = bmax + 4.0;
