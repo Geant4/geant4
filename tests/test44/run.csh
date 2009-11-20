@@ -16,18 +16,20 @@ set    dir  = "$G4INSTALL/tests/test44/"
 ln -s ${dir}/Exp_Data/*.txt ./
 
 setenv PHYSLIST  QBBC
-set    phys = "opt0"
-source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-set    phys = "opt2"
-source ${dir}run_single.csh ${phys} ${work} ${dir}
+set tPart = (p he4 c12)
+foreach phys (opt0 opt2 opt3) 
+    foreach part ($tPart)
+	set file = "${tPart}_water_${phys}.log"
+	if ( -e "$file" )  then
+	    rm -f $file
+	endif
+	${work} ${dir}${part}_water_${phys}.in >& ${part}_water_${phys}.log
+	mv Bragg.out ${part}_${phys}.out
+    end
+end
 
-set    phys = "opt3"
-source ${dir}run_single.csh ${phys} ${work} ${dir}
-
-${G4BIN}/${G4SYSTEM}/reader_test44 p $1
-${G4BIN}/${G4SYSTEM}/reader_test44 he4 $1
-${G4BIN}/${G4SYSTEM}/reader_test44 c12 $1
-
-source ${dir}plot.csh $1 >& root.log
-
+date > root.log
+foreach tPart ($tPart)
+    ${G4BIN}/${G4SYSTEM}/reader_test44 $tPart $1  >>& root.log
+end
