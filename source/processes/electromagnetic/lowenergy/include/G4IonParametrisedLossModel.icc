@@ -41,7 +41,7 @@
 //                               and modified method to add/remove tables
 //                               (tables are now built in initialisation phase),
 //                               Minor bug fix in ComputeDEDXPerVolume (AL)
-//
+//                20. 11. 2009 - Added set-method for energy loss limit (AL)
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -203,4 +203,15 @@ LossTableList::iterator G4IonParametrisedLossModel::IsApplicable(
   }
 
   return iter;
+}
+
+
+inline
+void G4IonParametrisedLossModel::SetEnergyLossLimit(
+                                            G4double ionEnergyLossLimit) {
+
+  if(ionEnergyLossLimit > 0 && ionEnergyLossLimit <=1) {
+
+     energyLossLimit = ionEnergyLossLimit;
+  }
 }

@@ -43,7 +43,7 @@
 //                               Minor bug fix in ComputeDEDXPerVolume (AL) 
 //                12. 11. 2009 - Added function for switching off scaling 
 //                               of heavy ions from ICRU 73 data
-//
+//                20. 11. 2009 - Added set-method for energy loss limit (AL)
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -202,6 +202,9 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                       G4int,             // Number of bins
                       G4bool);           // Logarithmic scaling of energy
    
+   // Function for setting energy loss limit for stopping power integration
+   void SetEnergyLossLimit(G4double ionEnergyLossLimit); 
+
  protected:
    G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			       G4double);   // Kinetic energy of projectile

@@ -1,4 +1,4 @@
-$Id: History,v 1.402 2009-11-12 15:48:41 alechner Exp $
+$Id: History,v 1.403 2009-11-20 13:34:44 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.11.2009, A. Lechner tag emlowen-V09-02-65
+            -G4IonParametrisedLossModel: Added set-function for loss limit 
+             parameter
 
 12.11.2009, A. Lechner tag emlowen-V09-02-64
             -G4IonParametrisedLossModel: 
