@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.7 2009-05-25 19:07:15 dennis Exp $
+// $Id: G4RPGInelastic.cc,v 1.8 2009-11-20 16:39:38 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,6 +56,11 @@ G4RPGInelastic::G4RPGInelastic(const G4String& modelName)
   particleDef[15] = G4OmegaMinus::OmegaMinus();
   particleDef[16] = G4AntiProton::AntiProton();
   particleDef[17] = G4AntiNeutron::AntiNeutron();
+
+  G4cout << " **************************************************** " << G4endl; 
+  G4cout << " * The RPG model is currently under development and * " << G4endl; 
+  G4cout << " * should not be used.                              * " << G4endl; 
+  G4cout << " **************************************************** " << G4endl; 
 }
 
 
