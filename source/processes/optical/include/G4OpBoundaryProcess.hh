@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.21 2009-11-12 00:48:05 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.22 2009-11-20 01:06:45 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,8 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   TotalInternalReflection,
                                   LambertianReflection, LobeReflection,
                                   SpikeReflection, BackScattering,
+                                  Absorption, Detection, NotAtBoundary,
+                                  SameMaterial, StepTooSmall, NoRINDEX,
                                   PolishedLumirrorAirReflection,
                                   PolishedLumirrorGlueReflection,
                                   PolishedAirReflection,
@@ -122,9 +124,7 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   GroundTiOAirReflection,
                                   GroundTyvekAirReflection,
                                   GroundVM2000AirReflection,
-                                  GroundVM2000GlueReflection,
-                                  Absorption, Detection, NotAtBoundary,
-                                  SameMaterial, StepTooSmall, NoRINDEX };
+                                  GroundVM2000GlueReflection };
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
@@ -210,8 +210,6 @@ private:
 
         void BoundaryProcessVerbose(void) const;
 
-        void ReadFile(void);
-
 private:
 
 	G4double thePhotonMomentum;
@@ -252,12 +250,6 @@ private:
         G4int iTE, iTM;
 
         G4double kCarTolerance;
-
-        G4bool surface_read;
-        static const G4int incidentIndexMax = 91;
-        static const G4int thetaIndexMax = 45;
-        static const G4int phiIndexMax = 37;
-        G4float AngularDistribution[incidentIndexMax*thetaIndexMax*phiIndexMax];
 
 };
 

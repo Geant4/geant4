@@ -115,7 +115,6 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         kCarTolerance = G4GeometryTolerance::GetInstance()
                         ->GetSurfaceTolerance();
 
-        surface_read = false;
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
@@ -708,6 +707,12 @@ void G4OpBoundaryProcess::DielectricLUT()
         G4double AngularDistributionValue, thetaRad, phiRad, EdotN;
         G4ThreeVector PerpendicularVectorTheta, PerpendicularVectorPhi;
 
+        theStatus = G4OpBoundaryProcessStatus(G4int(theFinish) + 
+                           (G4int(NoRINDEX)-G4int(groundbackpainted)));
+
+        G4int thetaIndexMax = OpticalSurface->GetThetaIndexMax();
+        G4int phiIndexMax   = OpticalSurface->GetPhiIndexMax();
+
         do {
            if ( !G4BooleanRand(theReflectivity) ) // Not reflected, so Absorbed
               DoAbsorption();
@@ -718,18 +723,16 @@ void G4OpBoundaryProcess::DielectricLUT()
               // Round it to closest integer
               G4int angleIncident = G4int(floor(180/pi*anglePhotonToNormal+0.5));
 
-              if (!surface_read) ReadFile();
-
               // Take random angles THETA and PHI, 
               // and see if below Probability - if not - Redo
               do {
                  thetaIndex = CLHEP::RandFlat::shootInt(thetaIndexMax-1);
                  phiIndex = CLHEP::RandFlat::shootInt(phiIndexMax-1);
                  // Find probability with the new indeces from LUT
-                 AngularDistributionValue =
-                   AngularDistribution[angleIncident+
-                                       thetaIndex*incidentIndexMax+
-                                       phiIndex*thetaIndexMax*incidentIndexMax];
+                 AngularDistributionValue = OpticalSurface -> 
+                   GetAngularDistributionValue(angleIncident,
+                                               thetaIndex,
+                                               phiIndex);
               } while ( !G4BooleanRand(AngularDistributionValue) );
 
               thetaRad = (-90 + 4*thetaIndex)*pi/180;
@@ -1126,101 +1129,4 @@ void G4OpBoundaryProcess::CalculateReflectivity()
   theReflectivity =
              GetReflectivity(E1_perp, E1_parl, incidentangle,
                                                  RealRindex, ImaginaryRindex);
-}
-
-void G4OpBoundaryProcess::ReadFile()
-{
-  G4String readFileName;
-
-  char* path = getenv("G4REALSURFACEDATA");
-  if (!path) {
-     G4String excep = 
-        "G4OpBoundaryProcess - G4REALSURFACEDATA environment variable not set";
-     G4Exception(excep);
-  }
-  G4String pathString(path);
-
-  if (theFinish == polishedlumirrorglue) {
-     readFileName = "PolishedLumirrorGlue.dat";
-  }
-  else if (theFinish == polishedlumirrorair) {
-     readFileName = "PolishedLumirror.dat";
-  }
-  else if (theFinish == polishedteflonair) {
-     readFileName = "PolishedTeflon.dat";
-  }
-  else if (theFinish == polishedtioair) {
-     readFileName = "PolishedTiO.dat";
-  }
-  else if (theFinish == polishedtyvekair) {
-     readFileName = "PolishedTyvek.dat";
-  }
-  else if (theFinish == polishedvm2000glue) {
-     readFileName = "PolishedVM2000Glue.dat";
-  }
-  else if (theFinish == polishedvm2000air) {
-     readFileName = "PolishedVM2000.dat";
-  }
-  else if (theFinish == etchedlumirrorglue) {
-     readFileName = "EtchedLumirrorGlue.dat";
-  }
-  else if (theFinish == etchedlumirrorair) {
-     readFileName = "EtchedLumirror.dat";
-  }
-  else if (theFinish == etchedteflonair) {
-     readFileName = "EtchedTeflon.dat";
-  }
-  else if (theFinish == etchedtioair) {
-     readFileName = "EtchedTiO.dat";
-  }
-  else if (theFinish == etchedtyvekair) {
-     readFileName = "EtchedTyvek.dat";
-  }
-  else if (theFinish == etchedvm2000glue) {
-     readFileName = "EtchedVM2000Glue.dat";
-  }
-  else if (theFinish == etchedvm2000air) {
-     readFileName = "EtchedVM2000.dat";
-  }
-  else if (theFinish == groundlumirrorglue) {
-     readFileName = "GroundLumirrorGlue.dat";
-  }
-  else if (theFinish == groundlumirrorair) {
-     readFileName = "GroundLumirror.dat";
-  }
-  else if (theFinish == groundteflonair) {
-     readFileName = "GroundTeflon.dat";
-  }
-  else if (theFinish == groundtioair) {
-     readFileName = "GroundTiO.dat";
-  }
-  else if (theFinish == groundtyvekair) {
-     readFileName = "GroundTyvek.dat";
-  }
-  else if (theFinish == groundvm2000glue) {
-     readFileName = "GroundVM2000Glue.dat";
-  }
-  else if (theFinish == groundvm2000air) {
-     readFileName = "GroundVM2000.dat";
-  }
-
-  readFileName = pathString + "/" + readFileName;
-
-  // Open LUT with Material and Integer Angle
-  FILE* readFileHandle;
-
-  readFileHandle = fopen(readFileName,"r");
-
-  if (readFileHandle!=NULL) {
-     for (int i=0;i<incidentIndexMax*thetaIndexMax*phiIndexMax;i++) {
-         fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
-     }
-     G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
-  }
-  else {
-     G4String excep = "LUT - data file: " + readFileName + " not found";
-     G4Exception(excep);
-  }
-  fclose(readFileHandle);
-  surface_read = true;
 }
