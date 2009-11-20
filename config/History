@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.370 2009-11-18 17:33:22 gcosmo Exp $
+cvs log $Id: History,v 1.371 2009-11-20 11:09:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th November 2009  Gabriele Cosmo (config-V09-02-16)
+- Removed CHIPS/xs_dependent module from include paths.
 
 18th November 2009  Gabriele Cosmo (config-V09-02-15)
 - architecture.gmk: corrected inclusion of -lz for zlib.
