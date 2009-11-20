@@ -13,10 +13,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-November-2009 Tatsumi Koi (hadr-qmd-V09-02-02)
+- Fix bug for incidence of neutral particles;
+  Should be OK for neucleon-nucleus interaction 
+	src/G4QMDReaction.cc  
+	src/G4QMDGroundStateNucleus.cc  
+
 31-March-2009 Tatsumi Koi (hadr-qmd-V09-02-01)
 - Fix bug in gamma(mass zero) partiticpants
 	src/G4QMDCollision.cc  
-- Chnage meber object to pointer
+- Chnage member object to pointer
 	include/G4QMDReaction.hh  
 	src/G4QMDReaction.cc  
 
