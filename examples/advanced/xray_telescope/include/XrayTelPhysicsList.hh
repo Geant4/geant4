@@ -70,10 +70,8 @@ public:
   // Set/Get cut values 
   void      SetCutForGamma(G4double);
   void      SetCutForElectron(G4double);
-  void      SetCutForProton(G4double);           
   G4double  GetCutForGamma() const;
   G4double  GetCutForElectron() const;
-  G4double  GetCutForProton() const;
     
 protected:
   // these methods Construct particles 
@@ -81,6 +79,7 @@ protected:
   void ConstructLeptons();
   void ConstructMesons();
   void ConstructBaryons();
+  void ConstructIons();
   void ConstructAllShortLiveds();
 
 protected:
@@ -91,7 +90,6 @@ protected:
 private:
   G4double cutForGamma;
   G4double cutForElectron; 
-  G4double cutForProton;
 };
 
 #endif
