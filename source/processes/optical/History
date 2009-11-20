@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th Nov 2009 Peter Gumplinger (op-V09-02-06)
+              change the code such that the LUT are now read in and kept
+              by G4OpticalSurface and not G4OpBoundaryProcess, reordering
+              of enumeration and set theStatus in DielectricLUT.
+
 11th Nov 2009 Peter Gumplinger (op-V09-02-05)
               add capability of simulating surface reflections
               with Look-Up-Tables (LUT) containing measured
