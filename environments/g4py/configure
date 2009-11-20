@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.16 2009-05-14 09:10:02 kmura Exp $
+#$Id: configure,v 1.17 2009-11-20 03:36:51 kmura Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -105,6 +105,7 @@ enable_openglxm=${G4VIS_USE_OPENGLXM:+1}
 enable_openglxm=${enable_openglxm:-0}
 enable_raytracerx=${G4VIS_USE_RAYTRACERX:+1}
 enable_raytracerx=${enable_raytracerx:-0}
+enable_gl2ps=0
 
 enable_physicslist=0
 
@@ -444,6 +445,15 @@ else
 fi
 
 # ---
+echo $ac_n "Checking for GL2PS support ...$ac_c"
+if [ -f "$g4_libdir"/libG4gl2ps.${shlib} ]; then
+  echo "yes"
+  enable_gl2ps=1
+else
+  echo "no"
+fi
+
+# ---
 echo $ac_n "Checking for physics list support ...$ac_c"
 if [ -f "$g4_incdir"/QGSP.hh ]; then
   enable_physicslist=1
@@ -550,6 +560,7 @@ Q_BOOST_PYTHON_LIB    := $boost_python_lib
 Q_ENABLE_OPENGLX      := $enable_openglx
 Q_ENABLE_OPENGLXM     := $enable_openglxm
 Q_ENABLE_RAYTRACERX   := $enable_raytracerx
+Q_ENABLE_GL2PS        := $enable_gl2ps
 
 Q_ENABLE_PHYSICSLIST  := $enable_physicslist
 
@@ -581,6 +592,10 @@ fi
 
 if [ $enable_raytracerx = 1 ]; then
   echo $ac_n " raytracerx$ac_c"
+fi
+
+if [ $enable_gl2ps = 1 ]; then
+  echo $ac_n " gl2ps$ac_c"
 fi
 
 if [ $enable_physicslist = 1 ]; then
