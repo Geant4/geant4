@@ -97,7 +97,8 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
     short readGroupId;    // identify the kind of input data 
     short readElementId;  // identify a particular type information
     short elementLength2; // deal with element length in 2 bytes
-    unsigned int elementLength4; // deal with element length in 4 bytes
+    //unsigned int elementLength4; // deal with element length in 4 bytes
+    G4int elementLength4; // deal with element length in 4 bytes
 
     char * data = new char[DATABUFFSIZE];
 
