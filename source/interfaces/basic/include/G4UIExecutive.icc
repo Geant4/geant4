@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIExecutive.icc,v 1.5 2009-11-20 09:34:49 allison Exp $
+// $Id: G4UIExecutive.icc,v 1.6 2009-11-20 22:10:31 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -54,22 +54,17 @@
 
 #endif
 
+#define DISCARD_PARAMETER(p) (void)p
+
 /////////////////////////////////////////////////////
-#if defined(G4UI_USE_TCSH)
-G4UIExecutive::G4UIExecutive(G4int, char**)
-#elif defined(G4UI_USE_XM)
 G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
-#elif defined(G4UI_USE_WIN32)
-G4UIExecutive::G4UIExecutive(G4int, char**)
-#elif defined(G4UI_USE_QT)
-G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
-#else
-G4UIExecutive::G4UIExecutive(G4int, char**)
-#endif
   : session(0), shell(0),isGUI(false)
 /////////////////////////////////////////////////////
 {
 #if defined(G4UI_USE_TCSH)
+  DISCARD_PARAMETER(argc);
+  DISCARD_PARAMETER(argv);
+
   shell = new G4UItcsh;
   session = new G4UIterminal(shell);
 
@@ -78,6 +73,9 @@ G4UIExecutive::G4UIExecutive(G4int, char**)
   isGUI = true;
 
 #elif defined(G4UI_USE_WIN32)
+  DISCARD_PARAMETER(argc);
+  DISCARD_PARAMETER(argv);
+
   session = new G4UIWin32();
 
 #elif defined(G4UI_USE_QT)
@@ -85,6 +83,9 @@ G4UIExecutive::G4UIExecutive(G4int, char**)
   isGUI = true;
     
 #else
+  DISCARD_PARAMETER(argc);
+  DISCARD_PARAMETER(argv);
+
   shell = new G4UIcsh;
   session = new G4UIterminal(shell);
 

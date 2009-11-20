@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIExecutive.hh,v 1.3 2009-05-28 06:13:03 kmura Exp $
+// $Id: G4UIExecutive.hh,v 1.4 2009-11-20 22:10:31 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -64,7 +64,7 @@ private:
   G4bool isGUI;
 
 public:
-  G4UIExecutive(G4int argc=1, char** argv=0);
+  G4UIExecutive(G4int argc, char** argv);
   ~G4UIExecutive();
 
   G4bool IsGUI() const;
