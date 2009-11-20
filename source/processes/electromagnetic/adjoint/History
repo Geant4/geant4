@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2009-11-11 16:28:00 ldesorgh Exp $
+$Id: History,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Nov 2009: L.Desorgher (emadjoint-V09-02-01)
+-Replace C++ type by G4 type where needed and adding of G4disclaimer 
+
 
 10 Nov 2009: L.Desorgher (emadjoint-V09-02-00)
 - Commit of the electromagnetic  adjoint processes for the release of the all adjoint machinery into Geant4.

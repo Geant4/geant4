@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4VAdjointReverseReaction.cc,v 1.2 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #include "G4VAdjointReverseReaction.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4AdjointCSMatrix.hh"
@@ -53,7 +81,7 @@ G4VParticleChange* G4VAdjointReverseReaction::PostStepDoIt(const G4Track& track,
  /* if (IsFwdCSUsed && IsIntegralModeUsed){ //INtegral mode still unstable
   	 G4double Tkin = step.GetPostStepPoint()->GetKineticEnergy();
   	 G4double fwdCS = theAdjointCSManager->GetTotalForwardCS(track.GetDefinition(), Tkin, track.GetMaterialCutsCouple());
-	 //G4cout<<"lastCS "<<lastCS<<std::endl;
+	 //G4cout<<"lastCS "<<lastCS<<G4endl;
 	 if (fwdCS<lastCS*G4UniformRand()) { // the reaction does not take place, same integral method as the one used for forward ionisation in  G4 
 	 	ClearNumberOfInteractionLengthLeft();
   		return fParticleChange;
@@ -85,9 +113,9 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
   		
   G4double fwd_TotCS;
   Sigma *=  theAdjointCSManager->GetCrossSectionCorrection(track.GetDefinition(),preStepKinEnergy,track.GetMaterialCutsCouple(),IsFwdCSUsed, fwd_TotCS);
-  //G4cout<<fwd_TotCS<<std::endl;
+  //G4cout<<fwd_TotCS<<G4endl;
   /*if (IsFwdCSUsed && IsIntegralModeUsed){ //take the maximum cross section only for charged particle		
-  	double e_sigma_max, sigma_max;
+  	G4double e_sigma_max, sigma_max;
 	theAdjointCSManager->GetMaxFwdTotalCS(track.GetDefinition(),
 	 		   	     track.GetMaterialCutsCouple(), e_sigma_max, sigma_max);
 	if (e_sigma_max > preStepKinEnergy){
@@ -100,8 +128,8 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
   if (Sigma>0) mean_free_path = 1./Sigma;
   lastCS=Sigma;
   
-  /*G4cout<<"Sigma  "<<Sigma<<std::endl;
-  G4cout<<"mean_free_path [mm] "<<mean_free_path/mm<<std::endl;
+  /*G4cout<<"Sigma  "<<Sigma<<G4endl;
+  G4cout<<"mean_free_path [mm] "<<mean_free_path/mm<<G4endl;
   */
   
 

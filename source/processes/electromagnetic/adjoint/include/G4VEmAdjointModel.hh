@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4VEmAdjointModel.hh,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4VEMAdjointModel
 //	Author:       	L. Desorgher
@@ -114,25 +142,25 @@ public: // public methods
   void  DefineCurrentMaterial(const G4MaterialCutsCouple* couple);
   
   
-  std::vector< std::vector< G4double >* >  ComputeAdjointCrossSectionVectorPerAtomForSecond(      
+  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerAtomForSecond(      
 				G4double kinEnergyProd,
 				G4double Z, 
                                 G4double A = 0.,
 				G4int nbin_pro_decade=10
 				);
-  std::vector< std::vector< G4double >* >  ComputeAdjointCrossSectionVectorPerAtomForScatProj(      
+  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerAtomForScatProj(      
 				G4double kinEnergyProd,
 				G4double Z, 
                                 G4double A = 0.,
 				G4int nbin_pro_decade=10
 				);
   
-  std::vector< std::vector< G4double >* >  ComputeAdjointCrossSectionVectorPerVolumeForSecond(      
+  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerVolumeForSecond(      
 				G4Material* aMaterial,
 				G4double kinEnergyProd,
 				G4int nbin_pro_decade=10
 				);
-  std::vector< std::vector< G4double >* >  ComputeAdjointCrossSectionVectorPerVolumeForScatProj(      
+  std::vector< std::vector< double>* >  ComputeAdjointCrossSectionVectorPerVolumeForScatProj(      
 				G4Material* aMaterial,
 				G4double kinEnergyProd,
 				G4int nbin_pro_decade=10
@@ -169,7 +197,7 @@ public: // public methods
   
   inline void SetSecondPartOfSameType(G4bool aBool){second_part_of_same_type =aBool;}
   
-  inline bool GetSecondPartOfSameType(){return second_part_of_same_type;}
+  inline G4bool GetSecondPartOfSameType(){return second_part_of_same_type;}
   
   inline void SetUseMatrix(G4bool aBool) { UseMatrix = aBool;}
   
@@ -249,8 +277,8 @@ protected: //attributes
   
   std::vector< G4AdjointCSMatrix* >* pOnCSMatrixForProdToProjBackwardScattering;
   std::vector< G4AdjointCSMatrix* >* pOnCSMatrixForScatProjToProjBackwardScattering;
-  std::vector<double> CS_Vs_ElementForScatProjToProjCase;
-  std::vector<double> CS_Vs_ElementForProdToProjCase;
+  std::vector<G4double> CS_Vs_ElementForScatProjToProjCase;
+  std::vector<G4double> CS_Vs_ElementForProdToProjCase;
   
   G4double lastCS;
   G4double lastAdjointCSForScatProjToProjCase;
@@ -304,9 +332,9 @@ protected: //attributes
   
   //Type of Model with Matrix or not
   //--------------------------------
-   bool UseMatrix;
-   bool UseMatrixPerElement; //other possibility is per Material
-   bool UseOnlyOneMatrixForAllElements;
+   G4bool UseMatrix;
+   G4bool UseMatrixPerElement; //other possibility is per Material
+   G4bool UseOnlyOneMatrixForAllElements;
   
   
    //Index of Cross section matrices to be used

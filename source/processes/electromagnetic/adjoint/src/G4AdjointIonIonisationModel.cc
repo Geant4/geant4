@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointIonIonisationModel.cc,v 1.2 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #include "G4AdjointIonIonisationModel.hh"
 #include "G4AdjointCSManager.hh"
 
@@ -114,7 +142,7 @@ void G4AdjointIonIonisationModel::SampleSecondaries(const G4Track& aTrack,
  if (!IsScatProjToProjCase ){ //kill the primary and add a secondary
  	fParticleChange->ProposeTrackStatus(fStopAndKill);
  	fParticleChange->AddSecondary(new G4DynamicParticle(theAdjEquivOfDirectPrimPartDef,projectileMomentum));
-	//G4cout<<"projectileMomentum "<<projectileMomentum<<std::endl;
+	//G4cout<<"projectileMomentum "<<projectileMomentum<<G4endl;
  }
  else {
  	fParticleChange->ProposeEnergy(projectileKinEnergy);
@@ -163,9 +191,9 @@ G4double G4AdjointIonIonisationModel::DiffCrossSectionPerAtomPrimToSecond(
 	
 	
 	if (dSigmadEprod>1.) {
-		G4cout<<"sigma1 "<<kinEnergyProj/MeV<<'\t'<<kinEnergyProd/MeV<<'\t'<<sigma1<<std::endl;
-		G4cout<<"sigma2 "<<kinEnergyProj/MeV<<'\t'<<kinEnergyProd/MeV<<'\t'<<sigma2<<std::endl;
-		G4cout<<"dsigma "<<kinEnergyProj/MeV<<'\t'<<kinEnergyProd/MeV<<'\t'<<dSigmadEprod<<std::endl;
+		G4cout<<"sigma1 "<<kinEnergyProj/MeV<<'\t'<<kinEnergyProd/MeV<<'\t'<<sigma1<<G4endl;
+		G4cout<<"sigma2 "<<kinEnergyProj/MeV<<'\t'<<kinEnergyProd/MeV<<'\t'<<sigma2<<G4endl;
+		G4cout<<"dsigma "<<kinEnergyProj/MeV<<'\t'<<kinEnergyProd/MeV<<'\t'<<dSigmadEprod<<G4endl;
 		
 	}
 	
@@ -216,7 +244,7 @@ G4double G4AdjointIonIonisationModel::DiffCrossSectionPerAtomPrimToSecond(
 	     			<< G4endl;
 				g=1.;
 			}
-			//G4cout<<"g"<<g<<std::endl;
+			//G4cout<<"g"<<g<<G4endl;
 			dSigmadEprod*=g;		
     	 	}
 	}	

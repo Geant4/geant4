@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointBremsstrahlungModel.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4Integrator.hh"
@@ -163,7 +191,7 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
 	if (Emin>=Emax) return;
 	G4double f1=(Emin-adjointPrimKinEnergy)/Emin;
 	G4double f2=(Emax-adjointPrimKinEnergy)/Emax/f1;
-	//G4cout<<"f1 and f2 "<<f1<<'\t'<<f2<<std::endl;
+	//G4cout<<"f1 and f2 "<<f1<<'\t'<<f2<<G4endl;
 	projectileKinEnergy=adjointPrimKinEnergy/(1.-f1*pow(f2,G4UniformRand()));
 	gammaEnergy=projectileKinEnergy-adjointPrimKinEnergy;
 	diffCSUsed=lastCZ*adjointPrimKinEnergy/projectileKinEnergy/gammaEnergy;
@@ -305,7 +333,7 @@ G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondAppr
  G4double dCrossEprod=0.;
  
  const G4ElementVector* theElementVector = material->GetElementVector();
- const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
+ const double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
  G4double dum=0.;
  G4double E1=kinEnergyProd,E2=kinEnergyProd*1.001;
  G4double dE=E2-E1;

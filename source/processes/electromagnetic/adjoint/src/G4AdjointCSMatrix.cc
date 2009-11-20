@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointCSMatrix.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 
 #include "G4AdjointCSMatrix.hh"
 #include <iomanip>
@@ -37,8 +65,8 @@ void G4AdjointCSMatrix::Clear()
 }
 ///////////////////////////////////////////////////////
 //
- void G4AdjointCSMatrix::AddData(G4double aLogPrimEnergy,G4double aLogCS, std::vector< G4double>* aLogSecondEnergyVector,
-	 							       std::vector< G4double>* aLogProbVector,size_t n_pro_decade){
+ void G4AdjointCSMatrix::AddData(G4double aLogPrimEnergy,G4double aLogCS, std::vector< double>* aLogSecondEnergyVector,
+	 							       std::vector< double>* aLogProbVector,size_t n_pro_decade){
 	
 	G4AdjointInterpolator* theInterpolator=G4AdjointInterpolator::GetInstance();
 	
@@ -74,10 +102,10 @@ void G4AdjointCSMatrix::Clear()
 }
 ///////////////////////////////////////////////////////
 //
-bool G4AdjointCSMatrix::GetData(unsigned int i, G4double& aLogPrimEnergy,G4double& aLogCS,G4double& log0, std::vector< G4double>*& aLogSecondEnergyVector,
-	 							       std::vector< G4double>*& aLogProbVector, std::vector< size_t>*& aLogProbVectorIndex)
+G4bool G4AdjointCSMatrix::GetData(unsigned int i, G4double& aLogPrimEnergy,G4double& aLogCS,G4double& log0, std::vector< double>*& aLogSecondEnergyVector,
+	 							       std::vector< double>*& aLogProbVector, std::vector< size_t>*& aLogProbVectorIndex)
 {	if (i>= nb_of_PrimEnergy) return false;
-	//G4cout<<"Test Get Data "<<std::endl;
+	//G4cout<<"Test Get Data "<<G4endl;
 	aLogPrimEnergy = theLogPrimEnergyVector[i];
 	aLogCS = theLogCrossSectionVector[i];
 	aLogSecondEnergyVector = theLogSecondEnergyMatrix[i];
@@ -93,33 +121,33 @@ void G4AdjointCSMatrix::Write(G4String file_name)
 {	std::fstream FileOutput(file_name, std::ios::out);			  
  	FileOutput<<std::setiosflags(std::ios::scientific);
  	FileOutput<<std::setprecision(6);
-	FileOutput<<theLogPrimEnergyVector.size()<<std::endl;
+	FileOutput<<theLogPrimEnergyVector.size()<<G4endl;
 	for (size_t i=0;i<theLogPrimEnergyVector.size();i++){
-		FileOutput<<std::exp(theLogPrimEnergyVector[i])/MeV<<'\t'<<std::exp(theLogCrossSectionVector[i])<<std::endl;
+		FileOutput<<std::exp(theLogPrimEnergyVector[i])/MeV<<'\t'<<std::exp(theLogCrossSectionVector[i])<<G4endl;
 		size_t j1=0;
-		FileOutput<<theLogSecondEnergyMatrix[i]->size()<<std::endl;
+		FileOutput<<theLogSecondEnergyMatrix[i]->size()<<G4endl;
 		for (size_t j=0;j<theLogSecondEnergyMatrix[i]->size();j++){
 			FileOutput<<std::exp((*theLogSecondEnergyMatrix[i])[j]);
 			j1++;
 			if (j1<10) FileOutput<<'\t';
 			else  {
-				FileOutput<<std::endl;
+				FileOutput<<G4endl;
 				j1=0;
 			}	
 		}
-		if (j1>0) FileOutput<<std::endl;
+		if (j1>0) FileOutput<<G4endl;
 		j1=0;
-		FileOutput<<theLogProbMatrix[i]->size()<<std::endl;
+		FileOutput<<theLogProbMatrix[i]->size()<<G4endl;
 		for (size_t j=0;j<theLogProbMatrix[i]->size();j++){
 			FileOutput<<std::exp((*theLogProbMatrix[i])[j]);
 			j1++;
 			if (j1<10) FileOutput<<'\t';
 			else  {
-				FileOutput<<std::endl;
+				FileOutput<<G4endl;
 				j1=0;
 			}	
 		}
-		if (j1>0) FileOutput<<std::endl;
+		if (j1>0) FileOutput<<G4endl;
 		
 		
 	}
@@ -143,8 +171,8 @@ void G4AdjointCSMatrix::Read(G4String file_name)
 		theLogPrimEnergyVector.push_back(E);
 		theLogCrossSectionVector.push_back(CS);
 		FileOutput>>n2;
-		theLogSecondEnergyMatrix.push_back(new std::vector<double>());
-		theLogProbMatrix.push_back(new std::vector<double>());
+		theLogSecondEnergyMatrix.push_back(new std::vector<G4double>());
+		theLogProbMatrix.push_back(new std::vector<G4double>());
 		
 		for (size_t j=0; j<n2;j++){
 			G4double E1;

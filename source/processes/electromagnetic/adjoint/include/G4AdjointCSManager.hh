@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4AdjointCSManager.hh,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Class:		G4AdjointCSManager
 //	Author:       	L. Desorgher
@@ -75,22 +103,22 @@ class G4AdjointCSManager
 	
 	
 	void GetEminForTotalCS(G4ParticleDefinition* aPartDef,
-	 		   	     const G4MaterialCutsCouple* aCouple, double& emin_adj, double& emin_fwd);
+	 		   	     const G4MaterialCutsCouple* aCouple, G4double& emin_adj, G4double& emin_fwd);
 	void GetMaxFwdTotalCS(G4ParticleDefinition* aPartDef,
-	 		   	     const G4MaterialCutsCouple* aCouple, double& e_sigma_max, double& sigma_max);
+	 		   	     const G4MaterialCutsCouple* aCouple, G4double& e_sigma_max, G4double& sigma_max);
 	void GetMaxAdjTotalCS(G4ParticleDefinition* aPartDef,
-	 		   	     const G4MaterialCutsCouple* aCouple, double& e_sigma_max, double& sigma_max);
+	 		   	     const G4MaterialCutsCouple* aCouple, G4double& e_sigma_max, G4double& sigma_max);
 				     
 				     			     			     
 	
-	//CrossSection Correction  1 or FwdCS/AdjCS following the boolean value of forward_CS_is_used and forward_CS_mode
+	//CrossSection Correction  1 or FwdCS/AdjCS following the G4boolean value of forward_CS_is_used and forward_CS_mode
 	//-------------------------------------------------
-	G4double GetCrossSectionCorrection(G4ParticleDefinition* aPartDef,G4double PreStepEkin,const G4MaterialCutsCouple* aCouple, bool& fwd_is_used, double& fwd_TotCS);
+	G4double GetCrossSectionCorrection(G4ParticleDefinition* aPartDef,G4double PreStepEkin,const G4MaterialCutsCouple* aCouple, G4bool& fwd_is_used, G4double& fwd_TotCS);
 	
 	
 	//Cross section mode
 	//------------------
-	inline void SetFwdCrossSectionMode(bool aBool){forward_CS_mode=aBool;}
+	inline void SetFwdCrossSectionMode(G4bool aBool){forward_CS_mode=aBool;}
 	
 	
 	//Weight correction 
@@ -106,12 +134,12 @@ class G4AdjointCSManager
 	//Method Called by the adjoint model to get there CS, if not precised otherwise
 	//-------------------------------
 	
-	double ComputeAdjointCS(G4Material* aMaterial,
+	G4double ComputeAdjointCS(G4Material* aMaterial,
 					    G4VEmAdjointModel* aModel, 
 					    G4double PrimEnergy,
 					    G4double Tcut,
 					    G4bool IsScatProjToProjCase,
-					    std::vector<double>& 
+					    std::vector<G4double>& 
 					         AdjointCS_for_each_element);
 					 
 	//Method Called by the adjoint model to sample the secondary energy form the CS matrix
@@ -164,7 +192,7 @@ class G4AdjointCSManager
 	G4double    lastTcut;	
 	std::vector< size_t> listOfIndexOfAdjointEMModelInAction;
 	std::vector< G4bool> listOfIsScatProjToProjCase;
-	std::vector< std::vector<double> > lastAdjointCSVsModelsAndElements;
+	std::vector< std::vector<G4double> > lastAdjointCSVsModelsAndElements;
 	G4bool CrossSectionMatrixesAreBuilt;
 	size_t  currentParticleIndex;
 	G4ParticleDefinition* currentParticleDef;
@@ -173,10 +201,10 @@ class G4AdjointCSManager
 	//--------------------------------------------------------------------------------------------------------------------
 	std::vector<G4PhysicsTable*>        theTotalForwardSigmaTableVector;
 	std::vector<G4PhysicsTable*>        theTotalAdjointSigmaTableVector;
-	std::vector< std::vector<double> > 	EminForFwdSigmaTables;	
-	std::vector< std::vector<double> > 	EminForAdjSigmaTables;	
-	std::vector< std::vector<double> > 	EkinofFwdSigmaMax;	
-	std::vector< std::vector<double> > 	EkinofAdjSigmaMax;
+	std::vector< std::vector<G4double> > 	EminForFwdSigmaTables;	
+	std::vector< std::vector<G4double> > 	EminForAdjSigmaTables;	
+	std::vector< std::vector<G4double> > 	EkinofFwdSigmaMax;	
+	std::vector< std::vector<G4double> > 	EkinofAdjSigmaMax;
 	
 	
 	
@@ -201,7 +229,7 @@ class G4AdjointCSManager
 	G4Material* currentMaterial;
 	size_t  currentMatIndex;
 	
-	int verbose;
+	G4int verbose;
 	
 	
 	
@@ -236,7 +264,7 @@ class G4AdjointCSManager
         G4AdjointCSManager();  
 	void DefineCurrentMaterial(const G4MaterialCutsCouple* couple);
 	void DefineCurrentParticle(const G4ParticleDefinition* aPartDef);
-	double ComputeAdjointCS(G4double aPrimEnergy, G4AdjointCSMatrix* anAdjointCSMatrix, G4double Tcut);
+	G4double ComputeAdjointCS(G4double aPrimEnergy, G4AdjointCSMatrix* anAdjointCSMatrix, G4double Tcut);
 
 };
 #endif

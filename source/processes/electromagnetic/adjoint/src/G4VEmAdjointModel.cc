@@ -1,3 +1,31 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4VEmAdjointModel.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4Integrator.hh"
@@ -30,7 +58,7 @@ G4double G4VEmAdjointModel::AdjointCrossSection(const G4MaterialCutsCouple* aCou
   DefineCurrentMaterial(aCouple);
   preStepEnergy=primEnergy;
   
-  std::vector<double>* CS_Vs_Element = &CS_Vs_ElementForProdToProjCase;
+  std::vector<G4double>* CS_Vs_Element = &CS_Vs_ElementForProdToProjCase;
   if (IsScatProjToProjCase)   CS_Vs_Element = &CS_Vs_ElementForScatProjToProjCase;
   lastCS = G4AdjointCSManager::GetAdjointCSManager()->ComputeAdjointCS(currentMaterial,
 					    		 		this, 
@@ -180,9 +208,9 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
                                 G4double A ,
 				G4int nbin_pro_decade) //nb bins pro order of magnitude of energy
 { 
-  G4Integrator<G4VEmAdjointModel, G4double(G4VEmAdjointModel::*)(G4double)> integral;
-  ASelectedNucleus= G4int(A);
-  ZSelectedNucleus=G4int(Z);
+  G4Integrator<G4VEmAdjointModel, double(G4VEmAdjointModel::*)(double)> integral;
+  ASelectedNucleus= int(A);
+  ZSelectedNucleus=int(Z);
   kinEnergyProdForIntegration = kinEnergyProd;
   
   //compute the vector of integrated cross sections
@@ -191,21 +219,21 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   G4double minEProj= GetSecondAdjEnergyMinForProdToProjCase(kinEnergyProd);
   G4double maxEProj= GetSecondAdjEnergyMaxForProdToProjCase(kinEnergyProd);
   G4double E1=minEProj;
-  std::vector< G4double >*  log_ESec_vector = new  std::vector< G4double >();
-  std::vector< G4double >*  log_Prob_vector = new  std::vector< G4double >();
+  std::vector< double>*  log_ESec_vector = new  std::vector< double>();
+  std::vector< double>*  log_Prob_vector = new  std::vector< double>();
   log_ESec_vector->clear();
   log_Prob_vector->clear();
   log_ESec_vector->push_back(std::log(E1));
   log_Prob_vector->push_back(-50.);
   
-  G4double E2=std::pow(10.,G4double( G4int(std::log10(minEProj)*nbin_pro_decade)+1)/nbin_pro_decade);
+  G4double E2=std::pow(10.,double( int(std::log10(minEProj)*nbin_pro_decade)+1)/nbin_pro_decade);
   G4double fE=std::pow(10.,1./nbin_pro_decade);
   G4double int_cross_section=0.;
   
   if (std::pow(fE,5.)>(maxEProj/minEProj)) fE = std::pow(maxEProj/minEProj,0.2);
   
   while (E1 <maxEProj*0.9999999){
-  	//G4cout<<E1<<'\t'<<E2<<std::endl;
+  	//G4cout<<E1<<'\t'<<E2<<G4endl;
 	
   	int_cross_section +=integral.Simpson(this,
 	&G4VEmAdjointModel::DiffCrossSectionFunction1,E1,std::min(E2,maxEProj*0.99999999), 5);
@@ -232,9 +260,9 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
 				G4double Z, 
                                 G4double A ,
 				G4int nbin_pro_decade) //nb bins pro order of magnitude of energy
-{ G4Integrator<G4VEmAdjointModel, G4double(G4VEmAdjointModel::*)(G4double)> integral;
-  ASelectedNucleus=G4int(A);
-  ZSelectedNucleus=G4int(Z);
+{ G4Integrator<G4VEmAdjointModel, double(G4VEmAdjointModel::*)(double)> integral;
+  ASelectedNucleus=int(A);
+  ZSelectedNucleus=int(Z);
   kinEnergyScatProjForIntegration = kinEnergyScatProj;
   
   //compute the vector of integrated cross sections
@@ -248,11 +276,11 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   G4double dE2=dEmin;
   
   
-  std::vector< G4double >*  log_ESec_vector = new std::vector< G4double >();
-  std::vector< G4double >*  log_Prob_vector = new std::vector< G4double >();
+  std::vector< double>*  log_ESec_vector = new std::vector< double>();
+  std::vector< double>*  log_Prob_vector = new std::vector< double>();
   log_ESec_vector->push_back(std::log(dEmin));
   log_Prob_vector->push_back(-50.);
-  G4int nbins=std::max( G4int(std::log10(dEmax/dEmin))*nbin_pro_decade,5);
+  G4int nbins=std::max( int(std::log10(dEmax/dEmin))*nbin_pro_decade,5);
   G4double fE=std::pow(dEmax/dEmin,1./nbins);
   
   
@@ -265,7 +293,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   	dE2=dE1*fE;
   	int_cross_section +=integral.Simpson(this,
 	&G4VEmAdjointModel::DiffCrossSectionFunction2,minEProj+dE1,std::min(minEProj+dE2,maxEProj), 5);
-	//G4cout<<"int_cross_section "<<minEProj+dE1<<'\t'<<int_cross_section<<std::endl;
+	//G4cout<<"int_cross_section "<<minEProj+dE1<<'\t'<<int_cross_section<<G4endl;
 	log_ESec_vector->push_back(std::log(std::min(dE2,maxEProj-minEProj)));
 	log_Prob_vector->push_back(std::log(int_cross_section));	
 	dE1=dE2;
@@ -288,7 +316,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
 				G4Material* aMaterial,
 				G4double kinEnergyProd,
 				G4int nbin_pro_decade) //nb bins pro order of magnitude of energy
-{ G4Integrator<G4VEmAdjointModel, G4double(G4VEmAdjointModel::*)(G4double)> integral;
+{ G4Integrator<G4VEmAdjointModel, double(G4VEmAdjointModel::*)(double)> integral;
   SelectedMaterial= aMaterial;
   kinEnergyProdForIntegration = kinEnergyProd;
    //compute the vector of integrated cross sections
@@ -297,14 +325,14 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   G4double minEProj= GetSecondAdjEnergyMinForProdToProjCase(kinEnergyProd);
   G4double maxEProj= GetSecondAdjEnergyMaxForProdToProjCase(kinEnergyProd);
   G4double E1=minEProj;
-  std::vector< G4double >*  log_ESec_vector = new  std::vector< G4double >();
-  std::vector< G4double >*  log_Prob_vector = new  std::vector< G4double >();
+  std::vector< double>*  log_ESec_vector = new  std::vector< double>();
+  std::vector< double>*  log_Prob_vector = new  std::vector< double>();
   log_ESec_vector->clear();
   log_Prob_vector->clear();
   log_ESec_vector->push_back(std::log(E1));
   log_Prob_vector->push_back(-50.);
   
-  G4double E2=std::pow(10.,G4double( G4int(std::log10(minEProj)*nbin_pro_decade)+1)/nbin_pro_decade);
+  G4double E2=std::pow(10.,double( int(std::log10(minEProj)*nbin_pro_decade)+1)/nbin_pro_decade);
   G4double fE=std::pow(10.,1./nbin_pro_decade);
   G4double int_cross_section=0.;
   
@@ -339,7 +367,7 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
       				G4Material* aMaterial,
 				G4double kinEnergyScatProj,
 				G4int nbin_pro_decade) //nb bins pro order of magnitude of energy
-{ G4Integrator<G4VEmAdjointModel, G4double(G4VEmAdjointModel::*)(G4double)> integral;
+{ G4Integrator<G4VEmAdjointModel, double(G4VEmAdjointModel::*)(double)> integral;
   SelectedMaterial= aMaterial;
   kinEnergyScatProjForIntegration = kinEnergyScatProj;
  
@@ -356,11 +384,11 @@ std::vector< std::vector<G4double>* > G4VEmAdjointModel::ComputeAdjointCrossSect
   G4double dE2=dEmin;
   
   
-  std::vector< G4double >*  log_ESec_vector = new std::vector< G4double >();
-  std::vector< G4double >*  log_Prob_vector = new std::vector< G4double >();
+  std::vector< double>*  log_ESec_vector = new std::vector< double>();
+  std::vector< double>*  log_Prob_vector = new std::vector< double>();
   log_ESec_vector->push_back(std::log(dEmin));
   log_Prob_vector->push_back(-50.);
-  G4int nbins=std::max( G4int(std::log10(dEmax/dEmin))*nbin_pro_decade,5);
+  G4int nbins=std::max( int(std::log10(dEmax/dEmin))*nbin_pro_decade,5);
   G4double fE=std::pow(dEmax/dEmin,1./nbins);
   
   G4double int_cross_section=0.;
@@ -396,11 +424,11 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromCSMatrix(size_t MatrixIndex,G4
   
   G4AdjointCSMatrix* theMatrix= (*pOnCSMatrixForProdToProjBackwardScattering)[MatrixIndex];
   if (IsScatProjToProjCase) theMatrix= (*pOnCSMatrixForScatProjToProjBackwardScattering)[MatrixIndex];
-  std::vector< G4double >* theLogPrimEnergyVector = theMatrix->GetLogPrimEnergyVector();
+  std::vector< double>* theLogPrimEnergyVector = theMatrix->GetLogPrimEnergyVector();
   
   if (theLogPrimEnergyVector->size() ==0){
- 	G4cout<<"No data are contained in the given AdjointCSMatrix!"<<std::endl;
-	G4cout<<"The sampling procedure will be stopped."<<std::endl;
+ 	G4cout<<"No data are contained in the given AdjointCSMatrix!"<<G4endl;
+	G4cout<<"The sampling procedure will be stopped."<<G4endl;
 	return 0.;
 	
   }
@@ -413,10 +441,10 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromCSMatrix(size_t MatrixIndex,G4
   G4double aLogPrimEnergy1,aLogPrimEnergy2;
   G4double aLogCS1,aLogCS2;
   G4double log01,log02;
-  std::vector< G4double>* aLogSecondEnergyVector1 =0;
-  std::vector< G4double>* aLogSecondEnergyVector2  =0;
-  std::vector< G4double>* aLogProbVector1=0;
-  std::vector< G4double>* aLogProbVector2=0; 
+  std::vector< double>* aLogSecondEnergyVector1 =0;
+  std::vector< double>* aLogSecondEnergyVector2  =0;
+  std::vector< double>* aLogProbVector1=0;
+  std::vector< double>* aLogProbVector2=0; 
   std::vector< size_t>* aLogProbVectorIndex1=0;
   std::vector< size_t>* aLogProbVectorIndex2=0;
 	 							     
@@ -491,7 +519,7 @@ void G4VEmAdjointModel::SelectCSMatrix(G4bool IsScatProjToProjCase)
   indexOfUsedCrossSectionMatrix=0;
   if (!UseMatrixPerElement) indexOfUsedCrossSectionMatrix = currentMaterialIndex;
   else if (!UseOnlyOneMatrixForAllElements) { //Select Material
-   	std::vector<double>* CS_Vs_Element = &CS_Vs_ElementForScatProjToProjCase;
+   	std::vector<G4double>* CS_Vs_Element = &CS_Vs_ElementForScatProjToProjCase;
 	lastCS=lastAdjointCSForScatProjToProjCase;
   	if ( !IsScatProjToProjCase) {
 		CS_Vs_Element = &CS_Vs_ElementForProdToProjCase;
@@ -581,7 +609,7 @@ void G4VEmAdjointModel::CorrectPostStepWeight(G4ParticleChange* fParticleChange,
 	
  new_weight*=w_corr;
 
- //std::cout<<"Post step "<<new_weight<<'\t'<<w_corr<<'\t'<<old_weight<<std::endl;
+ //G4cout<<"Post step "<<new_weight<<'\t'<<w_corr<<'\t'<<old_weight<<G4endl;
  new_weight*=projectileKinEnergy/adjointPrimKinEnergy;//This is needed due to the biasing of diff CS
  							//by the factor adjointPrimKinEnergy/projectileKinEnergy
    
