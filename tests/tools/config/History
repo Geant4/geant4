@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2009-11-19 14:14:23 bmorgan Exp $
+$Id: History,v 1.30 2009-11-20 13:51:48 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20th November 2009 Ben Morgan
+- Configure: Regenerated following changes below.
+- U/g4_12_gmake.U: Added sectional text heading and moved check earlier in
+Configure.
+- U/g4_11_analysis.U: Removed extraneous echos.
+- U/g4_10_gdml.U: Added sectional text heading.
+- U/g4_09_vis.U: Added sectional text heading.
+- U/g4_08_ui.U: Added sectional text heading.
+- U/g4_07_debug.U: Tidied up questions and reformatted to integrate with
+earlier library build options.
+- U/g4_06_global.U: Tidied up questions and reformatted, changing default
+build to global shared libraries.
+- U/g4_05_shared.U: Added sectional text, cleaned up questions and reformatted
+text. Moved all initialization of variables to INIT section.
+- U/g4_04_clhep.U: Added sectional text, cleaned up and reformatted questions.
+- U/g4_03_dirs_data.U: Added extra sectional header text and moved checks to
+after all library checks completed.
+- U/g4_02_dirs_work.U: Removed never run section on setting tmp directories as
+Configure does this automatically.
+- U/g4_01_dir_inst.U: Removed obsolete commented out sections, cleaned up
+content and formatting of questions.
+- U/Oldconfig.U: Removed obsolete commented out sections, cleaned up
+extraneous echos and tidied up questions.
+- U/Instruct.U: Removed obsolete commented out sections and extraneous echos.
+- U/Begin.U: Removed obsolete commented out section.
+
 19th November 2009 Ben Morgan
 - Configure: Regenerated folowing changes below.
 - U/g4_15_zlib.U: Added forcing of zlib build when WIN32 GL or Inventor drivers
