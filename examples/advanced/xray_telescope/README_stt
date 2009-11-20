@@ -17,24 +17,17 @@ xraytel_ref.out
 
 The job should take ~ 2 minutes on a 1 GHz Linux machine
 
-The memory usage should be around 6 Mbytes.
-
 Platforms to be tested on:
-SUN and LINUX, NOT WINDOWS.
+LINUX
 
-At a future date G4ANALYSIS_USE should be set and the AIDA/Anaphe 
-packages tested.
+G4ANALYSIS_USE requires an AIDA implementation 
 In this case 
 - computation time ~ 4 minutes
-- memory usage ~ 18 Mbytes
 - the file xraytel.hbook is created (~250 kbytes)
 - this file should be compared to xraytel_ref.hbook
 
-If G4ANALYSIS_USE_PLOTTER is set together with G4ANALYSIS_USE, the 
-AIDA/Anaphe plotter (Grace) can be tested in interactive runs.
-
 Giovanni Santin
-e-mail: giovanni.santin@cern.ch
+e-mail: giovanni.santin@esa.int
 
 *******************************************************************************
 *******************************************************************************
