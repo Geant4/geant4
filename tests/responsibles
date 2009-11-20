@@ -116,7 +116,6 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   amsEcal                    Michel.Maire@lapp.in2p3.fr      Michel Maire
   brachytherapy              susanna@uow.edu.au              Susanna Guatelli
   composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
-  cosmicray_charging         h.araujo@ic.ac.uk               Henrique Araujo
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
   human_phantom              susanna@uow.edu.au              Susanna Guatelli
@@ -126,10 +125,8 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   microdosimetry             incerti@cenbg.in2p3.fr          Sebastien Incerti
   nanobeam                   incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
-  radiation_monitor          cirrone@lns.infn.it             Pablo Cirrone
   radioprotection            cirrone@lns.infn.it             Pablo Cirrone
   Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
-  Tiara                      Alexander.Howard@cern.ch        Alexander Howard
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
   xray_fluorescence          Alfonso.Mantero@ge.infn.it      Alfonso Mantero
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
@@ -140,6 +137,7 @@ examples/extended
     N03Con                   tkoi@slac.stanford.edu          Tatsumi Koi
   biasing
     B01, B02                 Alexander.Howard@cern.ch        Alexander Howard
+    ReverseMC                desorgher@spaceit.ch            Laurent Desorgher
   electromagnetic:
     TestEm1,2,5,6,7,9        Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     TestEm3,4                Michel.Maire@lapp.in2p3.fr      Michel Maire
@@ -154,8 +152,9 @@ examples/extended
   exoticphysics:
     monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   field:
+    BlineTracer              desorgher@spaceit.ch            Laurent Desorgher
     field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
-    field04                  gum@triumf.ca                   Peter Gumplinger
+    field04,05               gum@triumf.ca                   Peter Gumplinger
   g3tog4:
     clGeometry, cltog4       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
   geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
