@@ -15,8 +15,6 @@ case "$g4wanalysis_use" in
 	;;
 esac
 
-echo ""
-
 g4message=`cat << EOM
 
   G4ANALYSIS_USE
