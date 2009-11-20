@@ -2,12 +2,6 @@
 ?MAKE:g4lib_build_shared g4lib_build_static g4lib_use_shared g4lib_use_static g4lib_use_dyn g4lib_use_dll: \
 	g4install Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
-?S:g4lib_build_shared:
-?S:	This variable determines whether shared libraries will be built.
-?S.
-?S:g4lib_build_static:
-?S:	This variable determines whether static libraries will be built
-?S.
 ?INIT:#INITIALIZE LIBRARY BUILD OPTIONS
 ?INIT:g4lib_build_shared='y'
 ?INIT:g4lib_use_shared='y'
