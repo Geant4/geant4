@@ -9,17 +9,8 @@
 ?INIT:#INITIALIZE G3TOG4 OPTIONS
 ?INIT:g4wlib_build_g3tog4='n'
 ?INIT:g4wlib_use_g3tog4='n'
-echo " "
 
-g4message=`cat << EOM
-
-  G4LIB_BUILD_G3TOG4  
-
-The utility module 'g3tog4' will be built by setting this variable. 
-NOTE: it requires a valid FORTRAN compiler to be installed on your system.
-Enable build of G3toG4 module?
-EOM`
-
+g4message="Enable build of the g3tog4 utility module?"
 dflt=$g4wlib_build_g3tog4
 rp=$g4message
 . ./myread

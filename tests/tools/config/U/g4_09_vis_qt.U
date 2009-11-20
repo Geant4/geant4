@@ -23,18 +23,7 @@
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
 if test "x$g4ui_build_qt_session" = "xy" ; then
     # Query the user to see if build of Qt GL module is needed
-    g4message=`cat <<EOM
-
-    G4UI_BUILD_OPENGLQT_DRIVER
-    G4UI_USE_OPENGLQT
-
-Setting these variables will enable the building of the G4 OpenGL Qt based 
-visualisation driver and the use of this driver in your applications
-respectively.
-The Qt3 or Qt4 headers, libraries and moc application are required to enable
-the building of this module.
-Do you want to enable build and use of this module?
-EOM`
+	g4message="Enable building of the Qt OpenGL visualization driver?"
 
     # Read in the user response
     dflt=$g4vis_build_openglqt_driver
@@ -61,7 +50,6 @@ EOM`
     # installation
     #
     if test "x$g4vis_build_openglqt_driver" = "xy" ; then
-	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
 	qt_search_dir=""
 	. ./qt
