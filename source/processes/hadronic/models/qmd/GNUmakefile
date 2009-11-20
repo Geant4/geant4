@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2008-11-22 06:30:46 tkoi Exp $
+# $Id: GNUmakefile,v 1.3 2009-11-20 23:33:38 tkoi Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -29,8 +29,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
 	    -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
 	    -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
-	    -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
-	    -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
 	    -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
 	    -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
 	    -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
@@ -42,7 +40,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
-            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
