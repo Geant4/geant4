@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2009-11-09 15:28:00 grichine Exp $
+// $Id: HistoManager.cc,v 1.7 2009-11-20 16:21:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ///////////////////////////////////////////////////////////////////////////////////////..
@@ -378,7 +378,7 @@ void HistoManager::WriteFiles()
   G4double angleMax = 3*fThetaZero, tmp = 0., angleUnit, dTheta, angleMin;
 
   jMin = 0;  
-  jMax = 43;
+  jMax = 40;
 
   // angleMax = 30*degree;
 

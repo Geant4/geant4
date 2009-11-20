@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.3 2009-10-22 08:20:46 grichine Exp $
+// $Id: PhysicsList.cc,v 1.4 2009-11-20 16:21:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,12 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+
+
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
 
 #include "G4Decay.hh"
 #include "StepMax.hh"
@@ -86,6 +92,11 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   // EM physics
   emName = G4String("emstandard");
   emPhysicsList = new G4EmStandardPhysics(1);
+
+  // hePhysicsList = new G4HadronDElasticPhysics(1);
+  // hePhysicsList = new G4HadronElasticPhysics(1);
+  // hePhysicsList = new G4HadronHElasticPhysics(1);
+  hePhysicsList = new G4HadronQElasticPhysics(1);
     
   defaultCutValue = 1.*mm;
 
@@ -101,6 +112,9 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete emPhysicsList;
+
+  delete hePhysicsList;
+
   delete pMessenger;  
 }
 
@@ -145,6 +159,9 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+
+  hePhysicsList->ConstructProcess();
+
   G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   AddDecay();  
   AddStepMax();

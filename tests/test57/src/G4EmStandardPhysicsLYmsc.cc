@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysicsLYmsc.cc,v 1.3 2009-10-27 16:24:32 grichine Exp $
+// $Id: G4EmStandardPhysicsLYmsc.cc,v 1.4 2009-11-20 16:21:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -198,6 +198,7 @@ void G4EmStandardPhysicsLYmsc::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering());
     } 
     else if (  particleName == "B+" ||
 	       particleName == "B-" ||
@@ -237,6 +238,7 @@ void G4EmStandardPhysicsLYmsc::ConstructProcess()
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
   opt.SetApplyCuts(true);
+  // opt.SetPolarAngleLimit(0.01);
   
   // Physics tables
   //

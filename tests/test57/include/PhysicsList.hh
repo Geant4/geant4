@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.1 2009-07-30 15:05:25 grichine Exp $
+// $Id: PhysicsList.hh,v 1.2 2009-11-20 16:21:58 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +65,7 @@ private:
 
   G4String emName;
   G4VPhysicsConstructor*  emPhysicsList;
+  G4VPhysicsConstructor*  hePhysicsList;
     
   G4double cutForGamma;
   G4double cutForElectron;
