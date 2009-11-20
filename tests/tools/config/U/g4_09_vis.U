@@ -8,6 +8,8 @@
 ?S:.
 
 echo " "
+echo "*OPTIONS FOR GEANT4 VISUALIZATION DRIVERS*"
+
 case "$g4vis_none" in
 '')
 	g4vis_none=n
@@ -167,7 +169,6 @@ case "$g4vis_use_gagtree" in
 	;;
 esac
 
-echo ""
 
 g4message=`cat << EOM
 

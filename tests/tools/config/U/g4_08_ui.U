@@ -26,6 +26,7 @@ g4ui_xawflags g4ui_xawlibs:\
 ?INIT:#END QT UI OPTIONS
 
 echo " "
+echo "*OPTIONS FOR GEANT4 USER INTERFACE MODULES*"
 
 case "$g4ui_none" in
 '')
@@ -105,9 +106,6 @@ case "$g4ui_use_tcsh" in
 esac
 
 
-
-
-echo ""
 
 g4message=`cat << EOM
 
