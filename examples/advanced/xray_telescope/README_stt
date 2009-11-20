@@ -20,6 +20,8 @@ The job should take ~ 2 minutes on a 1 GHz Linux machine
 Platforms to be tested on:
 LINUX
 
+NOTE: with the new physics the example does not produce any output (unless it is run with much higher statistics)
+
 G4ANALYSIS_USE requires an AIDA implementation 
 In this case 
 - computation time ~ 4 minutes
