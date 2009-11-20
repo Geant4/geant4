@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 12-Mar-2009
+# Last update: 20-Nov-2009
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -322,7 +322,7 @@ for dir in listDir :
                     foundEnergyNotConserved = 1
             if ( runStarted  and  ( not runTerminated ) ) :
                 foundRunCrashed = 1
-        if ( iFile.find( "ntuple.hbook" ) > -1 ) :
+        if ( iFile.find( "ntuple.root" ) > -1 ) :
             foundNtuples = 1
         if ( iFile.find( "outputPvalues.log" ) > -1 ) :
             foundPvalues = 1
