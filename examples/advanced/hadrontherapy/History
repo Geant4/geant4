@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+20.11.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-38
+           - Fixes and updates to the analysis scripts in RootScripts/iaeaBenchmark
+           - Updated RootScripts/README
+
 19.11.2009 G.A.P.Cirrone; Tag: hadrontherapy-V09-02-37
            - Minor revisions;
 

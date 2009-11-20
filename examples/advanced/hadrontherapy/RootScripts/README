@@ -10,22 +10,31 @@ All the scripts in the iaeaBenchmark/ -directory apply to results produced using
 carbon-12 bragg peak plot
 
 --> iaeaBenchmark/checkBeam.C
+Macro for checking beam FWHM
 
 --> iaeaBenchmark/fragmentAngularDistribution.C
+Produces a histogram of the angular distribution of a certain type of charged fragment (default Z=1) interactively
 
 --> iaeaBenchmark/fragmentAngularDistributionGM.C
+Produces a histogram of the angular distribution of a certain type of charged fragment (default Z=1) interactively
 
 --> iaeaBenchmark/fragmentAngularDistributionHistogram.C
+Produces a histogram of the angular distribution of a certain type of charged fragment (default Z=1) interactively
 
 --> iaeaBenchmark/fragmentEnergy.C
+Plot fragment energy distributions
 
 --> iaeaBenchmark/fragmentEnergyDistributionDifferentAngles.C
+Plot fragment energy distributions
 
 --> iaeaBenchmark/fragmentYields.C
+Produces the yield calculations for fragments below the angle of 10 degrees
 
 --> iaeaBenchmark/fragmentYieldsPlot.C
+Produces the yield calculations for fragments below the angle of 10 degrees and compares to data
 
 --> iaeaBenchmark/readExfor.C
+Example script for reading datafile
 
 --> iaeaBenchmark/rootlogon.C
-
+Plotting style definition
