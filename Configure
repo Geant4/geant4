@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.121 2009-11-19 14:16:27 bmorgan Exp $
+# $Id: Configure,v 1.122 2009-11-20 13:52:37 bmorgan Exp $
 #
-# Generated on Thu Nov 19 14:16:18 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Fri Nov 20 13:51:14 GMT 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -290,6 +290,12 @@ if test -f /etc/unixtovms.exe; then
 	eunicefix=/etc/unixtovms.exe
 fi
 
+#INITIALIZE GLOBAL/GRANULAR LIBRARY OPTIONS
+g4global='y'
+g4granular='n'
+g4lib_use_granular='n'
+#INITIALIZE DEBUGGING OPTIONS
+g4debug='n'
 #INITIALIZE QT UI OPTIONS
 g4ui_build_qt_session='n'
 g4ui_use_qt='n'
@@ -978,25 +984,6 @@ esac
 : Eunice requires " " instead of "", can you believe it
 #echo " "
 : Here we go...
-#if [ X$install = Xyes ] ; then
-#echo " "
-#echo " "
-#echo " "
-#echo "                --- Geant4 Toolkit Installation  ---"
-#echo " "
-#echo " "
-#echo " "
-#echo " "
-#else
-#echo " "
-#echo " "
-#echo " "
-#echo "                --- Geant4 Toolkit Installation  ---"
-#echo "                  (setting environments for USER )"
-#echo " "
-#echo " "
-#echo " "
-#fi
 
 trap 'echo " ";rm -rf ../../.config/UU; test -d ../../.config/UU && rm -rf X $rmlist; exit 1' 1 2 3 15
 
@@ -1017,44 +1004,14 @@ case "$user" in
 '') user=`whoami 2>&1`;;
 esac
 
-#if [ X$install = Xyes ] ; then
-#
-#echo " "
-#echo " "
-#echo " "
-#echo "                --- Geant4 Toolkit Installation  ---"
-#echo " "
-#echo " "
-#echo " "
-#echo " "
-#
-##if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
-##	firsttime=false
-##	echo " "
-##	rp='Would you like to see the instructions?'
-##	dflt=n
-##	. ./myread
-##	case "$ans" in
-##	[yY]*) ;;
-##	*) needman=false;;
-##	esac
-##fi
-#fi
-
 if [ X$g4build = Xyes ] ; then
 
 echo " "
-echo " "
-echo " "
 echo "                --- Geant4 Toolkit Build  ---"
-echo " "
-echo " "
-echo " "
 echo " "
 
 if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 	firsttime=false
-	echo " "
 	rp='Would you like to see the instructions?'
 	dflt=n
 	. ./myread
@@ -1736,7 +1693,7 @@ case  "$g4compiler" in
 				*egcs*) g4compiler=egcs
 				;;
 				*2.96*) 
-				echo "WARNING: Found version of 'g++' (2.96.XXX) is known to be buggy!"
+				echo "WARNING: Found version of g++ (2.96.XXX) is known to be buggy!"
 				g4compiler="g++"
 				;;
 				*) g4compiler="g++"
@@ -1752,7 +1709,7 @@ case  "$g4compiler" in
 				;;
 		'WIN32')
 				g4compiler=VC
-	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
+	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no cl compiler.") 2>&1`
 				case $clcompiler in
 				*"Version 12"*) g4compiler=VC6
 				;;
@@ -1826,13 +1783,8 @@ gans=$ans
 
 		if test X$tans != X$g4osnamerec ; then
 		echo ""
-
-cat << EOM
-
-		You are running 'Configure' on NOT native platform!
-		You are on your own way !!!
-
-EOM
+		echo "You are configuring Geant4 for a different platform to the native system!"
+		echo "You are on your own!!!"
 
 		dflt=$tans
 		rp="Confirm your selection or set native '$g4osnamerec'!"
@@ -1875,14 +1827,10 @@ EOM
 		tans=$ans
 
 		if test X$tans != X$g4compilerrec ; then
-		echo ""
+		echo " "
+		echo "The recommmended compiler for this platform ($g4osname) is $g4compilerrec."
+		echo "Use of $tans on $g4osname is not supported - you are on your own!"
 
-cat << EOM
-
-		The recommmended compiler for this platform ($g4osname) is $g4compilerrec.
-		You are on your own way !!!
-
-EOM
 
 		dflt=$tans
 		rp="Confirm your selection or set recommended '$g4compilerrec'!"
@@ -1892,11 +1840,7 @@ EOM
 
 		g4compiler=$tans
 		;;
-#	[eE]) 
-#		break
-#		;;
 	*) 
-#		echo " "
 		break
 		;;
 	esac
@@ -1910,12 +1854,6 @@ fi
 g4system=$g4osname-$g4compiler
 
 fi
-
-#cat << EOM
-#
-#G4SYSTEM is now set to $g4system.
-#
-#EOM
 
 cd .config/UU
 
@@ -2116,19 +2054,9 @@ fi
 
 # header for User
 echo " "
-echo " "
-echo " "
 echo "                --- Geant4 Toolkit Installation  ---"
 echo "                  (setting environments for USER )"
 echo " "
-echo " "
-echo " "
-
-#cat << EOM
-#
-#G4SYSTEM is now set to $g4system.
-#
-#EOM
 
 	cat >&2 <<EOM
 ---------------------------------------------------
@@ -2159,12 +2087,7 @@ else #there is no env.sh
 
 # header for Installer
 echo " "
-echo " "
-echo " "
 echo "                --- Geant4 Toolkit Installation  ---"
-echo " "
-echo " "
-echo " "
 echo " "
 
 	echo " "
@@ -3008,10 +2931,7 @@ rm -f getfile.ok
 EOSC
 
 echo " "
-
-#echo "SSS"
-#echo `pwd`
-#echo "SSS"
+echo "*OPTIONS FOR GEANT4 INSTALLATION PATHS*"
 
 if [ X$src = X. ] ; then
 	cd ../..
@@ -3027,37 +2947,26 @@ case "$g4conf" in
 	;;
 esac
 
-#echo "g4conf=$g4conf"
 
 case "$g4install" in
 '')
-if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-#	g4install="c:/geant4"
-	g4install=$abssrc
-else
-#	if [ X"$HOME" = X/ ] ; then
-#	HOME=""
-#	fi
-#	g4install="$HOME"/geant4
-	g4install=$abssrc
+	if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+		g4install=$abssrc
+	else
+		g4install=$abssrc
+	fi
 
-fi
+	# Check for Windows!
+	if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+		checkdrive=`echo $g4install|cut -d"/" -f2`
 
-# Check for Windows!
-if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
-
-checkdrive=`echo $g4install|cut -d"/" -f2`
-
-if test $checkdrive = "cygdrive"; then
-
-windrive=`echo $g4install|cut -d"/" -f3`
-winpath=`echo $g4install|cut -d"/" -f4-`
-
-fullwinpath="$windrive:/$winpath"
-g4install=$fullwinpath
-
-fi
-fi
+		if test $checkdrive = "cygdrive"; then
+			windrive=`echo $g4install|cut -d"/" -f3`
+			winpath=`echo $g4install|cut -d"/" -f4-`
+			fullwinpath="$windrive:/$winpath"
+			g4install=$fullwinpath
+		fi
+	fi
 	;;
 esac
 
@@ -3080,158 +2989,212 @@ case "$g4includes_flag" in
 esac
 
 
-g4message=`cat << EOM
-
-Where is Geant4 source installed?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
+g4message="What is the path to the Geant4 source tree?"
 dflt=$g4install
 fn='d~'
 rp=$g4message
 . ./getfile
 g4install=$ans
 g4workdir=$g4install
+
 #################################
-g4message=`cat << EOM
-
-Specify the path where Geant4 libraries and source files should be
-installed.
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
+echo " "
+g4message="Where should Geant4 be installed?"
 dflt=$g4final_install
 fn='d~'
 rp=$g4message
 . ./getfile
 g4final_install=$ans
-#g4workdir=$g4install
 
 ##################################
-g4message=`cat << EOM
-
-Do you want to copy all Geant4 headers 
-in one directory?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
+echo " "
+g4message="Do you want to install all Geant4 headers in one directory?"
 dflt=$g4includes_flag
-#fn='d~'
 rp=$g4message
 . ./myread
 g4includes_flag=$ans
 
 if [ X$g4includes_flag = Xy ] ; then
+	case "$g4include" in
+	'')
+		g4include=$g4install/include
+		;;
+	esac
 
-case "$g4include" in
-'')
-	g4include=$g4install/include
-#	g4include=''
-	;;
-esac
-
-#g4message=`cat << EOM
-#
-#Where will be directory to copy all Geant4 headers?
-#EOM`
-#
-##dflt="NO DEFAULT ANSWER"
-####dflt=$g4install/include
-#dflt=$g4include
-#fn='d~+'
-#rp=$g4message
-#. ./getfile
-#g4include=$ans
-
-# Set constantly!
-if [ X$g4install != X$g4final_install ] ; then
-g4include=$g4final_install/include/geant4
-else
-g4include=$g4final_install/include
+	# Set constantly!
+	if [ X$g4install != X$g4final_install ] ; then
+		g4include=$g4final_install/include/geant4
+	else
+		g4include=$g4final_install/include
+	fi
 fi
 
-fi
-
-#if test "X$g4include" = "X[NOT DEFINED]" ; then
-#g4include=""
-#fi
 
 echo " "
+echo "*GEANT4 LIBRARY BUILD OPTIONS*"
 
-case "$g4tmp" in
-'')
-	g4tmp=$g4workdir/tmp
-	;;
-esac
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	while test 1 = 1  ; do
+		g4message="Do you want to build DLL (.dll) libraries?"
+		dflt=$g4lib_build_dll
+		rp=$g4message
+		. ./myread
+		gans=$ans
 
-case "$g4lib" in
-'')
-	g4lib=$g4workdir/lib
-	;;
-esac
+		case $gans in
+		n*|N*) 
+			g4lib_build_dll=n
+			g4lib_build_shared=n
+			g4lib_build_static=y
+			break
+			;;
+		y*|Y*) 
+			g4lib_build_dll=y
+			g4lib_build_shared=n
+			g4lib_build_static=n
+			break
+			;;
+		esac
+	done
+fi
 
-#case "$g4bin" in
-#'')
-#	g4bin=$g4workdir/bin
-#	;;
-#esac
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" ; then
+	while test 1 = 1  ; do
+		g4message="Do you want to build shared libraries?"
+		dflt=$g4lib_build_shared
+		rp=$g4message
+		. ./myread
+		gans=$ans
 
-while test 1 = 0  ; do
+		case $gans in
+		n*|N*) 
+			g4lib_build_shared=n
+			g4lib_build_static=y
+			break
+			;;
+		y*|Y*) 
+			g4lib_build_shared=y
+			break
+			;;
+		esac
+	done
 
-g4message=`cat << EOM
+	if [ X$g4lib_build_shared = Xy ] ; then
+		#
+		# Ask about g4lib_build_static - default "n". 
+		#
+		while test 1 = 1  ; do
+			g4message="Do you want to build static libraries too?"
+			dflt=n
+			rp=$g4message
+			. ./myread
+			gans=$ans
 
-(OPTIONAL) You can now customise installation directories:
-  G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
-  G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
+			case $gans in
+			n*|N*) 
+				g4lib_build_static=n
+				break
+				;;
+			y*|Y*) 
+				g4lib_build_static=y
+				break
+				;;
+			esac
+		done
+	fi
+fi # if !Win
 
-1) G4TMP:		$g4tmp
 
-2) G4LIB:		$g4lib
 
-To modify default settings, select number above (e.g. 2) 
-EOM`
+if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy" \) -o  \( "X$g4system" = "XDarwin-g++"  -a "X$g4lib_build_dyn" = "Xy" \) ; then
 
-#dflt="NO DEFAULT ANSWER"
-dflt="Press [Enter] for default settings"
-#fn='d~'
+	g4global=n
+	g4granular=n
+	g4lib_use_granular=n
+
+fi
+
+if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
+	#
+	# Ask about g4global - default "(empty)". 
+	#
+	g4message="Do you want to build global libraries?"
+	dflt=$g4global
+	rp=$g4message
+	. ./myread
+	gans=$ans
+
+	case $gans in
+	n*|N*) 
+		g4global=n
+		g4granular=y
+		g4lib_use_granular=y
+		;;
+	y*|Y*) 
+		g4global=y
+		g4granular=n
+		g4lib_use_granular=n
+		;;
+	esac
+
+	if [ X$g4global = Xy ] ; then
+		#
+		# Ask about g4granular - default "n". 
+		#
+		g4message="Do you want to build granular libraries as well?"
+		dflt=$g4granular
+		rp=$g4message
+		. ./myread
+		gans=$ans
+
+		case $gans in
+		n*|N*) 
+			g4granular=n
+			;;
+		y*|Y*) 
+			g4granular=y
+			;;
+		esac
+
+		if [ X$g4granular = Xy ] ; then
+			#
+			# Ask about g4lib_use_granular - default "n". 
+			#
+			g4message="Do you want to use granular libraries in your applications?"
+			dflt=$g4lib_use_granular
+			rp=$g4message
+			. ./myread
+			gans=$ans
+
+			case $gans in
+			n*|N*) 
+				g4lib_use_granular=n
+				;;
+			y*|Y*) 
+				g4lib_use_granular=y
+				;;
+			esac
+		fi
+	fi
+fi # !Win
+
+### End file - without will be problem! Check in others...
+
+
+g4message="Do you want to build libraries with debugging information?"
+dflt=$g4debug
 rp=$g4message
 . ./myread
 gans=$ans
 
-
-	case $gans in
-
-	1) 
-		dflt=$g4tmp
-		fn='d~+'
-		rp="Where will be your Geant4 tmp directory?"
-		. ./getfile
-		g4tmp=$ans
+case $gans in
+n*|N*) 
+	g4debug=n
 		;;
-	2) 
-		dflt=$g4lib
-		fn='d~+'
-		rp="Where will be your Geant4 lib directory?"
-		. ./getfile
-		g4lib=$ans
-		;;
-#	3) 
-#		dflt=$g4bin
-#		fn='d~+'
-#		rp="Where will be your Geant4 bin directory?"
-#		. ./getfile
-#		g4bin=$ans
-#		;;
-
-#	[eE]) 
-#		break
-#		;;
-	*) 
-		break
-#		echo " "
-		;;
-	esac
-done
+y*|Y*) 
+	g4debug=y
+	;;
+esac
 
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
@@ -3241,6 +3204,7 @@ g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
 #END GEANT4 DATA OPTIONS
 echo " "
+echo "*CHECKS AND OPTIONS FOR GEANT4 PHYSICS DATA FILES*"
 
 
 #
@@ -3398,7 +3362,7 @@ $g4data
 Please enter
 1) Another path to search in
 2) 'f' to force the use of the path you entered previously (the data libraries
-   are not needed to build Geant4, but are needed to run applications later).
+   are NOT needed to build Geant4, but are needed to run applications later).
 3) 'c' to customize the data paths, e.g. if you have the data libraries
    installed in different locations.
 EOM`
@@ -3534,71 +3498,152 @@ fi
 
 
 
+#
+# Configure which make to use...
+# On WIN32, we have to watch for cygwin/Matlab clash
+# Here, cygwin supplies make, Matlab 'gmake', but we must select
+# cygwin make.
+#
+# Yes, we could use Loc's built in make, but want full control
+# for now....
+#
+
+echo " "
+echo "*CHECKS FOR CORRECT MAKE IMPLEMENTATION*"
+
+g4_make_loc="no"
+g4_gmake_loc="no"
+
+g4_make_program=make
+g4_gmake_program=gmake
+
+g4_check_make_msg="Checking for $g4_make_program..."
+g4_check_gmake_msg="Checking for $g4_gmake_program..."
+
+g4_make_isgnu="no"
+g4_gmake_isgnu="no"
+
+g4_make_dirs=`echo $PATH | sed 's/\:/ /g'`
+
+# Check for 'make' on all systems
+g4_make_loc=`./loc $g4_make_program no $g4_make_dirs`
+echo "$g4_check_make_msg $g4_make_loc"
+
+
+# On anything but Windows, check for gmake as well
+if test "x$g4osname" != "xWIN32" ; then
+    g4_gmake_loc=`./loc $g4_gmake_program no $g4_make_dirs`
+    echo "$g4_check_gmake_msg $g4_gmake_loc"
+fi
+ 
+
+# Now see if make/gmake are GNU make.
+if test "x$g4_make_loc" != "xno" ; then
+    g4_make_version=`$g4_make_loc -v 2>/dev/null`
+
+    case $g4_make_version in
+	GNU*)
+	    g4_make_isgnu=yes
+	    ;;
+	*)
+	    g4_make_isgnu=no
+	    ;;
+    esac
+    echo "Checking if make is GNU make... $g4_make_isgnu"
+fi
+
+if test "x$g4osname" != "xWIN32" ; then
+    if test "x$g4_gmake_loc" != "xno" ; then
+	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null`
+
+	case $g4_gmake_version in
+	    GNU*)
+		g4_gmake_isgnu=yes
+	    	;;
+	    *)
+		g4_gmake_isgnu=no
+		;;
+	esac
+	echo "Checking if gmake is GNU make... $g4_gmake_isgnu"
+    fi
+fi
+
+# Now perform selection on following logic
+# 1) If we have gmake AND it's GNU make, use that
+# 2) If we have make AND it's GNU make, use that
+# 3) If none of the above, prompt user for path to make program
+if test "x$g4_gmake_loc" != "xno" -a "x$g4_gmake_isgnu" = "xyes" ; then
+    g4make=$g4_gmake_loc
+elif test "x$g4_make_loc" != "xno" -a "x$g4_make_isgnu" = "xyes" ; then
+    g4make=$g4_make_loc
+else
+    g4_got_user_make="no"
+    while test "x$g4_got_user_make" = "xno"; do
+        g4message=`cat << EOM
+
+    G4MAKE
+
+A GNU make program could not be located on your system.
+Please enter the full path to the GNU make program you
+want to use:
+EOM`
+        dflt=$g4make
+        rp=$g4message
+        . ./myread
+        gans=$ans
+
+        #Check if this is GNU make...
+        g4_user_make_version=`$gans -v 2>/dev/null`
+
+        case $g4_user_make_version in
+	    "GNU Make"*)
+		echo "Checking that $gans is GNU Make... yes"
+	        g4make=$gans
+                g4_got_user_make=yes
+		;;
+	    *)
+	        echo "Checking that $gans is GNU Make... no"
+		;;
+	esac
+    done
+fi
+
+
+
+echo " "
+echo "*CHECKS FOR REQUIRED EXTERNAL PACKAGE CLHEP*"
+
 if test "X$g4clhep_base_dir" = "X" ; then
-
-clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
-#echo clhep_dirs=$clhep_dirs
-
+	clhep_dirs=`find $g4clhep_base_dir /usr/local/include /usr/include -type d -name CLHEP 2>/dev/null |xargs echo`
 fi
 
 if test "X$clhep_dirs" != "X" ; then
-
-g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
-#echo g4clhep_base_dir_found=$g4clhep_base_dir_found
-
-
-#g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
-#echo g4clhep_base_dir_n=$g4clhep_base_dir_n
-g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
-g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+	g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
+	g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+	g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
-
-#else
-#case "$g4clhep_base_dir" in
-#'')
-#	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
-#	g4clhep_base_dir="c:/usr/local"
-#	else
-#	g4clhep_base_dir=/usr/local
-#	fi
-#	;;
-#esac
 fi
 
 
-#while test 1 = 1  ; do
-
-#if test "X$g4clhep_base_dir" != "X" ; then
-#clhep_dirs=$g4clhep_base_dir
-#echo 1 g4clhep_base_dir=$g4clhep_base_dir
-#fi
-
 if test "X$g4clhep_base_dir" != "X" ; then
+	echo "checking for a CLHEP installation... $g4clhep_base_dir"
 
-g4message=`cat << EOM
+	echo " "
+	g4message="Is this the CLHEP installation you want to use?"
 
-Please, specify where CLHEP is installed. It was found in:
+	dflt=$g4clhep_base_dir
+	fn='d~'
+	rp=$g4message
+	. ./getfile
 
-CLHEP_BASE_DIR:			$g4clhep_base_dir
-
-EOM`
-
-dflt=$g4clhep_base_dir
-fn='d~'
-rp=$g4message
-. ./getfile
-
-cend="no"
-while test "$cend" = "no" ; do
-if test -e "$ans/include/CLHEP" ; then
-cend="yes"
-
-g4clhep_base_dir=$ans
-
-else
-
-g4message=`cat << EOM
+	cend="no"
+	while test "$cend" = "no" ; do
+		if test -e "$ans/include/CLHEP" ; then
+			cend="yes"
+			g4clhep_base_dir=$ans
+		else
+			g4message=`cat << EOM
 
 Could not find CLHEP installed in $ans!
 Please, specify where CLHEP is installed:
@@ -3607,16 +3652,15 @@ CLHEP_BASE_DIR:
 
 EOM`
 
-dflt=""
-fn='d~'
-rp=$g4message
-. ./getfile
-fi
-done
+			dflt=""
+			fn='d~'
+			rp=$g4message
+			. ./getfile
+		fi
+	done
 
 else
-
-g4message=`cat << EOM
+	g4message=`cat << EOM
 
 Could not find CLHEP installed on this system!
 Please, specify where CLHEP is installed:
@@ -3625,21 +3669,18 @@ CLHEP_BASE_DIR:
 
 EOM`
 
-dflt=""
-fn='d~'
-rp=$g4message
-. ./getfile
+	dflt=""
+	fn='d~'
+	rp=$g4message
+	. ./getfile
 
-cend="no"
-while test "$cend" = "no" ; do
-if test -e "$ans/include/CLHEP" ; then
-cend="yes"
-
-g4clhep_base_dir=$ans
-
-else
-
-g4message=`cat << EOM
+	cend="no"
+	while test "$cend" = "no" ; do
+		if test -e "$ans/include/CLHEP" ; then
+			cend="yes"
+			g4clhep_base_dir=$ans
+		else
+			g4message=`cat << EOM
 
 Could not find CLHEP installed in $ans!
 Please, specify where CLHEP is installed:
@@ -3648,62 +3689,13 @@ CLHEP_BASE_DIR:
 
 EOM`
 
-dflt=""
-fn='d~'
-rp=$g4message
-. ./getfile
+			dflt=""
+			fn='d~'
+			rp=$g4message
+			. ./getfile
+		fi
+	done
 fi
-done
-
-fi
-
-#dflt="Press [Enter] for default settings"
-#fn='d~'
-#####rp=$g4message
-#. ./myread
-#gans=$ans
-
-#	case $gans in
-
-#	1) 
-##		dflt=""
-##		fn='d~'
-#		rp="Where is CLHEP installed?"
-##		. ./getfile
-##		g4clhep_base_dir=$ans
-
-#####		g4clhep_include_dir=$ans/include
-#####		g4clhep_lib_dir=$ans/lib
-#		;;
-#	2) 
-#		dflt=$g4clhep_include_dir
-#		fn='d~'
-#		rp="Where is CLHEP include directory?"
-#		. ./getfile
-#		g4clhep_include_dir=$ans
-#		;;
-#	3) 
-#		dflt=$g4clhep_lib_dir
-#		fn='d~'
-#		rp="Where is CLHEP lib directory?"
-#		. ./getfile
-#		g4clhep_lib_dir=$ans
-#		;;
-#	4) 
-#		dflt=$g4clhep_lib
-#		rp="What is CLHEP lib title?"
-#		. ./myread
-#		g4clhep_lib=$ans
-#		;;
-##	[eE]) 
-##		break
-##		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-#	esac
-#done
 
 case "$g4clhep_include_dir" in
 '')
@@ -3728,8 +3720,7 @@ case "$g4clhep_lib" in
 esac
 
 while test 1 = 1  ; do
-
-g4message_1=`cat << You
+	g4message_1=`cat << You
 
 You can customize paths and library name of you CLHEP installation:
 
@@ -3739,502 +3730,54 @@ You can customize paths and library name of you CLHEP installation:
 
 You`
 
-g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
+	g4message_2=" need to use full library name with its extension (e.g. libCLHEP.lib)."
 
-g4message_3=`cat << EOM
+	g4message_3=`cat << EOM
 
 To modify default settings, select number above (e.g. 2)
 EOM`
 
 
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
-rp=$g4message_1$g4message_3
-else
-rp=$g4message_1$g4message_2$g4message_3
-fi
+	if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+		rp=$g4message_1$g4message_3
+	else
+		rp=$g4message_1$g4message_2$g4message_3
+	fi
 
-dflt="Press [Enter] for default settings"
-#fn='d~'
-. ./myread
-gans=$ans
+	dflt="Press [Enter] for default settings"
+	. ./myread
+	gans=$ans
 
 	case $gans in
-
 	1) 
 		dflt=$g4clhep_include_dir
 		fn='d~'
-		rp="Where is CLHEP include directory?"
+		rp="Where is the CLHEP include directory?"
 		. ./getfile
 		g4clhep_include_dir=$ans
 		;;
 	2) 
 		dflt=$g4clhep_lib_dir
 		fn='d~'
-		rp="Where is CLHEP lib directory?"
+		rp="Where is the CLHEP lib directory?"
 		. ./getfile
 		g4clhep_lib_dir=$ans
 		;;
 	3) 
 		dflt=$g4clhep_lib
-		rp="What is CLHEP lib title?"
+		rp="What is the name of the CLHEP library?"
 		. ./myread
 		g4clhep_lib=$ans
 		;;
-#	[eE]) 
-##		break
-##		;;
 	*) 
-#		echo " "
 		break
 		;;
 	esac
 done
 
-#if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
-#g4clhep_base_dir=""
-#fi
-#
-#if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
-#g4clhep_include_dir=""
-#fi
-#
-#if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
-#g4clhep_lib_dir=""
-#fi
 
 echo " "
-
-case "$g4lib_build_shared" in
-'')
-	g4lib_build_shared=n
-	;;
-esac
-
-echo " "
-
-case "$g4lib_build_static" in
-'')
-	g4lib_build_static=n
-	;;
-esac
-
-echo " "
-
-case "$g4lib_use_shared" in
-'')
-	g4lib_use_shared=n
-	;;
-esac
-
-echo " "
-
-case "$g4lib_use_static" in
-'')
-	g4lib_use_static=n
-	;;
-esac
-
-case "$g4lib_build_dll" in
-'')
-	g4lib_build_dll=n
-	;;
-esac
-
-case "$g4lib_build_dyn" in
-'')
-	g4lib_build_dyn=n
-	;;
-esac
-
-#
-# Ask about building of SHARED|STATIC libraries - default STATIC. 
-#
-echo ""
-
-if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-By default 'static'  libraries are built.
-
-Do you want to build DLL (.dll) libraries?
-EOM`
-
-dflt=$g4lib_build_dll
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4lib_build_dll=n
-		g4lib_build_shared=n
-		g4lib_build_static=y
-		break
-		;;
-	y*|Y*) 
-		g4lib_build_dll=y
-		g4lib_build_shared=n
-		g4lib_build_static=n
-
-#		g4lib_build_static=""
-#		g4lib_use_shared=1
-#		g4lib_use_static=""
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-fi
-
-if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" ; then
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-By default 'static' (.a) libraries are built.
-
-Do you want to build 'shared' (.so) libraries?
-EOM`
-
-dflt=$g4lib_build_shared
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4lib_build_shared=n
-		g4lib_build_static=y
-		break
-		;;
-	y*|Y*) 
-		g4lib_build_shared=y
-#		g4lib_build_static=""
-#		g4lib_use_shared=1
-#		g4lib_use_static=""
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4lib_build_shared = Xy ] ; then
-#
-# Ask about g4lib_build_static - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-You selected to build 'shared' (.so) libraries. 
-Do you want to build 'static' (.a) libraries too?
-EOM`
-
-#dflt=$g4lib_build_static
-dflt=n
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4lib_build_static=n
-		break
-		;;
-	y*|Y*) 
-#		g4lib_build_shared=1
-		g4lib_build_static=y
-#		g4lib_use_shared=1
-#		g4lib_use_static=""
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-## Comment out in waiting G4LIB_USE_STATIC and G4LIB_USE_SHARED.
-#
-#if [ X$g4lib_build_static = Xy ] ; then
-##
-## Ask about g4lib_use_static - default "n". 
-##
-#echo ""
-#
-#while test 1 = 1  ; do
-#
-#g4message=`cat << EOM
-#
-#You selected to build 'shared' (.so) and 'static' (.a) libraries. 
-#Do you want to use 'static' (.a) libraries?
-#EOM`
-#
-#dflt=$g4lib_use_static
-#rp=$g4message
-#. ./myread
-#gans=$ans
-#
-#	case $gans in
-#	
-#	n*|N*) 
-#		break
-#		;;
-#	y*|Y*) 
-##		g4lib_build_shared=1
-##		g4lib_build_static=1
-##		g4lib_use_shared=1
-#		g4lib_use_static=y
-#		break
-#		;;
-##	[eE]) 
-##		break
-##		;;
-##	*) 
-##		echo " "
-##		break
-##		;;
-#	esac
-#done
-#fi
-
-fi
-
-fi # if !Win
-
-echo " "
-case "$g4global" in
-'')
-	g4global=n
-	;;
-esac
-
-echo " "
-# By default it's 'grabular'!
-case "$g4granular" in
-'')
-	g4granular=y
-	;;
-esac
-
-echo " "
-# Will be set (if needed) in GNUmakefile!
-case "$g4lib_use_granular" in
-'')
-	g4lib_use_granular=y
-	;;
-esac
-
-if test \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy" \) -o  \( "X$g4system" = "XDarwin-g++"  -a "X$g4lib_build_dyn" = "Xy" \) ; then
-
-	g4global=n
-	g4granular=n
-	g4lib_use_granular=n
-
-fi
-
-if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4system" != "XDarwin-g++" \) -o    \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) -o \( "X$g4system" = "XDarwin-g++" -a "X$g4lib_build_dyn" = "Xn" \) ; then
-
-#
-# Ask about g4global - default "(empty)". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Do you want to build 'global' compound libraries?
-EOM`
-
-dflt=$g4global
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4global=n
-		g4granular=y
-		g4lib_use_granular=y
-		break
-		;;
-	y*|Y*) 
-		g4global=y
-# Shoud be comment out to keep settings from config.sh - not now to keep as in release
-		g4granular=n
-# Shoud be comment out to keep settings from config.sh - not now to keep as in release
-		g4lib_use_granular=n
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4global = Xy ] ; then
-#
-# Ask about g4granular - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Granular libraries are used by defaults, you asked to build global
-compound libraries. Do you want to build 'granular' libraries too?
-EOM`
-
-dflt=$g4granular
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4granular=n
-		break
-		;;
-	y*|Y*) 
-		g4granular=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4granular = Xy ] ; then
-#
-# Ask about g4lib_use_granular - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Global libraries are used by defaults, you asked to build global
-compound libraries and granular libraries. 
-Do you want to use 'granular' libraries instead?
-EOM`
-
-dflt=$g4lib_use_granular
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4lib_use_granular=n
-		break
-		;;
-	y*|Y*) 
-		g4lib_use_granular=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-fi
-fi
-
-fi # !Win
-
-### End file - without will be problem! Check in others...
-
-
-echo " "
-case "$g4debug" in
-'')
-	g4debug=n
-	;;
-esac
-
-#
-# Ask about g4debug - default "(empty)". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Do you want to compile libraries in DEBUG mode (-g)?
-EOM`
-
-dflt=$g4debug
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-		g4debug=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-
-echo " "
+echo "*OPTIONS FOR GEANT4 USER INTERFACE MODULES*"
 
 case "$g4ui_none" in
 '')
@@ -4314,9 +3857,6 @@ case "$g4ui_use_tcsh" in
 esac
 
 
-
-
-echo ""
 
 g4message=`cat << EOM
 
@@ -5021,6 +4561,8 @@ EOM`
 fi #END TEST g4ui_none = n
 
 echo " "
+echo "*OPTIONS FOR GEANT4 VISUALIZATION DRIVERS*"
+
 case "$g4vis_none" in
 '')
 	g4vis_none=n
@@ -5180,7 +4722,6 @@ case "$g4vis_use_gagtree" in
 	;;
 esac
 
-echo ""
 
 g4message=`cat << EOM
 
@@ -6406,21 +5947,10 @@ else # TEST g4ui_build_qt_session
 fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
 
-#
-# BEGIN GDML/XERCESC PROBE 
-#
-
-# Set default build option to no
-echo " "
-case "$g4lib_build_gdml" in
-'')
-	g4lib_build_gdml=n
-	;;
-esac
-
 
 # Now query the user to see if they want to build the GDML plugin
-echo ""
+echo " "
+echo "*OPTIONS FOR GEANT4 OPTIONAL EXTENSION MODULES*"
 
 g4message=`cat << EOM
 
@@ -6533,114 +6063,17 @@ fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
 
-#
-# Configure which make to use...
-# On WIN32, we have to watch for cygwin/Matlab clash
-# Here, cygwin supplies make, Matlab 'gmake', but we must select
-# cygwin make.
-#
-# Yes, we could use Loc's built in make, but want full control
-# for now....
-#
+case "$g4tmp" in
+'')
+	g4tmp=$g4workdir/tmp
+	;;
+esac
 
-echo " "
-
-g4_make_loc="no"
-g4_gmake_loc="no"
-
-g4_make_program=make
-g4_gmake_program=gmake
-
-g4_check_make_msg="Checking for $g4_make_program..."
-g4_check_gmake_msg="Checking for $g4_gmake_program..."
-
-g4_make_isgnu="no"
-g4_gmake_isgnu="no"
-
-g4_make_dirs=`echo $PATH | sed 's/\:/ /g'`
-
-# Check for 'make' on all systems
-g4_make_loc=`./loc $g4_make_program no $g4_make_dirs`
-echo "$g4_check_make_msg $g4_make_loc"
-
-
-# On anything but Windows, check for gmake as well
-if test "x$g4osname" != "xWIN32" ; then
-    g4_gmake_loc=`./loc $g4_gmake_program no $g4_make_dirs`
-    echo "$g4_check_gmake_msg $g4_gmake_loc"
-fi
- 
-
-# Now see if make/gmake are GNU make.
-if test "x$g4_make_loc" != "xno" ; then
-    g4_make_version=`$g4_make_loc -v 2>/dev/null`
-
-    case $g4_make_version in
-	GNU*)
-	    g4_make_isgnu=yes
-	    ;;
-	*)
-	    g4_make_isgnu=no
-	    ;;
-    esac
-    echo "Checking if make is GNU make... $g4_make_isgnu"
-fi
-
-if test "x$g4osname" != "xWIN32" ; then
-    if test "x$g4_gmake_loc" != "xno" ; then
-	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null`
-
-	case $g4_gmake_version in
-	    GNU*)
-		g4_gmake_isgnu=yes
-	    	;;
-	    *)
-		g4_gmake_isgnu=no
-		;;
-	esac
-	echo "Checking if gmake is GNU make... $g4_gmake_isgnu"
-    fi
-fi
-
-# Now perform selection on following logic
-# 1) If we have gmake AND it's GNU make, use that
-# 2) If we have make AND it's GNU make, use that
-# 3) If none of the above, prompt user for path to make program
-if test "x$g4_gmake_loc" != "xno" -a "x$g4_gmake_isgnu" = "xyes" ; then
-    g4make=$g4_gmake_loc
-elif test "x$g4_make_loc" != "xno" -a "x$g4_make_isgnu" = "xyes" ; then
-    g4make=$g4_make_loc
-else
-    g4_got_user_make="no"
-    while test "x$g4_got_user_make" = "xno"; do
-        g4message=`cat << EOM
-
-    G4MAKE
-
-A GNU make program could not be located on your system.
-Please enter the full path to the GNU make program you
-want to use:
-EOM`
-        dflt=$g4make
-        rp=$g4message
-        . ./myread
-        gans=$ans
-
-        #Check if this is GNU make...
-        g4_user_make_version=`$gans -v 2>/dev/null`
-
-        case $g4_user_make_version in
-	    "GNU Make"*)
-		echo "Checking that $gans is GNU Make... yes"
-	        g4make=$gans
-                g4_got_user_make=yes
-		;;
-	    *)
-	        echo "Checking that $gans is GNU Make... no"
-		;;
-	esac
-    done
-fi
+case "$g4lib" in
+'')
+	g4lib=$g4workdir/lib
+	;;
+esac
 
 
 echo " "
@@ -6715,8 +6148,6 @@ case "$g4wanalysis_use" in
 	g4wanalysis_use=n
 	;;
 esac
-
-echo ""
 
 g4message=`cat << EOM
 
