@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.14 2009-11-12 00:54:30 gum Exp $
+// $Id: G4OpticalSurface.hh,v 1.15 2009-11-20 00:57:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,10 @@ enum G4OpticalSurfaceFinish
    polishedfrontpainted,        // smooth top-layer (front) paint
    polishedbackpainted,         // same is 'polished' but with a back-paint
 
+   ground,                      // rough surface
+   groundfrontpainted,          // rough top-layer (front) paint
+   groundbackpainted,           // same as 'ground' but with a back-paint
+
    polishedlumirrorair,         // mechanically polished surface, with lumirror
    polishedlumirrorglue,        // mechanically polished surface, with lumirror & meltmount
    polishedair,                 // mechanically polished surface
@@ -89,11 +93,7 @@ enum G4OpticalSurfaceFinish
    groundtioair,                // rough-cut surface, with tio paint
    groundtyvekair,              // rough-cut surface, with tyvek
    groundvm2000air,             // rough-cut surface, with esr film
-   groundvm2000glue,            // rough-cut surface, with esr film & meltmount
-
-   ground,                      // rough surface
-   groundfrontpainted,          // rough top-layer (front) paint
-   groundbackpainted            // same as 'ground' but with a back-paint
+   groundvm2000glue             // rough-cut surface, with esr film & meltmount
 };
 
 enum G4OpticalSurfaceModel
@@ -151,10 +151,11 @@ public: // With description
 
         virtual void Overwrite() {G4cout << "G4OpticalSurface" << G4endl;};
 
+        void         SetType(const G4SurfaceType& type);
+
         G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
         // Returns the optical surface finish.
-        void         SetFinish(const G4OpticalSurfaceFinish finish)
-						 {theFinish = finish;};
+        void         SetFinish(const G4OpticalSurfaceFinish );
         // Sets the optical surface finish.
 
         G4OpticalSurfaceModel GetModel() const {return theModel;};
@@ -186,6 +187,14 @@ public: // With description
 	void DumpInfo() const;
         // Prints information about the optical surface.
 
+        void ReadFile(void);
+        // Method to read the Look-Up-Table into array AngularDistribution
+
+        G4double GetAngularDistributionValue(G4int, G4int, G4int);
+
+        inline G4int GetThetaIndexMax(void) const { return thetaIndexMax; }
+        inline G4int GetPhiIndexMax(void) const { return phiIndexMax; } 
+
 private:
 
 // ------------------
@@ -200,10 +209,26 @@ private:
 
 	G4MaterialPropertiesTable* theMaterialPropertiesTable;
 
+        static const G4int incidentIndexMax = 91;
+        static const G4int thetaIndexMax = 45;
+        static const G4int phiIndexMax = 37;
+
+        G4float* AngularDistribution;
+
 };
 
 ////////////////////
 // Inline methods
 ////////////////////
+
+inline
+ G4double G4OpticalSurface::GetAngularDistributionValue(G4int angleIncident,
+                                                        G4int thetaIndex,
+                                                        G4int phiIndex)
+{
+  return *(AngularDistribution+angleIncident+
+                               thetaIndex*incidentIndexMax+
+                               phiIndex*thetaIndexMax*incidentIndexMax);
+}
 
 #endif /* G4OpticalSurface_h */
