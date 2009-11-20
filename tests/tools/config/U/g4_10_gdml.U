@@ -1,12 +1,8 @@
 ?RCS:
 ?MAKE:g4lib_build_gdml g4gdml_xercesc_root: g4vis_oglhome g4vis_build_openglqt_driver Myread Getfile cat rm test
-?MAKE:		       -pick add $@ %<
+?MAKE:	-pick add $@ %<
 ?S:g4lib_build_gdml:
-?S:     This variable determines whether to build the GDML plugin module
-?S.
-?S:g4gdml_xercesc_root:
-?S:     This variable holds the value of the root of the XercesC install
-?S:.
+?S:	This variable determines whether to build the optional GDML module.
 ?INIT:#INITIALIZE GDML OPTIONS
 ?INIT:g4lib_build_gdml='n'
 
@@ -15,20 +11,7 @@
 echo " "
 echo "*OPTIONS FOR GEANT4 OPTIONAL EXTENSION MODULES*"
 
-g4message=`cat << EOM
-
-  G4LIB_BUILD_GDML
-
-Setting this variable will enable building of the GDML plugin module embedded
-in Geant4 for detector description persistency.
-It requires your system to have the XercesC library and headers installed.
-Do you want to set this variable?
-
-EOM`
-
-#
-# read in the users response
-#
+g4message="Enable the Geometry Description Markup Language (GDML) module?"
 dflt=$g4lib_build_gdml
 rp=$g4message
 . ./myread
@@ -62,11 +45,10 @@ if test "X$g4lib_build_gdml" != "Xn"; then
 	 g4gdml_xercesc_root=`dirname $xercesc_root`
 	 g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
 
-	 echo " "
 	 echo "checking for XercesC install... $g4gdml_xercesc_root"
+     echo " "
       else
          g4gdml_xercesc_root=""
-	 echo " "
 	 echo "checking for XercesC install... no"
       fi
    fi #END OF XERCES AUTOPROBE
@@ -100,11 +82,13 @@ EOM`
 	       g4lib_build_gdml=n
 	       g4gdml_xercesc_root=""
 	       echo "G4LIB_BUILD_GDML cancelled..."
+		   echo " "
 	       promptend=yes
 	    else
 	       if test -r "$ans/include/xercesc"; then
 		  g4gdml_xercesc_root=$ans
 		  echo "checking for XercesC install... $g4gdml_xercesc_root"
+		  echo " "
 		  promptend=yes
 	       else
 	          xercesloc=$ans
