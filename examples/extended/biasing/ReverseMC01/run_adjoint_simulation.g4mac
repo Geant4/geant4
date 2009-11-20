@@ -54,10 +54,10 @@
 
 #Definition of the precision in % that the computed energy deposited should reach 
 #before aborting the run. 
-/RMC01/analysis/SetExpectedPrecisionOfResults 1.
+/RMC01/analysis/SetExpectedPrecisionOfResults 2.
 
 
 
 /run/verbose 1
 /tracking/verbose 0
-/adjoint/start_run  20000
+/adjoint/start_run  50000

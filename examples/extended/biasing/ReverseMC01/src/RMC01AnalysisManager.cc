@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
+// $Id: RMC01AnalysisManager.cc,v 1.2 2009-11-20 16:47:24 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -524,7 +524,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(const G4Event* anEven
 	// Registering answer matrix
 	//---------------------------
 	
-	edep_answer_matrix->fill(prim_ekin,totEdep*adj_weight);
+	edep_answer_matrix->fill(prim_ekin,totEdep*adj_weight/cm2);
 	
 
    } 
@@ -536,21 +536,21 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(const G4Event* anEven
    	G4double ekin =(*ElectronCurrentCollection)[i]->GetValue();
 	G4double weight=(*ElectronCurrentCollection)[i]->GetWeight();
 	electron_current->fill(ekin,weight*normalised_weight);
-	electron_current_answer_matrix->fill(prim_ekin,ekin,weight*adj_weight);
+	electron_current_answer_matrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
    }
    
    for (i=0;i<ProtonCurrentCollection->entries();i++) {
    	G4double ekin =(*ProtonCurrentCollection)[i]->GetValue();
 	G4double weight=(*ProtonCurrentCollection)[i]->GetWeight();
 	proton_current->fill(ekin,weight*normalised_weight);
-	proton_current_answer_matrix->fill(prim_ekin,ekin,weight*adj_weight);
+	proton_current_answer_matrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
   }	
    
    for (i=0;i<GammaCurrentCollection->entries();i++) {
    	G4double ekin =(*GammaCurrentCollection)[i]->GetValue();
 	G4double weight=(*GammaCurrentCollection)[i]->GetWeight();
 	gamma_current->fill(ekin,weight*normalised_weight);
-	gamma_current_answer_matrix->fill(prim_ekin,ekin,weight*adj_weight);
+	gamma_current_answer_matrix->fill(prim_ekin,ekin,weight*adj_weight/cm2);
 
    }
    		
