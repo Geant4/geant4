@@ -1,6 +1,6 @@
 ?RCS:
 ?MAKE:g4data g4levelgammadata g4radioactivedata g4ledata g4neutronhpcrosssections g4abladata g4elasticdata: \
-	g4tmp Myread Getfile cat rm g4system echo n c
+	g4debug Myread Getfile cat rm g4system echo n c
 ?MAKE:	-pick add $@ %<
 ?S:g4osname:
 ?S:	This variable contains the value of the 'g4osname' symbol, which
@@ -35,6 +35,7 @@ g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
 #END GEANT4 DATA OPTIONS
 echo " "
+echo "*CHECKS AND OPTIONS FOR GEANT4 PHYSICS DATA FILES*"
 
 
 #
@@ -192,7 +193,7 @@ $g4data
 Please enter
 1) Another path to search in
 2) 'f' to force the use of the path you entered previously (the data libraries
-   are not needed to build Geant4, but are needed to run applications later).
+   are NOT needed to build Geant4, but are needed to run applications later).
 3) 'c' to customize the data paths, e.g. if you have the data libraries
    installed in different locations.
 EOM`
