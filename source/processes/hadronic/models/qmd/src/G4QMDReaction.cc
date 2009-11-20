@@ -32,6 +32,7 @@
 //        Fix bug in nucleon projectiles  by T. Koi    
 // 090122 Be8 -> Alpha + Alpha 
 // 090331 Change member shenXS and genspaXS object to pointer 
+// 091119 Fix for incidence of neutral particles 
 //
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
@@ -635,9 +636,16 @@ G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
 
    G4double pccf = std::sqrt( pcca );
 
-   G4double aas = 2.0 * eccm * b / double ( zp * zt ) / ccoul;  
-   G4double bbs = 1.0 / std::sqrt ( 1.0 + aas*aas );
-   G4double aas1 = ( 1.0 + aas * b / rmax ) * bbs;
+   //Fix for neutral particles
+   G4double aas1 = 0.0;
+   G4double bbs = 0.0;
+
+   if ( zp != 0 )
+   {
+      G4double aas = 2.0 * eccm * b / double ( zp * zt ) / ccoul;
+      bbs = 1.0 / std::sqrt ( 1.0 + aas*aas );
+      aas1 = ( 1.0 + aas * b / rmax ) * bbs;
+   }
 
    G4double cost = 0.0;
    G4double sint = 0.0;
