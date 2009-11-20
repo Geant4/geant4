@@ -30,7 +30,6 @@ unsetenv  CLHEP_INCLUDE_DIR
 unsetenv  CLHEP_LIB
 unsetenv  CLHEP_LIB_DIR
 
-unsetenv  G4ANALYSIS_USE
 unsetenv  G4DEBUG
 unsetenv  G4INCLUDE
 unsetenv  G4INSTALL
@@ -200,14 +199,6 @@ setenv G4DEBUG 1
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 endif
 
-#
-# g4analysis
-#
-#+
-if ( X$g4wanalysis_use == Xy ) then
-setenv G4ANALYSIS_USE 1
-echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
-endif
 
 #
 # g4ui

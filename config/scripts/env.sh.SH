@@ -30,7 +30,6 @@ unset  CLHEP_INCLUDE_DIR
 unset  CLHEP_LIB
 unset  CLHEP_LIB_DIR
 
-unset  G4ANALYSIS_USE
 unset  G4DEBUG
 unset  G4INCLUDE
 unset  G4INSTALL
@@ -247,17 +246,6 @@ echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
 fi
 
-#
-# g4analysis
-#
-#+
-if [ X$g4wanalysis_use = Xy ] ; then
-G4ANALYSIS_USE=1
-export G4ANALYSIS_USE
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
-fi
-fi 
 
 #
 # g4ui
