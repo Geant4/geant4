@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.cc,v 1.2 2009-11-18 18:04:11 gcosmo Exp $
+// $Id: G4AdjointSteppingAction.cc,v 1.3 2009-11-20 14:24:34 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 
   G4double weight_factor = aTrack->GetWeight()/prim_weight;
 
-  if (weight_factor<= 1e-290 || weight_factor>1.e200)
+  if ( (weight_factor>0 && weight_factor<=0) || weight_factor<= 1e-290 || weight_factor>1.e200)
   {
 	//std::cout<<"Weight_factor problem! Value = "<<weight_factor<<std::endl;
 	aTrack->SetTrackStatus(fStopAndKill);
@@ -111,6 +111,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 	}	
 	else if (surface_name == "AdjointSource" && GoingIn) {
 		did_adj_part_reach_ext_source=false;
+		aTrack->SetTrackStatus(fStopAndKill);
 		return;
 	}  
   }

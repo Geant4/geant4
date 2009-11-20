@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.hh,v 1.2 2009-11-18 18:04:11 gcosmo Exp $
+// $Id: G4AdjointSteppingAction.hh,v 1.3 2009-11-20 14:24:34 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +40,7 @@
 //		 -15/01/2007 Creation by  L. Desorgher 
 // 		 -01/11/2009 Some cleaning and adding of documentation  for the first Release in the Geant4 toolkit, L. Desorgher 
 //		 -04/11/2009 Adding the possibility to use user stepping action,  L. Desorgher
+//		 -20/11/2009 Correct the stop of adjoint particles tracking when it reenters the adjoint source.
 //		 
 //
 //-------------------------------------------------------------
