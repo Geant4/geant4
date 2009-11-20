@@ -7,22 +7,13 @@
 ?S:g4gdml_xercesc_root:
 ?S:     This variable holds the value of the root of the XercesC install
 ?S:.
-
-#
-# BEGIN GDML/XERCESC PROBE 
-#
-
-# Set default build option to no
-echo " "
-case "$g4lib_build_gdml" in
-'')
-	g4lib_build_gdml=n
-	;;
-esac
+?INIT:#INITIALIZE GDML OPTIONS
+?INIT:g4lib_build_gdml='n'
 
 
 # Now query the user to see if they want to build the GDML plugin
-echo ""
+echo " "
+echo "*OPTIONS FOR GEANT4 OPTIONAL EXTENSION MODULES*"
 
 g4message=`cat << EOM
 
