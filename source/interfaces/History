@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2009-11-19 08:26:55 allison Exp $
+$Id: History,v 1.121 2009-11-20 09:34:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 November, 2009 J. Allison (interfaces-V09-02-06)
+- G4UIExecutive.cc: Fixed complier warnings for some cases when more
+  than one flag is set.
 
 19 November, 2009 J. Allison (interfaces-V09-02-05)
 - Tagged for the release.
