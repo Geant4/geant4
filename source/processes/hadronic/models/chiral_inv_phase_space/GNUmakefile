@@ -9,14 +9,12 @@ SUBDIRS  +=  cross_sections
 SUBDIRS  +=  fragmentation
 SUBDIRS  +=  processes
 SUBDIRS  +=  interface
-SUBDIRS  +=  xs_dependent
 
 SUBLIBS   = G4hadronic_body_ci
 SUBLIBS  += G4hadronic_crosec_ci
 SUBLIBS  += G4hadronic_fragm_ci
 SUBLIBS  += G4hadronic_proc_ci
 SUBLIBS  += G4hadronic_interface_ci
-SUBLIBS  += G4hadronic_xsint_ci
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../..

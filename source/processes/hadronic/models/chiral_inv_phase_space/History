@@ -18,6 +18,11 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+20-Nov-2009 M.Kosov                            (hadr-chips-V09-02-27)
+-----------------------------------------------------------------------
+Mutual tag: G4QHadronInelasticDataSet moved to CHIPS-interface and
+            the temporary xs_dependent directory is removed
+
 19-Nov-2009 M.Kosov                            (hadr-chips-V09-02-26)
 -----------------------------------------------------------------------
 Mutual tag: delete all XS files from xs_dependent
