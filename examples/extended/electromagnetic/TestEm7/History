@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2009-11-20 20:15:14 vnivanch Exp $
+$Id: History,v 1.87 2009-11-20 20:18:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,13 @@ track of all tags.
 
 20-11-09 V.Ivant (testem7-V09-02-00)
 - use Livermore and Penelope builders from PhysList library
+- G4LiniardPartition moved to source
 
 21-11-08 V.Ivant (testem7-V09-01-17)
 - Added process type to G4SceenNuclearRecoil process
 - Added "standardICRU73" Physics List in which ion ionisation
   is simulated using new model G4IonLossParametrisedModel,
-  whihc is configured via G4EmConfigurator
+  which is configured via G4EmConfigurator
 - removed options from the default "emstandard_local" 
   Physics List
      
