@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CHIPS.icc,v 1.5 2009-11-18 09:35:11 mkossov Exp $
+// $Id: CHIPS.icc,v 1.6 2009-11-20 10:24:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,7 +50,7 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+#include "G4QAtomicPhysics.hh"
 #include "G4QPhotoNuclearPhysics.hh"
 #include "G4QNeutrinoPhysics.hh"
 #include "G4IonPhysics.hh"
@@ -72,7 +72,7 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+  this->RegisterPhysics( new G4QAtomicPhysics(ver));
 
   // Synchroton Radiation & Photo-Nuclear Physics
   this->RegisterPhysics( new G4QPhotoNuclearPhysics("photo-nuclear"));

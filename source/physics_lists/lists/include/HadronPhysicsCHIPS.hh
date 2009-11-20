@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsCHIPS.hh,v 1.1 2009-10-30 15:29:25 mkossov Exp $
+// $Id: HadronPhysicsCHIPS.hh,v 1.2 2009-11-20 10:24:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   HadronPhysicsCHIPS
 //
-// Author: 2009  M. Kosov based on HadronPhysicsQGSC_BERT
+// Author: 2009  M. Kosov
 //
 // Modified:
 //

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2009-11-17 11:58:51 mkossov Exp $
+# $Id: GNUmakefile,v 1.7 2009-11-20 10:24:28 mkossov Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/lists library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -62,7 +62,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/processes/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/xs_dependent/include \
             -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \

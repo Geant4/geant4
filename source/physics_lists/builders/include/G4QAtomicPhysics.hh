@@ -23,55 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsCHIPS.cc,v 1.2 2009-11-20 10:24:28 mkossov Exp $
+//
+// $Id: G4QAtomicPhysics.hh,v 1.1 2009-11-20 10:24:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   HadronPhysicsCHIPS
+// ClassName:   G4QAtomicPhysics
 //
-// Author: 2009  M.Kosov
+// Author:      M. Kosov 20.11.2009 (similar to G4EmStandardPhysics)
 //
 // Modified:
 //
-//----------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 //
-#include "HadronPhysicsCHIPS.hh"
+// This class provides construction of CHIPS-modified Electromagnetic physics
+//
+//---------------------------------------------------------------------------
 
+#ifndef G4QAtomicPhysics_h
+#define G4QAtomicPhysics_h 1
+
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>   
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
-HadronPhysicsCHIPS::HadronPhysicsCHIPS(const G4String& name):  G4VPhysicsConstructor(name)
-{}
-
-HadronPhysicsCHIPS::~HadronPhysicsCHIPS() 
+class G4QAtomicPhysics : public G4VPhysicsConstructor
 {
-   delete theInelasticCHIPS;
-}
+public:
+  G4QAtomicPhysics(G4int ver = 0, const G4String& name = "G4QAtomic");
+  virtual ~G4QAtomicPhysics();
 
-void HadronPhysicsCHIPS::ConstructParticle()
-{
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
 
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
+private:
+  G4int  verbose;
+};
 
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-}
+#endif
 
-#include "G4ProcessManager.hh"
-void HadronPhysicsCHIPS::ConstructProcess()
-{
-  theInelasticCHIPS = new G4QInelasticCHIPSBuilder(0); // No verbose (@@ to be developed)
-  theInelasticCHIPS->Build();
-}
+
+
+
+
 
