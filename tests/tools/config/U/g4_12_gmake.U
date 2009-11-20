@@ -1,6 +1,6 @@
 ?RCS:
 ?MAKE:g4make g4_gmake_version g4_gmake g4_make_version g4_make:\
-	 g4osname Myread Getfile cat rm test
+	 g4debug Myread Getfile cat rm test
 ?MAKE:	-pick add $@ %<
 ?S:g4make:
 ?S:	This variable contains the value of the 'g4make' symbol, which
@@ -21,6 +21,7 @@
 #
 
 echo " "
+echo "*CHECKS FOR CORRECT MAKE IMPLEMENTATION*"
 
 g4_make_loc="no"
 g4_gmake_loc="no"
