@@ -132,7 +132,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     AddPhysicsList("emstandard_opt3");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
-    G4UrbanMscModel2* mscm = new G4UrbanMscModel93();
+    G4UrbanMscModel93* mscm = new G4UrbanMscModel93();
     conf->SetExtraEmModel("mu+","msc",mscm);
 
   } else if (name == "standardSS") {
