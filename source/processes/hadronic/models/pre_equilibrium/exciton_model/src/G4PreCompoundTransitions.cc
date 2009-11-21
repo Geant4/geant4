@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.21 2009-11-19 10:18:38 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.22 2009-11-21 18:03:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -158,8 +158,8 @@ CalculateProbability(const G4Fragment & aFragment)
     TransitionProb1 = AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
 
 //JMQ 281009  phenomenological factor in order to increase equilibrium contribution
-   G4double factor=5.0;
-   TransitionProb1 *= factor;
+//   G4double factor=5.0;
+//   TransitionProb1 *= factor;
 //
     if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
     
