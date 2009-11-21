@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2009-11-20 20:18:56 vnivanch Exp $
+$Id: History,v 1.88 2009-11-21 22:02:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+21-11-09 mma (testem7-V09-02-01)
+- PhysicsList.cc :
+  - renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0"
+- remove obsolete G4MultipleScattering in PhysListEmStandardNR  
+- updated README and macro files
+  
 20-11-09 V.Ivant (testem7-V09-02-00)
 - use Livermore and Penelope builders from PhysList library
 - G4LiniardPartition moved to source
