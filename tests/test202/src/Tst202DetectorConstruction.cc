@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst202DetectorConstruction.cc,v 1.4 2009-03-09 15:57:26 allison Exp $
+// $Id: Tst202DetectorConstruction.cc,v 1.5 2009-11-21 12:03:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,6 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4VisExtent.hh"
-#include "G4VisManager.hh"
 #include "G4RunManager.hh"
 #include "G4Polyhedron.hh"
 

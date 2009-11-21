@@ -25,42 +25,27 @@
 //
 
 //
-// $Id: test202.cc,v 1.1 2007-02-08 15:45:28 allison Exp $
+// $Id: test202.cc,v 1.2 2009-11-21 12:03:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // Usage: test202 [macro-file]
 // Typically: test202  (executes vis.mac and enters interactive session)
 //        or: test202 run0.mac (executes run0.mac, enters interactive session)
-//
-// Note: Type of session determined by G4UI_USE... macros.  The first
-// found is instantiated (see code below).
 
 #include "globals.hh"
 
 #include "QGSP.hh"
 #include "Tst202DetectorConstruction.hh"
 #include "Tst202PrimaryGeneratorAction.hh"
-#include "G4UIsession.hh"
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#ifdef G4UI_USE_WIN32
-#include "G4UIWin32.hh"
-#endif
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-#ifdef G4UI_USE_XAW
-#include "G4UIXaw.hh"
-#endif
-#ifdef G4UI_USE_GAG
-#include "G4UIGAG.hh"
-#endif
-#ifdef G4UI_USE_TCSH
-#include "G4UItcsh.hh"
-#endif
+//#include "G4UIsession.hh"
+//#include "G4UImanager.hh"
 
 #include "G4RunManager.hh"
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -73,34 +58,6 @@ HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpszCmdLine,int nCmdShow) {
 #else
 int main (int argc, char** argv) {
 #endif
-
-  G4int visVerbose = 3;
-
-  // Choose (G)UI.
-  G4UIsession* session;
-#ifdef G4UI_USE_WIN32
-  session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
-#else
-#ifdef G4UI_USE_XM
-  session = new G4UIXm (argc, argv);
-#else
-#ifdef G4UI_USE_XAW
-  session = new G4UIXaw (argc, argv);
-#else
-#ifdef G4UI_USE_GAG
-  session = new G4UIGAG ;
-#else
-#ifdef G4UI_USE_TCSH
-   session = new G4UIterminal(new G4UItcsh);
-#else
-   session = new G4UIterminal();
-#endif
-#endif
-#endif
-#endif
-#endif
-
-  G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
   // Run manager
   G4cout << "RunManager is constructing...." << G4endl;
@@ -118,6 +75,7 @@ int main (int argc, char** argv) {
   runManager -> Initialize();
 
 #ifdef G4VIS_USE
+  G4int visVerbose = 3;
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> SetVerboseLevel (visVerbose);
   visManager -> Initialize ();
@@ -130,16 +88,20 @@ int main (int argc, char** argv) {
     G4String fileName = argv[1];
     UImanager->ApplyCommand(controlExecute + fileName);
   } else {
-    // Execute vis.mac
-    UImanager->ApplyCommand(controlExecute + "vis.mac");
+    // Start UI session
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+    UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+    ui->SessionStart();
+    delete ui;
+#endif
   }
-  // start interactive session
-  session->SessionStart();
 
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete session;
   delete runManager; // Should be last.
 
   return 0;
