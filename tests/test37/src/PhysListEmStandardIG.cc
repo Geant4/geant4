@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.11 2008-11-19 15:42:39 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.12 2009-11-21 15:53:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,9 +37,10 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
+#include "G4WentzelVIModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -50,7 +51,7 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4ionGasIonisation.hh"
+#include "G4ionIonisation.hh"
 #include "G4CoulombScattering.hh"
 
 #include "G4EmProcessOptions.hh"
@@ -84,16 +85,20 @@ void PhysListEmStandardIG::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MuMultipleScattering(), -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3,3);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0,new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                     -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3,3);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MuMultipleScattering(), -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3,3);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0,new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                     -1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
             
@@ -108,12 +113,12 @@ void PhysListEmStandardIG::ConstructProcess()
              
     } else if (particleName == "alpha" || particleName == "He3") {
       pmanager->AddProcess(new G4MuMultipleScattering(),-1, 1, 1);
-      pmanager->AddProcess(new G4ionGasIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
       pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4MuMultipleScattering(),-1, 1, 1);
-      pmanager->AddProcess(new G4ionGasIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
       G4CoulombScattering* cs = new G4CoulombScattering();
       pmanager->AddDiscreteProcess(cs);
      

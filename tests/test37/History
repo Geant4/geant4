@@ -14,7 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-22-09  V.Ivanchenko (test37-V09-02-04)
 - PhysicsList - construct "standardGS" on top of "emstandard_opt3"
+- update builders according to 9.3
 
 19-06-09  V.Ivanchenko (test37-V09-02-03)
 - PhysicsList - fixed typo in builder name

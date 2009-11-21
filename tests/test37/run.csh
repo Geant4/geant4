@@ -16,10 +16,6 @@ setenv PHYSLIST    emstandard_opt3
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-setenv PHYSLIST    emstandard_msc2
-set    phys = "msc2"
-source ${dir}run_single.csh ${phys} ${work} ${dir}
-
 setenv PHYSLIST    standardGS
 set    phys = "optK"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
