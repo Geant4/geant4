@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.13 2008-12-05 12:54:21 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.14 2009-11-21 17:28:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -249,10 +249,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   //Vertex
   G4double vertWidth = ecalWidth/5.;
-  G4int npads = (G4int)(vertWidth/padWidth + 0.5);
+  G4int npads = (G4int)(vertWidth/padWidth);
   //G4cout << " vertWidth= " << vertWidth << " padWidth= " << padWidth 
   //	 << " npads= " << npads << G4endl;
-  //  npads = (npads/2)*2 + 1;
+  // insure beam to hit a middle of central pad
+  npads = (npads/2)*2 + 1;
   x0 = -0.5*(padWidth + vertWidth);
   G4double x1 = 0.5*vertWidth + gap; 
   G4double z  = -(vertexLength+absLength);
