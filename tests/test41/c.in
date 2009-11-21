@@ -1,7 +1,7 @@
 /run/verbose 1
 /control/verbose 1
 
-/testem/det/setAbsorberMat  G4_GRAPHITE
+/testem/det/setAbsorberMat  G4_GRAPHITE_POROUS
 /testem/det/setWidth        2.5 mm
 
 /testem/setFileName        HISTFILENAME

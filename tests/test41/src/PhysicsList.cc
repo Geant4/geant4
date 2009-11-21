@@ -34,9 +34,6 @@
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
-
 #include "StepMax.hh"
 #include "G4DecayPhysics.hh"
 
@@ -50,7 +47,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-#include "G4UrbanMscModel2.hh"
+#include "G4UrbanMscModel93.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -131,15 +128,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
 
-  } else if (name == "emstandard_msc2") {
+  } else if (name == "emstandard_msc93") {
 
     AddPhysicsList("emstandard_opt3");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
-    G4UrbanMscModel2* msce = new G4UrbanMscModel2();
-    conf->SetExtraEmModel("e-","msc",msce);
-    G4UrbanMscModel2* mscp = new G4UrbanMscModel2();
-    conf->SetExtraEmModel("e+","msc",mscp);
-    G4UrbanMscModel2* mscm = new G4UrbanMscModel2();
+    G4UrbanMscModel2* mscm = new G4UrbanMscModel93();
     conf->SetExtraEmModel("mu+","msc",mscm);
 
   } else if (name == "standardSS") {
@@ -154,18 +147,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardIG(name);
 
-  } else if (name == "livermore") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
-    
-  } else if (name == "penelope") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
-        
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
