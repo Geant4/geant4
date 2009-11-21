@@ -12,7 +12,6 @@
 #
 /testem/phys/addPhysics       emstandard
 #/testem/phys/addPhysics      emstandard_opt2
-#/testem/phys/addPhysics       lowenergy
 #
 /testem/target1Material       G4_W
 /testem/target2Material       G4_Cu

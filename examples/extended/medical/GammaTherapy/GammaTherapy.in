@@ -12,8 +12,8 @@
 #
 /testem/phys/addPhysics       emstandard
 #/testem/phys/addPhysics      emstandard_opt2
-#/testem/phys/addPhysics       penelope
-#/testem/phys/addPhysics       livermore
+#/testem/phys/addPhysics       empenelope
+#/testem/phys/addPhysics       emlivermore
 #/testem/phys/addPhysics      step_limit
 #
 /testem/target1Material       G4_Be
