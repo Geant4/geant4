@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.cc,v 1.6 2009-11-19 10:32:42 vnivanch Exp $
+// $Id: G4FissionLevelDensityParameter.cc,v 1.7 2009-11-21 18:05:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -72,10 +72,15 @@ LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const
   G4double EvapLDP = 
     theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);
 
+  if(Z >= 89)      { EvapLDP *= 1.02; }
+  else if(Z >= 85) { EvapLDP *= (1.02 + 0.004*(89 - Z)); }
+  else             { EvapLDP *= 1.04; }
+
+  /*
   if(Z >= 89)      { EvapLDP *= 1.01; }
   else if(Z >= 85) { EvapLDP *= (1.01 + 0.002*(89 - Z)); }
   else             { EvapLDP *= 1.02; }
-
+  */
   return EvapLDP;
 
   /*
