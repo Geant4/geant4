@@ -1,4 +1,4 @@
-$Id: History,v 1.458 2009-11-17 17:48:51 allison Exp $
+$Id: History,v 1.459 2009-11-22 14:05:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,15 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd November 2009  John Allison
+- visman-V09-02-08: /vis/scene/add/trajectories rich:
+  o Added G4RichTrajectoryPoint().GetAttDefs() to informational.
+
+18th November 2009  Gabriele Cosmo
+- visexternal-V09-02-06:
+  o Added GLOBLIBS dependencies.
+  o Re-instated fix to gl2ps.cc (always #define GL2PS_HAVE_ZLIB).
 
 17th November 2009  John Allison  (vis-V09-02-11)
 - visman-V09-02-07:
