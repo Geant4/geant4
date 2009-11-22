@@ -15,7 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 22-11-09  V.Ivanchenko (test41-V09-02-03)
-- Fixed script
+- Fixed scripts and options
 
 21-11-09  V.Ivanchenko (test41-V09-02-02)
 - Substitute G4_GRAPHITE by G4_GRAPHITE_POROUS
