@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc,v 1.5 2009-07-20 17:06:48 vnivanch Exp $
+// $Id: G4EmConfigurator.cc,v 1.6 2009-11-22 19:48:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,7 @@ enum PType {unknown=0, eloss, discrete, msc};
 
 G4EmConfigurator::G4EmConfigurator()
 {
-  index = 1;
+  index = -10;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,7 +155,7 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
   //G4cout << " G4EmConfigurator::SetModelForRegion" << G4endl;
 
   // new set
-  index--;
+  --index;
 
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = 
     G4ParticleTable::GetParticleTable()->GetIterator(); 
@@ -257,7 +257,7 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	  mod->SetLowEnergyLimit(e1);
 	  mod->SetHighEnergyLimit(e2);
 
-	  //G4cout << "e1= " << e1 << " e2= " << e2 << G4endl;
+	  //G4cout << "index= " << index << " e1= " << e1 << " e2= " << e2 << G4endl;
 
 	  // added model
 	  if(ptype == eloss) {
@@ -269,6 +269,8 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	    G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
 	    p->AddEmModel(index,mod,reg);
 	  } else if(ptype == msc) {
+	    //G4cout << "### Added msc model order= " << index << " for " 
+	    //	   << particleName << " and " << processName << "  " << mod << G4endl;
 	    G4VMultipleScattering* p = static_cast<G4VMultipleScattering*>(proc);
 	    p->AddEmModel(index,mod,reg);
 	  }
