@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.48 2009-11-11 23:59:48 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.49 2009-11-22 17:58:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,21 +126,23 @@ G4double G4EmCalculator::GetDEDX(G4double kinEnergy, const G4ParticleDefinition*
   const G4MaterialCutsCouple* couple = FindCouple(mat, region);
   if(couple && UpdateParticle(p, kinEnergy) ) {
     res = manager->GetDEDX(p, kinEnergy, couple);
-    /*
+    
     if(isIon) {
       if(FindEmModel(p, currentProcessName, kinEnergy)) {
-	G4double length = 1.*um;
-	G4cout << "### GetDEDX: E= " << kinEnergy << " res= " << res; 
+	G4double length = CLHEP::nm;
 	G4double eloss = res*length;
+	//G4cout << "### GetDEDX: E= " << kinEnergy << " dedx0= " << res 
+	//       << " de= " << eloss << G4endl;; 
 	G4double niel  = 0.0;
+        dynParticle.SetKineticEnergy(kinEnergy);
+        currentModel->GetChargeSquareRatio(p, mat, kinEnergy);
 	currentModel->CorrectionsAlongStep(couple,&dynParticle,eloss,niel,length);
 	res = eloss/length; 
-     
-	//G4cout << "### GetDEDX: E= " << kinEnergy << " res= " << res;  
-	G4cout << " res1= " << res << G4endl;;
+     	//G4cout << " de1= " << eloss << " res1= " << res 
+	//       << " " << p->GetParticleName() <<G4endl;;
       }
     } 
-    */
+    
     if(verbose>0) {
       G4cout << "G4EmCalculator::GetDEDX: E(MeV)= " << kinEnergy/MeV
 	     << " DEDX(MeV/mm)= " << res*mm/MeV
@@ -465,13 +467,14 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
       } 
 
       // low energy correction for ions
-      /*
       if(isIon) {
-        G4double length = 1.*nm;
+        G4double length = CLHEP::nm;
 	const G4Region* r = 0;
 	const G4MaterialCutsCouple* couple = FindCouple(mat, r);
         G4double eloss = res*length;
         G4double niel  = 0.0;
+        dynParticle.SetKineticEnergy(kinEnergy);
+        currentModel->GetChargeSquareRatio(p, mat, kinEnergy);
         currentModel->CorrectionsAlongStep(couple,&dynParticle,eloss,niel,length);
         res = eloss/length; 
 	
@@ -481,7 +484,6 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 		 << G4endl;
 	}
       }
-      */
     }
       
     if(verbose > 0) {
@@ -970,11 +972,11 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
                                    const G4String& processName,
 	  	 		         G4double kinEnergy)
 {
-  G4bool res = false;
+  isApplicable = false;
   if(!p) {
     G4cout << "G4EmCalculator::FindEmModel WARNING: no particle defined" 
 	   << G4endl;
-    return res;
+    return isApplicable;
   }
   G4String partname =  p->GetParticleName();
   const G4ParticleDefinition* part = p;
@@ -984,7 +986,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   if(verbose > 1) {
     G4cout << "G4EmCalculator::FindEmModel for " << partname
            << " (type= " << p->GetParticleType()
-           << ") and " << processName << " at e(MeV)= " << scaledEnergy;
+           << ") and " << processName << " at E(MeV)= " << scaledEnergy;
     if(p != part) G4cout << "  GenericIon is the base particle";       
     G4cout << G4endl;
   }
@@ -1018,10 +1020,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
     }
   }
   if(elproc) {
-    isApplicable = true;
     currentModel = elproc->SelectModelForMaterial(scaledEnergy, idx);
     G4double eth = currentModel->LowEnergyLimit();
-    if(eth > 0.0) { loweModel = elproc->SelectModelForMaterial(eth-keV, idx); }       
+    loweModel = elproc->SelectModelForMaterial(eth - CLHEP::eV, idx);
   }
 
   // Search for discrete process
@@ -1034,8 +1035,7 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       {
         currentModel = (vem[i])->SelectModelForMaterial(kinEnergy, idx);
 	G4double eth = currentModel->LowEnergyLimit();
-	if(eth > 0.0) { loweModel = (vem[i])->SelectModelForMaterial(eth-keV, idx); }       
-	isApplicable    = true;
+	loweModel = (vem[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
         break;
       }
     }
@@ -1052,14 +1052,24 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       {
         currentModel = (vmsc[i])->SelectModelForMaterial(kinEnergy, idx);
 	G4double eth = currentModel->LowEnergyLimit();
-	if(eth > 0.0) { loweModel = (vmsc[i])->SelectModelForMaterial(eth-keV, idx); }       
-	isApplicable    = true;
+	loweModel = (vmsc[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);  
         break;
       }
     }
   }
-  if(currentModel) res = true;
-  return res;
+  if(currentModel) {
+    if(loweModel == currentModel) { loweModel = 0; }
+    isApplicable = true;
+    if(verbose > 1) {
+      G4cout << "Model <" << currentModel->GetName() 
+	     << "> Emin(MeV)= " << currentModel->LowEnergyLimit()/MeV;
+      if(loweModel) { 
+	G4cout << " LowEnergy model <" << loweModel->GetName() << ">"; 
+      }
+      G4cout << G4endl;
+    } 
+  }
+  return isApplicable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
