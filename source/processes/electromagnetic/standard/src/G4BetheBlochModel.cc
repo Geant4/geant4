@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.34 2009-11-11 23:22:27 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.35 2009-11-22 18:00:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -277,6 +277,15 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
+					     const G4DynamicParticle*,
+					     G4double&,
+					     G4double&,
+					     G4double)
+{}
+
+/*
+
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					     const G4DynamicParticle* dp,
 					     G4double& eloss,
@@ -292,30 +301,16 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 
     G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
     GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-    eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
-    eloss += length*corr->IonHighOrderCorrections(p,couple,e);
+    G4double qfactor = q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor;
+    G4double highOrder = length*corr->IonHighOrderCorrections(p,couple,e);
+    eloss *= qfactor; 
+    eloss += highOrder;
+    //G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
+    //	   << " qfactor= " << qfactor 
+    //	   << " highOrder= " << highOrder << " (" << highOrder/eloss << ")" << G4endl;    
   }
-  /*
-  if(nuclearStopping && preKinEnergy*proton_mass_c2/mass < chargeSquare*100.*MeV) {
-
-    G4double nloss = length*corr->NuclearDEDX(p,mat,e,false);
-
-    // too big energy loss
-    if(eloss + nloss > preKinEnergy) {
-      nloss *= (preKinEnergy/(eloss + nloss));
-      eloss = preKinEnergy;
-    } else {
-      eloss += nloss;
-    }
-    
-    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    	   << " de= " << eloss << " NIEL= " << nloss 
-	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    
-    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
-  }
-  */
 }
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
