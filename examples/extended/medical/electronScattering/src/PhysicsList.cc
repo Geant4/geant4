@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.2 2009-09-23 14:59:18 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2009-11-22 19:06:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,16 +34,13 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
+#include "PhysListEmStandardGS.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
 
-#include "G4GoudsmitSaundersonMscModel.hh"
-#include "G4EmConfigurator.hh"
-
-#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -75,7 +72,6 @@
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
   pMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
@@ -142,7 +138,6 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-  G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   AddDecay();  
   AddStepMax();
 }
@@ -242,13 +237,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new PhysListEmStandardSS(name);
         
   } else if (name == "standardGS") {
-
-    AddPhysicsList("emstandard_opt3");
-    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
-    G4GoudsmitSaundersonMscModel* msce = new G4GoudsmitSaundersonMscModel();
-    conf->SetExtraEmModel("e-","msc",msce);
-    G4GoudsmitSaundersonMscModel* mscp = new G4GoudsmitSaundersonMscModel();
-    conf->SetExtraEmModel("e+","msc",mscp);
+  
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardGS(name);
 
   } else {
 
