@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-11-09  V.Ivanchenko (test41-V09-02-03)
+- Fixed script
+
 21-11-09  V.Ivanchenko (test41-V09-02-02)
 - Substitute G4_GRAPHITE by G4_GRAPHITE_POROUS
 - Change names of options according to 9.3
