@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.77 2009-11-04 13:15:02 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.78 2009-11-22 14:02:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -65,6 +65,7 @@
 #include "G4TransportationManager.hh"
 #include "G4PropagatorInField.hh"
 #include "G4RichTrajectory.hh"
+#include "G4RichTrajectoryPoint.hh"
 #include "G4AttDef.hh"
 #include "G4ios.hh"
 #include <sstream>
@@ -1414,7 +1415,8 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 	"Attributes available for modeling and filtering with"
 	"\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
 	"\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:\n"
-	     << G4RichTrajectory().GetAttDefs();
+	     << G4RichTrajectory().GetAttDefs()
+	     << G4RichTrajectoryPoint().GetAttDefs();
     }
   }
 
