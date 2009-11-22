@@ -89,6 +89,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
+  G4LossTableManager::Instance()->SetVerbose(1);
   G4LossTableManager::Instance()->EmConfigurator()->AddModels();
   decayPhysics->ConstructProcess();
   AddMaxStep();
@@ -130,10 +131,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "emstandard_msc93") {
 
-    AddPhysicsList("emstandard_opt3");
+    AddPhysicsList("emstandard");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4UrbanMscModel93* mscm = new G4UrbanMscModel93();
-    conf->SetExtraEmModel("mu+","msc",mscm);
+    conf->SetExtraEmModel("mu+","muMsc",mscm);
 
   } else if (name == "standardSS") {
 
