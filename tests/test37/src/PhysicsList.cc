@@ -91,6 +91,7 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   emPhysicsList->ConstructProcess();
   G4LossTableManager::Instance()->EmConfigurator()->AddModels();
+  G4LossTableManager::Instance()->SetVerbose(1);
   decayPhysics->ConstructProcess();
   AddMaxStep();
 }

@@ -6,13 +6,14 @@
 /testem/det/setThick1  203 um
 /testem/det/setNbOfLayers1 100 
 
-/testem/phys/addPhysics  standardIG
+/testem/phys/addPhysics  standardGS
 #/testem/phys/addPhysics  standard
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt1
 #/testem/phys/addPhysics  emstandard_opt2
-#/testem/phys/addPhysics  livermore
-#/testem/phys/addPhysics  penelope
+#/testem/phys/addPhysics  emstandard_opt3
+#/testem/phys/addPhysics  emlivermore
+#/testem/phys/addPhysics  empenelope
 
 /gun/particle e- 
 /gun/energy 0.5 MeV
@@ -30,4 +31,4 @@
 
 /run/initialize
 
-/run/beamOn 100000
+/run/beamOn 10000

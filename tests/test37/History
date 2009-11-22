@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-22-09  V.Ivanchenko (test37-V09-02-05)
+- Fixed option setup
+
 21-22-09  V.Ivanchenko (test37-V09-02-04)
 - PhysicsList - construct "standardGS" on top of "emstandard_opt3"
 - update builders according to 9.3
