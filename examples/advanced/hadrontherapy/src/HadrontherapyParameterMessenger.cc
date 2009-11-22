@@ -61,7 +61,8 @@ HadrontherapyParameterMessenger::HadrontherapyParameterMessenger(HadrontherapyIn
     listCmd -> SetParameterName("String",true);
     listCmd -> SetDefaultValue("list");
     listCmd -> SetCandidates("all simple compound hep list");
-    //listCmd->AvailableForStates(G4State_PreInit, G4State_Init, G4State_Idle,G4State_GeomClosed, G4State_EventProc);  
+    listCmd ->AvailableForStates(G4State_PreInit);  
+    //Available G4 States (G4State_PreInit, G4State_Init, G4State_Idle,G4State_GeomClosed, G4State_EventProc);  
 }
 HadrontherapyParameterMessenger::~HadrontherapyParameterMessenger()
 {

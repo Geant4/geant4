@@ -77,7 +77,6 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
   // Build phantom and associated detector 
   ConstructPhantom();
   ConstructDetector();
-
   // Set number of the detector voxels along X Y and Z directions.  
   // This will construct also the sensitive detector, the ROGeometry 
   // and the matrix where the energy deposited is collected!
@@ -87,8 +86,8 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
 { 
-    if (detectorROGeometry) delete detectorROGeometry;  
-    if (matrix) delete matrix;  
+    delete detectorROGeometry;// This should be safe in C++ even if the argument is a NULL pointer  
+    delete matrix;  
     delete detectorMessenger;
 }
 
@@ -234,14 +233,14 @@ G4bool HadrontherapyDetectorConstruction::SetNumberOfVoxelBySize(G4double sizeX,
 	 sizeOfVoxelAlongZ = (2 * detectorSizeZ / numberOfVoxelsAlongZ );
 	}
 
-    G4cout << "The (X,Y,Z) sizes of the Voxels are: (" << 
-		G4BestUnit(sizeOfVoxelAlongX, "Length")  << ',' << 
-		G4BestUnit(sizeOfVoxelAlongY, "Length")  << ',' << 
+    G4cout << "The (X, Y, Z) sizes of the Voxels are: (" << 
+		G4BestUnit(sizeOfVoxelAlongX, "Length")  << ", " << 
+		G4BestUnit(sizeOfVoxelAlongY, "Length")  << ", " << 
 		G4BestUnit(sizeOfVoxelAlongZ, "Length") << ')' << G4endl;
 
     G4cout << "The number of Voxels along (X,Y,Z) is: (" << 
-		numberOfVoxelsAlongX  << ',' <<
-	        numberOfVoxelsAlongY  <<','  <<
+		numberOfVoxelsAlongX  << ", " <<
+	        numberOfVoxelsAlongY  << ", "  <<
 		numberOfVoxelsAlongZ  << ')' << G4endl;
 
     //  This will clear the existing matrix (together with data inside it)! 
@@ -287,9 +286,9 @@ G4bool HadrontherapyDetectorConstruction::SetDetectorSize(G4double sizeX, G4doub
 		    }
 
 
-    G4cout << "The (X,Y,Z) dimensions of the detector are : (" << 
-	    	  G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ',' << 
-	    	  G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ',' << 
+    G4cout << "The (X, Y, Z) dimensions of the detector are : (" << 
+	    	  G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ", " << 
+	    	  G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ", " << 
 	    	  G4BestUnit( detector -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
 // Adjust detector position
     SetDetectorPosition();
@@ -331,9 +330,9 @@ G4bool HadrontherapyDetectorConstruction::SetPhantomSize(G4double sizeX, G4doubl
 		   }
  
 
-    G4cout << "The (X,Y,Z) dimensions of the phantom are : (" << 
-	    	  G4BestUnit( phantom -> GetXHalfLength()*2., "Length") << ',' << 
-	    	  G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ',' << 
+    G4cout << "The (X, Y, Z) dimensions of the phantom are : (" << 
+	    	  G4BestUnit( phantom -> GetXHalfLength()*2., "Length") << ", " << 
+	    	  G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ", " << 
 	    	  G4BestUnit( phantom -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
 //G4cout << '\n' << "Coordinate volume: " << phantomPhysicalVolume -> GetTranslation() << G4endl; 
 // Adjust detector position inside phantom
@@ -347,14 +346,14 @@ G4bool HadrontherapyDetectorConstruction::SetPhantomSize(G4double sizeX, G4doubl
 G4bool HadrontherapyDetectorConstruction::SetPhantomPosition(G4ThreeVector displacement)
 {
 // Set Phantom position respect to the World 
-// TODO check limits!
+// TODO check for overlap!
     phantomPosition = displacement;
     if (phantomPhysicalVolume) 
 	{
 	    phantomPhysicalVolume -> SetTranslation(phantomPosition);
 	    G4cout << "Displacement between Phantom and World is: "; 
-	    G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") << 
-		      "DY= "<< G4BestUnit(phantomPosition.getY(),"Length") << 
+	    G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") << ", " << 
+		      "DY= "<< G4BestUnit(phantomPosition.getY(),"Length") << ", " << 
 		      "DZ= "<< G4BestUnit(phantomPosition.getZ(),"Length") << G4endl;
 
 // Redraw ROGeometry!

@@ -44,7 +44,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 PassiveProtonBeamLine::PassiveProtonBeamLine():
-  modulator(0), physicalTreatmentRoom(0),
+  modulator(0), physicalTreatmentRoom(0),hadrontherapyDetectorConstruction(0),
   physiBeamLineSupport(0), physiBeamLineCover(0), physiBeamLineCover2(0), 
   firstScatteringFoil(0), physiFirstScatteringFoil(0), physiKaptonWindow(0), 
   solidStopper(0), physiStopper(0), 

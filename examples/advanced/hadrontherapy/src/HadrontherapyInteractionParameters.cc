@@ -84,7 +84,7 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
 	    G4double logmin = std::log10(kinEmin);
 	    G4double logmax = std::log10(kinEmax); 
 	    G4double en;
-		// uniform logarithm space
+	    // uniform log space
             for (G4double c = 0.; c < npoints; c++)
 	       {
 		    en = std::pow(10., logmin + ( c*(logmax-logmin)  / (npoints - 1.)) );  
@@ -134,7 +134,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
   particle = material = filename = "";
   // set internal variables
   std::istringstream strParam(vararg);
-  // TODO here check for number and parameter consistency!! 
+  // TODO here check for number and parameters consistency 
   strParam >> std::skipws >> material >> kinEmin >> kinEmax >> npoints >> particle >> filename;
   // npoints must be an integer!
   npoints = std::floor(npoints); 
@@ -151,7 +151,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
    }
   if (npoints < 1) npoints = 1;
 
-    // check if element/material is here!
+    // check if element/material is into database
     if (!GetNistMaterial(material) )
 	   {
 	     G4cout << "WARNING: material \"" << material << "\" doesn't exist in NIST elements/materials"
@@ -170,7 +170,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
 			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl;
 		return false;
 	   }
-    // start physics by forcing a beamOn(): 
+    // start physics by forcing a G4RunManager beamOn(): 
     BeamOn();
     // Set output file
     if( filename != "" ) 

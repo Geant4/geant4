@@ -43,29 +43,29 @@ public:
 	~HadrontherapyInteractionParameters();
 
 // Get data for Mass SP (MeV*cm2/g)   
-// into G4NistMaterialBuilder class materials
+// G4NistMaterialBuilder class materials
 // User must provide: material kinetic energy lower limit, kinetic energy upper limit, number of points to retrieve,
 // [particle], [output filename].
 
-	bool GetStoppingTable (const G4String& vararg);
+    bool GetStoppingTable (const G4String& vararg);
     void ListOfNistMaterials (const G4String& vararg);
     void BeamOn();
     bool ParseArg (const G4String& vararg);	
 
 private:
-	G4Material* GetNistMaterial(G4String material);
+    G4Material* GetNistMaterial(G4String material);
 
-	G4NistElementBuilder* nistEle;
-	G4NistMaterialBuilder* nistMat;
-	G4double kinEmin, kinEmax, npoints;
-	G4String particle, material, filename; 
-	std::ofstream outfile;
-	std::ostream data;
+    G4NistElementBuilder* nistEle;
+    G4NistMaterialBuilder* nistMat;
+    G4double kinEmin, kinEmax, npoints;
+    G4String particle, material, filename; 
+    std::ofstream outfile;
+    std::ostream data;
     G4Material* Pmaterial;
-	G4double density;
+    G4double density;
     G4EmCalculator* emCal;
     HadrontherapyParameterMessenger* pMessenger; 
-	bool beamFlag;
+    bool beamFlag;
 };
 #endif
 

@@ -37,7 +37,7 @@
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), E.Mazzaglia(a), F.Romano(a)
+// G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), S.E.Mazzaglia(a), F.Romano(a)
 // 
 // Contributor authors:
 // P.Kaitaniemi(d), A.Heikkinen(d), Gillis Danielsen (d)

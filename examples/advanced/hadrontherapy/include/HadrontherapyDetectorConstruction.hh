@@ -137,12 +137,12 @@ inline bool IsInside(G4double detectorHalfX,
 		   return false;
 	     }
 	}
-
+/*
     G4cout << "Displacement between Phantom and Detector is: "; 
     G4cout << "DX= "<< G4BestUnit(detectorToPhantomPosition.getX(),"Length") << 
               "DY= "<< G4BestUnit(detectorToPhantomPosition.getY(),"Length") << 
               "DZ= "<< G4BestUnit(detectorToPhantomPosition.getZ(),"Length") << G4endl;
-
+*/
 	return true;
 }
 /////////////////////////////////////////////////////////////////////////////

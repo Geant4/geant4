@@ -49,7 +49,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 						"PhantomSizeAlongZ", false);
     changeThePhantomSizeCmd -> SetDefaultUnit("mm");
     changeThePhantomSizeCmd -> SetUnitCandidates("um mm cm"); 
-    changeThePhantomSizeCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
+    changeThePhantomSizeCmd -> AvailableForStates(G4State_Idle);
 
 
     // Change Phantom position
@@ -61,7 +61,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 						    "PositionAlongZ", false);
     changeThePhantomPositionCmd -> SetDefaultUnit("mm");
     changeThePhantomPositionCmd -> SetUnitCandidates("mm cm m"); 
-    changeThePhantomPositionCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
+    changeThePhantomPositionCmd -> AvailableForStates(G4State_Idle);
 
 
     //  Change detector size
@@ -74,7 +74,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
     changeTheDetectorSizeCmd -> SetParameterName("DetectorSizeAlongX", "DetectorSizeAlongY", "DetectorSizeAlongZ", false);
     changeTheDetectorSizeCmd -> SetDefaultUnit("mm");
     changeTheDetectorSizeCmd -> SetUnitCandidates("um mm cm"); 
-    changeTheDetectorSizeCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
+    changeTheDetectorSizeCmd -> AvailableForStates(G4State_Idle);
 
     //  Change the detector to phantom displacement
     changeTheDetectorToPhantomPositionCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/displacement",this);
@@ -85,7 +85,7 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
 							      "DisplacementAlongZ", false);
     changeTheDetectorToPhantomPositionCmd -> SetDefaultUnit("mm");
     changeTheDetectorToPhantomPositionCmd -> SetUnitCandidates("um mm cm"); 
-    changeTheDetectorToPhantomPositionCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
+    changeTheDetectorToPhantomPositionCmd -> AvailableForStates(G4State_Idle);
     
     // Change voxels by its size
     changeTheDetectorVoxelCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/voxelSize",this);
@@ -94,13 +94,13 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
     changeTheDetectorVoxelCmd -> SetParameterName("VoxelSizeAlongX", "VoxelSizeAlongY", "VoxelSizeAlongZ", false);
     changeTheDetectorVoxelCmd -> SetDefaultUnit("mm");
     changeTheDetectorVoxelCmd -> SetUnitCandidates("um mm cm");
-    changeTheDetectorVoxelCmd -> AvailableForStates(G4State_PreInit,G4State_Idle);
+    changeTheDetectorVoxelCmd -> AvailableForStates(G4State_Idle);
    }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
 {
-  delete changeThePhantomDir; 
+    delete changeThePhantomDir; 
     delete changeThePhantomSizeCmd; 
     delete changeThePhantomPositionCmd; 
     delete changeTheDetectorDir; 

@@ -40,17 +40,17 @@ class G4UIcmdWithoutParameter;
 
 class HadrontherapyParameterMessenger : public G4UImessenger
 {
-	public:
-		HadrontherapyParameterMessenger(HadrontherapyInteractionParameters* );
-        ~HadrontherapyParameterMessenger();
+    public:
+    HadrontherapyParameterMessenger(HadrontherapyInteractionParameters* );
+    ~HadrontherapyParameterMessenger();
 
-        void SetNewValue(G4UIcommand*, G4String);
+    void SetNewValue(G4UIcommand*, G4String);
 
-	private:
-        HadrontherapyInteractionParameters* pParam;
+    private:
+    HadrontherapyInteractionParameters* pParam;
 
-        G4UIdirectory           *paramDir;
-        G4UIcmdWithAString      *dedxCmd, *listCmd;  
+    G4UIdirectory           *paramDir;
+    G4UIcmdWithAString      *dedxCmd, *listCmd;  
 
 };
 #endif

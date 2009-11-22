@@ -46,7 +46,8 @@ HadrontherapyMatrix* HadrontherapyMatrix::getInstance(G4int voxelX, G4int voxelY
     return instance;
 }
 
-HadrontherapyMatrix::HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ)
+HadrontherapyMatrix::HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ):
+    matrix(0)
 {  
 // Number of the voxels of the phantom
 // For Y = Z = 1 the phantom is divided in slices (and not in voxels)

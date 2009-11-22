@@ -38,7 +38,7 @@
 class HadrontherapyMatrix 
 {
 private:
-  HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ); //< this is supposed to be a singleton
+  HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ); //<--- this is supposed to be a singleton
 
 public:
 
@@ -63,7 +63,7 @@ public:
   // a 1D Histogram
   
   inline G4int Index(G4int i, G4int j, G4int k){ return (i * numberVoxelY + j) * numberVoxelZ + k; } 
-  // Get a unique index from three dimensional voxel information
+  // Get a unique index from a three dimensional voxel information
 
 private:
 

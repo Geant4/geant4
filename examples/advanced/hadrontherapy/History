@@ -8,6 +8,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+22.11.2009 S.E.Mazzaglia; Tag: Hadrontherapy-V09-02-39
+           - Correction in the initialization of the passiveProtonBeamLine class.
+
 20.11.2009 P.Kaitaniemi; Tag: hadrontherapy-V09-02-38
            - Fixes and updates to the analysis scripts in RootScripts/iaeaBenchmark
            - Updated RootScripts/README
