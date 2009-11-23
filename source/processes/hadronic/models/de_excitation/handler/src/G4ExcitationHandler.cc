@@ -279,10 +279,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 
   theReactionProductVector->reserve( theResults.size() );
     
-  G4int idx = 0;
   for (iList = theResults.begin(); iList != theResults.end(); ++iList)
     {
-      G4cout << "idx= " << idx << "  " << (*iList) << G4endl;
       G4int theFragmentA = static_cast<G4int>((*iList)->GetA());
       G4int theFragmentZ = static_cast<G4int>((*iList)->GetZ());
       G4LorentzVector theFragmentMomentum = (*iList)->GetMomentum();
@@ -317,7 +315,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 	  theReactionProductVector->push_back(theNew);
 	}
       delete (*iList); 
-      ++idx; 
     }
 
 #ifdef debug
