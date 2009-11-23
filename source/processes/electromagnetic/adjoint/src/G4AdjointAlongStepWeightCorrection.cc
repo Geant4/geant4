@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.5 2009-11-23 09:02:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointAlongStepWeightCorrection.hh"
@@ -31,10 +31,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VParticleChange.hh"
 #include "G4AdjointCSManager.hh"
-
-#ifdef WIN32
-#include <G4float .h>
-#endif
 
 ///////////////////////////////////////////////////////
 //
