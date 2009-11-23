@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.hh,v 1.2 2006-06-29 18:05:34 gunter Exp $
+// $Id: G4VReadOutGeometry.hh,v 1.3 2009-11-23 18:13:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -58,17 +58,17 @@ class G4VReadOutGeometry
       // the ROGeometry. It sets up in addition the needed
       // the G4Navigator used to navigate inside this ROGeometry.
       void BuildROGeometry();
-      G4bool CheckROVolume(G4Step*,G4TouchableHistory*&);
+      virtual G4bool CheckROVolume(G4Step*,G4TouchableHistory*&);
 
   protected:
-      G4bool FindROTouchable(G4Step*);
+      virtual G4bool FindROTouchable(G4Step*);
 
       G4VPhysicalVolume* ROworld;
       G4SensitiveVolumeList* fincludeList;
       G4SensitiveVolumeList* fexcludeList;
       G4String name;
 
-  private:
+  protected:
       G4Navigator*        ROnavigator;
       G4TouchableHistory* touchableHistory;
 
