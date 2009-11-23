@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.9 2009-11-19 13:27:40 arce Exp $
+// $Id: G4tgrVolume.cc,v 1.10 2009-11-23 11:36:29 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,12 +107,13 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
 }
 
 
+//-------------------------------------------------------------------------
 G4tgrVolume::G4tgrVolume( const G4tgrVolume& vol )
 {
   theName = vol.GetName();   
   theType = vol.GetType();
   theMaterialName = vol.GetMaterialName();   
-  theSolid = vol.GetSolid();
+  theSolid = const_cast<G4tgrSolid*>(vol.GetSolid());
   thePlacements  = vol.GetPlacements();
   theVisibility   = vol.GetVisibility();
   theRGBColour   = vol.GetRGBColour();
