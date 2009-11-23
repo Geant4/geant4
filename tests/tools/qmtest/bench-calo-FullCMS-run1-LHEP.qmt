@@ -26,7 +26,7 @@
   </argument>
   <argument name="command">
     <text>cd
-    $G4INSTALL/benchmarks/calorimeter/HadCalCMS;$G4BIN/$G4SYSTEM/full_cms bench1.g4 LHEP</text>
+    $G4INSTALL/benchmarks/calorimeter/FullCMS;$G4BIN/$G4SYSTEM/full_cms bench1.g4 LHEP</text>
   </argument>
   <argument name="stderr">
     <text/>
