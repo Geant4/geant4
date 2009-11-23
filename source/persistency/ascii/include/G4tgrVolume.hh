@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.9 2009-11-19 13:30:36 arce Exp $
+// $Id: G4tgrVolume.hh,v 1.10 2009-11-23 11:38:54 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,36 +87,17 @@ class G4tgrVolume
 
     // Accessors
 
-    const G4String& GetName() const {
-      return theName;
-    }
-    void SetName(const G4String& name ){
-      theName = name;
-    }
-    const G4String& GetType() const {
-      return theType;
-    }
-    G4tgrSolid* GetSolid() const {
-      return theSolid;
-    }
-    const G4String& GetMaterialName() const {
-      return theMaterialName;
-    }
-    const std::vector<G4tgrPlace*> GetPlacements() const {
-      return thePlacements;
-    }
-    G4bool GetVisibility() const {
-      return theVisibility;
-    }
-    const G4double* GetColour() const {
-      return theRGBColour;
-    }
-    G4double*  GetRGBColour() const {
-      return theRGBColour;
-    }
-    G4bool GetCheckOverlaps() const {
-      return theCheckOverlaps;
-    }
+    const G4String& GetName() const {return theName;}
+    const G4String& GetType() const {return theType;}
+    const G4tgrSolid* GetSolid() const {return theSolid;}
+    const G4String& GetMaterialName() const {return theMaterialName;}
+
+    const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}
+    G4bool GetVisibility() const {return theVisibility;}
+    G4double* GetColour() const {return theRGBColour;}
+    G4double* GetRGBColour() const {return theRGBColour;}
+
+    G4bool GetCheckOverlaps() const {return theCheckOverlaps;}
 
     virtual G4tgrVolume* GetVolume( G4int ii ) const;
 
