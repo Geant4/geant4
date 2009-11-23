@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.66 2008-01-04 22:11:31 allison Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.67 2009-11-23 05:42:28 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,6 +33,8 @@
 
 #include "G4HepRepFileSceneHandler.hh"
 #include "G4HepRepFile.hh"
+#include "G4HepRepMessenger.hh"
+#include "G4UIcommand.hh"
 
 #include "G4Version.hh"
 #include "G4VSolid.hh"
@@ -70,27 +72,6 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 {
 	hepRepXMLWriter = ((G4HepRepFile*)(&system))->GetHepRepXMLWriter();
 	fileCounter = 0;
-	int length;
-	
-	if (getenv("G4HEPREPFILE_DIR") == NULL)
-		strcpy(fileDir, "");
-	else
-		length = sprintf (fileDir, "%s%s", getenv("G4HEPREPFILE_DIR"),"/");
-	
-	if (getenv("G4HEPREPFILE_NAME") == NULL)
-		strcpy(fileName, "G4Data");
-	else
-		strcpy(fileName, getenv("G4HEPREPFILE_NAME"));
-	
-	if (getenv("G4HEPREPFILE_OVERWRITE") == NULL)
-		fileOverwrite = false;
-	else
-		fileOverwrite = strcmp(getenv("G4HEPREPFILE_OVERWRITE"),"0");
-	
-	if (getenv("G4HEPREPFILE_CULL") == NULL)
-		cullInvisibleObjects = false;
-	else
-		cullInvisibleObjects = strcmp(getenv("G4HEPREPFILE_CULL"),"0");
 	
 	inPrimitives2D = false;
 	warnedAbout3DText = false;
@@ -179,7 +160,9 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 	haveVisible = false;
 	AddHepRepInstance("Prism", NULL);
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	hepRepXMLWriter->addPrimitive();
@@ -242,7 +225,9 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
-		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+		
+		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
 		G4Point3D vertex1(G4Point3D( 0., 0., -cons.GetZHalfLength()));
@@ -277,10 +262,23 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	PrintThings();
 #endif
 	
+	// HepRApp does not correctly represent the end faces of cylinders at
+	// non-standard angles, let the base class convert these solids to polygons.	
+	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4bool linedUpWithAnAxis = (fabs(r.phiX())<=.001 ||  
+								fabs(r.phiY())<=.001 || 
+								fabs(r.phiZ())<=.001 ||
+								fabs(r.phiX()-pi)<=.001 ||
+								fabs(r.phiY()-pi)<=.001 ||
+								fabs(r.phiZ()-pi)<=.001);	
+	//G4cout << "Angle X:" << r.phiX() << ", Angle Y:" << r.phiY() << ", Angle Z:" << r.phiZ() << G4endl;
+	//G4cout << "linedUpWithAnAxis:" << linedUpWithAnAxis << G4endl;
+	
 	// HepRep does not have a primitive for a cut cylinder,
 	// so if this cylinder is cut, let the base class convert this
 	// solid to polygons.
-	if (tubs.GetDeltaPhiAngle() < twopi) {
+	if (tubs.GetDeltaPhiAngle() < twopi || !linedUpWithAnAxis)
+	{
 		G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
 	} else {
 	
@@ -293,7 +291,9 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
-		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+		
+		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
 		G4Point3D vertex1(G4Point3D( 0., 0., -tubs.GetZHalfLength()));
@@ -339,7 +339,9 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 	haveVisible = false;
 	AddHepRepInstance("Prism", NULL);
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	hepRepXMLWriter->addPrimitive();
@@ -1003,7 +1005,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 	PrintThings();
 #endif
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	if (inPrimitives2D) {
@@ -1041,7 +1045,9 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	PrintThings();
 #endif
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	if (inPrimitives2D) {
@@ -1143,7 +1149,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 	PrintThings();
 #endif
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	if (inPrimitives2D) {
@@ -1187,7 +1195,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 	PrintThings();
 #endif
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	if (inPrimitives2D) {
@@ -1230,7 +1240,9 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 	PrintThings();
 #endif
 	
-	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+	
+	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
 	if(polyhedron.GetNoFacets()==0)return;
@@ -1429,7 +1441,9 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 		hepRepXMLWriter->addType(pCurrentPV->GetName(),currentDepth+1);
 		hepRepXMLWriter->addInstance();
 		
-		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && cullInvisibleObjects)
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+		
+		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
 		// Additional attributes.
@@ -1511,18 +1525,22 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
 #endif
 	
 	if (!hepRepXMLWriter->isOpen) {
-		char* newFileSpec;
-		newFileSpec = new char [256];
-		int length;
+		G4String newFileSpec;
+
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 		
-		if (fileOverwrite)
-			length = sprintf (newFileSpec, "%s%s%s",fileDir,fileName,".heprep");
-		else
-			length = sprintf (newFileSpec, "%s%s%d%s",fileDir,fileName,fileCounter,".heprep");
+		if (messenger->getOverwrite()) {
+			newFileSpec = messenger->getFileDir()+messenger->getFileName()+".heprep";
+		} else {
+			newFileSpec = messenger->getFileDir()+messenger->getFileName()+G4UIcommand::ConvertToString(fileCounter)+".heprep";
+		}
+		
 		G4cout << "HepRepFile writing to " << newFileSpec << G4endl;
 		
 		hepRepXMLWriter->open(newFileSpec);
-		fileCounter++;
+		
+		if (!messenger->getOverwrite())
+			fileCounter++;
 		
 		hepRepXMLWriter->addAttDef("Generator", "HepRep Data Generator", "Physics","");
 		G4String versionString = G4Version;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRep.cc,v 1.22 2006-06-29 21:17:20 gunter Exp $
+// $Id: G4HepRep.cc,v 1.23 2009-11-23 05:42:28 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,11 +53,10 @@ G4HepRep::G4HepRep ()
                              G4VGraphicsSystem::threeD),
           sceneHandler(NULL),
           viewer(NULL) {
-    messenger = new G4HepRepMessenger();
+		G4HepRepMessenger::GetInstance();
 }
 
 G4HepRep::~G4HepRep () {
-    delete messenger;
 }
 
 G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
@@ -65,7 +64,7 @@ G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
         cout << "G4HepRep::CreateSceneHandler: Cannot create more than one G4HepRepSceneHandler" << endl;
         return NULL;
     }
-    sceneHandler = new G4HepRepSceneHandler (*this, *messenger, name);
+    sceneHandler = new G4HepRepSceneHandler (*this, name);
     return sceneHandler;
 }
 
@@ -74,7 +73,7 @@ G4VViewer* G4HepRep::CreateViewer (G4VSceneHandler& scene, const G4String& name)
         cout << "G4HepRep::CreateViewer: Cannot create more than one G4HepRepViewer" << endl;
         return NULL;
     }
-    viewer  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, *messenger, name);
+    viewer  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, name);
     return viewer;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRep.hh,v 1.17 2006-06-29 21:17:04 gunter Exp $
+// $Id: G4HepRep.hh,v 1.18 2009-11-23 05:42:28 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,8 +35,6 @@
 
 //G4
 #include "G4VGraphicsSystem.hh"
-
-class G4HepRepMessenger;
 
 class G4HepRep: public G4VGraphicsSystem {
     public:
@@ -51,7 +49,6 @@ class G4HepRep: public G4VGraphicsSystem {
     private:
         G4VSceneHandler* sceneHandler;
         G4VViewer* viewer;
-        G4HepRepMessenger* messenger;        
 };
 
 #endif

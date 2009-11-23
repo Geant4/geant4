@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.43 2009-10-21 15:08:35 allison Exp $
+// $Id: G4HepRepSceneHandler.hh,v 1.44 2009-11-23 05:42:28 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,12 +62,10 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
-#include "G4HepRepMessenger.hh"
-
 class G4HepRepSceneHandler: public G4VSceneHandler {
 
     public:
-        G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& messenger, const G4String& name = "");
+        G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
         virtual ~G4HepRepSceneHandler ();
 
         void AddSolid (const G4Box& box);
@@ -186,7 +184,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4String getParentTypeName(int currentDepth);
 
         // initialized Member Variables
-        G4HepRepMessenger& messenger;
         G4String geometryLayer, eventLayer, calHitLayer;
         G4String trajectoryLayer, hitLayer;
         G4String rootVolumeName;
