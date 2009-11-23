@@ -1,4 +1,4 @@
-$Id: History,v 1.459 2009-11-22 14:05:11 allison Exp $
+$Id: History,v 1.460 2009-11-23 05:56:37 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd November 2009  Joseph Perl (vis-V09-02-12)
+- vis-HepRep-V09-02-03
+  o Changed messenger to a singleton.
+  o Added messenger commands to HepRepFile.
+  o Render G4Tubs as polygons if G4Tubs is not at a standard angle.
 
 22nd November 2009  John Allison
 - visman-V09-02-08: /vis/scene/add/trajectories rich:
