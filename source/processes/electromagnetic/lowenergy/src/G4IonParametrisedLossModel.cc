@@ -55,6 +55,8 @@
 //                               of heavy ions from ICRU 73 data 
 //                             - Minor fix in ComputeLossForStep function  
 //                             - Minor fix in ComputeDEDXPerVolume (AL)
+//                23. 11. 2009 - Changed energy loss limit from 0.15 to 0.01
+//                               to improve accuracy for large steps (AL)
 //
 //
 // Class description:
@@ -101,7 +103,7 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
     modelIsInitialised(false),
     corrections(0),
     corrFactor(1.0),
-    energyLossLimit(0.15),
+    energyLossLimit(0.01),
     cutEnergies(0) {
 
   genericIon = G4GenericIon::Definition();
