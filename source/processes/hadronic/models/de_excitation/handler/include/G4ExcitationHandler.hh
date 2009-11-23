@@ -23,17 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ExcitationHandler.hh,v 1.8 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4ExcitationHandler.hh,v 1.9 2009-11-23 18:48:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+// Modified:
 //
-// Modif (30 June 1998) by V. Lara:
+// (30 June 1998) by V. Lara:
 //      -Using G4ParticleTable and therefore G4IonTable
 //       it can return all kind of fragments produced in 
 //       deexcitation
@@ -42,10 +40,13 @@
 //              MultiFragmentation: G4DummyMF (a dummy one)
 //              Fermi Breakup model: G4StatFermiBreakUp
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
-// JMQ (06 September 2008) Also external choices have been added for 
-// superimposed Coulomb barrier (if useSICBis set true, by default is false) 
+// (03 September 2008) by J. M. Quesada for external choice of inverse 
+//       cross section option
+// (06 September 2008) by J. M. Quesada addedexternal choices for 
+//       superimposed Coulomb barrier (if useSICBis set true, by default is false) 
+// (23 November 2009) By V.Ivanchenko general cleanup of work with intermediate
+//       fragments
+//
 
 #ifndef G4ExcitationHandler_h
 #define G4ExcitationHandler_h 1
@@ -60,6 +61,7 @@
 #include "G4ReactionProduct.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+
 // needed for default models
 #include "G4Evaporation.hh"
 #include "G4StatMF.hh"
@@ -67,22 +69,23 @@
 #include "G4PhotonEvaporation.hh"
 #include "G4IonConstructor.hh" 
 
-//#define debug
-
 class G4ExcitationHandler 
 {
 public:
+
   G4ExcitationHandler(); 
   ~G4ExcitationHandler();
+
 private:
+
   G4ExcitationHandler(const G4ExcitationHandler &right);
 
   const G4ExcitationHandler & operator=(const G4ExcitationHandler &right);
   G4bool operator==(const G4ExcitationHandler &right) const;
   G4bool operator!=(const G4ExcitationHandler &right) const;
   
-
 public:
+
   G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState) const;
 
   void SetEvaporation(G4VEvaporation *const  value);
@@ -98,14 +101,10 @@ public:
   void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
   void SetMinEForMultiFrag(G4double anE);
 
-// for inverse cross section choice
+  // for inverse cross section choice
   inline void SetOPTxs(G4int opt) { OPTxs = opt;}
-// for superimposed Coulomb Barrir for inverse cross sections
+  // for superimposed Coulomb Barrir for inverse cross sections
   inline void UseSICB(){useSICB=true;}
-
-private:
-
-  G4ReactionProductVector * Transform(G4FragmentVector * theFragmentVector) const;
 
   const G4VEvaporation * GetEvaporation() const;
 
@@ -123,6 +122,7 @@ private:
   void CheckConservation(const G4Fragment & aFragment,
 			 G4FragmentVector * Result) const;
 #endif
+
 private:
   
   G4VEvaporation *theEvaporation;
@@ -146,16 +146,6 @@ private:
 
   G4int OPTxs;
   G4bool useSICB;
-
-  struct DeleteFragment 
-  {
-    template<typename T>
-    void operator()(const T* ptr) const
-    {
-      delete ptr;
-    }
-  };
-
 
 };
 

@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-19)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed double deletion; cleanup logic of
+                        new/delete of intermediate G4Fragments
+                        reducing number of coping
+
 22 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-18)
 ----------------------------------------------------------
 - G4FissionLevelDensityParameter tuning using IAEA benchmark
