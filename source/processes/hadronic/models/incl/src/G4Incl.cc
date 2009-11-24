@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.22 2009-11-18 10:43:14 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.23 2009-11-24 15:31:28 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -48,8 +48,8 @@ G4Incl::G4Incl()
   derivGausFunction = 4;
   densFunction = 5;
 
-  //  randomGenerator = new G4InclGeant4Random();
-  randomGenerator = new G4Ranecu();
+  randomGenerator = new G4InclGeant4Random();
+  //randomGenerator = new G4Ranecu();
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
@@ -93,8 +93,8 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G
   mat = aMat;
   varntp = aVarntp;
 
-  //  randomGenerator = new G4InclGeant4Random();
-  randomGenerator = new G4Ranecu();
+  randomGenerator = new G4InclGeant4Random();
+  // randomGenerator = new G4Ranecu();
   light_gaus_nuc = new G4LightGausNuc();
   light_nuc = new G4LightNuc();
   spl2 = new G4Spl2();
