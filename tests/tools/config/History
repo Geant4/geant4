@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2009-11-20 13:51:48 bmorgan Exp $
+$Id: History,v 1.31 2009-11-24 13:09:45 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24th November 2009 Ben Morgan
+- Configure: regenerated following changes below.
+- U/Qt.U: removed -s flag from sed commands to fix Mac OSX problem reported
+by Laurent Garnier.
+
 20th November 2009 Ben Morgan
+- Configure: Regenerated following second set of changes.
+- config/scripts/*.SH: Removed G4ANALYSIS_USE from all environments.
+- U/g4_03_dirs_data.U: Simplified introduction text.
+- U/g4_08_ui.U: Added new streamlined questioning and moved variables to INIT
+- U/g4_08_ui_qt.U: Added new streamlined questioning.
+- U/g4_09_vis.U: Added new streamlined questioning and moved variables to INIT.
+- U/g4_09_vis_qt.U: Added new streamlined questioning.
+- U/g4_15_zlib.U: Added new streamlined questioning.
+- U/g4_13_g3tog4.U: Added new streamlined questioning.
+- U/g4_11_analysis.U: No checks performed as analysis does not influence build.
+- U/g4_10_gdml.U: Added new streamlined questioning.
 - Configure: Regenerated following changes below.
 - U/g4_12_gmake.U: Added sectional text heading and moved check earlier in
 Configure.
