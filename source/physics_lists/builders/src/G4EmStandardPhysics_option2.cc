@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.19 2009-10-30 18:36:15 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.20 2009-11-24 12:53:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -198,7 +198,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
       //ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 20*um);
+      //ionIoni->SetStepFunction(0.1, 20*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
     } else if (particleName == "alpha" ||

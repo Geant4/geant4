@@ -1,4 +1,4 @@
-q$Id: History,v 1.112 2009-11-20 16:49:03 mkossov Exp $
+q$Id: History,v 1.113 2009-11-24 12:53:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-11-2009, V.Ivanchenko                  (phys-lists-V09-02-40)
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
+  G4EmLivermorePolarizedPhysics - set finalRange=10um for ions
+- G4EmStandardPhysics_option2 - use default StepFunction for ions
 
 20-11-2009, M.Kosov                       (phys-lists-V09-02-39)
 - Something was wrong in CHIPS lis, but now it is working

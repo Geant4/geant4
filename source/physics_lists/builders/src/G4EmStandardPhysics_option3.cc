@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.17 2009-11-10 20:08:15 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.18 2009-11-24 12:53:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -208,7 +208,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 20*um);
+      ionIoni->SetStepFunction(0.1, 10*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
 

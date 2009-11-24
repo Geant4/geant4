@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.5 2009-11-10 20:08:15 vnivanch Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.6 2009-11-24 12:53:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -268,7 +268,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
-      ionIoni->SetStepFunction(0.1, 20*um); 
+      ionIoni->SetStepFunction(0.1, 10*um); 
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);
 
