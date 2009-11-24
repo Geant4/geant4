@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.cc,v 1.4 2009-11-12 09:09:56 allison Exp $
+// $Id: G4RichTrajectoryPoint.cc,v 1.5 2009-11-24 10:04:14 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,8 @@
 #include "G4AttCheck.hh"
 #endif
 
+#include <sstream>
+
 G4Allocator<G4RichTrajectoryPoint> aRichTrajectoryPointAllocator;
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
@@ -78,7 +80,9 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack):
   fRemainingEnergy(aTrack->GetKineticEnergy()),
   fpProcess(0),
   fPreStepPointGlobalTime(aTrack->GetGlobalTime()),
-  fPostStepPointGlobalTime(aTrack->GetGlobalTime())
+  fPostStepPointGlobalTime(aTrack->GetGlobalTime()),
+  fpPreStepPointVolume(aTrack->GetTouchableHandle()),
+  fpPostStepPointVolume(aTrack->GetNextTouchableHandle())
 {}
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
@@ -96,6 +100,8 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
   fpProcess = postStepPoint->GetProcessDefinedStep();
   fPreStepPointGlobalTime = preStepPoint->GetGlobalTime();
   fPostStepPointGlobalTime = postStepPoint->GetGlobalTime();
+  fpPreStepPointVolume = preStepPoint->GetTouchableHandle();
+  fpPostStepPointVolume = postStepPoint->GetTouchableHandle();
 
   /*
   G4cout << "fpAuxiliaryPointVector "
@@ -182,8 +188,26 @@ G4RichTrajectoryPoint::GetAttDefs() const
     ID = "PostT";
     (*store)[ID] = G4AttDef(ID,"Post-step-point global time",
 			    "Physics","G4BestUnit","G4double");
+    ID = "PreVPath";
+    (*store)[ID] = G4AttDef(ID,"Pre-step Volume Path",
+                            "Physics","","G4String");
+    ID = "PostVPath";
+    (*store)[ID] = G4AttDef(ID,"Post-step Volume Path",
+                            "Physics","","G4String");
   }
   return store;
+}
+
+static G4String Path(const G4TouchableHandle& th)
+{
+  std::ostringstream oss;
+  G4int depth = th->GetHistoryDepth();
+  for (G4int i = depth; i >= 0; --i) {
+    oss << th->GetVolume(i)->GetName()
+	<< ':' << th->GetCopyNumber(i);
+    if (i != 0) oss << '/';
+  }
+  return oss.str();
 }
 
 std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
@@ -221,6 +245,18 @@ std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
 
   values->push_back
     (G4AttValue("PostT",G4BestUnit(fPostStepPointGlobalTime,"Time"),""));
+
+  if (fpPreStepPointVolume && fpPreStepPointVolume->GetVolume()) {
+    values->push_back(G4AttValue("PreVPath",Path(fpPreStepPointVolume),""));
+  } else {
+    values->push_back(G4AttValue("PreVPath","None",""));
+  }
+
+  if (fpPostStepPointVolume && fpPostStepPointVolume->GetVolume()) {
+    values->push_back(G4AttValue("PostVPath",Path(fpPostStepPointVolume),""));
+  } else {
+    values->push_back(G4AttValue("PostVPath","None",""));
+  }
 
 #ifdef G4ATTDEBUG
   G4cout << G4AttCheck(values,GetAttDefs());

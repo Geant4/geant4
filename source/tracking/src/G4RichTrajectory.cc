@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc,v 1.7 2009-11-12 09:09:56 allison Exp $
+// $Id: G4RichTrajectory.cc,v 1.8 2009-11-24 10:04:14 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -56,13 +56,14 @@
 #include "G4AttCheck.hh"
 #endif
 
+#include <sstream>
+
 G4Allocator<G4RichTrajectory> aRichTrajectoryAllocator;
 
 G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),
-  fpInitialVolume(0),
-  fpInitialNextVolume(0),
   fpCreatorProcess(0),
+  fpEndingProcess(0),
   fFinalKineticEnergy(0.)
 {}
 
@@ -76,15 +77,18 @@ G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
 			// G4RichTrajectoryPoint in the
 			// RichTrajectoryPointsContainer
 {
-  fpInitialVolume = aTrack->GetVolume();
-  fpInitialNextVolume = aTrack->GetNextVolume();
+  fpInitialVolume = aTrack->GetTouchableHandle();
+  fpInitialNextVolume = aTrack->GetNextTouchableHandle();
   fpCreatorProcess = aTrack->GetCreatorProcess();
-  fpRichPointsContainer = new RichTrajectoryPointsContainer;
-  // Insert the first rich trajectory point (see note above)...
-  fpRichPointsContainer->push_back(new G4RichTrajectoryPoint(aTrack));
-  // On construction, set final KE to initial KE.
-  // Final KE is updated at the addition of every step - see AppendStep.
+  // On construction, set final values to initial values.
+  // Final values are updated at the addition of every step - see AppendStep.
+  fpFinalVolume = aTrack->GetTouchableHandle();
+  fpFinalNextVolume = aTrack->GetNextTouchableHandle();
+  fpEndingProcess = aTrack->GetCreatorProcess();
   fFinalKineticEnergy = aTrack->GetKineticEnergy();
+  // Insert the first rich trajectory point (see note above)...
+  fpRichPointsContainer = new RichTrajectoryPointsContainer;
+  fpRichPointsContainer->push_back(new G4RichTrajectoryPoint(aTrack));
 }
 
 G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
@@ -93,8 +97,11 @@ G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
   fpInitialVolume = right.fpInitialVolume;
   fpInitialNextVolume = right.fpInitialNextVolume;
   fpCreatorProcess = right.fpCreatorProcess;
-  fpRichPointsContainer = new RichTrajectoryPointsContainer;
+  fpFinalVolume = right.fpFinalVolume;
+  fpFinalNextVolume = right.fpFinalNextVolume;
+  fpEndingProcess = right.fpEndingProcess;
   fFinalKineticEnergy = right.fFinalKineticEnergy;
+  fpRichPointsContainer = new RichTrajectoryPointsContainer;
   for(size_t i=0;i<right.fpRichPointsContainer->size();i++)
   {
     G4RichTrajectoryPoint* rightPoint =
@@ -120,8 +127,13 @@ void G4RichTrajectory::AppendStep(const G4Step* aStep)
 {
   fpRichPointsContainer->push_back(new G4RichTrajectoryPoint(aStep));
   // Except for first step, which is a sort of virtual step to start
-  // the track, compute the final energy.
-  if (aStep->GetTrack()->GetCurrentStepNumber() > 0) {
+  // the track, compute the final values...
+  const G4Track* track = aStep->GetTrack();
+  const G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
+  if (track->GetCurrentStepNumber() > 0) {
+    fpFinalVolume = track->GetTouchableHandle();
+    fpFinalNextVolume = track->GetNextTouchableHandle();
+    fpEndingProcess = postStepPoint->GetProcessDefinedStep();
     fFinalKineticEnergy =
       aStep->GetPreStepPoint()->GetKineticEnergy() -
       aStep->GetTotalEnergyDeposit();
@@ -157,12 +169,12 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
 
     G4String ID;
 
-    ID = "IVN";
-    (*store)[ID] = G4AttDef(ID,"Initial Volume Name",
+    ID = "IVPath";
+    (*store)[ID] = G4AttDef(ID,"Initial Volume Path",
 			    "Physics","","G4String");
 
-    ID = "INVN";
-    (*store)[ID] = G4AttDef(ID,"Initial Next Volume Name",
+    ID = "INVPath";
+    (*store)[ID] = G4AttDef(ID,"Initial Next Volume Path",
 			    "Physics","","G4String");
 
     ID = "CPN";
@@ -171,6 +183,22 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
 
     ID = "CPTN";
     (*store)[ID] = G4AttDef(ID,"Creator Process Type Name",
+			    "Physics","","G4String");
+
+    ID = "FVPath";
+    (*store)[ID] = G4AttDef(ID,"Final Volume Path",
+			    "Physics","","G4String");
+
+    ID = "FNVPath";
+    (*store)[ID] = G4AttDef(ID,"Final Next Volume Path",
+			    "Physics","","G4String");
+
+    ID = "EPN";
+    (*store)[ID] = G4AttDef(ID,"Ending Process Name",
+			    "Physics","","G4String");
+
+    ID = "EPTN";
+    (*store)[ID] = G4AttDef(ID,"Ending Process Type Name",
 			    "Physics","","G4String");
 
     ID = "FKE";
@@ -182,14 +210,34 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
   return store;
 }
 
+static G4String Path(const G4TouchableHandle& th)
+{
+  std::ostringstream oss;
+  G4int depth = th->GetHistoryDepth();
+  for (G4int i = depth; i >= 0; --i) {
+    oss << th->GetVolume(i)->GetName()
+	<< ':' << th->GetCopyNumber(i);
+    if (i != 0) oss << '/';
+  }
+  return oss.str();
+}
+
 std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
 {
   // Create base class att values...
   std::vector<G4AttValue>* values = G4Trajectory::CreateAttValues();
 
-  values->push_back(G4AttValue("IVN",fpInitialVolume->GetName(),""));
+  if (fpInitialVolume && fpInitialVolume->GetVolume()) {
+    values->push_back(G4AttValue("IVPath",Path(fpInitialVolume),""));
+  } else {
+    values->push_back(G4AttValue("IVPath","None",""));
+  }
 
-  values->push_back(G4AttValue("INVN",fpInitialNextVolume->GetName(),""));
+  if (fpInitialNextVolume && fpInitialNextVolume->GetVolume()) {
+    values->push_back(G4AttValue("INVPath",Path(fpInitialNextVolume),""));
+  } else {
+    values->push_back(G4AttValue("INVPath","None",""));
+  }
 
   if (fpCreatorProcess) {
     values->push_back(G4AttValue("CPN",fpCreatorProcess->GetProcessName(),""));
@@ -198,6 +246,27 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
   } else {
     values->push_back(G4AttValue("CPN","User Defined",""));
     values->push_back(G4AttValue("CPTN","User",""));
+  }
+
+  if (fpFinalVolume && fpFinalVolume->GetVolume()) {
+    values->push_back(G4AttValue("FVPath",Path(fpFinalVolume),""));
+  } else {
+    values->push_back(G4AttValue("FVPath","None",""));
+  }
+
+  if (fpFinalNextVolume && fpFinalNextVolume->GetVolume()) {
+    values->push_back(G4AttValue("FNVPath",Path(fpFinalNextVolume),""));
+  } else {
+    values->push_back(G4AttValue("FNVPath","None",""));
+  }
+
+  if (fpEndingProcess) {
+    values->push_back(G4AttValue("EPN",fpEndingProcess->GetProcessName(),""));
+    G4ProcessType type = fpEndingProcess->GetProcessType();
+    values->push_back(G4AttValue("EPTN",G4VProcess::GetProcessTypeName(type),""));
+  } else {
+    values->push_back(G4AttValue("EPN","User Defined",""));
+    values->push_back(G4AttValue("EPTN","User",""));
   }
 
   values->push_back

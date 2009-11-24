@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh,v 1.6 2009-11-12 09:09:56 allison Exp $
+// $Id: G4RichTrajectoryPoint.hh,v 1.7 2009-11-24 10:04:14 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -39,8 +39,10 @@
 //   includes:
 //     2) Auxiliary points, as in G4SmoothTrajectory.
 //     3) Total energy deposit.
-//     4) Procees defining end of step.
-//     5) Global time (from start of event) at pre- amd post-step.
+//     4) Remaining energy.
+//     5) Process defining end of step.
+//     6) Global time (from start of event) at pre- amd post-step.
+//   ...and more.
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -58,6 +60,7 @@
 
 #include "G4TrajectoryPoint.hh"
 
+#include "G4TouchableHandle.hh"
 #include "G4ThreeVector.hh"
 #include <vector>
 
@@ -100,6 +103,8 @@ private:
   const G4VProcess* fpProcess;
   G4double fPreStepPointGlobalTime;
   G4double fPostStepPointGlobalTime;
+  G4TouchableHandle fpPreStepPointVolume;
+  G4TouchableHandle fpPostStepPointVolume;
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
