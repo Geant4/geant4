@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2009-11-20 00:59:40 gum Exp $
+$Id: History,v 1.165 2009-11-24 17:19:10 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-11-09 V.Ivanchenko (materials-V09-02-21)
+- G4NistMaterialBuilder - allow to use old names of G4 materials
+  G4_NYLON-6/6 and G4_NYLON-6/10 for backward compatibility
 
 19-11-09 P.Gumplinger (materials-V09-02-20)
 - change the code such that the LUT are now read in and kept by

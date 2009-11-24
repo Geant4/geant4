@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.22 2009-11-03 17:02:03 alechner Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.23 2009-11-24 17:19:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,7 +82,7 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
+G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
                                                        G4bool isotopes,
 						       G4bool warning)
 {
@@ -93,9 +93,13 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
     first = false;
   }
 
-  if (verbose > 1)
-    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
+  G4String name = matname;
+  if("G4_NYLON-6/6" == matname)  name = "G4_NYLON-6-6";
+  if("G4_NYLON-6/10" == matname) name = "G4_NYLON-6-10";
 
+  if (verbose > 1) {
+    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
+  }
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int nmat = theMaterialTable->size();
 
