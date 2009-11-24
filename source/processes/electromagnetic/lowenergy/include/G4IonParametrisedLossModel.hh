@@ -44,6 +44,13 @@
 //                12. 11. 2009 - Added function for switching off scaling 
 //                               of heavy ions from ICRU 73 data
 //                20. 11. 2009 - Added set-method for energy loss limit (AL)
+//                24. 11. 2009 - Bug fix: Range calculation corrected if same 
+//                               materials appears with different cuts in diff.
+//                               regions (added UpdateRangeCache function and
+//                               modified BuildRangeVector, ComputeLossForStep
+//                               functions accordingly, added new cache param.,
+//                               changed typdef of IonMatCouple).
+//                             - Removed GetRange function (AL)  
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -74,9 +81,11 @@ class G4ParticleChangeForLoss;
 class G4VIonDEDXTable;
 class G4VIonDEDXScalingAlgorithm;
 class G4LPhysicsFreeVector;
+class G4MaterialCutsCouple;
 
 typedef std::list<G4IonDEDXHandler*> LossTableList;
-typedef std::pair<const G4ParticleDefinition*, const G4Material*> IonMatCouple;
+typedef std::pair<const G4ParticleDefinition*, 
+                  const G4MaterialCutsCouple*> IonMatCouple;
 
 
 class G4IonParametrisedLossModel : public G4VEmModel {
@@ -120,10 +129,9 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // stopping) for a given pre-step energy and step length by using
    // range vs energy (and energy vs range) tables  
    G4double ComputeLossForStep(
-                                 const G4Material*, // Target material
+                                 const G4MaterialCutsCouple*, // Mat-cuts couple
 				 const G4ParticleDefinition*, // Projectile
 				 G4double,  // Kinetic energy of projectile
-                                 G4double,  // Energy cut for secondary prod.
 				 G4double); // Length of current step
 
    // Function, which computes the mean energy transfer rate to delta rays 
@@ -156,10 +164,6 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 				 G4double&, // Energy loss in current step
 				 G4double&, 
 				 G4double); // Length of current step
-
-   G4double GetRange(const G4ParticleDefinition*, // Projectile
-		     const G4Material*,           // Target Material
-	             G4double);                   // Kinetic energy
 
    // Function which allows to add additional stopping power tables
    // in combination with a scaling algorithm, which may depend on dynamic
@@ -218,6 +222,13 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                   const G4Material*,             // Target material
                   G4double cutEnergy);           // Energy cut
 
+   // Function which updates parameters concerning the range calculation
+   // (the parameters are only updated if the particle, the material or 
+   // the associated energy cut has changed)
+   void UpdateRangeCache(
+                  const G4ParticleDefinition*,   // Projectile (ion) 
+                  const G4MaterialCutsCouple*);  // Target material
+
    // Function, which updates parameters concering particle properties
    void UpdateCache(
                   const G4ParticleDefinition*);  // Projectile (ion) 
@@ -226,8 +237,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // for a given particle, material and energy cut   
    void BuildRangeVector(
                   const G4ParticleDefinition*,   // Projectile (ion) 
-                  const G4Material*,             // Target material
-                  G4double);                     // Energy cut
+                  const G4MaterialCutsCouple*);  // Material cuts couple
 
    // Assignment operator and copy constructor are hidden:
    G4IonParametrisedLossModel & operator=(
@@ -328,13 +338,17 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    G4double cacheElecMassRatio;               // Electron-mass ratio
    G4double cacheChargeSquare;                // Charge squared
 
+   // Cached parameters needed during range computations:
+   const G4ParticleDefinition* rangeCacheParticle; // Key: 1) Current ion,
+   const G4MaterialCutsCouple* rangeCacheMatCutsCouple; // 2) Mat-cuts-couple
+   G4PhysicsVector* rangeCacheEnergyRange;         // Energy vs range vector
+   G4PhysicsVector* rangeCacheRangeEnergy;         // Range vs energy vector
+
    // Cached parameters needed during dE/dx computations:
    const G4ParticleDefinition* dedxCacheParticle; // Key: 1) Current ion,
    const G4Material* dedxCacheMaterial;           //      2) material and
    G4double dedxCacheEnergyCut;                   //      3) cut energy 
    LossTableList::iterator dedxCacheIter;         // Responsible dE/dx table
-   G4PhysicsVector* dedxCacheEnergyRange;         // Energy vs range vector
-   G4PhysicsVector* dedxCacheRangeEnergy;         // Range vs energy vector
    G4double dedxCacheTransitionEnergy;      // Transition energy between
                                             // parameterization and 
                                             // Bethe-Bloch model

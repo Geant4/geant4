@@ -1,4 +1,4 @@
-$Id: History,v 1.404 2009-11-23 15:18:23 alechner Exp $
+$Id: History,v 1.405 2009-11-24 19:12:11 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24.11.2009, A. Lechner tag emlowen-V09-02-67
+            -G4IonParametrisedLossModel: Important bug fix to calculate ion
+             ranges correctly if the same materials appears multiple times
+             in tracking geometry with different production cuts (for example
+             in different regions). (added UpdateRangeCache function,
+             modified BuildRangeVector, ComputeLossForStep functions and
+             removed GetRange function).
 
 23.11.2009, A. Lechner tag emlowen-V09-02-66
             -G4IonParametrisedLossModel: Changed energy loss limit to smaller

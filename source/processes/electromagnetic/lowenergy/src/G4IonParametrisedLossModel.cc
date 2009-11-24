@@ -57,6 +57,12 @@
 //                             - Minor fix in ComputeDEDXPerVolume (AL)
 //                23. 11. 2009 - Changed energy loss limit from 0.15 to 0.01
 //                               to improve accuracy for large steps (AL)
+//                24. 11. 2009 - Bug fix: Range calculation corrected if same 
+//                               materials appears with different cuts in diff.
+//                               regions (added UpdateRangeCache function and
+//                               modified BuildRangeVector, ComputeLossForStep
+//                               functions accordingly, added new cache param.)
+//                             - Removed GetRange function (AL)  
 //
 //
 // Class description:
@@ -125,13 +131,19 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
   lowerEnergyEdgeIntegr = 0.025 * MeV;
   upperEnergyEdgeIntegr = betheBlochModel -> HighEnergyLimit();
 
-  // Cached parameters are reset
+  // Cache parameters are set
   cacheParticle = 0;
   cacheMass = 0;
   cacheElecMassRatio = 0;
   cacheChargeSquare = 0;
 
-  // Cached parameters are reset
+  // Cache parameters are set
+  rangeCacheParticle = 0; 
+  rangeCacheMatCutsCouple = 0; 
+  rangeCacheEnergyRange = 0; 
+  rangeCacheRangeEnergy = 0;
+
+  // Cache parameters are set
   dedxCacheParticle = 0;
   dedxCacheMaterial = 0;
   dedxCacheEnergyCut = 0;
@@ -193,6 +205,12 @@ void G4IonParametrisedLossModel::Initialise(
   cacheElecMassRatio = 0;
   cacheChargeSquare = 0;
   
+  // Cached parameters are reset
+  rangeCacheParticle = 0; 
+  rangeCacheMatCutsCouple = 0; 
+  rangeCacheEnergyRange = 0; 
+  rangeCacheRangeEnergy = 0;
+
   // Cached parameters are reset
   dedxCacheParticle = 0;
   dedxCacheMaterial = 0;
@@ -724,6 +742,45 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 
 // #########################################################################
 
+void G4IonParametrisedLossModel::UpdateRangeCache(
+                     const G4ParticleDefinition* particle,
+                     const G4MaterialCutsCouple* matCutsCouple) {
+
+  // ############## Caching ##################################################
+  // If the ion-material-cut combination is covered by any native ion data
+  // parameterisation (for low energies), range vectors are computed 
+
+  if(particle == rangeCacheParticle && 
+     matCutsCouple == rangeCacheMatCutsCouple) {
+  }
+  else{
+     rangeCacheParticle = particle;
+     rangeCacheMatCutsCouple = matCutsCouple;
+
+     const G4Material* material = matCutsCouple -> GetMaterial();
+     LossTableList::iterator iter = IsApplicable(particle, material);
+
+     // If any table is applicable, the transition factor is computed:
+     if(iter != lossTableList.end()) {
+
+        // Build range-energy and energy-range vectors if they don't exist
+        IonMatCouple ionMatCouple = std::make_pair(particle, matCutsCouple);
+        RangeEnergyTable::iterator iterRange = r.find(ionMatCouple);
+
+        if(iterRange == r.end()) BuildRangeVector(particle, matCutsCouple);
+
+        rangeCacheEnergyRange = E[ionMatCouple];    
+        rangeCacheRangeEnergy = r[ionMatCouple];
+     }
+     else {
+        rangeCacheEnergyRange = 0;    
+        rangeCacheRangeEnergy = 0;
+     }
+  }
+}
+
+// #########################################################################
+
 void G4IonParametrisedLossModel::UpdateDEDXCache(
                      const G4ParticleDefinition* particle,
                      const G4Material* material,
@@ -794,16 +851,6 @@ void G4IonParametrisedLossModel::UpdateDEDXCache(
         dedxCacheTransitionFactor = 
                   	 (dEdxParam - dEdxBetheBloch)/dEdxBetheBloch
                              * transitionEnergy; 
-
-        // Build range-energy and energy-range vectors if they don't exist
-        IonMatCouple ionMatCouple = std::make_pair(particle, material);
-        RangeEnergyTable::iterator iterRange = r.find(ionMatCouple);
-
-        if(iterRange == r.end()) BuildRangeVector(particle, material, 
-                                                  cutEnergy);
-
-        dedxCacheEnergyRange = E[ionMatCouple];    
-        dedxCacheRangeEnergy = r[ionMatCouple];
      }
      else {
  
@@ -816,8 +863,6 @@ void G4IonParametrisedLossModel::UpdateDEDXCache(
 
         dedxCacheTransitionEnergy = 0.0;
         dedxCacheTransitionFactor = 0.0;
-        dedxCacheEnergyRange = 0;    
-        dedxCacheRangeEnergy = 0;
      }
   }
 }
@@ -900,8 +945,8 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
      // energy loss
      if(eloss > energyLossLimit * kineticEnergy) {
 
-        eloss = ComputeLossForStep(material, particle, 
-                                   kineticEnergy, cutEnergy,length);
+        eloss = ComputeLossForStep(couple, particle, 
+                                   kineticEnergy,length);
 
 #ifdef PRINT_DEBUG
   G4cout << "# Correction applied:"
@@ -973,8 +1018,13 @@ void G4IonParametrisedLossModel::CorrectionsAlongStep(
 
 void G4IonParametrisedLossModel::BuildRangeVector(
                      const G4ParticleDefinition* particle,
-                     const G4Material* material,
-                     G4double cutEnergy) {
+                     const G4MaterialCutsCouple* matCutsCouple) {
+
+  G4double cutEnergy = DBL_MAX;
+  size_t cutIndex = matCutsCouple -> GetIndex();
+  cutEnergy = cutEnergies[cutIndex];
+
+  const G4Material* material = matCutsCouple -> GetMaterial();
 
   G4double massRatio = genericIonPDGMass / particle -> GetPDGMass();
 
@@ -1078,7 +1128,7 @@ void G4IonParametrisedLossModel::BuildRangeVector(
          << *rangeEnergyVector << G4endl;     
 #endif 
 
-  IonMatCouple ionMatCouple = std::make_pair(particle, material); 
+  IonMatCouple ionMatCouple = std::make_pair(particle, matCutsCouple); 
 
   E[ionMatCouple] = energyRangeVector;
   r[ionMatCouple] = rangeEnergyVector;
@@ -1086,67 +1136,18 @@ void G4IonParametrisedLossModel::BuildRangeVector(
 
 // #########################################################################
 
-G4double G4IonParametrisedLossModel::GetRange(
-                  const G4ParticleDefinition* particle, // Projectile
-		  const G4Material* material,           // Target Material
-	          G4double kineticEnergy) {
-
-  G4double range = 0.0;
-
-  IonMatCouple couple = std::make_pair(particle, material);
-
-  EnergyRangeTable::iterator iter = E.find(couple);
-
-  if(iter == E.end()) {
-     G4cerr << "G4IonParametrisedLossModel::GetRange() No range vector found."
-            << G4endl;
-
-     G4cout << "   Ion-material pair: " << particle ->GetParticleName()
-            << "  " << material -> GetName()
-            << G4endl
-            << "   Available couples:"
-            << G4endl;
-
-     EnergyRangeTable::iterator iter_beg = E.begin();
-     EnergyRangeTable::iterator iter_end = E.end();
-
-     for(;iter_beg != iter_end; iter_beg++) {
-         IonMatCouple key = (*iter_beg).first; 
- 
-         G4cout << "           " << (key.first) -> GetParticleName()
-                << "  " << (key.second) -> GetName()
-                << G4endl;
-     }
-  }
-  else {
-     G4PhysicsVector* energyRange = (*iter).second;
-
-     if(energyRange != 0) {
-        G4bool b;
-
-        // Computing range for kinetic energy:
-        range = energyRange -> GetValue(kineticEnergy, b);
-     }
-  }
-
-  return range;
-}
-
-// #########################################################################
-
 G4double G4IonParametrisedLossModel::ComputeLossForStep(
-                     const G4Material* material,
+                     const G4MaterialCutsCouple* matCutsCouple,
                      const G4ParticleDefinition* particle,
                      G4double kineticEnergy,
-                     G4double cutEnergy,
                      G4double stepLength) {
 
   G4double loss = 0.0;
 
-  UpdateDEDXCache(particle, material, cutEnergy);
+  UpdateRangeCache(particle, matCutsCouple);
 
-  G4PhysicsVector* energyRange = dedxCacheEnergyRange;
-  G4PhysicsVector* rangeEnergy = dedxCacheRangeEnergy;
+  G4PhysicsVector* energyRange = rangeCacheEnergyRange;
+  G4PhysicsVector* rangeEnergy = rangeCacheRangeEnergy;
 
   if(energyRange != 0 && rangeEnergy != 0) {
      G4bool b;
