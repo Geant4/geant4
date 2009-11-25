@@ -25,6 +25,7 @@
 //
 // By JPW, working, but to be cleaned up. @@@
 // 22 Dec 2006 - DHW added isotope dependence
+// G.Folger, 25-Nov-2009: extend to 100TeV, using a constant above 20GeV
 //
 
 #include "G4NeutronInelasticCrossSection.hh"
@@ -63,6 +64,10 @@ GetCrossSection(const G4DynamicParticle* aPart,
 G4double G4NeutronInelasticCrossSection::
 GetCrossSection(G4double anEnergy, G4double atomicNumber, G4double nOfProtons)
 {
+  if (anEnergy > 19.9*GeV ) 
+  { // constant cross section above ~20GeV.
+    return  GetCrossSection(19.8*GeV,atomicNumber,nOfProtons);
+  } 
   G4double kineticEnergy = std::log10(DBL_MIN/MeV);
   if (anEnergy > DBL_MIN/MeV) kineticEnergy = std::log10(anEnergy/MeV);
   G4double nOfNeutrons = atomicNumber-nOfProtons;

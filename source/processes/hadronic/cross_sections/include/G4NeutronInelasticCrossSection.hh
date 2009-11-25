@@ -25,6 +25,7 @@
 //
 // by JPW, working, but to be cleaned up. @@@@
 // D. Wright, 23-Dec-2006 Added isotope dependence
+// G.Folger, 25-Nov-2009: extend to 100TeV, using a constant above 20GeV
 //
 
 #ifndef G4NeutronInelasticCrossSection_h
@@ -50,7 +51,7 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
    {
      G4bool result = false;
      if(( aPart->GetDefinition()==G4Neutron::Neutron()) &&
-        ( aPart->GetKineticEnergy()<20*GeV) &&
+        ( aPart->GetKineticEnergy()<100*TeV) &&
           aPart->GetKineticEnergy()>19.9*MeV) result = true;
      if(aEle->GetZ()<2) result = false;
      return result;
@@ -61,7 +62,7 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
    {
      G4bool result = false;
      if(( aPart->GetDefinition() == G4Neutron::Neutron()) &&
-        ( aPart->GetKineticEnergy() < 20*GeV) &&
+        ( aPart->GetKineticEnergy() < 100*TeV) &&
           aPart->GetKineticEnergy() > 19.9*MeV) result = true;
      if(ZZ < 2) result = false;
      return result;

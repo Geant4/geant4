@@ -26,6 +26,7 @@
 // By JPW, working, but to be cleaned up. @@@
 // G.Folger, 29-sept-2006: extend to 1TeV, using a constant above 20GeV
 // 22 Dec 2006 - DHW added isotope dependence
+// G.Folger, 25-Nov-2009: extend to 100TeV, using a constant above 20GeV
 //
 
 #include "G4ProtonInelasticCrossSection.hh"
