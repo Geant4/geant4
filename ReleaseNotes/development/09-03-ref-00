@@ -31,7 +31,7 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-02-16
+config                                           config-V09-02-17
 ------
 - Updated Configure script (Configure-V09-02-04) and internal scripts:
   o Added new data set for G4REALSURFACEDATA variable and updated G4LEDATA
@@ -40,7 +40,11 @@ config                                           config-V09-02-16
   o Added flag to allow running with query options on non-interactive
     terminal. Resolves issue reported in Hypernews Install-and-Config #1213.
   o Corrected text for installation of g3tog4 module; cernlib is not required.
-  o New layout for queries and updated some defaults.
+  o New simplified layout for queries and updated some defaults.
+  o Removed query on analysi; now G4ANALYSIS_USE flag has to be set explicitely
+    by the user, if necessary.
+  o Added force build of zlib when WIN32 GL or Inventor vis drivers are built.
+  o Removed of -s switch to sed in Qt.U to fix problem with Qt setup. 
 - architecture.gmk: corrected inclusion of -lz for zlib.
 - binmake.gmk: corrected inclusion of G4zlib library in link list for
   the case of global libraries. Added include paths to new CHIPS modules.
@@ -49,10 +53,12 @@ config                                           config-V09-02-16
 - WIN32-VC.gmk: added "gd32.lib use32.lib" to OGLLIBS to fix problems of
   linking when G4LIB_BUILD/USE_WIN32_SESSION is not set.
 
-digits_hits                                      digits_hits-V09-02-03
+digits_hits                                      digits_hits-V09-02-04
 -----------
 - Fixes for the way of counting the flux and current passing through
   a curved surface (cylinder and sphere surfaces).
+- Added missing virtual keyword for qualification of CheckROVolume() and
+  FindROTouchable() methods in G4VReadOutGeometry.
 
 environments                                     envs-V09-02-01
 ------------
@@ -84,7 +90,7 @@ geometry/magneticfield                           field-V09-02-08
   magnetic field, with spin tracking for both MDM and EDM terms.
   Thanks to Kevin Lynch, Phys. Dept. at Boston University.
 
-geometry/navigation                              geomnav-V09-02-08
+geometry/navigation                              geomnav-V09-02-80
 -------------------
 - Refinements in G4PropagatorInField: changed parameters for treating
   consecutive tiny/zero steps (decrease factor to 0.25 from 0.1); the value is
@@ -120,17 +126,17 @@ intercoms                                        intercoms-V09-02-02
   Addresses problem report #1087.
 - Added method GetPreviousSession() in G4UIbatch.
 
-interfaces                                       interfaces-V09-02-06
+interfaces                                       interfaces-V09-02-07
 ----------
-- G4UIExecutive.cc: fixed compiler warnings for some cases when more
-  than one UI session flag is set.
+- G4UIExecutive.cc: fixed issue of default argument to contructor for the
+  selection of specific drivers.
 - Fix to G4VBasicShell: commands strings that match some shorter commands
   are trimmed and executed as those shorter commands.
 - G4UIQt: added CTRL+A and CTRL+E to move to begin/end of command line.
   Fixed a problem on macOSX 10.6 with Qt 4.6-Beta.
 - Added debug flags for Qt.
 
-materials                                        materials-V09-02-20
+materials                                        materials-V09-02-21
 ---------
 - Increased flexibily of G4SurfaceProperty and G4OpticalSurface classes
   to allow for lookup-table boundary process simulations.
@@ -151,7 +157,8 @@ materials                                        materials-V09-02-20
   G4_NYLON-6-6.
 - G4NistMaterialBuilder: changed material names, G4_NYLON-6/6 to G4_NYLON-6-6,
   and G4_NYLON-6/10 to G4_NYLON-6-10, to allow matching with ion stopping power
-  data files, which have material name in the file name.  
+  data files, which have material name in the file name.
+  Old names can still be used for backward compatibility. 
 - Improved comments to ICRU73 classes.
 
 particles                                        particles-V09-02-17
@@ -159,12 +166,18 @@ particles                                        particles-V09-02-17
 - Added new classes for "Reverse MonteCarlo" technique: G4AdjointProton and
   light ions.
 
-physics_lists                                    phys-lists-V09-02-39
+persistency/ascii                                ascii-V09-02-10
+-----------------
+- Inclusion of extruded and tessellated solids.
+- Additions of accessors and constructors of G4tgbVolume and G4tgrVolume.
+
+physics_lists                                    phys-lists-V09-02-40
 -------------
 - Added G4OpticalPhysics and G4OpticalPhysicsMessenger classes.
 - G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
   G4EmLivermorePolarizedPhysics: added G4NuclearStopping process for 
-  GenericIon, He3, alpha particles
+  GenericIon, He3, alpha particles. Set finalRange=10um for ions.
+- G4EmStandardPhysics_option2: use default StepFunction for ions.
 - Added two builders G4QNeutrinoPhysics & G4QPhotoNuclearPhysics with
   the messenger to the CHIPS physics list. Arranged dependencies with CHIPS.
 
@@ -172,7 +185,7 @@ processes/cuts                                   procuts-V09-02-08
 --------------
 - Added new command /cuts/setMaxCutEnergy to messenger. 
 
-processes/electromagnetic/adjoint                emadjoint-V09-02-01
+processes/electromagnetic/adjoint                emadjoint-V09-02-02
 ---------------------------------
 - New revised electromagnetic processes for "Reverse MonteCarlo" technique.
   All e- processes have been improved and adjoint proton and ion ionisation
@@ -186,7 +199,7 @@ processes/electromagnetic/highenergy             emhighenergy-V09-02-03
   section threshold.
 - G4eeTo3PiModel: fixed vector product in matrix element.
 
-processes/electromagnetic/lowenergy              emlowen-V09-02-65
+processes/electromagnetic/lowenergy              emlowen-V09-02-67
 -----------------------------------
 - G4IonParametrisedLossModel: moved from original ICRU 73 classes to new class
   (G4IonStoppingData), which is capable of reading stopping power data files
@@ -195,7 +208,10 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-65
   Decision logic concerning stopping power scaling for heavy ions was entirely
   moved to class G4IonDEDXScalingICRU73.
   Introduced function for switching off scaling for heavy ions.
-  Added set-function for loss limit parameter.
+  Added set-function for loss limit parameter. Added UpdateRangeCache()
+  method, removed GetRange() method.
+  Changed energy loss limit to smaller value (from 0.15 to 0.01) to avoid
+  approximative loss description in case of large steps.
   Removed nuclear stopping from model since dedicated process is available in
   standard EM package. Minor fixes applied in energy loss computation.
 - G4VIonDEDXScalingAlgorithm: introduced additional argument for energy scaling
@@ -240,15 +256,16 @@ processes/electromagnetic/standard               emstand-V09-02-32
   sampling for theta below the screening angle.
 - G4LindhardPartition: class moved from TestEm7.
 
-processes/electromagnetic/utils                  emutils-V09-02-22
+processes/electromagnetic/utils                  emutils-V09-02-24
 -------------------------------
 - G4EmCalculator: added method FindIon(); improved computation for ions
-  allowing to be applied for the model based on ICRU'73. 
+  allowing to be applied for the model based on ICRU'73. Take into account
+  CorrectionAlongStep for ions. Fixed bug in selection of models.
 - G4VEmProcess: improved printout.
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-02-14)
+- cross_sections (hadr-cross-V09-02-15)
   o Use as a default hadron-nucleon cross section parameterisation
     in G4GlauberGribovCrossSection, G4GGNuclNuclCrossSection,
     G4NeutronElasticXS, G4NeutronInelasticXS, G4BGGNucleonElasticXS,
@@ -274,7 +291,7 @@ processes/hadronic
     fragmentation, interface and processes. 
 - models/coherent_elastic (hadr-cohe-V09-02-03)
   o Modified dependency to CHIPS after sub-module splitting.
-- models/de_excitation (hadr-deex-V09-02-17)
+- models/de_excitation (hadr-deex-V09-02-20)
   o Updated nearly all classes of GEM sub-package with the introduction
     of new classes G4GEMCoulombBarrier, G4AlphaGEMCoulombBarrier,
     G4DeuteronGEMCoulombBarrier, G4He3GEMCoulombBarrier,
@@ -293,7 +310,7 @@ processes/hadronic
     weight inside G4FermiConfiguration.
   o Added a G4NeutronRadCapture model, a simple 1 gamma emission with
     4-momentum balance.
-- models/incl (hadr-incl-V09-02-01)
+- models/incl (hadr-incl-V09-02-02)
   o Bug fixes to INCL nuclear potential handling; the interpolation function
     used to produce discontinuous results due to an array index off-by-one.
     This bug fix corrects the impact parameter distribution.
@@ -301,6 +318,8 @@ processes/hadronic
     in INCL.
   o Added safeguard division by zero (or negative) energy in ABLA
     fission fragment handling.
+  o Use centralised random number generator instead of built-in one.
+  o Fixed memory leak issues in difraction (hadr-string-diff-V09-02-18).
   o Minor fix in the INCL particle reflection time calculation.
 - models/management (hadr-modman-V09-02-07)
   o G4V3DNucleus: added two functions to sort nucleons along +/- Z.
@@ -321,16 +340,22 @@ processes/hadronic
   o Tuned FTFP with parameters of nuclear de-excitation.
   o G4VParticipants: use modified name of method to sort nucleons in
     G4V3DNucleus.
-- models/pre_equilibrium (hadr-pre-V09-02-06)
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-02-03)
+  o Code cleanup.
+- models/pre_equilibrium (hadr-pre-V09-02-07)
   o G4PreCompoundModel: CEM transition probabilities are set by default.
   o G4PreCompoundTransitions: CEM transition probabilities have been
     renormalized (transitions with Delta N=+2 are increased by factor 5).
   o G4PrecompoundEmission: modified AngularDistribution() to avoid floating
     point exceptions. Removed calls to log() in rho() and replaced by use of
     new logfactorial().
-- models/qmd (hadr-qmd-V09-02-02)
+- models/qmd (hadr-qmd-V09-02-03)
   o Fixed bug for incidence of neutral particles in G4QMDReaction and
     G4QMDGroundStateNucleus; verified for nucleon-nucleus interactions.
+  o Beta version of code for enabling meson oncidence.
+- models/rpg (hadr-rpg-V09-02-01)
+  o G4RPGInelastic: added temporary message stating the RPG model is
+    under development and should not be used for production.
 - models/theo_high_energy (had-theo-HE-V09-02-03)
   o Modified dependency to CHIPS after sub-module splitting.
 - models/util (hadr-mod-util-V09-02-04)
@@ -361,21 +386,25 @@ run                                              run-V09-02-09
 - Fixing two minor bugs in G4RunManager and G4RunManagerKernel for the
   dump printout of regions.
 
-tracking                                     tracking-V09-02-06
+tracking                                     tracking-V09-02-07
 --------
 - New classes implementing the "Reverse MonteCarlo" technique:
   G4AdjointCrossSurfChecker and G4AdjointSteppingAction.
 - G4Trajectory, G4SmoothTrajectory, G4RichTrajectory: added initial
   kinetic energy. G4RichTrajectory: added final kinetic energy.
-  G4RichTrajectoryPoint: added "remaining energy" at each step.
+  G4RichTrajectoryPoint: added "remaining energy" at each step and attributes.
 
-visualization                                    vis-V09-02-11
+visualization                                    vis-V09-02-12
 -------------
 - management:
   o Many small bug fixes.
   o Enhanced functionality for gMocren driver: introduced the concept of
     end-of-run model.
   o Allow for arbitrary viewer deletion (fixes a case of crash).
+- HepRep:
+  o Changed messenger to a singleton.
+  o Added messenger commands to HepRepFile.
+  o Render G4Tubs as polygons if G4Tubs is not at a standard angle.
 - OpenGL: fixed build problem with gl2ps on Windows.
 - OpenInventor: fixed build problem with gl2ps on Windows.
 - externals (visexternal-V09-02-06):
@@ -406,10 +435,11 @@ examples                                         examples-V09-02-11
   o Use QGSP_BIC_EMY as default physics-list to test the low-energy EM.
 - advanced/gammaray_telescope (gammaraytel-V09-02-01)
   o Updated physics-list setup.
-- advanced/hadrontherapy (hadrontherapy-V09-02-38)
+- advanced/hadrontherapy (hadrontherapy-V09-02-39)
   o Added ability to use command based scoring; IAEA geometry: now can produce
     Bragg peak using command based scoring
   o Additional data extracted from E. Haettner's thesis.
+  o Correction in the initialization of the passiveProtonBeamLine class.
   o Now the HadrontherapyDetectorConstruction class implements only phantom
     and detector [RO]geometry. World volume and the rest of the geometry is
     inside another class whose messenger allows for modification by users with
@@ -440,6 +470,8 @@ examples                                         examples-V09-02-11
 - advanced/xray_fluorescence (XrayFluo-V09-02-01)
   o Migrated physics-list to new low-energy processes design
   o Migrated XrayFluoDataSet to meet new specifications in G4VEMDataSet.
+- advanced/xray_telescope (xraytel-V09-02-01)
+  o Updated and simplified physics-list.
 - extended/analysis/A01 (exampleA01-V09-02-01)
   o A01DetectorConstruction, A01MagneticField: improved handling of field.
     Addresses problem report #1012.
@@ -461,6 +493,15 @@ examples                                         examples-V09-02-11
   o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
   o New local physics-list PhysListEmStandardGS.
   o Removed G4EMConfigurator in physics-list.
+- extended/electromagnetic/TestEm7 (testem7-V09-02-01)
+  o Renaming of IDs in PhysicsList.
+  o Removed obsolete G4MultipleScattering in PhysListEmStandardNR  
+  o Use Livermore and Penelope builders from reference physics-lists library.
+  o Updated README and macro files.
+- extended/electromagnetic/TestEm9 (testem9-V09-02-00)
+  o Changed options: 20bins/decade; LinLossLimit=default=0.01.
+- extended/electromagnetic/TestEm10 (testem10-V09-02-00)
+  o Updated physics-list.
 - extended/electromagnetic/TestEm11 (testem11-V09-02-01)
 - extended/electromagnetic/TestEm12 (testem12-V09-02-01)
   o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
@@ -482,15 +523,24 @@ examples                                         examples-V09-02-11
 - extended/field/field05 (fieldex05-V09-02-00)
   o New example demonstrating usage of 'spin' in electric-field to cancel
     g-2 precession.
+- extended/medical/DICOM (DICOM-V09-02-03)
+  o Changed DICOM Handler to read CT files coming from CONQUEST DICOM server.
+- extended/medical/electronScattering (electronScattering-V09-02-03)
+  o Replaced obsolete G4MultipleScattering in PhysListEmStandard and
+    PhysListStandardGS.
 - extended/medical/fanoCavity (fano-V09-02-03)
 - extended/medical/fanoCavity2 (fano2-V09-02-01)
   o Replaced obsolete G4MultipleScattering in PhysListEmStandard_option3.
+- extended/medical/GammaTherapy (gtherapy-V09-02-00)
+  o Updated physics-list for EM.
 - extended/optical/LXe (LXe-V09-02-01)
   o Exhibit the usage of a complex index of refraction for the photo cathode.
   o Show usage of G4OpticalPhysics builder/messenger, instead of
     LXeOpticalPhysics.
 - extended/persistency/P03 (exampleP03-V09-02-02)
   o Use G4XMultipleScattering in physics-list.
+- extended/polarisation/Pol01 (expol01-V09-02-00)
+  o Updated multiple-scattering physics.
 - novice/N02 (exampleN02-V09-02-01)
 - novice/N03 (exampleN03-V09-02-02)
   o Use G4MuMultipleScattering for muons; separated alpha from GenericIon.
@@ -507,9 +557,16 @@ tests                                            tests-V09-02-11
   o Added option to test QGS_BIC.
 - test19 (test19-V09-02-09)
   o Added magnetic field and G4QCollision for G4QInelastic.
+- test37 (test37-V09-02-05)
+  o Updated physics-lists. Fixed option setup.
+- test41 (test41-V09-02-03)
+  o Substitute G4_GRAPHITE by G4_GRAPHITE_POROUS.
+  o Updates to options names and scripts.
 - test60 (test60-V09-02-05)
   o Renamed main file (and executable) from Test60 to test60
     to be conformed with all other tests.
   o Removed useless include files in physics-list.
 - test61 (test61-V09-02-00)
   o Changed multiple scattering processes to particle-specific.
+- test202 (test202-V09-02-01)
+  o Introduced G4UIExecutive.
