@@ -643,7 +643,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4int jj = 0;
     solid = new G4TessellatedSolid(sname);
     G4TessellatedSolid* solidTS = (G4TessellatedSolid*)(solid);
-    G4VFacet* facet;
+    G4VFacet* facet=0;
     
     for( G4int ii = 0; ii < nFacets; ii++){
       G4int nPoints = G4int(solParam[jj+1]);
@@ -661,7 +661,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	G4ThreeVector pt0(solParam[jj+2],solParam[jj+3],solParam[jj+4]);
 	G4ThreeVector vt1(solParam[jj+5],solParam[jj+6],solParam[jj+7]);
 	G4ThreeVector vt2(solParam[jj+8],solParam[jj+9],solParam[jj+10]);
-	G4FacetVertexType vertexType;
+	G4FacetVertexType vertexType = ABSOLUTE;
 	if( solParam[jj+11] == 0 ) 
 	{
 	  vertexType = ABSOLUTE;
@@ -687,7 +687,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
 	G4ThreeVector vt1(solParam[jj+5],solParam[jj+6],solParam[jj+7]);
 	G4ThreeVector vt2(solParam[jj+8],solParam[jj+9],solParam[jj+10]);
 	G4ThreeVector vt3(solParam[jj+11],solParam[jj+12],solParam[jj+13]);
-	G4FacetVertexType vertexType;
+	G4FacetVertexType vertexType = ABSOLUTE;
 	if( solParam[jj+14] == 0 ) 
 	{
 	  vertexType = ABSOLUTE;
