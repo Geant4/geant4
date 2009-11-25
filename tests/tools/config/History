@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2009-11-24 13:09:45 bmorgan Exp $
+$Id: History,v 1.32 2009-11-25 18:31:21 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25th November 2009 Ben Morgan
+- Configure: Regenerated following changes below.
+- U/g4_08_ui.U: Added a g4osname test at beginning to set default choice
+for WIN32 UI to yes on WIN32 only.
+- U/g4_09_vis.U: Changed VRML build default to 'no' added defaults for
+VRMLFile driver to 'yes'.
+
 24th November 2009 Ben Morgan
 - Configure: regenerated following changes below.
 - U/Qt.U: removed -s flag from sed commands to fix Mac OSX problem reported
