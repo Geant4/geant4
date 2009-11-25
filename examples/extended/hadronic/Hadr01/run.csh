@@ -1,28 +1,25 @@
 #/bin/csh
 
-setenv HISTODIR 20091124
+setenv HISTODIR 20091125
 mkdir -p $HISTODIR
 
 setenv PHYSLIST LHEP
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSP
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QGSP_BERT_EMV
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QGSP_BERT_EMX
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QGSP_BERT
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QGSP_BIC
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QBBC
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QBBC_XGG
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
