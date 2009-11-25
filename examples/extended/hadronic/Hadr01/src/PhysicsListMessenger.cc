@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.4 2006-08-11 14:38:11 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.5 2009-11-25 19:56:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,6 +124,7 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForGamma(cut);
       pPhysicsList->SetCutForElectron(cut);
       pPhysicsList->SetCutForPositron(cut);
+      pPhysicsList->SetCutForProton(cut);
     }
 
   if( command == pListCmd ) {

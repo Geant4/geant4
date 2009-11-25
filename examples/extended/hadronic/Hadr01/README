@@ -83,21 +83,20 @@ of printout is established.
                            PHYSICS
 
 PhysicsList of the application uses components, which are distributed with
-Geant4 in /geant4/physics_lists subdirectory. So, before compiling hadro01 it
-is necessary to compile physics_lists
+Geant4 in /geant4/physics_lists subdirectory. 
 
-The choice of the physics is provided by the UI command:
+There is a possibility directly use one of reference Physics Lists if 
+using the environment variable PHYSLIST. Alternatively the name of the reference
+Physics List can be given via parameter of the the application as following:
 
-/testhadr/Physics     QGSP
+$G4BIN/Linux++/hadr01 QGSP_BERT my.macro
 
-The command 
+Finally it is possible to use UI commands (PHYSLIST environment variable is not 
+defined). The choice of the physics is provided by the UI command:
 
-/testhadr/Physics     PHYSLIST
+/testhadr/Physics     QGSP_BIC
 
-allows allows to download a physics configuration defined by an environment
-variable PHYSLIST. 
-
-To see the list of available configurations one can use
+To see the list of available configurations with UI one can use
 
 /testhadr/ListPhysics
 
@@ -107,6 +106,9 @@ The cuts for electromagnetic physics can be established via
 /testhadr/CutsGamma   0.1 mm
 /testhadr/CutsEl      0.2 mm
 /testhadr/CutsPos     0.3 mm
+
+Note that testhadr UI commands are not available in the case when PHYSLIST 
+environment variable is defined. 
 
 
                           VISUALIZATION
