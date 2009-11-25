@@ -301,7 +301,7 @@ public:
 	///
 	/// It is not maintained automatically in general!  The root finder, integrator, and sampler do increment it.
 	/// \return number of evaluations logged since last reset.
-	volatile size_t get_evaluations() const { return evaluations; }
+	size_t get_evaluations() const { return evaluations; }
 	/// \brief reset the counter
 	void reset_evaluations()  const { evaluations=0; } // evaluations are 'invisible' to constant
 	/// \brief count evaluations
