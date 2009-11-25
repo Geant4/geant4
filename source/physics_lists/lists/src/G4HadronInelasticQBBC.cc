@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.23 2009-11-25 17:06:36 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.24 2009-11-25 18:55:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,28 +64,18 @@
 #include "G4LCapture.hh"
 #include "G4NeutronRadCapture.hh"
 
-#include "G4NeutronHPInelastic.hh"
-#include "G4NeutronHPFission.hh"
-#include "G4NeutronHPCapture.hh"
-#include "G4NeutronHPInelasticData.hh"
-#include "G4NeutronHPFissionData.hh"
-#include "G4NeutronHPCaptureData.hh"
-
 enum QBBCType
 {
   fQBBC = 0,
   fQBBC_XGG,
-  fQBBC_XGGSN,
-  fQBBC_HP
+  fQBBC_XGGSN
 };
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver, 
-					     G4bool, G4bool,
-					     G4bool, G4bool hp, G4bool)
+    G4bool, G4bool,G4bool, G4bool, G4bool)
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {
   htype = name;
-  if(hp) { htype = "QBBC_HP"; }
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
@@ -100,16 +90,11 @@ void G4HadronInelasticQBBC::ConstructProcess()
   QBBCType fType = fQBBC;
   if("QBBC_XGG" == htype)        { fType = fQBBC_XGG; }
   else if("QBBC_XGGSN" == htype) { fType = fQBBC_XGGSN; }
-  else if("QBBC_HP" == htype)    { fType = fQBBC_HP; }
 
   if(verbose > 1) {
     G4cout << "### HadronInelasticQBBC Construct Process with type <"
 	   << htype << ">" << G4endl;
   }
-
-  G4bool flagHP = false;
-  if(htype == "QBBC_HP") { flagHP = true; }
-  //  G4bool flagBinary = false;
 
   // configure models
   G4HadronicInteraction* theQGSP = 
@@ -165,7 +150,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
       // model and X-section configuration
       if(pname == "proton") {
-        if(fType == fQBBC || fType == fQBBC_HP) { 
+        if(fType == fQBBC) { 
 	  hp->AddDataSet(new G4ProtonInelasticCrossSection()); 
 	} else {
           hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
@@ -177,7 +162,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	//	hp->RegisterMe(theBIC);
 
       } else if(pname == "neutron") {
-        if(fType == fQBBC || fType == fQBBC_HP) { 
+        if(fType == fQBBC) { 
 	  hp->AddDataSet(new G4NeutronInelasticCrossSection()); 
 	} else if(fType == fQBBC_XGG) {
           hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
@@ -192,35 +177,16 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	G4HadronicProcess* capture = FindCaptureProcess();
 	pmanager->AddDiscreteProcess(capture);
 
-	if(fType == fQBBC_HP) {
-	  //G4HadronicInteraction* theB = 
-	  //  NewModel(new G4BinaryCascade(), 19.5*MeV, 3.5*GeV);
-	  G4HadronicInteraction* theB = 
-	    NewModel(new G4BinaryCascade(), 19.5*MeV, 6.5*GeV);
-	  hp->RegisterMe(theB);
-	  hp->RegisterMe(new G4NeutronHPInelastic());
-	  hp->AddDataSet(new G4NeutronHPInelasticData());
-
-	  capture->RegisterMe(new G4NeutronHPCapture());
-	  capture->AddDataSet(new G4NeutronHPCaptureData());
-
-	  G4HadronicProcess* fission = FindFissionProcess();
-	  pmanager->AddDiscreteProcess(fission);
-	  fission->RegisterMe(new G4NeutronHPFission());
-	  fission->AddDataSet(new G4NeutronHPFissionData());
-
-	} else {
-	  hp->RegisterMe(theBERT);
-	  //hp->RegisterMe(theBIC);
-	  capture->RegisterMe(new G4NeutronRadCapture());
-	  //capture->RegisterMe(new G4LCapture());
-          if(fType == fQBBC_XGGSN) {
-	    capture->AddDataSet(new G4NeutronCaptureXS());
-	  }
+	hp->RegisterMe(theBERT);
+	//hp->RegisterMe(theBIC);
+	capture->RegisterMe(new G4NeutronRadCapture());
+	//capture->RegisterMe(new G4LCapture());
+	if(fType == fQBBC_XGGSN) {
+	  capture->AddDataSet(new G4NeutronCaptureXS());
 	}
 
       } else if(pname == "pi-" || pname == "pi+") {
-        if(fType == fQBBC || fType == fQBBC_HP) { 
+        if(fType == fQBBC) { 
 	  hp->AddDataSet(new G4PiNuclearCrossSection()); 
 	} else {
           hp->AddDataSet(new G4BGGPionInelasticXS(particle));

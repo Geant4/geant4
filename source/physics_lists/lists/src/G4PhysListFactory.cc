@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.11 2009-11-25 17:06:36 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.12 2009-11-25 18:55:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -66,11 +66,12 @@
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
-  nlists = 27;
-  G4String s[27] = {
-    "CHIPS","FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
+  nlists = 26;
+  G4String s[26] = {
+    "CHIPS",
+    "FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
     "LBE","LHEP","LHEP_EMV",
-    "QBBC","QBBC_HP","QBBC_XGG","QBBC_XGGSN",
+    "QBBC","QBBC_XGG","QBBC_XGGSN",
     "QGSC_BERT","QGSC_CHIPS",
     "QGSP_BERT","QGSP_BERT_EMV","QGSP_BERT_EMX","QGSP_BERT_HP",
     "QGSP_BERT_NOLEP","QGSP_BERT_TRV","QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
@@ -117,7 +118,6 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "LHEP") {p = new LHEP();}
   else if(name == "LHEP_EMV") {p = new LHEP_EMV();}
   else if(name == "QBBC") {p = new QBBC();}
-  else if(name == "QBBC_HP") {p = new QBBC(1,"QBBC_HP");}
   else if(name == "QBBC_XGG") {p = new QBBC(1,"QBBC_XGG");}
   else if(name == "QBBC_XGGSN") {p = new QBBC(1,"QBBC_XGGSN");}
   else if(name == "QGSC_BERT") {p = new QGSC_BERT();}
