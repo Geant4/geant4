@@ -29,7 +29,7 @@ config                                           config-V09-02-12
   backward compatibility in G4VIS_BUILD.gmk.
   Removed references to obsolete GAGTREE driver.
 
-digits_hits                                      digits_hits-V09-02-03
+digits_hits                                      digits_hits-V09-02-02
 -----------
 - Added few accessors for visualization to G4VScoringMesh.
 
