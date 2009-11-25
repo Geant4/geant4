@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.10 2009-11-25 13:10:51 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.11 2009-11-25 17:06:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,7 +38,7 @@
 //
 
 #include "G4PhysListFactory.hh"
-#include "FTFP.hh"
+#include "CHIPS.hh"
 #include "FTFP_BERT.hh"
 #include "FTFP_BERT_EMV.hh"
 #include "FTFP_BERT_EMX.hh"
@@ -48,16 +48,13 @@
 #include "LHEP.hh"
 #include "LHEP_EMV.hh"
 #include "QBBC.hh"
-#include "QGSC.hh"
 #include "QGSC_BERT.hh"
 #include "QGSC_CHIPS.hh"
-#include "QGSC_EMV.hh"
-#include "QGSC_QGSC.hh"
-#include "QGSP.hh"
 #include "QGSP_BERT.hh"
 #include "QGSP_BERT_EMV.hh"
 #include "QGSP_BERT_EMX.hh"
 #include "QGSP_BERT_HP.hh"
+#include "QGSP_BERT_NOLEP.hh"
 #include "QGSP_BERT_TRV.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_EMY.hh"
@@ -69,14 +66,14 @@
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
-  nlists = 31;
-  G4String s[31] = {
-    "FTFP","FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
+  nlists = 27;
+  G4String s[27] = {
+    "CHIPS","FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
     "LBE","LHEP","LHEP_EMV",
-    "QBBBG","QBBC","QBBCG","QBBCF","QBBC_HP",
-    "QGSC","QGSC_BERT","QGSC_CHIPS","QGSC_EMV","QGSC_QGSC",
-    "QGSP","QGSP_BERT","QGSP_BERT_EMV","QGSP_BERT_EMX","QGSP_BERT_HP",
-    "QGSP_BERT_TRV","QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
+    "QBBC","QBBC_HP","QBBC_XGG","QBBC_XGGSN",
+    "QGSC_BERT","QGSC_CHIPS",
+    "QGSP_BERT","QGSP_BERT_EMV","QGSP_BERT_EMX","QGSP_BERT_HP",
+    "QGSP_BERT_NOLEP","QGSP_BERT_TRV","QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
     "QGSP_FTFP_BERT","QGS_BIC", "QGSP_INCL_ABLA"};
 
   for(size_t i=0; i<nlists; i++) {
@@ -110,7 +107,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
         const G4String& name)
 {
   G4VModularPhysicsList* p = 0;
-  if     (name == "FTFP") {p = new FTFP();}
+  if(name == "CHIPS") {p = new CHIPS();}
   else if(name == "FTFP_BERT") {p = new FTFP_BERT();}
   else if(name == "FTFP_BERT_EMV") {p = new FTFP_BERT_EMV();}
   else if(name == "FTFP_BERT_EMX") {p = new FTFP_BERT_EMX();}
@@ -123,16 +120,13 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QBBC_HP") {p = new QBBC(1,"QBBC_HP");}
   else if(name == "QBBC_XGG") {p = new QBBC(1,"QBBC_XGG");}
   else if(name == "QBBC_XGGSN") {p = new QBBC(1,"QBBC_XGGSN");}
-  else if(name == "QGSC") {p = new QGSC();}
   else if(name == "QGSC_BERT") {p = new QGSC_BERT();}
   else if(name == "QGSC_CHIPS") {p = new QGSC_CHIPS();}
-  else if(name == "QGSC_EMV") {p = new QGSC_EMV();}
-  else if(name == "QGSC_QGSC") {p = new QGSC_QGSC();}
-  else if(name == "QGSP") {p = new QGSP();}
   else if(name == "QGSP_BERT") {p = new QGSP_BERT();}
   else if(name == "QGSP_BERT_EMV") {p = new QGSP_BERT_EMV();}
   else if(name == "QGSP_BERT_EMX") {p = new QGSP_BERT_EMX();}
   else if(name == "QGSP_BERT_HP") {p = new QGSP_BERT_HP();}
+  else if(name == "QGSP_BERT_NOLEP") {p = new QGSP_BERT_NOLEP();}
   else if(name == "QGSP_BERT_TRV") {p = new QGSP_BERT_TRV();}
   else if(name == "QGSP_BIC") {p = new QGSP_BIC();}
   else if(name == "QGSP_BIC_EMY") {p = new QGSP_BIC_EMY();}

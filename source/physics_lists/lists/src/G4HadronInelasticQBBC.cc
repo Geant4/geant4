@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.22 2009-11-25 16:33:33 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.23 2009-11-25 17:06:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -120,10 +120,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
     BuildModel(new G4FTFBuilder("FTFP"),4.5*GeV,100.*TeV);
   G4HadronicInteraction* theBERT = 
     NewModel(new G4CascadeInterface(),0.0,6.5*GeV);
-  G4HadronicInteraction* theBERT1 = 
-    NewModel(new G4CascadeInterface(),2.5*GeV,6.5*GeV);
-  G4HadronicInteraction* theBIC = 
-    NewModel(new G4BinaryCascade(),0.0,3.5*GeV);
+  //G4HadronicInteraction* theBERT1 = 
+  //  NewModel(new G4CascadeInterface(),2.5*GeV,6.5*GeV);
+  //G4HadronicInteraction* theBIC = 
+  //  NewModel(new G4BinaryCascade(),0.0,3.5*GeV);
   G4HadronicInteraction* theCHIPS = 
     NewModel(new G4QStringChipsParticleLevelInterface(),0.0,7.5*GeV);
 
@@ -172,8 +172,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	}
 	hp->RegisterMe(theQGSP);
 	hp->RegisterMe(theFTFP);
-	hp->RegisterMe(theBERT1);
-	hp->RegisterMe(theBIC);
+	hp->RegisterMe(theBERT);
+	//	hp->RegisterMe(theBERT1);
+	//	hp->RegisterMe(theBIC);
 
       } else if(pname == "neutron") {
         if(fType == fQBBC || fType == fQBBC_HP) { 
@@ -186,15 +187,17 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
 	hp->RegisterMe(theQGSP);
 	hp->RegisterMe(theFTFP);
-	hp->RegisterMe(theBERT1);
+	//	hp->RegisterMe(theBERT1);
        
 	G4HadronicProcess* capture = FindCaptureProcess();
 	pmanager->AddDiscreteProcess(capture);
 
 	if(fType == fQBBC_HP) {
-	  G4HadronicInteraction* theBIC1 = 
-	    NewModel(new G4BinaryCascade(), 19.5*MeV, 3.5*GeV);
-	  hp->RegisterMe(theBIC1);
+	  //G4HadronicInteraction* theB = 
+	  //  NewModel(new G4BinaryCascade(), 19.5*MeV, 3.5*GeV);
+	  G4HadronicInteraction* theB = 
+	    NewModel(new G4BinaryCascade(), 19.5*MeV, 6.5*GeV);
+	  hp->RegisterMe(theB);
 	  hp->RegisterMe(new G4NeutronHPInelastic());
 	  hp->AddDataSet(new G4NeutronHPInelasticData());
 
@@ -207,7 +210,8 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  fission->AddDataSet(new G4NeutronHPFissionData());
 
 	} else {
-	  hp->RegisterMe(theBIC);
+	  hp->RegisterMe(theBERT);
+	  //hp->RegisterMe(theBIC);
 	  capture->RegisterMe(new G4NeutronRadCapture());
 	  //capture->RegisterMe(new G4LCapture());
           if(fType == fQBBC_XGGSN) {

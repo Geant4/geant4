@@ -1,4 +1,4 @@
-q$Id: History,v 1.113 2009-11-24 12:53:22 vnivanch Exp $
+q$Id: History,v 1.114 2009-11-25 17:06:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-11-2009, V.Ivanchenko                  (phys-lists-V09-02-41)
+- G4PhysListFactory - update list of supported referenced PhysicsLists
+- QBBC - updated for the release
 
 24-11-2009, V.Ivanchenko                  (phys-lists-V09-02-40)
 - G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
