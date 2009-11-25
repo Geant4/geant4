@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VHadronPhysics.cc,v 1.2 2009-10-04 16:06:19 vnivanch Exp $
+// $Id: G4VHadronPhysics.cc,v 1.3 2009-11-25 19:33:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -92,24 +92,8 @@ G4VHadronPhysics::BuildModel(G4VHadronModelBuilder* mBuilder,
 			     G4double emin, 
 			     G4double emax)
 {
-  G4HadronicInteraction* model = 0;
-  G4int n = builders.size();
-  if(n > 0) {
-    for(G4int i=0; i<n; i++) {
-      if(builders[i] == mBuilder) {
-	if (verboseLevel>0) {
-	  G4cout << "### G4VHadronPhysics <" 
-		 << mBuilder->GetName() << " already exist "
-		 << G4endl;
-	}
-	model = mBuilder->GetModel();
-      }
-    }
-  }  
-  if(!model) {
-    builders.push_back(mBuilder);                           
-    model =  mBuilder->GetModel();
-  }
+  builders.push_back(mBuilder);                           
+  G4HadronicInteraction* model = mBuilder->GetModel();
   model->SetMinEnergy(emin);
   model->SetMaxEnergy(emax);
   if (verboseLevel>1) {

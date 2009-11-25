@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBuilder.cc,v 1.1 2009-10-04 16:29:54 vnivanch Exp $
+// $Id: G4FTFBuilder.cc,v 1.2 2009-11-25 19:33:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ G4FTFBuilder::G4FTFBuilder(const G4String& aName) : G4VHadronModelBuilder(aName)
 G4FTFBuilder::~G4FTFBuilder() 
 {
   delete theStringDecay;
-  delete theStringModel;
+  //delete theStringModel; // is deleted by the model
 }                                     
 
 G4HadronicInteraction* G4FTFBuilder::BuildModel()
