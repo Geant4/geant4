@@ -1,0 +1,515 @@
+
+                       geant4-09-03-ref-00
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o First full release of classes implementing the "Reverse MonteCarlo"
+   technique.
+ o New stepper G4NystromRK4 for magnetic field with analytic estimation of
+   integration error; and new simple class G4CachedMagneticField to cache
+   value of magnetic field, speeding up code when calculation of field value
+   is relatively complex.
+ o Revised optical boundary process and new data set for measured optical
+   surface reflectance, RealSurface-1.0; path controlled by new flag
+   G4REALSURFACEDATA.
+ o Added ability of reading stopping power data files stored in G4LEDATA data
+   set for low-energy EM processes; new data set G4EMLOW-6.9.
+ o Improved FTF model for pion obsorption on nuclei; implemented charge-exchange
+   for pn->np in elastic and inelastic interactions and pion absorption by a
+   nucleon.
+ o Changes to binary-cascade hadronic model to protects against cases of energy
+   non-conservation.
+ o Modifications to pre-compound hadronic model to properly handle
+   CEM transition probabilities.
+ o Revised advanced examples; new version of hadrontherapy and medical_linac
+   an retired no longer supported Tiara, cosmicray_charging, radiation_monitor.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-02-16
+------
+- Updated Configure script (Configure-V09-02-04) and internal scripts:
+  o Added new data set for G4REALSURFACEDATA variable and updated G4LEDATA
+    data set version.
+  o Fixed detection of QtCore library; addressing problem report #1079.
+  o Added flag to allow running with query options on non-interactive
+    terminal. Resolves issue reported in Hypernews Install-and-Config #1213.
+  o Corrected text for installation of g3tog4 module; cernlib is not required.
+  o New layout for queries and updated some defaults.
+- architecture.gmk: corrected inclusion of -lz for zlib.
+- binmake.gmk: corrected inclusion of G4zlib library in link list for
+  the case of global libraries. Added include paths to new CHIPS modules.
+- G4VIS_USE.gmk: fixed dependency issues on WIN32-VC for gl2ps utility
+  library in visualization.
+- WIN32-VC.gmk: added "gd32.lib use32.lib" to OGLLIBS to fix problems of
+  linking when G4LIB_BUILD/USE_WIN32_SESSION is not set.
+
+digits_hits                                      digits_hits-V09-02-03
+-----------
+- Fixes for the way of counting the flux and current passing through
+  a curved surface (cylinder and sphere surfaces).
+
+environments                                     envs-V09-02-01
+------------
+- G4Py: updated configuration script and wrappers to physics-lists.
+- Momo: Updated documentation.
+
+error_propagation                                error_propagation-V09-02-02
+-----------------
+- Corrected usage of G4ThreeVector constructor in G4ErrorMagFieldLimitProces.
+
+event                                            event-V09-02-05
+-----
+- New classes implementing the "Reverse MonteCarlo" technique:
+  G4AdjointPosOnPhysVolGenerator, G4AdjointPrimaryGenerator and
+  G4AdjointStackingAction.
+
+geometry/magneticfield                           field-V09-02-08
+----------------------
+- New stepper G4NystromRK4 for magnetic field with analytic estimation of
+  integration error. Greatly reduces number of field value per step.
+- Added new virtual method CalculateRightHandSide() to G4MagIntegratorStepper
+  for use in caching momentum (and field value) by G4NystromRK4
+  Default implementation in G4MagIntegratorStepper calls RightHandSide().
+- New simple class G4CachedMagneticField to cache value of magnetic field. 
+  Speeds up code when calculation of field value is complex.
+- Bug fix in G4EqEMFieldWithSpin and G4EqEMFieldWithEDM, following report
+  on Hypernews EM-field forum #161.
+- New G4EqEMFieldWithEDM class for RHS of EofM in a combined electric and
+  magnetic field, with spin tracking for both MDM and EDM terms.
+  Thanks to Kevin Lynch, Phys. Dept. at Boston University.
+
+geometry/navigation                              geomnav-V09-02-08
+-------------------
+- Refinements in G4PropagatorInField: changed parameters for treating
+  consecutive tiny/zero steps (decrease factor to 0.25 from 0.1); the value is
+  not used when the step size falls below a certain threshold.
+  Added new member 'fZeroStepThreshold', to enable tuning of threshold for
+  tiny/zero steps; this threshold is now changed, and expressed as a multiple
+  of 'fZeroStepThreshold' instead of kCarTolerance. Changed the value given to
+  the decrease factor to 0.35. Improved printing of Diagnostic message.
+  Addresses a problem seen at boundary of volumes reported by ATLAS.
+
+geometry/solids/CSG                              geom-csg-V09-02-06
+-------------------
+- G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
+  of point on surface. Fixes a problem of stuck tracks observed in CMS, due
+  to wrong reply from the solid for points on the inner radius surface base
+  with direction along the imaginary extension of the cone.
+
+geometry/solids/specific                         geom-specific-V09-02-08
+------------------------
+- Avoid redundant assignment of value to 3-vector in G4PolyconeSide and
+  G4TwistTubsSide.
+
+global                                           global-V09-02-11
+------
+- G4PhysicsVector: cleaned up initialisation of cached values;
+  simplified Value() method, now not looking into previous bin;
+  added method ScaleVector() needed for ICRU'73 data. 
+- Changed date for release 9.3.
+
+intercoms                                        intercoms-V09-02-02
+---------
+- Fixed incorrect directory deletion of G4UIcommandTree::RemoveCommand().
+  Addresses problem report #1087.
+- Added method GetPreviousSession() in G4UIbatch.
+
+interfaces                                       interfaces-V09-02-06
+----------
+- G4UIExecutive.cc: fixed compiler warnings for some cases when more
+  than one UI session flag is set.
+- Fix to G4VBasicShell: commands strings that match some shorter commands
+  are trimmed and executed as those shorter commands.
+- G4UIQt: added CTRL+A and CTRL+E to move to begin/end of command line.
+  Fixed a problem on macOSX 10.6 with Qt 4.6-Beta.
+- Added debug flags for Qt.
+
+materials                                        materials-V09-02-20
+---------
+- Increased flexibily of G4SurfaceProperty and G4OpticalSurface classes
+  to allow for lookup-table boundary process simulations.
+  Thanks to Martin Janecek and William Moses from LBNL
+- New class G4IonStoppingData, which can read ion stopping power vectors
+  contained in G4LEDATA data set; allows for inclusion of larger physics
+  vectors than those in the ICRU 73 classes, where vectors are restricted
+  to the maximum energy 10 MeV/nuc.
+- G4IonisParamMat: fixed density effect computation; added plasma energy
+  computation and access to G4DensityEffectData by the atomic number.
+- G4DensityEffectData: added method GetIndex().
+- G4VIonDEDXTable: added new method BuildPhysicsVector() which invokes the
+  build of physics vectors on demand in the initialisation phase.
+  Added method BuildPhysicsVector() according to base class for G4ExtDEDXTable,
+  G4SimpleMaterialStoppingICRU73, G4MaterialStoppingICRU73 and
+  G4IronStoppingICRU73.
+- G4MaterialStoppingICRU73: changed material name from G4_NYLON-6/6 to
+  G4_NYLON-6-6.
+- G4NistMaterialBuilder: changed material names, G4_NYLON-6/6 to G4_NYLON-6-6,
+  and G4_NYLON-6/10 to G4_NYLON-6-10, to allow matching with ion stopping power
+  data files, which have material name in the file name.  
+- Improved comments to ICRU73 classes.
+
+particles                                        particles-V09-02-17
+---------
+- Added new classes for "Reverse MonteCarlo" technique: G4AdjointProton and
+  light ions.
+
+physics_lists                                    phys-lists-V09-02-39
+-------------
+- Added G4OpticalPhysics and G4OpticalPhysicsMessenger classes.
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
+  G4EmLivermorePolarizedPhysics: added G4NuclearStopping process for 
+  GenericIon, He3, alpha particles
+- Added two builders G4QNeutrinoPhysics & G4QPhotoNuclearPhysics with
+  the messenger to the CHIPS physics list. Arranged dependencies with CHIPS.
+
+processes/cuts                                   procuts-V09-02-08
+--------------
+- Added new command /cuts/setMaxCutEnergy to messenger. 
+
+processes/electromagnetic/adjoint                emadjoint-V09-02-01
+---------------------------------
+- New revised electromagnetic processes for "Reverse MonteCarlo" technique.
+  All e- processes have been improved and adjoint proton and ion ionisation
+  have been added. The use of adjoint cross section matrices can be now
+  limited only to e- Ionisation and Ion ionisation. 
+
+processes/electromagnetic/highenergy             emhighenergy-V09-02-03
+------------------------------------
+- G4AnnihiToMuPair: added method CrossSectionPerVolume(); added integral
+  option to PostStepDoIt(), providing more precise simulation near cross
+  section threshold.
+- G4eeTo3PiModel: fixed vector product in matrix element.
+
+processes/electromagnetic/lowenergy              emlowen-V09-02-65
+-----------------------------------
+- G4IonParametrisedLossModel: moved from original ICRU 73 classes to new class
+  (G4IonStoppingData), which is capable of reading stopping power data files
+  stored in G4LEDATA data set; with the new tables the upper energy limit of
+  ICRU 73 stopping powers is increased to 1 GeV/nucleon. 
+  Decision logic concerning stopping power scaling for heavy ions was entirely
+  moved to class G4IonDEDXScalingICRU73.
+  Introduced function for switching off scaling for heavy ions.
+  Added set-function for loss limit parameter.
+  Removed nuclear stopping from model since dedicated process is available in
+  standard EM package. Minor fixes applied in energy loss computation.
+- G4VIonDEDXScalingAlgorithm: introduced additional argument for energy scaling
+  function. G4IonDEDXScalingICRU73, G4IonDEDXHandler: adapted function
+  according to interface changes in G4VIonDEDXScalingAlgorithm.
+- G4IonDEDXHandler: using new build methods defined in G4VIonDEDXTable
+- PIXE code cleaning and update of G4hLowEnIonisation in order to use new
+  PIXE developments.
+- Removed memory leak in G4DNACrossSectionDataSet.
+- Added protection for secondary electron energy computation in
+  G4DNABornIonisationModel. Proposed a faster computation of cross section
+  max value.
+- Requires new data set G4EMLOW-6.9.
+
+processes/electromagnetic/muons                  emmuons-V09-02-08
+-------------------------------
+- G4MuBetheBlochModel: compute density effect correction using method of 
+  G4IonisParamMat class applying revised parameterisation.
+- G4MuMultipleScattering: use G4UrbanMscModel90 by default.
+
+processes/electromagnetic/polarisation           empolar-V09-02-01
+--------------------------------------
+- Bug fix in G4PolarizationHelper::GetSpinInPRF() for wrong normalization of
+  Y component.
+- Bug fix in G4PolarizedAnnihilationModel::PostStepDoIt() for wrong treatment
+  in error check.
+- Bug fix in G4StokesVector::RotateAz() for wrong usage of vector product.
+
+processes/electromagnetic/standard               emstand-V09-02-32
+----------------------------------
+- Added new G4alphaIonisation process.
+- G4ICRU49NuclearStoppingModel: new model providing computation of nuclear
+  stopping.
+- G4NuclearStopping: updated process for computation of nuclear stopping.
+- G4BetheBlochModel: minor speedup inside CorrectionsAlongStep() method.
+- G4BetheBlochModel, G4BraggModel, G4BraggIonModel: removed computations
+  of nuclear stopping power, some CPU speadup.
+- G4BetheBlochModel, G4MollerBhabhaModel: compute density effect correction
+  using method of G4IonisParamMat class, applying revised parameterisation.
+- G4GoudsmitSaundersonMscModel: tuned small angle theta distributions
+  assuming the case of lambdan<1 as single scattering regime; tuned theta
+  sampling for theta below the screening angle.
+- G4LindhardPartition: class moved from TestEm7.
+
+processes/electromagnetic/utils                  emutils-V09-02-22
+-------------------------------
+- G4EmCalculator: added method FindIon(); improved computation for ions
+  allowing to be applied for the model based on ICRU'73. 
+- G4VEmProcess: improved printout.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-02-14)
+  o Use as a default hadron-nucleon cross section parameterisation
+    in G4GlauberGribovCrossSection, G4GGNuclNuclCrossSection,
+    G4NeutronElasticXS, G4NeutronInelasticXS, G4BGGNucleonElasticXS,
+    G4BGGNucleonInelasticXS, G4BGGPionElasticXS, G4BGGPionInelasticXS
+  o Bug fixes for G4BGGXX classes and added new classes G4NeutronElasticXS,
+    G4NeutronInelasticXS, G4NeutronCaptureXS.
+- models/binary_cascade (had-binary-V09-02-05)
+  o Changes to G4BinaryCascade to protects against energy non-conservation:
+    shift of particle's formation times; inclusion of captured particles;
+    corerction in GetExcitationEnergy() for the case when all nucleons are
+    ejected; correction for the nuclear field for baryons.
+  o Corrected assignment to 3-vector, avoid use of 3vector=0.
+  o Added protection against void nucleus after cascade.
+- models/cascade (hadr-casc-V09-02-10)
+  o G4CascadParticle, G4InuclElementaryParticle: added integer argument to
+    constructor to indicate which generation cascade particle belongs to.
+    Changed G4NucleiModel and G4BertiniNucleiModel to use this.
+- models/chiral_inv_phase_space (hadr-chips-V09-02-27)
+  o Added diffraction to CHIPS inelastic.
+  o Bug fixes in G4QSynchRad, G4QPhotonNuclearCrossSection and
+    G4QDiffractionRatio; added 'MinGamma' parameter to G4QSynchRad.
+  o Reorganised CHIPS classes in sub-modules: body, cross_sections,
+    fragmentation, interface and processes. 
+- models/coherent_elastic (hadr-cohe-V09-02-03)
+  o Modified dependency to CHIPS after sub-module splitting.
+- models/de_excitation (hadr-deex-V09-02-17)
+  o Updated nearly all classes of GEM sub-package with the introduction
+    of new classes G4GEMCoulombBarrier, G4AlphaGEMCoulombBarrier,
+    G4DeuteronGEMCoulombBarrier, G4He3GEMCoulombBarrier,
+    G4ProtonGEMCoulombBarrier, G4TritonGEMCoulombBarrier and corresponding 
+    changes in other classes of the sub-package.
+    Fixed usage of units inside G4GEMProbability computations.
+  o Fix in G4GEMProbability and G4GEMChannel to provide same probability as
+    proposed in original papers. Fixed old problem in G4GEMChannel, computation
+    of Coulomb barrier was not consistent with G4GEMProbability.
+    Added protection on unphysical initial state in G4GEMChannel.
+  o Fixed G4ExitationHandler for the case when Fermi-BreakUp 
+    and multi-fragmentation model are activated.
+  o Retuning for IAEA spallation data fission parameters in G4FissionParameters
+    and G4FissionLevelDensityParameter.
+  o Improved implementation of Gamma function computation in configuration
+    weight inside G4FermiConfiguration.
+  o Added a G4NeutronRadCapture model, a simple 1 gamma emission with
+    4-momentum balance.
+- models/incl (hadr-incl-V09-02-01)
+  o Bug fixes to INCL nuclear potential handling; the interpolation function
+    used to produce discontinuous results due to an array index off-by-one.
+    This bug fix corrects the impact parameter distribution.
+  o Fixed several variable initialization and F77 to C++ translation issues
+    in INCL.
+  o Added safeguard division by zero (or negative) energy in ABLA
+    fission fragment handling.
+  o Minor fix in the INCL particle reflection time calculation.
+- models/management (hadr-modman-V09-02-07)
+  o G4V3DNucleus: added two functions to sort nucleons along +/- Z.
+- models/parton_string (hadr-prtn-V09-02-09)
+  o Implemented charge-exchange for pn->np in elastic and inelastic
+    interactions simulated by FTF. Implemented also pion absorption by a
+    nucleon.
+  o Fixed bug in G4VLongitudinalStringDecay for the calculation of
+    formation/creation time, c_light was inserted. Due to this string
+    tension parameter was set to the usual value (1 GeV/fm) in
+    G4LundStringFragmentation.
+  o Improve FTF model for pion obsorption on nuclei: introduced status of
+    nuclear nucleon involved in an interaction (Status 0 - spectator,
+    1 - involved nucleon, 2 - absorbed nucleon); introduced connection between
+    a participant nucleon and a nuclear nucleon in G4InteractionContent.
+  o Completed FTF model with reggeon cascade and added excitation energy
+    calculation.
+  o Tuned FTFP with parameters of nuclear de-excitation.
+  o G4VParticipants: use modified name of method to sort nucleons in
+    G4V3DNucleus.
+- models/pre_equilibrium (hadr-pre-V09-02-06)
+  o G4PreCompoundModel: CEM transition probabilities are set by default.
+  o G4PreCompoundTransitions: CEM transition probabilities have been
+    renormalized (transitions with Delta N=+2 are increased by factor 5).
+  o G4PrecompoundEmission: modified AngularDistribution() to avoid floating
+    point exceptions. Removed calls to log() in rho() and replaced by use of
+    new logfactorial().
+- models/qmd (hadr-qmd-V09-02-02)
+  o Fixed bug for incidence of neutral particles in G4QMDReaction and
+    G4QMDGroundStateNucleus; verified for nucleon-nucleus interactions.
+- models/theo_high_energy (had-theo-HE-V09-02-03)
+  o Modified dependency to CHIPS after sub-module splitting.
+- models/util (hadr-mod-util-V09-02-04)
+  o Restored methods for storing/retrieving G4SplitableHadron*, now in use
+    in FTF model.
+  o Corrected assignment to 3-vector, avoid use of 3vector=0.
+- stopping (hadr-stopping-V09-02-04)
+  o G4PiMinusAbsorptionAtRest, G4KaonMinusAbsorptionAtRest: fixed usage of
+    3vector constructor.
+
+processes/optical                                op-V09-02-06
+-----------------
+- Added capability of simulating surface reflections with Look-Up-Tables (LUT)
+  containing measured optical reflectance for a variety of surface treatments.
+  Requires new data set RealSurface-1.0 controlled by flag G4REALSURFACEDATA.
+  Courtesy of M.Janecek and W.Moses (LBNL).
+- G4OpBoundaryProcess: added initialization of 'theReflectivity' and
+  'theEfficiency' at the beginning of the PostStepDoIt(); added method
+  BoundaryProcessVerbose() which will now print the process status for
+  every call to PostStepDoIt().
+  Change in PostStepDoIt() so that all dielectric_dielectric surfaces may now
+  have a reflectivity <1; not only 'frontpainted' as was the case in the past.
+
+run                                              run-V09-02-09
+---
+- New classes implementing the "Reverse MonteCarlo" technique:
+  G4AdjointSimManager, G4AdjointSimMessenger, G4AdjointPrimaryGeneratorAction.
+- Fixing two minor bugs in G4RunManager and G4RunManagerKernel for the
+  dump printout of regions.
+
+tracking                                     tracking-V09-02-06
+--------
+- New classes implementing the "Reverse MonteCarlo" technique:
+  G4AdjointCrossSurfChecker and G4AdjointSteppingAction.
+- G4Trajectory, G4SmoothTrajectory, G4RichTrajectory: added initial
+  kinetic energy. G4RichTrajectory: added final kinetic energy.
+  G4RichTrajectoryPoint: added "remaining energy" at each step.
+
+visualization                                    vis-V09-02-11
+-------------
+- management:
+  o Many small bug fixes.
+  o Enhanced functionality for gMocren driver: introduced the concept of
+    end-of-run model.
+  o Allow for arbitrary viewer deletion (fixes a case of crash).
+- OpenGL: fixed build problem with gl2ps on Windows.
+- OpenInventor: fixed build problem with gl2ps on Windows.
+- externals (visexternal-V09-02-06):
+  o gl2ps: Added dependency on zlib if G4LIB_BUILD_ZLIB is set.
+  o Corrected setup for building DLLs on Windows.
+- RayTracer:
+  o Fix for problem report #1072.
+
+data sets
+---------
+- G4EMLOW-6.9:
+  o Added data tables for PIXE in the directories uf, kpcsPaul and kacsPaul
+    included in the pixe dir.
+- RealSurface-1.0:
+  o New data of optical reflectance for a variety of surface treatments.
+    Absolute path controlled by environment flag G4REALSURFACEDATA.
+
+examples                                         examples-V09-02-11
+--------
+- Updated reference outputs.
+- Retired advanced examples: cosmicray_charging, radiation_monitor, Tiara.
+- advanced/air_shower (air_shower-V09-02-06)
+  o Changed UltraPhysicsList to use new processes G4eMultipleScattering,
+    G4MuMultipleScattering and G4hMultipleScattering.
+- advanced/brachytherapy (brachy-V09-02-02)
+  o Updated physics-list and analysis setup.
+- advanced/composite_calorimeter (ccal-V09-02-01)
+  o Use QGSP_BIC_EMY as default physics-list to test the low-energy EM.
+- advanced/gammaray_telescope (gammaraytel-V09-02-01)
+  o Updated physics-list setup.
+- advanced/hadrontherapy (hadrontherapy-V09-02-38)
+  o Added ability to use command based scoring; IAEA geometry: now can produce
+    Bragg peak using command based scoring
+  o Additional data extracted from E. Haettner's thesis.
+  o Now the HadrontherapyDetectorConstruction class implements only phantom
+    and detector [RO]geometry. World volume and the rest of the geometry is
+    inside another class whose messenger allows for modification by users with
+    the same old syntax.
+  o Added possibility to make a graphical user interface (GUI) using the QT
+    libraries.
+  o Added some functionalities in order to change, via messengers, geometry, 
+    voxelization of the detector and disposition in the space of the
+    detector/phantom.
+  o Added possibility to calculate the stopping powers for ions.
+  o Various additions and fixes to the matrix class.
+  o Updated the README file and general code revision.
+- advanced/lAr_calorimeter (lAr_calorimeter-V09-02-01)
+  o Use QGSP_BIC_EMY as default physics-list to tests the low-energy EM.
+  o Fixed problem in GNUmakefile.
+- medical_linac (medical_linac-V09-02-05)
+  o New release of the example: updated physics models and deleted old and
+    no longer supported processes; added possibility to activate the physics
+    lists and reference physics-lists directly via UI command; added
+    possibility to set cuts and max allowed step lenghts via UI commands.
+  o Fixed problem in GNUmakefile.
+- advanced/radioprotection (radioprotection-V09-02-04)
+  o Updated physics-lists setup.
+  o Changed analysis output format to XML.
+- advanced/Rich (Rich-V09-02-01)
+  o Added possibility to use QGSP_BIC_EMY as physics-list; by default,
+    the example's physics-list is used still.
+- advanced/xray_fluorescence (XrayFluo-V09-02-01)
+  o Migrated physics-list to new low-energy processes design
+  o Migrated XrayFluoDataSet to meet new specifications in G4VEMDataSet.
+- extended/analysis/A01 (exampleA01-V09-02-01)
+  o A01DetectorConstruction, A01MagneticField: improved handling of field.
+    Addresses problem report #1012.
+  o Removed A01Trajectory, to now use default G4Trajectory.
+  o Update physics-list to use new multiple scattering classes.
+  o Introduced use of G4UIExecutive.
+  o General update to README.
+- extended/biasing (exbiasing-V09-02-00)
+  o New example ReverseMC01, demonstrating the use of Reverse MonteCarlo
+    technique in Geant4.
+- extended/electromagnetic/TestEm0 (testem0-V09-02-01)
+- extended/electromagnetic/TestEm1 (testem1-V09-02-01)
+- extended/electromagnetic/TestEm2 (testem2-V09-02-02)
+  o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
+- extended/electromagnetic/TestEm3 (testem3-V09-02-02)
+  o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
+  o Removed G4EMConfigurator in physics-list.
+- extended/electromagnetic/TestEm5 (testem5-V09-02-07)
+  o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
+  o New local physics-list PhysListEmStandardGS.
+  o Removed G4EMConfigurator in physics-list.
+- extended/electromagnetic/TestEm11 (testem11-V09-02-01)
+- extended/electromagnetic/TestEm12 (testem12-V09-02-01)
+  o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
+- extended/electromagnetic/TestEm13 (testem13-V09-02-01)
+- extended/electromagnetic/TestEm14 (testem14-V09-02-01)
+  o Added new Livermore and Penelope physics-lists.
+- extended/electromagnetic/TestEm15 (testem15-V09-02-00)
+  o Introduced MuMultipleScattering in PhysListEmStandard.
+- extended/electromagnetic/TestEm16 (testem16-V09-02-00)
+  o Introduced Mu and eMultipleScattering in PhysListEmStandard.
+- extended/electromagnetic/TestEm18 (testem18-V09-02-04)
+  o Some cosmetics in low-energy physics-lists.
+- extended/field/field01 (fieldex01-V09-02-00)
+- extended/field/field02 (fieldex02-V09-02-00)
+- extended/field/field03 (fieldex03-V09-02-00)
+  o Fixed density of STP Carbon Dioxide in DetectorConstruction.
+- extended/field/field04 (fieldex04-V09-02-03)
+  o Changed F04PhysicsList and F04PhysicsListMessenger to use G4PhysListFactory.
+- extended/field/field05 (fieldex05-V09-02-00)
+  o New example demonstrating usage of 'spin' in electric-field to cancel
+    g-2 precession.
+- extended/medical/fanoCavity (fano-V09-02-03)
+- extended/medical/fanoCavity2 (fano2-V09-02-01)
+  o Replaced obsolete G4MultipleScattering in PhysListEmStandard_option3.
+- extended/optical/LXe (LXe-V09-02-01)
+  o Exhibit the usage of a complex index of refraction for the photo cathode.
+  o Show usage of G4OpticalPhysics builder/messenger, instead of
+    LXeOpticalPhysics.
+- extended/persistency/P03 (exampleP03-V09-02-02)
+  o Use G4XMultipleScattering in physics-list.
+- novice/N02 (exampleN02-V09-02-01)
+- novice/N03 (exampleN03-V09-02-02)
+  o Use G4MuMultipleScattering for muons; separated alpha from GenericIon.
+- novice/N06 (exampleN06-V09-02-01)
+  o Use G4eMultipleScattering, G4MuMultipleScattering and
+    G4hMultipleScattering instead of standard G4MultipleScattering.
+
+tests                                            tests-V09-02-11
+-----
+- Updated reference outputs and tools.
+- test11 (test11-V09-02-02)
+  o Changed multiple scattering processes to particle-specific.
+- test12 (test12-V09-02-07)
+  o Added option to test QGS_BIC.
+- test19 (test19-V09-02-09)
+  o Added magnetic field and G4QCollision for G4QInelastic.
+- test60 (test60-V09-02-05)
+  o Renamed main file (and executable) from Test60 to test60
+    to be conformed with all other tests.
+  o Removed useless include files in physics-list.
+- test61 (test61-V09-02-00)
+  o Changed multiple scattering processes to particle-specific.
