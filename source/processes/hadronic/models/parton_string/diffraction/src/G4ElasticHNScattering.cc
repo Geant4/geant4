@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.11 2009-10-06 10:10:36 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.12 2009-11-25 09:14:03 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -57,19 +57,14 @@ G4bool G4ElasticHNScattering::
                               G4VSplitableHadron *target,
                               G4FTFParameters    *theParameters) const
 {
-//G4cout<<"G4ElasticHNScattering::ElasticScattering"<<G4endl;
 // -------------------- Projectile parameters -----------------------------------
 	   G4LorentzVector Pprojectile=projectile->Get4Momentum();
-//G4cout<<"Elastic P "<<Pprojectile<<G4endl;
+
            if(Pprojectile.z() < 0.)
            {
             target->SetStatus(2);
             return false;
            } 
-
-//           G4double ProjectileRapidity = Pprojectile.rapidity();
-//           G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding();
-//           G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition();
 
            G4bool PutOnMassShell(false);
 
@@ -85,11 +80,9 @@ G4bool G4ElasticHNScattering::
            G4double AveragePt2=theParameters->GetAvaragePt2ofElasticScattering();
 
 // -------------------- Target parameters ----------------------------------------------
-//           G4int    TargetPDGcode=target->GetDefinition()->GetPDGEncoding();
 
   	   G4LorentzVector Ptarget=target->Get4Momentum();
-//G4cout<<"Elastic T "<<Ptarget<<G4endl;
-//           G4double TargetRapidity = Ptarget.rapidity();
+
 	   G4double M0target = Ptarget.mag();
 
            if(M0target < target->GetDefinition()->GetPDGMass()) 
@@ -148,7 +141,7 @@ G4bool G4ElasticHNScattering::
             }
             else // if(M0projectile > projectile->GetDefinition()->GetPDGMass())
             {
-             target->SetStatus(2);                                   // Uzhi 17.07.09
+             target->SetStatus(2);                                   
              return false;                   // The projectile was not excited,
                                              // but the energy was too low to put
                                              // the target nucleon on mass-shell
@@ -182,17 +175,6 @@ G4bool G4ElasticHNScattering::
 
            G4double maxPtSquare = PZcms2;
 
-//----- Charge exchange between the projectile and the target, if possible 
-//        (G4UniformRand() < 0.5*std::exp(-0.5*(ProjectileRapidity - TargetRapidity))))
-/*
-           if((ProjectilePDGcode != TargetPDGcode) && 
-             ((ProjectilePDGcode > 1000) && (TargetPDGcode > 1000)) &&
-             (G4UniformRand() < 1.0*std::exp(-0.5*(ProjectileRapidity - TargetRapidity)))) 
-           {
-              projectile->SetDefinition(target->GetDefinition());
-              target->SetDefinition(ProjectileDefinition); 
-           }
-*/
 // ------ Now we can calculate the transfered Pt --------------------------
 	   G4double Pt2;                                                    
            G4double ProjMassT2, ProjMassT;                                  

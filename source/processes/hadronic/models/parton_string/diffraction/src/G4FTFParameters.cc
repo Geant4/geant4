@@ -23,14 +23,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.11 2009-10-25 10:50:54 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.12 2009-11-25 09:14:03 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4FTFParameters.hh"
 
 #include "G4ios.hh"
-#include <utility>                                        // Uzhi 29.03.08
+#include <utility>                                        
 
 G4FTFParameters::G4FTFParameters()
 {;}
@@ -230,19 +230,12 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
               SetProjMinDiffMass(0.5);                    // GeV
               SetProjMinNonDiffMass(0.3);                 // GeV
               SetProbabilityOfProjDiff(0.*0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
-//G4cout<<"Params "<<0.6*0.62*std::pow(s/GeV/GeV,-0.51)<<G4endl;
+
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-//G4cout<<"       "<<2.7*0.62*std::pow(s/GeV/GeV,-0.51)<<G4endl; // was 2
-//G4int Uzhi; G4cin>>Uzhi;
+
               SetProbabilityOfTarDiff(2.*0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
-/*
-SetProjMinDiffMass(0.5);
-SetProjMinNonDiffMass(0.3);   // Uzhi 12.06.08
-SetProbabilityOfProjDiff(0.05); 
-SetProbabilityOfTarDiff(0.05);
-*/
               SetAveragePt2(0.3);                         // GeV^2
              }
            else if( (absPDGcode == 321) || (PDGcode == 311) || 

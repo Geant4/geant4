@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.16 2009-10-06 10:10:36 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.17 2009-11-25 09:14:03 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -72,11 +72,10 @@ G4bool G4DiffractiveExcitation::
   ExciteParticipants(G4VSplitableHadron *projectile, 
                      G4VSplitableHadron *target,
                      G4FTFParameters    *theParameters,
-                     G4ElasticHNScattering *theElastic) const  // Uzhi 03.09.09
+                     G4ElasticHNScattering *theElastic) const  
 {
 // -------------------- Projectile parameters -----------------------
      G4LorentzVector Pprojectile=projectile->Get4Momentum();
-//G4cout<<"Excite P "<<Pprojectile<<G4endl;
 
      if(Pprojectile.z() < 0.)
      {
@@ -87,7 +86,6 @@ G4bool G4DiffractiveExcitation::
      G4double ProjectileRapidity = Pprojectile.rapidity();
 
      G4int    ProjectilePDGcode=projectile->GetDefinition()->GetPDGEncoding();
-//     G4ParticleDefinition * ProjectileDefinition = projectile->GetDefinition();
      G4int    absProjectilePDGcode=std::abs(ProjectilePDGcode);
 
      G4bool PutOnMassShell(false);
@@ -113,10 +111,6 @@ G4bool G4DiffractiveExcitation::
      G4LorentzVector Ptarget=target->Get4Momentum();
 
      G4double M0target = Ptarget.mag();
-
-//G4cout<<"Excite T "<<Ptarget<<G4endl;
-//G4cout<<"PDGs "<<ProjectilePDGcode<<" "<<TargetPDGcode<<G4endl;
-//G4cout<<"Masses "<<M0projectile<<" "<<M0target<<G4endl;
 
      G4double TargetRapidity = Ptarget.rapidity();
 
@@ -166,7 +160,7 @@ G4bool G4DiffractiveExcitation::
      G4double PZcms2, PZcms;
 
      G4double SqrtS=std::sqrt(S);
-//G4cout<<" SqrtS "<<SqrtS<<" 2200 "<<G4endl;
+
      if(absProjectilePDGcode > 1000 && SqrtS < 2300*MeV && SqrtS < SumMasses)
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // p+p-interactions
@@ -222,8 +216,6 @@ G4bool G4DiffractiveExcitation::
 
 // Charge exchange can be possible for baryons -----------------
 
-//G4cout<<1./std::exp(-2.0*(ProjectileRapidity - TargetRapidity))<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
 // Getting the values needed for exchange ----------------------
      G4double MagQuarkExchange        =theParameters->GetMagQuarkExchange();
      G4double SlopeQuarkExchange      =theParameters->GetSlopeQuarkExchange();
@@ -239,11 +231,8 @@ G4bool G4DiffractiveExcitation::
         std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity)))
      {    
 
-//G4cout<<"Exchange "<<G4endl;
-
       G4int NewProjCode(0), NewTargCode(0);
 
-//G4bool StandardExcitation(false); // ================================= 
       G4int ProjQ1(0), ProjQ2(0), ProjQ3(0);
 
 //  Projectile unpacking --------------------------
@@ -263,11 +252,8 @@ G4bool G4DiffractiveExcitation::
       G4int ProjExchangeQ(0);
       G4int TargExchangeQ(0);
 
-//G4cout<<"Targ "<<TargQ1<<" "<<TargQ2<<" "<<TargQ3<<G4endl;
       if(absProjectilePDGcode < 1000 )
       {    // projectile is meson ----------------- 
-//G4cout<<"Proj Q1 Q2 "<<ProjQ1<<" "<<ProjQ2<<G4endl;
-
        if(ProjQ1 > 0 ) // ProjQ1 is quark
        {  
         ProjExchangeQ = ProjQ1;
@@ -282,7 +268,6 @@ G4bool G4DiffractiveExcitation::
         {
          TargExchangeQ = TargQ3;  TargQ3=ProjExchangeQ; ProjQ1=TargExchangeQ;
         }
-//G4cout<<" Pr Tr "<<ProjQ1<<" "<<TargQ1<<" "<<TargQ2<<" "<<TargQ3<<G4endl;
        } else          // ProjQ2 is quark
        {  
         ProjExchangeQ = ProjQ2;
@@ -328,39 +313,34 @@ G4bool G4DiffractiveExcitation::
 
        target->SetDefinition(
        G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode)); 
-//G4cout<<"New PDGs "<<NewProjCode<<" "<<NewTargCode<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
-       //}
       } else 
       {    // projectile is baryon ----------------
-G4double Same=0.; //0.3; //0.5;
+       G4double Same=0.; //0.3; //0.5;
        G4bool ProjDeltaHasCreated(false);
        G4bool TargDeltaHasCreated(false);
  
        G4double Ksi=G4UniformRand();
        if(G4UniformRand() < 0.5)     // Sampling exchange quark from proj. or targ.
        {   // Sampling exchanged quark from the projectile ---
-//G4cout<<"Proj Exc"<<G4endl;
         if( Ksi < 0.333333 ) 
         {ProjExchangeQ = ProjQ1;}
         else if( (0.333333 <= Ksi) && (Ksi < 0.666667))
         {ProjExchangeQ = ProjQ2;}
         else
         {ProjExchangeQ = ProjQ3;}
-//G4cout<<"ProjExchangeQ "<<ProjExchangeQ<<G4endl;
 
-        if((ProjExchangeQ != TargQ1)||(G4UniformRand()<Same)) // Vova
+        if((ProjExchangeQ != TargQ1)||(G4UniformRand()<Same)) 
         {
          TargExchangeQ = TargQ1; TargQ1=ProjExchangeQ; ProjExchangeQ=TargExchangeQ;
         } else
-        if((ProjExchangeQ != TargQ2)||(G4UniformRand()<Same)) // Vova
+        if((ProjExchangeQ != TargQ2)||(G4UniformRand()<Same)) 
         {
          TargExchangeQ = TargQ2; TargQ2=ProjExchangeQ; ProjExchangeQ=TargExchangeQ;
         } else 
         {
          TargExchangeQ = TargQ3;  TargQ3=ProjExchangeQ; ProjExchangeQ=TargExchangeQ;
         }
-//G4cout<<"ProjExchangeQ "<<ProjExchangeQ<<G4endl;
+
         if( Ksi < 0.333333 ) 
         {ProjQ1=ProjExchangeQ;}
         else if( (0.333333 <= Ksi) && (Ksi < 0.666667))
@@ -368,109 +348,34 @@ G4double Same=0.; //0.3; //0.5;
         else
         {ProjQ3=ProjExchangeQ;}
 
-/*
-        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3); // *****************************
-
-        if((ProjQ1==ProjQ2) && (ProjQ1==ProjQ3)) {NewProjCode +=2; ProjDeltaHasCreated=true;}
-        else if(projectile->GetDefinition()->GetPDGiIsospin() == 3)// Projectile was Delta
-        { if(G4UniformRand() > DeltaProbAtQuarkExchange)
-                                                 {NewProjCode +=2; ProjDeltaHasCreated=true;} 
-          else                                   {NewProjCode +=0; ProjDeltaHasCreated=false;}
-        }
-        else                                                       // Projectile was Nucleon
-        {
-         if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS > DeltaMass+M0target)) 
-                                                 {NewProjCode +=2; ProjDeltaHasCreated=true;}
-         else                                    {NewProjCode +=0; ProjDeltaHasCreated=false;}
-        } 
-
-        NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3); // *****************************
-
-        if((TargQ1==TargQ2) && (TargQ1==TargQ3)) {NewTargCode +=2; TargDeltaHasCreated=true;}  
-        else if(target->GetDefinition()->GetPDGiIsospin() == 3)    // Target was Delta
-        { if(G4UniformRand() > DeltaProbAtQuarkExchange)
-                                                 {NewTargCode +=2; TargDeltaHasCreated=true;} 
-          else                                   {NewTargCode +=0; TargDeltaHasCreated=false;}
-        }
-        else                                                       // Target was Nucleon
-        {
-         if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS > M0projectile+DeltaMass)) 
-                                                 {NewTargCode +=2; TargDeltaHasCreated=true;}
-         else                                    {NewTargCode +=0; TargDeltaHasCreated=false;}
-        }         
-
-        if((absProjectilePDGcode == NewProjCode) && (absTargetPDGcode == NewTargCode))
-        { // Nothing was changed! It is not right!?
-        }
-*/
-/*-----------------------------------------------------------------------------------------
-        if(!ProjDeltaHasCreated && !TargDeltaHasCreated) // No Deltas were created then
-        { if( G4UniformRand() < 0.5) {NewProjCode +=2; ProjDeltaHasCreated = true;}
-          else                       {NewTargCode +=2; TargDeltaHasCreated = true;} 
-        }
-
-        if(!(ProjDeltaHasCreated && TargDeltaHasCreated))
-        {
-         if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS >2600.)) 
-         { 
-G4cout<<"2 Deltas "<<G4endl;
-          if(!ProjDeltaHasCreated)
-               {NewProjCode +=2; ProjDeltaHasCreated = true;}
-          else {NewTargCode +=2; TargDeltaHasCreated = true;} // For Delta isobar
-         }
-        }
-*/
        } else
        {   // Sampling exchanged quark from the target -------
-//G4cout<<"Targ Exc"<<G4endl;
         if( Ksi < 0.333333 ) 
         {TargExchangeQ = TargQ1;}
         else if( (0.333333 <= Ksi) && (Ksi < 0.666667)) 
         {TargExchangeQ = TargQ2;}
         else
         {TargExchangeQ = TargQ3;}
-//G4cout<<"TargExchangeQ "<<TargExchangeQ<<G4endl;
-        if((TargExchangeQ != ProjQ1)||(G4UniformRand()<Same)) // Vova
+
+        if((TargExchangeQ != ProjQ1)||(G4UniformRand()<Same)) 
         {
          ProjExchangeQ = ProjQ1; ProjQ1=TargExchangeQ; TargExchangeQ=ProjExchangeQ;
         } else
-        if((TargExchangeQ != ProjQ2)||(G4UniformRand()<Same)) // Vova
+        if((TargExchangeQ != ProjQ2)||(G4UniformRand()<Same)) 
         {
          ProjExchangeQ = ProjQ2; ProjQ2=TargExchangeQ; TargExchangeQ=ProjExchangeQ;
         } else 
         {
          ProjExchangeQ = ProjQ3;  ProjQ3=TargExchangeQ; TargExchangeQ=ProjExchangeQ;
         }
-//G4cout<<"TargExchangeQ "<<TargExchangeQ<<G4endl;
+
         if( Ksi < 0.333333 ) 
         {TargQ1=TargExchangeQ;}
         else if( (0.333333 <= Ksi) && (Ksi < 0.666667)) 
         {TargQ2=TargExchangeQ;}
         else
         {TargQ3=TargExchangeQ;}
-/*
-        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3);
-        if( (ProjQ1 == ProjQ2) && (ProjQ1 == ProjQ3) )  
-        {NewProjCode +=2; ProjDeltaHasCreated = true;}
 
-        NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3);
-        if( (TargQ1 == TargQ2) && (TargQ1 == TargQ3) )  
-        {NewTargCode +=2; TargDeltaHasCreated = true;}
-
-        if(!ProjDeltaHasCreated && !TargDeltaHasCreated)
-        {NewTargCode +=2; TargDeltaHasCreated = true;}
-
-        if(!(ProjDeltaHasCreated && TargDeltaHasCreated))
-        {
-         if((G4UniformRand() < DeltaProbAtQuarkExchange) && (SqrtS >2600.)) 
-         { 
-G4cout<<"2 Deltas "<<G4endl;
-          if(!ProjDeltaHasCreated)
-               {NewProjCode +=2; ProjDeltaHasCreated = true;}
-          else {NewTargCode +=2; TargDeltaHasCreated = true;}
-         }
-        }
-*/
        } // End of sampling baryon
 
        NewProjCode = NewNucleonId(ProjQ1, ProjQ2, ProjQ3); // *****************************
@@ -508,10 +413,6 @@ G4cout<<"2 Deltas "<<G4endl;
        }
 // Forming baryons --------------------------------------------------
 
-//       if( ProjDeltaHasCreated && TargDeltaHasCreated ) {StandardExcitation = true;}
-
-//G4cout<<"New PDG "<<NewProjCode<<" "<<NewTargCode<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
       } // End of if projectile is baryon ---------------------------
 
 
@@ -536,8 +437,6 @@ G4cout<<"2 Deltas "<<G4endl;
       PZcms2=(S*S+M0projectile2*M0projectile2+M0target2*M0target2-
              2*S*M0projectile2 - 2*S*M0target2 - 2*M0projectile2*M0target2)
              /4./S;
-//G4cout<<"New Masses "<<M0projectile<<" "<<M0target<<G4endl;
-//G4cout<<"PZcms2 "<<PZcms2<<G4endl;
 
       if(PZcms2 < 0) {return false;}  // It can be if energy is not sufficient for Delta
 //----------------------------------------------------------
@@ -555,10 +454,6 @@ G4cout<<"2 Deltas "<<G4endl;
       Ptarget.setPz(    -PZcms);
       Ptarget.setE(std::sqrt(M0target2+PZcms2));
 
-//G4cout<<"Proj "<<Pprojectile<<" "<<Pprojectile.mag()<<G4endl;
-//G4cout<<"Targ "<<Ptarget<<" "<<Ptarget.mag()<<G4endl;
-
-//      if(!StandardExcitation)
       {
        Pprojectile.transform(toLab);
        Ptarget.transform(toLab);
@@ -570,32 +465,13 @@ G4cout<<"2 Deltas "<<G4endl;
        target->Set4Momentum(Ptarget);
 
        G4bool Result= theElastic->ElasticScattering (projectile,target,theParameters);
-//G4cout<<"1 Delta result "<<Result<<"**********"<<G4endl;
+
        return Result;
       } 
-/*
-else
-      {
-       if(M0projectile > ProjectileDiffStateMinMass) 
-       { ProjectileDiffStateMinMass +=200.*MeV; ProjectileNonDiffStateMinMass +=200.*MeV;}
-
-       if(M0target > TargetDiffStateMinMass) 
-       { TargetDiffStateMinMass +=200.*MeV; TargetNonDiffStateMinMass +=200.*MeV;}
-
-       ProbOfDiffraction         = 1.;
-       ProbProjectileDiffraction =0.5;
-       ProbTargetDiffraction     =0.5;
-G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
-//       After that standard FTF excitation
-      }
-*/
      }  // End of charge exchange part ------------------------------
 
 // ------------------------------------------------------------------
-//     G4double ProbOfDiffraction=ProbProjectileDiffraction +
-//                                ProbTargetDiffraction;
-//G4cout<<ProbOfDiffraction<<" "<<ProbProjectileDiffraction<<" "<<ProbTargetDiffraction<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
+
      if(ProbOfDiffraction!=0.)
      {
       ProbProjectileDiffraction/=ProbOfDiffraction;
@@ -604,8 +480,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
      {
       ProbProjectileDiffraction=0.;
      }
-
-//ProbOfDiffraction=1.; //0.5; // Vova 
 
      G4double ProjectileDiffStateMinMass2    = ProjectileDiffStateMinMass    *
                                                ProjectileDiffStateMinMass;
@@ -616,7 +490,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
                                                TargetDiffStateMinMass;
      G4double TargetNonDiffStateMinMass2     = TargetNonDiffStateMinMass     *
                                                TargetNonDiffStateMinMass;
-
 
      G4double Pt2;
      G4double ProjMassT2, ProjMassT;
@@ -636,7 +509,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
        {
         if(G4UniformRand() < ProbProjectileDiffraction)
         { //-------- projectile diffraction ---------------
-//G4cout<<"Proj difr"<<G4endl;
          do {
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
@@ -658,7 +530,7 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
              PZcms2=(S*S + ProjMassT2*ProjMassT2 + TargMassT2*TargMassT2-
                      2.*S*ProjMassT2-2.*S*TargMassT2-2.*ProjMassT2*TargMassT2)
                     /4./S;
-//G4cout<<"PZcms2 < 0 false "<<PZcms2<<G4endl;
+
              if(PZcms2 < 0 ) 
              {
                target->SetStatus(2);  
@@ -702,7 +574,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
         else
         { // -------------- Target diffraction ----------------
          do {
-//G4cout<<"Targ difr"<<G4endl;
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
 //	   	 G4cout << "G4DiffractiveExcitation::ExciteParticipants possibly looping"
@@ -769,7 +640,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
         }
         else  //----------- Non-diffraction process ------------
         {
-//G4cout<<"Non difr"<<G4endl;
          do {
 //             Generate pt
 //             if (whilecount++ >= 500 && (whilecount%100)==0)
@@ -840,9 +710,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
 	   Pprojectile += Qmomentum;
 	   Ptarget     -= Qmomentum;
 
-//G4cout<<"Masses "<<Pprojectile.mag()<<" "<<Ptarget.mag()<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
-
 // Transform back and update SplitableHadron Participant.
 	   Pprojectile.transform(toLab);
 	   Ptarget.transform(toLab);
@@ -864,8 +731,6 @@ G4cout<<"Exc DD "<<M0projectile<<" "<<M0target<<" --------------------"<<G4endl;
 }
 
 // ---------------------------------------------------------------------
-//G4ExcitedString * G4DiffractiveExcitation::
-//           String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron, 
                                             G4bool isProjectile,
                                             G4ExcitedString * &FirstString, 
@@ -886,12 +751,7 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
 	  return;
 	}
         G4LorentzVector Phadron=hadron->Get4Momentum();
-/*
-G4cout<<"Create strings had "<<hadron->GetDefinition()->GetParticleName()<<" "<<Phadron<<" "<<Phadron.mag()<<G4endl;
-G4cout<<"isProjectile "<<isProjectile<<G4endl;
-G4cout<<"start Q "<<start->GetDefinition()->GetPDGEncoding()<<G4endl;
-G4cout<<"end   Q "<<end->GetDefinition()->GetPDGEncoding()<<G4endl;
-*/
+
         G4LorentzVector Pstart(0.,0.,0.,0.);
         G4LorentzVector Pend(0.,0.,0.,0.);
         G4LorentzVector Pkink(0.,0.,0.,0.);
@@ -913,7 +773,7 @@ G4cout<<"end   Q "<<end->GetDefinition()->GetPDGEncoding()<<G4endl;
 
         G4double W = hadron->Get4Momentum().mag();
         G4double W2=W*W;
-//G4cout<<"W Wmin "<<W<<" "<<Wmin<<G4endl;
+
         G4double Pt(0.), x1(0.), x2(0.), x3(0.);
         G4bool Kink=false;
 
@@ -921,17 +781,16 @@ G4cout<<"end   Q "<<end->GetDefinition()->GetPDGEncoding()<<G4endl;
         {                                        // Kink is possible
           G4double Pt2kink=theParameters->GetPt2Kink();
           Pt = std::sqrt(Pt2kink*(std::pow(W2/16./Pt2kink+1.,G4UniformRand()) - 1.));
-// Pt=0.;
-//G4cout<<"Pt2kink Pt Pt2 "<<Pt2kink<<" "<<Pt<<" "<<Pt*Pt<<G4endl;
+
           if(Pt > 500.*MeV)
           {
              G4double Ymax = std::log(W/2./Pt + std::sqrt(W2/4./Pt/Pt - 1.));
              G4double Y=Ymax*(1.- 2.*G4UniformRand());
-//G4cout<<"Ymax Y "<<Ymax<<" "<<Y<<G4endl;
+
              x1=1.-Pt/W*std::exp( Y);
              x3=1.-Pt/W*std::exp(-Y);
              x2=2.-x1-x3;
-//G4cout<<"X1 X2 X3 "<<x1<<" "<<x2<<" "<<x3<<G4endl;
+
              G4double Mass_startQ = 650.*MeV;
              if(PDGcode_startQ <  3) Mass_startQ =  325.*MeV;
              if(PDGcode_startQ == 3) Mass_startQ =  500.*MeV;
@@ -946,7 +805,7 @@ G4cout<<"end   Q "<<end->GetDefinition()->GetPDGEncoding()<<G4endl;
              G4double P2_3=W2*x3*x3/4.-Mass_startQ*Mass_startQ;
      
              G4double P2_2=sqr((2.-x1-x3)*W/2.);
-//G4cout<<"P2_1 P2_2 P2_3 "<<P2_1<<" "<<P2_2<<" "<<P2_3<<G4endl;
+
              if((P2_1 < 0.) || (P2_3 <0.))
              { Kink=false;}
              else
@@ -954,10 +813,10 @@ G4cout<<"end   Q "<<end->GetDefinition()->GetPDGEncoding()<<G4endl;
                G4double P_1=std::sqrt(P2_1);
                G4double P_2=std::sqrt(P2_2);
                G4double P_3=std::sqrt(P2_3);
-//G4cout<<"P_1 P_2 P_3 "<<P_1<<" "<<P_2<<" "<<P_3<<G4endl;
+
                G4double CosT12=(P2_3-P2_1-P2_2)/(2.*P_1*P_2);
                G4double CosT13=(P2_2-P2_1-P2_3)/(2.*P_1*P_3);
-//G4cout<<"CosT12 CosT13 "<<CosT12<<" "<<CosT13<<" "<<std::acos(CosT12)*180./3.14159<<" "<<std::acos(CosT13)*180./3.14159<<G4endl;
+
                if((std::abs(CosT12) >1.) || (std::abs(CosT13) > 1.)) 
                { Kink=false;}
                else
@@ -980,44 +839,28 @@ G4cout<<"end   Q "<<end->GetDefinition()->GetPDGEncoding()<<G4endl;
 
                  PkinkQ2=Pkink - PkinkQ1;
 //------------------------- Minimizing Pt1^2+Pt3^2 ------------------------------
-/*
-G4cout<<"Pstart "<<Pstart<<G4endl;
-G4cout<<"Pkink  "<<Pkink <<G4endl;
-G4cout<<"Pkink1 "<<PkinkQ1<<G4endl;
-G4cout<<"Pkink2 "<<PkinkQ2<<G4endl;
-G4cout<<"Pend   "<<Pend  <<G4endl;
-*/
+
                  G4double Cos2Psi=(sqr(x1) -sqr(x3)+2.*sqr(x3*CosT13))/
                           std::sqrt(sqr(sqr(x1)-sqr(x3)) + sqr(2.*x1*x3*CosT13));
                  G4double Psi=std::acos(Cos2Psi);
-//G4cout<<"Psi "<<Psi<<" "<<Psi*180./twopi<<G4endl;
 
 G4LorentzRotation Rotate;
 if(isProjectile) {Rotate.rotateY(Psi);}
 else             {Rotate.rotateY(pi-Psi);}                   
 Rotate.rotateZ(twopi*G4UniformRand());
 
-//G4cout<<"Rotate"<<G4endl;
-
 Pstart*=Rotate;
 Pkink*=Rotate;
 PkinkQ1*=Rotate;
 PkinkQ2*=Rotate;
 Pend*=Rotate;
-/*
-G4cout<<"Pstart "<<Pstart<<G4endl;
-G4cout<<"Pkink1 "<<PkinkQ1 <<G4endl;
-G4cout<<"Pkink2 "<<PkinkQ2 <<G4endl;
-G4cout<<"Pend   "<<Pend  <<G4endl;
-*/
+
                }
              }      // end of if((P2_1 < 0.) || (P2_3 <0.))
           }         // end of if(Pt > 500.*MeV)
         }           // end of if(W > Wmin) Check for a kink
 
 //--------------------------------------------------------------------------------
-
-//G4cout<<"Kink "<<Kink<<G4endl;
 
         if(Kink)
         {                                        // Kink is possible
@@ -1027,55 +870,23 @@ G4cout<<"Pend   "<<Pend  <<G4endl;
           G4int QuarkInGluon(1); G4double Ksi=G4UniformRand();
           for(unsigned int Iq=0; Iq <3; Iq++)
           {
-//G4cout<<Iq<<" "<<QuarkProbabilitiesAtGluonSplitUp[Iq]<<G4endl;
+
 if(Ksi > QuarkProbabilitiesAtGluonSplitUp[Iq]) QuarkInGluon++;}
 
-//G4cout<<"Gquark "<<QuarkInGluon<<G4endl;
           G4Parton * Gquark = new G4Parton(QuarkInGluon);
           G4Parton * Ganti_quark = new G4Parton(-QuarkInGluon);
-/*
-G4cout<<Gquark->GetDefinition()->GetParticleName()<<" "<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->GetDefinition()->GetPDGMass()<<G4endl;
-G4cout<<Ganti_quark->GetDefinition()->GetParticleName()<<" "<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->GetDefinition()->GetPDGMass()<<G4endl;
-*/
-
-//G4int Uzhi; G4cin>>Uzhi;
 
 //-------------------------------------------------------------------------------
-/*
-DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection); 
-      void Set4Momentum(const G4LorentzVector & aMomentum);
-      G4int PDGencoding;
-      G4ParticleDefinition * theDefinition;
-      G4LorentzVector theMomentum;
-      G4ThreeVector   thePosition;
-      
-      G4int theColour;
-      G4double theIsoSpinZ;
-      G4double theSpinZ;
-      
-      G4double theX;
-*/
-//-------------------------------------------------------------------------------
-
-//G4cout<<"Phadron "<<Phadron<<" mass "<<Phadron.mag()<<G4endl;
           G4LorentzRotation toCMS(-1*Phadron.boostVector());
-//G4cout<<"To lab"<<G4endl;
+
           G4LorentzRotation toLab(toCMS.inverse());
 
           Pstart.transform(toLab);  start->Set4Momentum(Pstart);
           PkinkQ1.transform(toLab);
           PkinkQ2.transform(toLab);
           Pend.transform(toLab);    end->Set4Momentum(Pend);
-/*
-G4cout<<"Pstart "<<start->GetDefinition()->GetPDGEncoding()<<Pstart<<G4endl;
-G4cout<<"Pkink1 "<<PkinkQ1 <<G4endl;
-G4cout<<"Pkink2 "<<PkinkQ2 <<G4endl;
-G4cout<<"Pend   "<<end->GetDefinition()->GetPDGEncoding()<<Pend  <<G4endl;
-*/
-// !!!	  G4ExcitedString * FirstString(0); G4ExcitedString * SecondString(0);
-          G4int absPDGcode=std::abs(hadron->GetDefinition()->GetPDGEncoding());
 
-//G4cout<<"absPDGcode "<<absPDGcode<<G4endl;
+          G4int absPDGcode=std::abs(hadron->GetDefinition()->GetPDGEncoding());
 
           if(absPDGcode < 1000)
           {                                // meson
@@ -1087,35 +898,14 @@ G4cout<<"Pend   "<<end->GetDefinition()->GetPDGEncoding()<<Pend  <<G4endl;
                 SecondString= new G4ExcitedString(Gquark,start      ,+1);
                 Ganti_quark->Set4Momentum(PkinkQ1);
                 Gquark->Set4Momentum(PkinkQ2);
-/*
-G4cout<<" Proj Meson end Q"<<G4endl;
-G4cout<<"First string  ============ "<<G4endl;
-G4cout<<"end  Q "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"G antiQ"<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"G    Q "<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
 
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
               } else
               {                            // Anti_Quark on the end
                 FirstString = new G4ExcitedString(end        ,Gquark, +1);
                 SecondString= new G4ExcitedString(Ganti_quark,start ,+1);
                 Gquark->Set4Momentum(PkinkQ1);
                 Ganti_quark->Set4Momentum(PkinkQ2);
-/*
-G4cout<<" Proj Meson end Qbar"<<G4endl;
-G4cout<<"First string  ============ "<<G4endl;
-G4cout<<"end  Q "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"G     Q"<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"G antQ "<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               }   // end of if(end->GetPDGcode() > 0)
             } else {                      // Target
               if(end->GetDefinition()->GetPDGEncoding() > 0 )  // A quark on the end
@@ -1124,34 +914,14 @@ G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+start->Get4Momentum())<<G4endl;
                 SecondString= new G4ExcitedString(start      ,Gquark,-1);
                 Ganti_quark->Set4Momentum(PkinkQ2);
                 Gquark->Set4Momentum(PkinkQ1);
-/*
-G4cout<<" Targ Meson end Q"<<G4endl;
-G4cout<<"First string   ============ "<<G4endl;
-G4cout<<"G antiQ"<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"end  Q "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"G    Q "<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               } else
               {                            // Anti_Quark on the end
                 FirstString = new G4ExcitedString(Gquark,end        ,-1);
                 SecondString= new G4ExcitedString(start ,Ganti_quark,-1);
                 Gquark->Set4Momentum(PkinkQ2);
                 Ganti_quark->Set4Momentum(PkinkQ1);
-/*
-G4cout<<" Targ Meson end Qbar"<<G4endl;
-G4cout<<"First string   ============ "<<G4endl;
-G4cout<<"G     Q"<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"end  Q "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"G antQ "<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               }   // end of if(end->GetPDGcode() > 0)
 	    }     // end of if ( isProjectile )
           } else  // if(absPDGCode < 1000)
@@ -1165,34 +935,14 @@ G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+start->Get4Momentum())<<G4endl;
                 SecondString= new G4ExcitedString(Ganti_quark,start ,+1);
                 Gquark->Set4Momentum(PkinkQ1);
                 Ganti_quark->Set4Momentum(PkinkQ2);
-/*
-G4cout<<" Proj baryon end QQ"<<G4endl;
-G4cout<<"First string   ============ "<<G4endl;
-G4cout<<"end OQ "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"G    Q"<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"G  Qbar"<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               } else
               {                            // Anti_DiQuark on the end or quark
                 FirstString = new G4ExcitedString(end   ,Ganti_quark, +1);
                 SecondString= new G4ExcitedString(Gquark,start      ,+1);
                 Ganti_quark->Set4Momentum(PkinkQ1);
                 Gquark->Set4Momentum(PkinkQ2);
-/*
-G4cout<<" Proj baryon end Q"<<G4endl;
-G4cout<<"First string   ============ "<<G4endl;
-G4cout<<"end OQ "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"G antQ"<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"G  Q   "<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               }   // end of if(end->GetPDGcode() > 0)
             } else {                      // Target
 
@@ -1204,34 +954,14 @@ G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+start->Get4Momentum())<<G4endl;
                 SecondString= new G4ExcitedString(start ,Ganti_quark,-1);
                 Gquark->Set4Momentum(PkinkQ1);
                 Ganti_quark->Set4Momentum(PkinkQ2);
-/*
-G4cout<<" Targ baryon end QQ"<<G4endl;
-G4cout<<"First string   ============ "<<G4endl;
-G4cout<<"G  Q   "<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"end OQ "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"G  Qbar"<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               } else
               {                            // Anti_DiQuark on the end or Q
                 FirstString = new G4ExcitedString(Ganti_quark,end   ,-1);
                 SecondString= new G4ExcitedString(start      ,Gquark,-1);
                 Gquark->Set4Momentum(PkinkQ2);
                 Ganti_quark->Set4Momentum(PkinkQ1);
-/*
-G4cout<<" Targ baryon end Q"<<G4endl;
-G4cout<<"First string   ============ "<<G4endl;
-G4cout<<"G  Qbar"<<Ganti_quark->GetDefinition()->GetPDGEncoding()<<" "<<Ganti_quark->Get4Momentum()<<G4endl;
-G4cout<<"end O "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Ganti_quark->Get4Momentum()+end->Get4Momentum())<<G4endl;
-G4cout<<"Secondstring   ============ "<<G4endl;
-G4cout<<"startQ "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
-G4cout<<"G  Q   "<<Gquark->GetDefinition()->GetPDGEncoding()<<" "<<Gquark->Get4Momentum()<<G4endl;
-G4cout<<"Sum P  "<<(Gquark->Get4Momentum()+start->Get4Momentum())<<G4endl;
-*/
+
               }   // end of if(end->GetPDGcode() > 0)
 	    }     // end of if ( isProjectile )
           }  // end of if(absPDGcode < 1000)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.15 2009-10-25 10:50:54 vuzhinsk Exp $
+// $Id: G4FTFParticipants.cc,v 1.16 2009-11-25 09:14:03 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -71,7 +71,7 @@ G4FTFParticipants::~G4FTFParticipants()
 //{}
 
 void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
-                                      G4FTFParameters    *theParameters) // Uzhi 29.03.08
+                                      G4FTFParameters    *theParameters) 
 {
     
     StartLoop();  // reset Loop over Interactions
@@ -95,44 +95,28 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	G4double impactX = theImpactParameter.first; 
 	G4double impactY = theImpactParameter.second;
 
-        G4ThreeVector thePosition(impactX, impactY, -DBL_MAX);     //Uzhi 24 July 09 
-        primarySplitable->SetPosition(thePosition);                //Uzhi 24 July 09
+        G4ThreeVector thePosition(impactX, impactY, -DBL_MAX);     
+        primarySplitable->SetPosition(thePosition);                
 
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
-//G4int InterNumber=0;           // Uzhi
-G4int NucleonNumber(0);        // Uzhi
-//while ( (nucleon=theNucleus->GetNextNucleon())&& (InterNumber < 1) ) // Uzhi
-	while ( (nucleon=theNucleus->GetNextNucleon()) ) // Uzhi
+
+	while ( (nucleon=theNucleus->GetNextNucleon()) ) 
 	{
-//G4cout<<"Nucl# "<<NucleonNumber<<G4endl; // Vova
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
                              sqr(impactY - nucleon->GetPosition().y());
 
-//	   if ( theParameters->GetInelasticProbability(impact2/fermi/fermi) // Uzhi 29.03.08 
-	   if ( theParameters->GetProbabilityOfInteraction(impact2/fermi/fermi) // Uzhi 29.03.08 
+	   if ( theParameters->GetProbabilityOfInteraction(impact2/fermi/fermi) 
 		> G4UniformRand() )
 	   {
-//InterNumber++;
-/*                                                    // Uzhi 20 July 2009
-	   	if ( nucleusNeedsShift ) 
-	   	{			// on the first hit, shift nucleus 
-	   	     nucleusNeedsShift = false;
-	   	     theNucleus->DoTranslation(G4ThreeVector(-1*impactX,-1*impactY,0.));
-	   	     impactX=0;
-	   	     impactY=0;
-	   	}
-*/                                                    // Uzhi 20 July 2009
-//G4cout<<"          Interact"<<G4endl;
                 primarySplitable->SetStatus(1);        // It takes part in the interaction
 
 		G4VSplitableHadron * targetSplitable=0;
 	   	if ( ! nucleon->AreYouHit() )
 	   	{
-//G4cout<<"Part "<<nucleon->Get4Momentum()<<G4endl;
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
-	   	    nucleon->SetBindingEnergy(3.*nucleon->GetBindingEnergy()); // Uzhi 5.10.09
+	   	    nucleon->SetBindingEnergy(3.*nucleon->GetBindingEnergy()); 
                     targetSplitable->SetStatus(1);     // It takes part in the interaction
 	   	}
 	   	G4InteractionContent * aInteraction = 
@@ -141,13 +125,12 @@ G4int NucleonNumber(0);        // Uzhi
                 aInteraction->SetTargetNucleon(nucleon);     // Uzhi 16.07.09
 		theInteractions.push_back(aInteraction);
 	   }
-NucleonNumber++; // Uzhi
 	}    
-// // Uzhi
+
 //	G4cout << "Number of Hit nucleons " << theInteractions.size()<<G4endl; //  entries() 
 //		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
 //		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
-// // Uzhi
+
     }
    
 }
