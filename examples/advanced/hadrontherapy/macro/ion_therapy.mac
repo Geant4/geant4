@@ -18,6 +18,7 @@
 /physic/addPhysics elastic                             # Hadronic elastic model   (Geant4 native physic list)
 /physic/addPhysics binary                              # Hadronic inelastic model for proton and neutron (Geant4 native physic list)
 /physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+/physic/addPhysics radioactive_decay
 
 #Alternatively to *local_ion_ion_inelastic* the native "binary-ion" can be also used
 

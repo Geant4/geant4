@@ -46,6 +46,7 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMatrix.hh"
+
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
   : motherPhys(physicalTreatmentRoom),
@@ -201,37 +202,46 @@ G4bool HadrontherapyDetectorConstruction::SetNumberOfVoxelBySize(G4double sizeX,
     // XXX numberOfVoxels must be an integer, warn the user
 
     if (sizeX > 0)
+    {
+	if (sizeX > 2*detectorSizeX)
 	{
-	  if (sizeX > 2*detectorSizeX)
-	   {
-		   G4cout << "WARNING: Voxel X size must be smaller or equal than that of detector X" << G4endl;
-		   return false;
-	   }
-	 // Round to zero 
-	  numberOfVoxelsAlongX = (G4int) (2 * detectorSizeX / sizeX);
-          sizeOfVoxelAlongX = (2 * detectorSizeX / numberOfVoxelsAlongX );
+	    G4cout << "WARNING: Voxel X size must be smaller or equal than that of detector X" << G4endl;
+	    return false;
 	}
+	// Round to the nearest integer 
+	numberOfVoxelsAlongX = lrint(2 * detectorSizeX / sizeX);
+	sizeOfVoxelAlongX = (2 * detectorSizeX / numberOfVoxelsAlongX );
+	if(sizeOfVoxelAlongX!=sizeX) G4cout << "Rounding " << 
+						G4BestUnit(sizeX, "Length") << " to " << 
+						G4BestUnit(sizeOfVoxelAlongX, "Length") << G4endl;
+    }
 
     if (sizeY > 0)
+    {
+	if (sizeY > 2*detectorSizeY)
 	{
-	  if (sizeY > 2*detectorSizeY)
-	   {
-		   G4cout << "WARNING: Voxel Y size must be smaller or equal than that of detector Y" << G4endl;
-		   return false;
-	   }
-	 numberOfVoxelsAlongY = (G4int) (2 * detectorSizeY / sizeY);
-	 sizeOfVoxelAlongY = (2 * detectorSizeY / numberOfVoxelsAlongY );
+	    G4cout << "WARNING: Voxel Y size must be smaller or equal than that of detector Y" << G4endl;
+	    return false;
 	}
-	  if (sizeZ > 0)
+	numberOfVoxelsAlongY = lrint(2 * detectorSizeY / sizeY);
+	sizeOfVoxelAlongY = (2 * detectorSizeY / numberOfVoxelsAlongY );
+	if(sizeOfVoxelAlongY!=sizeY) G4cout << "Rounding " << 
+						G4BestUnit(sizeY, "Length") << " to " << 
+						G4BestUnit(sizeOfVoxelAlongY, "Length") << G4endl;
+    }
+    if (sizeZ > 0)
+    {
+	if (sizeZ > 2*detectorSizeZ)
 	{
-	  if (sizeZ > 2*detectorSizeZ)
-	   {
-		G4cout << "WARNING: Voxel Z size must be smaller or equal than that of detector Z" << G4endl;
-		return false;
-	   }
-	 numberOfVoxelsAlongZ = (G4int) (2 * detectorSizeZ / sizeZ);
-	 sizeOfVoxelAlongZ = (2 * detectorSizeZ / numberOfVoxelsAlongZ );
+	    G4cout << "WARNING: Voxel Z size must be smaller or equal than that of detector Z" << G4endl;
+	    return false;
 	}
+	numberOfVoxelsAlongZ = lrint(2 * detectorSizeZ / sizeZ);
+	sizeOfVoxelAlongZ = (2 * detectorSizeZ / numberOfVoxelsAlongZ );
+	if(sizeOfVoxelAlongZ!=sizeZ) G4cout << "Rounding " << 
+						G4BestUnit(sizeZ, "Length") << " to " << 
+						G4BestUnit(sizeOfVoxelAlongZ, "Length") << G4endl;
+    }
 
     G4cout << "The (X, Y, Z) sizes of the Voxels are: (" << 
 		G4BestUnit(sizeOfVoxelAlongX, "Length")  << ", " << 

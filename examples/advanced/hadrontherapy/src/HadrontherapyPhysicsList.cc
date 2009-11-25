@@ -83,7 +83,7 @@
 
 // Local physic directly implemented in the Hadronthrapy directory
 #include "LocalIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes
-#include "LocalINCLIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes using INCL/ABLA
+#include "LocalINCLIonIonInelasticPhysic.hh"         // Physic dedicated to the ion-ion inelastic processes using INCL/ABLA
 
 // Physic lists (contained inside the Geant4 distribution)
 #include "G4EmStandardPhysics_option3.hh"
@@ -106,6 +106,8 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
 
+#include "G4RadioactiveDecayPhysics.hh"
+
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
 {
@@ -119,6 +121,7 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
   bicIsRegisted  = false;
   biciIsRegisted = false;
   locIonIonInelasticIsRegistered = false;
+  radioactiveDecayIsRegisted = false;
 
   stepMaxProcess  = 0;
 
@@ -210,13 +213,13 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     emPhysicsList = new G4EmStandardPhysics_option3();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
 
- } else if (name == "LowE_Livermore") {
+  } else if (name == "LowE_Livermore") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
 
- } else if (name == "LowE_Penelope") {
+  } else if (name == "LowE_Penelope") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmPenelopePhysics();
@@ -258,6 +261,10 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "local_incl_ion_ion_inelastic" && !locIonIonInelasticIsRegistered) {
     hadronPhys.push_back(new LocalINCLIonIonInelasticPhysic());
     locIonIonInelasticIsRegistered = true;
+
+  } else if (name == "radioactive_decay" && !radioactiveDecayIsRegisted ) {
+    hadronPhys.push_back(new G4RadioactiveDecayPhysics());
+    radioactiveDecayIsRegisted = true;
 
   } else {
 
@@ -323,5 +330,3 @@ void HadrontherapyPhysicsList::SetCutForPositron(G4double cut)
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
-
-

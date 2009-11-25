@@ -70,6 +70,7 @@ private:
   G4bool bicIsRegisted;
   G4bool biciIsRegisted;
   G4bool locIonIonInelasticIsRegistered;
+  G4bool radioactiveDecayIsRegisted;
 
   G4String                             emName;
   G4VPhysicsConstructor*               emPhysicsList;
@@ -82,4 +83,3 @@ private:
 };
 
 #endif
-

@@ -33,7 +33,8 @@
 /physic/addPhysics emstandard_opt3  # Electromagnetic model
 /physic/addPhysics elastic          # Hadronic elastic model
 /physic/addPhysics binary           # Hadronic inelastic model
-
+/physic/addPhysics radioactive_decay                   # Radioactive decay
+ 
 ##########################
 # Initialisation procedure
 #

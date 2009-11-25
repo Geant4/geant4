@@ -32,9 +32,12 @@
 # List of available materials #
 ###############################
 
-# Show all available elements and materials (list with additional informations)
+# Show all available materials (list with additional informations)
 /parameter/nist all
-/parameter/nist simple
+
+# Show all available elements (list with additional informations)
+#/parameter/nist simple
+
 # Show all available elements and materials (simple full list)
 #/parameter/nist 
 

@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+25.11.2009 S.E.Mazzaglia & F.Romano; Tag:Hadrontherapy-V09-02-40
+           - Corrected a bug in HadrontherapyDetectorConstruction class 
+	   - Added G4RadiactiveDecayPhysics class to the Physics List. 
+
 22.11.2009 S.E.Mazzaglia; Tag: Hadrontherapy-V09-02-39
            - Correction in the initialization of the passiveProtonBeamLine class.
 
@@ -26,8 +30,8 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              Geant4 9.3 release
 
 17.11.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-34
-	   - Added some functionalities in order to change, via messengers, the geometry, 
-	     the voxelization of the detector, and the disposition in the space of the detector/phantom.
+	   - Added some functionalities in order to change, via messengers, the geometry, the voxelization 
+	     of the detector, and the disposition in the space of the detector/phantom.
 	   - Added the possibility to calculate the stopping powers for ions too.
 	   - Modified the HadrontherapyDetectorROGeometry class constructor.
 	   - Various additions and fixes to the matrix class.
