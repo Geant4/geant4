@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.21 2009-11-25 13:10:51 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.22 2009-11-25 16:33:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -121,7 +121,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicInteraction* theBERT = 
     NewModel(new G4CascadeInterface(),0.0,6.5*GeV);
   G4HadronicInteraction* theBERT1 = 
-    NewModel(new G4CascadeInterface(),2.5,6.5*GeV);
+    NewModel(new G4CascadeInterface(),2.5*GeV,6.5*GeV);
   G4HadronicInteraction* theBIC = 
     NewModel(new G4BinaryCascade(),0.0,3.5*GeV);
   G4HadronicInteraction* theCHIPS = 
