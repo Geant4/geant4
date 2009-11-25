@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #--------------------------------------------------------------------
-# Last update: 20-Nov-2009
+# Last update: 25-Nov-2009
 #
 # This script should be run in the directory which has, either
 # as immediate subdirectories (in the case of Patricia's framework)
@@ -189,8 +189,8 @@ dictBeamEnergiesPS = { '1GeV':0,
                        '250GeV':0,
                        '300GeV':0 }
 
-dictObservablesPS = { '1':0,
-                      '2':0,
+dictObservablesPS = { 'edep_act':0,
+                      'edep_cal':0,
                       'L0':0,
                       'L1':0,
                       'L2':0,
@@ -286,6 +286,9 @@ for dir in listDir :
     foundPS = 0
     foundNan = 0
     foundWarning = 0
+    detectorString = ""
+    particleString = ""
+    energyString = ""
     for iFile in listFiles :
         #print " iFile=", iFile
 
@@ -329,27 +332,27 @@ for dir in listDir :
             for iDetector in dictCalorimetersOK.keys() :
                 if ( iFile.find( "-" + iDetector + "-" ) > -1 ) :
                     dictCalorimetersOK[ iDetector ] += 1
+                    detectorString = iDetector
             for iParticle in dictBeamParticlesOK.keys() :
                 if ( iFile.find( "-" + iParticle + "-" ) > -1 ) :
                     dictBeamParticlesOK[ iParticle ] += 1
+                    particleString = iParticle
             for iEnergy in dictBeamEnergiesOK.keys() :
                 if ( iFile.find( "-" + iEnergy + "-" ) > -1 ) :
                     dictBeamEnergiesOK[ iEnergy ] += 1
-        if ( iFile.find( "plot.ps" ) > -1 ) :
+                    energyString = iEnergy
+        if ( iFile.find( "plot" ) > -1 ) :
             foundPS = 1
             countPS += 1
             listPS.write( currentDir + "/" + iFile )
-            for iDetector in dictCalorimetersPS.keys() :
-                if ( iFile.find( "-" + iDetector + "-" ) > -1 ) :
-                    dictCalorimetersPS[ iDetector ] += 1
-            for iParticle in dictBeamParticlesPS.keys() :
-                if ( iFile.find( "-" + iParticle + "-" ) > -1 ) :
-                    dictBeamParticlesPS[ iParticle ] += 1
-            for iEnergy in dictBeamEnergiesPS.keys() :
-                if ( iFile.find( "-" + iEnergy + "-" ) > -1 ) :
-                    dictBeamEnergiesPS[ iEnergy ] += 1
+            if ( detectorString != "") :
+                dictCalorimetersPS[ detectorString ] += 1
+            if ( particleString != "") :
+                dictBeamParticlesPS[ particleString ] += 1
+            if ( energyString != "" ) :
+                dictBeamEnergiesPS[ energyString ] += 1
             for iObservable in dictObservablesPS.keys() :
-                if ( iFile.find( "-" + iObservable + "-" ) > -1 ) :
+                if ( iFile.find( "_" + iObservable + ".ps") > -1 ) :
                     dictObservablesPS[ iObservable ] += 1
                 elif ( iObservable == "L>9" ) :
                     for i in xrange(100) :
