@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.9 2009-07-19 18:24:03 kaitanie Exp $
+// $Id: G4PhysListFactory.cc,v 1.10 2009-11-25 13:10:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -119,11 +119,10 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "LBE") {p = new LBE();}
   else if(name == "LHEP") {p = new LHEP();}
   else if(name == "LHEP_EMV") {p = new LHEP_EMV();}
-  else if(name == "QBBBG") {p = new QBBC(1, "QBBBG");}
   else if(name == "QBBC") {p = new QBBC();}
-  else if(name == "QBBCG") {p = new QBBC(1, "QBBCG");}
-  else if(name == "QBBCF") {p = new QBBC(1, "QBBCF");}
-  else if(name == "QBBC_HP") {p = new QBBC(1, "QBBC_HP");}
+  else if(name == "QBBC_HP") {p = new QBBC(1,"QBBC_HP");}
+  else if(name == "QBBC_XGG") {p = new QBBC(1,"QBBC_XGG");}
+  else if(name == "QBBC_XGGSN") {p = new QBBC(1,"QBBC_XGGSN");}
   else if(name == "QGSC") {p = new QGSC();}
   else if(name == "QGSC_BERT") {p = new QGSC_BERT();}
   else if(name == "QGSC_CHIPS") {p = new QGSC_CHIPS();}

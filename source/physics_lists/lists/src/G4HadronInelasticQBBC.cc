@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.20 2009-10-08 17:29:00 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.21 2009-11-25 13:10:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -47,7 +47,13 @@
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
-#include "G4UInelasticCrossSection.hh"
+//#include "G4UInelasticCrossSection.hh"
+#include "G4NeutronInelasticXS.hh"
+#include "G4NeutronCaptureXS.hh"
+
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4PiNuclearCrossSection.hh"
 
 #include "G4QGSBuilder.hh"
 #include "G4FTFBuilder.hh"
@@ -56,6 +62,7 @@
 #include "G4CascadeInterface.hh"
 #include "G4BinaryCascade.hh"
 #include "G4LCapture.hh"
+#include "G4NeutronRadCapture.hh"
 
 #include "G4NeutronHPInelastic.hh"
 #include "G4NeutronHPFission.hh"
@@ -64,13 +71,21 @@
 #include "G4NeutronHPFissionData.hh"
 #include "G4NeutronHPCaptureData.hh"
 
-G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String&, G4int ver, 
+enum QBBCType
+{
+  fQBBC = 0,
+  fQBBC_XGG,
+  fQBBC_XGGSN,
+  fQBBC_HP
+};
+
+G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver, 
 					     G4bool, G4bool,
 					     G4bool, G4bool hp, G4bool)
   : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
 {
-  htype = "QBBC";
-  if(hp) htype = "QBBC_HP";
+  htype = name;
+  if(hp) { htype = "QBBC_HP"; }
 }
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
@@ -80,6 +95,12 @@ void G4HadronInelasticQBBC::ConstructProcess()
 {
   if(wasActivated) return;
   wasActivated = true;
+
+  // select type
+  QBBCType fType = fQBBC;
+  if("QBBC_XGG" == htype)        { fType = fQBBC_XGG; }
+  else if("QBBC_XGGSN" == htype) { fType = fQBBC_XGGSN; }
+  else if("QBBC_HP" == htype)    { fType = fQBBC_HP; }
 
   if(verbose > 1) {
     G4cout << "### HadronInelasticQBBC Construct Process with type <"
@@ -98,7 +119,11 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicInteraction* theFTFP1 = 
     BuildModel(new G4FTFBuilder("FTFP"),4.5*GeV,100.*TeV);
   G4HadronicInteraction* theBERT = 
-    NewModel(new G4CascadeInterface(),0.0,9.9*GeV);
+    NewModel(new G4CascadeInterface(),0.0,6.5*GeV);
+  G4HadronicInteraction* theBERT1 = 
+    NewModel(new G4CascadeInterface(),2.5,6.5*GeV);
+  G4HadronicInteraction* theBIC = 
+    NewModel(new G4BinaryCascade(),0.0,3.5*GeV);
   G4HadronicInteraction* theCHIPS = 
     NewModel(new G4QStringChipsParticleLevelInterface(),0.0,7.5*GeV);
 
@@ -132,31 +157,44 @@ void G4HadronInelasticQBBC::ConstructProcess()
        pname == "xi-"       || 
        pname == "xi0") {
       
+      // common for all particles
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      if(!hp) continue;
+      if(!hp) { continue; }
       G4ProcessManager* pmanager = particle->GetProcessManager();
       pmanager->AddDiscreteProcess(hp);
 
+      // model and X-section configuration
       if(pname == "proton") {
-	hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
-
+        if(fType == fQBBC || fType == fQBBC_HP) { 
+	  hp->AddDataSet(new G4ProtonInelasticCrossSection()); 
+	} else {
+          hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
+	}
 	hp->RegisterMe(theQGSP);
 	hp->RegisterMe(theFTFP);
-	hp->RegisterMe(theBERT);
+	hp->RegisterMe(theBERT1);
+	hp->RegisterMe(theBIC);
 
       } else if(pname == "neutron") {
-	hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
+        if(fType == fQBBC || fType == fQBBC_HP) { 
+	  hp->AddDataSet(new G4NeutronInelasticCrossSection()); 
+	} else if(fType == fQBBC_XGG) {
+          hp->AddDataSet(new G4BGGNucleonInelasticXS(particle));
+	} else {
+          hp->AddDataSet(new G4NeutronInelasticXS());
+	}
 
 	hp->RegisterMe(theQGSP);
 	hp->RegisterMe(theFTFP);
+	hp->RegisterMe(theBERT1);
        
 	G4HadronicProcess* capture = FindCaptureProcess();
 	pmanager->AddDiscreteProcess(capture);
 
-	if(flagHP) {
-	  G4HadronicInteraction* theBERT1 = 
-	    NewModel(new G4CascadeInterface(), 19.5*MeV, 7.*GeV);
-	  hp->RegisterMe(theBERT1);
+	if(fType == fQBBC_HP) {
+	  G4HadronicInteraction* theBIC1 = 
+	    NewModel(new G4BinaryCascade(), 19.5*MeV, 3.5*GeV);
+	  hp->RegisterMe(theBIC1);
 	  hp->RegisterMe(new G4NeutronHPInelastic());
 	  hp->AddDataSet(new G4NeutronHPInelasticData());
 
@@ -169,12 +207,20 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	  fission->AddDataSet(new G4NeutronHPFissionData());
 
 	} else {
-	  hp->RegisterMe(theBERT);
-	  capture->RegisterMe(new G4LCapture());
+	  hp->RegisterMe(theBIC);
+	  capture->RegisterMe(new G4NeutronRadCapture());
+	  //capture->RegisterMe(new G4LCapture());
+          if(fType == fQBBC_XGGSN) {
+	    capture->AddDataSet(new G4NeutronCaptureXS());
+	  }
 	}
 
       } else if(pname == "pi-" || pname == "pi+") {
-	hp->AddDataSet(new G4BGGPionInelasticXS(particle));
+        if(fType == fQBBC || fType == fQBBC_HP) { 
+	  hp->AddDataSet(new G4PiNuclearCrossSection()); 
+	} else {
+          hp->AddDataSet(new G4BGGPionInelasticXS(particle));
+	}
 	hp->RegisterMe(theQGSP);
 	hp->RegisterMe(theFTFP);
         hp->RegisterMe(theBERT);

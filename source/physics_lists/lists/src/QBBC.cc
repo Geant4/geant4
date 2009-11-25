@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.2 2009-10-08 17:29:00 vnivanch Exp $
+// $Id: QBBC.cc,v 1.3 2009-11-25 13:10:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,6 +45,7 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option2.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4QStoppingPhysics.hh"
 
@@ -60,14 +61,14 @@
 QBBC::QBBC( G4int ver, const G4String& type )
 {
   G4DataQuestionaire it(photon, neutron);
-  G4cout << "<<< Geant4 Physics List simulation engine: QBBC with type <"
+  G4cout << "<<< Geant4 Physics List simulation engine: QBBC of type <"
 	 << type <<">" <<G4endl;	
   G4cout <<G4endl;
   defaultCutValue = 0.7*mm;  
   SetVerboseLevel(ver);
 
   // EM Physics
-  RegisterPhysics( new G4EmStandardPhysics(ver));
+  RegisterPhysics( new G4EmStandardPhysics_option2(ver));
 
   // Synchroton Radiation & GN Physics
   RegisterPhysics( new G4EmExtraPhysics("extra EM"));
