@@ -101,12 +101,15 @@ geometry/navigation                              geomnav-V09-02-80
   the decrease factor to 0.35. Improved printing of Diagnostic message.
   Addresses a problem seen at boundary of volumes reported by ATLAS.
 
-geometry/solids/CSG                              geom-csg-V09-02-06
+geometry/solids/CSG                              geom-csg-V09-02-07
 -------------------
 - G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
   of point on surface. Fixes a problem of stuck tracks observed in CMS, due
   to wrong reply from the solid for points on the inner radius surface base
   with direction along the imaginary extension of the cone.
+- G4Torus: fix in SolveNumericJT() in order to take in account the difference
+  in the value of theta for different intervals, [0:pi] or [-pi:0], and for
+  SPhi in [0:twopi] or [-twopi:0]. Addresses problem report #1086.
 
 geometry/solids/specific                         geom-specific-V09-02-08
 ------------------------
@@ -171,7 +174,7 @@ persistency/ascii                                ascii-V09-02-10
 - Inclusion of extruded and tessellated solids.
 - Additions of accessors and constructors of G4tgbVolume and G4tgrVolume.
 
-physics_lists                                    phys-lists-V09-02-40
+physics_lists                                    phys-lists-V09-02-41
 -------------
 - Added G4OpticalPhysics and G4OpticalPhysicsMessenger classes.
 - G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
@@ -180,6 +183,8 @@ physics_lists                                    phys-lists-V09-02-40
 - G4EmStandardPhysics_option2: use default StepFunction for ions.
 - Added two builders G4QNeutrinoPhysics & G4QPhotoNuclearPhysics with
   the messenger to the CHIPS physics list. Arranged dependencies with CHIPS.
+- Updated QBBC physics-list.
+- Updated list of supported  physics-lists in G4PhysicsListFactory.
 
 processes/cuts                                   procuts-V09-02-08
 --------------
@@ -240,7 +245,7 @@ processes/electromagnetic/polarisation           empolar-V09-02-01
   in error check.
 - Bug fix in G4StokesVector::RotateAz() for wrong usage of vector product.
 
-processes/electromagnetic/standard               emstand-V09-02-32
+processes/electromagnetic/standard               emstand-V09-02-33
 ----------------------------------
 - Added new G4alphaIonisation process.
 - G4ICRU49NuclearStoppingModel: new model providing computation of nuclear
@@ -254,7 +259,7 @@ processes/electromagnetic/standard               emstand-V09-02-32
 - G4GoudsmitSaundersonMscModel: tuned small angle theta distributions
   assuming the case of lambdan<1 as single scattering regime; tuned theta
   sampling for theta below the screening angle.
-- G4LindhardPartition: class moved from TestEm7.
+- Restored 'linLossLimit' as in release 9.2 for G4ionIonisation.
 
 processes/electromagnetic/utils                  emutils-V09-02-24
 -------------------------------
@@ -265,13 +270,16 @@ processes/electromagnetic/utils                  emutils-V09-02-24
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-02-15)
+- cross_sections (hadr-cross-V09-02-16)
   o Use as a default hadron-nucleon cross section parameterisation
     in G4GlauberGribovCrossSection, G4GGNuclNuclCrossSection,
     G4NeutronElasticXS, G4NeutronInelasticXS, G4BGGNucleonElasticXS,
     G4BGGNucleonInelasticXS, G4BGGPionElasticXS, G4BGGPionInelasticXS
   o Bug fixes for G4BGGXX classes and added new classes G4NeutronElasticXS,
     G4NeutronInelasticXS, G4NeutronCaptureXS.
+  o Modified upper limit of validity to 100 TeV in G4PiNuclearCrossSection,
+    G4NeutronInelasticCrossSection and G4ProtonInelasticCrossSection.
+    Use constant cross-section above original range.
 - models/binary_cascade (had-binary-V09-02-05)
   o Changes to G4BinaryCascade to protects against energy non-conservation:
     shift of particle's formation times; inclusion of captured particles;
@@ -435,10 +443,11 @@ examples                                         examples-V09-02-11
   o Use QGSP_BIC_EMY as default physics-list to test the low-energy EM.
 - advanced/gammaray_telescope (gammaraytel-V09-02-01)
   o Updated physics-list setup.
-- advanced/hadrontherapy (hadrontherapy-V09-02-39)
+- advanced/hadrontherapy (hadrontherapy-V09-02-40)
   o Added ability to use command based scoring; IAEA geometry: now can produce
     Bragg peak using command based scoring
   o Additional data extracted from E. Haettner's thesis.
+  o Added G4RadiactiveDecayPhysics class to the physics-list.
   o Correction in the initialization of the passiveProtonBeamLine class.
   o Now the HadrontherapyDetectorConstruction class implements only phantom
     and detector [RO]geometry. World volume and the rest of the geometry is
@@ -493,10 +502,11 @@ examples                                         examples-V09-02-11
   o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
   o New local physics-list PhysListEmStandardGS.
   o Removed G4EMConfigurator in physics-list.
-- extended/electromagnetic/TestEm7 (testem7-V09-02-01)
+- extended/electromagnetic/TestEm7 (testem7-V09-02-03)
   o Renaming of IDs in PhysicsList.
   o Removed obsolete G4MultipleScattering in PhysListEmStandardNR  
   o Use Livermore and Penelope builders from reference physics-lists library.
+  o Fixed compilation warnings on SLC5 and corrected disclaimer on some files.
   o Updated README and macro files.
 - extended/electromagnetic/TestEm9 (testem9-V09-02-00)
   o Changed options: 20bins/decade; LinLossLimit=default=0.01.
@@ -523,6 +533,8 @@ examples                                         examples-V09-02-11
 - extended/field/field05 (fieldex05-V09-02-00)
   o New example demonstrating usage of 'spin' in electric-field to cancel
     g-2 precession.
+- extended/hadronic/Hadr01 (exhadr01-V09-02-03)
+  o Updated physics-list choice according to new configuration.
 - extended/medical/DICOM (DICOM-V09-02-03)
   o Changed DICOM Handler to read CT files coming from CONQUEST DICOM server.
 - extended/medical/electronScattering (electronScattering-V09-02-03)
@@ -535,8 +547,10 @@ examples                                         examples-V09-02-11
   o Updated physics-list for EM.
 - extended/optical/LXe (LXe-V09-02-01)
   o Exhibit the usage of a complex index of refraction for the photo cathode.
-  o Show usage of G4OpticalPhysics builder/messenger, instead of
-    LXeOpticalPhysics.
+  o Use of G4OpticalPhysics builder/messenger, instead of LXeOpticalPhysics.
+- extended/optical/wls (WLS-V09-02-00)
+  o New example for optical physics simulating the propagation of photons
+    inside a Wave Length Shifting (WLS) fiber.
 - extended/persistency/P03 (exampleP03-V09-02-02)
   o Use G4XMultipleScattering in physics-list.
 - extended/polarisation/Pol01 (expol01-V09-02-00)
