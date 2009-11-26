@@ -46,13 +46,6 @@ g4ui_xawlibs:\
 ?INIT:g4ui_use_win32='n'
 ?INIT:g4ui_use_tcsh='y'
 
-# Early rejig of defaults in the case of WIN32 (Because we don't
-# know g4osname by INIT stage)
-if test "x$g4osname" = "xWIN32" ; then
-	g4ui_build_win32_session='y'
-	g4ui_use_win32='y'
-fi
-
 echo " "
 echo "*OPTIONS FOR GEANT4 USER INTERFACE MODULES*"
 

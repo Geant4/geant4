@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.125 2009-11-25 18:32:02 bmorgan Exp $
+# $Id: Configure,v 1.126 2009-11-26 10:40:56 bmorgan Exp $
 #
-# Generated on Wed Nov 25 18:31:02 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Thu Nov 26 10:39:51 GMT 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3807,13 +3807,6 @@ EOM`
 	esac
 done
 
-
-# Early rejig of defaults in the case of WIN32 (Because we don't
-# know g4osname by INIT stage)
-if test "x$g4osname" = "xWIN32" ; then
-	g4ui_build_win32_session='y'
-	g4ui_use_win32='y'
-fi
 
 echo " "
 echo "*OPTIONS FOR GEANT4 USER INTERFACE MODULES*"
