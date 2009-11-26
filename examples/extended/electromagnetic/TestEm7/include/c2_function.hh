@@ -30,7 +30,7 @@
  *  fast, flexible operations on piecewise-twice-differentiable functions
  *
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
- *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
+ *  \author 2005 Vanderbilt University.
  *
  * 	\version c2_function.hh,v 1.238 2008/05/22 12:45:19 marcus Exp
  *  \see \ref c2_factory "Factory Functions" for information on constructing things in here  

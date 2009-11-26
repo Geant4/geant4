@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LindhardPartition.cc,v 1.3 2009-11-24 17:26:42 vnivanch Exp $
+// $Id: G4LindhardPartition.cc,v 1.4 2009-11-26 08:19:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,7 @@
  *  G4LindhardPartition.cc
  *
  *  Created by Marcus Mendenhall on 1/14/08.
- *  Copyright 2008 Vanderbilt University, Nashville, TN, USA. All rights reserved.
+ *  2008 Vanderbilt University, Nashville, TN, USA.
  *
  */
 
