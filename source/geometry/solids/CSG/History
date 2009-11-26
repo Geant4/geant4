@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2009-11-12 11:53:38 gcosmo Exp $
+$Id: History,v 1.118 2009-11-26 10:31:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 26, 2009  T.Nikitina                 geom-csg-V09-02-07
+- G4Torus: fix in SolveNumericJT() in order to take in account the difference
+  in the value of theta for different intervals, [0:pi] or [-pi:0], and for
+  SPhi in [0:twopi] or [-twopi:0]. Addresses problem report #1086.
 
 Nov 12, 2009  T.Nikitina                 geom-csg-V09-02-06
 - G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
