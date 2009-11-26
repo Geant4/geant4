@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2009-11-25 18:31:21 bmorgan Exp $
+$Id: History,v 1.33 2009-11-26 10:40:19 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26th November 2009 Ben Morgan
+- Configure: Regenerated following changes below.
+- U/g4_08_ui.U: Reverted WIN32 UI build default to no.
+
 25th November 2009 Ben Morgan
 - Configure: Regenerated following changes below.
 - U/g4_08_ui.U: Added a g4osname test at beginning to set default choice
