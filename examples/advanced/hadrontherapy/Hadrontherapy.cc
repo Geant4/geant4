@@ -192,9 +192,20 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
     session->SessionStart();
     delete session;
    }
-    HadrontherapyMatrix* matrix = HadrontherapyMatrix::getInstance();
-    if (matrix) matrix -> TotalEnergyDeposit();
- 
+ HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+ if (matrix)
+ {
+     matrix -> TotalEnergyDeposit("DoseDistribution.out");
+     // print list of generated nuclides 
+     //matrix -> PrintNuclides();
+
+     // Store to files secondaries fluence contribution
+     // matrix -> StoreFluenceData(); 
+     // Store to files secondaries dose contribution
+     // matrix -> StoreDoseData();
+     // Sore to one file all secondaries dose
+     matrix -> StoreData("Secondaries.out");
+ } 
 #ifdef ANALYSIS_USE
  analysis -> finish();
 #endif

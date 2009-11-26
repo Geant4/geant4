@@ -28,49 +28,90 @@
 
 #ifndef HadrontherapyMatrix_H
 #define HadrontherapyMatrix_H 1
-
+#include <G4ParticleDefinition.hh>
 #include "globals.hh"
 #include <vector>
+#include <fstream>
 
 // The information: energy deposit and position in the phantom
 // is stored in a matrix
 
+// type struct useful to store nucludes data
+struct ion 
+ { 
+     G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
+     G4String name; // simple name without excitation energy: He3, He4, Li7, ...
+     G4int len; // name length
+     G4int Z; // atomic number
+     G4int A; // mass number
+     G4double *dose; // pointer to dose matrix
+     u_int    *fluence; // pointer to fluence matrix
+ };
+
 class HadrontherapyMatrix 
 {
 private:
-  HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ); //<--- this is supposed to be a singleton
+  HadrontherapyMatrix(G4int numberOfVoxelAlongX, 
+		      G4int numberOfVoxelAlongY, 
+		      G4int numberOfVoxelAlongZ); //< this is supposed to be a singleton
 
 public:
 
   ~HadrontherapyMatrix();
 // Get object instance only
-  static HadrontherapyMatrix* getInstance();
+  static HadrontherapyMatrix* GetInstance();
 // Make & Get instance
-  static HadrontherapyMatrix* getInstance(G4int nX, G4int nY, G4int nZ);
- 
-  void flush();
- 
-  void Initialize(); 
+  static HadrontherapyMatrix* GetInstance(G4int nX, G4int nY, G4int nZ);
+
+  // Full list of generated nuclides
+  void PrintNuclides(); 
+  // Hit array marker (useful to avoid multiple counts of fluence)
+  void ClearHitTrack();
+  G4int* GetHitTrack(G4int i, G4int j, G4int k);
+
   // All the elements of the matrix are initialised to zero
-   
+  void flush();
+  void Initialize(); 
+
+// Fill DOSE/fluence matrix for particle: 
+// if fluence parameter is true then fluence at voxel (i, j, k) is increased 
+// else energyDeposit fill the dose matrix for voxel (i,j,k) 
+  G4bool Fill(G4ParticleDefinition* particleDef, G4int i, G4int j, G4int k, G4double energyDeposit, G4bool fluence=false); 
+
+  // Fill TOTAL DOSE matrix for primary particle 
   void Fill(G4int i, G4int j, G4int k, G4double energyDeposit);
   // The matrix is filled with the energy deposit 
   // in the element corresponding to the voxel of the phantom where
   // the energy deposit was registered
- 
-  void TotalEnergyDeposit();
+  
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
-  
-  inline G4int Index(G4int i, G4int j, G4int k){ return (i * numberVoxelY + j) * numberVoxelZ + k; } 
-  // Get a unique index from a three dimensional voxel information
+  void TotalEnergyDeposit(G4String filename);
+   
+  // Store single matrix data to filename 
+  void StoreMatrix(G4String filename, void* data,size_t psize);
+  // Store all fluence data to filenames
+  void StoreFluenceData();
+  // Store all dose data to filenames
+  void StoreDoseData();
+
+  // Store all data (except the total dose) to ONE filename
+  void StoreData(G4String filename);
+
+  inline G4int Index(G4int i, G4int j, G4int k) { return (i * numberOfVoxelAlongY + j) * numberOfVoxelAlongZ + k; } 
+  // Get a unique index from  a three dimensional one 
 
 private:
 
   static HadrontherapyMatrix* instance;
-  G4int numberVoxelX;
-  G4int numberVoxelY;
-  G4int numberVoxelZ;
+  G4int numberOfVoxelAlongX;
+  G4int numberOfVoxelAlongY;
+  G4int numberOfVoxelAlongZ;
   G4double* matrix;
+  G4int* hitTrack;
+  std::ofstream ofs;
+
+// Dose&fluence data store 
+  std::vector <ion> ionStore;
 };
 #endif

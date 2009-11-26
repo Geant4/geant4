@@ -42,6 +42,7 @@ public:
   HadrontherapyDetectorSD(G4String name);
   ~HadrontherapyDetectorSD();
 
+    std::ofstream ofs;
   void Initialize(G4HCofThisEvent*);
  
   G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);

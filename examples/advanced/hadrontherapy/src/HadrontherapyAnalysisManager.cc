@@ -592,9 +592,9 @@ void HadrontherapyAnalysisManager::setBeamMetaData(G4double meanKineticEnergy,G4
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::flush()
 {
-  HadrontherapyMatrix* matrix = HadrontherapyMatrix::getInstance();
+  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
 
-  matrix->TotalEnergyDeposit();
+  matrix->TotalEnergyDeposit("DoseDistribution.out");
 #ifdef G4ANALYSIS_USE
   theTree -> commit();
   theTree ->close();

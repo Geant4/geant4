@@ -27,6 +27,7 @@
 //
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
+
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4Box.hh"
@@ -46,6 +47,7 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMatrix.hh"
+#include <math.h>
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
@@ -71,13 +73,13 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
   sizeOfVoxelAlongX = 200 *um;  
   sizeOfVoxelAlongY = 2 * detectorSizeY;
   sizeOfVoxelAlongZ = 2 * detectorSizeZ;
-
   // Calculate (and eventually set) detector position by displacement, phantom size and detector size
   SetDetectorPosition();
 
   // Build phantom and associated detector 
   ConstructPhantom();
   ConstructDetector();
+
   // Set number of the detector voxels along X Y and Z directions.  
   // This will construct also the sensitive detector, the ROGeometry 
   // and the matrix where the energy deposited is collected!
@@ -87,7 +89,7 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
 { 
-    delete detectorROGeometry;// This should be safe in C++ even if the argument is a NULL pointer  
+    delete detectorROGeometry;  
     delete matrix;  
     delete detectorMessenger;
 }
@@ -208,12 +210,12 @@ G4bool HadrontherapyDetectorConstruction::SetNumberOfVoxelBySize(G4double sizeX,
 	    G4cout << "WARNING: Voxel X size must be smaller or equal than that of detector X" << G4endl;
 	    return false;
 	}
-	// Round to the nearest integer 
+	// Round to nearest integer 
 	numberOfVoxelsAlongX = lrint(2 * detectorSizeX / sizeX);
 	sizeOfVoxelAlongX = (2 * detectorSizeX / numberOfVoxelsAlongX );
 	if(sizeOfVoxelAlongX!=sizeX) G4cout << "Rounding " << 
-						G4BestUnit(sizeX, "Length") << " to " << 
-						G4BestUnit(sizeOfVoxelAlongX, "Length") << G4endl;
+					    G4BestUnit(sizeX, "Length") << " to " << 
+					    G4BestUnit(sizeOfVoxelAlongX, "Length") << G4endl;
     }
 
     if (sizeY > 0)
@@ -226,8 +228,8 @@ G4bool HadrontherapyDetectorConstruction::SetNumberOfVoxelBySize(G4double sizeX,
 	numberOfVoxelsAlongY = lrint(2 * detectorSizeY / sizeY);
 	sizeOfVoxelAlongY = (2 * detectorSizeY / numberOfVoxelsAlongY );
 	if(sizeOfVoxelAlongY!=sizeY) G4cout << "Rounding " << 
-						G4BestUnit(sizeY, "Length") << " to " << 
-						G4BestUnit(sizeOfVoxelAlongY, "Length") << G4endl;
+					    G4BestUnit(sizeY, "Length") << " to " << 
+					    G4BestUnit(sizeOfVoxelAlongY, "Length") << G4endl;
     }
     if (sizeZ > 0)
     {
@@ -239,24 +241,24 @@ G4bool HadrontherapyDetectorConstruction::SetNumberOfVoxelBySize(G4double sizeX,
 	numberOfVoxelsAlongZ = lrint(2 * detectorSizeZ / sizeZ);
 	sizeOfVoxelAlongZ = (2 * detectorSizeZ / numberOfVoxelsAlongZ );
 	if(sizeOfVoxelAlongZ!=sizeZ) G4cout << "Rounding " << 
-						G4BestUnit(sizeZ, "Length") << " to " << 
-						G4BestUnit(sizeOfVoxelAlongZ, "Length") << G4endl;
+					    G4BestUnit(sizeZ, "Length") << " to " << 
+					    G4BestUnit(sizeOfVoxelAlongZ, "Length") << G4endl;
     }
 
-    G4cout << "The (X, Y, Z) sizes of the Voxels are: (" << 
-		G4BestUnit(sizeOfVoxelAlongX, "Length")  << ", " << 
-		G4BestUnit(sizeOfVoxelAlongY, "Length")  << ", " << 
-		G4BestUnit(sizeOfVoxelAlongZ, "Length") << ')' << G4endl;
+    G4cout << "The (X,Y,Z) sizes of the Voxels are: (" << 
+	      G4BestUnit(sizeOfVoxelAlongX, "Length")  << ',' << 
+	      G4BestUnit(sizeOfVoxelAlongY, "Length")  << ',' << 
+	      G4BestUnit(sizeOfVoxelAlongZ, "Length") << ')' << G4endl;
 
     G4cout << "The number of Voxels along (X,Y,Z) is: (" << 
-		numberOfVoxelsAlongX  << ", " <<
-	        numberOfVoxelsAlongY  << ", "  <<
-		numberOfVoxelsAlongZ  << ')' << G4endl;
+	      numberOfVoxelsAlongX  << ',' <<
+	      numberOfVoxelsAlongY  <<','  <<
+	      numberOfVoxelsAlongZ  << ')' << G4endl;
 
     //  This will clear the existing matrix (together with data inside it)! 
-    matrix = HadrontherapyMatrix::getInstance(numberOfVoxelsAlongX, 
+    matrix = HadrontherapyMatrix::GetInstance(numberOfVoxelsAlongX, 
 					      numberOfVoxelsAlongY,
-	   			 	      numberOfVoxelsAlongZ);
+					      numberOfVoxelsAlongZ);
 
     // Here construct the Sensitive Detector and Read Out Geometry
     ConstructSensitiveDetector(GetDetectorToWorldPosition());
@@ -296,9 +298,9 @@ G4bool HadrontherapyDetectorConstruction::SetDetectorSize(G4double sizeX, G4doub
 		    }
 
 
-    G4cout << "The (X, Y, Z) dimensions of the detector are : (" << 
-	    	  G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ", " << 
-	    	  G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ", " << 
+    G4cout << "The (X,Y,Z) dimensions of the detector are : (" << 
+	    	  G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ',' << 
+	    	  G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ',' << 
 	    	  G4BestUnit( detector -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
 // Adjust detector position
     SetDetectorPosition();
@@ -340,9 +342,9 @@ G4bool HadrontherapyDetectorConstruction::SetPhantomSize(G4double sizeX, G4doubl
 		   }
  
 
-    G4cout << "The (X, Y, Z) dimensions of the phantom are : (" << 
-	    	  G4BestUnit( phantom -> GetXHalfLength()*2., "Length") << ", " << 
-	    	  G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ", " << 
+    G4cout << "The (X,Y,Z) dimensions of the phantom are : (" << 
+	    	  G4BestUnit( phantom -> GetXHalfLength()*2., "Length") << ',' << 
+	    	  G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ',' << 
 	    	  G4BestUnit( phantom -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
 //G4cout << '\n' << "Coordinate volume: " << phantomPhysicalVolume -> GetTranslation() << G4endl; 
 // Adjust detector position inside phantom
@@ -356,14 +358,14 @@ G4bool HadrontherapyDetectorConstruction::SetPhantomSize(G4double sizeX, G4doubl
 G4bool HadrontherapyDetectorConstruction::SetPhantomPosition(G4ThreeVector displacement)
 {
 // Set Phantom position respect to the World 
-// TODO check for overlap!
+// TODO check for overlaps!
     phantomPosition = displacement;
     if (phantomPhysicalVolume) 
 	{
 	    phantomPhysicalVolume -> SetTranslation(phantomPosition);
 	    G4cout << "Displacement between Phantom and World is: "; 
-	    G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") << ", " << 
-		      "DY= "<< G4BestUnit(phantomPosition.getY(),"Length") << ", " << 
+	    G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") << 
+		      "DY= "<< G4BestUnit(phantomPosition.getY(),"Length") << 
 		      "DZ= "<< G4BestUnit(phantomPosition.getZ(),"Length") << G4endl;
 
 // Redraw ROGeometry!

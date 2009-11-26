@@ -23,9 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.cc; 
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-
+// $Id: HadrontherapyEventAction.cc;
+//
+// See more at: http://workgroup.lngs.infn.it/geant4lns
+//
+// ----------------------------------------------------------------------------
+//                 GEANT 4 - Hadrontherapy example
+// ----------------------------------------------------------------------------
+// Code developed by:
+//
+// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// 
+// (a) Laboratori Nazionali del Sud 
+//     of the National Institute for Nuclear Physics, Catania, Italy
+// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+// 
+// * cirrone@lns.infn.it
+// --------------------------------------------------------------
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -63,7 +77,7 @@ void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
   
   //printing survey
   if (evtNb%printModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
+     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
    
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
   if(hitsCollectionID == -1)
@@ -72,17 +86,18 @@ void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
-{  
+{ 
   if(hitsCollectionID < 0)
   return;
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
- 
+// Clear Hits of voxels list 
+  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+  matrix -> ClearHitTrack(); 
   if(HCE)
   {
     HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
     if(CHC)
      {
-	   matrix = HadrontherapyMatrix::getInstance();	 
        if(matrix)
 	  { 
 	      // Fill the matrix with the information: voxel and associated energy deposit 
