@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.63 2007-10-02 09:34:17 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.64 2009-11-26 10:20:57 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -283,9 +283,17 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
     ptmp = p + t*v ;   // calculate the position of the proposed intersection
 
     G4double theta = std::atan2(ptmp.y(),ptmp.x());
-
-    if (theta < 0)  { theta += twopi; }
     
+    if ( fSPhi >= 0 ){
+     if( theta < - kAngTolerance*0.5 )  { theta += twopi; }
+     if( (std::abs(theta) < kAngTolerance*0.5)
+              && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
+           { 
+               theta += twopi ; // 0 <= theta < 2pi
+           }
+    }
+    if((fSPhi <= -pi )&&(theta>kAngTolerance*0.5)){theta =theta- twopi;}
+       
     // We have to verify if this root is inside the region between
     // fSPhi and fSPhi + fDPhi
     //
