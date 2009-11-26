@@ -166,7 +166,9 @@ examples/extended
     fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
     fanoCavity2              Michel.Maire@lapp.in2p3.fr      Michel Maire
     GammaTherapy             Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-  optical/LXe                gum@triumf.ca                   Peter Gumplinger
+  optical:
+    LXe                      gum@triumf.ca                   Peter Gumplinger
+    wls                      gum@triumf.ca                   Peter Gumplinger
   parallel:
     ParN02, ParN04           gene@ccs.neu.edu                Gene Cooperman
     ExDiane                  susanna@uow.edu.au              Susanna Guatelli
