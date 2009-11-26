@@ -47,8 +47,10 @@ while test $# -gt 0 ; do
   --win) win="";
   	shift;	 
 	;;
-  --patch) slot=geant4-v9_2-patches;
-  	   tagname=G4_9_2_patches;
+  --tag) slot=geant4_1;
+  	  tagname=$2;
+          logfile="${logfile}.${tagname}";
+	   shift;
 	   shift;
 	   ;;
   default) shift;
@@ -74,6 +76,9 @@ for sys in $slc4 $slc5 $mac $win; do
  bonsai_basetag=`awk '/# Bonsai global tag/ { print $NF }' $tmpfile`
  rm $tmpfile
   #echo "tags: $bonsai_tag,  $bonsai_basetag"
+[ -z "$bonsai_tag"  ] && bonsai_tag=`echo $tagname | tr "-" "_"`
+#bonsai_tag=999
+[ -z "$bonsai_basetag" ] && bonsai_basetag="geant4_1"
 
 cat > $sedfile << EoI
 1i\
@@ -103,7 +108,7 @@ BEGIN {}
   num=\$3;
   tag[num]=tag[num] " " sys;
   if (num in tagnums) {;}
-  else {tagnums[num]=num;}   
+  else {tagnums[num]=num;}
 }
 /Bonsai base tag:/ {
   num=\$4
@@ -143,7 +148,7 @@ BEGIN {}
 #find bonsai tag 
 n_tags=asorti(tagnums)
 if (n_tags == 1) {
-   printf("Bonsai tag: %d\n",tagnums[1]);
+   printf("Bonsai tag: %s\n",tagnums[1]);
 } else {
    printf"Different Bonsai tags:\n"
    for (el=1;el<=n_tags; el++) {
