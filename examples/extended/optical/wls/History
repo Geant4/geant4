@@ -1,0 +1,20 @@
+$Id: History,v 1.1 2009-11-26 00:18:48 gum Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    WLS History file
+                    ----------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 24th, 2009 Siu Pak Mok / Peter Gumplinger (WLS-V09-02-00)
+------------------------------
+- First release of WLS setup for optical processes.
