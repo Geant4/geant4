@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc,v 1.5 2009-05-15 12:58:23 tnikitin Exp $
+// $Id: G4VIntersectionLocator.cc,v 1.6 2009-11-27 10:15:29 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4VIntersectionLocator implementation
@@ -190,12 +190,15 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
      G4double advanceLength= endCurveLen - currentCurveLen ; 
      if (std::abs(advanceLength)<kCarTolerance)
      {
-       advanceLength=(EstimatedEndStateB.GetPosition()
-                     -newEndPoint.GetPosition()).mag();
+       // advanceLength=(EstimatedEndStateB.GetPosition()
+       //             -newEndPoint.GetPosition()).mag();
+       goodAdvance=true;
      }
+     else{
      goodAdvance= 
        integrDriver->AccurateAdvance(newEndPoint, advanceLength,
                                      GetEpsilonStepFor());
+     }
   }
   while( !goodAdvance && (++itrial < no_trials) );
 
