@@ -57,6 +57,8 @@ int main(int argc, char** argv)
 			 "4He-144.3MeV-endep-EXP-M03-norm-max.txt",
 			 "12C100MeVen-dep-EXP-norm-max.txt"}; 
 
+  double zmax[nidx] = {120., 180., 40.};
+ 
   string fname = argv[1];
   int idx = 0;
   for (; idx < nidx; idx++) {if (fname == fnm[idx]) break;}
@@ -73,8 +75,6 @@ int main(int argc, char** argv)
   const int nbin = 3000;
   double x[nbin], y[nbin];
 
-  //  const int n_exp = 41;
-  //  int n_exp[nidx] = {41, 25, 79};
   int n_exp[nidx] = {39, 25, 76};
   int nn = n_exp[idx];
   double *x_exp = new double[nn];
@@ -83,7 +83,6 @@ int main(int argc, char** argv)
   double maxJ, maxX, maxY, norm;
   char buffer[256];
 
-  //gROOT->Reset(); 
   gROOT->SetStyle("Plain");
   TCanvas *c1 = new TCanvas("c1", "c1",6,6,800,600);
   gStyle->SetOptStat(0);
@@ -110,27 +109,22 @@ int main(int argc, char** argv)
     x_exp[i] = 10.*x_exp[i];
   }
 
-  double x_max = x_exp[nn-1]*1.01;
+  //  double x_max = x_exp[nn-1]*1.01;
   string hist_title = tp[idx] + " " + te[idx] + " " + 
     teu[idx] + " " + "in Water, Geant4  " + refer;
 
   cout << "Data file <" << fname2[idx] << " was red " << nn << " lines" << endl;
-  /*
-  TH1  *h = new TH2F("h", hist_title.c_str(),100,0,x_max,11,0,1.1);
-  h->SetLineStyle(2);
-  h->GetYaxis()->SetLabelFont(132);
-  h->GetYaxis()->SetLabelSize(0.04);
-  h->GetXaxis()->SetLabelFont(132);
-  h->GetXaxis()->SetLabelSize(0.04);
-  h->GetXaxis()->SetTitle("z, mm");
-  h->GetYaxis()->SetTitle("dE/dx, arb. units");
-  h->GetYaxis()->SetTitleOffset(1.2);
-  h->Draw();
-  */
+  
+  TH1F* h0 = gPad->DrawFrame(0.0,0.0,zmax[idx],1.2,hist_title.c_str());
+  h0->GetXaxis()->SetTitle("z (mm)");
+  h0->GetYaxis()->SetTitle("dose (relative unit)");
+  h0->Draw("AXIS SAME");
+  
   TGraph *gr = new TGraph(nn,x_exp,y_exp);
   gr->SetMarkerStyle(22);
   gr->SetMarkerSize(1.2);
   gr->Draw("P");
+  //  gr->Draw("P SAME");
 
   TLegend *leg = new TLegend(0.2,0.65,0.45,0.86);
   leg->SetTextFont(52);
@@ -172,7 +166,6 @@ int main(int argc, char** argv)
         cout << "Stop reading results at k= " << k << endl;
 	break;
       }
-      //      cout << "x= " << x[k] << " y= " << y[k] << endl; 
       hh[j]->SetBinContent(k+1, y[k]);
       hh[j]->SetBinError(k+1, y[k]/100.);
     }
@@ -182,9 +175,6 @@ int main(int argc, char** argv)
 	 << " maxX= " << maxX << " maxY= " << maxY << endl;
     norm = maxY;
     hh[j]->Scale(1./norm);
-
-    //cout << " Bin 10 y= " <<  hh[j]->GetBinContent(10) << endl;
-    //cout << " Bin 1 y= " <<  hh[j]->GetBinContent(1) << endl;
 
     hh[j]->Draw("HISTO SAME");
   
@@ -196,7 +186,6 @@ int main(int argc, char** argv)
     in.close();
   }
   leg->Draw();
-  //  c1->Update();
 
   delete [] x_exp;
   delete [] y_exp;
