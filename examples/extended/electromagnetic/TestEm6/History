@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2009-05-13 17:25:33 vnivanch Exp $
+$Id: History,v 1.34 2009-11-27 16:19:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-11-09 V.Ivant (testem6-V09-02-01)
+- H.Burkhardt add StackingAction allowing remove secondary particles;
+              cleanup PhysicsList for 9.3.
 
 13-05-09 V.Ivant (testem6-V09-02-00)
 - Increased upper limit of energy in the tables to 1000 TeV
