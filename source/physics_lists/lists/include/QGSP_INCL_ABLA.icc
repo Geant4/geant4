@@ -23,24 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_INCL_ABLA.icc,v 1.1 2009-07-19 18:24:03 kaitanie Exp $
+// $Id: QGSP_INCL_ABLA.icc,v 1.2 2009-11-27 17:28:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   QGSP_INCL_ABLA
 //
-// Author: 2002 J.P. Wellisch
+// Author: 2009 Pekka Heikkinen
+//   Created as a copy of ...
 //
 // Modified:
-// 25.11.2005 G.Folger: migration to non static particles
-// 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
-// 02.12.2005 V.Ivanchenko: rename components
-// 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
-// 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
-// 20.11.2006 G.Folger: add Tracking Cut for neutrons
-// 26.04.2007 G.Folger: Enable quasielastic for QGS string model
-// 16.05.2007 V.Ivanchenko: rename EM builders
+// 27.11.2009 G.Folger: Mark as experimental
 //
 //----------------------------------------------------------------------------
 //
@@ -69,6 +63,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_INCL_ABLA.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_INCL_ABLA<T>::TQGSP_INCL_ABLA(G4int ver):  T()
 {
 
@@ -78,6 +74,9 @@ template<class T> TQGSP_INCL_ABLA<T>::TQGSP_INCL_ABLA(G4int ver):  T()
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSP_INCL_ABLA");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

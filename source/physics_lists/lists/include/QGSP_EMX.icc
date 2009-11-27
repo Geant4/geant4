@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_EMX.icc,v 1.7 2009-06-02 16:51:35 gunter Exp $
+// $Id: QGSP_EMX.icc,v 1.8 2009-11-27 17:28:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -79,7 +79,7 @@ template<class T> TQGSP_EMX<T>::TQGSP_EMX(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
-  obs.Unsupported("QGSP_EMX","QGSP_BERT_EMX");
+  obs.Replaced("QGSP_EMX","QGSP_BERT_EMX");
   G4Exception(" Crash for usage of replaced physics list");
 
   // EM Physics

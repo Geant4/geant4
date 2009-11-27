@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_QGSC.icc,v 1.1 2009-04-06 10:04:55 mkossov Exp $
+// $Id: QGSC_QGSC.icc,v 1.2 2009-11-27 17:28:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2009 M.Kosov (based on QGSC_BERT, but without BERT)
 //
 // Modified:
+// 27.11.2009 G.Folger: Mark as obsolete
 //
 //----------------------------------------------------------------------------
 //
@@ -60,6 +61,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC_QGSC.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSC_QGSC<T>::TQGSC_QGSC(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -69,6 +72,9 @@ template<class T> TQGSC_QGSC<T>::TQGSC_QGSC(G4int ver):  T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSC_QGSC", "CHIPS");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

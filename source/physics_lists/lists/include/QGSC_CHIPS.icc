@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_CHIPS.icc,v 1.2 2009-04-17 15:29:19 mkossov Exp $
+// $Id: QGSC_CHIPS.icc,v 1.3 2009-11-27 17:28:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2009 M.Kosov (Development of the QGSC_QGSC physics list)
 //
 // Modified:
+// 27.11.2009 G.Folger: Mark as obsolete
 //
 //-------------------------------------------------------------------------------
 //  Short description: In tis file the aim is to get rid of LHEP, use the
@@ -70,6 +71,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC_CHIPS.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSC_CHIPS<T>::TQGSC_CHIPS(G4int ver):  T()
 {
   G4DataQuestionaire it(photon);
@@ -78,6 +81,9 @@ template<class T> TQGSC_CHIPS<T>::TQGSC_CHIPS(G4int ver):  T()
   // default cut value  (1.0 mm) 
   this->defaultCutValue = 0.7*mm;
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSC_CHIPS", "CHIPS");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

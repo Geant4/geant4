@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_EMV.icc,v 1.6 2009-05-18 08:54:22 gunter Exp $
+// $Id: QGSP_EMV.icc,v 1.7 2009-11-27 17:28:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ template<class T> TQGSP_EMV<T>::TQGSP_EMV(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
-  obs.Unsupported("QGSP_EMV");
+  obs.Unsupported("QGSP_EMV", "QGSP_BERT_EMV");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));

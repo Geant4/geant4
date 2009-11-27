@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_FTFP_BERT.icc,v 1.1 2009-04-23 19:04:18 japost Exp $
+// $Id: QGSP_FTFP_BERT.icc,v 1.2 2009-11-27 17:28:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,6 +33,7 @@
 // Author: 2009  J. Apostolakis/V.Ivantchenko
 //
 // Modified:
+// 27.11.2009 G.Folger: Mark as experimental
 //
 //----------------------------------------------------------------------------
 //
@@ -61,6 +62,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_FTFP_BERT.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_FTFP_BERT<T>::TQGSP_FTFP_BERT(G4int ver):  T()
 {
 
@@ -70,6 +73,9 @@ template<class T> TQGSP_FTFP_BERT<T>::TQGSP_FTFP_BERT(G4int ver):  T()
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSP_FTFP_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

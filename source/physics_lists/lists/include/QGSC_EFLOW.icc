@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_EFLOW.icc,v 1.5 2009-05-18 08:54:22 gunter Exp $
+// $Id: QGSC_EFLOW.icc,v 1.6 2009-11-27 17:28:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 26.04.2007 G.Folger: Enable quasielastic for QGS string model
 // 26.04.2007 G.Folger  Use QCaptureAtRest for muon
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 27.11.2009 G.Folger: suggest different alternative list
 //
 //----------------------------------------------------------------------------
 //
@@ -78,7 +79,7 @@ template<class T> TQGSC_EFLOW<T>::TQGSC_EFLOW(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
-  obs.Unsupported("QGSC_EFLOW","QGSC_CHIPS");
+  obs.Replaced("QGSC_EFLOW","QGSC_BERT");
   G4Exception(" Crash for usage of replaced physics list");
 
   // EM Physics
