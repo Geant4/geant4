@@ -16,19 +16,28 @@
 
 #include "QGSC_EMV.hh"
 #include "QGSC.hh"
+#include "QGSC_EFLOW.hh"
 #include "QGSC_BERT.hh"
+#include "QGSC_QGSC.hh"
+#include "QGSC_CHIPS.hh"
+#include "CHIPS.hh"
 
 #include "QGSP.hh"
 #include "QGSP_DIF.hh"
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BERT.hh"
+#include "QGSP_BERT_EMX.hh"
 #include "QGSP_BERT_DIF.hh"
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_BIC.hh"
+#include "G4IonQMDPhysics.hh"
 #include "QGSP_EMV.hh"
 #include "QGSP_EMX.hh"
 #include "QGSP_QEL.hh"
 //#include "QGSP_CASC.hh"
+#include "QGSP_INCL_ABLA.hh"
+
+#include "QGSP_FTFP_BERT.hh"
 
 #include "QGS_BIC.hh"
 #include "FTF_BIC.hh"
@@ -58,23 +67,34 @@ int main(int argc,char** argv) {
 
   G4VModularPhysicsList *thePL16 = new QGSC_EMV;
   G4VModularPhysicsList *thePL17 = new QGSC;
+//replaced  G4VModularPhysicsList *thePL17a = new QGSC_EFLOW;
   G4VModularPhysicsList *thePL18 = new QGSC_BERT;
-
+  G4VModularPhysicsList *thePL18a = new QGSC_QGSC;
+  G4VModularPhysicsList *thePL18b = new QGSC_CHIPS;
+  G4VModularPhysicsList *thePL19 = new CHIPS;
+    
   G4VModularPhysicsList *thePL20 = new QGSP_BERT_HP; 
   G4VModularPhysicsList *thePL21 = new QGSP_BERT;
-  G4VModularPhysicsList *thePL21a = new QGSP_BERT_DIF;
+  G4VModularPhysicsList *thePL21a = new QGSP_BERT_EMX;
+  G4VModularPhysicsList *thePL21b = new QGSP_BERT_DIF;
   G4VModularPhysicsList *thePL22 = new QGSP_BIC_HP; 
   G4VModularPhysicsList *thePL23 = new QGSP_BIC;
+  G4VModularPhysicsList *thePL23a= new QGSP_BIC(1);
+      G4IonQMDPhysics * ionQMD=new G4IonQMDPhysics("IonQMD",1);
+      thePL23a->RegisterPhysics(ionQMD);
+      ionQMD->ConstructProcess();
   G4VModularPhysicsList *thePL24 = new QGSP_EMV;
-  G4VModularPhysicsList *thePL25 = new QGSP_EMX;
+//replaced  G4VModularPhysicsList *thePL25 = new QGSP_EMX;
   G4VModularPhysicsList *thePL27 = new QGSP;
   G4VModularPhysicsList *thePL27a = new QGSP_DIF;
   G4VModularPhysicsList *thePL28 = new QGSP_QEL;
 //  G4VModularPhysicsList *thePL29 = new QGSP_CASC;
+  G4VModularPhysicsList *thePL29 = new QGSP_INCL_ABLA;
   
   G4VModularPhysicsList *thePL30 = new QGS_BIC;
   G4VModularPhysicsList *thePL31 = new FTF_BIC;
   
+  G4VModularPhysicsList *thePL40 = new QGSP_FTFP_BERT;
 
 
   delete runManager; 
