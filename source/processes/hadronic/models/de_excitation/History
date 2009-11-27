@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-21)
+----------------------------------------------------------
+- G4ExcitationHandler - cleanup the logic; reduce number internal vectors;
+                        fixed memory leak; should work bit faster
+
 24 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-20)
 ----------------------------------------------------------
 - G4ExcitationHandler - fixed double deletion only on top of tag 18
