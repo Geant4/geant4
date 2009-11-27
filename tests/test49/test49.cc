@@ -89,7 +89,7 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleChange.hh"
 
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
 #include "G4QDiffraction.hh"
 #include "G4QLowEnergy.hh"
 #include "G4TheoFSGenerator.hh"
@@ -311,8 +311,8 @@ int main()
   G4QCHIPSWorld* theW=G4QCHIPSWorld::Get();
   theW->GetParticles(nop);           // Create CHIPS World of nop particles
   //G4Exception("***CHIPStest: TMP");
-  G4QCollision::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
-  G4QCollision::SetManual();
+  G4QInelastic::SetParameters(temperature,ssin2g,eteps,fN,fD,cP,rM,nop,sA);
+  G4QInelastic::SetManual();
   // ********** Now momb is a momentum of the incident particle, if =0 => LOOP ************
 //#ifdef chips
 //#else
@@ -392,7 +392,7 @@ int main()
   if(!pPDG) npart=nPr;                                 // Make a LOOP ove all particles
 #ifdef chips
   // *************** CHIPS process definition starts here *******************************
-  G4QCollision* proc = new G4QCollision;               // A general CHIPS process
+  G4QInelastic* proc = new G4QInelastic;               // A general CHIPS process
   ///G4QDiffraction* proc = new G4QDiffraction;           // A diffraction CHIPS process
   ///G4QLowEnergy* proc = new G4QLowEnergy;               // fragment-nucleus universal
 #endif
@@ -459,7 +459,7 @@ int main()
 #ifdef chips
   if(!proc)
   {
-    G4cout<<"Tst19: there is no G4QCollision process"<<G4endl;
+    G4cout<<"Tst19: there is no G4QInelastic process"<<G4endl;
     exit(1);
   }
   // Comment for G4QLowEnergies
@@ -717,7 +717,7 @@ int main()
      // -----> For GHAD muons
      ///G4MuNuclearInteraction* HadrPR = new G4MuNuclearInteraction;// GHAD MuNuclear Proc.
      ///HadrPR->SetPhysicsTableBining(.01*GeV, 7.e8*GeV, 1000); // For the table
-     ///HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QCollision
+     ///HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QInelastic
      // -----> For GHAD hadrons
      G4PiNuclearCrossSection  barashPiXS;      // Barashenkov parameterization of pion-A XS
      G4CrossSectionDataStore  theElasticXS;    // GEISHA Elastic hadron-A XS
@@ -728,7 +728,7 @@ int main()
      theInelasticXS.AddDataSet(&theInelasticData); // Put parameterization in the XS class
      // -----> For CHIPS
      // ..... CHIPS on the Process level
-     ///G4QCollision* HadrPR = new G4QCollision(); // CHIPS MuNuc
+     ///G4QInelastic* HadrPR = new G4QInelastic(); // CHIPS MuNuc
      // ..... CHIPS on the Cross-Section level
      //G4VQCrossSection* HadrCS = G4QMuonNuclearCrossSection::GetPointer(); // CHIPS MuNuc
      // ______ End of CHIPS/GHAD ___________
