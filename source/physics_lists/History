@@ -1,4 +1,4 @@
-q$Id: History,v 1.114 2009-11-25 17:06:36 vnivanch Exp $
+q$Id: History,v 1.115 2009-11-27 17:29:45 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-11-2009, G.Folger                    (phys-lists-V09-02-42)
+- QGSP_BERT_TRV, change transition energies in HadronPhysicsQGSP_BERT_TRV to 
+   use BERT ]0,9.9], LEP [9.5, 15], QGSP [10, inf[
+- QGSP_BERT_NOLEP, use G4HadronQElasticPhysics  
+- explicitely mark experimental: QGSP_BERT_EMX, QGSP_BERT_TRV, QGSP_FTFP_BERT, 
+     QGSP_INCL_ABLA
+- mark as obsolete: FTFP, QGSP, QGSC, QGSC_CHIPS, QGSC_EMV, QGSC_QGSC 
+- mark supported ( remove experimental) :FTFP_BERT,  FTFP_BERT_EMV
+- Add initial version of G4IonQMDPhysics    
+   
 25-11-2009, V.Ivanchenko                  (phys-lists-V09-02-41)
 - G4PhysListFactory - update list of supported referenced PhysicsLists
 - QBBC - updated for the release
