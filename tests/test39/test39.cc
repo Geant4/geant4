@@ -73,7 +73,6 @@
 #include "G4VParticleChange.hh"        // @@ should we keep both? (this is not necessary)
 #include "G4ParticleChange.hh"
 #include "G4QCaptureAtRest.hh"
-#include "G4QCollision.hh"
 #include "G4QElastic.hh"               // CHIPS
 #include "G4LElastic.hh"
 #include "G4UHadronElasticProcess.hh"
@@ -437,35 +436,6 @@ int main()
   G4double nz = 0.;
   G4int npart=1;                                      // By default only one particle
   if(!pPDG) npart=nPr;                                // Make a LOOP ove all particles
-  // Different Process Managers are used for the atRest and onFlight processes
-  //G4ProcessManager* man = new G4ProcessManager(part); //Does not help to go out
-  //G4VDiscreteProcess* proc = new G4QCollision;
-  // ============ GHAD definition of the Hadron Elastic process ====================
-  // Define the Elastic Process
-  //G4LEnp* theElasticModel = new G4LEnp;// A model for the Elastic Process (only for np!)
-  //G4LEpp* theElasticModel = new G4LEpp;// A model for the Elastic Process (only for pp!)
-  //G4LElastic* theElasticModel = new G4LElastic;// A model for the Elastic Process (Old)
-  //G4LElasticB* theElasticModel = new G4LElasticB;// A model for ElasticProcess (cons.E)
-  //G4ElasticCascadeInterface* theElasticModel = new G4ElasticCascadeInterface; //(Cascade)
-  //G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE; //(Coherent)
-  //G4HadronElasticProcess* proc = new G4HadronElasticProcess;
-  //proc->RegisterMe(theElasticModel);
-  // =========== End of the GHAD definition of the Hadron Elastic process =================
-  // -> HP_GHAD definition of the Hadron Elastic Process
-  ///G4HadronElasticProcess* proc = new G4HadronElasticProcess;
-  ///G4NeutronHPElastic* theElasticModel     = new G4NeutronHPElastic;
-  ///G4NeutronHPElasticData* theElasticData = new G4NeutronHPElasticData;
-  ///proc->AddDataSet(theElasticData);
-  ///proc->RegisterMe(theElasticModel);
-  //theElasticModel->SetMinEnergy(0.*eV);              // ?
-  //theElasticModel->SetMaxEnergy(20.*MeV);            // ?
-  // =========== End of the HP_GHAD definition of the Hadron Elastic process ==============
-  //........... Unified GHAD/CHIPS elastic process of V.Ivanchenko ..............
-  ///G4ElasticHadrNucleusHE* theElasticModel = new G4ElasticHadrNucleusHE;//(Coherent,N.S.)
-  ///G4HadronElastic* theElasticModel = new G4HadronElastic(0.);//ElasticModel(cons4m,V.I.)
-  ///G4UHadronElasticProcess* proc = new G4UHadronElasticProcess;
-  ///proc->RegisterMe(theElasticModel);
-  // -> Alternative (one step) CHIPS definition of the Hadron Elastic Process
   G4QElastic* proc = new G4QElastic;
 #ifdef debug
   G4cout<<"G4GH_ElasticPhysics::ConstructProcess: the elastic model is defined"<<G4endl;

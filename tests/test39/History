@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2009-05-29 10:11:10 mkossov Exp $
+$Id: History,v 1.5 2009-11-27 15:25:39 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 27th, 2009  Mikhail  Kosov (test39-V09-02-03)
+- Unused G4QCollision is excluded (it is renamed to G4QInelastic in CHIPS)
 
 May 29th, 2009  Mikhail  Kosov (test39-V09-02-02)
 - Paranthesis around && to avoid warnings...
