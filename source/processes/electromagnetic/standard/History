@@ -1,4 +1,4 @@
-$Id: History,v 1.477 2009-11-25 18:18:15 vnivanch Exp $
+$Id: History,v 1.478 2009-11-27 20:06:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 November 09:  V.Ivant (emstand-V09-02-34)
+- G4ionIonisation - set linLossLimit 0.02 
+
 25 November 09:  V.Ivant (emstand-V09-02-33)
 - G4LindhardPartition - moved back to TestEm7 
-- G4ionIonisation - returned back linLossLimit of 9.2
 
 10 November 09:  V.Ivant (emstand-V09-02-32)
 - G4BetheBlochModel - minor speedup inside CorrectionsAlongStep method

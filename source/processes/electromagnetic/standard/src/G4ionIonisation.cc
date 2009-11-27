@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.69 2009-11-24 17:25:50 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.70 2009-11-27 20:06:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,7 +88,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     stopDataActive(true),
     nuclearStopping(true)
 {
-  SetLinearLossLimit(0.15);
+  SetLinearLossLimit(0.02);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
   SetProcessSubType(fIonisation);
