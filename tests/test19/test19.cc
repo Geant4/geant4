@@ -493,8 +493,22 @@ int main()
   G4double s_n=0.;
   G4double s_s=0.;
   G4double s_d=0.;
-  G4QSynchRad* proc = new G4QSynchRad;           // CHIPS Synchrotron Radiation process
-  //G4SynchrotronRadiation* proc = new G4SynchrotronRadiation; // GHadSynchratRad process 1
+  const G4int nBin=50;
+  G4double minom=.000000001;
+  G4double logmin=std::log(minom);
+  G4double maxom=10.;
+  G4double logmax=std::log(maxom);
+  G4double dlog=(logmax-logmin)/nBin;
+  G4double eBin[nBin];
+  G4double hBin[nBin];
+  for(G4int i=0; i < nBin; ++i)
+  {
+    eBin[i]=0.;
+    hBin[i]=0.;
+  }
+  //
+  //G4QSynchRad* proc = new G4QSynchRad;           // CHIPS Synchrotron Radiation process
+  G4SynchrotronRadiation* proc = new G4SynchrotronRadiation; // GHadSynchratRad process 1
   //G4SynchrotronRadiationInMat* proc = new G4SynchrotronRadiationInMat; // GHadSR process2
 #else
   G4HadronInelasticProcess* proc = 0;
@@ -938,7 +952,7 @@ int main()
       G4cout<<"Test19: ### "<<iter<< "-th event starts.### energy="<<energy<<G4endl;
 #endif
 
-      if(!(iter%1000)&&iter)G4cout<<"***=>TEST19: "<<iter<<" events are simulated"<<G4endl;
+      if(!(iter%10000000)&&iter)G4cout<<">TEST19: "<<iter<<" events are simulated"<<G4endl;
 
       gTrack->SetStep(step);            // Now step is included in the Track (see above)
       gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
@@ -1106,9 +1120,15 @@ int main()
             mom = sec->GetMomentumDirection();
             e   = sec->GetKineticEnergy();
 #ifdef synch
-             s_n+=1.;
-             s_s+=e;
-             s_d+=e*e;
+            s_n+=1.;
+            s_s+=e;
+            s_d+=e*e;
+            G4int ebin=(G4int)((std::log(e)-logmin)/dlog);
+            if(ebin >= 0 && ebin < nBin)
+            {
+              hBin[ebin]+=1.;
+              eBin[ebin]+=e;
+            }
 #endif
 #ifdef debug
             G4cout<<"Test19:SecPt#"<<i<<",T="<<e<<",m="<<m<<",PDG="<<c<<",C="<<cCG<<G4endl;
@@ -1496,6 +1516,25 @@ int main()
   s_s/=s_n;
   s_d=std::sqrt(s_d/s_n-s_s*s_s);
   G4cout<<"SynchroRadiation: Mean="<<s_s<<", RMS="<<s_d<<", nEv="<<s_n<<G4endl;
+  G4double low=minom;
+  G4double lgx=logmin;
+  for(G4int i=0; i<nBin; ++i)
+  {
+    lgx+=dlog;
+    G4double hx=std::exp(lgx);
+    G4double dx=hx-low;
+    G4double z=hBin[i];
+    G4double x=(hx+low)/2.;
+    G4double y=0.;
+    if(z>0.)
+    {
+      x=eBin[i]/z;
+      y=z*x/dx;
+    }
+    G4double d=std::sqrt(z+1.)*x/dx;
+    G4cout<<x<<" "<<y<<" "<<d<<G4endl;
+    low=hx;
+  }
 #endif
 #ifdef pverb
   G4cout<<"###### End of Test19 #####"<<G4endl;
