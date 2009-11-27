@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc,v 1.6 2009-11-27 10:15:29 tnikitin Exp $
+// $Id: G4VIntersectionLocator.cc,v 1.7 2009-11-27 15:21:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4VIntersectionLocator implementation
@@ -42,12 +42,16 @@
 //
 // Constructor
 //
-G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator)
+G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator): 
+  fUseNormalCorrection(false), 
+  fiNavigator( theNavigator ),
+  fiChordFinder( 0 ),            // Not set - overridden at each step
+  fiEpsilonStep( -1.0 ),         // Out of range - overridden at each step
+  fiDeltaIntersection( -1.0 ),   // Out of range - overridden at each step
+  fiUseSafety(false)             // Default - overridden at each step
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fiNavigator = theNavigator;
   fVerboseLevel = 0;
-  fUseNormalCorrection = false;
   fHelpingNavigator = new G4Navigator();
 }      
 
@@ -190,8 +194,6 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
      G4double advanceLength= endCurveLen - currentCurveLen ; 
      if (std::abs(advanceLength)<kCarTolerance)
      {
-       // advanceLength=(EstimatedEndStateB.GetPosition()
-       //             -newEndPoint.GetPosition()).mag();
        goodAdvance=true;
      }
      else{

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh,v 1.4 2008-11-14 18:26:35 gcosmo Exp $
+// $Id: G4VIntersectionLocator.hh,v 1.5 2009-11-27 15:21:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,17 +143,19 @@ class G4VIntersectionLocator
   
   protected:
 
-    G4double kCarTolerance;
-    G4int    fVerboseLevel;
-      // For verbose purposes
-    G4bool   fUseNormalCorrection;
+    G4double kCarTolerance;         // Constant
 
+    G4int    fVerboseLevel;          // For debugging
+    G4bool   fUseNormalCorrection;   // Configuration parameter
+
+    G4Navigator   *fiNavigator;
+      // Parameters set by G4PropagatorInField  ( when ? ) 
+
+    G4ChordFinder *fiChordFinder;
     G4double       fiEpsilonStep;
     G4double       fiDeltaIntersection;
-    G4Navigator   *fiNavigator;
-    G4ChordFinder *fiChordFinder;
     G4bool         fiUseSafety;
-      // For passing the parameters from G4PropagatorInField
+      // Parameters set at each physical step by calling method - G4PropagatorInField
 
     G4Navigator *fHelpingNavigator;
       // Helper for location
