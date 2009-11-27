@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01DetectorMessenger.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
+// $Id: RMC01DetectorMessenger.cc,v 1.2 2009-11-27 14:43:25 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -75,8 +75,11 @@ RMC01DetectorMessenger::RMC01DetectorMessenger(
 
 RMC01DetectorMessenger::~RMC01DetectorMessenger()
 {
-
-  delete detDir;
+  if (GeneralDir ) delete GeneralDir;
+  if (detDir) delete detDir;
+  if (SetSensitiveVolumeHeightCmd) delete  SetSensitiveVolumeHeightCmd;
+  if (SetSensitiveVolumeRadiusCmd) delete  SetSensitiveVolumeRadiusCmd;
+  if (SetShieldingThicknessCmd) delete  SetShieldingThicknessCmd;
    
   
 }

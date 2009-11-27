@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhysicsList.cc,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
+// $Id: G4AdjointPhysicsList.cc,v 1.2 2009-11-27 14:43:25 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ void G4AdjointPhysicsList::ConstructProcess()
 ////////////////////////////////////////////////////////////////////////////////
 //
 void G4AdjointPhysicsList::ConstructEM()
-{G4AdjointCSManager* theCSManager = G4AdjointCSManager::GetAdjointCSManager();
+{ G4AdjointCSManager* theCSManager = G4AdjointCSManager::GetAdjointCSManager();
   
   G4AdjointSimManager* theAdjointSimManager = G4AdjointSimManager::GetInstance();
   

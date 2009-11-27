@@ -14,10 +14,10 @@
 #Select physics list
 ###############################################
 
-#/adjoint_physics/UseProtonIonisation true
+/adjoint_physics/UseProtonIonisation true
 /adjoint_physics/UseGammaConversion false
 /adjoint_physics/SetEminForAdjointModels 1. keV
-/adjoint_physics/SetEmaxForAdjointModels 10. MeV
+/adjoint_physics/SetEmaxForAdjointModels 200. MeV
 #
 #Initialize geometry and physics
 ###############################################
@@ -39,18 +39,18 @@
 #Definition of the external source
 
 /adjoint/DefineExtSourceOnExtSurfaceOfAVolume  Shielding
-/adjoint/SetExtSourceEmax 10. MeV
+/adjoint/SetExtSourceEmax 200. MeV
 
 #Definition of the adjoint source
 /adjoint/DefineAdjSourceOnExtSurfaceOfAVolume SensitiveVolume
 /adjoint/SetAdjSourceEmin 1. keV
-/adjoint/SetAdjSourceEmax 10. MeV
+/adjoint/SetAdjSourceEmax 200. MeV
 
 
 #Definition of the primary spectrum to which 
 #the results of the adjoint/reverse simulation will be normalised
 
-/RMC01/analysis/SetExponentialSpectrumForAdjointSim e- 1. cm-2 1. 1e-3 10. MeV 
+/RMC01/analysis/SetPowerLawPrimSpectrumForAdjointSim proton 1. cm-2 1. 1e-3 200. MeV 
 
 #Definition of the precision in % that the computed energy deposited should reach 
 #before aborting the run. 

@@ -14,7 +14,7 @@
 #Select physics list
 ###############################################
 
-#/adjoint_physics/UseProtonIonisation true
+/adjoint_physics/UseProtonIonisation true
 /adjoint_physics/UseGammaConversion false
 
 #Initialize geometry and physics
@@ -36,15 +36,15 @@
 ##################################
 
 #define the source
-/gps/particle e-
+/gps/particle proton
 /gps/pos/type Surface
 /gps/pos/shape Sphere 
 /gps/pos/radius 1.000e+01  cm
 /gps/pos/centre 0.000e+00  0.000e+00   0.000e+00 cm
-/gps/ene/type Exp
-/gps/ene/ezero 1.
+/gps/ene/type Pow
+/gps/ene/alpha -1.
 /gps/ene/min  1. keV
-/gps/ene/max  1.000e+01 MeV
+/gps/ene/max  2.000e+02 MeV
 /gps/ang/type cos
 
 

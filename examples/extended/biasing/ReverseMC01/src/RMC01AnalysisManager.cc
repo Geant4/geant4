@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.2 2009-11-20 16:47:24 ldesorgh Exp $
+// $Id: RMC01AnalysisManager.cc,v 1.3 2009-11-27 14:43:25 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -198,18 +198,23 @@ void RMC01AnalysisManager::BeginOfRun(const G4Run* aRun)
    error_mean_edep=0.;
    adjoint_sim_mode =G4AdjointSimManager::GetInstance()->GetAdjointSimMode();
    if (adjoint_sim_mode){
-   	nb_evt_per_adj_evt=aRun->GetNumberOfEventToBeProcessed()/G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun(); 
-   	
-   }	
+   	nb_evt_per_adj_evt=aRun->GetNumberOfEventToBeProcessed()/G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
+	ConvergenceFileOutput.open("ConvergenceOfAdjointSimulationResults.txt", std::ios::out);
+  	ConvergenceFileOutput<<"Normalised Edep[MeV]\terror[MeV]\tcomputing_time[s]"<<std::endl;
+   }
+   else {
+   	ConvergenceFileOutput.open("ConvergenceOfForwardSimulationResults.txt", std::ios::out);
+  	ConvergenceFileOutput<<"Edep per event [MeV]\terror[MeV]\tcomputing_time[s]"<<std::endl;
+   }
+   ConvergenceFileOutput.setf(std::ios::scientific);
+   ConvergenceFileOutput.precision(6); 	
    ResetHistograms();
-   edep_mean_vec.clear();
-   error_mean_vec.clear();
-   time_vec.clear();
    theTimer->Start();
+   elapsed_time=0.;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //  
-void RMC01AnalysisManager::EndOfRun(const G4Run*)
+void RMC01AnalysisManager::EndOfRun(const G4Run* aRun)
 { theTimer->Stop();
  
   
@@ -218,26 +223,11 @@ void RMC01AnalysisManager::EndOfRun(const G4Run*)
 	G4cout<<"Results of forward simulation!"<<std::endl;
 	G4cout<<"edep per event [MeV] = "<<mean_edep<<std::endl;
 	G4cout<<"error[MeV] = "<<error_mean_edep<<std::endl;
- 	WriteHisto(edep_vs_prim_ekin,1., G4String("Fwd_Edep_vs_EkinPrim.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tEdep[MeV]\terr_Edep[MeV]\n"));
- 	WriteHisto(electron_current,1., G4String("Fwd_ElectronCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering electron\terr\n"));
- 	WriteHisto(proton_current,1., G4String("Fwd_ProtonCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering proton\terr[]\n"));
-  	WriteHisto(gamma_current,1., G4String("Fwd_GammaCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering gamma\terr[]\n"));
-  	
-	//Write the convergence results
-	
-	std::fstream FileOutput("ConvergenceOfForwardSimulationResults.txt", std::ios::out);
-  	FileOutput<<"Edep per event [MeV]\terror[MeV]\tcomputing_time[s]"<<std::endl;
-	FileOutput.setf(std::ios::scientific);
-  	FileOutput.precision(6);
-	G4double time=0.;
-	for (size_t i=0; i<edep_mean_vec.size();i++){
-		time+=time_vec[i];
-		FileOutput<<edep_mean_vec[i]<<'\t'<<'\t'<<error_mean_vec[i]<<'\t'<<time<<std::endl;
-		
-	}
-	FileOutput.close();
-  
-  
+	G4int nb_evt=aRun->GetNumberOfEvent();
+ 	WriteHisto(edep_vs_prim_ekin,1./nb_evt, G4String("Fwd_Edep_vs_EkinPrim.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tEdep[MeV]\terr_Edep[MeV]\n"));
+ 	WriteHisto(electron_current,1./nb_evt, G4String("Fwd_ElectronCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering electron\terr\n"));
+ 	WriteHisto(proton_current,1./nb_evt, G4String("Fwd_ProtonCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering proton\terr[]\n"));
+  	WriteHisto(gamma_current,1./nb_evt, G4String("Fwd_GammaCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering gamma\terr[]\n"));
   }
   
   else {
@@ -245,72 +235,62 @@ void RMC01AnalysisManager::EndOfRun(const G4Run*)
 	G4cout<<"normalised edep [MeV] = "<<mean_edep<<std::endl;
 	G4cout<<"error[MeV] = "<<error_mean_edep<<std::endl;
 
-	//Write the convergence results
 	
-	std::fstream FileOutput("ConvergenceOfAdjointSimulationResults.txt", std::ios::out);
-  	FileOutput<<"Normalised Edep[MeV]\terror[MeV]\tcomputing_time[s]"<<std::endl;
-	FileOutput.setf(std::ios::scientific);
-  	FileOutput.precision(6);
-	G4double time=0.;
-	for (size_t i=0; i<edep_mean_vec.size();i++){
-		time+=time_vec[i];
-		FileOutput<<edep_mean_vec[i]<<'\t'<<error_mean_vec[i]<<'\t'<<time<<std::endl;
+	G4double factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun()*nb_evt_per_adj_evt/aRun->GetNumberOfEvent();
 		
-	}
-	FileOutput.close();
 	
 	
-	
-	WriteHisto(edep_vs_prim_ekin,1., G4String("Adj_Edep_vs_EkinPrim.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tEdep[MeV]\terr_Edep[MeV]\n"));
- 	WriteHisto(electron_current,1., G4String("Adj_ElectronCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering electron\terr\n"));
- 	WriteHisto(proton_current,1., G4String("Adj_ProtonCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering proton\terr[]\n"));
-  	WriteHisto(gamma_current,1., G4String("Adj_GammaCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering gamma\terr[]\n"));
+	WriteHisto(edep_vs_prim_ekin,factor, G4String("Adj_Edep_vs_EkinPrim.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tEdep[MeV]\terr_Edep[MeV]\n"));
+ 	WriteHisto(electron_current,factor, G4String("Adj_ElectronCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering electron\terr\n"));
+ 	WriteHisto(proton_current,factor, G4String("Adj_ProtonCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering proton\terr[]\n"));
+  	WriteHisto(gamma_current,factor, G4String("Adj_GammaCurrent.txt"),G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering gamma\terr[]\n"));
   
   	
-	WriteHisto(edep_answer_matrix_vs_electron_prim_energy,1.,
+	WriteHisto(edep_answer_matrix_vs_electron_prim_energy,factor,
 					   G4String("Adj_Edep_vs_EkinPrimElectron_Answer.txt"),
 					   G4String("E1[MeV]\t\tE2[MeV]\t\tEdep Efficiency[MeV*cm2*MeV*str]\terr_Edep[MeV*cm2*MeV*str]\n"));
  	
-  	WriteHisto(electron_current_answer_matrix_vs_electron_prim_energy,1.,
+  	WriteHisto(electron_current_answer_matrix_vs_electron_prim_energy,factor,
 					   G4String("Adj_ElectronCurrent_vs_EkinPrimElectron_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
  	
-	WriteHisto(gamma_current_answer_matrix_vs_electron_prim_energy,1.,
+	WriteHisto(gamma_current_answer_matrix_vs_electron_prim_energy,factor,
 					   G4String("Adj_GammaCurrent_vs_EkinPrimElectron_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
  	
   	
 	
-	WriteHisto(edep_answer_matrix_vs_gamma_prim_energy,1.,
+	WriteHisto(edep_answer_matrix_vs_gamma_prim_energy,factor,
 					   G4String("Adj_Edep_vs_EkinPrimGamma_Answer.txt"),
 					   G4String("E1[MeV]\t\tE2[MeV]\t\tEdep Efficiency[MeV*cm2*MeV*str]\terr_Edep[MeV*cm2*MeV*str]\n"));
  	
-  	WriteHisto(electron_current_answer_matrix_vs_gamma_prim_energy,1.,
+  	WriteHisto(electron_current_answer_matrix_vs_gamma_prim_energy,factor,
 					   G4String("Adj_ElectronCurrent_vs_EkinPrimGamma_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
  	
-	WriteHisto(gamma_current_answer_matrix_vs_gamma_prim_energy,1.,
+	WriteHisto(gamma_current_answer_matrix_vs_gamma_prim_energy,factor,
 					   G4String("Adj_GammaCurrent_vs_EkinPrimGamma_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
  	
 	
 	
-	WriteHisto(edep_answer_matrix_vs_proton_prim_energy,1.,
+	WriteHisto(edep_answer_matrix_vs_proton_prim_energy,factor,
 					   G4String("Adj_Edep_vs_EkinPrimProton_Answer.txt"),
 					   G4String("E1[MeV]\t\tE2[MeV]\t\tEdep Efficiency[MeV*cm2*MeV*str]\terr_Edep[MeV*cm2*MeV*str]\n"));
  	
-  	WriteHisto(electron_current_answer_matrix_vs_proton_prim_energy,1.,
+  	WriteHisto(electron_current_answer_matrix_vs_proton_prim_energy,factor,
 					   G4String("Adj_ElectronCurrent_vs_EkinPrimProton_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
  	
-	WriteHisto(gamma_current_answer_matrix_vs_proton_prim_energy,1.,
+	WriteHisto(gamma_current_answer_matrix_vs_proton_prim_energy,factor,
 					   G4String("Adj_GammaCurrent_vs_EkinPrimProton_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
  	
-	WriteHisto(proton_current_answer_matrix_vs_proton_prim_energy,1.,
+	WriteHisto(proton_current_answer_matrix_vs_proton_prim_energy,factor,
 					   G4String("Adj_ProtonCurrent_vs_EkinPrimProton_Answer.txt"),
 					   G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
   }
+  ConvergenceFileOutput.close();
 }
 ////////////////////////////////////////////////////////////////////////////////
 //  
@@ -347,20 +327,19 @@ void RMC01AnalysisManager::EndOfEvent(const G4Event* anEvent)
    
    if (nb_event>0 && stop_run_if_precision_reached && precision_to_reach >relative_error) {
 		G4cout<<precision_to_reach*100.<<"%  Precision reached!"<<std::endl;
-		edep_mean_vec.push_back(mean_edep);
-   		error_mean_vec.push_back(error_mean_edep);
 		theTimer->Stop();
-		time_vec.push_back(theTimer->GetRealElapsed());
+		elapsed_time+=theTimer->GetRealElapsed();
+		ConvergenceFileOutput<<mean_edep<<'\t'<<error_mean_edep<<'\t'<<elapsed_time<<std::endl;
 		G4RunManager::GetRunManager()->AbortRun(true);
    }
    
    
    if (nb_event>0 && nb_event % nb_evt_modulo_for_convergence_test == 0) {
-   	edep_mean_vec.push_back(mean_edep);
-   	error_mean_vec.push_back(error_mean_edep);
-	theTimer->Stop();
-	time_vec.push_back(theTimer->GetRealElapsed());
+   	theTimer->Stop();
+	elapsed_time+=theTimer->GetRealElapsed();
 	theTimer->Start();
+	ConvergenceFileOutput<<mean_edep<<'\t'<<error_mean_edep<<'\t'<<elapsed_time<<std::endl;
+	
    }	
    	
   
@@ -390,14 +369,15 @@ void  RMC01AnalysisManager::EndOfEventForForwardSimulation(const G4Event* anEven
    if (totEdep>0.){
    	accumulated_edep +=totEdep ;
    	accumulated_edep2 +=totEdep*totEdep;
-        ComputeMeanEdepAndError(anEvent,mean_edep,error_mean_edep);
-	if (error_mean_edep>0) relative_error= error_mean_edep/mean_edep;
-   	G4PrimaryParticle* thePrimary=anEvent->GetPrimaryVertex()->GetPrimary();
+        G4PrimaryParticle* thePrimary=anEvent->GetPrimaryVertex()->GetPrimary();
    	G4double E0= thePrimary->GetG4code()->GetPDGMass();
    	G4double P=thePrimary->GetMomentum().mag();
    	G4double prim_ekin =sqrt(E0*E0+P*P)-E0;
    	edep_vs_prim_ekin->fill(prim_ekin,totEdep);
-   }	
+   } 
+   ComputeMeanEdepAndError(anEvent,mean_edep,error_mean_edep);
+   if (error_mean_edep>0) relative_error= error_mean_edep/mean_edep;
+   		
    
    
    //Particle current on sensitive cylinder
@@ -487,7 +467,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(const G4Event* anEven
    G4int i;
    for (i=0;i<EdepCollection->entries();i++) totEdep+=(*EdepCollection)[i]->GetValue()*(*EdepCollection)[i]->GetWeight();
    
-   
+   G4bool new_mean_computed=false;
    if (totEdep>0.){
    	if (normalised_weight>0.){
 		G4double edep=totEdep* normalised_weight;
@@ -517,6 +497,7 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(const G4Event* anEven
 			mean_edep = new_mean;
 			error_mean_edep = new_error;
 			relative_error =new_relative_error;
+			new_mean_computed=true;
 		}	 
 		edep_vs_prim_ekin->fill(prim_ekin,edep); 
 	}
@@ -527,7 +508,12 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(const G4Event* anEven
 	edep_answer_matrix->fill(prim_ekin,totEdep*adj_weight/cm2);
 	
 
-   } 
+   }
+   if (!new_mean_computed){
+   	 ComputeMeanEdepAndError(anEvent,mean_edep,error_mean_edep);
+   	 if (error_mean_edep>0) relative_error= error_mean_edep/mean_edep;
+   }	 
+    
    
   //Registering of current of particles on the sensitive volume
   //------------------------------------------------------------

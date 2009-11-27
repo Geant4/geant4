@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2009-11-20 16:47:24 ldesorgh Exp $
+$Id: History,v 1.3 2009-11-27 14:43:25 ldesorgh Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27th, 2009 L.Desorgher (ReverseMC01-V09-02-01)
+ -Uppdate of the analysis code:
+	 -for registering in  Conv* ASCII files every 5000 events the computed edep with  precision.
+	 -Correction of the adjoint computed current and answer matrices by a factor n_asked/n_processed for the case 
+	  where a run is aborted because the user expected precision on e_dep has been reached. 
+ -Important update of the README file
+ -Rename g4mac files run_*_simulation.g4mac files by   run_*_simulation_electron.g4mac 
+ -Add g4mac files run_*_simulation_proton.g4mac
 
 
 November 20th, 2009 L.Desorgher (ReverseMC01-V09-02-00)
--Slight update of the code for unit of answer matrices.
--Adding draft of README file
+ -Slight update of the code for unit of answer matrices.
+ -Adding draft of README file
 
 
 November 19th, 2009 L.Desorgher (no tag)
--First commit to the Geant4 repository
+ -First commit to the Geant4 repository
 

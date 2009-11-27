@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.hh,v 1.1 2009-11-19 22:41:18 ldesorgh Exp $
+// $Id: RMC01AnalysisManager.hh,v 1.2 2009-11-27 14:43:25 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -37,6 +37,10 @@
 //--------------
 //      ChangeHistory:
 //	 	17-11-2009 creation by L. Desorgher
+//		24-11-2009 L.Desorgher,
+//				- registering in  Conv* ASCII files every 5000 events the computed edep with  precision. 
+//				-Correction of the adjoint computed current and answer matrices by a factor n_asked/n_processed for the case 
+//				where a run is aborted because the user expected precision on e_dep has been reached.  	 	   
 //
 //-------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +86,7 @@ public:
   static RMC01AnalysisManager* GetInstance();
   
   public:
+   
    void BeginOfRun(const G4Run*); 
    void EndOfRun(const G4Run*); 
    void BeginOfEvent(const G4Event*); 
@@ -136,11 +141,9 @@ RMC01AnalysisManagerMessenger*  theMsg;
   G4double mean_edep;
   G4double error_mean_edep;
   G4double relative_error;
- 
+  G4double elapsed_time;
   
-  std::vector<G4double > edep_mean_vec;
-  std::vector<G4double > error_mean_vec;
-  std::vector<G4double > time_vec;
+ 
   G4double precision_to_reach;
   G4bool stop_run_if_precision_reached;
   G4int nb_evt_modulo_for_convergence_test;
@@ -175,13 +178,14 @@ RMC01AnalysisManagerMessenger*  theMsg;
   
   G4bool adjoint_sim_mode;
   G4int nb_evt_per_adj_evt;
+
   
   //Timer
   //------
   G4Timer* theTimer;
   
   
-  
+  std::fstream ConvergenceFileOutput;
  
   
   
