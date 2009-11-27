@@ -33,7 +33,7 @@ Summarised, the list of changes is the following:
 
 config                                           config-V09-02-17
 ------
-- Updated Configure script (Configure-V09-02-04) and internal scripts:
+- Updated Configure script (Configure-V09-02-05) and internal scripts:
   o Added new data set for G4REALSURFACEDATA variable and updated G4LEDATA
     data set version.
   o Fixed detection of QtCore library; addressing problem report #1079.
@@ -60,7 +60,7 @@ digits_hits                                      digits_hits-V09-02-04
 - Added missing virtual keyword for qualification of CheckROVolume() and
   FindROTouchable() methods in G4VReadOutGeometry.
 
-environments                                     envs-V09-02-01
+environments                                     envs-V09-02-02
 ------------
 - G4Py: updated configuration script and wrappers to physics-lists.
 - Momo: Updated documentation.
