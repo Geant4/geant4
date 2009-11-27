@@ -12,3 +12,14 @@ The purpose of this test is to validate Bragg peak distribution.
 The results of simulation ASCII file is created. The macro
 files for proton, He4 and C12 are prepared. Different electromagnetic Physics
 Lists are available.
+
+How to run it:
+1) compilation
+unsetenv $G4ANALYSIS_USE
+setenv G4ANALYSIS_USE_ROOT 1
+gmake
+cd utils
+gmake
+2) unsetenv REFERENCE (optional)
+source run.csh 9.3p01
+
