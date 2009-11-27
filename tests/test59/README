@@ -1,0 +1,55 @@
+
+-----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test59   
+                            -------
+
+Histogramming of multiple scattering in thick targets. It can be used
+for testing of G4QElastic with additional EM part.
+	
+                       Geometry.
+                       =========
+ 
+The target is a InWorldBox with
+1. the particula material and
+2. the thickness of an absorber.
+ 
+                       Physics.
+                       ========
+ Different physics processes can be activated (e.g. G4QElastic)
+         	
+                      Particle gun.
+                      =============
+ 
+ A single particle with the defined energy and angular distribution hits the target.
+ 
+                     Tracking.
+                     =========
+ 
+ Collection of the secondaries is in StackingAction class and its Messenger.
+ Step limitation can be made by the StepMax class and its Messenger.
+ 
+                     Visualization
+                     =============
+ 
+ is initialized by vis.mac or interactively.
+  	
+                     Data collection.
+                     ================
+  	
+ At the end of a run an angle distribution of particles is collected.
+ 
+                     Start up sequence.
+                     ==================
+ > cd tests/test59
+ > gmake
+ > test59 gui.mac
+
+                     The output histogram of the angular distribution
+                     ================================================
+	
+Output is in a form of the printed vectors, which can be cut & pasted for analysis  
