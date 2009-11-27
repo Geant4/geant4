@@ -32,23 +32,24 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VPiKBuilder.hh"
 
-enum G4DataType {no, photon, neutron, radioactive, lowenergy};
+enum G4DataType {no, photon, neutron, radioactive, lowenergy, optical};
 class G4DataQuestionaire
 {
   public: 
-    G4DataQuestionaire(G4DataType t1=no, G4DataType t2=no, G4DataType t3=no, G4DataType t4=no) 
+    G4DataQuestionaire(G4DataType t1=no, G4DataType t2=no, G4DataType t3=no, G4DataType t4=no, G4DataType t5=no) 
     {
       G4cout << G4endl;
-      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.4"<<G4endl;
+      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.5"<<G4endl;
       //      G4cout <<G4endl<<G4endl;
       // G4cout << "##### the input "<<t1<<" "<<t2<<" "<<t3<<" "<<t4<<G4endl;
-      for(G4int i=0; i<4; i++)
+      for(G4int i=0; i<5; i++)
       {
 	G4DataType t(no);
 	if(i==0) t=t1;
 	if(i==1) t=t2;
 	if(i==2) t=t3;
 	if(i==3) t=t4;
+	if(i==4) t=t5;
 	switch(t)
 	{
           case photon:
@@ -90,6 +91,17 @@ class G4DataQuestionaire
 	      G4cout << "Low energy electromagnetic data are needed."<<G4endl;
 	      G4cout << "Please set the environmental variable G4LEDATA"<<G4endl;
 	      G4cout << "to point to your G4EMLOW directory."<<G4endl;
+	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
+              G4Exception("G4DataQuestionaire", "007", FatalException,
+	                  "Fatal error: Missing mandatory data for this simulation engine");
+	    }
+	    break;
+          case optical:
+	    if(!getenv("G4LEDATA") )
+	    {
+	      G4cout << "Data describing surface propeties for optical photons are needed."<<G4endl;
+	      G4cout << "Please set the environmental variable G4REALSURFACEDATA"<<G4endl;
+	      G4cout << "to point to your RealSurface directory."<<G4endl;
 	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
               G4Exception("G4DataQuestionaire", "007", FatalException,
 	                  "Fatal error: Missing mandatory data for this simulation engine");
