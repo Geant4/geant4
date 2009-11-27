@@ -23,43 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.6 2009-11-27 14:54:58 hbu Exp $
+// $Id: StackingAction.hh,v 1.1 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef StackingAction_h
+#define StackingAction_h 1
 
+#include "G4UserStackingAction.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADouble;
+class G4Track;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class StackingAction : public G4UserStackingAction
 {
   public:
-  
-    PhysicsListMessenger(PhysicsList*);
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList*        physList;
-    
-    G4UIdirectory*      physDir;    
-    G4UIcmdWithADouble* GammaToMuPairFacCmd;
-    G4UIcmdWithADouble* AnnihiToMuPairFacCmd;
-    G4UIcmdWithADouble* AnnihiToHadronFacCmd;    
-};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    StackingAction();
+   ~StackingAction();
+
+    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
+    
+};
 
 #endif

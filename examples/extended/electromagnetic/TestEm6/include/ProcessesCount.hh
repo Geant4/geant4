@@ -23,43 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.6 2009-11-27 14:54:58 hbu Exp $
+// $Id: ProcessesCount.hh,v 1.1 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef ProcessesCount_HH
+#define ProcessesCount_HH
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADouble;
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class OneProcessCount
 {
-  public:
-  
-    PhysicsListMessenger(PhysicsList*);
-   ~PhysicsListMessenger();
+public:
+    OneProcessCount(G4String name) {Name=name; Counter=0;};
+   ~OneProcessCount() {};
+   
+public:
+    G4String  GetName()       {return Name;};
+    G4int     GetCounter()    {return Counter;};        
+    void      Count()         {Counter++;};
     
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList*        physList;
-    
-    G4UIdirectory*      physDir;    
-    G4UIcmdWithADouble* GammaToMuPairFacCmd;
-    G4UIcmdWithADouble* AnnihiToMuPairFacCmd;
-    G4UIcmdWithADouble* AnnihiToHadronFacCmd;    
+private:
+    G4String Name;            // process name
+    G4int    Counter;         // process counter
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+typedef std::vector<OneProcessCount*> ProcessesCount;
 
 #endif

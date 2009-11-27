@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm6.cc,v 1.15 2006-06-29 16:56:32 gunter Exp $
+// $Id: TestEm6.cc,v 1.16 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,6 +43,7 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "SteppingAction.hh"
+#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -79,6 +80,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(RunAct = new RunAction); 
   runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(RunAct));
+  runManager->SetUserAction(new StackingAction);
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

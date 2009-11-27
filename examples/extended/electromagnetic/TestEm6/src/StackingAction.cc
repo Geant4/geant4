@@ -23,81 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.10 2009-11-27 14:54:58 hbu Exp $
+// $Id: StackingAction.cc,v 1.1 2009-11-27 14:54:58 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "SteppingAction.hh"
-#include "RunAction.hh"
-#include "G4SteppingManager.hh"
-#include "G4VProcess.hh"
-#include "G4ParticleTypes.hh"
-
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
+#include "StackingAction.hh"
+#include "G4Track.hh"
+#include "G4TrackStatus.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
-:runAction(RuAct)
-{ 
- muonMass = G4MuonPlus::MuonPlus()->GetPDGMass();
-}
+StackingAction::StackingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::~SteppingAction()
-{ }
+StackingAction::~StackingAction()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* aStep)
+G4ClassificationOfNewTrack 
+StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
- const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
- if (process == 0) return;  
- G4String processName = process->GetProcessName();
- runAction->CountProcesses(processName); //count processes
+  G4ClassificationOfNewTrack     classification = fUrgent;
   
- if (processName != "GammaToMuPair") return;
- 
-#ifdef G4ANALYSIS_USE
- G4StepPoint* PrePoint = aStep->GetPreStepPoint();  
- G4double      EGamma  = PrePoint->GetTotalEnergy();
- G4ThreeVector PGamma  = PrePoint->GetMomentum();
-    
- G4double      Eplus(0), Eminus(0);
- G4ThreeVector Pplus   , Pminus;
- G4TrackVector* secondary = fpSteppingManager->GetSecondary();
- for (size_t lp=0; lp<(*secondary).size(); lp++) {
-   if ((*secondary)[lp]->GetDefinition()==G4MuonPlus::MuonPlusDefinition()) {
-     Eplus  = (*secondary)[lp]->GetTotalEnergy();
-     Pplus  = (*secondary)[lp]->GetMomentum();
-   } else {
-     Eminus = (*secondary)[lp]->GetTotalEnergy();
-     Pminus = (*secondary)[lp]->GetMomentum();      	   
-   }
- }
-    	   
- G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
- G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
- G4double GammaPlus=EGamma*xPlus/muonMass;
- G4double GammaMinus=EGamma*xMinus/muonMass;
-
- runAction->GetHisto(0)->fill(1./(1.+std::pow(thetaPlus*GammaPlus,2)));
- runAction->GetHisto(1)->fill(std::log10(thetaPlus*GammaPlus));
-
- runAction->GetHisto(2)->fill(std::log10(thetaMinus*GammaMinus));
- runAction->GetHisto(3)->fill(std::log10(std::fabs(thetaPlus *GammaPlus
-                                              -thetaMinus*GammaMinus)));
- 
- runAction->GetHisto(4)->fill(xPlus);
- runAction->GetHisto(5)->fill(xMinus); 
-#endif
+  // kill all secondaries
+  if(aTrack->GetParentID() != 0) classification = fKill;
+  
+  return classification;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
