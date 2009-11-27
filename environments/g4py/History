@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2009-11-20 03:36:51 kmura Exp $
+$Id: History,v 1.48 2009-11-27 07:56:30 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27 November 2009 K.Murakami
+ - config/g4py.gmk: add -lz as linker options
+
 19 November 2009 K.Murakami
  - add checking gl2ps library in configure script.
  - gl2ps is added in config/g4vis.gmk.
