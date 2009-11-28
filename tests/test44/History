@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2009-05-27 17:53:41 bagoulia Exp $
+$Id: History,v 1.12 2009-11-28 19:52:41 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,15 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-	 History
-27-05-09 A.Bagulya ()
-- added scripts: run.py, reader_test44-online.py
+
+28-11-09  V.Ivant (test44-V09-02-02)
+- A.Bagulya added scripts: run.py, reader_test44-online.py
 
 25-05-09 A.Bagulya ()
 - modified run.csh: set REFERENCE variable automatic
 - added scripts: run_py.csh, reader_test44.py 
 
-=======
 15-05-09  V.Ivant (test44-V09-02-01)
 - fixed script run.csh
 
