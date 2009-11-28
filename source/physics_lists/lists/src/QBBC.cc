@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.3 2009-11-25 13:10:51 vnivanch Exp $
+// $Id: QBBC.cc,v 1.4 2009-11-28 17:35:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -77,7 +77,7 @@ QBBC::QBBC( G4int ver, const G4String& type )
   RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
    // Hadron Physics
-  RegisterPhysics( new G4HadronHElasticPhysics(ver,false));
+  RegisterPhysics( new G4HadronHElasticPhysics(ver,false,type));
   RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
   RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
   RegisterPhysics( new G4HadronInelasticQBBC(type, ver));

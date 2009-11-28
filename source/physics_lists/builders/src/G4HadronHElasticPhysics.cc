@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc,v 1.6 2009-10-04 16:03:38 vnivanch Exp $
+// $Id: G4HadronHElasticPhysics.cc,v 1.7 2009-11-28 17:35:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,10 +57,12 @@
 #include "G4UElasticCrossSection.hh"
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
+#include "G4NeutronElasticXS.hh"
 
-G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool hp)
+G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool hp,
+						 const G4String& type)
   : G4VPhysicsConstructor("HElastic"), verbose(ver), 
-    hpFlag(hp), wasActivated(false)
+    hpFlag(hp), wasActivated(false), subtype(type)
 {
   if(verbose > 1) G4cout << "### HadronHElasticPhysics" << G4endl;
 }
@@ -156,7 +158,11 @@ void G4HadronHElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      if(subtype == "QBBC_XGGSN") {
+	hel->AddDataSet(new G4NeutronElasticXS());
+      } else {
+	hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      }
       hel->RegisterMe(chipsn);
 
       if(hpFlag) {
