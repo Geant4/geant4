@@ -1,4 +1,4 @@
-q$Id: History,v 1.115 2009-11-27 17:29:45 gunter Exp $
+q$Id: History,v 1.116 2009-11-28 18:25:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-2009, V.Ivanchenko                (phys-lists-V09-02-43)
+- QBBC - fixed cross sections for hadron elastic
 
 27-11-2009, G.Folger                    (phys-lists-V09-02-42)
 - QGSP_BERT_TRV, change transition energies in HadronPhysicsQGSP_BERT_TRV to 
