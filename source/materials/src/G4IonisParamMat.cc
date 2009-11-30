@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.33 2009-11-19 16:43:36 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.34 2009-11-30 15:48:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -145,9 +145,11 @@ void G4IonisParamMat::ComputeDensityEffect()
   // Check if density effect data exist in the table
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
-  if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
-    idx = fDensityData->GetIndex(G4int(fMaterial->GetZ()));
-  }
+  // if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
+  //  idx = fDensityData->GetIndex(G4int(fMaterial->GetZ()));
+  // }
+
+  //G4cout << "DensityEffect for " << fMaterial->GetName() << "  " << idx << G4endl; 
 
   if(idx >= 0) {
 
@@ -255,7 +257,7 @@ void G4IonisParamMat::ComputeDensityEffect()
     fAdensity = twoln10*(Xa-fX0density)
       /std::pow((fX1density-fX0density),fMdensity);
   }
-  /*
+  /*  
   G4cout << "G4IonisParamMat: density effect data for <" << fMaterial->GetName() 
 	 << "> " << G4endl;
   G4cout << "Eplasma(eV)= " << fPlasmaEnergy/eV

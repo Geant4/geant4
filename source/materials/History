@@ -1,4 +1,4 @@
-$Id: History,v 1.165 2009-11-24 17:19:10 vnivanch Exp $
+$Id: History,v 1.166 2009-11-30 15:48:04 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-11-09 V.Ivanchenko (materials-V09-02-22)
+- G4IonisParamMat - fixed liquid Argon problem
 
 24-11-09 V.Ivanchenko (materials-V09-02-21)
 - G4NistMaterialBuilder - allow to use old names of G4 materials
