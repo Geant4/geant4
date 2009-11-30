@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.48 2009-11-13 17:34:26 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.49 2009-11-30 11:57:46 japost Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -421,10 +421,17 @@ G4PropagatorInField::ComputeStep(
   // In order to correct this efficiently, we identify these cases
   // and only take corrective action when they occur.
   // 
-  if( TruePathLength < fZeroStepThreshold ) // Old Threshold = 0.5*kCarTolerance 
+  if( ( (TruePathLength < fZeroStepThreshold) 
+	&& ( TruePathLength+kCarTolerance < CurrentProposedStepLength  ) 
+	) 
+      || ( TruePathLength < 0.5*kCarTolerance )
+    )
+  {
     fNoZeroStep++;
-  else
+  }
+  else{
     fNoZeroStep = 0;
+  }
 
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
      fParticleIsLooping = true;
