@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.1 2009-11-16 18:16:04 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.2 2009-11-30 18:36:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -53,10 +53,10 @@
 
 // Definition of static parameters
 G4int    G4QFragmentation::nCutMax=7; 
-G4double G4QFragmentation::stringTension=1.*GeV/fermi;
-G4double G4QFragmentation::tubeDensity  =1./fermi;
-// Parameters of diffractional fragmentation
-G4double G4QFragmentation::widthOfPtSquare=-0.72*GeV*GeV; // pt -width2 forStringExcitation
+G4double G4QFragmentation::stringTension=1.5*GeV/fermi;
+G4double G4QFragmentation::tubeDensity  =1.5/fermi;
+// Parameters of diffractional fragmentation (was .72*)
+G4double G4QFragmentation::widthOfPtSquare=-GeV*GeV; // pt -width2 forStringExcitation
 
 G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &aPrimary)
 {

@@ -18,6 +18,11 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+30-Nov-2009 M.Kosov                            (hadr-chips-V09-02-28)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix for the final double delete and slight change of
+parameters based on the Sunanda tests
+
 20-Nov-2009 M.Kosov                            (hadr-chips-V09-02-27)
 -----------------------------------------------------------------------
 Mutual tag: G4QHadronInelasticDataSet moved to CHIPS-interface and

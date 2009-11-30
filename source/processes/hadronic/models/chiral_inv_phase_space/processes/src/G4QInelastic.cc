@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.2 2009-11-19 16:32:56 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.3 2009-11-30 18:36:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -67,13 +67,13 @@ G4QInelastic::G4QInelastic(const G4String& processName):
 }
 
 G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters are used
-G4double G4QInelastic::Temperature=180.; // Critical Temperature (sensitive at High En)
+G4double G4QInelastic::Temperature=200.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QInelastic::freeNuc=0.5;      // Percentage of free nucleons on the surface
-G4double G4QInelastic::freeDib=0.05;     // Percentage of free diBaryons on the surface
-G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
-G4double G4QInelastic::mediRatio=10.;    // medium/vacuum hadronization ratio
+G4double G4QInelastic::freeNuc=0.4;      // Percentage of free nucleons on the surface
+G4double G4QInelastic::freeDib=0.1;      // Percentage of free diBaryons on the surface
+G4double G4QInelastic::clustProb=6.;     // Nuclear clusterization parameter
+G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
 G4int    G4QInelastic::nPartCWorld=152;  // The#of particles initialized in CHIPS World
 G4double G4QInelastic::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QInelastic::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
@@ -118,20 +118,22 @@ void G4QInelastic::SetWeakNucBias(G4double ccnB) {weakNucBias=ccnB;}
 
 G4QInelastic::~G4QInelastic()
 {
-  ElementZ.clear();
-  ElProbInMat.clear();
-  for(unsigned i=0; i < ElIsoN.size(); ++i)
+  // The following is just a copy of what is done in PostStepDoIt every interaction !
+  // The correction is if(IPIE), so just for(...;ip<IPIE;...) does not work ! @@
+  G4int IPIE=IsoProbInEl.size();            // How many old elements?
+  if(IPIE) for(G4int ip=0; ip<IPIE; ++ip)   // Clean up the SumProb's of Isotopes (SPI)
   {
-    std::vector<G4int>* curEIN=ElIsoN[i];
-    curEIN->clear();
-    delete curEIN;
+    std::vector<G4double>* SPI=IsoProbInEl[ip]; // Pointer to the SPI vector
+    SPI->clear();
+    delete SPI;
+    std::vector<G4int>* IsN=ElIsoN[ip];     // Pointer to the N vector
+    IsN->clear();
+    delete IsN;
   }
-  for(unsigned i=0; i < IsoProbInEl.size(); ++i)
-  {
-    std::vector<G4double>* curEIN=IsoProbInEl[i];
-    curEIN->clear();
-    delete curEIN;
-  }
+  ElProbInMat.clear();                      // Clean up the SumProb's of Elements (SPE)
+  ElementZ.clear();                         // Clear the body vector for Z of Elements
+  IsoProbInEl.clear();                      // Clear the body vector for SPI
+  ElIsoN.clear();                           // Clear the body vector for N of Isotopes
 }
 
 

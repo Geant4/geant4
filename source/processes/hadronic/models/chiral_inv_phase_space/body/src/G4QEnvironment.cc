@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.157 2009-11-16 18:15:01 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.158 2009-11-30 18:36:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1744,7 +1744,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //if(envA>1&&envA<13) premC = 24/envA;
     //if(envA>1&&envA<19) premC = 36/envA;
     //if(envA>1&&envA<25) premC = 48/envA;
-    if(envA>1&&envA<41) premC = 80/envA;
+    //if(envA>1&&envA<41) premC = 80/envA;
     G4int  sumstat= 2;                     // Sum of statuses of all Quasmons
     G4bool force  = false;                 // Prototype of the Force Major Flag
     G4int cbR     =0;                      // Counter of the "Stoped by Coulomb Barrier"
@@ -1761,7 +1761,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
     G4bool first=true;                     // Flag of the first interaction (only NucMedia)
     G4int cAN=0;                           // Counter of the nucleon absorptions
-    G4int mcAN=3;                          // Max for the counter of nucleon absorptions
+    //G4int mcAN=3;                          // Max for the counter of nucleon absorptions
+    G4int mcAN=1;                          // Max for the counter of nucleon absorptions
     while (sumstat||totC<totCM)            // ===***=== The MAIN "FOREVER" LOOP ===***===
     {
 #ifdef chdebug
