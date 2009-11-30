@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QNeutrinoPhysics.cc,v 1.2 2009-11-16 19:12:10 mkossov Exp $
+// $Id: G4QNeutrinoPhysics.cc,v 1.3 2009-11-30 18:44:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,7 +42,7 @@
 G4QNeutrinoPhysics::G4QNeutrinoPhysics(const G4String& name): 
   G4VPhysicsConstructor(name), wasBuilt(false), nuEleActivated(false),
   nuMuoActivated(false), nuTauActivated(false), nuEleOn(false),
-  nuMuoOn(false), nuTauOn(false), nuNucBias(1.)
+  nuMuoOn(false), nuTauOn(false), nuNucBias(1.), inelastic(0)
 {
   theMessenger = G4QMessenger::GetPointer();
   theMessenger->Add(this);
@@ -50,7 +50,7 @@ G4QNeutrinoPhysics::G4QNeutrinoPhysics(const G4String& name):
 
 G4QNeutrinoPhysics::~G4QNeutrinoPhysics()
 {
-  if(wasBuilt) delete inelastic;
+  if(wasBuilt && inelastic) delete inelastic;
 }
 
 void G4QNeutrinoPhysics::ConstructParticle()
@@ -93,13 +93,16 @@ void G4QNeutrinoPhysics::SetNuNuclearBias(G4double newValue)
 void G4QNeutrinoPhysics::ConstructProcess()
 {
   if(wasBuilt) return;
-  wasBuilt = true;
-
-  inelastic = new G4QInelastic("neutrinoNuclear");
-  inelastic->SetWeakNucBias(nuNucBias); // enough only once (static)
-  if (nuEleOn)   BuildNuEleNuclear();
-  if (nuMuoOn)   BuildNuMuoNuclear();
-  if (nuTauOn)   BuildNuTauNuclear();
+  if(nuEleOn || nuMuoOn || nuTauOn)
+  {
+    wasBuilt = true;
+    G4cout<<"Builded=>G4QNeutrinoPhysics: "<<nuEleOn<<", "<<nuMuoOn<<", "<<nuTauOn<<G4endl;
+    inelastic = new G4QInelastic("neutrinoNuclear");
+    inelastic->SetWeakNucBias(nuNucBias); // enough only once (static)
+    if (nuEleOn)   BuildNuEleNuclear();
+    if (nuMuoOn)   BuildNuMuoNuclear();
+    if (nuTauOn)   BuildNuTauNuclear();
+  }
 }
 
 void G4QNeutrinoPhysics::BuildNuEleNuclear()
