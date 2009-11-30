@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.hh,v 1.5 2009-11-27 15:21:59 japost Exp $
+// $Id: G4VIntersectionLocator.hh,v 1.6 2009-11-30 11:39:15 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,25 +94,36 @@ class G4VIntersectionLocator
        // Intersect the chord from StartPointA to EndPointB and return
        // whether an intersection occurred. NOTE: changes the Safety!
 
+     inline void    SetEpsilonStepFor( G4double EpsilonStep );
+     inline void    SetDeltaIntersectionFor( G4double deltaIntersection );
+     inline void    SetNavigatorFor( G4Navigator *fNavigator );
+     inline void    SetChordFinderFor(G4ChordFinder *fCFinder );
+       // These parameters must be set at each step, in case they were changed
+
+       // Note: This simple approach ensures that all scenarios are considered. 
+       //   [ Future refinement may identify which are invariant during a 
+       //      track, run or event ]
+
+    inline void     SetVerboseFor(G4int fVerbose);
+    inline G4int    GetVerboseFor();
+       // Controling verbosity enables checking of the locating of intersections
+
   public:  // without description
+    // Additional inline Set/Get methods for parameters, dependent objects
 
-    // inline Set/Get methods used for IntersctionLocator
+    inline G4double       GetDeltaIntersectionFor();
+    inline G4double       GetEpsilonStepFor();
+    inline G4Navigator*   GetNavigatorFor();
+    inline G4ChordFinder* GetChordFinderFor();
 
-    inline G4double  GetDeltaIntersectionFor();
-    inline G4double  GetEpsilonStepFor();
-    inline G4Navigator*  GetNavigatorFor();
-    inline G4ChordFinder*  GetChordFinderFor();
-    inline G4int  GetVerboseFor();
+    inline void   SetSafetyParametersFor(G4bool UseSafety );
 
-    inline void SetEpsilonStepFor( G4double EpsilonStep );
-    inline void SetDeltaIntersectionFor( G4double deltaIntersection );
-    inline void SetNavigatorFor( G4Navigator *fNavigator );
-    inline void SetChordFinderFor(G4ChordFinder *fCFinder );
-    inline void SetSafetyParametersFor(G4bool UseSafety );
-    inline void SetVerboseFor(G4int fVerbose);
-
-    inline void AddAdjustementOfFoundIntersection(G4bool UseCorrection);
+    inline void   AddAdjustementOfFoundIntersection(G4bool UseCorrection);
     inline G4bool GetAdjustementOfFoundIntersection();
+      // Methods to be made Obsolete - replaced by methods below
+    inline void   AdjustIntersections(G4bool UseCorrection); 
+    inline G4bool AreIntersectionsAdjusted(){ return fUseNormalCorrection; }  
+      // Change adjustment flag  ( New Interface ) 
 
   protected:  // with description
 
