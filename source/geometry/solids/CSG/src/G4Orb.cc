@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.29 2009-11-30 09:54:05 grichine Exp $
+// $Id: G4Orb.cc,v 1.30 2009-11-30 10:20:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -430,11 +430,13 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
         return snxt = 0.;
       }
     }
+#ifdef G4CSGDEBUG
     else // inside ???
     {
-      //      G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
-      //          JustWarning, "Point p is inside !?");
+      G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
+                  JustWarning, "Point p is inside !?");
     }
+#endif
   }
   return snxt;
 }
