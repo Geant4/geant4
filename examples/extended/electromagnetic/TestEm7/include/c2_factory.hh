@@ -55,7 +55,7 @@ template <typename float_type> class c2_factory {
 public:
 
 /// make a *new object
-static c2_classic_function_p<float_type> &classic_function(const float_type (*c_func)(float_type)) 
+static c2_classic_function_p<float_type> &classic_function(float_type (*c_func)(float_type)) 
 	{ return *new c2_classic_function_p<float_type>(c_func); }
 /// make a *new object
 static c2_plugin_function_p<float_type> &plugin_function() 

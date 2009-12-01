@@ -1,4 +1,4 @@
-$Id: History,v 1.90 2009-11-26 08:20:19 gcosmo Exp $
+$Id: History,v 1.91 2009-12-01 12:13:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-12-09 V.Ivant (testem7-V09-02-04)
+- An attempt to fix SLC5 compillation problem
 
 26-11-09 G.Cosmo (testem7-V09-02-03)
 - Corrected disclaimer in some files.
