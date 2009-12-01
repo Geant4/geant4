@@ -1,0 +1,21 @@
+$Id: History,v 1.1 2009-12-01 14:12:40 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                     Test 49 History file
+                     --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Dec 1st, 2009  Mikhail  Kosov (test49-V09-02-00)
+- Excluded G4QCollision and renamed to G4QInelastic.
+- Created History file.
+
