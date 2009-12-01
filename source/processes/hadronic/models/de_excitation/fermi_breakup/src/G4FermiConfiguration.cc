@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.10 2009-11-19 10:41:59 vnivanch Exp $
+// $Id: G4FermiConfiguration.cc,v 1.11 2009-12-01 08:35:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -142,7 +142,7 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
 	Gamma*=arg2;
 	arg2-=2;
       }
-    Gamma=Gamma/std::pow(2,n)*sqrt(pi);
+    Gamma=Gamma/std::pow(2.,n)*sqrt(pi);
   }
   // end of new implementation of Gamma function
   
