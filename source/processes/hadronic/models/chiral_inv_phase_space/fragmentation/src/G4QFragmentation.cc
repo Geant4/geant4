@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.2 2009-11-30 18:36:44 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.3 2009-12-01 09:24:24 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -550,13 +550,13 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
   // 
   // >>>>>>>> make soft collisions (ordering is vital)
   //
-  G4QInteractionVector::iterator i;
+  G4QInteractionVector::iterator it;
 #ifdef debug
   G4cout<<"G4QFragmentation::Construct: Creation ofSoftCollisionPartonPair STARTS"<<G4endl;
 #endif
-  for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
+  for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
   {
-    G4QInteraction* anIniteraction = *i;
+    G4QInteraction* anIniteraction = *it;
     G4QPartonPair*  aPair=0;
     G4int nSoftCollisions = anIniteraction->GetNumberOfSoftCollisions();
 #ifdef debug
@@ -580,9 +580,9 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
         G4cout<<"--->G4QFragmentation::Construct: SOFT, 2 parton pairs are filled"<<G4endl;
 #endif
       }  
-      delete *i;
-      i=theInteractions.erase(i);       // Soft interactions are converted & erased
-      i--;
+      delete *it;
+      it=theInteractions.erase(it);      // Soft interactions are converted & erased
+      it--;
     }
   }
 #ifdef debug
