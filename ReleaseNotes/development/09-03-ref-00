@@ -90,18 +90,33 @@ geometry/magneticfield                           field-V09-02-08
   magnetic field, with spin tracking for both MDM and EDM terms.
   Thanks to Kevin Lynch, Phys. Dept. at Boston University.
 
-geometry/navigation                              geomnav-V09-02-80
+geometry/management                              geommng-V09-02-05
 -------------------
-- Refinements in G4PropagatorInField: changed parameters for treating
-  consecutive tiny/zero steps (decrease factor to 0.25 from 0.1); the value is
-  not used when the step size falls below a certain threshold.
-  Added new member 'fZeroStepThreshold', to enable tuning of threshold for
-  tiny/zero steps; this threshold is now changed, and expressed as a multiple
-  of 'fZeroStepThreshold' instead of kCarTolerance. Changed the value given to
-  the decrease factor to 0.35. Improved printing of Diagnostic message.
-  Addresses a problem seen at boundary of volumes reported by ATLAS.
+- G4Region: added pointer to field-manager and associated accessor/modifier,
+  to allow for association of a local field to a geometrical region.
 
-geometry/solids/CSG                              geom-csg-V09-02-07
+geometry/navigation                              geomnav-V09-02-10
+-------------------
+- Refinements in G4PropagatorInField:
+  o Changed parameters for treating consecutive tiny/zero steps (decrease
+    factor to 0.25 from 0.1); the value is not used when the step size falls
+    below a certain threshold. Added new member 'fZeroStepThreshold', to
+    enable tuning of threshold for tiny/zero steps; this threshold is now
+    changed, and expressed as a multiple of 'fZeroStepThreshold' instead of
+    kCarTolerance. Changed the value given to the decrease factor to 0.35.
+    Addresses a problem seen at boundary of volumes reported by ATLAS.
+  o Improved printing of Diagnostic message.
+  o Added new method RefreshIntersectionLocator() to update state.
+  o Deleted long obsolete methods: SetAccuraciesWithDeltaOneStep(),
+    SetDeltaIntersection(), SetDeltaOneStep(). Revised implementation
+    to avoid using the older methods.
+- G4VIntersectionLocator: fixed problem in ReEstimateEndPoint() for very small
+  steps. Corrected constructor to ensure that it initialises all data members.
+  Labelled methods in header to make noticable those that must change
+  attributes at every step.
+
+
+geometry/solids/CSG                              geom-csg-V09-02-08
 -------------------
 - G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
   of point on surface. Fixes a problem of stuck tracks observed in CMS, due
@@ -110,6 +125,7 @@ geometry/solids/CSG                              geom-csg-V09-02-07
 - G4Torus: fix in SolveNumericJT() in order to take in account the difference
   in the value of theta for different intervals, [0:pi] or [-pi:0], and for
   SPhi in [0:twopi] or [-twopi:0]. Addresses problem report #1086.
+- G4Orb: moved debug warning in DistanceToIn(p,v) within G4CSGDEBUG flag.
 
 geometry/solids/specific                         geom-specific-V09-02-08
 ------------------------
@@ -139,7 +155,7 @@ interfaces                                       interfaces-V09-02-07
   Fixed a problem on macOSX 10.6 with Qt 4.6-Beta.
 - Added debug flags for Qt.
 
-materials                                        materials-V09-02-21
+materials                                        materials-V09-02-23
 ---------
 - Increased flexibily of G4SurfaceProperty and G4OpticalSurface classes
   to allow for lookup-table boundary process simulations.
@@ -174,7 +190,7 @@ persistency/ascii                                ascii-V09-02-10
 - Inclusion of extruded and tessellated solids.
 - Additions of accessors and constructors of G4tgbVolume and G4tgrVolume.
 
-physics_lists                                    phys-lists-V09-02-41
+physics_lists                                    phys-lists-V09-02-44
 -------------
 - Added G4OpticalPhysics and G4OpticalPhysicsMessenger classes.
 - G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
@@ -183,7 +199,15 @@ physics_lists                                    phys-lists-V09-02-41
 - G4EmStandardPhysics_option2: use default StepFunction for ions.
 - Added two builders G4QNeutrinoPhysics & G4QPhotoNuclearPhysics with
   the messenger to the CHIPS physics list. Arranged dependencies with CHIPS.
-- Updated QBBC physics-list.
+- Updated QBBC physics-list and fixed cross-section for hadron elastic.
+- QGSP_BERT_TRV: changed transition energies to use BERT ]0,9.9],
+  LEP [9.5, 15] and QGSP [10, inf[.
+- QGSP_BERT_NOLEP: use G4HadronQElasticPhysics  
+- Added initial version of G4IonQMDPhysics.    
+- Explicitely marked experimental following lists: QGSP_BERT_EMX,
+  QGSP_BERT_TRV, QGSP_FTFP_BERT, QGSP_INCL_ABLA.
+  Marked as obsolete: FTFP, QGSP, QGSC, QGSC_CHIPS, QGSC_EMV, QGSC_QGSC.
+  Marked as supported: FTFP_BERT, FTFP_BERT_EMV.
 - Updated list of supported  physics-lists in G4PhysicsListFactory.
 
 processes/cuts                                   procuts-V09-02-08
@@ -245,7 +269,7 @@ processes/electromagnetic/polarisation           empolar-V09-02-01
   in error check.
 - Bug fix in G4StokesVector::RotateAz() for wrong usage of vector product.
 
-processes/electromagnetic/standard               emstand-V09-02-33
+processes/electromagnetic/standard               emstand-V09-02-34
 ----------------------------------
 - Added new G4alphaIonisation process.
 - G4ICRU49NuclearStoppingModel: new model providing computation of nuclear
@@ -259,7 +283,7 @@ processes/electromagnetic/standard               emstand-V09-02-33
 - G4GoudsmitSaundersonMscModel: tuned small angle theta distributions
   assuming the case of lambdan<1 as single scattering regime; tuned theta
   sampling for theta below the screening angle.
-- Restored 'linLossLimit' as in release 9.2 for G4ionIonisation.
+- Set 'linLossLimit'to 0.02 in G4ionIonisation.
 
 processes/electromagnetic/utils                  emutils-V09-02-24
 -------------------------------
@@ -291,7 +315,7 @@ processes/hadronic
   o G4CascadParticle, G4InuclElementaryParticle: added integer argument to
     constructor to indicate which generation cascade particle belongs to.
     Changed G4NucleiModel and G4BertiniNucleiModel to use this.
-- models/chiral_inv_phase_space (hadr-chips-V09-02-27)
+- models/chiral_inv_phase_space (hadr-chips-V09-02-29)
   o Added diffraction to CHIPS inelastic.
   o Bug fixes in G4QSynchRad, G4QPhotonNuclearCrossSection and
     G4QDiffractionRatio; added 'MinGamma' parameter to G4QSynchRad.
@@ -299,7 +323,7 @@ processes/hadronic
     fragmentation, interface and processes. 
 - models/coherent_elastic (hadr-cohe-V09-02-03)
   o Modified dependency to CHIPS after sub-module splitting.
-- models/de_excitation (hadr-deex-V09-02-20)
+- models/de_excitation (hadr-deex-V09-02-22)
   o Updated nearly all classes of GEM sub-package with the introduction
     of new classes G4GEMCoulombBarrier, G4AlphaGEMCoulombBarrier,
     G4DeuteronGEMCoulombBarrier, G4He3GEMCoulombBarrier,
@@ -318,6 +342,12 @@ processes/hadronic
     weight inside G4FermiConfiguration.
   o Added a G4NeutronRadCapture model, a simple 1 gamma emission with
     4-momentum balance.
+- models/im_r_matrix (hadr-im_r-V09-02-02)
+  o Fix in G4CollisionComposite reproducibility. Removed dependence of the
+    energy grid of the cross-section set on the order of the particles by
+    forcing heavier particle to be at rest when caching the cross section.
+  o Reduced usage of strings; maps of cross-sections use G4Particledefinition
+    in place of particle name.
 - models/incl (hadr-incl-V09-02-02)
   o Bug fixes to INCL nuclear potential handling; the interpolation function
     used to produce discontinuous results due to an array index off-by-one.
@@ -489,8 +519,8 @@ examples                                         examples-V09-02-11
   o Introduced use of G4UIExecutive.
   o General update to README.
 - extended/biasing (exbiasing-V09-02-00)
-  o New example ReverseMC01, demonstrating the use of Reverse MonteCarlo
-    technique in Geant4.
+  o New example ReverseMC01 (ReverseMC01-V09-02-01), demonstrating the use
+    of Reverse MonteCarlo technique in Geant4.
 - extended/electromagnetic/TestEm0 (testem0-V09-02-01)
 - extended/electromagnetic/TestEm1 (testem1-V09-02-01)
 - extended/electromagnetic/TestEm2 (testem2-V09-02-02)
@@ -502,7 +532,10 @@ examples                                         examples-V09-02-11
   o Replaced obsolete G4MultipleScattering in PhysListEmStandard.
   o New local physics-list PhysListEmStandardGS.
   o Removed G4EMConfigurator in physics-list.
-- extended/electromagnetic/TestEm7 (testem7-V09-02-03)
+- extended/electromagnetic/TestEm6 (testem6-V09-02-01)
+  o Added StackingAction to allow for removal of secondary particles.
+  o Updated physics-list.
+- extended/electromagnetic/TestEm7 (testem7-V09-02-04)
   o Renaming of IDs in PhysicsList.
   o Removed obsolete G4MultipleScattering in PhysListEmStandardNR  
   o Use Livermore and Penelope builders from reference physics-lists library.
@@ -573,9 +606,15 @@ tests                                            tests-V09-02-11
   o Added magnetic field and G4QCollision for G4QInelastic.
 - test37 (test37-V09-02-05)
   o Updated physics-lists. Fixed option setup.
+- test39 (test39-V09-02-03)
+  o Excluded G4QCollision and renamed to G4QInelastic.
 - test41 (test41-V09-02-03)
   o Substitute G4_GRAPHITE by G4_GRAPHITE_POROUS.
   o Updates to options names and scripts.
+- test44 (test44-V09-02-02)
+  o Added scripts: run.py, reader_test44-online.py.
+- test49 (test49-V09-02-00)
+  o New test for CHIPS inelastic nuclear interactions.
 - test60 (test60-V09-02-05)
   o Renamed main file (and executable) from Test60 to test60
     to be conformed with all other tests.
