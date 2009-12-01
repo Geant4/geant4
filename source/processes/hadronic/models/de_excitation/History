@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 December 2009 Gabriele Cosmo (hadr-deex-V09-02-22)
+-----------------------------------------------------
+- Fixed singletons in utils sub-module to canonical form, to help preventing
+  leaks reported by Valgrind (tag hadr-deex-util-V09-02-01).
+- Corrected argument to std::pow() in G4FermiConfiguration.cc to fix
+  compilation problem on Windows VC7.
+
 27 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-21)
 ----------------------------------------------------------
 - G4ExcitationHandler - cleanup the logic; reduce number internal vectors;
