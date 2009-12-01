@@ -1,4 +1,4 @@
-$Id: README,v 1.29 2009-06-25 07:08:57 gunter Exp $
+$Id: README,v 1.30 2009-12-01 14:19:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -68,7 +68,7 @@ test45 ## Validation of thick target data for low-energy proton and ion beams
 test46 ## Validation of CMS-type combined calorimeter (not for stt).
 test47 ## CMS combined calorimeter (not for stt).
 test48 ## Stopping processes validation (not for stt) 
-test49 ## Test for total cross-sctions in the process level simulation, CHIPS?
+test49 ## Test for CHIPS inelastic nuclear interactions.
 test50 ## Statistical test suite for e.m. processes:
        ## 1) CSDA range and Stopping Power test for e-,p;
        ## 2) gamma attenuation coefficient;

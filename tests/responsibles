@@ -48,7 +48,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/"/binary_cascade         Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/cascade                Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/chiral_inv_phase_space dwright@slac.stanford.edu       Dennis Wright
+"/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
 "/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
 "/"/"/de_excitation          Aatos.Heikkinen@cern.ch         Aatos Heikkinen
 "/"/"/"/ablation             PRTruscott@space.qinetiq.com    Pete Truscott
@@ -209,7 +209,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
-      test19                 dwright@slac.stanford.edu       Dennis Wright
+      test19                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test20                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test21                 dwright@slac.stanford.edu       Dennis Wright
       test22                 dwright@slac.stanford.edu       Dennis Wright
@@ -219,7 +219,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test26                 (not currently used - see tests/GNUmakefile)
       test27                 Gunter.Folger@cern.ch           Gunter Folger
       test28                 flei@space.qinetiq.com          Fan Lei
-      test29                 dwright@slac.stanford.edu       Dennis Wright
+      test29                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test30                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test31                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test32                 asai@slac.stanford.edu          Makoto Asai
@@ -228,14 +228,15 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test35                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test36                 Vladimir.Grichine@cern.ch       Vladimir Grichine
       test37                 Omrane.Ben.Mbarek.Kadri@cern.ch Omrane Kadri                    
-      test38                 dwright@slac.stanford.edu       Dennis Wright
-      test39                 dwright@slac.stanford.edu       Dennis Wright
+      test38                 Mikhail.Kossov@cern.ch          Mikhail Kossov
+      test39                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test40                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test41                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test44                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test45                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test46                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test47                 Sunanda.Banerjee@cern.ch        Sunanda Banerjee
+      test49                 Mikhail.Kossov@cern.ch          Mikhail Kossov
       test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
       test52                 Anton.Lechner@cern.ch	     Anton Lechner
       test53                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
