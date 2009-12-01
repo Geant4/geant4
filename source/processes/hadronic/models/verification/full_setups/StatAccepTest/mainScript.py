@@ -30,12 +30,12 @@ print '========== START mainScript.py =========='
 #               -  the Bfield:
 #                  e.g. : "0", "4tesla", etc.
 #
-REF1        = "9.2.p01"
+REF1        = "9.2.p02"
 SIM_REF1    = "Yes"
-REF2        = "9.2.p02"
+REF2        = "9.3.cand02"
 SIM_REF2    = "Yes"
 RUN_STAT    = "Yes"
-PHYSICS     = "QGSP"
+PHYSICS     = "FTFP_BERT"
 EVENTS      = "10"
 BFIELD      = "0"
 #***endLOOKHERE***

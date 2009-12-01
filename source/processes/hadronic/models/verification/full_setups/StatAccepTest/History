@@ -1,6 +1,14 @@
                  History file
                  ------------
 
+01-Dec-2009 - A.Ribon (statAccepTest-V09-02-10)
+- Updated list of Physics Lists.
+  Possibility to run new Physics Lists available
+  in 9.3 but not present in the reference version 
+  of Geant4 (9.2.p02): alternative, close, Physics
+  Lists are used in this case.
+
+
 19-Nov-2009 - A.Ribon (statAccepTest-V09-02-09)
 - Ready for December 2009 release testing (G4 9.3),
   with the new approach of shipping binaries

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 19-Nov-2009.
+# Last update: 01-Dec-2009.
 #
 # This Python script has the following input parameters:
 #
@@ -71,28 +71,32 @@ ReleaseUnameI = Release + "_" + UNAMEI
 print '  ReleaseUnameI = ', ReleaseUnameI
 
 # ---------------- Physics ---------------------
-if ( PHYSICS != "LHEP"          and
-     PHYSICS != "LHEP_GN"       and
-     PHYSICS != "QGSP"          and
-     PHYSICS != "QGSP_GN"       and
-     PHYSICS != "QGSP_EMV"      and
-     PHYSICS != "QGSP_BERT"     and
-     PHYSICS != "QGSP_BERT_EMV" and
-     PHYSICS != "QGSP_BIC"      and
-     PHYSICS != "QGSP_BERT_HP"  and
-     PHYSICS != "QGSP_BIC_HP"   and
-     PHYSICS != "QGSC"          and
-     PHYSICS != "QGSC_EFLOW"    and
-     PHYSICS != "QGSC_BERT"     and
-     PHYSICS != "QGSC_CHIPS"    and
-     PHYSICS != "QGSC_QGSC"     and
-     PHYSICS != "FTFP"          and 
-     PHYSICS != "FTFC"          and
-     PHYSICS != "FTFP_BERT"     and 
-     PHYSICS != "FTFP_BIC"      and
-     PHYSICS != "QGS_BIC"       and
-     PHYSICS != "FTF_BIC"
-     
+if ( PHYSICS != "LHEP"            and
+     PHYSICS != "LHEP_GN"         and
+     PHYSICS != "QGSP"            and
+     PHYSICS != "QGSP_GN"         and
+     PHYSICS != "QGSP_EMV"        and
+     PHYSICS != "QGSP_BERT"       and
+     PHYSICS != "QGSP_BERT_EMV"   and
+     PHYSICS != "QGSP_BIC"        and
+     PHYSICS != "QGSP_BERT_HP"    and
+     PHYSICS != "QGSP_BIC_HP"     and
+     PHYSICS != "QGSC"            and
+     PHYSICS != "QGSC_EFLOW"      and
+     PHYSICS != "QGSC_BERT"       and
+     PHYSICS != "QGSC_CHIPS"      and
+     PHYSICS != "QGSC_QGSC"       and
+     PHYSICS != "FTFP"            and 
+     PHYSICS != "FTFC"            and
+     PHYSICS != "FTFP_BERT"       and 
+     PHYSICS != "FTFP_BIC"        and
+     PHYSICS != "QGS_BIC"         and
+     PHYSICS != "FTF_BIC"         and
+     PHYSICS != "CHIPS"           and
+     PHYSICS != "FTFP_BERT_TRV"   and
+     PHYSICS != "QGSP_FTFP_BERT"  and 
+     PHYSICS != "QGSP_BERT_TRV"   and 
+     PHYSICS != "QGSP_INCL_ABLA"
    ) :
     print '  ***ERROR*** in build.py : WRONG PHYSICS LIST = ', PHYSICS
     sys.exit( 1 )        
@@ -361,7 +365,25 @@ else :
 #***LOOKHERE*** Switch on the extra histograms (else only the ntuple).
 ###setupFile.write( "export HISTOGRAMS_ON=1 \n" )
 
-setupFile.write( "export PHYSLIST=" + PHYSICS + "\n" )
+if ( REFERENCE.find( "9.2" ) > -1 ) :
+    if ( PHYSICS=="CHIPS" ) :
+        setupFile.write( "export PHYSLIST=QGSC_BERT \n" )
+    elif ( PHYSICS=="QGSC_CHIPS" ) :
+        setupFile.write( "export PHYSLIST=QGSC_BERT \n" )
+    elif ( PHYSICS=="QGSC_QGSC" ) :
+        setupFile.write( "export PHYSLIST=QGSC_BERT \n" )
+    elif ( PHYSICS=="FTFP_BERT_TRV" ) :
+        setupFile.write( "export PHYSLIST=FTFP_BERT \n" )
+    elif ( PHYSICS=="QGSP_FTFP_BERT" ) :
+        setupFile.write( "export PHYSLIST=QGSP_BERT \n" )
+    elif ( PHYSICS=="QGSP_BERT_TRV" ) :
+        setupFile.write( "export PHYSLIST=QGSP_BERT \n" )
+    elif ( PHYSICS=="QGSP_INCL_ABLA" ) :
+        setupFile.write( "export PHYSLIST=QGSP_BERT \n" )
+    else :
+        setupFile.write( "export PHYSLIST=" + PHYSICS + "\n" )
+else :
+    setupFile.write( "export PHYSLIST=" + PHYSICS + "\n" )
 
 setupFile.close()
 
