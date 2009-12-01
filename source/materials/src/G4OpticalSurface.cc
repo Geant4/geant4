@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.cc,v 1.15 2009-11-20 00:57:51 gum Exp $
+// $Id: G4OpticalSurface.cc,v 1.16 2009-12-01 08:24:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,7 +105,7 @@ G4OpticalSurface::G4OpticalSurface(const G4String& name,
 
         if (type == dielectric_LUT) {
            AngularDistribution =
-                       new float[incidentIndexMax*thetaIndexMax*phiIndexMax];
+                       new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
            ReadFile();
         }
 }
@@ -165,7 +165,7 @@ void G4OpticalSurface::SetType(const G4SurfaceType& type)
   theType = type;
   if (type == dielectric_LUT) {
      if (!AngularDistribution) AngularDistribution =
-                       new float[incidentIndexMax*thetaIndexMax*phiIndexMax];
+                       new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
      ReadFile();
   }
 }
@@ -175,7 +175,7 @@ void G4OpticalSurface::SetFinish(const G4OpticalSurfaceFinish finish)
   theFinish = finish;
   if (theType == dielectric_LUT) {
      if (!AngularDistribution) AngularDistribution =
-                       new float[incidentIndexMax*thetaIndexMax*phiIndexMax];
+                       new G4float[incidentIndexMax*thetaIndexMax*phiIndexMax];
      ReadFile();
   }
 }
