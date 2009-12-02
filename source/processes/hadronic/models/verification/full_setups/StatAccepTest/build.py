@@ -259,7 +259,7 @@ setupFile.write( "   fi\n" )
 setupFile.write( "fi\n" )
 
 ###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirDec09 \n" )   #***LOOKHERE***
-###setupFile.write( "export OSG_APP=/users/ribon/dirGrid/dirDec09/dirOSG \n" ) #***LOOKHERE***
+######setupFile.write( "export OSG_APP=/users/ribon/dirGrid/dirDec09/dirOSG \n" ) #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
@@ -322,12 +322,14 @@ setupFile.write( "  export G4LEDATA=$G4INSTALL/data/G4EMLOW \n" )
 # Geant4 versions >= 9.0 use G4NEUTRONHPDATA
 setupFile.write( "  export G4NEUTRONHPDATA=$G4INSTALL/data/G4NDL \n")
 setupFile.write( "  export NeutronHPCrossSections=$G4INSTALL/data/G4NDL \n")
+setupFile.write( "  export G4ABLADATA=$G4INSTALL/data/G4ABLA \n")
 setupFile.write( "else \n")
 setupFile.write( "  export G4LEVELGAMMADATA=$DIR_INSTALLATIONS/dirG4DATA/PhotonEvaporation2.0 \n" )
 setupFile.write( "  export G4RADIOACTIVEDATA=$DIR_INSTALLATIONS/dirG4DATA/RadioactiveDecay3.2 \n" )
 setupFile.write( "  export G4LEDATA=$DIR_INSTALLATIONS/dirG4DATA/G4EMLOW6.9 \n" )
 setupFile.write( "  export G4NEUTRONHPDATA=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.13 \n")
 setupFile.write( "  export NeutronHPCrossSections=$DIR_INSTALLATIONS/dirG4DATA/G4NDL3.13 \n")
+setupFile.write( "  export G4ABLADATA=$DIR_INSTALLATIONS/dirG4DATA/G4ABLA3.0 \n")
 setupFile.write( "fi \n")
 #
 setupFile.write( "echo --- Data libraries --- \n")
@@ -336,6 +338,7 @@ setupFile.write( "echo G4RADIOACTIVEDATA=$G4RADIOACTIVEDATA \n")
 setupFile.write( "echo G4LEDATA=$G4LEDATA \n")
 setupFile.write( "echo NeutronHPCrossSections=$NeutronHPCrossSections \n")
 setupFile.write( "echo G4NEUTRONHPDATA=$G4NEUTRONHPDATA \n")
+setupFile.write( "echo G4ABLADATA=$G4ABLADATA \n")
 setupFile.write( "echo ---------------------- \n")
 #
 if ( REFERENCE.find( "9.2" ) > -1 ) :
