@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.1 2009-09-24 18:51:14 dennis Exp $
+// $Id: G4NucleonSampler.cc,v 1.2 2009-12-02 17:34:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -61,7 +61,7 @@ const G4int G4NucleonSampler::NPindex[8][2] =
     NPindex[i][0] = NPTotChans - NPChanNums[i] + 1;
   }
 
-  G4int i, k, m;
+  G4int j, k, m;
   G4int start, stop;
 
   for (m = 0; m < 8; m++) {
@@ -69,14 +69,14 @@ const G4int G4NucleonSampler::NPindex[8][2] =
     stop = PPindex[m][1] + 1;
     for (k = 0; k < 30; k++) {
       t1_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t1_dSigma_dMult[m][k] += PPCrossSections[i][k];
+      for (j = start; j < stop; j++) t1_dSigma_dMult[m][k] += PPCrossSections[j][k];
     }
 
     start = NPindex[m][0];
     stop = NPindex[m][1] + 1;
     for (k = 0; k < 30; k++) {
       t0_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t0_dSigma_dMult[m][k] += NPCrossSections[i][k];
+      for (j = start; j < stop; j++) t0_dSigma_dMult[m][k] += NPCrossSections[j][k];
     }
   }
 

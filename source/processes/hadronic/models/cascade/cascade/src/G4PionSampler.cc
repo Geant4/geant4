@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.4 2009-10-09 01:03:45 dennis Exp $
+// $Id: G4PionSampler.cc,v 1.5 2009-12-02 17:35:10 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -59,7 +59,7 @@ G4PionSampler::G4PionSampler()
     pizPindex[i][0] = pizPTotChans - pizPChanNums[i] + 1;
   }
 
-  G4int i, k, m;
+  G4int j, k, m;
   G4int start, stop;
 
   for (m = 0; m < 8; m++) {
@@ -67,21 +67,21 @@ G4PionSampler::G4PionSampler()
     stop = pipPindex[m][1] + 1;
     for (k = 0; k < 30; k++) {
       t33_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t33_dSigma_dMult[m][k] += pipPCrossSections[i][k];
+      for (j = start; j < stop; j++) t33_dSigma_dMult[m][k] += pipPCrossSections[j][k];
     }
 
     start = pimPindex[m][0];
     stop = pimPindex[m][1] + 1;
     for (k = 0; k < 30; k++) {
       t31_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t31_dSigma_dMult[m][k] += pimPCrossSections[i][k];
+      for (j = start; j < stop; j++) t31_dSigma_dMult[m][k] += pimPCrossSections[j][k];
     }
 
     start = pizPindex[m][0];
     stop = pizPindex[m][1] + 1;
     for (k = 0; k < 30; k++) {
       t11_dSigma_dMult[m][k] = 0.0;
-      for (i = start; i < stop; i++) t11_dSigma_dMult[m][k] += pizPCrossSections[i][k];
+      for (j = start; j < stop; j++) t11_dSigma_dMult[m][k] += pizPCrossSections[j][k];
     }
   }
 
