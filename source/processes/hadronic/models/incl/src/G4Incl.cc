@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.23 2009-11-24 15:31:28 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.24 2009-12-02 22:10:55 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1085,7 +1085,7 @@ void G4Incl::initIncl(G4bool initRandomSeed)
   // input: should contain a seed (ial, odd and of 5 digits) to start the work.     
 
   G4double xrand = 0.0;
-  G4double ialdep = 0.0;
+  G4long ialdep = 0;
   G4int imat = 0;
   G4int iamat = 0, izmat = 0;
 
@@ -1125,7 +1125,7 @@ void G4Incl::initIncl(G4bool initRandomSeed)
       }
     }
 
-    hazard->ial = int(ialdep);
+    hazard->ial = ialdep;
   }
 
   // calculation with realistic nuclear density (saxon-wood)

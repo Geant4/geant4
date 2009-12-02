@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.20 2009-11-24 15:31:28 kaitanie Exp $
+$Id: History,v 1.21 2009-12-02 22:10:55 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,10 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+02 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-03)
+---------------------------------------------------------
+- Fix: Corrected datatype problem in INCL initialization
 
 22 November 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-02)
 ---------------------------------------------------------
