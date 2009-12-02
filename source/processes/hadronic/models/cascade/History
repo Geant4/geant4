@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1 Dec 2009 Dennis Wright (hadr-casc-V09-02-11)
+----------------------------------------------
+- G4PionSampler, G4NucleonSampler: change loop variable in ctor from i to j
+  in order to satisfy Windows compiler
+ 
 11 Nov 2009 Dennis Wright (hadr-casc-V09-02-10)
 -----------------------------------------------
 - G4CascadParticle, G4InuclElementaryParticle: add integer argument to ctor
