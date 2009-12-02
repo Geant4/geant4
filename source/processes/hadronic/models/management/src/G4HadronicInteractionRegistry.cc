@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc,v 1.8 2009-08-30 16:12:34 vnivanch Exp $
+// $Id: G4HadronicInteractionRegistry.cc,v 1.9 2009-12-02 15:57:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
@@ -52,29 +52,31 @@ G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 
 void G4HadronicInteractionRegistry::Clean()
 {
-  //G4cout << "G4HadronicInteractionRegistry::Clean() start " << nModels << G4endl;
   size_t nModels = allModels.size();
+  //G4cout << "G4HadronicInteractionRegistry::Clean() start " << nModels << G4endl;
   if(0 < nModels) {
     for (size_t i=0; i<nModels; ++i) {
       if( allModels[i] ) {
 	//G4cout << "delete " << i << G4endl;
         //G4cout << allModels[i]->GetModelName() << G4endl;
-	delete allModels[i];
+	G4HadronicInteraction * model = allModels[i];
 	allModels[i] = 0;
+	delete model;
       }
     }
+    allModels.clear();
   }
-  allModels.clear();
   //G4cout << "G4HadronicInteractionRegistry::Clean() is done " << G4endl; 
 }
 
 void G4HadronicInteractionRegistry::
 RegisterMe(G4HadronicInteraction * aModel)
 {
+  if(!aModel) { return; }
   size_t nModels = allModels.size();
   if(nModels > 0) {
     for (size_t i=0; i<nModels; ++i) {
-      if( aModel == allModels[i] ) return;
+      if( aModel == allModels[i] ) { return; }
     }
   }
   //G4cout << "Register model <" << aModel->GetModelName() 
@@ -85,8 +87,9 @@ RegisterMe(G4HadronicInteraction * aModel)
 void G4HadronicInteractionRegistry::
 RemoveMe(G4HadronicInteraction * aModel)
 {
+  if(!aModel) { return; }
   size_t nModels = allModels.size();
-  if(0 == nModels) return;
+  if(0 == nModels) { return; }
   for (size_t i=0; i<nModels; ++i) {
     if( aModel == allModels[i] ) {
       //G4cout << "DeRegister model <" << aModel->GetModelName() 
