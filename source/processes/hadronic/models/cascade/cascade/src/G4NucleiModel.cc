@@ -968,12 +968,12 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
   }
 
   G4double rat;
-  G4double ratm;
+  //  G4double ratm;
 
   // Calculate number of protons and neutrons in local region
-  G4double Athird = std::pow(A, 0.3333);
-  G4double Nneut = Athird*(A-Z)/A;
-  G4double Nprot = Athird*Z/A;
+  //  G4double Athird = std::pow(A, 0.3333);
+  //  G4double Nneut = Athird*(A-Z)/A;
+  //  G4double Nprot = Athird*Z/A;
 
   // Reduce number of 
   if (ip == 1) {
@@ -984,9 +984,9 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
     rat = protonNumberCurrent/protonNumber;
 
     // Calculate ratio modified for local region
-    G4double deltaP = protonNumber - protonNumberCurrent;
+    //    G4double deltaP = protonNumber - protonNumberCurrent;
     //    G4cout << " deltaP = " << deltaP << G4endl;
-    ratm = std::max(0.0, (Nprot - deltaP)/Nprot);
+    //    ratm = std::max(0.0, (Nprot - deltaP)/Nprot);
 
   } else {
     if (verboseLevel > 2){
@@ -996,9 +996,9 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
     rat = neutronNumberCurrent/neutronNumber;
 
     // Calculate ratio modified for local region
-    G4double deltaN = neutronNumber - neutronNumberCurrent;
+    //    G4double deltaN = neutronNumber - neutronNumberCurrent;
     //   G4cout << " deltaN = " << deltaN << G4endl;
-    ratm = std::max(0.0, (Nneut - deltaN)/Nneut);
+    //    ratm = std::max(0.0, (Nneut - deltaN)/Nneut);
   }
 
   //  G4cout << " get ratio: ratm =  " << ratm << G4endl;
