@@ -11,7 +11,6 @@
       <text>exam-adv-amsEcal-build</text>
       <text>exam-adv-microbeam-build</text>
       <text>exam-adv-microdosimetry-build</text>
-      <text>exam-adv-cosmicray_charging-build</text>
       <text>exam-adv-nanobeam-build</text>
       <text>exam-ext-biasing-b01-build</text>
       <text>exam-ext-electromagnetic-testem0-build</text>
@@ -45,6 +44,7 @@
       <text>exam-ext-medical-fanocavity2-build</text>
       <text>exam-ext-medical-gammatherapy-build</text>
       <text>exam-ext-optical-lxe-build</text>
+      <text>exam-ext-optical-wls-build</text>
       <text>exam-ext-persistency-gdml-g01-build</text>
       <text>exam-ext-persistency-gdml-g02-build</text>
       <text>exam-ext-persistency-gdml-g03-build</text>
