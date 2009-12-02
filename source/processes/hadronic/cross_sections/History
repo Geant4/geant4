@@ -14,7 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-25 nov 2009 Gunter Folger       (hadr-cross-V09-02-16)
+2 Dec 2009 Vladimir Ivanchenko (hadr-cross-V09-02-17)
+------------------------------------------------------------
+- G4CrossSectionDataSetRegistry - more accurate cross section deletion
+
+25 Nov 2009 Gunter Folger       (hadr-cross-V09-02-16)
+------------------------------------------------------------
 - modify upper limit of validity to 100 TeV in 
   G4NeutronInelasticCrossSection, G4ProtonInelasticCrossSection,
   and G4PiNuclearCrossSection

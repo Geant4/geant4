@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.5 2009-08-12 20:25:10 vnivanch Exp $
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.6 2009-12-02 15:59:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,11 @@ void G4CrossSectionDataSetRegistry::Clean()
   size_t n = xSections.size(); 
   if(n > 0) {
     for (size_t i=0; i<n; ++i) {
-      if(xSections[i]) delete xSections[i];
+      if(xSections[i]) {
+	G4VCrossSectionDataSet* p = xSections[i];
+	xSections[i] = 0;
+	delete p;
+      }
     }
     xSections.clear();
   }
@@ -78,7 +82,7 @@ void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
   size_t n = xSections.size(); 
   if(n > 0) {
     for (size_t i=0; i<n; ++i) {
-      if(xSections[i] == p) return;
+      if(xSections[i] == p) { return; }
     }
   }
   xSections.push_back(p);
@@ -92,7 +96,7 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
     for (size_t i=0; i<n; ++i) {
       if(xSections[i] == p) {
         xSections[i] = 0;
-	if(i == n-1) xSections.pop_back();
+	if(i == n-1) { xSections.pop_back(); }
 	return;
       }
     }
