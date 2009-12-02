@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #----------------------------------------------------------------
-# Last update: 01-Dec-2009.
+# Last update: 02-Dec-2009.
 #
 # This Python script has the following input parameters:
 #
@@ -247,7 +247,19 @@ setupFile = open( "setup.sh", "w" )
 
 setupFile.write( "#!/bin/sh \n" )
 
+#source a useful script that allows to detect the release
+setupFile.write( "source identify_release.sh \n" )
+setupFile.write( "export RELEASENAME=`identify_release 2>/dev/null`\n" )
+setupFile.write( "echo $RELEASENAME \n" )
+#Check if AFS is available, if so take GCC 4.3 (for SLC5)
+setupFile.write( "if [ $RELEASENAME == \"slc5\" ]; then\n" )
+setupFile.write( "   if [ -d  /afs/cern.ch/sw/lcg/contrib/gcc/4.3/x86_64-slc5-gcc43-opt ]; then \n " ) 
+setupFile.write( "      . /afs/cern.ch/sw/lcg/contrib/gcc/4.3/x86_64-slc5-gcc43-opt/setup.sh \n" )  ###***LOOKHERE***
+setupFile.write( "   fi\n" )
+setupFile.write( "fi\n" )
+
 ###setupFile.write( "export VO_GEANT4_SW_DIR=/users/ribon/dirGrid/dirDec09 \n" )   #***LOOKHERE***
+###setupFile.write( "export OSG_APP=/users/ribon/dirGrid/dirDec09/dirOSG \n" ) #***LOOKHERE***
 
 # In the American sites, the environmental variable  $VO_GEANT4_SW_DIR
 # is not defined. Its equivalent is:  $OSG_APP/geant4 .
@@ -259,7 +271,7 @@ setupFile.write( "  if [ -d $OSG_APP/geant4 ] ; then \n" )
 setupFile.write( "    echo OSG_APP=$OSG_APP \n" )
 setupFile.write( "    echo set VO_GEANT4_SW_DIR=$OSG_APP/geant4 \n" )
 setupFile.write( "    export VO_GEANT4_SW_DIR=$OSG_APP/geant4 \n" )
-setupFile.write( "    export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations_`uname -i` \n" )
+setupFile.write( "    export DIR_INSTALLATIONS=$VO_GEANT4_SW_DIR/dirInstallations_${RELEASENAME}_`uname -i` \n" )
 setupFile.write( "  else \n")
 setupFile.write( "    echo ***ERROR*** : VO_GEANT4_SW_DIR and OSG_APP are undefined or unaccessible! \n" )
 setupFile.write( "    exit 1 \n")
@@ -353,8 +365,15 @@ setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ROOTSYS/lib \n" )
 # The following is needed by ROOT to find libG4TypesDict.so, which has
 # been created with the reference version of Geant4 and copied by hand
 # from $G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/ .
-setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4WORKDIR/lib_`uname -i`/$G4SYSTEM \n" )
+setupFile.write( "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4WORKDIR/lib_${RELEASENAME}_`uname -i`/$G4SYSTEM \n" )
 
+## if on SLC5 and AFS is not available use GCC 4.3 from local area
+setupFile.write( "if [ $RELEASENAME == \"slc5\" ];then \n" )
+setupFile.write( "   if [ ! -d  /afs/cern.ch/sw/lcg/contrib/gcc/4.3/x86_64-slc5-gcc43-opt ]; then \n " )    ###***LOOKHERE***
+setupFile.write( "      basedir=$G4WORKDIR/lib_${RELEASENAME}_`uname -i`\n" )
+setupFile.write( "      export LD_LIBRARY_PATH=$basedir/gcc43:$basedir/gmp:$basedir/mpfr:$LD_LIBRARY_PATH\n" )
+setupFile.write( "   fi\n" )
+setupFile.write( "fi\n" )
 # If the beam energy is below a given threshold (in GeV) then
 # no biasing is used (i.e. the StackingAction is not used).
 if ( float( EnergyValue.split()[0] ) < energyThresholdInGeVNoBiasBelow ) :
@@ -364,8 +383,7 @@ else :
 
 #***LOOKHERE*** Switch on the extra histograms (else only the ntuple).
 ###setupFile.write( "export HISTOGRAMS_ON=1 \n" )
-
-if ( REFERENCE.find( "9.2" ) > -1 ) :
+if ( REFERENCE.find( "9.2" ) > -1 ) : #***LOOKHERE***
     if ( PHYSICS=="CHIPS" ) :
         setupFile.write( "export PHYSLIST=QGSC_BERT \n" )
     elif ( PHYSICS=="QGSC_CHIPS" ) :

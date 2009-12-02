@@ -1,5 +1,5 @@
 
- Last update: 16-Aug-2009
+ Last update: 02-Dec-2009
  ========================
 
  This directory contains a configurable calorimeter setup to be used
@@ -40,26 +40,47 @@
  If you run on the Grid, for each platform (e.g. SLC4 32-bits, 
  SLC4 64-bits, SLC5 64-bits, etc.) you need a different 
  installation tar-ball; however, for the application tar-ball,
- you do not need a separate tar-ball for 32-bits and 64-bits
- architectures (but SLC4 and SLC5 must be kept separated).
- Instead, you can prepare a single tar-ball containing the 
- following 4 executables:
-   1) 32-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-i386 
-   2) 32-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-i386 
-   3) 64-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-x86_64
-   4) 64-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-x86_64
+ you do not need a separate tar-ball: you can have in a single
+ tar-ball the following 3 platforms:
+   SLC4 32-bits : slc4-i386
+   SLC4 64-bits : slc4-x86_64
+   SLC5 64-bits : slc5-x86_64
+ The shell script  identify_release.sh  defined an environmental
+ variable, $RELEASENAME, whose value is 'slc4' or 'slc5'.
+ So you can prepare a single tar-ball containing the 
+ following 6 executables:
+   1) 32-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-slc4-i386 
+   2) 32-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-slc4-i386 
+   3) 64-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-slc4-x86_64
+   4) 64-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-slc4-x86_64
+   5) 64-bits REF1 : e.g.  mainStatAccepTest-9.2.p01-slc5-x86_64
+   6) 64-bits REF2 : e.g.  mainStatAccepTest-9.2.cand01-slc5-x86_64
  Notice that you can get "i386" or "x86_64" with the command
- `uname -i` .
+ `uname -i`, and "slc4" or "slc5" from $RELEASENAME (produced
+ by the script identify_release.sh).
+ In the case of SLC5, because the native compiler is g++ 4.1,
+ but we are interested in g++ 4.3, the following directories
+ should be copied in  lib_slc5_x86_64/ :
+    gcc43/  gmp/  mpfr/
+ which are copied from, respectively:
+    /afs/cern.ch/sw/lcg/contrib/gcc/4.3/x86_64-slc5-gcc34-opt/lib64
+    /afs/cern.ch/sw/lcg/contrib/gmp/4.2.2/x86_64-slc5-gcc34-opt/lib
+    /afs/cern.ch/sw/lcg/contrib/mpfr/2.3.1/x86_64-slc5-gcc34-opt/lib
+ and then the LD_LIBRARY_PATH should be set, at the end, as:
+   export LD_LIBRARY_PATH=$basedir/gcc43:$basedir/gmp:$basedir/mpfr:$LD_LIBRARY_PATH
+ where  basedir=$G4WORKDIR/lib_${RELEASENAME}_`uname -i` .
+
  Furthermore, in order to let ROOT to find the library
  libG4TypesDict.so , which is automatically created when you
  build the binaries in:
     $G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/
  you need to create by hand the subdirectories:
-    a)  $G4WORKDIR/lib_i386/Linux-g++/  
-    b)  $G4WORKDIR/lib_x86_64/Linux-g++/
+    a)  $G4WORKDIR/lib_slc4_i386/Linux-g++/  
+    b)  $G4WORKDIR/lib_slc4_x86_64/Linux-g++/
+    c)  $G4WORKDIR/lib_slc5_x86_64/Linux-g++/
  and then copy (by hand) such library:
    cp $G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/libG4TypesDict.so \
-      $G4WORKDIR/lib_`uname -i`/Linux-g++/
+      $G4WORKDIR/lib_${RELEASENAME}_`uname -i`/Linux-g++/
  and finally setting the library path:
  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$G4WORKDIR/tmp/$G4SYSTEM/mainStatAccepTest/
  After that, you can delete the directory $G4WORKDIR/tmp .

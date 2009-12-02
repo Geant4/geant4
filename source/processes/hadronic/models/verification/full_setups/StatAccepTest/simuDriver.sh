@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 #----------------------------------------------------------------------------
-# Last update: 14-Aug-2009.
+# Last update: 02-Dec-2009.
 #
 # This Bash shell script has the following 11 parameters:
 #
@@ -104,7 +104,7 @@ echo ' UNAMEI      =' $UNAMEI
 #
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
 
-    mainStatAccepTest-$REF-`uname -i` run.g4-$LABEL > output.log-$LABEL 2>&1 ;
+    mainStatAccepTest-$REF-$RELEASENAME-`uname -i` run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 
     EXITCODE=$? ;
     if [ $EXITCODE != 0 ] ; then
@@ -158,7 +158,7 @@ fi
     fi
     echo '  '; echo ' G4INSTALL = ' $G4INSTALL; echo ' running REF = ' $REF ; echo '  ' ;
 
-    mainStatAccepTest-$REF-`uname -i` run.g4-$LABEL > output.log-$LABEL 2>&1 ;
+    mainStatAccepTest-$REF-$RELEASENAME-`uname -i` run.g4-$LABEL > output.log-$LABEL 2>&1 ;
 
     EXITCODE=$? ;
     if [ $EXITCODE != 0 ] ; then

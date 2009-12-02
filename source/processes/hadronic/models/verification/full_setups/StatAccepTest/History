@@ -1,6 +1,13 @@
                  History file
                  ------------
 
+02-Dec-2009 - A.Ribon (statAccepTest-V09-02-11)
+- In order to run on OSG, where there are no
+  distinction between SLC4 and SLC5, and 32- and
+  64-bits, an unique tar-ball can be created for
+  the 3 platforms.
+
+
 01-Dec-2009 - A.Ribon (statAccepTest-V09-02-10)
 - Updated list of Physics Lists.
   Possibility to run new Physics Lists available
