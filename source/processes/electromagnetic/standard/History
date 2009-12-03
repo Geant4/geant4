@@ -1,4 +1,4 @@
-$Id: History,v 1.479 2009-12-03 09:59:07 vnivanch Exp $
+$Id: History,v 1.480 2009-12-03 17:28:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 December 09:  V.Ivant (emstand-V09-02-36)
+- G4BetheBlochModel - (A.Lechner) return back commented out CorrectionAlongStep
+                      method, returning back to normal ion ranges
 
 03 December 09:  V.Ivant (emstand-V09-02-35)
 - G4CoulombScatteringModel - (C.Consaldi) fixed relativistic formula
