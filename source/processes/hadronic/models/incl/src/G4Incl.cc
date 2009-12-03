@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.24 2009-12-02 22:10:55 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.25 2009-12-03 17:16:23 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -7473,7 +7473,11 @@ G4double G4Incl::clmb1(G4double rho, G4double eta, G4double *ml)
     if (psi > dp4 && psi < 50.0) {                           
       prob = clmb2(rho,eta,&dumm);                                       
     } else {
-      x = std::exp(std::log(eta)/6.0);
+      if(eta <= 1.0e-6) { // Safeguard against a floating point exception
+	x = 0.0;
+      } else {
+	x = std::exp(std::log(eta)/6.0);
+      }
       prob = std::sqrt(dp1 - y*x/(c0 + c1 * std::pow(x,3) + rho * x));
     } 
     (*ml) = 0;
