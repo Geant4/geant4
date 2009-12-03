@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.4 2009-12-03 14:45:40 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.5 2009-12-03 18:09:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -70,8 +70,8 @@ G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters ar
 G4double G4QInelastic::Temperature=210.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QInelastic::freeNuc=.4;       // Percentage of free nucleons on the surface
-G4double G4QInelastic::freeDib=.1;       // Percentage of free diBaryons on the surface
+G4double G4QInelastic::freeNuc=.35;      // Percentage of free nucleons on the surface
+G4double G4QInelastic::freeDib=.05;      // Percentage of free diBaryons on the surface
 G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
 G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
 G4int    G4QInelastic::nPartCWorld=152;  // The#of particles initialized in CHIPS World
@@ -79,7 +79,7 @@ G4double G4QInelastic::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-
 G4bool   G4QInelastic::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
 G4double G4QInelastic::PiPrThresh=141.4; // Pion Production Threshold for gammas
 G4double G4QInelastic::M2ShiftVir=20000.;// Shift for M2=-Q2=m_pi^2 of the virtualGamma
-G4double G4QInelastic::DiNuclMass=1880.; // DoubleNucleon Mass for VirtualNormalization
+G4double G4QInelastic::DiNuclMass=1870.; // DoubleNucleon Mass for VirtualNormalization
 G4double G4QInelastic::photNucBias=1.;   // BiasingParameter for photo(e,mu,tau)Nuclear
 G4double G4QInelastic::weakNucBias=1.;   // BiasingParameter for ChargedCurrents(nu,mu) 
 

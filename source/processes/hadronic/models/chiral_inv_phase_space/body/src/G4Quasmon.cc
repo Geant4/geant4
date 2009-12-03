@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.120 2009-12-03 14:45:40 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.121 2009-12-03 18:09:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -601,7 +601,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4int kCountMax=1;                    // "No reson to increase it"
     //G4int kCountMax=0;                    //@@ *** Close search for the minimum k ***
     //
-    G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
+    G4int qCountMax=12;                   // Try different q to come over CoulBar or SepE
     //G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
     //G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
     //G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
@@ -611,10 +612,12 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     //G4int pCountMax=3;                    //Try differentHadrons(Parents) forBetterRecoil
     G4int pCountMax=1;                    //Try differentHadrons(Parents) forBetterRecoil
     //if(envA>0) pCountMax=3;
-    if(envA>0&&envA<31)
+    //if(envA>0&&envA<31)
+    if(envA>0&&envA<61)
     {
-      pCountMax=60/envA;
-      kCountMax=pCountMax;                // See above !
+      //pCountMax=60/envA;
+      pCountMax=120/envA;
+      //kCountMax=pCountMax;                // See above !
     }
     G4bool gintFlag=false;                // Flag of gamma interaction with one quark
     while(kCount<kCountMax&&kCond)

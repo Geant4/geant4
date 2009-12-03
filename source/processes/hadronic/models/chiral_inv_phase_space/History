@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+3-Dec-2009 M.Kosov                            (hadr-chips-V09-02-31)
+-----------------------------------------------------------------------
+Mutual tag: further CHIPS acceleration (10% slower than QGSP_BERT)
+
 3-Dec-2009 M.Kosov                            (hadr-chips-V09-02-30)
 -----------------------------------------------------------------------
 Mutual tag: Tuning of parameters to accelerate CHIPS

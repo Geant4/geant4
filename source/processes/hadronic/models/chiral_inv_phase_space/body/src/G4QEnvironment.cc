@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.159 2009-12-03 14:45:40 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.160 2009-12-03 18:09:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1736,7 +1736,8 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //G4int   c3Max = 27;
     //G4int   c3Max = 9;                    // Max#of "no hadrons" steps (reduced below?)
     //G4int   c3Max = 3;
-    G4int   c3Max = 1;
+    //G4int   c3Max = 1;
+    G4int   c3Max = 0;
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
@@ -1762,6 +1763,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
     //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
     G4bool first=true;                     // Flag of the first interaction (only NucMedia)
     G4int cAN=0;                           // Counter of the nucleon absorptions
+    //G4int mcAN=27;                         // Max for the counter of nucleon absorptions
     G4int mcAN=9;                          // Max for the counter of nucleon absorptions
     //G4int mcAN=3;                          // Max for the counter of nucleon absorptions
     //G4int mcAN=1;                          // Max for the counter of nucleon absorptions
