@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.43 2009-10-28 10:14:13 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.44 2009-12-03 09:59:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,9 +107,14 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   tkin = sqrt(mom2 + m12) - mass;
 
   //invbeta2 = 1.0 +  m12/mom2;
- 
-  G4double fm = m2/(mass + m2);
-  invbeta2 = 1.0 +  m12*fm*fm/mom2;
+  //  G4double fm = m2/(mass + m2);  
+
+  // 03.09.2009 C.Consaldi
+  G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
+  G4double mu_rel=mass*m2/Ecm;
+
+  invbeta2 = 1.0 +  mu_rel*mu_rel/mom2; 
+  //
 
   SetupTarget(Z, tkin);
 
@@ -157,8 +162,15 @@ void G4CoulombScatteringModel::SampleSecondaries(
   G4double eCM = sqrt(mom2 + m12);
 
   // a correction for heavy projectile
-  G4double fm = m2/(mass + m2);
-  invbeta2 = 1.0 +  m12*fm*fm/mom2;
+  //  G4double fm = m2/(mass + m2);
+  //  invbeta2 = 1.0 +  m12*fm*fm/mom2;
+
+  // 03.09.2009 C.Consaldi
+  G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
+  G4double mu_rel=mass*m2/Ecm;
+
+  invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
+  //
 
   // sample scattering angle in CM system
   SetupTarget(Z, eCM - mass);
@@ -180,9 +192,9 @@ void G4CoulombScatteringModel::SampleSecondaries(
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
 
-  //  G4double elab = gam*(eCM + bet*pzCM);
+ //   G4double elab = gam*(eCM + bet*pzCM);
 
-  G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
+ // G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
   G4double elab = etot - m2*(ptot/Ecm)*(ptot/Ecm)*(1.-cost) ;
 
  
@@ -209,5 +221,4 @@ void G4CoulombScatteringModel::SampleSecondaries(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
