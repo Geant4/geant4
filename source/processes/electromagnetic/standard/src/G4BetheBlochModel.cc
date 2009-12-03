@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.35 2009-11-22 18:00:23 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.36 2009-12-03 17:26:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -276,15 +276,14 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 					     const G4DynamicParticle*,
 					     G4double&,
 					     G4double&,
 					     G4double)
 {}
-
-/*
+*/
 
 void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					     const G4DynamicParticle* dp,
@@ -310,7 +309,6 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     //	   << " highOrder= " << highOrder << " (" << highOrder/eloss << ")" << G4endl;    
   }
 }
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
