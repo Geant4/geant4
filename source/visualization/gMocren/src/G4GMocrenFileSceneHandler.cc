@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.10 2009-11-05 11:34:01 gcosmo Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.11 2009-12-03 00:37:25 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -360,7 +360,6 @@ void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void )
 
 	    modality[ixy] = kgMocrenIO->convertDensityToHU(itr->second);
 	  } else {
-	    G4cout << "ABC : " << x << ", " <<  y << ", " << z << G4endl;
 	    modality[ixy] = -1024;
 	  }
 
