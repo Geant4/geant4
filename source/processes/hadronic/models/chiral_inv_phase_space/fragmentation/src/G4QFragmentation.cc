@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.3 2009-12-01 09:24:24 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.4 2009-12-03 14:45:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -52,11 +52,11 @@
 // Promoting model parameters from local variables class properties @@(? M.K.)
 
 // Definition of static parameters
-G4int    G4QFragmentation::nCutMax=7; 
+G4int    G4QFragmentation::nCutMax=7;
 G4double G4QFragmentation::stringTension=1.5*GeV/fermi;
 G4double G4QFragmentation::tubeDensity  =1.5/fermi;
 // Parameters of diffractional fragmentation (was .72*)
-G4double G4QFragmentation::widthOfPtSquare=-GeV*GeV; // pt -width2 forStringExcitation
+G4double G4QFragmentation::widthOfPtSquare=-4.*GeV*GeV/3.;// pt -width2 forStringExcitation
 
 G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &aPrimary)
 {

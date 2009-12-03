@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.119 2009-11-16 18:15:01 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.120 2009-12-03 14:45:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -536,7 +536,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       //}
     }
     G4ThreeVector totBoost = tot4M.boostVector(); // BoostVector for TotalSystem (backward)
-    G4ThreeVector totRBoost= -totBoost;    // Boost vector for Total System (forward)
+    G4ThreeVector totRBoost= -totBoost;   // Boost vector for Total System (forward)
     G4int    iniPDG =valQ.GetSPDGCode();
     G4int    iniBN  =valQ.GetBaryonNumber();
     G4int    iniQChg=valQ.GetCharge();
@@ -547,7 +547,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4cout<<"G4Q::HQ: iniPDG="<<iniPDG<<", Z="<<iniP<<", N="<<iniN<<", S="<<iniS<<G4endl;
 #endif
     G4QNucleus iniRN(iniP,iniN-1,iniS);
-    G4double iniRM = iniRN.GetMZNS();      // Mass of Residual Quasmon when neutron is rad
+    G4double iniRM = iniRN.GetMZNS();     // Mass of Residual Quasmon when neutron is rad
     if(iniBN<2||envA>0) iniRM=0.;
     G4double iniQM =G4QPDGCode(iniPDG).GetMass();  // Minimum mass of Quasmon
 #ifdef debug
@@ -564,42 +564,42 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4cout<<"G4Q::HQ:mQ="<<quasM<<valQ<<bndQM2<<",nQ="<<nOfQ<<",Env="<<envM
           <<envQC<<",Q+E="<<quen<<",tM="<<totPDG<<totQC<<totM<<"<"<<totMass<<G4endl;
 #endif
-    G4int tQ    = valQ.GetTot();           // Total number of quarks for current Quasmon
+    G4int tQ    = valQ.GetTot();          // Total number of quarks for current Quasmon
     G4int bQ    = abs(valQ.GetBaryonNumber()); // Baryon number of the current Quasmon
-    G4QContent cQ = valQ;                  // Temporary copy of Quasmon QC
-    G4int   s   = 4;                       // Mesonic
-    if (bQ) s   = 3*bQ + 2;                // Barionic
-    if (tQ> s) cQ.DecQAQ((tQ-s)/2);        // Reduce QC to minimum QC
+    G4QContent cQ = valQ;                 // Temporary copy of Quasmon QC
+    G4int   s   = 4;                      // Mesonic
+    if (bQ) s   = 3*bQ + 2;               // Barionic
+    if (tQ> s) cQ.DecQAQ((tQ-s)/2);       // Reduce QC to minimum QC
 #ifdef debug
-    G4int rsPDG = cQ.GetSPDGCode();        // PDG for the lowest residual Quasmon state
+    G4int rsPDG = cQ.GetSPDGCode();       // PDG for the lowest residual Quasmon state
     G4cout<<"G4Q::HQ:eN="<<envN<<",eZ="<<envZ<<",Q="<<rsPDG<<cQ<<",piF="<<piF<<",gaF="<<gaF
          <<G4endl;
 #endif
-    theEnvironment.UpdateClusters(false);// New A-clusters are calculated
+    theEnvironment.UpdateClusters(false); // New A-clusters are calculated
     //theEnvironment.PrepareCandidates(theQCandidates,false,false);//Calc.PrePreprob's of C
     //G4bool fF=piF||gaF;
     // piF,piF or gaF,gaF is correct. Made to avoid theSpecificInteractionTimeClusterChoice
     theEnvironment.PrepareCandidates(theQCandidates,piF,piF);// Calc.PrePreprob of Candid's
-    ModifyInMatterCandidates();            // Calculate InMediaMasses of Cand. & Possibil.
-    G4double kMom = 0.;                    // Energy of primary qParton in Q-CMS
-    G4double minK = 0.;                    // k_min for randomization
-    G4double maxK = quasM/2.;              // k_max for randomization
-    G4double kLS  = 0;                     // Energy of primary qParton in LS
-    G4double cost = 0.;                    // Cos(theta) of k in QS InRespecTo Q direction
-    G4bool   kCond = true;                 // k choice condition
-    G4bool   qCond = true;                 // q choice condition
-    G4bool   pCond = true;                 // Not adoptable parent cluster choice condition
-    G4bool   fskip=false;                  // Flag to skip when sucked
-    G4bool   fred =false;                  // Flag of Environment reduction
-    //G4bool   ffdc =true;                   // Flag of not successful decay in fragment
-    G4LorentzVector k4Mom=zeroLV;          // 4-momentum prototype for k
-    G4LorentzVector cr4Mom=zeroLV;         // 4-momentum prototype for the ColResQuasmon
-    G4int kCount =0;                       // Counter of attempts of k for hadronization
+    ModifyInMatterCandidates();           // Calculate InMediaMasses of Cand. & Possibil.
+    G4double kMom = 0.;                   // Energy of primary qParton in Q-CMS
+    G4double minK = 0.;                   // k_min for randomization
+    G4double maxK = quasM/2.;             // k_max for randomization
+    G4double kLS  = 0;                    // Energy of primary qParton in LS
+    G4double cost = 0.;                   // Cos(theta) of k in QS InRespecTo Q direction
+    G4bool   kCond = true;                // k choice condition
+    G4bool   qCond = true;                // q choice condition
+    G4bool   pCond = true;                // Not adoptable parent cluster choice condition
+    G4bool   fskip=false;                 // Flag to skip when sucked
+    G4bool   fred =false;                 // Flag of Environment reduction
+    //G4bool   ffdc =true;                  // Flag of not successful decay in fragment
+    G4LorentzVector k4Mom=zeroLV;         // 4-momentum prototype for k
+    G4LorentzVector cr4Mom=zeroLV;        // 4-momentum prototype for the ColResQuasmon
+    G4int kCount =0;                      // Counter of attempts of k for hadronization
     //G4int kCountMax=27;
     //G4int kCountMax=9;
-    //G4int kCountMax=3;                     // Try different k if they are below minK
-    G4int kCountMax=1;                     // "No reson to increase it"
-    //G4int kCountMax=0;                   //@@ *** Close search for the minimum k ***
+    //G4int kCountMax=3;                    // Try different k if they are below minK
+    G4int kCountMax=1;                    // "No reson to increase it"
+    //G4int kCountMax=0;                    //@@ *** Close search for the minimum k ***
     //
     G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
     //G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
@@ -614,7 +614,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     if(envA>0&&envA<31)
     {
       pCountMax=60/envA;
-      kCountMax=pCountMax;
+      kCountMax=pCountMax;                // See above !
     }
     G4bool gintFlag=false;                // Flag of gamma interaction with one quark
     while(kCount<kCountMax&&kCond)

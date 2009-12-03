@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.3 2009-11-30 18:36:44 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.4 2009-12-03 14:45:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -67,12 +67,12 @@ G4QInelastic::G4QInelastic(const G4String& processName):
 }
 
 G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters are used
-G4double G4QInelastic::Temperature=200.; // Critical Temperature (sensitive at High En)
+G4double G4QInelastic::Temperature=210.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
-G4double G4QInelastic::freeNuc=0.4;      // Percentage of free nucleons on the surface
-G4double G4QInelastic::freeDib=0.1;      // Percentage of free diBaryons on the surface
-G4double G4QInelastic::clustProb=6.;     // Nuclear clusterization parameter
+G4double G4QInelastic::freeNuc=.4;       // Percentage of free nucleons on the surface
+G4double G4QInelastic::freeDib=.1;       // Percentage of free diBaryons on the surface
+G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
 G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
 G4int    G4QInelastic::nPartCWorld=152;  // The#of particles initialized in CHIPS World
 G4double G4QInelastic::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
