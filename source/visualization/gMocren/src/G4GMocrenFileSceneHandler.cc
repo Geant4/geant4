@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.11 2009-12-03 00:37:25 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.12 2009-12-03 11:44:42 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -300,6 +300,7 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
     //kgMocrenIO->setModalityImageSize(kModalitySize);
     
     // initializations
+    //kgMocrenIO->clearModalityImage();
     kgMocrenIO->clearDoseDistAll();
     kgMocrenIO->clearROIAll();
     kgMocrenIO->clearTracks();

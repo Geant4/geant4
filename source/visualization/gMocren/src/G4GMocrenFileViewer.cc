@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.cc,v 1.2 2009-10-12 10:04:35 akimura Exp $
+// $Id: G4GMocrenFileViewer.cc,v 1.3 2009-12-03 11:44:42 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,13 +106,13 @@ G4GMocrenFileViewer::ClearView( void )
   if(GFDEBUG)
     G4cerr << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
 
-  if(kSceneHandler.kGddDest) {
-    kSceneHandler.kGddDest.close();
+  //if(kSceneHandler.kGddDest) {
+    //kSceneHandler.kGddDest.close();
     // Re-open with same filename...
-    kSceneHandler.kGddDest.open(kSceneHandler.kGddFileName);
+    //kSceneHandler.kGddDest.open(kSceneHandler.kGddFileName);
     kSceneHandler.kFlagInModeling = false;
     kSceneHandler.GFBeginModeling();
-  }
+    //}
 }
 
 
