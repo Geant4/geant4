@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2009-12-01 08:25:06 gcosmo Exp $
+$Id: History,v 1.168 2009-12-03 11:09:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-12-09 V.Ivanchenko (materials-V09-02-24)
+- G4NIstMessenger - fixed minor memory leak at destruction
 
 01-12-09 G.Cosmo (materials-V09-02-23)
 - Use G4double in place of G4float in G4DensityEffectData.

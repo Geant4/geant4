@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.cc,v 1.8 2009-10-30 19:39:35 bagoulia Exp $
+// $Id: G4NistMessenger.cc,v 1.9 2009-12-03 11:09:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,6 +124,7 @@ G4NistMessenger::~G4NistMessenger()
   
   delete g4ElmCmd;   
   delete g4MatCmd;
+  delete g4DensCmd;
   delete g4Dir;
   delete matDir;  
 }
