@@ -36,6 +36,9 @@
    theModel = new G4InclAblaCascadeInterface;
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax); 
+   theBertiniModel = new G4CascadeInterface;
+   theBertiniModel->SetMinEnergy(theMin);
+   theBertiniModel->SetMaxEnergy(theMax); 
  }
 
  G4InclAblaPiKBuilder::
@@ -65,23 +68,35 @@
  Build(G4HadronElasticProcess * ) {}
 
  void G4InclAblaPiKBuilder::
- Build(G4KaonPlusInelasticProcess *)
+ Build(G4KaonPlusInelasticProcess *aP)
  {
+   aP->RegisterMe(theBertiniModel);
+   theBertiniModel->SetMinEnergy(theMin);
+   theBertiniModel->SetMaxEnergy(theMax);
  }
 
  void G4InclAblaPiKBuilder::
- Build(G4KaonMinusInelasticProcess *)
+ Build(G4KaonMinusInelasticProcess *aP)
  {
+   aP->RegisterMe(theBertiniModel);
+   theBertiniModel->SetMinEnergy(theMin);
+   theBertiniModel->SetMaxEnergy(theMax);
  }
 
  void G4InclAblaPiKBuilder::
- Build(G4KaonZeroLInelasticProcess *)
+ Build(G4KaonZeroLInelasticProcess *aP)
  {
+   aP->RegisterMe(theBertiniModel);
+   theBertiniModel->SetMinEnergy(theMin);
+   theBertiniModel->SetMaxEnergy(theMax);
  }
 
  void G4InclAblaPiKBuilder::
- Build(G4KaonZeroSInelasticProcess *)
+ Build(G4KaonZeroSInelasticProcess *aP)
  {
+   aP->RegisterMe(theBertiniModel);
+   theBertiniModel->SetMinEnergy(theMin);
+   theBertiniModel->SetMaxEnergy(theMax);
  }
 
  // 2002 by J.P. Wellisch

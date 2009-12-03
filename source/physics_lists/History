@@ -1,4 +1,4 @@
-q$Id: History,v 1.117 2009-11-30 18:44:49 mkossov Exp $
+q$Id: History,v 1.118 2009-12-03 14:31:35 kaitanie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-12-2009, P.Kaitaniemi                (phys-lists-V09-02-45)
+- QGSP_INCL_ABLA, Fix: Use Bertini cascade for kaons in the energy range 0 - 10 GeV.
 
 30-11-2009, M.Kosov                     (phys-lists-V09-02-44)
 - G4QNeutrinoPhysics - process is not created if neutrino is not simulated

@@ -36,6 +36,7 @@
 
 #include "G4PiNuclearCrossSection.hh"
 #include "G4InclAblaCascadeInterface.hh"   
+#include "G4CascadeInterface.hh"
 
 /**
  * Builder for pion processes using the INCL/ABLA intra-nuclear
@@ -74,7 +75,7 @@ class G4InclAblaPiKBuilder : public G4VPiKBuilder
     G4InclAblaCascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;
-
+    G4CascadeInterface *theBertiniModel;
 };
 
 // 2002 by J.P. Wellisch
