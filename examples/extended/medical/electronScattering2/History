@@ -1,0 +1,20 @@
+$Id: History,v 1.1 2009-12-04 07:31:15 perl Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example ElectronScattering2 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+ 
+3rd December 2009, Joseph Perl (exampleES2-V09-02-00)
+- Introducing this example.
+
