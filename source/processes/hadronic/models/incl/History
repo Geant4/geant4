@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.22 2009-12-03 17:16:23 kaitanie Exp $
+$Id: History,v 1.23 2009-12-04 13:16:57 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,17 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+04 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-05)
+---------------------------------------------------------
+- Fix: Corrected the G4InclAblaLightIonInterface error handling. In
+  case INCL is unable to produce a valid cascade it will return the
+  original projectile particle back to Geant4. Unfortunately in case
+  of the light ion interface it returned a particle with NULL pointer
+  to particle definition.
+- Added safeguards to both G4InclAblaCascadeInterface and
+  G4InclAblaLightIonInterface to prevent returning of particles with
+  NULL definition.
 
 03 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-04)
 ---------------------------------------------------------

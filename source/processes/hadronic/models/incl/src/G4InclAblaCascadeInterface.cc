@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.12 2009-11-18 10:43:14 kaitanie Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.13 2009-12-04 13:16:57 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -228,24 +228,24 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       
       if(bulletType == proton) {
         aParticleDefinition = G4Proton::ProtonDefinition();
-      }
-      if(bulletType == neutron) {
+      } else if(bulletType == neutron) {
         aParticleDefinition = G4Neutron::NeutronDefinition();
-      }
-      if(bulletType == pionPlus) {
+      } else if(bulletType == pionPlus) {
         aParticleDefinition = G4PionPlus::PionPlusDefinition();
-      }
-      if(bulletType == pionZero) {
+      } else if(bulletType == pionZero) {
         aParticleDefinition = G4PionZero::PionZeroDefinition();
-      }
-      if(bulletType == pionMinus) {
+      } else if(bulletType == pionMinus) {
         aParticleDefinition = G4PionMinus::PionMinusDefinition();
+      } else { // Projectile was not regognized
+	aParticleDefinition = 0;
       }
 
-      cascadeParticle = new G4DynamicParticle();
-      cascadeParticle->SetDefinition(aParticleDefinition);
-      cascadeParticle->Set4Momentum(aTrack.Get4Momentum());
-      theResult.AddSecondary(cascadeParticle);
+      if(aParticleDefinition != 0) {
+	cascadeParticle = new G4DynamicParticle();
+	cascadeParticle->SetDefinition(aParticleDefinition);
+	cascadeParticle->Set4Momentum(aTrack.Get4Momentum());
+	theResult.AddSecondary(cascadeParticle);
+      }
     }
 
     // Convert INCL4 output to Geant4 compatible data structures.
