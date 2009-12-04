@@ -1,4 +1,4 @@
-q$Id: History,v 1.118 2009-12-03 14:31:35 kaitanie Exp $
+q$Id: History,v 1.119 2009-12-04 13:09:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-12-2009, K.Murakami                  (phys-lists-V09-02-46)
+- Fixed typo in FTFP_EMV.icc for wrong call to G4WarnPLStatus.
 
 03-12-2009, P.Kaitaniemi                (phys-lists-V09-02-45)
 - QGSP_INCL_ABLA, Fix: Use Bertini cascade for kaons in the energy range 0 - 10 GeV.
