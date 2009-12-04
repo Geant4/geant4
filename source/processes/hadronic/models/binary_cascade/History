@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4-Dec-2009, Gunter Folger                had-binary-V09-02-06
+- Bug fix in G4BinaryCascade::ApplyCollision; decay products outside
+   nucleus were nevertheless counted in currentZ/A as if these were within
+   nucleus.
+
 13-Nov-2009, Gunter Folger               had-binary-V09-02-05
 - Correct assignment to G4ThreeVector, avoid use of Vector=0;
 - Protect for void nucleus ( not even a single neutron ) after cascade 
