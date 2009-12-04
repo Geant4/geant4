@@ -786,13 +786,13 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   G4ping debug("debug_ExcitationEnergy");
 // get A and Z for the residual nucleus
   #if defined(debug_G4BinaryCascade) || defined(debug_BIC_GetExcitationEnergy)
-  G4int finalA = theTargetList.size()+theCapturedList.size();
-  G4int finalZ = GetTotalCharge(theTargetList)+GetTotalCharge(theCapturedList);
-  if ( (currentA - finalA) != 0 || (currentZ - finalZ) != 0 )
-  {
-     G4cerr << "G4BIC:GetExcitationEnergy(): Nucleon counting error current/final{A,Z} " 
-            << currentA << " " << finalA << " "<< currentZ << " " << finalZ << G4endl;
-  }
+     G4int finalA = theTargetList.size()+theCapturedList.size();
+     G4int finalZ = GetTotalCharge(theTargetList)+GetTotalCharge(theCapturedList);
+     if ( (currentA - finalA) != 0 || (currentZ - finalZ) != 0 )
+     {
+	G4cerr << "G4BIC:GetExcitationEnergy(): Nucleon counting error current/final{A,Z} " 
+               << currentA << " " << finalA << " "<< currentZ << " " << finalZ << G4endl;
+     }
   
   #endif
 
@@ -851,7 +851,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
     {
       initialExc = theInitial4Mom.mag()-
            G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A);
-	   G4cout << " Initial nucleus A Z" << A << " " << Z << initialExc << G4endl; 
+	   G4cout << "GetExcitationEnergy: Initial nucleus A Z " << A << " " << Z << " " << initialExc << G4endl; 
     }
   }
 
@@ -1080,7 +1080,6 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 
   G4int initialBaryon(0);
   G4int initialCharge(0);
-  G4double initial_Efermi(0);
   G4LorentzVector mom4Primary(0);
   
   if (primary->GetState() == G4KineticTrack::inside)
@@ -1089,26 +1088,29 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
      initialCharge = G4lrint(primary->GetDefinition()->GetPDGCharge());
   }
 
-// for primary resonances, subtract neutron ( = proton) field ( ie. add std::abs(field))
   G4int PDGcode=std::abs(primary->GetDefinition()->GetPDGEncoding());
   mom4Primary=primary->Get4Momentum();
-  initial_Efermi=RKprop->GetField(primary->GetDefinition()->GetPDGEncoding(),primary->GetPosition());
 
-  if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
-  {
-     initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(),
-                                                primary->GetPosition());
-     primary->Update4Momentum(mom4Primary.e() - initial_Efermi);
-  }
+// for primary resonances, subtract neutron ( = proton) field ( ie. add std::abs(field))
+  G4double initial_Efermi(0);
+  if (primary->GetState() == G4KineticTrack::inside ) {
+     initial_Efermi=RKprop->GetField(primary->GetDefinition()->GetPDGEncoding(),primary->GetPosition());
 
-  std::vector<G4KineticTrack *>::iterator titer;
-  for ( titer=target_collection.begin() ; titer!=target_collection.end(); ++titer)
-  {
-     G4ParticleDefinition * aDef=(*titer)->GetDefinition();
-     G4int aCode=aDef->GetPDGEncoding();
-     G4ThreeVector aPos=(*titer)->GetPosition();
-     initial_Efermi+= RKprop->GetField(aCode, aPos);
-//     initial_Efermi+= RKprop->GetField((*titer)->GetDefinition()->GetPDGEncoding(),(*titer)->GetPosition());
+     if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
+     {
+	initial_Efermi = RKprop->GetField(G4Neutron::Neutron()->GetPDGEncoding(),
+                                                   primary->GetPosition());
+	primary->Update4Momentum(mom4Primary.e() - initial_Efermi);
+     }
+
+     std::vector<G4KineticTrack *>::iterator titer;
+     for ( titer=target_collection.begin() ; titer!=target_collection.end(); ++titer)
+     {
+	G4ParticleDefinition * aDef=(*titer)->GetDefinition();
+	G4int aCode=aDef->GetPDGEncoding();
+	G4ThreeVector aPos=(*titer)->GetPosition();
+	initial_Efermi+= RKprop->GetField(aCode, aPos);
+     }
   }
 //****************************************
 
@@ -1139,7 +1141,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
    #endif
      G4bool lateParticleCollision= (!haveTarget) && products && products->size() == 1;
 	//  if ( lateParticleCollision ) G4cout << " Added late particle--------------------------"<<G4endl;
-	//  if ( products ) PrintKTVector(products, " reaction products");
+	//  if ( lateParticleCollision && products ) PrintKTVector(products, " reaction products");
 //****************************************  
 
   // reset primary to initial state
@@ -1171,40 +1173,42 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
      return false;
   }
 
-   G4double final_Efermi(0);
-   G4KineticTrackVector resonances;
-   for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
-   {
-       G4int PDGcode=std::abs((*i)->GetDefinition()->GetPDGEncoding());
-//       G4cout << " PDGcode, state " << PDGcode << " " << (*i)->GetState()<<G4endl;
-       final_Efermi+=RKprop->GetField(PDGcode,(*i)->GetPosition());
-       if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
-       {  
-	  resonances.push_back(*i);
-       }
-   }	
-   if ( resonances.size() > 0 ) 
-   {  
-      G4double delta_Fermi= (initial_Efermi-final_Efermi)/resonances.size();
-      for (std::vector<G4KineticTrack *>::iterator res=resonances.begin(); res != resonances.end(); res++)
-      {
-	  G4LorentzVector mom=(*res)->Get4Momentum();
-	  G4double mass2=mom.mag2();
-	  G4double newEnergy=mom.e() + delta_Fermi;
-	  G4double newEnergy2= newEnergy*newEnergy;
-	  	//G4cout << "mom = " << mom <<" newE " << newEnergy<< G4endl;
-	  if ( newEnergy2 < mass2 )
-	  {
-             ClearAndDestroy(products);
-             if (target_collection.size() == 0 ) FindDecayCollision(primary);  // for decay, sample new decay
-	     delete products;
-	     return false;
-	  }
-//	  G4cout << " correct resonance from /to " << mom.e() << " / " << newEnergy<< G4endl;
-	  G4ThreeVector mom3=std::sqrt(newEnergy2 - mass2) * mom.vect().unit();
-	  (*res)->Set4Momentum(G4LorentzVector(mom3,newEnergy));
-      }
-   }
+  if (primary->GetState() == G4KineticTrack::inside ) {   // if the primary was outside, nothing to correct
+     G4double final_Efermi(0);
+     G4KineticTrackVector resonances;
+     for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
+     {
+	 G4int PDGcode=std::abs((*i)->GetDefinition()->GetPDGEncoding());
+         //       G4cout << " PDGcode, state " << PDGcode << " " << (*i)->GetState()<<G4endl;
+	 final_Efermi+=RKprop->GetField(PDGcode,(*i)->GetPosition());
+	 if ( PDGcode > 1000 && PDGcode != 2112 && PDGcode != 2212 )
+	 {  
+	    resonances.push_back(*i);
+	 }
+     }	
+     if ( resonances.size() > 0 ) 
+     {  
+	G4double delta_Fermi= (initial_Efermi-final_Efermi)/resonances.size();
+	for (std::vector<G4KineticTrack *>::iterator res=resonances.begin(); res != resonances.end(); res++)
+	{
+	    G4LorentzVector mom=(*res)->Get4Momentum();
+	    G4double mass2=mom.mag2();
+	    G4double newEnergy=mom.e() + delta_Fermi;
+	    G4double newEnergy2= newEnergy*newEnergy;
+	  	  //G4cout << "mom = " << mom <<" newE " << newEnergy<< G4endl;
+	    if ( newEnergy2 < mass2 )
+	    {
+               ClearAndDestroy(products);
+               if (target_collection.size() == 0 ) FindDecayCollision(primary);  // for decay, sample new decay
+	       delete products;
+	       return false;
+	    }
+            //	  G4cout << " correct resonance from /to " << mom.e() << " / " << newEnergy<< G4endl;
+	    G4ThreeVector mom3=std::sqrt(newEnergy2 - mass2) * mom.vect().unit();
+	    (*res)->Set4Momentum(G4LorentzVector(mom3,newEnergy));
+	}
+     }
+  }
 
 #ifdef debug_BIC_ApplyCollision
   DebugApplyCollision(collision, products);
@@ -1217,9 +1221,11 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   {
     if ( ! lateParticleCollision ) 
     {
-       (*i)->SetState(primary->GetState());  // secondaries are created inside nucleus, except for decay in propagate
-       finalBaryon+=(*i)->GetDefinition()->GetBaryonNumber();
-       finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge());
+       (*i)->SetState(primary->GetState());  // decay may be anywhere!
+       if ( (*i)->GetState() == G4KineticTrack::inside ){
+          finalBaryon+=(*i)->GetDefinition()->GetBaryonNumber();
+          finalCharge+=G4lrint((*i)->GetDefinition()->GetPDGCharge());
+       }
     } else {
        G4double tin=0., tout=0.; 
        if (((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes((*i),tin,tout))
@@ -1246,7 +1252,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	  toFinalState.push_back((*i));
        }
        
-//       G4cout << " PDGcode, state " << (*i)->GetDefinition()->GetPDGEncoding() << " " << (*i)->GetState()<<G4endl;
+       //G4cout << " PDGcode, state " << (*i)->GetDefinition()->GetPDGEncoding() << " " << (*i)->GetState()<<G4endl;
 
     }   
   }
@@ -1268,7 +1274,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	//G4cout << " currentA, Z be4: " << currentA << " " << currentZ << G4endl;
   currentA += finalBaryon-initialBaryon;
   currentZ += finalCharge-initialCharge;
-	//G4cout << " currentA, Z aft: " << currentA << " " << currentZ << G4endl;
+	//G4cout << " ApplyCollision currentA, Z aft: " << currentA << " " << currentZ << G4endl;
   
   G4KineticTrackVector oldSecondaries;
   if (primary) 
@@ -2350,7 +2356,7 @@ G4LorentzVector G4BinaryCascade::GetFinal4Momentum()
      G4cerr << G4endl;
      G4cerr << "G4BinaryCascade::GetFinal4Momentum - Fatal"<<G4endl;
      G4KineticTrackVector::iterator i;
-     G4cerr <<" Initial nucleus "<<theInitial4Mom<<G4endl;
+     G4cerr <<" GetFinal4Momentum: Initial nucleus "<<theInitial4Mom<<G4endl;
      for(i = theProjectileList.begin() ; i != theProjectileList.end(); ++i)
      {
        G4cerr << " Initial state (get4M), (trackingM): "
