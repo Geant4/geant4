@@ -36,7 +36,7 @@ ElectronEventAction::~ElectronEventAction()
 
 void ElectronEventAction::BeginOfEventAction(const G4Event* event)
 {
-  if (fmod(event->GetEventID(), 100000)==0)
+  if (fmod(event->GetEventID(), 100000.)==0)
 	G4cout << "Event Number:" <<  event->GetEventID() << G4endl;
 }
 
