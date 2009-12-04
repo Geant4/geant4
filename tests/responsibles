@@ -163,6 +163,8 @@ examples/extended
     Hadr01                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   medical:
     DICOM                    Pedro.Arce@ciemat.es            Pedro Arce
+    electronScattering       Michel.Maire@lapp.in2p3.fr      Michel Maire
+    electronScattering2      perl@slac.stanford.edu          Joseph Perl
     fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
     fanoCavity2              Michel.Maire@lapp.in2p3.fr      Michel Maire
     GammaTherapy             Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
