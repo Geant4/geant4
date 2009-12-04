@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.30 2009-11-30 10:20:38 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.31 2009-12-04 15:39:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -295,7 +295,7 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
   EInside in;
 
 
-  rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z() ;
+  rad2 = p.x()*p.x()+p.y()*p.y()+p.z()*p.z();
 
   G4double rad = std::sqrt(rad2);
 
@@ -303,14 +303,14 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
   // Check radial surface
   // sets `in'
   
-  tolRMax = fRmax - fRmaxTolerance*0.5 ;
+  tolRMax = fRmax - fRmaxTolerance*0.5;
     
-  if ( rad <= tolRMax )  { in = kInside ; }
+  if ( rad <= tolRMax )  { in = kInside; }
   else
   {
-    tolRMax = fRmax + fRmaxTolerance*0.5 ;       
-    if ( rad <= tolRMax )  { in = kSurface ; }
-    else                   { in = kOutside ; }
+    tolRMax = fRmax + fRmaxTolerance*0.5;       
+    if ( rad <= tolRMax )  { in = kSurface; }
+    else                   { in = kOutside; }
   }
   return in;
 }
@@ -356,22 +356,22 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
                               const G4ThreeVector& v  ) const
 {
-  G4double snxt = kInfinity ;      // snxt = default return value
+  G4double snxt = kInfinity;      // snxt = default return value
 
-  G4double rad2, pDotV3d, tolORMax2, tolIRMax2 ;
-  G4double c, d2, s = kInfinity ;
+  G4double rad, pDotV3d; // , tolORMax2, tolIRMax2;
+  G4double c, d2, s = kInfinity;
 
   const G4double dRmax = 100.*fRmax;
 
   // General Precalcs
 
-  rad2    = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
-  pDotV3d = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
+  rad    = std::sqrt(p.x()*p.x() + p.y()*p.y() + p.z()*p.z());
+  pDotV3d = p.x()*v.x() + p.y()*v.y() + p.z()*v.z();
 
   // Radial Precalcs
 
-  tolORMax2 = (fRmax+fRmaxTolerance*0.5)*(fRmax+fRmaxTolerance*0.5) ;
-  tolIRMax2 = (fRmax-fRmaxTolerance*0.5)*(fRmax-fRmaxTolerance*0.5) ;
+  // tolORMax2 = (fRmax+fRmaxTolerance*0.5)*(fRmax+fRmaxTolerance*0.5);
+  // tolIRMax2 = (fRmax-fRmaxTolerance*0.5)*(fRmax-fRmaxTolerance*0.5);
 
   // Outer spherical shell intersection
   // - Only if outside tolerant fRmax
@@ -387,57 +387,59 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-std::sqrt(pDotV3d^2-(rad2-R^2))
 
-
-  G4double rad = std::sqrt(rad2);
   c = (rad - fRmax)*(rad + fRmax);
 
-  if ( c > fRmaxTolerance*fRmax )
+  if( rad > fRmax-fRmaxTolerance*0.5 ) // not inside in terms of Inside(p)
   {
-    // If outside tolerant boundary of outer G4Orb
-    // [ should be std::sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
-
-    d2 = pDotV3d*pDotV3d - c ;
-
-    if ( d2 >= 0 )
+    if ( c > fRmaxTolerance*fRmax )
     {
-      s = -pDotV3d - std::sqrt(d2) ;
-      if ( s >= 0 )
+      // If outside tolerant boundary of outer G4Orb in terms of c
+      // [ should be std::sqrt(rad2) - fRmax > fRmaxTolerance*0.5 ]
+
+      d2 = pDotV3d*pDotV3d - c;
+
+      if ( d2 >= 0 )
       {
-        if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
-        {              // 64 bits systems. Split long distances and recompute
-          G4double fTerm = s-std::fmod(s,dRmax);
-          s = fTerm + DistanceToIn(p+fTerm*v,v);
-        } 
-        return snxt = s;
+        s = -pDotV3d - std::sqrt(d2);
+        if ( s >= 0 )
+        {
+          if ( s > dRmax ) // Avoid rounding errors due to precision issues seen on
+          {                // 64 bits systems. Split long distances and recompute
+            G4double fTerm = s - std::fmod(s,dRmax);
+            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
+          return snxt = s;
+        }
       }
-    }
-    else    // No intersection with G4Orb
-    {
-      return snxt = kInfinity;
-    }
-  }
-  else
-  {
-    if ( c > -fRmaxTolerance*fRmax )  // on surface  
-    {
-      d2 = pDotV3d*pDotV3d - c ;             
-      if ( (d2 < fRmaxTolerance*fRmax) || (pDotV3d >= 0) )
+      else    // No intersection with G4Orb
       {
         return snxt = kInfinity;
       }
-      else
+    }
+    else // not outside in terms of c
+    {
+      if ( c > -fRmaxTolerance*fRmax )  // on surface  
       {
-        return snxt = 0.;
+        d2 = pDotV3d*pDotV3d - c;             
+        if ( (d2 < fRmaxTolerance*fRmax) || (pDotV3d >= 0) )
+        {
+          return snxt = kInfinity;
+        }
+        else
+        {
+          return snxt = 0.;
+        }
       }
     }
+  }
 #ifdef G4CSGDEBUG
-    else // inside ???
-    {
+  else // inside ???
+  {
       G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
                   JustWarning, "Point p is inside !?");
-    }
-#endif
   }
+#endif
+
   return snxt;
 }
 
@@ -519,15 +521,15 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
       {
         if(calcNorm)
         {
-          *validNorm = true ;
-          *n         = G4ThreeVector(p.x()/fRmax,p.y()/fRmax,p.z()/fRmax) ;
+          *validNorm = true;
+          *n         = G4ThreeVector(p.x()/fRmax,p.y()/fRmax,p.z()/fRmax);
         }
         return snxt = 0;
       }
       else 
       {
         snxt = -pDotV3d + std::sqrt(d2);    // second root since inside Rmax
-        side = kRMax ; 
+        side = kRMax; 
       }
     }
   }
@@ -595,13 +597,13 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
-     G4cout << G4endl ;
+     G4cout.precision(16);
+     G4cout << G4endl;
      DumpInfo();
-     G4cout << "Position:"  << G4endl << G4endl ;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
      G4Exception("G4Orb::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
