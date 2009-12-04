@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.26 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.27 2009-12-04 13:58:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -1554,17 +1554,46 @@ OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
    G4OpticalSurfaceFinish finish;
    G4SurfaceType type;   
    
-   if (smodel="unified") { model = unified; } else { model = glisur; }
+   if (smodel="unified") { model = unified; } else
+   if (smodel="glisur") { model = glisur; }
+   else { model = LUT; }
 
    if (sfinish=="polishedfrontpainted") { finish = polishedfrontpainted; } else
    if (sfinish=="polishedbackpainted") { finish = polishedbackpainted; } else
    if (sfinish=="groundfrontpainted") { finish = groundfrontpainted; } else
    if (sfinish=="groundbackpainted") { finish = groundbackpainted; } else
-   if (sfinish=="ground") { finish = ground; } else { finish = polished; }
+   if (sfinish=="ground") { finish = ground; } else
+   if (sfinish=="polished") { finish = polished; } else
+   if (sfinish=="polishedlumirrorair") { finish = polishedlumirrorair; } else
+   if (sfinish=="polishedlumirrorglue") { finish = polishedlumirrorglue; } else
+   if (sfinish=="polishedair") { finish = polishedair; } else
+   if (sfinish=="polishedteflonair") { finish = polishedteflonair; } else
+   if (sfinish=="polishedtioair") { finish = polishedtioair; } else
+   if (sfinish=="polishedtyvekair") { finish = polishedtyvekair; } else
+   if (sfinish=="polishedvm2000air") { finish = polishedvm2000air; } else
+   if (sfinish=="polishedvm2000glue") { finish = polishedvm2000glue; } else
+   if (sfinish=="etchedlumirrorair") { finish = etchedlumirrorair; } else
+   if (sfinish=="etchedlumirrorglue") { finish = etchedlumirrorglue; } else
+   if (sfinish=="etchedair") { finish = etchedair; } else
+   if (sfinish=="etchedteflonair") { finish = etchedteflonair; } else
+   if (sfinish=="etchedtioair") { finish = etchedtioair; } else
+   if (sfinish=="etchedtyvekair") { finish = etchedtyvekair; } else
+   if (sfinish=="etchedvm2000air") { finish = etchedvm2000air; } else
+   if (sfinish=="etchedvm2000glue") { finish = etchedvm2000glue; } else
+   if (sfinish=="groundlumirrorair") { finish = groundlumirrorair; } else
+   if (sfinish=="groundlumirrorglue") { finish = groundlumirrorglue; } else
+   if (sfinish=="groundair") { finish = groundair; } else
+   if (sfinish=="groundteflonair") { finish = groundteflonair; } else
+   if (sfinish=="groundtioair") { finish = groundtioair; } else
+   if (sfinish=="groundtyvekair") { finish = groundtyvekair; } else
+   if (sfinish=="groundvm2000air") { finish = groundvm2000air; }
+   else { finish = groundvm2000glue; }
 
    if (stype=="dielectric_metal") { type = dielectric_metal; } else
-   if (stype=="x_ray") { type = x_ray; } else
-   if (stype=="firsov") { type = firsov; } else { type = dielectric_dielectric; }
+   if (stype=="dielectric_dielectric") { type = dielectric_dielectric; } else
+   if (stype=="dielectric_LUT") { type = dielectric_LUT; } else
+   if (stype=="x_ray") { type = x_ray; }
+   else { type = firsov; }
 
    new G4OpticalSurface(name,model,finish,type,value);
 }
