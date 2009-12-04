@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_EMV.icc,v 1.5 2009-11-27 17:28:18 gunter Exp $
+// $Id: FTFP_EMV.icc,v 1.6 2009-12-04 13:08:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ template<class T> TFTFP_EMV<T>::TFTFP_EMV(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   G4WarnPLStatus obs;
-  obs.Replaceded("FTFP_EMV","FTFP_BERT_EMV");
+  obs.Replaced("FTFP_EMV","FTFP_BERT_EMV");
   G4Exception(" Crash for usage of replaced physics list");
 
   // EM Physics
