@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.29 2009-11-25 09:14:03 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.30 2009-12-06 11:17:02 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -264,6 +264,7 @@ G4bool G4FTFModel::PutOnMassShell()
         theParticipants.Next();
 	G4VSplitableHadron * primary = theParticipants.GetInteraction().GetProjectile();
 	G4LorentzVector Pprojectile=primary->Get4Momentum();
+
 // To get original projectile particle
 
         if(Pprojectile.z() < 0.){return false;}
@@ -304,6 +305,7 @@ G4bool G4FTFModel::PutOnMassShell()
 	}   // end of while (theNucleus->GetNextNucleon())
 
         Psum += PnuclearResidual;
+
         G4double ResidualMass(0.);
         if(ResidualMassNumber == 0)
         {
@@ -369,8 +371,8 @@ G4bool G4FTFModel::PutOnMassShell()
          return false; 
         }
 
-        toCms.rotateZ(-1*Ptmp.phi());
-        toCms.rotateY(-1*Ptmp.theta());
+//        toCms.rotateZ(-1*Ptmp.phi());              // Uzhi 5.12.09
+//        toCms.rotateY(-1*Ptmp.theta());            // Uzhi 5.12.09
 	
         G4LorentzRotation toLab(toCms.inverse());
 
@@ -442,14 +444,13 @@ G4bool G4FTFModel::PutOnMassShell()
              XminusSum=1.;
              M2target =0.;
 
-
 	     for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
              {
                G4Nucleon * aNucleon = TheInvolvedNucleon[i];
 
                Xminus = aNucleon->Get4Momentum().pz() - DeltaXminus;
-
                XminusSum-=Xminus;               
+
                if((Xminus <= 0.)   || (Xminus > 1.) || 
                   (XminusSum <=0.) || (XminusSum > 1.)) {Success=false; break;}
  
@@ -507,16 +508,18 @@ G4bool G4FTFModel::PutOnMassShell()
 
            tmp.setPz(Pz); 
            tmp.setE(E);
+
            tmp.transform(toLab);
 
            aNucleon->SetMomentum(tmp);
+
            G4VSplitableHadron * targetSplitable=aNucleon->GetSplitableHadron();
            targetSplitable->Set4Momentum(tmp);
            
         }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
         G4double Mt2Residual=sqr(ResidualMass) +
-                                 sqr(Residual3Momentum.x())+sqr(Residual3Momentum.x());
+                                 sqr(Residual3Momentum.x())+sqr(Residual3Momentum.y());
 
         G4double PzResidual=-WminusTarget*Residual3Momentum.z()/2. + 
                              Mt2Residual/(2.*WminusTarget*Residual3Momentum.z());
@@ -528,7 +531,6 @@ G4bool G4FTFModel::PutOnMassShell()
         Residual4Momentum.setPz(PzResidual); 
         Residual4Momentum.setE(EResidual);
         Residual4Momentum.transform(toLab);
-
 //-------------------------------------------------------------
 
  return true;
@@ -648,7 +650,8 @@ void G4FTFModel::GetResidualNucleus()
 	for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
         {
          G4Nucleon * aNucleon = TheInvolvedNucleon[i];
-         G4LorentzVector tmp=aNucleon->Get4Momentum()-DeltaPResidualNucleus;
+//         G4LorentzVector tmp=aNucleon->Get4Momentum()-DeltaPResidualNucleus;
+         G4LorentzVector tmp=-DeltaPResidualNucleus;
          aNucleon->SetMomentum(tmp);
          aNucleon->SetBindingEnergy(DeltaExcitationE);
         }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )

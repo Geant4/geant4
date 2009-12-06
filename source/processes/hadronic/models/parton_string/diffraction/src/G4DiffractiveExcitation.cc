@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.17 2009-11-25 09:14:03 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.18 2009-12-06 11:17:02 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -160,21 +160,21 @@ G4bool G4DiffractiveExcitation::
      G4double PZcms2, PZcms;
 
      G4double SqrtS=std::sqrt(S);
-
-     if(absProjectilePDGcode > 1000 && SqrtS < 2300*MeV && SqrtS < SumMasses)
+               
+     if(absProjectilePDGcode > 1000 && (SqrtS < 2300*MeV || SqrtS < SumMasses))
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // p+p-interactions
                                              // at Plab < 1.62 GeV/c.
 
      if(( absProjectilePDGcode == 211 || ProjectilePDGcode ==  111) && 
-        (SqrtS < 1600*MeV) && (SqrtS < SumMasses))
+        ((SqrtS < 1600*MeV) || (SqrtS < SumMasses)))
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // Pi+p-interactions
                                              // at Plab < 1. GeV/c.
 
      if(( (absProjectilePDGcode == 321) || (ProjectilePDGcode == -311)   ||
           (absProjectilePDGcode == 311) || (absProjectilePDGcode == 130) ||
-          (absProjectilePDGcode == 310)) && (SqrtS < 1600*MeV) && (SqrtS < SumMasses)) 
+          (absProjectilePDGcode == 310)) && ((SqrtS < 1600*MeV) || (SqrtS < SumMasses))) 
      {target->SetStatus(2);  return false;}  // The model cannot work for
                                              // K+p-interactions
                                              // at Plab < ??? GeV/c.  ???
@@ -222,7 +222,7 @@ G4bool G4DiffractiveExcitation::
      G4double DeltaProbAtQuarkExchange=theParameters->GetDeltaProbAtQuarkExchange();
 
 //     G4double NucleonMass=
-              (G4ParticleTable::GetParticleTable()->FindParticle(2112))->GetPDGMass();     
+//              (G4ParticleTable::GetParticleTable()->FindParticle(2112))->GetPDGMass();     
      G4double DeltaMass=
               (G4ParticleTable::GetParticleTable()->FindParticle(2224))->GetPDGMass();
 
@@ -230,7 +230,6 @@ G4bool G4DiffractiveExcitation::
      if(G4UniformRand() < MagQuarkExchange*
         std::exp(-SlopeQuarkExchange*(ProjectileRapidity - TargetRapidity)))
      {    
-
       G4int NewProjCode(0), NewTargCode(0);
 
       G4int ProjQ1(0), ProjQ2(0), ProjQ3(0);
@@ -294,11 +293,8 @@ G4bool G4DiffractiveExcitation::
         else                           {NewProjCode = aProjQ2*100+aProjQ1*10+1;}
        }
 
-//       projectile->SetDefinition(
-//       G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode)); 
-
        NewTargCode = NewNucleonId(TargQ1, TargQ2, TargQ3);
- 
+
        if( (TargQ1 == TargQ2) && (TargQ1 == TargQ3) &&
            (SqrtS > M0projectile+DeltaMass))           {NewTargCode +=2;} //Create Delta isobar
 
@@ -418,6 +414,7 @@ G4bool G4DiffractiveExcitation::
 
 // If we assume that final state hadrons after the charge exchange will be
 // in the ground states, we have to put ----------------------------------
+
       if(M0projectile < 
          (G4ParticleTable::GetParticleTable()->FindParticle(NewProjCode))->GetPDGMass())
       {
@@ -750,6 +747,7 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
           FirstString=0; SecondString=0;
 	  return;
 	}
+
         G4LorentzVector Phadron=hadron->Get4Momentum();
 
         G4LorentzVector Pstart(0.,0.,0.,0.);
@@ -806,7 +804,7 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
      
              G4double P2_2=sqr((2.-x1-x3)*W/2.);
 
-             if((P2_1 < 0.) || (P2_3 <0.))
+             if((P2_1 <= 0.) || (P2_3 <= 0.))
              { Kink=false;}
              else
              {
@@ -816,6 +814,7 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
 
                G4double CosT12=(P2_3-P2_1-P2_2)/(2.*P_1*P_2);
                G4double CosT13=(P2_2-P2_1-P2_3)/(2.*P_1*P_3);
+               Pt=P_2*std::sqrt(1.-CosT12*CosT12);  // because system was rotated
 
                if((std::abs(CosT12) >1.) || (std::abs(CosT13) > 1.)) 
                { Kink=false;}
