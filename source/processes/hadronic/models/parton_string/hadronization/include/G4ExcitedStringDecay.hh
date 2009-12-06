@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.10 2009-10-05 12:52:48 vuzhinsk Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.11 2009-12-06 11:23:36 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
@@ -71,21 +71,21 @@ FragmentString(const G4ExcitedString &theString)
 	return theStringDecay->FragmentString(theString);
 }
 	
+
 inline
 G4KineticTrackVector *G4ExcitedStringDecay::
 FragmentStrings(const G4ExcitedStringVector * theStrings)
 {
   G4KineticTrackVector * theResult = new G4KineticTrackVector;
 
-  G4LorentzVector KTsum;
-  G4LorentzVector KTsecondaries;
+  G4LorentzVector KTsum(0.,0.,0.,0.);
+  G4LorentzVector KTsecondaries(0.,0.,0.,0.);
   G4bool NeedEnergyCorrector=false;
-//G4cout<<"Number of strings "<<theStrings->size()<<G4endl;   // Vova  
+ 
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
-//G4cout<<"String# "<<astring<<" 4mom "<<theStrings->operator[](astring)->Get4Momentum()<<G4endl;  // Vova
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
-//G4cout<<"KTsum "<<KTsum<<G4endl;
+
 	if( !(KTsum.e()<1) && !(KTsum.e()>-1) )
 	{
           throw G4HadronicException(__FILE__, __LINE__, 
@@ -107,8 +107,7 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 		continue;
 	}
 
-//G4cout<<" prod had "<<generatedKineticTracks->size()<<G4endl; // Vova	
-	G4LorentzVector KTsum1;
+	G4LorentzVector KTsum1(0.,0.,0.,0.);
 	for ( unsigned int aTrack=0; aTrack<generatedKineticTracks->size();aTrack++)
 	{
 		theResult->push_back(generatedKineticTracks->operator[](aTrack));
@@ -123,6 +122,7 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 //--debug--	          << theStrings->operator[](astring)->Get4Momentum() << " " << KTsum1 << G4endl;
 	   NeedEnergyCorrector=true;
  	}
+
 //      clean up
 	delete generatedKineticTracks;
   }
