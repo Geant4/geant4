@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2009-11-25 09:17:02 vuzhinsk Exp $
+$Id: History,v 1.24 2009-12-06 11:20:05 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+6 Dec. 2009 V.Uzhinsky (hadr-string-diff-V09-02-19) 
+   Sampling of kinky string momentum is improved
+  
 25 November 2009, V. Uzhinsky (hadr-string-diff-V09-02-18)
    Memory leak is erased in FTF at the end.
 
