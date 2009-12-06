@@ -13,6 +13,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+6  December 2009, V. Uzhinsky     (hadr-prtn-V09-02-10)
+   Some correstions are made in diffr., hadronization and managment
+   to treat kinky string fragmentation.
 
 19 November 2009, Gunter Folger   (hadr-prtn-V09-02-09)
 -  G4VParticipants.hh: use modified name of method to sort nucleons in G4V3DNucleus
