@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.40 2009-11-04 11:45:54 vnivanch Exp $
+// $Id: G4PhysicsVector.cc,v 1.41 2009-12-07 09:21:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@
 G4PhysicsVector::G4PhysicsVector(G4bool spline)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   lastEnergy(-1.0), lastValue(0.), lastBin(0), useSpline(spline)
+   lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0), useSpline(spline)
 {}
 
 // --------------------------------------------------------------
@@ -170,7 +170,7 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
-  lastEnergy=-1.0;
+  lastEnergy=-DBL_MAX;
   lastValue =0.;
   lastBin   =0;
   dataVector.clear();
