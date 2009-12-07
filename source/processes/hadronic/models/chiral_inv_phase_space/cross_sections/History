@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+7-Dec-2009 M.Kosov                            (hadr-chips-sc-V09-02-00)
+-----------------------------------------------------------------------
+Bug fix in G4QNeutronCaptureRatio (Cu65): accelerate CuSc by 1.5
+
 18-Nov-2009 M.Kosov                            (hadr-chips-V09-02-25)
 -----------------------------------------------------------------------
 Mutual tag: Bug fix in G4QPhotonNuclearCrossSection
