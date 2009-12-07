@@ -1,4 +1,4 @@
-$Id: History,v 1.233 2009-11-24 13:51:02 gcosmo Exp $
+$Id: History,v 1.234 2009-12-07 09:24:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 7, 2009  V.Ivanchenko (global-V09-02-12)
+- G4PhysicsVector: (L.Pandola) fixed initialisation of lastEnergy to -DBL_MAX
+                   allowing to have negative scale of energy  
 
 Nov 24, 2009  G.Cosmo (global-V09-02-11)
 - Changed date for release 9.3.
