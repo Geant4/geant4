@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
+// $Id: G4QNeutronCaptureRatio.cc,v 1.2 2009-12-07 10:32:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -475,7 +475,7 @@ G4double G4QNeutronCaptureRatio::CalcCap2In_Ratio(G4double p, G4int Z, G4int N)
   static const std::pair<G4int, const G4double*> Z29N34=std::make_pair(34,pZ29N34);
   static const G4double pZ29N36[5]={.036, 15., .003, .0001, .013};
   static const std::pair<G4int, const G4double*> Z29N36=std::make_pair(36,pZ29N36);
-  static const std::pair<G4int, const G4double*> Z29[N29]={Z29N34, Z29N34};
+  static const std::pair<G4int, const G4double*> Z29[N29]={Z29N34, Z29N36};
   //==> Zn(Z=30)
   static const G4int N30=5;
   static const G4double pZ30N34[5]={.041, 20., .008, .0001, .02}; // *** only NAT mix ***
