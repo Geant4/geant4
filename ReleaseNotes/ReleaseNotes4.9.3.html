@@ -125,10 +125,18 @@ Note that for all users a full re-installation of libraries (or a full
 recompilation) and a recompilation of user applications is required.
 
 <P> </P>
-<B>Particles</B>
+<B>Run</B>
 <P> </P>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>A new method <TT>CheckParticleList()</TT> has been added to
+    <TT>G4VUserPhysicsList</TT> to check the consistency of list of defined
+    particles before instantiating the physics processes. For example,
+    <TT>e+, e-</TT> and <TT>gamma</TT> should exist any electro-magnetic
+    process is simulated... A fatal exception will be thrown if any particle
+    type mandatory for the simulation is missing.<BR>
+    If not caring about any cut values and wish to skip this check,
+    <TT>G4VUserPhysicsList</TT> provides also the method
+    <TT>DisableCheckParticleList()</TT>.</LI> 
 </UL>
 
 <P> </P>
@@ -1264,25 +1272,21 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI>Added new classes for "Reverse MonteCarlo" technique:
     <TT>G4AdjointProton</TT> and light ions.</LI>
-<LI>Added <TT>CalculateAnomaly()</TT> method to <TT>G4ParticleDefinition</TT>.</LI>
 <LI>Make use of new experimental class <TT>G4NucleiPropertiesTableAME03</TT>
     including data updated to the Ame-2003 atomic mass evaluation (II) by
     G.Audi, A.H.Wapstra and C.Thibault, Nuclear Physics A729, 2003.</LI>
-<LI>Added method <TT>GetNuclearMass(A,Z)</TT> in <TT>G4NuclearProperty</TT>.</LI>
-<LI><TT>G4IonTable</TT>: use <TT>std::multimap</TT>; modified
-    <TT>G4IonTable::IsIon()</TT> method. Added method <TT>CreateAllIon()</TT>
-    and <TT>/particle/createAllIon</TT> UI command.
-    Fixed a bug for <TT>A</TT> and <TT>Z</TT> of neutron not defined, and
-    fixed handling of PDG encoding for proton.
-    Fixed a bug in <TT>FindIon()</TT> and <TT>CreateIon()</TT> for
-    the deletion of <TT>G4IsotopeProperty</TT> pointed object.</LI>
-<LI>Fixed mass of anti baryons (Sigmac, Lambdac) and anti-diquarks A.</LI>
-<LI>Fix small difference of mass of taus, mesons, and baryons between PDG-2009.</LI>
 <LI>Removed obsolete class <TT>G4NucleiPropertiesTable</TT>.</LI>
-<LI>Added check on application state in the constructor of
-    <TT>G4ParticleDefinition</TT>.</LI>
-<LI>Code cleanup in <TT>G4DecayChannels</TT>.</LI>
-<LI>Changed <TT>G4ElectronOccupancies::MaxSizeOfOrbit</TT> to 10.</LI>
+<LI>Added method <TT>CreateAllIon()</TT> in <TT>G4IonTable</TT>
+    and added <TT>/particle/createAllIon</TT> UI command. By this method and
+    command, all stable ions are created.</LI>
+<LI><TT>G4ParticleDefinition</TT> should be created in <TT>pre-init</TT> state;
+    a warning is  thrown if constructors of <TT>G4ParticleDefinition</TT> are
+    called in a different application state.</LI>
+<LI>Added <TT>CalculateAnomaly()</TT> method to <TT>G4ParticleDefinition</TT>.</LI>
+<LI>Fixed small difference of mass of taus, mesons, and anti-baryons between
+    PDG-2009.</LI>
+<LI>Changed <TT>G4ElectronOccupancies::MaxSizeOfOrbit</TT> to 10 to allow for
+    higher excited atom.</LI>
 </UL>
 
 <A NAME="pers-notes">
