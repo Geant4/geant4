@@ -371,6 +371,9 @@ void WLSDetectorConstruction::ConstructFiber()
                                       dielectric_dielectric,   // SetType
                                       surfaceRoughness);       // SetPolish
 
+  G4LogicalVolume   *logicClad1, *logicClad2;
+  G4VPhysicalVolume *physiClad1, *physiClad2;
+
   // Determine the number of cladding layers to be built
   switch ( numOfCladLayers ) {
  
@@ -387,19 +390,17 @@ void WLSDetectorConstruction::ConstructFiber()
      else
        solidClad2 = new G4EllipticalTube("Clad2",clad2RX,clad2RY,clad2Z);
 
-     G4LogicalVolume*   logicClad2;
-
      logicClad2  = new G4LogicalVolume(solidClad2,
                                        FindMaterial("FPethylene"),
                                        "Clad2");
 
-     G4VPhysicalVolume* physiClad2 = new G4PVPlacement(0,
-                                   G4ThreeVector(0.0,0.0,wlsfiberOrigin),
-                                   logicClad2,
-                                   "Clad2",
-                                   logicPlacement,
-                                   false,
-                                   0);
+     physiClad2 = new G4PVPlacement(0,
+                                    G4ThreeVector(0.0,0.0,wlsfiberOrigin),
+                                    logicClad2,
+                                    "Clad2",
+                                    logicPlacement,
+                                    false,
+                                    0);
 
      // Place the rough surface only if needed
      if (OpSurface) {
@@ -429,18 +430,17 @@ void WLSDetectorConstruction::ConstructFiber()
      else
        solidClad1 = new G4EllipticalTube("Clad1",clad1RX,clad1RY,clad1Z);
 
-     G4LogicalVolume*   logicClad1 =
-                                new G4LogicalVolume(solidClad1,
-                                                    FindMaterial("Pethylene"),
-                                                    "Clad1");
+     logicClad1 = new G4LogicalVolume(solidClad1,
+                                      FindMaterial("Pethylene"),
+                                      "Clad1");
 
-     G4VPhysicalVolume* physiClad1 = new G4PVPlacement(0,
-                                   G4ThreeVector(0.0,0.0,wlsfiberOrigin),
-                                   logicClad1,
-                                   "Clad1",
-                                   logicPlacement,
-                                   false,
-                                   0);
+     physiClad1 = new G4PVPlacement(0,
+                                    G4ThreeVector(0.0,0.0,wlsfiberOrigin),
+                                    logicClad1,
+                                    "Clad1",
+                                    logicPlacement,
+                                    false,
+                                    0);
 
      // Place the rough surface only if needed
      if (OpSurface) {
