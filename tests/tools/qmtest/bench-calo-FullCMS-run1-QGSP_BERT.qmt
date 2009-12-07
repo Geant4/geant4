@@ -11,9 +11,7 @@
     <text/>
   </argument>
   <argument name="prerequisites">
-    <set>
-      <tuple><text>bench-calo-FullCMS-build</text><enumeral>PASS</enumeral></tuple>
-    </set>
+    <set/>
   </argument>
   <argument name="stdin">
     <text/>

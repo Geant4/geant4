@@ -11,7 +11,9 @@
     <text/>
   </argument>
   <argument name="prerequisites">
-    <set/>
+    <set>
+      <tuple><text>test49-build</text><enumeral>PASS</enumeral></tuple>
+    </set>
   </argument>
   <argument name="stdin">
     <text/>
@@ -23,8 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd
-    $G4INSTALL/benchmarks/calorimeter/FullCMS;$G4BIN/$G4SYSTEM/full_cms bench1.g4 LHEP</text>
+    <text>cd $G4INSTALL/tests/test49; $G4BIN/$G4SYSTEM/test49 chipstest.in</text>
   </argument>
   <argument name="stderr">
     <text/>
