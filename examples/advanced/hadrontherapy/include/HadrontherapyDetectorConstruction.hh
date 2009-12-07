@@ -41,6 +41,7 @@ class HadrontherapyDetectorROGeometry;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyDetectorSD;
 class HadrontherapyMatrix;
+class HadrontherapyLet;
 
 class HadrontherapyDetectorConstruction 
 {
@@ -55,7 +56,7 @@ private:
 
   void ConstructPhantom();
   void ConstructDetector();
-  void ConstructSensitiveDetector(G4ThreeVector position_respect_to_WORLD);
+  void ConstructSensitiveDetector(G4ThreeVector positionToWORLD);
   
 public: 
 // Get detector position relative to WORLD
@@ -167,6 +168,7 @@ private:
   HadrontherapyDetectorSD*         detectorSD; // Pointer to sensitive detector
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
   HadrontherapyMatrix*             matrix;
+  HadrontherapyLet*                let;
 
   G4VPhysicalVolume* phantomPhysicalVolume;
   G4LogicalVolume*   phantomLogicalVolume; 
@@ -193,6 +195,8 @@ private:
 
   G4Box* phantom;
   G4Box* detector;
+
+  G4String phantomMaterial, detectorMaterial;
 
 };
 #endif

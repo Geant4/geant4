@@ -47,8 +47,9 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMatrix.hh"
-#include <math.h>
+#include "HadrontherapyLet.hh"
 
+#include <cmath>
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
   : motherPhys(physicalTreatmentRoom),
@@ -77,7 +78,9 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
   SetDetectorPosition();
 
   // Build phantom and associated detector 
+  phantomMaterial = "G4_WATER";
   ConstructPhantom();
+  detectorMaterial = "G4_WATER";
   ConstructDetector();
 
   // Set number of the detector voxels along X Y and Z directions.  
@@ -102,7 +105,7 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
   //----------------------------------------
 
     G4bool isotopes =  false; 
-    G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
+    G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial(phantomMaterial, isotopes);
     phantom = new G4Box("Phantom",phantomSizeX, phantomSizeY, phantomSizeZ);
     phantomLogicalVolume = new G4LogicalVolume(phantom,	
 					     waterNist, 
@@ -131,7 +134,7 @@ void HadrontherapyDetectorConstruction::ConstructDetector()
   // Detector
   //-----------
     G4bool isotopes =  false; 
-    G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER", isotopes);
+    G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial(detectorMaterial, isotopes);
     detector = new G4Box("Detector",detectorSizeX,detectorSizeY,detectorSizeZ);
     detectorLogicalVolume = new G4LogicalVolume(detector,
 						waterNist,
@@ -255,11 +258,11 @@ G4bool HadrontherapyDetectorConstruction::SetNumberOfVoxelBySize(G4double sizeX,
 	      numberOfVoxelsAlongY  <<','  <<
 	      numberOfVoxelsAlongZ  << ')' << G4endl;
 
-    //  This will clear the existing matrix (together with data inside it)! 
+    //  This will clear the existing H.Matrix (together with all data inside it)! 
     matrix = HadrontherapyMatrix::GetInstance(numberOfVoxelsAlongX, 
 					      numberOfVoxelsAlongY,
 					      numberOfVoxelsAlongZ);
-
+    let = HadrontherapyLet::GetInstance(this);
     // Here construct the Sensitive Detector and Read Out Geometry
     ConstructSensitiveDetector(GetDetectorToWorldPosition());
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();

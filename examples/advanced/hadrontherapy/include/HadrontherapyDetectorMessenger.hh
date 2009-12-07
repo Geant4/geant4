@@ -44,20 +44,20 @@ class HadrontherapyDetectorMessenger: public G4UImessenger
   HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
   ~HadrontherapyDetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
 private:
 
-  // Pointer to the detector component
+  // Pointer to the phantom/detector 
   HadrontherapyDetectorConstruction* hadrontherapyDetector;
 
   G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir; 
 
   G4UIcmdWith3VectorAndUnit *changeThePhantomSizeCmd,
-							*changeThePhantomPositionCmd, 
-							*changeTheDetectorSizeCmd, 
-							*changeTheDetectorToPhantomPositionCmd,
-							*changeTheDetectorVoxelCmd;
+			    *changeThePhantomPositionCmd, 
+			    *changeTheDetectorSizeCmd, 
+			    *changeTheDetectorToPhantomPositionCmd,
+			    *changeTheDetectorVoxelCmd;
 };
 #endif
 

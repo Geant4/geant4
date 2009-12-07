@@ -34,6 +34,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4SDManager.hh"
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyLet.hh"
 
 HadrontherapyDetectorSD::HadrontherapyDetectorSD(G4String name):G4VSensitiveDetector(name)
 { 
@@ -64,93 +65,103 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	return false;
     // Get kinetic energy
     G4Track * theTrack = aStep  ->  GetTrack();
-    G4double KineticEnergy =  theTrack -> GetKineticEnergy();     
+    G4double kineticEnergy =  theTrack -> GetKineticEnergy();     
 
-    G4ParticleDefinition *def = theTrack -> GetDefinition();
+    G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
     //Get particle name  
-    G4String particleName =  def -> GetParticleName();  
-    // G4cout << def -> GetParticleType() << '\n';  
+    G4String particleName =  particleDef -> GetParticleName();  
+    // G4cout << particleDef -> GetParticleType() << '\n';  
     // Get unique track_id (in an event)
     G4int TrackID = theTrack -> GetTrackID();
 
     G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
-    //if(energyDeposit == 0.) return false;
 
+    G4int Z = particleDef-> GetAtomicNumber();
+    G4int A = particleDef-> GetAtomicMass();
     // Read voxel indexes: i is the x index, k is the z index
 
     G4int k  = ROhist -> GetReplicaNumber(0);
     G4int i  = ROhist -> GetReplicaNumber(2);
     G4int j  = ROhist -> GetReplicaNumber(1);
-    /*
-       if (i==25) 
-       {
 
-    //if (ofs && particleName!="e-" && TrackID!=1) ofs << particleName << " " << TrackID << '\n'; }
-    if (ofs) ofs << particleName << " " << TrackID << '\n'; }
-    */
-    HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
-    // Increment Fluences
-    // Hit voxel (marked with track_id)
-    G4int* hitTrack = matrix -> GetHitTrack(i,j,k); // hitTrack must be cleared at every eventAction
-if ( *hitTrack != TrackID )
-{
-    //G4cout << "TrackID " << TrackID << " Voxel " << i << '\t' << j << '\t' << k << G4endl;
-    *hitTrack = TrackID;
+    static HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+    static HadrontherapyLet* let = HadrontherapyLet::GetInstance();
 
-    // Directly fill fluence data 
-    matrix-> Fill(def, i, j, k, 0, true);
-    // Fill kinetic energy histo
-    //matrix -> fillEnergySpectrum(kineticEnergy, particleName,i,j,k);
-}	 
-if(energyDeposit != 0)                       
-{  
-    // Create a hit with the information of position is in the detector     
-    HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
-    detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
-    HitsCollection -> insert(detectorHit);
-}
+    // Increment Fluences & accumulate energy spectra
+    // Hit voxels are marked with track_id throught hitTrack matrix
+    // XXX TrackID sequences inside a voxel are NOT decrescent (?)  XXX
+    G4int* hitTrack = matrix -> GetHitTrack(i,j,k); // hitTrack MUST BE cleared at every eventAction!
+    if ( *hitTrack != TrackID )
+    {
+	//G4cout << "TrackID " << TrackID << " Voxel " << i << '\t' << j << '\t' << k << G4endl;
+	*hitTrack = TrackID;
 
-// Energy deposit of secondary particles along X (integrated on Y and Z)
+	// Fill FLUENCE data for every single nuclide 
+	// matrix-> Fill(particleDef, i, j, k, 0, true);
+
+
+	// Fill LET data for every single nuclide.
+	// Let will be calculated at endOfRunAction.
+	// A data ASCII file will be generated in main through the command let -> StoreData(filename)
+	// Put this command at endOfRunAction in case of multiple runs!
+	//
+	//if (A==12 && Z==6) // primary and secondary C12
+	//if (A==4 && Z==2) // Primary and secondary Helium
+	//if (A==1 && Z==1)    // primary and sec. protons 
+	if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
+	    let -> FillEnergySpectrum(particleDef, kineticEnergy, i, j, k);
+    }	 
+    if(energyDeposit != 0)                       
+    {  
+	// Energy deposit of secondary particles along X (integrated on Y and Z)
+	// Fill DOSE matrix for every single nuclide 
+	// A data ASCII file will be generated in main() function (Hadrontherapy.cc)
+	// through the command matrix-> StoreData(filename)
+	// Put this command at endOfRunAction in case of multiple runs!
+	
+	// if (A==1 && Z==1) // primary and sec. protons 
+	// matrix->Fill(particleDef, i, j, k, energyDeposit/MeV);
+
+	// Create a hit with the information of position is in the detector     
+	HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
+	detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
+	HitsCollection -> insert(detectorHit);
+    }
 
 #ifdef ANALYSIS_USE
-HadrontherapyAnalysisManager* analysis = 
-HadrontherapyAnalysisManager::getInstance();
-if(energyDeposit != 0)                       
-{  
+    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
+    if(energyDeposit != 0)                       
+    {  
+	if(TrackID != 1)
+	{
+	    if (particleName == "proton")
+		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
 
-    // Fill DOSE matrix for single nuclide 
-    matrix->Fill(def, i, j, k, energyDeposit/MeV);
+	    else if (particleName == "neutron")
+		analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/MeV);
 
-    if(TrackID != 1)
-    {
-	if (particleName == "proton")
-	    analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);
+	    else if (particleName == "alpha")
+		analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/MeV);
 
-	else if (particleName == "neutron")
-	    analysis -> SecondaryNeutronEnergyDeposit(i, energyDeposit/MeV);
+	    else if (particleName == "gamma")
+		analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/MeV);
 
-	else if (particleName == "alpha")
-	    analysis -> SecondaryAlphaEnergyDeposit(i, energyDeposit/MeV);
+	    else if (particleName == "e-")
+		analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/MeV);
 
-	else if (particleName == "gamma")
-	    analysis -> SecondaryGammaEnergyDeposit(i, energyDeposit/MeV);
+	    else if (particleName == "triton")
+		analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/MeV);
 
-	else if (particleName == "e-")
-	    analysis -> SecondaryElectronEnergyDeposit(i, energyDeposit/MeV);
+	    else if (particleName == "deuteron")
+		analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
 
-	else if (particleName == "triton")
-	    analysis -> SecondaryTritonEnergyDeposit(i, energyDeposit/MeV);
-
-	else if (particleName == "deuteron")
-	    analysis -> SecondaryDeuteronEnergyDeposit(i, energyDeposit/MeV);
-
-	else if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
-	    analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
+	    else if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
+		analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
+	}
     }
-}
 #endif
 
-return true;
+    return true;
 }
 
 void HadrontherapyDetectorSD::EndOfEvent(G4HCofThisEvent* HCE)

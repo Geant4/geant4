@@ -33,6 +33,8 @@
 #include "G4RunManager.hh"
 #include "globals.hh"
 
+#include "TCanvas.h"
+#include "TGraph.h"
 class G4Run;
 class HadrontherapyAnalysisManager;
 class HadrontherapyDetectorConstruction;
@@ -59,6 +61,8 @@ public:
   // of primary particles in the phantom
 
 private:  
+  TCanvas *c1;
+  TGraph *graph;
   G4int electromagnetic;
   G4int hadronic;
 };

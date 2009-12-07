@@ -49,6 +49,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4VVisManager.hh"
+
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyDetectorHit.hh"
 #include "HadrontherapyDetectorSD.hh"
@@ -82,6 +83,7 @@ void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
   if(hitsCollectionID == -1)
     hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
+  
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -90,9 +92,11 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
   if(hitsCollectionID < 0)
   return;
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
-// Clear Hits of voxels list 
-  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+
+  // Clear voxels hit list 
+  static HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
   matrix -> ClearHitTrack(); 
+
   if(HCE)
   {
     HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));

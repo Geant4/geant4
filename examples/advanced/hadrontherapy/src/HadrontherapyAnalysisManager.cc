@@ -308,10 +308,10 @@ void HadrontherapyAnalysisManager::book()
   histo16 = createHistogram1D("hydrogenEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
 			   70, 0., 500.);
 
-  theROOTNtuple = new TNtuple("theROOTNtuple", "Energy deposit by slice", "i:j:k:energy");
+  theROOTNtuple =   new TNtuple("theROOTNtuple", "Energy deposit by slice", "i:j:k:energy");
   theROOTIonTuple = new TNtuple("theROOTIonTuple", "Generic ion information", "a:z:occupancy:energy");
-  fragmentNtuple = new TNtuple("fragmentNtuple", "Fragments", "A:Z:energy:posX:posY:posZ");
-  metaData = new TNtuple("metaData", "Metadata", "events:detectorDistance:waterThickness:beamEnergy:energyError:phantomCenterDistance");
+  fragmentNtuple =  new TNtuple("fragmentNtuple", "Fragments", "A:Z:energy:posX:posY:posZ");
+  metaData =        new TNtuple("metaData", "Metadata", "events:detectorDistance:waterThickness:beamEnergy:energyError:phantomCenterDistance");
 #endif
 }
 

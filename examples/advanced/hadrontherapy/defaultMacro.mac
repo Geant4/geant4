@@ -68,4 +68,4 @@
 #########################
 # Start of the run
 #
-/run/beamOn 10
+/run/beamOn 1000

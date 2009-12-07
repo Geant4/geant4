@@ -39,7 +39,7 @@
 // type struct useful to store nucludes data
 struct ion 
  { 
-     G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
+     //G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
      G4String name; // simple name without excitation energy: He3, He4, Li7, ...
      G4int len; // name length
      G4int Z; // atomic number
@@ -72,7 +72,7 @@ public:
   // All the elements of the matrix are initialised to zero
   void flush();
   void Initialize(); 
-
+  void Clear();
 // Fill DOSE/fluence matrix for particle: 
 // if fluence parameter is true then fluence at voxel (i, j, k) is increased 
 // else energyDeposit fill the dose matrix for voxel (i,j,k) 
@@ -101,6 +101,13 @@ public:
   inline G4int Index(G4int i, G4int j, G4int k) { return (i * numberOfVoxelAlongY + j) * numberOfVoxelAlongZ + k; } 
   // Get a unique index from  a three dimensional one 
 
+  G4double * GetMatrix(){return matrix;}
+
+  G4int GetNvoxel(){return numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ;}
+  // Total number of voxels read only access  
+  G4int GetNumberOfVoxelAlongX(){return numberOfVoxelAlongX;}
+  G4int GetNumberOfVoxelAlongY(){return numberOfVoxelAlongY;}
+  G4int GetNumberOfVoxelAlongZ(){return numberOfVoxelAlongZ;}
 private:
 
   static HadrontherapyMatrix* instance;

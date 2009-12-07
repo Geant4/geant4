@@ -79,6 +79,7 @@
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
+#include "HadrontherapyLet.hh"
 #include "G4ScoringManager.hh"
 #include "IAEAScoreWriter.hh"
 
@@ -99,12 +100,15 @@
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
 #endif
-
 //////////////////////////////////////////////////////////////////////////////////////////////
+//
 int main(int argc ,char ** argv)
 {
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+
+  G4int seed = time(0);
+  CLHEP::HepRandom::setTheSeed(seed);
 
   G4RunManager* runManager = new G4RunManager;
 
@@ -149,7 +153,7 @@ int main(int argc ,char ** argv)
   runManager -> SetUserAction(steppingAction);    
 
   // Interaction data: stopping powers
-  HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters();
+  HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
 
 #ifdef G4VIS_USE
   // Visualization manager
@@ -178,11 +182,11 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
 
      // Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
      // G$UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
-     // In the following case the GUI.mac file is also executed
-     // 
+    // In the following case the GUI.mac file is also executed
+    // 
 #elif defined(G4UI_USE_QT)
-     session = new G4UIQt(argc,argv);
-     UI->ApplyCommand("/control/execute macro/GUI.mac");      
+    session = new G4UIQt(argc,argv);
+    UI->ApplyCommand("/control/execute macro/GUI.mac");      
      
      // As final option, the simpler user interface terminal is opened
 #else
@@ -193,18 +197,22 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
     delete session;
    }
  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+ HadrontherapyLet* let = HadrontherapyLet::GetInstance();
  if (matrix)
  {
      matrix -> TotalEnergyDeposit("DoseDistribution.out");
      // print list of generated nuclides 
      //matrix -> PrintNuclides();
 
-     // Store to files secondaries fluence contribution
+     // Store to multiple files, fluence contribution
      // matrix -> StoreFluenceData(); 
-     // Store to files secondaries dose contribution
+     // Store to multiple files, dose contribution
      // matrix -> StoreDoseData();
-     // Sore to one file all secondaries dose
+     // Store dose to one file only 
      matrix -> StoreData("Secondaries.out");
+     // Store to only one file, LET_T & LET_D
+     let -> StoreData("Let.out");
+
  } 
 #ifdef ANALYSIS_USE
  analysis -> finish();
