@@ -147,6 +147,26 @@ recompilation) and a recompilation of user applications is required.
 </UL>
 
 <P> </P>
+<B>Standard Electromagnetic physics</B>
+<P> </P>
+<UL>
+<LI>It is recommended to migrate user custom physics-lists by replacing
+    the <TT>G4MultipleScattering</TT> physics process with the following:
+    <UL>
+    <LI><TT>G4eMultipleScattering</TT> for <TT>e+-</TT>;</LI>
+    <LI><TT>G4MuMultipleScattering</TT> for muons;</LI>
+    <LI><TT>G4hMultipleScattering</TT> for hadrons and ions.</LI>
+    </UL>
+    The former <TT>G4MultipleScattering</TT> still exists in the Geant4
+    distribution but is marked as an obsolete process.
+    <P></P>
+    Nuclear stopping power is no longer part of ionization processes, and is now
+    responsible only for electronic stopping power; for simulation of nuclear
+    stopping, a new process <TT>G4NuclearStopping</TT> should be added to
+    custom physics-lists.</LI>
+</UL>
+
+<P> </P>
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
@@ -198,7 +218,22 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>A new set of multiple-scattering models is provided:
+    <UL>
+    <LI><TT>G4UrbanMscModel92</TT> is the default model for <TT>e+-</TT>
+        equivalent to the Urban model included in the previous release 9.2.
+        It is used as the default and in the <TT>Option1</TT> electromagnetic
+        physics constructors for physics-lists.</LI>
+    <LI><TT>G4UrbanMscModel93</TT> is a tuned version of the Urban model used
+        for <TT>e+-</TT> in all other physics constructors of physics-lists
+        (<TT>Option2, Option3, Livermore, Penelope</TT>).</LI>
+    <LI><TT>G4GoudssmitSoundersonMscModel</TT> is a new model for <TT>e+-</TT>
+        based on formalism developed for Penelope and EGSnrc.</LI>
+    </UL>
+    A new relativistic model <TT>G4PairProductionRelModel</TT> is available
+    for gamma conversion into <TT>e+e-</TT> pair. In this model, the LPM effect
+    is taken into account. The model is suggested for use in high-energy
+    astrophysics applications.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -210,7 +245,10 @@ Please see the corresponding details in
 <B>Physics Lists</B>
 <P> </P>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>New electromagnetic physics constructors combining standard and
+    low-energy electromagnetic models are available:
+    <TT>G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
+    G4EmLivermorePolarizedPhysics</TT>.</LI>
 </UL>
 
 <P> </P>
@@ -235,7 +273,11 @@ Please see the corresponding details in
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>Initialization of the physics-tables is now considerably faster,
+    being measured up to a factor 3, depending on the application
+    complexity.</LI>
+<LI>A more precise Spline interpolation for the physics-tables, provides
+    accuracy of the order of 0.1%.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -385,9 +427,8 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4AnnihiToMuPair</TT>: added method <TT>CrossSectionPerVolume()</TT>;
         added integral option to <TT>PostStepDoIt()</TT>, providing more precise
         simulation near cross-section threshold.</LI>
-    <LI><TT>G4eeTo3PiModel</TT>: fixed vector product in matrix element.</LI>
-    <LI>Some code cleanup: improved comments, avoid inlined virtual methods,
-        ecc...</LI>
+    <LI><TT>G4eeTo3PiModel</TT>: fixed vector product in matrix element. </LI>
+    <LI>Some code cleanup: improved comments, avoid inlined virtual methods.</LI>
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
@@ -485,12 +526,14 @@ please refer to the corresponding History files provided in most packages):
         external model of fluctuations. Simplified initialisation in
         <TT>G4MuBetheBlochModel</TT>, <TT>G4MuBremsstrahlungModel</TT>
         and <TT>G4MuPairProductionModel</TT>.</LI>
-    <LI><TT>G4EnergyLossForExtrapolator</TT>: removed hidden bin to use full scale of 
+    <LI><TT>G4EnergyLossForExtrapolator</TT>: removed hidden bin to use full scale of
         of <TT>G4PhysicsVector</TT>; set <TT>linLossLimit</TT> to 0.01.</LI>
-    <LI><TT>G4MuBetheBlochModel</TT>: compute density effect correction using method
-        of <TT>G4IonisParamMat</TT> class applying revised parameterisation.</LI>
-    <LI><TT>G4MuMultipleScattering</TT>: use <TT>G4UrbanMscModel90</TT> by default.</LI>
-    <LI>Some code cleanup: improved comments, avoid inlined virtual methods, ecc...</LI>
+    <LI><TT>G4MuBetheBlochModel</TT>: compute density effect correction using new
+        method of <TT>G4IonisParamMat</TT> class, allowing to apply revised
+        parameterization of the density effect.</LI>
+    <LI><TT>G4MuMultipleScattering</TT>: use <TT>G4UrbanMscModel90</TT> by
+        default.</LI>
+    <LI>Some code cleanup: improved comments, avoid inlined virtual methods. </LI>
     </UL></LI>
 <LI><B>Polarisation</B>
     <UL>
@@ -505,146 +548,163 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Standard</B>
     <UL>
     <LI>Simplified initialisation of all models and code cleanup.</LI>
-    <LI><TT>G4UniversalFluctuation</TT>: modification in width correction,
-        the dependence of the correction on energy deposition at previous steps
-        is now fixed. Addresses report from T2K setup.</LI>
     <LI><TT>G4PEEffectModel</TT>: substituted <TT>ComputeMeanFreePath()</TT>
         with <TT>CrossSectionPerVolume()</TT> resulting in minor CPU speedup
         for compound materials.</LI>
+    <LI>Added new class <TT>G4HeatedKleinNishinaCompton</TT>, prototype model
+        for plasma.</LI>
+    <LI>New class <TT>G4PairProductionRelModel</TT>, relativistic model for
+        gamma conversion.</LI>
+    <LI>Energy loss models:
+        <UL>
+        <LI><TT>G4UniversalFluctuation</TT>: modification in width correction,
+            the dependence of the correction on energy deposition at previous
+            steps is removed, width correction function is used instead.
+            Addresses report from T2K setup.</LI>
+        <LI><TT>G4IonFluctuations</TT>: removed extra phenomenological factor in
+            fluctuation width.</LI>
+        <LI><TT>G4BohrFluctuations</TT>: changed internal parameter to provide for
+            smoother transition to Landau regime in the case of small cuts.</LI>
+        <LI>Set <TT>linLossLimit</TT> to 0.02 in <TT>G4ionIonisation</TT> allowing
+            to smooth computations of mean energy loss of ions.</LI>
+        <LI><TT>G4BetheBlochModel</TT> and <TT>G4MollerBhabhaModel</TT>: compute
+            density effect correction using method of <TT>G4IonisParamMat</TT>
+            class, applying revised density effect parameterisation.</LI>
+        <LI><TT>G4BetheBlochModel</TT>: fixed and simplified initialisation for
+            ions needed for the new <TT>G4IonParametrisedLossModel</TT> of
+            low-energy package.
+            Minor speedup in <TT>CorrectionsAlongStep()</TT> method.</LI>
+        <LI><TT>G4BetheBlochModel, G4BraggModel, G4BraggIonModel</TT>: removed
+            computations of nuclear stopping power, which will is provided by
+            the dedicated process, some CPU speedup.</LI>
+        <LI><TT>G4WaterStopping</TT>: fix to Ar data; added Fe ion data.</LI>
+        </UL></LI>
+    <LI>Added new classes <TT>G4NuclearStopping</TT> and
+        <TT>G4ICRU49NuclearStoppingModel</TT>, a new model providing computation
+        of nuclear stopping.</LI>
     <LI><TT>G4PAIModel</TT>, <TT>G4PAIPhotonModel</TT>: removed usage of random
         numbers at initialisation, to avoid potential non-reproducibility issues.</LI>
-    <LI>Added new class <TT>G4HeatedKleinNishinaCompton</TT>, prototype model for
-        plasma.</LI>
-    <LI>New class <TT>G4PairProductionRelModel</TT>, relativistic model for gamma
-        conversion.</LI>
-    <LI>Added new <TT>G4alphaIonisation</TT> process.</LI>
-    <LI>Set <TT>linLossLimit</TT> to 0.02 in <TT>G4ionIonisation</TT>.</LI>
-    <LI><TT>G4IonFluctuations</TT>: removed extra phenomenological factor in
-        fluctuation width.</LI>
-    <LI><TT>G4BohrFluctuations</TT>: changed internal parameter to provide for
-        smoother transition to Landau regime in the case of small cuts.</LI>
-    <LI><TT>G4BetheBlochModel</TT>: fixed and simplified initialisation for ions
-        needed for the new <TT>G4IonParametrisedLossModel</TT> of low-energy package.
-        Minor speedup in <TT>CorrectionsAlongStep()</TT> method.</LI>
-    <LI><TT>G4BetheBlochModel, G4BraggModel, G4BraggIonModel</TT>: removed
-        computations of nuclear stopping power, some CPU speadup.</LI>
-    <LI><TT>G4BetheBlochModel, G4MollerBhabhaModel</TT>: compute density effect
-        correction using method of <TT>G4IonisParamMat</TT> class, applying revised
-        parameterisation.</LI>
-    <LI>Multiple Scattering and Coulomb Scattering:
+    <LI>Added new <TT>G4alphaIonisation</TT> process to be used in experimental
+        physics-lists.</LI>
+    <LI>Single and multiple scattering:
         <UL>
-        <LI>Added new alternative multiple-scattering model,
-            <TT>G4GoudsmitSaundersonMscModel.</TT>
-        <LI><TT>G4WentzelVIModel, G4UrbanMscModel, G4UrbanMscModel2,
-            G4UrbanMscModel90</TT>: use generic methods of <TT>G4VMscModel</TT> to
-            access safety and other geometrical information.</LI>
-        <LI><TT>G4WentzelVIModel, G4eCoulombScatteringModel</TT>: substituted scaling
-            of low-energy limit by setting <TT>1 keV</TT> for all particles; use
-            EGSnrc form of screening parameter (second order correction).
-            Extended low-energy cross-section to <TT>0.1 keV</TT>.</LI>
-        <LI><TT>G4WentzelVIModel, G4eCoulombScattering, G4CoulombScattering</TT>:
-            added relativistic factor to Reserford cross section; set default limit
-            on kinetic energy of the recoil to <TT>100 KeV</TT>.
+        <LI>Added <TT>G4UrbanMscModel92</TT> and <TT>G4UrbanMscModel93</TT>
+            classes, corresponding to 9.2 and 9.3 versions of the Urban multiple
+            scattering model.</LI>
+        <LI>Set default model <TT>G4UrbanMscModel92</TT> for
+            <TT>G4eMultipleScattering</TT>.</LI>
+        <LI><TT>G4UrbanMscModel93</TT>: new tuning for the central part and for
+            the tail of the angular distribution using the old e- scattering data
+            only (Phys. Rev. 84 (1951) 634; Phys. Rev. 61 (1942) 254).
+            New version of <TT>theta0</TT> and correction in tail tuning using
+            MuScat data.</LI>
+        <LI><TT>G4WentzelVIModel</TT> and all <TT>G4UrbanMscModel*</TT>: use
+            generic methods of <TT>G4VMscModel</TT> to access safety and other
+            information with the geometry modeller.</LI>
+        <LI>Added new alternative multiple-scattering model for <TT>e+-</TT>,
+            <TT>G4GoudsmitSaundersonMscModel</TT>.</LI>
+        <LI>Added warning in obsolete multiple-scattering classes
+            <TT>G4MultipleScattering, G4UrbanMscModel, G4UrbanMscModel2,
+            G4MscModel71</TT>.</LI>
+        <LI><TT>G4hMultipleScattering</TT>: removed unused obsolete methods.</LI>   
+        <LI><TT>G4eCoulombScatteringModel</TT>: added relativistic factor to
+            Rutherford cross section; added cut per recoil using proton production
+            threshold (<TT>1 mm</TT> cut in range corresponding to <TT>100 KeV</TT>);
             Reduced low-limit from <TT>1 KeV</TT> to <TT>0.1 KeV</TT> to provide
             smoother transport cross-section table. Added protection for very low
-            energies and changed screening parameters. Fixed kinematic for ion/ion
+            energies and changed screening parameters; fixed kinematic for ion/ion
             scattering.</LI>
-        <LI><TT>G4UrbanMscModel</TT> now corresponds to the frozen version of
-            <TT>G4UrbanMscModel2</TT> as in Geant4 9.2.
-            Added <TT>G4UrbanMscModel92</TT> and <TT>G4UrbanMscModel93</TT> classes,
-            9.2 and 9.3 versions of the Urban multiple-scattering model.
-            Set default model <TT>G4UrbanMscModel92</TT> for
-            <TT>G4eMultipleScattering</TT>. Added warning in obsolete
-            multiple-scattering classes <TT>G4MultipleScattering,
-            G4UrbanMscModel, G4UrbanMscModel2, G4MscModel71</TT>.</LI>
-        <LI><TT>G4UrbanMscModel2</TT>: new tuning for the central part and for the
-            tail of the angular distribution using the old e- scattering data only
-            (Phys. Rev. 84 (1951) 634; Phys. Rev. 61 (1942) 254).
-            New version of <TT>theta0</TT> and correction in tail tuning using MuScat
-            data. Corrected logic in <TT>ComputeTruePathLengthLimit()</TT> for
-            computing distance to boundary.</LI>
-        <LI><TT>G4hMultipleScattering</TT>: removed obsolete methods.</LI>
-        <LI><TT>G4eMultipleScattering</TT>: use <TT>G4UrbanMscModel</TT> as default
-            (same as in Geant4 9.2).</LI>
-        <LI><TT>G4eCoulombScatteringModel</TT>: added effective mass factor.</LI>
-        <LI><TT>G4CoulombScattering</TT>: added cut per recoil.</LI>
-        </UL></LI>
-    <LI>Stopping:
-        <UL>
-        <LI>Added new classes <TT>G4NuclearStopping</TT> and
-            <TT>G4ICRU49NuclearStoppingModel</TT>.</LI>
-        <LI><TT>G4ICRU49NuclearStoppingModel</TT>: new model providing computation
-            of nuclear stopping.</LI>
-        <LI><TT>G4NuclearStopping</TT>: updated process for computation of nuclear
-            stopping.</LI>
-        <LI><TT>G4WaterStopping</TT>: fix to Ar data; added Fe ion data.</LI>
+        <LI><TT>G4CoulombScatteringModel</TT>: fixed energy in the center of mass
+            reference system; added cut per recoil using proton production
+            threshold.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
-    <LI><TT>G4VEmModel</TT>: moved to protected methods to access geometrical
-        information. Added new method <TT>SetSampleZ()</TT> and
-        <TT>SampleDeexcitationAlongStep()</TT>; added modifiers for
-        setting de-excitation.
-        Moved multiple-scattering methods to <TT>G4VMscModel</TT>; added
-        protected methods for initialisation of particle-change.</LI>
-    <LI><TT>G4VMscModel</TT>: added methods <TT>InitialiseSafetyHelper()</TT>,
-        <TT>ComputeSafety()</TT>, <TT>ComputeGeomLimit()</TT> and
-        <TT>ComputeDisplacement()</TT>. Set <TT>facsafety</TT> to 0.3 as it is
-        defined in Urban models. Set default range-factor to 0.04.</LI>
-    <LI><TT>G4VEmProcess</TT>: added possibility to set more than one model.</LI>
-    <LI><TT>G4VEmModel</TT>: insure definition of pointer to
-        <TT>G4MaterialCutsCouple</TT> object both at initialisation and at run
-        time.</LI>
-    <LI><TT>G4VEnergyLossProcess, G4VEmProcess</TT>: added calls to
-        de-excitation post-step. Added <TT>ActivateDeexcitation()</TT> method
-        in <TT>G4EmProcessOptions</TT> and related UI command to messenger.
-        Added de-excitation along-step per region.
-        Set high energy limit to <TT>10 TeV</TT> and number of bins to 77.
-        Adopt updated <TT>G4PhysicsVector</TT> with no longer hidden bin.
-        Added initialisation of <TT>polarAngleLimit</TT> and
-        <TT>highEnergyLimit</TT> parameters for all models.
-        Fixed bug in method <TT>RetrieveTables()</TT>; check that each its
-        physics-vector is retrieved before setting the <TT>SplineFlag</TT>.</LI>
-    <LI><TT>G4VMultipleScattering</TT>: added initialisation of generic
-        multiple-scattering model parameters, allowing to overwrite default
-        models. Set default range-factor to 0.04. Removed obsolete method
-        <TT>GetMscContinuesStepLimit()</TT>. Added <TT>SetModel()</TT> method.</LI>
+    <LI><TT>G4VEmModel</TT>:
+        <UL>
+        <LI>Moved multiple-scattering methods to derived class <TT>G4VMscModel</TT>.</LI>
+        <LI>Added new methods <TT>SampleDeexcitationAlongStep()</TT>,
+            <TT>GetParticleChangeForLoss</TT>, <TT>GetParticleChangeForGamma</TT>.</LI>
+        <LI>Insure definition of pointers to the current <TT>G4Element</TT> and
+            <TT>G4MaterialCutsCouple</TT> objects both at initialisation and at
+            run time.</LI>
+        </UL></LI> 
+    <LI><TT>G4VMscModel</TT>:
+        <UL>
+        <LI>Added generic methods used by all multiple-scattering models
+            <TT>InitialiseSafetyHelper()</TT>, <TT>ComputeSafety()</TT>,
+            <TT>ComputeGeomLimit()</TT> and <TT>ComputeDisplacement()</TT>.</LI>
+        <LI>Set default <TT>facsafety</TT> to 0.3 and <TT>range-factor</TT>
+            to 0.04 to be the same as in <TT>G4UrbanMscModel92</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering</TT>:
+        <UL>
+        <LI>Set high energy limit to <TT>10 TeV</TT> and number of bins to 77.
+            Adopt updated <TT>G4PhysicsVector</TT> with no longer hidden bin.</LI>
+        <LI>Added initialisation of <TT>polarAngleLimit</TT> and
+            <TT>highEnergyLimit</TT> parameters for all models.</LI>
+        <LI>Fixed bug in method <TT>RetrieveTables()</TT>; check that each its
+            physics-vector is retrieved before setting the <TT>SplineFlag</TT>.</LI>
+        </UL></LI>
+    <LI><TT>G4VEnergyLossProcess, G4VEmProcess</TT>:
+        <UL>
+        <LI>Added calls to de-excitation post-step; added de-excitation
+            along-step per region.</LI>
+        <LI>Added <TT>ActivateDeexcitation()</TT> method
+            in <TT>G4EmProcessOptions</TT> and related UI command to messenger.</LI>
+        </UL></LI>
+    <LI><TT>G4VMultipleScattering</TT>:
+        <UL>
+        <LI>Added initialisation of generic multiple-scattering model parameters</LI>
+        <LI>Added <TT>SetModel()</TT> method, allowing to overwrite default.</LI>
+        <LI>Removed obsolete method <TT>GetMscContinuesStepLimit()</TT>.</LI>
+        </UL></LI>
     <LI><TT>G4LossTableManager, G4EmProcessOptions, G4EnergyLossMessenger</TT>:
-        added parameter <TT>FactorForAngleLimit</TT> with accessors, modifiers
-        and UI command, to be used in the computation of limit on -t (invariant
-        momentum transfer) inside single scattering and <TT>G4WentzelVI</TT>
-        models.</LI>
-    <LI><TT>G4EmCalculator</TT>: added possibility to be used by DNA low-energy
-        processes; take into account special DNA particles.
-        Added method <TT>FindIon()</TT>; improved computation for ions
-        allowing to be applied for the model based on ICRU'73. Take into
-        account the correction along-step for ions. Fixed bug in selection
-        of models.</LI>
+        <UL>
+        <LI>Added parameter <TT>FactorForAngleLimit</TT> with accessors, modifiers
+            and UI command, to be used in the computation of limit on -t
+            (invariant momentum transfer) inside single scattering and
+            <TT>G4WentzelVI</TT> models.</LI>
+        </UL></LI>
+    <LI><TT>G4EmCalculator</TT>:
+        <UL>
+        <LI>Added possibility to be used by DNA low-energy processes taking into
+            account special DNA particles.</LI>
+        <LI>Added method <TT>FindIon()</TT></LI>
+        <LI>Improved computation for electronic stopping power of ions using
+            <TT>CorrectionAlongStep</TT> method of <TT>G4vEnergyLossProcess</TT>
+            allowing to be applied for any model including the model based on
+            ICRU'73 data.</LI>
+        <LI>Fixed bug in selection of models.</LI>
+        </UL></LI>
     <LI><TT>G4EmConfigurator</TT>: fix for the case when only fluctuation model
-        is set and main model is the default. Added <TT>G4EmConfigurator</TT>
-        in <TT>G4LossTableManager</TT> providing for easier addition of models
-        per region.</LI>
+        is set and main model is the default.</LI>
+    <LI>Added <TT>G4EmConfigurator</TT> in <TT>G4LossTableManager</TT> providing
+        for easier addition of models per region.</LI>
     <LI><TT>G4EmSaturation</TT>: use PDG encoding instead of pointer to
         <TT>G4ParticleDefinition</TT>.</LI>
     <LI><TT>G4EmCorrections</TT>: fixed bug reported in physics-list forum #532.</LI>
     <LI><TT>G4LossTableBuilder</TT>: added protection in <TT>BuildRangeTable()</TT>
         against zero <TT>dEdx</TT>. Use copy constructors to create physics
-        vectors in order to reduce number of calls to log() function.</LI>
-    <LI><TT>G4EmModelManager</TT>: fixed energy range selection algorithm for
-        the case of a small intersection of model energy intervals.
-        Fixed energy range selection algorithm for the case when there is an
-        intersection of energy regions of standard and low-energy models.
-        Reduced internal vectors if no model per region are initialized;
-        avoid to initilise unused models.
-        Simplified initialisation by smoothing procedure; the size of
-        executable should be reduced.</LI>
+        vectors in order to reduce number of calls to <TT>exp()</TT> function.</LI>
+    <LI><TT>G4EmModelManager</TT>:
+        <UL>
+        <LI>Fixed energy range selection algorithm for the case of a small
+            intersection of model energy intervals.</LI>
+        <LI>Fixed energy range selection algorithm for the case when there
+            is an intersection of energy regions of standard and low-energy
+            models.</LI>
+        <LI>Reduced size and number of internal vectors if no model per region
+            are initialized.</LI>
+        <LI>Avoid to initilise unused models; simplified initialisation by
+            smoothing procedure. The size of executable should be reduced.</LI>
+        </UL></LI>
     <LI><TT>G4EmElementSelector</TT>: added protection for zero cross section
         at first and last bins of physics vector and disabled Spline
         interpolation.</LI>
     <LI>Added <TT>G4AtomicShell</TT> class from use by the low-energy module.</LI>
     <LI>Added new interface class <TT>G4VAtomDeexcitation</TT>.</LI>
-    <LI>Some code cleanup.</LI>
     </UL></LI>
 <LI><B>Xrays</B>
     <UL>
