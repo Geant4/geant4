@@ -280,13 +280,17 @@ Please see the corresponding details in
 <LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
 </UL>
 
-<B>Standard Electromagnetic physics</B>
+<B>Standard Electromagnetic physics and cuts</B>
 <UL>
 <LI>Initialization of the physics-tables is now considerably faster,
     being measured up to a factor 3, depending on the application
     complexity.</LI>
 <LI>A more precise Spline interpolation for the physics-tables, provides
     accuracy of the order of 0.1%.</LI>
+<LI>A new method <TT>ResetConverters()</TT> has been added to
+    <TT>G4ProductionCutTable</TT>. This method, if called once initialised
+    the run, allows to reduce the memory footprint by clearing temporary
+    loss tables and range vectors used at initialisation.</LI>
 </UL>
 
 <B>Hadronic physics</B>
