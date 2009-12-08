@@ -83,7 +83,10 @@ G4double G4WilsonRadius::GetWilsonRMSRadius (G4double A)
     radius = factor * (0.84*std::pow(A,third) + 0.55);
   else
   {
-    G4double r[27] = {0.0, 0.85,  2.095, 1.976, 1.671, 1.986,
+	// this was changed from just G4double to static const G4double
+	// to make sure that time wasn't being wasted on every call reloading a stack variable
+	// by MHM 20050119
+    static const G4double r[27] = {0.0, 0.85,  2.095, 1.976, 1.671, 1.986,
                            2.57,  2.41,  2.23,  2.519, 2.45,
                            2.42,  2.471, 2.440, 2.58,  2.611,
                            2.730, 2.662, 2.727, 2.9,   3.040,
