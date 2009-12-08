@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.27 2009-12-08 10:19:33 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.28 2009-12-08 16:25:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1430,6 +1430,10 @@ G4double G4Incl::interpolateFunction(G4double xv)
 void G4Incl::firstDerivative(G4int k)
 {
   for(G4int i=0; i < saxw->n-1; i++) {
+    if((saxw->x[i+1][k] - saxw->x[i][k]) == 0.0) { // Safeguard to avoid division by zero
+      saxw->s[i][k] = 0.0;
+      continue;
+    }
     saxw->s[i][k] = (saxw->y[i+1][k] - saxw->y[i][k]) / (saxw->x[i+1][k] - saxw->x[i][k]);
   }
   saxw->s[saxw->n-1][k] = saxw->s[saxw->n-2][k];
