@@ -37,8 +37,8 @@
 //
 // MODULE:              G4WilsonAblationModel.cc
 //
-// Version:		B.1
-// Date:		15/04/04
+// Version:		1.0
+// Date:		08/12/2009
 // Author:		P R Truscott
 // Organisation:	QinetiQ Ltd, UK
 // Customer:		ESA/ESTEC, NOORDWIJK
@@ -55,6 +55,24 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// 08 December 2009, P R Truscott, QinetiQ Ltd, UK
+// Ver 1.0
+// Updated as a result of changes in the G4Evaporation classes.  These changes
+// affect mostly SelectSecondariesByEvaporation, and now you have variables
+// associated with the evaporation model which can be changed:
+//    OPTxs to select the inverse cross-section
+//    OPTxs = 0      => Dostrovski's parameterization
+//    OPTxs = 1 or 2 => Chatterjee's paramaterization
+//    OPTxs = 3 or 4 => Kalbach's parameterization
+//    useSICB        => use superimposed Coulomb Barrier for inverse cross
+//                      sections
+// Other problem found with G4Fragment definition using Lorentz vector and
+// **G4ParticleDefinition**.  This does not allow A and Z to be defined for the
+// fragment for some reason.  Now the fragment is defined more explicitly:
+//    G4Fragment *fragment = new G4Fragment(A, Z, lorentzVector);
+// to avoid this quirk.  Bug found in SelectSecondariesByDefault: *type is now
+// equated to evapType[i] whereas previously it was equated to fragType[i].
+// 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -122,11 +140,23 @@ G4WilsonAblationModel::G4WilsonAblationModel()
 // Set verboseLevel default to no output.
 //
   verboseLevel = 0;
+  theChannelFactory = new G4EvaporationFactory();
+  theChannels = theChannelFactory->GetChannel();
+//
+//
+// Set defaults for evaporation classes.  These can be overridden by user
+// "set" methods.
+//
+  OPTxs   = 3;
+  useSICB = false;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4WilsonAblationModel::~G4WilsonAblationModel()
-{;}
+{
+  if (theChannels != 0) theChannels = 0;
+  if (theChannelFactory != 0) delete theChannelFactory;
+}
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4FragmentVector *G4WilsonAblationModel::BreakItUp
@@ -206,8 +236,9 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 //
   G4int DAabl = (G4int) (ex / B);
   if (DAabl > A) DAabl = A;
-  if (verboseLevel >= 2)
-    G4cout <<"Number of nucleons ejected = " <<DAabl <<G4endl;
+// The following lines are no longer accurate given we now treat the final fragment
+//  if (verboseLevel >= 2)
+//    G4cout <<"Number of nucleons ejected = " <<DAabl <<G4endl;
 
 //
 //
@@ -218,7 +249,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
   G4int ZF = 0;
   if (AF > 0)
   {
-    G4double AFd = static_cast<G4double>(AF);
+    G4double AFd = (G4double) AF;
     G4double R = 11.8 / std::pow(AFd, 0.45);
     G4int minZ = Z - DAabl;
     if (minZ <= 0) minZ = 1;
@@ -252,10 +283,6 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
       ZF = iz;
   }
   G4int DZabl = Z - ZF;
-  if (verboseLevel >= 2)
-    G4cout <<"Final fragment      A=" <<AF
-           <<", Z=" <<ZF
-           <<G4endl;
 //
 //
 // Now determine the nucleons or nuclei which have bee ablated.  The preference
@@ -284,22 +311,46 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
       }
       DAabl -= (G4int) (n * type->GetBaryonNumber() + 1.0E-10);
       DZabl -= (G4int) (n * type->GetPDGCharge() + 1.0E-10);
-      if (verboseLevel >= 2)
-        G4cout <<"Particle type: " <<std::setw(10) <<type->GetParticleName()
-               <<", number of particles emitted = " <<n
-               <<G4endl;
     }
   }
 //
 //
-// Determine the properties of the final nuclear fragment.
+// Determine the properties of the final nuclear fragment.  Note that if
+// the final fragment is predicted to have a nucleon number of zero, then
+// really it's the particle last in the vector evapType which becomes the
+// final fragment.  Therefore delete this from the vector if this is the
+// case.
 //
   G4double massFinalFrag = 0.0;
-  if (AF > 0.0)
+  if (AF > 0)
     massFinalFrag = G4ParticleTable::GetParticleTable()->GetIonTable()->
       GetIonMass(ZF,AF);
+  else
+  {
+    G4ParticleDefinition *type = evapType[evapType.size()-1];
+    AF                         = type->GetBaryonNumber();
+    ZF                         = (G4int) (type->GetPDGCharge() + 1.0E-10);
+    evapType.erase(evapType.end()-1);
+  }
   totalEpost   += massFinalFrag;
 //
+//
+// Provide verbose output on the nuclear fragment if requested.
+//
+  if (verboseLevel >= 2)
+  {
+    G4cout <<"Final fragment      A=" <<AF
+           <<", Z=" <<ZF
+           <<G4endl;
+    for (G4int ift=0; ift<nFragTypes; ift++)
+    {
+      G4ParticleDefinition *type = fragType[ift];
+      G4int n                    = std::count(evapType.begin(),evapType.end(),type);
+      if (n > 0) 
+        G4cout <<"Particle type: " <<std::setw(10) <<type->GetParticleName()
+               <<", number of particles emitted = " <<n <<G4endl;
+    }
+  }
 //
 // Add the total energy from the fragment.  Note that the fragment is assumed
 // to be de-excited and does not undergo photo-evaporation .... I did mention
@@ -325,6 +376,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     else
       SelectSecondariesByDefault(G4ThreeVector(0.0,0.0,0.0));
   }
+
   if (AF > 0)
   {
     G4double mass = G4ParticleTable::GetParticleTable()->GetIonTable()->
@@ -351,11 +403,11 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     }
     G4int ie = 0;
     G4FragmentVector::iterator iter;
-    for (iter = fragmentVector->begin(); iter != fragmentVector->end(); ++iter)
+    for (iter = fragmentVector->begin(); iter != fragmentVector->end(); iter++)
     {
       if (ie == nEvap)
       {
-        G4cout <<*iter  <<G4endl;
+//        G4cout <<*iter  <<G4endl;
         G4cout <<"---------------------------------" <<G4endl;
         G4cout <<"Particles from default emission :" <<G4endl;
         G4cout <<"---------------------------------" <<G4endl;
@@ -374,6 +426,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
 void G4WilsonAblationModel::SelectSecondariesByEvaporation
   (G4Fragment *intermediateNucleus)
 {
+  G4Fragment theResidualNucleus = *intermediateNucleus;
   G4bool evaporate = true;
   while (evaporate && evapType.size() != 0)
   {
@@ -385,6 +438,7 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
 //
     std::vector <G4VEvaporationChannel*>  theChannels;
     theChannels.clear();
+    std::vector <G4VEvaporationChannel*>::iterator i;
     VectorOfFragmentTypes::iterator iter;
     std::vector <VectorOfFragmentTypes::iterator> iters;
     iters.clear();
@@ -392,36 +446,60 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
     if (iter != evapType.end())
     {
       theChannels.push_back(new G4AlphaEvaporationChannel);
+      i = theChannels.end() - 1;
+      (*i)->SetOPTxs(OPTxs);
+      (*i)->UseSICB(useSICB);
+//      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
     iter = std::find(evapType.begin(), evapType.end(), G4He3::He3());
     if (iter != evapType.end())
     {
       theChannels.push_back(new G4He3EvaporationChannel);
+      i = theChannels.end() - 1;
+      (*i)->SetOPTxs(OPTxs);
+      (*i)->UseSICB(useSICB);
+//      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
     iter = std::find(evapType.begin(), evapType.end(), G4Triton::Triton());
     if (iter != evapType.end())
     {
       theChannels.push_back(new G4TritonEvaporationChannel);
+      i = theChannels.end() - 1;
+      (*i)->SetOPTxs(OPTxs);
+      (*i)->UseSICB(useSICB);
+//      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
     iter = std::find(evapType.begin(), evapType.end(), G4Deuteron::Deuteron());
     if (iter != evapType.end())
     {
       theChannels.push_back(new G4DeuteronEvaporationChannel);
+      i = theChannels.end() - 1;
+      (*i)->SetOPTxs(OPTxs);
+      (*i)->UseSICB(useSICB);
+//      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
     iter = std::find(evapType.begin(), evapType.end(), G4Proton::Proton());
     if (iter != evapType.end())
     {
       theChannels.push_back(new G4ProtonEvaporationChannel);
+      i = theChannels.end() - 1;
+      (*i)->SetOPTxs(OPTxs);
+      (*i)->UseSICB(useSICB);
+//      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
     iter = std::find(evapType.begin(), evapType.end(), G4Neutron::Neutron());
     if (iter != evapType.end())
     {
       theChannels.push_back(new G4NeutronEvaporationChannel);
+      i = theChannels.end() - 1;
+      (*i)->SetOPTxs(OPTxs);
+      (*i)->UseSICB(useSICB);
+//      (*i)->Initialize(theResidualNucleus);
       iters.push_back(iter);
     }
     G4int nChannels = theChannels.size();
@@ -478,7 +556,7 @@ void G4WilsonAblationModel::SelectSecondariesByDefault (G4ThreeVector boost)
 {
   for (unsigned i=0; i<evapType.size(); i++)
   {
-    G4ParticleDefinition *type = fragType[i];
+    G4ParticleDefinition *type = evapType[i];
     G4double mass              = type->GetPDGMass();
     G4double e                 = mass + 10.0*eV;
     G4double p                 = std::sqrt(e*e-mass*mass);
@@ -488,8 +566,15 @@ void G4WilsonAblationModel::SelectSecondariesByDefault (G4ThreeVector boost)
     G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
     G4LorentzVector lorentzVector = G4LorentzVector(direction*p, e);
     lorentzVector.boost(-boost);
+// Possibility that the following line is not correctly carrying over A and Z
+// from particle definition.  Force values.  PRT 03/12/2009.
+//    G4Fragment *fragment          = 
+//      new G4Fragment(lorentzVector, type);
+    G4int A = type->GetBaryonNumber();
+    G4int Z = (G4int) (type->GetPDGCharge() + 1.0E-10);
     G4Fragment *fragment          = 
-      new G4Fragment(lorentzVector, type);
+      new G4Fragment(A, Z, lorentzVector);
+
     fragmentVector->push_back(fragment);
   }
 }

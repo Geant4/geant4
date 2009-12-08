@@ -39,8 +39,8 @@
 //
 // MODULE:              G4WilsonAblationModel.hh
 //
-// Version:		B.1
-// Date:		15/04/04
+// Version:		1.0
+// Date:		08/12/2009
 // Author:		P R Truscott
 // Organisation:	QinetiQ Ltd, UK
 // Customer:		ESA/ESTEC, NOORDWIJK
@@ -57,6 +57,13 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
+// 08 December 2009, P R Truscott, QinetiQ Ltd, UK
+// Ver 1.0
+// Introduced vector of evaporation channels and evaporation factory.  Also
+// copied directly over the SumProbabilities class in G4Evaporation.hh at
+// version 9.2.r9, just in cases there's any subtle differences.  See .cc
+// file comments to see impact of the rest of the changes.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -66,6 +73,9 @@
 #include "G4FragmentVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4VEvaporationFactory.hh"
+#include "G4EvaporationFactory.hh"
+
 
 #include <vector>
 ////////////////////////////////////////////////////////////////////////////////
@@ -98,23 +108,26 @@ class G4WilsonAblationModel : public G4VEvaporation
     G4FragmentVector      *fragmentVector;
     VectorOfFragmentTypes  evapType;
 
-    class SumProbabilities : 
-      public std::binary_function<G4double,G4double,G4double>
-    {
-      public:
-        SumProbabilities() : total(0.0) {}
-        G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
-        {
-          total += frag->GetEmissionProbability();
-          return total;
-        }
+    std::vector<G4VEvaporationChannel*> * theChannels;
+    G4VEvaporationFactory * theChannelFactory;
 
-        G4double GetTotal() { return total; }
-      public:
-      G4double total;
+  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
+  {
+  public:
+    SumProbabilities() : total(0.0) {}
+    G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
+    { 
+      G4double temp_prob = frag->GetEmissionProbability();
+      if(temp_prob >= 0.0) total += temp_prob;
+      //      total += frag->GetEmissionProbability();
+      return total;
+    }
+    
+    G4double GetTotal() { return total; }
+  public:
+    G4double total;
+    
   };
-                                                                                
-
 
 };
 ////////////////////////////////////////////////////////////////////////////////
