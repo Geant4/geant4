@@ -203,7 +203,7 @@ Please see the corresponding details in
 <LI><U>GDML</U>: it is now possible to customise the reader as well as
     the writer to treat ad-hoc user extensions to the GDML schema.
     The GDML writer now also supports dumping of optical surface
-    properties associated to volumes and materials.</LI>
+    properties associated with surfaces and materials.</LI>
 </UL>
 
 <B>Interfaces & Visualization</B>
@@ -241,6 +241,12 @@ Please see the corresponding details in
 <LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
 </UL>
 
+<B>Optical physics</B>
+<UL>
+<LI>Measured angular reflectivity distributions for common surface treatments
+    and reflectors have been incorporated as Look-Up-Tables.</LI>
+</UL>
+
 <P> </P>
 <B>Physics Lists</B>
 <P> </P>
@@ -249,6 +255,9 @@ Please see the corresponding details in
     low-energy electromagnetic models are available:
     <TT>G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
     G4EmLivermorePolarizedPhysics</TT>.</LI>
+<LI>A default builder for optical photon physics has been added:
+    <TT>G4OpticalPhysics</TT> together with its messenger,
+    <TT>G4OpticalPhysicsMessenger</TT>.</LI>
 </UL>
 
 <P> </P>
@@ -1362,8 +1371,8 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Implemented virtual layer for allowing customisation of the writer
         for user-extended schemas.</LI>
-    <LI>Implemented ability to write surface properties associated to volumes
-        and material properties.</LI>
+    <LI>Implemented ability to write surface properties associated with
+        surfaces and material properties.</LI>
     <LI>Allow for reading/writing of constant material properties.</LI>
     <LI>Added support for the GDML <TT>assembly</TT> tag, implementing assemblies of
         simple placements through <TT>G4AssemblyVolume</TT>.</LI>
@@ -1836,8 +1845,9 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>field/field05
         <UL>
-        <LI>New example demonstrating usage of 'spin' in electric-field
-            to cancel g-2 precession.</LI>
+        <LI>New example to test the spin-frozen condition whereby the g-2
+            muon spin precession is canceled by an applied electric field.
+            Courtesy of Hiromi Iinuma from KEK.</LI>
         </UL></LI>
     <LI>hadronic/Hadr00
         <UL>
@@ -1880,8 +1890,10 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>optical/wls
         <UL>
-        <LI>New example for optical physics simulating the propagation of
-            photons inside a Wave Length Shifting (WLS) fiber.</LI>
+        <LI>New example tracking optical photons in a realistic plastic
+            scintillator bar geometry with a wave length shifting (WLS) fiber
+            and propagating the WLS photons inside the fiber.
+            Courtesy of Siu Pak Mok from TRIUMF.</LI>
         </UL></LI>
     <LI>persistency/gdml
         <UL>
