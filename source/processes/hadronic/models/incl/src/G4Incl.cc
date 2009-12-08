@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.26 2009-12-04 13:16:57 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.27 2009-12-08 10:19:33 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -854,6 +854,7 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 
   if(nopart > -1) {
     for(G4int j = 0; j < nopart; j++) {
+      if(ep[j] < 0.0) continue; // Workaround to avoid negative energies (and taking std::sqrt of a negative number).
       varntp->itypcasc[j] = 1;
       // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
       if(kind[j] == 1) { 
