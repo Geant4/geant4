@@ -56,7 +56,7 @@
 HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(G4bool wantMessenger): 
     nistEle(new G4NistElementBuilder(0)),										  
     nistMat(new G4NistMaterialBuilder(nistEle, 0)),									  
-    data(G4cout.rdbuf()), emCal(new G4EmCalculator),
+    data(G4cout.rdbuf()), 
     pMessenger(0),
     beamFlag(false)
 #ifdef G4ANALYSIS_USE_ROOT 
@@ -70,17 +70,17 @@ HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(G4bool wa
 HadrontherapyInteractionParameters::~HadrontherapyInteractionParameters()
 {
     if (pMessenger) delete pMessenger; 
-    delete emCal;
     delete nistMat; 
     delete nistEle; 
 }
 
 G4double HadrontherapyInteractionParameters::GetStopping (G4double energy, 
-							  G4double density,
 	                                                  const G4ParticleDefinition* pDef, 
-						          const G4Material* pMat)
+						          const G4Material* pMat,
+							  G4double density)
 {
-    return (ComputeTotalDEDX(energy, pDef, pMat)/density/(MeV*cm2/g));
+    if (density) return ComputeTotalDEDX(energy, pDef, pMat)/density;
+    return ComputeTotalDEDX(energy, pDef, pMat);
 }
 bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg)
 {
@@ -100,14 +100,14 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
 	       {
 		    en = std::pow(10., logmin + ( c*(logmax-logmin)  / (npoints - 1.)) );  
 		    energy.push_back(en/MeV);
-		    dedxtot =  emCal -> ComputeTotalDEDX (en, particle, material);
+		    dedxtot =  ComputeTotalDEDX (en, particle, material);
 	            massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
 	       }
 	}
 	else // one point only
 	{
 	    energy.push_back(kinEmin/MeV);
-	    dedxtot =  emCal -> ComputeTotalDEDX (kinEmin, particle, material);
+	    dedxtot =  ComputeTotalDEDX (kinEmin, particle, material);
 	    massDedx.push_back ( (dedxtot / density)/(MeV*cm2/g) );
 	}
 
@@ -225,7 +225,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
 	   }
     // Check for particle
     if (particle == "") particle = "proton"; // default to "proton"
-    else if ( !emCal->FindParticle(particle) )
+    else if ( !FindParticle(particle) )
 	   {
 		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported" << G4endl;
 		G4cout << "Try the command \"/particle/list\" to get full supported particles list" << G4endl;

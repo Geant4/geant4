@@ -26,10 +26,6 @@
 // $Id: HadrontherapyRunAction.cc
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
-#include "TROOT.h"
-#include "TFile.h"
-#include "TNtuple.h"
-#include "TH1F.h"
 
 #include "HadrontherapyRunAction.hh"
 #include "HadrontherapyEventAction.hh"

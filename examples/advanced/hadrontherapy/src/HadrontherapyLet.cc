@@ -24,18 +24,7 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyLet.cc,v 1.0, May 2007;
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), M. Sallemi, A. Salvia
 // 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
 
 #include "HadrontherapyLet.hh"
 #include "HadrontherapyInteractionParameters.hh"
@@ -153,8 +142,8 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
     G4int bin = 0;
     for(G4double E = binWidth/2; E < energyLimit ; E += binWidth )
     {
-	ion.stop[bin++] = pParam -> GetStopping(E, density, particleDef, detectorMat);
-	//G4cout << E/MeV << '\t' << ion.stop[bin-1] << '\t' << bin-1 << '\t' << nBins << '\n';
+	ion.stop[bin++] = pParam -> GetStopping(E, particleDef, detectorMat)*(keV/um);
+	G4cout << E/MeV << '\t' << ion.stop[bin-1] << '\t' << bin-1 << '\t' << nBins << '\n';
     }
     // Clear array of pointer to histograms
     for(G4int v=0; v < nVoxels; v++) ion.pSpectrum[v] = 0;
@@ -196,9 +185,9 @@ void HadrontherapyLet::LetOutput()
 		    dD += ionLetStore[l].pSpectrum[v][bin]*ionLetStore[l].stop[bin];
 
 		} 
-		//G4cout << "LetT " << nT/dT/(keV/um) << " LetD " << nD/dD/(keV/um) << '\n';  
-		ionLetStore[l].letT[v] = (nT/dT)*(keV/um);
-		ionLetStore[l].letD[v] = (nD/dD)*(keV/um);
+		//G4cout << "LetT " << nT/dT << " LetD " << nD/dD << '\n';  
+		ionLetStore[l].letT[v] = (nT/dT);
+		ionLetStore[l].letD[v] = (nD/dD);
 	    }
 	}
     }

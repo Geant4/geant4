@@ -48,7 +48,7 @@ HadrontherapyMatrix* HadrontherapyMatrix::GetInstance(G4int voxelX, G4int voxelY
 {
 	if (instance) delete instance;
 	instance = new HadrontherapyMatrix(voxelX, voxelY, voxelZ);
-	instance -> Initialize();
+	instance -> Initialize();// XXX
 	return instance;
 }
 
@@ -83,6 +83,7 @@ HadrontherapyMatrix::~HadrontherapyMatrix()
     // clear fluences/dose data
     Clear();
 }
+
 void HadrontherapyMatrix::Clear()
 {
     for (size_t i=0; i<ionStore.size(); i++)
@@ -91,6 +92,29 @@ void HadrontherapyMatrix::Clear()
 	delete[] ionStore[i].fluence; 
     }
     ionStore.clear();
+}
+
+void HadrontherapyMatrix::flush()
+{
+    for(int i=0;i<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ;i++)
+    {
+	matrix[i] = 0;
+    }
+}
+// Initialise the elements of the matrix to zero
+void HadrontherapyMatrix::Initialize()
+{ 
+    Clear();
+    // Fill dose matrix with zero
+    for(G4int i = 0; i < numberOfVoxelAlongX; i++)
+    {
+	for(G4int j = 0; j < numberOfVoxelAlongY; j++)
+	{
+	    for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
+
+		matrix[Index(i,j,k)] = 0.;
+	} 
+    }
 }
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -220,28 +244,7 @@ void HadrontherapyMatrix::StoreData(G4String filename)
 }
 /////////////////////////////////////////////////////////////////////////////
 // Dose methods...
-void HadrontherapyMatrix::flush()
-{
-    for(int i=0;i<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ;i++)
-    {
-	matrix[i] = 0;
-    }
-}
-// Initialise the elements of the matrix to zero
-void HadrontherapyMatrix::Initialize()
-{ 
-    Clear();
-    // Fill dose matrix with zero
-    for(G4int i = 0; i < numberOfVoxelAlongX; i++)
-    {
-	for(G4int j = 0; j < numberOfVoxelAlongY; j++)
-	{
-	    for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
 
-		matrix[Index(i,j,k)] = 0.;
-	} 
-    }
-}
 // Fill DOSE/fluence matrix for particle/ion: 
 // If fluence parameter is true (default value is FALSE) then fluence at voxel (i, j, k) is increased. 
 // The energyDeposit parameter fill the dose matrix for voxel (i,j,k) 

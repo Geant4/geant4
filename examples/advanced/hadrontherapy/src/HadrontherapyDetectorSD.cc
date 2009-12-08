@@ -100,7 +100,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	// matrix-> Fill(particleDef, i, j, k, 0, true);
 
 
-	// Fill LET data for every single nuclide.
+	// Fill LET data for every single nuclide (first step kinetic energy).
 	// Let will be calculated at endOfRunAction.
 	// A data ASCII file will be generated in main through the command let -> StoreData(filename)
 	// Put this command at endOfRunAction in case of multiple runs!
