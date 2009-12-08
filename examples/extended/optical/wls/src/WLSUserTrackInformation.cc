@@ -74,12 +74,12 @@ G4bool WLSUserTrackInformation::AddStatusFlag(TrackStatus s)
 
       case InsideOfFiber:
  
-        return status =
-         status & ~(EscapedFromSide + EscapedFromReadOut + OutsideOfFiber) | s;
+        return ( status =
+         (status & ~(EscapedFromSide + EscapedFromReadOut + OutsideOfFiber)) | s);
 
       case OutsideOfFiber:
 
-        return status = status & ~InsideOfFiber | s;
+        return ( status = (status & ~InsideOfFiber) | s );
  
       default:
  

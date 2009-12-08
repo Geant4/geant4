@@ -207,7 +207,8 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
      case FresnelRefraction:
      case SameMaterial:
 
-       G4bool isFiber = thePostPVname == "WLSFiber"
+       G4bool isFiber;
+       isFiber = thePostPVname == "WLSFiber"
                      || thePostPVname == "Clad1"
                      || thePostPVname == "Clad2";
  
