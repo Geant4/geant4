@@ -23,7 +23,7 @@
 #ifndef TVANAPlot_h
 #define TVANAPlot_h
 
-#include "Analysis/src/VPlot.h"
+#include "VPlot.h"
 #include "globals.hh"
 
 template <class DataPointType>

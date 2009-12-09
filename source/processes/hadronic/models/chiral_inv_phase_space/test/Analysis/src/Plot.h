@@ -24,8 +24,8 @@
 #define ANAPlot_h
 
 #include <vector>
-#include "Analysis/src/DataPoint.h"
-#include "Analysis/src/TVPlot.h"
+#include "DataPoint.h"
+#include "TVPlot.h"
 
 template <class DataPointType, class FilterType>
 class ANAPlot : public TVANAPlot<DataPointType>
@@ -40,15 +40,13 @@ class ANAPlot : public TVANAPlot<DataPointType>
     {
       if(aPDG==thePDG)
       {
-        for(G4int i=0; i<theDataPoints.size(); i++)
-	{
-	  if(theDataPoints[i].InsertAt(anEnergy, aXsec)) break;
-	}
+        for(unsigned i=0; i<theDataPoints.size(); ++i)
+          if(theDataPoints[i].InsertAt(anEnergy, aXsec)) break;
       }
       return aPDG==thePDG;
     }
     
-    void DumpInfo(ostream & aOStream, G4String aPreFix)
+    void DumpInfo(ostream& , G4String aPreFix)
     {
       G4cout <<" Dumping info for PDG = "<<thePDG<<G4endl;
       G4String dot = ".";
@@ -56,14 +54,8 @@ class ANAPlot : public TVANAPlot<DataPointType>
       G4cout<< it<<G4endl;
       ofstream theOutput(it);
       G4double aWeight = theTotalXsec/theStatistics/theFilter->RelativeGeometricalAcceptance();
-      for(G4int i=0; i<theDataPoints.size(); i++)
-      {
-//        theDataPoints[i].DumpInfo(aOStream);
-        if(theOutputFile!="") 
-	{
-	  theDataPoints[i].DumpInfo(theOutput, aWeight);
-	}
-      }
+      for(unsigned i=0; i<theDataPoints.size(); ++i)
+        if(theOutputFile!="") theDataPoints[i].DumpInfo(theOutput, aWeight);
     }
     
     G4bool Filter(ANAParticle * aPart) 

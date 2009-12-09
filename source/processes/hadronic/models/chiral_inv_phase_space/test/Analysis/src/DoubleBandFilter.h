@@ -23,7 +23,7 @@
 #ifndef DoubleBandFilter_h
 #define DoubleBandFilter_h
 
-#include "Analysis/src/VFilter.h"
+#include "VFilter.h"
 #include "globals.hh"
 
 class DoubleBandFilter : public TVANAFilter<G4double>

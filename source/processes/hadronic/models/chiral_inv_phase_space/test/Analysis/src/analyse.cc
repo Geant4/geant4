@@ -20,11 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-#include "Analysis/src/ParticleInfo.h"
+using namespace std;
+#include "ParticleInfo.h"
 #include "globals.hh"
 #include <fstream>
 
-main()
+int main()
 {
   // ANAParticleInfo(G4double xSec, G4String aFileName);
   // Analyse the stuff
@@ -52,13 +53,13 @@ main()
       G4cout << " IT! "<<inputFile<<G4endl;
       G4double crossSection;
       G4double A;
-      G4double nevents;
+      G4int nevents;
       input >> crossSection;
       crossSection *= millibarn;
       input >> A;
       input >> nevents;
       G4double weight = crossSection/A;
-    G4cout << "IT!!!!!"<<crossSection<<" "<<A<<" "<<nevents<<" "<<weight<< G4endl;
+      G4cout<<"CS="<<crossSection<<", A="<<A<<", nE="<<nevents<<", W="<<weight<< G4endl;
       G4String file("../logs/liste.");
       G4String it;
       it = file+fileName;

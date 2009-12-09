@@ -29,33 +29,23 @@
 class ANAParticle
 {
   public:
-    ANAParticle(G4int aCode, G4double apx, G4double apy, G4double apz, G4double anenergy)
-    : pdgCode(aCode), px(apx), py(apy), pz(apz), energy(anenergy) {}
+    ANAParticle(G4int aCode, G4double apx, G4double apy, G4double apz, G4double anenergy):
+      charge(0), pdgCode(aCode), energy(anenergy), px(apx), py(apy), pz(apz) {}
+
     ANAParticle(){}
-    G4bool Init(ifstream & theData);
+
+    G4bool Init(ifstream& theData);
     
-    G4int GetCharge(){return charge;}
-    G4int GetPDGCode(){return pdgCode;}
-    G4double GetEnergy() {return energy;}
-    G4double GetKineticEnergy()
-    {
-      return energy - GetMomentum();
-    }
-    G4double GetPx() {return px;}
-    G4double GetPy() {return py;}
-    G4double GetPz() {return pz;}
-    G4double GetMomentum()
-    {
-      G4double result = sqrt(max(G4double(0), px*px+py*py+pz*pz));
-      return result;
-    }
-    G4double GetCosTheta() { return pz/GetMomentum(); }
-    
-    G4double GetWeight() 
-    {
-      G4double result = 1./(2.*3.14159265*GetMomentum());
-      return result;
-    }
+    G4int GetCharge()           {return charge;}
+    G4int GetPDGCode()          {return pdgCode;}
+    G4double GetEnergy()        {return energy;}
+    G4double GetKineticEnergy() {return energy - GetMomentum();}
+    G4double GetPx()            {return px;}
+    G4double GetPy()            {return py;}
+    G4double GetPz()            {return pz;}
+    G4double GetMomentum()      {return sqrt(max(0., px*px+py*py+pz*pz));}
+    G4double GetCosTheta()      {return pz/GetMomentum();}
+    G4double GetWeight()        {return 1./(twopi*GetMomentum());}
     
   private:
   G4int charge;
@@ -66,8 +56,7 @@ class ANAParticle
   G4double pz;
 };
 
-inline
-G4bool ANAParticle::Init(ifstream & theData)
+inline G4bool ANAParticle::Init(ifstream& theData)
 {
   G4int dummy;
   if(!(theData>>charge)) return false;

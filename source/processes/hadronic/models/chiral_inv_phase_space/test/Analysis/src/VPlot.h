@@ -24,7 +24,7 @@
 #define VANAPlot_h
 
 #include <iostream>
-#include "Analysis/src/Particle.h"
+#include "Particle.h"
 #include "globals.hh"
 
 class VANAPlot
