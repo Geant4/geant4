@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2009-12-07 16:59:20 gunter Exp $
+$Id: History,v 1.47 2009-12-09 10:05:42 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.46 2009-12-07 16:59:20 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9-Dec-2009 G.Folger                  (testtools-QMtest-V09-02-38)
+- add test44, using only test44.in so far
 
 7-Dec 2009 G.Folger                  (testtools-QMtest-V09-02-37)
 - remove dependency for builds failing due to XercesC on slc5
