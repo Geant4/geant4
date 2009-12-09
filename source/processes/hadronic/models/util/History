@@ -14,7 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 December 2009 Gunter Folger     hadr-mod-util-V09-02-05
+--------------------------------------------------------
+- G4WilsonRadius.cc change provided by M.Mendenhall via P.Truscott:
+   Data vector r[] made static const
+   
 19 November 2009 Gunter Folger     hadr-mod-util-V09-02-04
+--------------------------------------------------------
 -  Restore methods storing/retrieving G4SplitableHadron*, 
    now in use in FTF
 
