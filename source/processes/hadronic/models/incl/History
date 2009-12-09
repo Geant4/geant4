@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.25 2009-12-08 16:25:04 kaitanie Exp $
+$Id: History,v 1.26 2009-12-09 10:36:40 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,11 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+09 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-08)
+---------------------------------------------------------
+- Fix: Added a safeguard against division by zero in INCL nucleon
+  transmission probability calculation.
 
 08 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-07)
 ---------------------------------------------------------

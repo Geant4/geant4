@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.28 2009-12-08 16:25:04 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.29 2009-12-09 10:36:40 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -6864,7 +6864,7 @@ G4double G4Incl::transmissionProb(G4double E, G4double iz, G4double izn, G4doubl
   if (E > v0) {
     x = std::sqrt(E*(E - v0));
     barr = 4.0*x/(E + E - v0 + x + x);
-    if (iz > 0) {
+    if (iz > 0 && izn != 0) { // izn = 0 causes division by zero
       G4double b = izn*1.44/r;
       G4double px = std::sqrt((E - v0)/b);
       
