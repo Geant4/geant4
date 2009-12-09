@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.30 2009-12-06 11:17:02 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.31 2009-12-09 16:14:12 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -539,7 +539,9 @@ G4bool G4FTFModel::PutOnMassShell()
 // ------------------------------------------------------------
 G4bool G4FTFModel::ExciteParticipants()
 {
-        G4bool Successfull=false;
+    G4bool Successfull(false);
+    do {                           // } while (Successfull == false)
+        Successfull=false;
         theParticipants.StartLoop();
 
 	while (theParticipants.Next())
@@ -573,7 +575,7 @@ G4bool G4FTFModel::ExciteParticipants()
             }
            }
         }       // end of while (theParticipants.Next())
-
+       } while (Successfull == false);
 	return Successfull;
 }
 // ------------------------------------------------------------
@@ -662,10 +664,13 @@ void G4FTFModel::GetResidualNucleus()
 G4ThreeVector G4FTFModel::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
 	
-	G4double Pt2;
-        Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
+	G4double Pt2(0.);
+        if(AveragePt2 <= 0.) {Pt2=0.;}
+        else
+        {
+         Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
                 (std::exp(-maxPtSquare/AveragePt2)-1.)); 
-	
+	}
 	G4double Pt=std::sqrt(Pt2);
 	G4double phi=G4UniformRand() * twopi;
 	

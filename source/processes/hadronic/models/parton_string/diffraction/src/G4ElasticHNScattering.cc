@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.12 2009-11-25 09:14:03 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.13 2009-12-09 16:14:12 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -236,10 +236,13 @@ G4bool G4ElasticHNScattering::
 G4ThreeVector G4ElasticHNScattering::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
 	
-	G4double Pt2;
-        Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
+	G4double Pt2(0.);
+        if(AveragePt2 <= 0.) {Pt2=0.;}
+        else
+        {
+         Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
                 (std::exp(-maxPtSquare/AveragePt2)-1.)); 
-	
+	}
 	G4double Pt=std::sqrt(Pt2);
 	G4double phi=G4UniformRand() * twopi;
 	

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.18 2009-12-06 11:17:02 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.19 2009-12-09 16:14:12 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -1074,10 +1074,13 @@ G4ThreeVector G4DiffractiveExcitation::GaussianPt(G4double AveragePt2,
                                                   G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
 
-	G4double Pt2;
-        Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
-                           (std::exp(-maxPtSquare/AveragePt2)-1.));
-
+	G4double Pt2(0.);
+        if(AveragePt2 <= 0.) {Pt2=0.;}
+        else
+        {
+         Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
+                            (std::exp(-maxPtSquare/AveragePt2)-1.));
+        }
 	G4double Pt=std::sqrt(Pt2);
 	G4double phi=G4UniformRand() * twopi;
 	return G4ThreeVector (Pt*std::cos(phi), Pt*std::sin(phi), 0.);
