@@ -105,10 +105,10 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	// A data ASCII file will be generated in main through the command let -> StoreData(filename)
 	// Put this command at endOfRunAction in case of multiple runs!
 	//
-	//if (A==12 && Z==6) // primary and secondary C12
+	if (A==12 && Z==6) // primary and secondary C12
 	//if (A==4 && Z==2) // Primary and secondary Helium
 	//if (A==1 && Z==1)    // primary and sec. protons 
-	if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
+	//if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
 	    let -> FillEnergySpectrum(particleDef, kineticEnergy, i, j, k);
     }	 
     if(energyDeposit != 0)                       

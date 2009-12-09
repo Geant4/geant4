@@ -24,18 +24,6 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyLet.hh,v 1.0, May 2007;
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), M. Sallemi, A. Salvia
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
 
 #ifndef HadrontherapyLet_h
 #define HadrontherapyLet_h 1
@@ -49,11 +37,11 @@
 struct ionLet 
  { 
      G4String fullName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
-     G4String name; // simple name without excitation energy: He3, He4, Li7, ...
-     //G4int Z; // atomic number
-     //G4int A; // mass number
-     G4double *stop; // stopping power table
-     G4int **pSpectrum; // pointer to energy spectrum 
+     G4String name;     // simple name without excitation energy: He3, He4, Li7, ...
+     //G4int Z;         // atomic number
+     //G4int A;		// mass number
+     G4double *stop;	// stopping power table
+     G4int **spectrum; // energy spectrum 
      G4double *letT , *letD;  //Track averaged LET and dose averaged LET 
  };
 

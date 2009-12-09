@@ -185,10 +185,7 @@ void HadrontherapyInteractionParameters::PlotStopping(const G4String& filetype)
 G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String material)
 {
     Pmaterial = G4NistManager::Instance()->FindOrBuildMaterial(material);
-    if (Pmaterial)
-    {
-	density = Pmaterial -> GetDensity(); 
-    }
+    if (Pmaterial) density = Pmaterial -> GetDensity(); 
     return Pmaterial;
 }
 // Parse arguments line

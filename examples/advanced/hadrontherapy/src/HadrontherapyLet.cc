@@ -52,7 +52,7 @@ HadrontherapyLet* HadrontherapyLet::GetInstance()
 HadrontherapyLet::HadrontherapyLet(HadrontherapyDetectorConstruction* pDet)
    :pParam(0)
 {
-    pParam = new HadrontherapyInteractionParameters(false);
+    pParam = new HadrontherapyInteractionParameters(false); // no messenger
     //  letMessenger = new HadrontherapyLetMessenger(this);
     matrix = HadrontherapyMatrix::GetInstance();
     if (!matrix) G4Exception("HadrontherapyMatrix not found. Firstly instance it.");
@@ -89,8 +89,8 @@ void HadrontherapyLet::Clear()
     for (size_t i=0; i < ionLetStore.size(); i++)
     {
 	for(G4int v=0; v < nVoxels; v++) 
-	    if(ionLetStore[i].pSpectrum[v]) delete[] ionLetStore[i].pSpectrum[v]; 
-	delete[] ionLetStore[i].pSpectrum;
+	    if(ionLetStore[i].spectrum[v]) delete[] ionLetStore[i].spectrum[v]; 
+	delete[] ionLetStore[i].spectrum;
     }
     ionLetStore.clear();
 
@@ -118,13 +118,13 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
 	if (ionLetStore[l].name == name) 
 	{
 
-	    if (!ionLetStore[l].pSpectrum[voxel]) 
+	    if (!ionLetStore[l].spectrum[voxel]) 
 	    {
-		ionLetStore[l].pSpectrum[voxel] = new G4int[nBins];// allocate new histogram for every hit voxel!
-		for(G4int bin=0; bin < nBins; bin++) ionLetStore[l].pSpectrum[voxel][bin] = 0; // clear it
+		ionLetStore[l].spectrum[voxel] = new G4int[nBins];// allocate new histogram for every hit voxel!
+		for(G4int bin=0; bin < nBins; bin++) ionLetStore[l].spectrum[voxel][bin] = 0; // clear it
 	    }
-	    ionLetStore[l].pSpectrum[voxel][enBin]++; // fill spectrum
-	    return ; // exit
+	    ionLetStore[l].spectrum[voxel][enBin]++; // fill spectrum
+	    return ; 
 	}
     }
     // Just another type of ion/particle for our store...
@@ -138,27 +138,23 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
 	new G4double[nVoxels]  // Let_D
     };
 
-    // Stopping powers table
+    // Get stopping powers table
     G4int bin = 0;
     for(G4double E = binWidth/2; E < energyLimit ; E += binWidth )
     {
 	ion.stop[bin++] = pParam -> GetStopping(E, particleDef, detectorMat)*(keV/um);
-	G4cout << E/MeV << '\t' << ion.stop[bin-1] << '\t' << bin-1 << '\t' << nBins << '\n';
+	//G4cout << E/MeV << '\t' << ion.stop[bin-1] << '\t' << bin-1 << '\t' << nBins << '\n';
     }
     // Clear array of pointer to histograms
-    for(G4int v=0; v < nVoxels; v++) ion.pSpectrum[v] = 0;
-    ion.pSpectrum[voxel] = new G4int[nBins];// allocate new histogram
-    for(int bin=0; bin<nBins; bin++) ion.pSpectrum[voxel][bin] = 0; // clear it
+    for(G4int v=0; v < nVoxels; v++) ion.spectrum[v] = NULL;
+    ion.spectrum[voxel] = new G4int[nBins];// allocate new histogram
+    for(int bin=0; bin<nBins; bin++) ion.spectrum[voxel][bin] = 0; // clear it
     
-    ion.pSpectrum[voxel][enBin]++; // fill spectrum
+    ion.spectrum[voxel][enBin]++; // fill spectrum
     // Initialize let
-    for(G4int v=0; v < nVoxels; v++) 
-    {
-	ion.letT[v] = 0.; 
-	ion.letD[v] = 0.;
-    }
-    G4cout << "Allocated LET data for " << ion.fullName << '\n';
+    for(G4int v=0; v < nVoxels; v++) ion.letT[v] = ion.letD[v] = 0.;
     ionLetStore.push_back(ion);
+    G4cout << "Allocated LET data for " << ion.name << G4endl;
 }
 
 // Issued at endOfRunAction!
@@ -167,27 +163,26 @@ void HadrontherapyLet::LetOutput()
 {
     for (size_t l=0; l < ionLetStore.size(); l++)
     {
-	for(G4int v=0; v < nVoxels; v++) // indice sui voxels in cui calcolare il LET
+	for(G4int v=0; v < nVoxels; v++)  
 	{
-	    // Take LET for voxel v  
+	    // Numeric calculation to get LET_T & LET_D for voxel v  
 	    // Med. Phys. 30(5), May 2003. Equations (13) and (14)
-	    // only if a Spectrum exists
-	    if ( ionLetStore[l].pSpectrum[v] )
+	    if ( ionLetStore[l].spectrum[v] )
 	    {
 		nT = dT = nD = dD = 0.;
-		for(G4int bin=0; bin < nBins; bin++) // m histogram bin index
+		for(G4int bin=0; bin < nBins; bin++) // histogram bin index
 		{
-		    // numeratore e denominatore per Let_Track(nT,dT) e Let_Dose(nD,dD)
-		    nT += ionLetStore[l].pSpectrum[v][bin]*ionLetStore[l].stop[bin];
-		    dT += ionLetStore[l].pSpectrum[v][bin];
+		    // numerator and denominator for Let_Track(nT,dT), Let_Dose(nD,dD)
+		    nT += ionLetStore[l].spectrum[v][bin]*ionLetStore[l].stop[bin];
+		    dT += ionLetStore[l].spectrum[v][bin];
 
-		    nD += ionLetStore[l].pSpectrum[v][bin]*(ionLetStore[l].stop[bin]*ionLetStore[l].stop[bin]);
-		    dD += ionLetStore[l].pSpectrum[v][bin]*ionLetStore[l].stop[bin];
+		    nD += ionLetStore[l].spectrum[v][bin]*(ionLetStore[l].stop[bin]*ionLetStore[l].stop[bin]);
+		    dD += ionLetStore[l].spectrum[v][bin]*ionLetStore[l].stop[bin];
 
 		} 
 		//G4cout << "LetT " << nT/dT << " LetD " << nD/dD << '\n';  
-		ionLetStore[l].letT[v] = (nT/dT);
-		ionLetStore[l].letD[v] = (nD/dD);
+		ionLetStore[l].letT[v] = nT/dT;
+		ionLetStore[l].letD[v] = nD/dD;
 	    }
 	}
     }
