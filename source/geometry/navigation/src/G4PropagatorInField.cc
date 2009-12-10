@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.49 2009-11-30 11:57:46 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.50 2009-12-10 08:41:54 japost Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -662,10 +662,23 @@ FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
   currentFieldMgr = fDetectorFieldMgr;
   if( pCurrentPhysicalVolume)
   {
-     G4FieldManager *newFieldMgr = 0;
-     newFieldMgr= pCurrentPhysicalVolume->GetLogicalVolume()->GetFieldManager();
-     if ( newFieldMgr ) 
-        currentFieldMgr = newFieldMgr;
+     G4FieldManager *pRegionFieldMgr= 0, *localFieldMgr = 0;
+     G4LogicalVolume* pLogicalVol= pCurrentPhysicalVolume->GetLogicalVolume();
+
+     if( pLogicalVol ) { 
+	// Value for Region, if any, Overrides 
+	G4Region*  pRegion= pLogicalVol->GetRegion();
+	if( pRegion ) { 
+	   pRegionFieldMgr= pRegion->GetFieldManager();
+	   if( pRegionFieldMgr ) 
+	     currentFieldMgr= pRegionFieldMgr;
+	}
+
+	// 'Local' Value from logical volume, if any, Overrides 
+	localFieldMgr= pLogicalVol->GetFieldManager();
+	if ( localFieldMgr ) 
+	   currentFieldMgr = localFieldMgr;
+     }
   }
   fCurrentFieldMgr= currentFieldMgr;
 
