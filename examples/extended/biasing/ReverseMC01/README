@@ -15,6 +15,11 @@ This is the README file for the first G4 example illustrating the use of the Rev
 application. The  Reverse Monte Carlo method is also known as the Adjoint Monte Carlo (AMC) method  and 
 in this document we will alternate both Reverse and Adjoint terms.
 
+Other documentation
+-------------------
+See also the section 3.7.3 Adjoint/Reverse Monte carlo in the 
+Geant4 User guide for application developers.
+
 
 Table of Contents:
 -----------------
@@ -26,7 +31,8 @@ Table of Contents:
 	2.2. Forward tracking phase
 	2.3. Reverse processes
 	2.4. Remark on Nb of adjoint particle types and G4 events considered in an adjoint simulation
-	
+	2.5. Modifications to bring in a existing G4 application to use the Reverse MC method
+
 3.exampleRMC01
 	3.1. Geometry
 	3.2. Physics
@@ -39,7 +45,7 @@ Table of Contents:
 	4.2.  G4UI commands in the directory /adjoint_physics
 	4.3.  G4UI commands in the directory  /RMC01
 
-5. Known problems and limitation
+5. Known issues
 	5.1. Rare too high weight in the adjoint simulation
 	5.2. Limitation of the reverse bremsstrahlung
 	5.3.Limitation of the reverse multiple scattering
@@ -63,81 +69,88 @@ or exceed an energy threshold. During the reverse tracking reverse reactions are
 2. The Reverse Monte Carlo mode in Geant4 (since G4.9.3 release)
 ----------------------------------------------------------------
 ----------------------------------------------------------------
+(See also the section 3.7.3 Adjoint/Reverse Monte carlo in the 
+Geant4 User guide for application developers.)
+
 Different G4Adjoint classes have been implemented into the Geant4 
 toolkit to run an adjoint/reverse simulation in a Geant4 application.
-In this implementation an adjoint run is divided in a serie 
+In this implementation an adjoint run is divided in a succession 
 of alternative adjoint and forward tracking  of adjoint and normal particles.
-One event in the common sense of Geant4 treats one of this tracking phase. 
+One Geant4 event treats one of this tracking phase.
 
 
 2.1. Reverse tracking phase:
 -------------------------
 
-Adjoint particles (adjoint_e-, adjoint_gamma,...) are generated randomly one by one on the so called adjoint source
-with  random energy (1/E distribution) and direction. The adjoint source is the 
-external surface of a user defined volume or of a user defined sphere. The adjoint
-source should contain one or several sensitive volumes and should be small compared to the entire geometry.
-The user can set the minimum and maximum energy of the adjoint source. After its
-generation the adjoint primary  particle is tracked backward in the geometry till a user  defined external surface 
-(spherical or boundary of a volume) or is killed before if it reaches a user defined  upper energy limit that 
-represents the maximum energy of the external source. During the reverse tracking, reverse
-processes take place where  the adjoint particle being tracked can be either scattered
-or transformed in another type of adjoint particle. During the reverse tracking the
-G4AdjointSimulationManager replaces the user defined Primary, Run, ... actions, by its own actions.
-The reverse tracking phase corresponds to one event in the common sense of Geant4.
+Adjoint particles (adjoint_e-, adjoint_gamma,...) are generated one by one on the so called
+adjoint source with random position, energy (1/E distribution) and direction. The adjoint
+source is the external surface of a user defined volume or of a user defined sphere. The 
+adjoint source should contain one or several sensitive volumes and should be small 
+compared to the entire geometry. The user can set the minimum and maximum energy of the 
+adjoint source. After its generation the adjoint primary particle is tracked backward in
+the geometry till a user defined external surface (spherical or boundary of a volume) 
+or is killed before if it reaches a user defined upper energy limit that represents the
+maximum energy of the external source. During the reverse tracking, reverse processes take 
+place where the adjoint particle being tracked can be either scattered or transformed in 
+another type of adjoint particle. During the reverse tracking the 
+G4AdjointSimulationManager replaces the user defined primary, run, stepping, ... actions, 
+by its own actions. A reverse tracking phase corresponds to one Geant4 event.
 
 2.2. Forward tracking phase:
 --------------------------
 
 When an adjoint particle reaches the external surface its weight, type,  position, 
-and directions are registered and a  normal primary particle with a type equivalent to the last generated primary
-adjoint is generated with the same energy, position but opposite direction  and is  tracked in the forward direction 
+and direction are registered and a  normal primary particle with a type equivalent 
+to the last generated adjoint primary is generated with the same energy, 
+position but opposite direction  and is  tracked in the forward direction 
 in the sensitive region as in a forward MC simulation. 
-During this forward tracking phase the  
-event, stacking, stepping, tracking actions defined by the user for its general forward application are used. 
-By this clear separation between
-adjoint and forward tracking phases , the code of the user developed for a forward simulation should be only slightly 
-modified to adapt it for an adjoint simulation. Indeed  the computation of the signal is done by the same actions 
-or classes that the one used in the forward simulation mode.   
-The forward tracking phase corresponds to one event in the common sense of Geant4.
+During this forward tracking phase the  event, stacking, stepping, tracking actions defined 
+by the user for its general forward application are used. 
+By this clear separation between adjoint and forward tracking phases, the code of the 
+user developed for a forward simulation should be only slightly 
+modified to adapt it for an adjoint simulation. Indeed  the computation of the signal 
+is done by the same user actions or analysis classes that the one used in the forward 
+simulation mode.  The forward tracking phase corresponds to one event in the common sense 
+of Geant4.
 
 
 2.3. Reverse Processes:
 ---------------------
 
 During the reverse tracking phase reverse processes act on the adjoint particles.
-The Reverse processes that have been implemented till now are:
+The Reverse processes that  are available at the moment in Geant4 are the:
 	- Reverse discrete  Ionization for e-, proton and ions
 	- Continuous gain of energy by ionization and bremsstrahlung for e- and by ionization for protons and ions
 	- Reverse discrete e- bremsstrahlung  
 	- Reverse photoelectric effect 
 	- Reverse Compton scattering
-	- An approximated multiple scattering (MS) is implemented where the reverse MS is equivalent to the forward MS 
-	but applied to adjoint
-		particles
+	- Approximated multiple scattering (MS) (see section 5.3)
+		
 
 It is important to note that the electromagnetic reverse processes are cut dependent 
-as their equivalent forward processes. The implementation of the reverse processes is based on the forward processes
-implemented in the G4 standard electromagnetic packages.		     
+as their equivalent forward processes. The implementation of the reverse processes is
+ based on the forward processes
+implemented in the G4 standard electromagnetic package.		     
 
 
-2.4. Remark on Nb of adjoint particle types and G4 events considered in an adjoint simulation:
+2.4. Remark on Nb of adjoint particle types and  Nb of G4 events considered in an adjoint simulation:
 ---------------------------------------------------------------------------------
 
-The list of type of adjoint and forward particles that are generated alternatively on the adjoint source 
-and considered in the simulation  is a function of the physics processes declared in the physics list.
-For example if only the e- and gamma electromagnetic physics is considered, 
-adjoint_e- and adjoint_gamma will be consider as primaries.
-In this case on adjoint event will be divided in four G4 event for the tracking of the adjoint e-, the tracking 
-of its equivalent forward e-, the tracking of 
-an adjoint gamma and the tracking of its equivalent forward gamma. 
-In this case a run of 100 adjoint events will consist in 400 G4 events.
-If you add the proton ionization adjoint and forward protons are also considered as primary and we obtain 
-600 G4 events for 100 adjoint events.  
-
+The list of type of adjoint and forward particles that are generated on the adjoint source
+and considered in the simulation is a function of the adjoint processes declared in the 
+physics list. For example if only the e- and gamma electromagnetic processes are considered
+, only adjoint e- and adjoint gamma will be considered as primaries. In this case an 
+adjoint event will be divided in four G4 event consisting in the reverse tracking of an 
+adjoint e-, the forward tracking of its equivalent forward e-, the reverse tracking of 
+an adjoint gamma, and the forward tracking of its equivalent forward gamma. In this case a 
+run of 100 adjoint events will consist into 400 Geant4 events. If the proton ionization is
+also considered adjoint and forward protons  are also generated as primaries and 600 Geant4
+events are processed for 100 adjoint events.
 
 2.5. Modifications to bring in a existing G4 application to use the Reverse MC method
 --------------------------------------------------------------------------------
+(for more details see also the section 3.7.3 Adjoint/Reverse Monte carlo in the 
+Geant4 User guide for application developers.)
 
 Due the clear separation  between the reverse and forward  tracking  phase  only few modifications are needed 
 to an existing  Geant4 application in order to adapt it for the use of the reverse simulation mode.
@@ -181,8 +194,8 @@ its code as such:
 3. exampleRMC01
 ---------------
 ---------------
-The example RMC01 illustrates how to modify a G4 application in order to use both forward and reverse MC modes in the
-same code.
+The example RMC01 illustrates how to modify a G4 application in order to use 
+both forward and reverse MC modes in the same code.
 	   
 	
 3.1. Geometry:
@@ -263,7 +276,7 @@ The outputs of a forward simulation are:
 
 3.4. Run macrofiles:
 ------------------
-Two example run macro files are distributed with the codes:
+The following example run macro files are distributed with the code:
 	
 	-run_adjoint_simulation_electron.g4mac and  run_adjoint_simulation_proton.g4mac for adjoint simulations 
 	
@@ -285,7 +298,7 @@ This normalization factor is explained by the following:
 	-In run_fwd_simulation.g4mac the source is set on a sphere of 10 cm radius (see /gps commands in
 	 macrofile).Therefore the omnidirectional  fluence for the fwd simulation  is 1./(pi*R^2) with R=10cm. 
 	
-	-The adjoint results  are normalised to a fluence of 1/cm2.
+	-The adjoint results  are normalized to a fluence of 1/cm2.
 	    (See command /RMC01/analysis/SetExponentialSpectrumForAdjointSim in macrofile)
 	
 	-In conclusion to compare the adjoint and forward results, the forward results should
@@ -465,7 +478,7 @@ adjoint simulation results and fix the expected precision of the computed Edep:
 
 
 
-5. Known problems and limitation
+5. Known issues
 --------------------------------
 --------------------------------
 
@@ -508,31 +521,4 @@ For the reverse multiple scattering we are using the same models than for the fo
 This approximation makes that the discrepancy between the adjoint and forward 
 simulation cases can get to a level of ~ 10-15% relative differences in the test cases that we have considered. 
 In the future we plan to improve   the adjoint multiple scattering models  by forcing the computation of 
- multiple scattering effect at the end of an adjoint step.
- 
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
+multiple scattering effect at the end of an adjoint step.
