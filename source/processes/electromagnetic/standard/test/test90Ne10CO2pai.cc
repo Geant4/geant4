@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.6 2008-12-18 13:01:40 gunter Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.7 2009-12-10 16:22:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,7 @@
 //
 // 11.04.08, V. Grichine test of PAI predictions for 90% Ne + 10% CO2
 //                       ALICE TPC gas mixture 
+// 8.12.09   V. Grichine update for T2K gas mixture
 
 #include "G4ios.hh"
 #include <fstream>
@@ -173,6 +174,16 @@ int main()
   G4String name, symbol;
 
 
+  a = 1.01*g/mole;
+  G4Isotope* ih1 = new G4Isotope("Hydrogen",iz=1,n=1,a);
+
+  a = 2.01*g/mole;
+  G4Isotope* ih2 = new G4Isotope("Deuterium",iz=1,n=2,a);
+
+  G4Element* elH = new G4Element(name="Hydrogen",symbol="H",2);
+  elH->AddIsotope(ih1,.999);
+  elH->AddIsotope(ih2,.001);
+
   a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon",symbol="C", ez=6., a);
 
@@ -182,7 +193,12 @@ int main()
   a = 16.00*g/mole;
   G4Element* elO = new G4Element(name="Oxygen",symbol="O", ez=8., a);
 
+  
+  a = 19.00*g/mole;
+  G4Element* elF  = new G4Element(name="Fluorine", symbol="F", z=9., a);
  
+  a = 39.948*g/mole;
+  G4Element* elAr = new G4Element(name="Argon", symbol="Ar", z=18., a);
 
   // Neon as detector gas, STP
 
@@ -231,13 +247,65 @@ int main()
   density *= 273./292.;
   density *= 0.966/1.01325;
 
-  G4cout<<"density of Ne857CO295N2T292 = "<<density*cm3/mg<<"  mg/cm3"<<G4endl;
+  // G4cout<<"density of Ne857CO295N2T292 = "<<density*cm3/mg<<"  mg/cm3"<<G4endl;
 
   G4Material* Ne857CO295N2T292 = new G4Material(name="Ne857CO295N2T292"  , density, 
                              ncomponents=3);
   Ne857CO295N2T292->AddMaterial( Ne,            fractionmass = 0.76065 );
   Ne857CO295N2T292->AddMaterial( CarbonDioxide, fractionmass = 0.18140 );
   Ne857CO295N2T292->AddMaterial( Nitrogen,      fractionmass = 0.05795 );
+
+
+  /*
+  // Ar as detector gas,STP
+
+  density = 1.7836*mg/cm3 ;       // STP
+  G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
+  Argon->AddElement(elAr, 1);
+
+  // iso-Butane (methylpropane), STP
+
+  density = 2.67*mg/cm3 ;
+  G4Material* isobutane = new G4Material(name="isoC4H10",density,nel=2) ;
+  isobutane->AddElement(elC,4) ;
+  isobutane->AddElement(elH,10) ;
+
+  // CF4 from ATLAS TRT estimation
+
+  G4double TRT_CF4_density = 3.9*mg/cm3;
+  G4Material* TRT_CF4 = new G4Material(name="TRT_CF4", TRT_CF4_density, nel=2,
+                                           kStateGas,293.15*kelvin,1.*atmosphere);
+  */
+
+  // Philippe Gros T2K mixture version
+  // Argon                                                                                                       
+                                           
+  density     = 1.66*mg/cm3;
+  pressure    = 1*atmosphere;
+  temperature = 288.15*kelvin;
+  G4Material* Argon = new G4Material(name="Ar", z=18., a=39.948*g/mole,
+                         density, kStateGas,temperature,pressure);
+
+   
+  // IsoButane    
+                                                                                                    
+  density     = 2.51*mg/cm3;
+  G4Material* Isobu = new G4Material(name="isoC4H10", z=34.,a=58.123*g/mole, 
+                                       density, kStateGas,temperature,pressure);
+
+  // Tetrafluoromethane   
+                                                                                            
+  density = 3.72*mg/cm3;
+  G4Material* FlMet = new
+  G4Material(name="CF4",z=42.,a=88.01*g/mole,density,kStateGas,temperature,pressure);
+
+  // Argon + 3% tetrafluoromethane  + 2% iso-butane     
+                                                            
+  density = 1.748*mg/cm3;
+  G4Material* t2kGasMixture = new G4Material(name="t2kGasMixture", density, ncomponents=3);
+  t2kGasMixture->AddMaterial(Argon, fractionmass = 90.9*perCent);
+  t2kGasMixture->AddMaterial(FlMet, fractionmass = 6.3*perCent);
+  t2kGasMixture->AddMaterial(Isobu, fractionmass = 2.8*perCent);
 
 
   G4int i, j, jMax, k, numOfMaterials, iSan, nbOfElements, sanIndex, row;
@@ -260,7 +328,8 @@ int main()
 
 
   // G4String testName = "N2";
-  G4String testName = "Ne10CO2";
+  // G4String testName = "Ne10CO2";
+  G4String testName = "t2kGasMixture";
   // G4String testName = "Ne10CO2T293";
   // G4String testName = "Ne857CO295N2T292";
 
@@ -373,24 +442,28 @@ int main()
 
      kineticEnergy = 10.0*keV; // 100.*GeV;    // 10.0*keV;  // 110*MeV; // for proton
 
+     kineticEnergy = 5*GeV; // for electrons
+
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
-     jMax = 70; // 70;
+     // jMax = 70; // 70;
+     jMax = 1; // 70;
 
-     outFile<<jMax<<G4endl;
+     // outFile<<jMax<<G4endl;
 
      for( j = 0; j < jMax; j++ )
      {
-       tau      = kineticEnergy/proton_mass_c2;
+       // tau      = kineticEnergy/proton_mass_c2;
+       tau      = kineticEnergy/electron_mass_c2;
        gamma    = tau +1.0;
        bg2      = tau*(tau + 2.0);
        bg = std::sqrt(bg2);
        beta2    = bg2/(gamma*gamma);
        // G4cout<<"bg = "<<bg<<";  b2 = "<<beta2<<G4endl<<G4endl;
        rateMass = electron_mass_c2/proton_mass_c2;
-
-       Tmax     = 2.0*electron_mass_c2*bg2
-                   /(1.0+2.0*gamma*rateMass+rateMass*rateMass);
+       
+       Tmax = 2.0*electron_mass_c2*bg2/(1.0+2.0*gamma*rateMass+rateMass*rateMass);
+       Tmax = 0.5*kineticEnergy;
 
        Tkin = maxEnergyTransfer;
 
@@ -403,7 +476,7 @@ int main()
           Tkin = Tmin + 0.5*eV;
        }
        G4PAIxSection testPAIproton(k,Tkin,bg2);
-       
+       /*       
        G4cout  
          //      << kineticEnergy/keV<<"\t\t"
          //      << gamma << "\t\t"
@@ -443,13 +516,22 @@ int main()
        //          <<testPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
        //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl;
 
-             
-       /*
+       */            
+       
        outFile<<testPAIproton.GetSplineSize()-1<<G4endl;
 
        for( i = 1; i < testPAIproton.GetSplineSize(); i++)
        {
        outFile 
+               << testPAIproton.GetSplineEnergy(i)/keV       << "\t"
+	 //  << testPAIproton.GetIntegralCerenkov(i)*cm    << "\t"
+	 //     << testPAIproton.GetIntegralMM(i)*cm    << "\t"
+	 //     << testPAIproton.GetIntegralPlasmon(i)*cm     << "\t"
+         //      << testPAIproton.GetIntegralResonance(i)*cm   << "\t"
+               << testPAIproton.GetIntegralPAIxSection(i)*cm << "\t" 
+               << G4endl;
+
+       G4cout 
                << testPAIproton.GetSplineEnergy(i)/keV       << "\t"
                << testPAIproton.GetIntegralCerenkov(i)*cm    << "\t"
                << testPAIproton.GetIntegralMM(i)*cm    << "\t"
@@ -457,9 +539,10 @@ int main()
                << testPAIproton.GetIntegralResonance(i)*cm   << "\t"
                << testPAIproton.GetIntegralPAIxSection(i)*cm << "\t" 
                << G4endl;
+
        }
        
-       */
+      
 
        
        /*
