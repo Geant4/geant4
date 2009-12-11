@@ -238,7 +238,7 @@ processes/electromagnetic/highenergy             emhighenergy-V09-02-03
   section threshold.
 - G4eeTo3PiModel: fixed vector product in matrix element.
 
-processes/electromagnetic/lowenergy              emlowen-V09-02-68
+processes/electromagnetic/lowenergy              emlowen-V09-02-69
 -----------------------------------
 - G4IonParametrisedLossModel: moved from original ICRU 73 classes to new class
   (G4IonStoppingData), which is capable of reading stopping power data files
@@ -257,8 +257,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-68
   function. G4IonDEDXScalingICRU73, G4IonDEDXHandler: adapted function
   according to interface changes in G4VIonDEDXScalingAlgorithm.
 - G4IonDEDXHandler: using new build methods defined in G4VIonDEDXTable
-- PIXE code cleaning and update of G4hLowEnIonisation in order to use new
-  PIXE developments.
+- Withdrawn last PIXE changes.
 - Added vapor water shell constants to G4DNARuddIonisationModel.
 - Removed memory leak in G4DNACrossSectionDataSet.
 - Added protection for secondary electron energy computation in

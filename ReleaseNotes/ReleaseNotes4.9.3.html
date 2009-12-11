@@ -488,92 +488,60 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
-    <LI>PIXE updates:<BR>
-        PIXE in Geant4 went through a first design iteration and an update
-        of the existing code. Changes are as follows:
-        <UL>
-        <LI>Added <TT>G4ecpssrKCrossSection</TT> and <TT>G4ecpssrLiCrossSection</TT>
-            classes: these classes replace <TT>G4ecpssrCrossSection</TT>
-            (removed), fixing existing bugs and improving the goodness of the
-            results.<BR>
-            The developers are thankful to Dr.M.G.Pia for searching for
-            limitations in the previous version of the software, pointing
-            existing problems and propose solution in a very collaborative way.
-            For more details, see "M.G.Pia et al.,
-            <A HREF="http://www.particle.cz/conferences/chep2009/">CHEP-2009 Conference</A>,
-            21-27 March 2009, Prague, Czech Republic".</LI>
-        <LI>Added <TT>G4empCrossSection</TT> and <TT>G4teoCrossSection</TT>
-            classes: these two classes, deriving from <TT>G4VhShellCrossSection</TT>,
-            provide the interface to empirical ionization cross sections
-            (Orlic for L shells and Paul for K).</LI>
-        <LI><TT>G4hShellCrossSection, G4hShellCrossSectionDoubleExp,
-            G4hShellCrossSectionDoubleExpData, G4hShellCrossSectionExp,
-            G4hShellCrossSectionExpData</TT> are now discontinued.</LI>
-        <LI>G4hLowEnergyIonisation</LI> has been updated to follow the new
-            design and let the user chose which model to use for the
-            calculation of shell ionization cross section through the method
-            <TT>SelectShellIonisationCS()</TT>. Dependencies on old methods
-            for cross section calculation have been removed.</LI>
-        <LI><TT>G4OrlicLiCrossSection</TT> and <TT>G4PaulKCrossSection</TT>
-            updated: bugs fixing.</LI>
-        </UL></LI>
-    <LI>Other Modifications:
-        <UL>
-        <LI>Added <TT>G4PenelopeBremsstrahlungModel</TT>, namely Bremsstrahlung
-            according to Penelope model, now inheriting from <TT>G4VEmModel</TT>.
-            Completed migration to standard-EM design for all Penelope
-            processes.</LI>
-        <LI>Added <TT>G4RayleighScattering</TT> process (inheriting from
-            <TT>G4VEmProcess</TT>) describing Rayleigh scattering. Removed
-            <TT>G4Rayleigh</TT> to avoid duplication.</LI>
-        <LI>Added <TT>G4LivermoreIonisationModel</TT>, first implementation of
-            low-energy ionisation in the new design. Updated Livermore photon
-            processes classes for handling of compound materials; added gamma
-            particle and energy range test in cross section computation.<BR>
-            Updated public interface of <TT>G4eIonisationCrossSectionHandler</TT>
-            in order to facilitate migration from <TT>G4LowEnergyIonisation</TT>
-            to <TT>G4LivermoreIonisationModel</TT>.
-            Set default angular generator in <TT>G4LivermorePhotoElectric</TT>
-            as Sauter-Gavrila.</LI>
-        <LI>First fully tested version of <TT>G4LivermoreBremsstrahlungModel</TT>,
-            completing migration of Livermore processes to new design.</LI>
-        <LI>General cleanup of new model classes for Livermore and Penelope
-            processes.</LI>
-        <LI>Fixed bug in <TT>G4PenelopeRayleigh</TT> (calculation of <TT>mfp</TT>
-            for compounds), and in momentum normalization in
-            <TT>G4PenelopeBremsstrahlungModel</TT>. Fix in
-            <TT>G4PenelopePhotoElectricModel</TT> to avoid misleading warnings.</LI>
-        <LI>Added proton case in <TT>G4CrossSectionExcitationMillerGreenPartial</TT>.</LI>
-        <LI>Design update, bug fixes and models update for atomic shell hadronic
-            cross-sections calculation.</LI>
-        <LI>Cleared annoying printout from <TT>G4AugerData</TT> transition table.</LI>
-        <LI>Added <TT>ActivateAuger()</TT> method to Penelope Compton and
-            Ionisation, so that all Penelope models have now the same interface.</LI>
-        <LI>Added protections in <TT>G4eIonisationSpectrum</TT> and
-            <TT>G4eIonisationParameters</TT>, addressing problem report
-            <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1042">#1042</A>.</LI>
-        <LI>Revision of <TT>G4IonParametrisedLossModel</TT>. Added
-            <TT>G4IonDEDXHandler</TT>, a new handler class used by the revised
-            model class. Added <TT>G4VIonDEDXScalingAlgorithm</TT>, used by the
-            handler; removed <TT>G4IonParametrisedLossTable</TT>. Moved from
-            original ICRU'73 classes to new class <TT>G4IonStoppingData</TT>,
-            capable of reading stopping power data files stored in the data
-            set; with the new tables the upper energy limit of ICRU'73 stopping
-            powers is increased to <TT>1 GeV/nucleon</TT>. Added modifier for
-            energy loss limit parameter. Changed default energy loss limit to
-            smaller value (from 0.15 to 0.01) to avoid approximate loss
-            description in case of large steps. Removed nuclear stopping from
-            model since dedicated process is available in standard EM package.
-            Minor fixes applied in energy loss computation. Bug fix avoiding
-            wrong ion ranges in case different cuts are used for a given
-            material in different regions. Added <TT>UpdateRangeCache()</TT>
-            method, removed <TT>GetRange()</TT> method.</LI>
-        <LI>Added new scaling algorithm <TT>G4IonDEDXScalingICRU73</TT>, to
-            obtain heavy ion stopping powers for ions not covered by ICRU'73
-            report (scaled from existing ICRU'73 data). Included algorithm in
-            ion model, extending the applicability of the model to very heavy
-            ions.</LI>
-        </UL></LI>
+    <LI>Added <TT>G4PenelopeBremsstrahlungModel</TT>, namely Bremsstrahlung
+        according to Penelope model, now inheriting from <TT>G4VEmModel</TT>.
+        Completed migration to standard-EM design for all Penelope
+        processes.</LI>
+    <LI>Added <TT>G4RayleighScattering</TT> process (inheriting from
+        <TT>G4VEmProcess</TT>) describing Rayleigh scattering. Removed
+        <TT>G4Rayleigh</TT> to avoid duplication.</LI>
+    <LI>Added <TT>G4LivermoreIonisationModel</TT>, first implementation of
+        low-energy ionisation in the new design. Updated Livermore photon
+        processes classes for handling of compound materials; added gamma
+        particle and energy range test in cross section computation.<BR>
+        Updated public interface of <TT>G4eIonisationCrossSectionHandler</TT>
+        in order to facilitate migration from <TT>G4LowEnergyIonisation</TT>
+        to <TT>G4LivermoreIonisationModel</TT>.
+        Set default angular generator in <TT>G4LivermorePhotoElectric</TT>
+        as Sauter-Gavrila.</LI>
+    <LI>First fully tested version of <TT>G4LivermoreBremsstrahlungModel</TT>,
+        completing migration of Livermore processes to new design.</LI>
+    <LI>General cleanup of new model classes for Livermore and Penelope
+        processes.</LI>
+    <LI>Fixed bug in <TT>G4PenelopeRayleigh</TT> (calculation of <TT>mfp</TT>
+        for compounds), and in momentum normalization in
+        <TT>G4PenelopeBremsstrahlungModel</TT>. Fix in
+        <TT>G4PenelopePhotoElectricModel</TT> to avoid misleading warnings.</LI>
+    <LI>Added proton case in <TT>G4CrossSectionExcitationMillerGreenPartial</TT>.</LI>
+    <LI>Design update, bug fixes and models update for atomic shell hadronic
+        cross-sections calculation.</LI>
+    <LI>Cleared annoying printout from <TT>G4AugerData</TT> transition table.</LI>
+    <LI>Added <TT>ActivateAuger()</TT> method to Penelope Compton and
+        Ionisation, so that all Penelope models have now the same interface.</LI>
+    <LI>Added protections in <TT>G4eIonisationSpectrum</TT> and
+        <TT>G4eIonisationParameters</TT>, addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1042">#1042</A>.</LI>
+    <LI>Revision of <TT>G4IonParametrisedLossModel</TT>. Added
+        <TT>G4IonDEDXHandler</TT>, a new handler class used by the revised
+        model class. Added <TT>G4VIonDEDXScalingAlgorithm</TT>, used by the
+        handler; removed <TT>G4IonParametrisedLossTable</TT>. Moved from
+        original ICRU'73 classes to new class <TT>G4IonStoppingData</TT>,
+        capable of reading stopping power data files stored in the data
+        set; with the new tables the upper energy limit of ICRU'73 stopping
+        powers is increased to <TT>1 GeV/nucleon</TT>. Added modifier for
+        energy loss limit parameter. Changed default energy loss limit to
+        smaller value (from 0.15 to 0.01) to avoid approximate loss
+        description in case of large steps. Removed nuclear stopping from
+        model since dedicated process is available in standard EM package.
+        Minor fixes applied in energy loss computation. Bug fix avoiding
+        wrong ion ranges in case different cuts are used for a given
+        material in different regions. Added <TT>UpdateRangeCache()</TT>
+        method, removed <TT>GetRange()</TT> method.</LI>
+    <LI>Added new scaling algorithm <TT>G4IonDEDXScalingICRU73</TT>, to
+        obtain heavy ion stopping powers for ions not covered by ICRU'73
+        report (scaled from existing ICRU'73 data). Included algorithm in
+        ion model, extending the applicability of the model to very heavy
+        ions.</LI>
     <LI>Geant4-DNA processes and models:
         <UL>
         <LI>New migrated processes and models.</LI>
@@ -854,8 +822,10 @@ please refer to the corresponding History files provided in most packages):
         Added <TT>fRangeVectorStore</TT> to ensure that range-vector is
         created only once for each material. Do not apply converter for neutron,
         anti-proton, and anti-neutron.</LI>
-    <LI>Added <TT>G4ProductionCutTable::ResetConverters()</TT> method to clear
-        temporary loss tables and range vectors after first initialisation.</LI>
+    <LI>A new method <TT>ResetConverters()</TT> has been added to
+        <TT>G4ProductionCutTable</TT>. This method allows to reduce the memory
+        footprint by clearing temporary loss tables and range vectors used at
+        initialization, if invoked when starting the first run of a session.</LI>
     <LI>Added possibility to handle cuts for protons.</LI>
     <LI>Added new command <TT>/cuts/setMaxCutEnergy</TT> to messenger.</LI>
     </UL></LI>
