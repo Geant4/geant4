@@ -596,6 +596,8 @@ please refer to the corresponding History files provided in most packages):
         <LI>Fixed cross section computation bug in
             <TT>G4DNAScreenedRutherfordElasticModel</TT> and
             <TT>G4DNAChampionElasticModel</TT>.</LI>
+        <LI>Added vapor water shell constants to
+            <TT>G4DNARuddIonisationModel</TT>.</LI>
         <LI>Added message to obsolete non-migrated Geant4-DNA cross section
             and final state classes, and non-migrated Livermore and Penelope
             classes.</LI>
@@ -934,6 +936,7 @@ please refer to the corresponding History files provided in most packages):
             factor to 0.35. Addresses a problem seen at boundary of volumes
             reported by ATLAS.</LI>
         <LI>Improved printing of diagnostics.</LI>
+        <LI>Activated field per region.</LI>
         <LI>Added new method <TT>RefreshIntersectionLocator()</TT> to update
             state.</LI>
         <LI>Deleted obsolete internal methods:
@@ -1083,6 +1086,11 @@ please refer to the corresponding History files provided in most packages):
     <LI><TT>G4V3DNucleus</TT>: added two functions to sort nucleons along
         +/- <TT>Z</TT>.</LI>
     </UL></LI>
+<LI><B>Abrasion</B>
+    <UL>
+    <LI>Fixed problems of negative <TT>sqrt()</TT> and made code more robust
+        to potential loop problems.</LI>
+    </UL></LI>
 <LI><B>Binary Cascade</B>
     <UL>
     <LI>Added interface to set de-excitation handler in
@@ -1096,6 +1104,9 @@ please refer to the corresponding History files provided in most packages):
         captured particles; correction in <TT>GetExcitationEnergy()</TT> for
         the case when all nucleons are ejected; correction for the nuclear
         field for baryons.</LI>
+    <LI>Bug fix in <TT>G4BinaryCascade::ApplyCollision()</TT>: decay products
+        outside nucleus were nevertheless counted as if these were within
+        nucleus.</LI>
     <LI>Corrected assignment to 3-vector, avoid use of 3vector=0.</LI>
     <LI>Added protection against void nucleus after cascade.</LI>
     </UL></LI>
@@ -1169,6 +1180,8 @@ please refer to the corresponding History files provided in most packages):
         particles.</LI>
     <LI>Replaced internal <TT>RndmDir()</TT> with general
         <TT>G4RandomDirection()</TT> in the code.</LI>
+    <LI>Bug fix in <TT>G4QNeutronCaptureRatio</TT> (Cu65): accelerate CuSc
+        by 1.5.</LI>
     <LI>Cleared dependency of now removed <TT>G4NucleiPropertiesTable</TT>
         class.</LI>
     </UL></LI>
@@ -1207,6 +1220,9 @@ please refer to the corresponding History files provided in most packages):
         and multi-fragmentation model are activated.</LI>
     <LI>Improved implementation of Gamma function computation in configuration
         weight inside <TT>G4FermiConfiguration</TT>.</LI>
+    <LI>Updated ablation largely to comply with updates in <TT>G4Evaporation</TT>
+        and handling of <TT>G4Fragment</TT>; fixed a bug in fragment
+        identification when evaporation isn't used.</LI>
     </UL></LI>
 <LI><B>Elastic scattering</B>
     <UL>
@@ -1244,8 +1260,7 @@ please refer to the corresponding History files provided in most packages):
         off-by-one. This bug fix corrects the impact parameter distribution.</LI>
     <LI>Fixed several variable initialization and F77 to C++ translation issues
         in INCL.</LI>
-    <LI>Added safeguard division by zero (or negative) energy in ABLA
-        fission fragment handling.</LI>
+    <LI>Added several safeguards for division by zero or negative sqrt().</LI>
     <LI>Use centralised random number generator instead of built-in one.</LI>
     <LI>Minor fix in the INCL particle reflection time calculation.</LI>
     </UL></LI>
@@ -1314,6 +1329,10 @@ please refer to the corresponding History files provided in most packages):
     <LI>Restored methods for storing/retrieving <TT>G4SplitableHadron</TT>,
         now in use in <TT>FTF</TT> model.</LI>
     <LI>Corrected assignment to 3-vector, avoid use of 3vector=0.</LI>
+    <LI><TT>G4WilsonRadius</TT>: fixed data vector type qualification.</LI>
+    <LI><TT>G4NuclearFermiDensity</TT>: added protection to <TT>GetDeriv()</TT>
+        for positions far outside the nucleus causing an FP overflow in
+        <TT>exp()</TT>.</LI>
     </UL></LI>
 </UL>
 

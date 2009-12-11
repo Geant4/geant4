@@ -95,7 +95,7 @@ geometry/management                              geommng-V09-02-05
 - G4Region: added pointer to field-manager and associated accessor/modifier,
   to allow for association of a local field to a geometrical region.
 
-geometry/navigation                              geomnav-V09-02-10
+geometry/navigation                              geomnav-V09-02-11
 -------------------
 - Refinements in G4PropagatorInField:
   o Changed parameters for treating consecutive tiny/zero steps (decrease
@@ -105,7 +105,8 @@ geometry/navigation                              geomnav-V09-02-10
     changed, and expressed as a multiple of 'fZeroStepThreshold' instead of
     kCarTolerance. Changed the value given to the decrease factor to 0.35.
     Addresses a problem seen at boundary of volumes reported by ATLAS.
-  o Improved printing of Diagnostic message.
+  o Activated field per region.
+  o Improved printing of diagnostic messages.
   o Added new method RefreshIntersectionLocator() to update state.
   o Deleted long obsolete methods: SetAccuraciesWithDeltaOneStep(),
     SetDeltaIntersection(), SetDeltaOneStep(). Revised implementation
@@ -132,11 +133,12 @@ geometry/solids/specific                         geom-specific-V09-02-08
 - Avoid redundant assignment of value to 3-vector in G4PolyconeSide and
   G4TwistTubsSide.
 
-global                                           global-V09-02-11
+global                                           global-V09-02-12
 ------
 - G4PhysicsVector: cleaned up initialisation of cached values;
   simplified Value() method, now not looking into previous bin;
-  added method ScaleVector() needed for ICRU'73 data. 
+  added method ScaleVector() needed for ICRU'73 data.
+  Fixed initialisation of 'lastEnergy' to allow for negative scale of energy. 
 - Changed date for release 9.3.
 
 intercoms                                        intercoms-V09-02-02
@@ -236,7 +238,7 @@ processes/electromagnetic/highenergy             emhighenergy-V09-02-03
   section threshold.
 - G4eeTo3PiModel: fixed vector product in matrix element.
 
-processes/electromagnetic/lowenergy              emlowen-V09-02-67
+processes/electromagnetic/lowenergy              emlowen-V09-02-68
 -----------------------------------
 - G4IonParametrisedLossModel: moved from original ICRU 73 classes to new class
   (G4IonStoppingData), which is capable of reading stopping power data files
@@ -257,6 +259,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-02-67
 - G4IonDEDXHandler: using new build methods defined in G4VIonDEDXTable
 - PIXE code cleaning and update of G4hLowEnIonisation in order to use new
   PIXE developments.
+- Added vapor water shell constants to G4DNARuddIonisationModel.
 - Removed memory leak in G4DNACrossSectionDataSet.
 - Added protection for secondary electron energy computation in
   G4DNABornIonisationModel. Proposed a faster computation of cross section
@@ -303,7 +306,7 @@ processes/electromagnetic/utils                  emutils-V09-02-24
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-02-17)
+- cross_sections (hadr-cross-V09-02-18)
   o Use as a default hadron-nucleon cross section parameterisation
     in G4GlauberGribovCrossSection, G4GGNuclNuclCrossSection,
     G4NeutronElasticXS, G4NeutronInelasticXS, G4BGGNucleonElasticXS,
@@ -313,14 +316,21 @@ processes/hadronic
   o Modified upper limit of validity to 100 TeV in G4PiNuclearCrossSection,
     G4NeutronInelasticCrossSection and G4ProtonInelasticCrossSection.
     Use constant cross-section above original range.
+  o G4TripathiLightCrossSection: re-enable low energy check code.
   o G4CrossSectionDataSetRegistry: fix for more accurate cross-section deletion.
 - management (hadr-man-V09-02-05)
   o G4HadronicProcessStore: added protection in Clean() method.
-- models/binary_cascade (had-binary-V09-02-05)
+- models/abrasion (had-abrasion-V09-02-00)
+  o Fixed problems of negative sqrt() and made code more robust to potential
+    while-loop problems.
+- models/binary_cascade (had-binary-V09-02-06)
   o Changes to G4BinaryCascade to protects against energy non-conservation:
     shift of particle's formation times; inclusion of captured particles;
-    corerction in GetExcitationEnergy() for the case when all nucleons are
+    correction in GetExcitationEnergy() for the case when all nucleons are
     ejected; correction for the nuclear field for baryons.
+  o Bug fix in G4BinaryCascade::ApplyCollision(): decay products outside
+    nucleus were nevertheless counted in currentZ/A as if these were within
+    nucleus.
   o Corrected assignment to 3-vector, avoid use of 3vector=0.
   o Added protection against void nucleus after cascade.
 - models/cascade (hadr-casc-V09-02-11)
@@ -332,12 +342,14 @@ processes/hadronic
   o Added diffraction to CHIPS inelastic.
   o Bug fixes in G4QSynchRad, G4QPhotonNuclearCrossSection and
     G4QDiffractionRatio; added 'MinGamma' parameter to G4QSynchRad.
+  o Bug fix in G4QNeutronCaptureRatio (Cu65): accelerate CuSc by 1.5.
+    (hadr-chips-cs-V09-02-00)
   o Reorganised CHIPS classes in sub-modules: body, cross_sections,
     fragmentation, interface and processes.
   o Parameters tuning to speed-up.
 - models/coherent_elastic (hadr-cohe-V09-02-03)
   o Modified dependency to CHIPS after sub-module splitting.
-- models/de_excitation (hadr-deex-V09-02-22)
+- models/de_excitation (hadr-deex-V09-02-23)
   o Updated nearly all classes of GEM sub-package with the introduction
     of new classes G4GEMCoulombBarrier, G4AlphaGEMCoulombBarrier,
     G4DeuteronGEMCoulombBarrier, G4He3GEMCoulombBarrier,
@@ -356,21 +368,23 @@ processes/hadronic
     weight inside G4FermiConfiguration.
   o Added a G4NeutronRadCapture model, a simple 1 gamma emission with
     4-momentum balance.
+  o Updated ablation largely to comply with updates in G4Evaporation and
+    handling of G4Fragment; fixed a bug in fragment identification when
+    evaporation isn't used.
 - models/im_r_matrix (hadr-im_r-V09-02-02)
   o Fix in G4CollisionComposite reproducibility. Removed dependence of the
     energy grid of the cross-section set on the order of the particles by
     forcing heavier particle to be at rest when caching the cross section.
   o Reduced usage of strings; maps of cross-sections use G4Particledefinition
     in place of particle name.
-- models/incl (hadr-incl-V09-02-05)
+- models/incl (hadr-incl-V09-02-08)
   o Bug fixes to INCL nuclear potential handling; the interpolation function
     used to produce discontinuous results due to an array index off-by-one.
     This bug fix corrects the impact parameter distribution.
   o Fixed several variable initialization and F77 to C++ translation issues
     in INCL, and added a safeguard against attempts to compute the logarithm
     of zero.
-  o Added safeguard division by zero (or negative) energy in ABLA
-    fission fragment handling.
+  o Fixed several cases of division by zero and negative sqrt().
   o Use centralised random number generator instead of built-in one.
   o Corrected datatype problem in INCL initialization.
   o Corrected G4InclAblaLightIonInterface error handling: in case INCL is
@@ -419,6 +433,9 @@ processes/hadronic
   o Restored methods for storing/retrieving G4SplitableHadron*, now in use
     in FTF model.
   o Corrected assignment to 3-vector, avoid use of 3vector=0.
+  o G4WilsonRadius: data vector r[] made static const.
+  o G4NuclearFermiDensity: added protection to GetDeriv() for positions far 
+    outside the nucleus causing an FP overflow in exp().
 - stopping (hadr-stopping-V09-02-04)
   o G4PiMinusAbsorptionAtRest, G4KaonMinusAbsorptionAtRest: fixed usage of
     3vector constructor.
@@ -539,7 +556,7 @@ examples                                         examples-V09-02-11
   o Introduced use of G4UIExecutive.
   o General update to README.
 - extended/biasing (exbiasing-V09-02-00)
-  o New example ReverseMC01 (ReverseMC01-V09-02-01), demonstrating the use
+  o New example ReverseMC01 (ReverseMC01-V09-02-02), demonstrating the use
     of Reverse MonteCarlo technique in Geant4.
 - extended/electromagnetic/TestEm0 (testem0-V09-02-01)
 - extended/electromagnetic/TestEm1 (testem1-V09-02-01)
@@ -593,7 +610,7 @@ examples                                         examples-V09-02-11
 - extended/medical/electronScattering (electronScattering-V09-02-03)
   o Replaced obsolete G4MultipleScattering in PhysListEmStandard and
     PhysListStandardGS.
-- extended/medical/electronScattering2 (exampleES2-V09-02-00)
+- extended/medical/electronScattering2 (exampleES2-V09-02-01)
   o New example for simulation of precision electron scattering benchmark
     with minimal user code.
 - extended/medical/fanoCavity (fano-V09-02-03)
@@ -604,7 +621,7 @@ examples                                         examples-V09-02-11
 - extended/optical/LXe (LXe-V09-02-01)
   o Exhibit the usage of a complex index of refraction for the photo cathode.
   o Use of G4OpticalPhysics builder/messenger, instead of LXeOpticalPhysics.
-- extended/optical/wls (WLS-V09-02-00)
+- extended/optical/wls (WLS-V09-02-02)
   o New example for optical physics simulating the propagation of photons
     inside a Wave Length Shifting (WLS) fiber.
 - extended/persistency/P03 (exampleP03-V09-02-02)
