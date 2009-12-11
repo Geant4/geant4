@@ -99,7 +99,7 @@ Platforms configured but neither tested nor supported:
 <H2>2. CLHEP and AIDA</H2>
 
 This release of Geant4 has been verified with
-<A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>, release <B>2.0.4.4</B>.
+<A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>, release <B>2.0.4.5</B>.
 <P> </P>
 Geant4 9.3 examples with histogramming co-work with analysis tools compliant
 to AIDA 3.2.1 interfaces (for details, see
@@ -143,7 +143,21 @@ recompilation) and a recompilation of user applications is required.
 <B>Low Energy Electromagnetic physics</B>
 <P> </P>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>All Low Energy Electromagnetic Physics process classes have been entirely
+    redesigned (migrated) in the Geant4 toolkit in order to offer to users a
+    coherent approach for the modeling of electromagnetic physical interactions.
+    The software design is now common to both 'standard' and 'low energy'
+    electromagnetic modules. These changes affect Livermore, Penelope,
+    ICRU'73 ion and Geant4-DNA Physics. Users are invited to modify their own
+    physics-list(s) in order to use these new processes and models.
+    The web page indicated below describe how to use these new processes and
+    models, with examples of physics list implementations and new features of
+    the adopted common design:<BR>
+    <A HREF="https://twiki.cern.ch/twiki/bin/view/Geant4/LoweMigratedProcesses">https://twiki.cern.ch/twiki/bin/view/Geant4/LoweMigratedProcesses</A>
+    Please note that it is still possible to use previous implementation of the
+    low energy processes for backward compatibility, however, these models are no
+    longer maintained and will be removed in the near future. A warning message
+    will also be displayed when running older low energy model versions.</LI>
 </UL>
 
 <P> </P>
@@ -213,7 +227,31 @@ Please see the corresponding details in
 
 <B>Low Energy Electromagnetic physics</B>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>Software migration: as explained in section 3, all low energy
+    electromagnetic processes and models are now adopting the same design
+    as for the Standard Electromagnetic Physics, for a coherent approach
+    of the modeling of electromagnetic physical interactions.</LI>
+<LI>Livermore Physics: new <TT>G4LivermorePolarizedPhotoElectricModel</TT> and
+    <TT>G4LivermorePolarizedGammaConversionModel</TT> are available for the
+    simulation of polarized photon interactions.</LI>
+<LI>ICRU'73 ion model : the upper energy limit of ICRU'73 stopping power tables
+    was extended to <TT>1 GeV/nucleon</TT> (compared to <TT>10 MeV/nucleon</TT>
+    in the previous release). Revised tables were included for <TT>G4_WATER,
+    G4_WATER_VAPOR, G4_Cu, G4_NYLON-6-6</TT> (all tables provided by
+    P. Sigmund/Univ. of Southern Denmark).</LI>
+<LI>Geant4-DNA Physics:
+    <UL>
+    <LI>Energy range coverage of several Geant4-DNA Physics models has been
+        extended: electron elastic Champion's model from <TT>7.4 eV</TT> up to
+        <TT>10 MeV</TT>; electron ionization Born's model from <TT>11 eV</TT>
+        up to <TT>1 MeV</TT>; proton excitation Born's model up to
+        <TT>100 MeV</TT>; proton ionization Born's model up to <TT>100 MeV</TT>.</LI>
+    <LI>Geant4-DNA models are valid for liquid water only and use now the
+        <TT>G4_WATER</TT> NIST material as liquid water material definition.
+        Users should define liquid water as <TT>G4_WATER</TT> in their
+        application(s).</LI>
+    </UL></LI>
+<LI>Data set: G4LEDATA version 6.9 is required.</LI>
 </UL>
 
 <B>Standard Electromagnetic physics</B>
@@ -277,7 +315,12 @@ Please see the corresponding details in
 
 <B>Low-energy Electromagnetic physics</B>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>Computing performance of low energy models has been significantly
+    improved thanks to new implementations for data loading and interpolation
+    methods, transparent to the user's application.<BR>
+    No significant changes on the physics outcomes are expected due to the
+    new software design of process and model classes, or from these new
+    implementations of data loading and interpolation methods.</LI>
 </UL>
 
 <B>Standard Electromagnetic physics and cuts</B>
@@ -445,93 +488,129 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
-    <LI>Added <TT>G4PenelopeBremsstrahlungModel</TT>, namely Bremsstrahlung
-        according to Penelope model, now inheriting from <TT>G4VEmModel</TT>.
-        Completed migration to standard-EM design for all Penelope processes.</LI>
-    <LI>Added <TT>G4RayleighScattering</TT> process (inheriting from
-        <TT>G4VEmProcess</TT>) describing Rayleigh scattering.
-        Removed <TT>G4Rayleigh</TT> to avoid duplication.</LI>
-    <LI>Added <TT>G4LivermoreIonisationModel</TT>, first implementation of
-        low-energy ionisation in the new design. Updated Livermore photon processes
-        classes for handling of compound materials; added gamma particle and energy
-        range test in cross section computation.<BR>
-        Updated public interface of <TT>G4eIonisationCrossSectionHandler</TT> in
-        order to facilitate migration from <TT>G4LowEnergyIonisation</TT> to
-        <TT>G4LivermoreIonisationModel</TT>.<BR>
-        Set default angular generator in <TT>G4LivermorePhotoElectric</TT> as
-        Sauter-Gavrila.</LI>
-    <LI>First fully tested version of <TT>G4LivermoreBremsstrahlungModel</TT>,
-        completing migration of Livermore processes to new design.</LI>
-    <LI>General cleanup of new model classes for Livermore and Penelope processes.</LI>
-    <LI>Fixed bug in <TT>G4PenelopeRayleigh</TT> (calculation of <TT>mfp</TT> for
-        compounds), and in momentum normalization in
-        <TT>G4PenelopeBremsstrahlungModel</TT>.
-        Fix in <TT>G4PenelopePhotoElectricModel</TT> to avoid misleading warnings.</LI>
-    <LI>Added proton case in <TT>G4CrossSectionExcitationMillerGreenPartial</TT>.</LI>
-    <LI>Design update, bug fixes and models update for atomic shell hadronic
-        cross-sections calculation.</LI>
-    <LI>Cleared annoying printout from <TT>G4AugerData</TT> transition table.</LI>
-    <LI>Added <TT>ActivateAuger()</TT> method to Penelope Compton and Ionisation,
-        so that all Penelope models have now the same interface.</LI>
-    <LI>Added protections in <TT>G4eIonisationSpectrum</TT> and
-        <TT>G4eIonisationParameters</TT>, addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1042">#1042</A>.</LI>
-    <LI>Added new scaling algorithm, to obtain heavy ion stopping powers for ions not
-        covered by ICRU 73 report (scaled from existing ICRU 73 data). Included
-        algorithm in ion model, extending the applicability of the model to very
-        heavy ions.</LI>
-    <LI>Replaced old version of <TT>G4IonParametrisedLossModel</TT> with newer one.
-        Added <TT>G4IonDEDXHandler</TT>, a new handler class used by the new
-        model. Added <TT>G4VIonDEDXScalingAlgorithm</TT>, used by the handler;
-        removed <TT>G4IonParametrisedLossTable</TT>.<BR>
-        Moved from original ICRU 73 classes to new class <TT>G4IonStoppingData</TT>,
-        capable of reading stopping power data files stored in the data set; with
-        the new tables the upper energy limit of ICRU 73 stopping powers is increased
-        to 1 GeV/nucleon. Decision logic concerning stopping power scaling for heavy
-        ions is entirely moved to <TT>G4IonDEDXScalingICRU73</TT>.
-        Introduced function for switching off scaling for heavy ions.
-        Added set-function for loss limit parameter. Added <TT>UpdateRangeCache()</TT>
-        method, removed <TT>GetRange()</TT> method.
-        Changed energy loss limit to smaller value (from 0.15 to 0.01) to avoid
-        approximative loss description in case of large steps.
-        Removed nuclear stopping from model since dedicated process is available in
-        standard EM package. Minor fixes applied in energy loss computation.</LI>
-    <LI>PIXE code cleaning and update of <TT>G4hLowEnIonisation</TT> in order to use
-        new PIXE developments.</LI>
+    <LI>PIXE updates:<BR>
+        PIXE in Geant4 went through a first design iteration and an update
+        of the existing code. Changes are as follows:
+        <UL>
+        <LI>Added <TT>G4ecpssrKCrossSection</TT> and <TT>G4ecpssrLiCrossSection</TT>
+            classes: these classes replace <TT>G4ecpssrCrossSection</TT>
+            (removed), fixing existing bugs and improving the goodness of the
+            results.<BR>
+            The developers are thankful to Dr.M.G.Pia for searching for
+            limitations in the previous version of the software, pointing
+            existing problems and propose solution in a very collaborative way.
+            For more details, see "M.G.Pia et al.,
+            <A HREF="http://www.particle.cz/conferences/chep2009/">CHEP-2009 Conference</A>,
+            21-27 March 2009, Prague, Czech Republic".</LI>
+        <LI>Added <TT>G4empCrossSection</TT> and <TT>G4teoCrossSection</TT>
+            classes: these two classes, deriving from <TT>G4VhShellCrossSection</TT>,
+            provide the interface to empirical ionization cross sections
+            (Orlic for L shells and Paul for K).</LI>
+        <LI><TT>G4hShellCrossSection, G4hShellCrossSectionDoubleExp,
+            G4hShellCrossSectionDoubleExpData, G4hShellCrossSectionExp,
+            G4hShellCrossSectionExpData</TT> are now discontinued.</LI>
+        <LI>G4hLowEnergyIonisation</LI> has been updated to follow the new
+            design and let the user chose which model to use for the
+            calculation of shell ionization cross section through the method
+            <TT>SelectShellIonisationCS()</TT>. Dependencies on old methods
+            for cross section calculation have been removed.</LI>
+        <LI><TT>G4OrlicLiCrossSection</TT> and <TT>G4PaulKCrossSection</TT>
+            updated: bugs fixing.</LI>
+        </UL></LI>
+    <LI>Other Modifications:
+        <UL>
+        <LI>Added <TT>G4PenelopeBremsstrahlungModel</TT>, namely Bremsstrahlung
+            according to Penelope model, now inheriting from <TT>G4VEmModel</TT>.
+            Completed migration to standard-EM design for all Penelope
+            processes.</LI>
+        <LI>Added <TT>G4RayleighScattering</TT> process (inheriting from
+            <TT>G4VEmProcess</TT>) describing Rayleigh scattering. Removed
+            <TT>G4Rayleigh</TT> to avoid duplication.</LI>
+        <LI>Added <TT>G4LivermoreIonisationModel</TT>, first implementation of
+            low-energy ionisation in the new design. Updated Livermore photon
+            processes classes for handling of compound materials; added gamma
+            particle and energy range test in cross section computation.<BR>
+            Updated public interface of <TT>G4eIonisationCrossSectionHandler</TT>
+            in order to facilitate migration from <TT>G4LowEnergyIonisation</TT>
+            to <TT>G4LivermoreIonisationModel</TT>.
+            Set default angular generator in <TT>G4LivermorePhotoElectric</TT>
+            as Sauter-Gavrila.</LI>
+        <LI>First fully tested version of <TT>G4LivermoreBremsstrahlungModel</TT>,
+            completing migration of Livermore processes to new design.</LI>
+        <LI>General cleanup of new model classes for Livermore and Penelope
+            processes.</LI>
+        <LI>Fixed bug in <TT>G4PenelopeRayleigh</TT> (calculation of <TT>mfp</TT>
+            for compounds), and in momentum normalization in
+            <TT>G4PenelopeBremsstrahlungModel</TT>. Fix in
+            <TT>G4PenelopePhotoElectricModel</TT> to avoid misleading warnings.</LI>
+        <LI>Added proton case in <TT>G4CrossSectionExcitationMillerGreenPartial</TT>.</LI>
+        <LI>Design update, bug fixes and models update for atomic shell hadronic
+            cross-sections calculation.</LI>
+        <LI>Cleared annoying printout from <TT>G4AugerData</TT> transition table.</LI>
+        <LI>Added <TT>ActivateAuger()</TT> method to Penelope Compton and
+            Ionisation, so that all Penelope models have now the same interface.</LI>
+        <LI>Added protections in <TT>G4eIonisationSpectrum</TT> and
+            <TT>G4eIonisationParameters</TT>, addressing problem report
+            <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1042">#1042</A>.</LI>
+        <LI>Revision of <TT>G4IonParametrisedLossModel</TT>. Added
+            <TT>G4IonDEDXHandler</TT>, a new handler class used by the revised
+            model class. Added <TT>G4VIonDEDXScalingAlgorithm</TT>, used by the
+            handler; removed <TT>G4IonParametrisedLossTable</TT>. Moved from
+            original ICRU'73 classes to new class <TT>G4IonStoppingData</TT>,
+            capable of reading stopping power data files stored in the data
+            set; with the new tables the upper energy limit of ICRU'73 stopping
+            powers is increased to <TT>1 GeV/nucleon</TT>. Added modifier for
+            energy loss limit parameter. Changed default energy loss limit to
+            smaller value (from 0.15 to 0.01) to avoid approximate loss
+            description in case of large steps. Removed nuclear stopping from
+            model since dedicated process is available in standard EM package.
+            Minor fixes applied in energy loss computation. Bug fix avoiding
+            wrong ion ranges in case different cuts are used for a given
+            material in different regions. Added <TT>UpdateRangeCache()</TT>
+            method, removed <TT>GetRange()</TT> method.</LI>
+        <LI>Added new scaling algorithm <TT>G4IonDEDXScalingICRU73</TT>, to
+            obtain heavy ion stopping powers for ions not covered by ICRU'73
+            report (scaled from existing ICRU'73 data). Included algorithm in
+            ion model, extending the applicability of the model to very heavy
+            ions.</LI>
+        </UL></LI>
     <LI>Geant4-DNA processes and models:
         <UL>
         <LI>New migrated processes and models.</LI>
-        <LI>Added ability for DNA charge change processes to kill particle without
-            total energy deposit.</LI>
-        <LI>Increased energy range validity of e- elastic Champion model up to
-            <TT>10 MeV</TT>.</LI>
+        <LI>Added ability for DNA charge change processes to kill particle
+            without total energy deposit.</LI>
+        <LI>Increased energy range validity of <TT>e-</TT> elastic Champion
+            model up to <TT>10 MeV</TT>.</LI>
         <LI>Extended high energy coverage of proton ionisation
             (<TT>G4DNABornIonisationModel</TT>) and excitation
-            (<TT>G4DNABornExcitationModel</TT>); decreased temporarily high energy
+            (G4DNABornExcitationModel); decreased temporarily high energy
             coverage of electron ionisation from <TT>30 keV</TT> to
             <TT>20 keV</TT>.</LI>
-        <LI>Added <TT>G4_WATER NIST</TT> material and verbose condition to all
-            Geant4-DNA models.</LI>
+        <LI>Added <TT>G4_WATER</TT> NIST material and verbose condition
+            to all Geant4-DNA models.</LI>
         <LI>Bug fix in <TT>G4DNABornIonisationModel</TT> for energy deposit.</LI>
         <LI>Improved energy limit display.</LI>
-        <LI>Modified low energy limit of e- elastic Champion model to be used with
-            new data set. Extended coverage of e- ionisation model as well.</LI>
+        <LI>Modified low energy limit of <TT>e-</TT> elastic Champion model
+            to be used with new data set. Extended coverage of <TT>e-</TT>
+            ionisation model as well.</LI>
         <LI>Fixed cross section computation bug in
             <TT>G4DNAScreenedRutherfordElasticModel</TT> and
             <TT>G4DNAChampionElasticModel</TT>.</LI>
+        <LI>Added message to obsolete non-migrated Geant4-DNA cross section
+            and final state classes, and non-migrated Livermore and Penelope
+            classes.</LI>
         </UL></LI>
-    <LI>Added message to obsolete non-migrated Geant4-DNA cross section and final
-        state classes, and non-migrated Livermore and Penelope classes.</LI>
-    <LI>Modified classes <TT>G4VeLowEnergyLoss</TT>, <TT>G4eLowEnergyLoss</TT> and
-        <TT>G4hLowEnergyLoss</TT> according to updates in <TT>G4PhysicsVector</TT>.</LI>
+    <LI>Modified classes <TT>G4VeLowEnergyLoss, G4eLowEnergyLoss</TT> and
+        <TT>G4hLowEnergyLoss</TT> according to updates in
+        <TT>G4PhysicsVector</TT>.</LI>
     <LI>New implementation for data loading and interpolation methods;
         <TT>LoadData()</TT> method now loads the data from the <TT>G4EMLOW</TT>
-        dataset and, then calculates the respective logarithmic values during
-        initialization. Both data formats (original and logarithmic) are loaded
-        to EM datasets and used later by interpolation methods to perform faster
-        calculations. <TT>LoadNonLogData()</TT> method implements the old version
-        for data loading and interpolation.</LI>
-    <LI>Requires new data set <TT>G4EMLOW-6.9</TT>.</LI>
+        dataset and, then calculates the respective logarithmic values
+        during initialization. Both data formats (original and logarithmic)
+        are loaded to EM datasets and used later by interpolation methods
+        to perform faster calculations. <TT>LoadNonLogData()</TT> method
+        implements the old version for data loading and interpolation.</LI>
+    <LI>Requires new data set G4EMLOW-6.9.</LI>
     </UL></LI>
 <LI><B>Muons</B>
     <UL>
