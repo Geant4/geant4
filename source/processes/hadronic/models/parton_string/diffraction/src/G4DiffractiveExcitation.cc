@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.19 2009-12-09 16:14:12 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.20 2009-12-14 09:53:01 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -814,13 +814,14 @@ void G4DiffractiveExcitation::CreateStrings(G4VSplitableHadron * hadron,
 
                G4double CosT12=(P2_3-P2_1-P2_2)/(2.*P_1*P_2);
                G4double CosT13=(P2_2-P2_1-P2_3)/(2.*P_1*P_3);
-               Pt=P_2*std::sqrt(1.-CosT12*CosT12);  // because system was rotated
+//             Pt=P_2*std::sqrt(1.-CosT12*CosT12);  // because system was rotated 11.12.09
 
                if((std::abs(CosT12) >1.) || (std::abs(CosT13) > 1.)) 
                { Kink=false;}
                else
                { 
                  Kink=true; 
+                 Pt=P_2*std::sqrt(1.-CosT12*CosT12);  // because system was rotated 11.12.09
                  Pstart.setPx(-Pt); Pstart.setPy(0.); Pstart.setPz(P_3*CosT13); 
                  Pend.setPx(   0.); Pend.setPy(  0.); Pend.setPz(          P_1); 
                  Pkink.setPx(  Pt); Pkink.setPy( 0.); Pkink.setPz(  P_2*CosT12);
