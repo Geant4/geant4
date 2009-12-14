@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.115 2009-11-04 10:52:34 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.116 2009-12-14 16:41:52 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -5989,7 +5989,8 @@ void G4QNucleus::DecayDibaryon(G4QHadron* qH, G4QHadronVector* evaHV)
 #endif
       G4cerr<<"***G4QN::DecDiBar: badPDG="<<qPDG<<" or smallM="<<qM<<",2mP="<<dProt
             <<",2mN="<<dNeut<<G4endl;
-      throw G4QException("G4QNucleus::DecayDibar: Unknown PDG code or small Mass of DB");
+      // @@ Nothing to do. Just 2 GeV disappears... Very rare! Just to avoid the exception.
+      //throw G4QException("G4QNucleus::DecayDibar: Unknown PDG code or small Mass of DB");
     }
   }
   G4LorentzVector f4Mom(0.,0.,0.,fMass);
