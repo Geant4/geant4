@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel93.hh,v 1.3 2009-12-08 04:36:28 vnivanch Exp $
+// $Id: G4UrbanMscModel93.hh,v 1.4 2009-12-14 06:57:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -215,31 +215,13 @@ inline
 void G4UrbanMscModel93::UpdateCache()                                   
 {
     lnZ = std::log(Zeff);
-
-    coeffth1 = 1.0;
-
-    if(Zeff < 6.) 
-      coeffth2 = 1.53206e-1-Zeff*(3.56055e-2-Zeff*2.976e-3);
-    else
-      coeffth2 = 4.607e-2+1.065e-4*Zeff;                   
-
-    if(Zeff < 13.)
-      coeffc1 = 1.901+2.22e-3*Zeff;
-    else
-      coeffc1 = 1.72+5.5e-5*(Zeff-75.)*(Zeff-75.);
-    if(Zeff < 47.)
-      coeffc2 = 1.e-3+6.5e-6*(Zeff-47.)*(Zeff-47.);
-    else
-      coeffc2 = 1.89e-3-1.89e-5*Zeff; 
-		
     //new correction in theta0 formula
-    //coeffth1 = (1.-8.7780e-2/Zeff)*(0.87+0.03*lnZ);                   
-    //coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
+    coeffth1 = (1.-8.7780e-2/Zeff)*(0.87+0.03*lnZ);                   
+    coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
     // tail parameters
-    //G4double lnZ1 = std::log(Zeff+1.);
-    //coeffc1  = 2.943-0.197*lnZ1;                  
-    //coeffc2  = 0.0987-0.0143*lnZ1;                              
-		
+    G4double lnZ1 = std::log(Zeff+1.);
+    coeffc1  = 2.943-0.197*lnZ1;                  
+    coeffc2  = 0.0987-0.0143*lnZ1;                              
     // for single scattering
     Z2 = Zeff*Zeff;
     Z23 = std::exp(2.*lnZ/3.);
