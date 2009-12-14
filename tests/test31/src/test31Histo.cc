@@ -432,7 +432,7 @@ void test31Histo::TableControl()
 	     << std::setw(11) << dedx0/dedx2
 	     << std::setw(11) << dedx/dedx2
 	     << std::setw(11) << dedx1/dedx2
-	     << std::setw(11) << dedx2*fact
+	     << std::setw(11) << dedx0*fact
 	     << G4endl; 
     }
     /*
