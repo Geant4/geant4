@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.20 2009-12-14 09:53:01 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.21 2009-12-15 19:14:31 vuzhinsk Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -142,6 +142,7 @@ G4bool G4DiffractiveExcitation::
      G4LorentzRotation toCms(-1*Psum.boostVector());
 
      G4LorentzVector Ptmp=toCms*Pprojectile;
+
      if ( Ptmp.pz() <= 0. )
      {
        target->SetStatus(2); 
@@ -306,9 +307,8 @@ G4bool G4DiffractiveExcitation::
        else if((G4UniformRand() < DeltaProbAtQuarkExchange) &&         //Nucleon was the target
                (SqrtS > M0projectile+DeltaMass))      {NewTargCode +=2;}  //Create Delta isobar
        else                                           {}                 //Save initial nucleon
-
-       target->SetDefinition(
-       G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode)); 
+//       target->SetDefinition(                                          // Fix 15.12.09
+//       G4ParticleTable::GetParticleTable()->FindParticle(NewTargCode));// Fix 15.12.09 
       } else 
       {    // projectile is baryon ----------------
        G4double Same=0.; //0.3; //0.5;
@@ -468,7 +468,6 @@ G4bool G4DiffractiveExcitation::
      }  // End of charge exchange part ------------------------------
 
 // ------------------------------------------------------------------
-
      if(ProbOfDiffraction!=0.)
      {
       ProbProjectileDiffraction/=ProbOfDiffraction;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.33 2009-12-15 14:24:07 stesting Exp $
+// $Id: G4FTFModel.cc,v 1.34 2009-12-15 19:14:31 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -102,7 +102,6 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
 // ----------- N-mass number Z-charge -------------------------
 
 // --- cms energy
-
         G4double s = sqr( theProjectile.GetMass() ) +
                      sqr( G4Proton::Proton()->GetPDGMass() ) +
                      2*theProjectile.GetTotalEnergy()*G4Proton::Proton()->GetPDGMass();
@@ -136,6 +135,7 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
          if( ExciteParticipants() )
          {
 	  theStrings = BuildStrings();
+
           GetResidualNucleus();
 
           if( theParameters != 0 )
@@ -340,6 +340,7 @@ G4bool G4FTFModel::PutOnMassShell()
         if(SqrtS < SumMasses)      {return false;} // It is impossible to simulate
                                                    // after putting nuclear nucleons
                                                    // on mass-shell
+
         if(SqrtS < SumMasses+ResidualExcitationEnergy) {ResidualExcitationEnergy=0.;}
 
         ResidualMass +=ResidualExcitationEnergy;
@@ -407,7 +408,7 @@ G4bool G4FTFModel::PutOnMassShell()
           {     // while (DecayMomentum < 0.)
 
             NumberOfTries++;
-            if(NumberOfTries == 100*(NumberOfTries/100))
+            if(NumberOfTries == 100*(NumberOfTries/100))   // 100
             { // At large number of tries it would be better to reduce the values
               ScaleFactor/=2.;
               Dcor       *=ScaleFactor;
@@ -570,7 +571,7 @@ G4bool G4FTFModel::PutOnMassShell()
 G4bool G4FTFModel::ExciteParticipants()
 {
     G4bool Successfull(false);
-    do {                           // } while (Successfull == false)
+//    do {                           // } while (Successfull == false) // Closed 15.12.09
         Successfull=false;
         theParticipants.StartLoop();
 	while (theParticipants.Next())
@@ -604,7 +605,7 @@ G4bool G4FTFModel::ExciteParticipants()
             }
            }
         }       // end of while (theParticipants.Next())
-       } while (Successfull == false);
+//       } while (Successfull == false);                        // Closed 15.12.09
 	return Successfull;
 }
 // ------------------------------------------------------------
