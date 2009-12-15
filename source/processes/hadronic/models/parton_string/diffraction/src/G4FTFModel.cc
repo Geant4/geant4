@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.32 2009-12-14 09:53:01 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.33 2009-12-15 14:24:07 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,7 @@ G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()),
 {
 	G4VPartonStringModel::SetThisPointer(this);
         theParameters=0;
+	NumberOfInvolvedNucleon=0;
 }
 
 
