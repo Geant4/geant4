@@ -184,7 +184,11 @@ recompilation) and a recompilation of user applications is required.
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>The validity of the pion-nuclear cross sections in G4PiNuclearCrossSections,
+    and the nucleon-nuclear cross sections in G4NeutronInelasticCrossSections and
+    G4ProtonInelasticCrossSections has been extended to 100 TeV.  Users who include 
+    these cross sections in their custom-developed physics lists may want to modify 
+    the physics lists accordingly.</LI>
 </UL>
 
 <P> </P>
@@ -285,7 +289,28 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>The validity of the pion-nuclear cross sections in G4PiNuclearCrossSections,
+    and the nucleon-nuclear cross sections in G4NeutronInelasticCrossSections and
+    G4ProtonInelasticCrossSections has been extended to 100 TeV by assuming a 
+    constant cross section at very high energies.</LI>
+<LI>Glauber-Gribov cross sections for ion-ion collisions are now available in 
+    the class G4GGNuclNuclCrossSection.  They can be used from 0.1 MeV to 
+    100 TeV.</LI>
+<LI>The nucleon-nucleon and pion-nucleon partial cross sections used in the 
+    Bertini cascade were reviewed and incorrect cross sections found below 1 GeV 
+    were fixed.  This results in slightly improved agreement with data below
+    1 GeV.</LI>
+<LI>The CHIPS ion-ion elastic scattering model is now available.  Also, the 
+    CHIPS model has been extended to high energies (~TeV) for hadron- and 
+    lepton-nuclear reactions.</LI>
+<LI>An option was added to allow elastic scattering models to be treated in 
+    the same way as inelastic models.  Models can now be assigned to the 
+    process class G4WHadronElasticProcess.</LI>    
+<LI>G4NeutronRadCapture is a simplified new model which produces a single photon 
+    after neutron capture. 4-momentum is conserved in the reaction.</LI>    
+<LI>Improved probabilities and channels in the G4GEM model bring it into closer 
+    agreement with data.<LI>
+<LI>Unit conversion errors were fixed in fission and Fermi break-up models.<LI>   
 </UL>
 
 <B>Optical physics</B>
@@ -391,8 +416,20 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
-</UL>  
+<LI>Improvements in the de-excitation code (G4CompetitiveFission,
+    G4FermiBreakup, etc.) produce better agreement with IAEA benchmark data 
+    below 200 MeV.</LI>
+<LI>Bug-fixes in G4GEM evaporation code remove odd-even A (in fragment mass) 
+    discrepancies with triple differential benchmark data.</LI>   
+<LI>Bertini cascade now generates 10% less memory churn (creation and deletion
+    of objects) and is about 6% faster as a result.</LI>
+<LI>Improved low energy partial cross sections in Bertini cascade give slightly 
+    better agreement with low energy benchmark data (< 1 GeV).</LI> 
+<LI>Improvements in INCL/ABLA code allow QGSP_INCL_ABLA physics list to 
+    run much longer (several thousand events) without crashing.</LI>
+<LI>Improvements in the FTF high energy model, allow the model to be used 
+    successfully down to 3-5 GeV incident particle energy.</LI>
+</UL>
 
 <P> </P>
 <A NAME="6."></A>
@@ -1101,9 +1138,9 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Management</B>
     <UL>
-    <LI><TT>G4HadronicInteraction</TT>: renamed <TT>SampleT</TT> with
+    <LI><TT>G4HadronicInteraction</TT>: renamed <TT>SampleT</TT> as
         <TT>SampleInvariantT</TT>; added <TT>recoilEnergyThreshold</TT>
-        parameter and accessors methods; use <TT>const</TT> pointers to
+        parameter and accessor methods; use <TT>const</TT> pointers to
         <TT>G4Element</TT> and </TT>G4Material</TT>; moved
         <TT>G4ReactionDynamics</TT> instance to parameterised model class
         <TT>G4InelasticInteraction</TT>.</LI>
@@ -1135,7 +1172,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Corrected assignment to 3-vector, avoid use of 3vector=0.</LI>
     <LI>Added protection against void nucleus after cascade.</LI>
     </UL></LI>
-<LI><B>Cascade</B>
+<LI><B>Bertini Cascade</B>
     <UL>
     <LI>New class <TT>G4PionSampler</TT>: samples partial cross sections,
         multiplicities and final state particle types required for <TT>pi+,
@@ -1222,7 +1259,7 @@ please refer to the corresponding History files provided in most packages):
             Fixed units (<TT>hbar_Plank -> hbarc</TT>) in
             <TT>G4GEMProbability</TT>.</LI>
         <LI><TT>G4EvaporationDefaultGEMFactory</TT>: new class where light
-            mesons probabilities are computed from default classes and other
+            meson probabilities are computed from default classes and other
             fragments from GEM.</LI>
         <LI>Introduction of new classes <TT>G4GEMCoulombBarrier,
             G4AlphaGEMCoulombBarrier, G4DeuteronGEMCoulombBarrier,
