@@ -21,14 +21,14 @@ ve/copy v(1,1:006) x
 ve/copy v(2,1:006) q
 ve/copy v(3,1:006) y
 ve/copy v(4,1:006) e
- null    9.50000E-02   0.275000   -2.26200E-03    4.62420E-01
+ null    9.50000E-02   0.275000   -2.26200E-03    2.00000E-01
 exec ../analyse ../../logs/liste.p_ta.kaonminus.90degree.p_ta
 /GRAPHICS/HPLOT/ERRORS x y q e 006 24 0.2
  atitle 'EKIN(P=3,RF=LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
- text    0.185000     4.38168E-02 'RE   P TA --> K- X' 0.3
- text    0.185000     4.13916E-02 'E IN GEV   400.00' 0.3
- text    0.185000     3.89664E-02 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
- text    0.185000     3.65412E-02 'A   180.95' 0.3
+ text    0.185000    10.8E-02 'RE   P TA --> K- X' 0.3
+ text    0.185000     7.2E-02 'E IN GEV   400.00' 0.3
+ text    0.185000     4.8E-02 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
+ text    0.185000     3.2E-02 'A   180.95' 0.3
  option *
  ve/de *
 close 66

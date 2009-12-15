@@ -36,31 +36,27 @@
 class G4DymmyINC : public G4VIntraNuclearTransportModel 
 {
 public:
-   G4DymmyINC(){}      
-   G4DymmyINC(G4double anEnergy)
-   {
-     theEnergy = anEnergy;
-   }      
-   ~G4DymmyINC(){}
+  G4DymmyINC(){}      
+  G4DymmyINC(G4double anEnergy) {theEnergy = anEnergy;}      
+  ~G4DymmyINC(){}
 
 private:
-   G4int operator==(G4DymmyINC& right) {return (this == &right);}
-   G4int operator!=(G4DymmyINC& right) {return (this != &right);}
+  G4int operator==(G4DymmyINC& right) {return (this == &right);}
+  G4int operator!=(G4DymmyINC& right) {return (this != &right);}
    
-   G4double theEnergy;
+  G4double theEnergy;
       
 public:
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
-   { return new G4ParticleChange;}
+  //G4VParticleChange* ApplyYourself(const G4Track& , G4Nucleus& )
+  //{ return new G4ParticleChange;}
 
-   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
-   {
-     G4ReactionProductVector * theFinalResult = new G4ReactionProductVector(0);
-     for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
-     delete theSecondaries;
-     return theFinalResult;
-   }
-
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* )
+  {
+    G4ReactionProductVector * theFinalResult = new G4ReactionProductVector(0);
+    for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
+    delete theSecondaries;
+    return theFinalResult;
+  }
 
 private:   
 };

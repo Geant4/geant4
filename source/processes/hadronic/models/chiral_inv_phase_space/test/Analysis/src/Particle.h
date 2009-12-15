@@ -44,8 +44,8 @@ class ANAParticle
     G4double GetPy()            {return py;}
     G4double GetPz()            {return pz;}
     G4double GetMomentum()      {return sqrt(max(0., px*px+py*py+pz*pz));}
-    G4double GetCosTheta()      {return pz/GetMomentum();}
-    G4double GetWeight()        {return 1./(twopi*GetMomentum());}
+    G4double GetCosTheta() {G4double p=GetMomentum(); if(p)return pz/p; return 0.;}
+    G4double GetWeight() {G4double p=GetMomentum(); if(p)return 1./(twopi*p); return 0.;}
     
   private:
   G4int charge;

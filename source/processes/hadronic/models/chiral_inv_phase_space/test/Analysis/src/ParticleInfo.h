@@ -65,19 +65,19 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName) : theFileNam
   G4double halfBin = 0.07; 
 
   aMean = cos(pi*70./180.);
-  DoubleBandFilter* bin1 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".70_deg");
+  DoubleBandFilter* bin1 = new DoubleBandFilter(aMean-halfBin,aMean+halfBin,".70degree");
 
   aMean = cos(pi*90./180.);
-  DoubleBandFilter* bin2 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".90_deg");
+  DoubleBandFilter* bin2 = new DoubleBandFilter(aMean-halfBin,aMean+halfBin,".90degree");
 
   aMean = cos(pi*118./180.);
-  DoubleBandFilter* bin3 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".118_deg");
+  DoubleBandFilter* bin3 = new DoubleBandFilter(aMean-halfBin,aMean+halfBin,".118degree");
 
   aMean = cos(pi*137./180.);
-  DoubleBandFilter* bin4 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".137_deg");
+  DoubleBandFilter* bin4 = new DoubleBandFilter(aMean-halfBin,aMean+halfBin,".137degree");
  
   aMean = cos(pi*160./180.);
-  DoubleBandFilter* bin5 = new DoubleBandFilter(aMean-halfBin, aMean+halfBin, ".160_deg");
+  DoubleBandFilter* bin5 = new DoubleBandFilter(aMean-halfBin,aMean+halfBin,".160degree");
 
   ANAPlot<ANADataPoint, TVANAFilter<G4double> >* aNewPlot = 0;
 

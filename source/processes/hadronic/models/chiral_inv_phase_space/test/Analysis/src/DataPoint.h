@@ -48,11 +48,12 @@ class ANADataPoint
   {
     G4double err=0;
     if(entries) err=xSec/sqrt(G4double(entries));
-    G4double energyInGeV = meanKinetic/GeV;
+    G4double eKinInGeV = meanKinetic/GeV;
     G4double doubleDiffCrossSectionWithUnits = aWeight*(xSec/theWidth)/(millibarn/GeV/GeV);
     G4double errorWithUnits = aWeight*(err/theWidth)/(millibarn/GeV/GeV);
-    aOStream<<"kinE(GeV)="<<energyInGeV<<", f(mb/GeV^-2)="<<doubleDiffCrossSectionWithUnits
-            <<", df="<<errorWithUnits<<G4endl;
+    //aOStream<<"kinE(GeV)="<<eKinInGeV<<", f(mb/GeV^-2)="
+    //        <<doubleDiffCrossSectionWithUnits<<", df="<<errorWithUnits<<G4endl;
+    aOStream<<eKinInGeV<<" "<<doubleDiffCrossSectionWithUnits<<" "<<errorWithUnits<<G4endl;
   }
   G4double GetMeanKinetic(){return meanKinetic;}
   G4double GetXSec()       {return xSec;}

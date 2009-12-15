@@ -53,6 +53,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
       G4String it = theOutputFile+theFilter->GetName()+dot+aPreFix;
       G4cout<< it<<G4endl;
       ofstream theOutput(it);
+      cout<<"S="<<theStatistics<<",RGA="<<theFilter->RelativeGeometricalAcceptance()<<endl;
       G4double aWeight = theTotalXsec/theStatistics/theFilter->RelativeGeometricalAcceptance();
       for(unsigned i=0; i<theDataPoints.size(); ++i)
         if(theOutputFile!="") theDataPoints[i].DumpInfo(theOutput, aWeight);

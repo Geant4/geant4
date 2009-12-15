@@ -37,10 +37,7 @@ class G4StringInfoDump : public G4VIntraNuclearTransportModel
 {
 public:
    G4StringInfoDump(){}      
-   G4StringInfoDump(G4double anEnergy)
-   {
-     theEnergy = anEnergy;
-   }      
+   G4StringInfoDump(G4double anEnergy)       {theEnergy = anEnergy;}      
    ~G4StringInfoDump(){}
 
 private:
@@ -50,8 +47,8 @@ private:
    G4double theEnergy;
       
 public:
-   G4VParticleChange* ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
-   { return new G4ParticleChange;}
+  //G4VParticleChange* ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+  //{ return new G4ParticleChange;}
 
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
    {
@@ -77,7 +74,7 @@ public:
      // some info about the energy of particles within the nucleus
      G4double nuclearRadius = theNucleus->GetNuclearRadius(25*perCent);
      G4double insideEnergy = 0;
-     for (G4int aRes=0; aRes < result1->size(); aRes++)
+     for (unsigned aRes=0; aRes < result1->size(); aRes++)
      {
        G4cout << "PREDECAYDUMP ";
        G4cout << result1->operator[](aRes)->GetDefinition()->GetPDGCharge()<<" ";
@@ -102,36 +99,36 @@ public:
        G4LorentzVector Mom = result1->operator[](aRes)->Get4Momentum();
        double currentEta = Mom.rapidity();
        if(currentEta>-0.1&&currentEta<2.9) 
-	      preDecayEtWithinCuts += Mom.perp();
+       preDecayEtWithinCuts += Mom.perp();
        Mom.boost(-theCurrentVelocity);
        G4cout << Mom << G4endl;
      }
      G4cout << "PREDECAYETWITHINCUTS "<<preDecayEtWithinCuts<<" "
             <<pos<<" "<<neg<<" "<<ch<<" "<<al
-	    << " total energy = "<< totalEnergy 
-	    << " inside energy = "<<insideEnergy << G4endl;
+     << " total energy = "<< totalEnergy 
+     << " inside energy = "<<insideEnergy << G4endl;
      totalEnergy = 0;
-     for (G4int aResult=0; aResult < result1->size(); aResult++)
+     for (unsigned aResult=0; aResult < result1->size(); aResult++)
      {
        G4ParticleDefinition * pdef;
        pdef=result1->operator[](aResult)->GetDefinition();
        secondaries=NULL;
        if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
        {
-	  secondaries = result1->operator[](aResult)->Decay();
+   secondaries = result1->operator[](aResult)->Decay();
        }
        if ( secondaries == NULL )
        {
-	  result->push_back(result1->operator[](aResult));
-	  result1->operator[](aResult)=NULL;	//protect for clearAndDestroy 
+   result->push_back(result1->operator[](aResult));
+   result1->operator[](aResult)=NULL; //protect for clearAndDestroy 
        } 
        else
        {
-	 for (G4int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
-	 {
-	     result1->push_back(secondaries->operator[](aSecondary));
-	 }
-	 delete secondaries;
+  for (unsigned aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
+  {
+      result1->push_back(secondaries->operator[](aSecondary));
+  }
+  delete secondaries;
        }
      }
      for_each(result1->begin(), result1->end(), DeleteKineticTrack());
@@ -140,7 +137,7 @@ public:
      int positives, negatives, charged, all;
      positives = negatives = charged = 0;
      all = result->size();
-     for(G4int i=0; i<result->size(); i++)
+     for(unsigned i=0; i<result->size(); ++i)
      {
        totalEnergy += result->operator[](i)->Get4Momentum().t();
        G4cout << "STRINGDUMP ";
@@ -149,7 +146,7 @@ public:
        G4cout << result->operator[](i)->Get4Momentum()<<" ";
        G4cout << result->operator[](i)->GetPosition()<<" ";
        if(abs(result->operator[](i)->GetDefinition()->GetPDGCharge())>1.1)
-	 G4Exception("multiply charged particle after decay");
+  G4Exception("multiply charged particle after decay");
       if(result->operator[](i)->GetDefinition()->GetPDGCharge()>0.5)
        {
          positives++;
@@ -167,22 +164,22 @@ public:
        double currentEta = Mom.rapidity();
        if(currentEta>-0.1&&currentEta<2.9) 
        {
-	 const G4ParticleDefinition * theCurrentDef = result->operator[](i)->GetDefinition();
-	 if(theCurrentDef->GetBaryonNumber()>0)
-	 {
-	   double energy = Mom.t() - G4Proton::Proton()->GetPDGMass();
-	   etWithinCuts += sin(Mom.theta())*energy;
-	 }
-	 else if(theCurrentDef->GetBaryonNumber()<0)
-	 {
-	   double energy = Mom.t() + G4Proton::Proton()->GetPDGMass();
-	   etWithinCuts += sin(Mom.theta())*energy;
-	 }
-	 else
-	 {
-	   double energy = Mom.t();
-	   etWithinCuts += sin(Mom.theta())*energy;
-	 }
+  const G4ParticleDefinition * theCurrentDef = result->operator[](i)->GetDefinition();
+  if(theCurrentDef->GetBaryonNumber()>0)
+  {
+    double energy = Mom.t() - G4Proton::Proton()->GetPDGMass();
+    etWithinCuts += sin(Mom.theta())*energy;
+  }
+  else if(theCurrentDef->GetBaryonNumber()<0)
+  {
+    double energy = Mom.t() + G4Proton::Proton()->GetPDGMass();
+    etWithinCuts += sin(Mom.theta())*energy;
+  }
+  else
+  {
+    double energy = Mom.t();
+    etWithinCuts += sin(Mom.theta())*energy;
+  }
        }
        Mom.boost(-theCurrentVelocity);
        G4cout << Mom << G4endl;
@@ -191,7 +188,7 @@ public:
      <<negatives<<" "<<charged<<" "<<all<< " total energy = "<< totalEnergy <<G4endl;
      G4ReactionProductVector * theFinalResult = new G4ReactionProductVector;
      G4ReactionProduct * theSec;
-     for(G4int it=0; it<result->size(); it++)
+     for(unsigned it=0; it<result->size(); ++it)
      {
        theSec = new G4ReactionProduct(result->operator[](it)->GetDefinition());
        G4LorentzVector current4Mom = result->operator[](it)->Get4Momentum();
