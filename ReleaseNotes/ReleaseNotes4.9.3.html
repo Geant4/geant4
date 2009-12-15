@@ -188,6 +188,20 @@ recompilation) and a recompilation of user applications is required.
 </UL>
 
 <P> </P>
+<B>Visualization</B>
+<P> </P>
+<UL>
+<LI>The OpenGL Print EPS facility now always depends on the compression library,
+    <TT>zlib</TT>. An internal version of this library is provided for users
+    whose system does not provide the library <TT>libz</TT>.
+    To use this internal version, set the environment variable
+    <TT>G4LIB_USE_ZLIB</TT>.
+    Users who build with the standard Geant4 <TT>Configure</TT> script should
+    not have to worry about this as the environment will automatically be set up
+    correctly.</LI>
+</UL>
+
+<P> </P>
 <B>Data Sets</B>
 <P> </P>
 This release introduces new versions of two data sets.
@@ -218,11 +232,6 @@ Please see the corresponding details in
     the writer to treat ad-hoc user extensions to the GDML schema.
     The GDML writer now also supports dumping of optical surface
     properties associated with surfaces and materials.</LI>
-</UL>
-
-<B>Interfaces & Visualization</B>
-<UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
 </UL>
 
 <B>Low Energy Electromagnetic physics</B>
@@ -296,6 +305,50 @@ Please see the corresponding details in
 <LI>A default builder for optical photon physics has been added:
     <TT>G4OpticalPhysics</TT> together with its messenger,
     <TT>G4OpticalPhysicsMessenger</TT>.</LI>
+</UL>
+
+<B>Visualization and Graphical Representations</B>
+<UL>
+<LI>Improved ability of visualization system to render Boolean solids.
+    Certain cases involving very near co-planar faces had resulted in
+    incorrect visualization (though not incorrect tracking).
+    A previously included mechanism to deal with this by slightly shifting the
+    position of one solid in a chosen direction has been expanded by attempting
+    shifts in different directions by varying small amounts until one is found
+    that does not give an error. The system still can not handle every
+    situation, but results in far fewer visualization inaccuracies than were
+    previously seen in such difficult cases.</LI>
+<LI>Visualization attributes can now be individually set for each volume within
+    a nested parameterization.</LI>
+<LI>Rich Trajectories and Rich Trajectory Points now include additional
+    information such as the complete volume path of the starting and ending
+    volume including all replica and copy numbers, etc.</LI>
+<LI>A new command, <TT>/vis/viewer/set/targetPoint</TT>, sets a specific point
+    to be the center of the view. Helps with doing extreme zoom in to a
+    specific point.</LI>
+<LI><B>gMocrenFile</B>: First Beta release of this new visualization driver to
+    output data in the <TT>gdd</TT> format used by the gMocren volume
+    visualization tool. <TT>gMocrenFile</TT> can include volume data from
+    sensitive detector volumes, or from command-based scoring meshes, in
+    addition to detector geometry and trajectories. Use new command
+    <TT>/vis/scene/add/psHits</TT> to add scorer hits to gMocren output.
+    For details, see the Application Developers Guide and the
+    <A HREF="http://geant4.kek.jp/gMocren/">gMocren web site</A>.</LI>
+<LI><B>Qt</B>: Continued improvements to this new driver. The <TT>Qt</TT>
+    visualization driver and the associated <TT>Qt</TT> User Interface now work
+    well on almost all platforms and with both Qt3 and Qt4 (but still considered
+    a Beta release due to a few rare combinations of commands on certain
+    platforms that can cause crashes).</LI>
+<LI>PostScript printing: vector and bitmapped printing through the UI command
+    <TT>/vis/ogl/printEPS</TT> is now fully functional for all OpenGL viewers
+    (previously only for OGLIX and OGLSX). Related new commands are
+    <TT>/vis/ogl/set/printSize</TT> and <TT>/vis/ogl/set/printFilename</TT>.</LI>
+<LI><B>HepRepFile</B>: new UI commands of the form <TT>/vis/heprep</TT> allow
+    easy control of output file name and output directory, whether a file name
+    should be reused (rather than having a sequential suffix appended at each
+    new file) and whether culled geometry volumes should be included.
+    Also fixed a bug in representation of <TT>G4Tubs</TT> which had caused
+    wrong visualization for cases in which the tube was at an unusual angle.</LI>
 </UL>
 
 <P> </P>
@@ -1006,15 +1059,17 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="greps-notes">
 <H3><I>Graphical Representations</I></H3></A>
 <UL>
-<LI><TT>BooleanProcessor</TT>: changes contributed from LHCb to "loop on shifts"
-    in the attempt to solve visualization of "coplanar faces cases".
-    Optimized the code.</LI>
-<LI><TT>HepPolyhedronProcessor</TT>: new class to handle "overall shifting" in
-    case of doing multiple Boolean operations. This permits to solve most
-    tricky cases in visualization of the LHCb detector.</LI>
-<LI><TT>HepPolyhedron</TT>: removed static instance of <TT>BooleanProcessor</TT>;
-    removed <TT>IsErrorBooleanProcess</TT>, use <TT>HepPolyhedronProcessor</TT>
-    instead.</LI>
+<LI>Improved ability of visualization system to render Boolean solids.
+    Certain cases involving very near co-planar faces had resulted in incorrect
+    visualization (though not incorrect tracking). A previously included
+    mechanism to deal with this by shifting the position of one solid in a
+    chosen direction has been expanded by attempting shifts in different
+    directions by varying small amounts until one is found that does not give
+    an error. The system still can not handle every situation, but results in
+    far fewer visualization inaccuracies than were previously seen in such
+    difficult cases.</LI>
+<LI>Improved infrastructure for scoring (supporting new UI command
+    <TT>/vis/scene/add/psHits</TT>).</LI>
 <LI><TT>G4VVisManager</TT>: added notify scene handlers (<TT>G4VGraphicsScene</TT>
      objects) taking care to notify that the scene has changed so that they may
      rebuild their graphics database, if any, and redraw all views.</LI>
@@ -1595,17 +1650,15 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI><B>Overall</B>
     <UL>
-    <LI>Accomodated interfaces according to new pure virtual function
-        <TT>AddCompound()</TT> introduced in <TT>graphics_reps</TT>
-        module.</LI>
-    <LI>Fixed bug in ratio and geometry on X/Xm/Qt/Win32 viewers.</LI>
-    <LI>Command <TT>printEPS</TT> is now fully functionnal for
-        X, Xm, Qt Win viewers.</LI>
-    </UL></LI>
-<LI><B>Externals</B>
-    <UL>
-    <LI>gl2ps: Added dependency on zlib if <TT>G4LIB_BUILD_ZLIB</TT> is set.</LI>
-    <LI>Corrected setup for building DLLs on Windows.</LI>
+    <LI>Rich Trajectories and Rich Trajectory Points now include additional
+        information such as the complete volume path of the starting and ending
+        volume including all replica and copy numbers, etc.</LI>
+    <LI>Fixed bug in screen location and screen ratio handling for
+        <TT>X/Xm/Qt/Win32</TT> viewers.</LI>
+    <LI>Vector and bitmapped printing through <TT>/vis/ogl/printEPS</TT> is now
+        fully functional for all OpenGL viewers (previously only for OGLIX and
+        OGLSX). Related new commands are <TT>/vis/ogl/set/printSize</TT> and
+        <TT>/vis/ogl/set/printFilename</TT>.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
@@ -1616,65 +1669,82 @@ please refer to the corresponding History files provided in most packages):
         <TT>/vis/verbose</TT> and <TT>/vis/initialize</TT> in constructor
         of <TT>G4VisManager</TT> so that a user may set verbosity before
         initialisation.</LI>
-    <LI>Added <TT>/vis/viewer/set/targetPoint</TT> and
-        <TT>/vis/scene/add/psHits</TT> UI commands and improved end
-        of run event keeping information.</LI>
-    <LI>Allow for arbitrary viewer deletion (fixes a case of crash).</LI>
+    <LI>New UI command, <TT>/vis/viewer/set/targetPoint</TT>, sets a specific
+        point to be the center of the view. Helps with doing extreme zoom in to
+        a specific point.</LI>
+    <LI>New UI command, <TT>/vis/scene/add/psHits</TT> for visualization of
+        scoring quantities to <TT>gMocrenFile</TT>.</LI>
+    <LI>Improved end of run event keeping information.</LI>
+    <LI>Allow for arbitrary viewer deletion (fixes some situations that had
+        caused crashes).</LI>
     <LI>Allow refresh in <TT>GeomClosed</TT> as well as <TT>Idle</TT> state.</LI>
-    <LI>Implemented default behaviour in <TT>G4VSceneHandler::AddCompound()</TT>.</LI>
     <LI><TT>G4VisExecutive</TT>: made methods inline.</LI>
-    <LI>Many small bug fixes.</LI>
     </UL></LI>
 <LI><B>Modeling</B>
     <UL>
     <LI>Added warning if logical volume is not defined.</LI>
-    <LI>Added class <TT>G4PhysicalVolumeModelTouchable</TT>.
-        Used in <TT>ComputeMaterial()</TT> and effective for visualization
-        of nested parameterisations.</LI>
-    <LI>Added <TT>setAux/StepPtsSizeType</TT> UI commands with unit.</LI>
+    <LI><TT>G4PhysicalVolumeModelTouchable</TT>: new class to allow
+        visualization attributes to be individually set for each volume within
+        a nested parameterization.</LI>
+    <LI>Added unit to <TT>setAux/StepPtsSizeType</TT> UI commands so that size
+        can be specified either in pixels or relative to screen size.</LI>
     <LI>Added <TT>G4PSHitsModel</TT> for gMocren driver.</LI>
     <LI><TT>G4ModelApplyCommands</TT>: added call to <TT>NotifyHandlers()</TT>
         to force update of all viewers after a change of model, e.g.,
         trajectory colour, point size, etc.</LI>
     </UL></LI>
+<LI><B>Externals</B>
+    <UL>
+    <LI>gl2ps: Added dependency on zlib (even if <TT>G4LIB_BUILD_ZLIB</TT> is
+        not set).</LI>
+    <LI>Corrected setup for building DLLs on Windows.</LI>
+    </UL></LI>
 <LI><B>gMocren</B>
     <UL>
-    <LI>New driver for visualization of medical patient data and DICOM data
-        allowing for dose distributions calculations and analysis for
-        radiotherapy. See also:
+    <LI>First Beta release of this new visualization driver to output data in
+        the <TT>gdd</TT> format used by the gMocren volume visualization tool.
+        <TT>gMocrenFile</TT> can include volume data from sensitive detector
+        volumes, or from command-based scoring meshes, in addition to detector
+        geometry and trajectories. Use the new UI command
+        <TT>/vis/scene/add/psHits</TT> to add scorer hits to gMocren output.
+        For details, see the Application Developers Guide and:
         <A href="http://geant4.kek.jp/gMocren/">http://geant4.kek.jp/gMocren/</A>.</LI>
     </UL></LI>
 <LI><B>HepRep</B>
     <UL>
-    <LI>Changed messenger to a singleton. Added messenger commands to
-        <TT>HepRepFile</TT>.</LI>
-    <LI>Render <TT>G4Tubs</TT> as polygons if the shape is not at a
-        standard angle.</LI>
+    <LI>New UI commands of the form <TT>/vis/heprep</TT> allow easy control of
+        output file name and output directory, whether a file name should be
+        reused (rather than having a sequential suffix appended at each new
+        file) and whether culled geometry volumes should be included.</LI>
+    <LI>Changed messenger to a singleton to facilitate sharing by
+        <TT>HepRepFile</TT> and <TT>HepRepXML</TT>.</LI>
+    <LI>Fixed a bug in representation of <TT>G4Tubs</TT> which had caused wrong
+        visualization for cases in which the tube was at an unusual angle.</LI>
     </UL></LI>
 <LI><B>OpenGL</B>
     <UL>
-    <LI>Improvements in order to use gl2ps for printing.</LI>
-    <LI>Added UI commands <TT>/vis/ogl/set/printSize</TT> and
-        <TT>/vis/ogl/set/printFilename</TT>.</LI>
-    <LI><TT>G4OpenGLXmViewer</TT>: fixed cas of wrong initialization.</LI>
     <LI><TT>G4OpenGLQtViewer</TT>: ensure the GL frame size will be correct
         by setting a zero size margin around.</LI>
     <LI><TT>G4OpenGLStoredQtViewer</TT>: removed picking to true at
         initialisation.</LI>
-    <LI>Fixed build problem with gl2ps on Windows.</LI>
     </UL></LI>
 <LI><B>OpenInventor</B>
     <UL>
     <LI>Created new "externals" module for gl2ps library, moving out code from
         OpenInventor module. Added ability to draw markers.</LI>
-    <LI>Improvements in order to use gl2ps for printing.</LI>
-    <LI><TT>G4OpenInventorXt/WinViewer</TT>: fixed a case of wrong
-        initialization.</LI>
-    <LI>Fixed build problem with gl2ps on Windows.</LI>
+    </UL></LI>
+<LI><B>Qt</B>
+    <UL>
+    <LI>Continued improvements to this new driver. The <TT>Qt</TT> visualization
+        driver and the associated <TT>Qt</TT> User Interface now work well on
+        almost all platforms and with both Qt3 and Qt4 (but still considered a
+        Beta release due to a few rare combinations of commands on certain
+        platforms that can cause crashes).</LI>
     </UL></LI>
 <LI><B>RayTracer</B>
     <UL>
-    <LI>Fixed bad use of fVP parameters. Addressing problem report
+    <LI>Fixed a crash of <TT>RayTracerX</TT> on some platforms.
+        Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1072">#1072</A>.</LI>
     </UL></LI>
 </UL>
