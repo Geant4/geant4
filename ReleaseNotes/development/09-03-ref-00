@@ -344,7 +344,7 @@ processes/hadronic
   o Bug fix in G4QNeutronCaptureRatio (Cu65): accelerate CuSc by 1.5.
     (hadr-chips-cs-V09-02-00)
   o Reorganised CHIPS classes in sub-modules: body, cross_sections,
-    fragmentation, interface and processes.
+    fragmentation, interface and processes. (hadr-chips-body-V09-02-16)
   o Parameters tuning to speed-up.
 - models/coherent_elastic (hadr-cohe-V09-02-03)
   o Modified dependency to CHIPS after sub-module splitting.
@@ -401,12 +401,12 @@ processes/hadronic
     formation/creation time, c_light was inserted. Due to this string
     tension parameter was set to the usual value (1 GeV/fm) in
     G4LundStringFragmentation.
-  o Improve FTF model for pion obsorption on nuclei: introduced status of
+  o Improved FTF model for pion obsorption on nuclei: introduced status of
     nuclear nucleon involved in an interaction (Status 0 - spectator,
     1 - involved nucleon, 2 - absorbed nucleon); introduced connection between
     a participant nucleon and a nuclear nucleon in G4InteractionContent.
   o Completed FTF model with reggeon cascade and added excitation energy
-    calculation.
+    calculation. (hadr-string-diff-V09-02-23)
   o Tuned FTFP with parameters of nuclear de-excitation.
   o G4VParticipants: use modified name of method to sort nucleons in
     G4V3DNucleus.
