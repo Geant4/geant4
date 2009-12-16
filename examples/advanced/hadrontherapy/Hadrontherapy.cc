@@ -107,8 +107,8 @@ int main(int argc ,char ** argv)
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-  G4int seed = time(0);
-  CLHEP::HepRandom::setTheSeed(seed);
+  //G4int seed = time(0);
+  //CLHEP::HepRandom::setTheSeed(seed);
 
   G4RunManager* runManager = new G4RunManager;
 
@@ -204,13 +204,9 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
      // print list of generated nuclides 
      //matrix -> PrintNuclides();
 
-     // Store to multiple files, fluence contribution
-     // matrix -> StoreFluenceData(); 
-     // Store to multiple files, dose contribution
-     // matrix -> StoreDoseData();
-     // Store dose to one file only 
-     matrix -> StoreData("Secondaries.out");
-     // Store to only one file, LET_T & LET_D
+     // Store dose by particle/ion to one (ASCII) file 
+     matrix -> StoreData("Dose.out");
+     // Store Let track & Let dose
      let -> StoreData("Let.out");
 
  } 

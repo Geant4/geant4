@@ -191,9 +191,11 @@ void HadrontherapyMatrix::StoreDoseData()
     }
 }
 
-// Store dose for all ions into a single file
+// Store dose for all ions into a single file and into an ntuple
 void HadrontherapyMatrix::StoreData(G4String filename)
 {
+    // Sort like periodic table
+    std::sort(ionStore.begin(), ionStore.end());
 #define width 15L
     if (ionStore.size())
     {
@@ -231,14 +233,20 @@ void HadrontherapyMatrix::StoreData(G4String filename)
 				ofs << i << '\t' << j << '\t' << k << '\t';
 				for (size_t l=0; l < ionStore.size(); l++)
 				{
+#ifdef G4ANALYSIS_USE_ROOT
+	                            static HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
+				    // Fill energy ntuple  
+				    analysis -> FillVoxelFragmentTuple(i, j, k, ionStore[l].A, ionStore[l].Z, ionStore[l].dose[n] );
+#endif
+				    // Fill ASCII file rows
 				    ofs << std::setw(width) << ionStore[l].dose[n] <<
-					std::setw(width) << ionStore[l].fluence[n]; 
+					   std::setw(width) << ionStore[l].fluence[n]; 
 				}
 				break;
 			    }
 			}
 		    }
-	ofs.close();
+	    ofs.close();
 	}
     }
 }
@@ -331,17 +339,16 @@ void HadrontherapyMatrix::TotalEnergyDeposit(G4String filename)
 	StoreMatrix(filename, matrix, sizeof(*matrix));
 
 #ifdef ANALYSIS_USE
+	HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
 	for(G4int i = 0; i < numberOfVoxelAlongX; i++) 
 	    for(G4int j = 0; j < numberOfVoxelAlongY; j++) 
 		for(G4int k = 0; k < numberOfVoxelAlongZ; k++)
 		{ 
 		    G4int n = Index(i,j,k);
-		    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
 		    analysis -> FillEnergyDeposit(i, j, k, matrix[n]);
 		    analysis -> BraggPeak(i, matrix[n]);
 		}
 #endif
     }
 }
-
 

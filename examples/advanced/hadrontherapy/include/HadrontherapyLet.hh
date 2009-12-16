@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyLet.hh,v 1.0, May 2007;
+// $Id: HadrontherapyLet.hh,v 1.0, Dec 2009;
 
 #ifndef HadrontherapyLet_h
 #define HadrontherapyLet_h 1
+#endif
 
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
@@ -34,19 +35,21 @@
 #include <vector>
 #include <string>
 
-struct ionLet 
- { 
+
+ struct ionLet { 
      G4String fullName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
      G4String name;     // simple name without excitation energy: He3, He4, Li7, ...
-     //G4int Z;         // atomic number
-     //G4int A;		// mass number
+     G4int Z;         // atomic number
+     G4int A;		// mass number
      G4double *stop;	// stopping power table
-     G4int **spectrum; // energy spectrum 
+     G4int    **spectrum; // energy spectrum 
      G4double *letT , *letD;  //Track averaged LET and dose averaged LET 
+     //friend bool operator<(const ionLet& a, const ionLet& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
+     G4bool operator<(const ionLet& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
  };
 
 class G4Material;
-class HadrontherapyLetMessenger;
+//class HadrontherapyLetMessenger;
 class HadrontherapyMatrix;
 class HadrontherapyPrimaryGeneratorAction;
 class HadrontherapyInteractionParameters;
@@ -70,9 +73,7 @@ public:
   void LetOutput(); 
 
   void StoreData(G4String filename);
-  void SetValue(G4String);
-
-  HadrontherapyLetMessenger* letMessenger;
+//  HadrontherapyLetMessenger* letMessenger;
 
 private:
   static HadrontherapyLet *instance;
@@ -91,6 +92,4 @@ private:
   G4String nome_file;
 
   std::vector<ionLet> ionLetStore;
- 
 };
-#endif

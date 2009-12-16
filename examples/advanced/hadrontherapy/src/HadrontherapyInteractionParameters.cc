@@ -120,8 +120,9 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
 		data << std::setw(16) << energy[i] << massDedx[i] << G4endl;
 	}
     outfile.close();
+    // This will plot 
 #ifdef G4ANALYSIS_USE_ROOT 
-    PlotStopping("gif");
+    PlotStopping("pdf");
 #endif
 
 // Info to user
@@ -170,12 +171,12 @@ void HadrontherapyInteractionParameters::PlotStopping(const G4String& filetype)
     theRootGraph -> SetMarkerStyle(20);// circle
     theRootGraph -> SetMarkerSize(.5);
 
-    gName = particle.substr(0, particle.find("[") ); // cut excitation energy   
-    gName = gName + " " + material;
-    fName = "./referenceData/interaction/" + gName + "." + filetype;
+    G4String gName = particle.substr(0, particle.find("[") ); // cut excitation energy   
+    gName = gName + "_" + material;
+    G4String fName = "./referenceData/interaction/" + gName + "." + filetype;
     theRootGraph -> SetTitle(gName);
     theRootGraph -> Draw("AP");
-    theRootCanvas -> Update();
+    //theRootCanvas -> Update();
     //theRootCanvas -> Draw();
     theRootCanvas -> SaveAs(fName);
 }
@@ -224,11 +225,11 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
     if (particle == "") particle = "proton"; // default to "proton"
     else if ( !FindParticle(particle) )
 	   {
-		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported" << G4endl;
-		G4cout << "Try the command \"/particle/list\" to get full supported particles list" << G4endl;
+		G4cout << "WARNING: Particle \"" << particle << "\" isn't supported." << G4endl;
+		G4cout << "Try the command \"/particle/list\" to get full supported particles list." << G4endl;
 		G4cout << "If you are interested in an ion that isn't in this list you must give it to the particle gun."
-		          "\nTry the commands \n/gun/particle ion"
-			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl;
+		          "\nTry the commands:\n/gun/particle ion"
+			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl << G4endl;
 		return false;
 	   }
     // start physics by forcing a G4RunManager beamOn(): 

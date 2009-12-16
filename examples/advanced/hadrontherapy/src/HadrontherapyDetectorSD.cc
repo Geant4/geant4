@@ -72,7 +72,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
     G4String particleName =  particleDef -> GetParticleName();  
     // G4cout << particleDef -> GetParticleType() << '\n';  
     // Get unique track_id (in an event)
-    G4int TrackID = theTrack -> GetTrackID();
+    G4int trackID = theTrack -> GetTrackID();
 
     G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
 
@@ -86,41 +86,54 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 
     static HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
     static HadrontherapyLet* let = HadrontherapyLet::GetInstance();
+#ifdef ANALYSIS_USE
+    static HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
+#endif
 
     // Increment Fluences & accumulate energy spectra
     // Hit voxels are marked with track_id throught hitTrack matrix
     // XXX TrackID sequences inside a voxel are NOT decrescent (?)  XXX
     G4int* hitTrack = matrix -> GetHitTrack(i,j,k); // hitTrack MUST BE cleared at every eventAction!
-    if ( *hitTrack != TrackID )
+    if ( *hitTrack != trackID )
     {
 	//G4cout << "TrackID " << TrackID << " Voxel " << i << '\t' << j << '\t' << k << G4endl;
-	*hitTrack = TrackID;
+	*hitTrack = trackID;
 
 	// Fill FLUENCE data for every single nuclide 
-	// matrix-> Fill(particleDef, i, j, k, 0, true);
+	if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
+	    matrix-> Fill(particleDef, i, j, k, 0, true);
 
 
-	// Fill LET data for every single nuclide (first step kinetic energy).
+	// Fill LET data for every single nuclide (kinetic energy spectrum taken from first step in voxel).
 	// Let will be calculated at endOfRunAction.
 	// A data ASCII file will be generated in main through the command let -> StoreData(filename)
 	// Put this command at endOfRunAction in case of multiple runs!
 	//
-	if (A==12 && Z==6) // primary and secondary C12
-	//if (A==4 && Z==2) // Primary and secondary Helium
-	//if (A==1 && Z==1)    // primary and sec. protons 
-	//if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
-	    let -> FillEnergySpectrum(particleDef, kineticEnergy, i, j, k);
+	//if (A==12 && Z==6) // C12
+	//if (A==4 && Z==2)  // Helium
+	//if (A==1 && Z==1)  // Protons 
+	if ( Z>=1 )          // Exclude e-, neutrons, gamma, ...
+	    let -> FillEnergySpectrum(particleDef, kineticEnergy/MeV, i, j, k);
+
+#ifdef G4ANALYSIS_USE_ROOT
+        // First step kinetic energy (Ntuple!)
+	if (Z>=1) 
+	    analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
+#endif
     }	 
     if(energyDeposit != 0)                       
     {  
-	// Energy deposit of secondary particles along X (integrated on Y and Z)
-	// Fill DOSE matrix for every single nuclide 
-	// A data ASCII file will be generated in main() function (Hadrontherapy.cc)
-	// through the command matrix-> StoreData(filename)
-	// Put this command at endOfRunAction in case of multiple runs!
+	// Energy deposit.
+	// This method will fill a dose matrix for every single nuclide. 
+	// A data ASCII file can be generated through the method StoreData(filename) 
+	// into the matrix class.
+	// In case of multiple runs, remember to: 
+	// a) Initialize() the matrix and the Let classes (Initialize() method for both) 
+	// B) Put the StoreData(filename) method at endOfRunAction
 	
 	// if (A==1 && Z==1) // primary and sec. protons 
-	// matrix->Fill(particleDef, i, j, k, energyDeposit/MeV);
+	if ( Z>=1 )    //  exclude e-, neutrons, gamma, ...
+	matrix -> Fill(particleDef, i, j, k, energyDeposit/MeV);
 
 	// Create a hit with the information of position is in the detector     
 	HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
@@ -129,10 +142,9 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
     }
 
 #ifdef ANALYSIS_USE
-    HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
     if(energyDeposit != 0)                       
     {  
-	if(TrackID != 1)
+	if(trackID != 1)
 	{
 	    if (particleName == "proton")
 		analysis -> SecondaryProtonEnergyDeposit(i, energyDeposit/MeV);

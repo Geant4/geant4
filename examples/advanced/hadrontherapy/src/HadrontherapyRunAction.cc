@@ -51,7 +51,7 @@ HadrontherapyRunAction::~HadrontherapyRunAction()
 
 void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 	
-    G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+    G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
     G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
     // Initialize LET with energy of primaries and clear data inside
     HadrontherapyLet::GetInstance() -> Initialize();
@@ -67,11 +67,12 @@ void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
     // Write 
     HadrontherapyLet::GetInstance() -> LetOutput();
 
-  //   G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
+
+  //G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
   //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
-  // 	 << electromagnetic << G4endl;
+  // 	   << electromagnetic << G4endl;
   //G4cout << "Number of hadronic processes of primary particles in the phantom:"
-  //	 << hadronic << G4endl;
+  //	   << hadronic << G4endl;
 }
 void HadrontherapyRunAction::AddEMProcess()
 {

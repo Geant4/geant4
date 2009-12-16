@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2009-11-26 18:13:57 cirrone Exp $
+# $Id: GNUmakefile,v 1.14 2009-12-16 17:08:20 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,10 +6,6 @@
 name := Hadrontherapy
 G4TARGET := $(name)
 G4EXLIB := true
-
-# debug info
-CPPFLAGS += -g
-#CPPFLAGS += -L/usr/lib/qt4/lib
 
 ifndef G4INSTALL
   G4INSTALL = ../../..

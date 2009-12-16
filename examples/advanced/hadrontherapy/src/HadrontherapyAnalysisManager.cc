@@ -308,6 +308,9 @@ void HadrontherapyAnalysisManager::book()
   histo16 = createHistogram1D("hydrogenEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
 			   70, 0., 500.);
 
+  kinFragNtuple  = new TNtuple("kinFragNtuple", "Kinetic energy by voxel & fragment", "i:j:k:A:Z:kineticEnergy");
+  doseFragNtuple = new TNtuple("doseFragNtuple", "Energy deposit by voxel & fragment", "i:j:k:A:Z:energy");
+
   theROOTNtuple =   new TNtuple("theROOTNtuple", "Energy deposit by slice", "i:j:k:energy");
   theROOTIonTuple = new TNtuple("theROOTIonTuple", "Generic ion information", "a:z:occupancy:energy");
   fragmentNtuple =  new TNtuple("fragmentNtuple", "Fragments", "A:Z:energy:posX:posY:posZ");
@@ -518,6 +521,19 @@ void HadrontherapyAnalysisManager::hydrogenEnergy(G4double secondaryParticleKine
 }
 
 
+void HadrontherapyAnalysisManager::FillKineticFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double kinEnergy)
+{
+#ifdef G4ANALYSIS_USE_ROOT
+    kinFragNtuple -> Fill(i, j, k, A, Z, kinEnergy);
+#endif
+}
+
+void HadrontherapyAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double energy)
+{
+#ifdef G4ANALYSIS_USE_ROOT
+    doseFragNtuple -> Fill(i, j, k, A, Z, energy);
+#endif
+}
 
 void HadrontherapyAnalysisManager::fillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ)
 {
@@ -624,6 +640,10 @@ void HadrontherapyAnalysisManager::finish()
 #ifdef G4ANALYSIS_USE_ROOT
   metaData->Fill((Float_t) eventCounter,(Float_t) detectorDistance, (Float_t) phantomDepth, (Float_t) beamEnergy,(Float_t) energyError, (Float_t) phantomCenterDistance);
   metaData->Write();
+
+  kinFragNtuple->Write();
+  doseFragNtuple->Write(); 
+
   theROOTNtuple->Write();
   theROOTIonTuple->Write();
   fragmentNtuple->Write();
@@ -634,12 +654,4 @@ void HadrontherapyAnalysisManager::finish()
 }
 
 #endif
-
-
-
-
-
-
-
-
 

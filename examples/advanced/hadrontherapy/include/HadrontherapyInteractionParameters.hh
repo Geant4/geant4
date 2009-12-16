@@ -88,7 +88,6 @@ private:
     TCanvas *theRootCanvas;
     TGraph *theRootGraph;
     TAxis *axisX, *axisY;
-    G4String gName, fName;
 #endif
     G4double kinEmin, kinEmax, npoints;
     G4String particle, material, filename; 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyLet.cc,v 1.0, May 2007;
+// $Id: HadrontherapyLet.cc,v 1.0, Dec 2009;
 // 
 
 #include "HadrontherapyLet.hh"
@@ -67,6 +67,7 @@ HadrontherapyLet::HadrontherapyLet(HadrontherapyDetectorConstruction* pDet)
     // Pointer to the detector material
     detectorMat = pDet -> GetDetectorLogicalVolume() -> GetMaterial();
     density = detectorMat -> GetDensity();
+
 }
 HadrontherapyLet::~HadrontherapyLet()
 {
@@ -101,71 +102,71 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
 {
     // First step energy
     if (kinEnergy<=0) return;
-    //G4int Z = particleDef-> GetAtomicNumber();
-    //G4int A = particleDef-> GetAtomicMass();
+    G4int Z = particleDef -> GetAtomicNumber();
+    G4int A = particleDef -> GetAtomicMass();
+
     G4String fullName = particleDef -> GetParticleName();
     G4String name = fullName.substr (0, fullName.find("[") ); // cut excitation energy  
     G4int voxel = matrix -> Index(i,j,k);
     G4int enBin = lround(trunc(kinEnergy/binWidth)); 
     // bins are [n.binWidth, n.binWidth + binWidth), n natural
     // for example for 0.25 binWidth we have [0, 0.25) [0.25, 0.5) [0.5, 0.75) [0.75, 1) [1, 1.25) ...
-    //if (i > 219)
-    //G4cout << "Slab= " << i << ", E= " << kinEnergy << ", enBin= " << enBin << G4endl;
-    // Search for already allocated data...
-    for (size_t l=0; l < ionLetStore.size(); l++)
-    {
-	// Search for particle/ion name...
-	if (ionLetStore[l].name == name) 
-	{
-
-	    if (!ionLetStore[l].spectrum[voxel]) 
-	    {
-		ionLetStore[l].spectrum[voxel] = new G4int[nBins];// allocate new histogram for every hit voxel!
-		for(G4int bin=0; bin < nBins; bin++) ionLetStore[l].spectrum[voxel][bin] = 0; // clear it
-	    }
-	    ionLetStore[l].spectrum[voxel][enBin]++; // fill spectrum
-	    return ; 
-	}
-    }
-    // Just another type of ion/particle for our store...
-    ionLet ion =
-    {
-	fullName,
-	name,
-	new G4double[nBins],   // Stopping Powers table
-	new G4int*  [nVoxels], // Energy Spectrum
-	new G4double[nVoxels], // Let_T
-	new G4double[nVoxels]  // Let_D
-    };
-
-    // Get stopping powers table
-    G4int bin = 0;
-    for(G4double E = binWidth/2; E < energyLimit ; E += binWidth )
-    {
-	ion.stop[bin++] = pParam -> GetStopping(E, particleDef, detectorMat)*(keV/um);
-	//G4cout << E/MeV << '\t' << ion.stop[bin-1] << '\t' << bin-1 << '\t' << nBins << '\n';
-    }
-    // Clear array of pointer to histograms
-    for(G4int v=0; v < nVoxels; v++) ion.spectrum[v] = NULL;
-    ion.spectrum[voxel] = new G4int[nBins];// allocate new histogram
-    for(int bin=0; bin<nBins; bin++) ion.spectrum[voxel][bin] = 0; // clear it
     
-    ion.spectrum[voxel][enBin]++; // fill spectrum
-    // Initialize let
-    for(G4int v=0; v < nVoxels; v++) ion.letT[v] = ion.letD[v] = 0.;
-    ionLetStore.push_back(ion);
-    G4cout << "Allocated LET data for " << ion.name << G4endl;
+    // Search for already allocated data...
+    size_t l;
+    for (l=0; l < ionLetStore.size(); l++) if (ionLetStore[l].name == name) break; 
+    //for (vector<ionLet>::const_iterator iter = ionLetStore.begin(); iter!=ionLetStore.end(); ++iter)
+    //if ((*iter).name == name) break; 
+    
+    if (l == ionLetStore.size()) // Just another type of ion/particle for our store...
+    {
+    ionLet ion =
+	{
+	    fullName,
+	    name,
+	    Z,
+	    A,
+	    new G4double[nBins],   // Stopping Powers table
+	    new G4int*  [nVoxels], // Array of pointers to Energy Spectrum
+	    new G4double[nVoxels], // Let_T
+	    new G4double[nVoxels]  // Let_D
+	};
+
+	// Get stopping powers table (keV/um)
+	G4int bin = 0;
+	for(G4double E = binWidth/2; E < energyLimit ; E += binWidth )
+	{
+	    ion.stop[bin++] = pParam -> GetStopping(E, particleDef, detectorMat)*(keV/um); // Total linear stopping power (keV/um)
+	    //G4cout << E/MeV << '\t' << ion.stop[bin-1] << '\t' << bin-1 << '\t' << nBins << '\n';
+	}
+	// Clear array of pointer to histograms
+	for(G4int v=0; v < nVoxels; v++) ion.spectrum[v] = NULL;
+	// Initialize let
+	for(G4int v=0; v < nVoxels; v++) ion.letT[v] = ion.letD[v] = 0.;
+	ionLetStore.push_back(ion);
+	G4cout << "Allocated LET data for " << ion.name << G4endl;
+
+    }
+
+    if (!ionLetStore[l].spectrum[voxel]) 
+    {
+	ionLetStore[l].spectrum[voxel] = new G4int[nBins];// allocate new histogram for every hit voxel!
+	for(G4int bin=0; bin < nBins; bin++) ionLetStore[l].spectrum[voxel][bin] = 0; // clear it
+    }
+
+    ionLetStore[l].spectrum[voxel][enBin]++; // fill spectrum
 }
 
-// Issued at endOfRunAction!
 // LET calculation
+// Must be issued at endOfRunAction!
 void HadrontherapyLet::LetOutput()
 {
+    std::sort(ionLetStore.begin(), ionLetStore.end());
     for (size_t l=0; l < ionLetStore.size(); l++)
     {
 	for(G4int v=0; v < nVoxels; v++)  
 	{
-	    // Numeric calculation to get LET_T & LET_D for voxel v  
+	    // Numeric calculation to get LET Track & LET Dose (keV/um)   
 	    // Med. Phys. 30(5), May 2003. Equations (13) and (14)
 	    if ( ionLetStore[l].spectrum[v] )
 	    {
@@ -181,8 +182,8 @@ void HadrontherapyLet::LetOutput()
 
 		} 
 		//G4cout << "LetT " << nT/dT << " LetD " << nD/dD << '\n';  
-		ionLetStore[l].letT[v] = nT/dT;
-		ionLetStore[l].letD[v] = nD/dD;
+		ionLetStore[l].letT[v] = nT/dT; //(keV/um)
+		ionLetStore[l].letD[v] = nD/dD; //(keV/um)
 	    }
 	}
     }
