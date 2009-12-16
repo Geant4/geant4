@@ -8,7 +8,7 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
-07.12.2009 S.E.Mazzaglia; Tag:Hadrontherapy-V09-02-42
+16.12.2009 S.E.Mazzaglia; Tag:Hadrontherapy-V09-02-42
            - Added the possibility to calculate the let too, using an ASCII file to store it.
 	   - Added the new class HadrontherapyLet.
 	   - Minor revisions of the code.
