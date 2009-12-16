@@ -30,7 +30,7 @@ Code Web page</A>.
 </P>
 <P>
 <I>We are grateful for the efforts of Geant4 users who have provided
-   detailed feedback, comprehensive reports of issues.
+   detailed feedback or comprehensive reports of issues.
    We thank in particular those who have contributed corrections,
    improvements or developments included in this release. </I>
 </P>
@@ -65,7 +65,7 @@ User Documentation</A> for further information about using Geant4.
 Official platforms:
 <UL>
 <LI>Linux, gcc-4.1.2 (SLC5).<BR>
-    Tested on <I>32 and 64 bit architectures</I> (Intel or AMD) with
+    Tested on 32 and 64 bit architectures (Intel or AMD) with
     Scientific Linux CERN 4 (SLC4) (based on RedHat Linux Enterprise 4) and
     Scientific Linux CERN 5 (SLC5) (based on RedHat Linux Enterprise 5).
     Geant4 has also been successfully compiled on other RedHat versions as
@@ -86,6 +86,7 @@ Platforms configured but neither tested nor supported:
 <LI>AIX 4.3.2, xlC 6.0</LI>
 <LI>DEC V4.0, cxx C++ V6.1-027</LI>
 <LI>HP 10.20, aCC C++ B3910B A.01.23</LI>
+<LI>MacOSX 10.4, gcc-3.3</LI>
 <LI>SGI V6.5.5, CC 7.2.1</LI>
 <LI>SUN Solaris 5.8, C++ CC-5.5.</LI>
 </UL>
@@ -100,12 +101,13 @@ Platforms configured but neither tested nor supported:
 
 This release of Geant4 has been verified with
 <A TARGET="ext" HREF="http://cern.ch/clhep/">CLHEP</A>, release <B>2.0.4.5</B>.
+Use of a different CLHEP version may cause incorrect simulation results.
 <P> </P>
 Geant4 9.3 examples with histogramming co-work with analysis tools compliant
 to AIDA 3.2.1 interfaces (for details, see
 <A TARGET="ext" HREF="http://cern.ch/geant4/UserDocumentation/UsersGuides/ForApplicationDeveloper/html/apas02.html">Appendix 2</A>
 of the
-<A TARGET="ext" HREF="http://cern.ch/geant4/UserDocumentation/UsersGuides/ForApplicationDeveloper/html/">Users Guide for Application Developers</A>).<BR>
+<A TARGET="ext" HREF="http://cern.ch/geant4/UserDocumentation/UsersGuides/ForApplicationDeveloper/html/">Users Guide for Application Developers</A>).
 AIDA headers can be downloaded from:
 <A TARGET="ext" HREF="http://aida.freehep.org/">http://aida.freehep.org</A>
 
@@ -129,14 +131,13 @@ recompilation) and a recompilation of user applications is required.
 <P> </P>
 <UL>
 <LI>A new method <TT>CheckParticleList()</TT> has been added to
-    <TT>G4VUserPhysicsList</TT> to check the consistency of list of defined
+    <TT>G4VUserPhysicsList</TT> to check the consistency of the list of defined
     particles before instantiating the physics processes. For example,
-    <TT>e+, e-</TT> and <TT>gamma</TT> should exist any electro-magnetic
+    <TT>e+, e-</TT> and <TT>gamma</TT> should exist if any electromagnetic
     process is simulated... A fatal exception will be thrown if any particle
     type mandatory for the simulation is missing.<BR>
-    If not caring about any cut values and wish to skip this check,
-    <TT>G4VUserPhysicsList</TT> provides also the method
-    <TT>DisableCheckParticleList()</TT>.</LI> 
+    It is possible to skip this check, by making use of the method
+    <TT>DisableCheckParticleList()</TT> from <TT>G4VUserPhysicsList</TT>.</LI> 
 </UL>
 
 <P> </P>
@@ -172,7 +173,7 @@ recompilation) and a recompilation of user applications is required.
     <LI><TT>G4hMultipleScattering</TT> for hadrons and ions.</LI>
     </UL>
     The former <TT>G4MultipleScattering</TT> still exists in the Geant4
-    distribution but is marked as an obsolete process.
+    distribution but will be deleted in a future release.
     <P></P>
     Nuclear stopping power is no longer part of ionization processes, and is now
     responsible only for electronic stopping power; for simulation of nuclear
@@ -184,11 +185,12 @@ recompilation) and a recompilation of user applications is required.
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-<LI>The validity of the pion-nuclear cross sections in G4PiNuclearCrossSections,
-    and the nucleon-nuclear cross sections in G4NeutronInelasticCrossSections and
-    G4ProtonInelasticCrossSections has been extended to 100 TeV.  Users who include 
-    these cross sections in their custom-developed physics lists may want to modify 
-    the physics lists accordingly.</LI>
+<LI>The validity of the pion-nuclear cross-sections in
+    <TT>G4PiNuclearCrossSections</TT>, and the nucleon-nuclear cross-sections
+    in <TT>G4NeutronInelasticCrossSections</TT> and
+    <TT>G4ProtonInelasticCrossSections</TT> has been extended to <TT>100 TeV</TT>.
+    Users who include these cross-sections in their custom-developed physics
+    lists may want to modify the physics lists accordingly.</LI>
 </UL>
 
 <P> </P>
@@ -264,12 +266,12 @@ Please see the corresponding details in
         Users should define liquid water as <TT>G4_WATER</TT> in their
         application(s).</LI>
     </UL></LI>
-<LI>Data set: G4LEDATA version 6.9 is required.</LI>
+<LI>Data set: G4EMLOW version 6.9 is required.</LI>
 </UL>
 
 <B>Standard Electromagnetic physics</B>
 <UL>
-<LI>A new set of multiple-scattering models is provided:
+<LI>The set of multiple-scattering models has been expanded:
     <UL>
     <LI><TT>G4UrbanMscModel92</TT> is the default model for <TT>e+-</TT>
         equivalent to the Urban model included in the previous release 9.2.
@@ -289,34 +291,36 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>The validity of the pion-nuclear cross sections in G4PiNuclearCrossSections,
-    and the nucleon-nuclear cross sections in G4NeutronInelasticCrossSections and
-    G4ProtonInelasticCrossSections has been extended to 100 TeV by assuming a 
-    constant cross section at very high energies.</LI>
-<LI>Glauber-Gribov cross sections for ion-ion collisions are now available in 
-    the class G4GGNuclNuclCrossSection.  They can be used from 0.1 MeV to 
-    100 TeV.</LI>
-<LI>The nucleon-nucleon and pion-nucleon partial cross sections used in the 
-    Bertini cascade were reviewed and incorrect cross sections found below 1 GeV 
-    were fixed.  This results in slightly improved agreement with data below
-    1 GeV.</LI>
-<LI>The CHIPS ion-ion elastic scattering model is now available.  Also, the 
+<LI>The validity of the pion-nuclear cross-sections in
+    <TT>G4PiNuclearCrossSections</TT>, and the nucleon-nuclear cross-sections
+    in <TT>G4NeutronInelasticCrossSections</TT> and
+    <TT>G4ProtonInelasticCrossSections</TT> has been extended to <TT>100 TeV</TT>
+    by assuming a constant cross-section at very high energies.</LI>
+<LI>Glauber-Gribov cross-sections for ion-ion collisions are now available in 
+    the class <TT>G4GGNuclNuclCrossSection</TT>.
+    They can be used from <TT>0.1 MeV</TT> to <TT>100 TeV</TT>.</LI>
+<LI>The nucleon-nucleon and pion-nucleon partial cross-sections used in the 
+    Bertini cascade were reviewed and incorrect cross-sections found below
+    <TT>1 GeV</TT> were fixed. This results in slightly improved agreement
+    with data below <TT>1 GeV</TT>.</LI>
+<LI>The CHIPS ion-ion elastic scattering model is now available. Also, the 
     CHIPS model has been extended to high energies (~TeV) for hadron- and 
     lepton-nuclear reactions.</LI>
 <LI>An option was added to allow elastic scattering models to be treated in 
-    the same way as inelastic models.  Models can now be assigned to the 
-    process class G4WHadronElasticProcess.</LI>    
-<LI>G4NeutronRadCapture is a simplified new model which produces a single photon 
-    after neutron capture. 4-momentum is conserved in the reaction.</LI>    
-<LI>Improved probabilities and channels in the G4GEM model bring it into closer 
-    agreement with data.<LI>
+    the same way as inelastic models. Models can now be assigned to the 
+    process class <TT>G4WHadronElasticProcess</TT>.</LI>    
+<LI><TT>G4NeutronRadCapture</TT> is a simplified new model which produces a
+    single photon after neutron capture. 4-momentum is conserved in the
+    reaction.</LI>    
+<LI>Improved probabilities and channels in the <TT>G4GEM</TT> model bring it
+    into closer agreement with data.<LI>
 <LI>Unit conversion errors were fixed in fission and Fermi break-up models.<LI>   
 </UL>
 
 <B>Optical physics</B>
 <UL>
 <LI>Measured angular reflectivity distributions for common surface treatments
-    and reflectors have been incorporated as Look-Up-Tables.</LI>
+    and reflectors have been incorporated as look-up tables (LUT).</LI>
 </UL>
 
 <P> </P>
@@ -332,7 +336,7 @@ Please see the corresponding details in
     <TT>G4OpticalPhysicsMessenger</TT>.</LI>
 </UL>
 
-<B>Visualization and Graphical Representations</B>
+<B>Visualization, Graphical Representations & Interfaces</B>
 <UL>
 <LI>Improved ability of visualization system to render Boolean solids.
     Certain cases involving very near co-planar faces had resulted in
@@ -359,6 +363,9 @@ Please see the corresponding details in
     <TT>/vis/scene/add/psHits</TT> to add scorer hits to gMocren output.
     For details, see the Application Developers Guide and the
     <A HREF="http://geant4.kek.jp/gMocren/">gMocren web site</A>.</LI>
+<LI><TT>G4UIExecutive</TT>: a new utility class for automatic instantiation of
+    a user session selected according to defined environment variables
+    <TT>G4UI_USE_*</TT>.</LI> 
 <LI><B>Qt</B>: Continued improvements to this new driver. The <TT>Qt</TT>
     visualization driver and the associated <TT>Qt</TT> User Interface now work
     well on almost all platforms and with both Qt3 and Qt4 (but still considered
@@ -385,10 +392,9 @@ Please see the corresponding details in
 
 <B>Geometry</B>
 <UL>
-<LI>Adoption of ad-hoc memory allocation for touchables in navigation
-    has been measured in an average improvement of ~5% in CPU speed in
-    run conditions of reasonably complex detector setups, with overall
-    memory allocation and fragmentation considerably reduced.</LI>
+<LI>The new ad-hoc memory allocation system for touchables in navigation has
+    shown an average CPU speed improvement of ~5% and a reduction of overall
+    memory allocation and fragmentation for reasonably complex detector setups.</LI>
 </UL>
 
 <B>Low-energy Electromagnetic physics</B>
@@ -416,19 +422,19 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>Improvements in the de-excitation code (G4CompetitiveFission,
-    G4FermiBreakup, etc.) produce better agreement with IAEA benchmark data 
-    below 200 MeV.</LI>
-<LI>Bug-fixes in G4GEM evaporation code remove odd-even A (in fragment mass) 
-    discrepancies with triple differential benchmark data.</LI>   
+<LI>Improvements in the de-excitation code (<TT>G4CompetitiveFission</TT>,
+    <TT>G4FermiBreakup</TT>, etc.) produce better agreement with IAEA benchmark
+    data below <TT>200 MeV</TT>.</LI>
+<LI>Bug-fixes in <TT>G4GEM</TT> evaporation code remove odd-even <TT>A</TT>
+    (in fragment mass) discrepancies with triple differential benchmark data.</LI>   
 <LI>Bertini cascade now generates 10% less memory churn (creation and deletion
     of objects) and is about 6% faster as a result.</LI>
-<LI>Improved low energy partial cross sections in Bertini cascade give slightly 
-    better agreement with low energy benchmark data (< 1 GeV).</LI> 
-<LI>Improvements in INCL/ABLA code allow QGSP_INCL_ABLA physics list to 
+<LI>Improved low energy partial cross-sections in Bertini cascade give slightly 
+    better agreement with low energy benchmark data (<TT>< 1 GeV</TT>).</LI> 
+<LI>Improvements in INCL/ABLA code allow <TT>QGSP_INCL_ABLA</TT> physics list to 
     run much longer (several thousand events) without crashing.</LI>
-<LI>Improvements in the FTF high energy model, allow the model to be used 
-    successfully down to 3-5 GeV incident particle energy.</LI>
+<LI>Improvements in the <TT>FTF</TT> high energy model, allow the model to be
+    used successfully down to <TT>3-5 GeV</TT> incident particle energy.</LI>
 </UL>
 
 <P> </P>
@@ -455,7 +461,7 @@ Reporting System</A>.
 
 <H2>7. Compilation Warnings</H2>
 
-There may be few compilation warnings on some platforms.
+There may be a few compilation warnings on some platforms.
 We do not believe that any of these lead to incorrect run-time behaviour.
 
 <P> </P>
@@ -466,7 +472,7 @@ We do not believe that any of these lead to incorrect run-time behaviour.
 
 <H2>8. Known Run-Time Warnings</H2>
 
-The following message can be written to standard output at the end of a program:
+The following message may be written to standard output at the end of a program:
 <PRE>
     G4Transportation: Statistics for looping particles 
        Sum of energy of loopers killed: 
@@ -549,11 +555,11 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="digits-notes">
 <H3><I>Digitization & Hits</I></H3></A>
 <UL>
-  <LI>Important fixes on scorers for the way of counting the flux and current
-      passing through a curved surface (cylinder and sphere surface scorers).</LI>
+  <LI>Corrected counting of flux and current passing through curved surfaces
+      (affecting cylinder and sphere surface scorers).</LI>
   <LI>Added missing virtual keyword for qualification of <TT>CheckROVolume()</TT> and
       <TT>FindROTouchable()</TT> methods in <TT>G4VReadOutGeometry</TT>.</LI>
-  <LI>Added few accessors for visualization to <TT>G4VScoringMesh</TT>.</LI>
+  <LI>Added a few accessors for visualization to <TT>G4VScoringMesh</TT>.</LI>
 </UL>
 
 <A NAME="emstd-notes">
@@ -1112,7 +1118,7 @@ please refer to the corresponding History files provided in most packages):
      rebuild their graphics database, if any, and redraw all views.</LI>
 <LI><TT>G4VMarker</TT>: added enum <TT>SizeType</TT> {<TT>none, world, screen</TT>};
     added <TT>GetSizeType()</TT> and <TT>SetSize/Diameter/Radius()</TT> methods.</LI>
-<LI><TT>G4VGraphicsScene</TT>: added method <TT>AddCompound()</TT>.</LI>
+<LI><TT>G4VGraphicsScene</TT>: added method <TT>AddCompound(HitsMap)</TT>.</LI>
 </UL>
 
 <A NAME="had-notes">
@@ -2044,10 +2050,10 @@ please refer to the corresponding History files provided in most packages):
         <LI>Changed DICOM Handler to read CT files coming from CONQUEST
             DICOM server.</LI>
         </UL></LI>
-    <LI>medical/electronScattering
+    <LI>medical/electronScattering, electronScattering2
         <UL>
-        <LI>New example for electron scattering benchmark from T.O'Shea
-            and B.Faddegon.</LI>
+        <LI>Two alternate approaches to simulating the published electron
+            scattering benchmark experiment of C. K. Ross et al.</LI>
         </UL></LI>
     <LI>medical/fanoCavity[1,2]
         <UL>
