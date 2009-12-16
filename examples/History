@@ -1,4 +1,4 @@
-$Id: History,v 1.152 2009-11-09 11:00:01 gcosmo Exp $
+$Id: History,v 1.153 2009-12-16 11:34:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th November 2009  Gabriele Cosmo (examples-V09-03-00)
+- Updated reference outputs according to reference tag geant4-09-03-ref-00.
+- Includes tags: air_shower-V09-02-06, brachy-V09-02-02, ccal-V09-02-01,
+                 gammaraytel-V09-02-01, hadrontherapy-V09-02-40,
+                 lAr_calorimeter-V09-02-01, medical_linac-V09-02-05,
+                 radioprotection-V09-02-04, Rich-V09-02-01, XrayFluo-V09-02-01,
+                 xraytel-V09-02-01, exampleA01-V09-02-02, exbiasing-V09-02-00,
+                 ReverseMC01-V09-02-02, testem0-V09-02-01, testem1-V09-02-01,
+                 testem2-V09-02-02, testem3-V09-02-02, testem5-V09-02-07,
+                 testem6-V09-02-01, testem7-V09-02-04, testem9-V09-02-00,
+                 testem10-V09-02-00, testem11-V09-02-01, testem12-V09-02-01,
+                 testem13-V09-02-01, testem14-V09-02-01, testem16-V09-02-00,
+                 testem18-V09-02-04, fieldex01-V09-02-00, fieldex02-V09-02-00,
+                 fieldex03-V09-02-00, fieldex04-V09-02-03, fieldex05-V09-02-00,
+                 exhadr01-V09-02-03, DICOM-V09-02-03, exampleES2-V09-02-01,
+                 electronScattering-V09-02-03, fano-V09-02-03, fano2-V09-02-01,
+                 gtherapy-V09-02-00, LXe-V09-02-01, exampleP03-V09-02-02,
+                 WLS-V09-02-02, expol01-V09-02-00, exampleN02-V09-02-01,
+                 exampleN03-V09-02-02, exampleN06-V09-02-01.
 
 9th November 2009  Gabriele Cosmo (examples-V09-02-10)
 - Updated reference outputs according to reference tag geant4-09-02-ref-10.
