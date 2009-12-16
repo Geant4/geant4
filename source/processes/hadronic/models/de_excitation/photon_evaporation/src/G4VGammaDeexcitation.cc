@@ -37,11 +37,6 @@
 //
 //      Modifications: 
 //
-//        29 Jan 2009, Miguel A. Cortes-Giraldo (miancortes@us.es)
-//           Modified UpdateNucleus() to perform Lorentz boosts to gamma and
-//           residual nucleus momenta, both calculated at CM frame, in order to
-//           fix the absence of Doppler broadening (discussed at HyperNews)
-//
 //        21 Nov 2001, Fan Lei (flei@space.qinetiq.com)
 //           Modified GenerateGamma() and UpdateUncleus() for implementation
 //           of Internal Conversion processs 
@@ -88,15 +83,12 @@ G4FragmentVector* G4VGammaDeexcitation::DoTransition()
   
   if (CanDoTransition())
     {
-     G4Fragment* gamma = GenerateGamma();  // returns a gamma calculated in CM frame
+     G4Fragment* gamma = GenerateGamma();
      if (gamma != 0)
        {
-	 // MACG (22/01/09) gamma has to be added after performing boost to lab frame
-	 // products->push_back(gamma);
-
+	 products->push_back(gamma);
 	 UpdateNucleus(gamma);
 	 Update();
-	 products->push_back(gamma);
        }
     }
 
@@ -163,7 +155,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 	     << G4endl;
     }
   
-  // Photon momentum isotropically generated (CM frame)
+  // Photon momentum isotropically generated
   // the same for electron 
   
   if (eGamma > 0.) 
@@ -205,7 +197,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     }
 }
 
-void G4VGammaDeexcitation::UpdateNucleus(/*const*/ G4Fragment*  gamma)
+void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
 {
   G4LorentzVector p4Gamma = gamma->GetMomentum();
   G4ThreeVector pGamma(p4Gamma.vect());
@@ -220,15 +212,9 @@ void G4VGammaDeexcitation::UpdateNucleus(/*const*/ G4Fragment*  gamma)
 
   G4LorentzVector p4Nucleus(_nucleus.GetMomentum() );
 
-
 // New tetravector calculation:
 
 //  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(_nucleus.GetZ(),_nucleus.GetA());
-
-// MACG (22/01/09) this calculation works when the gamma has been boosted to lab frame, since
-// p4Nucleus corresponds to the lab frame (it seems so)
-/*
-
   G4double m1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(_nucleus.GetZ()),
 									       static_cast<G4int>(_nucleus.GetA()));
   G4double m2 = _nucleus.GetZ() *  G4Proton::Proton()->GetPDGMass() + 
@@ -236,43 +222,23 @@ void G4VGammaDeexcitation::UpdateNucleus(/*const*/ G4Fragment*  gamma)
 
   G4double Mass = std::min(m1,m2);
 
+
   G4double newExcitation = p4Nucleus.mag() - Mass - eGamma;
   if(newExcitation < 0)
     newExcitation = 0;
-
+  
   G4ThreeVector p3Residual(p4Nucleus.vect() - pGamma);
   G4double newEnergy = std::sqrt(p3Residual * p3Residual +
 			    (Mass + newExcitation) * (Mass + newExcitation));
   G4LorentzVector p4Residual(p3Residual, newEnergy);
-*/ 
-
-  // G4LorentzVector p4Residual(-pGamma, p4Nucleus.e() - eGamma);
-
-// MACG (29/01/09) this calculation is done to make sure that the residual
-// excitation energy is positive or zero.
-
-  G4double evapEnergy = eGamma;
-  if (_nucleus.GetExcitationEnergy() < eGamma) evapEnergy = _nucleus.GetExcitationEnergy();
-
-//
-// MACG (22/01/09) this is the new calculation at CM frame
-// to fix the absence of Doppler Broadening in gamma emission
-//
-  G4LorentzVector pCM = p4Nucleus;          // four-vector to calculate Energy at CM frame
-  pCM.boost( -(p4Nucleus.boostVector()) );  // now 'pCM' is at CM frame
-
-  G4LorentzVector p4Residual(-pGamma, pCM.e() - evapEnergy); // momentum and energy conservation at CM frame
-  p4Residual.boost( _nucleus.GetMomentum().boostVector() ); // conversion to Lab frame
-
-  // once the residual nucleus 4-momentum is boosted, we boost the gamma
-  p4Gamma.boost( _nucleus.GetMomentum().boostVector() );
-  gamma->SetMomentum(p4Gamma);
-
+  
+  //  G4LorentzVector p4Residual(-pGamma, p4Nucleus.e() - eGamma);
+  //  p4Residual.boost( _nucleus.GetMomentum().boostVector() );
+  
   // Update excited nucleus parameters
 
   _nucleus.SetMomentum(p4Residual);
   _nucleus.SetCreationTime(gamma->GetCreationTime());
-
 
 //  if (_transition != 0) 
 //  {

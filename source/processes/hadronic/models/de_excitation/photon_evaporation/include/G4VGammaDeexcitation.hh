@@ -37,9 +37,6 @@
 //
 //      Modifications:
 //
-//        22 January 2009, Miguel A. Cortes-Giraldo (miancortes@us.es)
-//           Modified UpdateNucleus() to perform a Lorentz boost to 'gamma'
-//
 //        18 October 2002, F. Lei
 //          Added GetVaccantSN() and _vSN in order to link to ARM in low-e em
 //          _vSN is updated in UpdateElectron()
@@ -89,7 +86,7 @@ public:
 
     virtual const G4Fragment & GetNucleus() const;
 
-  virtual void SetNucleus(const G4Fragment & nucleus);
+    virtual void SetNucleus(const G4Fragment & nucleus);
 
     virtual void SetVerboseLevel(G4int verbose);
 
@@ -101,7 +98,7 @@ public:
 protected:
 
     void Initialize();
-    void UpdateNucleus(/*const*/ G4Fragment * gamma);
+    void UpdateNucleus(const G4Fragment * gamma);
     void UpdateElectrons ();
     void Update();
 

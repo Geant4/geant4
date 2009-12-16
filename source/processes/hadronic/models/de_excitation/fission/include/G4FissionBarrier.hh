@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionBarrier.hh,v 1.4 2009-03-13 18:57:17 vnivanch Exp $
+// $Id: G4FissionBarrier.hh,v 1.5 2009-12-16 16:50:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -57,10 +57,6 @@ public:
 private:
 
   G4double BarashenkovFissionBarrier(const G4int A, const G4int Z);
-
-  //JMQ 19/02/2009 new methods  
-  G4double SierkFissionBarrier(const G4int , const G4int , G4int);
-  void LPOLY( G4double , G4int  , G4double* );
   
   G4double SellPlusPairingCorrection(const G4int Z, const G4int N)
   { 
@@ -69,7 +65,5 @@ private:
   }
 
 };
-
-
 
 #endif
