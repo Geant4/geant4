@@ -325,6 +325,15 @@ int main(int argc, char** argv)
         ebinlog *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
+	char* st = getenv("statistic");
+	G4int st0 = atol(st);
+	if (st0 < nevt && st0 > 0){  
+	  nevt = st0;
+	  G4cout<<"Number of events according to run.mac "<< nevt << G4endl;
+	  G4cout<<"Number of events will be forced to "<< nevt << G4endl;
+	}else{
+	  G4cout<<"Number of events will be "<< nevt << G4endl;
+	}
       } else if(line == "#exclusive") {
         inclusive = false;
       } else if(line == "#inclusive") {
@@ -377,12 +386,23 @@ int main(int argc, char** argv)
       } else if(line == "#Shen") {
         Shen = true;
       } else if(line == "#generator") {
+	nameGen = "";
         (*fin) >> nameGen;
-      } else if(line == "#paw") {
+	if (nameGen == "") {
+	  G4cout << "Generator name is empty! " << G4endl; 
+	  continue;
+	}
         usepaw = true;
-        (*fin) >> hFile;
-      } else if(line == "#run") {
-        break;
+	hFile = nameGen;
+	char* c = getenv(nameGen);
+        if(!c) {
+	  G4cout << "Generator <" << nameGen << "> is not included in the "
+		 << " list SetModels.csh, so is ignored!" 
+		 << G4endl; 
+	  continue;
+	}
+	G4String s(c);
+	if(s=="1") {break;}	
       } else if(line == "#verbose") {
         (*fin) >> verbose;
 	G4NistManager::Instance()->SetVerbose(verbose);
@@ -490,7 +510,7 @@ int main(int argc, char** argv)
     } else {
       part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0.);
     }
-    if (! part ) {
+    if (!part) {
       G4cout << " Sorry, No definition for particle" <<namePart 
 	     << " found" << G4endl;
       G4Exception(" ");  
