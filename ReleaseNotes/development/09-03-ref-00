@@ -157,7 +157,7 @@ interfaces                                       interfaces-V09-02-07
   Fixed a problem on macOSX 10.6 with Qt 4.6-Beta.
 - Added debug flags for Qt.
 
-materials                                        materials-V09-02-23
+materials                                        materials-V09-02-24
 ---------
 - Increased flexibily of G4SurfaceProperty and G4OpticalSurface classes
   to allow for lookup-table boundary process simulations.
@@ -176,6 +176,7 @@ materials                                        materials-V09-02-23
   G4IronStoppingICRU73.
 - G4MaterialStoppingICRU73: changed material name from G4_NYLON-6/6 to
   G4_NYLON-6-6.
+- G4NIstMessenger: fixed minor memory leak at destruction.
 - G4NistMaterialBuilder: changed material names, G4_NYLON-6/6 to G4_NYLON-6-6,
   and G4_NYLON-6/10 to G4_NYLON-6-10, to allow matching with ion stopping power
   data files, which have material name in the file name.
