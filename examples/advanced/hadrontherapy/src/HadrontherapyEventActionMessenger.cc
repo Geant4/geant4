@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // $Id: HadrontherapyDetectorHit.cc; 
 //
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy

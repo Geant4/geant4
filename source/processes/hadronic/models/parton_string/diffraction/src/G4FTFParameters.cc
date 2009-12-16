@@ -1,4 +1,5 @@
-//********************************************************************
+//
+// ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
@@ -23,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.12 2009-11-25 09:14:03 vuzhinsk Exp $
+// $Id: G4FTFParameters.cc,v 1.13 2009-12-16 17:51:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

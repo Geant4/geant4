@@ -1,4 +1,3 @@
-//#define VERBOSE_DOSEDEP
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//#define VERBOSE_DOSEDEP
 //
-// $Id: G4PSDoseDeposit_RegNav.cc,v 1.3 2009-11-10 18:52:35 arce Exp $
+// $Id: G4PSDoseDeposit_RegNav.cc,v 1.4 2009-12-16 17:54:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit_RegNav

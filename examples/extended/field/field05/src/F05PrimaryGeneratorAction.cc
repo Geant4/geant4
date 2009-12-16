@@ -69,7 +69,7 @@ void F05PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   G4double Pmu = 517.6*MeV;
   G4double mu_mass = 105.658*MeV;
-  G4double Emu = sqrt(Pmu*Pmu + mu_mass*mu_mass);
+  G4double Emu = std::sqrt(Pmu*Pmu + mu_mass*mu_mass);
   G4double Kmu = Emu - mu_mass;
 
   G4double x0 = -6.99*m;

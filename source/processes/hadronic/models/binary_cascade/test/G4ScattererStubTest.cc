@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 #include "G4ScattererStub.hh"
@@ -49,17 +52,17 @@ int main(int argc, char ** argv)
   {
     G4double p = 1000*MeV*G4UniformRand();
     G4double theta = 2.0*G4UniformRand()-1.0;
-    theta = acos(theta);
+    theta = std::acos(theta);
     G4double phi = G4UniformRand()*2*pi;
-    G4ThreeVector direction(sin(theta)*cos(phi),
-			    sin(theta)*sin(phi), cos(theta));
-    G4LorentzVector mom1(p*direction, sqrt(p*p+pmass*pmass));
+    G4ThreeVector direction(std::sin(theta)*std::cos(phi),
+			    std::sin(theta)*std::sin(phi), std::cos(theta));
+    G4LorentzVector mom1(p*direction, std::sqrt(p*p+pmass*pmass));
     p = 1000*MeV*G4UniformRand();
     theta = 2.0*G4UniformRand()-1.0;
-    theta = acos(theta);
+    theta = std::acos(theta);
     phi = G4UniformRand()*2*pi;
-    G4ThreeVector direction2(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
-    G4LorentzVector mom2(p*direction2, sqrt(p*p+nmass*nmass));
+    G4ThreeVector direction2(std::sin(theta)*std::cos(phi), std::sin(theta)*std::sin(phi), std::cos(theta));
+    G4LorentzVector mom2(p*direction2, std::sqrt(p*p+nmass*nmass));
 
     G4KineticTrack kt1(proton, 0.0, pos, mom1);
     G4KineticTrack kt2(proton, 0.0, pos, mom2);

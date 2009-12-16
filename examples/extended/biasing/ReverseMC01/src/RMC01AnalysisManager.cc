@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.3 2009-11-27 14:43:25 ldesorgh Exp $
+// $Id: RMC01AnalysisManager.cc,v 1.4 2009-12-16 17:54:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -372,7 +372,7 @@ void  RMC01AnalysisManager::EndOfEventForForwardSimulation(const G4Event* anEven
         G4PrimaryParticle* thePrimary=anEvent->GetPrimaryVertex()->GetPrimary();
    	G4double E0= thePrimary->GetG4code()->GetPDGMass();
    	G4double P=thePrimary->GetMomentum().mag();
-   	G4double prim_ekin =sqrt(E0*E0+P*P)-E0;
+   	G4double prim_ekin =std::sqrt(E0*E0+P*P)-E0;
    	edep_vs_prim_ekin->fill(prim_ekin,totEdep);
    } 
    ComputeMeanEdepAndError(anEvent,mean_edep,error_mean_edep);
@@ -547,8 +547,8 @@ void  RMC01AnalysisManager::EndOfEventForAdjointSimulation(const G4Event* anEven
 G4double RMC01AnalysisManager::PrimDiffAndDirectionalFluxForAdjointSim(G4double prim_energy)
 { 
   G4double flux=amplitude_prim_spectrum;
-  if ( the_prim_spectrum_type ==EXPO)	flux*=exp(-prim_energy/alpha_or_E0);
-  else flux*=pow(prim_energy, -alpha_or_E0);
+  if ( the_prim_spectrum_type ==EXPO)	flux*=std::exp(-prim_energy/alpha_or_E0);
+  else flux*=std::pow(prim_energy, -alpha_or_E0);
   return flux;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -626,7 +626,7 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(const G4Event* anEvent,G4doub
    if (nb_event>0) {
    	  mean = accumulated_edep/nb_event;
 	  G4double mean_x2 =accumulated_edep2/nb_event;
-  	  error = factor*sqrt(mean_x2-mean*mean)/sqrt(nb_event);
+  	  error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(nb_event);
 	  mean *=factor;
    }
 }
@@ -644,7 +644,7 @@ void RMC01AnalysisManager::SetPrimaryExponentialSpectrumForAdjointSim(const G4St
   
 
   alpha_or_E0 = E0 ;
-  amplitude_prim_spectrum = omni_fluence/E0/(exp(-Emin/E0)-exp(-Emax/E0))/4./pi;
+  amplitude_prim_spectrum = omni_fluence/E0/(std::exp(-Emin/E0)-std::exp(-Emax/E0))/4./pi;
   emin_prim_spectrum = Emin ;
   emax_prim_spectrum = Emax;
 }
@@ -662,11 +662,11 @@ void RMC01AnalysisManager::SetPrimaryPowerLawSpectrumForAdjointSim(const G4Strin
   
 
  if (alpha ==1.) {
- 	amplitude_prim_spectrum = omni_fluence/log(Emax/Emin)/4./pi;
+ 	amplitude_prim_spectrum = omni_fluence/std::log(Emax/Emin)/4./pi;
  }
  else {
  	G4double p=1.-alpha;
- 	amplitude_prim_spectrum = omni_fluence/p/(pow(Emax,p)-pow(Emin,p))/4./pi;
+ 	amplitude_prim_spectrum = omni_fluence/p/(std::pow(Emax,p)-std::pow(Emin,p))/4./pi;
  	
  }
 

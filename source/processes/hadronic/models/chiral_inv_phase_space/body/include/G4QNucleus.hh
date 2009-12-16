@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.45 2009-08-31 11:21:48 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.46 2009-12-16 17:51:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -90,8 +90,8 @@ public:
   G4double GetRho0()                 {return rho0;} // One nucleon prob-density 
   G4double GetRelativeDensity(const G4ThreeVector& aPosition); // Densyty/rho0
   G4double GetRelWSDensity(const G4double& r)       // Wood-Saxon rho/rho0(r)
-                                        {return 1./(1.+exp((r-radius)/WoodSaxonSurf));}    
-  G4double GetRelOMDensity(const G4double& r2){return exp(-r2/radius);} // OscModelRelDens
+                                        {return 1./(1.+std::exp((r-radius)/WoodSaxonSurf));}    
+  G4double GetRelOMDensity(const G4double& r2){return std::exp(-r2/radius);} // OscModelRelDens
   G4double GetRadius(const G4double maxRelativeDenisty=0.5); // Radius of %ofDensity
   G4double GetOuterRadius();                        // Get radius of the most far nucleon
   G4double GetDeriv(const G4ThreeVector& point);    // Derivitive of density

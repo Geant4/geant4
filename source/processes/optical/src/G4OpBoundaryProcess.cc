@@ -721,7 +721,7 @@ void G4OpBoundaryProcess::DielectricLUT()
               G4double anglePhotonToNormal = 
                                           OldMomentum.angle(-theGlobalNormal);
               // Round it to closest integer
-              G4int angleIncident = G4int(floor(180/pi*anglePhotonToNormal+0.5));
+              G4int angleIncident = G4int(std::floor(180/pi*anglePhotonToNormal+0.5));
 
               // Take random angles THETA and PHI, 
               // and see if below Probability - if not - Redo

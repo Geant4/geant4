@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// $Id: G4VEmAdjointModel.cc,v 1.5 2009-12-16 17:50:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4VEmAdjointModel.hh"
@@ -571,7 +571,7 @@ G4double G4VEmAdjointModel::SampleAdjSecEnergyFromDiffCrossSectionPerAtom(G4doub
 	G4double grejmax = DiffCrossSectionPerAtomPrimToSecond(Emin,prim_energy,1); 
 	do {
         	q = G4UniformRand();
-        	x = pow(xmin, q);
+        	x = std::pow(xmin, q);
 		E=x*Emax;
 		greject = DiffCrossSectionPerAtomPrimToSecond( E,prim_energy ,1); 
 		

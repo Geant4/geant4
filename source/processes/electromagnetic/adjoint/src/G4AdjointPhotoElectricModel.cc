@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhotoElectricModel.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// $Id: G4AdjointPhotoElectricModel.cc,v 1.5 2009-12-16 17:50:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointPhotoElectricModel.hh"
@@ -108,7 +108,7 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
    G4double  cos_theta = 1.;
    G4double gamma   = 1. + electronEnergy/electron_mass_c2;
    if (gamma <= 5.) {
-  	G4double beta  = sqrt(gamma*gamma-1.)/gamma;
+  	G4double beta  = std::sqrt(gamma*gamma-1.)/gamma;
  	G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
 
   	G4double rndm,term,greject,grejsup;
@@ -126,9 +126,9 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
   //---------------------------------------
   
      
-  G4double sin_theta = sqrt(1.-cos_theta*cos_theta);
+  G4double sin_theta = std::sqrt(1.-cos_theta*cos_theta);
   G4double Phi     = twopi * G4UniformRand();
-  G4double dirx = sin_theta*cos(Phi),diry = sin_theta*sin(Phi),dirz = cos_theta;
+  G4double dirx = sin_theta*std::cos(Phi),diry = sin_theta*std::sin(Phi),dirz = cos_theta;
   G4ThreeVector adjoint_gammaDirection(dirx,diry,dirz);
   adjoint_gammaDirection.rotateUz(electronDirection);
   

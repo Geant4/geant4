@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.13 2009-12-09 16:14:12 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.14 2009-12-16 17:51:13 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //

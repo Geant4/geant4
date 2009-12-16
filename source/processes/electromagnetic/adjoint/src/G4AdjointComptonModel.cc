@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointComptonModel.cc,v 1.5 2009-11-20 10:31:20 ldesorgh Exp $
+// $Id: G4AdjointComptonModel.cc,v 1.6 2009-12-16 17:50:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointComptonModel.hh"
@@ -180,9 +180,9 @@ void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
 	if (Emin>=Emax) return;
 	G4double f1=(Emin-adjointPrimKinEnergy)/Emin;
 	G4double f2=(Emax-adjointPrimKinEnergy)/Emax/f1;
-	gammaE1=adjointPrimKinEnergy/(1.-f1*pow(f2,G4UniformRand()));;
+	gammaE1=adjointPrimKinEnergy/(1.-f1*std::pow(f2,G4UniformRand()));;
 	gammaE2=gammaE1-adjointPrimKinEnergy;
-	diffCSUsed= diffCSUsed*(1.+2.*log(1.+electron_mass_c2/adjointPrimKinEnergy))*adjointPrimKinEnergy/gammaE1/gammaE2;
+	diffCSUsed= diffCSUsed*(1.+2.*std::log(1.+electron_mass_c2/adjointPrimKinEnergy))*adjointPrimKinEnergy/gammaE1/gammaE2;
 	
  	
  }
@@ -190,7 +190,7 @@ void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
 	G4double Emin = GetSecondAdjEnergyMinForScatProjToProjCase(adjointPrimKinEnergy,currentTcutForDirectSecond);
 	if (Emin>=Emax) return;
 	gammaE2 =adjointPrimKinEnergy;
-	gammaE1=Emin*pow(Emax/Emin,G4UniformRand());
+	gammaE1=Emin*std::pow(Emax/Emin,G4UniformRand());
 	diffCSUsed= diffCSUsed/gammaE1;
 	
  }
@@ -387,15 +387,15 @@ G4double G4AdjointComptonModel::AdjointCrossSection(const G4MaterialCutsCouple* 
   	Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
   	Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
 	if (Emax_proj>Emin_proj ){
-		 Cross= log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
-		 						*(1.+2.*log(1.+electron_mass_c2/primEnergy));
+		 Cross= std::log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
+		 						*(1.+2.*std::log(1.+electron_mass_c2/primEnergy));
 	}	 
   }
   else {
         Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);
 	Emin_proj = GetSecondAdjEnergyMinForScatProjToProjCase(primEnergy,0.);
 	if (Emax_proj>Emin_proj) {
-		Cross = log(Emax_proj/Emin_proj);
+		Cross = std::log(Emax_proj/Emin_proj);
 		//+0.5*primEnergy*primEnergy(1./(Emin_proj*Emin_proj) - 1./(Emax_proj*Emax_proj)); neglected at the moment
 	}
   	

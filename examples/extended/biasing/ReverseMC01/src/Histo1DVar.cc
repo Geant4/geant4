@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              Histo1DVar.cc
@@ -165,13 +190,13 @@ double Histo1DVar::get_bin_error (HistSpecialBin specialBin)
   //
     case overflow_bin :
       if (overflownEvents>0) {
-        error = overflowTotalWeight/sqrt((G4double) overflownEvents);}
+        error = overflowTotalWeight/std::sqrt((G4double) overflownEvents);}
       else {
         error = 0.;}
       break;
     case underflow_bin :
       if (underflownEvents>0) {
-        error = underflowTotalWeight/sqrt((G4double) underflownEvents);}
+        error = underflowTotalWeight/std::sqrt((G4double) underflownEvents);}
       else {
         error = 0.;}
       break;
@@ -180,7 +205,7 @@ double Histo1DVar::get_bin_error (HistSpecialBin specialBin)
       if (nAllEvents-overflownEvents-underflownEvents>0) {
         for (size_t i=0; i<(part.total_bins()); i++) {
           error+=totalWeightSquared[i];}
-        error = error/sqrt((G4double) nAllEvents-overflownEvents-underflownEvents);
+        error = error/std::sqrt((G4double) nAllEvents-overflownEvents-underflownEvents);
       }
       break;
   }
@@ -217,19 +242,19 @@ double Histo1DVar::get_bin_error (int i)
   double error(0.);
   if (i > int(part.total_bins())-1) {
     if (overflownEvents>0) {
-      error = overflowTotalWeight/sqrt((G4double) overflownEvents);}
+      error = overflowTotalWeight/std::sqrt((G4double) overflownEvents);}
     else {
       error = 0.;}
   }
   else if (i < 0) {
     if (underflownEvents>0) {
-      error = underflowTotalWeight/sqrt((G4double) underflownEvents);}
+      error = underflowTotalWeight/std::sqrt((G4double) underflownEvents);}
     else {
       error = 0.;}
   }
   else {
     if (nEvents[i]>0) {
-      error = totalWeight[i]/sqrt((G4double) nEvents[i]);}
+      error = totalWeight[i]/std::sqrt((G4double) nEvents[i]);}
     else {
       error = 0.;}
   }

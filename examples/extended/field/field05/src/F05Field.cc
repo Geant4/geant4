@@ -103,7 +103,7 @@ void F05Field::GetFieldValue( const G4double Point[3],G4double* Bfield ) const
 
   G4double Ex,Ey;
  
-  G4double posR = sqrt(pow(Point[0],2) + pow(Point[1],2));
+  G4double posR = std::sqrt(std::pow(Point[0],2) + std::pow(Point[1],2));
   G4double cos_theta, sin_theta;
 
   if (posR>0){

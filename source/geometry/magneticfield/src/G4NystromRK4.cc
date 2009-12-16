@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.5 2009-11-12 15:02:33 japost Exp $
+// $Id: G4NystromRK4.cc,v 1.6 2009-12-16 17:49:57 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -144,9 +144,9 @@ G4NystromRK4::Stepper
 
   // Errors
   //
-  Err[3] = S*fabs(K1[0]-K2[0]-K3[0]+K4[0]);
-  Err[4] = S*fabs(K1[1]-K2[1]-K3[1]+K4[1]);
-  Err[5] = S*fabs(K1[2]-K2[2]-K3[2]+K4[2]);
+  Err[3] = S*std::fabs(K1[0]-K2[0]-K3[0]+K4[0]);
+  Err[4] = S*std::fabs(K1[1]-K2[1]-K3[1]+K4[1]);
+  Err[5] = S*std::fabs(K1[2]-K2[2]-K3[2]+K4[2]);
   Err[0] = S*Err[3]                       ;
   Err[1] = S*Err[4]                       ;
   Err[2] = S*Err[5]                       ;
@@ -156,7 +156,7 @@ G4NystromRK4::Stepper
 
   // Normalize momentum
   //
-  G4double normF = m_mom/sqrt(Po[3]*Po[3]+Po[4]*Po[4]+Po[5]*Po[5]);
+  G4double normF = m_mom/std::sqrt(Po[3]*Po[3]+Po[4]*Po[4]+Po[5]*Po[5]);
   Po [3]*=normF; Po[4]*=normF; Po[5]*=normF; 
 
   // Pass Energy, time unchanged -- time is not integrated !!
@@ -185,7 +185,7 @@ G4NystromRK4::DistChord() const
     dy         -= (s*ay)                ;
     dz         -= (s*az)                ;
   }
-  return sqrt(dx*dx+dy*dy+dz*dz);
+  return std::sqrt(dx*dx+dy*dy+dz*dz);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ void
 G4NystromRK4::ComputeRightHandSide(const G4double P[],G4double dPdS[])
 {
   getField(P);
-  m_mom   = sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
+  m_mom   = std::sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
   m_imom  = 1./m_mom                                ;
   m_cof   = m_fEq->FCof()*m_imom                    ;
   m_cachedMom = true                                ; // Caching the value

@@ -185,7 +185,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
 	initGamma = x * px + y * py;
 
-	initGamma = initGamma / sqrt(px*px + py*py) / sqrt(x*x + y*y);
+	initGamma = initGamma / std::sqrt(px*px + py*py) / std::sqrt(x*x + y*y);
 
 	initGamma = std::acos(initGamma*rad);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.67 2009-11-23 05:42:28 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.68 2009-12-16 17:51:21 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -265,12 +265,12 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	// HepRApp does not correctly represent the end faces of cylinders at
 	// non-standard angles, let the base class convert these solids to polygons.	
 	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
-	G4bool linedUpWithAnAxis = (fabs(r.phiX())<=.001 ||  
-								fabs(r.phiY())<=.001 || 
-								fabs(r.phiZ())<=.001 ||
-								fabs(r.phiX()-pi)<=.001 ||
-								fabs(r.phiY()-pi)<=.001 ||
-								fabs(r.phiZ()-pi)<=.001);	
+	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
+								std::fabs(r.phiY())<=.001 || 
+								std::fabs(r.phiZ())<=.001 ||
+								std::fabs(r.phiX()-pi)<=.001 ||
+								std::fabs(r.phiY()-pi)<=.001 ||
+								std::fabs(r.phiZ()-pi)<=.001);	
 	//G4cout << "Angle X:" << r.phiX() << ", Angle Y:" << r.phiY() << ", Angle Z:" << r.phiZ() << G4endl;
 	//G4cout << "linedUpWithAnAxis:" << linedUpWithAnAxis << G4endl;
 	

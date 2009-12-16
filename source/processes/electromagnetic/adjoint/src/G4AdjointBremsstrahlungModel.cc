@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointBremsstrahlungModel.cc,v 1.4 2009-11-20 10:31:20 ldesorgh Exp $
+// $Id: G4AdjointBremsstrahlungModel.cc,v 1.5 2009-12-16 17:50:01 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointBremsstrahlungModel.hh"
@@ -121,8 +121,8 @@ void G4AdjointBremsstrahlungModel::SampleSecondaries(const G4Track& aTrack,
   G4double u;
   const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
 
-  if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1;
-     else                          u = - log(G4UniformRand()*G4UniformRand())/a2;
+  if (9./(9.+d) > G4UniformRand()) u = - std::log(G4UniformRand()*G4UniformRand())/a1;
+     else                          u = - std::log(G4UniformRand()*G4UniformRand())/a2;
 
   G4double theta = u*electron_mass_c2/projectileTotalEnergy;
 
@@ -182,7 +182,7 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
 	G4double Emax = GetSecondAdjEnergyMaxForProdToProjCase(adjointPrimKinEnergy);
         G4double Emin=  GetSecondAdjEnergyMinForProdToProjCase(adjointPrimKinEnergy);;
 	if (Emin>=Emax) return;
-	projectileKinEnergy=Emin*pow(Emax/Emin,G4UniformRand());
+	projectileKinEnergy=Emin*std::pow(Emax/Emin,G4UniformRand());
 	diffCSUsed=lastCZ/projectileKinEnergy;
  	
  }
@@ -192,7 +192,7 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
 	G4double f1=(Emin-adjointPrimKinEnergy)/Emin;
 	G4double f2=(Emax-adjointPrimKinEnergy)/Emax/f1;
 	//G4cout<<"f1 and f2 "<<f1<<'\t'<<f2<<G4endl;
-	projectileKinEnergy=adjointPrimKinEnergy/(1.-f1*pow(f2,G4UniformRand()));
+	projectileKinEnergy=adjointPrimKinEnergy/(1.-f1*std::pow(f2,G4UniformRand()));
 	gammaEnergy=projectileKinEnergy-adjointPrimKinEnergy;
 	diffCSUsed=lastCZ*adjointPrimKinEnergy/projectileKinEnergy/gammaEnergy;
 	
@@ -231,8 +231,8 @@ void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
   G4double u;
   const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
 
-  if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1;
-     else                          u = - log(G4UniformRand()*G4UniformRand())/a2;
+  if (9./(9.+d) > G4UniformRand()) u = - std::log(G4UniformRand()*G4UniformRand())/a1;
+     else                          u = - std::log(G4UniformRand()*G4UniformRand())/a2;
 
   G4double theta = u*electron_mass_c2/projectileTotalEnergy;
 
@@ -372,17 +372,17 @@ G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(const G4MaterialCutsC
   if (UseMatrix) return G4VEmAdjointModel::AdjointCrossSection(aCouple,primEnergy,IsScatProjToProjCase);
   DefineCurrentMaterial(aCouple);
   G4double Cross=0.;
-  lastCZ=theDirectEMModel->CrossSectionPerVolume(aCouple->GetMaterial(),theDirectPrimaryPartDef,100.*MeV,100.*MeV/exp(1.));//this give the constant above
+  lastCZ=theDirectEMModel->CrossSectionPerVolume(aCouple->GetMaterial(),theDirectPrimaryPartDef,100.*MeV,100.*MeV/std::exp(1.));//this give the constant above
   
   if (!IsScatProjToProjCase ){
   	G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
   	G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
-	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= lastCZ*log(Emax_proj/Emin_proj);
+	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= lastCZ*std::log(Emax_proj/Emin_proj);
   }
   else {
   	G4double Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);
 	G4double Emin_proj = GetSecondAdjEnergyMinForScatProjToProjCase(primEnergy,currentTcutForDirectSecond);
-	if (Emax_proj>Emin_proj) Cross= lastCZ*log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy));
+	if (Emax_proj>Emin_proj) Cross= lastCZ*std::log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy));
   	
   }
   return Cross;	

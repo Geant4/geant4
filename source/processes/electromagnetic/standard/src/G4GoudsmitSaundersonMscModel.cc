@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.19 2009-11-09 18:40:25 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.20 2009-12-16 17:50:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc,v 1.3 2009-09-15 19:05:31 vnivanch Exp $
+// $Id: G4NeutronRadCapture.cc,v 1.4 2009-12-16 17:51:11 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,7 +96,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
   G4double cost = 2.0*G4UniformRand() - 1.0;
   if(cost > 1.0) {cost = 1.0;}
   else if(cost < -1.0) {cost = -1.0;}
-  G4double sint = sqrt((1. - cost)*(1.0 + cost));
+  G4double sint = std::sqrt((1. - cost)*(1.0 + cost));
   G4double phi  = G4UniformRand()*CLHEP::twopi;
   G4LorentzVector lv2(e1*sint*std::cos(phi),e1*sint*std::sin(phi),e1*cost,e1);   
   lv2.boost(bst);
