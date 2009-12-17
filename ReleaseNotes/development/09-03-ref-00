@@ -490,8 +490,7 @@ visualization                                    vis-V09-02-12
 data sets
 ---------
 - G4EMLOW-6.9:
-  o Added data tables for PIXE in the directories uf, kpcsPaul and kacsPaul
-    included in the pixe dir.
+  o Removed data for PIXE.
 - RealSurface-1.0:
   o New data of optical reflectance for a variety of surface treatments.
     Absolute path controlled by environment flag G4REALSURFACEDATA.
