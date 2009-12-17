@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -141,7 +141,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -219,9 +219,16 @@ ionIoni:   for  GenericIon    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+         ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
+
+nuclearStopping:   for  GenericIon    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   100 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -253,9 +260,9 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -407,7 +414,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=41.93s Real=42.2s Sys=0.23s
+  User=42.24s Real=42.48s Sys=0.24s
 
  ======================== run summary ======================
 
@@ -415,18 +422,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.936 MeV +- 235.764 keV
+ Total Energy deposited        = 3.936 MeV +- 229.975 keV
 
- Track length of primary track = 2.016 cm  +- 2.794 mm 
- Range from EmCalculator       = 2.026 cm  (from full dE/dx)
+ Track length of primary track = 2.043 cm  +- 2.828 mm 
+ Range from EmCalculator       = 2.048 cm  (from full dE/dx)
 
- Projected range               = 1.245 cm  +- 4.059 mm 
+ Projected range               = 1.315 cm  +- 4.209 mm 
 
- Nb of steps of primary track  = 238.57 +- 31.19	 Step size= 84.492 um  +- 4.583 um 
+ Nb of steps of primary track  = 241.38 +- 31.51	 Step size= 84.614 um  +- 4.532 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1536484387, 602520693
+ Current couple of seeds = 2012808689, 1315739825
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -494,8 +494,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=10.19s Real=10.19s Sys=0.01s
-Time elapsed in 1 events ---- User=10.19s Real=10.19s Sys=0.01s
+  User=7.13s Real=7.14s Sys=0s
+Time elapsed in 1 events ---- User=7.13s Real=7.14s Sys=0s
 #
 /gun/particle proton
 /gun/energy 0.01 MeV
@@ -516,8 +516,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.5s Real=2.5s Sys=0s
-Time elapsed in 1 events ---- User=2.5s Real=2.5s Sys=0s
+  User=2.55s Real=2.55s Sys=0s
+Time elapsed in 1 events ---- User=2.55s Real=2.55s Sys=0s
 #
 /gun/particle hydrogen
 /gun/energy 0.01 MeV
@@ -538,8 +538,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.72s Real=1.72s Sys=0s
-Time elapsed in 1 events ---- User=1.72s Real=1.72s Sys=0s
+  User=3.03s Real=3.04s Sys=0s
+Time elapsed in 1 events ---- User=3.03s Real=3.04s Sys=0s
 #
 /gun/particle alpha
 /gun/energy 0.01 MeV
@@ -560,8 +560,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.87s Real=1.9s Sys=0.02s
-Time elapsed in 1 events ---- User=1.87s Real=1.9s Sys=0.02s
+  User=2.16s Real=2.19s Sys=0.03s
+Time elapsed in 1 events ---- User=2.16s Real=2.19s Sys=0.03s
 #
 /gun/particle alpha+
 /gun/energy 0.01 MeV
@@ -582,8 +582,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.83s Real=1.87s Sys=0.04s
-Time elapsed in 1 events ---- User=1.83s Real=1.87s Sys=0.04s
+  User=2.16s Real=2.2s Sys=0.02s
+Time elapsed in 1 events ---- User=2.16s Real=2.2s Sys=0.02s
 #
 /gun/particle helium
 /gun/energy 0.01 MeV
@@ -604,18 +604,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1.87s Real=1.9s Sys=0.03s
-Time elapsed in 1 events ---- User=1.87s Real=1.9s Sys=0.03s
+  User=2.14s Real=2.16s Sys=0.03s
+Time elapsed in 1 events ---- User=2.14s Real=2.16s Sys=0.03s
 #
 G4 kernel has come to Quit state.
-DNAProcess for alpha in Water : 1 calls
-DNAProcess for alpha+ in Water : 5 calls
-DNAProcess for helium in Water : 1854 calls
-DNAProcess for hydrogen in Water : 1187 calls
-DNAProcess for proton in Water : 458 calls
-ElasticChampion for e- in Water : 21378 calls
-ExcitationEmfietzoglou for e- in Water : 164 calls
-IonisationBorn for e- in Water : 138 calls
+DNAProcess for alpha in Water : 3 calls
+DNAProcess for alpha+ in Water : 8 calls
+DNAProcess for helium in Water : 1872 calls
+DNAProcess for hydrogen in Water : 1165 calls
+DNAProcess for proton in Water : 454 calls
+ElasticChampion for e- in Water : 24474 calls
+ExcitationEmfietzoglou for e- in Water : 133 calls
+IonisationBorn for e- in Water : 137 calls
 Transportation for e- in Water : 1 calls
 Transportation for hydrogen in Water : 2 calls
 

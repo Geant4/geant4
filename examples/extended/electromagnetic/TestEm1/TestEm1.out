@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -112,7 +112,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -121,7 +121,6 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -138,7 +137,6 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -168,7 +166,6 @@ hIoni:   for  proton    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hBrems:   for  proton    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -196,7 +193,6 @@ ionIoni:   for  GenericIon    SubType= 2
             BraggIon :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -207,7 +203,6 @@ hIoni:   for  anti_proton    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -218,7 +213,6 @@ hIoni:   for  kaon+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -229,11 +223,10 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -246,7 +239,6 @@ muIoni:   for  mu+    SubType= 2
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -269,7 +261,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -292,7 +283,6 @@ hIoni:   for  pi+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -321,7 +311,6 @@ hIoni:   for  pi-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -369,7 +358,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=7.84s Real=7.88s Sys=0.04s
+  User=7.58s Real=7.61s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -377,29 +366,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.756 MeV
+ total energy deposit: 99.804 MeV
 
- nb tracks/event   neutral:     27.663   charged:     148.71
- nb  steps/event   neutral:     139.92   charged:     476.75
+ nb tracks/event   neutral:      27.68   charged:        148
+ nb  steps/event   neutral:     140.95   charged:     475.54
 
  nb of process calls per event: 
-            msc       eBrem       eIoni       compt        photTransportation        conv     annihil
-         149.29      25.104      300.94      112.26      25.273       0.999       1.403       1.403
+            msc       eBrem       eIoni        phot       comptTransportation        conv     annihil
+         148.31      25.075      300.73      25.293      113.27      0.9665       1.425       1.425
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.075 cm    rms = 3.7828 cm 
- proj Range = 9.5809 cm    rms = 3.4913 cm 
- proj/true  = 0.86507
- transverse dispersion at end = 1.6797 cm 
-      mass true Range from simulation = 29.903 g/cm2 
+ true Range = 10.987 cm    rms = 3.8234 cm 
+ proj Range = 9.5776 cm    rms = 3.5627 cm 
+ proj/true  = 0.87176
+ transverse dispersion at end = 1.6319 cm 
+      mass true Range from simulation = 29.664 g/cm2 
        from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 600723939, 264408015
+ Current couple of seeds = 1375807554, 1269164770
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -429,7 +418,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 600723939, 264408015
+ Current couple of seeds = 1375807554, 1269164770
 ----------------------------------------
 Start Run processing.
 
@@ -437,7 +426,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=15.01s Real=15.07s Sys=0.05s
+  User=13.9s Real=13.95s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -445,29 +434,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.814 MeV
+ total energy deposit: 99.81 MeV
 
- nb tracks/event   neutral:     34.839   charged:     312.09
- nb  steps/event   neutral:     145.89   charged:     944.06
+ nb tracks/event   neutral:     35.065   charged:     288.91
+ nb  steps/event   neutral:     145.41   charged:     898.27
 
  nb of process calls per event: 
-          eIoni       eBrem         msc        phot       compt        conv     annihilTransportation
-          602.5      32.977      307.15      32.496      111.05       1.409       1.409       0.948
+          eIoni       eBrem        phot         msc       compt        conv     annihilTransportation
+         579.81      33.178      32.715      283.87      110.35       1.407       1.407      0.9465
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.069 cm    rms = 3.875 cm 
- proj Range = 9.6224 cm    rms = 3.6043 cm 
- proj/true  = 0.86931
- transverse dispersion at end = 1.6757 cm 
-      mass true Range from simulation = 29.886 g/cm2 
+ true Range = 11.154 cm    rms = 3.8454 cm 
+ proj Range = 9.6831 cm    rms = 3.573 cm 
+ proj/true  = 0.86815
+ transverse dispersion at end = 1.7408 cm 
+      mass true Range from simulation = 30.115 g/cm2 
        from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1812713879, 303010491
+ Current couple of seeds = 885076725, 250399748
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

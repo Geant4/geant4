@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -360,13 +360,11 @@ msc:   for pi-    SubType= 10
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
 AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
-          CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <anti_proton>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                 G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
-          CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <kaon+>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -377,15 +375,11 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   KaonMinusInelastic  Models:    G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                  G4HEKaonMinusInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
-          CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <lambda>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
      LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                     G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 10000
-
-                     Hadronic Processes for <mu->
-          CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <neutron>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -401,7 +395,6 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
   PionMinusInelastic  Models:    G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 55
                                  G4HEPionMinusInelastic: Emin(GeV)=    45  Emax(GeV)= 10000
-          CHIPSNuclearAbsorptionAtRest
 
                      Hadronic Processes for <proton>
        HadronElastic  Models:                G4LElastic: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
@@ -418,6 +411,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=123(3.7645745), e-=1674(15.46102), e+=22(3.9572371), p=360(5.0975786), n=2224(3.7701009), d=48(2.3936125), t=13(1.6355956), He3=0(0), alph=193(2.978495), nu=1326(54.527709), anu=697(32.861338), others=22978*0.086433782
+Test23_Result: gam=100(3.3869875), e-=1649(17.205987), e+=11(4.4656154), p=280(2.8586132), n=2516(2.4142848), d=17(2.0848084), t=0(0), He3=0(0), alph=207(3.1453715), nu=1363(52.607781), anu=773(33.566348), others=30483*0.069987023
 Test23 is done
 

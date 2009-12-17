@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -185,10 +185,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -243,7 +251,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -379,18 +387,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.03s Real=3.06s Sys=0.02s
+  User=3.05s Real=3.07s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
- Projected Range= 298.546 um    rms= 1.45025 um 
- Mean number of primary steps = 299.87
+ Projected Range= 298.008 um    rms= 1.39692 um 
+ Mean number of primary steps = 299.424
  Total energy deposit= 144 MeV
- NIEL energy deposit = 111.655 keV
+ NIEL energy deposit = 96.7585 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 463731876, 1517366432
+ Current couple of seeds = 1803592974, 1093366397
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_Be
@@ -534,10 +542,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -592,7 +608,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -725,7 +741,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 463731876, 1517366432
+ Current couple of seeds = 1803592974, 1093366397
 ----------------------------------------
 Start Run processing.
 
@@ -733,18 +749,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.73s Real=3.76s Sys=0.02s
+  User=3.84s Real=3.87s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_Be (density: 1.848 g/cm3 )
 
- Projected Range= 381.806 um    rms= 1.98884 um 
- Mean number of primary steps = 383.072
+ Projected Range= 381.552 um    rms= 1.88203 um 
+ Mean number of primary steps = 382.869
  Total energy deposit= 144 MeV
- NIEL energy deposit = 85.2275 keV
+ NIEL energy deposit = 77.7503 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 157280889, 1326054589
+ Current couple of seeds = 224005204, 334662281
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_C
@@ -893,10 +909,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -951,7 +975,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1089,7 +1113,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 157280889, 1326054589
+ Current couple of seeds = 224005204, 334662281
 ----------------------------------------
 Start Run processing.
 
@@ -1097,18 +1121,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.29s Real=3.3s Sys=0.02s
+  User=3.32s Real=3.36s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 144 MeV through 20 cm  of G4_C (density: 2 g/cm3 )
 
- Projected Range= 330.598 um    rms= 1.68945 um 
- Mean number of primary steps = 331.891
+ Projected Range= 330.517 um    rms= 1.58789 um 
+ Mean number of primary steps = 331.827
  Total energy deposit= 144 MeV
- NIEL energy deposit = 96.3225 keV
+ NIEL energy deposit = 86.9622 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1593910242, 454064662
+ Current couple of seeds = 541097711, 1301942312
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_KAPTON
@@ -1273,10 +1297,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1331,7 +1363,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1474,7 +1506,7 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1593910242, 454064662
+ Current couple of seeds = 541097711, 1301942312
 ----------------------------------------
 Start Run processing.
 
@@ -1482,18 +1514,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.96s Real=0.99s Sys=0.02s
+  User=1.01s Real=1.02s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 8.26654 MeV
- NIEL energy deposit = 4.92754 keV
+ Total energy deposit= 8.26068 MeV
+ NIEL energy deposit = 4.57963 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 617328339, 1722782574
+ Current couple of seeds = 250189806, 309965681
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_POLYCARBONATE
@@ -1670,10 +1702,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1728,7 +1768,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1876,7 +1916,7 @@ Index : 5     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 617328339, 1722782574
+ Current couple of seeds = 250189806, 309965681
 ----------------------------------------
 Start Run processing.
 
@@ -1884,18 +1924,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.45s Sys=0.02s
+  User=0.42s Real=0.45s Sys=0.02s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 2.82872 MeV
- NIEL energy deposit = 1.73886 keV
+ Total energy deposit= 2.82997 MeV
+ NIEL energy deposit = 1.61528 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 489350735, 59164819
+ Current couple of seeds = 359402474, 561927785
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_MYLAR
@@ -2084,10 +2124,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -2142,7 +2190,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -2295,7 +2343,7 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 489350735, 59164819
+ Current couple of seeds = 359402474, 561927785
 ----------------------------------------
 Start Run processing.
 
@@ -2303,18 +2351,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.38s Sys=0.02s
+  User=0.34s Real=0.36s Sys=0.03s
 
  The run consists of 1000 Li7[0.0] of 29.818 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 2.53343 MeV
- NIEL energy deposit = 1.52947 keV
+ Total energy deposit= 2.535 MeV
+ NIEL energy deposit = 1.41816 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2124525405, 506776727
+ Current couple of seeds = 683913139, 1855354281
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_KAPTON
@@ -2503,10 +2551,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -2561,7 +2617,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -2714,7 +2770,7 @@ Index : 6     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2124525405, 506776727
+ Current couple of seeds = 683913139, 1855354281
 ----------------------------------------
 Start Run processing.
 
@@ -2722,18 +2778,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.98s Real=1s Sys=0.02s
+  User=1s Real=1.02s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 23.6929 MeV
- NIEL energy deposit = 12.7966 keV
+ Total energy deposit= 23.7173 MeV
+ NIEL energy deposit = 11.7213 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 401153536, 373629916
+ Current couple of seeds = 182400950, 536978402
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_POLYCARBONATE
@@ -2922,10 +2978,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -2980,7 +3044,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -3133,7 +3197,7 @@ Index : 6     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 401153536, 373629916
+ Current couple of seeds = 182400950, 536978402
 ----------------------------------------
 Start Run processing.
 
@@ -3141,18 +3205,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.45s Sys=0.03s
+  User=0.43s Real=0.44s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 79.08 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 8.04027 MeV
- NIEL energy deposit = 4.47277 keV
+ Total energy deposit= 8.03112 MeV
+ NIEL energy deposit = 4.06394 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 843358798, 276127574
+ Current couple of seeds = 2094016332, 433191287
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_MYLAR
@@ -3341,10 +3405,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -3399,7 +3471,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -3552,7 +3624,7 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 843358798, 276127574
+ Current couple of seeds = 2094016332, 433191287
 ----------------------------------------
 Start Run processing.
 
@@ -3560,18 +3632,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.39s Sys=0.03s
+  User=0.34s Real=0.37s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 59.04 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 9.22079 MeV
- NIEL energy deposit = 5.2166 keV
+ Total energy deposit= 9.22069 MeV
+ NIEL energy deposit = 4.8065 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 394663106, 1538672824
+ Current couple of seeds = 512466670, 1849459925
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_KAPTON
@@ -3760,10 +3832,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -3818,7 +3898,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -3971,7 +4051,7 @@ Index : 6     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 394663106, 1538672824
+ Current couple of seeds = 512466670, 1849459925
 ----------------------------------------
 Start Run processing.
 
@@ -3979,18 +4059,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.67s Real=0.69s Sys=0.02s
+  User=0.7s Real=0.73s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 46.7 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
  Projected Range= 46.7 um    rms= 0 fm 
  Mean number of primary steps = 49
- Total energy deposit= 36.3207 MeV
- NIEL energy deposit = 21.285 keV
+ Total energy deposit= 36.4361 MeV
+ NIEL energy deposit = 19.4894 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 180581139, 148467975
+ Current couple of seeds = 1888651047, 692922270
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_POLYCARBONATE
@@ -4179,10 +4259,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -4237,7 +4325,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -4390,7 +4478,7 @@ Index : 6     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 180581139, 148467975
+ Current couple of seeds = 1888651047, 692922270
 ----------------------------------------
 Start Run processing.
 
@@ -4398,18 +4486,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.44s Sys=0.02s
+  User=0.43s Real=0.45s Sys=0.02s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 29.333 um  of G4_POLYCARBONATE (density: 1.2 g/cm3 )
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 18.4382 MeV
- NIEL energy deposit = 10.722 keV
+ Total energy deposit= 18.4465 MeV
+ NIEL energy deposit = 9.85807 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 708756044, 1962113736
+ Current couple of seeds = 1054298524, 899008821
 ----------------------------------------
 /testem/stepMax 0.001 mm
 /testem/det/setMat G4_MYLAR
@@ -4598,10 +4686,18 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  C12[0.0]    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -4656,7 +4752,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 1, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :     Emin=          0 eV         Emax=   10 TeV
 
@@ -4809,7 +4905,7 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 708756044, 1962113736
+ Current couple of seeds = 1054298524, 899008821
 ----------------------------------------
 Start Run processing.
 
@@ -4817,18 +4913,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.35s Real=0.38s Sys=0.03s
+  User=0.36s Real=0.39s Sys=0.03s
 
  The run consists of 1000 O16[0.0] of 78.215 MeV through 23.143 um  of G4_MYLAR (density: 1.4 g/cm3 )
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 16.4265 MeV
- NIEL energy deposit = 9.38071 keV
+ Total energy deposit= 16.4342 MeV
+ NIEL energy deposit = 8.6105 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 969236126, 1702851589
+ Current couple of seeds = 543272365, 1577829966
 ----------------------------------------
 
 ===============================================================================
@@ -4841,9 +4937,9 @@ Run Summary
   Particle       Material      Energy    Ref.Value  Err.   Sim.Value  Diff. P/F
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
-  C12[0.0]          G4_Al       144.0     300.1 um   5.0  298.546 um    0.5   P
-  C12[0.0]          G4_Be       144.0     381.5 um   5.0  381.806 um   -0.1   P
-  C12[0.0]           G4_C       144.0     327.7 um   5.0  330.598 um   -0.9   P
+  C12[0.0]          G4_Al       144.0     300.1 um   5.0  298.008 um    0.7   P
+  C12[0.0]          G4_Be       144.0     381.5 um   5.0  381.552 um   -0.0   P
+  C12[0.0]           G4_C       144.0     327.7 um   5.0  330.517 um   -0.9   P
 -------------------------------------------------------------------------------
   TOTAL = 3, FAILED = 0, PASSED = 3
 ===============================================================================
@@ -4859,15 +4955,15 @@ Run Summary
   Particle       Material      Energy    Ref.Value  Err.   Sim.Value  Diff. P/F
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
-  Li7[0.0]      G4_KAPTON        29.8      8.44 MeV  5.0  8.26654 MeV   2.1   P
-  Li7[0.0]  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82872 MeV   3.5   P
-  Li7[0.0]       G4_MYLAR        29.8      2.61 MeV  5.0  2.53343 MeV   2.9   P
-  C12[0.0]      G4_KAPTON        79.1     23.17 MeV  5.0  23.6929 MeV  -2.3   P
-  C12[0.0]  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.04027 MeV  -9.5   F
-  C12[0.0]       G4_MYLAR        59.0      9.39 MeV  5.0  9.22079 MeV   1.8   P
-  O16[0.0]      G4_KAPTON        78.2     35.47 MeV  5.0  36.3207 MeV  -2.4   P
-  O16[0.0]  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4382 MeV  -1.4   P
-  O16[0.0]       G4_MYLAR        78.2     16.32 MeV  5.0  16.4265 MeV  -0.7   P
+  Li7[0.0]      G4_KAPTON        29.8      8.44 MeV  5.0  8.26068 MeV   2.1   P
+  Li7[0.0]  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82997 MeV   3.4   P
+  Li7[0.0]       G4_MYLAR        29.8      2.61 MeV  5.0    2.535 MeV   2.9   P
+  C12[0.0]      G4_KAPTON        79.1     23.17 MeV  5.0  23.7173 MeV  -2.4   P
+  C12[0.0]  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03112 MeV  -9.4   F
+  C12[0.0]       G4_MYLAR        59.0      9.39 MeV  5.0  9.22069 MeV   1.8   P
+  O16[0.0]      G4_KAPTON        78.2     35.47 MeV  5.0  36.4361 MeV  -2.7   P
+  O16[0.0]  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4465 MeV  -1.5   P
+  O16[0.0]       G4_MYLAR        78.2     16.32 MeV  5.0  16.4342 MeV  -0.7   P
 -------------------------------------------------------------------------------
   TOTAL = 9, FAILED = 1, PASSED = 8
 ===============================================================================

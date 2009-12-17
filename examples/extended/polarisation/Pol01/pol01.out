@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,18 +26,6 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -170,33 +158,33 @@ Run Summary
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.494358 0.968166 0.261004 0.22015 0.555984 0.170507 0.554672 0.303487 0.600259 0.868946 0.935145 0.256778 0.769885 0.0551859 0.594984 0.361001 0.260112 0.412109 0.74448 0.0259306 0.394197 0.235287 0.46433 0.925884 
- i_lag = 7, j_lag = 17
- carry = 0, count24 = 19
+ float_seed_table[] = 0.327186 0.406724 0.440079 0.769111 0.803129 0.366524 0.0286527 0.0578583 0.622567 0.140711 0.992686 0.361992 0.837692 0.198571 0.710228 0.679671 0.88341 0.910976 0.584298 0.661074 0.244239 0.0382392 0.626088 0.336393 
+ i_lag = 10, j_lag = 20
+ carry = 5.96046e-08, count24 = 14
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31166
-	pol-compt = 287
-	pol-eBrem = 364
-	msc = 3103
-	pol-conv = 216
-	pol-eIoni = 630
-	pol-phot = 179
-	pol-annihil = 59
+	Transportation = 31248
+	pol-compt = 283
+	pol-eBrem = 383
+	msc = 2968
+	pol-conv = 201
+	pol-phot = 174
+	pol-eIoni = 584
+	pol-annihil = 60
  Gamma: 
-Mean Number per Event :1.0073
-Mean Energy :9.5832 MeV +- 1.893 MeV
-Mean Polarization :-0.96428 +- 0.18378
+Mean Number per Event :1.0115
+Mean Energy :9.5556 MeV +- 1.9431 MeV
+Mean Polarization :-0.96279 +- 0.18598
  Electron: 
-Mean Number per Event :0.035
-Mean Energy :5.2407 MeV +- 2.5599 MeV
-Mean Polarization :-0.71451 +- 0.30128
+Mean Number per Event :0.0363
+Mean Energy :4.9456 MeV +- 2.608 MeV
+Mean Polarization :-0.702 +- 0.30913
  Positron: 
-Mean Number per Event :0.016
-Mean Energy :4.1542 MeV +- 2.0809 MeV
-Mean Polarization :-0.61772 +- 0.31591
+Mean Number per Event :0.0146
+Mean Energy :4.1287 MeV +- 2.1373 MeV
+Mean Polarization :-0.59393 +- 0.3522
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

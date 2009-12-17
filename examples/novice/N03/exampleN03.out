@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -213,9 +213,9 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -357,8 +357,9 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
      Transportation,                msc,              hIoni,              eIoni
               eBrem,            annihil,               phot,              compt
-               conv,             muIoni,            muBrems,         muPairProd
-             hBrems,          hPairProd,              Decay
+               conv,              muMsc,             muIoni,            muBrems
+         muPairProd,             hBrems,          hPairProd,              Decay
+
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -469,9 +470,9 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
           BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -699,9 +700,9 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.052311 MeV
           BetheBloch :     Emin=   1.052311 MeV        Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -803,16 +804,16 @@ hPairProd:   for  pi-    SubType= 4
  Current couple of seeds = 330333918, 180809835
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 421.83138 MeV       total track length: 98.116103 cm 
-        Gap: total energy: 76.492864 MeV       total track length: 2.1613591 m  
+   Absorber: total energy: 404.61721 MeV       total track length: 96.080817 cm 
+        Gap: total energy: 89.598634 MeV       total track length: 2.4895852 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 421.83138 MeV +- 0 eV 
- mean Energy in Gap      : 76.492864 MeV +- 0 eV 
+ mean Energy in Absorber : 404.61721 MeV +- 0 eV 
+ mean Energy in Gap      : 89.598634 MeV +- 0 eV 
 
- mean trackLength in Absorber : 98.116103 cm  +- 0 fm 
- mean trackLength in Gap      : 2.1613591 m   +- 0 fm 
+ mean trackLength in Absorber : 96.080817 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.4895852 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

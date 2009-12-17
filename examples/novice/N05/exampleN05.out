@@ -5,7 +5,7 @@ RunManager construction starting....
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-02-ref-09    (5-June-2009)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -695,7 +695,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    10   -0.335      606 1.01e+03      3.09    0.238    0.561      5.54     Crystal msc
    11   -0.179      606 1.01e+03      2.84    0.248    0.561       6.1     Crystal msc
    12   -0.057      607 1.01e+03      2.63    0.211    0.561      6.66     Crystal msc
-   13 -1.67e-16      607 1.01e+03      2.55   0.0736    0.127      6.79     Crystal CoupledTransportation
+   13   -5e-16      607 1.01e+03      2.55   0.0736    0.127      6.79     Crystal CoupledTransportation
    14   0.0125      607 1.01e+03      2.49   0.0603    0.187      6.97     Crystal msc
    15    0.131      607 1.01e+03      2.41   0.0878    0.187      7.16     Crystal msc
    16    0.275      607 1.01e+03      2.32   0.0871    0.187      7.35     Crystal msc
@@ -721,7 +721,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.345      606 1.01e+03     0.489        0        0         0     Crystal initStep
-    1 1.11e-16      607 1.01e+03     0.489        0     2.57      2.57     Crystal CoupledTransportation
+    1 -2.78e-16      607 1.01e+03     0.489        0     2.57      2.57     Crystal CoupledTransportation
     2     1.96      617 1.02e+03         0   0.0332     14.6      17.1     Crystal phot
 
 *********************************************************************************************************
@@ -3833,7 +3833,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.664     -356 1.16e+03     0.603        0        0         0     Crystal initStep
     1    -0.18     -355 1.16e+03     0.447        0     1.83      1.83     Crystal compt
-    2 -8.33e-16     -354 1.16e+03     0.447        0     0.56      2.39     Crystal CoupledTransportation
+    2 5.83e-16     -354 1.16e+03     0.447        0     0.56      2.39     Crystal CoupledTransportation
     3     1.77     -350 1.16e+03     0.447        0     5.51      7.91     Crystal CoupledTransportation
     4     7.98     -335 1.17e+03         0    0.036     19.4      27.3     Crystal phot
 
@@ -4016,7 +4016,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -1.88     -350 1.16e+03     0.425        0        0         0     Crystal initStep
     1    -1.59     -350 1.16e+03     0.425        0    0.327     0.327     Crystal CoupledTransportation
-    2 -1.55e-15     -351 1.16e+03     0.425        0     1.78      2.11     Crystal CoupledTransportation
+    2 2.22e-16     -351 1.16e+03     0.425        0     1.78      2.11     Crystal CoupledTransportation
     3     7.34     -354 1.16e+03         0    0.036     8.24      10.4     Crystal phot
 
 *********************************************************************************************************
@@ -4361,7 +4361,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0.2589252417026369 (GeV)
      7 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5030344591325732 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.5030344591325733 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0

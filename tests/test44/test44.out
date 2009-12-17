@@ -1,13 +1,17 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-04    (9-May-2008)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 /run/verbose 1
-/tracking/verbose 0
+/tracking/verbose 1
 #
 /testhadr/TargetMat G4_Al
 /testhadr/TargetRadius 5 cm
@@ -15,10 +19,9 @@
 /testhadr/NumberDivZ 40
 /testhadr/PrintModulo 10
 #
-/testhadr/CutsAll 1 mm
-/testhadr/Physics QBBC
-PhysicsList::AddPhysicsList: <QBBC>
-### HadronInelasticQBBC
+#/testhadr/CutsAll          1 mm
+#/testhadr/Physics          QBBC
+#/testhadr/Physics          emstandard_opt2
 #
 /run/initialize
 ### Target consist of 40 of G4_Al disks with R(mm)= 50  Width(mm)= 1  Total Length(mm)= 40  ###
@@ -27,119 +30,573 @@ PhysicsList::AddPhysicsList: <QBBC>
 
  Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_Galactic     density:  0.000 kg/m3   RadL: 204311276.564 pc   Nucl.Int.Length: 114319864.124 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: G4_Galactic     density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-   --->  Isotope:     H   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-   --->  Isotope:     H   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+   --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+   --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
-Thank you for using G4BinaryCascade. 
-### Adding Neutron tracking cut for neutron
-###  cut value is 10 microseconds
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
 PhysicsList::SetCuts:CutLength : 1 mm 
+/process/eLoss/subsec true
+/run/physicsModified
 #
 /gun/particle proton
 /gun/energy 100. MeV
-/run/beamOn 100
-============================================================================================
-             HADRONIC PROCESSES SUMMARY (verbose level 1)
-
-                     Hadronic Processes for <anti_neutron>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <anti_proton>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <kaon+>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <kaon->
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <lambda>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <neutron>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
-            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 1.79769e+305
-
-                     Hadronic Processes for <pi+>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <pi->
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-
-                     Hadronic Processes for <proton>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-          hInelastic  Models:           TheoFSGenerator: Emin(GeV)=     6  Emax(GeV)= 100000
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9
-============================================================================================
+/run/beamOn 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 0 start
-### Histo books 1 histograms in <test44.root>
+### Histo books 1 histograms in <test44.xml>
 Start Run processing.
 EventAction: Event # 0 started
-EventAction: Event # 10 started
-EventAction: Event # 20 started
-EventAction: Event # 30 started
-EventAction: Event # 40 started
-EventAction: Event # 50 started
-EventAction: Event # 60 started
-EventAction: Event # 70 started
-EventAction: Event # 80 started
-EventAction: Event # 90 started
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -20       100        0        0         0      Target initStep
+    1        0        0      -19      98.7     1.34        1         1      Target Transportation
+    2        0        0      -19      98.7        0        0         1      Target Transportation
+    3  0.00114 -0.00121      -18      96.7     1.63        1         2      Target Transportation
+    4  0.00164 -0.00602      -17      95.2     1.49        1         3      Target Transportation
+    5 -0.000407  -0.0115      -16      93.7     1.35        1         4      Target Transportation
+    6  0.00036 -0.00953      -15        92     1.49        1         5      Target Transportation
+    7 0.000407  -0.0147      -14      90.2     1.38        1         6      Target Transportation
+    8  0.00886   -0.021      -13      88.1     1.61        1         7      Target Transportation
+    9   0.0163  -0.0261      -12      86.5     1.51        1         8      Target Transportation
+   10   0.0337  -0.0254      -11      84.9      1.5        1         9      Target Transportation
+   11   0.0556  -0.0265      -10      83.2      1.6        1        10      Target Transportation
+   12    0.104  -0.0336       -9      81.4     1.57        1        11      Target Transportation
+   13    0.177  -0.0192       -8      79.6     1.57        1        12      Target Transportation
+   14    0.256  -0.0041       -7      77.9     1.52        1        13      Target Transportation
+   15    0.333   0.0192       -6        76     1.73        1        14      Target Transportation
+   16    0.426   0.0457       -5      74.2      1.8        1        15      Target Transportation
+   17    0.517    0.132       -4      72.2     1.61     1.01        16      Target Transportation
+   18    0.613    0.225       -3      70.1     1.93     1.01        17      Target Transportation
+   19    0.718    0.323       -2      67.9     1.98     1.01        18      Target Transportation
+   20    0.817    0.431       -1        66     1.89     1.01      19.1      Target Transportation
+   21    0.925    0.531        0      63.8     1.98     1.01      20.1      Target Transportation
+   22     1.06    0.621        1      61.8     2.02     1.01      21.1      Target Transportation
+   23     1.18    0.722        2      59.6     2.11     1.01      22.1      Target Transportation
+   24     1.29    0.814        3      57.3     2.22     1.01      23.1      Target Transportation
+   25      1.4    0.921        4      54.9     2.18     1.01      24.1      Target Transportation
+   26     1.52     1.03        5      52.4     2.39     1.01      25.1      Target Transportation
+   27     1.65     1.14        6      49.8     2.41     1.01      26.1      Target Transportation
+   28     1.75     1.22        7      47.2     2.49     1.01      27.1      Target Transportation
+   29     1.86      1.3        8      44.7     2.49     1.01      28.2      Target Transportation
+   30     1.95     1.36        9      41.6     2.81     1.01      29.2      Target Transportation
+   31     2.03     1.45       10      38.5        3     1.01      30.2      Target Transportation
+   32      2.1      1.5       11      35.4     3.09        1      31.2      Target Transportation
+   33     2.17     1.55       12        32      3.4        1      32.2      Target Transportation
+   34     2.21     1.56       13      28.1     3.86        1      33.2      Target Transportation
+   35     2.22     1.52       14        24     4.08        1      34.2      Target Transportation
+   36     2.24     1.47       15      18.7     5.28        1      35.2      Target Transportation
+   37     2.27     1.44       16      12.5     6.21        1      36.2      Target Transportation
+   38     2.19     1.35     16.9         0     12.5    0.943      37.1      Target hIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 55,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     2.15     1.54     11.8    0.0635        0        0         0      Target initStep
+    1     2.16     1.54     11.8         0   0.0635   0.0322    0.0322      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 54,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     2.03     1.44     9.97     0.083        0        0         0      Target initStep
+    1     2.03     1.44     9.97    0.0741   0.0089   0.0101    0.0101      Target msc
+    2     2.03     1.45     9.98    0.0694  0.00467  0.00635    0.0164      Target msc
+    3     2.03     1.45     9.98    0.0651  0.00429  0.00525    0.0217      Target msc
+    4     2.03     1.45     9.99    0.0586  0.00653  0.00396    0.0256      Target msc
+    5     2.03     1.45     9.99    0.0577 0.000958  0.00307    0.0287      Target msc
+    6     2.03     1.45     9.99    0.0551  0.00253  0.00317    0.0319      Target msc
+    7     2.03     1.45     9.99    0.0523  0.00281  0.00277    0.0346      Target msc
+    8     2.03     1.45     9.99    0.0494  0.00296  0.00262    0.0372      Target msc
+    9     2.03     1.45     9.99     0.047  0.00236  0.00284    0.0401      Target msc
+   10     2.04     1.46     9.99     0.041  0.00597  0.00299    0.0431      Target msc
+   11     2.03     1.46     9.98    0.0386  0.00244   0.0033    0.0464      Target msc
+   12     2.04     1.46     9.98    0.0302  0.00836   0.0032    0.0496      Target msc
+   13     2.04     1.46     9.98         0   0.0302  0.00891    0.0585      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 53,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      1.9     1.33     8.42    0.0811        0        0         0      Target initStep
+    1      1.9     1.33     8.44         0   0.0811   0.0488    0.0488      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 52,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.87     1.31     8.14    0.0691        0        0         0      Target initStep
+    1     1.87      1.3     8.15         0   0.0691   0.0372    0.0372      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 51,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.86      1.3     8.04    0.0625        0        0         0      Target initStep
+    1     1.85      1.3     8.05         0   0.0625   0.0313    0.0313      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 50,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.86      1.3     8.03    0.0778        0        0         0      Target initStep
+    1     1.86      1.3     8.03    0.0689  0.00894   0.0082    0.0082      Target msc
+    2     1.86      1.3     8.04    0.0647  0.00415  0.00518    0.0134      Target msc
+    3     1.86      1.3     8.04    0.0564  0.00832  0.00854    0.0219      Target msc
+    4     1.85     1.31     8.05         0   0.0564   0.0262    0.0482      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 49,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.71     1.19     6.61    0.0925        0        0         0      Target initStep
+    1     1.72     1.19     6.63         0   0.0925    0.061     0.061      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 48,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.69     1.17     6.37    0.0722        0        0         0      Target initStep
+    1     1.68     1.18     6.38         0   0.0722     0.04      0.04      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 47,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.55     1.05      5.2     0.116        0        0         0      Target initStep
+    1     1.55     1.06     5.23         0    0.116   0.0885    0.0885      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 46,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      1.5     1.01     4.79     0.105        0        0         0      Target initStep
+    1     1.51     1.01     4.81         0    0.105   0.0759    0.0759      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 45,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.41    0.928     4.06    0.0692        0        0         0      Target initStep
+    1     1.41    0.936     4.07         0   0.0692   0.0373    0.0373      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 44,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.36     0.88     3.62     0.105        0        0         0      Target initStep
+    1     1.37    0.878     3.64         0    0.105   0.0752    0.0752      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.35    0.874     3.56     0.126        0        0         0      Target initStep
+    1     1.36    0.873      3.6         0    0.126    0.102     0.102      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 42,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.24    0.774     2.56     0.081        0        0         0      Target initStep
+    1     1.25    0.783     2.57         0    0.081   0.0487    0.0487      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 41,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     1.16    0.707     1.85    0.0803        0        0         0      Target initStep
+    1     1.16    0.717     1.87         0   0.0803    0.048     0.048      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 40,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.881     0.49    -0.41     0.101        0        0         0      Target initStep
+    1    0.895    0.487   -0.391         0    0.101   0.0709    0.0709      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.839    0.451     -0.8    0.0672        0        0         0      Target initStep
+    1    0.842    0.444   -0.791         0   0.0672   0.0354    0.0354      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 38,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.709    0.315    -2.09     0.118        0        0         0      Target initStep
+    1    0.721    0.325    -2.07    0.0997   0.0186   0.0259    0.0259      Target msc
+    2    0.721    0.339    -2.07    0.0906  0.00918   0.0165    0.0424      Target msc
+    3    0.711    0.347    -2.07    0.0817  0.00892   0.0148    0.0572      Target msc
+    4    0.699    0.352    -2.06         0   0.0817   0.0494     0.107      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 37,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.707    0.313     -2.1    0.0801        0        0         0      Target initStep
+    1    0.715    0.306    -2.09         0   0.0801   0.0477    0.0477      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 36,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     0.66    0.269    -2.55    0.0743        0        0         0      Target initStep
+    1    0.652    0.272    -2.54         0   0.0743   0.0421    0.0421      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 35,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.593    0.206     -3.2    0.0701        0        0         0      Target initStep
+    1    0.591    0.215     -3.2         0   0.0701   0.0381    0.0381      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 34,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.554    0.167    -3.61     0.114        0        0         0      Target initStep
+    1    0.563    0.184    -3.59         0    0.114    0.086     0.086      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 33,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.474   0.0914    -4.47     0.101        0        0         0      Target initStep
+    1    0.486    0.104    -4.45         0    0.101   0.0708    0.0708      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 32,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.444   0.0628     -4.8     0.127        0        0         0      Target initStep
+    1    0.439   0.0511    -4.77         0    0.127    0.104     0.104      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 31,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.437   0.0559    -4.88    0.0745        0        0         0      Target initStep
+    1    0.427   0.0555    -4.87         0   0.0745   0.0423    0.0423      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 30,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.387   0.0347    -5.41    0.0826        0        0         0      Target initStep
+    1    0.401   0.0343     -5.4         0   0.0826   0.0504    0.0504      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 29,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.328   0.0177    -6.06    0.0964        0        0         0      Target initStep
+    1    0.328  0.00715    -6.05    0.0647   0.0316   0.0194    0.0194      Target msc
+    2    0.333  0.00564    -6.04         0   0.0647   0.0332    0.0526      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 28,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.247  -0.0058    -7.11    0.0607        0        0         0      Target initStep
+    1    0.242 0.000286    -7.11         0   0.0607   0.0298    0.0298      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 27,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.228 -0.00942    -7.35     0.177        0        0         0      Target initStep
+    1     0.23  -0.0155    -7.29         0    0.177    0.178     0.178      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 26,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.139  -0.0268    -8.52    0.0754        0        0         0      Target initStep
+    1    0.141  -0.0158    -8.51         0   0.0754   0.0431    0.0431      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 25,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.113  -0.0318    -8.87    0.0859        0        0         0      Target initStep
+    1    0.109  -0.0195    -8.86         0   0.0859   0.0538    0.0538      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 24,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.102  -0.0334    -9.04    0.0781        0        0         0      Target initStep
+    1   0.0969   -0.041    -9.03    0.0679   0.0102   0.0107    0.0107      Target msc
+    2   0.0951  -0.0432    -9.03     0.063  0.00488  0.00675    0.0174      Target msc
+    3   0.0969  -0.0463    -9.02    0.0577   0.0053  0.00741    0.0248      Target msc
+    4   0.0932  -0.0496    -9.02    0.0466   0.0111  0.00552    0.0303      Target msc
+    5   0.0964  -0.0472    -9.02    0.0393  0.00731  0.00451    0.0349      Target msc
+    6   0.0994  -0.0449    -9.02         0   0.0393    0.014    0.0489      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 23,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0602  -0.0271    -9.91     0.178        0        0         0      Target initStep
+    1   0.0718  -0.0221    -9.88      0.16    0.018   0.0284    0.0284      Target msc
+    2   0.0747 -0.00807    -9.87     0.148   0.0118   0.0179    0.0463      Target msc
+    3   0.0635    0.015    -9.88     0.127   0.0212   0.0288     0.075      Target msc
+    4    0.072   0.0363    -9.89     0.107   0.0197   0.0275     0.103      Target msc
+    5   0.0929   0.0273     -9.9         0    0.107   0.0777      0.18      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 22,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0578  -0.0268    -9.95    0.0657        0        0         0      Target initStep
+    1   0.0508  -0.0214    -9.95         0   0.0657   0.0341    0.0341      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 21,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0351  -0.0255    -10.9    0.0767        0        0         0      Target initStep
+    1    0.043  -0.0339    -10.9         0   0.0767   0.0444    0.0444      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0185   -0.026    -11.9    0.0801        0        0         0      Target initStep
+    1  0.00654  -0.0258    -11.9         0   0.0801   0.0478    0.0478      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 19,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0116  -0.0229    -12.6     0.108        0        0         0      Target initStep
+    1 -0.00539  -0.0274    -12.6         0    0.108   0.0786    0.0786      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 18,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   0.0078  -0.0203    -13.1     0.071        0        0         0      Target initStep
+    1  0.00283  -0.0112    -13.1         0    0.071   0.0389    0.0389      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00776  -0.0202    -13.1     0.171        0        0         0      Target initStep
+    1  0.00304 0.000719    -13.1     0.144   0.0268   0.0389    0.0389      Target msc
+    2   0.0117   0.0123    -13.1     0.132   0.0113   0.0246    0.0634      Target msc
+    3   0.0153  0.00204    -13.1     0.119   0.0137   0.0214    0.0849      Target msc
+    4   0.0166  -0.0131    -13.1     0.106   0.0124   0.0174     0.102      Target msc
+    5   0.0171  -0.0231    -13.1    0.0973   0.0091   0.0139     0.116      Target msc
+    6   0.0205  -0.0339      -13    0.0838   0.0135   0.0137      0.13      Target msc
+    7   0.0191  -0.0434      -13    0.0736   0.0102   0.0113     0.141      Target msc
+    8   0.0244  -0.0509      -13    0.0577   0.0158   0.0106     0.152      Target msc
+    9   0.0253  -0.0601      -13         0   0.0577   0.0273     0.179      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00573  -0.0187    -13.4     0.099        0        0         0      Target initStep
+    1  -0.0102  -0.0165    -13.4         0    0.099   0.0684    0.0684      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00336  -0.0169    -13.6    0.0994        0        0         0      Target initStep
+    1   0.0196  -0.0198    -13.6         0   0.0994   0.0688    0.0688      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00236  -0.0162    -13.8    0.0713        0        0         0      Target initStep
+    1 -0.00516 -0.00896    -13.8         0   0.0713   0.0392    0.0392      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000399  -0.0139    -14.2      0.09        0        0         0      Target initStep
+    1  0.00444 8.41e-05    -14.2         0     0.09   0.0583    0.0583      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000398  -0.0137    -14.2    0.0796        0        0         0      Target initStep
+    1   0.0117  -0.0188    -14.2         0   0.0796   0.0473    0.0473      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000381  -0.0118    -14.6    0.0673        0        0         0      Target initStep
+    1 -0.00551 -0.00412    -14.6         0   0.0673   0.0355    0.0355      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000374   -0.011    -14.7    0.0639        0        0         0      Target initStep
+    1  0.00726  -0.0169    -14.7         0   0.0639   0.0325    0.0325      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000369  -0.0105    -14.8    0.0628        0        0         0      Target initStep
+    1  0.00535  -0.0178    -14.8         0   0.0628   0.0315    0.0315      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000362  -0.0097      -15    0.0698        0        0         0      Target initStep
+    1  0.00208  -0.0149      -15    0.0605  0.00933   0.0094    0.0094      Target msc
+    2  0.00649  -0.0181      -15    0.0541  0.00636  0.00596    0.0154      Target msc
+    3   0.0143  -0.0182      -15         0   0.0541   0.0244    0.0398      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000132  -0.0108    -15.6    0.0806        0        0         0      Target initStep
+    1   0.0124  -0.0121    -15.6         0   0.0806   0.0483    0.0483      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.00015  -0.0108    -15.7    0.0815        0        0         0      Target initStep
+    1   0.0034  0.00153    -15.7         0   0.0815   0.0492    0.0492      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000767 -0.00835    -16.6     0.134        0        0         0      Target initStep
+    1  -0.0215 -0.00247    -16.5         0    0.134    0.113     0.113      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000504 -0.000534    -18.6     0.211        0        0         0      Target initStep
+    1  -0.0186 -0.00332    -18.5         0    0.211    0.235     0.235      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000319 -0.000338    -18.7    0.0808        0        0         0      Target initStep
+    1  -0.0124  0.00127    -18.7         0   0.0808   0.0485    0.0485      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000138 -0.000146    -18.9    0.0637        0        0         0      Target initStep
+    1  0.00872 -0.00317    -18.9         0   0.0637   0.0323    0.0323      Target eIoni
 Run terminated.
 Run Summary
-  Number of events processed : 100
-  User=0.15s Real=0.31s Sys=0.01s
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     100
-Number of events                     100
-Average energy deposit (MeV)         98.83   RMS(MeV) 5.936
-Average number of steps              43
+Number of events                     1
+Average energy deposit (MeV)         100   RMS(MeV) 0
+Average number of steps of primary   38
 ========================================================
 
 #
 G4 kernel has come to Quit state.
+
