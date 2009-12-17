@@ -289,6 +289,10 @@ int main(int argc, char** argv)
 
     // ---- Read input file
     do {
+      if( fin->eof() ) {
+        end = false;
+        break;
+      }
       (*fin) >> line;
       if(verbose > 0) G4cout << "Next line " << line << G4endl;
       if(line == "#particle") {
