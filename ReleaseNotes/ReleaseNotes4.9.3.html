@@ -184,8 +184,8 @@ recompilation) and a recompilation of user applications is required.
 <B>Physics Lists</B>
 <P> </P>
 <UL>
-<LI>Qualification for several physics-lists have changed, being now declared
-    either obsolete or experimental. Some physics-lists have been removed.
+<LI>Qualification for several physics-lists have changed. Several are now declared
+     obsolete. A new category of 'experimental' is used for newer physics-lists or ones with new physics options. Some physics-lists have been removed.
     See in <A HREF="#lst-notes">Section 10</A> for the details.</LI>
 </UL>
 
@@ -298,29 +298,27 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>Improved and extended the <TT>FTF</TT> model for pion obsorption on nuclei.
-    Introduced Reggeon cascade; added excitation energy calculation and
-    tuned the model with parameters of nuclear de-excitation and
-    implemented charge-exchange for <TT>pn->np</TT> in elastic and
-    inelastic interactions. Implemented also pion absorption by a nucleon.</LI>
+<LI>Improved and extended the <TT>FTF</TT> model.
+  Improved  its pion absorption on nucleons, introduced Reggeon cascade stage, and added excitation energy calculation. Tuned the model  parameters of nuclear de-excitation and
+  implemented charge-exchange for <TT>pn->np</TT> in elastic and
+  inelastic interactions.</LI>
 <LI>The validity of the pion-nuclear cross-sections in
     <TT>G4PiNuclearCrossSections</TT>, and the nucleon-nuclear cross-sections
     in <TT>G4NeutronInelasticCrossSections</TT> and
-    <TT>G4ProtonInelasticCrossSections</TT> has been extended to <TT>100 TeV</TT>
+    <TT>G4ProtonInelasticCrossSections</TT> has been extended to <TT>100 TeV,</TT>
     by assuming a constant cross-section at very high energies.</LI>
 <LI>Glauber-Gribov cross-sections for ion-ion collisions are now available in 
-    the class <TT>G4GGNuclNuclCrossSection</TT>.
-    They can be used from <TT>0.1 MeV</TT> to <TT>100 TeV</TT>.</LI>
+    the class <TT>G4GGNuclNuclCrossSection</TT>,
+    spanning from <TT>0.1 MeV</TT> to <TT>100 TeV</TT>.</LI>
 <LI>The nucleon-nucleon and pion-nucleon partial cross-sections used in the 
-    Bertini cascade were reviewed and incorrect cross-sections found below
+    Bertini cascade were reviewed and the incorrect cross-sections found below
     <TT>1 GeV</TT> were fixed. This results in slightly improved agreement
     with data below <TT>1 GeV</TT>.</LI>
-<LI>The CHIPS model has been extended to high energies (~TeV) for hadron- and 
-    lepton-nuclear reactions; now covering all energies for all particles.
+<LI>The CHIPS model has been extended with hadronic interactions covering all energies for all hadronic particles; in addition    hadron- and 
+    lepton-nuclear reactions  are extended to high energies (~TeV). 
     It can be used by choosing the new <TT>CHIPS</TT> physics-list.
     CHIPS ion-ion elastic scattering model is also now available.</LI>
-<LI>An option was added to allow elastic scattering models to be treated in 
-    the same way as inelastic models. Models can now be assigned to the 
+<LI>An option was added to allow models for elastic scattering  to be treated in a similar way to inelastic models. Models can now be assigned to the 
     process class <TT>G4WHadronElasticProcess</TT>.</LI>    
 <LI><TT>G4NeutronRadCapture</TT> is a simplified new model which produces a
     single photon after neutron capture. 4-momentum is conserved in the
@@ -338,39 +336,41 @@ Please see the corresponding details in
 
 <P> </P>
 <B>Physics Lists</B>
-<P> </P>
-<UL>
-<LI>New electromagnetic physics constructors combining standard and
+<UL><LI>New electromagnetic physics constructors combining standard and
     low-energy electromagnetic models are available:
     <TT>G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
     G4EmLivermorePolarizedPhysics</TT>.</LI>
-<LI>New default builder for optical photon physics has been added:
+  <LI>New default builder for optical photon physics has been added:
     <TT>G4OpticalPhysics</TT> together with its messenger,
     <TT>G4OpticalPhysicsMessenger</TT>.</LI>
-<LI>All lists based on <TT>FTF</TT> and <TT>CHIPS</TT> modelling will
-    use improved versions of <TT>FTF</TT> and <TT>CHIPS</TT>.</LI>
+<LI>All lists based on <TT>FTF</TT> and <TT>CHIPS</TT> modelling 
+    use the improved versions of <TT>FTF</TT> and <TT>CHIPS</TT>.</LI>
 <LI>Newly added physics lists:
     <UL>
-    <LI><TT>CHIPS</TT>, a physics-lists based on the CHIPS model.</LI>
+    <LI><TT>CHIPS</TT>, a physics-lists which uses the CHIPS model for  nuclear interactions of all energies and particles..</LI>
     <LI><TT>QGSP_INCL_ABLA</TT>, a list using INCL/ABLA. It is mainly
         intended for use with energies less than <TT>3 GeV</TT>. This is
         useful for e.g. spallation studies and Accelerator Driven Systems (ADS)
         applications.</LI>
     </UL></LI>
 <LI>Other new physics-lists, already present in 9.3-Beta:
-    <UL>
-    <LI>For different lists additional options for EM physics are
-        provided:<BR>
-        <TT>FTF_BERT_EMV, FTF_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY</TT>.</LI>
-    <LI><TT>FTF_BERT_TRV</TT>, lower the transition energy from BERTini to
-        QGSP in the range from <TT>6-8 GeV</TT>.</LI>
-    </UL></LI>
+  <ul>
+    <li> Some are based on existing lists, with different transitions between models:
+      <ul>
+        <li><tt>FTFP_BERT_TRV</tt>, lower the transition energy from BERTini to
+          QGSP in the range from <tt>6-8 GeV</tt>.</li>
+        </ul>
+    </li>
+    <li>Others  offer  options for EM physics:<BR>
+      <TT>FTFP_BERT_EMV, FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY</TT>.</li>
+    </ul>
+</LI>
 <LI>Attempts to reduce usage of LEP in the intermediate energy range:
     <UL>
-    <LI><TT>QGSP_BERT_NOLEP</TT>, using QGSP starting from <TT>8.5 GeV</TT>.</LI>
+    <LI><TT>QGSP_BERT_NOLEP</TT>, using QGSP starting from <TT>8.5 GeV</TT>;</LI>
     <LI><TT>QGSP_FTFP_BERT</TT>, using FTFP in the energy range between BERT
         and QGSP.</LI>
-    </UL></LI>
+  </UL></LI>
 </UL>
 
 <B>Visualization, Graphical Representations & Interfaces</B>
