@@ -224,7 +224,7 @@ Please see the corresponding details in
 
 <B>Geometry & Field</B>
 <UL>
-<LI>A new stepper<TT>G4NystromRK4</TT> offers better computing performance in
+<LI>A new stepper <TT>G4NystromRK4</TT> offers better computing performance in
     integrating the trajectories of charged particles in a magnetic field.
     It uses the standard Nystrom method and a novel analytical estimation of
     the integration error. This reduces greatly the number of field calls per
@@ -336,11 +336,12 @@ Please see the corresponding details in
 
 <P> </P>
 <B>Physics Lists</B>
-<UL><LI>New electromagnetic physics constructors combining standard and
+<UL>
+<LI>New electromagnetic physics constructors combining standard and
     low-energy electromagnetic models are available:
     <TT>G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
     G4EmLivermorePolarizedPhysics</TT>.</LI>
-  <LI>New default builder for optical photon physics has been added:
+<LI>New default builder for optical photon physics has been added:
     <TT>G4OpticalPhysics</TT> together with its messenger,
     <TT>G4OpticalPhysicsMessenger</TT>.</LI>
 <LI>All lists based on <TT>FTF</TT> and <TT>CHIPS</TT> modelling 
@@ -354,23 +355,20 @@ Please see the corresponding details in
         applications.</LI>
     </UL></LI>
 <LI>Other new physics-lists, already present in 9.3-Beta:
-  <ul>
-    <li> Some are based on existing lists, with different transitions between models:
-      <ul>
-        <li><tt>FTFP_BERT_TRV</tt>, lower the transition energy from BERTini to
-          QGSP in the range from <tt>6-8 GeV</tt>.</li>
-        </ul>
-    </li>
-    <li>Others  offer  options for EM physics:<BR>
-      <TT>FTFP_BERT_EMV, FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY</TT>.</li>
-    </ul>
-</LI>
+    <UL>
+    <LI>Some are based on existing lists, with different transitions between
+        models:<BR>
+        <TT>FTFP_BERT_TRV</TT>, lower the transition energy from
+        BERTini to QGSP in the range from <TT>6-8 GeV</TT>.</LI>
+    <LI>Others  offer  options for EM physics:<BR>
+        <TT>FTFP_BERT_EMV, FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY</TT>.</LI>
+    </UL></LI>
 <LI>Attempts to reduce usage of LEP in the intermediate energy range:
     <UL>
     <LI><TT>QGSP_BERT_NOLEP</TT>, using QGSP starting from <TT>8.5 GeV</TT>;</LI>
     <LI><TT>QGSP_FTFP_BERT</TT>, using FTFP in the energy range between BERT
         and QGSP.</LI>
-  </UL></LI>
+    </UL></LI>
 </UL>
 
 <B>Visualization, Graphical Representations & Interfaces</B>
