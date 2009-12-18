@@ -228,8 +228,9 @@ Please see the corresponding details in
 
 <B>Geometry & Field</B>
 <UL>
-<LI><TT>G4NystromRK4</TT> field stepper<BR>
-    *************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>A new stepper<TT>G4NystromRK4</TT> offers better computing performance in integrating  the trajectories of charged particles in a magnetic field. It uses the standard Nystrom method and a novel analytical estimation of the integration error. This reduces greatly the number of field calls per integration step - from ten to three. It achieves comparable accuracy with G4ClassicalRK4 in test cases.  It can be used only for pure magnetic fields which do are not time-dependent.
+<LI>A  new class <TT>G4CachedMagneticField</TT> caches the value of a magnetic field class, in order to reduce the number of calls to an expensive field calculation or interpolation method. For positions within the chosen radius of the previous position where it evaluated the field, it returns the last value of the field is automatically. It can be used only for pure magnetic fields which are not time-dependent.<BR>
+  
 </UL>
 
 <B>Detector description persistency</B>
@@ -273,14 +274,14 @@ Please see the corresponding details in
 <UL>
 <LI>The set of multiple-scattering models has been expanded:
     <UL>
-    <LI><TT>G4UrbanMscModel92</TT> is the default model for <TT>e+-</TT>
+    <LI><TT>G4UrbanMscModel92</TT> is the default model for <TT>e+/e-</TT>
         equivalent to the Urban model included in the previous release 9.2.
         It is used as the default and in the <TT>Option1</TT> electromagnetic
         physics constructors for physics-lists.</LI>
     <LI><TT>G4UrbanMscModel93</TT> is a tuned version of the Urban model used
-        for <TT>e+-</TT> in all other physics constructors of physics-lists
+        for <TT>e+/e-</TT> in all other physics constructors of physics-lists
         (<TT>Option2, Option3, Livermore, Penelope</TT>).</LI>
-    <LI><TT>G4GoudssmitSoundersonMscModel</TT> is a new model for <TT>e+-</TT>
+    <LI><TT>G4GoudssmitSoundersonMscModel</TT> is a new model for <TT>e+/e-</TT>
         based on formalism developed for Penelope and EGSnrc.</LI>
     </UL>
     A new relativistic model <TT>G4PairProductionRelModel</TT> is available
@@ -313,8 +314,8 @@ Please see the corresponding details in
     single photon after neutron capture. 4-momentum is conserved in the
     reaction.</LI>    
 <LI>Improved probabilities and channels in the <TT>G4GEM</TT> model bring it
-    into closer agreement with data.<LI>
-<LI>Unit conversion errors were fixed in fission and Fermi break-up models.<LI>   
+    into closer agreement with data.</LI>
+<LI>Unit conversion errors were corrected in fission and Fermi break-up models.</LI>   
 </UL>
 
 <B>Optical physics</B>
@@ -339,14 +340,18 @@ Please see the corresponding details in
 <B>Visualization, Graphical Representations & Interfaces</B>
 <UL>
 <LI>Improved ability of visualization system to render Boolean solids.
-    Certain cases involving very near co-planar faces had resulted in
+    Certain cases involving very near co-planar faces used to result in
     incorrect visualization (though not incorrect tracking).
-    A previously included mechanism to deal with this by slightly shifting the
-    position of one solid in a chosen direction has been expanded by attempting
-    shifts in different directions by varying small amounts until one is found
-    that does not give an error. The system still can not handle every
-    situation, but results in far fewer visualization inaccuracies than were
-    previously seen in such difficult cases.</LI>
+    An existing mechanism to deal with this has been improved.
+  <ul>
+    <li>This mechanism used to  shift slightly the
+      position of one solid in a chosen direction. Now it  attempts
+      shifts in different directions by varying small amounts until one is found
+      that does not give an error. The system still can not handle every
+      situation. However it results in far fewer visualization inaccuracies than were seen
+      previously  in such difficult cases.</li>
+  </ul>
+</LI>
 <LI>Visualization attributes can now be individually set for each volume within
     a nested parameterization.</LI>
 <LI>Rich Trajectories and Rich Trajectory Points now include additional
@@ -445,7 +450,13 @@ Please see the corresponding details in
 
 <H2>6. Known Run-Time Problems and Limitations</H2>
 <UL>
-<LI>*************************** ADD TEXT HERE !!!!!!!!!!!!!
+<LI>Reports have been made of particle tracks stuck at a volume boundary or at an interface between volumes. This occurs infrequently - on the order of one step per 10^11, but can effect large productions. The behaviour involved particles which do not progress but move in very small steps, and as a result the simulation of this track never finishes.
+  <ul>
+    <li>A partial solution is implemented in this release, which uses an existing mechanism to identify better these stuck tracks. It is able to find all such tracks in the setups reported, using a large multiple of the value of the <tt>Tolerance</tt> for the setup. Users should pay attention that the value is chosen well for their setup in case they encounter a similar problem (using the existing functionality for setting this value.)</li>
+    <li>The treatment for these stuck tracks is to abandon the relevant track. This results in the track being killed by the G4Transportation process.  A warning is issued (if compiled in verbose mode) in the case that the energy of the track is above a threshold  energy. Its default value   is 100 MeV. This value should be chosen by a user in order to  get warning for all  particles of energy important to your simulation. A new value can be assigned  using the <tt>SetThresholdWarningEnergy</tt> method of <tt>G4Transportation</tt>.</li>
+    <li>Please report any similar instances in the <A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem
+Reporting System </A> </li>
+  </ul>
 </UL>
 For a complete list of outstanding run-time problems and to submit any
 problem you may find while running this version of Geant4, please refer 
@@ -481,12 +492,12 @@ The following message may be written to standard output at the end of a program:
 It provides the total energy (in <TT>MeV</TT>) of tracks  killed due to
 excessive number of steps ('looping') during the simulation, and the maximum
 energy of such a track. Such behaviour can be due to looping in magnetic fields
-or encountering problems at geometrical boundaries.
+or being abandoned due to being stuck at geometrical boundaries -  as  as mentioned in section 6.
 <P></P>
 In case either of these reported energies is significant, we recommend
 increasing the verbosity of <TT>G4Transportation</TT> to obtain information for
 each track killed. A user can change the threshold energy above which particles
-are not killed using the method <TT>SetThresholdImportantEnergy</TT> of
+are  killed more reluctantly (only after significant additional effort) using the method <TT>SetThresholdImportantEnergy</TT> of
 <TT>G4Transportation</TT>. The default value is <TT>250 MeV</TT>.
 
 <P> </P>
@@ -992,19 +1003,27 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Refinements in <TT>G4PropagatorInField</TT>:
         <UL>
-        <LI>Changed parameters for treating consecutive tiny/zero steps
-            (decrease factor to 0.25 from 0.1); the value is not used when
-            the step size falls below a certain threshold. Added new member
-            <TT>fZeroStepThreshold</TT>, to enable tuning of threshold for
-            tiny/zero steps; this threshold is now changed, and expressed as
-            a multiple of <TT>fZeroStepThreshold</TT> instead of
-            <TT>kCarTolerance</TT>. Changed the value given to the decrease
-            factor to 0.35. Addresses a problem seen at boundary of volumes
-            reported by ATLAS.</LI>
+        <LI>Activated field per region. A field manager can now be assigned to a region, and it will be used for all logical volumes it contains - except those which override it by having a field manager of their own.</LI>
+        <LI>Improved handling of repeated small steps at boundaries which are due to geometry  imprecision, navigation optimisation, or the details of the algorithm used for tracking in field.
+          <ul>
+            <li>Added new member <tt>fZeroStepThreshold</tt>, to enable tuning of this existing threshold for
+              identifying tiny or zero steps. </li>
+              <li>A new value for this threshold <tt>fZeroStepThreshold</tt> is 
+                  a large multiple (10^4) of <tt>kCarTolerance</tt> - the old value was <tt>0.5*kCarTolerance</tt>. Addresses a problem of tracks stuck at boundaries of volumes
+              reported by ATLAS.</li>
+              <li>The condition for identifying a tiny step is changed in order to avoid misidentifying small proposed physical steps as problem tiny steps. </li>
+            </ul>
+        </LI>
+        <LI>Changed parameters which determine the size of the next trial step. This is used only when trying to recover from consecutive tiny/zero steps.
+          <ul>
+            <li> The default decrease factor is now 0.25 (from 0.1)</li>
+            <li>When the step size is comparable to the value <tt>of fZeroStepThreshold </tt> a different decrease factor is used. The value  given to the decrease
+              factor was changed to 0.35 (from 0.25).</li>
+          </ul>
+        </LI>
+        <LI>Added new method <TT>RefreshIntersectionLocator()</TT> to update the
+            state of helper class.</LI>
         <LI>Improved printing of diagnostics.</LI>
-        <LI>Activated field per region.</LI>
-        <LI>Added new method <TT>RefreshIntersectionLocator()</TT> to update
-            state.</LI>
         <LI>Deleted obsolete internal methods:
             <TT>SetAccuraciesWithDeltaOneStep(), SetDeltaIntersection(),
             SetDeltaOneStep()</TT>.</LI>
