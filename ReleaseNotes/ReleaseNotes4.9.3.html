@@ -193,6 +193,15 @@ recompilation) and a recompilation of user applications is required.
 </UL>
 
 <P> </P>
+<B>Physics Lists</B>
+<P> </P>
+<UL>
+<LI>Qualification for several physics-lists have changed, being now declared
+    either obsolete or experimental. Some physics-lists have been removed.
+    See in <A HREF="#lst-notes">Section 10</A> for the details.</LI>
+</UL>
+
+<P> </P>
 <B>Visualization</B>
 <P> </P>
 <UL>
@@ -301,6 +310,11 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
+<LI>Improved and extended the <TT>FTF</TT> model for pion obsorption on nuclei.
+    Introduced Reggeon cascade; added excitation energy calculation and
+    tuned the model with parameters of nuclear de-excitation and
+    implemented charge-exchange for <TT>pn->np</TT> in elastic and
+    inelastic interactions. Implemented also pion absorption by a nucleon.</LI>
 <LI>The validity of the pion-nuclear cross-sections in
     <TT>G4PiNuclearCrossSections</TT>, and the nucleon-nuclear cross-sections
     in <TT>G4NeutronInelasticCrossSections</TT> and
@@ -313,9 +327,10 @@ Please see the corresponding details in
     Bertini cascade were reviewed and incorrect cross-sections found below
     <TT>1 GeV</TT> were fixed. This results in slightly improved agreement
     with data below <TT>1 GeV</TT>.</LI>
-<LI>The CHIPS ion-ion elastic scattering model is now available. Also, the 
-    CHIPS model has been extended to high energies (~TeV) for hadron- and 
-    lepton-nuclear reactions.</LI>
+<LI>The CHIPS model has been extended to high energies (~TeV) for hadron- and 
+    lepton-nuclear reactions; now covering all energies for all particles.
+    It can be used by choosing the new <TT>CHIPS</TT> physics-list.
+    CHIPS ion-ion elastic scattering model is also now available.</LI>
 <LI>An option was added to allow elastic scattering models to be treated in 
     the same way as inelastic models. Models can now be assigned to the 
     process class <TT>G4WHadronElasticProcess</TT>.</LI>    
@@ -341,9 +356,18 @@ Please see the corresponding details in
     low-energy electromagnetic models are available:
     <TT>G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
     G4EmLivermorePolarizedPhysics</TT>.</LI>
-<LI>A default builder for optical photon physics has been added:
+<LI>New default builder for optical photon physics has been added:
     <TT>G4OpticalPhysics</TT> together with its messenger,
     <TT>G4OpticalPhysicsMessenger</TT>.</LI>
+<LI>Added <TT>FTFP_BERT_TRV</TT> as variant of <TT>FTFP_BERT</TT> with
+    transition between 6 and 8 <TT>GeV</TT>. Also added new
+    <TT>QGSP_BERT_TRV</TT> list, with transition energies to use
+    <TT>BERT ]0,9.9]</TT>, <TT>LEP [9.5, 15]</TT> and
+    <TT>QGSP [10, inf[</TT>. Added list <TT>QGSP_FTFP_BERT</TT> based on
+    <TT>QGSP_BERT</TT> and transitioning from <TT>BERT</TT> to <TT>FTFP</TT>
+    between 7 and 9 <TT>GeV</TT>.</LI>
+<LI>New <TT>CHIPS</TT> physics list, using the <TT>CHIPS</TT> model for all
+    energies and particles.</LI>
 </UL>
 
 <B>Visualization, Graphical Representations & Interfaces</B>
@@ -514,7 +538,7 @@ It provides the total energy (in <TT>MeV</TT>) of tracks  killed due to
 excessive number of steps ('looping') during the simulation, and the maximum
 energy of such a track. Such behaviour can be due to looping in magnetic fields
 or being abandoned due to being stuck at geometrical boundaries, as mentioned
-in <A href="6.">Section 6</A>.
+in <A href="#6.">Section 6</A>.
 <P></P>
 In case either of these reported energies is significant, we recommend
 increasing the verbosity of <TT>G4Transportation</TT> to obtain information for
