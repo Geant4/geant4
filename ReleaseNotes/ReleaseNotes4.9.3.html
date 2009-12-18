@@ -70,7 +70,7 @@ Official platforms:
     Scientific Linux CERN 5 (SLC5) (based on RedHat Linux Enterprise 5).
     Geant4 has also been successfully compiled on other RedHat versions as
     well as Debian and Suse.</LI>
-<LI>MacOSX 10.5 and 10.6, gcc-4.0.1/gcc-4.2.1</LI>
+<LI>MacOSX 10.5 with gcc-4.0.1 and 10.6 with gcc-4.2.1</LI>
 <LI>Windows/XP and CygWin Tools with: Visual C++ 9.0 (Visual Studio 2008)</LI>
 </UL>
 
@@ -359,15 +359,26 @@ Please see the corresponding details in
 <LI>New default builder for optical photon physics has been added:
     <TT>G4OpticalPhysics</TT> together with its messenger,
     <TT>G4OpticalPhysicsMessenger</TT>.</LI>
-<LI>Added <TT>FTFP_BERT_TRV</TT> as variant of <TT>FTFP_BERT</TT> with
-    transition between 6 and 8 <TT>GeV</TT>. Also added new
-    <TT>QGSP_BERT_TRV</TT> list, with transition energies to use
-    <TT>BERT ]0,9.9]</TT>, <TT>LEP [9.5, 15]</TT> and
-    <TT>QGSP [10, inf[</TT>. Added list <TT>QGSP_FTFP_BERT</TT> based on
-    <TT>QGSP_BERT</TT> and transitioning from <TT>BERT</TT> to <TT>FTFP</TT>
-    between 7 and 9 <TT>GeV</TT>.</LI>
-<LI>New <TT>CHIPS</TT> physics list, using the <TT>CHIPS</TT> model for all
-    energies and particles.</LI>
+<LI>All lists based on <TT>FTF</TT> and <TT>CHIPS</TT> modelling will
+    use improved versions of <TT>FTF</TT> and <TT>CHIPS</TT>.</LI>
+<LI>Newly added physics lists:
+    <UL>
+    <LI><TT>CHIPS</TT>, a physics-lists based on the CHIPS model.</LI>
+    <LI><TT>QGSP_INCL_ABLA</TT>, a list using INCL/ABLA. It is mainly
+        intended for use with energies less than <TT>3 GeV</TT>. This is
+        useful for e.g. spallation studies and Accelerator Driven Systems (ADS)
+        applications.</LI>
+    </UL></LI>
+<LI>Other new physics-lists, already present in 9.3-Beta:
+    <UL>
+    <LI>For different lists additional options for EM physics are
+        provided:<BR>
+        <TT>FTF_BERT_EMV, FTF_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY</TT>.</LI>
+    <LI><TT>FTF_BERT_TRV</TT>, lower the transition energy from BERTini to
+        QGSP in the range from <TT>6-8 GeV</TT>.</LI>
+    <LI><TT>QGSP_BERT_NOLEP</TT>, an attempt to avoid usage of LEP models
+        in the region of <TT>9-25 GeV</TT>.</LI>
+    </UL></LI>
 </UL>
 
 <B>Visualization, Graphical Representations & Interfaces</B>
