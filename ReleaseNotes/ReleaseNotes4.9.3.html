@@ -181,18 +181,6 @@ recompilation) and a recompilation of user applications is required.
 </UL>
 
 <P> </P>
-<B>Hadronic physics</B>
-<P> </P>
-<UL>
-<LI>The validity of the pion-nuclear cross-sections in
-    <TT>G4PiNuclearCrossSections</TT>, and the nucleon-nuclear cross-sections
-    in <TT>G4NeutronInelasticCrossSections</TT> and
-    <TT>G4ProtonInelasticCrossSections</TT> has been extended to <TT>100 TeV</TT>.
-    Users who include these cross-sections in their custom-developed physics
-    lists may want to modify the physics lists accordingly.</LI>
-</UL>
-
-<P> </P>
 <B>Physics Lists</B>
 <P> </P>
 <UL>
@@ -376,8 +364,12 @@ Please see the corresponding details in
         <TT>FTF_BERT_EMV, FTF_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY</TT>.</LI>
     <LI><TT>FTF_BERT_TRV</TT>, lower the transition energy from BERTini to
         QGSP in the range from <TT>6-8 GeV</TT>.</LI>
-    <LI><TT>QGSP_BERT_NOLEP</TT>, an attempt to avoid usage of LEP models
-        in the region of <TT>9-25 GeV</TT>.</LI>
+    </UL></LI>
+<LI>Attempts to reduce usage of LEP in the intermediate energy range:
+    <UL>
+    <LI><TT>QGSP_BERT_NOLEP</TT>, using QGSP starting from <TT>8.5 GeV</TT>.</LI>
+    <LI><TT>QGSP_FTFP_BERT</TT>, using FTFP in the energy range between BERT
+        and QGSP.</LI>
     </UL></LI>
 </UL>
 
