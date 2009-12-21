@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.cc,v 1.13 2009-06-25 10:05:26 vnivanch Exp $
+// $Id: G4PhysicsFreeVector.cc,v 1.14 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,13 +59,13 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(size_t theNbin)
   type = T_G4PhysicsFreeVector;
   numberOfNodes = theNbin;
 
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);
+  dataVector->reserve(numberOfNodes);
+  binVector->reserve(numberOfNodes);
 
   for (size_t i=0; i<numberOfNodes; i++)
   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
+     binVector->push_back(0.0);
+     dataVector->push_back(0.0);
   }
 }  
 
@@ -75,36 +75,37 @@ G4PhysicsFreeVector::G4PhysicsFreeVector(const G4DataVector& theBinVector,
   type = T_G4PhysicsFreeVector;
   numberOfNodes = theBinVector.size();
 
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);
+  dataVector->reserve(numberOfNodes);
+  binVector->reserve(numberOfNodes);
 
   for (size_t i=0; i<numberOfNodes; i++)
   {
-     binVector.push_back(theBinVector[i]);
-     dataVector.push_back(theDataVector[i]);
+     binVector->push_back(theBinVector[i]);
+     dataVector->push_back(theDataVector[i]);
   }
 
-  edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes-1];
+  edgeMin = (*binVector)[0];
+  edgeMax = (*binVector)[numberOfNodes-1];
 }  
 
 G4PhysicsFreeVector::~G4PhysicsFreeVector()
 {
 }
 
-void G4PhysicsFreeVector::PutValue( size_t theBinNumber, G4double theBinValue, 
+void G4PhysicsFreeVector::PutValue( size_t theBinNumber, 
+				    G4double theBinValue, 
                                     G4double theDataValue )
 {
-  binVector[theBinNumber]  = theBinValue;
-  dataVector[theBinNumber] = theDataValue;
+  (*binVector)[theBinNumber]  = theBinValue;
+  (*dataVector)[theBinNumber] = theDataValue;
 
   if( theBinNumber == numberOfNodes-1 )
   {
-     edgeMax = binVector[numberOfNodes-1];
+     edgeMax = (*binVector)[numberOfNodes-1];
   }
 
   if( theBinNumber == 0 )
   {
-     edgeMin = binVector[0];
+     edgeMin = (*binVector)[0];
   }
 }

@@ -24,73 +24,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.icc,v 1.10 2009-12-21 22:51:54 kurasige Exp $
+// $Id: G4PVDataVector.cc,v 1.1 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-////////////////////////////////////////////////////////////////////////
-// PhysicsOrderedFreeVector Class Inline Functions Definitions
-////////////////////////////////////////////////////////////////////////
+// 
+// --------------------------------------------------------------
+//      GEANT 4 class implementation file
 //
-// File:	G4PhysicsOrderedFreeVector.icc
-// Version:	1.0
-// Author:      Juliet Armstrong
-// mail:        gum@triumf.ca
+//  G4PVDataVector.cc
 //
-// Updated:
-//              2000-11-11 by H.Kurashige
-//              > use STL vector for dataVector and binVector
-////////////////////////////////////////////////////////////////////////
+//  History:
+//    19 Nov. 2009, H.Kurashige : created 
+// --------------------------------------------------------------
 
-////////////////////
-// Inline methods
-////////////////////
+#include "G4PVDataVector.hh"
 
-inline
-G4double G4PhysicsOrderedFreeVector::GetMaxValue()
-{
-	return dataVector->back();
-}
+// --------------------------------------------------------------
 
-inline
-G4double G4PhysicsOrderedFreeVector::GetMinValue()
-{
-	return dataVector->front();
-}
+G4PVDataVector::G4PVDataVector()
+ : std::vector<G4double>()
+{}
 
-inline
-G4double G4PhysicsOrderedFreeVector::GetMaxLowEdgeEnergy()
-{
-	return binVector->back();
-}
+// --------------------------------------------------------------
 
-inline
-G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
-{
-	return binVector->front();
-}
+G4PVDataVector::~G4PVDataVector() 
+{}
 
-inline
-void G4PhysicsOrderedFreeVector::DumpValues()
-{
-   for (size_t i = 0; i < numberOfNodes; i++)
-   {
-      G4cout << (*binVector)[i] << "\t" << (*dataVector)[i] << G4endl;
-   }
-}
-
-inline
-size_t G4PhysicsOrderedFreeVector::FindBinLocation(G4double theEnergy) const
-{
-   G4int n1 = 0;
-   G4int n2 = numberOfNodes/2;
-   G4int n3 = numberOfNodes - 1;
-   while (n1 != n3 - 1)
-   {
-      if (theEnergy > (*binVector)[n2])
-         { n1 = n2; }
-      else
-         { n3 = n2; }
-      n2 = n1 + (n3 - n1 + 1)/2;
-   }
-   return (size_t)n1;
-}

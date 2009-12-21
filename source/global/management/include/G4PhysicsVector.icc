@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.23 2009-11-18 11:42:03 vnivanch Exp $
+// $Id: G4PhysicsVector.icc,v 1.24 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
-  return dataVector[binNumber];
+  return (*dataVector)[binNumber];
 }
 
 //---------------------------------------------------------------
@@ -53,7 +53,7 @@ inline
 inline
  G4double G4PhysicsVector::operator()(const size_t binNumber) const
 {
-  return dataVector[binNumber];
+  return (*dataVector)[binNumber];
 }
 
 //---------------------------------------------------------------
@@ -61,7 +61,7 @@ inline
 inline
  G4double G4PhysicsVector::Energy(const size_t binNumber) const
 {
-  return binVector[binNumber];
+  return (*binVector)[binNumber];
 }
 
 //---------------------------------------------------------------
@@ -75,94 +75,9 @@ inline
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::LinearInterpolation()
-{
-  // Linear interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  G4double intplFactor = (lastEnergy-binVector[lastBin]) 
-     / (binVector[lastBin+1]-binVector[lastBin]); // Interpolation factor
-
-  return dataVector[lastBin] +
-         ( dataVector[lastBin+1]-dataVector[lastBin] ) * intplFactor;
-}
-
-//---------------------------------------------------------------
-
-inline
- G4double G4PhysicsVector::SplineInterpolation()
-{
-  // Spline interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  if(0 == secDerivative.size() ) { FillSecondDerivatives(); }
-
-  // check bin value
-  G4double x1 = binVector[lastBin];
-  G4double x2 = binVector[lastBin+1];
-  G4double delta = x2 - x1;
-
-  G4double a = (x2 - lastEnergy)/delta;
-  G4double b = (lastEnergy - x1)/delta;
-   
-  // Final evaluation of cubic spline polynomial for return   
-  G4double y1 = dataVector[lastBin];
-  G4double y2 = dataVector[lastBin+1];
-
-  G4double res = a*y1 + b*y2 + 
-        ( (a*a*a - a)*secDerivative[lastBin] +
-          (b*b*b - b)*secDerivative[lastBin+1] )*delta*delta/6.0;
-
-  return res;
-}
-
-//---------------------------------------------------------------
-
-inline
  G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
 {
   return Value(theEnergy);
-}
-
-//---------------------------------------------------------------
-
-inline
- G4double G4PhysicsVector::Value(G4double theEnergy) 
-{
-  // Use cache for speed up - check if the value 'theEnergy' is same as the 
-  // last call. If it is same, then use the last bin location. Also the
-  // value 'theEnergy' lies between the last energy and low edge of of the 
-  // bin of last call, then the last bin location is used.
-
-  if( theEnergy == lastEnergy ) {
-
-  } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin]) {
-     lastEnergy = theEnergy;
-     Interpolation();
-
-  } else if( theEnergy <= edgeMin ) {
-     lastBin = 0;
-     lastEnergy = edgeMin;
-     lastValue  = dataVector[0];
-
-  } else if( theEnergy >= edgeMax ){
-     lastBin = numberOfNodes-2;
-     lastEnergy = edgeMax;
-     lastValue  = dataVector[numberOfNodes-1];
-
-  } else {
-     lastBin = FindBinLocation(theEnergy); 
-     if(lastBin >= numberOfNodes-1) {lastBin = numberOfNodes-2;} 
-     lastEnergy = theEnergy;
-     Interpolation();
-  }
-  return lastValue;        
 }
 
 //---------------------------------------------------------------
@@ -174,12 +89,13 @@ inline
   else          { lastValue = LinearInterpolation(); }
 }
 
+
 //---------------------------------------------------------------
 
 inline 
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 {
-  dataVector[binNumber] = theValue;
+  (*dataVector)[binNumber] = theValue;
 }
 
 //---------------------------------------------------------------

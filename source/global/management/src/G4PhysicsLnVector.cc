@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.cc,v 1.18 2009-06-25 10:05:26 vnivanch Exp $
+// $Id: G4PhysicsLnVector.cc,v 1.19 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,13 +52,13 @@ G4PhysicsLnVector::G4PhysicsLnVector(size_t theNbin)
   type = T_G4PhysicsLnVector;
 
   numberOfNodes = theNbin + 1;
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);      
+  dataVector->reserve(numberOfNodes);
+  binVector->reserve(numberOfNodes);      
 
   for (size_t i=0; i<numberOfNodes; i++)
   {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
+     binVector->push_back(0.0);
+     dataVector->push_back(0.0);
   }
 }  
 
@@ -71,17 +71,17 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   type = T_G4PhysicsLnVector;
 
   numberOfNodes = theNbin + 1;
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);      
+  dataVector->reserve(numberOfNodes);
+  binVector->reserve(numberOfNodes);      
 
   for (size_t i=0; i<numberOfNodes; i++)
   {
-    binVector.push_back(std::exp((baseBin+i)*dBin));
-    dataVector.push_back(0.0);
+    binVector->push_back(std::exp((baseBin+i)*dBin));
+    dataVector->push_back(0.0);
   }
 
-  edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes-1];
+  edgeMin = (*binVector)[0];
+  edgeMax = (*binVector)[numberOfNodes-1];
 }
 
 G4PhysicsLnVector::~G4PhysicsLnVector(){}
@@ -91,8 +91,8 @@ G4bool G4PhysicsLnVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    G4double theEmin = binVector[0];
-    dBin = std::log(binVector[1]/theEmin);
+    G4double theEmin = (*binVector)[0];
+    dBin = std::log((*binVector)[1]/theEmin);
     baseBin = std::log(theEmin)/dBin;
   }
   return success;

@@ -24,69 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.hh,v 1.12 2009-12-21 22:51:54 kurasige Exp $
+// $Id: G4PVDataVector.hh,v 1.1 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// ------------------------------------------------------------------
+//---------------------------------------------------------------
+//      GEANT 4 class header file
 //
-// Class G4LPhysicsFreeVector -- header file
+//  G4PVDataVector.hh
 //
-// Class description:
+//  Class description:
 //
-// Derived from base class G4PhysicsVector
-// This is a free vector for Low Energy Physics cross section data.
-// The class name includes an "L" to distinguish it from other groups
-// who may wish to implement a free vector in a different way.
-// A subdivision method is used to find the energy|momentum bin.
+//    This class is a vector of double and used in physics vectors
+//
+//  History:
+//    19 Nov. 2009, H.Kurashige : created 
+//
+//---------------------------------------------------------------
 
-// F.W. Jones, TRIUMF, 04-JUN-96
-// 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
-// 02-APR-08 A.Bagulya: use GetValue() from base class
-// ------------------------------------------------------------------
+#ifndef G4PVDataVector_h
+#define G4PVDataVector_h 1
 
-#ifndef G4LPhysicsFreeVector_h
-#define G4LPhysicsFreeVector_h 1
+#include <vector>
+#include "globals.hh"
 
-#include "G4PhysicsVector.hh"
-
-class G4LPhysicsFreeVector : public G4PhysicsVector  
+class G4PVDataVector : public std::vector<G4double> 
 {
-
-public: // with description
-
-   G4LPhysicsFreeVector();
-
-   G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
-
-   ~G4LPhysicsFreeVector();
-
-   G4LPhysicsFreeVector(const G4LPhysicsFreeVector&);
-   G4LPhysicsFreeVector& operator=(const G4LPhysicsFreeVector&);
-     // Copy constructor and assignment operator.
-
-   void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
-     // G4PhysicsVector has PutValue() but it is inconvenient.
-     // Want to simultaneously fill the bin and data vectors.
-
-   void SetVerboseLevel(G4int value);
-
-   G4int GetVerboseLevel(G4int);
-
-   G4double GetLastEnergy();
-
-   size_t GetLastBin();
-
-   void DumpValues();
-
-private:
-
-   G4int verboseLevel;
-
-   size_t FindBinLocation(G4double theEnergy) const;
-     // Pure virtual in G4PhysicsVector
+  public:  
+   G4PVDataVector();
+   virtual ~G4PVDataVector();
 };
-
-#include "G4LPhysicsFreeVector.icc"
 
 #endif

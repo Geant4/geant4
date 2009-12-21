@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.13 2009-06-25 10:05:26 vnivanch Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.14 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,7 @@ class G4PhysicsFreeVector : public G4PhysicsVector
          // 'binVector'. 'binVector' and 'dataVector' need to have 
          // the same vector length.
   
-    ~G4PhysicsFreeVector();
+    virtual ~G4PhysicsFreeVector();
          // Destructor
 
     void PutValue( size_t binNumber, G4double binValue, 
@@ -112,7 +112,7 @@ size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
   while (lowerBound <= upperBound)
   {
     size_t midBin = (lowerBound + upperBound)/2;
-    if( theEnergy < binVector[midBin] )
+    if( theEnergy < (*binVector)[midBin] )
        { upperBound = midBin-1; }
     else
        { lowerBound = midBin+1; }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.11 2008-09-22 11:37:09 vnivanch Exp $
+// $Id: G4PhysicsLinearVector.hh,v 1.12 2009-12-21 22:51:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -1,4 +1,4 @@
-$Id: History,v 1.235 2009-12-08 04:37:45 gcosmo Exp $
+$Id: History,v 1.236 2009-12-21 22:51:54 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 22, 2009  H.Kurashige (global-V09-03-00)
+- Modify PhysicsVector to use a pointer to G4PVDataVector
 
 Dec 07, 2009  L.Pandola, V.Ivanchenko (global-V09-02-12)
 - G4PhysicsVector: fixed initialisation of 'lastEnergy' to -DBL_MAX
