@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc,v 1.6 2009-06-11 15:47:08 mantero Exp $
+// $Id: G4PenelopeRayleighModel.cc,v 1.7 2009-12-21 12:49:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -36,6 +36,9 @@
 //                  - do not apply low-energy limit (default is 0)
 // 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
 //                            PrepareConstants(), since they might be checked later on
+// 18 Dec 2009   L Pandola    Added a dummy ComputeCrossSectionPerAtom() method issueing a 
+//                            warning if users try to access atomic cross sections via 
+//                            G4EmCalculator
 //
 
 #include "G4PenelopeRayleighModel.hh"
@@ -189,7 +192,14 @@ G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* material,
       //Calculate the total number of atoms per molecule
       G4int atomsPerMolecule = 0;
       for (G4int k=0;k<nElements;k++)
+       {
 	atomsPerMolecule += stechiometric[k];
+        if (verboseLevel > 2)
+	   {
+	     G4cout << "Element: " << (G4int) (*elementVector)[k]->GetZ() << " has " << 
+	        stechiometric[k] << " atoms/molecule" << G4endl;	
+           }
+       }
       if (atomsPerMolecule)
 	{
 	  isAMolecule = true;
@@ -202,7 +212,7 @@ G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* material,
 	  cross = cs*moleculeDensity;
 	}
     }
-
+  
   if (verboseLevel > 2)
     {
       if (isAMolecule)
@@ -220,6 +230,25 @@ G4PenelopeRayleighModel::CrossSectionPerVolume(const G4Material* material,
     }
   return cross;
 }
+
+
+//This is a dummy method. Never inkoved by the tracking, it just issues
+//a warning if one tries to get Cross Sections per Atom via the
+//G4EmCalculator.
+G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+							     G4double,
+							     G4double,
+							     G4double,
+							     G4double,
+							     G4double)
+{
+  G4cout << "*** G4PenelopeRayleighModel -- WARNING ***" << G4endl;
+  G4cout << "Penelope Rayleigh model does not calculate cross section _per atom_ " << G4endl;
+  G4cout << "so the result is always zero. For physics values, please invoke " << G4endl;
+  G4cout << "GetCrossSectionPerVolume() or GetMeanFreePath() via the G4EmCalculator" << G4endl;
+  return 0;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

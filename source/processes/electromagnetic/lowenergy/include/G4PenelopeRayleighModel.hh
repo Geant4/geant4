@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.hh,v 1.1 2008-10-28 08:50:21 pandola Exp $
+// $Id: G4PenelopeRayleighModel.hh,v 1.2 2009-12-21 12:49:01 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -32,12 +32,15 @@
 // -----------
 // 13 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
 //                            to EM model
+// 18 Dec 2009   L. Pandola   Added a dummy ComputeCrossSectioPerAtom() method issueing a
+//                            warning if users try to access atomic cross sections via 
+//                            G4EmCalculator
 //
 // -------------------------------------------------------------------
 //
 // Class description:
 // Low Energy Electromagnetic Physics, Rayleigh Scattering
-// with Penelope Model
+// with Penelope v2001 Model
 // -------------------------------------------------------------------
 
 #ifndef G4PENELOPERAYLEIGHMODEL_HH
@@ -70,6 +73,16 @@ public:
                                          G4double cutEnergy = 0.0,
                                          G4double maxEnergy = DBL_MAX);
   
+  //This is a dummy method. Never inkoved by the tracking, it just issues 
+  //a warning if one tries to get Cross Sections per Atom via the 
+  //G4EmCalculator.
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
