@@ -1,4 +1,4 @@
-$Id: History,v 1.407 2009-12-10 12:26:05 sincerti Exp $
+$Id: History,v 1.408 2009-12-21 16:30:31 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21.12.2009, L. Pandola, tag emlowen-V09-03-00
+	    Added a dummy ComputeCrossSectionPerAtom() method in G4PenelopeRayleighModel. 
+            Never inkoved by tracking, issues a warning if users access it via G4EmCalculator.
 
 10.12.2009, S. Incerti, tag emlowen-V09-02-68
             - Added vapor water shell constants to G4DNARuddIonisationModel.cc 
