@@ -398,7 +398,8 @@ int main(int argc, char** argv)
 	}
         usepaw = true;
 	hFile = nameGen;
-        if(nameGen == "elastic"){break;}
+        if(nameGen == "elastic" || nameGen == "HElastic" || 
+	   nameGen == "DElastic") { break; }
 	char* c = getenv(nameGen);
         if(!c) {
 	  G4cout << "Generator <" << nameGen << "> is not included in the "
@@ -407,7 +408,7 @@ int main(int argc, char** argv)
 	  continue;
 	}
 	G4String s(c);
-	if(s=="1") {break;}	
+	if(s=="1") { break; }
       } else if(line == "#verbose") {
         (*fin) >> verbose;
 	G4NistManager::Instance()->SetVerbose(verbose);

@@ -14,7 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-test30-V09-03-00  25 December 2009 V.Ivanchenko
+test30-V09-03-00  22 December 2009 V.Ivanchenko
+- added contron on statistics and active generators via environment 
+  variables and SetModels.csh script 
 
 test30-V09-02-00  25 February 2009 V.Ivanchenko
 - fixed cross section for light ions
