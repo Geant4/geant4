@@ -398,6 +398,7 @@ int main(int argc, char** argv)
 	}
         usepaw = true;
 	hFile = nameGen;
+        if(nameGen == "elastic"){break;}
 	char* c = getenv(nameGen);
         if(!c) {
 	  G4cout << "Generator <" << nameGen << "> is not included in the "
