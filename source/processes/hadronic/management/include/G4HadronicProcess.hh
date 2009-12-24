@@ -156,6 +156,8 @@ protected:
   { return theLastCrossSection; }
 
 private:
+
+  void DumpState(const G4Track&, const G4String&);
     
   void FillTotalResult(G4HadFinalState * aR, const G4Track & aT);
 
