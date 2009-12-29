@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBuilder.hh,v 1.1 2009-10-04 16:29:54 vnivanch Exp $
+// $Id: G4QGSBuilder.hh,v 1.2 2009-12-29 17:54:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -46,13 +46,15 @@
 
 class G4ExcitedStringDecay;
 class G4QuasiElasticChannel;
+class G4PreCompoundModel;
 class G4ProjectileDiffractiveChannel;
 
 class G4QGSBuilder : public G4VHadronModelBuilder
 {
 public: 
 
-  G4QGSBuilder(const G4String& name ="", 
+  G4QGSBuilder(const G4String& name ="",
+	       G4PreCompoundModel* p = 0,
 	       G4bool quasiElastic=true,
 	       G4bool projectileDiffraction=false);
 
@@ -74,6 +76,7 @@ private:
   G4QuasiElasticChannel*    theQuasiElastic;
 
   G4ProjectileDiffractiveChannel* theProjectileDiffraction;
+  G4PreCompoundModel* thePreCompound;
 
   G4bool quasielFlag;
   G4bool diffFlag;
