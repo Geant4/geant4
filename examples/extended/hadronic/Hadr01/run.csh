@@ -1,6 +1,6 @@
 #/bin/csh
 
-setenv HISTODIR 20091125
+setenv HISTODIR 20091229
 mkdir -p $HISTODIR
 
 setenv PHYSLIST LHEP
@@ -25,6 +25,15 @@ setenv PHYSLIST QBBC_XGG
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QBBC_XGGSN
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+
+setenv PHYSLIST FTFP_BERT
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+
+setenv PHYSLIST QGSP_FTFP_BERT
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+
+setenv PHYSLIST CHIPS
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 echo "Done!"
