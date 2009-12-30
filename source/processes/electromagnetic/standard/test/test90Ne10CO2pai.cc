@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test90Ne10CO2pai.cc,v 1.7 2009-12-10 16:22:32 grichine Exp $
+// $Id: test90Ne10CO2pai.cc,v 1.8 2009-12-30 12:57:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,8 @@ G4double GetIonisation(G4double transfer)
 
 int main()
 {
-   std::ofstream outFile("90Ne10CO2pai.dat", std::ios::out );
+  // std::ofstream outFile("90Ne10CO2pai.dat", std::ios::out );
+   std::ofstream outFile("e5GeVt2kPhilippe.dat", std::ios::out );
    outFile.setf( std::ios::scientific, std::ios::floatfield );
 
    std::ofstream fileOut("PAICerPlasm90Ne10CO2.dat", std::ios::out );
@@ -256,13 +257,13 @@ int main()
   Ne857CO295N2T292->AddMaterial( Nitrogen,      fractionmass = 0.05795 );
 
 
-  /*
+  
   // Ar as detector gas,STP
 
   density = 1.7836*mg/cm3 ;       // STP
   G4Material* Argon = new G4Material(name="Argon"  , density, ncomponents=1);
   Argon->AddElement(elAr, 1);
-
+  /*
   // iso-Butane (methylpropane), STP
 
   density = 2.67*mg/cm3 ;
@@ -278,14 +279,15 @@ int main()
   */
 
   // Philippe Gros T2K mixture version
-  // Argon                                                                                                       
-                                           
+  // Argon                                                                                                   
+  /*                                          
   density     = 1.66*mg/cm3;
   pressure    = 1*atmosphere;
   temperature = 288.15*kelvin;
-  G4Material* Argon = new G4Material(name="Ar", z=18., a=39.948*g/mole,
-                         density, kStateGas,temperature,pressure);
-
+  G4Material* Argon = new G4Material(name="Ar", // z=18., a=39.948*g/mole,
+				     density, ncomponents=1); // kStateGas,temperature,pressure);
+  Argon->AddElement(elAr, 1);
+  */
    
   // IsoButane    
                                                                                                     
@@ -330,6 +332,8 @@ int main()
   // G4String testName = "N2";
   // G4String testName = "Ne10CO2";
   G4String testName = "t2kGasMixture";
+  // G4String testName = "Ar";
+  //  G4String testName = "Argon";
   // G4String testName = "Ne10CO2T293";
   // G4String testName = "Ne857CO295N2T292";
 
@@ -440,9 +444,13 @@ int main()
 
 
 
-     kineticEnergy = 10.0*keV; // 100.*GeV;    // 10.0*keV;  // 110*MeV; // for proton
+     // kineticEnergy = 10.0*keV; // 100.*GeV;    // 10.0*keV;  // 110*MeV; // for proton
 
-     kineticEnergy = 5*GeV; // for electrons
+     // kineticEnergy = 5*GeV; // for electrons
+
+     kineticEnergy = 5*GeV*proton_mass_c2/electron_mass_c2;
+
+     // kineticEnergy = 5*GeV;
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
@@ -453,17 +461,17 @@ int main()
 
      for( j = 0; j < jMax; j++ )
      {
-       // tau      = kineticEnergy/proton_mass_c2;
-       tau      = kineticEnergy/electron_mass_c2;
+       tau      = kineticEnergy/proton_mass_c2;
+       // tau      = kineticEnergy/electron_mass_c2;
        gamma    = tau +1.0;
        bg2      = tau*(tau + 2.0);
        bg = std::sqrt(bg2);
        beta2    = bg2/(gamma*gamma);
-       // G4cout<<"bg = "<<bg<<";  b2 = "<<beta2<<G4endl<<G4endl;
+       G4cout<<"bg = "<<bg<<";  b2 = "<<beta2<<G4endl<<G4endl;
        rateMass = electron_mass_c2/proton_mass_c2;
        
        Tmax = 2.0*electron_mass_c2*bg2/(1.0+2.0*gamma*rateMass+rateMass*rateMass);
-       Tmax = 0.5*kineticEnergy;
+       // Tmax = 0.5*kineticEnergy;
 
        Tkin = maxEnergyTransfer;
 

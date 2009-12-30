@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSectionTest.cc,v 1.15 2006-06-29 19:54:15 gunter Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.16 2009-12-30 12:57:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -431,7 +431,7 @@ int main()
   G4cout <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
  outFile <<k<<"\t"<< "  Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
   }
-  G4String testName ;
+  G4String testName = "Argon" ;
   G4cout<<"Enter material name for test : "<<std::flush ;
   //  G4cin>>testName ;
     
@@ -447,9 +447,9 @@ int main()
    
 
 
-  for(k=0;k<numOfMaterials;k++)
+  for( k = 0; k < numOfMaterials; k++ )
   {
-    //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
+    if((*theMaterialTable)[k]->GetName() != testName) continue ;
      outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
 
@@ -542,7 +542,7 @@ int main()
 
      //   G4PAIxSection testPAIproton(k,maxEnergyTransfer) ;
 
-     kineticEnergy = 10.0*keV ;  // 110*MeV ;
+     kineticEnergy = 100.*MeV;  // 10.0*keV ;  // 110*MeV ;
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
