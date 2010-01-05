@@ -23,60 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2010-01-05 15:35:32 maire Exp $
+//
+// $Id: PhysListEmStandardWVI.hh,v 1.1 2010-01-05 15:35:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef PhysListEmStandardWVI_h
+#define PhysListEmStandardWVI_h 1
 
-#include "G4UserRunAction.hh"
-
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
-class DetectorConstruction;
-class PrimaryGeneratorAction;
-class HistoManager;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class RunAction : public G4UserRunAction
+class PhysListEmStandardWVI : public G4VPhysicsConstructor
 {
-  public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-   ~RunAction();
+  public: 
+    PhysListEmStandardWVI(const G4String& name = "standardWVI");
+   ~PhysListEmStandardWVI();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
-
-    void InitFluence ();    
-    void SumFluence(G4double, G4double); 
-    void ComputeFluenceError();
-    void PrintFluence(G4int);
-    
-  private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    HistoManager*           histoManager;
-
-    //for fluence computation
-    //
-    G4int                   nbBins;
-    G4double                dr;
-    std::vector<G4double>   fluence;
-    std::vector<G4double>   fluence1;	//normalized fluence    
-    std::vector<G4double>   fluence2;	//rms on norm. fl
-    std::vector<G4int>      nbEntries;	//entries per bin            
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 
