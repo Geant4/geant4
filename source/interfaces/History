@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2010-01-06 14:01:20 lgarnier Exp $
+$Id: History,v 1.124 2010-01-06 14:07:44 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 6 January, 2010 L. Garnier
 - G4VBasicShell : improvments for command completion
+- G4Qt : Add a link to G4UIQt
 
 20 November, 2009 K. Murakami (interfaces-V09-02-07)
 - G4UIExecutive.hh:  no default arguments of the constructor

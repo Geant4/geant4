@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.14 2009-10-07 09:12:35 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.15 2010-01-06 14:07:34 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -37,6 +37,8 @@
 #include "G4ios.hh"
 
 #include "G4Qt.hh"
+#include "G4UIQt.hh"
+#include <qwidget.h>
 
 #include <qapplication.h>
 
@@ -65,6 +67,9 @@ G4Qt* G4Qt::getInstance (
   if (instance==NULL) {
     instance = new G4Qt(a_argn,a_args,a_class);
   }
+#ifdef G4DEBUG_INTERFACES_COMMON
+    printf("G4Qt::getInstance :%d\n",instance);
+#endif
   return instance;
 }
 /***************************************************************************/
@@ -72,7 +77,8 @@ G4Qt::G4Qt (
  int    a_argn
 ,char** a_args
  ,char*  /*a_class */
-)
+ )
+:fG4UI(NULL)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -123,6 +129,9 @@ G4Qt::G4Qt (
 #if QT_VERSION < 0x040000
       qApp = new QApplication (*p_argn, args);
 #else
+#ifdef G4DEBUG_INTERFACES_COMMON
+    printf("G4Qt::G4Qt QAppl \n");
+#endif
       new QApplication (*p_argn, args);
 #endif
       if(!qApp) {
@@ -131,6 +140,9 @@ G4Qt::G4Qt (
       } else {
         QtInited  = TRUE;
         if (a_argn != 0) {
+#ifdef G4DEBUG_INTERFACES_COMMON
+        printf("G4Qt::G4Qt SetMainInteractor\n");
+#endif
           SetMainInteractor (qApp);
         }
         SetArguments      (a_argn,a_args);
@@ -142,7 +154,7 @@ G4Qt::G4Qt (
   }
 #ifdef G4DEBUG_INTERFACES_COMMON
   if (qApp) {
-    printf("G4Qt::qApp exist\n");
+    printf("G4Qt::qApp exist adress:%d\n",this);
   }  else {
     printf("G4Qt::qApp not exist\n");
   }
@@ -197,7 +209,35 @@ void G4Qt::FlushAndWaitExecution (
   qApp->processEvents();
 }
 
+/***************************************************************************/
+void G4Qt::SetG4UI (
+ G4UIQt* ui
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef G4DEBUG_INTERFACES_COMMON
+    printf("G4Qt::SetG4UI \n");
 #endif
+  fG4UI = ui;
+}
 
+/***************************************************************************/
+bool G4Qt::AddTabWidget (
+ QWidget * vis
+,QString name
+,int sizeX
+,int sizeY
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  if (fG4UI != NULL) {
+    fG4UI->AddTabWidget(vis,name,sizeX,sizeY);
+    return true;
+  }
+  return false;
+}
+#endif
 
 

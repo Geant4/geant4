@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.hh,v 1.4 2008-11-06 10:06:33 lgarnier Exp $
+// $Id: G4Qt.hh,v 1.5 2010-01-06 14:07:34 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  To unify Qt event treatment between 
@@ -37,6 +37,10 @@
 #if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
 
 #include "G4VInteractorManager.hh"
+
+class G4UIQt;
+class QWidget;
+class QString;
 
 // Class description :
 //
@@ -55,11 +59,15 @@ public:
   void* GetEvent();
   void FlushAndWaitExecution();
   virtual ~G4Qt();                     
+  bool AddTabWidget(QWidget*,QString,int,int);
+  void SetG4UI(G4UIQt*);
+
 private:
   G4Qt (int,char**,char*);                     
   static G4Qt* instance; // Pointer to single instance.
   int    argn;
   char** args;
+  G4UIQt* fG4UI;
 };
 
 #endif //HAS_QT
