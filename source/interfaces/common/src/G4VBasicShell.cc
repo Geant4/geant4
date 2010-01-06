@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.14 2009-11-17 17:41:33 lgarnier Exp $
+// $Id: G4VBasicShell.cc,v 1.15 2010-01-06 14:04:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -243,11 +243,11 @@ void G4VBasicShell::ApplyShellCommand (
     G4cout << "Current Working Directory : " 
        << GetCurrentWorkingDirectory() << G4endl; 
 
-  } else if( command == "cd" || command(0,3) == "cd ") {
+  } else if( command(0,2) == "cd" ) { 
 
     ChangeDirectoryCommand ( command );
 
-  } else if( command == "help" || command(0,5) == "help ") {
+  } else if( command(0,4) == "help" ) { 
 
     TerminalHelp( command ); 
 
@@ -255,7 +255,7 @@ void G4VBasicShell::ApplyShellCommand (
 
     ShowCurrent( command );
 
-  } else if( command == "hist" || command == "history") {
+  } else if( command(0,4) == "hist" ) {
 
     G4int nh = UI->GetNumberOfHistory();
     for(G4int i=0;i<nh;i++) { 
@@ -278,7 +278,7 @@ void G4VBasicShell::ApplyShellCommand (
       G4cerr << "history " << vl << " is not found." << G4endl; 
     }
 
-  } else if( command == "exit" ) { 
+  } else if( command(0,4) == "exit" ) { 
 
     if( exitPause == false) { //In a secondary loop.
       G4cout << "You are now processing RUN." << G4endl;
@@ -289,7 +289,7 @@ void G4VBasicShell::ApplyShellCommand (
       exitSession = true;
     }
 
-  } else if( command == "cont" || command == "continue"){
+  } else if( command(0,4) == "cont" ) { 
 
     exitPause = true;
 
