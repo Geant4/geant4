@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.45 2009-10-21 08:14:44 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.46 2010-01-06 15:05:29 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,42 +109,73 @@ void G4OpenGLQtViewer::CreateMainWindow (
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  QWidget *myParent = getParentWidget();
-  if (myParent != NULL) {
-#if QT_VERSION < 0x040000
-    glWidget->reparent(myParent,0,QPoint(0,0));  
-#else
-    glWidget->setParent(myParent);  
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLQtViewer::CreateMainWindow :: ++++++++++++++ add new TAB %s\n",name.toStdString().c_str());
 #endif
-  }
+  G4Qt* interactorManager = G4Qt::getInstance ();
 
-  QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
-  mainLayout->setMargin(0);
-  mainLayout->setSpacing(0);   
-  mainLayout->addWidget(fWindow);
-
-#if QT_VERSION < 0x040000
-  fGLWindow->setCaption(name );
-#else
-  fGLWindow->setLayout(mainLayout);
-  fGLWindow->setWindowTitle( name);
-#endif
   ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+    
+  // FIXME L.Garnier 9/11/09 Has to be check !!! 
+  // Qt UI with Qt Vis
+  // Qt UI with X Vis
+  // X UI with Qt Vis
+  // X UI with X Vis
+  // Ne marche pas avec un UIBatch !! (ecran blanc)
 
-  //useful for MACOSX, we have to compt the menuBar height
-  int offset = QApplication::desktop()->height() 
-                      - QApplication::desktop()->availableGeometry().height();
+  // return false if G4UIQt was not launch
+  bool res = interactorManager->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
 
-  G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
-  if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
-    YPos = offset;
+  if (!res) { // we have to do a dialog
+
+    QWidget *myParent = getParentWidget();
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow :: getParent OK \n");
+#endif
+    if (myParent != NULL) {
+#if QT_VERSION < 0x040000
+      glWindget->reparent(myParent,0,QPoint(0,0));  
+#else
+      glWidget->setParent(myParent);  
+#endif
+    }
+    QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
+    
+    mainLayout->setMargin(0);
+    mainLayout->setSpacing(0);   
+    mainLayout->addWidget(fWindow);
+    if (fGLWindow->inherits("QMainWindow")) {
+#if QT_VERSION < 0x040000
+      fGLWindow->setCaption(name );
+#else
+      fGLWindow->setWindowTitle( name);
+#endif
+    }
+#if QT_VERSION >= 0x040000
+    fGLWindow->setLayout(mainLayout);
+#endif
+
+    
+    //useful for MACOSX, we have to compt the menuBar height
+    int offset = QApplication::desktop()->height() 
+      - QApplication::desktop()->availableGeometry().height();
+    
+    G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
+    if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
+      YPos = offset;
+    }
+    fGLWindow->resize(getWinWidth(), getWinHeight());
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
+#endif
+    fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
+    fGLWindow->show();
+  } else {
+    fGLWindow = fWindow;
   }
-  fGLWindow->resize(getWinWidth(), getWinHeight());
-  fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
-  fGLWindow->show();
-  
-  if(!fWindow) return;
 
+  if(!fWindow) return;
+  
   if (!fContextMenu) 
     createPopupMenu();
 
@@ -2606,7 +2637,10 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 {
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
-  //  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+#ifdef G4DEBUG_VIS_OGL
+  //  printf("G4OpenGLQtViewer::getParentWidget :: UImanager %d  G4Qt:%d et via GetUIQt:%d---------------------\n",UI,UI->GetSession(),interactorManager,interactorManager->GetUIVisWidget());
+#endif
   
   bool found = false;
   
@@ -2647,6 +2681,9 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
     fGLWindow = new QDialog();
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::GetParentWidget fGLWindow:%d \n",fGLWindow);
+#endif
   }
   if (found) {
     return fGLWindow;

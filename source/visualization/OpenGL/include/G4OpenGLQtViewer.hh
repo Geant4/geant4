@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.20 2009-10-21 08:14:44 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.21 2010-01-06 15:05:29 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,7 @@
 #include <qpoint.h>
 
 class G4OpenGLSceneHandler;
+class G4UImanager;
 
 class QGLWidget;
 class QDialog;
@@ -120,7 +121,7 @@ protected:
 
 protected:
   QGLWidget* fWindow;
-  QDialog* fGLWindow;
+  QWidget* fGLWindow;
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;

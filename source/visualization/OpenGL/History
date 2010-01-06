@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2009-11-17 17:21:11 allison Exp $
+$Id: History,v 1.162 2010-01-06 15:05:29 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th January 2010  Laurent Garnier (needs interfaces-V09-02-07 + laurent-QtUI_with_tabs_v1)
+- GNUMakefile : Add include for interfaces/basic
+- G4OpenGLQtWiewer : Integration into QtUI Tab
 
 17th November 2009  John Allison  (opengl-V09-02-10)
 - Tagged for vis tag.

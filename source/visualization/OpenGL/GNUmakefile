@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2009-11-17 11:32:38 gcosmo Exp $
+# $Id: GNUmakefile,v 1.12 2010-01-06 15:05:29 lgarnier Exp $
 
 name := G4OpenGL
 
@@ -34,6 +34,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+CPPFLAGS += -I$(G4BASE)/interfaces/basic/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 
