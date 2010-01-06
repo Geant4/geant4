@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2010-01-06 14:07:44 lgarnier Exp $
+$Id: History,v 1.125 2010-01-06 14:13:08 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,19 +18,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 6 January, 2010 L. Garnier
-- G4VBasicShell : improvments for command completion
-- G4Qt : Add a link to G4UIQt
+ - G4VBasicShell : improvments for command completion
+ - G4Qt : Add a link to G4UIQt
+ - G4UIQt : Add tab widgets in order to put Vis in
 
 20 November, 2009 K. Murakami (interfaces-V09-02-07)
-- G4UIExecutive.hh:  no default arguments of the constructor
-- G4UIExecutive.icc: more cleaver way for suppressing compiler warnings
+ - G4UIExecutive.hh:  no default arguments of the constructor
+ - G4UIExecutive.icc: more cleaver way for suppressing compiler warnings
 
 20 November, 2009 J. Allison (interfaces-V09-02-06)
-- G4UIExecutive.icc: Fixed complier warnings for some cases when more
+ - G4UIExecutive.icc: Fixed complier warnings for some cases when more
   than one flag is set.
 
 19 November, 2009 J. Allison (interfaces-V09-02-05)
-- Tagged for the release.
+ - Tagged for the release.
 
 18 November, 2009 L. Garnier
  - G4UIQt: Add CTRL+A and CTRL+E to move to begin/end of command line

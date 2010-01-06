@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.16 2009-02-16 11:40:26 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.17 2010-01-06 14:13:08 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -39,6 +39,7 @@
 
 #include <qobject.h>
 #include <qmap.h>
+#include <qstringlist.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -53,7 +54,10 @@ class QTreeWidgetItem;
 #endif
 class QTextEdit;
 class QLabel;
-class QDialog;
+class QTabWidget;
+class QResizeEvent;
+class QToolBox;
+class QStringList;
 
 // Class description :
 //
@@ -94,6 +98,10 @@ public: // With description
   // Second argument is the label of the button.
   // Third argument is the Geant4 command executed when the button is fired.
   // Ex : AddButton("my_menu","Run","/run/beamOn 1"); 
+
+  void AddTabWidget(QWidget*,QString,int,int);
+  // To add a tab for vis openGL Qt driver
+
 public:
   ~G4UIQt();
   void Prompt(G4String);
@@ -102,16 +110,16 @@ public:
   G4int ReceiveG4cout(G4String);
   G4int ReceiveG4cerr(G4String);
   //   G4String GetCommand(Widget);
-  QMainWindow * getMainWindow();
 
 private:
   void SecondaryLoop(G4String); // a VIRER
-  void TerminalHelp(G4String);
+  void CreateHelpWidget();
 #if QT_VERSION < 0x040000
   QListView * CreateHelpTree();
 #else
   QTreeWidget * CreateHelpTree();
 #endif
+  void ExitHelp();
 
 #if QT_VERSION < 0x040000
   void CreateChildTree(QListViewItem*,G4UIcommandTree*);
@@ -124,11 +132,16 @@ private:
   QString GetCommandList(const G4UIcommand*);
 
   G4bool GetHelpChoice(G4int&) ;// have to be implemeted because we heritate from G4VBasicShell
-  void ExitHelp();// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
   QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
 
+  void CreateVisParametersTBWidget();
+  void CreateViewComponentsTBWidget();
+  void CreateHelpTBWidget();
+  void CreateCoutTBWidget();
+  void CreateHistoryTBWidget();
+  void OpenHelpTreeOnCommand(const QString &);
 
 private:
 
@@ -139,18 +152,28 @@ private:
   QMainWindow * fMainWindow;
   QLabel *fCommandLabel;
   QLineEdit * fCommandArea;
-  QTextEdit *fTextArea;
+  QTextEdit *fCoutTBTextArea;
   QTextEdit *fHelpArea;
+  QToolBox* fToolBox;
+  QStringList fG4cout;
+  QLineEdit * fCoutFilter;
+
 #if QT_VERSION < 0x040000
-  QListView *fCommandHistoryArea;
+  QListView *fHistoryTBTableList;
   QListView *fHelpTreeWidget;
 #else
-  QListWidget *fCommandHistoryArea;
+  QListWidget *fHistoryTBTableList;
   QTreeWidget *fHelpTreeWidget;
 #endif
-  QDialog *fHelpDialog;
-  QLineEdit *helpLine;
- 
+  QWidget* fHelpTBWidget;
+  QWidget* fHistoryTBWidget;
+  QWidget* fCoutTBWidget;
+  QWidget* fVisParametersTBWidget;
+  QWidget* fViewComponentsTBWidget;
+  QLineEdit* helpLine;
+  QTabWidget* fTabWidget;
+  QString fCoutText;
+
 signals : 
   void myClicked(const QString &text);
 
@@ -163,7 +186,10 @@ private slots :
   void HelpTreeDoubleClicCallback();
   void ShowHelpCallback();
   void CommandHistoryCallback();
-  void lookForHelpStringCallback();
+  void LookForHelpStringCallback();
+  void UpdateTabWidget(int);
+  void ResizeTabWidget( QResizeEvent* );
+  void CoutFilterCallback(const QString&);
 };
 
 #endif
