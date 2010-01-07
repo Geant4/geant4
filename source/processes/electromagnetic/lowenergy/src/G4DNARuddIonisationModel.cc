@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.11 2009-12-10 12:24:27 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.12 2010-01-07 18:10:50 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -270,45 +270,11 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
   // InitialiseElementSelectors(particle,cuts);
 
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* particleDefinition,
 					   G4double k,
 					   G4double,
@@ -354,7 +320,7 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
   G4double highLim = 0;
   G4double sigma=0;
 
-  if (flagMaterialIsWater)
+  if (material->GetName() == "G4_WATER")
   {
     const G4String& particleName = particleDefinition->GetParticleName();
     
@@ -420,9 +386,10 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
                       {
                         G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
                         G4cout << " - Cross section per water molecule (cm^2)=" << tmp1/cm/cm << G4endl;
-                        G4cout << " - Cross section per water molecule (cm^-1)=" << tmp1*densityWater/(1./cm) << G4endl;
+                        G4cout << " - Cross section per water molecule (cm^-1)=" << 
+			tmp1*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
                       } 
-		      return tmp1*densityWater;
+		      return tmp1*material->GetAtomicNumDensityVector()[1];
 		  }
 
 		  if ( particleDefinition == instance->GetIon("helium") ) 
@@ -433,9 +400,10 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
                       {
                         G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
                         G4cout << " - Cross section per water molecule (cm^2)=" << tmp2/cm/cm << G4endl;
-                        G4cout << " - Cross section per water molecule (cm^-1)=" << tmp2*densityWater/(1./cm) << G4endl;
+                        G4cout << " - Cross section per water molecule (cm^-1)=" << tmp2*
+			material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
                       } 
-		      return tmp2*densityWater;
+		      return tmp2*material->GetAtomicNumDensityVector()[1];
 		  }
               }      
 
@@ -453,12 +421,13 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material*,
     {
       G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
       G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*densityWater/(1./cm) << G4endl;
+      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*
+      material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
     } 
  
   } // if (waterMaterial)
  
- return sigma*densityWater;		   
+ return sigma*material->GetAtomicNumDensityVector()[1];		   
 
 }
 
@@ -709,8 +678,6 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   G4double D2 ; 
   G4double alphaConst ;
 
-  const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV};
-
   if (j == 4) 
   {
       //Data For Liquid Water K SHELL from Dingfelder (Protons in Water)
@@ -747,7 +714,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   instance = G4DNAGenericIonsManager::Instance();
 
   G4double wBig = (energyTransfer - waterStructure.IonisationEnergy(ionizationLevelIndex));
-  G4double w = wBig / Bj[ionizationLevelIndex];
+  G4double w = wBig / waterStructure.IonisationEnergy(ionizationLevelIndex);
   G4double Ry = 13.6*eV;
 
   G4double tau = 0.;
@@ -765,10 +732,10 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
       tau = (0.511/3728.) * k ;
   }
  
-  G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/Bj[ionizationLevelIndex]),2);
-  G4double v2 = tau / Bj[ionizationLevelIndex];
+  G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
+  G4double v2 = tau / waterStructure.IonisationEnergy(ionizationLevelIndex);
   G4double v = std::sqrt(v2);
-  G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj[ionizationLevelIndex]));
+  G4double wc = 4.*v2 - 2.*v - (Ry/(4.*waterStructure.IonisationEnergy(ionizationLevelIndex)));
 
   G4double L1 = (C1* std::pow(v,(D1))) / (1.+ E1*std::pow(v, (D1+4.)));
   G4double L2 = C2*std::pow(v,(D2));
@@ -779,7 +746,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   G4double F2 = (L2*H2)/(L2+H2);
 
   G4double sigma = CorrectionFactor(particleDefinition, k/eV) 
-    * Gj[j] * (S/Bj[ionizationLevelIndex]) 
+    * Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) 
     * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 
   if (    particleDefinition == G4Proton::ProtonDefinition() 
@@ -824,7 +791,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
 	  || particleDefinition == instance->GetIon("alpha++")
 	  ) 
   {
-      sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
+      sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
     
       G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
   

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.hh,v 1.3 2009-06-26 10:15:19 mantero Exp $
+// $Id: G4DNABornIonisationModel.hh,v 1.4 2010-01-07 18:10:19 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -128,11 +128,6 @@ private:
   
   G4int RandomSelect(G4double energy,const G4String& particle );
 
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNABornIonisationModel & operator=(const  G4DNABornIonisationModel &right);

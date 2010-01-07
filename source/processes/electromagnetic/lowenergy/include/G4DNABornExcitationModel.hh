@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.hh,v 1.1 2009-01-12 14:26:02 sincerti Exp $
+// $Id: G4DNABornExcitationModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,13 +86,8 @@ private:
 
   G4WaterExcitationStructure waterStructure;
    
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
-   
+  
   G4DNABornExcitationModel & operator=(const  G4DNABornExcitationModel &right);
   G4DNABornExcitationModel(const  G4DNABornExcitationModel&);
 

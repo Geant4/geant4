@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.1 2009-01-12 14:26:03 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -92,11 +92,6 @@ private:
 
   G4double ScreenedRutherfordRandomizeCosTheta(G4double k, G4double z);
 
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNAScreenedRutherfordElasticModel & operator=(const  G4DNAScreenedRutherfordElasticModel &right);

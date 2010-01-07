@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.hh,v 1.1 2009-01-12 14:26:02 sincerti Exp $
+// $Id: G4DNAEmfietzoglouExcitationModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,11 +88,6 @@ private:
 
   G4WaterExcitationStructure waterExcitation;
   
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNAEmfietzoglouExcitationModel & operator=(const  G4DNAEmfietzoglouExcitationModel &right);
