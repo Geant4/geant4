@@ -14,6 +14,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 Jan 2010 Michael Kelsey (hadr-casc-V09-03-00)
+------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+- G4BertiniNuclearModel:  REMOVE this class from the HEAD, and hopefully all
+  future tags.  It is redundant with the G4NuclearModel class, and is not
+  used anywhere in the G4 distribtion; the latter is referenced in both
+  regular G4 code and in examples.
+
+- G4Diproton, G4Dineutron, G4UnboundPN:  New G4ParticleDefinition
+  subclasses, which implement the Bertini-specific dibaryon states.  These
+  are not used anywhere as yet, but will be used in future modifications to
+  the G4InuclParticle subclasses.
+
+- G4CascadeMomentum:  Add interface to create from and cast to
+  G4LorentzVector.  Will be used (in future) by G4InuclParticle modifications,
+  and provides a transition to eliminating this class entirely.
+
 1 Dec 2009 Dennis Wright (hadr-casc-V09-02-11)
 ----------------------------------------------
 - G4PionSampler, G4NucleonSampler: change loop variable in ctor from i to j
