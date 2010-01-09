@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeMomentum.hh,v 1.1 2008-09-22 10:06:32 gcosmo Exp $
+// $Id: G4CascadeMomentum.hh,v 1.2 2010-01-09 00:00:35 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // Class G4CascadeMomentum
 //
@@ -34,8 +33,14 @@
 // A simple wrapper class meant to replace the widespread use of
 // std::vector<double> in the cascade mode code, which causes
 // problems for performance due to excess memory allocations.
-
+//
+// NOTE:  The Bertini code does not pass legitimate four-vectors when
+//	  creating new particles; the new getLV() function takes an
+//	  optional mass argument (in Bertini units [GeV]) so that a
+//	  valid G4LorentzVector can be returned.
+//
 // Author: Peter Elmer, Princeton University                  7-Aug-2008
+// Update: Michael Kelsey, SLAC (supprt G4LorentzVector)      8-Jan-2010
 // --------------------------------------------------------------------
 #ifndef G4CASCADE_MOMENTUM_HH
 #define G4CASCADE_MOMENTUM_HH
@@ -43,12 +48,18 @@
 #include <cassert>
 
 #include "G4Types.hh"
+#include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 
 class G4CascadeMomentum
 {
   public:
-
     G4CascadeMomentum() {for (int i=0; i<4; ++i) data_[i]=0.0;}
+
+    // WARNING!  This metric is (t,x,y,z), DIFFERENT FROM HepLV!
+    explicit G4CascadeMomentum(const G4LorentzVector& lv) {
+      setLV(lv);
+    }
 
     G4double& operator[](int i)
     {
@@ -61,8 +72,31 @@ class G4CascadeMomentum
       return data_[i];
     }
 
-  private:
+    const G4LorentzVector& getLV(G4double mass=-1.) const
+    {
+      static G4LorentzVector lv;	// FIXME:  NOT THREAD-SAFE!
 
+      if (mass>0.) lv.setVectM(get3V(),mass);		// Force input mass!
+      else lv.set(data_[1],data_[2],data_[3],data_[0]);
+      
+      return lv;
+    }
+
+    const G4ThreeVector& get3V() const
+    {
+      static G4ThreeVector vec;		// FIXME:  NOT THREAD-SAFE!
+      vec.set(data_[1],data_[2],data_[3]);
+      return vec;
+    }
+
+    void setLV(const G4LorentzVector& lv) {
+      data_[0] = lv.t();		// NOTE DIFFERENT METRIC CONVENTION!
+      data_[1] = lv.x();
+      data_[2] = lv.y();
+      data_[3] = lv.z();
+    }
+
+  private:
     G4double data_[4];
 };
 #endif
