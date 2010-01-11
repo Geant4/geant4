@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006-06-16 13:08:03 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2010-01-11 17:01:48 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,13 +10,13 @@ G4EXLIB := true
 LOCALDIR := ${PWD}
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
 ifndef PLATFORM
-  PLATFORM = slc3_ia32_gcc323
+  PLATFORM = slc4_ia32_gcc34
 endif
 
 CPPFLAGS += -I$(ROOTSYS)/include
