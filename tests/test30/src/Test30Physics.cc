@@ -68,7 +68,7 @@
 #include "G4RPGProtonInelastic.hh"
 #include "G4RPGNeutronInelastic.hh"
 
-#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QStringChipsParticleLevelInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
@@ -84,6 +84,11 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4LundStringFragmentation.hh"
 
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4QuasiElasticChannel.hh"
+
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
@@ -93,9 +98,7 @@
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QStringChipsParticleLevelInterface.hh"
 
-#include "HsQGSPInterface.hh"
 #include "HsQGSCInterface.hh"
-#include "HsQGSBInterface.hh"
 #include "G4DiffuseElastic.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -190,7 +193,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "chips") {
-    sg = new Test30VSecondaryGenerator(new G4StringChipsParticleLevelInterface(),mat);
+    sg = new Test30VSecondaryGenerator(new G4QStringChipsParticleLevelInterface(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -206,12 +209,21 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
+  } else if(gen_name == "binary_ion") {
+    G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
+    hkm->SetDeExcitation(theDeExcitation);
+    hkm->SetPrecompound(thePreCompound);
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
   } else if(gen_name == "ftfp") {
 
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
     G4GeneratorPrecompoundInterface* theCascade = 
       new G4GeneratorPrecompoundInterface;
+    theCascade->SetDeExcitation(thePreCompound);
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);
@@ -244,8 +256,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "ftfb") {
 
-    G4TheoFSGenerator * theModel = new G4TheoFSGenerator;
-    G4FTFModel * theStringModel= new G4FTFModel;
+    G4TheoFSGenerator* theModel = new G4TheoFSGenerator();
+    G4FTFModel* theStringModel= new G4FTFModel();
     G4BinaryCascade* theCascade = new G4BinaryCascade();
     theCascade->SetDeExcitation(thePreCompound);
     G4ExcitedStringDecay * theStringDecay = 
@@ -262,9 +274,22 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "qgsp") {
-    HsQGSPInterface* qgsp = new HsQGSPInterface();
-    qgsp->SetMinEnergy(GeV);
-    sg = new Test30VSecondaryGenerator(qgsp, mat);
+    G4TheoFSGenerator* theModel = new G4TheoFSGenerator();
+    G4GeneratorPrecompoundInterface* theCascade = 
+      new G4GeneratorPrecompoundInterface();
+    theCascade->SetDeExcitation(thePreCompound);  
+    G4QGSModel< G4QGSParticipants > * theStringModel = 
+      new G4QGSModel< G4QGSParticipants >;
+    G4ExcitedStringDecay* theQGStringDecay = 
+      new G4ExcitedStringDecay(new G4QGSMFragmentation());
+    theStringModel->SetFragmentationModel(theQGStringDecay);
+    theModel->SetTransport(theCascade);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theModel->SetMinEnergy(0.5*GeV);
+    theModel->SetMaxEnergy(100*TeV);
+    sg = new Test30VSecondaryGenerator(theModel, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
@@ -276,15 +301,21 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "qgsb") {
-    HsQGSBInterface* qgsb = new HsQGSBInterface(thePreCompound);
-    qgsb->SetMinEnergy(GeV);
-    sg = new Test30VSecondaryGenerator(qgsb, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "binary_ion") {
-    G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
-    sg = new Test30VSecondaryGenerator(hkm, mat);
+    G4TheoFSGenerator* theModel = new G4TheoFSGenerator();
+    G4BinaryCascade* theCascade = new G4BinaryCascade();
+    theCascade->SetDeExcitation(thePreCompound);  
+    G4QGSModel< G4QGSParticipants > * theStringModel = 
+      new G4QGSModel< G4QGSParticipants >;
+    G4ExcitedStringDecay* theQGStringDecay = 
+      new G4ExcitedStringDecay(new G4QGSMFragmentation());
+    theStringModel->SetFragmentationModel(theQGStringDecay);
+    theModel->SetTransport(theCascade);
+    theModel->SetHighEnergyGenerator(theStringModel);
+    G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
+    theModel->SetQuasiElasticChannel(theQuasiElastic);
+    theModel->SetMinEnergy(0.5*GeV);
+    theModel->SetMaxEnergy(100*TeV);
+    sg = new Test30VSecondaryGenerator(theModel, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 

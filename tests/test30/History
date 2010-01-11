@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-03-01  11 January 2010 V.Ivanchenko
+- added options FermiBreakUp and default/GEM evaporation;
+  propagate pre-compound, deexcitation options to all generators
+  using native pre-compound model
+
 test30-V09-03-00  22 December 2009 V.Ivanchenko
 - added contron on statistics and active generators via environment 
   variables and SetModels.csh script 

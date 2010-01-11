@@ -168,7 +168,6 @@ int main(int argc, char** argv)
 
   G4Material* material = 0;
 
-  G4bool nevap = false;
   G4bool gtran = false;
   G4bool gemis = false;
   G4bool xsbgg = true;
@@ -277,6 +276,8 @@ int main(int argc, char** argv)
 
   // construct pre-compound and deexcitation
   G4ExcitationHandler* theDeExcitation = new G4ExcitationHandler();
+  G4Evaporation* theEvaporation = new G4Evaporation();
+  theDeExcitation->SetEvaporation(theEvaporation);
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theDeExcitation);
   phys->SetPreCompound(thePreCompound); 
   phys->SetDeExcitation(theDeExcitation); 
@@ -442,7 +443,14 @@ int main(int argc, char** argv)
       } else if(line == "#GNASHTransition") {
         gtran = true;
       } else if(line == "#GEMEvaporation") {
-        nevap = true;
+        G4cout<<"### GEM evaporation is set"<<G4endl;
+        theEvaporation->SetGEMChannel();
+      } else if(line == "#DefGEMEvaporation") {
+        G4cout<<"### Combined Default+GEM evaporation is set"<<G4endl;
+        theEvaporation->SetCombinedChannel();
+      } else if(line == "#Evaporation") {
+        G4cout<<"### Default evaporation is set"<<G4endl;
+        theEvaporation->SetDefaultChannel();
       } else if(line == "#XSoption") {
         G4int OPTxs;
         (*fin)>>OPTxs;
@@ -482,6 +490,10 @@ int main(int argc, char** argv)
         G4cout<<" Min energy for multi-fragmentation is set to " << tmin 
 	      << " MeV" << G4endl;
 	theDeExcitation->SetMinEForMultiFrag(tmin*MeV);
+      } else if(line == "#FermiBreakUp") {
+        G4cout<<"### Max A and Z energy for fermiBreakUp  are set to 17 and 9"
+              << G4endl;
+        theDeExcitation->SetMaxAandZForFermiBreakUp(17,9);
       }      
     } while(end);
 
