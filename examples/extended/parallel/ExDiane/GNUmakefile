@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2009-03-06 09:51:42 gbarrand Exp $
+# $Id: GNUmakefile,v 1.5 2010-01-11 16:49:50 gcosmo Exp $
 # --------------------------------------------------------------
 
 name := Brachy
@@ -6,7 +6,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../../../..
 endif
 
 .PHONY: all
