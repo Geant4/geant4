@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 2009-12-16 17:08:20 cirrone Exp $
+# $Id: GNUmakefile,v 1.15 2010-01-11 14:31:38 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -8,7 +8,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../..
+  G4INSTALL = ../..
 endif
 
 .PHONY: all
@@ -28,6 +28,3 @@ endif
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
-
-ifdef G4ANALYSIS_USE 
-endif
