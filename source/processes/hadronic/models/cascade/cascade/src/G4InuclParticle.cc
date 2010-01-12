@@ -1,5 +1,3 @@
-#ifndef G4PARTICLE_LARGER_EKIN_HH
-#define G4PARTICLE_LARGER_EKIN_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,38 +22,39 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerEkin.hh,v 1.7 2010-01-12 06:27:15 mkelsey Exp $
+// $Id: G4InuclParticle.cc,v 1.1 2010-01-12 06:27:15 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
-//
-// Implements a *reverse* sorting: std::sort expects a less-than operator
-// which returns true if arg1<arg2.  This function returns true if arg1>=arg2.
-//
-// 20091125  M. Kelsey -- Add additional operator() which uses pointers
 
-#include "G4InuclElementaryParticle.hh"
-
-#ifdef G4CASCADE_DEBUG_SORT
+#include "G4InuclParticle.hh"
 #include "G4ios.hh"
-#endif
+#include <math.h>
 
-class G4ParticleLargerEkin {
-public:
-  G4bool operator() (const G4InuclElementaryParticle& part1,
-		     const G4InuclElementaryParticle& part2) {
-#ifdef G4CASCADE_DEBUG_SORT
-    G4cout << "part1 @ " << &part1 << ": ";
-    part1.printParticle();
-    G4cout << "part2 @ " << &part2 << ": ";
-    part2.printParticle();
-    G4cout << G4endl;
-#endif
-    return (part1.getKineticEnergy() >= part2.getKineticEnergy());
-  }
- 
-  G4bool operator() (const G4InuclElementaryParticle* part1,
-		     const G4InuclElementaryParticle* part2) {
-    return (part1 && part2 && operator()(*part1, *part2));
-  }
-};
 
-#endif // G4PARTICLE_LARGER_EKIN_HH
+// Assignment operator for use with std::sort()
+G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
+  pDP = right.pDP;
+  modelId = right.modelId;
+  mom = right.mom;
+
+  return *this;
+}
+
+// WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
+void G4InuclParticle::setMomentum(const G4CascadeMomentum& mom) {
+  G4double mass = getMass();
+  const G4LorentzVector& lv = mom.getLV();
+
+  if (fabs(mass-lv.m()) <= 1e-5)		// Allow for rounding etc.
+    pDP.Set4Momentum(lv*GeV/MeV);		// From Bertini to G4 units
+  else
+    pDP.Set4Momentum(mom.getLV(mass)*GeV/MeV);	// Use correct mass value!
+}
+
+
+void G4InuclParticle::printParticle() const {
+  getMomentum();				// Fill local buffer
+  G4cout << " px " << mom[1] << " py " << mom[2] << " pz " << mom[3]
+	 << " pmod " << getMomModule() << " E " << mom[0] 
+	 << " creator model " << modelId << G4endl;
+}
+

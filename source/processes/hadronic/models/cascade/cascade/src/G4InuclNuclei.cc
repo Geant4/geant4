@@ -1,5 +1,3 @@
-#ifndef G4PARTICLE_LARGER_EKIN_HH
-#define G4PARTICLE_LARGER_EKIN_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,38 +22,39 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerEkin.hh,v 1.7 2010-01-12 06:27:15 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.1 2010-01-12 06:27:15 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
-//
-// Implements a *reverse* sorting: std::sort expects a less-than operator
-// which returns true if arg1<arg2.  This function returns true if arg1>=arg2.
-//
-// 20091125  M. Kelsey -- Add additional operator() which uses pointers
 
-#include "G4InuclElementaryParticle.hh"
+#include "G4InuclNuclei.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include <assert.h>
 
-#ifdef G4CASCADE_DEBUG_SORT
-#include "G4ios.hh"
-#endif
 
-class G4ParticleLargerEkin {
-public:
-  G4bool operator() (const G4InuclElementaryParticle& part1,
-		     const G4InuclElementaryParticle& part2) {
-#ifdef G4CASCADE_DEBUG_SORT
-    G4cout << "part1 @ " << &part1 << ": ";
-    part1.printParticle();
-    G4cout << "part2 @ " << &part2 << ": ";
-    part2.printParticle();
-    G4cout << G4endl;
-#endif
-    return (part1.getKineticEnergy() >= part2.getKineticEnergy());
-  }
- 
-  G4bool operator() (const G4InuclElementaryParticle* part1,
-		     const G4InuclElementaryParticle* part2) {
-    return (part1 && part2 && operator()(*part1, *part2));
-  }
-};
+G4Allocator<G4InuclNuclei> anInuclNucleiAllocator;
 
-#endif // G4PARTICLE_LARGER_EKIN_HH
+// Convert nuclear configuration to standard GEANT4 pointer
+
+// WARNING:  Opposite conventions!  G4InuclNuclei uses (A,Z) everywhere, while
+//	  G4ParticleTable::GetIon() uses (Z,A)!
+
+G4ParticleDefinition* 
+G4InuclNuclei::makeDefinition(G4double a, G4double z, G4double exc) {
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition *pd = pTable->GetIon(G4int(z), G4int(a), exc);
+  assert(0 != pd);
+  return pd;
+}
+
+G4double G4InuclNuclei::getNucleiMass(G4double a, G4double z) {
+  G4ParticleDefinition* pd = makeDefinition(a,z);
+  return pd ? pd->GetPDGMass()*MeV/GeV : 0.;	// From G4 to Bertini units
+}
+
+// Assignment operator for use with std::sort()
+G4InuclNuclei& G4InuclNuclei::operator=(const G4InuclNuclei& right) {
+  exitationEnergy = right.exitationEnergy;
+  theExitonConfiguration = right.theExitonConfiguration;
+  G4InuclParticle::operator=(right);
+  return *this;
+}
