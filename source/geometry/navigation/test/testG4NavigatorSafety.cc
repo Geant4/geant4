@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigatorSafety.cc,v 1.1 2010-01-12 16:57:27 gcosmo Exp $
+// $Id: testG4NavigatorSafety.cc,v 1.2 2010-01-12 17:00:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,8 +32,9 @@
 //   axes, printing location, steps & safeties. Compare results of standard
 //   voxel safety calculations with "exact safety" computed values.
 //
-//   Arguments: Number of points to generate [Default: 1000]
-//              Initial random seed [Default: CLHEP default], between [0,255]
+//   Optional arguments:
+//      - Number of points to generate [Default: 10000]
+//      - Initial random seed modulo 256 [Default: CLHEP default]
 
 #include <assert.h>
 #include "G4ios.hh"
