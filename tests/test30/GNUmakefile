@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.12 2008-06-11 13:12:16 vnivanch Exp $
+# $Id: GNUmakefile,v 1.13 2010-01-12 09:28:48 gcosmo Exp $
 # --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 name := test30
@@ -8,7 +8,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../
+  G4INSTALL = ../..
 endif
 
 .PHONY: all 

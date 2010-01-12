@@ -1,4 +1,5 @@
-# $Id: GNUmakefile,v 1.5 2004-03-18 11:02:24 mkossov Exp $
+# $Id: GNUmakefile,v 1.6 2010-01-12 09:31:57 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2010-01-12 09:31:57 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -16,35 +17,4 @@ endif
 all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
-
-#ifdef GLOBALLIBS
-#  LDLIBS := -lG4global
-#else
-#  LDLIBS := -lG4globman
-#endif
-
-# ---Temporary--- external CHIPS processes
-#CPPFLAGS +=-I$(G4BASE)/processes/photolepton_hadron/cross-sections/include \
-#           -I$(G4BASE)/processes/photolepton_hadron/processes/include
-#EXTRALIBS += -lG4photoleptohadr_cs -lG4photoleptohadr_proc
-
 include $(G4INSTALL)/config/binmake.gmk
-
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-ifeq ($(G4SYSTEM),HP-aCC)
-COMPILER := $(shell aCC -V 2>&1)
-ifeq ($(COMPILER), aCC: HP ANSI C++ B3910B A.01.15)
-$(G4TMP)/$(G4SYSTEM)/$(name)/Tst23HadronPhysics.o: src/Tst23HadronPhysics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/Tst23HadronPhysics.cc
-endif
-endif
-
-ifeq ($(G4SYSTEM),Linux-g++)
-COMPILER := $(shell g++ -v 2>&1 | grep version | grep egcs)
-ifeq ($(findstring 1.1,$(COMPILER)),1.1)
-$(G4TMP)/$(G4SYSTEM)/$(name)/Tst23HadronPhysics.o: src/Tst23HadronPhysics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/Tst23HadronPhysics.cc
-endif
-endif

@@ -1,6 +1,15 @@
+# $Id: GNUmakefile,v 1.3 2010-01-12 09:23:04 gcosmo Exp $
+# --------------------------------------------------------------
+# GNUmakefile for tests module.
+# --------------------------------------------------------------
+
 name := test37
 G4TARGET := $(name)
 G4EXLIB := true
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
 
 .PHONY: all
 all: lib bin

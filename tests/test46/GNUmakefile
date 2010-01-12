@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2008-11-20 08:55:42 antoni Exp $
+# $Id: GNUmakefile,v 1.2 2010-01-12 09:18:22 gcosmo Exp $
 # GEANT4 tag $Name: not supported by cvs2svn $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
@@ -9,7 +9,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../
+  G4INSTALL = ../..
 endif
 
 .PHONY: all

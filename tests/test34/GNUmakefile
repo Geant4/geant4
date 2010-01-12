@@ -1,12 +1,11 @@
-# $Id: GNUmakefile,v 1.1 2004-11-26 16:58:14 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2010-01-12 09:26:44 gcosmo Exp $
 # --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 name := test34
 G4TARGET := $(name)
 G4EXLIB := true
-
 
 ifndef G4INSTALL
   G4INSTALL = ../..
