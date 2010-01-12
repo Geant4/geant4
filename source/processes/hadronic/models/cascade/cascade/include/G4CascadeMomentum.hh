@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeMomentum.hh,v 1.2 2010-01-09 00:00:35 mkelsey Exp $
+// $Id: G4CascadeMomentum.hh,v 1.3 2010-01-12 20:40:34 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4CascadeMomentum
@@ -40,7 +40,7 @@
 //	  valid G4LorentzVector can be returned.
 //
 // Author: Peter Elmer, Princeton University                  7-Aug-2008
-// Update: Michael Kelsey, SLAC (supprt G4LorentzVector)      8-Jan-2010
+// Update: Michael Kelsey, SLAC (support G4LorentzVector)     8-Jan-2010
 // --------------------------------------------------------------------
 #ifndef G4CASCADE_MOMENTUM_HH
 #define G4CASCADE_MOMENTUM_HH
@@ -57,36 +57,32 @@ class G4CascadeMomentum
     G4CascadeMomentum() {for (int i=0; i<4; ++i) data_[i]=0.0;}
 
     // WARNING!  This metric is (t,x,y,z), DIFFERENT FROM HepLV!
-    explicit G4CascadeMomentum(const G4LorentzVector& lv) {
+    G4CascadeMomentum(const G4LorentzVector& lv) {
       setLV(lv);
     }
 
-    G4double& operator[](int i)
-    {
+    G4double& operator[](int i) {
       assert(i>=0 && i<4);
       return data_[i];
     }
-    const G4double& operator[](int i) const
-    {
+    const G4double& operator[](int i) const {
       assert(i>=0 && i<4);
       return data_[i];
     }
 
-    const G4LorentzVector& getLV(G4double mass=-1.) const
-    {
-      static G4LorentzVector lv;	// FIXME:  NOT THREAD-SAFE!
+    operator const G4LorentzVector&() const {
+      return getLV();			// Casting can't do mass repairs
+    }
 
-      if (mass>0.) lv.setVectM(get3V(),mass);		// Force input mass!
+    const G4LorentzVector& getLV(G4double mass=-1.) const {
+      if (mass>=0.) lv.setVectM(get3V(),mass);		// Force input mass!
       else lv.set(data_[1],data_[2],data_[3],data_[0]);
       
       return lv;
     }
 
-    const G4ThreeVector& get3V() const
-    {
-      static G4ThreeVector vec;		// FIXME:  NOT THREAD-SAFE!
-      vec.set(data_[1],data_[2],data_[3]);
-      return vec;
+    G4ThreeVector get3V() const {
+      return getLV().vect();
     }
 
     void setLV(const G4LorentzVector& lv) {
@@ -96,8 +92,15 @@ class G4CascadeMomentum
       data_[3] = lv.z();
     }
 
+    G4CascadeMomentum& operator=(const G4LorentzVector& lv) {
+      setLV(lv);
+      return *this;
+    }
+
   private:
     G4double data_[4];
+    mutable G4LorentzVector lv;		// Buffer for conversion operations
 };
+
 #endif
 
