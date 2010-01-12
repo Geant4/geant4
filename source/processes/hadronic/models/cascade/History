@@ -14,6 +14,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 Jan 2010 Michael Kelsey (hadr-casc-V03-03-01)
+------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+- G4ParticleLargerBeta, G4ParticleLargerEkin: Add additional operator()
+  which takes pointers (for future mods to reduce ctor/dtor cycling), and
+  fix ordering bug in beta sorting.  Add debugging printout togged with
+  preprocessor flag.
+
+- G4InuclParticle, G4InuclNuclei, G4InuclElementaryParticle:  Rewrite to
+  carry G4DynamicParticle data member, and to instantiate particle
+  properties via G4ParticleDefinition subclasses.  This is first stage in
+  eventually eliminating the G4InuclParticle stuff entirely in favor of
+  direct use of G4DynamicParticle for internal propagation.
+
+These changes have been testing using debugging output on the production
+(4.9.3) code compared to the above changes.  |diff| shows mostly identical
+results, with occasional ~1e-5 floating point differences.
+
 08 Jan 2010 Michael Kelsey (hadr-casc-V09-03-00)
 ------------------------------------------------
 All changes below within "cascade/" subdirectory:
