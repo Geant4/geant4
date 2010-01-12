@@ -1,29 +1,21 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.2 2007-11-16 17:28:39 alechner Exp $
+# $Id: GNUmakefile,v 1.3 2010-01-12 09:14:19 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := main
+name := test52
 
 G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../..
+  G4INSTALL = ../..
 endif
 
 .PHONY: all
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
-
-ifdef G4ANALYSIS_USE  
- CPPFLAGS += `aida-config --include` 
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
-endif
-
-
 
 
