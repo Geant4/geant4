@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.3 2010-01-12 09:21:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2010-01-12 09:44:06 gcosmo Exp $
 # --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 name := test40
@@ -15,7 +15,6 @@ endif
 all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
-
 include $(G4INSTALL)/config/binmake.gmk
 
 visclean:

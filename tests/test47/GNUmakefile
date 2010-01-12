@@ -1,6 +1,6 @@
-# $Id: GNUmakefile,v 1.6 2010-01-12 09:17:30 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2010-01-12 09:42:21 gcosmo Exp $
 # --------------------------------------------------------------
-# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
 name := test47

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2010-01-12 09:25:52 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2010-01-12 09:45:26 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.
 # --------------------------------------------------------------
@@ -16,7 +16,6 @@ endif
 all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
-
 include $(G4INSTALL)/config/binmake.gmk
 
 histclean:
