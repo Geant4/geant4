@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigatorSafety.cc,v 1.2 2010-01-12 17:00:05 gcosmo Exp $
+// $Id: testG4NavigatorSafety.cc,v 1.3 2010-01-12 17:03:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -247,7 +247,7 @@ int main(int argc, char* argv[])
 
   generatePoints(iter);
   computeApproxSafeties(myTopNode);
-//  computeExactSafeties(myTopNode);
+  computeExactSafeties(myTopNode);
   compareSafeties();
 
   timer.Stop();
