@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.6 2009-12-29 19:23:26 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.7 2010-01-13 15:53:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -158,22 +158,34 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
       UI->ApplyCommand("/run/setCut " + newValue);
     }
 
-  } else if( command == pListCmd && pPhysicsList) {
-    G4String name = newValue;
-    if(name == "PHYSLIST") {
-      char* path = getenv(name);
-      if (path) name = G4String(path);
-      else {
-        G4cout << "### PhysicsListMessenger WARNING: "
-	       << " environment variable PHYSLIST is not defined"
-	       << G4endl;
-	return; 
+  } else if( command == pListCmd ) {
+    if(pPhysicsList) {
+      G4String name = newValue;
+      if(name == "PHYSLIST") {
+	char* path = getenv(name);
+	if (path) name = G4String(path);
+	else {
+	  G4cout << "### PhysicsListMessenger WARNING: "
+		 << " environment variable PHYSLIST is not defined"
+		 << G4endl;
+	  return; 
+	}
       }
+      pPhysicsList->AddPhysicsList(name);
+    } else {
+      G4cout << "### PhysicsListMessenger WARNING: "
+	     << " /testhadr/Physics UI command is not available "
+	     << "for reference Physics List" << G4endl;
     }
-    pPhysicsList->AddPhysicsList(name);
 
-  } else if( command == listCmd && pPhysicsList) {
-    pPhysicsList->List();
+  } else if( command == listCmd ) {
+    if(pPhysicsList) {
+      pPhysicsList->List();
+    } else { 
+      G4cout << "### PhysicsListMessenger WARNING: "
+	     << " /testhadr/ListPhysics UI command is not available "
+	     << "for reference Physics List" << G4endl;
+    }
   }
 }
 

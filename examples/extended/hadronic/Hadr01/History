@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2009-12-29 19:23:25 vnivanch Exp $
+$Id: History,v 1.33 2010-01-13 15:53:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-01-10  V.Ivant (exhadr01-V09-03-01)
+- Fixed problem of counting of particles leaked from the target
 
 29-12-09  V.Ivant (exhadr01-V09-03-00)
 - When PhysList defined via PHYSLIST environment variable still
