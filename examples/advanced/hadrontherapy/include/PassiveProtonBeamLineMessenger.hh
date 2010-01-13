@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// HadrontherapyDetectorMessenger.hh;
+// PassiveProtonBeamLineMessenger.hh;
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
-#ifndef HadrontherapyDetectorMessenger_h
-#define HadrontherapyDetectorMessenger_h 1
+#ifndef PassiveProtonBeamLineMessenger_h
+#define PassiveProtonBeamLineMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
