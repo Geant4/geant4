@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.31 2009-10-08 18:56:57 vnivanch Exp $
+// $Id: G4HadronElastic.hh,v 1.32 2010-01-13 15:42:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,6 +42,7 @@
 // 16-Nov-06 V.Ivanchenko cleanup and rename Set methods and variables 
 // 28-Mar-07 V.Ivanchenko add NIST manager
 // 11-May-07 V.Ivanchenko remove unused method Defs1
+// 13.01.10: M.Kosov: Use G4Q(Pr/Neut)ElasticCS instead of G4QElasticCS
 //
 //
 // Class Description
@@ -107,7 +108,8 @@ private:
 		  G4double aa, G4double bb, G4double cc, G4double dd, 
 		  G4double rr);
 
-  static G4VQCrossSection* qCManager;
+  static G4VQCrossSection* pCManager;
+  static G4VQCrossSection* nCManager;
 
   G4ElasticHadrNucleusHE*     hElastic;
 

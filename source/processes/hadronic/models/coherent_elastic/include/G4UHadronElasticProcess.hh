@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UHadronElasticProcess.hh,v 1.10 2006-11-16 20:09:13 vnivanch Exp $
+// $Id: G4UHadronElasticProcess.hh,v 1.11 2010-01-13 15:42:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -80,7 +80,8 @@ public:
 
 private:
 
-  G4VQCrossSection*           qCManager;
+  G4VQCrossSection*           pCManager;
+  G4VQCrossSection*           nCManager;
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theNeutron;
   const G4ParticleDefinition* theParticle;

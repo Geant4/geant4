@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CHIPSElastic.hh,v 1.3 2009-10-08 18:56:57 vnivanch Exp $
+// $Id: G4CHIPSElastic.hh,v 1.4 2010-01-13 15:42:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4CHIPSElastic
@@ -59,7 +59,8 @@ public:
 
 private:
 
-  static G4VQCrossSection* xsManager;
+  static G4VQCrossSection* pxsManager;
+  static G4VQCrossSection* nxsManager;
 
 };
 
