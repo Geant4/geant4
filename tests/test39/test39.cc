@@ -89,7 +89,8 @@
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronCrossSections.hh"
-#include "G4QElasticCrossSection.hh"   // CHIPS Cross-Sections
+#include "G4QProtonElasticCrossSection.hh"  // CHIPS pA elastic Cross-Sections
+#include "G4QNeutronElasticCrossSection.hh" // CHIPS nA elasticCross-Sections
 
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
@@ -154,12 +155,12 @@
 //int main(int argc, char** argv)
 int main()
 {
-  const G4int nTg=8;   // Length of the target list for the Performance test
-  G4int tli[nTg]={90001000,90002002,90003004,90006006,90013014,90029034,90050069,90082126};
-  G4String tnm[nTg]={"Hydrogen","Helium","Lithium","Carbon","Aluminum","Copper","Tin",
+  const G4int nTg=7;   // Length of the target list for the Performance test
+  G4int tli[nTg]={90001000,90002002,90006006,90013014,90029034,90050069,90082126};
+  G4String tnm[nTg]={"Hydrogen","Helium","Carbon","Aluminum","Copper","Tin",
                      "Lead"}; // Target names
-  G4String tsy[nTg]={"H","He","Li","C","Al","Cu","Sn","Pb"}; // Target symbols
-  G4Material* mat[nTg]={0,0,0,0,0,0,0,0}; // Material pointers for the Target Loop
+  G4String tsy[nTg]={"H","He","C","Al","Cu","Sn","Pb"}; // Target symbols
+  G4Material* mat[nTg]={0,0,0,0,0,0,0}; // Material pointers for the Target Loop
   const G4int nPr=2;  // Length of the projectile list for the Performance test
   G4int pli[nPr] = {2212, 2112}; // PDG Codes of the projectile particles
   const G4int nMom=5;  // Length of the projectile momentum list for the Performance test
@@ -678,7 +679,7 @@ int main()
      G4int zeroO=0;                               // a#of events with noLead & 0 in OUT
      G4int alonO=0;                               // a#of events with noLead & 1 in OUT
      G4int badOT=0;                               // a#of events with wrong secondaries
-     const G4int ntpt=40;
+     const G4int ntpt=4;
      G4double thist[ntpt];                        // Values of t in the histogram
 #ifdef tdisthist
      G4double shist[ntpt];                        // Collected values in the histogram
@@ -687,18 +688,18 @@ int main()
      //G4double tMin=.00001;                        // in GeV^2  (pd)
      //G4double tMin=.000005;                       // in GeV^2 (pp_le)
      //G4double tMin=.0005;                         // in GeV^2 (pp_he4)
-     G4double tMin=.0003;                         // in GeV^2 (pp_he3)
+     G4double tMin=.0005;                         // in GeV^2 (pp_he3)
      ///G4double tMax=energy*pMass/GeV/GeV;          // 1/2 max -t value in GeV^2 (pp)
      ///if(tMax>9.)tMax=9.;
      G4double gev2=GeV*GeV;
-     G4double tmt=(e0-mp)*mt/gev2;                  // T_proj*M_targ (GeV^2)
+     G4double tmt=(e0-mp)*mt/gev2;                // T_proj*M_targ (GeV^2)
      //G4double emt=e0*mt/gev2;                     // E_proj*M_targ (GeV^2) - Wrong Calc
      //G4double mp2=mp*mp/gev2;                     // M_proj^2 (GeV^2)
      //G4double mt2=mt*mt/gev2;                     // M_trag^2 (GeV^2)
      //G4double pl2=pmax*pmax/gev2;                 // P_proj^2 (GeV^2)
      //G4double tMax=4.8*pl2*mt2/(mt2+mp2+emt+emt); // max -t value in GeV^2 (pd?-Wrong)
-     G4double tMax=2.2*tmt;                       // max -t value in GeV^2 (pA)
-     G4double tMaM=3.3;                           // max_max -t value in GeV^2 (pA)
+     G4double tMax=1.*tmt;                        // max -t value in GeV^2 (pA)
+     G4double tMaM=1.;                            // max_max -t value in GeV^2 (pA)
      G4cout<<"Test39: Mt="<<mt<<", Mp="<<mp<<", tmt="<<tmt<<", E="<<e0<<G4endl;
      if(tMax>tMaM) tMax=tMaM;
      G4double ltMin=std::log(tMin);
@@ -730,7 +731,8 @@ int main()
      //while(!HadrCS.Register(theFS));
      //delete theFS;
      // ------> for CHIPS
-     G4VQCrossSection* HadrCS = G4QElasticCrossSection::GetPointer(); // CHIPS ElasticCS
+     G4VQCrossSection* HadrCS = G4QNeutronElasticCrossSection::GetPointer(); // CHIPS NElCS
+     if (pPDG==2212)   HadrCS = G4QProtonElasticCrossSection::GetPointer(); // CHIPS PrElCS
 #ifdef csdebug
      // --- A temporary LOOP for calculation of total cross section ------------
      //G4double pMin=.02;                            // in GeV --> for protons
@@ -767,7 +769,7 @@ int main()
        //G4double CS = HadrCS.GetXsec(aThermalE.GetThermalEnergy(aTrack,element,
        //                                                     material->GetTemperature()));
        // ==================== End of GHAD ==============================
-       // CHIPS calculation by G4QElasticCrossSection
+       // CHIPS calculation by G4Q...ElasticCrossSection
        G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
        // ------ direct CHIPS approximation of elastic cross section --------
        //G4double sp=std::sqrt(mic);
@@ -804,12 +806,14 @@ int main()
      gTrack->SetKineticEnergy(energy); // Duplication of Kin. Energy for the Track (?!)
      gTrack->SetTouchableHandle(touch);// Set Box touchable history
      G4double mfp=proc->GetMeanFreePath(*gTrack,0.1,cond);
-     if(mfp<1.e12) for (G4int iter=0; iter<nEvt; iter++)
+#ifdef debug
+     G4cout<<"Test39: Mean free path "<<mfp/meter<<"(m)"<<G4endl;
+#endif
+     if(mfp<1.e20) for (G4int iter=0; iter<nEvt; iter++)
      {
 #ifdef debug
       G4cout<<"Test39: ### "<<iter<< "-th event starts.### energy(IU)="<<energy<<G4endl;
 #endif
-
       if(!(iter%100000)&&iter)G4cout<<"*=>TEST39: "<<iter<<" events are simulated"<<G4endl;
 
       // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RANDOM ENERGY AND RANDOM n/p SEQUENCE
