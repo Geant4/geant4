@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.1 2009-11-17 10:36:55 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.2 2010-01-14 11:24:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -92,13 +92,14 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #ifdef debug
   G4cout<<"G4QElastic::GetMeanFreePath:"<<nE<<" Elem's in theMaterial"<<G4endl;
 #endif
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
   G4int pPDG=0;
 
   if     (incidentParticleDefinition == G4Proton::Proton()  ) pPDG=2212;
   else if(incidentParticleDefinition == G4Neutron::Neutron()) pPDG=2112;
   else G4cout<<"G4QElastic::GetMeanFreePath:only nA & pA are implemented in CHIPS"<<G4endl;
-  
+
+  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+  G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();  
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
   G4int IPIE=IsoProbInEl.size();            // How many old elements?
@@ -181,7 +182,9 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #ifdef debug
       G4cout<<"G4QEl::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
-      G4double CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG);//CS(j,i) for isotope
+      G4double CSI=0.;                      // Prototype of CS(j,i) for the isotope
+      if(pPDG==2212) CSI=PCSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // pCS(j,i)
+      else           CSI=NCSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // nCS(j,i)
 
 #ifdef debug
       G4cout<<"G4QEl::GMFP: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="<<Momentum<<", XSec="
@@ -415,12 +418,14 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4cout<<"G4QElastic::PostStepDoIt: tM="<<tM<<", p4M="<<proj4M<<", t4M="<<tot4M<<G4endl;
 #endif
   EnMomConservation=tot4M;                 // Total 4-mom of reaction for E/M conservation
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
-  // @@ Probably this is not necessary any more
+  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+  G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
 #ifdef debug
   G4cout<<"G4QElas::PSDI:false,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<projPDG<<G4endl;
 #endif
-  G4double xSec=CSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);// Rec.CrossSect
+  G4double xSec=0.; // Prototype of the Recalculated Cross Section
+  if(projPDG==2212) xSec=PCSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);//RCrS
+  else              xSec=NCSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);//RCrS
 #ifdef debug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -441,7 +446,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,projPDG); // functional randomized -t in MeV^2
+  G4double mint=0.;                      // Prototype of functional randomized -t in MeV^2
+  if(projPDG==2212) mint=PCSmanager->GetExchangeT(Z,N,projPDG);// functional rand -t(MeV^2)
+  else              mint=NCSmanager->GetExchangeT(Z,N,projPDG);// functional rand -t(MeV^2)
 #ifdef pdebug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
         <<xSec<<",-t="<<mint<<G4endl;
@@ -450,12 +457,14 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(mint>-.0000001);
   else  G4cout<<"*Warning*G4QElastic::PostStDoIt:-t="<<mint<<G4endl;
 #endif
-  //G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
-  G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
+  G4double maxt=0.;                              // Prototype of max -t in MeV^2
+  if(projPDG==2212) maxt=PCSmanager->GetHMaxT(); // max -t (MeV^2)
+  else              maxt=NCSmanager->GetHMaxT(); // max -t (MeV^2)
+  G4double cost=1.-mint/maxt;                    // cos(theta) in CMS
   // 
 #ifdef ppdebug
-  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<",dpcm2="<<CSmanager->GetHMaxT()<<",Ek="
-        <<kinEnergy<<",tM="<<tM<<",pM="<<pM<<",cost="<<cost<<G4endl;
+  G4cout<<"G4QElastic::PoStDoI:t="<<mint<<", maxt="<<maxt<<",Ek="<<kinEnergy<<",tM="<<tM
+        <<",pM="<<pM<<",cost="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<1.))
   {
@@ -467,7 +476,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
       G4double twop2cm=(tM2+tM2)*(pEn*pEn-pM2)/sM;// Max_t/2 (2*p^2_cm)
       G4cout<<"*Warning*G4QElastic::PostStepDoIt:cos="<<cost<<",t="<<mint<<",T="<<kinEnergy
             <<",tM="<<tM<<",tmax="<<2*kinEnergy*tM<<",p="<<projPDG<<",t="<<targPDG<<G4endl;
-      G4cout<<"..G4QElastic::PoStDoI: dpcm2="<<twop2cm<<"="<<CSmanager->GetHMaxT()<<G4endl;
+      G4cout<<"..G4QElastic::PoStDoI: dpcm2="<<twop2cm<<"="<<maxt<<G4endl;
     }
     if     (cost>1.)  cost=1.;
     else if(cost<-1.) cost=-1.;
@@ -543,27 +552,39 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
 {
   static G4bool init=false;
   static G4bool first=true;
-  static G4VQCrossSection* CSmanager;
+  static G4VQCrossSection* PCSmanager;
+  static G4VQCrossSection* NCSmanager;
   if(first)                              // Connection with a singletone
   {
-    CSmanager=G4QElasticCrossSection::GetPointer();
+    PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+    NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
     first=false;
   }
   G4double res=0.;
   if(oxs && xst)                         // Only the Cross-Section can be returened
   {
-    res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+    if(pPDG==2212) res=PCSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+    else           res=NCSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
   }
-  else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
+  else if(!oxs && xst)                   // Calculate CrossSection & prepare differentialCS
   {
-    res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
+    if(pPDG==2212) res=PCSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS+init t-distr
+    else           res=NCSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS+init t-distr
     // The XS for the nucleus must be calculated the last
     init=true;
   }
-  else if(init)                          // Return t-value for scattering (=G4QElastic)
+  else if(init)                             // Return t-value for scattering (=G4QElastic)
   {
-    if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
-    else res=CSmanager->GetExchangeT(Z, N, pPDG); // functionally randomized -t in MeV^2
+    if(pPDG==2212)                          // ===> Protons
+    {
+      if(oxs) res=PCSmanager->GetHMaxT();   // Calculate the max_t value
+      else res=PCSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+    }
+    else                                    // ==> Neutrons
+    {
+      if(oxs) res=NCSmanager->GetHMaxT();   // Calculate the max_t value
+      else res=NCSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+    }
   }
   else G4cout<<"*Warning*G4QElastic::CalculateXSt:*NotInitiatedScattering"<<G4endl;
   return res;
