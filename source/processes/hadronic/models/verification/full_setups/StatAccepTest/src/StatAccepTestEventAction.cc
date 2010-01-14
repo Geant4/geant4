@@ -108,6 +108,8 @@ void StatAccepTestEventAction::EndOfEventAction( const G4Event* evt ) {
     G4cout << "UNDEFINED";
   }
 
+  //G4cout << "   evis=" << energyDepositedInActiveCalorimeterLayer;
+
   G4cout << "   random=" << CLHEP::HepRandom::getTheEngine()->flat() << G4endl;
 
   // Fill the histograms/ntuple.
