@@ -27,16 +27,16 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// GEANT4 physics class: G4QElasticCrossSection -- header file
+// GEANT4 physics class: G4QProtonElasticCrossSection -- header file
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-2006
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 12-Jan-2010 (from G4QElCrSect)
 //
 //================================================================================
 // Short description: Interaction cross-sections for the G4QElastic process
 // -------------------------------------------------------------------------------
 
-#ifndef G4QElasticCrossSection_h
-#define G4QElasticCrossSection_h 1
+#ifndef G4QProtonElasticCrossSection_h
+#define G4QProtonElasticCrossSection_h 1
 
 #include "G4QPDGCode.hh"
 #include "G4QException.hh"
@@ -44,21 +44,21 @@
 #include "Randomize.hh"
 #include "G4VQCrossSection.hh"
 
-class G4QElasticCrossSection : public G4VQCrossSection
+class G4QProtonElasticCrossSection : public G4VQCrossSection
 {
 protected:
 
-  G4QElasticCrossSection();               // Constructor
+  G4QProtonElasticCrossSection();               // Constructor
 
 public:
 
-  ~G4QElasticCrossSection();
+  ~G4QProtonElasticCrossSection();
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
   // Cross-section is mb. At present momentum (pMom) is in MeV=IU (@@ make Indep. Units)
   virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
-                                                                             G4int pPDG=0);
+                                                                          G4int pPDG=2212);
 
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int pPDG, G4int Z, G4int N,
                                                                               G4double pP);
@@ -100,7 +100,6 @@ private:
   static G4double  theS4;    // The Last mantissa of 4-th diffruction 
   static G4double  theB4;    // The Last slope of 4-th diffruction    
   // ---- Global (AMBD of P-dependent tables for pPDG,tZ,tN) -----
-  static G4int     lastPDG;  // Last PDG code of the projectile
   static G4int     lastTZ;   // Last atomic number of the target
   static G4int     lastTN;   // Last number of neutrons of the target
   static G4double  lastPIN;  // Last initialized max momentum

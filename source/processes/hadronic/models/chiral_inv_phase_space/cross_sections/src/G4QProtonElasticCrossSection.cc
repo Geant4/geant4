@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
+// $Id: G4QProtonElasticCrossSection.cc,v 1.1 2010-01-14 11:25:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// G4 Physics class: G4QElasticCrossSection for N+A elastic cross sections
+// G4 Physics class: G4QProtonElasticCrossSection for pA elastic cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
-// The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Oct-06
+// The last update: M.V. Kossov, CERN/ITEP (Moscow) 12-Jan-10 (from G4QElCrSect)
 // 
 //================================================================================
 // Short description: Interaction cross-sections for the G4QElastic process
@@ -43,66 +43,65 @@
 //#define tdebug
 //#define sdebug
 
-#include "G4QElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
 
 // Initialization of the static parameters
-const G4int G4QElasticCrossSection::nPoints=128;//#of points in the AMDB tables(>anyPar)(D)
-const G4int G4QElasticCrossSection::nLast=nPoints-1; // the Last element in the table   (D)
-G4double  G4QElasticCrossSection::lPMin=-8.;  // Min tabulated logarithmic Momentum     (D)
-G4double  G4QElasticCrossSection::lPMax= 8.;  // Max tabulated logarithmic Momentum     (D)
-G4double  G4QElasticCrossSection::dlnP=(lPMax-lPMin)/nLast;// Log step in the table     (D)
-G4bool    G4QElasticCrossSection::onlyCS=true;// Flag to calculate only CS (not Si/Bi)  (L)
-G4double  G4QElasticCrossSection::lastSIG=0.; // Last calculated cross section          (L)
-G4double  G4QElasticCrossSection::lastLP=-10.;// Last log(mom_of_the_incident_hadron)   (L)
-G4double  G4QElasticCrossSection::lastTM=0.;  // Last t_maximum                         (L)
-G4double  G4QElasticCrossSection::theSS=0.;   // The Last sq.slope of first difruction  (L)
-G4double  G4QElasticCrossSection::theS1=0.;   // The Last mantissa of first difruction  (L)
-G4double  G4QElasticCrossSection::theB1=0.;   // The Last slope of first difruction     (L)
-G4double  G4QElasticCrossSection::theS2=0.;   // The Last mantissa of second difruction (L)
-G4double  G4QElasticCrossSection::theB2=0.;   // The Last slope of second difruction    (L)
-G4double  G4QElasticCrossSection::theS3=0.;   // The Last mantissa of third difruction  (L)
-G4double  G4QElasticCrossSection::theB3=0.;   // The Last slope of third difruction     (L)
-G4double  G4QElasticCrossSection::theS4=0.;   // The Last mantissa of 4-th difruction   (L)
-G4double  G4QElasticCrossSection::theB4=0.;   // The Last slope of 4-th difruction      (L)
-G4int     G4QElasticCrossSection::lastTZ=0;   // Last atomic number of the target    
-G4int     G4QElasticCrossSection::lastTN=0;   // Last number of neutrons of the target
-G4double  G4QElasticCrossSection::lastPIN=0.; // Last initialized max momentum
-G4double* G4QElasticCrossSection::lastCST=0;  // Elastic cross-section table               
-G4double* G4QElasticCrossSection::lastPAR=0;  // Parameters for functional calculation     
-G4double* G4QElasticCrossSection::lastSST=0;  // E-dep of sq.slope of the first difruction 
-G4double* G4QElasticCrossSection::lastS1T=0;  // E-dep of mantissa of the first difruction 
-G4double* G4QElasticCrossSection::lastB1T=0;  // E-dep of the slope of the first difruction
-G4double* G4QElasticCrossSection::lastS2T=0;  // E-dep of mantissa of the second difruction
-G4double* G4QElasticCrossSection::lastB2T=0;  // E-dep of the slope of theSecond difruction
-G4double* G4QElasticCrossSection::lastS3T=0;  // E-dep of mantissa of the third difruction 
-G4double* G4QElasticCrossSection::lastB3T=0;  // E-dep of the slope of the third difruction
-G4double* G4QElasticCrossSection::lastS4T=0;  // E-dep of mantissa of the 4-th difruction 
-G4double* G4QElasticCrossSection::lastB4T=0;  // E-dep of the slope of the 4-th difruction
-G4int     G4QElasticCrossSection::lastPDG=0;  // The last PDG code of the projectile
-G4int     G4QElasticCrossSection::lastN=0;    // The last N of calculated nucleus
-G4int     G4QElasticCrossSection::lastZ=0;    // The last Z of calculated nucleus
-G4double  G4QElasticCrossSection::lastP=0.;   // Last used in cross section Momentum
-G4double  G4QElasticCrossSection::lastTH=0.;  // Last threshold momentum
-G4double  G4QElasticCrossSection::lastCS=0.;  // Last value of the Cross Section
-G4int     G4QElasticCrossSection::lastI=0;    // The last position in the DAMDB
+const G4int G4QProtonElasticCrossSection::nPoints=128;//#ofPt in the AMDB table(>anyPar)(D)
+const G4int G4QProtonElasticCrossSection::nLast=nPoints-1;// theLastElement in the table(D)
+G4double  G4QProtonElasticCrossSection::lPMin=-8.;  // Min tabulated logarithmicMomentum(D)
+G4double  G4QProtonElasticCrossSection::lPMax= 8.;  // Max tabulated logarithmicMomentum(D)
+G4double  G4QProtonElasticCrossSection::dlnP=(lPMax-lPMin)/nLast;// LogStep in the table(D)
+G4bool    G4QProtonElasticCrossSection::onlyCS=true;// Flag toCalculateOnlyCS(not Si/Bi)(L)
+G4double  G4QProtonElasticCrossSection::lastSIG=0.; // Last calculated cross section    (L)
+G4double  G4QProtonElasticCrossSection::lastLP=-10.;// Last log(mom_ofTheIncidentHadron)(L)
+G4double  G4QProtonElasticCrossSection::lastTM=0.;  // Last t_maximum                   (L)
+G4double  G4QProtonElasticCrossSection::theSS=0.;   // The Last sq.slope of 1st difr.Max(L)
+G4double  G4QProtonElasticCrossSection::theS1=0.;   // The Last mantissa of 1st difr.Max(L)
+G4double  G4QProtonElasticCrossSection::theB1=0.;   // The Last slope of 1st difruct.Max(L)
+G4double  G4QProtonElasticCrossSection::theS2=0.;   // The Last mantissa of 2nd difr.Max(L)
+G4double  G4QProtonElasticCrossSection::theB2=0.;   // The Last slope of 2nd difruct.Max(L)
+G4double  G4QProtonElasticCrossSection::theS3=0.;   // The Last mantissa of 3d difr. Max(L)
+G4double  G4QProtonElasticCrossSection::theB3=0.;   // The Last slope of 3d difruct. Max(L)
+G4double  G4QProtonElasticCrossSection::theS4=0.;   // The Last mantissa of 4th difr.Max(L)
+G4double  G4QProtonElasticCrossSection::theB4=0.;   // The Last slope of 4th difruct.Max(L)
+G4int     G4QProtonElasticCrossSection::lastTZ=0;   // Last atomic number of the target
+G4int     G4QProtonElasticCrossSection::lastTN=0;   // Last # of neutrons in the target
+G4double  G4QProtonElasticCrossSection::lastPIN=0.; // Last initialized max momentum
+G4double* G4QProtonElasticCrossSection::lastCST=0;  // Elastic cross-section table
+G4double* G4QProtonElasticCrossSection::lastPAR=0;  // Parameters for FunctionalCalculation
+G4double* G4QProtonElasticCrossSection::lastSST=0;  // E-dep of sq.slope of the 1st dif.Max
+G4double* G4QProtonElasticCrossSection::lastS1T=0;  // E-dep of mantissa of the 1st dif.Max
+G4double* G4QProtonElasticCrossSection::lastB1T=0;  // E-dep of the slope of the 1st difMax
+G4double* G4QProtonElasticCrossSection::lastS2T=0;  // E-dep of mantissa of the 2nd difrMax
+G4double* G4QProtonElasticCrossSection::lastB2T=0;  // E-dep of the slope of the 2nd difMax
+G4double* G4QProtonElasticCrossSection::lastS3T=0;  // E-dep of mantissa of the 3d difr.Max
+G4double* G4QProtonElasticCrossSection::lastB3T=0;  // E-dep of the slope of the 3d difrMax
+G4double* G4QProtonElasticCrossSection::lastS4T=0;  // E-dep of mantissa of the 4th difrMax
+G4double* G4QProtonElasticCrossSection::lastB4T=0;  // E-dep of the slope of the 4th difMax
+G4int     G4QProtonElasticCrossSection::lastN=0;    // The last N of calculated nucleus
+G4int     G4QProtonElasticCrossSection::lastZ=0;    // The last Z of calculated nucleus
+G4double  G4QProtonElasticCrossSection::lastP=0.;   // Last used in cross section Momentum
+G4double  G4QProtonElasticCrossSection::lastTH=0.;  // Last threshold momentum
+G4double  G4QProtonElasticCrossSection::lastCS=0.;  // Last value of the Cross Section
+G4int     G4QProtonElasticCrossSection::lastI=0;    // The last position in the DAMDB
 
-std::vector<G4double*> G4QElasticCrossSection::PAR; // Vector of parameters for functCalcul
-std::vector<G4double*> G4QElasticCrossSection::CST; // Vector of cross-section table
-std::vector<G4double*> G4QElasticCrossSection::SST; // Vector of the first squared slope
-std::vector<G4double*> G4QElasticCrossSection::S1T; // Vector of the first mantissa
-std::vector<G4double*> G4QElasticCrossSection::B1T; // Vector of the first slope
-std::vector<G4double*> G4QElasticCrossSection::S2T; // Vector of the secon mantissa
-std::vector<G4double*> G4QElasticCrossSection::B2T; // Vector of the second slope
-std::vector<G4double*> G4QElasticCrossSection::S3T; // Vector of the third mantissa
-std::vector<G4double*> G4QElasticCrossSection::B3T; // Vector of the third slope
-std::vector<G4double*> G4QElasticCrossSection::S4T; // Vector of the 4-th mantissa (gloria)
-std::vector<G4double*> G4QElasticCrossSection::B4T; // Vector of the 4-th slope    (gloria)
+std::vector<G4double*> G4QProtonElasticCrossSection::PAR; // Vector of pars for functCalcul
+std::vector<G4double*> G4QProtonElasticCrossSection::CST; // Vector of cross-section table
+std::vector<G4double*> G4QProtonElasticCrossSection::SST; // Vector of the 1st SquaredSlope
+std::vector<G4double*> G4QProtonElasticCrossSection::S1T; // Vector of the 1st mantissa
+std::vector<G4double*> G4QProtonElasticCrossSection::B1T; // Vector of the 1st slope
+std::vector<G4double*> G4QProtonElasticCrossSection::S2T; // Vector of the 2nd mantissa
+std::vector<G4double*> G4QProtonElasticCrossSection::B2T; // Vector of the 2nd slope
+std::vector<G4double*> G4QProtonElasticCrossSection::S3T; // Vector of the 3d mantissa
+std::vector<G4double*> G4QProtonElasticCrossSection::B3T; // Vector of the 3d slope
+std::vector<G4double*> G4QProtonElasticCrossSection::S4T; // Vector of the 4th mantissa (g)
+std::vector<G4double*> G4QProtonElasticCrossSection::B4T; // Vector of the 4th slope (glor)
 
-G4QElasticCrossSection::G4QElasticCrossSection()
+G4QProtonElasticCrossSection::G4QProtonElasticCrossSection()
 {
 }
 
-G4QElasticCrossSection::~G4QElasticCrossSection()
+G4QProtonElasticCrossSection::~G4QProtonElasticCrossSection()
 {
   std::vector<G4double*>::iterator pos;
   for (pos=CST.begin(); pos<CST.end(); pos++)
@@ -141,191 +140,142 @@ G4QElasticCrossSection::~G4QElasticCrossSection()
 }
 
 // Returns Pointer to the G4VQCrossSection class
-G4VQCrossSection* G4QElasticCrossSection::GetPointer()
+G4VQCrossSection* G4QProtonElasticCrossSection::GetPointer()
 {
-  static G4QElasticCrossSection theCrossSection; //**Static body of the QEl Cross Section**
+  static G4QProtonElasticCrossSection theCrossSection;//*StaticBody of theQEl CrossSection*
   return &theCrossSection;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
 // Make pMom in independent units ! (Now it is MeV)
-G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ,
-                                                 G4int tgN, G4int pPDG)
+G4double G4QProtonElasticCrossSection::GetCrossSection(G4bool fCS,G4double pMom, G4int tgZ,
+                                                       G4int tgN, G4int pPDG)
 {
-  static std::vector <G4int>    colPDG;// Vector of the projectile PDG code
   static std::vector <G4int>    colN;  // Vector of N for calculated nuclei (isotops)
   static std::vector <G4int>    colZ;  // Vector of Z for calculated nuclei (isotops)
   static std::vector <G4double> colP;  // Vector of last momenta for the reaction
   static std::vector <G4double> colTH; // Vector of energy thresholds for the reaction
   static std::vector <G4double> colCS; // Vector of last cross sections for the reaction
   // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
-  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
-  {
-    tgZ=1;
-    tgN=1;
-    if     (pPDG==2212) pPDG=2112;
-    else if(pPDG==2112) pPDG=2212;
-  }
   G4double pEn=pMom;
   onlyCS=fCS;
 #ifdef pdebug
-  G4cout<<"G4QElCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG="<<pPDG<<"("<<lastPDG<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="
-        <<colN.size()<<G4endl;
-  //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+  G4cout<<"G4QPElCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="
+        <<tgN<<"("<<lastN<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="<<colN.size()<<G4endl;
+  //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
-  if(!pPDG)
+  if(pPDG!=2212)
   {
-#ifdef pdebug
-    G4cout<<"G4QElCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
-    //CalculateCrossSection(fCS,-27,j,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
+    G4cout<<"*Warning*G4QProtonElCS::GetCS: *** Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
+    //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
-  G4bool in=false;                     // By default the isotope must be found in the AMDB
-//GF the block will update parameters, needed for quasi-eleastic
-//GF if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus isn't the LastUsedIsotope
+  G4bool in=false;                   // By default the isotope must be found in the AMDB
+  lastP   = 0.;                      // New momentum history (nothing to compare with)
+  lastN   = tgN;                     // The last N of the calculated nucleus
+  lastZ   = tgZ;                     // The last Z of the calculated nucleus
+  lastI   = colN.size();             // Size of the Associative Memory DB in the heap
+  if(lastI) for(G4int i=0; i<lastI; i++) // Loop over proj/tgZ/tgN lines of DB
+  {                                  // The nucleus with projPDG is found in AMDB
+    if(colN[i]==tgN && colZ[i]==tgZ) // Isotope is foind in AMDB
+    {
+      lastI=i;
+      lastTH =colTH[i];              // Last THreshold (A-dependent)
+#ifdef pdebug
+      G4cout<<"G4QElCS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",i="<<i<<G4endl;
+      //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+      if(pEn<=lastTH)
+      {
+#ifdef pdebug
+        G4cout<<"G4QElCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
+        //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+        return 0.;                   // Energy is below the Threshold value
+      }
+      lastP  =colP [i];              // Last Momentum  (A-dependent)
+      lastCS =colCS[i];              // Last CrossSect (A-dependent)
+      //  if(std::fabs(lastP/pMom-1.)<tolerance) //VI (do not use tolerance)
+      if(lastP == pMom)              // Do not recalculate
+      {
+#ifdef pdebug
+        G4cout<<"G4QElCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
+#endif
+        CalculateCrossSection(fCS,-1,i,pPDG,lastZ,lastN,pMom); // Update param's only
+        return lastCS*millibarn;     // Use theLastCS
+      }
+      in = true;                       // This is the case when the isotop is found in DB
+      // Momentum pMom is in IU ! @@ Units
+#ifdef pdebug
+      G4cout<<"G4QElCS::G:UpdateDB P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",i="<<i<<G4endl;
+#endif
+      lastCS=CalculateCrossSection(fCS,-1,i,pPDG,lastZ,lastN,pMom); // read & update
+#ifdef pdebug
+      G4cout<<"G4QElCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
+      //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+      if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
+      {
+#ifdef pdebug
+        G4cout<<"G4QElCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
+#endif
+        lastTH=pEn;
+      }
+      break;                           // Go out of the LOOP with found lastI
+    }
+#ifdef pdebug
+    G4cout<<"---G4QElCrossSec::GetCrosSec:pPDG="<<pPDG<<",i="<<i<<",N="<<colN[i]
+          <<",Z["<<i<<"]="<<colZ[i]<<G4endl;
+    //CalculateCrossSection(fCS,-27,i,pPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+  } // End of attampt to find the nucleus in DB
+  if(!in)                            // This nucleus has not been calculated previously
   {
-    in = false;                        // By default the isotope haven't be found in AMDB  
-    lastP   = 0.;                      // New momentum history (nothing to compare with)
-    lastPDG = pPDG;                    // The last PDG of the projectile
-    lastN   = tgN;                     // The last N of the calculated nucleus
-    lastZ   = tgZ;                     // The last Z of the calculated nucleus
-    lastI   = colN.size();             // Size of the Associative Memory DB in the heap
-    if(lastI) for(G4int i=0; i<lastI; i++) // Loop over proj/tgZ/tgN lines of DB
-    {                                  // The nucleus with projPDG is found in AMDB
-      if(colPDG[i]==pPDG && colN[i]==tgN && colZ[i]==tgZ)
-      {
-        lastI=i;
-        lastTH =colTH[i];                // Last THreshold (A-dependent)
 #ifdef pdebug
-        G4cout<<"G4QElCS::GetCS:*Found* P="<<pMom<<",Threshold="<<lastTH<<",i="<<i<<G4endl;
-        //CalculateCrossSection(fCS,-27,i,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+    G4cout<<"G4QElCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
 #endif
-        if(pEn<=lastTH)
-        {
-#ifdef pdebug
-          G4cout<<"G4QElCS::GetCS:Found T="<<pEn<<" < Threshold="<<lastTH<<",CS=0"<<G4endl;
-          //CalculateCrossSection(fCS,-27,i,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
-          return 0.;                     // Energy is below the Threshold value
-        }
-        lastP  =colP [i];                // Last Momentum  (A-dependent)
-        lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        //  if(std::fabs(lastP/pMom-1.)<tolerance) //VI (do not use tolerance)
-        if(lastP == pMom)   // V.Ivanchenko safe solution
-        {
-#ifdef pdebug
-          G4cout<<"G4QElCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
-#endif
-          CalculateCrossSection(fCS,-1,i,lastPDG,lastZ,lastN,pMom); // Update param's only
-          return lastCS*millibarn;     // Use theLastCS
-        }
-        in = true;                       // This is the case when the isotop is found in DB
-        // Momentum pMom is in IU ! @@ Units
-#ifdef pdebug
-        G4cout<<"G4QElCS::G:UpdateDB P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",i="<<i<<G4endl;
-#endif
-        lastCS=CalculateCrossSection(fCS,-1,i,lastPDG,lastZ,lastN,pMom); // read & update
-#ifdef pdebug
-        G4cout<<"G4QElCS::GetCrosSec: *****> New (inDB) Calculated CS="<<lastCS<<G4endl;
-        //CalculateCrossSection(fCS,-27,i,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
-        if(lastCS<=0. && pEn>lastTH)    // Correct the threshold
-        {
-#ifdef pdebug
-          G4cout<<"G4QElCS::GetCS: New T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
-#endif
-          lastTH=pEn;
-        }
-        break;                           // Go out of the LOOP with found lastI
-      }
-#ifdef pdebug
-      G4cout<<"---G4QElCrossSec::GetCrosSec:pPDG="<<pPDG<<",i="<<i<<",N="<<colN[i]
-            <<",Z["<<i<<"]="<<colZ[i]<<",cPDG="<<colPDG[i]<<G4endl;
-      //CalculateCrossSection(fCS,-27,i,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
-    }
-    if(!in)                            // This nucleus has not been calculated previously
+    //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
+    lastCS=CalculateCrossSection(fCS,0,lastI,pPDG,lastZ,lastN,pMom);//calculate&create
+    if(lastCS<=0.)
     {
+      lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef pdebug
-      G4cout<<"G4QElCS::GetCrosSec:CalcNew P="<<pMom<<",f="<<fCS<<",lastI="<<lastI<<G4endl;
+      G4cout<<"G4QElCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
 #endif
-      //!!The slave functions must provide cross-sections in millibarns (mb) !! (not in IU)
-      lastCS=CalculateCrossSection(fCS,0,lastI,lastPDG,lastZ,lastN,pMom);//calculate&create
-      if(lastCS<=0.)
+      if(pEn>lastTH)
       {
-        lastTH = ThresholdEnergy(tgZ, tgN); // The Threshold Energy which is now the last
 #ifdef pdebug
-        G4cout<<"G4QElCrossSection::GetCrossSect: NewThresh="<<lastTH<<",T="<<pEn<<G4endl;
+        G4cout<<"G4QElCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
 #endif
-        if(pEn>lastTH)
-        {
-#ifdef pdebug
-          G4cout<<"G4QElCS::GetCS: First T="<<pEn<<"(CS=0) > Threshold="<<lastTH<<G4endl;
-#endif
-          lastTH=pEn;
-        }
+        lastTH=pEn;
       }
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
-      //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
-      colN.push_back(tgN);
-      colZ.push_back(tgZ);
-      colPDG.push_back(pPDG);
-      colP.push_back(pMom);
-      colTH.push_back(lastTH);
-      colCS.push_back(lastCS);
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
-      //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-#endif
-      return lastCS*millibarn;
-    } // End of creation of the new set of parameters
-    else
-    {
-#ifdef pdebug
-      G4cout<<"G4QElCS::GetCS: Update lastI="<<lastI<<G4endl;
-#endif
-      colP[lastI]=pMom;
-      colPDG[lastI]=pPDG;
-      colCS[lastI]=lastCS;
     }
-  } // End of parameters udate
-
-//GF
-// else if(pEn<=lastTH)
-// {
-//#ifdef pdebug
-//  G4cout<<"G4QElCS::GetCS: Current T="<<pEn<<" < Threshold="<<lastTH<<", CS=0"<<G4endl;
-//  //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-//#endif
-//  return 0.;                         // Momentum is below the Threshold Value -> CS=0
-// }
-// //  else if(std::fabs(lastP/pMom-1.)<tolerance)
-// else if(lastP == pMom) // V.Ivanchenko safe solution
-// {
-//#ifdef pdebug
-//  G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;
-//  //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
-//  G4cout<<"G4QElCS::GetCrSec:***SAME***, onlyCS="<<onlyCS<<G4endl;
-//#endif
-//  return lastCS*millibarn;     // Use theLastCS
-// }
-// else
-// {
-//#ifdef pdebug
-//  G4cout<<"G4QElCS::GetCS:UpdatCur P="<<pMom<<",f="<<fCS<<",I="<<lastI<<",j="<<j<<G4endl;
-//#endif
-//  lastCS=CalculateCrossSection(fCS,1,lastI,lastPDG,lastZ,lastN,pMom); // Only UpdateDB
-//  lastP=pMom;
-// }
-//GF
-
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCrosSec: New CS="<<lastCS<<",lZ="<<lastN<<",lN="<<lastZ<<G4endl;
+    //CalculateCrossSection(fCS,-27,lastI,pPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+    colN.push_back(tgN);
+    colZ.push_back(tgZ);
+    colP.push_back(pMom);
+    colTH.push_back(lastTH);
+    colCS.push_back(lastCS);
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCS:1st,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
+    //CalculateCrossSection(fCS,-27,lastI,pPDG,lastZ,lastN,pMom); // DUMMY TEST
+#endif
+    return lastCS*millibarn;
+  } // End of creation of the new set of parameters
+  else
+  {
+#ifdef pdebug
+    G4cout<<"G4QElCS::GetCS: Update lastI="<<lastI<<G4endl;
+#endif
+    colP[lastI]=pMom;
+    colCS[lastI]=lastCS;
+  }
 #ifdef pdebug
   G4cout<<"G4QElCS::GetCrSec:End,P="<<pMom<<"(MeV),CS="<<lastCS*millibarn<<"(mb)"<<G4endl;
-  //CalculateCrossSection(fCS,-27,lastI,lastPDG,lastZ,lastN,pMom); // DUMMY TEST
+  //CalculateCrossSection(fCS,-27,lastI,pPDG,lastZ,lastN,pMom); // DUMMY TEST
   G4cout<<"G4QElCS::GetCrSec:***End***, onlyCS="<<onlyCS<<G4endl;
 #endif
   return lastCS*millibarn;
@@ -333,23 +283,16 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
 
 // Calculation of total elastic cross section (p in IU, CS in mb) @@ Units (?)
 // F=0 - create AMDB, F=-1 - read&update AMDB, F=1 - update AMDB (sinchro with higher AMDB)
-G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I,G4int PDG,
-                                                       G4int tgZ, G4int tgN, G4double pIU)
+G4double G4QProtonElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
+                                             G4int PDG, G4int tgZ, G4int tgN, G4double pIU)
 {
   // *** Begin of Associative Memory DB for acceleration of the cross section calculations
   static std::vector <G4double>  PIN;   // Vector of max initialized log(P) in the table
   // *** End of Static Definitions (Associative Memory Data Base) ***
-  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
-  {
-    tgZ=1;
-    tgN=1;
-    if     (PDG==2212) PDG=2112;
-    else if(PDG==2112) PDG=2212;
-  }
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
 #ifdef pdebug
-  G4cout<<"G4QElasticCrossSection::CalcCS:->onlyCS="<<onlyCS<<",F="<<F<<",p="<<pIU<<G4endl;
+  G4cout<<"G4QProtonElasticCrossS::CalcCS:->onlyCS="<<onlyCS<<",F="<<F<<",p="<<pIU<<G4endl;
 #endif
   lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation
   if(F)                                 // This isotope was found in AMDB =>RETRIEVE/UPDATE
@@ -373,7 +316,7 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
 #endif
     }
 #ifdef pdebug
-    G4cout<<"G4QElasticCrossSection::CalcCS:*read*, LP="<<lastLP<<",PIN="<<lastPIN<<G4endl;
+    G4cout<<"G4QProtonElasticCrossS::CalcCS:*read*, LP="<<lastLP<<",PIN="<<lastPIN<<G4endl;
 #endif
     if(lastLP>lastPIN && lastLP<lPMax)
     {
@@ -399,7 +342,7 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
     lastS4T = new G4double[nPoints];    // Allocate memory for Tabulated 4-th mantissa 
     lastB4T = new G4double[nPoints];    // Allocate memory for Tabulated 4-th slope    
 #ifdef pdebug
-    G4cout<<"G4QElasticCrossSection::CalcCS:*ini*,lastLP="<<lastLP<<",min="<<lPMin<<G4endl;
+    G4cout<<"G4QProtonElasticCrossS::CalcCS:*ini*,lastLP="<<lastLP<<",min="<<lPMin<<G4endl;
 #endif
     lastPIN = GetPTables(lastLP,lPMin,PDG,tgZ,tgN); // Returns the new P-limit for tables
 #ifdef pdebug
@@ -438,8 +381,7 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
 #endif
   if(lastLP>lPMin && lastLP<=lastPIN)   // Linear fit is made using precalculated tables
   {
-    if(lastLP==lastPIN) // VI do not use tolerance
-      //    if(std::fabs(lastLP-lastPIN)<.0001) // Just take the highest tabulated value
+    if(lastLP==lastPIN)
     {
       G4double shift=(lastLP-lPMin)/dlnP+.000001; // Log distance from lPMin
       G4int    blast=static_cast<int>(shift); // this is a bin number of the lower edge (0)
@@ -458,7 +400,7 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
         theB4  = lastB4T[blast];
       }
 #ifdef pdebug
-      G4cout<<"G4QElasticCrossSection::CalculateCS:(E) S1="<<theS1<<", B1="<<theB1<<G4endl;
+      G4cout<<"G4QProtonElasticCrossS::CalculateCS:(E) S1="<<theS1<<", B1="<<theB1<<G4endl;
 #endif
     }
     else
@@ -509,21 +451,21 @@ G4double G4QElasticCrossSection::CalculateCrossSection(G4bool CS,G4int F,G4int I
         theB4=B4TL+shift*(lastB4T[lastL]-B4TL); // the basic value of the 4-th slope
       }
 #ifdef pdebug
-      G4cout<<"G4QElasticCrossSection::CalculateCS:(I) S1="<<theS1<<", B1="<<theB1<<G4endl;
+      G4cout<<"G4QProtonElasticCrossS::CalculateCS:(I) S1="<<theS1<<", B1="<<theB1<<G4endl;
 #endif
     }
   }
   else lastSIG=GetTabValues(lastLP, PDG, tgZ, tgN); // Direct calculation beyond the table
   if(lastSIG<0.) lastSIG = 0.;                   // @@ a Warning print can be added
 #ifdef pdebug
-  G4cout<<"G4QElasticCrossSection::CalculateCS: END, onlyCS="<<onlyCS<<G4endl;
+  G4cout<<"G4QProtonElasticCrossSection::CalculateCS: END, onlyCS="<<onlyCS<<G4endl;
 #endif
   return lastSIG;
 }
 
 // It has parameter sets for all tZ/tN/PDG, using them the tables can be created/updated
-G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG, G4int tgZ,
-                                                                                 G4int tgN)
+G4double G4QProtonElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4int PDG,
+                                                  G4int tgZ, G4int tgN)
 {
   // @@ At present all nA==pA ---------> Each neucleus can have not more than 51 parameters
   static const G4double pwd=2727;
@@ -540,24 +482,8 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
   //                      -14--15- -16- -17- -18-  -19- -20- -21- -22-  -23-   -24-  -25-
   //                       -26- -27-  -28- -29- -30- -31-
   //                      -0- -1--2- -3-  -4-  -5-  -6-    -7-  -8- -9- -10--11--12--13-
-  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
+  if(PDG==2212)
   {
-    tgZ=1;
-    tgN=1;
-    if     (PDG==2212) PDG=2112;
-    else if(PDG==2112) PDG=2212;
-  }
-  if(PDG==2212 || PDG==2112)
-  {
-    // --- Total np elastic cross section cs & s1/b1 (t), s2/b2 (u) --- NotTuned for highE
-    //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(5.=par(3));p4=p2*p2; p=|3-mom|
-    //CS=12./(p2s+.05*p+.0001/sqrt(sp))+.35/p+(6.75+.14*dl1*dl1+19./p)/(1.+.6/p4);
-    //  par(0)   par(1) par(2)        par(4) par(5) par(6)     par(7)     par(8)
-    //s1=(6.75+.14*dl2*dl2+13./p)/(1.+.14/p4)+.6/(p4+.00013), s2=(75.+.001/p4/p)/p3
-    //  par(9) par(10)   par(11)     par(12) par(13) par(14)  par(15) par(16)
-    //b1=(7.2+4.32/(p4*p4+.012*p3))/(1.+2.5/p4), ss=0., b2=12./(p*sp+.34)
-    //par(17) par(18)    par(19)       par(20)  par(21)   par(22)   par(23)
-    //
     // -- Total pp elastic cross section cs & s1/b1 (main), s2/b2 (tail1), s3/b3 (tail2) --
     //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(3.=par(3));p4=p2*p2; p=|3-mom|
     //CS=2.865/p2s/(1+.0022/p2s)+(18.9+.6461*dl1*dl1+9./p)/(1.+.425*lp)/(1.+.4276/p4);
@@ -571,15 +497,17 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
     //
     if(lastPAR[nLast]!=pwd) // A unique flag to avoid the repeatable definition
     {
-      if ( (PDG == 2112 && tgZ == 1 && tgN == 0) || 
-           (PDG == 2212 && tgZ == 0 && tgN == 1) ) {
-        for (G4int ip=0; ip<n_npel; ip++) lastPAR[ip]=np_el[ip]; //np/pn
+      if ( tgZ == 0 && tgN == 1 )
+      {
+        for (G4int ip=0; ip<n_npel; ip++) lastPAR[ip]=np_el[ip]; // pn
 
-      } else if ( (PDG == 2212 && tgZ == 1 && tgN == 0) || 
-                  (PDG == 2112 && tgZ == 0 && tgN == 1) ) {
-        for (G4int ip=0; ip<n_ppel; ip++) lastPAR[ip]=pp_el[ip]; //pp/nn
-
-      } else {
+      }
+      else if ( tgZ == 1 && tgN == 0 )
+      {
+        for (G4int ip=0; ip<n_ppel; ip++) lastPAR[ip]=pp_el[ip]; // pp
+      }
+      else
+      {
         G4double a=tgZ+tgN;
         G4double sa=std::sqrt(a);
         G4double ssa=std::sqrt(sa);
@@ -597,50 +525,18 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
         G4double a14=a7*a7;
         G4double a16=a8*a8;
         G4double a17=a16*a;
+        G4double a20=a16*a4;
         G4double a32=a16*a16;
-        G4double r1a16=3.e16/a16;
-        G4double r2a16=2.e13/a16;
-        G4double r3a16=6.e13/a16;
-        G4double pa10=5.e-27*a10;
         // Reaction cross-section parameters (pel=peh_fit.f)
-        lastPAR[0]=a/3.;                                                       // p1(p/n)
-        //lastPAR[0]=.28*a;                                                      // p1(p/n)
-        lastPAR[1]=4.5*a*ssa/(1.+6./a3)/(1.+1.e-2*a);                          // p2(p/n)
-        //lastPAR[1]=4.8*std::pow(a,1.14)/(1.+3.6/a3);                           // p2(p/n)
-        if(PDG==2112)                           // Neutron projectile
-        {
-          lastPAR[2]=3.3/a+.5*ssa/(1.+2.e7/a8);                                // p3 (old)
-          if(a<6.5)
-          {
-            lastPAR[3]=1./(1.+.00123*a4);                                      // p4
-            lastPAR[4]=1.5e-4/a2/(a+1.2e-6*a12)+1.5e-6;                        // p5
-            lastPAR[5]=.0062/(a+5.e-11*a16);                                   // p6
-            lastPAR[6]=3.2e-14/a6/(1.+4.e-10*a17);                             // p7
-            lastPAR[7]=.847/a4/(a+.0005*a8)+.00045;                            // p8
-            lastPAR[8]=.413/a16+7.e-7;                                         // p9
-          }
-          else
-          {
-            lastPAR[3]=a*(.5+1.e-10*a4)/(1.+7.e5/a6);                          // p4
-            lastPAR[4]=a*3.e-5/(1.+2.e12/a12);                                 // p5
-            lastPAR[5]=(.0006+1.e-14*a5)/(1.+4.e5/a3)/(1.+3.e23/a16/a8);       // p6
-            lastPAR[6]=1.e-22*a4/(1.+5.e16*(1.+5e31/a32)/a16);                 // p7
-            lastPAR[7]=(8.+.00016*a2)/(1.+1.4e14/a16);                         // p8
-            lastPAR[8]=.0013;                                                  // p9
-          }
-        }
-        else                                   // Proton projectile
-        {
-          lastPAR[2]=3.3/a+.8*ssa/(1.+2.e7/a8);                                // p3
-          //lastPAR[2]=3.3/a+.7*ssa/(1.+2.e7/a8);                                // p3(old)
-          lastPAR[3]=1./(1.+6.e-9*a12)+.6*a/(1.+1.6e15/a16);                   // p4
-          lastPAR[4]=6.e-4/(a4+3.e-6*a12)+.16/(a+9.e5/a3+r1a16*r1a16);         // p5
-          lastPAR[5]=3.e-4/a2+(1.5e-3+3.e-14*a7)/(1.+r2a16*r2a16+3.e-12*a6);   // p6
-          lastPAR[6]=4.e-30+(1.2e-28*a3+pa10*pa10)/(1.+r3a16*r3a16+4.e-26*a14);// p7
-          lastPAR[7]=.1/(1.+1.7e-8*a16)+1./(1.+1.7e18/a16+2.e-6*a4);         // p8
-          //lastPAR[7]=.07/(1.+1.7e-8*a16)+.5/(1.+1.7e18/a16+4.5e-7*a4);         // p8(old)
-          lastPAR[8]=(1.5e-10+2.e-18*a8)/(1.+3.e-25*a16);                      // p9
-        }
+        lastPAR[0]=5./(1.+22./asa);                                          // p1
+        lastPAR[1]=4.8*std::pow(a,1.14)/(1.+3.6/a3);                         // p2
+        lastPAR[2]=1./(1.+4.E-3*a4)+2.E-6*a3/(1.+1.3E-6*a3);                 // p3
+        lastPAR[3]=1.3*a;                                                    // p4
+        lastPAR[4]=3.E-8*a3/(1.+4.E-7*a4);                                   // p5
+        lastPAR[5]=.07*asa/(1.+.009*a2);                                     // p6
+        lastPAR[6]=(3.+3.E-16*a20)/(1.+a20*(2.E-16/a+3.E-19*a));             // p7 (11)
+        lastPAR[7]=(5.E-9*a4*sa+.27/a)/(1.+5.E16/a20)/(1.+6.E-9*a4)+.015/a2; // p8
+        lastPAR[8]=(.001*a+.07/a)/(1.+5.E13/a16+5.E-7*a3)+.0003/sa;          // p9 (10)
         // @@ the differential cross-section is parameterized separately for A>6 & A<7
         if(a<6.5)
         {
@@ -665,10 +561,8 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
           lastPAR[23]=3.5e-36*a32*a8/(1.+5.e-15*a32/a);      // p4
           // The 1st max pre-exponent   (pel_qq)
           lastPAR[24]=1.e5/(a8+2.5e12/a16);                  // p1
-          //lastPAR[24]=8.e4/(a8+2.5e12/a16);                  // p1 (old)
           lastPAR[25]=8.e7/(a12+1.e-27*a28*a28);             // p2 
           lastPAR[26]=.0006*a3;                              // p3
-          //lastPAR[26]=.0011*a3;                              // p3 (old)
           // The 1st max slope          (pel_qs)
           lastPAR[27]=10.+4.e-8*a12*a;                       // p1
           lastPAR[28]=.114;                                  // p2
@@ -685,9 +579,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
           lastPAR[37]=64./a3;                                // p4
           // The gloria pre-exponent    (pel_us)
           lastPAR[38]=1.e8*std::exp(.32*asa);                // p1
-          //lastPAR[38]=1.05e8*std::exp(.32*asa);              // p1 (old)
-          lastPAR[39]=20.*std::exp(.45*asa);                // p2
-          //lastPAR[39]=19.5*std::exp(.45*asa);                // p2 (old)
+          lastPAR[39]=20.*std::exp(.45*asa);                 // p2
           lastPAR[40]=7.e3+2.4e6/a5;                         // p3
           lastPAR[41]=2.5e5*std::exp(.085*a3);               // p4
           lastPAR[42]=2.5*a;                                 // p5
@@ -782,7 +674,7 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
       lastS4T[0]=theS4;
       lastB4T[0]=theB4;
 #ifdef pdebug
-      G4cout<<"G4QElasticCrossSection::GetPTables:ip=0(init), lp="<<lp<<",S1="<<theS1
+      G4cout<<"G4QProtonElasticCrossSection::GetPTables:ip=0(init), lp="<<lp<<",S1="<<theS1
             <<",B1="<<theB1<<",S2="<<theS2<<",B2="<<theB3<<",S3="<<theS3
             <<",B3="<<theB3<<",S4="<<theS4<<",B4="<<theB4<<G4endl;
 #endif
@@ -815,106 +707,50 @@ G4double G4QElasticCrossSection::GetPTables(G4double LP,G4double ILP, G4int PDG,
             lastS4T[ip]=theS4;
             lastB4T[ip]=theB4;
 #ifdef pdebug
-            G4cout<<"G4QElasticCrossSection::GetPTables:ip="<<ip<<",lp="<<lp<<",S1="<<theS1
-                  <<",B1="<<theB1<<",S2="<<theS2<<",B2="<<theB2<<",S3="
+            G4cout<<"G4QProtonElasticCrossSection::GetPTables:ip="<<ip<<",lp="<<lp<<",S1="
+                  <<theS1<<",B1="<<theB1<<",S2="<<theS2<<",B2="<<theB2<<",S3="
                   <<theS3<<",B3="<<theB3<<",S4="<<theS4<<",B4="<<theB4<<G4endl;
 #endif
           }
           return lp;
         }
-        else G4cout<<"*Warning*G4QElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-                   <<", N="<<tgN<<", i="<<ini<<" > fin="<<fin<<", LP="<<LP<<" > ILP="<<ILP
-                   <<" nothing is done!"<<G4endl;
+        else G4cout<<"*Warning*G4QProtonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="
+                   <<tgZ<<", N="<<tgN<<", i="<<ini<<" > fin="<<fin<<", LP="<<LP<<" > ILP="
+                   <<ILP<<" nothing is done!"<<G4endl;
       }
-      else G4cout<<"*Warning*G4QElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-                 <<", N="<<tgN<<", i="<<ini<<">= max="<<nPoints<<", LP="<<LP<<" > ILP="
-                 <<ILP<<", lPMax="<<lPMax<<" nothing is done!"<<G4endl;
+      else G4cout<<"*Warning*G4QProtonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="
+                 <<tgZ<<", N="<<tgN<<", i="<<ini<<">= max="<<nPoints<<", LP="<<LP
+                 <<" > ILP="<<ILP<<", lPMax="<<lPMax<<" nothing is done!"<<G4endl;
     }
 #ifdef pdebug
-    else G4cout<<"*Warning*G4QElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+    else G4cout<<"*Warning*G4QProtonElasticCrossSection::GetPTables:PDG="<<PDG<<", Z="<<tgZ
                <<", N="<<tgN<<", LP="<<LP<<" <= ILP="<<ILP<<" nothing is done!"<<G4endl;
 #endif
   }
   else
   {
-    G4cout<<"*Error*G4QElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212(p)/2112(n)"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetPTables: only nA & pA are implemented");
+    G4cout<<"*Error*G4QProtonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
+          <<", N="<<tgN<<", while it is defined only for PDG=2212"<<G4endl;
+    throw G4QException("G4QProtonElasticCrossSection::GetPTables: only pA're implemented");
   }
   return ILP;
 }
 
 // Returns Q2=-t in independent units (MeV^2) (all internal calculations are in GeV)
-G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
+G4double G4QProtonElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 {
   static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
   static const G4double third=1./3.;
   static const G4double fifth=1./5.;
   static const G4double sevth=1./7.;
-  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
-  {
-    tgZ=1;
-    tgN=1;
-    if     (PDG==2212) PDG=2112;
-    else if(PDG==2112) PDG=2212;
-  }
 #ifdef tdebug
   G4cout<<"G4QElasticCS::GetExcT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
-  if(onlyCS) G4cout<<"**Warning*G4QElasticCrossSection::GetExchangeT: onlyCS=true"<<G4endl;
+  if(PDG!=2212) G4cout<<"**Warning*G4QProtonElasticCrossSection::GetExT:PDG="<<PDG<<G4endl;
+  if(onlyCS) G4cout<<"**Warning*G4QProtonElasticCrossSection::GetExchanT:onlyCS=1"<<G4endl;
   if(lastLP<-4.3) return lastTM*GeVSQ*G4UniformRand();// S-wave for p<14 MeV/c (kinE<.1MeV)
   G4double q2=0.;
-  if(PDG==2112 && tgZ==1 && tgN==0)                // ===> n+p=n+p
-  {
-#ifdef tdebug
-    G4cout<<"G4QElasticCS::GetExchangeT: TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1<<",S2="
-          <<theS2<<",B2="<<theB2<<",GeV2="<<GeVSQ<<G4endl;
-#endif
-    G4double E1=lastTM*theB1;
-    G4double R1=(1.-std::exp(-E1));
-#ifdef tdebug
-    G4double ts1=-std::log(1.-R1)/theB1;
-    G4double ds1=std::fabs(ts1-lastTM)/lastTM;
-    if(ds1>.0001)
-      G4cout<<"*Warning*G4QElCS::GetExT:1n "<<ts1<<"#"<<lastTM<<",d="<<ds1
-            <<",R1="<<R1<<",E1="<<E1<<G4endl;
-#endif
-    G4double E2=lastTM*theB2;
-    G4double R2=(1.-std::exp(-E2));
-#ifdef tdebug
-    G4double ts2=-std::log(1.-R2)/theB2;
-    G4double ds2=std::fabs(ts2-lastTM)/lastTM;
-    if(ds2>.0001)
-      G4cout<<"*Warning*G4QElCS::GetExT:2n "<<ts2<<"#"<<lastTM<<",d="<<ds2
-            <<",R2="<<R2<<",E2="<<E2<<G4endl;
-#endif
-    //G4double E3=lastTM*theB3;
-    //G4double R3=(1.-std::exp(-E3));
-#ifdef tdebug
-    //G4double ts3=-std::log(1.-R3)/theB3;
-    //G4double ds3=std::fabs(ts3-lastTM)/lastTM;
-    //if(ds3>.01)G4cout<<"*Warn*G4QElCS::GetExT:3n "<<ts3<<"#"<<lastTM<<",d="<<ds3<<G4endl;
-#endif
-    G4double I1=R1*theS1;
-    G4double I2=R2*theS2/theB2;
-    //G4double I3=R3*theS3/theB3;
-    G4double I12=I1+I2;
-    //G4double rand=(I12+I3)*G4UniformRand();
-    G4double rand=I12*G4UniformRand();
-    if     (rand<I1 )
-    {
-      G4double ran=R1*G4UniformRand();
-      if(ran>1.) ran=1.;
-      q2=-std::log(1.-ran)/theB1;       // t-chan
-    }
-    else
-    {
-      G4double ran=R2*G4UniformRand();
-      if(ran>1.) ran=1.;
-      q2=lastTM+std::log(1.-ran)/theB2; // u-chan (ChEx)
-    }
-  }
-  else if(PDG==2212 && tgZ==1 && tgN==0)                // ===> p+p=p+p
+  if(tgZ==1 && tgN==0)                // ===> p+p=p+p
   {
 #ifdef tdebug
     G4cout<<"G4QElasticCS::GetExchangeT: TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1<<",S2="
@@ -973,7 +809,7 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
       q2=-std::log(1.-ran)/theB3;
     }
   }
-  else if(PDG==2212 || PDG==2112)
+  else
   {
     G4double a=tgZ+tgN;
 #ifdef tdebug
@@ -1079,12 +915,6 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 #endif
     }
   }
-  else
-  {
-    G4cout<<"*Error*G4QElasticCrossSection::GetExchangeT: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212 & PDG==2112"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetExchangeT: nA and pA are implemented");
-  }
   if(q2<0.) q2=0.;
   if(!(q2>=-1.||q2<=1.)) G4cout<<"*NAN*G4QElasticCrossSect::GetExchangeT: -t="<<q2<<G4endl;
   if(q2>lastTM)
@@ -1098,19 +928,19 @@ G4double G4QElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 }
 
 // Returns B in independent units (MeV^-2) (all internal calculations are in GeV) see ExT
-G4double G4QElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
+G4double G4QProtonElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 {
   static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
 #ifdef tdebug
   G4cout<<"G4QElasticCS::GetSlope:"<<onlyCS<<", Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
-  if(onlyCS) G4cout<<"*Warning*G4QElasticCrossSection::GetSlope: onlyCS=true"<<G4endl;
+  if(onlyCS) G4cout<<"*Warning*G4QProtonElasticCrossSection::GetSlope:onlyCS=true"<<G4endl;
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
-  if(PDG!=2212 && PDG!=2112)
+  if(PDG!=2212)
   {
-    G4cout<<"*Error*G4QElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212 & PDG=2112"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetSlope: nA and pA are implemented");
+    G4cout<<"*Error*G4QProtonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ<<", N="
+          <<tgN<<", while it is defined only for PDG=2212"<<G4endl;
+    throw G4QException("G4QProtonElasticCrossSection::GetSlope: pA are implemented");
   }
   if(theB1<0.) theB1=0.;
   if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QElasticCrossSect::Getslope:"<<theB1<<G4endl;
@@ -1118,22 +948,17 @@ G4double G4QElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 }
 
 // Returns half max(Q2=-t) in independent units (MeV^2)
-G4double G4QElasticCrossSection::GetHMaxT()
+G4double G4QProtonElasticCrossSection::GetHMaxT()
 {
   static const G4double HGeVSQ=gigaelectronvolt*gigaelectronvolt/2.;
   return lastTM*HGeVSQ;
 }
 
 // lastLP is used, so calculating tables, one need to remember and then recover lastLP
-G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,G4int tgN)
+G4double G4QProtonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
+                                                    G4int tgN)
 {
-  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
-  {
-    tgZ=1;
-    tgN=1;
-    if     (PDG==2212) PDG=2112;
-    else if(PDG==2112) PDG=2212;
-  }
+  if(PDG!=2212) G4cout<<"*Warning*G4QProtonElasticCrossSection::GetTabV:PDG="<<PDG<<G4endl;
   if(tgZ<0 || tgZ>92)
   {
     G4cout<<"*Warning*G4QElasticCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
@@ -1161,33 +986,8 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
   G4double p2=p*p;            
   G4double p3=p2*p;
   G4double p4=p3*p;
-  if ( (PDG == 2112 && tgZ == 1 && tgN == 0) || 
-       (PDG == 2212 && tgZ == 0 && tgN == 1) ) {       // np/pn
-
-    G4double ssp=std::sqrt(sp);           // sqrt(sqrt(p))=p^.25
-    G4double p2s=p2*sp;
-    G4double dl1=lp-lastPAR[3];
-    theSS=lastPAR[21];
-    theS1=(lastPAR[9]+lastPAR[10]*dl1*dl1+lastPAR[11]/p)/(1.+lastPAR[12]/p4)
-          +lastPAR[13]/(p4+lastPAR[14]);
-    theB1=(lastPAR[17]+lastPAR[18]/(p4*p4+lastPAR[19]*p3))/(1.+lastPAR[20]/p4);
-    theS2=(lastPAR[15]+lastPAR[16]/p4/p)/p3;
-    theB2=lastPAR[22]/(p*sp+lastPAR[23]); 
-    theS3=0.;
-    theB3=0.; 
-    theS4=0.;
-    theB4=0.; 
-#ifdef tdebug
-    G4cout<<"G4QElasticCS::GetTableValues:(np) TM="<<lastTM<<",S1="<<theS1<<",B1="<<theB1
-          <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS1<<",B3="<<theB1<<G4endl;
-#endif
-    // Returns the total elastic pp cross-section (to avoid spoiling lastSIG)
-    return lastPAR[0]/(p2s+lastPAR[1]*p+lastPAR[2]/ssp)+lastPAR[4]/p
-           +(lastPAR[5]+lastPAR[6]*dl1*dl1+lastPAR[7]/p)/(1.+lastPAR[8]/p4);
-
-  } else if ( (PDG == 2212 && tgZ == 1 && tgN == 0) || 
-              (PDG == 2112 && tgZ == 0 && tgN == 1) ) { // pp/nn
-
+  if ( tgZ == 1 && tgN == 0 ) // pp/nn
+  {
     G4double p2s=p2*sp;
     G4double dl1=lp-lastPAR[3];
     G4double dl2=lp-lastPAR[8];
@@ -1209,7 +1009,7 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
     return lastPAR[0]/p2s/(1.+lastPAR[7]/p2s)+(lastPAR[1]+lastPAR[2]*dl1*dl1+lastPAR[4]/p)
                                                    /(1.+lastPAR[5]*lp)/(1.+lastPAR[6]/p4);
   }
-  else if(PDG==2212 || PDG==2112) // n/p + A
+  else
   {
     G4double p5=p4*p;
     G4double p6=p5*p;
@@ -1267,94 +1067,44 @@ G4double G4QElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
 #ifdef tdebug
     G4cout<<"G4QElCS::GetTabV: PDG="<<PDG<<",P="<<p<<",N="<<tgN<<",Z="<<tgZ<<G4endl;
 #endif
-    //if(PDG!=2112 || !tgN || p>.1)      // No Low Energy neutron addition
-    if(PDG==2212)                        // Unique formula for protons
-    {
-      G4double rp16=lastPAR[6]/p16;
-      return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p)+lastPAR[3]/(p4+lastPAR[4]/p2)
-             + lastPAR[5]/(p5+rp16*rp16)+lastPAR[7]/(p4+lastPAR[8]/p4);
-    }
-    else if(a<6.5)                       // neutrons on light nuclei
-     return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p)+lastPAR[3]/(p4+lastPAR[4]/p2)+
-            lastPAR[5]/(p5+lastPAR[6]/p8)+lastPAR[7]/(p4+lastPAR[8]);
-    else                                 // neutrons on heavy nuclei
-     return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p)+lastPAR[3]/(p4+lastPAR[4]/p2)+
-            lastPAR[5]/(p8+lastPAR[6]/p8)+lastPAR[7]/(p2+lastPAR[8]);
-    //else
-    //{
-    //  G4int nI=nn[iZ];
-    //  for(G4int i=0; i<nI; i++) if(tgN==nN[iZ][i])
-    //  {
-    //    G4double kE=p2/dNM;
-#ifdef tdebug
-    //  G4cout<<"G4QECS::GTV:P="<<p<<",E="<<kE<<",X="<<nX[iZ][i]<<",T="<<nT[iZ][i]<<G4endl;
-#endif
-    //    if(kE<nT[iZ][i]) return 0.;    // 0 below the threshold (in MeV)
-    //   if(p<2.) return nX[iZ][i];     // At very low momentum(<2MeV/c) -> only LECS
-    //    return lastPAR[3]/(p4+lastPAR[4]/p2)+lastPAR[5]/(p5+rp16*rp16)+
-    //           lastPAR[7]/(p4+lastPAR[8]/p4)+nX[iZ][i]/(1.+lastPAR[51]*p16);
-    //  }
-    //G4cerr<<"*G4QElCS::GTV:PDG="<<PDG<<",Z="<<tgZ<<",N="<<tgN<<": Sig not found"<<G4endl;
-    //}
-  }
-  else
-  {
-    G4cout<<"*Error*G4QElasticCrossSection::GetTabValues: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for PDG=2212/2112, Z>0, N>0"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetTabValues: only NA is implemented");
+    //         p1               p2              p3            p6
+    return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p+lastPAR[5]/p6)+
+     lastPAR[3]/(p3+lastPAR[4]/p3)+lastPAR[7]/(p4+pow((lastPAR[8]/p),lastPAR[6]));
+    //   p4            p5               p8                 p9             p7
   }
   return 0.;
 } // End of GetTableValues
 
 // Returns max -t=Q2 (GeV^2) for the momentum pP(GeV) and the target nucleus (tgN,tgZ)
-G4double G4QElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN, G4double pP)
+G4double G4QProtonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
+                                                G4double pP)
 {
-  static const G4double mNeut= G4QPDGCode(2112).GetMass()*.001; // MeV to GeV
+  //static const G4double mNeut= G4QPDGCode(2112).GetMass()*.001; // MeV to GeV
   static const G4double mProt= G4QPDGCode(2212).GetMass()*.001; // MeV to GeV
   //static const G4double mLamb= G4QPDGCode(3122).GetMass()*.001; // MeV to GeV
   //static const G4double mHe3 = G4QPDGCode(2112).GetNuclMass(2,1,0)*.001; // MeV to GeV
   //static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0)*.001; // MeV to GeV
   //static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0)*.001; // MeV to GeV
   static const G4double mProt2= mProt*mProt;
-  static const G4double mNeut2= mNeut*mNeut;
+  //static const G4double mNeut2= mNeut*mNeut;
   //static const G4double mDeut2= mDeut*mDeut;
-  if(tgZ==0 && tgN==1)                 // Temporary change for Quasi-Elastic
-  {
-    tgZ=1;
-    tgN=1;
-    if     (PDG==2212) PDG=2112;
-    else if(PDG==2112) PDG=2212;
-  }
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
-  if(PDG==2212 && tgZ==1 && tgN==0)
+  if(tgZ==1 && tgN==0)
   {
     G4double tMid=std::sqrt(pP2+mProt2)*mProt-mProt2; // CMS 90deg value of -t=Q2 (GeV^2)
     return tMid+tMid;
   }
-  else if(PDG==2112 && tgZ==0 && tgN==1)
-  {
-    G4double tMid=std::sqrt(pP2+mNeut2)*mNeut-mNeut2;  // CMS 90deg value of -t=Q2 (GeV^2)
-    return tMid+tMid;
-  }
-  else if(PDG==2112 && (tgZ || tgN))                   // ---> nA
-  {
-    G4double mt=mProt;                                 // Target mass in GeV
-    if(tgN||tgZ>1) mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass GeV
-    G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mNeut2)+mNeut2+mt*mt; // Mondelstam s (in GeV^2)
-    return dmt*dmt*pP2/s;
-  }
-  else if(PDG==2212 && (tgZ || tgN))                   // ---> pA
+  else if(tgZ || tgN)                                 // ---> pA
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt; // Mondelstam s
+    G4double s=dmt*std::sqrt(pP2+mProt2)+mProt2+mt*mt;// Mondelstam s
     return dmt*dmt*pP2/s;
   }
   else
   {
-    G4cout<<"*Error*G4QElasticCrossSection::GetQ2max: PDG="<<PDG<<", Z="<<tgZ<<", N="
-          <<tgN<<", while it is defined only for p,n projectiles & Z_target>0"<<G4endl;
-    throw G4QException("G4QElasticCrossSection::GetQ2max: only nA & pA are implemented");
+    G4cout<<"*Error*G4QProtonElasticCrossSection::GetQ2max: PDG="<<PDG<<", Z="<<tgZ<<", N="
+          <<tgN<<", while it is defined only for p projectiles & Z_target>0"<<G4endl;
+    throw G4QException("G4QProtonElasticCrossSection::GetQ2max: only pA are implemented");
   }
 }

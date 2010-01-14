@@ -50,9 +50,6 @@
 #include "G4QEnvironment.hh"
 #include "G4Quasmon.hh"
 #include "G4QHadronVector.hh"
-#include "G4QElasticCrossSection.hh"
-
-
 
 class G4QNeutronCaptureRatio
 {

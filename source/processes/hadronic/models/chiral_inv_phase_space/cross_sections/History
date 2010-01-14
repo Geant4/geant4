@@ -16,6 +16,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+14-Jan-2010 M.Kosov                            (hadr-chips-cs-V09-03-00)
+-----------------------------------------------------------------------
+Split G4QElasticCrossSection to G4QProtonElasticCS & G4QNeutronElasticCS
+CHIPS Proton Elastic is updated
+
 7-Dec-2009 M.Kosov                            (hadr-chips-cs-V09-02-00)
 -----------------------------------------------------------------------
 Bug fix in G4QNeutronCaptureRatio (Cu65): accelerate CuSc by 1.5

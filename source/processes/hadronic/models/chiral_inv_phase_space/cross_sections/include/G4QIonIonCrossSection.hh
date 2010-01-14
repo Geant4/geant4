@@ -50,7 +50,8 @@
 #include <vector>
 #include "G4VQCrossSection.hh"
 #include "G4QPDGCode.hh"
-#include "G4QElasticCrossSection.hh"
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"
 #include "G4QProtonNuclearCrossSection.hh"
 #include "G4QNeutronNuclearCrossSection.hh"
 

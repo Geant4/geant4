@@ -419,7 +419,8 @@ G4int G4QIonIonCrossSection::GetFunctions(G4int pZ,G4int pN,G4int tZ,G4int tN,G4
 std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int pN,G4int tZ,
                                                                 G4int tN, G4double Mom)
 {
-  static G4VQCrossSection* ElCSman = G4QElasticCrossSection::GetPointer();
+  static G4VQCrossSection* PElCSman = G4QProtonElasticCrossSection::GetPointer();
+  static G4VQCrossSection* NElCSman = G4QNeutronElasticCrossSection::GetPointer();
   static G4VQCrossSection* InelPCSman = G4QProtonNuclearCrossSection::GetPointer();
   static G4VQCrossSection* InelNCSman = G4QNeutronNuclearCrossSection::GetPointer();
   G4double pA=pZ+pN;
@@ -432,12 +433,12 @@ std::pair<G4double,G4double> G4QIonIonCrossSection::CalculateXS(G4int pZ,G4int p
     if     (pZ == 1 && !pN) // proton-nuclear
     {
       inCS=InelPCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
-      elCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
+      elCS=PElCSman->GetCrossSection(true, Mom, tZ, tN, 2212);
     }
     else if(pN == 1 && !pZ) // neutron-nuclear
     {
       inCS=InelNCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
-      elCS=ElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
+      elCS=NElCSman->GetCrossSection(true, Mom, tZ, tN, 2112);
     }
     else G4cerr<<"-Warn-G4QIICS::CaCS:pZ="<<pZ<<",pN="<<pN<<",tZ="<<tZ<<",tN="<<tN<<G4endl;
   }

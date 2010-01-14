@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.1 2009-11-16 18:15:43 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.2 2010-01-14 11:25:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -932,7 +932,8 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
   G4double P=std::sqrt(E2-mP2);                   // Momentum in pseudo laboratory system
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+  G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
 #ifdef ppdebug
   G4cout<<"G4QFR::Scatter: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
 #endif
@@ -940,8 +941,16 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   if(pPDG>3400 || pPDG<-3400) G4cout<<"-Warning-G4QElast::Scatter: pPDG="<<pPDG<<G4endl;
   G4int PDG=2212;                                                // *TMP* instead of pPDG
   if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
-  G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, PDG); // Rec.CrossSect *TMP*
-  //G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
+  if(!Z && N==1)                 // Change for Quasi-Elastic on neutron
+  {
+    Z=1;
+    N=0;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
+  G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
+  if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
+  else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
 #ifdef ppdebug
   G4cout<<"G4QElast::Scatter:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -950,16 +959,19 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
   else  G4cout<<"*Warning*G4QElast::Scatter: xSec="<<xSec/millibarn<<G4endl;
 #endif
   // @@ check a possibility to separate p, n, or alpha (!)
-  if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
+  if(xSec <= 0.)                                    // The cross-section iz 0 -> Do Nothing
   {
 #ifdef ppdebug
     G4cerr<<"-Warning-G4QFR::Scat:**Zero XS**PDG="<<pPDG<<",NPDG="<<NPDG<<",P="<<P<<G4endl;
 #endif
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); //Do Nothing Action
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,PDG); // functional randomized -t (MeV^2) *TMP*
-  //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
-  G4double maxt=CSmanager->GetHMaxT();            // max possible -t
+  G4double mint=0.;                        // Prototype of functional rand -t (MeV^2) *TMP*
+  if(PDG==2212) mint=PCSmanager->GetExchangeT(Z,N,PDG);// P functional rand -t(MeV^2) *TMP*
+  else          mint=NCSmanager->GetExchangeT(Z,N,PDG);// N functional rand -t(MeV^2) *TMP*
+  G4double maxt=0.;                                    // Prototype of max possible -t
+  if(PDG==2212) maxt=PCSmanager->GetHMaxT();           // max possible -t
+  else          maxt=NCSmanager->GetHMaxT();           // max possible -t
 #ifdef ppdebug
   G4cout<<"G4QFR::Scat:PDG="<<PDG<<",P="<<P<<",X="<<xSec<<",-t="<<mint<<"<"<<maxt<<", Z="
         <<Z<<",N="<<N<<G4endl;
@@ -978,7 +990,10 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::Scatter(G4int NPDG
     else if(cost<-1.) cost=-1.;
     else
     {
-      G4cerr<<"G4QFR::S:*NAN*c="<<cost<<",t="<<mint<<",tm="<<CSmanager->GetHMaxT()<<G4endl;
+      G4double tm=0.;
+      if(PDG==2212) tm=PCSmanager->GetHMaxT();
+      else          tm=NCSmanager->GetHMaxT();
+      G4cerr<<"G4QuasiFreeRatio::Scat:*NAN* cost="<<cost<<",-t="<<mint<<",tm="<<tm<<G4endl;
       return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
   }
@@ -1068,14 +1083,24 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
   }
   G4double P=std::sqrt(E2-mS2);                   // Momentum in pseudo laboratory system
-  G4VQCrossSection* CSmanager=G4QElasticCrossSection::GetPointer();
+  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
+  G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
 #ifdef debug
   G4cout<<"G4QFR::ChExer: Before XS, P="<<P<<", Z="<<Z<<", N="<<N<<", PDG="<<pPDG<<G4endl;
 #endif
   // @@ Temporary NN t-dependence for all hadrons
   G4int PDG=2212;                                                // *TMP* instead of pPDG
-  G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, PDG); // Rec.CrossSect *TMP*
-  //G4double xSec=CSmanager->GetCrossSection(false, P, Z, N, pPDG); // Rec.CrossSect
+  if(pPDG==2112||pPDG==-211||pPDG==-321) PDG=2112;               // *TMP* instead of pPDG
+  if(!Z && N==1)                 // Change for Quasi-Elastic on neutron
+  {
+    Z=1;
+    N=0;
+    if     (PDG==2212) PDG=2112;
+    else if(PDG==2112) PDG=2212;
+  }
+  G4double xSec=0.;                        // Prototype of Recalculated Cross Section *TMP*
+  if(PDG==2212) xSec=PCSmanager->GetCrossSection(false, P, Z, N, PDG); // P CrossSect *TMP*
+  else          xSec=NCSmanager->GetCrossSection(false, P, Z, N, PDG); // N CrossSect *TMP*
 #ifdef debug
   G4cout<<"G4QElast::ChExer:pPDG="<<pPDG<<",P="<<P<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -1091,8 +1116,9 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
 #endif
     return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); //Do Nothing Action
   }
-  G4double mint=CSmanager->GetExchangeT(Z,N,PDG); // functional randomized -t (MeV^2) *TMP*
-  //G4double mint=CSmanager->GetExchangeT(Z,N,pPDG); // functional randomized -t in MeV^2
+  G4double mint=0.;                        // Prototype of functional rand -t (MeV^2) *TMP*
+  if(PDG==2212) mint=PCSmanager->GetExchangeT(Z,N,PDG);// P functional rand -t(MeV^2) *TMP*
+  else          mint=NCSmanager->GetExchangeT(Z,N,PDG);// N functional rand -t(MeV^2) *TMP*
 #ifdef pdebug
   G4cout<<"G4QFR::ChEx:PDG="<<pPDG<<", P="<<P<<", CS="<<xSec<<", -t="<<mint<<G4endl;
 #endif
@@ -1100,9 +1126,12 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
   if(mint>-.0000001);
   else  G4cout<<"*Warning*G4QFR::ChExer: -t="<<mint<<G4endl;
 #endif
-  G4double cost=1.-mint/CSmanager->GetHMaxT(); // cos(theta) in CMS
+  G4double maxt=0.;                                    // Prototype of max possible -t
+  if(PDG==2212) maxt=PCSmanager->GetHMaxT();           // max possible -t
+  else          maxt=NCSmanager->GetHMaxT();           // max possible -t
+  G4double cost=1.-mint/maxt;                          // cos(theta) in CMS
 #ifdef pdebug
-  G4cout<<"G4QFR::ChEx:-t="<<mint<<",dpc2="<<CSmanager->GetHMaxT()<<",cost="<<cost<<G4endl;
+  G4cout<<"G4QuasiFfreeRatio::ChExer: -t="<<mint<<", maxt="<<maxt<<", cost="<<cost<<G4endl;
 #endif
   if(cost>1. || cost<-1. || !(cost>-1. || cost<=1.))
   {
@@ -1110,7 +1139,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiFreeRatios::ChExer(G4int NPDG,
     else if(cost<-1.) cost=-1.;
     else
     {
-      G4cerr<<"G4QFR::C:*NAN*c="<<cost<<",t="<<mint<<",tm="<<CSmanager->GetHMaxT()<<G4endl;
+      G4cerr<<"G4QuasiFreeRatio::ChExer:*NAN* c="<<cost<<",t="<<mint<<",tm="<<maxt<<G4endl;
       return std::make_pair(G4LorentzVector(0.,0.,0.,0.),p4M); // Do Nothing Action
     }
   }
