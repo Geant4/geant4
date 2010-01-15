@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.2 2009-12-01 09:24:24 mkossov Exp $
+// $Id: G4QIonIonCollision.cc,v 1.3 2010-01-15 12:08:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ G4int    G4QIonIonCollision::nCutMax=7;
 G4double G4QIonIonCollision::stringTension=1.*GeV/fermi;
 G4double G4QIonIonCollision::tubeDensity  =1./fermi;
 // Parameters of diffractional fragmentation
-G4double G4QIonIonCollision::widthOfPtSquare=-0.72*GeV*GeV; // ptWidth2 forStringExcitation
+G4double G4QIonIonCollision::widthOfPtSquare=-0.75*GeV*GeV; // ptWidth2 forStringExcitation
 
 G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &tNucleus)
 {

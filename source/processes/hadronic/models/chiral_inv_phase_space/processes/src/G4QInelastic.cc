@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.5 2009-12-03 18:09:07 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.6 2010-01-15 12:04:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -67,13 +67,13 @@ G4QInelastic::G4QInelastic(const G4String& processName):
 }
 
 G4bool   G4QInelastic::manualFlag=false; // If false then standard parameters are used
-G4double G4QInelastic::Temperature=210.; // Critical Temperature (sensitive at High En)
+G4double G4QInelastic::Temperature=200.; // Critical Temperature (sensitive at High En)
 G4double G4QInelastic::SSin2Gluons=0.3;  // Supression of s-quarks (in respect to u&d)
 G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g->qq)
 G4double G4QInelastic::freeNuc=.35;      // Percentage of free nucleons on the surface
 G4double G4QInelastic::freeDib=.05;      // Percentage of free diBaryons on the surface
 G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
-G4double G4QInelastic::mediRatio=1.;     // medium/vacuum hadronization ratio
+G4double G4QInelastic::mediRatio=2.7;    // medium/vacuum hadronization ratio
 G4int    G4QInelastic::nPartCWorld=152;  // The#of particles initialized in CHIPS World
 G4double G4QInelastic::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QInelastic::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
@@ -756,10 +756,11 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   G4double am=Z+N;
   G4double sr=std::sqrt(am);
   G4double dsr=0.01*(sr+sr);
+  G4double medRA=mediRatio*pow(am,third);
   if(dsr<dd)dsr=dd;
-  if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
+  if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,medRA); // ManualP
   else if(projPDG==-2212) G4QNucleus::SetParameters(1.-dsr-dsr,dd+dd,5.,10.);//aP ClustPars
-  else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.);//Pi- ClustPars
+  else if(projPDG==-211)  G4QNucleus::SetParameters(.67-dsr,.32-dsr,5.,9.); //Pi- ClustPars
 #ifdef debug
   G4cout<<"G4QInelastic::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif

@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.160 2009-12-03 18:09:07 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.161 2010-01-15 12:11:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1389,6 +1389,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
   static const G4QPDGCode lQPDG(3122);
   static const G4QPDGCode s0QPDG(3122);
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
+  static const G4double dPi0 = mPi0+mPi0;
   static const G4double mPi  = G4QPDGCode(211).GetMass();
   static const G4double mK   = G4QPDGCode(321).GetMass();
   static const G4double mK0  = G4QPDGCode(311).GetMass();
@@ -1721,7 +1722,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
       totIn4M           += Q4M;
       totInC            += pQ->GetQC().GetCharge();
     } // End of TotInitial4Momentum summation LOOP over Quasmons
-    G4int nsHadr  = theQHadrons.size();        // Update the value of OUTPUT entries
+    G4int nsHadr  = theQHadrons.size();        // Update the value of #of OUTPUT entries
     if(nsHadr) for(G4int jso=0; jso<nsHadr; jso++)// LOOP over output hadrons 
     {
       G4int hsNF  = theQHadrons[jso]->GetNFragments(); // A#of secondary fragments
@@ -1733,34 +1734,54 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
       }
     }
 #endif
-    //G4int   c3Max = 27;
+    // @@ Experimental calculations
+    G4QContent totInQC=theEnvironment.GetQCZNS();
+    G4LorentzVector totIn4M=theEnvironment.Get4Momentum();
+    for (G4int is=0; is<nQuasmons; is++) // Sum 4mom's of Quasmons for comparison
+    {
+      G4Quasmon*      pQ = theQuasmons[is];
+      totIn4M           += pQ->Get4Momentum();
+      totInQC           += pQ->GetQC();
+    } // End of TotInitial4Momentum/QC summation LOOP over Quasmons
+    G4double totMass=totIn4M.m();
+    G4QNucleus totN(totInQC);
+    G4double totM=totN.GetMZNS();
+    G4double excE = totMass-totM;
+    // @@ End of experimental calculations
+    G4int   envA=theEnvironment.GetA();
+    //G4int   c3Max = 27;                   // Big number (and any #0) slowes dow a lot
     //G4int   c3Max = 9;                    // Max#of "no hadrons" steps (reduced below?)
     //G4int   c3Max = 3;
-    //G4int   c3Max = 1;
+    ///G4int   c3Max = 1;
+    ///if(excE > dPi0) c3Max=(G4int)(excE/mPi0); // Try more for big excess
     G4int   c3Max = 0;
+    if(excE > mPi0) c3Max=(G4int)(excE/mPi0); // Try more for big excess
+    //G4int   c3Max = 0;                    // It closes the force decay of Quasmon at all!
+    //
     //G4int   premC = 27;
     //G4int   premC = 3;
     G4int   premC = 1;
-    G4int   envA=theEnvironment.GetA();
     //if(envA>1&&envA<13) premC = 24/envA;
-    //if(envA>1&&envA<19) premC = 36/envA;
-    //if(envA>1&&envA<25) premC = 48/envA;
-    //if(envA>1&&envA<41) premC = 80/envA;
+    if(envA>1&&envA<19) premC = 36/envA;
+    //if(envA>1&&envA<31) premC = 60/envA;
+    //if(envA>1&&envA<61) premC = 120/envA;
     G4int  sumstat= 2;                     // Sum of statuses of all Quasmons
     G4bool force  = false;                 // Prototype of the Force Major Flag
     G4int cbR     =0;                      // Counter of the "Stoped by Coulomb Barrier"
     //
-    G4int cbRM    =0;                      //** MaxCounter of "StopedByCoulombBarrier" **
+    //G4int cbRM    =0;                      //** MaxCounter of "StopedByCoulombBarrier" **
     //G4int cbRM    =1;                      // MaxCounter of the "StopedByCoulombBarrier"
     //G4int cbRM    =3;                      // MaxCounter of the "StopedByCoulombBarrier"
     //G4int cbRM    =9;                      // MaxCounter of the "Stoped byCoulombBarrier"
+    G4int cbRM    = c3Max;                 // MaxCounter of the "StopedByCoulombBarrier"
     G4int totC    = 0;                     // Counter to break the "infinit" loop
     //G4int totCM   = 227;                   // Limit for the "infinit" loop counter
     G4int totCM   = envA;                   // Limit for the "infinit" loop counter
     //G4int totCM   = 27;                    // Limit for this counter
-    G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    //G4int nCnMax = 1;                      // MaxCounterOfHadrFolts for shortCutSolutions
     //G4int nCnMax = 3;                      // MaxCounterOfHadrFolts for shortCutSolutions
     //G4int nCnMax = 9;                      // MaxCounterOfHadrFolts for shortCutSolutions
+    G4int nCnMax = c3Max;                  // MaxCounterOfHadrFolts for shortCutSolutions
     G4bool first=true;                     // Flag of the first interaction (only NucMedia)
     G4int cAN=0;                           // Counter of the nucleon absorptions
     //G4int mcAN=27;                         // Max for the counter of nucleon absorptions

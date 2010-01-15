@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.121 2009-12-03 18:09:07 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.122 2010-01-15 12:11:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -595,30 +595,29 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4LorentzVector k4Mom=zeroLV;         // 4-momentum prototype for k
     G4LorentzVector cr4Mom=zeroLV;        // 4-momentum prototype for the ColResQuasmon
     G4int kCount =0;                      // Counter of attempts of k for hadronization
+    //
+    //G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=12;                   // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
+    //G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
+    G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
+    if(excE > diPiM) qCountMax=(G4int)(excE/mPi0); // Try more for big excess
+    //
     //G4int kCountMax=27;
     //G4int kCountMax=9;
     //G4int kCountMax=3;                    // Try different k if they are below minK
     G4int kCountMax=1;                    // "No reson to increase it"
+    //G4int kCountMax=qCountMax;            // "No reson to increase it"
     //G4int kCountMax=0;                    //@@ *** Close search for the minimum k ***
-    //
-    //G4int qCountMax=27;                   // Try different q to come over CoulBar or SepE
-    G4int qCountMax=12;                   // Try different q to come over CoulBar or SepE
-    //G4int qCountMax=9;                    // Try different q to come over CoulBar or SepE
-    //G4int qCountMax=3;                    // Try different q to come over CoulBar or SepE
-    //G4int qCountMax=1;                    // Try different q to come over CoulBar or SepE
     //
     //G4int pCountMax=27;                   //Try differentHadrons(Parents) forBetterRecoil
     //G4int pCountMax=9;                    //Try differentHadrons(Parents) forBetterRecoil
     //G4int pCountMax=3;                    //Try differentHadrons(Parents) forBetterRecoil
     G4int pCountMax=1;                    //Try differentHadrons(Parents) forBetterRecoil
     //if(envA>0) pCountMax=3;
-    //if(envA>0&&envA<31)
-    if(envA>0&&envA<61)
-    {
-      //pCountMax=60/envA;
-      pCountMax=120/envA;
-      //kCountMax=pCountMax;                // See above !
-    }
+    if(envA>0&&envA<19) pCountMax=36/envA;
+    //if(envA>0&&envA<31) pCountMax=60/envA;
+    //if(envA>0&&envA<61) pCountMax=120/envA;
     G4bool gintFlag=false;                // Flag of gamma interaction with one quark
     while(kCount<kCountMax&&kCond)
     {
@@ -4736,13 +4735,13 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         G4double ked =kLS-eDelta;
                         G4double dked=ked+ked;
                         //////G4double dkedC=dked-CB-CB;
-                        //G4double kd =kLS-nDelta; //For TotalNucleus (includingQuasmon)
-                        //G4double dkd=kd+kd;
-                        //////////G4double dkdC=dkd-CB-CB;
+                        G4double kd =kLS-nDelta; //For TotalNucleus (includingQuasmon)
+                        G4double dkd=kd+kd;
+                        //G4double dkdC=dkd-CB-CB;
                         G4double dkLS=kLS+kLS;
                         //G4double Em=(E-eDelta)*(1.-frM/totMass);
                         //G4double Em=(E-nDelta)*(1.-frM/totMass);
-                        //G4double Em=(E-nDelta-CB)*(1.-frM/totMass);
+                        G4double Em=(E-nDelta-CB)*(1.-frM/totMass);
                         // *** START LIMITS ***
                         G4double ne=1.-dked/(boundM+dkLS);// qmin=DEFOULT=bM*(k-de)/(bM+2k)
                         G4double kf=1.;
@@ -4810,18 +4809,18 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         }
                         else if(nc <= 0.) kf=0.;
 
-                        //G4double nk=1.-(dkd-Em-Em)/boundM;  // q_min=(k-delta)-E*(M-m)/M
+                        G4double nk=1.-(dkd-Em-Em)/boundM;  // q_min=(k-delta)-E*(M-m)/M
 #ifdef pdebug
-                        //if(pPrint) G4cout<<"G4Q::CHP:qi_R="<<nk<<",kd="<<kd<<",E="<<Em
-                        //               <<",M="<<totMass<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qi_R="<<nk<<",kd="<<kd<<",E="<<Em
+                                       <<",M="<<totMass<<G4endl;
 #endif
-                        //if(nk > 0. && nk < 1. && nk < ne)
-                        //{
-                        //  ne=nk;
-                        //  newh=pow(nk,cNQ);
-                        //  if(newh<kf) kf=newh;
-                        //}
-                        //else if(nk <= 0.) kf=0.;
+                        if(nk > 0. && nk < 1. && nk < ne)
+                        {
+                          ne=nk;
+                          newh=pow(nk,cNQ);
+                          if(newh<kf) kf=newh;
+                        }
+                        else if(nk <= 0.) kf=0.;
 
                         //G4double mex=frM+Em;
                         //G4double sr=sqrt(mex*mex-frM2);//qmin=k-sqrt((m+E*(M-m)/M)^2-m^2)
@@ -5000,19 +4999,19 @@ void G4Quasmon::CalculateHadronizationProbabilities
 #endif
                         // == (@@) Historical additional cuts for q_max ===
                         //G4double tms=kLS+nDelta+Em;
-                        ////G4double tms=kLS+eDelta+Em;        // The same don't change ***
-                        //G4double le=1.-(tms+tms)/boundM;     // q_max=k+delta+E*(M-m)/M
+                        G4double tms=kLS+eDelta+Em;        // The same don't change ***
+                        G4double le=1.-(tms+tms)/boundM;     // q_max=k+delta+E*(M-m)/M
 #ifdef pdebug
-                        //if(pPrint) G4cout<<"G4Q::CHP:qa_t="<<le<<",k="<<kLS<<",E="<<Em
-                        //                 <<",bM="<<boundM<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qa_t="<<le<<",k="<<kLS<<",E="<<Em
+                                         <<",bM="<<boundM<<G4endl;
 #endif
-                        //if(le>0.&&le<1.&&le>lz)
-                        //{
-                        //  lz=le;
-                        //  newl=pow(le,cNQ);
-                        //  if(newl>low) low=newl;
-                        //}
-                        //else if(le>=1.)low=1.;
+                        if(le>0.&&le<1.&&le>lz)
+                        {
+                          lz=le;
+                          newl=pow(le,cNQ);
+                          if(newl>low) low=newl;
+                        }
+                        else if(le>=1.)low=1.;
                         // === End of historical cuts
 
                         //G4double lk=1.-(dkLS+E+E)/boundM;    // q_max=k+E
@@ -5045,21 +5044,22 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //else if(lq>=1.)low=1.;
 
                         // === The same as previous but "sr" instead of "st" ===
-                        //G4double lp=1.-(dkLS+sr+sr)/boundM;//qm=k+sqrt((E*(M-m)/M)^2-m^2)
+                        G4double lp=1.-(dkLS+sr+sr)/boundM;//qm=k+sqrt((E*(M-m)/M)^2-m^2)
 #ifdef pdebug
-                        //if(pPrint) G4cout<<"G4Q::CHP:qa_k+sr="<<lp<<",sr="<<sr<<",m="
-                        //                 <<mex<<",M="<<frM<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qa_k+sr="<<lp<<",sr="<<sr<<",m="
+                                         <<mex<<",M="<<frM<<G4endl;
 #endif
-                        //if(lp>0.&&lp<1.&&lp>lz)
-                        //{
-                        //  lz=lp;
-                        //  newl=pow(lp,cNQ);
-                        //  if(newl>low) low=newl;
-                        //}
-                        //else if(lp>=1.)low=1.;
+                        if(lp>0.&&lp<1.&&lp>lz)
+                        {
+                          lz=lp;
+                          newl=pow(lp,cNQ);
+                          if(newl>low) low=newl;
+                        }
+                        else if(lp>=1.)low=1.;
                         // ............................................................
                         //It's SpecificCoulombBarrierLimit forChargedParticles(canBeSkiped)
-                        if(totZ>cC)                         // ==> Check of Coulomb Barrier
+                        if(totZ>cC)                         // ==> Check CoulombBarrier
+                        //if(2>3)
                         {
                           G4double qmaCB=boundM-qMax;
                           //G4double qmaCB=nucBM-qMax;
