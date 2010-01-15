@@ -1012,6 +1012,18 @@ void StatAccepTestAnalysis::fillNtuple( float incidentParticleId,
 					float totalEnergyDepositedInCalorimeter ) {
   primaryParticleId = static_cast< G4int >( incidentParticleId );
   beamEnergy = incidentParticleEnergy;
+
+  // For meson primary beam particles, consider the total energy.
+  if ( primaryParticleId == -211  ||  primaryParticleId == +211 ) {  // pi- or pi+
+    beamEnergy += G4PionPlus::PionPlusDefinition()->GetPDGMass();
+  } else if ( primaryParticleId == -321  ||  primaryParticleId == +321 ) {  // K- or K+
+    beamEnergy += G4KaonPlus::KaonPlusDefinition()->GetPDGMass();
+  } else if ( primaryParticleId == 130 ) { // K0L
+    beamEnergy += G4KaonZeroLong::KaonZeroLongDefinition()->GetPDGMass(); 
+  } else if ( primaryParticleId == 310 ) { // K0S
+    beamEnergy += G4KaonZeroShort::KaonZeroShortDefinition()->GetPDGMass(); 
+  }
+
   if ( totalEnergyDepositedInCalorimeter - beamEnergy > 0.001*MeV ) {
     G4cout << "\t ***ENERGY-NON-CONSERVATION*** " 
 	   << totalEnergyDepositedInCalorimeter / MeV << " MeV" << G4endl;

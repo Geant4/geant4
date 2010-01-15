@@ -85,13 +85,13 @@ void StatAccepTestEventAction::EndOfEventAction( const G4Event* evt ) {
     if ( getenv( "AlwaysKillLeadingHadron" ) ) {
       isAlwaysKillLeadingHadronSet = 1;
     }
-    G4cout << "\t ----------------------------------" << G4endl
+    G4cout << "\t ---------------------------------------" << G4endl
            << "\t Beam Particle PDG Id = " << incidentParticleId << G4endl
-           << "\t Beam Particle Energy = " << incidentParticleEnergy / GeV
+           << "\t Beam Particle Kinetic Energy = " << incidentParticleEnergy / GeV
            << " GeV" << G4endl
            << "\t Is AlwaysKillLeadingHadron set? " 
            << isAlwaysKillLeadingHadronSet << G4endl
-           << "\t ----------------------------------" << G4endl;
+           << "\t ---------------------------------------" << G4endl;
   }
 
   theSteppingAction->reset();
