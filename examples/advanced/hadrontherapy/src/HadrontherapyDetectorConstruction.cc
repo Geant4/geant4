@@ -50,6 +50,7 @@
 #include "HadrontherapyLet.hh"
 
 #include <cmath>
+
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
   : motherPhys(physicalTreatmentRoom),
@@ -77,10 +78,12 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
   // Calculate (and eventually set) detector position by displacement, phantom size and detector size
   SetDetectorPosition();
 
+  // Define here the material of the water phantom and of the detector
+  defaultPhantomMaterial = "G4_WATER";
+  defaultDetectorMaterial = "G4_WATER";
+  
   // Build phantom and associated detector 
-  phantomMaterial = "G4_WATER";
   ConstructPhantom();
-  detectorMaterial = "G4_WATER";
   ConstructDetector();
 
   // Set number of the detector voxels along X Y and Z directions.  
@@ -97,20 +100,30 @@ HadrontherapyDetectorConstruction::~HadrontherapyDetectorConstruction()
     delete detectorMessenger;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// ConstructPhantom() is the method that reconstuct a water box (called phantom 
+// (or water phantom) in the usual Medical physicists slang). 
+// A water phantom can be considered a good
+// approximation of a an human body. 
 void HadrontherapyDetectorConstruction::ConstructPhantom()
 {
-  //----------------------------------------
-  // Phantom:
-  // A box used to approximate tissues
-  //----------------------------------------
-
+	// Searching in the Geant4 predefined material, the 'defaultPhantomMaterial'
+	// that has been previously defined in the constructor of this class
     G4bool isotopes =  false; 
-    G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial(phantomMaterial, isotopes);
-    phantom = new G4Box("Phantom",phantomSizeX, phantomSizeY, phantomSizeZ);
+    G4Material* phantomMaterial = G4NistManager::Instance()->FindOrBuildMaterial(defaultPhantomMaterial, isotopes);
+
+    // Definition of the solid volume of the Phantom
+    phantom = new G4Box("Phantom", 
+			phantomSizeX, 
+			phantomSizeY, 
+			phantomSizeZ);
+    
+// Definition of the logical volume of the Phantom
     phantomLogicalVolume = new G4LogicalVolume(phantom,	
-					     waterNist, 
+					     phantomMaterial, 
 					     "phantomLog", 0, 0, 0);
   
+    // Definition of the physics volume of the Phantom
     phantomPhysicalVolume = new G4PVPlacement(0,
 	                                    phantomPosition,
 					    "phantomPhys",
@@ -123,39 +136,66 @@ void HadrontherapyDetectorConstruction::ConstructPhantom()
     red = new G4VisAttributes(G4Colour(255/255., 0/255. ,0/255.));
     red -> SetVisibility(true);
     red -> SetForceSolid(true);
-//red -> SetForceWireframe(true);
+    //red -> SetForceWireframe(true);
     phantomLogicalVolume -> SetVisAttributes(red);
 }
 
 /////////////////////////////////////////////////////////////////////////////
+// ConstructDetector() it the method the reconstruct a detector region 
+// inside the water phantom. It is a volume, located inside the water phantom
+// and with two conicident faces:
+//
+//           **************************
+//           *   water phantom        *
+//           *                        *
+//           *                        *
+//           *---------------         *
+//  Beam     *              -         *
+//  ----->   * detector     -         *
+//           *              -         *
+//           *---------------         *
+//           *                        *
+//           *                        *
+//           *                        *
+//           **************************
+//
+// The detector is the volume that can be dived in slices or voxelized
+// and in it we can collect a number of usefull information:
+// dose distribution, fluence distribution, LET and so on
 void HadrontherapyDetectorConstruction::ConstructDetector()
 {
-  //-----------
-  // Detector
-  //-----------
+	// Searching in the Geant4 predefined material, the 'defaultDetectorMaterial'
+	// that has been previously defined in the constructor of this class
     G4bool isotopes =  false; 
-    G4Material* waterNist = G4NistManager::Instance()->FindOrBuildMaterial(detectorMaterial, isotopes);
-    detector = new G4Box("Detector",detectorSizeX,detectorSizeY,detectorSizeZ);
+    G4Material* detectorMaterial = G4NistManager::Instance()->FindOrBuildMaterial(defaultDetectorMaterial, isotopes);
+
+    // Definition of the solid volume of the Detector
+    detector = new G4Box("Detector", 
+			 detectorSizeX, 
+			 detectorSizeY, 
+			 detectorSizeZ);
+    
+    // Definition of the logic volume of the Phantom
     detectorLogicalVolume = new G4LogicalVolume(detector,
-						waterNist,
+						detectorMaterial,
 						"DetectorLog",
 						0,0,0);
-// Detector is attached by default to the phantom face directly exposed to the beam 
-    detectorPhysicalVolume = new G4PVPlacement(0,
-					     detectorPosition, // Setted by displacement
-					    "DetectorPhys",
-					     detectorLogicalVolume,
-					     phantomPhysicalVolume,
-					     false,0);
-  
+// Definition of the physical volume of the Phantom 
+    detectorPhysicalVolume = new G4PVPlacement(0, 
+					       detectorPosition, // Setted by displacement 
+					       "DetectorPhys", 
+					       detectorLogicalVolume, 
+					       phantomPhysicalVolume, 
+					       false,0);
+
 // Visualisation attributes of the detector 
     skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
     skyBlue -> SetVisibility(true);
     skyBlue -> SetForceSolid(true);
-//skyBlue -> SetForceWireframe(true);
+    //skyBlue -> SetForceWireframe(true);
     detectorLogicalVolume -> SetVisAttributes(skyBlue);
-  
 }
+
 /////////////////////////////////////////////////////////////////////////////
 void  HadrontherapyDetectorConstruction::ConstructSensitiveDetector(G4ThreeVector detectorToWorldPosition)
 {  
@@ -318,7 +358,6 @@ G4bool HadrontherapyDetectorConstruction::SetDetectorSize(G4double sizeX, G4doub
 /////////////////////////////////////////////////////////////////////////////
 G4bool HadrontherapyDetectorConstruction::SetPhantomSize(G4double sizeX, G4double sizeY, G4double sizeZ)
 {
-
 	if (!IsInside(detectorSizeX, 
 				  detectorSizeY, 
 				  detectorSizeZ,

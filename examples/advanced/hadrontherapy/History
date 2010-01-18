@@ -8,6 +8,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+18.01.2010 G.A.P.Cirrone, S.E.Mazzaglia; Tag: xxxxxx
+           - Solved a bug related to the use of the IAEA geometry due 
+             to the missing of the LET and Dose data matrices. 
+
 16.12.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-42
            - Added the possibility to calculate the let too, using an ASCII file to store it.
 	   - Added the new class HadrontherapyLet.

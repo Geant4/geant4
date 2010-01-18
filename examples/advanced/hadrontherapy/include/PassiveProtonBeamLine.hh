@@ -115,8 +115,8 @@ public:
 
 
 private:
-
-  void SetDimensions(); //passive proton line dimensions
+//passive proton line dimensions
+  void SetDefaultDimensions(); 
   void ConstructPassiveProtonBeamLine();
 
   HadrontherapyModulator* modulator; // Pointer to the modulator 

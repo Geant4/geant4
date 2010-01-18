@@ -141,7 +141,7 @@ int main(int argc ,char ** argv)
   // Initialize the primary particles
   HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
   runManager -> SetUserAction(pPrimaryGenerator);
-  
+
   // Optional UserActions: run, event, stepping
   HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
   runManager -> SetUserAction(pRunAction);
@@ -161,15 +161,15 @@ int main(int argc ,char ** argv)
   visManager -> Initialize();
 #endif 
 
-G4UImanager* UI = G4UImanager::GetUIpointer();      
-  
+G4UImanager* UI = G4UImanager::GetUIpointer();
+
  if (argc!=1)   // batch mode
    {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);    
+     UI->ApplyCommand(command+fileName);
    }
- 
+
  else  // interactive mode : define visualization UI terminal
    {
      G4UIsession* session = 0;
@@ -198,7 +198,7 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
    }
  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
  HadrontherapyLet* let = HadrontherapyLet::GetInstance();
- if (matrix)
+ if (matrix && let)
  {
      matrix -> TotalEnergyDeposit("DoseDistribution.out");
      // print list of generated nuclides 
@@ -208,8 +208,8 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
      matrix -> StoreData("Dose.out");
      // Store Let track & Let dose
      let -> StoreData("Let.out");
-
  } 
+
 #ifdef ANALYSIS_USE
  analysis -> finish();
 #endif

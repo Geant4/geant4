@@ -196,7 +196,7 @@ private:
   G4Box* phantom;
   G4Box* detector;
 
-  G4String phantomMaterial, detectorMaterial;
+  G4String defaultPhantomMaterial, defaultDetectorMaterial;
 
 };
 #endif

@@ -50,6 +50,7 @@ HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
 	fMess = new HadrontherapyAnalysisFileMessenger(this);
 }
 #endif
+
 #ifdef G4ANALYSIS_USE_ROOT
 HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
   analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
@@ -608,9 +609,10 @@ void HadrontherapyAnalysisManager::setBeamMetaData(G4double meanKineticEnergy,G4
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::flush()
 {
+ 
   HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
 
-  matrix->TotalEnergyDeposit("DoseDistribution.out");
+  if (matrix) matrix->TotalEnergyDeposit("DoseDistribution.out");
 #ifdef G4ANALYSIS_USE
   theTree -> commit();
   theTree ->close();
@@ -626,7 +628,7 @@ void HadrontherapyAnalysisManager::flush()
   theTFile->Close();
 #endif
   eventCounter = 0;
-  matrix->flush();
+  if (matrix) matrix->flush();
 }
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::finish()

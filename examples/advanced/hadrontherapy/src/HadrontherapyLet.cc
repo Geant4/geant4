@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyLet.cc,v 1.0, Dec 2009;
-// 
+// $Id: HadrontherapyLet.cc,v 1.0, Dec 2009
 
 #include "HadrontherapyLet.hh"
 #include "HadrontherapyInteractionParameters.hh"

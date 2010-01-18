@@ -53,11 +53,13 @@ void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 	
     G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
     G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
-    // Initialize LET with energy of primaries and clear data inside
+    if ( HadrontherapyLet::GetInstance() && HadrontherapyMatrix::GetInstance())
+      {
+    // Initialize LET with energy of primaries and clear data inside       
     HadrontherapyLet::GetInstance() -> Initialize();
     // Initialize matrix with energy of primaries and clear data inside
     HadrontherapyMatrix::GetInstance() -> Initialize();
-    
+      }
     electromagnetic = 0;
     hadronic = 0;
 }

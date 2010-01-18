@@ -1,4 +1,4 @@
-# G.A.P.Cirrone
+ # G.A.P.Cirrone
 #
 # Default macro file. It is called if no argument is provided at run
 # 
@@ -18,7 +18,7 @@
 ##########################
 # Set of the physic models
 #
-/physic/addPhysics emstandard_opt3                     # Electromagnetic model
+/physic/addPhysics standard_opt3                     # Electromagnetic model
 /physic/addPhysics elastic                             # Hadronic elastic model
 /physic/addPhysics binary                              # Hadronic inelastic model
 /physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
@@ -32,7 +32,7 @@
 # Visualisation 
 #
 /vis/scene/create
-#/vis/open OGLIQt # only if QT library are installed
+/vis/open OGLIQt # only if QT library are installed
 #/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
@@ -68,4 +68,4 @@
 #########################
 # Start of the run
 #
-/run/beamOn 10
+/run/beamOn 1000

@@ -76,30 +76,33 @@ PassiveProtonBeamLine::~PassiveProtonBeamLine()
   delete hadrontherapyDetectorConstruction;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 G4VPhysicalVolume* PassiveProtonBeamLine::Construct()
 { 
   // Sets default geometry and materials
-  SetDimensions();
+  SetDefaultDimensions();
+  
   // Construct the whole Passive Beam Line 
   ConstructPassiveProtonBeamLine();
 
   // HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
   hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom); 
-
+  
   return physicalTreatmentRoom;
 }
 
-void PassiveProtonBeamLine::SetDimensions()
-{
-  // DEFAULTS used in the geometry reconstruction of the beam line
+  // In the following method the DEFAULTS used in the geometry of 
+  // passive beam line are provided
   // HERE THE USER CAN CHANGE THE GEOMETRY CHARACTERISTICS OF BEAM
   // LINE ELEMENTS, ALTERNATIVELY HE/SHE CAN USE THE MACRO FILE (IF A 
   // MESSENGER IS PROVIDED)
   //
   // DEFAULT MATERIAL ARE ALSO PROVIDED	
-  // COLOURS ARE ALSO DEFINED
+  // and COLOURS ARE ALSO DEFINED
   // ----------------------------------------------------------
-	
+/////////////////////////////////////////////////////////////////////////////
+void PassiveProtonBeamLine::SetDefaultDimensions()
+{
   // Set of coulors that can be used
 	white = new G4VisAttributes( G4Colour());
 	white -> SetVisibility(true);
