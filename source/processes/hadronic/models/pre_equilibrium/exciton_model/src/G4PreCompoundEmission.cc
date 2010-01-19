@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.23 2010-01-19 12:12:52 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.24 2010-01-19 15:32:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,7 @@
 // Modified:  
 // 15.01.2010 J.M.Quesada added protection against unphysical values of parameter an 
 // 19.01.2010 V.Ivanchenko simplified computation of parameter an, sample cosTheta 
-//                         instead of theta 
+//                         instead of theta; protect all calls to sqrt 
 //
 
 #include "G4PreCompoundEmission.hh"
@@ -209,11 +209,13 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
 G4ThreeVector 
 G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
 					   const G4Fragment& aFragment,
-					   const G4double kinEnergyOfEmittedFr) const
+					   const G4double kinEnergyOfEmittedFrag) const
 {
   G4double p = aFragment.GetNumberOfParticles();
   G4double h = aFragment.GetNumberOfHoles();
   G4double U = aFragment.GetExcitationEnergy();
+
+  G4double ekin = std::max(0.0, kinEnergyOfEmittedFrag);
 	
   // Emission particle separation energy
   G4double Bemission = theFragment->GetBindingEnergy();
@@ -250,17 +252,21 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
 
   // VI + JMQ 19/01/2010 update computation of the parameter an
   //
+  G4double an = 0.0;
+  G4double Eeff = ekin + Bemission + Ef;
+  if(ekin > DBL_MIN && Eeff > DBL_MIN) {
 
-  G4double zeta = std::max(1.0,9.3/std::sqrt(kinEnergyOfEmittedFr/MeV));	
-  G4double an = 3.0*std::sqrt((ProjEnergy+Ef)*(kinEnergyOfEmittedFr+Bemission+Ef))
-    /(zeta*Eav);
+    G4double zeta = std::max(1.0,9.3/std::sqrt(ekin/MeV));
+  
+    an = 3.0*std::sqrt((ProjEnergy+Ef)*Eeff)/(zeta*Eav);
 
-  G4int ne = aFragment.GetNumberOfExcitons() - 1;
-  if ( ne > 1 ) { an /= (G4double)ne; }
+    G4int ne = aFragment.GetNumberOfExcitons() - 1;
+    if ( ne > 1 ) { an /= (G4double)ne; }
 			
-  // protection of exponent
-  if ( an > 10. ) { an = 10.; }
-		
+    // protection of exponent
+    if ( an > 10. ) { an = 10.; }
+  }
+
   // sample cosine of theta and not theta as in old versions  
   G4double random = G4UniformRand();
   G4double cost;
@@ -276,8 +282,7 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
   G4double phi = twopi*G4UniformRand();
   
   // Calculate the momentum magnitude of emitted fragment 	
-  G4double EmittedMass = theFragment->GetNuclearMass();
-  G4double pmag = std::sqrt(kinEnergyOfEmittedFr*(kinEnergyOfEmittedFr+2.0*EmittedMass));
+  G4double pmag = std::sqrt(ekin*(ekin + 2.0*theFragment->GetNuclearMass()));
   
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
