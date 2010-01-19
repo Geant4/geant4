@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_GS.cc,v 1.2 2010-01-19 17:28:20 maire Exp $
+// $Id: PhysListEmStandard_option2.cc,v 1.1 2010-01-19 17:28:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "PhysListEmStandard_GS.hh"
+#include "PhysListEmStandard_option2.hh"
 #include "DetectorConstruction.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -41,7 +41,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4UrbanMscModel93.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -56,19 +56,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard_GS::PhysListEmStandard_GS(const G4String& name,
+PhysListEmStandard_option2::PhysListEmStandard_option2(const G4String& name,
                                DetectorConstruction* det)
 : G4VPhysicsConstructor(name), detector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard_GS::~PhysListEmStandard_GS()
+PhysListEmStandard_option2::~PhysListEmStandard_option2()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListEmStandard_GS::ConstructProcess()
+void PhysListEmStandard_option2::ConstructProcess()
 {
   // Add standard EM Processes
   //
@@ -93,27 +93,25 @@ void PhysListEmStandard_GS::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-
-      G4eMultipleScattering* eMsc = new G4eMultipleScattering();
-      eMsc->AddEmModel(1, new G4GoudsmitSaundersonMscModel);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
             
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
                          
-      pmanager->AddProcess(eMsc,                      -1, 1, 1);
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
 	    
     } else if (particleName == "e+") {
       //positron
-
-      G4eMultipleScattering* pMsc = new G4eMultipleScattering();
-      pMsc->AddEmModel(1, new G4GoudsmitSaundersonMscModel);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
             
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
                                
-      pmanager->AddProcess(pMsc,                      -1, 1, 1);
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(pIoni,                     -1, 2, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 3);
@@ -137,6 +135,7 @@ void PhysListEmStandard_GS::ConstructProcess()
   emOptions.SetBuildCSDARange(true);		//default=false
   emOptions.SetMaxEnergyForCSDARange(10*GeV);  
   emOptions.SetDEDXBinningForCSDARange(8*7);	//default=8*7
+          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
