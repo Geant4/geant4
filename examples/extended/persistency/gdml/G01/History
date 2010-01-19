@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2010-01-08 12:59:08 gcosmo Exp $
+$Id: History,v 1.14 2010-01-19 17:06:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 19th, 2010  Gabriele Cosmo - G01-V09-03-01
+- Corrected typo in replicated.gdml file.
 
 Jan 8th, 2010  Gabriele Cosmo - G01-V09-03-00
 - Added printout of associated auxiliary information value.
