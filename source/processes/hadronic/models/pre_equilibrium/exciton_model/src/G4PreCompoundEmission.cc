@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.22 2009-11-13 17:40:14 gcosmo Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.23 2010-01-19 12:12:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,9 @@
 // Author:         V.Lara
 //
 // Modified:  
+// 15.01.2010 J.M.Quesada added protection against unphysical values of parameter an 
+// 19.01.2010 V.Ivanchenko simplified computation of parameter an, sample cosTheta 
+//                         instead of theta 
 //
 
 #include "G4PreCompoundEmission.hh"
@@ -165,10 +168,10 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     
   // check that Excitation energy is >= 0
   G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
-  if (anU < 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
-    
-    
-    
+  if (anU < 0.0) {
+    throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+  }
+     
   // Update nucleus parameters:
   // --------------------------
 
@@ -203,17 +206,14 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   return MyRP;
 }
 
-
-G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
-							 const G4Fragment& aFragment,
-							 const G4double KineticEnergyOfEmittedFragment) const
+G4ThreeVector 
+G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
+					   const G4Fragment& aFragment,
+					   const G4double kinEnergyOfEmittedFr) const
 {
   G4double p = aFragment.GetNumberOfParticles();
   G4double h = aFragment.GetNumberOfHoles();
   G4double U = aFragment.GetExcitationEnergy();
-	
-  // Kinetic Energy of emitted fragment
-  // G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
 	
   // Emission particle separation energy
   G4double Bemission = theFragment->GetBindingEnergy();
@@ -224,7 +224,7 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   //
   //  G4EvaporationLevelDensityParameter theLDP;
   //  G4double g = (6.0/pi2)*aFragment.GetA()*
-  //    theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),U);
+
   G4double g = (6.0/pi2)*aFragment.GetA()*
     G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 	
@@ -234,8 +234,6 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   // Excitation energy relative to the Fermi Level
   G4double Uf = std::max(U - (p - h)*Ef , 0.0);
   //  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
-
-
 
   G4double w_num = rho(p+1,h,g,Uf,Ef);
   G4double w_den = rho(p,h,g,Uf,Ef);
@@ -250,56 +248,40 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
     }
   
 
-  G4double zeta = std::max(1.0,9.3/std::sqrt(KineticEnergyOfEmittedFragment/MeV));
-	
-  G4double an = 3.0*std::sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef));
-  if (aFragment.GetNumberOfExcitons() == 1)
-    {
-      an /= (zeta*2.0*aFragment.GetNumberOfExcitons()*Eav);
-    }
-  else
-    {
-      an /= (zeta*(aFragment.GetNumberOfExcitons()-1.0)*Eav);
-    }
+  // VI + JMQ 19/01/2010 update computation of the parameter an
+  //
+
+  G4double zeta = std::max(1.0,9.3/std::sqrt(kinEnergyOfEmittedFr/MeV));	
+  G4double an = 3.0*std::sqrt((ProjEnergy+Ef)*(kinEnergyOfEmittedFr+Bemission+Ef))
+    /(zeta*Eav);
+
+  G4int ne = aFragment.GetNumberOfExcitons() - 1;
+  if ( ne > 1 ) { an /= (G4double)ne; }
 			
-			
-//    G4double expan=std::exp(an);
-//    thetaold = std::acos(std::log(expan-random*(expan-1.0/expan))/an);
-//      exp(an) becomes large for large an
-//      1/exp(an) becomes large for large negative an
-//       take the large value out of the log depending on the sign of an to avoid FP exceptions 
+  // protection of exponent
+  if ( an > 10. ) { an = 10.; }
+		
+  // sample cosine of theta and not theta as in old versions  
+  G4double random = G4UniformRand();
+  G4double cost;
  
-  G4double random=G4UniformRand();
-  G4double exp2an=0;
-  G4double theta;
-  if (an > 0.) {
-    if (an < 25.) { exp2an = std::exp(-2*an); } // we subtract from 1, exp(-50)~1e-21, so will not
-                                           //  change numerical result
-    theta = std::acos(1+ std::log(1-random*(1-exp2an))/an);
-  } else if ( an < 0.) {
-    if ( an > -25.) { exp2an = std::exp(2*an); } // similar to above, except we compare to rndm*1
-    theta = std::acos(std::log(exp2an-random*(exp2an-1))/an - 1.);
-  } else {   // an==0 now.	
-    theta=std::acos(1.-2*random);
-  }
-  
-  if (std::abs(an) < 50 )
-  {
-     
-  }
+  if(an < 0.1) { cost = 1. - 2*random; }
+  else {
+    G4double exp2an = std::exp(-2*an);
+    cost = 1. + std::log(1-random*(1-exp2an))/an;
+    if(cost > 1.) { cost = 1.; }
+    else if(cost < -1.) {cost = -1.; }
+  }  
 
   G4double phi = twopi*G4UniformRand();
   
   // Calculate the momentum magnitude of emitted fragment 	
   G4double EmittedMass = theFragment->GetNuclearMass();
-  G4double pmag = std::sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+2.0*EmittedMass));
+  G4double pmag = std::sqrt(kinEnergyOfEmittedFr*(kinEnergyOfEmittedFr+2.0*EmittedMass));
   
-  
-  G4double sinTheta = std::sin(theta);
-  //  G4double cosTheta = std::sqrt(1.0-sinTheta*sinTheta);
-  G4double cosTheta = std::cos(theta);
+  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  G4ThreeVector momentum(pmag*std::cos(phi)*sinTheta,pmag*std::sin(phi)*sinTheta,pmag*cosTheta);
+  G4ThreeVector momentum(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,pmag*cost);
   // theta is the angle wrt the incident direction
   momentum.rotateUz(theIncidentDirection);
 
