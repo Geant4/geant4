@@ -49,7 +49,7 @@
 # 
 /event/printEventNumber 100
 
-/run/beamOn 5000
+/run/beamOn 5
 
 #########################
 # Move the generated .root

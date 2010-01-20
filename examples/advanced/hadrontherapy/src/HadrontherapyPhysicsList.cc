@@ -75,6 +75,7 @@
 //    ion_therapy.mac   : use of mixed combination of native Geant4 physic lists
 //                        and local physic for ion-ion enelastic processes)
 
+#include "G4RunManager.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyStepMax.hh"
@@ -85,7 +86,7 @@
 #include "LocalIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes
 #include "LocalINCLIonIonInelasticPhysic.hh"         // Physic dedicated to the ion-ion inelastic processes using INCL/ABLA
 
-// Physic lists (contained inside the Geant4 distribution)
+// Physic lists (contained inside the Geant4 source code, in the 'physicslists folder')
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
@@ -172,16 +173,13 @@ void HadrontherapyPhysicsList::ConstructParticle()
 void HadrontherapyPhysicsList::ConstructProcess()
 {
   // transportation
-  //
   AddTransportation();
 
   // electromagnetic physics list
-  //
   emPhysicsList->ConstructProcess();
   em_config.AddModels();
 
   // decay physics list
-  //
   decPhysicsList->ConstructProcess();
 
   // hadronic physics lists
@@ -206,17 +204,18 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   /////////////////////////////////////////////////////////////////////////////
   //   ELECTROMAGNETIC MODELS
   /////////////////////////////////////////////////////////////////////////////
-
-  if (name == "standard_opt3") {
+    if (name == "standard_opt3") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
+    G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
 
   } else if (name == "LowE_Livermore") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();
+    G4RunManager::GetRunManager()-> PhysicsHasBeenModified();
     G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
 
   } else if (name == "LowE_Penelope") {

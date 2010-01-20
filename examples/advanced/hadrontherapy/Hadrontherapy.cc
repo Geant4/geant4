@@ -40,7 +40,7 @@
 // G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), S.E.Mazzaglia(a), F.Romano(a)
 // 
 // Contributor authors:
-// P.Kaitaniemi(d), A.Heikkinen(d), Gillis Danielsen (d)
+// P.Kaitaniemi(d), A.Heikkinen(d), G.Danielsen (d)
 //
 // Past authors:
 // M.G.Pia(b), S.Guatelli(c), G.Russo(a), M.Russo(a), A.Lechner(e) 
@@ -100,8 +100,9 @@
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
 #endif
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////
-//
 int main(int argc ,char ** argv)
 {
   // Set the Random engine
@@ -165,37 +166,48 @@ G4UImanager* UI = G4UImanager::GetUIpointer();
 
  if (argc!=1)   // batch mode
    {
+G4UIsession* session = 0;
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+     UI -> ApplyCommand(command+fileName);
+#if defined(G4UI_USE_TCSH)
+     session = new G4UIterminal(new G4UItcsh);
+     session -> SessionStart();
+#else
+    session = new G4UIterminal();
+session -> SessionStart();
+#endif
    }
 
  else  // interactive mode : define visualization UI terminal
    {
      G4UIsession* session = 0;
-     
+
      // If the enviroment variable for the TCSH terminal is active, it is used and the
      // defaultMacro.mac file is executed
 #if defined(G4UI_USE_TCSH)
-     session = new G4UIterminal(new G4UItcsh);      
-     UI->ApplyCommand("/control/execute defaultMacro.mac");  
+     session = new G4UIterminal(new G4UItcsh);
+     UI->ApplyCommand("/control/execute defaultMacro.mac");
+     session -> SessionStart();
 
      // Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
      // G$UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
-    // In the following case the GUI.mac file is also executed
-    // 
+     // In the following case the GUI.mac file is also executed
 #elif defined(G4UI_USE_QT)
     session = new G4UIQt(argc,argv);
     UI->ApplyCommand("/control/execute macro/GUI.mac");      
-     
-     // As final option, the simpler user interface terminal is opened
+session -> SessionStart();
+     // As final option, the basic user interface terminal is opened
 #else
     session = new G4UIterminal();
-    UI->ApplyCommand("/control/execute defaultMacro.mac");
+ 
+    UI -> ApplyCommand("/control/execute defaultMacro.mac");
+    session -> SessionStart();
 #endif
-    session->SessionStart();
+    //session->SessionStart();
     delete session;
    }
+
  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
  HadrontherapyLet* let = HadrontherapyLet::GetInstance();
  if (matrix && let)

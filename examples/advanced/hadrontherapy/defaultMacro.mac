@@ -18,7 +18,7 @@
 ##########################
 # Set of the physic models
 #
-/physic/addPhysics standard_opt3                     # Electromagnetic model
+/physic/addPhysics standard_opt3                       # Electromagnetic model
 /physic/addPhysics elastic                             # Hadronic elastic model
 /physic/addPhysics binary                              # Hadronic inelastic model
 /physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
@@ -32,8 +32,8 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLIQt # only if QT library are installed
-#/vis/open OGLIX
+#/vis/open OGLIQt # only if QT library are installed
+/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1

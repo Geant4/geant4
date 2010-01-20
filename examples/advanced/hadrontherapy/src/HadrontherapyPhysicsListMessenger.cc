@@ -71,12 +71,12 @@ HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(Hadronthera
   pListCmd = new G4UIcmdWithAString("/physic/addPhysics",this);  
   pListCmd->SetGuidance("Add physics list.");
   pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);  
+  pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
 
   packageListCmd = new G4UIcmdWithAString("/physic/addPackage",this);
   packageListCmd->SetGuidance("Add physics package.");
   packageListCmd->SetParameterName("package",false);
-  packageListCmd->AvailableForStates(G4State_PreInit);
+  packageListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 /////////////////////////////////////////////////////////////////////////////
