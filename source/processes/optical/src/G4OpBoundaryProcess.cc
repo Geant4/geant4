@@ -112,6 +112,10 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         prob_ss = 0.;
         prob_bs = 0.;
 
+        PropertyPointer  = NULL;
+        PropertyPointer1 = NULL;
+        PropertyPointer2 = NULL;
+
         kCarTolerance = G4GeometryTolerance::GetInstance()
                         ->GetSurfaceTolerance();
 
