@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.372 2009-11-25 14:20:40 gcosmo Exp $
+cvs log $Id: History,v 1.373 2010-01-20 09:27:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th January 2010  Gabriele Cosmo (config-V09-03-00)
+- binmake.gmk: removed extra space characters in definition of TARGOBJEXT,
+  fixing issue with target for main() not being rebuilt according to
+  dependencies change. Addressing problem report #1098. 
 
 25th November 2009  Ben Morgan (config-V09-02-17)
 - Updated internal scripts for Configure.
