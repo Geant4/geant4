@@ -7,7 +7,7 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating time slicing             #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis12.mac             #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis12.mac            #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Mac/Unix with X-Windows, OpenGL    #
 #                                                                     #

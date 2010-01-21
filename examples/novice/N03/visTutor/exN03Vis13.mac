@@ -7,7 +7,7 @@
 #                                                                     #
 #  CONTENTS: Time development of an electrmagnetic shower.            #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis12.mac             #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis13.mac            #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Mac/Unix with X-Windows, OpenGL    #
 #                                                                     #

@@ -1,5 +1,5 @@
 #######################################################################
-#  MACRO FILE NAME: exN03Vis10.mac                                     #
+#  MACRO FILE NAME: exN03Vis10.mac                                    #
 #                                                                     #
 #  AUTHOR(S): Guy Barrand                                             #
 #                                                                     #
@@ -7,7 +7,7 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating Inventor driver          #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis6.mac             #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis10.mac            #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Windows,                           #
 #                                  some Inventor (TGS, SGI, Coin)     #

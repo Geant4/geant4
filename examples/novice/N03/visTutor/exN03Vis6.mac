@@ -14,7 +14,7 @@
 #                                                                     #
 #  USAGE:  % gmake visclean                                           #
 #          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute visTutor/exN03Vis7.mac              #
+#          Idle> /control/execute visTutor/exN03Vis6.mac              #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
 #                                  VRML viewer (e.g. VRMLview)        #
@@ -27,15 +27,10 @@
 #  (See geant4/source/visualization/README for details.)              #
 #    * Unnecessary                                                    #
 #                                                                     #
-#  RECOMMENDED ENVIRONMENTAL VARIABLES FOR VISUALIZATION:             #
+#  OPTIONAL ENVIRONMENTAL VARIABLES FOR VISUALIZATION:                #
 #                                                                     #
-#    % setenv G4VRMLFILE_VIEWER        vrmlview                       #
-#     ( The default value is "NONE".)                                 #
-#                                                                     #
-#  ADDITIONAL NOTES:                                                  #
-#   The VRML-file viewer "vrmlview" is obtainable from the following  #
-#   Web site:                                                         #
-#      http://www.sim.no/downloads.html                               #
+#    % setenv G4VRMLFILE_VIEWER vrmlview                              #
+#     ( Example for 'vrmlview'. The default value is "NONE".)         #
 #                                                                     #
 #######################################################################
 
