@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.79 2009-11-10 20:30:55 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.80 2010-01-22 17:35:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -204,7 +204,7 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
 
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if(!particle) particle = &part;
+  if(!particle) { particle = &part; }
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PreparePhysicsTable() for "
            << GetProcessName()
@@ -353,9 +353,6 @@ void G4VEmProcess::BuildLambdaTable()
     G4cout << "Lambda table is built for "
            << particle->GetParticleName()
            << G4endl;
-    if(2 < verboseLevel) {
-      G4cout << *theLambdaTable << G4endl;
-    }
   }
 }
 
@@ -384,7 +381,7 @@ void G4VEmProcess::PrintInfoDefinition()
 
   if(verboseLevel > 2 && buildLambdaTable) {
     G4cout << "      LambdaTable address= " << theLambdaTable << G4endl;
-    if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+    if(theLambdaTable) { G4cout << (*theLambdaTable) << G4endl; }
   }
 }
 
@@ -400,7 +397,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
   if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
   InitialiseStep(track);
-  if(!currentModel->IsActive(preStepKinEnergy)) return x;
+  if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
 
   if(preStepKinEnergy < mfpKinEnergy) {
     if (integral) ComputeIntegralLambda(preStepKinEnergy);
@@ -460,7 +457,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // Do not make anything if particle is stopped, the annihilation then
   // should be performed by the AtRestDoIt!
-  if (track.GetTrackStatus() == fStopButAlive) return &fParticleChange;
+  if (track.GetTrackStatus() == fStopButAlive) { return &fParticleChange; }
 
   G4double finalT = track.GetKineticEnergy();
 
@@ -664,6 +661,7 @@ G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
 						particle,kineticEnergy);
   }
 
+  if(cross < 0.0) { cross = 0.0; }
   return cross;
 }
 
@@ -713,7 +711,7 @@ void G4VEmProcess::FindLambdaMax()
     }
     theEnergyOfCrossSectionMax[i] = emax;
     theCrossSectionMax[i] = smax;
-    if(2 < verboseLevel) {
+    if(1 < verboseLevel) {
       G4cout << "For " << particle->GetParticleName() 
 	     << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
 	     << " lambda= " << smax << G4endl;
