@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.21 2008-09-22 16:41:20 maire Exp $
+// $Id: ExN02DetectorConstruction.cc,v 1.22 2010-01-22 11:57:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -299,7 +299,7 @@ void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
  
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  fpMagField->SetFieldValue(fieldValue);
+  fpMagField->SetMagFieldValue(fieldValue);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
