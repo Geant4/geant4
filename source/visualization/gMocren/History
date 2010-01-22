@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2009-12-03 11:44:42 akimura Exp $
+$Id: History,v 1.10 2010-01-22 14:08:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+22 January 2010  Gabriele Cosmo (gMocren-V09-03-00)
+Fix in G4GMocrenFileSceneHandler.cc to allow for porting on C++0x Standard:
+made explicit with static_cast conversions from double to float. Also use
+G4 types in consistent way.
 
 3 December 2009  Akinori Kimura
 Line 363 of G4GMocrenFileSceneHandler.cc was deleted.
