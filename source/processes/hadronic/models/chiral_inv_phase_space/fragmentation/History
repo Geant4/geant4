@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
+-----------------------------------------------------------------------
+Mutual tag: bug fix in CHIPS fragmentation (G4QFragmentation)
+
 1-Dec-2009 M.Kosov                             (hadr-chips-V09-02-29)
 -----------------------------------------------------------------------
 Mutual tag: Compilation warning fix in G4QFragmentation and G4QIonIonCollision

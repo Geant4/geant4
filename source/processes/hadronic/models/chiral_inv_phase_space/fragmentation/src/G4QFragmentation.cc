@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.7 2010-01-15 12:08:09 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.8 2010-01-22 17:02:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1832,14 +1832,15 @@ G4QHadronVector* G4QFragmentation::Fragment()
         //gsM=theWorld->GetQParticle(QCh.GetQPDG1())->MinMassOfFragm() +
         //    theWorld->GetQParticle(QCh.GetQPDG2())->MinMassOfFragm();
       }
-      else if(miPDG>80000000)                               // Compound Nucleus
-      {
-        G4QNucleus rtN(qsumQC);                  // Create PseudoNucl for totCompound
-        gsM=rtN.GetGSMass(); // MinMass of residQ+(Env-ParC) syst.      }
-      }
-      else if(std::abs(miPDG)%10 > 2)
+      // @@ it is not clear, why it does not work ?!
+      //else if(miPDG>80000000)                             // Compound Nucleus
+      //{
+      //  G4QNucleus rtN(qsumQC);                           // CreatePseudoNucl for totComp
+      //  gsM=rtN.GetGSMass();                              // MinMass of residQ+(Env-ParC)
+      //}
+      else if(miPDG > 80000000 && std::abs(miPDG)%10 > 2)
                            gsM=theWorld->GetQParticle(G4QPDGCode(miPDG))->MinMassOfFragm();
-      else gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
+      else gsM=G4QPDGCode(miPDG).GetMass();                 // minM of hadron/fragm. for QC
       G4double reM=qsum4M.m();                              // real mass of the compound
 #ifdef debug
       G4cout<<"G4QFragmentation::Fragment: PDG="<<miPDG<<",rM="<<reM<<",GSM="<<gsM<<G4endl;
@@ -1860,7 +1861,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
       }
       else
       {
-        G4cerr<<"***G4QFragmentation::Fragm:PDG="<<miPDG<<",M="<<reM<<",GSM="<<gsM<<G4endl;
+        G4cerr<<"*G4QFr::Fr:PDG="<<miPDG<<",M="<<reM<<",GSM="<<gsM<<",QC="<<qsumQC<<G4endl;
         G4Exception("G4QFragmentation::Fragment:","27",FatalException,"Can't recover GSM");
       }
     }

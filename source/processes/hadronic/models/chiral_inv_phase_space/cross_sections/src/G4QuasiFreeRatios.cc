@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.2 2010-01-14 11:25:59 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.3 2010-01-22 17:02:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -442,18 +442,18 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     }
     else
     {
-      G4double lr=lp+1.27;
-      G4double LE=1.53/(lr*lr+.0676);
-      G4double ld=lp-lmi;
+      G4double lr=lp+1.27;                    // p1
+      G4double LE=1.53/(lr*lr+.0676);         // p2, p3        
+      G4double ld=lp-lmi;                     // p4 (lmi=3.5)
       G4double ld2=ld*ld;
       G4double p2=p*p;
       G4double p4=p2*p2;
       G4double sp=std::sqrt(p);
-      G4double lm=lp+.36;
-      G4double md=lm*lm+.04;
-      G4double lh=lp-.017;
-      G4double hd=lh*lh+.0025;
-      El=LE+(pbe*ld2+2.4+7./sp)/(1.+.7/p4)+.6/md+.05/hd;
+      G4double lm=lp+.36;                     // p5
+      G4double md=lm*lm+.04;                  // p6
+      G4double lh=lp-.017;                    // p7
+      G4double hd=lh*lh+.0025;                // p8
+      El=LE+(pbe*ld2+2.4+7./sp)/(1.+.7/p4)+.6/md+.05/hd;//p9(pbe=.0557),p10,p11,p12,p13,p14
       To=LE*3+(pbt*ld2+22.3+12./sp)/(1.+.4/p4)+1./md+.06/hd;
     }
   }
@@ -477,17 +477,17 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::CalcElTot(G4double p, G4int I)
     }
     else
     {
-      G4double lr=lp+1.27;
+      G4double lr=lp+1.27;                   // p1
       G4double lr2=lr*lr;
-      G4double LE=13./(lr2+lr2*lr2+.0676);
-      G4double ld=lp-lmi;
+      G4double LE=13./(lr2+lr2*lr2+.0676);   // p2, p3
+      G4double ld=lp-lmi;                    // p4 (lmi=3.5)
       G4double ld2=ld*ld;
       G4double p2=p*p;
       G4double p4=p2*p2;
       G4double sp=std::sqrt(p);
-      G4double lm=lp-.32;
-      G4double md=lm*lm+.0576;
-      El=LE+(pbe*ld2+2.4+6./sp)/(1.+3./p4)+.7/md;
+      G4double lm=lp-.32;                    // p5
+      G4double md=lm*lm+.0576;               // p6
+      El=LE+(pbe*ld2+2.4+6./sp)/(1.+3./p4)+.7/md; // p7(pbe=.0557), p8, p9, p10, p11
       To=LE+(pbt*ld2+22.3+5./sp)/(1.+1./p4)+.8/md;
     }
   }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.3 2010-01-15 12:08:09 mkossov Exp $
+// $Id: G4QIonIonCollision.cc,v 1.4 2010-01-22 17:02:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1644,14 +1644,15 @@ G4QHadronVector* G4QIonIonCollision::Fragment()
         //gsM=theWorld->GetQParticle(QCh.GetQPDG1())->MinMassOfFragm() +
         //    theWorld->GetQParticle(QCh.GetQPDG2())->MinMassOfFragm();
       }
-      else if(miPDG>80000000)                               // Compound Nucleus
-      {
-        G4QNucleus rtN(qsumQC);                  // Create PseudoNucl for totCompound
-        gsM=rtN.GetGSMass(); // MinMass of residQ+(Env-ParC) syst.      }
-      }
-      else if(std::abs(miPDG)%10 > 2)
+      // @@ it is not clear, why it does not work ?!
+      //else if(miPDG>80000000)                             // Compound Nucleus
+      //{
+      //  G4QNucleus rtN(qsumQC);                           // CreatePseudoNucl for totComp
+      //  gsM=rtN.GetGSMass();                              // MinMass of residQ+(Env-ParC)
+      //}
+      else if(miPDG > 80000000 && std::abs(miPDG)%10 > 2)
                            gsM=theWorld->GetQParticle(G4QPDGCode(miPDG))->MinMassOfFragm();
-      else gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
+      else gsM=G4QPDGCode(miPDG).GetMass();                 // minM of hadron/fragm. for QC
       G4double reM=qsum4M.m();                              // real mass of the compound
 #ifdef pdebug
       G4cout<<"G4QIonIonCollision::Fragm: PDG="<<miPDG<<", rM="<<reM<<",GSM="<<gsM<<G4endl;

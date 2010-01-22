@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProtonElasticCrossSection.cc,v 1.1 2010-01-14 11:25:59 mkossov Exp $
+// $Id: G4QProtonElasticCrossSection.cc,v 1.2 2010-01-22 17:02:48 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -346,7 +346,7 @@ G4double G4QProtonElasticCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 #endif
     lastPIN = GetPTables(lastLP,lPMin,PDG,tgZ,tgN); // Returns the new P-limit for tables
 #ifdef pdebug
-    G4cout<<"G4QElCS::CalcCS:*i*Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<",LP"<<lastPIN<<G4endl;
+    G4cout<<"G4QProtElCS::CCS:i,Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<",LP"<<lastPIN<<G4endl;
 #endif
     PIN.push_back(lastPIN);             // Fill parameters of CS function to AMDB
     PAR.push_back(lastPAR);             // Fill parameters of CS function to AMDB
@@ -481,7 +481,6 @@ G4double G4QProtonElasticCrossSection::GetPTables(G4double LP, G4double ILP, G4i
                           8.5e8,1.e10,1.1,3.4e6,6.8e6,0.};
   //                      -14--15- -16- -17- -18-  -19- -20- -21- -22-  -23-   -24-  -25-
   //                       -26- -27-  -28- -29- -30- -31-
-  //                      -0- -1--2- -3-  -4-  -5-  -6-    -7-  -8- -9- -10--11--12--13-
   if(PDG==2212)
   {
     // -- Total pp elastic cross section cs & s1/b1 (main), s2/b2 (tail1), s3/b3 (tail2) --
@@ -744,7 +743,7 @@ G4double G4QProtonElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4int 
   static const G4double fifth=1./5.;
   static const G4double sevth=1./7.;
 #ifdef tdebug
-  G4cout<<"G4QElasticCS::GetExcT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
+  G4cout<<"G4QProtElCS::GetExcT: F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
   if(PDG!=2212) G4cout<<"**Warning*G4QProtonElasticCrossSection::GetExT:PDG="<<PDG<<G4endl;
   if(onlyCS) G4cout<<"**Warning*G4QProtonElasticCrossSection::GetExchanT:onlyCS=1"<<G4endl;
@@ -961,7 +960,7 @@ G4double G4QProtonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
   if(PDG!=2212) G4cout<<"*Warning*G4QProtonElasticCrossSection::GetTabV:PDG="<<PDG<<G4endl;
   if(tgZ<0 || tgZ>92)
   {
-    G4cout<<"*Warning*G4QElasticCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
+    G4cout<<"*Warning*G4QProtonElCS::GetTabValue: (1-92) No isotopes for Z="<<tgZ<<G4endl;
     return 0.;
   }
   G4int iZ=tgZ-1; // Z index

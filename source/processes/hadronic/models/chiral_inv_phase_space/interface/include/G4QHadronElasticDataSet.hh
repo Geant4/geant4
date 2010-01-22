@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronInelasticDataSet.hh,v 1.2 2010-01-22 17:02:49 mkossov Exp $
+// $Id: G4QHadronElasticDataSet.hh,v 1.1 2010-01-22 17:02:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// GEANT4 physics class: G4QHadronInelasticDataSet -- header file
-// Created by M. Kosov (Mikhail.Kossov@cern.ch) 11.11.09
+// GEANT4 physics class: G4QHadronElasticDataSet -- header file
+// Created by M. Kosov (Mikhail.Kossov@cern.ch) 21.01.10
 //
-// ------------------------------------------------------------------------
-// Short description: G4hadr wrapper for CHIPS inelastic hA cross-sections.
-// ------------------------------------------------------------------------
+// ----------------------------------------------------------------------
+// Short description: G4hadr wrapper for CHIPS elastic hA cross-sections.
+// ----------------------------------------------------------------------
 
-#ifndef G4QHadronInelasticDataSet_h
-#define G4QHadronInelasticDataSet_h 1
+#ifndef G4QHadronElasticDataSet_h
+#define G4QHadronElasticDataSet_h 1
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
@@ -63,50 +63,25 @@
 #include "G4AntiXiMinus.hh"
 #include "G4AntiXiZero.hh"
 #include "G4AntiOmegaMinus.hh"
-//#include "G4Gamma.hh"
-//#include "G4MuonPlus.hh"
-//#include "G4MuonMinus.hh"
-//#include "G4Electron.hh"
-//#include "G4Positron.hh"
-//#include "G4TauPlus.hh"
-//#include "G4TauMinus.hh"
-//#include "G4AntiNeutrinoE.hh"
-//#include "G4NeutrinoE.hh"
-//#include "G4AntiNeutrinoMu.hh"
-//#include "G4NeutrinoMu.hh"
-//#include "G4AntiNeutrinoTau.hh"
-//#include "G4NeutrinoTau.hh"
 
 #include "G4QIsotope.hh"
-#include "G4QProtonNuclearCrossSection.hh"
-#include "G4QNeutronNuclearCrossSection.hh"  
-#include "G4QPionMinusNuclearCrossSection.hh"
-#include "G4QPionPlusNuclearCrossSection.hh"
-#include "G4QKaonPlusNuclearCrossSection.hh"
-#include "G4QKaonMinusNuclearCrossSection.hh"
-#include "G4QKaonZeroNuclearCrossSection.hh"
-#include "G4QHyperonNuclearCrossSection.hh"
-#include "G4QHyperonPlusNuclearCrossSection.hh"
-#include "G4QAntiBaryonPlusNuclearCrossSection.hh"
-#include "G4QAntiBaryonNuclearCrossSection.hh"
-//#include "G4QPhotonNuclearCrossSection.hh"
-//#include "G4QElectronNuclearCrossSection.hh"
-//#include "G4QMuonNuclearCrossSection.hh"
-//#include "G4QTauNuclearCrossSection.hh"
-//#include "G4QNuMuNuclearCrossSection.hh"
-//#include "G4QANuMuNuclearCrossSection.hh"
-//#include "G4QNuENuclearCrossSection.hh"
-//#include "G4QANuENuclearCrossSection.hh"
-//#include "G4QNuNuNuclearCrossSection.hh"
-//#include "G4QANuANuNuclearCrossSection.hh"   
+#include "G4QProtonElasticCrossSection.hh"
+#include "G4QNeutronElasticCrossSection.hh"  
+#include "G4QPionMinusElasticCrossSection.hh"
+#include "G4QPionPlusElasticCrossSection.hh"
+//#include "G4QKaonPlusElasticCrossSection.hh"
+//#include "G4QKaonMinusElasticCrossSection.hh"
+//#include "G4QKaonZeroElasticCrossSection.hh"
+//#include "G4QHyperonElasticCrossSection.hh"
+//#include "G4QAntiBaryonElasticCrossSection.hh"
 
 
-class G4QHadronInelasticDataSet : public G4VCrossSectionDataSet
+class G4QHadronElasticDataSet : public G4VCrossSectionDataSet
 {
 public:
 
-  G4QHadronInelasticDataSet();
-  ~G4QHadronInelasticDataSet() {}
+  G4QHadronElasticDataSet();
+  ~G4QHadronElasticDataSet() {}
   G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement);
   G4bool IsZAApplicable(const G4DynamicParticle* aParticle, G4double Z, G4double A);
   G4double GetCrossSection(const G4DynamicParticle* Part, const G4Element* El, G4double T);

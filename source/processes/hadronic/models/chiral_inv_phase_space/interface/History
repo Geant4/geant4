@@ -12,6 +12,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
+-----------------------------------------------------------------------
+Mutual tag: G4Hadr interface to CHIPS elastic is added
+
 17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
 -----------------------------------------------------------------------
 Mutual tag: Migration of CHIPS-cross_section depenent files to CHIPS-xs_dep

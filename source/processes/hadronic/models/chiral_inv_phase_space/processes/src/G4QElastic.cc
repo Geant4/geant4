@@ -23,16 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.2 2010-01-14 11:24:36 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.3 2010-01-22 17:02:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
 // G4QElastic class of the CHIPS Simulation Branch in GEANT4
 // --------------------------------------------------------------------
-// Short description: At present this is a process for nucleon-nucleus
-// elastic scattering. Mesons and hyperons exist only for the Hydrogen
-// target (see G4QuasiFreeRatios).
+// Short description: A process for hadron-nucleus elastic scattering.
 // --------------------------------------------------------------------
 
 //#define debug
@@ -94,12 +92,18 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #endif
   G4int pPDG=0;
 
-  if     (incidentParticleDefinition == G4Proton::Proton()  ) pPDG=2212;
-  else if(incidentParticleDefinition == G4Neutron::Neutron()) pPDG=2112;
-  else G4cout<<"G4QElastic::GetMeanFreePath:only nA & pA are implemented in CHIPS"<<G4endl;
+  if     (incidentParticleDefinition == G4Proton::Proton()  )     pPDG=2212;
+  else if(incidentParticleDefinition == G4Neutron::Neutron())     pPDG=2112;
+  else if(incidentParticleDefinition == G4PionPlus::PionPlus())   pPDG= 211;
+  else if(incidentParticleDefinition == G4PionMinus::PionMinus()) pPDG=-211;
+  else G4cout<<"G4QElastic::GetMeanFreePath:particle's not implemented in CHIPSel"<<G4endl;
 
-  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
-  G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();  
+  G4VQCrossSection* CSmanager=0;
+  if     (pPDG=2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
+  else if(pPDG=2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
+  else if(pPDG= 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
+  else if(pPDG=-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
+  else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<pPDG<<G4endl;
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
   G4int IPIE=IsoProbInEl.size();            // How many old elements?
@@ -183,9 +187,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
       G4cout<<"G4QEl::GMFP: GetCS #1 j="<<j<<G4endl;
 #endif
       G4double CSI=0.;                      // Prototype of CS(j,i) for the isotope
-      if(pPDG==2212) CSI=PCSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // pCS(j,i)
-      else           CSI=NCSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // nCS(j,i)
-
+      CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // CS(j,i)
 #ifdef debug
       G4cout<<"G4QEl::GMFP: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="<<Momentum<<", XSec="
             <<CSI/millibarn<<G4endl;
@@ -297,8 +299,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   // Not all these particles are implemented yet (see Is Applicable)
   if      (particle ==          G4Proton::Proton()         ) projPDG= 2212;
   else if (particle ==         G4Neutron::Neutron()        ) projPDG= 2112;
-  //else if (particle ==       G4PionMinus::PionMinus()      ) projPDG= -211;
-  //else if (particle ==        G4PionPlus::PionPlus()       ) projPDG=  211;
+  else if (particle ==       G4PionMinus::PionMinus()      ) projPDG= -211;
+  else if (particle ==        G4PionPlus::PionPlus()       ) projPDG=  211;
   //else if (particle ==        G4KaonPlus::KaonPlus()       ) projPDG= 2112;
   //else if (particle ==       G4KaonMinus::KaonMinus()      ) projPDG= -321;
   //else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) projPDG=  130;
@@ -418,14 +420,16 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4cout<<"G4QElastic::PostStepDoIt: tM="<<tM<<", p4M="<<proj4M<<", t4M="<<tot4M<<G4endl;
 #endif
   EnMomConservation=tot4M;                 // Total 4-mom of reaction for E/M conservation
-  G4VQCrossSection* PCSmanager=G4QProtonElasticCrossSection::GetPointer();
-  G4VQCrossSection* NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
+  G4VQCrossSection* CSmanager=0;
+  if     (projPDG=2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
+  else if(projPDG=2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
+  else if(projPDG= 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
+  else if(projPDG=-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
+  else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<projPDG<<G4endl;
 #ifdef debug
   G4cout<<"G4QElas::PSDI:false,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<projPDG<<G4endl;
 #endif
-  G4double xSec=0.; // Prototype of the Recalculated Cross Section
-  if(projPDG==2212) xSec=PCSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);//RCrS
-  else              xSec=NCSmanager->GetCrossSection(false, Momentum, Z, N, projPDG);//RCrS
+  G4double xSec=CSmanager->GetCrossSection(false, Momentum, Z, N, projPDG); //ReactionCrSec
 #ifdef debug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
@@ -446,9 +450,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     aParticleChange.ProposeMomentumDirection(dir) ;
     return G4VDiscreteProcess::PostStepDoIt(track,step);
   }
-  G4double mint=0.;                      // Prototype of functional randomized -t in MeV^2
-  if(projPDG==2212) mint=PCSmanager->GetExchangeT(Z,N,projPDG);// functional rand -t(MeV^2)
-  else              mint=NCSmanager->GetExchangeT(Z,N,projPDG);// functional rand -t(MeV^2)
+  G4double mint=CSmanager->GetExchangeT(Z, N, projPDG); // functional rand -t(MeV^2)
 #ifdef pdebug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",tPDG="<<targPDG<<",P="<<Momentum<<",CS="
         <<xSec<<",-t="<<mint<<G4endl;
@@ -457,9 +459,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if(mint>-.0000001);
   else  G4cout<<"*Warning*G4QElastic::PostStDoIt:-t="<<mint<<G4endl;
 #endif
-  G4double maxt=0.;                              // Prototype of max -t in MeV^2
-  if(projPDG==2212) maxt=PCSmanager->GetHMaxT(); // max -t (MeV^2)
-  else              maxt=NCSmanager->GetHMaxT(); // max -t (MeV^2)
+  G4double maxt=CSmanager->GetHMaxT(); // max -t (MeV^2)
   G4double cost=1.-mint/maxt;                    // cos(theta) in CMS
   // 
 #ifdef ppdebug
@@ -510,8 +510,6 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   EnMomConservation-=scat4M;                        // It must be initialized by (pE+tM,pP)
   // This is how in general the secondary should be identified
   G4DynamicParticle* theSec = new G4DynamicParticle; // A secondary for the recoil hadron 
-  //G4int targPDG=2212;                      // PDG for the recoil proton @@only for p targ
-  //G4ParticleDefinition* theDefinition=G4Proton::Proton(); // @@ only for p target
   G4int aA = Z+N;
 #ifdef pdebug
   G4cout<<"G4QElastic::PostStepDoIt: Ion Z="<<Z<<", A="<<aA<<G4endl;
@@ -554,38 +552,59 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
   static G4bool first=true;
   static G4VQCrossSection* PCSmanager;
   static G4VQCrossSection* NCSmanager;
+  static G4VQCrossSection* PiPCSmanager;
+  static G4VQCrossSection* PiMCSmanager;
   if(first)                              // Connection with a singletone
   {
-    PCSmanager=G4QProtonElasticCrossSection::GetPointer();
-    NCSmanager=G4QNeutronElasticCrossSection::GetPointer();
+    PCSmanager  =G4QProtonElasticCrossSection::GetPointer();
+    NCSmanager  =G4QNeutronElasticCrossSection::GetPointer();
+    PiPCSmanager=G4QPionPlusElasticCrossSection::GetPointer();
+    PiMCSmanager=G4QPionMinusElasticCrossSection::GetPointer();
     first=false;
   }
   G4double res=0.;
   if(oxs && xst)                         // Only the Cross-Section can be returened
   {
-    if(pPDG==2212) res=PCSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
-    else           res=NCSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+    if     (pPDG==2212) res=PCSmanager->GetCrossSection(true, p, Z, N, pPDG);
+    else if(pPDG==2112) res=NCSmanager->GetCrossSection(true, p, Z, N, pPDG);
+    else if(pPDG== 211) res=PiPCSmanager->GetCrossSection(true, p, Z, N, pPDG);
+    else if(pPDG==-211) res=PiMCSmanager->GetCrossSection(true, p, Z, N, pPDG);
+    else G4cout<<"*Warning*G4QElastic::CalculateXSt: (o) wrong PDG="<<pPDG<<G4endl;
   }
   else if(!oxs && xst)                   // Calculate CrossSection & prepare differentialCS
   {
-    if(pPDG==2212) res=PCSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS+init t-distr
-    else           res=NCSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS+init t-distr
+    if     (pPDG==2212) res=PCSmanager->GetCrossSection(false, p, Z, N, pPDG);
+    else if(pPDG==2112) res=NCSmanager->GetCrossSection(false, p, Z, N, pPDG);
+    else if(pPDG== 211) res=PiPCSmanager->GetCrossSection(false, p, Z, N, pPDG);
+    else if(pPDG==-211) res=PiMCSmanager->GetCrossSection(false, p, Z, N, pPDG);
+    else G4cout<<"*Warning*G4QElastic::CalculateXSt: (x) wrong PDG="<<pPDG<<G4endl;
     // The XS for the nucleus must be calculated the last
     init=true;
   }
   else if(init)                             // Return t-value for scattering (=G4QElastic)
   {
-    if(pPDG==2212)                          // ===> Protons
+    if     (pPDG==2212)                     // ===> Protons
     {
       if(oxs) res=PCSmanager->GetHMaxT();   // Calculate the max_t value
-      else res=PCSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+      else res=PCSmanager->GetExchangeT(Z, N, pPDG); // functionally randomized -t in MeV^2
     }
-    else                                    // ==> Neutrons
+    else if(pPDG==2112)                     // ==> Neutrons
     {
       if(oxs) res=NCSmanager->GetHMaxT();   // Calculate the max_t value
-      else res=NCSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+      else res=NCSmanager->GetExchangeT(Z, N, pPDG); // functionally randomized -t in MeV^2
     }
+    else if(pPDG== 211)                     // ==> PionPlus
+    {
+      if(oxs) res=PiPCSmanager->GetHMaxT(); // Calculate the max_t value
+      else res=PiPCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
+    }
+    else if(pPDG==-211)                     // ==> PionMinus
+    {
+      if(oxs) res=PiMCSmanager->GetHMaxT(); // Calculate the max_t value
+      else res=PiMCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
+    }
+    else G4cout<<"*Warning*G4QElastic::CalculateXSt: (i) wrong PDG="<<pPDG<<G4endl;
   }
-  else G4cout<<"*Warning*G4QElastic::CalculateXSt:*NotInitiatedScattering"<<G4endl;
+  else G4cout<<"*Warning*G4QElastic::CalculateXSt:*NotInitiatedScattering*"<<G4endl;
   return res;
 }

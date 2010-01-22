@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.hh,v 1.2 2010-01-14 11:24:36 mkossov Exp $
+// $Id: G4QElastic.hh,v 1.3 2010-01-22 17:02:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic header ----------------
@@ -32,15 +32,8 @@
 // -------------------------------------------------------------------------------
 // This is a unique CHIPS class for the Hadron-Nuclear Elastic Scattering Prosesses
 // -------------------------------------------------------------------------------
-// At present (Jan-06) only proton-proton scattering is implemented The interaction with
-// nuclei are planned only. The scattering of nuclei on nuclei are possible...
-// The simulation is based on the CHIPS approximation of total elastic and differential
-// elastic cross sections from E=0 to the highest energyes.
+// Short description: A process for CHIPS hadron-nucleus elastic scattering.
 // -------------------------------------------------------------------------------
-// Short description: At present this is a process for nucleon-nucleus
-// elastic scattering. Mesons and hyperons exist only for the Hydrogen
-// target (see G4QuasiFreeRatios).
-// ---------------------------------------------------------------
 
 #ifndef G4QElastic_hh
 #define G4QElastic_hh
@@ -60,6 +53,8 @@
 #include "G4LorentzVector.hh"
 
 // CHIPS Headers
+#include "G4QPionPlusElasticCrossSection.hh"
+#include "G4QPionMinusElasticCrossSection.hh"
 #include "G4QProtonElasticCrossSection.hh"
 #include "G4QNeutronElasticCrossSection.hh"
 #include "G4QIsotope.hh"
