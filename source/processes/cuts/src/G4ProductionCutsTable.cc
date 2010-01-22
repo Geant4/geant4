@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.26 2009-11-16 07:59:34 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.27 2010-01-22 11:10:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -290,7 +290,8 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
   if (material ==0) return -1.0;
 
   // check range
-  if (range <=0.0) return -1.0;
+  if (range ==0.0) return 0.0;
+  if (range <0.0) return -1.0;
 
   // check particle
   G4int index = G4ProductionCuts::GetIndex(particle);
@@ -921,9 +922,12 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       G4ProductionCuts* aCut = aCouple->GetProductionCuts();
       G4bool fRatio = true;
       for (size_t j=0; j< NumberOfG4CutIndex; j++) {
-        G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
-        fRatio = fRatio && (0.999<ratio) && (ratio<1.001) ;
-      }
+        // check ratio only if values are not the same
+        if (cutValues[j] != aCut->GetProductionCut(j)) {  
+          G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
+          fRatio = fRatio && (0.999<ratio) && (ratio<1.001) ;
+        }
+      } 
       if (!fRatio) continue; 
       // MCC matched 
       fOK = true;
