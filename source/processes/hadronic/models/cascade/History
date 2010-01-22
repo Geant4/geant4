@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Jan 2010 Michael Kelsey (hadr-casc-V09-03-02)
+------------------------------------------------
+- G4LorentzConvertor.hh:  Fix scm_momentum data member to be G4ThreeVector
+  (as used in previous versions) rather than G4LorentzVector.
+
+NOTE:  I have *retagged* cascade/include/G4LorentzConverter.hh and this
+       History file, rather than creating a new tag, since these are private
+       development only, not public releases.
+
 12 Jan 2010 Michael Kelsey (hadr-casc-V09-03-02)
 ------------------------------------------------
 All changes below within "cascade/" subdirectory:

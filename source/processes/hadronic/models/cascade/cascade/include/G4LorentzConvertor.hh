@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.hh,v 1.10 2010-01-12 20:40:34 mkelsey Exp $
+// $Id: G4LorentzConvertor.hh,v 1.11 2010-01-22 00:07:10 mkelsey Exp $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
+// 20100120  M. Kelsey -- BUG FIX:  scm_momentum should be G4ThreeVector
 
 #ifndef G4LORENTZ_CONVERTOR_HH
 #define G4LORENTZ_CONVERTOR_HH
@@ -113,7 +114,7 @@ private:
 
   G4ThreeVector velocity;
 
-  G4LorentzVector scm_momentum;
+  G4ThreeVector scm_momentum;
 
   G4double ecm_tot;
 
