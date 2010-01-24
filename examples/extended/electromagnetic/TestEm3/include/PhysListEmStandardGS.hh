@@ -23,58 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.9 2010-01-24 17:25:07 vnivanch Exp $
+// $Id: PhysListEmStandardGS.hh,v 1.1 2010-01-24 17:25:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#ifndef PhysListEmStandardGS_h
+#define PhysListEmStandardGS_h 1
 
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-
-class StepMax;
-class PhysicsListMessenger;
-class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+class PhysListEmStandardGS : public G4VPhysicsConstructor
 {
-public:
+public: 
+  PhysListEmStandardGS(const G4String& name = "standardGS");
+  virtual ~PhysListEmStandardGS();
 
-    PhysicsList();
-    virtual ~PhysicsList();
-
-    void ConstructParticle();
-    void ConstructProcess();
-    
-    void AddPhysicsList(const G4String& name);
-    void AddStepMax();
-    
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
-private:
-
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-    
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4String emName;
-    
-    StepMax* stepMaxProcess;
-    
-    PhysicsListMessenger* pMessenger;
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 
