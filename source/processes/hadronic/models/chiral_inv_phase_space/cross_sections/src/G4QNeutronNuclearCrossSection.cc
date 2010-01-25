@@ -769,9 +769,9 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4do
   //==> Ag(Z=47)
   static const G4int N47=2;
   static const G4double pZ47N60[4]={3.E-12, 500., .01, 2.7E-5};
-  static const std::pair<G4int, const G4double*> Z47N60=std::make_pair(48,pZ47N60);
+  static const std::pair<G4int, const G4double*> Z47N60=std::make_pair(60,pZ47N60);
   static const G4double pZ47N62[4]={3.E-12, 480., .01, 2.5E-4};
-  static const std::pair<G4int, const G4double*> Z47N62=std::make_pair(50,pZ47N62);
+  static const std::pair<G4int, const G4double*> Z47N62=std::make_pair(62,pZ47N62);
   static const std::pair<G4int, const G4double*> Z47[N47]={Z47N60, Z47N62};
   //==> Cd(Z=48)
   static const G4int N48=8;

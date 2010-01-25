@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.2 2009-12-07 10:32:06 mkossov Exp $
+// $Id: G4QNeutronCaptureRatio.cc,v 1.3 2010-01-25 09:54:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -662,9 +662,9 @@ G4double G4QNeutronCaptureRatio::CalcCap2In_Ratio(G4double p, G4int Z, G4int N)
   //==> Ag(Z=47)
   static const G4int N47=2;
   static const G4double pZ47N60[5]={.018, 5., .1, .004, .003};
-  static const std::pair<G4int, const G4double*> Z47N60=std::make_pair(48,pZ47N60);
+  static const std::pair<G4int, const G4double*> Z47N60=std::make_pair(60,pZ47N60);
   static const G4double pZ47N62[5]={.018, 4., .015, .06, .0008};
-  static const std::pair<G4int, const G4double*> Z47N62=std::make_pair(50,pZ47N62);
+  static const std::pair<G4int, const G4double*> Z47N62=std::make_pair(62,pZ47N62);
   static const std::pair<G4int, const G4double*> Z47[N47]={Z47N60, Z47N62};
   //==> Cd(Z=48)
   static const G4int N48=8;
