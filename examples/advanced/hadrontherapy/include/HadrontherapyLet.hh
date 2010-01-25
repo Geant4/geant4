@@ -36,16 +36,17 @@
 #include <string>
 
 
- struct ionLet { 
+struct ionLet { 
      G4String fullName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
      G4String name;     // simple name without excitation energy: He3, He4, Li7, ...
-     G4int Z;         // atomic number
+     G4int Z;           // atomic number
      G4int A;		// mass number
      G4double *stop;	// stopping power table
      G4int    **spectrum; // energy spectrum 
      G4double *letT , *letD;  //Track averaged LET and dose averaged LET 
      //friend bool operator<(const ionLet& a, const ionLet& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
      G4bool operator<(const ionLet& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
+     // For isotopes sort by the mass number, else sort by the atomic one.
  };
 
 class G4Material;
@@ -79,7 +80,7 @@ private:
   static HadrontherapyLet *instance;
   HadrontherapyInteractionParameters* pParam;
   HadrontherapyPrimaryGeneratorAction* pPGA;
-  // Detector
+  // Detector material
   G4Material* detectorMat;  
   G4double density;
   

@@ -31,7 +31,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLIX
+#/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 20 180 deg
 /vis/viewer/zoom 1
@@ -64,4 +64,4 @@
 #########################
 # Start of the run
 #
-/run/beamOn 20000
+/run/beamOn 2000
