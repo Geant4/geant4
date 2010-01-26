@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.4 2010-01-22 17:02:49 mkossov Exp $
+// $Id: G4QIonIonCollision.cc,v 1.5 2010-01-26 09:31:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -1650,7 +1650,7 @@ G4QHadronVector* G4QIonIonCollision::Fragment()
       //  G4QNucleus rtN(qsumQC);                           // CreatePseudoNucl for totComp
       //  gsM=rtN.GetGSMass();                              // MinMass of residQ+(Env-ParC)
       //}
-      else if(miPDG > 80000000 && std::abs(miPDG)%10 > 2)
+      else if(miPDG < 80000000 && std::abs(miPDG)%10 > 2)
                            gsM=theWorld->GetQParticle(G4QPDGCode(miPDG))->MinMassOfFragm();
       else gsM=G4QPDGCode(miPDG).GetMass();                 // minM of hadron/fragm. for QC
       G4double reM=qsum4M.m();                              // real mass of the compound

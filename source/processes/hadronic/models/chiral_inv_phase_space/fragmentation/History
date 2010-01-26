@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+26-Jan-2010 M.Kosov                            (hadr-chips-frag-V09-03-01)
+--------------------------------------------------------------------------
+Bug fix in previous bug fix in CHIPS fragmentation (G4QFragmentation)
+
 24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
 -----------------------------------------------------------------------
 Mutual tag: bug fix in CHIPS fragmentation (G4QFragmentation)
