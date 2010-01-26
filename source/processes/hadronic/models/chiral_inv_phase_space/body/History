@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+26-Jan-2010 M.Kosov                            (hadr-chips-V09-03-02)
+-----------------------------------------------------------------------
+Mutual tag: cleaning up compilation warning in G4QEnvironment
+
 14-Dec-2009 M.Kosov                           (hadr-chips-body-V09-02-16) 
 -----------------------------------------------------------------------
 Mutual tag: Bug fix in G4QNucleus (crash in QGSC for 400 GeV p)

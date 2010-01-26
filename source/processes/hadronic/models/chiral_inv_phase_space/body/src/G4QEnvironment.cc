@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.161 2010-01-15 12:11:00 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.162 2010-01-26 10:32:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -1389,7 +1389,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
   static const G4QPDGCode lQPDG(3122);
   static const G4QPDGCode s0QPDG(3122);
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
-  static const G4double dPi0 = mPi0+mPi0;
+  //static const G4double dPi0 = mPi0+mPi0;
   static const G4double mPi  = G4QPDGCode(211).GetMass();
   static const G4double mK   = G4QPDGCode(321).GetMass();
   static const G4double mK0  = G4QPDGCode(311).GetMass();

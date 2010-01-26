@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+26-Jan-2010 M.Kosov                            (hadr-chips-V09-03-02)
+-----------------------------------------------------------------------
+Mutual tag: after important bug fix and cleaning up compilation warnings
+
 24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
 -----------------------------------------------------------------------
 Mutual tag: added pion elastic and a bug fix in CHIPS fragmentation
