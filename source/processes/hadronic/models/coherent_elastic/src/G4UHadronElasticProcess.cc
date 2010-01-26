@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.40 2010-01-13 15:42:06 mkossov Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.41 2010-01-26 13:34:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -65,8 +65,8 @@ G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double
   theNeutron  = G4Neutron::Neutron();
   thEnergy    = 19.0*MeV;
   verboseLevel= 1;
-  pCManager   = 0;
-  nCManager   = 0;
+  pCManager   = G4QProtonElasticCrossSection::GetPointer();
+  nCManager   = G4QNeutronElasticCrossSection::GetPointer();
 }
 
 G4UHadronElasticProcess::~G4UHadronElasticProcess()
@@ -83,11 +83,6 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
   if(first) {
     first = false;
-    if(!pCManager)
-    {
-      pCManager = G4QProtonElasticCrossSection::GetPointer();
-      nCManager = G4QNeutronElasticCrossSection::GetPointer();
-    }
     theParticle = &aParticleType;
     pPDG = theParticle->GetPDGEncoding();
 
@@ -178,10 +173,6 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     x = 0.0;
     if(ni == 0) {
       G4int N = G4int(elm->GetN()+0.5) - iz;
-      x = 0.;
-      if     (pPDG==2212) x = pCManager->GetCrossSection(false,momentum,iz,N,pPDG);
-      else if(pPDG==2112) x = nCManager->GetCrossSection(false,momentum,iz,N,pPDG);
-      xsecH[0] = x;
 #ifdef G4VERBOSE
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
@@ -189,6 +180,10 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	       << " mom(GeV)= " << momentum/GeV 
 	       << ", pC=" << pCManager << ", nC=" << nCManager << G4endl; 
 #endif
+      x = 0.;
+      if     (pPDG==2212) x = pCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      else if(pPDG==2112) x = nCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      xsecH[0] = x;
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       for(G4int j=0; j<ni; j++) {
