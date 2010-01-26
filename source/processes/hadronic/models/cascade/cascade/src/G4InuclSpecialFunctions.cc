@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4InuclSpecialFunctions.cc,v 1.16 2010-01-26 23:17:47 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+
 #include "G4InuclSpecialFunctions.hh"
 #include "Randomize.hh"
 
@@ -149,7 +153,7 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
   return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT * CT));
 }
 
-G4CascadeMomentum G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
+G4LorentzVector G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
 									G4double p) {
   G4int verboseLevel = 2;
 
@@ -157,13 +161,13 @@ G4CascadeMomentum G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
     G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
   }
 
-  G4CascadeMomentum momr;
+  G4LorentzVector momr;
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
-  //  not used:  G4CascadeMomentum mom1;
-  momr[1] = pt * std::cos(phi);
-  momr[2] = pt * std::sin(phi);
-  momr[3] = p * ct;
+  //  not used:  G4LorentzVector mom1;
+  momr.setX(pt * std::cos(phi));
+  momr.setY(pt * std::sin(phi));
+  momr.setZ(p * ct);
 
   return momr;
 }

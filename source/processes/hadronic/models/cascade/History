@@ -14,6 +14,60 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 Jan 2010 Michael Kelsey (hadr-casc-V09-03-03)
+------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+- G4ParticleLargerBeta.hh:  Fix to use of CVS "Name" tag; no code changes.
+
+- G4CascadParticle: Replace the position std::vector<> with G4ThreeVector.
+
+- G4NucleiModel: Replace all std::vector<> coordinates with G4ThreeVector,
+  and use vector math for computations.
+
+Remove all use of G4CascadeMomentum (a simple container with a C-style
+four-element array) with G4LorentzVector.  This is a fairly invasive change,
+since G4CascMom was used for all of the three- and four-vector operations
+throughout the Bertini code:
+
+	include/G4CascadParticle.hh
+	include/G4CollisionOutput.hh
+	include/G4ElementaryParticleCollider.hh
+	include/G4InuclCollider.hh
+	include/G4InuclElementaryParticle.hh
+	include/G4InuclNuclei.hh
+	include/G4InuclParticle.hh
+	include/G4InuclSpecialFunctions.hh
+	include/G4LorentzConvertor.hh
+
+	src/G4BigBanger.cc
+	src/G4CascadParticle.cc
+	src/G4CascadeElasticInterface.cc
+	src/G4CascadeInterface.cc
+	src/G4CollisionOutput.cc
+	src/G4ElasticCascadeInterface.cc
+	src/G4ElementaryParticleCollider.cc
+	src/G4EquilibriumEvaporator.cc
+	src/G4EvaporationInuclCollider.cc
+	src/G4Fissioner.cc
+	src/G4IBertini.cc
+	src/G4IntraNucleiCascader.cc
+	src/G4InuclCollider.cc
+	src/G4InuclElementaryParticle.cc
+	src/G4InuclEvaporation.cc
+	src/G4InuclNuclei.cc
+	src/G4InuclParticle.cc
+	src/G4InuclSpecialFunctions.cc
+	src/G4LorentzConvertor.cc
+	src/G4NonEquilibriumEvaporator.cc
+	src/G4NucleiModel.cc
+	src/G4PreCompoundCascadeInterface.cc
+	src/G4PreCompoundInuclCollider.cc
+
+The new code is not yet entirely "correct," since Bertini also does a lot of
+operations by way of three-momentum, imposing masses (and hence energy
+conservation) separately, after the fact.
+
 20 Jan 2010 Gabriele Cosmo
 --------------------------
 - G4InteractionCase.hh:  Minor fix in initialisation in constructor to

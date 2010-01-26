@@ -24,6 +24,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4ParticleLargerBeta.hh,v 1.3 2010-01-26 23:17:47 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Add additional operator() which uses pointers,
 //		also fix bug which returns wrong result

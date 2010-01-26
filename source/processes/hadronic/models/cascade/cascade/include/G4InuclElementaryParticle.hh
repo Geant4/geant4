@@ -24,12 +24,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclElementaryParticle.hh,v 1.17 2010-01-12 06:27:15 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.hh,v 1.18 2010-01-26 23:17:47 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
+//
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 
 #include "G4InuclParticle.hh"
 #include "globals.hh"
-#include "G4Allocator.hh"
 
 class G4ParticleDefinition;
 
@@ -54,7 +55,7 @@ public:
   explicit G4InuclElementaryParticle(G4int type) 
     : G4InuclParticle("InuclElemPart", makeDefinition(type)), generation(0) {}
 
-  G4InuclElementaryParticle(const G4CascadeMomentum& mom,
+  G4InuclElementaryParticle(const G4LorentzVector& mom,
 			    G4int type, G4int model=0) 
     : G4InuclParticle("InuclElemPart", makeDefinition(type), mom),
       generation(0) {
@@ -65,12 +66,6 @@ public:
     : G4InuclParticle("InuclElemPart", makeDefinition(type), ekin),
       generation(0) {}
 
-  /******
-  //  new/delete operators are overridden to use G4Allocator
-  inline void *operator new(size_t);
-  inline void operator delete(void *inuclElemPart);
-  ******/
-
   // Copy and assignment constructors for use with std::vector<>
   G4InuclElementaryParticle(const G4InuclElementaryParticle& right)
     : G4InuclParticle(right), generation(right.generation) {}
@@ -78,18 +73,18 @@ public:
   G4InuclElementaryParticle& operator=(const G4InuclElementaryParticle& right);
 
   void setType(G4int ityp);
-  G4int type() const;
+  G4int type() const { return type(getDefinition()); }
+
+  static G4int type(const G4ParticleDefinition* pd);
 
   G4bool photon() const { return (type() == 10); }
 
+  G4bool pion() const { return (type()==3 || type()==5 || type()==7); }
+
   G4bool nucleon() const { return (type() <= 2); }
 
-  G4bool baryon() const { 
-    return (getDefinition()->GetBaryonNumber() != 0);
-  }
-
-  G4bool pion() const { 
-    return (type() == 3 || type() == 5 || type() == 7); 
+  G4int baryon() const { 		// Can use as a bool (!=0 ==> true)
+    return getDefinition()->GetBaryonNumber();
   }
 
   G4bool quasi_deutron() const { return (type() > 100); }
@@ -98,14 +93,12 @@ public:
 
   virtual void printParticle() const {
     G4InuclParticle::printParticle();
-
     G4cout << " Particle: type " << type() << " mass " << getMass()
 	   << " ekin " << getKineticEnergy() << G4endl; 
   }
 
   void setGeneration(G4int gen) { generation = gen; }
-
-  G4int getGeneration() { return generation; }
+  G4int getGeneration() const { return generation; }
 
   static G4double getStrangeness(G4int type);
   static G4double getParticleMass(G4int type);
@@ -117,26 +110,5 @@ protected:
 private: 
   G4int generation;
 };        
-
-/******
-//  new/delete operators are overloaded to use G4Allocator
-
-#ifdef G4INUCL_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4InuclElementaryParticle> anInuclElemPartAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4InuclElementaryParticle> anInuclElemPartAllocator;
-#endif
-
-inline void *G4InuclElementaryParticle::operator new(size_t) {
-  void* temp = anInuclElemPartAllocator.MallocSingle();
-  G4cout << "G4InuclElemPart::new returning @ " << temp << G4endl;
-  return temp;
-}
-
-inline void G4InuclElementaryParticle::operator delete(void *inuclElemPart) {
-  G4cout << "G4InuclElemPart::delete @ " << inuclElemPart << G4endl;
-  anInuclElemPartAllocator.FreeSingle((G4InuclElementaryParticle*)inuclElemPart);
-}
-******/
 
 #endif // G4INUCL_ELEMENTARY_PARTICLE_HH 

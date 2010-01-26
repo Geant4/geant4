@@ -22,39 +22,46 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticle.cc,v 1.1 2010-01-12 06:27:15 mkelsey Exp $
+// $Id: G4InuclParticle.cc,v 1.2 2010-01-26 23:17:47 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 
 #include "G4InuclParticle.hh"
 #include "G4ios.hh"
-#include <math.h>
+#include <cmath>
+
+
+// WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
+G4InuclParticle::G4InuclParticle(const G4String& name, 
+				 G4ParticleDefinition* pd,
+				 const G4LorentzVector& mom)
+  : modelId(0) {
+  setDefinition(pd);
+  setMomentum(mom);
+}
 
 
 // Assignment operator for use with std::sort()
 G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
   pDP = right.pDP;
   modelId = right.modelId;
-  mom = right.mom;
 
   return *this;
 }
 
 // WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
-void G4InuclParticle::setMomentum(const G4CascadeMomentum& mom) {
+void G4InuclParticle::setMomentum(const G4LorentzVector& mom) {
   G4double mass = getMass();
-  const G4LorentzVector& lv = mom.getLV();
-
-  if (fabs(mass-lv.m()) <= 1e-5)		// Allow for rounding etc.
-    pDP.Set4Momentum(lv*GeV/MeV);		// From Bertini to G4 units
+  if (std::fabs(mass-mom.m()) <= 1e-5) 
+    pDP.Set4Momentum(mom*GeV/MeV);		// From Bertini to G4 units
   else
-    pDP.Set4Momentum(mom.getLV(mass)*GeV/MeV);	// Use correct mass value!
+    pDP.SetMomentum(mom.vect()*GeV/MeV);	// Don't change current mass!
 }
 
 
 void G4InuclParticle::printParticle() const {
-  getMomentum();				// Fill local buffer
-  G4cout << " px " << mom[1] << " py " << mom[2] << " pz " << mom[3]
-	 << " pmod " << getMomModule() << " E " << mom[0] 
+  G4LorentzVector mom = getMomentum();
+  G4cout << " px " << mom.px() << " py " << mom.py() << " pz " << mom.pz()
+	 << " pmod " << mom.rho() << " E " << mom.e()
 	 << " creator model " << modelId << G4endl;
 }
 

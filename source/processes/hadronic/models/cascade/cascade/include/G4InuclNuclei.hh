@@ -24,13 +24,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.hh,v 1.10 2010-01-12 06:27:15 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.11 2010-01-26 23:17:47 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
+//
+// 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
 
 #include "G4InuclParticle.hh"
 #include "G4ExitonConfiguration.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4Allocator.hh"
 
 class G4ParticleDefinition;
 
@@ -44,7 +45,7 @@ public:
     : G4InuclParticle("InuclNuclei", makeDefinition(a,z)),
       exitationEnergy(0.0) {}
 
-  G4InuclNuclei(const G4CascadeMomentum& mom, G4double a, G4double z)
+  G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z)
     : G4InuclParticle("InuclNuclei", makeDefinition(a,z), mom),
       exitationEnergy(0.0) {}
 
@@ -53,12 +54,6 @@ public:
       exitationEnergy(0.0) {}
 
   virtual ~G4InuclNuclei() {}
-
-  /******
-  //  new/delete operators are overridden to use G4Allocator
-  inline void *operator new(size_t);
-  inline void operator delete(void *inuclNuclei);
-  ******/
 
   // Copy and assignment constructors for use with std::vector<>
   G4InuclNuclei(const G4InuclNuclei& right)
@@ -104,27 +99,6 @@ private:
   G4double exitationEnergy;
   G4ExitonConfiguration theExitonConfiguration;
 };        
-
-/******
-//  new/delete operators are overloaded to use G4Allocator
-
-#ifdef G4INUCL_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4InuclNuclei> anInuclNucleiAllocator;
-#else
-  extern G4DLLIMPORT G4Allocator<G4InuclNuclei> anInuclNucleiAllocator;
-#endif
-
-inline void *G4InuclNuclei::operator new(size_t) {
-  void* temp = anInuclNucleiAllocator.MallocSingle();
-  G4cout << "G4InuclNuclei::new returning @ " << temp << G4endl;
-  return temp;
-}
-
-inline void G4InuclNuclei::operator delete(void *inuclNuclei) {
-  G4cout << "G4InuclNuclei::delete @ " << inuclNuclei << G4endl;
-  anInuclNucleiAllocator.FreeSingle((G4InuclNuclei*)inuclNuclei);
-}
-******/
 
 #endif // G4INUCL_NUCLEI_HH 
 

@@ -22,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4IntraNucleiCascader.cc,v 1.26 2010-01-26 23:17:47 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 
 #define RUN
 
@@ -74,16 +77,17 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
                                       (1.+std::pow(tnuclei->getA(),0.333));
 
-  G4CascadeMomentum momentum_in = bullet->getMomentum();
+  G4LorentzVector momentum_in = bullet->getMomentum();
 
-  momentum_in[0] += tnuclei->getMass();
+  momentum_in.setE(momentum_in.e()+tnuclei->getMass());
 
   G4double ekin_in; 
 
   if (verboseLevel > 3) {
     model.printModel();
-    G4cout << " intitial momentum  E " << momentum_in[0] << " Px " << momentum_in[1] 
-	   << " Py " << momentum_in[2] << " Pz " << momentum_in[3] << G4endl;
+    G4cout << " intitial momentum  E " << momentum_in.e() << " Px "
+	   << momentum_in.x() << " Py " << momentum_in.y() << " Pz "
+	   << momentum_in.z() << G4endl;
   }
 
   G4int itry = 0;
@@ -240,13 +244,11 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	     << " output_particles  " << output_particles.size() <<  G4endl;
     }
 
-    G4CascadeMomentum momentum_out;
+    G4LorentzVector momentum_out;
     particleIterator ipart;
 
     for (ipart = output_particles.begin(); ipart != output_particles.end(); ipart++) {
-      const G4CascadeMomentum& mom = ipart->getMomentum();
-
-      for (G4int j = 0; j < 4; j++) momentum_out[j] += mom[j];
+      momentum_out += ipart->getMomentum();
 
       zfin -= ipart->getCharge();
       if (ipart->baryon()) afin -= 1.0;
@@ -259,20 +261,18 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     if (afin > 1.0) {
       G4InuclNuclei outgoing_nuclei(afin, zfin);
       G4double mass = outgoing_nuclei.getMass();
-      momentum_out[0] += mass;        
+      momentum_out.setE(momentum_out.e()+mass);
 
-      for (int j = 0; j < 4; j++) momentum_out[j] = momentum_in[j] - momentum_out[j];
+      momentum_out = momentum_in - momentum_out;
 
       if (verboseLevel > 3) {
-	G4cout << "  Eex + Ekin " << momentum_out[0]  <<  G4endl;
+	G4cout << "  Eex + Ekin " << momentum_out.e()  <<  G4endl;
       }
 
       if (momentum_out[0] > 0.0) { // Eex + Ekin > 0.0
-	G4double pnuc = momentum_out[1] * momentum_out[1] + 
-	  momentum_out[2] * momentum_out[2] +
-	  momentum_out[3] * momentum_out[3]; 
+	G4double pnuc = momentum_out.vect().mag2(); 
 	G4double ekin = std::sqrt(mass * mass + pnuc) - mass;
-	G4double Eex = 1000.0 * (momentum_out[0] - ekin);
+	G4double Eex = 1000.0 * (momentum_out.e() - ekin);
 
 	if (verboseLevel > 3) {
 	  G4cout << "  Eex  " << Eex  <<  G4endl;
@@ -282,7 +282,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(output_particles);
 	  outgoing_nuclei.setMomentum(momentum_out);
-	  outgoing_nuclei.setEnergy();
 	  outgoing_nuclei.setExitationEnergy(Eex);
 	  outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);	                           	  
           output.addTargetFragment(outgoing_nuclei);
@@ -295,7 +294,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       if (afin == 1.0) { // recoiling nucleon
 
-	for (int j = 0; j < 4; j++) momentum_out[j] = momentum_in[j] - momentum_out[j];
+	momentum_out = momentum_in - momentum_out;
 
 	G4InuclElementaryParticle  last_particle;
 
@@ -321,11 +320,10 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   // special branch to avoid the cascad generation but to get the input for evaporation etc
 
-  G4CascadeMomentum momentum_out;
+  G4LorentzVector momentum_out;
   G4InuclNuclei outgoing_nuclei(169, 69);
 
   outgoing_nuclei.setMomentum(momentum_out);
-  outgoing_nuclei.setEnergy();
   outgoing_nuclei.setExitationEnergy(150.0);
 
   G4ExitonConfiguration theExitonConfiguration(3.0, 3.0, 5.0, 6.0);

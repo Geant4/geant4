@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclElementaryParticle.cc,v 1.1 2010-01-12 06:27:15 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.cc,v 1.2 2010-01-26 23:17:47 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 
 #include "G4InuclElementaryParticle.hh"
@@ -61,8 +61,6 @@
 //                          29 - xi0
 //                          31 - xi-
 
-G4Allocator<G4InuclElementaryParticle> anInuclElemPartAllocator;
-
 G4ParticleDefinition* 
 G4InuclElementaryParticle::makeDefinition(G4int ityp) {
   switch(ityp) {
@@ -94,8 +92,7 @@ G4InuclElementaryParticle::makeDefinition(G4int ityp) {
 
 // This is the inverse mapping to makeDefinition above
 
-G4int G4InuclElementaryParticle::type() const {
-  G4ParticleDefinition* pd = getDefinition();
+G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == 0) return 0;
   if (pd == G4Proton::Definition())       return 1;
   if (pd == G4Neutron::Definition())      return 2;
@@ -116,6 +113,8 @@ G4int G4InuclElementaryParticle::type() const {
   if (pd == G4Diproton::Definition())     return 111;	// Bertini class!
   if (pd == G4UnboundPN::Definition())    return 112;	// Bertini class!
   if (pd == G4Dineutron::Definition())    return 122;	// Bertini class!
+
+  G4cerr << " uups, unknown G4ParticleDefinition type" << G4endl;
   return 0;
 }
 

@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.19 2010-01-26 23:17:47 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+
 #define RUN
 
 #include <cmath>
@@ -39,7 +43,7 @@ G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   }
 }
 
-G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
+G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
 						      G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
@@ -66,10 +70,10 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     //  initialization
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
-    G4CascadeMomentum PEX = nuclei_target->getMomentum();
-    G4CascadeMomentum pin = PEX;
+    G4LorentzVector PEX = nuclei_target->getMomentum();
+    G4LorentzVector pin = PEX;
     G4double EEXS = nuclei_target->getExitationEnergy();
-    pin[0] += 0.001 * EEXS;
+    pin.setE(pin.e() + 0.001 * EEXS);
     G4InuclNuclei dummy_nuc;
     G4ExitonConfiguration config = nuclei_target->getExitonConfiguration();  
 
@@ -95,7 +99,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     G4double AR = A - QP;
     G4double ZR = Z - QPP;  
     G4int NEX = G4int(QEX + 0.5);
-    G4CascadeMomentum ppout;
+    G4LorentzVector ppout;
     G4bool try_again = NEX > 0 ? true : false;
   
     while (try_again) {
@@ -108,8 +112,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 
 	// update exiton system
 	G4double nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
-	PEX[0] = std::sqrt(PEX[1] * PEX[1] + PEX[2] * PEX[2] + PEX[3] * PEX[3] +
-		      nuc_mass * nuc_mass);  	
+	PEX.setVectM(PEX.vect(), nuc_mass);
 	toTheExitonSystemRestFrame.setTarget(PEX, nuc_mass);
 	toTheExitonSystemRestFrame.toTheTargetRestFrame();
 	G4double MEL = getMatrixElement(A);
@@ -292,16 +295,16 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 			  EPART *= 0.001; // to the GeV
 			  // generate particle momentum
 			  G4double pmod = std::sqrt(EPART * (2.0 * mass + EPART));
-			  G4CascadeMomentum mom;
+			  G4LorentzVector mom;
 			  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 			  G4double FI = randomPHI();
 			  G4double P1 = pmod * COS_SIN.second;
-			  mom[1] = P1 * std::cos(FI);
-			  mom[2] = P1 * std::sin(FI);
-			  mom[3] = pmod * COS_SIN.first;
-			  G4CascadeMomentum mom_at_rest;
+			  mom.setX(P1 * std::cos(FI));
+			  mom.setY(P1 * std::sin(FI));
+			  mom.setZ(pmod * COS_SIN.first);
+			  G4LorentzVector mom_at_rest;
 
-			  for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
+			  mom_at_rest = -mom;
 
 			  G4double QPP_new = QPP;
 			  G4double Z_new = Z;
@@ -318,34 +321,26 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 			  G4double A_new = A - 1.0;
 			  G4double new_exiton_mass =
 			    dummy_nuc.getNucleiMass(A_new, Z_new);
-			  mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
-						mom_at_rest[2] * mom_at_rest[2] + 
-						mom_at_rest[3] * mom_at_rest[3] +
-						new_exiton_mass * new_exiton_mass); 
-			  mom[0] = std::sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
-					mom[3] * mom[3] + mass * mass);
+			  mom_at_rest.setVectM(mom_at_rest.vect(), new_exiton_mass); 
+			  mom.setVectM(mom.vect(), mass);
 
-			  G4CascadeMomentum part_mom = 
+			  G4LorentzVector part_mom = 
 		            toTheExitonSystemRestFrame.backToTheLab(mom);
+			  part_mom.setVectM(part_mom.vect(), mass);
 
-			  part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
-					     part_mom[2] * part_mom[2] + part_mom[3] * part_mom[3] +
-					     mass * mass);
-
-			  G4CascadeMomentum ex_mom = 
+			  G4LorentzVector ex_mom = 
 			    toTheExitonSystemRestFrame.backToTheLab(mom_at_rest);
+			  ex_mom.setVectM(ex_mom.vect(), new_exiton_mass);   
 
-			  ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + ex_mom[2] * ex_mom[2]
-					   + ex_mom[3] * ex_mom[3] + new_exiton_mass * new_exiton_mass);   
 			  //             check energy conservation and set new exitation energy
-			  EEXS_new = 1000.0 * (PEX[0] + 0.001 * EEXS - 
-					       part_mom[0] - ex_mom[0]);
+			  EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
+					       part_mom.e() - ex_mom.e());
 
 			  if (EEXS_new > 0.0) { // everything ok
 			    particle.setMomentum(part_mom);
 			    output.addOutgoingParticle(particle);
+			    ppout += part_mom;
 
-			    for (G4int i = 0; i < 4; i++) ppout[i] += part_mom[i];
 			    A = A_new;
 			    Z = Z_new;
 			    PEX = ex_mom;
@@ -422,17 +417,15 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     // the exitation energy has to be re-set properly for the energy
     // conservation
 
-    G4CascadeMomentum pnuc;
-
-    for (G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
+    G4LorentzVector pnuc = pin - ppout;
     G4InuclNuclei nuclei(pnuc, A, Z);
 
     nuclei.setModel(5);
     nuclei.setEnergy();
 
     pnuc = nuclei.getMomentum(); 
-    G4double eout = pnuc[0] + ppout[0];  
-    G4double eex_real = 1000.0 * (pin[0] - eout);        
+    G4double eout = pnuc.e() + ppout.e();  
+    G4double eex_real = 1000.0 * (pin.e() - eout);        
 
     nuclei.setExitationEnergy(eex_real);
     output.addTargetFragment(nuclei);
