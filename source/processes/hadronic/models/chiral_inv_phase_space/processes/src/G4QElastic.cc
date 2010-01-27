@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.3 2010-01-22 17:02:49 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.4 2010-01-27 14:28:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -99,10 +99,10 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
   else G4cout<<"G4QElastic::GetMeanFreePath:particle's not implemented in CHIPSel"<<G4endl;
 
   G4VQCrossSection* CSmanager=0;
-  if     (pPDG=2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
-  else if(pPDG=2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
-  else if(pPDG= 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
-  else if(pPDG=-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
+  if     (pPDG==2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
+  else if(pPDG==2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
+  else if(pPDG== 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
+  else if(pPDG==-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
   else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<pPDG<<G4endl;
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -421,10 +421,10 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   EnMomConservation=tot4M;                 // Total 4-mom of reaction for E/M conservation
   G4VQCrossSection* CSmanager=0;
-  if     (projPDG=2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
-  else if(projPDG=2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
-  else if(projPDG= 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
-  else if(projPDG=-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
+  if     (projPDG==2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
+  else if(projPDG==2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
+  else if(projPDG== 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
+  else if(projPDG==-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
   else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<projPDG<<G4endl;
 #ifdef debug
   G4cout<<"G4QElas::PSDI:false,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<projPDG<<G4endl;
