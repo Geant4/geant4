@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.46 2010-01-06 15:05:29 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.47 2010-01-27 15:49:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,7 +134,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #endif
     if (myParent != NULL) {
 #if QT_VERSION < 0x040000
-      glWindget->reparent(myParent,0,QPoint(0,0));  
+      glWidget->reparent(myParent,0,QPoint(0,0));  
 #else
       glWidget->setParent(myParent);  
 #endif
@@ -1558,9 +1558,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
     coefDepth = getSceneDepth()*fDeltaDepth;
   }
   fVP.IncrementPan(-dx*coefTrans,dy*coefTrans,dz*coefDepth);
-  emit moveX(-dx*coefTrans);
-  emit moveY(dy*coefTrans);
-  emit moveZ(dz*coefTrans);
+  emit moveX(-static_cast<int>(dx*coefTrans));
+  emit moveY(static_cast<int>(dy*coefTrans));
+  emit moveZ(static_cast<int>(dz*coefTrans));
   
   updateQWidget();
   if (fAutoMove)
@@ -1583,11 +1583,11 @@ void G4OpenGLQtViewer::rotateQtScene(float dx, float dy)
   
   if( dx != 0) {
     rotateScene(dx,0,fDeltaRotation);
-    emit rotateTheta(dx);
+    emit rotateTheta(static_cast<int>(dx));
   }
   if( dy != 0) {
     rotateScene(0,dy,fDeltaRotation);
-    emit rotatePhi(dy);
+    emit rotatePhi(static_cast<int>(dy));
   }
   updateQWidget();
   
@@ -1606,8 +1606,8 @@ void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
   fHoldRotateEvent = true;
 
   rotateScene(dx,dy,fDeltaRotation);
-  emit rotateTheta(dx);
-  emit rotatePhi(dy);
+  emit rotateTheta(static_cast<int>(dx));
+  emit rotatePhi(static_cast<int>(dy));
   updateQWidget();
   
   fHoldRotateEvent = false;
@@ -1669,7 +1669,7 @@ bool G4OpenGLQtViewer::printPDF (
      printer.setOutputFormat(QPrinter::PdfFormat);
      }
   */
-  printer.setOutputFileName(aFilename);
+  printer.setOutputFileName(QString(aFilename.c_str()));
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
   paint.drawImage (0,0,aImage );
@@ -2637,7 +2637,8 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 {
   // launch Qt if not
   G4Qt* interactorManager = G4Qt::getInstance ();
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  // G4UImanager* UI = 
+  G4UImanager::GetUIpointer();
 #ifdef G4DEBUG_VIS_OGL
   //  printf("G4OpenGLQtViewer::getParentWidget :: UImanager %d  G4Qt:%d et via GetUIQt:%d---------------------\n",UI,UI->GetSession(),interactorManager,interactorManager->GetUIVisWidget());
 #endif
