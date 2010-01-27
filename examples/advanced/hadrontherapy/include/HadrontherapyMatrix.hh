@@ -39,13 +39,14 @@
 // type struct useful to store nucludes data
 struct ion 
  { 
+     G4bool isPrimary;   // true if particle is primary
      //G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
-     G4String name; // simple name without excitation energy: He3, He4, Li7, ...
-     G4int len; // name length
-     G4int Z; // atomic number
-     G4int A; // mass number
-     G4double *dose; // pointer to dose matrix
-     u_int    *fluence; // pointer to fluence matrix
+     G4String name;   	 // simple name without excitation energy: He3, He4, Li7, ...
+     G4int len; 	 // name length
+     G4int Z; 		 // atomic number
+     G4int A; 		 // mass number
+     G4double *dose; 	 // pointer to dose matrix
+     u_int    *fluence;  // pointer to fluence matrix
      //friend bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
      G4bool operator<(const ion& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
  };
@@ -64,7 +65,6 @@ public:
   static HadrontherapyMatrix* GetInstance();
 // Make & Get instance
   static HadrontherapyMatrix* GetInstance(G4int nX, G4int nY, G4int nZ);
-
   // Full list of generated nuclides
   void PrintNuclides(); 
   // Hit array marker (useful to avoid multiple counts of fluence)
@@ -78,7 +78,7 @@ public:
 // Fill DOSE/fluence matrix for particle: 
 // if fluence parameter is true then fluence at voxel (i, j, k) is increased 
 // else energyDeposit fill the dose matrix for voxel (i,j,k) 
-  G4bool Fill(G4ParticleDefinition* particleDef, G4int i, G4int j, G4int k, G4double energyDeposit, G4bool fluence=false); 
+  G4bool Fill(G4int, G4ParticleDefinition* particleDef, G4int i, G4int j, G4int k, G4double energyDeposit, G4bool fluence=false); 
 
   // Fill TOTAL DOSE matrix for primary particle 
   void Fill(G4int i, G4int j, G4int k, G4double energyDeposit);

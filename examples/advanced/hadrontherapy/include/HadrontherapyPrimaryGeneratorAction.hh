@@ -56,6 +56,7 @@ public:
   void SetsigmaMomentumY(G4double);
   void SetsigmaMomentumZ(G4double);
   G4double GetmeanKineticEnergy(void);
+  G4ParticleGun *GetParticleGun(void){return particleGun;}
     
 private:
   void SetDefaultPrimaryParticle();
@@ -70,9 +71,9 @@ private:
   G4double sigmaMomentumZ;
 
 private:
-  G4ParticleGun*                particleGun;
+  G4ParticleGun*    		          particleGun;
   HadrontherapyPrimaryGeneratorMessenger* gunMessenger; 
-  G4double sigmaX;
+  G4double				  sigmaX;
 };
 
 #endif

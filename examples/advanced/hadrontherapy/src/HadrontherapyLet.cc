@@ -95,7 +95,8 @@ void HadrontherapyLet::Clear()
     ionLetStore.clear();
 
 }
-void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef, 
+void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
+					   G4ParticleDefinition* particleDef, 
 					   G4double kinEnergy, 
 					   G4int i, G4int j, G4int k) 
 {
@@ -106,6 +107,9 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
 
     G4String fullName = particleDef -> GetParticleName();
     G4String name = fullName.substr (0, fullName.find("[") ); // cut excitation energy  
+    // Is it a primary particle?
+    //if (trackID == 1) name +="_1"; 
+
     G4int voxel = matrix -> Index(i,j,k);
     G4int enBin = lround(trunc(kinEnergy/binWidth)); 
     // bins are [n.binWidth, n.binWidth + binWidth), n natural
@@ -113,7 +117,12 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
     
     // Search for already allocated data...
     size_t l;
-    for (l=0; l < ionLetStore.size(); l++) if (ionLetStore[l].name == name) break; 
+    for (l=0; l < ionLetStore.size(); l++) 
+    {
+	if (ionLetStore[l].name == name) 
+	    if ( trackID ==1 && ionLetStore[l].isPrimary || trackID !=1 && !ionLetStore[l].isPrimary)
+		break;
+    }
     //for (vector<ionLet>::const_iterator iter = ionLetStore.begin(); iter!=ionLetStore.end(); ++iter)
     //if ((*iter).name == name) break; 
     
@@ -121,6 +130,7 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
     {
     ionLet ion =
 	{
+	    (trackID == 1) ? true:false, // is it the primary particle? 
 	    fullName,
 	    name,
 	    Z,
@@ -143,7 +153,7 @@ void  HadrontherapyLet::FillEnergySpectrum(G4ParticleDefinition* particleDef,
 	// Initialize let
 	for(G4int v=0; v < nVoxels; v++) ion.letT[v] = ion.letD[v] = 0.;
 	ionLetStore.push_back(ion);
-	G4cout << "Allocated LET data for " << ion.name << G4endl;
+	//G4cout << "Allocated LET data for " << ion.name << G4endl;
 
     }
 
@@ -200,8 +210,9 @@ void HadrontherapyLet::StoreData(G4String filename)
 		"i\tj\tk\t"; 
 	    for (size_t l=0; l < ionLetStore.size(); l++)
 	    {
-		ofs << std::setw(width) << ionLetStore[l].name + "_LetT" <<
-		    std::setw(width) << ionLetStore[l].name + "_LetD";
+		G4String a = (ionLetStore[l].isPrimary) ? "_1":"";
+		ofs << std::setw(width) << ionLetStore[l].name + "_lT" + a <<
+		       std::setw(width) << ionLetStore[l].name + "_lD" + a;
 	    }
 	    ofs << G4endl;
 	    ofs << std::setfill('_');

@@ -36,18 +36,20 @@
 #include <string>
 
 
-struct ionLet { 
-     G4String fullName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
-     G4String name;     // simple name without excitation energy: He3, He4, Li7, ...
-     G4int Z;           // atomic number
-     G4int A;		// mass number
-     G4double *stop;	// stopping power table
-     G4int    **spectrum; // energy spectrum 
-     G4double *letT , *letD;  //Track averaged LET and dose averaged LET 
-     //friend bool operator<(const ionLet& a, const ionLet& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
-     G4bool operator<(const ionLet& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
-     // For isotopes sort by the mass number, else sort by the atomic one.
- };
+struct ionLet 
+{ 
+    G4bool isPrimary;	    // true if particle is primary
+    G4String fullName;      // AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
+    G4String name;          // simple name without excitation energy: He3, He4, Li7, ...
+    G4int Z;                // atomic number
+    G4int A;		    // mass number
+    G4double *stop;	    // stopping power table
+    G4int    **spectrum;    // energy spectrum 
+    G4double *letT , *letD; // Track averaged LET and Dose averaged LET 
+    //friend bool operator<(const ionLet& a, const ionLet& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
+    G4bool operator<(const ionLet& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
+    // For isotopes sort by the mass number, else sort by the atomic one.
+};
 
 class G4Material;
 //class HadrontherapyLetMessenger;
@@ -58,39 +60,40 @@ class HadrontherapyDetectorConstruction;
 
 class HadrontherapyLet
 {
-private:
-  HadrontherapyLet(HadrontherapyDetectorConstruction*); // Ahh, yes another singleton like H.Matrix
+    private:
+	HadrontherapyLet(HadrontherapyDetectorConstruction*); // Ahh, yes another singleton like H.Matrix
 
-public:
-  ~HadrontherapyLet();
-  static HadrontherapyLet* GetInstance(HadrontherapyDetectorConstruction*);
-  static HadrontherapyLet* GetInstance();
+    public:
+	~HadrontherapyLet();
+	static HadrontherapyLet* GetInstance(HadrontherapyDetectorConstruction*);
+	static HadrontherapyLet* GetInstance();
 
-  void Initialize();
-  void Clear();
-  void FillEnergySpectrum(G4ParticleDefinition* particleDef,
-			  G4double KinEnergy,
-			  G4int i, G4int j, G4int k); 
-  void LetOutput(); 
+	void Initialize();
+	void Clear();
+	void FillEnergySpectrum(G4int trackID,
+		G4ParticleDefinition* particleDef,
+		G4double KinEnergy,
+		G4int i, G4int j, G4int k); 
+	void LetOutput(); 
 
-  void StoreData(G4String filename);
-//  HadrontherapyLetMessenger* letMessenger;
+	void StoreData(G4String filename);
+	//  HadrontherapyLetMessenger* letMessenger;
 
-private:
-  static HadrontherapyLet *instance;
-  HadrontherapyInteractionParameters* pParam;
-  HadrontherapyPrimaryGeneratorAction* pPGA;
-  // Detector material
-  G4Material* detectorMat;  
-  G4double density;
-  
-  std::ofstream ofs;
-  HadrontherapyMatrix *matrix;
-  G4int nVoxels, numberOfVoxelAlongX, numberOfVoxelAlongY, numberOfVoxelAlongZ ;
-  G4double primaryEnergy, energyLimit, binWidth; 
-  G4int nBins;
-  G4double  nT, dT, nD, dD;
-  G4String nome_file;
+    private:
+	static HadrontherapyLet *instance;
+	HadrontherapyInteractionParameters* pParam;
+	HadrontherapyPrimaryGeneratorAction* pPGA;
+	// Detector material
+	G4Material* detectorMat;  
+	G4double density;
 
-  std::vector<ionLet> ionLetStore;
+	std::ofstream ofs;
+	HadrontherapyMatrix *matrix;
+	G4int nVoxels, numberOfVoxelAlongX, numberOfVoxelAlongY, numberOfVoxelAlongZ ;
+	G4double primaryEnergy, energyLimit, binWidth; 
+	G4int nBins;
+	G4double  nT, dT, nD, dD;
+	G4String nome_file;
+
+	std::vector<ionLet> ionLetStore;
 };

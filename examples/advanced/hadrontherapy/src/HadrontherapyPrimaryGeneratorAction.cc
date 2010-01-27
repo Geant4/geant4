@@ -216,3 +216,4 @@ void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double val )
 
 G4double HadrontherapyPrimaryGeneratorAction::GetmeanKineticEnergy(void)
 { return meanKineticEnergy;}
+
