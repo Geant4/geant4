@@ -20,12 +20,13 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p03
 
 Summarised, the list of changes is the following:
 
 config                                           config-V09-02-10
 ------
-- Darwin-g++.gmk: added paths to $QTHOME/include and $QTHOME/lib to
+- Darwin-g++.gmk: added paths to $QTHOME/include and $QTHOME/lib to          (o)
   setup for Qt4 configuration.
 
 event                                            event-V09-02-03
@@ -34,18 +35,18 @@ event                                            event-V09-02-03
 - Added UI comand /event/stack/verbose providing a short report of peak
   number of tracks in the urgent stack.
 
-geometry/management                              geommng-V09-02-02
+geometry/management                              geommng-V09-02-02           (o)
 -------------------
 - Fixed implementation of G4LogicalVolume::TotalVolumeEntities() to become
   invariant to call sequence. Addressing problem report #1082.
 
-geometry/solids/specific                         geom-specific-V09-02-07
+geometry/solids/specific                         geom-specific-V09-02-07     (o)
 ------------------------
 - G4Ellipsoid: refined fix in DistanceToIn(p,v) for points located on the
   curved surface, and correct treatment of geometrical tolerance.
   Addresses problem report #1076.
 
-geometry/volumes                                 geomvol-V09-02-02
+geometry/volumes                                 geomvol-V09-02-02           (o)
 ----------------
 - Fix in G4PVParameterised::CheckOverlaps() to not modify daughter volume
   transformation matrix for application to points in the daughter's frame.
@@ -85,7 +86,7 @@ physics_lists                                    phys-lists-V09-02-25
 
 processes/cuts                                   procuts-V09-02-06
 --------------
-- G4VRangeToEnergyConverter:
+- G4VRangeToEnergyConverter:                                                 (o)
   o Modified implementation of ConvertCutToKineticEnergy() to improve
     performance. Measured a factor 2 to 3 improvement in initialisation
     speed when building physics tables.
@@ -96,7 +97,7 @@ processes/cuts                                   procuts-V09-02-06
   o Added 'MaxEnergyCut' (10 GeV is set in default).
   o Added 'fRangeVectorStore' to ensure that RangeVector is created only
     once for each material.
-- Added G4ProductionCutTable::ResetConverters() method to clear temporary
+- Added G4ProductionCutTable::ResetConverters() method to clear temporary    (o)
   loss tables and range vectors after first initialisation.
 - Removed RToEConverter for neutron, anti-proton, and anti-neutron.
 
@@ -244,7 +245,7 @@ examples                                         examples-V09-02-09
   o New example for electron scattering benchmark from T.O'Shea and B.Faddegon.
 - examples/extended/persistency/gdml/G01 (G01-V09-02-04)
   o Added assembly.gdml to demonstrate support for 'assembly' tags.
-- examples/extended/radioactivedecay/exrdm (exrdm-V09-02-00)
+- examples/extended/radioactivedecay/exrdm (exrdm-V09-02-00)                 (o)
   o Fixed trivial compilation warning when compiled without G4ANALYSIS_USE.
 
 tests                                            tests-V09-02-09

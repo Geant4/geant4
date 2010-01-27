@@ -28,6 +28,7 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p03
 
 Summarised, the list of changes is the following:
 
@@ -47,7 +48,8 @@ config                                           config-V09-02-17
   o Removed of -s switch to sed in Qt.U to fix problem with Qt setup. 
 - architecture.gmk: corrected inclusion of -lz for zlib.
 - binmake.gmk: corrected inclusion of G4zlib library in link list for
-  the case of global libraries. Added include paths to new CHIPS modules.
+  the case of global libraries.                                              (o)
+  Added include paths to new CHIPS modules.
 - G4VIS_USE.gmk: fixed dependency issues on WIN32-VC for gl2ps utility
   library in visualization.
 - WIN32-VC.gmk: added "gd32.lib use32.lib" to OGLLIBS to fix problems of
@@ -55,9 +57,9 @@ config                                           config-V09-02-17
 
 digits_hits                                      digits_hits-V09-02-04
 -----------
-- Fixes for the way of counting the flux and current passing through
+- Fixes for the way of counting the flux and current passing through         (o)
   a curved surface (cylinder and sphere surfaces).
-- Added missing virtual keyword for qualification of CheckROVolume() and
+- Added missing virtual keyword for qualification of CheckROVolume() and     (o)
   FindROTouchable() methods in G4VReadOutGeometry.
 
 environments                                     envs-V09-02-02
@@ -67,7 +69,7 @@ environments                                     envs-V09-02-02
 
 error_propagation                                error_propagation-V09-02-02
 -----------------
-- Corrected usage of G4ThreeVector constructor in G4ErrorMagFieldLimitProces.
+- Corrected usage of G4ThreeVector constructor in G4ErrorMagFieldLimitProces.(o)
 
 event                                            event-V09-02-05
 -----
@@ -84,7 +86,7 @@ geometry/magneticfield                           field-V09-02-08
   Default implementation in G4MagIntegratorStepper calls RightHandSide().
 - New simple class G4CachedMagneticField to cache value of magnetic field. 
   Speeds up code when calculation of field value is complex.
-- Bug fix in G4EqEMFieldWithSpin and G4EqEMFieldWithEDM, following report
+- Bug fix in G4EqEMFieldWithSpin and G4EqEMFieldWithEDM, following report    (o)
   on Hypernews EM-field forum #161.
 - New G4EqEMFieldWithEDM class for RHS of EofM in a combined electric and
   magnetic field, with spin tracking for both MDM and EDM terms.
@@ -98,7 +100,7 @@ geometry/management                              geommng-V09-02-05
 geometry/navigation                              geomnav-V09-02-11
 -------------------
 - Refinements in G4PropagatorInField:
-  o Changed parameters for treating consecutive tiny/zero steps (decrease
+  o Changed parameters for treating consecutive tiny/zero steps (decrease    (o)
     factor to 0.25 from 0.1); the value is not used when the step size falls
     below a certain threshold. Added new member 'fZeroStepThreshold', to
     enable tuning of threshold for tiny/zero steps; this threshold is now
@@ -106,29 +108,28 @@ geometry/navigation                              geomnav-V09-02-11
     kCarTolerance. Changed the value given to the decrease factor to 0.35.
     Addresses a problem seen at boundary of volumes reported by ATLAS.
   o Activated field per region.
-  o Improved printing of diagnostic messages.
-  o Added new method RefreshIntersectionLocator() to update state.
+  o Improved printing of diagnostic messages.                                (o)
+  o Added new method RefreshIntersectionLocator() to update state.           (o)
   o Deleted long obsolete methods: SetAccuraciesWithDeltaOneStep(),
     SetDeltaIntersection(), SetDeltaOneStep(). Revised implementation
     to avoid using the older methods.
-- G4VIntersectionLocator: fixed problem in ReEstimateEndPoint() for very small
-  steps. Corrected constructor to ensure that it initialises all data members.
-  Labelled methods in header to make noticable those that must change
+- G4VIntersectionLocator: fixed problem in ReEstimateEndPoint() for very     (o)
+  small steps. Corrected constructor to ensure that it initialises all data
+  members. Labelled methods in header to make noticable those that must change
   attributes at every step.
-
 
 geometry/solids/CSG                              geom-csg-V09-02-08
 -------------------
-- G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
+- G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case   (o)
   of point on surface. Fixes a problem of stuck tracks observed in CMS, due
   to wrong reply from the solid for points on the inner radius surface base
   with direction along the imaginary extension of the cone.
-- G4Torus: fix in SolveNumericJT() in order to take in account the difference
+- G4Torus:fix in SolveNumericJT() in order to take in account the difference (o)
   in the value of theta for different intervals, [0:pi] or [-pi:0], and for
   SPhi in [0:twopi] or [-twopi:0]. Addresses problem report #1086.
-- G4Orb: moved debug warning in DistanceToIn(p,v) within G4CSGDEBUG flag.
+- G4Orb: moved debug warning in DistanceToIn(p,v) within G4CSGDEBUG flag.    (o)
 
-geometry/solids/specific                         geom-specific-V09-02-08
+geometry/solids/specific                         geom-specific-V09-02-08     (o)
 ------------------------
 - Avoid redundant assignment of value to 3-vector in G4PolyconeSide and
   G4TwistTubsSide.
@@ -295,7 +296,7 @@ processes/electromagnetic/standard               emstand-V09-02-36
 - G4GoudsmitSaundersonMscModel: tuned small angle theta distributions
   assuming the case of lambdan<1 as single scattering regime; tuned theta
   sampling for theta below the screening angle.
-- Set 'linLossLimit'to 0.02 in G4ionIonisation.
+- Set 'linLossLimit'to 0.02 in G4ionIonisation.                              (o)
 
 processes/electromagnetic/utils                  emutils-V09-02-24
 -------------------------------
@@ -316,11 +317,12 @@ processes/hadronic
   o Modified upper limit of validity to 100 TeV in G4PiNuclearCrossSection,
     G4NeutronInelasticCrossSection and G4ProtonInelasticCrossSection.
     Use constant cross-section above original range.
-  o G4TripathiLightCrossSection: re-enable low energy check code.
-  o G4CrossSectionDataSetRegistry: fix for more accurate cross-section deletion.
+  o G4TripathiLightCrossSection: re-enable low energy check code.            (o)
+  o G4CrossSectionDataSetRegistry: fix for more accurate cross-section       (o)
+    deletion.
 - management (hadr-man-V09-02-05)
-  o G4HadronicProcessStore: added protection in Clean() method.
-- models/abrasion (had-abrasion-V09-02-00)
+  o G4HadronicProcessStore: added protection in Clean() method.              (o)
+- models/abrasion (had-abrasion-V09-02-00)                                   (o)
   o Fixed problems of negative sqrt() and made code more robust to potential
     while-loop problems.
 - models/binary_cascade (had-binary-V09-02-06)
@@ -393,7 +395,7 @@ processes/hadronic
   o Minor fix in the INCL particle reflection time calculation.
 - models/management (hadr-modman-V09-02-08)
   o G4V3DNucleus: added two functions to sort nucleons along +/- Z.
-  o Fix in G4HadronicInteractionRegistry for more accurate model deletion.
+  o Fix in G4HadronicInteractionRegistry for more accurate model deletion.   (o)
 - models/parton_string (hadr-prtn-V09-02-09)
   o Implemented charge-exchange for pn->np in elastic and inelastic
     interactions simulated by FTF. Implemented also pion absorption by a
@@ -437,7 +439,7 @@ processes/hadronic
   o G4NuclearFermiDensity: added protection to GetDeriv() for positions far 
     outside the nucleus causing an FP overflow in exp().
 - stopping (hadr-stopping-V09-02-04)
-  o G4PiMinusAbsorptionAtRest, G4KaonMinusAbsorptionAtRest: fixed usage of
+  o G4PiMinusAbsorptionAtRest, G4KaonMinusAbsorptionAtRest: fixed usage of   (o)
     3vector constructor.
 
 processes/optical                                op-V09-02-06

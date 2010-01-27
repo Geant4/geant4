@@ -20,6 +20,7 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.2.p03
 
 Summarised, the list of changes is the following:
 
@@ -33,7 +34,7 @@ digits_hits                                      digits_hits-V09-02-02
 -----------
 - Added few accessors for visualization to G4VScoringMesh.
 
-geometry/management                              geommng-V09-02-04
+geometry/management                              geommng-V09-02-04           (o)
 -------------------
 - Clear possible excess capacity in node vectors in G4SmartVoxelHeader
   BuildNodes() method. May reduce excess memory allocated in optimisation
@@ -42,7 +43,7 @@ geometry/management                              geommng-V09-02-04
 - G4VTouchable: moved inline vitual methods, constructor and destructor to
   source, to avoid problem of memory alignment in allocation of derived objects.
 
-geometry/volumes                                 geomvol-V09-02-04
+geometry/volumes                                 geomvol-V09-02-04           (o)
 ----------------
 - Use G4Allocator for dynamic allocation of G4TouchableHistory objects.
   Should reduce the number of direct calls to malloc and memory fragmentation.
@@ -92,7 +93,7 @@ persistency/gdml                                 gdml-V09-02-17
 ----------------
 - Added support for GDML 'expression' tag, implementing generic expressions
   stored as literal constants.
-- Corrected handling of 'quantity' tag; added missing caching of evaluation.
+- Corrected handling of 'quantity' tag; added missing caching of evaluation. (o)
 
 physics_lists                                    phys-lists-V09-02-31
 -------------
@@ -139,7 +140,7 @@ processes/electromagnetic/standard               emstand-V09-02-27
 processes/electromagnetic/utils                  emutils-V09-02-20
 -------------------------------
 - G4VMultipleScattering: added SetModel() method.
-- G4EmCorrections: fixed bug reported in phys-list forum #532.
+- G4EmCorrections: fixed bug reported in phys-list forum #532.               (o)
 - G4ionEffectiveCharge: return back lost protection for zero energy.
 - G4LossTableManager, G4EmProcessOptions, G4EnergyLossMessenger: added
   parameter 'FactorForAngleLimit', accessors, modifiers and UI command to be
@@ -162,7 +163,7 @@ processes/hadronic
   o MuCaptureEMCascade excluded from capture at rest for mu-; all the atomic
     deexcitation energy of capture is concentrated in the energy deposition.
 - models/coherent_elastic (hadr-cohe-V09-02-02)
-  o G4CHIPSElastic, G4HadronElastic: use static pointer to G4VQCrossSection
+  o G4CHIPSElastic, G4HadronElastic: use static pointer to G4VQCrossSection  (o)
     in order to guarantee unique version of CHIPS cross-section class.
 
 run                                              run-V09-02-06

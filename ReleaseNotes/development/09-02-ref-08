@@ -21,12 +21,13 @@ Some of the development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 9.2.p02
+(oo) Fixes included in release 9.2.p03
 
 Summarised, the list of changes is the following:
 
 config                                           config-V09-02-09
 ------
-- Added G4OPTDEBUG option for hybrid optimized-debug build also to
+- Added G4OPTDEBUG option for hybrid optimized-debug build also to          (oo)
   Darwin-g++ and WIN32-g++ configurations.
 
 event                                            event-V09-02-02
