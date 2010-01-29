@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticle.cc,v 1.2 2010-01-26 23:17:47 mkelsey Exp $
+// $Id: G4InuclParticle.cc,v 1.3 2010-01-29 01:39:32 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 
 #include "G4InuclParticle.hh"
@@ -31,7 +31,7 @@
 
 
 // WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
-G4InuclParticle::G4InuclParticle(const G4String& name, 
+G4InuclParticle::G4InuclParticle(const G4String& /*name*/, 
 				 G4ParticleDefinition* pd,
 				 const G4LorentzVector& mom)
   : modelId(0) {

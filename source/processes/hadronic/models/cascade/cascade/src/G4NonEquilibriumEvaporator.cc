@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.19 2010-01-26 23:17:47 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.20 2010-01-29 01:40:05 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -43,7 +43,7 @@ G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   }
 }
 
-G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* bullet,
+G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 						      G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
