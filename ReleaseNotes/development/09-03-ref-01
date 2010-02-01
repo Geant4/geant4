@@ -1,0 +1,136 @@
+
+                       geant4-09-03-ref-01
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Beta version of G4PenelopeOscillator* classes to manage multi-element atomic
+   oscillators used in Penelope Compton and Ionisation models. Compliant with
+   Penelope-2008.
+ o Added pion elastic in CHIPS and updated proton elastic.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+(o)  Fixes included in release 9.2.p03
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-03-00
+------
+- binmake.gmk: removed extra space characters in definition of TARGOBJEXT,   (o)
+  fixing issue with target for main() not being rebuilt according to
+  dependencies change. Addressing problem report #1098. 
+
+global                                           global-V09-03-00
+------
+- Modified G4PhysicsVector to own a pointer to G4PVDataVector, instead having
+  it by value. First attempt to separate RO and RW objects for thread-safety. 
+
+materials                                        materials-V09-03-00
+---------
+- G4OpticalSurface: removed left-over debug test function OverWrite() from
+  class declaration, also causing unnecessary dependency on G4ios.
+
+physics_lists                                    phys-lists-V09-03-00
+-------------
+- QBBC: fixed hadron inelastic configuration; instantiated G4PreCompoundModel
+  and its pointer propagated to all high energy models.
+  Use CHIPS for anti-protons to fix crash in FTF.
+
+processes/cuts                                   procuts-V09-03-00
+--------------
+- Fix in G4ProductionCutTable to solve problem with zero range for protons.
+
+processes/electromagnetic/lowenergy              emlowen-V09-03-02
+-----------------------------------
+- Beta version of G4PenelopeOscillator* classes to manage multi-element atomic
+  oscillators used in Penelope Compton and Ionisation models. Compliant with
+  Penelope-2008.
+- Added dummy method ComputeCrossSectionPerAtom() in G4PenelopeRayleighModel, 
+  never inkoved in tracking and issuing a warning if users access it via
+  G4EmCalculator.
+- Improved way of testing material in Geant4-DNA models.
+
+processes/electromagnetic/utils                  emutils-V09-03-00
+-------------------------------
+- G4VEmProcess: added protection against negative cross section.             (o)
+- G4VEnergyLossProcess: added protection against negative cross section, and
+  improved logic in RetrieveTable() method.
+
+processes/hadronic
+------------------
+- models/chiral_inv_phase_space (hadr-chips-V09-03-02)
+  o Updated proton elastic and CHIPS parameters.
+  o Added pion elastic and fixed a bug in CHIPS fragmentation.
+  o Clean-up and fixed compilation warnings (hadr-chips-proc-V09-03-02).
+- models/coherent_elastic (hadr-cohe-V09-03-01)
+  o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
+    G4QElasticCrossSection; fixed initialization problem for
+    G4QNeutronElasticCrossSection.
+
+processes/optical                                op-V09-03-00
+-----------------
+- Fixed problem of initialization of 'PropertyPointers', now set to NULL at
+  the start of PostStepDoIt(). Addresses problem report #1094.
+
+visualization/gMocren                            gMocren-V09-03-00
+---------------------
+- Fixed file-I/O bug in G4GMocrenFileViewer and G4GMocrenIO.
+- G4GMocrenFileSceneHandler: fix to allow for porting on C++0x Standard:
+  made explicit with static_cast conversions from double to float. Also use
+  G4 types in consistent way. Removed debug code with printout. 
+
+examples                                         examples-V09-03-00
+--------
+- Updated reference outputs.
+- Corrected GNUmakefiles whereever necessary for default setting of G4INSTALL.
+- extended/electromagnetic/TestEm3 (testem3-V09-03-00)
+  o Added PhysListEmStandardGS and PhysListEmStandardWVI.
+  o Added printout of mean number of gamma, e-, e+.
+- extended/hadronic/Hadr01 (exhadr01-V09-03-01)
+  o Fixed problem of counting of particles leaked from the target.
+  o When PhysList defined via PHYSLIST environment variable still
+    make local PhysList messenger available to avoid crash in old macro.
+- extended/medical/electronScattering (electronScattering-V09-03-00)
+  o Added PhysListEmStandardWVI.
+  o RunAction::PrintFluence(): print unormalized fluence per event.
+- extended/medical/electronScattering2 (exampleES2-V09-02-01)
+  o New example for simulation of precision electron scattering benchmark
+    with minimal user code.
+- extended/medical/fanoCavity (fano-V09-03-00)
+- extended/medical/fanoCavity2 (fano2-V09-03-01)
+  o Introduced PhysListEmStandard_option2 (UrbanMscModel93 without options)
+    and PhysListEmStandard_WVI (using WentzelVIModel).
+  o Added to run01.mac all physics lists choice.
+- extended/optical/wls (WLS-V09-03-00)
+  o Added missing initialization macro init.in.
+- extended/persistency/gdml/G01 (G01-V09-03-01)
+  o Added printout of associated auxiliary information value.
+  o Corrected typo in replicated.gdml file.
+- extended/visualization/userVisAction (exam-ext-vis-UVA-V09-03-00)
+  o Introduced G4UIExecutive.
+- novice/N02 (exampleN02-V09-03-00)
+  o Correction in DetectorConstruction::SetMagField() to invoke
+    fpMagField->SetMagFieldValue().
+- novice/N03 (exampleN03-V09-03-00)
+  o visTutor: corrected exN03Vis14.mac and exN03Vis15.mac to enable
+    visualization of tracks and removed redundancy; updated gui.mac
+    adding missing macros and correcting order; corrected comments
+    wherever necessary.
+
+tests                                            tests-V09-03-00
+-----
+- Updated reference outputs and tools.
+- Corrected GNUmakefiles whereever necessary for default setting of G4INSTALL.
+- test19 (test19-V09-03-00)
+  o Added elastic cross-sections test.
+- test30 (test30-V09-03-01)
+  o Added control on statistics and activation of generators via environment 
+    variables and SetModels.csh script.
+  o Added options FermiBreakUp and default/GEM evaporation; propagate
+    pre-compound, deexcitation options to all generators using native
+    pre-compound model.
+- test39 (test39-V09-03-00)
+  o Separated test for G4QProtonElCS and G4QNeutronElCS, and made more
+    compact by reducing t-table.
