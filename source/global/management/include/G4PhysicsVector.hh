@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.26 2009-12-21 22:51:54 kurasige Exp $
+// $Id: G4PhysicsVector.hh,v 1.27 2010-02-01 14:17:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,7 +65,8 @@
 #include <fstream>
 
 #include "G4PhysicsVectorType.hh"
-#include "G4PVDataVector.hh"
+
+typedef std::vector<G4double> G4PVDataVector;
 
 class G4PhysicsVector 
 {
@@ -91,22 +92,22 @@ class G4PhysicsVector
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
 
-    G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
          // Obolete method to get value, isOutRange is not used anymore. 
          // This method is kept for the compatibility reason.
 
     G4int operator==(const G4PhysicsVector &right) const ;
     G4int operator!=(const G4PhysicsVector &right) const ;
 
-    G4double operator[](const size_t binNumber) const ;
+    inline G4double operator[](const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will not be done. 
 
-    G4double operator()(const size_t binNumber) const ;
+    inline G4double operator()(const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
          // of the dataVector. The boundary check will not be Done. 
 
-    void PutValue(size_t index, G4double theValue);
+    inline void PutValue(size_t index, G4double theValue);
          // Put 'theValue' into the bin specified by 'binNumber'.
          // Take note that the 'index' starts from '0'.
          // To fill the vector, you have beforehand to construct a vector
@@ -121,7 +122,7 @@ class G4PhysicsVector
          // for example after Retrieve a vector from an external file to 
          // convert values into Geant4 units
 
-    G4double Energy(size_t index) const;
+    inline G4double Energy(size_t index) const;
          // Returns simply the value in the energy specified by 'index'
          // of the energy vector. The boundary check will not be done. 
          // Use this function when you fill physis vector by PutValue().
@@ -133,7 +134,7 @@ class G4PhysicsVector
          // This value should be defined before the call.
          // The boundary check will not be done.
 
-    size_t GetVectorLength() const;
+    inline size_t GetVectorLength() const;
          // Get the toal length (bin number) of the vector. 
 
     void FillSecondDerivatives();
@@ -153,20 +154,20 @@ class G4PhysicsVector
          // Warning: this method should be called when the vector 
          // is already filled
 
-    G4bool IsFilledVectorExist() const;
+    inline G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
-    void PutComment(const G4String& theComment);
+    inline void PutComment(const G4String& theComment);
          // Put a comment to the G4PhysicsVector. This may help to check
          // whether your are accessing to the one you want. 
 
-    const G4String& GetComment() const;
+    inline const G4String& GetComment() const;
          // Retrieve the comment of the G4PhysicsVector.
 
-    G4PhysicsVectorType GetType() const;
+    inline G4PhysicsVectorType GetType() const;
          // Get physics vector type
   
-    void SetSpline(G4bool);
+    inline void SetSpline(G4bool);
          // Activate/deactivate Spline interpolation.
 
     virtual G4bool Store(std::ofstream& fOut, G4bool ascii=false);
@@ -185,6 +186,7 @@ class G4PhysicsVector
          // Internal methods for allowing copy of objects
 
   protected:
+
     G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
 
     G4double edgeMin;           // Energy of first point
@@ -209,7 +211,7 @@ class G4PhysicsVector
     G4double SplineInterpolation();
          // Spline interpolation function
 
-    void Interpolation();
+    inline void Interpolation();
 
     G4String   comment;
     G4bool     useSpline;
