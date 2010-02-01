@@ -1,4 +1,4 @@
-$Id: History,v 1.236 2009-12-21 22:51:54 kurasige Exp $
+$Id: History,v 1.237 2010-02-01 14:17:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 01, 2010  G.Cosmo (global-V09-03-01)
+- Restored G4PVDataVector as typedef for optimisation; removed class files.
+
 Dec 22, 2009  H.Kurashige (global-V09-03-00)
-- Modify PhysicsVector to use a pointer to G4PVDataVector
+- Modified G4PhysicsVector to use pointers to G4PVDataVector instead of
+  holding it as static data.
 
 Dec 07, 2009  L.Pandola, V.Ivanchenko (global-V09-02-12)
 - G4PhysicsVector: fixed initialisation of 'lastEnergy' to -DBL_MAX
