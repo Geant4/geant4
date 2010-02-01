@@ -110,12 +110,6 @@ List of fixes included in this public patch since the public release 9.2.p02:
 
   o Standard Electromagnetic Processes:
     ----------------------------------
-    + Standard:
-      o G4UniversalFluctuation: fix in width correction, get rid of dependence
-        of the correction on energy deposition at previous steps. Addresses T2K
-        report.
-      o G4ionIonisation: set 'linLossLimit' to 0.02. Moved virtual inline
-        methods to source.
     + Utils:
       o G4ionEffectiveCharge: added protection to minimal kinetic energy.
       o G4EmCorrections: fixed computation of correction to ion stopping powers.

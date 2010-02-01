@@ -296,7 +296,7 @@ processes/electromagnetic/standard               emstand-V09-02-36
 - G4GoudsmitSaundersonMscModel: tuned small angle theta distributions
   assuming the case of lambdan<1 as single scattering regime; tuned theta
   sampling for theta below the screening angle.
-- Set 'linLossLimit'to 0.02 in G4ionIonisation.                              (o)
+- Set 'linLossLimit'to 0.02 in G4ionIonisation.
 
 processes/electromagnetic/utils                  emutils-V09-02-24
 -------------------------------
