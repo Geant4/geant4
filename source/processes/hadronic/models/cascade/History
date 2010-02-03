@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 Feb 2010 Dennis Wright (hadr-casc-V09-03-05)
+-----------------------------------------------
+- replace all uses of bindingEnergy (local Bertini method) with the
+  Geant4 standard G4NucleiProperties::GetBindingEnergy(A,Z)
+  files modified:
+    G4IntraNucleiCascader.cc
+    G4InuclCollider.cc
+    G4NucleiModel.cc
+    G4EquilibriumEvaporator.cc
+    G4NonEquilibriumEvaporator.cc
+    G4Fissioner.cc
+- note that G4Fissioner still uses Bertini method bindingEnergyAsymptotic
+  
 28 Jan 2010 Dennis Wright (hadr-casc-V09-03-04)
 -----------------------------------------------
 - fix unused variable warnings in G4InuclParticle.hh, .cc and
