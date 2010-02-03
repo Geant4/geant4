@@ -157,6 +157,3 @@ tests                                            tests-V09-03-00
   o Added options FermiBreakUp and default/GEM evaporation; propagate
     pre-compound, deexcitation options to all generators using native
     pre-compound model.
-- test39 (test39-V09-03-00)
-  o Separated test for G4QProtonElCS and G4QNeutronElCS, and made more
-    compact by reducing t-table.
