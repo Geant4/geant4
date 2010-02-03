@@ -60,14 +60,42 @@ processes/electromagnetic/utils                  emutils-V09-03-00
 
 processes/hadronic
 ------------------
-- models/chiral_inv_phase_space (hadr-chips-V09-03-02)
-  o Updated proton elastic and CHIPS parameters.
-  o Added pion elastic and fixed a bug in CHIPS fragmentation.
-  o Clean-up and fixed compilation warnings (hadr-chips-proc-V09-03-02).
-- models/coherent_elastic (hadr-cohe-V09-03-01)
-  o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
-    G4QElasticCrossSection; fixed initialization problem for
-    G4QNeutronElasticCrossSection.
+- models/cascade (hadr-casc-V09-03-05)
+  o Replaced all uses of bindingEnergy() (local Bertini method) with the
+    Geant4 standard G4NucleiProperties::GetBindingEnergy(A,Z).
+    G4Fissioner still uses Bertini method bindingEnergyAsymptotic().
+  o Replaced usage of std::vector<> with G4ThreeVector where applicable
+    in G4CascadParticle and G4NucleiModel.
+  o Removed all use of G4CascadeMomentum (a simple container with a C-style
+    four-element array) with G4LorentzVector.
+  o G4InteractionCase: minor fix in initialisation in constructor to
+    allow for porting on C++0x Standard.
+  o G4CascadeMomentum: replaced use of static G4LV variables within functions
+    with mutable data member of object; this does introduce more memory
+    thrashing, but the plan is to get rid of the whole thing anyway.
+    Improve implicit casting and add assignment from G4LV.
+    Added interface to create from and cast to G4LorentzVector; provides a
+    transition to eliminating this class entirely.
+  o G4LorentzConverter: changed function signatures to accept G4LV as input,
+    using implicit cast to convert existing G4CascadeMomentum argument
+    passing. Simplified ::rotate() functions to use G4LV and
+    G4ThreeVector operations rather than array index gymnastics.
+    Moved some inline function implementations source.
+  o G4ParticleLargerBeta, G4ParticleLargerEkin: added additional operator()
+    which takes pointers (for future mods to reduce ctor/dtor cycling), and
+    fix ordering bug in beta sorting. Added debugging printout togged with
+    preprocessor flag.
+  o G4InuclParticle, G4InuclNuclei, G4InuclElementaryParticle: rewrite to
+    carry G4DynamicParticle data member, and to instantiate particle
+    properties via G4ParticleDefinition subclasses. First stage in eventually
+    use directly G4DynamicParticle for internal propagation.
+    Consistency of physics results verified.
+  o G4Diproton, G4Dineutron, G4UnboundPN: new G4ParticleDefinition
+    subclasses, which implement the Bertini-specific dibaryon states.
+    These are not used anywhere as yet, but will be used in future
+    modifications to the G4InuclParticle subclasses.
+  o Removed class G4BertiniNuclearModel, redundant with the G4NuclearModel
+    class, and not used anywhere.
 
 processes/optical                                op-V09-03-00
 -----------------
@@ -123,8 +151,6 @@ tests                                            tests-V09-03-00
 -----
 - Updated reference outputs and tools.
 - Corrected GNUmakefiles whereever necessary for default setting of G4INSTALL.
-- test19 (test19-V09-03-00)
-  o Added elastic cross-sections test.
 - test30 (test30-V09-03-01)
   o Added control on statistics and activation of generators via environment 
     variables and SetModels.csh script.
