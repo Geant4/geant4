@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.21 2010-01-26 23:17:47 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.22 2010-02-03 00:50:46 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,9 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -378,7 +381,8 @@ G4bool G4InuclCollider::explosion(G4InuclNuclei* target) const {
   if (a > a_cut) {
     explo = false;
   } else {
-    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
+    //    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
+    if (eexs < be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)) ) explo = false;
   };   
 
   return explo;

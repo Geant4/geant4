@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.35 2010-01-26 23:17:47 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.36 2010-02-03 00:49:57 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +33,8 @@
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
 
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -77,10 +79,11 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   protonNumberCurrent = protonNumber;
 
 // Set binding energies
-  G4double dm = bindingEnergy(a, z);
+//  G4double dm = bindingEnergy(a, z);
+  G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
 
-  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a - 1, z - 1) - dm)); // for P
-  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a - 1, z    ) - dm)); // for N
+  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z-1)) - dm)); // for P
+  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z)) - dm)); // for N
 
   G4double CU = cuu * std::pow(a, one_third);
   G4double D1 = CU / AU;
@@ -1008,8 +1011,8 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
   if (ab < max_a_for_cascad) {
 
-    G4double benb = 0.001 * bindingEnergy(ab, zb) / ab;
-    G4double bent = 0.001 * bindingEnergy(at, zt) / at;
+    G4double benb = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(ab), G4lrint(zb)) / ab;
+    G4double bent = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(at), G4lrint(zt)) / at;
     G4double ben = benb < bent ? bent : benb;
 
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {

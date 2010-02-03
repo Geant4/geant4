@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.20 2010-01-29 01:40:05 dennis Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.21 2010-02-03 00:49:43 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,6 +34,9 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   : verboseLevel(1) {
@@ -129,9 +132,12 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 	  G4double CPA1 = parms.second;
 	  G4double VP = coul_coeff * Z * AK1 / (std::pow(A - 1.0, one_third) + 1.0) /
 	    (1.0 + EEXS / E0);
-	  G4double DM1 = bindingEnergy(A, Z);
-	  G4double BN = DM1 - bindingEnergy(A - 1.0, Z);
-	  G4double BP = DM1 - bindingEnergy(A - 1.0, Z - 1.0);
+	  //	  G4double DM1 = bindingEnergy(A, Z);
+	  //	  G4double BN = DM1 - bindingEnergy(A - 1.0, Z);
+	  //	  G4double BP = DM1 - bindingEnergy(A - 1.0, Z - 1.0);
+          G4double DM1 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
+	  G4double BN = DM1 - G4NucleiProperties::GetBindingEnergy(G4lrint(A-1.0), G4lrint(Z));
+	  G4double BP = DM1 - G4NucleiProperties::GetBindingEnergy(G4lrint(A-1.0), G4lrint(Z-1.0));
 	  G4double EMN = EEXS - BN;
 	  G4double EMP = EEXS - BP - VP * A / (A - 1.0);
 	  G4double ESP = 0.0;

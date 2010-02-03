@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.26 2010-01-26 23:17:47 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.27 2010-02-03 00:49:24 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,6 +36,9 @@
 #include "G4ParticleLargerEkin.hh"
 #include "G4NucleiModel.hh"
 #include "G4CascadParticle.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+
 #include "Randomize.hh"
 #include <algorithm>
 
@@ -371,7 +374,8 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 
   if (eexs > eexs_cut) {
     G4double eexs_max0z = 1000.0 * ein / ediv_cut;
-    G4double dm = bindingEnergy(a, z);
+    //    G4double dm = bindingEnergy(a, z);
+    G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
     G4double eexs_max = eexs_max0z > reason_cut*dm ? eexs_max0z : reason_cut * dm;
 
     if(eexs < eexs_max) good = true;
