@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.17 2010-01-26 23:17:47 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.18 2010-02-03 00:47:55 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -36,7 +36,7 @@
 const G4double G4LorentzConvertor::small = 1.0e-10;
 
 G4LorentzConvertor::G4LorentzConvertor() 
-  : verboseLevel(4), degenerated(false) {
+  : verboseLevel(0), degenerated(false) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
