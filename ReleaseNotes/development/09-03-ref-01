@@ -7,7 +7,7 @@ Some of the development/fixes included since the last development tag are:
  o Beta version of G4PenelopeOscillator* classes to manage multi-element atomic
    oscillators used in Penelope Compton and Ionisation models. Compliant with
    Penelope-2008.
- o Added pion elastic in CHIPS and updated proton elastic.
+ o Code review in Bertini Cascade hadronic model.
 
 
 ---------- Reference-tag 'Release Notes' -----------
