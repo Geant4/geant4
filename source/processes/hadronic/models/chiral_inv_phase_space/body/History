@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+4-Feb-2009 M.Kosov                           (hadr-chips-body-V09-03-02) 
+-----------------------------------------------------------------------
+Fixed memory corruption in mass calculation
+
 4-Feb-2009 M.Kosov                           (hadr-chips-body-V09-03-01) 
 -----------------------------------------------------------------------
 Mass correction in G4Quasmon, and closed loop-call in G4QEnvironment

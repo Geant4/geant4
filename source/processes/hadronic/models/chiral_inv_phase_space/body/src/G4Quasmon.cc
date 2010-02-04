@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.123 2010-02-04 09:32:33 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.124 2010-02-04 17:45:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3718,6 +3718,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
     else if(thePDG==88001000) thePDG=-3312; // anti-KSI-
     else if(thePDG==89999002) thePDG=1114;  // Delta-(resonance) === bary-DECUPLET/OCTET
     else if(thePDG==90001999) thePDG=2224;  // Delta++(res)(Delta0&Delta+ a covered by n&p)
+    else if(thePDG==91000000) thePDG=3122;  // Lambda
     else if(thePDG==90999001) thePDG=3112;  // Sigma-
     else if(thePDG==91000999) thePDG=3222;  // Sigma+ (Sigma0 iz covered by Lambda)
     else if(thePDG==91999000) thePDG=3312;  // Ksi-
@@ -3778,7 +3779,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 #ifdef pdebug
     G4cout<<"G4Quasm::FillHadrVect:Nucl="<<qNuc<<",nPDG="<<thePDG<<",GSM="<<GSMass<<G4endl;
 #endif
-    if((nN<0||nZ<0||nS<0)&&bA>0)             // => "Anti-strangeness or ISOBAR" case
+    if((nN<0 || nZ<0 || nS<0) && bA>0)       // => "Anti-strangeness or ISOBAR" case
     {
       G4double m1=mPi;                       // Prototypes for the nZ<0 case
       G4int  PDG1=-211;
@@ -3946,7 +3947,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
           barM  =mLamb;
           resM  =lResM;
         }
-        else if(thePDG!=90004004&&fragMas>GSMass)// If it's not Be8 decay in gamma
+        else if(thePDG!=90004004 && fragMas>GSMass)// If it's not Be8 decay in gamma
         {
           barPDG=22;
           resPDG=thePDG;
@@ -3986,7 +3987,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         theQHadrons.push_back(qH);             // No decay  (delete equivalent)
       }
     }
-    else if (fragMas<GSMass)
+    else if (fragMas < GSMass)                 // Approximate equality was already checked
     {
       G4cerr<<"***G4Quasmon::FillHV:M="<<fragMas<<">GSM="<<GSMass<<"(PDG="<<thePDG<<"),d="
             <<fragMas-GSMass<<", NZS="<<nN<<","<<nZ<<","<<nS<<G4endl;
@@ -4511,7 +4512,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
 #ifdef pdebug
       //G4bool pPrint = abs(cPDG)%10<3 && cPDG<80000000 ||cPDG==90001000||cPDG==90000001||
       //  cPDG==90000002||cPDG==90001001||cPDG==90001002||cPDG==90002001||cPDG==90002002;
-      G4bool pPrint = cPDG==2212 || cPDG==2112 ||cPDG==90001000||cPDG==90000001;
+      //G4bool pPrint = cPDG==2212 || cPDG==2112 ||cPDG==90001000||cPDG==90000001;
+      G4bool pPrint = false;
       if(pPrint) G4cout<<"G4Q::CHP:==****==>>>c="<<cPDG<<",dUD="<<dUD<<",pos="<<pos<<",eA="
                        <<envA<<",tM="<<totMass<<" > tmpTM+frM="<<tmpTM+frM<<G4endl;
 #endif
