@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2009-11-04 05:39:42 kurasige Exp $
+$Id: History,v 1.7 2010-02-04 15:51:31 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+4 Feb 2010,  Mikhail Kosov (test21-V09-03-00)
+- Use separate MultipleScattering for e, Mu, and h=hadrons
+- Updated README (run instruction)
+
 20 October 2009,  Hisaya Kurashige (test21-V09-02-01)
 - Use /run/setCut instead of /run/particle/setCut
  

@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2008-08-25 19:06:09 dennis Exp $
+$Id: README,v 1.2 2010-02-04 15:51:31 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ Type of test:  run to completion
 
 Output:        run log
 
-
+How to run:
+> make
+> make -f GNUmakefile_hadronic_exerciser
+> rehash
+> test21_hadronic_exerciser > my.input
+> test21 my.input
 
 
