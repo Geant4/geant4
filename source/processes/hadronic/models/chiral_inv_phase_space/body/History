@@ -16,6 +16,14 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+4-Feb-2009 M.Kosov                           (hadr-chips-body-V09-03-01) 
+-----------------------------------------------------------------------
+Mass correction in G4Quasmon, and closed loop-call in G4QEnvironment
+
+?-Jan-2009 M.Kosov                           (hadr-chips-body-V09-03-00) 
+-----------------------------------------------------------------------
+?
+
 26-Jan-2010 M.Kosov                            (hadr-chips-V09-03-02)
 -----------------------------------------------------------------------
 Mutual tag: cleaning up compilation warning in G4QEnvironment

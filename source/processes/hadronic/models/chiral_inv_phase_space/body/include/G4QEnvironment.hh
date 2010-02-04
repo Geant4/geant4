@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.36 2009-11-16 18:15:01 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.37 2010-02-04 09:32:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -88,7 +88,7 @@ private:
   void             InitClustersVector(G4int maxC, G4int maxA);//Init.NucClust's for 1st int
   void             CleanUp();               // Makes theEnvironment=vacuum & kill Quasmons
   void             PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP);
-  void             EvaporateResidual(G4QHadron* h);// Final Evaporation of a nucl. fragment
+  void             EvaporateResidual(G4QHadron* h, G4bool f=true);// Evaporate NuclearFragm
   void             DecayBaryon(G4QHadron* dB);     // Decay baryon (gamma+N or Delta->N+Pi)
   void             DecayAntistrange(G4QHadron* aS);// Decay Antistrange nucleus
   G4bool           CheckGroundState(G4Quasmon* quasm,G4bool corFlag=false);//as G4Q for QHV
