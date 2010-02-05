@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.25 2010-01-26 07:40:38 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.26 2010-02-05 11:08:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,7 +37,7 @@
 // Author:         V.Lara
 //
 // Modified:  
-// 15.01.2010 J.M.Quesada added protection against unphysical values of parameter an 
+// 15.01.2010 J.M.Quesada  added protection against unphysical values of parameter an 
 // 19.01.2010 V.Ivanchenko simplified computation of parameter an, sample cosTheta 
 //                         instead of theta; protect all calls to sqrt 
 //
@@ -48,9 +48,11 @@
 #include "G4PreCompoundEmissionFactory.hh"
 #include "G4HETCEmissionFactory.hh"
 
-const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompoundEmission &)
+const G4PreCompoundEmission & 
+G4PreCompoundEmission::operator=(const G4PreCompoundEmission &)
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmission::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__,
+			    "G4PreCompoundEmission::operator= meant to not be accessable");
   return *this;
 }
 
@@ -169,7 +171,8 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   // check that Excitation energy is >= 0
   G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
   if (anU < 0.0) {
-    throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+    throw G4HadronicException(__FILE__, __LINE__, 
+			      "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
   }
      
   // Update nucleus parameters:
