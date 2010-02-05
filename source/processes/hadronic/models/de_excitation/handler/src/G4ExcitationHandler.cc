@@ -23,23 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ExcitationHandler.cc,v 1.27 2010-02-05 11:25:14 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
 //
 //
-// Modif (September 2009) by J. M. Quesada: 
-// according to Igor Pshenichnov, SMM will be applied (just in case) only once .
-//
-// Modif (September 2008) by J. M. Quesada. External choices have been added for :
-//                   -inverse cross section option (default OPTxs=3)
-//                   -superimposed Coulomb barrier (if useSICB is set true, by default it is false) 
-//
-// Modif (24 Jul 2008) by M. A. Cortes Giraldo:
-//      -Max Z,A for Fermi Break-Up turns to 9,17 by default
-//      -BreakItUp() reorganised and bug in Evaporation loop fixed
-//      -Transform() optimised
-// Modif (30 June 1998) by V. Lara:
+// Modified:
+// (30 June 1998) by V. Lara:
 //      -Modified the Transform method for use G4ParticleTable and 
 //       therefore G4IonTable. It makes possible to convert all kind 
 //       of fragments (G4Fragment) produced in deexcitation to 
@@ -48,6 +40,17 @@
 //              Evaporation: G4Evaporation
 //              MultiFragmentation: G4StatMF 
 //              Fermi Breakup model: G4FermiBreakUp
+// (24 Jul 2008) by M. A. Cortes Giraldo:
+//      -Max Z,A for Fermi Break-Up turns to 9,17 by default
+//      -BreakItUp() reorganised and bug in Evaporation loop fixed
+//      -Transform() optimised
+// (September 2008) by J. M. Quesada. External choices have been added for :
+//      -inverse cross section option (default OPTxs=3)
+//      -superimposed Coulomb barrier (if useSICB is set true, by default it is false) 
+// (September 2009) by J. M. Quesada: 
+//      -according to Igor Pshenichnov, SMM will be applied (just in case) only once.
+// (27 Nov 2009) by V.Ivanchenko: 
+//      -cleanup the logic, reduce number internal vectors, fixed memory leak.
 //
 
 #include "G4ExcitationHandler.hh"
@@ -61,9 +64,9 @@
 G4ExcitationHandler::G4ExcitationHandler():
   // JMQ 160909 Fermi BreakUp & MultiFrag are on by default 
   // This is needed for activation of such models when G4BinaryLightIonReaction is used
-  //  since no interface (for external activation via macro input file) is still available in this case.
-  //maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
-  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
+  // since no interface (for external activation via macro input file) is still available.
+  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
+  //maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
 {                                                                          

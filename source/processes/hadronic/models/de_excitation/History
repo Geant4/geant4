@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 February 2009 Vladimir Ivanchenko (hadr-deex-V09-03-01)
+----------------------------------------------------------
+- G4ExcitationHandler - activate FermiBreakUp and Multi-Fragmentation models
+
 18 January 2010  Vladimir Ivanchenko (hadr-deex-V09-03-00)
 ----------------------------------------------------------
 - Move 9.3 version to the head of cvs for following files: G4FissionBarrier.hh,
