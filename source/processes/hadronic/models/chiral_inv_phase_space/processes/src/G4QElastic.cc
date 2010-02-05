@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.4 2010-01-27 14:28:11 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.5 2010-02-05 09:48:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -92,10 +92,19 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #endif
   G4int pPDG=0;
 
-  if     (incidentParticleDefinition == G4Proton::Proton()  )     pPDG=2212;
-  else if(incidentParticleDefinition == G4Neutron::Neutron())     pPDG=2112;
-  else if(incidentParticleDefinition == G4PionPlus::PionPlus())   pPDG= 211;
-  else if(incidentParticleDefinition == G4PionMinus::PionMinus()) pPDG=-211;
+  if     (incidentParticleDefinition ==          G4Proton::Proton()         ) pPDG=2212;
+  else if(incidentParticleDefinition ==         G4Neutron::Neutron()        ) pPDG=2112;
+  else if(incidentParticleDefinition ==        G4PionPlus::PionPlus()       ) pPDG= 211;
+  else if(incidentParticleDefinition ==       G4PionMinus::PionMinus()      ) pPDG=-211;
+  else if(incidentParticleDefinition ==     G4AntiNeutron::AntiNeutron()    ) pPDG=-2112;
+  else if(incidentParticleDefinition ==      G4AntiProton::AntiProton()     ) pPDG=-2212;
+  else if(incidentParticleDefinition ==      G4AntiLambda::AntiLambda()     ) pPDG=-3122;
+  else if(incidentParticleDefinition ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) pPDG=-3222;
+  else if(incidentParticleDefinition ==  G4AntiSigmaMinus::AntiSigmaMinus() ) pPDG=-3112;
+  else if(incidentParticleDefinition ==   G4AntiSigmaZero::AntiSigmaZero()  ) pPDG=-3212;
+  else if(incidentParticleDefinition ==     G4AntiXiMinus::AntiXiMinus()    ) pPDG=-3312;
+  else if(incidentParticleDefinition ==      G4AntiXiZero::AntiXiZero()     ) pPDG=-3322;
+  else if(incidentParticleDefinition ==  G4AntiOmegaMinus::AntiOmegaMinus() ) pPDG=-3334;
   else G4cout<<"G4QElastic::GetMeanFreePath:particle's not implemented in CHIPSel"<<G4endl;
 
   G4VQCrossSection* CSmanager=0;
@@ -103,6 +112,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
   else if(pPDG==2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
   else if(pPDG== 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
   else if(pPDG==-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
+  else if(pPDG>-3333&&pPDG<-1110) CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
   else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<pPDG<<G4endl;
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material
@@ -325,8 +335,15 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   //else if (particle ==         G4XiMinus::XiMinus()        ) projPDG= 3312;
   //else if (particle ==          G4XiZero::XiZero()         ) projPDG= 3322;
   //else if (particle ==      G4OmegaMinus::OmegaMinus()     ) projPDG= 3334;
-  //else if (particle ==     G4AntiNeutron::AntiNeutron()    ) projPDG=-2112;
-  //else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
+  else if (particle ==     G4AntiNeutron::AntiNeutron()    ) projPDG=-2112;
+  else if (particle ==      G4AntiProton::AntiProton()     ) projPDG=-2212;
+  else if (particle ==      G4AntiLambda::AntiLambda()     ) projPDG=-3122;
+  else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) projPDG=-3222;
+  else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) projPDG=-3112;
+  else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) projPDG=-3212;
+  else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) projPDG=-3312;
+  else if (particle ==      G4AntiXiZero::AntiXiZero()     ) projPDG=-3322;
+  else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) projPDG=-3334;
 #ifdef debug
   G4int prPDG=particle->GetPDGEncoding();
   G4cout<<"G4QElastic::PostStepDoIt: projPDG="<<projPDG<<", stPDG="<<prPDG<<G4endl;
@@ -424,7 +441,9 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   if     (projPDG==2212) CSmanager=G4QProtonElasticCrossSection::GetPointer();
   else if(projPDG==2112) CSmanager=G4QNeutronElasticCrossSection::GetPointer();  
   else if(projPDG== 211) CSmanager=G4QPionPlusElasticCrossSection::GetPointer();  
-  else if(projPDG==-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();  
+  else if(projPDG==-211) CSmanager=G4QPionMinusElasticCrossSection::GetPointer();
+  else if(projPDG>-3333 && projPDG<-1110)
+                         CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
   else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<projPDG<<G4endl;
 #ifdef debug
   G4cout<<"G4QElas::PSDI:false,P="<<Momentum<<",Z="<<Z<<",N="<<N<<",PDG="<<projPDG<<G4endl;
@@ -554,12 +573,14 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
   static G4VQCrossSection* NCSmanager;
   static G4VQCrossSection* PiPCSmanager;
   static G4VQCrossSection* PiMCSmanager;
+  static G4VQCrossSection* aBaCSmanager;
   if(first)                              // Connection with a singletone
   {
     PCSmanager  =G4QProtonElasticCrossSection::GetPointer();
     NCSmanager  =G4QNeutronElasticCrossSection::GetPointer();
     PiPCSmanager=G4QPionPlusElasticCrossSection::GetPointer();
     PiMCSmanager=G4QPionMinusElasticCrossSection::GetPointer();
+    aBaCSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
     first=false;
   }
   G4double res=0.;
@@ -569,6 +590,7 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
     else if(pPDG==2112) res=NCSmanager->GetCrossSection(true, p, Z, N, pPDG);
     else if(pPDG== 211) res=PiPCSmanager->GetCrossSection(true, p, Z, N, pPDG);
     else if(pPDG==-211) res=PiMCSmanager->GetCrossSection(true, p, Z, N, pPDG);
+    else if(pPDG>-3333&&pPDG<-1110) res=aBaCSmanager->GetCrossSection(true,p,Z,N,pPDG);
     else G4cout<<"*Warning*G4QElastic::CalculateXSt: (o) wrong PDG="<<pPDG<<G4endl;
   }
   else if(!oxs && xst)                   // Calculate CrossSection & prepare differentialCS
@@ -577,6 +599,7 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
     else if(pPDG==2112) res=NCSmanager->GetCrossSection(false, p, Z, N, pPDG);
     else if(pPDG== 211) res=PiPCSmanager->GetCrossSection(false, p, Z, N, pPDG);
     else if(pPDG==-211) res=PiMCSmanager->GetCrossSection(false, p, Z, N, pPDG);
+    else if(pPDG>-3333&&pPDG<-1110) res=aBaCSmanager->GetCrossSection(false,p,Z,N,pPDG);
     else G4cout<<"*Warning*G4QElastic::CalculateXSt: (x) wrong PDG="<<pPDG<<G4endl;
     // The XS for the nucleus must be calculated the last
     init=true;
@@ -602,6 +625,11 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
     {
       if(oxs) res=PiMCSmanager->GetHMaxT(); // Calculate the max_t value
       else res=PiMCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
+    }
+    else if(pPDG>-3333 && pPDG<-1110)       // ==> AntiBaryons
+    {
+      if(oxs) res=aBaCSmanager->GetHMaxT(); // Calculate the max_t value
+      else res=aBaCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
     }
     else G4cout<<"*Warning*G4QElastic::CalculateXSt: (i) wrong PDG="<<pPDG<<G4endl;
   }

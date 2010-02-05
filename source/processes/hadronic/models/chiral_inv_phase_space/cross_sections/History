@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+5-Feb-2010 M.Kosov                             (hadr-chips-V09-03-03)
+-----------------------------------------------------------------------
+Mutual tag: accumulate bug fix and AntiBaryonElastic implementation
+
 25-Jan-2010 M.Kosov                            (hadr-chips-cs-V09-03-01)
 -----------------------------------------------------------------------
 Correction for Silver in low energy neutron-nuclear (bug fix)

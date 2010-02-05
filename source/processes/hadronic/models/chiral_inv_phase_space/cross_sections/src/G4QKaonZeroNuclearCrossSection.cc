@@ -75,7 +75,7 @@ G4double G4QKaonZeroNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pM
 {
 #ifdef debug
   G4cout<<"G4QKZCS::GetCS:>>> f="<<fCS<<", p="<<pMom<<", Z="<<tgZ<<"("<<lastZ<<") ,N="<<tgN
-        <<"("<<lastN<<"),PDG=2212, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
+        <<"("<<lastN<<"), PDG=130/310, thresh="<<lastTH<<",Sz="<<colN.size()<<G4endl;
 #endif
   if(PDG!=130 && PDG!=310 && PDG!=311 && PDG!=-311)
                  G4cout<<"-Warning-G4QKaonZeroCS::GetCS:***Not a K0***, PDG="<<PDG<<G4endl;

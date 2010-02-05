@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPionMinusElasticCrossSection.cc,v 1.1 2010-01-22 17:02:48 mkossov Exp $
+// $Id: G4QPionMinusElasticCrossSection.cc,v 1.2 2010-02-05 09:48:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -974,11 +974,11 @@ G4double G4QPionMinusElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G
   G4double p4=p3*p;
   if ( tgZ == 1 && tgN == 0 ) // PiMin+P
   {
-    G4double dl1=lp+lastPAR[0]; // lr
-    G4double dl2=lp-lastPAR[3]; // ld
-    G4double dl3=lp+lastPAR[4]; // lm
-    G4double dl4=lp-lastPAR[6]; // lh
-    theSS=lastPAR[31];
+    G4double dl1=lp+lastPAR[0]; // lr 
+    G4double dl2=lp-lastPAR[3]; // ld ?
+    G4double dl3=lp+lastPAR[4]; // lm |
+    G4double dl4=lp-lastPAR[6]; // lh |
+    theSS=lastPAR[31];          //    |
     theS1=(lastPAR[9]+lastPAR[10]*dl2*dl2)/(1.+lastPAR[11]/p4/p)+
           (lastPAR[12]/p2+lastPAR[13]*p)/(p4+lastPAR[14]*sp);
     theB1=lastPAR[15]*std::pow(p,lastPAR[16])/(1.+lastPAR[17]/p3);
