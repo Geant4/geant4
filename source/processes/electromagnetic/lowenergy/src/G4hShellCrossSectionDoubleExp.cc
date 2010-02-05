@@ -40,7 +40,7 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.10 2009-06-10 13:32:36 mantero Exp $
+// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.11 2010-02-05 08:54:12 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -55,6 +55,8 @@
 G4hShellCrossSectionDoubleExp::G4hShellCrossSectionDoubleExp()
 {
   kShellData = new G4hShellCrossSectionDoubleExpData();
+
+  atomTotalCrossSection = 0.;
 }
 
 G4hShellCrossSectionDoubleExp::~G4hShellCrossSectionDoubleExp()

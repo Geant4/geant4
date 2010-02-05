@@ -1,4 +1,4 @@
-$Id: History,v 1.410 2010-01-07 18:10:56 sincerti Exp $
+$Id: History,v 1.411 2010-02-05 08:54:12 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05.02.2010, S. Incerti, tag emlowen-V09-03-03
+            Added initialisation to atomTotalCrossSection in G4hShellCrossSectionDoubleExp.cc.
 
 07.01.2010, S. Incerti, tag emlowen-V09-03-02
             Improved way of testing material in Geant4-DNA models.
