@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeMomentum.hh,v 1.3 2010-01-12 20:40:34 mkelsey Exp $
+// $Id: G4CascadeMomentum.hh,v 1.4 2010-02-06 08:51:02 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
 //
 // Class G4CascadeMomentum
 //
@@ -33,14 +34,8 @@
 // A simple wrapper class meant to replace the widespread use of
 // std::vector<double> in the cascade mode code, which causes
 // problems for performance due to excess memory allocations.
-//
-// NOTE:  The Bertini code does not pass legitimate four-vectors when
-//	  creating new particles; the new getLV() function takes an
-//	  optional mass argument (in Bertini units [GeV]) so that a
-//	  valid G4LorentzVector can be returned.
-//
+
 // Author: Peter Elmer, Princeton University                  7-Aug-2008
-// Update: Michael Kelsey, SLAC (support G4LorentzVector)     8-Jan-2010
 // --------------------------------------------------------------------
 #ifndef G4CASCADE_MOMENTUM_HH
 #define G4CASCADE_MOMENTUM_HH
@@ -48,59 +43,27 @@
 #include <cassert>
 
 #include "G4Types.hh"
-#include "G4LorentzVector.hh"
-#include "G4ThreeVector.hh"
 
 class G4CascadeMomentum
 {
   public:
+
     G4CascadeMomentum() {for (int i=0; i<4; ++i) data_[i]=0.0;}
 
-    // WARNING!  This metric is (t,x,y,z), DIFFERENT FROM HepLV!
-    G4CascadeMomentum(const G4LorentzVector& lv) {
-      setLV(lv);
-    }
-
-    G4double& operator[](int i) {
+    G4double& operator[](int i)
+    {
       assert(i>=0 && i<4);
       return data_[i];
     }
-    const G4double& operator[](int i) const {
+    const G4double& operator[](int i) const
+    {
       assert(i>=0 && i<4);
       return data_[i];
-    }
-
-    operator const G4LorentzVector&() const {
-      return getLV();			// Casting can't do mass repairs
-    }
-
-    const G4LorentzVector& getLV(G4double mass=-1.) const {
-      if (mass>=0.) lv.setVectM(get3V(),mass);		// Force input mass!
-      else lv.set(data_[1],data_[2],data_[3],data_[0]);
-      
-      return lv;
-    }
-
-    G4ThreeVector get3V() const {
-      return getLV().vect();
-    }
-
-    void setLV(const G4LorentzVector& lv) {
-      data_[0] = lv.t();		// NOTE DIFFERENT METRIC CONVENTION!
-      data_[1] = lv.x();
-      data_[2] = lv.y();
-      data_[3] = lv.z();
-    }
-
-    G4CascadeMomentum& operator=(const G4LorentzVector& lv) {
-      setLV(lv);
-      return *this;
     }
 
   private:
-    G4double data_[4];
-    mutable G4LorentzVector lv;		// Buffer for conversion operations
-};
 
+    G4double data_[4];
+};
 #endif
 
