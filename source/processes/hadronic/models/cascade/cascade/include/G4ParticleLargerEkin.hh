@@ -1,5 +1,3 @@
-#ifndef G4PARTICLE_LARGER_EKIN_HH
-#define G4PARTICLE_LARGER_EKIN_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,38 +22,26 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerEkin.hh,v 1.8 2010-01-12 20:40:34 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// Implements a *reverse* sorting: std::sort expects a less-than operator
-// which returns true if arg1<arg2.  This function returns true if arg1>=arg2.
-//
-// 20091125  M. Kelsey -- Add additional operator() which uses pointers
+#ifndef G4PARTICLE_LARGER_EKIN_HH
+#define G4PARTICLE_LARGER_EKIN_HH
 
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #include "G4InuclElementaryParticle.hh"
-
-#ifdef G4CASCADE_DEBUG_SORT
-#include "G4ios.hh"
 #endif
 
 class G4ParticleLargerEkin {
+
 public:
+  
   G4bool operator() (const G4InuclElementaryParticle& part1,
 		     const G4InuclElementaryParticle& part2) {
-#ifdef G4CASCADE_DEBUG_SORT
-    G4cout << "part1 @ " << &part1 << ": ";
-    part1.printParticle();
-    G4cout << "part2 @ " << &part2 << ": ";
-    part2.printParticle();
-    G4cout << G4endl;
-#endif
-    return (part1.getKineticEnergy() >= part2.getKineticEnergy());
-  }
+
+    return part1.getKineticEnergy() >= part2.getKineticEnergy();
+    //  return part1.getEnergy() >= part2.getEnergy();
+    //  return part1.getMomModule() >= part2.getMomModule();
+  };
  
-  G4bool operator() (const G4InuclElementaryParticle* part1,
-		     const G4InuclElementaryParticle* part2) {
-    return (part1 && part2 && operator()(*part1, *part2));
-  }
 };
 
 #endif // G4PARTICLE_LARGER_EKIN_HH

@@ -22,11 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclSpecialFunctions.hh,v 1.12 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
-
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
 
@@ -34,7 +30,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
-#include "G4LorentzVector.hh"
+#include "G4CascadeMomentum.hh"
 
 namespace G4InuclSpecialFunctions {
 
@@ -74,7 +70,7 @@ namespace G4InuclSpecialFunctions {
 
   G4double nucleiLevelDensity(G4double a);
 
-  G4LorentzVector generateWithFixedTheta(G4double ct, 
+  G4CascadeMomentum generateWithFixedTheta(G4double ct, 
 					  G4double p);
 }
 #endif

@@ -1,5 +1,3 @@
-#ifndef G4INUCL_NUCLEI_HH
-#define G4INUCL_NUCLEI_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,80 +22,147 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.hh,v 1.11 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
+#ifndef G4INUCL_NUCLEI_HH
+#define G4INUCL_NUCLEI_HH
 
+#ifndef G4INUCL_PARTICLE_HH
 #include "G4InuclParticle.hh"
+#endif
 #include "G4ExitonConfiguration.hh"
 #include "G4InuclSpecialFunctions.hh"
-
-class G4ParticleDefinition;
 
 using namespace G4InuclSpecialFunctions;
 
 class G4InuclNuclei : public G4InuclParticle {
+
 public:
-  G4InuclNuclei() : G4InuclParticle("InuclNuclei") {}
 
-  G4InuclNuclei(G4double a, G4double z)
-    : G4InuclParticle("InuclNuclei", makeDefinition(a,z)),
-      exitationEnergy(0.0) {}
+  G4InuclNuclei() {};
 
-  G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z)
-    : G4InuclParticle("InuclNuclei", makeDefinition(a,z), mom),
-      exitationEnergy(0.0) {}
+  G4InuclNuclei(G4double a, 
+		G4double z)
+    : A(a),
+      Z(z) { 
 
-  G4InuclNuclei(G4double ekin, G4double a, G4double z) 
-    : G4InuclParticle("InuclNuclei", makeDefinition(a,z), ekin),
-      exitationEnergy(0.0) {}
+    setNucleiMass();
+    exitationEnergy = 0.0; 
+  };
 
-  virtual ~G4InuclNuclei() {}
+  G4InuclNuclei(const G4CascadeMomentum& mom, 
+		G4double a, 
+		G4double z)
+    : G4InuclParticle(mom),
+      A(a),
+      Z(z) { 
 
-  // Copy and assignment constructors for use with std::vector<>
-  G4InuclNuclei(const G4InuclNuclei& right)
-    : G4InuclParticle(right), exitationEnergy(right.exitationEnergy),
-      theExitonConfiguration(right.theExitonConfiguration) {}
+    setNucleiMass();  
+    exitationEnergy = 0.0;
+  };
 
-  G4InuclNuclei& operator=(const G4InuclNuclei& right);
+  G4InuclNuclei(G4double ekin, 
+		G4double a, 
+		G4double z) 
+    : A(a), 
+    Z(z) { 
 
-  void setExitationEnergy(G4double e) { exitationEnergy = e; }
+    setNucleiMass();
+    G4CascadeMomentum mom;
+    mom[0] = ekin + nucleiMass;
+    mom[3] = std::sqrt(mom[0] * mom[0] - nucleiMass * nucleiMass);
+    G4InuclParticle::setMomentum(mom);
+    exitationEnergy = 0.0;
+  };
+	
+  void setA(G4double a) { 
+
+    A = a; 
+  };
+
+  void setZ(G4double z) { 
+
+    Z = z; 
+  };
+
+  void setExitationEnergy(G4double e) { 
+
+    exitationEnergy = e; 
+  };
+
+  void setEnergy() {
+
+    momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
+		       momentum[3] * momentum[3] + nucleiMass * nucleiMass);  
+  };
+
+  void setNucleiMass() {
+
+    nucleiMass = 0.93827 * Z + 0.93957 * (A - Z) - 0.001 * bindingEnergy(A, Z);
+  };
 
   void setExitonConfiguration(const G4ExitonConfiguration& config) { 
+
     theExitonConfiguration = config;
-  }
+  };
 
-  G4double getA() const { return getDefinition()->GetAtomicMass(); }
+  G4double getA() const { 
 
-  G4double getZ() const { return getDefinition()->GetAtomicNumber(); }
+    return A; 
+  };
 
-  G4double getExitationEnergy() const { return exitationEnergy; }
+  G4double getZ() const { 
+
+    return Z; 
+  };
+
+  G4double getExitationEnergy() const { 
+
+    return exitationEnergy; 
+  };
 
   G4double getExitationEnergyInGeV() const { 
+
     return 0.001 * exitationEnergy; 
-  }
+  };
 
-  const G4ExitonConfiguration& getExitonConfiguration() const {
+  G4ExitonConfiguration getExitonConfiguration() const {
+
     return theExitonConfiguration;
-  }
+  };
 
-  static G4double getNucleiMass(G4double a, G4double z);
+  G4double getMass() const { 
+
+    return nucleiMass; 
+  };
+
+  G4double getKineticEnergy() const { 
+
+    return momentum[0] - nucleiMass; 
+  };
+
+  G4double getNucleiMass(G4double a, 
+			 G4double z) const {
+
+    return 0.93827 * z + 0.93957 * (a - z) - 0.001 * bindingEnergy(a, z);
+  };
 
   virtual void printParticle() const {
-    G4cout << " A " << getA() << " Z " << getZ() << " mass " 
-	   << getMass() << " Eex (MeV) " << exitationEnergy << G4endl;
-    G4InuclParticle::printParticle();
-  }
 
-protected:
-  // Convert nuclear configuration to standard GEANT4 pointer
-  static G4ParticleDefinition*
-  makeDefinition(G4double a, G4double z, G4double exc=0.);
+    G4cout << " A " << A << " Z " << Z << " mass " << nucleiMass << 
+      " Eex (MeV) " << exitationEnergy << G4endl;
+
+    G4cout << " Px " << momentum[1] << " Py " << momentum[2] << " Pz " <<  
+	momentum[3] <<  " E " << momentum[0] << G4endl;
+  };
 
 private: 
+
+  G4double A;
+  G4double Z;
   G4double exitationEnergy;
+  G4double nucleiMass;
   G4ExitonConfiguration theExitonConfiguration;
+
 };        
 
 #endif // G4INUCL_NUCLEI_HH 

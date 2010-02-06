@@ -1,5 +1,3 @@
-#ifndef G4ParticleLargerBeta_h
-#define G4ParticleLargerBeta_h
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,27 +22,25 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerBeta.hh,v 1.3 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100112  M. Kelsey -- Add additional operator() which uses pointers,
-//		also fix bug which returns wrong result
+#ifndef G4ParticleLargerBeta_h
+#define G4ParticleLargerBeta_h
 
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #include "G4InuclElementaryParticle.hh"
+#endif
 
 class G4ParticleLargerBeta {
+
 public:
+  
   G4bool operator() (const G4InuclElementaryParticle& part1,
 		     const G4InuclElementaryParticle& part2) {
-    return (part1.getMomModule()/part1.getEnergy() >=
-	    part2.getMomModule()/part2.getEnergy()
-	    );
+
+    return part1.getMomModule()/part1.getEnergy() <= 
+           part2.getMomModule()/part2.getEnergy();
   }
  
-  G4bool operator() (const G4InuclElementaryParticle* part1,
-		     const G4InuclElementaryParticle* part2) {
-    return (part1 && part2 && operator()(*part1, *part2));
-  }
 };
 
-#endif	/* G4ParticleLargerBeta_h */
+#endif
