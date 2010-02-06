@@ -22,11 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundInuclCollider.cc,v 1.3 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
-
 #include "G4PreCompoundInuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"
@@ -124,11 +120,15 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
 	}
 
-	G4LorentzVector bmom;
-	bmom.setZ(convertToTargetRestFrame.getTRSMomentum());
+	G4CascadeMomentum bmom;
+
+	bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
 	G4InuclNuclei ntarget(at, zt);
+	G4CascadeMomentum tmom;
 
+	ntarget.setMomentum(tmom);
+	ntarget.setEnergy();
 	theIntraNucleiCascader->setInteractionCase(intcase);
 	 
 	G4bool bad = true;
@@ -144,7 +144,9 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 
 	    output = theIntraNucleiCascader->collide(&pbullet, &ntarget);
 	  } else {
-	    G4InuclNuclei nbullet(bmom, ab, zb);
+	    G4InuclNuclei nbullet(ab, zb);
+	    nbullet.setMomentum(bmom);
+	    nbullet.setEnergy();
 	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
 	  };   
 
@@ -187,9 +189,9 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  if (!particles.empty()) { 
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      G4LorentzVector mom = ipart->getMomentum();
+	      G4CascadeMomentum mom = ipart->getMomentum();
 
-	      if (withReflection) mom.setZ(-mom.z());
+	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      ipart->setMomentum(mom); 
 	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
@@ -204,13 +206,15 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	    nucleiIterator inuc;
 
 	    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      G4LorentzVector mom = inuc->getMomentum(); 
+	      G4CascadeMomentum mom = inuc->getMomentum(); 
 
-	      if (withReflection) mom.setZ(-mom.z());
+	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      inuc->setMomentum(mom);
+	      inuc->setEnergy(); 
 	      mom = convertToTargetRestFrame.backToTheLab(inuc->getMomentum());
 	      inuc->setMomentum(mom);
+	      inuc->setEnergy(); 
 	    };
 	  };
 	  globalOutput.addOutgoingParticles(particles);

@@ -22,10 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IBertini.cc,v 1.4 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 
 #include "G4IBertini.hh"
 #include "globals.hh"
@@ -123,22 +120,45 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // Code momentum and energy.
+  G4double px,py,pz;
+  px=aTrack.Get4Momentum().px() / GeV;
+  py=aTrack.Get4Momentum().py() / GeV;
+  pz=aTrack.Get4Momentum().pz() / GeV;
+
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
   G4LorentzRotation toZ;
   toZ.rotateZ(-projectileMomentum.phi());
   toZ.rotateY(-projectileMomentum.theta());
   G4LorentzRotation toLabFrame = toZ.inverse();
 
+  //  G4cout << "projectileMomentum             " << projectileMomentum[0] << " " << projectileMomentum[1] << " " << projectileMomentum[2] << " " << projectileMomentum[3] << G4endl;
+ 
  G4LorentzVector projectileMomentumLab = projectileMomentum*=toLabFrame;
+ //G4cout << "projectileMomentumLab          " << projectileMomentumLab[0] << " " << projectileMomentumLab[1] << " " << projectileMomentumLab[2] << " " << projectileMomentumLab[3] << G4endl;
+  //  G4cout << "projectileMomentum in lab frame" <<      projectileMomentum*=toLabFrame << G4endl;
 
-  G4LorentzVector momentumBullet;
-  momentumBullet.setZ(aTrack.Get4Momentum().z()/GeV);	// From G4 to Bertini
+  G4CascadeMomentum momentumBullet;
+  momentumBullet[0] =0.;
+  momentumBullet[1] =0;
+  momentumBullet[2] =0;
+  momentumBullet[3] =std::sqrt(px*px+py*py+pz*pz);
+
+  //  G4cout << "momentumBullet[3]" << momentumBullet[3] << G4endl;
 
   G4InuclElementaryParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
+  //  bullet->printParticle(); //AH
+
+
+
   sumEnergy = bullet->getKineticEnergy(); // In GeV 
 
-  sumBaryon += bullet->baryon();	// Returns baryon number 0, 1, or 2
+  if (bulletType == proton || bulletType == neutron || bulletType == lambda ||
+      bulletType == sigmaPlus || bulletType == sigmaZero || bulletType == sigmaMinus ||
+      bulletType == xiZero || bulletType == xiMinus) {
+
+    sumBaryon += 1;
+  } 
 
   // Set target
   G4InuclNuclei*   target  = 0;
@@ -146,13 +166,22 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
   // and outcoming particles
   G4DynamicParticle* cascadeParticle = 0;
 
+  G4CascadeMomentum targetMomentum;
+
   G4double theNucleusA = theNucleus.GetN();
 
   if ( !(G4int(theNucleusA) == 1) ) {
-    target  = new G4InuclNuclei(theNucleusA, 
+    target  = new G4InuclNuclei(targetMomentum, 
+				theNucleusA, 
 				theNucleus.GetZ());
+    target->setEnergy();
 
-    eInit = bullet->getEnergy() + target->getEnergy();
+    //    target->printParticle();//AH
+
+    const G4CascadeMomentum& bmom = bullet->getMomentum();
+    eInit = std::sqrt(bmom[0] * bmom[0]);
+    const G4CascadeMomentum& tmom = target->getMomentum();
+    eInit += std::sqrt(tmom[0] * tmom[0]);
 
     sumBaryon += theNucleusA;
 
@@ -186,7 +215,7 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 
       if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
 
-	targetH = new G4InuclElementaryParticle(1);
+	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
 	G4float cutElastic[32];
 
@@ -207,7 +236,7 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
         cutElastic[xiZero] = 1.0;
         cutElastic[xiMinus] = 1.0;
 
-	if (momentumBullet.z() > cutElastic[bulletType]) { // inelastic collision possible
+	if (momentumBullet[3] > cutElastic[bulletType]) { // inelastic collision possible
 
 	  do {   // we try to create inelastic interaction
 	    output = collider->collide(bullet, targetH);
@@ -226,7 +255,10 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 
 	sumBaryon += 1;
 
-	eInit = bullet->getEnergy() + target->getEnergy();
+	const G4CascadeMomentum& bmom = bullet->getMomentum();
+	eInit = std::sqrt(bmom[0] * bmom[0]);
+	const G4CascadeMomentum& tmom = targetH->getMomentum();
+	eInit += std::sqrt(tmom[0] * tmom[0]);
 
 	if (verboseLevel > 2) {
 	  G4cout << "Target:  " << G4endl;
@@ -290,12 +322,16 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 
     for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
-      eTot += ipart->getEnergy();
+      const G4CascadeMomentum& mom = ipart->getMomentum();
+      eTot   += std::sqrt(mom[0] * mom[0]);
 
       G4double ekin = ipart->getKineticEnergy() * GeV;
-      G4ThreeVector aMom(ipart->getMomentum().vect().unit());
+      G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+      aMom = aMom.unit();
 
-      if (ipart->baryon() ) sumBaryon -= 1;
+      if (ipart->baryon() ) {
+	sumBaryon -= 1;
+      }
 
       sumEnergy -= ekin / GeV;
 
@@ -440,9 +476,11 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
     for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
-        eTot += ifrag->getEnergy();
+	const G4CascadeMomentum& mom = ifrag->getMomentum();
+        eTot   += std::sqrt(mom[0] * mom[0]);
 
-	G4ThreeVector aMom(ifrag->getMomentum().vect().unit());
+	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+	aMom = aMom.unit();
 
 	// hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
 

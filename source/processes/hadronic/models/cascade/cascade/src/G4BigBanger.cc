@@ -22,11 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.19 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
-
 #include "G4BigBanger.hh"
 #include "G4InuclNuclei.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -54,13 +50,14 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
 
   G4CollisionOutput output;
-  G4LorentzVector totscm;
-  G4LorentzVector totlab;
+  G4CascadeMomentum totscm;
+  G4CascadeMomentum totlab;
 
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
+  if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
+  
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
-    G4LorentzVector PEX = nuclei_target->getMomentum();
+    const G4CascadeMomentum& PEX = nuclei_target->getMomentum();
     G4double EEXS = nuclei_target->getExitationEnergy();
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
@@ -69,7 +66,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
     toTheNucleiSystemRestFrame.setTarget(PEX, nuclei_target->getMass());
     toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
-    G4double etot = (EEXS - bindingEnergy(A, Z)) * GeV/MeV;
+    G4double etot = 0.001 * (EEXS - bindingEnergy(A, Z));
 
     if (verboseLevel > 2) {
       G4cout << " BigBanger: target " << G4endl;
@@ -87,31 +84,37 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
 	particles[i].printParticle();
     }
     if(!particles.empty()) { // convert back to Lab
+      //      if (verboseLevel > 2) {
+      // not used    G4CascadeMomentum totscm;
+      // not used    G4CascadeMomentum totlab;
+      //      }
       particleIterator ipart;
 
       for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 	if (verboseLevel > 2) {
-	  totscm += ipart->getMomentum();
+	  const G4CascadeMomentum& mom_scm = ipart->getMomentum();
+
+	  for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
 	}
-	G4LorentzVector mom = 
+	G4CascadeMomentum mom = 
 	  toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
 	ipart->setMomentum(mom); 
 
 	if (verboseLevel > 2) {
 	  mom = ipart->getMomentum();
-	  totlab += mom;
+	  for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
 	}
       };
       std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
       if (verboseLevel > 2) {
 	G4cout << " In SCM: total outgoing momentum " << G4endl 
-	       << " E " << totscm.e() << " px " << totscm.x()
-	       << " py " << totscm.y() << " pz " << totscm.z() << G4endl; 
+	       << " E " << totscm[0] << " px " << totscm[1]
+	       << " py " << totscm[2] << " pz " << totscm[3] << G4endl; 
 	G4cout << " In Lab: mom cons " << G4endl 
-	       << " E " << PEX.e() + 0.001 * EEXS - totlab.e()
-	       << " px " << PEX.x() - totlab.x()
-	       << " py " << PEX.y() - totlab.y() 
-	       << " pz " << PEX.z() - totlab.z() << G4endl; 
+	       << " E " << PEX[0] + 0.001 * EEXS - totlab[0] 
+	       << " px " << PEX[1] - totlab[1]
+	       << " py " << PEX[2] - totlab[2] 
+	       << " pz " << PEX[3] - totlab[3] << G4endl; 
       }
     };	
     output.addOutgoingParticles(particles);
@@ -149,14 +152,14 @@ G4BigBanger::generateBangInSCM(G4double etot,
     // abnormal situation
     G4double m = iz > 0 ? mp : mn;
     G4double pmod = std::sqrt((etot + 2.0 * m) * etot);
-    G4LorentzVector mom;
+    G4CascadeMomentum mom;
     std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
     G4double FI = randomPHI();
     G4double Pt = pmod * COS_SIN.second;
 
-    mom.setX(Pt * std::cos(FI));
-    mom.setY(Pt * std::sin(FI));
-    mom.setZ(Pt * COS_SIN.first);    
+    mom[1] = Pt * std::cos(FI);
+    mom[2] = Pt * std::sin(FI);
+    mom[3] = Pt * COS_SIN.first;    
 
     G4int knd = iz > 0 ? 1 : 2;
 
@@ -172,46 +175,50 @@ G4BigBanger::generateBangInSCM(G4double etot,
 
   while(bad && itry < itry_max) {
     itry++;
-    std::vector<G4LorentzVector> scm_momentums;
-    G4LorentzVector tot_mom;
+    std::vector<G4CascadeMomentum> scm_momentums;
+    G4CascadeMomentum tot_mom;
 
     if(ia == 2) {
-      G4LorentzVector mom;
+      G4CascadeMomentum mom;
       std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       double FI = randomPHI();
       double Pt = pmod[0] * COS_SIN.second;
 
-      mom.setX(Pt * std::cos(FI));
-      mom.setY(Pt * std::sin(FI));
-      mom.setZ(Pt * COS_SIN.first);    
+      mom[1] = Pt * std::cos(FI);
+      mom[2] = Pt * std::sin(FI);
+      mom[3] = Pt * COS_SIN.first;    
 
-      tot_mom += mom;		 
+      for(G4int j = 1; j < 4; j++) tot_mom[j] += mom[j];		 
 
       scm_momentums.push_back(mom);
 
-      G4LorentzVector mom1 = -mom;
+      G4CascadeMomentum mom1;
+
+      for(G4int i = 1; i < 4; i++) mom1[i] = - mom[i];
 
       scm_momentums.push_back(mom1);  
       bad = false;
     }
     else {
       for(G4int i = 0; i < ia - 2; i++) {
-	G4LorentzVector mom;
+	G4CascadeMomentum mom;
 	std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 	G4double FI = randomPHI();
 	G4double Pt = pmod[i] * COS_SIN.second;
 
-	mom.setX(Pt * std::cos(FI));
-	mom.setY(Pt * std::sin(FI));
-	mom.setZ(Pt * COS_SIN.first);    
+	mom[1] = Pt * std::cos(FI);
+	mom[2] = Pt * std::sin(FI);
+	mom[3] = Pt * COS_SIN.first;    
 
-	tot_mom += mom;		 
+	for(G4int j = 1; j < 4; j++) tot_mom[j] += mom[j];		 
 
 	scm_momentums.push_back(mom);
       };
 
       //                handle last two
-      G4double tot_mod = tot_mom.rho(); 
+      G4double tot_mod = std::sqrt(tot_mom[1] * tot_mom[1] + 
+			      tot_mom[2] * tot_mom[2] + 
+			      tot_mom[3] * tot_mom[3]); 
       G4double ct = -0.5 * (tot_mod * tot_mod + pmod[ia - 2] * pmod[ia - 2] -
 			    pmod[ia - 1] * pmod[ia - 1]) / tot_mod / pmod[ia - 2];
 
@@ -220,14 +227,20 @@ G4BigBanger::generateBangInSCM(G4double etot,
       }
   
       if(std::fabs(ct) < ang_cut) {
-	G4LorentzVector mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
+	G4CascadeMomentum mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
 	//       rotate to the normal system
-	G4LorentzVector apr = tot_mom/tot_mod;
-	G4LorentzVector mom;
-	mom.setVect(mom2.vect().cross(apr));
+	G4CascadeMomentum apr = tot_mom;
+	G4int i;
+	for(i = 1; i < 4; i++) apr[i] /= tot_mod;
+	G4double a_tr = std::sqrt(apr[1] * apr[1] + apr[2] * apr[2]);
+	G4CascadeMomentum mom;
+	mom[1] = mom2[3] * apr[1] + ( mom2[1] * apr[2] + mom2[2] * apr[3] * apr[1]) / a_tr; // ::: replace with clhep tools?
+	mom[2] = mom2[3] * apr[2] + (-mom2[1] * apr[1] + mom2[2] * apr[3] * apr[2]) / a_tr;      
+	mom[3] = mom2[3] * apr[3] - mom2[2] * a_tr;      
 	scm_momentums.push_back(mom);
 	//               and the last one
-	G4LorentzVector mom1= - mom - tot_mom;
+	G4CascadeMomentum mom1;
+	for(i = 1; i < 4; i++) mom1[i] = - mom[i] - tot_mom[i];
 	scm_momentums.push_back(mom1);  
 	bad = false;
       };

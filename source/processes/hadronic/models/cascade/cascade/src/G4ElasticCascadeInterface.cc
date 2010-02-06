@@ -22,13 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElasticCascadeInterface.cc,v 1.6 2010-01-26 23:17:47 mkelsey Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Pekka Kaitaniemi, HIP
 // Aatos Heikkinen
-//
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 
 #include "G4ElasticCascadeInterface.hh"
 #include "globals.hh"
@@ -93,21 +89,40 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 
   enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
 
-  G4int bulletType =  G4InuclElementaryParticle::type(aTrack.GetDefinition());
+  G4int bulletType = 0;
+
+  // Coding particles 
+  if (aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
+  if (aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
+  if (aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
+  if (aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
+  if (aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
+  if (aTrack.GetDefinition() ==     G4Gamma::Gamma()     ) bulletType = photon;
 
   // Code momentum and energy.
+  G4double px,py,pz;
+  px=aTrack.Get4Momentum().px() / GeV;
+  py=aTrack.Get4Momentum().py() / GeV;
+  pz=aTrack.Get4Momentum().pz() / GeV;
+
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
   G4LorentzRotation toZ;
   toZ.rotateZ(-projectileMomentum.phi());
   toZ.rotateY(-projectileMomentum.theta());
   G4LorentzRotation toLabFrame = toZ.inverse();
 
-  G4LorentzVector momentumBullet(G4ThreeVector(0.,0.,aTrack.GetTotalMomentum()/GeV), projectileMomentum.m());
+  G4CascadeMomentum momentumBullet;
+  momentumBullet[0] =0.;
+  momentumBullet[1] =0;
+  momentumBullet[2] =0;
+  momentumBullet[3] =std::sqrt(px*px+py*py+pz*pz);
 
-  G4InuclElementaryParticle *bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
+  G4InuclElementaryParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
   sumEnergy = bullet->getKineticEnergy(); // In GeV 
-  sumBaryon += bullet->baryon();
+  if (bulletType == proton || bulletType == neutron) {
+    sumBaryon += 1;
+  } 
 
   // Set target
   G4InuclNuclei*   target  = NULL;
@@ -115,13 +130,20 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
   // and outcoming particles
   G4DynamicParticle* cascadeParticle = NULL;
 
+  G4CascadeMomentum targetMomentum;
+
   G4double theNucleusA = theNucleus.GetN();
 
   if ( !(G4int(theNucleusA) == 1) ) {
-    target  = new G4InuclNuclei(theNucleusA, 
+    target  = new G4InuclNuclei(targetMomentum, 
+				theNucleusA, 
 				theNucleus.GetZ());
+    target->setEnergy();
 
-    eInit = bullet->getEnergy() + target->getEnergy();
+    const G4CascadeMomentum& bmom = bullet->getMomentum();
+    eInit = std::sqrt(bmom[0] * bmom[0]);
+    const G4CascadeMomentum& tmom = target->getMomentum();
+    eInit += std::sqrt(tmom[0] * tmom[0]);
 
     sumBaryon += theNucleusA;
 
@@ -153,7 +175,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 
   if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
 
-    targetH = new G4InuclElementaryParticle(1);
+    targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
     G4float cutElastic[8];
     cutElastic[proton   ] = 1.0; // GeV
@@ -163,7 +185,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
     cutElastic[pionZero ] = 0.2;
 
     //	Was >
-    if (momentumBullet.z() < cutElastic[bulletType]) { // elastic collision possible
+    if (momentumBullet[3] < cutElastic[bulletType]) { // elastic collision possible
 
       do {   // we try to create elastic collision
 	output = collider->collide(bullet, targetH);
@@ -183,7 +205,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	  output.getOutgoingParticles().begin()->type() != proton)) {
 	output = G4CollisionOutput();
 	output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
-	output.addOutgoingParticle(G4InuclElementaryParticle(proton));
+	output.addOutgoingParticle(G4InuclElementaryParticle(targetMomentum, proton));
       }
 
     } else {
@@ -192,12 +214,15 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
       //target is proton) output = collider->collide(bullet, targetH);
       output = G4CollisionOutput();
       output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
-      output.addOutgoingParticle(G4InuclElementaryParticle(proton));
+      output.addOutgoingParticle(G4InuclElementaryParticle(targetMomentum, proton));
     }
 
     sumBaryon += 1;
 
-    eInit = bullet->getEnergy() + targetH->getEnergy();
+    const G4CascadeMomentum& bmom = bullet->getMomentum();
+    eInit = std::sqrt(bmom[0] * bmom[0]);
+    const G4CascadeMomentum& tmom = targetH->getMomentum();
+    eInit += std::sqrt(tmom[0] * tmom[0]);
 
     if (verboseLevel > 2) {
       G4cout << "Target:  " << G4endl;
@@ -232,7 +257,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	
       output = G4CollisionOutput();
       output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
-      output.addTargetFragment(G4InuclNuclei(target->getA(), target->getZ()));
+      output.addTargetFragment(G4InuclNuclei(targetMomentum, target->getA(), target->getZ()));
     }
   }
 
@@ -243,8 +268,8 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
     }
   
   // Convert cascade data to use hadronics interface
-  std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
-  std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+  std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
+  std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
 
@@ -254,11 +279,16 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 
     for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
-      eTot += ipart->getEnergy();
-      G4double ekin = ipart->getKineticEnergy() * GeV;
-      G4ThreeVector aMom(ipart->getMomentum().vect().unit());
+      const G4CascadeMomentum& mom = ipart->getMomentum();
+      eTot   += std::sqrt(mom[0] * mom[0]);
 
-      sumBaryon -= ipart->baryon();
+      G4double ekin = ipart->getKineticEnergy() * GeV;
+      G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+      aMom = aMom.unit();
+
+      if (outgoingParticle == proton ||  outgoingParticle == neutron) {
+	sumBaryon -= 1;
+      } 
 
       sumEnergy -= ekin / GeV;
 
@@ -338,9 +368,13 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
     for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
-        eTot += ifrag->getEnergy();
+	const G4CascadeMomentum& mom = ifrag->getMomentum();
+        eTot   += std::sqrt(mom[0] * mom[0]);
 
-	G4ThreeVector aMom(ifrag->getMomentum().vect().unit());
+	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+	aMom = aMom.unit();
+
+	// hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
 
 	if (verboseLevel > 2) {
 	  G4cout << " Nuclei fragment: " << G4endl;

@@ -22,18 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.22 2010-02-03 00:50:46 dennis Exp $
-// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
-
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
-#include "G4NucleiProperties.hh"
-#include "G4HadTmpUtil.hh"
-
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -49,6 +42,8 @@ G4InuclCollider::G4InuclCollider()
 
 G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 					   G4InuclParticle* target) {
+
+  verboseLevel = 0;
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::collide" << G4endl;
   }
@@ -125,12 +120,15 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
 	}
 
-	G4LorentzVector bmom;
-	bmom.setZ(convertToTargetRestFrame.getTRSMomentum());
+	G4CascadeMomentum bmom;
 
-	G4LorentzVector tmom;
-	G4InuclNuclei ntarget(tmom, at, zt);
+	bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
+	G4InuclNuclei ntarget(at, zt);
+	G4CascadeMomentum tmom;
+
+	ntarget.setMomentum(tmom);
+	ntarget.setEnergy();
 	theIntraNucleiCascader->setInteractionCase(intcase);
 	 
 	G4bool bad = true;
@@ -146,7 +144,9 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	    output = theIntraNucleiCascader->collide(&pbullet, &ntarget);
 	  } else {
-	    G4InuclNuclei nbullet(bmom, ab, zb);
+	    G4InuclNuclei nbullet(ab, zb);
+	    nbullet.setMomentum(bmom);
+	    nbullet.setEnergy();
 	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
 	  };   
 
@@ -199,9 +199,9 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  if (!particles.empty()) { 
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      G4LorentzVector mom = ipart->getMomentum();
+	      G4CascadeMomentum mom = ipart->getMomentum();
 
-	      if (withReflection) mom.setZ(-mom.z());
+	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      ipart->setMomentum(mom); 
 	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
@@ -216,13 +216,15 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	    nucleiIterator inuc;
 
 	    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      G4LorentzVector mom = inuc->getMomentum(); 
+	      G4CascadeMomentum mom = inuc->getMomentum(); 
 
-	      if (withReflection) mom.setZ(-mom.z());
+	      if (withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      inuc->setMomentum(mom);
+	      inuc->setEnergy(); 
 	      mom = convertToTargetRestFrame.backToTheLab(inuc->getMomentum());
 	      inuc->setMomentum(mom);
+	      inuc->setEnergy(); 
 	    };
 	  };
 	  globalOutput.addOutgoingParticles(particles);
@@ -381,8 +383,7 @@ G4bool G4InuclCollider::explosion(G4InuclNuclei* target) const {
   if (a > a_cut) {
     explo = false;
   } else {
-    //    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
-    if (eexs < be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)) ) explo = false;
+    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
   };   
 
   return explo;
