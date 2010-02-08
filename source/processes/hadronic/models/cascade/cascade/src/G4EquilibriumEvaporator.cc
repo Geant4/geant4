@@ -28,6 +28,9 @@
 #include "G4EquilibriumEvaporator.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
   : verboseLevel(1) {
@@ -162,7 +165,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    std::pair<std::vector<G4double>, std::vector<G4double> > parms = paraMaker(Z);
 	    std::vector<G4double> AK = parms.first;
 	    std::vector<G4double> CPA = parms.second;
-	    G4double DM0 = bindingEnergy(A, Z);   
+	    //	    G4double DM0 = bindingEnergy(A, Z);
+	    G4double DM0 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));   
 	    G4int i(0);
 
 	    for (i = 0; i < 6; i++) {
@@ -172,7 +176,9 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      TM[i] = -0.1;
 
 	      if (goodRemnant(A1[i], Z1[i])) {
-		G4double QB = DM0 - bindingEnergy(A1[i], Z1[i]) - Q1[i];
+		//		G4double QB = DM0 - bindingEnergy(A1[i], Z1[i]) - Q1[i];
+		G4double QB = DM0 -
+                          G4NucleiProperties::GetBindingEnergy(G4lrint(A1[i]), G4lrint(Z1[i])) - Q1[i];
 		V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
 		  (std::pow(A1[i], one_third) + std::pow(AN[i], one_third));
 		TM[i] = EEXS - QB - V[i] * A / A1[i];  
@@ -587,7 +593,8 @@ G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a,
 
   } else {
 
-    if (e < be_cut * bindingEnergy(a, z)) bigb = false;
+    //    if (e < be_cut * bindingEnergy(a, z)) bigb = false;
+    if (e < be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)) ) bigb = false;
   };
 
   return bigb;

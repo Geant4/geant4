@@ -32,7 +32,10 @@
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4NucleiModel.hh"
+#include "G4NucleiProperties.hh"
 #include "G4CascadParticle.hh"
+#include "G4HadTmpUtil.hh"
+
 #include "Randomize.hh"
 #include <algorithm>
 
@@ -373,7 +376,8 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 
   if (eexs > eexs_cut) {
     G4double eexs_max0z = 1000.0 * ein / ediv_cut;
-    G4double dm = bindingEnergy(a, z);
+    //    G4double dm = bindingEnergy(a, z);
+    G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
     G4double eexs_max = eexs_max0z > reason_cut*dm ? eexs_max0z : reason_cut * dm;
 
     if(eexs < eexs_max) good = true;

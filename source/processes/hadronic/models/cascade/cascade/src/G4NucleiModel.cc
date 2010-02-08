@@ -28,7 +28,8 @@
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
-
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
@@ -72,10 +73,14 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   protonNumberCurrent = protonNumber;
 
 // Set binding energies
-  G4double dm = bindingEnergy(a, z);
-
-  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a - 1, z - 1) - dm)); // for P
-  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a - 1, z    ) - dm)); // for N
+  //  G4double dm = bindingEnergy(a, z);
+  G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
+  //  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a - 1, z - 1) - dm)); // for P
+  //  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a - 1, z    ) - dm)); // for N
+  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a - 1), G4lrint(z - 1))
+               - dm)); // for P
+  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a - 1), G4lrint(z)) 
+               - dm)); // for N
 
   G4double CU = cuu * std::pow(a, one_third);
   G4double D1 = CU / AU;
@@ -1065,8 +1070,10 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
   if (ab < max_a_for_cascad) {
 
-    G4double benb = 0.001 * bindingEnergy(ab, zb) / ab;
-    G4double bent = 0.001 * bindingEnergy(at, zt) / at;
+    //    G4double benb = 0.001 * bindingEnergy(ab, zb) / ab;
+    G4double benb = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(ab), G4lrint(zb)) / ab;
+    //    G4double bent = 0.001 * bindingEnergy(at, zt) / at;
+    G4double bent = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(at), G4lrint(zt)) / at;
     G4double ben = benb < bent ? bent : benb;
 
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {

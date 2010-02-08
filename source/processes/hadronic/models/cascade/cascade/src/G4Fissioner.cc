@@ -27,6 +27,9 @@
 #include "G4InuclNuclei.hh"
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+
 
 G4Fissioner::G4Fissioner()
   : verboseLevel(1) {
@@ -73,7 +76,8 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     G4double Z1;
     G4double A2 = A - A1;
     G4double ALMA = -1000.0;
-    G4double DM1 = bindingEnergy(A, Z);
+    //    G4double DM1 = bindingEnergy(A, Z);
+    G4double DM1 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
     G4double EVV = EEXS - DM1;
     G4double DM2 = bindingEnergyAsymptotic(A, Z);
     G4double DTEM = (A < 220.0 ? 0.5 : 1.15);
@@ -97,9 +101,11 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
       potentialMinimization(VPOT, EDEF1, VCOUL, A1, A2, Z1, Z2, AL1, BET1, R12);
 
-      G4double DM3 = bindingEnergy(A1, Z1);
+      //      G4double DM3 = bindingEnergy(A1, Z1);
+      G4double DM3 = G4NucleiProperties::GetBindingEnergy(G4lrint(A1), G4lrint(Z1));
       G4double DM4 = bindingEnergyAsymptotic(A1, Z1);
-      G4double DM5 = bindingEnergy(A2, Z2);
+      //      G4double DM5 = bindingEnergy(A2, Z2);
+      G4double DM5 = G4NucleiProperties::GetBindingEnergy(G4lrint(A2), G4lrint(Z2));
       G4double DM6 = bindingEnergyAsymptotic(A2, Z2);
       G4double DMT1 = DM4 + DM6 - DM2;
       G4double DMT = DM3 + DM5 - DM1;
@@ -119,7 +125,9 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
 	if (EZ >= ALMA) ALMA = EZ;
 	G4double EK = VCOUL + DEfin + 0.5 * TEM;
-	G4double EV = EVV + bindingEnergy(A1, Z1) + bindingEnergy(A2, Z2) - EK;
+	//	G4double EV = EVV + bindingEnergy(A1, Z1) + bindingEnergy(A2, Z2) - EK;
+	G4double EV = EVV + G4NucleiProperties::GetBindingEnergy(G4lrint(A1), G4lrint(Z1)) + 
+                            G4NucleiProperties::GetBindingEnergy(G4lrint(A2), G4lrint(Z2)) - EK;
        
 	if (EV > 0.0) fissionStore.addConfig(A1, Z1, EZ, EK, EV);
       };

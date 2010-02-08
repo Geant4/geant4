@@ -27,6 +27,8 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -383,7 +385,8 @@ G4bool G4InuclCollider::explosion(G4InuclNuclei* target) const {
   if (a > a_cut) {
     explo = false;
   } else {
-    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
+    //    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
+    if (eexs < be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)) ) explo = false;
   };   
 
   return explo;
