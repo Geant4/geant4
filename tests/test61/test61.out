@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -284,7 +284,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=44s Real=44s Sys=0.01s
+  User=43s Real=43s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -714,7 +714,7 @@ GroundStateNucleus state cannot be created. Try again with another parameters.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=7.58s Real=7.58s Sys=0s
+  User=7.56s Real=7.57s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -936,7 +936,7 @@ GroundStateNucleus state cannot be created. Try again with another parameters.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=3.5s Real=3.5s Sys=0s
+  User=3.49s Real=3.5s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -984,7 +984,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=6.99s Real=7s Sys=0s
+  User=6.9s Real=6.9s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1307,7 +1307,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=40.32s Real=40.36s Sys=0.05s
+  User=39.96s Real=40.02s Sys=0.06s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

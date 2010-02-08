@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -578,7 +578,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.5s Real=1.5s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -819,7 +819,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.36s Real=0.36s Sys=0s
+  User=0.37s Real=0.37s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1142,7 +1142,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1577,7 +1577,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.25s Real=0.24s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1848,7 +1848,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.04s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -1950,7 +1950,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.17s Sys=0s
+  User=0.17s Real=0.16s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2001,7 +2001,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.18s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -2231,7 +2231,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.04s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -2399,7 +2399,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.1s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

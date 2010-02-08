@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -90,6 +90,7 @@ Construct processes
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Ionic processes for GenericIon
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -97,6 +98,7 @@ Ionic processes for GenericIon
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Ionic processes for alpha
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -104,6 +106,7 @@ Ionic processes for alpha
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Hadronic processes for anti_proton
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -111,6 +114,7 @@ Hadronic processes for anti_proton
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Ionic processes for deuteron
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -130,6 +134,7 @@ Ionic processes for deuteron
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Hadronic processes for kaon+
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -137,6 +142,7 @@ Hadronic processes for kaon+
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Hadronic processes for kaon-
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -156,6 +162,7 @@ Hadronic processes for kaon-
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Hadronic processes for pi+
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -163,6 +170,7 @@ Hadronic processes for pi+
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Hadronic processes for pi-
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 
 !!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
 !!! Please use G4eMultipleScattering for e+ and e- !!!
@@ -170,6 +178,7 @@ Hadronic processes for pi-
 !!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 Hadronic processes for proton
+G4teoCrossSection: sorry, only ECPSSR model available at the moment
 Test17PhysicsList::SetCuts:CutLength : 100 um 
 Set cuts for all particles! 
 #
@@ -360,7 +369,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.23s Sys=0s
+  User=0.26s Real=0.25s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -403,7 +412,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.22s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -444,7 +453,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.43s Sys=0s
+  User=0.42s Real=0.43s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
@@ -486,7 +495,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.77s Real=0.77s Sys=0s
+  User=6.81s Real=6.81s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -530,7 +539,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.45s Real=1.45s Sys=0s
+  User=7.82s Real=7.82s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

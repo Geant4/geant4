@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -494,8 +494,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.13s Real=7.14s Sys=0s
-Time elapsed in 1 events ---- User=7.13s Real=7.14s Sys=0s
+  User=7.33s Real=7.33s Sys=0s
+Time elapsed in 1 events ---- User=7.33s Real=7.33s Sys=0s
 #
 /gun/particle proton
 /gun/energy 0.01 MeV
@@ -516,8 +516,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.55s Real=2.55s Sys=0s
-Time elapsed in 1 events ---- User=2.55s Real=2.55s Sys=0s
+  User=2.57s Real=2.56s Sys=0s
+Time elapsed in 1 events ---- User=2.57s Real=2.56s Sys=0s
 #
 /gun/particle hydrogen
 /gun/energy 0.01 MeV
@@ -560,8 +560,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.16s Real=2.19s Sys=0.03s
-Time elapsed in 1 events ---- User=2.16s Real=2.19s Sys=0.03s
+  User=2.2s Real=2.24s Sys=0.03s
+Time elapsed in 1 events ---- User=2.2s Real=2.24s Sys=0.03s
 #
 /gun/particle alpha+
 /gun/energy 0.01 MeV
@@ -582,8 +582,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.16s Real=2.2s Sys=0.02s
-Time elapsed in 1 events ---- User=2.16s Real=2.2s Sys=0.02s
+  User=2.23s Real=2.25s Sys=0.03s
+Time elapsed in 1 events ---- User=2.23s Real=2.25s Sys=0.03s
 #
 /gun/particle helium
 /gun/energy 0.01 MeV
@@ -604,8 +604,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.14s Real=2.16s Sys=0.03s
-Time elapsed in 1 events ---- User=2.14s Real=2.16s Sys=0.03s
+  User=2.21s Real=2.24s Sys=0.03s
+Time elapsed in 1 events ---- User=2.21s Real=2.24s Sys=0.03s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 3 calls
