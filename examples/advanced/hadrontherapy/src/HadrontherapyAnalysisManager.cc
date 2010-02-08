@@ -612,7 +612,7 @@ void HadrontherapyAnalysisManager::flush()
  
   HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
 
-  if (matrix) matrix->TotalEnergyDeposit("DoseDistribution.out");
+  if (matrix) matrix->TotalEnergyDeposit();
 #ifdef G4ANALYSIS_USE
   theTree -> commit();
   theTree ->close();

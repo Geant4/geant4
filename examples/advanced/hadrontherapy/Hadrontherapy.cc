@@ -174,8 +174,8 @@ G4UIsession* session = 0;
      session = new G4UIterminal(new G4UItcsh);
      session -> SessionStart();
 #else
-    session = new G4UIterminal();
-session -> SessionStart();
+     session = new G4UIterminal();
+     session -> SessionStart();
 #endif
    }
 
@@ -196,7 +196,7 @@ session -> SessionStart();
 #elif defined(G4UI_USE_QT)
     session = new G4UIQt(argc,argv);
     UI->ApplyCommand("/control/execute macro/GUI.mac");      
-session -> SessionStart();
+    session -> SessionStart();
      // As final option, the basic user interface terminal is opened
 #else
     session = new G4UIterminal();
@@ -208,19 +208,6 @@ session -> SessionStart();
     delete session;
    }
 
- HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
- HadrontherapyLet* let = HadrontherapyLet::GetInstance();
- if (matrix && let)
- {
-     matrix -> TotalEnergyDeposit("DoseDistribution.out");
-     // print list of generated nuclides 
-     //matrix -> PrintNuclides();
-
-     // Store dose by particle/ion to one (ASCII) file 
-     matrix -> StoreData("Dose.out");
-     // Store Let track & Let dose
-     let -> StoreData("Let.out");
- } 
 
 #ifdef ANALYSIS_USE
  analysis -> finish();

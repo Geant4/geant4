@@ -40,6 +40,7 @@
 struct ion 
  { 
      G4bool isPrimary;   // true if particle is primary
+     G4int PDGencoding;  // Particle data group id for the particle
      //G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
      G4String name;   	 // simple name without excitation energy: He3, He4, Li7, ...
      G4int len; 	 // name length
@@ -88,7 +89,7 @@ public:
   
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
-  void TotalEnergyDeposit(G4String filename);
+  void TotalEnergyDeposit();
    
   // Store single matrix data to filename 
   void StoreMatrix(G4String filename, void* data,size_t psize);

@@ -54,7 +54,7 @@ HadrontherapyLet::HadrontherapyLet(HadrontherapyDetectorConstruction* pDet)
     pParam = new HadrontherapyInteractionParameters(false); // no messenger
     //  letMessenger = new HadrontherapyLetMessenger(this);
     matrix = HadrontherapyMatrix::GetInstance();
-    if (!matrix) G4Exception("HadrontherapyMatrix not found. Firstly instance it.");
+    if (!matrix) G4Exception("HadrontherapyLet::HadrontherapyLet. HadrontherapyMatrix not found. Firstly create an instance of it.");
 
     nVoxels = matrix -> GetNvoxel();
     numberOfVoxelAlongX = matrix -> GetNumberOfVoxelAlongX();
@@ -77,9 +77,10 @@ HadrontherapyLet::~HadrontherapyLet()
 // Fill energy spectrum for every voxel (local energy spectrum)
 void HadrontherapyLet::Initialize()
 {
-    primaryEnergy = pPGA -> GetmeanKineticEnergy();
-    energyLimit =   trunc((primaryEnergy /10.)+1.)*10.;// round toward zero
-    binWidth =      0.25*MeV;
+    primaryEnergy = pPGA -> GetmeanKineticEnergy()*MeV;
+    energyLimit =   trunc((primaryEnergy /10.) + 1.*MeV)*10.;// round toward zero
+    //binWidth =    0.25*MeV;
+    binWidth =      50 *MeV;
     nBins = 	    (G4int)ceil(energyLimit/binWidth); //round up toward nearest integer
     // Clear data, if any 
     Clear();
@@ -100,26 +101,15 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
 					   G4double kinEnergy, 
 					   G4int i, G4int j, G4int k) 
 {
-    // First step energy
     if (kinEnergy<=0) return;
-    G4int Z = particleDef -> GetAtomicNumber();
-    G4int A = particleDef -> GetAtomicMass();
 
-    G4String fullName = particleDef -> GetParticleName();
-    G4String name = fullName.substr (0, fullName.find("[") ); // cut excitation energy  
-    // Is it a primary particle?
-    //if (trackID == 1) name +="_1"; 
-
-    G4int voxel = matrix -> Index(i,j,k);
-    G4int enBin = lround(trunc(kinEnergy/binWidth)); 
-    // bins are [n.binWidth, n.binWidth + binWidth), n natural
-    // for example for 0.25 binWidth we have [0, 0.25) [0.25, 0.5) [0.5, 0.75) [0.75, 1) [1, 1.25) ...
     
+    G4int PDGencoding = particleDef -> GetPDGEncoding();
     // Search for already allocated data...
     size_t l;
     for (l=0; l < ionLetStore.size(); l++) 
     {
-	if (ionLetStore[l].name == name) 
+	if (ionLetStore[l].PDGencoding == PDGencoding) 
 	    if ( trackID ==1 && ionLetStore[l].isPrimary || trackID !=1 && !ionLetStore[l].isPrimary)
 		break;
     }
@@ -128,9 +118,16 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
     
     if (l == ionLetStore.size()) // Just another type of ion/particle for our store...
     {
+
+    G4int Z = particleDef -> GetAtomicNumber();
+    G4int A = particleDef -> GetAtomicMass();
+    G4String fullName = particleDef -> GetParticleName();
+    G4String name = fullName.substr (0, fullName.find("[") ); // cut excitation energy [x.y] 
+
     ionLet ion =
 	{
 	    (trackID == 1) ? true:false, // is it the primary particle? 
+	    PDGencoding,
 	    fullName,
 	    name,
 	    Z,
@@ -141,7 +138,7 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
 	    new G4double[nVoxels]  // Let_D
 	};
 
-	// Get stopping powers table (keV/um)
+	// Get stopping powers (calculated in the center of the bin) table (keV/um)
 	G4int bin = 0;
 	for(G4double E = binWidth/2; E < energyLimit ; E += binWidth )
 	{
@@ -157,19 +154,25 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
 
     }
 
+    G4int voxel = matrix -> Index(i,j,k);
+    G4int enBin = lround(trunc(kinEnergy/binWidth)); 
+    // bins are [n.binWidth, n.binWidth + binWidth), n natural
+    // for example for 0.25 binWidth we have [0, 0.25) [0.25, 0.5) [0.5, 0.75) [0.75, 1) [1, 1.25) ...
+    
     if (!ionLetStore[l].spectrum[voxel]) 
     {
 	ionLetStore[l].spectrum[voxel] = new G4int[nBins];// allocate new histogram for every hit voxel!
 	for(G4int bin=0; bin < nBins; bin++) ionLetStore[l].spectrum[voxel][bin] = 0; // clear it
     }
 
-    ionLetStore[l].spectrum[voxel][enBin]++; // fill spectrum
+    ionLetStore[l].spectrum[voxel][enBin]++; // fill kinetic energy spectrum
 }
 
 // LET calculation
-// Must be issued at endOfRunAction!
+// Must be called at endOfRunAction!
 void HadrontherapyLet::LetOutput()
 {
+    // Sort ions by A and Z...
     std::sort(ionLetStore.begin(), ionLetStore.end());
     for (size_t l=0; l < ionLetStore.size(); l++)
     {
@@ -184,7 +187,7 @@ void HadrontherapyLet::LetOutput()
 		{
 		    // numerator and denominator for Let_Track(nT,dT), Let_Dose(nD,dD)
 		    nT += ionLetStore[l].spectrum[v][bin]*ionLetStore[l].stop[bin];
-		    dT += ionLetStore[l].spectrum[v][bin];
+		    dT += ionLetStore[l].spectrum[v][bin]; // Namely the fluence
 
 		    nD += ionLetStore[l].spectrum[v][bin]*(ionLetStore[l].stop[bin]*ionLetStore[l].stop[bin]);
 		    dD += ionLetStore[l].spectrum[v][bin]*ionLetStore[l].stop[bin];
@@ -205,6 +208,7 @@ void HadrontherapyLet::StoreData(G4String filename)
 	if (ofs)
 	{
 	    ofs.open(filename, std::ios::out);
+	    
 	    // Write the voxels index and the list of particles/ions 
 	    ofs << std::setprecision(6) << std::left <<
 		"i\tj\tk\t"; 
@@ -215,8 +219,19 @@ void HadrontherapyLet::StoreData(G4String filename)
 		       std::setw(width) << ionLetStore[l].name + "_lD" + a;
 	    }
 	    ofs << G4endl;
+	    
+	    // Write the voxels index and the list of particles/ions 
+	    ofs << std::setprecision(6) << std::left <<
+		"0\t0\t0\t"; 
+	    for (size_t l=0; l < ionLetStore.size(); l++)
+	    {
+		ofs << std::setw(width) << ionLetStore[l].PDGencoding <<
+		       std::setw(width) << ionLetStore[l].PDGencoding;
+	    }
+	    ofs << G4endl;
+
 	    ofs << std::setfill('_');
-	    for (size_t l=0; l < 2*ionLetStore.size(); l++)
+	    for (size_t l=0; l < 2*ionLetStore.size()+3; l++)
 	    {
 		ofs << std::setw(width) <<  "_";
 	    }

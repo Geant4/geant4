@@ -32,6 +32,9 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIdirectory.hh"
 
+#include "HadrontherapyMatrix.hh"
+#include "HadrontherapyLet.hh"
+
 #ifdef ANALYSIS_USE
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -43,12 +46,26 @@ HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(Hadronthe
   FileNameCmd->SetDefaultValue("default.root");
   FileNameCmd->SetParameterName("choice",true); ///<doc did not say what second boolean really does
   FileNameCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
+
+  DoseMatrixCmd = new G4UIcmdWithAString("/analysis/writeDoseFile",this);
+  DoseMatrixCmd->SetGuidance("Write the ASCII filename for the dose-fluence");
+  DoseMatrixCmd->SetDefaultValue("Dose.out");
+  DoseMatrixCmd->SetParameterName("choice",true); 
+  //DoseMatrixCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
+
+  LetMatrixCmd = new G4UIcmdWithAString("/analysis/writeLetFile",this);
+  LetMatrixCmd->SetGuidance("Write the ASCII filename for the Let");
+  LetMatrixCmd->SetDefaultValue("Let.out");
+  LetMatrixCmd->SetParameterName("choice",true); 
+  //DoseMatrixCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
 {
   delete FileNameCmd;
+  delete DoseMatrixCmd;
+  delete LetMatrixCmd;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -60,6 +77,17 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
 	AnalysisManager->flush(); //< fills matrix, writes it into file and books a new file and histograms etc.
 	AnalysisManager->book();
 	}
+  else if (command == DoseMatrixCmd)
+  {
+     if ( HadrontherapyMatrix::GetInstance())
+	  HadrontherapyMatrix::GetInstance() -> StoreData(newValue);
+	  HadrontherapyMatrix::GetInstance() -> TotalEnergyDeposit();
+  }
+  else if (command == LetMatrixCmd)
+  {
+     if ( HadrontherapyLet::GetInstance())
+	  HadrontherapyLet::GetInstance() -> StoreData(newValue);
+  }
 }
 
 #endif

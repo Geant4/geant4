@@ -38,7 +38,8 @@
 
 struct ionLet 
 { 
-    G4bool isPrimary;	    // true if particle is primary
+    G4bool isPrimary;	    // True if particle is primary
+    G4int PDGencoding;      // Particle data group id for the particle
     G4String fullName;      // AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
     G4String name;          // simple name without excitation energy: He3, He4, Li7, ...
     G4int Z;                // atomic number

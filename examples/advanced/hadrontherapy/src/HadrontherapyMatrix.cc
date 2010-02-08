@@ -205,15 +205,15 @@ void HadrontherapyMatrix::StoreData(G4String filename)
 	if (ofs)
 	{
 	    ofs.open(filename, std::ios::out);
+	    //
 	    // Write the voxels index and the list of particles/ions 
 	    ofs << std::setprecision(6) << std::left <<
 		"i\tj\tk\t"; 
-	   /* 
+/*	    
             G4RunManager *runManager = G4RunManager::GetRunManager();
             HadrontherapyPrimaryGeneratorAction *pPGA = (HadrontherapyPrimaryGeneratorAction*)runManager -> GetUserPrimaryGeneratorAction();
             G4String name = pPGA -> GetParticleGun() -> GetParticleDefinition() -> GetParticleName();
-           */
-
+  */         
 	    // Total dose 
 	    ofs << std::setw(width) << "Dose";
 
@@ -224,8 +224,24 @@ void HadrontherapyMatrix::StoreData(G4String filename)
 		       std::setw(width) << ionStore[l].name + "_F" + a;
 	    }
 	    ofs << G4endl;
+
+/////////////////////////////////////////////////////////////////////////
+            ofs << std::setprecision(6) << std::left <<
+		"0\t0\t0\t"; 
+
+	    // Total dose 
+	    ofs << std::setw(width) << '0';
+
+	    for (size_t l=0; l < ionStore.size(); l++)
+	    {
+		ofs << std::setw(width) << ionStore[l].PDGencoding  <<
+		       std::setw(width) << ionStore[l].PDGencoding;
+	    }
+	    ofs << G4endl;
+
+//////////////////////////////////////////////////////////////////////////
 	    ofs << std::setfill('_');
-	    for (size_t l=0; l < 2*ionStore.size(); l++)
+	    for (size_t l=0; l < 2*ionStore.size()+3; l++)
 	    {
 		ofs << std::setw(width) <<  "_";
 	    }
@@ -278,20 +294,14 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 	G4bool fluence) 
 {
     if (energyDeposit <=0. && !fluence) return false;
-
-    G4int Z = particleDef-> GetAtomicNumber();
-    G4int A = particleDef-> GetAtomicMass();
-    G4String fullName = particleDef -> GetParticleName();
-    G4String name = fullName.substr (0, fullName.find("[") ); // cut excitation energy  
-    // XXX this seems a bit time consuming
-    //if (trackID == 1) { name +="_1"; } 
+    // Get Particle Data Group id
+    G4int PDGencoding = particleDef -> GetPDGEncoding();
 
     // Search for already allocated data...
     for (size_t l=0; l < ionStore.size(); l++)
     {
-	//if (ionStore[l].Z == Z && ionStore[l].A == A) 
-	if (ionStore[l].name == name ) 
-	{ 
+	if (ionStore[l].PDGencoding == PDGencoding ) 
+	{   // Is it a primary or a secondary particle? 
 	    if ( trackID ==1 && ionStore[l].isPrimary || trackID !=1 && !ionStore[l].isPrimary)
 	    {
 		if (energyDeposit > 0.) ionStore[l].dose[Index(i, j, k)] += energyDeposit;
@@ -301,17 +311,22 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 	}
 
     }
-    // Dose/fluence  matrix not found!
-    // Instantiate new particle definition and
-    // allocate memory to store relative dose/fluence
     // XXX Check if new operator fails
+     
+    G4int Z = particleDef-> GetAtomicNumber();
+    G4int A = particleDef-> GetAtomicMass();
+    G4String fullName = particleDef -> GetParticleName();
+    G4String name = fullName.substr (0, fullName.find("[") ); // cut excitation energy  
+    //if (trackID == 1) { name +="_1"; } 
+    // Let's put a new particle in our store...
     ion newIon = 
     {
 	(trackID == 1) ? true:false,
+	PDGencoding,
 	name,
 	name.length(), 
-	Z, // The atomic number
-	A, // The mass number
+	Z, 
+	A, 
 	new G4double[numberOfVoxelAlongX * numberOfVoxelAlongY * numberOfVoxelAlongZ],
 	new u_int[numberOfVoxelAlongX * numberOfVoxelAlongY * numberOfVoxelAlongZ]
     }; 
@@ -353,13 +368,13 @@ void HadrontherapyMatrix::Fill(G4int i, G4int j, G4int k,
     // Store the energy deposit in the matrix element corresponding 
     // to the phantom voxel  
 }
-void HadrontherapyMatrix::TotalEnergyDeposit(G4String filename)
+void HadrontherapyMatrix::TotalEnergyDeposit()
 {
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
     if (matrix)
     {  
-	StoreMatrix(filename, matrix, sizeof(*matrix));
+	//StoreMatrix(filename, matrix, sizeof(*matrix));
 
 #ifdef ANALYSIS_USE
 	HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();

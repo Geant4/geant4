@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2010-01-11 14:31:38 gcosmo Exp $
+# $Id: GNUmakefile,v 1.16 2010-02-08 16:39:27 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -17,7 +17,7 @@ all: lib bin
 include $(G4INSTALL)/config/architecture.gmk
 
 ifdef G4ANALYSIS_USE
-CPPFLAGS += -DANALYSIS_USE
+CPPFLAGS += -DANALYSIS_USE 
 endif
 ifndef G4ANALYSIS_USE      # If we don't have AIDA
 ifdef G4ANALYSIS_USE_ROOT   # And we have ROOT

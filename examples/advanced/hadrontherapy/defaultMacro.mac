@@ -69,3 +69,7 @@
 # Start of the run
 #
 /run/beamOn 1000
+# Write let e dose file
+/analysis/writeDoseFile
+/analysis/writeLetFile
+
