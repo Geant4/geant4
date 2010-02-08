@@ -48,6 +48,7 @@
 #include "G4Collider.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "Randomize.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -1053,10 +1054,54 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
   G4double ac;
   G4double ad;
   G4int itry = 0;
-  
-  if(k == 14) {
+
+  if (is == 1 || is == 2 || is == 4) {
+    // pp, pn or nn
+    // Parameters for two-exponential sampling of angular distribution
+    // of nucleon-nucleon scattering
+    G4double nnke[9] =  { 0.0,   0.44, 0.59,   0.80,   1.00,   2.24,   4.40,   6.15,  10.00};
+    G4double nnA[9] =   { 0.0,   0.34, 2.51,   4.59,   4.2,    5.61,   6.38,   7.93,   8.7};
+    G4double nnC[9] =   { 0.0,   0.0,  1.21,   1.54,   1.88,   1.24,   1.91,   4.04,   8.7};
+    G4double nnCos[9] = {-1.0,  -1.0, 0.4226, 0.4226, 0.4384, 0.7193, 0.8788, 0.9164,  0.95};
+    G4double nnFrac[9] = {1.0,   1.0, 0.4898, 0.7243, 0.7990, 0.8892, 0.8493, 0.9583,  1.0};
+
+    G4double pA = nnA[8];
+    G4double pC = nnC[8];
+    G4double pCos = nnCos[8];
+    G4double pFrac = nnFrac[8];
+    for (G4int i = 1; i < 9; i++) {
+      if (ekin < nnke[i]) {
+        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
+        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
+        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
+        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
+        break;
+      }
+    }
+
+    G4double term1;
+    G4double term2;
+    G4double randScale;
+    G4double randVal;
+    if (G4UniformRand() < pFrac) {
+      // Sample small angles ( 0 < theta < theta0 )
+      term1 = 2.0*pscm*pscm*pA;
+      term2 = std::exp(-2.0*term1);
+      randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
+      randVal = (1.0 - randScale)*G4UniformRand() + randScale;
+      ct = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
+
+    } else {
+      // Sample large angles ( theta0 < theta < 180 )
+      term1 = 2.0*pscm*pscm*pC;
+      term2 = std::exp(-2.0*term1);
+      randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
+      randVal = randScale*G4UniformRand();
+      ct = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
+    }
+
+  } else if (k == 14) {
     ab = 7.5;
-    if(is == 1 || is == 2 || is == 4) ab = 8.7;
     ac = -2.0 * ab * pscm * pscm;
     ad = 2.0 * ac;
     if(ad < -huge_num) {
@@ -1065,7 +1110,7 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
     } else {
 
       ad = std::exp(-huge_num);
-    };   
+    }
 
     while(std::fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
