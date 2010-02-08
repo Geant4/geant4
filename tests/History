@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2009-12-16 11:34:24 gcosmo Exp $
+$Id: History,v 1.113 2010-02-08 13:13:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V09-03-01 8th February 2010  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-09-03-ref-01.
+- Corrected default definition of G4INSTALL to GNUmakefiles where necessary.
+- Includes tags: testem3-V09-03-00, exhadr01-V09-03-01, exampleES2-V09-02-01
+                 electronScattering-V09-03-00, fano-V09-03-00, fano2-V09-03-01,
+                 WLS-V09-03-00, G01-V09-03-01, exam-ext-vis-UVA-V09-03-00,
+                 exampleN02-V09-03-00, exampleN03-V09-03-00.
 
 tests-V09-03-00 17th December 2009  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-09-03-ref-00.
