@@ -31,36 +31,50 @@
 #include "HadrontherapyInteractionParameters.hh"
 #include "IAEADetectorConstruction.hh"
 #include "PassiveProtonBeamLine.hh"
+#include "ThomsonSpectrometer.hh"
 #include "G4RunManager.hh"
 
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryController::HadrontherapyGeometryController()
-{
+{}
 
-}
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryController::~HadrontherapyGeometryController()
-{
+{}
 
-}
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyGeometryController::SetGeometry(G4String name)
 {
-  G4cout <<"Activating geometry " << name << G4endl;
-  if(name == "IAEA") {
-    registerGeometry(new IAEADetectorConstruction());
-    G4cout <<"IAEA geometry activated" << G4endl;
-  } else if(name == "default") {
-    registerGeometry(new PassiveProtonBeamLine());
-  } else {
-    G4cout <<"Unknown geometry: " << name << ". Geometry not changed." << G4endl;
-  }
+	G4cout <<"Activating geometry " << name << G4endl;
+	
+	if(name == "IAEA")
+	{
+		registerGeometry(new IAEADetectorConstruction());
+		G4cout <<"IAEA geometry activated" << G4endl;
+	} 
+	
+	else if(name == "Thomson_Spectometer")
+	{
+		registerGeometry(new ThomsonSpectrometer());
+		G4cout << "The Thomson spectrometer is active" << G4endl;
+	} 
+	
+	else if(name == "default") 
+	{
+		registerGeometry(new PassiveProtonBeamLine());
+	} 
+	
+	else
+	{
+		G4cout <<"Unknown geometry: " << name << ". Geometry not changed." << G4endl;
+	}
 }
-
+	
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyGeometryController::registerGeometry(G4VUserDetectorConstruction *detector)
 {
-  G4RunManager *runManager = G4RunManager::GetRunManager();
-  runManager->SetUserInitialization(detector);
-  runManager->GeometryHasBeenModified();
+	G4RunManager *runManager = G4RunManager::GetRunManager();
+	runManager->SetUserInitialization(detector);
+	runManager->GeometryHasBeenModified();
 }
 

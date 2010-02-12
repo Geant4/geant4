@@ -309,7 +309,12 @@ void HadrontherapyAnalysisManager::book()
   histo16 = createHistogram1D("hydrogenEnergyAfterPhantom","Energy distribution of secondary helium fragments after the phantom",
 			   70, 0., 500.);
 
-  kinFragNtuple  = new TNtuple("kinFragNtuple", "Kinetic energy by voxel & fragment", "i:j:k:A:Z:kineticEnergy");
+  kinFragNtuple  = new TNtuple("kinFragNtuple", 
+			       "Kinetic energy by voxel & fragment", 
+			       "i:j:k:A:Z:kineticEnergy");
+  kineticEnergyPrimaryNtuple= new TNtuple("kineticEnergyPrimaryNtuple", 
+					    "Kinetic energy by voxel of primary", 
+					    "i:j:k:kineticEnergy");
   doseFragNtuple = new TNtuple("doseFragNtuple", "Energy deposit by voxel & fragment", "i:j:k:A:Z:energy");
 
   theROOTNtuple =   new TNtuple("theROOTNtuple", "Energy deposit by slice", "i:j:k:energy");
@@ -521,7 +526,9 @@ void HadrontherapyAnalysisManager::hydrogenEnergy(G4double secondaryParticleKine
 #endif
 }
 
-
+/////////////////////////////////////////////////////////////////////////////
+// FillKineticFragmentTuple create an ntuple where the voxel indexs, the atomic number and mass and the kinetic
+// energy of all the particles interacting with the phantom, are stored
 void HadrontherapyAnalysisManager::FillKineticFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double kinEnergy)
 {
 #ifdef G4ANALYSIS_USE_ROOT
@@ -529,6 +536,17 @@ void HadrontherapyAnalysisManager::FillKineticFragmentTuple(G4int i, G4int j, G4
 #endif
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// FillKineticEnergyPrimaryNTuple creates a ntuple where the voxel indexs and the kinetic
+// energies of ONLY primary particles interacting with the phantom, are stored
+void HadrontherapyAnalysisManager::FillKineticEnergyPrimaryNTuple(G4int i, G4int j, G4int k, G4double kinEnergy)
+{
+#ifdef G4ANALYSIS_USE_ROOT
+    kineticEnergyPrimaryNtuple -> Fill(i, j, k, kinEnergy);
+#endif
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double energy)
 {
 #ifdef G4ANALYSIS_USE_ROOT
@@ -644,8 +662,8 @@ void HadrontherapyAnalysisManager::finish()
   metaData->Write();
 
   kinFragNtuple->Write();
+  kineticEnergyPrimaryNtuple->Write();
   doseFragNtuple->Write(); 
-
   theROOTNtuple->Write();
   theROOTIonTuple->Write();
   fragmentNtuple->Write();

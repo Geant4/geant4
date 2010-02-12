@@ -47,9 +47,9 @@
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 100
+/event/printEventNumber 10000
 
-/run/beamOn 5
+/run/beamOn 100000
 
 #########################
 # Move the generated .root

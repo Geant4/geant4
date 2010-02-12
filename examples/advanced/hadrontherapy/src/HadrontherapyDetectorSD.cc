@@ -120,18 +120,24 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	    //if (A==12 && Z==6) // C12
 	    //if (A==4 && Z==2)  // Helium
 	    //if (A==1 && Z==1)  // Protons 
-	    if ( Z>=1 )          // Exclude e-, neutrons, gamma, ...
+	    if ( Z>=1 )          // Exclude e-, neutrons, gamma
 		let -> FillEnergySpectrum(trackID, particleDef, kineticEnergy/MeV, i, j, k);
 
 #ifdef G4ANALYSIS_USE_ROOT
 	    // First step kinetic energy (ntuple)
 	    if (Z>=1) 
-		analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
+{
+	analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
+}	 
+if ( trackID == 1 && i == 0) 
+{
+	analysis -> FillKineticEnergyPrimaryNTuple(i, j, k, kineticEnergy/MeV);
+}
+		
 #endif
-
 	}	 
-	if(energyDeposit != 0)                       
-	{  
+	if(energyDeposit != 0)
+	{
 	    // Energy deposit.
 	    // This method will fill a dose matrix for every single nuclide. 
 	    // A data ASCII file can be generated through the method StoreData(filename) 
@@ -153,7 +159,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 
 
 #ifdef ANALYSIS_USE
-    if(energyDeposit != 0)                       
+    if(energyDeposit != 0)
     {  
 	if(trackID != 1)
 	{

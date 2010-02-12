@@ -139,9 +139,11 @@ public:
   void hydrogenEnergy(G4double secondaryParticleKineticEnergy);
   ///< Energy distribution of the hydrogen (proton, d, t) particles after the phantom
  
-  
+  //Kinetic energy by voxel, mass number A and atomic number Z.
   void FillKineticFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double kinEnergy);
-  ///< Kinetic energy by voxel, mass number A and atomic number Z.
+  
+  //Kinetic energy by voxel, mass number A and atomic number Z of only primary particles
+  void FillKineticEnergyPrimaryNTuple(G4int i, G4int j, G4int k, G4double kinEnergy);
 
   void FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double energy);
   ///< Energy by voxel, mass number A and atomic number Z.
@@ -225,7 +227,8 @@ private:
   TH1F *histo15;
   TH1F *histo16;
   
-  TNtuple *kinFragNtuple; 
+  TNtuple *kinFragNtuple;
+  TNtuple *kineticEnergyPrimaryNtuple;
   TNtuple *doseFragNtuple; 
   TNtuple *theROOTNtuple;
   TNtuple *theROOTIonTuple;
