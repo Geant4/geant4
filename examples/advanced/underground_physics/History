@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.20 2009-10-26 10:31:03 pandola Exp $
+$Id: History,v 1.21 2010-02-16 12:03:08 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.20 2009-10-26 10:31:03 pandola Exp $
 
                       Category History file
                       ---------------------
+
+16.02.2010 - L. Pandola (DMX-V09-03-00)
+	     Copy of the previous tag, DMX-V09-02-02, which was not submitted for 
+	     testing.
 
 26.10.2009 - L. Pandola (DMX-V09-02-02)
 	     Physics list migrated from LowEnergy processes to the new Livermore 
