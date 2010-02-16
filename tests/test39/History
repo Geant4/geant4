@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-01-14 11:23:05 mkossov Exp $
+$Id: History,v 1.7 2010-02-16 07:59:26 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 14th, 2010  Mikhail  Kosov (test39-V09-03-00)
+Feb 16th, 2010  Mikhail  Kosov (test39-V09-03-01)
+- Final version of all-hadrons testing for elastic scattering
+
+Jan 14th, 2010  Mikhail  Kosov (test39-V09-03-00)
 - The test is made for separate G4QProtonElCS and G4QNeutronElCS
 - It is made more compact (smaller t-table)
 

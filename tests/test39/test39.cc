@@ -161,8 +161,8 @@ int main()
                      "Lead"}; // Target names
   G4String tsy[nTg]={"H","He","C","Al","Cu","Sn","Pb"}; // Target symbols
   G4Material* mat[nTg]={0,0,0,0,0,0,0}; // Material pointers for the Target Loop
-  const G4int nPr=2;  // Length of the projectile list for the Performance test
-  G4int pli[nPr] = {2212, 2112}; // PDG Codes of the projectile particles
+  const G4int nPr=10;  // Length of the projectile list for the Performance test
+  G4int pli[nPr] = {211, 2112, 2212, -211, 321,-321, 310, 3122, 3222, -2212}; // projPDGs
   const G4int nMom=5;  // Length of the projectile momentum list for the Performance test
   G4double mom[nMom] = {30., 200., 1500., 10000., 100000.}; // Set of momenta in MeV/c !
   // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
@@ -731,8 +731,18 @@ int main()
      //while(!HadrCS.Register(theFS));
      //delete theFS;
      // ------> for CHIPS
-     G4VQCrossSection* HadrCS = G4QNeutronElasticCrossSection::GetPointer(); // CHIPS NElCS
-     if (pPDG==2212)   HadrCS = G4QProtonElasticCrossSection::GetPointer(); // CHIPS PrElCS
+     G4VQCrossSection* HadrCS = 0; // Prototype of CHIPS Elastic manager
+     if     (pPDG==2212) HadrCS=G4QProtonElasticCrossSection::GetPointer();
+     else if(pPDG==2112) HadrCS=G4QNeutronElasticCrossSection::GetPointer();  
+     else if(pPDG== 211) HadrCS=G4QPionPlusElasticCrossSection::GetPointer();  
+     else if(pPDG==-211) HadrCS=G4QPionMinusElasticCrossSection::GetPointer();  
+     else if(pPDG== 321) HadrCS=G4QKaonPlusElasticCrossSection::GetPointer();  
+     else if(pPDG==-321) HadrCS=G4QKaonMinusElasticCrossSection::GetPointer();  
+     else if(pPDG== 130 || pPDG==310) HadrCS=G4QKaonMinusElasticCrossSection::GetPointer();
+     else if(pPDG==3222) HadrCS=G4QHyperonPlusElasticCrossSection::GetPointer();  
+     else if(pPDG>3110 && pPDG<3334) HadrCS=G4QHyperonElasticCrossSection::GetPointer();
+     else if(pPDG>-3334&&pPDG<-1110) HadrCS=G4QAntiBaryonElasticCrossSection::GetPointer();
+     else G4cout<<"*Warning*G4QElastic::Test39: wrong PDG="<<pPDG<<G4endl;
 #ifdef csdebug
      // --- A temporary LOOP for calculation of total cross section ------------
      //G4double pMin=.02;                            // in GeV --> for protons
