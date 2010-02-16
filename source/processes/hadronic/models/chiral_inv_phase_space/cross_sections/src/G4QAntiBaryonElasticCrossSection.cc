@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QAntiBaryonElasticCrossSection.cc,v 1.1 2010-02-05 09:48:18 mkossov Exp $
+// $Id: G4QAntiBaryonElasticCrossSection.cc,v 1.2 2010-02-16 07:53:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -164,7 +164,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetCrossSection(G4bool fCS, G4double 
         <<tgN<<"("<<lastN<<"), T="<<pEn<<"("<<lastTH<<")"<<",Sz="<<colN.size()<<G4endl;
   //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
 #endif
-  if(pPDG!=-211)
+  if(pPDG<-3334 || pPDG>-1111)
   {
     G4cout<<"*Warning*G4QAntiBaryElCS::GetCS:**> Found pPDG="<<pPDG<<" ====> CS=0"<<G4endl;
     //CalculateCrossSection(fCS,-27,j,pPDG,lastZ,lastN,pMom); // DUMMY TEST
@@ -268,7 +268,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetCrossSection(G4bool fCS, G4double 
   else
   {
 #ifdef pdebug
-    G4cout<<"G4QElCS::GetCS: Update lastI="<<lastI<<G4endl;
+    G4cout<<"G4QAntiBaryonElasticCrossSection::GetCS: Update lastI="<<lastI<<G4endl;
 #endif
     colP[lastI]=pMom;
     colCS[lastI]=lastCS;
@@ -469,10 +469,14 @@ G4double G4QAntiBaryonElasticCrossSection::GetPTables(G4double LP, G4double ILP,
 {
   // @@ At present all nA==pA ---------> Each neucleus can have not more than 51 parameters
   static const G4double pwd=2727;
-  const G4int n_pimpel=5;                // #of parameters for pp-elastic (<nPoints=128)
-  G4double pimp_el[n_pimpel]={1.25,3.5,80.,.0557,6.72};
-  //                           -0- -1- -2-  -3-   -4-
-  if(PDG ==-211)
+  const G4int n_appel=30;                // #of parameters for app-elastic (<nPoints=128)
+  //                          -0- -1- -2- -3-  -4- -5- -6- -7- -8--9--10--11--12--13--14-
+  G4double app_el[n_appel]={1.25,3.5,80.,1.,.0557,6.72,5.,74.,3.,3.4,.2,.17,.001,8.,.055,
+                            3.64,5.e-5,4000.,1500.,.46,1.2e6,3.5e6,5.e-5,1.e10,8.5e8,
+                            1.e10,1.1,3.4e6,6.8e6,0.};
+  //                        -15-  -16-  -17-  -18- -19- -20-  -21-  -22-  -23- -24-
+  //                        -25-  -26- -27- -28- -29- 
+  if(PDG>-3334 && PDG<-1111)
   {
     // -- Total pp elastic cross section cs & s1/b1 (main), s2/b2 (tail1), s3/b3 (tail2) --
     //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(3.=par(3));p4=p2*p2; p=|3-mom|
@@ -489,7 +493,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetPTables(G4double LP, G4double ILP,
     {
       if ( tgZ == 1 && tgN == 0 )
       {
-        for (G4int ip=0; ip<n_pimpel; ip++) lastPAR[ip]=pimp_el[ip]; // PiMinus+P
+        for (G4int ip=0; ip<n_appel; ip++) lastPAR[ip]=app_el[ip]; // PiMinus+P
       }
       else
       {
@@ -715,7 +719,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetPTables(G4double LP, G4double ILP,
   else
   {
     G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetPTables: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=-211"<<G4endl;
+          <<", N="<<tgN<<", while it is defined only for Anti Baryons"<<G4endl;
     throw G4QException("G4QAntiBaryonElasticCrossSection::GetPTables:onlyaBA implemented");
   }
   return ILP;
@@ -731,7 +735,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4
 #ifdef tdebug
   G4cout<<"G4QAnBaElCS::GetExcT: F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
-  if(PDG!=-211)G4cout<<"WarningG4QAntiBaryonElasticCrossSection::GetExT:PDG="<<PDG<<G4endl;
+  if(PDG<-3334 || PDG>-1111)G4cout<<"*Warning*G4QAntiBaryonElCS::GetExT:PDG="<<PDG<<G4endl;
   if(onlyCS)G4cout<<"WarningG4QAntiBaryonElasticCrossSection::GetExchanT:onlyCS=1"<<G4endl;
   if(lastLP<-4.3) return lastTM*GeVSQ*G4UniformRand();// S-wave for p<14 MeV/c (kinE<.1MeV)
   G4double q2=0.;
@@ -901,7 +905,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4
     }
   }
   if(q2<0.) q2=0.;
-  if(!(q2>=-1.||q2<=1.))G4cout<<"*NAN*G4aBQElasticCrossSect::GetExchangeT:-t="<<q2<<G4endl;
+  if(!(q2>=-1.||q2<=1.))G4cout<<"*NAN*G4QaBElasticCrossSect::GetExchangeT:-t="<<q2<<G4endl;
   if(q2>lastTM)
   {
 #ifdef tdebug
@@ -917,18 +921,18 @@ G4double G4QAntiBaryonElasticCrossSection::GetSlope(G4int tgZ, G4int tgN, G4int 
 {
   static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
 #ifdef tdebug
-  G4cout<<"G4QElasticCS::GetSlope:"<<onlyCS<<", Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
+  G4cout<<"G4QAnBarElCS::GetSlope:"<<onlyCS<<", Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
   if(onlyCS)G4cout<<"WarningG4QAntiBaryonElasticCrossSection::GetSlope:onlCS=true"<<G4endl;
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
-  if(PDG !=-211)
+  if(PDG<-3334 || PDG>-1111)
   {
     G4cout<<"*Error*G4QAntiBaryonElasticCrossSection::GetSlope: PDG="<<PDG<<", Z="<<tgZ
-          <<", N="<<tgN<<", while it is defined only for PDG=-211"<<G4endl;
-    throw G4QException("G4QAntiBaryonElasticCrossSection::GetSlope: pipA are implemented");
+          <<", N="<<tgN<<", while it is defined only for Anti Baryons"<<G4endl;
+    throw G4QException("G4QAntiBaryonElasticCrossSection::GetSlope: AnBa are implemented");
   }
   if(theB1<0.) theB1=0.;
-  if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4aBaQElasticCrossS::Getslope:"<<theB1<<G4endl;
+  if(!(theB1>=-1.||theB1<=1.))G4cout<<"*NAN*G4QaBaElasticCrossS::Getslope:"<<theB1<<G4endl;
   return theB1/GeVSQ;
 }
 
@@ -943,7 +947,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetHMaxT()
 G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
                                                     G4int tgN)
 {
-  if(PDG!=-211)G4cout<<"*Warn*G4QAntiBaryonElasticCrossSection::GetTabV:PDG="<<PDG<<G4endl;
+  if(PDG<-3334 || PDG>-1111) G4cout<<"*Warning*G4QAntiBaryElCS::GetTabV:PDG="<<PDG<<G4endl;
   if(tgZ<0 || tgZ>92)
   {
     G4cout<<"*Warning*G4QAntiBaryonElCS::GetTabValue:(1-92) NoIsotopesFor Z="<<tgZ<<G4endl;
@@ -959,7 +963,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
   //if(nN[iZ][0] < 0)
   //{
 #ifdef isodebug
-  //  G4cout<<"*Warning*G4QElasticCS::GetTabValue: No isotopes for Z="<<tgZ<<G4endl;
+  //  G4cout<<"*Warning*G4QAntiBaryonElastCS::GetTabValue: NoIsotopes for Z="<<tgZ<<G4endl;
 #endif
   //  return 0.;
   //}
@@ -973,15 +977,15 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
   G4double p4=p3*p;
   if ( tgZ == 1 && tgN == 0 ) // PiMin+P
   {
-    G4double dl2=lp-lastPAR[1]; // ld ?
-    theSS=lastPAR[31];
-    theS1=(lastPAR[9]+lastPAR[10]*dl2*dl2)/(1.+lastPAR[11]/p4/p)+
-          (lastPAR[12]/p2+lastPAR[13]*p)/(p4+lastPAR[14]*sp);
-    theB1=lastPAR[15]*std::pow(p,lastPAR[16])/(1.+lastPAR[17]/p3);
-    theS2=lastPAR[18]+lastPAR[19]/(p4+lastPAR[20]*p);
-    theB2=lastPAR[21]+lastPAR[22]/(p4+lastPAR[23]/sp); 
-    theS3=lastPAR[24]+lastPAR[25]/(p4*p4+lastPAR[26]*p2+lastPAR[27]);
-    theB3=lastPAR[28]+lastPAR[29]/(p4+lastPAR[30]); 
+    G4double dl2=lp-lastPAR[6]; // ld ?
+    theSS=lastPAR[29];
+    theS1=(lastPAR[7]+lastPAR[8]*dl2*dl2)/(1.+lastPAR[9]/p4/p)+
+          (lastPAR[10]/p2+lastPAR[11]*p)/(p4+lastPAR[12]*sp);
+    theB1=lastPAR[13]*std::pow(p,lastPAR[14])/(1.+lastPAR[15]/p3);
+    theS2=lastPAR[16]+lastPAR[17]/(p4+lastPAR[18]*p);
+    theB2=lastPAR[19]+lastPAR[20]/(p4+lastPAR[21]/sp); 
+    theS3=lastPAR[22]+lastPAR[23]/(p4*p4+lastPAR[24]*p2+lastPAR[25]);
+    theB3=lastPAR[26]+lastPAR[27]/(p4+lastPAR[28]); 
     theS4=0.;
     theB4=0.; 
 #ifdef tdebug
@@ -989,8 +993,9 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
           <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS1<<",B3="<<theB1<<G4endl;
 #endif
     // Returns the total elastic pim-p cross-section (to avoid spoiling lastSIG)
+    G4double ye=std::exp(lp*lastPAR[0]);
     G4double dp=lp-lastPAR[1];
-    return lastPAR[2]/(1.+std::exp(lp*lastPAR[0]))+lastPAR[3]*dp*dp+lastPAR[4];
+    return lastPAR[2]/(ye+lastPAR[3])+lastPAR[4]*dp*dp+lastPAR[5];
   }
   else
   {
@@ -1052,7 +1057,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
 #endif
     G4double dlp=lp-lastPAR[5]; // ax
     //         p1               p2          p3                 p4
-    return (lastPAR[0]*dlp*dlp+lastPAR[1]+lastPAR[2]*p)/(1.+lastPAR[3]/p);
+    return (lastPAR[0]*dlp*dlp+lastPAR[1]+lastPAR[2]/p)/(1.+lastPAR[3]/p);
   }
   return 0.;
 } // End of GetTableValues
@@ -1061,14 +1066,13 @@ G4double G4QAntiBaryonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, 
 G4double G4QAntiBaryonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
                                                     G4double pP)
 {
-  //static const G4double mNeut= G4QPDGCode(2112).GetMass()*.001; // MeV to GeV
-  static const G4double mPi= G4QPDGCode(211).GetMass()*.001; // pion mass MeV to GeV
-  //static const G4double mProt= G4QPDGCode(2212).GetMass()*.001; // MeV to GeV
+  static const G4double mNeut= G4QPDGCode(2112).GetMass()*.001; // MeV to GeV
+  static const G4double mProt= G4QPDGCode(2212).GetMass()*.001; // MeV to GeV
   //static const G4double mLamb= G4QPDGCode(3122).GetMass()*.001; // MeV to GeV
   //static const G4double mHe3 = G4QPDGCode(2112).GetNuclMass(2,1,0)*.001; // MeV to GeV
   //static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0)*.001; // MeV to GeV
   //static const G4double mDeut = G4QPDGCode(2112).GetNuclMass(1,1,0)*.001; // MeV to GeV
-  static const G4double mPi2= mPi*mPi;
+  static const G4double mNuc2= sqr((mProt+mNeut)/2);
   //static const G4double mProt2= mProt*mProt;
   //static const G4double mNeut2= mNeut*mNeut;
   //static const G4double mDeut2= mDeut*mDeut;
@@ -1077,7 +1081,7 @@ G4double G4QAntiBaryonElasticCrossSection::GetQ2max(G4int PDG, G4int tgZ, G4int 
   {
     G4double mt=G4QPDGCode(90000000+tgZ*1000+tgN).GetMass()*.001; // Target mass in GeV
     G4double dmt=mt+mt;
-    G4double s=dmt*std::sqrt(pP2+mPi2)+mPi2+mt*mt;    // Mondelstam s
+    G4double s=dmt*std::sqrt(pP2+mNuc2)+mNuc2+mt*mt;    // Mondelstam s (@@ other AntiBar?)
     return dmt*dmt*pP2/s;
   }
   else

@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+16-Feb-2010 M.Kosov                             (hadr-chips-V09-03-04)
+-----------------------------------------------------------------------
+Mutual tag: final tested implementation of CHIPS elastic (G4QElastic)
+
 5-Feb-2010 M.Kosov                             (hadr-chips-V09-03-03)
 -----------------------------------------------------------------------
 Mutual tag: accumulate bug fix and AntiBaryonElastic implementation

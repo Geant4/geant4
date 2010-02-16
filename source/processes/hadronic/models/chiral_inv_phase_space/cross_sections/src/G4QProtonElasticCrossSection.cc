@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProtonElasticCrossSection.cc,v 1.2 2010-01-22 17:02:48 mkossov Exp $
+// $Id: G4QProtonElasticCrossSection.cc,v 1.3 2010-02-16 07:53:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -988,7 +988,6 @@ G4double G4QProtonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
   if ( tgZ == 1 && tgN == 0 ) // pp/nn
   {
     G4double p2s=p2*sp;
-    G4double dl1=lp-lastPAR[3];
     G4double dl2=lp-lastPAR[8];
     theSS=lastPAR[31];
     theS1=(lastPAR[9]+lastPAR[10]*dl2*dl2)/(1.+lastPAR[11]/p4/p)+
@@ -1005,6 +1004,7 @@ G4double G4QProtonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
           <<",S2="<<theS2<<",B2="<<theB2<<",S3="<<theS1<<",B3="<<theB1<<G4endl;
 #endif
     // Returns the total elastic pp cross-section (to avoid spoiling lastSIG)
+    G4double dl1=lp-lastPAR[3];
     return lastPAR[0]/p2s/(1.+lastPAR[7]/p2s)+(lastPAR[1]+lastPAR[2]*dl1*dl1+lastPAR[4]/p)
                                                    /(1.+lastPAR[5]*lp)/(1.+lastPAR[6]/p4);
   }

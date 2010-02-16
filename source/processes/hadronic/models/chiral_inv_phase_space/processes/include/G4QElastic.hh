@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.hh,v 1.4 2010-02-05 09:48:18 mkossov Exp $
+// $Id: G4QElastic.hh,v 1.5 2010-02-16 07:53:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic header ----------------
@@ -55,6 +55,10 @@
 // CHIPS Headers
 #include "G4QPionPlusElasticCrossSection.hh"
 #include "G4QPionMinusElasticCrossSection.hh"
+#include "G4QKaonPlusElasticCrossSection.hh"
+#include "G4QKaonMinusElasticCrossSection.hh"
+#include "G4QHyperonElasticCrossSection.hh"
+#include "G4QHyperonPlusElasticCrossSection.hh"
 #include "G4QProtonElasticCrossSection.hh"
 #include "G4QNeutronElasticCrossSection.hh"
 #include "G4QAntiBaryonElasticCrossSection.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronElasticDataSet.cc,v 1.1 2010-01-22 17:02:49 mkossov Exp $
+// $Id: G4QHadronElasticDataSet.cc,v 1.2 2010-02-16 07:53:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 physics class: G4QHadronElasticDataSet -- header file
@@ -53,26 +53,26 @@ G4bool G4QHadronElasticDataSet::IsApplicable(const G4DynamicParticle* P,const G4
   else if (particle ==          G4Proton::Proton()         ) return true;
   else if (particle ==       G4PionMinus::PionMinus()      ) return true;
   else if (particle ==        G4PionPlus::PionPlus()       ) return true;
-  //else if (particle ==        G4KaonPlus::KaonPlus()       ) return true;
-  //else if (particle ==       G4KaonMinus::KaonMinus()      ) return true;
-  //else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) return true;
-  //else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) return true;
-  //else if (particle ==          G4Lambda::Lambda()         ) return true;
-  //else if (particle ==       G4SigmaPlus::SigmaPlus()      ) return true;
-  //else if (particle ==      G4SigmaMinus::SigmaMinus()     ) return true;
-  //else if (particle ==       G4SigmaZero::SigmaZero()      ) return true;
-  //else if (particle ==         G4XiMinus::XiMinus()        ) return true;
-  //else if (particle ==          G4XiZero::XiZero()         ) return true;
-  //else if (particle ==      G4OmegaMinus::OmegaMinus()     ) return true;
-  //else if (particle ==     G4AntiNeutron::AntiNeutron()    ) return true;
-  //else if (particle ==      G4AntiProton::AntiProton()     ) return true;
-  //else if (particle ==      G4AntiLambda::AntiLambda()     ) return true;
-  //else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) return true;
-  //else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) return true;
-  //else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) return true;
-  //else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) return true;
-  //else if (particle ==      G4AntiXiZero::AntiXiZero()     ) return true;
-  //else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) return true;
+  else if (particle ==        G4KaonPlus::KaonPlus()       ) return true;
+  else if (particle ==       G4KaonMinus::KaonMinus()      ) return true;
+  else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) return true;
+  else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) return true;
+  else if (particle ==          G4Lambda::Lambda()         ) return true;
+  else if (particle ==       G4SigmaPlus::SigmaPlus()      ) return true;
+  else if (particle ==      G4SigmaMinus::SigmaMinus()     ) return true;
+  else if (particle ==       G4SigmaZero::SigmaZero()      ) return true;
+  else if (particle ==         G4XiMinus::XiMinus()        ) return true;
+  else if (particle ==          G4XiZero::XiZero()         ) return true;
+  else if (particle ==      G4OmegaMinus::OmegaMinus()     ) return true;
+  else if (particle ==     G4AntiNeutron::AntiNeutron()    ) return true;
+  else if (particle ==      G4AntiProton::AntiProton()     ) return true;
+  else if (particle ==      G4AntiLambda::AntiLambda()     ) return true;
+  else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) return true;
+  else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) return true;
+  else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) return true;
+  else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) return true;
+  else if (particle ==      G4AntiXiZero::AntiXiZero()     ) return true;
+  else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) return true;
   return false;
 }
 
@@ -84,26 +84,26 @@ G4bool G4QHadronElasticDataSet::IsZAApplicable(const G4DynamicParticle* Pt,
   else if (particle ==          G4Proton::Proton()         ) return true;
   else if (particle ==       G4PionMinus::PionMinus()      ) return true;
   else if (particle ==        G4PionPlus::PionPlus()       ) return true;
-  //else if (particle ==        G4KaonPlus::KaonPlus()       ) return true;
-  //else if (particle ==       G4KaonMinus::KaonMinus()      ) return true;
-  //else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) return true;
-  //else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) return true;
-  //else if (particle ==          G4Lambda::Lambda()         ) return true;
-  //else if (particle ==       G4SigmaPlus::SigmaPlus()      ) return true;
-  //else if (particle ==      G4SigmaMinus::SigmaMinus()     ) return true;
-  //else if (particle ==       G4SigmaZero::SigmaZero()      ) return true;
-  //else if (particle ==         G4XiMinus::XiMinus()        ) return true;
-  //else if (particle ==          G4XiZero::XiZero()         ) return true;
-  //else if (particle ==      G4OmegaMinus::OmegaMinus()     ) return true;
-  //else if (particle ==     G4AntiNeutron::AntiNeutron()    ) return true;
-  //else if (particle ==      G4AntiProton::AntiProton()     ) return true;
-  //else if (particle ==      G4AntiLambda::AntiLambda()     ) return true;
-  //else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) return true;
-  //else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) return true;
-  //else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) return true;
-  //else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) return true;
-  //else if (particle ==      G4AntiXiZero::AntiXiZero()     ) return true;
-  //else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) return true;
+  else if (particle ==        G4KaonPlus::KaonPlus()       ) return true;
+  else if (particle ==       G4KaonMinus::KaonMinus()      ) return true;
+  else if (particle ==    G4KaonZeroLong::KaonZeroLong()   ) return true;
+  else if (particle ==   G4KaonZeroShort::KaonZeroShort()  ) return true;
+  else if (particle ==          G4Lambda::Lambda()         ) return true;
+  else if (particle ==       G4SigmaPlus::SigmaPlus()      ) return true;
+  else if (particle ==      G4SigmaMinus::SigmaMinus()     ) return true;
+  else if (particle ==       G4SigmaZero::SigmaZero()      ) return true;
+  else if (particle ==         G4XiMinus::XiMinus()        ) return true;
+  else if (particle ==          G4XiZero::XiZero()         ) return true;
+  else if (particle ==      G4OmegaMinus::OmegaMinus()     ) return true;
+  else if (particle ==     G4AntiNeutron::AntiNeutron()    ) return true;
+  else if (particle ==      G4AntiProton::AntiProton()     ) return true;
+  else if (particle ==      G4AntiLambda::AntiLambda()     ) return true;
+  else if (particle ==   G4AntiSigmaPlus::AntiSigmaPlus()  ) return true;
+  else if (particle ==  G4AntiSigmaMinus::AntiSigmaMinus() ) return true;
+  else if (particle ==   G4AntiSigmaZero::AntiSigmaZero()  ) return true;
+  else if (particle ==     G4AntiXiMinus::AntiXiMinus()    ) return true;
+  else if (particle ==      G4AntiXiZero::AntiXiZero()     ) return true;
+  else if (particle ==  G4AntiOmegaMinus::AntiOmegaMinus() ) return true;
   return false;
 }
 
@@ -178,6 +178,7 @@ G4double G4QHadronElasticDataSet::GetIsoZACrossSection(const G4DynamicParticle* 
   G4ParticleDefinition* particle = Pt->GetDefinition();
   G4double Momentum=Pt->GetTotalMomentum();
   G4VQCrossSection* CSmanager=0;
+  G4VQCrossSection* CSmanager2=0;
   //G4VQCrossSection* CSmanager2=0;
   G4int pPDG=0;
   if(particle == G4Neutron::Neutron())
@@ -200,109 +201,111 @@ G4double G4QHadronElasticDataSet::GetIsoZACrossSection(const G4DynamicParticle* 
     CSmanager=G4QPionPlusElasticCrossSection::GetPointer();
     pPDG=211;
   }
-  //else if(particle == G4KaonMinus::KaonMinus())
-  //{
-  //  CSmanager=G4QKaonMinusElasticCrossSection::GetPointer();
-  //  pPDG=-321;
-  //}
-  //else if(particle == G4KaonPlus::KaonPlus())
-  //{
-  //  CSmanager=G4QKaonPlusElasticCrossSection::GetPointer();
-  //  pPDG=321;
-  //}
-  //else if(particle == G4KaonZeroLong::KaonZeroLong()   ||
-  //        particle == G4KaonZeroShort::KaonZeroShort() ||
-  //        particle == G4KaonZero::KaonZero()           ||
-  //        particle == G4AntiKaonZero::AntiKaonZero()   )
-  //{
-  //  CSmanager=G4QKaonZeroElasticCrossSection::GetPointer();
-  //  if(G4UniformRand() > 0.5) pPDG= 311;
-  //  else                      pPDG=-311;
-  //}
-  //else if(particle == G4Lambda::Lambda())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3122;
-  //}
-  //else if(particle == G4SigmaPlus::SigmaPlus())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3222;
-  //}
-  //else if(particle == G4SigmaMinus::SigmaMinus())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3112;
-  //}
-  //else if(particle == G4SigmaZero::SigmaZero())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3212;
-  //}
-  //else if(particle == G4XiMinus::XiMinus())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3312;
-  //}
-  //else if(particle == G4XiZero::XiZero())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3322;
-  //}
-  //else if(particle == G4OmegaMinus::OmegaMinus())
-  //{
-  //  CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  //  pPDG=3334;
-  //}
-  //else if(particle == G4AntiNeutron::AntiNeutron())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-2112;
-  //}
-  //else if(particle == G4AntiProton::AntiProton())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-2212;
-  //}
-  //else if(particle == G4AntiLambda::AntiLambda())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3122;
-  //}
-  //else if(particle == G4AntiSigmaPlus::AntiSigmaPlus())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3222;
-  //}
-  //else if(particle == G4AntiSigmaMinus::AntiSigmaMinus())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3112;
-  //}
-  //else if(particle == G4AntiSigmaZero::AntiSigmaZero())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3212;
-  //}
-  //else if(particle == G4AntiXiMinus::AntiXiMinus())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3312;
-  //}
-  //else if(particle == G4AntiXiZero::AntiXiZero())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3322;
-  //}
-  //else if(particle == G4AntiOmegaMinus::AntiOmegaMinus())
-  //{
-  //  CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
-  //  pPDG=-3334;
-  //}
+  else if(particle == G4KaonMinus::KaonMinus())
+  {
+    CSmanager=G4QKaonMinusElasticCrossSection::GetPointer();
+    pPDG=-321;
+  }
+  else if(particle == G4KaonPlus::KaonPlus())
+  {
+    CSmanager=G4QKaonPlusElasticCrossSection::GetPointer();
+    pPDG=321;
+  }
+  else if(particle == G4KaonZeroLong::KaonZeroLong()   ||
+          particle == G4KaonZeroShort::KaonZeroShort() ||
+          particle == G4KaonZero::KaonZero()           ||
+          particle == G4AntiKaonZero::AntiKaonZero()   )
+  {
+    CSmanager=G4QKaonMinusElasticCrossSection::GetPointer();
+    CSmanager2=G4QKaonPlusElasticCrossSection::GetPointer();
+    if(G4UniformRand() > 0.5) pPDG= 321;
+    else                      pPDG=-321;
+  }
+  else if(particle == G4Lambda::Lambda())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3122;
+  }
+  else if(particle == G4SigmaPlus::SigmaPlus())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3222;
+  }
+  else if(particle == G4SigmaMinus::SigmaMinus())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3112;
+  }
+  else if(particle == G4SigmaZero::SigmaZero())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3212;
+  }
+  else if(particle == G4XiMinus::XiMinus())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3312;
+  }
+  else if(particle == G4XiZero::XiZero())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3322;
+  }
+  else if(particle == G4OmegaMinus::OmegaMinus())
+  {
+    CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+    pPDG=3334;
+  }
+  else if(particle == G4AntiNeutron::AntiNeutron())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-2112;
+  }
+  else if(particle == G4AntiProton::AntiProton())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-2212;
+  }
+  else if(particle == G4AntiLambda::AntiLambda())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3122;
+  }
+  else if(particle == G4AntiSigmaPlus::AntiSigmaPlus())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3222;
+  }
+  else if(particle == G4AntiSigmaMinus::AntiSigmaMinus())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3112;
+  }
+  else if(particle == G4AntiSigmaZero::AntiSigmaZero())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3212;
+  }
+  else if(particle == G4AntiXiMinus::AntiXiMinus())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3312;
+  }
+  else if(particle == G4AntiXiZero::AntiXiZero())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3322;
+  }
+  else if(particle == G4AntiOmegaMinus::AntiOmegaMinus())
+  {
+    CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+    pPDG=-3334;
+  }
   else G4cout<<"-Warning-G4QHadronElasticDataSet::GetIsoZACrossSection: PDG="
              <<particle->GetPDGEncoding()<<" isn't supported by CHIPS"<<G4endl;
   G4int tZ=(G4int)(Z);
   G4int tN=(G4int)(A-Z);
   G4double CSI=CSmanager->GetCrossSection(true, Momentum, tZ, tN, pPDG); // CS(j,i) basic
+  if(CSmanager2) CSI= (CSI  +CSmanager2->GetCrossSection(true, Momentum, tZ, tN, pPDG))/2.;
   return CSI;
 }

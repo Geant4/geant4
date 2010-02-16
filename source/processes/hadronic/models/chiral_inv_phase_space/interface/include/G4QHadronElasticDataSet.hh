@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QHadronElasticDataSet.hh,v 1.1 2010-01-22 17:02:49 mkossov Exp $
+// $Id: G4QHadronElasticDataSet.hh,v 1.2 2010-02-16 07:53:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // GEANT4 physics class: G4QHadronElasticDataSet -- header file
@@ -69,11 +69,11 @@
 #include "G4QNeutronElasticCrossSection.hh"  
 #include "G4QPionMinusElasticCrossSection.hh"
 #include "G4QPionPlusElasticCrossSection.hh"
-//#include "G4QKaonPlusElasticCrossSection.hh"
-//#include "G4QKaonMinusElasticCrossSection.hh"
-//#include "G4QKaonZeroElasticCrossSection.hh"
-//#include "G4QHyperonElasticCrossSection.hh"
-//#include "G4QAntiBaryonElasticCrossSection.hh"
+#include "G4QKaonPlusElasticCrossSection.hh"
+#include "G4QKaonMinusElasticCrossSection.hh"
+#include "G4QHyperonElasticCrossSection.hh"
+#include "G4QHyperonPlusElasticCrossSection.hh"
+#include "G4QAntiBaryonElasticCrossSection.hh"
 
 
 class G4QHadronElasticDataSet : public G4VCrossSectionDataSet
