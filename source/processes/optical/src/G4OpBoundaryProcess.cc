@@ -814,8 +814,11 @@ void G4OpBoundaryProcess::DielectricDielectric()
 
               theStatus = TotalInternalReflection;
 
-	      if ( theModel == unified && theFinish != polished )
-						     ChooseReflection();
+              if ( theModel == unified ) {
+                 if (theFinish == polished ||
+                     theFinish == polishedbackpainted) {
+                 } else ChooseReflection();
+              }
 
 	      if ( theStatus == LambertianReflection ) {
 		 DoReflection();
@@ -889,8 +892,11 @@ void G4OpBoundaryProcess::DielectricDielectric()
 
 		 theStatus = FresnelReflection;
 
-		 if ( theModel == unified && theFinish != polished )
-						     ChooseReflection();
+                 if ( theModel == unified ) {
+                    if (theFinish == polished || 
+                        theFinish == polishedbackpainted) {
+                    } else ChooseReflection();
+                 }
 
 		 if ( theStatus == LambertianReflection ) {
 		    DoReflection();
