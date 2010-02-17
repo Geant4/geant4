@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.27 2010-02-05 11:25:14 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.28 2010-02-17 19:43:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -65,7 +65,8 @@ G4ExcitationHandler::G4ExcitationHandler():
   // JMQ 160909 Fermi BreakUp & MultiFrag are on by default 
   // This is needed for activation of such models when G4BinaryLightIonReaction is used
   // since no interface (for external activation via macro input file) is still available.
-  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
+  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
+  //  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
   //maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
@@ -185,9 +186,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 	      if((*j) == theInitialStatePtr) { deletePrimary = false; }
 	      A = static_cast<G4int>((*j)->GetA()+0.5);  // +0.5 to avoid bad truncation
 
-	      if(A <= 1)      { theResults.push_back(*j); }         // gamma, p, n
-	      else if(A <= 4) { theEvapStableList.push_back(*j); }  // evaporation is not possible
-	      else            { theEvapList.push_back(*j); }        // evaporation is possible
+	      if(A <= 1)      { theResults.push_back(*j); }        // gamma, p, n
+	      else if(A <= 4) { theEvapStableList.push_back(*j); } // evaporation is not possible
+	      else            { theEvapList.push_back(*j); }       // evaporation is possible
 	    }
 	}
       if( deletePrimary ) { delete theInitialStatePtr; }
