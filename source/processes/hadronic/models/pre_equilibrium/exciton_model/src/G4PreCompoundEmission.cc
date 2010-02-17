@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.26 2010-02-05 11:08:29 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.27 2010-02-17 19:33:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -223,16 +223,15 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
   // Emission particle separation energy
   G4double Bemission = theFragment->GetBindingEnergy();
 
-  G4double A = aFragment.GetA();
-	
   // Fermi energy
-  G4double Ef = A*G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
+  G4double Ef = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
 	
   //
   //  G4EvaporationLevelDensityParameter theLDP;
   //  G4double g = (6.0/pi2)*aFragment.GetA()*
 
-  G4double g = (6.0/pi2)*A*G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  G4double g = (6.0/pi2)*aFragment.GetA()
+    *G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 	
   // Average exciton energy relative to bottom of nuclear well
   G4double Eav = 2.0*p*(p+1.0)/((p+h)*g);
