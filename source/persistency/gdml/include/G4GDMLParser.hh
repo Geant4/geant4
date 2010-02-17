@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.58 2009-04-15 13:29:30 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.59 2010-02-17 18:06:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,15 +90,16 @@ class G4GDMLParser
 
    // Methods for Reader
    //
-   inline G4double GetConstant(const G4String& name);
-   inline G4double GetVariable(const G4String& name);
-   inline G4double GetQuantity(const G4String& name);
-   inline G4ThreeVector GetPosition(const G4String& name);
-   inline G4ThreeVector GetRotation(const G4String& name);
-   inline G4ThreeVector GetScale(const G4String& name);
-   inline G4GDMLMatrix GetMatrix(const G4String& name);
-   inline G4LogicalVolume* GetVolume(const G4String& name);
-   inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
+   inline G4bool IsValid(const G4String& name) const;
+   inline G4double GetConstant(const G4String& name) const;
+   inline G4double GetVariable(const G4String& name) const;
+   inline G4double GetQuantity(const G4String& name) const;
+   inline G4ThreeVector GetPosition(const G4String& name) const;
+   inline G4ThreeVector GetRotation(const G4String& name) const;
+   inline G4ThreeVector GetScale(const G4String& name) const;
+   inline G4GDMLMatrix GetMatrix(const G4String& name) const;
+   inline G4LogicalVolume* GetVolume(const G4String& name) const;
+   inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") const;
    inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
    inline void StripNamePointers() const;
    inline void SetOverlapCheck(G4bool);
