@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.78 2009-10-28 10:14:13 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.79 2010-02-17 18:59:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,10 +91,10 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
   currentElement  = 0;
-  lowEnergyLimit  = 0.1*keV;
+  lowEnergyLimit  = 1*eV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
-  tkin = targetZ = mom2 = DBL_MIN;
+  tkin = targetZ = mom2 = etag = 0.0;
   elecXSection = nucXSection = 0.0;
   recoilThreshold = 0.*keV;
   ecut = DBL_MAX;
@@ -190,14 +190,17 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   //  << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
   G4double xsec = 0.0;
   SetupParticle(p);
-  if(kinEnergy < lowEnergyLimit) return xsec;
+
+  // cross section is set to zero to avoid problems in sample secondary
+  if(kinEnergy < lowEnergyLimit) { return xsec; }
   SetupKinematic(kinEnergy, cutEnergy);
   if(cosTetMaxNuc < cosTetMinNuc) {
     SetupTarget(Z, kinEnergy);
     xsec = CrossSectionPerAtom();  
   }
   /*
-  G4cout << "e(MeV)= " << ekin/MeV << "cosTetMinNuc= " << cosTetMinNuc
+  G4cout << "e(MeV)= " << kinEnergy/MeV << " xsec(b)= " << xsec/barn  
+	 << "cosTetMinNuc= " << cosTetMinNuc
 	 << " cosTetMaxNuc= " << cosTetMaxNuc
 	 << " cosTetMaxElec= " << cosTetMaxElec
 	 << " screenZ= " << screenZ
@@ -211,10 +214,10 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 G4double G4eCoulombScatteringModel::CrossSectionPerAtom()
 {
   // This method needs initialisation before be called
-  //G4double fac = coeff*targetZ*chargeSquare*invbeta2/mom2;
+  G4double fac = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
-  G4double meff = targetMass/(mass+targetMass);
-  G4double fac  = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+  //G4double meff = targetMass/(mass+targetMass);
+  //G4double fac  = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
 
   elecXSection = 0.0;
   nucXSection  = 0.0;
@@ -283,9 +286,9 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4int ia = SelectIsotopeNumber(currentElement);
   targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
   
-  G4double cost = SampleCosineTheta();
-  G4double z1   = 1.0 - cost;
-  if(z1 < 0.0) return;
+  G4double z1 = SampleCosineTheta();
+  if(z1 <= 0.0) { return; }
+  G4double cost = 1.0 - z1;
 
   G4double sint = sqrt(z1*(1.0 + cost));
   
@@ -345,15 +348,17 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
     formf = 0.0;
   }
 
-  /*  
+  /*
   G4cout << "SampleCost: e(MeV)= " << tkin 
   	 << " 1-ctmaxN= " << 1. - cosTetMinNuc
   	 << " 1-ctmax= " << 1. - costm
   	 << " Z= " << targetZ 
-  	 << G4endl;
+         << " screenZ= " << screenZ
+         << " formf= " << formf 
+ 	 << G4endl;
   */
 
-  if(costm >= cosTetMinNuc) return 2.0; 
+  if(costm >= cosTetMinNuc) return 0.0; 
 
   G4double x1 = 1. - cosTetMinNuc + screenZ;
   G4double x2 = 1. - costm + screenZ;
@@ -362,17 +367,20 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
   do {
     z1 = x1*x2/(x1 + G4UniformRand()*x3) - screenZ;
     grej = 1.0/(1.0 + formf*z1);
+    //G4cout << "z1= " << z1 << " grej= " << grej << " x1= " << x1
+    //	   <<" x2= " << x2 <<" x3= " << x3 << G4endl;
   } while ( G4UniformRand() > grej*grej );  
 
   if(mass > MeV) {
     if(G4UniformRand() > (1. - z1*0.5)/(1.0 + z1*sqrt(mom2)/targetMass)) {
-      return 2.0;
+      return 0.0;
     }
   }
-  //G4cout << "z1= " << z1 << " cross= " << nucXSection/barn 
+  
+  //  G4cout << "z1= " << z1 << " cross= " << nucXSection/barn 
   //	 << " crossE= " << elecXSection/barn << G4endl;
 
-  return 1.0 - z1;
+  return z1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

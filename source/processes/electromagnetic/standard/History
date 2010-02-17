@@ -1,4 +1,4 @@
-$Id: History,v 1.480 2009-12-03 17:28:28 vnivanch Exp $
+$Id: History,v 1.481 2010-02-17 18:59:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 February 09:  V.Ivant (emstand-V09-03-00)
+- G4CoulombScatteringModel - Added comments to relativistic formula
+- G4eCoulombScatteringModel - Added method SetLowEnergyLimit, default
+                              value is set to 1 eV (befor ewas 100 eV)
+- G4CoulombScattering - Removed inlined method SetBuildTableFlag because
+                        the method exist in the base class 
 
 03 December 09:  V.Ivant (emstand-V09-02-36)
 - G4BetheBlochModel - (A.Lechner) return back commented out CorrectionAlongStep

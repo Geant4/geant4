@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.49 2009-10-10 15:16:57 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.50 2010-02-17 18:59:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,10 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  // defines low energy limit of the model
+  inline void SetLowEnergyLimit(G4double val);
+
+  // obsolete method
   inline void SetRecoilThreshold(G4double eth);
 
 protected:
@@ -209,6 +213,7 @@ void G4eCoulombScatteringModel::SetupParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     tkin = 0.0;
+    etag = 0.0;
   }
 }
 
@@ -251,6 +256,13 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     cosTetMaxElec2 = cosTetMaxElec;
   } 
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4eCoulombScatteringModel::SetLowEnergyLimit(G4double val)
+{
+  lowEnergyLimit = val;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
