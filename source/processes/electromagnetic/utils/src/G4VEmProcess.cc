@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.80 2010-01-22 17:35:26 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.81 2010-02-17 17:25:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   idxDERegions(0),
   currentModel(0),
   particle(0),
+  currentParticle(0),
   currentCouple(0)
 {
   SetVerboseLevel(1);
@@ -204,7 +205,7 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
 
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if(!particle) { particle = &part; }
+  if(!particle) { SetParticle(&part); }
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PreparePhysicsTable() for "
            << GetProcessName()
@@ -395,7 +396,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
   G4double x = DBL_MAX;
-  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
+  if(previousStepSize <= DBL_MIN) { theNumberOfInteractionLengthLeft = -1.0; }
   InitialiseStep(track);
   if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
 
@@ -424,7 +425,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     if (verboseLevel>2){
       G4cout << "G4VEmProcess::PostStepGetPhysicalInteractionLength ";
       G4cout << "[ " << GetProcessName() << "]" << G4endl; 
-      G4cout << " for " << particle->GetParticleName() 
+      G4cout << " for " << currentParticle->GetParticleName() 
 	     << " in Material  " <<  currentMaterial->GetName()
 	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
 	     <<G4endl;
@@ -465,7 +466,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if (integral) {
     G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 1 < verboseLevel) {
-      G4cout << "WARING: for " << particle->GetParticleName() 
+      G4cout << "WARING: for " << currentParticle->GetParticleName() 
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
@@ -479,7 +480,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
 
   SelectModel(finalT, currentCoupleIndex);
-  if(!currentModel->IsActive(finalT)) return &fParticleChange;
+  if(!currentModel->IsActive(finalT)) { return &fParticleChange; }
   if(useDeexcitation) {
     currentModel->SetDeexcitationFlag(idxDERegions[currentCoupleIndex]);
   }
@@ -658,7 +659,7 @@ G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
   } else {
     SelectModel(kineticEnergy, currentCoupleIndex);
     cross = currentModel->CrossSectionPerVolume(currentMaterial,
-						particle,kineticEnergy);
+						currentParticle,kineticEnergy);
   }
 
   if(cross < 0.0) { cross = 0.0; }

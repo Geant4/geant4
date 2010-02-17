@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.55 2009-09-23 14:42:47 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.56 2010-02-17 17:25:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -339,6 +339,7 @@ private:
   G4VEmModel*                  currentModel;  
 
   const G4ParticleDefinition*  particle;
+  const G4ParticleDefinition*  currentParticle;
 
   // cash
   const G4Material*            currentMaterial;
@@ -360,7 +361,7 @@ inline G4double G4VEmProcess::ComputeCrossSectionPerAtom(
   SelectModel(kineticEnergy, currentCoupleIndex);
   G4double x = 0.0;
   if(currentModel) {
-   x = currentModel->ComputeCrossSectionPerAtom(particle,kineticEnergy,
+   x = currentModel->ComputeCrossSectionPerAtom(currentParticle,kineticEnergy,
 						 Z,A,cut);
   }
   return x;
@@ -534,6 +535,7 @@ inline G4ParticleChangeForGamma* G4VEmProcess::GetParticleChange()
 inline void G4VEmProcess::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
+  currentParticle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -583,6 +585,7 @@ inline void G4VEmProcess::SetStartFromNullFlag(G4bool val)
 
 inline void G4VEmProcess::InitialiseStep(const G4Track& track)
 {
+  currentParticle = track.GetDefinition();
   preStepKinEnergy = track.GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
   SelectModel(preStepKinEnergy, currentCoupleIndex);
@@ -646,7 +649,7 @@ inline G4double G4VEmProcess::GetCurrentLambda(G4double e)
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
   SelectModel(e, currentCoupleIndex);
-  return currentModel->CrossSectionPerVolume(currentMaterial,particle,
+  return currentModel->CrossSectionPerVolume(currentMaterial,currentParticle,
 					     e,(*theCuts)[currentCoupleIndex]);
 }
 
