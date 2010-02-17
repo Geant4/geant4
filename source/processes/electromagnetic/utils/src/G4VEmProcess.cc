@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.81 2010-02-17 17:25:44 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.82 2010-02-17 17:39:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 12-04-07 remove double call to Clear model manager (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
+// 17-02-10 Added pointer currentParticle (VI)
 //
 // Class Description:
 //
@@ -230,7 +231,8 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       }
     }
 
-    theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
+    theCuts = modelManager->Initialise(particle,secondaryParticle,
+				       2.,verboseLevel);
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);

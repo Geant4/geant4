@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.56 2010-02-17 17:25:44 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.57 2010-02-17 17:39:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,6 +55,7 @@
 //          PostStepGetPhysicalInteractionLength (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 15-07-08 Reorder class members for further multi-thread development (VI)
+// 17-02-10 Added pointer currentParticle (VI)
 //
 // Class Description:
 //
