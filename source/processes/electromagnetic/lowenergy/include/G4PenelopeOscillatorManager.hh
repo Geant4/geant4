@@ -31,7 +31,9 @@
 // -----------
 //  
 //  03 Dec 2009  First implementation, Luciano Pandola
-//
+//  16 Feb 2010  Added methods to calculate and store also A and Z 
+//               for molecules. Luciano Pandola
+// 
 // -------------------------------------------------------------------
 //
 // Class description:
@@ -80,6 +82,10 @@ public:
   void SetVerbosityLevel(G4int vl){verbosityLevel = vl;};
   G4int GetVerbosityLevel(){return verbosityLevel;};
   
+  //These are cumulative for the molecule
+  G4double GetTotalZ(const G4Material*);
+  G4double GetTotalA(const G4Material*);
+
 protected:
 
   G4PenelopeOscillatorManager();
@@ -97,13 +103,15 @@ private:
   std::map<const G4Material*,G4PenelopeOscillatorTable*> *oscillatorStoreIonisation;
   std::map<const G4Material*,G4PenelopeOscillatorTable*> *oscillatorStoreCompton;
 
+  std::map<const G4Material*,G4double> *atomicNumber;
+  std::map<const G4Material*,G4double> *atomicMass;
+
   //create both tables simultaneously
   void CheckForTablesCreated();
 
   void ReadElementData();
   G4double elementData[5][2000];
   G4bool fReadElementData;
-
 
   void BuildOscillatorTable(const G4Material*);
 

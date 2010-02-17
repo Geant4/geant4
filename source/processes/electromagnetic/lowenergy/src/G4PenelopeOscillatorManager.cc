@@ -29,7 +29,9 @@
 // -----------
 //  
 //  03 Dec 2009  First working version, Luciano Pandola
-//
+//  16 Feb 2010  Added methods to store also total Z and A for the 
+//               molecule, Luciano Pandola 
+// 
 // -------------------------------------------------------------------
 
 #include "G4PenelopeOscillatorManager.hh"
@@ -39,7 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() : 
-  oscillatorStoreIonisation(0),oscillatorStoreCompton(0)
+  oscillatorStoreIonisation(0),oscillatorStoreCompton(0),atomicNumber(0),
+  atomicMass(0)
 {
   fReadElementData = false;
   for (G4int i=0;i<5;i++)
@@ -47,7 +50,7 @@ G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() :
       for (G4int j=0;j<2000;j++)
 	elementData[i][j] = 0.;
     }
-  verbosityLevel = 2;
+  verbosityLevel = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,6 +112,10 @@ void G4PenelopeOscillatorManager::Clear()
 	}
     }
   delete oscillatorStoreCompton;
+
+  if (atomicMass) delete atomicMass;
+  if (atomicNumber) delete atomicNumber;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -224,8 +231,63 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
 	}
     }
 
+  if (!atomicNumber)
+    atomicNumber = new std::map<const G4Material*,G4double>;
+  if (!atomicMass)
+    atomicMass = new std::map<const G4Material*,G4double>;
+
 }
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeOscillatorManager::GetTotalZ(const G4Material* mat)
+{
+  // (1) First time, create oscillatorStores and read data
+  CheckForTablesCreated();
+
+  // (2) Check if the material has been already included
+  if (atomicNumber->count(mat))
+    return atomicNumber->find(mat)->second;
+    
+  // (3) If we are here, it means that we have to create the table for the material
+  BuildOscillatorTable(mat);
+
+  // (4) now, the oscillator store should be ok
+  if (atomicNumber->count(mat))
+    return atomicNumber->find(mat)->second;
+  else
+    {
+      G4cout << "G4PenelopeOscillatorManager::GetTotalZ() " << G4endl;
+      G4cout << "Impossible to retrieve the total Z for " << mat->GetName() << G4endl;      
+      return 0;
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PenelopeOscillatorManager::GetTotalA(const G4Material* mat)
+{
+  // (1) First time, create oscillatorStores and read data
+  CheckForTablesCreated();
+
+  // (2) Check if the material has been already included
+  if (atomicMass->count(mat))
+    return atomicMass->find(mat)->second;
+    
+  // (3) If we are here, it means that we have to create the table for the material
+  BuildOscillatorTable(mat);
+
+  // (4) now, the oscillator store should be ok
+  if (atomicMass->count(mat))
+    return atomicMass->find(mat)->second;
+  else
+    {
+      G4cout << "G4PenelopeOscillatorManager::GetTotalA() " << G4endl;
+      G4cout << "Impossible to retrieve the total A for " << mat->GetName() << G4endl;      
+      return 0;
+    }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -419,6 +481,8 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       */
     }
   
+  atomicNumber->insert(std::make_pair(material,totalZ));
+  atomicMass->insert(std::make_pair(material,totalMolecularWeight));
 
   meanExcitationEnergy = exp(meanExcitationEnergy/totalZ);
   if (verbosityLevel > 1)
