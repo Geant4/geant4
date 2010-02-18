@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2010-02-17 18:06:39 gcosmo Exp $
+$Id: History,v 1.118 2010-02-18 17:39:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 Feb 2010 Gabriele Cosmo (gdml-V09-03-01)
+- Added missing reference attribute in G4GDMLWriteMaterials for dumping
+  of materials property vectors. Increased string buffer in G4GDMLWrite.
+  Addressing problem report #1104.
+- Corrected import of surface properties in G4GDMLReadSolids for the case
+  of recursive read of files.
 
 17 Feb 2010 Gabriele Cosmo (gdml-V09-03-00)
 - Added IsValid() method to parser to verify if variable/constant/quantity
