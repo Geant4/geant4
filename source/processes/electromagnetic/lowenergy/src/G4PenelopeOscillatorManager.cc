@@ -31,7 +31,10 @@
 //  03 Dec 2009  First working version, Luciano Pandola
 //  16 Feb 2010  Added methods to store also total Z and A for the 
 //               molecule, Luciano Pandola 
-// 
+//  19 Feb 2010  Scale the Hartree factors in the Compton Oscillator 
+//               table by (1/fine_structure_const), since the models use 
+//               always the ratio (hartreeFactor/fine_structure_const)
+//
 // -------------------------------------------------------------------
 
 #include "G4PenelopeOscillatorManager.hh"
@@ -529,7 +532,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		      G4PenelopeOscillator newOsc; 
 		      newOsc.SetOscillatorStrength(fabs(occup)*(*StechiometricFactors)[k]);
 		      newOsc.SetIonisationEnergy(elementData[3][i]);
-		      newOsc.SetHartreeFactor(elementData[4][i]);
+		      newOsc.SetHartreeFactor(elementData[4][i]/fine_structure_const);
 		      newOsc.SetParentZ(elementData[0][i]);
 		      //keep track of the origianl shell level
 		      newOsc.SetParentShellID((G4int)elementData[1][i]);
@@ -617,7 +620,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       (*helper)[0].SetResonanceEnergy(plasmaEnergy);
       G4double hartree = 0.75/std::sqrt(3.0*pi*pi*moleculeDensity*
 					Bohr_radius*Bohr_radius*Bohr_radius*conductionStrength);
-      (*helper)[0].SetHartreeFactor(hartree);
+      (*helper)[0].SetHartreeFactor(hartree/fine_structure_const);
     }
   
   //Check f-sum rule
