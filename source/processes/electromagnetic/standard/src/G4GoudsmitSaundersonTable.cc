@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.4 2009-08-28 16:36:52 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.5 2010-02-19 09:29:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,10 +37,9 @@
 // Creation date: 20.02.2009
 //
 // Modifications:
-// 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
-// 26.08.2009 O.Kadri: avoiding unuseful calculations and optimizing the root finding parameter error's 
-//                     within SampleTheta method
-//
+// 04.03.2009 V.Ivanchenko: cleanup and format according to Geant4 EM style
+// 08.02.2010 O.Kadri     : reduce delared variables 
+//                          reduce error of finding root in secant method
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 #include "G4GoudsmitSaundersonTable.hh"
@@ -197,9 +196,10 @@ G4GoudsmitSaundersonTable::~G4GoudsmitSaundersonTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2, G4double rndm)
 { 
+
   //Benedito's procedure
   G4double A[11],ThisPDF[320],ThisCPDF[320];
-  G4double PDF1[320],PDF2[320],PDF3[320],PDF4[320],CPDF1[320],CPDF2[320],CPDF3[320],CPDF4[320];
+  G4double PDF1[320],PDF2[320],PDF3[320],PDF4[320];
   G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,aa,b,m,F;
   G4int Ind0,Ind1,Ind2,Ind3,KIndex=0,JIndex=0,IIndex=0;
 
@@ -225,15 +225,15 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
   for(G4int i=0 ; i<320 ;i++){
     PDF1[i]=PDF[Ind0+i];PDF2[i]=PDF[Ind1+i];    
     PDF3[i]=PDF[Ind2+i];PDF4[i]=PDF[Ind3+i];    
-    CPDF1[i]=CPDF[Ind0+i];CPDF2[i]=CPDF[Ind1+i];    
-    CPDF3[i]=CPDF[Ind2+i];CPDF4[i]=CPDF[Ind3+i];  
     ThisPDF[i]=Ckj*PDF1[i]+CkjPlus1*PDF2[i]+CkPlus1j*PDF3[i]+CkPlus1jPlus1*PDF4[i];
-    ThisCPDF[i]=Ckj*CPDF1[i]+CkjPlus1*CPDF2[i]+CkPlus1j*CPDF3[i]+CkPlus1jPlus1*CPDF4[i];  
-  // Find u Index using secant method
+    PDF1[i]=CPDF[Ind0+i];PDF2[i]=CPDF[Ind1+i]; //PDF as CPDF   
+    PDF3[i]=CPDF[Ind2+i];PDF4[i]=CPDF[Ind3+i]; //PDF as CPDF 
+    ThisCPDF[i]=Ckj*PDF1[i]+CkjPlus1*PDF2[i]+CkPlus1j*PDF3[i]+CkPlus1jPlus1*PDF4[i];  
   if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
   }
 
   ///////////////////////////////////////////////////////////////////////////
+  // Find u Index using secant method
   //CPDF^-1(rndm)=x ==> CPDF(x)=rndm;
   aa=uvalues[IIndex];
   b=uvalues[IIndex+1];
@@ -246,7 +246,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
     if(F>0.)b=m;
     else aa=m;
   } while(sqrt((b-aa)*(b-aa))>1.0e-6);
-
+if(m<1.0e-6)m=0.;
   return m;
 }
 
