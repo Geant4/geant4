@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-02-16 07:59:26 mkossov Exp $
+$Id: History,v 1.8 2010-02-21 02:05:09 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 21th, 2010  Mikhail  Kosov (test39-V09-03-02)
+- Test is reduced and accelerated to meet TG requirements
 
 Feb 16th, 2010  Mikhail  Kosov (test39-V09-03-01)
 - Final version of all-hadrons testing for elastic scattering

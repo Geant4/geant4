@@ -155,16 +155,15 @@
 //int main(int argc, char** argv)
 int main()
 {
-  const G4int nTg=7;   // Length of the target list for the Performance test
-  G4int tli[nTg]={90001000,90002002,90006006,90013014,90029034,90050069,90082126};
-  G4String tnm[nTg]={"Hydrogen","Helium","Carbon","Aluminum","Copper","Tin",
-                     "Lead"}; // Target names
-  G4String tsy[nTg]={"H","He","C","Al","Cu","Sn","Pb"}; // Target symbols
-  G4Material* mat[nTg]={0,0,0,0,0,0,0}; // Material pointers for the Target Loop
+  const G4int nTg=3;   // Length of the target list for the Performance test
+  G4int tli[nTg]={90001000,90013014,90082126};     // Targets CHIPS codes
+  G4String tnm[nTg]={"Hydrogen","Aluminum","Lead"};// Target names
+  G4String tsy[nTg]={"H","Al","Pb"};               // Target symbols
+  G4Material* mat[nTg]={0,0,0,};                   // Material pointers for the Target Loop
   const G4int nPr=10;  // Length of the projectile list for the Performance test
   G4int pli[nPr] = {211, 2112, 2212, -211, 321,-321, 310, 3122, 3222, -2212}; // projPDGs
-  const G4int nMom=5;  // Length of the projectile momentum list for the Performance test
-  G4double mom[nMom] = {30., 200., 1500., 10000., 100000.}; // Set of momenta in MeV/c !
+  const G4int nMom=3;  // Length of the projectile momentum list for the Performance test
+  G4double mom[nMom] = {100., 1000., 10000.}; // Set of momenta in MeV/c !
   // ^^^ End of the Performance On Flight test definition for targets/projectiles/energies
 #ifdef tdebug
   const G4int nT=20;           // Dimension of the t-distribution vectors
@@ -679,7 +678,7 @@ int main()
      G4int zeroO=0;                               // a#of events with noLead & 0 in OUT
      G4int alonO=0;                               // a#of events with noLead & 1 in OUT
      G4int badOT=0;                               // a#of events with wrong secondaries
-     const G4int ntpt=4;
+     const G4int ntpt=3;
      G4double thist[ntpt];                        // Values of t in the histogram
 #ifdef tdisthist
      G4double shist[ntpt];                        // Collected values in the histogram
