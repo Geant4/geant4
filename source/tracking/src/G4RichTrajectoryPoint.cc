@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.cc,v 1.5 2009-11-24 10:04:14 perl Exp $
+// $Id: G4RichTrajectoryPoint.cc,v 1.6 2010-02-22 21:26:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -235,9 +235,8 @@ std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
        ("PTDS",G4VProcess::GetProcessTypeName(fpProcess->GetProcessType()),
 	""));
   } else {
-    values->push_back
-      (G4AttValue("PDS","User Defined Limit in Current Volume",""));
-    values->push_back(G4AttValue("PTDS","User",""));
+    values->push_back(G4AttValue("PDS","None",""));
+    values->push_back(G4AttValue("PTDS","None",""));
   }
 
   values->push_back
