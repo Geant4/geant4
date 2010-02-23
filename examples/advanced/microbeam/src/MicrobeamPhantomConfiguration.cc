@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhantomConfiguration.cc,v 1.6 2008-06-16 07:46:11 sincerti Exp $
+// $Id: MicrobeamPhantomConfiguration.cc,v 1.7 2010-02-23 11:44:17 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamPhantomConfiguration.hh"
@@ -66,6 +66,7 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
   dz=0;
   nucleusMass=0;
   cytoplasmMass=0;
+  density=0;
 
   // READ PHANTOM PARAMETERS
   fMap = fopen("phantom.dat","r");
