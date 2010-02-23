@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.22 2010-02-23 11:44:17 sincerti Exp $
+$Id: History,v 1.23 2010-02-23 12:04:16 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,10 @@ $Id: History,v 1.22 2010-02-23 11:44:17 sincerti Exp $
                        --------------------
 
 23 February 2010 - S. Incerti - tag microbeam-V09-03-01
+- changed material/density selection in MicrobeamPhantomConfiguration.cc
+(thanks to gunter)
+
+23 February 2010 - S. Incerti - tag microbeam-V09-03-00
 - Added density initialisation in MicrobeamPhantomConfiguration.cc
 (thanks to gunter)
 
