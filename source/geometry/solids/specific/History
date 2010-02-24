@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2010-02-10 16:38:57 gcosmo Exp $
+$Id: History,v 1.162 2010-02-24 11:19:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-Feb-2010  G.Cosmo (geom-specific-V09-03-01)
+- Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid
+  unnecessary consecutive computations on the same point.
 
 10-Feb-2010  G.Cosmo (geom-specific-V09-03-00)
 - Use kInfinity for initialising minimum and maximum allowed extent for
