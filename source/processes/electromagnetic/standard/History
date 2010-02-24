@@ -1,4 +1,4 @@
-$Id: History,v 1.481 2010-02-17 18:59:22 vnivanch Exp $
+$Id: History,v 1.482 2010-02-24 15:29:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 February 09:  V.Ivant (emstand-V09-03-02)
+- make a tag co-working with emutils-V09-03-02
+
+19 February 09:  V.Ivant (emstand-V09-03-01)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) 
+      - fixed problems of small angle theta distributions
 
 17 February 09:  V.Ivant (emstand-V09-03-00)
 - G4CoulombScatteringModel - Added comments to relativistic formula
