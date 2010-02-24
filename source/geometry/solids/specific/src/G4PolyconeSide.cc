@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.22 2009-11-11 12:23:37 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.23 2010-02-24 11:18:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -491,7 +491,7 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   //
   if (phiIsOpen)
   {
-    G4double phi = axis.phi();
+    G4double phi = GetPhi(axis);
     while( phi < startPhi ) phi += twopi;
     
     if (phi > deltaPhi+startPhi)
@@ -852,6 +852,29 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
   return;
 }
 
+//
+// GetPhi
+//
+// Calculate Phi for a given 3-vector (point), if not already cached for the
+// same point, in the attempt to avoid consecutive computation of the same
+// quantity
+//
+G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
+{
+  G4double val=0.;
+
+  if (fPhi.first != p)
+  {
+    val = p.phi();
+    fPhi.first = p;
+    fPhi.second = val;
+  }
+  else
+  {
+    val = fPhi.second;
+  }
+  return val;
+}
 
 //
 // DistanceAway
@@ -921,7 +944,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
     //
     // Finally, check phi
     //
-    G4double phi = p.phi();
+    G4double phi = GetPhi(p);
     while( phi < startPhi ) phi += twopi;
     
     if (phi > startPhi+deltaPhi)
@@ -977,7 +1000,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit,
     // to use the standard method consistent with
     // PolyPhiFace. See PolyPhiFace::InsideEdgesExact
     //
-    G4double phi = hit.phi();
+    G4double phi = GetPhi(hit);
     while( phi < startPhi-phiTolerant ) phi += twopi;
     
     if (phi > startPhi+deltaPhi+phiTolerant) return false;

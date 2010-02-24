@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.11 2008-05-15 11:41:59 gcosmo Exp $
+// $Id: G4PolyhedraSide.hh,v 1.12 2010-02-24 11:18:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,7 +165,9 @@ class G4PolyhedraSide : public G4VCSGface
     G4int ClosestPhiSegment( G4double phi );
   
     G4int PhiSegment( G4double phi );
-  
+
+    G4double GetPhi( const G4ThreeVector& p );
+
     G4double DistanceToOneSide( const G4ThreeVector &p,
                                 const G4PolyhedraSideVec &vec,
                                       G4double *normDist );
@@ -196,6 +198,7 @@ class G4PolyhedraSide : public G4VCSGface
 
   private:
 
+    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
     G4double kCarTolerance;  // Geometrical surface thickness
     G4double fSurfaceArea;   // Surface Area 
 };
