@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.57 2010-02-17 17:39:05 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.58 2010-02-24 15:30:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -232,6 +232,8 @@ public:
 
   inline void SetApplyCuts(G4bool val);
 
+  inline void SetBuildTableFlag(G4bool val);
+
   //------------------------------------------------------------------------
   // Other generic methods
   //------------------------------------------------------------------------
@@ -258,8 +260,6 @@ protected:
   inline G4double GetGammaEnergyCut();
 
   inline G4double GetElectronEnergyCut();
-
-  inline void SetBuildTableFlag(G4bool val);
 
   inline void SetStartFromNullFlag(G4bool val);
 
@@ -517,6 +517,14 @@ inline void G4VEmProcess::SetApplyCuts(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
+{
+  buildLambdaTable = val;
+  if(!val) { integral = false; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEmProcess::RecalculateLambda(G4double e, 
 						const G4MaterialCutsCouple* couple)
 {
@@ -565,14 +573,6 @@ inline G4double G4VEmProcess::GetGammaEnergyCut()
 inline G4double G4VEmProcess::GetElectronEnergyCut()
 {
   return (*theCutsElectron)[currentCoupleIndex];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
-{
-  buildLambdaTable = val;
-  if(!val) integral = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
