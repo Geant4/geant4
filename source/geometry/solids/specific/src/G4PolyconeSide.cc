@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.23 2010-02-24 11:18:25 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.24 2010-02-24 11:31:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea = 0.0;
+  fPhi.first = G4ThreeVector(0,0,0);
+  fPhi.second= 0.0;
 
   //
   // Record values

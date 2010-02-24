@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.16 2010-02-24 11:18:25 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.17 2010-02-24 11:31:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,9 +63,11 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                                         G4bool thePhiIsOpen,
                                         G4bool isAllBehind )
 {
-
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea=0.;
+  fPhi.first = G4ThreeVector(0,0,0);
+  fPhi.second= 0.0;
+
   //
   // Record values
   //
