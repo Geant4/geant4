@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.27 2010-02-17 19:33:27 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.28 2010-02-25 10:27:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -298,38 +298,40 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
 
 G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4double g, 
 				    const G4double E, const G4double Ef) const
-{
-	
-  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-  G4double alpha = (p*p+h*h)/(2.0*g);
+{	
+  // 25.02.2010 V.Ivanchenko added more protections
+  G4double Aph   = (p*p + h*h + p - 3.0*h)/(4.0*g);
+  //  G4double alpha = (p*p + h*h)/(2.0*g);
   
-  if ( (E-alpha) < 0 ) return 0;
+  if ( E - Aph < 0.0) { return 0.0; }
   
   G4double logConst =  (p+h)*std::log(g) - logfactorial(p+h-1) - logfactorial(p) - logfactorial(h);
 
-// initialise values using j=0
+  // initialise values using j=0
 
   G4double t1=1;
   G4double t2=1;
-  G4double logt3=(p+h-1) * std::log(E-Aph);
-  G4double tot = std::exp( logt3 + logConst );
+  G4double logt3=(p+h-1) * std::log(E-Aph) + logConst;
+  const G4double logmax = 200.;
+  if(logt3 > logmax) { logt3 = logmax; }
+  G4double tot = std::exp( logt3 );
 
-// and now sum rest of terms 
-  G4int j(1);  
-  while ( (j <= h) && ((E - alpha - j*Ef) > 0.0) ) 
+  // and now sum rest of terms
+  // 25.02.2010 V.Ivanchenko change while to for loop and cleanup 
+  G4double Eeff = E - Aph; 
+  for(G4int j=1; j<=h; ++j) 
     {
-	  t1 *= -1.;
-	  t2 *= (h+1-j)/j;
-	  logt3 = (p+h-1) * std::log( E - j*Ef - Aph) + logConst;
-	  G4double t3 = std::exp(logt3);
-	  tot += t1*t2*t3;
-	  j++;
+      Eeff -= Ef;
+      if(Eeff < 0.0) { break; }
+      t1 *= -1.;
+      t2 *= (G4double)(h+1-j)/(G4double)j;
+      logt3 = (p+h-1) * std::log( Eeff) + logConst;
+      if(logt3 > logmax) { logt3 = logmax; }
+      tot += t1*t2*std::exp(logt3);
     }
         
   return tot;
 }
-
-
 
 G4double G4PreCompoundEmission::factorial(G4double a) const
 {
