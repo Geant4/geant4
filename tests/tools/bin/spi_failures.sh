@@ -24,12 +24,14 @@ URLstart=http://lcgapp.cern.ch/spi/aaLibrarian/nightlies/
 slc4="slc4_amd64_gcc34 slc4_ia32_gcc34"
 slc5="x86_64-slc5-gcc43 i686-slc5-gcc43"
 slc5="$slc5 x86_64-slc5-gcc41"
-mac="osx105_ia32_gcc401 x86_64-mac106-gcc42"
+mac5="osx105_ia32_gcc401"
+mac6="x86_64-mac106-gcc42"
 win="i686-winxp-vc9"
 
 addbg "$slc4" _dbg; slc4=$result;
 addbg "$slc5" -dbg -opt; slc5=$result;
-addbg "$mac"  _dbg; mac=$result;
+addbg "$mac5"  _dbg; mac=$result;
+addbg "$mac6"  -dbg -opt; mac="$mac $result";
 addbg "$win"  -dbg -opt; win=$result;
 
 day=`date "+%a"`
