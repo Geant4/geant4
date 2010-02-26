@@ -104,7 +104,7 @@ private:
   G4double           aPower;
   G4double           elow;
   G4double           elowest;
-  G4double           APower[92];
+  G4double           APower[93];
 
   const G4ParticleDefinition* piPlus;
   const G4ParticleDefinition* piMinus;
