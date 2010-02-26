@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2009-12-14 17:20:37 gunter Exp $
+$Id: History,v 1.49 2010-02-26 11:08:55 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.48 2009-12-14 17:20:37 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-Feb-2010 G.Folger                (testtools-QMtest-V09-03-00)
+- exam-ext-persistency-gdml-g01-run.qmt: use rm -f; this will not give an error
+  on nonexistant file
 
 14-Dec-2009 G.Folger                 (testtools-QMtest-V09-02-39)
 - test all physics lists, available from Factory, using benchmark/.../HadCalCMS
