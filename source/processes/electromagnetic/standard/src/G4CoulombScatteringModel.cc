@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.45 2010-02-17 18:59:22 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.46 2010-03-01 11:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,7 +89,8 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   //	 << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV 
   //	 <<" cut(MeV)= " << cutEnergy<< G4endl; 
   SetupParticle(p);
-  if(kinEnergy < lowEnergyLimit) return 0.0;
+  if(kinEnergy < lowEnergyLimit) { return 0.0; }
+  DefineMaterial(CurrentCouple());
   SetupKinematic(kinEnergy, cutEnergy);
 
   // save lab system kinematics

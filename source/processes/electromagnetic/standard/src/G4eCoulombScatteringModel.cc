@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.79 2010-02-17 18:59:22 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.80 2010-03-01 11:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,7 +109,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
     G4double constn = 6.937e-6/(MeV*MeV);
 
     ScreenRSquare[0] = alpha2*a0*a0;
-    for(G4int j=1; j<100; j++) {
+    for(G4int j=1; j<100; ++j) {
       G4double x = a0*fNistManager->GetZ13(j);
       ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
@@ -193,6 +193,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   // cross section is set to zero to avoid problems in sample secondary
   if(kinEnergy < lowEnergyLimit) { return xsec; }
+  DefineMaterial(CurrentCouple());
   SetupKinematic(kinEnergy, cutEnergy);
   if(cosTetMaxNuc < cosTetMinNuc) {
     SetupTarget(Z, kinEnergy);
@@ -268,7 +269,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 		G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) return;
+  if(kinEnergy < lowEnergyLimit) { return; }
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
 

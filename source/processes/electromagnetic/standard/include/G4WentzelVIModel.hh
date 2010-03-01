@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.21 2009-10-10 15:16:57 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.22 2010-03-01 11:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -221,14 +221,13 @@ G4double G4WentzelVIModel::GetLambda(G4double e)
 {
   G4double x;
   if(theLambdaTable) {
-    G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
+    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
   } else {
     x = CrossSection(currentCouple,particle,e,
 		     (*currentCuts)[currentMaterialIndex]);
   }
-  if(x > DBL_MIN) x = 1./x;
-  else            x = DBL_MAX;
+  if(x > DBL_MIN) { x = 1./x; }
+  else            { x = DBL_MAX; }
   return x;
 }
 
@@ -256,7 +255,7 @@ inline void G4WentzelVIModel::SetupKinematic(G4double ekin, G4double cut)
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     cosTetMaxNuc = cosThetaMax;
-    if(mass < MeV && ekin <= 10.*cut) {
+    if(mass < MeV && cosThetaMax < 1.0 && ekin <= 10.*cut) {
       cosTetMaxNuc = ekin*(cosThetaMax + 1.0)/(10.*cut) - 1.0;
     }
     ComputeMaxElectronScattering(cut);
@@ -274,8 +273,9 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     if(iz > 99) iz = 99;
     targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
     screenZ = ScreenRSquare[iz]/mom2;
-    G4double meff = targetMass/(mass+targetMass);
-    kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+    //G4double meff = targetMass/(mass+targetMass);
+    //    kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+    kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
     screenZ *=(1.13 + std::min(1.0,3.76*Z*Z*invbeta2*alpha2));
     if(mass > MeV) { screenZ *= 2.0; } 
     formfactA = FormFactor[iz]*mom2;

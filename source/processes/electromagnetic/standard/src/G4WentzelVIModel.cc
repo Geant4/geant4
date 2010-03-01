@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.37 2009-10-28 10:14:13 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.38 2010-03-01 11:25:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -95,7 +95,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
   theProton   = G4Proton::Proton();
-  lowEnergyLimit = 0.1*keV;
+  lowEnergyLimit = 1.0*eV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   tkin = targetZ = mom2 = DBL_MIN;
@@ -113,7 +113,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
     G4double constn = 6.937e-6/(MeV*MeV);
 
     ScreenRSquare[0] = alpha2*a0*a0;
-    for(G4int j=1; j<100; j++) {
+    for(G4int j=1; j<100; ++j) {
       G4double x = a0*fNistManager->GetZ13(j);
       ScreenRSquare[j] = alpha2*x*x;
       x = fNistManager->GetA27(j); 
@@ -156,11 +156,15 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 			     G4double Z, G4double,
 			     G4double cutEnergy, G4double)
 {
+  G4double xsec = 0.0;
   SetupParticle(p);
-  if(kinEnergy < lowEnergyLimit) return 0.0;
+  if(kinEnergy < lowEnergyLimit) { return xsec; }
+  DefineMaterial(CurrentCouple());
   SetupKinematic(kinEnergy, cutEnergy);
-  SetupTarget(Z, kinEnergy);
-  G4double xsec = ComputeTransportXSectionPerAtom();
+  if(cosTetMaxNuc < 1.0) {
+    SetupTarget(Z, kinEnergy);
+    xsec = ComputeTransportXSectionPerAtom();
+  }
   /*   
   G4cout << "CS: e= " << tkin << " cosEl= " << cosTetMaxElec2 
 	 << " cosN= " << cosTetMaxNuc2 << " xsec(bn)= " << xsec/barn
@@ -393,7 +397,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double kinEnergy = dynParticle->GetKineticEnergy();
 
   // ignore scattering for zero step length and enegy below the limit
-  if(kinEnergy < lowEnergyLimit || tPathLength <= DBL_MIN) return;
+  if(kinEnergy < lowEnergyLimit || tPathLength <= DBL_MIN) { return; }
 
   G4double ekin = preKinEnergy;
   if(ekin - kinEnergy > ekin*dtrl) {
@@ -402,6 +406,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   }  
   
   G4double x1 = 0.5*tPathLength/lambdaeff;
+  if(x1 <= DBL_MIN) {return; }
   G4double cut= (*currentCuts)[currentMaterialIndex];
   /*  
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy<<" Eeff(MeV)= "<<ekin/MeV
@@ -452,8 +457,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // cost is sampled ------------------------------
   G4double cost = 1.0 - 2.0*z;
-  //  if(cost < -1.0) cost = -1.0;
-  // else if(cost > 1.0) cost = 1.0;
+  //if(cost < -1.0)     { cost = -1.0; }
+  //else if(cost > 1.0) { cost = 1.0; }
   G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
 
   G4double phi  = twopi*G4UniformRand();
@@ -549,7 +554,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
       }
     } while (t > 0.0); 
   }
-  if(isscat) newDirection.rotateUz(dir);
+  if(isscat) { newDirection.rotateUz(dir); }
   newDirection.rotateUz(oldDirection);
 
   //G4cout << "G4WentzelVIModel sampling of scattering is done" << G4endl;
