@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.22 2010-03-01 11:25:26 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.23 2010-03-02 11:27:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -273,9 +273,9 @@ inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
     if(iz > 99) iz = 99;
     targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
     screenZ = ScreenRSquare[iz]/mom2;
-    //G4double meff = targetMass/(mass+targetMass);
-    //    kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
-    kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
+    G4double meff = targetMass/(mass+targetMass);
+    kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+    //kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
     screenZ *=(1.13 + std::min(1.0,3.76*Z*Z*invbeta2*alpha2));
     if(mass > MeV) { screenZ *= 2.0; } 
     formfactA = FormFactor[iz]*mom2;
