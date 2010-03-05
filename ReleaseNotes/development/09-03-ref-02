@@ -1,0 +1,140 @@
+
+                       geant4-09-03-ref-02
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Fixed issue for ion processes in G4VEmProcess.
+ o Adopt G4NucleiProperties in Bertini Cascade for retrieving binding energy
+   and fixed 2-body scattering angular distributions.
+ o Added pion elastic in CHIPS and updated proton elastic.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+geometry/management                              geommng-V09-03-00
+-------------------
+- Added explicit initialisation of min/max extent for mother and target
+  volumes in method BuildNodes() of G4SmartVoxelHeader.
+
+geometry/solids/specific                         geom-specific-V09-03-01
+------------------------
+- Use kInfinity for initialising minimum and maximum allowed extent for
+  G4SolidExtentList of faceted solids.
+- Adopt caching of 'Phi' in G4PolyconeSide and G4PolyhedraSide to avoid
+  unnecessary consecutive computations on the same point.
+
+persistency/gdml                                 gdml-V09-03-01
+----------------
+- Added missing reference attribute in G4GDMLWriteMaterials for dumping
+  of materials property vectors. Increased string buffer in G4GDMLWrite.
+  Addressing problem report #1104.
+- Corrected import of surface properties in G4GDMLReadSolids for the case
+  of recursive read of files.
+- Added IsValid() method to parser to verify if variable/constant/quantity
+  is defined and is valid. Added const qualifier to reader accessors in parser.
+
+processes/electromagnetic/lowenergy              emlowen-V09-03-03
+-----------------------------------
+- Fixed initialisation of 'atomTotalCrossSection' in class
+  G4hShellCrossSectionDoubleExp.
+
+processes/electromagnetic/standard               emstand-V09-03-02
+----------------------------------
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable: fixed problems of
+  small angle theta distributions.
+- G4CoulombScatteringModel: added comments to relativistic formula.
+- G4eCoulombScatteringModel: added method SetLowEnergyLimit(), default value
+  is set to 1 eV (before was 100 eV)
+- G4CoulombScattering: removed inline method SetBuildTableFlag() which was
+  hiding implementation in the base class.
+
+processes/electromagnetic/utils                  emutils-V09-03-02
+-------------------------------
+- G4VEmProcess: fixed problem for ion processes by adding pointer to
+  'currentParticle' which may be different from generic ion.
+  Moved SetBuildTableFlag() method to public.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-03-00)
+  o G4UPiNuclearCrossSection: fixed bug for high Z (>83) atoms.
+- models/cascade (hadr-casc-V09-03-07)
+  o Replaced all uses of bindingEnergy() (local Bertini method) with the
+    Geant4 standard G4NucleiProperties::GetBindingEnergy(A,Z) in classes
+    G4IntraNuclearCascader, G4InuclCollider, G4NucleiModel, G4Fissioner,
+    G4EquilibriumModel and G4NonEquilibriumModel.
+    G4Fissioner still uses Bertini method bindingEnergyAsymptotic().
+  o G4InteractionCase: minor fix in initialisation in constructor to
+    allow for porting on C++0x Standard.
+  o G4Diproton, G4Dineutron, G4UnboundPN: new G4ParticleDefinition
+    subclasses, which implement the Bertini-specific dibaryon states.
+    These are not used anywhere as yet, but will be used in future
+    modifications to the G4InuclParticle subclasses.
+  o G4ElementaryParticleCollider: replaced original (incorrect) pp, pn, nn
+    2-body to 2-body scattering angular distributions with a new
+    parameterization of elastic scattering data using the sum of two
+    exponentials.
+- models/chiral_inv_phase_space (hadr-chips-V09-03-04)
+  o Updated proton elastic and CHIPS parameters.
+  o Implemented anti-baryon elastic interactions.
+  o Added pion elastic and fixed a bug in CHIPS fragmentation.
+  o Clean-up and fixed compilation warnings.
+- models/coherent_elastic (hadr-cohe-V09-03-01)
+  o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
+    G4QElasticCrossSection; fixed initialization problem for
+    G4QNeutronElasticCrossSection.
+- models/de_excitation (hadr-deex-V09-03-02)
+  o G4ExcitationHandler: activated FermiBreakUp.
+- models/high_energy (hadr-hep-V09-03-00)
+  o Fixed case of segmentation fault in G4HEKaonZeroLongInelastic and 
+    G4HEKaonZeroShortInelastic due to local instantiation and subsequent
+    deletion of the K0 and anti-K0 models.
+    This was fixed by implementing code specifically for
+    G4HEKaonZeroLongInelastic and G4HEKaonZeroShortInelastic, without
+    using the K0, anti-K0 code. As an added feature, the production of
+    K0 and anti-K0 outside the nucleus is now prohibited.
+    Courtesy of A.Shepetov (Tien-Shan Mountain Station).
+- models/pre_equilibrium (hedr-pre-V09-03-03)
+  o G4PreCompoundEmission: added protection against unphysical value of 
+    parameter 'an' when exitation energy is huge to avoid numerical problems.
+  o Removed dummy classes G4VPreCompoundIon and G4VPreCompoundNucleon.
+
+tracking                                         tracking-V09-03-00
+--------
+- G4RichTrajectory: Fixed bug in MergeTrajectory(), to not invoke
+  G4Trajectory::MergeTrajectory().
+- G4RichTrajectory and G4RichTrajectoryPoint: eliminated spaces in G4AttValue
+  values; G4AttValue values are "None" for attributes derived from zero
+  pointers.
+
+examples                                         examples-V09-03-02
+--------
+- Updated reference outputs.
+- advanced/microbeam (microbeam-V09-03-01)
+  o Added density initialisation in MicrobeamPhantomConfiguration and
+    changed material/density selection.
+- advanced/underground_physics (DMX-V09-03-00)
+  o Physics list migrated from LowEnergy processes to the new Livermore 
+    models. Physics results unchanged for gamma/e-. Possible differences 
+    with ions/protons.
+  o Corrected analysis-manager to solve a problem with the HBOOK output files
+    (ntuples not filled, histograms not saved). Get rid of a warning message
+    and allocation problems with ntuple2.
+- extended/electromagnetic/TestEm2 (testem2-V09-03-00)
+  o Added histos rms on profiles (histos numbering is changed) and new scripts.
+
+tests                                            tests-V09-03-02
+-----
+- Updated reference outputs and tools.
+- test19 (test19-V09-03-00)
+  o Added elastic cross-sections test.
+- test21 (test21-V09-03-00)
+  o Use separate MultipleScattering for e, Mu, and hadrons.
+- test39 (test39-V09-03-00)
+  o Separated test for G4QProtonElCS and G4QNeutronElCS, and made more
+    compact by reducing t-table.
+  o Extended to test all-hadrons for elastic scattering.
