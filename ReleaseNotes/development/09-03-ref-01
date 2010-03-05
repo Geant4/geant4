@@ -69,7 +69,7 @@ visualization/gMocren                            gMocren-V09-03-00
   made explicit with static_cast conversions from double to float. Also use
   G4 types in consistent way. Removed debug code with printout. 
 
-examples                                         examples-V09-03-00
+examples                                         examples-V09-03-01
 --------
 - Updated reference outputs.
 - Corrected GNUmakefiles whereever necessary for default setting of G4INSTALL.
@@ -107,7 +107,7 @@ examples                                         examples-V09-03-00
     adding missing macros and correcting order; corrected comments
     wherever necessary.
 
-tests                                            tests-V09-03-00
+tests                                            tests-V09-03-01
 -----
 - Updated reference outputs and tools.
 - Corrected GNUmakefiles whereever necessary for default setting of G4INSTALL.
