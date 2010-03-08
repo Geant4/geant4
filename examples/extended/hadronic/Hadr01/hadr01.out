@@ -399,33 +399,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.35s Real=0.35s Sys=0s
+  User=0.36s Real=0.37s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         72.2   RMS(MeV) 64.41
-Average number of steps              243.1
-Average number of gamma              2.4
-Average number of e-                 2.92
-Average number of e+                 0.11
-Average number of neutrons           1.47
-Average number of protons            1.42
+Average energy deposit (MeV)         63.92   RMS(MeV) 45.39
+Average number of steps              255.2
+Average number of gamma              2.89
+Average number of e-                 3.37
+Average number of e+                 0.08
+Average number of neutrons           1.35
+Average number of protons            1.24
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.32
-Average number of pi0                0.16
+Average number of pi+ & pi-          0.2
+Average number of pi0                0.19
 Average number of kaons              0
-Average number of muons              0.02
-Average number of deuterons+tritons  0.16
-Average number of He3+alpha          0.17
+Average number of muons              0.01
+Average number of deuterons+tritons  0.11
+Average number of He3+alpha          0.18
 Average number of ions               0.55
-Average number of forward neutrons   0.22
-Average number of reflected neutrons 1.16
-Average number of leaked neutrons    0.05
-Average number of proton leak        0.62
-Average number of pion leak          0.29
+Average number of forward neutrons   0.13
+Average number of reflected neutrons 1.11
+Average number of leaked neutrons    0.04
+Average number of proton leak        0.51
+Average number of pion leak          0.16
 ========================================================
 
 #

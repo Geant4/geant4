@@ -148,7 +148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=27.41s Real=27.63s Sys=0.23s
+  User=27.53s Real=27.77s Sys=0.24s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules

@@ -494,8 +494,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=7.33s Real=7.33s Sys=0s
-Time elapsed in 1 events ---- User=7.33s Real=7.33s Sys=0s
+  User=7.1s Real=7.1s Sys=0s
+Time elapsed in 1 events ---- User=7.1s Real=7.1s Sys=0s
 #
 /gun/particle proton
 /gun/energy 0.01 MeV
@@ -516,8 +516,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.57s Real=2.56s Sys=0s
-Time elapsed in 1 events ---- User=2.57s Real=2.56s Sys=0s
+  User=2.57s Real=2.57s Sys=0.01s
+Time elapsed in 1 events ---- User=2.57s Real=2.57s Sys=0.01s
 #
 /gun/particle hydrogen
 /gun/energy 0.01 MeV
@@ -538,8 +538,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=3.03s Real=3.04s Sys=0s
-Time elapsed in 1 events ---- User=3.03s Real=3.04s Sys=0s
+  User=3.04s Real=3.04s Sys=0s
+Time elapsed in 1 events ---- User=3.04s Real=3.04s Sys=0s
 #
 /gun/particle alpha
 /gun/energy 0.01 MeV
@@ -560,8 +560,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.2s Real=2.24s Sys=0.03s
-Time elapsed in 1 events ---- User=2.2s Real=2.24s Sys=0.03s
+  User=2.2s Real=2.23s Sys=0.02s
+Time elapsed in 1 events ---- User=2.2s Real=2.23s Sys=0.02s
 #
 /gun/particle alpha+
 /gun/energy 0.01 MeV
@@ -582,8 +582,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.23s Real=2.25s Sys=0.03s
-Time elapsed in 1 events ---- User=2.23s Real=2.25s Sys=0.03s
+  User=2.23s Real=2.26s Sys=0.03s
+Time elapsed in 1 events ---- User=2.23s Real=2.26s Sys=0.03s
 #
 /gun/particle helium
 /gun/energy 0.01 MeV
@@ -604,8 +604,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=2.21s Real=2.24s Sys=0.03s
-Time elapsed in 1 events ---- User=2.21s Real=2.24s Sys=0.03s
+  User=2.21s Real=2.22s Sys=0.02s
+Time elapsed in 1 events ---- User=2.21s Real=2.22s Sys=0.02s
 #
 G4 kernel has come to Quit state.
 DNAProcess for alpha in Water : 3 calls

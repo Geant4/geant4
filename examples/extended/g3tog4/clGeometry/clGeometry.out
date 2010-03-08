@@ -407,7 +407,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 

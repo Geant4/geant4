@@ -16,7 +16,7 @@ energy = 3.143303e+00 GeV
 Histograms are booked output file <lhep> 
 ### factor  = 6.429441e-02    cross(b)= 2.526210e-01
 ### 0-th event start 
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 ###### Save histograms
 #################################################################
 ###### Cross section per bin for pi+

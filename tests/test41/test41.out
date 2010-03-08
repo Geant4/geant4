@@ -124,6 +124,11 @@ ionIoni:   for  GenericIon    SubType= 2
             BraggIon :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 GeV
 
+CoulombScat:   for  GenericIon    SubType= 1
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; q2Max(GeV^2)= 1e+06
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :     Emin=          0 eV         Emax=   10 GeV
+
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
       Lambda tables from threshold to 10 GeV in 56 bins, spline: 1
@@ -1238,7 +1243,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.119   -0.281     68.8      1.05        0        0         0         Abs initStep
-    1    -1.81    -4.42     74.4     0.841    0.212     7.21      7.21         Abs CoulombScat
+    1    -1.81    -4.42     74.4     0.841    0.213     7.22      7.22         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -3575,7 +3580,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     0.62    0.204       95      1.27        0        0         0         Abs initStep
-    1     2.12    -1.18     98.6      1.19   0.0889     4.19      4.19         Abs CoulombScat
+    1     2.12    -1.18     98.6      1.19    0.089     4.19      4.19         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -6329,7 +6334,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.035  -0.0072     16.9     0.866        0        0         0         Abs initStep
-    1    0.934    -2.29     19.6     0.778   0.0881     3.64      3.64         Abs CoulombScat
+    1    0.935    -2.29     19.6     0.778   0.0882     3.64      3.64         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -9075,7 +9080,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.291   -0.358     92.5      1.58        0        0         0         Abs initStep
-    1   0.0786    0.215     94.1      1.55   0.0289     1.75      1.75         Abs CoulombScat
+    1   0.0784    0.216     94.1      1.55    0.029     1.75      1.75         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -9126,7 +9131,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0771  -0.0247     43.8      1.66        0        0         0         Abs initStep
-    1    -1.25    0.547       47      1.58   0.0763      3.5       3.5         Abs CoulombScat
+    1    -1.25    0.548       47      1.58   0.0764      3.5       3.5         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -10049,7 +10054,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -0.01   0.0439     26.1     0.182        0        0         0         Abs initStep
-    1  -0.0699    0.997     26.5     0.143   0.0389     1.03      1.03         Abs CoulombScat
+    1  -0.0699    0.998     26.5     0.143    0.039     1.03      1.03         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -12380,7 +12385,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0453    0.118     93.5      1.22        0        0         0         Abs initStep
-    1     2.43     4.12      100     0.957    0.268     8.11      8.11         Abs CoulombScat
+    1     2.43     4.13      100     0.957    0.268     8.11      8.11         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -14486,7 +14491,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.107  -0.0149     35.4      1.05        0        0         0         Abs initStep
-    1    -4.54    0.482     41.5     0.861    0.191     7.73      7.73         Abs CoulombScat
+    1    -4.54    0.483     41.5     0.861    0.191     7.74      7.74         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 1,   Parent ID = 0
@@ -17653,7 +17658,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.128   0.0554     85.9     0.297        0        0         0         Abs initStep
-    1  -0.0182  -0.0146       86     0.292  0.00527    0.193     0.193         Abs CoulombScat
+    1  -0.0184  -0.0147       86     0.292  0.00528    0.193     0.193         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -18558,7 +18563,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.302   0.0865      100     0.773        0        0         0         Abs initStep
-    1   -0.525   -0.959      102     0.726   0.0473     1.89      1.89         Abs CoulombScat
+    1   -0.525    -0.96      102     0.726   0.0473      1.9       1.9         Abs CoulombScat
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -24914,7 +24919,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.19s Real=0.51s Sys=0.02s
+  User=0.2s Real=0.49s Sys=0.02s
 ###  999  events of mu+  with p(MeV/c)= 172 scattered off 116.24 mm of G4_lH2
 ###    Beam momentum spread 1 MeV/c
 /testem/setFileName test41_al.log

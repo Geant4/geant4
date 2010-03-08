@@ -385,7 +385,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.94s Real=14.18s Sys=0.24s
+  User=14.26s Real=14.48s Sys=0.22s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -444,7 +444,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.32s Real=5.34s Sys=0.02s
+  User=5.4s Real=5.43s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -821,19 +821,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.06s Real=6.07s Sys=0.03s
+  User=5.56s Real=5.6s Sys=0.04s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.12213 cm    rms= 1.20971 mm 
- Mean number of primary steps = 20.086
- Total energy deposit= 286.907 MeV
+ Projected Range= 2.11481 cm    rms= 1.73576 mm 
+ Mean number of primary steps = 20.057
+ Total energy deposit= 285.581 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	2.45947 GeV	2.45947 % 	5.49736e-06 Gy
- tally 1: 	 	0 eV 	0 % 	0 Gy
+ tally 0: 	 	2.57553 GeV	2.57553 % 	5.75677e-06 Gy
+ tally 1: 	 	6.74522 MeV	0.00674522 % 	1.50768e-08 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
@@ -842,7 +842,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 822432760, 421322046
+ Current couple of seeds = 2111978565, 1031016466
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/tallyMat TechVacuum
@@ -1195,7 +1195,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 822432760, 421322046
+ Current couple of seeds = 2111978565, 1031016466
 ----------------------------------------
 Start Run processing.
 
@@ -1203,18 +1203,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 325.482 um    rms= 87.4618 um 
- Mean number of primary steps = 5.29
+ Projected Range= 333.202 um    rms= 99.3023 um 
+ Mean number of primary steps = 5.28
  Total energy deposit= 265 eV 
- NIEL energy deposit = 177.214 eV 
+ NIEL energy deposit = 177.123 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	12.3285 keV	46.5227 % 	2.46906e-05 Gy
+ tally 0: 	 	12.7241 keV	48.0154 % 	2.54828e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1224,7 +1224,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1681173262, 636173046
+ Current couple of seeds = 815499456, 1371750856
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/tallyMat G4_WATER
@@ -1577,7 +1577,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1681173262, 636173046
+ Current couple of seeds = 815499456, 1371750856
 ----------------------------------------
 Start Run processing.
 
@@ -1585,18 +1585,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.04s Real=0.03s Sys=0s
+  User=0.03s Real=0.03s Sys=0.01s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.42516 mm    rms= 47.4931 um 
- Mean number of primary steps = 30.46
+ Projected Range= 6.4179 mm    rms= 49.4442 um 
+ Mean number of primary steps = 30.42
  Total energy deposit= 100 MeV
- NIEL energy deposit = 57.4656 keV
+ NIEL energy deposit = 57.4941 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	877.944 MeV	8.77944 % 	1.75828e-05 Gy
+ tally 0: 	 	784.159 MeV	7.84159 % 	1.57045e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1606,7 +1606,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1784061889, 788625207
+ Current couple of seeds = 1937912428, 2035742019
 ----------------------------------------
 G4 kernel has come to Quit state.
 

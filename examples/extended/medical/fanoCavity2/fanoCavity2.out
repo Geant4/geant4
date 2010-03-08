@@ -175,7 +175,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=9.3s Real=9.3s Sys=0s
+  User=9s Real=9s Sys=0s
 
  Process calls frequency --->  msc= 537781  eIoni= 618411  Transportation= 23069
 
