@@ -98,6 +98,9 @@ processes/hadronic
     using the K0, anti-K0 code. As an added feature, the production of
     K0 and anti-K0 outside the nucleus is now prohibited.
     Courtesy of A.Shepetov (Tien-Shan Mountain Station).
+- models/pre_equilibrium (hadr-pre-V09-03-01)
+  o G4PreCompoundEmission: added protection against unphysical value of 
+    parameter 'an' when exitation energy is huge to avoid numerical problems.
 
 tracking                                         tracking-V09-03-00
 --------
