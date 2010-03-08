@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.122 2009-11-04 12:58:00 allison Exp $
+// $Id: G4VisManager.cc,v 1.123 2010-03-08 16:34:17 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,10 +179,14 @@ G4VisManager::~G4VisManager () {
     delete fSceneList[i];
   }
   for (i = 0; i < fAvailableSceneHandlers.size (); ++i) {
+  if (fAvailableSceneHandlers[i] != NULL) {
     delete fAvailableSceneHandlers[i];
   }
+  }
   for (i = 0; i < fAvailableGraphicsSystems.size (); ++i) {
-    delete fAvailableGraphicsSystems[i];
+    if (fAvailableGraphicsSystems[i]) {
+      delete fAvailableGraphicsSystems[i];
+    }
   }
   if (fVerbosity >= startup) {
     G4cout << "Graphics systems deleted." << G4endl;
