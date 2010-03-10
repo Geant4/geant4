@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2010-01-28 09:19:04 gcosmo Exp $
+$Id: History,v 1.164 2010-03-10 11:03:46 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+9th March 2010 Laurent Garnier
+ - G4OpenGLViewer : Fix clipping when resizing non square size windows
+   Remove error message when no scene present.
+ - G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer : 
+    - Add some protections if viewer is in tab
+    -  fix some redraw probems when focus was outside frame
+    - Add ShowView() and paintEvent() methods
+    - DrawView method is now the same in Store and Immediate mode
+ - G4OpenGLQtViewer : Add things for viewer in tabs
+
+3rd March 2010 Laurent Garnier
+- G4OpenGLViewer : Add protection against null pointer scene
 
 27th January 2010  Gabriele Cosmo
 - Fixed compilation warnings on G4OpenGLQtViewer and corrected compilation

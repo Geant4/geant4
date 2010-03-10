@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.17 2009-11-03 11:02:32 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.18 2010-03-10 11:03:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,19 +96,8 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 }
 
 
-/** To ensure compatibility with DrawView method
- */
 void  G4OpenGLImmediateQtViewer::DrawView() {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::DrawView  VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n");
-#endif
-  // That's no the same logic as Stored Viewer, I don't know why...
-  // see G4OpenGLStoredQtViewer::DrawView for more informations
-
   updateQWidget();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::DrawView  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-#endif
 }
 
 
@@ -130,7 +119,7 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
     HaloingFirstPass ();
     NeedKernelVisit ();
     ProcessView ();
-    glFlush ();
+    FinishView();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::ComputeView First ProcessView ok\n");
 #endif
@@ -150,19 +139,6 @@ void G4OpenGLImmediateQtViewer::ComputeView () {
 #endif
   fHasToRepaint = true;
 }
-
-void G4OpenGLImmediateQtViewer::FinishView()
-{
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::FinishView() BEGIN\n");
-#endif
-  glFlush ();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLImmediateQtViewer::FinishView() END\n");
-#endif
-
-}
-
 
 /**
    - Lors du resize de la fenetre, on doit non pas redessiner le detecteur, mais aussi les evenements
@@ -185,10 +161,16 @@ void G4OpenGLImmediateQtViewer::paintGL()
     fReadyToPaint= true;
     return;
   }
+  if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
+      return;
+  }
+
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE
   if ( !fHasToRepaint) {
 #if QT_VERSION < 0x040000
     if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
+      return;
+    }
 #else
     // L. Garnier : Trap to get the size with mac OSX 10.6 and Qt 4.6(devel)
     // Tested on Qt4.5 on mac, 4.4 on windows, 4.5 on unbuntu
@@ -202,9 +184,14 @@ void G4OpenGLImmediateQtViewer::paintGL()
       sh = frameGeometry().height();
     }
     if ((getWinWidth() == (unsigned int)sw) &&(getWinHeight() == (unsigned int)sh)) {
-#endif
       return;
+
+    } else if ((sw == 0) && (sh == 0)) { // NOT A TOP LEVEL WIDGET
+      if (((getWinWidth() == (unsigned int)width())) &&(getWinHeight() == (unsigned int) height())) { 
+        return;
+      }
     }
+#endif
   }
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
@@ -237,6 +224,12 @@ void G4OpenGLImmediateQtViewer::wheelEvent (QWheelEvent * event)
   G4wheelEvent(event);
 }
 
+void G4OpenGLImmediateQtViewer::showEvent (QShowEvent * event) 
+{
+  fHasToRepaint = true;
+}
+
+
 /**
  * This function was build in order to make a zoom on double clic event.
  * It was think to build a rubberband on the zoom area, but never work fine
@@ -262,9 +255,17 @@ void G4OpenGLImmediateQtViewer::contextMenuEvent(QContextMenuEvent *e)
   G4manageContextMenuEvent(e);
 }
 
+void G4OpenGLImmediateQtViewer::paintEvent(QPaintEvent *event) {
+  if ( fHasToRepaint) {
+    updateGL();
+  }
+}
+
+
 void G4OpenGLImmediateQtViewer::updateQWidget() {
   fHasToRepaint= true;
   updateGL();
+  repaint();
   fHasToRepaint= false;
 }
 
@@ -274,6 +275,7 @@ void G4OpenGLImmediateQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  fHasToRepaint = true;
 #if QT_VERSION < 0x040000
   setActiveWindow();
 #else

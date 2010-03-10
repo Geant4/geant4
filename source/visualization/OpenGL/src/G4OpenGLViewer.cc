@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.59 2009-10-20 12:47:45 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.60 2010-03-10 11:03:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,48 +161,20 @@ void G4OpenGLViewer::ResizeGLView()
   // Check size
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
-  if (fWinSize_x > (unsigned)dims[0]) {
-    G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
-    fWinSize_x = dims[0];
-  }
-  if (fWinSize_y > (unsigned)dims[1]) {
-    G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
-    fWinSize_y = dims[1];
-  }
-  GLsizei side = fWinSize_x;
-  if (fWinSize_y < fWinSize_x) side = fWinSize_y;
 
-  // SPECIAL CASE if fWinSize_x is even (69 for example) 
-  // Ex : X: 69 Y: 26
-  // side = 26
-  // width / 2 = 21,5
-  // height / 2 = 0
-  // Should be fixed to closed : 21 0 for ex
-  // Then size must by change to :
-  // X:68 Y: 26
+  if ((dims[0] !=0 ) && (dims[1] !=0)) {
 
-  // SPECIAL CASE
-  if ((fWinSize_x - side)%2) {
-    //    fWinSize_x --;
-
-    side = fWinSize_x;
-    if (fWinSize_y < fWinSize_x) side = fWinSize_y;
+    if (fWinSize_x > (unsigned)dims[0]) {
+      G4cerr << "Try to resize view greater than max X viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[0] << G4endl;
+      fWinSize_x = dims[0];
+    }
+    if (fWinSize_y > (unsigned)dims[1]) {
+      G4cerr << "Try to resize view greater than max Y viewport dimension. Desired size "<<dims[0] <<" is resize to "<<  dims[1] << G4endl;
+      fWinSize_y = dims[1];
+    }
   }
-  if ((fWinSize_y - side)%2) {
-    //    fWinSize_y --;
-
-    side = fWinSize_x;
-    if (fWinSize_y < fWinSize_x) side = fWinSize_y;
-  }
-  
-  GLint X = (fWinSize_x - side) / 2;
-  GLint Y = (fWinSize_y - side) / 2;
-  
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView X:%d Y:%d W:%d H:%d --side%d\n",(fWinSize_x - side) / 2,(fWinSize_y - side) / 2,fWinSize_x,fWinSize_y,side);
-#endif
-  glViewport(X, Y, side, side);
-  //    glViewport(0, 0, fWinSize_x,fWinSize_y);  
+    
+  glViewport(0, 0, fWinSize_x,fWinSize_y);  
   
 
 }
@@ -211,8 +183,6 @@ void G4OpenGLViewer::ResizeGLView()
 void G4OpenGLViewer::SetView () {
 
   if (!fSceneHandler.GetScene()) {
-    G4cerr << "G4OpenGLStoredViewer: Creating a Viewer without a scene is not allowed. \nPlease use /vis/scene/create before /vis/open/.... "
-	   << G4endl;
     return;
   }
   // Calculates view representation based on extent of object being
@@ -232,6 +202,15 @@ void G4OpenGLViewer::SetView () {
   glLightfv (GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv (GL_LIGHT0, GL_DIFFUSE, diffuse);
   
+  G4double ratioX = 1;
+  G4double ratioY = 1;
+  if (fWinSize_y > fWinSize_x) {
+    ratioX = ((G4double)fWinSize_y) / ((G4double)fWinSize_x);
+  }
+  if (fWinSize_x > fWinSize_y) {
+    ratioY = ((G4double)fWinSize_x) / ((G4double)fWinSize_y);
+  }
+  
   // Get radius of scene, etc.
   // Note that this procedure properly takes into account zoom, dolly and pan.
   const G4Point3D targetPoint
@@ -244,10 +223,10 @@ void G4OpenGLViewer::SetView () {
     targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
   const GLdouble pnear  = fVP.GetNearDistance (cameraDistance, radius);
   const GLdouble pfar   = fVP.GetFarDistance  (cameraDistance, pnear, radius);
-  const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius);
+  const GLdouble right  = fVP.GetFrontHalfHeight (pnear, radius) * ratioY;
   const GLdouble left   = -right;
-  const GLdouble bottom = left;
-  const GLdouble top    = right;
+  const GLdouble top    = fVP.GetFrontHalfHeight (pnear, radius) * ratioX;
+  const GLdouble bottom = -top;
   
   // FIXME
   ResizeGLView();
@@ -674,8 +653,12 @@ G4int G4OpenGLViewer::getRealPrintSizeX() {
   }
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
-  if (fPrintSizeX > dims[0]){
-    return dims[0];
+
+  // L.Garnier 01-2010: Some problems with mac 10.6
+  if ((dims[0] !=0 ) && (dims[1] !=0)) {
+    if (fPrintSizeX > dims[0]){
+      return dims[0];
+    }
   }
   if (fPrintSizeX < -1){
     return 0;
@@ -689,8 +672,12 @@ G4int G4OpenGLViewer::getRealPrintSizeY() {
   }
   GLint dims[2];
   glGetIntegerv(GL_MAX_VIEWPORT_DIMS, dims);
-  if (fPrintSizeY > dims[1]){
-    return dims[1];
+
+  // L.Garnier 01-2010: Some problems with mac 10.6
+  if ((dims[0] !=0 ) && (dims[1] !=0)) {
+    if (fPrintSizeY > dims[1]){
+      return dims[1];
+    }
   }
   if (fPrintSizeY < -1){
     return 0;
@@ -731,6 +718,9 @@ std::string G4OpenGLViewer::getRealPrintFilename() {
 
 GLdouble G4OpenGLViewer::getSceneNearWidth()
 {
+  if (!fSceneHandler.GetScene()) {
+    return 0;
+  }
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
@@ -743,6 +733,9 @@ GLdouble G4OpenGLViewer::getSceneNearWidth()
 
 GLdouble G4OpenGLViewer::getSceneFarWidth()
 {
+  if (!fSceneHandler.GetScene()) {
+    return 0;
+  }
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
@@ -757,6 +750,9 @@ GLdouble G4OpenGLViewer::getSceneFarWidth()
 
 GLdouble G4OpenGLViewer::getSceneDepth()
 {
+  if (!fSceneHandler.GetScene()) {
+    return 0;
+  }
   const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();

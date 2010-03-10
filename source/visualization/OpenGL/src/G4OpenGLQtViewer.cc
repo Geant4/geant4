@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.47 2010-01-27 15:49:22 gcosmo Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.48 2010-03-10 11:03:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   //  fWindow->makeCurrent();
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLQtViewer::CreateMainWindow :: ++++++++++++++ add new TAB %s\n",name.toStdString().c_str());
+  printf("G4OpenGLQtViewer::CreateMainWindow :: ++++++++++++++ add new TAB %s  W:%d H:%d SizeHinX:%d SizeHintY:%d\n",name.toStdString().c_str(),getWinWidth(),getWinHeight(),fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 #endif
   G4Qt* interactorManager = G4Qt::getInstance ();
 
@@ -124,9 +124,9 @@ void G4OpenGLQtViewer::CreateMainWindow (
   // Ne marche pas avec un UIBatch !! (ecran blanc)
 
   // return false if G4UIQt was not launch
-  bool res = interactorManager->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+  bool isTabbedView = interactorManager->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
 
-  if (!res) { // we have to do a dialog
+  if (!isTabbedView) { // we have to do a dialog
 
     QWidget *myParent = getParentWidget();
 #ifdef G4DEBUG_VIS_OGL
@@ -172,6 +172,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     fGLWindow->show();
   } else {
     fGLWindow = fWindow;
+    fGLWindow->resize(getWinWidth(), getWinHeight());
   }
 
   if(!fWindow) return;

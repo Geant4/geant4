@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.9 2009-10-14 13:27:30 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.10 2010-03-10 11:03:46 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@ public:
   void ShowView ();
 
 protected:
+  void showEvent(QShowEvent * event );
   void wheelEvent(QWheelEvent *event);
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
@@ -70,6 +71,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
   void keyPressEvent (QKeyEvent * event); 
+  void paintEvent(QPaintEvent *event);
 private:
   void ComputeView ();
 
