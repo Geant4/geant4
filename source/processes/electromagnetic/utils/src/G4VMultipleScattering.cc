@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.78 2010-03-05 09:11:19 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.79 2010-03-10 18:29:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -361,6 +361,40 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double 
+G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* 
+G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
+{
+  if(currentModel->IsActive(track.GetKineticEnergy())) {
+    fParticleChange.ProposeTrueStepLength(currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  }
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* 
+G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  if(currentModel->IsActive(track.GetKineticEnergy())) {
+    currentModel->SampleScattering(track.GetDynamicParticle(),
+				   step.GetPostStepPoint()->GetSafety());
+  }
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4VMultipleScattering::GetContinuousStepLimit(
                                        const G4Track& track,
                                        G4double previousStepSize,
@@ -370,6 +404,18 @@ G4double G4VMultipleScattering::GetContinuousStepLimit(
   G4GPILSelection* selection = 0;
   return AlongStepGetPhysicalInteractionLength(track,previousStepSize,currentMinimalStep,
 					       currentSafety, selection);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VMultipleScattering::ContinuousStepLimit(
+                                       const G4Track& track,
+                                       G4double previousStepSize,
+                                       G4double currentMinimalStep,
+                                       G4double& currentSafety)
+{
+  return GetContinuousStepLimit(track,previousStepSize,currentMinimalStep,
+				currentSafety);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

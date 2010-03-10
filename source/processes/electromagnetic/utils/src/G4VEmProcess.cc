@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.82 2010-02-17 17:39:05 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.83 2010-03-10 18:29:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -676,6 +676,32 @@ G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
 {
   *condition = NotForced;
   return G4VEmProcess::MeanFreePath(track);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::MeanFreePath(const G4Track& track)
+{
+  DefineMaterial(track.GetMaterialCutsCouple());
+  preStepLambda = GetCurrentLambda(track.GetKineticEnergy());
+  G4double x = DBL_MAX;
+  if(DBL_MIN < preStepLambda) x = 1.0/preStepLambda;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4VEmProcess::ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+					 G4double Z, G4double A, G4double cut)
+{
+  SelectModel(kineticEnergy, currentCoupleIndex);
+  G4double x = 0.0;
+  if(currentModel) {
+   x = currentModel->ComputeCrossSectionPerAtom(currentParticle,kineticEnergy,
+						 Z,A,cut);
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
