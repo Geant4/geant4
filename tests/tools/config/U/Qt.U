@@ -93,15 +93,16 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             \`ls -dr /opt/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
             \`ls -dr /opt/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
             \`ls -dr /opt/local/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/lib*/QtCore.framework/Headers 2>/dev/null\`
             \`ls -dr /opt/Qt*/QtCore.framework/Headers 2>/dev/null\`
             \`ls -dr /opt/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
             \`ls -dr /usr/lib/QtCore.framework/Headers 2>/dev/null\`
             \`ls -dr /usr/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
             /usr/include/QtCore
             \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\`
-	    \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
+	        \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/local/include/qt*/QtCore 2>/dev/null\`
-	    \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
+	        \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
@@ -112,7 +113,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             /usr/include
             \`ls -dr /usr/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/include 2>/dev/null\`
-	    \`ls -dr /usr/local/include/qt* 2>/dev/null\`
+	        \`ls -dr /usr/local/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/qt*/include 2>/dev/null\`
             \`ls -dr /opt/qt*/include 2>/dev/null\` 
             \`ls -dr /usr/qt*/include 2>/dev/null\`
@@ -155,9 +156,10 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         if test "x\$g4_qt_include_dir" = "x" ; then
             g4_qt_include_dir=no
             g4_havegoodqt=no
+            echo "checking for qglobal.h... no"
+        else
+            echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
         fi
-
-        echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
     fi # END TEST with_qt_dir is set
 
     #
@@ -179,6 +181,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
         if test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xlib" ; then
             #This is probably an independent install
+            echo "checking Mac Framework location... trolltech/custom"
             g4_qt_dir=\`dirname \$g4_qt_fmwk_base_dir\`
 
             #Check for moc
@@ -197,6 +200,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             fi
         elif test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xFrameworks" ; then
             #This looks like a system install
+            echo "Checking Mac Framework location... Frameworks"
             if test -x "/usr/bin/moc" ; then
                 g4_qt_moc="/usr/bin/moc"
                 echo "checking for moc... \$g4_qt_moc"
@@ -213,7 +217,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
                 g4_havegoodqt=no
             fi
         fi
-    else
+    elif test "x\$g4_qt_include_dir" != "x" ; then
         # Probably have Unix-style installation, in which case estimated
         # 'QTDIR' equivalent is $with_qt_dir if supplied, or directory
         # one level below the 'include' directory in \$g4_qt_include_dir
@@ -504,6 +508,9 @@ EOM\`
         else
             g4_qt_is_configured=''
         fi
+    else
+        #We couldn't find qglobal...
+	    g4_havegoodqt="no"
     fi #END TEST for Darwin Framework
 
 else
