@@ -568,35 +568,35 @@ endif
 # In all cases, external shared library directories should be added to
 # (DY)LD_LIBRARY_PATH
 
-if ( ${?LD_LIBRARY_PATH} ) then
-    if ( ${?G4LIB_BUILD_SHARED} ) then
-        setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}	
-    endif
+if ( "X$G4SYSTEM" != "XDarwin-g++" ) then
+    if ( ${?LD_LIBRARY_PATH} ) then
+        if ( ${?G4LIB_BUILD_SHARED} ) then
+            setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}	
+        endif
 
-    setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
-
-    if ( ${?G4LIB_BUILD_GDML} ) then
-        setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
-    endif
-
-else
-    if ( ${?G4LIB_BUILD_SHARED} ) then
-        setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
         setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+
+        if ( ${?G4LIB_BUILD_GDML} ) then
+            setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+        endif
+
     else
-        setenv LD_LIBRARY_PATH ${CLHEP_LIB_DIR}
-    endif
+        if ( ${?G4LIB_BUILD_SHARED} ) then
+            setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+            setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+        else
+            setenv LD_LIBRARY_PATH ${CLHEP_LIB_DIR}
+        endif
 
-    if ( ${?G4LIB_BUILD_GDML} ) then
-        setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+        if ( ${?G4LIB_BUILD_GDML} ) then
+            setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+        endif
     endif
-endif
-
-#
-# Darwin Shared Libraries
-# we repeat the above logic, but for DYLD_LIBRARY_PATH
-#
-if ( "X$G4SYSTEM" == "XDarwin-g++" ) then
+else
+    #
+    # Darwin Shared Libraries
+    # we repeat the above logic, but for DYLD_LIBRARY_PATH
+    #   
     if ( ${?DYLD_LIBRARY_PATH} ) then
         if ( ${?G4LIB_BUILD_SHARED} ) then
             setenv DYLD_LIBRARY_PATH ${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}	

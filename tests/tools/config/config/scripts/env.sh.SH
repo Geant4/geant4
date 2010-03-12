@@ -782,37 +782,37 @@ fi
 # In all cases, external shared library directories should be added to
 # (DY)LD_LIBRARY_PATH
 
-if [ $LD_LIBRARY_PATH ] ; then
-    if [ $G4LIB_BUILD_SHARED ] ; then
-        LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
-    fi
+if test "X$G4SYSTEM" != "XDarwin-g++" ; then
+    if [ $LD_LIBRARY_PATH ] ; then
+        if [ $G4LIB_BUILD_SHARED ] ; then
+            LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+        fi
     
-    LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
-
-    if [ $G4LIB_BUILD_GDML ] ; then
-        LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
-    fi
-
-    export LD_LIBRARY_PATH
-else
-    if [ $G4LIB_BUILD_SHARED ] ; then
-        LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
         LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+
+        if [ $G4LIB_BUILD_GDML ] ; then
+            LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+        fi
+
+        export LD_LIBRARY_PATH
     else
-        LD_LIBRARY_PATH=${CLHEP_LIB_DIR}
+        if [ $G4LIB_BUILD_SHARED ] ; then
+            LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}
+            LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${CLHEP_LIB_DIR}
+        else
+            LD_LIBRARY_PATH=${CLHEP_LIB_DIR}
+        fi
+
+        if [ $G4LIB_BUILD_GDML ] ; then
+            LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
+        fi
+
+        export LD_LIBRARY_PATH
     fi
-
-    if [ $G4LIB_BUILD_GDML ] ; then
-       LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XERCESCROOT}/lib
-    fi
-
-    export LD_LIBRARY_PATH
-fi
-
-#
-# Shared libraries for Mac
-#
-if test "X$G4SYSTEM" = "XDarwin-g++" ; then
+else
+    #
+    # Shared libraries for Mac
+    #
     if [ $DYLD_LIBRARY_PATH ] ; then
         if [ $G4LIB_BUILD_SHARED ] ; then
             DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
