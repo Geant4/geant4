@@ -67,28 +67,28 @@ const G4double G4XPDGTotal::gammagammaPDGFit[5] = { 3.,    300.,  0.000156, 0.00
 
 G4XPDGTotal::G4XPDGTotal() 
 {
-  std::pair<G4String,G4String> pp(G4Proton::ProtonDefinition()->GetParticleName(),
-				    G4Proton::ProtonDefinition()->GetParticleName());
-  std::pair<G4String,G4String> pn(G4Proton::ProtonDefinition()->GetParticleName(),
-				    G4Neutron::NeutronDefinition()->GetParticleName());
-  std::pair<G4String,G4String> piPlusp(G4PionPlus::PionPlusDefinition()->GetParticleName(),
-					 G4Proton::ProtonDefinition()->GetParticleName());
-  std::pair<G4String,G4String> piMinusp(G4PionMinus::PionMinusDefinition()->GetParticleName(),
-					  G4Proton::ProtonDefinition()->GetParticleName());
-  std::pair<G4String,G4String> KPlusp(G4KaonPlus::KaonPlusDefinition()->GetParticleName(),
-					G4Proton::ProtonDefinition()->GetParticleName());
-  std::pair<G4String,G4String> KPlusn(G4KaonPlus::KaonPlusDefinition()->GetParticleName(),
-					G4Neutron::NeutronDefinition()->GetParticleName());
-  std::pair<G4String,G4String> KMinusp(G4KaonMinus::KaonMinusDefinition()->GetParticleName(),
-					 G4Proton::ProtonDefinition()->GetParticleName());
-  std::pair<G4String,G4String> KMinusn(G4KaonMinus::KaonMinusDefinition()->GetParticleName(),
-					 G4Neutron::NeutronDefinition()->GetParticleName());
-  std::pair<G4String,G4String> gp(G4Gamma::GammaDefinition()->GetParticleName(),
-				    G4Proton::ProtonDefinition()->GetParticleName());
-  std::pair<G4String,G4String> gg(G4Gamma::GammaDefinition()->GetParticleName(),
-				    G4Gamma::GammaDefinition()->GetParticleName());
-  std::pair<G4String,G4String> nn(G4Neutron::NeutronDefinition()->GetParticleName(),
-				    G4Neutron::NeutronDefinition()->GetParticleName());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> pp(G4Proton::ProtonDefinition(),
+				    G4Proton::ProtonDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> pn(G4Proton::ProtonDefinition(),
+				    G4Neutron::NeutronDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> piPlusp(G4PionPlus::PionPlusDefinition(),
+					 G4Proton::ProtonDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> piMinusp(G4PionMinus::PionMinusDefinition(),
+					  G4Proton::ProtonDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KPlusp(G4KaonPlus::KaonPlusDefinition(),
+					G4Proton::ProtonDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KPlusn(G4KaonPlus::KaonPlusDefinition(),
+					G4Neutron::NeutronDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KMinusp(G4KaonMinus::KaonMinusDefinition(),
+					 G4Proton::ProtonDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KMinusn(G4KaonMinus::KaonMinusDefinition(),
+					 G4Neutron::NeutronDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> gp(G4Gamma::GammaDefinition(),
+				    G4Proton::ProtonDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> gg(G4Gamma::GammaDefinition(),
+				    G4Gamma::GammaDefinition());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> nn(G4Neutron::NeutronDefinition(),
+				    G4Neutron::NeutronDefinition());
  
   std::vector<G4double> nnData;
   std::vector<G4double> ppData;
@@ -169,10 +169,10 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
   if ( (enc1 < 0 && enc2 >0) || (enc2 < 0 && enc1 >0) ) coeff = 1.;
 
   // Order the pair: first is the lower mass particle, second is the higher mass one
-  std::pair<G4String,G4String> trkPair(def1->GetParticleName(),def2->GetParticleName());
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> trkPair(def1,def2);
 
   if (def1->GetPDGMass() > def2->GetPDGMass())
-    trkPair = std::pair<G4String,G4String>(def2->GetParticleName(),def1->GetParticleName());
+    trkPair = std::pair<G4ParticleDefinition *,G4ParticleDefinition *>(def2,def1);
  
   std::vector<G4double> data;   
       
@@ -182,7 +182,7 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
       PairDoubleMap::const_iterator iter;
       for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	{
-	  std::pair<G4String,G4String> thePair = (*iter).first;
+	  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> thePair = (*iter).first;
 	  if (thePair == trkPair)
 	    {
 	      data = (*iter).second;

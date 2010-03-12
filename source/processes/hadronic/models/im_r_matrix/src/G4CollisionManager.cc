@@ -26,6 +26,9 @@
 #include "G4CollisionManager.hh"
 #include "G4HadronicException.hh"
 #include "G4CollisionInitialState.hh"
+#include "G4BCAction.hh"
+
+#include <typeinfo>
 
 G4CollisionManager::G4CollisionManager()
 {
@@ -177,9 +180,16 @@ void G4CollisionManager::Print()
   for(i = theCollisionList->begin(); i != theCollisionList->end(); ++i)
   {
     collision = *i;
+    G4int tgtPdg=collision->GetTarget() ?
+	   collision->GetTarget()->GetDefinition()->GetPDGEncoding() : 0;
     G4cout << "  collision " << collision << " time: "
 	   << collision->GetCollisionTime()/second << " proj: "
-	   << collision->GetPrimary() << " trgt: "
-	   << collision->GetTarget() << G4endl;
+	   << collision->GetPrimary() << "/pdg="
+	   << collision->GetPrimary()->GetDefinition()->GetPDGEncoding()
+	   << " trgt: "
+	   << collision->GetTarget() << "/pdg="
+	   << tgtPdg
+	   << " Collision type: "<< typeid(*collision->GetGenerator()).name()
+	   << G4endl;
   }
 }

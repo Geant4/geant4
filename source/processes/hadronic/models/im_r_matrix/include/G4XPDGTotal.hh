@@ -47,7 +47,7 @@
 #include <map>
 #include <vector>
 
-typedef std::pair<G4String,G4String> G4StringPair;
+typedef std::pair<G4ParticleDefinition *,G4ParticleDefinition *> G4pDefPair;
 
 class G4KineticTrack;
 class G4ParticleDefinition;
@@ -96,8 +96,8 @@ private:
   static const G4double gammapPDGFit[5];
   static const G4double gammagammaPDGFit[5];
 
-  std::map <G4StringPair, std::vector<G4double>, std::less<G4StringPair> > xMap;
-  typedef std::map <G4StringPair, std::vector<G4double>, std::less<G4StringPair> > PairDoubleMap;
+  std::map <G4pDefPair, std::vector<G4double>, std::less<G4pDefPair> > xMap;
+  typedef std::map <G4pDefPair, std::vector<G4double>, std::less<G4pDefPair> > PairDoubleMap;
 
   //  G4double eMinFit;
   //  G4double eMaxFit;

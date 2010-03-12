@@ -110,17 +110,15 @@ G4XNNElasticLowE::G4XNNElasticLowE()
       value = npTable[i] * millibarn;
       np->PutValue(i,value);
     }
-  xMap[G4Proton::ProtonDefinition()->GetParticleName()] = pp;
-  xMap[G4Neutron::NeutronDefinition()->GetParticleName()] = np;
+  xMap[G4Proton::ProtonDefinition()] = pp;
+  xMap[G4Neutron::NeutronDefinition()] = np;
 }
 
 
 G4XNNElasticLowE::~G4XNNElasticLowE()
 {
-  G4String name_proton = "proton";
-  G4String name_neutron = "neutron";
-  delete xMap[name_proton];
-  delete xMap[name_neutron];
+  delete xMap[G4Proton::ProtonDefinition()];
+  delete xMap[G4Neutron::NeutronDefinition()];
 }
 
 
@@ -143,9 +141,9 @@ G4double G4XNNElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
   G4bool dummy = false;
 
-  G4String key = FindKeyParticle(trk1,trk2);
+  G4ParticleDefinition * key = FindKeyParticle(trk1,trk2);
 
-  typedef std::map <G4String, G4PhysicsVector*, std::less<G4String> > StringPhysMap;
+  typedef std::map <G4ParticleDefinition *, G4PhysicsVector*, std::less<G4ParticleDefinition *> > StringPhysMap;
 
   if (xMap.find(key)!= xMap.end())
     {
@@ -153,7 +151,7 @@ G4double G4XNNElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
       StringPhysMap::const_iterator iter;
       for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	{
-	  G4String str = (*iter).first;
+	  G4ParticleDefinition * str = (*iter).first;
           if (str == key)
 	    {
 	      G4PhysicsVector* physVector = (*iter).second; 
@@ -165,6 +163,8 @@ G4double G4XNNElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
                 {
                   sigma = physVector->GetValue(_eMin,dummy);
                 }
+		//G4cout << " sqrtS / sigma " << sqrtS/GeV << " / " <<
+		//          sigma/millibarn << G4endl;
 	    }
 	}
     }
@@ -180,15 +180,15 @@ void G4XNNElasticLowE::Print() const
 
   G4bool dummy = false;
   G4int i;
-  G4String key = G4Proton::ProtonDefinition()->GetParticleName();
+  G4ParticleDefinition * key = G4Proton::ProtonDefinition();
   G4PhysicsVector* pp = 0;
 
-  typedef std::map <G4String, G4PhysicsVector*, std::less<G4String> > StringPhysMap;
+  typedef std::map <G4ParticleDefinition *, G4PhysicsVector*, std::less<G4ParticleDefinition *> > StringPhysMap;
   StringPhysMap::const_iterator iter;
 
   for (iter = xMap.begin(); iter != xMap.end(); ++iter)
     {
-      G4String str = (*iter).first;
+      G4ParticleDefinition * str = (*iter).first;
       if (str == key)
 	{
 	  pp = (*iter).second; 
@@ -209,11 +209,11 @@ void G4XNNElasticLowE::Print() const
 
   G4cout << Name() << ", np cross-section: " << G4endl;
 
-  key = G4Neutron::NeutronDefinition()->GetParticleName();
+  key = G4Neutron::NeutronDefinition();
   G4PhysicsVector* np = 0;
   for (iter = xMap.begin(); iter != xMap.end(); ++iter)
     {
-      G4String str = (*iter).first;
+      G4ParticleDefinition * str = (*iter).first;
       if (str == key)
 	{
 	  np = (*iter).second; 
