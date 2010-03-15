@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.373 2010-01-20 09:27:44 gcosmo Exp $
+cvs log $Id: History,v 1.374 2010-03-15 10:40:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th March 2010  Ben Morgan (config-V09-03-01)
+- Configure script (Configure-V09-03-00):
+  o Corrected settings of LD_LYBRARY_PATH for CLHEP for the case of static
+    libraries build selection (path was set only for the dynamic libraries
+    case...).
+  o Corrected detection of Qt modules on MacOSX.
+    Addressing problem report #1095.
+- Updated internal scripts for Configure.
 
 20th January 2010  Gabriele Cosmo (config-V09-03-00)
 - binmake.gmk: removed extra space characters in definition of TARGOBJEXT,
