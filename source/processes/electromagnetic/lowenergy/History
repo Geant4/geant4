@@ -1,4 +1,4 @@
-$Id: History,v 1.414 2010-03-15 08:34:14 pandola Exp $
+$Id: History,v 1.415 2010-03-15 09:06:46 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.03.2010, L. Pandola tag emlowen-V09-03-07
+            Updated public interface of G4LivermorePhotoElectricModel. Removed 
+	    possibility to use custom cuts for fluorescence/Auger. Main cuts from 
+	    G4ProductionCutsTable are always used - for consistency.
 
 15.03.2010, L. Pandola tag emlowen-V09-03-06
 	    Clean-up in Penelope models (explicitely set Auger flag to false in 
