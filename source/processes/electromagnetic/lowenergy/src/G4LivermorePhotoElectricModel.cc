@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.9 2009-10-23 09:31:03 pandola Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.10 2010-03-15 09:02:51 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,10 @@
 // 23 Oct 2009   L Pandola
 //                  - atomic deexcitation managed via G4VEmModel::DeexcitationFlag() is 
 //                    set as "true" (default would be false)
-//
+// 15 Mar 2010   L Pandola
+//                  - removed methods to set explicitely fluorescence cuts.
+//                  Main cuts from G4ProductionCutsTable are always used
+// 
 
 #include "G4LivermorePhotoElectricModel.hh"
 
@@ -124,9 +127,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   G4String shellCrossSectionFile = "phot/pe-ss-cs-";
   shellCrossSectionHandler->LoadShellData(shellCrossSectionFile);
   
-  // SI - Simple generator is buggy
-  //generatorName = "geant4.6.2";
-  //ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
+  // default generator
   ElectronAngularGenerator = 
     new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
 
@@ -297,25 +298,17 @@ G4LivermorePhotoElectricModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LivermorePhotoElectricModel::SetCutForLowEnSecPhotons(G4double cut)
+void G4LivermorePhotoElectricModel::ActivateAuger(G4bool augerbool)
 {
-  cutForLowEnergySecondaryPhotons = cut;
-  deexcitationManager.SetCutForSecondaryPhotons(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermorePhotoElectricModel::SetCutForLowEnSecElectrons(G4double cut)
-{
-  cutForLowEnergySecondaryElectrons = cut;
-  deexcitationManager.SetCutForAugerElectrons(cut);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LivermorePhotoElectricModel::ActivateAuger(G4bool val)
-{
-  deexcitationManager.ActivateAugerElectronProduction(val);
+  if (!DeexcitationFlag() && augerbool)
+    {
+      G4cout << "WARNING - G4PenelopePhotoElectricModel" << G4endl;
+      G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
+      G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
+    }
+  deexcitationManager.ActivateAugerElectronProduction(augerbool);
+  if (verboseLevel > 1)
+    G4cout << "Auger production set to " << augerbool << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
