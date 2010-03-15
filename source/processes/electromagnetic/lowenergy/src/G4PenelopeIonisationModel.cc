@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.10 2009-10-23 09:29:24 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.11 2010-03-15 08:32:32 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -41,7 +41,9 @@
 // 21 Oct 2009   L Pandola    Remove un-necessary fUseAtomicDeexcitation flag - now managed by
 //                            G4VEmModel::DeexcitationFlag()
 //			      Add ActivateAuger() method 
+// 15 Mar 2010   L Pandola    Explicitely initialize Auger to false
 //
+
 
 #include "G4PenelopeIonisationModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -81,6 +83,8 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
   //
   // Atomic deexcitation model activated by default
   SetDeexcitationFlag(true);
+  ActivateAuger(false);
+
   verboseLevel= 0;
   
   // Verbosity scale:
