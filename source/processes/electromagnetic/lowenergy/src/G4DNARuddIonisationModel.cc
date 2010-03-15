@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.12 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.13 2010-03-15 12:28:07 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -530,29 +530,6 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
       fvect->push_back(dp);
 
-      /*
-    // creating neutral water molechule...
-
-    G4DNAGenericMoleculeManager *instance;
-    instance = G4DNAGenericMoleculeManager::Instance();
-    G4ParticleDefinition* waterDef = NULL;
-    G4Molecule* water = instance->GetMolecule("H2O");
-    waterDef = (G4ParticleDefinition*)water;
-
-    direction.set(0.,0.,0.);
-
-    //G4DynamicParticle* dynamicWater = new G4DynamicParticle(waterDef, direction, bindingEnergy);
-    G4DynamicMolecule* dynamicWater = new G4DynamicMolecule(water, direction, bindingEnergy);
-    //dynamicWater->RemoveElectron(ionizationShell, 1);
-
-    G4DynamicMolecule* dynamicWater2 = new G4DynamicMolecule(water, direction, bindingEnergy);
-    G4DynamicMolecule* dynamicWater3 = new G4DynamicMolecule(water, direction, bindingEnergy);
-    // insertion inside secondaries
-
-    fvect->push_back(dynamicWater);
-    fvect->push_back(dynamicWater2);
-    fvect->push_back(dynamicWater3);
-      */
   }
 
   // SI - not useful since low energy of model is 0 eV
@@ -900,12 +877,12 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
   
   // BEGIN PART 1/2 OF ELECTRON CORRECTION
 
-  // add ONE or TWO electron-water excitation for alpha+ and helium
+  // add ONE or TWO electron-water ionisation for alpha+ and helium
    
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
   G4double kElectron(0);
-  G4double electronComponent(0);
+
   G4DNACrossSectionDataSet * electronDataset = new G4DNACrossSectionDataSet (new G4LogLogInterpolation, eV, (1./3.343e22)*m*m);
  
   if ( particle == instance->GetIon("alpha+")->GetParticleName()
@@ -917,11 +894,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 
       kElectron = k * 0.511/3728;
        
-      electronComponent = electronDataset->FindValue(kElectron);
-       
   }      
-  
-  delete electronDataset;
   
   // END PART 1/2 OF ELECTRON CORRECTION
   
@@ -950,12 +923,13 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 	      valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
 
 	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
-
+	      // Use only electron partial cross sections
+	      
 	      if (particle == instance->GetIon("alpha+")->GetParticleName()) 
-		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + electronComponent; }
-     
+		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + electronDataset->GetComponent(i)->FindValue(kElectron); }
+
 	      if (particle == instance->GetIon("helium")->GetParticleName()) 
-		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + 2*electronComponent; }
+		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + 2*electronDataset->GetComponent(i)->FindValue(kElectron); }
       
 	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
 
@@ -986,6 +960,8 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
   {
     G4Exception("G4DNARuddIonisationModel::RandomSelect: attempting to calculate cross section for wrong particle");
   }
+
+  delete electronDataset;
       
   return level;
 }
