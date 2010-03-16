@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4ElementaryParticleCollider.hh,v 1.24 2010-03-16 22:10:26 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
@@ -73,7 +77,7 @@ private:
 		     G4int is, G4double ekin, G4double etot_cm) const; 
 
 
-  G4CascadeMomentum
+  G4LorentzVector
   particleSCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
 			     G4double pscm) const; 
 
@@ -93,7 +97,7 @@ private:
 
   G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
 	
-  G4CascadeMomentum
+  G4LorentzVector
   particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
 			     G4double pmod) const; 
 

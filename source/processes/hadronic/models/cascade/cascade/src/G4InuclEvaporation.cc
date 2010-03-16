@@ -22,9 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4InuclEvaporation.cc,v 1.11 2010-03-16 22:10:26 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
-// $Id: G4InuclEvaporation.cc,v 1.10 2010-02-06 07:54:58 dennis Exp $
-//
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+
 #include <numeric>
 #include "G4IonTable.hh"
 #include "globals.hh"
@@ -122,9 +124,6 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
   G4InuclNuclei* nucleus = new G4InuclNuclei(A, Z);
   nucleus->setExitationEnergy(exitationE/1000);
-  G4CascadeMomentum tmom;
-  nucleus->setMomentum(tmom);
-  nucleus->setEnergy();
 
   G4EquilibriumEvaporator*          eqil = new G4EquilibriumEvaporator;
   G4Fissioner*                      fiss = new G4Fissioner;
@@ -156,15 +155,11 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 	//       	ipart->printParticle();
       }
 
-      const G4CascadeMomentum& mom = ipart->getMomentum();
-      eTot   += std::sqrt(mom[0]*1000 * mom[0]*1000);
-
+      eTot += ipart->getEnergy()*1000;
       ekin = ipart->getKineticEnergy()*1000;
       emas = ipart->getMass()*1000;
 
-      G4ThreeVector aMom(mom[1]*1000, mom[2]*1000, mom[3]*1000);
-
-      G4LorentzVector v(aMom, (ekin+emas));
+      G4LorentzVector v(ipart->getMomentum().vect()*1000, (ekin+emas));
       v.boost( boostToLab );
 
       switch(outgoingParticle) {
@@ -200,27 +195,20 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
       ekin = ifrag->getKineticEnergy()*1000;
       emas = ifrag->getMass()*1000;
-      const G4CascadeMomentum& mom = ifrag->getMomentum();
-      eTot  += std::sqrt(mom[0]*1000 * mom[0]*1000);
+      eTot += ifrag->getEnergy()*1000;
 
-      G4ThreeVector aMom(mom[1]*1000, mom[2]*1000, mom[3]*1000);
-      //      aMom = aMom.unit();
-
-      G4LorentzVector v(aMom, (ekin+emas));
+      G4LorentzVector v(ifrag->getMomentum().vect()*1000, (ekin+emas));
       v.boost( boostToLab );
 
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << i << G4endl; i++;
-	//	ifrag->printParticle();
       }
 
       G4int A = G4int(ifrag->getA());
       G4int Z = G4int(ifrag->getZ());
-      //	cascadeParticle = new G4DynamicParticle(G4Proton::ProtonDefinition(), v.vect(), v.e());
       if (verboseLevel > 2) {
 	G4cout << "boosted v" << v << G4endl;
       }
-      // theResult->push_back( new G4Fragment(A, Z, tmp) ); 
       theResult->push_back( new G4Fragment(A, Z, v) ); 
     }
   }

@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4Fissioner.cc,v 1.23 2010-03-16 22:10:26 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
 #include "G4FissionStore.hh"
@@ -126,8 +130,10 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 	if (EZ >= ALMA) ALMA = EZ;
 	G4double EK = VCOUL + DEfin + 0.5 * TEM;
 	//	G4double EV = EVV + bindingEnergy(A1, Z1) + bindingEnergy(A2, Z2) - EK;
-	G4double EV = EVV + G4NucleiProperties::GetBindingEnergy(G4lrint(A1), G4lrint(Z1)) + 
-                            G4NucleiProperties::GetBindingEnergy(G4lrint(A2), G4lrint(Z2)) - EK;
+	G4double EV = EVV
+                    + G4NucleiProperties::GetBindingEnergy(G4lrint(A1), G4lrint(Z1)) 
+                    + G4NucleiProperties::GetBindingEnergy(G4lrint(A2), G4lrint(Z2))
+                    - EK;
        
 	if (EV > 0.0) fissionStore.addConfig(A1, Z1, EZ, EK, EV);
       };
@@ -157,17 +163,12 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
       std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       G4double Fi = randomPHI();
       G4double P1 = pmod * COS_SIN.second;
-      G4CascadeMomentum mom1;
-      G4CascadeMomentum mom2;
 
-      mom1[1] = P1 * std::cos(Fi);
-      mom1[2] = P1 * std::sin(Fi);
-      mom1[3] = pmod * COS_SIN.first;
+      G4ThreeVector pvec(P1*std::cos(Fi), P1*std::sin(Fi), pmod*COS_SIN.first);
+      G4LorentzVector mom1(pvec, mass1);
+      G4LorentzVector mom2(-pvec, mass2);
 
-      for (G4int i = 1; i < 4; i++) mom2[i] = -mom1[i];
-
-      G4double e_out = std::sqrt(pmod * pmod + mass1 * mass1) + 
-	std::sqrt(pmod * pmod + mass2 * mass2);
+      G4double e_out = mom1.e() + mom2.e();
       G4double EV = 1000.0 * (e_in - e_out) / A;
 
       if (EV > 0.0) {

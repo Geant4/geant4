@@ -14,6 +14,64 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 March 2010 Michael Kelsey (hadr-casc-V09-03-DO-NOT-USE)
+--------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+Restore version hadr-casc-V09-03-05 to HEAD of CVS in order to apply bug
+fixes and re-deploy migration from G4CascadeMomentum to G4LorentzVector.
+This reversion is tagged as a checkpoint only, and should not be used for
+testing or running (since it restores the known bugs in V09-03-03).
+
+The update to G4InteractionCase.hh by Gabriele Cosmo in hadr-casc-V09-03-07
+is not touched by this reversion!
+
+The following CVS commands were used to perform the reversion:
+
+	cvs update -j1.13 -j1.12 cascade/include/G4CascadParticle.hh
+	cvs update -j1.4 -j1.3 cascade/include/G4CascadeMomentum.hh
+	cvs update -j1.15 -j1.14 cascade/include/G4CollisionOutput.hh
+	cvs update -j1.23 -j1.22 cascade/include/G4ElementaryParticleCollider.hh
+	cvs update -j1.9 -j1.8 cascade/include/G4InuclCollider.hh
+	cvs update -j1.19 -j1.18 cascade/include/G4InuclElementaryParticle.hh
+	cvs update -j1.12 -j1.11 cascade/include/G4InuclNuclei.hh
+	cvs update -j1.16 -j1.15 cascade/include/G4InuclParticle.hh
+	cvs update -j1.13 -j1.12 cascade/include/G4InuclSpecialFunctions.hh
+	cvs update -j1.13 -j1.12 cascade/include/G4LorentzConvertor.hh
+	cvs update -j1.4 -j1.3 cascade/include/G4ParticleLargerBeta.hh
+	cvs update -j1.9 -j1.8 cascade/include/G4ParticleLargerEkin.hh
+	cvs update -j1.20 -j1.19 cascade/src/G4BigBanger.cc
+	cvs update -j1.13 -j1.12 cascade/src/G4CascadParticle.cc
+	cvs update -j1.6 -j1.5 cascade/src/G4CascadeElasticInterface.cc
+	cvs update -j1.68 -j1.67 cascade/src/G4CascadeInterface.cc
+	cvs update -j1.18 -j1.17 cascade/src/G4CollisionOutput.cc
+	cvs update -j1.7 -j1.6 cascade/src/G4ElasticCascadeInterface.cc
+	cvs update -j1.6 -j1.5 cascade/src/G4EvaporationInuclCollider.cc
+	cvs update -j1.5 -j1.4 cascade/src/G4IBertini.cc
+	cvs update -j1.3 -j1.2 cascade/src/G4InuclElementaryParticle.cc
+	cvs update -j1.10 -j1.9 cascade/src/G4InuclEvaporation.cc
+	cvs update -j1.3 -j1.2 cascade/src/G4InuclNuclei.cc
+	cvs update -j1.4 -j1.3 cascade/src/G4InuclParticle.cc
+	cvs update -j1.17 -j1.16 cascade/src/G4InuclSpecialFunctions.cc
+	cvs update -j1.19 -j1.18 cascade/src/G4LorentzConvertor.cc
+	cvs update -j1.5 -j1.4 cascade/src/G4PreCompoundCascadeInterface.cc
+	cvs update -j1.4 -j1.3 cascade/src/G4PreCompoundInuclCollider.cc
+
+Intermediate versions below had bindingEnergy changes from -05 re-applied
+
+	cvs update -j1.23 -j1.21 cascade/src/G4EquilibriumEvaporator.cc
+	cvs update -j1.22 -j1.20 cascade/src/G4Fissioner.cc
+	cvs update -j1.29 -j1.27 cascade/src/G4IntraNucleiCascader.cc
+	cvs update -j1.24 -j1.22 cascade/src/G4InuclCollider.cc
+	cvs update -j1.23 -j1.21 cascade/src/G4NonEquilibriumEvaporator.cc
+	cvs update -j1.38 -j1.36 cascade/src/G4NucleiModel.cc
+
+G4ElementaryParticleCollider::particleSCMmomentumFor2to2:  Restore new
+parametrization of elastic scattering added by D.Write in hadr-casc-V09-03-06
+
+	cvs update -j1.47 -j1.45 cascade/src/G4ElementaryParticleCollider.cc
+	+ editing
+
 05 Mar 2010 Gabriele Cosmo (hadr-casc-V09-03-07)
 ------------------------------------------------
 - Reinstated fix in G4InteractionCase.hh for initialisation in constructor to

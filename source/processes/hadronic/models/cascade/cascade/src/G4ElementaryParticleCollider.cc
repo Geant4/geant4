@@ -22,7 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4ElementaryParticleCollider.cc,v 1.48 2010-03-16 22:10:26 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100316  D. Wright (restored by M. Kelsey) -- Replace original (incorrect)
+//		pp, pn, nn 2-body to 2-body scattering angular distributions
+//		with a new parametrization of elastic scattering data using
+//		the sum of two exponentials.
 
 #include "G4CascadeKplusPChannel.hh"
 #include "G4CascadeKplusNChannel.hh"
@@ -122,7 +129,7 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
       if(!particles.empty()) { // convert back to Lab
 	particleIterator ipart;
 	for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
-	  G4CascadeMomentum mom = 
+	  G4LorentzVector mom = 
 	    convertToSCM.backToTheLab(ipart->getMomentum());
 	  ipart->setMomentum(mom); 
 	};
@@ -149,7 +156,7 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
 	  if(!particles.empty()) { // convert back to Lab
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      G4CascadeMomentum mom = 
+	      G4LorentzVector mom = 
 		convertToSCM.backToTheLab(ipart->getMomentum());
 	      ipart->setMomentum(mom); 
 	    };
@@ -344,7 +351,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
         G4cout << " Unexpected interaction type (2->2) is = " << is << G4endl;
       }
 
-      G4CascadeMomentum mom;
+      G4LorentzVector mom;
 
       if (kw == 2) { // need to rescale momentum
 	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
@@ -368,19 +375,17 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       //      G4cout << " Particle kinds = " << particle_kinds[0] << " , " << particle_kinds[1] << G4endl;
 
       if (verboseLevel > 3){
-	G4cout << " before rotation px " << mom[1] << " py " << mom[2] <<
-	  " pz " << mom[3] << G4endl;
+	G4cout << " before rotation px " << mom.x() << " py " << mom.y() <<
+	  " pz " << mom.z() << G4endl;
       }
 
       mom = toSCM->rotate(mom); 
 
       if (verboseLevel > 3){
-	G4cout << " after rotation px " << mom[1] << " py " << mom[2] <<
-	  " pz " << mom[3] << G4endl;
+	G4cout << " after rotation px " << mom.x() << " py " << mom.y() <<
+	  " pz " << mom.z() << G4endl;
       }
-      G4CascadeMomentum mom1;
-
-      for (G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
+      G4LorentzVector mom1 = -mom;
 
       particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0], 3));
       // register modelId
@@ -450,7 +455,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	if (G4int(modules.size()) == multiplicity) {
 
 	  if (multiplicity == 3) { 
-	    G4CascadeMomentum mom3 = 
+	    G4LorentzVector mom3 = 
 	      particleSCMmomentumFor2to3(is, knd_last, ekin, modules[2]);
 
 	    mom3 = toSCM->rotate(mom3);
@@ -467,13 +472,11 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 		G4cout << " ok for mult " << multiplicity << G4endl;
 	      }
 
-	      G4CascadeMomentum mom1 = generateWithFixedTheta(ct, modules[0]);
+	      G4LorentzVector mom1 = generateWithFixedTheta(ct, modules[0]);
 
 	      mom1 = toSCM->rotate(mom3, mom1);
 
-	      G4CascadeMomentum mom2;
-
-	      for(G4int i = 1; i < 4; i++) mom2[i] = - (mom3[i] + mom1[i]);
+	      G4LorentzVector mom2 = - (mom3 + mom1);
 
 	      bad = false;
 	      generate = false;
@@ -486,8 +489,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	  } else { // multiplicity > 3
 
 	    // generate first mult - 2 momentums
-	    std::vector<G4CascadeMomentum> scm_momentums;
-	    G4CascadeMomentum tot_mom;
+	    std::vector<G4LorentzVector> scm_momentums;
+	    G4LorentzVector tot_mom;
 
 	    for (G4int i = 0; i < multiplicity - 2; i++) {
 	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
@@ -530,20 +533,19 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	      G4double pt = modules[i]*st;
 	      G4double phi = randomPHI();
 
-	      G4CascadeMomentum mom;
+	      G4LorentzVector mom;
 
-	      mom[1] = pt * std::cos(phi);
-	      mom[2] = pt * std::sin(phi);
-	      mom[3] = modules[i] * ct;
+	      mom.setX(pt * std::cos(phi));
+	      mom.setY(pt * std::sin(phi));
+	      mom.setZ(modules[i] * ct);
 
-	      for(G4int i = 1; i < 4; i++) tot_mom[i] += mom[i];		 
+	      tot_mom += mom;
 
 	      scm_momentums.push_back(mom);
 	    }; 
 
 	    // handle last two
-	    G4double tot_mod = std::sqrt(tot_mom[1] * tot_mom[1] + 
-					 tot_mom[2] * tot_mom[2] + tot_mom[3] * tot_mom[3]); 
+	    G4double tot_mod = tot_mom.rho(); 
 	    G4double ct = -0.5 * (tot_mod * tot_mod + 
 				  modules[multiplicity - 2] * modules[multiplicity - 2] -
 				  modules[multiplicity - 1] * modules[multiplicity - 1]) / tot_mod /
@@ -561,16 +563,14 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
 	      tot_mom = toSCM->rotate(tot_mom);  
 
-	      G4CascadeMomentum mom = 
+	      G4LorentzVector mom = 
 		generateWithFixedTheta(ct, modules[multiplicity - 2]);
 
 	      mom = toSCM->rotate(tot_mom, mom);
 	      scm_momentums.push_back(mom);
 
 	      // and the last one
-	      G4CascadeMomentum mom1;
-
-	      for (i = 1; i < 4; i++) mom1[i] = -mom[i] - tot_mom[i];
+	      G4LorentzVector mom1 = -(mom+tot_mom);
 
 	      scm_momentums.push_back(mom1);  
 	      bad = false;
@@ -822,7 +822,7 @@ G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int mult,
 }
 
 
-G4CascadeMomentum 
+G4LorentzVector 
 G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
 			   G4int is, 
 			   G4int knd, 
@@ -876,11 +876,11 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
   G4double pt = pmod * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
 
-  G4CascadeMomentum mom;
+  G4LorentzVector mom;
 
-  mom[1] = pt * std::cos(phi);
-  mom[2] = pt * std::sin(phi);
-  mom[3] = pmod * ct;
+  mom.setX(pt * std::cos(phi));
+  mom.setY(pt * std::sin(phi));
+  mom.setZ(pmod * ct);
   
   return mom;  
 }
@@ -1024,7 +1024,7 @@ G4ElementaryParticleCollider::adjustIntervalForElastic(G4double ekin, G4double a
 }  
 
 
-G4CascadeMomentum 
+G4LorentzVector 
 G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
 			   G4int is, 
 			   G4int kw, 
@@ -1054,7 +1054,7 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
   G4double ac;
   G4double ad;
   G4int itry = 0;
-
+  
   if (is == 1 || is == 2 || is == 4) {
     // pp, pn or nn
     // Parameters for two-exponential sampling of angular distribution
@@ -1065,12 +1065,12 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
     G4double nnCos[9] = {-1.0,  -1.0, 0.4226, 0.4226, 0.4384, 0.7193, 0.8788, 0.9164,  0.95};
     G4double nnFrac[9] = {1.0,   1.0, 0.4898, 0.7243, 0.7990, 0.8892, 0.8493, 0.9583,  1.0};
 
-    G4double pA = nnA[8];
+    G4double pA = nnA[8];	// Use last bin for all ekin above 10.
     G4double pC = nnC[8];
     G4double pCos = nnCos[8];
     G4double pFrac = nnFrac[8];
     for (G4int i = 1; i < 9; i++) {
-      if (ekin < nnke[i]) {
+      if (ekin < nnke[i]) {	// Linear interpolation within bins
         pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
         pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
         pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
@@ -1090,7 +1090,6 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
       randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
       randVal = (1.0 - randScale)*G4UniformRand() + randScale;
       ct = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
-
     } else {
       // Sample large angles ( theta0 < theta < 180 )
       term1 = 2.0*pscm*pscm*pC;
@@ -1099,7 +1098,6 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
       randVal = randScale*G4UniformRand();
       ct = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
     }
-
   } else if (k == 14) {
     ab = 7.5;
     ac = -2.0 * ab * pscm * pscm;
@@ -1110,7 +1108,7 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
     } else {
 
       ad = std::exp(-huge_num);
-    }
+    };   
 
     while(std::fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
@@ -1167,11 +1165,11 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
 
   G4double pt = pscm * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
-  G4CascadeMomentum mom;
+  G4LorentzVector mom;
 
-  mom[1] = pt * std::cos(phi);
-  mom[2] = pt * std::sin(phi);
-  mom[3] = pscm * ct;
+  mom.setX(pt * std::cos(phi));
+  mom.setY(pt * std::sin(phi));
+  mom.setZ(pscm * ct);
   
   return mom;  
 }
@@ -1327,18 +1325,17 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 
   G4double pmod = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-  G4CascadeMomentum mom;
+  G4LorentzVector mom;
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
 
-  mom[1] = pt * std::cos(FI);
-  mom[2] = pt * std::sin(FI);
-  mom[3] = pmod * COS_SIN.first;
+  mom.setX(pt * std::cos(FI));
+  mom.setY(pt * std::sin(FI));
+  mom.setZ(pmod * COS_SIN.first);
 
-  G4CascadeMomentum mom1 = mom;
+  G4LorentzVector mom1 = -mom;
 
-  for(G4int i = 1; i < 4; i++) mom1[i] *= -1.0;
   particles.push_back(G4InuclElementaryParticle(mom , particle_kinds[0]));
   particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1]));
 

@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4EquilibriumEvaporator.cc,v 1.24 2010-03-16 22:10:26 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+
 #define RUN
 
 #include "G4EquilibriumEvaporator.hh"
@@ -85,7 +89,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
-    G4CascadeMomentum PEX = nuclei_target->getMomentum();
+    G4LorentzVector PEX = nuclei_target->getMomentum();
     G4double EEXS = nuclei_target->getExitationEnergy();
 
     if (verboseLevel > 3) {
@@ -95,7 +99,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
     toTheNucleiSystemRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
-    G4CascadeMomentum ppout;
+    G4LorentzVector ppout;
   
     if (timeToBigBang(A, Z, EEXS)) {
 
@@ -116,8 +120,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
    
       G4InuclNuclei dummy_nuc;
       G4double EEXS_new;
-      G4CascadeMomentum pin = PEX;
-      pin[0] += 0.001 * EEXS;
+      G4LorentzVector pin = PEX;
+      pin.setE(pin.e() + 0.001 * EEXS);
       G4bool try_again = true;  
       G4bool fission_open = true;
       G4double nuc_mass;  
@@ -131,10 +135,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	}
 
 	nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
-	PEX[0] = std::sqrt(PEX[1] * PEX[1] + 
-		      PEX[2] * PEX[2] + 
-		      PEX[3] * PEX[3] +
-		      nuc_mass * nuc_mass);  	
+	PEX.setVectM(PEX.vect(), nuc_mass);  	
 	toTheNucleiSystemRestFrame.setTarget(PEX, nuc_mass);
 	toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
@@ -165,8 +166,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    std::pair<std::vector<G4double>, std::vector<G4double> > parms = paraMaker(Z);
 	    std::vector<G4double> AK = parms.first;
 	    std::vector<G4double> CPA = parms.second;
-	    //	    G4double DM0 = bindingEnergy(A, Z);
-	    G4double DM0 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));   
+	    //	    G4double DM0 = bindingEnergy(A, Z);   
+            G4double DM0 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
 	    G4int i(0);
 
 	    for (i = 0; i < 6; i++) {
@@ -177,8 +178,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	      if (goodRemnant(A1[i], Z1[i])) {
 		//		G4double QB = DM0 - bindingEnergy(A1[i], Z1[i]) - Q1[i];
-		G4double QB = DM0 -
-                          G4NucleiProperties::GetBindingEnergy(G4lrint(A1[i]), G4lrint(Z1[i])) - Q1[i];
+                G4double QB = DM0 - G4NucleiProperties::GetBindingEnergy(G4lrint(A1[i]), G4lrint(Z1[i]-Q1[i]));
 		V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
 		  (std::pow(A1[i], one_third) + std::pow(AN[i], one_third));
 		TM[i] = EEXS - QB - V[i] * A / A1[i];  
@@ -295,38 +295,27 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 		  particle.setModel(6);
 		  G4double pmod = 0.001 * S;
-		  G4CascadeMomentum mom;
+		  G4LorentzVector mom;
 		  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		  G4double FI = randomPHI();
 		  G4double P1 = pmod * COS_SIN.second;
-		  mom[1] = P1 * std::cos(FI);
-		  mom[2] = P1 * std::sin(FI);
-		  mom[3] = pmod * COS_SIN.first;
-		  mom[0] = pmod;
-		  G4CascadeMomentum mom_at_rest;
+		  mom.setX(P1 * std::cos(FI));
+		  mom.setY(P1 * std::sin(FI));
+		  mom.setZ(pmod * COS_SIN.first);
+		  mom.setE(pmod);
 
-		  for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
-		  mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
-					mom_at_rest[2] * mom_at_rest[2] + 
-					mom_at_rest[3] * mom_at_rest[3] +
-					nuc_mass * nuc_mass); 
+		  G4LorentzVector mom_at_rest(-mom.vect(), nuc_mass); 
 
-		  G4CascadeMomentum part_mom = 
+		  G4LorentzVector part_mom = 
 		    toTheNucleiSystemRestFrame.backToTheLab(mom);
+		  part_mom.setVectM(part_mom.vect(),0.); 
 
-		  part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
-				     part_mom[2] * part_mom[2] + 
-				     part_mom[3] * part_mom[3]); 
-
-		  G4CascadeMomentum ex_mom = 
+		  G4LorentzVector ex_mom = 
 		    toTheNucleiSystemRestFrame.backToTheLab(mom_at_rest);
 
-		  ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + 
-				   ex_mom[2] * ex_mom[2]
-				   + ex_mom[3] * ex_mom[3] + 
-				   nuc_mass * nuc_mass);			
-		  EEXS_new = 1000.0 * (PEX[0] + 0.001 * EEXS - 
-				       part_mom[0] - ex_mom[0]);
+		  ex_mom.setVectM(ex_mom.vect(), nuc_mass);			
+		  EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
+				       part_mom.e() - ex_mom.e());
 
 		  if (EEXS_new > 0.0) { // everything ok
 		    PEX = ex_mom;
@@ -334,7 +323,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    particle.setMomentum(part_mom);
 		    output.addOutgoingParticle(particle);
 
-		    for (G4int i = 0; i < 4; i++) ppout[i] += part_mom[i];
+		    ppout += part_mom;
 
 		  } else {
 
@@ -393,39 +382,27 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      G4double mass = particle.getMass();
 		      // generate particle momentum
 		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
-		      G4CascadeMomentum mom;
 		      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		      G4double FI = randomPHI();
 		      G4double P1 = pmod * COS_SIN.second;
-		      mom[1] = P1 * std::cos(FI);
-		      mom[2] = P1 * std::sin(FI);
-		      mom[3] = pmod * COS_SIN.first;
-		      G4CascadeMomentum mom_at_rest;
 
-		      for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
-		      G4double new_nuc_mass = dummy_nuc.getNucleiMass(A1[icase],
-								      Z1[icase]);
-		      mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
-					    mom_at_rest[2] * mom_at_rest[2] + 
-					    mom_at_rest[3] * mom_at_rest[3] +
-					    new_nuc_mass * new_nuc_mass); 
-		      mom[0] = std::sqrt(mom[1] * mom[1] + mom[2] * mom[2] +
-				    mom[3] * mom[3] + mass * mass);
+		      G4LorentzVector mom(P1*std::cos(FI), P1*std::sin(FI),
+					  pmod*COS_SIN.first, mass);
 
-		      G4CascadeMomentum part_mom = 
+		      G4double new_nuc_mass =
+			dummy_nuc.getNucleiMass(A1[icase], Z1[icase]);
+		      G4LorentzVector mom_at_rest(-mom.vect(), new_nuc_mass);
+
+		      G4LorentzVector part_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom);
-		      part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
-					 part_mom[2] * part_mom[2] + 
-					 part_mom[3] * part_mom[3] +
-					 mass * mass);
-		      G4CascadeMomentum ex_mom = 
+		      part_mom.setVectM(part_mom.vect(), mass);
+
+		      G4LorentzVector ex_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom_at_rest);
-		      ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + 
-				       ex_mom[2] * ex_mom[2] + 
-				       ex_mom[3] * ex_mom[3] + 
-				       new_nuc_mass * new_nuc_mass);			
-		      EEXS_new = 1000.0 * (PEX[0] + 0.001 * EEXS - 
-					   part_mom[0] - ex_mom[0]);
+		      ex_mom.setVectM(ex_mom.vect(), new_nuc_mass);
+
+		      EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
+					   part_mom.e() - ex_mom.e());
 
 		      if (EEXS_new > 0.0) { // everything ok
 			PEX = ex_mom;
@@ -434,7 +411,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			Z = Z1[icase]; 	      
 			particle.setMomentum(part_mom);
 			output.addOutgoingParticle(particle);
-			for (G4int i = 0; i < 4; i++) ppout[i] += part_mom[i];
+			ppout += part_mom;
 			bad = false;
 		      };
 
@@ -444,40 +421,27 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      G4double mass = nuclei.getMass();
 		      // generate particle momentum
 		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
-		      G4CascadeMomentum mom;
 		      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
 		      G4double FI = randomPHI();
 		      G4double P1 = pmod * COS_SIN.second;
-		      mom[1] = P1 * std::cos(FI);
-		      mom[2] = P1 * std::sin(FI);
-		      mom[3] = pmod * COS_SIN.first;
-		      G4CascadeMomentum mom_at_rest;
+		      G4LorentzVector mom(P1*std::cos(FI), P1*std::sin(FI),
+					  pmod*COS_SIN.first, mass);
 
-		      for (G4int i = 1; i < 4; i++) mom_at_rest[i] = -mom[i];
-		      G4double new_nuc_mass = dummy_nuc.getNucleiMass(A1[icase],
-								      Z1[icase]);
-		      mom_at_rest[0] = std::sqrt(mom_at_rest[1] * mom_at_rest[1] +
-					    mom_at_rest[2] * mom_at_rest[2] + 
-					    mom_at_rest[3] * mom_at_rest[3] +
-					    new_nuc_mass * new_nuc_mass); 
-		      mom[0] = std::sqrt(mom[1] * mom[1] + 
-				    mom[2] * mom[2] +
-				    mom[3] * mom[3] + 
-				    mass * mass);
-		      G4CascadeMomentum part_mom = 
+		      G4double new_nuc_mass =
+			dummy_nuc.getNucleiMass(A1[icase], Z1[icase]);
+		      G4LorentzVector mom_at_rest(-mom.vect(), new_nuc_mass);
+
+
+		      G4LorentzVector part_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom);
-		      part_mom[0] = std::sqrt(part_mom[1] * part_mom[1] +
-					 part_mom[2] * part_mom[2] + 
-					 part_mom[3] * part_mom[3] +
-					 mass * mass);
-		      G4CascadeMomentum ex_mom = 
+		      part_mom.setVectM(part_mom.vect(), mass);
+
+		      G4LorentzVector ex_mom = 
 		        toTheNucleiSystemRestFrame.backToTheLab(mom_at_rest);
-		      ex_mom[0] = std::sqrt(ex_mom[1] * ex_mom[1] + 
-				       ex_mom[2] * ex_mom[2] +
-				       ex_mom[3] * ex_mom[3] + 
-				       new_nuc_mass * new_nuc_mass);			
-		      EEXS_new = 1000.0 * (PEX[0] + 0.001 * EEXS - 
-					   part_mom[0] - ex_mom[0]);
+		      ex_mom.setVectM(ex_mom.vect(), new_nuc_mass);
+
+		      EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
+					   part_mom.e() - ex_mom.e());
 
 		      if (EEXS_new > 0.0) { // everything ok
 			PEX = ex_mom;
@@ -485,10 +449,9 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			A = A1[icase];
 			Z = Z1[icase];
  	      
-			for (G4int i = 0; i < 4; i++) ppout[i] += part_mom[i];
-			nuclei.setMomentum(part_mom);
+			ppout += part_mom;
 			nuclei.setExitationEnergy(0.0);
-			nuclei.setEnergy();
+			nuclei.setMomentum(part_mom);
 			output.addTargetFragment(nuclei);
 			bad = false;
 		      };
@@ -515,7 +478,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  // convert back to the lab
 
 		  for(G4int i = 0; i < 2; i++) {
-		    G4CascadeMomentum mom = nuclea[i].getMomentum();
+		    G4LorentzVector mom = nuclea[i].getMomentum();
 		    mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 		    nuclea[i].setMomentum(mom);
 		    nuclea[i].setEnergy();
@@ -554,16 +517,13 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
       }
 
-      G4CascadeMomentum pnuc;
-
-      for (G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
+      G4LorentzVector pnuc = pin - ppout;
 
       G4InuclNuclei nuclei(pnuc, A, Z);
       nuclei.setModel(6);
-      nuclei.setEnergy();
       pnuc = nuclei.getMomentum(); 
-      G4double eout = pnuc[0] + ppout[0];  
-      G4double eex_real = 1000.0 * (pin[0] - eout);        
+      G4double eout = pnuc.e() + ppout.e();  
+      G4double eex_real = 1000.0 * (pin.e() - eout);        
     
       nuclei.setExitationEnergy(eex_real);
     
@@ -595,7 +555,7 @@ G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a,
 
     //    if (e < be_cut * bindingEnergy(a, z)) bigb = false;
     if (e < be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)) ) bigb = false;
-  };
+  }
 
   return bigb;
 }

@@ -51,8 +51,7 @@ public:
 		  G4NonEquilibriumEvaporator* noeqevaporator,
 		  G4EquilibriumEvaporator* eqevaporator,
 		  G4Fissioner* fissioner, 
-		  G4BigBanger* bigbanger) {
-
+		  G4BigBanger* bigbanger) : verboseLevel(0) {
     setElementaryParticleCollider(ecollider);
     setIntraNucleiCascader(incascader,ecollider);
     setNonEquilibriumEvaporator(noeqevaporator);
