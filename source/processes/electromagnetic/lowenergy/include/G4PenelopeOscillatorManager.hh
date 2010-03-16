@@ -33,6 +33,8 @@
 //  03 Dec 2009  First implementation, Luciano Pandola
 //  16 Feb 2010  Added methods to calculate and store also A and Z 
 //               for molecules. Luciano Pandola
+//  16 Mar 2010  Added methods to calculate and store mean exc energy
+//               and plasma energy (used for Ionisation). L Pandola
 // 
 // -------------------------------------------------------------------
 //
@@ -85,9 +87,10 @@ public:
   //These are cumulative for the molecule
   G4double GetTotalZ(const G4Material*);
   G4double GetTotalA(const G4Material*);
+  G4double GetMeanExcitationEnergy(const G4Material*);
+  G4double GetPlasmaEnergySquared(const G4Material*);
 
 protected:
-
   G4PenelopeOscillatorManager();
   ~G4PenelopeOscillatorManager();
 
@@ -105,6 +108,9 @@ private:
 
   std::map<const G4Material*,G4double> *atomicNumber;
   std::map<const G4Material*,G4double> *atomicMass;
+
+  std::map<const G4Material*,G4double> *excitationEnergy;
+  std::map<const G4Material*,G4double> *plasmaSquared;
 
   //create both tables simultaneously
   void CheckForTablesCreated();

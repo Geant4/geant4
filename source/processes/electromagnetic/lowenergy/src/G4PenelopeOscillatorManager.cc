@@ -34,6 +34,8 @@
 //  19 Feb 2010  Scale the Hartree factors in the Compton Oscillator 
 //               table by (1/fine_structure_const), since the models use 
 //               always the ratio (hartreeFactor/fine_structure_const)
+//  16 Mar 2010  Added methods to calculate and store mean exc energy
+//               and plasma energy (used for Ionisation). L Pandola
 //
 // -------------------------------------------------------------------
 
@@ -45,7 +47,7 @@
 
 G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() : 
   oscillatorStoreIonisation(0),oscillatorStoreCompton(0),atomicNumber(0),
-  atomicMass(0)
+  atomicMass(0),excitationEnergy(0),plasmaSquared(0)
 {
   fReadElementData = false;
   for (G4int i=0;i<5;i++)
@@ -118,6 +120,8 @@ void G4PenelopeOscillatorManager::Clear()
 
   if (atomicMass) delete atomicMass;
   if (atomicNumber) delete atomicNumber;
+  if (excitationEnergy) delete excitationEnergy;
+  if (plasmaSquared) delete plasmaSquared;
 
 }
 
@@ -238,6 +242,10 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
     atomicNumber = new std::map<const G4Material*,G4double>;
   if (!atomicMass)
     atomicMass = new std::map<const G4Material*,G4double>;
+  if (!excitationEnergy)
+    excitationEnergy = new std::map<const G4Material*,G4double>;
+  if (!plasmaSquared)
+    plasmaSquared = new std::map<const G4Material*,G4double>;
 
 }
 
@@ -456,7 +464,8 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   G4double atomsPerMolecule = 0;
   for (G4int i=0;i<nElements;i++)
     atomsPerMolecule += (*StechiometricFactors)[i];
-  G4double moleculeDensity = material->GetTotNbOfAtomsPerVolume()/atomsPerMolecule; //molecules per unit volume
+  G4double moleculeDensity = 
+    material->GetTotNbOfAtomsPerVolume()/atomsPerMolecule; //molecules per unit volume
 
 
   if (verbosityLevel > 1)
@@ -483,11 +492,12 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	G4endl;
       */
     }
-  
+  meanExcitationEnergy = exp(meanExcitationEnergy/totalZ);
+
   atomicNumber->insert(std::make_pair(material,totalZ));
   atomicMass->insert(std::make_pair(material,totalMolecularWeight));
+  excitationEnergy->insert(std::make_pair(material,meanExcitationEnergy));
 
-  meanExcitationEnergy = exp(meanExcitationEnergy/totalZ);
   if (verbosityLevel > 1)
     {
       G4cout << "Calculated mean excitation energy for " << material->GetName() << 
@@ -570,6 +580,8 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   G4double Omega = std::sqrt(4*pi*moleculeDensity*totalZ*Bohr_radius)*Bohr_radius*2.0*RydbergEnergy; 
   G4double conductionStrength = (*helper)[0].GetOscillatorStrength();
   G4double plasmaEnergy = Omega*std::sqrt(conductionStrength/totalZ);
+
+  plasmaSquared->insert(std::make_pair(material,Omega*Omega));
 
   G4bool isAConductor = false;
   G4int nullOsc = 0;
@@ -1071,8 +1083,50 @@ void G4PenelopeOscillatorManager::ReadElementData()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4double G4PenelopeOscillatorManager::GetMeanExcitationEnergy(const G4Material* mat)
+{
+  // (1) First time, create oscillatorStores and read data
+  CheckForTablesCreated();
 
+  // (2) Check if the material has been already included
+  if (excitationEnergy->count(mat))
+    return excitationEnergy->find(mat)->second;
+    
+  // (3) If we are here, it means that we have to create the table for the material
+  BuildOscillatorTable(mat);
 
+  // (4) now, the oscillator store should be ok
+  if (excitationEnergy->count(mat))
+    return excitationEnergy->find(mat)->second;
+  else
+    {
+      G4cout << "G4PenelopeOscillatorManager::GetMolecularExcitationEnergy() " << G4endl;
+      G4cout << "Impossible to retrieve the excitation energy for  " << mat->GetName() << G4endl;      
+      return 0;
+    }
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4double G4PenelopeOscillatorManager::GetPlasmaEnergySquared(const G4Material* mat)
+{
+  // (1) First time, create oscillatorStores and read data
+  CheckForTablesCreated();
 
+  // (2) Check if the material has been already included
+  if (plasmaSquared->count(mat))
+    return plasmaSquared->find(mat)->second;
+    
+  // (3) If we are here, it means that we have to create the table for the material
+  BuildOscillatorTable(mat);
 
+  // (4) now, the oscillator store should be ok
+  if (plasmaSquared->count(mat))
+    return plasmaSquared->find(mat)->second;
+  else
+    {
+      G4cout << "G4PenelopeOscillatorManager::GetPlasmaEnergySquared() " << G4endl;
+      G4cout << "Impossible to retrieve the plasma energy for  " << mat->GetName() << G4endl;      
+      return 0;
+    }
+}
