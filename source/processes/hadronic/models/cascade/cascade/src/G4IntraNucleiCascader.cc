@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.30 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.31 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100307  M. Kelsey -- Bug fix: momentum_out[0] should be momentum_out.e()
 
 #define RUN
 
@@ -45,7 +46,7 @@
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : verboseLevel(1) {
+  : verboseLevel(0) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::G4IntraNucleiCascader" << G4endl;
@@ -272,7 +273,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	G4cout << "  Eex + Ekin " << momentum_out.e()  <<  G4endl;
       }
 
-      if (momentum_out[0] > 0.0) { // Eex + Ekin > 0.0
+      if (momentum_out.e() > 0.0) { // Eex + Ekin > 0.0
 	G4double pnuc = momentum_out.vect().mag2(); 
 	G4double ekin = std::sqrt(mass * mass + pnuc) - mass;
 	G4double Eex = 1000.0 * (momentum_out.e() - ekin);

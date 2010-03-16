@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.19 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.20 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100309  M. Kelsey -- Introduced bug checking i3 for valid tuning pair
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -170,7 +171,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 	       << " ind " << mom_ind << G4endl;
       }
       if(tune_particles.first >= 0 && tune_particles.second >= 0 &&
-	 mom_ind >= 1) { // tunning possible
+	 mom_ind >= G4LorentzVector::X) { // tunning possible
 
         G4LorentzVector mom1 = outgoingParticles[tune_particles.first].getMomentum();
         G4LorentzVector mom2 = outgoingParticles[tune_particles.second].getMomentum();
@@ -217,7 +218,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 	        xset = true;
 	      };
 	    };
-	  };  
+	  }	// if(mon_non_cons.e() > 0.0)
           if(xset) { // retune momentums
 	    mom1[mom_ind] += x;
 	    mom2[mom_ind] -= x;
@@ -237,103 +238,84 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 	    if(verboseLevel > 2){
 	      G4cout << " no appropriate solution found " << G4endl;
 	    }
-	  }; 
+	  }	// if(xset)
         }
 	else {
 	  if(verboseLevel > 2){
 	    G4cout << " DET < 0 " << G4endl;
 	  }
-        };   
+        }	// if(DET > 0.0)
       }
       else { 
 	if(verboseLevel > 2){
 	  G4cout << " tuning impossible " << G4endl;
 	}
-      };   
+      }	// if (<tuning-possible>) 
     }
     else {
       on_shell = true;
-    };
+    }	// if(need_hard_tuning)
   }
   else {
     on_shell = true;
-  };
-  
+  };	// if (<renormalization>)
 }
 
 std::pair<std::pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de) const {
-
   if (verboseLevel > 3) {
     G4cout << " >>> G4CollisionOutput::selectPairToTune" << G4endl;
   }
 
   std::pair<G4int, G4int> tup(-1, -1);
   G4int i3 = -1; 
-  std::pair<std::pair<G4int, G4int>, G4int> badp(tup, i3);
+  std::pair<std::pair<G4int, G4int>, G4int> tuner(tup, i3);	// Set invalid
 
-  if(outgoingParticles.size() < 2) {
+  if (outgoingParticles.size() < 2) return tuner;	// Nothing to do
 
-    return badp;
-  }
-  else {
+  G4int ibest1 = -1;
+  G4int ibest2 = -1;  
+  G4double pbest = 0.0;
+  G4double pcut = 0.3 * std::sqrt(1.88 * std::fabs(de));
+  G4double p1 = 0.0;
+  G4double p2;
+  
+  for (G4int i = 0; i < G4int(outgoingParticles.size()) - 1; i++) {
+    G4LorentzVector mom1 = outgoingParticles[i].getMomentum();
+    
+    for (G4int j = i+1; j < G4int(outgoingParticles.size()); j++) {
+      G4LorentzVector mom2 = outgoingParticles[j].getMomentum();
+      
+      for (G4int l = G4LorentzVector::X; l<=G4LorentzVector::Z; l++) {
+	if (mom1[l]*mom2[l]<0.0) { 
+	  if (std::fabs(mom1[l])>pcut && std::fabs(mom2[l])>pcut) {
+	    G4double psum = std::fabs(mom1[l]) + std::fabs(mom2[l]);  
+	    
+	    if(psum > pbest) {
+	      ibest1 = i;
+	      ibest2 = j;
+	      i3 = l;
+	      p1 = mom1[l];
+	      p2 = mom2[l];
+	      pbest = psum;
+	    }	// psum > pbest
+	  }	// mom1 and mom2 > pcut
+	}	// mom1 ~ -mom2
+      }	// for (G4int l ...
+    }	// for (G4int j ...
+  }	// for (G4int i ...
 
-    G4int ibest1 = -1;
-    G4int ibest2 = -1;  
-    G4double pbest = 0.0;
-    G4double pcut = 0.3 * std::sqrt(1.88 * std::fabs(de));
-    G4double p1 = 0.0;
-    G4double p2;
-   
-    for(G4int i = 0; i < G4int(outgoingParticles.size()) - 1; i++) {
-      G4LorentzVector mom1 = outgoingParticles[i].getMomentum();
-
-      for(G4int j = i+1; j < G4int(outgoingParticles.size()); j++) {
-	G4LorentzVector mom2 = outgoingParticles[j].getMomentum();
-
-	for(G4int l = G4LorentzVector::X; l<=G4LorentzVector::Z; l++) {
-	  if(mom1[l] * mom2[l] < 0.0) { 
-	    if(std::fabs(mom1[l]) > pcut && std::fabs(mom2[l]) > pcut) {
-
-	      G4double psum = std::fabs(mom1[l]) + std::fabs(mom2[l]);  
-
-	      if(psum > pbest) {
-		ibest1 = i;
-		ibest2 = j;
-		i3 = l;
-		p1 = mom1[l];
-		p2 = mom2[l];
-		pbest = psum;
-	      };
-	    };
-	  };
-	};
-      };
-    };    	       
-    if(i3 > 0) {
-      if(de > 0.0) {
-	if(p1 > 0.0) {
-	  tup.first  = ibest1;
-	  tup.second = ibest2;
-	}
-        else {
-	  tup.first  = ibest2;
-	  tup.second = ibest1;
-	};		 
-      }
-      else {
-	if(p1 < 0.0) {
-	  tup.first  = ibest2;
-	  tup.second = ibest1;
-	}
-        else {
-	  tup.first  = ibest1;
-	  tup.second = ibest2;
-	};		 
-      }; 
-
-      return std::pair<std::pair<G4int, G4int>, G4int>(tup, i3);
-    };
-  };  
-
-  return badp;
+  if (i3 < 0) return tuner;		
+  
+  tuner.second = i3;		// Momentum axis for tuning
+  
+  // NOTE: Sign of de determines order for special case of p1==0.
+  if (de > 0.0) {
+    tuner.first.first  = (p1>0.) ? ibest1 : ibest2;
+    tuner.first.second = (p1>0.) ? ibest2 : ibest1;
+  } else {
+    tuner.first.first  = (p1<0.) ? ibest2 : ibest1;
+    tuner.first.second = (p1<0.) ? ibest1 : ibest2;
+  }		 
+  
+  return tuner;
 }

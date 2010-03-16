@@ -14,6 +14,59 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 March 2010 Michael Kelsey (hadr-casc-V09-03-08)
+--------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+Fix bugs introduced during migration from G4CascadeMomentum to
+G4LorentzVector (see hadr-casc-V09-03-03).  With these bug fixes, 2000
+events generated with "ppi4GeV" test executable are equivalent to production
+output (GEANT 4.9.3), allowing for differences in hardwired nucleon masses.
+When compared with hadr-casc-V09-03-02 (which uses G4ParticleDefinition for
+all the particle masses) the 2000-event results are identical within
+floating point precision.
+
+- G4BigBanger.cc:  Line 72, fix unit conversion bug, GeV/MeV vs. MeV/GeV.
+  Replace incorrectly introduced cross-product with original vector
+  manipulation, written with G4LorentzVector accessors.
+
+- G4CollisionOutput::selectPairToTune(): Test on "i3>0" not appropriate with
+  G4LorentzVector indexing.  Replace with failure-test on "i3<0".  Also
+  simplify final if-cascade for readability.
+
+- G4EquilibriumEvaporator.cc:  Replace incorrect G4LorentzVector ctor
+  arguments (px,py,pz,m) with call to G4LV::setVectM().
+
+- G4IntraNuclearCascader.cc:  Replace leftover momentum_out[0] with .e().
+
+- G4InuclNuclei.cc,hh:  Add new function ::makeNuclearFragment(a,z,exc),
+  which "manually" construct a G4Ions object for cases where A/Z is not a
+  valid stable or unstable nucleus.  These unphysical objects are passed
+  back from G4IntraNuclearCascader.cc and immediately passed to G4BigBanger
+  for conversion to nucleons.  A future change should move this action into
+  G4INCascader and eliminate the need for unphysical nuclei.
+
+- G4LorentzConvertor::toTheTargetRestFrame():  Remove local declaration of
+  scm_momentum, restoring access to data member with that name.
+
+- G4NucleiModel::generateQuasiDeutron(): Undo consolidation of dmom with
+  local variables for each of the nucleon momenta.  Stack corruption led to
+  differences in unbound p-n state relative to pp and nn states.
+
+Minor updates:  Changed all the "verboseLevel()" initializers to (0), via a
+shell script.  This allows making the code uniformly verbose or quiet.
+
+	include/G4NucleiModel.hh
+	src/G4Analyser.cc
+	src/G4CollisionOutput.cc
+	src/G4ElementaryParticleCollider.cc
+	src/G4FissionStore.cc
+	src/G4Fissioner.cc
+	src/G4IntraNucleiCascader.cc
+	src/G4NonEquilibriumEvaporator.cc
+	src/G4NucleiModel.cc
+	src/G4WatcherGun.cc
+
 16 March 2010 Michael Kelsey (hadr-casc-V09-03-DO-NOT-USE)
 --------------------------------------------------
 All changes below within "cascade/" subdirectory:

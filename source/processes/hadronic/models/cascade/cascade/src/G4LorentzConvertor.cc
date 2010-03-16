@@ -22,11 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.20 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.21 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100308  M. Kelsey -- Bug fix in toTheTargetRestFrame: scm_momentum should
+//		be data member, not local.
 
 #include "G4LorentzConvertor.hh"
 #include "G4ThreeVector.hh"
@@ -97,7 +99,7 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
   velocity = target_mom.boostVector();
 
   // "SCM" is bullet momentum in the target's frame
-  G4LorentzVector scm_momentum = bullet_mom;
+  scm_momentum = bullet_mom;
   scm_momentum.boost(-velocity);
 
   if (verboseLevel > 3)
@@ -148,7 +150,7 @@ G4LorentzConvertor::backToTheLab(const G4LorentzVector& mom) const {
 G4double G4LorentzConvertor::getKinEnergyInTheTRS() const {
   G4double pv = bullet_mom.vect().dot(target_mom.vect());
   
-  G4double ekin_trf =
+   G4double ekin_trf =
     (target_mom.e() * bullet_mom.e() - pv) / target_mom.m()
     - bullet_mom.m();
   
@@ -236,7 +238,9 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom1,
 
 G4bool G4LorentzConvertor::reflectionNeeded() const {
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::reflectionNeeded" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::reflectionNeeded: v2 = " << v2
+	   << " SCM z = " << scm_momentum.z() << " degenerated? "
+	   << degenerated << G4endl;
   }
 
   if (v2 < small && !degenerated) 

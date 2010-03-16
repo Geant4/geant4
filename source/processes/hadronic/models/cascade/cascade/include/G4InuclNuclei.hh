@@ -24,10 +24,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.hh,v 1.13 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.14 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
+// 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
+//	     as temporary final-state fragments.
 
 #include "G4InuclParticle.hh"
 #include "G4ExitonConfiguration.hh"
@@ -94,6 +96,9 @@ protected:
   // Convert nuclear configuration to standard GEANT4 pointer
   static G4ParticleDefinition*
   makeDefinition(G4double a, G4double z, G4double exc=0.);
+
+  static G4ParticleDefinition* 
+  makeNuclearFragment(G4double a, G4double z, G4double exc=0.);
 
 private: 
   G4double exitationEnergy;

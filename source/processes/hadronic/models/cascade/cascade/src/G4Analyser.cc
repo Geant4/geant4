@@ -28,7 +28,7 @@
 #include <iomanip>
 
 G4Analyser::G4Analyser()
-  :verboseLevel(1)  {
+  :verboseLevel(0)  {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::G4Analyser" << G4endl;

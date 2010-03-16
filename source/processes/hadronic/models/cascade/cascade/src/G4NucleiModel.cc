@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.39 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.40 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,16 +31,20 @@
 //#define CHC_CHECK
 
 #include "G4NucleiModel.hh"
-#include "G4LorentzConvertor.hh"
 #include "G4CollisionOutput.hh"
-#include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4InuclNuclei.hh"
+#include "G4InuclSpecialFunctions.hh"
+#include "G4LorentzConvertor.hh"
+#include "G4NucleiProperties.hh"
+
+using namespace G4InuclSpecialFunctions;
 
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4NucleiModel::G4NucleiModel()
-  : verboseLevel(2) {
+  : verboseLevel(0) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
@@ -49,8 +53,6 @@ G4NucleiModel::G4NucleiModel()
 
 void 
 G4NucleiModel::generateModel(G4double a, G4double z) {
-
-  verboseLevel = 2;
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateModel" << G4endl;
   }
@@ -410,11 +412,15 @@ G4NucleiModel::generateQuasiDeutron(G4int type1, G4int type2,
     G4cout << " >>> G4NucleiModel::generateQuasiDeutron" << G4endl;
   }
 
-  G4LorentzVector dmom = (generateNucleon(type1, zone).getMomentum()
-			  + generateNucleon(type2, zone).getMomentum());
+  // FIXME:  Why generate two separate nucleon momenta (randomly!) and
+  //         add them, instead of just throwing a net momentum for the
+  //	     dinulceon state?  And why do I have to capture the two
+  //	     return values into local variables?
+  G4LorentzVector mom1 = generateNucleon(type1, zone).getMomentum();
+  G4LorentzVector mom2 = generateNucleon(type2, zone).getMomentum();
+  G4LorentzVector dmom = mom1 + mom2;
 
   G4int dtype = 0;
-
   if (type1*type2 == 1)      dtype = 111;	// proton-proton
   else if (type1*type2 == 2) dtype = 112;	// proton-neutron
   else if (type1*type2 == 4) dtype = 122;	// neutron-neutron
@@ -527,6 +533,10 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
     }
 
     if (cparticle.getParticle().pion()) { // absorption possible
+      if (verboseLevel > 2) {
+	G4cout << " trying quasi-deuterons with bullet: ";
+	cparticle.getParticle().printParticle();
+      }
 
       std::vector<G4InuclElementaryParticle> qdeutrons;
       std::vector<G4double> acsecs;
@@ -548,6 +558,11 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 
 	G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
 
+	if (verboseLevel > 2) {
+	  G4cout << " ptype=" << ptype << " using pp target" << G4endl;
+	  ppd.printParticle();
+	}
+
 	abs_sec = absorptionCrosSection(ekin, ptype);
 	abs_sec *= nucleon_densities[0][zone] * nucleon_densities[0][zone]*
 	  rat * rat * vol; 
@@ -567,6 +582,11 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
 
+      if (verboseLevel > 2) {
+	G4cout << " using np target" << G4endl;
+	npd.printParticle();
+      }
+
       abs_sec = absorptionCrosSection(ekin, ptype); 
       abs_sec *= pn_spec * nucleon_densities[0][zone] * nucleon_densities[1][zone] *
 	rat * rat1 * vol; 
@@ -580,6 +600,11 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 	dummy_convertor.setTarget(nnd.getMomentum(), nnd.getMass());
 
 	G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
+
+	if (verboseLevel > 2) {
+	  G4cout << " ptype=" << ptype << " using nn target" << G4endl;
+	  nnd.printParticle();
+	}
 
 	abs_sec = absorptionCrosSection(ekin, ptype); 
 	abs_sec *= nucleon_densities[1][zone] * nucleon_densities[1][zone] *
@@ -905,6 +930,11 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
     if (cparticle.getParticle().getKineticEnergy() < cut_coeff *    
        getFermiKinetic(ip, zone)) worth = false; 
 
+    if (verboseLevel > 3) {
+      G4cout << "ekin=" << cparticle.getParticle().getKineticEnergy()
+	     << " fermiKin=" << getFermiKinetic(ip, zone) << " : worth? "
+	     << worth << G4endl;
+    }
   };
 
   return worth;

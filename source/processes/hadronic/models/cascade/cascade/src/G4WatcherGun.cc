@@ -28,7 +28,7 @@
 #include "G4WatcherGun.hh"
 
 G4WatcherGun::G4WatcherGun()
-  : verboseLevel(2) {
+  : verboseLevel(0) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4WatcherGun::G4WatcherGun" << G4endl;

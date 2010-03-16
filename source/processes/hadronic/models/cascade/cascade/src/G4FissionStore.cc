@@ -27,7 +27,7 @@
 #include <cmath>
 
 G4FissionStore::G4FissionStore()
-  : verboseLevel(2){
+  : verboseLevel(0){
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4FissionStore::G4FissionStore" << G4endl;

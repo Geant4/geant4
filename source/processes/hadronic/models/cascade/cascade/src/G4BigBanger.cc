@@ -22,10 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.21 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.22 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100301  M. Kelsey -- In generateBangInSCM(), restore old G4CascMom calcs.
+//		for (N-1)th outgoing nucleon.
 
 #include "G4BigBanger.hh"
 #include "G4InuclNuclei.hh"
@@ -36,7 +38,7 @@
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4BigBanger::G4BigBanger()
-  : verboseLevel(1) {
+  : verboseLevel(0) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::G4BigBanger" << G4endl;
   }
@@ -69,7 +71,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
     toTheNucleiSystemRestFrame.setTarget(PEX, nuclei_target->getMass());
     toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
-    G4double etot = (EEXS - bindingEnergy(A, Z)) * GeV/MeV;
+    G4double etot = (EEXS - bindingEnergy(A, Z)) * MeV/GeV;  // To Bertini units
 
     if (verboseLevel > 2) {
       G4cout << " BigBanger: target " << G4endl;
@@ -220,11 +222,16 @@ G4BigBanger::generateBangInSCM(G4double etot,
       }
   
       if(std::fabs(ct) < ang_cut) {
+	// FIXME:  These are not actually four-vectors, just three-momenta
 	G4LorentzVector mom2 = generateWithFixedTheta(ct, pmod[ia - 2]);
 	//       rotate to the normal system
 	G4LorentzVector apr = tot_mom/tot_mod;
+	G4double a_tr = std::sqrt(apr.x()*apr.x() + apr.y()*apr.y());
 	G4LorentzVector mom;
-	mom.setVect(mom2.vect().cross(apr));
+	mom.setX(mom2.z()*apr.x() + ( mom2.x()*apr.y() + mom2.y()*apr.z()*apr.x())/a_tr);
+	mom.setY(mom2.z()*apr.y() + (-mom2.x()*apr.x() + mom2.y()*apr.z()*apr.y())/a_tr);
+	mom.setZ(mom2.z()*apr.z() - mom2.y()*a_tr);
+
 	scm_momentums.push_back(mom);
 	//               and the last one
 	G4LorentzVector mom1= - mom - tot_mom;

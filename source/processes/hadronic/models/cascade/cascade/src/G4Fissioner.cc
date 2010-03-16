@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.23 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.24 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,7 +36,7 @@
 
 
 G4Fissioner::G4Fissioner()
-  : verboseLevel(1) {
+  : verboseLevel(0) {
   
   if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::G4Fissioner" << G4endl;

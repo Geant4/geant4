@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.48 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.49 2010-03-16 23:54:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -62,7 +62,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : verboseLevel(1)
+  : verboseLevel(0)
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider ctor " << G4endl;
