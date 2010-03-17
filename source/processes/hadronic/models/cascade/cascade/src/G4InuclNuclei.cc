@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.5 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.6 2010-03-17 21:28:00 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -33,6 +33,7 @@
 #include "G4Ions.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4HadTmpUtil.hh"
 #include <assert.h>
 #include <sstream>
 #include <map>
@@ -97,7 +98,7 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc) {
   G4Ions* fragPD = new G4Ions(name,       mass, 0., G4double(nz)*eplus,
 			      0,          +1,   0,
 			      0,          0,    0,
-			      "nucleus",  0,    a, code,
+			      "nucleus",  0,    G4lrint(a), code,
 			      true,	  0.,   0,
 			      false, "generic", 0,  exc);
   fragPD->SetAntiPDGEncoding(0);
