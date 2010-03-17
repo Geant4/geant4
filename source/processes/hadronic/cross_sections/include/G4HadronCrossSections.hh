@@ -92,7 +92,8 @@ class G4HadronCrossSections
 {
 public:
 
-   G4HadronCrossSections() : prevParticleDefinition(0), verboseLevel(0)
+   G4HadronCrossSections()
+     : prevParticleDefinition(0), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
    {
    }
 
@@ -183,6 +184,7 @@ private:
    G4ParticleDefinition* prevParticleDefinition;
    G4Element* prevElement;
    G4double prevKineticEnergy;
+   G4double lastEkx, lastEkxPower;
 
    static G4bool correctInelasticNearZero;
 
