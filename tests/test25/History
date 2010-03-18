@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-Mar-2010, Gunter Folger                       (test25-V09-03-00)
+-  Adapt to new multiple scattering classes
+-  fix mac file for SetCut 
+
 2 March 2009, Gunter Folger     (test25-V09-02-00)
 - Fixed warnings on unused variables from gcc 4.3/slc5
 

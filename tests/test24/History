@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-Mar-2010, Gunter Folger                       (test24-V09-03-00)
+-  Adapt to new multiple scattering classes
+-  fix mac file for SetCut 
+
 6th December 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 
