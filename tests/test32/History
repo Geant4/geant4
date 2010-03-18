@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2004-12-01 17:56:39 gcosmo Exp $
+$Id: History,v 1.6 2010-03-18 00:30:25 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th March 2010 Makoto Asai (test32-V09-03-00)
+- Change G4MultipleScattering to G4eMultipleScattering, G4MuMultipleScattering
+   and G4hMultipleScattering.
 
 1st December 2004 Gabriele Cosmo (test32-V06-02-01)
 - Fix for migration to new G4VParticleChange interface in
