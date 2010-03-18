@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th March 2010  Pekka Kaitaniemi (test62-V09-03-00)
+- Migration to the new G4[e|Mu|h]MultipleScattering system
+
 7th November 2008  Pekka Kaitaniemi (test62-V09-01-00)
 - Use test24 as the basis of a new INCL/ABLA cascade/evaporation system test
 - Modifications:
