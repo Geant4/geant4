@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2005-12-06 16:10:57 gcosmo Exp $
+$Id: History,v 1.5 2010-03-18 22:59:30 dennis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,24 +15,40 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 Mar 2010  Dennis Wright (test22-V09-03-00)
+---------------------------------------------
+- replace G4MultipleScattering with G4eMultipleScattering,
+  G4MuMultipleScattering and G4hMultipleScattering
+- add more information to README
+- includes M. Kossov's option (in comments) to use native CHIPS
+  model instead of interface 
+
 December 6, 2005  G.Cosmo
+-------------------------
 - Trivial changes for support of CLHEP-2.0.X series.
 
+
 June 3, 2003  G.Cosmo (test22-V05-01-01)
+----------------------------------------
 - Reduced statistics in input script.
 - Cleared compilation warnings...
 - Made largeN macro corresponding to standard macro with more statistics...
 
 May 31, 2003  G.Cosmo (test22-V05-01-00)
+----------------------------------------
 - Made test more effective for scaling of the gamma-nuclear cross-sections.
   Modified physics-list and input script. Will require update of the
   reference output. (H.P.Wellisch)
 - Added description to README.
 
+
 November 22, 2001  H.P.Wellisch
+-------------------------------
 - Created the test to test gamma and electron nuclear reactions using
   chiral invariant phase space decay for final state production.
 
+
 March 07 2001 H.Kurashige (test22-V03-00-03)
+--------------------------------------------
 - Created directories.
 
