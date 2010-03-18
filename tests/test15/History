@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2010-03-18 20:49:27 dennis Exp $
+$Id: History,v 1.14 2010-03-18 20:52:32 dennis Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,14 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-20 Oct. 2009 Hisaya Kurashige
-- Use run/setCut command instead of /run/particle/setCut 
+18 Mar 2010  Dennis Wright  (test15-V09-03-01)
+----------------------------------------------
+- correct order in History file entries
+
 
 18 Mar 2010  Dennis Wright  (test15-V09-03-00)
 ----------------------------------------------
 - replace obsolete G4MultipleScattering with G4eMultipleScattering,
   G4MuMultipleScattering and G4hMultipleScattering.
 - add more information to README
+
+
+20 Oct. 2009 Hisaya Kurashige
+-----------------------------
+- Use run/setCut command instead of /run/particle/setCut 
 
 
 26 May 2009  Gunter Folger  (test15-V09-02-00)
