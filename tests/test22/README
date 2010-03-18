@@ -1,12 +1,50 @@
-$Id: README,v 1.2 2003-06-02 12:36:55 gcosmo Exp $
+$Id: README,v 1.3 2010-03-18 22:55:03 dennis Exp $
 -------------------------------------------------------------------
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+          =========================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+          =========================================================
 
-                            Test22
-                            ------
-Cross-section scaling test of gamma and electron nuclear reactions using chiral
-invariant phase space decay for final state production.
+                                 Test22
+                                 ------
+Description:  cross-section scaling test of electro-nuclear reactions, and
+              test of interface to the Chiral Invariant Phase Space model for
+              high energy gamma interactions.
 
+              All electromagnetic processes are included in this test, with
+              the addition of G4ElectronNuclearProcess, G4PositronNuclearProcess,
+              and G4PhotoNuclearProcess.
+
+              The electro-nuclear reaction cross section is scaled up by a
+              factor of 1000.  The positron and gamma processes are not scaled.
+
+              G4PhotoNuclearProcess is implemented by the G4GammaNuclearReaction
+              model below 3.5 GeV and by the interface to the Chiral Invariant
+              Phase Space model between 3 GeV and 100 TeV.
+
+              A complete set of hadronic processes, implemented by the LEP and
+              HEP models, is also included.
+
+              Detector is a simple box of air, aluminum or lead.
+
+
+Usage:        input file specifies 100 GeV gamma incident on aluminum target
+              and 100 GeV electron incident on air.  2 runs of 5 events each,
+              or optionally 25 events each.  
+
+              Verbose stepping action available but not currently
+              used.
+
+
+Running:      Build test22 and run
+
+              ../bin/$G4SYSTEM/test22 test22.in >& test22.out &
+              for 5 events per run, or
+
+              ../bin/$G4SYSTEM/test22 test22.large_N.in >& test22.out &
+
+
+Type of test: run to completion
+
+
+Output:       run log
