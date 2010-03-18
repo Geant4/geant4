@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.24 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.25 2010-03-18 18:27:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100318  M. Kelsey -- Bug fix setting mass with G4LV
 
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
@@ -165,8 +166,8 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
       G4double P1 = pmod * COS_SIN.second;
 
       G4ThreeVector pvec(P1*std::cos(Fi), P1*std::sin(Fi), pmod*COS_SIN.first);
-      G4LorentzVector mom1(pvec, mass1);
-      G4LorentzVector mom2(-pvec, mass2);
+      G4LorentzVector mom1; mom1.setVectM(pvec, mass1);
+      G4LorentzVector mom2; mom2.setVectM(-pvec, mass2);
 
       G4double e_out = mom1.e() + mom2.e();
       G4double EV = 1000.0 * (e_in - e_out) / A;
