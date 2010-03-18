@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst16PhysicsList.cc,v 1.9 2007-06-01 14:35:11 gcosmo Exp $
+// $Id: Tst16PhysicsList.cc,v 1.10 2010-03-18 05:09:33 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,16 +131,17 @@ void Tst16PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
-
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 
 void Tst16PhysicsList::ConstructEM()
@@ -161,7 +162,7 @@ void Tst16PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeminusMultipleScattering = new G4eMultipleScattering();
       G4VProcess* theeminusIonisation = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung = new G4eBremsstrahlung();
       // add processes
@@ -179,7 +180,7 @@ void Tst16PhysicsList::ConstructEM()
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
       G4VProcess* theeplusIonisation = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung = new G4eBremsstrahlung();
       G4VProcess* theeplusAnnihilation = new G4eplusAnnihilation();
@@ -203,7 +204,7 @@ void Tst16PhysicsList::ConstructEM()
                particleName == "mu-"    ) {
     //muon  
      // Construct processes for muon+
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4MuMultipleScattering();
      G4VProcess* aBremsstrahlung = new G4MuBremsstrahlung();
      G4VProcess* aPairProduction = new G4MuPairProduction();
      G4VProcess* anIonisation = new G4MuIonisation();
@@ -223,7 +224,7 @@ void Tst16PhysicsList::ConstructEM()
      
     } else if( particleName == "GenericIon" ) {
      G4VProcess* aionIonization = new G4hIonisation;
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4hMultipleScattering();
      pmanager->AddProcess(aionIonization);
      pmanager->AddProcess(aMultipleScattering);
      // set ordering for AlongStepDoIt
@@ -237,7 +238,7 @@ void Tst16PhysicsList::ConstructEM()
 	      (particle->GetPDGCharge() != 0.0) && 
 	      (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4hMultipleScattering();
      G4VProcess* anIonisation = new G4hIonisation();
      // add processes
      pmanager->AddProcess(anIonisation);
