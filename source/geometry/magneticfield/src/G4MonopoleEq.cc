@@ -24,17 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopoleEq.cc,v 1.1 2009-11-17 09:53:03 grichine Exp $
+// $Id: G4MonopoleEq.cc,v 1.2 2010-03-18 10:23:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-//  This is the standard right-hand side for equation of motion.
+//  This is the right-hand side for equation of motion for a 
+//   magnetic charge in a combined Electro-Magnetic field
 //
 //  d(p_c)/ds=g{c-energyB_ - p_c x E}/pc
-//
-//  The only case another is required is when using a moving reference
-//  frame ... or extending the class to include additional Forces,
-//  eg an electric field
 //
 //  17.11.09   V.Grichine
 //
@@ -64,7 +61,7 @@ G4MonopoleEq::EvaluateRhsGivenB(const G4double y[],
 
    // Components of y:
    //    0-2 dr/ds, 
-   //    3-5 dpc/ds - momentum derivatives 
+   //    3-5 d(pc)/ds - momentum derivatives 
 
    G4double pSquared = y[3]*y[3] + y[4]*y[4] + y[5]*y[5] ;
 
@@ -79,7 +76,6 @@ G4MonopoleEq::EvaluateRhsGivenB(const G4double y[],
    G4double cof1     = fElectroMagCof*pModuleInverse ;
 
    //  G4double vDotE = y[3]*Field[3] + y[4]*Field[4] + y[5]*Field[5] ;
-
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
