@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.13 2010-03-15 12:28:07 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.14 2010-03-18 20:13:14 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -655,6 +655,8 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   G4double D2 ; 
   G4double alphaConst ;
 
+  const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV};
+
   if (j == 4) 
   {
       //Data For Liquid Water K SHELL from Dingfelder (Protons in Water)
@@ -691,7 +693,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   instance = G4DNAGenericIonsManager::Instance();
 
   G4double wBig = (energyTransfer - waterStructure.IonisationEnergy(ionizationLevelIndex));
-  G4double w = wBig / waterStructure.IonisationEnergy(ionizationLevelIndex);
+  G4double w = wBig / Bj[ionizationLevelIndex];
   G4double Ry = 13.6*eV;
 
   G4double tau = 0.;
@@ -709,10 +711,10 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
       tau = (0.511/3728.) * k ;
   }
  
-  G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
-  G4double v2 = tau / waterStructure.IonisationEnergy(ionizationLevelIndex);
+  G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/Bj[ionizationLevelIndex]),2);
+  G4double v2 = tau / Bj[ionizationLevelIndex];
   G4double v = std::sqrt(v2);
-  G4double wc = 4.*v2 - 2.*v - (Ry/(4.*waterStructure.IonisationEnergy(ionizationLevelIndex)));
+  G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj[ionizationLevelIndex]));
 
   G4double L1 = (C1* std::pow(v,(D1))) / (1.+ E1*std::pow(v, (D1+4.)));
   G4double L2 = C2*std::pow(v,(D2));
@@ -723,7 +725,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   G4double F2 = (L2*H2)/(L2+H2);
 
   G4double sigma = CorrectionFactor(particleDefinition, k/eV) 
-    * Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) 
+    * Gj[j] * (S/Bj[ionizationLevelIndex]) 
     * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 
   if (    particleDefinition == G4Proton::ProtonDefinition() 
@@ -768,7 +770,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
 	  || particleDefinition == instance->GetIon("alpha++")
 	  ) 
   {
-      sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
+      sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
     
       G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
   

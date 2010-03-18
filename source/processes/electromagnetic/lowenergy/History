@@ -1,4 +1,4 @@
-$Id: History,v 1.419 2010-03-18 16:36:48 sincerti Exp $
+$Id: History,v 1.420 2010-03-18 20:13:14 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.03.2010, S. Incerti, tag emlowen-V09-03-12
+            - Re-added vapor water shell constants to G4DNARuddIonisationModel.cc
+            as suggested by Ziad.
 
 18.03.2010, S. Incerti, tag emlowen-V09-03-11
             Extended low energy cover of G4DNA charge change processes
