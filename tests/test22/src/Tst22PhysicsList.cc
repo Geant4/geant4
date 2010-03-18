@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22PhysicsList.cc,v 1.4 2006-05-02 10:31:20 mkossov Exp $
+// $Id: Tst22PhysicsList.cc,v 1.5 2010-03-18 22:51:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,14 +135,13 @@ void Tst22PhysicsList::ConstructEM()
     if (particleName == "gamma") 
     {
       // Construct processes for gamma
-      // ........The OLD (GHAR) usage of the CHIPS Photo-nuclear reactions .............
       G4PhotoNuclearProcess* thePhotoNuclearProcess = new G4PhotoNuclearProcess;
       G4QGSMFragmentation* theFragmentation = new G4QGSMFragmentation;
-						G4QGSModel<G4GammaParticipants>* theStringModel=new G4QGSModel<G4GammaParticipants>;
+      G4QGSModel<G4GammaParticipants>* theStringModel=new G4QGSModel<G4GammaParticipants>;
       G4GammaNuclearReaction* theGammaReaction = new G4GammaNuclearReaction;
       G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
       G4StringChipsParticleLevelInterface* theCascade =
-                                                   new G4StringChipsParticleLevelInterface;
+                                            new G4StringChipsParticleLevelInterface;
       theModel->SetTransport(theCascade);
       theModel->SetHighEnergyGenerator(theStringModel);
       G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay(theFragmentation);
@@ -153,7 +152,9 @@ void Tst22PhysicsList::ConstructEM()
       theModel->SetMaxEnergy(100*TeV);
       thePhotoNuclearProcess->RegisterMe(theModel);
       pmanager->AddDiscreteProcess(thePhotoNuclearProcess);
-      // ........The NEW (native) usage of the CHIPS Photo-nuclear reactions .............
+
+      // To use the native CHIPS Photo-nuclear reactions, comment out previous 16 lines
+      // and uncomment following line
       //pmanager->AddDiscreteProcess(new G4QCollision); // see test38
 
       // Pure Electromagnetic Processes
@@ -165,36 +166,36 @@ void Tst22PhysicsList::ConstructEM()
     else if (particleName == "e-")
     {
       // Construct processes for electron
-      // ........The OLD (GHAR) usage of the CHIPS Photo-nuclear reactions .............
       G4ElectronNuclearProcess* theElectronNuclearProcess = new G4ElectronNuclearProcess;
       G4ElectroNuclearReaction* theElectronReaction = new G4ElectroNuclearReaction;
       theElectronNuclearProcess->RegisterMe(theElectronReaction);
       theElectronNuclearProcess->BiasCrossSectionByFactor(1000);
       pmanager->AddDiscreteProcess(theElectronNuclearProcess);
-      // ........The NEW (native) usage of the CHIPS electro-nuclear reactions ............
+      // To use the native CHIPS electro-nuclear reactions, comment out previous 5 lines
+      // and uncomment following line
       //pmanager->AddDiscreteProcess(new G4QCollision); // see test38
 
       // Pure Electromagnetic Processes
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);// ElectronMultipleScattering
-      pmanager->AddProcess(new G4eIonisation(),-1,2,2);       // Electron Ionisation							
+      pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);// ElectronMultipleScattering
+      pmanager->AddProcess(new G4eIonisation(),-1,2,2);       // Electron Ionisation 
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);  // Electron BremsStrahlung   
   
     }
     else if (particleName == "e+")
     {
       // Construct processes for positron
-      // ........The OLD (GHAR) usage of the CHIPS Photo-nuclear reactions .............
       G4PositronNuclearProcess* thePositronNuclearProcess = new G4PositronNuclearProcess;
       G4ElectroNuclearReaction* thePositronReaction = new G4ElectroNuclearReaction;
       thePositronNuclearProcess->RegisterMe(thePositronReaction);
       thePositronNuclearProcess->BiasCrossSectionByFactor(1000);
       pmanager->AddDiscreteProcess(thePositronNuclearProcess);
-      // ........The NEW (native) usage of the CHIPS positron-nuclear reactions ............
+      // To use the native CHIPS positron-nuclear reactions, comment out previous 5 lines
+      // and uncomment following line
       //pmanager->AddDiscreteProcess(new G4QCollision); // see test38
 
       // Pure Electromagnetic Processes
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);// PositronMultipleScattering
-      pmanager->AddProcess(new G4eIonisation(),-1,2,2);							// Positron Ionisation
+      pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);// PositronMultipleScattering
+      pmanager->AddProcess(new G4eIonisation(),-1,2,2);	  // Positron Ionisation
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);  // Positron BremsStrahlung
       G4eplusAnnihilation* theAnnihilation = new G4eplusAnnihilation;
       pmanager->AddDiscreteProcess(theAnnihilation);     // Positron Annihilation on Flight
@@ -204,7 +205,7 @@ void Tst22PhysicsList::ConstructEM()
     else if( particleName == "mu+" || particleName == "mu-"    )
     {
       // Construct processes for muon+/-
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1); // Mu Multiple Scattering
+      pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1); // Mu Multiple Scattering
       pmanager->AddProcess(new G4MuIonisation(),-1,2,2);       // Mu Ionization
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);  // Mu Bremsstrahlung
       pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);  // Mu Pair Production      
@@ -213,7 +214,7 @@ void Tst22PhysicsList::ConstructEM()
     else if( particleName == "GenericIon" )
     {
       // Construct processes for ions
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
       pmanager->AddProcess(new G4hIonisation(),-1,2,2); 
     }
     else
@@ -222,7 +223,7 @@ void Tst22PhysicsList::ConstructEM()
                                                                 !particle->IsShortLived() )
       {  
         // short lived particles except geantino
-        pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+        pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
         pmanager->AddProcess(new G4hIonisation(),-1,2,2);       
       }
     }

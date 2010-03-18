@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22MuonPhysics.hh,v 1.2 2006-06-29 21:48:55 gunter Exp $
+// $Id: Tst22MuonPhysics.hh,v 1.3 2010-03-18 22:53:13 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 #include "G4MuIonisation.hh"
@@ -69,21 +69,21 @@ class Tst22MuonPhysics : public G4VPhysicsConstructor
 
   protected:
    // Muon physics
-   G4MultipleScattering   fMuPlusMultipleScattering;
+   G4MuMultipleScattering   fMuPlusMultipleScattering;
    G4MuBremsstrahlung     fMuPlusBremsstrahlung ;
    G4MuPairProduction     fMuPlusPairProduction;
    G4MuIonisation         fMuPlusIonisation;
 
-   G4MultipleScattering   fMuMinusMultipleScattering;
+   G4MuMultipleScattering   fMuMinusMultipleScattering;
    G4MuBremsstrahlung     fMuMinusBremsstrahlung ;
    G4MuPairProduction     fMuMinusPairProduction;
    G4MuIonisation         fMuMinusIonisation;
    G4MuonMinusCaptureAtRest fMuonMinusCaptureAtRest;
    // Tau physics
-   G4MultipleScattering   fTauPlusMultipleScattering;
+   G4MuMultipleScattering   fTauPlusMultipleScattering;
    G4hIonisation          fTauPlusIonisation;
 
-   G4MultipleScattering   fTauMinusMultipleScattering;
+   G4MuMultipleScattering   fTauMinusMultipleScattering;
    G4hIonisation          fTauMinusIonisation;
 
 };
