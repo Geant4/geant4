@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.7 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.8 2010-03-18 16:36:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -83,7 +83,7 @@ void G4DNADingfelderChargeDecreaseModel::Initialise(const G4ParticleDefinition* 
   if (protonDef != 0)
   {
     proton = protonDef->GetParticleName();
-    lowEnergyLimit[proton] = 1. * keV;
+    lowEnergyLimit[proton] = 100. * eV;
     highEnergyLimit[proton] = 10. * MeV;
   }
   else

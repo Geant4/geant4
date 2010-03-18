@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.7 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.8 2010-03-18 16:36:48 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,7 +84,7 @@ void G4DNADingfelderChargeIncreaseModel::Initialise(const G4ParticleDefinition* 
   if (hydrogenDef != 0)
   {
     hydrogen = hydrogenDef->GetParticleName();
-    lowEnergyLimit[hydrogen] = 1. * keV;
+    lowEnergyLimit[hydrogen] = 100. * eV;
     highEnergyLimit[hydrogen] = 10. * MeV;
   }
   else
