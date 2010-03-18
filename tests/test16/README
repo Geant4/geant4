@@ -1,19 +1,44 @@
-$Id: README,v 1.2 2008-08-23 00:41:44 dennis Exp $
--------------------------------------------------------------------
+$Id: README,v 1.3 2010-03-18 05:09:57 dennis Exp $
+------------------------------------------------------------------------------
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+            =========================================================
+            Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+            =========================================================
 
-                            Test16
-                            ------
+                                     Test16
+                                     ------
 
-Description:   test of n and p cross sections at 1, 10 and 20 GeV.
-               Detector is a simple box of air, aluminum or lead.
+Description:  test of n and p cross sections in the classes
+              G4NeutronInelasticCrossSection and G4ProtonInelasticCrossSection 
+              using the LEP and HEP models.  All electromagnetic, hadronic and
+              decay processes are included.  For hadrons other than n and p, 
+              the default LHEP cross sections are used.
+ 
+              Detector is a simple box of air, aluminum or lead.
 
-Type of test:  run to completion
 
-Output:        run log
+Usage:        auto-generated file provides input for neutron and proton runs 
+              with incident energies of 1, 10 and 20 GeV for each material.
+              18 runs in all, with the 10 events per run.  
+
+              Verbose atepping action available but not currently 
+              used.
+
+
+Running:      Build both test16 and test16_hadronic_exerciser.
+              Then generate the input file:
+
+              ../bin/$G4SYSTEM/test16_hadronic_exerciser >& test16.in &
+
+              and run the test:
+  
+              ../bin/$G4SYSTEM/test16 test16.in >& test16.out &
+ 
+
+Type of test: run to completion
+
+
+Output:       run log
 
 
 
