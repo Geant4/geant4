@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: History,v 1.9 2009-11-04 05:41:09 kurasige Exp $
+// $Id: History,v 1.10 2010-03-19 00:03:46 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -38,24 +38,44 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 Mar 2010  Dennis Wright  (test23-V09-03-00)
+----------------------------------------------
+- replace G4MultipleScattering with G4eMultipleScattering, G4MuMultipleScattering,
+  and G4hMultipleScattering
+- add information to README
+
+
 20 October 2009, Hisaya Kurashige (test12-V09-02-01)
+----------------------------------------------------
 - Use /run/setCut command instead of /run/particle/setCut command
 
+
 26 May 2009, Gunter Folger             (test23-V09-02-00)
+---------------------------------------------------------
 - rename hadronic exerciser files; use "_" instead of "." in filename; 
    ("." in fileanme confuses Windows, resulting in warnings)
 
+
 Dec 6, 2005  Gabriele Cosmo
+---------------------------
 - Trivial changes for support of CLHEP-2.0.X series.
 
+
 Jan 27, 2004 Mikhail Kossov
+---------------------------
 - converted to the CHIPS test of nuclear capture at rest
 
+
 Oct 18, 2001  Steve O'Neale (tests-V03-02-03)
+---------------------------------------------
 - update reference outputs in tests directory
 
+
 March 07 2001 H.Kurashige (test23-V03-00-03)
+--------------------------------------------
 -  Add G4MuonMinusCaptureAtRest in G4MuonPhysics 
+
 
 Feb 20 2001 Steve O'Neale Update reference outputs following 
             materials-V03-00-04 from tagset268 (test23-V03-00-02)
