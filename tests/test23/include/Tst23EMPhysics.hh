@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23EMPhysics.hh,v 1.4 2006-06-29 21:49:41 gunter Exp $
+// $Id: Tst23EMPhysics.hh,v 1.5 2010-03-19 00:00:01 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -76,12 +76,12 @@ class Tst23EMPhysics : public G4VPhysicsConstructor
     G4GammaConversion thePairProduction;
   
     // Electron physics
-    G4MultipleScattering theElectronMultipleScattering;
+    G4eMultipleScattering theElectronMultipleScattering;
     G4eIonisation theElectronIonisation;
     G4eBremsstrahlung theElectronBremsStrahlung;
   
     //Positron physics
-    G4MultipleScattering thePositronMultipleScattering;
+    G4eMultipleScattering thePositronMultipleScattering;
     G4eIonisation thePositronIonisation; 
     G4eBremsstrahlung thePositronBremsStrahlung;  
     G4eplusAnnihilation theAnnihilation;

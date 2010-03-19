@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst23IonPhysics.hh,v 1.4 2006-06-29 21:49:47 gunter Exp $
+// $Id: Tst23IonPhysics.hh,v 1.5 2010-03-19 00:00:24 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@
 #include "G4LEAlphaInelastic.hh"
 
 #include "G4hIonisation.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 class Tst23IonPhysics : public G4VPhysicsConstructor
 {
@@ -82,29 +82,29 @@ class Tst23IonPhysics : public G4VPhysicsConstructor
    G4LElastic*            theElasticModel;
 
    // Generic Ion physics
-   G4MultipleScattering   fIonMultipleScattering;
+   G4hMultipleScattering   fIonMultipleScattering;
    G4hIonisation          fIonIonisation;
 
    // Deuteron physics
-   G4MultipleScattering        fDeuteronMultipleScattering;
+   G4hMultipleScattering        fDeuteronMultipleScattering;
    G4hIonisation               fDeuteronIonisation;
    G4DeuteronInelasticProcess  fDeuteronProcess;
    G4LEDeuteronInelastic*      fDeuteronModel;
 
    // Triton physics
-   G4MultipleScattering        fTritonMultipleScattering;
+   G4hMultipleScattering        fTritonMultipleScattering;
    G4hIonisation               fTritonIonisation;
    G4TritonInelasticProcess    fTritonProcess;
    G4LETritonInelastic*        fTritonModel;
   
    // Alpha physics
-   G4MultipleScattering        fAlphaMultipleScattering;
+   G4hMultipleScattering        fAlphaMultipleScattering;
    G4hIonisation               fAlphaIonisation;
    G4AlphaInelasticProcess     fAlphaProcess;
    G4LEAlphaInelastic*         fAlphaModel;
 
    // He3 physics
-   G4MultipleScattering        fHe3MultipleScattering;
+   G4hMultipleScattering        fHe3MultipleScattering;
    G4hIonisation               fHe3Ionisation;
 
 };
