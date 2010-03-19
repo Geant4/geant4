@@ -22,32 +22,31 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4NonEquilibriumEvaporator.hh,v 1.8 2010-03-19 05:03:23 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+
 #ifndef G4NON_EQUILIBRIUM_EVAPORATOR_HH
 #define G4NON_EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4Collider.hh"
-#include "G4InuclSpecialFunctions.hh"
+#include "G4CollisionOutput.hh"
 
-using namespace G4InuclSpecialFunctions;
+class G4InuclParticle;
 
 class G4NonEquilibriumEvaporator {
-
 public:
-
   G4NonEquilibriumEvaporator();
 
   G4CollisionOutput collide(G4InuclParticle* bullet,
-				    G4InuclParticle* target);
+			    G4InuclParticle* target);
 
 private: 
-G4int verboseLevel;
+  G4int verboseLevel;
+
   G4double getMatrixElement(G4double A) const;
-
   G4double getE0(G4double A) const; 
-
   G4double getParLev(G4double A, G4double Z) const;
-
 };
 
 #endif // G4NON_EQUILIBRIUM_EVAPORATOR_HH 

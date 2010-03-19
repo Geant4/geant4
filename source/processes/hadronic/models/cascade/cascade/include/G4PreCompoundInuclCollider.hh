@@ -22,21 +22,22 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4PreCompoundInuclCollider.hh,v 1.4 2010-03-19 05:03:23 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100315  M. Kelsey -- Remove "using" directive and unneeded #includes.
+
 #ifndef G4PRECOMPOUNDINUCL_COLLIDER_HH
 #define G4PRECOMPOUNDINUCL_COLLIDER_HH
  
-#include "G4Collider.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4InteractionCase.hh"
-#include "G4InuclNuclei.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4Analyser.hh"
 
-using namespace G4InuclSpecialFunctions;
+class G4InuclParticle;
+class G4InuclNuclei;
 
 class G4PreCompoundInuclCollider {
 

@@ -26,6 +26,7 @@
 //#define PB
 
 #include "G4WatcherGun.hh"
+#include "G4ios.hh"
 
 G4WatcherGun::G4WatcherGun()
   : verboseLevel(0) {

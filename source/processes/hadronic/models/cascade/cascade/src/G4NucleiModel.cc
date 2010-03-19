@@ -22,34 +22,44 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.40 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.41 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Use G4ThreeVector for position
+// 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
+//		eliminate some unnecessary std::pow(), move ctor here
 
 //#define CHC_CHECK
 
 #include "G4NucleiModel.hh"
 #include "G4CollisionOutput.hh"
+#include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+#include "G4InuclSpecialFunctions.hh"
+#include "G4CascadSpecialFunctions.hh"
 
 using namespace G4InuclSpecialFunctions;
+using namespace G4CascadSpecialFunctions;
 
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-G4NucleiModel::G4NucleiModel()
-  : verboseLevel(0) {
-
+G4NucleiModel::G4NucleiModel() : verboseLevel(0) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
   }
 }
+
+G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei) : verboseLevel(0) {
+  generateModel(nuclei->getA(), nuclei->getZ());
+}
+
 
 void 
 G4NucleiModel::generateModel(G4double a, G4double z) {
@@ -61,7 +71,6 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
   const G4double AU = 1.7234;
   const G4double cuu = 3.3836; 
-  const G4double one_third = 1.0 / 3.0;
   const G4double oneBypiTimes4 = 0.0795775; // 1 / 4 Pi
   const G4double pf_coeff = 1.932;
   const G4double pion_vp = 0.007; // in GeV
@@ -87,7 +96,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z-1)) - dm)); // for P
   binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z)) - dm)); // for N
 
-  G4double CU = cuu * std::pow(a, one_third);
+  G4double CU = cuu * G4cbrt(a);
   G4double D1 = CU / AU;
   G4double D = std::exp(-D1);
   G4double CU2 = 0.0; 
@@ -141,8 +150,10 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
  
       v.push_back(v0);
       tot_vol += v0;
-      v0 = (i == 0 ? std::pow(zone_radii[i], G4double(3)) : std::pow(zone_radii[i], G4double(3)) -
-	    std::pow(zone_radii[i - 1], G4double(3)));
+
+      v0 = zone_radii[i]*zone_radii[i]*zone_radii[i];
+      if (i > 0) v0 -= zone_radii[i-1]*zone_radii[i-1]*zone_radii[i-1];
+
       v1.push_back(v0);
     }
 
@@ -156,7 +167,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = dd0 * v[i] / v1[i];
       rod.push_back(rd);
-      G4double pff = pf_coeff * std::pow(rd, one_third);
+      G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
       vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
     }
@@ -173,7 +184,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = dd0 * v[i] / v1[i];
       rod.push_back(rd);
-      G4double pff = pf_coeff * std::pow(rd, one_third);
+      G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
       vz.push_back(0.5 * pff * pff / mneutron + binding_energies[1]);
     };
@@ -197,7 +208,8 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   } else { // a < 4
     number_of_zones = 1;
     zone_radii.push_back(radForSmall);
-    G4double vol = 1.0 / piTimes4thirds / std::pow(zone_radii[0], G4double(3));
+    G4double vol = 1.0 / piTimes4thirds / (zone_radii[0]*zone_radii[0]*zone_radii[0]);
+
     std::vector<G4double> rod;
     std::vector<G4double> pf;
     std::vector<G4double> vz;
@@ -207,7 +219,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = vol;
       rod.push_back(rd);
-      G4double pff = pf_coeff * std::pow(rd, one_third);
+      G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
       vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
     };
@@ -224,7 +236,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = vol;
       rod.push_back(rd);
-      G4double pff = pf_coeff * std::pow(rd, one_third);
+      G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
       vz.push_back(0.5 * pff * pff / mneutron + binding_energies[1]);
     };
@@ -351,7 +363,7 @@ G4NucleiModel::volNumInt1(G4double r1, G4double r2,
     if (itry == itry_max) G4cout << " volNumInt1-> n iter " << itry_max << G4endl;
   }
 
-  return std::pow(cu2, G4double(3)) * fun;
+  return cu2*cu2*cu2 * fun;
 }
 
 
@@ -385,21 +397,10 @@ G4NucleiModel::generateNucleon(G4int type, G4int zone) const {
     G4cout << " >>> G4NucleiModel::generateNucleon" << G4endl;
   }
 
-  const G4double one_third = 1.0 / 3.0;
+//G4double pmod = getFermiMomentum(type, zone) * G4cbrt(inuclRndm());
+  G4double pmod = fermi_momenta[type - 1][zone] * G4cbrt(inuclRndm());
 
-//G4double pmod = getFermiMomentum(type, zone) * std::pow(inuclRndm(), one_third);
-
-  G4double pmod = fermi_momenta[type - 1][zone] * std::pow(inuclRndm(), one_third);
-
-  G4LorentzVector mom;
-  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-  G4double FI = randomPHI();
-  G4double pt = pmod * COS_SIN.second;
-
-  mom.setX(pt * std::cos(FI));
-  mom.setY(pt * std::sin(FI));
-  mom.setZ(pmod * COS_SIN.first);
-
+  G4LorentzVector mom = generateWithRandomAngles(pmod);
   return G4InuclElementaryParticle(mom, type);
 }
 
@@ -543,9 +544,9 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
 
       G4double tot_abs_csec = 0.0;
       G4double abs_sec;
-      G4double vol = std::pow(zone_radii[zone], G4double(3));
+      G4double vol = zone_radii[zone]*zone_radii[zone]*zone_radii[zone];
 
-      if (zone > 0) vol -= std::pow(zone_radii[zone - 1], G4double(3));
+      if (zone > 0) vol -= zone_radii[zone-1]*zone_radii[zone-1]*zone_radii[zone-1];
       vol *= pi4by3; 
 
       G4double rat  = getRatio(1); 
@@ -950,7 +951,7 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
   //  G4double ratm;
 
   // Calculate number of protons and neutrons in local region
-  //  G4double Athird = std::pow(A, 0.3333);
+  //  G4double Athird = G4cbrt(A);
   //  G4double Nneut = Athird*(A-Z)/A;
   //  G4double Nprot = Athird*Z/A;
 
@@ -1092,13 +1093,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4cout << " p nuc " << p << G4endl;
 	  }
 
-	  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-	  G4double FI = randomPHI();
-	  G4double P1 = p * COS_SIN.second;
-
-	  G4LorentzVector 
-	    mom(G4ThreeVector(P1*std::cos(FI),P1*std::sin(FI),p*COS_SIN.first),
-		massb);
+	  G4LorentzVector mom = generateWithRandomAngles(p, massb);
 
 	  momentums.push_back(mom);
 	  mom.setVect(-mom.vect());
@@ -1120,7 +1115,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	      for (i = 0; i < 2; i++) {
 		G4int itry1 = 0;
-		G4double s, u, rho, phi; 
+		G4double s, u, rho; 
 		G4double fmax = std::exp(-0.5) / std::sqrt(0.5);
 
 		while (itry1 < itry_max) {
@@ -1131,10 +1126,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 		  if (std::sqrt(s) * std::exp(-s) > u && s < s3max) {
 		    s = r0forAeq3 * std::sqrt(s);
-		    std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-		    u = s * COS_SIN.second;  
-		    phi = randomPHI();
-		    coord1.set(u*std::cos(phi),u*std::sin(phi),s*COS_SIN.first);
+		    coord1 = generateWithRandomAngles(s).vect();
 		    coordinates.push_back(coord1);
 
 		    if (verboseLevel > 2){
@@ -1197,7 +1189,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    
 	      for (i = 0; i < ia-1; i++) {
 		G4int itry1 = 0;
-		G4double s, u, phi; 
+		G4double s, u; 
 
 		while (itry1 < itry_max) {
 		  itry1++;
@@ -1206,10 +1198,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 		  if (std::sqrt(s) * std::exp(-s) * (1.0 + b * s) > u && s < s4max) {
 		    s = r0forAeq4 * std::sqrt(s);
-		    std::pair<double, double> COS_SIN = randomCOS_SIN();
-		    u = s * COS_SIN.second;  
-		    phi = randomPHI();
-		    coord1.set(u*std::cos(phi),u*std::sin(phi),s*COS_SIN.first);
+		    coord1 = generateWithRandomAngles(s).vect();
 		    coordinates.push_back(coord1);
 
 		    if (verboseLevel > 2) {
@@ -1269,7 +1258,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      (casparticles, particles);
 
 	  } else { // momentums
-	    G4double p, u, x, pt, phi;
+	    G4double p, u, x;
 	    G4LorentzVector mom;
 	    //G4bool badp = True;
 	    G4int i(0);
@@ -1284,11 +1273,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 		if(x > inuclRndm()) {
 		  p = std::sqrt(0.01953 * u);
-		  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-		  pt = p * COS_SIN.second;  
-		  phi = randomPHI();
-
-		  mom.setVectM(G4ThreeVector(pt*std::cos(phi),pt*std::sin(phi),p*COS_SIN.first), massb);
+		  mom = generateWithRandomAngles(p, massb);
 		  momentums.push_back(mom);
 
 		  break;

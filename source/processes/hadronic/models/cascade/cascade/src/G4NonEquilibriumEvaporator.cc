@@ -22,10 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.25 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
+//		eliminate some unnecessary std::pow()
 
 #define RUN
 
@@ -33,9 +35,12 @@
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
+
+using namespace G4InuclSpecialFunctions;
 
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
@@ -53,7 +58,6 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     G4cout << " >>> G4NonEquilibriumEvaporator::collide" << G4endl;
   }
 
-  const G4double one_third = 1.0/3.0;
   const G4double a_cut = 5.0;
   const G4double z_cut = 3.0;
 
@@ -130,7 +134,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 
 	  G4double AK1 = parms.first;
 	  G4double CPA1 = parms.second;
-	  G4double VP = coul_coeff * Z * AK1 / (std::pow(A - 1.0, one_third) + 1.0) /
+	  G4double VP = coul_coeff * Z * AK1 / (G4cbrt(A - 1.0) + 1.0) /
 	    (1.0 + EEXS / E0);
 	  //	  G4double DM1 = bindingEnergy(A, Z);
 	  //	  G4double BN = DM1 - bindingEnergy(A - 1.0, Z);
@@ -149,7 +153,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 	      G4double APH = 0.25 * (QP * QP + QH * QH + QP - 3.0 * QH);
 	      G4double APH1 = APH + 0.5 * (QP + QH);
 	      ESP = EEXS / QEX;
-	      G4double MELE = MEL / ESP / std::pow(A, 3);
+	      G4double MELE = MEL / ESP / (A*A*A);
 
 	      if (ESP > 15.0) {
 		MELE *= std::sqrt(15.0 / ESP);
@@ -172,7 +176,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 		if (D[0] > 0.0) {
 
 		  if (NEX >= 2) {
-		    D[1] = 0.0462 / parlev / std::pow(A, one_third) * QP * EEXS / QEX;
+		    D[1] = 0.0462 / parlev / G4cbrt(A) * QP * EEXS / QEX;
 
 		    if (EMP > eexs_cut) 
 		      D[2] = D[1] * std::pow(EMP / EEXS, NEX) * (1.0 + CPA1);
@@ -301,16 +305,8 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 			  EPART *= 0.001; // to the GeV
 			  // generate particle momentum
 			  G4double pmod = std::sqrt(EPART * (2.0 * mass + EPART));
-			  G4LorentzVector mom;
-			  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-			  G4double FI = randomPHI();
-			  G4double P1 = pmod * COS_SIN.second;
-			  mom.setX(P1 * std::cos(FI));
-			  mom.setY(P1 * std::sin(FI));
-			  mom.setZ(pmod * COS_SIN.first);
+			  G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
 			  G4LorentzVector mom_at_rest;
-
-			  mom_at_rest = -mom;
 
 			  G4double QPP_new = QPP;
 			  G4double Z_new = Z;
@@ -327,8 +323,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 			  G4double A_new = A - 1.0;
 			  G4double new_exiton_mass =
 			    dummy_nuc.getNucleiMass(A_new, Z_new);
-			  mom_at_rest.setVectM(mom_at_rest.vect(), new_exiton_mass); 
-			  mom.setVectM(mom.vect(), mass);
+			  mom_at_rest.setVectM(-mom.vect(), new_exiton_mass); 
 
 			  G4LorentzVector part_mom = 
 		            toTheExitonSystemRestFrame.backToTheLab(mom);

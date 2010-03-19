@@ -22,8 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: bindingEnergyKummel.cc,v 1.12 2010-03-19 05:03:23 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100202  M. Kelsey -- Eliminate unnecessary use of std::pow()
+
 #include "G4InuclSpecialFunctions.hh"
+
+using namespace G4InuclSpecialFunctions;
+
 
 G4double G4InuclSpecialFunctions::bindingEnergyKummel(G4double A, 
 						      G4double Z) {
@@ -233,7 +240,7 @@ G4double G4InuclSpecialFunctions::bindingEnergyKummel(G4double A,
   // deformation
   G4double TDEF = 0.0;
   G4double X = Z * Z / A;
-  G4double X1 = std::pow(A, 0.3333333);
+  G4double X1 = G4cbrt(A);
   G4double X2 = X1 * X1;
 
   if (IPS != INS && INS >= 3 && IPS >= 2) {
@@ -250,7 +257,7 @@ G4double G4InuclSpecialFunctions::bindingEnergyKummel(G4double A,
       G4double X7 = std::sqrt(X6);
 
       // G4double ALM = AL0 * (X7 + 0.143 * AL0 * X5 / X3);
-      TDEF = -X4 * (X6 + 1.0) + DNZ + 0.038 * X2 * std::pow(AL0 * X7, 3.0) * X5;
+      TDEF = -X4 * (X6 + 1.0) + DNZ + 0.038 * X2 * (AL0*X7 * AL0*X7 * AL0*X7) * X5;
     };
   };
 

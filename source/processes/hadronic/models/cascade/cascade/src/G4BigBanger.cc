@@ -22,18 +22,22 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.22 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.23 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100301  M. Kelsey -- In generateBangInSCM(), restore old G4CascMom calcs.
 //		for (N-1)th outgoing nucleon.
+// 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff
 
 #include "G4BigBanger.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
 #include <algorithm>
+
+using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
@@ -151,14 +155,7 @@ G4BigBanger::generateBangInSCM(G4double etot,
     // abnormal situation
     G4double m = iz > 0 ? mp : mn;
     G4double pmod = std::sqrt((etot + 2.0 * m) * etot);
-    G4LorentzVector mom;
-    std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-    G4double FI = randomPHI();
-    G4double Pt = pmod * COS_SIN.second;
-
-    mom.setX(Pt * std::cos(FI));
-    mom.setY(Pt * std::sin(FI));
-    mom.setZ(Pt * COS_SIN.first);    
+    G4LorentzVector mom = generateWithRandomAngles(pmod, m);
 
     G4int knd = iz > 0 ? 1 : 2;
 
@@ -178,14 +175,8 @@ G4BigBanger::generateBangInSCM(G4double etot,
     G4LorentzVector tot_mom;
 
     if(ia == 2) {
-      G4LorentzVector mom;
-      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-      double FI = randomPHI();
-      double Pt = pmod[0] * COS_SIN.second;
-
-      mom.setX(Pt * std::cos(FI));
-      mom.setY(Pt * std::sin(FI));
-      mom.setZ(Pt * COS_SIN.first);    
+      // FIXME:  This isn't actually a correct four-vector, wrong mass!
+      G4LorentzVector mom = generateWithRandomAngles(pmod[0]);
 
       tot_mom += mom;		 
 
@@ -198,14 +189,8 @@ G4BigBanger::generateBangInSCM(G4double etot,
     }
     else {
       for(G4int i = 0; i < ia - 2; i++) {
-	G4LorentzVector mom;
-	std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-	G4double FI = randomPHI();
-	G4double Pt = pmod[i] * COS_SIN.second;
-
-	mom.setX(Pt * std::cos(FI));
-	mom.setY(Pt * std::sin(FI));
-	mom.setZ(Pt * COS_SIN.first);    
+	// FIXME:  This isn't actually a correct four-vector, wrong mass!
+	G4LorentzVector mom = generateWithRandomAngles(pmod[i]);
 
 	tot_mom += mom;		 
 

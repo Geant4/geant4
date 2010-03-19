@@ -22,16 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclSpecialFunctions.hh,v 1.14 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclSpecialFunctions.hh,v 1.15 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100319  M. Kelsey -- Add optional mass argument to generateWithFixedTheta;
+//		define new generateWithRandomAngles, encapsulating code; define
+//		cbrt() cube-root function (in math.h, but not in <math>!)
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
 
 #include "globals.hh"
-#include <cmath>
 #include <algorithm>
 #include <vector>
 #include "G4LorentzVector.hh"
@@ -64,6 +66,8 @@ namespace G4InuclSpecialFunctions {
 
   G4double csPN(G4double e);
 
+  G4double G4cbrt(G4double x);	// Can't use "cbrt" name, clashes with <math.h>
+
   G4double inuclRndm();
 
   G4double randomGauss(G4double sigma);
@@ -74,7 +78,12 @@ namespace G4InuclSpecialFunctions {
 
   G4double nucleiLevelDensity(G4double a);
 
-  G4LorentzVector generateWithFixedTheta(G4double ct, 
-					  G4double p);
+  // Optional mass argument will be used to fill G4LorentzVector correctly
+  G4LorentzVector generateWithFixedTheta(G4double ct, G4double p,
+					 G4double m=0.);
+
+  G4LorentzVector generateWithRandomAngles(G4double p, G4double m=0.);
 }
+
+
 #endif

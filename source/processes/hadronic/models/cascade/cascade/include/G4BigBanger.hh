@@ -22,16 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4BigBanger.hh,v 1.10 2010-03-19 05:03:23 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
 
-#include "G4Collider.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
-#include "G4InuclSpecialFunctions.hh"
+#include <vector>
 
-
-using namespace G4InuclSpecialFunctions;
 
 class G4BigBanger {
 

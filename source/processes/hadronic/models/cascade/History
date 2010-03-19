@@ -14,6 +14,68 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 Mar 2010 Michael Kelsey (hadr-casc-V09-03-11)
+------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+- G4InuclSpecialFunctions:  Two new functions:
+
+::generateWithRandomAngles() to encapsulate random-direction generation.
+  This function and existing generateWithFixedTheta() take optional mass
+  argument to produce proper four-vector.
+
+  Replace duplicated random angle code with new function above, and use new
+  optional mass argument where available:
+
+	G4BigBanger.cc
+	G4ElementaryParticleCollider.cc
+	G4EquilibriumEvaporator.cc
+	G4Fissioner.cc
+	G4NonEquilibriumEvaporator.cc
+	G4NucleiModel.cc
+
+::G4cbrt():  Define cube-root in terms of log and exp, rather than pow().
+  Note that "cbrt()" can't be used, as it conflicts with <math.h> on Linux.
+
+  Eliminate unnecessary uses of std::pow() with fixed arguments.  For
+  example, "pow(x,3)" -> "x*x*x", "pow(x,1/3)" -> G4cbrt(x):
+
+	G4BertiniRegionModel.cc
+	G4EquilibriumEvaporator.cc
+	G4EvaporationInuclCollider.cc
+	G4Fissioner.cc
+	G4IntraNucleiCascader.cc
+	G4InuclCollider.cc
+	G4NonEquilibriumEvaporator.cc
+	G4NucleiModel.cc
+	G4PreCompoundInuclCollider.cc
+	G4RegionModel.cc
+	bindingEnergyAsymptotic.cc
+	bindingEnergyKummel.cc
+
+  WARNING!  In G4IntraNucleiCascader.cc, the Coulomb barrier was calculated
+  using "std::pow(A, 0.333)", rather than the "exact" 1./3.  This leads to
+  per-mil differences in the value, and occasional differences in wheter an
+  outgoing particle tunnels through.  The new code is exact to double
+  precision, and therefore fixes a bug.
+
+- Move "using" directive from all .hh files to corresponding .cc, along with
+  some unnecessary #includes:
+
+	G4BigBanger.hh, .cc
+	G4ElementaryParticleCollider.hh, .cc
+	G4EquilibriumEvaporator.hh, .cc
+	G4EvaporationInuclCollider.hh, .cc
+	G4Fissioner.hh, .cc
+	G4IntraNucleiCascader.hh, .cc
+	G4InuclCollider.hh
+	G4InuclNuclei.hh
+	G4NonEquilibriumEvaporator.hh, .cc
+	G4NucleiModel.hh, .cc
+	G4PreCompoundInuclCollider.hh, .cc
+
+- G4NuclWatcher.hh and .cc (new):  Move implementation code from .hh to .cc.
+
 18 March 2010 Michael Kelsey (hadr-casc-V09-03-10)
 --------------------------------------------------
 All changes below within "cascade/" subdirectory:

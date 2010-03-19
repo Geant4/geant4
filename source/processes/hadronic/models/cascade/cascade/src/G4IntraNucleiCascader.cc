@@ -22,26 +22,31 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.31 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.32 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100307  M. Kelsey -- Bug fix: momentum_out[0] should be momentum_out.e()
+// 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 
 #define RUN
 
+#include "G4CascadParticle.hh"
+#include "G4ElementaryParticleCollider.hh"
+#include "G4HadTmpUtil.hh"
 #include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
-#include "G4ParticleLargerEkin.hh"
 #include "G4NucleiModel.hh"
-#include "G4CascadParticle.hh"
 #include "G4NucleiProperties.hh"
-#include "G4HadTmpUtil.hh"
-
+#include "G4ParticleLargerEkin.hh"
 #include "Randomize.hh"
 #include <algorithm>
+
+using namespace G4InuclSpecialFunctions;
+
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
@@ -58,7 +63,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 						 G4InuclParticle* target) {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4IntraNucleiCascader::collide" << G4endl;
+    G4cout << " >>> G4IntraNucleiCascader::collide inter_case " << inter_case 
+	   << G4endl;
   }
 
   const G4int itry_max = 1000;
@@ -79,7 +85,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
                           dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
-                                      (1.+std::pow(tnuclei->getA(),0.333));
+                                      (1.+G4cbrt(tnuclei->getA()));
 
   G4LorentzVector momentum_in = bullet->getMomentum();
 
@@ -146,7 +152,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	G4int ihz = G4int(2.0 * zb * inuclRndm() + 0.5);
 
 	for (i = 0; i < ihn; i++) theExitonConfiguration.incrementHoles(2);
-
 	for (i = 0; i < ihz; i++) theExitonConfiguration.incrementHoles(1);
       };
     }; 
@@ -215,6 +220,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
             if (KE > 0.0001) CBP = std::exp(-0.0181*0.5*tnuclei->getZ()*
                                             (1./KE - 1./coulombBarrier)*
                                          std::sqrt(mass*(coulombBarrier-KE)) );
+
             if (G4UniformRand() < CBP) {
 	      output_particles.push_back(currentParticle);
             } else {

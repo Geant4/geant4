@@ -22,9 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4BertiniRegionModel.cc,v 1.13 2010-03-19 05:03:23 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100319  M. Kelsey -- Replace unnecessary std::pow(x,1/3) with cbrt()
+
 #include "G4BertiniRegionModel.hh"
 #include "G4HadronicException.hh"
+#include "G4InuclSpecialFunctions.hh"
+
+using namespace G4InuclSpecialFunctions;
 
 const G4double G4BertiniRegionModel::radius0 = 1.0E-15; 
 const G4double G4BertiniRegionModel::BE = 7;
@@ -32,19 +39,20 @@ const G4double G4BertiniRegionModel::BE = 7;
 G4BertiniRegionModel::G4BertiniRegionModel(const G4int numberOfLayers, const G4int A, const G4int Z)
 {
   //count the radiuses, densities and fermi momenta with A and Z
-  G4double oneThird = 1.0/3.0;
-  G4double r = radius0*std::pow(G4double(A), G4double(oneThird) );
+  G4double r = radius0 * G4cbrt(G4double(A));
 
   if(numberOfLayers==1){ 
     radius.push_back(r);
 
-    G4double rho = G4double(A) / (4.0/3.0*pi*std::pow(r,3));
+    G4double volume = 4.0/3.0 * pi * r*r*r;
+
+    G4double rho = G4double(A) / volume;
     density.push_back(rho);
 
     G4double protonMass = G4Proton::Proton()->GetPDGMass();
     G4double neutronMass = G4Neutron::Neutron()->GetPDGMass();
-    G4double protonDensity = G4double(Z) / (4.0/3.0*pi*std::pow(r,3));
-    G4double neutronDensity = G4double(A-Z) / (4.0/3.0*pi*std::pow(r,3));
+    G4double protonDensity = G4double(Z) / volume;
+    G4double neutronDensity = G4double(A-Z) / volume;
 
     protonFermiEnergy.push_back(GetFermiEnergy(protonDensity, protonMass));
     neutronFermiEnergy.push_back(GetFermiEnergy(neutronDensity, neutronMass));
@@ -70,11 +78,11 @@ G4BertiniRegionModel::~G4BertiniRegionModel(){}
 
 G4double G4BertiniRegionModel::GetDensity(G4double r){
   my_iterator j=density.begin();
-     for(my_iterator i=radius.begin(); i<radius.end(); i++){
-     if(r <= *i) return *j;
-     j++;
-   }
-   return 0;
+  for(my_iterator i=radius.begin(); i<radius.end(); i++){
+    if(r <= *i) return *j;
+    j++;
+  }
+  return 0;
 }
 
 G4double G4BertiniRegionModel::GetPotentialEnergy(G4double r, G4int particle){
@@ -121,15 +129,16 @@ G4double G4BertiniRegionModel::GetMaximumNucleonMomentum(G4double r,
 }
 
 G4double G4BertiniRegionModel::GetFermiMomentum(G4double aDensity,
-					 G4double aMass){
-  
+						G4double aMass) {
   return std::sqrt(2*aMass*GetFermiEnergy(aDensity, aMass));
 }
 
 G4double G4BertiniRegionModel::GetFermiEnergy(G4double aDensity,
-					 G4double aMass){
-G4double twoThirds = 2.0/3.0;
-    return (std::pow(hbar_Planck,2)/(2.0*aMass)*std::pow((3.0*pi2*aDensity), twoThirds)); 
+					      G4double aMass) {
+  G4double densFactor = G4cbrt(3.0*pi2*aDensity);		// 2/3 power
+  densFactor *= densFactor;
+
+  return hbar_Planck*hbar_Planck/(2.0*aMass) * densFactor;
 }
 
 

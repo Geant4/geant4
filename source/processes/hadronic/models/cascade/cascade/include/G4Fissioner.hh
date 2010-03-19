@@ -22,14 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4Fissioner.hh,v 1.10 2010-03-19 05:03:23 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
 
-#include "G4Collider.hh"
-#include "G4InuclSpecialFunctions.hh"
+#include "G4CollisionOutput.hh"
 
-using namespace G4InuclSpecialFunctions;
+class G4InuclParticle;
+
 
 class G4Fissioner {
 

@@ -22,13 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclSpecialFunctions.cc,v 1.18 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclSpecialFunctions.cc,v 1.19 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 
 #include "G4InuclSpecialFunctions.hh"
+#include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 #include "Randomize.hh"
+#include <cmath>
 
 G4double G4InuclSpecialFunctions::getAL(G4double A) {
   G4int verboseLevel = 2;
@@ -37,7 +40,7 @@ G4double G4InuclSpecialFunctions::getAL(G4double A) {
     G4cout << " >>> G4InuclSpecialFunctions::getAL" << G4endl;
   }
 
-  return 0.76 + 2.2 / std::pow(A, 0.333333);
+  return 0.76 + 2.2 / G4cbrt(A);
 }
 
 G4double G4InuclSpecialFunctions::csNN(G4double e) {
@@ -87,16 +90,13 @@ G4double G4InuclSpecialFunctions::FermiEnergy(G4double A, G4double Z, G4int ntyp
   }
 
   const G4double C = 55.4;
-  G4double Ef;
+  G4double arg = (ntype==0) ? (A-Z)/A : Z/A;
 
-  if (ntype == 0) {
-    Ef = C * std::pow((A - Z) / A, 0.666667);
+  return C * G4cbrt(arg*arg);	// 2/3 power
+}
 
-  } else {
-    Ef = C * std::pow(Z / A, 0.666667);
-  };
-
-  return Ef; 
+G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
+  return x==0 ? 0. : (x<0?-1.:1.)*std::exp(std::log(std::fabs(x))/3.);
 }
 
 G4double G4InuclSpecialFunctions::inuclRndm() { 
@@ -153,21 +153,37 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
   return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT * CT));
 }
 
-G4LorentzVector G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct,
-									G4double p) {
-  G4int verboseLevel = 2;
-
+G4LorentzVector 
+G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p, 
+						G4double m) {
+  const G4int verboseLevel = 0;
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
   }
 
-  G4LorentzVector momr;
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
-  //  not used:  G4LorentzVector mom1;
-  momr.setX(pt * std::cos(phi));
-  momr.setY(pt * std::sin(phi));
-  momr.setZ(p * ct);
+
+  static G4ThreeVector pvec;	// Buffers to avoid memory thrashing
+  static G4LorentzVector momr;
+
+  pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*ct);
+  momr.setVectM(pvec, m);
+
+  return momr;
+}
+
+G4LorentzVector 
+G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double m) {
+  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+  G4double phi = randomPHI();
+  G4double pt = p * COS_SIN.second;
+  
+  static G4ThreeVector pvec;	// Buffers to avoid memory thrashing
+  static G4LorentzVector momr;
+
+  pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*COS_SIN.first);
+  momr.setVectM(pvec, m);
 
   return momr;
 }

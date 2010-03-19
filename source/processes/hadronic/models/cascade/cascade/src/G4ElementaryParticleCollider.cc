@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.49 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.50 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,6 +30,10 @@
 //		pp, pn, nn 2-body to 2-body scattering angular distributions
 //		with a new parametrization of elastic scattering data using
 //		the sum of two exponentials.
+// 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
+//		eliminate some unnecessary std::pow()
+
+#include "G4ElementaryParticleCollider.hh"
 
 #include "G4CascadeKplusPChannel.hh"
 #include "G4CascadeKplusNChannel.hh"
@@ -52,11 +56,14 @@
 #include "G4CascadeXiMinusPChannel.hh"
 #include "G4CascadeXiMinusNChannel.hh"
 
-#include "G4Collider.hh"
-#include "G4ElementaryParticleCollider.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4LorentzConvertor.hh"
 #include "Randomize.hh"
 #include <algorithm>
+#include <vector>
+
+using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
@@ -816,7 +823,7 @@ G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int mult,
 
   if(knd == 1 || knd == 2) JM = 1;
   for(G4int m = 0; m < 3; m++) PS += rmn[8 + IM + m][7 + JM][KM - 1] * std::pow(ekin, m);
-  G4double PRA = PS * std::sqrt(S) * (PR + (1 - PQ) * std::pow(S, 4));
+  G4double PRA = PS * std::sqrt(S) * (PR + (1 - PQ) * (S*S*S*S));
 
   return std::fabs(PRA);
 }
@@ -861,7 +868,7 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
       U += V;
       W += V * std::pow(S, l);
     };  
-    ct = 2.0 * std::sqrt(S) * (W + (1.0 - U) * std::pow(S, 4)) - 1.0;
+    ct = 2.0 * std::sqrt(S) * (W + (1.0 - U) * (S*S*S*S)) - 1.0;
   };
 
   if(itry == itry_max) {
@@ -944,16 +951,17 @@ G4ElementaryParticleCollider::adjustIntervalForElastic(G4double ekin, G4double a
     if(adj_type == 1) {
       G4double s2_old = s2;
       G4double s1c = s1;
-      G4double s2_new;
+      G4double s2_new, s2_new4;
 
       while(itry < itry_max) {
 	itry++;
 	s2_new = 0.5 * (s2_old + s1c);
+	s2_new4 = s2_new*s2_new*s2_new*s2_new;
 	su = 0.0;      
 
 	for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(s2_new, i);
 
-	ct = ak * std::sqrt(s2_new) * (su + (1.0 - st) * std::pow(s2_new, 4)) + ae;
+	ct = ak * std::sqrt(s2_new) * (su + (1.0 - st) * s2_new4) + ae;
 
 	if(ct > 1.0) {
 	  s2_old = s2_new;
@@ -978,15 +986,16 @@ G4ElementaryParticleCollider::adjustIntervalForElastic(G4double ekin, G4double a
 
       G4double s1_old = s1;
       G4double s2c = s2;
-      G4double s1_new = 0.0;
+      G4double s1_new = 0.0, s1_new4;
 
       while (itry < itry_max) {
 	itry++;
 	s1_new = 0.5 * (s1_old + s2c);
+	s1_new4 = s1_new*s1_new*s1_new*s1_new;
 	su = 0.0;
       
 	for (G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(s1_new, i);
-	ct = ak * std::sqrt(s1_new) * (su + (1.0 - st) * std::pow(s1_new, 4)) + ae;
+	ct = ak * std::sqrt(s1_new) * (su + (1.0 - st) * s1_new4) + ae;
 
 	if(ct < -1.0) {
 	  s1_old = s1_new;
@@ -1145,12 +1154,13 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
     while(std::fabs(ct) > ct_cut && itry < itry_max) {
       itry++;
       G4double mrand = a * inuclRndm() + b;
+      G4double mrand4 = mrand*mrand*mrand*mrand;
 
       G4double su = 0.0;
 
       for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(mrand, i);
 
-      ct = ak * std::sqrt(mrand) * (su + (1.0 - st) * std::pow(mrand, 4)) + ae;
+      ct = ak * std::sqrt(mrand) * (su + (1.0 - st) * mrand4) + ae;
     };
 
   };
@@ -1315,29 +1325,20 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   };
     
   G4double m1 = dummy.getParticleMass(particle_kinds[0]);
-
-  m1 *= m1;
+  G4double m1sq = m1*m1;
 
   G4double m2 = dummy.getParticleMass(particle_kinds[1]);
+  G4double m2sq = m2*m2;
 
-  m2 *= m2;	 
+  G4double a = 0.5 * (etot_scm * etot_scm - m1sq - m2sq);
 
-  G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
+  G4double pmod = std::sqrt((a * a - m1sq * m2sq) / (m1sq + m2sq + 2.0 * a));
+  G4LorentzVector mom1 = generateWithRandomAngles(pmod, m1);
+  G4LorentzVector mom2;
+  mom2.setVectM(-mom1.vect(), m2);
 
-  G4double pmod = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-  G4LorentzVector mom;
-  std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-  G4double FI = randomPHI();
-  G4double pt = pmod * COS_SIN.second;
-
-  mom.setX(pt * std::cos(FI));
-  mom.setY(pt * std::sin(FI));
-  mom.setZ(pmod * COS_SIN.first);
-
-  G4LorentzVector mom1 = -mom;
-
-  particles.push_back(G4InuclElementaryParticle(mom , particle_kinds[0]));
-  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1]));
+  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0]));
+  particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1]));
 
   return particles;
 }

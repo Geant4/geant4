@@ -23,23 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationInuclCollider.hh,v 1.2 2008-06-29 23:56:03 dennis Exp $
+// $Id: G4EvaporationInuclCollider.hh,v 1.3 2010-03-19 05:03:23 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+
 #ifndef G4EVAPORATIONINUCL_COLLIDER_HH
 #define G4EVAPORATIONINUCL_COLLIDER_HH
  
-#include "G4Collider.hh"
-
 #include "G4EquilibriumEvaporator.hh"
 #include "G4Fissioner.hh"
 #include "G4BigBanger.hh"
-
 #include "G4ElementaryParticleCollider.hh"
 #include "G4InteractionCase.hh"
-#include "G4InuclNuclei.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4Analyser.hh"
+#include "G4CollisionOutput.hh"
 
-using namespace G4InuclSpecialFunctions;
+class G4InuclNuclei;
+class G4InuclParticle;
+
 
 class G4EvaporationInuclCollider {
 

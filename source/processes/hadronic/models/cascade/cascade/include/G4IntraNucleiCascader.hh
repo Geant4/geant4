@@ -22,18 +22,19 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4IntraNucleiCascader.hh,v 1.8 2010-03-19 05:03:23 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
+
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
-#include "G4Collider.hh"
-#include "G4ElementaryParticleCollider.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4CascadSpecialFunctions.hh"
-#include "G4InuclElementaryParticle.hh"
+#include "G4CollisionOutput.hh"
 
-using namespace G4InuclSpecialFunctions;
-using namespace G4CascadSpecialFunctions;
+class G4ElementaryParticleCollider;
+class G4InuclParticle;
+
 
 class G4IntraNucleiCascader {
 
@@ -53,7 +54,7 @@ public:
   };
 
 private: 
-G4int verboseLevel;
+  G4int verboseLevel;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
 
   G4int inter_case;

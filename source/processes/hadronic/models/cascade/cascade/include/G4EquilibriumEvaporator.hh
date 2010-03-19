@@ -26,12 +26,12 @@
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4Collider.hh"
-#include "G4Fissioner.hh"
-#include "G4BigBanger.hh"
-#include "G4InuclSpecialFunctions.hh"
+#include "G4types.hh"
+#include "G4CollisionOutput.hh"
 
-using namespace G4InuclSpecialFunctions;
+class G4Fissioner;
+class G4BigBanger;
+class G4InuclParticle;
 
 class G4EquilibriumEvaporator {
 

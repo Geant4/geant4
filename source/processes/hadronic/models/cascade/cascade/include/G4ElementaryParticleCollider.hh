@@ -22,26 +22,23 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.24 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.25 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
-#include "G4Collider.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include "G4CascadSpecialFunctions.hh"
-#include "G4LorentzConvertor.hh"
+#include "G4LorentzVector.hh"
 #include "G4NucleonSampler.hh"
 #include "G4PionSampler.hh"
+#include <vector>
 
- 
-using namespace G4InuclSpecialFunctions;
-using namespace G4CascadSpecialFunctions;
-
+class G4LorentzConvertor;
 
 class G4ElementaryParticleCollider {
 

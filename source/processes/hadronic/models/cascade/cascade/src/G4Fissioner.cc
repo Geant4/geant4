@@ -22,18 +22,24 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.25 2010-03-18 18:27:17 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100318  M. Kelsey -- Bug fix setting mass with G4LV
+// 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
+//		eliminate some unnecessary std::pow()
 
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclParticle.hh"
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4InuclSpecialFunctions.hh"
+
+using namespace G4InuclSpecialFunctions;
 
 
 G4Fissioner::G4Fissioner()
@@ -46,13 +52,10 @@ G4Fissioner::G4Fissioner()
 
 G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 				       G4InuclParticle* target) {
-
   if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::collide" << G4endl;
   }
 
-  const G4double one_third = 1.0 / 3.0;
-  const G4double two_thirds = 2.0 / 3.0;
   //  const G4int itry_max = 1000;
   G4CollisionOutput output;
 
@@ -69,9 +72,9 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     G4double EEXS = nuclei_target->getExitationEnergy();
     G4double mass_in = nuclei_target->getMass();
     G4double e_in = mass_in + 0.001 * EEXS;
-    G4double PARA = 0.055 * std::pow(A, two_thirds) * (std::pow(A - Z, one_third) + std::pow(Z, one_third));
+    G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A - Z) + G4cbrt(Z));
     G4double TEM = std::sqrt(EEXS / PARA);
-    G4double TETA = 0.494 * std::pow(A, one_third) * TEM;
+    G4double TETA = 0.494 * G4cbrt(A) * TEM;
 
     TETA = TETA / std::sinh(TETA);
 
@@ -92,13 +95,13 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     std::vector<G4double> AL1(2, -0.15);
     std::vector<G4double> BET1(2, 0.05);
     G4FissionStore fissionStore;
-    G4double R12 = std::pow(A1, one_third) + std::pow(A2, one_third); 
+    G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
   
     for (G4int i = 0; i < 50 && A1 > 30.0; i++) {
       A1 -= 1.0;
       A2 = A - A1;
-      G4double X3 = 1.0 / std::pow(A1, one_third);
-      G4double X4 = 1.0 / std::pow(A2, one_third);
+      G4double X3 = 1.0 / G4cbrt(A1);
+      G4double X4 = 1.0 / G4cbrt(A2);
       Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
       std::vector<G4double> EDEF1(2);
       G4double Z2 = Z - Z1;
@@ -161,13 +164,9 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
       G4double mass2 = nuclei2.getMass();
       G4double EK = config.ekin;
       G4double pmod = std::sqrt(0.001 * EK * mass1 * mass2 / mass_in);
-      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
-      G4double Fi = randomPHI();
-      G4double P1 = pmod * COS_SIN.second;
 
-      G4ThreeVector pvec(P1*std::cos(Fi), P1*std::sin(Fi), pmod*COS_SIN.first);
-      G4LorentzVector mom1; mom1.setVectM(pvec, mass1);
-      G4LorentzVector mom2; mom2.setVectM(-pvec, mass2);
+      G4LorentzVector mom1 = generateWithRandomAngles(pmod, mass1);
+      G4LorentzVector mom2; mom2.setVectM(-mom1.vect(), mass2);
 
       G4double e_out = mom1.e() + mom2.e();
       G4double EV = 1000.0 * (e_in - e_out) / A;
@@ -214,7 +213,7 @@ G4double G4Fissioner::getC2(G4double A1,
   }
 
   G4double C2 = 124.57 * (1.0 / A1 + 1.0 / A2) + 0.78 * (X3 + X4) - 176.9 *
-    (std::pow(X3, 4) + std::pow(X4, 4)) + 219.36 * (1.0 / (A1 * A1) + 1.0 / (A2 * A2)) - 1.108 / R12;
+    ((X3*X3*X3*X3) + (X4*X4*X4*X4)) + 219.36 * (1.0 / (A1 * A1) + 1.0 / (A2 * A2)) - 1.108 / R12;
 
   return C2;   
 }
@@ -231,7 +230,7 @@ G4double G4Fissioner::getZopt(G4double A1,
   }
 
   G4double Zopt = (87.7 * (X4 - X3) * (1.0 - 1.25 * (X4 + X3)) +
-		   ZT * ((124.57 / A2 + 0.78 * X4 - 176.9 * std::pow(X4, 4) + 219.36 / (A2 * A2)) - 0.554 / R12)) /
+		   ZT * ((124.57 / A2 + 0.78 * X4 - 176.9 * (X4*X4*X4*X4) + 219.36 / (A2 * A2)) - 0.554 / R12)) /
     getC2(A1, A2, X3, X4, R12);
 
   return Zopt;
@@ -253,8 +252,6 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   }
 
   const G4double huge_num = 2.0e35;
-  const G4double one_third = 1.0 / 3.0;
-  //  const G4double two_thirds = 2.0 / 3.0;
   const G4int itry_max = 2000;
   const G4double DSOL1 = 1.0e-6;
   const G4double DS1 = 0.3;
@@ -276,7 +273,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   G4int i;
 
   for (i = 0; i < 2; i++) {
-    R[i] = std::pow(A1[i], one_third);
+    R[i] = G4cbrt(A1[i]);
     Y1 = R[i] * R[i];
     Y2 = Z1[i] * Z1[i] / R[i];
     C[i] = 6.8 * Y1 - 0.142 * Y2;

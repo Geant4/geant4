@@ -22,18 +22,21 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.20 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.21 2010-03-19 05:03:23 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
+//		move ctor to .cc file
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
-#include "G4ElementaryParticleCollider.hh"
 #include <vector>
 
 class G4InuclNuclei;
+class G4ElementaryParticleCollider;
 
 typedef std::pair<G4InuclElementaryParticle, G4double> partner;
 typedef std::vector<partner> partners;
@@ -43,10 +46,7 @@ class G4NucleiModel {
 public:
 
   G4NucleiModel();
-
-  G4NucleiModel(G4InuclNuclei* nuclei) : verboseLevel(0) {
-    generateModel(nuclei->getA(), nuclei->getZ());
-  }
+  G4NucleiModel(G4InuclNuclei* nuclei);
 
   void generateModel(G4double a, G4double z);
 

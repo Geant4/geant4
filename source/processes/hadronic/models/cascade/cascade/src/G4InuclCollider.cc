@@ -22,19 +22,23 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.25 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
 
 #include <algorithm>
+
+using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -276,7 +280,6 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
   }
 
   const G4double coeff = 0.001 * 1.2;
-  const G4double one_third = 1.0 / 3.0;
 
   G4bool possible = true;
   G4double at;
@@ -314,7 +317,7 @@ G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
   }; 
 
   // VCOL used  for testing if elastic collision possible
-  G4double VCOL = coeff * zt * zb / (std::pow(at, one_third) + std::pow(ab, one_third)); 
+  G4double VCOL = coeff * zt * zb / (G4cbrt(at) + G4cbrt(ab)); 
 
   // possible = VCOL < ekin; // NOTE: inelastic collision if not true
   possible = true; // we force elastic
