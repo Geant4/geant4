@@ -36,6 +36,8 @@
 //               always the ratio (hartreeFactor/fine_structure_const)
 //  16 Mar 2010  Added methods to calculate and store mean exc energy
 //               and plasma energy (used for Ionisation). L Pandola
+//  18 Mar 2010  Added method to retrieve number of atoms per 
+//               molecule. L. Pandola
 //
 // -------------------------------------------------------------------
 
@@ -47,7 +49,7 @@
 
 G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() : 
   oscillatorStoreIonisation(0),oscillatorStoreCompton(0),atomicNumber(0),
-  atomicMass(0),excitationEnergy(0),plasmaSquared(0)
+  atomicMass(0),excitationEnergy(0),plasmaSquared(0),atomsPerMolecule(0)
 {
   fReadElementData = false;
   for (G4int i=0;i<5;i++)
@@ -122,6 +124,7 @@ void G4PenelopeOscillatorManager::Clear()
   if (atomicNumber) delete atomicNumber;
   if (excitationEnergy) delete excitationEnergy;
   if (plasmaSquared) delete plasmaSquared;
+  if (atomsPerMolecule) delete atomsPerMolecule;
 
 }
 
@@ -246,7 +249,9 @@ void G4PenelopeOscillatorManager::CheckForTablesCreated()
     excitationEnergy = new std::map<const G4Material*,G4double>;
   if (!plasmaSquared)
     plasmaSquared = new std::map<const G4Material*,G4double>;
-
+  if (!atomsPerMolecule)
+    atomsPerMolecule = new std::map<const G4Material*,G4double>;
+  
 }
 
 
@@ -461,11 +466,11 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     (*StechiometricFactors)[i] /=  MaxStechiometricFactor;
 
   // Equivalent atoms per molecule
-  G4double atomsPerMolecule = 0;
+  G4double theatomsPerMolecule = 0;
   for (G4int i=0;i<nElements;i++)
-    atomsPerMolecule += (*StechiometricFactors)[i];
+    theatomsPerMolecule += (*StechiometricFactors)[i];
   G4double moleculeDensity = 
-    material->GetTotNbOfAtomsPerVolume()/atomsPerMolecule; //molecules per unit volume
+    material->GetTotNbOfAtomsPerVolume()/theatomsPerMolecule; //molecules per unit volume
 
 
   if (verbosityLevel > 1)
@@ -497,6 +502,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   atomicNumber->insert(std::make_pair(material,totalZ));
   atomicMass->insert(std::make_pair(material,totalMolecularWeight));
   excitationEnergy->insert(std::make_pair(material,meanExcitationEnergy));
+  atomsPerMolecule->insert(std::make_pair(material,theatomsPerMolecule));
 
   if (verbosityLevel > 1)
     {
@@ -1127,6 +1133,31 @@ G4double G4PenelopeOscillatorManager::GetPlasmaEnergySquared(const G4Material* m
     {
       G4cout << "G4PenelopeOscillatorManager::GetPlasmaEnergySquared() " << G4endl;
       G4cout << "Impossible to retrieve the plasma energy for  " << mat->GetName() << G4endl;      
+      return 0;
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4double G4PenelopeOscillatorManager::GetAtomsPerMolecule(const G4Material* mat)
+{
+  // (1) First time, create oscillatorStores and read data
+  CheckForTablesCreated();
+
+  // (2) Check if the material has been already included
+  if (atomsPerMolecule->count(mat))
+    return atomsPerMolecule->find(mat)->second;
+    
+  // (3) If we are here, it means that we have to create the table for the material
+  BuildOscillatorTable(mat);
+
+  // (4) now, the oscillator store should be ok
+  if (atomsPerMolecule->count(mat))
+    return atomsPerMolecule->find(mat)->second;
+  else
+    {
+      G4cout << "G4PenelopeOscillatorManager::GetAtomsPerMolecule() " << G4endl;
+      G4cout << "Impossible to retrieve the number of atoms per molecule for  " 
+	     << mat->GetName() << G4endl;      
       return 0;
     }
 }

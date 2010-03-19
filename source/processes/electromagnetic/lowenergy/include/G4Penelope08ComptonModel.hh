@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.hh,v 1.1 2010-03-17 14:19:04 pandola Exp $
+// $Id: G4Penelope08ComptonModel.hh,v 1.2 2010-03-19 11:33:24 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,9 +31,11 @@
 // History:
 // -----------
 // 15 Feb 2010   L. Pandola   1st implementation. 
+// 18 Mar 2010   L. Pandola   Removed GetAtomsPerMolecule(), now demanded 
+//                            to G4PenelopeOscillatorManager
 //
 // -------------------------------------------------------------------
-//
+//*
 // Class description:
 // Low Energy Electromagnetic Physics, Compton Scattering
 // with Penelope Model, version 2008
@@ -102,16 +104,16 @@ private:
   G4double DifferentialCrossSection (G4double cdt,G4double energy,
 				     G4PenelopeOscillator* osc);
 
-  G4double OscillatorTotalCrossSection(G4double energy,G4PenelopeOscillator* osc);
+  G4double OscillatorTotalCrossSection(G4double energy,
+				       G4PenelopeOscillator* osc);
 
   G4double KleinNishinaCrossSection(G4double energy,const G4Material*);
-
-  G4double GetAtomsPerMolecule(const G4Material*);
 
   G4Penelope08ComptonModel & operator=(const G4Penelope08ComptonModel &right);
   G4Penelope08ComptonModel(const G4Penelope08ComptonModel&);
 
-  //Intrinsic energy limits of the model: cannot be extended by the parent process
+  //Intrinsic energy limits of the model: 
+  //cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
 
@@ -123,7 +125,6 @@ private:
 
   G4PenelopeOscillatorManager* oscManager;
 
-  std::map<const G4Material*,G4double> *atomsPerMolecule;
 
 };
 

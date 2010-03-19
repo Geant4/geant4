@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.cc,v 1.1 2010-03-17 14:18:50 pandola Exp $
+// $Id: G4Penelope08ComptonModel.cc,v 1.2 2010-03-19 11:33:30 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -31,8 +31,9 @@
 // History:
 // --------
 // 15 Feb 2010   L Pandola    Implementation
+// 18 Mar 2010   L. Pandola   Removed GetAtomsPerMolecule(), now demanded 
+//                            to G4PenelopeOscillatorManager
 //
-
 #include "G4Penelope08ComptonModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4MaterialCutsCouple.hh"
@@ -55,8 +56,7 @@
 
 G4Penelope08ComptonModel::G4Penelope08ComptonModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),oscManager(0),
-   atomsPerMolecule(0)
+  :G4VEmModel(nam),isInitialised(false),oscManager(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -82,10 +82,7 @@ G4Penelope08ComptonModel::G4Penelope08ComptonModel(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4Penelope08ComptonModel::~G4Penelope08ComptonModel()
-{
-  if (atomsPerMolecule)
-    delete atomsPerMolecule;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -102,12 +99,6 @@ void G4Penelope08ComptonModel::Initialise(const G4ParticleDefinition*,
 	   << HighEnergyLimit() / GeV << " GeV"
 	   << G4endl;
   }
-
-  if (atomsPerMolecule)
-    {
-      delete atomsPerMolecule;
-      atomsPerMolecule = 0; //zero explicitely
-    }
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
@@ -162,7 +153,12 @@ G4double G4Penelope08ComptonModel::CrossSectionPerVolume(const G4Material* mater
   //cross section per volume
 
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
-  G4double atPerMol = GetAtomsPerMolecule(material);
+  G4double atPerMol =  oscManager->GetAtomsPerMolecule(material);
+
+  if (verboseLevel > 3)
+    G4cout << "Material " << material->GetName() << " has " << atPerMol << 
+      "atoms per molecule" << G4endl;
+
   G4double moleculeDensity = 0.;
 
   if (atPerMol)
@@ -600,17 +596,7 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 	  (photonEnergy1+electronEnergy+energyInFluorescence+localEnergyDeposit)/keV << 
 	  " keV (final) vs. " << 
 	  photonEnergy0/keV << " keV (initial)" << G4endl;
-    }  
-
-  //DA TOGLIERE
-  //myfile<< photonEnergy0/keV << " " << photonEnergy1/keV << " " << cosTheta << " "  << 
-  //  eKineticEnergy/keV << " " << cosThetaE << " " << targetOscillator << G4endl;
-
-  //    }
-  //myfile.close();
-  //G4Exception();
-  // FIN QUI
-  
+    }    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -865,49 +851,3 @@ G4double G4Penelope08ComptonModel::KleinNishinaCrossSection(G4double energy,
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4Penelope08ComptonModel::GetAtomsPerMolecule(const G4Material* material)
-{
-  if (!atomsPerMolecule)
-    atomsPerMolecule = new std::map<const G4Material*,G4double>;
-
-  //material already processed
-  if (atomsPerMolecule->count(material))
-    return atomsPerMolecule->find(material)->second;
-
-  //otherwise, calculate and add in the map
-  size_t nElements = material->GetNumberOfElements();
-  const G4double* densityVector = material->GetVecNbOfAtomsPerVolume();
-  G4double maxElementDensity = 0.;
-
-  //find max
-  for (size_t i=0;i<nElements;i++)
-    {
-      if (densityVector[i] > maxElementDensity)
-	maxElementDensity = densityVector[i];	
-    }
-  //Get atoms per molecule
-  G4double atPerMol = 0.;
-
-  for (size_t i=0;i<nElements;i++)    
-    atPerMol += densityVector[i]/maxElementDensity;
-  atomsPerMolecule->insert(std::make_pair(material,atPerMol));
-
-  if (verboseLevel > 2)
-    {
-      G4cout << "Material " << material->GetName() << " has " << 
-	atPerMol << " atoms per molecule" << G4endl;
-    }
-
-  //material already processed
-  if (atomsPerMolecule->count(material))
-    return atomsPerMolecule->find(material)->second;
-  else
-    {
-      G4cout << "G4Penelope08ComptonModel::GetAtomsPerMolecule" << G4endl;
-      G4cout << "Problem with calculation of number of atoms per volume" << G4endl;
-      G4Exception();
-    }
-  return 0;
-}
