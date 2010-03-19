@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.4 2009-04-18 17:28:23 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.5 2010-03-19 09:55:53 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
+#include "PhysListEmPenelope08.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -48,6 +49,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4ProductionCutsTable.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -162,7 +164,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmLivermorePhysics();
-
+  } else if (name == "penelope08"){    
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmPenelope08(name);    
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -206,6 +211,8 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");   
     
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(250*eV,100.*GeV);
+
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
