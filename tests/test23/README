@@ -21,22 +21,57 @@
 // ********************************************************************
 //
 //
-// $Id: README,v 1.3 2004-03-05 15:25:57 mkossov Exp $
+// $Id: README,v 1.4 2010-03-19 00:03:11 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+          =========================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+          =========================================================
 
-                            Test23
-                            ------
+                                 Test23
+                                 ------
 
-	This test is made by Mikhail Kossov for debugging and testing of the nuclear
-capture process G4QCaptureAtRest for nine (9) particles, which can be captured
-by nuclei:
-	1. Well measured pi-, K- antiProton and antiNeutron capture (4)
-    2. Negative hyperon capture Sigma-, Xi-, Omega-, antiSigma+ (4)
-    3. Muon- capture at rest                                    (1)
-                                                                ---
-                                                                (9)
+Description:  test made by Mikhail Kossov for debugging and testing of the
+              nuclear capture process G4QCaptureAtRest for nine (9) particles,
+              which can be captured by nuclei:
+              1. Well measured pi-, K- antiProton and antiNeutron capture (4)
+              2. Negative hyperon capture Sigma-, Xi-, Omega-, antiSigma+ (4)
+              3. Muon- capture at rest                                    (1)
+                                                                          ---
+                                                                          (9)
+
+              Other hadronic processes are included, as implemented by the
+              LEP and HEP models.
+
+              Electromagnetic processes are included, but are mostly turned
+              off by setting production threshold to 1 m. 
+
+
+Usage:        auto-generated file provides input for 1 MeV mu- incident on 
+              aluminum.  1000 events are run.  An option exists to run 100,000
+              mu- on Pb.
+
+              Verbose atepping action available but not currently used.
+
+
+Running:      Build both test23 and test23_hadronic_exerciser.
+              Then generate the input file:
+
+              ../bin/$G4SYSTEM/test23_hadronic_exerciser >& test23.in &
+              for the 10 event test, or
+
+              ../bin/$G4SYSTEM/test23_hadronic_exerciser large_N > & test23_large_N.in &
+              for the 200 event test.
+
+              Then run the test:
+
+              ../bin/$G4SYSTEM/test23 test23.in >& test23.out &
+
+
+Type of test: run to completion
+
+
+Output:       run log
+              numbers of particles produced
+              mean energies of produced particle types 
