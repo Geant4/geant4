@@ -22,13 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.27 2010-03-20 22:12:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100308  M. Kelsey -- Bug fix for setting masses of evaporating nuclei
 // 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow()
+// 20100319  M. Kelsey -- Bug fix in new GetBindingEnergy() use right after
+//		goodRemnant() -- Q1 should be outside call.
 
 #define RUN
 
@@ -186,7 +188,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	      if (goodRemnant(A1[i], Z1[i])) {
 		//		G4double QB = DM0 - bindingEnergy(A1[i], Z1[i]) - Q1[i];
-                G4double QB = DM0 - G4NucleiProperties::GetBindingEnergy(G4lrint(A1[i]), G4lrint(Z1[i]-Q1[i]));
+                G4double QB = DM0 - G4NucleiProperties::GetBindingEnergy(G4lrint(A1[i]), G4lrint(Z1[i])) - Q1[i];
 		V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
 		  (G4cbrt(A1[i]) + G4cbrt(AN[i]));
 		TM[i] = EEXS - QB - V[i] * A / A1[i];  

@@ -22,11 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.6 2010-03-17 21:28:00 dennis Exp $
+// $Id: G4InuclNuclei.cc,v 1.7 2010-03-20 22:12:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
 //	     as temporary final-state fragments.
+// 20100319  M. Kelsey -- Add information message to makeNuclearFragment().
+//	     Use new GetBindingEnergy() function instead of bindingEnergy().
 
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
@@ -34,6 +36,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4NucleiProperties.hh"
 #include <assert.h>
 #include <sstream>
 #include <map>
@@ -84,8 +87,8 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc) {
   if (exc>0.) name += "["+estr.str()+"]";
 
   // Simple minded mass calculation use constants in CLHEP (all in MeV)
-  G4double mass = (nz*proton_mass_c2 + nn*neutron_mass_c2
-		   + bindingEnergy(a,z) + exc);
+  G4double mass = nz*proton_mass_c2 + nn*neutron_mass_c2
+    + G4NucleiProperties::GetBindingEnergy(G4lrint(a),G4lrint(z)) + exc;
 
   //    Arguments for constructor are as follows
   //               name             mass          width         charge
@@ -94,6 +97,9 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc) {
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding Excitation-energy
+
+  G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
+	 << "with non-standard PDGencoding." << G4endl;
 
   G4Ions* fragPD = new G4Ions(name,       mass, 0., G4double(nz)*eplus,
 			      0,          +1,   0,
