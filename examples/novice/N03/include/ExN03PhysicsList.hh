@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.13 2007-07-02 13:22:08 vnivanch Exp $
+// $Id: ExN03PhysicsList.hh,v 1.14 2010-03-21 16:09:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,11 +53,6 @@ public:
   void SetCuts();
    
 private:
-  // these methods Construct particles 
-  void ConstructBosons();
-  void ConstructLeptons();
-  void ConstructMesons();
-  void ConstructBaryons();
 
   // these methods Construct physics processes and register them
   void ConstructDecay();
