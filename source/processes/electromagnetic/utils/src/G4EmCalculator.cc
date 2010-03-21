@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.49 2009-11-22 17:58:39 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.50 2010-03-21 19:07:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -685,7 +685,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
 {
   return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),
 				    processName,
-                                    elm->GetZ(),elm->GetA(),cut);
+                                    elm->GetZ(),elm->GetN(),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1022,7 +1022,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   if(elproc) {
     currentModel = elproc->SelectModelForMaterial(scaledEnergy, idx);
     G4double eth = currentModel->LowEnergyLimit();
-    loweModel = elproc->SelectModelForMaterial(eth - CLHEP::eV, idx);
+    if(eth > 0.0) {
+      loweModel = elproc->SelectModelForMaterial(eth - CLHEP::eV, idx);
+    }
   }
 
   // Search for discrete process
@@ -1035,7 +1037,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       {
         currentModel = (vem[i])->SelectModelForMaterial(kinEnergy, idx);
 	G4double eth = currentModel->LowEnergyLimit();
-	loweModel = (vem[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
+	if(eth > 0.0) {
+	  loweModel = (vem[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
+	}
         break;
       }
     }
@@ -1052,7 +1056,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       {
         currentModel = (vmsc[i])->SelectModelForMaterial(kinEnergy, idx);
 	G4double eth = currentModel->LowEnergyLimit();
-	loweModel = (vmsc[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);  
+	if(eth > 0.0) {
+	  loweModel = (vmsc[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
+	}
         break;
       }
     }
