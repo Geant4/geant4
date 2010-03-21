@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst09PhysicsList.cc,v 1.8 2006-06-29 21:38:00 gunter Exp $
+// $Id: Tst09PhysicsList.cc,v 1.9 2010-03-21 14:54:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,19 +35,17 @@
 #include "Tst09PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"
 
-#include "G4ParticleTable.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4Material.hh"
-#include "G4RunManager.hh"
-#include "Tst09DetectorConstruction.hh"
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
 
-#include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -67,75 +65,24 @@ Tst09PhysicsList::~Tst09PhysicsList()
 
 void Tst09PhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
+  G4BosonConstructor  pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructMesons();
-  ConstructBaryons();
-}
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
 
-void Tst09PhysicsList::ConstructBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-  // gamma
-  G4Gamma::GammaDefinition();
-  
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
+
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle(); 
+
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Tst09PhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Tst09PhysicsList::ConstructMesons()
-{
- //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Tst09PhysicsList::ConstructBaryons()
-{
-//  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -148,11 +95,13 @@ void Tst09PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4PolarizedComptonScattering.hh"
+#include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -178,19 +127,19 @@ void Tst09PhysicsList::ConstructEM()
     if (particleName == "gamma") {
       // gamma         
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4PolarizedComptonScattering);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
       pmanager->AddProcess(new G4SynchrotronRadiation,-1,-1,4);      
 
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
@@ -199,7 +148,7 @@ void Tst09PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
@@ -208,7 +157,7 @@ void Tst09PhysicsList::ConstructEM()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
       pmanager->AddProcess(new G4hIonisation,      -1,2,2);                  
     }
   }
@@ -240,10 +189,11 @@ void Tst09PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Tst09PhysicsList::SetCuts:";
-    G4cout << "Default CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
+    G4cout << "Default CutLength : " << defaultCutValue/mm << " (mm)" 
+	   << G4endl;
   }  
 
- //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
   SetCutsWithDefault();   
 }

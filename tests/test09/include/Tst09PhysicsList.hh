@@ -40,21 +40,13 @@ protected:
   virtual void ConstructParticle();
   virtual void ConstructProcess();
   
-  // 
   virtual void SetCuts();
-  
-protected:
-  // these methods Construct particles 
-  virtual void ConstructBosons();
-  virtual void ConstructLeptons();
-  virtual void ConstructMesons();
-  virtual void ConstructBaryons();
-  
-protected:
+    
+private:
+
   // these methods Construct physics processes and register them
-  void AddParameterisation();
-  virtual void ConstructGeneral();
-  virtual void ConstructEM();
+  void ConstructGeneral();
+  void ConstructEM();
 
 };
 

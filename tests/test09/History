@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2005-12-06 16:48:31 gcosmo Exp $
+$Id: History,v 1.10 2010-03-21 14:54:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 21th, 2010  V.Ivantchenko (test09-V09-03-00)
+- Cleanup Physics Lists - obsolete classes are substituted
 
 Dec 6th, 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
