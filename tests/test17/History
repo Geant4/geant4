@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2008-06-24 13:51:03 cirrone Exp $
+$Id: History,v 1.47 2010-03-21 15:38:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 March 2010  V.Ivanchenko (test17-V09-03-00)
+             Cleanup Physics List - substitute obsolete classes
+
 24 Jun 2008  G.A.P.Cirrone tag: test17-V09-01-00
              Corrected the test17.cc for test with qmtest
 

@@ -43,8 +43,14 @@
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4EnergyLossTables.hh"
+//#include "G4Material.hh"
+//#include "G4EnergyLossTables.hh"
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -80,69 +86,21 @@ void Test17PhysicsList::ConstructParticle()
   // This ensures that objects of these particle types will be
   // created in the program. 
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructBarions();
-  ConstructMesons();
-  ConstructIons();
-}
+  G4BosonConstructor  pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
 
-void Test17PhysicsList::ConstructBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-  // gamma
-  G4Gamma::GammaDefinition();
-}
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
 
-void Test17PhysicsList::ConstructLeptons()
-{
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
 
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle(); 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17PhysicsList::ConstructMesons()
-{
- //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17PhysicsList::ConstructBarions()
-{
-//  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17PhysicsList::ConstructIons()
-{
-//  Ions
-  G4GenericIon::GenericIonDefinition();
-  G4Deuteron::DeuteronDefinition();
-  G4Alpha::AlphaDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -160,7 +118,9 @@ void Test17PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4LowEnergyBremsstrahlung.hh"
 #include "G4LowEnergyIonisation.hh"
@@ -198,7 +158,7 @@ void Test17PhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
@@ -206,7 +166,7 @@ void Test17PhysicsList::ConstructEM()
 
     } else if (particleName == "e+") {
       //positron      
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
@@ -216,10 +176,10 @@ void Test17PhysicsList::ConstructEM()
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
      //muon
-     pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-     pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-     pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-     pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
+     pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
+     pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
+     pmanager->AddProcess(new G4MuBremsstrahlung,   -1,-1,3);
+     pmanager->AddProcess(new G4MuPairProduction,   -1,-1,4);
 
     } else if (
                 particleName == "proton"  
@@ -230,7 +190,7 @@ void Test17PhysicsList::ConstructEM()
                || particleName == "kaon-"  
               )
     {
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
 
       G4cout << "Hadronic processes for " << particleName << G4endl; 
 
@@ -245,8 +205,8 @@ void Test17PhysicsList::ConstructEM()
       // hIon->SetAntiProtonStoppingOff() ;
       //      hIon->SetBarkasOff() ;
       //      hIon->SetNuclearStoppingOn() ;
-            hIon->SetFluorescence(false) ;
-            hIon->SetCutForSecondaryPhotons(100.*eV) ;
+      hIon->SetFluorescence(true) ;
+      hIon->SetCutForSecondaryPhotons(100.*eV) ;
 
       //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
      //   hIon->SetElectronicStoppingPowerModel(particle,"Ziegler1977p") ;
@@ -259,11 +219,11 @@ void Test17PhysicsList::ConstructEM()
       pmanager->AddProcess( theStepCut,       -1,-1,3);
 
     } else if (   particleName == "alpha"  
-               || particleName == "deuteron"  
-               || particleName == "GenericIon"  
-              )
+		  || particleName == "deuteron"  
+		  || particleName == "GenericIon"  
+		  )
     {
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
 
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
@@ -272,7 +232,7 @@ void Test17PhysicsList::ConstructEM()
 
       // Standard ionisation with low energy extantion
        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
-       	   iIon->SetVerboseLevel(1);
+       iIon->SetVerboseLevel(1);
 	   //   iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
 
@@ -281,12 +241,12 @@ void Test17PhysicsList::ConstructEM()
 	// iIon->SetStoppingPowerTableName("ICRU_R49p") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49He") ;
       //iIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
-            iIon->SetCutForSecondaryPhotons(100.*eV) ;
+       iIon->SetCutForSecondaryPhotons(100.*eV) ;
 
-      pmanager->AddProcess(iIon,-1,2,2);
-      hionVector.push_back(iIon);
+       pmanager->AddProcess(iIon,-1,2,2);
+       hionVector.push_back(iIon);
       
-      pmanager->AddProcess( theStepCut,       -1,-1,3);
+       pmanager->AddProcess( theStepCut,       -1,-1,3);
     }
   }
 }
@@ -298,7 +258,7 @@ void Test17PhysicsList::ConstructEM()
 void Test17PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
-   G4Decay* theDecayProcess = new G4Decay();
+  G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -334,6 +294,7 @@ void Test17PhysicsList::SetCuts()
   SetCutValue(cutForGamma,"gamma");
   SetCutValue(cutForElectron,"e-");
   SetCutValue(cutForElectron,"e+");
+  SetCutValue(cutForElectron,"proton");
 
   if (verboseLevel>0) DumpCutValuesTable();
 

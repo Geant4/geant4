@@ -50,49 +50,41 @@ class Test17PhysicsList: public G4VUserPhysicsList
 {
 public: // Without description
 
-    Test17PhysicsList( Test17DetectorConstruction*);
-   ~Test17PhysicsList();
+  Test17PhysicsList( Test17DetectorConstruction*);
+  virtual ~Test17PhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+protected:
+  // Construct particle and physics
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
 
-    void SetCuts();
+  virtual void SetCuts();
 
-  protected:
-    // these methods Construct particles
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions();
-    void ConstructIons();
-
-  protected:
+private:
   // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  void ConstructGeneral();
+  void ConstructEM();
 
-  public: // Without description
+public: // Without description
 
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void SetMaxStep(G4double);
-    void SetCutForSecondaryPhotons(G4double);
-    void SetCutForAugerElectrons(G4double);
+  void SetGammaCut(G4double);
+  void SetElectronCut(G4double);
+  void SetMaxStep(G4double);
+  void SetCutForSecondaryPhotons(G4double);
+  void SetCutForAugerElectrons(G4double);
 
-  private:
+private:
 
-    G4double cutForGamma;
-    G4double cutForElectron;
+  G4double cutForGamma;
+  G4double cutForElectron;
 
-    G4double MaxChargedStep;
+  G4double MaxChargedStep;
 
-    std::vector<G4hLowEnergyIonisation*> hionVector;
+  std::vector<G4hLowEnergyIonisation*> hionVector;
 
-    Test17DetectorConstruction* pDet;
-    Test17PhysicsListMessenger* physicsListMessenger;
-    Test17StepCut* theStepCut;
+  Test17DetectorConstruction* pDet;
+  Test17PhysicsListMessenger* physicsListMessenger;
+  Test17StepCut* theStepCut;
 };
 
 #endif
