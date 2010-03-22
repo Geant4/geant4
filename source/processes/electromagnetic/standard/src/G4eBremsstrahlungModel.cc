@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.44 2009-04-09 18:41:18 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.45 2010-03-22 19:26:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
 {
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
-  minThreshold = 1.0*keV;
+  minThreshold = 0.1*keV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
