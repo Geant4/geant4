@@ -1,4 +1,4 @@
-$Id: History,v 1.483 2010-03-01 11:46:57 vnivanch Exp $
+$Id: History,v 1.484 2010-03-22 19:28:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 March 09:  V.Ivant (emstand-V09-03-04)
+G4eBremsstrahlungModel - reduced minThreshold to 0.1 keV
+G4MollerBhabhaModel - reduced minimum cut value to mean ionisation 
+                      potential
 
 01 March 09:  V.Ivant (emstand-V09-03-03)
 G4WentzelVIModel - added protections, added DefineMaterial() call
