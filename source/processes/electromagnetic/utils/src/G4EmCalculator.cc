@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.50 2010-03-21 19:07:02 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.51 2010-03-22 19:20:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -494,6 +494,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	     << "  " <<  p->GetParticleName()
 	     << " in " <<  currentMaterialName
 	     << " Zi^2= " << chargeSquare
+	     << " isIon=" << isIon
 	     << G4endl;
     }
   }
@@ -515,10 +516,11 @@ G4double G4EmCalculator::ComputeElectronicDEDX(G4double kinEnergy,
     const std::vector<G4VEnergyLossProcess*> vel =
       lManager->GetEnergyLossProcessVector();
     G4int n = vel.size();
-    for(G4int i=0; i<n; i++) {
+    for(G4int i=0; i<n; ++i) {
       const G4ParticleDefinition* p = (vel[i])->Particle();
-      if((!isIon && p == part) || (isIon && p == theGenericIon))
+      if((!isIon && p == part) || (isIon && p == theGenericIon)) {
 	dedx += ComputeDEDX(kinEnergy,part,(vel[i])->GetProcessName(),mat,cut);
+      }
     }
   }
   return dedx;
@@ -1087,9 +1089,13 @@ G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
   G4String partname =  p->GetParticleName();
   const G4ParticleDefinition* part = p;
   
-  if(p->GetParticleType() == "nucleus" && 
-     partname != "deuteron" && 
-     partname != "triton") { part = theGenericIon; } 
+  if(p->GetParticleType() == "nucleus" 
+     && currentParticleName != "deuteron"  
+     && currentParticleName != "triton"
+     && currentParticleName != "alpha+"
+     && currentParticleName != "helium"
+     && currentParticleName != "hydrogen"
+     ) { part = theGenericIon; } 
   
   G4LossTableManager* lManager = G4LossTableManager::Instance();
   const std::vector<G4VEnergyLossProcess*> vel = 
