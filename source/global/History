@@ -1,4 +1,4 @@
-$Id: History,v 1.237 2010-02-01 14:17:38 gcosmo Exp $
+$Id: History,v 1.238 2010-03-23 16:57:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 23, 2010  V.Ivanchenko (global-V09-03-02)
+- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector - preserve
+      values of edgeMin and edgeMax in constructors avoiding recomputation,
+      which may have precision problem; this is the fix for Windows, where 
+      many tests are crashing
 
 Feb 01, 2010  G.Cosmo (global-V09-03-01)
 - Restored G4PVDataVector as typedef for optimisation; removed class files.
