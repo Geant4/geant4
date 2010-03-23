@@ -36,6 +36,8 @@
 
 #include "F04GlobalField.hh"
 
+#include <ctime>
+
 F04RunAction::F04RunAction()
   : saveRndm(0), autoSeed(false)
 {
