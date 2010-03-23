@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopolePhysics.cc,v 1.2 2009-07-15 10:19:47 vnivanch Exp $
+// $Id: G4MonopolePhysics.cc,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -72,16 +72,14 @@ G4MonopolePhysics::~G4MonopolePhysics()
 
 void G4MonopolePhysics::ConstructParticle()
 {
-  G4Monopole::MonopoleDefinition(monopoleMass, magCharge, elCharge);
+  mpl = G4Monopole::MonopoleDefinition(monopoleMass, magCharge, elCharge);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4MonopolePhysics::ConstructProcess()
 {
   if(verboseLevel > 0) {
     G4cout << "G4MonopolePhysics::ConstructProcess" << G4endl;
   }
-  G4Monopole* mpl = G4Monopole::Monopole();
   
   G4ProcessManager* pmanager = new G4ProcessManager(mpl);
   mpl->SetProcessManager(pmanager);

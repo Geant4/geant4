@@ -1,12 +1,12 @@
-$Id: History,v 1.4 2009-07-15 10:19:47 vnivanch Exp $
+$Id: History,v 1.5 2010-03-23 14:14:17 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    monopol History file
-                    --------------------
+                    Monopole Example History file
+                    -----------------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 March 10: V.Ivant (monopole-V09-03-00)
+- Cleanup and add test on ionisation of heavy highly charged particle
 
 14 July 09: V.Ivant (monopole-V09-02-00)
 - Added messenger to define mass and change of the monopole

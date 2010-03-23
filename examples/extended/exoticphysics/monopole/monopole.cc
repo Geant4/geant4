@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.2 2009-07-15 10:19:47 vnivanch Exp $
+// $Id: monopole.cc,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,7 @@ int main(int argc,char** argv) {
 
   // Setup monopole
   G4String s = ""; 
-  if(argc > 2) s = argv[2];
+  if(argc > 2) { s = argv[2]; }
   UI->ApplyCommand("/control/verbose 1");
   UI->ApplyCommand("/monopole/setup "+s);
 

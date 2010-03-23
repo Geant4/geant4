@@ -76,7 +76,7 @@ public:
 
   static G4Monopole* Monopole();
 
-  static G4double MagneticCharge() {return magCharge;};
+  G4double MagneticCharge();
 
 private:
 

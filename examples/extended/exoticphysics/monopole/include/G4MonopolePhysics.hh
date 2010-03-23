@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopolePhysics.hh,v 1.2 2009-07-15 10:19:47 vnivanch Exp $
+// $Id: G4MonopolePhysics.hh,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MonopolePhysicsMessenger;
+class G4Monopole;
 
 class G4MonopolePhysics : public G4VPhysicsConstructor
 {
@@ -62,14 +63,15 @@ public:
 private:
 
   // hide assignment operator
-  //  G4MonopolePhysics & operator=(const G4MonopolePhysics &right);
-  // G4MonopolePhysics(const G4MonopolePhysics&);
+  G4MonopolePhysics & operator=(const G4MonopolePhysics &right);
+  G4MonopolePhysics(const G4MonopolePhysics&);
 
   G4int    magCharge;
   G4int    elCharge;
   G4double monopoleMass;
 
   G4MonopolePhysicsMessenger*  theMessenger;
+  G4Monopole* mpl;
 
 };
 

@@ -105,9 +105,16 @@ G4Monopole* G4Monopole::MonopoleDefinition(G4double mass, G4int mCharge, G4int e
 
 G4Monopole* G4Monopole::Monopole()
 {    
-  if(!theMonopole) theMonopole = MonopoleDefinition();
+  if(!theMonopole) { theMonopole = MonopoleDefinition(); }
   return theMonopole;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4Monopole::MagneticCharge() 
+{
+  return magCharge;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
