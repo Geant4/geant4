@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2010-03-12 16:36:08 gunter Exp $
+$Id: History,v 1.51 2010-03-24 16:58:27 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.50 2010-03-12 16:36:08 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+24-Mar-2010 G.Folger                (testtools-QMtest-V09-03-02)
+- retire test20 and testing LBE with HadCalCMS benchmark.
+- start adding HadCalCMS testing physics lists to largeN ( incomplete )
 
 12-Mar-2010 G.Folger                (testtools-QMtest-V09-03-01)
 - incread timelimit to 1H for test61, and test12-FTFBIC
