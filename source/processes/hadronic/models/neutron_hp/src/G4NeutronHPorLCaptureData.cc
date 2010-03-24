@@ -104,13 +104,6 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
-   // Safty for 0 energy neutron  
-   if ( eKinetic == 0. ) 
-   {
-      G4cout << "G4NeutronHPorLCaptureData is requested cross section for 0 kinetic energy neutron!" << G4endl;
-      eKinetic = 1.0e-6*eV; 
-   }
-  
   G4ReactionProduct theNeutron( aP->GetDefinition() );
   theNeutron.SetMomentum( aP->GetMomentum() );
   theNeutron.SetKineticEnergy( eKinetic );

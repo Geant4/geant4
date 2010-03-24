@@ -33,7 +33,6 @@
 // 080428 change checking point of "neglecting doppler broadening" flag 
 //        from GetCrossSection to BuildPhysicsTable by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
-// 090922 Add safty for 0 kinetic energy neutron by T. Koi
 //
 #include "G4NeutronHPElasticData.hh"
 #include "G4Neutron.hh"
@@ -146,20 +145,12 @@ void G4NeutronHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 G4double G4NeutronHPElasticData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 {
-
   G4double result = 0;
   G4bool outOfRange;
   G4int index = anE->GetIndex();
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
-
-   // Safty for 0 energy neutron  
-   if ( eKinetic == 0. ) 
-   {
-      G4cout << "G4NeutronHPElasticData is requested cross section for 0 kinetic energy neutron!" << G4endl;
-      eKinetic = 1.0e-6*eV; 
-   }
 
   // T. K. 
 //  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
