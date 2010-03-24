@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.12 2010-03-24 20:52:13 gcosmo Exp $
+// $Id: F02PhysicsList.cc,v 1.13 2010-03-24 20:55:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -173,9 +173,9 @@ void F02PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
