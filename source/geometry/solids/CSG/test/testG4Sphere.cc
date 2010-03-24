@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.29 2009-05-14 13:22:44 tnikitin Exp $
+// $Id: testG4Sphere.cc,v 1.30 2010-03-24 09:50:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -95,7 +95,7 @@ const G4String OutputInside(const EInside a)
 int main(void)
 {
     G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
-
+    EInside inside;
     G4int i, iMax;
     G4double Dist, vol, volCheck;
     G4double phi, cosTheta, sinTheta, rMax, rRand, zP;
@@ -291,6 +291,16 @@ G4ThreeVector s9v(-0.6542770611918751,
 G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
    G4ThreeVector vb830(0.1644697995,0.18507236,0.9688642354);
 
+
+   G4Sphere      s18_03_10("s18_03_10", 47*mm, 48*mm, 0*deg, 200*deg, 80*deg, 100*deg);
+   G4ThreeVector p18_03_10(43.37539710867407*mm, 16.12036885157033*mm, -8.224548565698871*mm);
+   G4ThreeVector v18_03_10(-0.4161958548132512, 0.6603942936714858, -0.6250283092167956);
+
+   inside = s18_03_10.Inside(p18_03_10) ;
+   G4cout<<"s18_03_10.Inside(p18_03_10 ... = "<<OutputInside(inside)<<G4endl ;
+
+
+
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
@@ -346,7 +356,7 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
     
 // Check G4Sphere::Inside
 
-    EInside inside = s7.Inside(G4ThreeVector(1399.984667238032,
+    inside = s7.Inside(G4ThreeVector(1399.984667238032,
                                              5.9396696802500299,
                                             -2.7661927818688308)  ) ;
     // G4cout<<"s7.Inside(G4ThreeVector(1399.98466 ... = "
@@ -500,8 +510,8 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
      assert(ApproxEqual(Dist,49.));
      Dist=sn22.DistanceToOut(G4ThreeVector(-45.,0.,0.),vx,calcNorm,pgoodNorm,pNorm);
      assert(ApproxEqual(Dist,45.));
-     G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(0.,49.,0),G4ThreeVector(0,-1,0))<<G4endl;
-     G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(-45.,0.,0),G4ThreeVector(1,0,0))<<G4endl;
+G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(0.,49.,0),G4ThreeVector(0,-1,0))<<G4endl;
+G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(-45.,0.,0),G4ThreeVector(1,0,0))<<G4endl;
 
      //
     Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
@@ -1048,7 +1058,7 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
         G4bool checkPoint( const G4Sphere& pSph, G4ThreeVector origin,
                            G4double  d,    G4ThreeVector dir,    EInside  exp); 
 
-        G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
+  G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
 
 	G4double  sinOneDeg = std::sin( 1.0 * degree );
 	  radOne = 100.0 * mm;
@@ -1090,7 +1100,7 @@ G4ThreeVector pb830(81.61117212,-27.77179755,196.4143423);
         checkPoint( SphDeepNeg, StartPt,  0.0,  vy,   kInside); 
 
         // Try the edges  
-        G4ThreeVector  NegEdgePt( radOne * std::cos(-270.0*degree), radOne * std::sin(-270.0*degree), 0.0); 
+  G4ThreeVector  NegEdgePt( radOne * std::cos(-270.0*degree), radOne * std::sin(-270.0*degree), 0.0); 
         G4ThreeVector  PosEdgePt( radOne * std::cos(10.0*degree), radOne * std::sin(10.0*degree), 0.0); 
 
         G4cout << "--------------------------------------------------------" << G4endl; 
