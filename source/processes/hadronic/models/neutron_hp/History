@@ -14,7 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 March 2010  Dennis Wright (hadr-hpn-V09-03-00)
+-------------------------------------------------
+- move all code in hadr-hpn-V09-02-01 to HEAD and tag as 
+  hadr-hpn-V09-03-00
+
 18 November 2009 Tatsumi Koi (hadr-hpn-V09-02-01)
+-------------------------------------------------
 - Add Ignore and Enable On Flight Doppler Broadening methods  
 	G4NeutronHPElasticData.cc
 	G4NeutronHPInelasticData.cc
