@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.13 2010-03-24 20:45:27 gcosmo Exp $
+// $Id: F01PhysicsList.cc,v 1.14 2010-03-24 20:48:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -286,7 +286,7 @@ void F01PhysicsList::ConstructEM()
         F01StepCut* thehadronStepCut = new F01StepCut();
 
       G4hIonisation* thehIonisation = new G4hIonisation() ; 
-      G4MultipleScattering* thehMultipleScattering =
+      G4hMultipleScattering* thehMultipleScattering =
                      new G4hMultipleScattering() ;
 
 
