@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2009-06-15 10:20:52 gunter Exp $
+$Id: History,v 1.9 2010-03-24 21:18:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th March 2010, G.Cosmo (test34-V09-03-00)
+- Migrated physics list to use particle-based multiple-scattering processes.
+
 15th June 2009, G.Folger  (test34-V09-02-00)
-- Fix warning on error output about not cuts definded for region crystals
+- Fixed warning on error output about no cuts defined for region crystals.
 
 27th August 2007, G.Cosmo (test34-V09-00-00)
 - Protected use of TCSH terminal.

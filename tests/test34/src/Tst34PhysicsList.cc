@@ -134,7 +134,9 @@ void Tst34PhysicsList::AddTransportation()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -175,7 +177,7 @@ void Tst34PhysicsList::ConstructEM()
      else if (particleName == "e-")
      {
        // Construct processes for electron
-       G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+       G4VProcess* theeminusMultipleScattering = new G4eMultipleScattering();
        G4VProcess* theeminusIonisation = new G4eIonisation();
        G4VProcess* theeminusBremsstrahlung = new G4eBremsstrahlung();
        pmanager->AddProcess(theeminusMultipleScattering);
@@ -193,7 +195,7 @@ void Tst34PhysicsList::ConstructEM()
      else if (particleName == "e+")
      {
        // Construct processes for positron
-       G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+       G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
        G4VProcess* theeplusIonisation = new G4eIonisation();
        G4VProcess* theeplusBremsstrahlung = new G4eBremsstrahlung();
        G4VProcess* theeplusAnnihilation = new G4eplusAnnihilation();
@@ -218,7 +220,7 @@ void Tst34PhysicsList::ConstructEM()
               particleName == "mu-"    )
      {
        // Construct processes for muon+
-       G4VProcess* aMultipleScattering = new G4MultipleScattering();
+       G4VProcess* aMultipleScattering = new G4MuMultipleScattering();
        G4VProcess* aBremsstrahlung = new G4MuBremsstrahlung();
        G4VProcess* aPairProduction = new G4MuPairProduction();
        G4VProcess* anIonisation = new G4MuIonisation();
@@ -241,7 +243,7 @@ void Tst34PhysicsList::ConstructEM()
 	      (particle->GetParticleName() != "chargedgeantino"))
      {
        // all others charged particles except geantino
-       G4VProcess* aMultipleScattering = new G4MultipleScattering();
+       G4VProcess* aMultipleScattering = new G4hMultipleScattering();
        G4VProcess* anIonisation = new G4hIonisation();
        // add processes
        pmanager->AddProcess(anIonisation);
