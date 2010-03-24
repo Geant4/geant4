@@ -6,6 +6,33 @@
 </argument>
 <argument name="test_ids">
   <set>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGS_BIC</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_INCL_ABLA</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_FTFP_BERT</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BIC</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BIC_HP</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BIC_EMY</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_TRV</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_NOLEP</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_HP</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_EMX</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSP_BERT_EMV</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSC_CHIPS</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QGSC_BERT</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QBBC_XGGSN</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QBBC_XGG</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-QBBC</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-LHEP</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-LHEP_EMV</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-FTFP_BERT_TRV</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-FTFP_BERT</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-FTFP_BERT_EMX</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-FTFP_BERT_EMV</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-FTF_BIC</text>
+    <text>bench-calo-HadCalCMS-run1_largeN-CHIPS</text>
+    <text>bench-calo-FullCMS-run1-QGSP_BERT</text>
+    <text>bench-calo-FullCMS-run1-LHEP</text>
     <text>test60-large_n-run</text>
     <text>test40-large_n-run</text>
     <text>test23-large_n-run</text>

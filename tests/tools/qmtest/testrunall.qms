@@ -25,7 +25,6 @@
       <text>bench-calo-HadCalCMS-run1-QBBC</text>
       <text>bench-calo-HadCalCMS-run1-LHEP</text>
       <text>bench-calo-HadCalCMS-run1-LHEP_EMV</text>
-      <text>bench-calo-HadCalCMS-run1-LBE</text>
       <text>bench-calo-HadCalCMS-run1-FTFP_BERT_TRV</text>
       <text>bench-calo-HadCalCMS-run1-FTFP_BERT</text>
       <text>bench-calo-HadCalCMS-run1-FTFP_BERT_EMX</text>
@@ -100,7 +99,6 @@
       <text>test17-run</text>
       <text>test18-run</text>
       <text>test19-run</text>
-      <text>test20-run</text>
       <text>test21-run</text>
       <text>test22-run</text>
       <text>test23-run</text>

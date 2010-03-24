@@ -6,6 +6,8 @@
 </argument>
 <argument name="test_ids">
   <set>
+    <text>bench-calo-HadCalCMS-build</text>
+    <text>bench-calo-FullCMS-build</text>
     <text>exam-ext-electromagnetic-testem10-build</text>
     <text>exam-ext-electromagnetic-testem8-build</text>
     <text>exam-nov-n02-build</text>
