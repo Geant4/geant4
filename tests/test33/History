@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2008-04-21 09:00:03 ahoward Exp $
+$Id: History,v 1.38 2010-03-24 21:12:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 25th, 2010 G.Cosmo - test33-V09-03-00
+- Migrated physics list to use particle-based multiple-scattering processes.
 
 April 21st, 2008 A.Howard - test33-V09-01-00
   - Fixed implementation of parallel geometry (previously it was over-laid with
