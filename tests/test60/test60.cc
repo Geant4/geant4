@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: test60.cc,v 1.1 2009-11-16 09:28:23 gcosmo Exp $
+// $Id: test60.cc,v 1.2 2010-03-25 15:38:35 gunter Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,7 +85,11 @@ int main(int argc,char** argv)
 
   if (argc==1)   // Define UI session for interactive mode.
   { 
+#ifdef _WIN32
+    G4UIsession * session = new G4UIterminal();
+#else
     G4UIsession * session = new G4UIterminal(new G4UItcsh);
+#endif
     UI->ApplyCommand("/control/execute test60.mac");    
     session->SessionStart();
     delete session;
