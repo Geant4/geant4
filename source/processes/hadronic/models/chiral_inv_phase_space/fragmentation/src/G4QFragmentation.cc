@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.10 2010-02-05 09:48:18 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.11 2010-03-25 08:40:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -555,8 +555,11 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #ifdef debug
   G4cout<<"G4QFragmentation::Construct: Creation ofSoftCollisionPartonPair STARTS"<<G4endl;
 #endif
-  for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
+  G4bool rep=true;
+  while(rep && theInteractions.size())
   {
+   for(it = theInteractions.begin(); it != theInteractions.end(); ++it)
+   {
     G4QInteraction* anIniteraction = *it;
     G4QPartonPair*  aPair=0;
     G4int nSoftCollisions = anIniteraction->GetNumberOfSoftCollisions();
@@ -583,8 +586,31 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
       }  
       delete *it;
       it=theInteractions.erase(it);      // Soft interactions are converted & erased
-      it--;
+      if( it != theInteractions.begin() )// To avoid going below begin() (for Windows)
+      {
+        it--;
+        rep=false;
+#ifdef debug
+        G4cout<<"G4QFragmentation::Construct: *** Decremented ***"<<G4endl;
+#endif
+      }
+      else
+      {
+        rep=true;
+#ifdef debug
+        G4cout<<"G4QFragmentation::Construct: *** Begin ***"<<G4endl;
+#endif
+        break;
+      }
     }
+    else rep=false;
+#ifdef debug
+    G4cout<<"G4QFragmentation::Construct: #0fSC="<<nSoftCollisions<<", r="<<rep<<G4endl;
+#endif
+   }
+#ifdef debug
+   G4cout<<"G4QFragmentation::Construct: *** While *** , r="<<rep<<G4endl;
+#endif
   }
 #ifdef debug
   G4cout<<"G4QFragmentation::Construct: -> Parton pairs for SOFT strings are made"<<G4endl;

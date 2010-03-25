@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.5 2010-01-26 09:31:00 mkossov Exp $
+// $Id: G4QIonIonCollision.cc,v 1.6 2010-03-25 08:40:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -457,8 +457,11 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
 #ifdef debug
   G4cout<<"G4QIonIonCollision::Constr: Creation ofSoftCollisionPartonPair STARTS"<<G4endl;
 #endif
-  for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
+  G4bool rep=true;
+  while(rep && theInteractions.size())
   {
+   for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
+   {
     G4QInteraction* anIniteraction = *it;
     G4QPartonPair*  aPair=0;
     G4int nSoftCollisions = anIniteraction->GetNumberOfSoftCollisions();
@@ -474,19 +477,30 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
         aPair = new G4QPartonPair(pTarget->GetNextParton(),
                                   pProjectile->GetNextAntiParton(),
                                   G4QPartonPair::SOFT, G4QPartonPair::TARGET);
-        thePartonPairs.push_back(aPair);            // A target pair (Why TAGRET?)
+        thePartonPairs.push_back(aPair); // A target pair (Why TAGRET?)
         aPair = new G4QPartonPair(pProjectile->GetNextParton(),
                                   pTarget->GetNextAntiParton(),
                                   G4QPartonPair::SOFT, G4QPartonPair::PROJECTILE);
-        thePartonPairs.push_back(aPair);            // A projectile pair (Why Projectile?)
+        thePartonPairs.push_back(aPair); // A projectile pair (Why Projectile?)
 #ifdef debug
         G4cout<<"--->G4QIonIonCollision::Constr: SOFT, 2 parton pairs are filled"<<G4endl;
 #endif
       }  
       delete *it;
-      it=theInteractions.erase(it);                 // SoftInteractions're converted&erased
-      it--;
+      it=theInteractions.erase(it);      // SoftInteractions're converted&erased
+      if( it != theInteractions.begin() )// To avoid going below begin() (for Windows)
+      {
+        it--;
+        rep=false;
+      }
+      else
+      {
+        rep=true;
+        break;
+      }
     }
+    else rep=false;
+   }
   }
 #ifdef debug
   G4cout<<"G4QIonIonCollision::Constr: -> Parton pairs for SOFT strings are made"<<G4endl;
