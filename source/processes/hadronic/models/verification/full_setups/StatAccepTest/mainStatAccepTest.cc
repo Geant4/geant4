@@ -10,7 +10,7 @@
 #include "StatAccepTestAnalysis.hh" 
 #include "G4UIterminal.hh" 
 #include <cstdlib>
-#include "time.h"
+#include <ctime>
 
 //***LOOKHERE***
 // Uncomment these includes files only if you use a Geant4 version before 9.2 .
