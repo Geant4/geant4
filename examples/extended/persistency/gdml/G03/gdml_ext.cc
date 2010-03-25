@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_ext.cc,v 1.2 2010-03-25 15:31:36 gunter Exp $
+// $Id: gdml_ext.cc,v 1.3 2010-03-25 15:39:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
   {
     // Open a tcsh session: will stay there until the user types "exit"
 
-#ifndef _WIN32
+#ifdef _WIN32
     G4UIsession* session = new G4UIterminal();
 #else
     G4UIsession* session = new G4UIterminal(new G4UItcsh);
