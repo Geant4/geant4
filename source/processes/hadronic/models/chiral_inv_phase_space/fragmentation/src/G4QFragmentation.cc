@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.11 2010-03-25 08:40:33 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.12 2010-03-25 09:07:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -473,8 +473,8 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
     {
 	aTarget=theInteractions[0]->GetTarget();
 	aProjectile=theInteractions[0]->GetProjectile();
-      theInteractions.clear();
       delete theInteractions[0];
+      theInteractions.clear();
     }
     else                                             // Create a new target nucleon
     {

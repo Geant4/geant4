@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+25-Mar-2010 M.Kosov                            (hadr-chips-frag-V09-03-03)
+--------------------------------------------------------------------------
+Bug fix for the cleaning up sequence
+
 25-Mar-2010 M.Kosov                            (hadr-chips-frag-V09-03-02)
 --------------------------------------------------------------------------
 Bug fix for Windows run time warning

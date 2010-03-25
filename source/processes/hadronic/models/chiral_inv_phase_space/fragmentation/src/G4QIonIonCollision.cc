@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.6 2010-03-25 08:40:33 mkossov Exp $
+// $Id: G4QIonIonCollision.cc,v 1.7 2010-03-25 09:07:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -385,8 +385,8 @@ G4QIonIonCollision::G4QIonIonCollision(G4QNucleus &pNucleus, const G4QNucleus &t
     {
      	aTarget=theInteractions[0]->GetTarget();
 	     aProjectile=theInteractions[0]->GetProjectile();
-      theInteractions.clear();
       delete theInteractions[0];
+      theInteractions.clear();
     }
     else                                             // Create a new target nucleon (?)
     {
