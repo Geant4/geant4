@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.14 2010-03-18 20:13:14 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.15 2010-03-25 18:32:18 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -693,6 +693,8 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   instance = G4DNAGenericIonsManager::Instance();
 
   G4double wBig = (energyTransfer - waterStructure.IonisationEnergy(ionizationLevelIndex));
+  if (wBig<0) return 0.;
+
   G4double w = wBig / Bj[ionizationLevelIndex];
   G4double Ry = 13.6*eV;
 
@@ -724,8 +726,13 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   G4double F1 = L1+H1;
   G4double F2 = (L2*H2)/(L2+H2);
 
-  G4double sigma = CorrectionFactor(particleDefinition, k/eV) 
+  G4double sigma = CorrectionFactor(particleDefinition, k) 
     * Gj[j] * (S/Bj[ionizationLevelIndex]) 
+    * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
+
+  if ( (particleDefinition == instance->GetIon("hydrogen")) && (ionizationLevelIndex==4)) 
+
+    sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) 
     * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 
   if (    particleDefinition == G4Proton::ProtonDefinition() 
@@ -863,7 +870,7 @@ G4double G4DNARuddIonisationModel::CorrectionFactor(G4ParticleDefinition* partic
   else 
     if (particleDefinition == instance->GetIon("hydrogen")) 
     { 
-	G4double value = (std::log(k/eV)-4.2)/0.5;
+	G4double value = (std::log10(k/eV)-4.2)/0.5;
 	return((0.8/(1+std::exp(value))) + 0.9);
     }
     else 
