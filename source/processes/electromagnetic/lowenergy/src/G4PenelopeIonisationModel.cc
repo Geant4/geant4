@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.11 2010-03-15 08:32:32 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.12 2010-03-26 09:32:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -81,10 +81,7 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
-  // Atomic deexcitation model activated by default
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
-
+  //
   verboseLevel= 0;
   
   // Verbosity scale:
@@ -93,6 +90,10 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  // Atomic deexcitation model activated by default
+  SetDeexcitationFlag(true);
+  ActivateAuger(false);
   
   //These vectors do not change when materials or cut change.
   //Therefore I can read it at the constructor

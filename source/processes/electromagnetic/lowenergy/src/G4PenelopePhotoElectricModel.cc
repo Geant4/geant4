@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc,v 1.11 2010-03-15 08:32:32 pandola Exp $
+// $Id: G4PenelopePhotoElectricModel.cc,v 1.12 2010-03-26 09:32:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -75,10 +75,6 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
-  //by default the model will inkove the atomic deexcitation
-  SetDeexcitationFlag(true);  
-  ActivateAuger(false);
-
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -86,6 +82,10 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  //by default the model will inkove the atomic deexcitation
+  SetDeexcitationFlag(true);  
+  ActivateAuger(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc,v 1.8 2009-10-23 09:29:24 pandola Exp $
+// $Id: G4PenelopeComptonModel.cc,v 1.9 2010-03-26 09:32:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -80,10 +80,6 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   energyForIntegration = 0.0;
   ZForIntegration = 1;
 
-  //by default, the model will use atomic deexcitation
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
-
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -91,6 +87,10 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  //by default, the model will use atomic deexcitation
+  SetDeexcitationFlag(true);
+  ActivateAuger(false);
 
   //These vectors do not change when materials or cut change.
   //Therefore I can read it at the constructor

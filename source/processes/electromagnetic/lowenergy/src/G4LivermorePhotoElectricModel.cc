@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.10 2010-03-15 09:02:51 pandola Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.11 2010-03-26 09:32:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -64,11 +64,7 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   highEnergyLimit = 100 * GeV;
   //  SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
-
-  //Set atomic deexcitation by default
-  SetDeexcitationFlag(true);
-  ActivateAuger(false);
-   
+  
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -76,6 +72,11 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
+
+  //Set atomic deexcitation by default
+  SetDeexcitationFlag(true);
+  ActivateAuger(false);
+
   if(verboseLevel>0) {
     G4cout << "Livermore PhotoElectric is constructed " << G4endl
 	   << "Energy range: "

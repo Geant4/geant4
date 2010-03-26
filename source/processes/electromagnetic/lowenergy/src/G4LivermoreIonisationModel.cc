@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.7 2009-10-23 09:30:08 pandola Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.8 2010-03-26 09:32:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -84,11 +84,10 @@ G4LivermoreIonisationModel::G4LivermoreIonisationModel(const G4ParticleDefinitio
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   verboseLevel = 0;
-  //
   //By default: use deexcitation, not auger
   SetDeexcitationFlag(true);
   ActivateAuger(false);
-
+  //
   //
   // Notice: the fluorescence along step is generated only if it is 
   // set by the PROCESS (e.g. G4eIonisation) via the command
