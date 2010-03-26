@@ -383,9 +383,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       // G4int augerOriginatingShellId = 0;
       
       G4int numberOfPossibleAuger = 0;
-      numberOfPossibleAuger = anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId)->size();
-
-
+      
       G4bool foundFlag = false;
 
       while (transitionRandomShellIndex < transitionSize) {
