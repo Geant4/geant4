@@ -26,7 +26,6 @@
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4types.hh"
 #include "G4CollisionOutput.hh"
 
 class G4Fissioner;
