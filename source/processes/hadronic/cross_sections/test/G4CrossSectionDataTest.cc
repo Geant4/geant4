@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.19 2008-01-16 08:20:48 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.20 2010-03-26 11:11:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,9 +87,9 @@
 #include "G4PhotoNuclearCrossSection.hh"
 #include "G4TripathiCrossSection.hh"
 
-#include "G4VQCrossSection.hh"
-#include "G4QElasticCrossSection.hh"
-#include "G4QuasiFreeRatios.hh"
+// #include "G4VQCrossSection.hh"
+// #include "G4QElasticCrossSection.hh"
+// #include "G4QuasiFreeRatios.hh"
 
 
 
@@ -119,7 +119,7 @@ int main()
   G4cout << "15 helium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 1;
+  choice = 6;
 
 
 
@@ -234,7 +234,7 @@ int main()
   G4cout << " 5 kaon0short" << G4endl;
   G4cout << " 6 pion-" << G4endl;
   //  G4cin >> choice;
-  choice = 3;
+  choice = 1;
 
   G4ParticleDefinition* theParticleDefinition;
   G4VProcess* theProcess;
@@ -388,6 +388,9 @@ int main()
 
   std::ofstream writef("g4txs.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
+  G4double ratio = 1.;
+
+  /*
 
   G4ProtonInelasticCrossSection hpwPrIn;
   G4NeutronInelasticCrossSection hpwNeIn;
@@ -396,11 +399,10 @@ int main()
 
   G4NeutronHPInelasticData  nhpXscData;
 
-  G4double ratio = 1.;
   std::pair<G4double,G4double> chipsRat;
 
-  G4VQCrossSection*  qElastic = G4QElasticCrossSection::GetPointer();
-  G4QuasiFreeRatios* qRatio = G4QuasiFreeRatios::GetPointer();
+  // G4VQCrossSection*  qElastic = G4QElasticCrossSection::GetPointer();
+  // G4QuasiFreeRatios* qRatio = G4QuasiFreeRatios::GetPointer();
 
   G4int pPDG = theParticleDefinition->GetPDGEncoding();
   G4int iz   = G4int(theElement->GetZ()); 
@@ -431,8 +433,8 @@ int main()
     // if(i > 0) boolChips = false;
     // sig = qElastic->GetCrossSection(boolChips,momentum,iz,N,pPDG);
 
-    chipsRat = qRatio->GetRatios(momentum,pPDG,iz,N);
-    ratio = chipsRat.first*chipsRat.second; // !!!
+    // chipsRat = qRatio->GetRatios(momentum,pPDG,iz,N);
+    // ratio = chipsRat.first*chipsRat.second; // !!!
 
     // G4cout << "Q-elastic          " <<" \t"<< sig/millibarn << " mb" << G4endl;
 
@@ -475,7 +477,7 @@ writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
   }
   G4cout<<"iz = "<<iz<<";  N = "<<N<<"; sum = "<<iz+N<<G4endl;                         
   
-  /*  
+*/  
   // Check Glauber-Gribov model
   G4cout<<"Check Glauber-Gribov model"<<G4endl;
 
@@ -483,11 +485,11 @@ writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
   writegg.setf( std::ios::scientific, std::ios::floatfield );
 
   G4GlauberGribovCrossSection ggXsc;
-  G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc,ggDifXsc;
+  G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc, ggDifXsc;
 
   
                   
-  kinEnergy = 0.1*GeV;
+  kinEnergy = 100.*GeV;
   iMax = 80;
   // writegg <<iMax<< G4endl; 
   writef <<iMax<< G4endl; 
@@ -527,14 +529,14 @@ writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
 
   // writegg << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
      // writef << kinEnergy/GeV <<"\t"<< ggTotXsc/millibarn <<"\t"<< ggIneXsc/millibarn << G4endl;
-  // writef << kinEnergy/GeV <<"\t"<< ggIneXsc/millibarn <<"\t"<< ggProdXsc/millibarn << G4endl;
-     writef << kinEnergy/GeV <<"\t"<< ratio <<G4endl;
+  writef << kinEnergy/GeV <<"\t"<< ggIneXsc/millibarn <<"\t"<< ggProdXsc/millibarn << G4endl;
+  //  writef << kinEnergy/GeV <<"\t"<< ratio <<G4endl;
 
      kinEnergy *= 1.145;
      delete theDynamicParticle;
   }
               
-  */    
+      
 
  
   /*
