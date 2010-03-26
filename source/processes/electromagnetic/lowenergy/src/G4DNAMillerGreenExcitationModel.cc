@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.7 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.8 2010-03-26 21:43:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -278,12 +278,13 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
          ) 
       {
 	  G4DNAEmfietzoglouExcitationModel * excitationXS = new G4DNAEmfietzoglouExcitationModel();
+          excitationXS->Initialise(G4Electron::ElectronDefinition());
 
 	  G4double sigmaExcitation=0;
 	  G4double tmp =0.;
 	  
-	  if (k*0.511/3728 > 7.4*eV && k*0.511/3728 < 10*keV) sigmaExcitation = 
-	    excitationXS->CrossSectionPerVolume(material,particleDefinition,k*0.511/3728,tmp,tmp)
+	  if (k*0.511/3728 > 8.23*eV && k*0.511/3728 < 10*MeV ) sigmaExcitation = 
+	    excitationXS->CrossSectionPerVolume(material,G4Electron::ElectronDefinition(),k*0.511/3728,tmp,tmp)
 	    /material->GetAtomicNumDensityVector()[1];
        
 	  if ( particleDefinition == instance->GetIon("alpha+") ) 
@@ -448,10 +449,11 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 	  i--;
          
           G4DNAEmfietzoglouExcitationModel * excitationXS = new G4DNAEmfietzoglouExcitationModel();
+          excitationXS->Initialise(G4Electron::ElectronDefinition());
          
 	  G4double sigmaExcitation=0;
 
-	  if (k*0.511/3728 > 7.4*eV && k*0.511/3728 < 10*keV) sigmaExcitation = excitationXS->PartialCrossSection(k*0.511/3728,i);
+	  if (k*0.511/3728 > 8.23*eV && k*0.511/3728 < 10*MeV ) sigmaExcitation = excitationXS->PartialCrossSection(k*0.511/3728,i);
  
 	  G4double partial = PartialCrossSection(k,i,particle);
 	  if (particle == instance->GetIon("alpha+")) partial = PartialCrossSection(k,i,particle) + sigmaExcitation;
