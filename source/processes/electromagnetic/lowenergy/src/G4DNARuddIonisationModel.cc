@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.15 2010-03-25 18:32:18 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.16 2010-03-26 20:42:10 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -568,7 +568,7 @@ G4double G4DNARuddIonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefi
 
   G4double crossSectionMaximum = 0.;
   
-  for(G4double value=waterStructure.IonisationEnergy(shell); value<=4.*waterStructure.IonisationEnergy(shell) ; value+=0.1*eV)
+  for(G4double value=waterStructure.IonisationEnergy(shell); value<=5.*waterStructure.IonisationEnergy(shell) && k>=value ; value+=0.1*eV)
   {
       G4double differentialCrossSection = DifferentialCrossSection(particleDefinition, k, value, shell);
       if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
