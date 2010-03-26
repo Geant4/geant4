@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.15 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.16 2010-03-26 18:10:43 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -394,30 +394,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
     G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
     fvect->push_back(dp);
-    /*
-    // creating neutral water molechule...
 
-    G4DNAGenericMoleculeManager *instance;
-    instance = G4DNAGenericMoleculeManager::Instance();
-    G4ParticleDefinition* waterDef = NULL;
-    G4Molecule* water = instance->GetMolecule("H2O");
-    waterDef = (G4ParticleDefinition*)water;
-
-    direction.set(0.,0.,0.);
-
-    //G4DynamicParticle* dynamicWater = new G4DynamicParticle(waterDef, direction, bindingEnergy);
-        G4DynamicMolecule* dynamicWater = new G4DynamicMolecule(water, direction, bindingEnergy);
-
-
-	//dynamicWater->RemoveElectron(ionizationShell, 1);
-
-    G4DynamicMolecule* dynamicWater2 = new G4DynamicMolecule(water, direction, bindingEnergy);
-    G4DynamicMolecule* dynamicWater3 = new G4DynamicMolecule(water, direction, bindingEnergy);
-
-    fvect->push_back(dynamicWater);
-    fvect->push_back(dynamicWater2);
-    fvect->push_back(dynamicWater3);
-    */
   }
 
 }
@@ -477,7 +454,7 @@ G4double k, G4int shell)
   
   if (particleDefinition == G4Proton::ProtonDefinition()) 
   {
-    G4double maximumKineticEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k - (waterStructure.IonisationEnergy(shell));
+    G4double maximumKineticEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k;
 
     G4double crossSectionMaximum = 0.;
     for (G4double value = waterStructure.IonisationEnergy(shell); 
