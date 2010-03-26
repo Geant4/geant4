@@ -146,7 +146,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   // Choose generator
 
-  if(gen_name == "lepar") {
+  if(gen_name == "lhep") {
     if(part_name == "proton")   
       sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
     else if(part_name == "pi+") 
@@ -170,7 +170,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "CHIPS") {
+  } else if(gen_name == "chips") {
 
     sg = new Test30VSecondaryGenerator(new G4QStringChipsParticleLevelInterface(),mat);
     theProcess->SetSecondaryGenerator(sg);

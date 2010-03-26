@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-03-00  26 March 2010 V.Ivanchenko
+- use environment variables to activate generators; use CHIPS
+  via G4QInelastic
+
 test35-V09-02-00  14 May 2009 V.Ivanchenko
 - improved scripts, added comments to the main
 

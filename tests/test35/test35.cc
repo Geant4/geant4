@@ -98,6 +98,10 @@
 #include "G4Timer.hh"
 #include "G4NistManager.hh"
 
+#include "G4QInelastic.hh"
+#include "G4ForceCondition.hh"
+#include "G4TouchableHistory.hh"
+
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -218,10 +222,6 @@ int main(int argc, char** argv)
       if(verbose > 0) cout << "Next line " << line << endl;
       if(line == "#particle") {
         (*fin) >> namePart;
-      } else if(line == "#energy(MeV)") {
-        (*fin) >> energy;
-        energy *= MeV;
-        emax    = energy;
       } else if(line == "#sigmae(MeV)") {
         (*fin) >> sigmae;
         sigmae *= MeV;
@@ -236,7 +236,7 @@ int main(int argc, char** argv)
         elim *= MeV;
       } else if(line == "#ebinlog(MeV)") {
         (*fin) >> ebinlog;
-	if (ebinlog < 1.1) ebinlog = 1.1;
+	if (ebinlog < 1.1) { ebinlog = 1.1; }
         ebinlog *= MeV;
       } else if(line == "#pmax(MeV/c)") {
         (*fin) >> m_pmax;
@@ -245,7 +245,17 @@ int main(int argc, char** argv)
         (*fin) >> m_p;
         m_p *= MeV;
       } else if(line == "#events") {
+	nevt = 1;
         (*fin) >> nevt;
+	G4cout<<"Number of events according to macro "<< nevt << G4endl;
+	char* st = getenv("statistic");
+        if(st) {
+	  G4int st0 = atol(st);
+	  if (st0 > 0) {  
+	    nevt = st0;
+	    G4cout<<"Number of events is forced to "<< nevt << G4endl;
+	  }
+	}
       } else if(line == "#exclusive") {
         inclusive = false;
       } else if(line == "#inclusive") {
@@ -290,10 +300,28 @@ int main(int argc, char** argv)
       } else if(line == "#particle") {
         (*fin) >> namePart;
       } else if(line == "#generator") {
+	nameGen = "";
         (*fin) >> nameGen;
-      } else if(line == "#paw") {
-        usepaw = true;
-        (*fin) >> hFile;
+	if (nameGen == "") {
+	  G4cout << "Generator name is empty! " << G4endl; 
+	  continue;
+	}
+        hFile = nameGen;
+        if(nameGen == "binary")       { hFile = "bic"; }
+        else if(nameGen == "bertini") { hFile = "bert"; }
+        else if(nameGen == "lepar")   { nameGen = "lhep";  hFile = "lhep"; }
+        else if(nameGen == "CHIPS")   { nameGen = "chips"; hFile = "chips"; }
+	else if(nameGen == "elastic") { break; }
+
+	char* c = getenv(nameGen);
+        if(!c) {
+	  G4cout << "Generator <" << nameGen << "> is not included in the "
+		 << " list SetModels.csh, so is ignored!" 
+		 << G4endl; 
+	  continue;
+	}
+	G4String s(c);
+	if(s=="1") { break; }	
       } else if(line == "#rad") {
 	xssolang = false;
       } else if(line == "#xs_ghad") {
@@ -351,11 +379,20 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 
+    // -------- Projectile
+
     G4ParticleDefinition* part = 
       (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
+    G4double mass = part->GetPDGMass();
+    if(m_pmax == 0.0) { m_pmax = emax; }
+    else              { emax   = m_pmax; }
+    energy = sqrt(m_p*m_p + mass*mass) - mass; 
+    G4DynamicParticle dParticle(part,aDirection,energy);
 
+    // ------- Select model
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
-    G4double amass = phys->GetNucleusMass();
+    G4QInelastic* chips = 0;
+    if(nameGen == "chips") { chips = new G4QInelastic(); }
 
     if(!proc) { 
       cout << "For particle: " << part->GetParticleName()
@@ -363,11 +400,13 @@ int main(int argc, char** argv)
 	     << endl;
       exit(1);
     }
-    const G4Element* elm = material->GetElement(0); 
 
+    // ------- Define target A
+    const G4Element* elm = material->GetElement(0); 
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
 
+    // ------- Binning 
     cout << "The particle:  " << part->GetParticleName() << endl;
     if(verbose > 0) {
       cout << "The material:  " << material->GetName() 
@@ -377,22 +416,19 @@ int main(int argc, char** argv)
       cout << "The direction: " << aDirection << endl;
       cout << "The time:      " << aTime/ns << " ns" << endl;
     }
-    G4double mass = part->GetPDGMass();
-    if(m_pmax == 0.0) m_pmax = emax;
-    else              emax   = m_pmax;
-    if(m_p > 0.0) energy = sqrt(m_p*m_p + mass*mass);
 
-    double m_pmin = 0.0;
-    double m_ptmax = 0.65;
-    double m_pth = 0.2;
-    int m_binp = 65;
-    int m_bint = 20;
-    double m_thetamax = 300.;
-    double m_thetamin = 15.;
-    double cosmin = cos(m_thetamax*0.001);
-    double cosmax = cos(m_thetamin*0.001);
+    G4double amass = phys->GetNucleusMass();
+    G4double m_pmin = 0.0;
+    G4double m_ptmax = 0.65;
+    G4double m_pth = 0.2;
+    G4int m_binp = 65;
+    G4int m_bint = 20;
+    G4double m_thetamax = 300.;
+    G4double m_thetamin = 15.;
+    G4double cosmin = cos(m_thetamax*0.001);
+    G4double cosmax = cos(m_thetamin*0.001);
 
-    cout << "energy = " << energy/GeV << " GeV" << endl;
+    cout << "Ekin = " << energy/GeV << " GeV" << endl;
     if(verbose > 0) {
       cout << "emax   = " << emax/GeV << " GeV" << endl;
       cout << "pmax   = " << m_pmax/GeV << " GeV" << endl;
@@ -414,19 +450,19 @@ int main(int argc, char** argv)
     }
    
     if(usepaw) {
-      G4String namef = hFile + "hbook";
+      G4String namef = hFile + ".hbook";
       histo.setFileName(namef);
       histo.book();
       G4cout << "Histograms are booked output file <" << hFile << "> "
 	     << G4endl;
     }
 
-    // Create a DynamicParticle
-    G4DynamicParticle dParticle(part,aDirection,energy);
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "elastic") {
+    if(chips) {
+      chips->SetParameters();
+    } else if(nameGen == "LElastic" || nameGen == "BertiniElastic") {
       cs = new G4HadronElasticDataSet();
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
@@ -441,9 +477,40 @@ int main(int argc, char** argv)
       cs = new G4HadronInelasticDataSet();
     }
 
-    if(cs) {
-      cs->BuildPhysicsTable(*part);
-      cross_sec = cs->GetCrossSection(&dParticle, elm);
+    // -------- Track
+
+    G4Track* gTrack;
+    gTrack = new G4Track(&dParticle,aTime,aPosition);
+    G4TouchableHandle fpTouchable(new G4TouchableHistory());
+    gTrack->SetTouchableHandle(fpTouchable);
+
+    // -------- Step
+
+    G4Step* step;
+    step = new G4Step();
+    step->SetTrack(gTrack);
+    gTrack->SetStep(step);
+    
+    G4StepPoint *aPoint, *bPoint;
+    aPoint = new G4StepPoint();
+    aPoint->SetPosition(aPosition);
+    aPoint->SetMaterial(material);
+    G4double safety = 10000.*cm;
+    aPoint->SetSafety(safety);
+    step->SetPreStepPoint(aPoint);
+
+    bPoint = aPoint;
+    G4ThreeVector bPosition = aDirection*theStep;
+    bPosition += aPosition;
+    bPoint->SetPosition(bPosition);
+    step->SetPostStepPoint(bPoint);
+    step->SetStepLength(theStep);
+
+    if(chips) {
+      G4ForceCondition condition = NotForced;
+      cross_sec = 1.0/(material->GetTotNbOfAtomsPerVolume()*
+		       chips->GetMeanFreePath(*gTrack, DBL_MAX, 
+					      &condition));
     } else {
       cross_sec = (G4HadronCrossSections::Instance())->
         GetInelasticCrossSection(&dParticle, elm);
@@ -492,29 +559,6 @@ int main(int argc, char** argv)
       cout << " nbinTheta= " << nanglpi 
 	   << " nbinP= " << nmompi << " ang0= " << angpi[0] << endl; 
     }
-    G4Track* gTrack;
-    gTrack = new G4Track(&dParticle,aTime,aPosition);
-
-    // Step
-
-    G4Step* step;
-    step = new G4Step();
-    step->SetTrack(gTrack);
-
-    G4StepPoint *aPoint, *bPoint;
-    aPoint = new G4StepPoint();
-    aPoint->SetPosition(aPosition);
-    aPoint->SetMaterial(material);
-    G4double safety = 10000.*cm;
-    aPoint->SetSafety(safety);
-    step->SetPreStepPoint(aPoint);
-
-    bPoint = aPoint;
-    G4ThreeVector bPosition = aDirection*theStep;
-    bPosition += aPosition;
-    bPoint->SetPosition(bPosition);
-    step->SetPostStepPoint(bPoint);
-    step->SetStepLength(theStep);
 
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
       cout << "G4StateManager PROBLEM! " << endl;
@@ -528,12 +572,12 @@ int main(int argc, char** argv)
     G4double e, p, m, px, py, pz, pt, theta, x;
     G4VParticleChange* aChange = 0;
 
-    for (G4int iter=0; iter<nevt; iter++) {
+    for (G4int iter=0; iter<nevt; ++iter) {
 
       if(verbose>=1 || iter == modu*(iter/modu)) { 
         G4cout << "### " << iter << "-th event start " << G4endl;
       }
-      if(saverand) CLHEP::HepRandom::saveEngineStatus("random.txt");
+      if(saverand) { CLHEP::HepRandom::saveEngineStatus("random.txt"); }
      
       G4double e0 = energy;
       if(sigmae > 0.0) {
@@ -546,7 +590,9 @@ int main(int argc, char** argv)
 
       labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass)), 
 			     e0 + mass + amass);
-      aChange = proc->PostStepDoIt(*gTrack,*step);
+
+      if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
+      else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
 
       G4int n = aChange->GetNumberOfSecondaries();
 
@@ -554,20 +600,20 @@ int main(int argc, char** argv)
       G4int n_pr = 0;
       G4int n_pi = 0;
       
-      for(G4int j=0; j<n; j++) {
+      for(G4int j=0; j<n; ++j) {
 
         sec = aChange->GetSecondary(j)->GetDynamicParticle();
         pd  = sec->GetDefinition();
-        if(pd->GetPDGMass() > 100.*MeV) nbar++;
+        if(pd->GetPDGMass() > 100.*MeV) { ++nbar; }
       }
 
-      for(G4int i=0; i<n; i++) {
+      for(G4int i=0; i<n; ++i) {
 
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
         pd  = sec->GetDefinition();
         mom = sec->GetMomentumDirection();
         e   = sec->GetKineticEnergy();
-	if (e < 0.0) e = 0.0;
+	if (e < 0.0) { e = 0.0; }
 
         theta = mom.theta();
         G4double cost  = cos(theta);
@@ -591,7 +637,7 @@ int main(int argc, char** argv)
             if(p>m_pth) {
               histo.fill(6,thetamr,1.0);
               histo.fill(8,cost,1.0);
-              n_pr++;
+              ++n_pr;
             }
 	  } else if(pd == pip || pd == pin ) {
             histo.fill(3,p/GeV,1.0);
@@ -599,7 +645,7 @@ int main(int argc, char** argv)
             if(p>m_pth) {
               histo.fill(7,thetamr,1.0);
               histo.fill(9,cost,1.0);
-              n_pi++;
+              ++n_pi;
             }
           }
           histo.fill(0,n_pr,1.0);
@@ -607,27 +653,28 @@ int main(int argc, char** argv)
 
 	}
 	if((verbose >2) ||
-	   (verbose==2 && (pd == pip || pd == pin || pd == pi0 || pd == proton)))
-	  cout << i << "-th secondary: " 
+	   (verbose==2 && 
+	    (pd == pip || pd == pin || pd == pi0 || pd == proton))) {
+	  G4cout << i << "-th secondary: " 
 		 << pd->GetParticleName() << "  p= "<<p
 		 << "  theta= " << theta
-		 << endl; 
-
+		 << G4endl; 
+	}
 	if(p < mompi[nmompi-1] && theta < angpi[nanglpi-1] 
 	   && (pd == pip || pd == pin || pd == pi0 || pd == proton)) {
 
-	  int kang = -1;
-	  int kp   = -1;
-	  do {kp++;}   while (p > mompi[kp]);  
-	  do {kang++;} while (theta > angpi[kang]);  
+	  G4int kang = -1;
+	  G4int kp   = -1;
+	  do {++kp;}   while (p > mompi[kp]);  
+	  do {++kang;} while (theta > angpi[kang]);  
 	  if(verbose>=2)
 	    cout << " kp= " << kp << " kang= " << kang
 		   <<endl; 
 
-	  if(pd == proton)   nmomtetp[kp][kang] += 1;
-	  else if(pd == pip) nmomtet [kp][kang] += 1;
-	  else if(pd == pin) nmomtetm[kp][kang] += 1;
-	  else               nmomtet0[kp][kang] += 1;
+	  if(pd == proton)   { nmomtetp[kp][kang] += 1; }
+	  else if(pd == pip) { nmomtet [kp][kang] += 1; }
+	  else if(pd == pin) { nmomtetm[kp][kang] += 1; }
+	  else               { nmomtet0[kp][kang] += 1; }
 
 	}        
         delete aChange->GetSecondary(i);
@@ -647,31 +694,32 @@ int main(int argc, char** argv)
 
     std::cout.setf(std::ios::fixed);
     G4int prec = std::cout.precision(6);
-    std::cout << "#################################################################" << std::endl;
-    std::cout << "###### Cross section per bin for pi+" << std::setw(6) << std::endl;
-    std::cout << std::endl;    
+    G4cout << "#################################################################" 
+	   << G4endl;
+    G4cout << "###### Cross section per bin for pi+" << std::setw(6) << G4endl;
+    G4cout << G4endl;    
 
-    for(k=0; k<nmompi; k++) {
-      for(j=0; j<nanglpi; j++) {
-        respip[k][j] = double(nmomtet[k][j]) *harpcs[k][j];
-        respin[k][j] = double(nmomtetm[k][j])*harpcs[k][j];
-        respi0[k][j] = double(nmomtet0[k][j])*harpcs[k][j];
-        resp  [k][j] = double(nmomtetp[k][j])*harpcs[k][j];
+    for(k=0; k<nmompi; ++k) {
+      for(j=0; j<nanglpi; ++j) {
+        respip[k][j] = G4double(nmomtet[k][j]) *harpcs[k][j];
+        respin[k][j] = G4double(nmomtetm[k][j])*harpcs[k][j];
+        respi0[k][j] = G4double(nmomtet0[k][j])*harpcs[k][j];
+        resp  [k][j] = G4double(nmomtetp[k][j])*harpcs[k][j];
 
         if(nmomtetp[k][j] > 0)
-	  errp[k][j] = (resp[k][j])/sqrt(double(nmomtetp[k][j]));
+	  errp[k][j] = (resp[k][j])/sqrt(G4double(nmomtetp[k][j]));
         else  errp[k][j] = harpcs[k][j];
 
         if(nmomtet[k][j] > 0)
-	  errpip[k][j] = (respip[k][j])/sqrt(double(nmomtet[k][j]));
+	  errpip[k][j] = (respip[k][j])/sqrt(G4double(nmomtet[k][j]));
         else  errpip[k][j] = harpcs[k][j];
 
         if(nmomtetm[k][j] > 0)
-	  errpin[k][j] = (respin[k][j])/sqrt(double(nmomtetm[k][j]));
+	  errpin[k][j] = (respin[k][j])/sqrt(G4double(nmomtetm[k][j]));
         else  errpin[k][j] = harpcs[k][j];
 
         if(nmomtet0[k][j] > 0)
-	  errpi0[k][j] = (respi0[k][j])/sqrt(double(nmomtet0[k][j]));
+	  errpi0[k][j] = (respi0[k][j])/sqrt(G4double(nmomtet0[k][j]));
         else  errpi0[k][j] = harpcs[k][j];
       }
     }
@@ -704,31 +752,31 @@ int main(int argc, char** argv)
     G4double cross0;
     G4double crossp;
 
-    for(k=0; k<nmompi; k++) {
+    for(k=0; k<nmompi; ++k) {
       mom1 = mompi[k];
       dsdm[k] = 0.0;
-      cout << "## Next momentum bin " 
+      G4cout << "## Next momentum bin " 
 	     << mom0 << "  -  " << mom1 << "  MeV/c" 
-	     << endl;
+	     << G4endl;
 
       G4double ang0 = 0.0;
       G4double ang1 = 0.0;
 
-      for(j=0; j<nanglpi; j++) {
+      for(j=0; j<nanglpi; ++j) {
         ang1  = angpi[j];
         cross = respip[k][j];
         crossm= respin[k][j];
         cross0= respi0[k][j];
         crossp= resp[k][j];
-        cout << "  " << cross;
+        G4cout << "  " << cross;
         (*fout) << mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
-		<< " " << cross << " " << errpip[k][j] << endl; 
+		<< " " << cross << " " << errpip[k][j] << std::endl; 
 	(*fout1)<< mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
-		<< " " << crossm << " " << errpin[k][j] << endl; 
+		<< " " << crossm << " " << errpin[k][j] << std::endl; 
 	(*fout2)<< mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
-		<< " " << cross0 << " " << errpi0[k][j] << endl; 
+		<< " " << cross0 << " " << errpi0[k][j] << std::endl; 
 	(*fout3)<< mom0/GeV << " " << mom1/GeV << " " << ang0 << " " << ang1 
-		<< " " << crossp << " " << errp[k][j] << endl; 
+		<< " " << crossp << " " << errp[k][j] << std::endl; 
 
         if(k>0) {
           x = (mom1 - mom0)/GeV;
@@ -755,108 +803,111 @@ int main(int argc, char** argv)
       cout << endl;
       mom0 = mom1;
     }
-    cout << endl;    
-    cout << endl;    
-    cout << "## ds/do(mb/strad) for pi+ with momentum cut: " 
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## ds/do(mb/strad) for pi+ with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
-           << "  MeV/c" << endl;
-    for(j=0; j<nanglpi; j++) {
+           << "  MeV/c" << G4endl;
+    for(j=0; j<nanglpi; ++j) {
       cout << "  " << dsda[j];
     }
-    cout << endl;  
-    cout << "## ds/dp(mb/GeV) for pi+ with theta cut " 
-           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << endl;
+    G4cout << G4endl;  
+    G4cout << "## ds/dp(mb/GeV) for pi+ with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
     cross = 0.0;
     mom0  = 0.0;
-    for(k=0; k<nmompi; k++) {
-      cout << "  " << dsdm[k];
+    for(k=0; k<nmompi; ++k) {
+      G4cout << "  " << dsdm[k];
       cross += (dsdm[k]*(mompi[k] - mom0)/GeV);
       mom0 = mompi[k];
     }
-    cout << endl;
-    cout << "## cross_tot(bn)= " << cross/1000. << endl;  
-    cout << endl;    
+    G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000. << G4endl;  
+    G4cout << G4endl;    
 
-    cout << "#################################################################" << endl;
-    cout << "## ds/do(mb/strad) for pi0 with momentum cut: " 
+    G4cout << "#################################################################" 
+	   << G4endl;
+    G4cout << "## ds/do(mb/strad) for pi0 with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
-           << "  MeV/c" << endl;
+           << "  MeV/c" << G4endl;
     cross = 0.0;
-    for(j=0; j<nanglpi; j++) {
-      cout << "  " << dsda0[j];
+    for(j=0; j<nanglpi; ++j) {
+      G4cout << "  " << dsda0[j];
     }
-    cout << endl;    
-    cout << endl;    
-    cout << "## ds/dp(mb/GeV) for pi0 with theta cut " 
-           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << endl;
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## ds/dp(mb/GeV) for pi0 with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
     cross = 0.0;
     mom0  = 0.0;
-    for(k=0; k<nmompi; k++) {
-      cout << "  " << dsdm0[k];
+    for(k=0; k<nmompi; ++k) {
+      G4cout << "  " << dsdm0[k];
       cross += ((dsdm0[k])*(mompi[k] - mom0)/GeV);
       mom0 = mompi[k];
     }
-    cout << endl;
-    cout << "## cross_tot(bn)= " << cross/1000. << endl;  
-    cout << endl;
+    G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000. << G4endl;  
+    G4cout << G4endl;
 
-    cout << "#################################################################" << endl;
-    cout << "## ds/do(mb/strad) for protons with momentum cut: " 
+    G4cout << "#################################################################" 
+	   << G4endl;
+    G4cout << "## ds/do(mb/strad) for protons with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
-           << "  MeV/c" << endl;
+           << "  MeV/c" << G4endl;
     cross = 0.0;
-    for(j=0; j<nanglpi; j++) {
-      cout << "  " << dsdap[j];
+    for(j=0; j<nanglpi; ++j) {
+      G4cout << "  " << dsdap[j];
     }
-    cout << endl;    
-    cout << endl;    
-    cout << "## ds/dp(mb/GeV) for pi0 with theta cut " 
-           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << endl;
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## ds/dp(mb/GeV) for pi0 with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
     cross = 0.0;
     mom0  = 0.0;
-    for(k=0; k<nmompi; k++) {
-      cout << "  " << dsdmp[k];
+    for(k=0; k<nmompi; ++k) {
+      G4cout << "  " << dsdmp[k];
       cross += ((dsdmp[k])*(mompi[k] - mom0)/GeV);
       mom0 = mompi[k];
     }
-    cout << endl;
-    cout << "## cross_tot(bn)= " << cross/1000. << endl;  
-    cout << endl;
+    G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000. << G4endl;  
+    G4cout << G4endl;
 
-    cout << "#################################################################" << endl;
-    cout << "## ds/do(mb/strad) for pi- with momentum cut: " 
+    G4cout << "#################################################################" 
+	   << G4endl;
+    G4cout << "## ds/do(mb/strad) for pi- with momentum cut: " 
            << mompi[0] << "  -  " << mompi[nmompi-1] 
-           << "  MeV/c" << endl;
-    for(j=0; j<nanglpi; j++) {
+           << "  MeV/c" << G4endl;
+    for(j=0; j<nanglpi; ++j) {
       cout << "  " << dsdam[j];
     }
-    cout << endl;    
-    cout << endl;    
-    cout << "## ds/dp(mb/GeV) for pi- with theta cut " 
-           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << endl;
+    G4cout << G4endl;    
+    G4cout << G4endl;    
+    G4cout << "## ds/dp(mb/GeV) for pi- with theta cut " 
+           << angpi[0] << "  -  " << angpi[nanglpi-1] << " radian" << G4endl;
     cross = 0.0;
     mom0  = 0.0;
-    for(k=0; k<nmompi; k++) {
-      cout << "  " << dsdmm[k];
+    for(k=0; k<nmompi; ++k) {
+      G4cout << "  " << dsdmm[k];
       cross += (dsdmm[k]*(mompi[k] - mom0)/GeV);
       mom0 = mompi[k];
     }
-    cout << endl;
-    cout << "## cross_tot(bn)= " << cross/1000. << endl;  
-    cout << endl;
+    G4cout << G4endl;
+    G4cout << "## cross_tot(bn)= " << cross/1000. << G4endl;  
+    G4cout << G4endl;
 
     mom0 = 0.0;
     if(mom0 == 0.0) {
-      for(k=0; k<nmompi; k++) {
-	double mom1 = mompi[k];
-	cout << "## Next momentum bin " 
+      for(k=0; k<nmompi; ++k) {
+	G4double mom1 = mompi[k];
+	G4cout << "## Next momentum bin " 
 	       << mom0 << "  -  " << mom1 << "  MeV/c" 
-	       << endl;
+	       << G4endl;
 
-	for(j=0; j<nanglpi; j++) {
-	  cout << "  " << respin[k][j];
+	for(j=0; j<nanglpi; ++j) {
+	  G4cout << "  " << respin[k][j];
 	}
-	cout << endl;
+	G4cout << G4endl;
 	mom0 = mom1;
       }
     }
@@ -877,6 +928,6 @@ int main(int argc, char** argv)
   delete fin;
   delete phys;
 
-  cout << "###### End of test #####" << endl;
+  G4cout << "###### End of test #####" << G4endl;
 }
 
