@@ -112,6 +112,10 @@
 #include "Histo.hh"
 #include "G4Timer.hh"
 
+#include "G4QInelastic.hh"
+#include "G4ForceCondition.hh"
+#include "G4TouchableHistory.hh"
+
 int main(int argc, char** argv)
 {
   G4cout << "========================================================" << G4endl;
@@ -331,13 +335,13 @@ int main(int argc, char** argv)
       } else if(line == "#events") {
         (*fin) >> nevt;
 	char* st = getenv("statistic");
-	G4int st0 = atol(st);
-	if (st0 < nevt && st0 > 0){  
-	  nevt = st0;
-	  G4cout<<"Number of events according to run.mac "<< nevt << G4endl;
-	  G4cout<<"Number of events will be forced to "<< nevt << G4endl;
-	}else{
-	  G4cout<<"Number of events will be "<< nevt << G4endl;
+	if(st) {
+	  G4int st0 = atol(st);
+	  G4cout<<"Number of events according to macro "<< nevt << G4endl;
+	  if (st0 > 0){  
+	    nevt = st0;
+	    G4cout<<"Number of events is forced to "<< nevt << G4endl;
+	  }
 	}
       } else if(line == "#exclusive") {
         inclusive = false;
@@ -503,9 +507,9 @@ int main(int argc, char** argv)
     // -------- Start run processing
 
     G4StateManager* g4State=G4StateManager::GetStateManager();
-    if (! g4State->SetNewState(G4State_Init)) 
+    if (! g4State->SetNewState(G4State_Init)) {
       G4cout << "error changing G4state"<< G4endl;;   
-
+    }
     G4cout << "###### Start new run # " << run << "   for "
 	   << nevt << " events  #####" << G4endl;
     
@@ -537,6 +541,9 @@ int main(int argc, char** argv)
 
     // ------- Select model
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    G4QInelastic* chips = 0;
+    if(nameGen == "chips") { chips = new G4QInelastic(); }
+
     if(!proc) {
       G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"<< G4endl;
@@ -717,7 +724,9 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "BertiniElastic") {
+    if(chips) {
+      chips->SetParameters();
+    } else if(nameGen == "LElastic" || nameGen == "BertiniElastic") {
       cs = new G4HadronElasticDataSet();
     } else if (nameGen == "chargeex" ||
 	       nameGen == "elastic" || 
@@ -779,7 +788,42 @@ int main(int argc, char** argv)
       cs = new G4HadronInelasticDataSet();
     }
 
-    if(extraproc) {
+    // -------- Track
+
+    G4Track* gTrack;
+    gTrack = new G4Track(&dParticle,aTime,aPosition);
+    G4TouchableHandle fpTouchable(new G4TouchableHistory());
+    gTrack->SetTouchableHandle(fpTouchable);
+
+    // -------- Step
+
+    G4Step* step;
+    step = new G4Step();
+    step->SetTrack(gTrack);
+    gTrack->SetStep(step);
+    
+    G4StepPoint *aPoint, *bPoint;
+    aPoint = new G4StepPoint();
+    aPoint->SetPosition(aPosition);
+    aPoint->SetMaterial(material);
+    G4double safety = 10000.*cm;
+    aPoint->SetSafety(safety);
+    step->SetPreStepPoint(aPoint);
+
+    bPoint = aPoint;
+    G4ThreeVector bPosition = aDirection*theStep;
+    bPosition += aPosition;
+    bPoint->SetPosition(bPosition);
+    step->SetPostStepPoint(bPoint);
+    step->SetStepLength(theStep);
+
+    if(chips) {
+      G4ForceCondition condition = NotForced;
+      cross_sec = 1.0/(material->GetTotNbOfAtomsPerVolume()*
+		       chips->GetMeanFreePath(*gTrack, DBL_MAX, 
+					      &condition));
+
+    } else if(extraproc) {
       extraproc->PreparePhysicsTable(*part);
       extraproc->BuildPhysicsTable(*part);
       cross_sec = extraproc->GetMicroscopicCrossSection(&dParticle,
@@ -883,32 +927,6 @@ int main(int argc, char** argv)
       }
     }
 
-    // -------- Track
-
-    G4Track* gTrack;
-    gTrack = new G4Track(&dParticle,aTime,aPosition);
-
-    // -------- Step
-
-    G4Step* step;
-    step = new G4Step();
-    step->SetTrack(gTrack);
-
-    G4StepPoint *aPoint, *bPoint;
-    aPoint = new G4StepPoint();
-    aPoint->SetPosition(aPosition);
-    aPoint->SetMaterial(material);
-    G4double safety = 10000.*cm;
-    aPoint->SetSafety(safety);
-    step->SetPreStepPoint(aPoint);
-
-    bPoint = aPoint;
-    G4ThreeVector bPosition = aDirection*theStep;
-    bPosition += aPosition;
-    bPoint->SetPosition(bPosition);
-    step->SetPostStepPoint(bPoint);
-    step->SetStepLength(theStep);
-
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
       G4cout << "G4StateManager PROBLEM! " << G4endl;
     G4RotationMatrix* rot = new G4RotationMatrix();
@@ -932,7 +950,7 @@ int main(int argc, char** argv)
 
     // -------- Event loop
 
-    for (G4int iter=0; iter<nevt; iter++) {
+    for (G4int iter=0; iter<nevt; ++iter) {
 
       if(verbose>=1 || iter == modu*(iter/modu)) { 
         G4cout << "### " << iter << "-th event start " << G4endl;
@@ -952,8 +970,11 @@ int main(int argc, char** argv)
       labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), 
 			     e0 + mass + amass);
       G4ThreeVector bst = labv.boostVector();
-      
-      aChange = proc->PostStepDoIt(*gTrack,*step);
+
+      // note: check of 4-momentum balance for CHIPS is not guranteed due to
+      // unknown isotope      
+      if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
+      else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
 
       // take into account local energy deposit
       G4double de = aChange->GetLocalEnergyDeposit();
@@ -964,14 +985,14 @@ int main(int argc, char** argv)
 
       G4int nbar = 0;
 
-      for(G4int j=0; j<n; j++) {
+      for(G4int j=0; j<n; ++j) {
 
         sec = aChange->GetSecondary(j)->GetDynamicParticle();
         pd  = sec->GetDefinition();
-        if(pd->GetPDGMass() > 100.*MeV) nbar++;
+        if(pd->GetPDGMass() > 100.*MeV) { ++nbar; }
       }
 
-      for(G4int i=0; i<n; i++) {
+      for(G4int i=0; i<n; ++i) {
 
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
         pd  = sec->GetDefinition();
@@ -979,7 +1000,7 @@ int main(int argc, char** argv)
         mom = sec->GetMomentum();
 
 	// for exclusive reaction 2 particles in final state
-        if(!inclusive && nbar != 2) break;
+        if(!inclusive && nbar != 2) { break; }
 
         m = pd->GetPDGMass();
 	p = mom.mag();
@@ -1160,10 +1181,12 @@ int main(int argc, char** argv)
     // -------- Committing the transaction with the tree
 
     if(usepaw) {
-      if(verbose > 0) G4cout << "###### Save histograms" << G4endl;
+      if(verbose > 0) { G4cout << "###### Save histograms" << G4endl; }
       histo.save();
     }
-    if(verbose > 0) G4cout << "###### End of run # " << run << "     ######" << G4endl;
+    if(verbose > 0) {
+      G4cout << "###### End of run # " << run << "     ######" << G4endl;
+    }
   }
 
   delete pFrame;

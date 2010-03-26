@@ -35,12 +35,8 @@ G4_Zr
 //--------
 #generator
 binary
-#paw
-bic
-#run
 #generator
 bertini
-#paw
-bert
-#run
+#generator
+chips
 #exit
