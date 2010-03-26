@@ -1,4 +1,4 @@
-$Id: History,v 1.423 2010-03-26 18:10:43 sincerti Exp $
+$Id: History,v 1.424 2010-03-26 19:52:44 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.03.2010, S. Incerti, tag emlowen-V09-03-17
+            Changed default parameters of G4DNAEmfietzoglouExcitationModel.hh
 
 26.03.2010, tag emlowen-V09-03-16
             - S. Incerti : corrected G4DNABornIonisationModel.cc class 
