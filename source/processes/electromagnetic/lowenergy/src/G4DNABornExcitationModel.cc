@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.cc,v 1.8 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNABornExcitationModel.cc,v 1.9 2010-03-27 11:32:41 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,12 +39,6 @@ G4DNABornExcitationModel::G4DNABornExcitationModel(const G4ParticleDefinition*,
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-
-  lowEnergyLimit = 500 * keV; 
-  highEnergyLimit = 100 * MeV;
-  SetLowEnergyLimit(lowEnergyLimit);
-  SetHighEnergyLimit(highEnergyLimit);
-
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -53,19 +47,9 @@ G4DNABornExcitationModel::G4DNABornExcitationModel(const G4ParticleDefinition*,
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
   
-  //
-  
-  table = 0;
-  
-  //
-  
   if( verboseLevel>0 ) 
   { 
-    G4cout << "Born excitation model is constructed " << G4endl
-           << "Energy range: "
-           << lowEnergyLimit / keV << " keV - "
-           << highEnergyLimit / MeV << " MeV"
-           << G4endl;
+    G4cout << "Born excitation model is constructed " << G4endl;
   }
   
 }
@@ -75,12 +59,19 @@ G4DNABornExcitationModel::G4DNABornExcitationModel(const G4ParticleDefinition*,
 G4DNABornExcitationModel::~G4DNABornExcitationModel()
 { 
   // Cross section
-  delete table;
+  
+  std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+  for (pos = tableData.begin(); pos != tableData.end(); ++pos)
+  {
+    G4DNACrossSectionDataSet* table = pos->second;
+    delete table;
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* /*particle*/,
+void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
                                        const G4DataVector& /*cuts*/)
 {
 
@@ -88,36 +79,85 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* /*particle
     G4cout << "Calling G4DNABornExcitationModel::Initialise()" << G4endl;
 
   // Energy limits
+  // Energy limits
+
+  G4String fileElectron("dna/sigma_excitation_e_born");
+  G4String fileProton("dna/sigma_excitation_p_born");
+
+  G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
+
+  G4String electron;
+  G4String proton;
   
-  if (LowEnergyLimit() < lowEnergyLimit)
+  G4double scaleFactor = (1.e-22 / 3.343) * m*m;
+
+  if (electronDef != 0)
   {
-    G4cout << "G4DNABornExcitationModel: low energy limit increased from " << 
-	LowEnergyLimit()/keV << " keV to " << lowEnergyLimit/keV << " keV" << G4endl;
-    SetLowEnergyLimit(lowEnergyLimit);
+    electron = electronDef->GetParticleName();
+
+    tableFile[electron] = fileElectron;
+
+    lowEnergyLimit[electron] = 9. * eV; 
+    highEnergyLimit[electron] = 1. * MeV;
+
+    // Cross section
+    
+    G4DNACrossSectionDataSet* tableE = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+    tableE->LoadData(fileElectron);
+      
+    tableData[electron] = tableE;
+    
+  }
+  else
+  {
+    G4Exception("G4DNABornExcitationModel::Initialise(): electron is not defined");
   }
 
-  if (HighEnergyLimit() > highEnergyLimit)
+  if (protonDef != 0)
   {
-    G4cout << "G4DNABornExcitationModel: high energy limit decreased from " << 
-        HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
-    SetHighEnergyLimit(highEnergyLimit);
+    proton = protonDef->GetParticleName();
+
+    tableFile[proton] = fileProton;
+
+    lowEnergyLimit[proton] = 500. * keV;
+    highEnergyLimit[proton] = 100. * MeV;
+
+    // Cross section
+    
+    G4DNACrossSectionDataSet* tableP = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+    tableP->LoadData(fileProton);
+      
+    tableData[proton] = tableP;
+     
+  }
+  else
+  {
+    G4Exception("G4DNABornExcitationModel::Initialise(): proton is not defined");
   }
 
-  //
-  
-  if (table == 0)
+  if (particle==electronDef) 
   {
-    table = new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,(1e-22/3.343)*m*m );
-    table->LoadData("dna/sigma_excitation_p_born");
+    SetLowEnergyLimit(lowEnergyLimit[electron]);
+    SetHighEnergyLimit(highEnergyLimit[electron]);
+  }
+
+  if (particle==protonDef) 
+  {
+    SetLowEnergyLimit(lowEnergyLimit[proton]);
+    SetHighEnergyLimit(highEnergyLimit[proton]);
   }
 
   if( verboseLevel>0 ) 
   { 
     G4cout << "Born excitation model is initialized " << G4endl
            << "Energy range: "
-           << LowEnergyLimit() / keV << " keV - "
-           << HighEnergyLimit() / MeV << " MeV " << G4endl;
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / keV << " keV for "
+           << particle->GetParticleName()
+           << G4endl;
   }
+  
   
   if(!isInitialised) 
   {
@@ -137,36 +177,75 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* /*particle
 
 G4double G4DNABornExcitationModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* particleDefinition,
-					   G4double k,
+					   G4double ekin,
 					   G4double,
 					   G4double)
 {
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4DNABornExcitationModel" << G4endl;
 
+  if (
+      particleDefinition != G4Proton::ProtonDefinition()
+      &&
+      particleDefinition != G4Electron::ElectronDefinition()
+     )
+   	    
+    return 0;
+
  // Calculate total cross section for model
 
-  G4double crossSection=0;
-  
+  G4double lowLim = 0;
+  G4double highLim = 0;
+  G4double sigma=0;
+
   if (material->GetName() == "G4_WATER")
   {
-    if (particleDefinition == G4Proton::ProtonDefinition())
+    const G4String& particleName = particleDefinition->GetParticleName();
+ 
+    std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
+    pos1 = lowEnergyLimit.find(particleName);
+    if (pos1 != lowEnergyLimit.end())
     {
-      if (k >= lowEnergyLimit && k < highEnergyLimit)
-      {
-        crossSection = table->FindValue(k); 
-      }
-
-      if (verboseLevel > 3)
-      {
-        G4cout << "---> Kinetic energy(keV)=" << k/keV << G4endl;
-        G4cout << " - Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
-        G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-      } 
+      lowLim = pos1->second;
     }
-  } 
+  
+    std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
+    pos2 = highEnergyLimit.find(particleName);
+    if (pos2 != highEnergyLimit.end())
+    {
+      highLim = pos2->second;
+    }
 
- return crossSection*material->GetAtomicNumDensityVector()[1];		   
+    if (ekin >= lowLim && ekin < highLim)
+    {
+      std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+      pos = tableData.find(particleName);
+	
+      if (pos != tableData.end())
+      {
+        G4DNACrossSectionDataSet* table = pos->second;
+        if (table != 0)
+        {
+	  sigma = table->FindValue(ekin);
+        }
+      }
+      else
+      {
+        G4Exception("G4DNABornExcitationModel::CrossSectionPerVolume: attempting to calculate cross section for wrong particle");
+      }
+    }
+
+    if (verboseLevel > 3)
+    {
+      G4cout << "---> Kinetic energy(eV)=" << ekin/eV << G4endl;
+      G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
+      G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
+    } 
+ 
+  } // if (waterMaterial)
+ 
+ return sigma*material->GetAtomicNumDensityVector()[1];		   
+	   
 
 }
 
@@ -184,7 +263,9 @@ void G4DNABornExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
   G4double k = aDynamicParticle->GetKineticEnergy();
   
-  G4int level = RandomSelect(k);
+  const G4String& particleName = aDynamicParticle->GetDefinition()->GetParticleName();
+
+  G4int level = RandomSelect(k,particleName);
   G4double excitationEnergy = waterStructure.ExcitationEnergy(level);
   G4double newEnergy = k - excitationEnergy;
   
@@ -199,41 +280,55 @@ void G4DNABornExcitationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4DNABornExcitationModel::RandomSelect(G4double k)
+G4int G4DNABornExcitationModel::RandomSelect(G4double k, const G4String& particle)
 {   
   G4int level = 0;
 
-  G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
+  std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
+  pos = tableData.find(particle);
 
-  const size_t n(table->NumberOfComponents());
-  size_t i(n);
-  G4double value = 0.;
-  
-  while (i>0)
-  { 
-    i--;
-    valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-    value += valuesBuffer[i];
-  }
-  
-  value *= G4UniformRand();
-  
-  i = n;
-  
-  while (i > 0)
+  if (pos != tableData.end())
   {
-    i--;
-      
-    if (valuesBuffer[i] > value)
+    G4DNACrossSectionDataSet* table = pos->second;
+
+    if (table != 0)
     {
-      delete[] valuesBuffer;
-      return i;
+      G4double* valuesBuffer = new G4double[table->NumberOfComponents()];
+      const size_t n(table->NumberOfComponents());
+      size_t i(n);
+      G4double value = 0.;
+	    
+      while (i>0)
+      { 
+	i--;
+	valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
+	value += valuesBuffer[i];
+      }
+	    
+      value *= G4UniformRand();
+    
+      i = n;
+	    
+      while (i > 0)
+      {
+	i--;
+
+	if (valuesBuffer[i] > value)
+        {
+          delete[] valuesBuffer;
+          return i;
+        }
+	value -= valuesBuffer[i];
+      }
+	    
+      if (valuesBuffer) delete[] valuesBuffer;
+    
     }
-      value -= valuesBuffer[i];
   }
-
-  if (valuesBuffer) delete[] valuesBuffer;
-
+  else
+  {
+    G4Exception("G4DNABornExcitationModel::RandomSelect attempting to calculate cross section for wrong particle");
+  }
   return level;
 }
 
