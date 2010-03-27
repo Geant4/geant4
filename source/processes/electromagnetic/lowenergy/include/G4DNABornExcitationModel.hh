@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.hh,v 1.3 2010-03-27 11:32:41 sincerti Exp $
+// $Id: G4DNABornExcitationModel.hh,v 1.4 2010-03-27 12:46:51 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@ public:
 
   virtual ~G4DNABornExcitationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& );
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()) );
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
