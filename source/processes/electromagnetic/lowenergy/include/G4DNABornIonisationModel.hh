@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.hh,v 1.4 2010-01-07 18:10:19 sincerti Exp $
+// $Id: G4DNABornIonisationModel.hh,v 1.5 2010-03-28 18:33:19 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,7 @@ public:
 
   virtual ~G4DNABornIonisationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector& = *(new G4DataVector()));
 
   virtual G4double CrossSectionPerVolume(  const G4Material* material,
 					   const G4ParticleDefinition* p,
@@ -67,6 +67,8 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
+				
+  double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
 
 protected:
 
@@ -97,8 +99,6 @@ private:
   void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
                                            outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
    
-  double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
-
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double QuadInterpolator( G4double e11, 
