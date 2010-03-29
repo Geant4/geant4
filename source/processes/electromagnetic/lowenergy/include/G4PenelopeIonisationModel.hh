@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh,v 1.3 2009-10-21 14:56:47 pandola Exp $
+// $Id: G4PenelopeIonisationModel.hh,v 1.4 2010-03-29 12:31:11 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -35,6 +35,9 @@
 // 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle 
 //                            AtomicDeexcitationFlag - now demanded to G4VEmModel
 //			      Add ActivateAuger() method
+// 29 Mar 2010   L. Pandola   Added a dummy ComputeCrossSectioPerAtom() method issueing a
+//                            warning if users try to access atomic cross sections via 
+//                            G4EmCalculator
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +74,16 @@ public:
   virtual ~G4PenelopeIonisationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  //*This is a dummy method. Never inkoved by the tracking, it just issues 
+  //*a warning if one tries to get Cross Sections per Atom via the 
+  //*G4EmCalculator.
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double,
+                                              G4double);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* theParticle,

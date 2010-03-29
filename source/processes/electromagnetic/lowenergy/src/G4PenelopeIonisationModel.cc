@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.12 2010-03-26 09:32:50 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.13 2010-03-29 12:31:11 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -42,6 +42,9 @@
 //                            G4VEmModel::DeexcitationFlag()
 //			      Add ActivateAuger() method 
 // 15 Mar 2010   L Pandola    Explicitely initialize Auger to false
+// 29 Mar 2010   L Pandola    Added a dummy ComputeCrossSectionPerAtom() method issueing a 
+//                            warning if users try to access atomic cross sections via 
+//                            G4EmCalculator
 //
 
 
@@ -280,6 +283,25 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
       energy/keV << " keV = " << (1./totalCross)/mm << " mm" << G4endl;
   }
   return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//This is a dummy method. Never inkoved by the tracking, it just issues
+//a warning if one tries to get Cross Sections per Atom via the
+//G4EmCalculator.
+G4double G4PenelopeIonisationModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+							     G4double,
+							     G4double,
+							     G4double,
+							     G4double,
+							     G4double)
+{
+  G4cout << "*** G4PenelopeIonisationModel -- WARNING ***" << G4endl;
+  G4cout << "Penelope Ionisation model does not calculate cross section _per atom_ " << G4endl;
+  G4cout << "so the result is always zero. For physics values, please invoke " << G4endl;
+  G4cout << "GetCrossSectionPerVolume() or GetMeanFreePath() via the G4EmCalculator" << G4endl;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
