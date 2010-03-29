@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.11 2010-03-21 19:07:53 vnivanch Exp $
+// $Id: RunAction.cc,v 1.12 2010-03-29 18:02:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,9 +160,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4double Sig, Sigtot = 0.;
 
   for (size_t j=0; j<emName.size();j++) {
-    Sig = emCal.ComputeCrossSectionPerVolume
-      (energy,particle,emName[j],material,enerCut[j]);
-
+    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);
+    if (Sig == 0.) Sig = emCal.ComputeCrossSectionPerVolume
+		     (energy,particle,emName[j],material,enerCut[j]);
     Sigtot += Sig; 			     
     sigma1.push_back(Sig);
     sigma2.push_back(Sig/density);		        
@@ -216,9 +216,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   for (size_t j=0; j<emName.size();j++) {
     dedx = emCal.ComputeDEDX(energy,particle,emName[j],material,enerCut[j]);
     dedx1.push_back(dedx);
-    dedx2.push_back(dedx/density);
-    dedxtot += dedx;		        
+    dedx2.push_back(dedx/density);		        
   }
+  dedxtot = emCal.GetDEDX(energy,particle,material);
   dedx1.push_back(dedxtot);
   dedx2.push_back(dedxtot/density);	  
     
@@ -230,7 +230,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   G4cout << "\n      (MeV/g/cm2)          : ";
   for (size_t j=0; j<sigma2.size();j++) {
-    G4cout << "\t" << std::setw(13) << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
+  G4cout << "\t" << std::setw(13) << G4BestUnit(dedx2[j],"Energy*Surface/Mass");
   }
   
   //get range from restricted dedx
@@ -251,7 +251,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
          << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
 	 
   //get transport mean free path (for multiple scattering)
-  G4double MSmfp1 = emCal.ComputeMeanFreePath(energy,particle,"msc",material);
+  G4double MSmfp1 = emCal.GetMeanFreePath(energy,particle,"msc",material);
   G4double MSmfp2 = MSmfp1*density;
   
   //print transport mean free path
