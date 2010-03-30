@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.19 2009-10-29 16:01:28 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.20 2010-03-30 08:17:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,8 +135,6 @@ class G4Allocator
     template <class U>
     struct rebind { typedef G4Allocator<U> other; };
       // Rebind allocator to type U
-
-  private:
 
     G4AllocatorPool mem;
       // Pool of elements of sizeof(Type)
