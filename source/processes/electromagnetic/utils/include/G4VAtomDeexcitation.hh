@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.2 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.hh,v 1.3 2010-03-30 09:19:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,7 +98,7 @@ class G4VAtomDeexcitation {
 
   // generation of deexcitation for given atom and shell vacancy
   virtual void GenerateParticles(std::vector<G4DynamicParticle*>*, 
-				 const G4AtomicChell*, G4int Z) = 0;
+				 const G4AtomicShell*, G4int Z) = 0;
 
   // access or compute PIXE cross section 
   virtual G4double GetPIXECrossSection (const G4ParticleDefinition*, 
