@@ -1,4 +1,4 @@
-$Id: History,v 1.429 2010-03-28 18:33:19 sincerti Exp $
+$Id: History,v 1.430 2010-03-31 11:14:33 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31.03.2010, L. Pandola, tag emlowen-V09-03-23
+	    Removed G4cout's used for debugging in G4Penelope08ComptonModel and 
+	    G4Penelope08PhotoElectricModel
 
 27.03.2010, S. Incerti, tag emlowen-V09-03-22
             Modified G4DNABornIonisationModel.hh
