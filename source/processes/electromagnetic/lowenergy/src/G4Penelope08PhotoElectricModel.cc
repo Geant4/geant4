@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08PhotoElectricModel.cc,v 1.2 2010-03-26 09:32:50 pandola Exp $
+// $Id: G4Penelope08PhotoElectricModel.cc,v 1.3 2010-03-31 11:12:08 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -510,7 +510,6 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
 	  if (aValue < 1e-40*cm2) //protection against log(0)
 	    aValue = 1e-40*cm2;
 	  theVec->PutValue(k,logene,log(aValue));
-	  //G4cout << i << " " << k << " " << energy << G4endl;
 	}
     }
 

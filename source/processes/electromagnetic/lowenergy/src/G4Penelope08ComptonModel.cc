@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.cc,v 1.4 2010-03-31 11:07:16 pandola Exp $
+// $Id: G4Penelope08ComptonModel.cc,v 1.5 2010-03-31 11:12:08 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -262,12 +262,6 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4double TST = 0;
   G4double tau = 0.;
  
-  //DA TOGLIERE
-  //  std::ofstream myfile("out.dat");
-  //for (size_t iloop=0;iloop<5000000;iloop++)
-  // {
-      //FIN QUI
-
   //If the incoming photon is above 5 MeV, the quicker approach based on the 
   //pure Klein-Nishina formula is used
   if (photonEnergy0 > 5*MeV)
