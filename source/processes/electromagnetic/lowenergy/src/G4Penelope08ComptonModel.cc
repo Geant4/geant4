@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.cc,v 1.3 2010-03-26 09:32:50 pandola Exp $
+// $Id: G4Penelope08ComptonModel.cc,v 1.4 2010-03-31 11:07:16 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -291,15 +291,13 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 	G4bool levelFound = false;
 	for (size_t j=0;j<numberOfOscillators && !levelFound; j++)
 	  {
-	    S += (*theTable)[j]->GetOscillatorStrength();
-	    G4cout << "Loop: " << j << " " << S << " " << TST << G4endl;
+	    S += (*theTable)[j]->GetOscillatorStrength();	    
 	    if (S > TST) 
 	      {
 		targetOscillator = j;
 		levelFound = true;
 	      }
 	  }
-	G4cout << "Here: " << targetOscillator << G4endl;
 	//check whether the level is valid
 	ionEnergy = (*theTable)[targetOscillator]->GetIonisationEnergy();
       }while((epsilon*photonEnergy0-photonEnergy0+ionEnergy) >0);
@@ -788,7 +786,7 @@ G4double G4Penelope08ComptonModel::OscillatorTotalCrossSection(G4double energy,G
 	  G4cout << "G4Penelope08ComptonModel: " << G4endl;
 	  G4cout << "LowPoint: " << LowPoint << ", High Point: " << HighPoint << G4endl;
 	  G4cout << "Tolerance: " << MaxError << G4endl;
-	  G4cout << "Calls: " << icall << ", Integral: " << sumga << ", Error: " << Err << G4cout;
+	  G4cout << "Calls: " << icall << ", Integral: " << sumga << ", Error: " << Err << G4endl;
 	  G4cout << "Number of open subintervals: " << LHN << G4endl;
 	  G4cout << "WARNING: the required accuracy has not been attained" << G4endl;
 	  loopAgain = false;
