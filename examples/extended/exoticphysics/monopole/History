@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-03-23 14:14:17 vnivanch Exp $
+$Id: History,v 1.6 2010-03-31 10:12:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 March 10: V.Ivant (monopole-V09-03-01)
+- Removed obsolete header G4MultipleScattering.hh
 
 23 March 10: V.Ivant (monopole-V09-03-00)
 - Cleanup and add test on ionisation of heavy highly charged particle

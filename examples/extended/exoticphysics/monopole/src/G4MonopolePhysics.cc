@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopolePhysics.cc,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
+// $Id: G4MonopolePhysics.cc,v 1.4 2010-03-31 10:12:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,7 +50,7 @@
 
 #include "G4StepLimiter.hh"
 #include "G4Transportation.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4mplIonisation.hh"
 #include "G4hhIonisation.hh"
 
@@ -99,21 +99,27 @@ void G4MonopolePhysics::ConstructProcess()
   nbin *= 10;
   
   pmanager->AddProcess( new G4Transportation(), -1, 0, 0);
+  G4int idx = 1;
+  if(mpl->GetPDGCharge() != 0.0) {
+    //G4hMultipleScattering* hmsc = new G4hMultipleScattering();
+    //pmanager->AddProcess(hmsc,  -1, idx, idx);
+    //++idx;
+    G4hhIonisation* hhioni = new G4hhIonisation();
+    hhioni->SetDEDXBinning(nbin);
+    hhioni->SetMinKinEnergy(emin);
+    hhioni->SetMaxKinEnergy(emax);
+    pmanager->AddProcess(hhioni,  -1, idx, idx);
+    ++idx;
+  }
   if(magn != 0.0) {
     G4mplIonisation* mplioni = new G4mplIonisation(magn);
     mplioni->SetDEDXBinning(nbin);
     mplioni->SetMinKinEnergy(emin);
     mplioni->SetMaxKinEnergy(emax);
-    pmanager->AddProcess(mplioni, -1, 1, 1);
+    pmanager->AddProcess(mplioni, -1, idx, idx);
+    ++idx;
   }
-  if(mpl->GetPDGCharge() != 0.0) {
-    G4hhIonisation* hhioni = new G4hhIonisation();
-    hhioni->SetDEDXBinning(nbin);
-    hhioni->SetMinKinEnergy(emin);
-    hhioni->SetMaxKinEnergy(emax);
-    pmanager->AddProcess(hhioni,  -1, 2, 2);
-  }
-  pmanager->AddProcess( new G4StepLimiter(),  -1, -1, 3);
+  pmanager->AddProcess( new G4StepLimiter(),  -1, -1, idx);
 
 }
 
