@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: ExN03PhysicsList.hh,v 1.2 2010-03-31 21:43:48 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,29 +42,21 @@
 
 class ExN03PhysicsList: public G4VUserPhysicsList
 {
-  public:
-    ExN03PhysicsList();
-   ~ExN03PhysicsList();
+public:
+  ExN03PhysicsList();
+  virtual ~ExN03PhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
  
-    void SetCuts();
-
+  void SetCuts();
    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+private:
 
-  protected:
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+  // these methods Construct physics processes and register them
+  void ConstructDecay();
+  void ConstructEM();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
