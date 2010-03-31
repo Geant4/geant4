@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.55 2010-03-22 19:20:44 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.56 2010-03-31 18:04:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,7 +119,8 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  if(Barkas < 0.0 && Barkas < Bloch) { Barkas = Bloch; }
+  // temporary protection
+  if(Barkas < 0.0 && Barkas < Bloch && q2 > 50) { Barkas = Bloch; }
 
   G4double sum = (2.0*(Barkas + Bloch) + Mott);
 
@@ -575,7 +576,9 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
     term += del;
   } while (del > 0.01*term);
 
-  G4double res = std::max(-0.2,-y2*term); 
+  G4double res = -y2*term;
+  // temporary protection
+  if(q2 > 50. && res < -0.2) { res = -0.2; }
 
   return res;
 }
