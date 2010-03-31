@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: T07PhysicsList.hh,v 1.6 2006-06-29 21:37:00 gunter Exp $
+// $Id: T07PhysicsList.hh,v 1.7 2010-03-31 06:51:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,9 @@ class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
 
-class G4MultipleScattering;
+class G4eMultipleScattering;
+class G4MuMultipleScattering;
+class G4hMultipleScattering;
 
 class G4eIonisation;
 class G4eBremsstrahlung;
@@ -93,11 +95,11 @@ class T07PhysicsList: public G4VUserPhysicsList
     G4ComptonScattering*   theComptonScattering;
     G4GammaConversion*     theGammaConversion;
     
-    G4MultipleScattering*  theeminusMultipleScattering;
+    G4eMultipleScattering* theeminusMultipleScattering;
     G4eIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
     
-    G4MultipleScattering*  theeplusMultipleScattering;
+    G4eMultipleScattering* theeplusMultipleScattering;
     G4eIonisation*         theeplusIonisation;
     G4eBremsstrahlung*     theeplusBremsstrahlung;
     G4eplusAnnihilation*   theeplusAnnihilation;
