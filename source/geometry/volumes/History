@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2010-03-23 18:52:25 gcosmo Exp $
+$Id: History,v 1.165 2010-03-31 15:43:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 31th, 2010      G.Cosmo - geomvol-V09-03-01
+- Restore original vector allocation, but adopt simple loop copy within
+  copy-constructor. Should provide slight performance improvement and keep
+  locality.
 
 Dec 11th, 2009      G.Cosmo - geomvol-V09-03-00
 - Use G4Allocator for vectors in G4NavigationHistory, to optimise memory
