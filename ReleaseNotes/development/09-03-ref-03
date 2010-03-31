@@ -119,7 +119,7 @@ processes/hadronic
     G4NeutronHPElasticData, G4NeutronHPInelasticData and G4NeutronHPCaptureData.
 - models/parton_string/qgsm (hadr-qgsm-V09-03-00)
   o Remove unised class G4PartonStringAnnihilator.
-- models/pre_equilibrium (hadr-pre-V09-03-01)
+- models/pre_equilibrium (hadr-pre-V09-03-03)
   o Added more protections for numerical computations to G4PreCompoundEmission.
   o Removed unused dummy classes G4VPreCompoundIon and G4VPreCompoundNucleon. 
 
