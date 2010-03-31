@@ -160,7 +160,14 @@ void RichTbPhysicsList::ConstructGeneral()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+// A.R. 31-Mar-2010 : Replaced obsolete G4MultipleScattering with:
+//                      -  G4eMultipleScattering for e+ and e-;
+//                      -  G4MuMultipleScattering for mu+ and mu-;
+//                      -  G4hMultipleScattering for hadrons and ions.
+//#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -187,32 +194,31 @@ void RichTbPhysicsList::ConstructEM()
 
 
     if (particleName == "gamma") {
-    // gamma
       // Construct processes for gamma
       pmanager->AddDiscreteProcess(new G4GammaConversion());
       pmanager->AddDiscreteProcess(new G4ComptonScattering());
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
 
     } else if (particleName == "e-") {
-    //electron
       //Construct processes for electron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      //A.R. 31-Mar-2010 : replaced G4MultipleScattering with G4eMultipleScattering.
+      pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
 
     } else if (particleName == "e+") {
-    //positron
       // Construct processes for positron
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      // A.R. 31-Mar-2010 : replaced G4MultipleScattering with G4eMultipleScattering.
+      pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);
       pmanager->AddProcess(new G4eIonisation(),-1,2,2);
        pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
        pmanager->AddProcess(new G4eplusAnnihilation(),0,-1,4);
 
     } else if( particleName == "mu+" ||
-               particleName == "mu-"    ) {
-    //muon
-     // Construct processes for muon
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+	       particleName == "mu-"    ) {
+      // Construct processes for muon
+      // A.R. 31-Mar-2010 : replaced G4MultipleScattering with G4MuMultipleScattering.
+      pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
       pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
@@ -220,8 +226,9 @@ void RichTbPhysicsList::ConstructEM()
     } else {
       if ((particle->GetPDGCharge() != 0.0) &&
           (particle->GetParticleName() != "chargedgeantino")) {
-     // all others charged particles except geantino
-	pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+        // all others charged particles except geantino
+        // A.R. 31-Mar-2010 : replaced G4MultipleScattering with G4hMultipleScattering.
+	pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
 	pmanager->AddProcess(new G4hIonisation(),-1,2,2);
      }
     }
