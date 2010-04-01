@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,240 +71,6 @@ Checking overlaps for volume cell_19 ... OK!
 #############################################################################
  G4VUserPhysicsList::AddTransportation() --- G4CoupledTransportation is used 
 #############################################################################
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Tst33PhysicsList::SetCuts:CutLength : 1 (mm)
  adding importance to: cell_01
  adding importance to: cell_02
@@ -536,7 +302,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -577,9 +343,9 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -591,9 +357,9 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -622,11 +388,11 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -681,9 +447,9 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -768,83 +534,83 @@ hIoni:   for  pi-    SubType= 2
 ++ PhantomSDPlus/SLW_V id 28
 ++ PhantomSDPlus/SLWE_V id 31
 ### Run 0 start.
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1002 (mu)seconds
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1002, n= 0
+    mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 2471 for hit collection: PhantomSD
+ Number of event processed : 2746 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |          228 |            0 |            0 |    5.2603934 |    7.1434542 |   0.75130318 |    67501.278 |    50713.925 |    1813.4493 |     362272.6 |    9539.4566 |
-      cell_01 |         6767 |         1809 |    1556.6176 |    8.1774645 |    9.2386106 |   0.86450655 |    163016.46 |     140928.8 |    3776.0208 |    1301986.3 |    30878.276 |
-      cell_02 |         6399 |         2475 |    1001.1229 |    1.1870315 |    8.8355712 |   0.40722207 |    214544.88 |     87367.41 |    15725.112 |    771940.97 |    18666.203 |
-      cell_03 |         6672 |         2961 |    646.51942 |   0.25100842 |    8.4268391 |   0.22429589 |    248327.58 |    55698.856 |    45962.164 |     469365.3 |     11536.89 |
-      cell_04 |         6694 |         3142 |    390.64894 |   0.44642567 |    8.1600111 |   0.12925814 |    259289.38 |    33515.262 |    15206.769 |    273484.91 |    6788.6921 |
-      cell_05 |         6714 |         3489 |    262.26402 |   0.34735788 |    7.9641877 |  0.076174098 |    274536.13 |    20912.542 |    12014.994 |    166551.41 |    4173.5029 |
-      cell_06 |         6841 |         3865 |    162.11012 |    5.8096834 |    7.7106755 |  0.042412536 |    297238.78 |    12606.651 |    425.60903 |    97205.791 |    2472.6537 |
-      cell_07 |         6752 |         4239 |    95.270122 |   0.70256234 |    7.4161381 |  0.022632689 |    321453.04 |    7275.3468 |    1981.7222 |    53954.977 |    1392.2834 |
-      cell_08 |         6506 |         4385 |    53.430277 |   0.16960492 |    7.2177222 |  0.012608029 |    319980.31 |    4034.3211 |    4473.7696 |    29118.609 |    758.77331 |
-      cell_09 |         6375 |         4629 |    31.016366 |    1.0657337 |    6.9583602 | 0.0070149662 |    333966.39 |     2342.763 |    405.75814 |    16301.789 |    432.43011 |
-      cell_10 |         6315 |         4971 |    18.305433 |   0.89824349 |     6.768853 | 0.0039646188 |    349268.34 |    1384.7158 |    279.59972 |    9372.9378 |    251.14863 |
-      cell_11 |         6343 |         5431 |    10.904942 |   0.10612466 |    6.5364571 | 0.0020631991 |    373911.98 |    771.45486 |    1288.2585 |    5042.5816 |    136.71599 |
-      cell_12 |         6155 |         5983 |    7.0334543 |   0.99538111 |    6.1955526 | 0.0011026344 |    398593.57 |      439.503 |    75.202451 |     2722.964 |      74.8551 |
-      cell_13 |         6062 |         6384 |    3.2635477 |   0.63895834 |    6.0964734 |0.00054369793 |    409297.69 |     222.5343 |    59.145321 |    1356.6745 |    37.791396 |
-      cell_14 |         5769 |         6597 |    1.8074477 |    3.5331707 |    5.7925913 |0.00028913028 |    412779.92 |    119.34717 |    5.5697351 |     691.3294 |    19.678825 |
-      cell_15 |         5624 |         6916 |    1.0651872 |    1.6685784 |    5.4817519 |0.00014984121 |    427318.08 |    64.029859 |    6.1428408 |     350.9958 |    10.249811 |
-      cell_16 |         5580 |         7130 |   0.51145353 |   0.67824627 |    5.4263126 |7.4108705e-05 |    439439.87 |     32.56632 |    7.6285826 |    176.71503 |    5.1740577 |
-      cell_17 |         5501 |         7302 |   0.27893525 |   0.29015355 |    5.2376222 |3.9799977e-05 |    445501.49 |    17.730949 |    9.5222906 |    92.868014 |    2.7629264 |
-      cell_18 |         5112 |         7720 |    0.1672608 |   0.46930165 |    4.7535061 |2.1307107e-05 |    442570.79 |    9.4299032 |    2.9236895 |    44.825103 |    1.3720923 |
-      cell_19 |         2178 |            0 |            0 |   0.22456575 |    5.0456699 |1.9414636e-05 |    452246.51 |    8.7802016 |    5.8808292 |    44.301999 |    1.3206328 |
+      cell_00 |          249 |            0 |            0 |    6.6284129 |    7.6951755 |   0.78647403 |     73967.47 |    58173.495 |    1742.0372 |    447655.25 |    11546.942 |
+      cell_01 |         7501 |         2122 |    1786.8495 |   0.71932427 |    9.2004709 |   0.85970172 |    183747.06 |    157967.66 |    48024.203 |    1453376.9 |    34544.975 |
+      cell_02 |         7024 |         2711 |     1085.546 |    2.1525295 |    8.8125031 |   0.40486507 |    242688.97 |    98256.285 |    9733.0079 |    865883.81 |    20950.587 |
+      cell_03 |         7093 |         3042 |    659.01889 |   0.59750357 |    8.4025965 |    0.2175636 |    260946.72 |    56772.509 |    19619.736 |    477036.49 |    11722.862 |
+      cell_04 |         7159 |         3562 |    434.92167 |   0.23027279 |    8.0093328 |   0.12747012 |    278468.95 |    35496.471 |    30825.214 |    284303.05 |     7098.208 |
+      cell_05 |         7160 |         3767 |    271.55855 |   0.27363266 |    7.8664307 |  0.075028569 |    290638.06 |    21806.158 |    15791.508 |    171536.63 |    4321.0723 |
+      cell_06 |         7102 |         4058 |    171.07338 |  0.099469683 |    7.6754276 |  0.043457669 |    308733.98 |    13416.859 |    26360.905 |    102980.13 |    2622.1109 |
+      cell_07 |         6768 |         4068 |     90.39304 |   0.21574939 |    7.3996852 |  0.023095629 |    317008.97 |    7321.5215 |     6492.003 |    54176.955 |    1400.6457 |
+      cell_08 |         6839 |         4761 |    59.705398 |   0.38183179 |    7.1085592 |  0.013000415 |    340817.22 |    4430.7654 |    2172.0452 |    31496.358 |     829.3559 |
+      cell_09 |         6830 |         4982 |     31.65058 |   0.82414771 |    6.8382721 | 0.0069637134 |    354429.15 |     2468.143 |    547.73681 |    16877.833 |    451.41604 |
+      cell_10 |         6799 |         5455 |    18.727774 |   0.68640364 |    6.5546347 | 0.0034989928 |    381306.05 |    1334.1871 |     346.5937 |    8745.1092 |    237.90318 |
+      cell_11 |         6528 |         5685 |    10.177936 |   0.29145576 |    6.2257724 | 0.0018305424 |    385441.58 |    705.56714 |    418.50739 |    4392.7004 |    121.97639 |
+      cell_12 |         6238 |         5879 |    5.5652948 |   0.47101518 |    5.9539667 |0.00096094026 |    391519.61 |    376.22695 |    134.42319 |    2240.0427 |    63.315361 |
+      cell_13 |         6194 |         6727 |    3.2103443 |   0.79817361 |    5.7185573 |0.00049400254 |    431538.53 |    213.18113 |     43.93688 |    1219.0885 |    35.069258 |
+      cell_14 |         5912 |         6928 |    1.8545452 |    1.2888669 |    5.6362948 |0.00027194906 |       435863 |    118.53254 |     14.99501 |    668.08431 |    19.326572 |
+      cell_15 |         5683 |         6920 |   0.93090294 |    1.7198599 |    5.5027618 |0.00014168035 |    437267.37 |    61.952194 |    5.8080438 |    340.90817 |    9.9890216 |
+      cell_16 |         5692 |         7468 |   0.54691655 |   0.49135788 |    5.3472906 |7.7112322e-05 |    455698.89 |        35.14 |     11.37802 |    187.90379 |    5.5906796 |
+      cell_17 |         5489 |         7450 |   0.29986347 |   0.02149513 |    4.9593546 |4.0944444e-05 |    454111.25 |    18.593333 |    132.24846 |    92.210929 |    2.8426978 |
+      cell_18 |         4999 |         7292 |   0.14015497 |   0.70471699 |    4.6126738 |2.0658247e-05 |    437237.38 |    9.0325577 |    1.8820442 |    41.664243 |    1.3263085 |
+      cell_19 |         2111 |            0 |            0 |    3.6135668 |    5.0734635 | 1.948817e-05 |    440083.38 |    8.5764197 |   0.36800869 |    43.512152 |     1.329824 |
 =============================================
 =============================================================
- Number of event processed : 2471 for hit collection: PhantomSDMinus
+ Number of event processed : 2746 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |         2753 |         1869 |    1414.9374 |    8.1666042 |    8.5170268 |   0.84505478 |    69440.465 |    58680.997 |     1401.137 |    499787.62 |    11442.532 |
-      cell_02 |         3299 |         2602 |    1104.7803 |  0.062251946 |    7.8699246 |   0.41442161 |    90176.678 |    37371.163 |    108459.44 |    294108.24 |    6751.8109 |
-      cell_03 |         3560 |         2750 |    674.74116 |   0.65010402 |    7.5374532 |   0.23450749 |    106789.79 |    25043.007 |    6752.2168 |    188760.49 |    4389.6433 |
-      cell_04 |         3607 |         3085 |    456.01976 |   0.56024702 |    7.0487658 |   0.13862607 |    110878.71 |     15370.68 |    4477.6854 |    108344.32 |    2508.6099 |
-      cell_05 |         3529 |         2754 |     267.2235 |   0.48070223 |    6.9602988 |  0.083838134 |    106191.31 |    8902.8815 |    3018.3001 |    61966.716 |    1450.9036 |
-      cell_06 |         3561 |         2831 |    153.54423 |    6.2024207 |     6.704903 |  0.048449789 |    109882.79 |    5323.7979 |    136.15188 |    35695.549 |    844.47126 |
-      cell_07 |         3534 |         3143 |    87.978883 |  0.075618715 |    6.4220405 |  0.025431634 |    109516.57 |    2785.1853 |    5657.5913 |    17886.573 |    427.81979 |
-      cell_08 |         3312 |         2619 |    39.460928 |    5.9727362 |    6.5992294 |   0.01427531 |    102282.46 |    1460.1138 |    38.342095 |    9635.6261 |    229.00722 |
-      cell_09 |         3246 |         2570 |    17.975162 |    5.5298216 |    6.4975115 | 0.0077081344 |    99545.762 |    767.31211 |    21.606828 |    4985.6193 |     119.4819 |
-      cell_10 |         3111 |         2585 |    13.595027 |    5.2154584 |    6.2291422 | 0.0048166129 |    97592.353 |    470.06459 |    12.995938 |    2928.0991 |    67.779775 |
-      cell_11 |         3075 |         2558 |    18.412611 |   0.14926765 |    4.6833191 |  0.003149776 |    94291.139 |    296.99597 |    215.49176 |    1390.9269 |    32.165949 |
-      cell_12 |         2864 |         2310 |    7.4916159 |   0.64989981 |    5.1059774 | 0.0017158369 |    87765.021 |    150.59046 |    29.409385 |    768.91148 |    19.113153 |
-      cell_13 |         2790 |         2290 |    1.5068874 |   0.51123062 |    5.6564351 | 0.0006245978 |     86920.37 |    54.290272 |    15.164741 |     307.0894 |    7.7526801 |
-      cell_14 |         2551 |         2054 |    1.8610858 |    4.6472192 |    4.7833378 | 0.0004460092 |    75723.594 |     33.77342 |   0.86224326 |    161.54967 |    4.0070334 |
-      cell_15 |         2444 |         2115 |   0.41090845 |    2.5733674 |    5.4023727 |0.00019495513 |    76043.904 |     14.82515 |   0.81277393 |    80.090982 |    2.0915659 |
-      cell_16 |         2384 |         2062 |   0.26399497 |    2.5417539 |    4.3655345 |9.8758561e-05 |    73874.107 |    7.2957005 |   0.33836499 |    31.849632 |   0.86004053 |
-      cell_17 |         2297 |         1992 |   0.11402925 |   0.24715588 |    4.9252608 |5.1379661e-05 |    68884.257 |    3.5392498 |    1.8949357 |    17.431728 |   0.46834451 |
-      cell_18 |         2129 |         1752 |  0.046881882 |    2.9620442 |    4.6994834 |2.3875904e-05 |    64510.691 |     1.540251 |  0.067195389 |    7.2383842 |   0.19903571 |
+      cell_01 |         3002 |         1708 |    1284.6679 |    8.7118183 |    8.8702276 |    0.8454965 |    75447.709 |    63790.773 |    1497.7626 |    565838.68 |    13048.235 |
+      cell_02 |         3688 |         2467 |    974.22381 |    1.4334625 |    7.9415123 |   0.40995291 |    102815.16 |    42149.375 |    5412.2279 |    334729.78 |    7758.2259 |
+      cell_03 |         3828 |         2824 |    698.19838 |    7.1634401 |    7.2259885 |   0.23304681 |    112533.33 |    26225.533 |    603.31186 |     189505.4 |    4321.7884 |
+      cell_04 |         3939 |         3247 |     485.4315 |    6.4576728 |     6.776073 |   0.14036206 |    119311.44 |      16746.8 |    406.55352 |    113477.54 |    2625.3896 |
+      cell_05 |         3851 |         2845 |    253.24952 |    6.1146797 |    6.6657497 |  0.083880507 |    116556.28 |       9776.8 |    247.55974 |    65169.702 |    1513.7485 |
+      cell_06 |         3833 |         3157 |    170.99576 |     0.740334 |    6.6655073 |  0.048663394 |    117775.17 |    5731.3397 |    1215.6975 |    38202.287 |     900.0222 |
+      cell_07 |         3549 |         2766 |    85.657132 |   0.42363205 |    6.5715824 |   0.02747416 |       106908 |    2937.2076 |    1055.8347 |    19302.102 |     447.2854 |
+      cell_08 |         3458 |         2797 |    53.541318 |   0.17904501 |     6.038199 |  0.015888221 |    106991.68 |    1699.9074 |    1377.1759 |    10264.379 |    246.57648 |
+      cell_09 |         3421 |         2770 |    29.119572 |   0.53339804 |    5.7673264 |  0.008180117 |    104219.67 |     852.5291 |    220.69403 |    4916.8136 |    117.71776 |
+      cell_10 |         3366 |         2820 |    16.858846 |    5.7426249 |    5.4805101 |  0.005289571 |     106739.9 |     564.6083 |    12.767808 |    3094.3415 |    73.320733 |
+      cell_11 |         3133 |         2567 |    8.4128965 |    5.3275403 |    5.2339586 | 0.0023857032 |    99665.668 |    237.77271 |    5.5253653 |    1244.4925 |    29.436606 |
+      cell_12 |         2880 |         2328 |     2.567236 |    4.6061998 |    5.3655305 | 0.0012356429 |    89078.888 |    110.06969 |    3.0241533 |     590.5823 |    13.929855 |
+      cell_13 |         2868 |         2243 |     1.565554 |   0.80689318 |    5.5880021 |0.00061696333 |    89922.057 |    55.478612 |    8.5446573 |     310.0146 |    6.8946257 |
+      cell_14 |         2618 |         2120 |    2.4492562 |    3.7558208 |    2.1086857 |0.00094028283 |    82435.625 |    77.512802 |    0.9267636 |    163.45014 |     3.480758 |
+      cell_15 |         2432 |         2052 |   0.39941094 |    1.0280475 |    4.2971749 | 0.0002007583 |    75404.099 |    15.137999 |    1.6495713 |    65.050629 |    1.6958376 |
+      cell_16 |         2375 |         1907 |   0.15273509 |   0.31978776 |    5.3652341 | 7.438774e-05 |    73236.577 |    5.4479035 |    2.3603771 |    29.229277 |   0.75481971 |
+      cell_17 |         2302 |         1932 |   0.13609699 |    3.8242033 |    4.4465893 |4.3953406e-05 |    73351.895 |    3.2240656 |   0.10175254 |    14.336096 |   0.38912241 |
+      cell_18 |         2069 |         1609 |  0.053578711 |    3.7852265 |    3.7855859 |2.6612093e-05 |    65442.305 |    1.7415567 |  0.048270686 |    6.5928127 |   0.18271548 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 2471 for hit collection: PhantomSDPlus
+ Number of event processed : 2746 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |         2314 |         1779 |    1229.7937 |  0.056064129 |    8.2097766 |   0.76401646 |    63186.224 |    48275.315 |    162761.07 |    396329.55 |    9125.0577 |
-      cell_02 |         2635 |         2095 |    802.11029 |     7.274617 |    7.6074317 |   0.39082506 |    77427.503 |    30260.609 |    730.14426 |    230205.51 |    5311.5198 |
-      cell_03 |         2702 |         2081 |    455.58564 |   0.87341781 |    7.2536983 |   0.22615539 |    80868.095 |    18288.755 |     3535.934 |    132661.11 |    3088.3477 |
-      cell_04 |         2702 |         2268 |    312.28294 |   0.30329987 |    6.8207098 |   0.13141706 |    85706.975 |    11263.359 |    5894.1533 |      76824.1 |    1787.6959 |
-      cell_05 |         2707 |         2455 |     198.8712 |    6.1768054 |    6.5998946 |  0.079621101 |    84627.641 |    6738.1459 |    168.74136 |    44471.053 |    1042.2825 |
-      cell_06 |         2716 |         2307 |     119.5634 |    5.9082621 |    6.4847128 |  0.043476169 |    85138.975 |    3701.5165 |    95.750909 |    24003.271 |    565.72146 |
-      cell_07 |         2583 |         2384 |    58.391838 |     0.257344 |    6.1660552 |  0.024237589 |    81502.849 |    1975.4325 |    1127.8997 |    12180.626 |    290.25822 |
-      cell_08 |         2442 |         2368 |    34.156056 |    5.4953949 |    6.1789976 |  0.013938889 |    76539.895 |    1066.8811 |     28.60534 |    6592.2557 |    157.19764 |
-      cell_09 |         2337 |         1973 |    13.318012 |  0.084843017 |    6.2171598 | 0.0077928634 |    70806.139 |    551.78257 |    953.10762 |    3430.5204 |    80.864526 |
-      cell_10 |         2342 |         2144 |    11.049849 |    4.7980896 |    5.5116905 | 0.0051593696 |    72568.164 |    374.40598 |    9.8712802 |    2063.6099 |    47.363286 |
-      cell_11 |         2270 |         1912 |    5.1056562 |   0.30413142 |    5.3423954 | 0.0026223989 |    70697.367 |     185.3967 |    82.083206 |    990.46247 |    24.964082 |
-      cell_12 |         2133 |         1956 |    2.8530662 |    0.3598085 |    5.1354786 | 0.0014428136 |    66699.482 |     96.23492 |    34.961975 |    494.21237 |    12.579616 |
-      cell_13 |         2031 |         1842 |    1.5707202 |   0.62113701 |    4.9764143 |0.00069504201 |    62262.738 |    43.275219 |    8.7067138 |    215.35542 |    5.4080621 |
-      cell_14 |         1899 |         1852 |    1.0016127 |   0.55086426 |    5.0944879 |0.00038192225 |    59860.901 |     22.86221 |    5.2429876 |    116.47125 |    2.8881745 |
-      cell_15 |         1757 |         1672 |   0.51248101 |   0.94372316 |    5.0620218 |0.00022030075 |    55608.763 |    12.250652 |    1.7113285 |    62.013068 |    1.6150204 |
-      cell_16 |         1702 |         1519 |    0.1301459 |    3.8756162 |    4.7401433 |0.00010009205 |    52076.919 |    5.2124857 |   0.17016957 |     24.70793 |   0.65951195 |
-      cell_17 |         1668 |         1450 |  0.081363042 |   0.60800217 |    4.4765634 |4.6670648e-05 |    51648.195 |    2.4104547 |   0.48118664 |    10.790554 |   0.29256252 |
-      cell_18 |         1438 |         1316 |  0.028689635 |   0.10113562 |    5.0222286 |2.2659301e-05 |    44515.938 |       1.0087 |    1.2522293 |    5.0659223 |   0.12664499 |
+      cell_01 |         2535 |         1947 |    1312.5952 |  0.055700368 |    8.1791035 |   0.76975833 |    70429.629 |    54213.794 |    183801.72 |    443420.23 |    10237.823 |
+      cell_02 |         2883 |         2286 |    870.75417 |    7.2380382 |    7.4490675 |   0.39158912 |    85994.579 |    33674.541 |    800.16974 |    250843.93 |    5791.6592 |
+      cell_03 |         2979 |         2432 |    556.21426 |   0.35847569 |    7.0892987 |   0.21993992 |    87888.287 |    19330.142 |    8748.5214 |    137037.15 |    3136.1323 |
+      cell_04 |         2934 |         2420 |    317.20166 |    6.0312888 |    6.7488996 |   0.13143434 |    90014.898 |    11831.048 |    308.32348 |    79846.557 |    1859.5879 |
+      cell_05 |         2920 |         2332 |    208.64155 |  0.096588159 |    6.6536442 |  0.079721906 |    90016.198 |    7176.2628 |    11520.475 |      47748.3 |    1112.7415 |
+      cell_06 |         2721 |         2329 |    134.25266 |    5.4946844 |    6.2578826 |  0.048316228 |    81822.411 |    3953.3503 |    105.02681 |    24739.602 |    577.08915 |
+      cell_07 |         2637 |         2233 |     66.96993 |    5.5664333 |    5.9052006 |  0.026345663 |    80704.518 |     2126.214 |    53.770848 |    12555.721 |    299.31184 |
+      cell_08 |         2639 |         2107 |    30.111017 |   0.24781396 |    5.9818319 |  0.014103445 |    81373.501 |    1147.6467 |    660.52312 |    6865.0294 |    163.68685 |
+      cell_09 |         2551 |         2069 |     19.20164 |    1.2475413 |    5.4169953 |  0.008180489 |     79998.56 |    654.42734 |    68.520183 |    3545.0298 |    85.481759 |
+      cell_10 |         2491 |         1987 |    9.0227267 |   0.48406858 |    5.5844507 |  0.003807993 |    78811.869 |    300.11505 |    83.042926 |    1675.9777 |    40.198472 |
+      cell_11 |         2282 |         2045 |    8.1052898 |    5.1066116 |    4.8618284 | 0.0024793681 |    72112.078 |    178.79239 |    4.1112136 |    869.25791 |    20.994371 |
+      cell_12 |         2129 |         1726 |     2.458783 |    4.6739729 |    5.5682286 | 0.0011260195 |    64412.625 |    72.529869 |    1.9469693 |    403.86289 |    9.1000817 |
+      cell_13 |         2026 |         1790 |    3.3858121 |   0.33849593 |    3.2813363 | 0.0010601263 |     63134.21 |    66.930236 |    13.206657 |    219.62062 |    4.4703996 |
+      cell_14 |         1867 |         1485 |   0.48501839 |     4.211323 |    4.6620065 |0.00031711161 |    56948.515 |    18.059035 |   0.51595408 |     84.19134 |    2.1728493 |
+      cell_15 |         1780 |         1538 |   0.95610565 |  0.069860939 |    2.4195219 |0.00030536731 |    56061.798 |    17.119441 |    14.890847 |    41.420862 |    1.0402886 |
+      cell_16 |         1742 |         1487 |   0.10342029 |    4.2125742 |     5.435756 |6.8913547e-05 |    55614.756 |    3.8326101 |    0.1258956 |    20.833133 |   0.53034455 |
+      cell_17 |         1589 |         1281 |  0.062496098 |    4.0828596 |    4.5993121 |4.0089566e-05 |    49113.482 |    1.9689382 |  0.058550987 |    9.0557615 |   0.23905546 |
+      cell_18 |         1403 |         1067 |  0.042128417 |   0.89965638 |     3.502725 |2.3824685e-05 |    43025.387 |    1.0250663 |    0.1113904 |    3.5905253 |   0.10021309 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -1264,78 +1030,78 @@ Tst33TimedEventAction::CalculateFOM(): FOM:
     mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 17352 for hit collection: PhantomSD
+ Number of event processed : 18221 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |         1076 |            0 |            0 |    5.9309558 |    7.3799799 |     1.024553 |    330035.06 |    338138.41 |    11002.894 |    2495454.6 |    65257.681 |
-      cell_01 |        39937 |        10252 |     10396.87 |   0.97171281 |    9.3079902 |    1.0126032 |    941600.87 |    953468.01 |    216269.26 |    8874870.9 |    210151.61 |
-      cell_02 |        21475 |         8600 |    5851.6587 |   0.31089178 |    8.9194232 |   0.67928804 |    779975.58 |    529828.08 |    366075.35 |    4725760.9 |    113809.82 |
-      cell_03 |        15393 |         6674 |    2932.1267 |   0.32068056 |    8.6175805 |    0.4413444 |    590861.78 |    260773.54 |    171134.14 |      2247237 |    54879.392 |
-      cell_04 |        11888 |         5597 |    1449.5072 |  0.094828112 |    8.3472199 |   0.26311987 |    475484.59 |    125109.44 |    272455.26 |      1044316 |    25836.418 |
-      cell_05 |         8888 |         4392 |    644.82067 |      6.31127 |    8.1064735 |   0.14979178 |    376481.27 |    56393.797 |    1813.4728 |    457154.82 |    11445.317 |
-      cell_06 |         6847 |         3751 |    323.70012 |    5.8718304 |    7.7618506 |  0.085513466 |    307144.01 |    26264.949 |    885.85419 |    203864.61 |    5201.5856 |
-      cell_07 |         5311 |         3264 |    142.82053 |    5.8489179 |    7.5464588 |  0.045627908 |    252665.32 |     11528.59 |    384.31503 |    87000.028 |    2247.8271 |
-      cell_08 |         4017 |         2481 |    68.986191 |    5.1129565 |     7.118034 |  0.026011108 |    199608.35 |    5192.0345 |    191.14424 |    36957.078 |    977.31216 |
-      cell_09 |         3194 |         2270 |     30.15386 |   0.75760637 |     7.058482 |  0.013474196 |    176676.76 |    2380.5773 |    589.21318 |    16803.262 |    446.39165 |
-      cell_10 |         2463 |         2044 |    14.707736 |    2.1723559 |    6.6846116 |  0.007046538 |    153546.66 |    1081.9724 |    89.835859 |    7232.5649 |    195.15546 |
-      cell_11 |         1805 |         1631 |    5.7636849 |   0.45159787 |    6.6378194 | 0.0036450445 |    119757.58 |     436.5217 |    173.95374 |    2897.5522 |    78.557137 |
-      cell_12 |         1443 |         1506 |     2.602208 |    4.7475184 |    6.4234115 | 0.0018532877 |    107108.69 |    198.50322 |    7.4078497 |    1275.0679 |    35.168903 |
-      cell_13 |         1282 |         1350 |    1.2107554 |     4.804669 |    6.3881557 |0.00095011729 |    94784.341 |    90.056241 |     3.321437 |    575.29329 |    15.958405 |
-      cell_14 |         1057 |         1197 |   0.55969138 |    3.0214077 |    6.1206834 |0.00048782811 |     82995.51 |    40.487543 |    2.3106957 |    247.81143 |    6.9815538 |
-      cell_15 |          792 |         1058 |    0.2612676 |   0.19913155 |    6.0433796 |0.00024764635 |    68795.952 |    17.037066 |    14.631063 |    102.96146 |    2.9135062 |
-      cell_16 |          569 |          924 |   0.11754975 |  0.085242918 |    5.5417721 |0.00012174231 |    58607.135 |    7.1349678 |    13.568389 |    39.540366 |     1.156609 |
-      cell_17 |          511 |          802 |  0.053481151 |    4.1924008 |     5.526552 |6.8102354e-05 |    53806.346 |    3.6643388 |    0.1430364 |    20.251159 |   0.59966591 |
-      cell_18 |          392 |          691 |  0.023766301 |    4.3030116 |    5.5383582 |3.5603739e-05 |    44773.879 |    1.5941175 |  0.061136479 |    8.8287938 |   0.26307098 |
-      cell_19 |          185 |            0 |            0 |    4.2457445 |    5.8009306 |3.0025861e-05 |    38681.591 |    1.1614481 |  0.046149095 |    6.7374798 |   0.19593727 |
+      cell_00 |         1075 |            0 |            0 |    5.9227879 |    7.5313163 |    1.0278453 |     314846.4 |    323613.39 |    10696.296 |    2437234.8 |    63351.894 |
+      cell_01 |        42146 |        10646 |    10779.192 |   0.19636501 |    9.3457645 |    1.0109451 |    989056.51 |    999881.83 |    1125017.6 |    9344660.1 |     220914.1 |
+      cell_02 |        22758 |         9205 |    6241.8867 |   0.32537698 |    8.9417985 |   0.67842721 |    821478.49 |    557313.36 |    368407.34 |    4983383.8 |    119871.27 |
+      cell_03 |        16025 |         7104 |    3075.5106 |   0.37182674 |    8.6241451 |   0.43591012 |    621192.05 |     270783.9 |       153351 |    2335279.6 |    57020.002 |
+      cell_04 |        11976 |         5711 |    1482.2418 |   0.22562302 |    8.3367576 |   0.26012466 |    485634.28 |    126325.45 |    115599.92 |    1053144.7 |    26082.002 |
+      cell_05 |         8972 |         4612 |    688.62528 |    2.1723367 |    8.0884494 |   0.15211431 |     387001.1 |    58868.405 |    5497.8375 |    476154.11 |    11943.154 |
+      cell_06 |         6784 |         3762 |    302.20011 |    4.2247864 |    7.9053178 |  0.084937819 |    307338.63 |    26104.673 |    1238.5812 |    206365.74 |    5232.7411 |
+      cell_07 |         5228 |         3145 |    146.04347 |   0.98831969 |    7.4299404 |  0.047351483 |    252660.57 |    11963.853 |    2334.0737 |    88890.714 |     2306.811 |
+      cell_08 |         4070 |         2570 |    64.432231 |    5.8773126 |    7.4182529 |  0.025646702 |    198927.83 |    5101.8426 |    167.34768 |    37846.759 |    983.55463 |
+      cell_09 |         3154 |         2289 |    30.041923 |  0.082498482 |    7.1703091 |  0.013354383 |    175357.59 |    2341.7925 |    5367.8503 |    16791.376 |     442.8395 |
+      cell_10 |         2359 |         1832 |    13.055126 |   0.26793756 |    7.1521006 | 0.0072343939 |    140018.26 |    1012.9473 |    713.49511 |    7244.7008 |    191.17214 |
+      cell_11 |         1869 |         1639 |    6.0702448 |    5.3510042 |    6.7952878 | 0.0039439009 |    119786.77 |    472.42715 |     16.19254 |    3210.2785 |    86.646352 |
+      cell_12 |         1497 |         1421 |     2.872595 |   0.75533499 |    6.6253699 | 0.0021354147 |    103446.38 |    220.90093 |    52.882775 |    1463.5503 |     39.94421 |
+      cell_13 |         1164 |         1228 |    1.2128702 |    5.2573094 |     6.526939 | 0.0010473453 |    88583.459 |    92.777469 |     3.172319 |    605.55288 |    16.677863 |
+      cell_14 |          952 |         1057 |   0.53404425 |    0.2298167 |    6.2688173 |0.00055235347 |    75548.759 |    41.729619 |    32.069285 |    261.59536 |    7.3700572 |
+      cell_15 |          835 |         1031 |   0.30235529 |    4.9010855 |    5.8704113 |0.00030232678 |    74816.126 |    22.618918 |   0.78877282 |    132.78235 |     3.865843 |
+      cell_16 |          729 |          885 |   0.13589979 |   0.40861634 |    5.6895899 |0.00015185026 |    61171.625 |     9.288927 |    3.8078543 |    52.850185 |    1.5559515 |
+      cell_17 |          564 |          741 |  0.051713671 |    4.2617348 |    5.5555534 |6.9240678e-05 |    54061.017 |    3.7432215 |   0.14503614 |    20.795667 |   0.61810555 |
+      cell_18 |          474 |          666 |  0.023561191 |    4.2919314 |    5.3442763 |3.4567484e-05 |    50176.298 |    1.7344684 |  0.065282439 |    9.2694784 |   0.28018775 |
+      cell_19 |          246 |            0 |            0 |    4.4477428 |    5.4722397 |3.3108797e-05 |    49949.586 |    1.6537707 |  0.060841455 |    9.0498298 |   0.27060714 |
 =============================================
 =============================================================
- Number of event processed : 17352 for hit collection: PhantomSDMinus
+ Number of event processed : 18221 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        16288 |         9395 |    9135.2337 |    1.9290553 |    8.7764049 |    0.9927436 |     395070.4 |    392203.61 |    40942.071 |    3442137.7 |     78979.52 |
-      cell_02 |        12775 |         9298 |    6436.5935 |     5.389561 |    7.9911249 |   0.68204939 |    352153.68 |     240186.2 |    8207.0547 |    1919357.9 |    44232.422 |
-      cell_03 |         9235 |         6937 |    3376.2057 |    7.4598913 |    7.3601665 |   0.46348734 |    264836.04 |    122748.15 |    2791.5853 |    903446.85 |    20824.923 |
-      cell_04 |         7133 |         5820 |    2018.8416 |   0.25081396 |    6.8042784 |   0.29767725 |    210971.85 |    62801.519 |    39214.058 |    427319.02 |    9835.4331 |
-      cell_05 |         5340 |         4568 |    970.63175 |    6.1484177 |    6.1403412 |   0.18479087 |    162412.71 |    30012.386 |    677.60594 |    184286.29 |    4166.2044 |
-      cell_06 |         4002 |         3354 |    460.65953 |    6.0902092 |    6.0478668 |     0.110753 |    122800.56 |    13600.531 |    308.61479 |    82254.199 |    1879.5286 |
-      cell_07 |         3129 |         2595 |    214.61838 |     5.760895 |    5.3562293 |  0.061696478 |    95777.923 |    5909.1605 |    122.44787 |    31650.818 |    705.40931 |
-      cell_08 |         2294 |         1841 |    92.734619 |    5.9453397 |    4.9085253 |  0.038041943 |    69973.766 |     2661.938 |     48.79345 |     13066.19 |    290.09363 |
-      cell_09 |         1763 |         1424 |    46.280792 |   0.20997559 |    5.1649727 |  0.018158534 |    54094.064 |    982.26889 |    534.21671 |     5073.392 |    112.17247 |
-      cell_10 |         1340 |         1164 |    43.416536 |    4.9569501 |    3.4764286 |  0.014572505 |    42473.689 |    618.94807 |      9.26687 |    2151.7288 |    45.935412 |
-      cell_11 |          914 |          713 |    19.337721 |    4.1250729 |    3.1505542 | 0.0077311004 |    26762.899 |    206.90666 |    3.5275168 |    651.87064 |    14.551264 |
-      cell_12 |          724 |          604 |     2.388078 |  0.084492411 |    4.3770056 | 0.0029868349 |    22679.852 |    67.740974 |    83.307747 |    296.50262 |    7.0388724 |
-      cell_13 |          640 |          540 |    2.1060267 |    5.2978309 |    4.6253934 | 0.0017183121 |    19130.188 |    32.871634 |   0.65203922 |    152.04424 |    3.4543935 |
-      cell_14 |          509 |          474 |    2.1206722 |    1.1457828 |    2.3011505 | 0.0017311164 |    15583.685 |    26.977172 |    1.0972136 |    62.078534 |    1.2571685 |
-      cell_15 |          380 |          392 |   0.18199767 |    4.4464331 |    4.1590458 |0.00032445324 |    12776.167 |    4.1452687 |  0.096241268 |    17.240362 |   0.42793036 |
-      cell_16 |          249 |          265 |  0.092519004 |    3.5493218 |    3.4483743 |0.00017869591 |    7295.1754 |     1.303618 |   0.02867116 |    4.4953628 |   0.10176317 |
-      cell_17 |          213 |          173 | 0.0092320341 |    4.2425643 |    5.6194629 |5.0833345e-05 |    6915.8956 |   0.35155811 |  0.012437887 |    1.9755678 |  0.052768535 |
-      cell_18 |          161 |          130 | 0.0032752476 |     4.073297 |    5.2705656 |2.6926119e-05 |    5158.8085 |   0.13890669 |  0.005012084 |   0.73211684 |  0.020415707 |
+      cell_01 |        17183 |         9001 |    8736.9369 |   0.99421938 |    8.8358125 |   0.99311309 |    414882.42 |    412025.17 |    84008.575 |    3640577.1 |    83522.953 |
+      cell_02 |        13552 |         9004 |    6286.6874 |   0.28849747 |    7.9485225 |   0.68268586 |    376680.01 |    257154.12 |     163066.7 |    2043995.3 |     47044.33 |
+      cell_03 |         9692 |         6625 |    3222.0443 |   0.62081186 |    7.4858924 |   0.45731358 |    279792.33 |    127952.83 |    35427.751 |    957841.15 |    21993.968 |
+      cell_04 |         7211 |         5797 |    1945.3712 |  0.091319105 |    6.8486635 |   0.29073845 |    218887.57 |    63639.033 |    109599.35 |    435842.32 |    10008.515 |
+      cell_05 |         5424 |         4336 |     971.7107 |   0.13877712 |    6.1910504 |   0.18703245 |    168219.77 |    31462.555 |    32011.333 |    194786.27 |    4442.4406 |
+      cell_06 |         4001 |         3163 |    427.55895 |    1.0255317 |    6.0665265 |   0.10596424 |    122808.59 |    13013.319 |    1736.9905 |    78945.642 |    1781.3389 |
+      cell_07 |         3067 |         2483 |    216.39206 |     5.947405 |    5.3165639 |  0.065052017 |    94520.451 |     6148.746 |    122.53668 |    32690.201 |    728.77529 |
+      cell_08 |         2347 |         1808 |    108.41546 |    5.9234291 |    5.1141724 |  0.036826693 |     73036.21 |    2689.6821 |    49.678922 |    13755.498 |    294.26958 |
+      cell_09 |         1780 |         1379 |    54.472222 |    5.5284377 |    3.9263898 |  0.024894072 |    53627.509 |    1335.0071 |    19.540573 |    5241.7581 |    108.02884 |
+      cell_10 |         1329 |         1138 |    32.835659 |   0.14335745 |    3.1252927 |  0.016377883 |    42290.415 |    692.62748 |    295.22144 |    2164.6636 |    42.322191 |
+      cell_11 |          993 |          755 |    14.811117 |    4.8703184 |    3.0554028 | 0.0098683598 |    31260.883 |    308.49364 |    3.5423717 |    942.57232 |    17.252478 |
+      cell_12 |          791 |          713 |    4.2571473 |    4.2332775 |    4.0121317 | 0.0042387957 |    25294.271 |    107.21725 |    1.5838009 |    430.16971 |    6.7046689 |
+      cell_13 |          578 |          431 |    2.3044147 |    3.9823139 |    2.7420006 | 0.0031897519 |    18083.918 |    57.683213 |   0.61245791 |    158.16741 |    2.4389996 |
+      cell_14 |          448 |          429 |    3.9320986 |    3.0835467 |    1.3352155 |  0.003678377 |    13151.457 |    48.376017 |   0.33216019 |    64.592409 |    1.0242315 |
+      cell_15 |          373 |          303 |    0.1495266 |    4.8363397 |    4.2129524 | 0.0003599128 |    10769.792 |     3.876186 |   0.08934459 |    16.330187 |   0.43210079 |
+      cell_16 |          323 |          217 |  0.032486509 |    4.6385106 |    5.1109803 | 0.0001560951 |     9664.851 |    1.5086359 |  0.043799477 |    7.7106083 |   0.20316434 |
+      cell_17 |          242 |          180 |  0.011858142 |    4.8902913 |     5.589924 |7.8795989e-05 |    7678.2425 |   0.60501471 |  0.016812618 |    3.3819863 |  0.082218599 |
+      cell_18 |          207 |          167 |  0.014482626 |    5.0236496 |    4.3398536 |4.8250348e-05 |    6664.7362 |   0.32157584 | 0.0067673582 |     1.395592 |  0.033996836 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 17352 for hit collection: PhantomSDPlus
+ Number of event processed : 18221 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        11985 |         8319 |    7896.1504 |   0.41639834 |    8.2737723 |   0.98550908 |    318648.65 |    314031.14 |    143562.15 |    2598222.1 |    59779.043 |
-      cell_02 |         8891 |         6788 |    4493.3394 |   0.73562936 |    7.6723852 |    0.6754949 |    255337.46 |    172479.15 |    41181.077 |    1323326.5 |     30294.01 |
-      cell_03 |         6578 |         5427 |    2513.7783 |   0.29715383 |    7.0698168 |   0.45138295 |    194455.92 |    87774.087 |     48269.95 |    620546.71 |    14343.601 |
-      cell_04 |         4893 |         3994 |    1306.7003 |   0.56635131 |    6.7111642 |    0.2862911 |    147906.41 |    42344.289 |    11455.783 |    284179.48 |    6487.9978 |
-      cell_05 |         3735 |         3065 |    676.64535 |    5.7704515 |    5.9543871 |   0.17981413 |    111564.12 |    20060.805 |    472.39322 |     119449.8 |    2725.9222 |
-      cell_06 |         2850 |         2398 |    292.54164 |    5.7858382 |    5.6542188 |   0.10438283 |    86443.543 |    9023.2215 |    197.46904 |    51019.269 |    1142.5239 |
-      cell_07 |         2132 |         1942 |    150.43172 |    5.6357903 |    5.0834055 |  0.061726524 |    66782.599 |    4122.2577 |    83.251071 |    20955.107 |    469.18557 |
-      cell_08 |         1599 |         1309 |    56.967595 |    5.7513155 |    4.7355117 |  0.035640063 |    48530.567 |    1729.6325 |    31.410983 |    8190.6949 |    180.65447 |
-      cell_09 |         1194 |         1000 |    32.030021 |    5.4115134 |    4.1943161 |  0.022966065 |    36398.905 |    835.93963 |    13.614911 |    3506.1951 |    73.677274 |
-      cell_10 |          885 |          695 |    15.850168 |   0.33625821 |     3.156662 |  0.014797924 |    26471.946 |    391.72985 |    81.621708 |    1236.5587 |    27.445969 |
-      cell_11 |          655 |          642 |    9.4794812 |    4.4017591 |    3.1171131 | 0.0076812028 |    19524.395 |    149.97084 |    2.3785768 |    467.47607 |    10.469922 |
-      cell_12 |          514 |          415 |    1.3101929 |    5.1093057 |    4.2502748 | 0.0030963343 |    15314.598 |    47.419115 |    0.8744767 |    201.54427 |    4.4679687 |
-      cell_13 |          448 |          384 |   0.85078921 |    3.9261733 |    3.5697715 | 0.0018679907 |    14174.897 |    26.478577 |   0.53576593 |    94.522471 |    2.1035099 |
-      cell_14 |          338 |          311 |   0.64005515 |    4.1607746 |    3.4768096 |0.00086895691 |    10669.613 |    9.2714341 |   0.17219487 |    32.235011 |   0.71646406 |
-      cell_15 |          251 |          219 |  0.062457809 |    3.4193762 |    4.7928259 |0.00025739102 |    8406.5049 |    2.1637588 |  0.068707059 |    10.370519 |   0.23493528 |
-      cell_16 |          179 |          171 |  0.028056906 |    3.4237534 |     4.479264 |0.00011175635 |    5745.5808 |   0.64210515 |  0.020517883 |    2.8761585 |  0.070248173 |
-      cell_17 |          139 |          101 |  0.004068483 |    4.2999056 |     5.827333 |4.6923417e-05 |     4551.913 |   0.21359132 | 0.0079565367 |    1.2446677 |  0.034212357 |
-      cell_18 |          111 |           77 |  0.005538174 |      3.44845 |    3.6776171 |3.1246764e-05 |    3179.2895 |  0.099342508 | 0.0026838729 |   0.36534371 | 0.0092552016 |
+      cell_01 |        12650 |         7899 |    7469.7285 |   0.60471878 |    8.4028819 |    0.9867171 |    333573.84 |    329143.02 |    104880.03 |    2765749.9 |    63422.926 |
+      cell_02 |         9510 |         6895 |    4660.9554 |    1.2977528 |    7.6255208 |   0.67612924 |    274945.94 |    185898.99 |    25076.865 |    1417576.6 |    32543.572 |
+      cell_03 |         6801 |         5275 |    2448.0088 |   0.32794284 |    7.1302673 |   0.44237977 |    202957.49 |    89784.287 |    44556.186 |    640185.97 |    14611.882 |
+      cell_04 |         4998 |         3753 |    1183.1713 |    6.7121234 |    6.6110213 |   0.28861724 |    147453.63 |    42557.659 |    955.01482 |    281349.59 |    6410.1773 |
+      cell_05 |         3700 |         3229 |    629.06627 |    6.3894729 |    6.2211035 |   0.16871044 |    113165.17 |    19092.145 |    418.72031 |    118774.21 |    2675.4021 |
+      cell_06 |         2855 |         2631 |    344.58509 |    6.3111179 |    5.7760657 |   0.10312244 |    87438.657 |    9016.8879 |    183.36239 |    52082.137 |    1157.2216 |
+      cell_07 |         2153 |         1863 |    150.92729 |    6.0944584 |    5.2765175 |  0.061829192 |    64883.006 |    4011.6638 |    77.095001 |    21167.614 |    469.85228 |
+      cell_08 |         1625 |         1384 |    77.830893 |    6.0438501 |    4.4651825 |  0.040204281 |    50224.779 |    2019.2511 |    31.836385 |    9016.3249 |    192.41434 |
+      cell_09 |         1252 |         1023 |    43.734848 |  0.044183166 |    3.5071959 |  0.025904319 |    38846.257 |    1006.2859 |    1623.8252 |    3529.2416 |    71.745739 |
+      cell_10 |          902 |          752 |    20.104322 |    5.2378482 |    3.1857526 |  0.015476925 |    27986.537 |    433.14552 |    5.1483908 |    1379.8945 |    26.966489 |
+      cell_11 |          704 |          613 |     11.14861 |    4.6684833 |    3.2898154 | 0.0084341907 |     22993.74 |    193.93358 |     2.396751 |    638.00568 |    11.189192 |
+      cell_12 |          545 |          503 |    7.7329003 |  0.085599306 |    2.4287118 | 0.0060728201 |    16188.919 |     98.31239 |     45.57107 |    238.77246 |     3.900852 |
+      cell_13 |          397 |          325 |    2.8253105 |    4.0402457 |    2.2696764 | 0.0036431393 |    11886.012 |    43.302399 |   0.39280996 |    98.282434 |    1.5870487 |
+      cell_14 |          322 |          322 |    0.7657556 |    5.1132512 |    4.0556017 |  0.000711952 |    10278.682 |    7.3179279 |   0.14217136 |    29.678601 |    0.7269579 |
+      cell_15 |          268 |          260 |  0.052303713 |    5.0130971 |     5.206712 |0.00027288038 |    8369.6934 |    2.2839251 |  0.062949478 |     11.89174 |   0.31557185 |
+      cell_16 |          218 |          206 |  0.050078058 |    4.7499802 |    4.9143625 |0.00016923615 |    7266.6173 |    1.2297743 |  0.033768801 |    6.0435568 |   0.16040114 |
+      cell_17 |          174 |          166 |  0.016984823 |    5.2906627 |    4.7087339 |8.7527686e-05 |    5797.5156 |   0.50744312 |  0.010540131 |    2.3894146 |  0.055764278 |
+      cell_18 |          132 |          132 | 0.0034585564 |    4.8937837 |    5.0769538 |3.5592884e-05 |    4053.3649 |   0.14427095 | 0.0037175474 |   0.73245694 |  0.018192873 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -1624,83 +1390,83 @@ DoIt Vector:
 ++ PhantomSDPlus/SLW_V id 28
 ++ PhantomSDPlus/SLWE_V id 31
 ### Run 2 start.
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1004 (mu)seconds
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1008 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1004, n= 0
+    mean= 0, error= -1, fom*time= 0, time= 1008, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 800 for hit collection: PhantomSD
+ Number of event processed : 814 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |           58 |            0 |            0 |    5.9058918 |    7.1548485 |            1 |    16518.654 |    16518.654 |    530.50133 |    118188.47 |    3133.0835 |
-      cell_01 |         2279 |          657 |          657 |   0.10067916 |    9.0091782 |            1 |    57453.634 |    57453.634 |    123030.86 |    517610.03 |    12386.643 |
-      cell_02 |         2474 |          936 |          468 |    7.2543312 |    8.4781113 |          0.5 |    86275.159 |     43137.58 |    1237.7951 |     365725.2 |    8979.3753 |
-      cell_03 |         3043 |         1316 |          329 |  0.095088779 |    8.1930759 |         0.25 |    111017.93 |    27754.483 |    59371.321 |    227394.59 |    5645.5464 |
-      cell_04 |         3621 |         1807 |      225.875 |   0.10414639 |    7.7187514 |        0.125 |    140271.57 |    17533.946 |    32901.523 |    135340.17 |     3426.575 |
-      cell_05 |         4001 |         2044 |       127.75 |   0.17942559 |    7.4165432 |       0.0625 |    160053.43 |    10003.339 |    10668.447 |    74190.199 |    1914.1924 |
-      cell_06 |         4467 |         2570 |      80.3125 |    5.1821673 |    7.0387028 |      0.03125 |     192644.9 |    6020.1533 |    215.23678 |     42374.07 |     1115.393 |
-      cell_07 |         4824 |         3001 |    46.890625 |   0.67564392 |    6.9376892 |     0.015625 |    225563.46 |     3524.429 |     961.5729 |    24451.393 |    649.68088 |
-      cell_08 |         5253 |         3725 |    29.101562 |   0.74767732 |    6.5575464 |    0.0078125 |    267712.65 |    2091.5051 |    498.08416 |    13715.142 |    372.40623 |
-      cell_09 |         5806 |         4287 |    16.746094 |    3.9763356 |    6.2721128 |   0.00390625 |     306334.6 |    1196.6195 |    52.298142 |    7505.3327 |    207.95496 |
-      cell_10 |         6327 |         5132 |    10.023438 |    0.7209021 |    6.0197448 |  0.001953125 |    364153.68 |    711.23765 |    167.56112 |    4281.4691 |    120.79516 |
-      cell_11 |         6872 |         5986 |    5.8457031 |    0.2207112 |    5.7364103 | 0.0009765625 |    403223.71 |    393.77315 |    294.08502 |    2258.8444 |    64.907859 |
-      cell_12 |         7412 |         7181 |    3.5063477 |   0.55749603 |    5.3981379 |0.00048828125 |    465880.54 |    227.48073 |    64.799548 |    1227.9724 |    36.125491 |
-      cell_13 |         7876 |         8464 |    2.0664062 |   0.30460782 |     5.085697 |0.00024414062 |    520078.52 |     126.9723 |    64.060593 |    645.74262 |    19.513358 |
-      cell_14 |         8634 |         9717 |    1.1861572 |   0.16251607 |    4.8826644 |0.00012207031 |    589299.39 |    71.935961 |    66.513235 |    351.23916 |     10.80947 |
-      cell_15 |         9325 |        10920 |   0.66650391 |    0.4338619 |    4.7142665 |6.1035156e-05 |    652812.22 |    39.844496 |     13.53774 |    187.83757 |    5.8735095 |
-      cell_16 |         9945 |        12430 |    0.3793335 |   0.42797214 |    4.4884622 |3.0517578e-05 |    730255.19 |     22.28562 |    7.4606094 |    100.02816 |     3.192933 |
-      cell_17 |        10726 |        14047 |   0.21434021 |   0.13590929 |    4.3162627 |1.5258789e-05 |    805698.62 |    12.293985 |    12.674448 |    53.064071 |    1.7225752 |
-      cell_18 |        10648 |        14609 |   0.11145782 |   0.62290313 |    4.2135281 |7.6293945e-06 |    831428.04 |    6.3432925 |    1.4061978 |    26.727642 |   0.87592498 |
-      cell_19 |         4275 |            0 |            0 |    2.6894894 |    4.4023945 |7.6293945e-06 |    917325.56 |    6.9986386 |   0.36724735 |    30.810768 |   0.98770787 |
+      cell_00 |          105 |            0 |            0 |    6.1849343 |    7.0868354 |            1 |    29984.047 |    29984.047 |    919.50109 |    212492.01 |    5687.0539 |
+      cell_01 |         2335 |          577 |          577 |    8.1502108 |    9.0671652 |            1 |    56501.312 |    56501.312 |    1501.9697 |    512306.73 |    12241.369 |
+      cell_02 |         2424 |         1017 |        508.5 |     6.583981 |    8.4533769 |          0.5 |    84724.213 |    42362.106 |    1331.2356 |    358102.85 |    8764.8302 |
+      cell_03 |         2965 |         1328 |          332 |    5.0442693 |    8.1423004 |         0.25 |    108180.95 |    27045.238 |    1081.5295 |    220210.45 |    5455.5258 |
+      cell_04 |         3498 |         1734 |       216.75 |    5.7702272 |    7.7923502 |        0.125 |    137501.74 |    17187.717 |    586.18388 |    133932.71 |    3382.4142 |
+      cell_05 |         3936 |         2112 |          132 |   0.40699115 |    7.3752678 |       0.0625 |    165766.21 |    10360.388 |    4850.9127 |    76410.636 |    1974.2786 |
+      cell_06 |         4476 |         2879 |     89.96875 |   0.58287456 |    6.8529515 |      0.03125 |    195254.17 |    6101.6927 |     1905.536 |    41814.604 |    1110.6885 |
+      cell_07 |         4937 |         3224 |       50.375 |   0.16708217 |    6.5945032 |     0.015625 |    229107.15 |    3579.7993 |    3803.1875 |    23606.998 |    635.44481 |
+      cell_08 |         5448 |         3858 |    30.140625 |   0.55003495 |    6.2428767 |    0.0078125 |    265967.28 |    2077.8694 |    648.74941 |    12971.882 |    356.83485 |
+      cell_09 |         5900 |         4561 |    17.816406 |   0.66085425 |    6.0128503 |   0.00390625 |    303838.35 |    1186.8686 |    301.22809 |     7136.463 |    199.06786 |
+      cell_10 |         6525 |         5895 |    11.513672 |    1.5152071 |    5.5714701 |  0.001953125 |    366893.96 |    716.58976 |    75.593923 |    3992.4584 |    114.54045 |
+      cell_11 |         7020 |         7035 |    6.8701172 |    1.4193339 |    5.2327488 | 0.0009765625 |    422164.21 |    412.26973 |    44.728845 |     2157.304 |    63.485167 |
+      cell_12 |         7581 |         8240 |    4.0234375 |    0.1993646 |    4.9262767 |0.00048828125 |     486227.9 |    237.41596 |    177.58074 |    1169.5767 |    35.403312 |
+      cell_13 |         8077 |         9289 |    2.2678223 |   0.27146547 |    4.7659336 |0.00024414062 |     535771.4 |    130.80356 |    70.519395 |     623.4011 |     19.14358 |
+      cell_14 |         8611 |        10737 |    1.3106689 |   0.49502664 |    4.5776928 |0.00012207031 |    610710.55 |    74.549628 |    21.547058 |    341.26529 |    10.666368 |
+      cell_15 |         9388 |        12238 |   0.74694824 |   0.21044706 |    4.3419774 |6.1035156e-05 |    677812.13 |    41.370369 |    27.248538 |    179.62921 |    5.7343747 |
+      cell_16 |        10427 |        14655 |   0.44723511 |   0.55552723 |    4.1123982 |3.0517578e-05 |    786490.08 |    24.001772 |    5.8031532 |    98.704845 |    3.2238096 |
+      cell_17 |        11154 |        16117 |    0.2459259 |   0.54442256 |    4.0370574 |1.5258789e-05 |     866000.3 |    13.214116 |    3.2342838 |    53.346145 |     1.760817 |
+      cell_18 |        11310 |        16637 |   0.12693024 |   0.26842091 |    3.9252926 |7.6293945e-06 |    889021.84 |    6.7826984 |    3.3161197 |    26.624075 |   0.89011588 |
+      cell_19 |         4556 |            0 |            0 |   0.15508784 |    3.9822577 |7.6293945e-06 |    958023.53 |    7.3091395 |    6.1946921 |    29.106877 |   0.96072142 |
 =============================================
 =============================================================
- Number of event processed : 800 for hit collection: PhantomSDMinus
+ Number of event processed : 814 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |          898 |          633 |    507.40625 |     7.279086 |    8.4837987 |   0.93429936 |    23649.842 |    22096.032 |    599.18992 |    187458.29 |    4361.5549 |
-      cell_02 |         1276 |         1097 |    512.92188 |   0.03721627 |    7.5460327 |   0.48436459 |    37141.315 |    17989.938 |    86191.231 |    135752.66 |    3207.7161 |
-      cell_03 |         1525 |         1116 |    287.83716 |    7.0458196 |     7.459351 |   0.25335676 |    43999.223 |      11147.5 |    278.98949 |    83153.119 |    1965.7096 |
-      cell_04 |         1854 |         1443 |    200.11963 |    6.3682701 |    7.0737762 |   0.13004396 |    56741.826 |    7378.9318 |    196.82865 |    52196.912 |     1253.458 |
-      cell_05 |         2068 |         1691 |    121.69141 |    6.2166443 |    6.7049475 |  0.066345558 |    61386.799 |    4072.7414 |    105.67627 |    27307.518 |    656.95178 |
-      cell_06 |         2190 |         1665 |    54.916504 |    5.8615054 |    6.6534834 |  0.033503275 |     67241.61 |    2252.8141 |    60.924531 |    14989.061 |    357.10947 |
-      cell_07 |         2480 |         1967 |    41.476562 |    5.3771821 |    5.8035631 |  0.018508479 |    74958.742 |    1387.3723 |    35.622253 |    8051.7027 |    191.54734 |
-      cell_08 |         2595 |         2140 |     21.71875 |   0.60718788 |    5.6660286 | 0.0092620336 |    82959.889 |    768.37728 |    174.24432 |    4353.6476 |    105.79904 |
-      cell_09 |         2858 |         2419 |     11.85321 |   0.41805228 |    5.6382555 | 0.0045323474 |    89752.714 |    406.79048 |    133.18144 |    2293.5887 |    55.676803 |
-      cell_10 |         3051 |         2781 |    9.3623352 |   0.10573332 |    5.0938606 | 0.0025658246 |    93639.481 |    240.26249 |    273.91182 |    1223.8636 |    28.961607 |
-      cell_11 |         3221 |         2858 |    5.7813721 |   0.36528375 |    4.6738608 | 0.0013379089 |     101993.4 |    136.45788 |    42.102906 |    637.78513 |    15.379507 |
-      cell_12 |         3375 |         2887 |    3.1357498 |   0.24841163 |    4.3554227 |0.00067382241 |    106000.51 |     71.42552 |    32.165509 |    311.08833 |    7.9902864 |
-      cell_13 |         3479 |         3177 |    1.2447891 |    3.9710607 |    4.7794988 | 0.0002940421 |    108761.06 |    31.980331 |    0.9850838 |    152.84995 |    3.9118276 |
-      cell_14 |         3770 |         3286 |   0.55008698 |   0.15764371 |    4.4496408 |0.00015649089 |    117926.98 |    18.454498 |    13.436943 |    82.115887 |    2.1182495 |
-      cell_15 |         3999 |         3426 |   0.27518463 |    3.3676204 |    4.1710064 |8.1313572e-05 |    125998.15 |    10.245359 |   0.33168282 |     42.73346 |    1.1169818 |
-      cell_16 |         4186 |         3827 |   0.29191589 |   0.28436879 |    2.8147308 |6.3605511e-05 |    130753.66 |    8.3166532 |    1.9923439 |     23.40914 |   0.56656044 |
-      cell_17 |         4397 |         3994 |    0.2073822 |   0.13003754 |    2.8775595 |2.7055107e-05 |    134763.82 |    3.6460494 |    2.2295068 |    10.491724 |   0.28991959 |
-      cell_18 |         4470 |         3930 |  0.038848877 |   0.85560298 |    4.1284182 |8.8457466e-06 |    138408.74 |    1.2243286 |   0.17004103 |    5.0545407 |   0.14548761 |
+      cell_01 |          943 |          575 |    512.64062 |  0.043757794 |    8.5465363 |   0.95165465 |    24362.492 |    23184.679 |     104580.1 |     198148.7 |    4576.1944 |
+      cell_02 |         1264 |          871 |      417.625 |    7.2070354 |    7.6962096 |   0.48811849 |    36241.649 |    17690.219 |    441.09092 |    136147.64 |    3178.9579 |
+      cell_03 |         1539 |         1246 |     334.4375 |  0.098968992 |    6.9726356 |   0.26080169 |    46080.027 |    12017.749 |    19462.895 |    83795.383 |    1926.2231 |
+      cell_04 |         1795 |         1323 |    187.16797 |    6.1565266 |    6.9153017 |   0.13350455 |    54474.845 |      7272.64 |    193.08783 |      50292.5 |    1188.7504 |
+      cell_05 |         1969 |         1551 |    125.77344 |    5.7897412 |    6.7766092 |  0.067673207 |    60294.585 |    4080.3279 |    113.18634 |    27650.788 |    655.31964 |
+      cell_06 |         2244 |         1867 |    67.456635 |   0.30124111 |    6.3025002 |  0.033437827 |    71645.253 |    2395.6616 |    1207.0368 |    15098.658 |    363.60909 |
+      cell_07 |         2413 |         1796 |    34.064697 |   0.24342427 |    6.4561129 |  0.016707149 |    72169.793 |    1205.7515 |    788.58501 |    7784.4676 |    191.96073 |
+      cell_08 |         2651 |         2074 |    19.516846 |   0.30917711 |     5.830933 | 0.0085247526 |    80917.041 |    689.79775 |    329.70471 |    4022.1645 |    101.93715 |
+      cell_09 |         2884 |         2478 |    11.524597 |   0.10148875 |    5.6870063 | 0.0041527467 |    87523.385 |    363.46245 |     517.8815 |    2067.0133 |    52.559144 |
+      cell_10 |         3057 |         2484 |    5.8492432 |    3.9444773 |    5.5038381 |  0.002109315 |    94256.731 |    198.81714 |    7.1363556 |    1094.2574 |    28.149193 |
+      cell_11 |         3236 |         2780 |    2.9285278 |    3.6542376 |      5.04771 | 0.0010731308 |    99726.332 |     107.0194 |    3.8958511 |    540.20289 |    14.236365 |
+      cell_12 |         3438 |         2925 |     1.832489 |   0.16001947 |    4.4944748 |0.00056427479 |    107604.94 |    60.718753 |    46.277609 |     272.8989 |    7.4053184 |
+      cell_13 |         3551 |         3069 |   0.90079498 |    3.2211694 |    4.6769949 |0.00026889022 |    110018.78 |    29.582975 |    1.1859833 |    138.35942 |     3.820253 |
+      cell_14 |         3686 |         3135 |   0.43004608 |   0.17931746 |       4.4186 |0.00013480186 |    115850.98 |    15.616928 |    10.814411 |    69.004956 |    1.9392127 |
+      cell_15 |         3929 |         3372 |   0.24013519 |      2.47225 |    4.2274483 | 6.833078e-05 |    121590.99 |    8.3084075 |   0.39768783 |    35.123363 |   0.98318375 |
+      cell_16 |         4338 |         3822 |   0.17818451 |    0.1625551 |    3.3043674 |4.1461187e-05 |    133924.69 |    5.5526768 |    3.2277737 |    18.348084 |   0.52469108 |
+      cell_17 |         4513 |         3921 |   0.13968658 |    2.3454682 |    3.2208563 |2.1648498e-05 |    140920.69 |    3.0507213 |   0.11933098 |     9.825935 |   0.27988703 |
+      cell_18 |         4710 |         3961 |  0.033576965 |   0.22954162 |    3.6128914 |9.3034315e-06 |    143725.66 |    1.3371418 |   0.62077508 |    4.8309483 |   0.14249372 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 800 for hit collection: PhantomSDPlus
+ Number of event processed : 814 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |          783 |          551 |    463.57812 |    7.6948922 |    8.2861181 |   0.91450103 |    21123.097 |    19317.094 |     490.2373 |    160063.72 |    3772.3232 |
-      cell_02 |         1046 |          928 |    410.00098 |    7.2206115 |    7.4866404 |   0.46483673 |    30569.025 |    14209.606 |    343.76617 |    106382.21 |     2482.202 |
-      cell_03 |         1252 |         1051 |    231.85205 |    6.2346098 |    7.0558624 |   0.24158654 |    38627.536 |    9331.8927 |    251.61411 |    65844.551 |    1568.7158 |
-      cell_04 |         1466 |         1254 |    157.64453 |    6.1435689 |    6.9319994 |   0.12216637 |    44325.071 |     5415.033 |    145.36509 |    37537.006 |    893.06044 |
-      cell_05 |         1570 |         1303 |    84.581436 |  0.075805274 |    6.8366378 |  0.062703832 |    46933.238 |    2942.8939 |    6388.7313 |      20119.5 |    484.29952 |
-      cell_06 |         1754 |         1496 |    56.645508 |  0.068052729 |    6.1521144 |   0.03334934 |    55830.121 |    1861.8977 |    4062.6885 |    11454.608 |    276.47704 |
-      cell_07 |         1883 |         1721 |    40.503174 |   0.14994597 |    5.6491731 |   0.01754644 |    59057.525 |    1036.2493 |    936.71509 |    5853.9518 |    140.45665 |
-      cell_08 |         2033 |         1821 |    16.377075 |    5.2180805 |    5.8959849 | 0.0083390486 |    61427.769 |    512.24915 |    14.098585 |    3020.2133 |    73.567551 |
-      cell_09 |         2173 |         1922 |    9.4066772 |    4.6252237 |     5.438656 | 0.0045222762 |    68099.718 |    307.96573 |    8.6848697 |    1674.9197 |    40.169465 |
-      cell_10 |         2352 |         2250 |    6.9871826 |    4.2885809 |     4.630213 | 0.0026488371 |    73796.167 |    195.47403 |    4.9439951 |    905.08638 |    21.202723 |
-      cell_11 |         2431 |         2259 |    4.3926544 |    3.9814211 |    3.9783711 | 0.0015214281 |    76763.936 |    116.79081 |     2.753942 |    464.63717 |    10.964603 |
-      cell_12 |         2512 |         2246 |    1.2421265 |    4.0669883 |    4.4189541 |0.00061782045 |    80497.338 |    49.732902 |    1.3843672 |    219.76741 |    5.6302053 |
-      cell_13 |         2651 |         2394 |   0.65960693 |   0.16330921 |    4.7298557 |0.00028375425 |    84311.069 |    23.923624 |    17.762942 |    113.15529 |     2.900852 |
-      cell_14 |         2885 |         2771 |   0.45571136 |   0.11582044 |    4.1251388 |0.00015725708 |    90408.024 |    14.217302 |    13.321983 |    58.648344 |    1.5429579 |
-      cell_15 |         3030 |         2890 |   0.66329956 |    1.5270092 |     2.964294 |0.00011420339 |     97556.57 |    11.141291 |   0.54822384 |    33.026061 |   0.83714284 |
-      cell_16 |         3081 |         2820 |   0.10755157 |    2.7212449 |     4.251552 |3.8874363e-05 |    95658.652 |    3.7186692 |   0.14804863 |    15.810116 |   0.40287657 |
-      cell_17 |         3279 |         2939 |  0.064331055 |   0.27493463 |    3.2741168 |2.1533266e-05 |    101952.57 |    2.1953719 |   0.75597517 |    7.1879039 |   0.20784376 |
-      cell_18 |         3119 |         2665 |  0.026115417 |    2.7201461 |    4.1754843 |8.3976458e-06 |     95529.83 |   0.80222568 |  0.036106421 |    3.3496808 |  0.098214739 |
+      cell_01 |          810 |          669 |    497.34375 |    7.9065695 |    8.3384812 |   0.89874166 |    22090.473 |    19853.629 |    482.22405 |    165549.11 |     3812.738 |
+      cell_02 |         1008 |          802 |    342.25781 |    6.5196015 |    7.4089206 |   0.47773513 |    29329.427 |    14011.698 |    370.36107 |    103811.56 |    2414.6066 |
+      cell_03 |         1244 |         1023 |    246.22656 |    6.5529604 |    6.8968742 |   0.25040112 |     39948.67 |    10003.192 |     245.8662 |    68990.756 |    1611.1515 |
+      cell_04 |         1397 |         1194 |    144.04492 |    6.3198188 |    6.9549757 |   0.12596684 |    43338.001 |    5459.1512 |    142.58982 |    37968.264 |    901.14185 |
+      cell_05 |         1578 |         1425 |     133.9834 |    5.6067491 |    6.1914879 |  0.067169259 |    49062.061 |    3295.4623 |    86.853957 |    20403.815 |    486.96835 |
+      cell_06 |         1712 |         1336 |    43.192871 |    5.3243668 |    6.3054026 |  0.032371608 |     51988.86 |     1682.963 |    48.984414 |    10611.759 |    260.81098 |
+      cell_07 |         1882 |         1590 |    32.130371 |  0.083629368 |     6.006265 |  0.016329837 |    58769.586 |    959.69779 |    1730.0705 |    5764.1992 |     144.6847 |
+      cell_08 |         2095 |         1830 |    14.520264 |   0.20155504 |    5.9237261 |  0.007750002 |    64803.647 |    502.22839 |    377.94616 |    2975.0634 |    76.176953 |
+      cell_09 |         2164 |         1845 |    8.0656738 |   0.84445249 |    5.6760623 | 0.0039804589 |     67561.68 |    268.92649 |    45.760844 |    1526.4435 |    38.642858 |
+      cell_10 |         2341 |         2043 |    4.1774902 |   0.14834504 |    5.2228603 | 0.0019972426 |    73613.279 |    147.02358 |    135.55771 |    767.88362 |    20.109314 |
+      cell_11 |         2482 |         2197 |    2.6054993 |    3.4055519 |    4.7000081 | 0.0010619903 |     78713.06 |    83.592508 |    3.0615588 |    392.88546 |    10.426297 |
+      cell_12 |         2585 |         2264 |      1.18367 |    3.4512721 |     4.815731 |0.00051019941 |    81278.541 |    41.468264 |    1.5875081 |        199.7 |    5.4789224 |
+      cell_13 |         2643 |         2366 |   0.73873901 |    2.8255165 |    4.2289132 |0.00027932117 |    82671.898 |    23.092012 |   0.95662821 |    97.654113 |    2.7029688 |
+      cell_14 |         2748 |         2540 |    0.3024292 |    2.6520071 |    4.3959865 |0.00012977281 |    87687.641 |    11.379472 |   0.52820061 |    50.024004 |    1.4007918 |
+      cell_15 |         2998 |         2656 |   0.21828461 |  0.078870537 |    3.7519979 | 7.304617e-05 |    94466.208 |    6.9003947 |    9.1653112 |    25.890266 |   0.72287302 |
+      cell_16 |         3249 |         3070 |   0.11914062 |    1.0598957 |    3.4236214 |3.9233437e-05 |    103405.17 |      4.05694 |   0.37560033 |    13.889426 |   0.39809717 |
+      cell_17 |         3326 |         2965 |  0.048522949 |   0.35791005 |    4.0231765 |1.7181053e-05 |    102842.75 |    1.7669468 |   0.57045437 |    7.1087389 |   0.20417135 |
+      cell_18 |         3323 |         2940 |  0.027236938 |  0.054125381 |    3.3192897 |9.9275861e-06 |    100626.17 |   0.99897492 |    1.8140598 |    3.3158872 |  0.098186677 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -1905,78 +1671,78 @@ Tst33TimedEventAction::CalculateFOM(): FOM:
     mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 29232 for hit collection: PhantomSD
+ Number of event processed : 30292 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |         2787 |            0 |            0 |     5.988508 |    7.3660473 |    0.7600996 |    799922.56 |    608020.82 |    19557.924 |    4478710.1 |    117122.78 |
-      cell_01 |        79990 |        21916 |    18628.753 |    0.5010276 |    9.2633181 |   0.85998028 |    1955225.9 |    1681455.7 |    736957.22 |     15575859 |     369235.9 |
-      cell_02 |        47673 |        15195 |     10883.39 |   0.65390003 |    8.8076139 |   0.72421566 |    1324060.3 |    958905.18 |    312268.97 |    8445666.5 |    204192.69 |
-      cell_03 |        26422 |         8972 |    5632.0909 |   0.66918901 |     8.510538 |   0.63260616 |    778263.42 |    492334.24 |    153538.25 |    4190029.2 |    102746.11 |
-      cell_04 |        14158 |         5360 |    3038.4468 |   0.41790357 |    8.1552146 |   0.57081503 |    438345.65 |    250214.28 |    121750.85 |    2040551.2 |    50880.114 |
-      cell_05 |         7446 |         2953 |    1522.1415 |    6.2575624 |    7.8046024 |   0.53039375 |    238713.91 |    126612.36 |    4002.8746 |    988159.16 |    25048.237 |
-      cell_06 |         3933 |         1829 |    882.04507 |    1.7325468 |    7.3974954 |   0.49489793 |    134334.73 |    66481.979 |    7334.2772 |    491800.13 |    12706.978 |
-      cell_07 |         1976 |          976 |    461.72979 |    5.5722316 |    7.1268786 |    0.4819073 |    72545.102 |    34960.014 |    1175.4087 |    249155.78 |    6549.6498 |
-      cell_08 |          941 |          487 |    229.56083 |    4.9759247 |    6.7402994 |   0.46906355 |    36282.288 |    17018.699 |    619.16067 |    114711.13 |    3080.8969 |
-      cell_09 |          445 |          260 |    119.80207 |    5.3894826 |    6.7338597 |   0.46305996 |    19682.835 |    9114.3331 |    308.79934 |     61374.64 |    1664.2687 |
-      cell_10 |          198 |          119 |    53.716124 |    5.4423167 |    6.5912629 |    0.4546394 |    8483.3416 |    3856.8613 |     127.8352 |    25421.587 |    695.71961 |
-      cell_11 |          111 |           61 |    28.687364 |    5.3590155 |    6.5084617 |   0.46199054 |    4181.1257 |    1931.6405 |    64.516207 |    12572.008 |    345.74335 |
-      cell_12 |           60 |           30 |    13.275705 |    5.0377866 |    6.0810419 |   0.42239679 |    2495.1352 |    1053.9371 |    36.186608 |    6409.0355 |    182.30041 |
-      cell_13 |           31 |           20 |      8.35033 |    5.5549043 |    6.4171959 |   0.41707159 |    1623.3548 |    677.05519 |    21.933959 |    4344.7958 |    121.84104 |
-      cell_14 |           16 |           19 |    8.3507607 |    5.1859289 |    6.1093289 |   0.41506163 |    1297.7243 |    538.63556 |    18.190751 |    3290.7018 |    94.335942 |
-      cell_15 |           13 |            9 |    3.8457342 |    4.5435749 |    4.8611217 |   0.42572866 |    354.69023 |     151.0018 |    5.2310823 |    734.03811 |    23.767814 |
-      cell_16 |            3 |            1 |          0.5 |    4.4120045 |    4.4402728 |          0.5 |    43.975368 |    21.987684 |   0.76072584 |    97.631316 |    3.3563259 |
-      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_00 |         2943 |            0 |            0 |    5.3437208 |    7.3392424 |   0.75802493 |    844842.24 |    640411.48 |    23033.245 |    4700135.1 |    123083.23 |
+      cell_01 |        83161 |        22632 |    19081.104 |   0.64817693 |    9.2465896 |   0.85789705 |      2045172 |    1754547.1 |     593782.9 |     16223577 |    384876.38 |
+      cell_02 |        49884 |        16028 |    11500.136 |   0.23932714 |    8.7898513 |   0.72738014 |      1382370 |    1005508.5 |    893067.71 |    8838270.2 |    213735.34 |
+      cell_03 |        27881 |         9651 |    6022.8311 |   0.32447717 |     8.489951 |   0.63593496 |    812621.59 |    516774.48 |    331567.48 |      4387390 |    107586.08 |
+      cell_04 |        15177 |         5757 |    3255.6834 |   0.29556126 |    8.1350684 |   0.57157459 |    466362.33 |    266560.86 |    183019.07 |    2168490.8 |    54093.347 |
+      cell_05 |         8022 |         3277 |    1693.3171 |   0.24532274 |    7.7773739 |   0.52557756 |    264622.55 |    139079.67 |    112114.72 |    1081674.6 |     27504.29 |
+      cell_06 |         3908 |         1720 |    843.54197 |   0.36714058 |    7.4049534 |   0.49692522 |    132382.09 |    65783.999 |    34380.457 |    487127.45 |    12622.461 |
+      cell_07 |         1951 |          937 |    441.48991 |    5.0765216 |    7.0967004 |   0.47498699 |    69119.778 |    32830.995 |    1207.7316 |    232991.73 |    6131.0757 |
+      cell_08 |         1012 |          568 |    254.54524 |    4.9630952 |    6.6793838 |   0.45344748 |    38355.331 |    17392.128 |    630.74877 |     116168.7 |    3130.4662 |
+      cell_09 |          508 |          266 |    119.05671 |      5.16362 |    6.6085176 |   0.44385958 |    19692.485 |    8740.6982 |    304.20946 |    57763.058 |    1570.8221 |
+      cell_10 |          245 |          113 |    47.562663 |    5.3267309 |    6.6803482 |   0.42193328 |    9020.5918 |    3806.0879 |    129.29558 |    25425.993 |    688.72275 |
+      cell_11 |          119 |           73 |    31.135455 |    4.8820805 |    6.1078057 |   0.41140001 |    5297.0186 |    2179.1935 |    77.105108 |     13310.09 |    376.43334 |
+      cell_12 |           67 |           53 |    22.749457 |    4.0371326 |    5.2577321 |   0.41928058 |    3615.9693 |    1516.1057 |    59.472786 |    7971.2776 |    240.09952 |
+      cell_13 |           40 |           27 |    12.112362 |    3.2409601 |    5.3582116 |   0.38443107 |    1895.4919 |    728.68597 |    35.189454 |    3904.4536 |    114.04761 |
+      cell_14 |           27 |           22 |    7.6183439 |    2.6125961 |    4.9678375 |   0.38421977 |     1163.776 |    447.14575 |    25.122703 |    2221.3474 |    65.635476 |
+      cell_15 |           10 |           15 |    5.2978118 |    2.2529858 |    3.9827081 |   0.37383822 |    696.92274 |    260.53635 |    15.100897 |    1037.6402 |    34.022106 |
+      cell_16 |            4 |            1 |   0.33925125 |    4.7549745 |    5.5299829 |   0.38415293 |     244.6292 |    93.975022 |    3.2521886 |    519.68027 |    15.464074 |
+      cell_17 |            2 |            1 |   0.33925125 |    3.4866313 |    3.8692992 |   0.33868872 |    134.99692 |    45.721933 |    1.8156442 |    176.91184 |    6.3304819 |
       cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 29232 for hit collection: PhantomSDMinus
+ Number of event processed : 30292 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        31159 |        17751 |    15676.477 |   0.35264857 |    8.8036593 |   0.88909226 |    772396.62 |    686731.85 |    394943.38 |    6045753.3 |    139276.22 |
-      cell_02 |        19964 |        14661 |     11100.46 |   0.42025942 |    7.8952502 |   0.75130516 |    569868.08 |    428144.83 |     185336.8 |    3380310.5 |    77889.538 |
-      cell_03 |        11563 |         9492 |    6447.6875 |   0.50181802 |    7.3565788 |   0.65962052 |    346997.03 |    228886.36 |    76978.048 |    1683820.6 |    38628.971 |
-      cell_04 |         6463 |         5555 |    3386.8329 |   0.45303498 |    6.8800798 |   0.59834345 |    198872.29 |    118993.93 |    41726.637 |    818687.76 |    18903.627 |
-      cell_05 |         3443 |         3354 |    1970.5389 |    6.3059983 |    6.4047987 |   0.56385265 |    104794.15 |    59088.457 |     1383.095 |    378449.67 |    8721.7949 |
-      cell_06 |         1860 |         1879 |     1044.126 |    6.0228903 |    5.9877953 |   0.53093547 |    57502.031 |    30529.868 |    704.57176 |     182806.6 |    4243.5584 |
-      cell_07 |          988 |          995 |    542.39019 |    5.9164657 |    5.4991407 |   0.52007656 |    30169.756 |    15690.583 |     342.1042 |    86284.725 |    2024.0478 |
-      cell_08 |          486 |          533 |    275.30851 |    5.5093078 |    5.1727739 |   0.49319296 |    15351.546 |    7571.2747 |    162.87953 |    39164.492 |    897.35348 |
-      cell_09 |          225 |          233 |    118.92207 |    6.3543805 |    5.5352398 |    0.4875984 |    7078.3933 |    3451.4132 |    67.684879 |      19104.4 |    430.09547 |
-      cell_10 |          108 |          123 |    60.989595 |    6.4647428 |    4.6733432 |   0.50965413 |    3250.5467 |    1656.6545 |    25.920281 |    7742.1152 |    167.56795 |
-      cell_11 |           64 |           63 |    30.664409 |    6.2610501 |     4.665403 |   0.49462421 |    1853.9245 |    916.99591 |     14.36703 |    4278.1555 |    89.952697 |
-      cell_12 |           38 |           29 |    14.952554 |    5.1866884 |    4.1851974 |   0.48455167 |    1046.7387 |    507.19898 |    8.4047606 |    2122.7278 |    43.592875 |
-      cell_13 |           20 |           15 |    8.0741617 |     5.672089 |    3.8868209 |   0.51671154 |    580.74282 |    300.07652 |     3.833365 |    1166.3437 |    21.743187 |
-      cell_14 |            8 |            4 |            3 |    4.2069987 |    3.8546479 |   0.57511555 |    185.10647 |    106.45761 |    1.5136787 |    410.35661 |    6.3680444 |
-      cell_15 |            8 |            6 |            3 |    3.6716438 |    3.2978315 |   0.51058651 |    218.06242 |    111.33973 |    1.4353079 |    367.17968 |    5.2699395 |
-      cell_16 |            4 |            1 |          0.5 |    4.6485681 |    5.6515461 |   0.56389148 |    93.256259 |     52.58641 |   0.98662514 |    297.19452 |    4.5863941 |
-      cell_17 |            2 |            0 |            0 |    5.8073889 |    5.8073889 |    0.6520378 |    42.084067 |    27.440402 |  0.091531329 |    159.35709 |   0.53155802 |
-      cell_18 |            2 |            0 |            0 |    5.8073889 |    5.8073889 |    0.6520378 |    42.084067 |    27.440402 |  0.091531329 |    159.35709 |   0.53155802 |
+      cell_01 |        32288 |        17389 |    15351.082 |   0.35062256 |    8.7512916 |   0.88910474 |     804151.9 |    714975.26 |    410570.34 |      6256957 |    143955.22 |
+      cell_02 |        20718 |        14062 |    10667.267 |    1.7159764 |    7.8632496 |   0.75760053 |    589589.12 |    446673.03 |    47097.093 |    3512301.5 |    80817.498 |
+      cell_03 |        12269 |         9778 |    6718.0621 |    3.5952674 |    7.2351091 |    0.6723863 |    368662.66 |    247883.72 |    11459.337 |    1793465.8 |    41199.381 |
+      cell_04 |         6848 |         5675 |    3538.2599 |   0.32560147 |    6.8504168 |     0.606335 |    207235.67 |    125654.24 |    60946.257 |    860783.92 |    19844.191 |
+      cell_05 |         3794 |         3404 |    2006.5311 |    0.2069351 |    6.3114235 |   0.56150654 |     115636.6 |    64930.708 |    45714.934 |     409805.2 |    9460.0244 |
+      cell_06 |         1875 |         1768 |    993.32701 |    6.1527147 |     6.026785 |   0.52547732 |    57992.564 |    30473.777 |    692.25843 |     183658.9 |    4259.2686 |
+      cell_07 |          973 |          981 |    501.70025 |    5.3288479 |    5.5496865 |   0.50411029 |    30293.061 |    15271.044 |    361.96967 |    84749.505 |    1928.8813 |
+      cell_08 |          518 |          558 |    302.34223 |    5.6599332 |    5.3458433 |   0.50233814 |    15634.859 |    7853.9859 |    165.08414 |    41986.178 |     934.3652 |
+      cell_09 |          271 |          288 |    163.90368 |    5.6642008 |    5.0982782 |   0.49871308 |    8526.0866 |    4252.0709 |    86.040624 |     21678.24 |    487.35137 |
+      cell_10 |          153 |          188 |    96.579918 |    4.6774101 |     4.145616 |   0.49107514 |     4375.043 |    2148.4748 |      43.4037 |    8906.7517 |     203.0169 |
+      cell_11 |           67 |           63 |    30.320052 |    5.2233978 |    4.2806272 |   0.43259007 |    1941.5144 |    839.87984 |    16.528405 |    3595.2125 |    86.334435 |
+      cell_12 |           30 |           21 |    8.9326625 |     3.591696 |    4.1867479 |   0.44129352 |    933.14487 |    411.79078 |    12.405094 |    1724.0642 |    44.555326 |
+      cell_13 |           18 |           19 |    11.005104 |    2.1254844 |    2.7510865 |    0.5022578 |    558.17558 |    280.34804 |    10.549341 |    771.26171 |    22.422459 |
+      cell_14 |           12 |           15 |    6.9207854 |    1.6514778 |    3.1717144 |   0.42042452 |    339.24926 |    142.62871 |     7.257811 |    452.37753 |    11.986113 |
+      cell_15 |            4 |            2 |   0.92766506 |    2.4310345 |    5.5157692 |   0.45203662 |    109.28216 |    49.399537 |    2.6406585 |    272.47645 |    6.4195319 |
+      cell_16 |            1 |            0 |            0 |    8.8087682 |    8.8087682 |          0.5 |    30.579678 |    15.289839 |   0.37506823 |    134.68465 |    3.3038891 |
+      cell_17 |            1 |            0 |            0 |    8.8087682 |    8.8087682 |          0.5 |    30.579678 |    15.289839 |   0.37506823 |    134.68465 |    3.3038891 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 29232 for hit collection: PhantomSDPlus
+ Number of event processed : 30292 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        25334 |        16515 |    13624.545 |   0.33821338 |    8.3155859 |   0.82505217 |    677086.34 |    558631.56 |    316443.08 |    4645348.7 |    107025.29 |
-      cell_02 |        15352 |        11912 |    8389.4862 |   0.21295512 |    7.6626902 |   0.70524797 |    447057.94 |    315286.71 |       261079 |    2415944.4 |     55598.11 |
-      cell_03 |         8651 |         7150 |    4594.2471 |   0.56939506 |    7.2298014 |   0.63073646 |    258457.23 |     163018.4 |    47750.686 |    1178590.6 |    27189.005 |
-      cell_04 |         4747 |         4281 |    2643.8827 |    6.4235407 |    6.5602154 |   0.58919168 |    144028.21 |    84860.221 |    2001.9882 |    556701.33 |    12859.853 |
-      cell_05 |         2514 |         2225 |    1269.9459 |    6.0901019 |    6.1190488 |   0.55113734 |    78159.867 |    43076.822 |    1010.5012 |    263589.17 |    6154.0554 |
-      cell_06 |         1367 |         1233 |    669.58276 |    5.9492205 |    5.9693456 |   0.53016877 |    41180.512 |    21832.622 |    503.13783 |    130326.46 |    2993.2779 |
-      cell_07 |          663 |          688 |    365.16753 |    5.6879592 |    5.5258937 |   0.51268297 |    20770.062 |    10648.457 |    238.93366 |    58842.241 |    1359.0449 |
-      cell_08 |          330 |          347 |    172.18938 |    4.6040515 |    5.1507316 |    0.4876952 |    9693.2167 |    4727.3353 |    119.16913 |    24349.235 |    548.66082 |
-      cell_09 |          168 |          245 |    123.74434 |    4.7334973 |    4.6630831 |   0.48526528 |    5330.5865 |    2586.7486 |    55.985702 |    12062.224 |    265.00817 |
-      cell_10 |           95 |          156 |    92.795825 |    5.7824017 |    3.5843216 |   0.54672636 |    3752.1295 |    2051.3881 |    28.457795 |    7352.8347 |     164.5544 |
-      cell_11 |           58 |          106 |    54.087831 |    4.7591625 |    3.3381738 |   0.50835451 |    1815.4823 |    922.90864 |    13.801594 |    3080.8294 |    65.684028 |
-      cell_12 |           30 |           30 |    14.153525 |    5.3852489 |    4.1386113 |   0.46554868 |    990.82027 |    461.27507 |    7.7873599 |    1909.0382 |    41.936871 |
-      cell_13 |           12 |            6 |    3.3651693 |    5.1123069 |    3.3662211 |   0.61693845 |    334.05107 |    206.08895 |    2.6134838 |    693.74098 |    13.360931 |
-      cell_14 |            8 |            3 |          1.5 |    4.1744666 |    4.6902661 |    0.5093589 |     189.7652 |    96.658592 |    1.9858669 |    453.35452 |    8.2899348 |
-      cell_15 |            6 |            0 |            0 |    3.7634209 |    4.9774751 |   0.51401323 |    140.29539 |    72.113686 |    1.5377389 |    358.94408 |    5.7871587 |
-      cell_16 |            2 |           14 |           14 |    5.8784346 |    5.9634975 |   0.67468351 |    45.013593 |    30.369929 |   0.10291614 |    181.11099 |   0.60498581 |
-      cell_17 |            2 |            0 |            0 |    5.8073889 |    5.8073889 |    0.6520378 |    42.084067 |    27.440402 |  0.091531329 |    159.35709 |   0.53155802 |
-      cell_18 |            2 |            0 |            0 |    1.9829258 |    1.9829258 |   0.69974701 |    48.771085 |    34.127421 |   0.11383682 |    67.672145 |   0.22572998 |
+      cell_01 |        26541 |        16563 |    13582.531 |     1.785672 |     8.285884 |   0.82198162 |    722640.12 |     593996.9 |    63411.736 |    4921789.4 |    113232.56 |
+      cell_02 |        16173 |        11466 |    8300.6642 |    6.7035141 |    7.6227106 |   0.71485079 |    471445.54 |    337013.22 |    8850.3826 |    2568954.3 |    59328.665 |
+      cell_03 |         9198 |         7618 |    4953.7659 |    0.2511974 |     7.012703 |   0.63426308 |    280417.44 |    177858.43 |    114255.15 |    1247268.3 |    28700.597 |
+      cell_04 |         5132 |         4685 |     2918.206 |   0.27358121 |    6.6048698 |   0.58376902 |    155434.32 |    90737.742 |    51004.405 |    599310.97 |    13953.847 |
+      cell_05 |         2661 |         2444 |    1374.7395 |    6.2495751 |     6.219151 |    0.5460367 |    81043.439 |    44252.692 |    1016.6626 |    275214.18 |    6353.7091 |
+      cell_06 |         1356 |         1291 |    692.14461 |    5.5398465 |    5.6521062 |   0.52777475 |    41759.692 |    22039.711 |    515.59371 |    124570.79 |      2856.31 |
+      cell_07 |          729 |          665 |    383.91128 |     4.936068 |    5.2922719 |   0.52149917 |    23070.921 |    12031.466 |    297.67836 |    63673.789 |    1469.3606 |
+      cell_08 |          354 |          317 |    174.95948 |  0.019483168 |     5.244524 |   0.51188213 |    11533.666 |    5903.8774 |    36186.083 |    30963.027 |    705.01953 |
+      cell_09 |          206 |          241 |    140.58421 |    5.4802674 |    4.5061483 |   0.49137445 |    5933.7599 |     2915.698 |    51.582231 |    13138.568 |    282.68442 |
+      cell_10 |          108 |          186 |    88.786471 |    4.9730247 |    3.5408263 |   0.47394213 |    3512.9677 |    1664.9434 |     25.08487 |    5895.2753 |    124.74768 |
+      cell_11 |           39 |           26 |    11.521029 |    4.5359533 |    4.6754268 |   0.41837327 |    1150.0816 |    481.16342 |    11.501402 |    2249.6443 |    52.169822 |
+      cell_12 |           25 |           23 |    10.463618 |    3.6126198 |    4.0261509 |   0.39888181 |    838.18365 |    334.33621 |    9.3283003 |     1346.088 |    33.699602 |
+      cell_13 |           15 |            6 |            4 |    1.8668306 |    2.7274327 |   0.54742115 |    443.79847 |    242.94467 |    9.7778781 |    662.61523 |    18.253642 |
+      cell_14 |            6 |            0 |            0 |    2.1534539 |    5.2308103 |   0.39242327 |    162.69305 |    63.844538 |    3.7650947 |    333.95866 |    8.1079577 |
+      cell_15 |            2 |            0 |            0 |    8.4981372 |    7.2605289 |   0.45229716 |    53.912938 |    24.384669 |   0.40540532 |    177.04559 |      3.44519 |
+      cell_16 |            1 |            0 |            0 |    8.8087682 |    8.8087682 |          0.5 |    30.579678 |    15.289839 |   0.37506823 |    134.68465 |    3.3038891 |
+      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -2236,78 +2002,78 @@ Tst33TimedEventAction::CalculateFOM(): FOM:
     mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 44705 for hit collection: PhantomSD
+ Number of event processed : 47451 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |         2596 |            0 |            0 |   0.29559572 |    7.5995506 |            1 |    775306.66 |    775306.66 |    516749.12 |    5891982.2 |    152748.83 |
-      cell_01 |       102808 |        25823 |        25823 |   0.33042638 |    9.3412049 |            1 |    2400636.3 |    2400636.3 |    1604497.6 |     22424836 |    530168.33 |
-      cell_02 |        47243 |        14187 |        14187 |   0.43292421 |    8.9331263 |            1 |    1254929.3 |    1254929.3 |     623018.3 |     11210442 |    269719.71 |
-      cell_03 |        20328 |         6424 |         6424 |   0.34028688 |    8.6045271 |            1 |    569477.65 |    569477.65 |     351578.6 |    4900085.9 |    119637.59 |
-      cell_04 |         8573 |         3021 |         3021 |   0.59371821 |    8.3411149 |            1 |    252446.45 |    252446.45 |    87713.605 |    2105684.8 |    52077.164 |
-      cell_05 |         3454 |         1317 |         1317 |    6.6211441 |    7.9784696 |            1 |    111235.94 |    111235.94 |    3377.5659 |    887492.54 |    22363.351 |
-      cell_06 |         1278 |          523 |          523 |    6.3616587 |    7.7476273 |            1 |    42529.619 |    42529.619 |    1318.0408 |    329503.64 |    8384.9256 |
-      cell_07 |          479 |          208 |          208 |    6.0528528 |    7.4967053 |            1 |    16978.179 |    16978.179 |    542.12659 |     127280.4 |    3281.4124 |
-      cell_08 |          199 |           91 |           91 |    6.0504799 |    7.7458991 |            1 |    8310.8465 |    8310.8465 |    271.17994 |    64374.979 |    1640.7688 |
-      cell_09 |           86 |           51 |           51 |     5.908706 |    7.1092558 |            1 |     4158.785 |     4158.785 |    133.38178 |    29565.867 |    788.11371 |
-      cell_10 |           31 |           13 |           13 |     4.445894 |    6.4354822 |            1 |    989.35321 |    989.35321 |    38.839957 |     6366.965 |    172.67833 |
-      cell_11 |           15 |            7 |            7 |    4.6262538 |    5.3252452 |            1 |    650.17129 |    650.17129 |    22.762706 |    3462.3216 |    105.30606 |
-      cell_12 |            6 |            5 |            5 |    2.9738521 |    3.4078428 |            1 |     456.2012 |     456.2012 |    19.786762 |     1554.662 |    58.842902 |
-      cell_13 |            2 |            5 |            5 |    4.0226777 |    4.4865391 |            1 |    315.24099 |    315.24099 |    11.751519 |     1414.341 |    47.272572 |
-      cell_14 |            1 |            2 |            2 |    5.8004989 |    5.8005984 |            1 |    57.161714 |    57.161714 |    1.7238757 |    331.57214 |    9.9993391 |
-      cell_15 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_16 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_17 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_00 |         2770 |            0 |            0 |    5.8660764 |    7.4151947 |            1 |    812425.83 |    812425.83 |    26845.516 |    6024295.7 |    157477.85 |
+      cell_01 |       109383 |        27841 |        27841 |   0.42914529 |    9.3381582 |            1 |    2563154.2 |    2563154.2 |    1318787.3 |     23935139 |    565951.36 |
+      cell_02 |        50009 |        14966 |        14966 |   0.92207754 |    8.9422631 |            1 |    1322798.3 |    1322798.3 |    308577.28 |     11828811 |    284532.18 |
+      cell_03 |        21485 |         6885 |         6885 |   0.32965964 |    8.6346993 |            1 |     597158.2 |     597158.2 |     381286.7 |    5156281.5 |    125694.84 |
+      cell_04 |         8747 |         3020 |         3020 |   0.26372188 |    8.4998608 |            1 |    248330.71 |    248330.71 |    196486.81 |    2110776.5 |    51817.871 |
+      cell_05 |         3489 |         1258 |         1258 |   0.75450153 |    8.2330873 |            1 |     106273.7 |     106273.7 |    28853.994 |    874960.64 |    21770.382 |
+      cell_06 |         1361 |          535 |          535 |    5.3061301 |    7.9403339 |            1 |    44411.749 |    44411.749 |    1674.2547 |    352644.11 |     8883.813 |
+      cell_07 |          522 |          236 |          236 |      5.71427 |    7.5763036 |            1 |    18424.899 |    18424.899 |    629.32249 |    139592.63 |    3596.1186 |
+      cell_08 |          201 |           85 |           85 |    7.0507648 |    7.7732316 |            1 |    8822.9838 |    8822.9838 |    249.84812 |    68583.096 |    1761.6203 |
+      cell_09 |          104 |           68 |           68 |    5.7144644 |    6.5855805 |            1 |    5126.6416 |    5126.6416 |     162.8684 |    33761.911 |    930.70565 |
+      cell_10 |           42 |           17 |           17 |    4.3806942 |    5.5604614 |            1 |    1652.2219 |    1652.2219 |    61.905305 |     9187.116 |    271.18821 |
+      cell_11 |           25 |            9 |            9 |    4.6964779 |     5.374359 |            1 |     1041.776 |     1041.776 |    36.185955 |    5598.8781 |    169.94654 |
+      cell_12 |           13 |            8 |            8 |    3.1978333 |    3.7186899 |            1 |    691.18237 |    691.18237 |    29.070627 |    2570.2929 |    92.963019 |
+      cell_13 |            7 |            8 |            8 |    3.3146602 |    3.8859278 |            1 |    351.36532 |    351.36532 |    14.562181 |    1365.3803 |    48.268681 |
+      cell_14 |            2 |            0 |            0 |    4.7012753 |    4.8050223 |            1 |    120.10521 |    120.10521 |    4.0400676 |     577.1082 |     18.99347 |
+      cell_15 |            1 |            2 |            2 |    4.3526493 |    4.3526493 |            1 |     104.6849 |     104.6849 |    3.6403225 |    455.65665 |    15.845047 |
+      cell_16 |            1 |            0 |            0 |    4.3526493 |    4.3526493 |            1 |     104.6849 |     104.6849 |    3.6403225 |    455.65665 |    15.845047 |
+      cell_17 |            1 |            2 |            2 |    4.3315739 |    4.3316947 |            1 |    106.57335 |    106.57335 |    3.7149611 |    461.64323 |    16.091629 |
+      cell_18 |            1 |            0 |            0 |    4.2816844 |    4.2816844 |            1 |    45.764238 |    45.764238 |    1.6044534 |    195.94802 |    6.8697632 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 44705 for hit collection: PhantomSDMinus
+ Number of event processed : 47451 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        41376 |        22390 |        22390 |   0.42261964 |    8.8663552 |            1 |    996095.01 |    996095.01 |    479745.58 |    8831732.2 |     202749.9 |
-      cell_02 |        20458 |        14577 |        14577 |   0.33779001 |     7.965109 |            1 |    578228.26 |    578228.26 |    313603.12 |    4605651.1 |       105932 |
-      cell_03 |         9530 |         8224 |         8224 |   0.16621423 |    7.2459239 |            1 |    277877.64 |    277877.64 |    277022.47 |    2013480.2 |    46045.076 |
-      cell_04 |         4339 |         3839 |         3839 |    7.1055358 |    6.7099051 |            1 |    132006.09 |    132006.09 |    2816.5502 |    885748.33 |    20013.098 |
-      cell_05 |         1905 |         1807 |         1807 |     7.038517 |    6.1342004 |            1 |    56722.755 |    56722.755 |    1099.4895 |    347948.75 |    7738.7755 |
-      cell_06 |          809 |          998 |          998 |    6.7575747 |    5.5338289 |            1 |    24485.574 |    24485.574 |    421.14807 |    135498.98 |    2845.9395 |
-      cell_07 |          362 |          499 |          499 |    6.8245675 |    5.0069408 |            1 |    11342.811 |    11342.811 |    172.38996 |    56792.781 |    1176.4869 |
-      cell_08 |          183 |          199 |          199 |    5.6170196 |     4.034643 |            1 |     5594.536 |     5594.536 |    78.775852 |    22571.955 |     442.4855 |
-      cell_09 |          106 |          156 |          156 |    4.6483781 |    3.4572874 |            1 |    3241.9219 |    3241.9219 |    41.064517 |    11208.256 |     190.8834 |
-      cell_10 |           46 |           74 |           74 |    5.4109215 |    3.4942853 |            1 |    1211.3882 |    1211.3882 |    10.424905 |     4232.936 |    56.408344 |
-      cell_11 |           26 |           54 |           54 |    5.0706228 |    2.7932848 |            1 |    832.70021 |    832.70021 |    6.9694685 |    2325.9688 |    35.339546 |
-      cell_12 |            8 |           11 |           11 |    3.3834029 |    3.6032994 |            1 |    192.53396 |    192.53396 |     2.091235 |    693.75752 |    7.0754908 |
-      cell_13 |            8 |           10 |           10 |    1.9282697 |    1.9297913 |            1 |    202.19319 |    202.19319 |    0.6749964 |    390.19066 |    1.3015751 |
-      cell_14 |            2 |            0 |            0 |    4.8412221 |    4.8412221 |            1 |     48.73663 |     48.73663 |    0.1625679 |    235.94485 |    0.7870273 |
-      cell_15 |            3 |            6 |            6 |    2.2587975 |    2.2595563 |            1 |    106.16139 |    106.16139 |   0.35423646 |    239.87762 |   0.80014845 |
-      cell_16 |            4 |           14 |           14 |    1.1552664 |    1.1563346 |            1 |    219.17782 |    219.17782 |   0.73182686 |    253.44291 |   0.84545498 |
-      cell_17 |            2 |            0 |            0 |   0.87678066 |   0.87678066 |            1 |    48.843909 |    48.843909 |   0.16292574 |    42.825394 |   0.14285014 |
-      cell_18 |            4 |           15 |           15 |   0.17491404 |   0.17467362 |            1 |    75.648909 |    75.648909 |   0.25353948 |    13.213868 |  0.044347614 |
+      cell_01 |        43988 |        22235 |        22235 |   0.26261092 |    8.8578035 |            1 |    1059163.2 |    1059163.2 |    819618.08 |    9381859.1 |    215240.66 |
+      cell_02 |        21686 |        14733 |        14733 |   0.90452135 |    7.9316612 |            1 |    606302.99 |    606302.99 |     122103.7 |    4808989.9 |     110445.4 |
+      cell_03 |        10005 |         8105 |         8105 |   0.26238864 |    7.2840404 |            1 |    292121.08 |    292121.08 |    185810.35 |    2127821.8 |    48754.526 |
+      cell_04 |         4378 |         3895 |         3895 |   0.56729853 |    6.8387956 |            1 |    130231.38 |    130231.38 |    35732.682 |    890625.79 |    20271.098 |
+      cell_05 |         1889 |         1754 |         1754 |    6.7742962 |    6.1989204 |            1 |    57310.476 |    57310.476 |    1178.5464 |    355263.08 |    7983.8226 |
+      cell_06 |          842 |          898 |          898 |    5.5591301 |    5.7076117 |            1 |    25970.696 |    25970.696 |    569.55246 |    148230.65 |    3166.2163 |
+      cell_07 |          382 |          485 |          485 |     5.481716 |    5.1638332 |            1 |    11713.696 |    11713.696 |    233.71338 |    60487.575 |    1281.1504 |
+      cell_08 |          157 |          110 |          110 |    6.5271583 |      4.97816 |            1 |    4277.1996 |    4277.1996 |    62.781661 |    21292.584 |    409.78584 |
+      cell_09 |           99 |          162 |          162 |    5.7715196 |    3.7790635 |            1 |    3165.3477 |    3165.3477 |    38.692452 |     11962.05 |    223.31424 |
+      cell_10 |           42 |           46 |           46 |     6.364819 |    4.6080758 |            1 |    1017.5283 |    1017.5283 |    11.406846 |    4688.8476 |    72.602508 |
+      cell_11 |           28 |           60 |           60 |    4.6757012 |    3.1487686 |            1 |    827.74827 |    827.74827 |    8.0739397 |    2606.3877 |    37.751329 |
+      cell_12 |           16 |           38 |           38 |    3.0417478 |    2.5289988 |            1 |    464.71131 |    464.71131 |    5.1996749 |    1175.2543 |      15.8161 |
+      cell_13 |           11 |            4 |            4 |    3.3905571 |    3.2549372 |            1 |    286.70495 |    286.70495 |    2.8816836 |    933.20659 |    9.7705128 |
+      cell_14 |            8 |            8 |            8 |    4.3877958 |    2.3768097 |            1 |    241.44578 |    241.44578 |    1.2698783 |    573.87066 |    5.5719665 |
+      cell_15 |            6 |            0 |            0 |    2.9638873 |    2.9638873 |            1 |    134.94864 |    134.94864 |   0.45014021 |    399.97255 |    1.3341648 |
+      cell_16 |            6 |           16 |           16 |    1.4583677 |    1.4600382 |            1 |    275.99217 |    275.99217 |   0.92187843 |    402.95911 |    1.3444377 |
+      cell_17 |            4 |            0 |            0 |    1.4888096 |    1.4888096 |            1 |    106.40333 |    106.40333 |    0.3549233 |    158.41429 |    0.5284132 |
+      cell_18 |            6 |           20 |           20 |    1.1885158 |    1.1923214 |            1 |    105.20539 |    105.20539 |   0.35228496 |    125.43864 |   0.41869624 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 44705 for hit collection: PhantomSDPlus
+ Number of event processed : 47451 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        30014 |        19306 |        19306 |   0.34905676 |    8.3789921 |            1 |    797790.98 |    797790.98 |     440957.6 |    6684684.3 |    153919.23 |
-      cell_02 |        14272 |        11153 |        11153 |   0.29244568 |    7.6495488 |            1 |    411176.29 |    411176.29 |    246298.72 |    3145313.1 |    72028.998 |
-      cell_03 |         6630 |         5678 |         5678 |   0.47278046 |    7.0129142 |            1 |    197207.27 |    197207.27 |     66417.39 |    1382997.7 |    31400.844 |
-      cell_04 |         2927 |         2858 |         2858 |    7.3642281 |     6.497496 |            1 |    88788.967 |    88788.967 |    1766.8326 |    576905.96 |    13011.358 |
-      cell_05 |         1273 |         1388 |         1388 |    6.7693119 |    5.8717518 |            1 |    39091.235 |    39091.235 |    759.04587 |    229534.03 |    5138.2182 |
-      cell_06 |          547 |          669 |          669 |    6.8575332 |    5.3079087 |            1 |    16332.837 |    16332.837 |    270.69685 |    86693.209 |    1856.3127 |
-      cell_07 |          259 |          391 |          391 |    6.5288945 |    4.5496555 |            1 |    7596.1238 |    7596.1238 |    106.25818 |    34559.746 |    693.74847 |
-      cell_08 |          132 |          214 |          214 |    5.7240117 |    4.2427431 |            1 |    4122.3084 |    4122.3084 |    54.962347 |    17489.895 |    314.60512 |
-      cell_09 |           70 |           79 |           79 |    4.7140143 |    3.7067465 |            1 |    1892.2955 |    1892.2955 |     23.06346 |    7014.2598 |    108.72148 |
-      cell_10 |           34 |           60 |           60 |    5.7867472 |    3.1517675 |            1 |    1017.6811 |    1017.6811 |    7.2138907 |    3207.4942 |    41.744962 |
-      cell_11 |           15 |           26 |           26 |    4.0577864 |    3.2805075 |            1 |    417.16516 |    417.16516 |       5.7478 |    1368.5134 |    23.323345 |
-      cell_12 |            9 |           15 |           15 |    1.9135452 |    1.7740301 |            1 |    264.37891 |    264.37891 |     2.543802 |    469.01615 |    4.8676802 |
-      cell_13 |            6 |           10 |           10 |    1.8151661 |    1.8168507 |            1 |    182.74554 |    182.74554 |    0.6102892 |    332.02137 |    1.1077763 |
-      cell_14 |            3 |            0 |            0 |    2.9933463 |    2.9933463 |            1 |    79.964957 |    79.964957 |   0.26673438 |    239.36281 |   0.79842839 |
-      cell_15 |            3 |            3 |            3 |    6.3694532 |    6.3772329 |            1 |     35.17345 |     35.17345 |    0.1174706 |    224.30928 |   0.74822345 |
-      cell_16 |            2 |            0 |            0 |    2.1151088 |    2.1151088 |            1 |    48.090868 |    48.090868 |   0.16041387 |    101.71742 |   0.33929279 |
-      cell_17 |            4 |            6 |            6 |   0.47119864 |   0.47157941 |            1 |    101.78211 |    101.78211 |   0.33982165 |     47.99835 |    0.1601235 |
-      cell_18 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
+      cell_01 |        32115 |        19467 |        19467 |    1.1789706 |    8.3786177 |            1 |    851693.57 |    851693.57 |    138773.32 |    7136014.9 |    163609.67 |
+      cell_02 |        15174 |        11349 |        11349 |    1.4785619 |    7.5865464 |            1 |     438905.6 |     438905.6 |    51610.906 |    3329777.7 |    76309.922 |
+      cell_03 |         6926 |         5713 |         5713 |     0.482006 |    7.0247115 |            1 |    202088.08 |    202088.08 |    66525.731 |    1419610.5 |    32065.802 |
+      cell_04 |         2974 |         2892 |         2892 |    7.3067902 |    6.4698851 |            1 |    90745.388 |    90745.388 |    1793.5273 |    587112.23 |    13104.928 |
+      cell_05 |         1284 |         1371 |         1371 |    5.9576799 |     5.988621 |            1 |    38751.179 |    38751.179 |    869.31683 |    232066.12 |    5179.1114 |
+      cell_06 |          569 |          649 |          649 |    5.0842122 |    5.2854831 |            1 |    16764.367 |    16764.367 |    363.14724 |    88607.776 |    1846.3176 |
+      cell_07 |          244 |          377 |          377 |    6.3545423 |    4.6097461 |            1 |    7510.9092 |    7510.9092 |    111.47979 |    34623.384 |    708.40305 |
+      cell_08 |          109 |           97 |           97 |    6.9013375 |    4.7534399 |            1 |    3192.7525 |    3192.7525 |    38.675606 |    15176.557 |    266.91341 |
+      cell_09 |           72 |          116 |          116 |    5.0812386 |    4.0594464 |            1 |    2308.1443 |    2308.1443 |     36.74147 |    9369.7879 |    186.69218 |
+      cell_10 |           33 |           52 |           52 |    5.7830474 |     4.294606 |            1 |    885.90006 |    885.90006 |    10.511758 |    3804.5917 |    60.789994 |
+      cell_11 |           18 |           14 |           14 |    4.0878474 |    3.8560889 |            1 |    424.94818 |    424.94818 |    7.4088639 |     1638.638 |    30.286305 |
+      cell_12 |           12 |            9 |            9 |    2.9271014 |     3.498177 |            1 |     281.7109 |     281.7109 |    4.5258965 |    985.47459 |    13.247758 |
+      cell_13 |           12 |           16 |           16 |    2.9395275 |    1.8874477 |            1 |    350.35412 |    350.35412 |    2.4600875 |    661.27506 |    7.2314948 |
+      cell_14 |            6 |            0 |            0 |    2.9348498 |    2.9348498 |            1 |    137.46373 |    137.46373 |   0.45852966 |    403.43541 |    1.3457157 |
+      cell_15 |            3 |            0 |            0 |    5.6886729 |    5.6886729 |            1 |    64.381691 |    64.381691 |   0.21475421 |    366.24638 |    1.2216664 |
+      cell_16 |            4 |            2 |            2 |    1.6634644 |     1.664063 |            1 |    145.16588 |    145.16588 |   0.48440383 |    241.56516 |   0.80578852 |
+      cell_17 |            6 |            6 |            6 |    1.0260753 |    1.0266454 |            1 |    159.34153 |    159.34153 |   0.53181921 |    163.58725 |   0.54568656 |
+      cell_18 |            1 |            0 |            0 |   0.74135838 |   0.74135838 |            1 |    46.963402 |    46.963402 |   0.15665305 |    34.816712 |   0.11613605 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
@@ -2453,78 +2219,78 @@ Tst33TimedEventAction::CalculateFOM(): FOM:
     mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 26821 for hit collection: PhantomSD
+ Number of event processed : 28392 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |         2856 |            0 |            0 |    5.3137103 |    7.0046132 |            1 |    802909.46 |    802909.46 |    28212.622 |    5624070.1 |     149913.7 |
-      cell_01 |        76096 |        21573 |        21573 |   0.28943788 |    9.0252197 |            1 |    1888316.2 |    1888316.2 |    1408372.5 |     17042469 |    407636.34 |
-      cell_02 |        47902 |        15505 |        15505 |   0.34721538 |    8.5812418 |            1 |    1335618.7 |    1335618.7 |    805049.88 |     11461267 |     279525.7 |
-      cell_03 |        28453 |        10131 |        10131 |   0.19587414 |    8.2161525 |            1 |    848044.83 |    848044.83 |    882628.72 |    6967665.6 |    172884.14 |
-      cell_04 |        16626 |         6553 |         6553 |   0.42018798 |    7.8182983 |            1 |    536446.45 |    536446.45 |    252664.62 |    4194098.4 |    106166.64 |
-      cell_05 |         9625 |         4227 |         4227 |   0.48686936 |     7.429406 |            1 |       330364 |       330364 |    129991.25 |    2454408.3 |    63288.757 |
-      cell_06 |         5506 |         2577 |         2577 |   0.46434479 |    7.1209685 |            1 |    195858.75 |    195858.75 |    78731.508 |      1394704 |    36558.566 |
-      cell_07 |         3112 |         1555 |         1555 |   0.45878281 |    6.8036448 |            1 |     112874.2 |     112874.2 |    44685.345 |    767955.96 |    20500.868 |
-      cell_08 |         1692 |          966 |          966 |    4.4226372 |    6.4862682 |            1 |    67809.336 |    67809.336 |    2701.2985 |    439829.54 |    11946.863 |
-      cell_09 |          946 |          569 |          569 |    3.9862832 |    6.1177564 |            1 |     39148.62 |     39148.62 |    1671.8753 |    239501.72 |    6664.5684 |
-      cell_10 |          500 |          375 |          375 |    3.3484405 |    5.9815354 |            1 |     26100.93 |     26100.93 |    1311.5389 |    156123.64 |    4391.6099 |
-      cell_11 |          284 |          222 |          222 |    4.5976374 |    5.6379339 |            1 |    14465.819 |    14465.819 |    520.64421 |    81557.329 |    2393.7333 |
-      cell_12 |          162 |          123 |          123 |    3.6071686 |    5.4719517 |            1 |    8230.0091 |    8230.0091 |    365.01171 |    45034.212 |    1316.6588 |
-      cell_13 |           71 |           46 |           46 |    3.1520212 |    5.5786275 |            1 |     3664.455 |     3664.455 |    185.38162 |    20442.629 |    584.32679 |
-      cell_14 |           51 |           27 |           27 |    3.8849668 |    5.4969388 |            1 |    1871.6861 |    1871.6861 |     78.07005 |    10288.544 |    303.29955 |
-      cell_15 |           35 |           20 |           20 |    4.3013091 |     5.287185 |            1 |    1347.0907 |    1347.0907 |    50.209835 |    7122.3178 |    215.96802 |
-      cell_16 |           28 |           27 |           27 |    2.8625271 |    4.4621302 |            1 |    1265.4738 |    1265.4738 |    61.846902 |    5646.7089 |    177.03844 |
-      cell_17 |           12 |            6 |            6 |    3.1448626 |    4.9017376 |            1 |    559.47367 |    559.47367 |    26.195063 |    2742.3931 |    82.379875 |
-      cell_18 |            8 |            8 |            8 |      2.08615 |    3.2889638 |            1 |    305.89901 |    305.89901 |     17.18446 |    1006.0908 |    35.849362 |
-      cell_19 |            1 |            0 |            0 |    8.0044409 |    8.0044409 |            1 |    236.35016 |    236.35016 |    6.0782619 |    1891.8509 |    48.653088 |
+      cell_00 |         3170 |            0 |            0 |   0.14629517 |     7.051861 |            1 |    902677.08 |    902677.08 |    1157659.8 |    6365553.3 |    169360.04 |
+      cell_01 |        80996 |        22782 |        22782 |    0.3579029 |    9.0015314 |            1 |    2017592.7 |    2017592.7 |      1214750 |     18161424 |    434762.55 |
+      cell_02 |        51187 |        17113 |        17113 |    1.7277896 |    8.5112878 |            1 |    1443137.8 |    1443137.8 |    173859.15 |     12282961 |    300392.03 |
+      cell_03 |        30206 |        11135 |        11135 |   0.31190748 |    8.1586496 |            1 |    907417.01 |    907417.01 |    590216.28 |    7403297.4 |    184092.87 |
+      cell_04 |        17239 |         6920 |         6920 |   0.88503893 |    7.8139169 |            1 |    544064.04 |    544064.04 |    121483.04 |    4251271.2 |    107517.22 |
+      cell_05 |         9842 |         4237 |         4237 |   0.41357059 |    7.4578861 |            1 |    333416.13 |    333416.13 |     154899.4 |    2486579.5 |    64061.835 |
+      cell_06 |         5342 |         2479 |         2479 |   0.14719367 |    7.2398051 |            1 |    185905.92 |    185905.92 |    238252.14 |    1345922.6 |    35069.207 |
+      cell_07 |         2970 |         1562 |         1562 |   0.70973208 |    6.7432231 |            1 |    111792.36 |    111792.36 |    28451.004 |    753840.83 |     20192.59 |
+      cell_08 |         1543 |          965 |          965 |   0.37669213 |    6.3174133 |            1 |     62978.34 |     62978.34 |    28981.252 |     397860.2 |    10917.009 |
+      cell_09 |          843 |          482 |          482 |  0.031391417 |     6.147612 |            1 |    33346.284 |    33346.284 |    181425.39 |    205000.01 |    5695.1999 |
+      cell_10 |          484 |          346 |          346 |    4.0837807 |    5.8229743 |            1 |    23572.592 |    23572.592 |    962.35964 |     137262.6 |    3930.0658 |
+      cell_11 |          258 |          204 |          204 |    3.5440713 |    5.3798809 |            1 |    12318.784 |    12318.784 |    553.74299 |    66273.591 |    1962.5047 |
+      cell_12 |          148 |          113 |          113 |    3.3119847 |    4.9742573 |            1 |    7563.0289 |    7563.0289 |    351.92024 |    37620.452 |    1165.5545 |
+      cell_13 |           89 |           51 |           51 |    3.7401535 |     5.304125 |            1 |    3157.5131 |    3157.5131 |    134.86246 |    16747.844 |    504.40632 |
+      cell_14 |           54 |           34 |           34 |    3.4307653 |    4.8052036 |            1 |    2669.0342 |    2669.0342 |    116.55381 |    12825.253 |    399.86879 |
+      cell_15 |           37 |           24 |           24 |     3.539393 |    4.5874884 |            1 |    1982.7855 |    1982.7855 |    83.476744 |    9096.0052 |    295.45701 |
+      cell_16 |           24 |           20 |           20 |    3.3624803 |    4.4262146 |            1 |    1446.0101 |    1446.0101 |    63.123114 |    6400.3512 |    212.25023 |
+      cell_17 |           14 |           18 |           18 |    2.8557224 |     3.828049 |            1 |    758.08607 |    758.08607 |    35.944159 |    2901.9906 |    102.64654 |
+      cell_18 |            3 |            5 |            5 |    3.3443333 |    3.8994006 |            1 |    279.08639 |    279.08639 |     11.51259 |    1088.2696 |     38.50194 |
+      cell_19 |            1 |            0 |            0 |    5.9070184 |    5.9070184 |            1 |    173.36764 |    173.36764 |     5.181458 |    1024.0858 |    30.606968 |
 =============================================
 =============================================================
- Number of event processed : 26821 for hit collection: PhantomSDMinus
+ Number of event processed : 28392 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        29249 |        15796 |        15796 |    1.6175813 |    8.6674568 |            1 |    721154.57 |    721154.57 |    89490.106 |      6250576 |    144757.52 |
-      cell_02 |        19704 |        14595 |        14595 |   0.34637625 |    7.7877427 |            1 |    565583.43 |    565583.43 |    295709.04 |    4404618.3 |    102426.59 |
-      cell_03 |        12307 |        10134 |        10134 |   0.28625685 |    7.3080703 |            1 |    364748.05 |    364748.05 |    217097.69 |    2665604.4 |    62145.701 |
-      cell_04 |         7414 |         6487 |         6487 |   0.42840312 |    6.8393322 |            1 |    223303.11 |    223303.11 |    83650.829 |    1527244.1 |    35836.276 |
-      cell_05 |         4364 |         4216 |         4216 |    2.1800937 |    6.4534432 |            1 |    134624.56 |    134624.56 |    9450.1088 |    868791.92 |    20602.123 |
-      cell_06 |         2452 |         2219 |         2219 |   0.13455359 |    6.2164559 |            1 |    76523.316 |    76523.316 |    84390.128 |    475703.82 |    11354.994 |
-      cell_07 |         1389 |         1275 |         1275 |    5.0123226 |    6.2280831 |            1 |    42879.455 |    42879.455 |    1281.0628 |    267056.81 |       6421.1 |
-      cell_08 |          755 |          661 |          661 |    5.3174809 |    5.9314595 |            1 |    22626.233 |    22626.233 |     609.9885 |    134206.58 |    3243.6022 |
-      cell_09 |          432 |          430 |          430 |    5.1655496 |    5.4861316 |            1 |    13750.327 |    13750.327 |    355.39474 |    75436.102 |    1835.8092 |
-      cell_10 |          243 |          301 |          301 |     4.919583 |    5.4322419 |            1 |    7611.8401 |    7611.8401 |     196.2259 |    41349.357 |    965.34962 |
-      cell_11 |          137 |          117 |          117 |    5.6248492 |     5.098068 |            1 |    4012.9941 |    4012.9941 |    83.369395 |    20458.517 |    468.94028 |
-      cell_12 |           72 |           82 |           82 |    4.0562023 |     4.647849 |            1 |    2364.2955 |    2364.2955 |    73.909504 |    10988.888 |     299.7919 |
-      cell_13 |           29 |           49 |           49 |      3.30948 |    4.3679655 |            1 |     1178.244 |     1178.244 |    40.449868 |    5146.5293 |    133.86803 |
-      cell_14 |           20 |           23 |           23 |    5.2796469 |    3.9851583 |            1 |     674.5094 |     674.5094 |    13.692644 |    2688.0267 |    72.292325 |
-      cell_15 |           12 |            1 |            1 |    5.7611839 |    5.9318037 |            1 |    302.44931 |    302.44931 |    8.5343739 |    1794.0699 |    49.168097 |
-      cell_16 |           11 |           13 |           13 |    4.0966696 |     5.349868 |            1 |     258.9093 |     258.9093 |    9.6702032 |    1385.1306 |    39.615627 |
-      cell_17 |            8 |           12 |           12 |    5.0083488 |    2.9691926 |            1 |    314.81245 |    314.81245 |    5.1832321 |    934.73879 |    25.959434 |
-      cell_18 |            3 |            2 |            2 |    2.5535431 |    3.7994888 |            1 |    84.843656 |    84.843656 |    4.2619601 |    322.36252 |    10.883099 |
+      cell_01 |        31214 |        16827 |        16827 |   0.35108424 |    8.5835418 |            1 |    786036.34 |    786036.34 |    444238.53 |    6746975.8 |    155965.15 |
+      cell_02 |        21050 |        14629 |        14629 |   0.54812613 |    7.7867151 |            1 |    600195.28 |    600195.28 |    198832.69 |    4673549.6 |    108985.39 |
+      cell_03 |        13055 |        10164 |        10164 |   0.77720065 |    7.2526002 |            1 |    390572.62 |    390572.62 |    85301.004 |      2832667 |    66295.995 |
+      cell_04 |         7642 |         6152 |         6152 |    4.6380679 |    6.8645222 |            1 |    235428.52 |    235428.52 |    8218.9865 |    1616104.3 |    38120.218 |
+      cell_05 |         4441 |         3992 |         3992 |    5.8164214 |    6.5330008 |            1 |    134175.58 |    134175.58 |     3587.217 |    876569.19 |    20864.766 |
+      cell_06 |         2399 |         2158 |         2158 |  0.061223318 |    6.3125841 |            1 |     73012.29 |     73012.29 |     177406.7 |    460896.22 |    10861.427 |
+      cell_07 |         1339 |         1268 |         1268 |   0.17387688 |    6.0630419 |            1 |    43035.789 |    43035.789 |    36077.529 |    260927.79 |    6273.0484 |
+      cell_08 |          688 |          771 |          771 |    4.7331162 |    5.6646488 |            1 |     22118.59 |     22118.59 |    654.33035 |    125294.05 |    3097.0216 |
+      cell_09 |          382 |          356 |          356 |    4.4751341 |    5.4510661 |            1 |    12157.458 |    12157.458 |    369.56575 |    66271.108 |    1653.8563 |
+      cell_10 |          211 |          194 |          194 |    4.2372974 |    5.3727802 |            1 |    6427.7433 |    6427.7433 |    205.68468 |    34534.852 |    871.54716 |
+      cell_11 |          116 |          110 |          110 |    3.8848202 |    4.6878143 |            1 |    3681.7835 |    3681.7835 |    113.22079 |    17259.517 |    439.84241 |
+      cell_12 |           61 |           73 |           73 |    3.5706032 |    4.8509497 |            1 |    2304.0486 |    2304.0486 |    77.606947 |    11176.824 |    277.10362 |
+      cell_13 |           38 |           34 |           34 |    2.7090552 |    4.2476306 |            1 |    1126.0902 |    1126.0902 |    45.021306 |    4783.2152 |     121.9652 |
+      cell_14 |           23 |           11 |           11 |    3.8940149 |     5.313699 |            1 |    666.32949 |    666.32949 |    21.321387 |    3540.6743 |    83.025797 |
+      cell_15 |           13 |           12 |           12 |    3.4211411 |     5.449767 |            1 |    368.73949 |    368.73949 |    15.037983 |    2009.5443 |     51.44706 |
+      cell_16 |            8 |            3 |            3 |     2.396266 |    3.9874213 |            1 |    231.04087 |    231.04087 |    11.693328 |    921.25728 |    28.020325 |
+      cell_17 |            5 |            1 |            1 |    1.5925519 |     3.178644 |            1 |    112.59659 |    112.59659 |    6.8809491 |    357.90449 |    10.958269 |
+      cell_18 |            2 |           13 |           13 |    2.4899498 |    1.1465807 |            1 |    79.343419 |    79.343419 |   0.34064689 |    90.973629 |   0.84819364 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 26821 for hit collection: PhantomSDPlus
+ Number of event processed : 28392 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |        24414 |        15564 |        15564 |   0.45602845 |    8.1463481 |            1 |    667038.37 |    667038.37 |    276595.04 |    5433926.8 |    126135.21 |
-      cell_02 |        15750 |        12746 |        12746 |  0.090017647 |    7.5122836 |            1 |    468314.93 |    468314.93 |    909324.87 |    3518114.6 |    81855.285 |
-      cell_03 |         9587 |         8195 |         8195 |   0.63135519 |    7.0531973 |            1 |    287467.76 |    287467.76 |    75221.633 |    2027566.8 |    47491.569 |
-      cell_04 |         5688 |         5009 |         5009 |    6.1088315 |    6.7293424 |            1 |    174960.19 |    174960.19 |    4549.0212 |      1177367 |    27789.204 |
-      cell_05 |         3326 |         3085 |         3085 |   0.28074591 |    6.4333706 |            1 |     104955.2 |     104955.2 |    57516.644 |    675215.71 |    16147.563 |
-      cell_06 |         1873 |         1646 |         1646 |    5.2376774 |    6.2704205 |            1 |    56262.272 |    56262.272 |     1614.193 |     352788.1 |    8454.6221 |
-      cell_07 |         1047 |          971 |          971 |    4.9051405 |    5.8904898 |            1 |    32061.391 |    32061.391 |    931.22688 |     188857.3 |    4567.7986 |
-      cell_08 |          594 |          590 |          590 |    4.9063663 |    5.4293579 |            1 |    18609.576 |    18609.576 |    498.44929 |    101038.05 |    2445.5748 |
-      cell_09 |          323 |          283 |          283 |    4.7256601 |    5.3024443 |            1 |    10156.134 |    10156.134 |    287.70744 |    53852.337 |    1359.6076 |
-      cell_10 |          174 |          235 |          235 |     5.216356 |    5.0799294 |            1 |    5500.7326 |    5500.7326 |    124.27226 |    27943.333 |    648.24833 |
-      cell_11 |           97 |          114 |          114 |    4.6504271 |    4.8511309 |            1 |    3198.6144 |    3198.6144 |     83.81241 |    15516.897 |     389.7635 |
-      cell_12 |           45 |           47 |           47 |    4.1783507 |    4.9415355 |            1 |    1275.4937 |    1275.4937 |    43.182126 |    6302.8975 |    180.43006 |
-      cell_13 |           26 |           41 |           41 |    5.6426891 |    4.7396088 |            1 |    755.74775 |    755.74775 |    16.607024 |    3581.9487 |    93.708274 |
-      cell_14 |           17 |           17 |           17 |    5.8635532 |    5.2598262 |            1 |     431.7226 |     431.7226 |     10.53111 |    2270.7858 |    61.749724 |
-      cell_15 |           11 |            5 |            5 |    5.5709074 |    5.7640169 |            1 |    241.96143 |    241.96143 |    6.8055786 |    1394.6698 |    37.913248 |
-      cell_16 |           11 |           25 |           25 |    3.0773377 |    3.3776295 |            1 |    427.94025 |    427.94025 |    13.290202 |    1445.4236 |    40.898439 |
-      cell_17 |            3 |            4 |            4 |    4.0165525 |    5.3565061 |            1 |    95.816143 |    95.816143 |     3.771983 |    513.23975 |    15.150368 |
-      cell_18 |            2 |            0 |            0 |    2.8627742 |    5.0829323 |            1 |    52.232866 |    52.232866 |    2.6846593 |    265.49612 |    7.6855733 |
+      cell_01 |        26089 |        15819 |        15819 |   0.78753909 |    8.1331566 |            1 |    707965.55 |    707965.55 |    169617.38 |    5757994.7 |    133580.32 |
+      cell_02 |        16669 |        12271 |        12271 |  0.071629941 |    7.5046729 |            1 |    494686.95 |    494686.95 |    1205779.9 |    3712463.7 |    86369.944 |
+      cell_03 |        10071 |         8216 |         8216 |   0.16420628 |     6.995208 |            1 |    303368.67 |    303368.67 |    301785.36 |      2122127 |     49555.05 |
+      cell_04 |         5832 |         5066 |         5066 |     4.430953 |    6.7393093 |            1 |    179601.39 |    179601.39 |    6486.0419 |    1210389.3 |    28739.347 |
+      cell_05 |         3413 |         3308 |         3308 |   0.12756319 |    6.4307731 |            1 |    108021.59 |    108021.59 |     130570.2 |    694662.36 |    16655.952 |
+      cell_06 |         1823 |         1658 |         1658 |    5.3915248 |    6.2198539 |            1 |    53487.425 |    53487.425 |    1463.1055 |    332683.97 |    7888.3693 |
+      cell_07 |         1016 |          858 |          858 |    5.3122702 |    5.7116038 |            1 |    31471.587 |    31471.587 |    823.60268 |    179753.24 |       4375.2 |
+      cell_08 |          489 |          410 |          410 |    5.2036361 |    5.9776058 |            1 |     13907.13 |     13907.13 |    389.91723 |    83131.343 |    2028.9874 |
+      cell_09 |          284 |          211 |          211 |    4.6169025 |     5.288322 |            1 |      7966.28 |      7966.28 |    219.48109 |    42128.254 |    1013.3228 |
+      cell_10 |          159 |          205 |          205 | 0.0044371563 |    4.4678772 |            1 |    5206.0356 |    5206.0356 |    128217.18 |    23259.928 |    568.91969 |
+      cell_11 |           79 |           82 |           82 |    3.9772747 |    5.0146934 |            1 |    2879.2507 |    2879.2507 |    86.929741 |    14438.559 |    345.74346 |
+      cell_12 |           49 |           32 |           32 |    3.1974181 |    5.0202103 |            1 |    1493.9851 |    1493.9851 |     58.15479 |    7500.1196 |    185.94518 |
+      cell_13 |           31 |           20 |           20 |    4.1341255 |    5.4393881 |            1 |    954.47626 |    954.47626 |    25.278318 |    5191.7668 |    104.50374 |
+      cell_14 |           16 |           11 |           11 |    4.7592821 |    6.4207426 |            1 |    641.86138 |    641.86138 |    22.344542 |    4121.2267 |    106.34398 |
+      cell_15 |           10 |            7 |            7 |     2.776921 |    4.4668263 |            1 |    262.23179 |    262.23179 |    12.082186 |    1171.3438 |    33.551275 |
+      cell_16 |            6 |           13 |           13 |    1.6794928 |    3.1145627 |            1 |    134.48432 |    134.48432 |     7.300249 |    418.85985 |    12.260715 |
+      cell_17 |            4 |            7 |            7 |    3.8194176 |    3.8649316 |            1 |    92.600939 |    92.600939 |    2.7552597 |     357.8963 |    10.523487 |
+      cell_18 |            1 |            6 |            6 |   0.47648679 |   0.47897953 |            1 |    35.317291 |    35.317291 |   0.11882624 |     16.91626 |  0.056619133 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
  adding importance to: cell_01
@@ -2639,83 +2405,83 @@ DoIt Vector:
 ++ PhantomSDPlus/SLW_V id 28
 ++ PhantomSDPlus/SLWE_V id 31
 ### Run 6 start.
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1001 (mu)seconds
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1003 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1001, n= 0
+    mean= 0, error= -1, fom*time= 0, time= 1003, n= 0
  ###### EndOfRunAction  
 =============================================================
- Number of event processed : 787 for hit collection: PhantomSD
+ Number of event processed : 933 for hit collection: PhantomSD
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
-      cell_00 |          109 |            0 |            0 |    5.7574648 |     7.209216 |            1 |    30652.269 |    30652.269 |    1014.8278 |    220978.83 |    5842.8352 |
-      cell_01 |         2286 |          661 |          661 |    7.7751946 |    8.8215456 |            1 |    58695.307 |    58695.307 |    1608.1276 |    517783.33 |    12503.505 |
-      cell_02 |         2278 |          930 |          465 |    6.9765393 |    8.4328728 |          0.5 |    75624.726 |    37812.363 |    1120.6232 |    318866.85 |    7818.0721 |
-      cell_03 |         2649 |         1150 |        287.5 |    0.4554748 |    8.2471313 |         0.25 |    95154.062 |    23788.516 |    10679.021 |    196187.01 |    4864.0248 |
-      cell_04 |         3070 |         1466 |       183.25 |     5.954819 |     7.931612 |        0.125 |     122861.9 |    15357.738 |    515.12589 |    121811.62 |    3067.4815 |
-      cell_05 |         3590 |         1801 |     112.5625 |    5.4502661 |    7.5898124 |       0.0625 |     148366.6 |    9272.9122 |    331.13888 |    70379.664 |     1804.795 |
-      cell_06 |         4072 |         2268 |       70.875 |   0.65301171 |    7.1991061 |      0.03125 |    174863.48 |    5464.4838 |    1574.4972 |    39339.399 |    1028.1651 |
-      cell_07 |         4576 |         2833 |    44.265625 |    4.4731887 |    6.7650225 |     0.015625 |    212238.74 |    3316.2303 |    134.19182 |    22434.372 |    600.26535 |
-      cell_08 |         5103 |         3686 |    28.796875 |   0.11047123 |     6.432616 |    0.0078125 |    262991.75 |    2054.6231 |    3267.9976 |    13216.601 |     361.0197 |
-      cell_09 |         5598 |         4366 |    17.054688 |   0.42675871 |    6.1918723 |   0.00390625 |    292132.62 |    1141.1431 |     459.5825 |    7065.8121 |    196.13084 |
-      cell_10 |         6047 |         5060 |    9.8828125 |   0.52123392 |    5.8225786 |  0.001953125 |    337639.39 |    659.45192 |    209.34902 |    3839.7107 |    109.11981 |
-      cell_11 |         6562 |         5654 |    5.5214844 |   0.74597193 |    5.7143162 | 0.0009765625 |    374977.69 |    366.18915 |    80.516756 |    2092.5206 |     60.06324 |
-      cell_12 |         7191 |         6757 |    3.2993164 |    3.4213018 |    5.4561174 |0.00048828125 |     439008.5 |    214.35962 |    10.001932 |    1169.5712 |    34.219629 |
-      cell_13 |         7916 |         8005 |    1.9543457 |   0.39883872 |    5.2201257 |0.00024414062 |    509098.26 |    124.29157 |    48.485269 |     648.8176 |    19.337803 |
-      cell_14 |         8565 |         9506 |    1.1604004 |   0.30938887 |    4.9708908 |0.00012207031 |    568800.86 |    69.433698 |    33.872764 |    345.14733 |    10.479856 |
-      cell_15 |         9597 |        11415 |   0.69671631 |   0.10562749 |    4.6426537 |6.1035156e-05 |    664341.06 |     40.54816 |    55.712606 |    188.25107 |    5.8847826 |
-      cell_16 |        10729 |        13394 |   0.40875244 |   0.16472395 |    4.5099419 |3.0517578e-05 |    779512.23 |    23.788825 |    20.668965 |    107.28622 |    3.4046735 |
-      cell_17 |        11496 |        15316 |   0.23370361 |   0.28046911 |    4.3122364 |1.5258789e-05 |    869499.69 |    13.267512 |    6.5919157 |    57.212649 |    1.8488287 |
-      cell_18 |        11432 |        16013 |   0.12216949 |   0.19225386 |     4.182145 |7.6293945e-06 |    892525.11 |    6.8094262 |    4.8439475 |    28.478007 |   0.93126759 |
-      cell_19 |         4629 |            0 |            0 |     2.148388 |    4.3015073 |7.6293945e-06 |     977323.8 |    7.4563888 |   0.47969696 |    32.073711 |    1.0305752 |
+      cell_00 |          100 |            0 |            0 |     6.412618 |    7.2046589 |            1 |    29930.894 |    29930.894 |    894.15222 |    215641.88 |    5733.8566 |
+      cell_01 |         2642 |          822 |          822 |    8.1254925 |      8.97782 |            1 |    67156.306 |    67156.306 |    1781.5657 |    602917.23 |    14476.099 |
+      cell_02 |         2740 |         1090 |          545 |   0.22464378 |    8.5667399 |          0.5 |     92796.31 |    46398.155 |    43211.697 |    397480.93 |    9707.2389 |
+      cell_03 |         3190 |         1347 |       336.75 |    1.1342186 |    8.3538965 |         0.25 |    116090.32 |     29022.58 |     5273.194 |    242451.63 |    5980.9549 |
+      cell_04 |         3597 |         1756 |        219.5 |    3.7635805 |    7.9138249 |        0.125 |    139952.78 |    17494.098 |    926.23456 |    138445.23 |    3485.9584 |
+      cell_05 |         4094 |         2046 |      127.875 |   0.70963966 |    7.6698512 |       0.0625 |    169133.16 |    10570.823 |    2917.8158 |    81076.638 |    2070.5978 |
+      cell_06 |         4626 |         2587 |     80.84375 |   0.69599818 |    7.2338188 |      0.03125 |    201421.07 |    6294.4083 |    1709.5024 |    45532.609 |    1189.8105 |
+      cell_07 |         5127 |         3265 |    51.015625 |   0.34080023 |    6.9493075 |     0.015625 |    240580.47 |    3759.0699 |    2031.0558 |    26122.933 |    692.18428 |
+      cell_08 |         5575 |         3995 |    31.210938 |   0.12380497 |    6.6187395 |    0.0078125 |    285444.08 |    2230.0319 |    3225.3904 |        14760 |    399.31935 |
+      cell_09 |         5872 |         4733 |    18.488281 |   0.34507248 |     6.284513 |   0.00390625 |    315983.02 |    1234.3087 |    620.77725 |     7757.029 |    214.21315 |
+      cell_10 |         6269 |         5246 |    10.246094 |    1.1957682 |    5.9405299 |  0.001953125 |    355108.85 |    693.57197 |    97.413889 |     4120.185 |    116.48443 |
+      cell_11 |         6783 |         6415 |    6.2646484 |   0.11376609 |    5.6268303 | 0.0009765625 |    421090.96 |    411.22164 |    588.34401 |    2313.8744 |    66.933599 |
+      cell_12 |         7240 |         7657 |    3.7387695 |   0.93626278 |    5.3177947 |0.00048828125 |    485694.67 |     237.1556 |     39.92864 |    1261.1448 |      37.3837 |
+      cell_13 |         7727 |         8700 |    2.1240234 |   0.19278027 |    5.0812415 |0.00024414062 |    538852.47 |    131.55578 |    104.45723 |    668.46669 |    20.137294 |
+      cell_14 |         8485 |        10199 |    1.2449951 |     0.296788 |    4.7918018 |0.00012207031 |    610696.96 |    74.547969 |    37.145575 |    357.21909 |    11.024361 |
+      cell_15 |         9272 |        12165 |   0.74249268 |  0.097600997 |     4.502395 |6.1035156e-05 |    702841.37 |    42.898033 |    62.677731 |    193.14389 |     6.117409 |
+      cell_16 |        10125 |        14125 |   0.43106079 |   0.21779077 |    4.3352577 |3.0517578e-05 |    788971.66 |    24.077504 |    15.425182 |    104.38219 |    3.3594622 |
+      cell_17 |        10888 |        15970 |   0.24368286 |   0.21119647 |    4.1587951 |1.5258789e-05 |    872174.59 |    13.308328 |    8.5725239 |    55.346609 |    1.8104868 |
+      cell_18 |        10957 |        16522 |   0.12605286 |   0.25899483 |    4.0372135 |7.6293945e-06 |     890096.6 |    6.7908981 |    3.4967357 |    27.416306 |   0.90563646 |
+      cell_19 |         4611 |            0 |            0 |   0.22465889 |     4.063931 |7.6293945e-06 |    963573.69 |    7.3514838 |    4.3491771 |    29.875923 |    0.9770813 |
 =============================================
 =============================================================
- Number of event processed : 787 for hit collection: PhantomSDMinus
+ Number of event processed : 933 for hit collection: PhantomSDMinus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |          936 |          568 |       517.75 |    8.1991083 |    8.4306855 |    0.9538293 |    24049.759 |    22939.365 |    549.99693 |    193394.57 |    4509.4845 |
-      cell_02 |         1163 |          842 |    410.29309 |  0.068400442 |    7.5460027 |    0.4998146 |     33264.25 |    16625.958 |     43125.04 |    125459.52 |    2949.7718 |
-      cell_03 |         1314 |         1017 |    256.17188 |    7.4868865 |    7.6409961 |   0.25132772 |    38378.896 |    9645.6805 |    233.36992 |    73702.607 |    1747.2141 |
-      cell_04 |         1563 |         1290 |    196.21143 |    6.4598239 |    7.1105778 |   0.13100868 |    47082.393 |    6168.2021 |    160.21353 |    43859.481 |    1034.9512 |
-      cell_05 |         1843 |         1556 |    115.11182 |    5.3634719 |    6.8149009 |  0.066870473 |    56390.713 |    3770.8737 |    113.09759 |     25698.13 |    606.59577 |
-      cell_06 |         2099 |         1678 |    62.859375 |    5.1413594 |    6.1301196 |   0.03531796 |    64604.971 |    2281.7158 |    65.044531 |    13987.191 |    334.41731 |
-      cell_07 |         2240 |         1843 |    32.359695 |    4.5707917 |    6.2463356 |  0.017423265 |    67719.552 |    1179.8957 |    38.467981 |    7370.0245 |    175.82913 |
-      cell_08 |         2520 |         2139 |    21.395569 |    4.6562747 |    5.7794065 | 0.0091642278 |    78755.277 |     721.7313 |    21.579949 |    4171.1785 |    100.48217 |
-      cell_09 |         2684 |         2201 |    9.8198242 |    4.6799818 |    5.8829939 | 0.0043279917 |    82666.666 |    357.78065 |    11.103275 |    2104.8214 |    51.963126 |
-      cell_10 |         2874 |         2389 |    5.8816376 |    4.1400497 |    5.1619995 | 0.0024036166 |    88893.174 |    213.66511 |    6.5632946 |    1102.9392 |    27.172366 |
-      cell_11 |         3031 |         2433 |     2.522522 |     2.397977 |    5.3846132 | 0.0011002997 |    93970.724 |    103.39596 |    6.0120112 |    556.74722 |    14.416665 |
-      cell_12 |         3293 |         2706 |    1.8359375 |    4.0380131 |    4.9428319 |0.00059176456 |    102474.38 |    60.640708 |    1.9136573 |    299.73682 |    7.7273732 |
-      cell_13 |         3593 |         3115 |     1.142807 |   0.25931918 |    4.7392705 |0.00029633757 |       110322 |    32.692554 |    15.577227 |    154.93886 |    4.0394739 |
-      cell_14 |         3705 |         3178 |   0.80918121 |   0.24552531 |    3.7814397 |0.00017573938 |    115596.86 |    20.314921 |    8.4799473 |    76.819648 |    2.0820417 |
-      cell_15 |         4037 |         3368 |   0.27264404 |    3.1782731 |    4.4283426 |7.1540815e-05 |    125875.75 |    9.0052537 |   0.34725682 |    39.878348 |     1.103677 |
-      cell_16 |         4484 |         3986 |   0.14471436 |  0.096027623 |    4.1613773 |3.6697384e-05 |    142614.08 |    5.2335636 |    6.3936658 |    21.778833 |   0.61396854 |
-      cell_17 |         4805 |         4476 |   0.10412598 |    2.9741654 |    3.7935972 |1.9234175e-05 |    149925.64 |     2.883696 |   0.10536957 |    10.939581 |   0.31338653 |
-      cell_18 |         4812 |         4221 |  0.042503357 |   0.26151504 |     4.002359 | 8.676869e-06 |    147837.78 |     1.282769 |   0.58103615 |    5.1341022 |   0.15194969 |
+      cell_01 |         1052 |          598 |    504.87891 |    8.5895138 |     8.795173 |   0.94094587 |     27396.07 |    25778.218 |    619.42054 |    226723.89 |    5320.5213 |
+      cell_02 |         1398 |          918 |    443.32812 |     6.603526 |    7.8400753 |   0.49710341 |    38786.483 |    19280.893 |    529.80771 |    151163.65 |     3498.599 |
+      cell_03 |         1660 |         1267 |     340.1875 |     6.553585 |    7.4219375 |   0.25597852 |    50340.262 |    12886.026 |    337.30314 |     95639.28 |    2210.5448 |
+      cell_04 |         1864 |         1315 |     188.6875 |    6.3166862 |    6.7389575 |   0.13604287 |    55827.257 |    7594.9001 |    191.19878 |    51181.709 |    1207.7427 |
+      cell_05 |         2144 |         1749 |    119.07324 |   0.19525086 |    6.6330975 |  0.066938601 |    66588.617 |    4457.3489 |    3538.6086 |     29566.03 |    690.91638 |
+      cell_06 |         2354 |         1707 |    61.507812 |    5.7707761 |    6.2234657 |  0.035516676 |    72789.992 |    2585.2586 |    65.227879 |    16089.268 |    376.41548 |
+      cell_07 |         2503 |         1897 |     37.15802 |    5.4904894 |    6.0441308 |  0.018556122 |    74959.596 |    1390.9594 |    36.137731 |    8407.1403 |    198.41383 |
+      cell_08 |         2732 |         2156 |    32.796997 |   0.25717137 |    5.5134609 | 0.0096307502 |    83754.777 |    806.62133 |    420.61728 |    4447.2752 |    108.17072 |
+      cell_09 |         2832 |         2299 |    13.257812 |    4.3047323 |    5.1954983 | 0.0047373549 |    86991.774 |     412.1109 |    12.475517 |    2141.1215 |     53.70376 |
+      cell_10 |         2921 |         2267 |    5.5460205 |   0.31233602 |    5.5336762 | 0.0022368177 |     87626.89 |    196.00538 |    87.644736 |    1084.6303 |    27.374608 |
+      cell_11 |         3045 |         2439 |    4.1392822 |    3.8518218 |    5.3102327 | 0.0011435499 |    93012.805 |    106.36479 |    3.7202434 |    564.82177 |    14.329715 |
+      cell_12 |         3234 |         2670 |    1.8628235 |   0.11981876 |    5.0233268 |0.00057597364 |     101333.9 |    58.365653 |     62.52079 |    293.18975 |    7.4911637 |
+      cell_13 |         3405 |         2862 |   0.87204742 |    3.6307264 |    4.7032434 |0.00030476427 |    108215.68 |    32.980272 |    1.0604894 |    155.11425 |    3.8503467 |
+      cell_14 |         3577 |         3030 |    1.5906372 |    3.2014733 |    3.0617787 |0.00020822417 |     109450.3 |    22.790198 |   0.58687151 |    69.778544 |    1.8788535 |
+      cell_15 |         3862 |         3261 |   0.27055359 |   0.12502633 |    4.1599682 |7.0821577e-05 |    118200.94 |    8.3711773 |    7.8570064 |    34.823831 |   0.98233271 |
+      cell_16 |         4094 |         3404 |   0.11963654 |    2.9098649 |    4.2359078 |3.4065051e-05 |    128718.79 |    4.3848122 |   0.18235867 |     18.57366 |    0.5306391 |
+      cell_17 |         4302 |         3522 |  0.068710327 |   0.80633151 |    3.9002337 |1.7886038e-05 |    131938.72 |     2.359861 |   0.33832631 |    9.2040092 |   0.27280317 |
+      cell_18 |         4425 |         3764 |  0.039474487 |    2.3805693 |    3.8860188 |8.7810435e-06 |    134541.92 |    1.1814184 |  0.057485204 |    4.5910141 |   0.13684751 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 =============================================================
- Number of event processed : 787 for hit collection: PhantomSDPlus
+ Number of event processed : 933 for hit collection: PhantomSDPlus
 =============================================================
        Volume |  Tr.Entering |   Collisions |     Coll*WGT |    NumWGTedE |   FluxWGTedE |    Av.Tr.WGT |           SL |          SLW |        SLW_v |         SLWE |       SLWE_v |
       cell_00 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
-      cell_01 |          786 |          618 |    561.40625 |  0.042090356 |    7.6908491 |   0.93106267 |    21385.245 |    19911.003 |    85504.031 |    153132.52 |    3598.8951 |
-      cell_02 |          918 |          693 |    310.75604 |    6.9240417 |    7.5197515 |   0.48370948 |    25731.891 |     12446.76 |    321.26048 |    93596.539 |     2224.421 |
-      cell_03 |         1087 |          830 |    186.96875 |    6.9795335 |    7.5263745 |     0.239401 |    32237.707 |    7717.7393 |    199.08191 |    58086.596 |    1389.4989 |
-      cell_04 |         1278 |         1073 |    141.32812 |    6.0773461 |    6.9366758 |   0.12452735 |    38616.928 |    4808.8638 |    129.46655 |    33357.529 |    786.81306 |
-      cell_05 |         1435 |         1326 |    91.730469 |    5.2195974 |     6.352625 |  0.066077954 |    45494.782 |    3006.2021 |    85.740435 |    19097.275 |    447.53055 |
-      cell_06 |         1633 |         1503 |    51.651367 |    4.6413074 |    5.9941272 |   0.03320961 |    52347.128 |    1738.4277 |    53.002459 |    10420.357 |    246.00071 |
-      cell_07 |         1780 |         1667 |    30.998062 |  0.040727682 |    6.0382952 |  0.016685059 |    55780.328 |    930.69808 |    3327.3272 |    5619.8297 |    135.51432 |
-      cell_08 |         1932 |         1744 |    15.854401 |   0.39362635 |    5.8330471 | 0.0085731765 |    62220.431 |    533.42673 |    191.90807 |    3111.5032 |    75.540075 |
-      cell_09 |         2061 |         1763 |    7.6685791 |  0.075585069 |    5.6819651 | 0.0042145805 |    64020.671 |    269.82027 |    504.48419 |    1533.1094 |    38.131472 |
-      cell_10 |         2183 |         1978 |    4.4361572 |    3.6673759 |    5.2775599 | 0.0020777138 |    68336.122 |    141.98291 |    5.2583152 |    749.32328 |    19.284219 |
-      cell_11 |         2315 |         1872 |    2.8518066 |   0.36839818 |    4.7738751 | 0.0011929278 |    72003.431 |    85.894897 |    28.587714 |    410.05151 |    10.531662 |
-      cell_12 |         2486 |         2171 |    1.1990356 |    3.9383228 |    4.9055556 |0.00056206716 |    76110.855 |    42.779412 |    1.3931259 |    209.85678 |    5.4865793 |
-      cell_13 |         2680 |         2498 |    1.0926132 |  0.050584332 |    4.3047666 |0.00031720206 |    83502.268 |    26.487092 |    57.804017 |    114.02075 |    2.9239776 |
-      cell_14 |         2839 |         2515 |    0.4907074 |    3.2654437 |    3.7466608 |0.00016710497 |    89834.025 |    15.011712 |   0.46698048 |    56.243792 |    1.5248985 |
-      cell_15 |         3140 |         2771 |   0.20237732 |   0.18401152 |    4.4992559 | 6.651386e-05 |    99497.956 |    6.6179931 |    4.5386965 |    29.776044 |   0.83517245 |
-      cell_16 |         3369 |         3190 |   0.13002014 |   0.21940953 |    3.7654246 |3.9375826e-05 |    106950.97 |    4.2112827 |    2.0147015 |    15.857267 |   0.44204471 |
-      cell_17 |         3487 |         3085 |  0.064834595 |    2.7588271 |    3.8216262 |1.8190426e-05 |    109102.86 |    1.9846274 |  0.079845401 |     7.584504 |   0.22027966 |
-      cell_18 |         3374 |         3086 |  0.032157898 |   0.40398094 |     3.745744 |9.1029008e-06 |    104200.35 |   0.94852542 |   0.26236921 |    3.5529334 |   0.10599216 |
+      cell_01 |          909 |          529 |    455.92188 |    7.9394314 |    8.2644234 |   0.92221118 |    24093.636 |     22219.42 |    539.17619 |    183630.69 |    4280.7523 |
+      cell_02 |         1166 |          976 |    434.32031 |   0.11512609 |    7.6660755 |   0.47646451 |    33833.426 |    16120.427 |    25213.276 |    123580.41 |    2902.7059 |
+      cell_03 |         1308 |         1046 |    269.48828 |    6.4874944 |    7.0546376 |   0.24967007 |    40396.151 |     10085.71 |    256.42696 |    71151.028 |    1663.5684 |
+      cell_04 |         1465 |         1155 |    151.96777 |    5.9502592 |    6.5789284 |   0.12707512 |    45210.385 |    5745.1151 |    148.47181 |    37796.701 |    883.44574 |
+      cell_05 |         1678 |         1544 |    98.801331 |    6.0280797 |    6.5541406 |  0.063759242 |    51855.636 |     3306.276 |    84.378752 |    21669.798 |    508.64184 |
+      cell_06 |         1808 |         1477 |    54.453735 |   0.09136324 |    6.1118272 |   0.03431999 |    56130.067 |    1926.3834 |    3066.9507 |    11773.722 |    280.20656 |
+      cell_07 |         1927 |         1509 |     26.71875 |    0.1164283 |    5.9623474 |  0.017576322 |    58650.004 |    1030.8514 |    1264.3149 |     6146.294 |    147.20204 |
+      cell_08 |         2101 |         1924 |    27.830383 |     4.344461 |    4.6603026 |   0.01043861 |    63475.674 |    662.59782 |      17.2201 |    3087.9064 |    74.812051 |
+      cell_09 |         2108 |         1894 |    8.6851807 |     4.156091 |    5.3051335 | 0.0044405668 |    64788.884 |    287.69937 |    9.1436657 |    1526.2836 |    38.001907 |
+      cell_10 |         2187 |         1822 |    4.4572754 |    3.8944985 |    4.9525929 |  0.002385471 |    68518.276 |    163.44836 |    5.2180306 |    809.49319 |    20.321612 |
+      cell_11 |         2356 |         2120 |    2.7085724 |  0.066345888 |    5.0917815 |  0.001102274 |     74529.21 |    82.151612 |    160.53064 |    418.29806 |    10.650548 |
+      cell_12 |         2397 |         2125 |    1.2097473 |   0.10594401 |    4.9407395 |0.00054479775 |    75418.494 |    41.087826 |    48.562238 |    203.00424 |    5.1448781 |
+      cell_13 |         2511 |         2252 |    1.2137146 |    3.2852217 |    3.2466332 |0.00044821582 |    75906.769 |    34.022615 |   0.78043197 |    110.45895 |    2.5638921 |
+      cell_14 |         2701 |         2291 |   0.37323761 |    1.9769841 |    4.1239709 |0.00014468929 |    84406.483 |    12.212714 |   0.69875245 |    50.364878 |    1.3814225 |
+      cell_15 |         2913 |         2617 |   0.20530701 |    2.8112673 |    4.1731409 |6.7510876e-05 |    89112.593 |    6.0160692 |   0.25414002 |    25.105905 |   0.71445554 |
+      cell_16 |         3071 |         2776 |   0.10653687 |     2.801235 |    3.8349168 |3.5654499e-05 |    97212.965 |    3.4660795 |   0.13785857 |    13.292127 |   0.38617426 |
+      cell_17 |         3185 |         2894 |  0.057601929 |    2.4721671 |    3.8837491 |1.7077368e-05 |    100622.63 |    1.7183696 |  0.079898129 |    6.6737164 |   0.19752153 |
+      cell_18 |         3062 |         2412 |  0.019950867 |    1.2040836 |    4.1308723 |8.2861561e-06 |    91109.796 |   0.75494999 |  0.076553529 |     3.118602 |  0.092176849 |
       cell_19 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |            0 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron

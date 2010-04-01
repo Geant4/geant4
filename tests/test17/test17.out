@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -83,100 +83,22 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
  X position of the middle of the absorber 0 fm 
 G4VUserPhysicsList::Construct()
 Construct processes 
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Ionic processes for GenericIon
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Ionic processes for alpha
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Hadronic processes for anti_proton
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Ionic processes for deuteron
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Hadronic processes for kaon+
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Hadronic processes for kaon-
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Hadronic processes for pi+
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Hadronic processes for pi-
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 Hadronic processes for proton
 G4teoCrossSection: sorry, only ECPSSR model available at the moment
 Test17PhysicsList::SetCuts:CutLength : 100 um 
@@ -203,7 +125,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -244,9 +166,9 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hLowEIoni:    Knock-on electron cross sections . 
         Good description above the mean excitation energy.
@@ -261,9 +183,9 @@ hLowEIoni:    Knock-on electron cross sections .
         Nuclear stopping power model is ICRU_R49
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 G4hLowEnergyIonisation::BuildPhysicsTable for GenericIon mass(MeV)= 938.272 charge= 1 type= nucleus
 Cuts are defined 
 G4hLowEnergyIonisation::BuildPhysicsTable: Loss table is built 
@@ -294,9 +216,9 @@ G4hLowEnergyIonisation::BuildPhysicsTable: end for deuteron
 
 msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -342,23 +264,23 @@ muPairProd:   for  mu-    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -369,21 +291,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.21s Sys=0s
+  User=68.39s Real=68.4s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.1963 +- 0.00573885  microns 
-    CSDA  Range  in absorber = 9.04855 +- 0.00659516  microns 
+    Track Length in absorber = 9.18603 +- 0.00522836  microns 
+    CSDA  Range  in absorber = 9.03714 +- 0.00537414  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.137304 +- 0.00573885 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.179551 +- 0.00659516 microns 
+    Track Length (G4 - ICRU49) = 0.12703 +- 0.00522836 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.168137 +- 0.00537414 microns 
 
-Average Number electrons per event = 0
-Average Number photons per event   = 0
+Average Number electrons per event = 22.632
+Average Number photons per event   = 22.567
 
 #/tracking/verbose 0
 /gun/particle anti_proton
@@ -393,15 +315,15 @@ Average Number photons per event   = 0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -409,20 +331,23 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 1 start.
 Start Run processing.
+EvtNo= 149  length= 0.00940633  xend= 0.00153001
+EvtNo= 648  length= 0.0094237  xend= 0.00428755
+EvtNo= 750  length= 0.00898057  xend= 0.00221988
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.21s Sys=0s
+  User=68.39s Real=68.4s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18037 +- 0.00585821  microns 
-    CSDA  Range  in absorber = 9.02713 +- 0.00732481  microns 
+ end of Run TotNbofEvents = 997 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.17951 +- 0.00562982  microns 
+    CSDA  Range  in absorber = 9.02765 +- 0.00626313  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 0
-Average Number photons per event   = 0
+Average Number electrons per event = 22.1725
+Average Number photons per event   = 22.0893
 
 /gun/particle ion
 /gun/ion 6 12 6
@@ -434,15 +359,15 @@ G4hLowEnergyIonisation::BuildPhysicsTable for C12[0.0] mass(MeV)= 11174.9 charge
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -450,15 +375,16 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
+EvtNo= 249  length= 0.00419945  xend= -0.000630367
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.41s Real=0.41s Sys=0s
+  User=0.6s Real=0.6s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.56857 +- 0.00129545  microns 
-    CSDA  Range  in absorber = 6.94097 +- 0.0117308  microns 
+ end of Run TotNbofEvents = 999 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
+    Track Length in absorber = 8.56796 +- 0.00123631  microns 
+    CSDA  Range  in absorber = 6.95158 +- 0.0115585  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -476,15 +402,15 @@ Average Number photons per event   = 0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -495,21 +421,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.8s Real=6.8s Sys=0s
+  User=6.92s Real=6.93s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18415 +- 0.0183021  microns 
-    CSDA  Range  in absorber = 9.02005 +- 0.0299831  microns 
+    Track Length in absorber = 9.17646 +- 0.0152834  microns 
+    CSDA  Range  in absorber = 9.03108 +- 0.0164197  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.125153 +- 0.0183021 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.151052 +- 0.0299831 microns 
+    Track Length (G4 - ICRU49) = 0.117464 +- 0.0152834 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.162076 +- 0.0164197 microns 
 
-Average Number electrons per event = 22.42
-Average Number photons per event   = 22.42
+Average Number electrons per event = 22.61
+Average Number photons per event   = 22.52
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -520,15 +446,15 @@ Average Number photons per event   = 22.42
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1 eV     e-  6.47973 eV     e+  6.35152 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 0 fm 
- Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 0 eV 
+ Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
+ Energy thresholds :  gamma  1.11131 keV    e-  84.9506 keV    e+  84.1395 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -539,21 +465,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.85s Real=7.84s Sys=0s
+  User=7.8s Real=7.8s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18277 +- 0.0149771  microns 
-    CSDA  Range  in absorber = 9.03714 +- 0.0168893  microns 
+    Track Length in absorber = 9.16639 +- 0.015918  microns 
+    CSDA  Range  in absorber = 9.02426 +- 0.0171128  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.123774 +- 0.0149771 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.168142 +- 0.0168893 microns 
+    Track Length (G4 - ICRU49) = 0.107387 +- 0.015918 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.155255 +- 0.0171128 microns 
 
-Average Number electrons per event = 520.55
-Average Number photons per event   = 2.78
+Average Number electrons per event = 521.72
+Average Number photons per event   = 3.29
 
 G4 kernel has come to Quit state.
 

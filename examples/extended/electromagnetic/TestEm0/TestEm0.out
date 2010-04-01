@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,7 +69,7 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.40 %  ElmAbundance  31.62 %
 
 
-PhysicsList::AddPhysicsList: <standard>
+PhysicsList::AddPhysicsList: <emstandard_opt0>
 
 ========= Table of registered couples ==============================
 
@@ -90,11 +90,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   cross section per atom   : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
 
  
-  cross section per volume : 	     0.075796 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.565733 cm^-1
-  cross section per mass   : 	    0.0142393 cm2/g	    0.0920415 cm2/g	            0 cm2/g	     0.106281 cm2/g
+  cross section per volume : 	     0.075796 cm^-1	     0.489922 cm^-1	            0 cm^-1	     0.565718 cm^-1
+  cross section per mass   : 	    0.0142393 cm2/g	    0.0920387 cm2/g	            0 cm2/g	     0.106278 cm2/g
  
-  mean free path           : 	      13.1933 cm 	      2.04108 cm 	 5.82593e+288 pc 	      1.76762 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      9.40904 g/cm2 
+  mean free path           : 	      13.1933 cm 	      2.04114 cm 	 5.82593e+288 pc 	      1.76767 cm 
+        (g/cm2)            : 	       70.228 g/cm2 	       10.865 g/cm2 	 2.88022e+285 kg/cm2	      9.40928 g/cm2 
 
 -------------------------------------------------------------
 
@@ -104,24 +104,24 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
- Max_energy _transferable : 10 MeV (4.9049 cm )
+ Max_energy _transferable : 10 MeV (4.90425 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
-  cross section per volume : 	     0.994761 cm^-1	     0.343859 cm^-1	      1.33862 cm^-1
-  cross section per mass   : 	     0.994761 cm2/g	     0.343859 cm2/g	      1.33862 cm2/g
+  cross section per volume : 	     0.994763 cm^-1	     0.346324 cm^-1	      1.34109 cm^-1
+  cross section per mass   : 	     0.994763 cm2/g	     0.346324 cm2/g	      1.34109 cm2/g
  
-  mean free path           : 	      1.00527 cm 	      2.90817 cm 	      7.47038 mm 
-        (g/cm2)            : 	      1.00527 g/cm2 	      2.90817 g/cm2 	      747.038 mg/cm2
+  mean free path           : 	      1.00527 cm 	      2.88747 cm 	      7.45664 mm 
+        (g/cm2)            : 	      1.00527 g/cm2 	      2.88747 g/cm2 	      745.664 mg/cm2
 
  
   restricted dE/dx         : 	      1.61536 MeV/cm	      12.5324 eV/cm 	      1.61538 MeV/cm
       (MeV/g/cm2)          : 	      1.61536 MeV*cm2/g	      12.5324  eV*cm2/g	      1.61538 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.05854 cm  ( 6.05854 g/cm2 )
-  range from full dE/dx    : 	  4.9049 cm  (  4.9049 g/cm2 )
+  range from restrict dE/dx: 	 6.05865 cm  ( 6.05865 g/cm2 )
+  range from full dE/dx    : 	 4.90425 cm  ( 4.90425 g/cm2 )
  
-  transport mean free path : 	 28.2437 cm  ( 28.2437 g/cm2 )
+  transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
  
   critical energy (Rossi)  : 	 78.7733 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 

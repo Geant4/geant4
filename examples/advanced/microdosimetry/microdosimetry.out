@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-01    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -64,7 +64,7 @@ proton_G4DNAExcitation:   for  proton    SubType= 51
  Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMillerGreenExcitationModel :     Emin=          0 eV         Emax=   500 keV
-DNABornExcitationModel :     Emin=        500 keV        Emax=   10 MeV
+DNABornExcitationModel :     Emin=        500 keV        Emax=   100 MeV
 
 proton_G4DNAIonisation:   for  proton    SubType= 51
  Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
