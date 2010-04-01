@@ -1,4 +1,4 @@
-$Id: History,v 1.408 2010-04-01 20:00:42 vnivanch Exp $
+$Id: History,v 1.409 2010-04-01 20:04:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,7 +27,8 @@ committal in the CVS repository !
   Moved SetBuildTableFlag() method to public.
 - G4EmCorrections: added protection against large Barkas and Bloch
   corrections in the case of large negatively charged particle
-  (100*e-); addresses problem reported by ATLAS.
+  (Q^2 > 50); addresses problem of simulation of highly charged 
+  exotic particles reported by ATLAS.
 - Code cleanup in G4EmCalculator. Reordered inline methods and
   improved comments in classes G4VEmModel, G4VEmProcess,
   G4VEnergyLossProcess, G4VMultipleScattering and G4LossTableManager.
