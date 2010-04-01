@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PositronPenelope.cc,v 1.1 2008-12-15 10:22:59 pandola Exp $
+// $Id: Tst14PositronPenelope.cc,v 1.2 2010-04-01 08:52:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola (pandola@lngs.infn.it)
@@ -39,7 +39,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4PenelopeIonisation.hh"
 #include "G4PenelopeBremsstrahlung.hh"
 #include "G4PenelopeAnnihilation.hh"
@@ -65,7 +65,7 @@ void Tst14PositronPenelope::ConstructProcess()
      
       if (particleName == "e+") 
 	{
-	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
+	  manager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
 	  manager->AddProcess(new G4PenelopeIonisation,     -1, 2, 2);
 	  manager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
 	  manager->AddProcess(new G4PenelopeAnnihilation,    0,-1, 4);

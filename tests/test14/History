@@ -1,4 +1,4 @@
--n $Id: History,v 1.34 2008-12-15 10:26:31 pandola Exp $
+-n $Id: History,v 1.35 2010-04-01 08:52:16 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 Apr 2010 - S. Incerti tag test14-V09-03-00
+              Replaced obsolete G4MultipleScattering by G4eMultipleScattering
+              in all physics lists
 
 15 Dec 2008 - L. Pandola tag test14-V09-02-00
 	      Added physics constructor for positrons-Penelope

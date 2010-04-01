@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronEEDL.cc,v 1.2 2006-06-29 21:42:00 gunter Exp $
+// $Id: Tst14ElectronEEDL.cc,v 1.3 2010-04-01 08:52:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,7 +39,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
 
@@ -63,7 +63,7 @@ void Tst14ElectronEEDL::ConstructProcess()
      
       if (particleName == "e-") 
 	{
-	  manager->AddProcess(new G4MultipleScattering,     -1, 1,1);
+	  manager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
 	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
 	  manager->AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
 	}   
