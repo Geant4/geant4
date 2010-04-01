@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.hh,v 1.5 2006-06-29 19:01:18 gunter Exp $
+// $Id: G4AllocatorPool.hh,v 1.6 2010-04-01 12:43:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,13 @@ class G4AllocatorPool
     void  Reset();
       // Return storage to the free store
 
+    inline int  GetNoPages() const;
+      // Return the total number of allocated pages
+    inline unsigned int  GetPageSize() const;
+      // Accessor for default page size
+    inline void GrowPageSize( unsigned int factor );
+      // Increase default page size by a given factor
+
   private:
 
     G4AllocatorPool& operator= (const G4AllocatorPool& right);
@@ -96,7 +103,7 @@ class G4AllocatorPool
   private:
 
     const unsigned int esize;
-    const unsigned int csize;
+    unsigned int csize;
     G4PoolChunk* chunks;
     G4PoolLink* head;
     int nchunks;
@@ -139,6 +146,36 @@ inline unsigned int
 G4AllocatorPool::Size() const
 {
   return nchunks*csize;
+}
+
+// ************************************************************
+// GetNoPages
+// ************************************************************
+//
+inline int
+G4AllocatorPool::GetNoPages() const
+{
+  return nchunks;
+}
+
+// ************************************************************
+// GetPageSize
+// ************************************************************
+//
+inline unsigned int
+G4AllocatorPool::GetPageSize() const
+{
+  return csize;
+}
+
+// ************************************************************
+// GrowPageSize
+// ************************************************************
+//
+inline void
+G4AllocatorPool::GrowPageSize( unsigned int sz )
+{
+  csize = (sz) ? sz*csize : csize; 
 }
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.20 2010-03-30 08:17:24 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.21 2010-04-01 12:43:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,12 +65,17 @@ class G4Allocator
       // new and delete operators in the client <Type> object
 
     inline void ResetStorage();
-      // Returns allocated storage to the free store, resets
-      // allocator and page sizes.
+      // Returns allocated storage to the free store, resets allocator.
       // Note: contents in memory are lost using this call !
 
     inline size_t GetAllocatedSize() const;
       // Returns the size of the total memory allocated
+    inline int GetNoPages() const;
+      // Returns the total number of allocated pages
+    inline size_t GetPageSize() const;
+      // Returns the current size of a page
+    inline void IncreasePageSize( unsigned int sz );
+      // Resets allocator and increases default page size of a given factor
 
   public:  // without description
 
@@ -209,6 +214,37 @@ template <class Type>
 size_t G4Allocator<Type>::GetAllocatedSize() const
 {
   return mem.Size();
+}
+
+// ************************************************************
+// GetNoPages
+// ************************************************************
+//
+template <class Type>
+int G4Allocator<Type>::GetNoPages() const
+{
+  return mem.GetNoPages();
+}
+
+// ************************************************************
+// GetPageSize
+// ************************************************************
+//
+template <class Type>
+size_t G4Allocator<Type>::GetPageSize() const
+{
+  return mem.GetPageSize();
+}
+
+// ************************************************************
+// IncreasePageSize
+// ************************************************************
+//
+template <class Type>
+void G4Allocator<Type>::IncreasePageSize( unsigned int sz )
+{
+  ResetStorage();
+  mem.GrowPageSize(sz); 
 }
 
 // ************************************************************
