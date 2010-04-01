@@ -1,4 +1,4 @@
-$Id: History,v 1.487 2010-04-01 19:54:35 vnivanch Exp $
+$Id: History,v 1.488 2010-04-01 20:05:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 31 March 09:  V.Ivant (emstand-V09-03-02a)
+  Summary of modifications for the patch-01 for 9.3 release:
 - G4CoulombScatteringModel: added comments to relativistic formula.
 - G4CoulombScattering: removed inline method SetBuildTableFlag()
                        which was hiding implementation in the base class.
