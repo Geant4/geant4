@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50AntiProtonZiegler2000.cc,v 1.1 2006-01-27 11:14:57 chauvie Exp $
+// $Id: Tst50AntiProtonZiegler2000.cc,v 1.2 2010-04-01 09:48:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 #include "Tst50AntiProtonZiegler2000.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+//#include "G4MultipleScattering.hh"
 #include "G4AntiProton.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hLowEnergyLoss.hh"

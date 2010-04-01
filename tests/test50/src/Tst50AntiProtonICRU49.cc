@@ -31,7 +31,7 @@
 #include "Tst50AntiProtonICRU49.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+//#include "G4MultipleScattering.hh"
 #include "G4AntiProton.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hLowEnergyLoss.hh"

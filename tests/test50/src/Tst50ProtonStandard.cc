@@ -32,7 +32,7 @@
 #include "Tst50ProtonStandard.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+//#include "G4MultipleScattering.hh"
 #include "G4Proton.hh"
 #include "G4hIonisation.hh"
 #include "G4StepLimiter.hh"

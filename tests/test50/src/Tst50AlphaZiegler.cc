@@ -26,7 +26,7 @@
 #include "Tst50AlphaZiegler.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+//#include "G4MultipleScattering.hh"
 #include "G4Proton.hh"
 #include "G4hLowEnergyIonisation.hh"
 #include "G4hLowEnergyLoss.hh"

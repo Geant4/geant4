@@ -26,7 +26,7 @@
 #include "Tst50AlphaStandard.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+//#include "G4MultipleScattering.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 #include "G4ionIonisation.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst50ElectronStandard.cc,v 1.4 2006-06-29 22:05:40 gunter Exp $
+// $Id: Tst50ElectronStandard.cc,v 1.5 2010-04-01 09:48:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,7 +39,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4StepLimiter.hh"

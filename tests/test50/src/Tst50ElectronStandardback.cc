@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst50ElectronStandardback.cc,v 1.3 2006-06-29 22:05:42 gunter Exp $
+// $Id: Tst50ElectronStandardback.cc,v 1.4 2010-04-01 09:48:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -41,7 +41,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 
@@ -65,8 +65,8 @@ void Tst50ElectronStandardback::ConstructProcess()
      
       if (particleName == "e-") 
 	{
-          G4MultipleScattering*  multipleScattering= 
-                                             new G4MultipleScattering();
+          G4eMultipleScattering*  multipleScattering= 
+                                             new G4eMultipleScattering();
 	  manager->AddProcess(multipleScattering, -1, 1,1);
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);

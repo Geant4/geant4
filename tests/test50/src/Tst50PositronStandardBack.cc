@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst50PositronStandardBack.cc,v 1.2 2006-06-29 22:06:04 gunter Exp $
+// $Id: Tst50PositronStandardBack.cc,v 1.3 2010-04-01 09:48:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,7 +39,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -64,7 +64,7 @@ void Tst50PositronStandardBack::ConstructProcess()
      
       if (particleName == "e+") 
 	{
-          G4MultipleScattering* scattering =   new G4MultipleScattering();
+          G4eMultipleScattering* scattering =   new G4eMultipleScattering();
 	  manager->AddProcess(scattering, -1, 1,1);
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);

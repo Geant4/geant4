@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2006-01-27 11:21:46 chauvie Exp $
+$Id: History,v 1.10 2010-04-01 09:48:30 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-04-2010 S. Incerti - tag test50-V09-03-00
+           Removed obsolete multiple scattering models 
+
 27-01-2006 Stephane Chauvie 
 	   Added Pbar Test
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50ElectronEEDLback.hh,v 1.3 2006-06-29 22:04:24 gunter Exp $
+// $Id: Tst50ElectronEEDLback.hh,v 1.4 2010-04-01 09:48:30 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -40,7 +40,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-class G4MultipleScattering;
+class G4eMultipleScattering;
 class Tst50ElectronEEDLback : public G4VPhysicsConstructor {
 
 public: 
