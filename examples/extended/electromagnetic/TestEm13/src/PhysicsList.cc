@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.7 2009-11-19 17:30:25 maire Exp $
+// $Id: PhysicsList.cc,v 1.8 2010-04-02 15:46:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -226,7 +226,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 #include "G4Positron.hh"
 
 void PhysicsList::SetCuts()
-{    
+{
+  // fixe lower limit for cut
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(cutForGamma, "gamma");

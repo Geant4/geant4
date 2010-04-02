@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2006-06-29 16:44:47 gunter Exp $
+// $Id: RunAction.cc,v 1.7 2010-04-02 15:46:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,7 +129,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   //compute cross section and related quantities
   //
-  G4double CrossSection = std::log(1./ratio)/tickness;     
+  G4double CrossSection = - std::log(ratio)/tickness;     
   G4double massicCS  = CrossSection/density;
    
   G4cout << " ---> CrossSection per volume:\t" << CrossSection*cm << " cm^-1 "
