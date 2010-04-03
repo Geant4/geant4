@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteraction.cc,v 1.6 2009-08-30 16:12:34 vnivanch Exp $
+// $Id: G4HadronicInteraction.cc,v 1.7 2010-04-03 00:40:57 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Interaction  base class
@@ -39,15 +39,18 @@
 
 G4HadronicInteraction::G4HadronicInteraction(const G4String& modelName) :
   verboseLevel(0), theMinEnergy(0.0), theMaxEnergy(25.0*GeV), 
-  isBlocked(false), recoilEnergyThreshold(0.0), theModelName(modelName)
+  isBlocked(false), recoilEnergyThreshold(0.0), theModelName(modelName),
+  epCheckLevels(DBL_MAX, DBL_MAX)
 { 
   G4HadronicInteractionRegistry::Instance()->RegisterMe(this);
 }
-    
+
+
 G4HadronicInteraction::~G4HadronicInteraction()
 {
   G4HadronicInteractionRegistry::Instance()->RemoveMe(this);
 }
+
 
 G4double 
 G4HadronicInteraction::SampleInvariantT(const G4ParticleDefinition*, 
