@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.56 2010-03-31 18:04:15 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.57 2010-04-03 16:59:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -119,8 +119,6 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  // temporary protection
-  if(Barkas < 0.0 && Barkas < Bloch && q2 > 50) { Barkas = Bloch; }
 
   G4double sum = (2.0*(Barkas + Bloch) + Mott);
 
@@ -171,7 +169,6 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
   G4double Mott   = MottCorrection (p, mat, e);
-  if(Barkas < 0.0 && Barkas < Bloch) { Barkas = Bloch; }
 
   G4double sum = 2.0*(Barkas*(charge - 1.0)/charge + Bloch) + Mott;
 
@@ -554,6 +551,10 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
   }
 
   BarkasTerm *= 1.29*charge/material->GetTotNbOfAtomsPerVolume();
+
+  // temporary protection
+  if(charge < -7.0 ) { BarkasTerm *= (-7.0/charge); }
+
   return BarkasTerm;
 }
 
@@ -578,7 +579,7 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
 
   G4double res = -y2*term;
   // temporary protection
-  if(q2 > 50. && res < -0.2) { res = -0.2; }
+  if(q2 > 49. && res < -0.2) { res = -0.2; }
 
   return res;
 }
