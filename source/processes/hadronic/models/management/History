@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 April 2010 - Dennis Wright (hadr-modman-V09-03-01)
+-----------------------------------------------------
+- G4HadronicInteraction - add two methods, GetEnergyMomentumCheckLevels
+  and SetEnergyMomentumCheckLevels in order to implement checking
+  of energy/momentum conservation
+   
 25 March 2010 - V.Ivanchenko (hadr-modman-V09-03-00)
 ------------------------------------------------------
 -  G4HadronicInteractionRegistry - do not pop_back vector of pointers
