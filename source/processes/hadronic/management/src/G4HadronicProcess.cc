@@ -44,6 +44,7 @@
 #include "G4ProcessManager.hh"
 #include "G4StableIsotopes.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4NucleiProperties.hh"
 
 //VI #include "G4HadLeadBias.hh"
 #include "G4HadronicException.hh"
@@ -51,6 +52,7 @@
 //VI #include "G4HadronicWhiteBoard.hh"
 //VI #include "G4HadSignalHandler.hh"
 #include "G4HadronicProcessStore.hh"
+
 
 /*VI
 #include <typeinfo>
@@ -76,18 +78,24 @@ DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
 
 //////////////////////////////////////////////////////////////////
 
-G4HadronicProcess::G4HadronicProcess( const G4String &processName,
-                                      G4ProcessType   aType ) :
-G4VDiscreteProcess( processName, aType)
+G4HadronicProcess::G4HadronicProcess(const G4String& processName,
+                                     G4ProcessType aType)
+ :G4VDiscreteProcess(processName, aType)
 { 
   ModelingState = 0;
   isoIsOnAnyway = -1;
   theTotalResult = new G4ParticleChange();
+  theInteraction = 0;
   theCrossSectionDataStore = new G4CrossSectionDataStore();
   G4HadronicProcessStore::Instance()->Register(this);
   aScaleFactor = 1;
   xBiasOn = false;
   G4HadronicProcess_debug_flag = false;
+  epReportLevel = 0;
+  epCheckLevels.first = DBL_MAX;
+  epCheckLevels.second = DBL_MAX;
+  levelsSetByProcess = false;
+
   //VI   if(getenv("SwitchLeadBiasOn")) theBias.push_back(new G4HadLeadBias());
 }
 
@@ -375,7 +383,9 @@ G4VParticleChange *G4HadronicProcess::PostStepDoIt(
   FillTotalResult(result, aTrack);
   //VI if(G4HadronicProcess_debug_flag) 
   //VI  std::cout << "@@@@ hadronic process end "<< std::endl;
-    
+
+  if (epReportLevel > 0) CheckEnergyMomentumConservation(aTrack, targetNucleus);
+ 
   return theTotalResult;
 }
 
@@ -717,6 +727,87 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
       aScaleFactor = 100.;
     }
 }
+
+void 
+G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
+                                                   const G4Nucleus& aNucleus)
+{
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetN(), aNucleus.GetZ());
+  G4LorentzVector projectile4mom = aTrack.GetDynamicParticle()->Get4Momentum();
+  G4LorentzVector target4mom(0, 0, 0, targetMass);
+  G4LorentzVector initial4mom = projectile4mom + target4mom;
+
+  G4Track* sec;
+  G4LorentzVector final4mom;
+  G4int nSec = theTotalResult->GetNumberOfSecondaries();
+  for (G4int i = 0; i < nSec; i++) {
+    sec = theTotalResult->GetSecondary(i);
+    final4mom += sec->GetDynamicParticle()->Get4Momentum();
+  }
+
+  G4LorentzVector diff = initial4mom - final4mom;
+  G4double absolute = diff.e();
+  G4double relative = absolute/aTrack.GetKineticEnergy();
+
+  G4String processName = GetProcessName();
+  G4HadronicInteraction* theModel = GetHadronicInteraction();
+  G4String modelName("none");
+  if (theModel) modelName = theModel->GetModelName();
+
+  std::pair<G4double, G4double> checkLevels = epCheckLevels;;
+  if (!levelsSetByProcess) {
+    if (theModel) checkLevels = theModel->GetEnergyMomentumCheckLevels();
+  }
+
+  G4bool relPass = false;
+  G4String relResult = "fail";
+  if (std::abs(relative) < checkLevels.first) {
+    relPass = true;
+    relResult = "pass";
+  }
+
+  G4bool absPass = false;
+  G4String absResult = "fail";
+  if (std::abs(absolute) < checkLevels.second) {
+    absPass = true;
+    absResult = "pass";
+  }
+
+  // Options for level of reporting detail:
+  //  0. off
+  //  1. report only when E/p not conserved
+  //  2. report regardless of E/p conservation
+  //  3. report only when E/p not conserved, with model names, process names, and limits 
+  //  4. report regardless of E/p conservation, with model names, process names, and limits
+
+  if(epReportLevel == 4) {
+    G4cout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
+    G4cout << " relative limit " << checkLevels.first << " relative value = "
+           << relative << " " << relResult << G4endl;
+    G4cout << " absolute limit " << checkLevels.second << " absolute value = "
+           << absolute << " " << absResult << G4endl;
+
+  } else if(epReportLevel == 3) {
+    if (!absPass || !relPass) {
+      G4cout << " Process: " << processName << " , Model: " <<  modelName << G4endl; 
+      G4cout << " relative limit " << checkLevels.first << " relative value = "
+             << relative << " " << relResult << G4endl;  
+      G4cout << " absolute limit " << checkLevels.second << " absolute value = "
+             << absolute << " " << absResult << G4endl;
+    }
+
+  } else if(epReportLevel == 2) {
+    G4cout << " relative value = " << relative << " " << relPass
+           << " absolute value = " << absolute << " " << absPass << G4endl;
+
+  } else if(epReportLevel == 1) {
+    if (!absPass || !relPass) {
+      G4cout << " relative value = " << relative << " " << relPass
+             << " absolute value = " << absolute << " " << absPass << G4endl;
+    }
+  }
+}
+
 
 void G4HadronicProcess::DumpState(const G4Track& aTrack, const G4String& method)
 {

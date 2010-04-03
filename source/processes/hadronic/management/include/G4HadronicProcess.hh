@@ -56,17 +56,18 @@ class G4Step;
 class G4Element;
 class G4ParticleChange;
 
+
 class G4HadronicProcess : public G4VDiscreteProcess
 {
 public:
     
-  G4HadronicProcess( const G4String &processName = "Hadronic", 
-		     G4ProcessType   aType = fHadronic );    
+  G4HadronicProcess(const G4String& processName = "Hadronic", 
+		    G4ProcessType aType = fHadronic);    
 
   virtual ~G4HadronicProcess();
 
   // register generator of secondaries
-  void RegisterMe( G4HadronicInteraction *a );
+  void RegisterMe(G4HadronicInteraction* a);
 
   // get cross section per element
   virtual 
@@ -132,7 +133,20 @@ public:
   static G4IsoParticleChange * GetIsotopeProductionInfo();
 
   void BiasCrossSectionByFactor(G4double aScale);
-    
+
+  // Energy-momentum non-conservation limits and reporting
+  inline void SetEpReportLevel(G4int level)
+  { epReportLevel = level; }
+
+  inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
+  { epCheckLevels.first = relativeLevel;
+    epCheckLevels.second = absoluteLevel;
+    levelsSetByProcess = true;
+  }
+
+  inline std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const
+  { return epCheckLevels; }
+
 protected:
             
   // obsolete method will be removed
@@ -179,6 +193,8 @@ private:
     
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
+
+  void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
     
 private:
     
@@ -193,6 +209,11 @@ private:
   G4HadronicProcess *dispatch;
 
   bool G4HadronicProcess_debug_flag;
+
+  // Energy-momentum checking
+  G4int epReportLevel;
+  std::pair<G4double, G4double> epCheckLevels;
+  G4bool levelsSetByProcess;
 
   // swiches for isotope production    
   static G4bool isoIsEnabled; // true or false; local swich overrides
