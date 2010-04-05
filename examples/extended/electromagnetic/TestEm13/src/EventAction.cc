@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.2 2006-06-29 16:44:30 gunter Exp $
+// $Id: EventAction.cc,v 1.3 2010-04-05 13:45:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:printModulo(10000),eventMessenger(0)
+:printModulo(100000),eventMessenger(0)
 {
   eventMessenger = new EventActionMessenger(this);
 }

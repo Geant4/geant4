@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.8 2010-04-02 15:46:31 maire Exp $
+// $Id: PhysicsList.cc,v 1.9 2010-04-05 13:45:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,9 +182,7 @@ void PhysicsList::ConstructProcess()
   // Em options
   //
   G4EmProcessOptions emOptions;
-  emOptions.SetStepFunction(1., 1*mm);  
   emOptions.SetIntegral(false);
-  emOptions.SetLossFluctuations(false);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
