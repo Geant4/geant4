@@ -1,4 +1,4 @@
-$Id: History,v 1.430 2010-03-31 11:14:33 pandola Exp $
+$Id: History,v 1.431 2010-04-06 11:00:35 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.04.2010, S. Incerti, tag emlowen-V09-03-24
+            Replaced hard coded masses in G4DNADingfelderCharge*.cc
 
 31.03.2010, L. Pandola, tag emlowen-V09-03-23
 	    Removed G4cout's used for debugging in G4Penelope08ComptonModel and 

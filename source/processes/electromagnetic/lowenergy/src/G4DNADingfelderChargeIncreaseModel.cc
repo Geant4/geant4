@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.8 2010-03-18 16:36:48 sincerti Exp $
+// $Id: G4DNADingfelderChargeIncreaseModel.cc,v 1.9 2010-04-06 11:00:35 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -304,7 +304,9 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<G4Dynamic
   fParticleChangeForGamma->ProposeLocalEnergyDeposit(0.);
 
   G4ParticleDefinition* definition = aDynamicParticle->GetDefinition();
- 
+
+  G4double particleMass = definition->GetPDGMass();
+
   G4double inK = aDynamicParticle->GetKineticEnergy();
 
   G4int finalStateIndex = RandomSelect(inK,definition);
@@ -318,7 +320,7 @@ void G4DNADingfelderChargeIncreaseModel::SampleSecondaries(std::vector<G4Dynamic
 
   G4double electronK;
   if (definition == instance->GetIon("hydrogen")) electronK = inK*electron_mass_c2/proton_mass_c2;
-  else electronK = inK*electron_mass_c2/(3728*MeV);
+  else electronK = inK*electron_mass_c2/(particleMass);
   
   if (outK<0)
   {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.8 2010-03-18 16:36:48 sincerti Exp $
+// $Id: G4DNADingfelderChargeDecreaseModel.cc,v 1.9 2010-04-06 11:00:35 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -292,6 +292,8 @@ void G4DNADingfelderChargeDecreaseModel::SampleSecondaries(std::vector<G4Dynamic
   G4double inK = aDynamicParticle->GetKineticEnergy();
   
   G4ParticleDefinition* definition = aDynamicParticle->GetDefinition();
+  
+  G4double particleMass = definition->GetPDGMass();
 
   G4int finalStateIndex = RandomSelect(inK,definition);
  
@@ -303,7 +305,7 @@ void G4DNADingfelderChargeDecreaseModel::SampleSecondaries(std::vector<G4Dynamic
   if (definition==G4Proton::Proton())
     outK = inK - n*(inK*electron_mass_c2/proton_mass_c2) - waterBindingEnergy + outgoingParticleBindingEnergy;
   else
-    outK = inK - n*(inK*electron_mass_c2/(3728*MeV)) - waterBindingEnergy + outgoingParticleBindingEnergy;
+    outK = inK - n*(inK*electron_mass_c2/particleMass) - waterBindingEnergy + outgoingParticleBindingEnergy;
   
   if (outK<0)
   {
