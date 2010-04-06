@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.58 2009-10-29 18:07:08 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.59 2010-04-06 16:57:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -419,11 +419,11 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   // Access to materials and build cuts
   size_t idx = 1;
   if(secondaryParticle) {
-    if( secondaryParticle == G4Gamma::Gamma() )           idx = 0;
-    else if( secondaryParticle == G4Positron::Positron()) idx = 2;
+    if( secondaryParticle == G4Gamma::Gamma() )           { idx = 0; }
+    else if( secondaryParticle == G4Positron::Positron()) { idx = 2; }
   }
 
-  if(numOfCouples > theCuts.size()) {theCuts.resize(numOfCouples);}
+  if(numOfCouples > theCuts.size()) { theCuts.resize(numOfCouples); }
   if(minSubRange < 1.0 && numOfCouples > theSubCuts.size()) {
     theSubCuts.resize(numOfCouples);
   }
@@ -459,7 +459,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 				 maxSubCutInRange);
 	G4double tcutmax = 
 	  theCoupleTable->ConvertRangeToEnergy(secondaryParticle,material,rcut);
-	if(tcutmax < subcut) subcut = tcutmax;
+	if(tcutmax < subcut) { subcut = tcutmax; }
       }
     }
 
@@ -467,11 +467,10 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     for(G4int j=0; j<nm; ++j) {
 
       G4VEmModel* model = models[setOfRegionModels[reg]->ModelIndex(j)];
-
       G4double tcutmin = model->MinEnergyCut(particle, couple);
 
-      if(cut < tcutmin) cut = tcutmin;
-      if(subcut < tcutmin) subcut = tcutmin;
+      if(cut < tcutmin)    { cut = tcutmin; }
+      if(subcut < tcutmin) { subcut = tcutmin; }
       if(1 < verboseLevel) {
             G4cout << "The model # " << j
                    << "; tcutmin(MeV)= " << tcutmin/MeV
@@ -496,7 +495,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       if(flucModels[jj]) flucModels[jj]->InitialiseMe(particle);
     }
   }
-  if(1 == nn) severalModels = false;
+  if(1 == nn) { severalModels = false; }
 
   if(1 < verboseLevel) {
     G4cout << "G4EmModelManager for " << particle->GetParticleName() 

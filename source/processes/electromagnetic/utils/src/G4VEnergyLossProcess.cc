@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.159 2010-01-22 17:35:26 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.160 2010-04-06 16:57:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -589,9 +589,6 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
            << G4endl;
   }
   G4PhysicsTable* table = 0;
-  G4double emin = minKinEnergy;
-  G4double emax = maxKinEnergy;
-  G4int bin = nBins;
 
   if(fTotal == tType) {
     emax  = maxKinEnergyCSDA;
@@ -641,16 +638,15 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
       if(!bVector) {
-	aVector = new G4PhysicsLogVector(emin, emax, bin);
+	aVector = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
         bVector = aVector;
       } else {
         aVector = new G4PhysicsLogVector(*bVector);
       }
-      //      G4PhysicsVector* aVector = new G4PhysicsLogVector(emin, emax, bin);
       aVector->SetSpline(splineFlag);
 
       modelManager->FillDEDXVector(aVector, couple, tType);
-      if(splineFlag) aVector->FillSecondDerivatives();
+      if(splineFlag) { aVector->FillSecondDerivatives(); }
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
@@ -700,6 +696,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+  G4PhysicsLogVector* aVector = 0;
+  G4PhysicsLogVector* bVector = 0;
 
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -708,13 +706,16 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      G4double cut = (*theCuts)[i];
-      if(fSubRestricted == tType) cut = (*theSubCuts)[i]; 
-      G4PhysicsVector* aVector = LambdaPhysicsVector(couple, cut);
+      if(!bVector) {
+	aVector = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+        bVector = aVector;
+      } else {
+        aVector = new G4PhysicsLogVector(*bVector);
+      }
       aVector->SetSpline(splineFlag);
 
       modelManager->FillLambdaVector(aVector, couple, true, tType);
-      if(splineFlag) aVector->FillSecondDerivatives();
+      if(splineFlag) { aVector->FillSecondDerivatives(); }
 
       // Insert vector for this material into the table
       G4PhysicsTableHelper::SetPhysicsVector(table, i, aVector);
@@ -1622,11 +1623,14 @@ G4double G4VEnergyLossProcess::GetContinuousStepLimit(
 G4PhysicsVector* G4VEnergyLossProcess::LambdaPhysicsVector(
                  const G4MaterialCutsCouple* couple, G4double cut)
 {
+  /*
   G4double tmin = 
     std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
 	     minKinEnergy);
   if(tmin >= maxKinEnergy) { tmin = 0.5*maxKinEnergy; }
   G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nBins);
+  */
+  G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
   v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;
 }
