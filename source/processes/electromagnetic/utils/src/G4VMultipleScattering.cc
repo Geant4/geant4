@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.80 2010-04-01 20:00:42 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.81 2010-04-06 09:24:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   theLambdaTable(0),
   firstParticle(0),
   stepLimit(fUseSafety),
-  skin(3.0),
+  skin(1.0),
   facrange(0.04),
   facgeom(2.5),
   latDisplasment(true),
