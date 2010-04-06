@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.82 2010-03-31 18:16:59 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.83 2010-04-06 09:56:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theProton   = G4Proton::Proton();
   currentMaterial = 0; 
   currentElement  = 0;
-  lowEnergyLimit  = 100*eV;
+  lowEnergyLimit  = 1*eV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff  = twopi*p0*p0;
   tkin = targetZ = mom2 = etag = 0.0;
