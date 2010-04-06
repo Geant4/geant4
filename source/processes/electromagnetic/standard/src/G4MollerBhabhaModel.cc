@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.37 2010-04-06 17:02:23 vnivanch Exp $
+// $Id: G4MollerBhabhaModel.cc,v 1.38 2010-04-06 17:10:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,7 +91,7 @@ G4MollerBhabhaModel::~G4MollerBhabhaModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
-                                           const G4MaterialCutsCouple* couple)
+                                           const G4MaterialCutsCouple* /*couple*/)
 {
   //  G4double electronDensity = couple->GetMaterial()->GetElectronDensity();
   //G4double Zeff  = electronDensity/couple->GetMaterial()->GetTotNbOfAtomsPerVolume();
