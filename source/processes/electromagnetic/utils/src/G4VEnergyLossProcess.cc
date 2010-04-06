@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.160 2010-04-06 16:57:49 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.161 2010-04-06 17:10:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -589,6 +589,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
            << G4endl;
   }
   G4PhysicsTable* table = 0;
+  G4double emax = maxKinEnergy;
+  G4int bin = nBins;
 
   if(fTotal == tType) {
     emax  = maxKinEnergyCSDA;
@@ -615,7 +617,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(1 < verboseLevel) {
     G4cout << numOfCouples << " materials"
            << " minKinEnergy= " << minKinEnergy
-           << " maxKinEnergy= " << maxKinEnergy
+           << " maxKinEnergy= " << emax
+           << " nbin= " << bin
            << " EmTableType= " << tType
            << " table= " << table
            << G4endl;
@@ -638,7 +641,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
       if(!bVector) {
-	aVector = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+	aVector = new G4PhysicsLogVector(minKinEnergy, emax, bin);
         bVector = aVector;
       } else {
         aVector = new G4PhysicsLogVector(*bVector);
@@ -707,7 +710,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
       if(!bVector) {
-	aVector = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
+	aVector = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
         bVector = aVector;
       } else {
         aVector = new G4PhysicsLogVector(*bVector);
@@ -1620,8 +1623,9 @@ G4double G4VEnergyLossProcess::GetContinuousStepLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossProcess::LambdaPhysicsVector(
-                 const G4MaterialCutsCouple* couple, G4double cut)
+G4PhysicsVector* 
+G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* /*couple*/, 
+					  G4double /*cut*/)
 {
   /*
   G4double tmin = 
