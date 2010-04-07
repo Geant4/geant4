@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.7 2010-03-20 22:12:38 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.8 2010-04-07 17:28:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -101,12 +101,12 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc) {
   G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
 	 << "with non-standard PDGencoding." << G4endl;
 
-  G4Ions* fragPD = new G4Ions(name,       mass, 0., G4double(nz)*eplus,
+  G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
 			      0,          +1,   0,
 			      0,          0,    0,
-			      "nucleus",  0,    G4lrint(a), code,
+			      "nucleus",  0,    na, code,
 			      true,	  0.,   0,
-			      false, "generic", 0,  exc);
+			      true, "generic",  0,  exc);
   fragPD->SetAntiPDGEncoding(0);
 
   fragmentList[code] = fragPD;		// Store in table for next lookup

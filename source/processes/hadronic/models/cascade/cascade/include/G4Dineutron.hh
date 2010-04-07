@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Dineutron.hh,v 1.1 2010-01-08 23:19:41 mkelsey Exp $
+// $Id: G4Dineutron.hh,v 1.2 2010-04-07 17:28:35 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,6 +32,7 @@
 //
 //      History: first implementation, inspired by G4Proton
 //      17 Nov 2009:  Michael Kelsey
+//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
 // ----------------------------------------------------------------
 
 #include "G4Ions.hh"
@@ -43,8 +44,8 @@
 class G4Dineutron : public G4Ions {
 private:
   static G4Dineutron* theInstance;
-  G4Dineutron() {}
-  ~G4Dineutron() {}
+  G4Dineutron();
+  virtual ~G4Dineutron() { theInstance = 0; }
   
 public:
   static G4Dineutron* Definition();
