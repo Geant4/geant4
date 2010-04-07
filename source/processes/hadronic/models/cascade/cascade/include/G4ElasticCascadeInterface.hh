@@ -22,9 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4ElasticCascadeInterface.hh,v 1.6 2010-04-07 18:23:15 mkelsey Exp $
 //
 // Pekka Kaitaniemi, HIP 
 // Aatos Heikkinen
+//
+// 20100405  M. Kelsey -- Fix constness of op== and op!=
 
 #ifndef G4ELASTICCASCADEINTERFACE_H
 #define G4ELASTICCASCADEINTERFACE_H 1
@@ -47,11 +50,11 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
 private:
-  G4int operator==(G4ElasticCascadeInterface& right) {
+  G4int operator==(const G4ElasticCascadeInterface& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(G4ElasticCascadeInterface& right) {
+  G4int operator!=(const G4ElasticCascadeInterface& right) const {
     return (this != &right);
   }
 

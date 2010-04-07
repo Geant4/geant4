@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.11 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.12 2010-04-07 18:23:15 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100405  M. Kelsey -- Pass const-ref std::vector<>
 
 #include <numeric>
 #include "G4IonTable.hh"
@@ -217,7 +218,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   return theResult;
 }
 
-void G4InuclEvaporation::fillResult( std::vector<G4DynamicParticle *> secondaryParticleVector,
+void G4InuclEvaporation::fillResult(const std::vector<G4DynamicParticle*>& secondaryParticleVector,
 				     G4FragmentVector * aResult )
 {
   // Fill the vector pParticleChange with secondary particles stored in vector.

@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateSampler.cc,v 1.2 2009-09-17 18:15:38 dennis Exp $
+// $Id: G4FinalStateSampler.cc,v 1.3 2010-04-07 18:23:15 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 20100405  M. Kelsey -- Pass const-ref std::vector<>
 
 #include "G4FinalStateSampler.hh"
 #include "Randomize.hh"
@@ -49,7 +50,7 @@ G4FinalStateSampler::interpolateEnergy(G4double e) const
 
 
 G4int
-G4FinalStateSampler::sampleFlat(std::vector<G4double> sigma) const
+G4FinalStateSampler::sampleFlat(const std::vector<G4double>& sigma) const
 {
   G4int i;
   G4double sum(0.);
@@ -71,7 +72,7 @@ G4FinalStateSampler::sampleFlat(std::vector<G4double> sigma) const
 }
 
 
-void G4FinalStateSampler::CheckQnums(G4FastVector<G4ReactionProduct,256> &vec,
+void G4FinalStateSampler::CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
                                 G4int &vecLen,
                                 G4ReactionProduct &currentParticle,
                                 G4ReactionProduct &targetParticle,

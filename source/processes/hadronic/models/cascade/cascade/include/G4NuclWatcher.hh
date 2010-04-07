@@ -24,10 +24,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NuclWatcher.hh,v 1.12 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4NuclWatcher.hh,v 1.13 2010-04-07 18:23:15 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code into .cc file
+// 20100405  M. Kelsey -- Pass const-ref std::vector<>
 
 #include "G4Types.hh"
 
@@ -38,9 +39,9 @@
 class G4NuclWatcher {
 public:
   G4NuclWatcher(G4double z, 
-		std::vector<G4double> expa, 
-		std::vector<G4double> expcs, 
-		std::vector<G4double> experr, 
+		const std::vector<G4double>& expa, 
+		const std::vector<G4double>& expcs, 
+		const std::vector<G4double>& experr, 
 		G4bool check, 
 		G4bool nucl);
 

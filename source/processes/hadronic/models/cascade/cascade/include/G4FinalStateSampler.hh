@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateSampler.hh,v 1.2 2009-09-17 18:11:57 dennis Exp $
+// $Id: G4FinalStateSampler.hh,v 1.3 2010-04-07 18:23:15 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
 // Date:   26 March 2009
 //
- 
+// 20100405  M. Kelsey -- Pass const-ref std::vector<>
+
 #ifndef G4FinalStateSampler_h
 #define G4FinalStateSampler_h 1
 
@@ -61,9 +62,9 @@ class G4FinalStateSampler
     
    std::pair<G4int, G4double> interpolateEnergy(G4double ke) const;
 
-   G4int sampleFlat(std::vector<G4double> sigma) const;
+   G4int sampleFlat(const std::vector<G4double>& sigma) const;
 
-   void CheckQnums(G4FastVector<G4ReactionProduct,256> &vec,
+   void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
                    G4int &vecLen,
                    G4ReactionProduct &currentParticle,
                    G4ReactionProduct &targetParticle,

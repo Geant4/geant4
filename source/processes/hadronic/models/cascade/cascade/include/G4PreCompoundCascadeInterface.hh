@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundCascadeInterface.hh,v 1.1 2007-05-23 14:37:28 miheikki Exp $
+// $Id: G4PreCompoundCascadeInterface.hh,v 1.2 2010-04-07 18:23:15 mkelsey Exp $
 // Defines an interface to Bertini (BERT) INC with exitons. Evaporation is NOT included
 
 #ifndef G4PRECOMPOUNDCASCADEINTERFACE_H
@@ -51,11 +51,11 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
 private:
-  G4int operator==(G4PreCompoundCascadeInterface& right) {
+  G4int operator==(const G4PreCompoundCascadeInterface& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(G4PreCompoundCascadeInterface& right) {
+  G4int operator!=(const G4PreCompoundCascadeInterface& right) const {
     return (this != &right);
   }
 

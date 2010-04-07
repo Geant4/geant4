@@ -34,7 +34,7 @@ class G4CascadeChannel {
 public:
 
   static std::pair<G4int, G4double> interpolateEnergy(G4double ke);
-  static G4int sampleFlat(std::vector<G4double> const& sigma);
+  static G4int sampleFlat(const std::vector<G4double>& sigma);
   static std::vector<G4int> getQnums(G4int type);
 
 private:

@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.14 2009-09-24 20:48:02 dennis Exp $
+// $Id: G4CascadeInterface.hh,v 1.15 2010-04-07 18:23:15 mkelsey Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
+//
+// 20100405  M. Kelsey -- Fix constness of op== and op!=
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -60,11 +62,11 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
 private:
-  G4int operator==(G4CascadeInterface& right) {
+  G4int operator==(const G4CascadeInterface& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(G4CascadeInterface& right) {
+  G4int operator!=(const G4CascadeInterface& right) const {
     return (this != &right);
   }
 

@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NuclWatcher.cc,v 1.1 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4NuclWatcher.cc,v 1.2 2010-04-07 18:23:15 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code here from .hh file, clean up
+// 20100405  M. Kelsey -- Pass const-ref std::vector<>
 
 #include "G4NuclWatcher.hh"
 #include "globals.hh"
@@ -35,9 +36,9 @@
 #include <cmath>
 
 G4NuclWatcher::G4NuclWatcher(G4double z, 
-			     std::vector<G4double> expa, 
-			     std::vector<G4double> expcs, 
-			     std::vector<G4double> experr, 
+			     const std::vector<G4double>& expa, 
+			     const std::vector<G4double>& expcs, 
+			     const std::vector<G4double>& experr, 
 			     G4bool check, 
 			     G4bool nucl)
   : nuclz(z), izotop_chsq(0.), average_ratio(0.), aver_rat_err(0.),

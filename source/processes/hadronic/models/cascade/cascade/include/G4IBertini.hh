@@ -26,6 +26,8 @@
 // Defines an development version for interface  Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
+//
+// 20100405  M. Kelsey -- Fix constness on op== and op!=
 
 #ifndef G4IBERTINI_H
 #define G4IBERTINI_H 1
@@ -52,11 +54,11 @@ public:
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
 private:
-  G4int operator==(G4IBertini& right) {
+  G4int operator==(const G4IBertini& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(G4IBertini& right) {
+  G4int operator!=(const G4IBertini& right) const {
     return (this != &right);
   }
 

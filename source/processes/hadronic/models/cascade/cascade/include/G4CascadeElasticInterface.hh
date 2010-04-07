@@ -22,6 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeElasticInterface.hh,v 1.3 2010-04-07 18:23:15 mkelsey Exp $
 //
 // CLASS DESCRIPTION
 // G4CascadeElasticInterface defines an interface to INUCL 
@@ -29,6 +30,8 @@
 // If you have any questions, please contact 
 // package writer aatos.heikkinen@cern.ch.
 // --------------------------------------------------------------------
+// 20100405  M. Kelsey -- Fix constness of op== and op!=
+
 #ifndef G4CASCADEELASTICINTERFACE_H
 #define G4CASCADEELASTICINTERFACE_H 1
 
@@ -57,11 +60,11 @@ public:
 
 private:
 
-  G4int operator==(G4CascadeElasticInterface& right) {
+  G4int operator==(const G4CascadeElasticInterface& right) const {
     return (this == &right);
   }
 
-  G4int operator!=(G4CascadeElasticInterface& right) {
+  G4int operator!=(const G4CascadeElasticInterface& right) const {
     return (this != &right);
   }
 

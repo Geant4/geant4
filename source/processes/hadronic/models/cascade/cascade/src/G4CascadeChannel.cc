@@ -45,7 +45,7 @@ G4CascadeChannel::interpolateEnergy(G4double e)
 
 
 G4int 
-G4CascadeChannel::sampleFlat(std::vector<G4double> const& sigma)
+G4CascadeChannel::sampleFlat(const std::vector<G4double>& sigma)
 {
   G4int i;
   G4double sum(0.);
