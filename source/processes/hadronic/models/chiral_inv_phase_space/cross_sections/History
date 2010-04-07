@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+7-Apr-2010 M.Kosov                            (hadr-chips-cs-V09-03-02)
+-----------------------------------------------------------------------
+Implementation of isotope wise CHIPS elastic for neutrons
+
 5-Feb-2010 M.Kosov                             (hadr-chips-V09-03-03)
 -----------------------------------------------------------------------
 Mutual tag: accumulate bug fix and AntiBaryonElastic implementation
