@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.16 2010-03-26 20:42:10 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.17 2010-04-07 20:08:31 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -939,7 +939,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 
 	      if (particle == instance->GetIon("helium")->GetParticleName()) 
 		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + 2*electronDataset->GetComponent(i)->FindValue(kElectron); }
-      
+
 	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
 
 	      value += valuesBuffer[i];
@@ -952,10 +952,14 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 	  while (i > 0)
 	  {
 	      i--;
+	      
 		
 	      if (valuesBuffer[i] > value)
 	      {
 		  delete[] valuesBuffer;
+		  
+		  if (electronDataset) delete electronDataset;
+		  
 		  return i;
 	      }
 	      value -= valuesBuffer[i];
