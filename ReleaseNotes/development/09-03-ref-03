@@ -15,10 +15,11 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.3.p01
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-03-01
+config                                           config-V09-03-01            (o)
 ------
 - Configure script (Configure-V09-03-00):
   o Corrected settings of LD_LYBRARY_PATH for CLHEP for the case of static
@@ -27,7 +28,7 @@ config                                           config-V09-03-01
   o Corrected detection of Qt modules on MacOSX.
     Addressing problem report #1095.
 
-geometry/navigation                              geomnav-V09-03-00
+geometry/navigation                              geomnav-V09-03-00           (o)
 -------------------
 - Avoid unnecessary creation of string for debug purposes in
   G4PropagatorInField. Some printout formatting...
@@ -39,13 +40,13 @@ geometry/volumes                                 geomvol-V09-03-00
 
 global                                           global-V09-03-03
 ------
-- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: preserve
+- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: preserve     (o)
   values of 'edgeMin' and 'edgeMax' in constructors avoiding recomputation,
   to avoid precision problem; fixes problem detected on Windows/VC++.
-- Moved 'mem' pool in G4Allocator to public section, to allow for use of
+- Moved 'mem' pool in G4Allocator to public section, to allow for use of     (o)
   allocator in vectors on Windows/C++.
 
-processes/electromagnetic/highenergy             emhighenergy-V09-03-00
+processes/electromagnetic/highenergy             emhighenergy-V09-03-00      (o)
 ------------------------------------
 - G4mplIonisation: fixed IsApplicable() method for "true" case. Addresses
   a problem report by CMS about crashes in the case when several types of
@@ -68,14 +69,15 @@ processes/electromagnetic/lowenergy              emlowen-V09-03-22
   run-time errors reports.
 - Fixed bugs in G4AtomicDeexcitation and G4AugerTransition.
 - G4DNA processes:
-  o Extended low energy cover of G4DNA charge change processes.
+  o Extended low energy cover of G4DNA charge change processes.              (o)
   o Added new excitation model for electrons in G4DNABornExcitationModel.
     Requires new G4LEDATA data set, version 6.11.
   o Corrected G4DNABornIonisationModel for maximum kinetic energy transfer.
   o Modified method declaration in G4DNABornExcitation. Modified electron
-    correction in G4DNAMillerGreenExcitation. Modified hydrogen correction
-    in G4DNARuddIonisation. Modified electron correction in
-    G4DNARuddIonisationModel and re-added vapor water shell constants.
+    correction in G4DNAMillerGreenExcitation.
+  o Modified hydrogen correction in G4DNARuddIonisation. Modified electron   (o)
+    correction in G4DNARuddIonisationModel and re-added vapor water shell
+    constants.
   o Extended range of search for maximum of DCS in G4DNARuddIonisationModel.
   o Changed default parameters in G4DNAEmfietzoglouExcitationModel.
 
@@ -88,22 +90,22 @@ processes/electromagnetic/standard               emstand-V09-03-04
 
 processes/electromagnetic/utils                  emutils-V09-03-05
 -------------------------------
-- G4EmCorrections: added protection against large Barkas and Bloch corrections
-  in the case of large negatively charged particle (100*e-); addresses problem
-  reported by ATLAS.
+- G4EmCorrections: added protection against large Barkas and Bloch           (o)
+  corrections in the case of large negatively charged particle (100*e-);
+  addresses problem reported by ATLAS.
 - G4VMscModel, G4VMultipleScattering: set skin=1.0 as default.
-- Code cleanup in G4EmCalculator. Reordered inline methods and improved
+- Code cleanup in G4EmCalculator. Reordered inline methods and improved      (o)
   comments in classes G4VEmModel, G4VEmProcess, G4VEnergyLossProcess,
   G4VMultipleScattering and G4LossTableManager.
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-03-02)
+- cross_sections (hadr-cross-V09-03-02)                                      (o)
   o Cache computation of std::pow() in GetCaptureCrossSection() method of
     G4HadronCrossSections, to avoid repeated calls with same argument.
   o G4CrossSectionDataSetRegistry: do not pop_back vector of pointers
     when de-registering cross-section data set; fixes problem on Windows/VC++.
-- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-03)
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-03)    (o)
   o Bug fix in clean-up sequence.
 - models/de_excitation (hadr-deex-V09-03-03)
   o G4Evaporation: set as a default variant evaporation combining standard
@@ -111,19 +113,20 @@ processes/hadronic
 - models/im_r_matrix (hadr-im_r-V09-03-00)
   o Removed empty source file for G4VScatterer.
   o Synchronised developments to HEAD version.
-- models/management (hadr-modman-V09-03-00)
+- models/management (hadr-modman-V09-03-00)                                  (o)
   o G4HadronicInteractionRegistry: do not pop_back vector of pointers
     when de-registering cross section data set; fixes problem on Windows/VC++.
-- models/neutron_hp (hadr-hpn-V09-03-00)
+- models/neutron_hp (hadr-hpn-V09-03-00)                                     (o)
   o Add 'Ignore' and 'Enable' methods for on-flight Doppler Broadening in  
     G4NeutronHPElasticData, G4NeutronHPInelasticData and G4NeutronHPCaptureData.
 - models/parton_string/qgsm (hadr-qgsm-V09-03-00)
   o Remove unised class G4PartonStringAnnihilator.
 - models/pre_equilibrium (hadr-pre-V09-03-03)
-  o Added more protections for numerical computations to G4PreCompoundEmission.
+  o Added more protections for numerical computations to                     (o)
+    G4PreCompoundEmission.
   o Removed unused dummy classes G4VPreCompoundIon and G4VPreCompoundNucleon. 
 
-track                                            track-V09-03-00
+track                                            track-V09-03-00             (o)
 -----
 - Replace string data member to a pointer in G4VUserTrackInformation
   for property to indicate type of UserTrackInformation; helps in reducing
@@ -134,32 +137,32 @@ track                                            track-V09-03-00
 examples                                         examples-V09-03-03
 --------
 - Updated reference outputs.
-- advanced/microdosimetry (microdosimetry-V09-03-00)
+- advanced/microdosimetry (microdosimetry-V09-03-00)                         (o)
   o Disable use of G4UItcsh on Windows.
-- advanced/nanobeam (nanobeam-V09-03-00)
+- advanced/nanobeam (nanobeam-V09-03-00)                                     (o)
   o Updated physics-lists to use particle-based multiple-scattering processes.
 - extended/electromagnetic/TestEm0 (testem0-V09-03-01)
   o New physics-lists for EM standard options 0,1,2,3.
-- extended/biasing/B01 (B01-V09-03-00)
+- extended/biasing/B01 (B01-V09-03-00)                                       (o)
   o Updated physics-lists to use particle-based multiple-scattering processes.
 - extended/exoticphysics/monopole (monopole-V09-03-00)
   o Added test on ionisation of heavy highly charged particle; some cleanup.
-- extended/field/field01 (fieldex01-V09-03-00)
-- extended/field/field02 (fieldex02-V09-03-00)
-- extended/field/field03 (fieldex03-V09-03-00)
+- extended/field/field01 (fieldex01-V09-03-00)                               (o)
+- extended/field/field02 (fieldex02-V09-03-00)                               (o)
+- extended/field/field03 (fieldex03-V09-03-00)                               (o)
   o Updated physics-lists to use particle-based multiple-scattering processes.
-- extended/field/field04 (fieldex04-V09-03-00)
+- extended/field/field04 (fieldex04-V09-03-00)                               (o)
   o Fixed compilation error on Windows in F04RunAction.
-- extended/g3tog4 (g3tog4Tests-V09-03-00)
+- extended/g3tog4 (g3tog4Tests-V09-03-00)                                    (o)
   o Updated physics-lists to use particle-based multiple-scattering processes.
-- extended/optical/wls (WLS-V09-03-01)
+- extended/optical/wls (WLS-V09-03-01)                                       (o)
   o Replaced use of 2*M_PI by twopi from CLHEP, to allow compilation on Windows.
-- extended/persistency/gdml/G03 (G03-V09-03-00)
+- extended/persistency/gdml/G03 (G03-V09-03-00)                              (o)
   o Disable use of G4UItcsh on Windows.
-- novice/N03 (exampleN03-V09-03-01)
+- novice/N03 (exampleN03-V09-03-01)                                          (o)
   o Cleanup particle construction in physics-list.
-- examples/novice/N05 (exampleN05-V09-03-00)
-- examples/novice/N07 (exampleN07-V09-03-00)
+- examples/novice/N05 (exampleN05-V09-03-00)                                 (o)
+- examples/novice/N07 (exampleN07-V09-03-00)                                 (o)
   o Updated physics-lists to use particle-based multiple-scattering processes.
 
 tests                                            tests-V09-03-03

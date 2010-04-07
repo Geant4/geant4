@@ -12,10 +12,11 @@ Some of the development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 9.2.p03
+(+)  Fixes included in release 9.3.p01
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-03-00
+config                                           config-V09-03-00            (+)
 ------
 - binmake.gmk: removed extra space characters in definition of TARGOBJEXT,   (o)
   fixing issue with target for main() not being rebuilt according to
@@ -26,18 +27,18 @@ global                                           global-V09-03-00
 - Modified G4PhysicsVector to own a pointer to G4PVDataVector, instead having
   it by value. First attempt to separate RO and RW objects for thread-safety. 
 
-materials                                        materials-V09-03-00
+materials                                        materials-V09-03-00         (+)
 ---------
 - G4OpticalSurface: removed left-over debug test function OverWrite() from
   class declaration, also causing unnecessary dependency on G4ios.
 
-physics_lists                                    phys-lists-V09-03-00
+physics_lists                                    phys-lists-V09-03-00        (+)
 -------------
 - QBBC: fixed hadron inelastic configuration; instantiated G4PreCompoundModel
   and its pointer propagated to all high energy models.
   Use CHIPS for anti-protons to fix crash in FTF.
 
-processes/cuts                                   procuts-V09-03-00
+processes/cuts                                   procuts-V09-03-00           (+)
 --------------
 - Fix in G4ProductionCutTable to solve problem with zero range for protons.
 
@@ -49,20 +50,20 @@ processes/electromagnetic/lowenergy              emlowen-V09-03-02
 - Added dummy method ComputeCrossSectionPerAtom() in G4PenelopeRayleighModel, 
   never inkoved in tracking and issuing a warning if users access it via
   G4EmCalculator.
-- Improved way of testing material in Geant4-DNA models.
+- Improved way of testing material in Geant4-DNA models.                     (+)
 
-processes/electromagnetic/utils                  emutils-V09-03-00
+processes/electromagnetic/utils                  emutils-V09-03-00           (+)
 -------------------------------
 - G4VEmProcess: added protection against negative cross section.             (o)
 - G4VEnergyLossProcess: added protection against negative cross section, and
   improved logic in RetrieveTable() method.
 
-processes/optical                                op-V09-03-00
+processes/optical                                op-V09-03-00                (+)
 -----------------
 - Fixed problem of initialization of 'PropertyPointers', now set to NULL at
   the start of PostStepDoIt(). Addresses problem report #1094.
 
-visualization/gMocren                            gMocren-V09-03-00
+visualization/gMocren                            gMocren-V09-03-00           (+)
 ---------------------
 - Fixed file-I/O bug in G4GMocrenFileViewer and G4GMocrenIO.
 - G4GMocrenFileSceneHandler: fix to allow for porting on C++0x Standard:
@@ -76,7 +77,7 @@ examples                                         examples-V09-03-01
 - extended/electromagnetic/TestEm3 (testem3-V09-03-00)
   o Added PhysListEmStandardGS and PhysListEmStandardWVI.
   o Added printout of mean number of gamma, e-, e+.
-- extended/hadronic/Hadr01 (exhadr01-V09-03-01)
+- extended/hadronic/Hadr01 (exhadr01-V09-03-01)                              (+)
   o Fixed problem of counting of particles leaked from the target.
   o When PhysList defined via PHYSLIST environment variable still
     make local PhysList messenger available to avoid crash in old macro.
@@ -91,17 +92,17 @@ examples                                         examples-V09-03-01
   o Introduced PhysListEmStandard_option2 (UrbanMscModel93 without options)
     and PhysListEmStandard_WVI (using WentzelVIModel).
   o Added to run01.mac all physics lists choice.
-- extended/optical/wls (WLS-V09-03-00)
+- extended/optical/wls (WLS-V09-03-00)                                       (+)
   o Added missing initialization macro init.in.
-- extended/persistency/gdml/G01 (G01-V09-03-01)
+- extended/persistency/gdml/G01 (G01-V09-03-01)                              (+)
   o Added printout of associated auxiliary information value.
   o Corrected typo in replicated.gdml file.
-- extended/visualization/userVisAction (exam-ext-vis-UVA-V09-03-00)
+- extended/visualization/userVisAction (exam-ext-vis-UVA-V09-03-00)          (+)
   o Introduced G4UIExecutive.
-- novice/N02 (exampleN02-V09-03-00)
+- novice/N02 (exampleN02-V09-03-00)                                          (+)
   o Correction in DetectorConstruction::SetMagField() to invoke
     fpMagField->SetMagFieldValue().
-- novice/N03 (exampleN03-V09-03-00)
+- novice/N03 (exampleN03-V09-03-00)                                          (+)
   o visTutor: corrected exN03Vis14.mac and exN03Vis15.mac to enable
     visualization of tracks and removed redundancy; updated gui.mac
     adding missing macros and correcting order; corrected comments

@@ -12,22 +12,23 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.3.p01
 
 Summarised, the list of changes is the following:
 
-geometry/management                              geommng-V09-03-00
+geometry/management                              geommng-V09-03-00           (o)
 -------------------
 - Added explicit initialisation of min/max extent for mother and target
   volumes in method BuildNodes() of G4SmartVoxelHeader.
 
-geometry/solids/specific                         geom-specific-V09-03-01
+geometry/solids/specific                         geom-specific-V09-03-01     (o)
 ------------------------
 - Use kInfinity for initialising minimum and maximum allowed extent for
   G4SolidExtentList of faceted solids.
 - Adopt caching of 'Phi' in G4PolyconeSide and G4PolyhedraSide to avoid
   unnecessary consecutive computations on the same point.
 
-persistency/gdml                                 gdml-V09-03-01
+persistency/gdml                                 gdml-V09-03-01              (o)
 ----------------
 - Added missing reference attribute in G4GDMLWriteMaterials for dumping
   of materials property vectors. Increased string buffer in G4GDMLWrite.
@@ -39,20 +40,20 @@ persistency/gdml                                 gdml-V09-03-01
 
 processes/electromagnetic/lowenergy              emlowen-V09-03-03
 -----------------------------------
-- Fixed initialisation of 'atomTotalCrossSection' in class
+- Fixed initialisation of 'atomTotalCrossSection' in class                   (o)
   G4hShellCrossSectionDoubleExp.
 
 processes/electromagnetic/standard               emstand-V09-03-02
 ----------------------------------
 - G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable: fixed problems of
   small angle theta distributions.
-- G4CoulombScatteringModel: added comments to relativistic formula.
-- G4eCoulombScatteringModel: added method SetLowEnergyLimit(), default value
-  is set to 1 eV (before was 100 eV)
-- G4CoulombScattering: removed inline method SetBuildTableFlag() which was
+- G4CoulombScatteringModel: added comments to relativistic formula.          (o)
+- G4eCoulombScatteringModel: added method SetLowEnergyLimit().               (o)
+- Set default value G4eCoulombScatteringModel to 1 eV (before was 100 eV).
+- G4CoulombScattering: removed inline method SetBuildTableFlag() which was   (o)
   hiding implementation in the base class.
 
-processes/electromagnetic/utils                  emutils-V09-03-02
+processes/electromagnetic/utils                  emutils-V09-03-02           (o)
 -------------------------------
 - G4VEmProcess: fixed problem for ion processes by adding pointer to
   'currentParticle' which may be different from generic ion.
@@ -60,7 +61,7 @@ processes/electromagnetic/utils                  emutils-V09-03-02
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-03-00)
+- cross_sections (hadr-cross-V09-03-00)                                      (o)
   o G4UPiNuclearCrossSection: fixed bug for high Z (>83) atoms.
 - models/cascade (hadr-casc-V09-03-07)
   o Replaced all uses of bindingEnergy() (local Bertini method) with the
@@ -68,7 +69,7 @@ processes/hadronic
     G4IntraNuclearCascader, G4InuclCollider, G4NucleiModel, G4Fissioner,
     G4EquilibriumModel and G4NonEquilibriumModel.
     G4Fissioner still uses Bertini method bindingEnergyAsymptotic().
-  o G4InteractionCase: minor fix in initialisation in constructor to
+  o G4InteractionCase: minor fix in initialisation in constructor to         (o)
     allow for porting on C++0x Standard.
   o G4Diproton, G4Dineutron, G4UnboundPN: new G4ParticleDefinition
     subclasses, which implement the Bertini-specific dibaryon states.
@@ -87,9 +88,9 @@ processes/hadronic
   o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
     G4QElasticCrossSection; fixed initialization problem for
     G4QNeutronElasticCrossSection.
-- models/de_excitation (hadr-deex-V09-03-02)
+- models/de_excitation (hadr-deex-V09-03-02)                                 (o)
   o G4ExcitationHandler: activated FermiBreakUp.
-- models/high_energy (hadr-hep-V09-03-00)
+- models/high_energy (hadr-hep-V09-03-00)                                    (o)
   o Fixed case of segmentation fault in G4HEKaonZeroLongInelastic and 
     G4HEKaonZeroShortInelastic due to local instantiation and subsequent
     deletion of the K0 and anti-K0 models.
@@ -98,11 +99,11 @@ processes/hadronic
     using the K0, anti-K0 code. As an added feature, the production of
     K0 and anti-K0 outside the nucleus is now prohibited.
     Courtesy of A.Shepetov (Tien-Shan Mountain Station).
-- models/pre_equilibrium (hadr-pre-V09-03-01)
+- models/pre_equilibrium (hadr-pre-V09-03-01)                                (o)
   o G4PreCompoundEmission: added protection against unphysical value of 
     parameter 'an' when exitation energy is huge to avoid numerical problems.
 
-tracking                                         tracking-V09-03-00
+tracking                                         tracking-V09-03-00          (o)
 --------
 - G4RichTrajectory: Fixed bug in MergeTrajectory(), to not invoke
   G4Trajectory::MergeTrajectory().
@@ -113,10 +114,10 @@ tracking                                         tracking-V09-03-00
 examples                                         examples-V09-03-02
 --------
 - Updated reference outputs.
-- advanced/microbeam (microbeam-V09-03-01)
+- advanced/microbeam (microbeam-V09-03-01)                                   (o)
   o Added density initialisation in MicrobeamPhantomConfiguration and
     changed material/density selection.
-- advanced/underground_physics (DMX-V09-03-00)
+- advanced/underground_physics (DMX-V09-03-00)                               (o)
   o Physics list migrated from LowEnergy processes to the new Livermore 
     models. Physics results unchanged for gamma/e-. Possible differences 
     with ions/protons.
