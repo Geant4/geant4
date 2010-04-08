@@ -54,8 +54,8 @@ class G4HadronicWhiteBoard
   G4double GetPx();
   G4double GetPy();
   G4double GetPz();
-  G4double GetA();
-  G4double GetZ();
+  G4int GetA();
+  G4int GetZ();
 
   void Dump();
   
@@ -71,8 +71,8 @@ class G4HadronicWhiteBoard
   G4double thePz;
   
   G4Nucleus theTarget;
-  G4double theA;
-  G4double theZ;
+  G4int theA;
+  G4int theZ;
 
   G4String theProcessName;
   G4String theModelName;
