@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.cc,v 1.12 2010-03-24 20:58:49 gcosmo Exp $
+// $Id: F03PhysicsList.cc,v 1.13 2010-04-08 14:12:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -54,10 +54,9 @@
 
 F03PhysicsList::F03PhysicsList(F03DetectorConstruction* p)
 :  G4VUserPhysicsList(), MaxChargedStep(DBL_MAX),
-   thePhotoElectricEffect(0), theComptonScattering(0), theGammaConversion(0),
-   theeminusMultipleScattering(0), theeminusIonisation(0),
-   theeminusBremsstrahlung(0),
-   theeplusMultipleScattering(0), theeplusIonisation(0),
+   thePhotoElectricEffect(0), theComptonScattering(0),
+   theGammaConversion(0), theeminusIonisation(0),
+   theeminusBremsstrahlung(0), theeplusIonisation(0),
    theeplusBremsstrahlung(0), theeplusAnnihilation(0),
    theeminusStepCut(0), theeplusStepCut(0)
 {
