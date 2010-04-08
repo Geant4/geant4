@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.23 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.24 2010-04-08 00:22:11 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,6 +35,8 @@
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4HadTmpUtil.hh"
+#include "G4NucleiProperties.hh"
 #include <algorithm>
 
 using namespace G4InuclSpecialFunctions;
@@ -75,7 +77,12 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
     toTheNucleiSystemRestFrame.setTarget(PEX, nuclei_target->getMass());
     toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
-    G4double etot = (EEXS - bindingEnergy(A, Z)) * MeV/GeV;  // To Bertini units
+    //    G4double etot = (EEXS - bindingEnergy(A, Z)) * MeV/GeV;  // To Bertini units
+    G4double etot = (EEXS - G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z) ) ) * MeV/GeV;  // To Bertini units
+    if (etot < 0.0) {
+      G4cout << " Negative energy in BigBanger = " << etot << G4endl;
+      etot = 0.0;
+    }
 
     if (verboseLevel > 2) {
       G4cout << " BigBanger: target " << G4endl;
