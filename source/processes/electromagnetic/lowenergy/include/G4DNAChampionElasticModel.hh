@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.hh,v 1.3 2010-04-08 17:30:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,17 +44,17 @@ class G4DNAChampionElasticModel : public G4VEmModel
 public:
 
   G4DNAChampionElasticModel(const G4ParticleDefinition* p = 0, 
-		          const G4String& nam = "DNAChampionElasticModel");
+		            const G4String& nam = "DNAChampionElasticModel");
 
   virtual ~G4DNAChampionElasticModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* p,
-					   G4double ekin,
-					   G4double emin,
-					   G4double emax);
+					 const G4ParticleDefinition* p,
+					 G4double ekin,
+					 G4double emin,
+					 G4double emax);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -85,11 +85,15 @@ private:
   
   // Final state
 
-  G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
+  //G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
 
-  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
+  G4double Theta(G4ParticleDefinition * aParticleDefinition, G4double k, G4double integrDiff);
+  
+  G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+
   G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+   
+  G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double QuadInterpolator(G4double e11, 
  		            G4double e12, 
