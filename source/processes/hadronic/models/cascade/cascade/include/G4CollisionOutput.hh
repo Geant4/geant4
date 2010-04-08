@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.hh,v 1.16 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.17 2010-04-08 15:48:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100407  M. Kelsey -- Replace ::resize(0) with ::clear()
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -47,9 +48,8 @@ public:
   G4CollisionOutput& operator=(const G4CollisionOutput& right);
 
   void reset() {
-    nucleiFragments.resize(0);
-    outgoingParticles.resize(0);
-  
+    nucleiFragments.clear();
+    outgoingParticles.clear();
   };
 
   void addOutgoingParticle(const G4InuclElementaryParticle& particle) {

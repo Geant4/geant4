@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2010-04-08 00:25:56 dennis Exp $
+$Id: History,v 1.54 2010-04-08 15:48:00 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,58 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+07 April 2010 Michael Kelsey (hadr-casc-V09-03-17)
+--------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+Replace return-by-value std::vector<> with either const-ref returns, or
+with use of an internal buffer which can be reused, to reduce memory
+churn due to copying, allocation, and resizing.
+
+- G4BigBanger:  Create data buffer for lists of secondaries and momenta.
+  Fill buffers in ::generateBangInSCM() and ::generateMomentumModules(),
+  which are now non-const.  Reference buffers in ::collide().
+
+- G4CascadeFunctions::getOutgoingParticleTypes():  Make "kinds" a static
+  variable (buffer), and return it by const-ref.
+
+- G4ElementaryParticleCollider:  Eliminate return-by-value std::vector<>
+  on the functions listed below, by creating data buffers for particles,
+  momenta, and particle types.  The functions become non-const and void:
+  ::generateSCMfinalState(), ::generateMomModules()
+  ::generateStrangeChannelPartTypes(), ::generateSCMpionAbsorption()
+
+  Also, in ::generateStrangeChannelPartTypes(), use a switch statement
+  instead of the long cascade of if-else-else.
+
+- G4NucleiModel: Several member functions have different modifications:
+
+  ::initializeCascad(bullet,target) -- Replace return value with a passed-in
+	(non-const reference) buffer to be filled.  The calling code can
+	pass in a data member, local variable, or whatever.
+
+  ::generateParticleFate() -- Replace local "thePartners" variable with data
+  	member, filled below.  Move "outgouing_cparticles" to data member
+  	(fix the spelling!), and return by const-ref.
+
+  ::generateInteractionPartners() -- Eliminate return value; fill data
+	member instead, to be used by ::generateParticleFate().
+
+- G4IntraNucleiCascader.cc:  Follow changes to initializeCascad() above.
+
+- G4NucleonSampler, G4PionSampler: ** DON'T KNOW WHAT TO DO HERE **
+
+- G4WatcherGun:  Return const-ref to list of watchers, instead of copy.
+
+Replace all uses of std::vector<>::resize(0) with ::clear().  The former
+causes deallocation/reallocation/resizing cycles, while clear() just removes
+content, preserving the allocated buffer.
+
+	include/G4CollisionOutput.hh
+	src/G4ElementaryParticleCollider.cc
+	src/G4NucleiModel.cc
+	src/G4WatcherGun.cc
 
 07 April 2010 Dennis Wright (hadr-casc-V09-03-16)
 -------------------------------------------------

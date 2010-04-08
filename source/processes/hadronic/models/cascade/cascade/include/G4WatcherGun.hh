@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4WatcherGun.hh,v 1.9 2010-04-08 15:48:00 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100407  M. Kelsey -- Return const-ref to avoid copy overhead.
+
 #ifndef G4WATCHER_GUN_HH
 #define G4WATCHER_GUN_HH
 
@@ -36,7 +40,7 @@ public:
   G4WatcherGun();
   void setWatchers();
 
-  std::vector<G4NuclWatcher> getWatchers() const { 
+  const std::vector<G4NuclWatcher>& getWatchers() const { 
     return watchers; 
   };
 

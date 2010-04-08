@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.hh,v 1.10 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4BigBanger.hh,v 1.11 2010-04-08 15:48:00 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+// 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
@@ -47,17 +48,11 @@ public:
 private: 
 
 G4int verboseLevel;
-  std::vector<G4InuclElementaryParticle> generateBangInSCM(G4double etot, 
-						      G4double a, 
-						      G4double z, 
-						      G4double mp,
-						      G4double mn) const;
+  void generateBangInSCM(G4double etot, G4double a, G4double z, 
+			 G4double mp, G4double mn);
 
-  std::vector<G4double> generateMomentumModules(G4double etot, 
-					   G4double a, 
-					   G4double z,
-					   G4double mp, 
-					   G4double mn) const; 
+  void generateMomentumModules(G4double etot, G4double a, G4double z,
+			       G4double mp, G4double mn); 
 
   G4double xProbability(G4double x, 
 			G4int ia) const; 
@@ -68,6 +63,9 @@ G4int verboseLevel;
 		     G4double a, 
 		     G4double promax) const; 
 
+  // Buffers for big-bang results
+  std::vector<G4InuclElementaryParticle> particles;
+  std::vector<G4double> momModules;
 };        
 
 #endif // G4BIG_BANGER_HH 

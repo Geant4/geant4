@@ -22,13 +22,17 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.41 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.42 2010-04-08 15:48:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Use G4ThreeVector for position
 // 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow(), move ctor here
+// 20100407  M. Kelsey -- Replace std::vector<>::resize(0) with ::clear().
+//		Move output vectors from generateParticleFate() and 
+//		::generateInteractionPartners() to be data members; return via
+//		const-ref instead of by value.
 
 //#define CHC_CHECK
 
@@ -177,9 +181,9 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
     //  neutron stuff
     dd0 = 3.0 * (a - z) * oneBypiTimes4 / tot_vol;
-    rod.resize(0);
-    pf.resize(0);
-    vz.resize(0);
+    rod.clear();
+    pf.clear();
+    vz.clear();
 
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = dd0 * v[i] / v1[i];
@@ -229,9 +233,9 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
 
     // neutron 
-    rod.resize(0);
-    pf.resize(0);
-    vz.resize(0);
+    rod.clear();
+    pf.clear();
+    vz.clear();
 
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = vol;
@@ -430,9 +434,8 @@ G4NucleiModel::generateQuasiDeutron(G4int type1, G4int type2,
 }
 
 
-partners 
-G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
-
+void
+G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
   }
@@ -451,7 +454,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
   //const G4double young_cut = std::sqrt(10.0) * 0.1;
   //const G4double young_cut = 0.0;
 
-  partners thePartners;
+  thePartners.clear();		// Reset buffer for next cycle
 
   G4int ptype = cparticle.getParticle().type();
   G4int zone = cparticle.getCurrentZone();
@@ -480,7 +483,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
   }
 
   if (path < -small) { // something wrong
-    return thePartners;
+    return;
 
   } else if (std::fabs(path) < small) { // just on the boundary
     path = 0.0; 
@@ -696,135 +699,134 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
     thePartners.push_back(partner(particle, path));
   }; 
  
-  return thePartners;
+  return;
 }
 
 
-std::vector<G4CascadParticle> 
+const std::vector<G4CascadParticle>&
 G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
                                     G4ElementaryParticleCollider* theElementaryParticleCollider) {
+  if (verboseLevel > 3)
+    G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
 
-  if (verboseLevel > 3) G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
+  outgoing_cparticles.clear();		// Clear return buffer for this event
 
-  std::vector<G4CascadParticle> outgouing_cparticles;
+  generateInteractionPartners(cparticle);	// Fills "thePartners" data
 
-  partners thePartners = generateInteractionPartners(cparticle);
-
-  if(thePartners.empty()) { // smth. is wrong -> needs special treatment
-
+  if (thePartners.empty()) { // smth. is wrong -> needs special treatment
     G4cout << " generateParticleFate-> can not be here " << G4endl;
+    return outgoing_cparticles;
+  }
 
-  } else {
-    G4int npart = thePartners.size();
+  G4int npart = thePartners.size();
 
-    if (npart == 1) { // cparticle is on the next zone entry
-      // need to go here if particle outside nucleus ?
-      //
-      cparticle.propagateAlongThePath(thePartners[0].second);
-      cparticle.incrementCurrentPath(thePartners[0].second);
-      boundaryTransition(cparticle);
-      outgouing_cparticles.push_back(cparticle);
-
+  if (npart == 1) { // cparticle is on the next zone entry
+    // need to go here if particle outside nucleus ?
+    //
+    cparticle.propagateAlongThePath(thePartners[0].second);
+    cparticle.incrementCurrentPath(thePartners[0].second);
+    boundaryTransition(cparticle);
+    outgoing_cparticles.push_back(cparticle);
+    
+    if (verboseLevel > 2){
+      G4cout << " next zone " << G4endl;
+      cparticle.print();
+    }
+    
+  } else { // there are possible interactions
+    
+    G4ThreeVector old_position = cparticle.getPosition();
+    
+    G4InuclElementaryParticle bullet = cparticle.getParticle();
+    
+    G4bool no_interaction = true;
+    
+    G4int zone = cparticle.getCurrentZone();
+    
+    for (G4int i = 0; i < npart - 1; i++) {
+      if (i > 0) cparticle.updatePosition(old_position); 
+      
+      G4InuclElementaryParticle target = thePartners[i].first; 
+      
       if (verboseLevel > 2){
-	G4cout << " next zone " << G4endl;
-	cparticle.print();
+	if (target.quasi_deutron()) 
+	  G4cout << " try absorption: target " << target.type() << " bullet " <<
+	    bullet.type() << G4endl;
       }
-
-    } else { // there are possible interactions
- 
-      G4ThreeVector old_position = cparticle.getPosition();
-
-      G4InuclElementaryParticle bullet = cparticle.getParticle();
-
-      G4bool no_interaction = true;
-
-      G4int zone = cparticle.getCurrentZone();
-
-      for (G4int i = 0; i < npart - 1; i++) {
-	if (i > 0) cparticle.updatePosition(old_position); 
-
-	G4InuclElementaryParticle target = thePartners[i].first; 
-
-	if (verboseLevel > 2){
-	  if (target.quasi_deutron()) 
-	    G4cout << " try absorption: target " << target.type() << " bullet " <<
-	              bullet.type() << G4endl;
+      
+      G4CollisionOutput output = theElementaryParticleCollider->collide(&bullet, &target);
+      
+      if (verboseLevel > 2) output.printCollisionOutput();
+      
+      std::vector<G4InuclElementaryParticle> outgoing_particles = 
+	output.getOutgoingParticles();
+      
+      if (passFermi(outgoing_particles, zone)) { // interaction
+	cparticle.propagateAlongThePath(thePartners[i].second);
+	G4ThreeVector new_position = cparticle.getPosition();
+	
+	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
+	  G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
+	  outgoing_cparticles.push_back(temp);
 	}
-
-	G4CollisionOutput output = theElementaryParticleCollider->collide(&bullet, &target);
-
-	if (verboseLevel > 2) output.printCollisionOutput();
-
-	std::vector<G4InuclElementaryParticle> outgoing_particles = 
-	  output.getOutgoingParticles();
-
-        if (passFermi(outgoing_particles, zone)) { // interaction
-	  cparticle.propagateAlongThePath(thePartners[i].second);
-          G4ThreeVector new_position = cparticle.getPosition();
-
-          for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
-            G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
-	    outgouing_cparticles.push_back(temp);
-          }
-
-          no_interaction = false;
-	  current_nucl1 = 0;
-	  current_nucl2 = 0;
+	
+	no_interaction = false;
+	current_nucl1 = 0;
+	current_nucl2 = 0;
 #ifdef CHC_CHECK
-	  G4double out_charge = 0.0;
-
-	  for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
-	    out_charge += outgoing_particles[ip].getCharge();
-
-	  G4cout << " multiplicity " << outgoing_particles.size() <<
-	    " bul type " << bullet.type() << " targ type " << target.type() << 
-	    G4endl << " initial charge " << bullet.getCharge() + target.getCharge() 
-		 << " out charge " << out_charge << G4endl;  
+	G4double out_charge = 0.0;
+	
+	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
+	  out_charge += outgoing_particles[ip].getCharge();
+	
+	G4cout << " multiplicity " << outgoing_particles.size() <<
+	  " bul type " << bullet.type() << " targ type " << target.type() << 
+	  G4endl << " initial charge " << bullet.getCharge() + target.getCharge() 
+	       << " out charge " << out_charge << G4endl;  
 #endif
-
-	  if (verboseLevel > 2){
-	    G4cout << " partner type " << target.type() << G4endl;
-	  }
-
-	  if (target.nucleon()) {
-	    current_nucl1 = target.type();
-
-	  } else {
-	    if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
-
-	    current_nucl1 = (target.type() - 100) / 10;
-	    current_nucl2 = target.type() - 100 - 10 * current_nucl1;
-          }   
+	
+	if (verboseLevel > 2){
+	  G4cout << " partner type " << target.type() << G4endl;
+	}
+	
+	if (target.nucleon()) {
+	  current_nucl1 = target.type();
 	  
-	  if (current_nucl1 == 1) {
-	    protonNumberCurrent -= 1.0;
-
-	  } else {
-	    neutronNumberCurrent -= 1.0;
-	  }; 
-
-	  if (current_nucl2 == 1) {
-	    protonNumberCurrent -= 1.0;
-
-	  } else if(current_nucl2 == 2) {
-	    neutronNumberCurrent -= 1.0;
-	  };
- 
-	  break;
-        }; 
-      }  // loop over partners
-
-      if (no_interaction) { // still no interactions
-	cparticle.updatePosition(old_position); 
-	cparticle.propagateAlongThePath(thePartners[npart - 1].second);
-	cparticle.incrementCurrentPath(thePartners[npart - 1].second);
-	boundaryTransition(cparticle);
-	outgouing_cparticles.push_back(cparticle);
-      };
-    }; 
+	} else {
+	  if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
+	  
+	  current_nucl1 = (target.type() - 100) / 10;
+	  current_nucl2 = target.type() - 100 - 10 * current_nucl1;
+	}   
+	
+	if (current_nucl1 == 1) {
+	  protonNumberCurrent -= 1.0;
+	  
+	} else {
+	  neutronNumberCurrent -= 1.0;
+	}; 
+	
+	if (current_nucl2 == 1) {
+	  protonNumberCurrent -= 1.0;
+	  
+	} else if(current_nucl2 == 2) {
+	  neutronNumberCurrent -= 1.0;
+	};
+	
+	break;
+      }; 
+    }  // loop over partners
+    
+    if (no_interaction) { // still no interactions
+      cparticle.updatePosition(old_position); 
+      cparticle.propagateAlongThePath(thePartners[npart - 1].second);
+      cparticle.incrementCurrentPath(thePartners[npart - 1].second);
+      boundaryTransition(cparticle);
+      outgoing_cparticles.push_back(cparticle);
+    };
   }; 
 
-  return outgouing_cparticles;
+  return outgoing_cparticles;
 }
 
 G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
@@ -1008,9 +1010,9 @@ G4CascadParticle G4NucleiModel::initializeCascad(G4InuclElementaryParticle* part
   return cpart;
 }
 
-std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> >
-G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, 
-				G4InuclNuclei* target) {
+void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, 
+				     G4InuclNuclei* target,
+				     modelLists& output) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NucleiModel::initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target)" << G4endl;
@@ -1028,11 +1030,14 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
   const G4double s4max = 7.0;
   const G4int itry_max = 100;
 
-  std::vector<G4CascadParticle> casparticles;
-  std::vector<G4InuclElementaryParticle> particles;
+  // Convenient references to input buffer contents
+  std::vector<G4CascadParticle>& casparticles = output.first;
+  std::vector<G4InuclElementaryParticle>& particles = output.second;
 
-// first decide whether it will be cascad or compound final nuclei
+  casparticles.clear();		// Reset input buffer to fill this event
+  particles.clear();
 
+  // first decide whether it will be cascad or compound final nuclei
   G4double ab = bullet->getA();
   G4double zb = bullet->getZ();
   G4double at = target->getA();
@@ -1052,7 +1057,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
       while (casparticles.size() == 0 && itryg < itry_max) {      
 	itryg++;
 
-	if(itryg > 0) particles.resize(0);
+	if(itryg > 0) particles.clear();
       
 	//    nucleons coordinates and momenta in nuclei rest frame
 	std::vector<G4ThreeVector> coordinates;
@@ -1109,7 +1114,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
         
 	  if (ab < 4.0) { // a == 3
 	    while (badco && itry < itry_max) {
-	      if (itry > 0) coordinates.resize(0);
+	      if (itry > 0) coordinates.clear();
 	      itry++;	
 	      G4int i(0);    
 
@@ -1183,7 +1188,7 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  
 	    while (badco && itry < itry_max) {
 
-	      if (itry > 0) coordinates.resize(0);
+	      if (itry > 0) coordinates.clear();
 	      itry++;
 	      G4int i(0);
 	    
@@ -1251,11 +1256,12 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  }; 
 
 	  if(badco) {
-	    G4cout << " can not generate the nucleons coordinates for a " << ab <<
-	      G4endl;	
+	    G4cout << " can not generate the nucleons coordinates for a "
+		   << ab << G4endl;	
 
-	    return std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> >
-	      (casparticles, particles);
+	    casparticles.clear();	// Return empty buffer on error
+	    particles.clear();
+	    return;
 
 	  } else { // momentums
 	    G4double p, u, x;
@@ -1281,10 +1287,12 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      };
 
 	      if(itry == itry_max) {
-		G4cout << " can not generate proper momentum for a " << ab << G4endl;
+		G4cout << " can not generate proper momentum for a "
+		       << ab << G4endl;
 
-		return std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> >
-		  (casparticles, particles);
+		casparticles.clear();	// Return empty buffer on error
+		particles.clear();
+		return;
 	      }; 
 
 	    };
@@ -1390,26 +1398,26 @@ G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
       };    
 
       if(casparticles.size() == 0) {
-	particles.resize(0);
+	particles.clear();
 
-	G4cout << " can not generate proper distribution for " << itry_max << " steps " << G4endl;
-
+	G4cout << " can not generate proper distribution for " << itry_max
+	       << " steps " << G4endl;
       };    
     };
   };
 
   if(verboseLevel > 2){
-    G4cout << " cascad particles: " << casparticles.size() << G4endl;
     G4int ip(0);
 
+    G4cout << " cascad particles: " << casparticles.size() << G4endl;
     for(ip = 0; ip < G4int(casparticles.size()); ip++) casparticles[ip].print();
-    G4cout << " outgoing particles: " << particles.size() << G4endl;
 
-    for(ip = 0; ip < G4int(particles.size()); ip++) particles[ip].printParticle();
+    G4cout << " outgoing particles: " << particles.size() << G4endl;
+    for(ip = 0; ip < G4int(particles.size()); ip++)
+      particles[ip].printParticle();
   }
 
-  return std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> >
-    (casparticles, particles);
+  return;	// Buffer has been filled
 }
 
 

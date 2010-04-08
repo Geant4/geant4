@@ -22,7 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeFunctions.hh,v 1.2 2010-04-08 15:48:00 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
+//		using a static variable in the function as a buffer.
+
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
 
@@ -36,7 +41,9 @@ class G4CascadeFunctions
 public:
   static G4double getCrossSection(double ke);
   static G4int getMultiplicity(G4double ke);
-  static std::vector<G4int> getOutgoingParticleTypes(G4int mult, G4double ke);
+
+  static const std::vector<G4int>& 
+  getOutgoingParticleTypes(G4int mult, G4double ke);
 };
 
 template <class T>
@@ -74,7 +81,7 @@ G4CascadeFunctions<T>::getMultiplicity(G4double ke)
 
 template <class T>
 inline
-std::vector<G4int> 
+const std::vector<G4int>&
 G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke)
 {
   G4int i;
@@ -96,7 +103,8 @@ G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke)
  
   G4int channel = G4CascadeChannel::sampleFlat(sigma);
 
-  std::vector<G4int> kinds;
+  static std::vector<G4int> kinds(7);	// Reusable buffer -- NOT PARALLIZABLE!
+  kinds.clear();
 
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T::data.x2bfs[channel][i]);

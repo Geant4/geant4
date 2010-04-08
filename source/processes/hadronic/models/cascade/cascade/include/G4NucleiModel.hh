@@ -22,24 +22,27 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.21 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.22 2010-04-08 15:48:00 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
 //		move ctor to .cc file
+// 20100407  M. Kelsey -- Create "partners thePartners" data member to act
+//		as buffer between ::generateInteractionPartners() and 
+//		::generateParticleFate(), and make "outgoing_cparticles" a
+//		data member returned from the latter by const-ref.  Replace
+//		return-by-value of initializeCascad() with an input buffer.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
+#include <algorithm>
 #include <vector>
 
 class G4InuclNuclei;
 class G4ElementaryParticleCollider;
-
-typedef std::pair<G4InuclElementaryParticle, G4double> partner;
-typedef std::vector<partner> partners;
 
 class G4NucleiModel {
 
@@ -91,7 +94,7 @@ public:
   }
 
 
-  std::vector<G4CascadParticle> 
+  const std::vector<G4CascadParticle>&
   generateParticleFate(G4CascadParticle& cparticle,
 		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
 
@@ -119,8 +122,10 @@ public:
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
 
 
-  std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> >
-  initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+  typedef std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > modelLists;
+
+  void initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target,
+			modelLists& output);
 
 
   std::pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
@@ -133,7 +138,6 @@ public:
   G4InuclElementaryParticle generateNucleon(G4int type, G4int zone) const;
 
 private:
- 
   G4int verboseLevel;
 
   void initTotalCrossSections();
@@ -148,7 +152,10 @@ private:
 						 G4int type2,
 						 G4int zone) const;
 
-  partners generateInteractionPartners(G4CascadParticle& cparticle) const;
+  typedef std::pair<G4InuclElementaryParticle, G4double> partner;
+
+  std::vector<partner> thePartners;		// Buffer for output below
+  void generateInteractionPartners(G4CascadParticle& cparticle);
 
   G4double volNumInt(G4double r1, G4double r2, G4double cu, 
 		     G4double d1) const; 
@@ -156,6 +163,8 @@ private:
   G4double volNumInt1(G4double r1, G4double r2, G4double cu2) const; 
 
   G4double getRatio(G4int ip) const;
+
+  std::vector<G4CascadParticle> outgoing_cparticles;	// Return buffer
 
   std::vector<std::vector<G4double> > nucleon_densities;
 

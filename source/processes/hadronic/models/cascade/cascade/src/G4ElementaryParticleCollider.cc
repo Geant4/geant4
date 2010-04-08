@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.50 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.51 2010-04-08 15:48:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,6 +32,14 @@
 //		the sum of two exponentials.
 // 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow()
+// 20100407  M. Kelsey -- Replace std::vector<>::resize(0) with ::clear()
+//		Eliminate return-by-value std::vector<> by creating buffers
+//		buffers for particles, momenta, and particle types.
+//		The following functions now return void and are non-const:
+//		  ::generateSCMfinalState()
+//		  ::generateMomModules()
+//		  ::generateStrangeChannelPartTypes()
+//		  ::generateSCMpionAbsorption()
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -69,7 +77,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : verboseLevel(0)
+  : verboseLevel(4)
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider ctor " << G4endl;
@@ -123,8 +131,8 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
       G4double etot_scm = convertToSCM.getTotalSCMEnergy();
       G4double pscm = convertToSCM.getSCMMomentum();
 
-      std::vector<G4InuclElementaryParticle> particles = 	    
-	generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
+      generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2,
+			    &convertToSCM);
 
       if(verboseLevel > 2){
 	G4cout << " particles " << particles.size() << G4endl;
@@ -157,8 +165,8 @@ G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
 	  }; 
 	  convertToSCM.toTheCenterOfMass(); 
 	  G4double etot_scm = convertToSCM.getTotalSCMEnergy();
-	  std::vector<G4InuclElementaryParticle> particles = 
-	    generateSCMpionAbsorption(etot_scm, particle1, particle2);
+
+	  generateSCMpionAbsorption(etot_scm, particle1, particle2);
 
 	  if(!particles.empty()) { // convert back to Lab
 	    particleIterator ipart;
@@ -278,14 +286,13 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 }
 
  
-std::vector<G4InuclElementaryParticle> 
+void
 G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin, 
 		                     G4double etot_scm, 
 		                     G4double pscm,
 		                     G4InuclElementaryParticle* particle1,
 		                     G4InuclElementaryParticle* particle2, 
-	                             G4LorentzConvertor* toSCM) const 
-{
+	                             G4LorentzConvertor* toSCM) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::generateSCMfinalState" 
            << G4endl;
@@ -295,8 +302,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
   const G4double difr_const = 0.3678794;   
   const G4int itry_max = 10;
   G4InuclElementaryParticle dummy;
-  std::vector<G4InuclElementaryParticle> particles;
-  std::vector<G4int> particle_kinds;
+
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
   G4int is = type1 * type2;
@@ -307,21 +313,22 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
   G4int multiplicity = 0;
   G4bool generate = true;
-   
-  while (generate) {
 
+  particles.clear();		// Initialize buffers for this event
+  particle_kinds.clear();
+
+  while (generate) {
     if(multiplicity == 0) {
       multiplicity = generateMultiplicity(is, ekin);
     } else {
       multiplicity = generateMultiplicity(is, ekin);
-      particle_kinds.resize(0);
+      particle_kinds.clear();
     }
 
     if(multiplicity == 2) { // 2 -> 2
       G4int kw = 1;
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
-        particle_kinds =
-	  generateStrangeChannelPartTypes(is, 2, ekin);
+	generateStrangeChannelPartTypes(is, 2, ekin);
 
         G4int finaltype = particle_kinds[0]*particle_kinds[1];
         if (finaltype != is) kw = 2;  // Charge or strangeness exchange
@@ -402,8 +409,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
     } else { // 2 -> many
 
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
-        particle_kinds =
-          generateStrangeChannelPartTypes(is, multiplicity, ekin);
+	generateStrangeChannelPartTypes(is, multiplicity, ekin);
 
       } else if (is == 1) {
         particle_kinds = nucSampler.GetFSPartTypesForPP(multiplicity, ekin);
@@ -456,8 +462,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	  G4cout << " itry in while " << itry << G4endl;
 	}
 
-	std::vector<G4double> modules = 
-	  generateMomModules(particle_kinds, multiplicity, is, ekin, etot_scm);
+	generateMomModules(multiplicity, is, ekin, etot_scm);
 
 	if (G4int(modules.size()) == multiplicity) {
 
@@ -611,17 +616,14 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
     G4cout << " <<< G4ElementaryParticleCollider::generateSCMfinalState" << G4endl;
   }
 
-  return particles;
+  return;	// Particles buffer filled
 }
 
-std::vector<G4double> 
-G4ElementaryParticleCollider::generateMomModules(
-		   const std::vector<G4int>& kinds, 
-		   G4int mult, 
-		   G4int is, 
-		   G4double ekin, 
-		   G4double etot_cm) const 
-{
+void 
+G4ElementaryParticleCollider::generateMomModules(G4int mult, 
+						 G4int is, 
+						 G4double ekin, 
+						 G4double etot_cm) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::generateMomModules" 
            << G4endl;
@@ -637,18 +639,21 @@ G4ElementaryParticleCollider::generateMomModules(
   G4InuclElementaryParticle dummy;
   G4int itry = 0;
 
-  std::vector<G4double> modules(mult);
+  // FIXME:  Code below wants to set modules[i] directly.  Bad practice
+  modules.clear();			// Initialize buffer for this attempt
+  modules.insert(modules.begin(), mult, 0.);
+
   std::vector<G4double> masses2(mult);
 
   for (G4int i = 0; i < mult; i++) {
-    G4double mass = dummy.getParticleMass(kinds[i]);
+    G4double mass = dummy.getParticleMass(particle_kinds[i]);
     masses2[i] = mass * mass;
   };
 
   G4double mass_last = std::sqrt(masses2[mult - 1]);
 
   if (verboseLevel > 3){
-    G4cout << " knd_last " << kinds[mult - 1] << " mlast " 
+    G4cout << " knd_last " << particle_kinds[mult - 1] << " mlast " 
            << mass_last << G4endl;
   }
 
@@ -664,13 +669,13 @@ G4ElementaryParticleCollider::generateMomModules(
     for (G4int i = 0; i < mult - 1; i++) {
 
       G4double pmod = 
-	getMomModuleFor2toMany(is, mult, kinds[i], ekin);
+	getMomModuleFor2toMany(is, mult, particle_kinds[i], ekin);
 
       if (pmod < small) break;
       eleft -= std::sqrt(pmod * pmod + masses2[i]);
 
       if (verboseLevel > 3){
-	G4cout << " kp " << kinds[i] << " pmod " << pmod << " mass2 " 
+	G4cout << " kp " << particle_kinds[i] << " pmod " << pmod << " mass2 " 
                << masses2[i] << G4endl;
 	G4cout << " x1 " << eleft - mass_last << G4endl;
       }
@@ -691,19 +696,14 @@ G4ElementaryParticleCollider::generateMomModules(
 	modules[mult - 1] = plast;      
 
 	if (mult == 3) { 
-	  if(satisfyTriangle(modules)) {
-	    return modules;
-	  }
-
-	} else {
-	  return modules;
-	}
+	  if (satisfyTriangle(modules)) return;
+	} else return;
       }
     }
   }
 
-  modules.resize(0);
-  return modules;    
+  modules.clear();		// Something went wrong, throw away partial
+  return;    
 }
 
 
@@ -718,7 +718,7 @@ G4ElementaryParticleCollider::satisfyTriangle(
 
   G4bool good = true;
   if(modules.size() == 3) {
-
+  
     if(std::fabs(modules[1] - modules[2]) > modules[0] || 
        modules[0] > modules[1] + modules[2] ||
        std::fabs(modules[0] - modules[2]) > modules[1] ||
@@ -732,53 +732,52 @@ G4ElementaryParticleCollider::satisfyTriangle(
 }
 
 
-std::vector<G4int> 
-G4ElementaryParticleCollider::generateStrangeChannelPartTypes(
-                              G4int is, G4int mult, G4double ekin) const
+void G4ElementaryParticleCollider::generateStrangeChannelPartTypes(
+                              G4int is, G4int mult, G4double ekin)
 {
-  std::vector<G4int> kinds;
+  particle_kinds.clear();	// Initialize buffer for generation
 
   if (is == 11) {
-    kinds = G4CascadeKplusPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKplusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 13) {
-    kinds = G4CascadeKminusPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKminusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 15) {
-    kinds = G4CascadeKzeroPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKzeroPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 17) {
-    kinds = G4CascadeKzeroBarPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKzeroBarPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 21) {
-    kinds = G4CascadeLambdaPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeLambdaPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 23) {
-    kinds = G4CascadeSigmaPlusPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeSigmaPlusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 25) {
-    kinds = G4CascadeSigmaZeroPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeSigmaZeroPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 27) {
-    kinds = G4CascadeSigmaMinusPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeSigmaMinusPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 29) {
-    kinds = G4CascadeXiZeroPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeXiZeroPChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 31) {
-    kinds = G4CascadeXiMinusPChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeXiMinusPChannel::getOutgoingParticleTypes(mult, ekin);
 
   } else if (is == 22) {
-    kinds = G4CascadeKplusNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKplusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 26) {
-    kinds = G4CascadeKminusNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKminusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 30) {
-    kinds = G4CascadeKzeroNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKzeroNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 34) {
-    kinds = G4CascadeKzeroBarNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeKzeroBarNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 42) {
-    kinds = G4CascadeLambdaNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeLambdaNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 46) {
-    kinds = G4CascadeSigmaPlusNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeSigmaPlusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 50) {
-    kinds = G4CascadeSigmaZeroNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeSigmaZeroNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 54) {
-    kinds = G4CascadeSigmaMinusNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeSigmaMinusNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 58) {
-    kinds = G4CascadeXiZeroNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeXiZeroNChannel::getOutgoingParticleTypes(mult, ekin);
   } else if (is == 62) {
-    kinds = G4CascadeXiMinusNChannel::getOutgoingParticleTypes(mult, ekin);
+    particle_kinds = G4CascadeXiMinusNChannel::getOutgoingParticleTypes(mult, ekin);
 
   } else {
     G4cout << " G4ElementaryParticleCollider:"
@@ -786,7 +785,7 @@ G4ElementaryParticleCollider::generateStrangeChannelPartTypes(
            << G4endl;
   }
 
-  return kinds;
+  return;
 }
 
 
@@ -1255,11 +1254,10 @@ G4ElementaryParticleCollider::getElasticCase(G4int is,
 }
 
 
-std::vector<G4InuclElementaryParticle> 
+void
 G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 			             G4InuclElementaryParticle* particle1,
-			             G4InuclElementaryParticle* particle2) const 
-{
+			             G4InuclElementaryParticle* particle2) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionAbsorption" 
            << G4endl;
@@ -1269,8 +1267,10 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   // the nucleon distribution assumed to be isotropic in SCM
 
   G4InuclElementaryParticle dummy;
-  std::vector<G4InuclElementaryParticle> particles;
-  std::vector<G4int> particle_kinds;
+
+  particles.clear();		// Initialize buffers for this event
+  particle_kinds.clear();
+
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
 
@@ -1282,7 +1282,7 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
       G4cout << " pion absorption: pi+ + PP -> ? " << G4endl;
 
-      return particles;
+      return;
     }
     else if(type2 == 112) { // pi+ + PN -> PP
       particle_kinds.push_back(1);
@@ -1306,7 +1306,7 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
       G4cout << " pion absorption: pi- + NN -> ? " << G4endl;
 
-      return particles;
+      return;
     };     
   }
   else if(type1 == 7) {
@@ -1340,7 +1340,7 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0]));
   particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1]));
 
-  return particles;
+  return;
 }
 
 void G4ElementaryParticleCollider::initializeArrays()

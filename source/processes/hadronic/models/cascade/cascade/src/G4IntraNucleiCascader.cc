@@ -22,12 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.32 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.33 2010-04-08 15:48:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100307  M. Kelsey -- Bug fix: momentum_out[0] should be momentum_out.e()
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
+// 20100407  M. Kelsey -- Pass "all_particles" as argument to initializeCascad,
+//		following recent change to G4NucleiModel.
 
 #define RUN
 
@@ -130,8 +132,8 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       afin += ab;
       zfin += zb;
 
-      std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > 
-	all_particles = model.initializeCascad(bnuclei, tnuclei);
+      G4NucleiModel::modelLists all_particles;    // Buffer to receive lists
+      model.initializeCascad(bnuclei, tnuclei, all_particles);
 
       cascad_particles = all_particles.first;
 

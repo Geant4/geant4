@@ -22,11 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.25 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.26 2010-04-08 15:48:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
+// 20100407  M. Kelsey -- Eliminate return-by-value std::vector<> by creating
+//		three data buffers for particles, momenta, and particle types.
+//		The following functions now return void and are non-const:
+//		  ::generateSCMfinalState()
+//		  ::generateMomModules() (also remove input vector)
+//		  ::generateStrangeChannelPartTypes()
+//		  ::generateSCMpionAbsorption()
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -62,16 +69,17 @@ private:
 	       G4CollisionOutput& output);
 
       
-  std::vector<G4InuclElementaryParticle> 
-  generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,	     
-		        G4InuclElementaryParticle* particle1,
-			G4InuclElementaryParticle* particle2, 
-			G4LorentzConvertor* toSCM) const; 
+  void generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,
+			     G4InuclElementaryParticle* particle1,
+			     G4InuclElementaryParticle* particle2, 
+			     G4LorentzConvertor* toSCM); 
 
+  void generateSCMpionAbsorption(G4double etot_scm,
+				 G4InuclElementaryParticle* particle1,
+				 G4InuclElementaryParticle* particle2); 
 
-  std::vector<G4double>
-  generateMomModules(const std::vector<G4int>& kinds, G4int mult,
-		     G4int is, G4double ekin, G4double etot_cm) const; 
+  void generateMomModules(G4int mult, G4int is, G4double ekin,
+			  G4double etot_cm); 
 
 
   G4LorentzVector
@@ -82,14 +90,12 @@ private:
   G4int getElasticCase(G4int is, G4int kw, G4double ekin) const;
 
 
-  std::vector<G4int>
-  generateStrangeChannelPartTypes(G4int is, G4int mult, 
-				  G4double ekin) const;
+  void generateStrangeChannelPartTypes(G4int is, G4int mult, 
+				       G4double ekin);
 
 
-  G4double
-  getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 
-			 G4double ekin) const; 
+  G4double getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 
+				  G4double ekin) const; 
 
 
   G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
@@ -104,13 +110,13 @@ private:
                            G4int k, G4int l, const std::vector<G4double>& ssv, 
 			   G4double st) const;
  
-  std::vector<G4InuclElementaryParticle> 
-  generateSCMpionAbsorption(G4double etot_scm,
-			    G4InuclElementaryParticle* particle1,
-			    G4InuclElementaryParticle* particle2) const; 
-
   G4NucleonSampler nucSampler;
   G4PionSampler piSampler;
+
+  // Internal buffers for lists of secondaries
+  std::vector<G4InuclElementaryParticle> particles;
+  std::vector<G4double> modules;
+  std::vector<G4int> particle_kinds;
 
   // Parameter arrays
 
