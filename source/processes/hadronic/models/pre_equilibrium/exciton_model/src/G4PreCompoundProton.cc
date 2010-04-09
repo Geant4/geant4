@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.cc,v 1.4 2009-02-11 18:06:00 vnivanch Exp $
+// $Id: G4PreCompoundProton.cc,v 1.5 2010-04-09 14:06:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,7 +67,7 @@ G4double G4PreCompoundProton::GetRj(const G4int NumberParticles, const G4int Num
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
 //OPT=0 Dostrovski's parameterization
 //OPT=1 Chatterjee's paramaterization 
-//OPT=2 Wellisch's parametarization
+//OPT=2,4 Wellisch's parametarization
 //OPT=3 Kalbach's parameterization 
 // 
 G4double G4PreCompoundProton::CrossSection(const  G4double K)
@@ -223,8 +223,7 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
 {
   //     ** p from  becchetti and greenlees (but modified with sub-barrier
   //     ** correction function and xp2 changed from -449)
-  // JMQ (june 2008) : refinement of proton cross section for light systems
-  //
+
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
   G4double p, p0, p1, p2;
   p0 = 15.72;
@@ -280,7 +279,10 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   if (cut > 0.) ecut = std::sqrt(cut);
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
+//JMQ 290310 for avoiding unphysical increase below minimum (at ecut)
+//ecut<0 means that there is no cut with energy axis, i.e. xs is set to 0 bellow minimum
+//  if (cut < 0.) ecut2 = ecut - 2.;
+  if (cut < 0.) ecut2 = ecut;
   elab = K * FragmentA / ResidualA;
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
@@ -289,20 +291,9 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
     signor2 = (ec-elab-c) / w;
     signor2 = 1. + std::exp(signor2);
     sig = sig / signor2;
-    // signor2 is empirical global corr'n at low elab for protons in PRECO, not enough for light targets
-    //  refinement for proton cross section
-    if (ResidualZ<=26)
-      sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec)); 
-    
-  }              //end for E<Ec
+  }              //end for E<=Ec
   else{           //start for  E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;
-    
-    //  refinement for proton cross section
-    if ( ResidualZ<=26 && elab <=(afit*ResidualZ+bfit)*ec) 
-      sig = sig*std::exp(-(a2*ResidualZ + b2)*(elab-(afit*ResidualZ+bfit)*ec)*(elab-(afit*ResidualZ+bfit)*ec));   
-    //
-    
     geom = 0.;
     
     if (xnulam < flow || elab < etest) 

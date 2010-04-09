@@ -218,7 +218,10 @@ G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
   if (cut > 0.) ecut = std::sqrt(cut);
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
+//JMQ 290310 for avoiding unphysical increase below minimum (at ecut)
+//ecut<0 means that there is no cut with energy axis, i.e. xs is set to 0 bellow minimum
+//  if (cut < 0.) ecut2 = ecut - 2.;
+  if (cut < 0.) ecut2 = ecut;
   elab = K * FragmentA / ResidualA;
   sig = 0.;
 

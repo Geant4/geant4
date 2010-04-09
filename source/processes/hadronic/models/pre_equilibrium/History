@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06-April  2010 V.Ivanchenko  hadr-pre-V09-03-04
+---------------------------------------------------
+G4PreCompoundProton - (JMQ) removed temporary cross section 
+
 01-March  2010 V.Ivanchenko  hadr-pre-V09-03-03
 ---------------------------------------------------
 G4VPreCompoundIon, G4VPreCompoundNucleon - removed dummy classes

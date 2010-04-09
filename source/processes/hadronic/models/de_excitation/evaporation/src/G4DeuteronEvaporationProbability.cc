@@ -205,8 +205,9 @@ G4double G4DeuteronEvaporationProbability::GetOpt34(const  G4double K)
   G4double      ra=0.80;
         
   //JMQ 13/02/09 increase of reduced radius to lower the barrier
-  // ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
-  ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
+  //  ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+   ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
+
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
@@ -224,7 +225,10 @@ G4double G4DeuteronEvaporationProbability::GetOpt34(const  G4double K)
   if (cut > 0.) ecut = std::sqrt(cut);
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
+//JMQ 290310 for avoiding unphysical increase below minimum (at ecut)
+//ecut<0 means that there is no cut with energy axis, i.e. xs is set to 0 bellow minimum
+//  if (cut < 0.) ecut2 = ecut - 2.;
+  if (cut < 0.) ecut2 = ecut;
   elab = K * FragmentA / ResidualA;
   sig = 0.;
 

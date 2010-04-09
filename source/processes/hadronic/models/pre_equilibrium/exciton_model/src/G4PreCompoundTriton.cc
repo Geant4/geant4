@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTriton.cc,v 1.5 2009-02-13 18:57:32 vnivanch Exp $
+// $Id: G4PreCompoundTriton.cc,v 1.6 2010-04-09 14:06:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,7 +38,6 @@
 //
 // Modified:  
 // 21.08.2008 J. M. Quesada add choice of options  
-// 10.02.2009 J. M. Quesada set default opt1  
 //
  
 #include "G4PreCompoundTriton.hh"
@@ -234,7 +233,10 @@ G4double G4PreCompoundTriton::GetOpt34(const  G4double K)
   if (cut > 0.) ecut = std::sqrt(cut);
   ecut = (ecut-a) / (p+p);
   ecut2 = ecut;
-  if (cut < 0.) ecut2 = ecut - 2.;
+//JMQ 290310 for avoiding unphysical increase below minimum (at ecut)
+//ecut<0 means that there is no cut with energy axis, i.e. xs is set to 0 bellow minimum
+//  if (cut < 0.) ecut2 = ecut - 2.;
+  if (cut < 0.) ecut2 = ecut;
   elab = K * FragmentA / ResidualA;
   sig = 0.;
  
