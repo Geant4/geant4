@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateSampler.hh,v 1.3 2010-04-07 18:23:15 mkelsey Exp $
+// $Id: G4FinalStateSampler.hh,v 1.4 2010-04-09 00:30:42 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
 // Date:   26 March 2009
 //
-// 20100405  M. Kelsey -- Pass const-ref std::vector<>
+// 20100405  M. Kelsey -- Pass const-ref std::vector<>, improve base interface
 
 #ifndef G4FinalStateSampler_h
 #define G4FinalStateSampler_h 1
@@ -47,33 +47,27 @@
 
 class G4FinalStateSampler
 {
- public:  // with description
-    
-   G4FinalStateSampler()
-   { }
+public:  // with description
+  G4FinalStateSampler() { }
      
-   virtual ~G4FinalStateSampler()
-   { }
+  virtual ~G4FinalStateSampler() { }
     
-   enum {pi0=7, pip=3, pim=5, kp=11, km=13, k0=15, k0b=17, pro=1, neu=2, 
-         lam=21, sp=23, s0=25, sm=27, xi0=29, xim=31, om=33, ap=35, an=37};
+  enum {pi0=7, pip=3, pim=5, kp=11, km=13, k0=15, k0b=17, pro=1, neu=2, 
+	lam=21, sp=23, s0=25, sm=27, xi0=29, xim=31, om=33, ap=35, an=37};
 
- protected:  // with description
-    
-   std::pair<G4int, G4double> interpolateEnergy(G4double ke) const;
-
-   G4int sampleFlat(const std::vector<G4double>& sigma) const;
-
-   void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
-                   G4int &vecLen,
-                   G4ReactionProduct &currentParticle,
-                   G4ReactionProduct &targetParticle,
-                   G4double Q, G4double B, G4double S);
-
- private:
-   
-   static const G4double energyScale[30];
-
+protected:  // with description
+  std::pair<G4int, G4double> interpolateEnergy(G4double ke) const;
+  
+  G4int sampleFlat(const std::vector<G4double>& sigma) const;
+  
+  void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
+		  G4int &vecLen,
+		  G4ReactionProduct &currentParticle,
+		  G4ReactionProduct &targetParticle,
+		  G4double Q, G4double B, G4double S);
+  
+private:
+  static const G4double energyScale[30];
 };
- 
+
 #endif

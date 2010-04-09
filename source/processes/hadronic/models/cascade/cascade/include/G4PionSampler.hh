@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.hh,v 1.2 2009-09-17 18:10:44 dennis Exp $
+// $Id: G4PionSampler.hh,v 1.3 2010-04-09 00:30:42 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
 // Date:   26 March 2009
 //
+// 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 
 #ifndef G4PionSampler_h
 #define G4PionSampler_h 1
@@ -43,44 +44,50 @@ class G4PionSampler : public G4FinalStateSampler
 {
  public:
     
-   G4PionSampler();
-    
-   ~G4PionSampler() 
-   { }
-
-   void printCrossSections() const;
-    
-   G4int GetMultiplicityT33(G4double KE) const;   // pi+p, pi-n
-   G4int GetMultiplicityT31(G4double KE) const;   // pi-p, pi+n
-   G4int GetMultiplicityT11(G4double KE) const;   // pi0p, pi0n
-
-   std::vector<G4int>
-   GetFSPartTypesForT33(G4int mult, G4double KE, G4int tindex) const;
-   std::vector<G4int>
-   GetFSPartTypesForT31(G4int mult, G4double KE, G4int tindex) const;
-   std::vector<G4int>
-   GetFSPartTypesForT11(G4int mult, G4double KE, G4int tindex) const;
-
-   std::vector<G4int> GetFSPartTypesForPipP(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT33(mult, KE, 0); }
-
-   std::vector<G4int> GetFSPartTypesForPimN(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT33(mult, KE, 1); }
-
-   std::vector<G4int> GetFSPartTypesForPimP(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT31(mult, KE, 0); }
-
-   std::vector<G4int> GetFSPartTypesForPipN(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT31(mult, KE, 1); }
-
-   std::vector<G4int> GetFSPartTypesForPizP(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT11(mult, KE, 0); }
-
-   std::vector<G4int> GetFSPartTypesForPizN(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT11(mult, KE, 1); }
-
- protected:
-
+  G4PionSampler();
+  
+  virtual ~G4PionSampler() { }
+  
+  void printCrossSections() const;
+  
+  G4int GetMultiplicityT33(G4double KE) const;   // pi+p, pi-n
+  G4int GetMultiplicityT31(G4double KE) const;   // pi-p, pi+n
+  G4int GetMultiplicityT11(G4double KE) const;   // pi0p, pi0n
+  
+  void GetFSPartTypesForT33(std::vector<G4int>& kinds,
+			    G4int mult, G4double KE, G4int tindex) const;
+  
+  void GetFSPartTypesForT31(std::vector<G4int>& kinds,
+			    G4int mult, G4double KE, G4int tindex) const;
+  
+  void GetFSPartTypesForT11(std::vector<G4int>& kinds,
+			    G4int mult, G4double KE, G4int tindex) const;
+  
+  void GetFSPartTypesForPipP(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
+  { GetFSPartTypesForT33(kinds, mult, KE, 0); }
+  
+  void GetFSPartTypesForPimN(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
+  { GetFSPartTypesForT33(kinds, mult, KE, 1); }
+  
+  void GetFSPartTypesForPimP(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
+  { GetFSPartTypesForT31(kinds, mult, KE, 0); }
+  
+  void GetFSPartTypesForPipN(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
+  { GetFSPartTypesForT31(kinds, mult, KE, 1); }
+  
+  void GetFSPartTypesForPizP(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
+  { GetFSPartTypesForT11(kinds, mult, KE, 0); }
+  
+  void GetFSPartTypesForPizN(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
+  { GetFSPartTypesForT11(kinds, mult, KE, 1); }
+  
+protected:
    G4int pipPindex[8][2];
    G4int pimPindex[8][2];
    G4int pizPindex[8][2];
@@ -127,8 +134,7 @@ class G4PionSampler : public G4FinalStateSampler
    G4float pizPCrossSections[99][30];
 
  private:
-
-   void initCrossSections();
-
- };
+  void initChannels();
+  void initCrossSections();
+};
 #endif

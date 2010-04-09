@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2010-04-08 15:48:00 mkelsey Exp $
+$Id: History,v 1.55 2010-04-09 00:30:42 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+08 April 2010 Michael Kelsey (hadr-casc-V09-03-18)
+--------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+- G4PionSampler, G4NucleonSampler: For all ::GetFSPartTypes*() functions,
+  eliminate return-by-value std::vector<>, and pass in non-const reference
+  for filling in situ.  Buffer is cleared.
+
+- G4ElementaryParticleCollider.cc:  Follow changes above for Sampler calls.
 
 07 April 2010 Michael Kelsey (hadr-casc-V09-03-17)
 --------------------------------------------------

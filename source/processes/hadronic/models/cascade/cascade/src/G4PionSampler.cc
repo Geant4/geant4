@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.5 2009-12-02 17:35:10 dennis Exp $
+// $Id: G4PionSampler.cc,v 1.6 2010-04-09 00:30:42 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
  
 #include "G4PionSampler.hh"
 #include "Randomize.hh"
@@ -34,72 +35,9 @@ G4PionSampler::G4PionSampler()
  :G4FinalStateSampler()
 {
   initCrossSections();
-
-  // Initialize t33_dSigma_dMult, t31_dSigma_dMult, t11_dSigma_dMult:
-  // pi+, pi- and pi0 - nucleon inelastic cross sections as a function
-  // of multiplicity 
-  // |T, Tz> = |3/2,3/2> , |3/2,-1/2> , |1/2, 1/2> respectively 
-
-  // First set up indeces to arrays
-  const G4int pipPChanNums[8] = {2, 7, 15, 24, 5, 6, 7, 8};
-  const G4int pimPChanNums[8] = {5, 13, 22, 31, 6, 7, 8, 9};
-  const G4int pizPChanNums[8] = {5, 13, 21, 30, 6, 7, 8, 9};
-  G4int pipPTotChans = -1;
-  G4int pimPTotChans = -1;
-  G4int pizPTotChans = -1;
-  for (G4int i = 0; i < 8; i++) {
-    pipPTotChans += pipPChanNums[i];
-    pimPTotChans += pimPChanNums[i];
-    pizPTotChans += pizPChanNums[i];
-    pipPindex[i][1] = pipPTotChans;
-    pipPindex[i][0] = pipPTotChans - pipPChanNums[i] + 1;
-    pimPindex[i][1] = pimPTotChans;
-    pimPindex[i][0] = pimPTotChans - pimPChanNums[i] + 1;
-    pizPindex[i][1] = pizPTotChans;
-    pizPindex[i][0] = pizPTotChans - pizPChanNums[i] + 1;
-  }
-
-  G4int j, k, m;
-  G4int start, stop;
-
-  for (m = 0; m < 8; m++) {
-    start = pipPindex[m][0];
-    stop = pipPindex[m][1] + 1;
-    for (k = 0; k < 30; k++) {
-      t33_dSigma_dMult[m][k] = 0.0;
-      for (j = start; j < stop; j++) t33_dSigma_dMult[m][k] += pipPCrossSections[j][k];
-    }
-
-    start = pimPindex[m][0];
-    stop = pimPindex[m][1] + 1;
-    for (k = 0; k < 30; k++) {
-      t31_dSigma_dMult[m][k] = 0.0;
-      for (j = start; j < stop; j++) t31_dSigma_dMult[m][k] += pimPCrossSections[j][k];
-    }
-
-    start = pizPindex[m][0];
-    stop = pizPindex[m][1] + 1;
-    for (k = 0; k < 30; k++) {
-      t11_dSigma_dMult[m][k] = 0.0;
-      for (j = start; j < stop; j++) t11_dSigma_dMult[m][k] += pizPCrossSections[j][k];
-    }
-  }
-
-  // Initialize total cross section array
-
-  for (k = 0; k < 30; k++) {
-    pipPsummed[k] = 0.0;
-    pimPsummed[k] = 0.0;
-    pizPsummed[k] = 0.0;
-    for (m = 0; m < 8; m++) {
-      pipPsummed[k] += t33_dSigma_dMult[m][k];
-      pimPsummed[k] += t31_dSigma_dMult[m][k];
-      pizPsummed[k] += t11_dSigma_dMult[m][k];
-    }
-  }
+  initChannels();
 
   //  printCrossSections();
-
 }
 
 
@@ -248,8 +186,9 @@ G4int G4PionSampler::GetMultiplicityT11(G4double KE) const
 }
 
 
-std::vector<G4int> 
-G4PionSampler::GetFSPartTypesForT33(G4int mult, G4double KE, G4int tzindex) const
+void 
+G4PionSampler::GetFSPartTypesForT33(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE, G4int tzindex) const
 {
   G4int i;
   G4double sigint(0.);
@@ -270,7 +209,7 @@ G4PionSampler::GetFSPartTypesForT33(G4int mult, G4double KE, G4int tzindex) cons
 
   G4int channel = sampleFlat(sigma);
 
-  std::vector<G4int> kinds;
+  kinds.clear();	// Initialize buffer for new output
 
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T33_2bfs[tzindex][channel][i]);
@@ -291,13 +230,12 @@ G4PionSampler::GetFSPartTypesForT33(G4int mult, G4double KE, G4int tzindex) cons
   } else {
     G4cout << " Illegal multiplicity " << G4endl;
   }
-
-  return kinds;
 }
 
 
-std::vector<G4int> 
-G4PionSampler::GetFSPartTypesForT31(G4int mult, G4double KE, G4int tzindex) const
+void 
+G4PionSampler::GetFSPartTypesForT31(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE, G4int tzindex) const
 {
   G4int i;
   G4double sigint(0.);
@@ -318,7 +256,7 @@ G4PionSampler::GetFSPartTypesForT31(G4int mult, G4double KE, G4int tzindex) cons
 
   G4int channel = sampleFlat(sigma);
 
-  std::vector<G4int> kinds;
+  kinds.clear();	// Initialize buffer for new output
 
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T31_2bfs[tzindex][channel][i]);
@@ -339,13 +277,12 @@ G4PionSampler::GetFSPartTypesForT31(G4int mult, G4double KE, G4int tzindex) cons
   } else {
     G4cout << " Illegal multiplicity " << G4endl;
   }
-
-  return kinds;
 }
 
 
-std::vector<G4int> 
-G4PionSampler::GetFSPartTypesForT11(G4int mult, G4double KE, G4int tzindex) const
+void 
+G4PionSampler::GetFSPartTypesForT11(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE, G4int tzindex) const
 {
   G4int i;
   G4double sigint(0.);
@@ -366,7 +303,7 @@ G4PionSampler::GetFSPartTypesForT11(G4int mult, G4double KE, G4int tzindex) cons
 
   G4int channel = sampleFlat(sigma);
 
-  std::vector<G4int> kinds;
+  kinds.clear();	// Initialize buffer for new output
 
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T11_2bfs[tzindex][channel][i]);
@@ -387,10 +324,73 @@ G4PionSampler::GetFSPartTypesForT11(G4int mult, G4double KE, G4int tzindex) cons
   } else {
     G4cout << " Illegal multiplicity " << G4endl;
   }
-
-  return kinds;
 }
 
+void G4PionSampler::initChannels()
+{
+  // Initialize t33_dSigma_dMult, t31_dSigma_dMult, t11_dSigma_dMult:
+  // pi+, pi- and pi0 - nucleon inelastic cross sections as a function
+  // of multiplicity 
+  // |T, Tz> = |3/2,3/2> , |3/2,-1/2> , |1/2, 1/2> respectively 
+
+  // First set up indeces to arrays
+  const G4int pipPChanNums[8] = {2, 7, 15, 24, 5, 6, 7, 8};
+  const G4int pimPChanNums[8] = {5, 13, 22, 31, 6, 7, 8, 9};
+  const G4int pizPChanNums[8] = {5, 13, 21, 30, 6, 7, 8, 9};
+  G4int pipPTotChans = -1;
+  G4int pimPTotChans = -1;
+  G4int pizPTotChans = -1;
+  for (G4int i = 0; i < 8; i++) {
+    pipPTotChans += pipPChanNums[i];
+    pimPTotChans += pimPChanNums[i];
+    pizPTotChans += pizPChanNums[i];
+    pipPindex[i][1] = pipPTotChans;
+    pipPindex[i][0] = pipPTotChans - pipPChanNums[i] + 1;
+    pimPindex[i][1] = pimPTotChans;
+    pimPindex[i][0] = pimPTotChans - pimPChanNums[i] + 1;
+    pizPindex[i][1] = pizPTotChans;
+    pizPindex[i][0] = pizPTotChans - pizPChanNums[i] + 1;
+  }
+
+  G4int j, k, m;
+  G4int start, stop;
+
+  for (m = 0; m < 8; m++) {
+    start = pipPindex[m][0];
+    stop = pipPindex[m][1] + 1;
+    for (k = 0; k < 30; k++) {
+      t33_dSigma_dMult[m][k] = 0.0;
+      for (j = start; j < stop; j++) t33_dSigma_dMult[m][k] += pipPCrossSections[j][k];
+    }
+
+    start = pimPindex[m][0];
+    stop = pimPindex[m][1] + 1;
+    for (k = 0; k < 30; k++) {
+      t31_dSigma_dMult[m][k] = 0.0;
+      for (j = start; j < stop; j++) t31_dSigma_dMult[m][k] += pimPCrossSections[j][k];
+    }
+
+    start = pizPindex[m][0];
+    stop = pizPindex[m][1] + 1;
+    for (k = 0; k < 30; k++) {
+      t11_dSigma_dMult[m][k] = 0.0;
+      for (j = start; j < stop; j++) t11_dSigma_dMult[m][k] += pizPCrossSections[j][k];
+    }
+  }
+
+  // Initialize total cross section array
+
+  for (k = 0; k < 30; k++) {
+    pipPsummed[k] = 0.0;
+    pimPsummed[k] = 0.0;
+    pizPsummed[k] = 0.0;
+    for (m = 0; m < 8; m++) {
+      pipPsummed[k] += t33_dSigma_dMult[m][k];
+      pimPsummed[k] += t31_dSigma_dMult[m][k];
+      pizPsummed[k] += t11_dSigma_dMult[m][k];
+    }
+  }
+}
 
 void G4PionSampler::initCrossSections()
 {

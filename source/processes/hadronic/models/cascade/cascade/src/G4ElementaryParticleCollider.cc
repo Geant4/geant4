@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.51 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.52 2010-04-09 00:30:42 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -40,6 +40,8 @@
 //		  ::generateMomModules()
 //		  ::generateStrangeChannelPartTypes()
 //		  ::generateSCMpionAbsorption()
+// 20100408  M. Kelsey -- Follow changes to G4*Sampler to pass particle_kinds
+//		as input buffer.
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -77,7 +79,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : verboseLevel(4)
+  : verboseLevel(0)
 {
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider ctor " << G4endl;
@@ -338,27 +340,27 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
           particle_kinds.push_back(type2);
 
       } else if (is == 3) {
-        particle_kinds = piSampler.GetFSPartTypesForPipP(2, ekin);
+        piSampler.GetFSPartTypesForPipP(particle_kinds, 2, ekin);
         if (particle_kinds[0] != G4PionSampler::pro) kw = 2;
 
       } else if (is == 10) {
-        particle_kinds = piSampler.GetFSPartTypesForPimN(2, ekin);
+        piSampler.GetFSPartTypesForPimN(particle_kinds, 2, ekin);
         if (particle_kinds[0] != G4PionSampler::neu) kw = 2;
 
       } else if (is == 5) {
-        particle_kinds = piSampler.GetFSPartTypesForPimP(2, ekin);
+        piSampler.GetFSPartTypesForPimP(particle_kinds, 2, ekin);
         if (particle_kinds[0] != G4PionSampler::pro) kw = 2;
 
       } else if (is == 6) {
-        particle_kinds = piSampler.GetFSPartTypesForPipN(2, ekin);
+        piSampler.GetFSPartTypesForPipN(particle_kinds, 2, ekin);
         if (particle_kinds[0] != G4PionSampler::neu) kw = 2;
 
       } else if (is == 7) {
-        particle_kinds = piSampler.GetFSPartTypesForPizP(2, ekin);
+        piSampler.GetFSPartTypesForPizP(particle_kinds, 2, ekin);
         if (particle_kinds[0] != G4PionSampler::pro) kw = 2;
 
       } else if (is == 14) {
-        particle_kinds = piSampler.GetFSPartTypesForPizN(2, ekin);
+        piSampler.GetFSPartTypesForPizN(particle_kinds, 2, ekin);
         if (particle_kinds[0] != G4PionSampler::neu) kw = 2;
 
       } else {
@@ -412,31 +414,31 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	generateStrangeChannelPartTypes(is, multiplicity, ekin);
 
       } else if (is == 1) {
-        particle_kinds = nucSampler.GetFSPartTypesForPP(multiplicity, ekin);
+        nucSampler.GetFSPartTypesForPP(particle_kinds, multiplicity, ekin);
 
       } else if (is == 2) {
-        particle_kinds = nucSampler.GetFSPartTypesForNP(multiplicity, ekin);
+        nucSampler.GetFSPartTypesForNP(particle_kinds, multiplicity, ekin);
 
       } else if (is == 4) {
-        particle_kinds = nucSampler.GetFSPartTypesForNN(multiplicity, ekin);
+        nucSampler.GetFSPartTypesForNN(particle_kinds, multiplicity, ekin);
 
       } else if (is == 3) {
-        particle_kinds = piSampler.GetFSPartTypesForPipP(multiplicity, ekin);
+        piSampler.GetFSPartTypesForPipP(particle_kinds, multiplicity, ekin);
 
       } else if (is == 10) {
-        particle_kinds = piSampler.GetFSPartTypesForPimN(multiplicity, ekin);
+        piSampler.GetFSPartTypesForPimN(particle_kinds, multiplicity, ekin);
 
       } else if (is == 5) {
-        particle_kinds = piSampler.GetFSPartTypesForPimP(multiplicity, ekin);
+        piSampler.GetFSPartTypesForPimP(particle_kinds, multiplicity, ekin);
 
       } else if (is == 6) {
-        particle_kinds = piSampler.GetFSPartTypesForPipN(multiplicity, ekin);
+        piSampler.GetFSPartTypesForPipN(particle_kinds, multiplicity, ekin);
 
       } else if (is == 7) {
-        particle_kinds = piSampler.GetFSPartTypesForPizP(multiplicity, ekin);
+        piSampler.GetFSPartTypesForPizP(particle_kinds, multiplicity, ekin);
 
       } else if (is == 14) {
-        particle_kinds = piSampler.GetFSPartTypesForPizN(multiplicity, ekin);
+        piSampler.GetFSPartTypesForPizN(particle_kinds, multiplicity, ekin);
 
       } else {
         G4cout << " Unexpected interaction type is = " << is << G4endl;

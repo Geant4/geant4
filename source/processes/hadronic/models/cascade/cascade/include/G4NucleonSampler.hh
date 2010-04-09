@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.hh,v 1.1 2009-09-24 18:50:27 dennis Exp $
+// $Id: G4NucleonSampler.hh,v 1.2 2010-04-09 00:30:42 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
 // Date:   10 September 2009
 //
+// 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 
 #ifndef G4NucleonSampler_h
 #define G4NucleonSampler_h 1
@@ -43,32 +44,34 @@ class G4NucleonSampler : public G4FinalStateSampler
 {
  public:
     
-   G4NucleonSampler();
-    
-   ~G4NucleonSampler() 
-   { }
+  G4NucleonSampler();
+  
+  virtual ~G4NucleonSampler() { }
+  
+  void printCrossSections() const;
+  
+  G4int GetMultiplicityT1(G4double KE) const;   // pp, nn
+  G4int GetMultiplicityT0(G4double KE) const;   // pn
+  
+  void GetFSPartTypesForT1(std::vector<G4int>& types,
+			   G4int mult, G4double KE, G4int tindex) const;
 
-   void printCrossSections() const;
-    
-   G4int GetMultiplicityT1(G4double KE) const;   // pp, nn
-   G4int GetMultiplicityT0(G4double KE) const;   // pn
+  void GetFSPartTypesForT0(std::vector<G4int>& types,
+			   G4int mult, G4double KE) const;
+  
+  void GetFSPartTypesForPP(std::vector<G4int>& types,
+			   G4int mult, G4double KE) const
+  { GetFSPartTypesForT1(types, mult, KE, 0); }
+  
+  void GetFSPartTypesForNN(std::vector<G4int>& types,
+			   G4int mult, G4double KE) const
+  { GetFSPartTypesForT1(types, mult, KE, 1); }
+  
+  void GetFSPartTypesForNP(std::vector<G4int>& types,
+			   G4int mult, G4double KE) const
+  { GetFSPartTypesForT0(types, mult, KE); }
 
-   std::vector<G4int>
-   GetFSPartTypesForT1(G4int mult, G4double KE, G4int tindex) const;
-   std::vector<G4int>
-   GetFSPartTypesForT0(G4int mult, G4double KE) const;
-
-   std::vector<G4int> GetFSPartTypesForPP(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT1(mult, KE, 0); }
-
-   std::vector<G4int> GetFSPartTypesForNN(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT1(mult, KE, 1); }
-
-   std::vector<G4int> GetFSPartTypesForNP(G4int mult, G4double KE) const
-     {return GetFSPartTypesForT0(mult, KE); }
-
- protected:
-
+protected:
    G4int PPindex[8][2];
    G4int NPindex[8][2];
 
@@ -101,8 +104,7 @@ class G4NucleonSampler : public G4FinalStateSampler
    G4float NPCrossSections[108][30];
 
 private:
-
-   void initCrossSections();
-
- };
+  void initChannels();
+  void initCrossSections();
+};
 #endif

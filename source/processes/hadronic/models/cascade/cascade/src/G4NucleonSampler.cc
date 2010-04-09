@@ -23,76 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.2 2009-12-02 17:34:57 dennis Exp $
+// $Id: G4NucleonSampler.cc,v 1.3 2010-04-09 00:30:42 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- 
+// 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
+
 #include "G4NucleonSampler.hh"
 #include "Randomize.hh"
 
-G4NucleonSampler::G4NucleonSampler()
- :G4FinalStateSampler()
+G4NucleonSampler::G4NucleonSampler() : G4FinalStateSampler()
 {
   initCrossSections();
-
-  // Initialize t1_dSigma_dMult, t0_dSigma_dMult
-  // N-N inelastic cross sections for a given multiplicity 
-  // for  |T, Tz> = |1,1> , |1,-1> , |0, 0> respectively 
-
-  /*
-const G4int G4NucleonSampler::PPindex[8][2] =
- {{0, 0}, {1, 6}, {7,24}, {25,56}, {57,63}, {64,71}, {72,81}, {82,92}};
-
-const G4int G4NucleonSampler::NPindex[8][2] =
- {{0, 0}, {1,9}, {10,31}, {32,69}, {70,76}, {77,85}, {86,95}, {96,107}};
-  */
-
-  // First set up indeces to arrays
-  const G4int PPChanNums[8] = {1, 6, 18, 32, 7, 8, 10, 11};
-  const G4int NPChanNums[8] = {1, 9, 22, 38, 7, 9, 10, 12};
-  G4int PPTotChans = -1;
-  G4int NPTotChans = -1;
-  for (G4int i = 0; i < 8; i++) {
-    PPTotChans += PPChanNums[i];
-    NPTotChans += NPChanNums[i];
-    PPindex[i][1] = PPTotChans;
-    PPindex[i][0] = PPTotChans - PPChanNums[i] + 1;
-    NPindex[i][1] = NPTotChans;
-    NPindex[i][0] = NPTotChans - NPChanNums[i] + 1;
-  }
-
-  G4int j, k, m;
-  G4int start, stop;
-
-  for (m = 0; m < 8; m++) {
-    start = PPindex[m][0];
-    stop = PPindex[m][1] + 1;
-    for (k = 0; k < 30; k++) {
-      t1_dSigma_dMult[m][k] = 0.0;
-      for (j = start; j < stop; j++) t1_dSigma_dMult[m][k] += PPCrossSections[j][k];
-    }
-
-    start = NPindex[m][0];
-    stop = NPindex[m][1] + 1;
-    for (k = 0; k < 30; k++) {
-      t0_dSigma_dMult[m][k] = 0.0;
-      for (j = start; j < stop; j++) t0_dSigma_dMult[m][k] += NPCrossSections[j][k];
-    }
-  }
-
-  // Initialize total cross section array
-
-  for (k = 0; k < 30; k++) {
-    PPsummed[k] = 0.0;
-    NPsummed[k] = 0.0;
-    for (m = 0; m < 8; m++) {
-      PPsummed[k] += t1_dSigma_dMult[m][k];
-      NPsummed[k] += t0_dSigma_dMult[m][k];
-    }
-  }
+  initChannels();
 
   //  printCrossSections();
-
 }
 
 
@@ -192,8 +136,9 @@ G4int G4NucleonSampler::GetMultiplicityT0(G4double KE) const
 }
 
 
-std::vector<G4int> 
-G4NucleonSampler::GetFSPartTypesForT1(G4int mult, G4double KE, G4int tzindex) const
+void 
+G4NucleonSampler::GetFSPartTypesForT1(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE, G4int tzindex) const
 {
   G4int i;
   G4double sigint(0.);
@@ -214,7 +159,7 @@ G4NucleonSampler::GetFSPartTypesForT1(G4int mult, G4double KE, G4int tzindex) co
 
   G4int channel = sampleFlat(sigma);
 
-  std::vector<G4int> kinds;
+  kinds.clear();	// Initialize buffer for new output
 
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T1_2bfs[tzindex][channel][i]);
@@ -235,13 +180,12 @@ G4NucleonSampler::GetFSPartTypesForT1(G4int mult, G4double KE, G4int tzindex) co
   } else {
     G4cout << " Illegal multiplicity " << G4endl;
   }
-
-  return kinds;
 }
 
 
-std::vector<G4int> 
-G4NucleonSampler::GetFSPartTypesForT0(G4int mult, G4double KE) const
+void 
+G4NucleonSampler::GetFSPartTypesForT0(std::vector<G4int>& kinds,
+			     G4int mult, G4double KE) const
 {
   G4int i;
   G4double sigint(0.);
@@ -262,7 +206,7 @@ G4NucleonSampler::GetFSPartTypesForT0(G4int mult, G4double KE) const
 
   G4int channel = sampleFlat(sigma);
 
-  std::vector<G4int> kinds;
+  kinds.clear();	// Initialize buffer for new output
 
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T0_2bfs[channel][i]);
@@ -283,8 +227,64 @@ G4NucleonSampler::GetFSPartTypesForT0(G4int mult, G4double KE) const
   } else {
     G4cout << " Illegal multiplicity " << G4endl;
   }
+}
 
-  return kinds;
+void G4NucleonSampler::initChannels()
+{
+  // Initialize t1_dSigma_dMult, t0_dSigma_dMult
+  // N-N inelastic cross sections for a given multiplicity 
+  // for  |T, Tz> = |1,1> , |1,-1> , |0, 0> respectively 
+
+  /*
+const G4int G4NucleonSampler::PPindex[8][2] =
+ {{0, 0}, {1, 6}, {7,24}, {25,56}, {57,63}, {64,71}, {72,81}, {82,92}};
+
+const G4int G4NucleonSampler::NPindex[8][2] =
+ {{0, 0}, {1,9}, {10,31}, {32,69}, {70,76}, {77,85}, {86,95}, {96,107}};
+  */
+
+  // First set up indeces to arrays
+  const G4int PPChanNums[8] = {1, 6, 18, 32, 7, 8, 10, 11};
+  const G4int NPChanNums[8] = {1, 9, 22, 38, 7, 9, 10, 12};
+  G4int PPTotChans = -1;
+  G4int NPTotChans = -1;
+  for (G4int i = 0; i < 8; i++) {
+    PPTotChans += PPChanNums[i];
+    NPTotChans += NPChanNums[i];
+    PPindex[i][1] = PPTotChans;
+    PPindex[i][0] = PPTotChans - PPChanNums[i] + 1;
+    NPindex[i][1] = NPTotChans;
+    NPindex[i][0] = NPTotChans - NPChanNums[i] + 1;
+  }
+
+  G4int j, k, m;
+  G4int start, stop;
+
+  for (m = 0; m < 8; m++) {
+    start = PPindex[m][0];
+    stop = PPindex[m][1] + 1;
+    for (k = 0; k < 30; k++) {
+      t1_dSigma_dMult[m][k] = 0.0;
+      for (j = start; j < stop; j++) t1_dSigma_dMult[m][k] += PPCrossSections[j][k];
+    }
+
+    start = NPindex[m][0];
+    stop = NPindex[m][1] + 1;
+    for (k = 0; k < 30; k++) {
+      t0_dSigma_dMult[m][k] = 0.0;
+      for (j = start; j < stop; j++) t0_dSigma_dMult[m][k] += NPCrossSections[j][k];
+    }
+  }
+
+  // Initialize total cross section array
+  for (k = 0; k < 30; k++) {
+    PPsummed[k] = 0.0;
+    NPsummed[k] = 0.0;
+    for (m = 0; m < 8; m++) {
+      PPsummed[k] += t1_dSigma_dMult[m][k];
+      NPsummed[k] += t0_dSigma_dMult[m][k];
+    }
+  }
 }
 
 void G4NucleonSampler::initCrossSections()
