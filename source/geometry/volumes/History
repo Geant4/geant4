@@ -1,4 +1,4 @@
-$Id: History,v 1.165 2010-03-31 15:43:44 gcosmo Exp $
+$Id: History,v 1.166 2010-04-09 10:56:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 9th, 2010       G.Cosmo - geomvol-V09-03-02
+- Use more elegant solution in G4NavigationHistory copy-ctor. Adopt assign().
 
 Mar 31th, 2010      G.Cosmo - geomvol-V09-03-01
 - Restore original vector allocation, but adopt simple loop copy within
