@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.12 2010-03-31 15:43:23 gcosmo Exp $
+// $Id: G4NavigationHistory.cc,v 1.13 2010-04-09 10:55:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,10 +47,7 @@ G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
   : fStackDepth(h.fStackDepth)
 {
   fNavHistory.reserve(h.fNavHistory.size());
-  for (register unsigned int ilev=0; ilev<h.fNavHistory.size(); ++ilev)
-  {
-    fNavHistory.push_back(h.fNavHistory[ilev]);
-  }
+  fNavHistory.assign(h.fNavHistory.begin(),h.fNavHistory.end());
 }
 
 G4NavigationHistory::~G4NavigationHistory()
