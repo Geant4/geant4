@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2010-02-26 14:45:59 mkossov Exp $
+$Id: History,v 1.14 2010-04-09 16:07:37 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 9th, 2010  Mikhail Kossov (test19-V09-03-02)
+- Neutron capture and fusion cross-sections test is added
 
 Feb 26th, 2010  Mikhail Kossov (test19-V09-03-01)
 - Elastic cross-sections test is extended and improved
