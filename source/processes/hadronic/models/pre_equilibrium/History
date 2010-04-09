@@ -16,7 +16,7 @@ code and to keep track of all tags.
 
 09-April 2010 V.Ivanchenko  hadr-pre-V09-03-04
 ---------------------------------------------------
-G4PreCompoundProtonG4, G4PreCompoundDeuteron, G4PreCompoundTriton,
+G4PreCompoundProton, G4PreCompoundDeuteron, G4PreCompoundTriton,
 G4PreCompoundHe3, G4PreCompoundAlpha - (JMQ) return back to published
                varian of OPT3 (Kalbach) parameterization of inverse 
 	       cross section 
