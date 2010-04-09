@@ -24,13 +24,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.hh,v 1.15 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.16 2010-04-09 19:33:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
 //	     as temporary final-state fragments.
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes.
+// 20100409  M. Kelsey -- Drop unused string argument from ctors.
 
 #include "G4InuclParticle.hh"
 #include "G4ExitonConfiguration.hh"
@@ -39,18 +40,18 @@ class G4ParticleDefinition;
 
 class G4InuclNuclei : public G4InuclParticle {
 public:
-  G4InuclNuclei() : G4InuclParticle("InuclNuclei") {}
+  G4InuclNuclei() : G4InuclParticle() {}
 
   G4InuclNuclei(G4double a, G4double z)
-    : G4InuclParticle("InuclNuclei", makeDefinition(a,z)),
+    : G4InuclParticle(makeDefinition(a,z)),
       exitationEnergy(0.0) {}
 
   G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z)
-    : G4InuclParticle("InuclNuclei", makeDefinition(a,z), mom),
+    : G4InuclParticle(makeDefinition(a,z), mom),
       exitationEnergy(0.0) {}
 
   G4InuclNuclei(G4double ekin, G4double a, G4double z) 
-    : G4InuclParticle("InuclNuclei", makeDefinition(a,z), ekin),
+    : G4InuclParticle(makeDefinition(a,z), ekin),
       exitationEnergy(0.0) {}
 
   virtual ~G4InuclNuclei() {}

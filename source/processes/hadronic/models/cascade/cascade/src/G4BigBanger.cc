@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.25 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.26 2010-04-09 19:33:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -257,8 +257,8 @@ void G4BigBanger::generateMomentumModules(G4double etot,
 
   momModules.clear();		// Reset buffer for filling
 
-  G4int ia(a + 0.1);
-  G4int iz(z + 0.1);
+  G4int ia = G4int(a + 0.1);
+  G4int iz = G4int(z + 0.1);
 
   G4double xtot = 0.0;
   G4double promax = maxProbability(a);

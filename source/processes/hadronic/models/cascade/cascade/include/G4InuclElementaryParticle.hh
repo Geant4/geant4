@@ -24,10 +24,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclElementaryParticle.hh,v 1.20 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.hh,v 1.21 2010-04-09 19:33:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100409  M. Kelsey -- Drop unused string argument from ctors.
 
 #include "G4InuclParticle.hh"
 #include "globals.hh"
@@ -50,21 +51,19 @@ class G4InuclElementaryParticle : public G4InuclParticle {
 
 public:
   G4InuclElementaryParticle() 
-    : G4InuclParticle("InuclElemPart"), generation(0) {}
+    : G4InuclParticle(), generation(0) {}
 
   explicit G4InuclElementaryParticle(G4int type) 
-    : G4InuclParticle("InuclElemPart", makeDefinition(type)), generation(0) {}
+    : G4InuclParticle(makeDefinition(type)), generation(0) {}
 
   G4InuclElementaryParticle(const G4LorentzVector& mom,
 			    G4int type, G4int model=0) 
-    : G4InuclParticle("InuclElemPart", makeDefinition(type), mom),
-      generation(0) {
+    : G4InuclParticle(makeDefinition(type), mom), generation(0) {
     setModel(model);
   }
 
   G4InuclElementaryParticle(G4double ekin, G4int type) 
-    : G4InuclParticle("InuclElemPart", makeDefinition(type), ekin),
-      generation(0) {}
+    : G4InuclParticle(makeDefinition(type), ekin), generation(0) {}
 
   // Copy and assignment constructors for use with std::vector<>
   G4InuclElementaryParticle(const G4InuclElementaryParticle& right)

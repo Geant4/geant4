@@ -24,10 +24,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticle.hh,v 1.17 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclParticle.hh,v 1.18 2010-04-09 19:33:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100409  M. Kelsey -- Drop unused string argument from ctors.
 
 #include "G4DynamicParticle.hh"
 #include "G4LorentzVector.hh"
@@ -36,11 +37,9 @@
 
 class G4InuclParticle {
 public:
-  G4InuclParticle(const G4String& /*name*/)
-    : modelId(0) {}
+  G4InuclParticle() : modelId(0) {}
 
-  G4InuclParticle(const G4String& /*name*/, const G4LorentzVector& mom)
-    : modelId(0) {
+  explicit G4InuclParticle(const G4LorentzVector& mom) : modelId(0) {
     pDP.Set4Momentum(mom*GeV/MeV);		// From Bertini to G4 units
   }
 
@@ -96,18 +95,16 @@ public:
 
 protected: 
   //  Special constructors for subclasses to set particle type correctly
-  G4InuclParticle(const G4String& /*name*/, G4ParticleDefinition* pd)
-    : modelId(0) {
+  explicit G4InuclParticle(G4ParticleDefinition* pd) : modelId(0) {
     setDefinition(pd);
   }
 
   // FIXME: Bertini code doesn't pass valid 4-vectors, so force mass value
   //	    from supplied PartDefn, with required unit conversions
-  G4InuclParticle(const G4String& name, G4ParticleDefinition* pd,
-		  const G4LorentzVector& mom);
+  G4InuclParticle(G4ParticleDefinition* pd, const G4LorentzVector& mom);
 
   // NOTE:  Momentum forced along Z direction
-  G4InuclParticle(const G4String& /*name*/, G4ParticleDefinition* pd, G4double ekin)
+  G4InuclParticle(G4ParticleDefinition* pd, G4double ekin)
     : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*GeV/MeV), modelId(0) {}
 
   void setDefinition(G4ParticleDefinition* pd) { pDP.SetDefinition(pd); }

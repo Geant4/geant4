@@ -22,8 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticle.cc,v 1.5 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4InuclParticle.cc,v 1.6 2010-04-09 19:33:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
+//
+// 20100409  M. Kelsey -- Drop unused string argument from ctors.
 
 #include "G4InuclParticle.hh"
 #include "G4ios.hh"
@@ -31,8 +33,7 @@
 
 
 // WARNING!  Bertini code doesn't do four-vectors; repair mass before use!
-G4InuclParticle::G4InuclParticle(const G4String& /*name*/, 
-				 G4ParticleDefinition* pd,
+G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
 				 const G4LorentzVector& mom)
   : modelId(0) {
   setDefinition(pd);
