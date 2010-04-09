@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.21 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.22 2010-04-09 21:02:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100308  M. Kelsey -- Bug fix in toTheTargetRestFrame: scm_momentum should
 //		be data member, not local.
+// 20100409  M. Kelsey -- Protect std::sqrt(ga) against round-off negatives
 
 #include "G4LorentzConvertor.hh"
 #include "G4ThreeVector.hh"
@@ -75,7 +76,9 @@ void G4LorentzConvertor::toTheCenterOfMass() {
   G4double pa   = scm_momentum.vect().mag2();
   G4double pb   = scm_momentum.vect().dot(velocity);
 
-  ga = std::sqrt(v2-pb*pb/pa);
+  G4double gasq = v2-pb*pb/pa;
+  ga = (gasq > small*small) ? std::sqrt(gasq) : 0.;
+
   gb = pb / pscm;
   gbpp = gb / pscm;
   gapp = ga * pscm;
@@ -115,7 +118,9 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
   G4double pa   = scm_momentum.vect().mag2();
   G4double pb   = velocity.dot(scm_momentum.vect());
 
-  ga = std::sqrt(v2 - pb*pb/pa);
+  G4double gasq = v2-pb*pb/pa;
+  ga = (gasq > small*small) ? std::sqrt(gasq) : 0.;
+
   gb = pb/pscm;
   gbpp = gb/pscm;
   gapp = ga*pscm;

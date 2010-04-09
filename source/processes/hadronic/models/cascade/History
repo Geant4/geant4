@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2010-04-09 19:33:11 mkelsey Exp $
+$Id: History,v 1.57 2010-04-09 21:02:28 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+09 April 2010 Michael Kelsey (hadr-casc-V09-03-16-01)
+-----------------------------------------------------
+This modification is included in a pseudo-patch of hadr-casc-V09-03-16,
+without brining in any of the -17 through -19 modifications.
+
+- G4LorentzVector.cc:  Protect two instances of sqrt() against tiny negative
+  arguments (due to tiny-tiny subtractions).
 
 09 April 2010 Michael Kelsey (hadr-casc-V09-03-19)
 --------------------------------------------------
