@@ -5,7 +5,6 @@ mkdir -p $REFERENCE
 cd $REFERENCE
 
 setenv PRIMARYBEAM pi-
-
 mkdir -p $PRIMARYBEAM
 cd $PRIMARYBEAM
 
@@ -17,11 +16,36 @@ setenv PHYSLIST QBBCF
 #source $G4INSTALL/tests/test46/run.csh
 setenv PHYSLIST QGSP_BERT_EML
 source $G4INSTALL/tests/test46/run.csh
+setenv PHYSLIST QGSP_BERT_EMLSN
+source $G4INSTALL/tests/test46/run.csh
+setenv PHYSLIST QBBC_XGGSN
+source $G4INSTALL/tests/test46/run.csh
+#setenv PHYSLIST QGSP_BERT
+#source $G4INSTALL/tests/test46/run.csh
+
+exit
+
+cd $VFEM/test46
+mkdir -p $REFERENCE
+cd $REFERENCE
+
+setenv PRIMARYBEAM neutron
+mkdir -p $PRIMARYBEAM
+cd $PRIMARYBEAM
+
 setenv PHYSLIST QGSP_BERT_EMV
 source $G4INSTALL/tests/test46/run.csh
-setenv PHYSLIST FTFP_BERT
-#source $G4INSTALL/tests/test46/run.csh
-setenv PHYSLIST QGSP_BERT
-#source $G4INSTALL/tests/test46/run.csh
+
+cd $VFEM/test46
+mkdir -p $REFERENCE
+cd $REFERENCE
+
+setenv PRIMARYBEAM kaon0L
+mkdir -p $PRIMARYBEAM
+cd $PRIMARYBEAM
+
+setenv PRIMARYBEAM kaon0L
+setenv PHYSLIST QGSP_BERT_EMV
+source $G4INSTALL/tests/test46/run.csh
 
 #
