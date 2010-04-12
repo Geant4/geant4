@@ -64,6 +64,7 @@
 
 #include "G4UserLimits.hh"
 #include "G4DataQuestionaire.hh"
+#include "G4WarnPLStatus.hh"
 
 
 // Constructor /////////////////////////////////////////////////////////////
@@ -228,7 +229,10 @@ template<class T> TLBE<T>::~TLBE()
 
 // Electromagnetic Processes ////////////////////////////////////////////////
 // all charged particles
-#include "G4MultipleScattering.hh"
+
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 // gamma
 #include "G4LowEnergyRayleigh.hh" 
@@ -313,7 +317,7 @@ template<class T> TLBE<T>::~TLBE()
 	//electron
 	// process ordering: AddProcess(name, at rest, along step, post step)
 	// -1 = not implemented, then ordering
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4eMultipleScattering* aMultipleScattering = new G4eMultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
 	pmanager->AddProcess(loweIon,                 -1, 2, 2);
 	pmanager->AddProcess(loweBrem,                -1,-1, 3);
@@ -321,7 +325,7 @@ template<class T> TLBE<T>::~TLBE()
     else if (particleName == "e+") 
       {
 	//positron
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4eMultipleScattering* aMultipleScattering = new G4eMultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,     -1, 1, 1);
 	pmanager->AddProcess(new G4eIonisation(),     -1, 2, 2);
 	pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
@@ -331,7 +335,7 @@ template<class T> TLBE<T>::~TLBE()
 	     particleName == "mu-"    ) 
       {
 	//muon  
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4MuMultipleScattering* aMultipleScattering = new G4MuMultipleScattering();
 	pmanager->AddProcess(aMultipleScattering,           -1, 1, 1);
 	pmanager->AddProcess(new G4MuIonisation(),          -1, 2, 2);
 	pmanager->AddProcess(new G4MuBremsstrahlung(),      -1,-1, 3);
@@ -350,7 +354,7 @@ template<class T> TLBE<T>::~TLBE()
 	// OBJECT may be dynamically created as either a GenericIon or nucleus
 	// G4Nucleus exists and therefore has particle type nucleus
 	// genericIon:
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4hMultipleScattering* aMultipleScattering = new G4hMultipleScattering();
         G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
 	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
@@ -366,7 +370,7 @@ template<class T> TLBE<T>::~TLBE()
 	     (particle->GetParticleName() != "chargedgeantino")) 
       {
 	//all others charged particles except geantino
-        G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+        G4hMultipleScattering* aMultipleScattering = new G4hMultipleScattering();
         G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
 	pmanager->AddProcess(ahadronLowEIon,       -1,2,2);      
