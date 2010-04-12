@@ -1,4 +1,4 @@
-$Id: History,v 1.239 2010-03-30 08:34:56 gcosmo Exp $
+$Id: History,v 1.240 2010-04-12 16:41:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 06, 2010  G.Cosmo (global-V09-03-04)
+- Changed date for release 9.3.p01.
 
 Mar 30, 2010  G.Cosmo (global-V09-03-03)
 - Moved 'mem' pool in G4Allocator to public section, to allow for use of
