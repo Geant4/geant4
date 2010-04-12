@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.59 2010-04-06 16:57:49 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.60 2010-04-12 18:28:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -462,7 +462,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	if(tcutmax < subcut) { subcut = tcutmax; }
       }
     }
-
+    /*
     G4int nm = setOfRegionModels[reg]->NumberOfModels();
     for(G4int j=0; j<nm; ++j) {
 
@@ -480,8 +480,9 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 		   << G4endl;
       }
     }
+    */
     theCuts[i] = cut;
-    if(minSubRange < 1.0) theSubCuts[i] = subcut;
+    if(minSubRange < 1.0) { theSubCuts[i] = subcut; }
   }
 
   // initialize models
