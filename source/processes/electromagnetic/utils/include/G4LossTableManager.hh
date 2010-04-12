@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.56 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.57 2010-04-12 11:44:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,6 +60,7 @@
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
+// 12-04-10 Added PreparePhsyicsTables and BuildPhysicsTables entries (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -102,9 +103,31 @@ public:
 
   ~G4LossTableManager();
 
+  //-------------------------------------------------
+  // called from destructor
+  //-------------------------------------------------
+
   void Clear();
 
-  // get the DEDX or the range for a given particle/energy/material
+  //-------------------------------------------------
+  // initialisation before a new run
+  //-------------------------------------------------
+
+  void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
+			   G4VEnergyLossProcess* p);
+  void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
+			   G4VEmProcess* p);
+  void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
+			   G4VMultipleScattering* p);
+  void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
+  void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
+			 G4VEnergyLossProcess* p);
+
+  //-------------------------------------------------
+  // Run time access to DEDX, range, energy for a given particle, 
+  // energy, and G4MaterialCutsCouple
+  //-------------------------------------------------
+
   inline G4double GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
@@ -140,7 +163,10 @@ public:
     const G4DynamicParticle* dp,
           G4double& length);
 
-  // to be called only by energy loss processes
+  //-------------------------------------------------
+  // Methods to be called only at initialisation
+  //-------------------------------------------------
+
   void Register(G4VEnergyLossProcess* p);
 
   void DeRegister(G4VEnergyLossProcess* p);
@@ -161,17 +187,11 @@ public:
 
   void DeRegister(G4VEmFluctuationModel* p);
 
-  void EnergyLossProcessIsInitialised(const G4ParticleDefinition* aParticle, 
-				      G4VEnergyLossProcess* p);
-  
   void RegisterIon(const G4ParticleDefinition* aParticle, 
 		   G4VEnergyLossProcess* p);
 
   void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
 			     G4VEnergyLossProcess* p);
-
-  void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
-			 G4VEnergyLossProcess* p);
 
   void SetLossFluctuations(G4bool val);
 
@@ -213,6 +233,10 @@ public:
 
   void SetVerbose(G4int val);
 
+  //-------------------------------------------------
+  // Access methods
+  //-------------------------------------------------
+
   G4EnergyLossMessenger* GetMessenger();
 
   G4bool BuildCSDARange() const;
@@ -241,6 +265,10 @@ public:
 
 private:
 
+  //-------------------------------------------------
+  // Private methods and members
+  //-------------------------------------------------
+
   G4LossTableManager();
 
   G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
@@ -250,15 +278,15 @@ private:
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
-  void SetParameters(G4VEnergyLossProcess*);
+  void SetParameters(const G4ParticleDefinition* aParticle,
+		     G4VEnergyLossProcess*);
 
   void CopyDEDXTables();
-
-private:
 
   static G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
+
   std::map<PD,G4VEnergyLossProcess*,std::less<PD> > loss_map;
 
   std::vector<G4VEnergyLossProcess*> loss_vector;
@@ -278,18 +306,19 @@ private:
   G4VEnergyLossProcess* currentLoss;
   PD                    currentParticle;
   PD                    theElectron;
+  PD                    firstParticle;
 
   G4int n_loss;
   G4int run;
 
   G4bool all_tables_are_built;
-  //  G4bool first_entry;
+  G4bool startInitialisation;
+
   G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;
   G4bool integral;
   G4bool integralActive;
-  G4bool all_tables_are_stored;
   G4bool buildCSDARange;
   G4bool minEnergyActive;
   G4bool maxEnergyActive;
@@ -313,7 +342,6 @@ private:
   G4EmSaturation*             emSaturation;
   G4EmConfigurator*           emConfigurator;
 
-  const G4ParticleDefinition* firstParticle;
   G4int verbose;
 
 };
