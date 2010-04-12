@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.98 2010-04-12 11:44:14 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.99 2010-04-12 16:45:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -359,9 +359,10 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 	   << " and " << p->GetProcessName() << G4endl;
   }
   // start initialisation for the first run
+  startInitialisation = true;
+
   if( 0 == run ) {
     emConfigurator->PrepareModels(particle, p);
-    if( !firstParticle ) { firstParticle = particle; }
 
     // initialise particles for given process
     for (G4int j=0; j<n_loss; ++j) {
@@ -415,7 +416,6 @@ G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition*)
   if(0 == run && startInitialisation) {
     emConfigurator->Clear();
   }
-  startInitialisation = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -433,6 +433,7 @@ void G4LossTableManager::BuildPhysicsTable(
   // clear configurator
   if(0 == run && startInitialisation) {
     emConfigurator->Clear();
+    firstParticle = aParticle; 
   }
   startInitialisation = false;
 
@@ -461,8 +462,11 @@ void G4LossTableManager::BuildPhysicsTable(
 		 << "  for "  << pm->GetParticleType()->GetParticleName()
 		 << "  active= " << pm->GetProcessActivation(el)
                  << "  table= " << tables_are_built[i]
-		 << "  isIonisation= " << el->IsIonisationProcess()
-		 << G4endl;
+		 << "  isIonisation= " << el->IsIonisationProcess();
+	  if(base_part_vector[i]) { 
+	    G4cout << "  base particle " << base_part_vector[i]->GetParticleName();
+	  }
+	  G4cout << G4endl;
 	}
       } else {
         tables_are_built[i] = true;
@@ -514,8 +518,8 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
   for (G4int j=0; j<n_loss; ++j) {
 
     G4VEnergyLossProcess* proc = loss_vector[j];
-    if(proc == base_proc || proc->Particle() == part) 
-      tables_are_built[j] = true;
+    //if(proc == base_proc || proc->Particle() == part) 
+    //  tables_are_built[j] = true;
 
     if (!tables_are_built[j] && part == base_part_vector[j]) {
       tables_are_built[j] = true;
