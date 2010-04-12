@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.cc,v 1.5 2010-03-31 11:12:08 pandola Exp $
+// $Id: G4Penelope08ComptonModel.cc,v 1.6 2010-04-12 13:53:29 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -467,11 +467,6 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4double ionEnergyInPenelopeDatabase = ionEnergy;
   //protection against energy non-conservation
   ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase);  
-
-  G4cout << "Penelope binding: " << ionEnergyInPenelopeDatabase/keV << G4endl;
-  G4cout << "electron Energy before: " << (diffEnergy-ionEnergyInPenelopeDatabase)/keV << G4endl;
-  G4cout << "Geant4 binding energy: " << bindingEnergy/keV << G4endl;
-  G4cout << "electron energy after: " << (diffEnergy-ionEnergy)/keV << G4endl;
 
   //subtract the excitation energy. If not emitted by fluorescence
   //the ionization energy is deposited as local energy deposition
