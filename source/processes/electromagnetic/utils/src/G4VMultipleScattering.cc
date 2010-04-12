@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.81 2010-04-06 09:24:46 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.82 2010-04-12 11:45:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,7 +143,7 @@ void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
 {
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
-  if(p) p->SetParticleChange(pParticleChange);
+  if(p) { p->SetParticleChange(pParticleChange); }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -173,6 +173,75 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
+{
+  if (!firstParticle) {
+    currentCouple = 0;
+    if(part.GetParticleType() == "nucleus" && 
+       part.GetParticleSubType() == "generic") {
+      firstParticle = G4GenericIon::GenericIon();
+      isIon = true;
+    } else {
+      firstParticle = &part;
+      if(part.GetParticleType() == "nucleus" || 
+	 part.GetPDGMass() > GeV) {isIon = true;} 
+    } 
+    // limitations for ions
+    if(isIon) {
+      SetStepLimitType(fMinimal);
+      SetLateralDisplasmentFlag(false);
+      SetBuildLambdaTable(false);
+    }
+    currentParticle = &part;
+  }
+
+  (G4LossTableManager::Instance())->PreparePhysicsTable(&part, this);
+
+  if(1 < verboseLevel) {
+    G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
+           << " local particle " << firstParticle->GetParticleName()
+           << G4endl;
+  }
+
+  if(firstParticle == &part) {
+
+    InitialiseProcess(firstParticle);
+
+    // initialisation of models
+    G4int nmod = modelManager->NumberOfModels();
+    for(G4int i=0; i<nmod; ++i) {
+      G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
+      if(isIon) {
+	msc->SetStepLimitType(fMinimal);
+	msc->SetLateralDisplasmentFlag(false);
+	msc->SetRangeFactor(0.2);
+      } else {
+	msc->SetStepLimitType(StepLimitType());
+	msc->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+	msc->SetSkin(Skin());
+	msc->SetRangeFactor(RangeFactor());
+	msc->SetGeomFactor(GeomFactor());
+      }
+      msc->SetPolarAngleLimit(polarAngleLimit);
+      if(msc->HighEnergyLimit() > maxKinEnergy) {
+	msc->SetHighEnergyLimit(maxKinEnergy);
+      }
+    }
+
+    modelManager->Initialise(firstParticle, G4Electron::Electron(), 
+			     10.0, verboseLevel);
+
+    // prepare tables
+    if(buildLambdaTable) {
+      theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   G4String num = part.GetParticleName();
@@ -182,6 +251,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << num
            << G4endl;
   }
+
+  (G4LossTableManager::Instance())->BuildPhysicsTable(firstParticle);
 
   if (buildLambdaTable && firstParticle == &part) {
 
@@ -232,75 +303,6 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << GetProcessName()
            << " and particle " << num
            << G4endl;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
-{
-  if (!firstParticle) {
-    currentCouple = 0;
-    if(part.GetParticleType() == "nucleus" && 
-       part.GetParticleSubType() == "generic") {
-      firstParticle = G4GenericIon::GenericIon();
-      isIon = true;
-    } else {
-      firstParticle = &part;
-      if(part.GetParticleType() == "nucleus" || 
-	 part.GetPDGMass() > GeV) {isIon = true;} 
-    } 
-    // limitations for ions
-    if(isIon) {
-      SetStepLimitType(fMinimal);
-      SetLateralDisplasmentFlag(false);
-      SetBuildLambdaTable(false);
-    }
-    currentParticle = &part;
-  }
-
-  if(1 < verboseLevel) {
-    G4cout << "### G4VMultipleScattering::PrepearPhysicsTable() for "
-           << GetProcessName()
-           << " and particle " << part.GetParticleName()
-           << " local particle " << firstParticle->GetParticleName()
-           << G4endl;
-  }
-
-  (G4LossTableManager::Instance())->EmConfigurator()->AddModels();
-
-  if(firstParticle == &part) {
-
-    InitialiseProcess(firstParticle);
-
-    // initialisation of models
-    G4int nmod = modelManager->NumberOfModels();
-    for(G4int i=0; i<nmod; ++i) {
-      G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
-      if(isIon) {
-	msc->SetStepLimitType(fMinimal);
-	msc->SetLateralDisplasmentFlag(false);
-	msc->SetRangeFactor(0.2);
-      } else {
-	msc->SetStepLimitType(StepLimitType());
-	msc->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-	msc->SetSkin(Skin());
-	msc->SetRangeFactor(RangeFactor());
-	msc->SetGeomFactor(GeomFactor());
-      }
-      msc->SetPolarAngleLimit(polarAngleLimit);
-      if(msc->HighEnergyLimit() > maxKinEnergy) {
-	msc->SetHighEnergyLimit(maxKinEnergy);
-      }
-    }
-
-    modelManager->Initialise(firstParticle, G4Electron::Electron(), 
-			     10.0, verboseLevel);
-
-    // prepare tables
-    if(buildLambdaTable) {
-      theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-    }
   }
 }
 

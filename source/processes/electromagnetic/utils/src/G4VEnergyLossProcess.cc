@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.161 2010-04-06 17:10:46 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.162 2010-04-12 11:45:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -405,7 +405,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   if( !particle ) {
     particle = &part;
     if(part.GetParticleType() == "nucleus") {
-      if(!theGenericIon) theGenericIon = G4GenericIon::GenericIon();
+      if(!theGenericIon) { theGenericIon = G4GenericIon::GenericIon(); }
       if(particle == theGenericIon) { isIon = true; }
       else if(part.GetPDGCharge() > eplus) {
 	isIon = true; 
@@ -425,11 +425,15 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     } else { 
       lManager->RegisterExtraParticle(&part, this);
     }
+    if(1 < verboseLevel) {
+      G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable() end for "
+	     << part.GetParticleName() << G4endl;
+    }
     return;
   }
 
   Clean();
-  lManager->EmConfigurator()->AddModels();
+  lManager->PreparePhysicsTable(&part, this);
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
@@ -501,21 +505,19 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       if(nSCoffRegions>0) {
 	G4bool reg = false;
 	for(G4int i=0; i<nSCoffRegions; ++i) {
-	  if( pcuts == scoffRegions[i]->GetProductionCuts()) reg = true;
+	  if( pcuts == scoffRegions[i]->GetProductionCuts()) { reg = true; }
 	}
 	idxSCoffRegions[j] = reg;
       }
       if(nDERegions>0) {
 	G4bool reg = false;
 	for(G4int i=0; i<nDERegions; ++i) {
-	  if( pcuts == deRegions[i]->GetProductionCuts()) reg = true;
+	  if( pcuts == deRegions[i]->GetProductionCuts()) { reg = true; }
 	}
 	idxDERegions[j] = reg;
       }
     }
   }
-
-  lManager->EnergyLossProcessIsInitialised(particle, this);
 
   if (1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Initialise() is done "

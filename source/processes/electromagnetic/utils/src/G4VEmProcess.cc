@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.83 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.84 2010-04-12 11:45:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -166,7 +166,7 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
 {
   G4VEmFluctuationModel* fm = 0;
   modelManager->AddEmModel(order, p, fm, region);
-  if(p) p->SetParticleChange(pParticleChange);
+  if(p) { p->SetParticleChange(pParticleChange); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -215,7 +215,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
-  (G4LossTableManager::Instance())->EmConfigurator()->AddModels();
+  (G4LossTableManager::Instance())->PreparePhysicsTable(&part, this);
 
   if(particle == &part) {
     Clear();
@@ -244,7 +244,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
     }
   }
-  // Sub Cutoff and Deexcitation
+  // Deexcitation
   if (nDERegions>0) {
 
     const G4ProductionCutsTable* theCoupleTable=
@@ -289,6 +289,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
+  (G4LossTableManager::Instance())->BuildPhysicsTable(particle);
   if(buildLambdaTable) {
     BuildLambdaTable();
     FindLambdaMax();
