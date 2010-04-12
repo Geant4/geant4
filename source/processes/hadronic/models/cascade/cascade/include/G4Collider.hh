@@ -22,15 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4Collider.hh,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+
 #ifndef G4COLLIDER_HH
 #define G4COLLIDER_HH
 
-//#ifndef G4INUCL_PARTICLE_HH
-#include "G4InuclParticle.hh"
-//#endif
-
-#include "G4CollisionOutput.hh"
+class G4InuclParticle;
+class G4CollisionOutput;
 
 // class G4Collider {
 
@@ -38,8 +39,8 @@
 
 //   G4Collider() {};
 
-//   virtual G4CollisionOutput collide(G4InuclParticle* bullet,
-// 				    G4InuclParticle* target) = 0;
+//   virtual void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+//			  G4CollisionOutput& output) = 0;
 
 // };        
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2010-04-09 21:02:28 mkelsey Exp $
+$Id: History,v 1.58 2010-04-12 23:39:41 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,41 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+09 April 2010 Michael Kelsey (hadr-casc-V09-03-20)
+--------------------------------------------------
+All changes below within "cascade/" subdirectory:
+
+- G4NucleiModel: Move function implementations from .hh to .cc.  Replace
+  manual sorting (inefficient O(N^2)) with std::sort() and simple
+  "less-than" function for std::pair<> "partners".
+
+- G4CollisionOutput: Move function implementations from .hh to .cc.  Use
+  std::vevtor<>::insert() to add vectors together.
+
+- Replace return-by-value G4CollisionOutput with non-const reference buffer
+  passed into xxx::collide(), in the following classes:
+	G4BigBanger
+	G4CascadeElasticInterface
+	G4CascadeInterface
+	G4ElasticCascadeInterface
+	G4ElementaryParticleCollider
+	G4EquilibriumEvaporator
+	G4EvaporationInuclCollider
+	G4Fissioner
+	G4IBertini
+	G4IntraNucleiCascader
+	G4InuclCollider
+	G4InuclEvaporation
+	G4NonEquilibriumEvaporator
+	G4NucleiModel
+	G4PreCompoundCascadeInterface
+	G4PreCompoundInuclCollider
+
+  Note that some places where internal G4CollisionOutput buffers are being
+  used (and their contents appended to the global output) have not been
+  cleaned up yet.  These will require some rearrangement of the algorithms,
+  or/and elimination of debugging output.
 
 09 April 2010 Michael Kelsey (hadr-casc-V09-03-16-01)
 -----------------------------------------------------

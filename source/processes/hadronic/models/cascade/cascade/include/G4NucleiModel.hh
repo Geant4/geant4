@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.22 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.23 2010-04-12 23:39:41 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -32,6 +32,8 @@
 //		::generateParticleFate(), and make "outgoing_cparticles" a
 //		data member returned from the latter by const-ref.  Replace
 //		return-by-value of initializeCascad() with an input buffer.
+// 20100409  M. Kelsey -- Add function to sort list of partnerts by pathlen,
+//		move non-inlinable code to .cc.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -52,7 +54,6 @@ public:
   G4NucleiModel(G4InuclNuclei* nuclei);
 
   void generateModel(G4double a, G4double z);
-
 
   void reset() {
     neutronNumberCurrent = neutronNumber;
@@ -156,6 +157,11 @@ private:
 
   std::vector<partner> thePartners;		// Buffer for output below
   void generateInteractionPartners(G4CascadParticle& cparticle);
+
+  // Function for std::sort() to use in organizing partners by path length
+  static G4bool sortPartners(const partner& p1, const partner& p2) {
+    return (p2.second > p1.second);
+  }
 
   G4double volNumInt(G4double r1, G4double r2, G4double cu, 
 		     G4double d1) const; 

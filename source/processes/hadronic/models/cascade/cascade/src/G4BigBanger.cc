@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.27 2010-04-09 21:11:25 dennis Exp $
+// $Id: G4BigBanger.cc,v 1.28 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,6 +30,7 @@
 //		for (N-1)th outgoing nucleon.
 // 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4BigBanger.hh"
 #include "G4InuclNuclei.hh"
@@ -51,8 +52,9 @@ G4BigBanger::G4BigBanger()
   }
 }
 
-G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
-				       G4InuclParticle* target) {
+void
+G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
+		     G4CollisionOutput& output) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::collide" << G4endl;
@@ -62,7 +64,6 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
 
   const G4double small_ekin = 1.0e-6;
 
-  G4CollisionOutput output;
   G4LorentzVector totscm;
   G4LorentzVector totlab;
 
@@ -130,7 +131,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* /*bullet*/,
     G4cout << " BigBanger -> try to bang not nuclei " << G4endl;
   }; 
 
-  return output;
+  return;
 }		     
 
 void G4BigBanger::generateBangInSCM(G4double etot, 

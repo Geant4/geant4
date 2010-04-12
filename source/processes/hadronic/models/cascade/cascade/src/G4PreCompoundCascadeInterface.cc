@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.6 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -191,7 +192,8 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
     if (momentumBullet[3] > cutElastic[bulletType]) { // inelastic collision possible
 
       do {   // we try to create inelastic interaction
-	output = collider->collide(bullet, targetH);
+	output.reset();
+	collider->collide(bullet, targetH, output);
 	nTries++;
       } while(
 	      (nTries < maxTries) &&
@@ -201,7 +203,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 	      );
 
     } else { // only elastic collision is energetically possible
-      output = collider->collide(bullet, targetH);
+      collider->collide(bullet, targetH, output);
     }
 
     sumBaryon += 1;
@@ -217,7 +219,8 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 
     do  // we try to create inelastic interaction
       {
-	output = collider->collide(bullet, target );
+	output.reset();
+	collider->collide(bullet, target, output);
 	nTries++;
       } while (
 	       //	      (nTries < maxTries)                                                               &&

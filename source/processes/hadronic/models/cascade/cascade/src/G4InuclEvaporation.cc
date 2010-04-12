@@ -22,11 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.12 2010-04-07 18:23:15 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.13 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(), use
+//		const_iterator.
 
 #include <numeric>
 #include "G4IonTable.hh"
@@ -49,8 +51,8 @@
 #include "G4InuclParticle.hh"
 #include "G4CollisionOutput.hh"
 
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 
 G4InuclEvaporation::G4InuclEvaporation() {
@@ -130,12 +132,12 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4Fissioner*                      fiss = new G4Fissioner;
   G4BigBanger*                      bigb = new G4BigBanger;
   G4EvaporationInuclCollider* evaporator = new G4EvaporationInuclCollider(eqil, fiss, bigb);
+
   G4CollisionOutput output;
+  evaporator->collide(0, nucleus, output);
 
-  output = evaporator->collide(0, nucleus);
-
-  std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
-  std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+  const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
+  const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   G4double ekin,emas;
   G4double eTot=0.0;

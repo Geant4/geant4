@@ -22,11 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.20 2010-03-16 23:54:21 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.21 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Introduced bug checking i3 for valid tuning pair
+// 20100409  M. Kelsey -- Move non-inlinable code here out of .hh file, replace
+//		loop over push_back() with block insert().
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -55,6 +57,22 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
   return *this;
 }
 
+void G4CollisionOutput::reset() {
+  nucleiFragments.clear();
+  outgoingParticles.clear();
+}
+
+
+void G4CollisionOutput::addOutgoingParticles(const std::vector<G4InuclElementaryParticle>& particles) {
+  outgoingParticles.insert(outgoingParticles.end(),
+			   particles.begin(), particles.end());
+}
+
+
+void G4CollisionOutput::addTargetFragments(const std::vector<G4InuclNuclei>& nuclea) {
+  nucleiFragments.insert(nucleiFragments.end(), nuclea.begin(), nuclea.end());
+}
+
 
 G4LorentzVector G4CollisionOutput::getTotalOutputMomentum() const {
   G4LorentzVector tot_mom;
@@ -70,6 +88,40 @@ G4LorentzVector G4CollisionOutput::getTotalOutputMomentum() const {
   tot_mom.setE(tot_mom.e() + eex_r);
   return tot_mom;
 }
+
+void G4CollisionOutput::printCollisionOutput() const {
+  G4int i(0);
+
+  G4cout << " Output: " << G4endl  
+	 << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
+  for(i = 0; i < G4int(outgoingParticles.size()); i++)
+    outgoingParticles[i].printParticle(); 
+
+  G4cout << " Nuclei fragments: " << nucleiFragments.size() << G4endl;      
+  for(i = 0; i < G4int(nucleiFragments.size()); i++)
+    nucleiFragments[i].printParticle();
+}
+
+
+void G4CollisionOutput::trivialise(G4InuclParticle* bullet, 
+				   G4InuclParticle* target) {
+  if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
+    nucleiFragments.push_back(*nuclei_target);
+  } else {
+    G4InuclElementaryParticle* particle =
+      dynamic_cast<G4InuclElementaryParticle*>(target);
+    outgoingParticles.push_back(*particle);
+  }
+
+  if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {     
+    nucleiFragments.push_back(*nuclei_bullet);
+  } else {
+    G4InuclElementaryParticle* particle =
+      dynamic_cast<G4InuclElementaryParticle*>(bullet);
+    outgoingParticles.push_back(*particle);
+  }
+}
+
 
 void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, 
 				   G4InuclParticle* target) {
@@ -261,7 +313,16 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   };	// if (<renormalization>)
 }
 
-std::pair<std::pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de) const {
+
+void G4CollisionOutput::setRemainingExitationEnergy() { 
+  eex_rest = 0.0;
+  for(G4int i = 0; i < G4int(nucleiFragments.size()); i++) 
+    eex_rest += 0.001 * nucleiFragments[i].getExitationEnergy();
+}
+
+
+std::pair<std::pair<G4int, G4int>, G4int> 
+G4CollisionOutput::selectPairToTune(G4double de) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4CollisionOutput::selectPairToTune" << G4endl;
   }

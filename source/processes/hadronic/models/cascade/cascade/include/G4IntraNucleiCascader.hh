@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.8 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.9 2010-04-12 23:39:41 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -46,8 +47,8 @@ public:
     theElementaryParticleCollider = ecollider;   
   };
   
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& output);
 
   void setInteractionCase(G4int intcase) { 
     inter_case = intcase; 

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.33 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.34 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,6 +30,7 @@
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 // 20100407  M. Kelsey -- Pass "all_particles" as argument to initializeCascad,
 //		following recent change to G4NucleiModel.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #define RUN
 
@@ -61,8 +62,9 @@ G4IntraNucleiCascader::G4IntraNucleiCascader()
 
 }
 
-G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
-						 G4InuclParticle* target) {
+void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
+				    G4InuclParticle* target,
+				    G4CollisionOutput& output) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::collide inter_case " << inter_case 
@@ -77,8 +79,6 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     bullet->printParticle();
     target->printParticle();
   }
-
-  G4CollisionOutput output;
 
 #ifdef RUN
   G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
@@ -298,7 +298,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);	                           	  
           output.addTargetFragment(outgoing_nuclei);
 
-	  return output;
+	  return;
 	};
       };
 
@@ -324,7 +324,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
       output.addOutgoingParticles(output_particles);
 
-      return output;
+      return;
     }; 
   };
 
@@ -343,7 +343,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);	                           
   output.addTargetFragment(outgoing_nuclei);
 
-  return output;
+  return;
 
   /*
     G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>
@@ -351,7 +351,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
     output.addOutgoingParticle(*bparticle);
     output.addTargetFragment(*tnuclei);
-    return output;
+    return;
   */
 
 #endif
@@ -363,7 +363,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   output.trivialise(bullet, target);
 
-  return output;
+  return;
 }
 
 G4bool G4IntraNucleiCascader::goodCase(G4double a, 

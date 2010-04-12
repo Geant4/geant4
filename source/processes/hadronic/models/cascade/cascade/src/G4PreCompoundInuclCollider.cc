@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundInuclCollider.cc,v 1.6 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4PreCompoundInuclCollider.cc,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4PreCompoundInuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -51,17 +52,15 @@ G4PreCompoundInuclCollider::G4PreCompoundInuclCollider()
   }
 }
 
-G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
-					   G4InuclParticle* target) {
-
-  verboseLevel = 0;
+void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
+					 G4InuclParticle* target,
+					 G4CollisionOutput& globalOutput) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4PreCompoundInuclCollider::collide" << G4endl;
   }
 
   const G4int itry_max = 1000;
   		     
-  G4CollisionOutput globalOutput;
   G4InuclElementaryParticle* particle1 =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* particle2 =
@@ -73,7 +72,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
       particle2->printParticle();
     }
 
-    globalOutput = theElementaryParticleCollider->collide(bullet, target);
+    theElementaryParticleCollider->collide(bullet, target, globalOutput);
 
   } else { // needs to call all machinery    	
     G4LorentzConvertor convertToTargetRestFrame;
@@ -100,8 +99,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  G4cout << " InuclCollider -> can not collide with photon " << G4endl;
 
 	  globalOutput.trivialise(bullet, target);
-
-	  return globalOutput;
+	  return;
 	} else {
 	  convertToTargetRestFrame.setBullet(pbullet->getMomentum(),
 					     pbullet->getMass());   
@@ -149,10 +147,10 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  if (intcase == 1) {
 	    G4InuclElementaryParticle pbullet(bmom, btype);
 
-	    output = theIntraNucleiCascader->collide(&pbullet, &ntarget);
+	    theIntraNucleiCascader->collide(&pbullet, &ntarget, output);
 	  } else {
 	    G4InuclNuclei nbullet(bmom, ab, zb);
-	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
+	    theIntraNucleiCascader->collide(&nbullet, &ntarget, output);
 	  };   
 
 	  if (verboseLevel > 3) {
@@ -164,17 +162,18 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  // the rest, if any
 	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
-	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after	    
+	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after
+	    output.reset();
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 	    if (explosion(&cascad_rec_nuclei)) {
 	      if (verboseLevel > 3) {
 		G4cout << " big bang after cascade " << G4endl;
 	      };
 
-	      output = theBigBanger->collide(0,&cascad_rec_nuclei);
+	      theBigBanger->collide(0,&cascad_rec_nuclei, output);
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 	    } else {
-	      output = theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei);
+	      theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei, output);
 
 	      if (verboseLevel > 3) {
 		G4cout << " After NonEquilibriumEvaporator " << G4endl;
@@ -182,12 +181,12 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	      };
 
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
-	      TRFoutput.addTargetFragments(output.getNucleiFragments());         
+	      TRFoutput.addTargetFragments(output.getNucleiFragments());
 	    };
 	  };
 	 
 	  // convert to the LAB       
-	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
+	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();
 	  std::vector<G4InuclElementaryParticle> particles = 
 	    TRFoutput.getOutgoingParticles();
 
@@ -224,8 +223,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  globalOutput.addTargetFragments(nucleus);
 	  globalOutput.setOnShell(bullet, target);
 	  if(globalOutput.acceptable()) {
-
-	    return globalOutput;
+	    return;
 	  } else {
 	    globalOutput.reset();
 	  }; 
@@ -237,8 +235,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	}
 
 	globalOutput.trivialise(bullet, target);
-
-	return globalOutput;        
+	return;        
       } else {
 
 	if (verboseLevel > 3) {
@@ -247,8 +244,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	}
 
 	globalOutput.trivialise(bullet, target);
-
-	return globalOutput;
+	return;
       };
 	
     } else {
@@ -259,7 +255,7 @@ G4CollisionOutput G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
     };       
   };
 
-  return globalOutput;
+  return;
 }
 		     
 G4bool G4PreCompoundInuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,

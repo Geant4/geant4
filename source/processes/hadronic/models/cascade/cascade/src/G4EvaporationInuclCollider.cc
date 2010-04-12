@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EvaporationInuclCollider.cc,v 1.8 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4EvaporationInuclCollider.cc,v 1.9 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4EvaporationInuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -51,14 +52,13 @@ G4EvaporationInuclCollider::G4EvaporationInuclCollider()
   }
 }
 
-G4CollisionOutput G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target) {
-
-  verboseLevel = 0;
+void
+G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/,
+				    G4InuclParticle* target,
+				    G4CollisionOutput& globalOutput) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4EvaporationInuclCollider::evaporate" << G4endl;
   }
-
-  G4CollisionOutput globalOutput;
 
   G4LorentzConvertor convertToTargetRestFrame;
   G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
@@ -72,30 +72,16 @@ G4CollisionOutput G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*
   targ.setExitationEnergy(eEx);
   targ.printParticle();
 
-  G4CollisionOutput output;
-  output = theEquilibriumEvaporator->collide(0, &targ);
-
-  G4CollisionOutput TRFoutput;	   
-  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
-  TRFoutput.addTargetFragments(output.getNucleiFragments());         
+  theEquilibriumEvaporator->collide(0, &targ, globalOutput);
 
   if (verboseLevel > 3) {
     G4cout << " After EquilibriumEvaporator " << G4endl;
-    output.printCollisionOutput();
+    globalOutput.printCollisionOutput();
   };
 	 
 
-  std::vector<G4InuclElementaryParticle> particles = TRFoutput.getOutgoingParticles();
-  std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
-
-  globalOutput.addOutgoingParticles(particles);
-  globalOutput.addTargetFragments(nucleus);
-
-  if (verboseLevel > 3) G4cout << "G4EvaporationInuclCollider::collide end" << G4endl;
- 
-	
-  return globalOutput;
-	
+  if (verboseLevel > 3) 
+    G4cout << "G4EvaporationInuclCollider::collide end" << G4endl;
 }
 	
 	     

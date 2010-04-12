@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.52 2010-04-09 00:30:42 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.53 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -42,6 +42,7 @@
 //		  ::generateSCMpionAbsorption()
 // 20100408  M. Kelsey -- Follow changes to G4*Sampler to pass particle_kinds
 //		as input buffer.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -89,31 +90,22 @@ G4ElementaryParticleCollider::G4ElementaryParticleCollider()
 }
 
 
-G4CollisionOutput  
+void
 G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
-				      G4InuclParticle* target) 
+				      G4InuclParticle* target,
+				      G4CollisionOutput& output) 
 {
+  // Ensure that proper concrete projectiles were passed
   G4InuclElementaryParticle* particle1 =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* particle2 =	
     dynamic_cast<G4InuclElementaryParticle*>(target);
 
-  G4CollisionOutput output;
-
   if (!(particle1 && particle2)) {
-    G4cout << " ElementaryParticleCollider -> can collide only particle with particle " 
+    G4cerr << " ElementaryParticleCollider -> can collide only particle with particle " 
            << G4endl;
-  } else {
-    collide(particle1, particle2, output);
+    return;
   }
-  return output;	
-}
-
-
-void 
-G4ElementaryParticleCollider::collide(G4InuclElementaryParticle* particle1,
-				      G4InuclElementaryParticle* particle2,
-				      G4CollisionOutput& output) {
 
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron

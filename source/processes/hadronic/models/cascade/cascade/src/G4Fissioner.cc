@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100318  M. Kelsey -- Bug fix setting mass with G4LV
 // 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow()
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
@@ -50,14 +51,14 @@ G4Fissioner::G4Fissioner()
   }
 }
 
-G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
-				       G4InuclParticle* target) {
+void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
+			  G4InuclParticle* target,
+			  G4CollisionOutput& output) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4Fissioner::collide" << G4endl;
   }
 
   //  const G4int itry_max = 1000;
-  G4CollisionOutput output;
 
   if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
@@ -199,7 +200,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     G4cout << " Fissioner -> target is not nuclei " << G4endl;    
   }; 
 
-  return output;
+  return;
 }
 
 G4double G4Fissioner::getC2(G4double A1, 

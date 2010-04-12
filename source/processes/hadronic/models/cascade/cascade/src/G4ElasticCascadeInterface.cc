@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElasticCascadeInterface.cc,v 1.8 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4ElasticCascadeInterface.cc,v 1.9 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Pekka Kaitaniemi, HIP
 // Aatos Heikkinen
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4ElasticCascadeInterface.hh"
 #include "globals.hh"
@@ -166,7 +167,8 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
     if (momentumBullet.z() < cutElastic[bulletType]) { // elastic collision possible
 
       do {   // we try to create elastic collision
-	output = collider->collide(bullet, targetH);
+	output.reset();
+	collider->collide(bullet, targetH, output);
 	nTries++;
       } while(
 	      (nTries < maxTries)                                           &&
@@ -190,7 +192,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
       // If elastic collision can not happen above then we just output
       //the original bullet particle and the target (in this case the
       //target is proton) output = collider->collide(bullet, targetH);
-      output = G4CollisionOutput();
+      output.reset();
       output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
       output.addOutgoingParticle(G4InuclElementaryParticle(proton));
     }
@@ -210,7 +212,8 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
       {
 	//We try to create one particle (the bullet) and a nuclear
 	//fragment that has the same A and Z as the original target.
-	output = collider->collide(bullet, target );
+	output.reset();
+	collider->collide(bullet, target, output);
 	nTries++;
       } while(
 	      (nTries < maxTries)        &&
@@ -230,7 +233,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 	output.getNucleiFragments().begin()->getA() != target->getA() || 
 	output.getNucleiFragments().begin()->getZ() != target->getZ())) { 
 	
-      output = G4CollisionOutput();
+      output.reset();
       output.addOutgoingParticle(G4InuclElementaryParticle(momentumBullet, bulletType));
       output.addTargetFragment(G4InuclNuclei(target->getA(), target->getZ()));
     }

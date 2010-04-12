@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundInuclCollider.hh,v 1.4 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4PreCompoundInuclCollider.hh,v 1.5 2010-04-12 23:39:41 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unneeded #includes.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #ifndef G4PRECOMPOUNDINUCL_COLLIDER_HH
 #define G4PRECOMPOUNDINUCL_COLLIDER_HH
@@ -79,8 +80,9 @@ public:
     theBigBanger = bigbanger;   
   };
   
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet,
+	       G4InuclParticle* target,
+	       G4CollisionOutput& globalOutput);
 
 private: 
   G4int verboseLevel;

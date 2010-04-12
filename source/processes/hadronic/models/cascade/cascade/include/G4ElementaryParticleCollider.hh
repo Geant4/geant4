@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.26 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,6 +34,8 @@
 //		  ::generateMomModules() (also remove input vector)
 //		  ::generateStrangeChannelPartTypes()
 //		  ::generateSCMpionAbsorption()
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(); merge
+//		public vs. private ::collide() functions.
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -53,8 +55,8 @@ public:
 
   G4ElementaryParticleCollider();
 
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& output);
 
 private:
 
@@ -64,11 +66,6 @@ private:
 
   G4int generateMultiplicity(G4int is, G4double ekin) const;
 
-  void collide(G4InuclElementaryParticle* bullet,
-	       G4InuclElementaryParticle* target,
-	       G4CollisionOutput& output);
-
-      
   void generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,
 			     G4InuclElementaryParticle* particle1,
 			     G4InuclElementaryParticle* particle2, 

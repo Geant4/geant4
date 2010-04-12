@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.42 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.43 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +33,7 @@
 //		Move output vectors from generateParticleFate() and 
 //		::generateInteractionPartners() to be data members; return via
 //		const-ref instead of by value.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 //#define CHC_CHECK
 
@@ -492,9 +493,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     thePartners.push_back(partner(particle, path));
 
   } else { // normal case  
-    std::vector<G4InuclElementaryParticle> particles;
     G4LorentzConvertor dummy_convertor;
-
     dummy_convertor.setBullet(pmom, pmass);
   
     for (G4int ip = 1; ip < 3; ip++) { 
@@ -677,27 +676,13 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       G4cout << " after deutrons " << thePartners.size() << G4endl;
     }
   
-    if (thePartners.size() > 1) { // sort partners
- 
-      for (G4int i = 0; i < G4int(thePartners.size()) - 1; i++) {
+    if (thePartners.size() > 1) {		// Sort list by path length
+      std::sort(thePartners.begin(), thePartners.end(), sortPartners);
+    }
 
-	for (G4int j = i + 1; j < G4int(thePartners.size()); j++) {
-
-	  if (thePartners[i].second > thePartners[j].second) {
-
-	    G4InuclElementaryParticle particle = thePartners[i].first;
-	    G4double pathi = thePartners[i].second;
-	    thePartners[i] = partner(thePartners[j].first, thePartners[j].second);
-	    thePartners[j] = partner(particle, pathi);
-	  };
-	};
-      };
-    };
-
-    G4InuclElementaryParticle particle;
-
+    G4InuclElementaryParticle particle;		// Dummy for end of list
     thePartners.push_back(partner(particle, path));
-  }; 
+  }
  
   return;
 }
@@ -743,6 +728,8 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     
     G4int zone = cparticle.getCurrentZone();
     
+    G4CollisionOutput output;
+
     for (G4int i = 0; i < npart - 1; i++) {
       if (i > 0) cparticle.updatePosition(old_position); 
       
@@ -753,8 +740,9 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	  G4cout << " try absorption: target " << target.type() << " bullet " <<
 	    bullet.type() << G4endl;
       }
-      
-      G4CollisionOutput output = theElementaryParticleCollider->collide(&bullet, &target);
+
+      output.reset();
+      theElementaryParticleCollider->collide(&bullet, &target, output);
       
       if (verboseLevel > 2) output.printCollisionOutput();
       

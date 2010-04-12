@@ -22,12 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow()
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #define RUN
 
@@ -51,8 +52,9 @@ G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   }
 }
 
-G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
-						      G4InuclParticle* target) {
+void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
+					 G4InuclParticle* target,
+					 G4CollisionOutput& output) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::collide" << G4endl;
@@ -71,7 +73,6 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
   const G4int itry_max = 1000;
   const G4double small_ekin = 1.0e-6;
   const G4double width_cut = 0.005;
-  G4CollisionOutput output;
 
   if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     //  initialization
@@ -436,7 +437,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 
   }; 
 
-  return output;
+  return;
 }
 
 G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {

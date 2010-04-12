@@ -22,10 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IBertini.cc,v 1.6 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4IBertini.cc,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(); use
+//		const_interator.
 
 #include "G4IBertini.hh"
 #include "globals.hh"
@@ -49,8 +51,8 @@
 #include "G4LorentzRotation.hh"
 
 
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 G4IBertini::G4IBertini()
   :verboseLevel(0)  {
@@ -210,7 +212,8 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 	if (momentumBullet.z() > cutElastic[bulletType]) { // inelastic collision possible
 
 	  do {   // we try to create inelastic interaction
-	    output = collider->collide(bullet, targetH);
+	    output.reset();
+	    collider->collide(bullet, targetH, output);
 	    nTries++;
 	  } while(
 		  (nTries < maxTries)                                           &&
@@ -221,7 +224,7 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 		  );
 
 	} else { // only elastic collision is energetically possible
-	  output = collider->collide(bullet, targetH);
+	  collider->collide(bullet, targetH, output);
 	}
 
 	sumBaryon += 1;
@@ -238,7 +241,8 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 	do  // we try to create inelastic interaction
 	  {
             coulombOK=0;  // by default coulomb analysis is OK
-	    output = collider->collide(bullet, target );
+	    output.reset();
+	    collider->collide(bullet, target, output);
 	    nTries++;
 	    //----------------------------
 	    //	    G4double coulumbBarrier = 5.0 * MeV;	   
@@ -279,8 +283,8 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
     }
   
   // Convert cascade data to use hadronics interface
-  std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
-  std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+  const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
+  const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
 

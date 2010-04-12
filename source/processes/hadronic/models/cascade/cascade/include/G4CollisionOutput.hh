@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.hh,v 1.17 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.18 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100407  M. Kelsey -- Replace ::resize(0) with ::clear()
+// 20100409  M. Kelsey -- Move function code to .cc files, not inlinable
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -47,28 +48,19 @@ public:
 
   G4CollisionOutput& operator=(const G4CollisionOutput& right);
 
-  void reset() {
-    nucleiFragments.clear();
-    outgoingParticles.clear();
-  };
+  void reset();
 
   void addOutgoingParticle(const G4InuclElementaryParticle& particle) {
     outgoingParticles.push_back(particle);
-  };
+  }
 
-  void addOutgoingParticles(const std::vector<G4InuclElementaryParticle>& particles) {
-    for(G4int i = 0; i < G4int(particles.size()); i++)
-      outgoingParticles.push_back(particles[i]);
-  };
+  void addOutgoingParticles(const std::vector<G4InuclElementaryParticle>& particles);
 
   void addTargetFragment(const G4InuclNuclei& nuclei) {
     nucleiFragments.push_back(nuclei);
   };
 
-  void addTargetFragments(const std::vector<G4InuclNuclei>& nuclea) {
-    for(G4int i = 0; i < G4int(nuclea.size()); i++)
-      nucleiFragments.push_back(nuclea[i]);
-  };
+  void addTargetFragments(const std::vector<G4InuclNuclei>& nuclea);
 
   const std::vector<G4InuclElementaryParticle>& getOutgoingParticles() const {
     return outgoingParticles;
@@ -84,47 +76,15 @@ public:
 
   G4LorentzVector getTotalOutputMomentum() const;
 
-  void printCollisionOutput() const {
-    G4cout << " Output: " << G4endl  
-	   << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
-    G4int i(0);
-    for(i = 0; i < G4int(outgoingParticles.size()); i++) {
-      outgoingParticles[i].printParticle(); 
-    };
-    G4cout << " Nuclei fragments: " << nucleiFragments.size() << G4endl;      
-    for(i = 0; i < G4int(nucleiFragments.size()); i++) {
-      nucleiFragments[i].printParticle(); 
-    };
-  };
+  void printCollisionOutput() const;
 
   void trivialise(G4InuclParticle* bullet, 
-		  G4InuclParticle* target) {
-    if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
-      nucleiFragments.push_back(*nuclei_target);
-    }
-    else {
-      G4InuclElementaryParticle* particle =
-	dynamic_cast<G4InuclElementaryParticle*>(target);
-      outgoingParticles.push_back(*particle);
-    }; 
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {     
-      nucleiFragments.push_back(*nuclei_bullet);
-    }
-    else {
-      G4InuclElementaryParticle* particle =
-	dynamic_cast<G4InuclElementaryParticle*>(bullet);
-      outgoingParticles.push_back(*particle);
-    }; 
-  };
+		  G4InuclParticle* target);
 
   void setOnShell(G4InuclParticle* bullet, 
 		  G4InuclParticle* target);
 
-  void setRemainingExitationEnergy() { 
-    eex_rest = 0.0;
-    for(G4int i = 0; i < G4int(nucleiFragments.size()); i++) 
-      eex_rest += 0.001 * nucleiFragments[i].getExitationEnergy();
-  };
+  void setRemainingExitationEnergy();
 
   double getRemainingExitationEnergy() const { 
     return eex_rest; 

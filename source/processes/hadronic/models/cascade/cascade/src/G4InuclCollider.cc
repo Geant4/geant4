@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.26 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -51,15 +52,14 @@ G4InuclCollider::G4InuclCollider()
   }
 }
 
-G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
-					   G4InuclParticle* target) {
+void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
+			      G4CollisionOutput& globalOutput) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::collide" << G4endl;
   }
 
   const G4int itry_max = 1000;
   		     
-  G4CollisionOutput globalOutput;
   G4InuclElementaryParticle* particle1 =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* particle2 =
@@ -71,7 +71,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
       particle2->printParticle();
     }
 
-    globalOutput = theElementaryParticleCollider->collide(bullet, target);
+    theElementaryParticleCollider->collide(bullet, target, globalOutput);
 
   } else { // needs to call all machinery    	
     G4LorentzConvertor convertToTargetRestFrame;
@@ -95,11 +95,10 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
          
 	if (pbullet->photon()) {
-	  G4cout << " InuclCollider -> can not collide with photon " << G4endl;
+	  G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
 
 	  globalOutput.trivialise(bullet, target);
-
-	  return globalOutput;
+	  return;
 	} else {
 	  convertToTargetRestFrame.setBullet(pbullet->getMomentum(),
 					     pbullet->getMass());   
@@ -140,40 +139,43 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	G4bool bad = true;
 	G4int itry = 0;
 	 
+	G4CollisionOutput TRFoutput;
+	G4CollisionOutput output;
 	while (bad && itry < itry_max) {
-	  G4CollisionOutput TRFoutput;
-	  G4CollisionOutput output;
-
 	  itry++;
+
+	  output.reset();	// Clear buffers for this attempt
+	  TRFoutput.reset();
+
 	  if (intcase == 1) {
 	    G4InuclElementaryParticle pbullet(bmom, btype);
 
-	    output = theIntraNucleiCascader->collide(&pbullet, &ntarget);
+	    theIntraNucleiCascader->collide(&pbullet, &ntarget, output);
 	  } else {
 	    G4InuclNuclei nbullet(bmom, ab, zb);
-	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
+	    theIntraNucleiCascader->collide(&nbullet, &ntarget, output);
 	  };   
 
 	  if (verboseLevel > 3) {
 	    G4cout << " After Cascade " << G4endl;
-
 	    output.printCollisionOutput();
 	  }
 	  
 	  // the rest, if any
+	  // FIXME:  The code below still does too much copying!
 	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
-	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after	    
+	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 	    if (explosion(&cascad_rec_nuclei)) {
 	      if (verboseLevel > 3) {
 		G4cout << " big bang after cascade " << G4endl;
 	      };
 
-	      output = theBigBanger->collide(0,&cascad_rec_nuclei);
-	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+	      theBigBanger->collide(0,&cascad_rec_nuclei, TRFoutput);
 	    } else {
-	      output = theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei);
+	      output.reset();
+	      theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei, output);
 
 	      if (verboseLevel > 3) {
 		G4cout << " After NonEquilibriumEvaporator " << G4endl;
@@ -182,21 +184,22 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 	      G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
-	      output = theEquilibriumEvaporator->collide(0, &exiton_rec_nuclei);
+
+	      output.reset();
+	      theEquilibriumEvaporator->collide(0, &exiton_rec_nuclei, output);
 
 	      if (verboseLevel > 3) {
 		G4cout << " After EquilibriumEvaporator " << G4endl;
-
 		output.printCollisionOutput();
 	      };
 
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
-	      TRFoutput.addTargetFragments(output.getNucleiFragments());         
+	      TRFoutput.addTargetFragments(output.getNucleiFragments());
 	    };
 	  };
 	 
 	  // convert to the LAB       
-	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
+	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();
 	  std::vector<G4InuclElementaryParticle> particles = 
 	    TRFoutput.getOutgoingParticles();
 
@@ -233,8 +236,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  globalOutput.addTargetFragments(nucleus);
 	  globalOutput.setOnShell(bullet, target);
 	  if(globalOutput.acceptable()) {
-
-	    return globalOutput;
+	    return;
 	  } else {
 	    globalOutput.reset();
 	  }; 
@@ -247,7 +249,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	globalOutput.trivialise(bullet, target);
 
-	return globalOutput;        
+	return;        
       } else {
 
 	if (verboseLevel > 3) {
@@ -257,7 +259,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	globalOutput.trivialise(bullet, target);
 
-	return globalOutput;
+	return;
       };
 	
     } else {
@@ -268,7 +270,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
     };       
   };
 
-  return globalOutput;
+  return;
 }
 		     
 G4bool G4InuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,

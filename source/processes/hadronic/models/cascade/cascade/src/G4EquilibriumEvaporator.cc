@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.27 2010-03-20 22:12:38 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.28 2010-04-12 23:39:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,7 @@
 //		eliminate some unnecessary std::pow()
 // 20100319  M. Kelsey -- Bug fix in new GetBindingEnergy() use right after
 //		goodRemnant() -- Q1 should be outside call.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #define RUN
 
@@ -56,8 +57,9 @@ G4EquilibriumEvaporator::G4EquilibriumEvaporator()
   }
 }
 
-G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
-						   G4InuclParticle* target) {
+void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
+				      G4InuclParticle* target,
+				      G4CollisionOutput& output) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::collide" << G4endl;
@@ -94,7 +96,6 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   std::vector<G4double> TM(6);
 
   G4double coul_coeff;
-  G4CollisionOutput output;
 
   if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     G4double A = nuclei_target->getA();
@@ -117,8 +118,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	G4cout << " big bang in eql start " << G4endl;
       }
 
-      return theBigBanger->collide(0, target);
-
+      theBigBanger->collide(0, target, output);
+      return;
     } else {     
 
       if (A >= 100.0) {
@@ -160,11 +161,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  nuclei.setModel(6);
 	  nuclei.setExitationEnergy(EEXS);      
 
-	  G4CollisionOutput explosion = theBigBanger->collide(0, &nuclei);
-
-	  output.addOutgoingParticles(explosion.getOutgoingParticles());
-
-	  return output;	
+	  theBigBanger->collide(0, &nuclei, output);
+	  return;	
 
 	} else { // normal chain
 
@@ -452,7 +450,9 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    " Wn " << W[0] << " Wf " << W[6] << G4endl;
 		}
 
-		G4CollisionOutput foutput = theFissioner->collide(0, &nuclei);
+		// Catch fission output separately for verification
+		G4CollisionOutput foutput;
+		theFissioner->collide(0, &nuclei, foutput);
 		std::vector<G4InuclNuclei> nuclea = foutput.getNucleiFragments();
 
 		if (nuclea.size() == 2) { // fission o'k
@@ -465,18 +465,9 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    nuclea[i].setEnergy();
 		  };	      
 
-		  G4CollisionOutput output1 = this->collide(0, &nuclea[0]);
-
-		  output.addOutgoingParticles(output1.getOutgoingParticles());
-		  output.addTargetFragments(output1.getNucleiFragments());
-
-		  output1 = this->collide(0, &nuclea[1]);
-
-		  output.addOutgoingParticles(output1.getOutgoingParticles());
-		  output.addTargetFragments(output1.getNucleiFragments());
-
-		  return output;
-
+		  this->collide(0, &nuclea[0], output);
+		  this->collide(0, &nuclea[1], output);
+		  return;
 		} else { // fission forbidden now
 		  fission_open = false;
 		}; 
@@ -515,7 +506,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4cout << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
   }; 
 
-  return output;
+  return;
 }		     
 
 G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a, 

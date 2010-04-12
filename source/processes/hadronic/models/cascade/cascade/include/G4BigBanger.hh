@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.hh,v 1.11 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4BigBanger.hh,v 1.12 2010-04-12 23:39:41 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
+// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
@@ -42,8 +43,8 @@ public:
 
   G4BigBanger();
 
-  G4CollisionOutput collide(G4InuclParticle* bullet,
-			    G4InuclParticle* target);
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       G4CollisionOutput& output);
 
 private: 
 
