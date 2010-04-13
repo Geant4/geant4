@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.17 2010-04-13 08:12:23 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.18 2010-04-13 08:13:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,7 +105,7 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-  //em_config->AddModels();
+  em_config->AddModels();
   generalPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); ++i) { hadronPhys[i]->ConstructProcess(); }
   AddStepMax();
