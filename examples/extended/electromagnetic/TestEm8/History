@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2009-11-24 17:51:58 vnivanch Exp $
+$Id: History,v 1.34 2010-04-13 08:16:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-04-10 V.Ivant (testem8-V09-03-00)
+- Use pointer to G4EmConfigurator and not as a memeber of the class
 
 24-11-08 V.Ivant (testem8-V09-02-00)
 - Fixed compillation warnings at SLC5
