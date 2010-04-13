@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Diproton.hh,v 1.2 2010-04-07 17:28:35 mkelsey Exp $
+// $Id: G4Diproton.hh,v 1.3 2010-04-13 05:30:10 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -33,15 +33,16 @@
 //      History: first implementation, inspired by G4Proton
 //      17 Nov 2009:  Michael Kelsey
 //	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
+//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 // ----------------------------------------------------------------
 
-#include "G4Ions.hh"
+#include "G4VShortLivedParticle.hh"
 
 // ######################################################################
 // ###                        DIPROTON                                ###
 // ######################################################################
 
-class G4Diproton : public G4Ions {
+class G4Diproton : public G4VShortLivedParticle {
 private:
   static G4Diproton* theInstance;
   G4Diproton();

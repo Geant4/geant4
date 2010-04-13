@@ -22,10 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: paraMaker.cc,v 1.14 2010-04-13 05:30:10 mkelsey Exp $
+// Geant4 tag: $Name: not supported by cvs2svn $
 //
+// 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
+
 #include "G4InuclSpecialFunctions.hh"
 
-std::pair<std::vector<G4double>, std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
+void 
+G4InuclSpecialFunctions::paraMaker(G4double Z,
+	   std::pair<std::vector<G4double>, std::vector<G4double> >& parms) {
   G4int verboseLevel = 1;
 
   if (verboseLevel > 3) {
@@ -40,8 +46,14 @@ std::pair<std::vector<G4double>, std::vector<G4double> > G4InuclSpecialFunctions
   const G4double CP[5] = {0.50, 0.28, 0.20, 0.15, 0.10};
   const G4double AA[5] = {0.68, 0.82, 0.91, 0.97, 0.98};
   const G4double CA[5] = {0.10, 0.10, 0.10, 0.08, 0.06};
-  std::vector<G4double> AK(6);
-  std::vector<G4double> CPA(6);
+
+  // Set up input buffer for results
+  std::vector<G4double>& AK = parms.first; 
+  AK.resize(6); AK.clear();
+
+  std::vector<G4double>& CPA = parms.second;
+  CPA.resize(6); CPA.clear();
+
   AK[0] = 0.0;
   CPA[0] = 0.0;
   G4double AK2 = 0.0;
@@ -90,10 +102,12 @@ std::pair<std::vector<G4double>, std::vector<G4double> > G4InuclSpecialFunctions
   AK[4] = AK6 - 0.06;
   CPA[4] = 4.0 * CP6 / 3.0;
 
-  return std::pair<std::vector<G4double>, std::vector<G4double> >(AK, CPA);
+  return;	// Buffer filled
 }
 
-std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4double Z) {
+void 
+G4InuclSpecialFunctions::paraMakerTruncated(G4double Z,
+				    std::pair<G4double,G4double>& parms) {
   G4int verboseLevel = 1;
 
   if (verboseLevel > 3) {
@@ -104,8 +118,10 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4doub
   const G4double Z1[5] = {10.0, 20.0, 30.0, 50.0, 70.0};
   const G4double AP[5] = {0.42, 0.58, 0.68, 0.77, 0.8};
   const G4double CP[5] = {0.5, 0.28, 0.2, 0.15, 0.1};
-  G4double AK2=0.;
-  G4double CP2=0.;
+
+  // Set up buffers for output
+  G4double& AK2=parms.first; AK2=0.;
+  G4double& CP2=parms.second; CP2=0.;
 
   if (Z < 10.0) {
     AK2=0.42;
@@ -129,5 +145,5 @@ std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4doub
     };
   };
 
-  return std::pair<G4double, G4double>(AK2, CP2);
+  return;	// Buffer filled
 }

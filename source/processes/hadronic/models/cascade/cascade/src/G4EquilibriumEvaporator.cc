@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.28 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.29 2010-04-13 05:30:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,7 +31,8 @@
 //		eliminate some unnecessary std::pow()
 // 20100319  M. Kelsey -- Bug fix in new GetBindingEnergy() use right after
 //		goodRemnant() -- Q1 should be outside call.
-// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
 
 #define RUN
 
@@ -138,6 +139,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       G4double nuc_mass;  
       G4int itry_global = 0;
 
+      // Buffer for parameter sets
+      std::pair<std::vector<G4double>, std::vector<G4double> > parms;
+
       while (try_again && itry_global < itry_global_max) {
 	itry_global++;
 
@@ -171,9 +175,11 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    G4double E0 = getE0(A);
 	    G4double parlev = getPARLEVDEN(A, Z);
 	    G4double u1 = parlev * A;
-	    std::pair<std::vector<G4double>, std::vector<G4double> > parms = paraMaker(Z);
-	    std::vector<G4double> AK = parms.first;
-	    std::vector<G4double> CPA = parms.second;
+
+	    paraMaker(Z, parms);
+	    const std::vector<G4double>& AK = parms.first;
+	    const std::vector<G4double>& CPA = parms.second;
+
 	    //	    G4double DM0 = bindingEnergy(A, Z);   
             G4double DM0 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
 	    G4int i(0);

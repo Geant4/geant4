@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Diproton.cc,v 1.2 2010-04-07 17:28:35 mkelsey Exp $
+// $Id: G4Diproton.cc,v 1.3 2010-04-13 05:30:10 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -31,13 +31,14 @@
 //      History: first implementation, inspired by G4Diproton
 //      17 Nov 2009:  Michael Kelsey
 //	06 Apr 2010:  Do G4Ions initialization in ctor.
+//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 // ----------------------------------------------------------------
 
 #include "G4Diproton.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4Ions.hh"
+#include "G4VShortLivedParticle.hh"
 
 // ######################################################################
 // ###                          DIPROTON                              ###
@@ -50,14 +51,13 @@ G4Diproton* G4Diproton::theInstance = 0;
 //          2*Isospin       2*Isospin3       G-parity
 //               type    lepton number  baryon number   PDG encoding
 //             stable         lifetime    decay table
-//             shortlived      subType    anti_encoding   excitation
 G4Diproton::G4Diproton()
-  : G4Ions("diproton", 2.*proton_mass_c2, 0.0*MeV, +2.*eplus, 
+  : G4VShortLivedParticle("diproton",
+			  2.*proton_mass_c2, 0.0*MeV, +2.*eplus, 
 	            2,       +1,       0,          
 		    2,       +2,       0,             
 	    "nucleus",        0,      +2, 0, /* ? 100020020 */
-		 true,       0.,    NULL,
-	         true, "generic",       0, 0.0) {}
+		 true,       0.,    NULL) {}
 
 
 G4Diproton* G4Diproton::Definition() {

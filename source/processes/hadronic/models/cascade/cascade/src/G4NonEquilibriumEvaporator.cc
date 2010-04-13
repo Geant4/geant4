@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.28 2010-04-13 05:30:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow()
-// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
 
 #define RUN
 
@@ -110,6 +111,9 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4LorentzVector ppout;
     G4bool try_again = NEX > 0 ? true : false;
   
+    // Buffer for parameter sets
+    std::pair<G4double, G4double> parms;
+
     while (try_again) {
 
       if (A >= a_cut && Z >= z_cut && EEXS > eexs_cut) { // ok
@@ -131,10 +135,10 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	if (QEX < std::sqrt(2.0 * EG)) { // ok
 
-	  std::pair<G4double, G4double> parms = paraMakerTruncated(Z);
+	  paraMakerTruncated(Z, parms);
+	  const G4double& AK1 = parms.first;
+	  const G4double& CPA1 = parms.second;
 
-	  G4double AK1 = parms.first;
-	  G4double CPA1 = parms.second;
 	  G4double VP = coul_coeff * Z * AK1 / (G4cbrt(A - 1.0) + 1.0) /
 	    (1.0 + EEXS / E0);
 	  //	  G4double DM1 = bindingEnergy(A, Z);

@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclSpecialFunctions.hh,v 1.15 2010-03-19 05:03:23 mkelsey Exp $
+// $Id: G4InuclSpecialFunctions.hh,v 1.16 2010-04-13 05:30:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100319  M. Kelsey -- Add optional mass argument to generateWithFixedTheta;
 //		define new generateWithRandomAngles, encapsulating code; define
 //		cbrt() cube-root function (in math.h, but not in <math>!)
+// 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
@@ -56,9 +57,9 @@ namespace G4InuclSpecialFunctions {
 		       G4double Z, 
 		       G4int ntype);
   
-  std::pair<std::vector<G4double>, std::vector<G4double> > paraMaker(G4double Z);
+  void paraMaker(G4double Z, std::pair<std::vector<G4double>, std::vector<G4double> >& parms);
 
-  std::pair<G4double, G4double> paraMakerTruncated(G4double Z); 
+  void paraMakerTruncated(G4double Z, std::pair<G4double, G4double>& parms); 
 
   G4double getAL(G4double A);
  
