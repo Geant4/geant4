@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-03-19 10:55:16 pandola Exp $
+$Id: History,v 1.6 2010-04-13 09:11:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19-03-09  L.Pandola (test53-V09-03-00)
+13-04-10  V.Ivanchenko (test53-V09-03-01)
+- Removed old obsolete low-energy builders
+
+19-03-10  L.Pandola (test53-V09-03-00)
 - Added local physics list to test Penelope08 models (only gamma rays 
   at the moment)
      
