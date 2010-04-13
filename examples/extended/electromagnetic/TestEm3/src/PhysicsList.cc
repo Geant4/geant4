@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.31 2010-01-24 17:25:07 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.32 2010-04-13 08:10:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,6 @@
 #include "PhysListEmStandardWVI.hh"
 
 #include "G4UnitsTable.hh"
-#include "G4UrbanMscModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
