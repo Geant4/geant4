@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.52 2010-04-06 09:23:03 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.53 2010-04-13 10:58:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,6 +93,7 @@ G4EmCalculator::G4EmCalculator()
   currentCouple      = 0;
   currentMaterial    = 0;
   currentParticle    = 0;
+  lambdaParticle     = 0;
   baseParticle       = 0;
   currentLambda      = 0;
   currentModel       = 0;
@@ -101,6 +102,8 @@ G4EmCalculator::G4EmCalculator()
   massRatio          = 1.0;
   currentParticleName= "";
   currentMaterialName= "";
+  currentName        = "";
+  lambdaName         = "";
   theGenericIon      = G4GenericIon::GenericIon();
   ionEffCharge       = new G4ionEffectiveCharge();
   isIon              = false;
@@ -309,6 +312,7 @@ G4double G4EmCalculator::GetCrossSectionPerVolume(G4double kinEnergy,
   if(couple && UpdateParticle(p, kinEnergy)) {
     G4int idx = couple->GetIndex();
     FindLambdaTable(p, processName);
+
     if(currentLambda) {
       G4double e = kinEnergy*massRatio;
       res = (((*currentLambda)[idx])->Value(e))*chargeSquare;
@@ -349,7 +353,7 @@ G4double G4EmCalculator::GetMeanFreePath(G4double kinEnergy,
 {
   G4double res = DBL_MAX;
   G4double x = GetCrossSectionPerVolume(kinEnergy,p, processName, mat,region);
-  if(x > 0.0) res = 1.0/x;
+  if(x > 0.0) { res = 1.0/x; }
   if(verbose>1) {
     G4cout << "G4EmCalculator::GetMeanFreePath: E(MeV)= " << kinEnergy/MeV
 	   << " MFP(mm)= " << res/mm
@@ -913,9 +917,10 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
                                      const G4String& processName)
 {
   // Search for the process
-  if (p != currentParticle || processName != currentName) {
-    currentName     = processName;
-    currentLambda   = 0;
+  if (!currentLambda || p != lambdaParticle || processName != lambdaName) {
+    lambdaName     = processName;
+    currentLambda  = 0;
+    lambdaParticle = p;
 
     G4String partname =  p->GetParticleName();
     const G4ParticleDefinition* part = p;
@@ -927,7 +932,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
     lManager->GetEnergyLossProcessVector();
     G4int n = vel.size();
     for(G4int i=0; i<n; ++i) {
-      if((vel[i])->GetProcessName() == currentName && 
+      if((vel[i])->GetProcessName() == lambdaName && 
 	 (vel[i])->Particle() == part) 
 	{
 	  currentLambda = (vel[i])->LambdaTable();
@@ -945,7 +950,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
       const std::vector<G4VEmProcess*> vem = lManager->GetEmProcessVector();
       G4int n = vem.size();
       for(G4int i=0; i<n; ++i) {
-        if((vem[i])->GetProcessName() == currentName && 
+        if((vem[i])->GetProcessName() == lambdaName && 
 	   (vem[i])->Particle() == part) 
 	{
           currentLambda = (vem[i])->LambdaTable();
@@ -965,7 +970,7 @@ void G4EmCalculator::FindLambdaTable(const G4ParticleDefinition* p,
 	lManager->GetMultipleScatteringVector();
       G4int n = vmsc.size();
       for(G4int i=0; i<n; ++i) {
-        if((vmsc[i])->GetProcessName() == currentName && 
+        if((vmsc[i])->GetProcessName() == lambdaName && 
 	   (vmsc[i])->Particle() == part) 
 	{
           currentLambda = (vmsc[i])->LambdaTable();

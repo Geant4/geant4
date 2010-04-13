@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.19 2009-11-11 23:59:48 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.20 2010-04-13 10:58:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -248,6 +248,7 @@ private:
   const G4MaterialCutsCouple*  currentCouple;
   const G4Material*            currentMaterial;
   const G4ParticleDefinition*  currentParticle;
+  const G4ParticleDefinition*  lambdaParticle;
   const G4ParticleDefinition*  baseParticle;
   const G4PhysicsTable*        currentLambda;
         G4VEmModel*            currentModel;
@@ -259,6 +260,7 @@ private:
   G4DynamicParticle            dynParticle;
 
   G4String                     currentName;
+  G4String                     lambdaName;
   G4double                     currentCut;
   G4double                     chargeSquare;
   G4double                     massRatio;
