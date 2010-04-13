@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EcalSD.cc,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: EcalSD.cc,v 1.2 2010-04-13 10:07:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -68,8 +68,9 @@ void EcalSD::Initialize(G4HCofThisEvent*)
 G4bool EcalSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = emSaturation.VisibleEnergyDeposition(aStep);
+  const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
+  theHisto->AddStep(part);
   if(edep > 0.0) {
-    const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
     G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
     G4TouchableHandle theTouchable = preStepPoint->GetTouchableHandle();
     G4int copyNo = theTouchable->GetCopyNumber();

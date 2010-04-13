@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.12 2009-06-04 13:46:33 gunter Exp $
+// $Id: HistoManager.cc,v 1.13 2010-04-13 10:07:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "G4Proton.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Gamma.hh"
 #include "Histo.hh"
 #include "G4Track.hh"
 #include "globals.hh"
@@ -117,6 +118,11 @@ void HistoManager::BeginOfRun()
   n_evt   = 0;
   n_step  = 0;
   n_lowe  = 0;
+
+  m_gamma = 0.;
+  m_e = 0.;
+  m_h = 0.;
+  m_n = 0.;
  
   for(G4int i=0; i<6; i++) {
     ecal[i] = 0;
@@ -154,7 +160,7 @@ void HistoManager::EndOfRun()
   // Average values
   G4cout<<"========================================================"<<G4endl;
   G4double x = (G4double)n_evt;
-  if(n_evt > 0) x = 1.0/x;
+  if(n_evt > 0) { x = 1.0/x; }
 
   G4double xe = x*n_lowe;
   G4double xs = x*n_step;
@@ -167,6 +173,10 @@ void HistoManager::EndOfRun()
   G4cout                         << "Number of events                        " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average number of MIPS (Edep < 0.8 GeV) " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps                 " << xs << G4endl;
+  G4cout <<                         "Average number of neutron steps         " << x*m_n << G4endl; 
+  G4cout <<                         "Average number of hadron steps          " << x*m_h << G4endl; 
+  G4cout <<                         "Average number of gamma steps           " << x*m_gamma << G4endl; 
+  G4cout <<                         "Average number of e+- steps             " << x*m_e << G4endl; 
   G4cout<<"==============  ECAL  ===================================="<<G4endl;
   for(G4int j=0; j<6; j++) {
     G4double xx = stat[j];
@@ -378,6 +388,16 @@ void HistoManager::AddHcalAbsorberHit(const G4ParticleDefinition*, G4double edep
   n_step++;
   Eabshcal += edep;
   //  G4cout << "### edepAbs= " << edep << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::AddStep(const G4ParticleDefinition* part)
+{
+  if(part == G4Neutron::Neutron()) { m_n += 1.0; }
+  else if(part == G4Gamma::Gamma()) { m_gamma += 1.0; }
+  else if(part == G4Electron::Electron()) { m_e += 1.0; }
+  else { m_h += 1.0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

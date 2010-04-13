@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2008-12-22 17:14:34 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.5 2010-04-13 10:07:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -90,6 +90,8 @@ public:
   void AddHcalHit(const G4ParticleDefinition*, G4int, G4double);
   void AddHcalAbsorberHit(const G4ParticleDefinition*, G4double);
 
+  void AddStep(const G4ParticleDefinition*);
+
   void ScoreNewTrack(const G4Track*);
 
   void SetWorldLength(G4double val); 
@@ -151,6 +153,11 @@ private:
   G4double maxEnergy;
   G4double maxTotEnergy;
   G4double maxEnergyAbs;
+
+  G4double m_gamma;
+  G4double m_e;
+  G4double m_h;
+  G4double m_n;
   
   G4int n_evt;
   G4int n_elec;

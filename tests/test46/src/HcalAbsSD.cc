@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HcalAbsSD.cc,v 1.1 2008-11-20 08:55:42 antoni Exp $
+// $Id: HcalAbsSD.cc,v 1.2 2010-04-13 10:07:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -67,8 +67,9 @@ void HcalAbsSD::Initialize(G4HCofThisEvent*)
 G4bool HcalAbsSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
+  const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
+  theHisto->AddStep(part);
   if(edep > 0.0) {
-    const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
     theHisto->AddHcalAbsorberHit(part, edep);
   }
   return true;
