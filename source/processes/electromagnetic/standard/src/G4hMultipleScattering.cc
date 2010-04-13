@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.16 2009-11-01 13:05:01 vnivanch Exp $
+// $Id: G4hMultipleScattering.cc,v 1.17 2010-04-13 17:48:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -46,7 +46,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4hMultipleScattering.hh"
-#include "G4UrbanMscModel.hh"
 #include "G4UrbanMscModel90.hh"
 #include "G4MscStepLimitType.hh"
 
