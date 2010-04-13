@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.3 2008-11-21 12:39:24 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.4 2010-04-13 08:12:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +72,7 @@ private:
   void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
 		    const G4String& procname);
 
-  G4EmConfigurator em_config;
+  G4EmConfigurator* em_config;
 
   G4double cutForGamma;
   G4double cutForElectron;

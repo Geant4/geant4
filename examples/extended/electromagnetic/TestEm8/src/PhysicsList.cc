@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.16 2008-12-05 17:46:12 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.17 2010-04-13 08:12:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,7 +60,8 @@
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
+  em_config = G4LossTableManager::Instance()->EmConfigurator();
+  G4LossTableManager::Instance()->SetVerbose(1);
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
@@ -87,7 +88,7 @@ PhysicsList::~PhysicsList()
   delete pMessenger;
   delete generalPhysicsList;
   delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
+  for(size_t i=0; i<hadronPhys.size(); ++i) { delete hadronPhys[i]; }
   delete stepMaxProcess;
 }
 
@@ -104,9 +105,9 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-  em_config.AddModels();
+  //em_config->AddModels();
   generalPhysicsList->ConstructProcess();
-  for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
+  for(size_t i=0; i<hadronPhys.size(); ++i) { hadronPhys[i]->ConstructProcess(); }
   AddStepMax();
 }
 
@@ -195,7 +196,7 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
 
-  if ( verboseLevel > 0 ) DumpCutValuesTable();
+  if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -255,11 +256,11 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
   G4String partname = part->GetParticleName();
   if(modname == "pai") {
     G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
-    em_config.SetExtraEmModel(partname,procname,pai,"VertexDetector",
+    em_config->SetExtraEmModel(partname,procname,pai,"VertexDetector",
 			      0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
     G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
-    em_config.SetExtraEmModel(partname,procname,pai,"VertexDetector",
+    em_config->SetExtraEmModel(partname,procname,pai,"VertexDetector",
 			      0.0,100.*TeV,pai);
   }
 }
