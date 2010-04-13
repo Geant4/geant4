@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.9 2008-11-13 09:33:20 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.10 2010-04-13 07:19:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -756,6 +756,15 @@ const G4ReflectedVolumesMap&
 G4ReflectionFactory::GetReflectedVolumesMap() const
 {
   return fReflectedLVMap;
+}
+
+//_____________________________________________________________________________
+
+void
+G4ReflectionFactory::Reset()
+{
+  fConstituentLVMap.~map();
+  fReflectedLVMap.~map();
 }
 
 //_____________________________________________________________________________
