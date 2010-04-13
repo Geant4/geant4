@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2009-09-09 16:47:06 vnivanch Exp $
+$Id: History,v 1.5 2010-04-13 10:08:44 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-04-10 V.Ivant (test46-V09-03-00)
+- added count of average number of steps per particle type
 
 09-09-09 V.Ivant (test46-V09-02-01)
 - added script for test of EM initialisation time
