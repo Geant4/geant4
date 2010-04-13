@@ -1,11 +1,11 @@
-$Id: History,v 1.5 2010-04-13 10:08:44 vnivanch Exp $
+$Id: History,v 1.6 2010-04-13 10:09:02 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    hadr01 History file
+                    test46 History file
                     --------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
