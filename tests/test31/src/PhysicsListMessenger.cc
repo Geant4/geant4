@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.5 2006-06-29 21:58:21 gunter Exp $
+// $Id: PhysicsListMessenger.cc,v 1.6 2010-04-13 08:59:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,6 +118,7 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
       pPhysicsList->SetCutForGamma(cut);
       pPhysicsList->SetCutForElectron(cut);
       pPhysicsList->SetCutForPositron(cut);
+      pPhysicsList->SetCutForProton(cut);
     } 
 
   if( command == verbCmd )

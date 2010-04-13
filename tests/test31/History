@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2009-05-27 18:35:07 vnivanch Exp $
+$Id: History,v 1.27 2010-04-13 08:59:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-04-10  V.Ivant (test31-V09-03-00)
+- PhysicsList - removed obsolete low-energy builders, 
+                added cut per recoil
 
 27-05-08  V.Ivant (test31-V09-02-01)
 - Updated test31.in - fixing valgrind complains

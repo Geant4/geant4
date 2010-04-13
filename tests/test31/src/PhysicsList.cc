@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.26 2008-08-05 10:38:35 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.27 2010-04-13 08:59:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,12 +45,14 @@
 #include "PhysicsListMessenger.hh"
 
 #include "ParticlesBuilder.hh"
+
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+
 #include "G4StepLimiterBuilder.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -58,11 +60,12 @@
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-//#include "PhysListEmModelPai.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmProcessOptions.hh"
+
+#include "G4Proton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -83,6 +86,7 @@ PhysicsList::PhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+  cutForProton    = defaultCutValue;
 
   pMessenger = new PhysicsListMessenger(this);
 
@@ -154,21 +158,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "livermore" && !emBuilderIsRegisted) {
-    RegisterPhysics(new PhysListEmLivermore());
+  } else if (name == "emlivermore" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmLivermorePhysics());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "penelope" && !emBuilderIsRegisted) {
-    RegisterPhysics(new PhysListEmPenelope());
+    RegisterPhysics(new G4EmPenelopePhysics());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-    /*
-  } else if (name == "pai" && !emBuilderIsRegisted) {
-    RegisterPhysics(new PhysListEmModelPai());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-    */
+
   } else if (name == "step_limit" && !stepLimiterIsRegisted && emBuilderIsRegisted) {
     RegisterPhysics(new G4StepLimiterBuilder());
     stepLimiterIsRegisted = true;
@@ -221,8 +220,9 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
+  SetCutValue(cutForProton, "proton");
 
-  if (verbose>0) DumpCutValuesTable();
+  if (verbose>0) { DumpCutValuesTable(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -254,6 +254,14 @@ void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetCutForProton(G4double cut)
+{
+  cutForProton = cut;
+  SetParticleCuts(cutForProton, G4Proton::Proton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

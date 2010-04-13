@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.6 2006-11-16 11:33:40 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.7 2010-04-13 08:59:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Modified:
@@ -54,6 +54,7 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
+  void SetCutForProton(G4double);
 
   void AddPhysicsList(const G4String&);
   void SetVerbose(G4int val);
@@ -62,6 +63,7 @@ private:
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
+  G4double cutForProton;
   G4int    verbose;
   G4bool   emBuilderIsRegisted;
   G4bool   decayIsRegisted;
