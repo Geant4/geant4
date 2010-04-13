@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2010-04-06 17:12:56 vnivanch Exp $
+// $Id: RunAction.cc,v 1.14 2010-04-13 11:00:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   //instanciate EmCalculator
   G4EmCalculator emCal;
-  //  emCal.SetVerbose(2);
+  //emCal.SetVerbose(2);
      
   // get particle 
   G4ParticleDefinition* particle = primary->GetParticleGun()
