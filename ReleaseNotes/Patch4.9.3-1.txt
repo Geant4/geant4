@@ -90,6 +90,8 @@ List of fixes included in this public patch since the public release 9.3:
       o G4CoulombScattering: removed inlined method SetBuildTableFlag()
         hiding implementation in the base class.
       o G4PolarizedComptonScattering: added message for obsolete process.
+      o Use data for Oxigen (G4_O) from ICRU'49 instead NIST for alpha stopping
+        power. Fixes problem of data corruption when such material is used.
     + Utils:
       o G4EmCorrections: added protection against large Barkas and Bloch
         corrections in the case of large negatively charged particle
