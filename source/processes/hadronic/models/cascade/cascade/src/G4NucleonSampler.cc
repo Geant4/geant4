@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.3 2010-04-09 00:30:42 mkelsey Exp $
+// $Id: G4NucleonSampler.cc,v 1.4 2010-04-14 18:17:45 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
+// 20100414  M. Kelsey -- Make cross-section buffer a base class data member
+//		use base-class functions for interpolations, cross-sections.
 
 #include "G4NucleonSampler.hh"
 #include "Randomize.hh"
@@ -82,56 +84,38 @@ void G4NucleonSampler::printCrossSections() const
 
 G4int G4NucleonSampler::GetMultiplicityT1(G4double KE) const
 {
-  G4double multint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = PPsummed[k] + fraction*(PPsummed[k+1] - PPsummed[k]); 
-  G4double total = PPtot[k] + fraction*(PPtot[k+1] - PPtot[k]);
+  G4double summed = interpolateCrossSection(epair, PPsummed); 
+  G4double total = interpolateCrossSection(epair, PPtot);
 
   if (G4UniformRand() > summed/total) {
     return 9;
   } else {
-    for(G4int m = 0; m < 8; m++) {
-      multint = t1_dSigma_dMult[m][k]
-           + fraction*(t1_dSigma_dMult[m][k+1] - t1_dSigma_dMult[m][k]);
-        sigma.push_back(multint);
-    }
-    return sampleFlat(sigma) + 2;
+    fillSigmaBuffer(epair, t1_dSigma_dMult);
+    return sampleFlat() + 2;
   }
 }
 
 
 G4int G4NucleonSampler::GetMultiplicityT0(G4double KE) const
 {
-  G4double multint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = NPsummed[k] + fraction*(NPsummed[k+1] - NPsummed[k]); 
-  G4double total = NPtot[k] + fraction*(NPtot[k+1] - NPtot[k]);
+  G4double summed = interpolateCrossSection(epair, NPsummed); 
+  G4double total = interpolateCrossSection(epair, NPtot);
 
   if (G4UniformRand() > summed/total) {
     return 9;
   } else {
-    for(G4int m = 0; m < 8; m++) {
-      multint = t0_dSigma_dMult[m][k]
-           + fraction*(t0_dSigma_dMult[m][k+1] - t0_dSigma_dMult[m][k]);
-        sigma.push_back(multint);
-    }
-    return sampleFlat(sigma) + 2;
+    fillSigmaBuffer(epair, t0_dSigma_dMult);
+    return sampleFlat() + 2;
   }
 }
 
@@ -140,27 +124,18 @@ void
 G4NucleonSampler::GetFSPartTypesForT1(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   G4int start = PPindex[mult-2][0];
   G4int stop = PPindex[mult-2][1];
 
-  for(i = start; i < stop; i++) {
-      sigint = PPCrossSections[i][k]
-          + fraction*(PPCrossSections[i][k+1] - PPCrossSections[i][k]);
-      sigma.push_back(sigint);
-  }
+  fillSigmaBuffer(epair, PPCrossSections, start, stop);
 
-  G4int channel = sampleFlat(sigma);
+  G4int channel = sampleFlat();
 
   kinds.clear();	// Initialize buffer for new output
 
+  G4int i;
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T1_2bfs[tzindex][channel][i]);
   } else if (mult == 3) {
@@ -187,27 +162,18 @@ void
 G4NucleonSampler::GetFSPartTypesForT0(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE) const
 {
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   G4int start = NPindex[mult-2][0];
   G4int stop = NPindex[mult-2][1];
 
-  for(i = start; i < stop; i++) {
-      sigint = NPCrossSections[i][k]
-          + fraction*(NPCrossSections[i][k+1] - NPCrossSections[i][k]);
-      sigma.push_back(sigint);
-  }
+  fillSigmaBuffer(epair, NPCrossSections, start, stop);
 
-  G4int channel = sampleFlat(sigma);
+  G4int channel = sampleFlat();
 
   kinds.clear();	// Initialize buffer for new output
 
+  G4int i;
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T0_2bfs[channel][i]);
   } else if (mult == 3) {
@@ -308,9 +274,7 @@ void G4NucleonSampler::initCrossSections()
   // T1_nbfs = final state types for p p and n n
 
   const G4int T1_2bfsData[2][1][2] =
-  {{{pro,pro}},
-
-   {{neu,neu}}};
+  {{{pro,pro}}, {{neu,neu}}};
 
   const G4int T1_3bfsData[2][6][3] =
   {{{pro,pro,pi0}, {pro,neu,pip}, {pro,lam,kp},
@@ -467,7 +431,7 @@ void G4NucleonSampler::initCrossSections()
   // second index: kinetic energy
   //
 
-  const G4float PPCrossSectionsData[93][30] = {
+  const G4double PPCrossSectionsData[93][30] = {
   //
   // multiplicity 2 (1 channel)
   //
@@ -1075,7 +1039,7 @@ void G4NucleonSampler::initCrossSections()
   //
   // second index: kinetic energy
   //
-  const G4float NPCrossSectionsData[108][30] = {
+  const G4double NPCrossSectionsData[108][30] = {
   //
   // multiplicity 2 (1 channel)
   //

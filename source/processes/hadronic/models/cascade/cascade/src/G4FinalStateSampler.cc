@@ -22,53 +22,93 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: G4FinalStateSampler.cc,v 1.3 2010-04-07 18:23:15 mkelsey Exp $
+// $Id: G4FinalStateSampler.cc,v 1.4 2010-04-14 18:17:45 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
+// 20100413  M. Kelsey -- Move subclass functionality here
 
 #include "G4FinalStateSampler.hh"
 #include "Randomize.hh"
 
 
-std::pair<G4int, G4double>
+G4FinalStateSampler::Interpolation
 G4FinalStateSampler::interpolateEnergy(G4double e) const
 {
-  G4int index = 29;
-  G4double fraction = 0.0;
+  static Interpolation result;		// Save memory churn
 
-  for (G4int i = 1; i < 30; i++) {
+  result.first = energyBins-1;
+  result.second = 0.;
+  for (G4int i = 1; i < energyBins; i++) {
     if (e < energyScale[i]) {
-      index = i-1;
-      fraction = (e - energyScale[index]) / (energyScale[i] - energyScale[index]);
+      result.first = i-1;
+      result.second = (e - energyScale[i-1])
+	              / (energyScale[i] - energyScale[i-1]);
       break;
     }
   }
-  return std::pair<G4int, G4double>(index, fraction);
+
+  return result;
 }
 
 
+G4double 
+G4FinalStateSampler::interpolateCrossSection(const Interpolation& epair,
+					     const G4double xsec[energyBins]) const {
+  const G4int& k = epair.first;
+  const G4double& frac = epair.second;
+  return xsec[k] + frac*(xsec[k+1]-xsec[k]);
+}
+
+
+void 
+G4FinalStateSampler::fillSigmaBuffer(const Interpolation& epair, 
+				     const G4double xsec_dMult[][energyBins],
+				     G4int startBin, G4int stopBin) const {
+  sigmaBuf.clear();
+  sigmaBuf.reserve(stopBin-startBin);
+
+  // NOTE:  push_back() must be used to ensure that size() gets set!
+  for(G4int m = startBin; m < stopBin; m++)
+    sigmaBuf.push_back(interpolateCrossSection(epair, xsec_dMult[m]));
+}
+
+G4int G4FinalStateSampler::sampleFlat() const {
+  G4int nbins = sigmaBuf.size();
+
+  G4int i;
+  G4double fsum = 0.;
+  for (i = 0; i < nbins; i++) fsum += sigmaBuf[i];
+  fsum *= G4UniformRand();
+
+  G4double partialSum = 0.0;
+  for (i = 0; i < nbins; i++) {
+    partialSum += sigmaBuf[i];
+    if (fsum < partialSum) return i;	// Breaks out of loop automatically
+  }
+
+  return 0;	// Is this right?  Shouldn't it return maximum, not minimum?
+}
+
+
+// This version will disappear
 G4int
 G4FinalStateSampler::sampleFlat(const std::vector<G4double>& sigma) const
 {
+  G4int nbins = sigma.size();
+
   G4int i;
-  G4double sum(0.);
-  for (i = 0; i < G4int(sigma.size()); i++) sum += sigma[i];
+  G4double fsum = 0.;
+  for (i = 0; i < nbins; i++) fsum += sigma[i];
+  fsum *= G4UniformRand();
 
-  G4double fsum = sum*G4UniformRand();
   G4double partialSum = 0.0;
-  G4int channel = 0;
-
-  for (i = 0; i < G4int(sigma.size()); i++) {
+  for (i = 0; i < nbins; i++) {
     partialSum += sigma[i];
-    if (fsum < partialSum) {
-      channel = i;
-      break;
-    }
+    if (fsum < partialSum) return i;	// Breaks out of loop automatically
   }
 
-  return channel;
+  return 0;	// Is this right?  Shouldn't it return maximum, not minimum?
 }
 
 

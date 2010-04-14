@@ -22,14 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: G4FinalStateSampler.hh,v 1.4 2010-04-09 00:30:42 mkelsey Exp $
+// $Id: G4FinalStateSampler.hh,v 1.5 2010-04-14 18:17:45 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
 // Date:   26 March 2009
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>, improve base interface
+// 20100413  M. Kelsey -- Move subclass functionality here
 
 #ifndef G4FinalStateSampler_h
 #define G4FinalStateSampler_h 1
@@ -55,11 +55,25 @@ public:  // with description
   enum {pi0=7, pip=3, pim=5, kp=11, km=13, k0=15, k0b=17, pro=1, neu=2, 
 	lam=21, sp=23, s0=25, sm=27, xi0=29, xim=31, om=33, ap=35, an=37};
 
+  enum { energyBins=30 };
+
 protected:  // with description
-  std::pair<G4int, G4double> interpolateEnergy(G4double ke) const;
+  typedef std::pair<G4int, G4double> Interpolation;
+  Interpolation interpolateEnergy(G4double ke) const;
   
+  G4double interpolateCrossSection(const Interpolation& epair,
+				   const G4double xsec[energyBins]) const;
+
+  // Optional start/stop arguments default to inclusive arrays
+  void fillSigmaBuffer(const Interpolation& epair, 
+		       const G4double xsec_dMult[][energyBins],
+		       G4int startBin=0, G4int stopBin=8) const;
+
+  G4int sampleFlat() const;
+
+  // This version will disappear
   G4int sampleFlat(const std::vector<G4double>& sigma) const;
-  
+
   void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
 		  G4int &vecLen,
 		  G4ReactionProduct &currentParticle,
@@ -67,7 +81,8 @@ protected:  // with description
 		  G4double Q, G4double B, G4double S);
   
 private:
-  static const G4double energyScale[30];
+  mutable std::vector<G4double> sigmaBuf;
+  static const G4double energyScale[energyBins];
 };
 
 #endif

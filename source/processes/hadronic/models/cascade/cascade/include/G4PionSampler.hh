@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.hh,v 1.3 2010-04-09 00:30:42 mkelsey Exp $
+// $Id: G4PionSampler.hh,v 1.4 2010-04-14 18:17:45 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
 // Date:   26 March 2009
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
+// 20100414  M. Kelsey -- Make cross-section buffer a base class data member,
+//		use base-class functions for interpolations, cross-sections.
 
 #ifndef G4PionSampler_h
 #define G4PionSampler_h 1
@@ -129,9 +131,9 @@ protected:
    G4double t33_dSigma_dMult[8][30];
    G4double t11_dSigma_dMult[8][30];
 
-   G4float pipPCrossSections[74][30];
-   G4float pimPCrossSections[101][30];
-   G4float pizPCrossSections[99][30];
+   G4double pipPCrossSections[74][30];
+   G4double pimPCrossSections[101][30];
+   G4double pizPCrossSections[99][30];
 
  private:
   void initChannels();

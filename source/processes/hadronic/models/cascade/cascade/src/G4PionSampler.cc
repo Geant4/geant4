@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.6 2010-04-09 00:30:42 mkelsey Exp $
+// $Id: G4PionSampler.cc,v 1.7 2010-04-14 18:17:45 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
+// 20100414  M. Kelsey -- Make cross-section buffer a base class data member,
+//		use base-class functions for interpolations, cross-sections.
  
 #include "G4PionSampler.hh"
 #include "Randomize.hh"
@@ -101,87 +103,60 @@ void G4PionSampler::printCrossSections() const
 
 G4int G4PionSampler::GetMultiplicityT31(G4double KE) const
 {
-  G4double multint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = pimPsummed[k] + fraction*(pimPsummed[k+1] - pimPsummed[k]); 
-  G4double total = pimPtot[k] + fraction*(pimPtot[k+1] - pimPtot[k]);
+  G4double summed = interpolateCrossSection(epair, pimPsummed); 
+  G4double total = interpolateCrossSection(epair, pimPtot);
 
   if (G4UniformRand() > summed/total) {
     //    G4cout << " T31: partial sum = " << summed << " , total = " << total << " : truncating to 9 " << G4endl;
     return 9;
   } else {
-    for(G4int m = 0; m < 8; m++) {
-      multint = t31_dSigma_dMult[m][k]
-           + fraction*(t31_dSigma_dMult[m][k+1] - t31_dSigma_dMult[m][k]);
-        sigma.push_back(multint);
-    }
-    return sampleFlat(sigma) + 2;
+    fillSigmaBuffer(epair, t31_dSigma_dMult);
+    return sampleFlat() + 2;
   }
 }
 
 
 G4int G4PionSampler::GetMultiplicityT33(G4double KE) const
 {
-  G4double multint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = pipPsummed[k] + fraction*(pipPsummed[k+1] - pipPsummed[k]); 
-  G4double total = pipPtot[k] + fraction*(pipPtot[k+1] - pipPtot[k]);
+  G4double summed = interpolateCrossSection(epair, pipPsummed); 
+  G4double total = interpolateCrossSection(epair, pipPtot);
 
   if (G4UniformRand() > summed/total) {
     //    G4cout << " T33: partial sum = " << summed << " , total = " << total << " : truncating to 9 " << G4endl;
     return 9;
   } else {
-    for(G4int m = 0; m < 8; m++) {
-      multint = t33_dSigma_dMult[m][k]
-           + fraction*(t33_dSigma_dMult[m][k+1] - t33_dSigma_dMult[m][k]);
-        sigma.push_back(multint);
-    }
-    return sampleFlat(sigma) + 2;
+    fillSigmaBuffer(epair, t33_dSigma_dMult);
+    return sampleFlat() + 2;
   }
 }
 
 
 G4int G4PionSampler::GetMultiplicityT11(G4double KE) const
 {
-  G4double multint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 8 if summed < total
 
-  G4double summed = pizPsummed[k] + fraction*(pizPsummed[k+1] - pizPsummed[k]); 
-  G4double total = pizPtot[k] + fraction*(pizPtot[k+1] - pizPtot[k]);
+  G4double summed = interpolateCrossSection(epair, pizPsummed); 
+  G4double total = interpolateCrossSection(epair, pizPtot);
 
   if (G4UniformRand() > summed/total) {
     //    G4cout << " T11: partial sum = " << summed << " , total = " << total << " : truncating to 8 " << G4endl;
     return 9;
   } else {
-    for(G4int m = 0; m < 8; m++) {
-      multint = t11_dSigma_dMult[m][k]
-           + fraction*(t11_dSigma_dMult[m][k+1] - t11_dSigma_dMult[m][k]);
-        sigma.push_back(multint);
-    }
-    return sampleFlat(sigma) + 2;
+    fillSigmaBuffer(epair, t11_dSigma_dMult);
+    return sampleFlat() + 2;
   }
 }
 
@@ -190,27 +165,18 @@ void
 G4PionSampler::GetFSPartTypesForT33(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   G4int start = pipPindex[mult-2][0];
   G4int stop = pipPindex[mult-2][1];
 
-  for(i = start; i < stop; i++) {
-      sigint = pipPCrossSections[i][k]
-          + fraction*(pipPCrossSections[i][k+1] - pipPCrossSections[i][k]);
-      sigma.push_back(sigint);
-  }
+  fillSigmaBuffer(epair, pipPCrossSections, start, stop);
 
-  G4int channel = sampleFlat(sigma);
+  G4int channel = sampleFlat();
 
   kinds.clear();	// Initialize buffer for new output
 
+  G4int i;
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T33_2bfs[tzindex][channel][i]);
   } else if (mult == 3) {
@@ -237,27 +203,18 @@ void
 G4PionSampler::GetFSPartTypesForT31(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   G4int start = pimPindex[mult-2][0];
   G4int stop = pimPindex[mult-2][1];
 
-  for(i = start; i < stop; i++) {
-      sigint = pimPCrossSections[i][k]
-          + fraction*(pimPCrossSections[i][k+1] - pimPCrossSections[i][k]);
-      sigma.push_back(sigint);
-  }
+  fillSigmaBuffer(epair, pimPCrossSections, start, stop);
 
-  G4int channel = sampleFlat(sigma);
+  G4int channel = sampleFlat();
 
   kinds.clear();	// Initialize buffer for new output
 
+  G4int i;
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T31_2bfs[tzindex][channel][i]);
   } else if (mult == 3) {
@@ -284,27 +241,18 @@ void
 G4PionSampler::GetFSPartTypesForT11(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-
-  std::pair<G4int, G4double> epair = interpolateEnergy(KE);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+  Interpolation epair = interpolateEnergy(KE);
 
   G4int start = pizPindex[mult-2][0];
   G4int stop = pizPindex[mult-2][1];
 
-  for(i = start; i < stop; i++) {
-      sigint = pizPCrossSections[i][k]
-          + fraction*(pizPCrossSections[i][k+1] - pizPCrossSections[i][k]);
-      sigma.push_back(sigint);
-  }
+  fillSigmaBuffer(epair, pizPCrossSections, start, stop);
 
-  G4int channel = sampleFlat(sigma);
+  G4int channel = sampleFlat();
 
   kinds.clear();	// Initialize buffer for new output
 
+  G4int i;
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T11_2bfs[tzindex][channel][i]);
   } else if (mult == 3) {
@@ -555,7 +503,7 @@ void G4PionSampler::initCrossSections()
   // second index: kinetic energy
   //
 
-  const G4float pipPCrossSectionsData[74][30] = {
+  const G4double pipPCrossSectionsData[74][30] = {
   //
   // multiplicity 2 (2 channels)
   //
@@ -1130,7 +1078,7 @@ void G4PionSampler::initCrossSections()
   //
   // second index: kinetic energy
   //
-  const G4float pimPCrossSectionsData[101][30] = {
+  const G4double pimPCrossSectionsData[101][30] = {
   //
   // multiplicity 2 (5 channels)
   //
@@ -1842,7 +1790,7 @@ void G4PionSampler::initCrossSections()
 // second index: kinetic energy
 //
 
-  const G4float pizPCrossSectionsData[99][30] = {
+  const G4double pizPCrossSectionsData[99][30] = {
   //
   // multiplicity 2 (5 channels)
   //
