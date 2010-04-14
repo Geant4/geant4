@@ -27,9 +27,12 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 100413 Fix bug in incidence energy by T. Koi  
+//
 #include "G4NeutronHPEnAngCorrelation.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
+#include "G4RotationMatrix.hh"
 
 G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
 {  
@@ -66,9 +69,9 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
   if(frameFlag==2)
   {
     // simplify and double check @
-    G4ThreeVector the3Neutron = theNeutron.GetMomentum();
+    G4ThreeVector the3Neutron = theNeutron.GetMomentum(); //theNeutron has value in LAB
     G4double nEnergy = theNeutron.GetTotalEnergy();
-    G4ThreeVector the3Target = theTarget.GetMomentum();
+    G4ThreeVector the3Target = theTarget.GetMomentum();  //theTarget has value in LAB
     G4double tEnergy = theTarget.GetTotalEnergy();
     G4double totE = nEnergy+tEnergy;
     G4ThreeVector the3CMS = the3Target+the3Neutron;
@@ -79,15 +82,20 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     theCMS.SetTotalEnergy(totE);
     G4ReactionProduct aNeutron;
     aNeutron.Lorentz(theNeutron, theCMS);
-    anEnergy = aNeutron.GetKineticEnergy();
+    //TKDB 100413 
+    //ENDF-6 Formats Manual ENDF-102
+    //CHAPTER 6. FILE 6: PRODUCT ENERGY-ANGLE DISTRIBUTIONS
+    //LCT Reference system for secondary energy and angle (incident energy is always given in the LAB system)
+    //anEnergy = aNeutron.GetKineticEnergy();
+    anEnergy = theNeutron.GetKineticEnergy(); //should be same argumment of "anEnergy"
 
     G4LorentzVector Ptmp (aNeutron.GetMomentum(), aNeutron.GetTotalEnergy());
+
     toZ.rotateZ(-1*Ptmp.phi());
     toZ.rotateY(-1*Ptmp.theta());
-
   }
   theTotalMeanEnergy=0;
-  G4LorentzRotation toLab(toZ.inverse());
+  G4LorentzRotation toLab(toZ.inverse()); //toLab only change axis NOT to LAB system
   for(i=0; i<nProducts; i++)
   {
     it = theProducts[i].Sample(anEnergy);
@@ -109,9 +117,9 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
 	pTmp1 = toLab*pTmp1;
 	it->operator[](ii)->SetMomentum(pTmp1.vect());
 	it->operator[](ii)->SetTotalEnergy(pTmp1.e());
-	if(frameFlag==1) // target rest
+	if(frameFlag==1) // target rest //TK 100413 should be LAB?
 	{
-          it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget);
+          it->operator[](ii)->Lorentz(*(it->operator[](ii)), -1.*theTarget); //TK 100413 Is this really need?
 	}
 	else if(frameFlag==2) // CMS
 	{
