@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.hh,v 1.2 2009-12-21 12:49:01 pandola Exp $
+// $Id: G4PenelopeRayleighModel.hh,v 1.3 2010-04-15 10:02:25 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -73,9 +73,9 @@ public:
                                          G4double cutEnergy = 0.0,
                                          G4double maxEnergy = DBL_MAX);
   
-  //This is a dummy method. Never inkoved by the tracking, it just issues 
-  //a warning if one tries to get Cross Sections per Atom via the 
-  //G4EmCalculator.
+  //*This is a dummy method. Never inkoved by the tracking, it just issues 
+  //*a warning if one tries to get Cross Sections per Atom via the 
+  //*G4EmCalculator.
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
                                               G4double,
                                               G4double,
