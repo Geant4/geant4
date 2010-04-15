@@ -1,4 +1,4 @@
-$Id: History,v 1.433 2010-04-08 17:29:08 sincerti Exp $
+$Id: History,v 1.434 2010-04-15 10:07:47 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.04.2010, L. Pandola, tag emlowen-V09-03-27
+	    Added MinEnergyCut() method to G4PenelopeIonisationModel. Small (minor) 
+	    changes to other G4Penelope models (mainly clean-up)
 
 08.04.2010, S. Incerti, tag emlowen-V09-03-26
             Changed computation of scattering angle in G4DNAChampionElasticModel.cc
