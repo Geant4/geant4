@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.21 2010-02-19 09:29:53 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.22 2010-04-15 19:20:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,9 @@
 // 08.02.2010 O.Kadri: bugfix in compound xsection calculation and small angle computation
 //                     adding a rejection condition to hard collision angular sampling
 //                     ComputeTruePathLengthLimit was taken from G4WentzelVIModel
+// 26.03.2010 O.Kadri: direct xsection calculation not inverse of the inverse
+//                     angular sampling without large angle rejection method
+//                     longitudinal displacement is computed exactly from <z>
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -63,7 +66,6 @@
 //Ref.4:Bielajew et al.,".....", NIMB 173 (2001) 332-343;
 //Ref.5:F. Salvat et al.,"ELSEPA--Dirac partial ...molecules", Comp.Phys.Comm.165 (2005) pp 157-190;
 //Ref.6:G4UrbanMscModel G4_v9.1Ref09; 
-//Ref.7:G4WentzelVIModel G4_v9.3.
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4GoudsmitSaundersonTable.hh"
@@ -133,11 +135,9 @@ G4GoudsmitSaundersonMscModel::ComputeCrossSectionPerAtom(const G4ParticleDefinit
   if(kinEnergy<lowKEnergy) kinEnergy=lowKEnergy;
   if(kinEnergy>highKEnergy)kinEnergy=highKEnergy;
 
-  G4double value1;
-  CalculateIntegrals(p,Z,kinEnergy,cs,value1);
+  G4double cs0;
+  CalculateIntegrals(p,Z,kinEnergy,cs0,cs);
   
-  if(value1 > 0.0) cs = 1./value1;
-
   return cs;
 }  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,7 +151,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
      (tPathLength/tausmall < lambda1)) return ;
 
   ///////////////////////////////////////////
-  // Effective energy given by Eq. 4.7.15 from Ref.4
+  // Effective energy taken from  Ref.7
   G4double  eloss = theManager->GetEnergy(particle,tPathLength,currentCouple);
   if(eloss>0.5*kineticEnergy)eloss=kineticEnergy-eloss;//exchange between target and projectile
   G4double ee       = kineticEnergy - 0.5*eloss;
@@ -162,30 +162,31 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 
   kineticEnergy *= (1 - cst1);
   ///////////////////////////////////////////
-  // additivity rule for mixture and compound xsection calculation
+  // additivity rule for mixture and compound xsection's
   const G4Material* mat = currentCouple->GetMaterial();
-  G4int nelm = mat->GetNumberOfElements();
   const G4ElementVector* theElementVector = mat->GetElementVector();
   const G4double* theAtomNumDensityVector = mat->GetVecNbOfAtomsPerVolume();
+  G4int nelm = mat->GetNumberOfElements();
+  G4double s0,s1;
   lambda0=0.;
   for(G4int i=0;i<nelm;i++)
-    {
-      G4double l0,l1;
-      CalculateIntegrals(particle,(*theElementVector)[i]->GetZ(),kineticEnergy,l0,l1);
-      lambda0 += (theAtomNumDensityVector[i]/l0);
+    { 
+      CalculateIntegrals(particle,(*theElementVector)[i]->GetZ(),kineticEnergy,s0,s1);
+      lambda0 += (theAtomNumDensityVector[i]*s0);
     } 
   if(lambda0>DBL_MIN) lambda0 =1./lambda0;
 
+// Newton-Raphson root's finding method of scrA from: 
+// Sig1(PWA)/Sig0(PWA)=g1=2*scrA*((1+scrA)*log(1+1/scrA)-1)
   G4double g1=0.0;
   if(lambda1>DBL_MIN) g1 = lambda0/lambda1;
 
-// Newton-Raphson root's finding method of scrA from: 
-// Sig1(PWA)/Sig0(PWA)=2*scrA*((1+scrA)*log(1+1/scrA)-1)
-  G4double x1,delta;
+  G4double logx0,x1,delta;
   G4double x0=g1/2.;
   do
     {  
-      x1 = x0-(x0*((1.+x0)*log(1.+1./x0)-1.0)-g1/2.)/( (1.+2.*x0)*log(1.+1./x0)-2.0);
+      logx0=std::log(1.+1./x0);
+      x1 = x0-(x0*((1.+x0)*logx0-1.0)-g1/2.)/( (1.+2.*x0)*logx0-2.0);
       delta = std::abs( x1 - x0 );    
       x0 = x1;
     } while (delta > 1.0e-10);
@@ -194,68 +195,60 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   G4double lambdan=0.;
 
   if(lambda0>0.)lambdan=tPathLength/lambda0;
-  if(lambdan<=1.0e-10)return;
-
+  if(lambdan<=1.0e-12)return;
+  G4double Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+  G4double Qn12 = 0.5*Qn1;
+  
   G4double cosTheta1,sinTheta1,cosTheta2,sinTheta2;
   G4double cosPhi1=1.0,sinPhi1=0.0,cosPhi2=1.0,sinPhi2=0.0;
   G4double us=0.0,vs=0.0,ws=1.0,wss=0.,x_coord=0.0,y_coord=0.0,z_coord=1.0;
-  G4bool noscatt=false,mscatt=false;
 
   G4double epsilon1=G4UniformRand();
-  G4double expn = exp(-lambdan);
+  G4double expn = std::exp(-lambdan);
   if(epsilon1<expn)// no scattering 
-    {noscatt=true;}
+    {return;}
   else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single or plural scattering (Rutherford DCS's)
     {
-      G4double  xi=G4UniformRand();
+      G4double xi=G4UniformRand();
       xi= 2.*scrA*xi/(1.-xi + scrA);
       if(xi<0.)xi=0.;
-      if(xi>2.)xi=2.;
+      else if(xi>2.)xi=2.;      
       ws=(1. - xi);
-      wss=sqrt(1.-ws*ws);
-      G4double phi0=twopi*G4UniformRand(); 
+      wss=std::sqrt(xi*(2.-xi));      
+      G4double phi0=CLHEP::twopi*G4UniformRand(); 
       us=wss*cos(phi0);
       vs=wss*sin(phi0);
-      G4double rr=G4UniformRand();
-      x_coord = rr*us;
-      y_coord = rr*vs;
-      z_coord = ((1.-rr)+rr*ws);
     }
   else // multiple scattering
     {
-      mscatt=true;
       // Ref.2 subsection 4.4 "The best solution found"
       // Sample first substep scattering angle
       SampleCosineTheta(0.5*lambdan,scrA,cosTheta1,sinTheta1);
-      G4double phi1  = twopi*G4UniformRand();
+      G4double phi1  = CLHEP::twopi*G4UniformRand();
       cosPhi1 = cos(phi1);
       sinPhi1 = sin(phi1);
 
       // Sample second substep scattering angle
       SampleCosineTheta(0.5*lambdan,scrA,cosTheta2,sinTheta2);
-      G4double phi2  = twopi*G4UniformRand();
+      G4double phi2  = CLHEP::twopi*G4UniformRand();
       cosPhi2 = cos(phi2);
       sinPhi2 = sin(phi2);
 
-      // Scattering direction
+      // Overall scattering direction
       us = sinTheta2*(cosTheta1*cosPhi1*cosPhi2 - sinPhi1*sinPhi2) + cosTheta2*sinTheta1*cosPhi1;
       vs = sinTheta2*(cosTheta1*sinPhi1*cosPhi2 + cosPhi1*sinPhi2) + cosTheta2*sinTheta1*sinPhi1;
       ws = cosTheta1*cosTheta2 - sinTheta1*sinTheta2*cosPhi2; 
-      if(acos(ws)<2.0*sqrt(scrA))//small angle approximation for theta less than screening angle
-      {mscatt=false;
-      G4int i=0;
+      G4double sqrtA=sqrt(scrA);
+      if(acos(ws)<sqrtA)//small angle approximation for theta less than screening angle
+      {
+       G4int i=0;
       do{i++;
-      ws=1.+0.5*tPathLength*log(G4UniformRand())/lambda1;
-      }while((fabs(ws)>1.)&&(i<20));
-      if(i>=19)ws=cos(2.*sqrt(scrA));
-      wss=sqrt(1.-ws*ws);
-      G4double phi0=twopi*G4UniformRand(); 
-      us=wss*cos(phi0);
-      vs=wss*sin(phi0);
-      G4double rr=G4UniformRand();
-      x_coord = rr*us;
-      y_coord = rr*vs;
-      z_coord = ((1.-rr)+rr*ws);
+      ws=1.+Qn12*log(G4UniformRand());
+      }while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
+      if(i>=19)ws=cos(sqrtA);
+      wss=std::sqrt(1.-ws*ws);      
+      us=wss*cos(phi1);
+      vs=wss*sin(phi1);
       }
     }
     
@@ -265,30 +258,17 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   fParticleChange->ProposeMomentumDirection(newDirection);
   
   if((safety > tlimitminfix)&&latDisplasment)
-    {  
-
-      if(mscatt)
-	{
-          G4double q1,Gamma,Eta,nu,nu0,nu1,nu2;
-	  if(scrA<DBL_MIN)scrA=DBL_MIN;
-	  if(lambda1<DBL_MIN)lambda1=DBL_MIN;
-          q1     =2.*scrA*((1. + scrA)*log(1. + 1./scrA) - 1.);
-	  if(q1<DBL_MIN)q1=DBL_MIN;
-	  Gamma  = 6.*scrA*(1. + scrA)*((1. + 2.*scrA)*log(1. + 1./scrA) - 2.)/q1;
-	  Eta    = tPathLength/lambda1;      
-	  delta  = 0.90824829 - Eta*(0.102062073-Gamma*0.026374715);
-	  nu = std::sqrt(G4UniformRand());
-	  nu0 = 0.5*(1.0 - nu);
-	  nu1 = nu*delta;
-	  nu2 = nu*(1.0-delta);
-	  x_coord=(nu1*sinTheta1*cosPhi1+nu2*sinTheta2*(cosPhi1*cosPhi2-cosTheta1*sinPhi1*sinPhi2)+nu0*us);
-	  y_coord=(nu1*sinTheta1*sinPhi1+nu2*sinTheta2*(sinPhi1*cosPhi2+cosTheta1*cosPhi1*sinPhi2)+nu0*vs);
-	  z_coord=(nu0+nu1*cosTheta1+nu2*cosTheta2+ nu0*ws)  ;
-	}
+    { 
+      if(Qn1<0.02)// corresponding to error less than 1% in the exact formula of <z>
+      z_coord = 1.0 - Qn1*(0.5 - Qn1*(0.166666667));
+      else z_coord = (1.-std::exp(-Qn1))/Qn1;
+      G4double rr=std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
+      x_coord = rr*us;
+      y_coord = rr*vs;
 
       // displacement is computed relatively to the end point
-      if(!noscatt)z_coord -= 1.0;//for noscatt z_coord !=0.
-      G4double rr = sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
+      z_coord -= 1.0;
+      rr = std::sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
       G4double r  = rr*zPathLength;
       /*
       G4cout << "G4GS::SampleSecondaries: e(MeV)= " << kineticEnergy
@@ -297,6 +277,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	     << " geomStep(mm)= " << zPathLength
 	     << G4endl;
       */
+
       if(r > tlimitminfix) {
 
         G4ThreeVector Direction(x_coord/rr,y_coord/rr,z_coord/rr);
@@ -315,26 +296,23 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 {
   G4double r1,tet,xi=0.;
   G4double Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
-  if (Qn1<0.001)
-  {
+if (Qn1<0.001)
+{
       do{
-	r1=G4UniformRand();
-        xi=-0.5*Qn1*log(G4UniformRand());  
-	tet=acos(1.-xi);
+        r1=G4UniformRand();
+        xi=-0.5*Qn1*log(G4UniformRand());
+        tet=acos(1.-xi);
       }while(tet*r1*r1>sin(tet));
-  
-  }
-  else if(Qn1>0.5)  xi=2.*G4UniformRand();//isotropic distribution
-  else // procedure described by Benedito in Ref.1
-  {    do{
-	r1=G4UniformRand();
-  	xi = 2.*(GSTable->SampleTheta(lambdan,scrA,G4UniformRand()));
-	tet=acos(1.-xi);
-      }while(tet*r1*r1>sin(tet));
-  }
+}
+else if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
+else
+{
+	xi=2.*(GSTable->SampleTheta(lambdan,scrA,G4UniformRand()));
+}
+
 
   if(xi<0.)xi=0.;
-  if(xi>2.)xi=2.;
+  else if(xi>2.)xi=2.;
 
   cost=(1. - xi);
   sint=sqrt(xi*(2.-xi));
@@ -347,17 +325,15 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 
 void 
 G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G4double Z, 
-						 G4double kinEnergy,G4double &Lam0,
-						 G4double &Lam1)
+						 G4double kinEnergy,G4double &Sig0,
+						 G4double &Sig1)
 { 
-  G4double summ00=0.0;
-  G4double summ10=0.0;
   G4double x1,x2,y1,y2,acoeff,bcoeff;
   G4double kineticE = kinEnergy;
   if(kineticE<lowKEnergy)kineticE=lowKEnergy;
   if(kineticE>highKEnergy)kineticE=highKEnergy;
   kineticE /= eV;
-  G4double logE=log(kineticE);
+  G4double logE=std::log(kineticE);
   
   G4int  iZ = G4int(Z);
   if(iZ > 103) iZ = 103;
@@ -378,14 +354,14 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 	y2=TCSE[iZ-1][enerInd+1];
 	acoeff=(y2-y1)/(x2*x2-x1*x1);
 	bcoeff=y2-acoeff*x2*x2;
-	summ00=acoeff*logE*logE+bcoeff;
-	summ00 =exp(summ00);
+	Sig0=acoeff*logE*logE+bcoeff;
+	Sig0 =std::exp(Sig0);
 	y1=FTCSE[iZ-1][enerInd];
 	y2=FTCSE[iZ-1][enerInd+1];
 	acoeff=(y2-y1)/(x2*x2-x1*x1);
 	bcoeff=y2-acoeff*x2*x2;
-	summ10=acoeff*logE*logE+bcoeff;
-	summ10 =exp(summ10);
+	Sig1=acoeff*logE*logE+bcoeff;
+	Sig1=std::exp(Sig1);
       }
     else  //Interpolation of the form y=ax+b
       {  
@@ -393,12 +369,12 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 	x2=ener[105];       
 	y1=TCSE[iZ-1][104];
 	y2=TCSE[iZ-1][105];
-	summ00=(y2-y1)*(logE-x1)/(x2-x1)+y1;
-	summ00 =exp(summ00);
+	Sig0=(y2-y1)*(logE-x1)/(x2-x1)+y1;
+	Sig0=std::exp(Sig0);
 	y1=FTCSE[iZ-1][104];
 	y2=FTCSE[iZ-1][105];
-	summ10=(y2-y1)*(logE-x1)/(x2-x1)+y1;
-	summ10 =exp(summ10);
+	Sig1=(y2-y1)*(logE-x1)/(x2-x1)+y1;
+	Sig1=std::exp(Sig1);
       }
     }
   if(p==G4Positron::Positron())        
@@ -411,14 +387,14 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 	y2=TCSP[iZ-1][enerInd+1];
 	acoeff=(y2-y1)/(x2*x2-x1*x1);
 	bcoeff=y2-acoeff*x2*x2;
-	summ00=acoeff*logE*logE+bcoeff;
-	summ00 =exp(summ00);
+	Sig0=acoeff*logE*logE+bcoeff;
+	Sig0 =std::exp(Sig0);
 	y1=FTCSP[iZ-1][enerInd];
 	y2=FTCSP[iZ-1][enerInd+1];
 	acoeff=(y2-y1)/(x2*x2-x1*x1);
 	bcoeff=y2-acoeff*x2*x2;
-	summ10=acoeff*logE*logE+bcoeff;
-	summ10 =exp(summ10);
+	Sig1=acoeff*logE*logE+bcoeff;
+	Sig1=std::exp(Sig1);
       }
     else
       {  
@@ -426,28 +402,22 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 	x2=ener[105];       
 	y1=TCSP[iZ-1][104];
 	y2=TCSP[iZ-1][105];
-	summ00=(y2-y1)*(logE-x1)/(x2-x1)+y1;
-	summ00 =exp(summ00);
+	Sig0=(y2-y1)*(logE-x1)/(x2-x1)+y1;
+	Sig0 =std::exp(Sig0);
 	y1=FTCSP[iZ-1][104];
 	y2=FTCSP[iZ-1][105];
-	summ10=(y2-y1)*(logE-x1)/(x2-x1)+y1;
-	summ10 =exp(summ10);
+	Sig1=(y2-y1)*(logE-x1)/(x2-x1)+y1;
+	Sig1=std::exp(Sig1);
       }
     }
     
-  summ00 *=barn;
-  summ10 *=barn;
-
-  Lam0=1./((1.+1./Z)*summ00);
-  Lam1=1./((1.+1./Z)*summ10);
-
-
-
+  Sig0 *= barn;
+  Sig1 *= barn;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//t->g->t step transformations taken from Ref.7 
+//t->g->t step transformations taken from Ref.6 
 
 G4double 
 G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
@@ -489,28 +459,165 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
   //	 << " Alg: " << steppingAlgorithm <<G4endl;
 
   // far from geometry boundary
-  if(stepStatus != fGeomBoundary && presafety < tlimitminfix) 
-    presafety = ComputeSafety(sp->GetPosition(), tPathLength); 
+  if(currentRange < presafety)
+    {
+      inside = true;
+      return tPathLength;  
+    }
+
+  // standard  version
+  //
+  if (steppingAlgorithm == fUseDistanceToBoundary)
+    {
+      //compute geomlimit and presafety 
+      G4double geomlimit = ComputeGeomLimit(track, presafety, tPathLength);
    
       // is far from boundary
-  if(currentRange < presafety) {
-    inside = true;  
-    
-    // limit mean scattering angle
-  } else {
-    G4double rlimit = facrange*lambda1;
-    G4double rcut = currentCouple->GetProductionCuts()->GetProductionCut(1);
-    if(rcut > rlimit) rlimit = std::pow(rcut*rcut*rlimit,0.33333333);
-    rlimit = std::min(rlimit, facgeom*currentCouple->GetMaterial()->GetRadlen());
-    if(rlimit < tPathLength) tPathLength = rlimit;
-  }
-  /*
-  G4cout << particle->GetParticleName() << " e= " << preKinEnergy
-	 << " L0= " << lambda0 << " R= " << currentRange
-	 << "tlimit= " << tlimit  
-  	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
-  */
+      if(currentRange <= presafety)
+	{
+	  inside = true;
+	  return tPathLength;   
+	}
 
+      smallstep += 1.;
+      insideskin = false;
+
+      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+	{
+          rangeinit = currentRange;
+          if(stepStatus == fUndefined) smallstep = 1.e10;
+          else  smallstep = 1.;
+
+          //define stepmin here (it depends on lambda!)
+          //rough estimation of lambda_elastic/lambda_transport
+          G4double rat = currentKinEnergy/MeV ;
+          rat = 1.e-3/(rat*(10.+rat)) ;
+          //stepmin ~ lambda_elastic
+          stepmin = rat*lambda1;
+          skindepth = skin*stepmin;
+          //define tlimitmin
+          tlimitmin = 10.*stepmin;
+          if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+
+	  //G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
+	  //	 << " tlimitmin= " << tlimitmin << " geomlimit= " << geomlimit <<G4endl;
+	  // constraint from the geometry 
+	  if((geomlimit < geombig) && (geomlimit > geommin))
+	    {
+	      if(stepStatus == fGeomBoundary)  
+	        tgeom = geomlimit/facgeom;
+	      else
+	        tgeom = 2.*geomlimit/facgeom;
+	    }
+            else
+              tgeom = geombig;
+
+        }
+
+      //step limit 
+      tlimit = facrange*rangeinit;              
+      if(tlimit < facsafety*presafety)
+        tlimit = facsafety*presafety; 
+
+      //lower limit for tlimit
+      if(tlimit < tlimitmin) tlimit = tlimitmin;
+
+      if(tlimit > tgeom) tlimit = tgeom;
+
+      //G4cout << "tgeom= " << tgeom << " geomlimit= " << geomlimit  
+      //      << " tlimit= " << tlimit << " presafety= " << presafety << G4endl;
+
+      // shortcut
+      if((tPathLength < tlimit) && (tPathLength < presafety) &&
+         (smallstep >= skin) && (tPathLength < geomlimit-0.999*skindepth))
+	return tPathLength;   
+
+      // step reduction near to boundary
+      if(smallstep < skin)
+	{
+	  tlimit = stepmin;
+	  insideskin = true;
+	}
+      else if(geomlimit < geombig)
+	{
+	  if(geomlimit > skindepth)
+	    {
+	      if(tlimit > geomlimit-0.999*skindepth)
+		tlimit = geomlimit-0.999*skindepth;
+	    }
+	  else
+	    {
+	      insideskin = true;
+	      if(tlimit > stepmin) tlimit = stepmin;
+	    }
+	}
+
+      if(tlimit < stepmin) tlimit = stepmin;
+
+      if(tPathLength > tlimit) tPathLength = tlimit; 
+
+    }
+    // for 'normal' simulation with or without magnetic field 
+    //  there no small step/single scattering at boundaries
+  else if(steppingAlgorithm == fUseSafety)
+    {
+      // compute presafety again if presafety <= 0 and no boundary
+      // i.e. when it is needed for optimization purposes
+      if((stepStatus != fGeomBoundary) && (presafety < tlimitminfix)) 
+        presafety = ComputeSafety(sp->GetPosition(),tPathLength); 
+
+      // is far from boundary
+      if(currentRange < presafety)
+        {
+          inside = true;
+          return tPathLength;  
+        }
+
+      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
+	{
+	  rangeinit = currentRange;
+	  fr = facrange;
+	  // 9.1 like stepping for e+/e- only (not for muons,hadrons)
+	  if(mass < masslimite) 
+	    {
+	      if(lambda1 > currentRange)
+		rangeinit = lambda1;
+	      if(lambda1 > lambdalimit)
+		fr *= 0.75+0.25*lambda1/lambdalimit;
+	    }
+
+	  //lower limit for tlimit
+	  G4double rat = currentKinEnergy/MeV ;
+	  rat = 1.e-3/(rat*(10.+rat)) ;
+	  tlimitmin = 10.*lambda1*rat;
+	  if(tlimitmin < tlimitminfix) tlimitmin = tlimitminfix;
+	}
+      //step limit
+      tlimit = fr*rangeinit;               
+
+      if(tlimit < facsafety*presafety)
+        tlimit = facsafety*presafety;
+
+      //lower limit for tlimit
+      if(tlimit < tlimitmin) tlimit = tlimitmin;
+
+      if(tPathLength > tlimit) tPathLength = tlimit;
+    }
+  
+  // version similar to 7.1 (needed for some experiments)
+  else
+    {
+      if (stepStatus == fGeomBoundary)
+	{
+	  if (currentRange > lambda1) tlimit = facrange*currentRange;
+	  else                        tlimit = facrange*lambda1;
+
+	  if(tlimit < tlimitmin) tlimit = tlimitmin;
+	  if(tPathLength > tlimit) tPathLength = tlimit;
+	}
+    }
+  //G4cout << "tPathLength= " << tPathLength  
+  // << " currentMinimalStep= " << currentMinimalStep << G4endl;
   return tPathLength ;
 }
 

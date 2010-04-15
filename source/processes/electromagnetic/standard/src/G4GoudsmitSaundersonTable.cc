@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.5 2010-02-19 09:29:53 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.6 2010-04-15 19:20:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,8 @@
 // 04.03.2009 V.Ivanchenko: cleanup and format according to Geant4 EM style
 // 08.02.2010 O.Kadri     : reduce delared variables 
 //                          reduce error of finding root in secant method
+// 26.03.2010 O.Kadri     : minimum of used arrays in computation
+//                          within the dichotomie finding method the error was the lowest value of uvalues
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 #include "G4GoudsmitSaundersonTable.hh"
@@ -196,12 +198,10 @@ G4GoudsmitSaundersonTable::~G4GoudsmitSaundersonTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2, G4double rndm)
 { 
-
   //Benedito's procedure
   G4double A[11],ThisPDF[320],ThisCPDF[320];
-  G4double PDF1[320],PDF2[320],PDF3[320],PDF4[320];
-  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,aa,b,m,F;
-  G4int Ind0,Ind1,Ind2,Ind3,KIndex=0,JIndex=0,IIndex=0;
+  G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,m,F;
+  G4int Ind0,KIndex=0,JIndex=0,IIndex=0;
 
   ///////////////////////////////////////////////////////////////////////////
   // Find Lambda and Chia2 Index
@@ -219,35 +219,30 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
   ///////////////////////////////////////////////////////////////////////////
   // Calculate Interpolated PDF and CPDF arrays
   Ind0=320*(11*KIndex+JIndex);
-  Ind1=320*(11*KIndex+JIndex+1);
-  Ind2=320*(11*(KIndex+1)+JIndex);
-  Ind3=320*(11*(KIndex+1)+JIndex+1);
   for(G4int i=0 ; i<320 ;i++){
-    PDF1[i]=PDF[Ind0+i];PDF2[i]=PDF[Ind1+i];    
-    PDF3[i]=PDF[Ind2+i];PDF4[i]=PDF[Ind3+i];    
-    ThisPDF[i]=Ckj*PDF1[i]+CkjPlus1*PDF2[i]+CkPlus1j*PDF3[i]+CkPlus1jPlus1*PDF4[i];
-    PDF1[i]=CPDF[Ind0+i];PDF2[i]=CPDF[Ind1+i]; //PDF as CPDF   
-    PDF3[i]=CPDF[Ind2+i];PDF4[i]=CPDF[Ind3+i]; //PDF as CPDF 
-    ThisCPDF[i]=Ckj*PDF1[i]+CkjPlus1*PDF2[i]+CkPlus1j*PDF3[i]+CkPlus1jPlus1*PDF4[i];  
-  if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
+    ThisPDF[i]=Ckj*PDF[Ind0]+CkjPlus1*PDF[Ind0+320]+CkPlus1j*PDF[Ind0+3520]+CkPlus1jPlus1*PDF[Ind0+3840];
+    ThisCPDF[i]=Ckj*CPDF[Ind0]+CkjPlus1*CPDF[Ind0+320]+CkPlus1j*CPDF[Ind0+3520]+CkPlus1jPlus1*CPDF[Ind0+3840];  
+    if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
+    Ind0++;
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // Find u Index using secant method
   //CPDF^-1(rndm)=x ==> CPDF(x)=rndm;
-  aa=uvalues[IIndex];
+  a=uvalues[IIndex];
   b=uvalues[IIndex+1];
   
   do{
-    m=0.5*(aa+b);
+    m=0.5*(a+b);
     F=(ThisCPDF[IIndex]+(m-uvalues[IIndex])*ThisPDF[IIndex]
        +((m-uvalues[IIndex])*(m-uvalues[IIndex])*(ThisPDF[IIndex+1]-ThisPDF[IIndex]))
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
     if(F>0.)b=m;
-    else aa=m;
-  } while(sqrt((b-aa)*(b-aa))>1.0e-6);
-if(m<1.0e-6)m=0.;
+    else a=m;
+  } while(sqrt((b-a)*(b-a))>1.0e-9);
+
   return m;
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
