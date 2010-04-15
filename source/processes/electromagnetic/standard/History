@@ -1,4 +1,4 @@
-$Id: History,v 1.489 2010-04-06 17:02:23 vnivanch Exp $
+$Id: History,v 1.490 2010-04-15 19:25:20 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 April 09:  V.Ivant (emstand-V09-03-07)
+G4hMultipleScattering - removed old unused header of G4UrbanMscModel
+G4ASTARStopping.cc - disabled corrupted data for Oxigen 
 
 06 April 09:  V.Ivant (emstand-V09-03-06)
 - G4eBremsstrahlungRelModel, G4MollerBhabhaModel - set minimum cut 
