@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.7 2008-02-27 12:32:48 ivana Exp $
+// $Id: G4ExtrudedSolid.hh,v 1.8 2010-04-15 10:23:34 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 // Parameters in the constructor:
 // const G4String& pName             - solid name
 // std::vector<G4TwoVector> polygon  - the vertices of the outlined polygon
-//                                     defined in clock-wise order     
+//                                     defined in clockwise or anti-clockwise order     
 // std::vector<ZSection>             - the z-sections defined by
 //                                     z position, offset and scale
 //                                     in increasing z-position order
