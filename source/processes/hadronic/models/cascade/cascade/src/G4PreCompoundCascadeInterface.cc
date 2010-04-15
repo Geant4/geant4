@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.8 2010-04-15 00:24:45 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100414  M. Kelsey -- Check for K0L/K0S before using G4InuclElemPart::type
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -94,17 +95,12 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
                       kaonZeroBar = 17, lambda     = 21, sigmaPlus = 23,
                       sigmaZero   = 25, sigmaMinus = 27, xiZero    = 29, xiMinus  = 31 };
 
-  G4int bulletType = G4InuclElementaryParticle::type(aTrack.GetDefinition());
-
-  // Special -- Mix K0L/K0S back to strong K0/K0bar
+  G4int bulletType;
   if (aTrack.GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
-      aTrack.GetDefinition() == G4KaonZeroShort::KaonZeroShort() ) {
-    if (G4UniformRand() > 0.5) {
-      bulletType = kaonZero;
-    } else {
-      bulletType = kaonZeroBar;
-    }
-  }
+      aTrack.GetDefinition() == G4KaonZeroShort::KaonZeroShort() )
+    bulletType = (G4UniformRand() > 0.5) ? kaonZero : kaonZeroBar;
+  else 
+    bulletType = G4InuclElementaryParticle::type(aTrack.GetDefinition());
 
   // Code momentum and energy.
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
@@ -324,13 +320,6 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
         break;
 
       case kaonZero:
-        if (G4UniformRand() > 0.5) {
-          cascadeParticle = new G4DynamicParticle(G4KaonZeroLong::KaonZeroLongDefinition(), aMom, ekin);
-        } else {
-          cascadeParticle = new G4DynamicParticle(G4KaonZeroShort::KaonZeroShortDefinition(), aMom, ekin);
-        }
-        break;
-
       case kaonZeroBar:
         if (G4UniformRand() > 0.5) {
           cascadeParticle = new G4DynamicParticle(G4KaonZeroLong::KaonZeroLongDefinition(), aMom, ekin);
