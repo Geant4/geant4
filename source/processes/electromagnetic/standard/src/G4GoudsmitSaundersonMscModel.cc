@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.22 2010-04-15 19:20:11 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.23 2010-04-15 19:22:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,8 @@
 //Ref.3:I. Kawrakow et al.,"On the representation ... calculations",NIMB 134 (1998) pp 325-336;
 //Ref.4:Bielajew et al.,".....", NIMB 173 (2001) 332-343;
 //Ref.5:F. Salvat et al.,"ELSEPA--Dirac partial ...molecules", Comp.Phys.Comm.165 (2005) pp 157-190;
-//Ref.6:G4UrbanMscModel G4_v9.1Ref09; 
+//Ref.6:G4UrbanMscModel G4 9.2; 
+//Ref.7:G4WentzelVIModel G4 9.3;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4GoudsmitSaundersonTable.hh"
