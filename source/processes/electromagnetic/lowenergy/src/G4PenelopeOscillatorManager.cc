@@ -153,6 +153,8 @@ void G4PenelopeOscillatorManager::Dump(const G4Material* material)
 	G4cout << "Ionisation energy = " << (*theTable)[k]->GetIonisationEnergy()/eV << " eV" << G4endl;
 	G4cout << "Occupation number = " << (*theTable)[k]->GetOscillatorStrength() << G4endl;
 	G4cout << "Resonance energy = " << (*theTable)[k]->GetResonanceEnergy()/eV << " eV" << G4endl;
+	G4cout << "Cufoff resonance energy = " << 
+		(*theTable)[k]->GetCutoffRecoilResonantEnergy()/eV << " eV" << G4endl;
 	G4cout << "*********************************************************************" << G4endl;
       }
   for (size_t k=0;k<theTable->size();k++)
