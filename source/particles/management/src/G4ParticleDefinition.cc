@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.34 2009-09-21 04:08:24 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.35 2010-04-15 08:53:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,10 +132,10 @@ G4ParticleDefinition::G4ParticleDefinition(
    // check initialization is in Pre_Init state except for ions
    G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
 
-   if ( (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
+   if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
-       G4cout << "G4ParticleDefintion (other than ions) should be created in Pre_Init state  "; 
+       G4cout << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  "; 
        G4cout << aName << G4endl;
      }
 #endif
