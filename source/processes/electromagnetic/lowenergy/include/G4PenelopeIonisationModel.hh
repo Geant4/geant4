@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.hh,v 1.4 2010-03-29 12:31:11 pandola Exp $
+// $Id: G4PenelopeIonisationModel.hh,v 1.5 2010-04-15 10:02:10 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -38,6 +38,7 @@
 // 29 Mar 2010   L. Pandola   Added a dummy ComputeCrossSectioPerAtom() method issueing a
 //                            warning if users try to access atomic cross sections via 
 //                            G4EmCalculator
+// 15 Apr 2010   L. Pandola   Implemented model's own version of MinEnergyCut()
 //
 // -------------------------------------------------------------------
 //
@@ -102,6 +103,10 @@ public:
                                G4double kineticEnergy,
                                G4double cutEnergy);
 				
+  // Min cut in kinetic energy allowed by the model
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+                                const G4MaterialCutsCouple*);
+
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
