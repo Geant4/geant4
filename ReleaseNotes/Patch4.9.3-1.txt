@@ -31,8 +31,8 @@ List of fixes included in this public patch since the public release 9.3:
       o Fixed initialisation of min/max extent for mother and target volumes
         in method BuildNodes() of G4SmartVoxelHeader.
     + navigation:
-      o Avoid unnecessary creation of string for debug purposes in
-        G4PropagatorInField. Some printout formatting.
+      o Avoid unnecessary creation of debug string in G4PropagatorInField. 
+        Also printout reformatting.
     + solids/specific:
       o Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid
         unnecessary consecutive computations on the same point.
@@ -90,7 +90,7 @@ List of fixes included in this public patch since the public release 9.3:
       o G4CoulombScattering: removed inlined method SetBuildTableFlag()
         hiding implementation in the base class.
       o G4PolarizedComptonScattering: added message for obsolete process.
-      o Use data for Oxigen (G4_O) from ICRU'49 instead NIST for alpha stopping
+      o Use data for Oxygen (G4_O) from ICRU'49 instead NIST for alpha stopping
         power. Fixes problem of data corruption when such material is used.
     + Utils:
       o G4EmCorrections: added protection against large Barkas and Bloch
@@ -114,14 +114,14 @@ List of fixes included in this public patch since the public release 9.3:
       o G4CrossSectionDataSetRegistry: do not pop_back vector of pointers
         when deregistering cross-section data set; addresses problem detected
         on Windows/VC++.
-      o Cache computation of std::pow() in GetCaptureCrossSection() method of
-        G4HadronCrossSections, to avoid repeated calls with same argument.
       o G4UPiNuclearCrossSection: fixed bug for high Z (>83) atoms.
+      o Cache computation of std::pow() in GetCaptureCrossSection() method of
+        G4HadronCrossSections, avoiding repeated calls with same argument.
     + models/cascade:
       o G4InteractionCase: minor change in initialisation in constructor to
         allow for porting on C++0x Standard.
     + models/CHIPS:
-      o Mass correction in G4Quasmon, and fixed memory corruption in mass
+      o Correction of mass in G4Quasmon, and fix of memory corruption in mass
         calculation; 
       o Tuning of parameters and fixed bug in CHIPS fragmentation.
     + models/de_excitation:
