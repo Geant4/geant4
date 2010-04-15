@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.30 2010-01-06 14:13:08 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.31 2010-04-15 12:22:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -795,12 +795,12 @@ void G4UIQt::AddButton (
   
   QSignalMapper *signalMapper = new QSignalMapper(this);
 #if QT_VERSION < 0x030200
-  QAction *action = new QAction(QString(aLabel),QString(aLabel),QKeySequence::QKeySequence (),signalMapper, SLOT(map()));
+  QAction *action = new QAction(QString(aLabel),QString(aLabel),QKeySequence(),signalMapper, SLOT(map()));
   action->addTo(parent);
  connect(action,SIGNAL(activated()),signalMapper,SLOT(map()));
 
 #elif QT_VERSION < 0x040000
-  QAction *action = new QAction(QString(aLabel),QKeySequence::QKeySequence (),signalMapper, SLOT(map()));
+  QAction *action = new QAction(QString(aLabel),QKeySequence(),signalMapper, SLOT(map()));
   action->addTo(parent);
  connect(action,SIGNAL(activated()),signalMapper,SLOT(map()));
 
