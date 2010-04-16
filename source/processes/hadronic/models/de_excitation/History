@@ -25,12 +25,12 @@ code and to keep track of all tags.
 - G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
   G4TritonEvaporationProbability, G4He3EvaporationProbability,
   G4AlphaEvaporationProbability - (JMQ) return back to published
-               varian of OPT3 (Kalbach) parameterization of inverse 
+               variant OPT3 (Kalbach) parameterization of inverse 
 	       cross section 
 
 05 March 2010 Vladimir Ivanchenko (hadr-deex-V09-03-03)
 ----------------------------------------------------------
-- G4Evaporation - set as a default variant evaporation comvbined 
+- G4Evaporation - set as a default variant evaporation combined 
                   standard + GEM probabilities
 
 17 February 2009 Vladimir Ivanchenko (hadr-deex-V09-03-02)
