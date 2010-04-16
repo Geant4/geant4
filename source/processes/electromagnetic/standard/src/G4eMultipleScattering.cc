@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.cc,v 1.10 2009-11-01 13:05:01 vnivanch Exp $
+// $Id: G4eMultipleScattering.cc,v 1.11 2010-04-16 09:01:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -97,11 +97,12 @@ void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 void G4eMultipleScattering::PrintInfo()
 {
   G4cout << "      RangeFactor= " << RangeFactor()
-	 << ", step limit type: " << StepLimitType()
-         << ", lateralDisplacement: " << LateralDisplasmentFlag()
-	 << ", skin= " << Skin()  
-	 << ", geomFactor= " << GeomFactor()  
-	 << G4endl;
+	 << ", stepLimitType: " << StepLimitType()
+         << ", latDisplacement: " << LateralDisplasmentFlag();
+  if(StepLimitType() == fUseDistanceToBoundary) {
+    G4cout  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
+  }  
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

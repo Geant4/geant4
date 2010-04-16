@@ -1,4 +1,4 @@
-$Id: History,v 1.491 2010-04-15 19:32:27 vnivanch Exp $
+$Id: History,v 1.492 2010-04-16 09:01:24 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 April 09:  V.Ivant (emstand-V09-03-08)
+16 April 09:  V.Ivant (emstand-V09-03-08)
 - G4GoudsmitSaundersonMscModel (O.Kadri) - improved numerical stability 
             of computations for small angles by  direct xsection calculation 
             not inverse of the inverse angular sampling without large angle 
             rejection method longitudinal displacement is computed exactly 
             from <z>
 - G4GoudsmitSaundersonTable (O.Kadri)    - improved numerical stability by 
-            minimum of used arrays in computation within the dichotomie 
+            minimum of used arrays in computation within the dichotomy 
             finding method
+- G4eMultipleScattering, G4hMultipleScattering - improved printout at
+                                                 initialisation
 
 15 April 09:  V.Ivant (emstand-V09-03-07)
 - G4hMultipleScattering - removed old unused header of G4UrbanMscModel
-- G4ASTARStopping.cc - disabled corrupted data for Oxigen 
+- G4ASTARStopping.cc - disabled corrupted data for Oxygen 
 
 06 April 09:  V.Ivant (emstand-V09-03-06)
 - G4eBremsstrahlungRelModel, G4MollerBhabhaModel - set minimum cut 
