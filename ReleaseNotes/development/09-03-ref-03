@@ -33,7 +33,7 @@ geometry/navigation                              geomnav-V09-03-00           (o)
 - Avoid unnecessary creation of string for debug purposes in
   G4PropagatorInField. Some printout formatting...
 
-geometry/volumes                                 geomvol-V09-03-00
+geometry/volumes                                 geomvol-V09-03-00           (o)
 ----------------
 - Use G4Allocator for internal vector in G4NavigationHistory, to optimise
   memory management and reduce fragmentation.
