@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2010-04-13 07:19:17 gcosmo Exp $
+$Id: History,v 1.168 2010-04-16 07:40:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 15th, 2010      G.Cosmo - geomvol-V09-03-04
+- Combine use of G4Allocator for vectors in G4NavigationHistory with use
+  of assign().
 
 Apr 13th, 2010      G.Cosmo - geomvol-V09-03-03
 - Added Reset() method to G4ReflectionFactory for clearing maps of
