@@ -14,11 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-05)
+----------------------------------------------------------
+- G4ExcitationHandler - enable Multi-Fragmentation model
+- G4StatMFMacroTemperature - cleanup logic of solving equation for
+           temperature; moved constructors and destructor to source
+
 09 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-04)
 ----------------------------------------------------------
-G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
-G4TritonEvaporationProbability, G4He3EvaporationProbability,
-G4AlphaEvaporationProbability - (JMQ) return back to published
+- G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
+  G4TritonEvaporationProbability, G4He3EvaporationProbability,
+  G4AlphaEvaporationProbability - (JMQ) return back to published
                varian of OPT3 (Kalbach) parameterization of inverse 
 	       cross section 
 
@@ -29,7 +35,7 @@ G4AlphaEvaporationProbability - (JMQ) return back to published
 
 17 February 2009 Vladimir Ivanchenko (hadr-deex-V09-03-02)
 ----------------------------------------------------------
-- G4ExcitationHandler - deactivate Multi-Fragmentation models
+- G4ExcitationHandler - deactivate Multi-Fragmentation model
 
 05 February 2009 Vladimir Ivanchenko (hadr-deex-V09-03-01)
 ----------------------------------------------------------
