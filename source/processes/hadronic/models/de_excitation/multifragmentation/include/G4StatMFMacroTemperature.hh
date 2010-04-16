@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.hh,v 1.3 2006-06-29 20:24:21 gunter Exp $
+// $Id: G4StatMFMacroTemperature.hh,v 1.4 2010-04-16 17:04:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -47,27 +47,17 @@ public:
     G4StatMFMacroTemperature(const G4double anA, const G4double aZ, 
 			     const G4double ExEnergy, const G4double FreeE0, 
 			     const G4double kappa, 
-			     std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
-	theA(anA),
-	theZ(aZ),
-	_ExEnergy(ExEnergy),
-	_FreeInternalE0(FreeE0),
-	_Kappa(kappa),
-	_MeanMultiplicity(0.0),
-	_MeanTemperature(0.0),
-	_ChemPotentialMu(0.0),
-	_ChemPotentialNu(0.0),
-	_theClusters(ClusterVector) 
-	{};
+			     std::vector<G4VStatMFMacroCluster*> * ClusterVector);
 	
-    ~G4StatMFMacroTemperature() {};
+    ~G4StatMFMacroTemperature();
    
     G4double operator()(const G4double T)
 	{ return (_ExEnergy - this->FragsExcitEnergy(T))/_ExEnergy; }	
 
 private:
+
     // Default constructor
-    G4StatMFMacroTemperature() {};
+    G4StatMFMacroTemperature();
 
     // copy constructor
     G4StatMFMacroTemperature(const G4StatMFMacroTemperature &) {};
