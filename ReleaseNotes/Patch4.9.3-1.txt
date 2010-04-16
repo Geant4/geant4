@@ -125,7 +125,8 @@ List of fixes included in this public patch since the public release 9.3:
         calculation; 
       o Tuning of parameters and fixed bug in CHIPS fragmentation.
     + models/de_excitation:
-      o G4ExcitationHandler: activate Fermi-BreakUp.
+      o G4ExcitationHandler: activated Fermi-BreakUp by setting limits to the
+        default values (Z=9 and A=17) for this model.
     + models/high_energy:
       o Fixed segmentation fault in G4HEKaonZeroLongInelastic and
         G4HEKaonZeroShortInelastic due to local instantiation and subsequent
@@ -136,9 +137,9 @@ List of fixes included in this public patch since the public release 9.3:
         when deregistering cross-section data set; addresses problem detected
         on Windows/VC++.
     + models/neutron_hp:
-      o Add 'Ignore' and 'Enable' methods for on-flight Doppler Broadening
+      o Add 'Ignore' and 'Enable' methods for on-flight Doppler broadening
         in G4NeutronHPElasticData, G4NeutronHPInelasticData and
-        G4NeutronHPCaptureData.
+        G4NeutronHPCaptureData, which can now be set from the physics-lists.
     + models/pre_equilibrium:
       o Added protections for numerical computations to G4PreCompoundEmission.
 
