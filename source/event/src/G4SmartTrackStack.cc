@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.cc,v 1.3 2009-09-16 23:10:46 asaim Exp $
+// $Id: G4SmartTrackStack.cc,v 1.4 2010-04-19 18:21:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -72,7 +72,7 @@ G4StackedTrack * G4SmartTrackStack::PopFromStack()
   {
     if(stacks[fTurn]->GetNTrack()==0)
     {
-      fTurn = (++fTurn)%nTurn;
+      fTurn = (fTurn+1)%nTurn;
       //G4cout<<"++++++++ Shift to Stack ["<<fTurn<<"] with "<<stacks[fTurn]->GetNTrack()<<" stacked tracks."<<G4endl;
     }
     else
