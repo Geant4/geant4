@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.26 2009-08-17 14:52:19 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.27 2010-04-19 00:23:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,7 +109,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
   theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
-  AllocateElectronOccupancy();
+  theElectronOccupancy = 0; 
+  //AllocateElectronOccupancy();
 }
 
 ////////////////////
@@ -127,7 +128,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
   theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
-  AllocateElectronOccupancy();
+  theElectronOccupancy = 0; 
+  //AllocateElectronOccupancy();
 
   // 3-dim momentum is given
   G4double pModule2 = aParticleMomentum.mag2();
@@ -159,7 +161,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
   theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
-  AllocateElectronOccupancy();
+   theElectronOccupancy = 0; 
+  //AllocateElectronOccupancy();
 
   // 4-momentum vector (Lorentz vecotr) is given
   G4double pModule2 = aParticleMomentum.x()*aParticleMomentum.x()
@@ -201,7 +204,8 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
   theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
-  AllocateElectronOccupancy();
+  theElectronOccupancy = 0; 
+  //AllocateElectronOccupancy();
   
   // total energy and momentum direction are given
   G4double pModule2 = aParticleMomentum.mag2();
@@ -331,7 +335,7 @@ void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition
   // Set electron orbits
   if (theElectronOccupancy != 0) delete theElectronOccupancy;
   theElectronOccupancy =0;
-  AllocateElectronOccupancy();
+  //AllocateElectronOccupancy();
 
 }
 
