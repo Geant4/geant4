@@ -22,12 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.28 2010-04-19 23:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100418  M. Kelsey -- Move lab-frame transformation code to G4CollisonOutput
 
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -41,8 +42,8 @@
 
 using namespace G4InuclSpecialFunctions;
 
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 	 
 G4InuclCollider::G4InuclCollider()
   : verboseLevel(0) {
@@ -198,42 +199,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	    };
 	  };
 	 
-	  // convert to the LAB       
-	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();
-	  std::vector<G4InuclElementaryParticle> particles = 
-	    TRFoutput.getOutgoingParticles();
+	  // convert to the LAB
+	  TRFoutput.boostToLabFrame(convertToTargetRestFrame);
 
-	  if (!particles.empty()) { 
-	    particleIterator ipart;
-	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      G4LorentzVector mom = ipart->getMomentum();
-
-	      if (withReflection) mom.setZ(-mom.z());
-	      mom = convertToTargetRestFrame.rotate(mom);
-	      ipart->setMomentum(mom); 
-	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
-	      ipart->setMomentum(mom); 
-	    };
-	    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-	  };
-           
-	  std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
-
-	  if (!nucleus.empty()) { 
-	    nucleiIterator inuc;
-
-	    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      G4LorentzVector mom = inuc->getMomentum(); 
-
-	      if (withReflection) mom.setZ(-mom.z());
-	      mom = convertToTargetRestFrame.rotate(mom);
-	      inuc->setMomentum(mom);
-	      mom = convertToTargetRestFrame.backToTheLab(inuc->getMomentum());
-	      inuc->setMomentum(mom);
-	    };
-	  };
-	  globalOutput.addOutgoingParticles(particles);
-	  globalOutput.addTargetFragments(nucleus);
+	  globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
+	  globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
 	  globalOutput.setOnShell(bullet, target);
 	  if(globalOutput.acceptable()) {
 	    return;

@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IBertini.cc,v 1.8 2010-04-15 00:24:45 mkelsey Exp $
+// $Id: G4IBertini.cc,v 1.9 2010-04-19 23:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(); use
 //		const_interator.
 // 20100414  M. Kelsey -- Check for K0L/K0S before using G4InuclElemPart::type
+// 20100418  M. Kelsey -- Reference output particle lists via const-ref
 
 #include "G4IBertini.hh"
 #include "globals.hh"
@@ -231,7 +232,7 @@ G4HadFinalState* G4IBertini::ApplyYourself(const G4HadProjectile& aTrack,
 			    //	    G4double coulumbBarrier = 8.7 * MeV; // fro 54 26 Fe case 5	   
 		    //	    	    G4double coulumbBarrier = 7.9 * MeV; // fro 197 79Au case 9	   
 		    //G4double coulumbBarrier = 1.0 * MeV; // fro 197 79 case 9	   
-	    std::vector<G4InuclElementaryParticle> p= output.getOutgoingParticles();
+	    const std::vector<G4InuclElementaryParticle>& p= output.getOutgoingParticles();
 	    if(!p.empty()) { 
 	      for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
 		if (ipart->type() == proton) {

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.43 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.44 2010-04-19 23:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,6 +34,7 @@
 //		::generateInteractionPartners() to be data members; return via
 //		const-ref instead of by value.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100418  M. Kelsey -- Reference output particle lists via const-ref
 
 //#define CHC_CHECK
 
@@ -745,8 +746,9 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       theElementaryParticleCollider->collide(&bullet, &target, output);
       
       if (verboseLevel > 2) output.printCollisionOutput();
-      
-      std::vector<G4InuclElementaryParticle> outgoing_particles = 
+
+      // Don't need to copy list, as "output" isn't changed again below
+      const std::vector<G4InuclElementaryParticle>& outgoing_particles = 
 	output.getOutgoingParticles();
       
       if (passFermi(outgoing_particles, zone)) { // interaction

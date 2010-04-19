@@ -22,12 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.71 2010-04-15 00:24:45 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.72 2010-04-19 23:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100414  M. Kelsey -- Check for K0L/K0S before using G4InuclElemPart::type
+// 20100418  M. Kelsey -- Reference output particle lists via const-ref, use
+//		const_iterator for both.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -48,8 +50,8 @@
 
 //#define BERTDEV 1  // A flag to activate a development version of Bertini cascade
 
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 G4CascadeInterface::G4CascadeInterface(const G4String& nam)
   :G4VIntraNuclearTransportModel(nam), verboseLevel(0)  
@@ -222,7 +224,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
 #ifdef BERTDEV
 	    G4double coulumbBarrier = 8.7 * MeV; 
-	    std::vector<G4InuclElementaryParticle> p= output.getOutgoingParticles();
+	    const std::vector<G4InuclElementaryParticle>& p= output.getOutgoingParticles();
 	    if(!p.empty()) { 
 	      for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
 		if (ipart->type() == proton) {

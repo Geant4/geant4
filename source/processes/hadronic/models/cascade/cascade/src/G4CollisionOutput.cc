@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.21 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.22 2010-04-19 23:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,9 +32,11 @@
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4LorentzConvertor.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 
 G4CollisionOutput::G4CollisionOutput()
@@ -100,6 +102,44 @@ void G4CollisionOutput::printCollisionOutput() const {
   G4cout << " Nuclei fragments: " << nucleiFragments.size() << G4endl;      
   for(i = 0; i < G4int(nucleiFragments.size()); i++)
     nucleiFragments[i].printParticle();
+}
+
+
+// Boost particles and fragment to LAB -- "convertor" must already be configured
+
+void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
+  G4bool withReflection = convertor.reflectionNeeded();
+
+  if (!outgoingParticles.empty()) { 
+    particleIterator ipart;
+    for(ipart = outgoingParticles.begin(); ipart != outgoingParticles.end();
+	ipart++) {
+      G4LorentzVector mom = ipart->getMomentum();
+      
+      if (withReflection) mom.setZ(-mom.z());
+      mom = convertor.rotate(mom);
+      ipart->setMomentum(mom); 
+      mom = convertor.backToTheLab(ipart->getMomentum());
+      ipart->setMomentum(mom); 
+    }
+
+    std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
+  }
+  
+  if (!nucleiFragments.empty()) { 
+    nucleiIterator inuc;
+    
+    for (inuc = nucleiFragments.begin(); inuc != nucleiFragments.end();
+	 inuc++) {
+      G4LorentzVector mom = inuc->getMomentum(); 
+      
+      if (withReflection) mom.setZ(-mom.z());
+      mom = convertor.rotate(mom);
+      inuc->setMomentum(mom);
+      mom = convertor.backToTheLab(inuc->getMomentum());
+      inuc->setMomentum(mom);
+    }
+  }
 }
 
 

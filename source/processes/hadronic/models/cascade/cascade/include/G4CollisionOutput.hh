@@ -22,23 +22,24 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.hh,v 1.18 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.19 2010-04-19 23:03:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100407  M. Kelsey -- Replace ::resize(0) with ::clear()
 // 20100409  M. Kelsey -- Move function code to .cc files, not inlinable
+// 20100418  M. Kelsey -- Add function to boost output lists to lab frame
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
 
-#include <iostream>
-
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
-
 #include <algorithm>
 #include <vector>
+
+class G4LorentzConvertor;
+
 
 class G4CollisionOutput {
 
@@ -78,6 +79,8 @@ public:
 
   void printCollisionOutput() const;
 
+  void boostToLabFrame(const G4LorentzConvertor& convertor);
+
   void trivialise(G4InuclParticle* bullet, 
 		  G4InuclParticle* target);
 
@@ -95,15 +98,12 @@ public:
   };
 
 private: 
-
-G4int verboseLevel;
+  G4int verboseLevel;
   std::vector<G4InuclElementaryParticle> outgoingParticles;
-
   std::vector<G4InuclNuclei> nucleiFragments;
-
   G4double eex_rest;
 
-  std::pair<std::pair<G4int, G4int>, G4int> selectPairToTune(G4double de) const; 
+  std::pair<std::pair<G4int,G4int>, G4int> selectPairToTune(G4double de) const; 
 
   G4bool on_shell;
 
