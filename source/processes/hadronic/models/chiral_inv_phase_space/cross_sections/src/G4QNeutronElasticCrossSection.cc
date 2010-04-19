@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronElasticCrossSection.cc,v 1.3 2010-04-07 16:44:53 mkossov Exp $
+// $Id: G4QNeutronElasticCrossSection.cc,v 1.4 2010-04-19 12:40:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2235,11 +2235,11 @@ G4double G4QNeutronElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4i
     G4double p2s=p2*sp;
     G4double dl1=lp-lastPAR[3];
     theSS=lastPAR[27];
-    theS1=(lastPAR[15]+lastPAR[16]*dl1*dl1+lastPAR[17]/p)/(1.+lastPAR[18]/p4)
-          +lastPAR[19]/(p4+lastPAR[20]);
-    theB1=(lastPAR[23]+lastPAR[24]/(p4*p4+lastPAR[25]*p3))/(1.+lastPAR[26]/p4);
-    theS2=(lastPAR[21]+lastPAR[22]/p4/p)/p3;
-    theB2=lastPAR[28]/(p*sp+lastPAR[29]); 
+    theS1=(lastPAR[9]+lastPAR[10]*dl1*dl1+lastPAR[11]/p)/(1.+lastPAR[12]/p4)
+          +lastPAR[13]/(p4+lastPAR[14]);
+    theB1=(lastPAR[17]+lastPAR[18]/(p4*p4+lastPAR[19]*p3))/(1.+lastPAR[20]/p4);
+    theS2=(lastPAR[15]+lastPAR[16]/p4/p)/p3;
+    theB2=lastPAR[22]/(p*sp+lastPAR[23]); 
     theS3=0.;
     theB3=0.; 
     theS4=0.;

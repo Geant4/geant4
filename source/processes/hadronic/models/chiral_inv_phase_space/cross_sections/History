@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+19-Apr-2010 M.Kosov                            (hadr-chips-cs-V09-03-03)
+-----------------------------------------------------------------------
+Bug fix for G4QNeutronElasticCrossSection (after the new implementation)
+
 7-Apr-2010 M.Kosov                            (hadr-chips-cs-V09-03-02)
 -----------------------------------------------------------------------
 Implementation of isotope wise CHIPS elastic for neutrons

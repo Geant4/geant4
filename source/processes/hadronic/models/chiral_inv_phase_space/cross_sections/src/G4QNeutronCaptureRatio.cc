@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNeutronCaptureRatio.cc,v 1.3 2010-01-25 09:54:26 mkossov Exp $
+// $Id: G4QNeutronCaptureRatio.cc,v 1.4 2010-04-19 12:40:56 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -93,7 +93,7 @@ G4double G4QNeutronCaptureRatio::GetRatio(G4double pIU, G4int tgZ, G4int tgN)
   if(pIU<toler || A<1) return 1.;        // Fake use of toler as non zero number
   if(A>247)
   {
-    G4cout<<"-*-Warning-*-G4QuasiFreeRatio::GetRatio: A="<<A<<">247, return zero"<<G4endl;
+    G4cout<<"-*-Warning-*-G4NeutronCaptureRatio::GetRatio:A="<<A<<">247, return 0"<<G4endl;
     return 0.;
   }
   G4int nDB=vZ.size();                   // A number of nuclei already initialized in AMDB
