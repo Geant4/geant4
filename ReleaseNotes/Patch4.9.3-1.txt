@@ -40,8 +40,7 @@ List of fixes included in this public patch since the public release 9.3:
         G4SolidExtentList of faceted solids.
     + volumes:
       o Adopt assign() within copy-constructor of G4NavigationHistory.
-        Should provide slight performance improvement. Use G4Allocator for
-        vectors, to optimise memory management and reduce fragmentation.
+        Should provide slight performance improvement.
 
   o Global:
     ------
