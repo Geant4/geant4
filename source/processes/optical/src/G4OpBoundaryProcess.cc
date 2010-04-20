@@ -421,26 +421,28 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         }
 	else if (type == dielectric_dielectric) {
 
-	  if ( theFinish == polishedfrontpainted ||
-	       theFinish == groundfrontpainted ) {
-	          if( !G4BooleanRand(theReflectivity) ) {
-		    DoAbsorption();
-		  }
-	          else {
-		    if ( theFinish == groundfrontpainted )
-					theStatus = LambertianReflection;
-		    DoReflection();
-		  }
-	  }
+          if ( theFinish == polishedbackpainted ||
+               theFinish == groundbackpainted ) {
+             DielectricDielectric();
+          }
 	  else {
-                  if( !G4BooleanRand(theReflectivity) ) {
-                    DoAbsorption();
-                  }
-                  else {
-                    DielectricDielectric();
-                  }
-	  }
-	}
+             if ( !G4BooleanRand(theReflectivity) ) {
+                DoAbsorption();
+             }
+             else {
+                if ( theFinish == polishedfrontpainted ) {
+                   DoReflection();
+                }
+                else if ( theFinish == groundfrontpainted ) {
+                   theStatus = LambertianReflection;
+                   DoReflection();
+                }
+                else {
+                   DielectricDielectric();
+                }
+             }
+          }
+        }
 	else {
 
 	  G4cerr << " Error: G4BoundaryProcess: illegal boundary type " << G4endl;
