@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.19 2009-11-14 02:23:13 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.20 2010-04-20 00:50:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,7 +96,7 @@ class G4DynamicParticle
      G4DynamicParticle(const G4DynamicParticle &right);
 
   //- destructor
-     virtual ~G4DynamicParticle();
+     ~G4DynamicParticle();
 
   //- operators
      G4DynamicParticle & operator=(const G4DynamicParticle &right);
