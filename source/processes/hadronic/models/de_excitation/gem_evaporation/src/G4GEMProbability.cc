@@ -39,7 +39,7 @@
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
-#include "G$Pow.hh"
+#include "G4Pow.hh"
 
 
 G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbability()
