@@ -22,12 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.8 2010-04-15 00:24:45 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.9 2010-04-20 06:46:45 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100414  M. Kelsey -- Check for K0L/K0S before using G4InuclElemPart::type
+// 20100419  M. Kelsey -- Access G4CollisionOutput lists by const-ref, and 
+//		const_iterator
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -49,8 +51,8 @@
 #include "G4LorentzRotation.hh"
 
 
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 G4PreCompoundCascadeInterface::G4PreCompoundCascadeInterface()
   :verboseLevel(0)  {
@@ -241,8 +243,8 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
     }
   
   // Convert cascade data to use hadronics interface
-  std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
-  std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+  const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
+  const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
 

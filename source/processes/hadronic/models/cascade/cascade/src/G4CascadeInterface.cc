@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.72 2010-04-19 23:03:23 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.73 2010-04-20 06:46:45 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -258,8 +258,8 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     }
   
   // Convert cascade data to use hadronics interface
-  std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
-  std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+  const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
+  const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
 

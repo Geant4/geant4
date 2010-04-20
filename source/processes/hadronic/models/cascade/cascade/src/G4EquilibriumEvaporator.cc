@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.29 2010-04-13 05:30:10 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.30 2010-04-20 06:46:45 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,12 +33,13 @@
 //		goodRemnant() -- Q1 should be outside call.
 // 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
+// 20100419  M. Kelsey -- Handle fission output list via const-ref
 
 #define RUN
 
+#include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
 #include "G4Fissioner.hh"
-#include "G4EquilibriumEvaporator.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
@@ -459,17 +460,15 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		// Catch fission output separately for verification
 		G4CollisionOutput foutput;
 		theFissioner->collide(0, &nuclei, foutput);
-		std::vector<G4InuclNuclei> nuclea = foutput.getNucleiFragments();
 
-		if (nuclea.size() == 2) { // fission o'k
-		  // convert back to the lab
-
+		if (foutput.getNucleiFragments().size() == 2) { // fission o'k
+		  // Copy fragment list and convert back to the lab
+		  std::vector<G4InuclNuclei> nuclea(foutput.getNucleiFragments());
+		  G4LorentzVector mom;
 		  for(G4int i = 0; i < 2; i++) {
-		    G4LorentzVector mom = nuclea[i].getMomentum();
-		    mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
+		    mom = toTheNucleiSystemRestFrame.backToTheLab(nuclea[i].getMomentum());
 		    nuclea[i].setMomentum(mom);
-		    nuclea[i].setEnergy();
-		  };	      
+		  }
 
 		  this->collide(0, &nuclea[0], output);
 		  this->collide(0, &nuclea[1], output);

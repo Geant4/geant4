@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2010-04-19 23:03:23 mkelsey Exp $
+$Id: History,v 1.63 2010-04-20 06:46:45 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -17,9 +17,16 @@ code and to keep track of all tags.
 
 18 April 2010 Michael Kelsey (hadr-casc-V09-03-23)
 --------------------------------------------------
-- G4CascadeInterface.cc, G4IBertini.cc, G4InuclCollier.cc, G4NucleiModel.cc:
-  Access lists from G4CollisionOutput via const-ref, not via copying.  Move
-  boosting of output lists from G4InuclCollider to G4CollisionOutput.
+Final revisions to access std::vector<particle> via const-references:
+
+	G4CascadeInterface.cc
+	G4EquilibriumEvaporator.cc
+	G4IBertini.cc
+	G4InuclCollier.cc
+	G4NucleiModel.cc
+	G4PreCompoundCascadeInterface.cc
+
+- G4CollisionOutput:  Add new function to boost output lists to lab frame.
 
 14 April 2010 Michael Kelsey (hadr-casc-V09-03-22)
 --------------------------------------------------
