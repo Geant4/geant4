@@ -39,6 +39,8 @@
 //      Modifications: 
 //
 //      02 May 2003,   Vladimir Ivanchenko change interface to G4NuclearlevelManager
+//
+//      19 April 2010 J. M. Quesada: smaller value of tolerance parameter
 //      
 // -------------------------------------------------------------------
 //
@@ -129,7 +131,10 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
 	  << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation <= 0"
 	  << G4endl;
     }
-  G4double tolerance = 10*eV;
+  //JMQ: far too small, creating sometimes continuum gammas instead of the right discrete ones
+  // (when excitation energy is slightly over maximum discrete  energy): changed
+  //  G4double tolerance = 10*eV;
+  G4double tolerance =0.001*MeV;
   if (excitation <= (_levelManager->MaxLevelEnergy()+ tolerance)) 
     {
       canDo = false;  

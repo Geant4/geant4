@@ -106,7 +106,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	      << "G4DiscreteGammaDeexcitation::CreateTransition - Created from level energy " 
 	      << level->Energy() << ", excitation is " 
 	      << excitation << G4endl;
-	  G4DiscreteGammaTransition* dtransit = new G4DiscreteGammaTransition(*level,Z);
+	  G4DiscreteGammaTransition* dtransit = new G4DiscreteGammaTransition(*level,Z,A);
 	  dtransit->SetICM(_icm);  
 	  return dtransit;
 	}

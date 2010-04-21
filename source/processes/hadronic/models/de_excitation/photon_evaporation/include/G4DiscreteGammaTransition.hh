@@ -51,7 +51,12 @@
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
+//
 //      
+//        19 April 2010, J. M. Quesada. 
+//              Corrections added for taking into account mismatch between tabulated 
+//              gamma energies and level energy differences (fake photons eliminated) 
+//   
 // -------------------------------------------------------------------
 
 #ifndef G4DiscreteGammaTransition_hh
@@ -61,13 +66,18 @@
 #include "G4VGammaTransition.hh"
 #include "G4NuclearLevel.hh"
 
+//JMQ 180410
+class G4NuclearLevelManager;
+
 class G4DiscreteGammaTransition : public G4VGammaTransition
 {
 public:
 
   // Constructor
   G4DiscreteGammaTransition(const G4NuclearLevel& level);
-  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
+//JMQ 180410
+//  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
+  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A);
 
   // Destructor
   ~G4DiscreteGammaTransition();
@@ -98,6 +108,12 @@ private:
   G4NuclearLevel _level;     
   G4double _excitation;
   G4double _gammaCreationTime;
+  //JMQ 180410
+  G4int _A;
+  G4int _Z;
+  G4NuclearLevelManager * _levelManager;
+  //JMQ 190410
+  G4double _tolerance;
 };
 
 

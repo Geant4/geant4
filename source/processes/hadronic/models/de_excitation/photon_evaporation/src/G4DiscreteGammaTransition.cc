@@ -42,11 +42,15 @@
 //
 //        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
 //              i) added G4int _nucleusZ initialise it through the constructor
-//              ii) modified SelectGamma() to allow the generation of conversion electrons      
+//              ii) modified SelectGamma() to allow the generation of conversion electrons    
 //              iii) added #include G4AtomicShells.hh
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
+//
+//        19 April 2010, J. M. Quesada. 
+//              Corrections added for taking into account mismatch between tabulated 
+//              gamma energies and level energy differences (fake photons eliminated) 
 //      
 // -------------------------------------------------------------------
 
@@ -54,16 +58,23 @@
 #include "Randomize.hh"
 #include "G4RandGeneralTmp.hh"
 #include "G4AtomicShells.hh"
+//JMQ: 
+#include "G4NuclearLevelStore.hh"
 
 G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level): 
   _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
 { }
 
-G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z): 
+//JMQ: now A is also needed in the constructor
+//G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z): 
+G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A): 
   _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false), _gammaEnergy(0.), 
-  _level(level), _excitation(0.),  _gammaCreationTime(0.)
+  //  _level(level), _excitation(0.),  _gammaCreationTime(0.)
+  _level(level), _excitation(0.),  _gammaCreationTime(0.),_A(A),_Z(Z)
 {
   _verbose = 0;
+  //JMQ: added tolerence in the mismatch
+  _tolerance=0.001*MeV;
 }
 
 
@@ -73,29 +84,46 @@ G4DiscreteGammaTransition::~G4DiscreteGammaTransition()
 
 void G4DiscreteGammaTransition::SelectGamma()
 {
-
+  
   _gammaEnergy = 0.;
-
+  
   G4int nGammas = _level.NumberOfGammas();
   if (nGammas > 0)
     {
       G4double random = G4UniformRand();
-
+      
       G4int iGamma = 0;
       for(iGamma=0;iGamma < nGammas;iGamma++)
 	{
 	  if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
 	    break;
 	}
-
-
+      
       // Small correction due to the fact that there are mismatches between 
       // nominal level energies and emitted gamma energies
-
+      
       G4double eCorrection = _level.Energy() - _excitation;
-
+      
       _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
-
+      
+      
+      //JMQ: 
+      //1)If chosen gamma energy is close enough to excitation energy, the later
+      //  is used instead for gamma dacey to gs (it guarantees energy conservation)
+      //2)For energy conservation, level energy differences instead of  tabulated 
+      //  gamma energies must be used (origin of final fake photons)
+      
+      _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(_Z,_A);
+      if((_excitation-_gammaEnergy)<_tolerance)      
+	{ 
+	  _gammaEnergy =_excitation;
+	}
+      else
+	{		 
+	  const G4NuclearLevel* finalLevel =_levelManager->NearestLevel(_excitation-_gammaEnergy);
+	  _gammaEnergy =_excitation-finalLevel->Energy();
+	}
+      
       //  Warning: the following check is needed to avoid loops:
       //  Due essentially to missing nuclear levels in data files, it is
       //  possible that _gammaEnergy is so low as the nucleus doesn't change
@@ -105,7 +133,7 @@ void G4DiscreteGammaTransition::SelectGamma()
       //    NOTE: you should force the transition to the next lower level,
       //          but this change needs a more complex revision of actual design.
       //          I leave this for a later revision.
-
+      
       if (_gammaEnergy < _level.Energy()*10e-5) _gammaEnergy = _excitation;
       // now decide whether Internal Coversion electron should be emitted instead
       if (_icm) {
@@ -154,9 +182,9 @@ void G4DiscreteGammaTransition::SelectGamma()
 	    _aGamma = false ;   // emitted is not a gamma now 
 	  }
       }
-    
+      
       G4double tau = _level.HalfLife() / std::log(2.0);
-
+      
       G4double tMin = 0;
       G4double tMax = 10.0 * tau;
       //  Original code, not very efficent
@@ -171,7 +199,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 
       //  G4RandGeneralTmp randGeneral(sampleArray, nBins);
       //G4double random = randGeneral.shoot();
-  
+      
       //_gammaCreationTime = tMin + (tMax - tMin) * random;
 
       // new code by Fan Lei

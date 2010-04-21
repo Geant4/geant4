@@ -44,6 +44,8 @@
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
 //
+//        19 April 2010, J. M. Quesada calculations in CM system
+//              pending final boost to lab system  (not critical)
 //
 // -------------------------------------------------------------------
 
@@ -63,6 +65,7 @@
 
 #include "G4DiscreteGammaTransition.hh"
 
+
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { }
@@ -77,38 +80,39 @@ G4VGammaDeexcitation::~G4VGammaDeexcitation()
 G4FragmentVector* G4VGammaDeexcitation::DoTransition()
 {
   // Template method
-
+  
  Initialize();
  G4FragmentVector* products = new G4FragmentVector;
-  
-  if (CanDoTransition())
-    {
+ 
+ if (CanDoTransition())
+   {
      G4Fragment* gamma = GenerateGamma();
      if (gamma != 0)
        {
+	 //JMQ: pending of final boost to lab (not critical)
 	 products->push_back(gamma);
-	 UpdateNucleus(gamma);
+	 UpdateNucleus(gamma); 
 	 Update();
        }
-    }
-
-  if (_verbose > 1)
+   }
+ 
+ if (_verbose > 1)
     G4cout << "G4VGammaDeexcitation::DoTransition - Transition deleted " << G4endl;
-
-  if (_transition != 0) delete _transition;
-
-  return products;
+ 
+ if (_transition != 0) delete _transition;
+ 
+ return products;
 }
 
 G4FragmentVector* G4VGammaDeexcitation::DoChain()
 {
   Initialize();
   G4FragmentVector* products = new G4FragmentVector;
-
+  
   while (CanDoTransition())
     {
       if (_verbose > 5) G4cout << "G4VGammaDeexcitation::DoChain -  Looping" << G4endl;
-
+      
       G4Fragment* gamma = GenerateGamma();
       if (gamma != 0) 
 	{
@@ -116,12 +120,12 @@ G4FragmentVector* G4VGammaDeexcitation::DoChain()
 	  UpdateNucleus(gamma);
 	  UpdateElectrons ();
 	}
-     Update();
+      Update();
     } 
-
+  
   if (_verbose > 1)
-      G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << G4endl;
-
+    G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << G4endl;
+  
   if (_transition != 0) delete _transition;
   
   return products;
@@ -143,7 +147,7 @@ void G4VGammaDeexcitation::SetNucleus(const G4Fragment& nucleus)
 G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 {
   G4double eGamma = 0.;
-
+  
   if (_transition != 0) {
     _transition->SelectGamma();  // it can be conversion electron too
     eGamma = _transition->GetGammaEnergy(); 
@@ -175,7 +179,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 			    pM * sinTheta * std::sin(phi),
 			    pM * cosTheta );
       G4LorentzVector gamma(pGamma, eGamma);
-      //	gamma.boost(_nucleus.GetMomentum().boostVector() );
+      //      	gamma.boost(_nucleus.GetMomentum().boostVector() );
       G4Fragment* gammaFragment ;
       if ( dtransition && !(dtransition->IsAGamma()) ){
 	gammaFragment = new G4Fragment(gamma,G4Electron::ElectronDefinition());
@@ -209,44 +213,61 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
   dtransition = dynamic_cast <G4DiscreteGammaTransition*> (_transition);
   if (dtransition && !(dtransition->IsAGamma()) )      
     eGamma += dtransition->GetBondEnergy(); 
-
+  
   G4LorentzVector p4Nucleus(_nucleus.GetMomentum() );
-
-// New tetravector calculation:
-
-//  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(_nucleus.GetZ(),_nucleus.GetA());
-  G4double m1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(_nucleus.GetZ()),
-									       static_cast<G4int>(_nucleus.GetA()));
-  G4double m2 = _nucleus.GetZ() *  G4Proton::Proton()->GetPDGMass() + 
-    (_nucleus.GetA()- _nucleus.GetZ())*G4Neutron::Neutron()->GetPDGMass();
-
-  G4double Mass = std::min(m1,m2);
-
-
+  
+  // New tetravector calculation:
+  
+  //JMQ : for the sake of consistency, mass is calculated from G4G4ParticleTable (as in evaporation and exciton models)
+  //  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(_nucleus.GetZ(),_nucleus.GetA());
+  //  G4double m1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(_nucleus.GetZ()),
+  //									       static_cast<G4int>(_nucleus.GetA()));
+  //  G4double m2 = _nucleus.GetZ() *  G4Proton::Proton()->GetPDGMass() + 
+  //    (_nucleus.GetA()- _nucleus.GetZ())*G4Neutron::Neutron()->GetPDGMass();
+  
+  //  G4double Mass = std::min(m1,m2);
+  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(_nucleus.GetZ()),
+										 static_cast<G4int>(_nucleus.GetA()));
+  
+  
+  
   G4double newExcitation = p4Nucleus.mag() - Mass - eGamma;
   if(newExcitation < 0)
     newExcitation = 0;
   
-  G4ThreeVector p3Residual(p4Nucleus.vect() - pGamma);
-  G4double newEnergy = std::sqrt(p3Residual * p3Residual +
-			    (Mass + newExcitation) * (Mass + newExcitation));
-  G4LorentzVector p4Residual(p3Residual, newEnergy);
   
-  //  G4LorentzVector p4Residual(-pGamma, p4Nucleus.e() - eGamma);
-  //  p4Residual.boost( _nucleus.GetMomentum().boostVector() );
+  
+  //JMQ: calculations have been reshaped for full energy-momentum conservation
+  //  Calculations must be done al CM system and later on 4-momenta must be boosted to lab system
+  
+  //  G4ThreeVector p3Residual(p4Nucleus.vect() - pGamma);
+  G4ThreeVector p3Residual(- pGamma);
+  
+  // Now the residual nucleus. 
+  // The energy conservation says that 
+  G4double ResidualEcm = p4Nucleus.m()-eGamma;
+  
+  
+  
+  //JMQ: equivalent, but more compact 
+  //  G4double newEnergy = std::sqrt(p3Residual * p3Residual +
+  //			    (Mass + newExcitation) * (Mass + newExcitation));
+  //  G4LorentzVector p4Residual(p3Residual, newEnergy);
+  G4LorentzVector p4Residual(p3Residual, ResidualEcm);
   
   // Update excited nucleus parameters
-
+  
   _nucleus.SetMomentum(p4Residual);
+  
   _nucleus.SetCreationTime(gamma->GetCreationTime());
-
-//  if (_transition != 0) 
-//  {
-//    G4double excitation =_transition->GetEnergyTo();
-//    if (excitation < 0.) excitation = 0.0;
-//    _nucleus.SetExcitationEnergy(excitation);
-//  }
-
+  
+  //  if (_transition != 0) 
+  //  {
+  //    G4double excitation =_transition->GetEnergyTo();
+  //    if (excitation < 0.) excitation = 0.0;
+  //    _nucleus.SetExcitationEnergy(excitation);
+  //  }
+  
   return;
 }
 
@@ -271,7 +292,7 @@ void G4VGammaDeexcitation::Update()
       if (_verbose > 1)
 	G4cout << "G4VGammaDeexcitation::Update - Transition deleted " << G4endl;
     }
-
+  
   _transition = CreateTransition();
   if (_transition != 0) 
     {
@@ -282,7 +303,7 @@ void G4VGammaDeexcitation::Update()
       // the atom to deexcite before the next IC. But this limitation is causing other problems as 
       // reported in #952
     }
-
+  
   return;
 }
 
