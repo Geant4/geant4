@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.23 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.24 2010-04-21 18:35:50 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -34,6 +34,7 @@
 //		return-by-value of initializeCascad() with an input buffer.
 // 20100409  M. Kelsey -- Add function to sort list of partnerts by pathlen,
 //		move non-inlinable code to .cc.
+// 20100421  M. Kelsey -- Move getFermiKinetic() to .cc, no hardwired masses.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -73,19 +74,7 @@ public:
     return fermi_momenta[ip - 1][izone];
   }
 
-
-  G4double getFermiKinetic(G4int ip, G4int izone) const {
-    G4double ekin = 0.0;
-
-    if(ip < 3 && izone < number_of_zones) {
-      G4double pf = fermi_momenta[ip - 1][izone]; 
-      G4double mass = ip == 1 ? 0.93827 : 0.93957;
-
-      ekin = std::sqrt(pf * pf + mass * mass) - mass;
-    }  
-    return ekin;
-  }
-
+  G4double getFermiKinetic(G4int ip, G4int izone) const;
 
   G4double getPotential(G4int ip, G4int izone) const {
     G4int ip0 = ip < 3 ? ip - 1 : 2;

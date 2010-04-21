@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.44 2010-04-19 23:03:23 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.45 2010-04-21 18:35:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,6 +35,7 @@
 //		const-ref instead of by value.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100418  M. Kelsey -- Reference output particle lists via const-ref
+// 20100421  M. Kelsey -- Replace hardwire p/n masses with G4PartDef's
 
 //#define CHC_CHECK
 
@@ -49,6 +50,8 @@
 #include "G4HadTmpUtil.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4CascadSpecialFunctions.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
 
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
@@ -83,8 +86,8 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   const G4double pion_vp_small = 0.007; 
   const G4double radForSmall = 8.0; // fermi
   const G4double piTimes4thirds = 4.189; // 4 Pi/3
-  const G4double mproton = 0.93827;
-  const G4double mneutron = 0.93957; 
+  const G4double mproton = G4Proton::Definition()->GetPDGMass() / GeV;
+  const G4double mneutron = G4Neutron::Definition()->GetPDGMass() / GeV;
   const G4double alfa3[3] = { 0.7, 0.3, 0.01 }; // listing zone radius
   //  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
@@ -266,6 +269,19 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   }; 
   nuclei_radius = zone_radii[zone_radii.size() - 1];
 
+}
+
+
+G4double G4NucleiModel::getFermiKinetic(G4int ip, G4int izone) const {
+  G4double ekin = 0.0;
+  
+  if (ip < 3 && izone < number_of_zones) {	// ip for proton/neutron only
+    G4double pf = fermi_momenta[ip - 1][izone]; 
+    G4double mass = G4InuclElementaryParticle::getParticleMass(ip);
+    
+    ekin = std::sqrt(pf * pf + mass * mass) - mass;
+  }  
+  return ekin;
 }
 
 
