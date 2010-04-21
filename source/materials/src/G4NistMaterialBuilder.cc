@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.23 2009-11-24 17:19:10 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.24 2010-04-21 14:48:29 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -354,11 +354,13 @@ void G4NistMaterialBuilder::ListMaterials(const G4String& list)
   if (list == "simple")   ListNistSimpleMaterials();
   if (list == "compound") ListNistCompoundMaterials();
   if (list == "hep")      ListHepMaterials();
+  if (list == "space")    ListSpaceMaterials();
 
   if (list == "all") {
     ListNistSimpleMaterials();
     ListNistCompoundMaterials();
     ListHepMaterials();
+    ListSpaceMaterials();
   }
 }
 
@@ -384,6 +386,19 @@ void G4NistMaterialBuilder::ListNistCompoundMaterials()
   G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
   G4cout << "=======================================================" << G4endl;
   for (G4int i=nElementary; i<nNIST; i++) {DumpMix(i);}
+  G4cout << "=======================================================" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistMaterialBuilder::ListSpaceMaterials()
+{
+  G4cout << "=======================================================" << G4endl;
+  G4cout << "###           Space ISS Materials                    ##" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  for (G4int i=nNIST; i<nMaterials; i++) {DumpMix(i);}
   G4cout << "=======================================================" << G4endl;
 }
 
@@ -595,6 +610,7 @@ void G4NistMaterialBuilder::Initialise()
   NistSimpleMaterials();
   NistCompoundMaterials();
   HepAndNuclearMaterials();
+  SpaceMaterials();
 
   if (verbose > 1) ListMaterials("all");
 }
@@ -1742,4 +1758,29 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+void G4NistMaterialBuilder::SpaceMaterials()
+{
+  // density in g/cm3
+
+  AddMaterial("G4_KEVLAR" , 1.44, 0, 0.0, 4);
+  AddElementByAtomCount("C", 14);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("O", 2);
+  AddElementByAtomCount("N", 2);
+
+  AddMaterial("G4_DACRON" , 1.40, 0, 0.0, 3);   // G4_POLYETHYLENE_TEREPHTALATE
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("H", 8);
+  AddElementByAtomCount("O", 4);
+
+  AddMaterial("G4_NEOPRENE" , 1.23, 0, 0.0, 3);   // POLYCLOROPRENE
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("H", 5);
+  AddElementByAtomCount("Cl", 1);
+}
+
+
+
 
