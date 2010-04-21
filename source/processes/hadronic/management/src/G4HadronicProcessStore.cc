@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.13 2009-12-02 15:56:02 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.14 2010-04-21 17:55:25 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "G4Proton.hh"
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4HadronicEPTestMessenger.hh"
 
 G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
 
@@ -77,6 +78,7 @@ G4HadronicProcessStore::~G4HadronicProcessStore()
   Clean();
   G4HadronicInteractionRegistry::Instance()->Clean();
   G4CrossSectionDataSetRegistry::Instance()->Clean();
+  delete theEPTestMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -126,6 +128,7 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   currentParticle = 0;
   verbose = 1;
   buildTableStart = true;
+  theEPTestMessenger = new G4HadronicEPTestMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -366,7 +369,7 @@ void G4HadronicProcessStore::Register(G4HadronicProcess* proc)
       if(process[i] == proc) { return; }
     }
   }
-  //G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
+  //  G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
   //	 << "  " << proc->GetProcessName() << G4endl;
   n_proc++;
   process.push_back(proc);
@@ -663,4 +666,38 @@ G4HadronicProcess* G4HadronicProcessStore::FindProcess(
   return hp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4HadronicProcessStore::SetEpReportLevel(G4int level)
+{
+  G4cout << " Setting energy/momentum report level to " << level 
+         << " for " << process.size() << " hadronic processes " << G4endl;
+  for (G4int i = 0; i < G4int(process.size()); i++) {
+    process[i]->SetEpReportLevel(level);
+  }
+}
+
+
+void G4HadronicProcessStore::SetProcessAbsLevel(G4double abslevel)
+{
+  G4cout << " Setting absolute energy/momentum test level to " << abslevel << G4endl;
+  G4double rellevel = 0.0;
+  G4HadronicProcess* theProcess = 0;
+  for (G4int i = 0; i < G4int(process.size()); i++) {
+    theProcess = process[i];
+    rellevel = theProcess->GetEnergyMomentumCheckLevels().first;
+    theProcess->SetEnergyMomentumCheckLevels(rellevel, abslevel);
+  }
+}
+
+
+void G4HadronicProcessStore::SetProcessRelLevel(G4double rellevel)
+{
+  G4cout << " Setting relative energy/momentum test level to " << rellevel << G4endl;
+  G4double abslevel = 0.0;
+  G4HadronicProcess* theProcess = 0;
+  for (G4int i = 0; i < G4int(process.size()); i++) {
+    theProcess = process[i];
+    abslevel = theProcess->GetEnergyMomentumCheckLevels().second;
+    theProcess->SetEnergyMomentumCheckLevels(rellevel, abslevel);
+  }
+}

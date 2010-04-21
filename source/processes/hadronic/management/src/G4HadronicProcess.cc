@@ -81,7 +81,7 @@ DisableIsotopeProductionGlobally() {isoIsEnabled = false;}
 G4HadronicProcess::G4HadronicProcess(const G4String& processName,
                                      G4ProcessType aType)
  :G4VDiscreteProcess(processName, aType)
-{ 
+{
   ModelingState = 0;
   isoIsOnAnyway = -1;
   theTotalResult = new G4ParticleChange();

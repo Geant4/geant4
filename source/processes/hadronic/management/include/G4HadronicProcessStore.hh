@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.5 2009-02-15 16:50:15 vnivanch Exp $
+// $Id: G4HadronicProcessStore.hh,v 1.6 2010-04-21 17:55:13 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,6 +61,8 @@
 #include <vector>
 
 class G4Element;
+class G4HadronicEPTestMessenger;
+
 
 class G4HadronicProcessStore
 {
@@ -178,6 +180,13 @@ public:
   G4HadronicProcess* FindProcess(const G4ParticleDefinition*, 
 				 G4HadronicProcessType subType);
 
+  // Energy-momentum non-conservation limits and reporting
+  void SetEpReportLevel(G4int level);
+
+  void SetProcessAbsLevel(G4double absoluteLevel);
+
+  void SetProcessRelLevel(G4double relativeLevel);
+
 private:
 
   // constructor
@@ -221,6 +230,7 @@ private:
 
   G4DynamicParticle localDP;
 
+  G4HadronicEPTestMessenger* theEPTestMessenger;
 };
 
 
