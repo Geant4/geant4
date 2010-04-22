@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2010-04-16 07:40:50 gcosmo Exp $
+$Id: History,v 1.169 2010-04-22 09:07:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 22nd, 2010      G.Cosmo - geomvol-V09-03-05
+- Make use of specialized allocator for handling internal vector in
+  G4NavigatorHistory, globally controlling the memory pool.
+  Measured ~2% average run-time speed-up.
 
 Apr 15th, 2010      G.Cosmo - geomvol-V09-03-04
 - Combine use of G4Allocator for vectors in G4NavigationHistory with use
