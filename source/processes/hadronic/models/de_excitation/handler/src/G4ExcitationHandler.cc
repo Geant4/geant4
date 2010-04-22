@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.29 2010-04-16 17:02:55 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.30 2010-04-22 10:14:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -147,14 +147,15 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
   
   // JMQ 150909:  first step in de-excitation chain (SMM will be used only here)
   
-  // In case A <= 4 the fragment will not perform any nucleon emission
-  if (A <= 4)
+  // In case A <= 1 the fragment will not perform any nucleon emission
+  // JMQ 220410 change limit from 4 to 1
+  if (A <= 1)
     {
       // I store G4Fragment* in theEvapStableList to apply thePhotonEvaporation later      
-      theEvapStableList.push_back( theInitialStatePtr );
+      theResults.push_back( theInitialStatePtr );
     }
   
-  else  // If A > 4 we try to apply theFermiModel, theMultiFragmentation or theEvaporation
+  else  // If A > 1 we try to apply theFermiModel, theMultiFragmentation or theEvaporation
     {
       
       // JMQ 150909: first step in de-excitation is treated separately 
@@ -187,7 +188,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 	      A = static_cast<G4int>((*j)->GetA()+0.5);  // +0.5 to avoid bad truncation
 
 	      if(A <= 1)      { theResults.push_back(*j); }        // gamma, p, n
-	      else if(A <= 4) { theEvapStableList.push_back(*j); } // evaporation is not possible
+	      // else if(A <= 4) { theEvapStableList.push_back(*j); } // evaporation is not possible
 	      else            { theEvapList.push_back(*j); }       // evaporation is possible
 	    }
 	}
@@ -209,57 +210,60 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
     {
       A = static_cast<G4int>((*iList)->GetA()+0.5);  // +0.5 to avoid bad truncation
       Z = static_cast<G4int>((*iList)->GetZ()+0.5);
-	  
-      // In case A <= 4 the fragment will not perform any nucleon emission
-      if (A <= 4)
+
+      /*	  
+      // In case A <= 1 the fragment will not perform any nucleon emission
+      // and no photon evaporation
+      if (A <= 1)
 	{
 	  // storing G4Fragment* in theEvapStableList to apply thePhotonEvaporation later    
-	  theEvapStableList.push_back(*iList );
+	  theResults.push_back(*iList );
 	}
 	  
-      else  // If A > 4 we try to apply theFermiModel or theEvaporation
-	{   
-	  // stable fragment  
-	  if ((*iList)->GetExcitationEnergy() <= 0.1*eV) 
-	    { 
-	      theResults.push_back(*iList); 
-	    }
-	  else
+      else  // If A > 1 we try to apply theFermiModel or theEvaporation
+	{
+      */   
+      // stable fragment condition   
+      if ((*iList)->GetExcitationEnergy() <= 0.1*eV) 
+	{ 
+	  theResults.push_back(*iList); 
+	}
+      else
+	{
+	  if ( A < GetMaxA() && Z < GetMaxZ() ) // if satisfied apply Fermi Break-Up
 	    {
-	      if ( A < GetMaxA() && Z < GetMaxZ() ) // if satisfied apply Fermi Break-Up
-		{
-		  theTempResult = theFermiModel->BreakItUp(*(*iList));
-		}
-	      else // apply Evaporation in another case
-		{
-		  theTempResult = theEvaporation->BreakItUp(*(*iList));
-		}
-		  
-	      // New configuration is stored in theTempResult, so we can free
-	      // the memory where the previous configuration is
-		  
-	      G4bool deletePrimary = true;
-	      G4int nsec = theTempResult->size();
-		  
-	      // The number of secondaries tells us if the configuration has changed  
-	      if ( nsec > 0 )
-		{
-		  G4FragmentVector::iterator j;
-		  for (j = theTempResult->begin(); j != theTempResult->end(); ++j)
-		    {
-		      if((*j) == (*iList)) { deletePrimary = false; }
-		      A = static_cast<G4int>((*j)->GetA()+0.5);  // +0.5 to avoid bad truncation
-
-		      if(A <= 1)                   { theResults.push_back(*j); }        // gamma, p, n
-		      else if(A <= 4 || 1 == nsec) { theEvapStableList.push_back(*j); } // no evaporation 
-		      else                         { theEvapList.push_back(*j); }      
-		    }
-		}
-	      if( deletePrimary ) { delete (*iList); }
-	      delete theTempResult;
-	      
+	      theTempResult = theFermiModel->BreakItUp(*(*iList));
 	    }
-	} // endif (A <=4)
+	  else // apply Evaporation in another case
+	    {
+	      theTempResult = theEvaporation->BreakItUp(*(*iList));
+	    }
+		  
+	  // New configuration is stored in theTempResult, so we can free
+	  // the memory where the previous configuration is
+		  
+	  G4bool deletePrimary = true;
+	  G4int nsec = theTempResult->size();
+		  
+	  // The number of secondaries tells us if the configuration has changed  
+	  if ( nsec > 0 )
+	    {
+	      G4FragmentVector::iterator j;
+	      for (j = theTempResult->begin(); j != theTempResult->end(); ++j)
+		{
+		  if((*j) == (*iList)) { deletePrimary = false; }
+		  A = static_cast<G4int>((*j)->GetA()+0.5);  // +0.5 to avoid bad truncation
+
+		  if(A <= 1)  { theResults.push_back(*j); }        // gamma, p, n
+		  //  else if(A <= 4 || 1 == nsec) { theEvapStableList.push_back(*j); } // no evaporation 
+		  else        { theEvapList.push_back(*j); }      
+		}
+	    }
+	  if( deletePrimary ) { delete (*iList); }
+	  delete theTempResult;
+	      
+	}
+      //   } // endif (A <=4)
     } // end of the loop over theEvapList
 
   //G4cout << "## After 2nd step " << theEvapList.size() << " was evap;  "
@@ -269,7 +273,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
   // -----------------------
   // Photon-Evaporation loop
   // -----------------------
-  
+  /*  
   for (iList = theEvapStableList.begin(); iList != theEvapStableList.end(); ++iList)
     {
       // take out stable particles and fragments
@@ -334,7 +338,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 	  delete theTempResult;
 	}  
     } // end of photon-evaporation loop
-
+  */
   //G4cout << "## After 3d step " << theEvapList.size() << " was evap;  "
   //	 << theEvapStableList.size() << " was photo-evap; " 
   //	 << theResults.size() << " results. " << G4endl; 
