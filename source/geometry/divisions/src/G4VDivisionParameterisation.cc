@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.14 2008-12-03 16:41:15 arce Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.15 2010-04-22 00:40:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
+// 21.04.10 - M.Asai, Add "half_gap"
 // --------------------------------------------------------------------
 
 #include "G4VDivisionParameterisation.hh" 
@@ -63,6 +64,8 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
 
   theVoluFirstCopyNo = 1;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
+  half_gap = 0.;
 }
 
 //--------------------------------------------------------------------------

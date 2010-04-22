@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.11 2007-05-11 13:26:26 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.12 2010-04-22 00:40:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
@@ -38,6 +38,7 @@
 // -------
 // 09.05.01 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
+// 21.04.10 - M.Asai, Add "half_gap"
 //---------------------------------------------------------------------
 #ifndef G4VDivisionParameterisation_H
 #define G4VDivisionParameterisation_H 1
@@ -106,6 +107,14 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;
+
+    G4double half_gap;
+
+  public:
+
+    void SetHalfGap(G4double hg) { half_gap = hg; }
+    G4double GetHalfGap() const { return half_gap; }
+
 };
 
 #include "G4VDivisionParameterisation.icc"

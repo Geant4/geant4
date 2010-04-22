@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.9 2006-06-29 18:18:38 gunter Exp $
+// $Id: G4ParameterisationCons.cc,v 1.10 2010-04-22 00:40:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationCons Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
+// 21.04.10 - M.Asai, Add "half_gap"
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationCons.hh"
@@ -187,14 +188,15 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
                   + foffset + fwidthPlus * (copyNo+1);
   G4double pDz = msol->GetZHalfLength();
 
+  G4double d_half_gap = half_gap * pRMax2 / pRMax1;
   //- already rotated  double pSR = foffset + copyNo*fwidth;
   G4double pSPhi = msol->GetStartPhiAngle();
   G4double pDPhi = msol->GetDeltaPhiAngle();;
 
-  cons.SetInnerRadiusMinusZ( pRMin1 );
-  cons.SetOuterRadiusMinusZ( pRMax1 );
-  cons.SetInnerRadiusPlusZ( pRMin2 );
-  cons.SetOuterRadiusPlusZ( pRMax2 );
+  cons.SetInnerRadiusMinusZ( pRMin1 + half_gap );
+  cons.SetOuterRadiusMinusZ( pRMax1 - half_gap );
+  cons.SetInnerRadiusPlusZ( pRMin2 + d_half_gap );
+  cons.SetOuterRadiusPlusZ( pRMax2 - d_half_gap );
   cons.SetZHalfLength( pDz );
   cons.SetStartPhiAngle( pSPhi );
   cons.SetDeltaPhiAngle( pDPhi );
@@ -294,8 +296,8 @@ ComputeDimensions( G4Cons& cons, const G4int,
   G4double pDz = msol->GetZHalfLength();
 
   //- already rotated  double pSPhi = foffset + copyNo*fwidth;
-  G4double pSPhi = foffset + msol->GetStartPhiAngle();
-  G4double pDPhi = fwidth;
+  G4double pSPhi = foffset + msol->GetStartPhiAngle() + half_gap;
+  G4double pDPhi = fwidth - 2.*half_gap;
 
   cons.SetInnerRadiusMinusZ( pRMin1 );
   cons.SetOuterRadiusMinusZ( pRMax1 );
@@ -395,7 +397,7 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
 {
   G4Cons* msol = (G4Cons*)(fmotherSolid);
 
-  G4double mHalfLength = msol->GetZHalfLength();
+  G4double mHalfLength = msol->GetZHalfLength() - half_gap;
   G4double aRInner = (msol->GetInnerRadiusPlusZ()
                    - msol->GetInnerRadiusMinusZ()) / (2*mHalfLength);
   G4double bRInner = (msol->GetInnerRadiusPlusZ()
@@ -404,14 +406,14 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
                    - msol->GetOuterRadiusMinusZ()) / (2*mHalfLength);
   G4double bROuter = (msol->GetOuterRadiusPlusZ()
                    + msol->GetOuterRadiusMinusZ()) / 2;
-  G4double xMinusZ = -mHalfLength + OffsetZ() + fwidth*copyNo;
-  G4double xPlusZ  = -mHalfLength + OffsetZ() + fwidth*(copyNo+1);
+  G4double xMinusZ = -mHalfLength + OffsetZ() + fwidth*copyNo + half_gap;
+  G4double xPlusZ  = -mHalfLength + OffsetZ() + fwidth*(copyNo+1) - half_gap;
   cons.SetInnerRadiusMinusZ( aRInner * xMinusZ + bRInner );
   cons.SetOuterRadiusMinusZ( aROuter * xMinusZ + bROuter );
   cons.SetInnerRadiusPlusZ( aRInner * xPlusZ + bRInner );
   cons.SetOuterRadiusPlusZ( aROuter * xPlusZ + bROuter );
  
-  G4double pDz = fwidth / 2.;
+  G4double pDz = fwidth / 2. - half_gap;
   G4double pSPhi = msol->GetStartPhiAngle();
   G4double pDPhi = msol->GetDeltaPhiAngle();
 
