@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.16 2010-01-07 08:47:03 gcosmo Exp $
+// $Id: G4OpticalSurface.hh,v 1.17 2010-04-22 21:19:14 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -223,9 +223,9 @@ inline
                                                         G4int thetaIndex,
                                                         G4int phiIndex)
 {
-  return *(AngularDistribution+angleIncident+
-                               thetaIndex*incidentIndexMax+
-                               phiIndex*thetaIndexMax*incidentIndexMax);
+  return AngularDistribution[angleIncident+
+                             thetaIndex*incidentIndexMax+
+                             phiIndex*thetaIndexMax*incidentIndexMax];
 }
 
 #endif /* G4OpticalSurface_h */
