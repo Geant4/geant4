@@ -64,7 +64,7 @@ G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation():
   _nucleusZ(0), _nucleusA(0), _max_hl(1e-6*second), _icm(false),
   _rdm(false), _levelManager(0)
 {
-  _tolerance = 0.1 * MeV;
+  _tolerance = keV;
 }
 
 

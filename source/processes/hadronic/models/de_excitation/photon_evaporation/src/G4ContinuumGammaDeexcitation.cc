@@ -134,7 +134,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
   //JMQ: far too small, creating sometimes continuum gammas instead of the right discrete ones
   // (when excitation energy is slightly over maximum discrete  energy): changed
   //  G4double tolerance = 10*eV;
-  G4double tolerance =0.001*MeV;
+  G4double tolerance = keV;
   if (excitation <= (_levelManager->MaxLevelEnergy()+ tolerance)) 
     {
       canDo = false;  

@@ -74,7 +74,7 @@ G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level
 {
   _verbose = 0;
   //JMQ: added tolerence in the mismatch
-  _tolerance=0.001*MeV;
+  _tolerance = keV;
 }
 
 
