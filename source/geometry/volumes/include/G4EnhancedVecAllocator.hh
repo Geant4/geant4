@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnhancedVecAllocator.hh,v 1.1 2010-04-22 09:06:25 gcosmo Exp $
+// $Id: G4EnhancedVecAllocator.hh,v 1.2 2010-04-22 09:49:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,10 +87,12 @@ class G4EnhancedVecAllocator : public std::allocator<_Tp>
 
     G4EnhancedVecAllocator() {;}
 
-    G4EnhancedVecAllocator(const G4EnhancedVecAllocator<_Tp>&) {;}
+    G4EnhancedVecAllocator(const G4EnhancedVecAllocator<_Tp>&)
+      : std::allocator<_Tp>() {;}
 
     template<typename _Tp1>
-    G4EnhancedVecAllocator(const G4EnhancedVecAllocator<_Tp1>&) {;}
+    G4EnhancedVecAllocator(const G4EnhancedVecAllocator<_Tp1>&)
+      : std::allocator<_Tp1>() {;}
 
     ~G4EnhancedVecAllocator() {;}
 
