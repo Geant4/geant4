@@ -14,13 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-22 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-08)
-----------------------------------------------------------
 - G4ExcitationHandler - (JQM+VI) apply FermiBreakUp to fragments with A>1 
                         (before was A>4) in order to reduce number of 
                         fake gamma produced in order deexcite light
                         fragments; set excitation low-limit 1 keV
-- G4VGammaDeexcitation - (JMQ) return back version of hadr-deex-V09-03-06
+
+
+22 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-08)
+----------------------------------------------------------
+- G4VGammaDeexcitation - (JMQ) fixed negative excitation energy
 - G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
   G4ContinuumGammaDeexcitation - set energy tolerance 1 keV
 
