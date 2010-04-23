@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2010-02-24 11:19:22 gcosmo Exp $
+$Id: History,v 1.163 2010-04-23 07:47:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-Apr-2010  I.Hrivnacova (geom-specific-V09-03-02)
+- G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
+  vertices. Added a check for vertices ordering; if vertices are defined
+  anti-clockwise their ordering is reverted.
+  Fix in polygon facet triangularization for consequent concave vertices.
 
 24-Feb-2010  G.Cosmo (geom-specific-V09-03-01)
 - Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid
