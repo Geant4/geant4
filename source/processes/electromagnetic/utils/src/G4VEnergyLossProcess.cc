@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.162 2010-04-12 11:45:03 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.163 2010-04-23 14:25:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -994,7 +994,6 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double length = step.GetStepLength();
   if(length <= DBL_MIN) { return &fParticleChange; }
   G4double eloss  = 0.0;
-  G4double esecdep = 0.0;
  
   /*  
   if(-1 < verboseLevel) {
@@ -1108,8 +1107,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
  	eloss -= GetSubDEDXForScaledEnergy(preStepScaledEnergy)*length;
 	scTracks.clear();
 	SampleSubCutSecondaries(scTracks, step, 
-				currentModel,currentMaterialIndex, 
-				esecdep);
+				currentModel,currentMaterialIndex);
 	// add bremsstrahlung sampling
 	/*
 	if(nProcesses > 0) {
@@ -1117,7 +1115,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	    (scProcesses[i])->SampleSubCutSecondaries(
 		scTracks, step, (scProcesses[i])->
 		SelectModelForMaterial(preStepKinEnergy, currentMaterialIndex),
-		currentMaterialIndex,esecdep);
+		currentMaterialIndex);
 	  }
 	} 
 	*/   
@@ -1138,14 +1136,15 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 
   // Corrections, which cannot be tabulated
+  G4double eadd = 0.0;
   currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
-				     eloss, esecdep, length);
+				     eloss, eadd, length);
 
   // Sample fluctuations
   if (lossFluctuationFlag) {
     G4VEmFluctuationModel* fluc = currentModel->GetModelOfFluctuations();
     if(fluc && 
-      (eloss + esec + esecdep + lowestKinEnergy) < preStepKinEnergy) {
+      (eloss + esec + lowestKinEnergy) < preStepKinEnergy) {
 
       G4double tmax = 
 	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
@@ -1163,13 +1162,10 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       */
     }
   }
-  // add low-energy subcutoff particles
-  eloss += esecdep;
-  if(eloss < 0.0) eloss = 0.0;
 
   // deexcitation
-  else if (useDeexcitation) {
-    if(idxDERegions[currentMaterialIndex]) {
+  if (useDeexcitation) {
+    if(idxDERegions[currentMaterialIndex] && eloss > 0.0) {
       currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
       if(eloss < 0.0) eloss = 0.0;
     }
@@ -1208,8 +1204,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
        std::vector<G4Track*>& tracks, 
        const G4Step& step, 
        G4VEmModel* model,
-       G4int idx,
-       G4double& /*extraEdep*/) 
+       G4int idx) 
 {
   // Fast check weather subcutoff can work
   G4double subcut = (*theSubCuts)[idx];

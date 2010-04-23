@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.90 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.91 2010-04-23 14:25:33 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -195,8 +195,7 @@ public:
 
   // Sampling of secondaries in vicinity of geometrical boundary
   void SampleSubCutSecondaries(std::vector<G4Track*>&, const G4Step&, 
-                               G4VEmModel* model, G4int matIdx,
-			       G4double& extraEdep); 
+                               G4VEmModel* model, G4int matIdx); 
 
   // PostStep sampling of secondaries
   G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
