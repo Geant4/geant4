@@ -24,7 +24,8 @@ code and to keep track of all tags.
 ----------------------------------------------------------
 - G4VGammaDeexcitation - kinematic of 2-body decay rewritten
 - G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
-  G4ContinuumGammaDeexcitation - set energy tolerance 1 keV
+  G4ContinuumGammaDeexcitation - set energy tolerance 1 keV;
+                                 set destructors to be virtual
 
 21 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-07)
 ----------------------------------------------------------
