@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08GammaConversionModel.cc,v 1.1 2010-03-17 14:18:50 pandola Exp $
+// $Id: G4Penelope08GammaConversionModel.cc,v 1.2 2010-04-23 14:49:46 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -300,23 +300,21 @@ G4Penelope08GammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticl
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
 
   //electron kinematics
-  G4double costheta_el,costheta_po;
-  G4double phi_el,phi_po;
   G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ; 
-  costheta_el = G4UniformRand()*2.0-1.0;
+  G4double costheta_el = G4UniformRand()*2.0-1.0;
   G4double kk = std::sqrt(electronKineEnergy*(electronKineEnergy+2.*electron_mass_c2));
   costheta_el = (costheta_el*electronTotEnergy+kk)/(electronTotEnergy+costheta_el*kk);
-  phi_el  = twopi * G4UniformRand() ;
+  G4double phi_el  = twopi * G4UniformRand() ;
   G4double dirX_el = std::sqrt(1.-costheta_el*costheta_el) * std::cos(phi_el);
   G4double dirY_el = std::sqrt(1.-costheta_el*costheta_el) * std::sin(phi_el);
   G4double dirZ_el = costheta_el;
 
   //positron kinematics
   G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
-  costheta_po = G4UniformRand()*2.0-1.0;
+  G4double costheta_po = G4UniformRand()*2.0-1.0;
   kk = std::sqrt(positronKineEnergy*(positronKineEnergy+2.*electron_mass_c2));
   costheta_po = (costheta_po*positronTotEnergy+kk)/(positronTotEnergy+costheta_po*kk);
-  phi_po  = twopi * G4UniformRand() ;
+  G4double phi_po  = twopi * G4UniformRand() ;
   G4double dirX_po = std::sqrt(1.-costheta_po*costheta_po) * std::cos(phi_po);
   G4double dirY_po = std::sqrt(1.-costheta_po*costheta_po) * std::sin(phi_po);
   G4double dirZ_po = costheta_po;
