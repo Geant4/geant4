@@ -20,9 +20,9 @@ code and to keep track of all tags.
                         fragments; set excitation low-limit 1 keV
 
 
-22 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-08)
+23 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-08)
 ----------------------------------------------------------
-- G4VGammaDeexcitation - (JMQ) fixed negative excitation energy
+- G4VGammaDeexcitation - kinematic of 2-body decay rewritten
 - G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
   G4ContinuumGammaDeexcitation - set energy tolerance 1 keV
 
