@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.14 2010-04-15 10:01:40 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.15 2010-04-23 14:50:32 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -46,8 +46,9 @@
 //                            warning if users try to access atomic cross sections via 
 //                            G4EmCalculator
 // 15 Apr 2010   L. Pandola   Implemented model's own version of MinEnergyCut()
+// 23 Apr 2010   L. Pandola   Removed InitialiseElementSelectors() call. Useless here and 
+//                            triggers fake warning messages
 //
-
 
 #include "G4PenelopeIonisationModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -183,8 +184,6 @@ void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
   crossSectionHandler->LoadData(crossSectionFile);
   //This is used to retrieve cross section values later on
   crossSectionHandler->BuildMeanFreePathForMaterials();
-
-  InitialiseElementSelectors(particle,cuts);
   
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopeIonisationModel" << G4endl;
