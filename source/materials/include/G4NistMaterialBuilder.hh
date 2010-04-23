@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.14 2010-04-21 14:48:29 antoni Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.15 2010-04-23 16:20:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -174,6 +174,7 @@ private:
   G4int                  nCurrent;
   G4int                  nElementary;
   G4int                  nNIST;
+  G4int                  nHEP;
 
   std::vector<G4String>  names;
   std::vector<G4String>  chFormulas;
