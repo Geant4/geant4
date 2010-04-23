@@ -106,7 +106,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
   G4FragmentVector* contProducts = _contDeexcitation->DoTransition();  
 
   G4int nCont = 0;
-  if (contProducts != 0) nCont = contProducts->size();
+  if (contProducts != 0) { nCont = contProducts->size(); }
 
   G4FragmentVector::iterator i;
   if (nCont > 0)
@@ -124,38 +124,40 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
       G4FragmentVector* discrProducts = _discrDeexcitation->DoTransition();
       
       G4int nDiscr = 0;
-      if (discrProducts != 0) nDiscr = discrProducts->size();
+      if (discrProducts != 0) { nDiscr = discrProducts->size(); }
       
-      if (_verbose > 0)
-	G4cout << " = BreakUp = " << nDiscr 
-	       << " gammas from DiscreteDeexcitation " 
-	       << G4endl;
+      if(nDiscr > 0) {
+	if (_verbose > 0)
+	  G4cout << " = BreakUp = " << nDiscr 
+		 << " gammas from DiscreteDeexcitation " 
+		 << G4endl;
       
-      for (i = discrProducts->begin(); i != discrProducts->end(); i++)
-	{
-	  products->push_back(*i);
-	}
-      discrProducts->clear();
+	for (i = discrProducts->begin(); i != discrProducts->end(); i++)
+	  {
+	    products->push_back(*i);
+	  }
+	//discrProducts->clear();
+      }
       delete discrProducts;
     }
 
 
-  _gammaE = 0.;
-  if (products->size() > 0)
-    {
-      _gammaE = (*(products->begin()))->GetMomentum().e();
-    }
+  //_gammaE = 0.;
+  //if (products->size() > 0)
+  //  {
+  //    _gammaE = (*(products->begin()))->GetMomentum().e();
+  //  }
 
-  contProducts->clear();
+  //contProducts->clear();
   delete contProducts;  // delete vector, not fragments 
 
   // Add deexcited nucleus to products
   G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
   products->push_back(finalNucleus);
 
-
-  if (_verbose > 0)
+  if (_verbose > 0) {
     G4cout << "*-*-*-* Photon evaporation: " << products->size() << G4endl;
+  }
 
   return products;
 }
@@ -225,8 +227,8 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 #ifdef debug
   CheckConservation(nucleus,products);
 #endif
-  contProducts->clear();
-  discrProducts->clear();
+  //  contProducts->clear();
+  // discrProducts->clear();
   delete contProducts;  // delete vector, not fragments 
   delete discrProducts;
   return products;

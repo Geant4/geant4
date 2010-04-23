@@ -70,7 +70,7 @@ public:
   G4DiscreteGammaDeexcitation();
 
   // Destructor
-  ~G4DiscreteGammaDeexcitation();
+  virtual ~G4DiscreteGammaDeexcitation();
 
   // Functions
 

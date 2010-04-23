@@ -63,7 +63,7 @@ public:
   G4ContinuumGammaDeexcitation();
 
   // Destructor
-  ~G4ContinuumGammaDeexcitation();
+  virtual ~G4ContinuumGammaDeexcitation();
 
   // Functions
 

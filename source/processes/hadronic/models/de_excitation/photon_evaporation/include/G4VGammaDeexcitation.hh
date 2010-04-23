@@ -77,32 +77,33 @@ public:
     virtual G4bool CanDoTransition() const = 0;
 
     // Single gamma transition
-    virtual G4FragmentVector * DoTransition();
+    G4FragmentVector * DoTransition();
 
     // Chain of gamma transitions
-    virtual G4FragmentVector * DoChain();
+    G4FragmentVector * DoChain();
 
-    virtual G4Fragment * GenerateGamma();
+    G4Fragment * GenerateGamma();
 
-    virtual const G4Fragment & GetNucleus() const;
+    inline const G4Fragment & GetNucleus() const;
 
-    virtual void SetNucleus(const G4Fragment & nucleus);
+    inline void SetNucleus(const G4Fragment & nucleus);
 
-    virtual void SetVerboseLevel(G4int verbose);
+    inline void SetVerboseLevel(G4int verbose);
 
     void SetEO(G4ElectronOccupancy eo) { _electronO = eo; };
     void SetVaccantSN( G4int val ) { _vSN = val;};
   
     G4ElectronOccupancy GetEO() { return _electronO; };    
     G4int GetVacantSN() {return _vSN;};
+
 protected:
 
     void Initialize();
     void UpdateNucleus(const G4Fragment * gamma);
-    void UpdateElectrons ();
+    void UpdateElectrons();
     void Update();
 
-    G4VGammaTransition * _transition; // Owned pointer
+    G4VGammaTransition* _transition; // Owned pointer
     G4int _verbose;
 
 private:
@@ -118,6 +119,21 @@ private:
     G4bool operator != (const G4VGammaDeexcitation & right) const;
 
 };
+
+inline const G4Fragment& G4VGammaDeexcitation::GetNucleus() const
+{
+  return _nucleus; 
+}
+
+inline void G4VGammaDeexcitation::SetNucleus(const G4Fragment& nucleus)
+{
+  _nucleus = G4Fragment(nucleus);
+}
+
+inline void G4VGammaDeexcitation::SetVerboseLevel(G4int verbose)
+{
+  _verbose = verbose;
+}
 
 #endif
 

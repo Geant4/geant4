@@ -73,38 +73,27 @@ G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { }
 
-
 G4VGammaDeexcitation::~G4VGammaDeexcitation()
 { 
-  //  if (_transition != 0) delete _transition;
+  if (_transition != 0) delete _transition;
 }
-
 
 G4FragmentVector* G4VGammaDeexcitation::DoTransition()
 {
-  // Template method
-  
- Initialize();
- G4FragmentVector* products = new G4FragmentVector;
+  Initialize();
+  G4FragmentVector* products = new G4FragmentVector;
  
- if (CanDoTransition())
-   {
-     G4Fragment* gamma = GenerateGamma();
-     if (gamma != 0)
-       {
-	 //JMQ: pending of final boost to lab (not critical)
-	 products->push_back(gamma);
-	 UpdateNucleus(gamma); 
-	 Update();
-       }
-   }
+  if (CanDoTransition())
+    {
+      G4Fragment* gamma = GenerateGamma();
+      if (gamma != 0) { products->push_back(gamma); }
+    }
  
- if (_verbose > 1)
+  if (_verbose > 1) {
     G4cout << "G4VGammaDeexcitation::DoTransition - Transition deleted " << G4endl;
+  }
  
- if (_transition != 0) delete _transition;
- 
- return products;
+  return products;
 }
 
 G4FragmentVector* G4VGammaDeexcitation::DoChain()
@@ -120,32 +109,16 @@ G4FragmentVector* G4VGammaDeexcitation::DoChain()
       if (gamma != 0) 
 	{
 	  products->push_back(gamma);
-	  UpdateNucleus(gamma);
-	  UpdateElectrons ();
+	  Update();
 	}
-      Update();
     } 
   
-  if (_verbose > 1)
+  if (_verbose > 1) {
     G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << G4endl;
-  
-  if (_transition != 0) delete _transition;
+  }
   
   return products;
 }
-
-
-const G4Fragment& G4VGammaDeexcitation::GetNucleus() const
-{
-  return _nucleus; 
-}
-
-
-void G4VGammaDeexcitation::SetNucleus(const G4Fragment& nucleus)
-{
-  _nucleus = G4Fragment(nucleus);
-}
-
 
 G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 {
@@ -178,13 +151,18 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 
   G4DiscreteGammaTransition* dtransition = 0; 
   dtransition = dynamic_cast <G4DiscreteGammaTransition*> (_transition);
-  if ( dtransition && !( dtransition->IsAGamma()) ) { gamma = G4Electron::Electron(); }
+  if ( dtransition && !( dtransition->IsAGamma()) ) { 
+    gamma = G4Electron::Electron(); 
+    _vSN = dtransition->GetOrbitNumber();   
+    _electronO.RemoveElectron(_vSN);
+  }
 
   // check consistency  
   G4double eMass = gamma->GetPDGMass();
-  if(Ecm - Mass <= eMass) { return 0; }
 
   G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
+  if(GammaEnergy <= eMass) { return 0; }
+
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
   G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
   G4double phi = twopi * G4UniformRand();
@@ -199,11 +177,16 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   G4double gammaTime = _nucleus.GetCreationTime() + _transition->GetGammaCreationTime();
   thePhoton->SetCreationTime(gammaTime);
 
+  lv -= Gamma4P;
+  _nucleus.SetMomentum(lv);
+  _nucleus.SetCreationTime(gammaTime);
+
   return thePhoton;
 }
 
-void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
+void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  /*gamma*/)
 {
+  /*
   // 23/04/10 V.Ivanchenko rewrite complitely
   if( !gamma ) { return; }
   G4LorentzVector lv = _nucleus.GetMomentum() - gamma->GetMomentum();
@@ -212,7 +195,7 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
 
   _nucleus.SetMomentum(lv);
   _nucleus.SetCreationTime(gamma->GetCreationTime());
-
+  */
   return;
 }
 
@@ -252,7 +235,6 @@ void G4VGammaDeexcitation::Update()
   return;
 }
 
-
 void G4VGammaDeexcitation::Initialize()
 {
   _transition = CreateTransition();
@@ -261,16 +243,5 @@ void G4VGammaDeexcitation::Initialize()
   }
   return;
 }
-
-
-void G4VGammaDeexcitation::SetVerboseLevel(G4int verbose)
-{
-  _verbose = verbose;
-  return;
-}
-
-
-
-
 
 
