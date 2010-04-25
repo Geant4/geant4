@@ -472,7 +472,9 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       aHadron.SetMomentum( hadron_in_LAB.v() );
       aHadron.SetKineticEnergy ( hadron_in_LAB.e() - hadron_in_LAB.m() );
 
-      delete proj, targ, hadron;
+      delete proj;
+      delete targ; 
+      delete hadron;
 
 //TKDB 100405
 /*
