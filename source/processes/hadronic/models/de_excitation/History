@@ -14,11 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-09)
+----------------------------------------------------------
 - G4ExcitationHandler - (JQM+VI) apply FermiBreakUp to fragments with A>1 
                         (before was A>4) in order to reduce number of 
                         fake gamma produced in order deexcite light
-                        fragments; set excitation low-limit 1 keV
-
+                        fragments; added parameter minExcitation = 1 keV
+- G4VEvaporationChannel, G4PhotonEvaporation - added 2 new virtual methods 
+                        EmittedFragment and BreakUpFragment
 
 23 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-08)
 ----------------------------------------------------------
