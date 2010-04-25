@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ExcitationHandler.hh,v 1.10 2009-11-24 11:18:48 vnivanch Exp $
+// $Id: G4ExcitationHandler.hh,v 1.11 2010-04-25 18:42:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -54,6 +53,7 @@
 #include "G4VFermiBreakUp.hh"
 #include "G4VEvaporation.hh"
 #include "G4VPhotonEvaporation.hh"
+#include "G4VEvaporationChannel.hh"
 #include "G4Fragment.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ReactionProductVector.hh"
@@ -67,22 +67,21 @@
 #include "G4PhotonEvaporation.hh"
 #include "G4IonConstructor.hh" 
 
-//#define debug
-
 class G4ExcitationHandler 
 {
 public:
   G4ExcitationHandler(); 
   ~G4ExcitationHandler();
-private:
-  G4ExcitationHandler(const G4ExcitationHandler &right);
 
+private:
+
+  G4ExcitationHandler(const G4ExcitationHandler &right);
   const G4ExcitationHandler & operator=(const G4ExcitationHandler &right);
   G4bool operator==(const G4ExcitationHandler &right) const;
   G4bool operator!=(const G4ExcitationHandler &right) const;
   
-
 public:
+
   G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState) const;
 
   void SetEvaporation(G4VEvaporation *const  value);
@@ -91,7 +90,7 @@ public:
 
   void SetFermiModel(G4VFermiBreakUp *const  value);
 
-  void SetPhotonEvaporation(G4VPhotonEvaporation * const value);
+  void SetPhotonEvaporation(G4VEvaporationChannel * const value);
 
   void SetMaxZForFermiBreakUp(G4int aZ);
   void SetMaxAForFermiBreakUp(G4int anA);
@@ -113,7 +112,7 @@ private:
 
   const G4VFermiBreakUp * GetFermiModel() const;
 
-  const G4VPhotonEvaporation * GetPhotonEvaporation() const;
+  const G4VEvaporationChannel * GetPhotonEvaporation() const;
 
   G4int GetMaxZ() const;
   G4int GetMaxA() const;
@@ -123,6 +122,7 @@ private:
   void CheckConservation(const G4Fragment & aFragment,
 			 G4FragmentVector * Result) const;
 #endif
+
 private:
   
   G4VEvaporation *theEvaporation;
@@ -131,11 +131,12 @@ private:
   
   G4VFermiBreakUp *theFermiModel;
  
-  G4VPhotonEvaporation * thePhotonEvaporation;
+  G4VEvaporationChannel * thePhotonEvaporation;
 
   G4int maxZForFermiBreakUp;
   G4int maxAForFermiBreakUp;
   G4double minEForMultiFrag;
+  G4double minExcitation;
 
   G4ParticleTable *theTableOfParticles;
 
@@ -155,8 +156,6 @@ private:
       delete ptr;
     }
   };
-
-
 };
 
 
@@ -198,12 +197,12 @@ inline void G4ExcitationHandler::SetFermiModel(G4VFermiBreakUp *const  value)
 }
 
 
-inline const G4VPhotonEvaporation * G4ExcitationHandler::GetPhotonEvaporation() const
+inline const G4VEvaporationChannel * G4ExcitationHandler::GetPhotonEvaporation() const
 {
   return thePhotonEvaporation;
 }
 
-inline void G4ExcitationHandler::SetPhotonEvaporation(G4VPhotonEvaporation *const  value)
+inline void G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel *const  value)
 {
   if (thePhotonEvaporation != 0 && MyOwnPhotonEvaporationClass) delete thePhotonEvaporation;
   MyOwnPhotonEvaporationClass = false;
