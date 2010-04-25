@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ContinuumGammaDeexcitation.cc,v 1.6 2010-04-25 18:43:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -72,10 +74,10 @@ G4ContinuumGammaDeexcitation::~G4ContinuumGammaDeexcitation()
 
 G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 {
-  G4Fragment nucleus = GetNucleus();
-  G4int Z = static_cast<G4int>(nucleus.GetZ());
-  G4int A = static_cast<G4int>(nucleus.GetA());
-  G4double excitation = nucleus.GetExcitationEnergy();
+  G4Fragment* nucleus = GetNucleus();
+  G4int Z = static_cast<G4int>(nucleus->GetZ());
+  G4int A = static_cast<G4int>(nucleus->GetA());
+  G4double excitation = nucleus->GetExcitationEnergy();
 
   if (_nucleusA != A || _nucleusZ != Z)
     {
@@ -93,9 +95,9 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 }
     
 
-G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
+G4bool G4ContinuumGammaDeexcitation::CanDoTransition() 
 {
- G4bool canDo = true;
+  G4bool canDo = true;
 
   if (_transition == 0) 
     {
@@ -107,11 +109,11 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
 	  << G4endl;
     }
 
-  G4Fragment nucleus = GetNucleus();
-  G4double excitation = nucleus.GetExcitationEnergy();
+  G4Fragment* nucleus = GetNucleus();
+  G4double excitation = nucleus->GetExcitationEnergy();
 
-  G4double A = nucleus.GetA();
-  G4double Z = nucleus.GetZ();
+  G4double A = nucleus->GetA();
+  G4double Z = nucleus->GetZ();
   if (A <2 || Z<3)
     {
       canDo = false;

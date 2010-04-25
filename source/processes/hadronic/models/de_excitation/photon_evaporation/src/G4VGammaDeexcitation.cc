@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VGammaDeexcitation.cc,v 1.14 2010-04-25 18:43:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -81,7 +83,7 @@ G4VGammaDeexcitation::~G4VGammaDeexcitation()
 G4FragmentVector* G4VGammaDeexcitation::DoTransition()
 {
   Initialize();
-  G4FragmentVector* products = new G4FragmentVector;
+  G4FragmentVector* products = new G4FragmentVector();
  
   if (CanDoTransition())
     {
@@ -99,11 +101,11 @@ G4FragmentVector* G4VGammaDeexcitation::DoTransition()
 G4FragmentVector* G4VGammaDeexcitation::DoChain()
 {
   Initialize();
-  G4FragmentVector* products = new G4FragmentVector;
+  G4FragmentVector* products = new G4FragmentVector();
   
   while (CanDoTransition())
     {
-      if (_verbose > 5) G4cout << "G4VGammaDeexcitation::DoChain -  Looping" << G4endl;
+      if (_verbose > 5) { G4cout << "G4VGammaDeexcitation::DoChain -  Looping" << G4endl; }
       
       G4Fragment* gamma = GenerateGamma();
       if (gamma != 0) 
@@ -130,7 +132,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     eGamma = _transition->GetGammaEnergy(); 
     if(eGamma <= 0.0) { return 0; }
   }
-  G4double excitation = _nucleus.GetExcitationEnergy() - eGamma;
+  G4double excitation = _nucleus->GetExcitationEnergy() - eGamma;
   if(excitation < 0.0) { excitation = 0.0; } 
   if (_verbose > 1 && _transition != 0 ) 
     {
@@ -141,10 +143,10 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   
   // Do complete Lorentz computation 
 
-  G4LorentzVector lv = _nucleus.GetMomentum();
+  G4LorentzVector lv = _nucleus->GetMomentum();
   G4double Ecm       = lv.m();
   G4ThreeVector bst  = lv.boostVector();
-  G4double Mass = _nucleus.GetGroundStateMass() + excitation;
+  G4double Mass = _nucleus->GetGroundStateMass() + excitation;
 
   // select secondary
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
@@ -174,41 +176,14 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   Gamma4P.boost(bst);  
   G4Fragment * thePhoton = new G4Fragment(Gamma4P,gamma);
 
-  G4double gammaTime = _nucleus.GetCreationTime() + _transition->GetGammaCreationTime();
+  G4double gammaTime = _nucleus->GetCreationTime() + _transition->GetGammaCreationTime();
   thePhoton->SetCreationTime(gammaTime);
 
   lv -= Gamma4P;
-  _nucleus.SetMomentum(lv);
-  _nucleus.SetCreationTime(gammaTime);
+  _nucleus->SetMomentum(lv);
+  _nucleus->SetCreationTime(gammaTime);
 
   return thePhoton;
-}
-
-void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  /*gamma*/)
-{
-  /*
-  // 23/04/10 V.Ivanchenko rewrite complitely
-  if( !gamma ) { return; }
-  G4LorentzVector lv = _nucleus.GetMomentum() - gamma->GetMomentum();
-  //  G4double newExcitation = lv.mag() - _nucleus.GetGroundStateMass();
-  //if(newExcitation < 0.0) { newExcitation = 0.0; }
-
-  _nucleus.SetMomentum(lv);
-  _nucleus.SetCreationTime(gamma->GetCreationTime());
-  */
-  return;
-}
-
-void G4VGammaDeexcitation::UpdateElectrons( )
-{
-  G4DiscreteGammaTransition* dtransition = 0; 
-  dtransition = dynamic_cast <G4DiscreteGammaTransition*> (_transition);
-  if (dtransition && !(dtransition->IsAGamma()) ) {    
-    
-    _vSN = dtransition->GetOrbitNumber();   
-    _electronO.RemoveElectron(_vSN);
-  }
-  return;
 }
 
 void G4VGammaDeexcitation::Update()
@@ -224,7 +199,7 @@ void G4VGammaDeexcitation::Update()
   _transition = CreateTransition();
   if (_transition != 0) 
     {
-      _transition->SetEnergyFrom(_nucleus.GetExcitationEnergy());
+      _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
       //      if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
       // the above line is commented out for bug fix #952. It was intruduced for reason that
       // the k-shell electron is most likely one to be kicked out and there is no time for 
@@ -234,14 +209,3 @@ void G4VGammaDeexcitation::Update()
   
   return;
 }
-
-void G4VGammaDeexcitation::Initialize()
-{
-  _transition = CreateTransition();
-  if (_transition != 0) {
-    _transition->SetEnergyFrom(_nucleus.GetExcitationEnergy());
-  }
-  return;
-}
-
-

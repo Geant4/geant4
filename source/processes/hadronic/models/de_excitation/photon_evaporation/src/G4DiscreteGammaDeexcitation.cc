@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.10 2010-04-25 18:43:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -73,9 +75,9 @@ G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() {}
 
 G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 {
-  G4Fragment nucleus = GetNucleus();
-  G4int A = static_cast<G4int>(nucleus.GetA());
-  G4int Z = static_cast<G4int>(nucleus.GetZ());
+  G4Fragment* nucleus = GetNucleus();
+  G4int A = static_cast<G4int>(nucleus->GetA());
+  G4int Z = static_cast<G4int>(nucleus->GetZ());
 
   if (_nucleusA != A || _nucleusZ != Z) 
     {
@@ -95,7 +97,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	    << G4endl;
 	}
 	
-      G4double excitation = nucleus.GetExcitationEnergy();
+      G4double excitation = nucleus->GetExcitationEnergy();
       //      const G4NuclearLevel* level =_levelManager.NearestLevel(excitation, _tolerance);
       const G4NuclearLevel* level =_levelManager->NearestLevel(excitation);
 	
@@ -124,7 +126,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 }
 
 
-G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
+G4bool G4DiscreteGammaDeexcitation::CanDoTransition() 
 {
 
   G4bool canDo = true;
@@ -137,10 +139,10 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
 	<< "G4DiscreteGammaDeexcitation::CanDoTransition - Null transition " 
 	<< G4endl;
   } 
-  G4Fragment nucleus = GetNucleus();
+  G4Fragment* nucleus = GetNucleus();
   if (canDo)  {
-    G4double A = nucleus.GetA();
-    G4double Z = nucleus.GetZ();
+    G4double A = nucleus->GetA();
+    G4double Z = nucleus->GetZ();
     if (Z<2 || A<3 || Z>98)
       {
 	canDo = false;
@@ -151,7 +153,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
       }
   }
 
-  G4double excitation = nucleus.GetExcitationEnergy();
+  G4double excitation = nucleus->GetExcitationEnergy();
 
   if (canDo) {
     if (excitation <= 0.) {

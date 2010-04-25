@@ -38,6 +38,9 @@
 //      Modifications: 
 //      
 // -------------------------------------------------------------------
+//
+// $Id: G4VPhotonEvaporation.cc,v 1.3 2010-04-25 18:43:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
 
 #include "G4VPhotonEvaporation.hh"

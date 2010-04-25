@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PhotonEvaporation.hh,v 1.6 2010-04-25 18:43:21 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file
@@ -60,17 +62,15 @@
 #define G4PHOTONEVAPORATION_HH
 
 #include "globals.hh"
-#include "G4VPhotonEvaporation.hh"
+//#include "G4VPhotonEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4VGammaDeexcitation.hh"
 #include "G4ElectronOccupancy.hh"
 
-//#define debug
-
 class G4Fragment;
 
-class G4PhotonEvaporation : public G4VPhotonEvaporation, public G4VEvaporationChannel {
+class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
@@ -78,9 +78,13 @@ public:
 
     virtual ~G4PhotonEvaporation();
 
-    virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
-
     virtual void Initialize(const G4Fragment & fragment);
+
+    virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+
+    virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
+
+    virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
 
     virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
 
@@ -98,7 +102,6 @@ public:
  
     void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
-
     G4ElectronOccupancy GetEOccupancy () { return _eOccupancy;} ;
    
     G4int GetVacantShellNumber () { return _vShellNumber;};
@@ -110,25 +113,23 @@ private:
     G4VEmissionProbability * _probAlgorithm;
     G4VGammaDeexcitation * _discrDeexcitation;
     G4VGammaDeexcitation * _contDeexcitation;
-  //    G4VGammaDeexcitation * _cdDeexcitation;
 
     G4ElectronOccupancy _eOccupancy;
     G4int _vShellNumber;
 
-    G4Fragment _nucleus;
+    G4Fragment* _nucleus;
     G4double _gammaE;
 
     G4PhotonEvaporation(const G4PhotonEvaporation & right);
-
     const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
     // MGP - Check == and != multiple inheritance... must be a mess!
     G4bool operator == (const G4PhotonEvaporation & right) const;
     G4bool operator != (const G4PhotonEvaporation & right) const;
 
-#ifdef debug
-    void CheckConservation(const G4Fragment & theInitialState, G4FragmentVector * Result) const;
-#endif
+  //#ifdef debug
+  //  void CheckConservation(const G4Fragment & theInitialState, G4FragmentVector * Result) const;
+  //#endif
 
 
 };

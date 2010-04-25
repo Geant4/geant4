@@ -23,42 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4VEvaporationChannel.cc,v 1.5 2006-06-29 20:23:55 gunter Exp $
+// $Id: G4VEvaporationChannel.cc,v 1.6 2010-04-25 18:43:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
+// Modified:
+// 24.04.2010 (V.Ivanchenko) moved constructor and destructor to source; added two
+//                          new virtual methods EmittedFragment(s) to allow more optimal
+//                          work with G4Fragment objects; removed unnecesary exceptions
 
 #include "G4VEvaporationChannel.hh"
 #include "G4HadronicException.hh"
 
-G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &)
-{
- throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::copy_constructor meant to not be accessable");
-}
+G4VEvaporationChannel::G4VEvaporationChannel(const G4String & aName) 
+  : Name(aName) 
+{}
 
+G4VEvaporationChannel::~G4VEvaporationChannel() 
+{}
 
-
-
-const G4VEvaporationChannel & G4VEvaporationChannel::operator=(const G4VEvaporationChannel &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::operator= meant to not be accessable");
-  return *this;
-}
-
+//G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &)
+//{
+// throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::copy_constructor meant to not be accessable");
+//}
+//const G4VEvaporationChannel & G4VEvaporationChannel::operator=(const G4VEvaporationChannel &)
+//{
+//  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::operator= meant to not be accessable");
+//  return *this;
+//}
 
 G4bool G4VEvaporationChannel::operator==(const G4VEvaporationChannel &right) const
 {
-    return (this == (G4VEvaporationChannel *) &right);
-    //  return false;
+  return (this == (G4VEvaporationChannel *) &right);
 }
 
 G4bool G4VEvaporationChannel::operator!=(const G4VEvaporationChannel &right) const
 {
-    return (this != (G4VEvaporationChannel *) &right);
-    //  return true;
+  return (this != (G4VEvaporationChannel *) &right);
 }
 
+G4Fragment* G4VEvaporationChannel::EmittedFragment(G4Fragment*)
+{
+  return 0;
+}
 
+G4FragmentVector* G4VEvaporationChannel::BreakUpFragment(G4Fragment*)
+{
+  return 0;
+}
