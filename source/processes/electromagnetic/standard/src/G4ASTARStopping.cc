@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.cc,v 1.11 2010-04-26 10:01:20 vnivanch Exp $
+// $Id: G4ASTARStopping.cc,v 1.12 2010-04-26 16:58:10 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// $Id: G4ASTARStopping.cc,v 1.11 2010-04-26 10:01:20 vnivanch Exp $
+// $Id: G4ASTARStopping.cc,v 1.12 2010-04-26 16:58:10 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //---------------------------------------------------------------------------
 //
@@ -40,6 +40,9 @@
 // Contract:            CSMAN-5288
 //
 // Modifications:
+// 19.04.2010 A.Ivanchenko fixed data for G4_O, 
+//                         checked all data 
+// 25.04.2010 V.Ivanchenko introduce G4LPhysicsFreeVector
 // 
 //----------------------------------------------------------------------------
 //

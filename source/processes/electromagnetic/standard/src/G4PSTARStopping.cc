@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.cc,v 1.11 2010-04-26 15:39:59 antoni Exp $
+// $Id: G4PSTARStopping.cc,v 1.12 2010-04-26 16:58:10 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -38,7 +38,10 @@
 // Customer:            ESA/ESTEC, NOORDWIJK
 // Contract:            CSMAN-5288
 //
-// Modifications:
+// Modifications:  
+// 25.04.2010 V.Ivanchenko introduce G4LPhysicsFreeVector
+// 26.04.2010 A.Ivanchenko fixed data for G4_PROPANE and G4_Pt, 
+//                         checked all data
 // 
 //----------------------------------------------------------------------------
 //
