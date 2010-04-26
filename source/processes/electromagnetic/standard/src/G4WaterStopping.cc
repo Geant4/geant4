@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WaterStopping.cc,v 1.19 2010-04-26 17:22:08 vnivanch Exp $
+// $Id: G4WaterStopping.cc,v 1.20 2010-04-26 17:40:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -61,7 +61,7 @@ G4WaterStopping::G4WaterStopping(G4EmCorrections* corr, G4bool splineFlag)
 
 G4WaterStopping::~G4WaterStopping()
 {
-  for(i=0; i<17; ++i) { delete dedx[i]; }
+  for(size_t i=0; i<17; ++i) { delete dedx[i]; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
