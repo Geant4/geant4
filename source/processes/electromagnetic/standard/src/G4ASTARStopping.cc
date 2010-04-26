@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.cc,v 1.12 2010-04-26 16:58:10 antoni Exp $
+// $Id: G4ASTARStopping.cc,v 1.13 2010-04-26 17:22:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// $Id: G4ASTARStopping.cc,v 1.12 2010-04-26 16:58:10 antoni Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //---------------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -93,12 +92,15 @@ G4int G4ASTARStopping:: GetIndex (const G4Material* mat)
 
 G4double G4ASTARStopping::GetElectronicDEDX(G4int i, G4double energy)
 {
+  G4double res = 0.0;
   if (i<0 || i>73){
     G4cout << "### G4ASTARStopping WARNING: index " 
 	   << i << " is out of range!" << G4endl; 
-    return 0.0;
+    return res;
   }
-  return sdata[i]->Value(energy);
+  if(energy < emin) { res = (*(sdata[i]))[0]*std::sqrt(energy/emin); } 
+  else              { res = sdata[i]->Value(energy); }
+  return res;
 }
  
 void G4ASTARStopping::Initialise()
@@ -118,7 +120,8 @@ for(G4int i=0; i<74; ++i) {effZ[i]=Z[i];}
   
 name [0] = "G4_A-150_TISSUE";  
 G4double T0[78] = { 0.001, 0.0015, 0.002, 0.0025, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01, 0.0125, 0.015, 0.0175, 0.02, 0.0225, 0.025, 0.0275, 0.03, 0.035, 0.04, 0.045, 0.05, 0.055, 0.06, 0.065, 0.07, 0.075, 0.08, 0.085, 0.09, 0.095, 0.1, 0.125, 0.15, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 2.75, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10. }; 
- 
+ emin = T0[0]*MeV;
+
 G4double e0[78] = { 168.8, 204.2, 233.8, 259.7, 283, 324.3, 360.4, 393, 422.8, 450.5, 476.5, 501, 557.1, 607.7, 654.1, 697.1, 737.4, 775.4, 811.5, 845.9, 910.3, 970, 1026, 1078, 1128, 1175, 1220, 1263, 1305, 1344, 1383, 1419, 1455, 1489, 1646, 1782, 1901, 2005, 2097, 2178, 2249, 2312, 2413, 2488, 2539, 2572, 2589, 2593, 2586, 2571, 2548, 2521, 2489, 2453, 2416, 2377, 2176, 1989, 1825, 1683, 1561, 1457, 1369, 1292, 1165, 1062, 978.5, 908.4, 848.8, 797.4, 752.4, 712.9, 677.7, 646.1, 617.7, 591.9, 568.4, 547 }; 
 AddData(T0,e0, 0);
  
@@ -417,7 +420,8 @@ AddData(T0,e73, 73);
 
 void G4ASTARStopping::AddData(G4double* ekin, G4double* s, G4int idx)
 {
-sdata[idx] = new G4LPhysicsFreeVector(78, ekin[0], ekin[77]);
-for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*MeV*cm2/g); }
+sdata[idx] = new G4LPhysicsFreeVector(78, ekin[0]*MeV, ekin[77]*MeV);
+const G4double fac = MeV*cm2/g;
+for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*fac); }
 sdata[idx]->SetSpline(true);
 }

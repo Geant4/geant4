@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSTARStopping.cc,v 1.12 2010-04-26 16:58:10 antoni Exp $
+// $Id: G4PSTARStopping.cc,v 1.13 2010-04-26 17:22:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -91,12 +91,15 @@ G4int G4PSTARStopping:: GetIndex (const G4Material* mat)
 
 G4double G4PSTARStopping::GetElectronicDEDX(G4int i, G4double energy)
 {
+  G4double res = 0.0;
   if (i<0 || i>73){
     G4cout << "### G4PSTARStopping WARNING: index " 
 	   << i << " is out of range!" << G4endl; 
-    return 0.0;
+    return res;
   }
-  return sdata[i]->Value(energy);
+  if(energy < emin) { res = (*(sdata[i]))[0]*std::sqrt(energy/emin); } 
+  else              { res = sdata[i]->Value(energy); }
+  return res;
 }
  
 void G4PSTARStopping::Initialise()
@@ -108,7 +111,9 @@ void G4PSTARStopping::Initialise()
     0.035, 0.04,   0.045, 0.05,   0.055, 0.06,  0.065,  0.07, 0.075, 0.08, 
     0.085, 0.09,   0.095, 0.1,    0.125, 0.15,  0.175,   0.2, 0.225, 0.25, 
     0.275, 0.3,    0.35,  0.4,    0.45,  0.5,    0.55,   0.6, 0.65,  0.7, 
-    0.75,  0.8,    0.85,  0.9,    0.95,  1.,     1.25,   1.5, 1.75,  2. }; 
+    0.75,  0.8,    0.85,  0.9,    0.95,  1.,     1.25,   1.5, 1.75,  2. };
+  emin = T0[0]*MeV;
+ 
   G4double e0[60] = { 176.8, 216.6, 250.1, 279.6, 306.3, 351.1, 390.9, 426.8, 459.8, 489.9, 517.8, 544, 596.4, 641.3, 680.6, 715.7, 747, 775, 800, 822.6, 861.7, 894.2, 920.7, 941.5, 957.3, 968.6, 976.2, 980.5, 982, 981, 978, 973.2, 967, 959.5, 910.4, 853.6, 797.9, 746.9, 701.5, 661.5, 626.4, 595.6, 544.8, 504.4, 471.1, 442.8, 416.4, 392, 369.9, 350, 332.2, 316.4, 302.2, 289.5, 278.1, 267.9, 228.9, 200.8, 179.5, 162.6 }; 
  
   AddData(T0, e0, 0);
@@ -481,7 +486,8 @@ void G4PSTARStopping::Initialise()
 
 void G4PSTARStopping::AddData(G4double* ekin, G4double* s, G4int idx)
 {
-  sdata[idx] = new G4LPhysicsFreeVector(60, ekin[0], ekin[59]);
-  for(size_t i=0; i<60; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*MeV*cm2/g); }
+  sdata[idx] = new G4LPhysicsFreeVector(60, ekin[0]*MeV, ekin[59]*MeV);
+  const G4double fac = MeV*cm2/g;
+  for(size_t i=0; i<60; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, s[i]*fac); }
   sdata[idx]->SetSpline(true);
 }

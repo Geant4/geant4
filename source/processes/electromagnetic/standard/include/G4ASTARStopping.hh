@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ASTARStopping.hh,v 1.7 2010-04-26 10:01:20 vnivanch Exp $
+// $Id: G4ASTARStopping.hh,v 1.8 2010-04-26 17:22:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ASTARStopping_h
@@ -85,6 +85,7 @@ private:
 
   G4int matIndex;
   const G4Material* currentMaterial;
+  G4double emin;
   std::vector<G4String> name;
   std::vector<G4double> effZ; 
   std::vector<G4LPhysicsFreeVector*> sdata;
