@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.15 2010-01-06 14:07:34 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.16 2010-04-26 15:46:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -67,9 +67,6 @@ G4Qt* G4Qt::getInstance (
   if (instance==NULL) {
     instance = new G4Qt(a_argn,a_args,a_class);
   }
-#ifdef G4DEBUG_INTERFACES_COMMON
-    printf("G4Qt::getInstance :%d\n",instance);
-#endif
   return instance;
 }
 /***************************************************************************/
@@ -154,7 +151,7 @@ G4Qt::G4Qt (
   }
 #ifdef G4DEBUG_INTERFACES_COMMON
   if (qApp) {
-    printf("G4Qt::qApp exist adress:%d\n",this);
+    printf("G4Qt::qApp already exist\n");
   }  else {
     printf("G4Qt::qApp not exist\n");
   }
@@ -233,8 +230,7 @@ bool G4Qt::AddTabWidget (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if (fG4UI != NULL) {
-    fG4UI->AddTabWidget(vis,name,sizeX,sizeY);
-    return true;
+    return fG4UI->AddTabWidget(vis,name,sizeX,sizeY);
   }
   return false;
 }

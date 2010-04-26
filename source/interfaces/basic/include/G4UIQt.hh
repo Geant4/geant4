@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.17 2010-01-06 14:13:08 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.18 2010-04-26 15:46:00 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -40,6 +40,7 @@
 #include <qobject.h>
 #include <qmap.h>
 #include <qstringlist.h>
+#include <qtabwidget.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -54,10 +55,10 @@ class QTreeWidgetItem;
 #endif
 class QTextEdit;
 class QLabel;
-class QTabWidget;
 class QResizeEvent;
 class QToolBox;
 class QStringList;
+class QSplitter;
 
 // Class description :
 //
@@ -79,6 +80,17 @@ class QStringList;
 //
 // Class description - end :
 
+class G4QTabWidget : public QTabWidget {
+public :
+  G4QTabWidget();
+  G4QTabWidget(QSplitter*&);
+  void paintEvent  ( QPaintEvent * event );
+  inline void setTabSelected() { tabSelected = true; };
+  inline void unselectTab() { tabSelected = false; };
+  inline bool isTabSelected() { return tabSelected; };
+  bool tabSelected;
+};
+
 class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSession {
   Q_OBJECT
 
@@ -99,8 +111,10 @@ public: // With description
   // Third argument is the Geant4 command executed when the button is fired.
   // Ex : AddButton("my_menu","Run","/run/beamOn 1"); 
 
-  void AddTabWidget(QWidget*,QString,int,int);
+  bool AddTabWidget(QWidget*,QString,int,int);
   // To add a tab for vis openGL Qt driver
+  
+  bool IsSplitterReleased();
 
 public:
   ~G4UIQt();
@@ -170,12 +184,11 @@ private:
   QWidget* fCoutTBWidget;
   QWidget* fVisParametersTBWidget;
   QWidget* fViewComponentsTBWidget;
-  QLineEdit* helpLine;
-  QTabWidget* fTabWidget;
+  QLineEdit* fHelpLine;
+  G4QTabWidget* fTabWidget;
   QString fCoutText;
-
-signals : 
-  void myClicked(const QString &text);
+  QLabel *fEmptyViewerTabLabel;
+  QSplitter * fMyVSplitter;
 
 private slots :
   void ExitSession();
@@ -190,6 +203,8 @@ private slots :
   void UpdateTabWidget(int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
+  void TabCloseCallback(int);
+  void CurrentChangedCallback(int);
 };
 
 #endif

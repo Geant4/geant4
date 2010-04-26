@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2010-04-15 12:23:47 gcosmo Exp $
+$Id: History,v 1.127 2010-04-26 15:46:00 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 April, L. Garnier
+ - G4UIQt: Improvments
+ - G4Qt: Improvments
 
 15 April, 2010 G. Cosmo
  - Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
