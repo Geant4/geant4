@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2010-03-10 11:03:46 lgarnier Exp $
+$Id: History,v 1.165 2010-04-27 15:54:27 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27th April 2010 Laurent Garnier
+ - G4OpenGLStoredXmViewer : remove viewer form list at destruction
+
 9th March 2010 Laurent Garnier
  - G4OpenGLViewer : Fix clipping when resizing non square size windows
    Remove error message when no scene present.
