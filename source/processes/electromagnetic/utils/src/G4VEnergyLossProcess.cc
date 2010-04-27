@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.163 2010-04-23 14:25:33 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.164 2010-04-27 17:43:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -575,7 +575,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
            << GetProcessName()
            << " and particle " << part.GetParticleName();
-    if(isIonisation) G4cout << "  isIonisation  flag = 1";
+    if(isIonisation) { G4cout << "  isIonisation  flag = 1"; }
     G4cout << G4endl;
   }
 }
@@ -1136,9 +1136,11 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   }
 
   // Corrections, which cannot be tabulated
-  G4double eadd = 0.0;
-  currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
-				     eloss, eadd, length);
+  if(isIon) {
+    G4double eadd = 0.0;
+    currentModel->CorrectionsAlongStep(currentCouple, dynParticle, 
+				       eloss, eadd, length);
+  }
 
   // Sample fluctuations
   if (lossFluctuationFlag) {
