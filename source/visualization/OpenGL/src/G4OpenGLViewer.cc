@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.60 2010-03-10 11:03:46 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.61 2010-04-27 15:59:10 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -156,7 +156,7 @@ void G4OpenGLViewer::ResizeWindow(unsigned int aWidth, unsigned int aHeight) {
 void G4OpenGLViewer::ResizeGLView()
 {
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ResizeGLView %d %d\n",fWinSize_x,fWinSize_y);
+  printf("G4OpenGLViewer::ResizeGLView %d %d &:%d\n",fWinSize_x,fWinSize_y,this);
 #endif
   // Check size
   GLint dims[2];
@@ -174,9 +174,9 @@ void G4OpenGLViewer::ResizeGLView()
     }
   }
     
-  glViewport(0, 0, fWinSize_x,fWinSize_y);  
-  
+  glViewport(0, 0, fWinSize_x,fWinSize_y); 
 
+  
 }
 
 
@@ -503,6 +503,9 @@ void G4OpenGLViewer::printEPS() {
     fPrintFilenameIndex++;
   }
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::printEPS END\n");
+#endif
 }
 
 bool G4OpenGLViewer::printVectoredEPS() {
@@ -515,7 +518,7 @@ bool G4OpenGLViewer::printNonVectoredEPS () {
   int height = getRealPrintSizeY();
 
 #ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour);
+  printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d fWinX:%d fWinY:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour,fWinSize_x,fWinSize_y);
 #endif
   FILE* fp;
   GLubyte* pixels;
@@ -612,9 +615,20 @@ bool G4OpenGLViewer::printGl2PS() {
 
   fWinSize_x = width;
   fWinSize_y = height;
+  // Laurent G. 16/03/10 : Not the good way to do. 
+  // We should draw in a new offscreen context instead of
+  // resizing and drawing in current window...
+  // This should be solve when we will do an offscreen method
+  // to render OpenGL
+  // See : 
+  // http://developer.apple.com/Mac/library/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_offscreen/opengl_offscreen.html
+  // http://www.songho.ca/opengl/gl_fbo.html
+
   ResizeGLView();
   if (fGL2PSAction->enableFileWriting()) {
 
+    // Set the viewport
+    //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
     // By default, we choose the line width (trajectories...)
     fGL2PSAction->setLineWidth(1);
     // By default, we choose the point size (markers...)
@@ -627,6 +641,7 @@ bool G4OpenGLViewer::printGl2PS() {
   fWinSize_x = X;
   fWinSize_y = Y;
   ResizeGLView();
+  DrawView ();
 
   // Reset for next time (useful is size change)
   //  fPrintSizeX = 0;
