@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 2008-07-11 08:25:37 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2010-04-27 16:02:37 kaitanie Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -10,6 +10,12 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+
+# INCL_DEBUG_LOG : Produce an ASCII log that contains detailed avatar
+# and particle information
+ifdef G4INCL_DEBUG_LOG
+  CPPFLAGS += -DG4INCL_DEBUG_LOG
+endif
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \

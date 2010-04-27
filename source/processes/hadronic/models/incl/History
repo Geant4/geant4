@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.26 2009-12-09 10:36:40 kaitanie Exp $
+$Id: History,v 1.27 2010-04-27 16:02:37 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,12 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+27 April 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-00)
+------------------------------------------------------
+- Fix: Nuclear deformation and shell effect data reader now constructs
+  the corresponding data tables correctly.
+- Added some internal logging facilities to INCL (disabled by default)
 
 09 December 2009 - Pekka Kaitaniemi (hadr-incl-V09-02-08)
 ---------------------------------------------------------

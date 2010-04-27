@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.15 2009-11-18 10:43:14 kaitanie Exp $ 
+// $Id: G4Incl.hh,v 1.16 2010-04-27 16:02:37 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -636,6 +636,16 @@ public: // Utilities
   G4double amax1(G4double a, G4double b);
   G4double w(G4double a, G4double b, G4double c, G4double d);
   G4int idnint(G4double a);
+
+  void print_log_start_step();
+  void print_log_end_step();
+  void print_log_entry(G4int iavatars, G4int iselected, G4int iparticles, G4int imin);
+  void print_avatars();
+  void print_one_avatar(G4int index);
+  void print_one_particle(G4int index);
+  void print_three_vector(G4double x, G4double y, G4double z);
+  void print_map();
+
    private:
 
   /**
@@ -818,6 +828,8 @@ public: // Utilities
   G4Volant *volant;
   G4Abla *abla;
   G4InclRandomInterface *randomGenerator;
+
+  G4int inside_step; // Flag to determine whether we are inside or outside a simulation step
 };
 
 #endif

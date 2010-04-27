@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.29 2009-12-09 10:36:40 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.30 2010-04-27 16:02:37 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -3408,6 +3408,13 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   imin = indic[next];
   bl9->l1 = bl2->ind[imin]; //NOTE: l1 changed to bl9->l1.
   bl9->l2 = bl2->jnd[imin]; //NOTE: l2 changed to bl9->l2.
+
+#ifdef G4INCL_DEBUG_LOG
+  // Print the debug log
+  print_log_start_step();
+  print_log_entry(1, 1, 1, imin);
+  print_log_end_step();
+#endif
 
   // test le 20/3/2003: tue sinon le dernier avatar?
   if (bl2->k == 0) {
@@ -7765,4 +7772,173 @@ G4int G4Incl::idnint(G4double a)
   else {
     return valueFloor;
   }
+}
+
+// C------------------------------------------------------------------------
+// C Logging
+// C
+
+// C     Start a new simulation step log entry
+//       subroutine print_log_start_step()
+void G4Incl::print_log_start_step()
+{
+  if(inside_step != 1) {
+    G4cout << "(simulation-step " << G4endl;
+    inside_step = 1;
+  } else {
+    G4cout << ";; Error: Can not start a new step inside s step" << G4endl;
+  }
+}
+
+// C     End a simulation step
+//       subroutine print_log_end_step()
+void G4Incl::print_log_end_step()
+{
+  if(inside_step == 1) {
+    G4cout <<") ;;ENDSIMULATIONSTEP" << G4endl;
+    inside_step = 0;
+  } else {
+    G4cout <<";; Error: Not inside a step" << G4endl;
+  }
+}
+
+// C     The main logging routine
+// C     Parameters are used to select what to print. Possible options are:
+// C     list of avatars, selected avatar, list of particles and
+// C     the index of the selected avatar
+//       subroutine print_log_entry(iavatars, iselected, iparticles, imin)
+void G4Incl::print_log_entry(G4int iavatars, G4int iselected, G4int iparticles, G4int imin)
+{
+//       COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+//       COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+//       COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+  if(iavatars == 1) {
+    G4cout <<";; List of avatars" << G4endl;
+    print_avatars();
+  }
+
+  if(iselected == 1) {
+    G4cout <<";; Selected avatar" << G4endl;
+    print_one_avatar(imin); // (avatar ...) ;; Selected avatar (index: imin)
+  }
+      
+  if(iparticles == 1) {
+    G4cout <<";; Particle avatar map" << G4endl;
+    print_map();      // ((list particle-avatar-map particle-avatar-map ...))
+  }
+}
+
+//       subroutine print_avatars(crois, k, ind, jnd, p1, p2, p3, eps, ind1
+//      s,ind2, ta, r1, r2, x1, x2, x3, ia1, ia2, rab2)
+void G4Incl::print_avatars()
+{
+// C      COMMON/BL1/P1(350),P2(350),P3(350),EPS(350),IND1(350),IND2(350),TA
+// C     -,V(350)                                                           P-N22260
+// C      COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+// C      COMMON/BL3/R1,R2,X1(350),X2(350),X3(350),IA1,IA2,RAB2             P-N22270
+      
+  G4cout <<"(list ;; List of avatars" << G4endl;
+  for(int i = 1; i <= bl2->k; ++i) { //do i=1,k
+    print_one_avatar(i);
+  }
+  G4cout << ")" << G4endl;
+}
+
+// C     Prints the information of one avatar (selected using the index
+// C     (values between 1 and K) in BL2 common block.
+//       subroutine print_one_avatar(index)
+void G4Incl::print_one_avatar(G4int index)
+{
+//       COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+//       COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+//       COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+  G4int i_ind1 = bl1->ind1[bl2->ind[index]];
+  //  G4int i_ind2 = bl1->ind2[bl2->ind[index]];
+  G4int j_ind1 = -1;
+  G4int j_ind2 = -1;
+
+  if(bl2->jnd[index] != -1) {
+    j_ind1 = bl1->ind1[bl2->jnd[index]];
+    j_ind2 = bl1->ind2[bl2->jnd[index]];
+  } else {
+    j_ind1 = -1;
+    j_ind2 = -1;
+  }
+
+  G4cout <<"(avatar " << bl2->crois[index] << G4endl;// Create avatar with time crois(index)
+
+// C     Now we print the avatar type
+  if(i_ind1 == 0 && j_ind2 == 0) { // NN collision
+    G4cout <<"(quote nn-collision)" << G4endl;
+  } else if(bl2->ind[index] != -1 && bl2->jnd[index] == -1) {
+    G4cout <<"(quote reflection)" << G4endl;
+  } else {
+    G4cout <<"(quote unidentified-avatar)" << G4endl;
+  }
+
+// C     Print the list of particles in the avatar
+  G4cout <<"(list ;; List of particles in the avatar" << G4endl;
+  print_one_particle(bl2->ind[index]);
+  if(bl2->jnd[index] != -1) {
+    print_one_particle(bl2->jnd[index]);
+  }
+  G4cout <<") ;; End of the particle list" << G4endl;
+
+  G4cout <<") ;; End of the avatar" << G4endl;
+}
+
+// C     Prints the information of one particle in common blocks BL1 and BL3.
+// C     The particle is selected by giving the index of the particle entry
+// C     as a parameter.
+//       subroutine print_one_particle(index)
+void G4Incl::print_one_particle(G4int index)
+{
+//       COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+//       COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+//       COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+// C     Particle knows its ID, type position, momentum and energy
+  G4cout <<"(particle " << index << G4endl;
+  if(bl1->ind1[index] == 0) { // Nucleon
+    if(bl1->ind1[index] == 1) G4cout << "(quote proton)" << G4endl;
+    else if(bl1->ind1[index] == -1) G4cout << "(quote neutron)" << G4endl;
+    else G4cout << "(quote unidentified-nucleon)" << G4endl;
+  } else if(bl1->ind1[index] == 1) { // Delta
+    if(bl1->ind2[index] >= -2 && bl1->ind2[index] <= 2) G4cout << "(quote delta-"
+							       << bl1->ind2[index]
+							       << ")" << G4endl;
+    else G4cout << "(quote unidentified-delta)" << G4endl;
+  } else {
+    G4cout <<"(quote unidentified-particle)" << G4endl;
+  }
+
+  print_three_vector (bl3->x1[index], bl3->x2[index], bl3->x3[index]);
+  print_three_vector (bl1->p1[index], bl1->p2[index], bl1->p3[index]);
+
+  G4cout << bl1->eps[index] << G4endl;
+
+  G4cout <<")" << G4endl; // Close the particle s-expression
+}
+
+//       subroutine print_three_vector(x, y, z)
+void G4Incl::print_three_vector(G4double x, G4double y, G4double z)
+{
+  G4cout <<"(vector3 " << x << " " << y << " " << z << ")" << G4endl;
+}
+
+//       subroutine print_map()
+void G4Incl::print_map()
+{
+//       COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+//       COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+//       COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+  G4cout <<"(list ;; Particles at the beginning of the avatar" << G4endl;
+  G4int ia = bl3->ia1 + bl3->ia2;
+  for(G4int i = 1; i != ia; ++i) { // do i=1,IA
+    print_one_particle(i);
+  }
+  G4cout <<")" << G4endl;
 }

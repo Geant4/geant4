@@ -35,8 +35,8 @@ void fragments()
 
 void INCL()
 {
-  TFile *cf = new TFile("tmp/run2.root");
-  TFile *ff = new TFile("tmp/run2ref.root");
+  TFile *cf = new TFile("tmp/run1.root");
+  TFile *ff = new TFile("tmp/run1ref.root");
 
   TTree *ct = (TTree *) cf->Get("h101");
   ct->SetLineColor(kRed);
@@ -69,8 +69,8 @@ void INCL()
 }
 
 void residus() {
-  TFile* fref = new TFile("tmp/run2.root");
-  TFile* freffort = new TFile("tmp/run2ref.root");
+  TFile* fref = new TFile("tmp/run1.root");
+  TFile* freffort = new TFile("tmp/run1ref.root");
   Double_t sigGeom1 = 3792.89;
   Double_t nbEvt1 = 100000.0;
 	

@@ -197,6 +197,7 @@ C+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++P-N00340
  
       DIMENSION f(15),kind(300),ep(300),alpha(300),beta(300),gam(300)
       DIMENSION bmass(300)
+      common/logging/inside_step
       COMMON/hazard/ial,IY1,IY2,IY3,IY4,IY5,IY6,IY7,IY8,IY9,IY10,
      s               IY11,IY12,IY13,IY14,IY15,IY16,IY17,IY18,IY19
       COMMON/kind/kindf7
@@ -386,6 +387,9 @@ C                                                                       P-N00700
   156 FORMAT (1H ,'DISTRIBUTION OF THE REMNANTS IN THE CHARGE LOSS(H)-  P-N01680
      - NEUTRON LOSS(V) PLANE (0,1,2,...)'/'ATTENTION : ZERO OF THE SCALEHE-01950
      -S CORRESPONDS TO THE NINTH ENTRY'//)
+
+C     For avatar debugging (PK: 26.01.2010)
+      inside_step=0 ! not inside a simulation step
 C                                                                       P-N01700
 CCC   READING OF THE DATA                                               P-N01710
 C                                                                       P-N01720
@@ -481,6 +485,8 @@ c      write(6,*)'********************************************************'
 c      write(6,*)' '
 c	endif
 
+C     Avatar logging:
+      idebuglog=0 ! 0 = OFF, 1 = ON
 
    91 continue
 c deutons
@@ -1482,6 +1488,15 @@ C                irst_avatar=0
   448 IMIN=INDIC(NEXT)                                                  P-N05360
       L1=IND(IMIN)                                                      P-N05370
       L2=JND(IMIN)                                                      P-N05380
+
+      if(idebuglog.eq.1) then
+C     Log the list of avatars, selected avatar and the particles at the
+C     beginning of the avatar.
+      call print_log_start_step
+      call print_log_entry(1, 1, 1, imin)
+      call print_log_end_step
+      endif
+
 C TEST le 20/3/2003: tue sinon le dernier avatar?
 C      K=K-1                                                             P-N05390
       IF (K.EQ.0) GO TO 230                                             P-N05400
@@ -4432,4 +4447,171 @@ C	    	ESREM=f(3)+SEP
       
       RETURN
       END      	
+
+C------------------------------------------------------------------------
+C Logging
+C
+
+C     Start a new simulation step log entry
+      subroutine print_log_start_step()
+      common/logging/inside_step
+      if(inside_step.ne.1) then
+         write(6,*) '(simulation-step '
+         inside_step = 1
+      else
+         write(6,*) ';; Error: Can not start a new step inside s step'
+         stop
+      endif
+      end
+
+C     End a simulation step
+      subroutine print_log_end_step()
+      common/logging/inside_step
+      if(inside_step.eq.1) then
+         write(6,*) ') ;;ENDSIMULATIONSTEP '
+         inside_step = 0
+      else
+         write(6,*) ';; Error: Not inside a step'
+         stop
+      endif
+
+      end
+
+C     The main logging routine
+C     Parameters are used to select what to print. Possible options are:
+C     list of avatars, selected avatar, list of particles and
+C     the index of the selected avatar
+      subroutine print_log_entry(iavatars, iselected, iparticles, imin)
+      COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+      COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+      COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+                            ! (simulation-step
+C      call print_avatars()  ! (list avatar1 avatar2 ...)
+      if(iavatars.eq.1) then
+      write(6,*) ';; List of avatars'
+      call print_avatars(crois, k, ind, jnd, p1, p2, p3, eps, ind1, ind2
+     s,ta, v, r1, r2, x1, x2, x3, ia1, ia2, rab2)
+      endif
+
+      if(iselected.eq.1) then
+      write(6,*) ';; Selected avatar'
+      call print_one_avatar(imin) ! (avatar ...) ;; Selected avatar (index: imin)
+      endif
+      
+      if(iparticles.eq.1) then
+      write(6,*) ';; Particle avatar map'
+      call print_map()      ! ((list particle-avatar-map particle-avatar-map ...))
+                            ! ) ;; ENDSIMULATIONSTEP
+      endif
+      end
+
+      subroutine print_avatars(crois, k, ind, jnd, p1, p2, p3, eps, ind1
+     s,ind2, ta, r1, r2, x1, x2, x3, ia1, ia2, rab2)
+C      COMMON/BL1/P1(350),P2(350),P3(350),EPS(350),IND1(350),IND2(350),TA
+C     -,V(350)                                                           P-N22260
+C      COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+C      COMMON/BL3/R1,R2,X1(350),X2(350),X3(350),IA1,IA2,RAB2             P-N22270
+      
+      write(6,*) '(list ;; ',K,ia1,ia2,ta
+      do i=1,k
+         call print_one_avatar(i)
+      enddo
+      write(6,*) ')'
+
+      end
+
+C     Prints the information of one avatar (selected using the index
+C     (values between 1 and K) in BL2 common block.
+      subroutine print_one_avatar(index)
+      COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+      COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+      COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+      i_ind1 = ind1(ind(index))
+      i_ind2 = ind2(ind(index))
+
+      if(jnd(index).ne.-1) then
+         j_ind1 = ind1(jnd(index))
+         j_ind2 = ind2(jnd(index))
+      else
+         j_ind1 = -1
+         j_ind2 = -1
+      endif
+
+      write(6,*) '(avatar ', crois(index) ! Create avatar with time crois(index)
+
+C     Now we print the avatar type
+      if(i_ind1.eq.0.and.j_ind2.eq.0) then ! NN collision
+         write(6,*) '(quote nn-collision)'
+      elseif(ind(index).ne.-1.and.jnd(index).eq.-1) then
+         write(6,*) '(quote reflection)'
+      else
+         write(6,*) '(quote unidentified-avatar)'
+      endif
+
+C     Print the list of particles in the avatar
+      write(6,*) '(list ;; List of particles in the avatar'
+      call print_one_particle(ind(index))
+      if(jnd(index).ne.-1) then
+         call print_one_particle(jnd(index))
+      endif
+      write(6,*) ') ;; End of the particle list'
+
+      write(6,*) ') ;; End of the avatar'
+      end
+
+C     Prints the information of one particle in common blocks BL1 and BL3.
+C     The particle is selected by giving the index of the particle entry
+C     as a parameter.
+      subroutine print_one_particle(index)
+      COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+      COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+      COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+C     Particle knows its ID, type position, momentum and energy
+      write(6,*) '(particle ', index
+      if(ind1(index).eq.0) then ! Nucleon
+         if(ind2(index).eq.1) then
+            write(6,*)'(quote proton)'
+         elseif(ind2(index).eq.-1) then
+            write(6,*)'(quote neutron)'
+         else
+            write(6,*)'(quote unidentified-nucleon)'
+         endif
+      elseif(ind1(index).eq.1) then ! Delta
+         if(ind2(index).ge.-2.and.ind2(index).le.2) then
+            write(6,*)'(quote delta-',ind2(index),')'
+         else
+            write(6,*)'(quote unidentified-delta)'
+         endif
+      else
+         write(6,*)'(quote unidentified-particle)'
+      endif
+
+      call print_three_vector (x1(index), x2(index), x3(index))
+      call print_three_vector (p1(index), p2(index), p3(index))
+
+      write(6,*) eps(index)
+
+      write(6,*) ')' ! Close the particle s-expression
+      end
+
+      subroutine print_three_vector(x, y, z)
+      IMPLICIT REAL*4 (A-H,O-Z)
+      write(6,*) '(vector3 ',x,' ',y,' ',z,')'
+      end
+
+      subroutine print_map()
+      COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
+      COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
+      COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+      write(6,*) '(list ;; Particles at the beginning of the avatar'
+      IA=IA1+IA2
+      do i=1,IA
+         call print_one_particle(i)
+      enddo
+      write(6,*) ')'
+      end
 

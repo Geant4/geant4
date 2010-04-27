@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaDataFile.cc,v 1.7 2008-06-25 17:20:04 kaitanie Exp $ 
+// $Id: G4InclAblaDataFile.cc,v 1.8 2010-04-27 16:02:37 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -89,22 +89,22 @@ bool G4InclAblaDataFile::readData()
   const G4int rows = 99;
   const G4int cols = 154;
   const G4int massnumbers = 263;
-  for(int i = 0; i < cols; i++) {
-    for(int j = 0; j < rows; j++) {
+  for(int i = 0; i < rows; i++) {
+    for(int j = 0; j < cols; j++) {
       setAlpha(j, i, 0.0);
       setEcnz( j, i, 0.0);
-      setVgsld(j, i, 0.0);      
+      setVgsld(j, i, 0.0);
     }
   }
   
-  for(int i = 0; i < cols; i++) {
-    for(int j = 0; j < rows; j++) {
+  for(int i = 0; i < rows; i++) {
+    for(int j = 0; j < cols; j++) {
       flalphain >> flalpha;
       frldmin >> frldm;
       vgsldin >> vgsld;      
-      setAlpha(i, j, flalpha);
-      setEcnz( i, j, frldm);
-      setVgsld(i, j, vgsld);      
+      setAlpha(j, i, flalpha);
+      setEcnz( j, i, frldm);
+      setVgsld(j, i, vgsld);
     }
   }
   flalphain.close();
