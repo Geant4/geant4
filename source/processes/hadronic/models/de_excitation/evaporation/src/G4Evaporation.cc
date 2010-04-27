@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.17 2010-04-27 11:43:16 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.18 2010-04-27 14:00:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -75,7 +75,7 @@ void G4Evaporation::Initialise()
   probabilities.resize(nChannels, 0.0);
   // loop over evaporation channels
   std::vector<G4VEvaporationChannel*>::iterator i;
-  for (i=theChannels->begin(); i != theChannels->end(); i++) 
+  for (i=theChannels->begin(); i != theChannels->end(); ++i) 
     {
       // for inverse cross section choice
       (*i)->SetOPTxs(OPTxs);

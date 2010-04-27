@@ -18,9 +18,11 @@ code and to keep track of all tags.
 ----------------------------------------------------------
 - G4ExcitationHandler - (JQM+VI) add check on stability of primary;
                                  do evaporation if FermiBreakUp or MFM
-                                 cannot deexcite a fragment
-- G4Evaporation - rewrite BreakUp method 
-- virtual interfaces - moved cnstructorss and destructors to source files
+                                 cannot deexcite a fragment; 
+	                         added SetParameters method
+- G4Evaporation - rewrite BreakUp method; added Initialise method, where setup
+                  all options and not at run time
+- virtual interfaces - moved constructors and destructors to source files
 
 26 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-10)
 ----------------------------------------------------------

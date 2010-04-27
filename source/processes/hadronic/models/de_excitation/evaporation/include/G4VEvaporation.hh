@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporation.hh,v 1.5 2010-04-27 11:43:16 vnivanch Exp $
+// $Id: G4VEvaporation.hh,v 1.6 2010-04-27 14:00:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -58,6 +58,8 @@ private:
 public:
 
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
+
+  virtual void Initialise();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
