@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporation.hh,v 1.4 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4VEvaporation.hh,v 1.5 2010-04-27 11:43:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -45,8 +45,8 @@
 class G4VEvaporation 
 {
 public:
-  G4VEvaporation() {};
-  virtual ~G4VEvaporation() {}; // *
+  G4VEvaporation();
+  virtual ~G4VEvaporation(); 
 
 private:  
   G4VEvaporation(const G4VEvaporation &right);
@@ -56,6 +56,7 @@ private:
   G4bool operator!=(const G4VEvaporation &right) const;
   
 public:
+
   virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
 
   // for inverse cross section choice

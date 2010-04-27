@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.7 2009-07-27 10:32:05 vnivanch Exp $
+// $Id: G4Evaporation.hh,v 1.8 2010-04-27 11:43:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -44,6 +44,7 @@
 #include "G4Fragment.hh"
 
 class G4VEvaporationFactory;
+class G4NistManager;
 
 //#define debug
 
@@ -51,13 +52,14 @@ class G4Evaporation : public G4VEvaporation
 {
 public:
   G4Evaporation();
-  G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector) :
-    theChannels(aChannelsVector), theChannelFactory(0)
-  {};
+  G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector);
 	 
   virtual ~G4Evaporation();
 
 private:
+
+  void Initialise();
+
   G4Evaporation(const G4Evaporation &right);
 
   const G4Evaporation & operator=(const G4Evaporation &right);
@@ -65,6 +67,7 @@ private:
   G4bool operator!=(const G4Evaporation &right) const;
 
 public:
+
   G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
 
   void SetDefaultChannel();
@@ -76,11 +79,13 @@ public:
 			 G4FragmentVector * Result) const;
 #endif
 
-
   std::vector<G4VEvaporationChannel*> * theChannels;
+  std::vector<G4double>   probabilities;
   G4VEvaporationFactory * theChannelFactory;
-  
-  
+  G4int nChannels;
+  G4double minExcitation;
+  G4NistManager* nist;
+    
   class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
   {
   public:
