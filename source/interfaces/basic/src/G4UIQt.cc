@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.32 2010-04-26 15:46:00 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.33 2010-04-27 13:49:02 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -59,7 +59,7 @@
 #include <qsignalmapper.h>
 #include <qtabwidget.h>
 #include <qtabbar.h>
-#include <qresizeevent.h>
+#include <QResizeEvent>
 #include <qstringlist.h>
 
 #include <qmainwindow.h>
