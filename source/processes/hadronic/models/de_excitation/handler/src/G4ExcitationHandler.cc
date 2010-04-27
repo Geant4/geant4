@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.32 2010-04-25 18:42:41 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.33 2010-04-27 11:42:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -77,12 +77,6 @@ G4ExcitationHandler::G4ExcitationHandler():
   theFermiModel = new G4FermiBreakUp;
   thePhotonEvaporation = new G4PhotonEvaporation;
 }
-/*
-G4ExcitationHandler::G4ExcitationHandler(const G4ExcitationHandler &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::copy_constructor: is meant to not be accessable! ");
-}
-*/
 
 G4ExcitationHandler::~G4ExcitationHandler()
 {
@@ -92,27 +86,6 @@ G4ExcitationHandler::~G4ExcitationHandler()
   if (MyOwnPhotonEvaporationClass) delete thePhotonEvaporation;
 }
 
-/*
-const G4ExcitationHandler & G4ExcitationHandler::operator=(const G4ExcitationHandler &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::operator=: is meant to not be accessable! ");
-  
-  return *this;
-}
-
-
-G4bool G4ExcitationHandler::operator==(const G4ExcitationHandler &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::operator==: is meant to not be accessable! ");
-  return false;
-} 
-
-G4bool G4ExcitationHandler::operator!=(const G4ExcitationHandler &) const
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ExcitationHandler::operator!=: is meant to not be accessable! ");
-  return true;
-}
-*/
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// 25/07/08 16:45  Proposed by MAC ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,9 +96,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
   theEvaporation->SetOPTxs(OPTxs);
   //for the choice of superimposed Coulomb Barrier for inverse cross sections
   theEvaporation->UseSICB(useSICB);
-  
-  // Pointer which will be used to return the final production vector
-  //G4FragmentVector * theResult = new G4FragmentVector;
   
   // Variables existing until end of method
   //G4Fragment * theInitialStatePtr = const_cast<G4Fragment*>(&theInitialState);
@@ -153,10 +123,13 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
     {
       theResults.push_back( theInitialStatePtr );
     }
-  
-  else  // In all cases apply once theFermiModel, theMultiFragmentation or theEvaporation
+  // check if a fragment is stable
+  else if(exEnergy < minExcitation && nist->GetIsotopeAbundance(Z, A) > 0.0)
     {
-      
+      theResults.push_back( theInitialStatePtr );
+    }  
+  else  // In all cases apply once theFermiModel, theMultiFragmentation or theEvaporation
+    {      
       // JMQ 150909: first step in de-excitation is treated separately 
       // Fragments after the first step are stored in theEvapList 
       // Statistical Multifragmentation will take place (just in case) only here
@@ -166,10 +139,22 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       if( A<GetMaxA() && Z<GetMaxZ()) 
         {
           theTempResult = theFermiModel->BreakItUp(theInitialState);
+	  // fragment was not decaied try to evaporate
+	  if(1 == theTempResult->size()) {
+            if((*theTempResult)[0] !=  theInitialStatePtr) { delete (*theTempResult)[0]; }
+            delete theTempResult;
+	    theTempResult = theEvaporation->BreakItUp(theInitialState);
+	  }
         }
       else   if (exEnergy>GetMinE()*A) 
         {
           theTempResult = theMultiFragmentation->BreakItUp(theInitialState);
+	  // fragment was not decaied try to evaporate
+	  if(1 == theTempResult->size()) {
+            if((*theTempResult)[0] !=  theInitialStatePtr) { delete (*theTempResult)[0]; }
+            delete theTempResult;
+	    theTempResult = theEvaporation->BreakItUp(theInitialState);
+	  }
         }
       else 
         {
@@ -225,6 +210,12 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       if ( A < GetMaxA() && Z < GetMaxZ() ) // if satisfied apply Fermi Break-Up
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
+	  // fragment was not decaied try to evaporate
+	  if(1 == theTempResult->size()) {
+            if((*theTempResult)[0] !=  theInitialStatePtr) { delete (*theTempResult)[0]; }
+            delete theTempResult;
+	    theTempResult = theEvaporation->BreakItUp(*(*iList));
+	  }
 	}
       else // apply Evaporation in another case
 	{
@@ -341,9 +332,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
   //	 << theEvapStableList.size() << " was photo-evap; " 
   //	 << theResults.size() << " results. " << G4endl; 
     
-  //#ifdef debug
-  // CheckConservation(theInitialState,*theResults);
-  //#endif
+#ifdef debug
+  CheckConservation(theInitialState,*theResults);
+#endif
 
   G4ReactionProductVector * theReactionProductVector = new G4ReactionProductVector;
 
