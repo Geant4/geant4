@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.18 2010-04-27 14:00:40 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.19 2010-04-27 17:03:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -144,7 +144,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     }
 
     // select channel
-    totprob*G4UniformRand();
+    totprob *= G4UniformRand();
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
 
