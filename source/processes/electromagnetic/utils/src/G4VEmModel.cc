@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.31 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.32 2010-04-27 16:59:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,7 @@ G4VEmModel::~G4VEmModel()
   G4LossTableManager::Instance()->DeRegister(this);
   G4int n = elmSelectors.size();
   if(n > 0) {
-    for(G4int i=0; i<n; i++) { 
+    for(G4int i=0; i<n; ++i) { 
       delete elmSelectors[i]; 
     }
   }
@@ -120,34 +120,37 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 {
   // initialise before run
   flagDeexcitation = false;
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4bool spline = man->SplineFlag();
 
-  G4int nbins = G4int(std::log10(highLimit/lowLimit) + 0.5);
-  if(nbins < 3) nbins = 3;
-  G4bool spline = G4LossTableManager::Instance()->SplineFlag();
+  // two times less bins because probability functon is normalized 
+  // so correspondingly is more smooth
+  G4int nbins = 
+    man->GetNumberOfBinsPerDecade()*G4int(std::log10(highLimit/lowLimit))/2;
+  if(nbins < 5) { nbins = 5; }
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // prepare vector
-  if(numOfCouples > nSelectors) elmSelectors.reserve(numOfCouples);
+  if(numOfCouples > nSelectors) { 
+    elmSelectors.reserve(numOfCouples); 
+    for(G4int i=nSelectors; i<numOfCouples; ++i) { elmSelectors.push_back(0); }
+    nSelectors = numOfCouples;
+  }
 
   // initialise vector
-  for(G4int i=0; i<numOfCouples; i++) {
+  for(G4int i=0; i<numOfCouples; ++i) {
     currentCouple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = currentCouple->GetMaterial();
     G4int idx = currentCouple->GetIndex();
 
     // selector already exist check if should be deleted
     G4bool create = true;
-    if(i < nSelectors) { 
-      if(elmSelectors[i]) {
-	if(material == elmSelectors[i]->GetMaterial()) create = false;
-	else delete elmSelectors[i];
-      }
-    } else {
-      nSelectors++;
-      elmSelectors.push_back(0); 
+    if(elmSelectors[i]) {
+      if(material == elmSelectors[i]->GetMaterial()) { create = false; }
+      else { delete elmSelectors[i]; }
     }
     if(create) {
       elmSelectors[i] = new G4EmElementSelector(this,material,nbins,

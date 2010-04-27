@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.57 2010-04-12 11:44:14 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.58 2010-04-27 16:59:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -93,6 +93,7 @@ class G4EmCorrections;
 class G4EmSaturation;
 class G4EmConfigurator;
 class G4LossTableBuilder;
+class G4Region;
 
 class G4LossTableManager
 {
@@ -195,7 +196,7 @@ public:
 
   void SetLossFluctuations(G4bool val);
 
-  void SetSubCutoff(G4bool val);
+  void SetSubCutoff(G4bool val, const G4Region* r=0);
 
   void SetIntegral(G4bool val);
 
@@ -216,6 +217,8 @@ public:
   void SetDEDXBinningForCSDARange(G4int val);
 
   void SetLambdaBinning(G4int val);
+
+  G4int GetNumberOfBinsPerDecade() const;
 
   void SetStepFunction(G4double v1, G4double v2);
 
@@ -342,6 +345,8 @@ private:
   G4EmSaturation*             emSaturation;
   G4EmConfigurator*           emConfigurator;
 
+  G4int nbinsLambda;
+  G4int nbinsPerDecade;
   G4int verbose;
 
 };

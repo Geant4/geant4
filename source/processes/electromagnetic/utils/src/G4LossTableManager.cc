@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.99 2010-04-12 16:45:37 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.100 2010-04-27 16:59:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,6 +96,7 @@
 #include "G4EmConfigurator.hh"
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
+#include "G4Region.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -159,6 +160,8 @@ G4LossTableManager::G4LossTableManager()
   maxFinalStep = 0.0;
   minKinEnergy = 0.1*keV;
   maxKinEnergy = 10.0*TeV;
+  nbinsLambda  = 77;
+  nbinsPerDecade = 7;
   maxKinEnergyForMuons = 10.*TeV;
   integral = true;
   integralActive = false;
@@ -726,11 +729,11 @@ void G4LossTableManager::SetLossFluctuations(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetSubCutoff(G4bool val)
+void G4LossTableManager::SetSubCutoff(G4bool val, const G4Region* r)
 {
   subCutoffFlag = val;
   for(G4int i=0; i<n_loss; ++i) {
-    if(loss_vector[i]) { loss_vector[i]->ActivateSubCutoff(val); }
+    if(loss_vector[i]) { loss_vector[i]->ActivateSubCutoff(val, r); }
   }
 }
 
@@ -846,6 +849,15 @@ void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
 
 void G4LossTableManager::SetLambdaBinning(G4int val)
 {
+  G4int n = val/G4int(std::log10(maxKinEnergy/minKinEnergy));
+  if(n < 5) {
+    G4cout << "G4LossTableManager::SetLambdaBinning WARNING "
+	   << "too small number of bins " << val << "  ignored" 
+	   << G4endl;
+    return;
+  } 
+  nbinsLambda = val;
+  nbinsPerDecade = n;
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; ++j) {
     if(msc_vector[j]) { msc_vector[j]->SetBinning(val); }
@@ -854,6 +866,13 @@ void G4LossTableManager::SetLambdaBinning(G4int val)
   for (size_t k=0; k<emp; ++k) {
     if(emp_vector[k]) { emp_vector[k]->SetLambdaBinning(val); }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4int G4LossTableManager::GetNumberOfBinsPerDecade() const
+{
+  return nbinsPerDecade;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
