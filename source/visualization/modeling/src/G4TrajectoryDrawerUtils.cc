@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.12 2009-02-24 12:00:56 allison Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.13 2010-04-27 15:46:18 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -55,16 +55,30 @@ namespace G4TrajectoryDrawerUtils {
       if (0 != auxiliaries) {
 	for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
 	  const G4ThreeVector pos((*auxiliaries)[iAux]);
-	  trajectoryLine.push_back(pos);
-	  auxiliaryPoints.push_back(pos);
-	}
+          if (trajectoryLine.size() >0) {
+            if (pos != trajectoryLine[trajectoryLine.size()-1]) {
+              trajectoryLine.push_back(pos);
+              auxiliaryPoints.push_back(pos);
+            }
+          } else {
+            trajectoryLine.push_back(pos);
+            auxiliaryPoints.push_back(pos);
+          }
+        }
       }
       const G4ThreeVector pos(aTrajectoryPoint->GetPosition());
-      trajectoryLine.push_back(pos);
-      stepPoints.push_back(pos);
-    }    
+      if (trajectoryLine.size() >0) {
+        if (pos != trajectoryLine[trajectoryLine.size()-1]) {
+          trajectoryLine.push_back(pos);
+          stepPoints.push_back(pos);
+        }
+      } else {
+        trajectoryLine.push_back(pos);
+        stepPoints.push_back(pos);
+      }
+    }
   }
-
+  
   void DrawLineAndPoints(const G4VTrajectory& traj, const G4int& i_mode, const G4Colour& colour, const G4bool& visible) {
     // If i_mode>=0, draws a trajectory as a polyline (default is blue for
     // positive, red for negative, green for neutral) and, if i_mode!=0,
