@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh,v 1.11 2010-04-25 18:42:41 vnivanch Exp $
+// $Id: G4ExcitationHandler.hh,v 1.12 2010-04-27 14:00:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -97,12 +97,14 @@ public:
   void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
   void SetMinEForMultiFrag(G4double anE);
 
-// for inverse cross section choice
-  inline void SetOPTxs(G4int opt) { OPTxs = opt;}
-// for superimposed Coulomb Barrir for inverse cross sections
-  inline void UseSICB(){useSICB=true;}
+  // for inverse cross section choice
+  inline void SetOPTxs(G4int opt);
+  // for superimposed Coulomb Barrir for inverse cross sections
+  inline void UseSICB();
 
 private:
+
+  void SetParameters();
 
   G4ReactionProductVector * Transform(G4FragmentVector * theFragmentVector) const;
 
@@ -147,7 +149,7 @@ private:
 
   G4int OPTxs;
   G4bool useSICB;
-
+  
   struct DeleteFragment 
   {
     template<typename T>
@@ -156,9 +158,20 @@ private:
       delete ptr;
     }
   };
+  
 };
 
+inline void G4ExcitationHandler::SetOPTxs(G4int opt) 
+{ 
+  OPTxs = opt; 
+  SetParameters();
+}
 
+inline void G4ExcitationHandler::UseSICB()
+{ 
+  useSICB = true; 
+  SetParameters();
+}
 
 inline const G4VEvaporation * G4ExcitationHandler::GetEvaporation() const
 {
@@ -170,6 +183,7 @@ inline void G4ExcitationHandler::SetEvaporation(G4VEvaporation *const  value)
   if (theEvaporation != 0 && MyOwnEvaporationClass) delete theEvaporation;
   MyOwnEvaporationClass = false;
   theEvaporation = value;
+  SetParameters();
 }
 
 inline const G4VMultiFragmentation * G4ExcitationHandler::GetMultiFragmentation() const

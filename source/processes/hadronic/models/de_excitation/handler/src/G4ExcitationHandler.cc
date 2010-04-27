@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.33 2010-04-27 11:42:50 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.34 2010-04-27 14:00:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -76,6 +76,7 @@ G4ExcitationHandler::G4ExcitationHandler():
   theMultiFragmentation = new G4StatMF;
   theFermiModel = new G4FermiBreakUp;
   thePhotonEvaporation = new G4PhotonEvaporation;
+  SetParameters();
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
@@ -86,19 +87,19 @@ G4ExcitationHandler::~G4ExcitationHandler()
   if (MyOwnPhotonEvaporationClass) delete thePhotonEvaporation;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-/// 25/07/08 16:45  Proposed by MAC ////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
-{	
+void G4ExcitationHandler::SetParameters()
+{
   //for inverse cross section choice
   theEvaporation->SetOPTxs(OPTxs);
   //for the choice of superimposed Coulomb Barrier for inverse cross sections
   theEvaporation->UseSICB(useSICB);
+  theEvaporation->Initialise();
+}
+
+G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
+{	
   
   // Variables existing until end of method
-  //G4Fragment * theInitialStatePtr = const_cast<G4Fragment*>(&theInitialState);
   G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
   G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
   std::list<G4Fragment*> theEvapList;        // list to apply Evaporation, SMF or Fermi Break-Up
