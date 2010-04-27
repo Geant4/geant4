@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2010-03-08 16:34:17 lgarnier Exp $
+$Id: History,v 1.139 2010-04-27 15:40:40 lgarnier Exp $
 
 -------------------------------------------------------------------
 
@@ -25,8 +25,6 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
-8th March 2010 Laurent Garnier
--G4VisManager.cc : Add protection against null pointer
 
 22nd November 2009  John Allison  (visman-V09-02-08)
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/trajectories rich:
