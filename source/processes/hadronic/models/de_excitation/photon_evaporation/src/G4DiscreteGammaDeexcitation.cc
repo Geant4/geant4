@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.10 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.11 2010-04-28 08:57:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,9 +69,8 @@ G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation():
   _tolerance = keV;
 }
 
-
-G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() {}
-
+G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() 
+{}
 
 G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 {
@@ -122,7 +121,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	  return 0; 
 	}
     }
-  else return 0;
+  return 0;
 }
 
 

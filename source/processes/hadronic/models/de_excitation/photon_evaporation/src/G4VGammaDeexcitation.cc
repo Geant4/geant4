@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.14 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.cc,v 1.15 2010-04-28 08:57:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,7 +77,7 @@ G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 
 G4VGammaDeexcitation::~G4VGammaDeexcitation()
 { 
-  if (_transition != 0) delete _transition;
+  if (_transition != 0) { delete _transition; }
 }
 
 G4FragmentVector* G4VGammaDeexcitation::DoTransition()
@@ -192,8 +192,9 @@ void G4VGammaDeexcitation::Update()
     { 
       delete _transition;
       _transition = 0;
-      if (_verbose > 1)
+      if (_verbose > 1) {
 	G4cout << "G4VGammaDeexcitation::Update - Transition deleted " << G4endl;
+      }
     }
   
   _transition = CreateTransition();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.hh,v 1.6 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.hh,v 1.7 2010-04-28 08:57:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -138,6 +138,7 @@ inline void G4VGammaDeexcitation::SetVerboseLevel(G4int verbose)
 
 inline void G4VGammaDeexcitation::Initialize()
 {
+  if (_transition != 0) { delete _transition; }
   _transition = CreateTransition();
   if (_transition != 0) {
     _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
