@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.164 2010-04-27 17:43:17 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.165 2010-04-28 07:27:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1075,7 +1075,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       G4StepPoint* prePoint  = step.GetPreStepPoint();
 
       // Check boundary
-      if(prePoint->GetStepStatus() == fGeomBoundary) yes = true;
+      if(prePoint->GetStepStatus() == fGeomBoundary) { yes = true; }
 
       // Check PrePoint
       else {
@@ -1087,7 +1087,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  preSafety = safetyHelper->ComputeSafety(prePoint->GetPosition());
 	}
 
-        if(preSafety < rcut) yes = true;
+        if(preSafety < rcut) { yes = true; }
 
 	// Check PostPoint
 	else {
@@ -1095,7 +1095,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  if(postSafety < rcut) {
 	    postSafety = 
 	      safetyHelper->ComputeSafety(step.GetPostStepPoint()->GetPosition());
-	    if(postSafety < rcut) yes = true;
+	    if(postSafety < rcut) { yes = true; }
 	  }
 	}
       }
@@ -1126,7 +1126,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  for(G4int i=0; i<n; ++i) {
 	    G4Track* t = scTracks[i];
 	    G4double e = t->GetKineticEnergy();
-	    if (t->GetDefinition() == thePositron) e += 2.0*electron_mass_c2;
+	    if (t->GetDefinition() == thePositron) { e += 2.0*electron_mass_c2; }
 	    esec += e;
 	    pParticleChange->AddSecondary(t);
 	  }      
@@ -1169,7 +1169,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if (useDeexcitation) {
     if(idxDERegions[currentMaterialIndex] && eloss > 0.0) {
       currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
-      if(eloss < 0.0) eloss = 0.0;
+      if(eloss < 0.0) { eloss = 0.0; }
     }
   }
 
@@ -1271,7 +1271,6 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
       */
       if(addSec) {
 	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
-	//G4Track* t = new G4Track((*it), pretime, r);
 	t->SetTouchableHandle(track->GetTouchableHandle());
 	tracks.push_back(t);
 
