@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-27 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-11)
+28 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-11)
 ----------------------------------------------------------
 - G4ExcitationHandler - (JQM+VI) add check on stability of primary;
                                  do evaporation if FermiBreakUp or MFM
