@@ -101,7 +101,7 @@ Test30Physics::Test30Physics()
 
 Test30Physics::~Test30Physics()
 {
-  //  if(theProcess) delete theProcess;
+  delete theProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,7 +124,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 		                            G4Material* mat)
 {
   G4cout <<  "Test30Physics entry" << G4endl;
-  if(theProcess) delete theProcess;
+  if(theProcess) { delete theProcess; }
   theProcess = 0;
 
   G4ProcessManager* man = 0;

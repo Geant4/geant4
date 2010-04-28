@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-03-03  28 April 2010 V.Ivanchenko
+- reduced memory leak at destruction
+
 test30-V09-03-02  26 March 2010 V.Ivanchenko
 - use CHIPS from G4QInelastic
 

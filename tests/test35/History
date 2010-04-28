@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-03-01  28 April 2010 V.Ivanchenko
+- reduced memory leak at destruction
+
 test35-V09-03-00  26 March 2010 V.Ivanchenko
 - use environment variables to activate generators; use CHIPS
   via G4QInelastic

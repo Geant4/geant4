@@ -1195,6 +1195,7 @@ int main(int argc, char** argv)
   delete mate;
   delete fin;
   delete phys;
+  partTable->DeleteAllParticles();
 
   G4cout << "###### End of test #####" << G4endl;
 }
