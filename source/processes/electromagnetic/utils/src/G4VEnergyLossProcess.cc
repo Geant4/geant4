@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.165 2010-04-28 07:27:12 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.166 2010-04-28 14:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1821,6 +1821,15 @@ void G4VEnergyLossProcess::SetSubLambdaTable(G4PhysicsTable* p)
              << " and process " << GetProcessName() << G4endl;
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4Element* G4VEnergyLossProcess::GetCurrentElement() const
+{
+  const G4Element* elm = 0;
+  if(currentModel) { elm = currentModel->GetCurrentElement(); }
+  return elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

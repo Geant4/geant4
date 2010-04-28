@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.91 2010-04-23 14:25:33 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.92 2010-04-28 14:43:13 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -416,6 +416,9 @@ public:
   //------------------------------------------------------------------------
   // Run time method for simulation of ionisation
   //------------------------------------------------------------------------
+
+  // access atom on which interaction happens
+  const G4Element* GetCurrentElement() const;
 
   // sample range at the end of a step
   inline G4double SampleRange();

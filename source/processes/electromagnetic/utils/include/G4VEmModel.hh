@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.73 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.74 2010-04-28 14:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -290,13 +290,13 @@ public:
 
   inline void SetCurrentCouple(const G4MaterialCutsCouple*);
 
+  inline const G4Element* GetCurrentElement() const;
+
 protected:
 
   inline const G4MaterialCutsCouple* CurrentCouple() const;
 
   inline void SetCurrentElement(const G4Element*);
-
-  inline const G4Element* GetCurrentElement() const;
 
 private:
 

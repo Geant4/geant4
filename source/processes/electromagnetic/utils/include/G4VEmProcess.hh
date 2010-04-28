@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.59 2010-03-10 18:29:51 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.60 2010-04-28 14:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -224,6 +224,9 @@ public:
 
   // Access to models
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+
+  // access atom on which interaction happens
+  const G4Element* GetCurrentElement() const;
 
   inline void SetLambdaFactor(G4double val);
 

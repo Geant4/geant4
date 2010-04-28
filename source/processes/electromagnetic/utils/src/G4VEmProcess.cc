@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.84 2010-04-12 11:45:03 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.85 2010-04-28 14:43:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -757,6 +757,15 @@ G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
   v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4Element* G4VEmProcess::GetCurrentElement() const
+{
+  const G4Element* elm = 0;
+  if(currentModel) {elm = currentModel->GetCurrentElement(); }
+  return elm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
