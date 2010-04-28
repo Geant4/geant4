@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.19 2009-04-27 08:06:27 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.20 2010-04-28 16:21:21 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -41,6 +41,10 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 12 April 2010      P R Truscott, QinetiQ, bug fixes to treat optical
+//                    photon transport, in particular internal reflection
+//                    at surface.
 //
 // 14 November 2007   P R Truscott, QinetiQ & Stan Seibert, U Texas
 //                    Bug fixes to CalculateExtent
@@ -669,9 +673,21 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
   {
     if ((*f)->Intersect(p,v,false,dist,distFromSurface,normal))
     {
+//
+//
+// Set minDist to the new distance to current facet if distFromSurface is in
+// positive direction and point is not at surface.  If the point is within
+// 0.5*kCarTolerance of the surface, then force distance to be zero and
+// leave member function immediately (for efficiency), as proposed by & credit
+// to Akira Okumura.
+//
       if (distFromSurface > 0.5*kCarTolerance && dist >= 0.0 && dist < minDist)
       {
         minDist  = dist;
+      }
+      else if (-0.5*kCarTolerance <= dist && dist <= 0.5*kCarTolerance)
+      {
+        return 0.0;
       }
     }
   }
