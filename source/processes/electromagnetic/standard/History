@@ -1,4 +1,4 @@
-$Id: History,v 1.494 2010-04-26 17:24:57 vnivanch Exp $
+$Id: History,v 1.495 2010-04-28 18:41:15 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 April 09:  V.Ivant (emstand-V09-03-10)
+G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 26 April 09:  V.Ivant (emstand-V09-03-09)
 - G4ASTARStopping, G4PSTARTStopping - C-arrays sustituted by G4PhysicsVector 
