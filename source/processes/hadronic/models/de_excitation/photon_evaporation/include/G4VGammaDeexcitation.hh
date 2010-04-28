@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.hh,v 1.7 2010-04-28 08:57:19 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.hh,v 1.8 2010-04-28 14:22:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,23 +38,25 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications:
+//          
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//
+//        21 Nov 2001, Fan Lei (flei@space.qinetiq.com)
+//           Modified GenerateGamma() and UpdateUncleus() for implementation
+//           of Internal Conversion processs
+// 
+//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
+//          Added  SetEO () , GetEO(), UpdateElectrons() to allow the assignment 
+//          and modification of electron configuration.
 //
 //        18 October 2002, F. Lei
 //          Added GetVaccantSN() and _vSN in order to link to ARM in low-e em
 //          _vSN is updated in UpdateElectron()
 //          Added SetVaccantSN(). It is need to to re-set _vSN after each 
 //          IC happened.
-// 
-//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
-//          Added  SetEO () , GetEO(), UpdateElectrons() to allow the assignment 
-//          and modification of electron configuration.
-//          
-//        21 Nov 2001, Fan Lei (flei@space.qinetiq.com)
-//           Modified GenerateGamma() and UpdateUncleus() for implementation
-//           of Internal Conversion processs
 //
-//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
-//              Added creation time evaluation for products of evaporation
+//        28 April 2010, V.Ivanchenko cleanup methods
 //
 // -------------------------------------------------------------------
 //
