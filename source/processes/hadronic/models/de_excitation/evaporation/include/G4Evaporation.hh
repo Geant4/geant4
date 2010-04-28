@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.9 2010-04-27 14:00:40 vnivanch Exp $
+// $Id: G4Evaporation.hh,v 1.10 2010-04-28 14:27:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -59,6 +59,8 @@ public:
   virtual void Initialise();
 
 private:
+
+  void InitialiseEvaporation();
 
   G4Evaporation(const G4Evaporation &right);
 

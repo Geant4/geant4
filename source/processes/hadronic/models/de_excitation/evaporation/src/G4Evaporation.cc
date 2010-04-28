@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.19 2010-04-27 17:03:00 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.20 2010-04-28 14:27:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -51,13 +51,13 @@ G4Evaporation::G4Evaporation()
 {
   //theChannelFactory = new G4EvaporationFactory();
   theChannelFactory = new G4EvaporationDefaultGEMFactory();
-  Initialise();
+  InitialiseEvaporation();
 }
 
 G4Evaporation::G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector) 
   : theChannels(aChannelsVector), theChannelFactory(0), nChannels(0)
 {
-  Initialise();
+  InitialiseEvaporation();
 }
 
 G4Evaporation::~G4Evaporation()
@@ -66,13 +66,18 @@ G4Evaporation::~G4Evaporation()
   if (theChannelFactory != 0) { delete theChannelFactory; }
 }
 
-void G4Evaporation::Initialise()
+void G4Evaporation::InitialiseEvaporation()
 {
   nist = G4NistManager::Instance();
   minExcitation = CLHEP::keV;
   if(theChannelFactory) { theChannels = theChannelFactory->GetChannel(); }
   nChannels = theChannels->size();
   probabilities.resize(nChannels, 0.0);
+  Initialise();
+}
+
+void G4Evaporation::Initialise()
+{
   // loop over evaporation channels
   std::vector<G4VEvaporationChannel*>::iterator i;
   for (i=theChannels->begin(); i != theChannels->end(); ++i) 
@@ -88,21 +93,21 @@ void G4Evaporation::SetDefaultChannel()
 {
   if (theChannelFactory != 0) delete theChannelFactory;
   theChannelFactory = new G4EvaporationFactory();
-  Initialise();
+  InitialiseEvaporation();
 }
 
 void G4Evaporation::SetGEMChannel()
 {
   if (theChannelFactory != 0) delete theChannelFactory;
   theChannelFactory = new G4EvaporationGEMFactory();
-  Initialise();
+  InitialiseEvaporation();
 }
 
 void G4Evaporation::SetCombinedChannel()
 {
   if (theChannelFactory != 0) delete theChannelFactory;
   theChannelFactory = new G4EvaporationDefaultGEMFactory();
-  Initialise();
+  InitialiseEvaporation();
 }
 
 G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
