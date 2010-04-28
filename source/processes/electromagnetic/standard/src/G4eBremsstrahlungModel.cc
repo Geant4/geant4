@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.45 2010-03-22 19:26:20 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.46 2010-04-28 18:39:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -900,20 +900,18 @@ const G4Element* G4eBremsstrahlungModel::SelectRandomAtom(
 
   if(1 < nElements) {
 
+    --nElements; 
     G4DataVector* dv = partialSumSigma[couple->GetIndex()];
-    G4double rval = G4UniformRand()*((*dv)[nElements-1]);
+    G4double rval = G4UniformRand()*((*dv)[nElements]);
 
-    for (G4int i=0; i<nElements; i++) {
-      if (rval <= (*dv)[i]) elm = (*theElementVector)[i];
+    elm = (*theElementVector)[nElements];
+    for (G4int i=0; i<nElements; ++i) {
+      if (rval <= (*dv)[i]) {
+	elm = (*theElementVector)[i];
+	break;
+      }
     }
-    if(!elm) {
-      G4cout << "G4eBremsstrahlungModel::SelectRandomAtom: Warning -"
-	     << " no elements found in "
-	     << material->GetName()
-	     << G4endl;
-      elm = (*theElementVector)[0];
-    }
-  } else elm = (*theElementVector)[0];
+  } else { elm = (*theElementVector)[0]; }
  
   SetCurrentElement(elm);
   return elm;
