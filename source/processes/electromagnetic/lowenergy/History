@@ -1,4 +1,4 @@
-$Id: History,v 1.435 2010-04-23 14:52:22 pandola Exp $
+$Id: History,v 1.436 2010-04-29 07:35:05 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.04.2010, L. Pandola, tag emlowen-V09-03-29
+	    Removed the compiler warning in G4PenelopeIonisationModel.cc which 
+            caused the rejection of emlowen-V09-03-28
 
 23.04.2010, L. Pandola, tag emlowen-V09-03-28
 	    Removed useless call in G4PenelopeIonisationModel which triggered fake 
