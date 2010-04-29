@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc,v 1.16 2009-01-24 11:54:47 vnivanch Exp $
+// $Id: G4CrossSectionDataStore.cc,v 1.17 2010-04-29 14:46:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,6 +124,17 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
                                          G4double Z, G4double A,
 					 G4double aTemperature)
 {
+  G4int iZ=lrint(Z);
+  G4int iA=lrint(A);
+  return GetCrossSection(aParticle, iZ, iA,aTemperature); 
+  }
+
+
+G4double
+G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
+                                         G4int Z, G4int A,
+					 G4double aTemperature)
+{
   if (NDataSetList == 0) 
   {
     throw G4HadronicException(__FILE__, __LINE__, 
@@ -196,8 +207,8 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 
   // element have been selected
   inCharge = whichDataSetInCharge(particle, anElement);
-  G4double ZZ = anElement->GetZ();
-  G4double AA;
+  G4int ZZ = lrint(anElement->GetZ());
+  G4int AA;
 
   // Collect abundance weighted cross sections and A values for each isotope 
   // in each element
@@ -207,7 +218,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
   // user-defined isotope abundances
   if (0 < nIsoPerElement) { 
     G4IsotopeVector* isoVector = anElement->GetIsotopeVector();
-    AA = G4double((*isoVector)[0]->GetN());
+    AA =(*isoVector)[0]->GetN();
     if(1 < nIsoPerElement) {
 
       G4double* xsec  = new G4double [nIsoPerElement];
@@ -217,7 +228,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
       G4double* abundVector = anElement->GetRelativeAbundanceVector();
       G4bool elementXS = false;
       for (i = 0; i<nIsoPerElement; i++) {
-	if (inCharge->IsZAApplicable(particle, ZZ, G4double((*isoVector)[i]->GetN()))) {
+	if (inCharge->IsZAApplicable(particle, ZZ,(*isoVector)[i]->GetN())) {
 	  iso_xs = inCharge->GetIsoCrossSection(particle, (*isoVector)[i], aTemp);
 	} else if (elementXS == false) {
 	  iso_xs = inCharge->GetCrossSection(particle, anElement, aTemp);
@@ -230,7 +241,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
       cross *= G4UniformRand();
       for (i = 0; i<nIsoPerElement; i++) {
 	if(cross <= xsec[i]) {
-	  AA = G4double((*isoVector)[i]->GetN());
+	  AA = (*isoVector)[i]->GetN();
 	  break;
 	}
       }
@@ -240,10 +251,10 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
   } else { 
 
     G4StableIsotopes theDefaultIsotopes;  
-    G4int Z = G4int(ZZ + 0.5);
-    const G4int nIso = theDefaultIsotopes.GetNumberOfIsotopes(Z);
-    G4int index = theDefaultIsotopes.GetFirstIsotope(Z);
-    AA = G4double(theDefaultIsotopes.GetIsotopeNucleonCount(index));
+//-- Int ZZ    G4int Z = G4int(ZZ + 0.5);
+    const G4int nIso = theDefaultIsotopes.GetNumberOfIsotopes(ZZ);
+    G4int index = theDefaultIsotopes.GetFirstIsotope(ZZ);
+    AA = theDefaultIsotopes.GetIsotopeNucleonCount(index);
     
     if(1 < nIso) {
 
@@ -253,7 +264,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
       G4bool elementXS= false;
 
       for (i = 0; i<nIso; i++) {
-        AA = G4double(theDefaultIsotopes.GetIsotopeNucleonCount(index+i));
+        AA = theDefaultIsotopes.GetIsotopeNucleonCount(index+i);
 	if (inCharge->IsZAApplicable(particle, ZZ, AA )) {
 	  iso_xs = inCharge->GetIsoZACrossSection(particle, ZZ, AA, aTemp);
 	} else if (elementXS == false) {
@@ -266,7 +277,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
       cross *= G4UniformRand();
       for (i = 0; i<nIso; i++) {
 	if(cross <= xsec[i]) {
-	  AA = G4double(theDefaultIsotopes.GetIsotopeNucleonCount(index+i));
+	  AA = theDefaultIsotopes.GetIsotopeNucleonCount(index+i);
 	  break;
 	}
       }
