@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisationModel.cc,v 1.15 2010-04-23 14:50:32 pandola Exp $
+// $Id: G4PenelopeIonisationModel.cc,v 1.16 2010-04-29 07:28:50 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -149,7 +149,7 @@ G4PenelopeIonisationModel::~G4PenelopeIonisationModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PenelopeIonisationModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+                                       const G4DataVector& )
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeIonisationModel::Initialise()" << G4endl;
