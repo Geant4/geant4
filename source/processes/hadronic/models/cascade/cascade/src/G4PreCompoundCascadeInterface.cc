@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.9 2010-04-20 06:46:45 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.10 2010-04-29 00:30:02 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,6 +30,7 @@
 // 20100414  M. Kelsey -- Check for K0L/K0S before using G4InuclElemPart::type
 // 20100419  M. Kelsey -- Access G4CollisionOutput lists by const-ref, and 
 //		const_iterator
+// 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -49,6 +50,9 @@
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
 #include "G4LorentzRotation.hh"
+#include "G4InuclParticleNames.hh"
+
+using namespace G4InuclParticleNames;
 
 
 typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
@@ -90,12 +94,6 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
-
-  enum particleType { nuclei      = 0,  proton     = 1,  neutron   = 2,  pionPlus = 3,
-                      pionMinus   = 5,  pionZero   = 7,  photon    = 10,
-                      kaonPlus    = 11, kaonMinus  = 13, kaonZero  = 15,
-                      kaonZeroBar = 17, lambda     = 21, sigmaPlus = 23,
-                      sigmaZero   = 25, sigmaMinus = 27, xiZero    = 29, xiMinus  = 31 };
 
   G4int bulletType;
   if (aTrack.GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
@@ -178,7 +176,6 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
     cutElastic[pionPlus ]   = 0.6; // 0.6 GeV
 
     cutElastic[kaonPlus ]   = 0.5; // 0.5 GeV
-    cutElastic[kaonMinus]   = 0.5;
     cutElastic[kaonMinus]   = 0.5;
     cutElastic[kaonZero]    = 0.5;
     cutElastic[kaonZeroBar] = 0.5;
@@ -304,7 +301,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 #endif
 	break;
 
-      case photon: 
+      case gamma:
 	cascadeParticle = new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 
 #ifdef debug_G4PreCompoundCascadeInterface

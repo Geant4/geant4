@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.13 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.14 2010-04-29 00:30:02 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(), use
 //		const_iterator.
+// 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 
 #include <numeric>
 #include "G4IonTable.hh"
@@ -50,6 +51,9 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclParticle.hh"
 #include "G4CollisionOutput.hh"
+#include "G4InuclParticleNames.hh"
+
+using namespace G4InuclParticleNames;
 
 typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
@@ -87,12 +91,6 @@ void G4InuclEvaporation::setVerboseLevel( const G4int verbose ) {
 
 G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
  
-  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3,
-                      pionMinus = 5, pionZero = 7, photon = 10,
-                      kaonPlus = 11, kaonMinus = 13, kaonZero = 15,
-                      kaonZeroBar = 17, lambda = 21, sigmaPlus = 23,
-                      sigmaZero = 25, sigmaMinus = 27, xiZero = 29, xiMinus = 31 };  
-
   std::vector< G4DynamicParticle * > secondaryParticleVector;
   G4FragmentVector * theResult = new G4FragmentVector;
 
@@ -175,7 +173,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 	cascadeParticle = new G4DynamicParticle(G4Neutron::NeutronDefinition(), v.vect(), v.e());
 	break;
 
-      case photon: 
+      case gamma:
 	cascadeParticle = new G4DynamicParticle(G4Gamma::Gamma(), v.vect(), v.e());
 	break;
       default:

@@ -23,15 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.4 2010-04-14 18:17:45 mkelsey Exp $
+// $Id: G4NucleonSampler.cc,v 1.5 2010-04-29 00:30:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 // 20100414  M. Kelsey -- Make cross-section buffer a base class data member
 //		use base-class functions for interpolations, cross-sections.
+// 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers
 
 #include "G4NucleonSampler.hh"
 #include "Randomize.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
 G4NucleonSampler::G4NucleonSampler() : G4FinalStateSampler()
 {
@@ -277,51 +280,51 @@ void G4NucleonSampler::initCrossSections()
   {{{pro,pro}}, {{neu,neu}}};
 
   const G4int T1_3bfsData[2][6][3] =
-  {{{pro,pro,pi0}, {pro,neu,pip}, {pro,lam,kp},
-    {pro,s0,kp},   {pro,sp,k0},   {neu,sp,kp}},
+  {{{pro,pro,pi0}, {pro,neu,pip}, {pro,lam,kpl},
+    {pro,s0,kpl},   {pro,sp,k0},   {neu,sp,kpl}},
 
    {{neu,neu,pi0}, {pro,neu,pim}, {neu,lam,k0},
-    {neu,s0,k0},   {neu,sm,kp},   {pro,sm,k0}}};
+    {neu,s0,k0},   {neu,sm,kpl},   {pro,sm,k0}}};
 
   const G4int T1_4bfsData[2][18][4] =
   {{{pro,pro,pip,pim},{pro,neu,pip,pi0},{pro,pro,pi0,pi0},
-    {neu,neu,pip,pip},{pro,lam,kp,pi0}, {pro,lam,k0,pip},
-    {neu,lam,kp,pip}, {neu,s0,kp,pip},  {pro,s0,kp,pi0},
-    {pro,s0,k0,pip},  {pro,sm,kp,pip},  {pro,sp,k0,pi0},
-    {neu,sp,k0,pip},  {pro,sp,kp,pim},  {neu,sp,kp,pi0},
-    {pro,pro,k0,k0b}, {pro,pro,kp,km},  {pro,neu,kp,k0b}},
+    {neu,neu,pip,pip},{pro,lam,kpl,pi0}, {pro,lam,k0,pip},
+    {neu,lam,kpl,pip}, {neu,s0,kpl,pip},  {pro,s0,kpl,pi0},
+    {pro,s0,k0,pip},  {pro,sm,kpl,pip},  {pro,sp,k0,pi0},
+    {neu,sp,k0,pip},  {pro,sp,kpl,pim},  {neu,sp,kpl,pi0},
+    {pro,pro,k0,k0b}, {pro,pro,kpl,kmi},  {pro,neu,kpl,k0b}},
 
    {{neu,neu,pip,pim},{pro,neu,pim,pi0},{neu,neu,pi0,pi0},
-    {pro,pro,pim,pim},{neu,lam,k0,pi0}, {neu,lam,kp,pim},
+    {pro,pro,pim,pim},{neu,lam,k0,pi0}, {neu,lam,kpl,pim},
     {pro,lam,k0,pim}, {pro,s0,k0,pim},  {neu,s0,k0,pi0},
-    {neu,s0,kp,pim},  {neu,sp,k0,pim},  {neu,sm,kp,pi0},
-    {pro,sm,kp,pim},  {neu,sm,k0,pip},  {pro,sm,k0,pi0},
-    {neu,neu,kp,km},  {neu,neu,k0,k0b}, {pro,neu,k0,km}}};
+    {neu,s0,kpl,pim},  {neu,sp,k0,pim},  {neu,sm,kpl,pi0},
+    {pro,sm,kpl,pim},  {neu,sm,k0,pip},  {pro,sm,k0,pi0},
+    {neu,neu,kpl,kmi},  {neu,neu,k0,k0b}, {pro,neu,k0,kmi}}};
 
   const G4int T1_5bfsData[2][32][5] =
   {{{pro,pro,pip,pim,pi0},{pro,pro,pi0,pi0,pi0},{pro,neu,pip,pip,pim},
-    {pro,neu,pip,pi0,pi0},{neu,neu,pip,pip,pi0},{pro,lam,kp,pip,pim},
-    {pro,lam,kp,pi0,pi0}, {pro,lam,k0,pip,pi0}, {pro,s0,kp,pip,pim},
-    {pro,s0,kp,pi0,pi0},  {pro,s0,k0,pip,pi0},  {pro,sp,k0,pip,pim},
-    {pro,sp,k0,pi0,pi0},  {pro,sp,kp,pim,pi0},  {pro,sm,kp,pip,pi0},
-    {pro,sm,k0,pip,pip},  {neu,lam,kp,pip,pi0}, {neu,lam,k0,pip,pip},
-    {neu,s0,kp,pip,pi0},  {neu,s0,k0,pip,pip},  {neu,sp,k0,pip,pi0},
-    {neu,sp,kp,pip,pim},  {neu,sp,kp,pi0,pi0},  {neu,sm,kp,pip,pip},
-    {pro,pro,pip,k0,km},  {pro,pro,pim,kp,k0b}, {pro,pro,pi0,k0,k0b},
-    {pro,pro,pi0,kp,km},  {pro,neu,pip,k0,k0b}, {pro,neu,pip,kp,km},
-    {pro,neu,pi0,kp,k0b}, {neu,neu,pip,kp,k0b}},
+    {pro,neu,pip,pi0,pi0},{neu,neu,pip,pip,pi0},{pro,lam,kpl,pip,pim},
+    {pro,lam,kpl,pi0,pi0}, {pro,lam,k0,pip,pi0}, {pro,s0,kpl,pip,pim},
+    {pro,s0,kpl,pi0,pi0},  {pro,s0,k0,pip,pi0},  {pro,sp,k0,pip,pim},
+    {pro,sp,k0,pi0,pi0},  {pro,sp,kpl,pim,pi0},  {pro,sm,kpl,pip,pi0},
+    {pro,sm,k0,pip,pip},  {neu,lam,kpl,pip,pi0}, {neu,lam,k0,pip,pip},
+    {neu,s0,kpl,pip,pi0},  {neu,s0,k0,pip,pip},  {neu,sp,k0,pip,pi0},
+    {neu,sp,kpl,pip,pim},  {neu,sp,kpl,pi0,pi0},  {neu,sm,kpl,pip,pip},
+    {pro,pro,pip,k0,kmi},  {pro,pro,pim,kpl,k0b}, {pro,pro,pi0,k0,k0b},
+    {pro,pro,pi0,kpl,kmi},  {pro,neu,pip,k0,k0b}, {pro,neu,pip,kpl,kmi},
+    {pro,neu,pi0,kpl,k0b}, {neu,neu,pip,kpl,k0b}},
 
    {{neu,neu,pip,pim,pi0},{neu,neu,pi0,pi0,pi0},{pro,neu,pip,pim,pim},
     {pro,neu,pim,pi0,pi0},{pro,pro,pim,pim,pi0},{neu,lam,k0,pip,pim},
-    {neu,lam,k0,pi0,pi0}, {neu,lam,kp,pim,pi0}, {neu,s0,k0,pip,pim},
-    {neu,s0,k0,pi0,pi0},  {neu,s0,kp,pim,pi0},  {neu,sm,kp,pip,pim},
-    {neu,sm,kp,pi0,pi0},  {neu,sm,k0,pip,pi0},  {neu,sp,k0,pim,pi0},
-    {neu,sp,kp,pim,pim},  {pro,lam,k0,pim,pi0}, {pro,lam,kp,pim,pim},
-    {pro,s0,k0,pim,pi0},  {pro,s0,kp,pim,pim},  {pro,sm,kp,pim,pi0},
+    {neu,lam,k0,pi0,pi0}, {neu,lam,kpl,pim,pi0}, {neu,s0,k0,pip,pim},
+    {neu,s0,k0,pi0,pi0},  {neu,s0,kpl,pim,pi0},  {neu,sm,kpl,pip,pim},
+    {neu,sm,kpl,pi0,pi0},  {neu,sm,k0,pip,pi0},  {neu,sp,k0,pim,pi0},
+    {neu,sp,kpl,pim,pim},  {pro,lam,k0,pim,pi0}, {pro,lam,kpl,pim,pim},
+    {pro,s0,k0,pim,pi0},  {pro,s0,kpl,pim,pim},  {pro,sm,kpl,pim,pi0},
     {pro,sm,k0,pip,pim},  {pro,sm,k0,pi0,pi0},  {pro,sp,k0,pim,pim},
-    {neu,neu,pim,kp,k0b}, {neu,neu,pip,k0,km},  {neu,neu,pi0,kp,km},
-    {neu,neu,pi0,k0,k0b}, {pro,neu,pim,kp,km},  {pro,neu,pim,k0,k0b},
-    {pro,neu,pi0,k0,km},  {pro,pro,pim,k0,km}}};
+    {neu,neu,pim,kpl,k0b}, {neu,neu,pip,k0,kmi},  {neu,neu,pi0,kpl,kmi},
+    {neu,neu,pi0,k0,k0b}, {pro,neu,pim,kpl,kmi},  {pro,neu,pim,k0,k0b},
+    {pro,neu,pi0,k0,kmi},  {pro,pro,pim,k0,kmi}}};
 
   const G4int T1_6bfsData[2][7][6] =
   {{{pro,pro,pip,pip,pim,pim},{pro,pro,pip,pim,pi0,pi0},
@@ -944,33 +947,33 @@ void G4NucleonSampler::initCrossSections()
 
   const G4int T0_3bfsData[9][3] =
   {{pro,pro,pim},{pro,neu,pi0},{neu,neu,pip},{pro,lam,k0},
-   {pro,s0,k0},  {pro,sm,kp},  {neu,lam,kp}, {neu,s0,kp},
+   {pro,s0,k0},  {pro,sm,kpl},  {neu,lam,kpl}, {neu,s0,kpl},
    {neu,sp,k0}};
 
   const G4int T0_4bfsData[22][4] =
   {{pro,neu,pip,pim},{pro,pro,pim,pi0},{pro,neu,pi0,pi0},
-   {neu,neu,pip,pi0},{pro,lam,kp,pim}, {pro,s0,kp,pim},
+   {neu,neu,pip,pi0},{pro,lam,kpl,pim}, {pro,s0,kpl,pim},
    {pro,lam,k0,pi0}, {pro,s0,k0,pi0},  {pro,sp,k0,pim},
-   {pro,sm,kp,pi0},  {pro,sm,k0,pip},  {neu,lam,kp,pi0},
-   {neu,lam,k0,pip}, {neu,sp,kp,pim},  {neu,sp,k0,pi0},
-   {neu,s0,kp,pi0},  {neu,s0,k0,pip},  {neu,sm,kp,pip},
-   {pro,neu,kp,km},  {pro,neu,k0,k0b}, {pro,pro,k0,km},
-   {neu,neu,kp,k0b}};
+   {pro,sm,kpl,pi0},  {pro,sm,k0,pip},  {neu,lam,kpl,pi0},
+   {neu,lam,k0,pip}, {neu,sp,kpl,pim},  {neu,sp,k0,pi0},
+   {neu,s0,kpl,pi0},  {neu,s0,k0,pip},  {neu,sm,kpl,pip},
+   {pro,neu,kpl,kmi},  {pro,neu,k0,k0b}, {pro,pro,k0,kmi},
+   {neu,neu,kpl,k0b}};
 
   const G4int T0_5bfsData[38][5] =
   {{pro,neu,pip,pim,pi0},{pro,neu,pi0,pi0,pi0},{pro,pro,pip,pim,pim},
    {pro,pro,pim,pi0,pi0},{neu,neu,pip,pip,pim},{neu,neu,pip,pi0,pi0},
-   {pro,lam,kp,pim,pi0}, {pro,lam,k0,pip,pim}, {pro,lam,k0,pi0,pi0},
-   {pro,s0,k0,pip,pim},  {pro,s0,k0,pi0,pi0},  {pro,s0,kp,pim,pi0},
-   {pro,sp,kp,pim,pim},  {pro,sp,k0,pim,pi0},  {pro,sm,k0,pip,pi0},
-   {pro,sm,kp,pip,pim},  {pro,sm,kp,pi0,pi0},  {neu,lam,kp,pip,pim},
-   {neu,lam,kp,pi0,pi0}, {neu,lam,k0,pip,pi0}, {neu,s0,kp,pip,pim},
-   {neu,s0,kp,pi0,pi0},  {neu,s0,k0,pip,pi0},  {neu,sp,k0,pip,pim},
-   {neu,sp,k0,pi0,pi0},  {neu,sp,kp,pim,pi0},  {neu,sm,kp,pip,pi0},
-   {neu,sm,k0,pip,pip},  {pro,neu,kp,km,pi0},  {pro,neu,k0,k0b,pi0},
-   {pro,neu,k0,km,pip},  {pro,neu,kp,k0b,pim}, {pro,pro,k0,k0b,pim},
-   {pro,pro,kp,km,pim},  {pro,pro,k0,km,pi0},  {neu,neu,kp,km,pip},
-   {neu,neu,k0,k0b,pip}, {neu,neu,kp,k0b,pi0}};
+   {pro,lam,kpl,pim,pi0}, {pro,lam,k0,pip,pim}, {pro,lam,k0,pi0,pi0},
+   {pro,s0,k0,pip,pim},  {pro,s0,k0,pi0,pi0},  {pro,s0,kpl,pim,pi0},
+   {pro,sp,kpl,pim,pim},  {pro,sp,k0,pim,pi0},  {pro,sm,k0,pip,pi0},
+   {pro,sm,kpl,pip,pim},  {pro,sm,kpl,pi0,pi0},  {neu,lam,kpl,pip,pim},
+   {neu,lam,kpl,pi0,pi0}, {neu,lam,k0,pip,pi0}, {neu,s0,kpl,pip,pim},
+   {neu,s0,kpl,pi0,pi0},  {neu,s0,k0,pip,pi0},  {neu,sp,k0,pip,pim},
+   {neu,sp,k0,pi0,pi0},  {neu,sp,kpl,pim,pi0},  {neu,sm,kpl,pip,pi0},
+   {neu,sm,k0,pip,pip},  {pro,neu,kpl,kmi,pi0},  {pro,neu,k0,k0b,pi0},
+   {pro,neu,k0,kmi,pip},  {pro,neu,kpl,k0b,pim}, {pro,pro,k0,k0b,pim},
+   {pro,pro,kpl,kmi,pim},  {pro,pro,k0,kmi,pi0},  {neu,neu,kpl,kmi,pip},
+   {neu,neu,k0,k0b,pip}, {neu,neu,kpl,k0b,pi0}};
 
   const G4int T0_6bfsData[7][6] =
   {{pro,neu,pip,pip,pim,pim},{pro,neu,pip,pim,pi0,pi0},

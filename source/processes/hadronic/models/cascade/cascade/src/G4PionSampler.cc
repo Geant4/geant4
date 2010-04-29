@@ -23,18 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.7 2010-04-14 18:17:45 mkelsey Exp $
+// $Id: G4PionSampler.cc,v 1.8 2010-04-29 00:30:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 // 20100414  M. Kelsey -- Make cross-section buffer a base class data member,
 //		use base-class functions for interpolations, cross-sections.
- 
+// 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers
+
 #include "G4PionSampler.hh"
 #include "Randomize.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclParticleNames;
 
-G4PionSampler::G4PionSampler()
- :G4FinalStateSampler()
+G4PionSampler::G4PionSampler() : G4FinalStateSampler()
 {
   initCrossSections();
   initChannels();
@@ -362,48 +364,48 @@ void G4PionSampler::initCrossSections()
   // T33_nbfs = final state types for pi+ p and pi- n
 
   const G4int T33_2bfsData[2][2][2] =
-  {{{pip,pro}, {kp,sp}},
+  {{{pip,pro}, {kpl,sp}},
 
    {{pim,neu}, {k0,sm}}};
 
   const G4int T33_3bfsData[2][7][3] =
-  {{{pip,pro,pi0}, {pip,neu,pip}, {pi0,sp,kp}, {pip,sp,k0}, 
-    {pip,s0,kp},   {pip,lam,kp},  {kp,pro,k0b}},
+  {{{pip,pro,pi0}, {pip,neu,pip}, {pi0,sp,kpl}, {pip,sp,k0}, 
+    {pip,s0,kpl},   {pip,lam,kpl},  {kpl,pro,k0b}},
 
-   {{pim,neu,pi0}, {pim,pro,pim}, {pi0,sm,k0}, {pim,sm,kp},
-    {pim,s0,k0},   {pim,lam,k0},  {k0,neu,km}}};
+   {{pim,neu,pi0}, {pim,pro,pim}, {pi0,sm,k0}, {pim,sm,kpl},
+    {pim,s0,k0},   {pim,lam,k0},  {k0,neu,kmi}}};
 
   const G4int T33_4bfsData[2][15][4] =
   {{{pip,pro,pip,pim},{pip,pro,pi0,pi0},{pip,neu,pip,pi0},
-    {pip,sp,kp,pim},  {pi0,sp,kp,pi0},  {pip,sp,k0,pi0},
-    {pip,s0,k0,pip},  {pip,s0,kp,pi0},  {pip,lam,kp,pi0},
-    {pip,lam,k0,pip}, {pip,sm,kp,pip},  {pip,pro,kp,km},
-    {pip,pro,k0,k0b}, {pi0,pro,kp,k0b}, {pip,neu,kp,k0b}},
+    {pip,sp,kpl,pim},  {pi0,sp,kpl,pi0},  {pip,sp,k0,pi0},
+    {pip,s0,k0,pip},  {pip,s0,kpl,pi0},  {pip,lam,kpl,pi0},
+    {pip,lam,k0,pip}, {pip,sm,kpl,pip},  {pip,pro,kpl,kmi},
+    {pip,pro,k0,k0b}, {pi0,pro,kpl,k0b}, {pip,neu,kpl,k0b}},
 
    {{pim,neu,pip,pim},{pim,neu,pi0,pi0},{pim,pro,pim,pi0},
-    {pim,sm,k0,pip},  {pi0,sm,k0,pi0},  {pim,sm,kp,pi0},
-    {pim,s0,kp,pim},  {pim,s0,k0,pi0},  {pim,lam,k0,pi0},
-    {pim,lam,kp,pim}, {pim,sp,k0,pim},  {pim,neu,k0,k0b},
-    {pim,neu,kp,km},  {pi0,neu,k0,km},  {pim,pro,k0,km}}};
+    {pim,sm,k0,pip},  {pi0,sm,k0,pi0},  {pim,sm,kpl,pi0},
+    {pim,s0,kpl,pim},  {pim,s0,k0,pi0},  {pim,lam,k0,pi0},
+    {pim,lam,kpl,pim}, {pim,sp,k0,pim},  {pim,neu,k0,k0b},
+    {pim,neu,kpl,kmi},  {pi0,neu,k0,kmi},  {pim,pro,k0,kmi}}};
 
   const G4int T33_5bfsData[2][24][5] =
   {{{pip,pro,pip,pim,pi0}, {pip,pro,pi0,pi0,pi0}, {pip,neu,pip,pip,pim},
-    {pip,neu,pip,pi0,pi0}, {pip,sp,kp,pim,pi0},   {pi0,sp,kp,pi0,pi0},
+    {pip,neu,pip,pi0,pi0}, {pip,sp,kpl,pim,pi0},   {pi0,sp,kpl,pi0,pi0},
     {pip,sp,k0,pip,pim},   {pip,sp,k0,pi0,pi0},   {pip,lam,k0,pip,pi0},
-    {pip,lam,kp,pip,pim},  {pip,lam,kp,pi0,pi0},  {pip,s0,kp,pip,pim},
-    {pip,s0,kp,pi0,pi0},   {pip,s0,k0,pip,pi0},   {pip,sm,kp,pip,pi0},
-    {pip,sm,k0,pip,pip},   {pip,pro,pim,kp,k0b},  {pip,pro,pip,k0,km},
-    {pip,pro,pi0,kp,km},   {pip,pro,pi0,k0,k0b},  {pi0,pro,pi0,kp,k0b},
-    {pip,neu,pip,kp,km},   {pip,neu,pip,k0,k0b},  {pip,neu,pi0,kp,k0b}},
+    {pip,lam,kpl,pip,pim},  {pip,lam,kpl,pi0,pi0},  {pip,s0,kpl,pip,pim},
+    {pip,s0,kpl,pi0,pi0},   {pip,s0,k0,pip,pi0},   {pip,sm,kpl,pip,pi0},
+    {pip,sm,k0,pip,pip},   {pip,pro,pim,kpl,k0b},  {pip,pro,pip,k0,kmi},
+    {pip,pro,pi0,kpl,kmi},   {pip,pro,pi0,k0,k0b},  {pi0,pro,pi0,kpl,k0b},
+    {pip,neu,pip,kpl,kmi},   {pip,neu,pip,k0,k0b},  {pip,neu,pi0,kpl,k0b}},
 
    {{pim,neu,pip,pim,pi0}, {pim,neu,pi0,pi0,pi0}, {pim,pro,pip,pim,pim},
     {pim,pro,pim,pi0,pi0}, {pim,sm,k0,pip,pi0},   {pi0,sm,k0,pi0,pi0},
-    {pim,sm,kp,pip,pim},   {pim,sm,kp,pi0,pi0},   {pim,lam,kp,pim,pi0},
+    {pim,sm,kpl,pip,pim},   {pim,sm,kpl,pi0,pi0},   {pim,lam,kpl,pim,pi0},
     {pim,lam,k0,pip,pim},  {pim,lam,k0,pi0,pi0},  {pim,s0,k0,pip,pim},
-    {pim,s0,k0,pi0,pi0},   {pim,s0,kp,pim,pi0},   {pim,sp,k0,pim,pi0},
-    {pim,sp,kp,pim,pim},   {pim,neu,pip,k0,km},   {pim,neu,pim,kp,k0b},
-    {pim,neu,pi0,k0,k0b},  {pim,neu,pi0,kp,km},   {pi0,neu,pi0,k0,km},
-    {pim,pro,pim,k0,k0b},  {pim,pro,pim,kp,km},   {pim,pro,pi0,k0,km}}};
+    {pim,s0,k0,pi0,pi0},   {pim,s0,kpl,pim,pi0},   {pim,sp,k0,pim,pi0},
+    {pim,sp,kpl,pim,pim},   {pim,neu,pip,k0,kmi},   {pim,neu,pim,kpl,k0b},
+    {pim,neu,pi0,k0,k0b},  {pim,neu,pi0,kpl,kmi},   {pi0,neu,pi0,k0,kmi},
+    {pim,pro,pim,k0,k0b},  {pim,pro,pim,kpl,kmi},   {pim,pro,pi0,k0,kmi}}};
 
   const G4int T33_6bfsData[2][5][6] =
   {{{pip,pro,pip,pip,pim,pim}, {pip,pro,pip,pim,pi0,pi0},
@@ -918,63 +920,63 @@ void G4PionSampler::initCrossSections()
   // T31_nbfs = final state types for pi- p and pi+ n
 
   const G4int T31_2bfsData[2][5][2] =
-  {{{pim,pro}, {pi0,neu}, {k0,lam}, {k0,s0}, {kp,sm}},
+  {{{pim,pro}, {pi0,neu}, {k0,lam}, {k0,s0}, {kpl,sm}},
 
-   {{pip,neu}, {pi0,pro}, {kp,lam}, {kp,s0}, {k0,sp}}};
+   {{pip,neu}, {pi0,pro}, {kpl,lam}, {kpl,s0}, {k0,sp}}};
 
   const G4int T31_3bfsData[2][13][3] =
   {{{pim,pro,pi0}, {pim,neu,pip}, {pi0,neu,pi0}, {pi0,lam,k0}, 
-    {pim,lam,kp},  {pip,sm,k0},   {pi0,sm,kp},   {pim,sp,k0},
-    {pim,s0,kp},   {pi0,s0,k0},   {km,pro,k0},   {km,neu,kp},
+    {pim,lam,kpl},  {pip,sm,k0},   {pi0,sm,kpl},   {pim,sp,k0},
+    {pim,s0,kpl},   {pi0,s0,k0},   {kmi,pro,k0},   {kmi,neu,kpl},
     {k0b,neu,k0}},
 
-   {{pip,neu,pi0}, {pip,pro,pim}, {pi0,pro,pi0}, {pi0,lam,kp},
-    {pip,lam,k0},  {pim,sp,kp},   {pi0,sp,k0},   {pip,sm,kp},
-    {pip,s0,k0},   {pi0,s0,kp},   {k0b,neu,kp},  {k0b,pro,k0},
-    {km,pro,kp}}};
+   {{pip,neu,pi0}, {pip,pro,pim}, {pi0,pro,pi0}, {pi0,lam,kpl},
+    {pip,lam,k0},  {pim,sp,kpl},   {pi0,sp,k0},   {pip,sm,kpl},
+    {pip,s0,k0},   {pi0,s0,kpl},   {k0b,neu,kpl},  {k0b,pro,k0},
+    {kmi,pro,kpl}}};
 
   const G4int T31_4bfsData[2][22][4] =
   {{{pim,pro,pip,pim}, {pim,pro,pi0,pi0}, {pim,neu,pip,pi0},
     {pi0,neu,pi0,pi0}, {pim,lam,k0,pip},  {pi0,lam,k0,pi0},
-    {pim,lam,kp,pi0},  {pim,s0,k0,pip},   {pi0,s0,k0,pi0},
-    {pim,s0,kp,pi0},   {pim,sp,kp,pim},   {pim,sp,k0,pi0},
-    {pim,sm,kp,pip},   {pi0,sm,kp,pi0},   {pip,sm,k0,pi0},
-    {pim,pro,kp,km},   {pim,pro,k0,k0b},  {pi0,pro,k0,km},
-    {pip,neu,k0,km},   {pi0,neu,k0,k0b},  {pi0,neu,kp,km},
-    {pim,neu,kp,k0b}},
+    {pim,lam,kpl,pi0},  {pim,s0,k0,pip},   {pi0,s0,k0,pi0},
+    {pim,s0,kpl,pi0},   {pim,sp,kpl,pim},   {pim,sp,k0,pi0},
+    {pim,sm,kpl,pip},   {pi0,sm,kpl,pi0},   {pip,sm,k0,pi0},
+    {pim,pro,kpl,kmi},   {pim,pro,k0,k0b},  {pi0,pro,k0,kmi},
+    {pip,neu,k0,kmi},   {pi0,neu,k0,k0b},  {pi0,neu,kpl,kmi},
+    {pim,neu,kpl,k0b}},
 
    {{pip,neu,pip,pim},  {pip,neu,pi0,pi0}, {pip,pro,pim,pi0},
-    {pi0,pro,pi0,pi0},  {pip,lam,kp,pim},  {pi0,lam,kp,pi0},
-    {pip,lam,k0,pi0},   {pip,s0,kp,pim},   {pi0,s0,kp,pi0},
-    {pip,s0,k0,pi0},    {pip,sm,k0,pip},   {pip,sm,kp,pi0},
-    {pip,sp,k0,pim},    {pi0,sp,k0,pi0},   {pim,sp,kp,pi0},
-    {pip,neu,k0,k0b},   {pip,neu,kp,km},   {pi0,neu,kp,k0b},
-    {pim,pro,kp,k0b},   {pi0,pro,kp,km},   {pi0,pro,k0,k0b},
-    {pip,pro,k0,km}}};
+    {pi0,pro,pi0,pi0},  {pip,lam,kpl,pim},  {pi0,lam,kpl,pi0},
+    {pip,lam,k0,pi0},   {pip,s0,kpl,pim},   {pi0,s0,kpl,pi0},
+    {pip,s0,k0,pi0},    {pip,sm,k0,pip},   {pip,sm,kpl,pi0},
+    {pip,sp,k0,pim},    {pi0,sp,k0,pi0},   {pim,sp,kpl,pi0},
+    {pip,neu,k0,k0b},   {pip,neu,kpl,kmi},   {pi0,neu,kpl,k0b},
+    {pim,pro,kpl,k0b},   {pi0,pro,kpl,kmi},   {pi0,pro,k0,k0b},
+    {pip,pro,k0,kmi}}};
 
   const G4int T31_5bfsData[2][31][5] =
   {{{pim,pro,pip,pim,pi0}, {pim,pro,pi0,pi0,pi0}, {pim,neu,pip,pip,pim},
     {pim,neu,pip,pi0,pi0}, {pi0,neu,pi0,pi0,pi0}, {pim,lam,k0,pip,pi0},
-    {pim,lam,kp,pi0,pi0},  {pim,lam,kp,pip,pim},  {pi0,lam,k0,pi0,pi0},
-    {pim,s0,kp,pip,pim},   {pim,s0,kp,pi0,pi0},   {pim,s0,k0,pip,pi0},
+    {pim,lam,kpl,pi0,pi0},  {pim,lam,kpl,pip,pim},  {pi0,lam,k0,pi0,pi0},
+    {pim,s0,kpl,pip,pim},   {pim,s0,kpl,pi0,pi0},   {pim,s0,k0,pip,pi0},
     {pi0,s0,k0,pi0,pi0},   {pim,sp,k0,pip,pim},   {pim,sp,k0,pi0,pi0},
-    {pim,sp,kp,pim,pi0},   {pim,sm,k0,pip,pip},   {pip,sm,k0,pi0,pi0},
-    {pim,sm,kp,pip,pi0},   {pi0,sm,kp,pi0,pi0},   {pim,pro,pi0,kp,km},
-    {pim,pro,pi0,k0,k0b},  {pim,pro,pip,k0,km},   {pi0,pro,pi0,k0,km},
-    {pim,pro,pim,kp,k0b},  {pim,neu,pip,kp,km},   {pim,neu,pip,k0,k0b},
-    {pip,neu,pi0,k0,km},   {pim,neu,pi0,kp,k0b},  {pi0,neu,pi0,k0,k0b},
-    {pi0,neu,pi0,kp,km}}, 
+    {pim,sp,kpl,pim,pi0},   {pim,sm,k0,pip,pip},   {pip,sm,k0,pi0,pi0},
+    {pim,sm,kpl,pip,pi0},   {pi0,sm,kpl,pi0,pi0},   {pim,pro,pi0,kpl,kmi},
+    {pim,pro,pi0,k0,k0b},  {pim,pro,pip,k0,kmi},   {pi0,pro,pi0,k0,kmi},
+    {pim,pro,pim,kpl,k0b},  {pim,neu,pip,kpl,kmi},   {pim,neu,pip,k0,k0b},
+    {pip,neu,pi0,k0,kmi},   {pim,neu,pi0,kpl,k0b},  {pi0,neu,pi0,k0,k0b},
+    {pi0,neu,pi0,kpl,kmi}}, 
 
    {{pip,neu,pip,pim,pi0}, {pip,neu,pi0,pi0,pi0}, {pip,pro,pip,pim,pim},
-    {pip,pro,pim,pi0,pi0}, {pi0,pro,pi0,pi0,pi0}, {pip,lam,kp,pim,pi0},
-    {pip,lam,k0,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,kp,pi0,pi0},
-    {pip,s0,k0,pip,pim},   {pip,s0,k0,pi0,pi0},   {pip,s0,kp,pim,pi0},
-    {pi0,s0,kp,pi0,pi0},   {pip,sm,kp,pip,pim},   {pip,sm,kp,pi0,pi0},
-    {pip,sm,k0,pip,pi0},   {pip,sp,kp,pim,pim},   {pim,sp,kp,pi0,pi0},
+    {pip,pro,pim,pi0,pi0}, {pi0,pro,pi0,pi0,pi0}, {pip,lam,kpl,pim,pi0},
+    {pip,lam,k0,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,kpl,pi0,pi0},
+    {pip,s0,k0,pip,pim},   {pip,s0,k0,pi0,pi0},   {pip,s0,kpl,pim,pi0},
+    {pi0,s0,kpl,pi0,pi0},   {pip,sm,kpl,pip,pim},   {pip,sm,kpl,pi0,pi0},
+    {pip,sm,k0,pip,pi0},   {pip,sp,kpl,pim,pim},   {pim,sp,kpl,pi0,pi0},
     {pip,sp,k0,pim,pi0},   {pi0,sp,k0,pi0,pi0},   {pip,neu,pi0,k0,k0b},
-    {pip,neu,pi0,kp,km},   {pip,neu,pim,kp,k0b},  {pi0,neu,pi0,kp,k0b},
-    {pip,neu,pip,k0,km},   {pip,pro,pim,k0,k0b},  {pip,pro,pim,kp,km},
-    {pim,pro,pi0,kp,k0b},  {pip,pro,pi0,k0,km},   {pi0,pro,pi0,kp,km},
+    {pip,neu,pi0,kpl,kmi},   {pip,neu,pim,kpl,k0b},  {pi0,neu,pi0,kpl,k0b},
+    {pip,neu,pip,k0,kmi},   {pip,pro,pim,k0,k0b},  {pip,pro,pim,kpl,kmi},
+    {pim,pro,pi0,kpl,k0b},  {pip,pro,pi0,k0,kmi},   {pi0,pro,pi0,kpl,kmi},
     {pi0,pro,pi0,k0,k0b}}};
 
   const G4int T31_6bfsData[2][6][6] =
@@ -1633,60 +1635,60 @@ void G4PionSampler::initCrossSections()
   // T11_nbfs = final state types for pi0 p and pi0 n
 
   const G4int T11_2bfsData[2][5][2] =
-  {{{pi0,pro}, {pip,neu}, {kp,lam}, {kp,s0}, {k0,sp}},
+  {{{pi0,pro}, {pip,neu}, {kpl,lam}, {kpl,s0}, {k0,sp}},
 
-   {{pi0,neu}, {pim,pro}, {k0,lam}, {k0,s0}, {kp,sm}}};
+   {{pi0,neu}, {pim,pro}, {k0,lam}, {k0,s0}, {kpl,sm}}};
 
   const G4int T11_3bfsData[2][13][3] =
-  {{{pip,pro,pim}, {pi0,pro,pi0}, {pi0,neu,pip}, {pi0,lam,kp}, 
-    {pip,lam,k0},  {pi0,s0,kp},   {pip,s0,k0},   {pi0,sp,k0},
-    {pim,sp,kp},   {pip,sm,kp},   {km,pro,kp},   {k0b,pro,k0},
-    {k0b,neu,kp}},
+  {{{pip,pro,pim}, {pi0,pro,pi0}, {pi0,neu,pip}, {pi0,lam,kpl}, 
+    {pip,lam,k0},  {pi0,s0,kpl},   {pip,s0,k0},   {pi0,sp,k0},
+    {pim,sp,kpl},   {pip,sm,kpl},   {kmi,pro,kpl},   {k0b,pro,k0},
+    {k0b,neu,kpl}},
 
    {{pim,neu,pip}, {pi0,neu,pi0}, {pi0,pro,pim}, {pi0,lam,k0},
-    {pim,lam,kp},  {pi0,s0,k0},   {pim,s0,kp},   {pi0,sm,kp},  
-    {pip,sm,k0},   {pim,sp,k0},   {k0b,neu,k0},  {km,neu,kp},
-    {km,pro,k0}}};
+    {pim,lam,kpl},  {pi0,s0,k0},   {pim,s0,kpl},   {pi0,sm,kpl},  
+    {pip,sm,k0},   {pim,sp,k0},   {k0b,neu,k0},  {kmi,neu,kpl},
+    {kmi,pro,k0}}};
 
   const G4int T11_4bfsData[2][21][4] =
   {{{pi0,pro,pim,pip}, {pi0,pro,pi0,pi0}, {pip,neu,pip,pim},
-    {pi0,neu,pip,pi0}, {pip,lam,kp,pim},  {pip,s0,kp,pim}, 
-    {pi0,lam,kp,pi0},  {pi0,s0,kp,pi0},   {pi0,sp,k0,pi0}, 
+    {pi0,neu,pip,pi0}, {pip,lam,kpl,pim},  {pip,s0,kpl,pim}, 
+    {pi0,lam,kpl,pi0},  {pi0,s0,kpl,pi0},   {pi0,sp,k0,pi0}, 
     {pi0,lam,k0,pip},  {pi0,s0,k0,pip},   {pip,sp,k0,pim}, 
-    {pi0,sp,kp,pim},   {pi0,sm,kp,pip},   {pi0,pro,kp,km}, 
-    {pi0,pro,k0,k0b},  {pip,pro,k0,km},   {pim,pro,kp,k0b}, 
-    {pip,neu,kp,km},   {pip,neu,k0,k0b},  {pi0,neu,kp,k0b}}, 
+    {pi0,sp,kpl,pim},   {pi0,sm,kpl,pip},   {pi0,pro,kpl,kmi}, 
+    {pi0,pro,k0,k0b},  {pip,pro,k0,kmi},   {pim,pro,kpl,k0b}, 
+    {pip,neu,kpl,kmi},   {pip,neu,k0,k0b},  {pi0,neu,kpl,k0b}}, 
 
    {{pi0,neu,pim,pip}, {pi0,neu,pi0,pi0}, {pim,pro,pip,pim},
     {pi0,pro,pim,pi0}, {pip,lam,k0,pim},  {pip,s0,k0,pim},
-    {pi0,lam,k0,pi0},  {pi0,s0,k0,pi0},   {pi0,sm,kp,pi0},
-    {pi0,lam,kp,pim},  {pi0,s0,kp,pim},   {pip,sm,kp,pim},
+    {pi0,lam,k0,pi0},  {pi0,s0,k0,pi0},   {pi0,sm,kpl,pi0},
+    {pi0,lam,kpl,pim},  {pi0,s0,kpl,pim},   {pip,sm,kpl,pim},
     {pi0,sm,k0,pip},   {pi0,sp,k0,pim},   {pi0,neu,k0,k0b},
-    {pi0,neu,kp,km},   {pim,neu,kp,k0b},  {pip,neu,k0,km},
-    {pim,pro,k0,k0b},  {pim,pro,kp,km},   {pi0,pro,k0,km}}};
+    {pi0,neu,kpl,kmi},   {pim,neu,kpl,k0b},  {pip,neu,k0,kmi},
+    {pim,pro,k0,k0b},  {pim,pro,kpl,kmi},   {pi0,pro,k0,kmi}}};
 
   const G4int T11_5bfsData[2][30][5] =
   {{{pip,pro,pip,pim,pim}, {pi0,pro,pip,pim,pi0}, {pi0,pro,pi0,pi0,pi0},
-    {pi0,neu,pip,pip,pim}, {pi0,neu,pip,pi0,pi0}, {pi0,lam,kp,pip,pim},
-    {pi0,lam,kp,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,k0,pip,pi0},  
-    {pi0,s0,kp,pip,pim},   {pi0,s0,kp,pi0,pi0},   {pip,s0,k0,pip,pim},
+    {pi0,neu,pip,pip,pim}, {pi0,neu,pip,pi0,pi0}, {pi0,lam,kpl,pip,pim},
+    {pi0,lam,kpl,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,k0,pip,pi0},  
+    {pi0,s0,kpl,pip,pim},   {pi0,s0,kpl,pi0,pi0},   {pip,s0,k0,pip,pim},
     {pi0,s0,k0,pip,pi0},   {pi0,sp,k0,pip,pim},   {pi0,sp,k0,pi0,pi0},
-    {pim,sp,kp,pip,pim},   {pi0,sp,kp,pim,pi0},   {pip,sm,kp,pip,pim}, 
-    {pi0,sm,kp,pip,pi0},   {pi0,pro,kp,km,pi0},   {pi0,pro,k0,k0b,pi0}, 
-    {pi0,pro,kp,k0b,pim},  {pi0,pro,k0,km,pip},   {pip,pro,kp,km,pim},
-    {pip,pro,k0,k0b,pim},  {pi0,neu,kp,km,pip},   {pi0,neu,k0,k0b,pip},
-    {pi0,neu,kp,k0b,pi0},  {pip,neu,k0,km,pip},   {pip,neu,kp,k0b,pim}},
+    {pim,sp,kpl,pip,pim},   {pi0,sp,kpl,pim,pi0},   {pip,sm,kpl,pip,pim}, 
+    {pi0,sm,kpl,pip,pi0},   {pi0,pro,kpl,kmi,pi0},   {pi0,pro,k0,k0b,pi0}, 
+    {pi0,pro,kpl,k0b,pim},  {pi0,pro,k0,kmi,pip},   {pip,pro,kpl,kmi,pim},
+    {pip,pro,k0,k0b,pim},  {pi0,neu,kpl,kmi,pip},   {pi0,neu,k0,k0b,pip},
+    {pi0,neu,kpl,k0b,pi0},  {pip,neu,k0,kmi,pip},   {pip,neu,kpl,k0b,pim}},
 
    {{pim,neu,pip,pip,pim}, {pi0,neu,pip,pim,pi0}, {pi0,neu,pi0,pi0,pi0},
     {pi0,pro,pip,pim,pim}, {pi0,pro,pim,pi0,pi0}, {pi0,lam,k0,pip,pim},
-    {pi0,lam,k0,pi0,pi0},  {pim,lam,kp,pip,pim},  {pi0,lam,kp,pim,pi0},
-    {pi0,s0,k0,pip,pim},   {pi0,s0,k0,pi0,pi0},   {pim,s0,kp,pip,pim},
-    {pi0,s0,kp,pim,pi0},   {pi0,sm,kp,pip,pim},   {pi0,sm,kp,pi0,pi0},
+    {pi0,lam,k0,pi0,pi0},  {pim,lam,kpl,pip,pim},  {pi0,lam,kpl,pim,pi0},
+    {pi0,s0,k0,pip,pim},   {pi0,s0,k0,pi0,pi0},   {pim,s0,kpl,pip,pim},
+    {pi0,s0,kpl,pim,pi0},   {pi0,sm,kpl,pip,pim},   {pi0,sm,kpl,pi0,pi0},
     {pip,sm,k0,pip,pim},   {pi0,sm,k0,pip,pi0},   {pim,sp,k0,pip,pim},
-    {pi0,sp,k0,pim,pi0},   {pi0,neu,k0,k0b,pi0},  {pi0,neu,kp,km,pi0},
-    {pi0,neu,k0,km,pip},   {pi0,neu,kp,k0b,pim},  {pim,neu,k0,k0b,pip},
-    {pim,neu,kp,km,pip},   {pi0,pro,k0,k0b,pim},  {pi0,pro,kp,km,pim},
-    {pi0,pro,k0,km,pi0},   {pim,pro,kp,k0b,pim},  {pim,pro,k0,km,pip}}};
+    {pi0,sp,k0,pim,pi0},   {pi0,neu,k0,k0b,pi0},  {pi0,neu,kpl,kmi,pi0},
+    {pi0,neu,k0,kmi,pip},   {pi0,neu,kpl,k0b,pim},  {pim,neu,k0,k0b,pip},
+    {pim,neu,kpl,kmi,pip},   {pi0,pro,k0,k0b,pim},  {pi0,pro,kpl,kmi,pim},
+    {pi0,pro,k0,kmi,pi0},   {pim,pro,kpl,k0b,pim},  {pim,pro,k0,kmi,pip}}};
 
   const G4int T11_6bfsData[2][6][6] =
   {{{pi0,pro,pip,pip,pim,pim}, {pi0,pro,pip,pim,pi0,pi0},

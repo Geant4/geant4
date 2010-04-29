@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeElasticInterface.cc,v 1.8 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4CascadeElasticInterface.cc,v 1.9 2010-04-29 00:30:02 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 
 #include "G4CascadeElasticInterface.hh"
 #include "globals.hh"
@@ -48,6 +49,9 @@
 #include "G4Nucleus.hh"
 #include "G4NucleiModel.hh"
 #include "G4LorentzRotation.hh"
+#include "G4InuclParticleNames.hh"
+
+using namespace G4InuclParticleNames;
 
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -89,8 +93,6 @@ G4HadFinalState* G4CascadeElasticInterface::ApplyYourself(const G4HadProjectile&
 
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
-
-  enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, photon = 10 };
 
   G4int bulletType =  G4InuclElementaryParticle::type(aTrack.GetDefinition());
 
@@ -277,7 +279,7 @@ G4HadFinalState* G4CascadeElasticInterface::ApplyYourself(const G4HadProjectile&
 #endif
 	break;
 
-      case photon: 
+      case gamma:
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 

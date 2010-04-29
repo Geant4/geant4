@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FinalStateSampler.hh,v 1.5 2010-04-14 18:17:45 mkelsey Exp $
+// $Id: G4FinalStateSampler.hh,v 1.6 2010-04-29 00:30:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -30,6 +30,7 @@
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>, improve base interface
 // 20100413  M. Kelsey -- Move subclass functionality here
+// 20100428  M. Kelsey -- Use G4InuclParticleNames enums in .cc file
 
 #ifndef G4FinalStateSampler_h
 #define G4FinalStateSampler_h 1
@@ -52,9 +53,6 @@ public:  // with description
      
   virtual ~G4FinalStateSampler() { }
     
-  enum {pi0=7, pip=3, pim=5, kp=11, km=13, k0=15, k0b=17, pro=1, neu=2, 
-	lam=21, sp=23, s0=25, sm=27, xi0=29, xim=31, om=33, ap=35, an=37};
-
   enum { energyBins=30 };
 
 protected:  // with description
