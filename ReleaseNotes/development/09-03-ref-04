@@ -1,0 +1,268 @@
+
+                       geant4-09-03-ref-04
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o G4MaterialPropertyVector: removed allocation of temporary helper object
+   and modified GetAdjacentBins() to allow for a value to match a bin exactly.
+   Measured 21% CPU speed-up for optical processes.
+ o Added 6 new materials to G4NistMaterialBuilder.
+ o G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
+   vertices.
+ o New G4LEDATA data set, version 6.13 required for low-energy processes.
+ o Code review in Bertini Cascade hadronic model.
+ o Enabled Multi-Fragmentation model for de_excitation and fixes for
+   improving numerical stability.
+ o Fix in INCL hadronic model in the construction of data tables for
+   nuclear deformation and shell effect data.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(o)  Fixes included in release 9.3.p01
+
+Summarised, the list of changes is the following:
+
+event                                            event-V09-03-01
+-----
+- Improved logic in G4PrimaryTransformer. Addressing problem report #1101.
+- Fixed compilation warning in G4SmartTrackStack issued with gcc 4.5.0.
+
+geometry/solids/specific                         geom-specific-V09-03-02
+------------------------
+- G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
+  vertices. Added a check for vertices ordering; if vertices are defined
+  anti-clockwise their ordering is reverted.
+  Fix in polygon facet triangularization for consequent concave vertices.
+
+geometry/volumes                                 geomvol-V09-03-06
+----------------
+- Make use of specialized allocator for handling internal vector in
+  G4NavigatorHistory, globally controlling the memory pool.
+  Measured ~2% average run-time speed-up.
+- Adopth assign() in G4NavigatorHistory copy-constructor.                    (o)
+- Added Reset() method to G4ReflectionFactory for clearing maps of
+  constituent and reflected volumes.
+
+global                                           global-V09-03-04
+------
+- Changed date for release 9.3.p01.                                          (o)
+
+interfaces                                       interfaces-V09-03-00
+----------
+- Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
+  allow for porting on gcc-4.5.0.
+
+materials                                        materials-V09-03-02
+---------
+- G4MaterialPropertyVector: removed allocation of temporary helper object
+  and modified GetAdjacentBins() to allow for a value to match a bin exactly.
+  Measured 21% CPU speed-up for optical processes.
+- G4OpticalSurface: changed GetAngularDistributionValue(), no longer
+  dereferencing a pointer but returning the value at the array index.
+- G4NistMaterialBuilder: added 6 new materials.
+- G4ionisParamMat, G4DensityEffectData: added possibility to access density
+  effect data in the case when pure material is not defined via NIST; atom
+  number and state of such materials are checked.
+
+physics_lists                                    phys-lists-V09-03-01
+-------------
+- LBE: substituted obsolete G4MultipleScattering by particle wise processes.
+
+processes/electromagnetic/adjoint                emadjoint-V09-03-00
+---------------------------------
+- G4AdjointhMultipleScattering: removed unused header.
+
+processes/electromagnetic/lowenergy              emlowen-V09-03-29
+-----------------------------------
+- Changed computation of scattering angle in G4DNAChampionElasticModel.
+  New G4EMLOW data set (version >= 6.12) needed.
+- Fixed memory leak in G4DNARuddIonisationModel.                             (o)
+- Replaced hard coded masses in G4DNADingfelderCharge* classes.
+- Added MinEnergyCut() method to G4PenelopeIonisationModel. Small (minor)
+  changes to other Penelope models (mainly clean-up).
+  Removed useless call in G4PenelopeIonisationModel which triggered fake
+  warning messages. Removed debug printout in G4Penelope08ComptonModel and
+  G4Penelope08PhotoElectricModel.
+
+processes/electromagnetic/standard               emstand-V09-03-09
+----------------------------------
+- G4GoudsmitSaundersonMscModel: improved numerical stability of computations
+  for small angles by direct cross-section calculation, now inverse of the
+  inverse angular sampling without large angle rejection method longitudinal
+  displacement is computed exactly from <z>.
+- G4GoudsmitSaundersonTable: improved numerical stability by minimum of used
+  arrays in computation within the dichotomy finding method.
+- G4ASTARStopping, G4PSTARTStopping: replaced C-arrays with G4PhysicsVector
+  with Spline interpolation. Reviewed names of materials (G4_PHOTO_EMULSION,
+  G4_He, G4_NYLON-6-6).
+- Fixed G4_O data in G4ASTARStopping. Fixed G4_Pt and G4_PROPANE data in
+  G4PSTARStopping.
+- Cleanup in GetElectronicDEDX() method in G4WaterStopping.
+- G4eMultipleScattering, G4hMultipleScattering: improved printout at
+  initialisation. Removed old unused header of G4UrbanMscModel in
+  G4hMultipleScattering.
+- G4eBremsstrahlungRelModel, G4MollerBhabhaModel: set minimum cut value
+  to 0.1 keV.
+- G4PolarizedComptonScattering: added message that this process is obsolete.
+
+processes/electromagnetic/utils                  emutils-V09-03-10
+-------------------------------
+- G4LossTableManager: added new method GetNumberOfBinsPerDecade(), used in
+  G4VEmModel with Spline flag to initialise G4EmElementSelector.
+  Addressing problem report #1115.
+  Added methods PreparePhsyicsTables(), BuildPhysicsTables(), and changed
+  initialisation of models via G4EmConfigurator.
+- G4EmProcessOptions: removed extra initialisation code, already existing in
+  G4LossTableManager.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: added
+  calls to new G4LossTableManager methods.
+- G4VEnergyLossProcess: call CorrectionsAlongStep() only for ions (minor
+  CPU saving). Use the same method to build cross section table
+  as DEDX table (use copy constructors to reduce number of calls to exp()).
+- G4EmConfigurator: upgraded and fixed old problem.
+- G4EmCalculator: fix in GetCrossSection() method.
+- G4EmElementSelector: use Spline flag to construct vectors probabilities.
+- G4EmModelManager: do not use min energy cut defined by models allowing
+  decreasing of cuts in limit to zero. Cleanup to comments.
+
+processes/hadronic
+------------------
+- models/cascade (hadr-casc-V09-03-23)
+<   o Replaced usage of std::vector<> with G4ThreeVector where applicable
+<     in G4CascadParticle and G4NucleiModel.
+<   o Removed all use of G4CascadeMomentum (a simple container with a C-style
+<     four-element array) with G4LorentzVector.
+<   o G4InteractionCase: minor fix in initialisation in constructor to
+<     allow for porting on C++0x Standard.
+<   o G4CascadeMomentum: replaced use of static G4LV variables within functions
+<     with mutable data member of object; this does introduce more memory
+<     thrashing, but the plan is to get rid of the whole thing anyway.
+<     Improve implicit casting and add assignment from G4LV.
+<     Added interface to create from and cast to G4LorentzVector; provides a
+<     transition to eliminating this class entirely.
+<   o G4LorentzConverter: changed function signatures to accept G4LV as input,
+<     using implicit cast to convert existing G4CascadeMomentum argument
+<     passing. Simplified ::rotate() functions to use G4LV and
+<     G4ThreeVector operations rather than array index gymnastics.
+<     Moved some inline function implementations source.
+<   o G4ParticleLargerBeta, G4ParticleLargerEkin: added additional operator()
+<     which takes pointers (for future mods to reduce ctor/dtor cycling), and
+<     fix ordering bug in beta sorting. Added debugging printout togged with
+<     preprocessor flag.
+<   o G4InuclParticle, G4InuclNuclei, G4InuclElementaryParticle: rewrite to
+<     carry G4DynamicParticle data member, and to instantiate particle
+<     properties via G4ParticleDefinition subclasses. First stage in eventually
+<     use directly G4DynamicParticle for internal propagation.
+<     Consistency of physics results verified.
+<   o Removed class G4BertiniNuclearModel, redundant with the G4NuclearModel
+<     class, and not used anywhere.
+
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-03)
+  o Implementated isotope wise CHIPS elastic for neutrons.
+  o Fix in G4QElasticCrossSection in parameter order for nH. 
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-04)
+  o Fix for run-time warning on Windows.
+- models/de_excitation (hadr-deex-V09-03-06)
+  o Fixed numerical problem (division by zero) in G4GEMProbability.
+  o G4ExcitationHandler: enabled Multi-Fragmentation model.
+  o G4StatMFMacroTemperature: cleanup logic of solving equation for
+    temperature; moved constructors and destructor to source.
+  o G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
+    G4TritonEvaporationProbability, G4He3EvaporationProbability,
+    G4AlphaEvaporationProbability: return back to published variant OPT3
+    (Kalbach) parameterization of inverse cross section.
+- models/incl (hadr-incl-V09-03-00)
+  o Nuclear deformation and shell effect data reader now constructs the
+    corresponding data tables correctly.
+  o Added some internal logging facilities to INCL (disabled by default).
+- models/neutron_hp (hadr-hpn-V09-03-03)
+  o Modified sampling in G4NeutronHPInelasticCompFS.
+  o  Fix bug about incidence energy in G4NeutronHPEnAngCorrelation.
+- models/pre_equilibrium (hadr-pre-V09-03-04)
+  o G4PreCompoundProton, G4PreCompoundDeuteron, G4PreCompoundTriton,
+    G4PreCompoundHe3, G4PreCompoundAlpha: return back to published variant OPT3
+    (Kalbach) parameterization of inverse cross section.
+- util (hadr-util-V09-03-00)
+  o Added interface for integer A&Z to G4Nucleus, and modified G4LightMedia,
+    G4HadronicWhiteBoard and G4ReactionDynamics to use the new interface.
+
+processes/optical                                op-V09-03-01
+-----------------
+- Fix for backpainted surfaces to avoid applying twice reflectivity.
+  Addressing problem report #1114.
+- Refashioned code in the case of type 'dielectric_dielect'.
+
+data sets
+---------
+- G4EMLOW-6.10 to 6.13:
+  o Updated PDF.dat to msc_GS module.
+  o Added 'sigmadiff_cumulated_elastic_e_champion.dat' and
+    temporary 'sigma_excitation_e_born.dat' to dna module.
+  o Added data files in the penelope module, necessary for
+    Penelope08 models for gamma rays.
+
+examples                                         examples-V09-03-04
+--------
+- Updated reference outputs.
+- advanced/Rich (Rich-V09-03-00)
+  o Updated physics-lists to use particle-based multiple-scattering processes.
+- extended/analysis/N03Con (exampleN03Con-V09-03-00)                                     (o)
+  o Updated physics-lists as for in novice exampleN03.
+- extended/electromagnetic/TestEm0 (testem0-V09-03-02)
+  o RunAction: printout both GetCrossSection() and ComputeCrossSection().
+- extended/electromagnetic/TestEm1 (testem1-V09-03-00)
+  o RunAction: replaced 'ProcessCount' with a map.
+  o Introduction of G4UIExecutive in main().
+- extended/electromagnetic/TestEm3 (testem3-V09-03-01)
+  o PhysicsList: removed inclusion of obsolete header.
+- extended/electromagnetic/TestEm6 (testem6-V09-03-00)
+  o PhysicsList: removed obsolete multiple-scattering from comments.
+- extended/electromagnetic/TestEm8 (testem8-V09-03-00)
+  o Use pointer to G4EmConfigurator and not as data member.
+- extended/electromagnetic/TestEm13 (testem13-V09-03-01)
+- extended/electromagnetic/TestEm14 (testem14-V09-03-01)
+  o PhysicsList: extend 'ProductionCuts' down to 100 eV.
+    Removed non pertinent EmOptions.
+  o PhysListEmStandard, Livermore, Penelope: all processes registered as
+    discrete (i.e., no continuous Eloss).
+  o RunAction: replaced 'ProcessCount' with a map.
+  o Introduction of G4UIExecutive in main().
+  o Cleanup in SteppingAction.
+  o Updated README.
+- extended/exoticphysics/monopole (monopole-V09-03-01)
+  o PhysicsList: removed inclusion of obsolete header.
+- extended/field/field01 (fieldex01-V09-03-01)
+- extended/field/field02 (fieldex02-V09-03-01)
+- extended/field/field03 (fieldex03-V09-03-01)
+  o Removed unused pointers to G4MultipleScattering left.
+- extended/runAndEvent/RE01 (exampleRE01-V09-03-00)
+- extended/runAndEvent/RE02 (exampleRE02-V09-03-00)
+- extended/runAndEvent/RE03 (exampleRE03-V09-03-00)
+  o Updated physics-lists to use particle-based multiple-scattering processes.
+
+tests                                            tests-V09-03-04
+-----
+- Updated reference outputs and tools.
+- test07 (test07-V09-03-00)
+  o Updated physics-lists to use particle-based multiple-scattering processes.
+- test30 (test30-V09-03-03)
+  o Use CHIPS from G4QInelastic.
+  o Reduced memory leak at destruction.
+- test31 (test31-V09-03-00)
+  o PhysicsList: removed obsolete low-energy builders; added cut per recoil.
+- test35 (test35-V09-03-00)
+  o Use CHIPS from G4QInelastic.
+  o Use environment variables to activate generators.
+  o Reduced memory leak at destruction.
+- test46 (test46-V09-03-00)
+  o Added count of average number of steps per particle type.
+- test53 (test53-V09-03-01)
+- test54 (test54-V09-03-00)
+  o Removed old obsolete low-energy builders.
+- test55 (test55-V09-03-00)
+  o Added scoring functionality for the mean energy loss of primaries
+    transmitted through a material layer.
+  o Added functionality to compare range and energy loss of primaries
+    against reference values (specified in macro file).
+  o Removed local physics lists containing outdated physics processes.
