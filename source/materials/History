@@ -1,4 +1,4 @@
-$Id: History,v 1.173 2010-04-29 11:11:56 vnivanch Exp $
+$Id: History,v 1.174 2010-04-29 11:35:21 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,11 +19,11 @@ committal in the CVS repository !
 
 29-04-10 V.Ivanchenko (materials-V09-03-03)
 - G4NistMaterialBuilder, G4NistManager - added method GetMeanIonisationEnergy
-- G4ionisParamElm - use mean excitation energy from NIST DB
+- G4IonisParamElm - use mean excitation energy from NIST DB
 
 23-04-10 V.Ivanchenko (materials-V09-03-02)
 - G4NistMaterialBuilder - added 6 new materials
-- G4ionisParamMat, G4DensityEffectData - added a possibility to access 
+- G4IonisParamMat, G4DensityEffectData - added a possibility to access 
           density effect data in the case when pure material is not 
           defined via NIST; atom number and state of such materials 
           are checked.
