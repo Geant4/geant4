@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.28 2010-04-19 23:03:23 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.29 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100418  M. Kelsey -- Move lab-frame transformation code to G4CollisonOutput
+// 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
 
 #include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -95,7 +96,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	G4InuclElementaryParticle* pbullet = 
 	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
          
-	if (pbullet->photon()) {
+	if (pbullet->isPhoton()) {
 	  G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
 
 	  globalOutput.trivialise(bullet, target);

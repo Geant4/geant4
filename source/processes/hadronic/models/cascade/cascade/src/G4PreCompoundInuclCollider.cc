@@ -22,12 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundInuclCollider.cc,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4PreCompoundInuclCollider.cc,v 1.8 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
 
 #include "G4PreCompoundInuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -95,7 +96,7 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	G4InuclElementaryParticle* pbullet = 
 	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
          
-	if (pbullet->photon()) {
+	if (pbullet->isPhoton()) {
 	  G4cout << " InuclCollider -> can not collide with photon " << G4endl;
 
 	  globalOutput.trivialise(bullet, target);

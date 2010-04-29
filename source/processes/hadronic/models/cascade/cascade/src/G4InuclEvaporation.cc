@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.14 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.15 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,6 +30,7 @@
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(), use
 //		const_iterator.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
+// 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 
 #include <numeric>
 #include "G4IonTable.hh"
@@ -173,7 +174,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 	cascadeParticle = new G4DynamicParticle(G4Neutron::NeutronDefinition(), v.vect(), v.e());
 	break;
 
-      case gamma:
+      case photon:
 	cascadeParticle = new G4DynamicParticle(G4Gamma::Gamma(), v.vect(), v.e());
 	break;
       default:

@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticleNames.hh,v 1.1 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4InuclParticleNames.hh,v 1.2 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Defines enums to map G4InuclElementaryParticle type codes to human
@@ -33,7 +33,7 @@
 
 namespace G4InuclParticleNames {
   enum Long { nuclei=0, proton=1, neutron=2,
-	      pionPlus=3, pionMinus=5, pionZero=7, gamma=10,
+	      pionPlus=3, pionMinus=5, pionZero=7, photon=10,
 	      kaonPlus=11, kaonMinus=13, kaonZero=15, kaonZeroBar=17, 
 	      lambda=21, sigmaPlus=23, sigmaZero=25, sigmaMinus=27, 
 	      xiZero=29, xiMinus=31, omegaMinus=33, antiProton=35, 
@@ -41,7 +41,7 @@ namespace G4InuclParticleNames {
 
   // NOTE:  "km" cannot be used as conflicts with "kilometers" unit!
   enum Short { nuc=nuclei, pro=proton, neu=neutron,
-	       pip=pionPlus, pim=pionMinus, pi0=pionZero, gam=gamma,
+	       pip=pionPlus, pim=pionMinus, pi0=pionZero, gam=photon,
 	       kpl=kaonPlus, kmi=kaonMinus, k0=kaonZero, k0b=kaonZeroBar,
 	       lam=lambda, sp=sigmaPlus, s0=sigmaZero, sm=sigmaMinus,
 	       xi0=xiZero, xim=xiMinus, om=omegaMinus, ap=antiProton,

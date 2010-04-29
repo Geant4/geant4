@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.54 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.55 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -44,6 +44,7 @@
 //		as input buffer.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
+// 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -113,7 +114,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron
 
-  if (!particle1->photon() && !particle2->photon()) { // ok
+  if (!particle1->isPhoton() && !particle2->isPhoton()) { // ok
     if (particle1->nucleon() || particle2->nucleon()) { // ok
       G4LorentzConvertor convertToSCM;
       if(particle2->nucleon()) {

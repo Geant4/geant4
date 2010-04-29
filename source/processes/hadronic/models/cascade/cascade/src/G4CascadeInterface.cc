@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.74 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.75 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,7 @@
 // 20100418  M. Kelsey -- Reference output particle lists via const-ref, use
 //		const_iterator for both.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
+// 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -323,7 +324,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 #endif
 	break;
 
-      case gamma: 
+      case photon: 
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 

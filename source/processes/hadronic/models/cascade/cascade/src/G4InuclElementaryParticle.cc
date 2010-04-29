@@ -22,11 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclElementaryParticle.cc,v 1.5 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.cc,v 1.6 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
 //		add Omega and antinucleons.
+// 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -66,7 +67,7 @@ G4InuclElementaryParticle::makeDefinition(G4int ityp) {
   case pionPlus:    return G4PionPlus::Definition(); break;
   case pionMinus:   return G4PionMinus::Definition(); break;
   case pionZero:    return G4PionZero::Definition(); break;
-  case gamma:       return G4Gamma::Definition(); break;
+  case photon:      return G4Gamma::Definition(); break;
   case kaonPlus:    return G4KaonPlus::Definition(); break;
   case kaonMinus:   return G4KaonMinus::Definition(); break;
   case kaonZero:    return G4KaonZero::Definition(); break;
@@ -99,7 +100,7 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == G4PionPlus::Definition())     return pionPlus;
   if (pd == G4PionMinus::Definition())    return pionMinus;
   if (pd == G4PionZero::Definition())     return pionZero;
-  if (pd == G4Gamma::Definition())        return gamma;
+  if (pd == G4Gamma::Definition())        return photon;
   if (pd == G4KaonPlus::Definition())     return kaonPlus;
   if (pd == G4KaonMinus::Definition())    return kaonMinus;
   if (pd == G4KaonZero::Definition())     return kaonZero;

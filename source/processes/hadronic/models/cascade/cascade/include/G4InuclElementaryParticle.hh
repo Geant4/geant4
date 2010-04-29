@@ -24,31 +24,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclElementaryParticle.hh,v 1.21 2010-04-09 19:33:11 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.hh,v 1.22 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
+// 20100429  M. Kelsey -- Change "photon()" to "isPhoton()", use enum names
 
 #include "G4InuclParticle.hh"
+#include "G4InuclParticleNames.hh"
 #include "globals.hh"
 
 class G4ParticleDefinition;
 
 class G4InuclElementaryParticle : public G4InuclParticle {
-
-//                     known particle types:
-//      1 - proton          11 - k+         111 - quasideuteron PP
-//      2 - neutron         13 - k-         112 - quasideuteron PN
-//      3 - pi+             15 - k0         122 - quasideuteron NN
-//      5 - pi-             17 - k0bar
-//      7 - pi 0            21 - lambda 
-//     10 - photon          23 - sigma+
-//                          25 - sigma0
-//                          27 - sigma-
-//                          29 - xi0
-//                          31 - xi-
-
 public:
   G4InuclElementaryParticle() 
     : G4InuclParticle(), generation(0) {}
@@ -76,11 +65,14 @@ public:
 
   static G4int type(const G4ParticleDefinition* pd);
 
-  G4bool photon() const { return (type() == 10); }
+  G4bool isPhoton() const { return (type() == G4InuclParticleNames::photon); }
 
-  G4bool pion() const { return (type()==3 || type()==5 || type()==7); }
+  G4bool pion() const { return (type()==G4InuclParticleNames::pionPlus ||
+				type()==G4InuclParticleNames::pionMinus ||
+				type()==G4InuclParticleNames::pionZero); }
 
-  G4bool nucleon() const { return (type() <= 2); }
+  G4bool nucleon() const { return (type()==G4InuclParticleNames::proton ||
+				   type()==G4InuclParticleNames::neutron); }
 
   G4int baryon() const { 		// Can use as a bool (!=0 ==> true)
     return getDefinition()->GetBaryonNumber();

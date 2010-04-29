@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2010-04-29 00:30:02 mkelsey Exp $
+$Id: History,v 1.67 2010-04-29 19:39:55 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,22 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+29 Apr 2010 Michael Kelsey (hadr-casc-V09-03-27)
+------------------------------------------------
+- G4InuclPartcleNames.hh:  Long name "gamma" conflicts with math function.
+  Change back to "photon".
+
+- G4InuclElementaryParticle.cc, G4InuclEvaporation.cc,
+  G4NonEquilibriumEvaporator.cc, G4NucleiModel.cc, G4NucleonSampler.cc,
+  G4PionSampler.cc, G4PreCompoundCascadeInterface.cc,
+  G4PreCompoundInuclCollider.cc:  Replace "gamma" with "photon".
+
+- G4InuclElementaryParticle.hh:  Change "photon()" to "isPhoton()" to avoid
+  conflicts with names enum.  Use names enum internally as well.
+
+- G4ElementaryParticleCollider.cc, G4InuclCollider.cc, 
+  G4PreCompoundInuclCollider.cc:  Change "photon()" to "isPhoton()".
 
 28 Apr 2010 Michael Kelsey (hadr-casc-V09-03-26)
 ------------------------------------------------

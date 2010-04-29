@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElasticCascadeInterface.cc,v 1.10 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4ElasticCascadeInterface.cc,v 1.11 2010-04-29 19:39:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Pekka Kaitaniemi, HIP
@@ -31,6 +31,7 @@
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
+// 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 
 #include "G4ElasticCascadeInterface.hh"
 #include "globals.hh"
@@ -313,7 +314,7 @@ G4HadFinalState* G4ElasticCascadeInterface::ApplyYourself(const G4HadProjectile&
 #endif
 	break;
 
-      case gamma:
+      case photon:
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 
