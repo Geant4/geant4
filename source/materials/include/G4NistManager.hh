@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.23 2008-08-07 10:15:16 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.24 2010-04-29 11:11:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,6 +45,7 @@
 // 02.05.07 V.Ivanchneko add GetNistFirstIsotopeN and GetNumberOfNistIsotopes 
 // 28.07.07 V.Ivanchneko make simple methods inline
 // 28.10.07 V.Ivanchneko add state, T, P to maetrial build
+// 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method 
 //
 // Class Description:
 //
@@ -148,6 +149,10 @@ public:
   // Access to the vector of Geant4 predefined element names 
   //
   inline const std::vector<G4String>& GetNistElementNames() const;
+
+  // Access mean ionisation energy for atoms (Z <= 98) 
+  //
+  inline G4double GetMeanIonisationEnergy(G4int Z) const;
 
   // Get G4Material by index 
   //
@@ -271,7 +276,7 @@ inline G4Element* G4NistManager::GetElement(size_t index)
 {
   G4Element* elm = 0; 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  if(index < theElementTable->size()) elm = (*theElementTable)[index];
+  if(index < theElementTable->size()) { elm = (*theElementTable)[index]; }
   return elm;
 }
 
@@ -367,6 +372,13 @@ inline
 const std::vector<G4String>& G4NistManager::GetNistElementNames() const
 {
   return elmBuilder->GetElementNames();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetMeanIonisationEnergy(G4int Z) const
+{
+  return matBuilder->GetMeanIonisationEnergy(Z-1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

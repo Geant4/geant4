@@ -1,4 +1,4 @@
-$Id: History,v 1.172 2010-04-23 16:20:26 vnivanch Exp $
+$Id: History,v 1.173 2010-04-29 11:11:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-04-10 V.Ivanchenko (materials-V09-03-03)
+- G4NistMaterialBuilder, G4NistManager - added method GetMeanIonisationEnergy
+- G4ionisParamElm - use mean excitation energy from NIST DB
 
 23-04-10 V.Ivanchenko (materials-V09-03-02)
 - G4NistMaterialBuilder - added 6 new materials

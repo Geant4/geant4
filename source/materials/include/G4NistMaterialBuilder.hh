@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.15 2010-04-23 16:20:26 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.16 2010-04-29 11:11:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -44,6 +44,7 @@
 // 27.07.06 V.Ivanchneko set defaul warning=true for FindOrBuildMaterial
 // 27.07.07 V.Ivanchneko add matIndex vector to control built materials
 // 28.07.07 V.Ivanchneko add BuildMaterial method using Nist index
+// 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method using Nist index
 //
 //----------------------------------------------------------------------------
 //
@@ -130,6 +131,10 @@ public:
   //
   const std::vector<G4String>& GetMaterialNames() const;
 
+  // access to the NIST mean ionisation potentials
+  //
+  inline G4double GetMeanIonisationEnergy(G4int index) const;
+
 private:
 
   void Initialise();
@@ -200,6 +205,14 @@ inline const std::vector<G4String>&
        G4NistMaterialBuilder::GetMaterialNames() const
 {
   return names;
+}
+
+inline G4double 
+G4NistMaterialBuilder::GetMeanIonisationEnergy(G4int index) const
+{
+  G4double res = 10*index;
+  if(index >= 0 && index < nMaterials) { res = ionPotentials[index]; }
+  return res;
 }
 
 #endif
