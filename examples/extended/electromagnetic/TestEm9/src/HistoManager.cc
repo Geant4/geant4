@@ -37,6 +37,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "HistoManager.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4EmProcessSubType.hh"
+#include "G4VProcess.hh"
+#include "G4VEmProcess.hh"
+#include "G4VEnergyLossProcess.hh"
 #include "G4UnitsTable.hh"
 #include "Histo.hh"
 #include "EmAcceptance.hh"
@@ -163,6 +168,11 @@ void HistoManager::BeginOfRun()
 
   histo->book();
 
+  brem.resize(93,0.0);
+  phot.resize(93,0.0);
+  comp.resize(93,0.0);
+  conv.resize(93,0.0);
+
   if(verbose > 0) {
     G4cout << "HistoManager: Histograms are booked and run has been started"
            << G4endl;
@@ -279,6 +289,19 @@ void HistoManager::EndOfRun()
     }
   }
   if(isStarted) acc.EndOfAcceptance();
+
+  // atom frequency
+  G4cout << "   Z  bremsstrahlung photoeffect  compton    conversion" << G4endl;
+  for(j=1; j<93; ++j) {
+    G4int n1 = G4int(brem[j]*x);
+    G4int n2 = G4int(phot[j]*x);
+    G4int n3 = G4int(comp[j]*x);
+    G4int n4 = G4int(conv[j]*x);
+    if(n1 + n2 + n3 + n4 > 0) {
+      G4cout << std::setw(4) << j << std::setw(12) << n1 << std::setw(12) << n2
+	     << std::setw(12) << n3 << std::setw(12) << n4 << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -389,6 +412,7 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
   G4double kinE = dynParticle->GetKineticEnergy();
   G4ThreeVector pos = aTrack->GetVertexPosition();
 
+  // primary
   if(0 == pid) {
 
     beamEnergy = kinE;
@@ -413,26 +437,56 @@ void HistoManager::ScoreNewTrack(const G4Track* aTrack)
            << "; pos= " << pos << ";  dir= " << dir << G4endl;
     }
 
+    // secondary
+  } else {
+    const G4VProcess* proc = aTrack->GetCreatorProcess();
+    G4int type = proc->GetProcessSubType();
+    if(type == fBremsstrahlung) {
+      const G4Element* elm = static_cast<const G4VEnergyLossProcess*>(proc)->GetCurrentElement();
+      if(elm) {
+	G4int Z = G4int(elm->GetZ());
+        if(Z > 0 && Z < 93) { brem[Z] += 1.0; }
+      }
+    } else if(type == fPhotoElectricEffect) {
+      const G4Element* elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      if(elm) {
+	G4int Z = G4int(elm->GetZ());
+        if(Z > 0 && Z < 93) { phot[Z] += 1.0; }
+      }
+    } else if(type == fGammaConversion) {
+      const G4Element* elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      if(elm) {
+	G4int Z = G4int(elm->GetZ());
+        if(Z > 0 && Z < 93) { conv[Z] += 1.0; }
+      }
+    } else if(type == fComptonScattering) {
+      const G4Element* elm = static_cast<const G4VEmProcess*>(proc)->GetCurrentElement();
+      if(elm) {
+	G4int Z = G4int(elm->GetZ());
+        if(Z > 0 && Z < 93) { comp[Z] += 1.0; }
+      }
+    }
+
     // delta-electron
-  } else if (0 < pid && "e-" == name) {
-    if(1 < verbose) {
-      G4cout << "TrackingAction: Secondary electron " << G4endl;
-    }
-    AddDeltaElectron(dynParticle);
+    if (0 < pid && "e-" == name) {
+      if(1 < verbose) {
+	G4cout << "TrackingAction: Secondary electron " << G4endl;
+      }
+      AddDeltaElectron(dynParticle);
 
-  } else if (0 < pid && "e+" == name) {
-    if(1 < verbose) {
-      G4cout << "TrackingAction: Secondary positron " << G4endl;
-    }
-    AddPositron(dynParticle);
+    } else if (0 < pid && "e+" == name) {
+      if(1 < verbose) {
+	G4cout << "TrackingAction: Secondary positron " << G4endl;
+      }
+      AddPositron(dynParticle);
 
-  } else if (0 < pid && "gamma" == name) {
-    if(1 < verbose) {
-      G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
-             << " E= " << kinE << G4endl;
+    } else if (0 < pid && "gamma" == name) {
+      if(1 < verbose) {
+	G4cout << "TrackingAction: Secondary gamma; parentID= " << pid
+	       << " E= " << kinE << G4endl;
+      }
+      AddPhoton(dynParticle);
     }
-    AddPhoton(dynParticle);
-
   }
 }
 

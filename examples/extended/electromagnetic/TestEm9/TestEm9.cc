@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.8 2006-11-17 17:45:05 vnivanch Exp $
+// $Id: TestEm9.cc,v 1.9 2010-04-29 15:21:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,15 +73,10 @@ int main(int argc,char** argv) {
 #endif
 
   //set user action classes
-  RunAction* run        = new RunAction();
-  EventAction* event    = new EventAction();
-  TrackingAction* track = new TrackingAction();
-  SteppingAction* step  = new SteppingAction();
-
-  runManager->SetUserAction(run);
-  runManager->SetUserAction(event);
-  runManager->SetUserAction(track);
-  runManager->SetUserAction(step);
+  runManager->SetUserAction(new RunAction());
+  runManager->SetUserAction(new EventAction());
+  runManager->SetUserAction(new TrackingAction());
+  runManager->SetUserAction(new SteppingAction());
 
   //get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
