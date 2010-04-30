@@ -136,6 +136,7 @@ int main(int argc, char** argv)
   G4bool    usepaw   = false;
   G4bool    isInitH  = false;
   G4bool    inclusive= true;
+  G4bool    saverand = false;
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
   G4double  sigmae   = 0.0;
@@ -429,6 +430,15 @@ int main(int argc, char** argv)
       } else if(line == "#time(ns)") {
         (*fin) >> aTime;
         aTime *= ns;
+      } else if(line == "#saverand") {
+        saverand = true;
+      } else if(line == "#random") {
+        G4String sss("");
+        (*fin) >> sss;
+        CLHEP::HepRandom::restoreEngineStatus(sss);
+        if(verbose>0) G4cout << "Random Engine restored from file <"
+                             << sss << ">" << G4endl;
+        CLHEP::HepRandom::showEngineStatus();
       } else if(line == "#logx") {
         logx = true;
       } else if(line == "#xs_ghad") {
@@ -955,6 +965,7 @@ int main(int argc, char** argv)
       if(verbose>=1 || iter == modu*(iter/modu)) { 
         G4cout << "### " << iter << "-th event start " << G4endl;
       }
+      if(saverand) { CLHEP::HepRandom::saveEngineStatus("random.txt"); }
 
       G4double e0 = energy;
       do {
