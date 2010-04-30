@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.2 2010-04-28 12:53:43 urban Exp $
+// $Id: G4UrbanMscModel93.cc,v 1.3 2010-04-30 17:10:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1079,7 +1079,9 @@ G4double G4UrbanMscModel93::SampleDisplacement()
 
   if(rmean >= rmax) return rmax;
      
-
+  return rmean;
+  // VI comment out for the time being
+  /*
   //sample r (Gaussian distribution with a mean of rmean )
   G4double r = 0.;
   G4double sigma = min(rmean,rmax-rmean);
@@ -1091,6 +1093,7 @@ G4double G4UrbanMscModel93::SampleDisplacement()
      } while ((r < rlow) || (r > rhigh));   
 
   return r;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
