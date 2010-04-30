@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -91,7 +91,7 @@ Rayl:   for  gamma    SubType= 11
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -132,7 +132,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -158,7 +158,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -312,7 +312,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -385,28 +385,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=14.11s Real=14.36s Sys=0.24s
+  User=13.82s Real=14.11s Sys=0.29s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.7728 cm    rms= 2.24711 mm 
- Mean number of primary steps = 188.638
- Total energy deposit= 159.988 MeV
+ Projected Range= 17.7702 cm    rms= 2.5183 mm 
+ Mean number of primary steps = 188.614
+ Total energy deposit= 159.99 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.54457 GeV	0.284036 % 	9.1015e-05 Gy
- tally 1: 	 	4.9427 GeV	0.308919 % 	9.89885e-05 Gy
- tally 2: 	 	3.3492 GeV	0.209325 % 	6.70752e-05 Gy
- tally 3: 	 	2.05287 GeV	0.128305 % 	4.11133e-05 Gy
+ tally 0: 	 	4.65015 GeV	0.290635 % 	9.31296e-05 Gy
+ tally 1: 	 	4.88391 GeV	0.305244 % 	9.78111e-05 Gy
+ tally 2: 	 	3.25386 GeV	0.203366 % 	6.51657e-05 Gy
+ tally 3: 	 	1.99135 GeV	0.124459 % 	3.98811e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 531554272, 136504517
+ Current couple of seeds = 714655883, 399474552
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -436,7 +436,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 531554272, 136504517
+ Current couple of seeds = 714655883, 399474552
 ----------------------------------------
 Start Run processing.
 
@@ -444,28 +444,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.37s Real=5.39s Sys=0.02s
+  User=5.34s Real=5.36s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4883 cm    rms= 460.836 um 
- Mean number of primary steps = 127.988
+ Projected Range= 16.4851 cm    rms= 472.741 um 
+ Mean number of primary steps = 126.866
  Total energy deposit= 3.49997 GeV
- NIEL energy deposit = 1.33987 MeV
+ NIEL energy deposit = 1.33978 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.4169 GeV	0.326198 % 	0.000228649 Gy
- tally 1: 	 	13.0682 GeV	0.373377 % 	0.00026172 Gy
- tally 2: 	 	15.0953 GeV	0.431293 % 	0.000302316 Gy
- tally 3: 	 	22.7235 GeV	0.649243 % 	0.000455088 Gy
+ tally 0: 	 	10.9916 GeV	0.314045 % 	0.00022013 Gy
+ tally 1: 	 	12.6042 GeV	0.36012 % 	0.000252427 Gy
+ tally 2: 	 	15.4718 GeV	0.44205 % 	0.000309856 Gy
+ tally 3: 	 	22.7628 GeV	0.650366 % 	0.000455876 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1611250472, 617553225
+ Current couple of seeds = 1342413477, 1584541430
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/tallyMat G4_Cu
@@ -540,7 +540,7 @@ Rayl:   for  gamma    SubType= 11
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -581,7 +581,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -607,7 +607,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -761,7 +761,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -813,7 +813,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1611250472, 617553225
+ Current couple of seeds = 1342413477, 1584541430
 ----------------------------------------
 Start Run processing.
 
@@ -821,20 +821,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.27s Real=6.28s Sys=0.02s
+  User=6.33s Real=6.35s Sys=0.03s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.1185 cm    rms= 1.40635 mm 
- Mean number of primary steps = 20.059
- Total energy deposit= 286.944 MeV
+ Projected Range= 2.1222 cm    rms= 1.20779 mm 
+ Mean number of primary steps = 20.001
+ Total energy deposit= 279.305 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	2.49501 GeV	2.49501 % 	5.57681e-06 Gy
- tally 1: 	 	9.49215 MeV	0.00949215 % 	2.12166e-08 Gy
- tally 2: 	 	136.428 keV	0.000136428 % 	3.04941e-10 Gy
+ tally 0: 	 	2.39508 GeV	2.39508 % 	5.35344e-06 Gy
+ tally 1: 	 	95.9074 keV	9.59074e-05 % 	2.1437e-10 Gy
+ tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
 ---------------------------------------------------------
@@ -842,7 +842,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 310711867, 1137836989
+ Current couple of seeds = 1426799962, 440270986
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/tallyMat TechVacuum
@@ -917,7 +917,7 @@ Rayl:   for  gamma    SubType= 11
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -958,7 +958,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -984,7 +984,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1138,7 +1138,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1195,7 +1195,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 310711867, 1137836989
+ Current couple of seeds = 1426799962, 440270986
 ----------------------------------------
 Start Run processing.
 
@@ -1203,18 +1203,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0.01s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 314.639 um    rms= 89.2104 um 
- Mean number of primary steps = 5.26
+ Projected Range= 352.862 um    rms= 90.6159 um 
+ Mean number of primary steps = 5.33
  Total energy deposit= 265 eV 
- NIEL energy deposit = 172.85 eV 
+ NIEL energy deposit = 178.235 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	9.72055 keV	36.6813 % 	1.94675e-05 Gy
+ tally 0: 	 	11.6544 keV	43.9787 % 	2.33404e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1224,7 +1224,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 865898122, 1510874155
+ Current couple of seeds = 873651834, 928966034
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/tallyMat G4_WATER
@@ -1299,7 +1299,7 @@ Rayl:   for  gamma    SubType= 11
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1340,7 +1340,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1366,7 +1366,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1520,7 +1520,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1577,7 +1577,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 865898122, 1510874155
+ Current couple of seeds = 873651834, 928966034
 ----------------------------------------
 Start Run processing.
 
@@ -1585,18 +1585,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.4214 mm    rms= 41.4986 um 
- Mean number of primary steps = 30.35
+ Projected Range= 6.43039 mm    rms= 42.8833 um 
+ Mean number of primary steps = 30.45
  Total energy deposit= 100 MeV
- NIEL energy deposit = 57.4222 keV
+ NIEL energy deposit = 57.4804 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	675.225 MeV	6.75225 % 	1.35229e-05 Gy
+ tally 0: 	 	853.783 MeV	8.53783 % 	1.70989e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1606,7 +1606,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 59439361, 1511874363
+ Current couple of seeds = 41845054, 504712568
 ----------------------------------------
 G4 kernel has come to Quit state.
 

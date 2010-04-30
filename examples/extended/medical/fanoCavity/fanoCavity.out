@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -78,7 +78,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 GeV
 
@@ -164,7 +164,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=31.32s Real=31.32s Sys=0s
+  User=33.25s Real=33.26s Sys=0.01s
 
  ======================== run summary ======================
 

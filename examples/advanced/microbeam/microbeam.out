@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,7 +157,7 @@ Rayl:   for  gamma    SubType= 11
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -198,7 +198,7 @@ annihil:   for  e+    SubType= 5
             eplus2gg :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -321,48 +321,38 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
 -> Event # 2 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32566538453102
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.05228690803051
-
--> Event # 3 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.29519668221474
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.034028865396976
-
--> Event # 4 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30407440662384
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.05348215252161
-
--> Event # 5 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.38269978761673
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.074538514018059
-
--> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
--> Event # 7 generated 
+-> Event # 3 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
+
+-> Event # 4 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
+
+-> Event # 5 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
+
+-> Event # 6 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.37610948085785
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.050721030682325
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.36356353759766
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.054907903075218
+
+-> Event # 7 generated 
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.33805868029594
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.10465013980865
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 9 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.2930960059166
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.094103783369064
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.33643025159836
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.084209352731705
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 7
+-> Total number of particles detected by the gas detector : 2
 
 Idle> Graphics systems deleted.
 Visualization Manager deleting...

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -150,7 +150,7 @@ eBrem:   for  e+    SubType= 3
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -240,7 +240,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -283,7 +283,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -310,7 +310,7 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      250 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm    50.6432 cm    21.9895 m           0 1.17455e-09          1      250 MeV0.00183037 eV    79.5502 cm    79.5502 cm      World  Transportation
+    1          0 fm    50.6432 cm    21.9895 m           0 1.17455e-09          1      250 MeV0.00183036 eV    79.5502 cm    79.5502 cm      World  Transportation
     2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.3009e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
     3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18654e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
 Run terminated.
@@ -376,7 +376,7 @@ Start Run processing.
 
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      100 MeV     0 eV          0 fm          0 fm      World    initStep
-    1          0 fm     20.319 cm    21.9895 m           0  9.914e-09          1      100 MeV0.000676634 eV    31.9171 cm    31.9171 cm      World  Transportation
+    1          0 fm     20.319 cm    21.9895 m           0  9.914e-09          1      100 MeV0.000676633 eV    31.9171 cm    31.9171 cm      World  Transportation
     2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.12001e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
     3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.01797e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
 Run terminated.
@@ -490,7 +490,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

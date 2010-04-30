@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -528,7 +528,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.3s Real=1.3s Sys=0.01s
+  User=1.5s Real=1.5s Sys=0.01s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -963,7 +963,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.41s Real=0.41s Sys=0s
+  User=0.65s Real=0.66s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1010,7 +1010,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1102,7 +1102,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0.01s
 #
 #  .....end deuteron.............
 #
@@ -1150,7 +1150,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.55s Real=0.57s Sys=0.01s
+  User=0.57s Real=0.57s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1196,7 +1196,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon
 #
@@ -1242,7 +1242,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.19s Sys=0s
+  User=0.37s Real=0.36s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1476,7 +1476,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1523,7 +1523,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1749,7 +1749,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.08s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1772,24 +1772,24 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  707.80537 keV    e+  689.03282 keV proton 100 MeV
+ Energy thresholds :  gamma  9.9e+02 eV     e-  7.1e+02 keV    e+  6.9e+02 keV proton 1e+02 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1 GeV    e+  9.6e+02 MeV proton 1e+02 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  842.93575 keV    e-  324.76744 MeV    e+  307.7688 MeV proton 100 MeV
+ Energy thresholds :  gamma  8.4e+02 keV    e-  3.2e+02 MeV    e+  3.1e+02 MeV proton 1e+02 MeV
 
 ====================================================================
 
@@ -1854,7 +1854,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1906,7 +1906,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.06s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 #  .....end C(12,6)++............
 #

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -139,7 +139,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -209,7 +209,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
@@ -414,7 +414,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=41.8s Real=42.06s Sys=0.25s
+  User=42.8s Real=43.07s Sys=0.24s
 
  ======================== run summary ======================
 
@@ -422,18 +422,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.938 MeV +- 225.530 keV
+ Total Energy deposited        = 3.935 MeV +- 237.769 keV
 
- Track length of primary track = 2.043 cm  +- 2.841 mm 
+ Track length of primary track = 2.039 cm  +- 2.865 mm 
  Range from EmCalculator       = 2.048 cm  (from full dE/dx)
 
- Projected range               = 1.316 cm  +- 4.207 mm 
+ Projected range               = 1.315 cm  +- 4.291 mm 
 
- Nb of steps of primary track  = 241.38 +- 31.72	 Step size= 84.638 um  +- 4.473 um 
+ Nb of steps of primary track  = 240.98 +- 31.68	 Step size= 84.596 um  +- 4.526 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1893906933, 259187119
+ Current couple of seeds = 698169802, 1850948191
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

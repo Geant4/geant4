@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,7 +93,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -134,7 +134,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -160,7 +160,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -295,7 +295,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -351,24 +351,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.03s Real=7.04s Sys=0.01s
+  User=7.48s Real=7.49s Sys=0s
 
  SUMMARY 
 
- energy deposit :   94.74 % E0 +-    0.94 % E0
- charged traklen:  479.34 radl +-    4.94 radl
- neutral traklen: 4466.32 radl +-  117.22 radl
+ energy deposit :   94.69 % E0 +-    0.98 % E0
+ charged traklen:  478.77 radl +-    5.30 radl
+ neutral traklen: 4471.54 radl +-  130.67 radl
 
- 90.00 % confinement: radius = 3.05 radl  (2.72 cm )
+ 90.00 % confinement: radius = 3.08 radl  (2.75 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1171293487, 1725180354
+ Current couple of seeds = 1013047557, 339105066
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94741855  delEdep= -0.0015814507 nrms= -1.9285984
-Erms: 0.009372642  delErms= 0.001172642 nrms= 1.4300513
+Edep: 0.94687346  delEdep= -0.0021265399 nrms= -2.5933414
+Erms: 0.009756953  delErms= 0.001556953 nrms= 1.8987232
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

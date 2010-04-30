@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -36,7 +36,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -77,7 +77,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -91,7 +91,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -181,7 +181,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -318,7 +318,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.04s Real=0.05s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -331,30 +331,7 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -365,99 +342,6 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0.01s Real=0.01s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.08s Real=0.08s Sys=0s
-SimpleBox is now made of Cu
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.02s Real=0.02s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -503,7 +387,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.1s Real=0.1s Sys=0s
+  User=0.11s Real=0.12s Sys=0s
+SimpleBox is now made of Cu
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -526,7 +411,122 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.11s Real=0.12s Sys=0s
+  User=0.01s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.04s Real=0.04s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.07s Real=0.07s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.04s Real=0.04s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Copper 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.2s Real=0.2s Sys=0s
 SimpleBox is now made of U
 
 conv:   for  gamma    SubType= 14
@@ -545,7 +545,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -586,7 +586,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -600,7 +600,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -690,7 +690,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -729,7 +729,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -785,7 +785,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.13s Real=0.13s Sys=0s
+  User=0.07s Real=0.08s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -841,7 +841,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.22s Sys=0s
+  User=0.13s Real=0.14s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -869,36 +869,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.58s Real=0.59s Sys=0.01s
+  User=0.77s Real=0.77s Sys=0s
 SimpleBox is now made of U
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Uranium 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -954,7 +926,63 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.14s Real=0.14s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.1s Real=0.1s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.41s Real=0.41s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1010,35 +1038,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Uranium 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.66s Real=0.66s Sys=0.01s
+  User=0.71s Real=0.72s Sys=0s
 SimpleBox is now made of Si
 
 conv:   for  gamma    SubType= 14
@@ -1057,7 +1057,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1098,7 +1098,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1112,7 +1112,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1202,7 +1202,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1214,6 +1214,205 @@ hIoni:   for  pi-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.50434 keV
           BetheBloch :     Emin=  297.50434 keV        Emax=   10 TeV
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.03s Real=0.03s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.03s Real=0.04s Sys=0s
+SimpleBox is now made of Si
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1279,7 +1478,40 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
+
+Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No      recalculation needed : No 
+ Material : Copper
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No      recalculation needed : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1345,7 +1577,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.01s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
  Root logical volume(s) : SLog 
@@ -1378,239 +1610,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.03s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.06s Real=0.06s Sys=0s
-SimpleBox is now made of Si
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.04s Real=0.03s Sys=0s
-
-Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No      recalculation needed : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.05s Real=0.06s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 SimpleBox is now made of H
 
 conv:   for  gamma    SubType= 14
@@ -1629,7 +1629,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1670,7 +1670,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1684,7 +1684,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1774,7 +1774,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -111,7 +111,7 @@ conv:   for  gamma, applyCuts: 1     SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -152,7 +152,7 @@ annihil:   for  e+, applyCuts: 1     SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -178,7 +178,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -325,7 +325,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -354,22 +354,22 @@ hPairProd:   for  pi-    SubType= 4
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
- Energy thresholds :  gamma  1.10289 MeV    e-  352.042 MeV    e+  333.616 MeV proton 0 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  1.10289 MeV    e-  352.042 MeV    e+  333.616 MeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -381,18 +381,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               C12[0.0]   Ekin(GeV)= 1
-Range(mm)= 18.942; Stragling(mm)= 0 +- 0    1 events for range
+Range(mm)= 18.897; Stragling(mm)= 0 +- 0    1 events for range
 Number of events               1
 Average energy deposit         1000 MeV
 Average number of e-           0
 Average number of gamma        0
 Average number of e+           0
-Average number of steps        191
+Average number of steps        190
 Average number of leak charged 0
 Average number of leak gamma   0
 Average number of back charged 0
@@ -405,48 +405,48 @@ Average number of pi+pi-       0
    Material            G4_WATER  AA= 12.01
 ================================================================
   N   E(MeV/N)  Esc(MeV) dEdx_T/NIST dEdx_C/NIST  dEdx_G/NIST  dedx(MeV*cm^2/mg)
-  0.     0.025  0.300268    1.04094    1.00051    1.00034    3.60551
-  1.      0.03  0.360322    1.03174   0.999967    0.99991    4.00549
-  2.      0.04  0.480429    1.02153   0.999898    1.00012    4.71485
-  3.      0.05  0.600537    1.01756    1.00133    1.00111    5.32735
-  4.       0.1   1.20107    1.00691    1.00019    1.00008    7.38967
-  5.       0.2   2.40215    1.00274   0.999478   0.998926    8.63564
-  6.       0.3   3.60322    0.99858   0.996261   0.995714    8.68756
-  7.       0.5   6.00537    1.00307    1.00148    1.00116    8.21495
-  8.         1   12.0107    1.00113    1.00009    1.00006    6.88189
-  9.       1.1   13.2118    1.00082   0.999816    1.00003    6.65221
- 10.       1.2   14.4129    1.00072   0.999757   0.999788     6.4356
- 11.       1.3    15.614    1.00066   0.999737   0.999742    6.23113
- 12.       1.4    16.815    1.00067   0.999773    0.99976    6.03788
- 13.       1.5   18.0161    1.00094    1.00007   0.999693    5.85493
- 14.       1.6   19.2172     1.0009    1.00005   0.999638    5.68282
- 15.       1.7   20.4183    1.00115    1.00031   0.999991    5.51962
- 16.       1.8   21.6193    1.00161     1.0008    1.00067    5.36489
- 17.       1.9   22.8204    1.00224    1.00145    1.00145    5.21816
- 18.         2   24.0215     1.0027    1.00193    1.00178    5.07897
- 19.       2.1   25.2225    1.00203    1.00127     1.0009    4.94651
- 20.       2.2   26.4236    1.00133    1.00058    1.00004    4.82069
- 21.       2.3   27.6247    1.00096    1.00022   0.999272    4.70104
- 22.       2.4   28.8258     1.0005   0.999774   0.998648    4.58711
- 23.       2.5   30.0268   0.998907   0.998187   0.998186    4.47842
- 24.         3   36.0322   0.998839   0.998156   0.997266    4.00211
- 25.         5   60.0537    1.00238    1.00176    1.00134    2.80613
- 26.        10   120.107   0.998265   0.997699   0.997761    1.62901
- 27.        15   180.161   0.998928   0.998376   0.998108    1.17057
- 28.        20   240.215   0.998355   0.997828   0.997886   0.925617
- 29.        30   360.322   0.998219   0.997714    0.99736   0.666276
- 30.        50   600.537   0.998561   0.998092   0.998008   0.442966
- 31.       100   1201.07   0.998796   0.998387     0.9984   0.260107
- 32.       200   2402.15    1.00011    0.99978   0.999773   0.160737
- 33.       300   3603.22   0.999224   0.998936   0.998723   0.126177
- 34.       400   4804.29   0.999552   0.999302   0.999222   0.108814
- 35.       500   6005.37   0.999815   0.999592    0.99953  0.0985385
- 36.      1000   12010.7   0.999127    0.99899   0.999073   0.079682
- 37.      2000   24021.5   0.911783   0.911715    0.91178   0.079682
- 38.      3000   36032.2   0.904583   0.904537   0.904454   0.079682
- 39.      5000   60053.7   0.921516   0.921488   0.921485   0.079682
- 40.     10000    120107   0.967845   0.967832   0.967832   0.079682
- 41.     20000    240215    1.02342    1.02342    1.02342   0.079682
+  0.     0.025  0.300268    1.04093    1.00051    1.00048    3.75308
+  1.      0.03  0.360322    1.03176   0.999993   0.999961    4.13272
+  2.      0.04  0.480429    1.02157   0.999938   0.999953    4.81656
+  3.      0.05  0.600537    1.01744     1.0012    1.00112    5.42024
+  4.       0.1   1.20107    1.00671   0.999983   0.999977    7.43923
+  5.       0.2   2.40215    1.00252   0.999263   0.999287    8.65743
+  6.       0.3   3.60322    1.00091   0.998594   0.999404    8.69548
+  7.       0.5   6.00537    1.00216    1.00056    1.00035    8.23266
+  8.         1   12.0107    1.00104          1    1.00004    6.88903
+  9.       1.1   13.2118    1.00078   0.999774    1.00015    6.65738
+ 10.       1.2   14.4129    1.00074   0.999772   0.999978    6.44035
+ 11.       1.3    15.614    1.00079   0.999866   0.999914    6.23606
+ 12.       1.4    16.815    1.00081   0.999916    0.99985    6.04276
+ 13.       1.5   18.0161      1.001    1.00013   0.999642    5.86079
+ 14.       1.6   19.2172    1.00075   0.999893   0.999313    5.68706
+ 15.       1.7   20.4183    1.00049   0.999658    0.99921    5.52235
+ 16.       1.8   21.6193    1.00027   0.999457    0.99926    5.36634
+ 17.       1.9   22.8204    1.00003   0.999237   0.999235    5.21831
+ 18.         2   24.0215    0.99984   0.999073   0.998977    5.07815
+ 19.       2.1   25.2225    1.00001   0.999247   0.998957    4.94654
+ 20.       2.2   26.4236     0.9999   0.999149   0.998702    4.82021
+ 21.       2.3   27.6247   0.999931    0.99919   0.998335    4.70072
+ 22.       2.4   28.8258   0.999729   0.998998    0.99795    4.58586
+ 23.       2.5   30.0268   0.998286   0.997567   0.997609    4.47075
+ 24.         3   36.0322   0.998035   0.997352   0.996429    3.99424
+ 25.         5   60.0537    0.99981   0.999191   0.998791     2.8056
+ 26.        10   120.107   0.998088   0.997522   0.997582     1.6259
+ 27.        15   180.161   0.999018   0.998467   0.998205    1.16942
+ 28.        20   240.215   0.998923   0.998396   0.998453    0.92462
+ 29.        30   360.322   0.998457   0.997953   0.997605   0.665248
+ 30.        50   600.537   0.998969     0.9985   0.998417   0.442509
+ 31.       100   1201.07   0.999072   0.998664   0.998676   0.259865
+ 32.       200   2402.15    1.00023   0.999892   0.999885   0.160773
+ 33.       300   3603.22   0.998643   0.998354   0.998143   0.126006
+ 34.       400   4804.29   0.997802   0.997552   0.997473   0.108575
+ 35.       500   6005.37   0.997155   0.996932   0.996871  0.0982581
+ 36.      1000   12010.7   0.993846   0.993709   0.993792  0.0791917
+ 37.      2000   24021.5   0.905206   0.905138   0.905202  0.0721287
+ 38.      3000   36032.2   0.897364   0.897318   0.897235  0.0715037
+ 39.      5000   60053.7   0.913564   0.913536   0.913534  0.0727946
+ 40.     10000    120107   0.959022   0.959008   0.959008  0.0764168
+ 41.     20000    240215    1.01385    1.01384    1.01385  0.0807857
 ==============  End of Table Control ===============================
 =========   End of tets31Histo  ============================
 #
@@ -475,7 +475,7 @@ conv:   for  gamma, applyCuts: 1     SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -516,7 +516,7 @@ annihil:   for  e+, applyCuts: 1     SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -542,7 +542,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -689,7 +689,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -718,22 +718,22 @@ hPairProd:   for  pi-    SubType= 4
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -746,30 +746,32 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 6.5338242 Erec-E0(MeV)= -984.73012
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 36.020537 Erec-E0(MeV)= -350.05773
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 24.960435 Erec-E0(MeV)= -211.22305
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 131.41942 Erec-E0(MeV)= 63.246075
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 118.90828 Erec-E0(MeV)= -3.7697864
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 427.16486 Erec-E0(MeV)= 1684.9971
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 60.1801 Erec-E0(MeV)= -297.05667
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 149.01068 Erec-E0(MeV)= 158.24445
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 202.09009 Erec-E0(MeV)= 447.69551
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 276.04446 Erec-E0(MeV)= 853.61245
 test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.3s Real=1.3s Sys=0s
+  User=1.16s Real=1.15s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               e-   Ekin(GeV)= 1
-Range(mm)= 545.52; Stragling(mm)= 96.286 +- 9.6    1e+02 events for range
+Range(mm)= 552.22; Stragling(mm)= 110.98 +- 11    1e+02 events for range
 Number of events               100
-Average energy deposit         296.1 MeV
-Average number of e-           47.57
-Average number of gamma        57.3
-Average number of e+           3.02
-Average number of steps        1922
-Average number of leak charged 3.22
-Average number of leak gamma   22.08
+Average energy deposit         273.1 MeV
+Average number of e-           43.03
+Average number of gamma        52.28
+Average number of e+           2.71
+Average number of steps        1724
+Average number of leak charged 3.12
+Average number of leak gamma   20.64
 Average number of back charged 0
-Average number of back gamma   1.29
+Average number of back gamma   1.21
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -783,22 +785,22 @@ Average number of pi+pi-       0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.941 keV    e-  351.9 keV    e+  342.5 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.941 keV    e-  351.9 keV    e+  342.5 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -806,15 +808,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 849.4 Erec-E0(MeV)= -25.38
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 886.77074 Erec-E0(MeV)= 12.317592
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 883.45133 Erec-E0(MeV)= 8.9653401
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 844.11132 Erec-E0(MeV)= -30.769791
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 879.85114 Erec-E0(MeV)= 5.3294474
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.19512 Erec-E0(MeV)= -6.4428109
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.47736 Erec-E0(MeV)= 11.011429
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 885.78332 Erec-E0(MeV)= 11.320415
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 884.87916 Erec-E0(MeV)= 10.407304
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 871.7 Erec-E0(MeV)= -2.952
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 889.48439 Erec-E0(MeV)= 15.058037
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 884.38629 Erec-E0(MeV)= 9.9095605
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 878.49807 Erec-E0(MeV)= 3.962932
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 888.5079 Erec-E0(MeV)= 14.071913
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 882.08512 Erec-E0(MeV)= 7.585594
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 881.57212 Erec-E0(MeV)= 7.0675024
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 886.4574 Erec-E0(MeV)= 12.001161
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 880.8739 Erec-E0(MeV)= 6.3623574
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -828,22 +830,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.82s Real=1.82s Sys=0s
+  User=1.79s Real=1.79s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               mu-   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         124.4 MeV
-Average number of e-           15.86
-Average number of gamma        2.769
-Average number of e+           0.017
-Average number of steps        225.1
-Average number of leak charged 1.124
-Average number of leak gamma   0.4
+Average energy deposit         124 MeV
+Average number of e-           15.89
+Average number of gamma        2.696
+Average number of e+           0.008
+Average number of steps        222.2
+Average number of leak charged 1.102
+Average number of leak gamma   0.342
 Average number of back charged 0.002
-Average number of back gamma   0.069
+Average number of back gamma   0.072
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -857,22 +859,22 @@ Average number of pi+pi-       0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.941 keV    e-  351.9 keV    e+  342.5 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.941 keV    e-  351.9 keV    e+  342.5 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -880,15 +882,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 3 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 876.7 Erec-E0(MeV)= 0.04378
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 890.47114 Erec-E0(MeV)= 13.906951
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 890.78586 Erec-E0(MeV)= 14.224468
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.96776 Erec-E0(MeV)= -8.7972514
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875.77913 Erec-E0(MeV)= -0.91601267
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 876.03464 Erec-E0(MeV)= -0.65821703
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 877.18903 Erec-E0(MeV)= 0.50648423
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 876.24099 Erec-E0(MeV)= -0.4500202
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 874.18583 Erec-E0(MeV)= -2.5235524
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 886.1 Erec-E0(MeV)= 9.51
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 892.0242 Erec-E0(MeV)= 15.473813
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.32151 Erec-E0(MeV)= -6.4224327
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 880.12653 Erec-E0(MeV)= 3.4702031
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 889.06412 Erec-E0(MeV)= 12.487411
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 836.60664 Erec-E0(MeV)= -40.440439
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 879.79353 Erec-E0(MeV)= 3.1342278
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.56876 Erec-E0(MeV)= -9.199821
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 875.4591 Erec-E0(MeV)= -1.2389023
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -902,22 +904,22 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.76s Real=1.76s Sys=0s
+  User=1.71s Real=1.72s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               pi+   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         122.3 MeV
-Average number of e-           15.56
-Average number of gamma        2.334
-Average number of e+           0.002
-Average number of steps        213.5
-Average number of leak charged 1.089
-Average number of leak gamma   0.263
-Average number of back charged 0
-Average number of back gamma   0.078
+Average energy deposit         123 MeV
+Average number of e-           15.57
+Average number of gamma        2.53
+Average number of e+           0.006
+Average number of steps        215.5
+Average number of leak charged 1.099
+Average number of leak gamma   0.325
+Average number of back charged 0.001
+Average number of back gamma   0.073
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
@@ -931,22 +933,22 @@ Average number of pi+pi-       0
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_WATER
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.941 keV    e-  351.9 keV    e+  342.5 keV proton 0 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  2.941 keV    e-  351.9 keV    e+  342.5 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -954,15 +956,15 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 ### Run 4 start
 Start Run processing.
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.8 Erec-E0(MeV)= -0.8856
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.49294 Erec-E0(MeV)= -1.168294
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.26986 Erec-E0(MeV)= -1.3838993
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.05648 Erec-E0(MeV)= -3.5228597
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 863.78627 Erec-E0(MeV)= -1.8512672
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.80641 Erec-E0(MeV)= 3.0014356
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 865.76545 Erec-E0(MeV)= 0.061638537
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.77469 Erec-E0(MeV)= 2.0039532
-Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.72094 Erec-E0(MeV)= 1.9519839
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 868.8 Erec-E0(MeV)= 3.025
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 870.03826 Erec-E0(MeV)= 4.1925423
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.4243 Erec-E0(MeV)= -1.2346413
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.6257 Erec-E0(MeV)= -1.0399872
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 867.42678 Erec-E0(MeV)= 1.6676111
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 861.6285 Erec-E0(MeV)= -3.9364009
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 862.57879 Erec-E0(MeV)= -3.0181448
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 861.75165 Erec-E0(MeV)= -3.8174048
+Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 864.6144 Erec-E0(MeV)= -1.0509101
 test31EventAction: Event # 100 started
 test31EventAction: Event # 200 started
 test31EventAction: Event # 300 started
@@ -976,27 +978,27 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.43s Real=1.43s Sys=0s
+  User=1.4s Real=1.39s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
 Initial particle               proton   Ekin(GeV)= 1
 Range(mm)= 600; Stragling(mm)= 0 +- 0    1e+03 events for range
 Number of events               1000
-Average energy deposit         134.3 MeV
-Average number of e-           13.81
-Average number of gamma        0.903
+Average energy deposit         134.1 MeV
+Average number of e-           13.77
+Average number of gamma        0.89
 Average number of e+           0
-Average number of steps        164.6
-Average number of leak charged 1.039
+Average number of steps        163.3
+Average number of leak charged 1.042
 Average number of leak gamma   0.048
 Average number of back charged 0
-Average number of back gamma   0.027
+Average number of back gamma   0.019
 Average number of mu+mu-       0
 Average number of pi+pi-       0
 ====================================================================
 =========   End of tets31Histo  ============================
 #
-  User=9.13s Real=9.14s Sys=0.01s
+  User=8.35s Real=8.37s Sys=0s
 G4 kernel has come to Quit state.
 

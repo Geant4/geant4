@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -48,7 +48,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -89,7 +89,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -103,7 +103,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -193,7 +193,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -282,7 +282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.42s Real=0.42s Sys=0s
+  User=0.45s Real=0.45s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -344,7 +344,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.5s Real=1.5s Sys=0s
+  User=1.2s Real=1.2s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -375,7 +375,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.4s Real=1.4s Sys=0s
+  User=1.2s Real=1.2s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -401,7 +401,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -442,7 +442,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -456,7 +456,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -546,7 +546,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -585,7 +585,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.39s Real=0.38s Sys=0s
+  User=0.33s Real=0.33s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -693,7 +693,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.1s Real=1.1s Sys=0s
+  User=0.99s Real=1s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -719,7 +719,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -760,7 +760,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -774,7 +774,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -864,7 +864,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -908,7 +908,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.37s Real=0.37s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -990,7 +990,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.3s Real=1.3s Sys=0s
+  User=0.81s Real=0.81s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1031,7 +1031,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1s Real=1s Sys=0s
+  User=0.66s Real=0.66s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1057,7 +1057,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1098,7 +1098,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1112,7 +1112,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1202,7 +1202,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1251,7 +1251,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.08s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -1343,7 +1343,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.26s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1389,7 +1389,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.24s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -1415,7 +1415,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1456,7 +1456,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1470,7 +1470,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1560,7 +1560,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1614,7 +1614,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -1716,7 +1716,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.14s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -1767,7 +1767,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.2s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -1793,7 +1793,7 @@ phot:   for  gamma    SubType= 12
 
 msc:   for e-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1834,7 +1834,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1848,7 +1848,7 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1938,7 +1938,7 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 1e+02 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -1997,7 +1997,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -2109,7 +2109,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.09s Sys=0s
+  User=0.09s Real=0.08s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -2165,7 +2165,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.09s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

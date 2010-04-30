@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -88,7 +88,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -129,7 +129,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -155,7 +155,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -290,7 +290,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -377,33 +377,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.08s Real=5.08s Sys=0s
+  User=5.62s Real=5.62s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead:  782.2 MeV :  17.01 MeV     2.174 +- 0.2174 %      53.8 cm  +- 1.25 cm 
-   liquidArgon: 207.91 MeV :  14.41 MeV      6.93 +- 0.693 %      1.02 m   +- 7.66 cm 
+          Lead: 780.01 MeV :  16.06 MeV      2.06 +- 0.206 %      54.4 cm  +- 1.22 cm 
+   liquidArgon: 209.92 MeV :  14.77 MeV     7.035 +- 0.7035 %      1.04 m   +- 7.78 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  563
- Mean number of e-     947
- Mean number of e+     54.2
+ Mean number of gamma  568
+ Mean number of e-     957
+ Mean number of e+     54.7
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 782.198 MeV
-liquidArgon:	 207.909 MeV
+      Lead:	 780.014 MeV
+liquidArgon:	 209.861 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1135937409, 1042680536
+ Current couple of seeds = 23671796, 72113615
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -62,7 +62,7 @@ conv:   for  gamma, applyCuts: 1     SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -103,7 +103,7 @@ annihil:   for  e+, applyCuts: 1     SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -129,7 +129,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -276,7 +276,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -399,33 +399,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.35s Real=0.35s Sys=0s
+  User=0.39s Real=0.4s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         63.92   RMS(MeV) 45.39
-Average number of steps              255.2
-Average number of gamma              2.89
-Average number of e-                 3.37
-Average number of e+                 0.08
-Average number of neutrons           1.35
-Average number of protons            1.24
+Average energy deposit (MeV)         67.63   RMS(MeV) 59.08
+Average number of steps              227.3
+Average number of gamma              2.19
+Average number of e-                 2.82
+Average number of e+                 0.03
+Average number of neutrons           1.27
+Average number of protons            1.31
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.2
-Average number of pi0                0.19
-Average number of kaons              0
-Average number of muons              0.01
-Average number of deuterons+tritons  0.11
-Average number of He3+alpha          0.18
-Average number of ions               0.55
-Average number of forward neutrons   0.13
-Average number of reflected neutrons 1.11
-Average number of leaked neutrons    0.04
-Average number of proton leak        0.51
-Average number of pion leak          0.16
+Average number of pi+ & pi-          0.24
+Average number of pi0                0.11
+Average number of kaons              0.01
+Average number of muons              0
+Average number of deuterons+tritons  0.09
+Average number of He3+alpha          0.2
+Average number of ions               0.53
+Average number of forward neutrons   0.2
+Average number of reflected neutrons 0.98
+Average number of leaked neutrons    0.02
+Average number of proton leak        0.64
+Average number of pion leak          0.22
 ========================================================
 
 #

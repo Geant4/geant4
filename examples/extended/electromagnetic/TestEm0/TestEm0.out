@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -87,14 +87,15 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
   processes :                	         phot		        compt		         conv		        total
  
-  cross section per atom   : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
+  cross section per atom    : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
 
  
-  cross section per volume : 	     0.075796 cm^-1	     0.489922 cm^-1	            0 cm^-1	     0.565718 cm^-1
-  cross section per mass   : 	    0.0142393 cm2/g	    0.0920387 cm2/g	            0 cm2/g	     0.106278 cm2/g
+  GetCrossSectionPerVolume : 	            0 cm^-1	     0.489922 cm^-1	            0 cm^-1	     0.489922 cm^-1
+  cross section per volume : 	     0.075796 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.565733 cm^-1
+  cross section per mass   : 	    0.0142393 cm2/g	    0.0920415 cm2/g	            0 cm2/g	     0.106281 cm2/g
  
-  mean free path           : 	      13.1933 cm 	      2.04114 cm 	 5.82593e+288 pc 	      1.76767 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	       10.865 g/cm2 	 2.88022e+285 kg/cm2	      9.40928 g/cm2 
+  mean free path           : 	      13.1933 cm 	      2.04108 cm 	 5.82593e+288 pc 	      1.76762 cm 
+        (g/cm2)            : 	       70.228 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      9.40903 g/cm2 
 
 -------------------------------------------------------------
 
@@ -104,15 +105,16 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
- Max_energy _transferable : 10 MeV (4.90425 cm )
+  Max_energy _transferable  : 10 MeV (4.90425 cm )
 
   processes :                	        eIoni		        eBrem		        total
  
-  cross section per volume : 	     0.994763 cm^-1	     0.346324 cm^-1	      1.34109 cm^-1
-  cross section per mass   : 	     0.994763 cm2/g	     0.346324 cm2/g	      1.34109 cm2/g
+  GetCrossSectionPerVolume : 	     0.994761 cm^-1	     0.342573 cm^-1	      1.33733 cm^-1
+  cross section per volume : 	     0.994761 cm^-1	     0.342573 cm^-1	      1.33733 cm^-1
+  cross section per mass   : 	     0.994761 cm2/g	     0.342573 cm2/g	      1.33733 cm2/g
  
-  mean free path           : 	      1.00527 cm 	      2.88747 cm 	      7.45664 mm 
-        (g/cm2)            : 	      1.00527 g/cm2 	      2.88747 g/cm2 	      745.664 mg/cm2
+  mean free path           : 	      1.00527 cm 	      2.91908 cm 	      7.47756 mm 
+        (g/cm2)            : 	      1.00527 g/cm2 	      2.91908 g/cm2 	      747.756 mg/cm2
 
  
   restricted dE/dx         : 	      1.61536 MeV/cm	      12.5324 eV/cm 	      1.61538 MeV/cm

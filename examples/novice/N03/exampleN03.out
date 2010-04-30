@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -120,7 +120,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -161,7 +161,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -187,7 +187,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -298,7 +298,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -357,16 +357,16 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 275.20785 MeV       total track length: 19.457951 cm 
-        Gap: total energy: 19.115159 MeV       total track length: 9.3632873 cm 
+   Absorber: total energy: 274.6048 MeV       total track length: 19.640738 cm 
+        Gap: total energy: 7.2780663 MeV       total track length: 3.1810179 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 275.20785 MeV +- 0 eV 
- mean Energy in Gap      : 19.115159 MeV +- 0 eV 
+ mean Energy in Absorber : 274.6048 MeV +- 0 eV 
+ mean Energy in Gap      : 7.2780663 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.457951 cm  +- 0 fm 
- mean trackLength in Gap      : 9.3632873 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.640738 cm  +- 0 fm 
+ mean trackLength in Gap      : 3.1810179 cm  +- 0 fm 
 ------------------------------------------------------------
 
      Transportation,                msc,              hIoni,            ionIoni
@@ -391,7 +391,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -432,7 +432,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -458,7 +458,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -569,7 +569,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -599,19 +599,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 399520705, 1405277458
+ Current couple of seeds = 888721058, 686768838
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 279.75422 MeV       total track length: 19.901912 cm 
-        Gap: total energy: 18.671614 MeV       total track length: 9.7191178 cm 
+   Absorber: total energy: 279.15069 MeV       total track length: 19.241339 cm 
+        Gap: total energy: 16.429321 MeV       total track length: 8.3604312 cm 
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 279.75422 MeV +- 0 eV 
- mean Energy in Gap      : 18.671614 MeV +- 0 eV 
+ mean Energy in Absorber : 279.15069 MeV +- 0 eV 
+ mean Energy in Gap      : 16.429321 MeV +- 0 eV 
 
- mean trackLength in Absorber : 19.901912 cm  +- 0 fm 
- mean trackLength in Gap      : 9.7191178 cm  +- 0 fm 
+ mean trackLength in Absorber : 19.241339 cm  +- 0 fm 
+ mean trackLength in Gap      : 8.3604312 cm  +- 0 fm 
 ------------------------------------------------------------
 
 
@@ -635,7 +635,7 @@ conv:   for  gamma    SubType= 14
 
 msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -676,7 +676,7 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -702,7 +702,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -813,7 +813,7 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
@@ -843,19 +843,19 @@ hPairProd:   for  pi-    SubType= 4
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 330333918, 180809835
+ Current couple of seeds = 489998031, 1683726802
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 404.61721 MeV       total track length: 96.080817 cm 
-        Gap: total energy: 89.598634 MeV       total track length: 2.4895852 m  
+   Absorber: total energy: 404.20932 MeV       total track length: 95.179543 cm 
+        Gap: total energy: 76.437646 MeV       total track length: 2.1236808 m  
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 404.61721 MeV +- 0 eV 
- mean Energy in Gap      : 89.598634 MeV +- 0 eV 
+ mean Energy in Absorber : 404.20932 MeV +- 0 eV 
+ mean Energy in Gap      : 76.437646 MeV +- 0 eV 
 
- mean trackLength in Absorber : 96.080817 cm  +- 0 fm 
- mean trackLength in Gap      : 2.4895852 m   +- 0 fm 
+ mean trackLength in Absorber : 95.179543 cm  +- 0 fm 
+ mean trackLength in Gap      : 2.1236808 m   +- 0 fm 
 ------------------------------------------------------------
 
 Graphics systems deleted.

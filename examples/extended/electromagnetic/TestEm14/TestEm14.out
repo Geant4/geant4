@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-03    (18-December-2009)
+ Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -85,7 +85,7 @@ physicsList->setCut() start.
 /gun/particle gamma
 /gun/energy 100 keV
 #
-/run/beamOn 100000
+/run/beamOn 1000000
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -104,7 +104,7 @@ conv:   for  gamma    SubType= 14
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
@@ -119,7 +119,7 @@ eBrem:   for  e-    SubType= 3
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
@@ -139,7 +139,7 @@ annihil:   for  e+    SubType= 5
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
@@ -148,7 +148,7 @@ hIoni:   for  proton    SubType= 2
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 0, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2 MeV
@@ -157,7 +157,7 @@ ionIoni:   for  GenericIon    SubType= 2
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
@@ -166,7 +166,7 @@ hIoni:   for  anti_proton    SubType= 2
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
@@ -175,7 +175,7 @@ hIoni:   for  kaon+    SubType= 2
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
@@ -184,7 +184,7 @@ hIoni:   for  kaon-    SubType= 2
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
@@ -205,7 +205,7 @@ muPairProd:   for  mu+    SubType= 4
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
@@ -226,7 +226,7 @@ muPairProd:   for  mu-    SubType= 4
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
@@ -235,7 +235,7 @@ hIoni:   for  pi+    SubType= 2
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 0, fluct: 0, linLossLimit= 0.01
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 0, fluct: 1, linLossLimit= 0.01
       NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
@@ -252,7 +252,7 @@ Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
- Energy thresholds :  gamma  2.94056 keV    e-  351.877 keV    e+  342.545 keV proton 0 eV 
+ Energy thresholds :  gamma  2.93991 keV    e-  349.408 keV    e+  341.455 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -273,49 +273,49 @@ Start Run processing.
 
 ---> Begin of Event: 0
 
----> Begin of Event: 10000
+---> Begin of Event: 100000
 
----> Begin of Event: 20000
+---> Begin of Event: 200000
 
----> Begin of Event: 30000
+---> Begin of Event: 300000
 
----> Begin of Event: 40000
+---> Begin of Event: 400000
 
----> Begin of Event: 50000
+---> Begin of Event: 500000
 
----> Begin of Event: 60000
+---> Begin of Event: 600000
 
----> Begin of Event: 70000
+---> Begin of Event: 700000
 
----> Begin of Event: 80000
+---> Begin of Event: 800000
 
----> Begin of Event: 90000
+---> Begin of Event: 900000
 Run terminated.
 Run Summary
-  Number of events processed : 100000
-  User=0.94s Real=0.94s Sys=0s
+  Number of events processed : 1000000
+  User=9s Real=9s Sys=0s
 
- The run consists of 100000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
+ The run consists of 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	compt = 98335	phot = 1665
+ Process calls frequency --->	compt = 983863	phot = 16137
 
- MeanFreePath:	6.0496 cm  +- 6.0503 cm 	massic: 6.0496 g/cm2 
- CrossSection:	0.1653 cm^-1 			massic: 0.1653 cm2/g
+ MeanFreePath:	6.0708 cm  +- 6.0755 cm 	massic: 6.0708 g/cm2 
+ CrossSection:	0.16472 cm^-1 			massic: 0.16472 cm2/g
 
- mean energy of charged secondaries: 15.209 keV	mass_energy_transfer coef: 0.025141 cm2/g
+ mean energy of charged secondaries: 15.188 keV	mass_energy_transfer coef: 0.025018 cm2/g
 
  Verification : crossSections from G4EmCalculator 
 	compt= 0.1623 cm2/g	phot= 0.0026853 cm2/g	total= 0.16499 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1982964064, 678286457
+ Current couple of seeds = 2024716243, 1456126694
 ----------------------------------------
 #
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/run/beamOn 100000
+/run/beamOn 1000000
 
 Region <DefaultRegionForTheWorld> -- appears in <Water> world volume
  Root logical volume(s) : Water 
@@ -338,49 +338,49 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1982964064, 678286457
+ Current couple of seeds = 2024716243, 1456126694
 ----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
 
----> Begin of Event: 10000
+---> Begin of Event: 100000
 
----> Begin of Event: 20000
+---> Begin of Event: 200000
 
----> Begin of Event: 30000
+---> Begin of Event: 300000
 
----> Begin of Event: 40000
+---> Begin of Event: 400000
 
----> Begin of Event: 50000
+---> Begin of Event: 500000
 
----> Begin of Event: 60000
+---> Begin of Event: 600000
 
----> Begin of Event: 70000
+---> Begin of Event: 700000
 
----> Begin of Event: 80000
+---> Begin of Event: 800000
 
----> Begin of Event: 90000
+---> Begin of Event: 900000
 Run terminated.
 Run Summary
-  Number of events processed : 100000
-  User=1.1s Real=1.1s Sys=0s
+  Number of events processed : 1000000
+  User=9.5s Real=9.5s Sys=0s
 
- The run consists of 100000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
+ The run consists of 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	eBrem = 60576	eIoni = 39424
+ Process calls frequency --->	eBrem = 604093	eIoni = 395907
 
- MeanFreePath:	1.6319 cm  +- 1.6269 cm 	massic: 1.6319 g/cm2 
- CrossSection:	0.61279 cm^-1 			massic: 0.61279 cm2/g
+ MeanFreePath:	1.6262 cm  +- 1.625 cm 	massic: 1.6262 g/cm2 
+ CrossSection:	0.61492 cm^-1 			massic: 0.61492 cm2/g
 
- mean energy of charged secondaries: 738.46 keV	mass_energy_transfer coef: 0.0045252 cm2/g
+ mean energy of charged secondaries: 751.18 keV	mass_energy_transfer coef: 0.0046191 cm2/g
 
  Verification : crossSections from G4EmCalculator 
-	eBrem= 0.37217 cm2/g	eIoni= 0.24166 cm2/g	total= 0.61383 cm2/g
+	eBrem= 0.37212 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61549 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1924985081, 747323284
+ Current couple of seeds = 34275255, 1606675325
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
