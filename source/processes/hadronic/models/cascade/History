@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2010-04-29 19:39:55 mkelsey Exp $
+$Id: History,v 1.68 2010-04-30 23:20:15 dennis Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 Apr 2010 Dennis Wright (hadr-casc-V09-03-28)
+-----------------------------------------------
+- G4ElementaryParticleCollider: 
+    improved pi-nucleon two-body angular distributions, and made 
+    sampling of CM angle faster.  As a result, the methods 
+    getElasticCase and adjustIntervalForElastic were made redundant
+    and removed.  Also removed array containing old angular distribution
+    parameters.
+    
+    Now use nucleon-nucleon angular distributions for hyperon-nucleon
+    scattering, and pi-nucleon dsitributions for kaon-nucleon scattering
+    (until specific kaon distributions are added). 
+ 
 29 Apr 2010 Michael Kelsey (hadr-casc-V09-03-27)
 ------------------------------------------------
 - G4InuclPartcleNames.hh:  Long name "gamma" conflicts with math function.
