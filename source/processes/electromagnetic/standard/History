@@ -1,4 +1,4 @@
-$Id: History,v 1.495 2010-04-28 18:41:15 vnivanch Exp $
+$Id: History,v 1.496 2010-04-30 17:11:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 April 09:  V.Ivant (emstand-V09-03-11)
+- G4UrbanMscModel93 - L.Urban add randomisation of step limit for the 
+                      first step in any volume
 
 28 April 09:  V.Ivant (emstand-V09-03-10)
 G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
