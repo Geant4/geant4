@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.34 2009-09-18 15:35:36 vnivanch Exp $
+// $Id: G4Element.cc,v 1.35 2010-04-30 13:19:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,6 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Element.hh"
+#include "G4AtomicShells.hh"
 #include <iomanip>
 
 G4ElementTable G4Element::theElementTable;
