@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.34 2010-04-27 14:00:23 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.35 2010-04-30 16:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -63,8 +63,8 @@ G4ExcitationHandler::G4ExcitationHandler():
   // JMQ 160909 Fermi BreakUp & MultiFrag are on by default 
   // This is needed for activation of such models when G4BinaryLightIonReaction is used
   // since no interface (for external activation via macro input file) is still available.
-    //  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
-  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
+  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
+  //  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
   //maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   minExcitation(CLHEP::keV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),

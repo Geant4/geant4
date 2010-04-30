@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.15 2010-04-28 08:57:19 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.cc,v 1.16 2010-04-30 16:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -100,17 +100,20 @@ G4FragmentVector* G4VGammaDeexcitation::DoTransition()
 
 G4FragmentVector* G4VGammaDeexcitation::DoChain()
 {
+  if (_verbose > 1) { G4cout << "G4VGammaDeexcitation::DoChain" << G4endl; }
+  const G4double tolerance = CLHEP::keV;
+
   Initialize();
   G4FragmentVector* products = new G4FragmentVector();
   
   while (CanDoTransition())
-    {
-      if (_verbose > 5) { G4cout << "G4VGammaDeexcitation::DoChain -  Looping" << G4endl; }
-      
+    {      
       G4Fragment* gamma = GenerateGamma();
       if (gamma != 0) 
 	{
 	  products->push_back(gamma);
+	  //G4cout << "Eex(keV)= " << _nucleus->GetExcitationEnergy()/keV << G4endl;
+	  if(_nucleus->GetExcitationEnergy() <= tolerance) { break; }
 	  Update();
 	}
     } 
@@ -136,15 +139,15 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   if(excitation < 0.0) { excitation = 0.0; } 
   if (_verbose > 1 && _transition != 0 ) 
     {
-      G4cout << "G4VGammaDeexcitation::GenerateGamma - Gamma energy " << eGamma 
-	     << " ** New excitation " << excitation
+      G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << eGamma 
+	     << " ** left Eexc(MeV)= " << excitation
 	     << G4endl;
     }
   
   // Do complete Lorentz computation 
 
   G4LorentzVector lv = _nucleus->GetMomentum();
-  G4double Ecm       = lv.m();
+  G4double Ecm       = lv.mag();
   G4ThreeVector bst  = lv.boostVector();
   G4double Mass = _nucleus->GetGroundStateMass() + excitation;
 
@@ -157,6 +160,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
+    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2);
   }
 
   // check consistency  
@@ -182,6 +186,11 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   lv -= Gamma4P;
   _nucleus->SetMomentum(lv);
   _nucleus->SetCreationTime(gammaTime);
+
+  //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " << Gamma4P.e() 
+  //	 << " ** left Eexc(MeV)= " << _nucleus->GetExcitationEnergy()
+  //	 << " deltaM(MeV)= " << lv.mag() - _nucleus->GetGroundStateMass()
+  //	 << G4endl;
 
   return thePhoton;
 }

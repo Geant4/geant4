@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.20 2010-04-28 14:27:16 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.21 2010-04-30 16:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -118,31 +118,55 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
   // The residual nucleus (after evaporation of each fragment)
   G4Fragment* theResidualNucleus = new G4Fragment(theNucleus);
 
-  G4double totprob, prob;
+  G4double totprob, prob, oldprob = 0.0;
   G4int maxchannel, i;
 
-  G4int A = static_cast<G4int>( theResidualNucleus->GetA() + 0.5 );
+  G4int Amax = static_cast<G4int>( theResidualNucleus->GetA() + 0.5 );
 
   // Starts loop over evaporated particles, loop is limited by number
   // of nucleons
-  for(G4int ia=0; ia<A; ++ia) {
+  for(G4int ia=0; ia<Amax; ++ia) {
  
+    // g,n,p - evaporation is finished
+    G4int A = static_cast<G4int>( theResidualNucleus->GetA() + 0.5 );
+    if(1 >= A) {
+      theResult->push_back(theResidualNucleus);
+      return theResult;
+    }
+
+    // check if it is stable, then finish evaporation
+    G4int Z = static_cast<G4int>(theResidualNucleus->GetZ()+0.5);
+    G4double abun = nist->GetIsotopeAbundance(Z, A);  
+    if(theResidualNucleus->GetExcitationEnergy() <= minExcitation && abun > 0.0) {
+      theResult->push_back(theResidualNucleus);
+      return theResult;
+    }
+
     totprob = 0.0;
     maxchannel = nChannels;
+
+    //G4cout << "### Evaporation loop #" << ia 
+    //	   << "  Fragment: " << theResidualNucleus << G4endl;
 
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       (*theChannels)[i]->Initialize(*theResidualNucleus);
       prob = (*theChannels)[i]->GetEmissionProbability();
+      //G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
+
+      //if(0 == i && 0.0 == abun) { prob = 0.0; }
+
       totprob += prob;
       probabilities[i] = totprob;
-      if(prob <= 0.0 && i>=8) {
+      // if two recent probabilities are zero stop computations
+      if(prob <= 0.0 && oldprob <= 0.0 && i>=8) {
         maxchannel = i+1; 
 	break;
       }
+      oldprob = prob;
     }
 
-    // stable fragnent - evaporation is complited
+    // stable fragnent - evaporation is finished
     if(0.0 == totprob) {
       theResult->push_back(theResidualNucleus);
       return theResult;
@@ -204,16 +228,6 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
           if(theResidualNucleus != (*theTempResult)[nsec] ) { 
 	    delete theResidualNucleus; 
 	    theResidualNucleus = (*theTempResult)[nsec];
-
-	    // check if it is stable, then finish evaporation
-            if(theResidualNucleus->GetExcitationEnergy() > minExcitation) {
-	      G4int iz = static_cast<G4int>(theResidualNucleus->GetZ()+0.5);  
-	      G4int ia = static_cast<G4int>(theResidualNucleus->GetA()+0.5);  
-              if( nist->GetIsotopeAbundance(iz, ia) > 0.0 ) {
-		theResult->push_back(theResidualNucleus);
-                return theResult;
-	      }
-	    }
 	  }
 	}
         delete theTempResult;

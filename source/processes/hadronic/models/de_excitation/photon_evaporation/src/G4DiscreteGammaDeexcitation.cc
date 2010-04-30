@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.11 2010-04-28 08:57:19 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.12 2010-04-30 16:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation():
   _nucleusZ(0), _nucleusA(0), _max_hl(1e-6*second), _icm(false),
   _rdm(false), _levelManager(0)
 {
-  _tolerance = keV;
+  _tolerance = CLHEP::keV;
 }
 
 G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() 
@@ -140,9 +140,9 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
   } 
   G4Fragment* nucleus = GetNucleus();
   if (canDo)  {
-    G4double A = nucleus->GetA();
-    G4double Z = nucleus->GetZ();
-    if (Z<2 || A<3 || Z>98)
+    //G4double A = nucleus->GetA();
+    //G4double Z = nucleus->GetZ();
+    if (_nucleusZ<2 || _nucleusA<3 || _nucleusZ>98)
       {
 	canDo = false;
 	if (_verbose > 0) 
@@ -155,7 +155,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
   G4double excitation = nucleus->GetExcitationEnergy();
 
   if (canDo) {
-    if (excitation <= 0.) {
+    if (excitation <= _tolerance) {
       canDo = false;
       if (_verbose > 0) 
 	G4cout 

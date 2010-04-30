@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.9 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4PhotonEvaporation.cc,v 1.10 2010-04-30 16:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@ void G4PhotonEvaporation::Initialize(const G4Fragment& fragment)
 
 G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
 {
+  //G4cout << "G4PhotonEvaporation::EmittedFragment" << G4endl;
   _nucleus = nucleus;
   
   // Do one photon emission by the continues deexcitation  
@@ -102,8 +103,9 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
     G4Fragment* gamma = _contDeexcitation->GenerateGamma();
     if(gamma) { 
       if (_verbose > 0) {
-	G4cout << "G4PhotonEvaporation emitted gamma from continium: "   
+	G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
 	       << gamma << G4endl;
+        G4cout << "   Residual: " << nucleus << G4endl;
       }
       return gamma; 
     }
@@ -117,8 +119,9 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
     G4Fragment* gamma = _discrDeexcitation->GenerateGamma();
     if(gamma) { 
       if (_verbose > 0) {
-	G4cout << "G4PhotonEvaporation emitted gamma from discrete: "   
+	G4cout << "G4PhotonEvaporation::EmittedFragment discrete deex: "   
 	       << gamma << G4endl;
+        G4cout << "   Residual: " << nucleus << G4endl;
       }
       return gamma; 
     }
@@ -133,6 +136,7 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
 
 G4FragmentVector* G4PhotonEvaporation::BreakUpFragment(G4Fragment* nucleus)
 {
+  //G4cout << "G4PhotonEvaporation::BreakUpFragment" << G4endl;
   // The same pointer of primary nucleus
   _nucleus = nucleus;
   _contDeexcitation->SetNucleus(_nucleus);
@@ -143,8 +147,9 @@ G4FragmentVector* G4PhotonEvaporation::BreakUpFragment(G4Fragment* nucleus)
   if( !products ) { products = new G4FragmentVector(); }
 
   if (_verbose > 0) {
-    G4cout << " = BreakItUp = " << products->size() 
+    G4cout << "G4PhotonEvaporation::BreakUpFragment " << products->size() 
 	   << " gammas from ContinuumDeexcitation " << G4endl;
+    G4cout << "   Residual: " << nucleus << G4endl;
   }
   // Products from discrete gamma transitions
   G4FragmentVector* discrProducts = _discrDeexcitation->DoChain();
@@ -156,8 +161,9 @@ G4FragmentVector* G4PhotonEvaporation::BreakUpFragment(G4Fragment* nucleus)
     _discrDeexcitation->SetVaccantSN(-1);
 
     if (_verbose > 0) {
-      G4cout << " = BreakItUp = " << discrProducts->size() 
+      G4cout << "G4PhotonEvaporation::BreakUpFragment " << discrProducts->size() 
 	     << " gammas from DiscreteDeexcitation " << G4endl;
+      G4cout << "   Residual: " << nucleus << G4endl;
     }
     G4FragmentVector::iterator i;
     for (i = discrProducts->begin(); i != discrProducts->end(); ++i)
@@ -177,6 +183,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUpFragment(G4Fragment* nucleus)
 
 G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
 {
+  //G4cout << "G4PhotonEvaporation::BreakUp" << G4endl;
   _nucleus = new G4Fragment(nucleus);
 
   _contDeexcitation->SetNucleus(_nucleus);
@@ -189,8 +196,9 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
   G4FragmentVector* products = _contDeexcitation->DoTransition();  
   if( !products ) { products = new G4FragmentVector(); }
   else if(_verbose > 0) {
-    G4cout << " = BreakUp = " << products->size() 
+    G4cout << "G4PhotonEvaporation::BreakUp " << products->size() 
 	   << " gammas from ContinuesDeexcitation " << G4endl;
+    G4cout << "   Residual: " << nucleus << G4endl;
   }
 
   if (0 == products->size())
@@ -203,6 +211,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
 	  G4cout << " = BreakUp = " << discrProducts->size() 
 		 << " gammas from DiscreteDeexcitation " 
 		 << G4endl;
+	  G4cout << "   Residual: " << nucleus << G4endl;
 	}
 	G4FragmentVector::iterator i;
 	for (i = discrProducts->begin(); i != discrProducts->end(); ++i)

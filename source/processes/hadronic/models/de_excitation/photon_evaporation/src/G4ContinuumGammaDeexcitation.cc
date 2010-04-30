@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaDeexcitation.cc,v 1.6 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4ContinuumGammaDeexcitation.cc,v 1.7 2010-04-30 16:08:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,8 @@
 // Constructor
 //
 
-G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation(): _nucleusZ(0), _nucleusA(0), _levelManager(0)
+G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation()
+  : _nucleusZ(0), _nucleusA(0), _levelManager(0)
 { }
 
 
@@ -86,9 +87,9 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
       _nucleusZ = Z;
     }
 
-  if (_verbose > 1)
+  if (_verbose > 1) {
     G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << G4endl;
-
+  }
   G4VGammaTransition* gt =  new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
 
   return gt;
@@ -97,63 +98,61 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 
 G4bool G4ContinuumGammaDeexcitation::CanDoTransition() 
 {
-  G4bool canDo = true;
+  //JMQ: far too small, creating sometimes continuum gammas instead of the right discrete ones
+  // (when excitation energy is slightly over maximum discrete  energy): changed
+  //  G4double tolerance = 10*eV;
+  const G4double tolerance = CLHEP::keV;
 
   if (_transition == 0) 
     {
-      canDo = false;
-
-      if (_verbose > 0)
-	G4cout 
-	  << "G4ContinuumGammaDeexcitation::CanDoTransition - Null transition "
-	  << G4endl;
+      if (_verbose > 0) {
+	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition - Null transition "
+	       << G4endl;
+      }
+      return false;
     }
 
   G4Fragment* nucleus = GetNucleus();
   G4double excitation = nucleus->GetExcitationEnergy();
 
-  G4double A = nucleus->GetA();
-  G4double Z = nucleus->GetZ();
-  if (A <2 || Z<3)
+  //  G4int A = (G4int)nucleus->GetA();
+  // G4int Z = (G4int)nucleus->GetZ();
+  if (_nucleusA<2 || _nucleusZ<3)
     {
-      canDo = false;
-      if (_verbose > 0) 
-	G4cout 
-	  << "G4ContinuumGammaDeexcitation::CanDoTransition - n/p/H"
-	  << G4endl;
+      if (_verbose > 1) { 
+	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition - n/p/H"
+	       << G4endl;
+      }
+      return false;
     }
 
-
-
-  if (excitation <= 0.) 
+  if (excitation <= tolerance) 
     {
-      canDo = false;
-      if (_verbose > 0) 
-	G4cout 
-	  << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation <= 0"
-	  << G4endl;
+      if (_verbose > 1) { 
+	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation "
+	       << excitation/CLHEP::keV << " keV is too small"
+	       << G4endl;
+      }
+      return false;
     }
-  //JMQ: far too small, creating sometimes continuum gammas instead of the right discrete ones
-  // (when excitation energy is slightly over maximum discrete  energy): changed
-  //  G4double tolerance = 10*eV;
-  G4double tolerance = keV;
-  if (excitation <= (_levelManager->MaxLevelEnergy()+ tolerance)) 
-    {
-      canDo = false;  
-      if (_verbose > 0)
-      G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
-	     << excitation << " below max discrete level " 
-	     << _levelManager->MaxLevelEnergy() << G4endl;
+  if (excitation <= (_levelManager->MaxLevelEnergy() + tolerance)) 
+    {  
+      if (_verbose > 0) {
+	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
+	       << excitation << " below max discrete level " 
+	       << _levelManager->MaxLevelEnergy() << G4endl;
+      }
+      return false;
     }
   
-  if (canDo)
-    { if (_verbose > 1) 
-      G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition - CanDo" 
-	     << G4endl; 
-    }
-
-  return canDo;
-
+  if (_verbose > 1) {
+    G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition - CanDo" 
+	   << " Eex(keV)= " << excitation/CLHEP::keV 
+	   << " Emax(keV)= " << _levelManager->MaxLevelEnergy()/CLHEP::keV 
+	   << " Z= " << _nucleusZ << " A= " << _nucleusA
+	   << G4endl;
+  }
+  return true;
 }
 
 

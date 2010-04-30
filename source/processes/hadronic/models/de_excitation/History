@@ -21,7 +21,10 @@ code and to keep track of all tags.
                                  cannot deexcite a fragment; 
 	                         added SetParameters method
 - G4Evaporation - rewrite BreakUp method; added Initialise method, where setup
-                  all options and not at run time
+                  all options and not at run time; added InitialiseEvaporation
+                  method to setup decay channels; changed order of decay
+                  channels - first photon evaporation, second - fision,
+                  after all other channels as before
 - virtual interfaces - moved constructors and destructors to source files
 
 26 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-10)
