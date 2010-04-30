@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.56 2009-10-21 15:18:43 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.57 2010-04-30 13:18:32 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -224,20 +224,27 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     break;
   case G4Polymarker::circles:
     {
+      std::vector <G4VMarker> circleV; 
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
         G4Circle circle (polymarker);
+        // If not already drawn
         circle.SetPosition (polymarker[iPoint]);
-        G4OpenGLSceneHandler::AddPrimitive (circle);
+        circleV.push_back(circle);
+        //      G4OpenGLSceneHandler::AddPrimitive (circle);
       }
+      G4OpenGLSceneHandler::AddPrimitives (circleV);
     }
     break;
   case G4Polymarker::squares:
     {
+      std::vector <G4VMarker> squareV; 
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
         G4Square square (polymarker);
         square.SetPosition (polymarker[iPoint]);
-        G4OpenGLSceneHandler::AddPrimitive (square);
+        squareV.push_back(square);
+        //      G4OpenGLSceneHandler::AddPrimitive (square);
       }
+      G4OpenGLSceneHandler::AddPrimitives (squareV);
     }
     break;
   }
@@ -303,35 +310,55 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
   AddCircleSquare (square, G4OpenGLBitMapStore::square);
 }
 
+void G4OpenGLSceneHandler::AddPrimitives (std::vector <G4VMarker> square) {
+  glDisable (GL_POINT_SMOOTH);
+  AddCircleSquareVector (square, G4OpenGLBitMapStore::square);
+}
+
 void G4OpenGLSceneHandler::AddCircleSquare
 (const G4VMarker& marker,
  G4OpenGLBitMapStore::Shape shape) {
+
+  std::vector <G4VMarker> circleVector;
+  circleVector.push_back(marker);
+  AddCircleSquareVector(circleVector,shape);
+}
+ 
+void G4OpenGLSceneHandler::AddCircleSquareVector
+(std::vector <G4VMarker> marker,
+ G4OpenGLBitMapStore::Shape shape) {
+
+  if (marker.size() == 0) {
+    return;
+  }
 
   if (!fProcessingPolymarker) {  // Polymarker has already loaded atts.
     // Loads G4Atts for picking...
     if (fpViewer->GetViewParameters().IsPicking()) {
       G4AttHolder* holder = new G4AttHolder;
-      LoadAtts(marker, holder);
+      LoadAtts(marker[0], holder);
       fPickMap[fPickName] = holder;
     }
   }
 
   // Note: colour treated in sub-class.
 
-  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
+  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ()) {
     glDisable (GL_DEPTH_TEST);
-  else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
+  } else {
+    glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);
+  }
   
   glDisable (GL_LIGHTING);
   
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes (marker.GetVisAttributes ());
+    fpViewer -> GetApplicableVisAttributes (marker[0].GetVisAttributes ());
 
   G4double lineWidth = GetLineWidth(pVA);
   glLineWidth(lineWidth);
 
-  G4VMarker::FillStyle style = marker.GetFillStyle();
+  G4VMarker::FillStyle style = marker[0].GetFillStyle();
 
   G4bool filled = false;
   static G4bool hashedWarned = false;
@@ -360,20 +387,27 @@ void G4OpenGLSceneHandler::AddCircleSquare
     
   }
 
-  // A few useful quantities...
-  G4Point3D centre = marker.GetPosition();
+
+
   MarkerSizeType sizeType;
-  G4double size = GetMarkerSize(marker, sizeType);
+  G4double size = GetMarkerSize(marker[0], sizeType);
 
   // Draw...
    if (sizeType == world) {  // Size specified in world coordinates.
 
-     DrawXYPolygon (shape, size, centre, pVA);
-
+     for (unsigned int a=0;a<marker.size();a++) {
+       G4Point3D centre = marker[a].GetPosition();
+       // A few useful quantities...
+       DrawXYPolygon (shape, size, centre, pVA);
+     }
    } else { // Size specified in screen (window) coordinates.
-     glPointSize (size);       
+     // A few useful quantities...
+     glPointSize (size);
      glBegin (GL_POINTS);
-     glVertex3f(centre.x(),centre.y(),centre.z());
+     for (unsigned int a=0;a<marker.size();a++) {
+       G4Point3D centre = marker[a].GetPosition();
+       glVertex3f(centre.x(),centre.y(),centre.z());
+     }
      glEnd();
      //Antialiasing
      glEnable (GL_POINT_SMOOTH);

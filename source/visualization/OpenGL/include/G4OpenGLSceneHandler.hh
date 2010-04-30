@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.27 2009-10-21 15:18:14 allison Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.28 2010-04-30 13:18:32 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+  void AddPrimitives (std::vector <G4VMarker>);
   void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
@@ -104,6 +105,7 @@ protected:
 private:
 
   void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
+  void AddCircleSquareVector (std::vector <G4VMarker>, G4OpenGLBitMapStore::Shape);
 
   void DrawXYPolygon
   (G4OpenGLBitMapStore::Shape,
