@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.28 2010-04-30 23:11:02 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -78,13 +78,17 @@ private:
   void generateMomModules(G4int mult, G4int is, G4double ekin,
 			  G4double etot_cm); 
 
-
+  // Samples the CM momentum for elastic and charge exchange scattering
+  //
   G4LorentzVector
-  particleSCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
-			     G4double pscm) const; 
+  sampleCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
+			  G4double pscm) const; 
 
 
-  G4int getElasticCase(G4int is, G4int kw, G4double ekin) const;
+  // Samples cos(theta) in the CM for elastic and charge exchange scattering
+  //
+  G4double sampleCMcosFor2to2(G4double pscm, G4double pFrac,
+                              G4double pA, G4double pC, G4double pCos) const;
 
 
   void generateStrangeChannelPartTypes(G4int is, G4int mult, 
@@ -101,12 +105,6 @@ private:
   particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
 			     G4double pmod) const; 
 
-
-  std::pair<G4double, G4double> 
-  adjustIntervalForElastic(G4double ekin, G4double ak, G4double ae,
-                           G4int k, G4int l, const std::vector<G4double>& ssv, 
-			   G4double st) const;
- 
   G4NucleonSampler nucSampler;
   G4PionSampler piSampler;
 
@@ -118,11 +116,10 @@ private:
   // Parameter arrays
 
   G4double rmn[14][10][2];    
-  G4double ang[4][4][13];
   G4double abn[4][4][4];
 
 };
 
-#endif // G4ELEMENTARY_PARTICLE_COLLIDER_HH
+#endif
 
 

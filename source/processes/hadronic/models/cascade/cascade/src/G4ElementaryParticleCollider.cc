@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.55 2010-04-29 19:39:55 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.56 2010-04-30 23:11:14 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -375,13 +375,13 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
         if (em > 0) { //  see if it is possible to rescale?
 	  G4double np = std::sqrt( em / (m1 + m2 + 2.0 * a));
-	  mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
+	  mom = sampleCMmomentumFor2to2(is, kw, ekin, np);
 	} else { // rescaling not possible
-	  mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm); 
+	  mom = sampleCMmomentumFor2to2(is, kw, ekin, pscm); 
 	}
 
       } else {
-	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
+	mom = sampleCMmomentumFor2to2(is, kw, ekin, pscm);
       };
 
       //      G4cout << " Particle kinds = " << particle_kinds[0] << " , " << particle_kinds[1] << G4endl;
@@ -890,179 +890,21 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
 }
 
 
-std::pair<G4double, G4double> 
-G4ElementaryParticleCollider::adjustIntervalForElastic(G4double ekin, G4double ak, 
-			                               G4double ae, G4int k, 
-			                               G4int l, 
-			                               const std::vector<G4double>& ssv,
-			                               G4double st) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4ElementaryParticleCollider::adjustIntervalForElastic" 
-           << G4endl;
-  }
-
-  const G4int itry_max = 100;
-  const G4double small = 1.0e-4;
-  G4double a = 1.0;
-  G4double b = 0.0;
-  G4int adj_type = 0;
-  G4double s1 = 0.0;
-  G4double s2 = 0.0;
-
-  if (k == 1) {
-    adj_type = 1;
-    s1 = 0.0;
-    s2 = 0.5;
-  } else if(k == 2) {
-
-    if(l != 2) {
-      // adj_type == 0;
-
-    } else { 
-
-      adj_type = 1;
-      s1 = 0.0;
-      s2 = 0.67;
-    };
-        
-  } else {
-
-    if(ekin < 0.32) {
-      // adj_type == 0;
-
-    } else {
-
-      adj_type = 2;
-      s1 = 0.1813;
-      s2 = 1.0;
-    };     
-
-  };
-
-  if(adj_type > 0) {
-    G4int itry = 0;
-    G4double su;
-    G4double ct;
-  
-    if(adj_type == 1) {
-      G4double s2_old = s2;
-      G4double s1c = s1;
-      G4double s2_new, s2_new4;
-
-      while(itry < itry_max) {
-	itry++;
-	s2_new = 0.5 * (s2_old + s1c);
-	s2_new4 = s2_new*s2_new*s2_new*s2_new;
-	su = 0.0;      
-
-	for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(s2_new, i);
-
-	ct = ak * std::sqrt(s2_new) * (su + (1.0 - st) * s2_new4) + ae;
-
-	if(ct > 1.0) {
-	  s2_old = s2_new;
-
-	} else {
-
-	  if(1.0 - ct < small) {
-
-	    break;
-
-	  } else {
-
-	    s1c = s2_new;
-	  };   
-	}; 
-      };
-
-      a = s2_new - s1;
-      b = s1;
-
-    } else {
-
-      G4double s1_old = s1;
-      G4double s2c = s2;
-      G4double s1_new = 0.0, s1_new4;
-
-      while (itry < itry_max) {
-	itry++;
-	s1_new = 0.5 * (s1_old + s2c);
-	s1_new4 = s1_new*s1_new*s1_new*s1_new;
-	su = 0.0;
-      
-	for (G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(s1_new, i);
-	ct = ak * std::sqrt(s1_new) * (su + (1.0 - st) * s1_new4) + ae;
-
-	if(ct < -1.0) {
-	  s1_old = s1_new;
-
-	} else {
-
-	  if (1.0 + ct < small) {
-
-	    break;
-
-	  } else {
-
-	    s2c = s1_new;
-	  };   
-	}; 
-      };
-      a = s2 - s1_new;
-      b = s1_new;
-    }; 
-
-    if (itry == itry_max) {
-
-      if (verboseLevel > 2){
-	G4cout << " in adjustIntervalForElastic: " << itry_max << G4endl;
-	G4cout << " e " << ekin << " ak " << ak << " ae " << ae << G4endl << " k " << k
-	       << " is " << l << " adj_type " << adj_type << G4endl; 
-      }
-
-      a = 1.0;
-      b = 0.0;
-    };
-  };
-
-  return std::pair<G4double, G4double>(a, b);
-}  
-
-
 G4LorentzVector 
-G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
-			   G4int is, 
-			   G4int kw, 
-			   G4double ekin, 
-			   G4double pscm) const 
+G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw, 
+                                                      G4double ekin, 
+			                              G4double pscm) const 
 {
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4ElementaryParticleCollider::particleSCMmomentumFor2to2" 
-           << G4endl;
-  }
+  if (verboseLevel > 3) G4cout << " >>> G4ElementaryParticleCollider::sampleCMmomentumFor2to2" 
+                               << G4endl;
 
-  const G4int itry_max = 100;
-  const G4double ct_cut = 0.9999;
-  const G4double huge_num = 60.0;
-  G4int k = getElasticCase(is, kw, ekin);
-  G4double ae = -1.0;
-  G4double ak = 2.0;
-
-  if(k == 1) {
-    if(is != 2) { ak = 1.0; ae = 0.0;};
-  } else if(k == 2) {
-    if(is != 2) { ak = 0.5; ae = 0.0; };
-  }
-
-  G4double ct = 2.0;
-  G4double ab;
-  G4double ac;
-  G4double ad;
-  G4int itry = 0;
+  G4double ct = 0.0;
   
-  if (is == 1 || is == 2 || is == 4) {
-    // pp, pn or nn
+  if (is == 1 || is == 2 || is == 4 ||
+      is == 21 || is == 23 || is == 25 || is == 27 || is ==29 || is == 31 ||
+      is == 42 || is == 46 || is == 50 || is == 54 || is ==58 || is == 62) {
+    // nucleon-nucleon or hyperon-nucleon
+
     // Parameters for two-exponential sampling of angular distribution
     // of nucleon-nucleon scattering
     G4double nnke[9] =  { 0.0,   0.44, 0.59,   0.80,   1.00,   2.24,   4.40,   6.15,  10.00};
@@ -1085,90 +927,90 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
       }
     }
 
-    G4double term1;
-    G4double term2;
-    G4double randScale;
-    G4double randVal;
-    if (G4UniformRand() < pFrac) {
-      // Sample small angles ( 0 < theta < theta0 )
-      term1 = 2.0*pscm*pscm*pA;
-      term2 = std::exp(-2.0*term1);
-      randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
-      randVal = (1.0 - randScale)*G4UniformRand() + randScale;
-      ct = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
-    } else {
-      // Sample large angles ( theta0 < theta < 180 )
-      term1 = 2.0*pscm*pscm*pC;
-      term2 = std::exp(-2.0*term1);
-      randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
-      randVal = randScale*G4UniformRand();
-      ct = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
+    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
+    
+  } else if (kw == 2) {
+    // pion charge exchange (pi-p -> pi0n, pi+n -> pi0p, pi0p -> pi+n, pi0n -> pi-p
+    // Parameters for two-exponential sampling of angular distribution
+    // of pi-nucleon scattering
+    G4double nnke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    G4double nnA[10] =    {0.0,   0.0,    2.48,   7.93,  10.0,    9.78,   5.08,   8.13,   8.13,   8.13};
+    G4double nnC[10] =    {0.0, -39.58, -12.55,  -4.38,   1.81,  -1.99,  -0.33,   1.2,    1.43,   8.13};
+    G4double nnCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
+    G4double nnFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
+
+    G4double pA = nnA[9];
+    G4double pC = nnC[9];
+    G4double pCos = nnCos[9];
+    G4double pFrac = nnFrac[9];
+    for (G4int i = 1; i < 10; i++) {
+      if (ekin < nnke[i]) {
+        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
+        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
+        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
+        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
+        break;
+      }
     }
-  } else if (k == 14) {
-    ab = 7.5;
-    ac = -2.0 * ab * pscm * pscm;
-    ad = 2.0 * ac;
-    if(ad < -huge_num) {
-      ad = std::exp(ad);
 
-    } else {
+    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
 
-      ad = std::exp(-huge_num);
-    };   
+  } else if (is == 3 || is == 7 || is == 14 || is == 10 || is == 11 || is == 30 || is == 17 || is == 26) {
+    // pi+p, pi0p, pi0n, pi-n, k+p, k0n, k0bp, or k-n
+    // Parameters for two-exponential sampling of angular distribution
+    // of pi-nucleon scattering
+    G4double nnke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    G4double nnA[10] =    {0.0,  0.0,   27.58,  19.83,   6.46,   4.59,   6.47,   6.68,   6.43,   6.7};
+    G4double nnC[10] =    {0.0, -26.4, -30.55, -19.42,  -5.05,  -5.24,  -1.00,   2.14,   2.9,    6.7};
+    G4double nnCos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
+    G4double nnFrac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
 
-    while(std::fabs(ct) > ct_cut && itry < itry_max) {
-      itry++;
-      ct = 1.0 - std::log(inuclRndm() * (1.0 - ad) + ad) / ac;
-    };      
-
-  } else if(k == 0) {
-    ct = 2.0 * inuclRndm() - 1;
-
-  } else { 
-    G4int k1 = k - 1;
-    // first set all coefficients
-    std::vector<G4double> ssv(4);
-    G4double st = 0.0;
-
-    for(G4int i = 0; i < 4; i++) {
-      G4double ss = 0.0;
-
-      for(G4int m = 0; m < 4; m++) ss += ang[m][i][k1] * std::pow(ekin, m);
-      st += ss;
-      ssv[i] = ss;
-    };
-
-    G4double a = 1.0;
-    G4double b = 0.0;
-
-    if(k <= 3) {
-      std::pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
-
-      a = ab.first;
-      b = ab.second;
-    };
-
-    while(std::fabs(ct) > ct_cut && itry < itry_max) {
-      itry++;
-      G4double mrand = a * inuclRndm() + b;
-      G4double mrand4 = mrand*mrand*mrand*mrand;
-
-      G4double su = 0.0;
-
-      for(G4int i = 0; i < 4; i++) su += ssv[i] * std::pow(mrand, i);
-
-      ct = ak * std::sqrt(mrand) * (su + (1.0 - st) * mrand4) + ae;
-    };
-
-  };
-
-  if(itry == itry_max) {
-    if(verboseLevel > 2){
-      G4cout << " particleSCMmomentumFor2to2 -> itry = itry_max " 
-             << itry << G4endl;
+    G4double pA = nnA[9];
+    G4double pC = nnC[9];
+    G4double pCos = nnCos[9];
+    G4double pFrac = nnFrac[9];
+    for (G4int i = 1; i < 10; i++) {
+      if (ekin < nnke[i]) {
+        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
+        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
+        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
+        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
+        break;
+      }
     }
-    ct = 2.0 * inuclRndm() - 1.0;
-  }
+
+    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
+
+  } else if (is == 5 || is == 6 || is == 13 || is == 34 || is == 22 || is == 15) {
+    // pi-p, pi+n, k-p, k0bn, k+n, or k0p
+    // Parameters for two-exponential sampling of angular distribution
+    // of pi-nucleon scattering
+    G4double nnke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    G4double nnA[10] =    {0.0, 27.08, 19.32,   9.92,   7.74,   9.86,   5.51,   7.25,   7.23,   7.3};
+    G4double nnC[10] =    {0.0,  0.0, -19.49, -15.78,  -9.78,  -2.74,  -1.16,   2.31,   2.96,   7.3};
+    G4double nnCos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
+    G4double nnFrac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
+
+    G4double pA = nnA[9];
+    G4double pC = nnC[9];
+    G4double pCos = nnCos[9];
+    G4double pFrac = nnFrac[9];
+    for (G4int i = 1; i < 10; i++) {
+      if (ekin < nnke[i]) {
+        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
+        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
+        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
+        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
+        break;
+      }
+    }
+
+    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
+
+  } else {
+    G4cout << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2: interaction not recognized " 
+           << G4endl;
+  } 
 
   G4double pt = pscm * std::sqrt(1.0 - ct * ct);
   G4double phi = randomPHI();
@@ -1182,73 +1024,33 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to2(
 }
 
 
-G4int 
-G4ElementaryParticleCollider::getElasticCase(G4int is, 
-					     G4int kw, 
-					     G4double ekin) const 
+G4double
+G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
+                                                 G4double pA, G4double pC,
+                                                 G4double pCos) const 
 {
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4ElementaryParticleCollider::getElasticCase" 
-           << G4endl;
+  G4double term1;
+  G4double term2;
+  G4double randScale;
+  G4double randVal;
+  G4double costheta = 1.0;
+  if (G4UniformRand() < pFrac) {
+    // Sample small angles ( 0 < theta < theta0 )
+    term1 = 2.0*pscm*pscm*pA;
+    term2 = std::exp(-2.0*term1);
+    randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
+    randVal = (1.0 - randScale)*G4UniformRand() + randScale;
+
+  } else {
+    // Sample large angles ( theta0 < theta < 180 )
+    term1 = 2.0*pscm*pscm*pC;
+    term2 = std::exp(-2.0*term1);
+    randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
+    randVal = randScale*G4UniformRand();
   }
 
-  G4int l = is;
-  G4int k = 0; // isotropic
-
-  if(l == 4) {
-    l = 1;
-  } else if(l == 10 || l == 7 || l == 14) {
-    l = 3;
-  } else if(l == 5 || l == 6) {
-    l = 4;
-  }
-
-  if(l < 3) { // nucleon nucleon
-
-    if(ekin > 2.8) {
-      // DHW      k = 2;
-      // DHW      if(ekin > 10.0) k = 14;
-      k = 14;
-
-    } else {
-      if(l == 1) { // PP or NN
-        if(ekin > 0.46) k = 1;
-      } else {
-        k = 3;
-	if(ekin >= 0.97) k = 1;
-      }
-    }
-  	 
-  } else { // pi nucleon
-
-    if(l == 3) { // pi+ P, pi- N, pi0 P, pi0 N
-      k = 8;
-      if(ekin > 0.08) k = 9;
-      if(ekin > 0.3) k = 10;
-      if(ekin > 1.0) k = 11;
-      if(ekin > 2.4) k = 14;
-
-    } else { // pi- P, pi+ N
-
-      if(kw == 1) {
-        k = 4;
-        if(ekin > 0.08) k = 5;
-        if(ekin > 0.3) k = 6;
-        if(ekin > 1.0) k = 7;
-        if (ekin > 2.4) k = 14;
-
-      } else {
-
-        k = 12;
-	if (ekin > 0.08) k = 13;
-        if (ekin > 0.3) k = 6;
-        if (ekin > 1.0) k = 7;
-        if (ekin > 2.4) k = 14;
-      }
-    }  
-  }     
-
-  return k;
+  costheta = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
+  return costheta;
 }
 
 
@@ -1256,10 +1058,8 @@ void
 G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 			             G4InuclElementaryParticle* particle1,
 			             G4InuclElementaryParticle* particle2) {
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionAbsorption" 
-           << G4endl;
-  }
+  if (verboseLevel > 3) G4cout << " >>> G4ElementaryParticleCollider::generateSCMpionAbsorption" 
+                               << G4endl;
 
   // generate nucleons momenta for pion absorption
   // the nucleon distribution assumed to be isotropic in SCM
@@ -1406,52 +1206,6 @@ void G4ElementaryParticleCollider::initializeArrays()
   for (G4int i = 0; i < 14; i++) {
     for (G4int j = 0; j < 10; j++) {
       for (G4int k = 0; k < 2; k++) rmn[i][j][k] = rmnData[i][j][k];
-    }
-  }
-
-  // Parameter array for angular distribution calculation
-  const G4double angData[4][4][13] = {
-    {{ 2.7404, -30.853,  0.1026,-0.3829,  0.2499, 3.9025, 19.402, 
-       0.1579, 0.3153,-17.953, 0.4217, 0.1499,  0.5369},
-     {-9.6998,  106.24, -1.0542, 3.7587,  32.028,-91.126,-224.46, 
-       2.9671,-7.4981, 109.72, 147.05, 2.8753, -13.216}, 
-     { 10.400, -129.39,  11.389,-6.5144, -118.82, 323.73, 747.33,
-       -5.5251, 43.295,-239.54,-653.35,-5.3078,  81.011}, 
-     { 2.3882,  54.339, -16.638, 6.7740,  150.99,-400.48,-935.70, 
-       6.8925,-76.460, 228.26, 915.07, 6.2233, -142.85}},
-
-    {{-7.5137,  19.465, -0.4961, 103.81, -2.6994,-20.619,-44.180,
-      -7.0218,-6.5373, 91.968,-3.5198,-5.9558, -10.550}, 
-     { 44.096, -68.102,  11.800,-272.82, -460.45, 491.70, 471.94,
-      -205.34, 193.07,-519.63,-260.19,-162.03,  296.29},
-     {-74.379,  96.358, -90.857, 477.59,  1895.9,-1715.5,-1485.6, 
-      569.51,-1018.1, 1126.6, 1225.0, 430.79, -1695.7}, 
-     { 46.038, -56.827,  164.76,-512.22, -2519.0, 2114.3, 1805.5,
-     -898.58, 1742.6,-1074.0,-1748.1,-625.48,  2893.5}},
-
-    {{ 7.5479, -3.4831,  1.5437,-1788.2,  16.268, 33.004, 31.567, 
-       134.96, 46.864,-132.70, 3.6373, 128.75,  69.621},
-     {-39.274,  12.341, -33.769, 4305.2,  2138.4,-766.84,-301.76, 
-       4872.2,-1303.0, 741.12, 155.92, 3140.2, -1924.5}, 
-     { 64.835, -18.592,  251.92,-7931.4, -9126.2, 2700.3, 907.63,
-       -14674., 6729.1,-1600.0,-752.01,-7918.9, 10620.0}, 
-     { 41.609,  12.024, -450.71, 9347.1, 12431.0,-3352.5,-1077.3, 
-       23924.,-11075., 1524.9, 1079.6, 10983., -17468.}},
-
-    {{-1.8369,  0.1894, -1.2021, 7147.5, -29.654,-16.367,-6.8648,
-      -821.16,-95.192, 58.598,-0.7804,-851.61, -138.65}, 
-     { 8.6911, -0.6788,  0.2534,-3339.5, -3182.3, 373.94, 60.476,
-      -32586., 2637.3,-318.74,-30.563,-18780.,  3928.1},
-     {-13.060,  1.0665, -186.58,-4139.2,  13944.,-1320.2,-175.20,
-       100980.,-12857., 677.51, 147.95, 44607., -20293.}, 
-     { 7.1880, -0.7291,  332.54,-4436.4, -19342., 1642.3, 203.81,
-       -165530.,20294.,-640.11,-212.50,-58790.,  32058.}}
-  };
-
-  // Copy to class scope
-  for (G4int i = 0; i < 4; i++) {
-    for (G4int j = 0; j < 4; j++) {
-      for (G4int k = 0; k < 13; k++) ang[i][j][k] = angData[i][j][k];
     }
   }
 
