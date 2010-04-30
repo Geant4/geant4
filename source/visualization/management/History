@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2010-04-27 15:40:40 lgarnier Exp $
+$Id: History,v 1.140 2010-04-30 13:13:57 lgarnier Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,11 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+9th March 2010 Laurent Garnier
+ - G4OpenGLViewer : Fix clipping when resizing non square size windows
+  
+8th March 2010 Laurent Garnier
+-G4VisManager.cc : Add protection against null pointer
 
 22nd November 2009  John Allison  (visman-V09-02-08)
 - G4VisCommandsSceneAdd.cc: /vis/scene/add/trajectories rich:
