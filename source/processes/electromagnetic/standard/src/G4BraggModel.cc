@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.23 2009-11-10 19:25:47 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.24 2010-05-03 10:23:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -89,6 +89,8 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   lowestKinEnergy  = 1.0*keV;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron = G4Electron::Electron();
+
+  corr = G4LossTableManager::Instance()->EmCorrections();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +111,7 @@ G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4BraggModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
-  if(p != particle) SetParticle(p);
+  if(p != particle) { SetParticle(p); }
 
   // always false before the run
   SetDeexcitationFlag(false);
@@ -120,8 +122,6 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" && 
        pname != "deuteron" && pname != "triton") isIon = true;
-
-    corr = G4LossTableManager::Instance()->EmCorrections();
 
     fParticleChange = GetParticleChangeForLoss();
   }
@@ -160,7 +160,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
   G4double cross     = 0.0;
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
   G4double maxEnergy = std::min(tmax,maxKinEnergy);
-  if(cutEnergy < tmax) {
+  if(cutEnergy < maxEnergy) {
 
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
@@ -214,8 +214,8 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tkin  = kineticEnergy/massRate;
   G4double dedx  = 0.0;
-  if(tkin > lowestKinEnergy) dedx = DEDX(material, tkin);
-  else      dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy);
+  if(tkin > lowestKinEnergy) { dedx = DEDX(material, tkin); }
+  else { dedx = DEDX(material, lowestKinEnergy)*sqrt(tkin/lowestKinEnergy); }
 
   if (cutEnergy < tmax) {
 
@@ -239,40 +239,6 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
-void G4BraggModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
-					const G4DynamicParticle* dp,
-					G4double& eloss,
-					G4double&,
-					G4double length)
-{
-  if(nuclearStopping) {
-
-    G4double preKinEnergy = dp->GetKineticEnergy();
-    G4double e = preKinEnergy - eloss*0.5;
-    if(e < 0.0) e = preKinEnergy*0.5;
-    G4double nloss = length*corr->NuclearDEDX(dp->GetDefinition(),
-					      couple->GetMaterial(),
-					      e,false);
-
-    // too big energy loss
-    if(eloss + nloss > preKinEnergy) {
-      nloss *= (preKinEnergy/(eloss + nloss));
-      eloss = preKinEnergy;
-    } else {
-      eloss += nloss;
-    }
-    
-    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    	   << " de= " << eloss << " NIEL= " << nloss 
-	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    
-    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
-  }
-}
-*/
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 				     const G4MaterialCutsCouple*,
@@ -282,7 +248,7 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = std::min(tmax, maxEnergy);
-  if(xmin >= xmax) return;
+  if(xmin >= xmax) { return; }
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -342,7 +308,7 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 					  G4double kinEnergy)
 {
-  if(pd != particle) SetParticle(pd);
+  if(pd != particle) { SetParticle(pd); }
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
