@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.51 2010-05-03 10:24:57 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.52 2010-05-03 12:46:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -251,7 +251,8 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     screenZ *=(1.13 + std::min(1.0,3.76*Z*Z*invbeta2*alpha2));
     if(mass > MeV) { screenZ *= 2.0; }
     formfactA = FormFactor[iz]*mom2;
-    cosTetMaxNuc2 = std::max(cosTetMaxNuc, 1.0 - factorA2*LimitMom2[iz]/mom2);
+    cosTetMinNuc  = std::max(cosTetMinNuc, 1.0 - factorA2*LimitMom2[iz]/mom2);
+    cosTetMaxNuc2 = cosTetMaxNuc;
     if(1 == iz && particle == theProton && cosTetMaxNuc2 < 0.0) {
       cosTetMaxNuc2 = 0.0;
     }
