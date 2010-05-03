@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.85 2010-04-28 14:43:13 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.86 2010-05-03 18:40:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -297,7 +297,8 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   // reduce printout for nuclear stopping
   G4bool gproc = true;
-  if(GetProcessName() == "nuclearStopping" && 
+  G4int st = GetProcessSubType();
+  if(st == fCoulombScattering && 
      partname != "GenericIon" && partname != "alpha") { gproc = false; } 
 
   if(gproc && 0 < verboseLevel) { PrintInfoDefinition(); }
