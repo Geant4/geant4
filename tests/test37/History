@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-05-10  V.Ivanchenko (test37-V09-03-00)
+- Removed obsolete header
+
 22-22-09  V.Ivanchenko (test37-V09-02-05)
 - Fixed option setup
 
