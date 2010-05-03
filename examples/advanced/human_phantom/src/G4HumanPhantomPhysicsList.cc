@@ -40,7 +40,8 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+
 // gamma
 #include "G4LowEnergyRayleigh.hh" 
 #include "G4LowEnergyPhotoElectric.hh"
@@ -121,13 +122,13 @@ void G4HumanPhantomPhysicsList::ConstructEM()
       // Select the Bremsstrahlung angular distribution model (Tsai/2BN/2BS)
       loweBrem->SetAngularGenerator("tsai");
     
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
       pmanager->AddProcess(loweIon,     -1, 2,2);
       pmanager->AddProcess(loweBrem,    -1,-1,3);      
       
     } else if (particleName == "e+") {
       // Positron      
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
