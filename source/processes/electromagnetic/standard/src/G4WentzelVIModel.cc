@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.38 2010-03-01 11:25:26 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.39 2010-05-03 10:24:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,11 +65,13 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4WentzelVIModel::ScreenRSquare[] = {0.0};
 G4double G4WentzelVIModel::FormFactor[]    = {0.0};
+G4double G4WentzelVIModel::LimitMom2[]     = {0.0};
 
 using namespace std;
 
@@ -88,6 +90,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   isInitialized(false),
   inside(false)
 {
+  factorA2 = 1.0;
   invsqrt12 = 1./sqrt(12.);
   tlimitminfix = 1.e-6*mm;
   theManager = G4LossTableManager::Instance(); 
@@ -111,13 +114,15 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   if(0.0 == ScreenRSquare[0]) {
     G4double a0 = electron_mass_c2/0.88534; 
     G4double constn = 6.937e-6/(MeV*MeV);
+    G4Pow* g4pow = G4Pow::GetInstance();
 
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
-      G4double x = a0*fNistManager->GetZ13(j);
+      G4double A = fNistManager->GetAtomicMassAmu(j);
+      G4double x = a0*g4pow->Z13(j);
       ScreenRSquare[j] = alpha2*x*x;
-      x = fNistManager->GetA27(j); 
-      FormFactor[j] = constn*x*x;
+      FormFactor[j] = constn*std::pow(A, 0.56);
+      LimitMom2[j] = 0.5*hbarc_squared/(fermi*fermi*std::pow(A, 2./3.)); 
     } 
   }
 }
@@ -138,6 +143,8 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   ecut = etag = DBL_MAX;
   currentRange = 0.0;
   cosThetaMax = cos(PolarAngleLimit());
+  G4double a = theManager->FactorForAngleLimit();
+  factorA2 = a*a;
   currentCuts = &cuts;
 
   // set values of some data members
