@@ -79,12 +79,12 @@
 #/control/execute vrmlVis.mac
 #
 # Visualize Phantom with OPENGL
-#/control/execute openGLVis.mac
+/control/execute openGLVis.mac
 #
 # Visualize Phantom with DAWN
-/control/execute dawnVis.mac
+#/control/execute dawnVis.mac
 #
 # Run Particles
 #
-#/control/execute run.mac
+/control/execute run.mac
 
