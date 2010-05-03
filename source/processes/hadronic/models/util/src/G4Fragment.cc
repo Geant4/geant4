@@ -23,10 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Fragment.cc,v 1.12 2010-05-03 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+//---------------------------------------------------------------------
+//
+// Geant4 class G4Fragment
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
+//
+// Modifications:
+// 03.05.2010 V.Ivanchenko General cleanup; moved obsolete methods from
+//            inline to source 
+//
 
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
@@ -68,13 +78,10 @@ G4Fragment::G4Fragment(const G4Fragment &right)
 #endif
 }
 
-
 G4Fragment::~G4Fragment()
-{
-}
+{}
 
-
-G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMomentum) :
+G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMomentum) :
   theA(A),
   theZ(Z),
   theMomentum(aMomentum),
@@ -88,6 +95,8 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
   ,theCreatorModel("No name")
 #endif
 {
+  CalculateExcitationEnergy();
+  /*
   theExcitationEnergy = theMomentum.mag() - 
                         G4ParticleTable::GetParticleTable()->GetIonTable()
 			->GetIonMass( G4lrint(theZ), G4lrint(theA) );
@@ -101,11 +110,12 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
       throw G4HadronicException(__FILE__, __LINE__, text);
     }
   }
+  */
 }
 
 
 // This constructor is for initialize photons
-G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * aParticleDefinition) :
+G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
   theMomentum(aMomentum),
@@ -119,10 +129,9 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
   ,theCreatorModel("No name")
 #endif
 {
-  theExcitationEnergy = CalculateExcitationEnergy(aMomentum);
+  theExcitationEnergy = 0.0;
+  //  theExcitationEnergy = CalculateExcitationEnergy(aMomentum);
 }
-
-
 
 const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
 {
@@ -144,7 +153,6 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
   return *this;
 }
 
-
 G4bool G4Fragment::operator==(const G4Fragment &right) const
 {
   return (this == (G4Fragment *) &right);
@@ -154,7 +162,6 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
 {
   return (this != (G4Fragment *) &right);
 }
-
 
 std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 {
@@ -196,8 +203,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
   return out; 
 }
 
-
-
+/*
 G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) const
 {
   static G4int errCount(0);
@@ -221,11 +227,11 @@ G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) cons
   }
   return U;
 }
+*/
 
 G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const
   // Create a unit vector with a random direction isotropically distributed
 {
-
   G4double CosTheta = 1.0 - 2.0*G4UniformRand();
   G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
   G4double Phi = twopi*G4UniformRand();
@@ -233,6 +239,23 @@ G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const
                        Magnitude*std::sin(Phi)*SinTheta,
                        Magnitude*CosTheta);
 
-  return Vector;
-		
+  return Vector;		
 }
+
+void G4Fragment::SetExcitationEnergy(const G4double )
+{
+  //   theExcitationEnergy = value;
+  G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << G4endl;
+}
+
+#ifdef PRECOMPOUND_TEST 
+G4String G4Fragment::GetCreatorModel() const 
+{ 
+  return theCreatorModel; 
+}
+
+void G4Fragment::SetCreatorModel(const G4String & aModel) 
+{ 
+  theCreatorModel = aModel; 
+}
+#endif
