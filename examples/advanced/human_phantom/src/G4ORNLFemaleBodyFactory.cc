@@ -36,6 +36,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GDMLParser.hh"
 #include "globals.hh"
+#include "G4PVPlacement.hh"
 #include "G4SDManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4HumanPhantomColour.hh"
