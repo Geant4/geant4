@@ -40,7 +40,8 @@ using namespace std;
 
 #include "G4EvaporationProbability.hh"
 #include "G4PairingCorrection.hh"
-
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 
 G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbability &) : G4VEmissionProbability()

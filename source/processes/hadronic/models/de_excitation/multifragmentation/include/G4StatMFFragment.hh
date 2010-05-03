@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.hh,v 1.4 2010-05-03 15:24:26 vnivanch Exp $
+// $Id: G4StatMFFragment.hh,v 1.5 2010-05-03 16:49:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -37,6 +37,7 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4Fragment.hh"
 
 class G4StatMFFragment {
 

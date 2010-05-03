@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.11 2009-03-13 18:57:17 vnivanch Exp $
+// $Id: G4CompetitiveFission.cc,v 1.12 2010-05-03 16:49:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -37,6 +37,7 @@
 
 #include "G4CompetitiveFission.hh"
 #include "G4PairingCorrection.hh"
+#include "G4ParticleMomentum.hh"
 
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
 {

@@ -21,7 +21,8 @@ code and to keep track of all tags.
                          electron emmision
 - G4PhotonEvaporation - improved printout
 - G4ExcitationHandler - disable MFM
-- G4StatMFFragment - use correct header files
+- G4StatMFFragment, G4CompetitiveFission, G4EvaporationProbability,
+  G4GEMProbability - use correct header files
 
 28 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-11)
 ----------------------------------------------------------

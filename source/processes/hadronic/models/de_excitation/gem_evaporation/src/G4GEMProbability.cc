@@ -40,7 +40,7 @@
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
 #include "G4Pow.hh"
-
+#include "G4IonTable.hh"
 
 G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbability()
 {
