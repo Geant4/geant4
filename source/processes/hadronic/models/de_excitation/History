@@ -14,13 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-30 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-12)
+03 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-12)
 ----------------------------------------------------------
 - G4Evaporation - improved condition how to stop deexcitation loop
 - G4VGammaDeexcitation - take into account electron mass in the case of
                          electron emmision
 - G4PhotonEvaporation - improved printout
 - G4ExcitationHandler - disable MFM
+- G4StatMFFragment - use correct header files
 
 28 April 2010 Vladimir Ivanchenko (hadr-deex-V09-03-11)
 ----------------------------------------------------------
