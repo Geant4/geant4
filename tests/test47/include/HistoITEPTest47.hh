@@ -2,10 +2,10 @@
 #define HistoITEPTest47_H
 
 #include "HistoTest47.hh"
+#include "HistoEPTest47.hh"
 
 #include "TFile.h"
 #include "TH1F.h"
-
 #include <string>
 
 class G4VParticleChange;
@@ -26,10 +26,10 @@ private:
   void initialize();
   void book();
 
-  // char                  fileName[160];
-  std::string fileName;
+  std::string           fileName;
   char                  tag1Name[60], tag2Name[24], tag3Name[40];
   double                dtheta, de;
+  HistoEPTest47         epTest;
   std::vector<TH1F*>    hiKE11, hiKE12, hiCT11, hiCT12;
   std::vector<TH1F*>    hiKE21, hiKE22, hiCT21, hiCT22;
   std::vector<G4double> energies, emin, emax, angles, cthmin, cthmax, dcth;

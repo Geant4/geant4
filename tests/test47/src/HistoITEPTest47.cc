@@ -129,6 +129,8 @@ void HistoITEPTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
       }
     }
   }
+
+  epTest.fill(aChange,pinit);
 }
 
 void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
@@ -205,7 +207,6 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
     hiCT20[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
   }
 
-  // TFile f(fileName, "recreate");
   TFile f(fileName.c_str(), "recreate");
   for (unsigned int ii=0; ii<angles.size(); ii++) {
     hiKE11[ii]->Write(); hiKE10[ii]->Write(); hiKE12[ii]->Write();
@@ -215,6 +216,7 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
     hiCT11[ii]->Write(); hiCT10[ii]->Write(); hiCT12[ii]->Write();
     hiCT21[ii]->Write(); hiCT20[ii]->Write(); hiCT22[ii]->Write();
   }
+  epTest.write();
   f.Close();
 }
 
@@ -222,42 +224,25 @@ void HistoITEPTest47::initialize() {
 
   unInitialized = false;
   G4cout << "HistoITEPTest47::initialize invoked" << G4endl;
-/*
-  if ( jobID > -1 )
-  {
-     sprintf ( fileName, "%s%s%s%4.2fGeV-%d.root", particle.c_str(), target.c_str(),
-	       generator.c_str(), energy, jobID );
-  }
-  else
-  {
-     sprintf ( fileName, "%s%s%s%4.2fGeV.root", particle.c_str(), target.c_str(),
-	       generator.c_str(), energy );
-  }
-*/
-  
   fileName = particle + target + generator;
   std::ostringstream tmp;
-  tmp << energy << "GeV";
-  if ( jobID > -1 )
-  {
-     tmp << "-" << jobID;
-  }
-  if ( clusterID > -1 )
-  {
-     tmp << "-" << clusterID;
-  }
+  char nams[4];
+  sprintf (nams, "%4.2f", energy);
+  tmp << nams << "GeV";
+  if ( jobID > -1 )     tmp << "-" << jobID;
+  if ( clusterID > -1 ) tmp << "-" << clusterID;
   tmp << ".root";
   fileName += tmp.str();
-  
   sprintf (tag1Name, "%s%s%s%4.2fGeV", particle.c_str(), target.c_str(),
 	   generator.c_str(), energy); 
   sprintf (tag2Name, "%s+%s", particle.c_str(), target.c_str());
   sprintf (tag3Name, "at %4.2f GeV (%s)", energy, generator.c_str());
-//  G4cout << "HistoITEPTest47::fileName:" << fileName 
   G4cout << "HistoITEPTest47::fileName:" << fileName.c_str() 
-         << " Tag1:" << tag1Name << " Tag2: " << tag2Name << " Tag3: " << tag3Name << G4endl;
+	 << " Tag1:" << tag1Name << " Tag2: " << tag2Name << " Tag3: " 
+	 << tag3Name << G4endl;
 
   book();
+  epTest.initialize(particle,target,energy,generator);
 }
 
 void HistoITEPTest47::book() {

@@ -14,9 +14,8 @@
 #include "G4Proton.hh"
 
 HistoTest47::HistoTest47(std::string namePart, std::string nameMat, 
-			 G4double momentum, std::string nameGen) 
-   : jobID(-1), clusterID(-1)
-{
+			 G4double momentum, std::string nameGen) : jobID(-1), 
+								   clusterID(-1) {
 
   setParticle(namePart);
   setTarget(nameMat);
@@ -31,6 +30,7 @@ HistoTest47::HistoTest47(std::string namePart, std::string nameMat,
   mapParticle[G4KaonMinus::KaonMinus()]   = 5;
   mapParticle[G4AntiProton::AntiProton()] = 6;
   mapParticle[G4PionZero::PionZero()]     = 7;
+  unInitialized = true;
 }
 
 HistoTest47::~HistoTest47() {}
@@ -40,7 +40,7 @@ void HistoTest47::setParticle(std::string namePart) {
   if      (namePart == "pi+") particle = "piplus";
   else if (namePart == "pi-") particle = "piminus";
   else                        particle = namePart; 
-  unInitialized =true;
+  unInitialized = true;
 }
 
 G4int HistoTest47::particleType(G4ParticleDefinition* pd) {

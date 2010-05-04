@@ -227,11 +227,11 @@ int main(int argc, char** argv) {
 	CLHEP::HepRandom::setTheSeed(myseed);
 	G4cout << "###### Set Random Seed to " << myseed << "     #####" << G4endl;
       } else if ( line == "#jobID") {
-         (*fin) >> jobid ;
+	(*fin) >> jobid ;
 	histoITEP.setJobID(jobid);
 	histoBNL.setJobID(jobid);
       } else if ( line == "#clusterID") {
-         (*fin) >> clusterid ;
+	(*fin) >> clusterid ;
 	histoITEP.setClusterID(clusterid);
 	histoBNL.setClusterID(clusterid);
       }
@@ -276,8 +276,10 @@ int main(int argc, char** argv) {
 
     G4double mass = part->GetPDGMass();
     energy = sqrt(m_p*m_p + mass*mass);
+    G4double eTot  = energy+amass;
 
     G4cout << "energy = " << energy/GeV << " GeV" << G4endl;
+    G4cout << "Target Mass = " << amass/GeV << " GeV and Initial total energy = " << eTot/GeV << " GeV" << G4endl;
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
