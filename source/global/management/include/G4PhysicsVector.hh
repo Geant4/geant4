@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.27 2010-02-01 14:17:12 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.28 2010-05-04 16:15:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,8 @@
 //    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
 //    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
 //    19 Jun. 2009, V.Ivanchenko : Removed hidden bin 
+//    22 Dec. 2009  H.Kurashige  : Use pointers to G4PVDataVector
+//    04 May. 2009  H.Kurashige  : Use G4PhysicsVectorCash
 //
 //---------------------------------------------------------------
 
@@ -64,6 +66,7 @@
 #include <iostream>
 #include <fstream>
 
+#include "G4PhysicsVectorCash.hh"
 #include "G4PhysicsVectorType.hh"
 
 typedef std::vector<G4double> G4PVDataVector;
@@ -176,6 +179,12 @@ class G4PhysicsVector
 
     friend std::ostream& operator<<(std::ostream&, const G4PhysicsVector&);
 
+    
+    G4double GetLastEnergy() const;
+    G4double GetLastValue() const;
+    size_t GetLastBin() const;
+         // Get cash values 
+
   protected:
 
     virtual size_t FindBinLocation(G4double theEnergy) const=0;
@@ -194,9 +203,7 @@ class G4PhysicsVector
 
     size_t numberOfNodes;
 
-    G4double lastEnergy;        // Cache the last input value
-    G4double lastValue;         // Cache the last output value   
-    size_t lastBin;             // Cache the last bin location
+    G4PhysicsVectorCash*  cash;
 
     G4PVDataVector* dataVector;    // Vector to keep the crossection/energyloss
     G4PVDataVector* binVector;     // Vector to keep energy
@@ -206,12 +213,12 @@ class G4PhysicsVector
 
     G4bool SplinePossible();
 
-    G4double LinearInterpolation();
+    G4double LinearInterpolation(int lastBin);
          // Linear interpolation function
-    G4double SplineInterpolation();
+    G4double SplineInterpolation(int lastBin);
          // Spline interpolation function
 
-    inline void Interpolation();
+    inline void Interpolation(int lastBin);
 
     G4String   comment;
     G4bool     useSpline;

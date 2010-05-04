@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.15 2009-12-21 22:51:54 kurasige Exp $
+// $Id: G4LPhysicsFreeVector.icc,v 1.16 2010-05-04 16:15:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,17 +67,6 @@ G4int G4LPhysicsFreeVector::GetVerboseLevel(G4int)
    return verboseLevel;
 }
 
-inline
-G4double G4LPhysicsFreeVector::GetLastEnergy()
-{
-   return lastEnergy;
-}
-
-inline
-size_t G4LPhysicsFreeVector::GetLastBin()
-{
-   return lastBin;
-}
 
 inline 
 size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
