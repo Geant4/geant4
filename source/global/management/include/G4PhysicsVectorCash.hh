@@ -24,21 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVectorCash.hh,v 1.1 2010-05-04 16:15:36 kurasige Exp $
+// $Id: G4PhysicsVectorCash.hh,v 1.2 2010-05-05 08:10:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//  G4PhysicsVector.hh
+//  G4PhysicsVectorCash.hh
 //
 //  Class description:
 //
-//    This class includes cash variables for G4PhysicsVector 
+//    This class includes cash data in use by G4PhysicsVector:
+//    last input value, last output value, last bin location.
 //
 //  History:
-//   04.May.2010 First Implementation       Hisaya
+//   04.May.2010 First Implementation       Hisaya Kurasige
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVectorCash_h
@@ -48,13 +49,13 @@
 
 class G4PhysicsVectorCash 
 {
-
   public:  
 
-    G4PhysicsVectorCash(){
+    G4PhysicsVectorCash()
+    {
       lastEnergy  = -DBL_MAX;
       lastValue   = 0.;
-      lastBin     =0  ; 
+      lastBin     = 0 ; 
     }
          // constructor
 
@@ -64,7 +65,6 @@ class G4PhysicsVectorCash
     G4double lastEnergy;        // Cache the last input value
     G4double lastValue;         // Cache the last output value   
     size_t lastBin;             // Cache the last bin location
-
 };
 
 #endif
