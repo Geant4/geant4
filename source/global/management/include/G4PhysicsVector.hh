@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.29 2010-05-05 08:30:38 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.30 2010-05-05 13:57:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -213,12 +213,12 @@ class G4PhysicsVector
 
     G4bool SplinePossible();
 
-    G4double LinearInterpolation(int lastBin);
+    inline G4double LinearInterpolation(G4int lastBin);
          // Linear interpolation function
-    G4double SplineInterpolation(int lastBin);
+    inline G4double SplineInterpolation(G4int lastBin);
          // Spline interpolation function
 
-    inline void Interpolation(int lastBin);
+    inline void Interpolation(G4int lastBin);
 
     G4String   comment;
     G4bool     useSpline;

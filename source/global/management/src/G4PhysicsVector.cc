@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.44 2010-05-05 08:30:38 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.45 2010-05-05 13:57:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -484,57 +484,9 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   return out;
 }
 
-//------------------------------------------------
- G4double G4PhysicsVector::LinearInterpolation(int lastBin)
-{
-  // Linear interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  G4double intplFactor = (cache->lastEnergy-(*binVector)[lastBin]) 
-     / ((*binVector)[lastBin + 1]-(*binVector)[lastBin]); // Interpolation factor
-
-  return (*dataVector)[lastBin] +
-         ( (*dataVector)[lastBin + 1]-(*dataVector)[lastBin] ) * intplFactor;
-}
-
 //---------------------------------------------------------------
 
- G4double G4PhysicsVector::SplineInterpolation(int lastBin)
-{
-  // Spline interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  if(0 == secDerivative->size() ) { FillSecondDerivatives(); }
-
-  // check bin value
-  G4double x1 = (*binVector)[lastBin];
-  G4double x2 = (*binVector)[lastBin + 1];
-  G4double delta = x2 - x1;
-
-  G4double a = (x2 - cache->lastEnergy)/delta;
-  G4double b = (cache->lastEnergy - x1)/delta;
-   
-  // Final evaluation of cubic spline polynomial for return   
-  G4double y1 = (*dataVector)[lastBin];
-  G4double y2 = (*dataVector)[lastBin + 1];
-
-  G4double res = a*y1 + b*y2 + 
-        ( (a*a*a - a)*(*secDerivative)[lastBin] +
-          (b*b*b - b)*(*secDerivative)[lastBin + 1] )*delta*delta/6.0;
-
-  return res;
-}
-
-
-//---------------------------------------------------------------
-
- G4double G4PhysicsVector::Value(G4double theEnergy) 
+G4double G4PhysicsVector::Value(G4double theEnergy) 
 {
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last bin location. Also the

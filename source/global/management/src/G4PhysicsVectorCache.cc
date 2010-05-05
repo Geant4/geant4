@@ -23,64 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PhysicsVectorCache.hh,v 1.2 2010-05-05 13:57:35 gcosmo Exp $
+// $Id: G4PhysicsVectorCache.cc,v 1.1 2010-05-05 13:57:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ---------------------------------------------------------------
-// GEANT 4 class header file
+//---------------------------------------------------------------
 //
 // G4PhysicsVectorCache
 //
-// Class description:
+// Implementation of data cache in use by G4PhysicsVector.
 //
-// This class includes cache data in use by G4PhysicsVector:
-// last input value, last output value, last bin location.
-
 // Author:
 // 04.05.2010 Hisaya Kurashige
-// ---------------------------------------------------------------
+//---------------------------------------------------------------
 
-#ifndef G4PhysicsVectorCache_h
-#define G4PhysicsVectorCache_h 1
+#include "G4PhysicsVectorCache.hh"
 
-#include "globals.hh"
-#include "G4Allocator.hh"
-
-class G4PhysicsVectorCache 
-{
-  public:  
-
-    G4PhysicsVectorCache() : lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0) {}
-      // Constructor
-
-   ~G4PhysicsVectorCache() {}
-      // Destructor
-
-    inline void* operator new( size_t );
-      // Operator new defined for G4Allocator.
-  
-    inline void operator delete( void *pObj );
-      // Operator delete defined for G4Allocator.
-
-    G4double lastEnergy;        // Cache the last input value
-    G4double lastValue;         // Cache the last output value   
-    size_t lastBin;             // Cache the last bin location
-
-    static G4Allocator<G4PhysicsVectorCache> aPVCAllocator;
-};
-
-// Overloaded inline new() and delete() for G4PhysicsVectorCache objects
-
-inline void* G4PhysicsVectorCache::operator new( size_t )
-{
-  return( (void *)aPVCAllocator.MallocSingle() );
-}
-  
-inline void G4PhysicsVectorCache::operator delete( void *pObj )
-{
-  aPVCAllocator.FreeSingle( (G4PhysicsVectorCache*)pObj );
-}
-
-#endif
+// Initialisation of global allocator for G4PhysicsVectorCache objects
+//
+G4Allocator<G4PhysicsVectorCache> G4PhysicsVectorCache::aPVCAllocator;
