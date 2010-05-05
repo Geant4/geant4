@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.25 2010-05-04 16:15:36 kurasige Exp $
+// $Id: G4PhysicsVector.icc,v 1.26 2010-05-05 08:30:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,19 +45,19 @@
 inline
  G4double G4PhysicsVector::GetLastEnergy() const
 {
-  return cash->lastEnergy;	
+  return cache->lastEnergy;	
 }
 
 inline
  G4double G4PhysicsVector::GetLastValue() const
 {
-   return cash->lastValue;
+   return cache->lastValue;
 }
 
 inline 
  size_t G4PhysicsVector::GetLastBin() const
 {
-   return cash->lastBin;
+   return cache->lastBin;
 }
  
 inline
@@ -103,8 +103,8 @@ inline
 inline 
  void G4PhysicsVector::Interpolation(int lastBin)
 {
-  if(useSpline) { cash->lastValue = SplineInterpolation(lastBin); }
-  else          { cash->lastValue = LinearInterpolation(lastBin); }
+  if(useSpline) { cache->lastValue = SplineInterpolation(lastBin); }
+  else          { cache->lastValue = LinearInterpolation(lastBin); }
 }
 
 

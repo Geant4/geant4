@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.28 2010-05-04 16:15:36 kurasige Exp $
+// $Id: G4PhysicsVector.hh,v 1.29 2010-05-05 08:30:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@
 //    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
 //    19 Jun. 2009, V.Ivanchenko : Removed hidden bin 
 //    22 Dec. 2009  H.Kurashige  : Use pointers to G4PVDataVector
-//    04 May. 2009  H.Kurashige  : Use G4PhysicsVectorCash
+//    04 May. 2009  H.Kurashige  : Use G4PhysicsVectorCache
 //
 //---------------------------------------------------------------
 
@@ -66,7 +66,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "G4PhysicsVectorCash.hh"
+#include "G4PhysicsVectorCache.hh"
 #include "G4PhysicsVectorType.hh"
 
 typedef std::vector<G4double> G4PVDataVector;
@@ -183,7 +183,7 @@ class G4PhysicsVector
     G4double GetLastEnergy() const;
     G4double GetLastValue() const;
     size_t GetLastBin() const;
-         // Get cash values 
+         // Get cache values 
 
   protected:
 
@@ -203,7 +203,7 @@ class G4PhysicsVector
 
     size_t numberOfNodes;
 
-    G4PhysicsVectorCash*  cash;
+    G4PhysicsVectorCache*  cache;
 
     G4PVDataVector* dataVector;    // Vector to keep the crossection/energyloss
     G4PVDataVector* binVector;     // Vector to keep energy

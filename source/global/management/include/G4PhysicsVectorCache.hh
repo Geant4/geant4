@@ -24,34 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVectorCash.hh,v 1.2 2010-05-05 08:10:17 gcosmo Exp $
+// $Id: G4PhysicsVectorCache.hh,v 1.1 2010-05-05 08:30:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //---------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//  G4PhysicsVectorCash.hh
+//  G4PhysicsVectorCache.hh
 //
 //  Class description:
 //
-//    This class includes cash data in use by G4PhysicsVector:
+//    This class includes cache data in use by G4PhysicsVector:
 //    last input value, last output value, last bin location.
 //
 //  History:
 //   04.May.2010 First Implementation       Hisaya Kurasige
 //---------------------------------------------------------------
 
-#ifndef G4PhysicsVectorCash_h
-#define G4PhysicsVectorCash_h 1
+#ifndef G4PhysicsVectorCache_h
+#define G4PhysicsVectorCache_h 1
 
 #include "globals.hh"
 
-class G4PhysicsVectorCash 
+class G4PhysicsVectorCache 
 {
   public:  
 
-    G4PhysicsVectorCash()
+    G4PhysicsVectorCache()
     {
       lastEnergy  = -DBL_MAX;
       lastValue   = 0.;
@@ -59,7 +59,7 @@ class G4PhysicsVectorCash
     }
          // constructor
 
-    ~G4PhysicsVectorCash(){}
+    ~G4PhysicsVectorCache(){}
          // destructor
 
     G4double lastEnergy;        // Cache the last input value

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.43 2010-05-04 16:15:36 kurasige Exp $
+// $Id: G4PhysicsVector.cc,v 1.44 2010-05-05 08:30:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@
 //                                    algorithm
 //    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
 //    17 Nov. 2009, H.Kurashige   : use pointer for DataVector
-//    04 May  2010  H.Kurashige   : use G4PhyscisVectorCash
+//    04 May  2010  H.Kurashige   : use G4PhyscisVectorCache
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
@@ -62,7 +62,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
    useSpline(spline)
 {
-  cash       = new G4PhysicsVectorCash();
+  cache      = new G4PhysicsVectorCache();
   dataVector = new G4PVDataVector();
   binVector = new G4PVDataVector();
   secDerivative = new G4PVDataVector();
@@ -72,7 +72,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-  delete cash; cash =0;
+  delete cache; cache =0;
   delete dataVector; dataVector =0;
   delete binVector;  binVector =0;
   delete secDerivative; secDerivative =0;
@@ -82,7 +82,7 @@ G4PhysicsVector::~G4PhysicsVector()
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  cash       = new G4PhysicsVectorCash();
+  cache      = new G4PhysicsVectorCache();
   dataVector = new G4PVDataVector();
   binVector = new G4PVDataVector();
   secDerivative = new G4PVDataVector();
@@ -131,9 +131,9 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   edgeMin = vec.edgeMin;
   edgeMax = vec.edgeMax;
   numberOfNodes = vec.numberOfNodes;
-  cash->lastEnergy = vec.GetLastEnergy();
-  cash->lastValue = vec.GetLastValue();
-  cash->lastBin = vec.GetLastBin();
+  cache->lastEnergy = vec.GetLastEnergy();
+  cache->lastValue = vec.GetLastValue();
+  cache->lastBin = vec.GetLastBin();
   useSpline = vec.useSpline;
   comment = vec.comment;
 
@@ -197,9 +197,9 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
-  cash->lastEnergy=-DBL_MAX;
-  cash->lastValue =0.;
-  cash->lastBin   =0;
+  cache->lastEnergy=-DBL_MAX;
+  cache->lastValue =0.;
+  cache->lastBin   =0;
   dataVector->clear();
   binVector->clear();
   secDerivative->clear();
@@ -279,8 +279,8 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
 
   edgeMin *= factorE;
   edgeMax *= factorE;
-  cash->lastEnergy = factorE*(cash->lastEnergy);
-  cash->lastValue  = factorV*(cash->lastValue);
+  cache->lastEnergy = factorE*(cache->lastEnergy);
+  cache->lastValue  = factorV*(cache->lastValue);
 }
 
 // --------------------------------------------------------------
@@ -493,7 +493,7 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  G4double intplFactor = (cash->lastEnergy-(*binVector)[lastBin]) 
+  G4double intplFactor = (cache->lastEnergy-(*binVector)[lastBin]) 
      / ((*binVector)[lastBin + 1]-(*binVector)[lastBin]); // Interpolation factor
 
   return (*dataVector)[lastBin] +
@@ -517,8 +517,8 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   G4double x2 = (*binVector)[lastBin + 1];
   G4double delta = x2 - x1;
 
-  G4double a = (x2 - cash->lastEnergy)/delta;
-  G4double b = (cash->lastEnergy - x1)/delta;
+  G4double a = (x2 - cache->lastEnergy)/delta;
+  G4double b = (cache->lastEnergy - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
   G4double y1 = (*dataVector)[lastBin];
@@ -541,28 +541,28 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   // value 'theEnergy' lies between the last energy and low edge of of the 
   // bin of last call, then the last bin location is used.
 
-  if( theEnergy == cash->lastEnergy ) {
+  if( theEnergy == cache->lastEnergy ) {
 
-  } else if( theEnergy < cash->lastEnergy
-	&&   theEnergy >= (*binVector)[cash->lastBin]) {
-     cash->lastEnergy = theEnergy;
-     Interpolation(cash->lastBin);
+  } else if( theEnergy < cache->lastEnergy
+	&&   theEnergy >= (*binVector)[cache->lastBin]) {
+     cache->lastEnergy = theEnergy;
+     Interpolation(cache->lastBin);
 
   } else if( theEnergy <= edgeMin ) {
-     cash->lastBin = 0;
-     cash->lastEnergy = edgeMin;
-     cash->lastValue  = (*dataVector)[0];
+     cache->lastBin = 0;
+     cache->lastEnergy = edgeMin;
+     cache->lastValue  = (*dataVector)[0];
 
   } else if( theEnergy >= edgeMax ){
-     cash->lastBin = numberOfNodes-1;
-     cash->lastEnergy = edgeMax;
-     cash->lastValue  = (*dataVector)[cash->lastBin];
+     cache->lastBin = numberOfNodes-1;
+     cache->lastEnergy = edgeMax;
+     cache->lastValue  = (*dataVector)[cache->lastBin];
 
   } else {
-     cash->lastBin = FindBinLocation(theEnergy); 
-     cash->lastEnergy = theEnergy;
-     Interpolation(cash->lastBin);
+     cache->lastBin = FindBinLocation(theEnergy); 
+     cache->lastEnergy = theEnergy;
+     Interpolation(cache->lastBin);
   }
-  return cash->lastValue;        
+  return cache->lastValue;        
 }
 
