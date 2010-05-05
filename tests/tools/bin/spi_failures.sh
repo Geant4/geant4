@@ -172,7 +172,9 @@ n_elem=asort(failed);
 
 for (elem=1;elem<=n_elem;elem++ ) {
      fail=failed[elem]
-     printf("\n%42s |",fail);
+     offset=1
+     if ( length(fail) > 42 ) {offset=length(fail)-42+1}
+     printf("\n%42s |",substr(fail,offset));
      for (msys=1;msys<=nsys;msys++) {
         strg="     |";
         if ( index(systems[fail],allsys[msys]) ) { 
