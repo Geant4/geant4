@@ -1,4 +1,4 @@
-$Id: History,v 1.242 2010-05-05 08:31:38 gcosmo Exp $
+$Id: History,v 1.243 2010-05-05 16:10:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 05, 2010  G.Cosmo (global-V09-03-06)
+- Move interpolation methods to inline in G4PhysicsVector.
+- Some cleanup.
 
 May 04, 2010  H.Kurashige (global-V09-03-05)
 - Introduced G4PhysicsVectorCache, placeholder for cache R/W data in use
