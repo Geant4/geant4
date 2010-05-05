@@ -1,4 +1,4 @@
-$Id: History,v 1.240 2010-04-12 16:41:17 gcosmo Exp $
+$Id: History,v 1.241 2010-05-05 08:17:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 04, 2010  H.Kurashige (global-V09-03-05)
+- Introduced G4PhysicsVectorCash, placeholder for cache R/W data in use
+  by G4PhysicsVector and derivates.
+  Modified G4PhysicsVector and G4LPhysicsFreeVector accordingly.
 
 Apr 06, 2010  G.Cosmo (global-V09-03-04)
 - Changed date for release 9.3.p01.
