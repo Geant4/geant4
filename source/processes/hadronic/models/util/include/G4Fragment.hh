@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.7 2010-05-03 16:50:53 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.8 2010-05-05 13:12:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -50,8 +50,8 @@
 //#include "G4ParticleMomentum.hh"
 #include "G4ThreeVector.hh"
 #include "G4NucleiProperties.hh"
-//#include "G4ParticleTable.hh"
-//#include "G4IonTable.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -313,27 +313,26 @@ inline G4double G4Fragment::GetGroundStateMass() const
 {
   return G4NucleiProperties::GetNuclearMass(theA, theZ); 
   //	if (theA == 0) return 0.0; // photon
-  //	else return G4ParticleTable::GetParticleTable()->
-  //		    GetIonTable()->GetIonMass(G4lrint(theZ),G4lrint(theA));
+  //return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theZ,theA);
 }
 
 inline G4double 
 G4Fragment::ComputeGroundStateMass(const G4int Z, const G4int A) const
 {
+  //return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
   return G4NucleiProperties::GetNuclearMass(A, Z); 
 }
 
 inline void G4Fragment::CalculateExcitationEnergy()
 {
-  theExcitationEnergy = theMomentum.mag() - 
-    G4NucleiProperties::GetNuclearMass(theA, theZ);
+  theExcitationEnergy = theMomentum.mag() - GetGroundStateMass();
   if(theExcitationEnergy < 0.0) { theExcitationEnergy = 0.0; }
 }
 	
 inline G4double G4Fragment::GetBindingEnergy() const
 {
   return (theA-theZ)*CLHEP::neutron_mass_c2 + theZ*CLHEP::proton_mass_c2 
-    - G4NucleiProperties::GetNuclearMass(theA, theZ);
+    - GetGroundStateMass();
 }
 
 inline void G4Fragment::SetMomentum(const G4LorentzVector& value)

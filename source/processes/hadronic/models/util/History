@@ -14,8 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-00
+- G4Fragment cleanup: only 1 return left in inline methods;
+        do not add any shift to excitation energy but use direct 
+        computation (this is needed to avoid infinite loop in gamma 
+        deexcitation); use G4NucleiProperties to access or compute
+        ground state mass; added inline method ComputeGroundStateMass;
+        added Get/Set methods for integer Z and A
+
 10 December 2009 Gunter Folger     hadr-mod-util-V09-02-07
-- G4NuclearFermiDensity.hh: chnage value of prtection in GetDeriv() to lower
+- G4NuclearFermiDensity.hh: change value of prtection in GetDeriv() to lower
     value
     
 09 December 2009 Gunter Folger     hadr-mod-util-V09-02-06

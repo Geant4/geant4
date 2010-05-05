@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.12 2010-05-03 16:50:53 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.13 2010-05-05 13:12:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
-
+#include "G4Gamma.hh"
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -95,7 +95,8 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMom
   ,theCreatorModel("No name")
 #endif
 {
-  CalculateExcitationEnergy();
+  theExcitationEnergy = 0.0;
+  if(theA > 0) { CalculateExcitationEnergy(); }
   /*
   theExcitationEnergy = theMomentum.mag() - 
                         G4ParticleTable::GetParticleTable()->GetIonTable()
@@ -130,7 +131,11 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, G4ParticleDefinition * 
 #endif
 {
   theExcitationEnergy = 0.0;
-  //  theExcitationEnergy = CalculateExcitationEnergy(aMomentum);
+  if(aParticleDefinition != G4Gamma::Gamma()) {
+    G4String text = "G4Fragment::G4Fragment constructor for gamma used for "
+      + aParticleDefinition->GetParticleName();  
+    throw G4HadronicException(__FILE__, __LINE__, text);
+  }
 }
 
 const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
