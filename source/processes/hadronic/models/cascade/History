@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2010-04-30 23:20:15 dennis Exp $
+$Id: History,v 1.69 2010-05-06 20:46:04 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 May 2010 Michael Kelsey (hadr-casc-V09-03-29, hadr-casc-V09-03-23-01)
+------------------------------------------------------------------------
+- G4Diproton.cc, G4Dineutron.cc, G4UnboundPN.cc:  After creating instance
+  of these "internal" particles, remove the pointer from G4ParticleTable.
+  This avoids an issue with the FTFP de-excitation code, which occasionally
+  picks up the diproton and puts it onto a final-state particle list.
+
+These three changes, and nothing else, are "backported" on top of -23 for
+continued validation tests.
+  
 30 Apr 2010 Dennis Wright (hadr-casc-V09-03-28)
 -----------------------------------------------
 - G4ElementaryParticleCollider: 

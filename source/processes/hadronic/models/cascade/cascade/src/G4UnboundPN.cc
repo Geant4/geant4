@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4UnboundPN.cc,v 1.3 2010-04-13 05:30:10 mkelsey Exp $
+// $Id: G4UnboundPN.cc,v 1.4 2010-05-06 20:46:04 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -32,13 +32,14 @@
 //      17 Nov 2009:  Michael Kelsey
 //	06 Apr 2010:  Do G4Ions initialization in ctor.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
+//	06 May 2010:  Remove created particle from master table.
 // ----------------------------------------------------------------
 
 #include "G4UnboundPN.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4Ions.hh"
+#include "G4ParticleTable.hh"
 
 // ######################################################################
 // ###                          UNBOUNDPN                             ###
@@ -60,7 +61,13 @@ G4UnboundPN::G4UnboundPN()
 			  true,       0.,    NULL) {}
 
 G4UnboundPN* G4UnboundPN::Definition() {
-  if (0 == theInstance) theInstance = new G4UnboundPN;	// There can be only one
+  if (0 == theInstance) {
+    theInstance = new G4UnboundPN;	// There can be only one
+
+    G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+    pTable->Remove(theInstance);	// Make invisible to GEANT4
+  }
+
   return theInstance;
 }
 
