@@ -773,6 +773,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			      e =e0*(ptn+0.5)/100.;
 			      g = e+1.;
 			      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+			     // Special treatment for K-40 (problem #1068) (flei,06/05/2010) 
+			      if (theParentNucleus.GetParticleName() == "K40[0.0]") f *=
+				(std::pow((g*g-1),3)+std::pow((ee-g),6)+7*(g*g-1)*std::pow((ee-g),2)*(g*g-1+std::pow((ee-g),2)));
 			      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
 			    }		  
 			    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  

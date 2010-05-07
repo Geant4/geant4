@@ -13,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+06 May 2010 F.Lei
+- G4RadioactiveDecay.hh:line 264 corrected typo as pointed out by Luciano Pandola
+- G4RadioactiveDecay.cc: insert a special treatment for K-40 beta decay at line 774 as suggested by Mauro Taiuti.This fixes bug #1068
+- G4NuclearDecayChannel.cc: line 396. Limit the shell index to < 7, as required by the ARM.
+  line 329: change to use BreakUp rather than BreakItUp so to limit to one transition per step (bug #1001)
+  (Note: changes have also been made in 30/08/2008 to use the correct atomic shell index and to conserve energy atfer ARM, problems 
+   pointed out by Andreas Zoglauer in the bug report).
 
 24 July 2009 V.Ivanchenko (radioactive_decay-V09-02-00)
 - GNUmakefile - added dependence on electromagnetic/utils

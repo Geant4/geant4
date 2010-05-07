@@ -324,7 +324,10 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       //
       // Get the gammas by deexciting the nucleus.
       //
-      G4FragmentVector* gammas = deexcitation->BreakItUp(nucleus);
+      // changed to use BreakUp() so limit to one transition at a time.
+      // this change is realted to bug#1001  (F.Lei 07/05/2010)
+      G4FragmentVector* gammas = deexcitation->BreakUp(nucleus);	
+      // G4FragmentVector* gammas = deexcitation->BreakItUp(nucleus);
       // in the case of BreakItUp(nucleus), the returned G4FragmentVector contains the residual nuclide
       // as its last entry.
       G4int nGammas=gammas->size()-1;
@@ -391,7 +394,9 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       case MshellEC:
 	//
 	{
-	  eShell = G4int(G4UniformRand()*5)+4;
+	// limit the shell index to 6 as specified by the ARM (F.Lei 06/05/2010)
+	// eShell = G4int(G4UniformRand()*5)+4;
+	  eShell = G4int(G4UniformRand()*3)+4;
 	}
 	break;
       case ERROR:
