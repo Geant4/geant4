@@ -53,6 +53,7 @@
 #include "G4EnergyLossForExtrapolator.hh"
 #include "G4NucleiProperties.hh"
 #include "G4WaterStopping.hh"
+#include "G4AtomicShells.hh"
 #include <iomanip>
 #include <fstream>
 
@@ -194,7 +195,16 @@ void test31Histo::EndOfHisto()
     histo->save();
   }
   G4cout<<"=========   End of tets31Histo  ============================"<<G4endl;  
+  /*
+  G4cout << G4endl;
+  for(G4int Z=1; Z<101; ++Z) {
 
+    G4int nn = G4AtomicShells::GetNumberOfElectrons(Z, 0);
+    G4cout << nn << ",  ";
+    if(Z/10*10 == Z) {G4cout << G4endl;}
+  } 
+  G4cout << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
