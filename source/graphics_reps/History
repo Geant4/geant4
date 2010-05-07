@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.138 2009-10-28 13:40:40 allison Exp $
+cvs log $Id: History,v 1.139 2010-05-07 16:06:18 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th May 2010  John Allison  (greps-V09-03-00)
+- G4VVisManager: Added a public static boolean flag,
+  IsDefaultDrawTrajectory, to assist deprecation of i-mode trajectory
+  drawing parameter.  After 10.0, it can be removed.
 
 28th October 2009  John Allison  (greps-V09-02-03 coworks vis-V09-02-10)
 - HepPolyhedron:
