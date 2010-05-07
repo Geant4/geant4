@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.13 2010-05-05 13:12:31 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.14 2010-05-07 11:37:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -42,6 +42,8 @@
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4Gamma.hh"
+
+G4int G4Fragment::errCount = 0;
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -206,6 +208,23 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 {
   out << &theFragment;
   return out; 
+}
+
+void G4Fragment::ExcitationEnegryWarning()
+{
+  if (theExcitationEnergy < -10.0 * eV) {
+    ++errCount;
+    if ( errCount <= 10 ) {
+      G4cout << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy = "
+	     << theExcitationEnergy/MeV << " MeV for A = " 
+	     <<theA << " and Z= " << theZ << G4endl;
+      if( errCount == 10 ) {
+	G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
+	throw G4HadronicException(__FILE__, __LINE__, text);
+      }
+    }
+  }
+  theExcitationEnergy = 0.0;
 }
 
 /*

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.8 2010-05-05 13:12:31 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.9 2010-05-07 11:37:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -149,11 +149,15 @@ public:
 
 private:
 
+  void ExcitationEnegryWarning();
+
   inline void CalculateExcitationEnergy();
 
   G4ThreeVector IsotropicRandom3Vector(const G4double Magnitude = 1.0) const;
   
   // ============= DATA MEMBERS ==================
+
+  static G4int errCount;
 
   G4int theA;
   
@@ -326,7 +330,7 @@ G4Fragment::ComputeGroundStateMass(const G4int Z, const G4int A) const
 inline void G4Fragment::CalculateExcitationEnergy()
 {
   theExcitationEnergy = theMomentum.mag() - GetGroundStateMass();
-  if(theExcitationEnergy < 0.0) { theExcitationEnergy = 0.0; }
+  if(theExcitationEnergy < 0.0) { ExcitationEnegryWarning(); }
 }
 	
 inline G4double G4Fragment::GetBindingEnergy() const
