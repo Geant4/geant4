@@ -261,7 +261,7 @@ private:
   // ParticleChange for decay process
   G4ParticleChangeForRadDecay   fParticleChangeForRadDecay;
 
-  inline G4double AtRestGetPhysicalInteractionLengt
+  inline G4double AtRestGetPhysicalInteractionLength
     (const G4Track& track, G4ForceCondition* condition)
   {fRemainderLifeTime = G4VRestDiscreteProcess::
     AtRestGetPhysicalInteractionLength(track, condition );
