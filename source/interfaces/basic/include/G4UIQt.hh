@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.18 2010-04-26 15:46:00 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.19 2010-05-07 13:25:28 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -128,11 +128,8 @@ public:
 private:
   void SecondaryLoop(G4String); // a VIRER
   void CreateHelpWidget();
-#if QT_VERSION < 0x040000
-  QListView * CreateHelpTree();
-#else
-  QTreeWidget * CreateHelpTree();
-#endif
+  void InitHelpTree();
+  void FillHelpTree();
   void ExitHelp();
 
 #if QT_VERSION < 0x040000
@@ -156,6 +153,12 @@ private:
   void CreateCoutTBWidget();
   void CreateHistoryTBWidget();
   void OpenHelpTreeOnCommand(const QString &);
+  QString GetShortCommandPath(QString);
+#if QT_VERSION < 0x040000
+  QString GetLongCommandPath(QListViewItem*);
+#else
+  QString GetLongCommandPath(QTreeWidgetItem*);
+#endif
 
 private:
 
@@ -189,6 +192,7 @@ private:
   QString fCoutText;
   QLabel *fEmptyViewerTabLabel;
   QSplitter * fMyVSplitter;
+  QSplitter * fHelpVSplitter;
 
 private slots :
   void ExitSession();
@@ -204,7 +208,7 @@ private slots :
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
   void TabCloseCallback(int);
-  void CurrentChangedCallback(int);
+  void ToolBoxActivated(int);
 };
 
 #endif
