@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.15 2009-02-25 14:13:43 allison Exp $
+// $Id: G4VVisManager.hh,v 1.16 2010-05-07 16:05:56 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -207,6 +207,10 @@ protected:
   static void SetConcreteInstance (G4VVisManager*);
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
+
+public:
+
+  static G4bool IsDefaultDrawTrajectory;
 
 };
 
