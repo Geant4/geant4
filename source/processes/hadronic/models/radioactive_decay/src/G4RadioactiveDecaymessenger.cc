@@ -115,7 +115,29 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   brbiasCmd->SetGuidance("false: no biasing; true: all branches are treated as equal");
   brbiasCmd->SetParameterName("BRBias",true);
   brbiasCmd->SetDefaultValue(true);
-
+  //
+  // Command contols whether ICM will be applied or not
+  //
+  icmCmd = new G4UIcmdWithABool ("/grdm/applyICM",this);
+  icmCmd->SetGuidance("True: ICM is applied; false: no");
+  icmCmd->SetParameterName("applyICM",true);
+  icmCmd->SetDefaultValue(true);
+  //
+  // Command contols whether ARM will be applied or not
+  //
+  armCmd = new G4UIcmdWithABool ("/grdm/applyARM",this);
+  armCmd->SetGuidance("True: ARM is applied; false: no");
+  armCmd->SetParameterName("applyARM",true);
+  armCmd->SetDefaultValue(true);
+  //
+  // Command to set the h-l thresold for isomer production
+  //
+  hlthCmd = new G4UIcmdWithADoubleAndUnit("/grdm/hlThreshold",this);
+  hlthCmd->SetGuidance("Set the h-l threshold for isomer production");
+  hlthCmd->SetParameterName("hlThreshold",false);
+  hlthCmd->SetRange("hlThreshold>0.");
+  hlthCmd->SetUnitCategory("Time");
+  hlthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   //
   // Command to define the incident particle source time profile.
   //
@@ -173,6 +195,9 @@ G4RadioactiveDecaymessenger::~G4RadioactiveDecaymessenger ()
   delete deavolumeCmd;
   delete allvolumesCmd;
   delete deallvolumesCmd;
+  delete icmCmd;
+  delete armCmd;
+  delete hlthCmd;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -214,6 +239,12 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
 				       SetSplitNuclei(splitnucleiCmd->GetNewIntValue(newValues));}
   else if (command==verboseCmd) {theRadioactiveDecayContainer->
 				       SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));}
+  else if (command==icmCmd ) {theRadioactiveDecayContainer->
+      SetICM(icmCmd-GetNewBoolValue(newValues));}
+  else if (command==armCmd ) {theRadioactiveDecayContainer->
+      SetARM(armCmd-GetNewBoolValue(newValues));}
+  else if (command==hlthCmd ) {theRadioactiveDecayContainer->
+      SetHLThreshold(hlthCmd-GetNewDoubleValue(newValues));}
 }
 
 

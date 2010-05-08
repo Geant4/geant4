@@ -167,6 +167,9 @@ G4RadioactiveDecay::G4RadioactiveDecay
   AnalogueMC  = true ;
   FBeta       = false ;
   BRBias      = true ;
+  applyICM    = true ;
+  appliARM    = true ;
+  halflifethreshold = 1e-6*second;
   //
   // RDM applies to xall logical volumes as default
   SelectAllVolumes();
@@ -743,6 +746,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 		      {
 			G4ITDecayChannel *anITChannel = new G4ITDecayChannel
 			  (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, b);
+			anITChannel->SetICM(applyICM);
+			anITChannel->SetARM(applyARM);
+			anITChannel->SetHLThresold(halflifethreshold);
 			theDecayTable->Insert(anITChannel);
 			break;
 		      }
@@ -847,6 +853,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			  G4KshellECDecayChannel *aKECChannel = new
 			    G4KshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
 						    b, c*MeV, a*MeV);
+			  aKECChannel->SetICM(applyICM);
+			  aKECChannel->SetARM(applyARM);
+			  aKECChannel->SetHLThresold(halflifethreshold);
 			  theDecayTable->Insert(aKECChannel);
 			  //delete aKECChannel;
 			  modeSumBR[3] += b;
@@ -864,6 +873,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			  G4LshellECDecayChannel *aLECChannel = new
 			    G4LshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
 						    b, c*MeV, a*MeV);
+			  aLECChannel->SetICM(applyICM);
+			  aLECChannel->SetARM(applyARM);
+			  aLECChannel->SetHLThresold(halflifethreshold);
 			  theDecayTable->Insert(aLECChannel);
 			  //delete aLECChannel;
 			  modeSumBR[4] += b;
@@ -881,6 +893,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 			  G4MshellECDecayChannel *aMECChannel = new
 			    G4MshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
 						    b, c*MeV, a*MeV);
+			  aMECChannel->SetICM(applyICM);
+			  aMECChannel->SetARM(applyARM);
+			  aMECChannel->SetHLThresold(halflifethreshold);
 			  theDecayTable->Insert(aMECChannel);
 			  modeSumBR[5] += b;
 			}

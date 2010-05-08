@@ -87,6 +87,15 @@ public: // with description
   G4DecayProducts *DecayIt (G4double theParentMass);
   // Returns the decay products
   //
+  void SetHLThreshold (G4double hl) {halflifethreshold = hl;}
+  // Set the half-life threshold for isomer production
+  //
+  void SetICM (G4bool icm) {applyICM = icm;}
+  // Enable/disable ICM 
+  //
+  void SetARM (G4bool arm) {applyARM = arm;}
+  // Enable/disable ARM
+  // 
   inline G4RadioactiveDecayMode GetDecayMode () {return decayMode;}
   // Returns the decay mode
   //
@@ -135,6 +144,9 @@ protected:
   G4double               Qtransition;
   G4double               FermiFN;
   G4bool                 BetaSimple;
+  G4double               halflifethreshold;
+  G4bool                 applyICM;
+  G4bool                 applyARM;
   CLHEP::RandGeneral*    RandomEnergy;    
 };
 #endif

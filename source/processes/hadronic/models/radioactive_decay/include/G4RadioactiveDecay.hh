@@ -113,6 +113,15 @@ public: // with description
   void SetDecayBias (G4String filename);
   //   Sets the decay biasing scheme using the data in "filename"
   //
+  void SetHLThreshold (G4double hl) {halflifethreshold = hl;}
+  // Set the half-life threshold for isomer production
+  //
+  void SetICM (G4bool icm) {applyICM = icm;}
+  // Enable/disable ICM 
+  //
+  void SetARM (G4bool arm) {applyARM = arm;}
+  // Enable/disable ARM
+  // 
   void SetSourceTimeProfile (G4String filename) ;
   //  Sets source exposure function using histograms in "filename"
   //
@@ -234,6 +243,10 @@ private:
   G4bool                        FBeta;
   G4int                         NSplit;
 
+  G4double                      halflifethreshold;
+  G4bool                        applyICM;
+  G4bool                        applyARM;
+
   G4int                         NSourceBin;
   G4double                      SBin[99];
   G4double                      SProfile[99];
@@ -242,8 +255,8 @@ private:
   G4double                      DBin[99];
   G4double                      DProfile[99];
 
-  std::vector<G4String>              LoadedNuclei;
-  std::vector<G4String>              ValidVolumes;
+  std::vector<G4String>         LoadedNuclei;
+  std::vector<G4String>         ValidVolumes;
 
   G4RadioactiveDecayRate        theDecayRate;
   G4RadioactiveDecayRates       theDecayRateVector;

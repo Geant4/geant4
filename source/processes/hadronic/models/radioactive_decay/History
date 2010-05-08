@@ -13,13 +13,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-06 May 2010 F.Lei
+10 May 2010 F.Lei (radioactive_decay-V09-03-00)
 - G4RadioactiveDecay.hh:line 264 corrected typo as pointed out by Luciano Pandola
-- G4RadioactiveDecay.cc: insert a special treatment for K-40 beta decay at line 774 as suggested by Mauro Taiuti.This fixes bug #1068
+- G4RadioactiveDecay.cc: insert a special treatment for K-40 beta decay at line 774 as suggested by Mauro Taiuti.
+  This fixes bug #1068
+  applied SetICM() SetARM() and SetHLThreshold() to a decay channel is created.
 - G4NuclearDecayChannel.cc: line 396. Limit the shell index to < 7, as required by the ARM.
-  line 329: change to use BreakUp rather than BreakItUp so to limit to one transition per step (bug #1001)
-  (Note: changes have also been made in 30/08/2008 to use the correct atomic shell index and to conserve energy atfer ARM, problems 
-   pointed out by Andreas Zoglauer in the bug report).
+  line 329: change to use BreakUp rather than BreakItUp so to limit to one transition per step when ICM is applied (bug #1001)
+  (Note: changes have also been made in 30/08/2008 to use the correct atomic shell index and to conserve energy atfer ARM, 
+   these problems were pointed out by Andreas Zoglauer in the bug report).
+- G4RadioactiveDecay.hh & G4NuclearDecayChannel.hh: added private member data "applyICM" "applyARM" "halflifethresold" 
+  and their public Set methods SetICM(), SetARM() and SetHLThreshold().
+- G4RadioactiveDecaymessenger: added the UICommands for SetICM, SETARM and SetHLThreshold.
 
 24 July 2009 V.Ivanchenko (radioactive_decay-V09-02-00)
 - GNUmakefile - added dependence on electromagnetic/utils
