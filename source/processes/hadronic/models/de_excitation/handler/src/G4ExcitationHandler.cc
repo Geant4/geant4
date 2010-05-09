@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.35 2010-04-30 16:08:03 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.36 2010-05-09 17:31:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -353,8 +353,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       theFragmentZ = static_cast<G4int>((*i)->GetZ());
       theFragmentMomentum = (*i)->GetMomentum();
       G4ParticleDefinition* theKindOfFragment = 0;
-      if (theFragmentA == 0 && theFragmentZ == 0) {       // photon
-	theKindOfFragment = G4Gamma::GammaDefinition();   
+      if (theFragmentA == 0) {       // photon or e-
+	theKindOfFragment = (*i)->GetParticleDefinition();   
       } else if (theFragmentA == 1 && theFragmentZ == 0) { // neutron
 	theKindOfFragment = G4Neutron::NeutronDefinition();
       } else if (theFragmentA == 1 && theFragmentZ == 1) { // proton

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.14 2010-05-07 11:37:03 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.15 2010-05-09 17:33:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -42,6 +42,7 @@
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4Gamma.hh"
+#include "G4Electron.hh"
 
 G4int G4Fragment::errCount = 0;
 
@@ -117,7 +118,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMom
 }
 
 
-// This constructor is for initialize photons
+// This constructor is for initialize photons or electrons
 G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
@@ -133,7 +134,8 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, G4ParticleDefinition * 
 #endif
 {
   theExcitationEnergy = 0.0;
-  if(aParticleDefinition != G4Gamma::Gamma()) {
+  if(aParticleDefinition != G4Gamma::Gamma() && 
+     aParticleDefinition != G4Electron::Electron()) {
     G4String text = "G4Fragment::G4Fragment constructor for gamma used for "
       + aParticleDefinition->GetParticleName();  
     throw G4HadronicException(__FILE__, __LINE__, text);
