@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.10 2010-04-30 16:08:03 vnivanch Exp $
+// $Id: G4PhotonEvaporation.cc,v 1.11 2010-05-09 17:31:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -238,6 +238,8 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   _nucleus = new G4Fragment(nucleus);
   _contDeexcitation->SetNucleus(_nucleus);
   _discrDeexcitation->SetNucleus(_nucleus);
+
+  //G4cout << "G4PhotonEvaporation::BreakItUp:  " << nucleus << G4endl;
 
   // Do the whole gamma chain 
   G4FragmentVector* products = _contDeexcitation->DoChain();  

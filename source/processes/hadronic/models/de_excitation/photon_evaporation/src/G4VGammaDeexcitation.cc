@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.16 2010-04-30 16:08:03 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.cc,v 1.17 2010-05-09 17:31:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,6 +108,7 @@ G4FragmentVector* G4VGammaDeexcitation::DoChain()
   
   while (CanDoTransition())
     {      
+      _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
       G4Fragment* gamma = GenerateGamma();
       if (gamma != 0) 
 	{
@@ -147,8 +148,6 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   // Do complete Lorentz computation 
 
   G4LorentzVector lv = _nucleus->GetMomentum();
-  G4double Ecm       = lv.mag();
-  G4ThreeVector bst  = lv.boostVector();
   G4double Mass = _nucleus->GetGroundStateMass() + excitation;
 
   // select secondary
@@ -160,11 +159,14 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
-    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2);
+    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2 - dtransition->GetBondEnergy());
   }
 
   // check consistency  
   G4double eMass = gamma->GetPDGMass();
+
+  G4double Ecm       = lv.mag();
+  G4ThreeVector bst  = lv.boostVector();
 
   G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
   if(GammaEnergy <= eMass) { return 0; }
@@ -187,11 +189,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   _nucleus->SetMomentum(lv);
   _nucleus->SetCreationTime(gammaTime);
 
-  //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " << Gamma4P.e() 
-  //	 << " ** left Eexc(MeV)= " << _nucleus->GetExcitationEnergy()
-  //	 << " deltaM(MeV)= " << lv.mag() - _nucleus->GetGroundStateMass()
-  //	 << G4endl;
-
+  //G4cout << "G4VGammaDeexcitation::GenerateGamma left nucleus: " << _nucleus << G4endl;
   return thePhoton;
 }
 
@@ -210,7 +208,7 @@ void G4VGammaDeexcitation::Update()
   if (_transition != 0) 
     {
       _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
-      //      if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
+      // if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
       // the above line is commented out for bug fix #952. It was intruduced for reason that
       // the k-shell electron is most likely one to be kicked out and there is no time for 
       // the atom to deexcite before the next IC. But this limitation is causing other problems as 

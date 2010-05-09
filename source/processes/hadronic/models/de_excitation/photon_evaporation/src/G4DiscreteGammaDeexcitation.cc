@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.12 2010-04-30 16:08:03 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.13 2010-05-09 17:31:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,14 +78,13 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
   G4int A = static_cast<G4int>(nucleus->GetA());
   G4int Z = static_cast<G4int>(nucleus->GetZ());
 
+  //  G4cout << "G4DiscreteGammaDeexcitation::CreateTransition: " << nucleus << G4endl;
   if (_nucleusA != A || _nucleusZ != Z) 
     {
       _nucleusA = A;
       _nucleusZ = Z;
       _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(Z,A);
     }
-
-
 
   if (_levelManager->IsValid()) 
     { 
@@ -97,27 +96,27 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	}
 	
       G4double excitation = nucleus->GetExcitationEnergy();
-      //      const G4NuclearLevel* level =_levelManager.NearestLevel(excitation, _tolerance);
       const G4NuclearLevel* level =_levelManager->NearestLevel(excitation);
 	
       if (level != 0)  
 	{ 
-	  if (_verbose > 0)
+	  if (_verbose > 0) {
 	    G4cout 
 	      << "G4DiscreteGammaDeexcitation::CreateTransition - Created from level energy " 
 	      << level->Energy() << ", excitation is " 
 	      << excitation << G4endl;
+	  }
 	  G4DiscreteGammaTransition* dtransit = new G4DiscreteGammaTransition(*level,Z,A);
 	  dtransit->SetICM(_icm);  
 	  return dtransit;
 	}
       else 
 	{ 
-	  if (_verbose > 0)
+	  if (_verbose > 0) {
 	    G4cout 
 	      << "G4DiscreteGammaDeexcitation::CreateTransition - No transition created from "
 	      << excitation << " within tolerance " << _tolerance << G4endl;
-	    
+	  }
 	  return 0; 
 	}
     }
@@ -138,10 +137,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
 	<< "G4DiscreteGammaDeexcitation::CanDoTransition - Null transition " 
 	<< G4endl;
   } 
-  G4Fragment* nucleus = GetNucleus();
   if (canDo)  {
-    //G4double A = nucleus->GetA();
-    //G4double Z = nucleus->GetZ();
     if (_nucleusZ<2 || _nucleusA<3 || _nucleusZ>98)
       {
 	canDo = false;
@@ -152,15 +148,19 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
       }
   }
 
+  G4Fragment* nucleus = GetNucleus();
   G4double excitation = nucleus->GetExcitationEnergy();
+  G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition: " << nucleus << G4endl;
 
   if (canDo) {
     if (excitation <= _tolerance) {
       canDo = false;
-      if (_verbose > 0) 
+      if (_verbose > 0) {
 	G4cout 
 	  << "G4DiscreteGammaDeexcitation::CanDoTransition -  Excitation <= 0" 
+	  << excitation << "  " << excitation - _tolerance
 	  << G4endl;
+      }
     } else { 
       if (excitation > _levelManager->MaxLevelEnergy() + _tolerance) canDo = false;
       if (excitation < _levelManager->MinLevelEnergy() - _tolerance) canDo = false;  
