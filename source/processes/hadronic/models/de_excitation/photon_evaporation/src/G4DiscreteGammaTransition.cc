@@ -187,7 +187,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 	    if (_verbose > 0) {
 	      G4cout << "G4DiscreteGammaTransition: _nucleusZ = " <<_nucleusZ 
 		     << " , iShell = " << iShell  
-		     << " , Shell binding energy = " _bondE/keV
+		     << " , Shell binding energy = " << _bondE/keV
 		     << " keV " << G4endl;
 	    }
 
@@ -201,7 +201,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 	  }
       }
       
-      G4double tau = _level.HalfLife() / G4Pow::Instance()->logZ(2);
+      G4double tau = _level.HalfLife() / G4Pow::GetInstance()->logZ(2);
 
       //09.05.2010 VI rewrite samling of decay time 
       //              assuming ordinary exponential low
