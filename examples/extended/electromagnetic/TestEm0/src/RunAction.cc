@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.14 2010-04-13 11:00:48 vnivanch Exp $
+// $Id: RunAction.cc,v 1.15 2010-05-10 13:45:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +61,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   //instanciate EmCalculator
   G4EmCalculator emCal;
-  //emCal.SetVerbose(2);
+  //  emCal.SetVerbose(2);
      
   // get particle 
   G4ParticleDefinition* particle = primary->GetParticleGun()
@@ -158,25 +158,25 @@ void RunAction::BeginOfRunAction(const G4Run*)
   std::vector<G4double> sigma0;
   std::vector<G4double> sigma1;
   std::vector<G4double> sigma2;
-  G4double Sig, SigtotGet = 0., Sigtot = 0.;
+  G4double Sig, SigtotComp = 0., Sigtot = 0.;
 
   for (size_t j=0; j<emName.size();j++) {
-    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);
-    SigtotGet += Sig;    
-    sigma0.push_back(Sig);
     Sig = emCal.ComputeCrossSectionPerVolume
-      (energy,particle,emName[j],material,enerCut[j]);
+      (energy,particle,emName[j],material,enerCut[j]);  
+    SigtotComp += Sig;    
+    sigma0.push_back(Sig);
+    Sig = emCal.GetCrossSectionPerVolume(energy,particle,emName[j],material);      
     Sigtot += Sig;    
     sigma1.push_back(Sig);
     sigma2.push_back(Sig/density);		        
   }
-  sigma0.push_back(SigtotGet);
+  sigma0.push_back(SigtotComp);
   sigma1.push_back(Sigtot);
   sigma2.push_back(Sigtot/density);	  
     
   //print cross sections
-  G4cout << "\n \n  GetCrossSectionPerVolume : ";
-  for (size_t j=0; j<sigma1.size();j++) {	     
+  G4cout << "\n \n  compCrossSectionPerVolume : ";
+  for (size_t j=0; j<sigma0.size();j++) {	     
     G4cout << "\t" << std::setw(13) << sigma0[j]*cm << " cm^-1";
   }
   G4cout << "\n  cross section per volume : ";
