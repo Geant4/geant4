@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.25 2010-04-23 16:19:58 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.26 2010-05-10 14:38:05 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1334,7 +1334,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.156214);
   AddElementByWeightFraction( 7, 0.035451);
   AddElementByWeightFraction( 8, 0.7101  );
-
+  
   AddMaterial("G4_MUSCLE_WITHOUT_SUCROSE", 1.07, 0, 74.2, 4);
   AddElementByWeightFraction( 1, 0.101969);
   AddElementByWeightFraction( 6, 0.120058);
@@ -1458,6 +1458,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 9, 0.759817);
 
   AddMaterial("G4_POLYTRIFLUOROCHLOROETHYLENE", 2.1, 0, 120.7, 3);
+  // correct chemical name Polychlorotrifluoroethylene [CF2CClF]n, IvantchenkoA.
   AddElementByWeightFraction( 6, 0.20625 );
   AddElementByWeightFraction( 9, 0.489354);
   AddElementByWeightFraction(17, 0.304395);
