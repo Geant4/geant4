@@ -1,4 +1,4 @@
-$Id: History,v 1.177 2010-04-30 17:00:34 vnivanch Exp $
+$Id: History,v 1.178 2010-05-10 10:44:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-05-10 V.Ivanchenko (materials-V09-03-05)
+- G4IonisParamMat - added member and method GetInvA23
 
 30-04-10 V.Ivanchenko (materials-V09-03-04)
 - G4AtomicShells - improved performance by adding an array of indexes

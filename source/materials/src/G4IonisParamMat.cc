@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.35 2010-04-23 16:20:26 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.36 2010-05-10 10:44:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -308,13 +308,14 @@ void G4IonisParamMat::ComputeIonParameters()
 
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF
-  G4double z = 0.0, vF = 0.0, lF = 0.0, norm = 0.0 ;
+  G4double z(0.0), vF(0.0), lF(0.0), norm(0.0), a23(0.0);
 
   if( 1 == NumberOfElements ) {
     const G4Element* element = (*theElementVector)[0];
     z = element->GetZ();
     vF= element->GetIonisation()->GetFermiVelocity();
     lF= element->GetIonisation()->GetLFactor();
+    a23 = std::pow(element->GetN(),-2./3.);
 
   } else {
     for (G4int iel=0; iel<NumberOfElements; iel++)
@@ -325,21 +326,24 @@ void G4IonisParamMat::ComputeIonParameters()
         z    += element->GetZ() * weight ;
         vF   += element->GetIonisation()->GetFermiVelocity() * weight ;
         lF   += element->GetIonisation()->GetLFactor() * weight ;
+	a23  += std::pow(element->GetN(),-2./3.);
       }
-    z  /= norm ;
-    vF /= norm ;
-    lF /= norm ;
+    z  /= norm;
+    vF /= norm;
+    lF /= norm;
+    a23 /= norm;
   }  
   fZeff        = z;
   fLfactor     = lF;
   fFermiEnergy = 25.*keV*vF*vF;
+  fInvA23      = a23;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
 {
-  if(value == fMeanExcitationEnergy || value <= 0.0) return;
+  if(value == fMeanExcitationEnergy || value <= 0.0) { return; }
 
   /*
   if (G4NistManager::Instance()->GetVerbose() > 0) 
