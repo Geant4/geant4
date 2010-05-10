@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.13 2010-05-09 17:31:23 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.14 2010-05-10 06:11:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -150,7 +150,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
 
   G4Fragment* nucleus = GetNucleus();
   G4double excitation = nucleus->GetExcitationEnergy();
-  G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition: " << nucleus << G4endl;
+  //G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition: " << nucleus << G4endl;
 
   if (canDo) {
     if (excitation <= _tolerance) {
