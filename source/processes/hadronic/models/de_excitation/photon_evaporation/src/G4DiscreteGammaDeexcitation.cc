@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.14 2010-05-10 06:11:50 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.15 2010-05-10 07:20:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,7 +77,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
   G4Fragment* nucleus = GetNucleus();
   G4int A = static_cast<G4int>(nucleus->GetA());
   G4int Z = static_cast<G4int>(nucleus->GetZ());
-
+  //  _verbose =2;
   //  G4cout << "G4DiscreteGammaDeexcitation::CreateTransition: " << nucleus << G4endl;
   if (_nucleusA != A || _nucleusZ != Z) 
     {
@@ -163,10 +163,10 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
       }
     } else { 
       if (excitation > _levelManager->MaxLevelEnergy() + _tolerance) canDo = false;
-      if (excitation < _levelManager->MinLevelEnergy() - _tolerance) canDo = false;  
+      //if (excitation < _levelManager->MinLevelEnergy() - _tolerance) canDo = false;  
       // The following is a protection to avoid looping in case of elements with very low
       // ensdf levels
-      if (excitation < _levelManager->MinLevelEnergy() * 0.9) canDo = false;  
+      //if (excitation < _levelManager->MinLevelEnergy() * 0.9) canDo = false;  
   
       if (_verbose > 0) {
 	G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition -  Excitation " 

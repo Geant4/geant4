@@ -108,13 +108,9 @@ void G4DiscreteGammaTransition::SelectGamma()
       // nominal level energies and emitted gamma energies
       
       // 09.05.2010 VI : it is an error ?
-      //G4double eCorrection = _level.Energy() - _excitation;      
-      //_gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
-      
-      // This should be correct computation
-      _gammaEnergy = (_level.GammaEnergies())[iGamma];
-      
-      
+      G4double eCorrection = _level.Energy() - _excitation;      
+      _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
+            
       //JMQ: 
       //1)If chosen gamma energy is close enough to excitation energy, the later
       //  is used instead for gamma dacey to gs (it guarantees energy conservation)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.21 2010-04-30 16:08:03 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.22 2010-05-10 07:20:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -159,9 +159,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
       totprob += prob;
       probabilities[i] = totprob;
       // if two recent probabilities are zero stop computations
-      if(prob <= 0.0 && oldprob <= 0.0 && i>=8) {
-        maxchannel = i+1; 
-	break;
+      if(i>=8) {
+	if(prob <= totprob*1.e-8 && oldprob <= totprob*1.e-8) {
+	  maxchannel = i+1; 
+	  break;
+	}
       }
       oldprob = prob;
     }
@@ -169,6 +171,20 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // stable fragnent - evaporation is finished
     if(0.0 == totprob) {
       theResult->push_back(theResidualNucleus);
+      return theResult;
+    }
+
+    // photon evaporation in the case of no other channels available
+    // do evaporation chain and return results
+    if(probabilities[0] == totprob) {
+      theTempResult = (*theChannels)[0]->BreakUpFragment(theResidualNucleus);
+      if(theTempResult) {
+	size_t nsec = theTempResult->size();
+	for(size_t j=0; j<nsec; ++j) {
+	  theResult->push_back((*theTempResult)[j]);
+	}
+        delete theTempResult;
+      }
       return theResult;
     }
 
@@ -180,21 +196,9 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // this should not happen
     if(i >= nChannels) { i = nChannels - 1; }
 
-    // photon evaporation in the case of no other channels available
-    // do evaporation chain and return results
-    if(0 == i && probabilities[0] == totprob) {
-      theTempResult = (*theChannels)[0]->BreakUpFragment(theResidualNucleus);
-      if(theTempResult) {
-	size_t nsec = theTempResult->size();
-	for(size_t j=0; j<nsec; ++j) {
-	  theResult->push_back((*theTempResult)[j]);
-	}
-        delete theTempResult;
-      }
-      return theResult;
 
     // single photon evaporation, primary pointer is kept
-    } else if(0 == i) {
+    if(0 == i) {
       G4Fragment* gamma = (*theChannels)[0]->EmittedFragment(theResidualNucleus);
       if(gamma) { theResult->push_back(gamma); }
 
