@@ -1,5 +1,5 @@
 
-$Id: History,v 1.63 2010-05-11 09:11:24 allison Exp $
+$Id: History,v 1.64 2010-05-11 15:04:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,14 +20,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- May 11, 2010  J.Allison
-  - Recursive algorithm in CreatePolyhedron.  It uses
-    HepPolyhedronProcessor (graphics_reps), which tries small shifts
-    in an attempt to avoid numerical problems in the calculation of
-    the polyhedron in BooleanProcessor.  Recursion allows
-    HepPolyhedronProcessor to try all permutations, even for booleans
-    of booleans.  Reduces the number of instances of "Error in Boolean
-    processor" but still some stubborn cases resist.
+ May 11, 2010  J.Allison                  geom-bool-V09-03-00
+  - Introduced recursive algorithm in CreatePolyhedron(): it uses
+    HepPolyhedronProcessor from 'graphics_reps', which tries small shifts
+    in an attempt to avoid numerical problems in the calculation of the
+    polyhedron in BooleanProcessor. Recursion allows HepPolyhedronProcessor
+    to try all permutations, also for Booleans of Booleans.
+    Helps in reducing the number of cases of "Error in Boolean processor" for
+    visualization, but still some stubborn cases are left.
 
  Oct 24, 2007  V.Grichine                 geom-bool-V09-00-00
   - Improved response of Inside() for G4SubtractionSolid and G4UnionSolid
