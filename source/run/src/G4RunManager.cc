@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.108 2007-11-09 13:57:39 asaim Exp $
+// $Id: G4RunManager.cc,v 1.109 2010-05-11 12:31:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -247,7 +247,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     G4cout << "Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
-    { G4cout << "  Run Aborted after " << i_event << " events processed." << G4endl; }
+    { G4cout << "  Run Aborted after " << i_event + 1 << " events processed." << G4endl; }
     else
     { G4cout << "  Number of events processed : " << n_event << G4endl; }
     G4cout << "  "  << *timer << G4endl;
