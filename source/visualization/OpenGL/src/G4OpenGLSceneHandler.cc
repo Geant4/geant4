@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.57 2010-04-30 13:18:32 lgarnier Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.58 2010-05-11 10:17:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,24 +137,24 @@ void G4OpenGLSceneHandler::EndPrimitives2D ()
   G4VSceneHandler::EndPrimitives2D ();
 }
 
-const G4Polyhedron* G4OpenGLSceneHandler::CreateSectionPolyhedron ()
+G4VSolid* G4OpenGLSceneHandler::CreateSectionSolid ()
 {
   // Clipping done in G4OpenGLViewer::SetView.
-  return 0;
+  // return 0;
 
   // But...OpenGL no longer seems to reconstruct clipped edges, so,
   // when the BooleanProcessor is up to it, abandon this and use
-  // generic clipping in G4VSceneHandler::CreateSectionPolyhedron...
-  // return G4VSceneHandler::CreateSectionPolyhedron();
+  // generic clipping in G4VSceneHandler::CreateSectionSolid...
+  return G4VSceneHandler::CreateSectionSolid();
 }
 
-const G4Polyhedron* G4OpenGLSceneHandler::CreateCutawayPolyhedron ()
+G4VSolid* G4OpenGLSceneHandler::CreateCutawaySolid ()
 {
   // Cutaway done in G4OpenGLViewer::SetView.
-  return 0;
+  // return 0;
 
   // But...if not, when the BooleanProcessor is up to it...
-  // return G4VSceneHandler::CreateCutawayPolyhedron();
+  return G4VSceneHandler::CreateCutawaySolid();
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)

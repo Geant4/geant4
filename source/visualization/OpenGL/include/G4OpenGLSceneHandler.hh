@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.28 2010-04-30 13:18:32 lgarnier Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.29 2010-05-11 10:17:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,8 +92,8 @@ protected:
 			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
 
-  const G4Polyhedron* CreateSectionPolyhedron ();
-  const G4Polyhedron* CreateCutawayPolyhedron ();
+  G4VSolid* CreateSectionSolid ();
+  G4VSolid* CreateCutawaySolid ();
 
   void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
 
