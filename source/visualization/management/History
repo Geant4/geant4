@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2010-05-11 11:07:40 allison Exp $
+$Id: History,v 1.142 2010-05-11 12:17:40 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-11th May 2010  John Allison  (visman-09-03-00)
+11th May 2010  John Allison  (visman-V09-03-00)
 - G4VSceneHandler:
   o Follow change in generic section and cutaway interface.
   o Trap use of user-defined DrawTrajectory and print i_mode warning.
