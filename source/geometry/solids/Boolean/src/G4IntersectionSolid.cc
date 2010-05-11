@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.31 2010-05-11 09:11:24 allison Exp $
+// $Id: G4IntersectionSolid.cc,v 1.32 2010-05-11 15:03:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -507,8 +507,8 @@ G4IntersectionSolid::CreatePolyhedron () const
   // See G4BooleanSolid::StackPolyhedron
   G4Polyhedron* top = StackPolyhedron(processor, this);
   G4Polyhedron* result = new G4Polyhedron(*top);
-  if (processor.execute(*result)) return result;
-  else return 0;
+  if (processor.execute(*result)) { return result; }
+  else { return 0; }
 }
 
 /////////////////////////////////////////////////////////

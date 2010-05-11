@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.16 2010-05-11 09:11:24 allison Exp $
+// $Id: G4BooleanSolid.hh,v 1.17 2010-05-11 15:03:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -110,8 +110,9 @@ class G4BooleanSolid : public G4VSolid
     G4VSolid* fPtrSolidA;
     G4VSolid* fPtrSolidB;
 
-    G4Polyhedron* StackPolyhedron
-    (HepPolyhedronProcessor&, const G4VSolid*) const;
+    G4Polyhedron* StackPolyhedron(HepPolyhedronProcessor&,
+                                  const G4VSolid*) const;
+      // Stack polyhedra for processing. Return top polyhedron.
 
   private:
 
