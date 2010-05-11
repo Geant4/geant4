@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.8 2006-06-29 21:33:10 gunter Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.9 2010-05-11 11:31:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -42,7 +42,15 @@ G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name,
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
 void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& object,
+				   const G4int& i_mode,
+				   const G4bool& visible) const
+{
+  Draw(object, visible);
+}
+
+void
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour(fDefault);
   G4String particle = traj.GetParticleName();
@@ -61,7 +69,7 @@ G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4int& i_mod
     myContext.Print(G4cout);
   }
 
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext);
 }
 
 void

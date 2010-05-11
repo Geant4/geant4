@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryGenericDrawer.cc,v 1.2 2006-06-29 21:33:16 gunter Exp $
+// $Id: G4TrajectoryGenericDrawer.cc,v 1.3 2010-05-11 11:31:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay May 2006
@@ -53,6 +53,21 @@ G4TrajectoryGenericDrawer::Draw(const G4VTrajectory& traj, const G4int& i_mode, 
   }
   
   G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+}
+
+void
+G4TrajectoryGenericDrawer::Draw(const G4VTrajectory& traj, const G4bool& visible) const
+{
+  G4VisTrajContext myContext(GetContext());
+  myContext.SetVisible(visible);
+
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryGenericDrawer named "<<Name();
+    G4cout<<", drawing trajectory with configuration: "<<G4endl;
+    myContext.Print(G4cout);
+  }
+  
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext);
 }
 
 void

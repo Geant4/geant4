@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.hh,v 1.7 2006-06-29 21:31:49 gunter Exp $
+// $Id: G4TrajectoryDrawByCharge.hh,v 1.8 2010-05-11 11:31:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -56,8 +56,10 @@ public: // With description
   
   virtual ~G4TrajectoryDrawByCharge();
 
-  // Draw the trajectory with optional i_mode parameter
-  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0, 
+  // Draw method
+  virtual void Draw(const G4VTrajectory& trajectory, const G4int& i_mode = 0,
+		    const G4bool& visible = true) const;
+  virtual void Draw(const G4VTrajectory& trajectory, 
 		    const G4bool& visible = true) const;
 
   // Print configuration

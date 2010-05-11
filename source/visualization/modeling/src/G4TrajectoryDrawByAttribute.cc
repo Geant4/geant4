@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByAttribute.cc,v 1.3 2006-09-14 15:41:42 tinslay Exp $
+// $Id: G4TrajectoryDrawByAttribute.cc,v 1.4 2010-05-11 11:31:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay August 2006
@@ -61,7 +61,15 @@ G4TrajectoryDrawByAttribute::~G4TrajectoryDrawByAttribute()
 }
 
 void
-G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object, const G4int&, 
+G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
+				  const G4int& i_mode,
+				  const G4bool& visible) const
+{
+  Draw(object, visible);
+}
+
+void
+G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object, 
 				  const G4bool& visible) const
 {
   // Return if attribute name has not been set. Just print one warning

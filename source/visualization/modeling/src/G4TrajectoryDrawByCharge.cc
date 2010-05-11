@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByCharge.cc,v 1.8 2006-06-29 21:33:06 gunter Exp $
+// $Id: G4TrajectoryDrawByCharge.cc,v 1.9 2010-05-11 11:31:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -56,7 +56,15 @@ G4TrajectoryDrawByCharge::G4TrajectoryDrawByCharge(const G4String& name,
 G4TrajectoryDrawByCharge::~G4TrajectoryDrawByCharge() {}
 
 void
-G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
+G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& object,
+			       const G4int& i_mode,
+			       const G4bool& visible) const
+{
+  Draw(object, visible);
+}
+
+void
+G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4bool& visible) const
 {
   G4Colour colour;
 
@@ -78,7 +86,7 @@ G4TrajectoryDrawByCharge::Draw(const G4VTrajectory& traj, const G4int& i_mode, c
     myContext.Print(G4cout);
   }
 
-  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext);
 }
 
 void
