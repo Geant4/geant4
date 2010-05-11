@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.37 2010-05-11 11:25:49 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.38 2010-05-11 11:30:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -51,6 +51,10 @@
 //      -according to Igor Pshenichnov, SMM will be applied (just in case) only once.
 // (27 Nov 2009) by V.Ivanchenko: 
 //      -cleanup the logic, reduce number internal vectors, fixed memory leak.
+// (11 May 2010) by V.Ivanchenko: 
+//      -FermiBreakUp activated, used integer Z and A, used BreakUpFragment method for 
+//       final photon deexcitation; used check on adundance of a fragment, decay 
+//       unstable fragments with A <5
 //
 
 #include "G4ExcitationHandler.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.23 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.24 2010-05-11 11:34:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -50,7 +50,6 @@
 #include "G4EvaporationDefaultGEMFactory.hh"
 #include "G4HadronicException.hh"
 #include "G4NistManager.hh"
-//#include <numeric>
 
 G4Evaporation::G4Evaporation() 
 {

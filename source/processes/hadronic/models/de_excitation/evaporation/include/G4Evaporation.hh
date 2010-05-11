@@ -24,15 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.11 2010-05-11 11:26:15 vnivanch Exp $
+// $Id: G4Evaporation.hh,v 1.12 2010-05-11 11:34:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
 //
-// Alex Howard - added protection for negative probabilities in the sum, 14/2/07
-// V.Ivanchenko - added Combined decay channels (default + GEM) 27/07/09
+// 14/02/2007 Alex Howard - added protection for negative probabilities in the sum 
+// 27/07/2009 V.Ivanchenko - added Combined decay channels (default + GEM) 
+// 11/05/2010 V.Ivanchenko - rewrited technical part do not "new" and "delete" 
+//                           of small objects
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
