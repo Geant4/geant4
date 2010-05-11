@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.42 2009-11-04 12:55:33 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.43 2010-05-11 10:50:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -308,11 +308,12 @@ protected:
   //////////////////////////////////////////////////////////////
   // Other internal routines...
 
-  virtual const G4Polyhedron* CreateSectionPolyhedron ();
-  virtual const G4Polyhedron* CreateCutawayPolyhedron ();
+  virtual G4VSolid* CreateSectionSolid ();
+  virtual G4VSolid* CreateCutawaySolid ();
   // Generic clipping using the BooleanProcessor in graphics_reps is
   // implemented in this class.  Subclasses that implement their own
   // clipping should provide an override that returns zero.
+
   void LoadAtts(const G4Visible&, G4AttHolder*);
   // Load G4AttValues and G4AttDefs associated with the G4Visible
   // object onto the G4AttHolder object.  It checks fpModel, and also
