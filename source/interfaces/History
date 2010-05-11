@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2010-05-11 09:18:46 allison Exp $
+$Id: History,v 1.130 2010-05-11 09:22:18 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11 May, J.Allison (interfaces-V09-03-00)
-- Tagged.
+11 May, J.Allison (interfaces-V09-03-01)
+- Tagged interfaces-V09-03-01.  (Note: interfaces-V09-03-00 already
+  used on a patch branch.)
 
 7 May, L. Garnier
  - G4UIQt: Add new command in help tree will update immediatly the help tree
