@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: test201.cc,v 1.16 2006-06-29 21:46:37 gunter Exp $
+// $Id: test201.cc,v 1.17 2010-05-11 12:23:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,71 +49,23 @@ std::ostream& g4cerr = G4cerr;
 #include "MySteppingAction.hh"
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "G4StateManager.hh"
-
-#ifdef G4UI_USE_GAG
-  #include "G4UIGAG.hh"
-#endif
-#ifdef G4UI_USE_XM
-  #include "G4UIXm.hh"
-#endif
-#ifdef G4UI_USE_XAW
-  #include "G4UIXaw.hh"
-#endif
-#ifdef G4UI_USE_WIN32
-  #include "G4UIWin32.hh"
-#endif
-
 #include "G4RunManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE_WIN32
-#include <windows.h>
-int WINAPI WinMain (
-HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpszCmdLine,int nCmdShow) {
-#else
-int main (int argc, char** argv) {
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
+
+int main (int argc, char** argv) {
 
   G4int Verbose = 0;
 #ifndef G4UI_USE_WIN32
   if ((argc >= 3)) Verbose = atoi (argv[2]);
 #endif
-
-  // Choose (G)UI.
-  G4UIsession* session;
-#ifdef G4UI_USE_WIN32
-  session = new G4UIWin32 (hInstance,hPrevInstance,lpszCmdLine,nCmdShow);
-#else
-  if (argc >= 2) {
-    if (strcmp (argv[1], "dumb")==0)     session = new G4UIterminal;
-#ifdef G4UI_USE_XM
-    else if (strcmp (argv[1], "Xm")==0)  session = new G4UIXm (argc, argv);
-#endif
-#ifdef G4UI_USE_XAW
-    else if (strcmp (argv[1], "Xaw")==0) session = new G4UIXaw (argc, argv);
-#endif
-#ifdef G4UI_USE_GAG
-    else if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
-#endif
-#ifdef G4UI_USE_GAG
-    else                                 session = new G4UIGAG;
-#else
-    else                                 session = new G4UIterminal;
-#endif
-  } else {
-#ifdef G4UI_USE_GAG
-    session = new G4UIGAG;
-#else
-    session = new G4UIterminal;
-#endif
-  }
-#endif
-  G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
   // Run manager
   g4cout << "RunManager is constructing...." << G4endl;
@@ -135,23 +87,28 @@ int main (int argc, char** argv) {
   visManager -> Initialize ();
 #endif
 
-  G4UImanager* UI = G4UImanager::GetUIpointer ();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer ();
 
   g4cout << "Reading test201.g4m file...." << G4endl;
-  UI -> ApplyCommand ("/control/execute test201.g4m");
+  UImanager -> ApplyCommand ("/control/execute test201.g4m");
 
   g4cout << 
     "Choose a detector with /test201/detector (or let default be"
     " constructed)."
        << G4endl;
 
+#ifdef G4UI_USE
   // Start an interactive session.
-  session -> SessionStart();
+  G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+  ui -> SessionStart();
+#endif
 
+#ifdef G4UI_USE
+  delete ui;
+#endif
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete session;
   delete runManager; // Should be last.
 
   return 0;

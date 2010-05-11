@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test201DetectorMessenger.cc,v 1.8 2006-06-29 21:48:03 gunter Exp $
+// $Id: test201DetectorMessenger.cc,v 1.9 2010-05-11 12:23:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,8 +106,8 @@ void test201DetectorMessenger::SetNewValue
       G4VUserDetectorConstruction* detector;
 #ifdef ATLAS
       ATLASdetector* atlas;
-#endif
       G4UImanager* UI = G4UImanager::GetUIpointer ();
+#endif
       switch (id) {
       default:
       case 0: pGeom = BuildCalorimeter (); break;

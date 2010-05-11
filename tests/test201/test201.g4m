@@ -59,7 +59,7 @@
 /vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/refresh
 /vis/scene/add/axes     0 0 0 500
-/vis/scene/add/text     0 0 0 mm 50 -120 -200   exampleN03
+/vis/scene/add/text     0 0 0 mm 50 -120 -200   test201
 /vis/viewer/update
 #
 # Create another viewer.
@@ -71,7 +71,7 @@
 #
 /vis/viewer/refresh
 /vis/scene/add/axes     0 0 0 500
-/vis/scene/add/text     0 0 0 mm 50 -120 -200   exampleN03
+/vis/scene/add/text     0 0 0 mm 50 -120 -200   test201
 /vis/viewer/update
 #
 /vis/viewer/set/style wireframe
@@ -318,7 +318,7 @@
 /vis/viewer/refresh
 /vis/viewer/update
 #
-/vis/sceneHandler/create RayTracer
+/vis/sceneHandler/create RayTracerX
 /vis/viewer/create
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 30 30
