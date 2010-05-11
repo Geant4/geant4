@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.10 2010-04-28 14:27:16 vnivanch Exp $
+// $Id: G4Evaporation.hh,v 1.11 2010-05-11 11:26:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -42,6 +42,7 @@
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4Fragment.hh"
+#include "G4UnstableFragmentBreakUp.hh"
 
 class G4VEvaporationFactory;
 class G4NistManager;
@@ -87,25 +88,8 @@ public:
   G4int nChannels;
   G4double minExcitation;
   G4NistManager* nist;
+  G4UnstableFragmentBreakUp unstableBreakUp;
     
-  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
-  {
-  public:
-    SumProbabilities() : total(0.0) {}
-    G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
-    { 
-      G4double temp_prob = frag->GetEmissionProbability();
-      if(temp_prob >= 0.0) total += temp_prob;
-      //      total += frag->GetEmissionProbability();
-      return total;
-    }
-    
-    G4double GetTotal() { return total; }
-  public:
-    G4double total;
-    
-  };
-
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.hh,v 1.1 2010-05-10 16:43:48 vnivanch Exp $
+// $Id: G4UnstableFragmentBreakUp.hh,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,8 @@
 class G4Fragment;
 class G4NistManager;
 
-class G4UnstableFragmentBreakUp : public G4VEvaporationChannel {
+class G4UnstableFragmentBreakUp : public G4VEvaporationChannel 
+{
 
 public:
 
@@ -63,11 +64,13 @@ public:
 
   virtual ~G4UnstableFragmentBreakUp();
 
+  // decay fragment on light ions
+  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
+
+  // dummy virtual methods
   virtual void Initialize(const G4Fragment& fragment);
 
   virtual G4Fragment* EmittedFragment(G4Fragment* fragment);
-
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* fragment);
 
   virtual G4FragmentVector * BreakUp(const G4Fragment& fragment);
 
@@ -88,7 +91,6 @@ private:
   static G4int Zfr[6];
   static G4int Afr[6];
   static G4double masses[6];
-  G4double deltaE[6];
 
   G4NistManager* fNistManager;
 };

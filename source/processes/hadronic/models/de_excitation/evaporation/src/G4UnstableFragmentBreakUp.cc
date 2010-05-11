@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc,v 1.1 2010-05-10 16:43:48 vnivanch Exp $
+// $Id: G4UnstableFragmentBreakUp.cc,v 1.2 2010-05-11 11:26:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -33,23 +33,12 @@
 //
 //      File name:     G4UnstableFragmentBreakUp
 //
-//      Author:        Maria Grazia Pia (pia@genova.infn.it)
+//      Author:        V.Ivanchenko
 // 
-//      Creation date: 23 October 1998
+//      Creation date: 11 May 2010
 //
-//      Modifications: 
+//Modifications: 
 //      
-//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
-//   
-//        Implementation of Internal Convertion process in discrete deexcitation
-//        The following public methods have been added. 
-//
-//       void SetICM (G4bool);
-//       void CallFromRDM(G4bool);
-//       void SetMaxHalfLife(G4double) ;
-//       void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
-//       G4ElectronOccupancy GetEOccupancy () ;
-//
 // -------------------------------------------------------------------
 //
 
@@ -88,7 +77,6 @@ void G4UnstableFragmentBreakUp::Initialize(const G4Fragment&)
 
 G4Fragment* G4UnstableFragmentBreakUp::EmittedFragment(G4Fragment*)
 {
-  //G4cout << "G4UnstableFragmentBreakUp::EmittedFragment" << G4endl;
   return 0;
 }
 
@@ -129,11 +117,12 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
     // no decay channels
     if(index < 0) { break; }
 
-    // sample decay
-    G4ThreeVector bst  = lv.boostVector();
-
+    // compute energy of light fragment
     G4double e2 = 0.5*((mass - mass1)*(mass + mass1) + mass2*mass2)/mass;
     if(e2 < mass2) { break; }
+
+    // sample decay
+    G4ThreeVector bst  = lv.boostVector();
 
     G4double cosTheta = 1. - 2. * G4UniformRand(); 
     G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
@@ -155,9 +144,11 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
   }
 
   // updated fragment
-  nucleus->SetZ_asInt(Z);
-  nucleus->SetA_asInt(A);
-  nucleus->SetMomentum(lv);
+  if( theResult->size() > 0) {
+    nucleus->SetZ_asInt(Z);
+    nucleus->SetA_asInt(A);
+    nucleus->SetMomentum(lv);
+  }
 
   return theResult;
 }
