@@ -1,4 +1,4 @@
-$Id: History,v 1.461 2010-05-11 12:07:48 allison Exp $
+$Id: History,v 1.462 2010-05-11 12:16:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-11th May 2010  John Allison  (vis-09-03-00)
+11th May 2010  John Allison  (vis-V09-03-00)
 - visman-09-03-00: Print i_mode warnings.
 - modeling-V09-03-00:
   o Replace polyhedra with solids for sections and cutaways.
