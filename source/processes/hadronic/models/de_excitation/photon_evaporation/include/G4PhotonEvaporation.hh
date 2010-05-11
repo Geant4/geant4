@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh,v 1.6 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4PhotonEvaporation.hh,v 1.7 2010-05-11 11:22:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,9 +37,9 @@
 //
 //      Creation date: 23 October 1998
 //
-//      Modifications:
+//Modifications:
 //
-//        18 October 2002, Fan Lei (flei@space.qinetiq.com)
+// 18 October 2002, Fan Lei (flei@space.qinetiq.com)
 //   
 //        Implementation of Internal Convertion process in discrete deexcitation
 //        The following public methods have been added. 
@@ -55,6 +55,9 @@
 //
 //            G4ElectronOccupancy _eOccupancy;
 //            G4int _vShellNumber;
+//
+// 11 May 2010, V.Ivanchenko added EmittedFragment and BreakUpFragment
+//                           methods
 // 
 // -------------------------------------------------------------------
 
@@ -62,7 +65,6 @@
 #define G4PHOTONEVAPORATION_HH
 
 #include "globals.hh"
-//#include "G4VPhotonEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4VGammaDeexcitation.hh"
@@ -123,7 +125,6 @@ private:
     G4PhotonEvaporation(const G4PhotonEvaporation & right);
     const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
-    // MGP - Check == and != multiple inheritance... must be a mess!
     G4bool operator == (const G4PhotonEvaporation & right) const;
     G4bool operator != (const G4PhotonEvaporation & right) const;
 

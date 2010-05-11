@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.11 2010-05-09 17:31:23 vnivanch Exp $
+// $Id: G4PhotonEvaporation.cc,v 1.12 2010-05-11 11:22:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,9 +37,9 @@
 // 
 //      Creation date: 23 October 1998
 //
-//      Modifications: 
+// Modifications: 
 //      
-//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
+// 8 March 2002, Fan Lei (flei@space.qinetiq.com)
 //   
 //        Implementation of Internal Convertion process in discrete deexcitation
 //        The following public methods have been added. 
@@ -49,6 +49,9 @@
 //       void SetMaxHalfLife(G4double) ;
 //       void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 //       G4ElectronOccupancy GetEOccupancy () ;
+//
+// 11 May 2010, V.Ivanchenko add implementation of EmittedFragment and 
+//                           BreakUpFragment methods; cleanup logic
 //
 // -------------------------------------------------------------------
 //
@@ -172,8 +175,6 @@ G4FragmentVector* G4PhotonEvaporation::BreakUpFragment(G4Fragment* nucleus)
       }
     delete discrProducts;
   }
-  // Add deexcited nucleus to products
-  products->push_back(_nucleus);
 
   if (_verbose > 0) {
     G4cout << "*-*-* Photon evaporation: " << products->size() << G4endl;
