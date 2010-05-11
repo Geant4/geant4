@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2010-04-30 13:13:57 lgarnier Exp $
+$Id: History,v 1.141 2010-05-11 11:07:40 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,17 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+11th May 2010  John Allison  (visman-09-03-00)
+- G4VSceneHandler:
+  o Follow change in generic section and cutaway interface.
+  o Trap use of user-defined DrawTrajectory and print i_mode warning.
+- G4VisCommandsSceneAdd.cc:
+  o Follow change in generic section and cutaway interface.
+  o Trap use of i_mode and print warning.
+- G4VisManager.cc:
+  o Trap use of i_mode and print warning.
+
 9th March 2010 Laurent Garnier
  - G4OpenGLViewer : Fix clipping when resizing non square size windows
   
