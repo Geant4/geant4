@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.78 2009-11-22 14:02:30 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.79 2010-05-11 10:58:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1372,6 +1372,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
   static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
   G4String defaultTrajectoryType;
+  G4bool i_mode_found = false;
   G4int i_mode = 0;
   if (smooth && rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
@@ -1389,10 +1390,12 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
       std::istringstream iss(newValue);
       iss >> i_mode;
       if (iss) {
+	i_mode_found = true;
 	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Integer parameter " << i_mode << " found."
-	    "\n  DEPRECATED - will be removed at next major release."
-	    "\n  Use \"/vis/modeling/trajectories\" commands."
+	  G4cout <<
+  "WARNING: Integer parameter " << i_mode << " found."
+  "\n  DEPRECATED - its use in this command will be removed at a future major"
+  "\n  release.  Use \"/vis/modeling/trajectories\" commands."
 		 << G4endl;
 	}
       } else {
@@ -1420,7 +1423,12 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4TrajectoriesModel* model = new G4TrajectoriesModel(i_mode);
+  G4TrajectoriesModel* model = 0;
+  if (i_mode_found) {
+    model = new G4TrajectoriesModel(i_mode);
+  } else {
+    model = new G4TrajectoriesModel();
+  }
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
 
@@ -1804,12 +1812,13 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     const G4double x0 = (param2 + param1) / 2.;
     const G4double y0 = (param4 + param3) / 2.;
     const G4double z0 = (param6 + param5) / 2.;
-    G4Box clippingBox("_clipping_box",dX,dY,dZ);
-    G4Polyhedron* clippingPolyhedron =
-      new G4PolyhedronBox(dX,dY,dZ);  // The model deletes.
-    clippingPolyhedron->Transform(G4Translate3D(x0,y0,z0));
+    G4VSolid* clippingSolid =
+      new G4DisplacedSolid
+      ("_displaced_clipping_box",
+       new G4Box("_clipping_box",dX,dY,dZ),
+       G4Translate3D(x0,y0,z0));
     for (size_t i = 0; i < foundVolumes.size(); ++i) {
-      models[i]->SetClippingPolyhedron(clippingPolyhedron);
+      models[i]->SetClippingSolid(clippingSolid);
       models[i]->SetClippingMode(clippingMode);
     }
   }  // If any other shape consider NumberOfRotationSides!!!!!!!!!!!
