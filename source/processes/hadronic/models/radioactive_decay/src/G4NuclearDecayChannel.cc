@@ -100,7 +100,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetNumberOfDaughters (1);
   FillDaughterNucleus (0, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
-  halflifetreshold = 1e-6*second;
+  halflifethreshold = 1e-6*second;
   applyICM = true;
   applyARM = true;
 }
@@ -133,7 +133,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetDaughter(0, theDaughterName1);
   FillDaughterNucleus (1, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
-  halflifetreshold = 1e-6*second;
+  halflifethreshold = 1e-6*second;
   applyICM = true;
   applyARM = true;
 }
@@ -176,6 +176,9 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   RandomEnergy = randBeta;
   Qtransition = theQtransition;
   FermiFN = theFFN;
+  halflifethreshold = 1e-6*second;
+  applyICM = true;
+  applyARM = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +296,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   }
   //
   // If the decay is to an excited state of the daughter nuclide, we need
-  // to apply the photo-evaporation process. This includes the IT decay mode
+  // to apply the photo-evaporation process. This includes the IT decay mode itself.
   //
   // needed to hold the shell idex after ICM
   G4int shellIndex = -1;
@@ -331,10 +334,11 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       // Now apply the photo-evaporation
       // Use BreakUp() so limit to one transition at a time, if ICM is requested
       // this change is realted to bug#1001  (F.Lei 07/05/2010)
+      G4FragmentVector* gammas = 0;	
       if (applyICM) {
-	G4FragmentVector* gammas = deexcitation->BreakUp(nucleus);	
+	gammas = deexcitation->BreakUp(nucleus);	
       } else {
-        G4FragmentVector* gammas = deexcitation->BreakItUp(nucleus);
+	gammas = deexcitation->BreakItUp(nucleus);
       }
       // the returned G4FragmentVector contains the residual nuclide
       // as its last entry.
@@ -366,6 +370,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 	(theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
 	 daughterMomentum1);
       products->PushProducts (dynamicDaughter); 
+      
       // retrive the ICM shell index
       shellIndex = deexcitation->GetVacantShellNumber();
       

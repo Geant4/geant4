@@ -168,7 +168,7 @@ G4RadioactiveDecay::G4RadioactiveDecay
   FBeta       = false ;
   BRBias      = true ;
   applyICM    = true ;
-  appliARM    = true ;
+  applyARM    = true ;
   halflifethreshold = 1e-6*second;
   //
   // RDM applies to xall logical volumes as default
@@ -202,9 +202,9 @@ G4bool G4RadioactiveDecay::IsApplicable( const G4ParticleDefinition &
   //
   // All particles, other than G4Ions, are rejected by default.
   //
+  if (((const G4Ions*)(&aParticle))->GetExcitationEnergy() > 0.) {return true;}
   if (aParticle.GetParticleName() == "GenericIon")      {return true;}
   else if (!(aParticle.GetParticleType() == "nucleus") || aParticle.GetPDGLifeTime() < 0. ) {return false;}
-
   //
   //
   // Determine whether the nuclide falls into the correct A and Z range.
@@ -484,6 +484,8 @@ G4double G4RadioactiveDecay::GetMeanLifeTime(const G4Track& theTrack,
     if (theParticleDef->GetPDGStable()) {meanlife = DBL_MAX;}
     else if (theLife < 0.0) {meanlife = DBL_MAX;}
     else {meanlife = theLife;}
+  // set the meanlife to zero for excited istopes which is not in the RDM database
+    if (((const G4Ions*)(theParticleDef))->GetExcitationEnergy() > 0. && meanlife == DBL_MAX) {meanlife = 0.;}
   }
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
@@ -614,8 +616,7 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 //     To load the decay scheme from the Radioactivity database for 
 //     theParentNucleus.
 //
-G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
-  &theParentNucleus)
+G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition &theParentNucleus)
 {
   //
   //
@@ -647,320 +648,306 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 
   
   std::ifstream DecaySchemeFile(file);
-
-  if (!DecaySchemeFile)
+  G4bool found(false);
+  if (DecaySchemeFile) { 
     //
     //
-    // There is no radioactive decay data for this nucleus.  Return a null
-    // decay table.
+    // Initialise variables used for reading in radioactive decay data.
     //
-    {
-      G4cerr <<"G4RadoactiveDecay::LoadDecayTable() : cannot find ion radioactive decay file " <<G4endl;
-      theDecayTable = 0;
-      return theDecayTable;
-    }
-  //
-  //
-  // Initialise variables used for reading in radioactive decay data.
-  //
-  G4int    nMode = 7;
-  G4bool   modeFirstRecord[7];
-  G4double modeTotalBR[7];
-  G4double modeSumBR[7];
-  G4int i;
-  for (i=0; i<nMode; i++)
-    {
+    G4int    nMode = 7;
+    G4bool   modeFirstRecord[7];
+    G4double modeTotalBR[7];
+    G4double modeSumBR[7];
+    G4int i;
+    for (i=0; i<nMode; i++) {
       modeFirstRecord[i] = true;
       modeSumBR[i]       = 0.0;
     }
-
-  G4bool complete(false);
-  G4bool found(false);
-  char inputChars[80]={' '};
-  G4String inputLine;
-  G4String recordType("");
-  G4RadioactiveDecayMode theDecayMode;
-  G4double a(0.0);
-  G4double b(0.0);
-  G4double c(0.0);
-  G4double n(1.0);
-  G4double e0;
-  //
-  //
-  // Go through each record in the data file until you identify the decay
-  // data relating to the nuclide of concern.
-  //
-//  while (!complete && -DecaySchemeFile.getline(inputChars, 80).eof() != EOF)
-  while (!complete && !DecaySchemeFile.getline(inputChars, 80).eof())    {
+    
+    G4bool complete(false);
+    char inputChars[80]={' '};
+    G4String inputLine;
+    G4String recordType("");
+    G4RadioactiveDecayMode theDecayMode;
+    G4double a(0.0);
+    G4double b(0.0);
+    G4double c(0.0);
+    G4double n(1.0);
+    G4double e0;
+    //
+    //
+    // Go through each record in the data file until you identify the decay
+    // data relating to the nuclide of concern.
+    //
+    //  while (!complete && -DecaySchemeFile.getline(inputChars, 80).eof() != EOF)
+    while (!complete && !DecaySchemeFile.getline(inputChars, 80).eof()) {
       inputLine = inputChars;
       //    G4String::stripType stripend(1);
       //    inputLine = inputLine.strip(stripend);
       inputLine = inputLine.strip(1);
-      if (inputChars[0] != '#' && inputLine.length() != 0)
-	{
-	  std::istringstream tmpStream(inputLine);
-	  if (inputChars[0] == 'P')
-	    //
-	    //
-	    // Nucleus is a parent type.  Check the excitation level to see if it matches
-	    // that of theParentNucleus
-	    //
-	    {
-	      tmpStream >>recordType >>a >>b;
-	      if (found) {complete = true;}
-	      else {found = (std::abs(a*keV - E)<levelTolerance);}
-	    }
-	  else if (found)
-	    {
-	      //
-	      //
-	      // The right part of the radioactive decay data file has been found.  Search
-	      // through it to determine the mode of decay of the subsequent records.
-	      //
-	      if (inputChars[0] == 'W') {
+      if (inputChars[0] != '#' && inputLine.length() != 0) {
+	std::istringstream tmpStream(inputLine);
+	if (inputChars[0] == 'P') {
+	  //
+	  //
+	  // Nucleus is a parent type.  Check the excitation level to see if it matches
+	  // that of theParentNucleus
+	  //
+	  tmpStream >>recordType >>a >>b;
+	  if (found) {complete = true;}
+	  else {found = (std::abs(a*keV - E)<levelTolerance);}
+	} else if (found) {
+	  //
+	  //
+	  // The right part of the radioactive decay data file has been found.  Search
+	  // through it to determine the mode of decay of the subsequent records.
+	  //
+	  if (inputChars[0] == 'W') {
 #ifdef G4VERBOSE
-		if (GetVerboseLevel()>0) {
-		  // a comment line identified and print out the message
-		  //
-		  G4cout << " Warning in G4RadioactiveDecay::LoadDecayTable " << G4endl;
-		  G4cout << "   In data file " << file << G4endl;
-		  G4cout << "   " << inputLine << G4endl;
-		}
-#endif
-	      }	
-	      else 
-		{
-		  tmpStream >>theDecayMode >>a >>b >>c;
-		  a/=1000.;
-		  c/=1000.;
-	  
-		  //	cout<< "The decay mode is [LoadTable] "<<theDecayMode<<G4endl;
-	  
-		  switch (theDecayMode)
-		    {
-		    case IT:
-		      //
-		      //
-		      // Decay mode is isomeric transition.
-		      //
-		      {
-			G4ITDecayChannel *anITChannel = new G4ITDecayChannel
-			  (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, b);
-			anITChannel->SetICM(applyICM);
-			anITChannel->SetARM(applyARM);
-			anITChannel->SetHLThresold(halflifethreshold);
-			theDecayTable->Insert(anITChannel);
-			break;
-		      }
-		    case BetaMinus:
-		      //
-		      //
-		      // Decay mode is beta-.
-		      //
-		      if (modeFirstRecord[1])
-			{modeFirstRecord[1] = false; modeTotalBR[1] = b;}
-		      else
-			{
-			  if (c > 0.) {
-			    // to work out the Fermi function normalization factor first
-			    G4BetaFermiFunction* aBetaFermiFunction = new G4BetaFermiFunction (A, (Z+1));
-			    e0 = c*MeV/0.511;
-			    n = aBetaFermiFunction->GetFFN(e0);
-			    
-			    // now to work out the histogram and initialise the random generator
-			    G4int npti = 100;				
-			    G4double* pdf = new G4double[npti];
-			    G4int ptn;
-			    G4double g,e,ee,f;
-			    ee = e0+1.;
-			    for (ptn=0; ptn<npti; ptn++) {
-			      // e =e0*(ptn+1.)/102.;
-			      // bug fix (#662) (flei, 22/09/2004)
-			      e =e0*(ptn+0.5)/100.;
-			      g = e+1.;
-			      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
-			     // Special treatment for K-40 (problem #1068) (flei,06/05/2010) 
-			      if (theParentNucleus.GetParticleName() == "K40[0.0]") f *=
-				(std::pow((g*g-1),3)+std::pow((ee-g),6)+7*(g*g-1)*std::pow((ee-g),2)*(g*g-1+std::pow((ee-g),2)));
-			      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
-			    }		  
-			    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
-			    G4BetaMinusDecayChannel *aBetaMinusChannel = new
-			      G4BetaMinusDecayChannel (GetVerboseLevel(), &theParentNucleus,
-						       b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
-			    theDecayTable->Insert(aBetaMinusChannel);
-			    modeSumBR[1] += b;
-			    delete[] pdf;
-			    delete aBetaFermiFunction;
-			  }
-			}
-		      break;
-		    case BetaPlus:
-		      //
-		      //
-		      // Decay mode is beta+.
-		      //
-		      if (modeFirstRecord[2])
-			{modeFirstRecord[2] = false; modeTotalBR[2] = b;}
-		      else
-			{
-			  //  e0 = c*MeV/0.511;
-			  // bug fix (#662) (flei, 22/09/2004)
-			  // need to test e0 as there are some data files (e.g. z67.a162) which have entries for beta+
-			  // with Q < 2Me
-			  //
-			  e0 = c*MeV/0.511 -2.;
-			  if (e0 > 0.) {
-			    G4BetaFermiFunction* aBetaFermiFunction = new G4BetaFermiFunction (A, -(Z-1));
-			    
-			    n = aBetaFermiFunction->GetFFN(e0);
-
-			    // now to work out the histogram and initialise the random generator
-			    G4int npti = 100;				
-			    G4double* pdf = new G4double[npti];
-			    G4int ptn;
-			    G4double g,e,ee,f;
-			    ee = e0+1.;
-			    for (ptn=0; ptn<npti; ptn++) {
-			      // e =e0*(ptn+1.)/102.;
-			      // bug fix (#662) (flei, 22/09/2004)
-			      e =e0*(ptn+0.5)/100.;
-			      g = e+1.;
-			      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
-			      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
-			    }
-			    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
-			    G4BetaPlusDecayChannel *aBetaPlusChannel = new 
-			      G4BetaPlusDecayChannel (GetVerboseLevel(), &theParentNucleus,
-						      b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
-			    theDecayTable->Insert(aBetaPlusChannel);
-			    modeSumBR[2] += b;
-			    
-			    delete[] pdf;
-			    delete aBetaFermiFunction;	      
-			  }
-			}
-		      break;
-		    case KshellEC:
-		      //
-		      //
-		      // Decay mode is K-electron capture.
-		      //
-		      if (modeFirstRecord[3])
-			{modeFirstRecord[3] = false; modeTotalBR[3] = b;}
-		      else
-			{
-			  G4KshellECDecayChannel *aKECChannel = new
-			    G4KshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
-						    b, c*MeV, a*MeV);
-			  aKECChannel->SetICM(applyICM);
-			  aKECChannel->SetARM(applyARM);
-			  aKECChannel->SetHLThresold(halflifethreshold);
-			  theDecayTable->Insert(aKECChannel);
-			  //delete aKECChannel;
-			  modeSumBR[3] += b;
-			}
-		      break;
-		    case LshellEC:
-		      //
-		      //
-		      // Decay mode is L-electron capture.
-		      //
-		      if (modeFirstRecord[4])
-			{modeFirstRecord[4] = false; modeTotalBR[4] = b;}
-		      else
-			{
-			  G4LshellECDecayChannel *aLECChannel = new
-			    G4LshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
-						    b, c*MeV, a*MeV);
-			  aLECChannel->SetICM(applyICM);
-			  aLECChannel->SetARM(applyARM);
-			  aLECChannel->SetHLThresold(halflifethreshold);
-			  theDecayTable->Insert(aLECChannel);
-			  //delete aLECChannel;
-			  modeSumBR[4] += b;
-			}
-		      break;
-		    case MshellEC:
-		      //
-		      //
-		      // Decay mode is M-electron capture. In this implementation it is added to L-shell case
-		      //
-		      if (modeFirstRecord[5])
-			{modeFirstRecord[5] = false; modeTotalBR[5] = b;}
-		      else
-			{
-			  G4MshellECDecayChannel *aMECChannel = new
-			    G4MshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
-						    b, c*MeV, a*MeV);
-			  aMECChannel->SetICM(applyICM);
-			  aMECChannel->SetARM(applyARM);
-			  aMECChannel->SetHLThresold(halflifethreshold);
-			  theDecayTable->Insert(aMECChannel);
-			  modeSumBR[5] += b;
-			}
-		      break;
-		    case Alpha:
-		      //
-		      //
-		      // Decay mode is alpha.
-		      //
-		      if (modeFirstRecord[6])
-			{modeFirstRecord[6] = false; modeTotalBR[6] = b;}
-		      else
-			{
-			  G4AlphaDecayChannel *anAlphaChannel = new
-			    G4AlphaDecayChannel (GetVerboseLevel(), &theParentNucleus,
-						 b, c*MeV, a*MeV);
-			  theDecayTable->Insert(anAlphaChannel);
-			  //	      delete anAlphaChannel;
-			  modeSumBR[6] += b;
-			}
-		      break;
-		    case ERROR:
-		    default:
-                      G4Exception("G4RadioactiveDecay::LoadDecayTable()", "601",
-                                  FatalException, "Error in decay mode selection");
-		      
-		    }
-		}
+	    if (GetVerboseLevel()>0) {
+	      // a comment line identified and print out the message
+	      //
+	      G4cout << " Warning in G4RadioactiveDecay::LoadDecayTable " << G4endl;
+	      G4cout << "   In data file " << file << G4endl;
+	      G4cout << "   " << inputLine << G4endl;
 	    }
+#endif
+	  }	
+	  else {
+	    tmpStream >>theDecayMode >>a >>b >>c;
+	    a/=1000.;
+	    c/=1000.;
+		  
+	    //	cout<< "The decay mode is [LoadTable] "<<theDecayMode<<G4endl;
+		  
+	    switch (theDecayMode) {
+	    case IT:
+	      {
+		//
+		//
+		// Decay mode is isomeric transition.
+		//
+		G4ITDecayChannel *anITChannel = new G4ITDecayChannel
+		  (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, b);
+		anITChannel->SetICM(applyICM);
+		anITChannel->SetARM(applyARM);
+		anITChannel->SetHLThreshold(halflifethreshold);
+		theDecayTable->Insert(anITChannel);
+		break;
+	      }
+	    case BetaMinus:
+	      {
+		//
+		//
+		// Decay mode is beta-.
+		//
+		if (modeFirstRecord[1])
+		  {modeFirstRecord[1] = false; modeTotalBR[1] = b;}
+		else {
+		  if (c > 0.) {
+		    // to work out the Fermi function normalization factor first
+		    G4BetaFermiFunction* aBetaFermiFunction = new G4BetaFermiFunction (A, (Z+1));
+		    e0 = c*MeV/0.511;
+		    n = aBetaFermiFunction->GetFFN(e0);
+				
+		    // now to work out the histogram and initialise the random generator
+		    G4int npti = 100;				
+		    G4double* pdf = new G4double[npti];
+		    G4int ptn;
+		    G4double g,e,ee,f;
+		    ee = e0+1.;
+		    for (ptn=0; ptn<npti; ptn++) {
+		      // e =e0*(ptn+1.)/102.;
+		      // bug fix (#662) (flei, 22/09/2004)
+		      e =e0*(ptn+0.5)/100.;
+		      g = e+1.;
+		      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+		      // Special treatment for K-40 (problem #1068) (flei,06/05/2010) 
+		      if (theParentNucleus.GetParticleName() == "K40[0.0]") f *=
+			(std::pow((g*g-1),3)+std::pow((ee-g),6)+7*(g*g-1)*std::pow((ee-g),2)*(g*g-1+std::pow((ee-g),2)));
+		      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
+		    }		  
+		    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
+		    G4BetaMinusDecayChannel *aBetaMinusChannel = new
+		      G4BetaMinusDecayChannel (GetVerboseLevel(), &theParentNucleus,
+					       b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
+		    theDecayTable->Insert(aBetaMinusChannel);
+		    modeSumBR[1] += b;
+		    delete[] pdf;
+		    delete aBetaFermiFunction;
+		  }
+		}
+		break;
+	      case BetaPlus:
+		//
+		//
+		// Decay mode is beta+.
+		//
+		if (modeFirstRecord[2])
+		  {modeFirstRecord[2] = false; modeTotalBR[2] = b;}
+		else {
+		  //  e0 = c*MeV/0.511;
+		  // bug fix (#662) (flei, 22/09/2004)
+		  // need to test e0 as there are some data files (e.g. z67.a162) which have entries for beta+
+		  // with Q < 2Me
+		  //
+		  e0 = c*MeV/0.511 -2.;
+		  if (e0 > 0.) {
+		    G4BetaFermiFunction* aBetaFermiFunction = new G4BetaFermiFunction (A, -(Z-1));
+				
+		    n = aBetaFermiFunction->GetFFN(e0);
+				
+		    // now to work out the histogram and initialise the random generator
+		    G4int npti = 100;				
+		    G4double* pdf = new G4double[npti];
+		    G4int ptn;
+		    G4double g,e,ee,f;
+		    ee = e0+1.;
+		    for (ptn=0; ptn<npti; ptn++) {
+		      // e =e0*(ptn+1.)/102.;
+		      // bug fix (#662) (flei, 22/09/2004)
+		      e =e0*(ptn+0.5)/100.;
+		      g = e+1.;
+		      f = std::sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+		      pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
+		    }
+		    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
+		    G4BetaPlusDecayChannel *aBetaPlusChannel = new 
+		      G4BetaPlusDecayChannel (GetVerboseLevel(), &theParentNucleus,
+					      b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
+		    theDecayTable->Insert(aBetaPlusChannel);
+		    modeSumBR[2] += b;
+				
+		    delete[] pdf;
+		    delete aBetaFermiFunction;	      
+		  }
+		}
+		break;
+	      case KshellEC:
+		//
+		//
+		// Decay mode is K-electron capture.
+		//
+		if (modeFirstRecord[3])
+		  {modeFirstRecord[3] = false; modeTotalBR[3] = b;}
+		else {
+		  G4KshellECDecayChannel *aKECChannel = new
+		    G4KshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
+					    b, c*MeV, a*MeV);
+		  aKECChannel->SetICM(applyICM);
+		  aKECChannel->SetARM(applyARM);
+		  aKECChannel->SetHLThreshold(halflifethreshold);
+		  theDecayTable->Insert(aKECChannel);
+		  //delete aKECChannel;
+		  modeSumBR[3] += b;
+		}
+		break;
+	      case LshellEC:
+		//
+		//
+		// Decay mode is L-electron capture.
+		//
+		if (modeFirstRecord[4])
+		  {modeFirstRecord[4] = false; modeTotalBR[4] = b;}
+		else {
+		  G4LshellECDecayChannel *aLECChannel = new
+		    G4LshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
+					    b, c*MeV, a*MeV);
+		  aLECChannel->SetICM(applyICM);
+		  aLECChannel->SetARM(applyARM);
+		  aLECChannel->SetHLThreshold(halflifethreshold);
+		  theDecayTable->Insert(aLECChannel);
+		  //delete aLECChannel;
+		  modeSumBR[4] += b;
+		}
+		break;
+	      case MshellEC:
+		//
+		//
+		// Decay mode is M-electron capture. In this implementation it is added to L-shell case
+		//
+		if (modeFirstRecord[5])
+		  {modeFirstRecord[5] = false; modeTotalBR[5] = b;}
+		else {
+		  G4MshellECDecayChannel *aMECChannel = new
+		    G4MshellECDecayChannel (GetVerboseLevel(), &theParentNucleus,
+					    b, c*MeV, a*MeV);
+		  aMECChannel->SetICM(applyICM);
+		  aMECChannel->SetARM(applyARM);
+		  aMECChannel->SetHLThreshold(halflifethreshold);
+		  theDecayTable->Insert(aMECChannel);
+		  modeSumBR[5] += b;
+		}
+		break;
+	      case Alpha:
+		//
+		//
+		// Decay mode is alpha.
+		//
+		if (modeFirstRecord[6])
+		  {modeFirstRecord[6] = false; modeTotalBR[6] = b;}
+		else {
+		  G4AlphaDecayChannel *anAlphaChannel = new
+		    G4AlphaDecayChannel (GetVerboseLevel(), &theParentNucleus,
+					 b, c*MeV, a*MeV);
+		  theDecayTable->Insert(anAlphaChannel);
+		  //	      delete anAlphaChannel;
+		  modeSumBR[6] += b;
+		}
+		break;
+	      case ERROR:
+	      default:
+		G4Exception("G4RadioactiveDecay::LoadDecayTable()", "601",
+			    FatalException, "Error in decay mode selection");
+		
+	      }
+	    }
+	  }
 	}
-
-    }  
-  DecaySchemeFile.close();
-  if (!found && E > 0.) {
-    // cases where IT cascade follows immediately after a decay
-    
-    // Decay mode is isomeric transition.
+      }
+    }	
     //
-    G4ITDecayChannel *anITChannel = new G4ITDecayChannel
-      (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, 1);
-    theDecayTable->Insert(anITChannel);
-  }
-  //
-  //
-  // Go through the decay table and make sure that the branching ratios are
-  // correctly normalised.
-  //
-  G4VDecayChannel       *theChannel             = 0;
-  G4NuclearDecayChannel *theNuclearDecayChannel = 0;
-  G4String mode                     = "";
-  G4int j                           = 0;
-  G4double theBR                    = 0.0;
-  for (i=0; i<theDecayTable->entries(); i++)
-    {
+    //
+    // Go through the decay table and make sure that the branching ratios are
+    // correctly normalised.
+    //
+    G4VDecayChannel       *theChannel             = 0;
+    G4NuclearDecayChannel *theNuclearDecayChannel = 0;
+    G4String mode                     = "";
+    G4int j                           = 0;
+    G4double theBR                    = 0.0;
+    for (i=0; i<theDecayTable->entries(); i++) {
       theChannel             = theDecayTable->GetDecayChannel(i);
       theNuclearDecayChannel = static_cast<G4NuclearDecayChannel *>(theChannel);
       theDecayMode           = theNuclearDecayChannel->GetDecayMode();
       j          = 0;
-      if (theDecayMode != IT)
-	{
-	  theBR = theChannel->GetBR();
-	  theChannel->SetBR(theBR*modeTotalBR[theDecayMode]/modeSumBR[theDecayMode]);
-	}
-    }  
-
+      if (theDecayMode != IT) {
+	theBR = theChannel->GetBR();
+	theChannel->SetBR(theBR*modeTotalBR[theDecayMode]/modeSumBR[theDecayMode]);
+      }
+    } 
+  }		
+  DecaySchemeFile.close();		
+  if (!found && E > 0.) {
+    // cases where IT cascade for exited isotopes without entry in RDM database
+    // Decay mode is isomeric transition.
+    //
+    G4ITDecayChannel *anITChannel = new G4ITDecayChannel
+      (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, 1);
+    anITChannel->SetICM(applyICM);
+    anITChannel->SetARM(applyARM);
+    anITChannel->SetHLThreshold(halflifethreshold);
+    theDecayTable->Insert(anITChannel);
+  } 
+  if (!theDecayTable) {
+    //
+    // There is no radioactive decay data for this nucleus.  Return a null
+    // decay table.
+    //
+    G4cerr <<"G4RadoactiveDecay::LoadDecayTable() : cannot find ion radioactive decay file " <<G4endl;
+    theDecayTable = 0;
+    return theDecayTable;
+  }	
   if (theDecayTable && GetVerboseLevel()>1)
     {
       G4cout <<"G4RadioactiveDecay::LoadDecayTable()" << G4endl;
@@ -1103,8 +1090,8 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 
 	  if (std::abs(daughterExcitation - level->Energy()) < levelTolerance) {
 	    
-	    // Level hafe life is in ns and I want to set the gate as 1 micros
-	    if ( theDecayMode == 0 && level->HalfLife() >= 1000.){    
+	    // Level hafe life is in ns and the gate as 1 micros by default
+	    if ( theDecayMode == 0 && level->HalfLife()*ns >= halflifethreshold ){    
 	      // some further though may needed here
 	      theDecayTable->Insert(theChannel);
 	    } 
@@ -1441,6 +1428,16 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	//
 	G4DecayProducts *products = DoDecay(*theParticleDef);
 	//
+	// check if the product is the same as input and kill the track if necessary to prevent infinite loop
+	// (11/05/10, F.Lei)
+	//
+	if ( products->entries() == 1) {
+	  fParticleChangeForRadDecay.SetNumberOfSecondaries(0);
+	  fParticleChangeForRadDecay.ProposeTrackStatus( fStopAndKill ) ;
+	  fParticleChangeForRadDecay.ProposeLocalEnergyDeposit(0.0);
+	  ClearNumberOfInteractionLengthLeft();
+	  return &fParticleChangeForRadDecay;
+	}	
 	//
 	// Get parent particle information and boost the decay products to the
 	// laboratory frame based on this information.
@@ -1457,8 +1454,10 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	    // since the time is still for rest particle in G4 we need to add the additional 
 	    // time lapsed between the particle come to rest and the actual decay. This time 
 	    // is simply sampled with the mean-life of the particle.
-	    //
-	    finalGlobalTime += -std::log( G4UniformRand()) * theParticleDef->GetPDGLifeTime() ;
+	    // but we need to protect the case PDGTime < 0. (F.Lei 11/05/10)
+	    G4double temptime =  -std::log( G4UniformRand()) * theParticleDef->GetPDGLifeTime();
+	    if (temptime <0.) temptime =0.; 
+	    finalGlobalTime += temptime ;
 	    energyDeposit += theParticle->GetKineticEnergy();
 	  }
 	else

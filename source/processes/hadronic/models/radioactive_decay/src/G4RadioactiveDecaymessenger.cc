@@ -240,11 +240,11 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
   else if (command==verboseCmd) {theRadioactiveDecayContainer->
 				       SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));}
   else if (command==icmCmd ) {theRadioactiveDecayContainer->
-      SetICM(icmCmd-GetNewBoolValue(newValues));}
+      SetICM(icmCmd->GetNewBoolValue(newValues));}
   else if (command==armCmd ) {theRadioactiveDecayContainer->
-      SetARM(armCmd-GetNewBoolValue(newValues));}
+      SetARM(armCmd->GetNewBoolValue(newValues));}
   else if (command==hlthCmd ) {theRadioactiveDecayContainer->
-      SetHLThreshold(hlthCmd-GetNewDoubleValue(newValues));}
+      SetHLThreshold(hlthCmd->GetNewDoubleValue(newValues));}
 }
 
 
