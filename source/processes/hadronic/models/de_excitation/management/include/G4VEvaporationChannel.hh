@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh,v 1.5 2010-04-25 18:43:08 vnivanch Exp $
+// $Id: G4VEvaporationChannel.hh,v 1.6 2010-05-11 11:16:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -68,7 +68,7 @@ public:
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
   // return vector of emitted fragments, initial fragment is modified
-  // and included in this vector
+  // but not included in this vector
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
   // old method initial fragment is not modified, its copy included 
@@ -86,9 +86,9 @@ public:
   inline void UseSICB(G4bool use) { useSICB = use; }	
 
 protected:
+
   G4int OPTxs;
   G4bool useSICB;
-
 
 private:
   G4String Name;
