@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.123 2010-03-08 16:34:17 lgarnier Exp $
+// $Id: G4VisManager.cc,v 1.124 2010-05-11 11:02:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -877,11 +877,33 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
   // Go on to draw trajectory
   assert (0 != fpTrajDrawModelMgr);
 
-  const G4VTrajectoryModel* model = CurrentTrajDrawModel();
+  const G4VTrajectoryModel* trajectoryModel = CurrentTrajDrawModel();
 
-  assert (0 != model); // Should exist
+  assert (0 != trajectoryModel); // Should exist
 
-  model->Draw(trajectory, i_mode, visible);
+  G4TrajectoriesModel* trajectoriesModel =
+    dynamic_cast<G4TrajectoriesModel*>(fpSceneHandler->GetModel());
+  if (trajectoriesModel) {
+    if (trajectoriesModel->IsDrawingModeSet()) {
+      trajectoryModel->Draw(trajectory, i_mode, visible);
+    } else {
+      trajectoryModel->Draw(trajectory, visible);
+    }
+  } else {
+    //G4Exception("G4VisManager::DispatchToModel: Not a G4TrajectoriesModel.");
+    // Just draw at user's request
+    trajectoryModel->Draw(trajectory, i_mode, visible);
+    static G4bool warnedAboutIMode = false;
+    if (!warnedAboutIMode) {
+      G4Exception
+        ("G4VisManager::DispatchToModel",
+         "",
+         JustWarning,
+  "WARNING: DEPRECATED: The use of the i_mode argument in DrawTrajectory"
+  "\n  is deprecated and will be removed at the next major release.");
+      warnedAboutIMode = true;
+    }
+   }
 } 
 
 void G4VisManager::SetUserAction
