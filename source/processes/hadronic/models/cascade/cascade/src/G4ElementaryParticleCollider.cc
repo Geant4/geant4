@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.56 2010-04-30 23:11:14 dennis Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.57 2010-05-11 23:38:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -45,6 +45,8 @@
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
+// 20100511  M. Kelsey -- Bug fix: pi-N two-body final states not correctly
+//		tested for charge-exchange case.
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -327,41 +329,27 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       G4int kw = 1;
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
 	generateStrangeChannelPartTypes(is, 2, ekin);
-
-        G4int finaltype = particle_kinds[0]*particle_kinds[1];
-        if (finaltype != is) kw = 2;  // Charge or strangeness exchange
-
       } else if (is == 1 || is == 2 || is == 4) {
           particle_kinds.push_back(type1);
           particle_kinds.push_back(type2);
-
       } else if (is == 3) {
         piSampler.GetFSPartTypesForPipP(particle_kinds, 2, ekin);
-        if (particle_kinds[0] != proton) kw = 2;
-
       } else if (is == 10) {
         piSampler.GetFSPartTypesForPimN(particle_kinds, 2, ekin);
-        if (particle_kinds[0] != neutron) kw = 2;
-
       } else if (is == 5) {
         piSampler.GetFSPartTypesForPimP(particle_kinds, 2, ekin);
-        if (particle_kinds[0] != proton) kw = 2;
-
       } else if (is == 6) {
         piSampler.GetFSPartTypesForPipN(particle_kinds, 2, ekin);
-        if (particle_kinds[0] != neutron) kw = 2;
-
       } else if (is == 7) {
         piSampler.GetFSPartTypesForPizP(particle_kinds, 2, ekin);
-        if (particle_kinds[0] != proton) kw = 2;
-
       } else if (is == 14) {
         piSampler.GetFSPartTypesForPizN(particle_kinds, 2, ekin);
-        if (particle_kinds[0] != neutron) kw = 2;
-
       } else {
         G4cout << " Unexpected interaction type (2->2) is = " << is << G4endl;
       }
+
+      G4int finaltype = particle_kinds[0]*particle_kinds[1];
+      if (finaltype != is) kw = 2;  // Charge or strangeness exchange
 
       G4LorentzVector mom;
 

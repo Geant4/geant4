@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2010-05-06 20:46:04 mkelsey Exp $
+$Id: History,v 1.70 2010-05-11 23:38:03 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,26 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+11 May 2010 Michael Kelsey (hadr-casc-V09-03-30)
+------------------------------------------------
+Bug fixes in the two-body scattering code.
+
+- G4PionSampler.cc, G4NucleonSampler.cc:  Fix long-standing bug with offset
+  indices computed for cross-section tables.  XXXindex[m][0] (start) and
+  XXXindex[m][1] (stop) are computed in initChannels() as [start,stop]
+  inclusive range (i.e., "for (i=start; i<=stop; i++)"), but used with
+  G4FinalStateSampler::fillSigmaBuffer (and its predecessor code) as
+  [start,stop) exclusive range (i.e., normal C style "for (i=start; i<stop;
+  i++)").  This is fixed by properly setting XXXindex[m-1][1] =
+  XXXindex[m][0], and using the ranges consistently in initChannels().
+
+- G4ElementaryParticleCollider.cc:  In the six pion-nucleon scatters, the
+  two-body final state is incorrectly tested for charge-exchange.  All the
+  if statements check whether "particle_kinds[0]" is the initial nucleon,
+  but the outgoing baryon actually appears in particle_kinds[1].  Replace
+  the individual tests with the use of "finaltype", moved out of the
+  strangeness if-block.
 
 06 May 2010 Michael Kelsey (hadr-casc-V09-03-29, hadr-casc-V09-03-23-01)
 ------------------------------------------------------------------------

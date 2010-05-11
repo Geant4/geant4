@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.8 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4PionSampler.cc,v 1.9 2010-05-11 23:38:03 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 // 20100414  M. Kelsey -- Make cross-section buffer a base class data member,
 //		use base-class functions for interpolations, cross-sections.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers
+// 20100510  M. Kelsey -- Fix bug with index-offset range calculation.
 
 #include "G4PionSampler.hh"
 #include "Randomize.hh"
@@ -283,23 +284,20 @@ void G4PionSampler::initChannels()
   // of multiplicity 
   // |T, Tz> = |3/2,3/2> , |3/2,-1/2> , |1/2, 1/2> respectively 
 
-  // First set up indeces to arrays
+  // First set up indices to arrays: [start,stop) for each multiplicity
   const G4int pipPChanNums[8] = {2, 7, 15, 24, 5, 6, 7, 8};
   const G4int pimPChanNums[8] = {5, 13, 22, 31, 6, 7, 8, 9};
   const G4int pizPChanNums[8] = {5, 13, 21, 30, 6, 7, 8, 9};
-  G4int pipPTotChans = -1;
-  G4int pimPTotChans = -1;
-  G4int pizPTotChans = -1;
+  pipPindex[0][0] = pimPindex[0][0] = pizPindex[0][0] = 0;
   for (G4int i = 0; i < 8; i++) {
-    pipPTotChans += pipPChanNums[i];
-    pimPTotChans += pimPChanNums[i];
-    pizPTotChans += pizPChanNums[i];
-    pipPindex[i][1] = pipPTotChans;
-    pipPindex[i][0] = pipPTotChans - pipPChanNums[i] + 1;
-    pimPindex[i][1] = pimPTotChans;
-    pimPindex[i][0] = pimPTotChans - pimPChanNums[i] + 1;
-    pizPindex[i][1] = pizPTotChans;
-    pizPindex[i][0] = pizPTotChans - pizPChanNums[i] + 1;
+    if (i>0) {
+      pipPindex[i][0] = pipPindex[i-1][1];
+      pimPindex[i][0] = pimPindex[i-1][1];
+      pizPindex[i][0] = pizPindex[i-1][1];
+    }
+    pipPindex[i][1] = pipPindex[i][0] + pipPChanNums[i];
+    pimPindex[i][1] = pimPindex[i][0] + pimPChanNums[i];
+    pizPindex[i][1] = pizPindex[i][0] + pizPChanNums[i];
   }
 
   G4int j, k, m;
@@ -307,21 +305,21 @@ void G4PionSampler::initChannels()
 
   for (m = 0; m < 8; m++) {
     start = pipPindex[m][0];
-    stop = pipPindex[m][1] + 1;
+    stop = pipPindex[m][1];
     for (k = 0; k < 30; k++) {
       t33_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t33_dSigma_dMult[m][k] += pipPCrossSections[j][k];
     }
 
     start = pimPindex[m][0];
-    stop = pimPindex[m][1] + 1;
+    stop = pimPindex[m][1];
     for (k = 0; k < 30; k++) {
       t31_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t31_dSigma_dMult[m][k] += pimPCrossSections[j][k];
     }
 
     start = pizPindex[m][0];
-    stop = pizPindex[m][1] + 1;
+    stop = pizPindex[m][1];
     for (k = 0; k < 30; k++) {
       t11_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t11_dSigma_dMult[m][k] += pizPCrossSections[j][k];

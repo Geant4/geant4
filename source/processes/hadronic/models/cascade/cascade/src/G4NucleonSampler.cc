@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.5 2010-04-29 00:30:02 mkelsey Exp $
+// $Id: G4NucleonSampler.cc,v 1.6 2010-05-11 23:38:03 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 // 20100414  M. Kelsey -- Make cross-section buffer a base class data member
 //		use base-class functions for interpolations, cross-sections.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers
+// 20100510  M. Kelsey -- Fix bug with index-offset range calculation.
 
 #include "G4NucleonSampler.hh"
 #include "Randomize.hh"
@@ -204,26 +205,17 @@ void G4NucleonSampler::initChannels()
   // N-N inelastic cross sections for a given multiplicity 
   // for  |T, Tz> = |1,1> , |1,-1> , |0, 0> respectively 
 
-  /*
-const G4int G4NucleonSampler::PPindex[8][2] =
- {{0, 0}, {1, 6}, {7,24}, {25,56}, {57,63}, {64,71}, {72,81}, {82,92}};
-
-const G4int G4NucleonSampler::NPindex[8][2] =
- {{0, 0}, {1,9}, {10,31}, {32,69}, {70,76}, {77,85}, {86,95}, {96,107}};
-  */
-
-  // First set up indeces to arrays
+  // First set up indices to arrays: [start,stop) for each multiplicity
   const G4int PPChanNums[8] = {1, 6, 18, 32, 7, 8, 10, 11};
   const G4int NPChanNums[8] = {1, 9, 22, 38, 7, 9, 10, 12};
-  G4int PPTotChans = -1;
-  G4int NPTotChans = -1;
+  PPindex[0][0] = NPindex[0][0] = 0;
   for (G4int i = 0; i < 8; i++) {
-    PPTotChans += PPChanNums[i];
-    NPTotChans += NPChanNums[i];
-    PPindex[i][1] = PPTotChans;
-    PPindex[i][0] = PPTotChans - PPChanNums[i] + 1;
-    NPindex[i][1] = NPTotChans;
-    NPindex[i][0] = NPTotChans - NPChanNums[i] + 1;
+    if (i>0) {
+      PPindex[i][0] = PPindex[i-1][1];
+      NPindex[i][0] = NPindex[i-1][1];
+    }
+    PPindex[i][1] = PPindex[i][0] + PPChanNums[i];
+    NPindex[i][1] = NPindex[i][0] + NPChanNums[i];
   }
 
   G4int j, k, m;
@@ -231,14 +223,14 @@ const G4int G4NucleonSampler::NPindex[8][2] =
 
   for (m = 0; m < 8; m++) {
     start = PPindex[m][0];
-    stop = PPindex[m][1] + 1;
+    stop = PPindex[m][1];
     for (k = 0; k < 30; k++) {
       t1_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t1_dSigma_dMult[m][k] += PPCrossSections[j][k];
     }
 
     start = NPindex[m][0];
-    stop = NPindex[m][1] + 1;
+    stop = NPindex[m][1];
     for (k = 0; k < 30; k++) {
       t0_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t0_dSigma_dMult[m][k] += NPCrossSections[j][k];
