@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.61 2010-04-27 15:59:10 lgarnier Exp $
+// $Id: G4OpenGLViewer.cc,v 1.62 2010-05-11 10:22:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -270,7 +270,8 @@ void G4OpenGLViewer::SetView () {
   // clipping in G4OpenGLSceneHandler::CreateSectionPolyhedron.  Also,
   // force kernel visit on change of clipping plane in
   // G4OpenGLStoredViewer::CompareForKernelVisit.
-  if (fVP.IsSection () ) {  // pair of back to back clip planes.
+  //if (fVP.IsSection () ) {  // pair of back to back clip planes.
+  if (false) {  // pair of back to back clip planes.
     const G4Plane3D& s = fVP.GetSectionPlane ();
     double sArray[4];
     sArray[0] = s.a();
@@ -292,7 +293,8 @@ void G4OpenGLViewer::SetView () {
 
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
-  if (fVP.IsCutaway() &&
+  //if (fVP.IsCutaway() &&
+  if (false &&
       fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
       nPlanes > 0) {
     double a[4];
@@ -383,14 +385,14 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   DrawView();
   GLint hits = glRenderMode(GL_RENDER);
   if (hits < 0)
-    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4cout;
+    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
   else if (hits > 0) {
     //G4cout << hits << " hit(s)" << G4endl;
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
       GLuint nnames = *p++;
-      *p++; //OR GLuint zmin = *p++;
-      *p++; //OR GLuint zmax = *p++;
+      p++; //OR GLuint zmin = *p++;
+      p++; //OR GLuint zmax = *p++;
       //G4cout << "Hit " << i << ": " << nnames << " names"
       //     << "\nzmin: " << zmin << ", zmax: " << zmax << G4endl;
       for (GLuint j = 0; j < nnames; ++j) {
@@ -477,7 +479,8 @@ void G4OpenGLViewer::printEPS() {
 
   // Change the LC_NUMERIC value in order to have "." separtor and not ","
   // This case is only useful for French, Canadien...
-  char *oldLocale = strdup(setlocale(LC_NUMERIC,NULL));
+  char* oldLocale = (char*)(malloc(strlen(setlocale(LC_NUMERIC,NULL))+1));
+  if(oldLocale!=NULL) strcpy(oldLocale,setlocale(LC_NUMERIC,NULL));
   setlocale(LC_NUMERIC,"C");
 
   if (fVectoredPs) {
