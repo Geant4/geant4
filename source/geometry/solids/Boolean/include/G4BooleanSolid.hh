@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.15 2006-10-19 15:34:49 gcosmo Exp $
+// $Id: G4BooleanSolid.hh,v 1.16 2010-05-11 09:11:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 
-class G4VSolid;
+class HepPolyhedronProcessor;
 
 class G4BooleanSolid : public G4VSolid
 {
@@ -109,6 +109,9 @@ class G4BooleanSolid : public G4VSolid
   
     G4VSolid* fPtrSolidA;
     G4VSolid* fPtrSolidB;
+
+    G4Polyhedron* StackPolyhedron
+    (HepPolyhedronProcessor&, const G4VSolid*) const;
 
   private:
 

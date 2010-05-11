@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.35 2007-10-23 14:42:31 grichine Exp $
+// $Id: G4UnionSolid.cc,v 1.36 2010-05-11 09:11:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -48,6 +48,7 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
+#include "HepPolyhedronProcessor.h"
 #include "G4NURBS.hh"
 // #include "G4NURBSbox.hh"
 
@@ -453,19 +454,13 @@ G4UnionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 G4Polyhedron* 
 G4UnionSolid::CreatePolyhedron () const 
 {
-  G4Polyhedron* pA = fPtrSolidA->GetPolyhedron();
-  G4Polyhedron* pB = fPtrSolidB->GetPolyhedron();
-  if (pA && pB) {
-    G4Polyhedron* resultant = new G4Polyhedron (pA->add(*pB));
-    return resultant;
-  } else {
-    std::ostringstream oss;
-    oss << GetName() <<
-      ": one of the Boolean components has no corresponding polyhedron.";
-    G4Exception("G4UnionSolid::CreatePolyhedron",
-		"", JustWarning, oss.str().c_str());
-    return 0;
-  }
+  HepPolyhedronProcessor processor;
+  // Stack components and components of components recursively
+  // See G4BooleanSolid::StackPolyhedron
+  G4Polyhedron* top = StackPolyhedron(processor, this);
+  G4Polyhedron* result = new G4Polyhedron(*top);
+  if (processor.execute(*result)) return result;
+  else return 0;
 }
 
 /////////////////////////////////////////////////////////

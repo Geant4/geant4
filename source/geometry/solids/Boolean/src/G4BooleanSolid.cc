@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.21 2006-10-19 15:34:49 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.22 2010-05-11 09:11:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -39,6 +39,7 @@
 #include "G4BooleanSolid.hh"
 #include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
+#include "HepPolyhedronProcessor.h"
 #include "Randomize.hh"
 
 //////////////////////////////////////////////////////////////////
@@ -229,4 +230,78 @@ G4Polyhedron* G4BooleanSolid::GetPolyhedron () const
       fpPolyhedron = CreatePolyhedron();
     }
   return fpPolyhedron;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Stack polyhedra for processing.  Return top polyhedron.
+
+G4Polyhedron* G4BooleanSolid::StackPolyhedron
+(HepPolyhedronProcessor& processor, const G4VSolid* solid) const
+{
+  HepPolyhedronProcessor::Operation operation;
+  const G4String& type = solid->GetEntityType();
+  if (type == "G4UnionSolid")
+    operation = HepPolyhedronProcessor::UNION;
+  else if (type == "G4IntersectionSolid")
+    operation = HepPolyhedronProcessor::INTERSECTION;
+  else if (type == "G4SubtractionSolid")
+    operation = HepPolyhedronProcessor::SUBTRACTION;
+  else {
+    std::ostringstream oss;
+    oss << "Solid - " << solid->GetName() <<
+      " - unrecognised composite solid"
+      "\n  Returning NULL !";
+    G4Exception("StackPolyhedron()", "InvalidSetup",
+                JustWarning, oss.str().c_str());
+    return 0;
+  }
+
+  G4Polyhedron* top = 0;
+  const G4VSolid* solidA = solid->GetConstituentSolid(0);
+  const G4VSolid* solidB = solid->GetConstituentSolid(1);
+
+  /***
+  // Debug
+  G4cout << "\nComposite: "
+	 << solid->GetName() << ": " << solid->GetEntityType()
+	 << G4endl;
+  const G4DisplacedSolid* displacedSolidB = solidB->GetDisplacedSolidPtr();
+  const G4VSolid* undisplacedSolidB = solidB;
+  if (displacedSolidB) undisplacedSolidB =
+    displacedSolidB->GetConstituentMovedSolid();
+  G4cout << "Constituents:\n"
+	 << solidA->GetName() << ": " << solidA->GetEntityType()
+	 << '\n' << solidB->GetName() << ": " << solidB->GetEntityType();
+  if (displacedSolidB)
+    G4cout << ", " << undisplacedSolidB->GetName()
+	   << ": " << undisplacedSolidB->GetEntityType();
+  G4cout << G4endl;
+  // End debug
+  ***/
+
+  if (solidA->GetConstituentSolid(0)) {
+    top = StackPolyhedron(processor, solidA);
+  } else {
+    top = solidA->GetPolyhedron();
+
+    /***
+    // Debug
+    G4cout << "Found top solid " << solidA->GetName()
+	   << ' ' << (void*)top << G4endl;
+    // End debug
+    ***/
+  }
+  G4Polyhedron* operand = solidB->GetPolyhedron();
+
+  /***
+  // Debug
+  G4cout << "Pushing " << solidB->GetName()
+	 << ' ' << operation << ':' << (void*)operand << G4endl;
+  G4cout << "Returning " << ' ' << (void*)top << G4endl;
+  // End debug
+  ***/
+
+  processor.push_back (operation, *operand);
+  return top;
 }
