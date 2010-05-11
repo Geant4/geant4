@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.91 2009-11-16 13:51:08 lgarnier Exp $
+// $Id: G4VSceneHandler.cc,v 1.92 2010-05-11 10:55:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,7 @@
 #include "G4Torus.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
@@ -257,11 +258,28 @@ void G4VSceneHandler::AddSolid (const G4VSolid& solid) {
 }
 
 void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
-  G4TrajectoriesModel* pTrModel =
+  G4TrajectoriesModel* trajectoriesModel =
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
-  if (!pTrModel) G4Exception
+  if (!trajectoriesModel) G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
-  traj.DrawTrajectory(pTrModel->GetDrawingMode());
+  G4VVisManager::IsDefaultDrawTrajectory = false;
+  if (trajectoriesModel->IsDrawingModeSet()) {
+    traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
+  } else {
+    traj.DrawTrajectory();
+  }
+  if (!G4VVisManager::IsDefaultDrawTrajectory) {
+    static G4bool warnedAboutIMode = false;
+    if (!warnedAboutIMode) {
+      G4Exception
+	("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
+	 "",
+	 JustWarning,
+  "WARNING: DEPRECATED: The use of the i_mode argument in DrawTrajectory"
+  "\n  is deprecated and will be removed in a future major release.");
+      warnedAboutIMode = true;
+    }
+  }
 }
 
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
@@ -740,23 +758,22 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
   pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
   pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());
 
-  pModelingParams->SetSectionPolyhedron(CreateSectionPolyhedron());
-  pModelingParams->SetCutawayPolyhedron(CreateCutawayPolyhedron());
+  pModelingParams->SetSectionSolid(CreateSectionSolid());
+  pModelingParams->SetCutawaySolid(CreateCutawaySolid());
   // The polyhedron objects are deleted in the modeling parameters destructor.
 
   return pModelingParams;
 }
 
-const G4Polyhedron* G4VSceneHandler::CreateSectionPolyhedron()
+G4VSolid* G4VSceneHandler::CreateSectionSolid()
 {
-  /* Disable for now.  Boolean processor not up to it.
+  G4VSolid* sectioner = 0;
   const G4ViewParameters& vp = fpViewer->GetViewParameters();
   if (vp.IsSection () ) {
     G4double radius = fpScene->GetExtent().GetExtentRadius();
     G4double safe = radius + fpScene->GetExtent().GetExtentCentre().mag();
-    G4Box sectionBox("clipper",
-		     safe, safe, 1.e-5 * radius);  // Thin in z-plane.
-    G4Polyhedron* sectioner = sectionBox.CreatePolyhedron();
+    G4VSolid* sectionBox =
+      new G4Box("_sectioner", safe, safe, 1.e-5 * radius);  // Thin in z-plane.
     const G4Plane3D& s = vp.GetSectionPlane ();
     G4double a = s.a();
     G4double b = s.b();
@@ -769,16 +786,13 @@ const G4Polyhedron* G4VSceneHandler::CreateSectionPolyhedron()
       const G4Vector3D axis = G4Normal3D(0,0,1).cross(normal);
       transform = G4Rotate3D(angle, axis) * transform;
     }
-    sectioner->Transform(transform);
-    return sectioner;
-  } else {
-    return 0;
+    sectioner = new G4DisplacedSolid
+      ("_displaced_sectioning_box", sectionBox, transform);
   }
-  */
-  return 0;
+  return sectioner;
 }
 
-const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
+G4VSolid* G4VSceneHandler::CreateCutawaySolid()
 {
   return 0;
 }
