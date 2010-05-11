@@ -41,6 +41,7 @@
 #/vis/sceneHandler/create OGLSXm
 #/vis/sceneHandler/create OGLIX
 /vis/sceneHandler/create OGLSX
+#/vis/sceneHandler/create OGLSXm
 #/vis/sceneHandler/create VRML1
 #/vis/sceneHandler/create VRML1FILE
 #
@@ -69,6 +70,10 @@
 # flush not necessary for auto-refresh drivers like OGL abd OI, but leave
 # (all that happens is an extra refresh).
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-1
+/vis/ogl/printEPS
 #
 # Create another viewer.
 /vis/viewer/create
@@ -78,6 +83,10 @@
 /vis/viewer/set/projection perspective 30
 #
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-2
+/vis/ogl/printEPS
 #
 # Now hidden line removal.
 /vis/viewer/create
@@ -88,6 +97,10 @@
 /vis/viewer/set/projection perspective 30
 #
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-3
+/vis/ogl/printEPS
 #
 # Now hidden line *and* hidden surface removal.
 /vis/viewer/create
@@ -98,6 +111,10 @@
 /vis/viewer/set/projection perspective 30
 #
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-4
+/vis/ogl/printEPS
 #
 # Start a run to initialise/optimise geometry and draw user-drawn transients.
 /run/beamOn
@@ -105,21 +122,29 @@
 # Test logical volume model...
 /vis/scene/create
 /vis/scene/add/logicalVolume expHall_L
-/vis/sceneHandler/create OGLSXm
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-5
+/vis/ogl/printEPS
 #
 # Logical volume of Boolean solids...
 /vis/scene/create
 /vis/scene/add/logicalVolume intersection_L
-/vis/sceneHandler/create OGLSXm
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-6
+/vis/ogl/printEPS
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume subtraction_L
@@ -127,6 +152,10 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-7
+/vis/ogl/printEPS
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume union_L
@@ -134,6 +163,10 @@
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-8
+/vis/ogl/printEPS
 #
 # Send geantino through...
 /vis/scene/create
@@ -142,7 +175,7 @@
 /vis/scene/add/volume
 /vis/scene/add/trajectories 5000
 #/vis/sceneHandler/create OGLSX
-/vis/sceneHandler/create OGLSXm
+/vis/sceneHandler/create OGLIQt
 /vis/viewer/create
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 35 35
@@ -151,6 +184,10 @@
 /run/beamOn 1
 /tracking/verbose 0
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-9
+/vis/ogl/printEPS
 #
 # Rotated tracker tube
 /vis/viewer/reset
@@ -170,6 +207,10 @@
 /gun/position -200 -200 300 cm
 /run/beamOn
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-10
+/vis/ogl/printEPS
 #
 # G4Trap1
 /vis/viewer/reset
@@ -213,6 +254,10 @@
 /gun/position -20 280 -200 cm
 /run/beamOn
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-11
+/vis/ogl/printEPS
 #
 # G4Trap2
 /vis/viewer/reset
@@ -239,6 +284,10 @@
 /gun/position -200 460 -20 cm
 /run/beamOn
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-12
+/vis/ogl/printEPS
 #
 # Displaced solid.
 /vis/viewer/reset
@@ -250,6 +299,10 @@
 /gun/direction 1 0 0
 /run/beamOn
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-13
+/vis/ogl/printEPS
 #
 # Boolean solid.
 /vis/viewer/reset
@@ -311,6 +364,10 @@
 /gun/position 50 20 0 cm
 /run/beamOn
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-14
+/vis/ogl/printEPS
 #
 # To view replicas...
 # Investigating BaBar problem...
@@ -353,17 +410,30 @@
 /gun/direction 1 -1 0
 /run/beamOn
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-15
+/vis/ogl/printEPS
 #...end
 #
 /vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/set/projection perspective 30
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-16
+/vis/ogl/printEPS
 #
-/vis/sceneHandler/create RayTracerX
+#/vis/sceneHandler/create OIX
+/vis/sceneHandler/create OGLIQt
 #/vis/viewer/create
 /vis/viewer/create ! ! 200
 /vis/viewer/set/viewpointThetaPhi 30 30
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-17
+/vis/ogl/printEPS
 #
 # You can use /vis/rayTracer/... commands
 /vis/rayTracer/column 150
@@ -375,7 +445,16 @@
 /vis/viewer/set/projection perspective  30
 /vis/viewer/set/viewpointThetaPhi 45 45
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-18
+/vis/ogl/printEPS
 #
 # Odd!!?  JPEG image seems upside down for default view direction...
 /vis/viewer/create ! ! 200
 /vis/viewer/flush
+/vis/ogl/set/printMode vectored
+/vis/ogl/set/printSize 800 600
+/vis/ogl/set/printFilename output-test19-19
+/vis/ogl/printEPS
+exit
