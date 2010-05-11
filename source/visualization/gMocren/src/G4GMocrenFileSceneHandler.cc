@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.13 2010-01-22 14:08:05 gcosmo Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.14 2010-05-11 10:44:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1450,7 +1450,6 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
 
   if(GFDEBUG_TRK) {
     std::cout << " ::AddCompound(const G4VTrajectory&) >>>>>>>>> " << std::endl;
-
     G4TrajectoriesModel * pTrModel = dynamic_cast<G4TrajectoriesModel*>(fpModel);
     if (!pTrModel) { 
       G4Exception 
@@ -1471,9 +1470,8 @@ void G4GMocrenFileSceneHandler::AddCompound(const G4VTrajectory & traj) {
 	G4cout << trj->GetPoint(i)->GetPosition() << ", ";
       }
       G4cout << G4endl;
-
-
     }
+    G4cout << G4endl;
   }
 
   kbModelingTrajectory = false;
