@@ -1,4 +1,4 @@
-# $Id: vis.mac,v 1.1 2008-11-03 11:48:35 gcosmo Exp $
+# $Id: vis.mac,v 1.2 2010-05-12 13:30:38 allison Exp $
 #
 # Macro file for the initialization phase
 # when running in interactive mode
@@ -20,8 +20,10 @@
 # suitable for viewing in DAWN.
 #/vis/open DAWNFILE
 #
+# Use this open statement for default OpenGL graphics system.
+/vis/open OGL
 # Use this open statement instead for OpenGL in immediate mode.
-/vis/open OGLIX
+#/vis/open OGLIX
 #/vis/open RayTracer
 #/vis/open OIX
 # Output an empty detector
