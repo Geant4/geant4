@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03Con.cc,v 1.2 2007-05-26 00:24:09 tkoi Exp $
+// $Id: exampleN03Con.cc,v 1.3 2010-05-12 12:29:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,21 +33,15 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
-#ifdef G4UI_USE_WIN32
-#include "G4UIWin32.hh"
-#endif
 
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "ExN03DetectorConstruction.hh"
@@ -83,30 +77,6 @@ int main(int argc,char** argv)
   G4VUserPhysicsList* physics = new ExN03PhysicsList;
   runManager->SetUserInitialization(physics);
 
-  G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal
-      //
-#if defined(G4UI_USE_XM)
-      session = new G4UIXm(argc,argv);
-#elif defined(G4UI_USE_WIN32)
-      session = new G4UIWin32();
-#elif defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-    }
-  
-#ifdef G4VIS_USE
-  // Visualization manager
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-    
   // Set user action classes
   //
   G4VUserPrimaryGeneratorAction* gen_action = new ExN03PrimaryGeneratorAction(detector);
@@ -126,33 +96,34 @@ int main(int argc,char** argv)
   //
   runManager->Initialize();
     
+#ifdef G4VIS_USE
+  // Visualization manager
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+#endif
+    
   // Get the pointer to the User Interface manager
   //
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  if (session)   // Define UI session for interactive mode
+  if (argc!=1)   // batch mode
     {
-      // G4UIterminal is a (dumb) terminal
-      //
-      // UI->ApplyCommand("/control/execute vis.mac");    
-#if defined(G4UI_USE_XM) || defined(G4UI_USE_WIN32)
-      // Customize the G4UIXm,Win32 menubar with a macro file
-      //
-      // UI->ApplyCommand("/control/execute visTutor/gui.mac");
-#endif
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
 #ifdef G4VIS_USE
       visManager->SetVerboseLevel("quiet");
 #endif
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);    
     }
-
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
+    }
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
