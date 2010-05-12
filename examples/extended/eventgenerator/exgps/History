@@ -11,6 +11,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12/05/2010 J.Allison (exgps-V09-03-00)
+- Introduced GUIExecutive.
+
 08/12/2008 G.Barrand
 - correct / compleete the part concerning AIDA in the README file.
 
