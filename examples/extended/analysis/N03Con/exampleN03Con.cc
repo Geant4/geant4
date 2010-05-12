@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03Con.cc,v 1.3 2010-05-12 12:29:51 allison Exp $
+// $Id: exampleN03Con.cc,v 1.4 2010-05-12 12:45:06 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -124,6 +124,7 @@ int main(int argc,char** argv)
       delete ui;
 #endif
     }
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
