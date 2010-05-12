@@ -6,7 +6,7 @@ digits_hits/hits             asai@slac.stanford.edu          Makoto Asai
 digits_hits/utils            asai@slac.stanford.edu          Makoto Asai
 error_propagation            Pedro.Arce@ciemat.es            Pedro Arce
 event                        asai@slac.stanford.edu          Makoto Asai
-g3tog4                       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
+g3tog4                       ivana@ipno.in2p3.fr             Ivana Hrivnakova
 geometry                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 geometry/biasing             Alexander.Howard@cern.ch        Alexander Howard
 geometry/divisions           Pedro.Arce@ciemat.es            Pedro Arce
@@ -148,7 +148,7 @@ examples/extended
     exgps                    flei@space.qinetiq.com          Fan Lei
     HepMCEx01,02             Koichi.Murakami@kek.jp          Koichi Murakami
     MCTruth                  Witold.Pokorski@cern.ch         Witold Pokorski
-    pythia                   Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
+    pythia                   ivana@ipno.in2p3.fr             Ivana Hrivnakova
   exoticphysics:
     monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
   field:
@@ -156,7 +156,7 @@ examples/extended
     field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
     field04,05               gum@triumf.ca                   Peter Gumplinger
   g3tog4:
-    clGeometry, cltog4       Ivana.Hrivnakova@cern.ch        Ivana Hrivnakova
+    clGeometry, cltog4       ivana@ipno.in2p3.fr             Ivana Hrivnakova
   geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   hadronic:
     Hadr00                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
