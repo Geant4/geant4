@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
+// $Id: monopole.cc,v 1.4 2010-05-12 16:22:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,8 +31,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 #include "globals.hh"
 
@@ -48,6 +46,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,13 +68,13 @@ int main(int argc,char** argv) {
   phys->RegisterPhysics(theMonopole);
 
   //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   // Setup monopole
   G4String s = ""; 
   if(argc > 2) { s = argv[2]; }
-  UI->ApplyCommand("/control/verbose 1");
-  UI->ApplyCommand("/monopole/setup "+s);
+  UImanager->ApplyCommand("/control/verbose 1");
+  UImanager->ApplyCommand("/monopole/setup "+s);
 
   // mandator user classes
   DetectorConstruction* det = new DetectorConstruction();
@@ -83,11 +85,6 @@ int main(int argc,char** argv) {
   PrimaryGeneratorAction* kin = new PrimaryGeneratorAction(det);
   runManager->SetUserAction(kin);
 
-#ifdef G4VIS_USE
-  //visualization manager
-  G4VisManager* visManager = 0;
-#endif
-
   //user action classes
   RunAction* run;
 
@@ -96,24 +93,24 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new TrackingAction(run));
   runManager->SetUserAction(new SteppingAction(det, run));
 
-  if (argc == 1)   // Define UI terminal for interactive mode
-    {
-      visManager = new G4VisExecutive();
-      visManager->Initialize();
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
+#ifdef G4VIS_USE
+  //visualization manager
+  G4VisManager* visManager = 0;
 #endif
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
+
+  if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);    
+    }
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
     }
 
   //job termination
