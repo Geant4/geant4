@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010-04-20 00:50:18 kurasige Exp $
+$Id: History,v 1.187 2010-05-13 00:13:03 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- May 13 2010    Hisaya Kurashige  (particles-V09-03-02)
+- Clean up codes of G4Dynamicparticle ctors (M.Kelsey)
+
 - Apr. 20 2010    Hisaya Kurashige  (particles-V09-03-01)
 - revert destructor of G4DynamicParticle to non-virtual
  (It was changed to virtual by mistake in particles-V09-03-00)
