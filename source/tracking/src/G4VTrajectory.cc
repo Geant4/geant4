@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.12 2006-10-16 13:45:01 allison Exp $
+// $Id: G4VTrajectory.cc,v 1.13 2010-05-13 07:19:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -120,6 +120,7 @@ void G4VTrajectory::DrawTrajectory(G4int i_mode) const
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   if (0 != pVVisManager) {
+    pVVisManager->IsDefaultDrawTrajectory = true;
     pVVisManager->DispatchToModel(*this, i_mode);
   }
 }
