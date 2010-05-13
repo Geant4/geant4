@@ -1,7 +1,7 @@
-# $Id: G4MPI-openmpi.gmk,v 1.1 2007-11-16 13:32:56 kmura Exp $
+# $Id: G4MPI-openmpi.gmk,v 1.2 2010-05-13 03:08:51 kmura Exp $
 # $Name: not supported by cvs2svn $
 # ===========================================================
-#  Makefile for building G4MPI (LAM)
+#  Makefile for building G4MPI (OpenMPI)
 # ===========================================================
 
 ifndef G4MPIROOT
@@ -10,5 +10,6 @@ endif
 
 # additional flags
 CXX := mpic++
+CXXFLAGS := $(subst -Wall, , $(CXXFLAGS))
 CPPFLAGS += -I$(G4MPIROOT)/include -I$(G4MPIROOT)/include/openmpi
 
