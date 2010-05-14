@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FinalStateSampler.cc,v 1.6 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4FinalStateSampler.cc,v 1.7 2010-05-14 20:19:39 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
@@ -79,10 +79,22 @@ G4FinalStateSampler::fillSigmaBuffer(G4double ke,
 G4int G4FinalStateSampler::sampleFlat() const {
   G4int nbins = sigmaBuf.size();
 
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << "G4FinalStateSampler::sampleFlat() has " << nbins << "bins:" << G4endl;
+  for (G4int sbi=0; sbi<nbins; sbi++) G4cout << " " << sigmaBuf[sbi];
+  G4cout << G4endl;
+#endif
+
   G4int i;
   G4double fsum = 0.;
   for (i = 0; i < nbins; i++) fsum += sigmaBuf[i];
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " buffer total (fsum) " << fsum;
+#endif
   fsum *= G4UniformRand();
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " *random-scale " << fsum << G4endl;
+#endif
 
   G4double partialSum = 0.0;
   for (i = 0; i < nbins; i++) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.8 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4NucleonSampler.cc,v 1.9 2010-05-14 20:19:39 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
@@ -126,6 +126,11 @@ G4NucleonSampler::GetFSPartTypesForT1(std::vector<G4int>& kinds,
 {
   G4int channel = findFinalStateIndex(mult, KE, PPindex, PPCrossSections);
 
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " GetFSPartTypesForT1: mult=" << mult << " KE=" << KE
+	 << " tz=" << tzindex << ": channel=" << channel << G4endl;
+#endif
+
   kinds.clear();	// Initialize buffer for new output
 
   G4int i;
@@ -156,6 +161,11 @@ G4NucleonSampler::GetFSPartTypesForT0(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE) const
 {
   G4int channel = findFinalStateIndex(mult, KE, NPindex, NPCrossSections);
+
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " GetFSPartTypesForT0: mult=" << mult << " KE=" << KE
+	 << ": channel=" << channel << G4endl;
+#endif
 
   kinds.clear();	// Initialize buffer for new output
 

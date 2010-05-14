@@ -22,23 +22,25 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeSigmaMinusNChannel.hh,v 1.4 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4CascadeSigmaMinusNChannel.hh,v 1.5 2010-05-14 20:19:39 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Remove redundant total-bins template argument
+// 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
+//		to template for channel typedef
 
 #ifndef G4_CASCADE_SIGMAMINUSN_CHANNEL_HH
 #define G4_CASCADE_SIGMAMINUSN_CHANNEL_HH
 
 #include "G4CascadeData.hh"
 #include "G4CascadeFunctions.hh"
-
+#include "G4CascadeSampler.hh"
 
 struct G4CascadeSigmaMinusNChannelData {
-  typedef G4CascadeData<1,6,20,42,25,17> data_t;
+  typedef G4CascadeData<31,1,6,20,42,25,17> data_t;
   static data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadeSigmaMinusNChannelData> G4CascadeSigmaMinusNChannel;
+typedef G4CascadeFunctions<G4CascadeSigmaMinusNChannelData,G4CascadeSampler> G4CascadeSigmaMinusNChannel;
 
 #endif

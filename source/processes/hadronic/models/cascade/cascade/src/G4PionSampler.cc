@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.11 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4PionSampler.cc,v 1.12 2010-05-14 20:19:39 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
@@ -160,6 +160,11 @@ G4PionSampler::GetFSPartTypesForT33(std::vector<G4int>& kinds,
 {
   G4int channel = findFinalStateIndex(mult, KE, pipPindex, pipPCrossSections);
 
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " GetFSPartTypesForT33: mult=" << mult << " KE=" << KE
+	 << " tz=" << tzindex << ": channel=" << channel << G4endl;
+#endif
+
   kinds.clear();	// Initialize buffer for new output
 
   G4int i;
@@ -191,6 +196,11 @@ G4PionSampler::GetFSPartTypesForT31(std::vector<G4int>& kinds,
 {
   G4int channel = findFinalStateIndex(mult, KE, pimPindex, pimPCrossSections);
 
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " GetFSPartTypesForT31: mult=" << mult << " KE=" << KE
+	 << " tz=" << tzindex << ": channel=" << channel << G4endl;
+#endif
+
   kinds.clear();	// Initialize buffer for new output
 
   G4int i;
@@ -221,6 +231,11 @@ G4PionSampler::GetFSPartTypesForT11(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
   G4int channel = findFinalStateIndex(mult, KE, pizPindex, pizPCrossSections);
+
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " GetFSPartTypesForT11: mult=" << mult << " KE=" << KE
+	 << " tz=" << tzindex << ": channel=" << channel << G4endl;
+#endif
 
   kinds.clear();	// Initialize buffer for new output
 

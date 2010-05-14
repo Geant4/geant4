@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.58 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.59 2010-05-14 20:19:39 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -48,6 +48,7 @@
 // 20100511  M. Kelsey -- Bug fix: pi-N two-body final states not correctly
 //		tested for charge-exchange case.
 // 20100512  M. Kelsey -- Rationalize multiplicity returns to be actual value
+// 20100512  M. Kelsey -- Add some additional debugging messages for 2-to-2
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -373,11 +374,11 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	mom = sampleCMmomentumFor2to2(is, kw, ekin, pscm);
       };
 
-      //      G4cout << " Particle kinds = " << particle_kinds[0] << " , " << particle_kinds[1] << G4endl;
-
       if (verboseLevel > 3){
-	G4cout << " before rotation px " << mom.x() << " py " << mom.y() <<
-	  " pz " << mom.z() << G4endl;
+	G4cout << " Particle kinds = " << particle_kinds[0] << " , "
+	       << particle_kinds[1] << G4endl
+	       << " before rotation px " << mom.x() << " py " << mom.y()
+	       << " pz " << mom.z() << G4endl;
       }
 
       mom = toSCM->rotate(mom); 
@@ -884,8 +885,10 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
                                                       G4double ekin, 
 			                              G4double pscm) const 
 {
-  if (verboseLevel > 3) G4cout << " >>> G4ElementaryParticleCollider::sampleCMmomentumFor2to2" 
-                               << G4endl;
+  if (verboseLevel > 3) 
+    G4cout << " >>> G4ElementaryParticleCollider::sampleCMmomentumFor2to2" 
+	   << " is " << is << " kw " << kw << " ekin " << ekin << " pscm "
+	   << pscm << G4endl;
 
   G4double ct = 0.0;
   
@@ -893,6 +896,7 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
       is == 21 || is == 23 || is == 25 || is == 27 || is ==29 || is == 31 ||
       is == 42 || is == 46 || is == 50 || is == 54 || is ==58 || is == 62) {
     // nucleon-nucleon or hyperon-nucleon
+    if (verboseLevel > 3) G4cout << " nucleon/hyperon elastic" << G4endl;
 
     // Parameters for two-exponential sampling of angular distribution
     // of nucleon-nucleon scattering
@@ -920,6 +924,8 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     
   } else if (kw == 2) {
     // pion charge exchange (pi-p -> pi0n, pi+n -> pi0p, pi0p -> pi+n, pi0n -> pi-p
+    if (verboseLevel > 3) G4cout << " pion-nucleon charge exchange " << G4endl;
+
     // Parameters for two-exponential sampling of angular distribution
     // of pi-nucleon scattering
     G4double nnke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
@@ -946,6 +952,8 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
 
   } else if (is == 3 || is == 7 || is == 14 || is == 10 || is == 11 || is == 30 || is == 17 || is == 26) {
     // pi+p, pi0p, pi0n, pi-n, k+p, k0n, k0bp, or k-n
+    if (verboseLevel > 3) G4cout << " meson-nucleon elastic (1)" << G4endl;
+
     // Parameters for two-exponential sampling of angular distribution
     // of pi-nucleon scattering
     G4double nnke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
@@ -972,6 +980,8 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
 
   } else if (is == 5 || is == 6 || is == 13 || is == 34 || is == 22 || is == 15) {
     // pi-p, pi+n, k-p, k0bn, k+n, or k0p
+    if (verboseLevel > 3) G4cout << " meson-nucleon elastic (2)" << G4endl;
+
     // Parameters for two-exponential sampling of angular distribution
     // of pi-nucleon scattering
     G4double nnke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
@@ -1023,13 +1033,18 @@ G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
   G4double randScale;
   G4double randVal;
   G4double costheta = 1.0;
+
+  if (verboseLevel>3) {
+    G4cout << " sampleCMcosFor2to2: pscm " << pscm << " pFrac " << pFrac
+	   << " pA " << pA << " pC " << pC << " pCos " << pCos << G4endl;
+  }
+
   if (G4UniformRand() < pFrac) {
     // Sample small angles ( 0 < theta < theta0 )
     term1 = 2.0*pscm*pscm*pA;
     term2 = std::exp(-2.0*term1);
     randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
     randVal = (1.0 - randScale)*G4UniformRand() + randScale;
-
   } else {
     // Sample large angles ( theta0 < theta < 180 )
     term1 = 2.0*pscm*pscm*pC;
@@ -1039,6 +1054,12 @@ G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
   }
 
   costheta = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
+
+  if (verboseLevel>3) {
+    G4cout << " term1 " << term1 << " term2 " << term2 << " randVal "
+	   << randVal << " => costheta " << costheta << G4endl;
+  }
+
   return costheta;
 }
 

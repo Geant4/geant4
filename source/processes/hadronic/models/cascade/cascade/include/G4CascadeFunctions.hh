@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeFunctions.hh,v 1.3 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4CascadeFunctions.hh,v 1.4 2010-05-14 20:19:39 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
@@ -31,65 +31,41 @@
 //		sampleFlat(...) from G4CascadeChannel, move functionality
 //		to new base class, to allow data-member buffers.  Move
 //		function definitions to .icc file (needed with templating).
+// 20100510  M. Kelsey -- Use both summed and inclusive cross-sections for
+//		multiplicity, as done in G4{Pion,Nucleon}Sampler.  Support
+//		up to 9-body final states.  Add second argument specifying
+//		which Sampler is used.  Move implementations to .icc file.
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
 
-#include <vector>
 #include "globals.hh"
-#include "G4CascadeSampler.hh"
+#include "Randomize.hh"
+#include <vector>
+#include <assert.h>
 
-template <class T>
-class G4CascadeFunctions : public G4CascadeSampler {
+
+template <class DATA, class SAMP>
+class G4CascadeFunctions : public SAMP {
 public:
   static G4double getCrossSection(double ke) {
-    return instance.findCrossSection(ke, T::data.tot);
+    return instance.findCrossSection(ke, DATA::data.tot);
   }
 
-  static G4int getMultiplicity(G4double ke) {
-    return instance.findMultiplicity(ke, T::data.multiplicities);
+  static G4double getCrossSectionSum(double ke) {
+    return instance.findCrossSection(ke, DATA::data.sum);
   }
+
+  static G4int getMultiplicity(G4double ke);
 
   static const std::vector<G4int>& 
   getOutgoingParticleTypes(G4int mult, G4double ke);
 
 private:
-  G4CascadeFunctions() : G4CascadeSampler() {}
-  static const G4CascadeFunctions<T> instance;
+  G4CascadeFunctions() : SAMP() {}
+  static const G4CascadeFunctions<DATA,SAMP> instance;
 };
 
-// Make sure singleton is instantiated
-template <class T>
-const G4CascadeFunctions<T> G4CascadeFunctions<T>::instance;
-
-
-template <class T> inline 
-const std::vector<G4int>& 
-G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke) {
-  G4int channel = instance.findFinalStateIndex(mult, ke, T::data.index,
-					       T::data.crossSections);
-
-  static std::vector<G4int> kinds(8);	// FIXME:  This is not thread-safe!
-  kinds.clear();
-
-  G4int i;
-  if (mult == 2) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x2bfs[channel][i]);
-  } else if (mult == 3) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x3bfs[channel][i]);
-  } else if (mult == 4) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x4bfs[channel][i]);
-  } else if (mult == 5) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x5bfs[channel][i]);
-  } else if (mult == 6) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x6bfs[channel][i]);
-  } else if (mult == 7) {
-    for(i = 0; i < mult; i++) kinds.push_back(T::data.x7bfs[channel][i]);
-  } else {
-    G4cout << " Illegal multiplicity " << G4endl;
-  }
-
-  return kinds;
-}
+#include "G4CascadeFunctions.icc"
 
 #endif	/* G4_CASCADE_FUNCTIONS_HH */

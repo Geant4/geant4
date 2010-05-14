@@ -1,0 +1,87 @@
+#ifndef G4_CASCADE_FUNCTIONS_ICC
+#define G4_CASCADE_FUNCTIONS_ICC
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+// $Id: G4CascadeFunctions.icc,v 1.1 2010-05-14 20:19:39 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
+
+// Make sure singleton is instantiated
+template <class DATA, class SAMP>
+const G4CascadeFunctions<DATA,SAMP> G4CascadeFunctions<DATA,SAMP>::instance;
+
+
+// Compare summed partial cross section with total cross section
+// Truncate multiplicity at maximum if summed < total
+
+template <class DATA, class SAMP> inline 
+G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) {
+  // Use pointer comparison to see whether tot is just a ref to sum)
+  if (&DATA::data.sum != &DATA::data.tot) {
+    G4double summed = instance.findCrossSection(ke, DATA::data.sum); 
+    G4double total  = instance.findCrossSection(ke, DATA::data.tot);
+    if (G4UniformRand() > summed/total) return DATA::data.maxMultiplicity();
+  }
+
+  return instance.findMultiplicity(ke, DATA::data.multiplicities);
+}
+
+
+template <class DATA, class SAMP> inline 
+const std::vector<G4int>& 
+G4CascadeFunctions<DATA,SAMP>::getOutgoingParticleTypes(G4int mult, G4double ke) {
+  const G4int maxMult = DATA::data.maxMultiplicity();
+
+  static std::vector<G4int> kinds(maxMult);  // FIXME:  This is not thread-safe!
+  kinds.clear();
+
+  if (mult > maxMult+2) {
+    G4cout << " Illegal multiplicity " << G4endl;
+    return kinds;
+  }
+
+  G4int channel = instance.findFinalStateIndex(mult, ke, DATA::data.index,
+					       DATA::data.crossSections);
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " getOutgoingParticleTypes: mult=" << mult << " KE=" << ke
+	 << ": channel=" << channel << G4endl;
+#endif
+
+  // Identify final-state array to be copies
+  const G4int* chan = 0;
+  if (mult == 2) chan = DATA::data.x2bfs[channel];
+  if (mult == 3) chan = DATA::data.x3bfs[channel];
+  if (mult == 4) chan = DATA::data.x4bfs[channel];
+  if (mult == 5) chan = DATA::data.x5bfs[channel];
+  if (mult == 6) chan = DATA::data.x6bfs[channel];
+  if (mult == 7) chan = DATA::data.x7bfs[channel];
+  if (mult == 8) chan = DATA::data.x8bfs[channel];
+  if (mult == 9) chan = DATA::data.x9bfs[channel];
+  assert(chan);
+
+  kinds.insert(kinds.begin(), chan, chan+mult);	// Transfer data into vector
+  return kinds;
+}
+
+#endif	/* G4_CASCADE_FUNCTIONS_ICC */

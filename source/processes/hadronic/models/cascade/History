@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2010-05-14 18:28:02 mkelsey Exp $
+$Id: History,v 1.73 2010-05-14 20:19:39 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,48 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14 May 2010 Michael Kelsey (hadr-casc-V09-03-33)
+------------------------------------------------
+Continue consolidation of two-body collision lookup tables.  Unify
+interfaces between pion/nucleon and kaon/hyperon samplers.
+
+- G4CascadeData: Many changes to support use as data class for both
+  kaon/hyperon and pion/nucleon tables (migration will be next tag):
+
+  1) Add new first argument to template with number of bins in energy
+     interpolation.  This replaces the (temporary) use of
+     G4CascadeSampler::energyBins within the class definition.
+
+  2) Add two additional template arguments, N8 and N9, with default values
+     of zero.  These will be used by the pion/nucleon tables, but not by the
+     existing kaon/hyperon tables.
+
+  3) Define additional arrays for 8- and 9-body final states, using
+     conditional dimensioning (e.g., if N8==0, use [1]).  Define second
+     9-body constructor to accept and initialize the new arrays.
+
+  4) Eliminate static intialization of index[], moving it into
+     initialize().  Template specialization can't be used with data!
+
+  5) Add separate "sum" (summed N-body cross-sections) and "tot" arrays
+     (measured inclusive xsec).  Latter is a const-ref, initialized to "sum"
+     if not provided as ctor argument, with two new ctors as needed.
+
+  6) Add accessor to return maximum multiplicity (NM+1).
+
+- G4CascadeFunctions.hh:  Add second template argument to specify which
+  "final state sampler" is the base class.  Use both T::data.tot and
+  T::data.sum in GetMultiplicity(), to support sum/tot comparisons in
+  pion/nucleon channels.  Extend GetOutputParticleTypes() to support up to
+  multiplicity 9.
+
+- G4CascadeFunctions.icc:  Implementations of template class functions.
+
+- G4CascadeXXXChannel.hh: Add "31," as initial template argument for Data.
+  Add G4CascadeSampler as second template argument in G4CascadeXXXChannel
+  typedef.
+
 
 14 May 2010 Michael Kelsey (hadr-casc-V09-03-32)
 ------------------------------------------------
