@@ -22,13 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FinalStateSampler.cc,v 1.5 2010-05-14 18:01:28 mkelsey Exp $
+// $Id: G4FinalStateSampler.cc,v 1.6 2010-05-14 18:28:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
 // 20100413  M. Kelsey -- Move subclass functionality here
 // 20100505  M. Kelsey -- Use new interpolator class, drop std::pair<>, remove
 //		unnecessary sampleFlat(...).
+// 20100511  M. Kelsey -- Add new findFinalStateIndex() function to match
+//		G4CascadeSampler.  Reduce index to one-dimension.
 
 #include "G4FinalStateSampler.hh"
 #include "Randomize.hh"
@@ -47,6 +49,18 @@ G4FinalStateSampler::findMultiplicity(G4double ke,
 				      const G4double xmult[][energyBins]) const {
   fillSigmaBuffer(ke, xmult);
   return sampleFlat() + 2;
+}
+
+
+G4int 
+G4FinalStateSampler::findFinalStateIndex(G4int mult, G4double ke,
+				      const G4int index[],
+				      const G4double xsec[][energyBins]) const {
+  G4int start = index[mult-2];
+  G4int stop = index[mult-1];
+
+  fillSigmaBuffer(ke, xsec, start, stop);
+  return sampleFlat();
 }
 
 

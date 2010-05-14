@@ -30,7 +30,7 @@
 #include "G4CascadeFunctions.hh"
 
 struct  G4CascadeKminusPChannelData {
-  typedef G4CascadeData<8,20,34,48,22,16,148> data_t;
+  typedef G4CascadeData<8,20,34,48,22,16> data_t;
   static data_t data;
 };
 

@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeXiMinusPChannel.hh,v 1.4 2010-05-14 18:28:02 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100507  M. Kelsey -- Remove redundant total-bins template argument
+
 #ifndef G4_CASCADE_XIMINUSP_CHANNEL_HH
 #define G4_CASCADE_XIMINUSP_CHANNEL_HH
 
@@ -30,7 +34,7 @@
 #include "G4CascadeFunctions.hh"
 
 struct G4CascadeXiMinusPChannelData {
-  typedef G4CascadeData<6,24,4,4,4,4,46> data_t;
+  typedef G4CascadeData<6,24,4,4,4,4> data_t;
   static data_t data;
 };
 

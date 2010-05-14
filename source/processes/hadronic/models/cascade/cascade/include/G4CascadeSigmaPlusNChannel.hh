@@ -22,7 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeSigmaPlusNChannel.hh,v 1.4 2010-05-14 18:28:02 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
+// 20100507  M. Kelsey -- Remove redundant total-bins template argument
+
 #ifndef G4_CASCADE_SIGMAPLUSN_CHANNEL_HH
 #define G4_CASCADE_SIGMAPLUSN_CHANNEL_HH
 
@@ -31,7 +35,7 @@
 
 
 struct G4CascadeSigmaPlusNChannelData {
-  typedef G4CascadeData<3,12,33,59,30,20,157> data_t;
+  typedef G4CascadeData<3,12,33,59,30,20> data_t;
   static data_t data;
 };
 

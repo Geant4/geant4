@@ -1,3 +1,5 @@
+#ifndef G4_CASCADE_SAMPLER_HH
+#define G4_CASCADE_SAMPLER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -22,22 +24,43 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeXiZeroPChannel.hh,v 1.4 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4CascadeSampler.hh,v 1.1 2010-05-14 18:28:02 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
-// 20100507  M. Kelsey -- Remove redundant total-bins template argument
+// 20100506  M. Kelsey -- Move functionality of G4CascadeChannel here,
+//		use as base class to G4CascadeFunctions<T>.
 
-#ifndef G4_CASCADE_XIZEROP_CHANNEL_HH
-#define G4_CASCADE_XIZEROP_CHANNEL_HH
+#include <vector>
+#include "globals.hh"
+#include "G4CascadeInterpolator.hh"
 
-#include "G4CascadeData.hh"
-#include "G4CascadeFunctions.hh"
+class G4CascadeSampler {
+public:
+  G4CascadeSampler() : interpolator(energyScale) {}
+  virtual ~G4CascadeSampler() {}
 
-struct G4CascadeXiZeroPChannelData {
-  typedef G4CascadeData<3,18,53,2,2,2> data_t;
-  static data_t data;
+  enum { energyBins=31 };
+
+  virtual G4double 
+  findCrossSection(double ke, const G4double (&xsec)[energyBins]) const;
+
+  virtual G4int 
+  findMultiplicity(G4double ke, const G4double xmult[][energyBins]) const;
+
+  virtual G4int 
+  findFinalStateIndex(G4int mult, G4double ke, const G4int index[],
+		      const G4double xsec[][energyBins]) const;
+
+private:
+  // Optional start/stop arguments default to inclusive arrays
+  void fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
+		       G4int startBin=0, G4int stopBin=6) const;
+
+  G4int sampleFlat() const;
+
+  G4CascadeInterpolator<energyBins> interpolator;
+  mutable std::vector<G4double> sigmaBuf;
+  static const G4double energyScale[energyBins];
 };
 
-typedef G4CascadeFunctions<G4CascadeXiZeroPChannelData> G4CascadeXiZeroPChannel;
-
-#endif
+#endif	/* G4_CASCADE_SAMPLER_HH */

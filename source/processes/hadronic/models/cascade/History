@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2010-05-14 18:01:28 mkelsey Exp $
+$Id: History,v 1.72 2010-05-14 18:28:02 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,52 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14 May 2010 Michael Kelsey (hadr-casc-V09-03-32)
+------------------------------------------------
+Continue revisions to two-body collision lookup tables.  Make the kaon and
+hyperon channels compatible with the pion/nucleon samplers, before the next
+stage of unifying the structure.
+
+- G4CascadeSampler: NEW class, parallel to G4FinalStateSampler but with a
+  different energy binning.  Used as base class to G4CascadeFunctions<T>,
+  from which the cross-section and other arrays are passed.  Implement
+  findMultiplicity (cf. G4CascadeFunctions::getMultiplicity) to return the
+  true value, not the array index.
+
+  This class replaces functionality of G4CascadeChannel, which is redundant.
+
+- G4CascadeChannel: Remove all interpolation code, leaving only getQnums().
+
+- G4CascadeFunctions:  Inherit from G4CascadeSampler for interpolations,
+  except for final-state extraction (where FS type arrays are dealt with
+  locally, not passed).  Public static functions rely on private instantiated
+  version of class to do work, so that G4CascadeSampler gets instantiated.
+
+- G4CascadeData: Remove final template argument (total number of indices),
+  as redundant with simple sum of multplicity indices.  Use template args to
+  dimension data member arrays (const references), and to statically
+  initialize the start-stop index table.  Make large cross-sections table
+  G4double, not G4float.  Define ctor to pass in array refs for initialization.
+  Reduce index array to single dimension (start=index[i], stop=index[i+1]).
+
+- G4CascadeXXXChannel:  All of the initial-state channel "classes"
+  (typedef names) modified to follow G4CascadeData rewrite.  In .cc file,
+  the explicit lookup tables are static, and passed by const-ref to
+  G4CascadeData.  The "initializer" struct is dropped; with the static
+  "data" object initialized by ctor here.
+
+- G4ElementaryParticleCollider.cc:  In ::generateMultiplicity(), eliminate
+  extra "+2" and "-2" applied to local "mul" variables.  With change above,
+  all functions return return true multiplicity, not array index.
+
+- G4FinalStateSampler:  Add findFinalStateIndex() function, to make
+  interface match G4CascadeSampler exactly.  Reduce index array to single
+  dimension.
+
+- G4PionSampler.cc, G4NucleonSampler.cc:  Use new findFinalStateIndex()
+  function in GetFSPartTypesXXX() functions.  Reduce index array to single
+  dimension (start=index[i], stop=index[i+1]).
 
 14 May 2010 Michael Kelsey (hadr-casc-V09-03-31)
 ------------------------------------------------

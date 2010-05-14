@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FinalStateSampler.hh,v 1.7 2010-05-14 18:01:28 mkelsey Exp $
+// $Id: G4FinalStateSampler.hh,v 1.8 2010-05-14 18:28:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -40,6 +40,8 @@
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums in .cc file
 // 20100505  M. Kelsey -- Use new interpolator class, drop std::pair<>, remove
 //		unnecessary sampleFlat(...).
+// 20100511  M. Kelsey -- Add new findFinalStateIndex() function to match
+//		G4CascadeSampler.   Reduce index to one-dimension.
 
 #include "globals.hh"
 #include <vector>
@@ -62,6 +64,10 @@ protected:
 
   virtual G4int 
   findMultiplicity(G4double ke, const G4double xmult[][energyBins]) const;
+
+  virtual G4int 
+  findFinalStateIndex(G4int mult, G4double ke, const G4int index[],
+		      const G4double xsec[][energyBins]) const;
 
   // Optional start/stop arguments default to inclusive arrays
   void fillSigmaBuffer(G4double ke, const G4double x[][energyBins],

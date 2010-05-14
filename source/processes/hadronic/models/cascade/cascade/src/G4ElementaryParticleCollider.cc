@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.57 2010-05-11 23:38:03 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.58 2010-05-14 18:28:02 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -47,6 +47,7 @@
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
 // 20100511  M. Kelsey -- Bug fix: pi-N two-body final states not correctly
 //		tested for charge-exchange case.
+// 20100512  M. Kelsey -- Rationalize multiplicity returns to be actual value
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -257,20 +258,20 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
   // Non-strange branch 
   } else if (l == 1 || l == 4) {
-    mul = nucSampler.GetMultiplicityT1(ekin) - 2;
-    if (mul > 7) G4cout << " Nuc sampler pp mult too high: mul = " << mul << G4endl;
+    mul = nucSampler.GetMultiplicityT1(ekin);
+    if (mul > 9) G4cout << " Nuc sampler pp mult too high: mul = " << mul << G4endl;
   } else if (l == 2) {
-    mul = nucSampler.GetMultiplicityT0(ekin) - 2;
-    if (mul > 7) G4cout << " Nuc sampler np mult too high: mul = " << mul << G4endl;
+    mul = nucSampler.GetMultiplicityT0(ekin);
+    if (mul > 9) G4cout << " Nuc sampler np mult too high: mul = " << mul << G4endl;
   } else if (l == 3 || l == 10) {
     // |T,Tz> = |3/2,3/2> 
-    mul = piSampler.GetMultiplicityT33(ekin) - 2;
+    mul = piSampler.GetMultiplicityT33(ekin);
   } else if (l == 5 || l == 6) {
     // |T,Tz> = |3/2,1/2> 
-    mul = piSampler.GetMultiplicityT31(ekin) - 2;
+    mul = piSampler.GetMultiplicityT31(ekin);
   } else if (l == 7 || l == 14) {
     // |T,Tz> = |1/2,1/2> 
-    mul = piSampler.GetMultiplicityT11(ekin) - 2;
+    mul = piSampler.GetMultiplicityT11(ekin);
   } else {
     G4cout << " G4ElementaryParticleCollider: "
            << " Unknown interaction channel - multiplicity not generated " 
@@ -279,10 +280,10 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
   if(verboseLevel > 3){
     G4cout << " G4ElementaryParticleCollider::generateMultiplicity: "  
-           << " multiplicity = " << mul + 2 << G4endl; 
+           << " multiplicity = " << mul << G4endl; 
   }
 
-  return mul + 2;
+  return mul;
 }
 
  

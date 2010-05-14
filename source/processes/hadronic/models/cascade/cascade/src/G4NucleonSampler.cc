@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.7 2010-05-14 18:01:28 mkelsey Exp $
+// $Id: G4NucleonSampler.cc,v 1.8 2010-05-14 18:28:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
@@ -124,12 +124,7 @@ void
 G4NucleonSampler::GetFSPartTypesForT1(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int start = PPindex[mult-2];
-  G4int stop = PPindex[mult-1];
-
-  fillSigmaBuffer(KE, PPCrossSections, start, stop);
-
-  G4int channel = sampleFlat();
+  G4int channel = findFinalStateIndex(mult, KE, PPindex, PPCrossSections);
 
   kinds.clear();	// Initialize buffer for new output
 
@@ -160,12 +155,7 @@ void
 G4NucleonSampler::GetFSPartTypesForT0(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE) const
 {
-  G4int start = NPindex[mult-2];
-  G4int stop = NPindex[mult-1];
-
-  fillSigmaBuffer(KE, NPCrossSections, start, stop);
-
-  G4int channel = sampleFlat();
+  G4int channel = findFinalStateIndex(mult, KE, NPindex, NPCrossSections);
 
   kinds.clear();	// Initialize buffer for new output
 

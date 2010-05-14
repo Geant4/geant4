@@ -22,50 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
 
 #include "G4CascadeChannel.hh"
-#include "Randomize.hh"
-
-std::pair<G4int, G4double> 
-G4CascadeChannel::interpolateEnergy(G4double e)
-{
-  G4int index = 30;
-  G4double fraction = 0.0;
-
-  for (G4int i = 1; i < 31; i++) {
-    if (e < energyScale[i]) {
-      index = i-1;
-      fraction = (e - energyScale[index]) / (energyScale[i] - energyScale[index]);
-      break;
-    }
-  }
-  return std::pair<G4int, G4double>(index, fraction);
-}
-
-
-G4int 
-G4CascadeChannel::sampleFlat(const std::vector<G4double>& sigma)
-{
-  G4int i;
-  G4double sum(0.);
-  for (i = 0; i < G4int(sigma.size()); i++) sum += sigma[i];
- 
-  G4double fsum = sum*G4UniformRand();
-  G4double partialSum = 0.0;
-  G4int channel = 0;
-
-  for (i = 0; i < G4int(sigma.size()); i++) {
-    partialSum += sigma[i];
-    if (fsum < partialSum) {
-      channel = i;
-      break;
-    }
-  }
-
-  return channel;
-}
-
 
 std::vector<G4int> 
 G4CascadeChannel::getQnums(G4int type)
@@ -158,10 +116,3 @@ G4CascadeChannel::getQnums(G4int type)
     Qnums[2] = ch;
     return Qnums;
 }
-
-
-
-const G4double G4CascadeChannel::energyScale[31] = 
-  { 0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
-    0.5, 1.0,  1.5, 2.0,  2.5, 3.0,  3.5, 4.0,  4.5, 5.0,
-    5.5, 6.0,  6.5, 7.0,  7.5, 8.0,  8.5, 9.0,  9.5, 10.0, 15.0 };

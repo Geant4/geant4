@@ -22,90 +22,57 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeFunctions.hh,v 1.2 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4CascadeFunctions.hh,v 1.3 2010-05-14 18:28:02 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
 //		using a static variable in the function as a buffer.
+// 20100505  M. Kelsey -- Use new interpolator class, drop std::pair<>, move
+//		sampleFlat(...) from G4CascadeChannel, move functionality
+//		to new base class, to allow data-member buffers.  Move
+//		function definitions to .icc file (needed with templating).
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
 
 #include <vector>
 #include "globals.hh"
-#include "G4CascadeChannel.hh"
+#include "G4CascadeSampler.hh"
 
 template <class T>
-class G4CascadeFunctions
-{
+class G4CascadeFunctions : public G4CascadeSampler {
 public:
-  static G4double getCrossSection(double ke);
-  static G4int getMultiplicity(G4double ke);
+  static G4double getCrossSection(double ke) {
+    return instance.findCrossSection(ke, T::data.tot);
+  }
+
+  static G4int getMultiplicity(G4double ke) {
+    return instance.findMultiplicity(ke, T::data.multiplicities);
+  }
 
   static const std::vector<G4int>& 
   getOutgoingParticleTypes(G4int mult, G4double ke);
+
+private:
+  G4CascadeFunctions() : G4CascadeSampler() {}
+  static const G4CascadeFunctions<T> instance;
 };
 
+// Make sure singleton is instantiated
 template <class T>
-inline
-G4double 
-G4CascadeFunctions<T>::getCrossSection(double ke)
-{
-  std::pair<G4int, G4double> epair = G4CascadeChannel::interpolateEnergy(ke);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
-  return T::data.tot[k] + fraction*(T::data.tot[k+1] - T::data.tot[k]);
-}
+const G4CascadeFunctions<T> G4CascadeFunctions<T>::instance;
 
-template <class T>
-inline
-G4int 
-G4CascadeFunctions<T>::getMultiplicity(G4double ke)
-{
-  G4double multint(0.0);
-  std::vector<G4double> sigma;
 
-  std::pair<G4int, G4double> epair = G4CascadeChannel::interpolateEnergy(ke);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
+template <class T> inline 
+const std::vector<G4int>& 
+G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke) {
+  G4int channel = instance.findFinalStateIndex(mult, ke, T::data.index,
+					       T::data.crossSections);
 
-  for (G4int m = 0; m < 6; ++m)
-    {
-      multint = T::data.multiplicities[m][k]
-	+ fraction * (T::data.multiplicities[m][k+1] - T::data.multiplicities[m][k]);
-      sigma.push_back(multint);
-    }
-  
-  return G4CascadeChannel::sampleFlat(sigma);
-}
-
-template <class T>
-inline
-const std::vector<G4int>&
-G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke)
-{
-  G4int i;
-  G4double sigint(0.);
-  std::vector<G4double> sigma;
-  
-  std::pair<G4int, G4double> epair = G4CascadeChannel::interpolateEnergy(ke);
-  G4int k = epair.first;
-  G4double fraction = epair.second;
-
-  G4int start = T::data.index[mult-2][0];
-  G4int stop = T::data.index[mult-2][1];
- 
-  for (i = start; i < stop; i++) {
-    sigint = T::data.crossSections[i][k] 
-      + fraction*(T::data.crossSections[i][k+1] - T::data.crossSections[i][k]);
-    sigma.push_back(sigint);
-  }
- 
-  G4int channel = G4CascadeChannel::sampleFlat(sigma);
-
-  static std::vector<G4int> kinds(7);	// Reusable buffer -- NOT PARALLIZABLE!
+  static std::vector<G4int> kinds(8);	// FIXME:  This is not thread-safe!
   kinds.clear();
 
+  G4int i;
   if (mult == 2) {
     for(i = 0; i < mult; i++) kinds.push_back(T::data.x2bfs[channel][i]);
   } else if (mult == 3) {
@@ -125,5 +92,4 @@ G4CascadeFunctions<T>::getOutgoingParticleTypes(G4int mult, G4double ke)
   return kinds;
 }
 
-
-#endif
+#endif	/* G4_CASCADE_FUNCTIONS_HH */

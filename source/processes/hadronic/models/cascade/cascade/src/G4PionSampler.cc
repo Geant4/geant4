@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.10 2010-05-14 18:01:28 mkelsey Exp $
+// $Id: G4PionSampler.cc,v 1.11 2010-05-14 18:28:02 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
@@ -158,12 +158,7 @@ void
 G4PionSampler::GetFSPartTypesForT33(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int start = pipPindex[mult-2];
-  G4int stop = pipPindex[mult-1];
-
-  fillSigmaBuffer(KE, pipPCrossSections, start, stop);
-
-  G4int channel = sampleFlat();
+  G4int channel = findFinalStateIndex(mult, KE, pipPindex, pipPCrossSections);
 
   kinds.clear();	// Initialize buffer for new output
 
@@ -194,12 +189,7 @@ void
 G4PionSampler::GetFSPartTypesForT31(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int start = pimPindex[mult-2];
-  G4int stop = pimPindex[mult-1];
-
-  fillSigmaBuffer(KE, pimPCrossSections, start, stop);
-
-  G4int channel = sampleFlat();
+  G4int channel = findFinalStateIndex(mult, KE, pimPindex, pimPCrossSections);
 
   kinds.clear();	// Initialize buffer for new output
 
@@ -230,12 +220,7 @@ void
 G4PionSampler::GetFSPartTypesForT11(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  G4int start = pizPindex[mult-2];
-  G4int stop = pizPindex[mult-1];
-
-  fillSigmaBuffer(KE, pizPCrossSections, start, stop);
-
-  G4int channel = sampleFlat();
+  G4int channel = findFinalStateIndex(mult, KE, pizPindex, pizPCrossSections);
 
   kinds.clear();	// Initialize buffer for new output
 
