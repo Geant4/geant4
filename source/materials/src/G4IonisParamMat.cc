@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.36 2010-05-10 10:44:39 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.37 2010-05-14 16:27:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
   fCdensity = 0.0;
   fD0density = 0.0;
   fAdjustmentFactor = 1.0;
-  if(!fDensityData) fDensityData = new G4DensityEffectData();
+  if(!fDensityData) { fDensityData = new G4DensityEffectData(); }
 
   // compute parameters
   ComputeMeanParameters();
@@ -326,7 +326,7 @@ void G4IonisParamMat::ComputeIonParameters()
         z    += element->GetZ() * weight ;
         vF   += element->GetIonisation()->GetFermiVelocity() * weight ;
         lF   += element->GetIonisation()->GetLFactor() * weight ;
-	a23  += std::pow(element->GetN(),-2./3.);
+	a23  += std::pow(element->GetN(),-2./3.) * weight ;
       }
     z  /= norm;
     vF /= norm;
