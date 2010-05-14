@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DensityEffectData.hh,v 1.8 2010-04-23 16:20:26 vnivanch Exp $
+// $Id: G4DensityEffectData.hh,v 1.9 2010-05-14 14:32:01 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ public:
   ~G4DensityEffectData();
 
   // return index by Z, -1 if material is not in the table 
-  G4int GetIndex(const G4int Z, G4State mState);
+  G4int GetIndex(G4int Z, G4State mState);
 
   // return index by material name, -1 if material is not in the table 
   G4int GetIndex(const G4String& matName);
