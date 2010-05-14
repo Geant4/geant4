@@ -1,4 +1,4 @@
-$Id: History,v 1.178 2010-05-10 10:44:39 vnivanch Exp $
+$Id: History,v 1.179 2010-05-14 13:36:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-05-10 V.Ivanchenko (materials-V09-03-06)
+- G4DensityEffectData - fixed method GetIndex(Z, state) for Hydrogen
+                        and solid states
 
 10-05-10 V.Ivanchenko (materials-V09-03-05)
 - G4IonisParamMat - added member and method GetInvA23

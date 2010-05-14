@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.10 2010-04-23 16:20:26 vnivanch Exp $
+// $Id: G4DensityEffectData.cc,v 1.11 2010-05-14 13:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -76,15 +76,15 @@ void G4DensityEffectData::Initialize()
       state[i]  = kStateSolid;
     }
 
-//G4_H  index=0
-  G4double M0[NDENSARRAY]={0.263,1.412,9.5835,1.8639,3.2718,0.14092,5.7273,0.0,0.024};
-  AddMaterial(M0,"G4_H");
-  indexZ[1]=0;
-  state[1]=kStateGas;
-
-//G4_lH2  index=1
+//G4_lH2  index=0
   G4double M1[NDENSARRAY]={7.031,1.546,3.2632,0.4759,1.9215,0.13483,5.6249,0,0.021};
   AddMaterial(M1,"G4_lH2");
+
+//G4_H  index=1
+  G4double M0[NDENSARRAY]={0.263,1.412,9.5835,1.8639,3.2718,0.14092,5.7273,0.0,0.024};
+  AddMaterial(M0,"G4_H");
+  indexZ[1]=1;
+  state[1]=kStateGas;
 
 //G4_He  index=2
   G4double M2[NDENSARRAY]={0.263,1.7,11.1393,2.2017,3.6122,0.13443,5.8347,0,0.024};
@@ -251,7 +251,7 @@ void G4DensityEffectData::Initialize()
 //G4_As  index=33
   G4double M33[NDENSARRAY]={45.779,2.219,5.0510,0.1767,3.5702,0.06633,3.4176,0.00,0.030};
   AddMaterial(M33,"G4_As");
-   indexZ[33]=33;
+  indexZ[33]=33;
 
 //G4_Se  index=34
   G4double M34[NDENSARRAY]={40.112,2.104,5.3210,0.2258,3.6264,0.06568,3.4317,0.10,0.024};
@@ -1300,7 +1300,10 @@ void G4DensityEffectData::Initialize()
 G4int G4DensityEffectData::GetIndex(G4int Z, G4State st)
 {
   G4int idx = -1;
-  if(Z >= 0 && Z < NDENSELEM) { if( st == state[Z]) { idx = indexZ[Z]; } } 
+  if(Z > 0 && Z < NDENSELEM) { 
+    if(st == state[Z])             { idx = indexZ[Z]; } 
+    else if(st == kStateUndefined) { idx = indexZ[Z]; }
+  } 
   return idx;
 }
 
