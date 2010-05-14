@@ -1,3 +1,5 @@
+#ifndef G4_CASCADE_PP_CHANNEL_HH
+#define G4_CASCADE_PP_CHANNEL_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -22,50 +24,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeFunctions.hh,v 1.5 2010-05-14 21:05:03 mkelsey Exp $
+// $Id: G4CascadePPChannel.hh,v 1.1 2010-05-14 21:05:03 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
-//
-// 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
-//		using a static variable in the function as a buffer.
-// 20100505  M. Kelsey -- Use new interpolator class, drop std::pair<>, move
-//		sampleFlat(...) from G4CascadeChannel, move functionality
-//		to new base class, to allow data-member buffers.  Move
-//		function definitions to .icc file (needed with templating).
-// 20100510  M. Kelsey -- Use both summed and inclusive cross-sections for
-//		multiplicity, as done in G4{Pion,Nucleon}Sampler.  Support
-//		up to 9-body final states.  Add second argument specifying
-//		which Sampler is used.  Move implementations to .icc file.
-// 20100511  M. Kelsey -- Pass "kinds" buffer as input to getOutputPartTypes
 
-#ifndef G4_CASCADE_FUNCTIONS_HH
-#define G4_CASCADE_FUNCTIONS_HH
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
+#include "G4FinalStateSampler.hh"
 
-#include "globals.hh"
-#include "Randomize.hh"
-#include <vector>
-
-
-template <class DATA, class SAMP>
-class G4CascadeFunctions : public SAMP {
-public:
-  static G4double getCrossSection(double ke) {
-    return instance.findCrossSection(ke, DATA::data.tot);
-  }
-
-  static G4double getCrossSectionSum(double ke) {
-    return instance.findCrossSection(ke, DATA::data.sum);
-  }
-
-  static G4int getMultiplicity(G4double ke);
-
-  static void
-  getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke);
-
-private:
-  G4CascadeFunctions() : SAMP() {}
-  static const G4CascadeFunctions<DATA,SAMP> instance;
+struct G4CascadePPChannelData {
+  typedef G4CascadeData<30,1,6,18,32,7,8,10,11> data_t;
+  static data_t data;
 };
 
-#include "G4CascadeFunctions.icc"
+typedef G4CascadeFunctions<G4CascadePPChannelData,G4FinalStateSampler> G4CascadePPChannel;
 
-#endif	/* G4_CASCADE_FUNCTIONS_HH */
+#endif	/* G4_CASCADE_PP_CHANNEL_HH */

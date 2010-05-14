@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FinalStateSampler.cc,v 1.7 2010-05-14 20:19:39 mkelsey Exp $
+// $Id: G4FinalStateSampler.cc,v 1.8 2010-05-14 21:05:03 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
@@ -31,10 +31,18 @@
 //		unnecessary sampleFlat(...).
 // 20100511  M. Kelsey -- Add new findFinalStateIndex() function to match
 //		G4CascadeSampler.  Reduce index to one-dimension.
+// 20100513  M. Kelsey -- Add checks for single-bin selection (but leave
+//		commented out for validation tests)
 
 #include "G4FinalStateSampler.hh"
 #include "Randomize.hh"
-#include <cmath>
+#include <vector>
+
+
+const G4double G4FinalStateSampler::energyScale[30] = {
+  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
+  0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
+  2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
 
 
 G4double 
@@ -58,6 +66,7 @@ G4FinalStateSampler::findFinalStateIndex(G4int mult, G4double ke,
 				      const G4double xsec[][energyBins]) const {
   G4int start = index[mult-2];
   G4int stop = index[mult-1];
+  //*** if (stop-start <= 1) return start;	// Avoid unnecessary work
 
   fillSigmaBuffer(ke, xsec, start, stop);
   return sampleFlat();
@@ -69,15 +78,17 @@ G4FinalStateSampler::fillSigmaBuffer(G4double ke,
 				     const G4double x[][energyBins],
 				     G4int startBin, G4int stopBin) const {
   sigmaBuf.clear();
-  sigmaBuf.reserve(stopBin-startBin);
+  //*** if (stopBin-startBin <= 1) return;	// Avoid unnecessary work
 
   // NOTE:  push_back() must be used to ensure that size() gets set!
+  sigmaBuf.reserve(stopBin-startBin);
   for(G4int m = startBin; m < stopBin; m++)
     sigmaBuf.push_back(interpolator.interpolate(ke, x[m]));
 }
 
 G4int G4FinalStateSampler::sampleFlat() const {
   G4int nbins = sigmaBuf.size();
+  //*** if (nbins <= 1) return 0;		// Avoid unnecessary work
 
 #ifdef G4CASCADE_DEBUG_SAMPLER
   G4cout << "G4FinalStateSampler::sampleFlat() has " << nbins << "bins:" << G4endl;
@@ -153,13 +164,6 @@ void G4FinalStateSampler::CheckQnums(const G4FastVector<G4ReactionProduct,256> &
     }
     G4cout << G4endl;
   }
-
 }
-
-
-const G4double G4FinalStateSampler::energyScale[30] = {
-  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
-  0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
-  2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
 
 /* end of file */

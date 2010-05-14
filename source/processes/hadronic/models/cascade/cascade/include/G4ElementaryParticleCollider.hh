@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.28 2010-04-30 23:11:02 dennis Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.29 2010-05-14 21:05:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,6 +36,7 @@
 //		  ::generateSCMpionAbsorption()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(); merge
 //		public vs. private ::collide() functions.
+// 20100511  M. Kelsey -- Remove G4PionSampler and G4NucleonSampler.
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -43,8 +44,6 @@
 #include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
-#include "G4NucleonSampler.hh"
-#include "G4PionSampler.hh"
 #include <vector>
 
 class G4LorentzConvertor;
@@ -104,9 +103,6 @@ private:
   G4LorentzVector
   particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
 			     G4double pmod) const; 
-
-  G4NucleonSampler nucSampler;
-  G4PionSampler piSampler;
 
   // Internal buffers for lists of secondaries
   std::vector<G4InuclElementaryParticle> particles;

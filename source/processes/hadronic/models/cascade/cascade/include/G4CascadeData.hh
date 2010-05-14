@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeData.hh,v 1.3 2010-05-14 20:19:39 mkelsey Exp $
+// $Id: G4CascadeData.hh,v 1.4 2010-05-14 21:05:03 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
@@ -107,10 +107,8 @@ struct G4CascadeData
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
       crossSections(xsec), tot(theTot) { initialize(); }
-
   void initialize();			// Fill summed arrays from input
 };
-
 
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
 void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {

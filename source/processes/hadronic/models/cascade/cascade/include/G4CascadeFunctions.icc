@@ -24,8 +24,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeFunctions.icc,v 1.1 2010-05-14 20:19:39 mkelsey Exp $
+// $Id: G4CascadeFunctions.icc,v 1.2 2010-05-14 21:05:03 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
+//		getOutgoingPartTypes().
+
 
 // Make sure singleton is instantiated
 template <class DATA, class SAMP>
@@ -49,16 +53,16 @@ G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) {
 
 
 template <class DATA, class SAMP> inline 
-const std::vector<G4int>& 
-G4CascadeFunctions<DATA,SAMP>::getOutgoingParticleTypes(G4int mult, G4double ke) {
+void G4CascadeFunctions<DATA,SAMP>::
+getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke) {
   const G4int maxMult = DATA::data.maxMultiplicity();
 
-  static std::vector<G4int> kinds(maxMult);  // FIXME:  This is not thread-safe!
   kinds.clear();
+  kinds.reserve(mult);
 
   if (mult > maxMult+2) {
-    G4cout << " Illegal multiplicity " << G4endl;
-    return kinds;
+    G4cerr << " Illegal multiplicity " << G4endl;
+    return;
   }
 
   G4int channel = instance.findFinalStateIndex(mult, ke, DATA::data.index,
@@ -78,10 +82,15 @@ G4CascadeFunctions<DATA,SAMP>::getOutgoingParticleTypes(G4int mult, G4double ke)
   if (mult == 7) chan = DATA::data.x7bfs[channel];
   if (mult == 8) chan = DATA::data.x8bfs[channel];
   if (mult == 9) chan = DATA::data.x9bfs[channel];
-  assert(chan);
+
+  if (!chan) {
+    G4cerr << " getOutgoingParticleTypes: invalid multiplicity " << mult
+	   << G4endl;
+    return;
+  }
 
   kinds.insert(kinds.begin(), chan, chan+mult);	// Transfer data into vector
-  return kinds;
+  return;
 }
 
 #endif	/* G4_CASCADE_FUNCTIONS_ICC */

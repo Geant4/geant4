@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2010-05-14 20:19:39 mkelsey Exp $
+$Id: History,v 1.74 2010-05-14 21:05:03 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,43 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14 May 2010 Michael Kelsey (hadr-casc-V09-03-34)
+------------------------------------------------
+Extract lookup tables from G4PionSampler and G4NucleonSampler into
+individual "classes" defined and initialized with G4CascadeData.
+
+- G4CascadePi{Plus,Minus,Zero}{P,N}Channel.hh: Six new typedefs defined as
+  with the existing G4CascadeXXXChannel, to replace G4PionSampler.
+
+- G4CascadeT33piNChannel.cc: Lookup tables for both PiPlusP and PiMinusN,
+  implemented as with existing G4CascadeXXXChannel, from G4PionSampler.cc.
+
+- G4CascadeT31piNChannel.cc: Lookup tables for both PiMinusP and PiPlusN,
+  implemented as with existing G4CascadeXXXChannel, from G4PionSampler.cc
+
+- G4CascadeT11pizNChannel.cc: Lookup tables for both PiZeroP and PiZeroN,
+  implemented as with existing G4CascadeXXXChannel, from G4PionSampler.cc
+
+- G4Cascade{PP,NP,NN}Channel.hh: Three new typedefs defined as with the
+  existing G4CascadeXXXChannel, to replace G4NucleonSampler.
+
+- G4CascadeT1NNChannel.cc: Lookup tables for both p-p and n-n scattering,
+  implemented as with existing G4CascadeXXXChannel, from G4NucleonSampler.cc
+
+- G4CascadeT0npChannel.cc: Lookup tables for p-n scattering, implemented as
+  with existing G4CascadeXXXChannel, from G4NucleonSampler.cc
+
+- G4CascadeFunctions.hh, .icc: Pass std::vector as non-const argument to
+  getOutgoingParticleTypes() instead of returning internal buffer.
+
+- G4CascadeSampler.cc, G4FinalStateSampler.cc:  Add some checks in
+  findFinalStateIndex, fillSigmaBuffer, and sampleFlat(), such that
+  single-entry ranges don't go through the analysis, just return index 0.
+
+- G4ElementaryParticleCollider.cc: Follow change to getOutgoingParticleTypes()
+  in generateStrangeChannelPartTypes().  Replace all uses of G4PionSampler
+  and G4NucleonSampler with new channel "classes".
 
 14 May 2010 Michael Kelsey (hadr-casc-V09-03-33)
 ------------------------------------------------

@@ -22,11 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeSampler.cc,v 1.1 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4CascadeSampler.cc,v 1.2 2010-05-14 21:05:03 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.
+// 20100513  M. Kelsey -- Add checks for single-bin selection (but leave
+//		commented out for validation tests)
 
 #include "G4CascadeSampler.hh"
 #include "Randomize.hh"
@@ -58,6 +60,7 @@ G4CascadeSampler::findFinalStateIndex(G4int mult, G4double ke,
 				      const G4double xsec[][energyBins]) const {
   G4int start = index[mult-2];
   G4int stop = index[mult-1];
+  //*** if (stop-start <= 1) return start;	// Avoid unnecessary work
 
   fillSigmaBuffer(ke, xsec, start, stop);
   return sampleFlat();
@@ -68,9 +71,10 @@ void
 G4CascadeSampler::fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
 				  G4int startBin, G4int stopBin) const {
   sigmaBuf.clear();
-  sigmaBuf.reserve(stopBin-startBin);
+  //*** if (stopBin-startBin <= 1) return;	// Avoid unnecessary work
 
   // NOTE:  push_back() must be used to ensure that size() gets set!
+  sigmaBuf.reserve(stopBin-startBin);
   for(G4int m = startBin; m < stopBin; m++)
     sigmaBuf.push_back(interpolator.interpolate(ke, x[m]));
 }
@@ -78,6 +82,13 @@ G4CascadeSampler::fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
 
 G4int G4CascadeSampler::sampleFlat() const {
   G4int nbins = sigmaBuf.size();
+  //*** if (nbins <= 1) return 0;		// Avoid unnecessary work
+
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << "G4FinalStateSampler::sampleFlat() has " << nbins << "bins:" << G4endl;
+  for (G4int sbi=0; sbi<nbins; sbi++) G4cout << " " << sigmaBuf[sbi];
+  G4cout << G4endl;
+#endif
 
   G4int i;
   G4double fsum = 0.;
