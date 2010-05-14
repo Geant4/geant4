@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.hh,v 1.3 2010-04-14 18:17:45 mkelsey Exp $
+// $Id: G4NucleonSampler.hh,v 1.4 2010-05-14 18:01:28 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: D. H. Wright
@@ -32,6 +32,7 @@
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
 // 20100414  M. Kelsey -- Make cross-section buffer a base class data member,
 //		use base-class functions for interpolations, cross-sections.
+// 20100508  M. Kelsey -- Use single array for cross-section index offsets.
 
 #ifndef G4NucleonSampler_h
 #define G4NucleonSampler_h 1
@@ -74,8 +75,8 @@ class G4NucleonSampler : public G4FinalStateSampler
   { GetFSPartTypesForT0(types, mult, KE); }
 
 protected:
-   G4int PPindex[8][2];
-   G4int NPindex[8][2];
+   G4int PPindex[9];
+   G4int NPindex[9];
 
    G4int T1_2bfs[2][1][2];
    G4int T1_3bfs[2][6][3];

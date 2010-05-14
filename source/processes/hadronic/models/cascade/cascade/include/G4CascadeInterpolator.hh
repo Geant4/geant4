@@ -1,5 +1,5 @@
-#ifndef G4FinalStateSampler_h
-#define G4FinalStateSampler_h 1
+#ifndef G4CASCADE_INTERPOLATOR_HH
+#define G4CASCADE_INTERPOLATOR_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,61 +24,52 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FinalStateSampler.hh,v 1.7 2010-05-14 18:01:28 mkelsey Exp $
+// $Id: G4CascadeInterpolator.hh,v 1.1 2010-05-14 18:01:28 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: D. H. Wright
-// Date:   26 March 2009
+// Author:  Michael Kelsey <kelsey@slac.stanford.edu>
 //
-// Class Description:
+// Simple linear interpolation class, more lightweight than
+// G4PhysicsVector.  Templated on number of X-axis (usually energy)
+// bins, constructor takes a C-array of bin edges as input, and an
+// optional flag whether to extrapolate (the default) or truncate values
+// beyond the bin boundaries.  
 //
-// Implementation base class for sampling partial cross sections and final
-// states for inelastic hadron-nucleon interactions
-//
-// 20100405  M. Kelsey -- Pass const-ref std::vector<>, improve base interface
-// 20100413  M. Kelsey -- Move subclass functionality here
-// 20100428  M. Kelsey -- Use G4InuclParticleNames enums in .cc file
-// 20100505  M. Kelsey -- Use new interpolator class, drop std::pair<>, remove
-//		unnecessary sampleFlat(...).
+// The interpolation action returns a simple double: the integer part
+// is the bin index, and the fractional part is, obviously, the
+// fractional part.
 
 #include "globals.hh"
-#include <vector>
-#include "G4CascadeInterpolator.hh"
-#include "G4FastVector.hh"
-#include "G4ReactionProduct.hh"
+#include <cfloat>
 
 
-class G4FinalStateSampler
-{
+template <int NBINS>
+class G4CascadeInterpolator {
 public:
-  G4FinalStateSampler() : interpolator(energyScale) { }
-  virtual ~G4FinalStateSampler() { }
-    
-  enum { energyBins=30 };
+  enum { nBins=NBINS, last=NBINS-1 };
 
-protected:
-  virtual G4double 
-  findCrossSection(G4double ke, const G4double (&xsec)[energyBins]) const;
+  G4CascadeInterpolator(const G4double (&xb)[nBins], G4bool extrapolate=true)
+    : xBins(xb), doExtrapolation(extrapolate),
+      lastX(-DBL_MAX), lastVal(-DBL_MAX) {}
 
-  virtual G4int 
-  findMultiplicity(G4double ke, const G4double xmult[][energyBins]) const;
+  virtual ~G4CascadeInterpolator() {}
 
-  // Optional start/stop arguments default to inclusive arrays
-  void fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
-		       G4int startBin=0, G4int stopBin=8) const;
+  // Find bin position (index and fraction) from input argument
+  G4double getBin(const G4double x) const;
 
-  G4int sampleFlat() const;
+  // Apply bin position from first input to second (array)
+  G4double interpolate(const G4double x, const G4double (&yb)[nBins]) const;
+  G4double interpolate(const G4double (&yb)[nBins]) const;
 
-  void CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
-		  G4int &vecLen,
-		  G4ReactionProduct &currentParticle,
-		  G4ReactionProduct &targetParticle,
-		  G4double Q, G4double B, G4double S);
-  
 private:
-  G4CascadeInterpolator<energyBins> interpolator;
-  mutable std::vector<G4double> sigmaBuf;
-  static const G4double energyScale[energyBins];
+  const G4double (&xBins)[nBins];
+  G4bool doExtrapolation;
+
+  mutable G4double lastX;		// Buffers to remember previous call
+  mutable G4double lastVal;
 };
 
-#endif
+// NOTE:  G4 requires template function definitions in .hh file
+#include "G4CascadeInterpolator.icc"
+
+#endif	/* G4CASCADE_INTERPOLATOR_HH */

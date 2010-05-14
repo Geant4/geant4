@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionSampler.cc,v 1.9 2010-05-11 23:38:03 mkelsey Exp $
+// $Id: G4PionSampler.cc,v 1.10 2010-05-14 18:01:28 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
@@ -31,6 +31,8 @@
 //		use base-class functions for interpolations, cross-sections.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers
 // 20100510  M. Kelsey -- Fix bug with index-offset range calculation.
+// 20100511  M. Kelsey -- Eliminate interpolation buffering.  Use single
+//		array for cross-section index offsets.
 
 #include "G4PionSampler.hh"
 #include "Randomize.hh"
@@ -106,60 +108,48 @@ void G4PionSampler::printCrossSections() const
 
 G4int G4PionSampler::GetMultiplicityT31(G4double KE) const
 {
-  Interpolation epair = interpolateEnergy(KE);
-
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = interpolateCrossSection(epair, pimPsummed); 
-  G4double total = interpolateCrossSection(epair, pimPtot);
+  G4double summed = findCrossSection(KE, pimPsummed); 
+  G4double total = findCrossSection(KE, pimPtot);
 
   if (G4UniformRand() > summed/total) {
-    //    G4cout << " T31: partial sum = " << summed << " , total = " << total << " : truncating to 9 " << G4endl;
     return 9;
   } else {
-    fillSigmaBuffer(epair, t31_dSigma_dMult);
-    return sampleFlat() + 2;
+    return findMultiplicity(KE, t31_dSigma_dMult);
   }
 }
 
 
 G4int G4PionSampler::GetMultiplicityT33(G4double KE) const
 {
-  Interpolation epair = interpolateEnergy(KE);
-
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = interpolateCrossSection(epair, pipPsummed); 
-  G4double total = interpolateCrossSection(epair, pipPtot);
+  G4double summed = findCrossSection(KE, pipPsummed); 
+  G4double total = findCrossSection(KE, pipPtot);
 
   if (G4UniformRand() > summed/total) {
-    //    G4cout << " T33: partial sum = " << summed << " , total = " << total << " : truncating to 9 " << G4endl;
     return 9;
   } else {
-    fillSigmaBuffer(epair, t33_dSigma_dMult);
-    return sampleFlat() + 2;
+    return findMultiplicity(KE, t33_dSigma_dMult);
   }
 }
 
 
 G4int G4PionSampler::GetMultiplicityT11(G4double KE) const
 {
-  Interpolation epair = interpolateEnergy(KE);
-
   // Compare summed partial cross section with total cross section
-  // Truncate multiplicity at 8 if summed < total
+  // Truncate multiplicity at 9 if summed < total
 
-  G4double summed = interpolateCrossSection(epair, pizPsummed); 
-  G4double total = interpolateCrossSection(epair, pizPtot);
+  G4double summed = findCrossSection(KE, pizPsummed); 
+  G4double total = findCrossSection(KE, pizPtot);
 
   if (G4UniformRand() > summed/total) {
-    //    G4cout << " T11: partial sum = " << summed << " , total = " << total << " : truncating to 8 " << G4endl;
     return 9;
   } else {
-    fillSigmaBuffer(epair, t11_dSigma_dMult);
-    return sampleFlat() + 2;
+    return findMultiplicity(KE, t11_dSigma_dMult);
   }
 }
 
@@ -168,12 +158,10 @@ void
 G4PionSampler::GetFSPartTypesForT33(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  Interpolation epair = interpolateEnergy(KE);
+  G4int start = pipPindex[mult-2];
+  G4int stop = pipPindex[mult-1];
 
-  G4int start = pipPindex[mult-2][0];
-  G4int stop = pipPindex[mult-2][1];
-
-  fillSigmaBuffer(epair, pipPCrossSections, start, stop);
+  fillSigmaBuffer(KE, pipPCrossSections, start, stop);
 
   G4int channel = sampleFlat();
 
@@ -206,12 +194,10 @@ void
 G4PionSampler::GetFSPartTypesForT31(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  Interpolation epair = interpolateEnergy(KE);
+  G4int start = pimPindex[mult-2];
+  G4int stop = pimPindex[mult-1];
 
-  G4int start = pimPindex[mult-2][0];
-  G4int stop = pimPindex[mult-2][1];
-
-  fillSigmaBuffer(epair, pimPCrossSections, start, stop);
+  fillSigmaBuffer(KE, pimPCrossSections, start, stop);
 
   G4int channel = sampleFlat();
 
@@ -244,12 +230,10 @@ void
 G4PionSampler::GetFSPartTypesForT11(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  Interpolation epair = interpolateEnergy(KE);
+  G4int start = pizPindex[mult-2];
+  G4int stop = pizPindex[mult-1];
 
-  G4int start = pizPindex[mult-2][0];
-  G4int stop = pizPindex[mult-2][1];
-
-  fillSigmaBuffer(epair, pizPCrossSections, start, stop);
+  fillSigmaBuffer(KE, pizPCrossSections, start, stop);
 
   G4int channel = sampleFlat();
 
@@ -288,38 +272,34 @@ void G4PionSampler::initChannels()
   const G4int pipPChanNums[8] = {2, 7, 15, 24, 5, 6, 7, 8};
   const G4int pimPChanNums[8] = {5, 13, 22, 31, 6, 7, 8, 9};
   const G4int pizPChanNums[8] = {5, 13, 21, 30, 6, 7, 8, 9};
-  pipPindex[0][0] = pimPindex[0][0] = pizPindex[0][0] = 0;
+
+  pipPindex[0] = pimPindex[0] = pizPindex[0] = 0;
   for (G4int i = 0; i < 8; i++) {
-    if (i>0) {
-      pipPindex[i][0] = pipPindex[i-1][1];
-      pimPindex[i][0] = pimPindex[i-1][1];
-      pizPindex[i][0] = pizPindex[i-1][1];
-    }
-    pipPindex[i][1] = pipPindex[i][0] + pipPChanNums[i];
-    pimPindex[i][1] = pimPindex[i][0] + pimPChanNums[i];
-    pizPindex[i][1] = pizPindex[i][0] + pizPChanNums[i];
+    pipPindex[i+1] = pipPindex[i] + pipPChanNums[i];
+    pimPindex[i+1] = pimPindex[i] + pimPChanNums[i];
+    pizPindex[i+1] = pizPindex[i] + pizPChanNums[i];
   }
 
   G4int j, k, m;
   G4int start, stop;
 
   for (m = 0; m < 8; m++) {
-    start = pipPindex[m][0];
-    stop = pipPindex[m][1];
+    start = pipPindex[m];
+    stop = pipPindex[m+1];
     for (k = 0; k < 30; k++) {
       t33_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t33_dSigma_dMult[m][k] += pipPCrossSections[j][k];
     }
 
-    start = pimPindex[m][0];
-    stop = pimPindex[m][1];
+    start = pimPindex[m];
+    stop = pimPindex[m+1];
     for (k = 0; k < 30; k++) {
       t31_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t31_dSigma_dMult[m][k] += pimPCrossSections[j][k];
     }
 
-    start = pizPindex[m][0];
-    stop = pizPindex[m][1];
+    start = pizPindex[m];
+    stop = pizPindex[m+1];
     for (k = 0; k < 30; k++) {
       t11_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t11_dSigma_dMult[m][k] += pizPCrossSections[j][k];

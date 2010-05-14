@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NucleonSampler.cc,v 1.6 2010-05-11 23:38:03 mkelsey Exp $
+// $Id: G4NucleonSampler.cc,v 1.7 2010-05-14 18:01:28 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 20100408  M. Kelsey -- Pass buffer as input to *ParticleTypes()
@@ -31,6 +31,8 @@
 //		use base-class functions for interpolations, cross-sections.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers
 // 20100510  M. Kelsey -- Fix bug with index-offset range calculation.
+// 20100511  M. Kelsey -- Eliminate interpolation buffering.  Use single
+//		array for cross-section index offsets.
 
 #include "G4NucleonSampler.hh"
 #include "Randomize.hh"
@@ -88,38 +90,32 @@ void G4NucleonSampler::printCrossSections() const
 
 G4int G4NucleonSampler::GetMultiplicityT1(G4double KE) const
 {
-  Interpolation epair = interpolateEnergy(KE);
-
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = interpolateCrossSection(epair, PPsummed); 
-  G4double total = interpolateCrossSection(epair, PPtot);
+  G4double summed = findCrossSection(KE, PPsummed); 
+  G4double total = findCrossSection(KE, PPtot);
 
   if (G4UniformRand() > summed/total) {
     return 9;
   } else {
-    fillSigmaBuffer(epair, t1_dSigma_dMult);
-    return sampleFlat() + 2;
+    return findMultiplicity(KE, t1_dSigma_dMult);
   }
 }
 
 
 G4int G4NucleonSampler::GetMultiplicityT0(G4double KE) const
 {
-  Interpolation epair = interpolateEnergy(KE);
-
   // Compare summed partial cross section with total cross section
   // Truncate multiplicity at 9 if summed < total
  
-  G4double summed = interpolateCrossSection(epair, NPsummed); 
-  G4double total = interpolateCrossSection(epair, NPtot);
+  G4double summed = findCrossSection(KE, NPsummed); 
+  G4double total = findCrossSection(KE, NPtot);
 
   if (G4UniformRand() > summed/total) {
     return 9;
   } else {
-    fillSigmaBuffer(epair, t0_dSigma_dMult);
-    return sampleFlat() + 2;
+    return findMultiplicity(KE, t0_dSigma_dMult);
   }
 }
 
@@ -128,12 +124,10 @@ void
 G4NucleonSampler::GetFSPartTypesForT1(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE, G4int tzindex) const
 {
-  Interpolation epair = interpolateEnergy(KE);
+  G4int start = PPindex[mult-2];
+  G4int stop = PPindex[mult-1];
 
-  G4int start = PPindex[mult-2][0];
-  G4int stop = PPindex[mult-2][1];
-
-  fillSigmaBuffer(epair, PPCrossSections, start, stop);
+  fillSigmaBuffer(KE, PPCrossSections, start, stop);
 
   G4int channel = sampleFlat();
 
@@ -166,12 +160,10 @@ void
 G4NucleonSampler::GetFSPartTypesForT0(std::vector<G4int>& kinds,
 			     G4int mult, G4double KE) const
 {
-  Interpolation epair = interpolateEnergy(KE);
+  G4int start = NPindex[mult-2];
+  G4int stop = NPindex[mult-1];
 
-  G4int start = NPindex[mult-2][0];
-  G4int stop = NPindex[mult-2][1];
-
-  fillSigmaBuffer(epair, NPCrossSections, start, stop);
+  fillSigmaBuffer(KE, NPCrossSections, start, stop);
 
   G4int channel = sampleFlat();
 
@@ -208,29 +200,26 @@ void G4NucleonSampler::initChannels()
   // First set up indices to arrays: [start,stop) for each multiplicity
   const G4int PPChanNums[8] = {1, 6, 18, 32, 7, 8, 10, 11};
   const G4int NPChanNums[8] = {1, 9, 22, 38, 7, 9, 10, 12};
-  PPindex[0][0] = NPindex[0][0] = 0;
+
+  PPindex[0] = NPindex[0] = 0;
   for (G4int i = 0; i < 8; i++) {
-    if (i>0) {
-      PPindex[i][0] = PPindex[i-1][1];
-      NPindex[i][0] = NPindex[i-1][1];
-    }
-    PPindex[i][1] = PPindex[i][0] + PPChanNums[i];
-    NPindex[i][1] = NPindex[i][0] + NPChanNums[i];
+    PPindex[i+1] = PPindex[i] + PPChanNums[i];
+    NPindex[i+1] = NPindex[i] + NPChanNums[i];
   }
 
   G4int j, k, m;
   G4int start, stop;
 
   for (m = 0; m < 8; m++) {
-    start = PPindex[m][0];
-    stop = PPindex[m][1];
+    start = PPindex[m];
+    stop = PPindex[m+1];
     for (k = 0; k < 30; k++) {
       t1_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t1_dSigma_dMult[m][k] += PPCrossSections[j][k];
     }
 
-    start = NPindex[m][0];
-    stop = NPindex[m][1];
+    start = NPindex[m];
+    stop = NPindex[m+1];
     for (k = 0; k < 30; k++) {
       t0_dSigma_dMult[m][k] = 0.0;
       for (j = start; j < stop; j++) t0_dSigma_dMult[m][k] += NPCrossSections[j][k];

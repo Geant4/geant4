@@ -1,4 +1,4 @@
-$Id: History,v 1.70 2010-05-11 23:38:03 mkelsey Exp $
+$Id: History,v 1.71 2010-05-14 18:01:28 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,31 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14 May 2010 Michael Kelsey (hadr-casc-V09-03-31)
+------------------------------------------------
+Begin revisions to two-body collision lookup tables.  This will be a major
+reorganization, splitting the G4PionSampler and G4NucleonSampler into
+separate little "classes" (typedefs) for each initial state, in the same way
+that the kaon and hyperon states are done now.  The underlying templated and
+base classes will be unified across all of the channels.
+
+- G4CascadeInterpolator: NEW class to encapsulate interpolation procedure.
+  Uses C-style arrays passed by dimensioned reference, to allow compile-time
+  array bounds checking.  Template argument is array dimension, and array of
+  energy bins is saved by ctor.  User array to be interpolated is passed as
+  function argument.  Last value interpolated, along with result, is saved,
+  to allow fast multiple interpolations.
+
+  This class is substantially more lightweight than G4PhysicsVector.
+
+- G4FinalStateSampler: Replace manual interpolation with G4CascadeInterpolator.
+  Remove redundant sampleFlat(...) function with argument.  Rename member
+  functions in anticipation of merging with G4CascadeFunctions.
+
+- G4PionSampler.cc, G4NucleonSampler.cc: Follow use of G4CascadeInterpolator
+  above, and drop local caching of interpolation results.  Reduce offset
+  list for cross-sections to one dimension (start=index[i], stop=index[i+1]).
 
 11 May 2010 Michael Kelsey (hadr-casc-V09-03-30)
 ------------------------------------------------
