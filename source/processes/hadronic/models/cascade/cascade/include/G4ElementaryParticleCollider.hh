@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.29 2010-05-14 21:05:03 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.30 2010-05-15 00:55:01 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,7 +36,8 @@
 //		  ::generateSCMpionAbsorption()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide(); merge
 //		public vs. private ::collide() functions.
-// 20100511  M. Kelsey -- Remove G4PionSampler and G4NucleonSampler.
+// 20100511  M. Kelsey -- Remove G4PionSampler and G4NucleonSampler.  Expand
+//		particle-types selector to all modes, not just strangeness.
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -65,6 +66,8 @@ private:
 
   G4int generateMultiplicity(G4int is, G4double ekin) const;
 
+  void generateOutgoingPartTypes(G4int is, G4int mult, G4double ekin);
+
   void generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,
 			     G4InuclElementaryParticle* particle1,
 			     G4InuclElementaryParticle* particle2, 
@@ -88,10 +91,6 @@ private:
   //
   G4double sampleCMcosFor2to2(G4double pscm, G4double pFrac,
                               G4double pA, G4double pC, G4double pCos) const;
-
-
-  void generateStrangeChannelPartTypes(G4int is, G4int mult, 
-				       G4double ekin);
 
 
   G4double getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 

@@ -24,18 +24,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadePiZeroPChannel.hh,v 1.1 2010-05-14 21:05:03 mkelsey Exp $
+// $Id: G4CascadePiZeroPChannel.hh,v 1.2 2010-05-15 00:55:01 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 
 #include "G4CascadeData.hh"
 #include "G4CascadeFunctions.hh"
-#include "G4FinalStateSampler.hh"
+#include "G4PionNucSampler.hh"
 
 struct G4CascadePiZeroPChannelData {
   typedef G4CascadeData<30,5,13,21,30,6,7,8,9> data_t;
   static data_t data;
 };
 
-typedef G4CascadeFunctions<G4CascadePiZeroPChannelData,G4FinalStateSampler> G4CascadePiZeroPChannel;
+typedef G4CascadeFunctions<G4CascadePiZeroPChannelData,G4PionNucSampler> G4CascadePiZeroPChannel;
 
 #endif	/* G4_CASCADE_PIZEROP_CHANNEL_HH */

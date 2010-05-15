@@ -24,22 +24,27 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeSampler.hh,v 1.1 2010-05-14 18:28:02 mkelsey Exp $
+// $Id: G4CascadeSampler.hh,v 1.2 2010-05-15 00:55:01 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100506  M. Kelsey -- Move functionality of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.
+// 20100512  M. Kelsey -- Make this templated on energy and multiplicity
+//		binning, as base to new sampler.
 
 #include <vector>
 #include "globals.hh"
 #include "G4CascadeInterpolator.hh"
 
+template <int NBINS, int NMULT>
 class G4CascadeSampler {
 public:
-  G4CascadeSampler() : interpolator(energyScale) {}
-  virtual ~G4CascadeSampler() {}
+  enum { energyBins=NBINS, multBins=NMULT };	// For use in function arguments
 
-  enum { energyBins=31 };
+  G4CascadeSampler(const G4double (&ebins)[energyBins]) 
+    : interpolator(ebins), energyScale(ebins) {}
+
+  virtual ~G4CascadeSampler() {}
 
   virtual G4double 
   findCrossSection(double ke, const G4double (&xsec)[energyBins]) const;
@@ -54,13 +59,15 @@ public:
 private:
   // Optional start/stop arguments default to inclusive arrays
   void fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
-		       G4int startBin=0, G4int stopBin=6) const;
+		       G4int startBin=0, G4int stopBin=multBins) const;
 
   G4int sampleFlat() const;
 
-  G4CascadeInterpolator<energyBins> interpolator;
+  G4CascadeInterpolator<NBINS> interpolator;
   mutable std::vector<G4double> sigmaBuf;
-  static const G4double energyScale[energyBins];
+  const G4double (&energyScale)[energyBins];
 };
+
+#include "G4CascadeSampler.icc"
 
 #endif	/* G4_CASCADE_SAMPLER_HH */

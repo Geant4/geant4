@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.60 2010-05-14 21:05:03 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.61 2010-05-15 00:55:01 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -53,6 +53,8 @@
 //		tested for charge-exchange case.
 // 20100512  M. Kelsey -- Rationalize multiplicity returns to be actual value
 // 20100512  M. Kelsey -- Add some additional debugging messages for 2-to-2
+// 20100512  M. Kelsey -- Replace "if (is==)" cascades with switch blocks.
+//		Use G4CascadeInterpolator for angular distributions.
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -86,6 +88,7 @@
 #include "G4CascadeXiMinusPChannel.hh"
 #include "G4CascadeXiMinusNChannel.hh"
 
+#include "G4CascadeInterpolator.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -219,65 +222,37 @@ G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 {
   G4int mul = 0;
 
-  if (is == 1) {
-    mul = G4CascadePPChannel::getMultiplicity(ekin);
-  } else if (is == 2) {
-    mul = G4CascadeNPChannel::getMultiplicity(ekin);
-  } else if (is == 4) {
-    mul = G4CascadeNNChannel::getMultiplicity(ekin);
-  } else if (is == 3) {
-    mul = G4CascadePiPlusPChannel::getMultiplicity(ekin);
-  } else if (is == 10) {
-    mul = G4CascadePiMinusNChannel::getMultiplicity(ekin);
-  } else if (is == 5) {
-    mul = G4CascadePiMinusPChannel::getMultiplicity(ekin);
-  } else if (is == 6) {
-    mul = G4CascadePiPlusNChannel::getMultiplicity(ekin);
-  } else if (is == 7) {
-    mul = G4CascadePiZeroPChannel::getMultiplicity(ekin);
-  } else if (is == 14) {
-    mul = G4CascadePiZeroNChannel::getMultiplicity(ekin);
-  } else if (is == 11 ) {
-    mul = G4CascadeKplusPChannel::getMultiplicity(ekin);
-  } else if (is == 13 ) {
-    mul = G4CascadeKminusPChannel::getMultiplicity(ekin);
-  } else if (is == 15 ) {
-    mul = G4CascadeKzeroPChannel::getMultiplicity(ekin);
-  } else if (is == 17 ) {
-    mul = G4CascadeKzeroBarPChannel::getMultiplicity(ekin);
-  } else if (is == 21 ) {
-    mul = G4CascadeLambdaPChannel::getMultiplicity(ekin);
-  } else if (is == 23 ) {
-    mul = G4CascadeSigmaPlusPChannel::getMultiplicity(ekin);
-  } else if (is == 25 ) {
-    mul = G4CascadeSigmaZeroPChannel::getMultiplicity(ekin);
-  } else if (is == 27 ) {
-    mul = G4CascadeSigmaMinusPChannel::getMultiplicity(ekin);
-  } else if (is == 29 ) {
-    mul = G4CascadeXiZeroPChannel::getMultiplicity(ekin);
-  } else if (is == 31 ) {
-    mul = G4CascadeXiMinusPChannel::getMultiplicity(ekin);
-  } else if (is == 22 ) {
-    mul = G4CascadeKplusNChannel::getMultiplicity(ekin);
-  } else if (is == 26 ) {
-    mul = G4CascadeKminusNChannel::getMultiplicity(ekin);
-  } else if (is == 30 ) {
-    mul = G4CascadeKzeroNChannel::getMultiplicity(ekin);
-  } else if (is == 34 ) {
-    mul = G4CascadeKzeroBarNChannel::getMultiplicity(ekin);
-  } else if (is == 42 ) {
-    mul = G4CascadeLambdaNChannel::getMultiplicity(ekin);
-  } else if (is == 46 ) {
-    mul = G4CascadeSigmaPlusNChannel::getMultiplicity(ekin);
-  } else if (is == 50 ) {
-    mul = G4CascadeSigmaZeroNChannel::getMultiplicity(ekin);
-  } else if (is == 54 ) {
-    mul = G4CascadeSigmaMinusNChannel::getMultiplicity(ekin);
-  } else if (is == 58 ) {
-    mul = G4CascadeXiZeroNChannel::getMultiplicity(ekin);
-  } else if (is == 62 ) {
-    mul = G4CascadeXiMinusNChannel::getMultiplicity(ekin);
-  } else {
+  switch (is) {
+  case  1: mul = G4CascadePPChannel::getMultiplicity(ekin); break;
+  case  2: mul = G4CascadeNPChannel::getMultiplicity(ekin); break;
+  case  3: mul = G4CascadePiPlusPChannel::getMultiplicity(ekin); break;
+  case  4: mul = G4CascadeNNChannel::getMultiplicity(ekin); break;
+  case  5: mul = G4CascadePiMinusPChannel::getMultiplicity(ekin); break;
+  case  6: mul = G4CascadePiPlusNChannel::getMultiplicity(ekin); break;
+  case  7: mul = G4CascadePiZeroPChannel::getMultiplicity(ekin); break;
+  case 10: mul = G4CascadePiMinusNChannel::getMultiplicity(ekin); break;
+  case 11: mul = G4CascadeKplusPChannel::getMultiplicity(ekin); break;
+  case 13: mul = G4CascadeKminusPChannel::getMultiplicity(ekin); break;
+  case 14: mul = G4CascadePiZeroNChannel::getMultiplicity(ekin); break;
+  case 15: mul = G4CascadeKzeroPChannel::getMultiplicity(ekin); break;
+  case 17: mul = G4CascadeKzeroBarPChannel::getMultiplicity(ekin); break;
+  case 21: mul = G4CascadeLambdaPChannel::getMultiplicity(ekin); break;
+  case 22: mul = G4CascadeKplusNChannel::getMultiplicity(ekin); break;
+  case 23: mul = G4CascadeSigmaPlusPChannel::getMultiplicity(ekin); break;
+  case 25: mul = G4CascadeSigmaZeroPChannel::getMultiplicity(ekin); break;
+  case 26: mul = G4CascadeKminusNChannel::getMultiplicity(ekin); break;
+  case 27: mul = G4CascadeSigmaMinusPChannel::getMultiplicity(ekin); break;
+  case 29: mul = G4CascadeXiZeroPChannel::getMultiplicity(ekin); break;
+  case 30: mul = G4CascadeKzeroNChannel::getMultiplicity(ekin); break;
+  case 31: mul = G4CascadeXiMinusPChannel::getMultiplicity(ekin); break;
+  case 34: mul = G4CascadeKzeroBarNChannel::getMultiplicity(ekin); break;
+  case 42: mul = G4CascadeLambdaNChannel::getMultiplicity(ekin); break;
+  case 46: mul = G4CascadeSigmaPlusNChannel::getMultiplicity(ekin); break;
+  case 50: mul = G4CascadeSigmaZeroNChannel::getMultiplicity(ekin); break;
+  case 54: mul = G4CascadeSigmaMinusNChannel::getMultiplicity(ekin); break;
+  case 58: mul = G4CascadeXiZeroNChannel::getMultiplicity(ekin); break;
+  case 62: mul = G4CascadeXiMinusNChannel::getMultiplicity(ekin); break;
+  default:
     G4cerr << " G4ElementaryParticleCollider: Unknown interaction channel "
 	   << is << " - multiplicity not generated " << G4endl;
   }
@@ -330,35 +305,30 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       particle_kinds.clear();
     }
 
-    if(multiplicity == 2) { // 2 -> 2
-      if (is == 1 || is == 2 || is == 4) {	// Nucleon-nucleon
-          particle_kinds.push_back(type1);
-          particle_kinds.push_back(type2);
-      } else if (is == 3) {			// Pion-nucleon
-	G4CascadePiPlusPChannel::getOutgoingParticleTypes(particle_kinds, 2, ekin);
-      } else if (is == 10) {
-        G4CascadePiMinusNChannel::getOutgoingParticleTypes(particle_kinds, 2, ekin);
-      } else if (is == 5) {
-        G4CascadePiMinusPChannel::getOutgoingParticleTypes(particle_kinds, 2, ekin);
-      } else if (is == 6) {
-        G4CascadePiPlusNChannel::getOutgoingParticleTypes(particle_kinds, 2, ekin);
-      } else if (is == 7) {
-        G4CascadePiZeroPChannel::getOutgoingParticleTypes(particle_kinds, 2, ekin);
-      } else if (is == 14) {
-        G4CascadePiZeroNChannel::getOutgoingParticleTypes(particle_kinds, 2, ekin);
-      } else if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
-	generateStrangeChannelPartTypes(is, 2, ekin);
-      } else {
-        G4cerr << " Unexpected interaction type (2->2) is = " << is << G4endl;
-      }
+    // Generate list of final-state particles
 
+    // SPECIAL CASE for nucleon-nucleon elastic; this should go away,
+    // as it is handled by the sampler classes automatically
+    if (multiplicity==2 && (is==1 || is==2 || is==4)) {
+      particle_kinds.push_back(type1);
+      particle_kinds.push_back(type2);
+    } else {
+      generateOutgoingPartTypes(is, multiplicity, ekin);
+    }
+
+    if (particle_kinds.empty()) continue;
+
+    // G4cout << " Particle kinds = " ;
+    // for (G4int i = 0; i < multiplicity; i++) G4cout << particle_kinds[i] << " , " ;
+    // G4cout << G4endl;
+
+    if (multiplicity == 2) {
       // Identify charge or strangeness exchange
       G4int finaltype = particle_kinds[0]*particle_kinds[1];
       G4int kw = (finaltype != is) ? 2 : 1;
 
-      G4LorentzVector mom;
-
-      if (kw == 2) { // need to rescale momentum
+      G4double pmod = pscm;	// May need to rescale momentum
+      if (kw == 2) {
 	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
 	m1 *= m1;
 	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
@@ -366,15 +336,12 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 	G4double em = a * a - m1 * m2;
 
-        if (em > 0) { //  see if it is possible to rescale?
-	  G4double np = std::sqrt( em / (m1 + m2 + 2.0 * a));
-	  mom = sampleCMmomentumFor2to2(is, kw, ekin, np);
-	} else { // rescaling not possible
-	  mom = sampleCMmomentumFor2to2(is, kw, ekin, pscm); 
+        if (em > 0) { 		//  It is possible to rescale
+	  pmod = std::sqrt( em / (m1 + m2 + 2.0 * a));
 	}
-      } else {
-	mom = sampleCMmomentumFor2to2(is, kw, ekin, pscm);
       }
+
+      G4LorentzVector mom = sampleCMmomentumFor2to2(is, kw, ekin, pmod);
 
       if (verboseLevel > 3){
 	G4cout << " Particle kinds = " << particle_kinds[0] << " , "
@@ -395,46 +362,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
       particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1],3));
       generate = false;
 
-    } else { // 2 -> many
-
-      if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
-	generateStrangeChannelPartTypes(is, multiplicity, ekin);
-
-      } else if (is == 1) {
-        G4CascadePPChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 2) {
-        G4CascadeNPChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 4) {
-        G4CascadeNNChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 3) {
-        G4CascadePiPlusPChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 10) {
-        G4CascadePiMinusNChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 5) {
-        G4CascadePiMinusPChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 6) {
-        G4CascadePiPlusNChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 7) {
-        G4CascadePiZeroPChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else if (is == 14) {
-        G4CascadePiZeroNChannel::getOutgoingParticleTypes(particle_kinds, multiplicity, ekin);
-
-      } else {
-        G4cout << " Unexpected interaction type is = " << is << G4endl;
-      }
-
-      //      G4cout << " Particle kinds = " ;
-      //      for (G4int i = 0; i < multiplicity; i++) G4cout << particle_kinds[i] << " , " ;
-      //       G4cout << G4endl;
-
+    } else {			 // 2 -> many
       G4int itry = 0;
       G4bool bad = true;
       G4int knd_last = particle_kinds[multiplicity - 1];
@@ -452,144 +380,138 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	}
 
 	generateMomModules(multiplicity, is, ekin, etot_scm);
+	if (G4int(modules.size()) != multiplicity) continue;
 
-	if (G4int(modules.size()) == multiplicity) {
-
-	  if (multiplicity == 3) { 
-	    G4LorentzVector mom3 = 
-	      particleSCMmomentumFor2to3(is, knd_last, ekin, modules[2]);
-
-	    mom3 = toSCM->rotate(mom3);
-
-	    // generate the momentum of first
-	    G4double ct = -0.5 * (modules[2] * modules[2] + 
-				  modules[0] * modules[0] - 
-				  modules[1] * modules[1]) /
-	      modules[2] / modules[0];   
-
-	    if(std::fabs(ct) < ang_cut) {
-
-	      if(verboseLevel > 2){
-		G4cout << " ok for mult " << multiplicity << G4endl;
-	      }
-
-	      G4LorentzVector mom1 = generateWithFixedTheta(ct, modules[0]);
-
-	      mom1 = toSCM->rotate(mom3, mom1);
-
-	      G4LorentzVector mom2 = - (mom3 + mom1);
-
-	      bad = false;
-	      generate = false;
-
-	      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0]));
-	      particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1]));
-	      particles.push_back(G4InuclElementaryParticle(mom3, particle_kinds[2]));
-	    };
-
-	  } else { // multiplicity > 3
-
-	    // generate first mult - 2 momentums
-	    std::vector<G4LorentzVector> scm_momentums;
-	    G4LorentzVector tot_mom;
-
-	    for (G4int i = 0; i < multiplicity - 2; i++) {
-	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
-	      G4double alf = 1.0 / p0 / (p0 - (modules[i] + p0) *
-					 std::exp(-modules[i] / p0));
-	      G4double st = 2.0;
-	      G4int itry1 = 0;
-
-	      while (std::fabs(st) > ang_cut && itry1 < itry_max) {
-		itry1++;
-		G4double s1 = modules[i] * inuclRndm();
-		G4double s2 = alf * difr_const * p0 * inuclRndm();
-
-		if(verboseLevel > 3){
-		  G4cout << " s1 * alf * std::exp(-s1 / p0) " << s1 * alf * std::exp(-s1 / p0) 
-			 << " s2 " << s2 << G4endl;
-		}
-
-		if(s1 * alf * std::exp(-s1 / p0) > s2) st = s1 / modules[i];
-
-	      }; 
-
+	if (multiplicity == 3) { 
+	  G4LorentzVector mom3 = 
+	    particleSCMmomentumFor2to3(is, knd_last, ekin, modules[2]);
+	  
+	  mom3 = toSCM->rotate(mom3);
+	  
+	  // generate the momentum of first
+	  G4double ct = -0.5 * (modules[2] * modules[2] + 
+				modules[0] * modules[0] - 
+				modules[1] * modules[1]) /
+	    modules[2] / modules[0];   
+	  
+	  if(std::fabs(ct) < ang_cut) {
+	    
+	    if(verboseLevel > 2){
+	      G4cout << " ok for mult " << multiplicity << G4endl;
+	    }
+	    
+	    G4LorentzVector mom1 = generateWithFixedTheta(ct, modules[0]);
+	    
+	    mom1 = toSCM->rotate(mom3, mom1);
+	    
+	    G4LorentzVector mom2 = -(mom3 + mom1);
+	    
+	    bad = false;
+	    generate = false;
+	    
+	    particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0],3));
+	    particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1],3));
+	    particles.push_back(G4InuclElementaryParticle(mom3, particle_kinds[2],3));
+	  };
+	} else { // multiplicity > 3
+	  // generate first mult - 2 momentums
+	  std::vector<G4LorentzVector> scm_momentums;
+	  G4LorentzVector tot_mom;
+	  
+	  for (G4int i = 0; i < multiplicity - 2; i++) {
+	    G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
+	    G4double alf = 1.0 / p0 / (p0 - (modules[i] + p0) *
+				       std::exp(-modules[i] / p0));
+	    G4double st = 2.0;
+	    G4int itry1 = 0;
+	    
+	    while (std::fabs(st) > ang_cut && itry1 < itry_max) {
+	      itry1++;
+	      G4double s1 = modules[i] * inuclRndm();
+	      G4double s2 = alf * difr_const * p0 * inuclRndm();
+	      
 	      if(verboseLevel > 3){
-		G4cout << " itry1 " << itry1 << " i " << i << " st " << st << G4endl;
+		G4cout << " s1 * alf * std::exp(-s1 / p0) "
+		       << s1 * alf * std::exp(-s1 / p0) 
+		       << " s2 " << s2 << G4endl;
 	      }
-
-	      if(itry1 == itry_max) {
-
-		if(verboseLevel > 2){
-		  G4cout << " high energy angles generation: itry1 " << itry1 << G4endl;
-		}
-
-		st = 0.5 * inuclRndm();
-	      };
-
-	      G4double ct = std::sqrt(1.0 - st * st);
-	      if (inuclRndm() > 0.5) ct = -ct;
-
-	      G4double mass = dummy.getParticleMass(particle_kinds[i]);
-	      G4LorentzVector mom = generateWithFixedTheta(ct, modules[i], mass);
-
-	      tot_mom += mom;
-
-	      scm_momentums.push_back(mom);
+	      
+	      if(s1 * alf * std::exp(-s1 / p0) > s2) st = s1 / modules[i];
+	      
 	    }; 
-
-	    // handle last two
-	    G4double tot_mod = tot_mom.rho(); 
-	    G4double ct = -0.5 * (tot_mod * tot_mod + 
-				  modules[multiplicity - 2] * modules[multiplicity - 2] -
-				  modules[multiplicity - 1] * modules[multiplicity - 1]) / tot_mod /
-	      modules[multiplicity - 2];  
-
-	    if (verboseLevel > 2){
-	      G4cout << " ct last " << ct << G4endl;
-	    }            
-
-	    if (std::fabs(ct) < ang_cut) {
-
-	      G4int i(0);
-	      for (i = 0; i < multiplicity - 2; i++) 
-		scm_momentums[i] = toSCM->rotate(scm_momentums[i]);
-
-	      tot_mom = toSCM->rotate(tot_mom);  
-
-	      G4LorentzVector mom = 
-		generateWithFixedTheta(ct, modules[multiplicity - 2]);
-
-	      mom = toSCM->rotate(tot_mom, mom);
-	      scm_momentums.push_back(mom);
-
-	      // and the last one
-	      G4LorentzVector mom1 = -(mom+tot_mom);
-
-	      scm_momentums.push_back(mom1);  
-	      bad = false;
-	      generate = false;
-
-	      if (verboseLevel > 2){
-		G4cout << " ok for mult " << multiplicity << G4endl;
+	    
+	    if(verboseLevel > 3){
+	      G4cout << " itry1 " << itry1 << " i " << i << " st " << st
+		     << G4endl;
+	    }
+	    
+	    if(itry1 == itry_max) {
+	      if(verboseLevel > 2){
+		G4cout << " high energy angles generation: itry1 " << itry1
+		       << G4endl;
 	      }
-
-	      for (i = 0; i < multiplicity; i++) {
-		particles.push_back(G4InuclElementaryParticle(
-							      scm_momentums[i], particle_kinds[i]));
-	      };
+	      
+	      st = 0.5 * inuclRndm();
 	    };
+
+	    G4double ct = std::sqrt(1.0 - st * st);
+	    if (inuclRndm() > 0.5) ct = -ct;
+	    
+	    G4LorentzVector mom = generateWithFixedTheta(ct,modules[i]);
+
+	    tot_mom += mom;
+	    
+	    scm_momentums.push_back(mom);
 	  }; 
-	};
+	  
+	  // handle last two
+	  G4double tot_mod = tot_mom.rho(); 
+	  G4double ct = -0.5 * (tot_mod * tot_mod + 
+				modules[multiplicity - 2] * modules[multiplicity - 2] -
+				modules[multiplicity - 1] * modules[multiplicity - 1]) / tot_mod /
+	    modules[multiplicity - 2];  
+	  
+	  if (verboseLevel > 2){
+	    G4cout << " ct last " << ct << G4endl;
+	  }            
+	  
+	  if (std::fabs(ct) < ang_cut) {
+	    
+	    G4int i(0);
+	    for (i = 0; i < multiplicity - 2; i++) 
+	      scm_momentums[i] = toSCM->rotate(scm_momentums[i]);
+	    
+	    tot_mom = toSCM->rotate(tot_mom);  
+	    
+	    G4LorentzVector mom = 
+	      generateWithFixedTheta(ct, modules[multiplicity - 2]);
+	    
+	    mom = toSCM->rotate(tot_mom, mom);
+	    scm_momentums.push_back(mom);
+
+	    // and the last one
+	    G4LorentzVector mom1 = -(mom+tot_mom);
+	    
+	    scm_momentums.push_back(mom1);  
+	    bad = false;
+	    generate = false;
+	    
+	    if (verboseLevel > 2){
+	      G4cout << " ok for mult " << multiplicity << G4endl;
+	    }
+	    
+	    for (i = 0; i < multiplicity; i++) {
+	      particles.push_back(G4InuclElementaryParticle(scm_momentums[i], particle_kinds[i],3));
+	    };
+	  };
+	}; 
       };
 
       if (itry == itry_max) {
-
 	if (verboseLevel > 2){
 	  G4cout << " cannot generate the distr. for mult " << multiplicity  <<
 	    G4endl << " and set it to " << multiplicity - 1 << G4endl;
 	}
-
       };
     };
   }; 
@@ -613,8 +535,8 @@ G4ElementaryParticleCollider::generateMomModules(G4int mult,
   }
 
   if (verboseLevel > 2){
-    G4cout << " mult " << mult << " is " << is << " ekin " << ekin << " etot_cm " <<
-      etot_cm << G4endl;
+    G4cout << " mult " << mult << " is " << is << " ekin " << ekin
+	   << " etot_cm " << etot_cm << G4endl;
   }
 
   const G4int itry_max = 10;
@@ -699,72 +621,57 @@ G4ElementaryParticleCollider::satisfyTriangle(
            << G4endl;
   }
 
-  G4bool good = true;
-  if(modules.size() == 3) {
-  
-    if(std::fabs(modules[1] - modules[2]) > modules[0] || 
-       modules[0] > modules[1] + modules[2] ||
-       std::fabs(modules[0] - modules[2]) > modules[1] ||
-       modules[1] > modules[0] + modules[2] ||
-       std::fabs(modules[0] - modules[1]) > modules[2] ||
-       modules[2] > modules[1] + modules[0]) good = false;
-
-  }
+  G4bool good = ( (modules.size() != 3) ||
+		  !(std::fabs(modules[1] - modules[2]) > modules[0] || 
+		    modules[0] > modules[1] + modules[2] ||
+		    std::fabs(modules[0] - modules[2]) > modules[1] ||
+		    modules[1] > modules[0] + modules[2] ||
+		    std::fabs(modules[0] - modules[1]) > modules[2] ||
+		    modules[2] > modules[1] + modules[0]));
 
   return good;
 }
 
 
-void G4ElementaryParticleCollider::generateStrangeChannelPartTypes(
-                              G4int is, G4int mult, G4double ekin)
+void 
+G4ElementaryParticleCollider::generateOutgoingPartTypes(G4int is, G4int mult,
+							G4double ekin)
 {
   particle_kinds.clear();	// Initialize buffer for generation
 
-  if (is == 11) {
-    G4CascadeKplusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 13) {
-    G4CascadeKminusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 15) {
-    G4CascadeKzeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 17) {
-    G4CascadeKzeroBarPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 21) {
-    G4CascadeLambdaPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 23) {
-    G4CascadeSigmaPlusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 25) {
-    G4CascadeSigmaZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 27) {
-    G4CascadeSigmaMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 29) {
-    G4CascadeXiZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 31) {
-    G4CascadeXiMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 22) {
-    G4CascadeKplusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 26) {
-    G4CascadeKminusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 30) {
-    G4CascadeKzeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 34) {
-    G4CascadeKzeroBarNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 42) {
-    G4CascadeLambdaNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 46) {
-    G4CascadeSigmaPlusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 50) {
-    G4CascadeSigmaZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 54) {
-    G4CascadeSigmaMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 58) {
-    G4CascadeXiZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-  } else if (is == 62) {
-    G4CascadeXiMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin);
-
-  } else {
-    G4cout << " G4ElementaryParticleCollider:"
-	   << " Unknown strange interaction channel - outgoing kinds not generated " 
-           << G4endl;
+  switch (is) {
+  case  1: G4CascadePPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case  2: G4CascadeNPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case  3: G4CascadePiPlusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case  4: G4CascadeNNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case  5: G4CascadePiMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case  6: G4CascadePiPlusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case  7: G4CascadePiZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 10: G4CascadePiMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 11: G4CascadeKplusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 13: G4CascadeKminusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 14: G4CascadePiZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 15: G4CascadeKzeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 17: G4CascadeKzeroBarPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 21: G4CascadeLambdaPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 22: G4CascadeKplusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 23: G4CascadeSigmaPlusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 25: G4CascadeSigmaZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 26: G4CascadeKminusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 27: G4CascadeSigmaMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 29: G4CascadeXiZeroPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 30: G4CascadeKzeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 31: G4CascadeXiMinusPChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 34: G4CascadeKzeroBarNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 42: G4CascadeLambdaNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 46: G4CascadeSigmaPlusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 50: G4CascadeSigmaZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 54: G4CascadeSigmaMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 58: G4CascadeXiZeroNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  case 62: G4CascadeXiMinusNChannel::getOutgoingParticleTypes(particle_kinds, mult, ekin); break;
+  default:
+    G4cout << " G4ElementaryParticleCollider: Unknown interaction channel "
+	   << is << " - outgoing kinds not generated " << G4endl;
   }
 
   return;
@@ -875,126 +782,82 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
 	   << " is " << is << " kw " << kw << " ekin " << ekin << " pscm "
 	   << pscm << G4endl;
 
-  G4double ct = 0.0;
-  
+  G4double pA=0.0, pC=0.0, pCos=0.0, pFrac=0.0;		// Angular parameters
+
+  // Arrays below are parameters for two-exponential sampling of angular
+  // distributions of two-body scattering in the specified channels
+
   if (is == 1 || is == 2 || is == 4 ||
       is == 21 || is == 23 || is == 25 || is == 27 || is ==29 || is == 31 ||
       is == 42 || is == 46 || is == 50 || is == 54 || is ==58 || is == 62) {
     // nucleon-nucleon or hyperon-nucleon
     if (verboseLevel > 3) G4cout << " nucleon/hyperon elastic" << G4endl;
 
-    // Parameters for two-exponential sampling of angular distribution
-    // of nucleon-nucleon scattering
-    G4double nnke[9] =  { 0.0,   0.44, 0.59,   0.80,   1.00,   2.24,   4.40,   6.15,  10.00};
-    G4double nnA[9] =   { 0.0,   0.34, 2.51,   4.59,   4.2,    5.61,   6.38,   7.93,   8.7};
-    G4double nnC[9] =   { 0.0,   0.0,  1.21,   1.54,   1.88,   1.24,   1.91,   4.04,   8.7};
-    G4double nnCos[9] = {-1.0,  -1.0, 0.4226, 0.4226, 0.4384, 0.7193, 0.8788, 0.9164,  0.95};
-    G4double nnFrac[9] = {1.0,   1.0, 0.4898, 0.7243, 0.7990, 0.8892, 0.8493, 0.9583,  1.0};
+    static const G4double nnke[9] =  { 0.0,   0.44, 0.59,   0.80,   1.00,   2.24,   4.40,   6.15,  10.00};
+    static const G4double nnA[9] =   { 0.0,   0.34, 2.51,   4.59,   4.2,    5.61,   6.38,   7.93,   8.7};
+    static const G4double nnC[9] =   { 0.0,   0.0,  1.21,   1.54,   1.88,   1.24,   1.91,   4.04,   8.7};
+    static const G4double nnCos[9] = {-1.0,  -1.0, 0.4226, 0.4226, 0.4384, 0.7193, 0.8788, 0.9164,  0.95};
+    static const G4double nnFrac[9] = {1.0,   1.0, 0.4898, 0.7243, 0.7990, 0.8892, 0.8493, 0.9583,  1.0};
 
-    G4double pA = nnA[8];	// Use last bin for all ekin above 10.
-    G4double pC = nnC[8];
-    G4double pCos = nnCos[8];
-    G4double pFrac = nnFrac[8];
-    for (G4int i = 1; i < 9; i++) {
-      if (ekin < nnke[i]) {	// Linear interpolation within bins
-        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
-        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
-        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
-        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
-        break;
-      }
-    }
-
-    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
-    
+    static G4CascadeInterpolator<9> interp(nnke);	// Only need one!
+    pA = interp.interpolate(ekin, nnA);
+    pC = interp.interpolate(ekin, nnC);
+    pCos = interp.interpolate(ekin, nnCos);
+    pFrac = interp.interpolate(ekin, nnFrac);
   } else if (kw == 2) {
     // pion charge exchange (pi-p -> pi0n, pi+n -> pi0p, pi0p -> pi+n, pi0n -> pi-p
     if (verboseLevel > 3) G4cout << " pion-nucleon charge exchange " << G4endl;
 
-    // Parameters for two-exponential sampling of angular distribution
-    // of pi-nucleon scattering
-    G4double nnke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    G4double nnA[10] =    {0.0,   0.0,    2.48,   7.93,  10.0,    9.78,   5.08,   8.13,   8.13,   8.13};
-    G4double nnC[10] =    {0.0, -39.58, -12.55,  -4.38,   1.81,  -1.99,  -0.33,   1.2,    1.43,   8.13};
-    G4double nnCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
-    G4double nnFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
+    static const G4double nnke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    static const G4double nnA[10] =    {0.0,   0.0,    2.48,   7.93,  10.0,    9.78,   5.08,   8.13,   8.13,   8.13};
+    static const G4double nnC[10] =    {0.0, -39.58, -12.55,  -4.38,   1.81,  -1.99,  -0.33,   1.2,    1.43,   8.13};
+    static const G4double nnCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
+    static const G4double nnFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
 
-    G4double pA = nnA[9];
-    G4double pC = nnC[9];
-    G4double pCos = nnCos[9];
-    G4double pFrac = nnFrac[9];
-    for (G4int i = 1; i < 10; i++) {
-      if (ekin < nnke[i]) {
-        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
-        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
-        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
-        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
-        break;
-      }
-    }
-
-    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
-
-  } else if (is == 3 || is == 7 || is == 14 || is == 10 || is == 11 || is == 30 || is == 17 || is == 26) {
+    static G4CascadeInterpolator<10> interp(nnke);	// Only need one!
+    pA = interp.interpolate(ekin, nnA);
+    pC = interp.interpolate(ekin, nnC);
+    pCos = interp.interpolate(ekin, nnCos);
+    pFrac = interp.interpolate(ekin, nnFrac);
+  } else if (is == 3 || is == 7 || is == 14 || is == 10 || is == 11 ||
+	     is == 30 || is == 17 || is == 26) {
     // pi+p, pi0p, pi0n, pi-n, k+p, k0n, k0bp, or k-n
     if (verboseLevel > 3) G4cout << " meson-nucleon elastic (1)" << G4endl;
 
-    // Parameters for two-exponential sampling of angular distribution
-    // of pi-nucleon scattering
-    G4double nnke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    G4double nnA[10] =    {0.0,  0.0,   27.58,  19.83,   6.46,   4.59,   6.47,   6.68,   6.43,   6.7};
-    G4double nnC[10] =    {0.0, -26.4, -30.55, -19.42,  -5.05,  -5.24,  -1.00,   2.14,   2.9,    6.7};
-    G4double nnCos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
-    G4double nnFrac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
+    static const G4double nnke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    static const G4double nnA[10] =    {0.0,  0.0,   27.58,  19.83,   6.46,   4.59,   6.47,   6.68,   6.43,   6.7};
+    static const G4double nnC[10] =    {0.0, -26.4, -30.55, -19.42,  -5.05,  -5.24,  -1.00,   2.14,   2.9,    6.7};
+    static const G4double nnCos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
+    static const G4double nnFrac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
 
-    G4double pA = nnA[9];
-    G4double pC = nnC[9];
-    G4double pCos = nnCos[9];
-    G4double pFrac = nnFrac[9];
-    for (G4int i = 1; i < 10; i++) {
-      if (ekin < nnke[i]) {
-        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
-        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
-        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
-        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
-        break;
-      }
-    }
-
-    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
-
-  } else if (is == 5 || is == 6 || is == 13 || is == 34 || is == 22 || is == 15) {
+    static G4CascadeInterpolator<10> interp(nnke);	// Only need one!
+    pA = interp.interpolate(ekin, nnA);
+    pC = interp.interpolate(ekin, nnC);
+    pCos = interp.interpolate(ekin, nnCos);
+    pFrac = interp.interpolate(ekin, nnFrac);
+  } else if (is == 5 || is == 6 || is == 13 || is == 34 || is == 22 ||
+	     is == 15) {
     // pi-p, pi+n, k-p, k0bn, k+n, or k0p
     if (verboseLevel > 3) G4cout << " meson-nucleon elastic (2)" << G4endl;
 
-    // Parameters for two-exponential sampling of angular distribution
-    // of pi-nucleon scattering
-    G4double nnke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    G4double nnA[10] =    {0.0, 27.08, 19.32,   9.92,   7.74,   9.86,   5.51,   7.25,   7.23,   7.3};
-    G4double nnC[10] =    {0.0,  0.0, -19.49, -15.78,  -9.78,  -2.74,  -1.16,   2.31,   2.96,   7.3};
-    G4double nnCos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
-    G4double nnFrac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
+    static const G4double nnke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
+    static const G4double nnA[10] =    {0.0, 27.08, 19.32,   9.92,   7.74,   9.86,   5.51,   7.25,   7.23,   7.3};
+    static const G4double nnC[10] =    {0.0,  0.0, -19.49, -15.78,  -9.78,  -2.74,  -1.16,   2.31,   2.96,   7.3};
+    static const G4double nnCos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
+    static const G4double nnFrac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
 
-    G4double pA = nnA[9];
-    G4double pC = nnC[9];
-    G4double pCos = nnCos[9];
-    G4double pFrac = nnFrac[9];
-    for (G4int i = 1; i < 10; i++) {
-      if (ekin < nnke[i]) {
-        pA = nnA[i-1] + (ekin-nnke[i-1])*(nnA[i]-nnA[i-1])/(nnke[i]-nnke[i-1]);
-        pC = nnC[i-1] + (ekin-nnke[i-1])*(nnC[i]-nnC[i-1])/(nnke[i]-nnke[i-1]);
-        pCos = nnCos[i-1] + (ekin-nnke[i-1])*(nnCos[i]-nnCos[i-1])/(nnke[i]-nnke[i-1]);
-        pFrac = nnFrac[i-1] + (ekin-nnke[i-1])*(nnFrac[i]-nnFrac[i-1])/(nnke[i]-nnke[i-1]);
-        break;
-      }
-    }
-
-    ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
-
+    static G4CascadeInterpolator<10> interp(nnke);	// Only need one!
+    pA = interp.interpolate(ekin, nnA);
+    pC = interp.interpolate(ekin, nnC);
+    pCos = interp.interpolate(ekin, nnCos);
+    pFrac = interp.interpolate(ekin, nnFrac);
   } else {
     G4cout << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2: interaction not recognized " 
            << G4endl;
   } 
+
+  // Use parameters determined above to get polar angle
+  G4double ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
 
   return generateWithFixedTheta(ct, pscm);
 }
@@ -1122,8 +985,8 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   G4LorentzVector mom2;
   mom2.setVectM(-mom1.vect(), m2);
 
-  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0]));
-  particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1]));
+  particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[0],3));
+  particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1],3));
 
   return;
 }

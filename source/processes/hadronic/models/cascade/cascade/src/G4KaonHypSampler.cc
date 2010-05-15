@@ -22,26 +22,19 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeXiMinusNChannel.hh,v 1.6 2010-05-15 00:55:01 mkelsey Exp $
+// $Id: G4KaonHypSampler.cc,v 1.1 2010-05-15 00:55:01 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
-// 20100507  M. Kelsey -- Remove redundant total-bins template argument
-// 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
-//		to template for channel typedef
-// 20100514  M. Kelsey -- Replace G4CascadeSampler with G4KaonHypSampler.
+// 20100512  M. Kelsey -- Replaces (old, untemplated) G4CascadeSampler
 
-#ifndef G4_CASCADE_XIMINUSN_CHANNEL_HH
-#define G4_CASCADE_XIMINUSN_CHANNEL_HH
-
-#include "G4CascadeData.hh"
-#include "G4CascadeFunctions.hh"
 #include "G4KaonHypSampler.hh"
 
-struct G4CascadeXiMinusNChannelData {
-  typedef G4CascadeData<31,3,18,53,2,2,2> data_t;
-  static data_t data;
-};
+namespace {
+  static const G4double bins[31] = 
+    { 0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+      0.5, 1.0,  1.5, 2.0,  2.5, 3.0,  3.5, 4.0,  4.5, 5.0,
+      5.5, 6.0,  6.5, 7.0,  7.5, 8.0,  8.5, 9.0,  9.5, 10.0, 15.0 };
+}
 
-typedef G4CascadeFunctions<G4CascadeXiMinusNChannelData,G4KaonHypSampler> G4CascadeXiMinusNChannel;
-
-#endif
+// Define constructor for initialization
+G4KaonHypSampler::G4KaonHypSampler() : G4CascadeSampler<31,6>(bins) {}

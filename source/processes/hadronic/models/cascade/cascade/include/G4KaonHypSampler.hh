@@ -1,3 +1,5 @@
+#ifndef G4_KAON_HYP_SAMPLER_HH
+#define G4_KAON_HYP_SAMPLER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -22,26 +24,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeXiMinusNChannel.hh,v 1.6 2010-05-15 00:55:01 mkelsey Exp $
+// $Id: G4KaonHypSampler.hh,v 1.1 2010-05-15 00:55:01 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
-// 20100507  M. Kelsey -- Remove redundant total-bins template argument
-// 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
-//		to template for channel typedef
-// 20100514  M. Kelsey -- Replace G4CascadeSampler with G4KaonHypSampler.
+// 20100512  M. Kelsey -- Replaces (old, untemplated) G4CascadeSampler
 
-#ifndef G4_CASCADE_XIMINUSN_CHANNEL_HH
-#define G4_CASCADE_XIMINUSN_CHANNEL_HH
 
-#include "G4CascadeData.hh"
-#include "G4CascadeFunctions.hh"
-#include "G4KaonHypSampler.hh"
+#include "G4CascadeSampler.hh"
 
-struct G4CascadeXiMinusNChannelData {
-  typedef G4CascadeData<31,3,18,53,2,2,2> data_t;
-  static data_t data;
-};
+// Entire interface is inherited from base (struct makes default public:)
+struct G4KaonHypSampler : public G4CascadeSampler<31,6> { G4KaonHypSampler(); };
 
-typedef G4CascadeFunctions<G4CascadeXiMinusNChannelData,G4KaonHypSampler> G4CascadeXiMinusNChannel;
-
-#endif
+#endif	/* G4_KAON_HYP_SAMPLER_HH */
