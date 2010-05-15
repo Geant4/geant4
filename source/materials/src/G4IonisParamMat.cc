@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.37 2010-05-14 16:27:55 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.38 2010-05-15 15:37:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -146,7 +146,8 @@ void G4IonisParamMat::ComputeDensityEffect()
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
   if(idx < 0 && fMaterial->GetNumberOfElements() == 1) {
-    idx = fDensityData->GetIndex(G4int(fMaterial->GetZ()),fMaterial->GetState());
+    idx = fDensityData->GetElementIndex(G4int(fMaterial->GetZ()),
+					fMaterial->GetState());
   }
 
   //G4cout << "DensityEffect for " << fMaterial->GetName() << "  " << idx << G4endl; 

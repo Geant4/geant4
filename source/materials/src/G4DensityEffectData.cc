@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DensityEffectData.cc,v 1.11 2010-05-14 13:36:59 vnivanch Exp $
+// $Id: G4DensityEffectData.cc,v 1.12 2010-05-15 15:37:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //---------------------------------------------------------------------------
@@ -1297,7 +1297,7 @@ void G4DensityEffectData::Initialize()
 
 }
 
-G4int G4DensityEffectData::GetIndex(G4int Z, G4State st)
+G4int G4DensityEffectData::GetElementIndex(G4int Z, G4State st)
 {
   G4int idx = -1;
   if(Z > 0 && Z < NDENSELEM) { 
