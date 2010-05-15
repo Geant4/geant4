@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2010-05-15 00:55:01 mkelsey Exp $
+$Id: History,v 1.76 2010-05-15 04:25:17 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,7 +15,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-12 May 2010 Michael Kelsey (hadr-casc-V09-03-35)
+14 May 2010 Michael Kelsey (hadr-casc-V09-03-36)
+------------------------------------------------
+Remove obsolete files following reorganization of two-body scattering
+lookup tables.
+
+	G4CascadeElasticInterface.hh,.cc
+	G4ElasticCascadeInterface.hh,.cc
+	G4FinalStateSampler.hh,.cc
+	G4NucleonSampler.hh,.cc
+	G4PionSampler.hh,.cc
+
+- G4CascadeChannel.hh,.cc:  All functionality removed, replaced with
+  namespace containing only getQnums and CheckQnums validation functions.
+
+14 May 2010 Michael Kelsey (hadr-casc-V09-03-35)
 ------------------------------------------------
 Replace independent parallel samplers with templated base class and single
 implementation.  This completes the reorganization of the channel tables.

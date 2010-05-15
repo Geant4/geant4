@@ -22,12 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeChannel.cc,v 1.7 2010-05-15 04:25:17 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100514  M. Kelsey -- All functionality removed except quantum-number
+//		validation functions.
 
 #include "G4CascadeChannel.hh"
+#include "G4ParticleDefinition.hh"
+#include <vector>
 
-std::vector<G4int> 
-G4CascadeChannel::getQnums(G4int type)
-{
+
+std::vector<G4int> G4CascadeChannel::getQnums(G4int type) {
   G4int bary=0, str=0, ch=0;
   std::vector<G4int> Qnums(3);
 
@@ -115,4 +121,53 @@ G4CascadeChannel::getQnums(G4int type)
     Qnums[1] = str;
     Qnums[2] = ch;
     return Qnums;
+}
+
+void 
+G4CascadeChannel::CheckQnums(const G4FastVector<G4ReactionProduct,256> &vec,
+			     G4int &vecLen,
+			     G4ReactionProduct &currentParticle,
+			     G4ReactionProduct &targetParticle,
+			     G4double Q, G4double B, G4double S) {
+  G4ParticleDefinition* projDef = currentParticle.GetDefinition();
+  G4ParticleDefinition* targDef = targetParticle.GetDefinition();
+  G4double chargeSum = projDef->GetPDGCharge() + targDef->GetPDGCharge();
+  G4double baryonSum = projDef->GetBaryonNumber() + targDef->GetBaryonNumber();
+  G4double strangenessSum = projDef->GetQuarkContent(3) - 
+                            projDef->GetAntiQuarkContent(3) + 
+                            targDef->GetQuarkContent(3) -
+                            targDef->GetAntiQuarkContent(3);
+
+  G4ParticleDefinition* secDef = 0;
+  for (G4int i = 0; i < vecLen; i++) {
+    secDef = vec[i]->GetDefinition();
+    chargeSum += secDef->GetPDGCharge();
+    baryonSum += secDef->GetBaryonNumber();
+    strangenessSum += secDef->GetQuarkContent(3) 
+                    - secDef->GetAntiQuarkContent(3);
+  }
+
+  G4bool OK = true;
+  if (chargeSum != Q) {
+    G4cout << " Charge not conserved " << G4endl;
+    OK = false;
+  }
+  if (baryonSum != B) {
+    G4cout << " Baryon number not conserved " << G4endl;
+    OK = false;
+  }
+  if (strangenessSum != S) {
+    G4cout << " Strangeness not conserved " << G4endl;
+    OK = false;
+  } 
+
+  if (!OK) {
+    G4cout << " projectile: " << projDef->GetParticleName() 
+           << "  target: " << targDef->GetParticleName() << G4endl;
+    for (G4int i = 0; i < vecLen; i++) {
+      secDef = vec[i]->GetDefinition();
+      G4cout << secDef->GetParticleName() << " " ;
+    }
+    G4cout << G4endl;
+  }
 }

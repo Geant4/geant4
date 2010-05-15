@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerEkin.hh,v 1.10 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4ParticleLargerEkin.hh,v 1.11 2010-05-15 04:25:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Implements a *reverse* sorting: std::sort expects a less-than operator
