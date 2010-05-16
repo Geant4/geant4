@@ -1,0 +1,12 @@
+/control/verbose 2
+
+/testem/histo/setFileName run1
+###/testem/histo/setFileType hbook
+/testem/histo/setFileType root
+/testem/histo/setHisto 1  100  0. 10.  mm	#vertex dN/dr
+/testem/histo/setHisto 2  90   0. 180 deg	#vertex dN/dteta
+/testem/histo/setHisto 3  180  0. 360 deg	#vertex dN/dphi
+/testem/histo/setHisto 4  90   0. 180 deg	#moment dN/dalfa
+/testem/histo/setHisto 5  180  0. 360 deg	#moment dN/dpsi
+#  
+/run/beamOn 1000000
