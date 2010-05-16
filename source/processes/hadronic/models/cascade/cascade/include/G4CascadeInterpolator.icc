@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterpolator.icc,v 1.1 2010-05-14 18:01:28 mkelsey Exp $
+// $Id: G4CascadeInterpolator.icc,v 1.2 2010-05-16 05:18:36 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
@@ -59,7 +59,7 @@ G4double G4CascadeInterpolator<NBINS>::getBin(const G4double x) const {
     xdiff = doExtrapolation ? x-xBins[last] : 0.;
   } else {				// Assume nBins small; linear search
     int i;
-    for (i=0.; i<nBins && x>xBins[i]; i++);	// Stops when x within bin i-1
+    for (i=0; i<nBins && x>xBins[i]; i++);	// Stops when x within bin i-1
     xindex = i-1;
     xbin = xBins[i] - xBins[i-1];
     xdiff = x - xBins[i-1];

@@ -22,21 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
+// $Id: G4CascadeKzeroBarNChannel.cc,v 1.5 2010-05-16 05:18:36 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 
 #include "G4CascadeKzeroBarNChannel.hh"
 
 namespace {
-
-  // Total cross section as a function of kinetic energy
-  G4double kzbntot[31];
-  
-  // Multiplicities as a function of kinetic energy
-  G4double kzbnMultiplicities[6][31];
-
-  static const G4int kzbnindex[6][2] = 
-    {{0, 8}, {8, 28}, {28, 62}, {62, 110}, {110, 132}, {132, 148}};
-
   // Outgoing particle types of a given multiplicity
 
   static const G4int kzbn2bfs[8][2] =

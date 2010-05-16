@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeData.hh,v 1.4 2010-05-14 21:05:03 mkelsey Exp $
+// $Id: G4CascadeData.hh,v 1.5 2010-05-16 05:18:36 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
@@ -141,9 +141,9 @@ void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
 
 // Dummy arrays for use when optional template arguments are skipped
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
-const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty8bfs[1][8] = { 0 };
+const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty8bfs[1][8] = {{0}};
 
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
-const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty9bfs[1][9] = { 0 };
+const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty9bfs[1][9] = {{0}};
 
 #endif
