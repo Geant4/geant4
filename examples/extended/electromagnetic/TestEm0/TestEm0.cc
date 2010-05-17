@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm0.cc,v 1.5 2009-11-17 22:48:26 maire Exp $
+// $Id: TestEm0.cc,v 1.6 2010-05-17 20:37:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,10 @@
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -66,16 +70,12 @@ int main(int argc,char** argv) {
     
   else           // define UI terminal for interactive mode 
     { 
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif     
-     session->SessionStart();
-     delete session;
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
     }
-
   // job termination 
   //
   delete runManager;
