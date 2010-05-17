@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.25 2010-05-17 15:24:14 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.26 2010-05-17 15:35:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -257,7 +257,7 @@ inline void G4WentzelVIModel::SetupKinematic(G4double ekin, G4double cut)
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     cosTetMaxNuc = cosThetaMax;
-    if(cosThetaMax < 1.0) {
+    if(std::fabs(cosThetaMax) < 1.0) {
       if(mass < MeV && ekin < 10.*cut && 0.0 < cosThetaMax) {
 	cosTetMaxNuc = ekin*cosThetaMax/(10.*cut);
       } else {
