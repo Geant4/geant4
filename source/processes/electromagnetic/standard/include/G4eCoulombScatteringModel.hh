@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.52 2010-05-03 12:46:26 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.hh,v 1.53 2010-05-17 15:24:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -151,7 +151,6 @@ protected:
   G4double                  cosTetMaxNuc2;
   G4double                  cosTetMaxElec;
   G4double                  cosTetMaxElec2;
-  G4double                  q2Limit;
   G4double                  recoilThreshold;
   G4double                  elecXSection;
   G4double                  nucXSection;
@@ -185,7 +184,6 @@ private:
 
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
-  static G4double LimitMom2[100];
 
   G4bool                    isInitialised;             
 };
@@ -230,9 +228,14 @@ inline void G4eCoulombScatteringModel::SetupKinematic(G4double ekin,
     invbeta2 = 1.0 +  mass*mass/mom2;
     cosTetMinNuc = cosThetaMin;
     cosTetMaxNuc = cosThetaMax;
-    //if(mass < MeV && cosThetaMin < 1.0 && ekin <= 10.*cut) {
-    //  cosTetMinNuc = ekin*(cosThetaMin + 1.0)/(10.*cut) - 1.0;
-    //}
+    if(cosThetaMin < 1.0) {
+      if(mass < MeV && ekin < 10.*cut && cosThetaMin > 0.0) {
+	cosTetMinNuc = ekin*cosThetaMin/(10.*cut);
+      } else {
+	cosTetMinNuc = 
+	  std::max(cosThetaMin,1.-factorA2*currentMaterial->GetIonisation()->GetInvA23()/mom2);
+      }
+    }
     ComputeMaxElectronScattering(cut);
   }
 }
@@ -245,13 +248,12 @@ inline void G4eCoulombScatteringModel::SetupTarget(G4double Z, G4double e)
     etag    = e; 
     targetZ = Z;
     iz= G4int(Z);
-    if(iz > 99) iz = 99;
+    if(iz > 99) { iz = 99; }
     targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
     screenZ = ScreenRSquare[iz]/mom2;
     screenZ *=(1.13 + std::min(1.0,3.76*Z*Z*invbeta2*alpha2));
     if(mass > MeV) { screenZ *= 2.0; }
     formfactA = FormFactor[iz]*mom2;
-    cosTetMinNuc  = std::max(cosTetMinNuc, 1.0 - factorA2*LimitMom2[iz]/mom2);
     cosTetMaxNuc2 = cosTetMaxNuc;
     if(1 == iz && particle == theProton && cosTetMaxNuc2 < 0.0) {
       cosTetMaxNuc2 = 0.0;

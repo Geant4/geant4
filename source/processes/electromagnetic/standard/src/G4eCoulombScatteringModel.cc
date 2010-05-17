@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.84 2010-05-03 10:24:57 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.85 2010-05-17 15:24:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,7 +74,6 @@
 
 G4double G4eCoulombScatteringModel::ScreenRSquare[] = {0.0};
 G4double G4eCoulombScatteringModel::FormFactor[]    = {0.0};
-G4double G4eCoulombScatteringModel::LimitMom2[]     = {0.0};
 
 using namespace std;
 
@@ -82,7 +81,6 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
     cosThetaMin(1.0),
     cosThetaMax(-1.0),
-    q2Limit(TeV*TeV),
     alpha2(fine_structure_const*fine_structure_const),
     faclim(100.0),
     isInitialised(false)
@@ -115,11 +113,10 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
 
     ScreenRSquare[0] = alpha2*a0*a0;
     for(G4int j=1; j<100; ++j) {
-      G4double A = fNistManager->GetAtomicMassAmu(j);
       G4double x = a0*g4pow->Z13(j);
       ScreenRSquare[j] = alpha2*x*x;
-      FormFactor[j] = constn*std::pow(A, 0.56);
-      LimitMom2[j] = 0.5*hbarc_squared/(fermi*fermi*std::pow(A, 2./3.)); 
+      x = fNistManager->GetA27(j);
+      FormFactor[j] = constn*x*x;
     } 
   }
 }
@@ -140,8 +137,15 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   tkin = targetZ = mom2 = DBL_MIN;
   ecut = etag = DBL_MAX;
   cosThetaMin = cos(PolarAngleLimit());
-  G4double a = G4LossTableManager::Instance()->FactorForAngleLimit();
-  factorA2 = a*a;
+  G4double a = 
+    G4LossTableManager::Instance()->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
+  factorA2 = 0.5*a*a;
+  /*
+  G4cout << "G4eCoulombScatteringModel: factorA2(GeV^2) = " << factorA2/(GeV*GeV) 
+         << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
+	 << "  cos(thetaMax)= " <<  cosThetaMax
+	 << G4endl;
+  */
   pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   //G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
@@ -180,8 +184,8 @@ void G4eCoulombScatteringModel::ComputeMaxElectronScattering(G4double cutEnergy)
       G4double mom22 = t1*(t1 + 2.0*mass);
       G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
       //G4cout << "ctm= " << ctm << G4endl;
-      if(ctm <  1.0) cosTetMaxElec = ctm;
-      if(ctm < -1.0) cosTetMaxElec = -1.0;
+      if(ctm <  1.0) { cosTetMaxElec = ctm; }
+      if(ctm < -1.0) { cosTetMaxElec = -1.0;}
     }
   }
 }
@@ -347,12 +351,10 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
 {
   G4double costm = cosTetMaxNuc2;
   G4double formf = formfactA;
-  G4double prob  = 0.0; 
   G4double xs = CrossSectionPerAtom();
-  if(xs > 0.0) prob = elecXSection/xs;
 
   // scattering off e or A?
-  if(G4UniformRand() < prob) {
+  if(G4UniformRand()*xs < elecXSection) {
     costm = cosTetMaxElec2;
     formf = 0.0;
   }
@@ -367,7 +369,7 @@ G4double G4eCoulombScatteringModel::SampleCosineTheta()
  	 << G4endl;
   */
 
-  if(costm >= cosTetMinNuc) return 0.0; 
+  if(costm >= cosTetMinNuc) { return 0.0; }
 
   G4double x1 = 1. - cosTetMinNuc + screenZ;
   G4double x2 = 1. - costm + screenZ;

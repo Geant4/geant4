@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.26 2010-02-17 18:59:22 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.27 2010-05-17 15:24:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 //#include "G4hCoulombScatteringModel.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -95,6 +96,9 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
   //G4cout << "### G4CoulombScattering::InitialiseProcess : "
   //	 << p->GetParticleName() << G4endl;
+  G4double a = 
+    G4LossTableManager::Instance()->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
+  q2Max = 0.5*a*a;
  
   // second initialisation
   if(isInitialised) {
