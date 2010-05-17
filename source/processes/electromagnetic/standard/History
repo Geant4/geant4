@@ -1,4 +1,4 @@
-$Id: History,v 1.496 2010-04-30 17:11:40 vnivanch Exp $
+$Id: History,v 1.497 2010-05-17 15:15:30 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,14 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30 April 09:  V.Ivant (emstand-V09-03-11)
+17 May 2010:  V.Ivant (emstand-V09-03-12)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) - 
+       optimized code to improve speed by addition extra class members
+
+30 April 2010:  V.Ivant (emstand-V09-03-11)
 - G4UrbanMscModel93 - L.Urban add randomisation of step limit for the 
                       first step in any volume
 
-28 April 09:  V.Ivant (emstand-V09-03-10)
+28 April 2010:  V.Ivant (emstand-V09-03-10)
 G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
-26 April 09:  V.Ivant (emstand-V09-03-09)
+26 April 2010:  V.Ivant (emstand-V09-03-09)
 - G4ASTARStopping, G4PSTARTStopping - C-arrays sustituted by G4PhysicsVector 
             with spline; reviewed names of materials (G4_He, G4_PHOTO_EMULSION,
             G4_NYLON-6-6)
@@ -32,7 +36,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - G4PSTARStopping - fixed G4_Pt and G4_PROPANE data
 - G4WaterStopping - cleanup GetElectronicDEDX method
 
-16 April 09:  V.Ivant (emstand-V09-03-08)
+16 April 2010:  V.Ivant (emstand-V09-03-08)
 - G4GoudsmitSaundersonMscModel (O.Kadri) - improved numerical stability 
             of computations for small angles by  direct xsection calculation 
             not inverse of the inverse angular sampling without large angle 
@@ -44,39 +48,39 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - G4eMultipleScattering, G4hMultipleScattering - improved printout at
                                                  initialisation
 
-15 April 09:  V.Ivant (emstand-V09-03-07)
+15 April 2010:  V.Ivant (emstand-V09-03-07)
 - G4hMultipleScattering - removed old unused header of G4UrbanMscModel
 - G4ASTARStopping.cc - disabled corrupted data for Oxygen 
 
-06 April 09:  V.Ivant (emstand-V09-03-06)
+06 April 2010:  V.Ivant (emstand-V09-03-06)
 - G4eBremsstrahlungRelModel, G4MollerBhabhaModel - set minimum cut 
                       value to 0.1 keV
 
-30 March 09:  V.Ivant (emstand-V09-03-05)
+30 March 2010:  V.Ivant (emstand-V09-03-05)
 - G4PolarizedComptonScattering - add message that this process is obsolete
 
-22 March 09:  V.Ivant (emstand-V09-03-04)
+22 March 2010:  V.Ivant (emstand-V09-03-04)
 - G4eBremsstrahlungModel - reduced minThreshold to 0.1 keV
 - G4MollerBhabhaModel - reduced minimum cut value to mean ionisation 
                       potential
 
-01 March 09:  V.Ivant (emstand-V09-03-03)
+01 March 2010:  V.Ivant (emstand-V09-03-03)
 - G4WentzelVIModel - added protections, added DefineMaterial() call
                      before computing cross section 
 
-31 March 09:  V.Ivant (emstand-V09-03-02a)
+31 March 2010:  V.Ivant (emstand-V09-03-02a)
 - G4PolarizedComptonScattering - add message that this process is obsolete
 - G4eCoulombScatteringModel - returned method default value 100 eV of 9.3 for
                               internal low limit
 
-24 February 09:  V.Ivant (emstand-V09-03-02)
+24 February 2010:  V.Ivant (emstand-V09-03-02)
 - make a tag co-working with emutils-V09-03-02
 
-19 February 09:  V.Ivant (emstand-V09-03-01)
+19 February 2010:  V.Ivant (emstand-V09-03-01)
 - G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) 
       - fixed problems of small angle theta distributions
 
-17 February 09:  V.Ivant (emstand-V09-03-00)
+17 February 2010:  V.Ivant (emstand-V09-03-00)
 - G4CoulombScatteringModel - Added comments to relativistic formula
 - G4eCoulombScatteringModel - Added method SetLowEnergyLimit, default
                               value is set to 1 eV (before was 100 eV)
