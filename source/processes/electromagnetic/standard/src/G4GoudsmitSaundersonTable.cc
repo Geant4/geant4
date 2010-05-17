@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.6 2010-04-15 19:20:11 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.7 2010-05-17 15:11:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,11 +37,16 @@
 // Creation date: 20.02.2009
 //
 // Modifications:
-// 04.03.2009 V.Ivanchenko: cleanup and format according to Geant4 EM style
-// 08.02.2010 O.Kadri     : reduce delared variables 
-//                          reduce error of finding root in secant method
-// 26.03.2010 O.Kadri     : minimum of used arrays in computation
-//                          within the dichotomie finding method the error was the lowest value of uvalues
+// 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
+// 26.08.2009 O.Kadri: avoiding unuseful calculations and optimizing the root 
+//                     finding parameter error's within SampleTheta method
+// 08.02.2010 O.Kadri: reduce delared variables; reduce error of finding root 
+//                     in secant method
+// 26.03.2010 O.Kadri: minimum of used arrays in computation within the dichotomie 
+//                     finding method the error was the lowest value of uvalues
+// 12.05.2010 O.Kadri: changing of sqrt((b-a)*(b-a)) with fabs(b-a)
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 #include "G4GoudsmitSaundersonTable.hh"
@@ -203,6 +208,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
   G4double coeff,Ckj,CkjPlus1,CkPlus1j,CkPlus1jPlus1,a,b,m,F;
   G4int Ind0,KIndex=0,JIndex=0,IIndex=0;
 
+
   ///////////////////////////////////////////////////////////////////////////
   // Find Lambda and Chia2 Index
   for(G4int k=0;k<75;k++){if((lambda>=LAMBDAN[k])&&(lambda<LAMBDAN[k+1])){KIndex=k;break;}}  
@@ -222,6 +228,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
   for(G4int i=0 ; i<320 ;i++){
     ThisPDF[i]=Ckj*PDF[Ind0]+CkjPlus1*PDF[Ind0+320]+CkPlus1j*PDF[Ind0+3520]+CkPlus1jPlus1*PDF[Ind0+3840];
     ThisCPDF[i]=Ckj*CPDF[Ind0]+CkjPlus1*CPDF[Ind0+320]+CkPlus1j*CPDF[Ind0+3520]+CkPlus1jPlus1*CPDF[Ind0+3840];  
+  // Find u Index using secant method
     if((i!=0)&&((rndm>=ThisCPDF[i-1])&&(rndm<ThisCPDF[i])))  {IIndex=i-1;break;}
     Ind0++;
   }
@@ -238,11 +245,9 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
     if(F>0.)b=m;
     else a=m;
-  } while(sqrt((b-a)*(b-a))>1.0e-9);
+  } while(fabs(b-a)>1.0e-9);
 
   return m;
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

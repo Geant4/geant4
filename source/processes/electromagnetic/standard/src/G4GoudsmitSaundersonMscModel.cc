@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.23 2010-04-15 19:22:09 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.24 2010-05-17 15:11:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,8 @@
 // 26.03.2010 O.Kadri: direct xsection calculation not inverse of the inverse
 //                     angular sampling without large angle rejection method
 //                     longitudinal displacement is computed exactly from <z>
+// 12.05.2010 O.Kadri: exchange between target and projectile has as a condition the particle type (e-/e-)
+//                     some cleanup to minimize time consuming (adding lamdan12 & Qn12, changing the error to 1.0e-12 for scrA)
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -66,7 +68,6 @@
 //Ref.4:Bielajew et al.,".....", NIMB 173 (2001) 332-343;
 //Ref.5:F. Salvat et al.,"ELSEPA--Dirac partial ...molecules", Comp.Phys.Comm.165 (2005) pp 157-190;
 //Ref.6:G4UrbanMscModel G4 9.2; 
-//Ref.7:G4WentzelVIModel G4 9.3;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4GoudsmitSaundersonTable.hh"
@@ -152,9 +153,12 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
      (tPathLength/tausmall < lambda1)) return ;
 
   ///////////////////////////////////////////
-  // Effective energy taken from  Ref.7
+  // Effective energy
   G4double  eloss = theManager->GetEnergy(particle,tPathLength,currentCouple);
-  if(eloss>0.5*kineticEnergy)eloss=kineticEnergy-eloss;//exchange between target and projectile
+  if(eloss>0.5*kineticEnergy)
+   {if((dynParticle->GetCharge())==-eplus)eloss=kineticEnergy-eloss;//exchange between target and projectile if they are electrons
+    else eloss=0.5*kineticEnergy;
+   }
   G4double ee       = kineticEnergy - 0.5*eloss;
   G4double ttau     = ee/electron_mass_c2;
   G4double ttau2    = ttau*ttau;
@@ -190,31 +194,33 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       x1 = x0-(x0*((1.+x0)*logx0-1.0)-g1/2.)/( (1.+2.*x0)*logx0-2.0);
       delta = std::abs( x1 - x0 );    
       x0 = x1;
-    } while (delta > 1.0e-10);
+    } while (delta > 1.0e-12);
   G4double scrA = x1;
 
   G4double lambdan=0.;
 
   if(lambda0>0.)lambdan=tPathLength/lambda0;
   if(lambdan<=1.0e-12)return;
-  G4double Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
-  G4double Qn12 = 0.5*Qn1;
+  G4double lambdan12=0.5*lambdan;
+  Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+  Qn12 = 0.5*Qn1;
   
   G4double cosTheta1,sinTheta1,cosTheta2,sinTheta2;
   G4double cosPhi1=1.0,sinPhi1=0.0,cosPhi2=1.0,sinPhi2=0.0;
   G4double us=0.0,vs=0.0,ws=1.0,wss=0.,x_coord=0.0,y_coord=0.0,z_coord=1.0;
-
+  
   G4double epsilon1=G4UniformRand();
   G4double expn = std::exp(-lambdan);
   if(epsilon1<expn)// no scattering 
     {return;}
-  else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single or plural scattering (Rutherford DCS's)
+  else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single scattering (Rutherford DCS's)
     {
+
       G4double xi=G4UniformRand();
-      xi= 2.*scrA*xi/(1.-xi + scrA);
+      xi= 2.*scrA*xi/(1.-xi + scrA);   
       if(xi<0.)xi=0.;
-      else if(xi>2.)xi=2.;      
-      ws=(1. - xi);
+      else if(xi>2.)xi=2.; 
+      ws=1.-xi;
       wss=std::sqrt(xi*(2.-xi));      
       G4double phi0=CLHEP::twopi*G4UniformRand(); 
       us=wss*cos(phi0);
@@ -224,13 +230,13 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
     {
       // Ref.2 subsection 4.4 "The best solution found"
       // Sample first substep scattering angle
-      SampleCosineTheta(0.5*lambdan,scrA,cosTheta1,sinTheta1);
+      SampleCosineTheta(lambdan12,scrA,cosTheta1,sinTheta1);
       G4double phi1  = CLHEP::twopi*G4UniformRand();
       cosPhi1 = cos(phi1);
       sinPhi1 = sin(phi1);
 
       // Sample second substep scattering angle
-      SampleCosineTheta(0.5*lambdan,scrA,cosTheta2,sinTheta2);
+      SampleCosineTheta(lambdan12,scrA,cosTheta2,sinTheta2);
       G4double phi2  = CLHEP::twopi*G4UniformRand();
       cosPhi2 = cos(phi2);
       sinPhi2 = sin(phi2);
@@ -243,14 +249,15 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       if(acos(ws)<sqrtA)//small angle approximation for theta less than screening angle
       {
        G4int i=0;
-      do{i++;
-      ws=1.+Qn12*log(G4UniformRand());
-      }while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
-      if(i>=19)ws=cos(sqrtA);
-      wss=std::sqrt(1.-ws*ws);      
-      us=wss*cos(phi1);
-      vs=wss*sin(phi1);
-      }
+       do{i++;
+       ws=1.+Qn12*log(G4UniformRand());
+       }while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
+       if(i>=19)ws=cos(sqrtA);
+
+       wss=std::sqrt((1.-ws)*(1.0+ws));      
+       us=wss*cos(phi1);
+       vs=wss*sin(phi1);
+     }
     }
     
   G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
@@ -261,12 +268,12 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
   if((safety > tlimitminfix)&&latDisplasment)
     { 
       if(Qn1<0.02)// corresponding to error less than 1% in the exact formula of <z>
-      z_coord = 1.0 - Qn1*(0.5 - Qn1*(0.166666667));
+      z_coord = 1.0 - Qn1*(0.5 - Qn1/6.);
       else z_coord = (1.-std::exp(-Qn1))/Qn1;
+
       G4double rr=std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
       x_coord = rr*us;
       y_coord = rr*vs;
-
       // displacement is computed relatively to the end point
       z_coord -= 1.0;
       rr = std::sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
@@ -278,7 +285,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
 	     << " geomStep(mm)= " << zPathLength
 	     << G4endl;
       */
-
+      if(tPathLength<=zPathLength)return;
       if(r > tlimitminfix) {
 
         G4ThreeVector Direction(x_coord/rr,y_coord/rr,z_coord/rr);
@@ -295,21 +302,18 @@ void
 G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						G4double &cost, G4double &sint)
 {
-  G4double r1,tet,xi=0.;
-  G4double Qn1=2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
-if (Qn1<0.001)
-{
+  G4double xi=0.;
+  
+  if (Qn12<0.001)  
+  {G4double r1,tet;
       do{
         r1=G4UniformRand();
-        xi=-0.5*Qn1*log(G4UniformRand());
+        xi=-Qn12*log(G4UniformRand());
         tet=acos(1.-xi);
       }while(tet*r1*r1>sin(tet));
-}
-else if(Qn1>0.5)xi=2.*G4UniformRand();//isotropic distribution
-else
-{
-	xi=2.*(GSTable->SampleTheta(lambdan,scrA,G4UniformRand()));
-}
+  }
+  else if(Qn12>0.5)xi=2.*G4UniformRand();
+  else xi=2.*(GSTable->SampleTheta(lambdan,scrA,G4UniformRand()));
 
 
   if(xi<0.)xi=0.;
@@ -418,7 +422,7 @@ G4GoudsmitSaundersonMscModel::CalculateIntegrals(const G4ParticleDefinition* p,G
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//t->g->t step transformations taken from Ref.6 
+//t->g->t step transformations taken from Ref.6
 
 G4double 
 G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.3 2010-02-19 09:29:53 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonMscModel.hh,v 1.4 2010-05-17 15:11:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 //
 // Modifications:
 // 04.03.2009 V.Ivanchenko cleanup and format according to Geant4 EM style
+// 12.05.2010 O.Kadri: adding Qn1 and Qn12 as private doubles
 //
 // Class description:
 //
@@ -123,7 +124,7 @@ private:
   G4double tausmall,taulim,tlimit,tlimitmin,geommin,geombig;
   G4double charge,lambdalimit;
   G4double tPathLength,stepmin ;
-  G4double lambda0,lambda1,lambda11;
+  G4double lambda0,lambda1,lambda11,Qn1,Qn12;
   G4double mass;
   G4int    currentMaterialIndex;
 
