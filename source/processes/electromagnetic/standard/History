@@ -1,4 +1,4 @@
-$Id: History,v 1.497 2010-05-17 15:15:30 vnivanch Exp $
+$Id: History,v 1.498 2010-05-17 15:27:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 May 2010:  V.Ivant (emstand-V09-03-13)
+- G4WentzelVIModel, G4eCoulombScatteringModel - added momentum dependent
+       limit of scattering angle between single and multiple scattering
+       which allowing to use  G4WentzelVIModel with optical model
+       of hadron scattering 
 
 17 May 2010:  V.Ivant (emstand-V09-03-12)
 - G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) - 
