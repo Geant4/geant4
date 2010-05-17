@@ -22,17 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: paraMaker.cc,v 1.14 2010-04-13 05:30:10 mkelsey Exp $
+// $Id: paraMaker.cc,v 1.15 2010-05-17 23:49:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
+// 20100517  M. Kelsey -- BUG FIX:  Must check for array boundary "if (Z>=70)"
 
 #include "G4InuclSpecialFunctions.hh"
 
 void 
 G4InuclSpecialFunctions::paraMaker(G4double Z,
 	   std::pair<std::vector<G4double>, std::vector<G4double> >& parms) {
-  G4int verboseLevel = 1;
+  G4int verboseLevel(0);
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::paraMaker" << G4endl;
@@ -67,7 +68,7 @@ G4InuclSpecialFunctions::paraMaker(G4double Z,
     AK6=0.68;
     CP6=0.1;
 
-  } else if(Z > 70.0) {
+  } else if(Z >= 70.0) {
     AK6=0.98;  // normal
     CP6=0.06;
     AK2=0.8;
@@ -108,7 +109,7 @@ G4InuclSpecialFunctions::paraMaker(G4double Z,
 void 
 G4InuclSpecialFunctions::paraMakerTruncated(G4double Z,
 				    std::pair<G4double,G4double>& parms) {
-  G4int verboseLevel = 1;
+  G4int verboseLevel(0);
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclSpecialFunctions::paraMakerTruncated" << G4endl;
@@ -127,7 +128,7 @@ G4InuclSpecialFunctions::paraMakerTruncated(G4double Z,
     AK2=0.42;
     CP2=0.5;
 
-  } else if (Z > 70.0) {
+  } else if (Z >= 70.0) {
     AK2=0.8;
     CP2=0.1;
 
