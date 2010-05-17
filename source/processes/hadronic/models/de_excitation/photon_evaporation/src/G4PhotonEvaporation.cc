@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.12 2010-05-11 11:22:14 vnivanch Exp $
+// $Id: G4PhotonEvaporation.cc,v 1.13 2010-05-17 11:47:43 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -206,8 +206,14 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
     {
       // Products from discrete gamma transitions
       G4FragmentVector* discrProducts = _discrDeexcitation->DoTransition();
-      
+
       if (discrProducts) {
+	_eOccupancy = _discrDeexcitation->GetEO();
+	_vShellNumber = _discrDeexcitation->GetVacantSN();
+
+	// not sure if the following line is needed!
+	_discrDeexcitation->SetVaccantSN(-1);
+	//
 	if (_verbose > 0) {
 	  G4cout << " = BreakUp = " << discrProducts->size() 
 		 << " gammas from DiscreteDeexcitation " 
@@ -222,7 +228,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
 	delete discrProducts;
       }
     }
-
+  
   // Add deexcited nucleus to products
   products->push_back(_nucleus);
 
