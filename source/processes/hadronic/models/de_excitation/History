@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-15)
+18 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-15)
 ----------------------------------------------------------
 - G4UnstableFragmentBreakUp - fixed selection of decay channel
 - G4E1Probability - code cleanup and optimisation by usage of G4Pow, integer A 
@@ -22,6 +22,7 @@ code and to keep track of all tags.
 - G4GEMProbability - code cleanup and optimisation by usage of G4Pow and integer Z,A
 - G4ExcitationHandler - forced  FermiBreakUp for A < 5
 - G4PhotonEvaporation - (F.Lei) added correction of electron state after emission
+- G4FermiFragmentsPool - JMQ fixed fragment 111
 
 11 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-14)
 ----------------------------------------------------------
