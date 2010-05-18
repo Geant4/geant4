@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImessenger.hh,v 1.1 2007-11-16 14:05:40 kmura Exp $
+// $Id: G4MPImessenger.hh,v 1.2 2010-05-18 06:03:54 kmura Exp $
 // $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -62,8 +62,9 @@ private:
   G4UIcmdWithAString* execute;
 
   G4UIcommand* beamOn;
-  G4UIcmdWithAnInteger* dotbeamOn;
+  G4UIcommand* dotbeamOn;
   G4UIcmdWithADouble* masterWeight;
+  G4UIcmdWithoutParameter* waitall;
 
   G4UIcmdWithoutParameter* showSeeds;
   G4UIcmdWithAnInteger* setMasterSeed;
@@ -72,10 +73,10 @@ private:
 public:
   G4MPImessenger(G4MPImanager* manager);
   ~G4MPImessenger();
-  
+
   virtual void SetNewValue(G4UIcommand* command, G4String newValue);
   virtual G4String GetCurrentValue(G4UIcommand* command);
-  
+
 };
 
 #endif
