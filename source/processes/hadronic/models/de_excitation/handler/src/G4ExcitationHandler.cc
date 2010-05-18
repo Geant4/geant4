@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.38 2010-05-11 11:30:51 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.39 2010-05-18 15:46:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -138,16 +138,17 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
     {      
       // JMQ 150909: first step in de-excitation is treated separately 
       // Fragments after the first step are stored in theEvapList 
-      // Statistical Multifragmentation will take place (just in case) only here
+      // Statistical Multifragmentation will take place only once
       //
-      // Test applicability
-      // Initial State De-Excitation 
-      if( A<GetMaxA() && Z<GetMaxZ()) 
+      // Fermi Break-Up always first
+      if((A < 5) || (A<GetMaxA() && Z<GetMaxZ())) 
         {
           theTempResult = theFermiModel->BreakItUp(theInitialState);
 	  // fragment was not decaied try to evaporate
 	  if(1 == theTempResult->size()) {
-            if((*theTempResult)[0] !=  theInitialStatePtr) { delete (*theTempResult)[0]; }
+            if((*theTempResult)[0] !=  theInitialStatePtr) { 
+	      delete (*theTempResult)[0]; 
+	    }
             delete theTempResult;
 	    theTempResult = theEvaporation->BreakItUp(theInitialState);
 	  }
@@ -157,7 +158,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
           theTempResult = theMultiFragmentation->BreakItUp(theInitialState);
 	  // fragment was not decaied try to evaporate
 	  if(1 == theTempResult->size()) {
-            if((*theTempResult)[0] !=  theInitialStatePtr) { delete (*theTempResult)[0]; }
+            if((*theTempResult)[0] !=  theInitialStatePtr) { 
+	      delete (*theTempResult)[0]; 
+	    }
             delete theTempResult;
 	    theTempResult = theEvaporation->BreakItUp(theInitialState);
 	  }
@@ -213,7 +216,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       A = (*iList)->GetA_asInt(); 
       Z = (*iList)->GetZ_asInt();
 	  
-      if ( A < GetMaxA() && Z < GetMaxZ() ) // if satisfied apply Fermi Break-Up
+      // Fermi Break-Up 
+      if ((A < 5) || (A < GetMaxA() && Z < GetMaxZ())) 
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
 	  // fragment was not decaied try to evaporate
