@@ -249,8 +249,8 @@ G4FermiFragmentsPool::GetMap()
   //  static const G4StableFermiFragment Fragment109( 16, 8,  5,  6.92*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment109);
   static const G4StableFermiFragment Fragment110( 16, 8,  5,  6.917100*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment110);
   //  static const G4StableFermiFragment Fragment110( 16, 8,  3,  7.12*MeV ); if(MapIsEmpty) fragment_pool.push_back
-  static const G4StableFermiFragment Fragment111( 16, 8,  3,  7.116850*MeV ); if(MapIsEmpty) fragment_pool.push_back
-											       (&Fragment110);
+  //JMQ 180510 fixed fragment 111
+  static const G4StableFermiFragment Fragment111( 16, 8,  3,  7.116850*MeV ); if(MapIsEmpty) fragment_pool.push_back(&Fragment111);
 
   static std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment* , std::less<const std::pair<G4int,G4int> > >  
     theMapOfFragments;
