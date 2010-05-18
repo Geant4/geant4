@@ -31,7 +31,6 @@
 #include "HadrontherapyInteractionParameters.hh"
 #include "IAEADetectorConstruction.hh"
 #include "PassiveProtonBeamLine.hh"
-#include "ThomsonSpectrometer.hh"
 #include "G4RunManager.hh"
 
 /////////////////////////////////////////////////////////////////////////////

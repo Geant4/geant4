@@ -69,7 +69,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	return false;
     // Get kinetic energy
     G4Track * theTrack = aStep  ->  GetTrack();
-    G4double kineticEnergy =  theTrack -> GetKineticEnergy();     
+    //G4double kineticEnergy =  theTrack -> GetKineticEnergy();     
 
     G4ParticleDefinition *particleDef = theTrack -> GetDefinition();
     //Get particle name  
@@ -81,7 +81,7 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
     G4double energyDeposit = aStep -> GetTotalEnergyDeposit();
 
     G4int Z = particleDef-> GetAtomicNumber();
-    G4int A = particleDef-> GetAtomicMass();
+    //G4int A = particleDef-> GetAtomicMass();
 
     // Read voxel indexes: i is the x index, k is the z index
     G4int k  = ROhist -> GetReplicaNumber(0);
@@ -107,18 +107,19 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 		if ( Z>= 1)    //  exclude e-, neutrons, gamma, ...
 		    matrix-> Fill(trackID, particleDef, i, j, k, 0, true);
 #ifdef G4ANALYSIS_USE_ROOT
+/*
 	    // First step kinetic energy (ntuple)
 	    if (Z>=1) 
 	    {
 		// First step kinetic energy for every fragment 
-		// analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
+		 analysis -> FillKineticFragmentTuple(i, j, k, A, Z, kineticEnergy/MeV);
 	    }	 
 	    if ( trackID == 1 && i == 0) 
 	    {
 		// First step kinetic energy for primaries only
-		//analysis -> FillKineticEnergyPrimaryNTuple(i, j, k, kineticEnergy/MeV);
+		analysis -> FillKineticEnergyPrimaryNTuple(i, j, k, kineticEnergy/MeV);
 	    }
-
+*/
 #endif
 	}	 
 
