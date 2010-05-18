@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2009-11-06 09:00:02 kmura Exp $
+$Id: History,v 1.78 2010-05-18 07:45:35 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 May, 2010 K.Murakami (intercoms-V09-03-00)
+ - add used characters to tokenNum in G4UItokenNum
+   for suppressing compiler warnings of gcc 4.5
 
 6 November, 2009 K. Murakami (intercoms-V09-02-02)
  - add GetPreviousSession() in G4UIbatch
