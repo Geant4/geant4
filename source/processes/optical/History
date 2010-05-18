@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th May 2010 Peter Gumplinger (op-V09-03-02)
+              fix a bug reported at:
+              http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/334/1/1.html
+              theFacetNormal was not sampled for polishedbackpainted
+              in DielectricDielectric method of G4OpBoundaryProcess
+
 19th Apr 2010 Peter Gumplinger (op-V09-03-01)
               fix Problem report #1114 in that for backpainted
               surfaces theReflectivity is not applied twice. 
