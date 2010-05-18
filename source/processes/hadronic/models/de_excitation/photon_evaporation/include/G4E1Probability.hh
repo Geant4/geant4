@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.hh,v 1.3 2010-05-18 17:43:55 vnivanch Exp $
+// $Id: G4E1Probability.hh,v 1.4 2010-05-18 18:49:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -34,7 +34,7 @@
 //
 // Modifications:
 // 18.05.2010 V.Ivanchenko trying to speedup the most slow method
-//            by usage of G4Pow, integer A and setup const members
+//            by usage of G4Pow, integer A and introduction of const members
 //
 //
 

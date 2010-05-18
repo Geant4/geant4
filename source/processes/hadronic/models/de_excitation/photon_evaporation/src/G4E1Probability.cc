@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4E1Probability.cc,v 1.6 2010-05-18 17:43:55 vnivanch Exp $
+// $Id: G4E1Probability.cc,v 1.7 2010-05-18 18:49:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -35,7 +35,7 @@
 //
 // Modifications:
 // 18.05.2010 V.Ivanchenko trying to speedup the most slow method
-//            by usage of G4Pow, integer A and setup const members
+//            by usage of G4Pow, integer A and introduction of const members
 //
 //
 
