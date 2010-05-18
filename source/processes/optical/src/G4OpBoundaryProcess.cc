@@ -786,13 +786,13 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      G4SwapPtr(Material1,Material2);
 	      G4SwapObj(&Rindex1,&Rindex2);
 	   }
-
-	   if ( theFinish == ground || theFinish == groundbackpainted ) {
-		theFacetNormal = 
-			     GetFacetNormal(OldMomentum,theGlobalNormal);
+	
+	   if ( theFinish == polished ) {
+	        theFacetNormal = theGlobalNormal;
 	   }
 	   else {
-		theFacetNormal = theGlobalNormal;
+	        theFacetNormal =
+	                     GetFacetNormal(OldMomentum,theGlobalNormal);
 	   }
 
 	   G4double PdotN = OldMomentum * theFacetNormal;
