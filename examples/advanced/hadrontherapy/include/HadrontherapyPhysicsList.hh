@@ -50,7 +50,7 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
-
+  void SetDetectorCut(G4double cut);
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
 

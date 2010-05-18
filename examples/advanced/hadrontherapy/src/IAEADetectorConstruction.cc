@@ -103,9 +103,9 @@ G4VPhysicalVolume* IAEADetectorConstruction::Construct()
 
   ConstructPassiveProtonBeamLine();
   ConstructDetector();
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   //write the metadata for analysis
-  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData((endDetectorPosition - endDetectorThickness/2)/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
+  HadrontherapyAnalysisManager::GetInstance()->setGeometryMetaData((endDetectorPosition - endDetectorThickness/2)/10, phantomDepth/10, phantomCenter/10); //FIXME! unit correction hardcoded
 #endif
   // Set the sensitive detector where the energy deposit is collected
   ConstructSensitiveDetector();
@@ -216,9 +216,9 @@ void IAEADetectorConstruction::setWaterThickness(G4double newWaterThickness){
 	}else{
 	this->noPhantom = true;
 	}
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
 	  //update the geometry metadata
-	  HadrontherapyAnalysisManager::getInstance()->setGeometryMetaData((this->endDetectorPosition - this->endDetectorThickness/2)/10, this->phantomDepth/10, this->phantomCenter/10); //FIXME! unit correction hardcoded
+	  HadrontherapyAnalysisManager::GetInstance()->setGeometryMetaData((this->endDetectorPosition - this->endDetectorThickness/2)/10, this->phantomDepth/10, this->phantomCenter/10); //FIXME! unit correction hardcoded
 #endif
 	}
 

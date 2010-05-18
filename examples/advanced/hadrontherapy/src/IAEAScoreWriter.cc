@@ -97,8 +97,8 @@ void IAEAScoreWriter::DumpQuantityToFiles(G4String & psName, G4String & option) 
 
   // write quantity
   
-#ifdef ANALYSIS_USE // If we are using ROOT or AIDA analysis
-  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
+#ifdef G4ANALYSIS_USE_ROOT // If we are using ROOT or AIDA analysis
+  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
 #endif
   for(int x = 0; x < fNMeshSegments[0]; x++) {
     for(int y = 0; y < fNMeshSegments[1]; y++) {
@@ -107,7 +107,7 @@ void IAEAScoreWriter::DumpQuantityToFiles(G4String & psName, G4String & option) 
   if(verboseLevel > 0) {
       std::cout << x << "\t" << projxy[x][y] << G4endl;
 	}
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
 	analysis->BraggPeak(x, projxy[x][y]);
 #endif
     } // y

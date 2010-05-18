@@ -29,13 +29,13 @@
 #ifndef HadrontherapyAnalysisFileMessenger_h
 #define HadrontherapyAnalysisFileMessenger_h 1
 
-#ifdef ANALYSIS_USE
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
 class HadrontherapyAnalysisManager; ///< Provides SetanalysisFileName()
-class G4UIcmdWithAString; ///< Provides possibility to add commands
+class G4UIcmdWithAString; 
+class G4UIcmdWithABool; 
 
 /**
 * A messenger object of this class is created by the AnalysisManager.
@@ -67,8 +67,10 @@ class HadrontherapyAnalysisFileMessenger: public G4UImessenger
 	* G4 user interface command (that takes a string argument) object
 	* Constructor requires command name and messenger class(this).
 	*/ 
-    G4UIcmdWithAString *FileNameCmd, *DoseMatrixCmd, *LetMatrixCmd ;
+    G4UIcmdWithABool *secondariesCmd; 
+#ifdef G4ANALYSIS_USE_ROOT
+    G4UIcmdWithAString *FileNameCmd;
+#endif
 };
 
-#endif
 #endif

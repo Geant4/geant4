@@ -76,6 +76,8 @@
 //                        and local physic for ion-ion enelastic processes)
 
 #include "G4RunManager.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
 #include "HadrontherapyStepMax.hh"
@@ -306,6 +308,8 @@ void HadrontherapyPhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
 
+  // Set cuts for detector
+  SetDetectorCut(defaultCutValue); 
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
@@ -329,3 +333,17 @@ void HadrontherapyPhysicsList::SetCutForPositron(G4double cut)
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
+
+void HadrontherapyPhysicsList::SetDetectorCut(G4double cut)
+{
+
+  G4String regionName = "DetectorLog";
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
+
+  G4ProductionCuts* cuts = new G4ProductionCuts ;
+  cuts -> SetProductionCut(cut,G4ProductionCuts::GetIndex("gamma"));
+  cuts -> SetProductionCut(cut,G4ProductionCuts::GetIndex("e-"));
+  cuts -> SetProductionCut(cut,G4ProductionCuts::GetIndex("e+"));
+  region -> SetProductionCuts(cuts);
+}
+

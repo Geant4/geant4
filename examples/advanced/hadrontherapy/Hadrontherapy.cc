@@ -23,19 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Hadrontherapy.cc 
-//
-// Main of the Hadrontherapy example; 
-// Released with the Geant4 9.3 version (December 2009)
-//
-// Last modified: G.A.P.Cirrone
+// This is the Full version of the Geant4-based Hadrontherapy application
 // 
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
-// Code developed by:
+// Main Authors:
 //
 // G.A.P. Cirrone(a)°, G.Cuttone(a), F.Di Rosa(a), S.E.Mazzaglia(a), F.Romano(a)
 // 
@@ -79,7 +74,6 @@
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
-#include "HadrontherapyLet.hh"
 #include "G4ScoringManager.hh"
 #include "IAEAScoreWriter.hh"
 
@@ -101,126 +95,120 @@
 #include "G4Qt.hh"
 #endif
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////
 int main(int argc ,char ** argv)
 {
-  // Set the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
-
-  G4int seed = time(0);
-  CLHEP::HepRandom::setTheSeed(seed);
-
-  G4RunManager* runManager = new G4RunManager;
-
-  //Initialize possible analysis needs, needs to come early in order to pick up metadata
-#ifdef ANALYSIS_USE
-  HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::getInstance();
-  analysis -> book();
-#endif
-  // Geometry controller is responsible for instantiating the
-  // geometries. All geometry specific setup tasks are now in class
-  // HadrontherapyGeometryController.
-  HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
-
-  // Connect the geometry controller to the G4 user interface
-  HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
-
-  G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
-  scoringManager->SetVerboseLevel(1);
-  scoringManager->SetScoreWriter(new IAEAScoreWriter());
-
-  // Initialize the default Hadrontherapy geometry
-  geometryController->SetGeometry("default");
-
-  // Initialize command based scoring
-  G4ScoringManager::GetScoringManager();
-
-  // Initialize the physics 
-  runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
-
-  // Initialize the primary particles
-  HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
-  runManager -> SetUserAction(pPrimaryGenerator);
-
-  // Optional UserActions: run, event, stepping
-  HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
-  runManager -> SetUserAction(pRunAction);
-
-  HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction();
-  runManager -> SetUserAction(pEventAction);
-
-  HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
-  runManager -> SetUserAction(steppingAction);    
-
-  // Interaction data: stopping powers
-  HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
-
+		// Set the Random engine
+	CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+        
+	// Only if an initial random seed is needed
+	// G4int seed = time(0);
+	// CLHEP::HepRandom::setTheSeed(seed);
+	
+	G4RunManager* runManager = new G4RunManager;
+	// Geometry controller is responsible for instantiating the
+	// geometries. All geometry specific setup tasks are now in class
+	// HadrontherapyGeometryController.
+	HadrontherapyGeometryController *geometryController = new HadrontherapyGeometryController();
+	
+	// Connect the geometry controller to the G4 user interface
+	HadrontherapyGeometryMessenger *geometryMessenger = new HadrontherapyGeometryMessenger(geometryController);
+	
+	G4ScoringManager *scoringManager = G4ScoringManager::GetScoringManager();
+	scoringManager->SetVerboseLevel(1);
+	scoringManager->SetScoreWriter(new IAEAScoreWriter());
+	
+		// Initialize the default Hadrontherapy geometry
+	geometryController->SetGeometry("default");
+	
+		// Initialize command based scoring
+	G4ScoringManager::GetScoringManager();
+	
+		// Initialize the physics 
+	runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
+	
+		// Initialize the primary particles
+	HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
+	runManager -> SetUserAction(pPrimaryGenerator);
+	
+		// Optional UserActions: run, event, stepping
+	HadrontherapyRunAction* pRunAction = new HadrontherapyRunAction();
+	runManager -> SetUserAction(pRunAction);
+	
+	HadrontherapyEventAction* pEventAction = new HadrontherapyEventAction();
+	runManager -> SetUserAction(pEventAction);
+	
+	HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
+	runManager -> SetUserAction(steppingAction);    
+	
+		// Interaction data: stopping powers
+	HadrontherapyInteractionParameters* pInteraction = new HadrontherapyInteractionParameters(true);
+	
 #ifdef G4VIS_USE
-  // Visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager -> Initialize();
+		// Visualization manager
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager -> Initialize();
 #endif 
-
-G4UImanager* UI = G4UImanager::GetUIpointer();
-
- if (argc!=1)   // batch mode
-   {
-G4UIsession* session = 0;
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI -> ApplyCommand(command+fileName);
+	
+	G4UImanager* UI = G4UImanager::GetUIpointer();
+	
+	// Batch mode: in this configuration, i.e. when the User explicitly call a macro file,
+	// the program run and, at the end, authomatically call the exit state.
+	// With a such configuration, it is possible to send in background a simulation
+	// and correctly get the output file.
+	if (argc!=1)   
+	{
+		G4UIsession* session = 0;
+		G4String command = "/control/execute ";
+		G4String fileName = argv[1];
+		UI -> ApplyCommand(command+fileName);
 #if defined(G4UI_USE_TCSH)
-     session = new G4UIterminal(new G4UItcsh);
-     session -> SessionStart();
+		session = new G4UIterminal(new G4UItcsh);
 #else
-     session = new G4UIterminal();
-     session -> SessionStart();
+		session = new G4UIterminal();
 #endif
-   }
-
- else  // interactive mode : define visualization UI terminal
-   {
-     G4UIsession* session = 0;
-
-     // If the enviroment variable for the TCSH terminal is active, it is used and the
-     // defaultMacro.mac file is executed
+		// Only if the User Interface is needed!
+		//session -> SessionStart();
+		//delete session;
+	}
+	else  // interactive mode : define visualization UI terminal
+	{
+		G4UIsession* session = 0;
+		
+			// If the enviroment variable for the TCSH terminal is active, it is used and the
+			// defaultMacro.mac file is executed
 #if defined(G4UI_USE_TCSH)
-     session = new G4UIterminal(new G4UItcsh);
-     UI->ApplyCommand("/control/execute defaultMacro.mac");
-     session -> SessionStart();
-
-     // Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
-     // G$UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
-     // In the following case the GUI.mac file is also executed
+		session = new G4UIterminal(new G4UItcsh);
+		UI->ApplyCommand("/control/execute defaultMacro.mac");
+		session -> SessionStart();
+		
+		// Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
+		// G4UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
+		// In the following case the GUI.mac file is also executed
 #elif defined(G4UI_USE_QT)
-    session = new G4UIQt(argc,argv);
-    UI->ApplyCommand("/control/execute macro/GUI.mac");      
-    session -> SessionStart();
-     // As final option, the basic user interface terminal is opened
+		session = new G4UIQt(argc,argv);
+		UI->ApplyCommand("/control/execute macro/GUI.mac");      
+		session -> SessionStart();
+		// As final option, the basic user interface terminal is opened
 #else
-    session = new G4UIterminal();
- 
-    UI -> ApplyCommand("/control/execute defaultMacro.mac");
-    session -> SessionStart();
+		session = new G4UIterminal();
+		
+		UI -> ApplyCommand("/control/execute defaultMacro.mac");
+		session -> SessionStart();
 #endif
-    //session->SessionStart();
-    delete session;
-   }
-
-
-#ifdef ANALYSIS_USE
- analysis -> finish();
+		delete session;
+	}
+	
+		// Job termination
+#ifdef G4ANALYSIS_USE_ROOT
+    HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
 #endif
-
- // Job termination
 #ifdef G4VIS_USE
- delete visManager;
+	delete visManager;
 #endif
-  
-  delete geometryMessenger;
-  delete geometryController;
-  delete pInteraction; 
-  delete runManager;
-  return 0;
+	delete geometryMessenger;
+	delete geometryController;
+	delete pInteraction; 
+	delete runManager;
+	return 0;
 }

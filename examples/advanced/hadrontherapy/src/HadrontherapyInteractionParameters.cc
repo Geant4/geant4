@@ -232,7 +232,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
 			  "\n/gun/ion <atomic number> <mass number> <[charge]>" << G4endl << G4endl;
 		return false;
 	   }
-    // start physics by forcing a G4RunManager beamOn(): 
+    // start physics by forcing a G4RunManager::BeamOn(): 
     BeamOn();
     // Set output file
     if( filename != "" ) 
@@ -240,7 +240,7 @@ bool HadrontherapyInteractionParameters::ParseArg(const G4String& vararg)
           outfile.open(filename,std::ios_base::trunc); // overwrite existing file
           data.rdbuf(outfile.rdbuf());
        }
-    else data.rdbuf(G4cout.rdbuf());	// output is G4cout                
+    else data.rdbuf(G4cout.rdbuf());	// output is G4cout!                
     return true;
 }
 // Force physics tables build

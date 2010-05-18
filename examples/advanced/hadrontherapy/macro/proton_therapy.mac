@@ -36,20 +36,40 @@
 /beam/energy/sigmaEnergy 400 keV
 /beam/position/Xposition -2600 mm
 
+
+#/beamLine/RangeShifter/RSMat G4_PLEXIGLASS
+#/beamLine/RangeShifter/thickness 13 mm
+/beamLine/FinalCollimator/halfInnerRad 12.5 mm
+
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-/physic/setCuts 0.01 mm
+/physic/setCuts 0.01 km
 /Step/waterPhantomStepMax 0.01 mm 
+
+##########################
+# Visualisation 
+#
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoomTo 3
+/vis/viewer/panTo 100  20 cm
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/update
+
+
 
 #########################
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 10000
+/event/printEventNumber 100
 
-/run/beamOn 100000
+/run/beamOn 5000
 
 #########################
 # Move the generated .root
@@ -57,3 +77,4 @@
 # "SimulationOutputs" folder
 
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root		
+/control/shell mv Dose.out SimulationOutputs/proton/BraggPeak/Dose.out		

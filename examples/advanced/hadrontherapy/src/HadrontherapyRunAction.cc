@@ -39,8 +39,9 @@
 #include "HadrontherapyRunAction.hh"
 
 
-#include "HadrontherapyLet.hh"
+#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyMatrix.hh"
+
 HadrontherapyRunAction::HadrontherapyRunAction()
 {
 }
@@ -54,27 +55,45 @@ void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
     G4RunManager::GetRunManager()-> SetRandomNumberStore(true);
     G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
 
-    // Initialize LET with energy of primaries and clear data inside       
-    if ( HadrontherapyLet::GetInstance()) HadrontherapyLet::GetInstance() -> Initialize();
+    // Warning! any beamOn will reset all data (dose, fluence, histograms, etc)!
+    //
 
-    // Initialize matrix with energy of primaries and clear data inside
-    if (HadrontherapyMatrix::GetInstance()) HadrontherapyMatrix::GetInstance() -> Initialize();
+    // Initialize matrix with energy of primaries clearing data inside
+    if (HadrontherapyMatrix::GetInstance()) 
+    {
+	HadrontherapyMatrix::GetInstance() -> Initialize();
+    }
 
+#ifdef G4ANALYSIS_USE_ROOT
+    HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
+    // Initialize root analysis ----> book
+    HadrontherapyAnalysisManager::GetInstance() -> book();
+#endif
     electromagnetic = 0;
     hadronic = 0;
 }
 
 void HadrontherapyRunAction::EndOfRunAction(const G4Run*)
 {
-    // Write 
-    if (HadrontherapyLet::GetInstance()) HadrontherapyLet::GetInstance() -> LetOutput();
+    // Store dose & fluence data to ASCII & ROOT files 
+    if ( HadrontherapyMatrix::GetInstance() )
+    {
+	HadrontherapyMatrix::GetInstance() -> TotalEnergyDeposit(); 
+	HadrontherapyMatrix::GetInstance() -> StoreDoseFluenceAscii();
 
+#ifdef G4ANALYSIS_USE_ROOT
+	if (HadrontherapyAnalysisManager::GetInstance())
+	{ 
+	    HadrontherapyMatrix::GetInstance() -> StoreDoseFluenceRoot();
+	}
+#endif
+    }
 
-  //G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
-  //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
-  // 	   << electromagnetic << G4endl;
-  //G4cout << "Number of hadronic processes of primary particles in the phantom:"
-  //	   << hadronic << G4endl;
+    //G4cout << " Summary of Run " << aRun -> GetRunID() <<" :"<< G4endl;
+    //G4cout << "Number of electromagnetic processes of primary particles in the phantom:"
+    // 	   << electromagnetic << G4endl;
+    //G4cout << "Number of hadronic processes of primary particles in the phantom:"
+    //	   << hadronic << G4endl;
 }
 void HadrontherapyRunAction::AddEMProcess()
 {
@@ -84,6 +103,4 @@ void HadrontherapyRunAction::AddHadronicProcess()
 {
   hadronic += 1;
 }
-
-
 

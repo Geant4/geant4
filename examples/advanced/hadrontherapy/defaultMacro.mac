@@ -23,6 +23,8 @@
 /physic/addPhysics binary                              # Hadronic inelastic model
 /physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
 
+
+
 ##########################
 # Initialisation procedure
 #
@@ -33,6 +35,7 @@
 #
 /vis/scene/create
 #/vis/open OGLIQt # only if QT library are installed
+#/vis/open OGLSX 600x600-0+0
 #/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
@@ -42,6 +45,7 @@
 #/vis/scene/endOfEventAction accumulate
 /vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
+
 
 ##########################
 # Set here the cut and the step max for the tracking. 
@@ -55,7 +59,7 @@
 # energy and position along the X direction
 #
 /gun/particle proton
-/beam/energy/meanEnergy 62 MeV
+/beam/energy/meanEnergy 162 MeV
 /beam/energy/sigmaEnergy 400 keV
 /beam/position/Xposition -2700 mm
 
@@ -68,8 +72,13 @@
 #########################
 # Start of the run
 #
-/run/beamOn 1000
-# Write let e dose file
-/analysis/writeDoseFile
-/analysis/writeLetFile
+# If secondaries dose/fluence is needed
+/analysis/secondaries true 
+/changeDetector/size 40 0 0 cm
+/changePhantom/update
+
+/run/beamOn 139
+# Write let 
+#/analysis/writeLetFile
+
 

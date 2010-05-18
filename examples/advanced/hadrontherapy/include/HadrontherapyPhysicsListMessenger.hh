@@ -57,6 +57,7 @@ class HadrontherapyPhysicsListMessenger: public G4UImessenger
   G4UIcmdWithADoubleAndUnit* electCutCmd;
   G4UIcmdWithADoubleAndUnit* protoCutCmd;    
   G4UIcmdWithADoubleAndUnit* allCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allDetectorCmd;    
   G4UIcmdWithAString*        pListCmd;
   G4UIcmdWithAString* packageListCmd;    
 };

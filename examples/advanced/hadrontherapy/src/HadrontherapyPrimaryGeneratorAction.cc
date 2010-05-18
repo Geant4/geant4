@@ -85,9 +85,9 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
   
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Write these values into the analysis if needed. Have to be written separately on change.
-  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+  HadrontherapyAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 #endif
 
   // Define the parameters of the initial position: 
@@ -119,9 +119,9 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Increment the event counter
-  HadrontherapyAnalysisManager::getInstance()->startNewEvent();
+  HadrontherapyAnalysisManager::GetInstance()->startNewEvent();
 #endif
 
   // ****************************************
@@ -177,9 +177,9 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
 {
 	meanKineticEnergy = val;
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Update the beam-data in the analysis manager
-  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+  HadrontherapyAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 #endif
 
 } 
@@ -187,9 +187,9 @@ void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )
 void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
 { 
 	sigmaEnergy = val;
-#ifdef ANALYSIS_USE
+#ifdef G4ANALYSIS_USE_ROOT
   // Update the sigmaenergy in the metadata.
-  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+  HadrontherapyAnalysisManager::GetInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
 #endif
 }
 

@@ -68,6 +68,13 @@ HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(Hadronthera
   allCutCmd->SetRange("cut>0.0");
   allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
+  allDetectorCmd = new G4UIcmdWithADoubleAndUnit("/physic/setDetectorCuts",this);  
+  allDetectorCmd->SetGuidance("Set cut for all. into Detector");
+  allDetectorCmd->SetParameterName("cut",false);
+  allDetectorCmd->SetUnitCategory("Length");
+  allDetectorCmd->SetRange("cut>0.0");
+  allDetectorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
   pListCmd = new G4UIcmdWithAString("/physic/addPhysics",this);  
   pListCmd->SetGuidance("Add physics list.");
   pListCmd->SetParameterName("PList",false);
@@ -86,6 +93,7 @@ HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
   delete electCutCmd;
   delete protoCutCmd;
   delete allCutCmd;
+  delete allDetectorCmd;
   delete pListCmd;
   delete physDir;    
   delete packageListCmd;
@@ -98,25 +106,29 @@ void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
   if( command == gammaCutCmd )
    { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
      
-  if( command == electCutCmd )
+  else if( command == electCutCmd )
    { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
      
-  if( command == protoCutCmd )
+  else if( command == protoCutCmd )
    { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
 
-  if( command == allCutCmd )
+  else if( command == allCutCmd )
     {
       G4double cut = allCutCmd->GetNewDoubleValue(newValue);
       pPhysicsList->SetCutForGamma(cut);
       pPhysicsList->SetCutForElectron(cut);
       pPhysicsList->SetCutForPositron(cut);
     } 
-
-  if( command == pListCmd )
+  else if( command == allDetectorCmd)
+  {
+      G4double cut = allDetectorCmd -> GetNewDoubleValue(newValue);
+      pPhysicsList -> SetDetectorCut(cut);
+  }
+  else if( command == pListCmd )
    { pPhysicsList->AddPhysicsList(newValue);}
 
 
-  if( command == packageListCmd )
+  else if( command == packageListCmd )
    { pPhysicsList->AddPackage(newValue);}
 
 

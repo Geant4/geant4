@@ -94,7 +94,7 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
 
   // Clear voxels hit list 
-  static HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
   if (matrix) matrix -> ClearHitTrack(); 
 
   if(HCE)
