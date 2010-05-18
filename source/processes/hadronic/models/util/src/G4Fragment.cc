@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.15 2010-05-09 17:33:46 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.16 2010-05-18 18:52:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -51,6 +51,7 @@ G4Fragment::G4Fragment() :
   theA(0),
   theZ(0),
   theExcitationEnergy(0.0),
+  theGroundStateMass(0.0),
   theMomentum(0),
   theAngularMomentum(0),
   numberOfParticles(0),
@@ -69,6 +70,7 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    theA = right.theA;
    theZ = right.theZ;
    theExcitationEnergy = right.theExcitationEnergy;
+   theGroundStateMass = right.theGroundStateMass;
    theMomentum  = right.theMomentum;
    theAngularMomentum = right.theAngularMomentum;
    numberOfParticles = right.numberOfParticles;
@@ -99,7 +101,11 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMom
 #endif
 {
   theExcitationEnergy = 0.0;
-  if(theA > 0) { CalculateExcitationEnergy(); }
+  theGroundStateMass = 0.0;
+  if(theA > 0) { 
+    CalculateGroundStateMass();
+    CalculateExcitationEnergy(); 
+  }
   /*
   theExcitationEnergy = theMomentum.mag() - 
                         G4ParticleTable::GetParticleTable()->GetIonTable()
@@ -119,7 +125,8 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMom
 
 
 // This constructor is for initialize photons or electrons
-G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, G4ParticleDefinition * aParticleDefinition) :
+G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, 
+		       G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
   theMomentum(aMomentum),
@@ -140,6 +147,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, G4ParticleDefinition * 
       + aParticleDefinition->GetParticleName();  
     throw G4HadronicException(__FILE__, __LINE__, text);
   }
+  theGroundStateMass = aParticleDefinition->GetPDGMass();
 }
 
 const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
@@ -148,6 +156,7 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theA = right.theA;
     theZ = right.theZ;
     theExcitationEnergy = right.theExcitationEnergy;
+    theGroundStateMass = right.theGroundStateMass;
     theMomentum  = right.theMomentum;
     theAngularMomentum = right.theAngularMomentum;
     numberOfParticles = right.numberOfParticles;
@@ -228,32 +237,6 @@ void G4Fragment::ExcitationEnegryWarning()
   }
   theExcitationEnergy = 0.0;
 }
-
-/*
-G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) const
-{
-  static G4int errCount(0);
-  G4double theMaxGroundStateMass = theZ*G4Proton::Proton()->GetPDGMass()+
-	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
-  G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
-  if( U < 0.0 ) {
-     if( U > -10.0 * eV || 0==G4lrint(theA)){
-	U = 0.0;
-     } else {
-	if ( errCount < 10 ) {
-	    G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
-	       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl
-	       << ", mass= " << GetGroundStateMass() << " maxMass= "<<theMaxGroundStateMass<<G4endl; ;
-	    errCount++;
-	    if (errCount == 10 ) G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
-				<< " further warnings on negative excitation will be supressed" << G4endl;
-	}
-	U=0.0;
-     }
-  }
-  return U;
-}
-*/
 
 G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const
   // Create a unit vector with a random direction isotropically distributed

@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-01
+- G4Fragment - minor speedup by adding member and access method 
+               to GroundStateMass;
+
 10 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-00
 - G4Fragment cleanup: only 1 return left in inline methods;
         do not add any shift to excitation energy but use direct 
