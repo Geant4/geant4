@@ -48,6 +48,8 @@ double chisq=func->GetChisquare();
 double ndf=func->GetNDF();
 double chisqdf=chisq/ndf;
 
+gStyle->SetOptFit(1111);
+
 cout << "----------------------------------------------";
 cout << "\n Chisquare: " << chisq << " / " << ndf << " = " << chisqdf;
 cout << "\n----------------------------------------------";
