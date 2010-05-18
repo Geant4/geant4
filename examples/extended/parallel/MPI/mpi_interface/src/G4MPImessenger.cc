@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MPImessenger.cc,v 1.1 2007-11-16 14:05:41 kmura Exp $
+// $Id: G4MPImessenger.cc,v 1.2 2010-05-18 06:06:21 kmura Exp $
 // $Name: not supported by cvs2svn $
 //
 // ====================================================================
@@ -71,7 +71,7 @@ G4MPImessenger::G4MPImessenger( G4MPImanager* manager)
   // /mpi/execute
   execute= new G4UIcmdWithAString("/mpi/execute", this);
   execute-> SetGuidance("Execute a macro file. (=/control/execute)");
-  execute-> SetParameterName("fileName", false, false);  
+  execute-> SetParameterName("fileName", false, false);
 
   // /mpi/beamOn
   beamOn= new G4UIcommand("/mpi/beamOn", this);
@@ -87,17 +87,28 @@ G4MPImessenger::G4MPImessenger( G4MPImanager* manager)
   beamOn-> SetParameter(p2);
 
   // /mpi/.beamOn
-  dotbeamOn= new G4UIcmdWithAnInteger("/mpi/.beamOn", this);
-  dotbeamOn-> SetGuidance("Start a parallel run w/o thread. (=/run/beamOn)");
-  dotbeamOn-> SetParameterName("numberOfEvent", true, false);
-  dotbeamOn-> SetDefaultValue(1);
-  dotbeamOn-> SetRange("numberOfEvent>=0");
+  dotbeamOn= new G4UIcommand("/mpi/.beamOn", this);
+  dotbeamOn-> SetGuidance("Start a parallel run w/o thread.");
+
+  p1= new G4UIparameter("numberOfEvent", 'i', true);
+  p1-> SetDefaultValue(1);
+  p1-> SetParameterRange("numberOfEvent>=0");
+  dotbeamOn-> SetParameter(p1);
+
+  p2= new G4UIparameter("divide", 'b', true);
+  p2-> SetDefaultValue(true);
+  dotbeamOn-> SetParameter(p2);
 
   // /mpi/weightForMaster
   masterWeight= new G4UIcmdWithADouble("/mpi/masterWeight", this);
   masterWeight-> SetGuidance("Set weight for master node.");
   masterWeight-> SetParameterName("weight", false, false);
   masterWeight-> SetRange("weight>=0. && weight<=1.");
+
+  // /mpi/wait
+  waitall= new G4UIcmdWithoutParameter("/mpi/wait", this);
+  waitall-> SetGuidance( "Wait until beamOn-s on all nodes are done. "
+                         "(batch mode only)");
 
   // /mpi/showSeeds
   showSeeds= new G4UIcmdWithoutParameter("/mpi/showSeeds", this);
@@ -131,10 +142,11 @@ G4MPImessenger::~G4MPImessenger()
   delete beamOn;
   delete dotbeamOn;
   delete masterWeight;
+  delete waitall;
   delete showSeeds;
   delete setMasterSeed;
   delete setSeed;
-  
+
   delete dir;
 }
 
@@ -161,23 +173,29 @@ void G4MPImessenger::SetNewValue( G4UIcommand* command, G4String newValue)
     g4MPI-> BeamOn(nevent, qdivide);
 
   } else if (command == dotbeamOn){ // /mpi/.beamOn
-    G4int nevent= dotbeamOn-> GetNewIntValue(newValue);
-    g4MPI-> BeamOn(nevent);
+    std::istringstream is(newValue);
+    G4int nevent;
+    G4bool qdivide;
+    is >> nevent >> qdivide;
+    g4MPI-> BeamOn(nevent, qdivide);
 
   } else if (command == masterWeight){ // /mpi/masterWeight
     G4double weight= masterWeight-> GetNewDoubleValue(newValue);
     g4MPI-> SetMasterWeight(weight);
-    
+
+  } else if (command == waitall) {
+    g4MPI-> WaitBeamOn();
+
   } else if (command == showSeeds){ // /mpi/showSeeds
     g4MPI-> ShowSeeds();
-  
+
   } else if (command == setMasterSeed){ // /mpi/setMasterSeed
     std::istringstream is(newValue);
     G4long seed;
     is >> seed;
     g4MPI-> GetSeedGenerator()-> SetMasterSeed(seed);
     g4MPI-> DistributeSeeds();
-    
+
   } else if (command == setSeed){ // /mpi/setSeed
     std::istringstream is(newValue);
     G4int inode;
