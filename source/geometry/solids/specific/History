@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2010-04-23 07:47:04 gcosmo Exp $
+$Id: History,v 1.164 2010-05-18 08:58:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-Apr-2010  P.R.Truscott (geom-specific-V09-03-03)
+- Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment of
+  optical photon transport related to internal reflection at surface.
+  Addresses problem report #1103.
 
 15-Apr-2010  I.Hrivnacova (geom-specific-V09-03-02)
 - G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
