@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc,v 1.3 2010-05-18 12:05:00 vnivanch Exp $
+// $Id: G4UnstableFragmentBreakUp.cc,v 1.4 2010-05-18 17:43:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -146,8 +146,7 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
 
   // updated fragment
   if( theResult->size() > 0) {
-    nucleus->SetZ_asInt(Z);
-    nucleus->SetA_asInt(A);
+    nucleus->SetZandA_asInt(Z, A);
     nucleus->SetMomentum(lv);
   }
 
