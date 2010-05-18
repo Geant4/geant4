@@ -23,6 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4E1Probability.hh,v 1.3 2010-05-18 17:43:55 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------
+//
+// Geant4 header G4E1Probability
+//
+// by V. Lara (May 2003)
+//
+// Modifications:
+// 18.05.2010 V.Ivanchenko trying to speedup the most slow method
+//            by usage of G4Pow, integer A and setup const members
 //
 //
 
@@ -32,23 +44,22 @@
 #include "globals.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4Fragment.hh"
-#include "G4VLevelDensityParameter.hh"
+
+class G4Pow;
 
 class G4E1Probability : public G4VEmissionProbability
 {
 
 public:
 
-  G4E1Probability() {};
+  G4E1Probability();
 
-  ~G4E1Probability();
+  virtual ~G4E1Probability();
 
   G4double EmissionProbability(const G4Fragment& frag, const G4double excite);
   G4double EmissionProbDensity(const G4Fragment& frag, const G4double ePhoton);
 
 private:
-
-  // G4E1Probability() {};
 
   G4E1Probability(const G4E1Probability& right);
 
@@ -62,7 +73,9 @@ private:
                                const G4double lowLim, const G4double upLim,
                                const G4int numIters);
 
-  // G4VLevelDensityParameter* _levelDensity; // Don't need this
+  G4Pow*   fG4pow;
+  G4double theLevelDensityParameter;
+  G4double normC;
 
 };
 
