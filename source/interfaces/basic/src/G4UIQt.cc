@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.34 2010-05-07 13:25:28 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.35 2010-05-18 14:51:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -604,7 +604,6 @@ bool G4UIQt::AddTabWidget(
 // // #ifdef G4DEBUG_INTERFACES_BASIC
 // //   printf("G4UIQt::AddTabWidget resize ^^^^^^^^^^^^ W:%d + sx:%d -fwx:%d   H:%d + sy:%d -fwy:%d    TabW:%d TabH:%d G4UIQt G4UIQt offX:%d  offY:%d aWX:%d aWY:%d\n",fMainWindow->width(),sizeX,fTabWidget->width(),fMainWindow->height(),sizeY,fTabWidget->height(),fTabWidget->width(),fTabWidget->height(),offX,offY,aWidget->size().height(),aWidget->size().width());
 // // #endif
-printf("G4UIQt::AddTabWidget  END\n");
 // // #endif
   
   fTabWidget->setVisible(true);
