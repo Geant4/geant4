@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.17 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4Box.hh,v 1.18 2010-05-18 10:07:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -100,7 +100,7 @@ class G4Box : public G4CSGSolid
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
-  // Functions for visualization
+  // Utilities for visualization
 
     void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
     G4VisExtent   GetExtent          () const;
@@ -124,7 +124,7 @@ class G4Box : public G4CSGSolid
   protected:  // without description
 
     enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
-      // Codes for faces (kPX=plus x face,kMY= minus y face etc)
+      // Codes for faces (kPX= +x face, kMY= -y face, etc...)
 
   private:
 
