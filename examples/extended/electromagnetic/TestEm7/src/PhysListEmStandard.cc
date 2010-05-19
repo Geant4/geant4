@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.20 2009-11-21 22:02:51 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.21 2010-05-19 09:37:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -131,6 +131,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(hIoni,                     -1, 2, 2);      
       pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
+      pmanager->AddProcess(new G4NuclearStopping,     -1, 5,-1);
      
     } else if( particleName == "alpha" || 
 	       particleName == "He3"    ) {
