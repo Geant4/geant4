@@ -16,8 +16,8 @@ code and to keep track of all tags.
 
 19 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-16)
 ----------------------------------------------------------
-- G4UnstableFragmentBreakUp - tag on top of 03-14 to fix selection of decay channel by 
-                              addition of check on residual fragment Z and A (address 
+- G4UnstableFragmentBreakUp - fix selection of decay channel by addition of check 
+                              on residual fragment Z and A (addressed
                               problem reported stt for the tag 03-14)
 
 19 May 2010 Vladimir Ivanchenko (hadr-deex-V09-03-15)
