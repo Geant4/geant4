@@ -42,8 +42,9 @@
 /vis/viewer/zoom 1
 /vis/viewer/pan -10  0 cm
 /tracking/storeTrajectory 1
-#/vis/scene/endOfEventAction accumulate
-/vis/scene/endOfEventAction accumulate -1
+/vis/scene/endOfEventAction accumulate
+# Accumulate events with no  limit
+#/vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
 
 
@@ -59,7 +60,7 @@
 # energy and position along the X direction
 #
 /gun/particle proton
-/beam/energy/meanEnergy 162 MeV
+/beam/energy/meanEnergy 62 MeV
 /beam/energy/sigmaEnergy 400 keV
 /beam/position/Xposition -2700 mm
 
@@ -73,12 +74,8 @@
 # Start of the run
 #
 # If secondaries dose/fluence is needed
-/analysis/secondaries true 
-/changeDetector/size 40 0 0 cm
-/changePhantom/update
+#/analysis/secondaries true 
 
-/run/beamOn 139
-# Write let 
-#/analysis/writeLetFile
+/run/beamOn 100
 
 
