@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.25 2009-12-29 17:54:25 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.26 2010-05-19 18:14:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -113,7 +113,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   theEvaporation->SetCombinedChannel();
   theHandler = new G4ExcitationHandler();
   theHandler->SetEvaporation(theEvaporation);
-  theHandler->SetMinEForMultiFrag(3.0*MeV);
+  theHandler->SetMinEForMultiFrag(3.0*GeV);
   theHandler->SetMaxAandZForFermiBreakUp(17,9);
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theHandler);
 
