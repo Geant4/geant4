@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc,v 1.5 2010-05-19 10:22:09 vnivanch Exp $
+// $Id: G4UnstableFragmentBreakUp.cc,v 1.6 2010-05-19 15:25:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,8 +102,10 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
     deltaE = 0.0;
     index  = -1;
     for(i=0; i<6; ++i) {
-      if(Z >= Zfr[i] && A > Afr[i]) {
-	G4double m1 = G4NucleiProperties::GetNuclearMass(A - Afr[i], Z - Zfr[i]);
+      G4int Zres = Z - Zfr[i];
+      G4int Ares = A - Afr[i];
+      if(Zres >= 0 && Ares >= Zres) {
+	G4double m1 = G4NucleiProperties::GetNuclearMass(Ares, Zres);
 	G4double de = mass - m1 - masses[i];
         if(de > deltaE) {
 	  mass1 = m1;
