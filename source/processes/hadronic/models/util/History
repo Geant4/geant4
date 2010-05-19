@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-18 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-01
+19 May 2010 Vladimir Ivanchenko    hadr-mod-util-V09-03-01
 - G4Fragment - minor speedup by adding member and access method 
                to GroundStateMass;
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.10 2010-05-18 18:52:07 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.11 2010-05-19 10:23:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -119,7 +119,6 @@ public:
   inline void SetAngularMomentum(const G4ThreeVector& value);
   
   inline G4int GetNumberOfExcitons() const;
-  //  void SetNumberOfExcitons(const G4int value);
   
   inline G4int GetNumberOfHoles() const;
   inline void SetNumberOfHoles(const G4int value);
@@ -136,12 +135,12 @@ public:
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(const G4double time);
 
-  // Some utility methods
   inline G4double GetGroundStateMass() const;
-  // Some utility methods
-  inline G4double ComputeGroundStateMass(const G4int Z, const G4int A) const;
-  
+   
   inline G4double GetBindingEnergy() const;
+
+  // computation of mass for any Z and A
+  inline G4double ComputeGroundStateMass(const G4int Z, const G4int A) const;
 
 #ifdef PRECOMPOUND_TEST 
   G4String GetCreatorModel() const;
