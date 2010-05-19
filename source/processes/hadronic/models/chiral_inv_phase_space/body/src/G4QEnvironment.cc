@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.163 2010-02-04 09:32:33 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.164 2010-05-19 13:21:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -102,9 +102,52 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #ifdef debug
         G4cout<<"*G4QE::Const:iH#"<<ih<<","<<curQH->GetQC()<<curQH->Get4Momentum()<<G4endl;
 #endif
+        if(curQH->GetPDGCode() == 10)        // Chipolino is found in the input -> Decay
+        {
+          G4QContent   chQC=curQH->GetQC();  // Quark content of the Hadron-Chipolino
+          G4QChipolino QCh(chQC);            // Define a Chipolino instance for the Hadron
+          G4LorentzVector ch4M=curQH->Get4Momentum(); // 4Mom of the Hadron-Chipolino
+          G4QPDGCode h1QPDG=QCh.GetQPDG1();  // QPDG of the first hadron
+          G4double   h1M   =h1QPDG.GetMass();// Mass of the first hadron
+          G4QPDGCode h2QPDG=QCh.GetQPDG2();  // QPDG of the second hadron
+          G4double   h2M   =h2QPDG.GetMass();// Mass of the second hadron
+          G4double   chM2  =ch4M.m2();       // Squared Mass of the Chipolino
+          if( sqr(h1M+h2M) < chM2 )          // Decay is possible
+          {
+            G4LorentzVector h14M(0.,0.,0.,h1M);
+            G4LorentzVector h24M(0.,0.,0.,h2M);
+            if(!G4QHadron(ch4M).DecayIn2(h14M,h24M))
+            {
+              G4cerr<<"***G4QE::Constr: CM="<<std::sqrt(chM2)<<" -> h1="<<h1QPDG<<"("<<h1M
+                    <<") + h2="<<h1QPDG<<"("<<h2M<<") = "<<h1M+h2M<<" **Failed**"<<G4endl;
+              throw G4QException("**G4QEnvironment::Constr:QChip DecIn2 error");
+            }
+            delete curQH;                    // Kill the primary Chipolino
+            G4QHadron* h1H = new G4QHadron(h1QPDG.GetPDGCode(),h14M);
+            theQHadrons.push_back(h1H);      // (delete equivalent)
+            curQH    = new G4QHadron(h1H);   // ... just to remember independently
+            theProjectiles.push_back(curQH); // Remember it for the error message
+
+#ifdef debug
+            G4cout<<"G4QE::Constr: QChipolino -> H1="<<h1QPDG<<h14M<<G4endl;
+#endif
+            curQH = new G4QHadron(h2QPDG.GetPDGCode(),h24M);
+            theQHadrons.push_back(curQH);    // (delete equivalent)
+#ifdef debug
+            G4cout<<"G4QE::Constr: QChipolino -> H2="<<h2QPDG<<h24M<<G4endl;
+#endif
+          }
+          else
+          {
+            G4cerr<<"***G4QE::Const:iH#"<<ih<<","<<curQH->GetQC()<<curQH->Get4Momentum()
+                  <<", chipoM="<<std::sqrt(chM2)<<" < m1="<<h1M<<"("<<h1QPDG<<") + m2="
+                  <<h2M<<"("<<h2QPDG<<") = "<<h1M+h2M<<G4endl;
+            throw G4QException("G4QEnvironment::HadronizeQEnv: LowMassChipolino in Input");
+          }
+        }
         theQHadrons.push_back(curQH);        // (delete equivalent)
-        curQH    = new G4QHadron(projHadrons[ih]); // ... to remember
-        theProjectiles.push_back(curQH);      // Remenber it for the error message
+        curQH    = new G4QHadron(curQH);     // ... just to remember independently
+        theProjectiles.push_back(curQH);     // Remenber it for the error message
       }
     }
     else if(targPDG!=90000000)               // No projHadrons,fill targetNucleus to output
@@ -115,7 +158,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
 #endif
       theQHadrons.push_back(curQH);          // (delete equivalent)
     }
-    if (nHadrons<0) G4cout<<"**G4QE::Const:NH="<<nHadrons<<" < 0 !"<<G4endl;
+    if (nHadrons<0) G4cout<<"***Warning****G4QE::Const:NH="<<nHadrons<<" < 0 !"<<G4endl;
     return;
   }
   G4QPDGCode targQPDG(targPDG);
@@ -2411,7 +2454,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                         if(!G4QHadron(tot4M).DecayIn2(h14M,h24M)) //                      ^
                         {                     //                                          ^
                           G4cerr<<"***G4QE::HQE:tM="<<ttM<<"->h1="<<h1QPDG<<"("<<h1M //   ^
-                                <<")+h2="<<h1QPDG<<"("<<h2M<<"="<<h1M+h2M<<G4endl;   //   ^
+                                <<")+h2="<<h1QPDG<<"("<<h2M<<")="<<h1M+h2M<<G4endl;  //   ^
                           throw G4QException("**G4QE::HadrQEnv:QChip (1) DecIn2 error");//^
                         }                     //                                          ^
                         G4QHadron* h1H = new G4QHadron(h1QPDG.GetPDGCode(),h14M);    //   ^
@@ -4322,15 +4365,14 @@ G4QHadronVector* G4QEnvironment::Fragment()
   delete reQHadrons;     // All temporary QHadrons memory is wiped out
   if(ExCount>=MaxExCnt)
   {
-    G4cerr<<"*G4QEnv::Fragment:Exception.Target="<<theTargetPDG<<". Projectiles:"<<G4endl;
     G4int nProj=theProjectiles.size();
+    G4cerr<<"*G4QEnv::Fragment:Exception.Target="<<theTargetPDG<<". #Proj="<<nProj<<G4endl;
     if(nProj) for(G4int ipr=0; ipr<nProj; ipr++)
     {
       G4QHadron* prH = theProjectiles[ipr];
       G4cerr<<"G4QE::F:#"<<ipr<<",PDG/4M="<<prH->GetPDGCode()<<prH->Get4Momentum()<<G4endl;
     }
     throw G4QException("G4QEnvironment::Fragment:This reaction caused the CHIPSException");
-    //G4Exception("G4QEnvironment::Fragment","027",FatalException,"GeneralCHIPSException");
   }
   // Put the postponed hadrons in the begining of theFragments and clean them up
   G4int tmpS=intQHadrons.size();
