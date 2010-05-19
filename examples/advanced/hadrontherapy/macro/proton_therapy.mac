@@ -76,5 +76,13 @@
 # file into the
 # "SimulationOutputs" folder
 
+
+###############################
+# Move the generated .root    
+# file into the
+# "SimulationOutputs" folder
+##############################
+
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root		
 /control/shell mv Dose.out SimulationOutputs/proton/BraggPeak/Dose.out		
+

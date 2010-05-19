@@ -73,7 +73,7 @@
 #########################
 # Start of the run
 #
-# If secondaries dose/fluence is needed
+# If secondaries dose/fluence are needed
 #/analysis/secondaries true 
 
 /run/beamOn 100
