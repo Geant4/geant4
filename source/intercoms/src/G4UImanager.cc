@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.33 2007-07-16 10:14:36 kmura Exp $
+// $Id: G4UImanager.cc,v 1.34 2010-05-19 14:50:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,6 +73,7 @@ G4UImanager::G4UImanager()
   verboseLevel = 0;
   saveHistory = false;
   session = NULL;
+  g4UIWindow = NULL;
   SetCoutDestination(session);
   pauseAtBeginOfEvent = false;
   pauseAtEndOfEvent = false;
