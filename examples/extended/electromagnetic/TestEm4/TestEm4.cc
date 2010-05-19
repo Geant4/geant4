@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm4.cc,v 1.12 2007-06-22 09:55:22 maire Exp $
+// $Id: TestEm4.cc,v 1.13 2010-05-19 09:19:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -32,8 +32,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -46,6 +44,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -92,16 +94,12 @@ int main(int argc,char** argv) {
      G4VisManager* visManager = new G4VisExecutive;
      visManager->Initialize();
 #endif
-    
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif         
-     UI->ApplyCommand("/control/execute vis.mac");    
-     session->SessionStart();
-     delete session;
+     
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
      
 #ifdef G4VIS_USE
      delete visManager;
