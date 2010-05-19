@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh,v 1.3 2010-05-18 18:49:37 vnivanch Exp $
+// $Id: G4GEMProbability.hh,v 1.4 2010-05-19 10:21:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -55,7 +55,7 @@ class G4GEMProbability : public G4VEmissionProbability
 {
 public:
 
-  // Default constructor
+  // Default constructor - should not be used
   G4GEMProbability();
 
   // Only available constructor
@@ -85,12 +85,10 @@ public:
     G4double res = 0.0;
     if (theCoulombBarrierPtr) 
       {
-	G4int Acompound = fragment.GetA_asInt();
-	G4int Zcompound = fragment.GetZ_asInt();
-	res = theCoulombBarrierPtr->GetCoulombBarrier(Acompound-theA, Zcompound-theZ,
-						      fragment.GetExcitationEnergy()-
-						      G4PairingCorrection::GetInstance()->
-						      GetPairingCorrection(Acompound,Zcompound));
+	G4int Acomp = fragment.GetA_asInt();
+	G4int Zcomp = fragment.GetZ_asInt();
+	res = theCoulombBarrierPtr->GetCoulombBarrier(Acomp-theA, Zcomp-theZ,
+	  fragment.GetExcitationEnergy()-fPairCorr->GetPairingCorrection(Acomp,Zcomp));
       }
     return res;
   }
