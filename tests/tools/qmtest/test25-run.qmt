@@ -11,7 +11,9 @@
     <text/>
   </argument>
   <argument name="prerequisites">
-    <set/>
+    <set>
+      <tuple><text>test25-build</text><enumeral>PASS</enumeral></tuple>
+    </set>
   </argument>
   <argument name="target_group">
     <text>.*</text>
