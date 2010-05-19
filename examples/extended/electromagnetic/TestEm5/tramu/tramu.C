@@ -1,15 +1,21 @@
 {
    gROOT->Reset();
 
-   // Draw histogram fill by Geant4 TestEm5 simulation
-   TFile f("./tramu.root");
-   TH1D* h1d = (TH1D*) f.Get("10");
-   h1d->SetTitle("1 TeV muon in 3 m iron : kinetic energy at exit (GeV)");
-   h1d->GetXaxis()->SetTitle("Ekine (GeV)");
-   h1d->GetYaxis()->SetTitle("nb/GeV");
-   h1d->SetStats(kFALSE);  // Eliminate statistics box
-   h1d->Draw("HIST");
+   // Draw histograms fill by Geant4 TestEm5 simulation
+   TFile f1("./ref10.opt0.root");
+   TH1D* h1 = (TH1D*) f1.Get("10");
+   h1->SetTitle("1 TeV muon in 3 m iron : kinetic energy at exit (GeV)");
+   h1->GetXaxis()->SetTitle("Ekine (GeV)");
+   h1->GetYaxis()->SetTitle("nb/GeV");
+   h1->SetStats(kFALSE);  // Eliminate statistics box
+   h1->SetLineColor(1);   //black      
+   h1->Draw("HIST");
    
+   TFile f2("./ref10.opt2.root");
+   TH1D* h2 = (TH1D*) f2.Get("10");
+   h2->SetStats(kFALSE);  // Eliminate statistics box
+   h2->SetLineColor(4);   //blue   
+   h2->Draw("SAME HIST");   
 /*
 * muon 1 TeV/c in 3 m Iron
 * Particle Data Group. Physics Letters B 592 (2004) page 251
@@ -35,12 +41,13 @@
    in.close();
 
    // Draw histogram fill by mars14.acsii values
-   h1f->SetLineColor(2);
+   h1f->SetLineColor(2);   //red
    h1f->Draw("SAME");
 
    // Print the histograms legend
    TLegend* legend = new TLegend(0.2,0.55,0.45,0.70);
-   legend->AddEntry(h1d,"G4-9.2-ref-04","l");
+   legend->AddEntry(h1,"ref10-opt0","l");
+   legend->AddEntry(h2,"ref10-opt2","l");   
    legend->AddEntry(h1f,"Mars14 simul ","L");
    legend->Draw();
 

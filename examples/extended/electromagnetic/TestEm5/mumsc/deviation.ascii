@@ -4,7 +4,7 @@ Lateral deviation at end point
 ref : Pedro.Arce@ciemat.es
 
  G4 version	Deviation
- 
+
  4.1		 752 um  2002.06.25
  5.0		 600 um  2002.12.13
  5.1		 605 um  2003.05.16
@@ -27,3 +27,4 @@ ref : Pedro.Arce@ciemat.es
  9.2ref4         953 um  2009.09.09
  9.2ref10        956 um  2009.11.25
  9.3ref0         955 um  2009.12.18
+ 9.3ref4++       956 um  2010.05.10 
