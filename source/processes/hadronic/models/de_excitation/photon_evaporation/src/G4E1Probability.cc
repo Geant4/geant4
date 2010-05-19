@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4E1Probability.cc,v 1.7 2010-05-18 18:49:37 vnivanch Exp $
+// $Id: G4E1Probability.cc,v 1.8 2010-05-19 10:21:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -85,8 +85,12 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 
   G4double aLevelDensityParam = Afrag*theLevelDensityParameter;
 
-  G4double levelDensBef = std::exp(2*std::sqrt(aLevelDensityParam*Uexcite));
-  G4double levelDensAft = std::exp(2*std::sqrt(aLevelDensityParam*(Uexcite-gammaE)));
+  //  G4double levelDensBef = std::exp(2*std::sqrt(aLevelDensityParam*Uexcite));
+  //  G4double levelDensAft = std::exp(2*std::sqrt(aLevelDensityParam*(Uexcite-gammaE)));
+  // VI reduce number of calls to exp 
+  G4double levelDens = std::exp(-2*aLevelDensityParam*gammaE/
+				(std::sqrt(aLevelDensityParam*Uexcite) +
+				 std::sqrt(aLevelDensityParam*(Uexcite-gammaE))));
 
   // Now form the probability density
 
@@ -115,6 +119,7 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   G4double gammaR2 = gammaE2*GammaR*GammaR;
   G4double egdp2   = gammaE2 - Egdp*Egdp;
   G4double sigmaAbs = sigma0*gammaR2/(egdp2*egdp2 + gammaR2); 
+  theProb = normC * sigmaAbs * gammaE2 * levelDens;
 
   // old implementation
   //  G4double numerator = sigma0 * gammaE*gammaE * GammaR*GammaR;
@@ -122,8 +127,7 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   //         (gammaE*gammaE - Egdp*Egdp) + GammaR*GammaR*gammaE*gammaE;
 
   //G4double sigmaAbs = numerator/denominator; 
-
-  theProb = normC * sigmaAbs * gammaE2 * levelDensAft/levelDensBef;
+  //theProb = normC * sigmaAbs * gammaE2 * levelDensAft/levelDensBef;
 
   // CD
   //cout<<" sigmaAbs = "<<sigmaAbs<<G4endl;
