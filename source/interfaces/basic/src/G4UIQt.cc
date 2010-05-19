@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.35 2010-05-18 14:51:31 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.36 2010-05-19 07:18:50 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -567,12 +567,15 @@ bool G4UIQt::AddTabWidget(
   //  UpdateTabWidget(fTabWidget->count()-1);
   // Set visible
 #if QT_VERSION >= 0x040000
-#if QT_VERSION >= 0x040200
-  fMainWindow->setVisible(true);
+ #if QT_VERSION >= 0x040200
+   fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
+   fMainWindow->setVisible(true);
+ #else
+   fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
+   fMainWindow->show();
+ #endif
 #else
-  fMainWindow->show();
-#endif
-#else
+  fTabWidget->setLastTabCreated(fTabWidget->currentPageIndex());
   fMainWindow->show();
  #endif
   
@@ -632,6 +635,8 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 
   // This will send a paintEvent to OGL Viewers
   fTabWidget->setTabSelected();
+
+  QCoreApplication::sendPostedEvents () ;
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::UpdateTabWidget END\n");
@@ -1988,11 +1993,15 @@ QString G4UIQt::GetLongCommandPath(
 G4QTabWidget::G4QTabWidget(
 QSplitter*& split
 ):QTabWidget(split)
+ ,tabSelected(false)
+ ,lastCreated(-1)
 {
 }
 
 G4QTabWidget::G4QTabWidget(
 ):QTabWidget()
+ ,tabSelected(false)
+ ,lastCreated(-1)
 {
 }
 
@@ -2037,11 +2046,20 @@ QPaintEvent * event
 #ifdef G4DEBUG_INTERFACES_BASIC
       printf("G4QTabWidget::paintEvent OK\n");
 #endif
+#if QT_VERSION < 0x040000
+      QString text = label (currentPageIndex()); 
+#else
       QString text = tabText (currentIndex()); 
-      QString paramSelect = QString("/vis/viewer/select ")+text;
-      G4UImanager* UI = G4UImanager::GetUIpointer();
-      if(UI!=NULL)  {
-        UI->ApplyCommand(paramSelect.toStdString().c_str());
+#endif
+
+      if (lastCreated == -1) {
+        QString paramSelect = QString("/vis/viewer/select ")+text;
+        G4UImanager* UI = G4UImanager::GetUIpointer();
+        if(UI != NULL)  {
+          UI->ApplyCommand(paramSelect.toStdString().c_str());
+        }
+      } else {
+        lastCreated = -1;
       }
       unselectTab();
       repaint();
