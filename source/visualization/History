@@ -1,4 +1,4 @@
-$Id: History,v 1.463 2010-05-20 07:49:35 allison Exp $
+$Id: History,v 1.464 2010-05-20 07:58:13 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -28,6 +28,8 @@ History file for visualization category
 - Co-working tags: intercoms-V09-03-01, interfaces-V09-03-02
 - opengl-V09-03-01:
   o GNUMakefile, G4OpenGLQtViewer : Better inclusion of new tabs in UI part
+- visman-V09-03-01:
+  o Restore previous viewer after /vis/drawTree.
 
 11th May 2010  John Allison  (vis-V09-03-00)
 - visman-09-03-00: Print i_mode warnings.
