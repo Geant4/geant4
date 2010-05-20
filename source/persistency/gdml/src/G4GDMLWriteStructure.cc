@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.80 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.81 2010-05-20 12:56:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -66,6 +66,7 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
    G4bool consuming = false;
 
    divisionvol->GetReplicationData(axis,number,width,offset,consuming);
+   axis = divisionvol->GetDivisionAxis();
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
