@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.48 2010-03-10 11:03:46 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.49 2010-05-20 07:09:33 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,7 @@
 #include "G4OpenGLQtMovieDialog.hh"
 #include "G4UnitsTable.hh"
 #include "G4Qt.hh"
+#include "G4UIQt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
 #include <qlayout.h>
@@ -124,7 +125,15 @@ void G4OpenGLQtViewer::CreateMainWindow (
   // Ne marche pas avec un UIBatch !! (ecran blanc)
 
   // return false if G4UIQt was not launch
-  bool isTabbedView = interactorManager->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if (UI == NULL) return;
+
+  if (! static_cast<G4UIQt*> (UI->GetG4UIWindow())) return;
+
+  G4UIQt * uiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
+  
+  bool isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
 
   if (!isTabbedView) { // we have to do a dialog
 
