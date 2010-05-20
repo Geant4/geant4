@@ -383,7 +383,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
 
-#ifdef ANALYSIS_USE_ROOT
+#ifdef G4ANALYSIS_USE_ROOT
     HadrontherapyAnalysisManager* analysis = HadrontherapyAnalysisManager::GetInstance();
 #endif
     if (matrix)
@@ -394,7 +394,7 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		{
 		    G4int n = Index(i,j,k);
 	            matrix[n] = matrix[n] / massOfVoxel;
-#ifdef ANALYSIS_USE_ROOT
+#ifdef G4ANALYSIS_USE_ROOT
 		    analysis -> FillEnergyDeposit(i, j, k, matrix[n]/(doseUnit));
 		    analysis -> BraggPeak(i, matrix[n]/(doseUnit));
 #endif

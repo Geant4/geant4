@@ -52,7 +52,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLIX
+#/vis/open OGLIX
 /vis/viewer/flush
 #/vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoomTo 3
@@ -72,16 +72,9 @@
 /run/beamOn 5000
 
 #########################
-# Move the generated .root
-# file into the
+# Move the generated .root & .out
+# files into the
 # "SimulationOutputs" folder
-
-
-###############################
-# Move the generated .root    
-# file into the
-# "SimulationOutputs" folder
-##############################
 
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root		
 /control/shell mv Dose.out SimulationOutputs/proton/BraggPeak/Dose.out		

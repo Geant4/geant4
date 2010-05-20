@@ -42,13 +42,13 @@ gROOT->Reset();
  TFile *simulationFile = new TFile("../../../SimulationOutputs/proton/BraggPeak/protonBraggPeak.root","READ");
 
  // EXTRACTION, FROM THE SIMULATION FILE OF THE INTERESTING HISTOGRAMS
- TH1D *simulatedPeak = (TH1D*) simulationFile -> Get("10");
+ TH1D *simulatedPeak = (TH1D*) simulationFile -> Get("braggPeak");
  // CREATION OF A NEW HISTOGRAM THAT MUST CONTAIN THE DEPTH AND NOT SLICE IN THE X-AXIS
  TH1D *simulatedPeakDepth = new TH1D("simulatedPeakDepth", "Simulated Peak",400, 0, 40);
 
  Float_t simulationNormalisationFactor =  simulatedPeak -> GetBinContent(1);
 
- for (l = 1; l < 401; l++)
+ for (Int_t l = 1; l < 401; l++)
    {
      simulatedPeakDepth -> Fill(simulatedPeak -> GetBinCenter(l)*0.2, simulatedPeak -> GetBinContent(l)/simulationNormalisationFactor);
    }
