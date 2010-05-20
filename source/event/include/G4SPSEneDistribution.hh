@@ -180,6 +180,18 @@ public:
   // Set the verbosity level.
   void SetVerbosity(G4int a) {verbosityLevel = a; } ;
   //x
+
+  G4double GetMonoEnergy () {return MonoEnergy; }; //Mono-energteic energy
+  G4double GetSE() {return SE;}; // Standard deviation for Gaussion distrbution in energy
+  G4double Getalpha () {return alpha;}; // alpha (pow)
+  G4double GetEzero() {return Ezero;}; // E0 (exp)
+  G4double GetTemp() {return Temp;}; // Temp (bbody,brem)
+  G4double Getgrad() {return grad;}; // gradient and intercept for linear spectra
+  G4double Getcept() {return cept;};
+
+  inline G4PhysicsOrderedFreeVector  GetUserDefinedEnergyHisto(){return UDefEnergyH;};
+  inline G4PhysicsOrderedFreeVector  GetArbEnergyHisto(){return ArbEnergyH;};
+
   G4double GenerateOne(G4ParticleDefinition*);
   
 private:
