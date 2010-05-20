@@ -1,8 +1,14 @@
-$Id: History,v 1.12 2010-05-11 12:23:52 allison Exp $
+$Id: History,v 1.13 2010-05-20 18:12:29 allison Exp $
 -----------------------------------------------------------------------------
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+20th May 2020  John Allison  (test201-V09-03-01)
+- Removed MyPhysicsList (used QGSP_BERT instead).
+- ParametrisedBox.hh: Fixed compiler warnings:
+  G4VPVParameterisation::ComputeDimensions
+  (G4Orb&, G4int, const G4VPhysicalVolume*) const' was hidden.
 
 11th May 2020  John Allison  (test201-V09-03-00)
 - Introduce G4UIExecutive.
