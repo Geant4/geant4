@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.26 2010-05-10 14:38:05 antoni Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.27 2010-05-20 13:08:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1756,6 +1756,12 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
 
   AddMaterial("G4_GRAPHITE_POROUS", 1.7, 6, 78.);
   AddChemicalFormula("G4_GRAPHITE_POROUS","Graphite");
+
+  // LUCITE is equal to plustiglass
+  AddMaterial("G4_LUCITE", 1.19, 0, 74., 3);
+  AddElementByWeightFraction( 1, 0.080538);
+  AddElementByWeightFraction( 6, 0.599848);
+  AddElementByWeightFraction( 8, 0.319614);
 
   // SRIM-2008 materials
   AddMaterial("G4_BRASS", 8.52, 0, 0.0, 3);

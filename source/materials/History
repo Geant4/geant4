@@ -1,4 +1,4 @@
-$Id: History,v 1.181 2010-05-15 15:38:32 vnivanch Exp $
+$Id: History,v 1.182 2010-05-20 13:08:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-05-10 V.Ivanchenko (materials-V09-03-07)
+- G4NistMaterialBuilder - added G4_LUCITE
 
 15-05-10 V.Ivanchenko (materials-V09-03-06)
 - G4DensityEffectData - fixed method GetIndex(Z, state) for Hydrogen
@@ -36,7 +39,8 @@ committal in the CVS repository !
                     mean energy deposition in compound materials
 
 23-04-10 V.Ivanchenko (materials-V09-03-02)
-- G4NistMaterialBuilder - added 6 new materials
+- G4NistMaterialBuilder - added 6 new materials : G4_BRASS, G4_BRONZE,
+          G4_STAINLESS-STEEL, G4_KEVLAR, G4_DACRON, G4_NEOPRENE
 - G4IonisParamMat, G4DensityEffectData - added a possibility to access 
           density effect data in the case when pure material is not 
           defined via NIST; atom number and state of such materials 
