@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.49 2010-05-20 07:09:33 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.50 2010-05-20 08:13:37 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -113,7 +113,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::CreateMainWindow :: ++++++++++++++ add new TAB %s  W:%d H:%d SizeHinX:%d SizeHintY:%d\n",name.toStdString().c_str(),getWinWidth(),getWinHeight(),fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 #endif
-  G4Qt* interactorManager = G4Qt::getInstance ();
+  //G4Qt* interactorManager = G4Qt::getInstance ();
 
   ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
     
