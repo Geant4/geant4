@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.70 2009-02-25 18:28:00 lgarnier Exp $
+// $Id: G4VisManager.hh,v 1.71 2010-05-20 07:54:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -365,10 +365,10 @@ public: // With description
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
   void SetUserActionExtent (const G4VisExtent&);
-  void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
+  void              SetCurrentGraphicsSystem    (G4VGraphicsSystem*);
   void              SetCurrentScene             (G4Scene*);
-  void              SetCurrentSceneHandler      (G4VSceneHandler* pScene);
-  void              SetCurrentViewer            (G4VViewer* pView);
+  void              SetCurrentSceneHandler      (G4VSceneHandler*);
+  void              SetCurrentViewer            (G4VViewer*);
   G4SceneHandlerList& SetAvailableSceneHandlers ();  // Returns lvalue.
   G4SceneList&      SetSceneList                ();  // Returns lvalue.
   void              SetVerboseLevel             (G4int);
