@@ -45,6 +45,9 @@
       <text>exam-ext-medical-gammatherapy-build</text>
       <text>exam-ext-optical-lxe-build</text>
       <text>exam-ext-optical-wls-build</text>
+      <text>exam-ext-eventgenerator-particleGun1-build</text>
+      <text>exam-ext-eventgenerator-particleGun2-build</text>
+      <text>exam-ext-eventgenerator-particleGun3-build</text>
       <text>exam-ext-persistency-gdml-g01-build</text>
       <text>exam-ext-persistency-gdml-g02-build</text>
       <text>exam-ext-persistency-gdml-g03-build</text>
@@ -97,6 +100,7 @@
       <text>test60-build</text>
       <text>test61-build</text>
       <text>test62-build</text>
+      <text>test201-build</text>
     </set>
   </argument>
 </extension>
