@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParametrisedBox.hh,v 1.4 2006-06-29 21:47:21 gunter Exp $
+// $Id: ParametrisedBox.hh,v 1.5 2010-05-20 18:10:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,6 +84,21 @@ public:
     G4VPVParameterisation::ComputeDimensions(shape,n,pV);
   }
   void ComputeDimensions(G4Hype& shape,
+			 const G4int n,
+			 const G4VPhysicalVolume* pV) const {
+    G4VPVParameterisation::ComputeDimensions(shape,n,pV);
+  }	
+  void ComputeDimensions(G4Orb& shape,
+			 const G4int n,
+			 const G4VPhysicalVolume* pV) const {
+    G4VPVParameterisation::ComputeDimensions(shape,n,pV);
+  }	
+  void ComputeDimensions(G4Polycone& shape,
+			 const G4int n,
+			 const G4VPhysicalVolume* pV) const {
+    G4VPVParameterisation::ComputeDimensions(shape,n,pV);
+  }	
+  void ComputeDimensions(G4Polyhedra& shape,
 			 const G4int n,
 			 const G4VPhysicalVolume* pV) const {
     G4VPVParameterisation::ComputeDimensions(shape,n,pV);
