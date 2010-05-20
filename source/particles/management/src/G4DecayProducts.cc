@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.17 2009-04-02 02:24:53 kurasige Exp $
+// $Id: G4DecayProducts.cc,v 1.18 2010-05-20 01:01:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,10 +140,10 @@ G4int G4DecayProducts::PushProducts(G4DynamicParticle *aParticle)
      numberOfProducts += 1; 
    } else {
 #ifdef G4VERBOSE
-     G4cout << "G4DecayProducts::PushProducts ";
-     G4cout << " exceeds MaxNumberOfProducts(="
-            << G4int(MaxNumberOfProducts) << ")";
-     G4cout << G4endl;
+     G4cerr << "G4DecayProducts::PushProducts "
+            << " exceeds MaxNumberOfProducts(="
+            << G4int(MaxNumberOfProducts) << ")"
+            << G4endl;
 #endif
    }
    return numberOfProducts;
@@ -241,8 +241,9 @@ G4bool G4DecayProducts::IsChecked() const
   // check momentum dirction is a unit vector
   if ( (parent_momentum.mag() >0.0) && (std::fabs(direction.mag()-1.0) >1.0e-6 ) ) {
 #ifdef G4VERBOSE
-    G4cout << " Momentum Direction Vector of Parent is not normalized ";
-    G4cout << "  (=" << direction.mag() << ")" << G4endl;
+    G4cerr << "G4DecayProducts::IsChecked()::  "
+           << " Momentum Direction Vector of Parent is not normalized "
+           << "  (=" << direction.mag() << ")" << G4endl;
 #endif
     returnValue = false;
     parent_momentum = parent_momentum * (1./direction.mag());
@@ -262,8 +263,9 @@ G4bool G4DecayProducts::IsChecked() const
     // check momentum dirction is a unit vector
     if ( (momentum.mag()>0.0) && (std::fabs(direction.mag()-1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
-      G4cout << " Momentum Direction Vector of Daughter [" << index;
-      G4cout << "]  is not normalized (=" << direction.mag() << ")" << G4endl;
+      G4cerr <<  "G4DecayProducts::IsChecked()::  "
+             << " Momentum Direction Vector of Daughter [" << index
+             << "]  is not normalized (=" << direction.mag() << ")" << G4endl;
 #endif
       returnValue = false;
       momentum = momentum * (1./direction.mag());
@@ -271,7 +273,8 @@ G4bool G4DecayProducts::IsChecked() const
     // whether daughter stops or not
     if (energy - mass < DBL_MIN ) {
 #ifdef G4VERBOSE
-      G4cout << "Daughter [" << index << "] has no kinetic energy "<< G4endl;
+      G4cerr <<  "G4DecayProducts::IsChecked()::  "
+             << "  Daughter [" << index << "] has no kinetic energy "<< G4endl;
 #endif
       returnValue = false;
     }
@@ -281,10 +284,11 @@ G4bool G4DecayProducts::IsChecked() const
   // check energy/momentum conservation
   if ( (std::fabs(total_energy) >1.0e-9*MeV) || (total_momentum.mag() >1.0e-9*MeV ) ){ 
 #ifdef G4VERBOSE
-    G4cout << " Energy/Momentum is not conserved   "<< G4endl;
-    G4cout << " difference between parent energy and sum of dughters' energy : " 
+    G4cerr <<  "G4DecayProducts::IsChecked()::  "
+           << " Energy/Momentum is not conserved   "<< G4endl;
+    G4cerr << " difference between parent energy and sum of dughters' energy : " 
 	   << total_energy /MeV << "[MeV]  " << G4endl; 
-    G4cout << " difference between parent momentum and sum of dughters' momentum : " 
+    G4cerr << " difference between parent momentum and sum of dughters' momentum : " 
 	   << " x:" << total_momentum.getX()/MeV 
 	   << " y:" << total_momentum.getY()/MeV  
 	   << " z:" << total_momentum.getZ()/MeV  

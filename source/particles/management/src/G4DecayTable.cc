@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.cc,v 1.8 2006-06-29 19:25:02 gunter Exp $
+// $Id: G4DecayTable.cc,v 1.9 2010-05-20 01:01:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,9 +62,9 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
   if (parent == 0) { parent = (G4ParticleDefinition*)(aChannel->GetParent()); }
   if (parent != aChannel->GetParent()) {
 #ifdef G4VERBOSE
-    G4cout << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";
-    G4cout << "       " << parent->GetParticleName();
-    G4cout << " input:" << aChannel->GetParent()->GetParticleName() << G4endl;
+    G4cerr << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) "
+           << "       " << parent->GetParticleName()
+           << " input:" << aChannel->GetParent()->GetParticleName() << G4endl;
 #endif
   } else {
     G4double r = aChannel->GetBR();

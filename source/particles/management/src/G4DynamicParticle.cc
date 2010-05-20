@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.28 2010-05-13 00:13:03 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.29 2010-05-20 01:01:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -272,12 +272,11 @@ void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition
   if (thePreAssignedDecayProducts != 0) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cout << " G4DynamicParticle::SetDefinition()::";
-      G4cout << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
-      DumpInfo(0);
-      G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
+      G4cerr << " G4DynamicParticle::SetDefinition()::"
+             << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
+      G4cerr << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
 	     << " !!! " << G4endl;
-      G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
+      G4cerr << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
     }
 #endif
     delete thePreAssignedDecayProducts;

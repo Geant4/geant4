@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.35 2010-04-15 08:53:22 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.36 2010-05-20 01:01:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,8 +135,8 @@ G4ParticleDefinition::G4ParticleDefinition(
    if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
-       G4cout << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  "; 
-       G4cout << aName << G4endl;
+       G4cerr << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
+              << aName << G4endl;
      }
 #endif
      G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
@@ -224,9 +224,9 @@ G4int G4ParticleDefinition::FillQuarkContents()
 	temp = 0;
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
-	  G4cout << " illegal charge (" << thePDGCharge/eplus;
-	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
+	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	         << " illegal charge (" << thePDGCharge/eplus
+	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
 #endif
       }
@@ -235,9 +235,9 @@ G4int G4ParticleDefinition::FillQuarkContents()
 	temp=0;
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cout << "G4ParticleDefinition::FillQuarkContents  : ";
-	  G4cout << " illegal SPIN (" << thePDGiSpin << "/2";
-	  G4cout << " PDG code=" << thePDGEncoding <<G4endl;
+	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	         << " illegal SPIN (" << thePDGiSpin << "/2"
+	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
 #endif
       }

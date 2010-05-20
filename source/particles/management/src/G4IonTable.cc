@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.60 2009-09-23 12:13:48 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.61 2010-05-20 01:01:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,9 +109,9 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   if (currentState == G4State_PreInit){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cout << "G4IonTable::CreateIon() : can not create ion of  "; 
-      G4cout << " Z =" << Z << "  A = " << A <<  G4endl;
-      G4cout << " because the current state is PreInit !!" <<   G4endl;
+      G4cerr << "G4IonTable::CreateIon() : can not create ion of  " 
+             << " Z =" << Z << "  A = " << A 
+             << "  because the current state is PreInit !!" <<   G4endl;
     }
 #endif
     G4Exception( "G4IonTable::CreateIon()","Illegal operation",
@@ -124,8 +124,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   if ( name(0) == '?') {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::CreateIon() : can not create ions " << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  G4endl;
+      G4cerr << "G4IonTable::CreateIon() : can not create ions " 
+             << " Z =" << Z << "  A = " << A <<  G4endl;
     }
 #endif
     return 0;
@@ -195,9 +195,9 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   if (currentState == G4State_PreInit){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cout << "G4IonTable::CreateIon() : can not create ion of  "; 
-      G4cout << " Z =" << Z << "  A = " << A <<  " L = " <<L << G4endl;
-      G4cout << " because the current state is PreInit !!" <<   G4endl;
+      G4cerr << "G4IonTable::CreateIon() : can not create ion of  " 
+             << " Z =" << Z << "  A = " << A <<  " L = " <<L 
+             << " because the current state is PreInit !!" <<   G4endl;
     }
 #endif
     G4Exception( "G4IonTable::CreateIon()","Illegal operation",
@@ -210,8 +210,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   if ( name(L) == '?') {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::CreateIon() : can not create ions " << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A << "  L = " << L <<  G4endl;
+      G4cerr << "G4IonTable::CreateIon() : can not create ions " 
+             << " Z =" << Z << "  A = " << A << "  L = " << L <<  G4endl;
     }
 #endif
       return 0;
@@ -276,8 +276,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
   if (!GetNucleusByEncoding(encoding,Z,A,L,E,J) ){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : illegal encoding" << G4endl;
-      G4cout << " CODE:" << encoding << G4endl;
+      G4cerr << "G4IonTable::GetIon() : illegal encoding" 
+             << " CODE:" << encoding << G4endl;
     }
 #endif
     G4Exception( "G4IonTable::GetIon()","Illegal operation",
@@ -294,8 +294,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
   if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) || (A>999) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
+      G4cerr << "G4IonTable::GetIon() : illegal atomic number/mass" 
+             << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
     return 0;
@@ -320,8 +320,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L, G4double E, 
   if (A < 2 || Z < 0 || Z > A-L || L>A || A>999 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A << " L = " << L 
+      G4cerr << "G4IonTable::GetIon() : illegal atomic number/mass" 
+             << " Z =" << Z << "  A = " << A << " L = " << L 
 	     <<"  E = " << E/keV << G4endl;
     }
 #endif
@@ -329,8 +329,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L, G4double E, 
   } else if( A==2 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetIon() : No boud state for " << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A << " L = " << L 
+      G4cerr << "G4IonTable::GetIon() : No boud state for " 
+             << " Z =" << Z << "  A = " << A << " L = " << L 
 	     <<  "  E = " << E/keV << G4endl;
     }
 #endif
@@ -356,8 +356,8 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) || (A>999) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
+      G4cerr << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " 
+             << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
     G4Exception( "G4IonTable::FindIon()","Illegal operation",
@@ -402,8 +402,8 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
   if (A < 2 || Z < 0 || Z > A-L || L>A || A>999 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A << " L = " << L 
+      G4cerr << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " 
+             << " Z =" << Z << "  A = " << A << " L = " << L 
 	     <<"  E = " << E/keV << G4endl;
     }    
 #endif
@@ -670,8 +670,8 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
   if ( (A<1)  || (Z<0) || (L<0) ){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " << G4endl;
-      G4cout << " Z =" << Z << "  A = " << A  << G4endl;
+      G4cerr << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " 
+             << " Z =" << Z << "  A = " << A  << G4endl;
     }
 #endif
     G4Exception( "G4IonTable::GetNucleusMass()","Illegal operation",
@@ -741,8 +741,8 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cout << "G4IonTable::Remove :" << particle->GetParticleName() ;
-      G4cout << " is not ions" << G4endl; 
+      G4cerr << "G4IonTable::Remove :" << particle->GetParticleName() 
+             << " is not ions" << G4endl; 
     }
 #endif
   }
@@ -911,8 +911,8 @@ G4ParticleDefinition* G4IonTable::GetParticle(G4int index) const
   } 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1){
-    G4cout << " G4IonTable::GetParticle";
-    G4cout << " invalid index (=" << index << ")" 
+    G4cerr << " G4IonTable::GetParticle"
+           << " invalid index (=" << index << ")" 
 	   << " entries = " << Entries() << G4endl;
   }
 #endif
