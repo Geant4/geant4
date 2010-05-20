@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2010-05-19 07:18:50 lgarnier Exp $
+$Id: History,v 1.133 2010-05-20 07:01:03 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 May, L. Garnier
+ Co-working tag : intercoms-V09-03-01
+ - G4UIQt: Add some changes in order to register UI in order to access
+   it after
+ - G4Qt: Remove a cycle dependency
 
 19 May, L. Garnier
  - G4UIQt: Fix a warning in Cout during viewer creation

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.36 2010-05-19 07:18:50 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.37 2010-05-20 07:01:03 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -125,6 +125,7 @@ G4UIQt::G4UIQt (
   
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
+  if(UI!=NULL) UI->SetG4UIWindow(this);
 
   // Check if already define in external app QMainWindow
   bool found = false;
@@ -309,8 +310,6 @@ G4UIQt::G4UIQt (
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
-  interactorManager->SetG4UI(this);
-
 #if QT_VERSION < 0x040000
   fMainWindow->setCaption( tr( "G4UI Session" ));
   fMainWindow->resize(900,600); 
@@ -348,6 +347,7 @@ G4UIQt::~G4UIQt(
   G4UImanager* UI = G4UImanager::GetUIpointer();  // TO KEEP
   if(UI!=NULL) {  // TO KEEP
     UI->SetSession(NULL);  // TO KEEP
+    UI->SetG4UIWindow(NULL);
     UI->SetCoutDestination(NULL);  // TO KEEP
   }
   

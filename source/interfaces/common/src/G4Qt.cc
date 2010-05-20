@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc,v 1.16 2010-04-26 15:46:00 lgarnier Exp $
+// $Id: G4Qt.cc,v 1.17 2010-05-20 07:01:03 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -37,7 +37,6 @@
 #include "G4ios.hh"
 
 #include "G4Qt.hh"
-#include "G4UIQt.hh"
 #include <qwidget.h>
 
 #include <qapplication.h>
@@ -75,7 +74,6 @@ G4Qt::G4Qt (
 ,char** a_args
  ,char*  /*a_class */
  )
-:fG4UI(NULL)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -206,34 +204,6 @@ void G4Qt::FlushAndWaitExecution (
   qApp->processEvents();
 }
 
-/***************************************************************************/
-void G4Qt::SetG4UI (
- G4UIQt* ui
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-#ifdef G4DEBUG_INTERFACES_COMMON
-    printf("G4Qt::SetG4UI \n");
-#endif
-  fG4UI = ui;
-}
-
-/***************************************************************************/
-bool G4Qt::AddTabWidget (
- QWidget * vis
-,QString name
-,int sizeX
-,int sizeY
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  if (fG4UI != NULL) {
-    return fG4UI->AddTabWidget(vis,name,sizeX,sizeY);
-  }
-  return false;
-}
 #endif
 
 
