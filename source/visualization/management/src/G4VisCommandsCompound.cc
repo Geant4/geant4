@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.39 2007-11-16 20:29:04 perl Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.40 2010-05-20 07:54:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -65,6 +65,11 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
   std::istringstream is(newValue);
   is >> pvname >> system;
 
+  G4VGraphicsSystem* keepSystem = fpVisManager->GetCurrentGraphicsSystem();
+  G4Scene* keepScene = fpVisManager->GetCurrentScene();
+  G4VSceneHandler* keepSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  G4VViewer* keepViewer = fpVisManager->GetCurrentViewer();
+
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose(0);
@@ -76,6 +81,16 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->ApplyCommand(G4String("/vis/drawVolume " + pvname));
   UImanager->ApplyCommand("/vis/viewer/flush");
   UImanager->SetVerboseLevel(keepVerbose);
+
+  if (keepViewer) {
+    if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+      G4cout << "Reverting to " << keepViewer->GetName() << G4endl;
+    }
+    fpVisManager->SetCurrentGraphicsSystem(keepSystem);
+    fpVisManager->SetCurrentScene(keepScene);
+    fpVisManager->SetCurrentSceneHandler(keepSceneHandler);
+    fpVisManager->SetCurrentViewer(keepViewer);
+  }
 }
 
 ////////////// /vis/drawView ///////////////////////////////////////
