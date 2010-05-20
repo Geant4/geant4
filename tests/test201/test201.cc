@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: test201.cc,v 1.17 2010-05-11 12:23:52 allison Exp $
+// $Id: test201.cc,v 1.18 2010-05-20 18:10:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 std::ostream& g4cout = G4cout;
 std::ostream& g4cerr = G4cerr;
 #include "test201DetectorConstruction.hh"
-#include "MyPhysicsList.hh"
+#include "QGSP_BERT.hh"
 #include "MyRunAction.hh"
 #include "MyPrimaryGeneratorAction.hh"
 #include "MyEventAction.hh"
@@ -73,7 +73,7 @@ int main (int argc, char** argv) {
 
   // User initialization classes
   runManager -> SetUserInitialization (new test201DetectorConstruction);
-  runManager -> SetUserInitialization (new MyPhysicsList);
+  runManager -> SetUserInitialization (new QGSP_BERT);
 
   // UserAction classes.
   runManager -> SetUserAction (new MyRunAction);
