@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.3 2010-04-30 17:10:00 vnivanch Exp $
+// $Id: G4UrbanMscModel93.cc,v 1.4 2010-05-20 13:17:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -635,34 +635,9 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
 
       //lower limit for tlimit
       if(tlimit < tlimitmin) tlimit = tlimitmin;
+      
+      if(tPathLength > tlimit) tPathLength = tlimit;
 
-      // randomize 1st step or 1st  step in volume
-      if((stepStatus == fGeomBoundary) || (stepStatus == fUndefined))
-        { 
-         // next few lines : possibility to restrict the step using
-         // some geometrical information
-          G4double geomlimit = ComputeGeomLimit(track,presafety,currentRange);
-          if((geomlimit > tlimitmin) && (tlimit > tlimitmin))
-            tlimit = min(tlimit,geomlimit/facgeom);
-          else
-            tlimit = tlimitmin;
-
-          G4double temptlimit = tlimit;
-          if(temptlimit > tlimitmin)
-          {
-            do {
-              temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);        
-               } while ((temptlimit < tlimitmin) || 
-                        (temptlimit > 2.*tlimit-tlimitmin));
-          }
-          else
-            temptlimit = tlimitmin;
-          if(tPathLength > temptlimit) tPathLength = temptlimit;
-        }
-      else
-        {  
-          if(tPathLength > tlimit) tPathLength = tlimit  ; 
-        }
     }
   
   // version similar to 7.1 (needed for some experiments)
