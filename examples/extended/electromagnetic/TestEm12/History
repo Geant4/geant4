@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2009-11-16 16:18:27 maire Exp $
+$Id: History,v 1.31 2010-05-20 13:13:33 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+20-05-10 mma (testem12-V09-03-00)
+- TestEm12.cc : introduction of G4UIExecutive
      
 16-11-09 mma (testem12-V09-02-01)
 - PhysListEmStandard copied from TestEm5

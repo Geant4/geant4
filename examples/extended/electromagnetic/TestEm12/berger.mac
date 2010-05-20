@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.8 2009-09-22 15:18:20 maire Exp $
+# $Id: berger.mac,v 1.9 2010-05-20 13:13:33 maire Exp $
 #
 # macro for TestEm12 : Dose Point Kernel
 # Seltzer, Appl. Radiat. Isot. 42(1991) page 917
@@ -10,8 +10,10 @@
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
 #
-/testem/phys/addPhysics  local	# em physics
-/testem/phys/setCuts 2 um
+###/testem/phys/addPhysics  emstandard_opt3	# em physics
+/testem/phys/addPhysics  standardSS	# em physics
+#
+/run/setCut 2 um	#will include cut for proton
 #
 /run/initialize
 #
@@ -20,7 +22,8 @@
 #
 ###/testem/histo/setFileType hbook
 /testem/histo/setFileType root
-/testem/histo/setFileName berger/1MeV
+/testem/histo/setFileName berger/ref4++/1MeV.ss
+/testem/histo/setHisto 4 100  0.   50. um	#true step length
 /testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
 ##/testem/histo/printHisto 8			#ascii
 #
