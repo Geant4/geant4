@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2010-05-21 18:07:30 mkelsey Exp $
+$Id: History,v 1.86 2010-05-21 18:26:16 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,15 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21 May 2010 Michael Kelsey (hadr-casc-V09-03-39)
+------------------------------------------------
+Final tag for inclusion in GEANT 4.9.4-beta.  Will be validated internal and
+included in global Hadronics tag.
+
+- G4CascadeSampler.icc:  Activate time-saving checks on single bins.
+- G4ElementaryParticleCollider.cc:  Remove special case for nucleon elastic
+  scattering.
 
 21 May 2010 Michael Kelsey (kelsey-20100521c)
 ---------------------------------------------

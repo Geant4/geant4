@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.17 2010-05-21 18:07:30 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.18 2010-05-21 18:26:16 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -132,9 +132,7 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
   const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
-  G4double ekin,emas;
   G4double eTot=0.0;
-  G4DynamicParticle* cascadeParticle = 0;
   G4int  i=1;
 
   if (!particles.empty()) { 

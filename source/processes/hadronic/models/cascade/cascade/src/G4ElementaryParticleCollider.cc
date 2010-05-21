@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.63 2010-05-21 18:07:30 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.64 2010-05-21 18:26:16 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -303,18 +303,9 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
     }
 
     // Generate list of final-state particles
-
-    // SPECIAL CASE for nucleon-nucleon elastic; this should go away,
-    // as it is handled by the sampler classes automatically
-    if (multiplicity==2 && (is==1 || is==2 || is==4)) {
-      particle_kinds.push_back(type1);
-      particle_kinds.push_back(type2);
-    } else {
-      generateOutgoingPartTypes(is, multiplicity, ekin);
-    }
+    generateOutgoingPartTypes(is, multiplicity, ekin);
 
     if (particle_kinds.empty()) continue;
-
     // G4cout << " Particle kinds = " ;
     // for (G4int i = 0; i < multiplicity; i++) G4cout << particle_kinds[i] << " , " ;
     // G4cout << G4endl;
