@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2010-05-21 04:55:44 dennis Exp $
+$Id: History,v 1.82 2010-05-21 05:50:15 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20 May 2010 Michael Kelsey
+--------------------------
+- G4CascadeInterpolator.icc:  Two bug fixes involving values at array edges.
 
 19 May 2010 Michael Kelsey, Dennis Wright
 -----------------------------------------

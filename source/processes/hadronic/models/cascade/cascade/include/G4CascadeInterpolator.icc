@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterpolator.icc,v 1.2 2010-05-16 05:18:36 mkelsey Exp $
+// $Id: G4CascadeInterpolator.icc,v 1.3 2010-05-21 05:50:15 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
@@ -36,6 +36,11 @@
 // The interpolation action returns a simple double: the integer part
 // is the bin index, and the fractional part is, obviously, the
 // fractional part.
+//
+// 20100517  M. Kelsey -- Bug fix in interpolate:  If bin position is _exactly_
+//		at upper edge (== last + 0.0), just return bin value.
+// 20100520  M. Kelsey -- Second bug fix:  Loop in bin search should start at
+//		i=1, not i=0 (since i-1 is the key).
 
 #include "G4CascadeInterpolator.hh"
 
@@ -59,7 +64,7 @@ G4double G4CascadeInterpolator<NBINS>::getBin(const G4double x) const {
     xdiff = doExtrapolation ? x-xBins[last] : 0.;
   } else {				// Assume nBins small; linear search
     int i;
-    for (i=0; i<nBins && x>xBins[i]; i++);	// Stops when x within bin i-1
+    for (i=1; i<nBins && x>xBins[i]; i++);	// Stops when x within bin i-1
     xindex = i-1;
     xbin = xBins[i] - xBins[i-1];
     xdiff = x - xBins[i-1];
@@ -90,7 +95,8 @@ G4double G4CascadeInterpolator<NBINS>::
 interpolate(const G4double (&yb)[nBins]) const {
   // Treat boundary extrapolations specially, otherwise just truncate
   G4int i = (lastVal<0) ? 0 : (lastVal>last) ? last-1 : G4int(lastVal);
-  G4double frac = lastVal - i;		// May be <0 or >1 if extrapolating
+  G4double frac = lastVal - G4double(i);	// May be <0 or >1 if extrapolating
 
-  return (yb[i] + frac*(yb[i+1]-yb[i]));
+  // Special case:  if exactly on upper bin edge, just return value
+  return (i==last) ? yb[last] : (yb[i] + frac*(yb[i+1]-yb[i]));
 }
