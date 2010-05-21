@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.45 2010-04-21 18:35:50 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.46 2010-05-21 01:23:54 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -79,7 +79,8 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   initTotalCrossSections();
 
   const G4double AU = 1.7234;
-  const G4double cuu = 3.3836; 
+  const G4double cuu = 3.3836;
+  const G4double convertToFermis = 2.8197;
   const G4double oneBypiTimes4 = 0.0795775; // 1 / 4 Pi
   const G4double pf_coeff = 1.932;
   const G4double pion_vp = 0.007; // in GeV
@@ -89,7 +90,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   const G4double mproton = G4Proton::Definition()->GetPDGMass() / GeV;
   const G4double mneutron = G4Neutron::Definition()->GetPDGMass() / GeV;
   const G4double alfa3[3] = { 0.7, 0.3, 0.01 }; // listing zone radius
-  //  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
+  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
   A = a;
   Z = z;
@@ -105,27 +106,34 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z-1)) - dm)); // for P
   binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z)) - dm)); // for N
 
-  G4double CU = cuu * G4cbrt(a);
-  G4double D1 = CU / AU;
-  G4double D = std::exp(-D1);
+  G4double CU = cuu*G4cbrt(a); // half-density radius * 2.8197
+  G4double D1 = CU/AU;
+  G4double D = std::exp(-D1);    
   G4double CU2 = 0.0; 
 
-  if (a > 3.5) { // a > 3
+  if (a > 4.5) {
     std::vector<G4double> ur;
-
     G4int icase = 0;
 
-    if (a > 11.5) { // a > 11
-      // number_of_zones = 6;
+    if (a > 99.5) {
+      number_of_zones = 6;
+      ur.push_back(-D1);
+
+      for (G4int i = 0; i < number_of_zones; i++) {
+        G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
+        zone_radii.push_back((CU + AU * y)/convertToFermis);
+        ur.push_back(y);
+      }
+
+    } else if (a > 11.5) {
       number_of_zones = 3;
       ur.push_back(-D1);
 
       for (G4int i = 0; i < number_of_zones; i++) {
-	// G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
 	G4double y = std::log((1.0 + D)/alfa3[i] - 1.0);
-	zone_radii.push_back(CU + AU * y);
+	zone_radii.push_back((CU + AU * y)/convertToFermis);
 	ur.push_back(y);
-      };
+      }
 
     } else {
       number_of_zones = 3;
@@ -137,7 +145,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
       for (G4int i = 0; i < number_of_zones; i++) {
 	G4double y = std::sqrt(-std::log(alfa3[i]));
-	zone_radii.push_back(CU2 * y);
+	zone_radii.push_back((CU2 * y)/convertToFermis);
 	ur.push_back(y);
       };
     }; 
@@ -166,9 +174,8 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
       v1.push_back(v0);
     }
 
-    // proton
+    // Protons
     G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
-
     std::vector<G4double> rod;
     std::vector<G4double> pf;
     std::vector<G4double> vz;
@@ -184,7 +191,8 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     nucleon_densities.push_back(rod);
     zone_potentials.push_back(vz);
     fermi_momenta.push_back(pf);
-    //  neutron stuff
+
+    // Neutrons
     dd0 = 3.0 * (a - z) * oneBypiTimes4 / tot_vol;
     rod.clear();
     pf.clear();
@@ -214,24 +222,24 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
 
-  } else { // a < 4
+  } else { // a < 5
     number_of_zones = 1;
-    zone_radii.push_back(radForSmall);
+    G4double smallRad = radForSmall;
+    if (a == 4) smallRad *= 0.7;
+    zone_radii.push_back(smallRad/convertToFermis);
     G4double vol = 1.0 / piTimes4thirds / (zone_radii[0]*zone_radii[0]*zone_radii[0]);
 
+    // proton
     std::vector<G4double> rod;
     std::vector<G4double> pf;
     std::vector<G4double> vz;
-
-    G4int i(0);
-
-    for (i = 0; i < number_of_zones; i++) {
-      G4double rd = vol;
+    for (G4int i = 0; i < number_of_zones; i++) {
+      G4double rd = vol*z;
       rod.push_back(rd);
       G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
       vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
-    };
+    }
 
     nucleon_densities.push_back(rod);
     zone_potentials.push_back(vz);
@@ -241,14 +249,13 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     rod.clear();
     pf.clear();
     vz.clear();
-
-    for (i = 0; i < number_of_zones; i++) {
-      G4double rd = vol;
+    for (G4int i = 0; i < number_of_zones; i++) {
+      G4double rd = vol*(a-z);
       rod.push_back(rd);
       G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
       vz.push_back(0.5 * pff * pff / mneutron + binding_energies[1]);
-    };
+    }
 
     nucleon_densities.push_back(rod);
     zone_potentials.push_back(vz);
@@ -265,10 +272,50 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     // hyperon potential (primitive)
     std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
+  }
 
-  }; 
   nuclei_radius = zone_radii[zone_radii.size() - 1];
 
+  /*
+  // Print nuclear radii and densities
+  G4cout << " For A = " << a << " zone radii = ";
+  for (G4int i = 0; i < number_of_zones; i++) G4cout << zone_radii[i] << "  ";
+  G4cout << "  " << G4endl;
+
+  G4cout << " proton densities: ";
+  for (G4int i = 0; i < number_of_zones; i++)
+     G4cout << nucleon_densities[0][i] << "  ";
+  G4cout << G4endl;
+
+  G4cout << " neutron densities: ";
+  for (G4int i = 0; i < number_of_zones; i++)
+     G4cout << nucleon_densities[1][i] << "  ";
+  G4cout << G4endl;
+
+  G4cout << " protons per shell " ;
+  G4double rinner = 0.0;
+  G4double router = 0.0;
+  G4double shellVolume = 0.0;
+  for (G4int i = 0; i < number_of_zones; i++) {  // loop over zones
+    router = zone_radii[i];
+    shellVolume = piTimes4thirds*(router*router*router - rinner*rinner*rinner);
+    G4cout << G4lrint(shellVolume*nucleon_densities[0][i]) << "  ";
+    rinner = router;
+  }
+  G4cout << G4endl;
+
+  G4cout << " neutrons per shell " ;
+  rinner = 0.0;
+  router = 0.0;
+  shellVolume = 0.0;
+  for (G4int i = 0; i < number_of_zones; i++) {  // loop over zones
+    router = zone_radii[i];
+    shellVolume = piTimes4thirds*(router*router*router - rinner*rinner*rinner);
+    G4cout << G4lrint(shellVolume*nucleon_densities[1][i]) << "  ";
+    rinner = router;
+  }
+  G4cout << G4endl;
+  */
 }
 
 
@@ -517,7 +564,9 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       G4InuclElementaryParticle particle = generateNucleon(ip, zone);
       dummy_convertor.setTarget(particle.getMomentum(), particle.getMass());
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
-      G4double csec = totalCrossSection(ekin, ptype * ip);
+
+      // Total cross section converted from mb to fm**2
+      G4double csec = 0.1*totalCrossSection(ekin, ptype * ip);
 
       if(verboseLevel > 2){
 	G4cout << " ip " << ip << " ekin " << ekin << " csec " << csec << G4endl;
