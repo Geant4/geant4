@@ -216,8 +216,10 @@ int main(int argc, char** argv)
 
   G4String line, line1;
   G4bool end = true;
-  for(G4int run=0; run<100; run++) {
+  for(G4int run=0; run<20; ++run) {
+    nameGen = "";
     do {
+      line = "";
       (*fin) >> line;
       if(verbose > 0) cout << "Next line " << line << endl;
       if(line == "#particle") {
@@ -304,7 +306,7 @@ int main(int argc, char** argv)
         (*fin) >> nameGen;
 	if (nameGen == "") {
 	  G4cout << "Generator name is empty! " << G4endl; 
-	  continue;
+	  break;
 	}
         hFile = nameGen;
         if(nameGen == "binary")       { hFile = "bic"; }
@@ -367,7 +369,7 @@ int main(int argc, char** argv)
       }
     } while(end);
 
-    if(!end) break;
+    if(!end) { break; }
 
     cout << "###### Start new run # " << run << "     #####" << endl;
 
@@ -398,7 +400,7 @@ int main(int argc, char** argv)
       cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"
 	     << endl;
-      exit(1);
+      break;
     }
 
     // ------- Define target A
