@@ -51,16 +51,18 @@ G4CascadSpecialFunctions::getPositionInEnergyScale3(G4double e)
 
 
 G4double 
-G4CascadSpecialFunctions::absorptionCrosSection(G4double e, G4int type) 
+G4CascadSpecialFunctions::absorptionCrossSection(G4double e, G4int type) 
 {
   G4int verboseLevel = 2;
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4CascadSpecialFunctions::absorptionCrosSection  type:" << type <<G4endl;
-  }
+  if (verboseLevel > 3)
+    G4cout << " >>> G4CascadSpecialFunctions::absorptionCrossSection  type:"
+           << type <<G4endl;
 
-  // was 0.2 since the beginning 
-  const G4double corr_fac = 1.0;
+  // Was 0.2 since the beginning, then changed to 1.0 
+  // now 0.1 to convert from mb to fm**2
+  const G4double corr_fac = 0.1;
+
   G4double csec = 0.0;
   
   if (e < 0.3) {
