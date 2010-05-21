@@ -1,65 +1,79 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-//
-// $Id: HadrontherapyAnalisysManager.cc;
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+	//
+	// ********************************************************************
+	// * License and Disclaimer                                           *
+	// *                                                                  *
+	// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+	// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+	// * conditions of the Geant4 Software License,  included in the file *
+	// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+	// * include a list of copyright holders.                             *
+	// *                                                                  *
+	// * Neither the authors of this software system, nor their employing *
+	// * institutes,nor the agencies providing financial support for this *
+	// * work  make  any representation or  warranty, express or implied, *
+	// * regarding  this  software system or assume any liability for its *
+	// * use.  Please see the license in the file  LICENSE  and URL above *
+	// * for the full disclaimer and the limitation of liability.         *
+	// *                                                                  *
+	// * This  code  implementation is the result of  the  scientific and *
+	// * technical work of the GEANT4 collaboration.                      *
+	// * By using,  copying,  modifying or  distributing the software (or *
+	// * any work based  on the software)  you  agree  to acknowledge its *
+	// * use  in  resulting  scientific  publications,  and indicate your *
+	// * acceptance of all terms of the Geant4 Software license.          *
+	// ********************************************************************
+	//
+	// $Id: HadrontherapyAnalisysManager.cc;
+	// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyAnalysisFileMessenger.hh"
 #include <time.h>
-#ifdef G4ANALYSIS_USE_ROOT
+
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
-	/////////////////////////////////////////////////////////////////////////////
-HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() :
+HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() 
+#ifdef G4ANALYSIS_USE_ROOT 
+:
 analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
 histo4(0), histo5(0), histo6(0), histo7(0), histo8(0), histo9(0), histo10(0), histo11(0), histo12(0), histo13(0), histo14(0), histo15(0), histo16(0),
 kinFragNtuple(0),
 kineticEnergyPrimaryNtuple(0),
 doseFragNtuple(0),
 fluenceFragNtuple(0),
+letFragNtuple(0),
 theROOTNtuple(0),
 theROOTIonTuple(0),
 fragmentNtuple(0),
 metaData(0),
 eventCounter(0)
+#endif
 {
-	fMess = new HadrontherapyAnalysisFileMessenger(this);
+    fMess = new HadrontherapyAnalysisFileMessenger(this);
 }
 /////////////////////////////////////////////////////////////////////////////
 
-
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager()
 {
-    delete(fMess); //kill the messenger
+    delete(fMess); 
+#ifdef G4ANALYSIS_USE_ROOT
     Clear();	
+#endif
 }
 
+HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::GetInstance()
+{
+	if (instance == 0) instance = new HadrontherapyAnalysisManager;
+	return instance;
+}
+#ifdef G4ANALYSIS_USE_ROOT
 void HadrontherapyAnalysisManager::Clear()
 {
+    // XXX delete ALL variables!!
+    // but this seems to be automatically done by 
+    // theTFile->Close() command!
+    // so we get a *double free or corruption* 
 
     delete metaData;
     metaData = 0;
@@ -123,13 +137,6 @@ void HadrontherapyAnalysisManager::Clear()
 }
 /////////////////////////////////////////////////////////////////////////////
 
-HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::GetInstance()
-{
-	if (instance == 0) instance = new HadrontherapyAnalysisManager;
-	return instance;
-}
-
-	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::SetAnalysisFileName(G4String aFileName)
 {
 	this->analysisFileName = aFileName;
@@ -175,6 +182,10 @@ void HadrontherapyAnalysisManager::book()
 	fluenceFragNtuple = new TNtuple("fluenceFragNtuple", 
 		"Fluence by voxel & fragment",
 		"i:j:k:A:Z:fluence");
+
+	letFragNtuple = new TNtuple("letFragNtuple", 
+		"Let by voxel & fragment",
+		"i:j:k:A:Z:letT:letD");
 
 	theROOTNtuple =   new TNtuple("theROOTNtuple", 
 		"Energy deposit by slice",
@@ -332,10 +343,14 @@ void HadrontherapyAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4in
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyAnalysisManager::FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD)
+{
+	letFragNtuple -> Fill( i, j, k, A, Z, letT, letD);
+
+}
+	/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisManager::FillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ)
 {
-		//G4cout <<" A = " << A << "  Z = " << Z << " energy = " << energy << G4endl;
 	fragmentNtuple->Fill(A, Z, energy, posX, posY, posZ);
 }
 
@@ -368,13 +383,13 @@ void HadrontherapyAnalysisManager::setBeamMetaData(G4double meanKineticEnergy,G4
 	this->energyError = sigmaEnergy;
 }
 /////////////////////////////////////////////////////////////////////////////
-// Flush data & close the root file
+// Flush data & close the file
 void HadrontherapyAnalysisManager::flush()
 {
     if (theTFile)
     {
-	theTFile->Write();  
-	theTFile->Close();
+	theTFile -> Write(); 
+	theTFile -> Close();
     }
     eventCounter = 0;
 }

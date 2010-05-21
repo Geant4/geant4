@@ -52,6 +52,7 @@
 #include "HadrontherapyDetectorMessenger.hh"
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyAnalysisManager.hh"
 
 #include <cmath>
 
@@ -64,6 +65,8 @@ HadrontherapyDetectorConstruction::HadrontherapyDetectorConstruction(G4VPhysical
     phantomPhysicalVolume(0), detectorPhysicalVolume(0),
     aRegion(0)
 {
+  HadrontherapyAnalysisManager::GetInstance();
+
   // NOTE! that the HadrontherapyDetectorConstruction class
   // does NOT inherit from G4VUserDetectorConstruction G4 class
   // So the Construct() mandatory virtual method is inside another geometric class

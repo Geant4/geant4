@@ -31,12 +31,13 @@
 
 #include "globals.hh"
 
-#ifdef G4ANALYSIS_USE_ROOT ///< ///< If analysis is done directly with ROOT
 
+#ifdef G4ANALYSIS_USE_ROOT ///< If analysis is done directly with ROOT
+#include "TROOT.h"
 #include "TFile.h"
 #include "TNtuple.h"
 #include "TH1F.h"
-
+#endif
 /**
  * Messenger class for analysis-settings for HadronTherapyAnalysisManager 
  */
@@ -64,11 +65,8 @@ public:
 	 */
 	static HadrontherapyAnalysisManager* GetInstance();
 
-	/**
-	 * Check if the analysis manager exist.
-	 */
-        static G4bool IsInstance();
-	/**
+#ifdef G4ANALYSIS_USE_ROOT 
+	 /**
 	 * Clear analysis manager heap.
 	 */
 	void Clear();
@@ -147,6 +145,9 @@ public:
 	void FillFragmentTuple(G4int A, G4double Z, G4double energy, G4double posX, G4double posY, G4double posZ);
 		///< Energy ntuple
 	
+	void FillLetFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double letT, G4double letD);
+		///< let ntuple
+
 	void genericIonInformation(G4int, G4double, G4int, G4double);
 	
 	void ThintargetBeamDisp(G4double,G4double);
@@ -170,8 +171,10 @@ private:
 	}
 	
 private:
+#endif
 	static HadrontherapyAnalysisManager* instance;
 	HadrontherapyAnalysisFileMessenger* fMess;
+#ifdef G4ANALYSIS_USE_ROOT 
 	G4String analysisFileName;
 	TFile *theTFile;
 	TH1F *histo1;
@@ -201,6 +204,7 @@ private:
 	TNtuple *fluenceFragNtuple;
 	
 	// ntuple containing the fluence of all the particle in any voxel
+	TNtuple *letFragNtuple;
 
 	TNtuple *theROOTNtuple;
 	TNtuple *theROOTIonTuple;
@@ -212,7 +216,9 @@ private:
 	G4double beamEnergy;
 	G4double energyError;
 	G4double phantomCenterDistance;
+#endif
 };
 #endif
-#endif
+
+
 

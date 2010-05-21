@@ -7,13 +7,18 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+21.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-01
+           - Solved some bugs related to the preprocessor variable G4ANALYSIS_USE_ROOT.
+
 18.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-00
 	   - Removed the possibility to calculate Let.
+	   - Removed AIDA and variables: G4_ANALYSIS_USE and ANALYSIS_USE.
 	   - Improved the commands to modify phantom/detector geometry
 	   - Added a command to set cuts just only in the detector: /physic/setDetectorCuts
 	   - Added the possibility to store dose & fluence for all secondaries
 	     produced in the same ASCII file. This feature can be switched on by the macro
 	     command: /analysis/secondaries true.
+	     
 
 16.12.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-42
            - Added the possibility to calculate the Let too, using an ASCII file to store it.
