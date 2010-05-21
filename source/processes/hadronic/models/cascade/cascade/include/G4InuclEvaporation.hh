@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.hh,v 1.6 2010-04-07 18:23:15 mkelsey Exp $
+// $Id: G4InuclEvaporation.hh,v 1.7 2010-05-21 17:56:34 mkelsey Exp $
 // Defines an interface to evaporation models of Bertini cascase (BERT)
 // based on INUCL code.
 //
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
+// 20100517  M. Kelsey -- MakeG4EvaporationInuclCollider a data member.
 
 #ifndef G4INUCLEVAPORATION_h
 #define G4INUCLEVAPORATION_h 1
@@ -36,7 +37,8 @@
 #include "G4VEvaporation.hh"
 #include "G4Fragment.hh"
 
-//#define DEBUG
+class G4EvaporationInuclCollider;
+
 
 class G4InuclEvaporation : public G4VEvaporation {
 public:
@@ -60,11 +62,7 @@ public:
 
 private:
   G4int verboseLevel;
-
-#ifdef DEBUG
-
-#endif
-
+  G4EvaporationInuclCollider* evaporator;
 };
 
 #endif

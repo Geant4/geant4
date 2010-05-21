@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.31 2010-05-21 17:44:38 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.32 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,11 +35,15 @@
 // 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
 // 20100419  M. Kelsey -- Handle fission output list via const-ref
 // 20100517  M. Kelsey -- Use G4CascadeInterpolator for QFF
+// 20100520  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members.  Rename timeToBigBang() to override
+//		base explosion().
 
 #define RUN
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
+#include "G4CollisionOutput.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4Fissioner.hh"
 #include "G4HadTmpUtil.hh"
@@ -54,19 +58,28 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : verboseLevel(0) {
-  
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4EquilibriumEvaporator::G4EquilibriumEvaporator" << G4endl;
-  }
+  : G4VCascadeCollider("G4EquilibriumEvaporator"),
+    theFissioner(new G4Fissioner),
+    theBigBanger(new G4BigBanger) {}
+
+G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {
+  delete theFissioner;
+  delete theBigBanger;
 }
+
 
 void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 				      G4InuclParticle* target,
 				      G4CollisionOutput& output) {
-
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::collide" << G4endl;
+  }
+
+  // Sanity check
+  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
+  if (!nuclei_target) {
+    G4cerr << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
+    return;
   }
 
   // simple implementation of the equilibium evaporation a la Dostrowski
@@ -101,7 +114,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
   G4double coul_coeff;
 
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
     G4LorentzVector PEX = nuclei_target->getMomentum();
@@ -113,10 +125,10 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
-    toTheNucleiSystemRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
+    toTheNucleiSystemRestFrame.setBullet(dummy);
     G4LorentzVector ppout;
   
-    if (timeToBigBang(A, Z, EEXS)) {
+    if (explosion(A, Z, EEXS)) {
 
       if (verboseLevel > 3) {
 	G4cout << " big bang in eql start " << G4endl;
@@ -157,7 +169,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	toTheNucleiSystemRestFrame.setTarget(PEX, nuc_mass);
 	toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
-	if (timeToBigBang(A, Z, EEXS)) { // big bang
+	if (explosion(A, Z, EEXS)) { // big bang
       
 	  if (verboseLevel > 2){
 	    G4cout << " big bang in eql step " << G4endl;
@@ -507,41 +519,30 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       nuclei.setExitationEnergy(eex_real);
     
       output.addTargetFragment(nuclei);
-    };
-
-  } else {
-    G4cout << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
-  }; 
+    }
 
   return;
 }		     
 
-G4bool G4EquilibriumEvaporator::timeToBigBang(G4double a, 
-					      G4double z, 
-					      G4double e) const {
-
+G4bool G4EquilibriumEvaporator::explosion(G4double a, 
+					  G4double z, 
+					  G4double e) const {
   if (verboseLevel > 3) {
-    G4cout << " >>> G4EquilibriumEvaporator::timeToBigBang" << G4endl;
+    G4cout << " >>> G4EquilibriumEvaporator::explosion" << G4endl;
   }
 
   const G4double be_cut = 3.0;
-  G4bool bigb = true;
 
-  if (a >= 12 && z >= 6.0 && z < 3.0 * (a - z)) {
-    bigb = false;  
-
-  } else {
-
-    //    if (e < be_cut * bindingEnergy(a, z)) bigb = false;
-    if (e < be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)) ) bigb = false;
-  }
+  // Different criteria from base class, since nucleus more "agitated"
+  G4bool bigb = (!(a >= 12 && z >= 6.0 && z < 3.0 * (a - z)) &&
+		 (e >= be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)))
+		 );
 
   return bigb;
 }
 
 G4bool G4EquilibriumEvaporator::goodRemnant(G4double a, 
 					    G4double z) const {
-  
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::goodRemnant" << G4endl;
   }

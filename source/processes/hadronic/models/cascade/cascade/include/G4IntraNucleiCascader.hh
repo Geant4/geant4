@@ -22,46 +22,44 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.9 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.10 2010-05-21 17:56:34 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
-#include "G4CollisionOutput.hh"
+#include "G4VCascadeCollider.hh"
 
+class G4CollisionOutput;
 class G4ElementaryParticleCollider;
 class G4InuclParticle;
 
 
-class G4IntraNucleiCascader {
-
+class G4IntraNucleiCascader : public G4VCascadeCollider {
 public:
-
   G4IntraNucleiCascader();
+  virtual ~G4IntraNucleiCascader();
 
-  void setElementaryParticleCollider(G4ElementaryParticleCollider* ecollider) {
-    theElementaryParticleCollider = ecollider;   
-  };
-  
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
+  // FIXME:  This should come from (or be determined by) G4InteractionCase
   void setInteractionCase(G4int intcase) { 
     inter_case = intcase; 
   };
 
 private: 
-  G4int verboseLevel;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
 
+  // FIXME:  This should come from (or be determined by) G4InteractionCase
   G4int inter_case;
 
   G4bool goodCase(G4double a, G4double z, G4double eexs, G4double ein) const; 
-
 };        
 
-#endif // G4INTRA_NUCLEI_CASCADER_HH 
+#endif /* G4INTRA_NUCLEI_CASCADER_HH */

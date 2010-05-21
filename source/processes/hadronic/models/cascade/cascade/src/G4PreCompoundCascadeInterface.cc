@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.11 2010-04-29 19:39:55 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.12 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,6 +32,7 @@
 //		const_iterator
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
+// 20100517  M. Kelsey -- Follow new ctors for G4*Collider family.
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -154,7 +155,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
 
   G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
   G4BigBanger*                     bigb = new G4BigBanger;
-  G4PreCompoundInuclCollider*  collider = new G4PreCompoundInuclCollider(colep, inc, noneq, bigb);
+  G4PreCompoundInuclCollider*  collider = new G4PreCompoundInuclCollider;
 
   G4int  maxTries = 10; // maximum tries for inelastic collision to avoid infinite loop
   G4int  nTries   = 0;  // try counter

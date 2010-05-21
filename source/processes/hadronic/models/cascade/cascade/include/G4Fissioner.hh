@@ -22,31 +22,32 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.hh,v 1.11 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4Fissioner.hh,v 1.12 2010-05-21 17:56:34 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
 
-#include "G4CollisionOutput.hh"
+#include "G4VCascadeCollider.hh"
+#include <vector>
 
+class G4CollisionOutput;
 class G4InuclParticle;
 
 
-class G4Fissioner {
-
+class G4Fissioner : public G4VCascadeCollider {
 public:
-
   G4Fissioner();
+  virtual ~G4Fissioner() {}
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
 private: 
-G4int verboseLevel;
   G4double getC2(G4double A1, 
 		 G4double A2, 
 		 G4double X3, 
@@ -70,7 +71,6 @@ G4int verboseLevel;
 			     std::vector<G4double>& AL1, 
 			     std::vector<G4double>& BET1, 
 			     G4double& R12) const; 
-
 };        
 
-#endif // G4FISSIONER_HH
+#endif /* G4FISSIONER_HH */

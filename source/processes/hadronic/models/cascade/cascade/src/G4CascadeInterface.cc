@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.75 2010-04-29 19:39:55 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.76 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,6 +32,7 @@
 //		const_iterator for both.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
+// 20100517  M. Kelsey -- Follow new ctors for G4*Collider family.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -152,7 +153,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
   // Colliders initialisation
   inc.setInteractionCase(1); 	// Interaction type is particle with nuclei.
-  G4InuclCollider* collider = new G4InuclCollider(&colep, &inc, &noneq, &eqil, &fiss, &bigb);
+  G4InuclCollider* collider = new G4InuclCollider;
 
       G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
       G4int  nTries   = 0;  // try counter
@@ -235,7 +236,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 		  (nTries < maxTries) &&  // conditions for next try
 		  (coulombOK==1) &&
 		  ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5) &&  
-		  (output.getOutgoingParticles().size()!=0)                                        
+		  (output.getOutgoingParticles().size()!=0)                                      
 		  );
 #else
 

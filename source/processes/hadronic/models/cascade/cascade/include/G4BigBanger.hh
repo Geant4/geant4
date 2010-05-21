@@ -22,38 +22,37 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.hh,v 1.12 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4BigBanger.hh,v 1.13 2010-05-21 17:56:34 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class
+// 20100519  M. Kelsey -- Get rid of proton and neutron masses as arguments!
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
 
-#include "G4CollisionOutput.hh"
+#include "G4VCascadeCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include <vector>
 
+class G4CollisionOutput;
 
-class G4BigBanger {
 
+class G4BigBanger : public G4VCascadeCollider {
 public:
-
   G4BigBanger();
+  virtual ~G4BigBanger() {};
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
 private: 
+  void generateBangInSCM(G4double etot, G4double a, G4double z);
 
-G4int verboseLevel;
-  void generateBangInSCM(G4double etot, G4double a, G4double z, 
-			 G4double mp, G4double mn);
-
-  void generateMomentumModules(G4double etot, G4double a, G4double z,
-			       G4double mp, G4double mn); 
+  void generateMomentumModules(G4double etot, G4double a, G4double z); 
 
   G4double xProbability(G4double x, 
 			G4int ia) const; 
@@ -69,7 +68,7 @@ G4int verboseLevel;
   std::vector<G4double> momModules;
 };        
 
-#endif // G4BIG_BANGER_HH 
+#endif /* G4BIG_BANGER_HH */
 
 
 

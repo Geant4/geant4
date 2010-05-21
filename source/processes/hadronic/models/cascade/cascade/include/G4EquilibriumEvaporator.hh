@@ -22,50 +22,46 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.hh,v 1.10 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.hh,v 1.11 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members.  Rename timeToBigBang() to override
+//		base explosion().
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4CollisionOutput.hh"
+#include "G4VCascadeCollider.hh"
 
+class G4CollisionOutput;
 class G4Fissioner;
 class G4BigBanger;
 class G4InuclParticle;
 
-class G4EquilibriumEvaporator {
-
+class G4EquilibriumEvaporator : public G4VCascadeCollider {
 public:
-
   G4EquilibriumEvaporator();
-
-  void setFissioner(G4Fissioner* fissioner) {
-    theFissioner = fissioner;
-  };
-
-  void setBigBanger(G4BigBanger* banger) {
-    theBigBanger = banger;
-  };
+  virtual ~G4EquilibriumEvaporator();
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
 private: 
-G4int verboseLevel;
+  // Replace base class verision
+  virtual G4bool explosion(G4InuclNuclei*) const { return false; }
+  virtual G4bool explosion(G4double a, 
+			   G4double z, 
+			   G4double e) const;
+
+  G4bool goodRemnant(G4double a, 
+		     G4double z) const; 
+
   G4double getE0(G4double A) const; 
 
   G4double getPARLEVDEN(G4double A, 
 			G4double Z) const; 
-
-  G4bool timeToBigBang(G4double a, 
-		       G4double z, 
-		       G4double e) const;
-
-  G4bool goodRemnant(G4double a, 
-		     G4double z) const; 
 
   G4double getQF(G4double x, 
 		 G4double x2, 
@@ -80,9 +76,8 @@ G4int verboseLevel;
 
   G4Fissioner* theFissioner;
   G4BigBanger* theBigBanger;
-
 };        
 
-#endif // G4EQUILIBRIUM_EVAPORATOR_HH 
+#endif /* G4EQUILIBRIUM_EVAPORATOR_HH */
 
 

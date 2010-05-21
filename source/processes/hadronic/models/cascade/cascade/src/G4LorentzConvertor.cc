@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.22 2010-04-09 21:02:28 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.23 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -30,10 +30,12 @@
 // 20100308  M. Kelsey -- Bug fix in toTheTargetRestFrame: scm_momentum should
 //		be data member, not local.
 // 20100409  M. Kelsey -- Protect std::sqrt(ga) against round-off negatives
+// 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 
 #include "G4LorentzConvertor.hh"
 #include "G4ThreeVector.hh"
 #include "G4HadronicException.hh"
+#include "G4InuclParticle.hh"
 
 
 const G4double G4LorentzConvertor::small = 1.0e-10;
@@ -44,6 +46,15 @@ G4LorentzConvertor::G4LorentzConvertor()
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
   }
+}
+
+// Extract four-vectors from input particles
+void G4LorentzConvertor::setBullet(const G4InuclParticle* bullet) {
+  setBullet(bullet->getMomentum());
+}
+
+void G4LorentzConvertor::setTarget(const G4InuclParticle* target) {
+  setTarget(target->getMomentum());
 }
 
 // Boost bullet and target four-vectors into destired frame

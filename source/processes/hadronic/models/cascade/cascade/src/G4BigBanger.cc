@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4BigBanger.cc,v 1.28 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.29 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,9 +31,12 @@
 // 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, clean up code
 
 #include "G4BigBanger.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
@@ -45,12 +48,7 @@ using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-G4BigBanger::G4BigBanger()
-  : verboseLevel(0) {
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4BigBanger::G4BigBanger" << G4endl;
-  }
-}
+G4BigBanger::G4BigBanger() : G4VCascadeCollider("G4BigBanger") {}
 
 void
 G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
@@ -67,82 +65,85 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   G4LorentzVector totscm;
   G4LorentzVector totlab;
 
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-    G4double A = nuclei_target->getA();
-    G4double Z = nuclei_target->getZ();
-    G4LorentzVector PEX = nuclei_target->getMomentum();
-    G4double EEXS = nuclei_target->getExitationEnergy();
-    G4InuclElementaryParticle dummy(small_ekin, 1);
-    G4LorentzConvertor toTheNucleiSystemRestFrame;
-
-    toTheNucleiSystemRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
-    toTheNucleiSystemRestFrame.setTarget(PEX, nuclei_target->getMass());
-    toTheNucleiSystemRestFrame.toTheTargetRestFrame();
-
-    G4double etot = (EEXS - G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z) ) ) * MeV/GeV;  // To Bertini units
-    if (etot < 0.0) etot = 0.0;
-
-    if (verboseLevel > 2) {
-      G4cout << " BigBanger: target " << G4endl;
-      nuclei_target->printParticle(); 
-      G4cout << " BigBanger: a " << A << " z " << Z << " eexs " << EEXS << " etot " <<
-	etot << " nm " << nuclei_target->getMass() << G4endl;
-    }
-  
-    generateBangInSCM(etot, A, Z, dummy.getParticleMass(1),
-		      dummy.getParticleMass(2));
-
-    if (verboseLevel > 2) {
-      G4cout << " particles " << particles.size() << G4endl;
-      for(G4int i = 0; i < G4int(particles.size()); i++) 
-	particles[i].printParticle();
-    }
-    if(!particles.empty()) { // convert back to Lab
-      particleIterator ipart;
-
-      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	if (verboseLevel > 2) {
-	  totscm += ipart->getMomentum();
-	}
-	G4LorentzVector mom = 
-	  toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
-	ipart->setMomentum(mom); 
-
-	if (verboseLevel > 2) {
-	  mom = ipart->getMomentum();
-	  totlab += mom;
-	}
-      };
-      std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-      if (verboseLevel > 2) {
-	G4cout << " In SCM: total outgoing momentum " << G4endl 
-	       << " E " << totscm.e() << " px " << totscm.x()
-	       << " py " << totscm.y() << " pz " << totscm.z() << G4endl; 
-	G4cout << " In Lab: mom cons " << G4endl 
-	       << " E " << PEX.e() + 0.001 * EEXS - totlab.e()
-	       << " px " << PEX.x() - totlab.x()
-	       << " py " << PEX.y() - totlab.y() 
-	       << " pz " << PEX.z() - totlab.z() << G4endl; 
-      }
-    };	
-    output.addOutgoingParticles(particles);
+  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
+  if (!nuclei_target) {
+    G4cerr << " BigBanger -> try to bang not nuclei " << G4endl;
+    return;
   }
-  else {
-    G4cout << " BigBanger -> try to bang not nuclei " << G4endl;
-  }; 
+
+  G4double A = nuclei_target->getA();
+  G4double Z = nuclei_target->getZ();
+  G4LorentzVector PEX = nuclei_target->getMomentum();
+  G4double EEXS = nuclei_target->getExitationEnergy();
+  G4InuclElementaryParticle dummy(small_ekin, 1);
+  G4LorentzConvertor toTheNucleiSystemRestFrame;
+  
+  toTheNucleiSystemRestFrame.setBullet(dummy);
+  toTheNucleiSystemRestFrame.setTarget(nuclei_target);
+  toTheNucleiSystemRestFrame.toTheTargetRestFrame();
+  
+  G4double etot = (EEXS - G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z) ) ) * MeV/GeV;  // To Bertini units
+  if (etot < 0.0) etot = 0.0;
+  
+  if (verboseLevel > 2) {
+    G4cout << " BigBanger: target " << G4endl;
+    nuclei_target->printParticle(); 
+    G4cout << " BigBanger: a " << A << " z " << Z << " eexs " << EEXS << " etot " <<
+      etot << " nm " << nuclei_target->getMass() << G4endl;
+  }
+  
+  generateBangInSCM(etot, A, Z);
+  
+  if (verboseLevel > 2) {
+    G4cout << " particles " << particles.size() << G4endl;
+    for(G4int i = 0; i < G4int(particles.size()); i++) 
+      particles[i].printParticle();
+  }
+
+  if(!particles.empty()) { // convert back to Lab
+    particleIterator ipart;
+    
+    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
+      if (verboseLevel > 2) {
+	totscm += ipart->getMomentum();
+      }
+      G4LorentzVector mom = 
+	toTheNucleiSystemRestFrame.backToTheLab(ipart->getMomentum());
+      ipart->setMomentum(mom); 
+      
+      if (verboseLevel > 2) {
+	mom = ipart->getMomentum();
+	totlab += mom;
+      }
+    }
+
+    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+
+    if (verboseLevel > 2) {
+      G4cout << " In SCM: total outgoing momentum " << G4endl 
+	     << " E " << totscm.e() << " px " << totscm.x()
+	     << " py " << totscm.y() << " pz " << totscm.z() << G4endl; 
+      G4cout << " In Lab: mom cons " << G4endl 
+	     << " E " << PEX.e() + 0.001 * EEXS - totlab.e()
+	     << " px " << PEX.x() - totlab.x()
+	     << " py " << PEX.y() - totlab.y() 
+	     << " pz " << PEX.z() - totlab.z() << G4endl; 
+    }
+  }
+
+  output.addOutgoingParticles(particles);
 
   return;
 }		     
 
-void G4BigBanger::generateBangInSCM(G4double etot, 
-				    G4double a, 
-				    G4double z, 
-				    G4double mp,
-				    G4double mn) {
-
+void G4BigBanger::generateBangInSCM(G4double etot, G4double a, G4double z) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::generateBangInSCM" << G4endl;
   }
+
+  // Proton and neutron masses
+  const G4double mp = G4InuclElementaryParticle::getParticleMass(1);
+  const G4double mn = G4InuclElementaryParticle::getParticleMass(2);
 
   const G4double ang_cut = 0.9999;
   const G4int itry_max = 1000;
@@ -169,7 +170,7 @@ void G4BigBanger::generateBangInSCM(G4double etot,
     return;
   };  
      
-  generateMomentumModules(etot, a, z, mp, mn);
+  generateMomentumModules(etot, a, z);
   G4bool bad = true;
   G4int itry = 0;
 
@@ -190,8 +191,7 @@ void G4BigBanger::generateBangInSCM(G4double etot,
 
       scm_momentums.push_back(mom1);  
       bad = false;
-    }
-    else {
+    } else {
       for(G4int i = 0; i < ia - 2; i++) {
 	// FIXME:  This isn't actually a correct four-vector, wrong mass!
 	G4LorentzVector mom = generateWithRandomAngles(momModules[i]);
@@ -243,14 +243,14 @@ void G4BigBanger::generateBangInSCM(G4double etot,
   return;
 }
 	   
-void G4BigBanger::generateMomentumModules(G4double etot, 
-					  G4double a, 
-					  G4double z, 
-					  G4double mp, 
-					  G4double mn) {
+void G4BigBanger::generateMomentumModules(G4double etot, G4double a, G4double z) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4BigBanger::generateMomentumModules" << G4endl;
   }
+
+  // Proton and neutron masses
+  const G4double mp = G4InuclElementaryParticle::getParticleMass(1);
+  const G4double mn = G4InuclElementaryParticle::getParticleMass(2);
 
   momModules.clear();		// Reset buffer for filling
 
@@ -284,8 +284,7 @@ void G4BigBanger::generateMomentumModules(G4double etot,
   return;  
 }
 
-G4double G4BigBanger::xProbability(G4double x, 
-				   G4int ia) const {
+G4double G4BigBanger::xProbability(G4double x, G4int ia) const {
 
 
   if (verboseLevel > 3) {

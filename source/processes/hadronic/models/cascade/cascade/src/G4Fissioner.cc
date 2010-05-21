@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.27 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.28 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,8 +30,10 @@
 // 20100319  M. Kelsey -- Use new generateWithRandomAngles for theta,phi stuff;
 //		eliminate some unnecessary std::pow()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class
 
 #include "G4Fissioner.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
 #include "G4FissionStore.hh"
@@ -43,13 +45,7 @@
 using namespace G4InuclSpecialFunctions;
 
 
-G4Fissioner::G4Fissioner()
-  : verboseLevel(0) {
-  
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4Fissioner::G4Fissioner" << G4endl;
-  }
-}
+G4Fissioner::G4Fissioner() : G4VCascadeCollider("G4Fissioner") {}
 
 void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 			  G4InuclParticle* target,

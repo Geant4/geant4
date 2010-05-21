@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.61 2010-05-15 00:55:01 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.62 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -55,6 +55,7 @@
 // 20100512  M. Kelsey -- Add some additional debugging messages for 2-to-2
 // 20100512  M. Kelsey -- Replace "if (is==)" cascades with switch blocks.
 //		Use G4CascadeInterpolator for angular distributions.
+// 20100517  M. Kelsey -- Inherit from common base class, make arrays static
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -89,6 +90,7 @@
 #include "G4CascadeXiMinusNChannel.hh"
 
 #include "G4CascadeInterpolator.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -104,14 +106,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : verboseLevel(0)
-{
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4ElementaryParticleCollider ctor " << G4endl;
-  }
-
-  initializeArrays();
-}
+  : G4VCascadeCollider("G4ElementaryParticleCollider") {}
 
 
 void
@@ -119,30 +114,33 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 				      G4InuclParticle* target,
 				      G4CollisionOutput& output) 
 {
-  // Ensure that proper concrete projectiles were passed
-  G4InuclElementaryParticle* particle1 =
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-  G4InuclElementaryParticle* particle2 =	
-    dynamic_cast<G4InuclElementaryParticle*>(target);
-
-  if (!(particle1 && particle2)) {
+  if (!useEPCollider(bullet,target)) {		// Sanity check
     G4cerr << " ElementaryParticleCollider -> can collide only particle with particle " 
            << G4endl;
     return;
   }
 
+  G4InuclElementaryParticle* particle1 =
+    dynamic_cast<G4InuclElementaryParticle*>(bullet);
+  G4InuclElementaryParticle* particle2 =	
+    dynamic_cast<G4InuclElementaryParticle*>(target);
+
+  if (particle1->isPhoton() || particle2->isPhoton()) {
+    G4cout << " ElementaryParticleCollider -> cannot collide photons " 
+           << G4endl;
+  } else {
+
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron
 
-  if (!particle1->isPhoton() && !particle2->isPhoton()) { // ok
     if (particle1->nucleon() || particle2->nucleon()) { // ok
       G4LorentzConvertor convertToSCM;
       if(particle2->nucleon()) {
-	convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
-	convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
+	convertToSCM.setBullet(particle1);
+	convertToSCM.setTarget(particle2);
       } else {
-	convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
-	convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
+	convertToSCM.setBullet(particle2);
+	convertToSCM.setTarget(particle1);
       };  
       convertToSCM.toTheCenterOfMass();
       G4double ekin = convertToSCM.getKinEnergyInTheTRS();
@@ -175,11 +173,11 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	if(particle1->pion() || particle2->pion()) {
 	  G4LorentzConvertor convertToSCM;
 	  if(particle1->pion()) {
-	    convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
-	    convertToSCM.setTarget(particle2->getMomentum(), particle2->getMass());
+	    convertToSCM.setBullet(particle1);
+	    convertToSCM.setTarget(particle2);
 	  } else {
-	    convertToSCM.setBullet(particle2->getMomentum(), particle2->getMass());
-	    convertToSCM.setTarget(particle1->getMomentum(), particle1->getMass());
+	    convertToSCM.setBullet(particle2);
+	    convertToSCM.setTarget(particle1);
 	  }; 
 	  convertToSCM.toTheCenterOfMass(); 
 	  G4double etot_scm = convertToSCM.getTotalSCMEnergy();
@@ -207,11 +205,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
       };
     };  
 
-  } else {
-
-    G4cout << " ElementaryParticleCollider -> cannot collide photons " 
-           << G4endl;
-  }; 
+  } 
 
 }
 
@@ -991,90 +985,73 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   return;
 }
 
-void G4ElementaryParticleCollider::initializeArrays()
-{
-  // Parameter array for momentum calculation of many body final states
-  const G4double rmnData[14][10][2] = {
-    {{0.5028,   0.6305}, {3.1442, -3.7333}, {-7.8172,  13.464}, {8.1667, -18.594}, 
-     {1.6208,   1.9439}, {-4.3139, -4.6268}, {12.291,  9.7879}, {-15.288, -9.6074}, 
-     {   0.0,     0.0}, {   0.0,      0.0}},     
 
-    {{0.9348,   2.1801}, {-10.59,  1.5163}, { 29.227,  -16.38}, {-34.55,  27.944}, 
-     {-0.2009, -0.3464}, {1.3641,   1.1093}, {-3.403, -1.9313}, { 3.8559,  1.7064}, 
-     {   0.0,     0.0}, {    0.0,     0.0}},    
+// Parameter array for momentum calculation of many body final states
+const G4double G4ElementaryParticleCollider::rmn[14][10][2] = {
+  {{0.5028,   0.6305}, {3.1442, -3.7333}, {-7.8172,  13.464}, {8.1667, -18.594}, 
+   {1.6208,   1.9439}, {-4.3139, -4.6268}, {12.291,  9.7879}, {-15.288, -9.6074}, 
+   {   0.0,     0.0}, {   0.0,      0.0}},     
 
-    {{-0.0967, -1.2886}, {4.7335,  -2.457}, {-14.298,  15.129}, {17.685, -23.295}, 
-     { 0.0126,  0.0271}, {-0.0835, -0.1164}, { 0.186,  0.2697}, {-0.2004, -0.3185}, 
-     {   0.0,     0.0}, {    0.0,     0.0}},    
+  {{0.9348,   2.1801}, {-10.59,  1.5163}, { 29.227,  -16.38}, {-34.55,  27.944}, 
+   {-0.2009, -0.3464}, {1.3641,   1.1093}, {-3.403, -1.9313}, { 3.8559,  1.7064}, 
+   {   0.0,     0.0}, {    0.0,     0.0}},    
+  
+  {{-0.0967, -1.2886}, {4.7335,  -2.457}, {-14.298,  15.129}, {17.685, -23.295}, 
+   { 0.0126,  0.0271}, {-0.0835, -0.1164}, { 0.186,  0.2697}, {-0.2004, -0.3185}, 
+   {   0.0,     0.0}, {    0.0,     0.0}},    
+  
+  {{-0.025,   0.2091}, {-0.6248, 0.5228}, { 2.0282, -2.8687}, {-2.5895, 4.2688}, 
+   {-0.0002, -0.0007}, {0.0014,   0.0051}, {-0.0024, -0.015}, { 0.0022,  0.0196}, 
+   {    0.0,    0.0}, {    0.0,     0.0}},     
+  
+  {{1.1965,   0.9336}, {-0.8289,-1.8181}, { 1.0426,  5.5157}, { -1.909,-8.5216}, 
+   { 1.2419,  1.8693}, {-4.3633, -5.5678}, { 13.743, 14.795}, {-18.592, -16.903}, 
+   {    0.0,    0.0}, {    0.0,     0.0}},     
+  
+  {{0.287,    1.7811}, {-4.9065,-8.2927}, { 16.264,  20.607}, {-19.904,-20.827}, 
+   {-0.244,  -0.4996}, {1.3158,   1.7874}, {-3.5691, -4.133}, { 4.3867,  3.8393}, 
+   {    0.0,    0.0}, {   0.0,      0.0}}, 
+  
+  {{-0.2449, -1.5264}, { 2.9191, 6.8433}, {-9.5776, -16.067}, { 11.938, 16.845}, 
+   {0.0157,   0.0462}, {-0.0826, -0.1854}, { 0.2143, 0.4531}, {-0.2585, -0.4627}, 
+   {    0.0,    0.0}, {   0.0,      0.0}},
+  
+  {{0.0373,   0.2713}, {-0.422, -1.1944}, { 1.3883,  2.7495}, {-1.7476,-2.9045}, 
+   {-0.0003, -0.0013}, {0.0014,   0.0058}, {-0.0034,-0.0146}, { 0.0039,  0.0156}, 
+   {    0.0,    0.0}, {    0.0,     0.0}},     
+  
+  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
+   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, 
+   { 0.1451,  0.0929},{ 0.1538,  0.1303}},  
+  
+  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
+   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, 
+   { 0.4652,  0.5389},{ 0.2744,  0.4071}},  
+  
+  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
+   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
+   { -0.033, -0.0545},{-0.0146, -0.0288}},  
+  
+  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
+   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
+   { 0.6296,  0.1491},{ 0.8381,  0.1802}},  
+  
+  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
+   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
+   { 0.1787,   0.385},{ 0.0086,  0.3302}},  
+  
+  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
+   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
+   {-0.0026, -0.0128},{ 0.0033, -0.0094}}
+};
 
-    {{-0.025,   0.2091}, {-0.6248, 0.5228}, { 2.0282, -2.8687}, {-2.5895, 4.2688}, 
-     {-0.0002, -0.0007}, {0.0014,   0.0051}, {-0.0024, -0.015}, { 0.0022,  0.0196}, 
-     {    0.0,    0.0}, {    0.0,     0.0}},     
-
-    {{1.1965,   0.9336}, {-0.8289,-1.8181}, { 1.0426,  5.5157}, { -1.909,-8.5216}, 
-     { 1.2419,  1.8693}, {-4.3633, -5.5678}, { 13.743, 14.795}, {-18.592, -16.903}, 
-     {    0.0,    0.0}, {    0.0,     0.0}},     
-
-    {{0.287,    1.7811}, {-4.9065,-8.2927}, { 16.264,  20.607}, {-19.904,-20.827}, 
-     {-0.244,  -0.4996}, {1.3158,   1.7874}, {-3.5691, -4.133}, { 4.3867,  3.8393}, 
-     {    0.0,    0.0}, {   0.0,      0.0}}, 
-   
-    {{-0.2449, -1.5264}, { 2.9191, 6.8433}, {-9.5776, -16.067}, { 11.938, 16.845}, 
-     {0.0157,   0.0462}, {-0.0826, -0.1854}, { 0.2143, 0.4531}, {-0.2585, -0.4627}, 
-     {    0.0,    0.0}, {   0.0,      0.0}},
-
-    {{0.0373,   0.2713}, {-0.422, -1.1944}, { 1.3883,  2.7495}, {-1.7476,-2.9045}, 
-     {-0.0003, -0.0013}, {0.0014,   0.0058}, {-0.0034,-0.0146}, { 0.0039,  0.0156}, 
-     {    0.0,    0.0}, {    0.0,     0.0}},     
-
-    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-     {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, 
-     { 0.1451,  0.0929},{ 0.1538,  0.1303}},  
-
-    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-     {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, 
-     { 0.4652,  0.5389},{ 0.2744,  0.4071}},  
-
-    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-     {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-     { -0.033, -0.0545},{-0.0146, -0.0288}},  
-
-    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-     {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-     { 0.6296,  0.1491},{ 0.8381,  0.1802}},  
-
-    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-     {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-     { 0.1787,   0.385},{ 0.0086,  0.3302}},  
-
-    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-     {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-     {-0.0026, -0.0128},{ 0.0033, -0.0094}}
-  };
-
-  // Copy to class scope
-  for (G4int i = 0; i < 14; i++) {
-    for (G4int j = 0; j < 10; j++) {
-      for (G4int k = 0; k < 2; k++) rmn[i][j][k] = rmnData[i][j][k];
-    }
-  }
-
-  const G4double abnData[4][4][4] = {
-    {{0.0856,  0.0716,  0.1729,  0.0376},  {5.0390,  3.0960,  7.1080,  1.4331},
-     {-13.782, -11.125, -17.961, -3.1350},  {14.661,  18.130,  16.403,  6.4864}},
-    {{0.0543,  0.0926, -0.1450,  0.2383}, {-9.2324, -3.2186, -13.032,  1.8253},
-     {36.397,  20.273,  41.781,  1.7648}, {-42.962, -33.245, -40.799, -16.735}},
-    {{-0.0511, -0.0515,  0.0454, -0.1541}, {4.6003,  0.8989,  8.3515, -1.5201},
-     {-20.534, -7.5084, -30.260, -1.5692},  {27.731,  13.188,  32.882,  17.185}},
-    {{0.0075,  0.0058, -0.0048,  0.0250}, {-0.6253, -0.0017, -1.4095,  0.3059},
-     {2.9159,  0.7022,  5.3505,  0.3252}, {-4.1101, -1.4854, -6.0946, -3.5277}} 
-  };
-
-  // Copy to class scope
-  for (G4int i = 0; i < 4; i++) {
-    for (G4int j = 0; j < 4; j++) {
-      for (G4int k = 0; k < 4; k++) abn[i][j][k] = abnData[i][j][k];
-    }
-  }
-
-}
+const G4double G4ElementaryParticleCollider::abn[4][4][4] = {
+  {{0.0856,  0.0716,  0.1729,  0.0376},  {5.0390,  3.0960,  7.1080,  1.4331},
+   {-13.782, -11.125, -17.961, -3.1350},  {14.661,  18.130,  16.403,  6.4864}},
+  {{0.0543,  0.0926, -0.1450,  0.2383}, {-9.2324, -3.2186, -13.032,  1.8253},
+   {36.397,  20.273,  41.781,  1.7648}, {-42.962, -33.245, -40.799, -16.735}},
+  {{-0.0511, -0.0515,  0.0454, -0.1541}, {4.6003,  0.8989,  8.3515, -1.5201},
+   {-20.534, -7.5084, -30.260, -1.5692},  {27.731,  13.188,  32.882,  17.185}},
+  {{0.0075,  0.0058, -0.0048,  0.0250}, {-0.6253, -0.0017, -1.4095,  0.3059},
+   {2.9159,  0.7022,  5.3505,  0.3252}, {-4.1101, -1.4854, -6.0946, -3.5277}} 
+};

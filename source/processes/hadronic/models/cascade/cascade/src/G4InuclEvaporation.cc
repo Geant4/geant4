@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.15 2010-04-29 19:39:55 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.16 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,8 @@
 //		const_iterator.
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
+// 20100517  M. Kelsey -- Follow new ctors for G4*Collider family.  Make
+//		G4EvaporationInuclCollider a data member.
 
 #include <numeric>
 #include "G4IonTable.hh"
@@ -47,8 +49,6 @@
 #include "G4HadronicException.hh"
 #include "G4LorentzVector.hh"
 #include "G4EquilibriumEvaporator.hh"
-#include "G4Fissioner.hh"
-#include "G4BigBanger.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclParticle.hh"
 #include "G4CollisionOutput.hh"
@@ -60,16 +60,15 @@ typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 
-G4InuclEvaporation::G4InuclEvaporation() {
-  verboseLevel=0;
-}
+G4InuclEvaporation::G4InuclEvaporation() 
+  : verboseLevel(0),   evaporator(new G4EvaporationInuclCollider) {}
 
 G4InuclEvaporation::G4InuclEvaporation(const G4InuclEvaporation &) : G4VEvaporation() {
   throw G4HadronicException(__FILE__, __LINE__, "G4InuclEvaporation::copy_constructor meant to not be accessable.");
 }
 
-
 G4InuclEvaporation::~G4InuclEvaporation() {
+  delete evaporator;
 }
 
 const G4InuclEvaporation & G4InuclEvaporation::operator=(const G4InuclEvaporation &) {
@@ -113,7 +112,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   //   G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetNuclearMass( A, Z ) ) * momentum ); 
   G4InuclNuclei* tempNuc = new G4InuclNuclei(A, Z);
   G4double mass=tempNuc->getMass()*1000;
-  G4ThreeVector boostToLab( ( 1/mass) * momentum ); 
+  G4ThreeVector boostToLab( momentum/mass ); 
 
   if ( verboseLevel > 2 )
     G4cout << " G4InuclEvaporation : initial kinematics : boostToLab vector = " << boostToLab << G4endl
@@ -125,12 +124,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   };
 
   G4InuclNuclei* nucleus = new G4InuclNuclei(A, Z);
-  nucleus->setExitationEnergy(exitationE/1000);
-
-  G4EquilibriumEvaporator*          eqil = new G4EquilibriumEvaporator;
-  G4Fissioner*                      fiss = new G4Fissioner;
-  G4BigBanger*                      bigb = new G4BigBanger;
-  G4EvaporationInuclCollider* evaporator = new G4EvaporationInuclCollider(eqil, fiss, bigb);
+  nucleus->setExitationEnergy(exitationE/1000.);
 
   G4CollisionOutput output;
   evaporator->collide(0, nucleus, output);

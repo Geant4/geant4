@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2010-05-21 17:44:38 mkelsey Exp $
+$Id: History,v 1.84 2010-05-21 17:56:34 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,50 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21 May 2010 Michael Kelsey (kelsey-20100521b)
+---------------------------------------------
+- G4VCascadeCollider:  New base class for all Colliders.  Carries
+  verboseLevel data member and set-function.  ::collide() is pure virtual.
+  Additional protected member functions will be defined to include all code
+  shared across multiple Colliders.
+
+- Migrate all of the "Collider" factories to use new base class, removing
+  common member functions, and replace passed-in sibling colliders with
+  local data members (pointers for now).  Since none of these classes have
+  persistent (state preserving) data members, the cost of more than one
+  instantiation is minimal.
+
+	G4BigBanger
+	G4ElementaryParticleCollider
+	G4EquilibriumEvaporator
+	G4EvaporationInuclCollider
+	G4Fissioner
+	G4IntraNucleiCascader
+	G4InuclCollider
+	G4NonEquilibriumEvaporator
+	G4PreCompoundInuclCollider
+
+- G4CascadeInterface.cc, G4InuclEvaporation.cc,
+  G4PreCompoundCascadeInterface.cc:  Remove siblings from constructors for
+  the Colliders.
+
+- G4InteractionCase.hh:  Eliminate unnecessary copying of std::pair<>'s, use
+  initializers in ctors, add clear() function to reset to 0-0-0.  Move
+  evaluation of bullet vs. target to new set() function, replacing separate
+  bulletTargetSetter() in the colliders.  Add boolean accessors to avoid
+  hard-coding inter_case values.  Change code numbers so nucleus collisions
+  are negative, and positive codes refer to the "is" or "rtype" numbers.
+
+- G4ElementaryParticleCollider.cc:  Use G4InteractionCase to compute "is",
+  instead of hardwiring the meaning.
+
+- G4Collider.hh:  Remove empty and never-used file.
+
+- G4EvaporationInuclCollider.cc:  Eliminate unnecessary creation of
+  duplicate G4InuclNuclei: pass input through to G4EquilibriumEvaporator.
+
+- G4LorentzConvertor:  Add interfaces to pass G4InuclParticles directly.
 
 21 May 2010 Michael Kelsey (kelsey-20100521a)
 ---------------------------------------------

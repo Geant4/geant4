@@ -1,3 +1,5 @@
+#ifndef G4V_CASCADE_COLLIDER_HH
+#define G4V_CASCADE_COLLIDER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -22,26 +24,43 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Collider.hh,v 1.7 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4VCascadeCollider.hh,v 1.1 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
-//
-// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 
-#ifndef G4COLLIDER_HH
-#define G4COLLIDER_HH
+#include "globals.hh"
+#include "G4InteractionCase.hh"
 
+class G4InuclNuclei;
 class G4InuclParticle;
 class G4CollisionOutput;
 
-// class G4Collider {
+class G4VCascadeCollider {
+public:
+  G4VCascadeCollider(const char* name="G4VCascadeCollider", G4int verbose=0);
 
-// public:
+  virtual ~G4VCascadeCollider() {}
 
-//   G4Collider() {};
+  virtual void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+		       G4CollisionOutput& output) = 0;
 
-//   virtual void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-//			  G4CollisionOutput& output) = 0;
+  virtual void setVerboseLevel(G4int verbose=0) { verboseLevel=verbose; }
 
-// };        
+protected:
+  const char* theName;
+  G4int verboseLevel;
+  G4InteractionCase interCase;		// Determine bullet vs. target
 
-#endif // G4COLLIDER_HH 
+  // Decide whether to use G4ElementaryParticleCollider or not
+  virtual G4bool useEPCollider(G4InuclParticle* bullet, 
+			       G4InuclParticle* target) const;
+
+  // Decide whether to use G4BigBanger or not
+  virtual G4bool explosion(G4InuclNuclei* target) const;
+
+  // Decide whether to use G4IntraNuclearCascader or not
+  virtual G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
+					      G4InuclParticle* target, 
+					      G4double ekin) const;
+};        
+
+#endif	/* G4V_CASCADE_COLLIDER_HH */

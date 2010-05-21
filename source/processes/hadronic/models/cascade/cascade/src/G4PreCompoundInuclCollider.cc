@@ -22,36 +22,40 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundInuclCollider.cc,v 1.8 2010-04-29 19:39:55 mkelsey Exp $
+// $Id: G4PreCompoundInuclCollider.cc,v 1.9 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members, consolidate code
 
 #include "G4PreCompoundInuclCollider.hh"
+#include "G4BigBanger.hh"
+#include "G4CollisionOutput.hh"
+#include "G4ElementaryParticleCollider.hh"
+#include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
-#include "G4InuclNuclei.hh"
-#include "G4InuclParticle.hh"
-#include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
-#include "G4ParticleLargerEkin.hh"
-#include <algorithm>
-
-using namespace G4InuclSpecialFunctions;
-
-typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
+#include "G4NonEquilibriumEvaporator.hh"
 
 	 
 G4PreCompoundInuclCollider::G4PreCompoundInuclCollider()
-  : verboseLevel(0) {
+  : G4VCascadeCollider("G4PreCompoundInuclCollider"),
+    theElementaryParticleCollider(new G4ElementaryParticleCollider),
+    theIntraNucleiCascader(new G4IntraNucleiCascader),
+    theNonEquilibriumEvaporator(new G4NonEquilibriumEvaporator),
+    theBigBanger(new G4BigBanger) {}
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4PreCompoundInuclCollider::G4PreCompoundInuclCollider" << G4endl;
-  }
+G4PreCompoundInuclCollider::~G4PreCompoundInuclCollider() {
+  delete theElementaryParticleCollider;
+  delete theIntraNucleiCascader;
+  delete theNonEquilibriumEvaporator;
+  delete theBigBanger;
 }
+
 
 void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 					 G4InuclParticle* target,
@@ -62,37 +66,30 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 
   const G4int itry_max = 1000;
   		     
-  G4InuclElementaryParticle* particle1 =
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-  G4InuclElementaryParticle* particle2 =
-    dynamic_cast<G4InuclElementaryParticle*>(target);
-  
-  if (particle1 && particle2) { // particle + particle (NOTE: also the h + H(1,1) treated here) 
+  if (useEPCollider(bullet,target)) {
     if (verboseLevel > 2) {
-      particle1->printParticle();
-      particle2->printParticle();
+      bullet->printParticle();
+      target->printParticle();
     }
 
     theElementaryParticleCollider->collide(bullet, target, globalOutput);
-
   } else { // needs to call all machinery    	
     G4LorentzConvertor convertToTargetRestFrame;
-    G4InteractionCase interCase = bulletTargetSetter(bullet, target);
-    G4int intcase = interCase.getInterCase();
+
+    interCase.set(bullet, target);
      
-    if (intcase > 0) { // ok
+    if (interCase.valid()) { // ok
       G4InuclNuclei* ntarget =
 	dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
 
-      convertToTargetRestFrame.setTarget(ntarget->getMomentum(),
-					 ntarget->getMass());
+      convertToTargetRestFrame.setTarget(ntarget);
       G4int btype = 0;
       G4double ab = 0.0;
       G4double zb = 0.0;
       G4double at = ntarget->getA();
       G4double zt = ntarget->getZ();
        
-      if (intcase == 1) { // particle with nuclei
+      if (interCase.hadNucleus()) { // particle with nuclei
 	G4InuclElementaryParticle* pbullet = 
 	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
          
@@ -102,8 +99,7 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  globalOutput.trivialise(bullet, target);
 	  return;
 	} else {
-	  convertToTargetRestFrame.setBullet(pbullet->getMomentum(),
-					     pbullet->getMass());   
+	  convertToTargetRestFrame.setBullet(pbullet);   
 	  btype = pbullet->type();
 	}; 
 
@@ -111,8 +107,7 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	G4InuclNuclei* nbullet = 
 	  dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
 
-	convertToTargetRestFrame.setBullet(nbullet->getMomentum(),
-					   nbullet->getMass());   
+	convertToTargetRestFrame.setBullet(nbullet);   
 	ab = nbullet->getA();
 	zb = nbullet->getZ();
       };
@@ -133,19 +128,22 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	G4LorentzVector bmom;
 	bmom.setZ(convertToTargetRestFrame.getTRSMomentum());
 
-	G4InuclNuclei ntarget(at, zt);
+	G4InuclNuclei ntarget(at, zt);		// Default is at rest
 
-	theIntraNucleiCascader->setInteractionCase(intcase);
+	theIntraNucleiCascader->setInteractionCase(interCase.code());
 	 
 	G4bool bad = true;
 	G4int itry = 0;
 	 
+	G4CollisionOutput TRFoutput;
+	G4CollisionOutput output;
 	while (bad && itry < itry_max) {
-	  G4CollisionOutput TRFoutput;
-	  G4CollisionOutput output;
-
 	  itry++;
-	  if (intcase == 1) {
+
+	  output.reset();	// Clear buffers for this attempt
+	  TRFoutput.reset();
+
+	  if (interCase.hadNucleus()) {
 	    G4InuclElementaryParticle pbullet(bmom, btype);
 
 	    theIntraNucleiCascader->collide(&pbullet, &ntarget, output);
@@ -156,7 +154,6 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 
 	  if (verboseLevel > 3) {
 	    G4cout << " After Cascade " << G4endl;
-
 	    output.printCollisionOutput();
 	  }
 	  
@@ -164,16 +161,15 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
 	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after
-	    output.reset();
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 	    if (explosion(&cascad_rec_nuclei)) {
 	      if (verboseLevel > 3) {
 		G4cout << " big bang after cascade " << G4endl;
 	      };
 
-	      theBigBanger->collide(0,&cascad_rec_nuclei, output);
-	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+	      theBigBanger->collide(0,&cascad_rec_nuclei, TRFoutput);
 	    } else {
+	      output.reset();
 	      theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei, output);
 
 	      if (verboseLevel > 3) {
@@ -187,194 +183,35 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 	  };
 	 
 	  // convert to the LAB       
-	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();
-	  std::vector<G4InuclElementaryParticle> particles = 
-	    TRFoutput.getOutgoingParticles();
+	  TRFoutput.boostToLabFrame(convertToTargetRestFrame);
 
-	  if (!particles.empty()) { 
-	    particleIterator ipart;
-	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      G4LorentzVector mom = ipart->getMomentum();
-
-	      if (withReflection) mom.setZ(-mom.z());
-	      mom = convertToTargetRestFrame.rotate(mom);
-	      ipart->setMomentum(mom); 
-	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
-	      ipart->setMomentum(mom); 
-	    };
-	    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-	  };
-           
-	  std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
-
-	  if (!nucleus.empty()) { 
-	    nucleiIterator inuc;
-
-	    for (inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      G4LorentzVector mom = inuc->getMomentum(); 
-
-	      if (withReflection) mom.setZ(-mom.z());
-	      mom = convertToTargetRestFrame.rotate(mom);
-	      inuc->setMomentum(mom);
-	      mom = convertToTargetRestFrame.backToTheLab(inuc->getMomentum());
-	      inuc->setMomentum(mom);
-	    };
-	  };
-	  globalOutput.addOutgoingParticles(particles);
-	  globalOutput.addTargetFragments(nucleus);
+	  globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
+	  globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
 	  globalOutput.setOnShell(bullet, target);
-	  if(globalOutput.acceptable()) {
-	    return;
-	  } else {
-	    globalOutput.reset();
-	  }; 
+	  if (globalOutput.acceptable()) return;
+
+	  globalOutput.reset();		// Clear and try again
 	};
 
 	if (verboseLevel > 3) {
 	  G4cout << " InuclCollider -> can not generate acceptable inter. after " 
 		 << itry_max << " attempts " << G4endl;
 	}
-
-	globalOutput.trivialise(bullet, target);
-	return;        
       } else {
-
 	if (verboseLevel > 3) {
 	  G4cout << " InuclCollider -> inelastic interaction is impossible " << G4endl
 		 << " due to the coulomb barirer " << G4endl;
 	}
-
-	globalOutput.trivialise(bullet, target);
-	return;
-      };
+      }
 	
+      globalOutput.trivialise(bullet, target);
+      return;
     } else {
-
       if (verboseLevel > 3) {
-	G4cout << " InuclCollider -> inter case " << intcase << G4endl;
+	G4cout << " InuclCollider -> inter case " << interCase.code() << G4endl;
       };
     };       
   };
 
   return;
 }
-		     
-G4bool G4PreCompoundInuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
-						     G4InuclParticle* target, 
-						     G4double ekin) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4PreCompoundInuclCollider::inelasticInteractionPossible" << G4endl;
-  }
-
-  const G4double coeff = 0.001 * 1.2;
-
-  G4bool possible = true;
-  G4double at;
-  G4double zt;
-  G4double ab;
-  G4double zb;
-
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-    at = nuclei_target->getA();
-    zt = nuclei_target->getZ(); 
-    if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
-      ab = nuclei_bullet->getA();
-      zb = nuclei_bullet->getZ();     
-    } else {
-      G4InuclElementaryParticle* particle =
-	dynamic_cast<G4InuclElementaryParticle*>(bullet);
-
-      ab = 1;
-      zb = particle->getCharge();
-    }; 
-  } else {
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
-      ab = nuclei_bullet->getA();
-      zb = nuclei_bullet->getZ();     
-
-      G4InuclElementaryParticle* particle =
-	dynamic_cast<G4InuclElementaryParticle*>(target);
-
-      at = 1;
-      zt = particle->getCharge();    
-    } else {
-
-      return possible;
-    };  
-  }; 
-
-  // VCOL used  for testing if elastic collision possible
-  G4double VCOL = coeff * zt * zb / (G4cbrt(at) + G4cbrt(ab)); 
-
-  // possible = VCOL < ekin; // NOTE: inelastic collision if not true
-  possible = true; // we force elastic
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4PreCompoundInuclCollider::inelasticInteractionPossible" << G4endl;
-    G4cout << " VCOL: " << VCOL << " ekin: " << ekin << " inelastic possible: " << possible << G4endl;
-  }
-
-  return possible;
-
-}
-	
-G4InteractionCase G4PreCompoundInuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
-						      G4InuclParticle* target) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4PreCompoundInuclCollider::bulletTargetSetter" << G4endl;
-  }
-
-  G4InteractionCase interCase;
-
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
-    if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) { // A + A         
-      interCase.setInterCase(2);
-      if (nuclei_target->getA() >= nuclei_bullet->getA()) {
-	interCase.setBulletTarget(bullet, target);
-      } else {
-	interCase.setBulletTarget(target, bullet);
-      }; 
-    } else {
-      interCase.setInterCase(1);
-      interCase.setBulletTarget(bullet, target);
-    }; 
-  } else {
-    G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet);
-    if (nuclei_bullet) { 
-      G4InuclElementaryParticle* part =
-	dynamic_cast<G4InuclElementaryParticle*>(target);
-      if (part) {
-	interCase.setInterCase(1);
-	interCase.setBulletTarget(target, bullet);
-      };
-    }; 
-  };
-
-  return interCase;
-}       
-
-G4bool G4PreCompoundInuclCollider::explosion(G4InuclNuclei* target) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4PreCompoundInuclCollider::explosion" << G4endl;
-  }
-
-  const G4double a_cut = 20.0;
-  const G4double be_cut = 3.0;
-
-  G4double a = target->getA();
-  G4double z = target->getZ();
-  G4double eexs = target->getExitationEnergy();
-  G4bool explo = true;
-
-  if (a > a_cut) {
-    explo = false;
-  } else {
-    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
-  };   
-
-  return explo;
-}
- 

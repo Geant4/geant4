@@ -22,22 +22,22 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.hh,v 1.14 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4LorentzConvertor.hh,v 1.15 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100120  M. Kelsey -- BUG FIX:  scm_momentum should be G4ThreeVector
 // 20100126  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 
 #ifndef G4LORENTZ_CONVERTOR_HH
 #define G4LORENTZ_CONVERTOR_HH
 
-#ifndef GLOB
 #include "globals.hh"
-#endif
-
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+
+class G4InuclParticle;
 
 class G4LorentzConvertor {
 
@@ -49,9 +49,25 @@ public:
 		     const G4LorentzVector& tmom, G4double tmass) {
     setBullet(bmom, bmass);
     setTarget(tmom, tmass);
-  }; 
+  }
+
+  G4LorentzConvertor(const G4InuclParticle* bullet, 
+		     const G4InuclParticle* target) {
+    setBullet(bullet);
+    setTarget(target);
+  }
 
   void setVerbose(G4int vb=0) { verboseLevel = vb; }
+
+  void setBullet(const G4InuclParticle* bullet);
+  void setTarget(const G4InuclParticle* target);
+
+  void setBullet(const G4InuclParticle& bullet) { setBullet(&bullet); }
+  void setTarget(const G4InuclParticle& target) { setTarget(&target); }
+
+  // Use correct four-vectors as input
+  void setBullet(const G4LorentzVector& bmom) { bullet_mom = bmom; }
+  void setTarget(const G4LorentzVector& bmom) { target_mom = bmom; }
 
   // NOTE:  These functions "repair" input 4-vectors using specified mass
   void setBullet(const G4LorentzVector& bmom, G4double bmass) {

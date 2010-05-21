@@ -22,35 +22,28 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EvaporationInuclCollider.cc,v 1.9 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4EvaporationInuclCollider.cc,v 1.10 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Eliminate some unnecessary std::pow()
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members.  Eliminate unnecessary G4InuclNuclei ctor.
 
 #include "G4EvaporationInuclCollider.hh"
-#include "G4InuclElementaryParticle.hh"
+#include "G4CollisionOutput.hh"
+#include "G4EquilibriumEvaporator.hh"
 #include "G4InuclNuclei.hh"
-#include "G4InuclParticle.hh"
-#include "G4LorentzConvertor.hh"
-#include "G4ParticleLargerEkin.hh"
-#include "G4InuclSpecialFunctions.hh"
-#include <algorithm>
 
-using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 	 
 G4EvaporationInuclCollider::G4EvaporationInuclCollider()
-  : verboseLevel(0) {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4EvaporationInuclCollider::G4EvaporationInuclCollider" << G4endl;
-  }
-}
+  : G4VCascadeCollider("G4EvaporationInuclCollider"),
+    theEquilibriumEvaporator(new G4EquilibriumEvaporator) {}
 
 void
 G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/,
@@ -60,147 +53,15 @@ G4EvaporationInuclCollider::collide(G4InuclParticle* /*bullet*/,
     G4cout << " >>> G4EvaporationInuclCollider::evaporate" << G4endl;
   }
 
-  G4LorentzConvertor convertToTargetRestFrame;
-  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
-  convertToTargetRestFrame.setTarget(ntarget->getMomentum(), ntarget->getMass());
+  if (!dynamic_cast<G4InuclNuclei*>(target)) return;	// Only nuclei evaporate
 
-  G4double at = ntarget->getA();
-  G4double zt = ntarget->getZ();
-  G4double eEx = ntarget->getExitationEnergy();
+  target->printParticle();	// FIXME: Why is this not verbose protected???
 
-  G4InuclNuclei targ(at, zt);		// Default is zero momentum
-  targ.setExitationEnergy(eEx);
-  targ.printParticle();
-
-  theEquilibriumEvaporator->collide(0, &targ, globalOutput);
+  theEquilibriumEvaporator->collide(0, target, globalOutput);
 
   if (verboseLevel > 3) {
     G4cout << " After EquilibriumEvaporator " << G4endl;
     globalOutput.printCollisionOutput();
-  };
-	 
-
-  if (verboseLevel > 3) 
     G4cout << "G4EvaporationInuclCollider::collide end" << G4endl;
+  }
 }
-	
-	     
-G4bool G4EvaporationInuclCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
-						     G4InuclParticle* target, 
-						     G4double ekin) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4EvaporationInuclCollider::inelasticInteractionPossible" << G4endl;
-  }
-
-  const G4double coeff = 0.001 * 1.2;
-
-  G4bool possible = true;
-  G4double at;
-  G4double zt;
-  G4double ab;
-  G4double zb;
-
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-    at = nuclei_target->getA();
-    zt = nuclei_target->getZ(); 
-    if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
-      ab = nuclei_bullet->getA();
-      zb = nuclei_bullet->getZ();     
-    } else {
-      G4InuclElementaryParticle* particle =
-	dynamic_cast<G4InuclElementaryParticle*>(bullet);
-
-      ab = 1;
-      zb = particle->getCharge();
-    }; 
-  } else {
-    if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
-      ab = nuclei_bullet->getA();
-      zb = nuclei_bullet->getZ();     
-
-      G4InuclElementaryParticle* particle =
-	dynamic_cast<G4InuclElementaryParticle*>(target);
-
-      at = 1;
-      zt = particle->getCharge();    
-    } else {
-
-      return possible;
-    };  
-  }; 
-
-  // VCOL used  for testing if elastic collision possible
-  G4double VCOL = coeff * zt * zb / (G4cbrt(at) + G4cbrt(ab)); 
-
-  // possible = VCOL < ekin; // NOTE: inelastic collision if not true
-  possible = true; // we force elastic
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4EvaporationInuclCollider::inelasticInteractionPossible" << G4endl;
-    G4cout << " VCOL: " << VCOL << " ekin: " << ekin << " inelastic possible: " << possible << G4endl;
-  }
-
-  return possible;
-
-}
-	
-G4InteractionCase G4EvaporationInuclCollider::bulletTargetSetter(G4InuclParticle* bullet,
-						      G4InuclParticle* target) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4EvaporationInuclCollider::bulletTargetSetter" << G4endl;
-  }
-
-  G4InteractionCase interCase;
-
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
-    if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) { // A + A         
-      interCase.setInterCase(2);
-      if (nuclei_target->getA() >= nuclei_bullet->getA()) {
-	interCase.setBulletTarget(bullet, target);
-      } else {
-	interCase.setBulletTarget(target, bullet);
-      }; 
-    } else {
-      interCase.setInterCase(1);
-      interCase.setBulletTarget(bullet, target);
-    }; 
-  } else {
-    G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet);
-    if (nuclei_bullet) { 
-      G4InuclElementaryParticle* part =
-	dynamic_cast<G4InuclElementaryParticle*>(target);
-      if (part) {
-	interCase.setInterCase(1);
-	interCase.setBulletTarget(target, bullet);
-      };
-    }; 
-  };
-
-  return interCase;
-}       
-
-G4bool G4EvaporationInuclCollider::explosion(G4InuclNuclei* target) const {
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4EvaporationInuclCollider::explosion" << G4endl;
-  }
-
-  const G4double a_cut = 20.0;
-  const G4double be_cut = 3.0;
-
-  G4double a = target->getA();
-  G4double z = target->getZ();
-  G4double eexs = target->getExitationEnergy();
-  G4bool explo = true;
-
-  if (a > a_cut) {
-    explo = false;
-  } else {
-    if (eexs < be_cut * bindingEnergy(a, z)) explo = false;
-  };   
-
-  return explo;
-}
- 

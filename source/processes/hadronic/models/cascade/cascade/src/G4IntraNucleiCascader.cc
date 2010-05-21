@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.34 2010-04-12 23:39:41 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.35 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,17 +31,19 @@
 // 20100407  M. Kelsey -- Pass "all_particles" as argument to initializeCascad,
 //		following recent change to G4NucleiModel.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
+// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
+//		simple data members
 
+#include "G4IntraNucleiCascader.hh"
 #define RUN
 
 #include "G4CascadParticle.hh"
+#include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
-#include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4LorentzConvertor.hh"
 #include "G4NucleiModel.hh"
 #include "G4NucleiProperties.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -54,13 +56,13 @@ using namespace G4InuclSpecialFunctions;
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : verboseLevel(0) {
+  : G4VCascadeCollider("G4IntraNucleiCascader"),
+    theElementaryParticleCollider(new G4ElementaryParticleCollider) {}
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4IntraNucleiCascader::G4IntraNucleiCascader" << G4endl;
-  }
-
+G4IntraNucleiCascader::~G4IntraNucleiCascader() {
+  delete theElementaryParticleCollider;
 }
+
 
 void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,

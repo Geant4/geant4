@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.hh,v 1.30 2010-05-15 00:55:01 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.31 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -38,30 +38,29 @@
 //		public vs. private ::collide() functions.
 // 20100511  M. Kelsey -- Remove G4PionSampler and G4NucleonSampler.  Expand
 //		particle-types selector to all modes, not just strangeness.
+// 20100517  M. Kelsey -- Inherit from common base class, make arrays static
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
-#include "G4CollisionOutput.hh"
+#include "G4VCascadeCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
 #include <vector>
 
 class G4LorentzConvertor;
+class G4CollisionOutput;
 
-class G4ElementaryParticleCollider {
 
+class G4ElementaryParticleCollider : public G4VCascadeCollider {
 public:
-
   G4ElementaryParticleCollider();
-
+  virtual ~G4ElementaryParticleCollider() {};
+  
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
 private:
-
-  G4int verboseLevel;
-
   void initializeArrays();
 
   G4int generateMultiplicity(G4int is, G4double ekin) const;
@@ -109,12 +108,10 @@ private:
   std::vector<G4int> particle_kinds;
 
   // Parameter arrays
-
-  G4double rmn[14][10][2];    
-  G4double abn[4][4][4];
-
+  static const G4double rmn[14][10][2];    
+  static const G4double abn[4][4][4];
 };
 
-#endif
+#endif	/* G4ELEMENTARY_PARTICLE_COLLIDER_HH */
 
 

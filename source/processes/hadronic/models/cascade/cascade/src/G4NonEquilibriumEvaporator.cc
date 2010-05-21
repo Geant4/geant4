@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.28 2010-04-13 05:30:10 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.29 2010-05-21 17:56:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,11 +30,13 @@
 //		eliminate some unnecessary std::pow()
 // 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
+// 20100517  M. Kelsey -- Inherit from common base class
 
 #define RUN
 
 #include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
+#include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
@@ -46,12 +48,8 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
-  : verboseLevel(0) {
+  : G4VCascadeCollider("G4NonEquilibriumEvaporator") {}
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator" << G4endl;
-  }
-}
 
 void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 					 G4InuclParticle* target,
@@ -59,6 +57,13 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::collide" << G4endl;
+  }
+
+  // Sanity check
+  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
+  if (!nuclei_target) {
+    G4cerr << " NonEquilibriumEvaporator -> target is not nuclei " << G4endl;    
+    return;
   }
 
   const G4double a_cut = 5.0;
@@ -75,8 +80,6 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
   const G4double width_cut = 0.005;
 
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-    //  initialization
     G4double A = nuclei_target->getA();
     G4double Z = nuclei_target->getZ();
     G4LorentzVector PEX = nuclei_target->getMomentum();
@@ -100,7 +103,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheExitonSystemRestFrame;
 
-    toTheExitonSystemRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
+    toTheExitonSystemRestFrame.setBullet(dummy);
 
     G4double EFN = FermiEnergy(A, Z, 0);
     G4double EFP = FermiEnergy(A, Z, 1);
@@ -109,7 +112,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4double ZR = Z - QPP;  
     G4int NEX = G4int(QEX + 0.5);
     G4LorentzVector ppout;
-    G4bool try_again = NEX > 0 ? true : false;
+    G4bool try_again = (NEX > 0);
   
     // Buffer for parameter sets
     std::pair<G4double, G4double> parms;
@@ -435,11 +438,6 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
     nuclei.setExitationEnergy(eex_real);
     output.addTargetFragment(nuclei);
-
-  } else {
-    G4cout << " NonEquilibriumEvaporator -> target is not nuclei " << G4endl;    
-
-  }; 
 
   return;
 }
