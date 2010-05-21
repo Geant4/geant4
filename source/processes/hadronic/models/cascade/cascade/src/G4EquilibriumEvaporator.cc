@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.30 2010-04-20 06:46:45 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.31 2010-05-21 17:44:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,11 +34,13 @@
 // 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
 // 20100419  M. Kelsey -- Handle fission output list via const-ref
+// 20100517  M. Kelsey -- Use G4CascadeInterpolator for QFF
 
 #define RUN
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
+#include "G4CascadeInterpolator.hh"
 #include "G4Fissioner.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
@@ -556,7 +558,7 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
     G4cout << " >>> G4EquilibriumEvaporator::getQF" << G4endl;
   }
   
-  const G4double QFREP[72] = {  
+  static const G4double QFREP[72] = {  
     //     TL201 *     *   *    *
     //      1    2     3   4    5
     22.5, 22.0, 21.0, 21.0, 20.0,
@@ -585,7 +587,7 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
     //     65    66    67    68    69    70    71    72
     6.2,  3.8,  5.6,  4.0,  4.0,  4.2,  4.2,  3.5 };
      
-  const G4double XREP[72] = {
+  static const G4double XREP[72] = {
     //      1      2     3      4      5
     0.6761, 0.677, 0.6788, 0.6803, 0.685,
     //      6     7     8     9     10     11
@@ -614,24 +616,14 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
   G4double QFF = 0.0;
 
   if (x < XMIN || x > XMAX) {
-
     G4double X1 = 1.0 - 0.02 * x2;
     G4double FX = (0.73 + (3.33 * X1 - 0.66) * X1) * (X1*X1*X1);
 
     QFF = G0 * FX * G4cbrt(a*a);
- 
   } else {
-
-    for (G4int i = 1; i < 72; i++) {
-
-      if (x <= XREP[i]) {
-	QFF = QFREP[i - 1] + (QFREP[i] - QFREP[i - 1]) * (x - XREP[i - 1])/
-	  (XREP[i] - XREP[i - 1]);
-
-	break;
-      };
-    };
-  };
+    static G4CascadeInterpolator<72> interp(XREP);	// Only need one!
+    QFF = interp.interpolate(x, QFREP);
+  }
 
   if (QFF < 0.0) QFF = 0.0;
 

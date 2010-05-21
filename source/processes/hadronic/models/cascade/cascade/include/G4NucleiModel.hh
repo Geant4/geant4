@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.24 2010-04-21 18:35:50 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.25 2010-05-21 17:44:38 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -35,6 +35,9 @@
 // 20100409  M. Kelsey -- Add function to sort list of partnerts by pathlen,
 //		move non-inlinable code to .cc.
 // 20100421  M. Kelsey -- Move getFermiKinetic() to .cc, no hardwired masses.
+// 20100517  M. Kelsey -- Change cross-section tables to static arrays.  Move
+//		absorptionCrossSection() from SpecialFunc.
+// 20100520  M. Kelsey -- Add function to separate momentum from nucleon
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -127,11 +130,13 @@ public:
     
   G4InuclElementaryParticle generateNucleon(G4int type, G4int zone) const;
 
+  G4LorentzVector generateNucleonMomentum(G4int type, G4int zone) const;
+
+  G4double absorptionCrossSection(G4double e, G4int type) const;
+  G4double totalCrossSection(G4double ke, G4int rtype) const;
+
 private:
   G4int verboseLevel;
-
-  void initTotalCrossSections();
-  G4double totalCrossSection(G4double e, G4int rtype) const;
 
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
@@ -188,22 +193,20 @@ private:
   G4int current_nucl2;
 
   // Total cross sections
-
-  G4double PPtot[30];
-  G4double NPtot[30];
-  G4double pipPtot[30];
-  G4double pimPtot[30];
-  G4double pizPtot[30];
-  G4double kpPtot[30];
-  G4double kpNtot[30];
-  G4double kmPtot[30];
-  G4double kmNtot[30];
-  G4double lPtot[30];
-  G4double spPtot[30];
-  G4double smPtot[30];
-  G4double xi0Ptot[30];
-  G4double ximPtot[30];
-
+  static const G4double PPtot[30];
+  static const G4double NPtot[30];
+  static const G4double pipPtot[30];
+  static const G4double pimPtot[30];
+  static const G4double pizPtot[30];
+  static const G4double kpPtot[30];
+  static const G4double kpNtot[30];
+  static const G4double kmPtot[30];
+  static const G4double kmNtot[30];
+  static const G4double lPtot[30];
+  static const G4double spPtot[30];
+  static const G4double smPtot[30];
+  static const G4double xi0Ptot[30];
+  static const G4double ximPtot[30];
 };        
 
 #endif // G4NUCLEI_MODEL_HH 
