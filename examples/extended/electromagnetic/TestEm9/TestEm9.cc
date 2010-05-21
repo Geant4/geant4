@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm9.cc,v 1.9 2010-04-29 15:21:39 vnivanch Exp $
+// $Id: TestEm9.cc,v 1.10 2010-05-21 18:32:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,8 +32,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -47,6 +45,10 @@
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,11 +69,6 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(phys = new PhysicsList);
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
 
-  //visualization manager
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif
-
   //set user action classes
   runManager->SetUserAction(new RunAction());
   runManager->SetUserAction(new EventAction());
@@ -80,33 +77,34 @@ int main(int argc,char** argv) {
 
   //get the pointer to the User Interface manager
   G4UImanager* UI = G4UImanager::GetUIpointer();
-
-  if (argc==1)   // Define UI terminal for interactive mode
-    {
-#ifdef G4VIS_USE
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-     G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-     session->SessionStart();
-     delete session;
-    }
-  else           // Batch mode
+    
+  if (argc!=1)   // batch mode  
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
     }
+    
+  else           //define visualization and UI terminal for interactive mode
+    { 
+#ifdef G4VIS_USE
+   G4VisManager* visManager = new G4VisExecutive;
+   visManager->Initialize();
+#endif    
+     
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
+          
+#ifdef G4VIS_USE
+     delete visManager;
+#endif     
+    }
 
   //job termination
-#ifdef G4VIS_USE
-  if(visManager) delete visManager;
-#endif
+  //
   delete runManager;
 
   return 0;
