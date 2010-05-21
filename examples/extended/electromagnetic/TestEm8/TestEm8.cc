@@ -24,27 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm8.cc,v 1.8 2007-07-27 15:29:38 vnivanch Exp $
+// $Id: TestEm8.cc,v 1.9 2010-05-21 18:15:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - TestEm8 
-//
-// --------------------------------------------------------------
-// Comments
-//     
-//   
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 #include "Em8DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -53,6 +41,16 @@
 #include "Em8EventAction.hh"
 #include "Em8SteppingAction.hh"
 #include "Em8SteppingVerbose.hh"
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) 
 {
@@ -75,10 +73,6 @@ int main(int argc,char** argv)
   detector = new Em8DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-  
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif 
  
   // set user action classes
 
@@ -98,32 +92,38 @@ int main(int argc,char** argv)
   runManager->SetUserAction(steppingAction);
   
   G4UImanager* UI = G4UImanager::GetUIpointer();  
- 
-  if (argc==1)   // Define UI terminal for interactive mode  
-    { 
-#ifdef G4VIS_USE
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif 
-      G4UIsession * session = new G4UIterminal;
-      UI->ApplyCommand("/control/execute init.mac");    
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+
+  if (argc!=1)   // batch mode  
+    {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
     }
     
-  // job termination
-  
+  else           //define visualization and UI terminal for interactive mode
+    { 
 #ifdef G4VIS_USE
-  delete visManager;
-#endif  
+   G4VisManager* visManager = new G4VisExecutive;
+   visManager->Initialize();
+#endif    
+     
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
+     
+#ifdef G4VIS_USE
+     delete visManager;
+#endif     
+    } 
+   
+  // job termination
+  //
   delete runManager;
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
