@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.62 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.63 2010-05-21 18:07:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -56,6 +56,7 @@
 // 20100512  M. Kelsey -- Replace "if (is==)" cascades with switch blocks.
 //		Use G4CascadeInterpolator for angular distributions.
 // 20100517  M. Kelsey -- Inherit from common base class, make arrays static
+// 20100519  M. Kelsey -- Use G4InteractionCase to compute "is" values.
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -120,6 +121,8 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     return;
   }
 
+  interCase.set(bullet, target);	// To identify kind of collision
+
   G4InuclElementaryParticle* particle1 =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* particle2 =	
@@ -158,16 +161,15 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 
       }
       if(!particles.empty()) { // convert back to Lab
+	G4LorentzVector mom;		// Buffer to avoid memory churn
 	particleIterator ipart;
 	for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
-	  G4LorentzVector mom = 
-	    convertToSCM.backToTheLab(ipart->getMomentum());
+	  mom = convertToSCM.backToTheLab(ipart->getMomentum());
 	  ipart->setMomentum(mom); 
 	};
 	std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	output.addOutgoingParticles(particles);
       };
-      output.addOutgoingParticles(particles);
-
     } else {
       if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
 	if(particle1->pion() || particle2->pion()) {
@@ -185,10 +187,10 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	  generateSCMpionAbsorption(etot_scm, particle1, particle2);
 
 	  if(!particles.empty()) { // convert back to Lab
+	    G4LorentzVector mom;	// Buffer to avoid memory churn
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      G4LorentzVector mom = 
-		convertToSCM.backToTheLab(ipart->getMomentum());
+	      mom = convertToSCM.backToTheLab(ipart->getMomentum());
 	      ipart->setMomentum(mom); 
 	    };
 	    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
@@ -279,6 +281,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
+
   G4int is = type1 * type2;
 
   if(verboseLevel > 3){
@@ -317,7 +320,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
     // G4cout << G4endl;
 
     if (multiplicity == 2) {
-      // Identify charge or strangeness exchange
+      // Identify charge or strangeness exchange (non-elastic scatter)
       G4int finaltype = particle_kinds[0]*particle_kinds[1];
       G4int kw = (finaltype != is) ? 2 : 1;
 

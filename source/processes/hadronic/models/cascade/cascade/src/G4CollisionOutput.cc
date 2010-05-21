@@ -22,17 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.22 2010-04-19 23:03:23 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.23 2010-05-21 18:07:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100309  M. Kelsey -- Introduced bug checking i3 for valid tuning pair
 // 20100409  M. Kelsey -- Move non-inlinable code here out of .hh file, replace
 //		loop over push_back() with block insert().
+// 20100418  M. Kelsey -- Add function to boost output lists to lab frame
+// 20100520  M. Kelsey -- Add function to rotate Z axis, from G4Casc.Interface
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4LorentzRotation.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -111,15 +114,13 @@ void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
   G4bool withReflection = convertor.reflectionNeeded();
 
   if (!outgoingParticles.empty()) { 
-    particleIterator ipart;
-    for(ipart = outgoingParticles.begin(); ipart != outgoingParticles.end();
-	ipart++) {
+    particleIterator ipart = outgoingParticles.begin();
+    for(; ipart != outgoingParticles.end(); ipart++) {
       G4LorentzVector mom = ipart->getMomentum();
       
       if (withReflection) mom.setZ(-mom.z());
       mom = convertor.rotate(mom);
-      ipart->setMomentum(mom); 
-      mom = convertor.backToTheLab(ipart->getMomentum());
+      mom = convertor.backToTheLab(mom);
       ipart->setMomentum(mom); 
     }
 
@@ -127,25 +128,36 @@ void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
   }
   
   if (!nucleiFragments.empty()) { 
-    nucleiIterator inuc;
+    nucleiIterator inuc = nucleiFragments.begin();
     
-    for (inuc = nucleiFragments.begin(); inuc != nucleiFragments.end();
-	 inuc++) {
+    for (; inuc != nucleiFragments.end(); inuc++) {
       G4LorentzVector mom = inuc->getMomentum(); 
       
       if (withReflection) mom.setZ(-mom.z());
       mom = convertor.rotate(mom);
-      inuc->setMomentum(mom);
-      mom = convertor.backToTheLab(inuc->getMomentum());
+      mom = convertor.backToTheLab(mom);
       inuc->setMomentum(mom);
     }
   }
 }
 
 
+// Apply LorentzRotation to all particles in event
+
+void G4CollisionOutput::rotateEvent(const G4LorentzRotation& rotate) {
+  particleIterator ipart = outgoingParticles.begin();
+  for(; ipart != outgoingParticles.end(); ipart++)
+    ipart->setMomentum(ipart->getMomentum()*=rotate);
+
+  nucleiIterator inuc = nucleiFragments.begin();
+  for (; inuc != nucleiFragments.end(); inuc++)
+    inuc->setMomentum(inuc->getMomentum()*=rotate);
+}
+
+
 void G4CollisionOutput::trivialise(G4InuclParticle* bullet, 
 				   G4InuclParticle* target) {
-  if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {     
+  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     nucleiFragments.push_back(*nuclei_target);
   } else {
     G4InuclElementaryParticle* particle =
@@ -153,7 +165,7 @@ void G4CollisionOutput::trivialise(G4InuclParticle* bullet,
     outgoingParticles.push_back(*particle);
   }
 
-  if(G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {     
+  if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
     nucleiFragments.push_back(*nuclei_bullet);
   } else {
     G4InuclElementaryParticle* particle =

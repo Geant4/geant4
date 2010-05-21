@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundCascadeInterface.hh,v 1.2 2010-04-07 18:23:15 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.hh,v 1.3 2010-05-21 18:07:30 mkelsey Exp $
 // Defines an interface to Bertini (BERT) INC with exitons. Evaporation is NOT included
+//
+// 20100520 M. Kelsey -- Add missing name string to ctor, follow code changes from
+//		G4CascadeInterface.
 
 #ifndef G4PRECOMPOUNDCASCADEINTERFACE_H
 #define G4PRECOMPOUNDCASCADEINTERFACE_H 1
@@ -41,7 +44,7 @@
 class G4PreCompoundCascadeInterface : public G4VIntraNuclearTransportModel {
 
 public:
-  G4PreCompoundCascadeInterface();
+  G4PreCompoundCascadeInterface(const G4String& nam="PreCompound Bertini Cascade");
 
   ~G4PreCompoundCascadeInterface(){
   }

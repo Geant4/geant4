@@ -23,31 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.15 2010-04-07 18:23:15 mkelsey Exp $
+// $Id: G4CascadeInterface.hh,v 1.16 2010-05-21 18:07:30 mkelsey Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
 //
 // 20100405  M. Kelsey -- Fix constness of op== and op!=
+// 20100519  M. Kelsey -- Remove Collider data members
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
 
+#include "G4VIntraNuclearTransportModel.hh"
+#include "G4FragmentVector.hh"
+#include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
-#include "G4VIntraNuclearTransportModel.hh"
-#include "G4KineticTrackVector.hh"
-#include "G4FragmentVector.hh"
 #include "G4ParticleChange.hh"
-#include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
-
-#include "G4ElementaryParticleCollider.hh"
-#include "G4NonEquilibriumEvaporator.hh"
-#include "G4EquilibriumEvaporator.hh"
-#include "G4Fissioner.hh"
-#include "G4BigBanger.hh"
-#include "G4IntraNucleiCascader.hh"
+#include "G4ReactionProductVector.hh"
 
 
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
@@ -57,9 +51,11 @@ public:
 
   virtual ~G4CascadeInterface();
 
-  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
-
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
+				     G4V3DNucleus* theNucleus);
+  
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+				 G4Nucleus& theNucleus); 
 
 private:
   G4int operator==(const G4CascadeInterface& right) const {
@@ -73,16 +69,7 @@ private:
   G4int verboseLevel;
 
 private:
-
-  G4ElementaryParticleCollider colep;
-  G4NonEquilibriumEvaporator noneq;
-  G4EquilibriumEvaporator eqil;
-  G4Fissioner fiss;
-  G4BigBanger bigb;
-  G4IntraNucleiCascader inc;
-
   G4HadFinalState theResult;  
-
 };
 
 #endif // G4CASCADEINTERFACE_H

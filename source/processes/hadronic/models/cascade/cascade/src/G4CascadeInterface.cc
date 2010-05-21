@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.76 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.77 2010-05-21 18:07:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,23 +33,26 @@
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enum
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 // 20100517  M. Kelsey -- Follow new ctors for G4*Collider family.
+// 20100520  M. Kelsey -- Simplify collision loop, move momentum rotations to
+//		G4CollisionOutput, copy G4DynamicParticle directly from
+//		G4InuclParticle, no switch-block required.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
-#include "G4DynamicParticleVector.hh"
-#include "G4IonTable.hh"
+#include "G4CollisionOutput.hh"
+#include "G4DynamicParticle.hh"
 #include "G4InuclCollider.hh"
-// #include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
-#include "G4CollisionOutput.hh"
-#include "G4V3DNucleus.hh"
-#include "G4Track.hh"
-#include "G4Nucleus.hh"
-#include "G4NucleiModel.hh"
-#include "G4LorentzRotation.hh"
 #include "G4InuclParticleNames.hh"
+#include "G4KaonZeroShort.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4LorentzRotation.hh"
+#include "G4Nucleus.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Track.hh"
+#include "G4V3DNucleus.hh"
 
 using namespace G4InuclParticleNames;
 
@@ -121,20 +124,16 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
   sumEnergy = bullet->getKineticEnergy(); // In GeV 
-
   sumBaryon += bullet->baryon();	// Returns baryon number (0, 1, or 2)
 
   // Set target
   G4InuclNuclei*   target  = 0;
   G4InuclParticle* targetH = 0;
-  // and outcoming particles
-  G4DynamicParticle* cascadeParticle = 0;
 
   G4double theNucleusA = theNucleus.GetN();
 
-  if ( !(G4int(theNucleusA) == 1) ) {
-    target  = new G4InuclNuclei(theNucleusA, 
-				theNucleus.GetZ());
+  if ( G4int(theNucleusA) != 1 ) {
+    target  = new G4InuclNuclei(theNucleusA, theNucleus.GetZ());
     eInit = bullet->getEnergy() + target->getEnergy();
 
     sumBaryon += theNucleusA;
@@ -152,287 +151,170 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4CollisionOutput output;
 
   // Colliders initialisation
-  inc.setInteractionCase(1); 	// Interaction type is particle with nuclei.
   G4InuclCollider* collider = new G4InuclCollider;
 
-      G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
-      G4int  nTries   = 0;  // try counter
+  G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
+  G4int  nTries   = 0;  // try counter
 
 #ifdef BERTDEV
-      G4int coulombOK =0;  // flag for correct Coulomb barrier
+  G4int coulombOK =0;  // flag for correct Coulomb barrier
 #endif
-      if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
-
-	targetH = new G4InuclElementaryParticle(proton);
-
-	G4float cutElastic[32];
-
-	cutElastic[proton   ] = 1.0; // GeV
-	cutElastic[neutron  ] = 1.0;
-	cutElastic[pionPlus ] = 0.6;
-	cutElastic[pionMinus] = 0.2;
-	cutElastic[pionZero ] = 0.2;
-        cutElastic[kaonPlus ] = 0.5;
-        cutElastic[kaonMinus] = 0.5;
-        cutElastic[kaonZero] = 0.5;
-        cutElastic[kaonZeroBar] = 0.5;
-        cutElastic[lambda] = 1.0;
-        cutElastic[sigmaPlus] = 1.0;
-        cutElastic[sigmaZero] = 1.0;
-        cutElastic[sigmaMinus] = 1.0;
-        cutElastic[xiZero] = 1.0;
-        cutElastic[xiMinus] = 1.0;
-
-	if (momentumBullet.z() > cutElastic[bulletType]) { // inelastic collision possible
-
-	  do {   // we try to create inelastic interaction
-	    output.reset();
-	    collider->collide(bullet, targetH, output);
-	    nTries++;
-	  } while(
-		  (nTries < maxTries)                                           &&
-		  (output.getOutgoingParticles().size() == 2                    && // elastic: bullet + p = H(1,1) coming out
-		   (output.getOutgoingParticles().begin()->type() == bulletType ||
-		    output.getOutgoingParticles().begin()->type() == proton)
-		   )
-		  );
-	} else { // only elastic collision is energetically possible
-	  collider->collide(bullet, targetH, output);
-	}
-
-	sumBaryon += 1;
-
-	eInit = bullet->getEnergy() + targetH->getEnergy();
-
-	if (verboseLevel > 2) {
-	  G4cout << "Target:  " << G4endl;
-	  targetH->printParticle();
-	}
-
-      } else {  // treat all other targets excepet H(1,1)
-
-	do  // we try to create inelastic interaction
-	  {
-#ifdef BERTDEV
-            coulombOK=0;  // by default coulomb analysis is OK
-#endif
-	    output.reset();
-	    collider->collide(bullet, target, output);
-	    nTries++;
-
-#ifdef BERTDEV
-	    G4double coulumbBarrier = 8.7 * MeV; 
-	    const std::vector<G4InuclElementaryParticle>& p= output.getOutgoingParticles();
-	    if(!p.empty()) { 
-	      for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
-		if (ipart->type() == proton) {
-		  G4double e = ipart->getKineticEnergy()*GeV;
-		  if (e < coulumbBarrier) coulombOK= 1; // If event with coulomb barrier violation detected -> retry
-		  //		  G4cout << "///AH "<< e << "" << coulumbBarrier <<G4endl;
-		}
-	      }
-	    }
-	  } while( 
-		  (nTries < maxTries) &&  // conditions for next try
-		  (coulombOK==1) &&
-		  ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5) &&  
-		  (output.getOutgoingParticles().size()!=0)                                      
-		  );
-#else
-
-	  } while(
-		   (nTries < maxTries)                                                               &&
-		   (output.getOutgoingParticles().size() + output.getNucleiFragments().size() < 2.5) &&
-		   (output.getOutgoingParticles().size()!=0) &&
-                   (output.getOutgoingParticles().begin()->type()==bullet->type())
-		   );
-#endif
-     }
-
-  if (verboseLevel > 1) 
-    {
-      G4cout << " Cascade output: " << G4endl;
-      output.printCollisionOutput();
+  if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
+    
+    targetH = new G4InuclElementaryParticle(proton);
+    
+    G4float cutElastic[32];
+    
+    cutElastic[proton   ] = 1.0; // GeV
+    cutElastic[neutron  ] = 1.0;
+    cutElastic[pionPlus ] = 0.6;
+    cutElastic[pionMinus] = 0.2;
+    cutElastic[pionZero ] = 0.2;
+    cutElastic[kaonPlus ] = 0.5;
+    cutElastic[kaonMinus] = 0.5;
+    cutElastic[kaonZero] = 0.5;
+    cutElastic[kaonZeroBar] = 0.5;
+    cutElastic[lambda] = 1.0;
+    cutElastic[sigmaPlus] = 1.0;
+    cutElastic[sigmaZero] = 1.0;
+    cutElastic[sigmaMinus] = 1.0;
+    cutElastic[xiZero] = 1.0;
+    cutElastic[xiMinus] = 1.0;
+    
+    if (momentumBullet.z() > cutElastic[bulletType]) { // inelastic collision possible
+      
+      do {   // we try to create inelastic interaction
+	output.reset();
+	collider->collide(bullet, targetH, output);
+	nTries++;
+      } while(
+	      (nTries < maxTries) &&
+	      (output.getOutgoingParticles().size() == 2 && // elastic: bullet + p = H(1,1) coming out
+	       (output.getOutgoingParticles().begin()->type() == bulletType ||
+		output.getOutgoingParticles().begin()->type() == proton)
+	       )
+	      );
+    } else { // only elastic collision is energetically possible
+      collider->collide(bullet, targetH, output);
     }
+    
+    sumBaryon += 1;
+    
+    eInit = bullet->getEnergy() + targetH->getEnergy();
+    
+    if (verboseLevel > 2) {
+      G4cout << "Target:  " << G4endl;
+      targetH->printParticle();
+    }
+    
+  } else {  // treat all other targets excepet H(1,1)
+    
+    do { // we try to create inelastic interaction
+
+#ifdef BERTDEV
+      coulombOK=0;  // by default coulomb analysis is OK
+#endif
+      output.reset();
+      collider->collide(bullet, target, output);
+      nTries++;
+      
+#ifdef BERTDEV
+      G4double coulumbBarrier = 8.7 * MeV; 
+      const std::vector<G4InuclElementaryParticle>& p= output.getOutgoingParticles();
+      if(!p.empty()) { 
+	for(    particleIterator ipart = p.begin(); ipart != p.end(); ipart++) {
+	  if (ipart->type() == proton) {
+	    G4double e = ipart->getKineticEnergy()*GeV;
+	    if (e < coulumbBarrier) coulombOK= 1; // If event with coulomb barrier violation detected -> retry
+	    //		  G4cout << "///AH "<< e << "" << coulumbBarrier <<G4endl;
+	  }
+	}
+      }
+#endif
+    } while( 
+	    (nTries < maxTries) &&  // conditions for next try
+	    (output.getOutgoingParticles().size()!=0) &&
+#ifdef BERTDEV
+	    (coulombOK==1) &&
+	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
+#else
+	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) < 2.5) &&  
+	    (output.getOutgoingParticles().begin()->type()==bullet->type())
+#endif
+	     );
+  }
+
+  if (verboseLevel > 1) {
+    G4cout << " Cascade output: " << G4endl;
+    output.printCollisionOutput();
+  }
   
+  // Rotate event to put Z axis along original projectile direction
+  output.rotateEvent(toLabFrame);
+
   // Convert cascade data to use hadronics interface
   const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
   const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
 
+  // Get outcoming particles
+  G4DynamicParticle* cascadeParticle = 0;
   if (!particles.empty()) { 
-    particleIterator ipart;
-    G4int outgoingParticle;
-
-    for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
-      outgoingParticle = ipart->type();
+    particleIterator ipart = particles.begin();
+    for (; ipart != particles.end(); ipart++) {
+      G4int outgoingType = ipart->type();
 
       eTot += ipart->getEnergy();
+      sumBaryon -= ipart->baryon();
+      sumEnergy -= ipart->getKineticEnergy();
 
-      G4double ekin = ipart->getKineticEnergy() * GeV;
-      G4ThreeVector aMom = ipart->getMomentum().vect().unit();
-
-      if (ipart->baryon() ) {
-	sumBaryon -= 1;
+      if (!ipart->valid() || ipart->quasi_deutron()) {
+        G4cerr << " ERROR: G4CascadeInterface::Propagate incompatible"
+	       << " particle type " << outgoingType << G4endl;
+	continue;
       }
 
-      sumEnergy -= ekin / GeV;
+      // Copy local G4DynPart to public output (handle kaon mixing specially)
+      if (outgoingType == kaonZero || outgoingType == kaonZeroBar) {
+	G4ThreeVector momDir = ipart->getMomentum().vect().unit();
+	G4double ekin = ipart->getKineticEnergy();
 
-      switch(outgoingParticle) {
+	G4ParticleDefinition* pd = G4KaonZeroShort::Definition();
+	if (G4UniformRand() > 0.5) pd = G4KaonZeroLong::Definition();
 
-      case proton: 
-#ifdef debug_G4CascadeInterface
-	G4cerr << "proton " << counter << " " << aMom << " " << ekin << G4endl;
-#endif
-	cascadeParticle = 
-	  new G4DynamicParticle(G4Proton::ProtonDefinition(), aMom, ekin);
-	break; 
-
-      case neutron: 
-
-#ifdef debug_G4CascadeInterface
-	G4cerr << "neutron "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
-#endif
-	cascadeParticle = 
-	  new G4DynamicParticle(G4Neutron::NeutronDefinition(), aMom, ekin);
-	break;
-
-      case pionPlus: 
-	cascadeParticle = 
-	  new G4DynamicParticle(G4PionPlus::PionPlusDefinition(), aMom, ekin);
-
-#ifdef debug_G4CascadeInterface
-	G4cerr << "pionPlus "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
-#endif
-	break;
-
-      case pionMinus:
-	cascadeParticle = 
-	  new G4DynamicParticle(G4PionMinus::PionMinusDefinition(), aMom, ekin);
-
-#ifdef debug_G4CascadeInterface
-	G4cerr << "pionMinus "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
-#endif
-	break;
-
-      case pionZero: 
-	cascadeParticle = 
-	  new G4DynamicParticle(G4PionZero::PionZeroDefinition(), aMom, ekin);
-
-#ifdef debug_G4CascadeInterface
-	G4cerr << "pionZero "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
-#endif
-	break;
-
-      case photon: 
-	cascadeParticle = 
-	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
-
-#ifdef debug_G4CascadeInterface
-	G4cerr << "photon "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
-#endif
-	break;
-
-
-      case kaonPlus:
-        cascadeParticle =
-          new G4DynamicParticle(G4KaonPlus::KaonPlusDefinition(), aMom, ekin);
-        break;
-
-      case kaonMinus:
-        cascadeParticle =
-         new G4DynamicParticle(G4KaonMinus::KaonMinusDefinition(), aMom, ekin);
-        break;
-
-      case kaonZero:
-      case kaonZeroBar:
-        if (G4UniformRand() > 0.5) {
-          cascadeParticle = new G4DynamicParticle(
-                              G4KaonZeroLong::KaonZeroLongDefinition(),
-                              aMom, ekin);
-        } else {
-          cascadeParticle = new G4DynamicParticle(
-                              G4KaonZeroShort::KaonZeroShortDefinition(),
-                              aMom, ekin);
-        }
-        break;
-
-      case lambda:
-        cascadeParticle =
-         new G4DynamicParticle(G4Lambda::LambdaDefinition(), aMom, ekin);
-        break;
-
-      case sigmaPlus:
-        cascadeParticle =
-         new G4DynamicParticle(G4SigmaPlus::SigmaPlusDefinition(), aMom, ekin);
-        break;
-
-      case sigmaZero:
-        cascadeParticle =
-         new G4DynamicParticle(G4SigmaZero::SigmaZeroDefinition(), aMom, ekin);
-        break;
-
-      case sigmaMinus:
-        cascadeParticle =
-         new G4DynamicParticle(G4SigmaMinus::SigmaMinusDefinition(), aMom, ekin);
-        break;
-
-      case xiZero:
-        cascadeParticle =
-         new G4DynamicParticle(G4XiZero::XiZeroDefinition(), aMom, ekin);
-        break;
-
-      case xiMinus:
-        cascadeParticle =
-         new G4DynamicParticle(G4XiMinus::XiMinusDefinition(), aMom, ekin);
-        break;
-
-      default:
-        G4cout << " ERROR: G4CascadeInterface::Propagate undefined particle type"
-	       << G4endl;
+	cascadeParticle = new G4DynamicParticle(pd, momDir, ekin);
+      } else {
+	cascadeParticle = new G4DynamicParticle(ipart->getDynamicParticle());
       }
 
-      cascadeParticle->Set4Momentum(cascadeParticle->Get4Momentum()*=toLabFrame);
       theResult.AddSecondary(cascadeParticle); 
     }
   }
 
   // get nuclei fragments
   G4DynamicParticle * aFragment = 0;
-  G4ParticleDefinition * aIonDef = 0;
-  G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
-
   if (!nucleiFragments.empty()) { 
-    nucleiIterator ifrag;
-
-    for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
-      {
-	G4double eKin = ifrag->getKineticEnergy() * GeV;
-        eTot += ifrag->getEnergy();
-	G4ThreeVector aMom = ifrag->getMomentum().vect().unit();
-
-	// hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
-
-	if (verboseLevel > 2) {
-	  G4cout << " Nuclei fragment: " << G4endl;
-	  ifrag->printParticle();
-	}
-
-	G4int A = G4int(ifrag->getA());
-	G4int Z = G4int(ifrag->getZ());
-	aIonDef = theTableOfParticles->FindIon(Z, A, 0, Z);
+    nucleiIterator ifrag = nucleiFragments.begin();
+    for (; ifrag != nucleiFragments.end(); ifrag++) {
+      eTot += ifrag->getEnergy();
+      sumBaryon -= ifrag->getA();
+      sumEnergy -= ifrag->getKineticEnergy();
       
-	aFragment =  new G4DynamicParticle(aIonDef, aMom, eKin);
-
-	sumBaryon -= A;
-	sumEnergy -= eKin / GeV;
-
-        aFragment->Set4Momentum(aFragment->Get4Momentum()*=toLabFrame);
-	theResult.AddSecondary(aFragment); 
+      // hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
+      
+      if (verboseLevel > 2) {
+	G4cout << " Nuclei fragment: " << G4endl;
+	ifrag->printParticle();
       }
+      
+      // Copy local G4DynPart to public output 
+      aFragment =  new G4DynamicParticle(ifrag->getDynamicParticle());
+      theResult.AddSecondary(aFragment); 
+    }
   }
 
+  // Report violations of energy, baryon conservation
   if (verboseLevel > 2) {
     if (sumBaryon != 0) {
       G4cout << "ERROR: no baryon number conservation, sum of baryons = "
@@ -454,13 +336,10 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   }
 
   delete bullet;
-//  delete inc;
   delete collider;
 
   if(target != 0) delete target;
   if(targetH != 0) delete targetH;
- // if(cascadeParticle != 0) delete cascadeParticle;
- // if(aFragment != 0) delete aFragment;
 
   return &theResult;
 }

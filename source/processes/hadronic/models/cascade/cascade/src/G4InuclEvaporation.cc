@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclEvaporation.cc,v 1.16 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.17 2010-05-21 18:07:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +33,9 @@
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
 // 20100517  M. Kelsey -- Follow new ctors for G4*Collider family.  Make
 //		G4EvaporationInuclCollider a data member.
+// 20100520  M. Kelsey -- Simplify collision loop, move momentum rotations to
+//		G4CollisionOutput, copy G4DynamicParticle directly from
+//		G4InuclParticle, no switch-block required.  Fix scaling factors.
 
 #include <numeric>
 #include "G4IonTable.hh"
@@ -89,10 +92,8 @@ void G4InuclEvaporation::setVerboseLevel( const G4int verbose ) {
   verboseLevel = verbose;
 }
 
-G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
- 
-  std::vector< G4DynamicParticle * > secondaryParticleVector;
-  G4FragmentVector * theResult = new G4FragmentVector;
+G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
+  G4FragmentVector* theResult = new G4FragmentVector;
 
   if (theNucleus.GetExcitationEnergy() <= 0.0) { // Check that Excitation Energy > 0
     theResult->push_back(new G4Fragment(theNucleus));
@@ -102,16 +103,15 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4double A = theNucleus.GetA();
   G4double Z = theNucleus.GetZ();
   G4double mTar  = G4NucleiProperties::GetNuclearMass(A, Z); // Mass of the target nucleus
-  G4LorentzVector tmp =theNucleus.GetMomentum();
 
-  G4ThreeVector momentum = tmp.vect();
+  G4ThreeVector momentum =  theNucleus.GetMomentum().vect() / GeV;
   //  G4double energy = tmp.e();
   G4double exitationE = theNucleus.GetExcitationEnergy();
 
   // Move to CMS frame, save initial velocity of the nucleus to boostToLab vector.
   //   G4ThreeVector boostToLab( ( 1/G4NucleiProperties::GetNuclearMass( A, Z ) ) * momentum ); 
-  G4InuclNuclei* tempNuc = new G4InuclNuclei(A, Z);
-  G4double mass=tempNuc->getMass()*1000;
+
+  G4double mass = mTar / GeV;
   G4ThreeVector boostToLab( momentum/mass ); 
 
   if ( verboseLevel > 2 )
@@ -124,7 +124,7 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   };
 
   G4InuclNuclei* nucleus = new G4InuclNuclei(A, Z);
-  nucleus->setExitationEnergy(exitationE/1000.);
+  nucleus->setExitationEnergy(exitationE);
 
   G4CollisionOutput output;
   evaporator->collide(0, nucleus, output);
@@ -136,100 +136,50 @@ G4FragmentVector * G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4double eTot=0.0;
   G4DynamicParticle* cascadeParticle = 0;
   G4int  i=1;
-  //G4cout << "# particles: " << output.getOutgoingParticles().size() << G4endl;
-  if (!particles.empty()) { 
-    particleIterator ipart;
-    G4int outgoingParticle;
 
-    for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
-     
-      outgoingParticle = ipart->type();
+  if (!particles.empty()) { 
+    G4int outgoingType;
+    particleIterator ipart = particles.begin();
+    for (; ipart != particles.end(); ipart++) {
+      outgoingType = ipart->type();
 
       if (verboseLevel > 2) {
-	G4cout << "Evaporated particle:  " << i << " of type: " << outgoingParticle << G4endl;
+	G4cout << "Evaporated particle:  " << i << " of type: " << outgoingType << G4endl;
         i++;
 	//       	ipart->printParticle();
       }
 
-      eTot += ipart->getEnergy()*1000;
-      ekin = ipart->getKineticEnergy()*1000;
-      emas = ipart->getMass()*1000;
+      eTot += ipart->getEnergy();
+      
+      G4LorentzVector vlab = ipart->getMomentum().boost(boostToLab);
 
-      G4LorentzVector v(ipart->getMomentum().vect()*1000, (ekin+emas));
-      v.boost( boostToLab );
-
-      switch(outgoingParticle) {
-
-      case proton: 
-	cascadeParticle = new G4DynamicParticle(G4Proton::ProtonDefinition(), v.vect(), v.e());
-	break; 
-
-      case neutron: 
-	cascadeParticle = new G4DynamicParticle(G4Neutron::NeutronDefinition(), v.vect(), v.e());
-	break;
-
-      case photon:
-	cascadeParticle = new G4DynamicParticle(G4Gamma::Gamma(), v.vect(), v.e());
-	break;
-      default:
-        G4cout << " ERROR: GInuclEvapration::Propagate undefined particle type" << G4endl;
-      };
-
-      secondaryParticleVector.push_back( cascadeParticle );
+      theResult->push_back( new G4Fragment(vlab, ipart->getDefinition()) );
       //      theResult.AddSecondary(cascadeParticle); 
     }  
   }
-  fillResult( secondaryParticleVector, theResult);
-  
 
   //  G4cout << "# fragments " << output.getNucleiFragments().size() << G4endl;
   i=1; 
   if (!nucleiFragments.empty()) { 
-    nucleiIterator ifrag;
-
-    for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
-
-      ekin = ifrag->getKineticEnergy()*1000;
-      emas = ifrag->getMass()*1000;
-      eTot += ifrag->getEnergy()*1000;
-
-      G4LorentzVector v(ifrag->getMomentum().vect()*1000, (ekin+emas));
-      v.boost( boostToLab );
-
+    nucleiIterator ifrag = nucleiFragments.begin();
+    for (; ifrag != nucleiFragments.end(); ifrag++) {
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << i << G4endl; i++;
       }
 
+      eTot += ifrag->getEnergy();
+
+      G4LorentzVector vlab = ifrag->getMomentum().boost(boostToLab);
+ 
       G4int A = G4int(ifrag->getA());
       G4int Z = G4int(ifrag->getZ());
       if (verboseLevel > 2) {
-	G4cout << "boosted v" << v << G4endl;
+	G4cout << "boosted v" << vlab << G4endl;
       }
-      theResult->push_back( new G4Fragment(A, Z, v) ); 
+      theResult->push_back( new G4Fragment(A, Z, vlab) ); 
     }
   }
 
   //G4cout << ">>>> G4InuclEvaporation::BreakItUp end " << G4endl;
   return theResult;
 }
-
-void G4InuclEvaporation::fillResult(const std::vector<G4DynamicParticle*>& secondaryParticleVector,
-				     G4FragmentVector * aResult )
-{
-  // Fill the vector pParticleChange with secondary particles stored in vector.
-  for ( size_t i = 0 ; i < secondaryParticleVector.size() ; i++ )
-    {
-      G4int aZ = static_cast<G4int> (secondaryParticleVector[i]->GetDefinition()->GetPDGCharge() );
-      G4int aA = static_cast<G4int> (secondaryParticleVector[i]->GetDefinition()->GetBaryonNumber());
-      G4LorentzVector aMomentum = secondaryParticleVector[i]->Get4Momentum();
-      if(aA>0) {
-	aResult->push_back( new G4Fragment(aA, aZ, aMomentum) ); 
-      } else {
-	aResult->push_back( new G4Fragment(aMomentum, secondaryParticleVector[i]->GetDefinition()) ); 
-      }
-    }
-  return;
-}
-
-
-
