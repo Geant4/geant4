@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_WVI.cc,v 1.1 2010-01-19 17:28:20 maire Exp $
+// $Id: PhysListEmStandard_WVI.cc,v 1.2 2010-05-22 21:02:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +96,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
       //electron
 
       G4eMultipleScattering* eMsc = new G4eMultipleScattering();
-      eMsc->AddEmModel(1, new G4WentzelVIModel());            
+      eMsc->AddEmModel(1, new G4WentzelVIModel()); 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
                          
@@ -109,7 +109,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
       //positron
 
       G4eMultipleScattering* pMsc = new G4eMultipleScattering();
-      pMsc->AddEmModel(1, new G4WentzelVIModel());            
+      pMsc->AddEmModel(1, new G4WentzelVIModel());
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
                                
@@ -122,7 +122,7 @@ void PhysListEmStandard_WVI::ConstructProcess()
     } else if( particleName == "proton" ) {
       //proton
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(1, new G4WentzelVIModel());        
+      msc->AddEmModel(1, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4CoulombScattering,   -1,-1, 3);      
