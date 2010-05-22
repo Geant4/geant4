@@ -2,44 +2,72 @@
 #include <vector>
     gROOT->Reset();
 
+    TFile * file = new TFile("Dose.root","RECREATE");
     // LOAD THE EXPERIMENTAL DATA FILE
     // CONTAINED IN THE DIRECTORY
     // hadrontherapy/experimentalData/proton/BraggPeak
-    TFile *experimentalFile = new TFile("../../../experimentalData/proton/BraggPeak/62MeVInWater.root","READ");
 
-    // HERE THE ROOT FILE IS INTERPRETED AS A TREE
-    TTree *experimentalTree = (TTree*)experimentalFile -> Get("Experimental62MeVInWater");
 
     TNtuple *ntupleExperimental = new TNtuple("ntupleExperimental","Protons, exp. data", "depthExp:EdepExp");
 
+    vector <Float_t> vec_dose, vec_iX;
+
+    TString doseFileExp = "../../../experimentalData/proton/BraggPeak/62MeVInWater.out"; 
+
+    ifstream in;
+    in.open(doseFileExp);
+    if (!in.is_open()){cout << "Error: Check file \"" << doseFileExp << "\"\n"; return;}
+
+    Float_t f1,f2,f3,f4;
+    Int_t nlines = 0;
+    cout << "Reading file \" " << doseFileExp << "\" ... ";
+    do{
+	in >> f1 >> f2;
+	nlines++;
+	ntupleExperimental -> Fill(f1, f2);
+	nlines++;}
+    while(in.good());
+
+    if (nlines <= 0){cout << "\nNo data found! Check file \"" << doseFile << "\"\n"; return;}
+    in.close();
+    printf("%d Experimental points found\n", nlines); 
+
     Float_t depthExp, EdepExp;
-    experimentalTree -> SetBranchAddress("EdepExp", &EdepExp);
-    experimentalTree -> SetBranchAddress("depthExp", &depthExp);
+    ntupleExperimental -> SetBranchAddress("EdepExp", &EdepExp);
+    ntupleExperimental -> SetBranchAddress("depthExp", &depthExp);
 
 
     // CREATION AND NORMALISATION TO THE FIRST POINT  OF AN NTUPLE CONTAINING THE EXPERIMENTAL DATA
-    Int_t nentries = (Int_t)experimentalTree -> GetEntries();   
-    experimentalTree -> GetEntry(0);
+    Int_t nentries = (Int_t)ntupleExperimental -> GetEntries();   
+    ntupleExperimental -> GetEntry(0);
     Float_t normFactor = EdepExp;
     for (Int_t l = 0; l<nentries; l++)
     {
-	experimentalTree -> GetEntry(l);
+	ntupleExperimental -> GetEntry(l);
+	vec_dose.push_back(EdepExp);
+	vec_iX.push_back(depthExp);
 	// Is there a method to directly modify data in TTree?
-	ntupleExperimental->Fill(depthExp,EdepExp/normFactor); 
     }
 
-//*****************************************************************************
+    ntupleExperimental->Reset(); 
+
+    for (Int_t l=0;l<vec_dose.size();l++)
+    {
+	depthExp = vec_iX[l];
+	EdepExp = vec_dose[l]/normFactor;
+	ntupleExperimental -> Fill(depthExp, EdepExp);
+    }
+    //*****************************************************************************
     // Load Simulation file  
-    TString doseFile = "../../../SimulationOutputs/proton/BraggPeak/Dose.out"; 
-    TFile * file = new TFile("Dose.root","RECREATE");
+    TString doseFileSim = "../../../SimulationOutputs/proton/BraggPeak/Dose.out"; 
     TNtuple *TNtupleSim = new TNtuple("SimTree","dose from ascii file", "iX:jY:kZ:dose"); 
 
-       
-   ifstream in(doseFile);
-   if (!in.is_open()){cout << "Check file \"" << doseFile << "\"\n"; return;}
-    Float_t f1,f2,f3,f4;
-    Int_t nlines = 0;
+
+    in.open(doseFileSim);
+    if (!in.is_open()){cout << "Error: Check file \"" << doseFileSim << "\"\n"; return;}
     Char_t n[5];
+    nlines = 0;
+    cout << "Reading file \" " << doseFileSim << "\" ... ";
     // Skip j,j,k,Dose strings
     in >> n >> n >> n >> n;
     do{
@@ -47,22 +75,23 @@
 	nlines++;
 	TNtupleSim -> Fill(f1, f2, f3, f4);
 	nlines++;}
-	while(in.good());
+    while(in.good());
 
 
-    if (nlines <= 0){cout << "No data found! Check file \"" << doseFile << "\"\n"; return;}
-    printf("%d points found\n", nlines); 
+    if (nlines <= 0){cout << "\nNo data found! Check file \"" << doseFileSim << "\"\n"; return;}
+    in.close();
 
     Float_t iX, dose, sumDose = 0., norm = 0. ;
     TNtupleSim -> SetBranchAddress("dose", &dose);
     TNtupleSim -> SetBranchAddress("iX", &iX);
 
     // Normalize data to 1 at the entry!
-    
-    Int_t nentries = (Int_t)TNtupleSim -> GetEntries();   
+
+    nentries = (Int_t)TNtupleSim -> GetEntries();   
     TNtupleSim -> GetEntry(0);
-    std::vector <Float_t> vec_dose, vec_iX;
     Int_t oldX = iX;
+    vec_iX.clear();
+    vec_dose.clear();
     // Sum dose along X --> i
     for (Int_t l = 0; l<nentries; l++)
     {
@@ -76,6 +105,7 @@
 	    oldX = iX;
 	}
     }
+    printf("%d Simulated points found\n", vec_iX.size()); 
     // Mean over the first points
     for (Int_t l=0; l<5; l++)
     {
@@ -118,6 +148,6 @@
     leg -> AddEntry(TNtupleSim, "Simulation", "P");
     leg -> Draw();
 
-    
+
     //c1->SaveAs("braggPeakComparison.pdf");
 }

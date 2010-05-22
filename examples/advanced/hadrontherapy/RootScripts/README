@@ -4,6 +4,7 @@ Each subdirectory (proton, etc) contains a specific ROOT script.
 
 --> proton/BraggPeak
 comparison.C performs a comparison beetwen non modulated Bragg peaks
+comparison_ascii.C performs a comparisin between non modulated Bragg peaks, reading simulated data from ASCII file
 
 All the scripts in the iaeaBenchmark/ -directory apply to results produced using the IAEA geometry
 -->iaeaBenchmark/braggPeak.C
