@@ -52,13 +52,13 @@
 # Visualisation 
 #
 /vis/scene/create
-#/vis/open OGLIX
+/vis/open OGLIX
 /vis/viewer/flush
 #/vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoomTo 3
 /vis/viewer/panTo 100  20 cm
 /tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
 
 

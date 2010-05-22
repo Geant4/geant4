@@ -395,8 +395,8 @@ void HadrontherapyMatrix::TotalEnergyDeposit()
 		    G4int n = Index(i,j,k);
 	            matrix[n] = matrix[n] / massOfVoxel;
 #ifdef G4ANALYSIS_USE_ROOT
-		    analysis -> FillEnergyDeposit(i, j, k, matrix[n]/(doseUnit));
-		    analysis -> BraggPeak(i, matrix[n]/(doseUnit));
+		    analysis -> FillEnergyDeposit(i, j, k, matrix[n]/doseUnit);
+		    analysis -> BraggPeak(i, matrix[n]/doseUnit);
 #endif
 		}
     }

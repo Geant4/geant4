@@ -87,8 +87,8 @@
     // Fill with normalized values. I suppose that slabs/voxel are 0.2 mm depth
     for (Int_t l=0;l<vec_dose.size();l++)
     {
-	// Slabs are 0.2 mm depth
-	iX = 0.1+(vec_iX[l]*0.2);
+	// Slabs (voxels) are 0.2 mm depth
+	iX = 0.1 + (vec_iX[l]*0.2);
 	dose = vec_dose[l]/norm;
 	TNtupleSim -> Fill(iX, 0, 0, dose);
     }
@@ -96,19 +96,15 @@
     TCanvas *c1 = new TCanvas ("c1","c1",200,10,600,400);
     // Triangle 
     TNtupleSim-> SetMarkerStyle(26);
-    TNtupleSim-> SetMarkerSize(1.0);
+    TNtupleSim-> SetMarkerSize(0.8);
     // Square
     //TNtupleSim-> SetMarkerStyle(25);
     // Star
     //TNtupleSim-> SetMarkerStyle(3);
-    //simulatedPeakDepth -> SetMarkerSize(1);
     // circle
     ntupleExperimental -> SetMarkerStyle(4);
     ntupleExperimental -> SetMarkerColor(2);
-    ntupleExperimental -> SetMarkerSize(1.0);
-    //ntupleExperimental -> SetFillColor(2);
-    //ntupleExperimental -> SetLineColor(2);
-    ntupleExperimental->SetFillStyle(1);
+    ntupleExperimental -> SetMarkerSize(0.8);
 
     ntupleExperimental  -> Draw("EdepExp:depthExp");
     TNtupleSim ->  Draw("dose:iX","","same");

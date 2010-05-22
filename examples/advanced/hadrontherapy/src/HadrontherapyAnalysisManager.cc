@@ -33,9 +33,8 @@
 
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
-HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() 
+HadrontherapyAnalysisManager::HadrontherapyAnalysisManager(): 
 #ifdef G4ANALYSIS_USE_ROOT 
-:
 analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
 histo4(0), histo5(0), histo6(0), histo7(0), histo8(0), histo9(0), histo10(0), histo11(0), histo12(0), histo13(0), histo14(0), histo15(0), histo16(0),
 kinFragNtuple(0),
@@ -150,7 +149,7 @@ void HadrontherapyAnalysisManager::book()
 	theTFile = new TFile(analysisFileName, "RECREATE");
 
 	// Create the histograms with the energy deposit along the X axis
-	histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 27.9); //<different waterthicknesses are accoutned for in ROOT-analysis stage
+	histo1 = createHistogram1D("braggPeak","slice, energy", 400, 0., 80); //<different waterthicknesses are accoutned for in ROOT-analysis stage
 	histo2 = createHistogram1D("h20","Secondary protons - slice, energy", 400, 0., 400.);
 	histo3 = createHistogram1D("h30","Secondary neutrons - slice, energy", 400, 0., 400.);
 	histo4 = createHistogram1D("h40","Secondary alpha - slice, energy", 400, 0., 400.);
