@@ -1,7 +1,7 @@
 {  
 #include <vector>
     gROOT->Reset();
-
+    ifstream in;
     TFile * file = new TFile("Dose.root","RECREATE");
     // LOAD THE EXPERIMENTAL DATA FILE
     // CONTAINED IN THE DIRECTORY
@@ -13,23 +13,11 @@
     vector <Float_t> vec_dose, vec_iX;
 
     TString doseFileExp = "../../../experimentalData/proton/BraggPeak/62MeVInWater.out"; 
-
-    ifstream in;
-    in.open(doseFileExp);
-    if (!in.is_open()){cout << "Error: Check file \"" << doseFileExp << "\"\n"; return;}
-
-    Float_t f1,f2,f3,f4;
-    Int_t nlines = 0;
+    
     cout << "Reading file \" " << doseFileExp << "\" ... ";
-    do{
-	in >> f1 >> f2;
-	nlines++;
-	ntupleExperimental -> Fill(f1, f2);
-	nlines++;}
-    while(in.good());
+    Long64_t nlines = ntupleExperimental -> ReadFile(doseFileExp, "depthExp:EdepExp"); 
+    if (nlines <=0){cout << "Error: Check file \"" << doseFileExp << "\"\n"; return;}
 
-    if (nlines <= 0){cout << "\nNo data found! Check file \"" << doseFile << "\"\n"; return;}
-    in.close();
     printf("%d Experimental points found\n", nlines); 
 
     Float_t depthExp, EdepExp;
@@ -46,7 +34,6 @@
 	ntupleExperimental -> GetEntry(l);
 	vec_dose.push_back(EdepExp);
 	vec_iX.push_back(depthExp);
-	// Is there a method to directly modify data in TTree?
     }
 
     ntupleExperimental->Reset(); 
@@ -57,15 +44,16 @@
 	EdepExp = vec_dose[l]/normFactor;
 	ntupleExperimental -> Fill(depthExp, EdepExp);
     }
+
     //*****************************************************************************
     // Load Simulation file  
     TString doseFileSim = "../../../SimulationOutputs/proton/BraggPeak/Dose.out"; 
     TNtuple *TNtupleSim = new TNtuple("SimTree","dose from ascii file", "iX:jY:kZ:dose"); 
 
-
     in.open(doseFileSim);
     if (!in.is_open()){cout << "Error: Check file \"" << doseFileSim << "\"\n"; return;}
     Char_t n[5];
+    Float_t f1, f2, f3, f4;
     nlines = 0;
     cout << "Reading file \" " << doseFileSim << "\" ... ";
     // Skip j,j,k,Dose strings
@@ -76,7 +64,6 @@
 	TNtupleSim -> Fill(f1, f2, f3, f4);
 	nlines++;}
     while(in.good());
-
 
     if (nlines <= 0){cout << "\nNo data found! Check file \"" << doseFileSim << "\"\n"; return;}
     in.close();
