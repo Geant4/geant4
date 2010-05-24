@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx02.cc,v 1.5 2006-07-05 12:04:07 gcosmo Exp $
+// $Id: hepmcEx02.cc,v 1.6 2010-05-24 05:32:22 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,13 +38,17 @@
 #include "G4UItcsh.hh"
 
 #include "H02DetectorConstruction.hh"
-#include "H02PhysicsList.hh"
+#include "QGSP.hh"
 #include "H02PrimaryGeneratorAction.hh"
 #include "H02EventAction.hh"
 #include "H02SteppingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc, char** argv)
@@ -56,7 +60,7 @@ int main(int argc, char** argv)
   G4VUserDetectorConstruction* detector = new H02DetectorConstruction;
   runManager-> SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new H02PhysicsList;
+  G4VUserPhysicsList* physics = new QGSP;
   runManager-> SetUserInitialization(physics);
 
   runManager-> Initialize();
@@ -80,27 +84,22 @@ int main(int argc, char** argv)
   G4cout << G4endl;
 #endif
 
-  if(argc==1)  // G4UIterminal is a (dumb) terminal
-  {
-#ifdef QERAUOY
-    G4UItcsh* tcsh= new
-      G4UItcsh("[40;01;36mhepmcEx02[40;33m(%s)[40;32m[%/][00;30m:");
-    G4UIterminal* session= new G4UIterminal(tcsh);
-    tcsh-> SetLsColor(RED, GREEN);
-#else
-    G4UItcsh* tcsh= new G4UItcsh("hepmcEx01(%s)[%/]:");
-    G4UIterminal* session= new G4UIterminal(tcsh);
-#endif
-    session->SessionStart();
-    delete session;
+ //get the pointer to the User Interface manager   
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
-  }
-  else  // Batch mode
-  {
-    G4UImanager* UImanager= G4UImanager::GetUIpointer();
-    G4String command= "/control/execute ";
-    G4String fileName= argv[1];
-    UImanager-> ApplyCommand(command+fileName);
+  if (argc!=1) { // batch mode
+#ifdef G4VIS_USE
+    visManager-> SetVerboseLevel("quiet");
+#endif
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager-> ApplyCommand(command+fileName);    
+  } else {  // interactive mode : define UI session
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    ui-> SessionStart();
+    delete ui;
+#endif
   }
 
   // Free the store: user actions, physics_list and detector_description are
