@@ -220,8 +220,12 @@ int main(int argc, char** argv)
     nameGen = "";
     do {
       line = "";
+      if( fin->eof() ) {
+        end = false;
+        break;
+      }
       (*fin) >> line;
-      if(verbose > 0) cout << "Next line " << line << endl;
+      if(verbose > 0) { cout << "Next line " << line << endl; }
       if(line == "#particle") {
         (*fin) >> namePart;
       } else if(line == "#sigmae(MeV)") {
