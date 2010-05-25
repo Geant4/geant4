@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.42 2010-05-25 09:49:30 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.43 2010-05-25 18:41:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -355,7 +355,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   // step limit due msc
   G4double x0 = length;
   // large scattering angle case - two step approach
-  if(tPathLength*invlambda > 0.5) {  x0 *= 0.5; } 
+  if(tPathLength*invlambda > 0.5 && length >  tlimitminfix) { x0 *= 0.5; } 
 
   // step limit due single scattering
   G4double x1 = length;
@@ -448,7 +448,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     dir = temp;
     length -= step;
 
-  } while (length > tlimitminfix);
+  } while (length > 0.0);
     
   dir.rotateUz(oldDirection);
   pos.rotateUz(oldDirection);

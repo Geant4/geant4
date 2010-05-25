@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.27 2010-05-25 09:49:30 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.28 2010-05-25 18:41:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,7 +59,7 @@
 
 #include "G4VMscModel.hh"
 #include "G4PhysicsTable.hh"
-#include "G4MscStepLimitType.hh"
+//#include "G4MscStepLimitType.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4WentzelOKandVIxSection.hh"
 

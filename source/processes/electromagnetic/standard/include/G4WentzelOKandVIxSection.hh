@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh,v 1.1 2010-05-25 09:48:51 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.hh,v 1.2 2010-05-25 18:41:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,6 +82,8 @@ public:
 
   void SetupParticle(const G4ParticleDefinition*);
 
+  // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
+  // cut = DBL_MAX means no scattering off electrons 
   G4double SetupTarget(G4int Z, G4double kinEnergy, G4double cut = DBL_MAX);
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
@@ -99,6 +101,10 @@ public:
   inline G4double SetupKinematic(G4double kinEnergy, const G4Material* mat);
   
   inline void SetTargetMass(G4double value);
+
+  inline void SetRelativisticMass(G4double value);
+
+  inline G4double GetMomentumSquare() const;
 
   inline G4double GetCosThetaNuc() const;
 
@@ -183,6 +189,20 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 inline void G4WentzelOKandVIxSection::SetTargetMass(G4double value)
 {
   targetMass = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4WentzelOKandVIxSection::SetRelativisticMass(G4double value)
+{
+  mass = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4WentzelOKandVIxSection::GetMomentumSquare() const
+{
+  return mom2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

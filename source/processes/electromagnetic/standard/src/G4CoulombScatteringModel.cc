@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.46 2010-03-01 11:25:26 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.47 2010-05-25 18:41:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4Proton.hh"
+#include "G4NucleiProperties.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -88,45 +89,36 @@ G4double G4CoulombScatteringModel::ComputeCrossSectionPerAtom(
   //G4cout << "### G4CoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
   //	 << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV 
   //	 <<" cut(MeV)= " << cutEnergy<< G4endl; 
-  SetupParticle(p);
+  G4double xsec = 0.0;
+  if(p != particle) { SetupParticle(p); }
   if(kinEnergy < lowEnergyLimit) { return 0.0; }
   DefineMaterial(CurrentCouple());
-  SetupKinematic(kinEnergy, cutEnergy);
 
-  // save lab system kinematics
-  G4double xtkin = tkin;
-  G4double xmom2 = mom2;
-  G4double xinvb = invbeta2;
-
-  // CM system
-  iz            = G4int(Z);
-  G4double m2   = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
-
-  G4double m12  = mass*mass;
+  // Lab system
+  G4int iz = G4int(Z);
+  G4double etot = kinEnergy + mass;
+  G4double m2 = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
 
   // 03.09.2009 C.Consaldi suggested to use relativistic reduced mass
   //            from publucation
   // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
-  G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-  G4double mu_rel=mass*m2/Ecm;
-
-  G4double momCM= ptot*m2/Ecm;
-  mom2 = momCM*momCM;
-
-  invbeta2 = 1.0 +  mu_rel*mu_rel/mom2; 
-  tkin = momCM*sqrt(invbeta2) - mu_rel;
-  //
-
-  SetupTarget(Z, tkin);
-
-  G4double xsec = CrossSectionPerAtom();
-
-  // restore Lab system kinematics
-  tkin = xtkin;
-  mom2 = xmom2;
-  invbeta2 = xinvb;
+  G4double Ecm  = sqrt(mass*mass + m2*m2 + 2.0*etot*m2);
+  G4double mu_rel = mass*m2/Ecm;
+  G4double tkin = Ecm - mu_rel;
+  wokvi->SetRelativisticMass(mu_rel);
+  
+  cosTetMinNuc = wokvi->SetupKinematic(tkin, currentMaterial);
+  if(cosThetaMax < cosTetMinNuc) {
+    cosTetMinNuc = wokvi->SetupTarget(iz, kinEnergy, cutEnergy);
+    cosTetMaxNuc = cosThetaMax; 
+    if(iz == 1 && cosTetMaxNuc < 0.0 && particle == theProton) { 
+      cosTetMaxNuc = 0.0; 
+    }
+    xsec =  wokvi->ComputeNuclearCrossSection(cosTetMinNuc, cosTetMaxNuc);
+    elecRatio = wokvi->ComputeElectronCrossSection(cosTetMinNuc, cosThetaMax);
+    xsec += elecRatio;
+    if(xsec > 0.0) { elecRatio /= xsec; }  
+  }
   /*
   G4cout << "e(MeV)= " << kinEnergy/MeV << " xsec(b)= " << xsec/barn  
 	 << "cosTetMinNuc= " << cosTetMinNuc
@@ -148,67 +140,47 @@ void G4CoulombScatteringModel::SampleSecondaries(
 			       G4double)
 {
   G4double kinEnergy = dp->GetKineticEnergy();
-  if(kinEnergy < lowEnergyLimit) return;
+  if(kinEnergy < lowEnergyLimit) { return; }
   DefineMaterial(couple);
   SetupParticle(dp->GetDefinition());
-  SetupKinematic(kinEnergy, cutEnergy);
 
   // Choose nucleus
   currentElement = SelectRandomAtom(couple,particle,
-				    kinEnergy,ecut,kinEnergy);
+				    kinEnergy,cutEnergy,kinEnergy);
 
-  G4double Z  = currentElement->GetZ();
-  iz          = G4int(Z);
-  G4int ia    = SelectIsotopeNumber(currentElement);
-  G4double m2 = theParticleTable->GetIonTable()->GetNucleusMass(iz, ia);
+  G4double Z = currentElement->GetZ();
+  G4int iz = G4int(Z);
+  G4int ia = SelectIsotopeNumber(currentElement);
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+  
+  if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
+				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
+    { return; }
 
-  // CM system
-  G4double etot = tkin + mass;
-  G4double ptot = sqrt(mom2);
-
-  G4double m12  = mass*mass;
-
-  // 03.09.2009 C.Consaldi suggested to use relativistic reduced mass
-  //            from publucation
-  // A.P. Martynenko, R.N. Faustov, Teoret. mat. Fiz. 64 (1985) 179
-  G4double Ecm=sqrt(m12 + m2*m2 + 2.0*etot*m2);
-  G4double mu_rel=mass*m2/Ecm;
-
-  G4double momCM= ptot*m2/Ecm;
-  mom2 = momCM*momCM;
-
-  invbeta2 = 1.0 +  mu_rel*mu_rel/mom2; 
-  tkin = momCM*sqrt(invbeta2) - mu_rel;
-  //
-
-  // sample scattering angle in CM system
-  SetupTarget(Z, tkin);
-
-  G4double z1 = SampleCosineTheta();
-  if(z1 <= 0.0) { return; }
-  G4double cost = 1.0 - z1;
-
-  G4double sint = sqrt(z1*(1.0 + cost));
-  G4double phi  = twopi * G4UniformRand();
+  G4ThreeVector newDirection = 
+    wokvi->SampleSingleScattering(cosTetMinNuc, cosTetMaxNuc, elecRatio);
 
   // kinematics in the Lab system
-  G4double bet  = ptot/(etot + m2);
+  G4double etot = mass + kinEnergy;
+  G4double ptot = sqrt(kinEnergy*(etot + mass));
+  G4double bet  = ptot/(etot + targetMass);
   G4double gam  = 1.0/sqrt((1.0 - bet)*(1.0 + bet));
-  G4double pzCM = momCM*cost;
-  G4double eCM  = sqrt(mom2 + m12);
+  G4double eCM  = sqrt(mass*mass + targetMass*targetMass + 2*targetMass*etot);
+  G4double pCM  = ptot*targetMass/eCM;
+  G4double e1   = sqrt(mass*mass + pCM*pCM);
 
-  G4ThreeVector v1(momCM*cos(phi)*sint,momCM*sin(phi)*sint,gam*(pzCM + bet*eCM));
+  newDirection *= pCM;
+
+  G4ThreeVector v1(newDirection.x(),newDirection.y(),gam*(newDirection.z() + bet*e1));
+  G4double finalT = gam*(e1 + bet*newDirection.z()) - mass;
+  newDirection = v1.unit();
+
   G4ThreeVector dir = dp->GetMomentumDirection(); 
-  G4ThreeVector newDirection = v1.unit();
   newDirection.rotateUz(dir);   
   fParticleChange->ProposeMomentumDirection(newDirection);   
-
-  G4double elab = gam*(eCM + bet*pzCM);
  
   // recoil
-  G4double finalT = elab - mass;
   G4double trec = kinEnergy - finalT;
-
   if(finalT <= lowEnergyLimit) { 
     trec = kinEnergy;  
     finalT = 0.0;

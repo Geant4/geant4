@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.27 2010-05-17 15:24:14 vnivanch Exp $
+// $Id: G4CoulombScattering.cc,v 1.28 2010-05-25 18:41:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,7 +165,7 @@ void G4CoulombScattering::PrintInfo()
   if(aParticle->GetPDGMass() < MeV) G4cout << thEnergyElec;
   else                              G4cout << thEnergy;
 
-  if(q2Max < DBL_MAX) G4cout << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV);
+  if(q2Max < DBL_MAX) { G4cout << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }
   G4cout << G4endl;
 }
 
