@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.41 2010-05-17 15:24:14 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.42 2010-05-25 09:49:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,21 +56,14 @@
 
 #include "G4WentzelVIModel.hh"
 #include "Randomize.hh"
-#include "G4LossTableManager.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4PhysicsTableHelper.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Proton.hh"
+#include "G4LossTableManager.hh"
 #include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4WentzelVIModel::ScreenRSquare[] = {0.0};
-G4double G4WentzelVIModel::FormFactor[]    = {0.0};
 
 using namespace std;
 
@@ -78,55 +71,29 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   G4VMscModel(nam),
   theLambdaTable(0),
   numlimit(0.2),
-  nbins(60),
-  nwarnings(0),
-  nwarnlimit(50),
   currentCouple(0),
   cosThetaMin(1.0),
-  alpha2(fine_structure_const*fine_structure_const),
   isInitialized(false),
   inside(false)
 {
-  factorA2 = 1.0;
   invsqrt12 = 1./sqrt(12.);
   tlimitminfix = 1.e-6*mm;
-  theManager = G4LossTableManager::Instance(); 
-  fNistManager = G4NistManager::Instance();
-  fG4pow = G4Pow::GetInstance();
-  theElectron = G4Electron::Electron();
-  thePositron = G4Positron::Positron();
-  theProton   = G4Proton::Proton();
   lowEnergyLimit = 1.0*eV;
-  G4double p0 = electron_mass_c2*classic_electr_radius;
-  coeff  = twopi*p0*p0;
-  tkin = targetZ = mom2 = DBL_MIN;
-  ecut = etag = DBL_MAX;
   particle = 0;
   nelments = 5;
   xsecn.resize(nelments);
   prob.resize(nelments);
-
-  // Thomas-Fermi screening radii
-  // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
-
-  if(0.0 == ScreenRSquare[0]) {
-    G4double a0 = electron_mass_c2/0.88534; 
-    G4double constn = 6.937e-6/(MeV*MeV);
-
-    ScreenRSquare[0] = alpha2*a0*a0;
-    for(G4int j=1; j<100; ++j) {
-      G4double x = a0*fG4pow->Z13(j);
-      ScreenRSquare[j] = alpha2*x*x;
-      x = fNistManager->GetA27(j);
-      FormFactor[j] = constn*x*x;
-    } 
-  }
+  theManager = G4LossTableManager::Instance();
+  fG4pow = G4Pow::GetInstance();
+  wokvi = new G4WentzelOKandVIxSection();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WentzelVIModel::~G4WentzelVIModel()
-{}
+{
+  delete wokvi;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -135,12 +102,9 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 {
   // reset parameters
   SetupParticle(p);
-  tkin = targetZ = mom2 = 0.0;
-  ecut = etag = DBL_MAX;
   currentRange = 0.0;
   cosThetaMax = cos(PolarAngleLimit());
-  G4double a = theManager->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
-  factorA2 = 0.5*a*a;
+  wokvi->Initialise(p, cosThetaMax);
   /*
   G4cout << "G4WentzelVIModel: factorA2(GeV^2) = " << factorA2/(GeV*GeV)
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
@@ -165,105 +129,20 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 			     G4double cutEnergy, G4double)
 {
   G4double xsec = 0.0;
-  SetupParticle(p);
+  if(p != particle) { SetupParticle(p); }
   if(kinEnergy < lowEnergyLimit) { return xsec; }
   DefineMaterial(CurrentCouple());
-  SetupKinematic(kinEnergy, cutEnergy);
+  cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosTetMaxNuc < 1.0) {
-    SetupTarget(Z, kinEnergy);
-    cosTetMaxNuc2 = cosTetMaxNuc;
-    cosTetMaxElec2 = cosTetMaxElec;
-    xsec = ComputeTransportXSectionPerAtom();
-  }
+    cosTetMaxNuc = wokvi->SetupTarget(G4int(Z), kinEnergy, cutEnergy);
+    xsec = wokvi->ComputeTransportCrossSectionPerAtom(cosTetMaxNuc);
   /*     
-  G4cout << "G4WentzelVIModel::CS: Z= " << G4int(Z) << " e(MeV)= " << tkin 
-	 << " 1-cosEl= " << 1 - cosTetMaxElec 
-	 << " 1-cosN= " << 1 - cosTetMaxNuc << " xsec(bn)= " << xsec/barn
-	 << " " << particle->GetParticleName() << G4endl;
+    G4cout << "G4WentzelVIModel::CS: Z= " << G4int(Z) << " e(MeV)= " << kinEnergy 
+	   << " 1-cosN= " << 1 - costm << " xsec(bn)= " << xsec/barn
+	   << " " << particle->GetParticleName() << G4endl;
   */
+  }
   return xsec;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4WentzelVIModel::ComputeTransportXSectionPerAtom()
-{
-  G4double xSection = 0.0;
-  G4double x, y, x1, x2, x3, x4;
-
-  // scattering off electrons
-  if(cosTetMaxElec2 < 1.0) {
-    x = (1.0 - cosTetMaxElec2)/screenZ;
-    if(x < numlimit) y = 0.5*x*x*(1.0 - 1.3333333*x + 1.5*x*x); 
-    else             y = log(1.0 + x) - x/(1.0 + x);
-    if(y < 0.0) {
-      ++nwarnings;
-      if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) {
-	G4cout << "Electron scattering <0 for L1 " << y 
-	       << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2) 
-	       << " Z= " << targetZ << "  " 
-	       << particle->GetParticleName() << G4endl;
-	G4cout << " z= " << 1.0-cosTetMaxElec2 << " screenZ= " << screenZ 
-	       << " x= " << x << G4endl;
-      }
-      y = 0.0;
-    }
-    xSection = y;
-  }
-  /*  
-  G4cout << "G4WentzelVI:XS per A " << " Z= " << targetZ 
-	 << " e(MeV)= " << tkin/MeV << " XSel= " << xSection
-	 << " cut(MeV)= " << ecut/MeV  
-  	 << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
-	 << " zmaxN= " << (1.0 - cosTetMaxNuc2)/screenZ 
-         << " costm= " << cosTetMaxNuc2 << G4endl;
-  */
-  // scattering off nucleus
-  if(cosTetMaxNuc2 < 1.0) {
-    x  = 1.0 - cosTetMaxNuc2;
-    x1 = screenZ*formfactA;
-    x2 = 1.0 - x1; 
-    x3 = x/screenZ;
-    x4 = formfactA*x;
-    // low-energy limit
-    if(x3 < numlimit && x1 < numlimit) {
-      y = 0.5*x3*x3*(1.0 - 1.3333333*x3 + 1.5*x3*x3 - 1.5*x1
-		     + 3.0*x1*x1 + 2.666666*x3*x1)/(x2*x2*x2);
-      // high energy limit
-    } else if(x2 <= 0.0) {
-      x4 = x1*(1.0 + x3);
-      y  = x3*(1.0 + 0.5*x3 - (2.0 - x1)*(1.0 + x3 + x3*x3/3.0)/x4)/(x4*x4);
-      // middle energy 
-    } else {
-      y = ((1.0 + x1)*x2*log((1. + x3)/(1. + x4)) 
-	   - x3/(1. + x3) - x4/(1. + x4))/(x2*x2); 
-    }
-    //G4cout << "y= " << y << " x1= " <<x1<<"  x2= " <<x2
-    //	   <<"  x3= "<<x3<<"  x4= " << x4<<G4endl;
-    if(y < 0.0) {
-      ++nwarnings;
-      if(nwarnings < nwarnlimit /*&& y < -1.e-10*/) { 
-	G4cout << "Nuclear scattering <0 for L1 " << y 
-	       << " e(MeV)= " << tkin << " Z= " << targetZ << "  " 
-	       << particle->GetParticleName() << G4endl;
-	G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
-	       << " x= " << " x1= " << x1 << " x2= " << x2 
-	       << " x3= " << x3 << " x4= " << x4 <<G4endl;
-      }
-      y = 0.0;
-    }
-    xSection += y*targetZ; 
-  }
-  xSection *= kinFactor;
-  /*
-  G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
-	 << " screenZ= " << screenZ << " formF= " << formfactA 
-	 << " for " << particle->GetParticleName() 
-  	 << " m= " << mass << " 1/v= " << sqrt(invbeta2) << " p= " << sqrt(mom2)
-	 << " x= " << x 
-	 << G4endl;
-  */
-  return xSection; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -289,8 +168,9 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   // initialisation for each step, lambda may be computed from scratch
   preKinEnergy  = dp->GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
+  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
   theLambdaTable = theTable;
-  lambda0 = GetLambda(preKinEnergy);
+  lambdaeff = GetLambda(preKinEnergy);
   currentRange = 
     theManager->GetRangeFromRestricteDEDX(particle,preKinEnergy,currentCouple);
 
@@ -314,7 +194,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 	 << "  " << particle->GetParticleName() 
 	 << " CurLimit(mm)= " << tlimit/mm <<" safety(mm)= " << presafety/mm
 	 << " R(mm)= " <<currentRange/mm
-	 << " L0(mm^-1)= " << lambda0*mm 
+	 << " L0(mm^-1)= " << lambdaeff*mm 
 	 <<G4endl;
   */
   // far from geometry boundary
@@ -324,7 +204,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   }
 
   // natural limit for high energy
-  G4double rlimit = std::max(facrange, 0.7*(1.0 - cosTetMaxNuc))*lambda0;
+  G4double rlimit = std::max(facrange, 0.7*(1.0 - cosTetMaxNuc))*lambdaeff;
 
   if(cosThetaMax > cosTetMaxNuc) {
     rlimit = std::min(rlimit, facsafety*presafety);
@@ -342,7 +222,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   tlimit = std::min(tlimit, 20*currentMaterial->GetRadlen());
   /*
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
-	 << " L0= " << lambda0 << " R= " << currentRange
+	 << " L0= " << lambdaeff << " R= " << currentRange
 	 << "tlimit= " << tlimit  
   	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
   */
@@ -355,19 +235,17 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
 {
   tPathLength  = truelength;
   zPathLength  = tPathLength;
-  lambdaeff    = lambda0;
 
-  if(lambda0 > 0.0) {
-    G4double tau = tPathLength/lambda0;
+  if(lambdaeff > 0.0) {
+    G4double tau = tPathLength/lambdaeff;
     //G4cout << "ComputeGeomPathLength: tLength= " << tPathLength
-    //	 << " lambda0= " << lambda0 << " tau= " << tau << G4endl; 
+    //	 << " Leff= " << lambdaeff << " tau= " << tau << G4endl; 
     // small step
     if(tau < numlimit) {
       zPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
 
       // medium step
     } else {
-      //      zPathLength = lambda0*(1.0 - exp(-tPathLength/lambda0));
       G4double e1 = 0.0;
       if(currentRange > tPathLength) {
 	e1 = theManager->GetEnergy(particle,
@@ -407,6 +285,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 				 currentCouple);
     }
     preKinEnergy = 0.5*(e1 + preKinEnergy);
+    cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
     lambdaeff = GetLambda(preKinEnergy);
     tau = zPathLength/lambdaeff;
     tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
@@ -418,9 +297,10 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
   // recompute transport cross section - small step 
   if(cosThetaMin > cosTetMaxNuc) {
-
+   
     // new computation
     G4double xsec = ComputeXSectionPerVolume();
+    //G4cout << "%%%% xsec= " << xsec << "  xtsec= " << xtsec << G4endl;
     if(xsec > DBL_MIN) { lambdaeff = 1./xsec; }
     else               { lambdaeff = DBL_MAX; }
     tau = zPathLength*xsec;
@@ -436,7 +316,13 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     if(tPathLength < zPathLength) { tPathLength = zPathLength; }
   }
   if(tPathLength > currentRange) { tPathLength = currentRange; }
-  //G4cout<<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength<<G4endl;
+  /*  
+  G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
+	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
+  G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin
+	 << " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc 
+	 << " e(MeV)= " << preKinEnergy/MeV << G4endl;
+  */
   return tPathLength;
 }
 
@@ -447,20 +333,20 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 {
   //G4cout << "!##! G4WentzelVIModel::SampleScattering for " 
   //	 << particle->GetParticleName() << G4endl;
-  G4double kinEnergy = dynParticle->GetKineticEnergy();
 
   // ignore scattering for zero step length and energy below the limit
-  if(kinEnergy < lowEnergyLimit || tPathLength <= DBL_MIN) { return; }
+  if(dynParticle->GetKineticEnergy() < lowEnergyLimit || 
+     tPathLength <= DBL_MIN || lambdaeff <= DBL_MIN) 
+    { return; }
   
-  if(lambdaeff <= DBL_MIN) { return; }
   G4double invlambda = 0.5/lambdaeff;
 
   // use average kinetic energy over the step
-  SetupKinematic(preKinEnergy, (*currentCuts)[currentMaterialIndex]);
-
-  /*  
-  G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy<<" Eeff(MeV)= "<<ekin/MeV
-	 << " L0= " << lambda0 << " Leff= " << lambdaeff 
+  //  SetupKinematic(preKinEnergy, (*currentCuts)[currentMaterialIndex]);
+  G4double cut = (*currentCuts)[currentMaterialIndex];
+  /*   
+  G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
+	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
 	 << " x1= " <<  tPathLength*invlambda << " safety= " << safety << G4endl;
   */
 
@@ -506,49 +392,22 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     pos += step*mscfac*dir;
 
     if(singleScat) {
-      G4double qsec = G4UniformRand()*xtsec;
 
       // select element
       G4int i = 0;
       if(nelm > 1) {
+	G4double qsec = G4UniformRand()*xtsec;
 	for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
 	if(i >= nelm) { i = nelm - 1; }
+	cosTetMaxNuc = 
+	  wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), preKinEnergy, cut);
       }
-      SetupTarget((*theElementVector)[i]->GetZ(), preKinEnergy);
-      G4double formf = formfactA;
-      G4double costm = cosTetMaxNuc;
-      if(prob[i] > 0.0) {
-	if(G4UniformRand() <= prob[i]) {
-	  formf = 0.0;
-	  costm = cosTetMaxElec;
-	}
-      }
-      if(cosThetaMin > costm) {
+      temp = wokvi->SampleSingleScattering(cosThetaMin, cosTetMaxNuc, prob[i]);
+      temp.rotateUz(dir);
 
-	G4double w1 = 1. - cosThetaMin + screenZ;
-	G4double w2 = 1. - costm + screenZ;
-	G4double w3 = cosThetaMin - costm;
-	G4double grej, zz; 
-	do {
-	  zz = w1*w2/(w1 + G4UniformRand()*w3) - screenZ;
-	  grej = 1.0/(1.0 + formf*zz);
-	} while ( G4UniformRand() > grej*grej );  
-	cost = 1.0 - zz;
-	if(cost > 1.0)       { cost = 1.0; }
-	else if(cost < -1.0) { cost =-1.0; }
-	sint = sqrt((1.0 - cost)*(1.0 + cost));
-	//G4cout << "sint= " << sint << G4endl;
-	phi  = twopi*G4UniformRand();
-	G4double vx1 = sint*cos(phi);
-	G4double vy1 = sint*sin(phi);
+      // renew direction
+      dir = temp;
 
-	// only direction is changed
-	temp.set(vx1,vy1,cost);
-	temp.rotateUz(dir);
-
-	// renew direction
-	dir = temp;
-      }
       // new single scatetring
       x1 = -log(G4UniformRand())/xtsec; 
     }
@@ -633,96 +492,35 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     prob.resize(nelm);
   }
 
-  SetupKinematic(preKinEnergy, (*currentCuts)[currentMaterialIndex]);
-
-  cosTetMaxNuc2  = std::max(cosTetMaxNuc,cosThetaMin); 
-  cosTetMaxElec2 = std::max(cosTetMaxElec,cosThetaMin); 
+  G4double cut = (*currentCuts)[currentMaterialIndex];
+  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
 
   xtsec = 0.0;
   G4double xs = 0.0;
 
   for (G4int i=0; i<nelm; ++i) {
-    SetupTarget((*theElementVector)[i]->GetZ(), tkin);
+    G4double costm = 
+      wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), preKinEnergy, cut);
     G4double density = theAtomNumDensityVector[i];
+    if(costm > cosThetaMin) { costm = cosThetaMin; } 
 
     // recompute the transport x-section
-    xs += ComputeTransportXSectionPerAtom()*density;
+    xs += density*wokvi->ComputeTransportCrossSectionPerAtom(costm);
 
-    G4double esec = 0.0;
-    G4double nsec = 0.0;
-    G4double x1 = 1.0 - cosThetaMin + screenZ;
-    G4double f  = kinFactor*density; 
-
-    // scattering off electrons
-    if(cosThetaMin > cosTetMaxElec2) {
-      esec = f*(cosThetaMin - cosTetMaxElec2)/(x1*(1.0 - cosTetMaxElec2 + screenZ));
-    }
-
-    // scattering off nucleaus
-    if(cosThetaMin > cosTetMaxNuc2) {
-
-      // Rutherford part
-      G4double s  = screenZ*formfactA;
-      G4double z1 = 1.0 - cosTetMaxNuc2 + screenZ;
-      G4double s1 = 1.0 - s;
-      G4double d  = s1/formfactA;
-
-      // check numerical limit
-      if(d < numlimit*x1) {
-	G4double x2 = x1*x1;
-	G4double z2 = z1*z1;
-	nsec = (1.0/(x1*x2) - 1.0/(z1*z2) - d*1.5*(1.0/(x2*x2) - 1.0/(z2*z2)))/
-	  (3.0*formfactA*formfactA);
-      } else {
-	G4double x2 = x1 + d;
-	G4double z2 = z1 + d;
-	nsec = (1.0/x1 - 1.0/z1 + 1.0/x2 - 1.0/z2 - 2.0*log(z1*x2/(z2*x1))/d)/(s1*s1);
-      }
-      nsec *= f*targetZ;
-    }
+    G4double esec = wokvi->ComputeElectronCrossSection(cosThetaMin, costm);
+    G4double nsec = wokvi->ComputeNuclearCrossSection(cosThetaMin, costm);
     nsec += esec;
     if(nsec > 0.0) { esec /= nsec; }
-    xtsec += nsec;
+    xtsec += nsec*density;
     xsecn[i] = xtsec;
     prob[i]  = esec;
-    //G4cout << i << "  xs= " << xs << " cosThetaMin= " << cosThetaMin 
-    //	   << " costm= " << costm << G4endl;
+    //G4cout << i << "  xs= " << xs << " xtsec= " << xtsec << " 1-cosThetaMin= " << 1-cosThetaMin 
+    //	   << " 1-cosTetMaxNuc2= " <<1-cosTetMaxNuc2<< G4endl;
   }
   
   //G4cout << "ComputeXS result:  xsec(1/mm)= " << xs 
-  //<< " txsec(1/mm)= " << xtsec <<G4endl; 
+  //	 << " txsec(1/mm)= " << xtsec <<G4endl; 
   return xs;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4WentzelVIModel::ComputeMaxElectronScattering(G4double cutEnergy)
-{
-  ecut = cutEnergy;
-  G4double tmax = tkin;
-  cosTetMaxElec = 1.0;
-  if(mass > MeV) {
-    G4double ratio = electron_mass_c2/mass;
-    G4double tau = tkin/mass;
-    tmax = 2.0*electron_mass_c2*tau*(tau + 2.)/
-      (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
-    cosTetMaxElec = 1.0 - std::min(cutEnergy, tmax)*electron_mass_c2/mom2;
-  } else {
-
-    if(particle == theElectron) tmax *= 0.5;
-    G4double t = std::min(cutEnergy, tmax);
-    G4double mom21 = t*(t + 2.0*electron_mass_c2);
-    G4double t1 = tkin - t;
-    //G4cout <<"tkin=" <<tkin<<" tmax= "<<tmax<<" t= " 
-    //<<t<< " t1= "<<t1<<" cut= "<<ecut<<G4endl;
-    if(t1 > 0.0) {
-      G4double mom22 = t1*(t1 + 2.0*mass);
-      G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-      if(ctm <  1.0) { cosTetMaxElec = ctm; }
-      if(ctm < -1.0) { cosTetMaxElec = -1.0;}
-    }
-  }
-  if(cosTetMaxElec < cosTetMaxNuc) { cosTetMaxElec = cosTetMaxNuc; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

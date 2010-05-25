@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh,v 1.26 2010-05-17 15:35:30 vnivanch Exp $
+// $Id: G4WentzelVIModel.hh,v 1.27 2010-05-25 09:49:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,11 +61,10 @@
 #include "G4PhysicsTable.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4MaterialCutsCouple.hh"
-#include "G4NistManager.hh"
+#include "G4WentzelOKandVIxSection.hh"
 
-class G4LossTableManager;
-class G4ParticleChangeForMSC;
 class G4ParticleDefinition;
+class G4LossTableManager;
 class G4Pow;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,19 +99,11 @@ public:
 
 private:
 
-  G4double ComputeTransportXSectionPerAtom();
-
   G4double ComputeXSectionPerVolume();
-
-  void ComputeMaxElectronScattering(G4double cut);
 
   inline G4double GetLambda(G4double kinEnergy);
 
   inline void SetupParticle(const G4ParticleDefinition*);
-
-  inline void SetupKinematic(G4double kinEnergy, G4double cut);
-  
-  inline void SetupTarget(G4double Z, G4double kinEnergy);
 
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
@@ -120,33 +111,23 @@ private:
   G4WentzelVIModel & operator=(const  G4WentzelVIModel &right);
   G4WentzelVIModel(const  G4WentzelVIModel&);
 
-  const G4ParticleDefinition* theProton;
-  const G4ParticleDefinition* theElectron;
-  const G4ParticleDefinition* thePositron;
-
+  G4LossTableManager*       theManager;
   G4ParticleChangeForMSC*   fParticleChange;
+  G4WentzelOKandVIxSection* wokvi;
+  G4Pow*                    fG4pow;
 
   G4PhysicsTable*           theLambdaTable;
-  G4LossTableManager*       theManager;
-  G4NistManager*            fNistManager;
-  G4Pow*                    fG4pow;
   const G4DataVector*       currentCuts;
 
-  G4double numlimit;
   G4double tlimitminfix;
   G4double invsqrt12;
 
   // cache kinematics
   G4double preKinEnergy;
-  G4double ecut;
-  G4double lambda0;
   G4double tPathLength;
   G4double zPathLength;
   G4double lambdaeff;
   G4double currentRange; 
-  G4double par1;
-  G4double par2;
-  G4double par3;
 
   // data for single scattering mode
   G4double xtsec;
@@ -154,10 +135,7 @@ private:
   std::vector<G4double> prob;
   G4int    nelments;
 
-  // integer parameters
-  G4int    nbins;
-  G4int    nwarnings;
-  G4int    nwarnlimit;
+  G4double numlimit;
 
   // cache material
   G4int    currentMaterialIndex;
@@ -165,38 +143,13 @@ private:
   const G4Material* currentMaterial;
 
   // single scattering parameters
-  G4double coeff;
   G4double cosThetaMin;
   G4double cosThetaMax;
   G4double cosTetMaxNuc;
-  G4double cosTetMaxElec;
-  G4double cosTetMaxNuc2;
-  G4double cosTetMaxElec2;
-  G4double alpha2;
-  G4double factorA2;
 
   // projectile
   const G4ParticleDefinition* particle;
-
-  G4double chargeSquare;
-  G4double spin;
-  G4double mass;
-  G4double tkin;
-  G4double mom2;
-  G4double invbeta2;
-  G4double kinFactor;
-  G4double etag;
   G4double lowEnergyLimit;
-
-  // target
-  G4double targetZ;
-  G4double targetMass;
-  G4double screenZ;
-  G4double formfactA;
-  G4int    iz;
-
-  static G4double ScreenRSquare[100];
-  static G4double FormFactor[100];
 
   // flags
   G4bool   isInitialized;
@@ -240,54 +193,9 @@ inline void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
   // Initialise mass and charge
   if(p != particle) {
     particle = p;
-    mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    tkin = 0.0;
+    wokvi->SetupParticle(p);
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4WentzelVIModel::SetupKinematic(G4double ekin, G4double cut)
-{
-  if(ekin != tkin || ecut != cut) {
-    tkin  = ekin;
-    mom2  = tkin*(tkin + 2.0*mass);
-    invbeta2 = 1.0 +  mass*mass/mom2;
-    cosTetMaxNuc = cosThetaMax;
-    if(std::fabs(cosThetaMax) < 1.0) {
-      if(mass < MeV && ekin < 10.*cut && 0.0 < cosThetaMax) {
-	cosTetMaxNuc = ekin*cosThetaMax/(10.*cut);
-      } else {
-	cosTetMaxNuc = 
-	  std::max(cosThetaMax,1.-factorA2*currentMaterial->GetIonisation()->GetInvA23()/mom2);
-      }
-    }
-    ComputeMaxElectronScattering(cut);
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline void G4WentzelVIModel::SetupTarget(G4double Z, G4double e)
-{
-  if(Z != targetZ || e != etag) {
-    etag    = e; 
-    targetZ = Z;
-    iz = G4int(Z);
-    if(iz > 99) { iz = 99; }
-    targetMass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
-    screenZ = ScreenRSquare[iz]/mom2;
-    G4double meff = targetMass/(mass+targetMass);
-    kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
-    //kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
-    screenZ *=(1.13 + std::min(1.0,3.76*Z*Z*invbeta2*alpha2));
-    if(mass > MeV) { screenZ *= 2.0; } 
-    formfactA = FormFactor[iz]*mom2;
-  } 
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
