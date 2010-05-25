@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.45 2010-05-18 09:55:17 gcosmo Exp $
+// $Id: G4Box.cc,v 1.46 2010-05-25 09:17:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ G4Box::G4Box(const G4String& pName,
 {
   if ( (pX > 2*kCarTolerance)
     && (pY > 2*kCarTolerance)
-    && (pZ > 2*kCarTolerance) )
+    && (pZ > 2*kCarTolerance) )  // limit to thickness of surfaces
   {
     fDx = pX ;
     fDy = pY ; 
@@ -104,7 +104,7 @@ G4Box::~G4Box()
 
 void G4Box::SetXHalfLength(G4double dx)
 {
-  if(dx > 2*kCarTolerance)
+  if(dx > 2*kCarTolerance)  // limit to thickness of surfaces
   {
     fDx = dx;
   }
@@ -123,7 +123,7 @@ void G4Box::SetXHalfLength(G4double dx)
 
 void G4Box::SetYHalfLength(G4double dy) 
 {
-  if(dy > 2*kCarTolerance)
+  if(dy > 2*kCarTolerance)  // limit to thickness of surfaces
   {
     fDy = dy;
   }
@@ -142,7 +142,7 @@ void G4Box::SetYHalfLength(G4double dy)
 
 void G4Box::SetZHalfLength(G4double dz) 
 {
-  if(dz > 2*kCarTolerance)
+  if(dz > 2*kCarTolerance)  // limit to thickness of surfaces
   {
     fDz = dz;
   }
@@ -200,14 +200,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
           (xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance)) { return false ; }
       else
       {
-        if (xMin < pVoxelLimit.GetMinXExtent())
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if (xMax > pVoxelLimit.GetMaxXExtent())
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
+        xMin = std::max(xMin, pVoxelLimit.GetMinXExtent());
+        xMax = std::min(xMax, pVoxelLimit.GetMaxXExtent());
       }
     }
     yoffset = pTransform.NetTranslation().y() ;
@@ -220,14 +214,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
           (yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance)) { return false ; }
       else
       {
-        if (yMin < pVoxelLimit.GetMinYExtent())
-        {
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if (yMax > pVoxelLimit.GetMaxYExtent())
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
+        yMin = std::max(yMin, pVoxelLimit.GetMinYExtent());
+        yMax = std::min(yMax, pVoxelLimit.GetMaxYExtent());
       }
     }
     zoffset = pTransform.NetTranslation().z() ;
@@ -240,14 +228,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
           (zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance)) { return false ; }
       else
       {
-        if (zMin < pVoxelLimit.GetMinZExtent())
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if (zMax > pVoxelLimit.GetMaxZExtent())
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
+        zMin = std::max(zMin, pVoxelLimit.GetMinZExtent());
+        zMax = std::min(zMax, pVoxelLimit.GetMaxZExtent());
       }
     }
     switch (pAxis)
@@ -361,24 +343,25 @@ EInside G4Box::Inside(const G4ThreeVector& p) const
 {
   static const G4double delta=0.5*kCarTolerance;
   EInside in = kOutside ;
+  G4ThreeVector q(std::fabs(p.x()), std::fabs(p.y()), std::fabs(p.z()));
 
-  if ( std::fabs(p.x()) <= (fDx - delta) )
+  if ( q.x() <= (fDx - delta) )
   {
-    if (std::fabs(p.y()) <= (fDy - delta) )
+    if (q.y() <= (fDy - delta) )
     {
-      if      ( std::fabs(p.z()) <= (fDz - delta) ) { in = kInside ;  }
-      else if ( std::fabs(p.z()) <= (fDz + delta) ) { in = kSurface ; }
+      if      ( q.z() <= (fDz - delta) ) { in = kInside ;  }
+      else if ( q.z() <= (fDz + delta) ) { in = kSurface ; }
     }
-    else if ( std::fabs(p.y()) <= (fDy + delta) )
+    else if ( q.y() <= (fDy + delta) )
     {
-      if ( std::fabs(p.z()) <= (fDz + delta) ) { in = kSurface ; }
+      if ( q.z() <= (fDz + delta) ) { in = kSurface ; }
     }
   }
-  else if ( std::fabs(p.x()) <= (fDx + delta) )
+  else if ( q.x() <= (fDx + delta) )
   {
-    if ( std::fabs(p.y()) <= (fDy + delta) )
+    if ( q.y() <= (fDy + delta) )
     {
-      if ( std::fabs(p.z()) <= (fDz + delta) ) { in = kSurface ; }
+      if ( q.z() <= (fDz + delta) ) { in = kSurface ; }
     }
   }
   return in ;
@@ -572,7 +555,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
   // Compute min / max distances for x/y/z travel:
   // X Planes
 
-  if ( v.x() )
+  if ( v.x() )  // != 0
   {
     stmp = 1.0/std::fabs(v.x()) ;
 
@@ -590,7 +573,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
 
   // Y Planes
 
-  if ( v.y() ) 
+  if ( v.y() )  // != 0
   {
     stmp = 1.0/std::fabs(v.y()) ;
 
@@ -617,7 +600,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
 
   // Z planes
 
-  if ( v.z() )
+  if ( v.z() )  // != 0
   {
     stmp = 1.0/std::fabs(v.z()) ;
 
@@ -686,13 +669,13 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
                                      G4bool *validNorm,G4ThreeVector *n) const
 {
   ESide side = kUndefined ;
-  G4double pdist,stmp,snxt;
+  G4double pdist,stmp,snxt=kInfinity;
 
   static const G4double delta = 0.5*kCarTolerance;
 
   if (calcNorm) { *validNorm = true ; }  // All normals are valid
 
-  if ( v.x() )   // X planes  
+  if ( v.x() )   // X planes. != 0
   {
     pdist = fDx - p.x() ;
 
@@ -722,12 +705,8 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       return        snxt = 0 ;
     }
   }
-  else  // v(x)=0
-  {
-    snxt = kInfinity ;
-  }
 
-  if ( v.y() )   // Y planes  
+  if ( v.y() )   // Y planes. != 0
   {
     pdist = fDy-p.y();
 
@@ -768,7 +747,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     }
   }
 
-  if ( v.z() )        // Z planes 
+  if ( v.z() )        // Z planes. != 0
   {
     pdist = fDz-p.z();
 
@@ -808,6 +787,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       return        snxt = 0 ;
     }
   }
+
   if (calcNorm)
   {      
     switch (side)
