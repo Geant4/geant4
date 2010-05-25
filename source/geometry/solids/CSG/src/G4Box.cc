@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.48 2010-05-25 10:12:27 gcosmo Exp $
+// $Id: G4Box.cc,v 1.49 2010-05-25 10:14:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -658,7 +658,7 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p) const
 
 /////////////////////////////////////////////////////////////////////////
 //
-// Calcluate distance to surface of box from inside
+// Calculate distance to surface of box from inside
 // by calculating distances to box's x/y/z planes.
 // Smallest distance is exact distance to exiting.
 // - Eliminate one side of each pair by considering direction of v
