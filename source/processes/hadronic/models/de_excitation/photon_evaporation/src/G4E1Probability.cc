@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4E1Probability.cc,v 1.8 2010-05-19 10:21:44 vnivanch Exp $
+// $Id: G4E1Probability.cc,v 1.9 2010-05-25 10:47:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -88,10 +88,11 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   //  G4double levelDensBef = std::exp(2*std::sqrt(aLevelDensityParam*Uexcite));
   //  G4double levelDensAft = std::exp(2*std::sqrt(aLevelDensityParam*(Uexcite-gammaE)));
   // VI reduce number of calls to exp 
-  G4double levelDens = std::exp(-2*aLevelDensityParam*gammaE/
-				(std::sqrt(aLevelDensityParam*Uexcite) +
-				 std::sqrt(aLevelDensityParam*(Uexcite-gammaE))));
-
+  G4double levelDens = 1.0;
+  if( aLevelDensityParam > 0.0 ) {
+    levelDens = std::exp(2*(std::sqrt(aLevelDensityParam*(Uexcite-gammaE)) 
+      - std::sqrt(aLevelDensityParam*Uexcite))); 
+  }
   // Now form the probability density
 
   // Define constants for the photoabsorption cross-section (the reverse
