@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.hh,v 1.1 2010-05-25 16:43:26 bagoulia Exp $
+// $Id: G4ICRU73QOModel.hh,v 1.2 2010-05-25 17:38:45 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -212,7 +212,7 @@ inline G4int G4ICRU73QOModel::GetNumberOfShells(G4int Z) const
 
   if(indexZ[Z] >= 0) { nShell = nbofShellsForElement[indexZ[Z]]; 
   } else { nShell = G4AtomicShells::GetNumberOfShells(Z); }
-  
+
   return nShell;
 }
 
@@ -227,7 +227,7 @@ inline G4double G4ICRU73QOModel::GetShellEnergy(G4int Z,
 
   if(indexZ[Z] >= 0) { shellEnergy = ShellEnergy[startElemIndex[idx] + nbOfTheShell]*eV; 
   } else { shellEnergy = GetOscillatorEnergy(Z, nbOfTheShell); }
-  
+
   return  shellEnergy;
 }
 
@@ -241,7 +241,7 @@ inline G4double G4ICRU73QOModel::GetShellStrength(G4int Z,
   G4int idx = indexZ[Z];
 
   if(indexZ[Z] >= 0) { shellStrength = SubShellOccupation[startElemIndex[idx] + nbOfTheShell] / Z; 
-  } else { shellStrength = GetOscillatorEnergy(Z, nbOfTheShell); }
+} else { shellStrength = 1.0 / Z * G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell); }
   
   return shellStrength;
 }
