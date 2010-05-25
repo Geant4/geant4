@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc,v 1.1 2010-05-25 16:43:26 bagoulia Exp $
+// $Id: G4ICRU73QOModel.cc,v 1.2 2010-05-25 16:55:21 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,7 +94,7 @@ G4ICRU73QOModel::~G4ICRU73QOModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple* couple)
+                                    const G4MaterialCutsCouple* )
 {
   //  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
   return 100*keV;
