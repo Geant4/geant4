@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.46 2010-05-25 09:17:34 gcosmo Exp $
+// $Id: G4Box.cc,v 1.47 2010-05-25 09:32:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -670,12 +670,15 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 {
   ESide side = kUndefined ;
   G4double pdist,stmp,snxt=kInfinity;
+  G4bool xv = (v.x() > 0) ? true : false;
+  G4bool yv = (v.y() > 0) ? true : false;
+  G4bool zv = (v.z() > 0) ? true : false;
 
   static const G4double delta = 0.5*kCarTolerance;
 
   if (calcNorm) { *validNorm = true ; }  // All normals are valid
 
-  if ( v.x() )   // X planes. != 0
+  if (xv)   // X planes
   {
     pdist = fDx - p.x() ;
 
@@ -690,7 +693,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       return        snxt = 0 ;
     }
   }
-  else if (v.x() < 0) 
+  else  // v.x() < 0
   {
     pdist = fDx + p.x() ;
 
@@ -706,7 +709,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     }
   }
 
-  if ( v.y() )   // Y planes. != 0
+  if (yv)   // Y planes
   {
     pdist = fDy-p.y();
 
@@ -726,7 +729,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       return        snxt = 0 ;
     }
   }
-  else if ( v.y() < 0 ) 
+  else  // v.y() < 0
   {
     pdist = fDy + p.y() ;
 
@@ -747,7 +750,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     }
   }
 
-  if ( v.z() )        // Z planes. != 0
+  if (zv)        // Z planes
   {
     pdist = fDz-p.z();
 
@@ -767,7 +770,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       return        snxt = 0 ;
     }
   }
-  else if ( v.z() < 0 ) 
+  else  // v.z() < 0
   {
     pdist = fDz + p.z();
 
