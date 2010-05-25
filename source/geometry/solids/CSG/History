@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2010-05-18 10:06:49 gcosmo Exp $
+$Id: History,v 1.121 2010-05-25 09:19:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 25, 2010  G.Cosmo                    geom-csg-V09-03-01
+- G4Box: more minor fixes in coding style, following code review discussion.
 
 May 18, 2010  G.Cosmo                    geom-csg-V09-03-00
 - G4Box: first implementation of speed improvements and corrections from joint
