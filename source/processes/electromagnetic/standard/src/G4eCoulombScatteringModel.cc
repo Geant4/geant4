@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.86 2010-05-25 18:41:12 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.87 2010-05-25 19:09:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -191,16 +191,17 @@ void G4eCoulombScatteringModel::SampleSecondaries(
 				    kinEnergy,cutEnergy,kinEnergy);
 
   G4double Z = currentElement->GetZ();
-  G4int iz = G4int(Z);
-  G4int ia = SelectIsotopeNumber(currentElement);
-  G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
   
   if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
 				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
     { return; }
 
+  G4int iz = G4int(Z);
+  G4int ia = SelectIsotopeNumber(currentElement);
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+
   G4ThreeVector newDirection = 
-    wokvi->SampleSingleScattering(cosTetMinNuc, cosTetMaxNuc, elecRatio);
+    wokvi->SampleSingleScattering(cosTetMinNuc, cosThetaMax, elecRatio);
   G4double cost = newDirection.z();
 
   G4ThreeVector direction = dp->GetMomentumDirection(); 
