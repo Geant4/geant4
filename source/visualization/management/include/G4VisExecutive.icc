@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.22 2009-10-12 11:54:50 akimura Exp $
+// $Id: G4VisExecutive.icc,v 1.23 2010-05-26 11:10:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,6 +117,65 @@ G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
 
+// Register OGL graphics system with generic nicknames
+#ifdef G4VIS_USE_OPENGL
+  G4VGraphicsSystem* ogl  = 0;
+  G4VGraphicsSystem* ogli = 0;
+  G4VGraphicsSystem* ogls = 0;
+// Follow G4UIExecutive
+#if defined(G4UI_USE_TCSH)
+#if defined (G4VIS_USE_OPENGLX)
+  ogl  = new G4OpenGLStoredX;
+  ogli = new G4OpenGLImmediateX;
+  ogls = new G4OpenGLStoredX;
+#elif defined (G4VIS_USE_OPENGLWIN32)
+  ogl  = new G4OpenGLStoredWin32;
+  ogli = new G4OpenGLImmediateWin32;
+  ogls = new G4OpenGLStoredWin32;
+#endif
+#elif defined(G4UI_USE_XM)
+#ifdef G4VIS_USE_OPENGLXM
+  ogl  = new G4OpenGLStoredXm;
+  ogli = new G4OpenGLImmediateXm;
+  ogls = new G4OpenGLStoredXm;
+#endif
+#elif defined(G4UI_USE_WIN32)
+#ifdef G4VIS_USE_OPENGLWIN32
+  ogl  = new G4OpenGLStoredWin32;
+  ogli = new G4OpenGLImmediateWin32;
+  ogls = new G4OpenGLStoredWin32;
+#endif
+#elif defined(G4UI_USE_QT)
+#ifdef G4VIS_USE_OPENGLQT
+  ogl  = new G4OpenGLStoredQt;
+  ogli = new G4OpenGLImmediateQt;
+  ogls = new G4OpenGLStoredQt;
+#endif
+#else
+#if defined (G4VIS_USE_OPENGLX)
+  ogl  = new G4OpenGLStoredX;
+  ogli = new G4OpenGLImmediateX;
+  ogls = new G4OpenGLStoredX;
+#elif defined (G4VIS_USE_OPENGLWIN32)
+  ogl  = new G4OpenGLStoredWin32;
+  ogli = new G4OpenGLImmediateWin32;
+  ogls = new G4OpenGLStoredWin32;
+#endif
+#endif
+  if (ogl) {
+    ogl->SetNickName("OGL");
+    RegisterGraphicsSystem (ogl);
+  }
+  if (ogli) {
+    ogli->SetNickName("OGLI");
+    RegisterGraphicsSystem (ogli);
+  }
+  if (ogls) {
+    ogls->SetNickName("OGLS");
+    RegisterGraphicsSystem (ogls);
+  }
+#endif
+
 #ifdef G4VIS_USE_OPENGLX
   RegisterGraphicsSystem (new G4OpenGLImmediateX);
   RegisterGraphicsSystem (new G4OpenGLStoredX);
@@ -135,6 +194,21 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OPENGLQT
   RegisterGraphicsSystem (new G4OpenGLImmediateQt);
   RegisterGraphicsSystem (new G4OpenGLStoredQt);
+#endif
+
+// Register OI graphics system with generic nickname
+#ifdef G4VIS_USE_OI
+  G4VGraphicsSystem* oi  = 0;
+#ifdef G4VIS_USE_OIX
+  oi = new G4OpenInventorX;
+#endif
+#ifdef G4VIS_USE_OIWIN32
+  oi = new G4OpenInventorWin32;
+#endif
+  if (oi) {
+    oi->SetNickName("OI");
+    RegisterGraphicsSystem (oi);
+  }
 #endif
 
 #ifdef G4VIS_USE_OIX
