@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.37 2010-05-20 07:01:03 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.38 2010-05-26 14:27:14 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -59,7 +59,6 @@
 #include <qsignalmapper.h>
 #include <qtabwidget.h>
 #include <qtabbar.h>
-#include <QResizeEvent>
 #include <qstringlist.h>
 
 #include <qmainwindow.h>
@@ -67,6 +66,7 @@
 #include <qmenu.h>
 #include <qlistwidget.h>
 #include <qtreewidget.h>
+#include <QResizeEvent>
 #else
 #include <qaction.h>
 #include <qheader.h>
@@ -163,10 +163,10 @@ G4UIQt::G4UIQt (
   QWidget *mainWidget = new QWidget(fMainWindow);
 #if QT_VERSION < 0x040000
   fMyVSplitter = new QSplitter(Qt::Horizontal,fMainWindow);
-  fToolBox = new QToolBox(Qt::Horizontal,fMyVSplitter);
+  fToolBox = new QToolBox(fMyVSplitter);
 #else
   fMyVSplitter = new QSplitter(Qt::Horizontal,fMainWindow);
-  fToolBox = new QToolBox(mainWidget);
+  fToolBox = new QToolBox();
 #endif
 
   // Set layouts
@@ -243,24 +243,44 @@ G4UIQt::G4UIQt (
   fTabWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
 
   QSizePolicy policy = fTabWidget->sizePolicy();
+#if QT_VERSION < 0x040000
+  policy.setHorStretch(1);
+  policy.setVerStretch(1);
+#else
   policy.setHorizontalStretch(1);
   policy.setVerticalStretch(1);
+#endif
   fTabWidget->setSizePolicy(policy);
 
+#if QT_VERSION < 0x040000
+  fEmptyViewerTabLabel = new QLabel(fToolBox,"         If you want to have a Viewer, please use /vis/open commands. ");
+#else
   fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
+#endif
 
   // Only at creation. Will be set visible when sessionStart();
+#if QT_VERSION >= 0x040000
+ #if QT_VERSION >= 0x040200
   fTabWidget->setVisible(false);
   fEmptyViewerTabLabel->setVisible(false);
+ #else
+  fTabWidget->hide();
+  fEmptyViewerTabLabel->hide();
+ #endif
+#else
+  fTabWidget->hide();
+  fEmptyViewerTabLabel->hide();
+#endif
 
-  fMyVSplitter->addWidget(fToolBox);
-  fMyVSplitter->addWidget(fEmptyViewerTabLabel);
+
   //  fMyVSplitter->addWidget(fTabWidget);
 
   // unset parent fot TabWidget
 #if QT_VERSION < 0x040000
   fTabWidget->reparent(0,0,QPoint(0,0));  
 #else
+  fMyVSplitter->addWidget(fToolBox);
+  fMyVSplitter->addWidget(fEmptyViewerTabLabel);
   fTabWidget->setParent(0);
 #endif
 
@@ -322,11 +342,11 @@ G4UIQt::G4UIQt (
 
   // Set visible
 #if QT_VERSION >= 0x040000
-#if QT_VERSION >= 0x040200
+ #if QT_VERSION >= 0x040200
   fMainWindow->setVisible(true);
-#else
+ #else
   fMainWindow->show();
-#endif
+ #endif
 #else
   fMainWindow->show();
 #endif
@@ -399,7 +419,6 @@ void G4UIQt::CreateHelpTBWidget(
 #if QT_VERSION < 0x040000
   QWidget *helpWidget = new QWidget(fHelpTBWidget);
   QHBoxLayout *helpLayout = new QHBoxLayout(helpWidget);
-  QVBoxLayout *vLayout = new QVBoxLayout(fHelpTBWidget);
   fHelpVSplitter = new QSplitter(Qt::Horizontal,fHelpTBWidget);
 #else
   QWidget *helpWidget = new QWidget();
@@ -526,45 +545,51 @@ bool G4UIQt::AddTabWidget(
   }
 
   // Remove QLabel 
+
+  // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
+  // troubles
+#if QT_VERSION >= 0x040000
   if ( fMyVSplitter->indexOf(fEmptyViewerTabLabel) != -1) {
+#endif
+
 #if QT_VERSION < 0x040000
     fEmptyViewerTabLabel->reparent(0,0,QPoint(0,0));  
 #else
     fEmptyViewerTabLabel->setParent(0);
-#endif
     fMyVSplitter->addWidget(fTabWidget);
+#endif
+
 #if QT_VERSION < 0x040000
     aWidget->reparent(fTabWidget,0,QPoint(0,0));  
 #else
     aWidget->setParent(fTabWidget);
 #endif
+#if QT_VERSION >= 0x040000
   }
-
+#endif
 
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::AddTabWidget ADD %d %d + %d %d---------------------------------------------------\n",sizeX, sizeY,sizeX-fTabWidget->width(),sizeY-fTabWidget->height());
 #endif
   
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::AddTabWidget resize VVVVVVVVVVVG4UIQt G4UIQt G4UIQt G4UIQt G4UIQt G4UIQt G4UIQt G4UIQt \n");
-  printf("G4UIQt::AddTabWidget resize 22222222222 W---:%d + sx:%d -fwx:%d   H---:%d + sy:%d -fwy:%d    TabW:%d TabH:%d G4UIQt G4UIQt aWX:%d aWY:%d\n",fMainWindow->width(),sizeX,fTabWidget->width(),fMainWindow->height(),sizeY,fTabWidget->height(),fTabWidget->width(),fTabWidget->height(),aWidget->size().height(),aWidget->size().width());
-#endif
-
   fMainWindow->resize(fMainWindow->width()+sizeX-fTabWidget->width(),fMainWindow->height()+sizeY-fTabWidget->height());
 
   // Problems with resize. The widgets are not realy drawn at this step,
   // then we have to force them on order to check the size
 
+#if QT_VERSION < 0x040000
+  fTabWidget->insertTab(aWidget,name,fTabWidget->count());
+#else
   fTabWidget->insertTab(fTabWidget->count(),aWidget,name);
+#endif
   
-  //   if (fTabWidget->count() == 1) {
-  //    connect(fTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int)));
-  //  connect(fTabWidget, SIGNAL(resizeEvent (  QResizeEvent* ) ), SLOT(ResizeTabWidget( QResizeEvent*)));
-  //   }
-
+#if QT_VERSION < 0x040000
+  fTabWidget->setCurrentPage(fTabWidget->count()-1);
+#else
   fTabWidget->setCurrentIndex(fTabWidget->count()-1);
-  //  UpdateTabWidget(fTabWidget->count()-1);
+#endif
+
   // Set visible
 #if QT_VERSION >= 0x040000
  #if QT_VERSION >= 0x040200
@@ -577,39 +602,17 @@ bool G4UIQt::AddTabWidget(
 #else
   fTabWidget->setLastTabCreated(fTabWidget->currentPageIndex());
   fMainWindow->show();
+#endif
+  
+#if QT_VERSION >= 0x040000
+ #if QT_VERSION >= 0x040200
+   fTabWidget->setVisible(true);
+ #else
+   fTabWidget->show();
  #endif
-  
-  
-
-// //   // Check size
-// //   int offX = (sizeX-aWidget->size().width());
-// //   int offY = (sizeY-aWidget->size().height());
-
-// // #ifdef G4DEBUG_INTERFACES_BASIC
-// //   printf("G4UIQt::AddTabWidget resize AFTER FIRST W:%d + sx:%d -fwx:%d   H:%d + sy:%d -fwy:%d    TabW:%d TabH:%d G4UIQt G4UIQt offX:%d  offY:%d aWX:%d aWY:%d\n",fMainWindow->width(),sizeX,fTabWidget->width(),fMainWindow->height(),sizeY,fTabWidget->height(),fTabWidget->width(),fTabWidget->height(),offX,offY,aWidget->size().height(),aWidget->size().width());
-// // #endif
-
-// //   // and correct if necessairy
-// //   if ((offX != 0) ||(offY != 0)) {
-// //     fMainWindow->resize(fMainWindow->width()+offX,fMainWindow->height()+offY);
-// //     // Re-Set visible
-// // #if QT_VERSION >= 0x040000
-// // #if QT_VERSION >= 0x040200
-// //     fMainWindow->setVisible(true);
-// // #else
-// //     fMainWindow->show();
-// // #endif
-// // #else
-// //     fMainWindow->show();
-// // #endif
-// //   }
-
-// // #ifdef G4DEBUG_INTERFACES_BASIC
-// //   printf("G4UIQt::AddTabWidget resize ^^^^^^^^^^^^ W:%d + sx:%d -fwx:%d   H:%d + sy:%d -fwy:%d    TabW:%d TabH:%d G4UIQt G4UIQt offX:%d  offY:%d aWX:%d aWY:%d\n",fMainWindow->width(),sizeX,fTabWidget->width(),fMainWindow->height(),sizeY,fTabWidget->height(),fTabWidget->width(),fTabWidget->height(),offX,offY,aWidget->size().height(),aWidget->size().width());
-// // #endif
-// // #endif
-  
-  fTabWidget->setVisible(true);
+#else
+   fTabWidget->show();
+#endif
 
   return true;
 }
@@ -628,15 +631,31 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
   printf("G4UIQt::UpdateTabWidget CALL REPAINT tabGL\n");
 #endif
 
+#if QT_VERSION < 0x040000
+  fTabWidget->setCurrentPage(tabNumber);
+#else
   fTabWidget->setCurrentIndex(tabNumber);
+#endif
 
   // Send this signal to unblock graphic updates !
-  fTabWidget->setVisible(true);
+#if QT_VERSION >= 0x040000
+ #if QT_VERSION >= 0x040200
+   fTabWidget->setVisible(true);
+ #else
+   fTabWidget->show();
+ #endif
+#else
+   fTabWidget->show();
+#endif
 
   // This will send a paintEvent to OGL Viewers
   fTabWidget->setTabSelected();
 
+#if QT_VERSION < 0x040000
+  QApplication::sendPostedEvents () ;
+#else
   QCoreApplication::sendPostedEvents () ;
+#endif
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::UpdateTabWidget END\n");
@@ -651,7 +670,11 @@ void G4UIQt::ResizeTabWidget( QResizeEvent* e) {
 #ifdef G4DEBUG_INTERFACES_BASIC
     printf("G4UIQt::ResizeTabWidget +++++++++++++++++++++++++++++++++++++++\n");
 #endif
+#if QT_VERSION < 0x040000
+    fTabWidget->page(a)->resize(e->size());
+#else
     fTabWidget->widget(a)->resize(e->size());
+#endif
   }
 }
 
@@ -670,20 +693,35 @@ G4UIsession* G4UIQt::SessionStart (
   Prompt("Session :");
   exitSession = false;
 
+#if QT_VERSION >= 0x040000
+ #if QT_VERSION >= 0x040200
   fTabWidget->setVisible(true);
   fEmptyViewerTabLabel->setVisible(true);
+ #else
+  fTabWidget->show();
+  fEmptyViewerTabLabel->show();
+ #endif
+#else
+  fTabWidget->show();
+  fEmptyViewerTabLabel->show();
+#endif
+
 
 #if QT_VERSION >= 0x040000
-#if QT_VERSION >= 0x040200
+ #if QT_VERSION >= 0x040200
   fMainWindow->setVisible(true);
-#else
+ #else
   fMainWindow->show();
-#endif
+ #endif
 #else
   fMainWindow->show();
 #endif
 
+#if QT_VERSION < 0x040000
+  QApplication::sendPostedEvents () ;
+#else
   QCoreApplication::sendPostedEvents () ;
+#endif
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::G4UIQt SessionStart2\n");
@@ -802,7 +840,12 @@ G4int G4UIQt::ReceiveG4cout (
 #endif
   fG4cout += newStr;
  
+#if QT_VERSION >= 0x040000
   QStringList result = newStr.filter(fCoutFilter->text());
+#else
+  //L. Garnier : in qt3 filter will does nothing
+  QStringList result = "";
+#endif
 
   if (result.join("\n").isEmpty()) {
     return 0;
@@ -841,7 +884,12 @@ G4int G4UIQt::ReceiveG4cerr (
 #endif
   fG4cout += newStr;
  
- QStringList result = newStr.filter(fCoutFilter->text());
+#if QT_VERSION < 0x040000
+  //L. Garnier : in qt3 filter will does nothing
+  QStringList result = "";
+#else
+  QStringList result = newStr.filter(fCoutFilter->text());
+#endif
 
 #if QT_VERSION < 0x040000
   QColor previousColor = fCoutTBTextArea->color();
@@ -956,7 +1004,11 @@ void G4UIQt::ActivateCommand(
     OpenHelpTreeOnCommand(targetCom.data());
   }
 
+#if QT_VERSION < 0x040000
+  fToolBox->setCurrentItem(fHelpTBWidget);
+#else
   fToolBox->setCurrentWidget(fHelpTBWidget);
+#endif
 }
 
 
@@ -972,7 +1024,7 @@ void G4UIQt::InitHelpTree()
 
   if (! fHelpTreeWidget ) {
 #if QT_VERSION < 0x040000
-    fHelpTreeWidget = new QListView(splitter);
+    fHelpTreeWidget = new QListView(fHelpVSplitter);
 #else
     fHelpTreeWidget = new QTreeWidget();
 #endif
@@ -1172,8 +1224,13 @@ QTreeWidgetItem* G4UIQt::FindTreeItem(
   // Suppress last "/"
   QString myCommand = aCommand;
   
+#if QT_VERSION < 0x040000
+  if (myCommand.findRev("/") == ((int)myCommand.length()-1)) {
+    myCommand = myCommand.left(myCommand.length()-1);
+#else
   if (myCommand.lastIndexOf("/") == (myCommand.size()-1)) {
     myCommand = myCommand.left(myCommand.size()-1);
+#endif
   }
 
   if (GetLongCommandPath(aParent) == myCommand)
@@ -1555,7 +1612,11 @@ void G4UIQt::HelpTreeClicCallback (
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
 
+#if QT_VERSION < 0x040000
+  std::string itemText = GetLongCommandPath(item).ascii();
+#else
   std::string itemText = GetLongCommandPath(item).toStdString();
+#endif
   
   G4UIcommand* command = treeTop->FindPath(itemText.c_str());
 
@@ -1662,11 +1723,11 @@ void G4UIQt::CommandHistoryCallback(
 void G4UIQt::CoutFilterCallback(
 const QString & text) {
 
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::CoutFilterCallback : %s\n",text.toStdString().c_str());
-#endif
- 
+#if QT_VERSION < 0x040000
+  QStringList result = "";
+#else
   QStringList result = fG4cout.filter(text);
+#endif
 
   fCoutTBTextArea->setText(result.join("\n"));
   fCoutTBTextArea->repaint();
@@ -1674,9 +1735,6 @@ const QString & text) {
   fCoutTBTextArea->verticalScrollBar()->setValue(fCoutTBTextArea->verticalScrollBar()->maxValue());
 #else
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
-#endif
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::CoutFilterCallback textSize:%d resSize:%d \n",fG4cout.join("").size(),result.join("").size());
 #endif
 
  }
@@ -1953,15 +2011,30 @@ QString G4UIQt::GetShortCommandPath(
 QString commandPath
 )
 {
+#if QT_VERSION < 0x040000
+  if (commandPath.find("/") == 0) {
+    commandPath = commandPath.right(commandPath.length()-1);
+#else
   if (commandPath.indexOf("/") == 0) {
     commandPath = commandPath.right(commandPath.size()-1);
+#endif
   }
 
+#if QT_VERSION < 0x040000
+  commandPath = commandPath.right(commandPath.length()-commandPath.findRev("/",-2)-1);
+#else
   commandPath = commandPath.right(commandPath.size()-commandPath.lastIndexOf("/",-2)-1);
+#endif
  
+#if QT_VERSION < 0x040000
+  if (commandPath.findRev("/") == ((int)commandPath.length()-1)) {
+    commandPath = commandPath.left(commandPath.length()-1);
+ }
+#else
  if (commandPath.lastIndexOf("/") == (commandPath.size()-1)) {
     commandPath = commandPath.left(commandPath.size()-1);
-  }
+ }
+#endif
 
  return commandPath;
 }
@@ -2008,15 +2081,22 @@ G4QTabWidget::G4QTabWidget(
 
   
 void G4UIQt::TabCloseCallback(int a){
+#if QT_VERSION < 0x040000
+  QWidget* temp = fTabWidget->page(a);
+  fTabWidget->removePage (temp);
+#else
   QWidget* temp = fTabWidget->widget(a);
   fTabWidget->removeTab (a);
+#endif
+
   delete temp;
 
   if (fTabWidget->count() == 0) {
-    fMyVSplitter->addWidget(fEmptyViewerTabLabel);
 #if QT_VERSION < 0x040000
+    fEmptyViewerTabLabel->reparent(fMyVSplitter,0,QPoint(0,0));
     fTabWidget->reparent(0,0,QPoint(0,0));  
 #else
+    fMyVSplitter->addWidget(fEmptyViewerTabLabel);
     fTabWidget->setParent(0);
 #endif
   }
@@ -2025,7 +2105,11 @@ void G4UIQt::TabCloseCallback(int a){
 
 void G4UIQt::ToolBoxActivated(int a){
 
+#if QT_VERSION < 0x040000
+  if (fToolBox->item(a) == fHelpTBWidget) {
+#else
   if (fToolBox->widget(a) == fHelpTBWidget) {
+#endif
     // Rebuild the help tree
     FillHelpTree();
   }
@@ -2036,13 +2120,20 @@ QPaintEvent * event
 )
 {
 
+#if QT_VERSION < 0x040000
+  if (currentPage()) {
+#else
   if (currentWidget()) {
-#ifdef G4DEBUG_INTERFACES_BASIC
-    printf("G4QTabWidget::paintEvent repaint type : %d -- rect %d %d  region:%d %d page : %d %d  ________________________  i= %d\n", event->type(),event->rect().height(),event->rect().width(),event->region().boundingRect().width(),event->region().boundingRect().height(),currentWidget()->width(),currentWidget()->height(),currentIndex());
 #endif
+
     if ( isTabSelected()) {
 
+#if QT_VERSION < 0x040000
+      QApplication::sendPostedEvents () ;
+#else
       QCoreApplication::sendPostedEvents () ;
+#endif
+
 #ifdef G4DEBUG_INTERFACES_BASIC
       printf("G4QTabWidget::paintEvent OK\n");
 #endif
@@ -2056,7 +2147,11 @@ QPaintEvent * event
         QString paramSelect = QString("/vis/viewer/select ")+text;
         G4UImanager* UI = G4UImanager::GetUIpointer();
         if(UI != NULL)  {
+#if QT_VERSION < 0x040000
+          UI->ApplyCommand(paramSelect.ascii());
+#else
           UI->ApplyCommand(paramSelect.toStdString().c_str());
+#endif
         }
       } else {
         lastCreated = -1;
