@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2009-06-26 16:27:00 vnivanch Exp $
+$Id: History,v 1.5 2010-05-26 11:43:15 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-05-1o J.Allsion (exhadr00-V09-03-00)
+- Introduced G4UIExecutive.
 
 26-06-09 V.Ivant (exhadr00-V09-02-00)
 - added a possibility to define Physics List as a job parameter 
