@@ -1,5 +1,6 @@
 /run/verbose 1
 /control/verbose 1
+/tracking/verbose 0
 
 /testem/det/setAbsorberMat  G4_Be
 /testem/det/setWidth        3.73 mm
