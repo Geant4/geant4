@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.44 2010-05-26 08:02:14 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.45 2010-05-26 16:20:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -394,27 +394,6 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     // new position
     pos += step*mscfac*dir;
 
-    if(singleScat) {
-
-      // select element
-      G4int i = 0;
-      if(nelm > 1) {
-	G4double qsec = G4UniformRand()*xtsec;
-	for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
-	if(i >= nelm) { i = nelm - 1; }
-	cosTetMaxNuc = 
-	  wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
-      }
-      temp = wokvi->SampleSingleScattering(cosThetaMin, cosTetMaxNuc, prob[i]);
-      temp.rotateUz(dir);
-
-      // renew direction
-      dir = temp;
-
-      // new single scatetring
-      x1 = -log(G4UniformRand())/xtsec; 
-    }
-
     // added multiple scattering
     G4double z; 
     G4double tet2 = step*invlambda;  
@@ -446,9 +425,30 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     // direction is changed
     temp.set(vx1,vy1,cost);
     temp.rotateUz(dir);
-
-    // updated step
     dir = temp;
+
+    if(singleScat) {
+
+      // select element
+      G4int i = 0;
+      if(nelm > 1) {
+	G4double qsec = G4UniformRand()*xtsec;
+	for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
+	if(i >= nelm) { i = nelm - 1; }
+      }
+      G4double cosTetM = 
+	wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
+      temp = wokvi->SampleSingleScattering(cosThetaMin, cosTetM, prob[i]);
+      temp.rotateUz(dir);
+
+      // renew direction
+      dir = temp;
+
+      // new single scatetring
+      x1 = -log(G4UniformRand())/xtsec; 
+    }
+
+    // update step
     length -= step;
 
   } while (length > lengthlim);

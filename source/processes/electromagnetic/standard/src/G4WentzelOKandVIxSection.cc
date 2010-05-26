@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.4 2010-05-26 09:29:41 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.5 2010-05-26 16:20:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -140,9 +140,9 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     targetZ = Z;
     if(targetZ > 99) { targetZ = 99; }
     targetMass = fNistManager->GetAtomicMassAmu(targetZ)*amu_c2;
-    G4double meff = targetMass/(mass+targetMass);
-    kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
-    //kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
+    //G4double meff = targetMass/(mass+targetMass);
+    //kinFactor = coeff*targetZ*chargeSquare*invbeta2/(mom2*meff*meff);
+    kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
     //if(Z > 2) {
@@ -154,13 +154,13 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     if(targetZ == 1 && cosTetMaxNuc < 0.0 && particle == theProton) {
       cosTetMaxNuc = 0.0;
     }
-    if(mass > MeV)  { screenZ *= 2.0; } 
+    //if(mass > MeV)  { screenZ *= 2.0; } 
     formfactA = FormFactor[targetZ]*mom2;
 
     // allowing do not compute scattering off e-
     cosTetMaxElec = 1.0;
     if(cut < DBL_MAX) { 
-      if(mass > MeV) { 
+      if(mass < MeV) { 
 	if(cosTetMaxNuc < 1.0 && cosTetMaxNuc > 0.0 && tkin < 10*cut) { 
 	  cosTetMaxNuc2 *= 0.1*tkin/cut;
 	}
