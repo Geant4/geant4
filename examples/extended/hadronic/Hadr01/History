@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2010-05-26 11:56:11 allison Exp $
+$Id: History,v 1.36 2010-05-26 12:02:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26-05-10 J.Allsion (exhadr01-V09-03-02)
+26-05-10 J.Allsion (exhadr01-V09-03-03)
 - Introduced G4UIExecutive.
+
+26-05-10 J.Allsion (exhadr01-V09-03-02)
+- Tag name spoiled by finger trouble in tags database..
 
 13-01-10  V.Ivant (exhadr01-V09-03-01)
 - Fixed problem of counting of particles leaked from the target
