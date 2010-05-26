@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2010-05-21 18:26:16 mkelsey Exp $
+$Id: History,v 1.87 2010-05-26 18:32:31 dennis Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+26 May 2010 Dennis Wright (hadr-casc-V09-03-40)
+-----------------------------------------------
+- G4NucleiModel: remove conversion to fm, and conversion of cross 
+  sections to fm**2
 
 21 May 2010 Michael Kelsey (hadr-casc-V09-03-39)
 ------------------------------------------------
