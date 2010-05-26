@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.47 2010-05-26 17:39:23 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.48 2010-05-26 17:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -511,15 +511,15 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
       wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
     G4double density = theAtomNumDensityVector[i];
 
-    esec = 0.0;
+    G4double esec = 0.0;
     if(costm < cosThetaMin) {  
 
       // recompute the transport x-section
       xs += density*wokvi->ComputeTransportCrossSectionPerAtom(cosThetaMin);
 
       // recompute the total x-section
-      G4double esec = wokvi->ComputeElectronCrossSection(cosThetaMin, costm);
       G4double nsec = wokvi->ComputeNuclearCrossSection(cosThetaMin, costm);
+      esec = wokvi->ComputeElectronCrossSection(cosThetaMin, costm);
       nsec += esec;
       if(nsec > 0.0) { esec /= nsec; }
       xtsec += nsec*density;
