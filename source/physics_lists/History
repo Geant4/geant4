@@ -1,4 +1,4 @@
-q$Id: History,v 1.122 2010-05-19 18:14:16 vnivanch Exp $
+q$Id: History,v 1.123 2010-05-26 15:06:32 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-05-2010, G.Folger                    (phys-lists-V09-03-03)
+- new physics list QGSP_BERT_CHIPS: Use CHIPS G4QInelastic for all
+    "misc" particles, including anti-proton, anti-neutron  and hyperons.
+    Also use interface to CHIPS cross sections G4QHadronInelasticDataSet
+    for Kaons.
+    added classes: QGSP_BERT_CHIPS, HadronPhysicsQGSP_BERT_CHIPS, and
+                   G4MiscCHIPSBuilder
+    modifed G4PhysListFactory to make new list available.
+    		     
 19-05-2010, V.Ivanchenko                (phys-lists-V09-03-02)
 - QBBC - disable multi fragmentation model of deexcitation
 
