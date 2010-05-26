@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.50 2010-05-20 08:13:37 allison Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.51 2010-05-26 14:50:56 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,10 +207,6 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,G4OpenGLViewer (scene)
   ,fWindow(0)
   ,fRecordFrameNumber(0)
-  ,fRotationAngleX(0)
-  ,fRotationAngleY(0)
-  ,fDeltaRotationAngleX(0)
-  ,fDeltaRotationAngleY(0)
   ,fContextMenu(0)
   ,fMouseAction(STYLE1)
   ,fDeltaRotation(1)
@@ -230,6 +226,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fMovieParametersDialog(NULL)
   ,fRecordingStep(WAIT)
   ,fProcess(NULL)
+  ,fNbMaxFramesPerSec(100)
+  ,fNbMaxAnglePerSec(360)
   ,fLaunchSpinDelay(100)
 {
 
@@ -1477,18 +1475,36 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent()
     QTime lastMoveTime;
     lastMoveTime.start();
     // try to addapt speed move/rotate looking to drawing speed
-    int cycles = 4;
+    float correctionFactor = 5;
     while (fAutoMove) {
-      //      if ( lastMoveTime.elapsed() > (fSpinningDelay / (cycles/2))) {
-        if (fMouseAction == STYLE1) {  // rotate
-          rotateQtScene(((float)delta.x())/cycles,((float)delta.y())/cycles);
-        } else if (fMouseAction == STYLE2) {  // move
-          moveScene(-((float)delta.x())/cycles,-((float)delta.y())/cycles,0,true);
+      if ( lastMoveTime.elapsed () >= (int)(1000/fNbMaxFramesPerSec)) {
+        float lTime = 1000/((float)lastMoveTime.elapsed ());
+        if (((((float)delta.x())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
+            ((((float)delta.x())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
+          correctionFactor = (float)delta.x()*(lTime/fNbMaxAnglePerSec);
+          if (delta.x() <0 ) {
+            correctionFactor = -correctionFactor;
+          }
         }
+      if (((((float)delta.y())/correctionFactor)*lTime > fNbMaxAnglePerSec) ||
+          ((((float)delta.y())/correctionFactor)*lTime < -fNbMaxAnglePerSec) ) {
+          correctionFactor = (float)delta.y()*(lTime/fNbMaxAnglePerSec);
+          if (delta.y() <0 ) {
+            correctionFactor = -correctionFactor;
+          }
+        }
+
+        if (fMouseAction == STYLE1) {  // rotate
+          rotateQtScene(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
+        } else if (fMouseAction == STYLE2) {  // move
+          moveScene(-((float)delta.x())/correctionFactor,-((float)delta.y())/correctionFactor,0,true);
+        }
+#ifdef G4DEBUG_VIS_OGL
+        printf("G4OpenGLQtViewer::G4MouseReleaseEvent Fps:%f x:%d y:%d cycle:%f\n",(float)1000/lastMoveTime.elapsed(),delta.x(),delta.y(),correctionFactor);
+#endif
         lastMoveTime.start();
-        cycles = 1 ;
+      }
       ((QApplication*)G4Qt::getInstance ())->processEvents();
-      cycles ++ ;
     }
   }
   fWindow->setMouseTracking(false);
@@ -2693,7 +2709,7 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 #endif
     fGLWindow = new QDialog();
 #ifdef G4DEBUG_VIS_OGL
-    printf("G4OpenGLQtViewer::GetParentWidget fGLWindow:%d \n",fGLWindow);
+    printf("G4OpenGLQtViewer::GetParentWidget fGLWindow\n");
 #endif
   }
   if (found) {

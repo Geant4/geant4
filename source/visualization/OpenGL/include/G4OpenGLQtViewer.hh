@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.21 2010-01-06 15:05:29 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.22 2010-05-26 14:50:56 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,12 +125,6 @@ protected:
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
-  float fRotationAngleX;
-  float fRotationAngleY;
-  float fRotationAngleZ;
-  float fDeltaRotationAngleX;
-  float fDeltaRotationAngleY;
-  float fDeltaRotationAngleZ;
 
   bool fHasToRepaint;
   bool fReadyToPaint;
@@ -198,6 +192,8 @@ private:
   QProcess *fProcess;
   QTime *fLastEventTime;
   int fSpinningDelay;
+  int fNbMaxFramesPerSec;
+  float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
 
 signals:
