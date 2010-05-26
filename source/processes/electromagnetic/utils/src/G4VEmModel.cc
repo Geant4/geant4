@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.33 2010-05-26 10:41:34 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.34 2010-05-26 17:07:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -126,7 +126,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
   G4int nbins = 
-    man->GetNumberOfBinsPerDecade()*G4int(std::log10(highLimit/lowLimit))/2;
+    man->GetNumberOfBinsPerDecade()*G4int(std::log10(highLimit/lowLimit))/3;
   if(nbins < 5) { nbins = 5; }
 
   G4ProductionCutsTable* theCoupleTable=
