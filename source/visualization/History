@@ -1,4 +1,4 @@
-$Id: History,v 1.464 2010-05-20 07:58:13 allison Exp $
+$Id: History,v 1.465 2010-05-26 15:28:20 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+26th May 2010  John Allison  (vis-V09-03-02)
+- Co-working: intercoms-V09-03-01, interfaces-V09-03-03, greps-V09-03-00.
+- visman-V09-03-02: Added generic drivers: OGL, OGLI, OGLS, OI.
+- openinventor-V09-03-00: Protection against repeated initialisation.
+- opengl-V09-03-02: Some improvments with auto rotation mode.
 
 20th May 2010  John Allison  (vis-V09-03-01)
 - Co-working tags: intercoms-V09-03-01, interfaces-V09-03-02
