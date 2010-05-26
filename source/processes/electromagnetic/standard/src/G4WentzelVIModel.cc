@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.46 2010-05-26 17:30:05 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.47 2010-05-26 17:39:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -304,10 +304,12 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     // new computation
     G4double xsec = ComputeXSectionPerVolume();
     //G4cout << "%%%% xsec= " << xsec << "  xtsec= " << xtsec << G4endl;
-    if(xsec > DBL_MIN) { lambdaeff = 1./xsec; }
-    else               { lambdaeff = DBL_MAX; }
-    tau = zPathLength*xsec;
-    tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+    if(xtsec > 0.0) {
+      if(xsec > 0.0) { lambdaeff = 1./xsec; }
+      else           { lambdaeff = DBL_MAX; }
+      tau = zPathLength*xsec;
+      tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0);
+    } 
   }
 
   // large steps logarithmic formula
@@ -342,7 +344,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
      tPathLength <= DBL_MIN || lambdaeff <= DBL_MIN) 
     { return; }
   
-  G4double invlambda = 0.5/lambdaeff;
+  G4double invlambda = 0.0;
+  if(lambdaeff < DBL_MAX) { invlambda = 0.5/lambdaeff; }
 
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
