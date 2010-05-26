@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.74 2010-04-28 14:43:13 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.75 2010-05-26 10:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -147,6 +147,9 @@ public:
   // min cut in kinetic energy allowed by the model
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 				const G4MaterialCutsCouple*);
+
+  // Compute effective ion charge square
+  virtual G4double ChargeSquareRatio(const G4Track&);
 
   // Compute effective ion charge square
   virtual G4double GetChargeSquareRatio(const G4ParticleDefinition*,

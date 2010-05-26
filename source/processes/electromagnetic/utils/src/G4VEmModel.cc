@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.32 2010-04-27 16:59:52 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.33 2010-05-26 10:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -239,6 +239,14 @@ G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*,
 				  const G4MaterialCutsCouple*)
 {
   return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::ChargeSquareRatio(const G4Track& track)
+{
+  return GetChargeSquareRatio(track.GetDefinition(), 
+			      track.GetMaterial(), track.GetKineticEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

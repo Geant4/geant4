@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.166 2010-04-28 14:43:13 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.167 2010-05-26 10:41:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -917,23 +917,22 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
   SelectModel(preStepScaledEnergy);
-  if(!currentModel->IsActive(preStepScaledEnergy)) return x;
+  if(!currentModel->IsActive(preStepScaledEnergy)) { return x; }
 
-  if(isIon) {
-    chargeSqRatio = 
-      currentModel->GetChargeSquareRatio(currPart,currentMaterial,preStepKinEnergy);
+  if(isIon) { 
+    chargeSqRatio = currentModel->ChargeSquareRatio(track);
     reduceFactor  = 1.0/(chargeSqRatio*massRatio);
   }
   //G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
   // initialisation for sampling of the interaction length 
-  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
-  if(theNumberOfInteractionLengthLeft < 0.0) mfpKinEnergy = DBL_MAX;
+  if(previousStepSize <= DBL_MIN) { theNumberOfInteractionLengthLeft = -1.0; }
+  if(theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
 
   // compute mean free path
   if(preStepScaledEnergy < mfpKinEnergy) {
-    if (integral) ComputeLambdaForScaledEnergy(preStepScaledEnergy);
-    else  preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy);
-    if(preStepLambda <= DBL_MIN) mfpKinEnergy = 0.0;
+    if (integral) { ComputeLambdaForScaledEnergy(preStepScaledEnergy); }
+    else  { preStepLambda = GetLambdaForScaledEnergy(preStepScaledEnergy); }
+    if(preStepLambda <= DBL_MIN) { mfpKinEnergy = 0.0; }
   }
 
   // non-zero cross section
@@ -945,8 +944,9 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     } else if(currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
       SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.)
+      if(theNumberOfInteractionLengthLeft < 0.) {
 	theNumberOfInteractionLengthLeft = perMillion;
+      }
     }
 
     // get mean free path and step limit
@@ -971,8 +971,9 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
        currentInteractionLength < DBL_MAX) {
       // subtract NumberOfInteractionLengthLeft
       SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.)
+      if(theNumberOfInteractionLengthLeft < 0.) {
 	theNumberOfInteractionLengthLeft = perMillion;
+      }
     }
     currentInteractionLength = DBL_MAX;
   }
