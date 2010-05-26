@@ -12,6 +12,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-May-2010 M.Kosov                            (hadr-chips-inter-V09-03-00)
+---------------------------------------------------------------------------
+Z+N instead of N for A, which sometimes in G4Had is called N.
+
 24-Jan-2010 M.Kosov                            (hadr-chips-V09-03-01)
 -----------------------------------------------------------------------
 Mutual tag: G4Hadr interface to CHIPS elastic is added
