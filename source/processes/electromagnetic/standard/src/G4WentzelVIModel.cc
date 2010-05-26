@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.45 2010-05-26 16:20:58 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.46 2010-05-26 17:30:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -484,8 +484,8 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
 G4double G4WentzelVIModel::ComputeXSectionPerVolume()
 {
-  const G4ElementVector* theElementVector = 
-    currentMaterial->GetElementVector();
+  // prepare recomputation of x-sections
+  const G4ElementVector* theElementVector = currentMaterial->GetElementVector();
   const G4double* theAtomNumDensityVector = 
     currentMaterial->GetVecNbOfAtomsPerVolume();
   G4int nelm = currentMaterial->GetNumberOfElements();
@@ -494,27 +494,33 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     xsecn.resize(nelm);
     prob.resize(nelm);
   }
-
   G4double cut = (*currentCuts)[currentMaterialIndex];
   cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
 
+  // check consistency
   xtsec = 0.0;
-  G4double xs = 0.0;
+  if(cosTetMaxNuc > cosThetaMin) { return 0.0; }
 
+  // loop over elements
+  G4double xs = 0.0;
   for (G4int i=0; i<nelm; ++i) {
     G4double costm = 
       wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
     G4double density = theAtomNumDensityVector[i];
-    if(costm > cosThetaMin) { costm = cosThetaMin; } 
 
-    // recompute the transport x-section
-    xs += density*wokvi->ComputeTransportCrossSectionPerAtom(costm);
+    esec = 0.0;
+    if(costm < cosThetaMin) {  
 
-    G4double esec = wokvi->ComputeElectronCrossSection(cosThetaMin, costm);
-    G4double nsec = wokvi->ComputeNuclearCrossSection(cosThetaMin, costm);
-    nsec += esec;
-    if(nsec > 0.0) { esec /= nsec; }
-    xtsec += nsec*density;
+      // recompute the transport x-section
+      xs += density*wokvi->ComputeTransportCrossSectionPerAtom(cosThetaMin);
+
+      // recompute the total x-section
+      G4double esec = wokvi->ComputeElectronCrossSection(cosThetaMin, costm);
+      G4double nsec = wokvi->ComputeNuclearCrossSection(cosThetaMin, costm);
+      nsec += esec;
+      if(nsec > 0.0) { esec /= nsec; }
+      xtsec += nsec*density;
+    }
     xsecn[i] = xtsec;
     prob[i]  = esec;
     //G4cout << i << "  xs= " << xs << " xtsec= " << xtsec << " 1-cosThetaMin= " << 1-cosThetaMin 
