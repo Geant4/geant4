@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.3 2010-05-26 08:02:14 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.4 2010-05-26 09:29:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,6 +134,7 @@ void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
 G4double
 G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
 {
+  G4double cosTetMaxNuc2 = cosTetMaxNuc;
   if(Z != targetZ || tkin != etag) {
     etag    = tkin; 
     targetZ = Z;
@@ -144,12 +145,12 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     //kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
-    if(Z > 2) {
-      G4double tau = tkin/mass + 1.0;
-      screenZ *= (1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z))));
-      //screenZ *=std::min(Z*invbeta2,
-      //	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
-    }
+    //if(Z > 2) {
+    G4double tau = tkin/mass;
+    //screenZ *= (1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z))));
+    screenZ *=std::min(Z*invbeta2,
+      	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
+    //}
     if(targetZ == 1 && cosTetMaxNuc < 0.0 && particle == theProton) {
       cosTetMaxNuc = 0.0;
     }
@@ -160,14 +161,14 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     cosTetMaxElec = 1.0;
     if(cut < DBL_MAX) { 
       if(mass > MeV) { 
-	if(cosThetaMax < 1.0 && cosThetaMax > 0.0 && tkin < 10*cut) { 
-	  cosTetMaxNuc *= 0.1*tkin/cut;
+	if(cosTetMaxNuc < 1.0 && cosTetMaxNuc > 0.0 && tkin < 10*cut) { 
+	  cosTetMaxNuc2 *= 0.1*tkin/cut;
 	}
       }
       ComputeMaxElectronScattering(cut); 
     }
   }
-  return cosTetMaxNuc;
+  return cosTetMaxNuc2;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
