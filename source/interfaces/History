@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2010-05-26 14:27:14 lgarnier Exp $
+$Id: History,v 1.136 2010-05-26 15:22:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26 May, L. Garnier
+26 May, L. Garnier (interfaces-V09-03-03)
  - G4UIQt: Fix some compil errors with qt3
 
 20 May, L. Garnier (interfaces-V09-03-02)
