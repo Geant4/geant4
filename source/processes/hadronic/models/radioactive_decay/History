@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 2010 Dennis Wright (radioactive_decay-V09-03-00)
+-------------------------------------------------------
+tag HEAD to submit for testing
+
 11 may 2010 F.Lei
 - G4RadioactiveDecay.cc::LoadDecayTable:line 931 create a decaytable for isomers not included in RDM database and assume 
   they all under go IT decay.
@@ -42,6 +47,7 @@ track of all tags.
 - GNUmakefile - added dependence on electromagnetic/utils
 
 09 July 2008 Dennis Wright (radioactive_decay-V09-01-02)
+--------------------------------------------------------
 - replace exit() with G4Exception in G4RadioactiveDecay and G4NuclearDecayChannel
 
 17 June 2008 Fan Lei (radioactive_decay-V09-01-01)
