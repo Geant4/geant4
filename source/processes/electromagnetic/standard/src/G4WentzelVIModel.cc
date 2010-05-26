@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.43 2010-05-25 18:41:12 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.44 2010-05-26 08:02:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,7 +134,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   DefineMaterial(CurrentCouple());
   cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosTetMaxNuc < 1.0) {
-    cosTetMaxNuc = wokvi->SetupTarget(G4int(Z), kinEnergy, cutEnergy);
+    cosTetMaxNuc = wokvi->SetupTarget(G4int(Z), cutEnergy);
     xsec = wokvi->ComputeTransportCrossSectionPerAtom(cosTetMaxNuc);
   /*     
     G4cout << "G4WentzelVIModel::CS: Z= " << G4int(Z) << " e(MeV)= " << kinEnergy 
@@ -168,7 +168,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   // initialisation for each step, lambda may be computed from scratch
   preKinEnergy  = dp->GetKineticEnergy();
   DefineMaterial(track.GetMaterialCutsCouple());
-  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
   theLambdaTable = theTable;
   lambdaeff = GetLambda(preKinEnergy);
   currentRange = 
@@ -204,8 +203,10 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   }
 
   // natural limit for high energy
+  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
   G4double rlimit = std::max(facrange, 0.7*(1.0 - cosTetMaxNuc))*lambdaeff;
 
+  // low-energy e-
   if(cosThetaMax > cosTetMaxNuc) {
     rlimit = std::min(rlimit, facsafety*presafety);
   }
@@ -252,7 +253,9 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
 				   currentRange-tPathLength,
 				   currentCouple);
       }
-      lambdaeff = GetLambda(0.5*(e1 + preKinEnergy));
+      preKinEnergy = 0.5*(e1 + preKinEnergy);
+      cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
+      lambdaeff = GetLambda(preKinEnergy);
       zPathLength = lambdaeff*(1.0 - exp(-tPathLength/lambdaeff));
     }
   }
@@ -342,7 +345,6 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double invlambda = 0.5/lambdaeff;
 
   // use average kinetic energy over the step
-  //  SetupKinematic(preKinEnergy, (*currentCuts)[currentMaterialIndex]);
   G4double cut = (*currentCuts)[currentMaterialIndex];
   /*   
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
@@ -351,11 +353,12 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
   */
 
   G4double length = tPathLength;
+  G4double lengthlim = tPathLength*1.e-6;
 
   // step limit due msc
   G4double x0 = length;
   // large scattering angle case - two step approach
-  if(tPathLength*invlambda > 0.5 && length >  tlimitminfix) { x0 *= 0.5; } 
+  if(tPathLength*invlambda > 0.5 && length > tlimitminfix) { x0 *= 0.5; } 
 
   // step limit due single scattering
   G4double x1 = length;
@@ -400,7 +403,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 	for (; i<nelm; ++i) { if(xsecn[i] >= qsec) { break; } }
 	if(i >= nelm) { i = nelm - 1; }
 	cosTetMaxNuc = 
-	  wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), preKinEnergy, cut);
+	  wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
       }
       temp = wokvi->SampleSingleScattering(cosThetaMin, cosTetMaxNuc, prob[i]);
       temp.rotateUz(dir);
@@ -448,7 +451,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
     dir = temp;
     length -= step;
 
-  } while (length > 0.0);
+  } while (length > lengthlim);
     
   dir.rotateUz(oldDirection);
   pos.rotateUz(oldDirection);
@@ -500,7 +503,7 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
 
   for (G4int i=0; i<nelm; ++i) {
     G4double costm = 
-      wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), preKinEnergy, cut);
+      wokvi->SetupTarget(G4int((*theElementVector)[i]->GetZ()), cut);
     G4double density = theAtomNumDensityVector[i];
     if(costm > cosThetaMin) { costm = cosThetaMin; } 
 

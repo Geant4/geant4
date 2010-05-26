@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh,v 1.2 2010-05-25 18:41:12 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.hh,v 1.3 2010-05-26 08:02:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
 
   // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
   // cut = DBL_MAX means no scattering off electrons 
-  G4double SetupTarget(G4int Z, G4double kinEnergy, G4double cut = DBL_MAX);
+  G4double SetupTarget(G4int Z, G4double cut = DBL_MAX);
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
  
@@ -121,6 +121,7 @@ private:
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
+  const G4Material* currentMaterial;
 
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
@@ -171,7 +172,8 @@ private:
 inline G4double 
 G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 {
-  if(ekin != tkin) {
+  if(ekin != tkin || mat != currentMaterial) {
+    currentMaterial = mat;
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;

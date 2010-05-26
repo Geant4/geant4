@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.87 2010-05-25 19:09:57 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.88 2010-05-26 08:02:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,7 +108,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   SetupParticle(p);
   currentCouple = 0;
   cosThetaMin = cos(PolarAngleLimit());
-  wokvi->Initialise(p, cosThetaMax);
+  wokvi->Initialise(p, cosThetaMin);
   /*
   G4cout << "G4eCoulombScatteringModel: factorA2(GeV^2) = " << factorA2/(GeV*GeV) 
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
@@ -148,7 +148,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   cosTetMinNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosThetaMax < cosTetMinNuc) {
     G4int iz = G4int(Z);
-    cosTetMinNuc = wokvi->SetupTarget(iz, kinEnergy, cutEnergy);
+    cosTetMinNuc = wokvi->SetupTarget(iz, cutEnergy);
     cosTetMaxNuc = cosThetaMax; 
     if(iz == 1 && cosTetMaxNuc < 0.0 && particle == theProton) { 
       cosTetMaxNuc = 0.0; 
