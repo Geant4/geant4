@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin.cc,v 1.7 2009-09-18 12:48:43 lgarnier Exp $
+// $Id: G4OpenInventorWin.cc,v 1.8 2010-05-26 14:30:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
@@ -57,7 +57,7 @@ void G4OpenInventorWin::Initialize ()
 
   HWND toplevel = (HWND)GetInteractorManager()->GetMainInteractor();
 
-  SoWin::init(toplevel);
+  if(!SoWin::getTopLevelWidget()) SoWin::init(toplevel);
 
   InitNodes();
 
