@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.11 2009-12-29 19:23:25 vnivanch Exp $
+// $Id: hadr01.cc,v 1.12 2010-05-26 11:53:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -46,8 +46,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
@@ -61,7 +59,13 @@
 #include "EventAction.hh"
 #include "StackingAction.hh"
 
+#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,7 +111,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new StackingAction());
 
   //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4VisManager* visManager = 0;
 
   if (argc==1)   // Define UI terminal for interactive mode
@@ -117,20 +121,17 @@ int main(int argc,char** argv) {
       visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
-      G4UIsession* session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
 #endif
-      session->SessionStart();
-      delete session;
     }
   else           // Batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   //job termination
