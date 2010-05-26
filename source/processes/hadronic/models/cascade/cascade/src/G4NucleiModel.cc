@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.47 2010-05-21 17:44:38 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.48 2010-05-26 18:29:28 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -89,8 +89,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
   const G4double AU = 1.7234;
   const G4double cuu = 3.3836;
-  const G4double convertToFermis = 2.8197;
-  const G4double oneBypiTimes4 = 0.0795775; // 1 / 4 Pi
+  //  const G4double convertToFermis = 2.8197;
   const G4double pf_coeff = 1.932;
   const G4double pion_vp = 0.007; // in GeV
   const G4double pion_vp_small = 0.007; 
@@ -130,7 +129,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
       for (G4int i = 0; i < number_of_zones; i++) {
         G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
-        zone_radii.push_back((CU + AU * y)/convertToFermis);
+        zone_radii.push_back(CU + AU * y);
         ur.push_back(y);
       }
 
@@ -140,7 +139,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
       for (G4int i = 0; i < number_of_zones; i++) {
 	G4double y = std::log((1.0 + D)/alfa3[i] - 1.0);
-	zone_radii.push_back((CU + AU * y)/convertToFermis);
+	zone_radii.push_back(CU + AU * y);
 	ur.push_back(y);
       }
 
@@ -154,10 +153,10 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
       for (G4int i = 0; i < number_of_zones; i++) {
 	G4double y = std::sqrt(-std::log(alfa3[i]));
-	zone_radii.push_back((CU2 * y)/convertToFermis);
+	zone_radii.push_back(CU2 * y);
 	ur.push_back(y);
-      };
-    }; 
+      }
+    }
 
     G4double tot_vol = 0.0;
     std::vector<G4double> v;
@@ -184,7 +183,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     }
 
     // Protons
-    G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
+    G4double dd0 = z/tot_vol/piTimes4thirds;
     std::vector<G4double> rod;
     std::vector<G4double> pf;
     std::vector<G4double> vz;
@@ -202,7 +201,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
 
     // Neutrons
-    dd0 = 3.0 * (a - z) * oneBypiTimes4 / tot_vol;
+    dd0 = (a - z)/tot_vol/piTimes4thirds;
     rod.clear();
     pf.clear();
     vz.clear();
@@ -235,7 +234,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     number_of_zones = 1;
     G4double smallRad = radForSmall;
     if (a == 4) smallRad *= 0.7;
-    zone_radii.push_back(smallRad/convertToFermis);
+    zone_radii.push_back(smallRad);
     G4double vol = 1.0 / piTimes4thirds / (zone_radii[0]*zone_radii[0]*zone_radii[0]);
 
     // proton
@@ -582,7 +581,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
 
       // Total cross section converted from mb to fm**2
-      G4double csec = 0.1*totalCrossSection(ekin, ptype * ip);
+      G4double csec = totalCrossSection(ekin, ptype * ip);
 
       if(verboseLevel > 2){
 	G4cout << " ip " << ip << " ekin " << ekin << " csec " << csec << G4endl;
@@ -1500,7 +1499,7 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
 
   // was 0.2 since the beginning, then changed to 1.0 
   // now 0.1 to convert from mb to fm**2
-  const G4double corr_fac = 0.1;
+  const G4double corr_fac = 1.0;
   G4double csec = 0.0;
   
   if (ke < 0.3) {
