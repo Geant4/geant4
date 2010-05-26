@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.12 2009-11-25 18:55:56 vnivanch Exp $
+// $Id: G4PhysListFactory.cc,v 1.13 2010-05-26 15:06:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,6 +56,7 @@
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BERT_NOLEP.hh"
 #include "QGSP_BERT_TRV.hh"
+#include "QGSP_BERT_CHIPS.hh"
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_EMY.hh"
 #include "QGSP_BIC_HP.hh"
@@ -66,15 +67,16 @@
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
-  nlists = 26;
-  G4String s[26] = {
+  nlists = 27;
+  G4String s[27] = {
     "CHIPS",
     "FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
     "LBE","LHEP","LHEP_EMV",
     "QBBC","QBBC_XGG","QBBC_XGGSN",
     "QGSC_BERT","QGSC_CHIPS",
     "QGSP_BERT","QGSP_BERT_EMV","QGSP_BERT_EMX","QGSP_BERT_HP",
-    "QGSP_BERT_NOLEP","QGSP_BERT_TRV","QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
+    "QGSP_BERT_NOLEP","QGSP_BERT_TRV","QGSP_BERT_CHIPS",
+    "QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
     "QGSP_FTFP_BERT","QGS_BIC", "QGSP_INCL_ABLA"};
 
   for(size_t i=0; i<nlists; i++) {
@@ -128,6 +130,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QGSP_BERT_HP") {p = new QGSP_BERT_HP();}
   else if(name == "QGSP_BERT_NOLEP") {p = new QGSP_BERT_NOLEP();}
   else if(name == "QGSP_BERT_TRV") {p = new QGSP_BERT_TRV();}
+  else if(name == "QGSP_BERT_CHIPS") {p = new QGSP_BERT_CHIPS();}
   else if(name == "QGSP_BIC") {p = new QGSP_BIC();}
   else if(name == "QGSP_BIC_EMY") {p = new QGSP_BIC_EMY();}
   else if(name == "QGSP_BIC_HP") {p = new QGSP_BIC_HP();}

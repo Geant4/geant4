@@ -23,46 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: QGSP_BERT_CHIPS.hh,v 1.1 2010-05-26 15:06:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4MiscCHIPSBuilder
+// ClassName:   QGSP_BERT_CHIPS
 //
-// Author: 2010, G.Folger
+// Author: 2010 G.Folger
+//   derived from QGSP_BERT
 //
-// created by modifying G4QInelasticCHIPSBuilder to apply only to MISC particles
-// -----------------------------------------------------------------------------
-#ifndef G4MiscCHIPSBuilder_h
-#define G4MiscCHIPSBuilder_h 1
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+#ifndef TQGSP_BERT_CHIPS_h
+#define TQGSP_BERT_CHIPS_h 1
 
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-#include "G4VPhysicsConstructor.hh"
-#include "G4QInelastic.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-
-class G4MiscCHIPSBuilder
+template<class T>
+class TQGSP_BERT_CHIPS: public T
 {
- public: 
-  G4MiscCHIPSBuilder(G4int verbose=0);
-  virtual ~G4MiscCHIPSBuilder();
+public:
+  TQGSP_BERT_CHIPS(G4int ver = 1);
+  virtual ~TQGSP_BERT_CHIPS();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
- public: 
-  void Build();
-
- protected:
-  // the particle table has the complete List of existing particle types
-  G4ParticleTable* theParticleTable;
-  G4ParticleTable::G4PTblDicIterator* theParticleIterator;
-
- private:
-  G4int  verbose;
-  G4bool wasActivated;
-  G4QInelastic* inelastic;
+private:
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
 
+#include "QGSP_BERT_CHIPS.icc"
+typedef TQGSP_BERT_CHIPS<G4VModularPhysicsList> QGSP_BERT_CHIPS;
 #endif
+
+
+
