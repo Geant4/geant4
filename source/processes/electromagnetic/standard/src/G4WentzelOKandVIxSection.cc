@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.5 2010-05-26 16:20:58 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.6 2010-05-27 15:26:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -145,16 +145,14 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     kinFactor = coeff*targetZ*chargeSquare*invbeta2/mom2;
 
     screenZ = ScreenRSquare[targetZ]/mom2;
-    //if(Z > 2) {
-    G4double tau = tkin/mass;
-    //screenZ *= (1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z))));
-    screenZ *=std::min(Z*invbeta2,
+    if(Z > 1) {
+      G4double tau = tkin/mass;
+      screenZ *=std::min(Z*invbeta2,
       	(1.13 +3.76*Z*Z*invbeta2*alpha2*std::sqrt(tau/(tau + fG4pow->Z23(Z)))));
-    //}
+    }
     if(targetZ == 1 && cosTetMaxNuc < 0.0 && particle == theProton) {
       cosTetMaxNuc = 0.0;
     }
-    //if(mass > MeV)  { screenZ *= 2.0; } 
     formfactA = FormFactor[targetZ]*mom2;
 
     // allowing do not compute scattering off e-
