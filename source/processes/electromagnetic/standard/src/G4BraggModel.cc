@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.24 2010-05-03 10:23:05 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.25 2010-05-27 10:25:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,9 +101,10 @@ G4BraggModel::~G4BraggModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
-                                    const G4MaterialCutsCouple* couple)
+                                    const G4MaterialCutsCouple*)
 {
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+  return 0.1*keV;
+  // return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,7 +122,7 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" && 
-       pname != "deuteron" && pname != "triton") isIon = true;
+       pname != "deuteron" && pname != "triton") { isIon = true; }
 
     fParticleChange = GetParticleChangeForLoss();
   }
@@ -145,7 +146,7 @@ G4double G4BraggModel::GetParticleCharge(const G4ParticleDefinition* p,
 					 const G4Material* mat,
 					 G4double kineticEnergy)
 {
-  // this method is called only for ions
+  // this method is called only for ions, so no check if it is an ion 
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.83 2010-05-27 10:08:58 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.84 2010-05-27 10:25:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,6 +78,7 @@
 //          positive from pi+ and p (VI)
 // 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
 // 12-09-08 Removed CorrectionsAlongStep (VI)
+// 27-05-10 Added G4ICRU73QOModel for anti-protons (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -107,9 +108,8 @@ using namespace std;
 G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     isInitialised(false)
-    //    nuclearStopping(false)
 {
-  //  SetStepFunction(0.2, 1.0*mm);
+  //SetStepFunction(0.2, 1.0*mm);
   //SetIntegral(true);
   //SetVerboseLevel(1);
   SetProcessSubType(fIonisation);
@@ -202,18 +202,16 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
     isInitialised = true;
   }
-  //EmModel(1)->ActivateNuclearStopping(nuclearStopping);
-  //EmModel(2)->ActivateNuclearStopping(nuclearStopping);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hIonisation::PrintInfo()
-{
-  //if(EmModel(1) && EmModel(2)) {
-  //  G4cout << "      NuclearStopping= " << nuclearStopping
-  //   << G4endl;
-  //}
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hIonisation::ActivateNuclearStopping(G4bool)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

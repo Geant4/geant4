@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.21 2010-05-27 10:08:58 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.22 2010-05-27 10:25:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,12 +115,6 @@ public:
 				     const G4Material* mat,
 				     G4double kineticEnergy);
 
-  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
-				    const G4DynamicParticle*,
-				    G4double& eloss,
-				    G4double& niel,
-				    G4double length);
-
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
@@ -138,7 +132,7 @@ protected:
 
 private:
 
-  inline void SetupParameters();
+  void SetupParameters();
 
   inline void SetParticle(const G4ParticleDefinition* p);
 
@@ -172,35 +166,12 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4BetheBlochModel::SetupParameters()
-{
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  ratio = electron_mass_c2/mass;
-  G4double magmom = particle->GetPDGMagneticMoment()*mass/(0.5*eplus*hbar_Planck*c_squared);
-  magMoment2 = magmom*magmom - 1.0;
-  formfact = 0.0;
-  if(particle->GetLeptonNumber() == 0) {
-    G4double x = 0.8426*GeV;
-    if(spin == 0.0 && mass < GeV) {x = 0.736*GeV;}
-    else if(mass > GeV) {
-      x /= nist->GetZ13(mass/proton_mass_c2);
-      //	tlimit = 51.2*GeV*A13[iz]*A13[iz];
-    }
-    formfact = 2.0*electron_mass_c2/(x*x);
-    tlimit   = 2.0/formfact;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(particle != p) {
     particle = p;
-    if (p->GetPDGCharge()/eplus > 1.5 && p->GetBaryonNumber() > 2) isIon = true;
+    if (p->GetPDGCharge()/eplus > 1.5 && p->GetBaryonNumber() > 2) 
+      { isIon = true; }
     SetupParameters();
   }
 }
@@ -209,8 +180,8 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 
 inline void G4BetheBlochModel::SetGenericIon(const G4ParticleDefinition* p)
 {
-  if(p && particle != p) {
-    if(p->GetParticleName() == "GenericIon") isIon = true;
+  if(p && particle != p) { 
+    if(p->GetParticleName() == "GenericIon") { isIon = true; }
   }
 }
 
