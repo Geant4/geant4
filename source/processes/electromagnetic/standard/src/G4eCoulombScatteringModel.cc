@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.88 2010-05-26 08:02:14 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.89 2010-05-27 14:22:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,8 @@
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko add SelectIsotope and sampling of the recoil ion 
 // 16.06.09 C.Consolandi fixed computation of effective mass
+// 27.05.10 V.Ivanchenko added G4WentzelOKandVIxSection class to
+//              compute cross sections and sample scattering angle
 //
 //
 // Class Description:
@@ -59,10 +61,7 @@
 #include "Randomize.hh"
 #include "G4DataVector.hh"
 #include "G4ElementTable.hh"
-//#include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-//#include "G4Electron.hh"
-//#include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProductionCutsTable.hh"

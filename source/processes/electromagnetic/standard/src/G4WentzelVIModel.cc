@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.48 2010-05-26 17:41:34 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.49 2010-05-27 14:22:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,8 @@
 // Creation date: 09.04.2008 from G4MuMscModel
 //
 // Modifications:
+// 27-05-2010 V.Ivanchenko added G4WentzelOKandVIxSection class to
+//              compute cross sections and sample scattering angle
 //
 //
 // Class Description:

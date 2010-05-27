@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh,v 1.3 2010-05-26 08:02:14 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.hh,v 1.4 2010-05-27 14:22:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,12 +43,12 @@
 //
 // Class Description:
 //
-// Implementation of the computation of total and transport cross sections
-// to be used by single and multiple scattering models
+// Implementation of the computation of total and transport cross sections,
+// sample scattering angle for the single scattering case.
+// to be used by single and multiple scattering models. References:
 // 1) G.Wentzel, Z. Phys. 40 (1927) 590.
 // 2) J.M. Fernandez-Varea et al., NIM B73 (1993) 447.
-
-
+//
 // -------------------------------------------------------------------
 //
 

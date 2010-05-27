@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.48 2010-05-26 08:02:14 vnivanch Exp $
+// $Id: G4CoulombScatteringModel.cc,v 1.49 2010-05-27 14:22:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,8 @@
 // 09.10.07 V.Ivanchenko reorganized methods, add cut dependence in scattering off e- 
 // 09.06.08 V.Ivanchenko SelectIsotope is moved to the base class
 // 16.06.09 Consolandi rows 109, 111-112, 183, 185-186
+// 27.05.10 V.Ivanchenko added G4WentzelOKandVIxSection class to
+//              compute cross sections and sample scattering angle
 //
 //
 // Class Description:
