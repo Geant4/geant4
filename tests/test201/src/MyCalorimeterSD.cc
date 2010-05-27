@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyCalorimeterSD.cc,v 1.6 2006-11-20 23:06:19 asaim Exp $
+// $Id: MyCalorimeterSD.cc,v 1.7 2010-05-27 15:00:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,7 +55,7 @@ void MyCalorimeterSD::Initialize(G4HCofThisEvent*)
   }
 }
 
-G4bool MyCalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+G4bool MyCalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
   G4double edep = 1.;
 

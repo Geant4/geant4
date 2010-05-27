@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyTrackerHit.cc,v 1.7 2006-06-29 21:47:55 gunter Exp $
+// $Id: MyTrackerHit.cc,v 1.8 2010-05-27 15:00:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,6 +44,7 @@ MyTrackerHit::~MyTrackerHit()
 {;}
 
 MyTrackerHit::MyTrackerHit(const MyTrackerHit &right)
+  : G4VHit()
 {
   edep = right.edep;
   pos = right.pos;
@@ -56,7 +57,7 @@ const MyTrackerHit& MyTrackerHit::operator=(const MyTrackerHit &right)
   return *this;
 }
 
-int MyTrackerHit::operator==(const MyTrackerHit &right) const
+int MyTrackerHit::operator==(const MyTrackerHit &) const
 {
   return 0;
 }

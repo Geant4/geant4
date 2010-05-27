@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyCalorimeterHit.cc,v 1.7 2006-06-29 21:47:37 gunter Exp $
+// $Id: MyCalorimeterHit.cc,v 1.8 2010-05-27 15:00:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,6 +50,7 @@ MyCalorimeterHit::~MyCalorimeterHit()
 {;}
 
 MyCalorimeterHit::MyCalorimeterHit(const MyCalorimeterHit &right)
+  : G4VHit()
 {
   edep = right.edep;
   pos = right.pos;
@@ -66,7 +67,7 @@ const MyCalorimeterHit& MyCalorimeterHit::operator=(const MyCalorimeterHit &righ
   return *this;
 }
 
-int MyCalorimeterHit::operator==(const MyCalorimeterHit &right) const
+int MyCalorimeterHit::operator==(const MyCalorimeterHit &) const
 {
   return 0;
 }

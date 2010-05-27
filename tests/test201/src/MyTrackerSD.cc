@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyTrackerSD.cc,v 1.5 2006-06-29 21:47:57 gunter Exp $
+// $Id: MyTrackerSD.cc,v 1.6 2010-05-27 15:00:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ void MyTrackerSD::Initialize(G4HCofThisEvent*)
 						  collectionName[0]); 
 }
 
-G4bool MyTrackerSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+G4bool MyTrackerSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
   G4ThreeVector hitPoint
    = ( aStep->GetPreStepPoint()->GetPosition()
