@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.22 2010-05-27 10:25:23 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.23 2010-05-27 14:26:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -114,6 +114,12 @@ public:
   virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
 				     const G4Material* mat,
 				     G4double kineticEnergy);
+
+  virtual void CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+				    const G4DynamicParticle* dp,
+				    G4double& eloss,
+				    G4double&,
+				    G4double length);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
