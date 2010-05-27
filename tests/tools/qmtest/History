@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2010-05-27 09:05:13 gunter Exp $
+$Id: History,v 1.56 2010-05-27 14:08:22 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.55 2010-05-27 09:05:13 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-May-2010 G.Folger                (testtools-QMtest-V09-03-07)
+- disable testing of eventgenerator/particleGun{1,2,3}
+- add testcase for HadCalCMS for QGSP_BERT_CHIPS physics list
 
 27-May-2010 G.Folger                (testtools-QMtest-V09-03-06)
 - correct typos in eventgenerator/particleGun{2-build,3-run}.qmt
