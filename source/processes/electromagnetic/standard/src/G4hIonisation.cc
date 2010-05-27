@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.82 2009-02-20 12:06:37 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.83 2010-05-27 10:08:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,7 @@
 #include "G4PionMinus.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
+#include "G4ICRU73QOModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -105,8 +106,8 @@ using namespace std;
 
 G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    isInitialised(false),
-    nuclearStopping(true)
+    isInitialised(false)
+    //    nuclearStopping(false)
 {
   //  SetStepFunction(0.2, 1.0*mm);
   //SetIntegral(true);
@@ -150,6 +151,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 
     const G4ParticleDefinition* theBaseParticle = 0;
     G4String pname = part->GetParticleName();
+    G4double q = part->GetPDGCharge();
 
     // standard base particles
     if(part == bpart || pname == "proton" ||
@@ -162,17 +164,14 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     // select base particle 
     else if(bpart == 0) {
 
-      if(part->GetPDGSpin() == 0.0)
-	if(part->GetPDGCharge() > 0.0 ) {
-	  theBaseParticle = G4KaonPlus::KaonPlus();
-	} else {
-	  theBaseParticle = G4KaonMinus::KaonMinus();
-	}
-      else if(part->GetPDGCharge() > 0.0) {
-	theBaseParticle = G4Proton::Proton();
+      if(part->GetPDGSpin() == 0.0) {
+	if(q > 0.0) { theBaseParticle = G4KaonPlus::KaonPlus(); }
+	else { theBaseParticle = G4KaonMinus::KaonMinus(); }
       } else {
-	theBaseParticle = G4AntiProton::AntiProton();
+	if(q > 0.0) { theBaseParticle = G4Proton::Proton(); } 
+	else { theBaseParticle = G4AntiProton::AntiProton(); }
       }
+
       // base particle defined by interface
     } else { 
       theBaseParticle = bpart;
@@ -183,9 +182,10 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     mass  = part->GetPDGMass();
     ratio = electron_mass_c2/mass;
 
-    if(mass < 900.*MeV) nuclearStopping = false;
-
-    if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
+    if (!EmModel(1)) { 
+      if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
+      else { SetEmModel(new G4ICRU73QOModel(),1); }
+    }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
 
     // model limit defined for protons
@@ -193,27 +193,27 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     EmModel(1)->SetHighEnergyLimit(eth);
     AddEmModel(1, EmModel(1), new G4IonFluctuations());
 
-    if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
+    if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
 
-    if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
+    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }
     EmModel(2)->SetLowEnergyLimit(eth);
     EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(2, EmModel(2), FluctModel());  
 
     isInitialised = true;
   }
-  EmModel(1)->ActivateNuclearStopping(nuclearStopping);
-  EmModel(2)->ActivateNuclearStopping(nuclearStopping);
+  //EmModel(1)->ActivateNuclearStopping(nuclearStopping);
+  //EmModel(2)->ActivateNuclearStopping(nuclearStopping);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hIonisation::PrintInfo()
 {
-  if(EmModel(1) && EmModel(2)) {
-    G4cout << "      NuclearStopping= " << nuclearStopping
-	   << G4endl;
-  }
+  //if(EmModel(1) && EmModel(2)) {
+  //  G4cout << "      NuclearStopping= " << nuclearStopping
+  //   << G4endl;
+  //}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

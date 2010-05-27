@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.20 2009-04-23 17:44:43 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.21 2010-05-27 10:08:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -132,6 +132,10 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kinEnergy);
 
+  inline G4double GetChargeSquareRatio() const;
+
+  inline void SetChargeSquareRatio(G4double val);
+
 private:
 
   inline void SetupParameters();
@@ -209,5 +213,21 @@ inline void G4BetheBlochModel::SetGenericIon(const G4ParticleDefinition* p)
     if(p->GetParticleName() == "GenericIon") isIon = true;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4BetheBlochModel::GetChargeSquareRatio() const
+{
+  return chargeSquare;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4BetheBlochModel::SetChargeSquareRatio(G4double val)
+{
+  chargeSquare = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
