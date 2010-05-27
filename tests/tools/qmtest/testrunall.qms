@@ -18,6 +18,7 @@
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT_HP</text>
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT_EMX</text>
       <text>bench-calo-HadCalCMS-run1-QGSP_BERT_EMV</text>
+      <text>bench-calo-HadCalCMS-run1-QGSP_BERT_CHIPS</text>
       <text>bench-calo-HadCalCMS-run1-QGSC_CHIPS</text>
       <text>bench-calo-HadCalCMS-run1-QGSC_BERT</text>
       <text>bench-calo-HadCalCMS-run1-QBBC_XGGSN</text>
@@ -70,9 +71,6 @@
       <text>exam-ext-medical-gammatherapy-run</text>
       <text>exam-ext-optical-lxe-run</text>
       <text>exam-ext-optical-wls-run</text>
-      <text>exam-ext-eventgenerator-particleGun1-run</text>
-      <text>exam-ext-eventgenerator-particleGun2-run</text>
-      <text>exam-ext-eventgenerator-particleGun3-run</text>
       <text>exam-ext-persistency-gdml-g01-run</text>
       <text>exam-ext-polarisation-pol01-run</text>
       <text>exam-ext-radioactivedecay-exrdm-run</text>
