@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History
 
+27-May-2010 M.Kosov                             (hadr-chips-V09-03-05)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta
+
 16-Feb-2010 M.Kosov                             (hadr-chips-V09-03-04)
 -----------------------------------------------------------------------
 Mutual tag: final tested implementation of CHIPS elastic (G4QElastic)
