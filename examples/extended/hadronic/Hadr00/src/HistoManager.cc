@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.5 2008-12-01 17:06:52 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.6 2010-05-27 18:09:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,12 +85,12 @@ HistoManager::HistoManager()
   elementName   = "Al";
 
   minKinEnergy  = 0.1*MeV;
-  maxKinEnergy  = 1*TeV;
+  maxKinEnergy  = 10*TeV;
   minMomentum   = 1*MeV;
-  maxMomentum   = 100*TeV;
+  maxMomentum   = 10*TeV;
 
-  nBinsE    = 700;
-  nBinsP    = 800;
+  nBinsE    = 800;
+  nBinsP    = 700;
 
   needsReset    = false;
   isInitialised = false;
@@ -124,6 +124,7 @@ void HistoManager::BeginOfRun()
     histo->setHisto1D(4,nBinsE,e1,e2);
     histo->setHisto1D(5,nBinsE,e1,e2);
     histo->setHisto1D(6,nBinsE,e1,e2);
+    histo->setHisto1D(7,nBinsE,e1,e2);
 
   } else {
     histo->add1D("h1","Elastic cross section (barn) as a functions of log10(p/GeV)",
@@ -139,6 +140,8 @@ void HistoManager::BeginOfRun()
     histo->add1D("h6","Fission cross section (barn) as a functions of log10(E/MeV)",
 		 nBinsE,e1,e2);
     histo->add1D("h7","Charge exchange cross section (barn) as a functions of log10(E/MeV)",
+		 nBinsE,e1,e2);
+    histo->add1D("h8","Total cross section (barn) as a functions of log10(E/MeV)",
 		 nBinsE,e1,e2);
   }
 
@@ -164,12 +167,12 @@ void HistoManager::EndOfRun()
 	 << " off " << elementName
 	 << G4endl;
   if(verbose > 0) {
-    G4cout << "-------------------------------------------------------------" 
+    G4cout << "------------------------------------------------------------------------" 
 	   << G4endl;
-    G4cout << "    N     E(MeV)    Elastic(barn)   Inelastic(barn)";
-    if(particle == neutron) G4cout << "  Capture(barn)     Fission(barn)";
-    G4cout << "    ChargeExchange(barn)" << G4endl;     
-    G4cout << "-------------------------------------------------------------" 
+    G4cout << "    N     E(MeV)   Elastic(b)   Inelastic(b)";
+    if(particle == neutron) G4cout << " Capture(b)   Fission(b)";
+    G4cout << "   Total(b)" << G4endl;     
+    G4cout << "------------------------------------------------------------------------" 
 	   << G4endl;
   }
   if(!particle || !elm) {
@@ -178,7 +181,7 @@ void HistoManager::EndOfRun()
   }
 
   G4int prec = G4cout.precision();
-  G4cout.precision(7);
+  G4cout.precision(4);
 
   G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();
   G4double mass = particle->GetPDGMass();
@@ -193,30 +196,34 @@ void HistoManager::EndOfRun()
   G4double dp = (p2 - p1)/G4double(nBinsP);
 
   G4double x  = e1 - de*0.5; 
-  G4double e, p, xs;
+  G4double e, p, xs, xtot;
   G4int i;
   for(i=0; i<nBinsE; i++) {
     x += de;
     e  = std::pow(10.,x)*MeV;
     if(verbose>0) G4cout << std::setw(5) << i << std::setw(12) << e;  
     xs = store->GetElasticCrossSectionPerAtom(particle,e,elm);
-    if(verbose>0) G4cout << std::setw(14) << xs/barn;  
+    xtot = xs;
+    if(verbose>0) G4cout << std::setw(12) << xs/barn;  
     histo->fill(1, x, xs/barn);    
     xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm);
-    if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+    xtot += xs;
+    if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
     histo->fill(3, x, xs/barn);    
     if(particle == neutron) {
       xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm);
-      if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+      xtot += xs;
+      if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
       histo->fill(4, x, xs/barn);    
       xs = store->GetFissionCrossSectionPerAtom(particle,e,elm);
-      if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+      xtot += xs;
+      if(verbose>0) G4cout << " " << std::setw(12) << xs/barn;  
       histo->fill(5, x, xs/barn);    
     }
     xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm);
-    if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
+    if(verbose>0) G4cout << " " << std::setw(12) << xtot/barn << G4endl;   
     histo->fill(6, x, xs/barn);    
-    if(verbose>0) G4cout << "  " << x << G4endl;
+    histo->fill(7, x, xtot/barn);    
   }
 
   x = p1 - dp*0.5; 
@@ -230,7 +237,7 @@ void HistoManager::EndOfRun()
     histo->fill(2, x, xs/barn); 
   }
   if(verbose > 0) {
-    G4cout << "---------------------------------------------------------" 
+    G4cout << "-----------------------------------------------------------------" 
 	   << G4endl;
   }
   G4cout.precision(prec);
