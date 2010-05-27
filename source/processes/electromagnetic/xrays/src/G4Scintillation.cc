@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.30 2008-10-22 01:19:11 gum Exp $
+// $Id: G4Scintillation.cc,v 1.31 2010-05-27 20:49:40 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,10 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2005-08-17 by Peter Gumplinger
+// Updated:     2010-92-22 by Peter Gumplinger
+//              > scintillation rise time included, thanks to
+//              > Martin Goettlich/DESY
+//              2005-08-17 by Peter Gumplinger
 //              > change variable name MeanNumPhotons -> MeanNumberOfPhotons
 //              2005-07-28 by Peter Gumplinger
 //              > add G4ProcessType to constructor
@@ -92,6 +95,7 @@ G4Scintillation::G4Scintillation(const G4String& processName,
         SetProcessSubType(fScintillation);
 
 	fTrackSecondariesFirst = false;
+        fFiniteRiseTime = false;
 
         YieldFactor = 1.0;
         ExcitationRatio = 1.0;
@@ -247,6 +251,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         for (G4int scnt = 1; scnt <= nscnt; scnt++) {
 
             G4double ScintillationTime = 0.*ns;
+            G4double ScintillationRiseTime = 0.*ns;
             G4PhysicsOrderedFreeVector* ScintillationIntegral = NULL;
 
             if (scnt == 1) {
@@ -254,12 +259,19 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  if(Fast_Intensity){
                    ScintillationTime   = aMaterialPropertiesTable->
                                            GetConstProperty("FASTTIMECONSTANT");
+                   if (fFiniteRiseTime) {
+                      ScintillationRiseTime = aMaterialPropertiesTable->
+                                  GetConstProperty("FASTSCINTILLATIONRISETIME");
+                   }
                    ScintillationIntegral =
                    (G4PhysicsOrderedFreeVector*)((*theFastIntegralTable)(materialIndex));
                  }
                  if(Slow_Intensity){
                    ScintillationTime   = aMaterialPropertiesTable->
                                            GetConstProperty("SLOWTIMECONSTANT");
+                   if (fFiniteRiseTime) {
+                      ScintillationRiseTime = aMaterialPropertiesTable->
+                                  GetConstProperty("SLOWSCINTILLATIONRISETIME");                   }
                    ScintillationIntegral =
                    (G4PhysicsOrderedFreeVector*)((*theSlowIntegralTable)(materialIndex));
                  }
@@ -275,6 +287,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
+                 if (fFiniteRiseTime) {
+                      ScintillationRiseTime = aMaterialPropertiesTable->
+                                 GetConstProperty("FASTSCINTILLATIONRISETIME");
+                 }
                  ScintillationIntegral =
                   (G4PhysicsOrderedFreeVector*)((*theFastIntegralTable)(materialIndex));
                }
@@ -283,6 +299,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                Num = NumPhotons - Num;
                ScintillationTime   =   aMaterialPropertiesTable->
                                           GetConstProperty("SLOWTIMECONSTANT");
+               if (fFiniteRiseTime) {
+                    ScintillationRiseTime = aMaterialPropertiesTable->
+                                 GetConstProperty("SLOWSCINTILLATIONRISETIME");
+               }
                ScintillationIntegral =
                   (G4PhysicsOrderedFreeVector*)((*theSlowIntegralTable)(materialIndex));
             }
@@ -368,8 +388,14 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                        ((pPreStepPoint->GetVelocity()+
                          pPostStepPoint->GetVelocity())/2.);
 
-                deltaTime = deltaTime - 
-                            ScintillationTime * log( G4UniformRand() );
+                // emission time distribution
+                if (ScintillationRiseTime==0.0) {
+                   deltaTime = deltaTime - 
+                          ScintillationTime * log( G4UniformRand() );
+                } else {
+                   deltaTime = deltaTime +
+                          sample_time(ScintillationRiseTime, ScintillationTime);
+                }
 
                 G4double aSecondaryTime = t0 + deltaTime;
 
@@ -590,4 +616,25 @@ G4double G4Scintillation::GetMeanLifeTime(const G4Track&,
 
         return DBL_MAX;
 
+}
+
+G4double G4Scintillation::sample_time(G4double tau1, G4double tau2)
+{
+// tau1: rise time and tau2: decay time
+
+        while(1) {
+          // two random numbers
+          G4double ran1 = G4UniformRand();
+          G4double ran2 = G4UniformRand();
+          //
+          // exponential distribution as envelope function: very efficient
+          //
+          G4double d = (tau1+tau2)/tau2;
+          // make sure the envelope function is 
+          // always larger than the bi-exponential
+          G4double t = -1.0*tau2*log(1-ran1);
+          G4double g = d*single_exp(t,tau2);
+          if (ran2 <= bi_exp(t,tau1,tau2)/g) return t;
+        }
+        return -1.0;
 }
