@@ -25,9 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd
-   
-$G4INSTALL/examples/extended/eventgenerator/particleGun3;$G4BIN/$G4SYSTEM/particleGun3 run1.mac</text>
+    <text>cd $G4INSTALL/examples/extended/eventgenerator/particleGun3;$G4BIN/$G4SYSTEM/particleGun3 run1.mac</text>
   </argument>
   <argument name="stderr">
     <text/>
