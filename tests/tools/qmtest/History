@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2010-05-20 15:09:51 gunter Exp $
+$Id: History,v 1.55 2010-05-27 09:05:13 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.54 2010-05-20 15:09:51 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-May-2010 G.Folger                (testtools-QMtest-V09-03-06)
+- correct typos in eventgenerator/particleGun{2-build,3-run}.qmt
 
 20-May-2010 G.Folger                (testtools-QMtest-V09-03-05)
 - add building of test201
