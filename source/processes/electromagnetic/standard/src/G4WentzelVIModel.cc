@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.58 2010-05-28 16:16:06 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.59 2010-05-28 16:21:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,7 +72,7 @@ using namespace std;
 G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   G4VMscModel(nam),
   theLambdaTable(0),
-  numlimit(0.2),
+  numlimit(0.1),
   currentCouple(0),
   cosThetaMin(1.0),
   isInitialized(false),
