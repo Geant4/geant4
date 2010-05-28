@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.51 2010-05-27 17:51:55 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.52 2010-05-28 08:25:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,7 +218,8 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   //G4cout << "rcut= " << rcut << " rlimit= " << rlimit << " presafety= " << presafety 
   // << " 1-cosThetaMax= " <<1-cosThetaMax << " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc
   // << G4endl;
-  if(rcut > rlimit) { rlimit = rcut*fG4pow->A13(rlimit/rcut); }
+  if(rcut > rlimit) { rlimit = rcut*sqrt(rlimit/rcut); }
+  //    if(rcut > rlimit) { rlimit = rcut*fG4pow->A13(rlimit/rcut); }
 
   if(rlimit < tlimit) { tlimit = rlimit; }
 
