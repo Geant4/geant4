@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.57 2010-05-28 16:11:43 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.58 2010-05-28 16:16:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -174,6 +174,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   lambdaeff = GetLambda(preKinEnergy);
   currentRange = 
     theManager->GetRangeFromRestricteDEDX(particle,preKinEnergy,currentCouple);
+  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
 
   // extra check for abnormal situation
   // this check needed to run MSC with eIoni and eBrem inactivated
@@ -205,7 +206,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   }
 
   // natural limit for high energy
-  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
   G4double rlimit = std::max(facrange*currentRange, 
 			     0.7*(1.0 - cosTetMaxNuc)*lambdaeff);
 
@@ -286,7 +286,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
   G4double tau = geomStepLength/lambdaeff;
 
-  // step defined other than transportation 
+  // step defined by transportation 
   if(geomStepLength != zPathLength) { 
 
     // step defined by transportation 
@@ -513,7 +513,6 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
   }
   G4double cut = (*currentCuts)[currentMaterialIndex];
   cosTetMaxNuc = wokvi->GetCosThetaNuc();
-  //cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
 
   // check consistency
   xtsec = 0.0;
