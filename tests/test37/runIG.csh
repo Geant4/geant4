@@ -1,5 +1,6 @@
 #/bin/csh
 
+cd $VFEM/test41
 mkdir -p $REFERENCE
 cd $REFERENCE
 rm *
@@ -11,11 +12,10 @@ setenv PHYSLIST    standardIG
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-ln -s $VFEM/test37/geant4-09-01-ref-03/*S.* ./
-ln -s $VFEM/test37/geant4-09-01-ref-03/*0.* ./
-ln -s $VFEM/test37/geant4-09-01-ref-03/*1.* ./
-#ln -s $VFEM/test37/geant4-09-01-ref-03/*3.* ./
-ln -s ../20080804/*3.* ./
+ln -s $VFEM/test37/$2/*S.* ./
+ln -s $VFEM/test37/$2/*0.* ./
+ln -s $VFEM/test37/$2/*3.* ./
+ln -s $VFEM/test37/$2/*K.* ./
 
 $G4MY/reader_test37 Al     $1
 $G4MY/reader_test37 Mo     $1
