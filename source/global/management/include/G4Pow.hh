@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.hh,v 1.4 2010-05-28 08:17:08 vnivanch Exp $
+// $Id: G4Pow.hh,v 1.5 2010-05-28 08:18:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,7 @@
 // functions. Integer argument should in the interval 0-255, no
 // check is performed inside these methods for performance reasons.
 // Computations with double arguments are fast for the interval
-// 0.5-255.5, standard library is used in opposite case
+// 0.5-255.5, standard library is used in the opposite case
 
 // Author: Vladimir Ivanchenko
 //
