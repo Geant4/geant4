@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.56 2010-05-28 16:00:10 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.57 2010-05-28 16:11:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -317,8 +317,8 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
   // recompute transport cross section - do not change energy
   // anymore - cannot be applied for big steps
-  if(cosThetaMin > cosTetMaxNuc && tau < numlimit) {
-   
+  if(cosThetaMin > cosTetMaxNuc) {
+
     // new computation
     G4double xsec = ComputeXSectionPerVolume();
     //G4cout << "%%%% xsec= " << xsec << "  xtsec= " << xtsec << G4endl;
@@ -327,9 +327,11 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
       else           { lambdaeff = DBL_MAX; }
 
       tau = zPathLength*xsec;
-      tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+      if(tau < numlimit) { tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); } 
+      else if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+      else               { tPathLength = currentRange; }
     } 
-  } else { cosThetaMin = cosTetMaxNuc; }
+  } 
 
   if(tPathLength > currentRange) { tPathLength = currentRange; }
   if(tPathLength < zPathLength)  { tPathLength = zPathLength; }
@@ -510,7 +512,8 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     prob.resize(nelm);
   }
   G4double cut = (*currentCuts)[currentMaterialIndex];
-  cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
+  cosTetMaxNuc = wokvi->GetCosThetaNuc();
+  //cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
 
   // check consistency
   xtsec = 0.0;
