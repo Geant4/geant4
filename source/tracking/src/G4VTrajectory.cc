@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.13 2010-05-13 07:19:07 allison Exp $
+// $Id: G4VTrajectory.cc,v 1.14 2010-05-28 18:42:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -118,6 +118,17 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 void G4VTrajectory::DrawTrajectory(G4int i_mode) const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+
+  static G4bool warnedAboutIMode = false;
+  if (i_mode != 0 && !warnedAboutIMode) {
+    G4Exception
+        ("G4VTrajectory::DrawTrajectory",
+         "",
+         JustWarning,
+"WARNING: DEPRECATED: The use of a non-zero i_mode argument in DrawTrajectory"
+"\n  is deprecated and will be removed at the next major release.");
+    warnedAboutIMode = true;
+  }
 
   if (0 != pVVisManager) {
     pVVisManager->IsDefaultDrawTrajectory = true;
