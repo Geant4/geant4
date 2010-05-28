@@ -268,7 +268,7 @@ tests                                            tests-V09-03-05
   o Removed obsolete header.
 - test47 (test47-V09-02-04)
   o Introduced changes to run in split jobs and have a few extra tests.
-- test201 (test201-V09-03-01)
+- test201 (test201-V09-03-02)
   o Removed local physics-list, use QGSP_BERT instead.
-  o Fixed compilation warnings for ParametrisedBox.
+  o Fixed compilation warnings.
   o Introduction of G4UIExecutive in main().
