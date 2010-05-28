@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2010-05-26 11:10:31 allison Exp $
+$Id: History,v 1.145 2010-05-28 10:47:14 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,10 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+28th May 2010  John Allison  (visman-V09-03-03)
+- Co-works interfaces-V09-03-04.
+- G4VisExecutive.icc: Change order of flags to follow G4UIExecutive.
 
 26th May 2010  John Allison  (visman-V09-03-02)
 - G4VisExecutive.icc: Added drivers with generic nicknames:
