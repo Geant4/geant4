@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.38 2010-05-26 14:27:14 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.39 2010-05-28 13:14:18 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -66,7 +66,6 @@
 #include <qmenu.h>
 #include <qlistwidget.h>
 #include <qtreewidget.h>
-#include <QResizeEvent>
 #else
 #include <qaction.h>
 #include <qheader.h>
@@ -638,6 +637,8 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 #endif
 
   // Send this signal to unblock graphic updates !
+  fTabWidget->setTabSelected(false);
+
 #if QT_VERSION >= 0x040000
  #if QT_VERSION >= 0x040200
    fTabWidget->setVisible(true);
@@ -649,7 +650,7 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 #endif
 
   // This will send a paintEvent to OGL Viewers
-  fTabWidget->setTabSelected();
+  fTabWidget->setTabSelected(true);
 
 #if QT_VERSION < 0x040000
   QApplication::sendPostedEvents () ;
@@ -2156,7 +2157,7 @@ QPaintEvent * event
       } else {
         lastCreated = -1;
       }
-      unselectTab();
+      setTabSelected(false);
       repaint();
     }
   }
