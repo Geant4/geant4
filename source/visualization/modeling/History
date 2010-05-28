@@ -1,4 +1,4 @@
-$Id: History,v 1.117 2010-05-11 11:58:41 allison Exp $
+$Id: History,v 1.118 2010-05-28 02:03:42 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+28th May 2010  John Allison  (modeling-V09-03-01)
+- G4TrajectoryDrawByAttribute.cc, G4TrajectoryDrawByCharge.cc,
+  G4TrajectoryDrawByOriginVolume.cc, G4TrajectoryDrawByParticleID.cc:
+  o Fixed unused parameter 'i_mode' warning.
 
 11th May 2010  John Allison  (modeling-V09-03-00)
 - G4ModelingParameters, G4PhysicalVolumeModel:
