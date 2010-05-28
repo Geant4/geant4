@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.27 2010-05-05 13:57:35 gcosmo Exp $
+// $Id: G4PhysicsVector.icc,v 1.28 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@ inline
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
-  return (*dataVector)[binNumber];
+  return  dataVector[binNumber];
 }
 
 //---------------------------------------------------------------
@@ -71,7 +71,7 @@ inline
 inline
  G4double G4PhysicsVector::operator()(const size_t binNumber) const
 {
-  return (*dataVector)[binNumber];
+  return dataVector[binNumber];
 }
 
 //---------------------------------------------------------------
@@ -79,7 +79,7 @@ inline
 inline
  G4double G4PhysicsVector::Energy(const size_t binNumber) const
 {
-  return (*binVector)[binNumber];
+  return binVector[binNumber];
 }
 
 //---------------------------------------------------------------
@@ -109,11 +109,11 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  G4double intplFactor = (cache->lastEnergy-(*binVector)[lastBin]) 
-     / ((*binVector)[lastBin + 1]-(*binVector)[lastBin]); // Interpol. factor
+  G4double intplFactor = (cache->lastEnergy-binVector[lastBin]) 
+     / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
 
-  return (*dataVector)[lastBin] +
-         ( (*dataVector)[lastBin + 1]-(*dataVector)[lastBin] ) * intplFactor;
+  return dataVector[lastBin] +
+         ( dataVector[lastBin + 1]-dataVector[lastBin] ) * intplFactor;
 }
 
 //---------------------------------------------------------------
@@ -127,23 +127,23 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  if(0 == secDerivative->size() ) { FillSecondDerivatives(); }
+  if(0 == secDerivative.size() ) { FillSecondDerivatives(); }
 
   // check bin value
-  G4double x1 = (*binVector)[lastBin];
-  G4double x2 = (*binVector)[lastBin + 1];
+  G4double x1 = binVector[lastBin];
+  G4double x2 = binVector[lastBin + 1];
   G4double delta = x2 - x1;
 
   G4double a = (x2 - cache->lastEnergy)/delta;
   G4double b = (cache->lastEnergy - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
-  G4double y1 = (*dataVector)[lastBin];
-  G4double y2 = (*dataVector)[lastBin + 1];
+  G4double y1 = dataVector[lastBin];
+  G4double y2 = dataVector[lastBin + 1];
 
   G4double res = a*y1 + b*y2 + 
-        ( (a*a*a - a)*(*secDerivative)[lastBin] +
-          (b*b*b - b)*(*secDerivative)[lastBin + 1] )*delta*delta/6.0;
+        ( (a*a*a - a)*secDerivative[lastBin] +
+          (b*b*b - b)*secDerivative[lastBin + 1] )*delta*delta/6.0;
 
   return res;
 }
@@ -162,7 +162,7 @@ inline
 inline 
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 {
-  (*dataVector)[binNumber] = theValue;
+  dataVector[binNumber] = theValue;
 }
 
 //---------------------------------------------------------------

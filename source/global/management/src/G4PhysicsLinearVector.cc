@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.cc,v 1.17 2010-03-23 16:53:05 vnivanch Exp $
+// $Id: G4PhysicsLinearVector.cc,v 1.18 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,13 +52,13 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(size_t theNbin)
   type = T_G4PhysicsLinearVector;
 
   numberOfNodes = theNbin + 1;
-  dataVector->reserve(numberOfNodes);
-  binVector->reserve(numberOfNodes);      
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);      
 
   for (size_t i=0; i<numberOfNodes; i++)
   {
-     binVector->push_back(0.0);
-     dataVector->push_back(0.0);
+     binVector.push_back(0.0);
+     dataVector.push_back(0.0);
   }
 }  
 
@@ -71,22 +71,22 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
   type = T_G4PhysicsLinearVector;
 
   numberOfNodes = theNbin + 1;
-  dataVector->reserve(numberOfNodes);
-  binVector->reserve(numberOfNodes);      
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);      
 
-  binVector->push_back(theEmin);
-  dataVector->push_back(0.0);
+  binVector.push_back(theEmin);
+  dataVector.push_back(0.0);
 
   for (size_t i=1; i<numberOfNodes-1; i++)
     {
-      binVector->push_back( theEmin + i*dBin );
-      dataVector->push_back(0.0);
+      binVector.push_back( theEmin + i*dBin );
+      dataVector.push_back(0.0);
     }
-  binVector->push_back(theEmax);
-  dataVector->push_back(0.0);
+  binVector.push_back(theEmax);
+  dataVector.push_back(0.0);
 
-  edgeMin = (*binVector)[0];
-  edgeMax = (*binVector)[numberOfNodes-1];
+  edgeMin = binVector[0];
+  edgeMax = binVector[numberOfNodes-1];
 
 }  
 
@@ -97,8 +97,8 @@ G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    G4double theEmin = (*binVector)[0];
-    dBin = (*binVector)[1]-theEmin;
+    G4double theEmin = binVector[0];
+    dBin = binVector[1]-theEmin;
     baseBin = theEmin/dBin;
   }
   return success;

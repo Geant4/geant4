@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.16 2010-05-04 16:15:36 kurasige Exp $
+// $Id: G4LPhysicsFreeVector.icc,v 1.17 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,8 +47,8 @@ void G4LPhysicsFreeVector::PutValues(size_t binNumber,
   // G4PhysicsVector has PutValue() but it is inconvenient.
   // Want to simultaneously fill the bin and data vectors.
 {
-   (*binVector)[binNumber] = binValue;
-   (*dataVector)[binNumber] = dataValue;
+   binVector[binNumber] = binValue;
+   dataVector[binNumber] = dataValue;
    if(binNumber == 0)
      { edgeMin = binValue; }
    else if( numberOfNodes - 1 == binNumber)
@@ -76,7 +76,7 @@ size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
    G4int n3 = numberOfNodes - 1;
    while (n1 != n3 - 1)
    {
-      if (theEnergy > (*binVector)[n2])
+      if (theEnergy > binVector[n2])
          { n1 = n2; }
       else
          { n3 = n2; }

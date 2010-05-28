@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.24 2010-03-23 16:53:05 vnivanch Exp $
+// $Id: G4PhysicsLogVector.cc,v 1.25 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,13 +59,13 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
   type = T_G4PhysicsLogVector;
 
   numberOfNodes = theNbin + 1;
-  dataVector->reserve(numberOfNodes);
-  binVector->reserve(numberOfNodes);      
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);      
 
   for (size_t i=0; i<numberOfNodes; i++)
   {
-     binVector->push_back(0.0);
-     dataVector->push_back(0.0);
+     binVector.push_back(0.0);
+     dataVector.push_back(0.0);
   }
 }  
 
@@ -77,23 +77,23 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
   type = T_G4PhysicsLogVector;
 
   numberOfNodes = theNbin + 1;
-  dataVector->reserve(numberOfNodes);
-  binVector->reserve(numberOfNodes);
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);
   static const G4double g4log10 = std::log(10.); 
 
-  binVector->push_back(theEmin);
-  dataVector->push_back(0.0);
+  binVector.push_back(theEmin);
+  dataVector.push_back(0.0);
 
   for (size_t i=1; i<numberOfNodes-1; i++)
     {
-      binVector->push_back(std::exp(g4log10*(baseBin+i)*dBin));
-      dataVector->push_back(0.0);
+      binVector.push_back(std::exp(g4log10*(baseBin+i)*dBin));
+      dataVector.push_back(0.0);
     }
-  binVector->push_back(theEmax);
-  dataVector->push_back(0.0);
+  binVector.push_back(theEmax);
+  dataVector.push_back(0.0);
 
-  edgeMin = (*binVector)[0];
-  edgeMax = (*binVector)[numberOfNodes-1];
+  edgeMin = binVector[0];
+  edgeMax = binVector[numberOfNodes-1];
 }  
 
 G4PhysicsLogVector::~G4PhysicsLogVector()
@@ -105,8 +105,8 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    G4double theEmin = (*binVector)[0];
-    dBin = std::log10((*binVector)[1]/theEmin);
+    G4double theEmin = binVector[0];
+    dBin = std::log10(binVector[1]/theEmin);
     baseBin = std::log10(theEmin)/dBin;
   }
   return success;

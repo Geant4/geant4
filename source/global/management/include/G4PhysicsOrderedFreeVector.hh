@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.13 2009-12-21 22:51:54 kurasige Exp $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.14 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////

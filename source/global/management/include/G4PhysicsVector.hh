@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.30 2010-05-05 13:57:35 gcosmo Exp $
+// $Id: G4PhysicsVector.hh,v 1.31 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,8 @@
 //    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
 //    19 Jun. 2009, V.Ivanchenko : Removed hidden bin 
 //    22 Dec. 2009  H.Kurashige  : Use pointers to G4PVDataVector
-//    04 May. 2009  H.Kurashige  : Use G4PhysicsVectorCache
-//
+//    04 May. 2010  H.Kurashige  : Use G4PhysicsVectorCache
+//    28 May  2010  H.Kurashige  : Stop using  pointers to G4PVDataVector
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
@@ -205,9 +205,9 @@ class G4PhysicsVector
 
     G4PhysicsVectorCache*  cache;
 
-    G4PVDataVector* dataVector;    // Vector to keep the crossection/energyloss
-    G4PVDataVector* binVector;     // Vector to keep energy
-    G4PVDataVector* secDerivative; // Vector to keep second derivatives 
+    G4PVDataVector  dataVector;    // Vector to keep the crossection/energyloss
+    G4PVDataVector  binVector;     // Vector to keep energy
+    G4PVDataVector  secDerivative; // Vector to keep second derivatives 
 
   private:
 

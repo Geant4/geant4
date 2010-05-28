@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.icc,v 1.10 2009-12-21 22:51:54 kurasige Exp $
+// $Id: G4PhysicsOrderedFreeVector.icc,v 1.11 2010-05-28 05:13:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -48,25 +48,25 @@
 inline
 G4double G4PhysicsOrderedFreeVector::GetMaxValue()
 {
-	return dataVector->back();
+	return dataVector.back();
 }
 
 inline
 G4double G4PhysicsOrderedFreeVector::GetMinValue()
 {
-	return dataVector->front();
+	return dataVector.front();
 }
 
 inline
 G4double G4PhysicsOrderedFreeVector::GetMaxLowEdgeEnergy()
 {
-	return binVector->back();
+	return binVector.back();
 }
 
 inline
 G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
 {
-	return binVector->front();
+	return binVector.front();
 }
 
 inline
@@ -74,7 +74,7 @@ void G4PhysicsOrderedFreeVector::DumpValues()
 {
    for (size_t i = 0; i < numberOfNodes; i++)
    {
-      G4cout << (*binVector)[i] << "\t" << (*dataVector)[i] << G4endl;
+      G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
    }
 }
 
@@ -86,7 +86,7 @@ size_t G4PhysicsOrderedFreeVector::FindBinLocation(G4double theEnergy) const
    G4int n3 = numberOfNodes - 1;
    while (n1 != n3 - 1)
    {
-      if (theEnergy > (*binVector)[n2])
+      if (theEnergy > binVector[n2])
          { n1 = n2; }
       else
          { n3 = n2; }
