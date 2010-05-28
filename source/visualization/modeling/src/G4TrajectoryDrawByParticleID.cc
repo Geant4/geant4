@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.9 2010-05-11 11:31:31 allison Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.10 2010-05-28 02:00:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -43,7 +43,7 @@ G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
 void
 G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& object,
-				   const G4int& i_mode,
+				   const G4int&,
 				   const G4bool& visible) const
 {
   Draw(object, visible);

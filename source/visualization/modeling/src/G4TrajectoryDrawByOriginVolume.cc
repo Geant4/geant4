@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.5 2010-05-11 11:31:31 allison Exp $
+// $Id: G4TrajectoryDrawByOriginVolume.cc,v 1.6 2010-05-28 02:00:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay March 2006
@@ -45,7 +45,7 @@ G4TrajectoryDrawByOriginVolume::~G4TrajectoryDrawByOriginVolume() {}
 
 void
 G4TrajectoryDrawByOriginVolume::Draw(const G4VTrajectory& object,
-				     const G4int& i_mode,
+				     const G4int&,
 				     const G4bool& visible) const
 {
   Draw(object, visible);
