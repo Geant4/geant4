@@ -34,6 +34,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
+#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -67,6 +68,7 @@ int main(int argc,char** argv) {
   // set user action classes
   runManager->SetUserAction(runAct);
   runManager->SetUserAction(new SteppingAction(det, runAct));
+  runManager->SetUserAction(new StackingAction());
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

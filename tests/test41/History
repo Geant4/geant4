@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-05-10  V.Ivanchenko (test41-V09-03-01)
+- Added StackingAction
+- Updated scripts
+
 03-05-10  V.Ivanchenko (test41-V09-03-00)
 - Removed obsolete header
 
