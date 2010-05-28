@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.55 2010-05-28 13:35:50 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.56 2010-05-28 16:00:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -260,9 +260,9 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
 				   currentRange-tPathLength,
 				   currentCouple);
       }
-      preKinEnergy = 0.5*(e1 + preKinEnergy);
-      cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
-      lambdaeff = GetLambda(preKinEnergy);
+      e1 = 0.5*(e1 + preKinEnergy);
+      cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial);
+      lambdaeff = GetLambda(e1);
       zPathLength = lambdaeff*(1.0 - exp(-tPathLength/lambdaeff));
     }
   }
@@ -276,15 +276,22 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // initialisation of single scattering x-section
   xtsec = 0.0;
-  G4double tau = zPathLength/lambdaeff;
+
+  // pathalogical case
+  if(lambdaeff <= 0.0) { 
+    zPathLength = geomStepLength;
+    tPathLength = geomStepLength;
+    return tPathLength;
+  }
+
+  G4double tau = geomStepLength/lambdaeff;
 
   // step defined other than transportation 
   if(geomStepLength != zPathLength) { 
 
     // step defined by transportation 
-    tPathLength  = geomStepLength;
-    zPathLength  = geomStepLength;
-    tPathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
+    zPathLength = geomStepLength;
+    tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
 
     // energy correction for a big step
     if(tau > numlimit) {
@@ -294,11 +301,13 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 				   currentRange-tPathLength,
 				   currentCouple);
       }
-      preKinEnergy = 0.5*(e1 + preKinEnergy);
-      cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
-      lambdaeff = GetLambda(preKinEnergy);
+      e1 = 0.5*(e1 + preKinEnergy);
+      cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial);
+      lambdaeff = GetLambda(e1);
       tau = zPathLength/lambdaeff;
-      tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+      
+      if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+      else               { tPathLength = currentRange; }
     }
   }
 
@@ -306,8 +315,9 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // define threshold angle between single and multiple scattering 
   cosThetaMin = 1.0 - 1.5*tPathLength/lambdaeff;
 
-  // recompute transport cross section - small step 
-  if(cosThetaMin > cosTetMaxNuc) {
+  // recompute transport cross section - do not change energy
+  // anymore - cannot be applied for big steps
+  if(cosThetaMin > cosTetMaxNuc && tau < numlimit) {
    
     // new computation
     G4double xsec = ComputeXSectionPerVolume();
@@ -315,20 +325,14 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     if(xtsec > 0.0) {
       if(xsec > 0.0) { lambdaeff = 1./xsec; }
       else           { lambdaeff = DBL_MAX; }
+
       tau = zPathLength*xsec;
-      tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0);
+      tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
     } 
-  }
+  } else { cosThetaMin = cosTetMaxNuc; }
 
-  // large steps logarithmic formula
-  if(tau > numlimit) {
-
-    if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
-    else               { tPathLength = currentRange; }
-
-    if(tPathLength < zPathLength) { tPathLength = zPathLength; }
-  }
   if(tPathLength > currentRange) { tPathLength = currentRange; }
+  if(tPathLength < zPathLength)  { tPathLength = zPathLength; }
   /*    
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
