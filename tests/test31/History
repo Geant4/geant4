@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2010-04-13 08:59:58 vnivanch Exp $
+$Id: History,v 1.28 2010-05-28 09:41:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-05-10  V.Ivant (test31-V09-03-01)
+- Added pi- and anti_proton beams to test31.in
 
 13-04-10  V.Ivant (test31-V09-03-00)
 - PhysicsList - removed obsolete low-energy builders, 

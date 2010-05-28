@@ -48,4 +48,10 @@
 /gun/particle proton
 /run/beamOn 1000
 #
+/gun/particle pi-
+/run/beamOn 1000
+#
+/gun/particle anti_proton
+/run/beamOn 1000
+#
 

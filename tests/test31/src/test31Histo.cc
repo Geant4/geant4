@@ -133,6 +133,8 @@ void test31Histo::EndOfHisto()
 {
 
   G4cout << "test31Histo: End of run actions" << G4endl;
+  //  G4cout << "1.5kT(eV)= " << 1.5*k_Boltzmann*STP_Temperature/eV << G4endl;
+
 
   // Zend average
 
@@ -352,6 +354,14 @@ void test31Histo::AddParticleBack(const G4Track* track)
 
 void test31Histo::TableControl()
 {
+  G4cout << ">>>>>> Mass test 2n:  " 
+	 << G4NucleiProperties::GetNuclearMass(2,0) - 2*neutron_mass_c2
+	 << " MeV" << G4endl;
+  G4cout << ">>>>>> Mass test 2p:  " 
+	 << G4NucleiProperties::GetNuclearMass(2,2) - 2*proton_mass_c2
+	 << " MeV" << G4endl;
+
+
   G4NistManager*  mman = G4NistManager::Instance();
   G4EmCorrections* emc = G4LossTableManager::Instance()->EmCorrections();
   G4EmCalculator cal;
