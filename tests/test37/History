@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-05-10  V.Ivanchenko (test37-V09-03-01)
+- Updated PhysList for WentzelVI model and scripts
+
 03-05-10  V.Ivanchenko (test37-V09-03-00)
 - Removed obsolete header
 
