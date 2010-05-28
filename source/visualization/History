@@ -1,4 +1,4 @@
-$Id: History,v 1.466 2010-05-28 02:07:44 allison Exp $
+$Id: History,v 1.467 2010-05-28 10:52:53 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,8 @@ History file for visualization category
 ---------------------------------------
 
 28th May 2010  John Allison
+- Co-works interfaces-V09-03-04.
+- visman-V09-03-03: Change order of flags to follow G4UIExecutive.
 - modeling-V09-03-01: Fixed unused parameter 'i_mode' warning.
 
 26th May 2010  John Allison  (vis-V09-03-02)
