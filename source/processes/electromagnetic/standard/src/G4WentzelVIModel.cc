@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.54 2010-05-28 11:19:52 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.55 2010-05-28 13:35:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -228,7 +228,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 
   // step limit in infinite media
   tlimit = std::min(tlimit, 20*currentMaterial->GetRadlen());
-  /*
+  /*  
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
 	 << " L0= " << lambdaeff << " R= " << currentRange
 	 << "tlimit= " << tlimit  
@@ -276,29 +276,30 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // initialisation of single scattering x-section
   xtsec = 0.0;
+  G4double tau = zPathLength/lambdaeff;
 
   // step defined other than transportation 
-  if(geomStepLength == zPathLength) { return tPathLength; }
+  if(geomStepLength != zPathLength) { 
 
-  // step defined by transportation 
-  tPathLength  = geomStepLength;
-  zPathLength  = geomStepLength;
-  G4double tau = zPathLength/lambdaeff;
-  tPathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
+    // step defined by transportation 
+    tPathLength  = geomStepLength;
+    zPathLength  = geomStepLength;
+    tPathLength *= (1.0 + 0.5*tau + tau*tau/3.0); 
 
-  // energy correction for a big step
-  if(tau > numlimit) {
-    G4double e1 = 0.0;
-    if(currentRange > tPathLength) {
-      e1 = theManager->GetEnergy(particle,
-				 currentRange-tPathLength,
-				 currentCouple);
+    // energy correction for a big step
+    if(tau > numlimit) {
+      G4double e1 = 0.0;
+      if(currentRange > tPathLength) {
+	e1 = theManager->GetEnergy(particle,
+				   currentRange-tPathLength,
+				   currentCouple);
+      }
+      preKinEnergy = 0.5*(e1 + preKinEnergy);
+      cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
+      lambdaeff = GetLambda(preKinEnergy);
+      tau = zPathLength/lambdaeff;
+      tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
     }
-    preKinEnergy = 0.5*(e1 + preKinEnergy);
-    cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
-    lambdaeff = GetLambda(preKinEnergy);
-    tau = zPathLength/lambdaeff;
-    tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
   }
 
   // check of step length
@@ -328,7 +329,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     if(tPathLength < zPathLength) { tPathLength = zPathLength; }
   }
   if(tPathLength > currentRange) { tPathLength = currentRange; }
-  /*  
+  /*    
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
   G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin
@@ -356,7 +357,7 @@ void G4WentzelVIModel::SampleScattering(const G4DynamicParticle* dynParticle,
 
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
-  /*   
+  /*     
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
 	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
 	 << " x1= " <<  tPathLength*invlambda << " safety= " << safety << G4endl;
