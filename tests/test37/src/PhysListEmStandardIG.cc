@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.12 2009-11-21 15:53:21 vnivanch Exp $
+// $Id: PhysListEmStandardIG.cc,v 1.13 2010-05-28 14:00:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,18 +109,18 @@ void PhysListEmStandardIG::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1,-3, 3);
       pmanager->AddProcess(new G4MuPairProduction,   -1,-4, 4);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering());
+      //pmanager->AddDiscreteProcess(new G4CoulombScattering());
              
     } else if (particleName == "alpha" || particleName == "He3") {
       pmanager->AddProcess(new G4MuMultipleScattering(),-1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering());
+      //pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4MuMultipleScattering(),-1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      pmanager->AddDiscreteProcess(cs);
+      //G4CoulombScattering* cs = new G4CoulombScattering();
+      //pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
@@ -128,8 +128,8 @@ void PhysListEmStandardIG::ConstructProcess()
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MuMultipleScattering(), -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,      -1, 2, 2);
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      pmanager->AddDiscreteProcess(cs);
+      //G4CoulombScattering* cs = new G4CoulombScattering();
+      //pmanager->AddDiscreteProcess(cs);
     }
   }
   G4EmProcessOptions opt;
@@ -141,6 +141,7 @@ void PhysListEmStandardIG::ConstructProcess()
   //  opt.SetLinearLossLimit(1.e-2);
   // opt.SetSplineFlag(true);
   opt.SetPolarAngleLimit(0.2);
+  opt.SetRangeFactor(0.1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
