@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2010-05-13 07:19:07 allison Exp $
+$Id: History,v 1.140 2010-05-28 18:42:23 allison Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 May 2010 John Allison (tracking-V09-03-02)
+- G4VTrajectory.cc: Added explicit once-only i_mode deprecation warning.
 
 13 May 2010 John Allison (tracking-V09-03-01 - needs greps-V09-03-00)
 - G4VTrajectory.cc: Added a statement to set IsDefaultDrawTrajectory,
