@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.15 2010-05-28 14:22:46 mkossov Exp $
+// $Id: G4QIsotope.cc,v 1.16 2010-05-28 15:03:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
@@ -272,7 +272,7 @@ G4QIsotope::G4QIsotope()
   vector<pair<G4int,G4double> >*e0=new vector<pair<G4int,G4double> >; // 40-Zr
   e0->push_back(make_pair(50,.5145));
   e0->push_back(make_pair(54,.6883));
-  e0->push_back(make_pair(53,.8598));
+  e0->push_back(make_pair(52,.8598));
   e0->push_back(make_pair(51,.972));
   e0->push_back(make_pair(56,1.));
   natEl.push_back(e0);
