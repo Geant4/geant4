@@ -1,0 +1,274 @@
+
+                       geant4-09-03-ref-05
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o New recursive algorithm for generation of polyhedrons, improving
+   visualization of Boolean shapes and nested Boolean shapes.
+ o Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment of
+   optical photon transport related to internal reflection at surface.
+ o Introduced G4PhysicsVectorCache, placeholder for cache R/W data in use
+   by G4PhysicsVector and derivates.
+ o New physics list QGSP_BERT_CHIPS: use CHIPS inelastic for all "misc"
+   particles, including anti-proton, anti-neutron and hyperons.
+   Also use interface to CHIPS cross-sections for Kaons.
+ o Major code review and developments to de-excitation hadronic model.
+ o Introduced use of G4UIExecutive in all examples, where required.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-03-02
+------
+- Updated internal scripts for Configure: protected echos on LD_LIBRARY_PATH
+  so that output from use of Configure post-install is clean.
+
+event                                            event-V09-03-02
+-----
+- Added few accessors methods to G4SPSEneDistribution class.
+
+geometry/solids/CSG                              geom-csg-V09-03-01
+-------------------
+- G4Box: first implementation of speed improvements and corrections from joint
+  code review of G4Box class: introduced half-tolerance constants and better
+  logic in some conditional statements. Some code cleanup.
+- G4Orb: modified DistanceToIn(p,v) to be more consistent with Inside(p).
+
+geometry/solids/Boolean                          geom-bool-V09-03-00
+-----------------------
+- Introduced recursive algorithm in CreatePolyhedron() for Boolean operations:
+  it uses HepPolyhedronProcessor from 'graphics_reps' module, using new
+  technique in attempt to avoid numerical problems for the calculation of the
+  polyhedron in BooleanProcessor. It allows to try all permutations, also for
+  Booleans of Booleans.
+  Helps in reducing the number of cases of "Error in Boolean processor" for
+  visualization; still some stubborn cases are left.
+
+geometry/solids/specific                         geom-specific-V09-03-03
+------------------------
+- Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment of
+  optical photon transport related to internal reflection at surface.
+  Addresses problem report #1103.
+
+global                                           global-V09-03-06
+------
+- Introduced G4PhysicsVectorCache, placeholder for cache R/W data in use
+  by G4PhysicsVector and derivates. Modified G4PhysicsVector and
+  G4LPhysicsFreeVector accordingly.
+- Moved interpolation methods to inline in G4PhysicsVector.
+
+graphics_reps                                    greps-V09-03-00
+-------------
+- G4VVisManager: added temporary Boolean flag 'IsDefaultDrawTrajectory',
+  to assist in deprecation of i-mode trajectory drawing parameter.
+
+intercoms                                        intercoms-V09-03-01
+---------
+- G4UIManager: added field to get GUI Window session.
+- Added used characters to 'tokenNum' in G4UItokenNum suppressing compiler
+  warnings of gcc-4.5.0.
+
+materials                                        materials-V09-03-07
+---------
+- G4NistMaterialBuilder, G4NistManager: added method GetMeanIonisationEnergy().
+  Added material G4_LUCITE.
+- G4DensityEffectData: fixed method GetIndex(Z, state) for Hydrogen
+  and solid states, renamed it to GetElementIndex().
+- G4IonisParamMat: added member and method GetInvA23(); use GetElementIndex().
+- G4IonisParamElm: use mean excitation energy from NIST DB; addressing a
+  problem reported for mean energy deposition in compound materials.
+- G4AtomicShells: improved performance by adding indexing array.
+- G4Element: moved include of G4AtomicShells header to the source.
+
+particles                                        particles-V09-03-03
+---------
+- Allow creation of shortlived particles other than in 'PreInit' state.
+- ElectronOccupancy in G4DynamicParticle is now created on demand, i.e. it is
+  not created at construction of G4DynamicParticle but when AddElectron() or
+  RemoveElectron() are invoked.
+- Fixed problems that error messages appear in cout and not in cerr.
+- Code cleanup in G4DynamicParticle constructors.
+
+persistency/gdml                                 gdml-V09-03-02
+----------------
+- Corrected dump of division axis in GDML writer.
+
+physics_lists                                    phys-lists-V09-03-02
+-------------
+- New physics list QGSP_BERT_CHIPS: use CHIPS inelastic for all "misc"
+  particles, including anti-proton, anti-neutron and hyperons.
+  Also use interface to CHIPS cross-sections for Kaons.
+  Added classes: QGSP_BERT_CHIPS, HadronPhysicsQGSP_BERT_CHIPS, and
+  G4MiscCHIPSBuilder; modifed G4PhysListFactory accordingly.
+- QBBC: disabled multi-fragmentation model of deexcitation.
+
+processes/electromagnetic/standard               emstand-V09-03-11
+----------------------------------
+- G4eBremsstrahlungModel: fix in SelectRandomAtom() method.
+  Addressing problem report #1115.
+- G4UrbanMscModel93: added randomization of step limit for the first step in
+  any volume.
+
+processes/electromagnetic/utils                  emutils-V09-03-12
+-------------------------------
+- Added method GetCurrentElement() in G4VEmProcess, G4VEnergyLossProcess
+  and G4VEmModel classes.
+- G4VEmProcess: cleanup printout at initialisation for scattering process.
+
+processes/hadronic
+------------------
+- models/cascade (hadr-casc-V09-03-23-01)
+  o G4Diproton, G4Dineutron, G4UnboundPN: fixed issue with FTFP de-excitation,
+    which occasionally may pick up these 'internal' particles and put it onto
+    a final-state particle list by mistake.
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-03)
+  o Bug fix in G4QNucleus::ChoosePosition() for looping.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-03-00)
+  o Fix to use of Z+N instead of N for A.
+- models/de_excitation (hadr-deex-V09-03-17)
+  o G4FermiFragmentsPool: extended list of stable fragments.
+  o G4UnstableFragmentBreakUp: new class to decay exotic fragment
+    (like 2n or 2p).
+  o G4DiscreteGammaTransition: make transition depended on Z and A (before was
+    only Z) and added energy tolerance
+  o G4VGammaDeexcitation: rewritten kinematic of 2-body decay.
+    Fix to take into account electron mass in the case of electron emission.
+    Take into account bounding energy of electron in the case of electron
+    emission; fixed kinematic.
+  o G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation, 
+    G4ContinuumGammaDeexcitation: set energy tolerance 1 keV. More accurate
+    Lorentz computations. Define destructors to be virtual.
+  o G4DiscreteGammaTransition: removed unphysical corrections of gamma energy; 
+    fixed default particle as gamma; avoid subtracting bounding energy in case
+    of electron emission.
+  o G4ExcitationHandler: apply FermiBreakUp to fragments with A>1 (before was
+    A>4) in order to reduce number of fake gamma produced in order deexcite
+    light fragments; added parameter 'minExcitation' equal to 1 keV.
+    Added check on stability of primary; do evaporation if FermiBreakUp cannot
+    deexcite a fragment. Added SetParameters() method. Disabled MFM.
+    Allow emission e- instead of gamma due to internal conversion.
+    Use BreakUpFragment() method for photon de-excitation.
+  o G4Evaporation: rewritten BreakUp() method; added Initialise() method,
+    to setup all options and not at run time. Added InitialiseEvaporation()
+    method to setup decay channels; changed order of decay channels: first
+    photon evaporation, then fission, finally all other channels as before.
+    Improved condition how to stop deexcitation loop.
+    Added call to G4UnstableFragmentBreakUp if natural abundances of cold
+    fragment is zero; optimized logic of stopping of evaporation loop
+  o G4PhotonEvaporation: added correction of electron state after emission.
+  o G4VEvaporationChannel, G4PhotonEvaporation: added two new virtual methods 
+    EmittedFragment() and BreakUpFragment().
+  o G4FermiConfiguration: parameter of Coulomb energy Kappa is changed from 1
+    to 6 according to recommendation of original author of the model A.Botvina.
+  o G4FermiPhaseSpaceDecay: improved model of sampling of kinetic energy.
+    Cleanup of the code to use G4Pow.
+  o G4FermiFragmentsPool: fix for fragment 111.
+  o G4StatMFFragment, G4CompetitiveFission, G4EvaporationProbability,
+    G4GEMProbability: corrected inclusion of headers.
+  o G4E1Probability: code cleanup and optimisation by usage of G4Pow, integer
+    A and introduction of const members. Added numerical protection to avoid
+    division by zero.
+  o G4GEMProbability:code cleanup and optimisation by usage of G4Pow and
+    integer Z,A.
+  o Code cleanup. Moved constructors and destructors to source files for
+    virtual interfaces. 
+- models/util (hadr-mod-util-V09-03-01)
+  o G4Fragment: do not add any shift to excitation energy but use direct
+    computation (this is needed to avoid infinite loop in gamma deexcitation);
+    use G4NucleiProperties to access or compute ground state mass. Allow e- as
+    a fragment.
+    Added inline method ComputeGroundStateMass(); added accessors for integer
+    Z and A; added ExcitationEnergyWarning() method.
+    Minor speedup by adding member and access method to GroundStateMass.
+    Some code cleanup: single return in inline methods.
+
+processes/optical                                op-V09-03-02
+-----------------
+- Fixed sampling of 'theFacetNormal' for 'polishedbackpainted' material
+  in G4OpBoundaryProcess::DielectricDielectric() method. Address problem
+  reported on Hypernews Optical Processes Forum, thread #334.
+
+tracking                                         tracking-V09-03-01
+--------
+- G4VTrajectory: added statement to set new flag 'IsDefaultDrawTrajectory',
+  to assist in deprecation of i-mode trajectory drawing parameter.
+
+examples                                         examples-V09-03-05
+--------
+- Updated reference outputs.
+- advanced/amsEcal (amsEcal-V09-03-00)
+  o Introduction of G4UIExecutive in main().
+- advanced/human_phantom (human_phantom-V09-03-00)
+  o Added missing includes, causing compilation error.
+  o Migrated multiple-scattering process in physics-list to particle-based
+    (e+/e-) multiple-scattering.
+  o Corrected commands in some macros.
+- extended/analysis/N03Con (exampleN03Con-V09-03-01)
+- extended/biasing/ReverseMC01 (ReverseMC01-V09-03-00)
+  o Introduction of G4UIExecutive in main().
+- extended/electromagnetic/TestEm0 (testem0-V09-03-02)
+  o RunAction: reverse order of calls, first ComputeCrossSection(), then
+    GetCrossSection().
+  o Introduction of G4UIExecutive in main().
+- extended/electromagnetic/TestEm2 (testem1-V09-03-02)
+- extended/electromagnetic/TestEm3 (testem3-V09-03-02)
+- extended/electromagnetic/TestEm4 (testem4-V09-03-00)
+- extended/electromagnetic/TestEm5 (testem5-V09-03-00)
+- extended/electromagnetic/TestEm6 (testem6-V09-03-01)
+- extended/electromagnetic/TestEm7 (testem7-V09-03-00)
+- extended/electromagnetic/TestEm8 (testem8-V09-03-01)
+- extended/electromagnetic/TestEm9 (testem9-V09-03-01)
+- extended/electromagnetic/TestEm10 (testem10-V09-03-01)
+  o Introduction of G4UIExecutive in main().
+- extended/electromagnetic/TestEm11 (testem11-V09-03-01)
+- extended/electromagnetic/TestEm12 (testem12-V09-03-01)
+  o Added lists PhysListStandardGS, PhysListStandardSS, PhysListStandardWVI.
+  o Introduction of G4UIExecutive in main().
+- extended/electromagnetic/TestEm15 (testem15-V09-03-00)
+- extended/electromagnetic/TestEm16 (testem16-V09-03-00)
+- extended/electromagnetic/TestEm17 (testem17-V09-03-00)
+- extended/electromagnetic/TestEm18 (testem18-V09-03-00)
+- extended/eventgenerator/exgps (exgps-V09-03-00)
+  o Introduction of G4UIExecutive in main().
+- extended/eventgenerator/HepMC (exHepMC-V09-03-00)
+  o Updated to make use of HepMC-2.06.00.
+  o Use QGSP physics-list.
+  o Introduction of G4UIExecutive in main().
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V09-03-00)
+- extended/exoticphysics/monopole (monopole-V09-03-02)
+- extended/field/field01 (fieldex01-V09-03-02)
+- extended/field/field02 (fieldex02-V09-03-02)
+- extended/field/field03 (fieldex03-V09-03-02)
+- extended/geometry/olap (olapex-V09-03-00)
+- extended/medical/electronScattering (electronScattering-V09-03-04)
+- extended/medical/fanoCavity (fano-V09-03-01)
+  o Introduction of G4UIExecutive in main().
+- extended/parallel/MPI (MPI-V09-03-00)
+  o General code review.
+  o mpi_interface: OpenMPI as default MPI library instead of LAM/MPI;
+    improved /mpi/status command (added waste of CPU, time measurement);
+    introduced /mpi/wait command for waiting until "beamOn" ends;
+    improved macro file parser (same parser as G4UIbatch; fixed unexpected
+    behavior at the end of batch mode); changed "beamOn" behavior for better
+    performance (thread-out for interactive, on-thread for batch).
+  o exMPI01: use G4UIcsh instead of G4UItcsh since OpenMPI is now default; 
+    use G4eMultipleScattering instead of obsolete G4MultipleScattering.
+  o exMPI02: use G4UIcsh instead of G4UItcsh since OpenMPI is now default.
+- extended/radioactivedecay/exrdm (exrdm-V09-03-00)
+  o Replaced G4MultipleScattering by particle specialized processes.
+
+tests                                            tests-V09-03-05
+-----
+- Updated reference outputs and tools.
+- test37 (test37-V09-03-00)
+- test41 (test41-V09-03-00)
+  o Removed obsolete header.
+- test47 (test47-V09-02-04)
+  o Introduced changes to run in split jobs and have a few extra tests.
+- test201 (test201-V09-03-01)
+  o Removed local physics-list, use QGSP_BERT instead.
+  o Fixed compilation warnings for ParametrisedBox.
+  o Introduction of G4UIExecutive in main().
