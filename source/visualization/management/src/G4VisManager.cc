@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.124 2010-05-11 11:02:19 allison Exp $
+// $Id: G4VisManager.cc,v 1.125 2010-05-28 16:48:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@
 
 G4VisManager* G4VisManager::fpInstance = 0;
 
-G4VisManager::G4VisManager ():
+G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),
   fInitialised     (false),
   fpUserVisAction  (0),
@@ -86,7 +86,6 @@ G4VisManager::G4VisManager ():
   fpScene          (0),
   fpSceneHandler   (0),
   fpViewer         (0),
-  fVerbosity       (warnings),
   fpStateDependent (0),
   fEventRefreshing          (false),
   fTransientsDrawnThisRun   (false),
@@ -122,54 +121,56 @@ G4VisManager::G4VisManager ():
     G4Exception
       ("G4VisManager: attempt to Construct more than one VisManager.");
   }
-  else {
 
-    fpInstance = this;
-    SetConcreteInstance(this);
+  fpInstance = this;
+  SetConcreteInstance(this);
 
-    fpStateDependent = new G4VisStateDependent (this);
-    // No need to delete this; G4StateManager does this.
+  fpStateDependent = new G4VisStateDependent (this);
+  // No need to delete this; G4StateManager does this.
 
-    if (fVerbosity >= startup) {
-      G4cout << "Visualization Manager instantiating..." << G4endl;
-    }
-
-    // Note: The specific graphics systems must be instantiated in a
-    // higher level library to avoid circular dependencies.  Also,
-    // some specifically need additional external libararies that the
-    // user must supply.  Therefore we ask the user to implement
-    // RegisterGraphicsSystems() and RegisterModelFactories()
-    // in a subclass.  We have to wait for the subclass to instantiate
-    // so RegisterGraphicsSystems() cannot be called from this
-    // constructor; it is called from Initialise().  So we ask the
-    // user:
-    //   (a) to write a subclass and implement  RegisterGraphicsSystems()
-    //       and RegisterModelFactories().  See
-    //       visualization/include/G4VisExecutive.hh/icc as an example.
-    //   (b) instantiate the subclass.
-    //   (c) invoke the Initialise() method of the subclass.
-    // For example:
-    //   ...
-    // #ifdef G4VIS_USE
-    //   // Instantiate and initialise Visualization Manager.
-    //   G4VisManager* visManager = new G4VisExecutive;
-    //   visManager -> SetVerboseLevel (Verbose);
-    //   visManager -> Initialise ();
-    // #endif
-    //   // (Don't forget to delete visManager;)
-    //   ...
-
-    // Make top level command directory...
-    G4UIcommand* directory;
-    directory = new G4UIdirectory ("/vis/");
-    directory -> SetGuidance ("Visualization commands.");
-    fDirectoryList.push_back (directory);
-
-    // Instantiate top level basic commands
-    G4VVisCommand::SetVisManager (this);  // Sets shared pointer
-    RegisterMessenger(new G4VisCommandVerbose);
-    RegisterMessenger(new G4VisCommandInitialize);
+  fVerbosity = GetVerbosityValue(verbosityString);
+  if (fVerbosity >= startup) {
+      G4cout
+	<< "Visualization Manager instantiating with verbosity \""
+	<< VerbosityString(fVerbosity)
+	<< "\"..." << G4endl;
   }
+
+  // Note: The specific graphics systems must be instantiated in a
+  // higher level library to avoid circular dependencies.  Also,
+  // some specifically need additional external libararies that the
+  // user must supply.  Therefore we ask the user to implement
+  // RegisterGraphicsSystems() and RegisterModelFactories()
+  // in a subclass.  We have to wait for the subclass to instantiate
+  // so RegisterGraphicsSystems() cannot be called from this
+  // constructor; it is called from Initialise().  So we ask the
+  // user:
+  //   (a) to write a subclass and implement  RegisterGraphicsSystems()
+  //       and RegisterModelFactories().  See
+  //       visualization/include/G4VisExecutive.hh/icc as an example.
+  //   (b) instantiate the subclass.
+  //   (c) invoke the Initialise() method of the subclass.
+  // For example:
+  //   ...
+  // #ifdef G4VIS_USE
+  //   // Instantiate and initialise Visualization Manager.
+  //   G4VisManager* visManager = new G4VisExecutive;
+  //   visManager -> SetVerboseLevel (Verbose);
+  //   visManager -> Initialise ();
+  // #endif
+  //   // (Don't forget to delete visManager;)
+  //   ...
+
+  // Make top level command directory...
+  G4UIcommand* directory;
+  directory = new G4UIdirectory ("/vis/");
+  directory -> SetGuidance ("Visualization commands.");
+  fDirectoryList.push_back (directory);
+
+  // Instantiate top level basic commands
+  G4VVisCommand::SetVisManager (this);  // Sets shared pointer
+  RegisterMessenger(new G4VisCommandVerbose);
+  RegisterMessenger(new G4VisCommandInitialize);
 }
 
 G4VisManager::~G4VisManager () {

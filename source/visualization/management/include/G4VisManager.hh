@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.71 2010-05-20 07:54:31 allison Exp $
+// $Id: G4VisManager.hh,v 1.72 2010-05-28 16:48:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -164,7 +164,7 @@ public: // With description
 
 protected: // With description
 
-  G4VisManager ();
+  G4VisManager (const G4String& verbosityString = "warnings");
   // The constructor is protected so that an object of the derived
   // class may be constructed.
 

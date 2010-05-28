@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2010-05-28 10:47:14 allison Exp $
+$Id: History,v 1.146 2010-05-28 16:48:03 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,14 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+28th May 2010  John Allison  (visman-V09-03-04)
+- G4VisManager, G4VisExecutive:
+  Introduced optional verbosity string argument in constructor.  You
+  can now write, for example:
+    G4VisManager* visManager = new G4VisExecutive("quiet");
+  Note that the default is "warnings":
+    G4VisManager* visManager = new G4VisExecutive;
 
 28th May 2010  John Allison  (visman-V09-03-03)
 - Co-works interfaces-V09-03-04.
