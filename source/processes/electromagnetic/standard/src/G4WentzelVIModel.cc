@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.53 2010-05-28 10:36:55 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.54 2010-05-28 11:19:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -206,7 +206,8 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 
   // natural limit for high energy
   cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
-  G4double rlimit = std::max(facrange*currentRange, 0.7*(1.0 - cosTetMaxNuc)*lambdaeff);
+  G4double rlimit = std::max(facrange*currentRange, 
+			     0.7*(1.0 - cosTetMaxNuc)*lambdaeff);
 
   // low-energy e-
   if(cosThetaMax > cosTetMaxNuc) {
