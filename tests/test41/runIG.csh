@@ -9,7 +9,7 @@ set    work = "$G4MY/test41"
 set    dir  = "$G4INSTALL/tests/test41/"
 
 setenv PHYSLIST    standardIG
-set    phys = "optG"
+set    phys = "opt2"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& resG.out
 
 ln -s $VFEM/test41/$2/*S.* ./
