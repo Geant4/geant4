@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.23 2010-05-26 11:10:31 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.24 2010-05-28 10:46:48 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -123,15 +123,11 @@ G4VisExecutive::RegisterGraphicsSystems () {
   G4VGraphicsSystem* ogli = 0;
   G4VGraphicsSystem* ogls = 0;
 // Follow G4UIExecutive
-#if defined(G4UI_USE_TCSH)
-#if defined (G4VIS_USE_OPENGLX)
-  ogl  = new G4OpenGLStoredX;
-  ogli = new G4OpenGLImmediateX;
-  ogls = new G4OpenGLStoredX;
-#elif defined (G4VIS_USE_OPENGLWIN32)
-  ogl  = new G4OpenGLStoredWin32;
-  ogli = new G4OpenGLImmediateWin32;
-  ogls = new G4OpenGLStoredWin32;
+#if defined(G4UI_USE_QT)
+#ifdef G4VIS_USE_OPENGLQT
+  ogl  = new G4OpenGLStoredQt;
+  ogli = new G4OpenGLImmediateQt;
+  ogls = new G4OpenGLStoredQt;
 #endif
 #elif defined(G4UI_USE_XM)
 #ifdef G4VIS_USE_OPENGLXM
@@ -145,11 +141,15 @@ G4VisExecutive::RegisterGraphicsSystems () {
   ogli = new G4OpenGLImmediateWin32;
   ogls = new G4OpenGLStoredWin32;
 #endif
-#elif defined(G4UI_USE_QT)
-#ifdef G4VIS_USE_OPENGLQT
-  ogl  = new G4OpenGLStoredQt;
-  ogli = new G4OpenGLImmediateQt;
-  ogls = new G4OpenGLStoredQt;
+#elif defined(G4UI_USE_TCSH)
+#if defined (G4VIS_USE_OPENGLX)
+  ogl  = new G4OpenGLStoredX;
+  ogli = new G4OpenGLImmediateX;
+  ogls = new G4OpenGLStoredX;
+#elif defined (G4VIS_USE_OPENGLWIN32)
+  ogl  = new G4OpenGLStoredWin32;
+  ogli = new G4OpenGLImmediateWin32;
+  ogls = new G4OpenGLStoredWin32;
 #endif
 #else
 #if defined (G4VIS_USE_OPENGLX)
