@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.14 2010-05-28 13:11:49 mkossov Exp $
+// $Id: G4QIsotope.cc,v 1.15 2010-05-28 14:22:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIsotope class ----------------
@@ -176,11 +176,11 @@ G4QIsotope::G4QIsotope()
   c1->push_back(make_pair(24,1.));
   natEl.push_back(c1);
   vector<pair<G4int,G4double> >*c2=new vector<pair<G4int,G4double> >; // 22-Ti
-  c2->push_back(make_pair(48,.738));
-  c2->push_back(make_pair(46,.818));
-  c2->push_back(make_pair(47,.891));
-  c2->push_back(make_pair(49,.946));
-  c2->push_back(make_pair(50,1.));
+  c2->push_back(make_pair(26,.738));
+  c2->push_back(make_pair(24,.818));
+  c2->push_back(make_pair(25,.891));
+  c2->push_back(make_pair(27,.946));
+  c2->push_back(make_pair(28,1.));
   natEl.push_back(c2);
   vector<pair<G4int,G4double> >*c3=new vector<pair<G4int,G4double> >; // 23-V
   c3->push_back(make_pair(28,.9975));
