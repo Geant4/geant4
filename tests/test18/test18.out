@@ -544,7 +544,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /vis/show/view
     1000.000           1           0     Na24[0.0]
          347           1   5.509e+04     e-
@@ -593,7 +593,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Ne24[0.0]
          282           1       259.3     e-
@@ -647,7 +647,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     F24[0.0]
     4.09e+03           1      0.6859     e-
@@ -705,7 +705,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /vis/show/view
        1e+03           1           0     Al24[0.0]
     1.81e+03           1       0.614     e+
@@ -811,16 +811,16 @@ Run Summary
   User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Cr46[0.0]
-    2.68e+03           1    0.006419     e+
-         511           1    0.006419     gamma
-         511           1    0.006419     gamma
-     3.9e+03           1    0.006419     nu_e
-       0.353           1    0.006419     V46[0.0]
-    4.12e+03           1      0.9004     e+
-         511           1      0.9004     gamma
-         511           1      0.9004     gamma
-    1.91e+03           1      0.9004     nu_e
-       0.182           1      0.9004     Ti46[0.0]
+     1.3e+03           1      0.3768     e+
+         511           1      0.3768     gamma
+         511           1      0.3768     gamma
+    5.28e+03           1      0.3768     nu_e
+       0.525           1      0.3768     V46[0.0]
+    2.28e+03           1       2.022     e+
+         511           1       2.022     gamma
+         511           1       2.022     gamma
+    3.75e+03           1       2.022     nu_e
+       0.117           1       2.022     Ti46[0.0]
 
 #
 #
@@ -865,8 +865,8 @@ Run Summary
   User=0s Real=0s Sys=0s
 /vis/show/view
        1e+03           1           0     Po215[0.0]
-    7.39e+03           1   0.0002001     alpha
-         140           1   0.0002001     Pb211[0.0]
+    7.39e+03           1    0.001145     alpha
+         140           1    0.001145     Pb211[0.0]
 
 Graphics systems deleted.
 Visualization Manager deleting...

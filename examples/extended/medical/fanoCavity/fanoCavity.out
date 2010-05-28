@@ -21,20 +21,20 @@
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm   Imean:  78.000 eV 
+ Material: Graphite     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm   Imean:  81.000 eV 
    --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m    Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Graphite_gas     density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m    Imean:  81.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.400 eV 
+ Material: Aluminium     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.000 eV 
    --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m    Imean: 166.400 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material: Aluminium_gas     density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m    Imean: 166.000 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -156,15 +156,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70433   Tkin= 589.545 keV (0.000 %)   NbOfelec in cav= 4694   Dose/EnFluence= 28.715 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70538   Tkin= 590.669 keV (0.000 %)   NbOfelec in cav= 4726   Dose/EnFluence= 30.091 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 140913   Tkin= 589.011 keV (-0.090 %)   NbOfelec in cav= 9450   Dose/EnFluence= 30.275 cm2/g (5.431 %)
+ ---> NbofEvents= 2000   NbOfelectr= 141090   Tkin= 589.502 keV (-0.198 %)   NbOfelec in cav= 9358   Dose/EnFluence= 28.953 cm2/g (-3.782 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211040   Tkin= 588.807 keV (-0.035 %)   NbOfelec in cav= 14208   Dose/EnFluence= 29.615 cm2/g (-2.180 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211481   Tkin= 589.178 keV (-0.055 %)   NbOfelec in cav= 14156   Dose/EnFluence= 28.931 cm2/g (-0.076 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=33.25s Real=33.26s Sys=0.01s
+  User=33.59s Real=33.59s Sys=0s
 
  ======================== run summary ======================
 
@@ -174,32 +174,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281864  Transportation= 77067  msc= 2105246  eIoni= 1758771
+ Process calls frequency --->  compt= 282107  Transportation= 77642  msc= 2087713  eIoni= 1755986
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.2664 keV +- 0.1029 %  (--> range in wall material = 2.2113 mm )
- Mass_energy_transfer coef: 29.8590 cm2/g
+ Mean energy of secondary e- = 588.9126 keV +- 0.1029 %  (--> range in wall material = 2.2146 mm )
+ Mass_energy_transfer coef: 29.8918 cm2/g
 
- StoppingPower in wall   = 1.9724 MeV*cm2/g
-               in cavity = 1.9724 MeV*cm2/g
+ StoppingPower in wall   = 1.9720 MeV*cm2/g
+               in cavity = 1.9720 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19024	 Energy = 9.6069 GeV
-      Exit  --> nbParticles = 19026	 Energy = 9.6104 GeV
+      Enter --> nbParticles = 18882	 Energy = 9.5906 GeV
+      Exit  --> nbParticles = 18879	 Energy = 9.5913 GeV
 
- Total edep in cavity = 13.3991 MeV +- 2.5370 %	 Total charged trackLength = 52.6161 m     (mean value = 2.7658 mm )
- Total dose in cavity = 21.3253 MeV/mg
- Dose/EnergyFluence   = 30.1480 cm2/g
+ Total edep in cavity = 13.0468 MeV +- 3.3776 %	 Total charged trackLength = 51.4975 m     (mean value = 2.7273 mm )
+ Total dose in cavity = 20.7646 MeV/mg
+ Dose/EnergyFluence   = 29.3552 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.00968 +- 0.02564
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.98205 +- 0.03318
 
- StepSize of ch. tracks in wall   = 123.2201 um  +- 121.7465 um 	 (nbSteps/track = 13.5760)
- StepSize of ch. tracks in cavity = 492.3283 um  +- 628.2962 um 	 (nbSteps/track = 5.6177)
+ StepSize of ch. tracks in wall   = 122.8120 um  +- 121.5387 um 	 (nbSteps/track = 13.6004)
+ StepSize of ch. tracks in cavity = 668.5550 um  +- 853.6674 um 	 (nbSteps/track = 4.0794)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 506106927, 1111384621
+ Current couple of seeds = 1335550696, 1317159614
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

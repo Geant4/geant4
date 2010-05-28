@@ -67,35 +67,35 @@ G4NistElementBuilder: Build Element <C>  Z= 6  A= 12.0107  with natural isotope 
 G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068  with natural isotope composition
 G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994  with natural isotope composition
 G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477  with natural isotope composition
-New material PMMA is prepeared;  nMaterials= 295 nComponents= 762 nCurrent= 3
+New material PMMA is prepeared;  nMaterials= 296 nComponents= 765 nCurrent= 3
 ### NIST DataBase for Elements is used
 G4NistMaterialBuilder: BuildMaterial PMMA
-G4NistMaterialBuilder: BuildMaterial #294
-New material nComponents= 3
-New material Pethylene is prepeared;  nMaterials= 296 nComponents= 765 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial Pethylene
 G4NistMaterialBuilder: BuildMaterial #295
-New material nComponents= 2
-New material FPethylene is prepeared;  nMaterials= 297 nComponents= 767 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial FPethylene
+New material nComponents= 3
+New material Pethylene is prepeared;  nMaterials= 297 nComponents= 768 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial Pethylene
 G4NistMaterialBuilder: BuildMaterial #296
 New material nComponents= 2
-New material Polystyrene is prepeared;  nMaterials= 298 nComponents= 769 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial Polystyrene
+New material FPethylene is prepeared;  nMaterials= 298 nComponents= 770 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial FPethylene
 G4NistMaterialBuilder: BuildMaterial #297
 New material nComponents= 2
-New material Silicone is prepeared;  nMaterials= 299 nComponents= 771 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial Silicone
+New material Polystyrene is prepeared;  nMaterials= 299 nComponents= 772 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial Polystyrene
 G4NistMaterialBuilder: BuildMaterial #298
+New material nComponents= 2
+New material Silicone is prepeared;  nMaterials= 300 nComponents= 774 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial Silicone
+G4NistMaterialBuilder: BuildMaterial #299
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Al
 G4NistMaterialBuilder: BuildMaterial #12
 New material nComponents= 1
 G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815  with natural isotope composition
-New material TiO2 is prepeared;  nMaterials= 300 nComponents= 773 nCurrent= 2
+New material TiO2 is prepeared;  nMaterials= 301 nComponents= 776 nCurrent= 2
 G4NistElementBuilder: Build Element <Ti>  Z= 22  A= 47.8667  with natural isotope composition
 G4NistMaterialBuilder: BuildMaterial TiO2
-G4NistMaterialBuilder: BuildMaterial #299
+G4NistMaterialBuilder: BuildMaterial #300
 New material nComponents= 2
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 WLSExtraPhysics:: Add Extra Physics Processes

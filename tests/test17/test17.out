@@ -26,34 +26,34 @@ Material available: Graphite
 
 ***** Table : Nb of materials = 14 *****
 
- Material: Beryllium     density:  1.848 g/cm3   RadL:  35.267 cm   Nucl.Int.Length:  39.410 cm   Imean:  63.600 eV 
+ Material: Beryllium     density:  1.848 g/cm3   RadL:  35.267 cm   Nucl.Int.Length:  39.410 cm   Imean:  63.700 eV 
    --->  Element: Beryllium ( )   Z =  4.0   N =   9.0   A =   9.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Aluminum     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.400 eV 
+ Material: Aluminum     density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm   Imean: 166.000 eV 
    --->  Element: Aluminum ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Carbon     density:  2.000 g/cm3   RadL:  21.348 cm   Nucl.Int.Length:  40.077 cm   Imean:  78.000 eV 
+ Material:   Carbon     density:  2.000 g/cm3   RadL:  21.348 cm   Nucl.Int.Length:  40.077 cm   Imean:  81.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm   Imean: 173.600 eV 
+ Material:  Silicon     density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm   Imean: 173.000 eV 
    --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm   Imean: 187.200 eV 
+ Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm   Imean: 188.000 eV 
    --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidXenon     density:  3.020 g/cm3   RadL:   2.808 cm   Nucl.Int.Length:  58.903 cm   Imean: 480.600 eV 
+ Material: liquidXenon     density:  3.020 g/cm3   RadL:   2.808 cm   Nucl.Int.Length:  58.903 cm   Imean: 482.000 eV 
    --->  Element: liquidXenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm   Imean: 321.900 eV 
+ Material:   Copper     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm   Imean: 322.000 eV 
    --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Gold     density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm   Imean: 790.000 eV 
    --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm   Imean: 823.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    Water H_2O   density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm   Imean:  75.000 eV 
@@ -64,10 +64,10 @@ Material available: Graphite
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  25.19 %  ElmAbundance  80.00 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction:  74.81 %  ElmAbundance  20.00 %
 
- Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.377 cm   Imean:  78.000 eV 
+ Material: Graphite Graphite   density:  2.265 g/cm3   RadL:  18.834 cm   Nucl.Int.Length:  35.377 cm   Imean:  81.000 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.00 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
@@ -288,26 +288,24 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 Start Run processing.
-EvtNo= 542  length= 0.00945541  xend= 0.00329896
-EvtNo= 965  length= 0.00691049  xend= -1.00234e-16
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=68.36s Real=68.38s Sys=0s
+  User=71.12s Real=71.18s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 998 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.18721 +- 0.00519196  microns 
-    CSDA  Range  in absorber = 9.04691 +- 0.00529983  microns 
+ end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 9.18712 +- 0.00525823  microns 
+    CSDA  Range  in absorber = 9.04027 +- 0.0064869  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.128206 +- 0.00519196 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.177912 +- 0.00529983 microns 
+    Track Length (G4 - ICRU49) = 0.128115 +- 0.00525823 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.171275 +- 0.0064869 microns 
 
-Average Number electrons per event = 31.0792
-Average Number photons per event   = 22.4549
+Average Number electrons per event = 31.497
+Average Number photons per event   = 22.472
 
 #/tracking/verbose 0
 /gun/particle anti_proton
@@ -336,17 +334,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=68.23s Real=68.23s Sys=0s
+  User=70.48s Real=70.51s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.19225 +- 0.00591753  microns 
-    CSDA  Range  in absorber = 9.04429 +- 0.00581377  microns 
+    Track Length in absorber = 9.17932 +- 0.00596272  microns 
+    CSDA  Range  in absorber = 9.03312 +- 0.00589761  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 30.95
-Average Number photons per event   = 22.193
+Average Number electrons per event = 31.299
+Average Number photons per event   = 22.382
 
 /gun/particle ion
 /gun/ion 6 12 6
@@ -374,16 +372,15 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 2 start.
 Start Run processing.
-EvtNo= 414  length= 0.00850913  xend= 0.000788982
 Run terminated.
 Run Summary
   Number of events processed : 1000
   User=0.41s Real=0.41s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 999 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.56913 +- 0.00122631  microns 
-    CSDA  Range  in absorber = 6.96203 +- 0.0115572  microns 
+ end of Run TotNbofEvents = 1000 for C12[0.0] with Ekin = 6 MeV p= 366.244 MeV/c
+    Track Length in absorber = 8.56704 +- 0.00124376  microns 
+    CSDA  Range  in absorber = 6.95539 +- 0.0121271  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -420,21 +417,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.72s Real=6.73s Sys=0s
+  User=6.77s Real=6.77s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.17805 +- 0.0176714  microns 
-    CSDA  Range  in absorber = 9.03572 +- 0.0181081  microns 
+    Track Length in absorber = 9.19676 +- 0.0160553  microns 
+    CSDA  Range  in absorber = 9.00699 +- 0.0448249  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.11905 +- 0.0176714 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.166722 +- 0.0181081 microns 
+    Track Length (G4 - ICRU49) = 0.137755 +- 0.0160553 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.137987 +- 0.0448249 microns 
 
-Average Number electrons per event = 30.72
-Average Number photons per event   = 22.42
+Average Number electrons per event = 31.92
+Average Number photons per event   = 22.83
 
 #
 /test17/cutAugerEnergy 250 eV
@@ -464,21 +461,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.76s Real=7.76s Sys=0s
+  User=8.08s Real=8.09s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.17773 +- 0.0181421  microns 
-    CSDA  Range  in absorber = 9.03357 +- 0.0174453  microns 
+    Track Length in absorber = 9.16673 +- 0.0158557  microns 
+    CSDA  Range  in absorber = 9.026 +- 0.0155338  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.118734 +- 0.0181421 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.164572 +- 0.0174453 microns 
+    Track Length (G4 - ICRU49) = 0.107727 +- 0.0158557 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.156999 +- 0.0155338 microns 
 
-Average Number electrons per event = 526.64
-Average Number photons per event   = 2.93
+Average Number electrons per event = 523.34
+Average Number photons per event   = 3.17
 
 G4 kernel has come to Quit state.
 

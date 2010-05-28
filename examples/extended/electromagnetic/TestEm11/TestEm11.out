@@ -43,7 +43,7 @@
  Material:    G4_Pb     density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_PbWO4     density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.740 cm   Imean: 541.543 eV 
+ Material: G4_PbWO4     density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.740 cm   Imean: 542.741 eV 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.06 %  ElmAbundance  66.67 %
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole  ElmMassFraction:  45.54 %  ElmAbundance  16.67 %
    --->  Element: W (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
@@ -62,39 +62,6 @@
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.19 %  ElmAbundance  66.67 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.81 %  ElmAbundance  33.33 %
 
-
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
 
 /run/verbose 2
 #
@@ -414,7 +381,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=12.91s Real=13.41s Sys=0.5s
+  User=13.63s Real=14.16s Sys=0.52s
 
  ======================== run summary ======================
 
@@ -422,23 +389,21 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 442.836 keV +- 109.637 keV
+ Total Energy deposited        = 443.666 keV +- 110.109 keV
 
- Track length of primary track = 868.835 um  +- 195.777 um 
+ Track length of primary track = 870.965 um  +- 199.370 um 
  Range from EmCalculator       = 943.428 um  (from full dE/dx)
 
- Projected range               = 321.698 um  +- 207.033 um 
+ Projected range               = 321.497 um  +- 208.092 um 
 
- Nb of steps of primary track  = 87.41 +- 19.56	 Step size= 9.931 um  +- 93.911 nm 
+ Nb of steps of primary track  = 87.62 +- 19.93	 Step size= 9.929 um  +- 123.724 nm 
 
- absorbed = 76.30 %   transmit = 5.54 %   reflected = 18.16 %
+ absorbed = 76.69 %   transmit = 5.10 %   reflected = 18.20 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 531030745, 1816029727
+ Current couple of seeds = 1325532186, 417920133
 ----------------------------------------
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

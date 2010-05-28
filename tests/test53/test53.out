@@ -26,17 +26,17 @@ userDetector->Construct() start.
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.943 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.943 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:     Lead     density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.247 cm   Imean: 820.000 eV 
+ Material:     Lead     density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.247 cm   Imean: 823.000 eV 
    --->  Element: Pb (Pb)   Z = 82.0   N = 207.2   A = 207.22 g/mole
    --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
    --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
    --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance:  22.10 %
    --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance:  52.40 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.022 cm   Imean: 187.200 eV 
+ Material: liquidArgon     density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.022 cm   Imean: 188.000 eV 
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
    --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
@@ -411,13 +411,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.12s Real=10.15s Sys=0.02s
+  User=10.22s Real=10.24s Sys=0.02s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 767.15 MeV :  23.85 MeV     3.109 +- 0.3109 %      54.9 cm  +- 1.81 cm 
-   liquidArgon: 209.28 MeV :  17.09 MeV     8.168 +- 0.8168 %      1.04 m   +- 8.73 cm 
+          Lead: 765.94 MeV :   30.8 MeV     4.021 +- 0.4021 %      54.7 cm  +- 2.29 cm 
+   liquidArgon: 207.22 MeV :  17.34 MeV     8.368 +- 0.8368 %      1.03 m   +- 8.94 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -425,15 +425,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 767.148 MeV
-liquidArgon:	 209.279 MeV
+      Lead:	 765.938 MeV
+liquidArgon:	 207.223 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 315234362, 1846977716
+ Current couple of seeds = 502395079, 14390848
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand

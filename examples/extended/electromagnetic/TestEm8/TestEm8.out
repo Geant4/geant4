@@ -388,43 +388,43 @@ Run Summary
   User=0.1s Real=0.1s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.8432 +- 0.321603  mm  
+    mean charged track length   in absorber=23.8875 +- 0.335688  mm  
 
-            mean energy deposit in absorber=0.0166507 +- 0.000478824  MeV 
+            mean energy deposit in absorber=0.0166478 +- 0.000489166  MeV 
 
- mean number of steps in absorber (charged) =0.136 +- 0.0580991      
+ mean number of steps in absorber (charged) =0.154 +- 0.0608135      
  mean number of steps in absorber (neutral) =0.001 +- 0.0009995      
 
    mean number of charged secondaries = 0.021 +- 0.00570605
 
-   mean number of neutral secondaries = 0.002 +- 0.0014128
+   mean number of neutral secondaries = 0.001 +- 0.0009995
 
    mean number of e-s =0.021  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=17
+#entries=1000    #underflows=0    #overflows=16
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           6       0.006
-    2         6         115       0.115
-    3         9         267       0.267
-    4        12         232       0.232
-    5        15         145       0.145
-    6        18          76       0.076
-    7        21          42       0.042
-    8        24          19       0.019
-    9        27          28       0.028
-   10        30          18       0.018
-   11        33          11       0.011
+    1         3           3       0.003
+    2         6         118       0.118
+    3         9         265       0.265
+    4        12         240        0.24
+    5        15         142       0.142
+    6        18          69       0.069
+    7        21          51       0.051
+    8        24          17       0.017
+    9        27          25       0.025
+   10        30          20        0.02
+   11        33           9       0.009
    12        36           7       0.007
    13        39           3       0.003
-   14        42           4       0.004
-   15        45           3       0.003
-   16        48           2       0.002
+   14        42           6       0.006
+   15        45           4       0.004
+   16        48           1       0.001
    17        51           2       0.002
-   18        54           2       0.002
+   18        54           1       0.001
    19        57           1       0.001
 
  Emp =           0.009   width=          0.006  MeV 
@@ -432,7 +432,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1941558475, 1176561052
+ Current couple of seeds = 521444540, 387002788
 ----------------------------------------
 #
 UserDetectorConstruction deleted.

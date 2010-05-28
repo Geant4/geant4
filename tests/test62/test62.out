@@ -282,7 +282,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=0.45s Sys=0s
+  User=0.44s Real=0.44s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -375,7 +375,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.2s Real=1.2s Sys=0s
+  User=0.92s Real=0.92s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -585,7 +585,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.33s Real=0.33s Sys=0s
+  User=0.37s Real=0.37s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -657,7 +657,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.6s Real=1.6s Sys=0s
+  User=1.3s Real=1.3s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -693,7 +693,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.99s Real=1s Sys=0s
+  User=1.2s Real=1.2s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -908,7 +908,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.32s Real=0.32s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -990,7 +990,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.81s Real=0.81s Sys=0s
+  User=1.6s Real=1.6s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1031,7 +1031,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.66s Real=0.66s Sys=0s
+  User=1.3s Real=1.3s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1251,7 +1251,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.07s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -1343,7 +1343,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.16s Sys=0s
+  User=0.32s Real=0.33s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -1389,7 +1389,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.35s Sys=0s
+  User=0.39s Real=0.39s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -1614,7 +1614,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -1716,7 +1716,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.15s Sys=0s
+  User=0.17s Real=0.17s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -1767,7 +1767,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.15s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -1997,7 +1997,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.04s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -2109,7 +2109,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.08s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -2130,32 +2130,32 @@ Region <DefaultRegionForTheWorld> -- appears in <SPhys> world volume
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 3     used in the geometry : No      recalculation needed : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 4     used in the geometry : No      recalculation needed : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1 GeV    e+  9.6e+02 MeV proton 1e+02 MeV
+ Energy thresholds :  gamma  10 GeV    e-  1.0179231 GeV    e+  964.64408 MeV proton 100 MeV
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.6 MeV    e-  7e+02 MeV    e+  6.7e+02 MeV proton 1e+02 MeV
+ Energy thresholds :  gamma  3.5990452 MeV    e-  698.68241 MeV    e+  671.07165 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2165,7 +2165,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

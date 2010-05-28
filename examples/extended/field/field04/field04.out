@@ -109,10 +109,10 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_BERYLLIUM_OXIDE
 G4NistMaterialBuilder: BuildMaterial #115
 New material nComponents= 2
 G4NistElementBuilder: Build Element <Be>  Z= 4  A= 9.01218  with natural isotope composition
-New material Scintillator is prepeared;  nMaterials= 295 nComponents= 762 nCurrent= 2
+New material Scintillator is prepeared;  nMaterials= 296 nComponents= 765 nCurrent= 2
 ### NIST DataBase for Elements is used
 G4NistMaterialBuilder: BuildMaterial Scintillator
-G4NistMaterialBuilder: BuildMaterial #294
+G4NistMaterialBuilder: BuildMaterial #295
 New material nComponents= 2
 
 The materials defined are: 
@@ -164,7 +164,7 @@ The materials defined are:
    --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
    --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  63.97 %  ElmAbundance  50.00 %
 
- Material: Scintillator     density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  70.066 cm   Imean:  63.913 eV 
+ Material: Scintillator     density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  70.066 cm   Imean:  64.684 eV 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
    --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
    --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:  91.47 %  ElmAbundance  47.37 %

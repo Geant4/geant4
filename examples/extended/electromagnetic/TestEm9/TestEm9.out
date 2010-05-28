@@ -350,39 +350,43 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.85s Real=1.85s Sys=0s
+  User=2.02s Real=2.01s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         410.3
-Average number of gamma      682.8
-Average number of e+         48.94
-Average number of steps      3056
-Edep 1x1 =                   0.8288 +- 0.002698  res=  3.206 %
-Edep 3x3 =                   0.9574 +- 0.001243  res=  1.285 %
-Edep 5x5 =                   0.9809 +- 0.0007201  res=  0.7267 %
+Average number of e-         411.1
+Average number of gamma      682.3
+Average number of e+         47.68
+Average number of steps      3046
+Edep 1x1 =                   0.8263 +- 0.002946  res=  3.548 %
+Edep 3x3 =                   0.9576 +- 0.001193  res=  1.221 %
+Edep 5x5 =                   0.9809 +- 0.00075  res=  0.7413 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8263 +- 0.002978  res=  3.604 %
-Edep 3x3 =                   0.9567 +- 0.001314  res=  1.373 %
-Edep 5x5 =                   0.9802 +- 0.0008521  res=  0.8693 %
+Edep 1x1 =                   0.8255 +- 0.003016  res=  3.653 %
+Edep 3x3 =                   0.9556 +- 0.001486  res=  1.555 %
+Edep 5x5 =                   0.9791 +- 0.001017  res=  1.039 %
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8636 +- 0.002679
-  E1/E25 =                   0.8429 +- 0.002869
-  E9/E25 =                   0.976 +- 0.0009863
+  E1/E9  =                   0.8638 +- 0.002621
+  E1/E25 =                   0.8431 +- 0.002828
+  E9/E25 =                   0.9761 +- 0.0009789
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8288  delEdep1x1= 0.001685 nrms= 0.5666
-Erms1x1: 0.02657  delErms1x1= -0.003171 nrms= -1.066
-Edep3x3: 0.9574  delEdep3x3= 0.0003766 nrms= 0.2929
-Erms3x3: 0.0123  delErms3x3= -0.0005567 nrms= -0.4329
-Edep5x5: 0.9809  delEdep5x5= 0.001605 nrms= 1.815
-Erms5x5: 0.007128  delErms5x5= -0.001712 nrms= -1.936
+Edep1x1: 0.8263  delEdep1x1= -0.0007872 nrms= -0.2647
+Erms1x1: 0.02932  delErms1x1= -0.0004249 nrms= -0.1429
+Edep3x3: 0.9576  delEdep3x3= 0.0005635 nrms= 0.4382
+Erms3x3: 0.01169  delErms3x3= -0.001168 nrms= -0.9085
+Edep5x5: 0.9809  delEdep5x5= 0.001602 nrms= 1.812
+Erms5x5: 0.007271  delErms5x5= -0.001569 nrms= -1.774
 <<<<<END>>>>>   IS ACCEPTED
 
+   Z  bremsstrahlung photoeffect  compton    conversion
+  13           0           0         162           0
+  53         286          43           0          44
+  55         299          49           0          48
 #
 G4 kernel has come to Quit state.
 

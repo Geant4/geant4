@@ -332,7 +332,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        HALL initStep
-    1        0    4e+03        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    1        0    4e+03        0     1e+03 1.14e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model.
@@ -380,7 +380,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        HALL initStep
-    1        0    4e+03        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    1        0    4e+03        0     1e+03 1.14e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -419,7 +419,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        HALL initStep
-    1        0    4e+03        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    1        0    4e+03        0     1e+03 1.76e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -458,7 +458,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0     -1.5        0     1e+03        0        0         0        HALL initStep
-    1        0    4e+03        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    1        0    4e+03        0     1e+03 1.76e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -500,7 +500,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        HALL initStep
-    1    4e+03      1.5        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    1    4e+03      1.5        0     1e+03 1.14e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -539,7 +539,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        HALL initStep
-    1    4e+03      1.5        0     1e+03 1.12e-22    4e+03     4e+03  OutOfWorld Transportation
+    1    4e+03      1.5        0     1e+03 1.14e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -578,7 +578,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        HALL initStep
-    1    4e+03      1.5        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    1    4e+03      1.5        0     1e+03 1.76e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -617,7 +617,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0      1.5        0     1e+03        0        0         0        HALL initStep
-    1    4e+03      1.5        0     1e+03 1.75e-22    4e+03     4e+03  OutOfWorld Transportation
+    1    4e+03      1.5        0     1e+03 1.76e-22    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.

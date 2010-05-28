@@ -309,7 +309,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=44.39s Real=44.4s Sys=0s
+  User=43.45s Real=43.46s Sys=0s
 Thicknesses(mm)= 1.5742333  1  1  
 Bins(R/R0)=      0.0073831317  0  0  
  ----------------------------------------------------------

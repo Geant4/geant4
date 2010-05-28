@@ -257,7 +257,7 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0469      572      954   0.00146        0        0         0 WorldPhysical initStep
-    1   -0.018      572      954         0  0.00146   0.0976    0.0976 WorldPhysical eIoni
+    1  -0.0179      572      954         0  0.00146   0.0976    0.0976 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -276,7 +276,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0349     51.7     86.1         0  0.00135   0.0873    0.0873 WorldPhysical eIoni
 >>> Event 0
      12 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999146559824535 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999146562769352 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -319,7 +319,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0032     28.9     48.2         0  0.00112   0.0671    0.0671 WorldPhysical eIoni
 >>> Event 1
      9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999183507441556 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999183511872669 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -364,7 +364,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.322     11.1     18.4         0  0.00503    0.727     0.727 WorldPhysical eIoni
 >>> Event 2
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999013634587496 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999013639670116 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -399,7 +399,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.346     33.9     56.9         0  0.00588    0.958     0.958 WorldPhysical eIoni
 >>> Event 3
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999055289778418 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999055292282231 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -433,7 +433,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.146      194      323         0  0.00145    0.529     0.529 DriftChamberPhysical eIoni
 >>> Event 4
      13 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999153937057028 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999153938205919 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
@@ -469,7 +469,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0133      155      518         0  0.00115    0.374     0.374 DriftChamberPhysical eIoni
 >>> Event 0
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999285309647692 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.999928531309234 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -494,7 +494,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.225     42.3      141         0  0.00109    0.349     0.349 DriftChamberPhysical eIoni
 >>> Event 1
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999928547163055 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999285475745463 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -528,7 +528,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0564     20.4     68.3         0  0.00258    0.233     0.233 WorldPhysical eIoni
 >>> Event 2
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999186069926056 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.999918607041581 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -628,7 +628,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     64.6      197      329         0  0.00192    0.819     0.819 DriftChamberPhysical eIoni
 >>> Event 3
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9998511575473268 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9998511585152575 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -680,7 +680,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.184     7.46       24         0  0.00493    0.703     0.703 WorldPhysical eIoni
 >>> Event 4
      9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999204121674224 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999204123546298 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
@@ -734,7 +734,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 -0.00609    -8.75     29.2         0  0.00105   0.0618    0.0618 WorldPhysical eIoni
 >>> Event 0
      13 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999208305821816 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.999920830874765 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -777,7 +777,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0642    -10.1     33.5         0  0.00204     0.16      0.16 WorldPhysical eIoni
 >>> Event 1
      11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999295543342219 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.999929555084528 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -811,7 +811,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0703     -280      934         0  0.00191    0.145     0.145 WorldPhysical eIoni
 >>> Event 2
      9 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999279358889035 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999279365705663 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -864,10 +864,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 -0.00153    -5.49     18.3   0.00392        0        0         0 WorldPhysical initStep
     1    0.208    -5.49     18.1   0.00123  0.00269    0.391     0.391 WorldPhysical eIoni
-    2    0.208    -5.46     18.1         0  0.00123   0.0766     0.468 WorldPhysical eIoni
+    2    0.208    -5.46     18.1         0  0.00123   0.0767     0.468 WorldPhysical eIoni
 >>> Event 3
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.999896820325376 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9998968202780647 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -912,7 +912,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3    -2.38    -86.7      294         0 0.000182   0.0631      3.51 DriftChamberPhysical eIoni
 >>> Event 4
      10 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999237000706667 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.99992370032323 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
@@ -948,7 +948,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 -0.00451    -26.2     43.5         0  0.00222    0.183     0.183 WorldPhysical eIoni
 >>> Event 0
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999261772702223 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999261775215901 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -994,7 +994,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0179     -364      605         0  0.00107     0.34      0.34 DriftChamberPhysical eIoni
 >>> Event 1
      11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999190820796517 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999190827572395 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -1027,7 +1027,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.462     -563      939   0.00119        0        0         0 WorldPhysical initStep
-    1   -0.453     -563      939         0  0.00119    0.073     0.073 WorldPhysical eIoni
+    1   -0.453     -563      939         0  0.00119   0.0731    0.0731 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -1035,7 +1035,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   -0.449     -550      917   0.00144        0        0         0 WorldPhysical initStep
-    1   -0.431     -550      917         0  0.00144   0.0952    0.0952 WorldPhysical eIoni
+    1   -0.431     -550      917         0  0.00144   0.0953    0.0953 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -1046,7 +1046,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0191    -22.5     37.6         0  0.00202    0.158     0.158 WorldPhysical eIoni
 >>> Event 2
      14 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9999125460877955 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9999125463784823 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -1106,7 +1106,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4    -6.99     -100      160         0  0.00221     1.03       9.6 DriftChamberPhysical eIoni
 >>> Event 3
      14 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9998909528882596 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9998909529303434 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 
@@ -1224,7 +1224,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 -0.00436    -16.5     27.5         0  0.00116   0.0707    0.0707 WorldPhysical eIoni
 >>> Event 4
      11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.9998769580529729 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.9998769584833636 (GeV)
      0 hits are stored in HAD ExN05CalorimeterHitsCollection.
      Total energy deposition in HAD calorimeter towers : 0 (GeV)
 number of event = 5
@@ -1280,15 +1280,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     8     77.6     60.7      217    0.0193  0.00207       14       170 DriftChamberPhysical eIoni
     9     81.5     68.7      225    0.0169  0.00247     11.9       182 DriftChamberPhysical eIoni
    10       85     77.4      226     0.015  0.00182     9.57       192 DriftChamberPhysical eIoni
-   11       86     84.8      228    0.0127   0.0023     8.04       200 DriftChamberPhysical eIoni
+   11       86     84.7      228    0.0127   0.0023     8.04       200 DriftChamberPhysical eIoni
    12     88.5     90.4      227    0.0114  0.00138     6.32       206 DriftChamberPhysical eIoni
    13     89.2     94.8      225   0.00916   0.0022      5.4       211 DriftChamberPhysical eIoni
    14     87.6     97.9      223   0.00692  0.00225     4.12       215 DriftChamberPhysical eIoni
    15     87.1      101      222   0.00516  0.00176     3.04       218 DriftChamberPhysical eIoni
    16     87.9      102      223   0.00412  0.00104     2.33       221 DriftChamberPhysical eIoni
    17     88.7      103      224   0.00264  0.00148     1.94       223 DriftChamberPhysical eIoni
-   18     88.8      105      224  0.000406  0.00224      1.3       224 DriftChamberPhysical eIoni
-   19     88.8      105      224         0 0.000406    0.108       224 DriftChamberPhysical eIoni
+   18     88.8      105      224  0.000407  0.00224      1.3       224 DriftChamberPhysical eIoni
+   19     88.8      105      224         0 0.000407    0.108       224 DriftChamberPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 3
@@ -1327,9 +1327,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0524     40.2     66.9         0  0.00231    0.195     0.195 WorldPhysical eIoni
 >>> Event 0
      6 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2399713324405909 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2399713325554902 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6599211642116252 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6599211645275982 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1361,9 +1361,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.029     2.04     3.37         0  0.00123   0.0768    0.0768 WorldPhysical eIoni
 >>> Event 1
      12 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.3599822638648623 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.3599822640731747 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5599724104564525 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.559972410780494 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1413,7 +1413,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0399      543      904   0.00158        0        0         0 WorldPhysical initStep
-    1  0.00118      543      904         0  0.00158     0.11      0.11 WorldPhysical eIoni
+    1  0.00117      543      904         0  0.00158     0.11      0.11 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
@@ -1441,9 +1441,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2      1.9      112      189         0  0.00203    0.899      2.79 DriftChamberPhysical eIoni
 >>> Event 2
      12 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2799835936391433 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2799835937906063 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5999648435124502 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.5999648438370133 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1475,9 +1475,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1 -0.00181     50.7     84.6         0  0.00187    0.141     0.141 WorldPhysical eIoni
 >>> Event 3
      11 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2799871183298509 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2799871185254953 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6999677958246274 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6999677963137384 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1511,9 +1511,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     2.48      329      548         0  0.00105     0.33      3.64 DriftChamberPhysical eIoni
 >>> Event 4
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2199876058612666 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2199876059504008 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.679961690843915 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6799616911194208 (GeV)
 number of event = 5
 ### Run 5 start.
 
@@ -1524,7 +1524,7 @@ number of event = 5
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
     1  -0.0176     29.9     99.5     1e+03   0.0144      104       104 WorldPhysical hIoni
-    2  -0.0177       30      100     1e+03 4.93e-05    0.512       104 DriftChamberPhysical CoupledTransportation
+    2  -0.0177       30      100     1e+03 4.94e-05    0.512       104 DriftChamberPhysical CoupledTransportation
     3  -0.0675     99.3      331     1e+03  0.00435      241       345 DriftChamberPhysical hIoni
     4   -0.213      251      836     1e+03   0.0137      528       873 DriftChamberPhysical hIoni
     5   -0.231      270      900     1e+03 0.000962     66.5       940 WorldPhysical CoupledTransportation
@@ -1580,9 +1580,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  0.00645     29.9     99.5         0  0.00116   0.0705    0.0705 WorldPhysical eIoni
 >>> Event 0
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.0399976093633763 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999760939407025 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599426247210311 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599426254576859 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1598,7 +1598,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      0 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9999529369952946 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9999529376285786 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1630,9 +1630,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1    0.102      243      811         0  0.00109    0.346     0.346 DriftChamberPhysical eIoni
 >>> Event 2
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.03999805360776186 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.03999805363303563 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599532865862845 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599532871928551 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1744,9 +1744,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1  -0.0218     6.05     20.2         0   0.0011   0.0656    0.0656 WorldPhysical eIoni
 >>> Event 3
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.07999174149929109 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999174152918227 (GeV)
      10 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9199050272418472 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9199050275855964 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1781,9 +1781,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3   -0.276     22.4       72         0  0.00205    0.162      1.61 WorldPhysical eIoni
 >>> Event 4
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.07999556314676025 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.07999556321274449 (GeV)
      12 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9199489761877427 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9199489769465616 (GeV)
 number of event = 5
 ### Run 6 start.
 
@@ -1810,7 +1810,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      0 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9799569627885948 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9799569634259266 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1839,12 +1839,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0112    -25.7     85.8    0.0047        0        0         0 WorldPhysical initStep
-    1   -0.275    -25.7     85.8         0   0.0047    0.644     0.644 WorldPhysical eIoni
+    1   -0.275    -25.7     85.8         0   0.0047    0.645     0.645 WorldPhysical eIoni
 >>> Event 1
      2 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.05999715364341072 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.0599971536757711 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9399554070801009 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.939955407587081 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1907,7 +1907,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
      0 hits are stored in EM ExN05CalorimeterHitsCollection.
      Total energy deposition in EM calorimeter crytals : 0 (GeV)
      13 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9999441037632152 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9999441042563272 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -1941,125 +1941,125 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0   0.0607     -276      922     0.232        0        0         0 WorldPhysical initStep
     1    -26.7     -237      963     0.216   0.0141     64.9      64.9 WorldPhysical eIoni
     2    -27.1     -227    1e+03     0.206   0.0101     40.1       105     Crystal CoupledTransportation
-    3    -27.1     -227    1e+03     0.203  0.00306  0.00751       105     Crystal msc
+    3    -27.1     -227    1e+03     0.203  0.00305  0.00751       105     Crystal msc
     4    -27.1     -227    1e+03     0.201  0.00189  0.00751       105     Crystal msc
     5    -27.1     -227    1e+03     0.182   0.0196  0.00751       105     Crystal msc
     6    -27.1     -227    1e+03     0.176  0.00565  0.00751       105     Crystal msc
-    7    -27.1     -227    1e+03     0.169  0.00731  0.00751       105     Crystal msc
-    8    -27.1     -227    1e+03     0.165  0.00409  0.00751       105     Crystal msc
+    7    -27.1     -227    1e+03     0.168  0.00777  0.00751       105     Crystal msc
+    8    -27.1     -227    1e+03     0.164  0.00409  0.00751       105     Crystal msc
     9    -27.1     -227    1e+03     0.162  0.00253  0.00751       105     Crystal msc
-   10    -27.1     -227    1e+03     0.162 0.000119  0.00288       105 WorldPhysical CoupledTransportation
-   11    -31.2     -163      987     0.141   0.0198     72.1       177 WorldPhysical eIoni
-   12    -44.1     -138      944     0.124   0.0152     54.3       232 WorldPhysical eIoni
-   13    -50.4     -119      939     0.115  0.00748     21.2       253 WorldPhysical eIoni
-   14    -46.2    -96.3      947     0.105  0.00892     25.6       278 WorldPhysical eIoni
-   15    -35.9    -84.7      953     0.097  0.00493       17       295 WorldPhysical eIoni
-   16    -30.5    -74.6      959    0.0907  0.00629     13.3       309 WorldPhysical eIoni
-   17    -28.3    -78.1      980    0.0808  0.00888     22.4       331 WorldPhysical eIoni
-   18    -16.2      -84      985    0.0383  0.00657     14.9       346 WorldPhysical eIoni
-   19    -10.4    -85.9      988    0.0316  0.00668     7.39       353 WorldPhysical eIoni
-   20    -9.28    -86.3      990    0.0276   0.0022     2.77       356 WorldPhysical eIoni
-   21    -9.16    -85.5      994    0.0233   0.0029     4.08       360 WorldPhysical eIoni
-   22    -9.85    -85.1      996    0.0173   0.0025     2.08       362 WorldPhysical eIoni
-   23    -9.89    -85.1      996    0.0172 6.43e-05   0.0672       362 WorldPhysical eIoni
-   24    -10.6    -83.1      997    0.0128   0.0044     2.82       365 WorldPhysical eIoni
-   25    -9.69    -81.5      998    0.0088  0.00399     2.18       367 WorldPhysical eIoni
-   26    -8.77    -81.4      998   0.00426  0.00454     1.59       369 WorldPhysical eIoni
-   27     -8.6    -81.3      998         0  0.00426    0.544       370 WorldPhysical eIoni
+   10    -27.1     -227    1e+03     0.162 0.000119  0.00289       105 WorldPhysical CoupledTransportation
+   11    -31.3     -163      987      0.14   0.0198       72       177 WorldPhysical eIoni
+   12    -44.4     -139      944     0.123   0.0152     54.2       231 WorldPhysical eIoni
+   13    -50.7     -120      939     0.114  0.00747     21.2       252 WorldPhysical eIoni
+   14    -46.6    -96.7      947     0.104  0.00892     25.6       278 WorldPhysical eIoni
+   15    -36.4    -85.1      953    0.0966  0.00493       17       295 WorldPhysical eIoni
+   16      -31    -75.1      959    0.0903  0.00628     13.3       308 WorldPhysical eIoni
+   17    -28.9    -78.6      980    0.0804  0.00888     22.3       331 WorldPhysical eIoni
+   18    -16.9    -84.6      985     0.038  0.00657     14.8       345 WorldPhysical eIoni
+   19    -11.2    -86.5      988    0.0314  0.00667     7.32       353 WorldPhysical eIoni
+   20      -10    -86.9      990    0.0274  0.00221     2.79       356 WorldPhysical eIoni
+   21    -9.88    -86.1      994    0.0231   0.0029     4.06       360 WorldPhysical eIoni
+   22    -10.6    -85.7      996     0.017   0.0025     2.07       362 WorldPhysical eIoni
+   23    -10.6    -85.7      996     0.017 6.43e-05   0.0666       362 WorldPhysical eIoni
+   24    -11.3    -83.7      997    0.0126   0.0044     2.79       364 WorldPhysical eIoni
+   25    -10.4    -82.2      998   0.00857  0.00401     2.15       367 WorldPhysical eIoni
+   26    -9.48    -82.1      998   0.00397   0.0046     1.55       368 WorldPhysical eIoni
+   27    -9.33      -82      998         0  0.00397    0.481       369 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -9.85    -85.1      996   0.00358        0        0         0 WorldPhysical initStep
-    1      -10    -85.2      996         0  0.00358    0.402     0.402 WorldPhysical eIoni
+    0    -10.6    -85.7      996   0.00357        0        0         0 WorldPhysical initStep
+    1    -10.7    -85.8      996         0  0.00357      0.4       0.4 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -9.16    -85.5      994    0.0014        0        0         0 WorldPhysical initStep
-    1    -9.13    -85.5      994         0   0.0014   0.0921    0.0921 WorldPhysical eIoni
+    0    -9.88    -86.1      994    0.0014        0        0         0 WorldPhysical initStep
+    1    -9.85    -86.1      994         0   0.0014   0.0921    0.0921 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -9.28    -86.3      990   0.00174        0        0         0 WorldPhysical initStep
-    1    -9.25    -86.3      990         0  0.00174    0.126     0.126 WorldPhysical eIoni
+    0      -10    -86.9      990   0.00174        0        0         0 WorldPhysical initStep
+    1    -9.98    -86.9      990         0  0.00174    0.126     0.126 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -16.2      -84      985     0.036        0        0         0 WorldPhysical initStep
-    1    -13.5    -84.9      981    0.0214  0.00381     4.75      4.75 WorldPhysical eIoni
-    2    -11.4    -82.5      981    0.0181  0.00332     3.52      8.27 WorldPhysical eIoni
-    3    -9.67    -83.2      983     0.013  0.00503     2.96      11.2 WorldPhysical eIoni
-    4    -9.94    -81.4      983   0.00887  0.00414     2.21      13.4 WorldPhysical eIoni
-    5    -10.4    -81.6      982   0.00222  0.00665      1.6        15 WorldPhysical eIoni
-    6    -10.4    -81.5      981         0  0.00222    0.183      15.2 WorldPhysical eIoni
+    0    -16.9    -84.6      985    0.0358        0        0         0 WorldPhysical initStep
+    1    -14.2    -85.4      981    0.0212  0.00381     4.73      4.73 WorldPhysical eIoni
+    2    -12.1    -83.1      981    0.0179  0.00331     3.49      8.22 WorldPhysical eIoni
+    3    -10.4    -83.8      983    0.0129  0.00503     2.94      11.2 WorldPhysical eIoni
+    4    -10.7    -82.1      983   0.00871  0.00416     2.19      13.3 WorldPhysical eIoni
+    5    -11.2    -82.2      982   0.00202  0.00669     1.58      14.9 WorldPhysical eIoni
+    6    -11.1    -82.2      982         0  0.00202    0.158      15.1 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 18,   Parent ID = 14
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -13.5    -84.9      981    0.0108        0        0         0 WorldPhysical initStep
-    1    -14.4    -85.8      981   0.00556  0.00523     1.89      1.89 WorldPhysical eIoni
-    2    -14.5    -86.2      980         0  0.00556    0.868      2.76 WorldPhysical eIoni
+    0    -14.2    -85.4      981    0.0107        0        0         0 WorldPhysical initStep
+    1    -15.1    -86.4      981   0.00551  0.00524     1.89      1.89 WorldPhysical eIoni
+    2    -15.3    -86.7      980         0  0.00551    0.854      2.74 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -28.3    -78.1      980   0.00103        0        0         0 WorldPhysical initStep
-    1    -28.4    -78.1      980         0  0.00103   0.0598    0.0598 WorldPhysical eIoni
+    0    -28.9    -78.6      980   0.00103        0        0         0 WorldPhysical initStep
+    1    -28.9    -78.6      980         0  0.00103   0.0598    0.0598 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -35.9    -84.7      953   0.00272        0        0         0 WorldPhysical initStep
-    1    -35.9    -84.7      953         0  0.00272    0.253     0.253 WorldPhysical eIoni
+    0    -36.4    -85.1      953   0.00272        0        0         0 WorldPhysical initStep
+    1    -36.3    -85.1      953         0  0.00272    0.253     0.253 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -46.2    -96.3      947   0.00129        0        0         0 WorldPhysical initStep
-    1    -46.2    -96.3      947         0  0.00129   0.0818    0.0818 WorldPhysical eIoni
+    0    -46.6    -96.7      947   0.00129        0        0         0 WorldPhysical initStep
+    1    -46.6    -96.7      947         0  0.00129   0.0818    0.0818 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -50.4     -119      939   0.00134        0        0         0 WorldPhysical initStep
-    1    -50.4     -119      939         0  0.00134    0.086     0.086 WorldPhysical eIoni
+    0    -50.7     -120      939   0.00134        0        0         0 WorldPhysical initStep
+    1    -50.7     -120      939         0  0.00134    0.086     0.086 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -44.1     -138      944   0.00197        0        0         0 WorldPhysical initStep
-    1    -44.2     -138      944         0  0.00197    0.152     0.152 WorldPhysical eIoni
+    0    -44.4     -139      944   0.00197        0        0         0 WorldPhysical initStep
+    1    -44.4     -139      944         0  0.00197    0.152     0.152 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 5
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -31.2     -163      987   0.00138        0        0         0 WorldPhysical initStep
-    1    -31.2     -163      987         0  0.00138   0.0903    0.0903 WorldPhysical eIoni
+    0    -31.3     -163      987   0.00138        0        0         0 WorldPhysical initStep
+    1    -31.4     -163      987         0  0.00138   0.0903    0.0903 WorldPhysical eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 5
@@ -2094,9 +2094,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.162    -3.51     11.8         0  0.00347    0.382     0.382 WorldPhysical eIoni
 >>> Event 3
      4 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.06002718578656756 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.06002762838180923 (GeV)
      14 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9397320351464382 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.939732035466907 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2185,9 +2185,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.479    -70.5      237         0  0.00197    0.858     0.858 DriftChamberPhysical eIoni
 >>> Event 4
      1 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.01999830703572079 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.01999830705043303 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.9599187377145979 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.9599187384207855 (GeV)
 number of event = 5
 ### Run 7 start.
 
@@ -2274,9 +2274,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2    -1.72    -35.7     60.1         0  0.00565    0.892      2.69 WorldPhysical eIoni
 >>> Event 0
      6 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1399890060231777 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1399890060580548 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.8199356067071836 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.8199356069114635 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2381,9 +2381,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4     2.25     -240      392         0 0.000926    0.277      6.61 DriftChamberPhysical eIoni
 >>> Event 1
      7 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.179982471997204 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1799824720899185 (GeV)
      6 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.719929887988816 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.719929888359674 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2540,9 +2540,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     74.1     -481      743         0  0.00143     0.52      0.52 DriftChamberPhysical eIoni
 >>> Event 2
      16 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.4599058006363088 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.4599058009343803 (GeV)
      7 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.5198935137627838 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.5198935140997343 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2556,9 +2556,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4   -0.295     -570      950         0    1e+03        0  1.11e+03 WorldPhysical G4FSMP_parallelGeom
 >>> Event 3
      8 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.2799839277419703 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.2799839279031176 (GeV)
      11 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.6799609673733564 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.6799609677647142 (GeV)
 
 *********************************************************************************************************
 * G4Track Information:   Particle = pi-,   Track ID = 1,   Parent ID = 0
@@ -2608,9 +2608,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   -0.161     -466      776         0  0.00108    0.343     0.343 DriftChamberPhysical eIoni
 >>> Event 4
      5 hits are stored in EM ExN05CalorimeterHitsCollection.
-     Total energy deposition in EM calorimeter crytals : 0.1199928024410673 (GeV)
+     Total energy deposition in EM calorimeter crytals : 0.1199928024981849 (GeV)
      9 hits are stored in HAD ExN05CalorimeterHitsCollection.
-     Total energy deposition in HAD calorimeter towers : 0.7599544154600932 (GeV)
+     Total energy deposition in HAD calorimeter towers : 0.7599544158218373 (GeV)
 number of event = 5
 Graphics systems deleted.
 Visualization Manager deleting...

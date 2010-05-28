@@ -159,23 +159,23 @@ muPairProd:   for  mu-    SubType= 4
           muMinusCaptureAtRest
 ============================================================================================
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (0.106321,-0.098087,-103.428)
+	Energy weighted position of hits in LXe : (0.106357,-0.0981109,-103.428)
 	Total energy deposition in scintillator : 511 (keV)
-	Reconstructed position of hits in LXe : (4.07988,0.698651,-14.7565)
+	Reconstructed position of hits in LXe : (4.05096,0.730982,-14.686)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
   manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
-	Number of photons that hit PMTs in this event : 1399
+	Number of photons that hit PMTs in this event : 1398
 	Number of PMTs above threshold(1) : 32
-	Number of photons produced by scintillation in this event : 5624
+	Number of photons produced by scintillation in this event : 5625
 	Number of photons produced by cerenkov in this event : 2
-	Number of photons absorbed (OpAbsorption) in this event : 4227
+	Number of photons absorbed (OpAbsorption) in this event : 4229
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.148611,0.0658269,-97.3519)
+	Energy weighted position of hits in LXe : (0.148663,0.0658336,-97.3519)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (1.15832,-1.1588,-14.6319)
 	Number of photons that hit PMTs in this event : 1349
@@ -185,7 +185,7 @@ Unacounted for photons in this event : 0
 	Number of photons absorbed (OpAbsorption) in this event : 4154
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (-0.148049,0.14515,-99.4255)
+	Energy weighted position of hits in LXe : (-0.148051,0.145162,-99.4255)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (-1.74264,-1.85574,-16.0139)
 	Number of photons that hit PMTs in this event : 1484

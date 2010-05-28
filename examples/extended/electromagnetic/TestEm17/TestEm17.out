@@ -13,64 +13,31 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: galactic     density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.800 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material:    CaCO3     density:  2.800 g/cm3   RadL:   8.581 cm   Nucl.Int.Length:  34.749 cm   Imean: 123.060 eV 
+ Material:    CaCO3     density:  2.800 g/cm3   RadL:   8.581 cm   Nucl.Int.Length:  34.749 cm   Imean: 123.236 eV 
    --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole  ElmMassFraction:  40.04 %  ElmAbundance  20.00 %
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  12.00 %  ElmAbundance  20.00 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  47.96 %  ElmAbundance  60.00 %
 
- Material:   Carbon     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm   Imean:  78.000 eV 
+ Material:   Carbon     density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm   Imean:  81.000 eV 
    --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm   Imean: 286.000 eV 
    --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:      Tin     density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.531 cm   Imean: 490.000 eV 
+ Material:      Tin     density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.531 cm   Imean: 488.000 eV 
    --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material:       HI     density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.888 cm   Imean: 465.242 eV 
+ Material:       HI     density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.888 cm   Imean: 462.393 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   0.79 %  ElmAbundance  50.00 %
    --->  Element: Iodine (I)   Z = 53.0   N = 126.9   A = 126.90 g/mole  ElmMassFraction:  99.21 %  ElmAbundance  50.00 %
 
-
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-  gMocrenFile (gMocrenFile)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
 
 /run/verbose 2
 #
@@ -255,7 +222,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.53s Real=4.78s Sys=0.25s
+  User=4.6s Real=4.88s Sys=0.29s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -319,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.27s Real=4.52s Sys=0.24s
+  User=4.46s Real=4.74s Sys=0.27s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -382,7 +349,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.81s Real=4.03s Sys=0.22s
+  User=3.83s Real=4.09s Sys=0.26s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -395,8 +362,6 @@ Run Summary
  Current couple of seeds = 1849986352, 1329553844
 ----------------------------------------
 #
-Graphics systems deleted.
-Visualization Manager deleting...
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
