@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.cc,v 1.5 2010-05-07 16:05:56 allison Exp $
+// $Id: G4VVisManager.cc,v 1.6 2010-05-29 21:35:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,5 +46,3 @@ void G4VVisManager::SetConcreteInstance (G4VVisManager* m)
 {
   fpConcreteInstance = m;
 }
-
-G4bool G4VVisManager::IsDefaultDrawTrajectory = true;

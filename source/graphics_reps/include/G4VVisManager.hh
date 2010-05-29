@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.16 2010-05-07 16:05:56 allison Exp $
+// $Id: G4VVisManager.hh,v 1.17 2010-05-29 21:35:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -193,7 +193,8 @@ public: // With description
   // has changed so that they may rebuild their graphics database, if
   // any, and redraw all views.
 
-  virtual void DispatchToModel(const G4VTrajectory&, G4int i_mode = 0) = 0;
+  virtual void DispatchToModel(const G4VTrajectory&) = 0;
+  virtual void DispatchToModel(const G4VTrajectory&, G4int i_mode) = 0;
   // Draw the trajectory.
 
   virtual G4bool FilterTrajectory(const G4VTrajectory&) = 0;
@@ -207,11 +208,6 @@ protected:
   static void SetConcreteInstance (G4VVisManager*);
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
-
-public:
-
-  static G4bool IsDefaultDrawTrajectory;
-
 };
 
 #endif
