@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2009-11-15 12:33:54 allison Exp $
+$Id: History,v 1.61 2010-05-29 21:09:55 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+29th May 2010  John Allison  (raytracer-V09-03-00)
+- G4RayTrajectory.hh: Added DrawTrajectory() ready for i_mode migration.
 
 15th November 2009  John Allison  (raytracer-V09-02-02)
 - Formal tag to record fixing of bugzilla Problem 1072.
