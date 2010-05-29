@@ -1,4 +1,4 @@
-$Id: History,v 1.472 2010-05-29 21:25:35 allison Exp $
+$Id: History,v 1.473 2010-05-29 21:42:17 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-29th May 2010  John Allison
+29th May 2010  John Allison  (vis-V09-03-04)
 - Co-works greps-V09-03-01 and tracking-V09-03-03.
 - visman-V09-03-05:
   o Introduced DispatchToModel without i_mode.
