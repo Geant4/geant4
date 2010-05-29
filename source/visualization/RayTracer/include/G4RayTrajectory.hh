@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh,v 1.15 2006-06-29 21:23:45 gunter Exp $
+// $Id: G4RayTrajectory.hh,v 1.16 2010-05-29 21:09:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,6 +69,7 @@ class G4RayTrajectory : public G4VTrajectory
 
    virtual void AppendStep(const G4Step*);
    virtual void ShowTrajectory(std::ostream&) const;
+   virtual void DrawTrajectory() const {;}
    virtual void DrawTrajectory(G4int) const {;}
    virtual int GetPointEntries() const {return positionRecord->size();}
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
