@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.92 2010-05-11 10:55:07 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.93 2010-05-29 21:18:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -262,23 +262,10 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (!trajectoriesModel) G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
-  G4VVisManager::IsDefaultDrawTrajectory = false;
   if (trajectoriesModel->IsDrawingModeSet()) {
     traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
   } else {
     traj.DrawTrajectory();
-  }
-  if (!G4VVisManager::IsDefaultDrawTrajectory) {
-    static G4bool warnedAboutIMode = false;
-    if (!warnedAboutIMode) {
-      G4Exception
-	("G4VSceneHandler::AddCompound(const G4VTrajectory&)",
-	 "",
-	 JustWarning,
-  "WARNING: DEPRECATED: The use of the i_mode argument in DrawTrajectory"
-  "\n  is deprecated and will be removed in a future major release.");
-      warnedAboutIMode = true;
-    }
   }
 }
 
