@@ -1,4 +1,4 @@
-$Id: History,v 1.470 2010-05-29 21:11:33 allison Exp $
+$Id: History,v 1.471 2010-05-29 21:23:18 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,11 @@ History file for visualization category
 ---------------------------------------
 
 29th May 2010  John Allison
+- Co-works greps-V09-03-00 and tracking-V09-03-02.
+- visman-V09-03-05:
+  o Introduced DispatchToModel without i_mode.
+  o Moved i-mode deprecation warnings to G4VTrajectory.
+  o Improved /vis/viewer/rebuild.
 - opengl-V09-03-03: Improvements.
 - raytracer-V09-03-00: Added DrawTrajectory() ready for i_mode migration.
 
