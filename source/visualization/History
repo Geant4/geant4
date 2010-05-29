@@ -1,4 +1,4 @@
-$Id: History,v 1.469 2010-05-29 15:58:51 allison Exp $
+$Id: History,v 1.470 2010-05-29 21:11:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,6 +26,7 @@ History file for visualization category
 
 29th May 2010  John Allison
 - opengl-V09-03-03: Improvements.
+- raytracer-V09-03-00: Added DrawTrajectory() ready for i_mode migration.
 
 28th May 2010  John Allison  (vis-V09-03-03)
 - Co-works interfaces-V09-03-04.
