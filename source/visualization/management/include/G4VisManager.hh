@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.72 2010-05-28 16:48:03 allison Exp $
+// $Id: G4VisManager.hh,v 1.73 2010-05-29 21:16:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -305,6 +305,7 @@ public: // With description
   // has changed so that they may rebuild their graphics database, if
   // any, and redraw all views.
 
+  void DispatchToModel(const G4VTrajectory&);
   void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
 

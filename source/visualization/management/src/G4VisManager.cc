@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.125 2010-05-28 16:48:03 allison Exp $
+// $Id: G4VisManager.cc,v 1.126 2010-05-29 21:16:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -861,6 +861,30 @@ G4bool G4VisManager::FilterHit(const G4VHit& hit)
   return fpHitFilterMgr->Accept(hit);
 }   
 
+void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
+{
+  G4bool visible(true);
+
+  // See if trajectory passes filter
+  G4bool passed = FilterTrajectory(trajectory);
+
+  if (!passed) {
+    // Draw invisible trajectory if trajectory failed filter and
+    // are filtering in soft mode
+    if (fpTrajFilterMgr->GetMode() == FilterMode::Soft) visible = false;
+    else {return;}
+  }
+
+  // Go on to draw trajectory
+  assert (0 != fpTrajDrawModelMgr);
+
+  const G4VTrajectoryModel* trajectoryModel = CurrentTrajDrawModel();
+
+  assert (0 != trajectoryModel); // Should exist
+
+  trajectoryModel->Draw(trajectory, visible);
+}
+
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
   G4bool visible(true);
@@ -891,21 +915,10 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
       trajectoryModel->Draw(trajectory, visible);
     }
   } else {
-    //G4Exception("G4VisManager::DispatchToModel: Not a G4TrajectoriesModel.");
     // Just draw at user's request
     trajectoryModel->Draw(trajectory, i_mode, visible);
-    static G4bool warnedAboutIMode = false;
-    if (!warnedAboutIMode) {
-      G4Exception
-        ("G4VisManager::DispatchToModel",
-         "",
-         JustWarning,
-  "WARNING: DEPRECATED: The use of the i_mode argument in DrawTrajectory"
-  "\n  is deprecated and will be removed at the next major release.");
-      warnedAboutIMode = true;
-    }
-   }
-} 
+  }
+}
 
 void G4VisManager::SetUserAction
 (G4VUserVisAction* pVisAction,
