@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2010-05-28 16:48:03 allison Exp $
+$Id: History,v 1.147 2010-05-29 21:20:54 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,17 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+29th May 2010  John Allison  (visman-V09-03-05)
+- Co-works greps-V09-03-00 and tracking-V09-03-02.
+- G4VisManager:
+  o Introduced DispatchToModel without i_mode.
+  o Moved i-mode deprecation warning to G4VTrajectory.
+- G4VSceneHandler.cc:
+  o Moved i-mode deprecation warning to G4VTrajectory.
+- G4VisCommandsViewer.cc: /vis/viewer/rebuild:
+  o Added sceneHandler->ClearTransientStore().
+  o Added viewer->Set/Clear/DrawView().
 
 28th May 2010  John Allison  (visman-V09-03-04)
 - G4VisManager, G4VisExecutive:
