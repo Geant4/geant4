@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.139 2010-05-07 16:06:18 allison Exp $
+cvs log $Id: History,v 1.140 2010-05-29 21:35:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th May 2010  John Allison  (greps-V09-03-01)
+- G4VVisManager:
+  o Removed IsDefaultDrawTrajectory.  A better way is...
+  o Added DispatchToModel(const G4VTrajectory&), i.e., without i_mode, to
+    distinguish usage and in preparation for i_mode migration.
 
 7th May 2010  John Allison  (greps-V09-03-00)
 - G4VVisManager: Added a public static boolean flag,
