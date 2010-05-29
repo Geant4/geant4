@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.75 2009-01-19 15:47:49 lgarnier Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.76 2010-05-29 21:20:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -1037,6 +1037,7 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String& rebuildName = newValue;
+
   G4VViewer* viewer = fpVisManager -> GetViewer (rebuildName);
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
@@ -1047,7 +1048,21 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
+  G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
+  if (!sceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << viewer->GetName() << "\"" <<
+	" has no scene handler - report serious bug."
+	     << G4endl;
+    }
+    return;
+  }
+
+  sceneHandler->ClearTransientStore();
   viewer->NeedKernelVisit();
+  viewer->SetView();
+  viewer->ClearView();
+  viewer->DrawView();
 
   // Check auto-refresh and print confirmations, but without changing
   // view paramters...
