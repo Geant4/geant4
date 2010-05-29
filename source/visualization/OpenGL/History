@@ -1,4 +1,4 @@
-$Id: History,v 1.172 2010-05-26 15:23:53 allison Exp $
+$Id: History,v 1.173 2010-05-29 15:57:20 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th May 2010  John Allison  (opengl-V09-03-03)
+- G4OpenGLImmediateSceneHandler.cc, G4OpenGLStoredSceneHandler.cc:
+  Removed the following from ClearTransientStrore (was causing
+  unnecessary drawing and flipping buffers?):
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+- G4OpenGLStoredXViewer.cc:
+  Commented out as follows in DrawView (was causing extra buffer swap,
+  thus showing bad picture; can't recall why it was introduced):
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        //DrawDisplayLists ();  ????????? (JA)
+        //FinishView ();        ????????? (JA)
 
 26th May 2010 Laurent Garnier  (opengl-V09-03-02)
  - G4OpenGLQtViewer : Some improvments with auto rotation mode.
