@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.31 2009-02-04 16:48:41 lgarnier Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.32 2010-05-29 15:52:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -202,15 +202,7 @@ void G4OpenGLImmediateSceneHandler::EndModeling () {
 }
 
 void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
-
   G4VSceneHandler::ClearTransientStore ();
-
-  // Make sure screen corresponds to graphical database...
-  if (fpViewer) {
-    fpViewer -> SetView ();
-    fpViewer -> ClearView ();
-    fpViewer -> DrawView ();
-  }
 }
 
 void G4OpenGLImmediateSceneHandler::RequestPrimitives (const G4VSolid& solid)
