@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.12 2009-10-21 15:36:22 allison Exp $
+// $Id: G4VGraphicsScene.hh,v 1.13 2010-05-30 11:15:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -56,6 +56,7 @@ class G4Polycone;
 class G4Polyhedra;
 class G4VTrajectory;
 class G4VHit;
+class G4VDigi;
 template <typename T> class G4THitsMap;
 class G4Polyline;
 class G4Scale;
@@ -115,6 +116,7 @@ public: // With description
 
   virtual void AddCompound (const G4VTrajectory&)        = 0;
   virtual void AddCompound (const G4VHit&)               = 0;
+  virtual void AddCompound (const G4VDigi&)              = 0;
   virtual void AddCompound (const G4THitsMap<G4double>&) = 0;
 
   ///////////////////////////////////////////////////////////////////

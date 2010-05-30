@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.17 2010-05-29 21:35:16 allison Exp $
+// $Id: G4VVisManager.hh,v 1.18 2010-05-30 11:15:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison 19/Oct/1996.
 // 
@@ -86,6 +86,7 @@ class G4Polyhedron;
 class G4NURBS;
 class G4VSolid;
 class G4VHit;
+class G4VDigi;
 class G4VTrajectory;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -167,6 +168,8 @@ public: // With description
 
   virtual void Draw (const G4VHit&) = 0;
 
+  virtual void Draw (const G4VDigi&) = 0;
+
   virtual void Draw (const G4VTrajectory&, G4int i_mode = 0) = 0;
   // i_mode is a parameter that can be used to control the drawing of
   // the trajectory.  See, e.g., G4TrajectoryDrawByCharge::Draw in the
@@ -202,6 +205,9 @@ public: // With description
 
   virtual G4bool FilterHit(const G4VHit&) = 0;
   // Hit filter
+
+  virtual G4bool FilterDigi(const G4VDigi&) = 0;
+  // Digi filter
 
 protected:
 
