@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.17 2009-10-21 14:59:17 allison Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.18 2010-05-30 10:18:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -96,6 +96,9 @@ public:
   }
   void AddCompound ( const G4VHit& hit) {
     G4VSceneHandler::AddCompound(hit);
+  }
+  void AddCompound ( const G4VDigi& digi) {
+    G4VSceneHandler::AddCompound(digi);
   }
   void AddCompound ( const G4THitsMap<G4double> & hits) {
     G4VSceneHandler::AddCompound(hits);
