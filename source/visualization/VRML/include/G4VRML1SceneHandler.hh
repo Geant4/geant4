@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.hh,v 1.15 2009-10-21 15:27:21 allison Exp $
+// $Id: G4VRML1SceneHandler.hh,v 1.16 2010-05-30 10:08:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandler.hh
@@ -76,6 +76,9 @@ public:
         }
         void AddCompound ( const G4VHit& hit) {
           G4VSceneHandler::AddCompound(hit);
+        }
+        void AddCompound ( const G4VDigi& digi) {
+          G4VSceneHandler::AddCompound(digi);
         }
         void AddCompound ( const G4THitsMap<G4double> & hits) {
 	  G4VSceneHandler::AddCompound(hits);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.14 2010-05-11 10:44:11 allison Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.15 2010-05-30 10:04:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,6 +95,7 @@ const G4int MAX_NUM_TRAJECTORIES = 100000;
 const G4bool GFDEBUG = false;
 const G4bool GFDEBUG_TRK = false;//true;
 const G4bool GFDEBUG_HIT = false;//true;
+const G4bool GFDEBUG_DIGI = false;//true;
 const G4int GFDEBUG_DET = 0; // 0: false 
 
 //////////////////////
@@ -1578,6 +1579,11 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
     delete attval;
   }
 
+}
+
+void G4GMocrenFileSceneHandler::AddCompound( const G4VDigi & digi) {
+  if(GFDEBUG_DIGI) G4cout << " ::AddCompound(const G4VDigi&) >>>>>>>>> " << G4endl;
+  G4VSceneHandler::AddCompound(digi);
 }
 
 void G4GMocrenFileSceneHandler::AddCompound(const G4THitsMap<G4double> & hits) {

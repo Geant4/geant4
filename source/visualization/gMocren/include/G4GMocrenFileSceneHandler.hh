@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.hh,v 1.5 2009-11-01 14:37:10 akimura Exp $
+// $Id: G4GMocrenFileSceneHandler.hh,v 1.6 2010-05-30 10:04:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,6 +102,7 @@ public:
   void AddSolid ( const G4VSolid& solid  );
   void AddCompound ( const G4VTrajectory& traj);
   void AddCompound ( const G4VHit& hit);
+  void AddCompound ( const G4VDigi& hit);
   void AddCompound ( const G4THitsMap<G4double> & hits);
 
 
