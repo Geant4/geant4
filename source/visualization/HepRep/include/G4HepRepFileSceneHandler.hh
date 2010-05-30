@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.31 2009-10-21 15:08:35 allison Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.32 2010-05-30 10:28:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,6 +83,9 @@ public:
   void InitHit();
   void AddCompound (const G4THitsMap<G4double>& hits) {
     G4VSceneHandler::AddCompound(hits);
+  }
+  void AddCompound (const G4VDigi& digi) {
+    G4VSceneHandler::AddCompound(digi);
   }
   // void PreAddSolid(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
