@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.19 2009-10-21 14:17:33 allison Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.20 2010-05-30 11:23:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,7 @@ public:
   void AddSolid (const G4VSolid& s) {Accrue (s);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
+  void AddCompound (const G4VDigi&) {}
   void AddCompound (const G4THitsMap<G4double>&) {}
   G4VisExtent GetBoundingSphereExtent ();
   const G4Point3D& GetCentre() const {return fCentre;}
