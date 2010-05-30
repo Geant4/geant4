@@ -1,4 +1,4 @@
-$Id: History,v 1.173 2010-05-29 15:57:20 allison Exp $
+$Id: History,v 1.174 2010-05-30 09:53:05 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th May 2010  John Allison  (opengl-V09-03-04)
+- G4OpenGLSceneHandler: Added AddCompound(const G4VDigi&).
 
 29th May 2010  John Allison  (opengl-V09-03-03)
 - G4OpenGLImmediateSceneHandler.cc, G4OpenGLStoredSceneHandler.cc:
