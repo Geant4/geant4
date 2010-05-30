@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.140 2010-05-29 21:35:36 allison Exp $
+cvs log $Id: History,v 1.141 2010-05-30 11:15:52 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th May 2010  John Allison  (greps-V09-03-02)
+- G4VVisManager: Added Draw(const G4VDigi&) and FilterDigi(const G4VDigi&).
+- G4VGraphicsScene: Added AddCompound (const G4VDigi&).
 
 29th May 2010  John Allison  (greps-V09-03-01)
 - G4VVisManager:
