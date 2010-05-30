@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.25 2010-05-28 16:48:03 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.26 2010-05-30 11:30:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 #include "G4HepRepFile.hh"
 #include "G4RayTracer.hh"
 #include "G4HitFilterFactories.hh"
+#include "G4DigiFilterFactories.hh"
 #include "G4TrajectoryFilterFactories.hh"
 #include "G4TrajectoryModelFactories.hh"
 #include "G4VRML1File.hh"
@@ -253,6 +254,9 @@ G4VisExecutive::RegisterModelFactories()
 
    // Hit filter models
    RegisterModelFactory(new G4HitAttributeFilterFactory());
+
+   // Digi filter models
+   RegisterModelFactory(new G4DigiAttributeFilterFactory());
 }
 
 #endif

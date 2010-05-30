@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.43 2010-05-11 10:50:57 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.44 2010-05-30 11:30:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,7 @@ public: // With description
 
   virtual void AddCompound (const G4VTrajectory&);
   virtual void AddCompound (const G4VHit&);
+  virtual void AddCompound (const G4VDigi&);
   virtual void AddCompound (const G4THitsMap<G4double>&);
 
   //////////////////////////////////////////////////////////////
@@ -318,10 +319,10 @@ protected:
   // Load G4AttValues and G4AttDefs associated with the G4Visible
   // object onto the G4AttHolder object.  It checks fpModel, and also
   // loads the G4AttValues and G4AttDefs from G4PhysicalVolumeModel,
-  // G4VTrajectory, G4VTrajectoryPoint, or G4VHits, as appropriate.
-  // The G4AttHolder object is an object of a class that publicly
-  // inherits G4AttHolder - see, e.g., SoG4Polyhedron in the Open
-  // Inventor driver.  G4AttHolder deletes G4AttValues in its
+  // G4VTrajectory, G4VTrajectoryPoint, G4VHit or G4VDigi, as
+  // appropriate.  The G4AttHolder object is an object of a class that
+  // publicly inherits G4AttHolder - see, e.g., SoG4Polyhedron in the
+  // Open Inventor driver.  G4AttHolder deletes G4AttValues in its
   // destructor to ensure proper clean-up of G4AttValues.
 
   //////////////////////////////////////////////////////////////

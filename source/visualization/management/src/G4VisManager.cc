@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.126 2010-05-29 21:16:21 allison Exp $
+// $Id: G4VisManager.cc,v 1.127 2010-05-30 11:30:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,7 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
   fpTrajFilterMgr = new G4VisFilterManager<G4VTrajectory>("/vis/filtering/trajectories");
   fpHitFilterMgr = new G4VisFilterManager<G4VHit>("/vis/filtering/hits");
+  fpDigiFilterMgr = new G4VisFilterManager<G4VDigi>("/vis/filtering/digi");
 
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
@@ -200,9 +201,10 @@ G4VisManager::~G4VisManager () {
     delete fDirectoryList[i];
   }
 
-  delete fpTrajDrawModelMgr;
-  delete fpTrajFilterMgr;
+  delete fpDigiFilterMgr;
   delete fpHitFilterMgr;
+  delete fpTrajFilterMgr;
+  delete fpTrajDrawModelMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -287,6 +289,12 @@ void G4VisManager::Initialise () {
   fDirectoryList.push_back (directory);
   directory = new G4UIdirectory ("/vis/filtering/hits/create/");
   directory -> SetGuidance ("Create hit filters and messengers.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/digi/");
+  directory -> SetGuidance ("Digi filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/digi/create/");
+  directory -> SetGuidance ("Create digi filters and messengers.");
   fDirectoryList.push_back (directory);
 
   RegisterMessengers ();
@@ -434,6 +442,17 @@ void
 G4VisManager::RegisterModelFactory(G4HitFilterFactory* factory)
 {
   fpHitFilterMgr->Register(factory);
+}
+
+void G4VisManager::RegisterModel(G4VFilter<G4VDigi>* model)
+{
+  fpDigiFilterMgr->Register(model);
+}
+
+void
+G4VisManager::RegisterModelFactory(G4DigiFilterFactory* factory)
+{
+  fpDigiFilterMgr->Register(factory);
 }
 
 void G4VisManager::SelectTrajectoryModel(const G4String& model) 
@@ -602,6 +621,13 @@ void G4VisManager::Draw (const G4VHit& hit) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
     fpSceneHandler -> AddCompound (hit);
+  }
+}
+
+void G4VisManager::Draw (const G4VDigi& digi) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> AddCompound (digi);
   }
 }
 
@@ -861,6 +887,11 @@ G4bool G4VisManager::FilterHit(const G4VHit& hit)
   return fpHitFilterMgr->Accept(hit);
 }   
 
+G4bool G4VisManager::FilterDigi(const G4VDigi& digi)
+{
+  return fpDigiFilterMgr->Accept(digi);
+}   
+
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
 {
   G4bool visible(true);
@@ -1107,6 +1138,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
+  RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddPSHits);
@@ -1168,6 +1200,12 @@ void G4VisManager::RegisterMessengers () {
                     (fpHitFilterMgr, fpHitFilterMgr->Placement()));
   RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VHit> >
                     (fpHitFilterMgr, fpHitFilterMgr->Placement()));
+
+  // Digi filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VDigi> >
+                    (fpDigiFilterMgr, fpDigiFilterMgr->Placement()));
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {
@@ -1404,10 +1442,11 @@ void G4VisManager::EndOfRun ()
       G4cout <<
 	"  Only useful if before starting the run:"
 	"\n    a) trajectories are stored (\"/vis/scene/add/trajectories [smooth|rich]\"), or"
-	"\n    b) the Draw method of any hits is implemented."
-	"\n  To view trajectories and hits:"
+	"\n    b) the Draw method of any hits or digis is implemented."
+	"\n  To view trajectories, hits or digis:"
 	"\n    open a viewer, draw a volume, \"/vis/scene/add/trajectories\""
-	"\n    \"/vis/scene/add/hits\" and, possibly, \"/vis/viewer/flush\"."
+	"\n    \"/vis/scene/add/hits\" or \"/vis/scene/add/digitisations\""
+	"\n    and, possibly, \"/vis/viewer/flush\"."
 	"\n  To see all events: \"/vis/scene/endOfEventAction accumulate\"."
 	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
 	     << G4endl;

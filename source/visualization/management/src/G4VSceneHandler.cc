@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.93 2010-05-29 21:18:02 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.94 2010-05-30 11:30:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,6 +74,7 @@
 #include "G4VTrajectoryPoint.hh"
 #include "G4HitsModel.hh"
 #include "G4VHit.hh"
+#include "G4VDigi.hh"
 #include "G4ScoringManager.hh"
 #include "G4DefaultLinearColorMap.hh"
 #include "Randomize.hh"
@@ -272,6 +273,11 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
   // Cast away const because Draw is non-const!!!!
   const_cast<G4VHit&>(hit).Draw();
+}
+
+void G4VSceneHandler::AddCompound (const G4VDigi& digi) {
+  // Cast away const because Draw is non-const!!!!
+  const_cast<G4VDigi&>(digi).Draw();
 }
 
 void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {

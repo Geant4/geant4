@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.73 2010-05-29 21:16:21 allison Exp $
+// $Id: G4VisManager.hh,v 1.74 2010-05-30 11:30:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,17 +65,18 @@
 // with the current viewer, in particular, the Draw operations.
 //
 // Each scene comprises drawable objects such as detector components
-// and hits when appropriate.  A scene handler translates a scene into
-// graphics-system-specific function calls and, possibly, a
-// graphics-system-dependent database - display lists, scene graphs,
-// etc.  Each viewer has its "view parameters" (see class description
-// of G4ViewParameters for available parameters and also for a
-// description of the concept of a "standard view" and all that).
+// and trajectories, hits and digis when appropriate.  A scene handler
+// translates a scene into graphics-system-specific function calls
+// and, possibly, a graphics-system-dependent database - display
+// lists, scene graphs, etc.  Each viewer has its "view parameters"
+// (see class description of G4ViewParameters for available parameters
+// and also for a description of the concept of a "standard view" and
+// all that).
 //
 // A friend class G4VisStateDependent is "state dependent", i.e., it
 // is notified on change of state (G4ApplicationState).  This is used
-// to message the G4VisManager to draw hits and trajectories in the
-// current scene at the end of event, as required.
+// to message the G4VisManager to draw hits, digis and trajectories in
+// the current scene at the end of event, as required.
 
 #ifndef G4VISMANAGER_HH
 #define G4VISMANAGER_HH
@@ -112,6 +113,7 @@ namespace {
   typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
   typedef G4VModelFactory< G4VFilter<G4VTrajectory> > G4TrajFilterFactory;
   typedef G4VModelFactory< G4VFilter<G4VHit> > G4HitFilterFactory;
+  typedef G4VModelFactory< G4VFilter<G4VDigi> > G4DigiFilterFactory;
 }
 
 class G4VisManager: public G4VVisManager {
@@ -214,6 +216,12 @@ public: // With description
   void RegisterModel(G4VFilter<G4VHit>* filter);
   // Register trajectory hit model. Assumes ownership of model.
 
+  void RegisterModelFactory(G4DigiFilterFactory* factory);
+  // Register trajectory digi model factory. Assumes ownership of factory.
+
+  void RegisterModel(G4VFilter<G4VDigi>* filter);
+  // Register trajectory digi model. Assumes ownership of model.
+
   void SelectTrajectoryModel(const G4String& model);
   // Set default trajectory model. Useful for use in compiled code
 
@@ -280,6 +288,8 @@ public: // With description
 
   void Draw (const G4VHit&);
 
+  void Draw (const G4VDigi&);
+
   void Draw (const G4VTrajectory&, G4int i_mode);
   // i_mode is a parameter that can be used to control the drawing of
   // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
@@ -311,6 +321,7 @@ public: // With description
 
   G4bool FilterTrajectory(const G4VTrajectory&);
   G4bool FilterHit(const G4VHit&);
+  G4bool FilterDigi(const G4VDigi&);
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -329,8 +340,8 @@ private:
 
   void EndOfEvent ();
   // This is called on change of state (G4ApplicationState).  It is
-  // used to draw hits and trajectories if included in the current
-  // scene at the end of event, as required.
+  // used to draw hits, digis and trajectories if included in the
+  // current scene at the end of event, as required.
 
   void EndOfRun ();
 
@@ -466,6 +477,9 @@ private:
 
   // Hit filter model manager
   G4VisFilterManager<G4VHit>* fpHitFilterMgr;
+
+  // Digi filter model manager
+  G4VisFilterManager<G4VDigi>* fpDigiFilterMgr;
 
 };
 

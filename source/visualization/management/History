@@ -1,4 +1,4 @@
-$Id: History,v 1.148 2010-05-29 21:26:22 allison Exp $
+$Id: History,v 1.149 2010-05-30 11:30:49 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,12 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+30th May 2010  John Allison  (visman-V09-03-06)
+- Added /vis/scene/add/digiti[sz]ations.
+- Added /vis/filtering/digi.
+- G4VisManager, G4VisExecutive: Added registration and methods for digis.
+- G4VSceneHandler: Added AddCompound(const G4VDigi&).
 
 29th May 2010  John Allison  (visman-V09-03-05)
 - Co-works greps-V09-03-01 and tracking-V09-03-03.

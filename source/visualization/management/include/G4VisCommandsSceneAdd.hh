@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.19 2009-11-04 13:15:02 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.20 2010-05-30 11:30:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -50,6 +50,19 @@ private:
   G4VisCommandSceneAddAxes (const G4VisCommandSceneAddAxes&);
   G4VisCommandSceneAddAxes& operator = (const G4VisCommandSceneAddAxes&);
   G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddDigis: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddDigis ();
+  virtual ~G4VisCommandSceneAddDigis ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddDigis (const G4VisCommandSceneAddDigis&);
+  G4VisCommandSceneAddDigis& operator = (const G4VisCommandSceneAddDigis&);
+  G4UIcmdWithoutParameter* fpCommand;
+  G4UIcmdWithoutParameter* fpCommandUS;
 };
 
 class G4VisCommandSceneAddEventID: public G4VVisCommandScene {
