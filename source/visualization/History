@@ -1,4 +1,4 @@
-$Id: History,v 1.473 2010-05-29 21:42:17 allison Exp $
+$Id: History,v 1.474 2010-05-30 11:34:13 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+30th May 2010  John Allison  (vis-V09-03-05)
+- Co-works greps-V09-03-02.
+- modeling-V09-03-02: Added G4DigiModel and G4DigiFilterFactories.
+- visman-V09-03-06:
+  o Added /vis/scene/add/digiti[sz]ations and /vis/filtering/digi.
+  o Added AddCompound(const G4VDigi&).
+- opengl-V09-03-04, gMocren-V09-03-02, VRML-V09-03-00, DAWN-V09-03-00,
+  raytracer-V09-03-01, vis-HepRep-V09-03-00:
+  o Added AddCompound(const G4VDigi&).
 
 29th May 2010  John Allison  (vis-V09-03-04)
 - Co-works greps-V09-03-01 and tracking-V09-03-03.
