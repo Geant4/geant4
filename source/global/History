@@ -1,4 +1,4 @@
-$Id: History,v 1.243 2010-05-05 16:10:06 gcosmo Exp $
+$Id: History,v 1.244 2010-05-31 07:01:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+May 29, 2010  V.Ivantchenko (global-V09-03-07)
+- More safe numerical computation of A13 and logA methods in G4Pow.
+
+May 28, 2010  H.Kurasige
+- Restored G4PVDataVector vectors in G4PhysicsVector owned by value instead
+  of pointers, as originally was before tag "global-V09-03-00".
 
 May 05, 2010  G.Cosmo (global-V09-03-06)
 - Move interpolation methods to inline in G4PhysicsVector.
