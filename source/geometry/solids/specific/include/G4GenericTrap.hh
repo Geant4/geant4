@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.2 2010-05-31 09:45:47 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.3 2010-05-31 09:48:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 // Class description:
 //
 // G4GenericTrap is a solid which represents an arbitrary trapezoid with 
-// up to 8 vertices standing on two paralel planes perpendicular to Z axis.
+// up to 8 vertices standing on two parallel planes perpendicular to Z axis.
 // 
 // Parameters in the constructor:
 // - name               - solid name

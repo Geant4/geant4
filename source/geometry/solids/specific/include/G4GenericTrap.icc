@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.icc,v 1.1 2010-05-27 20:59:54 tnikitin Exp $
+// $Id: G4GenericTrap.icc,v 1.2 2010-05-31 09:45:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -41,13 +41,18 @@ G4double G4GenericTrap::GetZHalfLength() const
   return fDz;
 }
 
+// --------------------------------------------------------------------
+
 inline 
 G4int G4GenericTrap::GetNofVertices() const
 {
   return fVertices.size();
 }  
 
-inline G4TwoVector G4GenericTrap::GetVertex(G4int index) const
+// --------------------------------------------------------------------
+
+inline
+G4TwoVector G4GenericTrap::GetVertex(G4int index) const
 {
   if ( index<0 || index >= G4int(fVertices.size()) )
   {
@@ -58,73 +63,92 @@ inline G4TwoVector G4GenericTrap::GetVertex(G4int index) const
   return fVertices[index];
 }  
 
+// --------------------------------------------------------------------
+
 inline 
 std::vector<G4TwoVector> G4GenericTrap::GetVertices() const
 {
   return fVertices;
 }  
 
+// --------------------------------------------------------------------
+
 inline 
 G4double G4GenericTrap::GetTwistAngle(G4int index) const
 {
-  if ( index<0 || index >= G4int(fVertices.size()) )
+  if ( (index<0) || (index >= G4int(fVertices.size())) )
   {
     G4Exception ("G4GenericTrap::GetTwistAngle()", "InvalidInput",
                  FatalException, "Index outside range.");
     return 0.;
   }
-  
   return fTwist[index];
 }
+
+// --------------------------------------------------------------------
+
 inline
-void G4GenericTrap::SetTwistAngle(G4int index,G4double twist){
- if ( index<0 || index >= G4int(fVertices.size()) )
+void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
+{
+  if ( (index<0) || (index >= G4int(fVertices.size())) )
   {
     G4Exception ("G4GenericTrap::SetTwistAngle()", "InvalidInput",
                  FatalException, "Index outside range.");
-    
-  }else{
-
-  fTwist[index]=twist;
   }
- 
+  else
+  {
+    fTwist[index]=twist;
+  }
 }
-//_____________________________________________________________________________
-inline G4ThreeVector G4GenericTrap:: GetMinimumBBox() const
+
+// --------------------------------------------------------------------
+
+inline
+G4ThreeVector G4GenericTrap::GetMinimumBBox() const
 {
   return fMinBBoxVector;
 }
 
-//_____________________________________________________________________________
-inline G4ThreeVector G4GenericTrap:: GetMaximumBBox() const
+// --------------------------------------------------------------------
+
+inline
+G4ThreeVector G4GenericTrap::GetMaximumBBox() const
 {
   return fMaxBBoxVector;
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 inline 
 G4GeometryType G4GenericTrap::GetEntityType() const
 {
   return G4String("G4GenericTrap");
 }
   
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 inline
 G4double G4GenericTrap::GetCubicVolume()
 {
-   if(fCubicVolume != 0.) {;}
-   else   { fCubicVolume = G4VSolid::GetCubicVolume(); }
-   return fCubicVolume;
+  if(fCubicVolume != 0.) {;}
+  else   { fCubicVolume = G4VSolid::GetCubicVolume(); }
+  return fCubicVolume;
 }
-//_____________________________________________________________________________
+
+// --------------------------------------------------------------------
+
 inline
 G4int G4GenericTrap::GetVisSubdivisions()const
 {
- return fVisSubdivisions;
+  return fVisSubdivisions;
 }
-//_____________________________________________________________________________
+
+// --------------------------------------------------------------------
+
 inline
 void G4GenericTrap::SetVisSubdivisions(G4int subdiv)
 {
- fVisSubdivisions=subdiv;
+  fVisSubdivisions=subdiv;
 }
+
+// --------------------------------------------------------------------

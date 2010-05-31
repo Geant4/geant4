@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.18 2008/10
+// $Id: G4GenericTrap.cc,v 1.2 2010-05-31 09:45:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 //
 // Authors:
 //   Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
-//   Adapted from ROOT Solid Arb8, created by Andrei Gheata, CERN 
+//   Adapted from Root Arb8 implementation by Andrei Gheata, CERN 
 // --------------------------------------------------------------------
 
 #include <iomanip>
@@ -52,15 +52,14 @@
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
 #include "G4VisExtent.hh"
-  	
+
 const G4int    G4GenericTrap::fgkNofVertices = 8;
 const G4double G4GenericTrap::fgkTolerance = 1E-3;
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
 
-G4GenericTrap::G4GenericTrap( const G4String& name,
-                      G4double hz,
-                      std::vector<G4TwoVector>  vertices)
+G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
+                              std::vector<G4TwoVector>  vertices )
   : G4VSolid(name),
     fDz(hz),
     fVertices(),
@@ -69,9 +68,6 @@ G4GenericTrap::G4GenericTrap( const G4String& name,
     fMinBBoxVector(G4ThreeVector(0,0,0)),
     fMaxBBoxVector(G4ThreeVector(0,0,0)),
     fVisSubdivisions(0)
-   
-    
-    
 {
   // General constructor
 
@@ -81,223 +77,271 @@ G4GenericTrap::G4GenericTrap( const G4String& name,
   
   // Check vertices size
 
-  if ( G4int(vertices.size()) != fgkNofVertices ) {
+  if ( G4int(vertices.size()) != fgkNofVertices )
+  {
     G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
-     
                 FatalException, "Number of vertices != 8");
-
   }            
    
   // Check Ordering and Copy vertices 
   //
-  if(CheckOrder(vertices)){
-    for ( G4int i=0; i<fgkNofVertices; ++i ) { fVertices.push_back(vertices[i]); }
+  if(CheckOrder(vertices))
+  {
+    for (G4int i=0; i<fgkNofVertices; ++i) {fVertices.push_back(vertices[i]);}
   }
-   else{ 
-    for ( G4int i=0; i <4; ++i) {fVertices.push_back(vertices[3-i]);}
-    for ( G4int i=0; i <4; ++i) {fVertices.push_back(vertices[7-i]);}
-  }  
+  else
+  { 
+    for (G4int i=0; i <4; ++i) {fVertices.push_back(vertices[3-i]);}
+    for (G4int i=0; i <4; ++i) {fVertices.push_back(vertices[7-i]);}
+  }
+
   // Compute Twist
-  for( G4int i=0; i<4; i++)fTwist[i]=0;
-   fIsTwisted = ComputeIsTwisted();
+  //
+  for( G4int i=0; i<4; i++) { fTwist[i]=0; }
+  fIsTwisted = ComputeIsTwisted();
+
   // Compute Bounding Box 
-   ComputeBBox();
+  //
+  ComputeBBox();
   
-   
   // If not twisted - create tessellated solid 
   // (an alternative implementation for testing)
+  //
 #ifdef G4TESS_TEST
-   if ( ! fIsTwisted ) fTessellatedSolid = CreateTessellatedSolid();
+   if ( !fIsTwisted )  { fTessellatedSolid = CreateTessellatedSolid(); }
 #endif
-     
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
 
 G4GenericTrap::G4GenericTrap( __void__& a )
-  : G4VSolid(a)
+  : G4VSolid(a),
+    fDz(0.),
+    fVertices(),
+    fIsTwisted(false),
+    fTessellatedSolid(0),
+    fMinBBoxVector(G4ThreeVector(0,0,0)),
+    fMaxBBoxVector(G4ThreeVector(0,0,0)),
+    fVisSubdivisions(0)
 {
-  // Fake default constructor - sets onlyif member data and allocates memory
+  // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4GenericTrap::~G4GenericTrap()
 {
   // Destructor
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4bool G4GenericTrap::ComputeIsTwisted() 
 {
-/// From TGeoArb8
-/// Computes tangents of twist angles (angles between projections on XY plane 
-/// of corresponding -dz +dz edges). 
+  // Computes tangents of twist angles (angles between projections on XY plane 
+  // of corresponding -dz +dz edges). 
 
-   G4bool twisted = false;
-   G4double dx1, dy1, dx2, dy2;
-   G4int nv = fgkNofVertices/2;
-   for ( G4int i=0; i<4; i++ ) {
-     
-     dx1 = fVertices[(i+1)%nv].x()-fVertices[i].x();
-     dy1 = fVertices[(i+1)%nv].y()-fVertices[i].y();
-     if ( dx1 == 0 && dy1 == 0 ) continue;
-     
-     dx2 = fVertices[nv+(i+1)%nv].x()-fVertices[nv+i].x();
+  G4bool twisted = false;
+  G4double dx1, dy1, dx2, dy2;
+  G4int nv = fgkNofVertices/2;
 
-     dy2 = fVertices[nv+(i+1)%nv].y()-fVertices[nv+i].y();
-     if ( dx2 == 0 && dy2 == 0 ) continue;
-     G4double twist_angle= fabs(dy1*dx2 - dx1*dy2);        
-     if ( twist_angle < fgkTolerance ) continue;
-     twisted = true;
-     SetTwistAngle(i,twist_angle);
-   }
+  for ( G4int i=0; i<4; i++ )
+  {
+    dx1 = fVertices[(i+1)%nv].x()-fVertices[i].x();
+    dy1 = fVertices[(i+1)%nv].y()-fVertices[i].y();
+    if ( (dx1 == 0) && (dy1 == 0) ) { continue; }
 
-   return twisted;
+    dx2 = fVertices[nv+(i+1)%nv].x()-fVertices[nv+i].x();
+    dy2 = fVertices[nv+(i+1)%nv].y()-fVertices[nv+i].y();
+
+    if ( dx2 == 0 && dy2 == 0 ) { continue; }
+    G4double twist_angle = std::fabs(dy1*dx2 - dx1*dy2);        
+    if ( twist_angle < fgkTolerance ) { continue; }
+    twisted = true;
+    SetTwistAngle(i,twist_angle);
+  }
+
+  return twisted;
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4bool G4GenericTrap::CheckOrder(std::vector<G4TwoVector> vertices) const
 {
-// Test is the vertices are in an clockwise order, if not reorder them.
-// Also test if the well defined without crossing opposite segments 
+  // Test if the vertices are in a clockwise order, if not reorder them.
+  // Also test if they're well defined without crossing opposite segments
+
   G4bool clockwise_order=true;
   G4double sum1 = 0.;
   G4double sum2 = 0.;
   G4int j;
 
-   for (G4int i=0; i<4; i++) {
-      j = (i+1)%4;
-      sum1 += vertices[i].x()*vertices[j].y()-
-              vertices[j].x()*vertices[i].y();
-      sum2 += vertices[i+4].x()*vertices[j+4].y()-
-              vertices[j+4].x()*vertices[i+4].y();
-   }
-   if (sum1*sum2 < -fgkTolerance) {
-       G4String errorDescription = "InvalidSetup in \"";
-       errorDescription += GetName();
-       errorDescription += "\"";
+  for (G4int i=0; i<4; i++)
+  {
+    j = (i+1)%4;
+    sum1 += vertices[i].x()*vertices[j].y() - vertices[j].x()*vertices[i].y();
+    sum2 += vertices[i+4].x()*vertices[j+4].y()
+          - vertices[j+4].x()*vertices[i+4].y();
+  }
+  if (sum1*sum2 < -fgkTolerance)
+  {
+    G4String errorDescription = "InvalidSetup in \"";
+    errorDescription += GetName();
+    errorDescription += "\"";
 
-       G4Exception("G4GenericTrap::CheckOrderAndSetup  ", errorDescription,
-                FatalException, " Lower/upper faces defined with opposite clockwise");
-     
-     
+    G4Exception("G4GenericTrap::CheckOrder()", errorDescription, FatalException,
+                "Lower/upper faces defined with opposite clockwise.");
    }
    
-   if ((sum1 > 0.)||(sum2 > 0.)) {
-       G4String errorDescription = "WarningSetup in \"";
-       errorDescription += GetName();
-       errorDescription += "\"";
-       G4Exception("G4GenericTrap::CheckOrder ", errorDescription,
-                 JustWarning, "Vertices must be defined in clockwise in XY planes. Re-ordering.. ");
-       clockwise_order=false;
-    
-   } 
-   // Check for illegal crossings.
-   G4bool illegal_cross = false;
-   illegal_cross = IsSegCrossing(vertices[0],vertices[1],vertices[2],vertices[3]);
-   if (!illegal_cross) 
-   illegal_cross = IsSegCrossing(vertices[4],vertices[5],vertices[6],vertices[7]);
-   if (illegal_cross) {
-      G4String errorDescription = "InvalidSetup in \"";
-       errorDescription += GetName();
-       errorDescription += "\"";
-       G4Exception("G4GenericTrap::CheckOrderAndSetup  ", errorDescription,
-                FatalException, " Malformed polygone with opposite sides");
-     
+   if ((sum1 > 0.)||(sum2 > 0.))
+   {
+     G4String errorDescription = "WarningSetup in \"";
+     errorDescription += GetName();
+     errorDescription += "\"";
+     G4Exception("G4GenericTrap::CheckOrder()", errorDescription, JustWarning,
+       "Vertices must be defined in clockwise in XY planes! Re-ordering.. ");
+     clockwise_order = false;
    }
 
+   // Check for illegal crossings
+   //
+   G4bool illegal_cross = false;
+   illegal_cross = IsSegCrossing(vertices[0],vertices[1],
+                                 vertices[2],vertices[3]);
+   if (!illegal_cross)
+   {
+     illegal_cross = IsSegCrossing(vertices[4],vertices[5],
+                                   vertices[6],vertices[7]);
+   }
+   if (illegal_cross)
+   {
+      G4String errorDescription = "InvalidSetup in \"";
+      errorDescription += GetName();
+      errorDescription += "\"";
+      G4Exception("G4GenericTrap::CheckOrderAndSetup()",
+                  errorDescription, FatalException,
+                  "Malformed polygone with opposite sides.");
+   }
    return clockwise_order;
 }
 
-//_____________________________________________________________________________
-void 
-G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
+// --------------------------------------------------------------------
+
+void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
 {
-// Reorder the vector of vertices 
+  // Reorder the vector of vertices 
 
   std::vector<G4ThreeVector> oldVertices(vertices);
-  for ( G4int i=0; i < G4int(oldVertices.size()); ++i ) {
+
+  for ( G4int i=0; i < G4int(oldVertices.size()); ++i )
+  {
     vertices[i] = oldVertices[oldVertices.size()-1-i];
-   
   }  
 } 
  
-//_____________________________________________________________________________
-G4bool G4GenericTrap::IsSegCrossing(G4TwoVector a,G4TwoVector b, 
-                                G4TwoVector c, G4TwoVector d) const
+// --------------------------------------------------------------------
+
+G4bool G4GenericTrap::IsSegCrossing(G4TwoVector a, G4TwoVector b, 
+                                    G4TwoVector c, G4TwoVector d) const
 { 
   // Check if segments [A,B] and [C,D] are crossing
+
   G4bool stand1 = false;
   G4bool stand2 = false;
   G4double dx1,dx2,xm=0.,ym=0.,a1=0.,a2=0.,b1=0.,b2=0.;
   dx1=(b-a).x();
   dx2=(d-c).x();
-  if( fabs(dx1) < fgkTolerance ) stand1 = true;
-  if( fabs(dx2)
- < fgkTolerance ) stand2 = true;
-  if (!stand1) {
-      a1 = (b.x()*a.y()-a.x()*b.y())/dx1;
-      b1 = (b-a).y()/dx1;
-  }
-  if (!stand2) {
-      a2 = (d.x()*c.y()-c.x()*d.y())/dx2;
-      b2 = (d-c).y()/dx2;
-   }   
-   if (stand1 && stand2) {
-      // Segments parallel and vertical
-      if (fabs(a.x()-c.x())<fgkTolerance) {
-         // Check if segments are overlapping
-         if ((c.y()-a.y())*(c.y()-b.y())<-fgkTolerance || (d.y()-a.y())*(d.y()-b.y())<-fgkTolerance ||
-             (a.y()-c.y())*(a.y()-d.y())<-fgkTolerance || (b.y()-c.y())*(b.y()-d.y())<-fgkTolerance) return true;
-         return false;
-      }
-      // Different x values
-      return false;
-   }
-   
-   if (stand1) {
-      // First segment vertical
-      xm = a.x();
-      ym = a2+b2*xm; 
-   } else {
-      if (stand2) {
-         // Second segment vertical
-         xm = c.x();
-         ym = a1+b1*xm;
-      } else {
-         // Normal crossing
-         if (fabs(b1-b2) < fgkTolerance ) {
-            // Parallel segments, are they aligned
-            if (fabs(c.y()-(a1+b1*c.x())) > fgkTolerance) return false;
-            // Aligned segments, are they overlapping
-            if ((c.x()-a.x())*(c.x()-b.x())<-fgkTolerance || (d.x()-a.x())*(d.x()-b.x())<-fgkTolerance ||
-             (a.x()-c.x())*(a.x()-d.x())<-fgkTolerance || (b.x()-c.x())*(b.x()-d.x())<-fgkTolerance) return true;
-            return false;
-         }
-         xm = (a1-a2)/(b2-b1);
-         ym = (a1*b2-a2*b1)/(b2-b1);
-      }
-   }
-   // Check if crossing point is both between A,B and C,D
-   G4double check = (xm-a.x())*(xm-b.x())+(ym-a.y())*(ym-b.y());
-   if (check > -fgkTolerance) return false;
-   check = (xm-c.x())*(xm-d.x())+(ym-c.y())*(ym-d.y());
-   if (check > -fgkTolerance) return false;
-   return true;
 
+  if( std::fabs(dx1) < fgkTolerance )  { stand1 = true; }
+  if( std::fabs(dx2) < fgkTolerance )  { stand2 = true; }
+  if (!stand1)
+  {
+    a1 = (b.x()*a.y()-a.x()*b.y())/dx1;
+    b1 = (b-a).y()/dx1;
+  }
+  if (!stand2)
+  {
+    a2 = (d.x()*c.y()-c.x()*d.y())/dx2;
+    b2 = (d-c).y()/dx2;
+  }   
+  if (stand1 && stand2)
+  {
+    // Segments parallel and vertical
+    //
+    if (std::fabs(a.x()-c.x())<fgkTolerance)
+    {
+       // Check if segments are overlapping
+       //
+       if ( ((c.y()-a.y())*(c.y()-b.y())<-fgkTolerance)
+         || ((d.y()-a.y())*(d.y()-b.y())<-fgkTolerance)
+         || ((a.y()-c.y())*(a.y()-d.y())<-fgkTolerance)
+         || ((b.y()-c.y())*(b.y()-d.y())<-fgkTolerance) )  { return true; }
+
+       return false;
+    }
+    // Different x values
+    //
+    return false;
+  }
+   
+  if (stand1)    // First segment vertical
+  {
+    xm = a.x();
+    ym = a2+b2*xm; 
+  }
+  else
+  {
+    if (stand2)  // Second segment vertical
+    {
+      xm = c.x();
+      ym = a1+b1*xm;
+    }
+    else  // Normal crossing
+    {
+      if (std::fabs(b1-b2) < fgkTolerance)
+      {
+        // Parallel segments, are they aligned
+        //
+        if (std::fabs(c.y()-(a1+b1*c.x())) > fgkTolerance)  { return false; }
+
+        // Aligned segments, are they overlapping
+        //
+        if ( ((c.x()-a.x())*(c.x()-b.x())<-fgkTolerance)
+          || ((d.x()-a.x())*(d.x()-b.x())<-fgkTolerance)
+          || ((a.x()-c.x())*(a.x()-d.x())<-fgkTolerance)
+          || ((b.x()-c.x())*(b.x()-d.x())<-fgkTolerance) )  { return true; }
+
+        return false;
+      }
+      xm = (a1-a2)/(b2-b1);
+      ym = (a1*b2-a2*b1)/(b2-b1);
+    }
+  }
+
+  // Check if crossing point is both between A,B and C,D
+  //
+  G4double check = (xm-a.x())*(xm-b.x())+(ym-a.y())*(ym-b.y());
+  if (check > -fgkTolerance)  { return false; }
+  check = (xm-c.x())*(xm-d.x())+(ym-c.y())*(ym-d.y());
+  if (check > -fgkTolerance)  { return false; }
+
+  return true;
 }
-//_____________________________________________________________________________
+
+// --------------------------------------------------------------------
+
 G4VFacet*
 G4GenericTrap::MakeDownFacet(std::vector<G4ThreeVector> fromVertices, 
-                         G4int ind1, G4int ind2, G4int ind3) const 
+                             G4int ind1, G4int ind2, G4int ind3) const 
 {
   // Create a triangular facet from the polygon points given by indices
   // forming the down side ( the normal goes in -z)
   // Do not create facet if 2 vertices are the same
-  if ( fromVertices[ind1] == fromVertices[ind2] ||
-       fromVertices[ind2] == fromVertices[ind3] ||
-       fromVertices[ind1] == fromVertices[ind3] ) return 0;
+
+  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
+       (fromVertices[ind2] == fromVertices[ind3]) ||
+       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
 
   std::vector<G4ThreeVector> vertices;
   vertices.push_back(fromVertices[ind1]);
@@ -306,12 +350,12 @@ G4GenericTrap::MakeDownFacet(std::vector<G4ThreeVector> fromVertices,
   
   // first vertex most left
   //
-  G4ThreeVector cross 
-    = (vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
-  
-  if ( cross.z() > 0.0 ) {
-    // Should not happen, as vertices should have been reordered
-    // at this stage
+  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
+
+  if ( cross.z() > 0.0 )
+  {
+    // Should not happen, as vertices should have been reordered at this stage
+
     G4String errorDescription = "InvalidSetup in \"";
     errorDescription += GetName();
     errorDescription += "\"";
@@ -319,36 +363,37 @@ G4GenericTrap::MakeDownFacet(std::vector<G4ThreeVector> fromVertices,
                 FatalException, "Vertices in wrong order.");
   }
   
-  return new G4TriangularFacet(vertices[0], vertices[1],
-                               vertices[2], ABSOLUTE);
-}      
+  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
+}
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4VFacet*
 G4GenericTrap::MakeUpFacet(std::vector<G4ThreeVector> fromVertices, 
-                             int ind1, int ind2, int ind3) const     
+                           G4int ind1, G4int ind2, G4int ind3) const     
 {
   // Create a triangular facet from the polygon points given by indices
   // forming the upper side ( z>0 )
 
   // Do not create facet if 2 vertices are the same
-  if ( fromVertices[ind1] == fromVertices[ind2] ||
-       fromVertices[ind2] == fromVertices[ind3] ||
-       fromVertices[ind1] == fromVertices[ind3] ) return 0;
+  //
+  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
+       (fromVertices[ind2] == fromVertices[ind3]) ||
+       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
 
   std::vector<G4ThreeVector> vertices;
   vertices.push_back(fromVertices[ind1]);
   vertices.push_back(fromVertices[ind2]);
   vertices.push_back(fromVertices[ind3]);
   
-  // first vertex most left
+  // First vertex most left
   //
-  G4ThreeVector cross 
-    = (vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
-  
-  if ( cross.z() < 0.0 ) {
-    // Should not happen, as vertices should have been reordered
-    // at this stage
+  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
+
+  if ( cross.z() < 0.0 )
+  {
+    // Should not happen, as vertices should have been reordered at this stage
+
     G4String errorDescription = "InvalidSetup in \"";
     errorDescription += GetName();
     errorDescription += "\"";
@@ -356,289 +401,306 @@ G4GenericTrap::MakeUpFacet(std::vector<G4ThreeVector> fromVertices,
                 FatalException, "Vertices in wrong order.");
   }
   
-  return new G4TriangularFacet(vertices[0], vertices[1],
-                               vertices[2], ABSOLUTE);
+  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
 }      
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4VFacet*
 G4GenericTrap::MakeSideFacet(G4ThreeVector downVertex0,
-                              G4ThreeVector downVertex1,
-                              G4ThreeVector upVertex1,
-                              G4ThreeVector upVertex0) const      
+                             G4ThreeVector downVertex1,
+                             G4ThreeVector upVertex1,
+                             G4ThreeVector upVertex0) const      
 {
   // Creates a triangular facet from the polygon points given by indices
   // forming the upper side ( z>0 )
 
-  if ( downVertex0 == downVertex1 &&  upVertex0 == upVertex1 )
+  if ( (downVertex0 == downVertex1) && (upVertex0 == upVertex1) )
+  {
     return 0;
+  }
 
   if ( downVertex0 == downVertex1 )
-    return new G4TriangularFacet(downVertex0, 
-                                 upVertex1, upVertex0, ABSOLUTE);
+  {
+    return new G4TriangularFacet(downVertex0, upVertex1, upVertex0, ABSOLUTE);
+  }
 
   if ( upVertex0 == upVertex1 )
-    return new G4TriangularFacet(downVertex0, downVertex1, 
-                                 upVertex0, ABSOLUTE);
-    
+  {
+    return new G4TriangularFacet(downVertex0, downVertex1, upVertex0, ABSOLUTE);
+  }
+
   return new G4QuadrangularFacet(downVertex0, downVertex1, 
                                  upVertex1, upVertex0, ABSOLUTE);   
 }    
-//_____________________________________________________________________________
+
+// --------------------------------------------------------------------
+
 G4TessellatedSolid* G4GenericTrap::CreateTessellatedSolid() const
 {
   // 3D vertices
+  //
   G4int nv = fgkNofVertices/2;
   std::vector<G4ThreeVector> downVertices;
-  for ( G4int i=0; i<nv; i++ ) 
-    downVertices.push_back(G4ThreeVector(fVertices[i].x(), fVertices[i].y(), -fDz));
-  
+  for ( G4int i=0; i<nv; i++ )
+  { 
+    downVertices.push_back(G4ThreeVector(fVertices[i].x(),
+                                         fVertices[i].y(), -fDz));
+  }
+
   std::vector<G4ThreeVector> upVertices;
-  for ( G4int i=nv; i<2*nv; i++ ) 
-    upVertices.push_back(G4ThreeVector(fVertices[i].x(), fVertices[i].y(), fDz));
+  for ( G4int i=nv; i<2*nv; i++ )
+  { 
+    upVertices.push_back(G4ThreeVector(fVertices[i].x(),
+                                       fVertices[i].y(), fDz));
+  }
                                          
   // Reorder vertices if they are not ordered anti-clock wise
+  //
   G4ThreeVector cross 
     = (downVertices[1]-downVertices[0]).cross(downVertices[2]-downVertices[1]);
    G4ThreeVector cross1 
     = (upVertices[1]-upVertices[0]).cross(upVertices[2]-upVertices[1]);
-  if ( cross.z() > 0.0||cross1.z() >0.0 ) {
-     ReorderVertices(downVertices);
-     ReorderVertices(upVertices);
-  }   
-      
+  if ( (cross.z() > 0.0) || (cross1.z() > 0.0) )
+  {
+    ReorderVertices(downVertices);
+    ReorderVertices(upVertices);
+  }
     
   G4TessellatedSolid* tessellatedSolid = new G4TessellatedSolid(GetName());
   
   G4VFacet* facet = 0;
   facet = MakeDownFacet(downVertices, 0, 1, 2);
-  if (facet) tessellatedSolid->AddFacet( facet );
-  
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
   facet = MakeDownFacet(downVertices, 0, 2, 3);
-  if (facet) tessellatedSolid->AddFacet( facet );
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
   facet = MakeUpFacet(upVertices, 0, 2, 1);
-  if (facet) tessellatedSolid->AddFacet( facet );
-  
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
   facet = MakeUpFacet(upVertices, 0, 3, 2);
-  if (facet) tessellatedSolid->AddFacet( facet );
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
 
   // The quadrangular sides
-  for ( G4int i = 0; i < nv; ++i ) {
+  //
+  for ( G4int i = 0; i < nv; ++i )
+  {
     G4int j = (i+1) % nv;
     facet = MakeSideFacet(downVertices[j], downVertices[i], 
                           upVertices[i], upVertices[j]);
 
-    if ( facet ) tessellatedSolid->AddFacet( facet );                           
-  }  
+    if ( facet )  { tessellatedSolid->AddFacet( facet ); }
+  }
 
   tessellatedSolid->SetSolidClosed(true);
-  
+
   return tessellatedSolid;
 }  
-//_____________________________________________________________________________
+
+// --------------------------------------------------------------------
+
 void G4GenericTrap::ComputeBBox() 
 {
-// Computes bounding box for a shape.
-   G4double minX, maxX, minY, maxY;
-   minX = maxX = fVertices[0].x();
-   minY = maxY = fVertices[0].y();
+  // Computes bounding box for a shape.
+
+  G4double minX, maxX, minY, maxY;
+  minX = maxX = fVertices[0].x();
+  minY = maxY = fVertices[0].y();
    
-   for (G4int i=1; i< fgkNofVertices; i++) {
-      if (minX>fVertices[i].x()) minX=fVertices[i].x();
-      if (maxX<fVertices[i].x()) maxX=fVertices[i].x();
-      if (minY>fVertices[i].y()) minY=fVertices[i].y();
-      if (maxY<fVertices[i].y()) maxY=fVertices[i].y();
-   }
+  for (G4int i=1; i< fgkNofVertices; i++)
+  {
+    if (minX>fVertices[i].x()) { minX=fVertices[i].x(); }
+    if (maxX<fVertices[i].x()) { maxX=fVertices[i].x(); }
+    if (minY>fVertices[i].y()) { minY=fVertices[i].y(); }
+    if (maxY<fVertices[i].y()) { maxY=fVertices[i].y(); }
+  }
   fMinBBoxVector = G4ThreeVector(minX,minY,-fDz);
   fMaxBBoxVector = G4ThreeVector(maxX,maxY, fDz);
 }
 
-//_____________________________________________________________________________
-G4bool  G4GenericTrap::CalculateExtent(const EAxis pAxis,
-                                   const G4VoxelLimits& pVoxelLimit,
-                                   const G4AffineTransform& pTransform,
-                                   G4double& pMin, G4double& pMax) const
+// --------------------------------------------------------------------
+
+G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
+                                      const G4VoxelLimits& pVoxelLimit,
+                                      const G4AffineTransform& pTransform,
+                                      G4double& pMin, G4double& pMax) const
 {
-
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) {  
-
-    return fTessellatedSolid
-             ->CalculateExtent(pAxis, pVoxelLimit, pTransform, pmin, pmax);
+  if ( fTessellatedSolid )
+  {
+    return fTessellatedSolid->CalculateExtent(pAxis, pVoxelLimit,
+                                              pTransform, pmin, pmax);
   }     
 #endif 
 
-
-// Computes bounding vectors for a shape.
-   G4double Dx,Dy;
-   G4ThreeVector minVec = GetMinimumBBox();
-   G4ThreeVector maxVec = GetMaximumBBox();
-   Dx = 0.5*(maxVec.x()- minVec.y());
-   Dy = 0.5*(maxVec.y()- minVec.y());
-
+  // Computes bounding vectors for a shape
+  //
+  G4double Dx,Dy;
+  G4ThreeVector minVec = GetMinimumBBox();
+  G4ThreeVector maxVec = GetMaximumBBox();
+  Dx = 0.5*(maxVec.x()- minVec.y());
+  Dy = 0.5*(maxVec.y()- minVec.y());
 
   if (!pTransform.IsRotated())
+  {
+    // Special case handling for unrotated shapes
+    // Compute x/y/z mins and maxs respecting limits, with early returns
+    // if outside limits. Then switch() on pAxis
+    //
+    G4double xoffset,xMin,xMax;
+    G4double yoffset,yMin,yMax;
+    G4double zoffset,zMin,zMax;
+
+    xoffset=pTransform.NetTranslation().x();
+    xMin=xoffset-Dx;
+    xMax=xoffset+Dx;
+    if (pVoxelLimit.IsXLimited())
     {
-      // Special case handling for unrotated shapes
-      // Compute x/y/z mins and maxs respecting limits, with early returns
-      // if outside limits. Then switch() on pAxis
-      //
-      G4double xoffset,xMin,xMax;
-      G4double yoffset,yMin,yMax;
-      G4double zoffset,zMin,zMax;
-
-      xoffset=pTransform.NetTranslation().x();
-      xMin=xoffset-Dx;
-      xMax=xoffset+Dx;
-      if (pVoxelLimit.IsXLimited())
+      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
+         || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
       {
-        if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
-            ||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
-        {
-          return false;
-        }
-        else
-        {
-          if (xMin<pVoxelLimit.GetMinXExtent())
-          {
-            xMin=pVoxelLimit.GetMinXExtent();
-          }
-          if (xMax>pVoxelLimit.GetMaxXExtent())
-          {
-            xMax=pVoxelLimit.GetMaxXExtent();
-          }
-        }
-      }
-
-      yoffset=pTransform.NetTranslation().y();
-      yMin=yoffset-Dy;
-      yMax=yoffset+Dy;
-      if (pVoxelLimit.IsYLimited())
-      {
-        if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-            || yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
-        {
-          return false;
-        }
-        else
-        {
-          if (yMin<pVoxelLimit.GetMinYExtent())
-          {
-            yMin=pVoxelLimit.GetMinYExtent();
-          }
-          if (yMax>pVoxelLimit.GetMaxYExtent())
-          {
-            yMax=pVoxelLimit.GetMaxYExtent();
-          }
-        }
-      }
-
-      zoffset=pTransform.NetTranslation().z();
-      zMin=zoffset-fDz;
-      zMax=zoffset+fDz;
-      if (pVoxelLimit.IsZLimited())
-      {
-        if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-            ||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
-        {
-          return false;
-        }
-        else
-        {
-          if (zMin<pVoxelLimit.GetMinZExtent())
-          {
-            zMin=pVoxelLimit.GetMinZExtent();
-          }
-          if (zMax>pVoxelLimit.GetMaxZExtent())
-          {
-            zMax=pVoxelLimit.GetMaxZExtent();
-          }
-        }
-      }
-
-      switch (pAxis)
-      {
-        case kXAxis:
-          pMin = xMin;
-          pMax = xMax;
-          break;
-        case kYAxis:
-          pMin = yMin;
-          pMax = yMax;
-          break;
-        case kZAxis:
-          pMin = zMin;
-          pMax = zMax;
-          break;
-        default:
-          break;
-      }
-      pMin-=kCarTolerance;
-      pMax+=kCarTolerance;
-
-      return true;
-    }
-  else
-    {
-      // General rotated case - create and clip mesh to boundaries
-
-      G4bool existsAfterClip=false;
-      G4ThreeVectorList *vertices;
-
-      pMin=+kInfinity;
-      pMax=-kInfinity;
-
-      // Calculate rotated vertex coordinates
-      //
-      vertices=CreateRotatedVertices(pTransform);
-      ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-      ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-      ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-
-      if ( (pMin!=kInfinity) || (pMax!=-kInfinity) )
-      {
-        existsAfterClip=true;
-    
-        // Add 2*tolerance to avoid precision troubles
-        //
-        pMin-=kCarTolerance;
-        pMax+=kCarTolerance;
+        return false;
       }
       else
       {
-        // Check for case where completely enveloping clipping volume.
-        // If point inside then we are confident that the solid completely
-        // envelopes the clipping volume. Hence set min/max extents according
-        // to clipping volume extents along the specified axis.
-        //
-        G4ThreeVector clipCentre(
-                (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-                (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-                (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-
-        if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+        if (xMin<pVoxelLimit.GetMinXExtent())
         {
-          existsAfterClip=true;
-          pMin=pVoxelLimit.GetMinExtent(pAxis);
-          pMax=pVoxelLimit.GetMaxExtent(pAxis);
+          xMin=pVoxelLimit.GetMinXExtent();
+        }
+        if (xMax>pVoxelLimit.GetMaxXExtent())
+        {
+          xMax=pVoxelLimit.GetMaxXExtent();
         }
       }
-      delete vertices;
-      return existsAfterClip;
     }
+
+    yoffset=pTransform.NetTranslation().y();
+    yMin=yoffset-Dy;
+    yMax=yoffset+Dy;
+    if (pVoxelLimit.IsYLimited())
+    {
+      if (  (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
+         || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (yMin<pVoxelLimit.GetMinYExtent())
+        {
+          yMin=pVoxelLimit.GetMinYExtent();
+        }
+        if (yMax>pVoxelLimit.GetMaxYExtent())
+        {
+          yMax=pVoxelLimit.GetMaxYExtent();
+        }
+      }
+    }
+
+    zoffset=pTransform.NetTranslation().z();
+    zMin=zoffset-fDz;
+    zMax=zoffset+fDz;
+    if (pVoxelLimit.IsZLimited())
+    {
+      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
+        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (zMin<pVoxelLimit.GetMinZExtent())
+        {
+          zMin=pVoxelLimit.GetMinZExtent();
+        }
+        if (zMax>pVoxelLimit.GetMaxZExtent())
+        {
+          zMax=pVoxelLimit.GetMaxZExtent();
+        }
+      }
+    }
+
+    switch (pAxis)
+    {
+      case kXAxis:
+        pMin = xMin;
+        pMax = xMax;
+        break;
+      case kYAxis:
+        pMin = yMin;
+        pMax = yMax;
+        break;
+      case kZAxis:
+        pMin = zMin;
+        pMax = zMax;
+        break;
+      default:
+        break;
+    }
+    pMin-=kCarTolerance;
+    pMax+=kCarTolerance;
+
+    return true;
+  }
+  else
+  {
+    // General rotated case - create and clip mesh to boundaries
+
+    G4bool existsAfterClip=false;
+    G4ThreeVectorList *vertices;
+
+    pMin=+kInfinity;
+    pMax=-kInfinity;
+
+    // Calculate rotated vertex coordinates
+    //
+    vertices=CreateRotatedVertices(pTransform);
+    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
+    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+
+    if ( (pMin!=kInfinity) || (pMax!=-kInfinity) )
+    {
+      existsAfterClip=true;
+    
+      // Add 2*tolerance to avoid precision troubles
+      //
+      pMin-=kCarTolerance;
+      pMax+=kCarTolerance;
+    }
+    else
+    {
+      // Check for case where completely enveloping clipping volume.
+      // If point inside then we are confident that the solid completely
+      // envelopes the clipping volume. Hence set min/max extents according
+      // to clipping volume extents along the specified axis.
+      //
+      G4ThreeVector clipCentre(
+              (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+              (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+              (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+
+      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+      {
+        existsAfterClip=true;
+        pMin=pVoxelLimit.GetMinExtent(pAxis);
+        pMax=pVoxelLimit.GetMaxExtent(pAxis);
+      }
+    }
+    delete vertices;
+    return existsAfterClip;
+  }
 }
 
+// --------------------------------------------------------------------
 
-//___________________________________________________________________________
 G4ThreeVectorList*
 G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                            CalculateBBox();                  [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
+  // Create a List containing the transformed vertices
+  // Ordering [0-3] -fDz cross section
+  //          [4-7] +fDz cross section such that [0] is below [4],
+  //                                             [1] below [5] etc.
+  // Note: caller has deletion responsibility
+
   G4ThreeVector Min = GetMinimumBBox();
   G4ThreeVector Max = GetMaximumBBox();
 
@@ -674,630 +736,739 @@ G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   return vertices;
 }
   
+// --------------------------------------------------------------------
 
-//___________________________________________________________________________
 EInside G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
-                                  std::vector<G4TwoVector> poly) const 
+                                      std::vector<G4TwoVector> poly) const 
 {
   static const G4double halfCarTolerance=kCarTolerance*0.5;
   EInside  in = kInside;
-  G4double cross,len2;
+  G4double cross, len2;
 
-  for (G4int i = 0; i < 4; i++){
-       G4int j = (i+1) % 4;
+  for (G4int i = 0; i < 4; i++)
+  {
+    G4int j = (i+1) % 4;
 
-       cross=(p.x()-poly[i].x())*(poly[j].y()-poly[i].y())-
-       (p.y()-poly[i].y())*(poly[j].x()-poly[i].x());
+    cross = (p.x()-poly[i].x())*(poly[j].y()-poly[i].y())-
+            (p.y()-poly[i].y())*(poly[j].x()-poly[i].x());
 
-       len2=(poly[i]-poly[j]).mag2();
-       if(len2){
-       // Surface check
-       if(cross*cross<=len2*halfCarTolerance*halfCarTolerance){
-	  G4double test;
-          G4int k,l;
-          if(poly[i].y() > poly[j].y()){ k=i; l=j;}
-          else{ k=j; l=i;}
-          if((poly[k].x()!=poly[l].x())){
- 
-           test=(p.x()-poly[l].x())/(poly[k].x()-poly[l].x())*(poly[k].y()-poly[l].y())+poly[l].y();}
-          else test=p.y();
-         // Check if point is Inside Segment 
-         if((test>=(poly[l].y()-halfCarTolerance))&&(test<=(poly[k].y()+halfCarTolerance))){ 
-	   return kSurface;
-         }
-         else{return kOutside;
-          }
+    len2=(poly[i]-poly[j]).mag2();
+    if(len2)
+    {
+      if(cross*cross<=len2*halfCarTolerance*halfCarTolerance)  // Surface check
+      {
+        G4double test;
+        G4int k,l;
+        if ( poly[i].y() > poly[j].y() )  { k=i; l=j; }
+        else                              { k=j; l=i; }
+
+        if ( poly[k].x() != poly[l].x() )
+        {
+          test = (p.x()-poly[l].x())/(poly[k].x()-poly[l].x())
+               * (poly[k].y()-poly[l].y())+poly[l].y();
+        }
+        else
+        {
+          test = p.y();
+        }
+
+        // Check if point is Inside Segment
+        // 
+        if( (test>=(poly[l].y()-halfCarTolerance))
+         && (test<=(poly[k].y()+halfCarTolerance)) )
+        { 
+          return kSurface;
+        }
+        else
+        {
+          return kOutside;
+        }
       }
-      else if(cross<0.){return kOutside; };
+      else if(cross<0.)  {return kOutside; }
     }
   }
  
   return in;
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
 {
-// Test if point is inside this shape.
+  // Test if point is inside this shape
+
 #ifdef G4TESS_TEST
-   if ( fTessellatedSolid ) { 
+   if ( fTessellatedSolid )
+   { 
      return fTessellatedSolid->Inside(p);
    }
 #endif  
- static const G4double halfCarTolerance=kCarTolerance*0.5;
- EInside innew=kOutside;
- std:: vector<G4TwoVector> xy;
+
+  static const G4double halfCarTolerance=kCarTolerance*0.5;
+  EInside innew=kOutside;
+  std:: vector<G4TwoVector> xy;
  
-// First check Z range
-  if (std::abs(p.z()) <= fDz+halfCarTolerance){
-  
- // Compute intersection between Z plane containing point and the shape
-   G4double cf = 0.5*(fDz-p.z())/fDz;
-   for (int i=0; i<4; i++) {
-          xy.push_back(fVertices[i+4]+cf*( fVertices[i]-fVertices[i+4]));
-   
-   }
-   innew=InsidePolygone(p,xy);
-   if(innew==kInside||innew==kSurface){ 
-    if(std::abs(p.z()) > fDz-halfCarTolerance) innew=kSurface;}
-   }
+  if (std::abs(p.z()) <= fDz+halfCarTolerance)  // First check Z range
+  {
+    // Compute intersection between Z plane containing point and the shape
+    G4double cf = 0.5*(fDz-p.z())/fDz;
+    for (G4int i=0; i<4; i++)
+    {
+      xy.push_back(fVertices[i+4]+cf*( fVertices[i]-fVertices[i+4]));
+    }
+  }
+
+  innew=InsidePolygone(p,xy);
+
+  if( (innew==kInside) || (innew==kSurface) )
+  { 
+    if(std::abs(p.z()) > fDz-halfCarTolerance)  { innew=kSurface; }
+  }
   
   return innew;    
-}    
+} 
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p) const
-// Calculate side nearest to p, and return normal
-// If two sides are equidistant,sum of the Normal is returned
 {
+  // Calculate side nearest to p, and return normal
+  // If two sides are equidistant, sum of the Normal is returned
 
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  {
     return fTessellatedSolid->SurfaceNormal(p);
   }  
 #endif   
-  static const G4double halfCarTolerance=kCarTolerance*0.5; 
-  G4ThreeVector lnorm; 
-  G4ThreeVector sumnorm(0.,0.,0.);
-  G4ThreeVector p0,p1,p2;
-  G4ThreeVector r1,r2,r3,r4;
+
+  static const G4double halfCarTolerance=kCarTolerance*0.5;
+ 
+  G4ThreeVector lnorm, sumnorm(0.,0.,0.), p0,p1,p2, r1,r2,r3,r4;
   G4int noSurfaces = 0; 
   G4double distxy,distz;
-  G4int i;
   G4bool zPlusSide=false;
 
-   distz = fDz-fabs(p.z());
-   if (distz < halfCarTolerance) {
-     if(p.z()>0){zPlusSide=true;
+  distz = fDz-std::fabs(p.z());
+  if (distz < halfCarTolerance)
+  {
+    if(p.z()>0)
+    {
+      zPlusSide=true;
       sumnorm=G4ThreeVector(0,0,1);
-     }
-     else{
-      sumnorm=G4ThreeVector(0,0,-1);
-     }
-     noSurfaces ++;
-     
-   } 
-
-   // Check lateral planes
-    std:: vector<G4TwoVector> vertices;  
-    G4double cf = 0.5*(fDz-p.z())/fDz;
-   for (G4int i=0; i<4; i++) {
-     vertices.push_back(fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]));
-    
-   }
-
-   // Compute distance for lateral planes
-   for (i=0; i<4; i++) {
-     p0=G4ThreeVector(vertices[i].x(),vertices[i].y(),p.z());
-     if(zPlusSide){
-      p1=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
-     }
-     else{
-      p1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz); 
-     }
-     p2=G4ThreeVector(vertices[(i+1)%4].x(),vertices[(i+1)%4].y(),p.z());
-       if((p2-p0).mag2()==0){
-     p2=G4ThreeVector(fVertices[(i+1)%4].x(),fVertices[(i+1)%4].y(),-fDz);
-    
     }
-      lnorm=(p1-p0).cross(p2-p0);
-      lnorm=lnorm.unit();
+    else
+    {
+      sumnorm=G4ThreeVector(0,0,-1);
+    }
+    noSurfaces ++;
+  } 
 
-       // Adjust Normal for Twisted Surface
-   
-    if( (fIsTwisted) && (GetTwistAngle(i)!=0)){
-     G4double normP=(p2-p0).mag();
-     if(normP){
-       G4double proj=(p-p0).dot(p2-p0)/normP;
-       if(proj<0)proj=0;
-       if(proj>normP)proj=normP;
-       G4int j=(i+1)%4;
-       r1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
-       r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
-       r3=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
-       r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
-       r1=r1+proj*(r2-r1)/normP;
-       r3=r3+proj*(r4-r3)/normP;
-       r2=r1-r3;
-       r4=r2.cross(p2-p0);r4=r4.unit();
-       lnorm=r4;
-   
+  // Check lateral planes
+  //
+  std:: vector<G4TwoVector> vertices;  
+  G4double cf = 0.5*(fDz-p.z())/fDz;
+  for (G4int i=0; i<4; i++)
+  {
+    vertices.push_back(fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]));
+  }
 
-       }
-      }// End if fIsTwisted
+  // Compute distance for lateral planes
+  //
+  for (G4int s=0; s<4; s++)
+  {
+    p0=G4ThreeVector(vertices[s].x(),vertices[s].y(),p.z());
+    if(zPlusSide)
+    {
+      p1=G4ThreeVector(fVertices[s].x(),fVertices[s].y(),-fDz);
+    }
+    else
+    {
+      p1=G4ThreeVector(fVertices[s+4].x(),fVertices[s+4].y(),fDz); 
+    }
+    p2=G4ThreeVector(vertices[(s+1)%4].x(),vertices[(s+1)%4].y(),p.z());
+    if((p2-p0).mag2()==0)
+    {
+      p2=G4ThreeVector(fVertices[(s+1)%4].x(),fVertices[(s+1)%4].y(),-fDz);
+    }
+    lnorm=(p1-p0).cross(p2-p0);
+    lnorm=lnorm.unit();
 
+    // Adjust Normal for Twisted Surface
+    //
+    if ( (fIsTwisted) && (GetTwistAngle(s)!=0) )
+    {
+      G4double normP=(p2-p0).mag();
+      if(normP)
+      {
+        G4double proj=(p-p0).dot(p2-p0)/normP;
+        if(proj<0)     { proj=0; }
+        if(proj>normP) { proj=normP; }
+        G4int j=(s+1)%4;
+        r1=G4ThreeVector(fVertices[s+4].x(),fVertices[s+4].y(),fDz);
+        r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
+        r3=G4ThreeVector(fVertices[s].x(),fVertices[s].y(),-fDz);
+        r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
+        r1=r1+proj*(r2-r1)/normP;
+        r3=r3+proj*(r4-r3)/normP;
+        r2=r1-r3;
+        r4=r2.cross(p2-p0); r4=r4.unit();
+        lnorm=r4;
+      }
+    }   // End if fIsTwisted
 
-      distxy=fabs((p0-p).dot(lnorm));
-      if(distxy<halfCarTolerance){noSurfaces ++;
-      //Negative sign for Normal is taken for Outside Normal
-          sumnorm=sumnorm+lnorm;
-      }      
-   }
+    distxy=std::fabs((p0-p).dot(lnorm));
+    if ( distxy<halfCarTolerance )
+    {
+      noSurfaces ++;
+
+      // Negative sign for Normal is taken for Outside Normal
+      //
+      sumnorm=sumnorm+lnorm;
+    }      
+  }  // End for loop
 
   // Calculate final Normal, add Normal in the Corners and Touching Sides
+  //
   if ( noSurfaces == 0 )
-   {
-     G4Exception("G4GenericTrap::SurfaceNormal(p)", "Notification", JustWarning, 
-                 "Point p is not on surface !?" );
-     //Add Approximative Surface Normal Calculation?
-   
-   }
-   else if ( noSurfaces == 1 ) sumnorm = sumnorm;
-   else                        sumnorm = sumnorm.unit();
+  {
+    G4Exception("G4GenericTrap::SurfaceNormal(p)", "Notification",
+                JustWarning, "Point p is not on surface !?" );
+
+    // Add Approximative Surface Normal Calculation?
+  }
+  else if ( noSurfaces == 1 )  { sumnorm = sumnorm; }
+  else                         { sumnorm = sumnorm.unit(); }
    
   return sumnorm ; 
 }    
 
-//_____________________________________________________________________________
-G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p, const G4int ipl) const
-// Return normal to given lateral plane ipl
+// --------------------------------------------------------------------
+
+G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
+                                            const G4int ipl) const
 {
+  // Return normal to given lateral plane ipl
 
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->SurfaceNormal(p);
   }  
 #endif   
+
   static const G4double halfCarTolerance=kCarTolerance*0.5; 
-  G4ThreeVector lnorm; 
-  G4ThreeVector norm(0.,0.,0.);
-  G4ThreeVector p0,p1,p2;
+  G4ThreeVector lnorm, norm(0.,0.,0.), p0,p1,p2;
  
   G4double  distz = fDz-p.z();
-  G4int i=ipl;// current plane index
+  G4int i=ipl;  // current plane index
  
   G4TwoVector u,v;  
   G4ThreeVector r1,r2,r3,r4;
   G4double cf = 0.5*(fDz-p.z())/fDz;
   G4int j=(i+1)%4;
-    u=fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]);
-    v=fVertices[j+4]+cf*(fVertices[j]-fVertices[j+4]);
+
+  u=fVertices[i+4]+cf*(fVertices[i]-fVertices[i+4]);
+  v=fVertices[j+4]+cf*(fVertices[j]-fVertices[j+4]);
 
   // Compute cross product
-     
-     p0=G4ThreeVector(u.x(),u.y(),p.z());
+  //
+  p0=G4ThreeVector(u.x(),u.y(),p.z());
       
-    if(fabs(distz)<halfCarTolerance){
-        p1=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);distz=-1;}
-    else{
-        p1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
-    }  
-    p2=G4ThreeVector(v.x(),v.y(),p.z());
-     if((p2-p0).mag2()==0){
-     p2=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
-    
-    }
-    lnorm=-(p1-p0).cross(p2-p0);
-    if(distz>-halfCarTolerance){lnorm=-lnorm.unit();}
-    else{lnorm=lnorm.unit();}
+  if (std::fabs(distz)<halfCarTolerance)
+  {
+    p1=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);distz=-1;}
+  else
+  {
+    p1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
+  }  
+  p2=G4ThreeVector(v.x(),v.y(),p.z());
+  if ((p2-p0).mag2()==0)
+  {
+    p2=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
+  }
+  lnorm=-(p1-p0).cross(p2-p0);
+  if (distz>-halfCarTolerance)  { lnorm=-lnorm.unit(); }
+  else                          { lnorm=lnorm.unit();  }
  
-   // Adjust Normal for Twisted Surface
-   
-    if( (fIsTwisted) && (GetTwistAngle(ipl)!=0)){
-   
-     G4double normP=(p2-p0).mag();
-     if(normP){
-       G4double proj=(p-p0).dot(p2-p0)/normP;
-       if(proj<0)proj=0;
-       if(proj>normP)proj=normP;
+  // Adjust Normal for Twisted Surface
+  //
+  if( (fIsTwisted) && (GetTwistAngle(ipl)!=0) )
+  {
+    G4double normP=(p2-p0).mag();
+    if(normP)
+    {
+      G4double proj=(p-p0).dot(p2-p0)/normP;
+      if (proj<0)     { proj=0; }
+      if (proj>normP) { proj=normP; }
 
-       r1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
-       r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
-       r3=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
-       r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
-       r1=r1+proj*(r2-r1)/normP;
-       r3=r3+proj*(r4-r3)/normP;
-       r2=r1-r3;
-       r4=r2.cross(p2-p0);r4=r4.unit();
-       lnorm=r4;
-      }
-    }// End if fIsTwisted
+      r1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
+      r2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
+      r3=G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz);
+      r4=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
+      r1=r1+proj*(r2-r1)/normP;
+      r3=r3+proj*(r4-r3)/normP;
+      r2=r1-r3;
+      r4=r2.cross(p2-p0);r4=r4.unit();
+      lnorm=r4;
+    }
+  }  // End if fIsTwisted
 
-    
-     return lnorm ;
-      
+  return lnorm;
 }    
 
+// --------------------------------------------------------------------
 
-//_____________________________________________________________________________
 G4double G4GenericTrap::DistToPlane(const G4ThreeVector& p,
-                          const G4ThreeVector& v, const G4int ipl) const 
+                                    const G4ThreeVector& v,
+                                    const G4int ipl) const 
 {
-// Computes distance to plane ipl :
-// ipl=0 : points 0,4,1,5
-// ipl=1 : points 1,5,2,6
-// ipl=2 : points 2,6,3,7
-// ipl=3 : points 3,7,0,4
-  static const G4double halfCarTolerance=0.5*kCarTolerance;
-   G4double xa,xb,xc,xd;
-   G4double ya,yb,yc,yd;
-  
-   G4int j = (ipl+1)%4;
-  
-   xa=fVertices[ipl].x();
-   ya=fVertices[ipl].y();
-   xb=fVertices[ipl+4].x();
-   yb=fVertices[ipl+4].y();
-   xc=fVertices[j].x();
-   yc=fVertices[j].y();
-   xd=fVertices[4+j].x();
-   yd=fVertices[4+j].y();
- 
-   G4double dz2 =0.5/fDz;
-   G4double tx1 =dz2*(xb-xa);
-   G4double ty1 =dz2*(yb-ya);
-   G4double tx2 =dz2*(xd-xc);
-   G4double ty2 =dz2*(yd-yc);
-   G4double dzp =fDz+p.z();
-   G4double xs1 =xa+tx1*dzp;
-   G4double ys1 =ya+ty1*dzp;
-   G4double xs2 =xc+tx2*dzp;
-   G4double ys2 =yc+ty2*dzp;
-   G4double dxs =xs2-xs1;
-   G4double dys =ys2-ys1;
-   G4double dtx =tx2-tx1;
-   G4double dty =ty2-ty1;
+  // Computes distance to plane ipl :
+  // ipl=0 : points 0,4,1,5
+  // ipl=1 : points 1,5,2,6
+  // ipl=2 : points 2,6,3,7
+  // ipl=3 : points 3,7,0,4
 
-   G4double a=(dtx*v.y()-dty*v.x()+(tx1*ty2-tx2*ty1)*v.z())*v.z();
-   G4double b=dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
-              +tx1*ys2-tx2*ys1)*v.z();
-   G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
-   G4double s=kInfinity;
-   G4double x1,x2,y1,y2,xp,yp,zi;
-   if (fabs(a)<kCarTolerance) {           
-      if (fabs(b)<kCarTolerance) return kInfinity;
-      s=-c/b;
-      // Check if Point is on the Surface
-      if (s>-halfCarTolerance) {
-	if(s<halfCarTolerance){
-	 
-          if(NormalToPlane(p,ipl).dot(v)<=0) {return 0.;}
-          else {return kInfinity;}
-          }
-	// Check the Intersection
-         zi=p.z()+s*v.z();
-         if (fabs(zi)<fDz) {
-	    x1=xs1+tx1*v.z()*s;
-	    x2=xs2+tx2*v.z()*s;
-	    xp=p.x()+s*v.x();
-	    y1=ys1+ty1*v.z()*s;
-	    y2=ys2+ty2*v.z()*s;
-	    yp=p.y()+s*v.y();
-	    zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-            if (zi<=halfCarTolerance) return s;
-         }     
-      }
-      return kInfinity;
-   }      
-   G4double d=b*b-4*a*c;
-   if (d>=0) {
-      if (a>0) s=0.5*(-b-std::sqrt(d))/a;
-      else     s=0.5*(-b+std::sqrt(d))/a;
-      // Check if Point is on the Surface
-      if (s>-halfCarTolerance) {
-	if(s<halfCarTolerance){
-         
-	   if(NormalToPlane(p,ipl).dot(v)<=0){ return 0.;}
-	   else{  // Check second root;return kInfinity;
-             if (a>0) s=0.5*(-b+std::sqrt(d))/a;
-             else     s=0.5*(-b-std::sqrt(d))/a;
-             if(s<=halfCarTolerance) return kInfinity;
-         }
-   
-         }
-	// Check the Intersection
-         zi=p.z()+s*v.z();
-         if (fabs(zi)<fDz) {
-            x1=xs1+tx1*v.z()*s;
-            x2=xs2+tx2*v.z()*s;
-            xp=p.x()+s*v.x();
-            y1=ys1+ty1*v.z()*s;
-            y2=ys2+ty2*v.z()*s;
-            yp=p.y()+s*v.y();
-	    zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-            if (zi<=halfCarTolerance) return s;
-         }      
-      }
-      if (a>0) s=0.5*(-b+std::sqrt(d))/a;
-      else     s=0.5*(-b-std::sqrt(d))/a;
-      // Check if Point is on the Surface
-      if (s>-halfCarTolerance) {
-	if(s<halfCarTolerance){
-          
-	   if (NormalToPlane(p,ipl).dot(v)<=0){ return 0.;}
-	   else {//Check second root; return kInfinity;
-             if (a>0) s=0.5*(-b-std::sqrt(d))/a;
-             else     s=0.5*(-b+std::sqrt(d))/a;
-             if(s<=halfCarTolerance) return kInfinity;
-          }
-         }
-	// Check the Intersection
-         zi=p.z()+s*v.z();
-         if (fabs(zi)<fDz) {
-            x1=xs1+tx1*v.z()*s;
-            x2=xs2+tx2*v.z()*s;
-            xp=p.x()+s*v.x();
-            y1=ys1+ty1*v.z()*s;
-            y2=ys2+ty2*v.z()*s;
-            yp=p.y()+s*v.y();
-            zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
-            if (zi<=halfCarTolerance) return s;
-         }      
-      }
-   }
+  static const G4double halfCarTolerance=0.5*kCarTolerance;
+  G4double xa,xb,xc,xd,ya,yb,yc,yd;
   
-   return kInfinity;
+  G4int j = (ipl+1)%4;
+  
+  xa=fVertices[ipl].x();
+  ya=fVertices[ipl].y();
+  xb=fVertices[ipl+4].x();
+  yb=fVertices[ipl+4].y();
+  xc=fVertices[j].x();
+  yc=fVertices[j].y();
+  xd=fVertices[4+j].x();
+  yd=fVertices[4+j].y();
+ 
+  G4double dz2 =0.5/fDz;
+  G4double tx1 =dz2*(xb-xa);
+  G4double ty1 =dz2*(yb-ya);
+  G4double tx2 =dz2*(xd-xc);
+  G4double ty2 =dz2*(yd-yc);
+  G4double dzp =fDz+p.z();
+  G4double xs1 =xa+tx1*dzp;
+  G4double ys1 =ya+ty1*dzp;
+  G4double xs2 =xc+tx2*dzp;
+  G4double ys2 =yc+ty2*dzp;
+  G4double dxs =xs2-xs1;
+  G4double dys =ys2-ys1;
+  G4double dtx =tx2-tx1;
+  G4double dty =ty2-ty1;
+
+  G4double a = (dtx*v.y()-dty*v.x()+(tx1*ty2-tx2*ty1)*v.z())*v.z();
+  G4double b = dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
+             + tx1*ys2-tx2*ys1)*v.z();
+  G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
+  G4double s=kInfinity;
+  G4double x1,x2,y1,y2,xp,yp,zi;
+
+  if (std::fabs(a)<kCarTolerance)
+  {           
+    if (std::fabs(b)<kCarTolerance)  { return kInfinity; }
+    s=-c/b;
+
+    // Check if Point is on the Surface
+
+    if (s>-halfCarTolerance)
+    {
+      if (s<halfCarTolerance)
+      {
+        if (NormalToPlane(p,ipl).dot(v)<=0) { return 0.; }
+        else                                { return kInfinity; }
+      }
+
+      // Check the Intersection
+      //
+      zi=p.z()+s*v.z();
+      if (std::fabs(zi)<fDz)
+      {
+        x1=xs1+tx1*v.z()*s;
+        x2=xs2+tx2*v.z()*s;
+        xp=p.x()+s*v.x();
+        y1=ys1+ty1*v.z()*s;
+        y2=ys2+ty2*v.z()*s;
+        yp=p.y()+s*v.y();
+        zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
+        if (zi<=halfCarTolerance)  { return s; }
+      }
+    }
+    return kInfinity;
+  }      
+  G4double d=b*b-4*a*c;
+  if (d>=0)
+  {
+    if (a>0) { s=0.5*(-b-std::sqrt(d))/a; }
+    else     { s=0.5*(-b+std::sqrt(d))/a; }
+
+    // Check if Point is on the Surface
+    //
+    if (s>-halfCarTolerance)
+    {
+      if(s<halfCarTolerance)
+      {
+        if (NormalToPlane(p,ipl).dot(v)<=0)  { return 0.;}
+        else  // Check second root; return kInfinity
+        {
+          if (a>0) { s=0.5*(-b+std::sqrt(d))/a; }
+          else     { s=0.5*(-b-std::sqrt(d))/a; }
+          if (s<=halfCarTolerance) { return kInfinity; }
+        }
+      }
+      // Check the Intersection
+      //
+      zi=p.z()+s*v.z();
+      if (std::fabs(zi)<fDz)
+      {
+        x1=xs1+tx1*v.z()*s;
+        x2=xs2+tx2*v.z()*s;
+        xp=p.x()+s*v.x();
+        y1=ys1+ty1*v.z()*s;
+        y2=ys2+ty2*v.z()*s;
+        yp=p.y()+s*v.y();
+        zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
+        if (zi<=halfCarTolerance)  { return s; }
+      }
+    }
+    if (a>0)  { s=0.5*(-b+std::sqrt(d))/a; }
+    else      { s=0.5*(-b-std::sqrt(d))/a; }
+
+    // Check if Point is on the Surface
+    //
+    if (s>-halfCarTolerance)
+    {
+      if(s<halfCarTolerance)
+      {
+        if (NormalToPlane(p,ipl).dot(v)<=0)  { return 0.; }
+        else   // Check second root; return kInfinity.
+        {
+          if (a>0) { s=0.5*(-b-std::sqrt(d))/a; }
+          else     { s=0.5*(-b+std::sqrt(d))/a; }
+          if (s<=halfCarTolerance)  { return kInfinity; }
+        }
+      }
+      // Check the Intersection
+      //
+      zi=p.z()+s*v.z();
+      if (std::fabs(zi)<fDz)
+      {
+        x1=xs1+tx1*v.z()*s;
+        x2=xs2+tx2*v.z()*s;
+        xp=p.x()+s*v.x();
+        y1=ys1+ty1*v.z()*s;
+        y2=ys2+ty2*v.z()*s;
+        yp=p.y()+s*v.y();
+        zi = (xp-x1)*(xp-x2)+(yp-y1)*(yp-y2);
+        if (zi<=halfCarTolerance)  { return s; }
+      }
+    }
+  }
+  return kInfinity;
 }      
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p,
-                          const G4ThreeVector& v) const
+                                     const G4ThreeVector& v) const
 {
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->DistanceToIn(p, v);
   }  
-#endif    
-   static const G4double halfCarTolerance=kCarTolerance*0.5;
-   G4double dist[5];
-   G4ThreeVector n;
-   // Check lateral faces
-   G4int i;
-   for (i=0; i<4; i++) {
-      dist[i]=DistToPlane(p, v, i);  
-   }   
-   // Check Z planes
-   dist[4]=kInfinity;
-   if (fabs(p.z())>fDz-halfCarTolerance) {
-      if (v.z()) {
-         G4ThreeVector pt;
-         if (p.z()>0) {
-            dist[4] = (fDz-p.z())/v.z();
-           
-         } else {   
-            dist[4] = (-fDz-p.z())/v.z();
-         }   
-         if (dist[4]<-halfCarTolerance) {
-            dist[4]=kInfinity;
-         } else {
-             if(dist[4]<halfCarTolerance){
-	       if(p.z()>0) n=G4ThreeVector(0,0,1);
-               else n=G4ThreeVector(0,0,-1);
-	       if (n.dot(v)<0){dist[4]=0.;}
-	       else {dist[4]=kInfinity;}
-           } 
+#endif
+    
+  static const G4double halfCarTolerance=kCarTolerance*0.5;
 
-            pt=p+dist[4]*v;
-            if (Inside(pt)==kOutside) dist[4]=kInfinity;
-         }   
+  G4double dist[5];
+  G4ThreeVector n;
+
+  // Check lateral faces
+  //
+  G4int i;
+  for (i=0; i<4; i++)
+  {
+    dist[i]=DistToPlane(p, v, i);  
+  }
+
+  // Check Z planes
+  //
+  dist[4]=kInfinity;
+  if (std::fabs(p.z())>fDz-halfCarTolerance)
+  {
+    if (v.z())
+    {
+      G4ThreeVector pt;
+      if (p.z()>0)
+      {
+        dist[4] = (fDz-p.z())/v.z();
       }
-   }   
-   G4double distmin = dist[0];
-   for (i=1;i<5;i++) if (dist[i] < distmin) distmin = dist[i];
+      else
+      {   
+        dist[4] = (-fDz-p.z())/v.z();
+      }   
+      if (dist[4]<-halfCarTolerance)
+      {
+        dist[4]=kInfinity;
+      }
+      else
+      {
+        if(dist[4]<halfCarTolerance)
+        {
+          if(p.z()>0)  { n=G4ThreeVector(0,0,1); }
+          else         { n=G4ThreeVector(0,0,-1); }
+          if (n.dot(v)<0) { dist[4]=0.; }
+          else            { dist[4]=kInfinity; }
+        }
+        pt=p+dist[4]*v;
+        if (Inside(pt)==kOutside)  { dist[4]=kInfinity; }
+      }
+    }
+  }   
+  G4double distmin = dist[0];
+  for (i=1;i<5;i++)
+  {
+    if (dist[i] < distmin)  { distmin = dist[i]; }
+  }
 
-  if(distmin<halfCarTolerance)distmin=0.;
- 
+  if (distmin<halfCarTolerance)  { distmin=0.; }
+
   return distmin;
 }    
   
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4double G4GenericTrap::DistanceToIn(const G4ThreeVector& p) const
 {
+  // Computes the closest distance from given point to this shape
+
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  {
     return fTessellatedSolid->DistanceToIn(p);
   }  
 #endif
  
-// Computes the closest distance from given point to this shape.
-   G4double safz =fabs(p.z())-fDz;
-   if(safz<0)safz=0;
-  
-   G4int iseg;
-   G4double safe  = safz;
-   G4double safxy = safz;
+  G4double safz = std::fabs(p.z())-fDz;
+  if(safz<0) { safz=0; }
+
+  G4int iseg;
+  G4double safe  = safz;
+  G4double safxy = safz;
  
-  for (iseg=0; iseg<4; iseg++){ 
-   safxy = SafetyToFace(p,iseg);
-   if(safxy>safe)safe=safxy;
+  for (iseg=0; iseg<4; iseg++)
+  { 
+    safxy = SafetyToFace(p,iseg);
+    if (safxy>safe)  { safe=safxy; }
   }
 
   return safe;
-}    
+}
 
-//_____________________________________________________________________________
-G4double G4GenericTrap::SafetyToFace(const G4ThreeVector& p,const G4int iseg) const
+// --------------------------------------------------------------------
+
+G4double
+G4GenericTrap::SafetyToFace(const G4ThreeVector& p, const G4int iseg) const
 {
-// Estimate distance to lateral plane defined by segment iseg in range [0,3]
-// Might be negative: plane seen only from inside.
+  // Estimate distance to lateral plane defined by segment iseg in range [0,3]
+  // Might be negative: plane seen only from inside
+
   G4ThreeVector p1,norm;
   G4double safe;
 
-    p1=G4ThreeVector(fVertices[iseg].x(),fVertices[iseg].y(),-fDz);
+  p1=G4ThreeVector(fVertices[iseg].x(),fVertices[iseg].y(),-fDz);
   
-    norm=NormalToPlane(p,iseg);
-    safe = (p-p1).dot(norm);//Can be negative
+  norm=NormalToPlane(p,iseg);
+  safe = (p-p1).dot(norm); //Can be negative
  
-   return safe;
+  return safe;
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
-                                  const G4ThreeVector& v,
-                                  const G4bool calcNorm,
-                                  G4bool* validNorm,
-                                  G4ThreeVector* n) const
+                                      const G4ThreeVector& v,
+                                      const G4bool calcNorm,
+                                            G4bool* validNorm,
+                                            G4ThreeVector* n) const
 {
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->DistanceToOut(p, v, calcNorm, validNorm, n);
   }
-#endif  
+#endif
+
   static const G4double halfCarTolerance=kCarTolerance*0.5;
+
   G4double distmin;
   G4bool lateral_cross = false;
   ESide side = kUndefined;
  
-   if (calcNorm) *validNorm=true; // All normals are valid
+  if (calcNorm)  { *validNorm=true; } // All normals are valid
 
-   if (v.z() < 0) {
-      distmin=(-fDz-p.z())/v.z();
-   } else {
-      if (v.z() > 0) distmin =(fDz-p.z())/v.z();
-      else         distmin = kInfinity;
-   }      
-   G4double dz2 =0.5/fDz;
-   G4double xa,xb,xc,xd;
-   G4double ya,yb,yc,yd;
-   for (G4int ipl=0; ipl<4; ipl++) {
-      G4int j = (ipl+1)%4;
-      xa=fVertices[ipl].x();
-      ya=fVertices[ipl].y();
-      xb=fVertices[ipl+4].x();
-      yb=fVertices[ipl+4].y();
-      xc=fVertices[j].x();
-      yc=fVertices[j].y();
-      xd=fVertices[4+j].x();
-      yd=fVertices[4+j].y();
+  if (v.z() < 0)
+  {
+    distmin=(-fDz-p.z())/v.z();
+  }
+  else
+  {
+    if (v.z() > 0)  { distmin = (fDz-p.z())/v.z(); }
+    else            { distmin = kInfinity; }
+  }      
+
+  G4double dz2 =0.5/fDz;
+  G4double xa,xb,xc,xd;
+  G4double ya,yb,yc,yd;
+
+  for (G4int ipl=0; ipl<4; ipl++)
+  {
+    G4int j = (ipl+1)%4;
+    xa=fVertices[ipl].x();
+    ya=fVertices[ipl].y();
+    xb=fVertices[ipl+4].x();
+    yb=fVertices[ipl+4].y();
+    xc=fVertices[j].x();
+    yc=fVertices[j].y();
+    xd=fVertices[4+j].x();
+    yd=fVertices[4+j].y();
      
-      G4double tx1 =dz2*(xb-xa);
-      G4double ty1 =dz2*(yb-ya);
-      G4double tx2 =dz2*(xd-xc);
-      G4double ty2 =dz2*(yd-yc);
-      G4double dzp =fDz+p.z();
-      G4double xs1 =xa+tx1*dzp;
-      G4double ys1 =ya+ty1*dzp;
-      G4double xs2 =xc+tx2*dzp;
-      G4double ys2 =yc+ty2*dzp;
-      G4double dxs =xs2-xs1;
-      G4double dys =ys2-ys1;
-      G4double dtx =tx2-tx1;
-      G4double dty =ty2-ty1;
-      G4double a=(dtx*v.y()-dty*v.x()+(tx1*ty2-tx2*ty1)*v.z())*v.z();
-      G4double b=dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
-              +tx1*ys2-tx2*ys1)*v.z();
-      G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
-      G4double s=kInfinity;
-     
-      if (fabs(a) < kCarTolerance) {           
-	if (fabs(b) < kCarTolerance){ continue;}
-         s=-c/b;
+    G4double tx1 =dz2*(xb-xa);
+    G4double ty1 =dz2*(yb-ya);
+    G4double tx2 =dz2*(xd-xc);
+    G4double ty2 =dz2*(yd-yc);
+    G4double dzp =fDz+p.z();
+    G4double xs1 =xa+tx1*dzp;
+    G4double ys1 =ya+ty1*dzp;
+    G4double xs2 =xc+tx2*dzp;
+    G4double ys2 =yc+ty2*dzp;
+    G4double dxs =xs2-xs1;
+    G4double dys =ys2-ys1;
+    G4double dtx =tx2-tx1;
+    G4double dty =ty2-ty1;
+    G4double a = (dtx*v.y()-dty*v.x()+(tx1*ty2-tx2*ty1)*v.z())*v.z();
+    G4double b = dxs*v.y()-dys*v.x()+(dtx*p.y()-dty*p.x()+ty2*xs1-ty1*xs2
+               + tx1*ys2-tx2*ys1)*v.z();
+    G4double c=dxs*p.y()-dys*p.x()+xs1*ys2-xs2*ys1;
+    G4double s=kInfinity;
+
+    if (std::fabs(a) < kCarTolerance)
+    {           
+      if (std::fabs(b) < kCarTolerance) { continue; }
+      s=-c/b;
          
-	 // Check for Point on the Surface
-         if ( (s > -halfCarTolerance) && (s < distmin) ) {
-	   if(s < halfCarTolerance) {
-	      
-             if(NormalToPlane(p,ipl).dot(v)<0.)continue;  
+      // Check for Point on the Surface
+      //
+      if ((s > -halfCarTolerance) && (s < distmin))
+      {
+        if (s < halfCarTolerance)
+        {
+          if (NormalToPlane(p,ipl).dot(v)<0.)  { continue; }
+        }
+        distmin =s;
+        lateral_cross=true;
+        side=ESide(ipl+1);
+      }   
+      continue;
+    }
+    G4double d=b*b-4*a*c;
+    if (d >= 0.)
+    {
+      if (a > 0)  { s=0.5*(-b-std::sqrt(d))/a; }
+      else        { s=0.5*(-b+std::sqrt(d))/a; }
 
-             }
-            distmin =s;
-            lateral_cross=true;
-           
-            side=ESide(ipl+1);
-         }   
-         continue;
+      // Check for Point on the Surface
+      //
+      if (s > -halfCarTolerance )
+      {
+        if (s < distmin)
+        {
+          if(s < halfCarTolerance)
+          {
+            if (NormalToPlane(p,ipl).dot(v)<0.)  // Check second root
+            {
+              if (a > 0)  { s=0.5*(-b+std::sqrt(d))/a; }
+              else        { s=0.5*(-b-std::sqrt(d))/a; }
+              if (( s > 0) && (s < distmin))
+              {
+                distmin=s;
+                lateral_cross = true;
+                side=ESide(ipl+1);
+              }
+              continue;
+            }
+          }
+          distmin = s;
+          lateral_cross = true;
+          side=ESide(ipl+1);
+        }
       }
-      G4double d=b*b-4*a*c;
-      if (d >= 0.) {
-         if (a > 0) s=0.5*(-b-std::sqrt(d))/a;
-         else     s=0.5*(-b+std::sqrt(d))/a;
-	 //Check for Point on the Surface
-                
-         if (s > -halfCarTolerance ) {
-            if (s < distmin) {
-	      if(s < halfCarTolerance) {
-              
-		if(NormalToPlane(p,ipl).dot(v)<0.){// Check second root
-                  if (a > 0) s=0.5*(-b+std::sqrt(d))/a;
-                  else     s=0.5*(-b-std::sqrt(d))/a;
-                  if(( s > 0) && (s < distmin) ){
-                   distmin=s;
-		   lateral_cross = true;
-                   side=ESide(ipl+1);
-                 }
-                continue;
-                }  
-               }
-               distmin = s;
-               lateral_cross = true;
-               side=ESide(ipl+1);
-            }   
-         } else {
-            if (a > 0) s=0.5*(-b+std::sqrt(d))/a;
-            else     s=0.5*(-b-std::sqrt(d))/a;
-            // Check for Point on the Surface
-            if ((s > -halfCarTolerance) && (s < distmin) ) {
-	      if(s < halfCarTolerance) {
-                  
-		if(NormalToPlane(p,ipl).dot(v)<0.){// Check second root
+      else
+      {
+        if (a > 0)  { s=0.5*(-b+std::sqrt(d))/a; }
+        else        { s=0.5*(-b-std::sqrt(d))/a; }
 
-                 if (a > 0) s=0.5*(-b-std::sqrt(d))/a;
-                else     s=0.5*(-b+std::sqrt(d))/a;
-               
-                 if( ( s > 0) && (s < distmin) ){
-                   distmin=s;
-		   lateral_cross = true;
-                   side=ESide(ipl+1);
-                 }
-                continue;
-                }  
-               }
-
-               distmin =s;
-               lateral_cross = true;
-               side=ESide(ipl+1);
-            }   
-         }
+        // Check for Point on the Surface
+        //
+        if ((s > -halfCarTolerance) && (s < distmin))
+        {
+          if (s < halfCarTolerance)
+          {
+            if (NormalToPlane(p,ipl).dot(v)<0.)  // Check second root
+            {
+              if (a > 0)  { s=0.5*(-b-std::sqrt(d))/a; }
+              else        { s=0.5*(-b+std::sqrt(d))/a; }
+              if ( ( s > 0) && (s < distmin) )
+              {
+                distmin=s;
+                lateral_cross = true;
+                side=ESide(ipl+1);
+              }
+              continue;
+            }  
+          }
+          distmin =s;
+          lateral_cross = true;
+          side=ESide(ipl+1);
+        }   
       }
-
-   }
-   if (!lateral_cross) {
-      // We have to make sure that track crosses the top or bottom.
-      if (distmin >= kInfinity) distmin=kCarTolerance;
-      G4ThreeVector pt=p+distmin*v;
+    }
+  }
+  if (!lateral_cross)  // Make sure that track crosses the top or bottom
+  {
+    if (distmin >= kInfinity)  { distmin=kCarTolerance; }
+    G4ThreeVector pt=p+distmin*v;
     
-      // Check if propagated point is in the polygon
-      G4int i=0;
-      if (v.z()>0.) i=4;
-      std:: vector<G4TwoVector> xy;
-      for ( G4int j=0; j<4; j++) {
-         xy.push_back(fVertices[i+j]);
-	 
-       }
-     //Check Inside
-     if (InsidePolygone(pt,xy)==kOutside){ 
-       if(calcNorm){
-	 if(v.z()>0){side= kPZ;*n = G4ThreeVector(0,0,1);}
-	 else{ side=kMZ; *n = G4ThreeVector(0,0,-1);}
-       } 
-       return 0.;}
+    // Check if propagated point is in the polygon
+    //
+    G4int i=0;
+    if (v.z()>0.) { i=4; }
+    std:: vector<G4TwoVector> xy;
+    for ( G4int j=0; j<4; j++)  { xy.push_back(fVertices[i+j]); }
 
-     else{if(v.z()>0){side=kPZ;}else{side=kMZ;}};
-     
-   }
+    // Check Inside
+    //
+    if (InsidePolygone(pt,xy)==kOutside)
+    { 
+      if(calcNorm)
+      {
+        if (v.z()>0) {side= kPZ; *n = G4ThreeVector(0,0,1);}
+        else         { side=kMZ; *n = G4ThreeVector(0,0,-1);}
+      } 
+      return 0.;
+    }
+    else
+    {
+      if(v.z()>0) {side=kPZ;}
+      else        {side=kMZ;}
+    }
+  }
 
- if (calcNorm)
-   { G4ThreeVector pt=p+v*distmin;     
+  if (calcNorm)
+  {
+    G4ThreeVector pt=p+v*distmin;     
     switch (side)
     {
       case kXY0:
@@ -1332,45 +1503,47 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "distmin = "    << distmin/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4GenericTrap::DistanceToOut(p,v,..)","Notification",JustWarning,
+        G4Exception("G4GenericTrap::DistanceToOut(p,v,..)",
+                    "Notification", JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
-    }
+     }
   }
  
- if(distmin<halfCarTolerance)distmin=0.;
+  if (distmin<halfCarTolerance)  { distmin=0.; }
  
- return distmin;
-
+  return distmin;
 }    
-                                  
-//_____________________________________________________________________________
+
+// --------------------------------------------------------------------
+
 G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
 {
 
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->DistanceToOut(p);
   }  
 #endif
 
-   G4double safz = fDz-fabs(p.z());
-   if(safz<0)safz = 0;
+  G4double safz = fDz-std::fabs(p.z());
+  if (safz<0) { safz = 0; }
 
-   G4double safe = safz;
-     G4double safxy = safz;
+  G4double safe  = safz;
+  G4double safxy = safz;
  
-  for (G4int iseg=0; iseg<4; iseg++){ 
-    safxy = fabs(SafetyToFace(p,iseg));
- 
-    if(safxy < safe) safe = safxy;
+  for (G4int iseg=0; iseg<4; iseg++)
+  { 
+    safxy = std::fabs(SafetyToFace(p,iseg));
+    if (safxy < safe)  { safe = safxy; }
   }
 
- return safe;
-
+  return safe;
 }    
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
@@ -1390,42 +1563,61 @@ std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
   return os;
 } 
 
-//______________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4double G4GenericTrap::GetSurfaceArea()
 {
-   if(fSurfaceArea != 0.) {;}
-   else
-   { std::vector<G4ThreeVector> vertices;
-    for (G4int i=0; i<4;i++)vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
-    for (G4int i=4; i<8;i++)vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
+  if(fSurfaceArea != 0.) {;}
+  else
+  {
+    std::vector<G4ThreeVector> vertices;
+    for (G4int i=0; i<4;i++)
+    {
+      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
+    }
+    for (G4int i=4; i<8;i++)
+    {
+      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
+    }
+
     // Surface Area of Planes(only estimation for twisted)
-    G4double fSurface0=GetFaceSurfaceArea(vertices[0],vertices[1],vertices[2],vertices[3]);// -fDz    plane 
-    G4double fSurface1=GetFaceSurfaceArea(vertices[0],vertices[1],vertices[5],vertices[4]);// Lateral plane 
-    G4double fSurface2=GetFaceSurfaceArea(vertices[3],vertices[0],vertices[4],vertices[7]);// Lateral plane 
-    G4double fSurface3=GetFaceSurfaceArea(vertices[2],vertices[3],vertices[7],vertices[6]);// Lateral plane 
-    G4double fSurface4=GetFaceSurfaceArea(vertices[2],vertices[1],vertices[5],vertices[6]);// Lateral plane 
-    G4double fSurface5=GetFaceSurfaceArea(vertices[4],vertices[5],vertices[6],vertices[7]);//  fDz    plane 
-   // Total Surface Area
-     if(!fIsTwisted){
-       fSurfaceArea = fSurface0+fSurface1+fSurface2+fSurface3+fSurface4+fSurface5;
-     }
-     else{
-       fSurfaceArea = G4VSolid::GetSurfaceArea();
-     }
-     
-   }
-   return fSurfaceArea;
+    //
+    G4double fSurface0=GetFaceSurfaceArea(vertices[0],vertices[1],
+                                          vertices[2],vertices[3]);//-fDz plane
+    G4double fSurface1=GetFaceSurfaceArea(vertices[0],vertices[1],
+                                          vertices[5],vertices[4]);// Lat plane
+    G4double fSurface2=GetFaceSurfaceArea(vertices[3],vertices[0],
+                                          vertices[4],vertices[7]);// Lat plane 
+    G4double fSurface3=GetFaceSurfaceArea(vertices[2],vertices[3],
+                                          vertices[7],vertices[6]);// Lat plane
+    G4double fSurface4=GetFaceSurfaceArea(vertices[2],vertices[1],
+                                          vertices[5],vertices[6]);// Lat plane
+    G4double fSurface5=GetFaceSurfaceArea(vertices[4],vertices[5],
+                                          vertices[6],vertices[7]);// fDz plane 
+
+    // Total Surface Area
+    //
+    if(!fIsTwisted)
+    {
+      fSurfaceArea = fSurface0+fSurface1+fSurface2
+                   + fSurface3+fSurface4+fSurface5;
+    }
+    else
+    {
+      fSurfaceArea = G4VSolid::GetSurfaceArea();
+    }
+  }
+  return fSurfaceArea;
 }
-  
-  
 
+// --------------------------------------------------------------------
 
-//___________________________________________________________________________ 
-// Auxiliary method for Get Surface Area of Face
-
-G4double G4GenericTrap::GetFaceSurfaceArea(G4ThreeVector p0, G4ThreeVector p1, 
-                                      G4ThreeVector p2, G4ThreeVector p3) const
+G4double
+G4GenericTrap::GetFaceSurfaceArea(G4ThreeVector p0, G4ThreeVector p1, 
+                                  G4ThreeVector p2, G4ThreeVector p3) const
 {
+  // Auxiliary method for Get Surface Area of Face
+
   G4double aOne, aTwo;
   G4ThreeVector t, u, v, w, Area, normal;
 
@@ -1448,14 +1640,16 @@ G4double G4GenericTrap::GetFaceSurfaceArea(G4ThreeVector p0, G4ThreeVector p1,
   
   
   return aOne + aTwo;
-
 }
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4ThreeVector G4GenericTrap::GetPointOnSurface() const
 {
+
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->GetPointOnSurface();
   }  
 #endif
@@ -1465,198 +1659,246 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
   G4double rand,area,chose,cf,lambda0,lambda1,alfa,beta,zp;
   G4int ipl,j;
  
+  std::vector<G4ThreeVector> vertices;
+  for (G4int i=0; i<4;i++)
+  {
+    vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
+  }
+  for (G4int i=4; i<8;i++)
+  {
+    vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
+  }
+
+  // Surface Area of Planes(only estimation for twisted)
   //
-   std::vector<G4ThreeVector> vertices;
-    for (G4int i=0; i<4;i++)vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
-    for (G4int i=4; i<8;i++)vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
-    // Surface Area of Planes(only estimation for twisted)
-    G4double Surface0=GetFaceSurfaceArea(vertices[0],vertices[1],vertices[2],vertices[3]);// -fDz    plane 
-    G4double Surface1=GetFaceSurfaceArea(vertices[0],vertices[1],vertices[5],vertices[4]);// Lateral plane 
-    G4double Surface2=GetFaceSurfaceArea(vertices[3],vertices[0],vertices[4],vertices[7]);// Lateral plane 
-    G4double Surface3=GetFaceSurfaceArea(vertices[2],vertices[3],vertices[7],vertices[6]);// Lateral plane 
-    G4double Surface4=GetFaceSurfaceArea(vertices[2],vertices[1],vertices[5],vertices[6]);// Lateral plane 
-    G4double Surface5=GetFaceSurfaceArea(vertices[4],vertices[5],vertices[6],vertices[7]);//  fDz    plane 
-    rand=G4UniformRand();
-    area=Surface0+Surface1+Surface2+Surface3+Surface4+Surface5;
+  G4double Surface0=GetFaceSurfaceArea(vertices[0],vertices[1],
+                                       vertices[2],vertices[3]);//-fDz plane 
+  G4double Surface1=GetFaceSurfaceArea(vertices[0],vertices[1],
+                                       vertices[5],vertices[4]);// Lat plane
+  G4double Surface2=GetFaceSurfaceArea(vertices[3],vertices[0],
+                                       vertices[4],vertices[7]);// Lat plane
+  G4double Surface3=GetFaceSurfaceArea(vertices[2],vertices[3],
+                                       vertices[7],vertices[6]);// Lat plane
+  G4double Surface4=GetFaceSurfaceArea(vertices[2],vertices[1],
+                                       vertices[5],vertices[6]);// Lat plane
+  G4double Surface5=GetFaceSurfaceArea(vertices[4],vertices[5],
+                                       vertices[6],vertices[7]);// fDz plane
+  rand = G4UniformRand();
+  area = Surface0+Surface1+Surface2+Surface3+Surface4+Surface5;
   chose = rand*area;
-  if( ( chose < Surface0)||( chose>(Surface0+Surface1+Surface2+Surface3+Surface4)) ){//fDz or -fDz Plane
-     ipl = int(G4UniformRand()*4);
-     j = (ipl+1)%4;
-    if(chose < Surface0){ 
-    zp = -fDz;
-    u = fVertices[ipl]; v = fVertices[j];
-    w = fVertices[(ipl+3)%4]; 
-    }else{
+
+  if ( ( chose < Surface0)
+    || ( chose > (Surface0+Surface1+Surface2+Surface3+Surface4)) )
+  {                                        // fDz or -fDz Plane
+    ipl = G4int(G4UniformRand()*4);
+    j = (ipl+1)%4;
+    if(chose < Surface0)
+    { 
+      zp = -fDz;
+      u = fVertices[ipl]; v = fVertices[j];
+      w = fVertices[(ipl+3)%4]; 
+    }
+    else
+    {
       zp = fDz;
       u = fVertices[ipl+4]; v = fVertices[j+4];
       w = fVertices[(ipl+3)%4+4]; 
     }
-     alfa = G4UniformRand();
-     beta = G4UniformRand();
-     lambda1=alfa*beta;
-     lambda0=alfa-lambda1;
-     v = v-u;
-     w = w-u;
-     v = u+lambda0*v+lambda1*w;
-
+    alfa = G4UniformRand();
+    beta = G4UniformRand();
+    lambda1=alfa*beta;
+    lambda0=alfa-lambda1;
+    v = v-u;
+    w = w-u;
+    v = u+lambda0*v+lambda1*w;
   }
-  else{// Lateral Plane Twisted or Not
-    if(chose < Surface0+Surface1) ipl=0;
-    else if(chose < Surface0+Surface1+Surface2) ipl=1;
-    else if(chose < Surface0+Surface1+Surface2+Surface3) ipl=2;
-    else ipl=3;
+  else                                     // Lateral Plane Twisted or Not
+  {
+    if (chose < Surface0+Surface1) { ipl=0; }
+    else if (chose < Surface0+Surface1+Surface2) { ipl=1; }
+    else if (chose < Surface0+Surface1+Surface2+Surface3) { ipl=2; }
+    else { ipl=3; }
     j = (ipl+1)%4;
     zp = -fDz+G4UniformRand()*2*fDz;
     cf = 0.5*(fDz-zp)/fDz;
     u = fVertices[ipl+4]+cf*( fVertices[ipl]-fVertices[ipl+4]);
     v = fVertices[j+4]+cf*(fVertices[j]-fVertices[j+4]); 
     v = u+(v-u)*G4UniformRand();
-    
   }
-   point=G4ThreeVector(v.x(),v.y(),zp);
+  point=G4ThreeVector(v.x(),v.y(),zp);
 
-   return point;
-}    
+  return point;
+}
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4Polyhedron* G4GenericTrap::GetPolyhedron () const
 {
+
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
-    return fTessellatedSolid->GetPolyhedron();}
+  if ( fTessellatedSolid )
+  { 
+    return fTessellatedSolid->GetPolyhedron();
+  }
 #endif  
   
-   if ( (!fpPolyhedron)
-     || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-         fpPolyhedron->GetNumberOfRotationSteps()) )
-     {
-       delete fpPolyhedron;
-       fpPolyhedron = CreatePolyhedron();
-     }
-   return fpPolyhedron;
-  
-   
+  if ( (!fpPolyhedron)
+    || (fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+        fpPolyhedron->GetNumberOfRotationSteps()) )
+  {
+    delete fpPolyhedron;
+    fpPolyhedron = CreatePolyhedron();
+  }
+  return fpPolyhedron;
 }    
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 void G4GenericTrap::DescribeYourselfTo(G4VGraphicsScene& scene) const
 {
+
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->DescribeYourselfTo(scene);
   }
 #endif  
   
-   scene.AddSolid(*this);
-  
- 
-}    
+  scene.AddSolid(*this);
+}
 
-//_____________________________________________________________________________
-G4VisExtent   G4GenericTrap::GetExtent() const
+// --------------------------------------------------------------------
+
+G4VisExtent G4GenericTrap::GetExtent() const
 {
+  // Computes bounding vectors for the shape
+
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->GetExtent();
   } 
 #endif
    
-    // Computes bounding vectors for a shape.
-   G4double Dx,Dy;
-   G4ThreeVector minVec = GetMinimumBBox();
-   G4ThreeVector maxVec = GetMaximumBBox();
-   Dx = 0.5*(maxVec.x()- minVec.y());
-   Dy = 0.5*(maxVec.y()- minVec.y());
-   return G4VisExtent (-Dx, Dx, -Dy, Dy, -fDz, fDz);
- 
+  G4double Dx,Dy;
+  G4ThreeVector minVec = GetMinimumBBox();
+  G4ThreeVector maxVec = GetMaximumBBox();
+  Dx = 0.5*(maxVec.x()- minVec.y());
+  Dy = 0.5*(maxVec.y()- minVec.y());
+
+  return G4VisExtent (-Dx, Dx, -Dy, Dy, -fDz, fDz); 
 }    
 
-//_____________________________________________________________________________
+// --------------------------------------------------------------------
+
 G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 {
+
 #ifdef G4TESS_TEST
-  if ( fTessellatedSolid ) { 
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->CreatePolyhedron();
   }  
 #endif 
   
   // Approximation of Twisted Side
   // Construct extra Points, if Twisted Side
+  //
   G4PolyhedronArbitrary* polyhedron;
   size_t nVertices, nFacets;
 
   G4int subdivisions=0;
   G4int i;
-  if(fIsTwisted){
-    if(GetVisSubdivisions()!= 0){subdivisions=GetVisSubdivisions();}
-    else{
-      // Estimation of Number od Subdivisions for smooth visualisation
-     G4double maxTwist=0.;
-     for(i=0; i<4; i++){if(GetTwistAngle(i)>maxTwist)maxTwist=GetTwistAngle(i);}
-
-     // Computes bounding vectors for a shape.
-     G4double Dx,Dy;
-     G4ThreeVector minVec = GetMinimumBBox();
-     G4ThreeVector maxVec = GetMaximumBBox();
-     Dx = 0.5*(maxVec.x()- minVec.y());
-     Dy = 0.5*(maxVec.y()- minVec.y());
-     if(Dy > Dx) Dx=Dy;
-    
-     subdivisions=8*int(maxTwist/(Dx*Dx*Dx)*fDz);
-     if (subdivisions<4)subdivisions=4;
-     if (subdivisions>30)subdivisions=30;
-    }
-   }
-     G4int sub4=4*subdivisions;
-    nVertices = 8+subdivisions*4;
-    nFacets = 6+subdivisions*4;
-    G4double cf=1./(subdivisions+1);
-    polyhedron =
-    new G4PolyhedronArbitrary (nVertices, nFacets);
-    //Add Vertex
-    for (i=0;i<4;i++) polyhedron->AddVertex(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));    
-    for( i=0;i<subdivisions;i++){
-      for(G4int j=0;j<4;j++){
-	G4TwoVector u=fVertices[j]+cf*(i+1)*( fVertices[j+4]-fVertices[j]);
-      polyhedron->AddVertex(G4ThreeVector(u.x(),u.y(),-fDz+cf*2*fDz*(i+1)));
-      
+  if(fIsTwisted)
+  {
+    if(GetVisSubdivisions()!= 0) {subdivisions=GetVisSubdivisions();}
+    else
+    {
+      // Estimation of Number of Subdivisions for smooth visualisation
+      //
+      G4double maxTwist=0.;
+      for(i=0; i<4; i++)
+      {
+        if(GetTwistAngle(i)>maxTwist) { maxTwist=GetTwistAngle(i); }
       }
+
+      // Computes bounding vectors for the shape
+      //
+      G4double Dx,Dy;
+      G4ThreeVector minVec = GetMinimumBBox();
+      G4ThreeVector maxVec = GetMaximumBBox();
+      Dx = 0.5*(maxVec.x()- minVec.y());
+      Dy = 0.5*(maxVec.y()- minVec.y());
+      if (Dy > Dx)  { Dx=Dy; }
     
-   }
-    for (i=4;i<8;i++) polyhedron->AddVertex(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));  
+      subdivisions=8*G4int(maxTwist/(Dx*Dx*Dx)*fDz);
+      if (subdivisions<4)  { subdivisions=4; }
+      if (subdivisions>30) { subdivisions=30; }
+    }
+  }
+  G4int sub4=4*subdivisions;
+  nVertices = 8+subdivisions*4;
+  nFacets = 6+subdivisions*4;
+  G4double cf=1./(subdivisions+1);
+  polyhedron = new G4PolyhedronArbitrary (nVertices, nFacets);
 
-    //Add Facets
-     polyhedron->AddFacet(1,4,3,2);//Z-plane
-     for (i=0;i<subdivisions+1;i++){
-      G4int is=i*4;
-      polyhedron->AddFacet(5+is,8+is,4+is,1+is);
-      polyhedron->AddFacet(8+is,7+is,3+is,4+is);
-      polyhedron->AddFacet(7+is,6+is,2+is,3+is);
-      polyhedron->AddFacet(6+is,5+is,1+is,2+is); 
-     }
-       
-     polyhedron->AddFacet(5+sub4,6+sub4,7+sub4,8+sub4);//Z-plane
+  // Add Vertex
+  //
+  for (i=0;i<4;i++)
+  {
+    polyhedron->AddVertex(G4ThreeVector(fVertices[i].x(),
+                                        fVertices[i].y(),-fDz));
+  }
+  for( i=0;i<subdivisions;i++)
+  {
+    for(G4int j=0;j<4;j++)
+    {
+      G4TwoVector u=fVertices[j]+cf*(i+1)*( fVertices[j+4]-fVertices[j]);
+      polyhedron->AddVertex(G4ThreeVector(u.x(),u.y(),-fDz+cf*2*fDz*(i+1)));
+    }    
+  }
+  for (i=4;i<8;i++)
+  {
+    polyhedron->AddVertex(G4ThreeVector(fVertices[i].x(),
+                                        fVertices[i].y(),fDz));
+  }
 
-   return (G4Polyhedron*) polyhedron;
- 
-}    
+  // Add Facets
+  //
+  polyhedron->AddFacet(1,4,3,2);  //Z-plane
+  for (i=0;i<subdivisions+1;i++)
+  {
+    G4int is=i*4;
+    polyhedron->AddFacet(5+is,8+is,4+is,1+is);
+    polyhedron->AddFacet(8+is,7+is,3+is,4+is);
+    polyhedron->AddFacet(7+is,6+is,2+is,3+is);
+    polyhedron->AddFacet(6+is,5+is,1+is,2+is); 
+  }
+  polyhedron->AddFacet(5+sub4,6+sub4,7+sub4,8+sub4);  //Z-plane
 
-//_____________________________________________________________________________
+  return (G4Polyhedron*) polyhedron;
+}
+
+// --------------------------------------------------------------------
+
 G4NURBS*  G4GenericTrap::CreateNURBS() const
 {
-  if ( fTessellatedSolid ) { 
+#ifdef G4TESS_TEST
+  if ( fTessellatedSolid )
+  { 
     return fTessellatedSolid->CreateNURBS();
-  }  
-  else{
-   // Computes bounding vectors for a shape.
-   G4double Dx,Dy;
-   G4ThreeVector minVec = GetMinimumBBox();
-   G4ThreeVector maxVec = GetMaximumBBox();
-   Dx = 0.5*(maxVec.x()- minVec.y());
-   Dy = 0.5*(maxVec.y()- minVec.y());
-   return new G4NURBSbox (Dx, Dy, fDz);
-  }  
-  
-}    
-       
+  }
+#endif
 
+  // Computes bounding vectors for the shape
+  //
+  G4double Dx,Dy;
+  G4ThreeVector minVec = GetMinimumBBox();
+  G4ThreeVector maxVec = GetMaximumBBox();
+  Dx = 0.5*(maxVec.x()- minVec.y());
+  Dy = 0.5*(maxVec.y()- minVec.y());
+
+  return new G4NURBSbox (Dx, Dy, fDz);
+}    
+
+// --------------------------------------------------------------------
