@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the Full version of the Geant4-based Hadrontherapy application
-// 
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
+
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
@@ -95,7 +96,11 @@
 #include "G4Qt.hh"
 #endif
 
-	//////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 int main(int argc ,char ** argv)
 {
 		// Set the Random engine
@@ -203,12 +208,17 @@ int main(int argc ,char ** argv)
 #ifdef G4ANALYSIS_USE_ROOT
     HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
 #endif
-#ifdef G4VIS_USE
-	delete visManager;
+
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
 #endif
-	delete geometryMessenger;
-	delete geometryController;
-	delete pInteraction; 
-	delete runManager;
-	return 0;
+  
+  delete geometryMessenger;
+  delete geometryController;
+  delete pInteraction; 
+  delete runManager;
+  return 0;
+  
 }

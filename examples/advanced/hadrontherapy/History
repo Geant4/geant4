@@ -7,6 +7,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+01.06.2010: G.A.P.Cirrone; Tag: harontherapy-V09-03-03
+           - Added G4UIExecutive
+           - Main file updated
+
 22.05.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-02
 	   - Updated ROOT scripts in folder RootScripts/proton/BraggPeak 
 
