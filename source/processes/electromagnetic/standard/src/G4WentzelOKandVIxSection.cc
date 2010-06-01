@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.8 2010-06-01 11:13:31 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.9 2010-06-01 11:15:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -179,8 +179,8 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
   G4double xSection = 0.0;
   G4double x = 0; 
   G4double y = 0;
-  G4oduble x1= 0;
-  G4oduble x2= 0;
+  G4double x1= 0;
+  G4double x2= 0;
   G4double xlog = 0.0;
 
   G4double costm = std::max(cosTMax,cosTetMaxElec); 
