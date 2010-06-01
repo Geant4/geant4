@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst01PhysicsList.cc,v 1.9 2006-06-29 21:35:04 gunter Exp $
+// $Id: Tst01PhysicsList.cc,v 1.10 2010-06-01 15:16:45 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -189,7 +189,9 @@ void Tst01PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+//#include "G4eMultipleScattering.hh"
+//#include "G4MuMultipleScattering.hh"
+//#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -225,7 +227,7 @@ void Tst01PhysicsList::ConstructEM()
       //electron
       // Construct processes for electron
 
-      // pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      // pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);
       // pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       // pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);
   
@@ -234,7 +236,7 @@ void Tst01PhysicsList::ConstructEM()
     {
       //positron
       // Construct processes for positron
-      // pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      // pmanager->AddProcess(new G4eMultipleScattering(),-1,1,1);
      
       // pmanager->AddProcess(new G4eIonisation(),-1,2,2);
       // pmanager->AddProcess(new G4eBremsstrahlung(),-1,-1,3);      
@@ -247,7 +249,7 @@ void Tst01PhysicsList::ConstructEM()
       //muon  
       // Construct processes for muon+
 
-      // pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      // pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
       // pmanager->AddProcess(new G4MuIonisation(),-1,2,2);
       // pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
       // pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);       
@@ -260,7 +262,7 @@ void Tst01PhysicsList::ConstructEM()
       {
         // all others charged particles except geantino
 
-	// pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+	// pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
 	// pmanager->AddProcess(new G4hIonisation(),-1,2,2);       
      }
     }
