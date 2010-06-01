@@ -194,7 +194,6 @@ void Test29PhysicsList::ConstructProcess()
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4MultipleScattering.hh"
 #include "G4hLowEnergyIonisation.hh"
 
 void Test29PhysicsList::ConstructEM()
@@ -217,14 +216,12 @@ void Test29PhysicsList::ConstructEM()
       else if (particleName == "e-")
 	{
 	  //electron
-	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
 	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
 	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
 	}
       else if (particleName == "e+")
 	{
 	  //positron
-	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
 	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
 	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
 	  pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
@@ -234,8 +231,6 @@ void Test29PhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino"))
 	{
 	  //all others charged particles except geantino
-	  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-
 	  G4double demax = 0.05;  // try to lose at most 5% of the energy in
 	  //    a single step (in limit of large energies)
 	  G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom

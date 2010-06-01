@@ -1039,7 +1039,7 @@ macro chips targ=C file=c0606 np=6 nn=6 runn=2000
 *  shell rm chips_[file].log
   shell cp chipstest.in chipstest_[file].in
   wait ' ' 2
-  shell ./CHIPStest | > chips_[file].log
+  shell ../test29 | > chips_[file].log
   wait ' ' 2
   exec makehbk
   wait ' ' 2
