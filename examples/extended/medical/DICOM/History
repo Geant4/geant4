@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2009-11-19 14:34:05 chauvie Exp $
+$Id: History,v 1.19 2010-06-01 19:08:35 chauvie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,7 +7,12 @@ $Id: History,v 1.18 2009-11-19 14:34:05 chauvie Exp $
 
                       Category History file
                       ---------------------
-19.11.2009- Stéphane Chauvie (DICOM-V09-02-03 )
+01.06.2010- Stephane Chauvie - Andrea Armando 
+	    Added function to read nested items (defined and undefined)
+	    Removed dependencies on CONQUEST
+	    DICOM handler could now read whichever DICOM file (PT,CT,DR,CR,US,MR... ) 
+	    
+19.11.2009- Stephanee Chauvie (DICOM-V09-02-03 )
 	    Changed DICOM Handler to read CT files coming from CONQUEST DICOM server
 
 05.02.2009 - Pedro Arce (DICOM-V09-02-01)

@@ -60,7 +60,7 @@
 
 
 DicomHandler::DicomHandler()
-    : DATABUFFSIZE(8192), LINEBUFFSIZE(128), FILENAMESIZE(512),
+    : DATABUFFSIZE(8192), LINEBUFFSIZE(5020), FILENAMESIZE(512),
       compression(0), nFiles(0), rows(0), columns(0),
       bitAllocated(0), maxPixelValue(0), minPixelValue(0),
       pixelSpacingX(0.), pixelSpacingY(0.),
@@ -118,6 +118,9 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 
 	// Creating a tag to be identified afterward
 	G4int tagDictionary = readGroupId*0x10000 + readElementId;
+	
+	// beginning of the pixels
+	    if(tagDictionary == 0x7FE00010) break;
 
       // VR or element length
 	std::fread(buffer,2,1,dicom);
@@ -138,14 +141,20 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	    // element length
 	    std::fread(buffer, 4, 1, dicom);
 	    GetValue(buffer, elementLength4);
-
-	    // beginning of the pixels
-	    if(tagDictionary == 0x7FE00010) break;
 	    
-	    if(elementLength4 == 0xFFFFFFFF) G4cerr << "Too difficult for me!" << G4endl; // VR = SQ with undefined length
-	    
+	    if(elementLength2 == 0x5153)
+	    {
+	     if(elementLength4 == 0xFFFFFFFF)
+	      read_undefined_nested( dicom );
+	     else{
+	      if(read_defined_nested( dicom, elementLength4 )==0){
+	       G4cerr << "Reading defined nested functin failed!" << G4endl;
+	       exit(-10);	       }
+	      }
+	    } else  { 
 	    // Reading the information with data
 	    std::fread(data, elementLength4,1,dicom);
+	    }  
 
 		
 	}  else { 
@@ -158,7 +167,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 		  GetValue(buffer, elementLength2);
 		  elementLength4 = elementLength2;
 		  
-		  if(tagDictionary == 0x7FE00010) break; // beginning of the pixels
+		  
 	          
 		  std::fread(data, elementLength4, 1, dicom);
 	        
@@ -176,26 +185,10 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 
 	          //G4cout <<  std::hex<< elementLength4 << G4endl;
 	      
-	          if(elementLength4 == 0xFFFFFFFF) {
-	          short momreadGroupId;
-		  short momreadElementId;
-		  unsigned int momelementLength4 ; // deal with element length in 4 bytes
-      		  G4cout << "Trying to read nested items!" << G4endl; // VR = SQ with undefined length
-		  while(true){
-			std::fread(buffer, 2, 1, dicom);
-			GetValue(buffer, momreadGroupId);
-			std::fread(buffer, 2, 1, dicom);
-			GetValue(buffer, momreadElementId);
-			//G4int momtagDictionary = momreadGroupId*0x10000 + momreadElementId;
-			//G4cout << "TAG"<< std::hex << momtagDictionary << G4endl;
-			std::fread(buffer, 4, 1, dicom);
-			GetValue(buffer, momelementLength4);
-			//G4cout << "Length"<< std::hex << momelementLength4 << G4endl;
-			if(momelementLength4 == 0x00000000 || momelementLength4 == 0xFFFFFFFF ) break;
-                	std::fread(buffer, momelementLength4, 1, dicom);
-			}
-		  } else {
-	          if(tagDictionary == 0x7FE00010) break; // beginning of the pixels
+	          if(elementLength4 == 0xFFFFFFFF) 
+	           read_undefined_nested(dicom);
+		  else {
+	          
 	          
 		  std::fread(data, elementLength4, 1, dicom);
 	        
@@ -854,4 +847,101 @@ void DicomHandler::GetValue(char * _val, Type & _rval) {
 	}
     }
     _rval = *(Type *)_val;
+}
+
+G4int DicomHandler::read_defined_nested(FILE * nested,G4int SQ_Length)
+{
+  //      VARIABLES
+  unsigned short item_GroupNumber;
+  unsigned short item_ElementNumber;
+  G4int item_Length;
+  G4int items_array_length=0;
+  char * buffer= new char[LINEBUFFSIZE];
+  
+
+  while(items_array_length < SQ_Length)
+  {
+   std::fread(buffer, 2, 1, nested);
+   GetValue(buffer, item_GroupNumber);
+   
+   std::fread(buffer, 2, 1, nested);
+   GetValue(buffer, item_ElementNumber);
+   
+   std::fread(buffer, 4, 1, nested);
+   GetValue(buffer, item_Length);
+   
+   std::fread(buffer, item_Length, 1, nested);
+   
+   items_array_length= items_array_length+8+item_Length;
+  }
+ 
+  delete []buffer;
+  
+  if(SQ_Length>items_array_length)
+   return 0;
+  else
+   return 1;
+
+}
+
+void DicomHandler::read_undefined_nested(FILE * nested)
+{
+  //      VARIABLES
+  unsigned short item_GroupNumber;
+  unsigned short item_ElementNumber;
+  G4int item_Length;
+  char * buffer= new char[LINEBUFFSIZE];
+  
+
+  do
+  {
+   std::fread(buffer, 2, 1, nested);
+   GetValue(buffer, item_GroupNumber);
+   
+   std::fread(buffer, 2, 1, nested);
+   GetValue(buffer, item_ElementNumber);
+   
+   std::fread(buffer, 4, 1, nested);
+   GetValue(buffer, item_Length);
+   
+   if(item_Length!=0xffffffff)
+    std::fread(buffer, item_Length, 1, nested);
+   else
+    read_undefined_item(nested);
+   
+   
+  }while(item_GroupNumber!=0xFFFE || item_ElementNumber!=0xE0DD || item_Length!=0);
+
+  delete [] buffer;
+
+}
+
+void DicomHandler::read_undefined_item(FILE * nested)
+{
+  //      VARIABLES
+ unsigned short item_GroupNumber;
+ unsigned short item_ElementNumber;
+ G4int item_Length;
+ char *buffer= new char[LINEBUFFSIZE];
+ 
+ do
+ {
+  std::fread(buffer, 2, 1, nested);
+  GetValue(buffer, item_GroupNumber);
+   
+  std::fread(buffer, 2, 1, nested);
+  GetValue(buffer, item_ElementNumber);
+   
+  std::fread(buffer, 4, 1, nested);
+  GetValue(buffer, item_Length);
+
+
+  if(item_Length!=0)
+   std::fread(buffer,item_Length,1,nested);
+
+ }
+ while(item_GroupNumber!=0xFFFE || item_ElementNumber!=0xE00D || item_Length!=0);
+ 
+ delete []buffer;
+ 
 }
