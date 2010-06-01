@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2010-06-01 15:43:30 lgarnier Exp $
+$Id: History,v 1.140 2010-06-01 17:21:10 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-1st June, L. Garnier
+1st June, L. Garnier (interfaces-V09-03-05)
  - G4UIQt : warning on Qt version < 4.5
 
 28 May, L. Garnier
