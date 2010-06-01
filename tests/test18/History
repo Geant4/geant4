@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2006-11-20 11:17:06 gcosmo Exp $
+$Id: History,v 1.19 2010-06-01 13:29:19 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 1, 2010   Gunter Folger  (test18-V03-03-00)
+- Migrate to G4{e,Mu,h}MutplieScattering
 
 Nov 20, 2006  Gabriele Cosmo (test18-V08-01-00)
 - Migrate to use G4VisExecutive. Removed obsolete vis-manager class.
