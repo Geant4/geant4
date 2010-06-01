@@ -727,6 +727,14 @@ void Tst01DetectorConstruction::ConstructDetectors()
   G4cout << "Total imprinted physical volumes for AssemblyDetector-3: "
          << assembly->TotalImprintedVolumes() << G4endl;
 
+  std::vector<G4VPhysicalVolume*>::iterator viter = assembly->GetVolumesIterator();
+  G4cout << "Imprinted volumes: ";
+  for (size_t i=0; i<assembly->TotalImprintedVolumes(); i++)
+  {
+     G4cout << (*viter)->GetName() << " - "; viter++;
+  }
+  G4cout << G4endl;
+
 //
 // Visualization attributes 
 // 
