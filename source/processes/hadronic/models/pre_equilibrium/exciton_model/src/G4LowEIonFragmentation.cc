@@ -23,12 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: G4LowEIonFragmentation.cc,v 1.5 2010-06-01 16:51:11 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4LowEIonFragmentation
+//
+// Author:  H.P. Wellisch
+//
+// Modified:
+// 02 Jun 2010 M. A. Cortes Giraldo fix: particlesFromTarget must be 
+//                     accounted for as particles of initial compound nucleus
+
 #include "G4LowEIonFragmentation.hh"
 #include <algorithm>
 
 G4int G4LowEIonFragmentation::hits = 0;
 G4int G4LowEIonFragmentation::totalTries = 0;
 G4double G4LowEIonFragmentation::area = 0;
+
+G4LowEIonFragmentation::G4LowEIonFragmentation(G4ExcitationHandler * const value) 
+{
+  theHandler = value;
+  theModel = new G4PreCompoundModel(theHandler);
+}
+
+G4LowEIonFragmentation::G4LowEIonFragmentation() 
+{
+  theHandler = new G4ExcitationHandler;
+  theModel = new G4PreCompoundModel(theHandler);
+}
+
+G4LowEIonFragmentation::~G4LowEIonFragmentation() 
+{
+  delete theModel;
+}
 
 G4HadFinalState * G4LowEIonFragmentation::
 ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
@@ -133,7 +164,9 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   G4Fragment anInitialState;
   anInitialState.SetA(aTargetA+particlesFromProjectile);
   anInitialState.SetZ(aTargetZ+chargedFromProjectile);
-  anInitialState.SetNumberOfParticles(particlesFromProjectile);
+  // M.A. Cortes fix
+  //anInitialState.SetNumberOfParticles(particlesFromProjectile);
+  anInitialState.SetNumberOfParticles(particlesFromProjectile+particlesFromTarget);
   anInitialState.SetNumberOfHoles(particlesFromTarget);
   anInitialState.SetNumberOfCharged(chargedFromProjectile + chargedFromTarget);
   anInitialState.SetMomentum(fragment4Momentum);
