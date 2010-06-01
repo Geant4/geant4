@@ -55,7 +55,6 @@
 
 
 /*VI
-#include <typeinfo>
 
 namespace G4HadronicProcess_local
 {
@@ -389,6 +388,7 @@ G4VParticleChange *G4HadronicProcess::PostStepDoIt(
   return theTotalResult;
 }
 
+#include <typeinfo>
 
 G4HadFinalState* 
 G4HadronicProcess::DoIsotopeCounting(G4HadFinalState * aResult,
