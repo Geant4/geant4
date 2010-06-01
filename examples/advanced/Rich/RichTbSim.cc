@@ -55,6 +55,10 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
 #include "G4ios.hh"
 #include <stdlib.h>
 
@@ -155,6 +159,12 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
   delete visManager;
   G4cout << "\nVisManager deleted..\n" <<G4endl;
+#endif
+
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
 #endif
 
    delete runManager;

@@ -73,6 +73,11 @@
 #include "BrachyAnalysisManager.hh"
 #endif
 
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
 int main(int argc ,char ** argv)
 
 {
@@ -151,6 +156,12 @@ int main(int argc ,char ** argv)
   analysis -> finish();
 #endif
   
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      ui->SessionStart();
+      delete ui;
+#endif
+
   // Job termination
 #ifdef G4VIS_USE
   delete visManager;
