@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 1, 2010   Gunter Folger  (test28-V03-03-00)
+- Migrate to G4{e,Mu,h}MutplieScattering
+
 06.12.2005, G.Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 
