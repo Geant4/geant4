@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.74 2010-05-30 11:30:49 allison Exp $
+// $Id: G4VisManager.hh,v 1.75 2010-06-01 16:08:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,26 +130,19 @@ class G4VisManager: public G4VVisManager {
   friend class G4RayTrajectory;
   friend class G4RayTracerSceneHandler;
   friend class G4RTMessenger;
-  friend class G4OpenGLStoredSceneHandler;
   friend class G4OpenGLViewerMessenger;
-  friend class G4OpenGLXViewerMessenger;
   friend class G4OpenGLXmViewerMessenger;
-  friend class G4XXXSceneHandler;
   friend class G4HepRepFileSceneHandler;
 
   // Management friends...
   friend class G4VSceneHandler;
   friend class G4VViewer;
-
-  friend std::ostream & operator <<
-  (std::ostream &, const G4VGraphicsSystem &);
-
-  friend std::ostream & operator <<
-  (std::ostream &, const G4VSceneHandler &);
-
   friend class G4VisStateDependent;
-
   friend class G4VisCommandList;
+
+  // operator << friends...
+  friend std::ostream& operator << (std::ostream&, const G4VGraphicsSystem&);
+  friend std::ostream& operator << (std::ostream&, const G4VSceneHandler&);
 
 public: // With description
 
@@ -368,7 +361,7 @@ public: // With description
   // already registered.
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
-  Verbosity                    GetVerbosity                () const;
+  static Verbosity             GetVerbosity                ();
   G4bool                       GetTransientsDrawnThisRun       () const;
   G4bool                       GetTransientsDrawnThisEvent     () const;
   const G4Event*               GetRequestedEvent               () const;
@@ -456,7 +449,7 @@ private:
   G4GraphicsSystemList  fAvailableGraphicsSystems;
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
-  Verbosity             fVerbosity;
+  static Verbosity             fVerbosity;
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.

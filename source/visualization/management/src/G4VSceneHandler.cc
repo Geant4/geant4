@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.94 2010-05-30 11:30:49 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.95 2010-06-01 16:08:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -490,8 +490,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       break;
     }
     else {
-      G4VisManager::Verbosity verbosity =
-	G4VisManager::GetInstance()->GetVerbosity();
+      G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
       if (verbosity >= G4VisManager::errors) {
 	G4cout <<
 	  "ERROR: G4VSceneHandler::RequestPrimitives"
@@ -511,8 +510,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       AddPrimitive (*pPolyhedron);
     }
     else {
-      G4VisManager::Verbosity verbosity =
-	G4VisManager::GetInstance()->GetVerbosity();
+      G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
       if (verbosity >= G4VisManager::errors) {
 	G4cout <<
 	  "ERROR: G4VSceneHandler::RequestPrimitives"
@@ -746,7 +744,7 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
      );
 
   pModelingParams->SetWarning
-    (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings);
+    (G4VisManager::GetVerbosity() >= G4VisManager::warnings);
 
   pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
   pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());

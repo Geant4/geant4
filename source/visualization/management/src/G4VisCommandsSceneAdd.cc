@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.80 2010-05-30 11:30:49 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.81 2010-06-01 16:08:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -183,7 +183,7 @@ G4String G4VisCommandSceneAddDigis::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand* command, G4String) {
+void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);

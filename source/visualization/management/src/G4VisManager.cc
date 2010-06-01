@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.127 2010-05-30 11:30:49 allison Exp $
+// $Id: G4VisManager.cc,v 1.128 2010-06-01 16:08:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,6 +77,8 @@
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
+
+G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 
 G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),

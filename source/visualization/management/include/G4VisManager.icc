@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.21 2009-01-13 09:55:15 lgarnier Exp $
+// $Id: G4VisManager.icc,v 1.22 2010-06-01 16:08:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,10 +68,9 @@ G4VisManager::GetCurrentGraphicsSystem () const {
   return fpGraphicsSystem;
 }
 
-inline G4VisManager::Verbosity G4VisManager::GetVerbosity () const {
+inline G4VisManager::Verbosity G4VisManager::GetVerbosity () {
   return fVerbosity;
 }
-
 
 inline G4bool G4VisManager::GetTransientsDrawnThisEvent() const {
   return fTransientsDrawnThisEvent;
