@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.9 2010-06-01 11:15:38 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.10 2010-06-01 13:34:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -199,8 +199,8 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
     }
 
     if(0.0 < factB) {
-      if(x < numlimit) { y -= fb*x*(0.6666667 - x); } 
-      else             { y -= fb*x2*(x + x1 - 2*xlog); }
+      if(x < numlimit) { y -= fb*x2*x*(0.6666667 - x); } 
+      else             { y -= fb*(x + x1 - 2*xlog); }
     }
 
     if(y < 0.0) {
@@ -240,8 +240,8 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
     }
 
     if(0.0 < factB) {
-      if(x < numlimit) { y -= fb*x*(0.6666667 - x); } 
-      else             { y -= fb*x2*(x + x1 - 2*xlog); }
+      if(x < numlimit) { y -= fb*x2*x*(0.6666667 - x); } 
+      else             { y -= fb*(x + x1 - 2*xlog); }
     }
     if(y < 0.0) {
       ++nwarnings;
