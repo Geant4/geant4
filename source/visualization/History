@@ -1,4 +1,4 @@
-$Id: History,v 1.474 2010-05-30 11:34:13 allison Exp $
+$Id: History,v 1.475 2010-06-01 16:20:18 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+1st June 2010  John Allison  (vis-V09-03-06)
+- visman-V09-03-07:
+  o Made fVerbosity and GetVerbosity static (saves having to get vis
+    manager pointer).
+- gMocren-V09-03-03: Removed dependency on G4VisManager.
 
 30th May 2010  John Allison  (vis-V09-03-05)
 - Co-works greps-V09-03-02.
