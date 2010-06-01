@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh,v 1.4 2010-05-27 14:22:05 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.hh,v 1.5 2010-06-01 11:13:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -162,6 +162,8 @@ private:
   G4double screenZ;
   G4double formfactA;
   G4double factorA2;
+  G4double factB;
+  G4double factD;
 
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
@@ -172,11 +174,12 @@ private:
 inline G4double 
 G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 {
-  if(ekin != tkin || mat != currentMaterial) {
+  if(ekin != tkin || mat != currentMaterial) { 
     currentMaterial = mat;
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
+    factB = spin/invbeta2;
     cosTetMaxNuc = cosThetaMax;
     if(std::fabs(cosThetaMax) < 1.0) {
       cosTetMaxNuc = 
@@ -191,6 +194,7 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 inline void G4WentzelOKandVIxSection::SetTargetMass(G4double value)
 {
   targetMass = value;
+  factD = sqrt(mom2)/value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
