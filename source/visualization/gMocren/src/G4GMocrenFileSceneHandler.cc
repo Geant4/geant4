@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.15 2010-05-30 10:04:16 allison Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.16 2010-06-01 16:18:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -69,7 +69,7 @@
 #include "G4VPVParameterisation.hh"
 #include "G4VVolumeMaterialScanner.hh"
 #include "G4VisTrajContext.hh"
-#include "G4VisManager.hh"
+#include "G4TrajectoriesModel.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4HitsModel.hh"
