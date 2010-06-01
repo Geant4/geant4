@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.20 2010-05-19 07:18:50 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.21 2010-06-01 15:43:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -85,9 +85,8 @@ public :
   G4QTabWidget();
   G4QTabWidget(QSplitter*&);
   void paintEvent  ( QPaintEvent * event );
-  inline void setTabSelected() { tabSelected = true; };
+  inline void setTabSelected(bool a) { tabSelected = a; };
   inline void setLastTabCreated(int a) { lastCreated = a; };
-  inline void unselectTab() { tabSelected = false; };
   inline bool isTabSelected() { return tabSelected; };
   bool tabSelected;
   int lastCreated;
@@ -209,7 +208,9 @@ private slots :
   void UpdateTabWidget(int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
+#if QT_VERSION >= 0x040500
   void TabCloseCallback(int);
+#endif
   void ToolBoxActivated(int);
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.39 2010-05-28 13:14:18 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.40 2010-06-01 15:43:30 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -323,7 +323,9 @@ G4UIQt::G4UIQt (
 
   // Connect signal
   connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
+#if QT_VERSION >= 0x040500
   connect(fTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
+#endif
   connect(fTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int)));
   connect(fToolBox, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
@@ -2081,27 +2083,19 @@ G4QTabWidget::G4QTabWidget(
 
 
   
+#if QT_VERSION >= 0x040500
 void G4UIQt::TabCloseCallback(int a){
-#if QT_VERSION < 0x040000
-  QWidget* temp = fTabWidget->page(a);
-  fTabWidget->removePage (temp);
-#else
   QWidget* temp = fTabWidget->widget(a);
   fTabWidget->removeTab (a);
-#endif
 
   delete temp;
 
   if (fTabWidget->count() == 0) {
-#if QT_VERSION < 0x040000
-    fEmptyViewerTabLabel->reparent(fMyVSplitter,0,QPoint(0,0));
-    fTabWidget->reparent(0,0,QPoint(0,0));  
-#else
     fMyVSplitter->addWidget(fEmptyViewerTabLabel);
     fTabWidget->setParent(0);
-#endif
   }
 }
+#endif
 
 
 void G4UIQt::ToolBoxActivated(int a){
