@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2010-04-09 16:07:37 mkossov Exp $
+$Id: History,v 1.15 2010-06-01 15:09:50 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 1st, 2010  Mikhail Kossov (test19-V09-03-03)
+- Get rid of G4MultipleScattering in Test19PhysicsList
 
 Apr 9th, 2010  Mikhail Kossov (test19-V09-03-02)
 - Neutron capture and fusion cross-sections test is added

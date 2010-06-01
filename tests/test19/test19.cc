@@ -107,12 +107,12 @@
 #include "G4QuasiElasticChannel.hh"
 #include "G4ProtonInelasticProcess.hh"
 #include "G4AntiProtonInelasticProcess.hh"
-#include "G4ProtonInelasticCrossSection.hh"
 #include "G4HadronInelasticDataSet.hh"
 #include "G4HadronCaptureDataSet.hh"
 #include "G4HadronFissionDataSet.hh"
 #include "G4PionPlusInelasticProcess.hh"
 #include "G4BGGNucleonElasticXS.hh"
+#include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4GlauberGribovCrossSection.hh"
@@ -134,6 +134,7 @@
 #include "G4QHyperonPlusNuclearCrossSection.hh"
 #include "G4QAntiBaryonPlusNuclearCrossSection.hh"
 #include "G4QAntiBaryonNuclearCrossSection.hh"
+#include "G4QHadronInelasticDataSet.hh"
 // CHIPS ElasticCross-Sections
 #include "G4QProtonElasticCrossSection.hh"
 #include "G4QNeutronElasticCrossSection.hh"
@@ -146,7 +147,8 @@
 #include "G4QHyperonPlusElasticCrossSection.hh"
 //#include "G4QAntiBaryonPlusElasticCrossSection.hh"
 #include "G4QAntiBaryonElasticCrossSection.hh"
-// GHAD Cross-Sections
+#include "G4QHadronElasticDataSet.hh"
+// GHAD Cross-Sections -----------------
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
@@ -196,8 +198,8 @@
 
 //#include "G4HadronCrossSections.hh"
 //#include "G4VCrossSectionDataSet.hh"
-//#include "G4ProtonInelasticCrossSection.hh"
-//#include "G4NeutronInelasticCrossSection.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 //#include "G4HadronInelasticDataSet.hh"
 
 #include "G4SynchrotronRadiation.hh"
@@ -559,8 +561,9 @@ int main()
   else G4cout<<"-Error-Test19: Process is not defined for PDG="<<pPDG<<G4endl;
   proc->RegisterMe(aModel); // from G4HadronicProcess
   G4VCrossSectionDataSet* theCS;
-  if(pPDG==2212 || pPDG==2112) theCS = new G4ProtonInelasticCrossSection;
-  else if(pPDG==211||pPDG==-211) theCS = new G4PiNuclearCrossSection;
+  if     (pPDG==2212) theCS = new G4ProtonInelasticCrossSection;
+  else if(pPDG==2112) theCS = new G4NeutronInelasticCrossSection;
+  else if(pPDG==211 || pPDG==-211) theCS = new G4PiNuclearCrossSection;
   else theCS = new G4HadronInelasticDataSet; // For kaons anti-protons and others...
   proc->AddDataSet(theCS);   // Can not be skipped for the event generator
 #endif
@@ -834,40 +837,47 @@ int main()
      ///HadrPR->SetPhysicsTableBining(.01*GeV, 7.e8*GeV, 1000); // For the table
      ///HadrPR->BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QInelastic
      // -----> For GHAD hadrons
-     //G4BGGPionElasticXS    barGGPiAElXS(part);//Barashenkov for <100GeV, GG for >100GeV
-     //barGGPiAElXS.BuildPhysicsTable(*part);    //NotNecessary for CHIPS G4QInelastic
+     //G4BGGPionElasticXS    barGGPiAElXS(part);  //Barashenkov for <100GeV, GG for >100GeV
+     //barGGPiAElXS.BuildPhysicsTable(*part);     //NotNecessary for CHIPS G4QInelastic
+     G4BGGNucleonInelasticXS  barGGNAInXS(part);//Barashenkov for <100GeV, GG for >100GeV
+     barGGNAInXS.BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QInelastic
      //G4BGGNucleonElasticXS    barGGNAElXS(part);//Barashenkov for <100GeV, GG for >100GeV
-     //barGGNAElXS.BuildPhysicsTable(*part);    //NotNecessary for CHIPS G4QInelastic
-     //G4NucleonNuclearCrossSection BarashNAElXS;// NA elastic Barashenkov approximation
-     //G4GlauberGribovCrossSection  GGNAElXS;    // NA GlaGrib approximation: high energies
-     //G4PiNuclearCrossSection  barashPiXS;      // Barashenkov parameterization of pi-A XS
+     //barGGNAElXS.BuildPhysicsTable(*part);      //NotNecessary for CHIPS G4QInelastic
+     //G4NucleonNuclearCrossSection BarashNAElXS; // NA elastic Barashenkov approximation
+     //G4GlauberGribovCrossSection  GGNAElXS;     // NA GlaGrib approximation: highEnergies
+     //G4PiNuclearCrossSection  barashPiXS;       // Barashenkov parameterization of piA XS
      G4CrossSectionDataStore  theInelasticXS;   // G4Had Inelastic hadron-A XS
      G4CrossSectionDataStore  theElasticXS;     // G4Had Elastic hadron-A XS
      G4CrossSectionDataStore  theCaptureXS;     // G4Had neutron capture XS
      G4CrossSectionDataStore  theFissionXS;     // G4Had fission XS
+     G4ProtonInelasticCrossSection thePInelastic; // H.P.Wellisch, D.Axen pA inelastic
+     G4NeutronInelasticCrossSection theNInelastic;// H.P.Wellisch, M.Laidlaw nA inelastic
      G4HadronInelasticDataSet theInelasticData; // GEISHA Elastic XS Tables
      G4HadronElasticDataSet   theElasticData;   // GEISHA Elastic XS Tables
      G4HadronCaptureDataSet   theCaptureData;   // GEISHA Capture XS Tables
      G4HadronFissionDataSet   theFissionData;   // GEISHA Fission XS Tables
-     G4NeutronHPInelasticData theHPInelasticData; // NeutronHP Inelastic XS Tables
-     G4NeutronHPElasticData   theHPElasticData; // NeutronHP Elastic XS Tables
+     //G4NeutronHPInelasticData theHPInelasticData;// NeutronHP Inelastic XS Tables
+     //G4NeutronHPElasticData   theHPElasticData; // NeutronHP Elastic XS Tables
      //G4NeutronHPCaptureData   theHPCaptureData; // NeutronHP Capture XS Tables
      //G4NeutronHPFissionData   theHPFissionData; // NeutronHP Fission XS Tables
+     //
+     //theInelasticXS.AddDataSet(&thePinelastic);//Put Wellish parameterization in XS class
+     theInelasticXS.AddDataSet(&theNInelastic);//Put Wellish parameterization in XS class
      //theElasticXS.AddDataSet(&theElasticData);  // Put LHEP parameterization in XS class
      //theCaptureXS.AddDataSet(&theCaptureData);  // Put LHEP parameterization in XS class
      //theFissionXS.AddDataSet(&theFissionData);  // Put LHEP parameterization in XS class
-     //theFissionXS.AddDataSet(&theFissionData);  // Put LHEP parameterization in XS class
+     //theInelasticXS.AddDataSet(&theInelasticData);//Put LHEP parameterization in XS class
      //theElasticXS.AddDataSet(&theHPElasticData);// Put HP parameterization el XS class
      //theCaptureXS.AddDataSet(&theHPCaptureData);// Put HP parameterization ng XS class
      //theFissionXS.AddDataSet(&theHPFissionData);// Put HP parameterization fi XS class
-     theInelasticXS.AddDataSet(&theHPInelasticData);// Put HP parameterization in XS class
+     //theInelasticXS.AddDataSet(&theHPInelasticData);//Put HP parameterization in XS class
      //G4CrossSectionDataStore  theInelasticXS;   // GEISHA Inelastic hadron-A XS
      //G4HadronInelasticDataSet theInelasticData; // GEISHA Inelastic XS Tables
      //theInelasticXS.AddDataSet(&theInelasticData);// Put parameterization in the XS class
      // -----> For CHIPS
      // ..... CHIPS on the Process level
-     ///G4QInelastic* HadrPR = new G4QInelastic(); // CHIPS Inelastic
-     ///G4QInelastic* HadrPR = new G4QElastic(); // CHIPS Inelastic
+     //G4QInelastic* HadrPR = new G4QInelastic(); // CHIPS Inelastic
+     ///G4QInelastic* HadrPR = new G4QElastic(); // CHIPS Elastic
      // ..... CHIPS on the Cross-Section level
      G4VQCrossSection* HadrCS = 0;             // ProtoPointer to CHIPS CrossSections
      
@@ -909,15 +919,16 @@ int main()
      //G4cout<<"Test19: Cross-section process is defined pPDG="<<pPDG<<G4endl;
      // --- A temporary LOOP for calculation of total cross section ------------
      //G4double pMin=.02;                       // in GeV --> for protons
-     //G4double pMax=370.;                      // in GeV ==> for HE (CHIPS/LHEP)
-     G4double pMax=.22;                       // in GeV ==> for HP
+     G4double pMax=370.;                      // in GeV ==> for HE (CHIPS/LHEP)
+     //G4double pMax=.22;                       // in GeV ==> for HP
      //G4double pMax=10000000.;                 // in GeV --> np
      //G4double pMax=1000.;                     // in GeV --> np->inelastic
      //G4double pMax=1.;                        // in GeV --> LHEP/CHIPS (Capture/Fission)
      //G4double pMin=.03;                       // in GeV --> np->dg
      //G4double pMin=.002;                      // in GeV --> for HE/HP
+     G4double pMin=.185;                          // in GeV --> for Wellish's NA
      //G4double pMin=.000000162;                // in GeV --> for neutrons (CHIPS,LHEP)
-     G4double pMin=.000000177;                 // in GeV --> for neutrons (HP)
+     //G4double pMin=.000000177;                 // in GeV --> for neutrons (HP)
      G4int nic=50;                            // Number of points
      G4double lpMin=std::log(pMin);
      G4double lpMax=std::log(pMax);
@@ -938,7 +949,7 @@ int main()
        G4double p2=mic*mic;
        G4double ken=std::sqrt(p2+hMa2)-hMa;
        // CHIPS calculation by G4QElasticCrossSection___ Only for CHIPS CS level
-       //G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG);
+       G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG);
        ///G4double CS = HadrCS->GetCrossSection(false, mic*GeV, tgZ, tgN, pPDG)*
        ///              theNCaptureRatio->GetRatio(mic*GeV, tgZ, tgN);
        //
@@ -994,10 +1005,11 @@ int main()
        // === Elastic ===
        ///G4double CS = theElasticXS.GetCrossSection(dParticle,element,T0);//GHAD/HPElastic
        ///G4double CS = theCaptureXS.GetCrossSection(dParticle,element,T0);//GHAD/HPCapture
-       G4double CS = theInelasticXS.GetCrossSection(dParticle,element,T0);//GHAD/HPInelXS
+       //G4double CS = theInelasticXS.GetCrossSection(dParticle,element,T0);//GHAD/HPInelXS
        //G4double CS = theFissionXS.GetCrossSection(dParticle,element,T0);//GHAD/HPFission
        //barashPiXS.GetCrossSection(dParticle,element,T0);// BarashenkovPiAin (initializes)
        //G4double CS= barashPiXS.GetElasticXsc();// BarashenkovPiAel (call after GetCrSec)
+       //G4double CS = barGGNAInXS.GetCrossSection(dParticle,element,T0);//BarashenkGG_NAin
        //G4double CS = barGGNAElXS.GetCrossSection(dParticle,element,T0);//BarashenkGG_NAel
        //G4double CS = barGGPiAElXS.GetCrossSection(dParticle,element,T0);//BarashenGGPiAel
        //BarashNAElXS.GetCrossSection(dParticle,element,T0);//BarashenkovNAel
@@ -1014,7 +1026,7 @@ int main()
        //  // ==================== End of GHAD ==============================
        //  // CHIPS calculation by G4QElasticCrossSection
        //  // ..... CHIPS CS on the CS level
-       //  //G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG); 
+       //G4double CS = HadrCS->GetCrossSection(true, mic*GeV, tgZ, tgN, pPDG);
        //  // ..... CHIPS dE on the CS level
        //  //den += HadrCS->GetExchangeEnergy(); 
        //  // ..... CHIPS CS on the Process level
