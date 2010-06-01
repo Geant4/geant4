@@ -22,12 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: paraMaker.cc,v 1.16 2010-05-21 17:44:38 mkelsey Exp $
+// $Id: paraMaker.cc,v 1.17 2010-06-01 17:20:31 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
 // 20100517  M. Kelsey -- BUG FIX:  Must check for array boundary "if (Z>=70)"
 // 20100517  M. Kelsey -- Use G4CascadeInterpolator, which handles boundaries
+// 20100601  M. Kelsey -- Bug fix from Gunter Folger; resize(6,0.), not clear()
 
 #include "G4InuclSpecialFunctions.hh"
 #include "G4CascadeInterpolator.hh"
@@ -52,10 +53,10 @@ G4InuclSpecialFunctions::paraMaker(G4double Z,
 
   // Set up input buffer for results
   std::vector<G4double>& AK = parms.first; 
-  AK.resize(6); AK.clear();
+  AK.resize(6,0.);
 
   std::vector<G4double>& CPA = parms.second;
-  CPA.resize(6); CPA.clear();
+  CPA.resize(6,0.);
 
   AK[0] = 0.0;
   CPA[0] = 0.0;
