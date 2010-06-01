@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.10 2010-05-28 02:00:59 allison Exp $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.11 2010-06-01 21:17:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -37,7 +37,15 @@
 G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name, G4VisTrajContext* context)
   :G4VTrajectoryModel(name, context)
   ,fDefault(G4Colour::Grey())
-{}
+{
+  Set("gamma", "green");
+  Set("e-", "red");
+  Set("e+", "blue");
+  Set("pi+", "magenta");
+  Set("pi-", "magenta");
+  Set("proton", "cyan");
+  Set("neutron", "yellow");
+}
 
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
 
