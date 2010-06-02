@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.28 2010-02-18 17:37:34 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.29 2010-06-02 13:53:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -51,6 +51,7 @@
 #include "G4Sphere.hh"
 #include "G4SolidStore.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4GenericTrap.hh"
 #include "G4TessellatedSolid.hh"
 #include "G4Tet.hh"
 #include "G4Torus.hh"
@@ -1053,6 +1054,71 @@ void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
    new G4Torus(name,rmin,rmax,rtor,startphi,deltaphi);
 }
 
+void G4GDMLReadSolids::
+GenTrapRead(const xercesc::DOMElement* const gtrapElement)
+{
+   G4String name;
+   G4double lunit = 1.0;
+   G4double hz =0.0;
+   G4double v1x=0.0, v1y=0.0, v2x=0.0, v2y=0.0, v3x=0.0, v3y=0.0,
+	    v4x=0.0, v4y=0.0, v5x=0.0, v5y=0.0, v6x=0.0, v6y=0.0,
+	    v7x=0.0, v7y=0.0, v8x=0.0, v8y=0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = gtrapElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
+      if (attName=="hz") { hz = eval.Evaluate(attValue); } else
+      if (attName=="v1x") { v1x = eval.Evaluate(attValue); } else
+      if (attName=="v1y") { v1y = eval.Evaluate(attValue); } else
+      if (attName=="v2x") { v2x = eval.Evaluate(attValue); } else
+      if (attName=="v2y") { v2y = eval.Evaluate(attValue); } else
+      if (attName=="v3x") { v3x = eval.Evaluate(attValue); } else
+      if (attName=="v3y") { v3y = eval.Evaluate(attValue); } else
+      if (attName=="v4x") { v4x = eval.Evaluate(attValue); } else
+      if (attName=="v4y") { v4y = eval.Evaluate(attValue); } else
+      if (attName=="v5x") { v5x = eval.Evaluate(attValue); } else
+      if (attName=="v5y") { v5y = eval.Evaluate(attValue); } else
+      if (attName=="v6x") { v6x = eval.Evaluate(attValue); } else
+      if (attName=="v6y") { v6y = eval.Evaluate(attValue); } else
+      if (attName=="v7x") { v7x = eval.Evaluate(attValue); } else
+      if (attName=="v7y") { v7y = eval.Evaluate(attValue); } else
+      if (attName=="v8x") { v8x = eval.Evaluate(attValue); } else
+      if (attName=="v8y") { v8y = eval.Evaluate(attValue); }
+   }
+
+   hz *= lunit;
+   v1x *= lunit; v1y *= lunit; v2x *= lunit; v2y *= lunit;
+   v3x *= lunit; v3y *= lunit; v4x *= lunit; v4y *= lunit;
+   v5x *= lunit; v5y *= lunit; v6x *= lunit; v6y *= lunit;
+   v7x *= lunit; v7y *= lunit; v8x *= lunit; v8y *= lunit;
+   std::vector<G4TwoVector> vertices;
+   vertices.push_back(G4TwoVector(v1x,v1y));
+   vertices.push_back(G4TwoVector(v2x,v2y));
+   vertices.push_back(G4TwoVector(v3x,v3y));
+   vertices.push_back(G4TwoVector(v4x,v4y));
+   vertices.push_back(G4TwoVector(v5x,v5y));
+   vertices.push_back(G4TwoVector(v6x,v6y));
+   vertices.push_back(G4TwoVector(v7x,v7y));
+   vertices.push_back(G4TwoVector(v8x,v8y));
+   new G4GenericTrap(name,hz,vertices);
+}
+
 void G4GDMLReadSolids::TrapRead(const xercesc::DOMElement* const trapElement)
 {
    G4String name;
@@ -1663,6 +1729,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="tessellated") { TessellatedRead(child); } else
       if (tag=="tet") { TetRead(child); } else
       if (tag=="torus") { TorusRead(child); } else
+      if (tag=="arb8") { GenTrapRead(child); } else
       if (tag=="trap") { TrapRead(child); } else
       if (tag=="trd") { TrdRead(child); } else
       if (tag=="tube") { TubeRead(child); } else

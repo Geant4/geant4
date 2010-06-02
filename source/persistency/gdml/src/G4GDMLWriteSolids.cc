@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.65 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.66 2010-06-02 13:53:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -52,6 +52,7 @@
 #include "G4ReflectedSolid.hh"
 #include "G4Sphere.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4GenericTrap.hh"
 #include "G4TessellatedSolid.hh"
 #include "G4Tet.hh"
 #include "G4Torus.hh"
@@ -610,6 +611,54 @@ TorusWrite(xercesc::DOMElement* solidsElement, const G4Torus* const torus)
 }
 
 void G4GDMLWriteSolids::
+GenTrapWrite(xercesc::DOMElement* solidsElement,
+             const G4GenericTrap* const gtrap)
+{
+   const G4String& name = GenerateName(gtrap->GetName(),gtrap);
+
+   std::vector<G4TwoVector> vertices = gtrap->GetVertices();
+
+   xercesc::DOMElement* gtrapElement = NewElement("arb8");
+   gtrapElement->setAttributeNode(NewAttribute("name",name));
+   gtrapElement->setAttributeNode(NewAttribute("hz",
+                 gtrap->GetZHalfLength()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v1x",
+                 vertices[0].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v1y",
+                 vertices[0].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v2x",
+                 vertices[1].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v2y",
+                 vertices[1].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v3x",
+                 vertices[2].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v3y",
+                 vertices[2].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v4x",
+                 vertices[3].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v4y",
+                 vertices[3].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v5x",
+                 vertices[4].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v5y",
+                 vertices[4].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v6x",
+                 vertices[5].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v6y",
+                 vertices[5].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v7x",
+                 vertices[6].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v7y",
+                 vertices[6].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v8x",
+                 vertices[7].x()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("v8y",
+                 vertices[7].y()/mm));
+   gtrapElement->setAttributeNode(NewAttribute("lunit","mm"));
+   solidsElement->appendChild(gtrapElement);
+}
+
+void G4GDMLWriteSolids::
 TrapWrite(xercesc::DOMElement* solidsElement, const G4Trap* const trap)
 {
    const G4String& name = GenerateName(trap->GetName(),trap);
@@ -892,6 +941,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4Torus* const torusPtr
      = dynamic_cast<const G4Torus*>(solidPtr))
      { TorusWrite(solidsElement,torusPtr); } else
+   if (const G4GenericTrap* const gtrapPtr
+     = dynamic_cast<const G4GenericTrap*>(solidPtr))
+     { GenTrapWrite(solidsElement,gtrapPtr); } else
    if (const G4Trap* const trapPtr
      = dynamic_cast<const G4Trap*>(solidPtr))
      { TrapWrite(solidsElement,trapPtr); } else
