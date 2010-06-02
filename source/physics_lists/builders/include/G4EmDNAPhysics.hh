@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmDNAPhysics.hh,v 1.1 2009-03-25 11:28:07 sincerti Exp $
+// $Id: G4EmDNAPhysics.hh,v 1.2 2010-06-02 17:21:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4EmDNAPhysics_h
@@ -38,8 +38,11 @@
 class G4EmDNAPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmDNAPhysics(G4int ver = 1,
-			      const G4String& name = "G4EmDNAPhysics");
+
+  G4EmDNAPhysics(G4int ver = 1);
+
+  // obsolete
+  G4EmDNAPhysics(G4int ver, const G4String& name);
 
   virtual ~G4EmDNAPhysics();
 

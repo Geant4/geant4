@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.19 2010-06-02 15:58:56 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.20 2010-06-02 17:21:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -93,9 +93,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(
-    G4int ver, const G4String& name)
-  : G4VPhysicsConstructor(name), verbose(ver)
+G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver)
+  : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
+{
+  G4LossTableManager::Instance();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver, const G4String&)
+  : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
 {
   G4LossTableManager::Instance();
 }
