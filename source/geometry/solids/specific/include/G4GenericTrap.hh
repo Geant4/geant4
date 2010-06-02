@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.3 2010-05-31 09:48:43 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.4 2010-06-02 13:50:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ class G4GenericTrap : public G4VSolid
   public:  // with description
 
      G4GenericTrap( const G4String& name, G4double hz,
-                    std::vector<G4TwoVector>  vertices );
+                    const std::vector<G4TwoVector>& vertices );
        // Constructor
 
      ~G4GenericTrap();
@@ -93,7 +93,7 @@ class G4GenericTrap : public G4VSolid
     inline G4double    GetZHalfLength() const;
     inline G4int       GetNofVertices() const;
     inline G4TwoVector GetVertex(G4int index) const;
-    inline std::vector<G4TwoVector> GetVertices() const;
+    inline const std::vector<G4TwoVector>& GetVertices() const;
     inline G4double    GetTwistAngle(G4int index) const;
     inline void        SetTwistAngle(G4int index, G4double twist);
     inline G4bool      IsTwisted() const;
