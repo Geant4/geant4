@@ -1,4 +1,4 @@
-q$Id: History,v 1.123 2010-05-26 15:06:32 gunter Exp $
+q$Id: History,v 1.124 2010-06-02 14:52:35 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-06-2010, G.Folger                    (phys-lists-V09-03-04)
+- revise QGSP_FTFP_BERT and FTFP_BERT to 
+   - Use CHIPS G4QInelastic for all "misc" particles, including 
+      anti-proton, anti-neutron  and hyperons.
+   - Use interface to CHIPS cross sections G4QHadronInelasticDataSet
+    for Kaons.
+  required changes to respective HadronPhysics... classes.     
 
 26-05-2010, G.Folger                    (phys-lists-V09-03-03)
 - new physics list QGSP_BERT_CHIPS: Use CHIPS G4QInelastic for all
