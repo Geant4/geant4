@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc,v 1.17 2010-04-29 14:46:08 gunter Exp $
+// $Id: G4CrossSectionDataStore.cc,v 1.18 2010-06-02 09:33:16 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 // Modifications:
 // 23.01.2009 V.Ivanchenko add destruction of data sets
+// 29.04.2010 G.Folger     modifictaions for integer A & Z
 //
 //
 
@@ -124,8 +125,8 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
                                          G4double Z, G4double A,
 					 G4double aTemperature)
 {
-  G4int iZ=lrint(Z);
-  G4int iA=lrint(A);
+  G4int iZ=G4lrint(Z);
+  G4int iA=G4lrint(A);
   return GetCrossSection(aParticle, iZ, iA,aTemperature); 
   }
 
@@ -207,7 +208,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 
   // element have been selected
   inCharge = whichDataSetInCharge(particle, anElement);
-  G4int ZZ = lrint(anElement->GetZ());
+  G4int ZZ = G4lrint(anElement->GetZ());
   G4int AA;
 
   // Collect abundance weighted cross sections and A values for each isotope 
