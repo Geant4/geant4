@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.6 2009-11-24 12:53:22 vnivanch Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.7 2010-06-02 15:58:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -85,6 +85,7 @@
 // msc models
 #include "G4UrbanMscModel93.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4CoulombScattering.hh"
 
 //
@@ -207,7 +208,8 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       
@@ -215,7 +217,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       G4LivermoreIonisationModel* theIoniLivermore = new
         G4LivermoreIonisationModel();
-      theIoniLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit); 
+      theIoniLivermore->SetHighEnergyLimit(1*MeV); 
       eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
       eIoni->SetStepFunction(0.2, 100*um); //     
       pmanager->AddProcess(eIoni,                 -1, 2, 2);
@@ -233,7 +235,8 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
 

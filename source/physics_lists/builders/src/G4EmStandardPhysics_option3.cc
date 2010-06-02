@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc,v 1.18 2009-11-24 12:53:22 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option3.cc,v 1.19 2010-06-02 15:58:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -161,7 +161,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
@@ -172,7 +172,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc,v 1.2 2009-11-01 13:21:13 vnivanch Exp $
+// $Id: G4EmDNAPhysics.cc,v 1.3 2010-06-02 15:58:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmDNAPhysics.hh"
@@ -61,6 +61,7 @@
 // e+
 #include "G4Positron.hh"
 #include "G4eMultipleScattering.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -184,6 +185,7 @@ void G4EmDNAPhysics::ConstructProcess()
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->SetStepLimitType(fUseDistanceToBoundary);
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                   -1, 1, 1);
 
       G4eIonisation* eIoni = new G4eIonisation();

@@ -1,4 +1,4 @@
-q$Id: History,v 1.124 2010-06-02 14:52:35 gunter Exp $
+q$Id: History,v 1.125 2010-06-02 15:58:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-06-2010, V.Ivanchenko                (phys-lists-V09-03-05)
+- G4EmStandardPhysics_option2 - added G4WentzelVIMscModel for e+- 
+- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
+  G4EmLivermorePolarizedPhysics - added G4GoudsmitSaundersonMscModel for e+-;
+                                - added 1 MeV upper limit for the Livermore 
+                                  ionisation model (was 1 GeV)
 
 02-06-2010, G.Folger                    (phys-lists-V09-03-04)
 - revise QGSP_FTFP_BERT and FTFP_BERT to 

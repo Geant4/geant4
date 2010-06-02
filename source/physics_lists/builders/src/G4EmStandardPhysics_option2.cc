@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.20 2009-11-24 12:53:22 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.21 2010-06-02 15:58:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -165,21 +165,25 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4WentzelVIModel());
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
+      pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
