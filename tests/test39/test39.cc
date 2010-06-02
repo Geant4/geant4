@@ -80,7 +80,6 @@
 //#include "G4LElasticB.hh"
 #include "G4LEnp.hh"
 #include "G4LEpp.hh"
-#include "G4ElasticCascadeInterface.hh"
 #include "G4NeutronHPChannel.hh"       // HP cross-section
 #include "G4NeutronHPElastic.hh"
 #include "G4NeutronHPElasticData.hh"
