@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.21 2010-06-01 15:43:30 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.22 2010-06-02 15:13:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -208,9 +208,7 @@ private slots :
   void UpdateTabWidget(int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
-#if QT_VERSION >= 0x040500
   void TabCloseCallback(int);
-#endif
   void ToolBoxActivated(int);
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.40 2010-06-01 15:43:30 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.41 2010-06-02 15:13:51 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -1732,7 +1732,7 @@ const QString & text) {
   QStringList result = fG4cout.filter(text);
 #endif
 
-  fCoutTBTextArea->setText(result.join("\n"));
+  fCoutTBTextArea->setPlainText(result.join("\n"));
   fCoutTBTextArea->repaint();
 #if QT_VERSION < 0x040000
   fCoutTBTextArea->verticalScrollBar()->setValue(fCoutTBTextArea->verticalScrollBar()->maxValue());
@@ -2083,8 +2083,8 @@ G4QTabWidget::G4QTabWidget(
 
 
   
-#if QT_VERSION >= 0x040500
 void G4UIQt::TabCloseCallback(int a){
+#if QT_VERSION >= 0x040500
   QWidget* temp = fTabWidget->widget(a);
   fTabWidget->removeTab (a);
 
@@ -2094,8 +2094,8 @@ void G4UIQt::TabCloseCallback(int a){
     fMyVSplitter->addWidget(fEmptyViewerTabLabel);
     fTabWidget->setParent(0);
   }
-}
 #endif
+}
 
 
 void G4UIQt::ToolBoxActivated(int a){
