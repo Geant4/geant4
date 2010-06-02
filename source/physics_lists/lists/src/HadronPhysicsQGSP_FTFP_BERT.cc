@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.1 2009-04-23 19:04:18 japost Exp $
+// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.2 2010-06-02 14:53:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -46,6 +46,8 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+#include "G4QHadronInelasticDataSet.hh"
 
 HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
@@ -111,12 +113,12 @@ void HadronPhysicsQGSP_FTFP_BERT::CreateModels()
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(maxBERT);  //  was (9.9*GeV);
   
-  theMiscLHEP=new G4MiscLHEPBuilder;
+  theMiscCHIPS=new G4MiscCHIPSBuilder;
 }
 
 HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
 {
-   delete theMiscLHEP;
+   delete theMiscCHIPS;
    delete theQGSPNeutron;
    delete theFTFPNeutron;
    delete theBertiniNeutron;
@@ -128,6 +130,7 @@ HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
    delete theFTFPPiK;
    delete theBertiniPiK;
    delete thePiK;
+   delete theCHIPSInelastic;
 }
 
 void HadronPhysicsQGSP_FTFP_BERT::ConstructParticle()
@@ -149,6 +152,33 @@ void HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   theNeutrons->Build();
   thePro->Build();
   thePiK->Build();
-  theMiscLHEP->Build();
+  // use CHIPS cross sections also for Kaons
+  theCHIPSInelastic = new G4QHadronInelasticDataSet();
+  
+  FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(theCHIPSInelastic);
+  FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(theCHIPSInelastic);
+  FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(theCHIPSInelastic);
+  FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(theCHIPSInelastic);
+
+  theMiscCHIPS->Build();
 }
 
+
+G4HadronicProcess* 
+HadronPhysicsQGSP_FTFP_BERT::FindInelasticProcess(const G4ParticleDefinition* p)
+{
+  G4HadronicProcess* had = 0;
+  if(p) {
+     G4ProcessVector*  pvec = p->GetProcessManager()->GetProcessList();
+     size_t n = pvec->size();
+     if(0 < n) {
+       for(size_t i=0; i<n; ++i) {
+	 if(fHadronInelastic == ((*pvec)[i])->GetProcessSubType()) {
+	   had = static_cast<G4HadronicProcess*>((*pvec)[i]);
+	   break;
+	 }
+       }
+     }
+  }
+  return had;
+}

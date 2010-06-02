@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_CHIPS.icc,v 1.1 2010-05-26 15:06:49 gunter Exp $
+// $Id: QGSP_BERT_CHIPS.icc,v 1.2 2010-06-02 14:53:20 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -62,6 +62,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_BERT_CHIPS.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_BERT_CHIPS<T>::TQGSP_BERT_CHIPS(G4int ver):  T()
 {
 
@@ -71,6 +73,9 @@ template<class T> TQGSP_BERT_CHIPS<T>::TQGSP_BERT_CHIPS(G4int ver):  T()
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSP_BETT_CHIPS");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));
