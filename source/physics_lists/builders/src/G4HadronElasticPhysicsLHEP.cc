@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysicsLHEP.cc,v 1.1 2010-06-03 11:04:33 vnivanch Exp $
+// $Id: G4HadronElasticPhysicsLHEP.cc,v 1.2 2010-06-03 14:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,6 +36,7 @@
 //
 //----------------------------------------------------------------------------
 //
+// LHEP x-sectios and sampling
 
 #include "G4HadronElasticPhysicsLHEP.hh"
 

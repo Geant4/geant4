@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc,v 1.8 2010-06-03 11:04:33 vnivanch Exp $
+// $Id: G4HadronHElasticPhysics.cc,v 1.9 2010-06-03 14:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,9 +35,15 @@
 // Modified:
 // 21.03.07 (V.Ivanchenko) Use G4BGGNucleonElasticXS and G4BGGPionElasticXS; 
 //                         Reduce thresholds for HE and Q-models to zero
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
+// CHIPS for sampling scattering for p and n
+// Glauber model for samplimg of high energy pi+- (E > 1GeV)
+// LHEP sampling model for the other particle
+// BBG cross sections for p, n and pi+- 
+// LHEP cross sections for other particles
 
 #include "G4HadronHElasticPhysics.hh"
 

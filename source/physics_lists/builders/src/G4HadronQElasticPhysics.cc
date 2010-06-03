@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.cc,v 1.8 2010-06-03 11:04:33 vnivanch Exp $
+// $Id: G4HadronQElasticPhysics.cc,v 1.9 2010-06-03 14:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,9 +33,12 @@
 // Author: 17 Nov 2006 V.Ivanchenko
 //
 // Modified:
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
+// CHIPS x-sections and generator (G4QElastic) for n and p
+// LHEP x-section and generator for the rest 
 
 #include "G4HadronQElasticPhysics.hh"
 
@@ -54,7 +57,7 @@
 #include "G4IonConstructor.hh"
 
 G4HadronQElasticPhysics::G4HadronQElasticPhysics(G4int ver)
-  : G4VPhysicsConstructor("hElasticCHIPS_UEL"), verbose(ver),
+  : G4VPhysicsConstructor("hElasticCHIPS_LHEP"), verbose(ver),
     wasActivated(false)
 {
   if(verbose > 1) { 
@@ -95,15 +98,15 @@ void G4HadronQElasticPhysics::ConstructParticle()
 
 void G4HadronQElasticPhysics::ConstructProcess()
 {
-  if(wasActivated) return;
+  if(wasActivated) { return; }
   wasActivated = true;
 
   G4double elimit = DBL_MAX;
 
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "### HadronQElasticPhysics: use HE limit " << elimit << " MeV" 
 	   << G4endl;
-
+  }
   process = new G4QElastic();
 
   model = new G4HadronElastic();

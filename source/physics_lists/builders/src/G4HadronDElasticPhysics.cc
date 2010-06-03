@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.cc,v 1.4 2010-06-03 11:04:33 vnivanch Exp $
+// $Id: G4HadronDElasticPhysics.cc,v 1.5 2010-06-03 14:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,9 +42,14 @@
 // 19.02.2007 A.Howard set QModelLowLimit and LowestEnergyLimit to zero 
 //                     for neutrons
 // 06.03.2007 V.Ivanchenko use updated interface to G4UElasticCrossSection
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
+// Diffuse optical model for sampling scattering
+// BBG cross sections for p, pi+-
+// XS cross sections for n
+// LHEP cross sections for other particles
 
 #include "G4HadronDElasticPhysics.hh"
 
@@ -67,6 +72,7 @@
 
 #include "G4DiffuseElastic.hh"
 
+#include "G4NeutronElasticXS.hh"
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
 
@@ -175,7 +181,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      hel->AddDataSet(new G4NeutronElasticXS(particle));
       model = new G4DiffuseElastic(particle);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);

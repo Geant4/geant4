@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.10 2010-06-03 11:04:33 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.11 2010-06-03 14:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,9 +42,15 @@
 // 19.02.2007 A.Howard set QModelLowLimit and LowestEnergyLimit to zero 
 //                     for neutrons
 // 06.03.2007 V.Ivanchenko use updated interface to G4UElasticCrossSection
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
+// CHIPS for sampling scattering for p and n
+// Glauber model for samplimg of high energy pi+- (E > 1GeV)
+// LHEP sampling model for the other particle
+// CHIPS cross sections for p and n off Hydrogen and Helium targets 
+// LHEP cross sections for other particles
 
 #include "G4HadronElasticPhysics.hh"
 

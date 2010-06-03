@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCrossSectionXS.cc,v 1.1 2010-06-03 14:01:59 vnivanch Exp $
+// $Id: G4NeutronCrossSectionXS.cc,v 1.2 2010-06-03 14:28:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,6 +36,8 @@
 //
 //----------------------------------------------------------------------------
 //
+// Inelastic and capture cross section from XS database added
+// on top of existing Physics List
 
 #include "G4NeutronCrossSectionXS.h"
 
@@ -51,12 +53,16 @@
 #include "G4Neutron.hh"
 
 G4NeutronCrossSectionXS::G4NeutronCrossSectionXS(G4int ver) :
-  G4VPhysicsConstructor("Neutron XS"), verbose(ver) 
+  G4VPhysicsConstructor("NeutronXS"), verbose(ver) 
 {}
 
-G4NeutronCrossSectionXS::~G4NeutronCrossSectionXS() {}
+G4NeutronCrossSectionXS::~G4NeutronCrossSectionXS() 
+{}
 
-void G4NeutronCrossSectionXS::ConstructParticle() {}
+void G4NeutronCrossSectionXS::ConstructParticle() 
+{
+  G4Neutron::Neutron();
+}
 
 void G4NeutronCrossSectionXS::ConstructProcess() 
 {
