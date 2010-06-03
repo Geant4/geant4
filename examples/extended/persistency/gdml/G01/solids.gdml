@@ -32,6 +32,8 @@
   <position name="pos801"  x="950"  y=" 125"/>
   <position name="pos901"  x="950"  y="-125"/>
   <position name="pos1001"  x="950" y="0"/>
+  <position name="pos1002"  x="950" y="125"/>
+  <position name="pos1003"  x="950" y="-125"/>
   <rotation name="rotatebyx" x="HALFPI"/>
   <rotation name="rotatebyall" x="HALFPI" y="PI" z="TWOPI"/>
   <position name="v0" unit="mm" x="10" y="10" z="0" />
@@ -76,6 +78,12 @@
 
   <sphere name="s1" rmax="50.0" deltaphi="TWOPI" deltatheta="PI" aunit="rad"/>
 
+  <arb8 name="arb81" dz="50.0" v1x="-45.0" v1y="-45.0" v2x="-45.0" v2y="45.0" 
+             v3x="45.0"  v3y="45.0" v4x="45.0" v4y="-45.0" v5x="-35.0" v5y="-35.0" 
+	     v6x="-35.0" v6y="35.0" v7x="35.0" v7y="35.0"  v8x="35.0"  v8y="-35.0" />
+  <arb8 name="arb82" dz="50.0" v1x="-45.0" v1y="-45.0" v2x="-45.0" v2y="45.0" 
+             v3x="45.0"  v3y="45.0" v4x="45.0" v4y="-45.0" v5x="-35.0" v5y="-35.0" 
+	     v6x="-35.0" v6y="35.0" v7x="35.0" v7y="35.0"  v8x="35.0"  v8y="-15.0" />
   <trap name="trap1" z="100.0" theta="60.0" phi="60.0"
                              y1="10.0"    x1="10.0" x2="10.0"
                              alpha1="30.0"  y2="10.0" x3="10.0"
@@ -235,6 +243,14 @@
    <materialref ref="Water"/>
    <solidref ref="testelcone"/>
   </volume>
+  <volume name="vol1002">
+   <materialref ref="Water"/>
+   <solidref ref="arb81"/>
+  </volume>
+  <volume name="vol1003">
+   <materialref ref="Water"/>
+   <solidref ref="arb82"/>
+  </volume>
   <volume name="World">
    <materialref ref="Air"/>
    <solidref ref="WorldBox"/>
@@ -366,7 +382,16 @@
      <positionref ref="pos1001"/>
      <rotationref ref="identity"/>
    </physvol> 
-   
+   <physvol>
+     <volumeref ref="vol1002"/>
+     <positionref ref="pos1002"/>
+     <rotationref ref="identity"/>
+   </physvol> 
+   <physvol>
+     <volumeref ref="vol1003"/>
+     <positionref ref="pos1003"/>
+     <rotationref ref="identity"/>
+   </physvol> 
  </volume>
 
  </structure>
