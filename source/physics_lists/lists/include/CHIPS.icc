@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CHIPS.icc,v 1.7 2009-11-20 16:49:03 mkossov Exp $
+// $Id: CHIPS.icc,v 1.8 2010-06-03 09:31:41 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -54,9 +54,9 @@
 //#include "G4QAtomicPhysics.hh"
 #include "G4QPhotoNuclearPhysics.hh"
 #include "G4QNeutrinoPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4QIonPhysics.hh"
 #include "G4QCaptureAtRestPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
+#include "G4QElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
@@ -86,7 +86,7 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
    // Hadron Elastic scattering, "CHIPS" version (to be replaced by G4QElasticPhysics)
-  this-> RegisterPhysics( new G4HadronQElasticPhysics("elastic",ver));
+  this-> RegisterPhysics( new G4QElasticPhysics("elastic",ver));
 
    // Hadron Physics (to be replaced by G4QInelasticPhysics)
   this->RegisterPhysics(  new HadronPhysicsCHIPS("inelastic"));
@@ -95,7 +95,7 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   this->RegisterPhysics( new G4QCaptureAtRestPhysics("nuclear_capture",ver));
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4QIonPhysics("ion"));
   
   // Neutron tracking cut
   this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));

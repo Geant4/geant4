@@ -1,4 +1,4 @@
-q$Id: History,v 1.125 2010-06-02 15:58:56 vnivanch Exp $
+q$Id: History,v 1.126 2010-06-03 09:31:40 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-06-2010, M. Kosov                (phys-lists-V09-03-06)
+- G4QElasticPhysics substitute for G4HadronQElasticPhysics in the CHIPS Physics List 
+- G4QIonPhysics substitute for G4IonPhysics in the CHIPS Physics ListList. 
 
 02-06-2010, V.Ivanchenko                (phys-lists-V09-03-05)
 - G4EmStandardPhysics_option2 - added G4WentzelVIMscModel for e+- 
