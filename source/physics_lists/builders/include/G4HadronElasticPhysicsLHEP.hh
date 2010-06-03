@@ -23,36 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.hh,v 1.2 2010-06-03 11:04:33 vnivanch Exp $
+// $Id: G4HadronElasticPhysicsLHEP.hh,v 1.1 2010-06-03 11:04:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4HadronDElasticPhysics
+// ClassName:   G4HadronElasticPhysicsLHEP
 //
-// Author: 13 November 2007 V. Ivanchenko
+// Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
+// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
+// 23.11.2006 V.Ivanchenko remove variables
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4HadronDElasticPhysics_h
-#define G4HadronDElasticPhysics_h 1
+#ifndef G4HadronElasticPhysicsLHEP_h
+#define G4HadronElasticPhysicsLHEP_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-class G4HadronDElasticPhysics : public G4VPhysicsConstructor
+class G4HadronElasticPhysicsLHEP : public G4VPhysicsConstructor
 {
 public: 
 
-  G4HadronDElasticPhysics(G4int ver = 1);
+  G4HadronElasticPhysicsLHEP(G4int ver = 1);
 
-  // obsolete
-  G4HadronDElasticPhysics(G4int ver, G4bool hp);
-
-  virtual ~G4HadronDElasticPhysics();
+  virtual ~G4HadronElasticPhysicsLHEP();
 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated

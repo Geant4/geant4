@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronQElasticPhysics.hh,v 1.1 2006-11-17 19:19:40 vnivanch Exp $
+// $Id: G4HadronQElasticPhysics.hh,v 1.2 2010-06-03 11:04:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -49,11 +49,14 @@ class G4QElastic;
 class G4HadronQElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4HadronQElasticPhysics(const G4String& name = "elastic",
-			  G4int ver = 1);
+
+  G4HadronQElasticPhysics(G4int ver = 1);
+
+  // obsolete
+  G4HadronQElasticPhysics(const G4String& name, G4int ver);
+
   virtual ~G4HadronQElasticPhysics();
 
-public: 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
   virtual void ConstructParticle();
