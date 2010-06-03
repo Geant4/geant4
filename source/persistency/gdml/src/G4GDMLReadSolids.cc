@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.29 2010-06-02 13:53:04 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.30 2010-06-03 08:18:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -1103,10 +1103,6 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
    }
 
    hz *= lunit;
-   v1x *= lunit; v1y *= lunit; v2x *= lunit; v2y *= lunit;
-   v3x *= lunit; v3y *= lunit; v4x *= lunit; v4y *= lunit;
-   v5x *= lunit; v5y *= lunit; v6x *= lunit; v6y *= lunit;
-   v7x *= lunit; v7y *= lunit; v8x *= lunit; v8y *= lunit;
    std::vector<G4TwoVector> vertices;
    vertices.push_back(G4TwoVector(v1x,v1y));
    vertices.push_back(G4TwoVector(v2x,v2y));
