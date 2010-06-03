@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.41 2010-05-29 15:52:49 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.42 2010-06-03 08:23:02 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -360,6 +360,13 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
+
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
