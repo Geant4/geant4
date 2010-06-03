@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.81 2010-06-01 16:08:15 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.82 2010-06-03 10:17:44 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -161,21 +161,14 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 ////////////// /vis/scene/add/digis ///////////////////////////////////////
 
 G4VisCommandSceneAddDigis::G4VisCommandSceneAddDigis () {
-  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/digitisations", this);
+  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/digis", this);
   fpCommand -> SetGuidance ("Adds digis to current scene.");
   fpCommand -> SetGuidance
-    ("Digis are drawn at end of event when the scene in which"
-     "\nthey are added is current.");
-
-  fpCommandUS = new G4UIcmdWithoutParameter ("/vis/scene/add/digitizations", this);
-  fpCommandUS -> SetGuidance ("Adds digis to current scene.");
-  fpCommandUS -> SetGuidance
     ("Digis are drawn at end of event when the scene in which"
      "\nthey are added is current.");
 }
 
 G4VisCommandSceneAddDigis::~G4VisCommandSceneAddDigis () {
-  delete fpCommandUS;
   delete fpCommand;
 }
 
