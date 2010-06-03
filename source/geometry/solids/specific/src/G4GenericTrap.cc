@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.3 2010-06-02 13:50:49 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.4 2010-06-03 06:56:18 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,7 +67,10 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
     fTessellatedSolid(0),
     fMinBBoxVector(G4ThreeVector(0,0,0)),
     fMaxBBoxVector(G4ThreeVector(0,0,0)),
-    fVisSubdivisions(0)
+    fVisSubdivisions(0),
+    fSurfaceArea(0.),
+    fCubicVolume(0.)
+   
 {
   // General constructor
 
@@ -122,7 +125,10 @@ G4GenericTrap::G4GenericTrap( __void__& a )
     fTessellatedSolid(0),
     fMinBBoxVector(G4ThreeVector(0,0,0)),
     fMaxBBoxVector(G4ThreeVector(0,0,0)),
-    fVisSubdivisions(0)
+    fVisSubdivisions(0),
+    fSurfaceArea(0.),
+    fCubicVolume(0.)
+   
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
@@ -816,7 +822,6 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
     {
       xy.push_back(fVertices[i+4]+cf*( fVertices[i]-fVertices[i+4]));
     }
-  }
 
   innew=InsidePolygone(p,xy);
 
@@ -824,8 +829,9 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
   { 
     if(std::abs(p.z()) > fDz-halfCarTolerance)  { innew=kSurface; }
   }
-  
-  return innew;    
+
+ }
+ return innew;    
 } 
 
 // --------------------------------------------------------------------
@@ -1617,28 +1623,21 @@ G4GenericTrap::GetFaceSurfaceArea(G4ThreeVector p0, G4ThreeVector p1,
                                   G4ThreeVector p2, G4ThreeVector p3) const
 {
   // Auxiliary method for Get Surface Area of Face
-
+  
   G4double aOne, aTwo;
   G4ThreeVector t, u, v, w, Area, normal;
 
-  t = p1 - p0;
-  u = p2 - p1;
-  v = p3 - p2;
+  t = p2 - p1;
+  u = p0 - p1;
+  v = p2 - p3;
   w = p0 - p3;
-
-  Area = G4ThreeVector(w.y()*v.z() - w.z()*v.y(),
-                       w.z()*v.x() - w.x()*v.z(),
-                       w.x()*v.y() - w.y()*v.x());
   
+  Area = w.cross(v);
   aOne = 0.5*Area.mag();
   
-  Area = G4ThreeVector(t.y()*u.z() - t.z()*u.y(),
-                       t.z()*u.x() - t.x()*u.z(),
-                       t.x()*u.y() - t.y()*u.x());
-  
+  Area = t.cross(u);
   aTwo = 0.5*Area.mag();
-  
-  
+ 
   return aOne + aTwo;
 }
 
