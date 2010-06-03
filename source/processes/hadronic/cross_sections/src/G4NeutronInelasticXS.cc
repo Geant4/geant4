@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc,v 1.3 2009-11-19 12:00:40 vnivanch Exp $
+// $Id: G4NeutronInelasticXS.cc,v 1.4 2010-06-03 11:50:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,9 +139,9 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
   // check environment variable 
   // Build the complete string identifying the file with the data set
-  char* path = getenv("G4NEUTRONXS");
+  char* path = getenv("G4NEUTRONXSDATA");
   if (!path){
-    G4cout << "G4NEUTRONXS environment variable not set" << G4endl;
+    G4cout << "G4NEUTRONXSDATA environment variable not set" << G4endl;
   }
 
   G4DynamicParticle* dynParticle = 
@@ -177,10 +177,10 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   if(!p) {
   // check environment variable 
   // Build the complete string identifying the file with the data set
-    path = getenv("G4NEUTRONXS");
+    path = getenv("G4NEUTRONXSDATA");
     if (!path) {
       if(verboseLevel > 1) {
-	G4cout << "G4NEUTRONXS environment variable not set" << G4endl;
+	G4cout << "G4NEUTRONXSDATA environment variable not set" << G4endl;
       }
       return;
     }
@@ -216,7 +216,7 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     dynParticle->SetKineticEnergy(emax);
     ggXsection->GetCrossSection(dynParticle, Elem);
     G4double sig2 = ggXsection->GetInelasticGlauberGribovXsc();
-    if(sig2 > 0.) coeff[Z] = sig1/sig2; 
+    if(sig2 > 0.) { coeff[Z] = sig1/sig2; }
   } 
-  if(!dp) delete dynParticle;
+  if(!dp) { delete dynParticle; }
 }

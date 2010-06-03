@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.2 2009-11-19 12:36:53 vnivanch Exp $
+// $Id: G4NeutronCaptureXS.cc,v 1.3 2010-06-03 11:50:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,9 +128,9 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
   // check environment variable 
   // Build the complete string identifying the file with the data set
-  char* path = getenv("G4NEUTRONXS");
+  char* path = getenv("G4NEUTRONXSDATA");
   if (!path){
-    G4cout << "G4NEUTRONXS environment variable not set" << G4endl;
+    G4cout << "G4NEUTRONXSDATA environment variable not set" << G4endl;
   }
 
   // Access to elements
@@ -161,10 +161,10 @@ G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
   if(!p) {
   // check environment variable 
   // Build the complete string identifying the file with the data set
-    path = getenv("G4NEUTRONXS");
+    path = getenv("G4NEUTRONXSDATA");
     if (!path) {
       if(verboseLevel > 1) {
-	G4cout << "G4NEUTRONXS environment variable not set" << G4endl;
+	G4cout << "G4NEUTRONXSDATA environment variable not set" << G4endl;
       }
       return;
     }
