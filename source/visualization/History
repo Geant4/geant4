@@ -1,4 +1,4 @@
-$Id: History,v 1.476 2010-06-03 08:31:22 allison Exp $
+$Id: History,v 1.477 2010-06-03 10:21:08 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,9 @@ History file for visualization category
 ---------------------------------------
 
 3rd June 2010  John Allison
+- visman-V09-03-09:
+  o Fixed unchecked pointer.
+  o Changed /vis/scene/add/digiti[sz]ations to /vis/scene/add/digis.
 - opengl-V09-03-05:
   o Restored some changes to geant4-09-03 to preserve behaviour.
 
