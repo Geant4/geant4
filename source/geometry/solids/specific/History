@@ -1,4 +1,4 @@
-$Id: History,v 1.167 2010-06-03 10:12:53 gcosmo Exp $
+$Id: History,v 1.168 2010-06-03 15:33:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-03-Jun-2010  T.Nikitina, G.Cosmo
+03-Jun-2010  T.Nikitina, G.Cosmo (geom-specific-V09-03-06)
 - G4GenericTrap:
   o Fixed initialization of fSurfaceArea and fCubicVolume and
     calculation of surface area.
   o Fixed error in Inside(p) function, and corrected use std::fabs() instead
     of std::abs() for floating point values.
+  o Added missing initialisation of fpPolyhedron pointer.
   o More corrected signatures for use of non-const references for vectors
     passed as arguments to functions.
 
