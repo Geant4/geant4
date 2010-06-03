@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.7 2010-06-03 10:22:45 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.8 2010-06-03 15:30:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,6 +61,7 @@ const G4double G4GenericTrap::fgkTolerance = 1E-3;
 G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
                               const std::vector<G4TwoVector>&  vertices )
   : G4VSolid(name),
+    fpPolyhedron(0),
     fDz(hz),
     fVertices(),
     fIsTwisted(false),
@@ -119,6 +120,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
 
 G4GenericTrap::G4GenericTrap( __void__& a )
   : G4VSolid(a),
+    fpPolyhedron(0),
     fDz(0.),
     fVertices(),
     fIsTwisted(false),
