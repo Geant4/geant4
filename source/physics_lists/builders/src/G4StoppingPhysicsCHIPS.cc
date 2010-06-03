@@ -23,62 +23,88 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.3 2010-06-03 11:22:00 vnivanch Exp $
+// $Id: G4StoppingPhysicsCHIPS.cc,v 1.1 2010-06-03 11:22:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QStoppingPhysics
+// ClassName:   G4StoppingPhysicsCHIPS
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 3 June 2010 V. Ivanchenko
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4QStoppingPhysics_h
-#define G4QStoppingPhysics_h 1
+#include "G4StoppingPhysicsCHIPS.hh"
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4QCaptureAtRest.hh"
 
-class G4QCaptureAtRest;
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
-class G4QStoppingPhysics : public G4VPhysicsConstructor
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4MuonMinus.hh"
+
+G4StoppingPhysicsCHIPS::G4StoppingPhysicsCHIPS(G4int ver)
+  : G4VPhysicsConstructor("hCaptureCHIPS"), verbose(ver), wasActivated(false)
 {
-public: 
+  if(verbose > 1) { G4cout << "### G4StoppingPhysicsCHIPS" << G4endl; }
+}
 
-  G4QStoppingPhysics(G4int ver = 1);
+G4StoppingPhysicsCHIPS::~G4StoppingPhysicsCHIPS()
+{
+  delete hProcess;
+}
 
-  // obsolete
-  G4QStoppingPhysics(const G4String& name, G4int ver, G4bool);
+void G4StoppingPhysicsCHIPS::ConstructParticle()
+{
+// G4cout << "G4StoppingPhysicsCHIPS::ConstructParticle" << G4endl;
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
 
-  virtual ~G4QStoppingPhysics();
- 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
 
-private:
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();
 
-  G4QCaptureAtRest* hProcess;
+}
 
-  G4int    verbose;
-  G4bool   wasActivated;
-};
+void G4StoppingPhysicsCHIPS::ConstructProcess()
+{
+  if(wasActivated) { return; }
+  wasActivated = true;
+  if(verbose > 1) { 
+    G4cout << "### G4StoppingPhysicsCHIPS::ConstructProcess " 
+	   << G4endl;
+  }
 
-#endif
+  hProcess = new G4QCaptureAtRest();
 
+  // Add Stopping Process
+  G4ParticleDefinition* particle=0;
+  G4ProcessManager* pmanager=0;
 
-
-
-
-
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )
+  {
+    particle = theParticleIterator->value();
+    pmanager = particle->GetProcessManager();
+    if(particle->GetPDGCharge() < 0.0 && 
+       !particle->IsShortLived() &&
+       hProcess->IsApplicable(*particle) ) 
+    { 
+      pmanager->AddRestProcess(hProcess);
+      if(verbose > 1) {
+        G4cout << "### StoppingPhysicsCHIPS added for " 
+	       << particle->GetParticleName() << G4endl;
+      }
+    }
+  }
+}
 
 

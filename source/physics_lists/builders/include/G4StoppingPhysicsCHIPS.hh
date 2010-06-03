@@ -23,38 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.3 2010-06-03 11:22:00 vnivanch Exp $
+// $Id: G4StoppingPhysicsCHIPS.hh,v 1.1 2010-06-03 11:22:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QStoppingPhysics
+// ClassName:   G4StoppingPhysicsCHIPS
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 3 June 2010 V. Ivanchenko
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4QStoppingPhysics_h
-#define G4QStoppingPhysics_h 1
+#ifndef G4StoppingPhysicsCHIPS_h
+#define G4StoppingPhysicsCHIPS_h 1
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
 class G4QCaptureAtRest;
 
-class G4QStoppingPhysics : public G4VPhysicsConstructor
+class G4StoppingPhysicsCHIPS : public G4VPhysicsConstructor
 {
 public: 
 
-  G4QStoppingPhysics(G4int ver = 1);
+  G4StoppingPhysicsCHIPS(G4int ver = 1);
 
-  // obsolete
-  G4QStoppingPhysics(const G4String& name, G4int ver, G4bool);
-
-  virtual ~G4QStoppingPhysics();
+  virtual ~G4StoppingPhysicsCHIPS();
  
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
