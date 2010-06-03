@@ -10,15 +10,15 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  pai
+#/testem/phys/addPhysics  pai
 #
-#/testem/phys/addPhysics  pai-photon
+/testem/phys/addPhysics  pai_photon
 #
 #/testem/phys/addPhysics  standard
 #
 #/testem/phys/addPhysics model
 #
-/testem/phys/setCuts    1 mm
+/testem/phys/setCuts    1.01 mm
 #/testem/phys/VertexCuts 0.1 mm
 #/testem/phys/MuonCuts  10.0 mm
 #/testem/stepMax         10 mm
@@ -32,9 +32,9 @@
 #
 #  PLOT: energy deposit distribution in absorber
 #
-/plots/setnbinEn 150
+/plots/setnbinEn 50
 /plots/setEnlow 0.00 MeV
-/plots/setEnhigh 0.3  MeV  
+/plots/setEnhigh 0.5  MeV  
 #
 #
 #/process/eLoss/verbose 2
@@ -79,7 +79,7 @@
 #
 #/tracking/verbose 1
 #
-/event/printModulo 1000
+/event/printModulo 10000
 /run/beamOn 50000
 #
 #/run/beamOn 3820
