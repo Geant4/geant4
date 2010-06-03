@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.6 2010-06-03 09:47:31 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.7 2010-06-03 10:22:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -248,8 +248,9 @@ void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
  
 // --------------------------------------------------------------------
 
-G4bool G4GenericTrap::IsSegCrossing(G4TwoVector a, G4TwoVector b, 
-                                    G4TwoVector c, G4TwoVector d) const
+G4bool
+G4GenericTrap::IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
+                             const G4TwoVector& c, const G4TwoVector& d) const
 { 
   // Check if segments [A,B] and [C,D] are crossing
 
@@ -413,10 +414,10 @@ G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices,
 // --------------------------------------------------------------------
 
 G4VFacet*
-G4GenericTrap::MakeSideFacet(G4ThreeVector downVertex0,
-                             G4ThreeVector downVertex1,
-                             G4ThreeVector upVertex1,
-                             G4ThreeVector upVertex0) const      
+G4GenericTrap::MakeSideFacet(const G4ThreeVector& downVertex0,
+                             const G4ThreeVector& downVertex1,
+                             const G4ThreeVector& upVertex1,
+                             const G4ThreeVector& upVertex0) const      
 {
   // Creates a triangular facet from the polygon points given by indices
   // forming the upper side ( z>0 )
@@ -953,7 +954,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 // --------------------------------------------------------------------
 
 G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
-                                            const G4int ipl) const
+                                            const G4int ipl ) const
 {
   // Return normal to given lateral plane ipl
 
@@ -1619,9 +1620,10 @@ G4double G4GenericTrap::GetSurfaceArea()
 
 // --------------------------------------------------------------------
 
-G4double
-G4GenericTrap::GetFaceSurfaceArea(G4ThreeVector p0, G4ThreeVector p1, 
-                                  G4ThreeVector p2, G4ThreeVector p3) const
+G4double G4GenericTrap::GetFaceSurfaceArea(const G4ThreeVector& p0,
+                                           const G4ThreeVector& p1, 
+                                           const G4ThreeVector& p2,
+                                           const G4ThreeVector& p3) const
 {
   // Auxiliary method for Get Surface Area of Face
   
