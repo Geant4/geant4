@@ -40,6 +40,7 @@ unset  G4NEUTRONHPDATA
 unset  G4RADIOACTIVEDATA
 unset  G4ABLADATA
 unset  G4REALSURFACEDATA
+unset  G4NEUTRONXSDATA
 
 unset  G4LIB
 unset  G4LIB_BUILD_G3TOG4
@@ -189,6 +190,16 @@ if [ X$g4realsurfacedata != X ] ; then
         echo "On this machine the G4REALSURFACEDATA=\$G4REALSURFACEDATA"
     fi
 fi
+
+#+
+if [ X$g4neutronxsdata != X ] ; then 
+    G4NEUTRONXSDATA="$g4neutronxsdata"
+    export G4NEUTRONXSDATA
+    if [ X\$g4non_display = X ] ; then
+        echo "On this machine the G4NEUTRONXSDATA=\$G4NEUTRONXSDATA"
+    fi
+fi
+
 
 #
 # g4clhep.U

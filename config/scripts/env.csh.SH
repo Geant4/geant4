@@ -40,6 +40,7 @@ unsetenv  G4NEUTRONHPDATA
 unsetenv  G4RADIOACTIVEDATA
 unsetenv  G4ABLADATA
 unsetenv  G4REALSURFACEDATA
+unsetenv  G4NEUTRONXSDATA
 
 unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
@@ -160,6 +161,12 @@ endif
 if ( X$g4realsurfacedata != X ) then
     setenv G4REALSURFACEDATA "$g4realsurfacedata"
     echo "On this machine the G4REALSURFACEDATA=\$G4REALSURFACEDATA"
+endif
+
+#+
+if ( X$g4neutronxsdata != X ) then
+    setenv G4NEUTRONXSDATA "$g4neutronxsdata"
+    echo "On this machine the G4NEUTRONXSDATA=\$G4NEUTRONXSDATA"
 endif
 
 
