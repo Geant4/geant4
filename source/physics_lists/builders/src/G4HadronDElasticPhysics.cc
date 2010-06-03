@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.cc,v 1.5 2010-06-03 14:28:32 vnivanch Exp $
+// $Id: G4HadronDElasticPhysics.cc,v 1.6 2010-06-03 15:09:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -181,7 +181,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4NeutronElasticXS(particle));
+      hel->AddDataSet(new G4NeutronElasticXS());
       model = new G4DiffuseElastic(particle);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);

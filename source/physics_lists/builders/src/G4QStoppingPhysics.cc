@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.3 2010-06-03 11:22:00 vnivanch Exp $
+// $Id: G4QStoppingPhysics.cc,v 1.4 2010-06-03 15:09:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,9 +33,12 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
+// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
+// G4MuonMinusCaptureAtRest for mu-
+// CHIPS capture for other negatively charged hadrons
 
 #include "G4QStoppingPhysics.hh"
 
