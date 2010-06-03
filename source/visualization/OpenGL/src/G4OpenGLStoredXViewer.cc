@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.26 2010-05-29 15:56:50 allison Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.27 2010-06-03 08:26:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,8 +132,8 @@ void G4OpenGLStoredXViewer::DrawView () {
 	DrawDisplayLists ();
 	FinishView ();
       } else { // ADD TO AVOID KernelVisit=1 and nothing to display
-        //DrawDisplayLists ();  ????????? (JA)
-        //FinishView ();        ????????? (JA)
+        DrawDisplayLists ();
+        FinishView ();
       }
     }
   }
