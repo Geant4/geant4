@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4HumanPhantomPhysicsList.hh,v 1.6 2010-06-03 23:29:36 cirrone Exp $
+// $Id: G4HumanPhantomPhysicsList.hh,v 1.7 2010-06-03 23:37:01 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Code review: MGP, 5 November 2006 (still to be completed)
+// 
 //
 //    **********************************
 //    *                                *

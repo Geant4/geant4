@@ -25,9 +25,9 @@
 //
 //
 // Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// S. Guatelli, G. Guerrieri and M. G. Pia
 //
-// Code review: MGP, 5 November 2006 (still to be completed)
+// 
 //
 //    **********************************
 //    *                                *
@@ -35,7 +35,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: G4HumanPhantomPhysicsList.cc,v 1.11 2010-06-03 23:29:36 cirrone Exp $
+// $Id: G4HumanPhantomPhysicsList.cc,v 1.12 2010-06-03 23:37:01 cirrone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HumanPhantomPhysicsList.hh"
