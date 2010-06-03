@@ -123,6 +123,13 @@ void WLSTrajectory::ShowTrajectory(std::ostream& os) const
     // ... or override with your own code here.
 }
 
+void WLSTrajectory::DrawTrajectory() const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory();
+  // ... or override with your own code here.
+}
+
 void WLSTrajectory::DrawTrajectory(G4int i_mode) const
 {
     // Invoke the default implementation in G4VTrajectory...

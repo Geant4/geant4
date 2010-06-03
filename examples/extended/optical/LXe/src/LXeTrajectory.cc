@@ -66,6 +66,14 @@ LXeTrajectory::~LXeTrajectory()
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
+void LXeTrajectory::DrawTrajectory() const
+{
+  // Invoke the default implementation in G4VTrajectory...
+  G4VTrajectory::DrawTrajectory();
+  // ... or override with your own code here.
+}
+
+//_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 void LXeTrajectory::DrawTrajectory(G4int i_mode) const{
   //Taken from G4VTrajectory and modified to select colours based on particle
   //type and to selectively eliminate drawing of certain trajectories.
