@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2010-03-11 15:58:14 bmorgan Exp $
+$Id: History,v 1.37 2010-06-03 13:11:28 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+3rd June 2010 Ben Morgan
+- Configure: regenerated folowing changes below.
+- config/scripts/env.sh.SH: Added setting of new G4NEUTRONXSDATA variable.
+- config/scripts/env.csh.SH: Added setting of new G4NEUTRONXSDATA variable.
+- U/g4_03_dirs_data.U: Added checks and config for new dataset G4NEUTRONXSDATA
+
+11th May 2010 Ben Morgan
+- config/scripts/env.sh.SH: Protected echos with info on LD_LIBRARY_PATH with
+g4non_display checks so that output from use of Configure post-install is clean.
+
+12th March 2010 Ben Morgan
+- config/scripts/env.sh.SH: LD_LIBRARY_PATH no longer set on Darwin, only
+DYLD_LIBRARY_PATH.
+- config/scripts/env.csh.SH: LD_LIBRARY_PATH no longer set on Darwin, only
+DYLD_LIBRARY_PATH.
+
 11th March 2010 Ben Morgan
 - Configure: regenerated following changes below.
 - U/Qt.U: Fix confirmed to work, but added tweaks to prevent further tests when
