@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.128 2010-06-01 16:08:15 allison Exp $
+// $Id: G4VisManager.cc,v 1.129 2010-06-03 10:16:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -939,17 +939,19 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode
 
   assert (0 != trajectoryModel); // Should exist
 
-  G4TrajectoriesModel* trajectoriesModel =
-    dynamic_cast<G4TrajectoriesModel*>(fpSceneHandler->GetModel());
-  if (trajectoriesModel) {
-    if (trajectoriesModel->IsDrawingModeSet()) {
-      trajectoryModel->Draw(trajectory, i_mode, visible);
+  if (IsValidView()) {
+    G4TrajectoriesModel* trajectoriesModel =
+      dynamic_cast<G4TrajectoriesModel*>(fpSceneHandler->GetModel());
+    if (trajectoriesModel) {
+      if (trajectoriesModel->IsDrawingModeSet()) {
+	trajectoryModel->Draw(trajectory, i_mode, visible);
+      } else {
+	trajectoryModel->Draw(trajectory, visible);
+      }
     } else {
-      trajectoryModel->Draw(trajectory, visible);
+      // Just draw at user's request
+      trajectoryModel->Draw(trajectory, i_mode, visible);
     }
-  } else {
-    // Just draw at user's request
-    trajectoryModel->Draw(trajectory, i_mode, visible);
   }
 }
 
@@ -1360,6 +1362,7 @@ void G4VisManager::EndOfEvent ()
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
       fpViewer->ShowView();
+      fpViewer->DrawView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
       // Keep, but only if user has not kept any...
