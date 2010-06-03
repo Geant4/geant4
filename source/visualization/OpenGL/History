@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2010-05-30 09:53:05 allison Exp $
+$Id: History,v 1.175 2010-06-03 08:27:26 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd June 2010  John Allison  (opengl-V09-03-05)
+- Retore following files to geant4-09-03 in interests of stable behaviour:
+  o G4OpenGLImmediateSceneHandler.cc, src/G4OpenGLStoredSceneHandler.cc
+    Restored code removed in opengl-V09-03-03:
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+  o G4OpenGLStoredXViewer.cc:
+    Restore to geant4-09-03.  Restored code removed in opengl-V09-03-03:
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        DrawDisplayLists ();
+        FinishView ();
 
 30th May 2010  John Allison  (opengl-V09-03-04)
 - G4OpenGLSceneHandler: Added AddCompound(const G4VDigi&).
