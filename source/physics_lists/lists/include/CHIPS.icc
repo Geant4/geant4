@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CHIPS.icc,v 1.8 2010-06-03 09:31:41 mkossov Exp $
+// $Id: CHIPS.icc,v 1.9 2010-06-03 15:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -83,16 +83,16 @@ template<class T> TCHIPS<T>::TCHIPS(G4int ver):  T()
   this->RegisterPhysics( new G4QNeutrinoPhysics("weak"));
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering, "CHIPS" version (to be replaced by G4QElasticPhysics)
-  this-> RegisterPhysics( new G4QElasticPhysics("elastic",ver));
+  this->RegisterPhysics( new G4QElasticPhysics(ver));
 
    // Hadron Physics (to be replaced by G4QInelasticPhysics)
   this->RegisterPhysics(  new HadronPhysicsCHIPS("inelastic"));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QCaptureAtRestPhysics("nuclear_capture",ver));
+  this->RegisterPhysics( new G4QCaptureAtRestPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4QIonPhysics("ion"));

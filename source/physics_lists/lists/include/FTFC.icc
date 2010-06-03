@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFC.icc,v 1.7 2009-05-18 08:54:22 gunter Exp $
+// $Id: FTFC.icc,v 1.8 2010-06-03 15:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,23 +85,23 @@ template<class T> TFTFC<T>::TFTFC(G4int ver):  T()
   obs.Unsupported("FTFC");
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay", ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
+  this-> RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
    G4bool quasiElastic;
   this->RegisterPhysics(  new HadronPhysicsFTFC("hadron",quasiElastic=false));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

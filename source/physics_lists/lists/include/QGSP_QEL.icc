@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_QEL.icc,v 1.4 2009-05-18 08:54:22 gunter Exp $
+// $Id: QGSP_QEL.icc,v 1.5 2010-06-03 15:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -84,23 +84,23 @@ template<class T> TQGSP_QEL<T>::TQGSP_QEL(G4int ver):  T()
   obs.Unsupported("QGSP_QEL");
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering, "CHIPS" version
-  this-> RegisterPhysics( new G4HadronQElasticPhysics("elastic",ver));
+  this-> RegisterPhysics( new G4HadronQElasticPhysics(ver) );
 
    // Hadron Physics
    G4bool quasiElastic;
   this->RegisterPhysics( new HadronPhysicsQGSP("hadron",quasiElastic=true));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

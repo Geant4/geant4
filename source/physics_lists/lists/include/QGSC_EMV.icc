@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_EMV.icc,v 1.5 2009-11-27 17:28:18 gunter Exp $
+// $Id: QGSC_EMV.icc,v 1.6 2010-06-03 15:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -60,7 +60,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
-#include "G4QStoppingPhysics.hh"
+#include "G4QCaptureAtRestPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
@@ -83,23 +83,23 @@ template<class T> TQGSC_EMV<T>::TQGSC_EMV(G4int ver):  T()
   obs.Unsupported("QGSC_EMV", "QGSC_BERT");
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering, "CHIPS" version
-  this-> RegisterPhysics( new G4HadronQElasticPhysics("elastic",ver));
+  this-> RegisterPhysics( new G4HadronQElasticPhysics(ver) );
 
    // Hadron Physics
    G4bool quasiElastic;
   this->RegisterPhysics(  new HadronPhysicsQGSC("hadron",quasiElastic=true));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping",ver,false));
+  this->RegisterPhysics( new G4QCaptureAtRestPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

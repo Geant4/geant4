@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.icc,v 1.5 2010-06-03 10:42:44 gunter Exp $
+// $Id: FTF_BIC.icc,v 1.6 2010-06-03 15:46:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -79,22 +79,22 @@ template<class T> TFTF_BIC<T>::TFTF_BIC(G4int ver):  T()
   exp.Experimental("FTF_BIC");
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  this->RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
-  this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
+  this-> RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsFTF_BIC(ver));
 
   // Stopping Physics
-  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
+  this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
   this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
