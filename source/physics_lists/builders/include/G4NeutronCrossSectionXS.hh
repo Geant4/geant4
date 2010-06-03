@@ -23,59 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.4 2010-06-03 14:01:59 vnivanch Exp $
+// $Id: G4NeutronCrossSectionXS.hh,v 1.1 2010-06-03 14:01:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QStoppingPhysics
+// ClassName:   G4NeutronCrossSectionXS
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 3 June 2010 V. Ivanchenko
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4QStoppingPhysics_h
-#define G4QStoppingPhysics_h 1
+#ifndef G4NeutronCrossSectionXS_h
+#define G4NeutronCrossSectionXS_h
 
-#include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-class G4QCaptureAtRest;
+class G4NeutronCrossSectionXS : public G4VPhysicsConstructor {
 
-class G4QStoppingPhysics : public G4VPhysicsConstructor
-{
-public: 
+public:
 
-  G4QStoppingPhysics(G4int ver = 1);
+  G4NeutronCrossSectionXS(G4int ver);
+  virtual ~G4NeutronCrossSectionXS();
 
-  // obsolete
-  G4QStoppingPhysics(const G4String& name, G4int ver=1, G4bool val=false);
-
-  virtual ~G4QStoppingPhysics();
- 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
   virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
 private:
-
-  G4QCaptureAtRest* hProcess;
-
-  G4int    verbose;
-  G4bool   wasActivated;
+  G4int  verbose;
 };
 
 #endif
-
-
 
 
 

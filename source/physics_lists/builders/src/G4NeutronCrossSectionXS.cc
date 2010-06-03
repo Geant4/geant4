@@ -23,62 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.hh,v 1.4 2010-06-03 14:01:59 vnivanch Exp $
+// $Id: G4NeutronCrossSectionXS.cc,v 1.1 2010-06-03 14:01:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4QStoppingPhysics
+// ClassName:   G4NeutronCrossSectionXS
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 3 June 2010 V. Ivanchenko
 //
 // Modified:
 //
 //----------------------------------------------------------------------------
 //
 
-#ifndef G4QStoppingPhysics_h
-#define G4QStoppingPhysics_h 1
+#include "G4NeutronCrossSectionXS.h"
 
-#include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4NeutronInelasticXS.hh"
+#include "G4NeutronCaptureXS.hh"
 
-class G4QCaptureAtRest;
+#include "G4ParticleDefinition.hh"
+#include "G4HadronicProcess.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4HadronicProcessType.hh"
 
-class G4QStoppingPhysics : public G4VPhysicsConstructor
+#include "G4Neutron.hh"
+
+G4NeutronCrossSectionXS::G4NeutronCrossSectionXS(G4int ver) :
+  G4VPhysicsConstructor("Neutron XS"), verbose(ver) 
+{}
+
+G4NeutronCrossSectionXS::~G4NeutronCrossSectionXS() {}
+
+void G4NeutronCrossSectionXS::ConstructParticle() {}
+
+void G4NeutronCrossSectionXS::ConstructProcess() 
 {
-public: 
 
-  G4QStoppingPhysics(G4int ver = 1);
+  G4NeutronInelasticXS* xinel = new G4NeutronInelasticXS();
+  G4NeutronCaptureXS* xcap = new G4NeutronCaptureXS();
 
-  // obsolete
-  G4QStoppingPhysics(const G4String& name, G4int ver=1, G4bool val=false);
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  if(verbose > 1) {
+    G4cout << "### G4NeutronCrossSectionXS: use alternative neutron X-sections"
+	   << G4endl;
+  }
 
-  virtual ~G4QStoppingPhysics();
- 
-  // This method will be invoked in the Construct() method. 
-  // each particle type will be instantiated
-  virtual void ConstructParticle();
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  virtual void ConstructProcess();
-
-private:
-
-  G4QCaptureAtRest* hProcess;
-
-  G4int    verbose;
-  G4bool   wasActivated;
-};
-
-#endif
-
-
-
-
-
-
-
-
+  G4ProcessVector* pv = neutron->GetProcessManager()->GetProcessList();
+  G4int n = pv->size();
+  G4HadronicProcess* had = 0;
+  for(G4int i=0; i<n; i++) {
+    if(fHadronInelastic == ((*pv)[i])->GetProcessSubType()) {
+      had = static_cast<G4HadronicProcess*>((*pv)[i]);
+      had->AddDataSet(xinel);
+    } else if(fCapture == ((*pv)[i])->GetProcessSubType()) {
+      had = static_cast<G4HadronicProcess*>((*pv)[i]);
+      had->AddDataSet(xcap);
+    }
+  }
+}
