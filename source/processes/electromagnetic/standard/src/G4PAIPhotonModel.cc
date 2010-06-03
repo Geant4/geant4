@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIPhotonModel.cc,v 1.23 2009-07-26 15:51:01 vnivanch Exp $
+// $Id: G4PAIPhotonModel.cc,v 1.24 2010-06-03 07:28:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -160,6 +160,7 @@ void G4PAIPhotonModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
                                    const G4DataVector&)
 {
+  G4cout<<"G4PAIPhotonModel::Initialise for "<<p->GetParticleName()<<G4endl;
   if(isInitialised) return;
   isInitialised = true;
 

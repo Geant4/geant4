@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.51 2009-08-12 21:28:50 vnivanch Exp $
+// $Id: G4PAIModel.cc,v 1.52 2010-06-03 07:28:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class
 // File name:     G4PAIModel.cc
 //
-// Author: Vladimir.Grichine@cern.ch on base of Vladimir Ivanchenko code
+// Author: Vladimir.Grichine@cern.ch on base of Vladimir Ivanchenko model interface
 //
 // Creation date: 05.10.2003
 //
@@ -147,6 +147,7 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {
+  G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
   if(isInitialised) return;
   isInitialised = true;
 
