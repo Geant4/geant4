@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.cc,v 1.1 2008-11-20 12:38:11 vnivanch Exp $
+// $Id: G4ChargeExchangePhysics.cc,v 1.2 2010-06-03 14:37:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -52,6 +52,14 @@
 
 G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver, G4bool glauber)
   : G4VPhysicsConstructor("chargeExchange"), verbose(ver), glFlag(glauber),
+    wasActivated(false)
+{
+  if(verbose > 1) G4cout << "### ChargeExchangePhysics" << G4endl;
+  model = 0;
+}
+
+G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver)
+  : G4VPhysicsConstructor("chargeExchange"), verbose(ver), glFlag(false),
     wasActivated(false)
 {
   if(verbose > 1) G4cout << "### ChargeExchangePhysics" << G4endl;

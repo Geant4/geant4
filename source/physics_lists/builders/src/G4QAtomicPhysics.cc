@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QAtomicPhysics.cc,v 1.1 2009-11-20 10:24:28 mkossov Exp $
+// $Id: G4QAtomicPhysics.cc,v 1.2 2010-06-03 14:37:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -88,6 +88,12 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
+
+G4QAtomicPhysics::G4QAtomicPhysics(G4int ver)
+  : G4VPhysicsConstructor("CHIPS Atomic"), verbose(ver)
+{
+  G4LossTableManager::Instance();
+}
 
 G4QAtomicPhysics::G4QAtomicPhysics(G4int ver, const G4String& name)
   : G4VPhysicsConstructor(name), verbose(ver)

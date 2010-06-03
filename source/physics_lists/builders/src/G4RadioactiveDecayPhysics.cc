@@ -35,6 +35,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
+  :  G4VPhysicsConstructor("G4RadioactiveDecay"), theRadioactiveDecay(0)
+{}
+
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String& name)
   :  G4VPhysicsConstructor(name), theRadioactiveDecay(0)
 {}

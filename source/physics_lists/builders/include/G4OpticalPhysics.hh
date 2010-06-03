@@ -63,7 +63,8 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 {
   public:
 
-    G4OpticalPhysics(G4int verbose = 0, const G4String& name = "Optical");
+    G4OpticalPhysics(G4int verbose = 0);
+    G4OpticalPhysics(G4int verbose, const G4String& name);
     virtual ~G4OpticalPhysics();
 
   protected:

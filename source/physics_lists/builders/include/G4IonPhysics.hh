@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonPhysics.hh,v 1.1 2006-10-31 11:35:01 gunter Exp $
+// $Id: G4IonPhysics.hh,v 1.2 2010-06-03 14:37:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -54,7 +54,9 @@ class  G4LEAlphaInelastic;
 class G4IonPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4IonPhysics(const G4String& name="ions");
+  G4IonPhysics(G4int verbose =1);
+  //obsolete
+  G4IonPhysics(const G4String& name);
   virtual ~G4IonPhysics();
 
   // This method will be invoked in the Construct() method.

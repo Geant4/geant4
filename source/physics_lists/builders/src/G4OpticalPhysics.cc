@@ -41,6 +41,28 @@
 #include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4OpticalPhysics::G4OpticalPhysics(G4int verbose) 
+  : G4VPhysicsConstructor("Optical")
+,
+    wasActivated(false),
+
+    fScintillationProcess(0),
+    fCerenkovProcess(0),
+    fOpWLSProcess(0),
+    fOpAbsorptionProcess(0),
+    fOpRayleighScatteringProcess(0),
+    fOpBoundaryProcess(0),
+    fMaxNumPhotons(100),
+    fMaxBetaChange(10.0),
+    fYieldFactor(1.),
+    fExcitationRatio(0.0),
+    fSurfaceModel(unified),
+    fProfile("delta"),
+    fTrackSecondariesFirst(true)
+{
+  verboseLevel = verbose;
+  fMessenger = new G4OpticalPhysicsMessenger(this);
+}
 
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
   : G4VPhysicsConstructor(name),

@@ -38,7 +38,8 @@ class G4RadioactiveDecay;
 class G4RadioactiveDecayPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4RadioactiveDecayPhysics(const G4String& name = "raddecay");
+  G4RadioactiveDecayPhysics(G4int verbose =1);
+  G4RadioactiveDecayPhysics(const G4String& name);
   virtual ~G4RadioactiveDecayPhysics();
 
 public: 

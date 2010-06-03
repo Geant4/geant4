@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPhotoNuclearPhysics.hh,v 1.2 2009-11-16 19:12:10 mkossov Exp $
+// $Id: G4QPhotoNuclearPhysics.hh,v 1.3 2010-06-03 14:37:24 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -65,7 +65,8 @@
 class G4QPhotoNuclearPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4QPhotoNuclearPhysics(const G4String& name = "CHIPS photo-nuclear");
+  G4QPhotoNuclearPhysics(G4int verbose =1);
+  G4QPhotoNuclearPhysics(const G4String& name);
   virtual ~G4QPhotoNuclearPhysics();
 
   void ConstructParticle();
