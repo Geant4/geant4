@@ -1,4 +1,4 @@
-$Id: History,v 1.175 2010-06-03 08:27:26 allison Exp $
+$Id: History,v 1.176 2010-06-03 10:05:33 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 3rd June 2010  John Allison  (opengl-V09-03-05)
-- Retore following files to geant4-09-03 in interests of stable behaviour:
-  o G4OpenGLImmediateSceneHandler.cc, src/G4OpenGLStoredSceneHandler.cc
+- Restored following files to geant4-09-03 in interests of stable behaviour:
+  o G4OpenGLStoredSceneHandler.cc
     Restored code removed in opengl-V09-03-03:
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
@@ -32,6 +32,8 @@ committal in the CVS repository !
       } else { // ADD TO AVOID KernelVisit=1 and nothing to display
         DrawDisplayLists ();
         FinishView ();
+- Note: G4OpenGLImmediateSceneHandler: Same code commented out.  I think
+  it's not necessary for immediate mode.
 
 30th May 2010  John Allison  (opengl-V09-03-04)
 - G4OpenGLSceneHandler: Added AddCompound(const G4VDigi&).
