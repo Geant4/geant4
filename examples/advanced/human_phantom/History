@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2010-05-03 15:38:55 gcosmo Exp $
+$Id: History,v 1.27 2010-06-03 23:42:16 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4, 2010, S. Guatelli, tag: human_phantom-V09-03-01
+- Migration of Physics List 
 
 April 29, 2010, G.Cosmo, tag: human_phantom-V09-03-00
 - Added missing includes of G4PVPlacement, causing compilation error.
