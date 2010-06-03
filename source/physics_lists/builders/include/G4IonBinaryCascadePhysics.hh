@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.hh,v 1.1 2006-10-31 11:35:01 gunter Exp $
+// $Id: G4IonBinaryCascadePhysics.hh,v 1.2 2010-06-03 15:03:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,7 +59,8 @@ class G4IonsShenCrossSection;
 class G4IonBinaryCascadePhysics : public G4VPhysicsConstructor
 {
 public:
-  G4IonBinaryCascadePhysics(const G4String& name="ions", G4int verb = 0);
+  G4IonBinaryCascadePhysics(G4int ver = 0);
+  G4IonBinaryCascadePhysics(const G4String& name, G4int ver = 0);
   virtual ~G4IonBinaryCascadePhysics();
 
   // This method will be invoked in the Construct() method.

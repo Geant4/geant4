@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.cc,v 1.1 2009-11-27 17:25:15 gunter Exp $
+// $Id: G4IonQMDPhysics.cc,v 1.2 2010-06-03 15:03:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,9 +59,20 @@
 // Nuclei
 #include "G4IonConstructor.hh"
 
+G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
+  :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
+{
+  eminBIC  = 0.*MeV;
+  eminQMD  = 100.*MeV;
+  emaxQMD  = 10.*GeV;
+  emaxLHEP = 1.*TeV;
+  overlap  = 10*MeV;
+  if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
+}
+
 G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name, 
-						     G4int verb)
-  :  G4VPhysicsConstructor(name), verbose(verb), wasActivated(false)
+						     G4int ver)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
