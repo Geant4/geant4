@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-03-25 16:18:02 gunter Exp $
+$Id: History,v 1.6 2010-06-03 21:25:31 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 3rd, 2010 Peter Gumplinger    (WLS-V09-03-02)
+--------------------------------------------------
+   modify WLSTrajectory class to compile without warnings against
+   tracking-V09-03-03 by implementing a DrawTrajectory() method.
 
 Mar 25th, 2010 Gunter Folger    (WLS-V09-03-01)
 -----------------------------------------------

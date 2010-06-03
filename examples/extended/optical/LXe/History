@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2009-11-10 04:20:37 gum Exp $
+$Id: History,v 1.14 2010-06-03 21:23:13 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 June 2010 Peter Gumplinger    (LXe-V09-03-00)
+-  modify LXeTrajectory class to compile without warnings against
+   tracking-V09-03-03 by implementing a DrawTrajectory() method.
 
 09 November 2009 Peter Gumplinger (LXe-V09-02-01)
 - exhibit the usage of a complex index of refraction for the photo cathode

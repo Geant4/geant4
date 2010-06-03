@@ -1,4 +1,4 @@
-// $Id: History,v 1.17 2010-03-23 17:39:37 gunter Exp $
+// $Id: History,v 1.18 2010-06-03 21:20:22 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 3rd, 2010, Peter Gumplinger    - fieldex04-V09-03-01
+   modify F04Trajectory class to compile without warnings against
+   tracking-V09-03-03 by implementing a DrawTrajectory() method.
 
 March 23rd, 2010, Gunter Folger     - fieldex04-V09-03-00
 - add <ctime> header in src/F04RunAction.cc to fix a compile 
