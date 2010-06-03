@@ -47,8 +47,8 @@
   <position name="shiftbysizeoft500" x="500.0"/>
   <position name="unionidentitypos" x="25."/>
  </define>
+
  <materials>
- 
   <element name="Hydrogen" formula="H"  Z="1.">  <atom value="1.01"/>   </element>
   <element name="Oxygen"   formula="O"  Z="8.">  <atom value="16.0"/>   </element>
   <element name="Nitrogen" formula="N"  Z="7.">  <atom value="14.01"/>  </element>
@@ -65,8 +65,8 @@
    <fraction n="0.3" ref="Oxygen"/>
   </material>
  </materials>
- <solids>
- 
+
+ <solids> 
   <box name="WorldBox" x="wextent" y="wextent" z="wextent"/>
 
   <box name="b100" x="10.0" y="10.0" z="10.0"/>
@@ -93,13 +93,13 @@
   <tube name="t400" z="200.0" rmax="50.0" deltaphi="customangle" aunit="rad"/>
   <tube name="t100" z="100.0" rmax="10.0" deltaphi="TWOPI" aunit="rad"/>
  
-   <union name="u1">
+  <union name="u1">
    <first ref="b500"/>  <second ref="b100"/>
    <positionref ref="unionidentitypos" /> 
    <rotation name="unionidentityrot"/>
    <firstpositionref ref= "center"/>
   </union>
- <subtraction name="sub1">
+  <subtraction name="sub1">
    <first ref="u1"/> <second ref="b100"/>
    <position  name="subidentitypos" x="-25."  /> 
    <rotation name="subidentityrot"/>
@@ -121,9 +121,9 @@
   <torus name="testtorus" rmin="0.0" rmax="10.0" rtor="80.0" startphi="0.0" deltaphi="TWOPI"/>
 
   <orb name="testorb" r="50.0"/>
- <polyhedra aunit="degree" deltaphi="90." lunit="mm" name="testph" numsides="3" startphi="0." >
+  <polyhedra aunit="degree" deltaphi="90." lunit="mm" name="testph" numsides="3" startphi="0." >
      <zplane z="10.0" rmin="1.0" rmax="5.0"/>
-    <zplane z="100.0" rmin="10.0" rmax="30.0"/>
+     <zplane z="100.0" rmin="10.0" rmax="30.0"/>
   </polyhedra> 
 
   <hype name="testhype" rmin="10.0" rmax="30.0" inst="10.0" outst="20.0" z="50.0"/>
@@ -176,7 +176,7 @@
    <materialref ref="Water"/>
    <solidref ref="t100"/>
   </volume>
- <volume name="vol31">
+  <volume name="vol31">
    <materialref ref="Water"/>
    <solidref ref="sub1"/>
   </volume>
@@ -215,31 +215,31 @@
    <materialref ref="Water"/>
    <solidref ref="ttwistedtubs"/>
   </volume>
- <volume name="vol201">
+  <volume name="vol201">
    <materialref ref="Water"/>
    <solidref ref="testtessel"/>
   </volume>
- <volume name="vol301">
+  <volume name="vol301">
    <materialref ref="Water"/>
    <solidref ref="testtorus"/>
   </volume>
- <volume name="vol401">
+  <volume name="vol401">
    <materialref ref="Water"/>
    <solidref ref="testorb"/>
   </volume>
- <volume name="vol501">
+  <volume name="vol501">
    <materialref ref="Water"/>
    <solidref ref="testph"/>
   </volume>
-<volume name="vol601">
+  <volume name="vol601">
    <materialref ref="Water"/>
    <solidref ref="testhype"/>
   </volume>
-<volume name="vol701">
+  <volume name="vol701">
    <materialref ref="Water"/>
    <solidref ref="testeltube"/>
   </volume>
-<volume name="vol1001">
+  <volume name="vol1001">
    <materialref ref="Water"/>
    <solidref ref="testelcone"/>
   </volume>
@@ -315,7 +315,7 @@
      <rotationref ref="identity"/>
    </physvol> 
 
-  <physvol>
+   <physvol>
      <volumeref ref="vol61"/>
      <positionref ref="pos61"/>
      <rotationref ref="identity"/>
@@ -342,7 +342,7 @@
      <positionref ref="pos101"/>
      <rotationref ref="identity"/>
    </physvol> 
- <physvol>
+   <physvol>
      <volumeref ref="vol201"/>
      <positionref ref="pos201"/>
      <rotationref ref="identity"/>
@@ -366,7 +366,7 @@
      <rotationref ref="identity"/>
    </physvol> 
 
-  <physvol>
+   <physvol>
      <volumeref ref="vol601"/>
      <positionref ref="pos601"/>
      <rotationref ref="identity"/>
@@ -392,9 +392,10 @@
      <positionref ref="pos1003"/>
      <rotationref ref="identity"/>
    </physvol> 
- </volume>
+  </volume>
 
  </structure>
+
  <setup name="Default" version="1.0">
   <world ref="World"/>
  </setup>
