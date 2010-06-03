@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QStoppingPhysics.cc,v 1.4 2010-06-03 15:09:54 vnivanch Exp $
+// $Id: G4QStoppingPhysics.cc,v 1.5 2010-06-03 16:28:39 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -33,12 +33,9 @@
 // Author: 11 April 2006 V. Ivanchenko
 //
 // Modified:
-// 03.06.2010 V.Ivanchenko cleanup constructors and ConstructProcess method
 //
 //----------------------------------------------------------------------------
 //
-// G4MuonMinusCaptureAtRest for mu-
-// CHIPS capture for other negatively charged hadrons
 
 #include "G4QStoppingPhysics.hh"
 
@@ -51,24 +48,28 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4MuonMinus.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
 
 G4QStoppingPhysics::G4QStoppingPhysics(G4int ver)
-  :  G4VPhysicsConstructor("hCapture"), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor("stopping"), verbose(ver), wasActivated(false) ,
+     useMuonMinusCaptureAtRest(true)
 {
-  if(verbose > 1) { G4cout << "### G4QStoppingPhysics" << G4endl; }
+  if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
 
-
-G4QStoppingPhysics::G4QStoppingPhysics(const G4String&, G4int ver, G4bool)
-  :  G4VPhysicsConstructor("hCapture"), verbose(ver), wasActivated(false)
+G4QStoppingPhysics::G4QStoppingPhysics(const G4String& name, G4int ver,
+		G4bool UseMuonMinusCapture)
+  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false) ,
+     useMuonMinusCaptureAtRest(UseMuonMinusCapture)
 {
-  if(verbose > 1) { G4cout << "### G4QStoppingPhysics" << G4endl; }
+  if(verbose > 1) G4cout << "### G4QStoppingPhysics" << G4endl;
 }
 
 G4QStoppingPhysics::~G4QStoppingPhysics()
 {
-  delete hProcess;
+  if(wasActivated) {
+    if ( muProcess ) delete muProcess;
+    delete hProcess;
+  }
 }
 
 void G4QStoppingPhysics::ConstructParticle()
@@ -87,14 +88,20 @@ void G4QStoppingPhysics::ConstructParticle()
 
 void G4QStoppingPhysics::ConstructProcess()
 {
-  if(wasActivated) { return; }
+  if(verbose > 1) G4cout << "### G4QStoppingPhysics::ConstructProcess " 
+			  << wasActivated << G4endl;
+  if(wasActivated) return;
   wasActivated = true;
-  if(verbose > 1) {
-    G4cout << "### G4QStoppingPhysics::ConstructProcess " 
-	   << G4endl;
-  }
 
-  hProcess  = new G4QCaptureAtRest();
+  if ( useMuonMinusCaptureAtRest )
+  {
+     muProcess = new G4MuonMinusCaptureAtRest();
+  } else {
+     muProcess = 0;
+  }   
+  hProcess = new G4QCaptureAtRest();
+
+  G4double mThreshold = 130.*MeV;
 
   // Add Stopping Process
   G4ParticleDefinition* particle=0;
@@ -106,19 +113,28 @@ void G4QStoppingPhysics::ConstructProcess()
     particle = theParticleIterator->value();
     pmanager = particle->GetProcessManager();
     if(particle == G4MuonMinus::MuonMinus()) {
-      pmanager->AddRestProcess(new G4MuonMinusCaptureAtRest());
-      if(verbose > 1) {
-	G4cout << "### QStoppingPhysics added G4MuonMinusCaptureAtRest for " 
-	       << particle->GetParticleName() << G4endl;
-      } 
-    } else if( particle->GetPDGCharge() < 0.0 && 
-	       !particle->IsShortLived() &&
-	       hProcess->IsApplicable(*particle) ) { 
+      if ( useMuonMinusCaptureAtRest ) 
+      {
+	 pmanager->AddRestProcess(muProcess);
+         if(verbose > 1)
+          G4cout << "### QStoppingPhysics added G4MuonMinusCaptureAtRest for " 
+	         << particle->GetParticleName() << G4endl;
+      } else {
+         pmanager->AddRestProcess(hProcess);
+         if(verbose > 1)
+          G4cout << "### QStoppingPhysics added G4QCaptureAtRest for " 
+	         << particle->GetParticleName() << G4endl;
+      }  
+    }
+    if(particle->GetPDGCharge() < 0.0 && 
+       particle->GetPDGMass() > mThreshold &&
+       !particle->IsShortLived() &&
+       hProcess->IsApplicable(*particle) ) 
+    { 
       pmanager->AddRestProcess(hProcess);
-      if(verbose > 1) {
+      if(verbose > 1)
         G4cout << "### QStoppingPhysics added for " 
 	       << particle->GetParticleName() << G4endl;
-      }
     }
   }
 }
