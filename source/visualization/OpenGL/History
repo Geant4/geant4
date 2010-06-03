@@ -1,4 +1,4 @@
-$Id: History,v 1.176 2010-06-03 10:05:33 allison Exp $
+$Id: History,v 1.177 2010-06-03 20:40:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd June 2010  John Allison  (opengl-V09-03-06)
+- G4OpenGLImmediateSceneHandler: Re-instate
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
+  }
+  I was wrong - it *is* necessary.  If not there, events are not refreshed.
+  So this and similar changes below are all back to geant4-09-03, including
+  glFlush, which is still a big performance penalty on Mac's Snow Leopard.
 
 3rd June 2010  John Allison  (opengl-V09-03-05)
 - Restored following files to geant4-09-03 in interests of stable behaviour:
