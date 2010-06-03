@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.4 2010-06-02 13:50:49 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.5 2010-06-03 09:47:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,15 +151,15 @@ class G4GenericTrap : public G4VSolid
       // Internal methods
 
       G4bool  ComputeIsTwisted() ;
-      G4bool  CheckOrder(std::vector<G4TwoVector> vertices) const;
+      G4bool  CheckOrder(const std::vector<G4TwoVector>& vertices) const;
       G4bool  IsSegCrossing(G4TwoVector a,G4TwoVector b, 
                             G4TwoVector c, G4TwoVector d) const;
-      void    ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
-      void    ComputeBBox() ;
+      void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
+      void ComputeBBox() ;
       
-      G4VFacet* MakeDownFacet(std::vector<G4ThreeVector> fromVertices, 
+      G4VFacet* MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
                               G4int ind1, G4int ind2, G4int ind3) const;
-      G4VFacet* MakeUpFacet(std::vector<G4ThreeVector> fromVertices, 
+      G4VFacet* MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
                               G4int ind1, G4int ind2, G4int ind3) const;      
       G4VFacet* MakeSideFacet(G4ThreeVector downVertex0, 
                               G4ThreeVector downVertex1,
@@ -168,7 +168,7 @@ class G4GenericTrap : public G4VSolid
       G4TessellatedSolid* CreateTessellatedSolid() const;
      
       EInside InsidePolygone(const G4ThreeVector& p,
-                             std::vector<G4TwoVector> poly) const;
+                             const std::vector<G4TwoVector>& poly) const;
       G4double DistToPlane(const G4ThreeVector& p,
                            const G4ThreeVector& v, const G4int ipl) const ;
       G4ThreeVector NormalToPlane(const G4ThreeVector& p,

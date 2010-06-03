@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.5 2010-06-03 08:32:16 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.6 2010-06-03 09:47:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -173,7 +173,7 @@ G4bool G4GenericTrap::ComputeIsTwisted()
 
 // --------------------------------------------------------------------
 
-G4bool G4GenericTrap::CheckOrder(std::vector<G4TwoVector> vertices) const
+G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
 {
   // Test if the vertices are in a clockwise order, if not reorder them.
   // Also test if they're well defined without crossing opposite segments
@@ -338,7 +338,7 @@ G4bool G4GenericTrap::IsSegCrossing(G4TwoVector a, G4TwoVector b,
 // --------------------------------------------------------------------
 
 G4VFacet*
-G4GenericTrap::MakeDownFacet(std::vector<G4ThreeVector> fromVertices, 
+G4GenericTrap::MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
                              G4int ind1, G4int ind2, G4int ind3) const 
 {
   // Create a triangular facet from the polygon points given by indices
@@ -375,7 +375,7 @@ G4GenericTrap::MakeDownFacet(std::vector<G4ThreeVector> fromVertices,
 // --------------------------------------------------------------------
 
 G4VFacet*
-G4GenericTrap::MakeUpFacet(std::vector<G4ThreeVector> fromVertices, 
+G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
                            G4int ind1, G4int ind2, G4int ind3) const     
 {
   // Create a triangular facet from the polygon points given by indices
@@ -744,8 +744,9 @@ G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   
 // --------------------------------------------------------------------
 
-EInside G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
-                                      std::vector<G4TwoVector> poly) const 
+EInside
+G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
+                              const std::vector<G4TwoVector>& poly) const 
 {
   static const G4double halfCarTolerance=kCarTolerance*0.5;
   EInside  in = kInside;
@@ -790,7 +791,7 @@ EInside G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
           return kOutside;
         }
       }
-      else if(cross<0.)  {return kOutside; }
+      else if (cross<0.)  {return kOutside; }
     }
   }
  
@@ -836,7 +837,7 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
 
 // --------------------------------------------------------------------
 
-G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p) const
+G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 {
   // Calculate side nearest to p, and return normal
   // If two sides are equidistant, sum of the Normal is returned
