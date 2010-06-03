@@ -40,6 +40,10 @@
 /mydet/SelectDetector Trd
 /run/beamOn 5
 #
+# GenericTrap
+/mydet/SelectDetector GenericTrap
+/run/beamOn 5
+#
 # Torus
 /mydet/SelectDetector Torus
 /run/beamOn 5

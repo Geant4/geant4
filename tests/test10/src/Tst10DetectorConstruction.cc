@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.15 2009-05-08 06:54:39 tnikitin Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.16 2010-06-03 19:56:34 tnikitin Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -50,6 +50,7 @@
 #include "G4Paraboloid.hh"
 #include "G4Torus.hh"
 #include "G4Trd.hh"
+#include "G4GenericTrap.hh"
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
 #include "G4TwistedBox.hh"
@@ -59,6 +60,7 @@
 #include "G4OpticalSurface.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
+#include "G4TwoVector.hh"
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
@@ -133,6 +135,18 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
     aVolume = new G4Paraboloid ("aParaboloid", 8*cm, 1*cm, 12*cm);
   else if (val == "Trd")
     aVolume = new G4Trd ("aTrd", 8*cm, 10*cm, 7*cm, 9*cm, 10*cm);
+  else if (val == "GenericTrap" ){
+   std::vector<G4TwoVector> vertices;
+   vertices.push_back(G4TwoVector( -4.5*cm, -4.5*cm));
+   vertices.push_back(G4TwoVector( -4.5*cm,  4.5*cm));
+   vertices.push_back(G4TwoVector(  4.5*cm,  4.5*cm));
+   vertices.push_back(G4TwoVector(  4.5*cm, -4.5*cm));
+   vertices.push_back(G4TwoVector( -3.5*cm, -3.5*cm));
+   vertices.push_back(G4TwoVector( -3.5*cm,  3.5*cm));
+   vertices.push_back(G4TwoVector(  3.5*cm,  3.5*cm));
+   vertices.push_back(G4TwoVector(  3.5*cm, -2.5*cm));     
+   aVolume = new G4GenericTrap("aGenTrd",14.*cm,vertices);
+  }
   else if (val == "Polyhedra")
   {
     G4double zPlane[2] = {-10.*cm, 10.*cm };
