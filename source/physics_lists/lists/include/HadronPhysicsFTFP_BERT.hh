@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT.hh,v 1.4 2010-06-02 14:53:20 gunter Exp $
+// $Id: HadronPhysicsFTFP_BERT.hh,v 1.5 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -65,7 +65,8 @@
 class HadronPhysicsFTFP_BERT : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTFP_BERT(const G4String& name ="hadron",G4bool quasiElastic=false);
+    HadronPhysicsFTFP_BERT(G4int verbose =1);
+    HadronPhysicsFTFP_BERT(const G4String& name, G4bool quasiElastic=false);
     virtual ~HadronPhysicsFTFP_BERT();
 
   public: 

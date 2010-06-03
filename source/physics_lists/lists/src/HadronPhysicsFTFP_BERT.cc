@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP_BERT.cc,v 1.2 2010-06-02 14:53:20 gunter Exp $
+// $Id: HadronPhysicsFTFP_BERT.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,6 +50,11 @@
 #include "G4ShortLivedConstructor.hh"
 
 #include "G4QHadronInelasticDataSet.hh"
+
+HadronPhysicsFTFP_BERT::HadronPhysicsFTFP_BERT(G4int)
+                    :  G4VPhysicsConstructor("hInelastic FTFP_BERT")
+		     , QuasiElastic(false)
+{}
 
 HadronPhysicsFTFP_BERT::HadronPhysicsFTFP_BERT(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)

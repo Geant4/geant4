@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSC_EFLOW.cc,v 1.2 2007-04-26 14:47:11 gunter Exp $
+// $Id: HadronPhysicsQGSC_EFLOW.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -49,6 +49,11 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+HadronPhysicsQGSC_EFLOW::HadronPhysicsQGSC_EFLOW(G4int)
+                    :  G4VPhysicsConstructor("hInelastic QGSC_EFLOW")
+		     , QuasiElastic(true)
+{}
 
 HadronPhysicsQGSC_EFLOW::HadronPhysicsQGSC_EFLOW(const G4String& name, G4bool quasiElastic)
                     :  G4VPhysicsConstructor(name)  , QuasiElastic(quasiElastic)

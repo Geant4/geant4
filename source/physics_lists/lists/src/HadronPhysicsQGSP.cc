@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadronPhysicsQGSP.cc,v 1.4 2007-11-13 10:16:11 gunter Exp $
+// $Id: HadronPhysicsQGSP.cc,v 1.5 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -51,6 +51,13 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+HadronPhysicsQGSP::HadronPhysicsQGSP(G4int)
+                 :  G4VPhysicsConstructor("hInelastic QGSP")
+		  , QuasiElastic(true)
+{
+   ProjectileDiffraction=false;
+}
 
 HadronPhysicsQGSP::HadronPhysicsQGSP(const G4String& name, G4bool quasiElastic)
                  :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)

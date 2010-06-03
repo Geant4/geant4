@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGS_BIC.hh,v 1.1 2007-11-13 10:23:24 gunter Exp $
+// $Id: HadronPhysicsQGS_BIC.hh,v 1.2 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,7 +64,8 @@
 class HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGS_BIC(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsQGS_BIC(G4int verbose =1);
+    HadronPhysicsQGS_BIC(const G4String& name, G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGS_BIC();
 
   public: 

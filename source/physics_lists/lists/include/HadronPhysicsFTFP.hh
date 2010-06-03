@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFP.hh,v 1.3 2008-06-19 08:08:22 gunter Exp $
+// $Id: HadronPhysicsFTFP.hh,v 1.4 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -63,7 +63,8 @@
 class HadronPhysicsFTFP : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTFP(const G4String& name ="hadron",G4bool quasiElastic=false);
+    HadronPhysicsFTFP(G4int verbose =1);
+    HadronPhysicsFTFP(const G4String& name,G4bool quasiElastic=false);
     virtual ~HadronPhysicsFTFP();
 
   public: 

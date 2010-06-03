@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTF_BIC.icc,v 1.4 2009-06-02 16:51:35 gunter Exp $
+// $Id: FTF_BIC.icc,v 1.5 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -91,8 +91,7 @@ template<class T> TFTF_BIC<T>::TFTF_BIC(G4int ver):  T()
   this-> RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
 
    // Hadron Physics
-   G4bool quasiElastic;
-  this->RegisterPhysics(  new HadronPhysicsFTF_BIC("hadron",quasiElastic=false));
+  this->RegisterPhysics(  new HadronPhysicsFTF_BIC(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics("stopping"));

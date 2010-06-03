@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsLHEP.cc,v 1.1 2006-10-31 11:35:10 gunter Exp $
+// $Id: HadronPhysicsLHEP.cc,v 1.2 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -48,6 +48,10 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+
+HadronPhysicsLHEP::HadronPhysicsLHEP(G4int)
+                    :  G4VPhysicsConstructor("hInelastic LHEP") 
+{}
 
 HadronPhysicsLHEP::HadronPhysicsLHEP(const G4String& name)
                     :  G4VPhysicsConstructor(name) 

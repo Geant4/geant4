@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.1 2010-05-26 15:06:49 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_CHIPS.hh,v 1.2 2010-06-03 10:42:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,7 +64,8 @@
 class HadronPhysicsQGSP_BERT_CHIPS : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsQGSP_BERT_CHIPS(const G4String& name ="hadron",G4bool quasiElastic=true);
+    HadronPhysicsQGSP_BERT_CHIPS(G4int verbose =1);
+    HadronPhysicsQGSP_BERT_CHIPS(const G4String& name, G4bool quasiElastic=true);
     virtual ~HadronPhysicsQGSP_BERT_CHIPS();
 
   public: 
