@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2010-01-19 17:06:18 gcosmo Exp $
+$Id: History,v 1.15 2010-06-03 14:24:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 3rd, 2010  Tatiana Nikitina - G01-V09-03-02
+- Added G4GenericTrap to the solids.gdml sample.
 
 Jan 19th, 2010  Gabriele Cosmo - G01-V09-03-01
 - Corrected typo in replicated.gdml file.
