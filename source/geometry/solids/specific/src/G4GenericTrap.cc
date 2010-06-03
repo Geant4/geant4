@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.4 2010-06-03 06:56:18 tnikitin Exp $
+// $Id: G4GenericTrap.cc,v 1.5 2010-06-03 08:32:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -812,26 +812,26 @@ EInside G4GenericTrap::Inside(const G4ThreeVector& p) const
 
   static const G4double halfCarTolerance=kCarTolerance*0.5;
   EInside innew=kOutside;
-  std:: vector<G4TwoVector> xy;
+  std::vector<G4TwoVector> xy;
  
-  if (std::abs(p.z()) <= fDz+halfCarTolerance)  // First check Z range
+  if (std::fabs(p.z()) <= fDz+halfCarTolerance)  // First check Z range
   {
     // Compute intersection between Z plane containing point and the shape
+    //
     G4double cf = 0.5*(fDz-p.z())/fDz;
     for (G4int i=0; i<4; i++)
     {
       xy.push_back(fVertices[i+4]+cf*( fVertices[i]-fVertices[i+4]));
     }
 
-  innew=InsidePolygone(p,xy);
+    innew=InsidePolygone(p,xy);
 
-  if( (innew==kInside) || (innew==kSurface) )
-  { 
-    if(std::abs(p.z()) > fDz-halfCarTolerance)  { innew=kSurface; }
+    if( (innew==kInside) || (innew==kSurface) )
+    { 
+      if(std::fabs(p.z()) > fDz-halfCarTolerance)  { innew=kSurface; }
+    }
   }
-
- }
- return innew;    
+  return innew;    
 } 
 
 // --------------------------------------------------------------------
