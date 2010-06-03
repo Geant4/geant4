@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.67 2010-06-03 08:22:39 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.68 2010-06-03 14:19:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -620,7 +620,7 @@ GenTrapWrite(xercesc::DOMElement* solidsElement,
 
    xercesc::DOMElement* gtrapElement = NewElement("arb8");
    gtrapElement->setAttributeNode(NewAttribute("name",name));
-   gtrapElement->setAttributeNode(NewAttribute("hz",
+   gtrapElement->setAttributeNode(NewAttribute("dz",
                                            gtrap->GetZHalfLength()/mm));
    gtrapElement->setAttributeNode(NewAttribute("v1x", vertices[0].x()));
    gtrapElement->setAttributeNode(NewAttribute("v1y", vertices[0].y()));

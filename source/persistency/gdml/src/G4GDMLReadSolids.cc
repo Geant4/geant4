@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.30 2010-06-03 08:18:08 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.31 2010-06-03 14:19:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -1059,7 +1059,7 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double hz =0.0;
+   G4double dz =0.0;
    G4double v1x=0.0, v1y=0.0, v2x=0.0, v2y=0.0, v3x=0.0, v3y=0.0,
 	    v4x=0.0, v4y=0.0, v5x=0.0, v5y=0.0, v6x=0.0, v6y=0.0,
 	    v7x=0.0, v7y=0.0, v8x=0.0, v8y=0.0;
@@ -1083,7 +1083,7 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
 
       if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="hz") { hz = eval.Evaluate(attValue); } else
+      if (attName=="dz") { dz = eval.Evaluate(attValue); } else
       if (attName=="v1x") { v1x = eval.Evaluate(attValue); } else
       if (attName=="v1y") { v1y = eval.Evaluate(attValue); } else
       if (attName=="v2x") { v2x = eval.Evaluate(attValue); } else
@@ -1102,7 +1102,7 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
       if (attName=="v8y") { v8y = eval.Evaluate(attValue); }
    }
 
-   hz *= lunit;
+   dz *= lunit;
    std::vector<G4TwoVector> vertices;
    vertices.push_back(G4TwoVector(v1x,v1y));
    vertices.push_back(G4TwoVector(v2x,v2y));
@@ -1112,7 +1112,7 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
    vertices.push_back(G4TwoVector(v6x,v6y));
    vertices.push_back(G4TwoVector(v7x,v7y));
    vertices.push_back(G4TwoVector(v8x,v8y));
-   new G4GenericTrap(name,hz,vertices);
+   new G4GenericTrap(name,dz,vertices);
 }
 
 void G4GDMLReadSolids::TrapRead(const xercesc::DOMElement* const trapElement)
