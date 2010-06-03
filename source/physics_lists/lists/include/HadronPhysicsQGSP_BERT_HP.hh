@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_HP.hh,v 1.4 2010-06-03 10:42:44 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT_HP.hh,v 1.5 2010-06-03 11:01:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -45,7 +45,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
