@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.41 2010-06-02 15:13:51 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.42 2010-06-04 15:12:09 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -2152,7 +2152,6 @@ QPaintEvent * event
         lastCreated = -1;
       }
       setTabSelected(false);
-      repaint();
     }
   }
 }

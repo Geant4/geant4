@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2010-06-03 13:23:41 allison Exp $
+$Id: History,v 1.143 2010-06-04 15:12:09 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th June  L. Garnier
+- G4UIQt : Fix recursive repaint on windows and linux
+- G4VBasicShell : Command completion improvments (was solve in
+  v1.14 of G4VBasicShell but don't know why I go one step back)
 
 3rd June  J. Allison (interfaces-V09-03-06)
 - Tagged.
