@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.100 2010-04-27 16:59:52 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.101 2010-06-04 15:33:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -359,7 +359,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
 	   << particle->GetParticleName() 
-	   << " and " << p->GetProcessName() << G4endl;
+	   << " and " << p->GetProcessName() << " run= " << run << G4endl;
   }
   // start initialisation for the first run
   startInitialisation = true;
