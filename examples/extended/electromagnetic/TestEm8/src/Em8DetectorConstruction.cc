@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.22 2009-11-24 17:51:58 vnivanch Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.23 2010-06-04 17:08:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -364,7 +364,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 
   if( fRegGasDet == 0 ) // First time - instantiate a region and a cut objects
   {    
-    fRegGasDet = new G4Region("VertexDetector");
+    fRegGasDet = new G4Region("GasDetector");
     cuts = new G4ProductionCuts();
     fRegGasDet->SetProductionCuts(cuts);
   }

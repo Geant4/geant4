@@ -23,6 +23,9 @@
 /plots/sethistName g4.p11
 #
 /run/initialize
+#
+/run/setCut  0.5 mm
+/run/setCutForRegion GasDetector 1.8 mm
 /run/particle/dumpCutValues
 #
 #/gun/particle e-

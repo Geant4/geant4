@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.18 2010-04-13 08:13:35 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.19 2010-06-04 17:08:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,7 +105,6 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-  em_config->AddModels();
   generalPhysicsList->ConstructProcess();
   for(size_t i=0; i<hadronPhys.size(); ++i) { hadronPhys[i]->ConstructProcess(); }
   AddStepMax();
@@ -256,11 +255,11 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
   G4String partname = part->GetParticleName();
   if(modname == "pai") {
     G4PAIModel* pai = new G4PAIModel(part,"PAIModel");
-    em_config->SetExtraEmModel(partname,procname,pai,"VertexDetector",
+    em_config->SetExtraEmModel(partname,procname,pai,"GasDetector",
 			      0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
     G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
-    em_config->SetExtraEmModel(partname,procname,pai,"VertexDetector",
+    em_config->SetExtraEmModel(partname,procname,pai,"GasDetector",
 			      0.0,100.*TeV,pai);
   }
 }
