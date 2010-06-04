@@ -1,4 +1,4 @@
-$Id: History,v 1.503 2010-06-03 07:31:51 grichine Exp $
+$Id: History,v 1.504 2010-06-04 09:25:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 June 2010:  V.Ivant (emstand-V09-03-17)
+- G4ICRU73QOModel - fixed problems and add factor for transition to
+                    Bethe-Bloch at 2 MeV
+- G4hIonisation - use G4ICRU73QOModel for negatively charged particles 
+                  below 2 MeV
+- G4BraggModel - above 2 MeV use ICRU'49 parameterisation for all atoms
+
 June 3, 2010, V. Grichine 
 - G4PAIModel.cc, G4PAIPhotonModel.cc cout for the model initialisation 
 
