@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParN04.cc,v 1.6 2006-07-05 13:07:54 gcosmo Exp $
+// $Id: ParN04.cc,v 1.7 2010-06-04 17:58:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "G4UItcsh.hh"
 
 #include "ExN04DetectorConstruction.hh"
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04RunAction.hh"
 #include "ExN04EventAction.hh"
@@ -70,7 +70,7 @@ int main(int argc,char** argv)
   G4VUserDetectorConstruction* detector = new ExN04DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP;
+  G4VUserPhysicsList* physics = new QGSP_BERT();
   runManager->SetUserInitialization(physics);
   
 #ifdef G4VIS_USE
