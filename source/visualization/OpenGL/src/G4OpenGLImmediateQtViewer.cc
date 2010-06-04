@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.20 2010-06-04 16:21:47 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.21 2010-06-04 16:23:07 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,9 +160,6 @@ void G4OpenGLImmediateQtViewer::paintGL()
   if (fIsRepainting) {
     //    return ;
   }
-#ifdef G4DEBUG_VIS_OGL
-  printf("\n\nG4OpenGLImmediateQtViewer::paintGL ??\n");
-#endif
   if (!fReadyToPaint) {
     fReadyToPaint= true;
     return;

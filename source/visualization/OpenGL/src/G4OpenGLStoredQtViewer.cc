@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.30 2010-06-04 15:27:47 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.31 2010-06-04 16:21:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -207,8 +207,11 @@ void G4OpenGLStoredQtViewer::resizeGL(
  
 void G4OpenGLStoredQtViewer::paintGL()
 {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredQtViewer::paintGL \n");
+#endif
   if (fIsRepainting) {
-    return ;
+    //    return ;
   }
   fIsRepainting = true;
 #ifdef G4DEBUG_VIS_OGL
