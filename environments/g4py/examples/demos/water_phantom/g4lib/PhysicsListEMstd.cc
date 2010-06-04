@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListEMstd.cc,v 1.3 2006-06-29 15:28:29 gunter Exp $
+// $Id: PhysicsListEMstd.cc,v 1.4 2010-06-04 05:43:47 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   PhysicsListEMstd.cc
@@ -46,10 +46,10 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4MultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4eMultipleScattering.hh"
 
 // ====================================================================
 //
@@ -96,7 +96,7 @@ void PhysicsListEMstd::ConstructProcess()
   // ----------------------------------------------------------
   // electron physics
   // ----------------------------------------------------------
-  G4MultipleScattering* msc=    new G4MultipleScattering;
+  G4eMultipleScattering* msc=   new G4eMultipleScattering;
   G4eIonisation*        eion=   new G4eIonisation;
   G4eBremsstrahlung*    ebrems= new G4eBremsstrahlung;
 
@@ -108,7 +108,7 @@ void PhysicsListEMstd::ConstructProcess()
   // ----------------------------------------------------------
   // positron physics
   // ----------------------------------------------------------
-  msc=    new G4MultipleScattering;
+  msc=    new G4eMultipleScattering;
   eion=   new G4eIonisation;
   ebrems= new G4eBremsstrahlung;
   G4eplusAnnihilation* annihilation= new G4eplusAnnihilation;
