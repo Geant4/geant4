@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.5 2009-12-29 17:54:25 vnivanch Exp $
+// $Id: QBBC.cc,v 1.6 2010-06-04 13:31:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -69,23 +69,32 @@ QBBC::QBBC( G4int ver, const G4String& type )
 
   // EM Physics
   //RegisterPhysics( new G4EmStandardPhysics(ver));
-  RegisterPhysics( new G4EmStandardPhysics_option2(ver));
+  RegisterPhysics( new G4EmStandardPhysics_option2(ver) );
 
   // Synchroton Radiation & GN Physics
-  RegisterPhysics( new G4EmExtraPhysics("extra EM"));
+  RegisterPhysics( new G4EmExtraPhysics(ver) );
 
   // Decays
-  RegisterPhysics( new G4DecayPhysics("decay",ver) );
+  RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Physics
-  RegisterPhysics( new G4HadronHElasticPhysics(ver,false,type));
-  //RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
-  RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
-  RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
+  if(type == "QBBC") {
+    RegisterPhysics( new G4HadronElasticPhysics(ver) );
+  } else if(type == "QBBC_XGG") { 
+    RegisterPhysics( new G4HadronHElasticPhysics(ver) );
+  } else if(type == "QBBC_XGGSN") { 
+    RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
+  } else if(type == "QBBC_HP") { 
+    RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );
+  }
+
+  RegisterPhysics( new G4QStoppingPhysics(ver) );
+  RegisterPhysics( new G4IonBinaryCascadePhysics(ver) );
+
   RegisterPhysics( new G4HadronInelasticQBBC(type, ver));
 
   // Neutron tracking cut
-  RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+  RegisterPhysics( new G4NeutronTrackingCut(ver) );
 }		 
 
 QBBC::~QBBC() 
