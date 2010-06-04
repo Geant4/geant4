@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.6 2010-06-04 13:31:55 vnivanch Exp $
+// $Id: QBBC.cc,v 1.7 2010-06-04 13:34:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -52,6 +52,8 @@
 #include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsXS.hh"
+#include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4ChargeExchangePhysics.hh"
