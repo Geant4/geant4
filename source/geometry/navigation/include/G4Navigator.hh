@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.29 2009-11-30 11:59:52 japost Exp $
+// $Id: G4Navigator.hh,v 1.30 2010-06-04 16:40:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -281,6 +281,9 @@ class G4Navigator
   inline G4ThreeVector NetTranslation() const;
   inline G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
+
+  inline void          EnableBestSafety( G4bool value= false );
+    // Enable best-possible evaluation of isotropic safety
 
  protected:  // with description
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;

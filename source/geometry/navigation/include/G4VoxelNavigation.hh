@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.5 2007-05-11 13:43:59 gcosmo Exp $
+// $Id: G4VoxelNavigation.hh,v 1.6 2010-06-04 16:40:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,7 @@
 #include "G4ThreeVector.hh"
 
 #include "G4BlockingList.hh"
+#include "G4VoxelSafety.hh"
 
 // Required for inline implementation
 //
@@ -106,12 +107,18 @@ class G4VoxelNavigation
       // verifications and more strict correctness conditions.
       // Is effective only with G4VERBOSE set.
 
+    inline void  EnableBestSafety( G4bool flag= false );
+      // Enable best-possible evaluation of isotropic safety
+
   protected:
 
     G4double ComputeVoxelSafety( const G4ThreeVector& localPoint ) const;
     G4bool LocateNextVoxel( const G4ThreeVector& localPoint,
                             const G4ThreeVector& localDirection,
                             const G4double currentStep );
+
+    G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
+					const G4ThreeVector& localPoint ) const;
 
     G4BlockingList fBList;
       // Blocked volumes
@@ -146,8 +153,12 @@ class G4VoxelNavigation
     //  END Voxel Stack information
     //
 
+    G4VoxelSafety  fpVoxelSafety;
+    //  Helper object for Voxel Safety
+
     G4bool fCheck;
     G4int  fVerbose;
+    G4bool   fBestSafety; 
     G4double kCarTolerance;
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.icc,v 1.4 2006-06-29 18:36:30 gunter Exp $
+// $Id: G4VoxelNavigation.icc,v 1.5 2010-06-04 16:40:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -189,4 +189,12 @@ inline
 void  G4VoxelNavigation::CheckMode(G4bool mode)
 {
   fCheck = mode;
+}
+
+// 
+//
+void  G4VoxelNavigation::EnableBestSafety(G4bool flag)
+{
+  fBestSafety= flag;
+  G4cout << " Setting 'BestSafety' mode flag to " << flag << G4endl;
 }

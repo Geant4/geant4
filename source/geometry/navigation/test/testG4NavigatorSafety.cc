@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigatorSafety.cc,v 1.3 2010-01-12 17:03:20 gcosmo Exp $
+// $Id: testG4NavigatorSafety.cc,v 1.4 2010-06-04 16:40:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -165,9 +165,12 @@ void computeApproxSafeties(G4VPhysicalVolume *pTopNode)
 
 void computeExactSafeties(G4VPhysicalVolume *pTopNode)
 {
-/*
   G4int i=0;
   MyNavigator myNav;
+
+  // Enable use of Best Safety Estimate -- ie as exact as solids allow
+  myNav->UseBestSafety( true ); 
+
   myNav.SetWorldVolume(pTopNode);
   std::vector<G4ThreeVector>::const_iterator pos;
   for (pos=kPoints.begin(); pos!=kPoints.end(); pos++)
@@ -177,7 +180,6 @@ void computeExactSafeties(G4VPhysicalVolume *pTopNode)
     i++;
   }
   compare = true;
-*/
 }
 
 void compareSafeties()

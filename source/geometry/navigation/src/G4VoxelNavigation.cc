@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.9 2008-11-14 18:26:35 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.10 2010-06-04 16:40:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,21 +36,25 @@
 
 #include "G4VoxelNavigation.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4VoxelSafety.hh"
 
 // ********************************************************************
 // Constructor
 // ********************************************************************
 //
 G4VoxelNavigation::G4VoxelNavigation()
-  : fVoxelDepth(-1),
+  : fBList(), 
+    fVoxelDepth(-1),
     fVoxelAxisStack(kNavigatorVoxelStackMax,kXAxis),
     fVoxelNoSlicesStack(kNavigatorVoxelStackMax,0),
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax,0.),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax,0),
     fVoxelHeaderStack(kNavigatorVoxelStackMax,(G4SmartVoxelHeader*)0),
     fVoxelNode(0),
+    fpVoxelSafety(),  // Object of New helper class
     fCheck(false),
-    fVerbose(0)
+    fVerbose(0),
+    fBestSafety(false)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
@@ -709,7 +713,7 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 G4double
 G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
                                  const G4NavigationHistory& history,
-                                 const G4double )
+                                 const G4double       maxLength)
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
   G4LogicalVolume *motherLogical;
@@ -723,6 +727,12 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   motherPhysical = history.GetTopVolume();
   motherLogical = motherPhysical->GetLogicalVolume();
   motherSolid = motherLogical->GetSolid();
+
+  if( fBestSafety ) { 
+    G4double bestSafety;
+    bestSafety= fpVoxelSafety.ComputeSafety( localPoint, *motherPhysical, maxLength );
+    return bestSafety;
+  }
 
   //
   // Compute mother safety
