@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2009-11-27 07:56:30 kmura Exp $
+$Id: History,v 1.49 2010-06-04 05:42:14 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,12 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 June 2010 K.Murakami (tagged as environments-V09-03-00)
+ - update for the 9.4 beta release
+ - use G4xMultipleScattering instead if G4MultipleScattering class.
+ - bug fix in pyG4GDMLParser.cc
+
 27 November 2009 K.Murakami
  - config/g4py.gmk: add -lz as linker options
 
