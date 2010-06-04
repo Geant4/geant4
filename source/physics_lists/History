@@ -1,4 +1,4 @@
-q$Id: History,v 1.129 2010-06-04 10:44:07 mkossov Exp $
+q$Id: History,v 1.130 2010-06-04 16:05:13 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-06-2010, G.Folger                    (phys-lists-V09-03-10)
+- New ctor for G4NeutronTrackingCut
+- Use new ctors in physics lists
+- QGSP_FTFP_BERT becomes supported (was experimental)
+- remove previously blocked lists (FTFP_EMV, QGSC_EFLOW, QGSP_EMX)
+- remove obsolete lists, except QGSP ( now blocked) and QGSC_CHIPS, 
+   ie. removed FTFC, FTFP, LHEP_BERT_HP, LHEP_BERT, LHEP_PRECO_HP,
+    QGSC_EMV, QGSC, QGSC_QGSC, QGSP_BERT_DIF, QGSP_BERT_NQE,
+    QGSP_DIF, QGSP_EMV, QGSP_EMV_NQE, QGSP_NQE, QGSP_QE
 
 
 04-06-2010, M. Kosov                            (phys-lists-V09-03-09)
