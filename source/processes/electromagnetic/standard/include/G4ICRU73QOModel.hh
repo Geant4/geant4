@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.hh,v 1.2 2010-05-25 17:38:45 bagoulia Exp $
+// $Id: G4ICRU73QOModel.hh,v 1.3 2010-06-04 09:09:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -189,6 +189,8 @@ private:
   G4int sizeL0;
   G4int sizeL1;
   G4int sizeL2;
+
+  static const G4double factorBethe[99];
   
 };
 
