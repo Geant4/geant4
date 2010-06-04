@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BIC_EMY.icc,v 1.2 2010-06-03 15:46:04 vnivanch Exp $
+// $Id: QGSP_BIC_EMY.icc,v 1.3 2010-06-04 16:05:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //   created from QGSP_BIC
 //
 // Modified:
+// 04.06.2010 G.Folger: Use new ctor for builders
 //
 //----------------------------------------------------------------------------
 //
@@ -67,7 +68,7 @@ template<class T> TQGSP_BIC_EMY<T>::TQGSP_BIC_EMY(G4int ver):  T()
   // defaultCutValue = 1.0*mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_EMY 1.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BIC_EMY 1.1"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
@@ -87,16 +88,16 @@ template<class T> TQGSP_BIC_EMY<T>::TQGSP_BIC_EMY(G4int ver):  T()
 
    // Hadron Physics
    G4bool quasiElastic;
-  this->RegisterPhysics(  new HadronPhysicsQGSP_BIC("hadron",quasiElastic=true));
+  this->RegisterPhysics(  new HadronPhysicsQGSP_BIC(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC_EMY"));
+  this->RegisterPhysics( new G4IonBinaryCascadePhysics(ver));
   
   // Neutron tracking cut
-  this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
 

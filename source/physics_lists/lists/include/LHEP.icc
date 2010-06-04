@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LHEP.icc,v 1.4 2010-06-03 15:46:04 vnivanch Exp $
+// $Id: LHEP.icc,v 1.5 2010-06-04 16:05:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 02.12.2005 V.Ivanchenko: rename components
 // 14.06.2006 G.Folger: Migrate to HadronElasticPhysics using G4LElastic
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 04.06.2010 G.Folger: Use new ctor for builders
 //
 //----------------------------------------------------------------------------
 //
@@ -68,7 +69,7 @@ template<class T> TLHEP<T>::TLHEP(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: LHEP 4.2"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP 4.3"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
@@ -86,10 +87,10 @@ template<class T> TLHEP<T>::TLHEP(G4int ver):  T()
   this-> RegisterPhysics( new G4HadronElasticPhysicsLHEP(ver) );
 
    // Hadron Physics
-  this->RegisterPhysics(  new HadronPhysicsLHEP("hadron"));
+  this->RegisterPhysics(  new HadronPhysicsLHEP(ver));
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4IonPhysics(ver));
 
 }
 

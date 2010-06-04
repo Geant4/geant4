@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_TRV.icc,v 1.4 2010-06-03 15:46:04 vnivanch Exp $
+// $Id: QGSP_BERT_TRV.icc,v 1.5 2010-06-04 16:05:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // Modified:
 // 16.05.2007 V.Ivanchenko: rename EM builders
 // 27.11.2009 G.Folger: Mark as experimental
+// 04.06.2010 G.Folger: Use new ctor for builders
 //
 //----------------------------------------------------------------------------
 //
@@ -70,7 +71,7 @@ template<class T> TQGSP_BERT_TRV<T>::TQGSP_BERT_TRV(G4int ver):  T()
 {
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_TRV 1.1"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_TRV 1.2"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
@@ -93,16 +94,16 @@ template<class T> TQGSP_BERT_TRV<T>::TQGSP_BERT_TRV(G4int ver):  T()
 
   // Hadron Physics
    G4bool quasiElastic;
-  this->RegisterPhysics( new HadronPhysicsQGSP_BERT_TRV("hadron",quasiElastic=true));
+  this->RegisterPhysics( new HadronPhysicsQGSP_BERT_TRV(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4QStoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics("ion"));
+  this->RegisterPhysics( new G4IonPhysics(ver));
   
   // Neutron tracking cut
-  this->RegisterPhysics( new G4NeutronTrackingCut("Neutron tracking cut", ver));
+  this->RegisterPhysics( new G4NeutronTrackingCut(ver));
 
 }
 
