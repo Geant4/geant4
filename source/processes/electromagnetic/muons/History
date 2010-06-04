@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2010-06-01 15:21:59 vnivanch Exp $
+$Id: History,v 1.136 2010-06-04 09:30:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 June 2010: V.Ivant (emmuons-V09-03-01)
+- G4MuIonisation - use G4ICRU73QOModel for mu- for E< 0.2 MeV
 
 1 June 2010: V.Ivant (emmuons-V09-03-00)
 - G4MuPairProductionModel - added sampling recoil of a primary particle

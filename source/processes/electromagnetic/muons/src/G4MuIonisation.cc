@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.60 2010-06-01 15:21:31 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.61 2010-06-04 09:30:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -149,7 +149,7 @@ void G4MuIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
       if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
       else { 
 	SetEmModel(new G4ICRU73QOModel(),1); 
-	elow = 1.0*MeV;
+	//elow = 1.0*MeV;
       }
     }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
