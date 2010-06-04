@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.9 2009-11-20 03:36:51 kmura Exp $
+// $Id: pyPhysicsLists.cc,v 1.10 2010-06-04 05:47:11 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyPhysicsLists.cc
@@ -105,6 +105,10 @@
 #include "QGSP_BIC_EMY.hh"
 #include "QGSP_FTFP_BERT.hh"
 #include "QGSP_INCL_ABLA.hh"
+#endif
+
+#if G4VERSION_NUMBER >= 940
+#include "QGSP_BERT_CHIPS.hh"
 #endif
 
 // macro for adding physics lists
@@ -210,6 +214,10 @@ void export_PhysicsLists()
   ADD_PHYSICS_LIST(QGSP_BIC_EMY);
   ADD_PHYSICS_LIST(QGSP_FTFP_BERT);
   ADD_PHYSICS_LIST(QGSP_INCL_ABLA);
+#endif
+
+#if G4VERSION_NUMBER >= 930
+  ADD_PHYSICS_LIST(QGSP_BERT_CHIPS);
 #endif
 
   // sort PL vector
