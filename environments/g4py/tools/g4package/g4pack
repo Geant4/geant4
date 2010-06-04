@@ -8,7 +8,7 @@
 export LANG=C
 
 IFS='
-        '
+	 '
 
 PATH=/bin:/usr/bin
 export PATH
@@ -231,7 +231,7 @@ if [ $enable_glib = 1 ]; then
 fi
 
 if [ $enable_slib = 1 ]; then
-  cp -pR $g4dir/$slibdir/$g4system/lib* $g4packdir/lib    
+  cp -pR $g4dir/$slibdir/$g4system/lib* $g4packdir/lib
 
   if [ $g4system = Darwin-g++ ]; then
     if [ $enable_glib = 0 ]; then
