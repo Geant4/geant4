@@ -8,12 +8,10 @@
 #  Hava A Fun!
 # ==================================================================
 """
-# $Id: __init__.py,v 1.21 2009-11-20 03:36:51 kmura Exp $
-__version__ ='9.3.0'
-__date__ = '1/Dec/2009'
+# $Id: __init__.py,v 1.22 2010-06-04 05:47:44 kmura Exp $
+__version__ ='9.4.0 beta'
+__date__ = '25/June/2010'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
-__url__ = 'http://www-geant4.kek.jp/projects/Geant4Py/'
-
 
 # import submodules
 from G4interface import *
@@ -42,9 +40,8 @@ def print_version():
   Version : %s
   Date    : %s
   Contact : %s
-  WWW     : %s
 =============================================================
-""" % ( __version__, __date__, __author__, __url__)
+""" % ( __version__, __date__, __author__)
 
 # ==================================================================
 # initialize
