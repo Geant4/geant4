@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4GDMLParser.cc,v 1.3 2008-12-12 02:26:34 kmura Exp $
+// $Id: pyG4GDMLParser.cc,v 1.4 2010-06-04 05:46:43 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyG4GDMLParser.cc
@@ -34,6 +34,8 @@
 
 #include <boost/python.hpp>
 #include "G4GDMLParser.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Material.hh"
 #include "G4Version.hh"
 
 using namespace boost::python;
@@ -63,7 +65,7 @@ void export_G4GDMLParser()
   class_<G4GDMLParser, boost::noncopyable>
     ("G4GDMLParser", "GDML parser")
     // ---
-#if G4VERSION_NUMBNER < 920
+#if G4VERSION_NUMBER < 920
     .def("Read",             &G4GDMLParser::Read)
 #else
     .def("Read",             &G4GDMLParser::Read,       f_Read())
