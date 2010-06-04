@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //  Taken from
-// $Id: MomoEventAction.cc,v 1.2 2006-06-29 15:27:54 gunter Exp $
+// $Id: MomoEventAction.cc,v 1.3 2010-06-04 06:36:46 kmura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,15 +68,4 @@ void MomoEventAction::EndOfEventAction(const G4Event* evt)
 	   << " trajectories stored in this event." << G4endl;
   }
     
-  // extract the trajectories and draw them
-  //
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
-        }
-    }
 }
-
