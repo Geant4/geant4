@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.57 2010-04-03 16:59:54 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.58 2010-06-04 09:28:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4AtomicShells.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -266,7 +267,7 @@ G4double G4EmCorrections:: KShellCorrection(const G4ParticleDefinition* p,
       Z2 = 1.0;
     }
     G4double e0= 13.6*eV*Z2;
-    term += f*atomDensity[i]*KShell(shells.GetBindingEnergy(iz,0)/e0,ba2/Z2)/Z;
+    term += f*atomDensity[i]*KShell(G4AtomicShells::GetBindingEnergy(iz,0)/e0,ba2/Z2)/Z;
   }
 
   term /= material->GetTotNbOfAtomsPerVolume();
@@ -292,10 +293,10 @@ G4double G4EmCorrections:: LShellCorrection(const G4ParticleDefinition* p,
       G4double Z2= Zeff*Zeff;
       G4double e0= 13.6*eV*Z2*0.25;
       G4double f = 0.125;
-      G4int nmax = std::min(4,shells.GetNumberOfShells(iz));
+      G4int nmax = std::min(4,G4AtomicShells::GetNumberOfShells(iz));
       for(G4int j=1; j<nmax; j++) {
-        G4double ne = G4double(shells.GetNumberOfElectrons(iz,j));
-        G4double e1 = shells.GetBindingEnergy(iz,j);
+        G4double ne = G4double(G4AtomicShells::GetNumberOfElectrons(iz,j));
+        G4double e1 = G4AtomicShells::GetBindingEnergy(iz,j);
 	//   G4cout << "LShell: j= " << j << " ne= " << ne << " e(eV)= " << e/eV
 	//  << " e0(eV)= " << e0/eV << G4endl;
         term += f*ne*atomDensity[i]*LShell(e1/e0,ba2/Z2)/Z;
@@ -416,6 +417,7 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
 
   for (G4int i = 0; i<numberOfElements; i++) {
 
+    G4double res = 0.0;
     G4double Z = (*theElementVector)[i]->GetZ();
     G4int   iz = G4int(Z);
     G4double Z2= (Z-0.3)*(Z-0.3);
@@ -425,7 +427,7 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
       Z2 = 1.0;
     }
     G4double e0= 13.6*eV*Z2;
-    term += f*atomDensity[i]*KShell(shells.GetBindingEnergy(iz,0)/e0,ba2/Z2)/Z;
+    res += f*KShell(G4AtomicShells::GetBindingEnergy(iz,0)/e0,ba2/Z2);
     if(2 < iz) {
       G4double Zeff = Z - ZD[10];
       if(iz < 10) Zeff = Z - ZD[iz];
@@ -433,46 +435,48 @@ G4double G4EmCorrections::ShellCorrection(const G4ParticleDefinition* p,
       e0= 13.6*eV*Z2*0.25;
       f = 0.125;
       G4double eta = ba2/Z2;
-      G4int ntot = shells.GetNumberOfShells(iz);
+      G4int ntot = G4AtomicShells::GetNumberOfShells(iz);
       G4int nmax = std::min(4, ntot);
       G4double norm   = 0.0;
       G4double eshell = 0.0;
-      for(G4int j=1; j<nmax; j++) {
-        G4double x = G4double(shells.GetNumberOfElectrons(iz,j));
-        G4double e1 = shells.GetBindingEnergy(iz,j);
-	norm   += x;
-	eshell += e1*x;
-        term += f*x*atomDensity[i]*LShell(e1/e0,eta)/Z;
+      for(G4int j=1; j<nmax; ++j) {
+        G4double e1 = G4AtomicShells::GetBindingEnergy(iz,j);
+        G4int ne = G4AtomicShells::GetNumberOfElectrons(iz,j);
+	norm   += ne;
+	eshell += e1*ne;
+        res += f*ne*LShell(e1/e0,eta);
       }
-      if(10 < iz) {
+      if(ntot > nmax) {
 	eshell /= norm;
 	G4double eeff = eshell*eta;
-	for(G4int k=nmax; k<ntot; k++) {
-          G4double x = G4double(shells.GetNumberOfElectrons(iz,k));
-          G4double e1 = shells.GetBindingEnergy(iz,k);
-          term += f*x*atomDensity[i]*LShell(e1/e0,eeff/e1)/Z;
-	  //          term += f*x*atomDensity[i]*LShell(eshell/e0,eeff/e1)/Z;
+	for(G4int k=nmax; k<ntot; ++k) {
+	  G4int ne = G4AtomicShells::GetNumberOfElectrons(iz,k);
+          G4double e1 = G4AtomicShells::GetBindingEnergy(iz,k);
+	  res += f*ne*LShell(e1/e0,eeff/e1);
+	  //res += f*ne*LShell(e1/eshell,eeff/e1);
 	}
+      }
 	/*
         if(28 >= iz) {
-          term += f*(Z - 10.)*atomDensity[i]*LShell(eshell,HM[iz-11]*eta)/Z; 
+          res += f*(Z - 10.)*LShell(eshell,HM[iz-11]*eta); 
         } else if(32 >= iz) {
-          term += f*18.0*atomDensity[i]*LShell(eshell,HM[iz-11]*eta)/Z;
+          res += f*18.0*LShell(eshell,HM[iz-11]*eta);
         } else if(60 >= iz) {
-          term += f*18.0*atomDensity[i]*LShell(eshell,HM[iz-11]*eta)/Z; 
-          term += f*(Z - 28.)*atomDensity[i]*LShell(eshell,HN[iz-33]*eta)/Z; 
+          res += f*18.0*LShell(eshell,HM[iz-11]*eta); 
+          res += f*(Z - 28.)*LShell(eshell,HN[iz-33]*eta); 
         } else {
-          term += f*18.0*atomDensity[i]*LShell(eshell,HM[53]*eta)/Z;
-          term += f*32.0*atomDensity[i]*LShell(eshell,HN[30]*eta)/Z;
-          term += f*(Z - 60.)*atomDensity[i]*LShell(eshell,150.*eta)/Z; 
+          res += f*18.0*LShell(eshell,HM[50]*eta);
+          res += f*32.0*LShell(eshell,HN[30]*eta);
+	  res += f*(Z - 60.)*LShell(eshell,150.*eta); 
 	}
 	*/
-      }
     }
-    //term += atomDensity[i]*MSH[iz]/(ba2*ba2);
+    //term += atomDensity[i]*(res/Z + MSH[iz]/(ba2*ba2));
+    term += res*atomDensity[i]/Z;
   }
 
   term /= material->GetTotNbOfAtomsPerVolume();
+  //if(charge < 0.0) { term = -term; }
   return term;
 }
 
@@ -1402,8 +1406,8 @@ void G4EmCorrections::Initialise()
     19.5, 19.3, 19.2, 19.1, 18.4, 18.8, 18.7, 18.6, 18.5, 18.4, 
     18.2
   };
-  for(i=0; i<53; i++) {HM[i] = hm[i];}
-  for(i=0; i<31; i++) {HN[i] = hn[i];}
+  for(i=0; i<53; ++i) {HM[i] = hm[i];}
+  for(i=0; i<31; ++i) {HN[i] = hn[i];}
 
   const G4double mm[93] = {
      0.0,

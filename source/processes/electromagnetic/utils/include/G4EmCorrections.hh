@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.24 2008-09-12 14:44:48 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.25 2010-06-04 09:28:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -55,7 +55,6 @@
 #define G4EmCorrections_h 1
 
 #include "globals.hh"
-#include "G4AtomicShells.hh"
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
@@ -262,7 +261,6 @@ private:
   G4double  eCorrMax;
   G4int     nbinCorr;
 
-  G4AtomicShells        shells;
   G4ionEffectiveCharge  effCharge;
 
   G4NistManager*        nist;
@@ -355,11 +353,13 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     G4double ratio = electron_mass_c2/mass;
     tmax  = 2.0*electron_mass_c2*bg2 /(1. + 2.0*gamma*ratio + ratio*ratio);
     charge  = p->GetPDGCharge()/eplus;
-    if(charge < 1.5)  {q2 = charge*charge;}
-    else {
-      q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
-      charge = std::sqrt(q2);
-    }
+    //if(charge < 1.5)  {q2 = charge*charge;}
+    //else {
+    //  q2 = effCharge.EffectiveChargeSquareRatio(p,mat,kinEnergy);
+    //  charge = std::sqrt(q2);
+    //}
+    if(charge > 1.5) { charge = effCharge.EffectiveCharge(p,mat,kinEnergy); }
+    q2 = charge*charge;
   }
   if(mat != material) {
     material = mat;
