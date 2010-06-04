@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2010-03-23 14:12:08 vnivanch Exp $
+// $Id: RunAction.cc,v 1.4 2010-06-04 19:03:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin):detector(det), kinematic(kin), af(0), tree(0)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+  :detector(det), kinematic(kin), af(0), tree(0)
 { 
   verboseLevel = 1;
   binLength = offsetX = 0.;
@@ -225,7 +226,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	     << G4endl;
     }
   };
-
+  G4cout << "### End of stopping power table" << G4endl;
 #ifdef G4ANALYSIS_USE
   // normalize histogram
   G4double fac = (mm/MeV) / (NbofEvents * binLength);
@@ -236,8 +237,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 		G4cout << "Range table for " << matName << G4endl;
 	};
 
-
-  for(i=0; i<100; i++) {
+  for(i=0; i<100; ++i) {
     G4double e = std::log10(ekin[i] / MeV) + 0.05;
     histo[1]->fill(e, dedxproton[i]);
     histo[2]->fill(e, dedxmp[i]);

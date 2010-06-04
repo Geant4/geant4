@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4MonopolePhysics.cc,v 1.4 2010-03-31 10:12:16 vnivanch Exp $
+// $Id: G4MonopolePhysics.cc,v 1.5 2010-06-04 19:03:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,6 +49,7 @@
 
 #include "G4StepLimiter.hh"
 #include "G4Transportation.hh"
+#include "G4MonopoleTransportation.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4mplIonisation.hh"
 #include "G4hhIonisation.hh"
@@ -98,7 +98,12 @@ void G4MonopolePhysics::ConstructProcess()
   if(nbin < 1) nbin = 1;
   nbin *= 10;
   
-  pmanager->AddProcess( new G4Transportation(), -1, 0, 0);
+  if(magn == 0.0) {
+    pmanager->AddProcess( new G4Transportation(), -1, 0, 0);
+  } else {
+    pmanager->AddProcess( new G4MonopoleTransportation(mpl), -1, 0, 0);
+  }
+
   G4int idx = 1;
   if(mpl->GetPDGCharge() != 0.0) {
     //G4hMultipleScattering* hmsc = new G4hMultipleScattering();

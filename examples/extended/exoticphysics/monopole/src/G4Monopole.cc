@@ -111,7 +111,7 @@ G4Monopole* G4Monopole::Monopole()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4Monopole::MagneticCharge() 
+G4double G4Monopole::MagneticCharge() const
 {
   return magCharge;
 }

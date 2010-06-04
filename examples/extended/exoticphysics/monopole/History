@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-05-12 16:22:15 allison Exp $
+$Id: History,v 1.8 2010-06-04 19:03:36 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 June 10: V.Ivant (monopole-V09-03-03)
+- Substituted QGSP by QGSP_BERT
+- (J. Apostolakis, B. Bozsogi)  Added new classes for monopole
+  G4MonopoleEquation, G4MonopoleFieldSetup, G4MonopoleTransportation
 
 12 May 10: J.Allison (monopole-V09-03-02)
 - Introduced GUIExecutive.

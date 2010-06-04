@@ -23,77 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.3 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: G4MonopoleFieldSetup.hh,v 1.1 2010-06-04 19:03:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+//
+// ------------------------------------------------------------
+//        GEANT 4  include file implementation
+// ------------------------------------------------------------
+//
+// G4MonopoleFieldSetup is responsible for setting up a magnetic field
+// and the ability to use it with two different equation of motions, 
+// one for monopoles and another for the rest of the particles. 
+// 
+// 
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4ThreeVector.hh"
+// =======================================================================
+// Created:  13 May 2010, B. Bozsogi
+// =======================================================================
 
-class G4LogicalVolume;
-class G4Material;
-class G4UniformMagField;
-class DetectorMessenger;
-class G4MonopoleFieldSetup;
+#ifndef G4MonopoleFieldSetup_H
+#define G4MonopoleFieldSetup_H
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4MagneticField.hh"
+#include "G4UniformMagField.hh"
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class G4FieldManager;
+class G4ChordFinder;
+class G4Mag_UsualEqRhs;
+class G4MagIntegratorStepper;
+class G4MonopoleEquation;
+
+class G4MonopoleFieldSetup
 {
-public:
+public:  
+  void InitialiseAll();    //  Set parameters and call method below
+  void SetStepperAndChordFinder(G4int val);
+
+  static G4MonopoleFieldSetup* GetMonopoleFieldSetup();
   
-  DetectorConstruction();
-  ~DetectorConstruction();
+protected:
+  G4MonopoleFieldSetup(G4ThreeVector) ;  //  The value of the field
+  G4MonopoleFieldSetup() ;               //  A zero field
 
-  void SetSizeX    (G4double);
-  void SetSizeYZ   (G4double);              
-  void SetMaterial (G4String);            
-  void SetMagField (G4double);
-     
-  void SetMaxStepSize   (G4double);
-     
-  G4VPhysicalVolume* Construct();
-  void               UpdateGeometry();
-     
-  G4double     GetWorldSizeX()    {return worldSizeX;};
-  G4double     GetWorldSizeYZ()   {return worldSizeYZ;};
-  G4Material*  GetWorldMaterial() {return worldMaterial;};     
-  G4double     GetAbsorSizeX()    {return absorSizeX;};
-  G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};
-  G4double     GetMaxStepSize()   {return maxStepSize;};
-  G4Material*  GetAbsorMaterial() {return absorMaterial;};
+ ~G4MonopoleFieldSetup() ;     
+ 
+protected:
+  G4FieldManager*         GetGlobalFieldManager() ;   // static 
+
+  G4FieldManager*         fFieldManager ;
+  G4ChordFinder*          fChordFinder ;
+  G4Mag_UsualEqRhs*       fEquation ; 
+  G4MonopoleEquation*     fMonopoleEquation ;
+  G4MagneticField*        fMagneticField ; 
+
+  G4MagIntegratorStepper* fStepper ;
+  G4MagIntegratorStepper* fMonopoleStepper ;
+
+  G4double                fMinStep ;
   
-  void         PrintParameters();
-                       
-private:
-
-  void               DefineMaterials();
-  G4VPhysicalVolume* ConstructVolumes();     
-  
-  G4double            worldSizeX;
-  G4double            worldSizeYZ;
-  G4Material*         worldMaterial;           
-  G4double            absorSizeX;
-  G4double            absorSizeYZ;
-  G4double	      maxStepSize;
-  G4Material*         absorMaterial;
-
-  G4UniformMagField*  magField;
-  G4MonopoleFieldSetup* fMFieldSetup;
-
-  G4LogicalVolume*    lAbsor;
-               
-  DetectorMessenger* detectorMessenger;
-
+private:  
+  static G4MonopoleFieldSetup*  fMonopoleFieldSetup;
+ 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-

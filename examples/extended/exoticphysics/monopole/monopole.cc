@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.4 2010-05-12 16:22:15 allison Exp $
+// $Id: monopole.cc,v 1.5 2010-06-04 19:03:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,7 @@
 
 #include "DetectorConstruction.hh"
 #include "G4MonopolePhysics.hh"
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -63,7 +63,7 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //create physicsList
-  QGSP* phys = new QGSP();
+  QGSP_BERT* phys = new QGSP_BERT();
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
   phys->RegisterPhysics(theMonopole);
 
