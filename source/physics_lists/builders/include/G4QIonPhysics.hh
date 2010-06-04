@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonPhysics.hh,v 1.1 2010-06-03 09:31:40 mkossov Exp $
+// $Id: G4QIonPhysics.hh,v 1.2 2010-06-04 10:22:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ class G4QIonPhysics : public G4VPhysicsConstructor
 {
 public:
   G4QIonPhysics(const G4String& name="ions");
-  virtual ~G4QIonPhysics();
+  virtual ~G4QIonPhysics() {};
 
   // This method will be invoked in the Construct() method.
   // each particle type will be instantiated

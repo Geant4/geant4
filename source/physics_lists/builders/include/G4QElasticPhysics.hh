@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElasticPhysics.hh,v 1.1 2010-06-03 09:31:40 mkossov Exp $
+// $Id: G4QElasticPhysics.hh,v 1.2 2010-06-04 10:22:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -51,7 +51,7 @@ class G4QElasticPhysics : public G4VPhysicsConstructor
 public: 
   G4QElasticPhysics(const G4String& name = "elastic",
 			  G4int ver = 1);
-  virtual ~G4QElasticPhysics();
+  virtual ~G4QElasticPhysics(){};
 
 public: 
   // This method will be invoked in the Construct() method. 

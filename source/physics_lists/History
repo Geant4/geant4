@@ -1,4 +1,4 @@
-q$Id: History,v 1.127 2010-06-03 16:29:04 gunter Exp $
+q$Id: History,v 1.128 2010-06-04 10:22:14 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+04-06-2010, M. Kosov                (phys-lists-V09-03-08)
+bug fix for the virtual distructor in G4QElasticPhysics & G4QIonPhysics
 
 03-June, V.Ivantchenko, G.Folger        (phys-lists-V09-03-07)
 - Introduce new ctor for all builders with signature
