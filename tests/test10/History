@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2009-05-11 14:04:50 gcosmo Exp $
+$Id: History,v 1.23 2010-06-04 07:45:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 04, 2010  Tatiana Nikitina (test10-V09-03-00)
+- Added G4GenericTrap solid to the test suite.
+  Requires tag "geom-specific-V09-03-06".
 
 May 11, 2009  Tatiana Nikitina (test10-V09-02-00)
 - Added few cases of non-zero rotation matrices for tested solids.
