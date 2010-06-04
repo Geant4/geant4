@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.375 2010-05-17 14:51:22 gcosmo Exp $
+cvs log $Id: History,v 1.376 2010-06-04 13:16:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd June 2010  Ben Morgan (config-V09-03-03)
+- Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
+  version 1.0) to Configure script. Coworks with tag "Configure-V09-03-01".
 
 11th May 2010  Ben Morgan (config-V09-03-02)
 - Updated internal scripts for Configure: protected echos on LD_LIBRARY_PATH
