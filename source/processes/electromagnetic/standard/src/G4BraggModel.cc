@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.25 2010-05-27 10:25:59 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.26 2010-06-04 09:08:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -571,7 +571,7 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   // compaund material with parametrisation
   G4int iNist = pstar.GetIndex(material);
 
-  if( iNist >= 0 ) {
+  if( iNist >= 0 && kineticEnergy <= 2.01*MeV) {
     return pstar.GetElectronicDEDX(iNist, kineticEnergy)*material->GetDensity();
 
   } else if( HasMaterial(material) ) {
