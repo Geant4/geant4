@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc,v 1.26 2010-05-19 18:14:16 vnivanch Exp $
+// $Id: G4HadronInelasticQBBC.cc,v 1.27 2010-06-04 08:40:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -47,7 +47,7 @@
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
-//#include "G4UInelasticCrossSection.hh"
+
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
@@ -77,6 +77,14 @@ enum QBBCType
   fQBBC_XGG,
   fQBBC_XGGSN
 };
+
+G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
+  : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
+{
+  htype = "QBBC";
+  theHandler = 0;
+  theEvaporation = 0;
+}
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver, 
     G4bool, G4bool,G4bool, G4bool, G4bool)
@@ -108,7 +116,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
 	   << htype << ">" << G4endl;
   }
 
-  // PreCompound and Evaporation models
+  // PreCompound and Evaporation models are instantiated here
   theEvaporation = new G4Evaporation();
   theEvaporation->SetCombinedChannel();
   theHandler = new G4ExcitationHandler();
@@ -133,9 +141,6 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4BinaryCascade* bic = new G4BinaryCascade();
   bic->SetDeExcitation(thePreCompound);
   G4HadronicInteraction* theBIC = NewModel(bic,0.0,1.5*GeV);
-
-  //  G4HadronicInteraction* theCHIPS = 
-  //  NewModel(new G4QStringChipsParticleLevelInterface(),0.0,7.5*GeV);
 
   G4QInelastic* theCHIPS = new G4QInelastic();
   G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();
