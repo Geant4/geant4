@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc,v 1.2 2010-05-25 16:55:21 bagoulia Exp $
+// $Id: G4ICRU73QOModel.cc,v 1.3 2010-06-04 09:08:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,9 +80,11 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
     {
       indexZ[i] = -1;
     }
-  for(G4int i = 0; i < NQOELEM; i++) 
+  for(G4int i = 0; i < NQOELEM; ++i) 
     {
-      indexZ[ZElementAvailable[i]] = i;
+      if(ZElementAvailable[i] > 0) {
+	indexZ[ZElementAvailable[i]] = i;
+      }
     }
 }
 
@@ -195,8 +197,8 @@ G4double G4ICRU73QOModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = cutEnergy/tmax;
 
-    dedx += chargeSquare*((log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
-          * (material->GetElectronDensity())/beta2);
+    dedx += chargeSquare*( log(x) + (1.0 - x)*beta2 ) * twopi_mc2_rcl2
+          * material->GetElectronDensity()/beta2;
   }
 
   return dedx;
@@ -217,7 +219,7 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
                            material->GetElementVector() ;
   
   //  loop for the elements in the material
-  for (G4int i=0; i<numberOfElements; i++)
+  for (G4int i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
       eloss   += DEDXPerElement(G4int(element->GetZ()), kineticEnergy)
@@ -228,9 +230,11 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4ICRU73QOModel::DEDXPerElement(G4int Z,
+G4double G4ICRU73QOModel::DEDXPerElement(G4int AtomicNumber,
 					 G4double kineticEnergy)
 {
+  G4int Z = AtomicNumber;
+  if(Z > 97) { Z = 97; }
   G4int nbOfShells = GetNumberOfShells(Z);
   if(nbOfShells < 1) nbOfShells = 1;
 
@@ -238,38 +242,33 @@ G4double G4ICRU73QOModel::DEDXPerElement(G4int Z,
 
   G4double fBetheVelocity = CLHEP::fine_structure_const*CLHEP::c_light/v;
 
-  G4double dedx  = 0.0;
-
   G4double tau   = kineticEnergy/proton_mass_c2;
   G4double gam   = tau + 1.0;
   G4double bg2   = tau * (tau+2.0);
   G4double beta2 = bg2/(gam*gam);
 
-  dedx += 2*CLHEP::twopi_mc2_rcl2/beta2;
-
   G4double l0Term = 0, l1Term = 0, l2Term = 0;
   
-  for (G4int nos = 0; nos < nbOfShells; nos++){
+  for (G4int nos = 0; nos < nbOfShells; ++nos){
     
-    G4double l0 = 0, l1 = 0, l2 = 0;
-  
     G4double NormalizedEnergy = (2.0*CLHEP::electron_mass_c2*beta2) / 
       GetShellEnergy(Z,nos);
 
     G4double shStrength = GetShellStrength(Z,nos);
 
-    l0 = GetL0(NormalizedEnergy);
+    G4double l0 = GetL0(NormalizedEnergy);
     l0Term += shStrength  * l0; 
 
-    l1 = GetL1(NormalizedEnergy);
+    G4double l1 = GetL1(NormalizedEnergy);
     l1Term += shStrength * l1; 
 
-    l2 = GetL2(NormalizedEnergy);
+    G4double l2 = GetL2(NormalizedEnergy);
     l2Term += shStrength * l2;
 
   }
-  dedx *= chargeSquare*(l0Term + q*fBetheVelocity*l1Term 
-			+ chargeSquare*fBetheVelocity*fBetheVelocity*l2Term);
+  G4double dedx  = 2*CLHEP::twopi_mc2_rcl2*chargeSquare*factorBethe[Z]*
+    (l0Term + q*fBetheVelocity*l1Term 
+     + chargeSquare*fBetheVelocity*fBetheVelocity*l2Term)/beta2;
   return dedx;
 }
 
@@ -277,9 +276,10 @@ G4double G4ICRU73QOModel::DEDXPerElement(G4int Z,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4ICRU73QOModel::GetOscillatorEnergy(G4int Z,
-					       G4int nbOfTheShell) const
+					      G4int nbOfTheShell) const
 { 
   G4int idx = denEffData->GetElementIndex(Z, kStateUndefined);
+  if(idx == -1) { idx = denEffData->GetElementIndex(Z-1, kStateUndefined); }
   G4double PlasmaEnergy = denEffData->GetPlasmaEnergy(idx);
  
   G4double PlasmaEnergy2 = PlasmaEnergy * PlasmaEnergy;
@@ -442,7 +442,7 @@ G4double G4ICRU73QOModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4int G4ICRU73QOModel::ZElementAvailable[NQOELEM] = {1,2,4,6,7,8,10,13,14,18,
+const G4int G4ICRU73QOModel::ZElementAvailable[NQOELEM] = {1,2,4,6,7,8,10,13,14,-18,
 						  22,26,28,29,32,36,42,47,
 						  50,54,73,74,78,79,82,92};
 
@@ -642,3 +642,18 @@ const G4double G4ICRU73QOModel::L2[14][2] =
   {20.00,      -0.88409},	
   {40.00,      -1.13902}
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// Correction obtained by V.Ivanchenko using G4BetheBlochModel
+const G4double G4ICRU73QOModel::factorBethe[99] = { 1.0, 
+0.9637, 0.9877, 0.9467, 0.9856, 0.9066, 0.9886, 0.9256, 0.9822, 0.8729, 0.9965,   // 1 - 10
+0.8564, 0.8879, 0.9577, 0.9606, 0.9104, 0.8962, 0.9316, 0.9378, 0.9189, 0.9543,   // 11 - 20
+0.9114, 0.9846, 0.8497, 0.8311, 0.8081, 0.985, 0.76, 0.9696, 0.9964, 0.7361,   // 21 - 30
+0.7787, 1.066, 0.8547, 0.8759, 0.9135, 1.042, 0.9256, 0.9555, 0.965, 0.9619,   // 31 - 40
+0.9361, 0.9078, 0.9291, 0.9128, 0.9115, 0.876, 0.8701, 0.7955, 0.8197, 0.8551,   // 41 - 50
+0.8318, 0.8646, 0.8802, 0.8871, 0.8881, 0.9103, 0.9113, 0.8879, 0.8588, 0.8279,   // 51 - 60
+0.7953, 0.7685, 0.7433, 0.7219, 0.7003, 0.6732, 0.6485, 0.63, 0.6232, 0.611,   // 61 - 70
+0.6385, 0.6642, 0.8452, 0.8127, 0.6982, 0.6971, 0.6889, 0.8416, 0.8341, 0.6956,   // 71 - 80
+0.7308, 0.7777, 0.7692, 0.7924, 0.8054, 0.8203, 0.8386, 0.8618, 0.8654, 0.8558,   // 81 - 90
+0.8323, 0.8362, 0.8044, 0.7811, 0.7685, 0.7714, 0.759, 0.7506}; 
