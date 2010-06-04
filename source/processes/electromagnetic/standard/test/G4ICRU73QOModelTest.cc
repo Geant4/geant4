@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// 
 // ------------------------------------------------------------
 //
 //  To print eloss by using of ICRU73QOModel
@@ -49,21 +48,24 @@
 #include "G4MuonPlus.hh"
 #include "G4MuonMinus.hh"
 
-int main() {
+#include <vector>
 
+int main() {
+ 
   G4UnitDefinition::BuildUnitsTable();
 
-  G4Material* material = G4NistManager::Instance()->FindOrBuildMaterial("G4_H");
+  G4NistManager* nist = G4NistManager::Instance();
+  G4Material* material = nist->FindOrBuildMaterial("G4_H");
   
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  const std::vector<G4String> mnames = nist->GetNistMaterialNames();
 
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
 
   // initialise proton processes (models)
-  // 
+  //   
   G4ParticleDefinition* part = G4AntiProton::AntiProton();
+  G4ParticleDefinition* prot = G4Proton::Proton();
   //G4ParticleDefinition* part = G4MuonMinus::MuonMinus();
 
   G4cout << "pName = " << part->GetParticleName() << G4endl;
@@ -72,19 +74,21 @@ int main() {
   partTable->SetReadiness();
 
   G4VEmModel* bragg = new G4BraggModel();
-  G4VEmModel* bethe = new G4BetheBlochModel();
+  G4VEmModel* bethe1 = new G4BetheBlochModel();
+  G4VEmModel* bethe2 = new G4BetheBlochModel();
   G4VEmModel* qo = new G4ICRU73QOModel();
  
   G4DataVector v;
   v.resize(100);
 
-  bragg->Initialise(part,v);
-  bethe->Initialise(part,v);
+  bragg->Initialise(prot,v);
+  bethe1->Initialise(prot,v);
+  bethe2->Initialise(part,v);
   qo->Initialise(part,v);
   
   G4double Emin = 1.1*keV; 
   G4double Emax = 100.01*MeV; 
- G4double Ecut = 1*GeV;
+  G4double Ecut = 1*GeV;
  
   size_t nBinTab = 35;
 
@@ -92,6 +96,7 @@ int main() {
   pVector = new G4PhysicsLogVector(Emin, Emax, nBinTab);
 
   G4double Energy = 0.;
+  G4double ELos0 = 0.;
   G4double ELos1 = 0.;
   G4double ELos2 = 0.;
   G4double ELos3 = 0.;
@@ -106,13 +111,127 @@ int main() {
     G4cout << "ERROR file <" << asciiFileName << "> is not opened" << G4endl;
     exit(1);
   }
+  G4double fact1[98];
+  G4double fact2[98];
+  G4double fact3[98]; 
 
-// Write to file
-  
+  Energy = 2.*MeV;
+  part = G4AntiProton::AntiProton();
+  pName = part->GetParticleName(); 
+  G4cout << "### E(MeV)= " << Energy/MeV << "  for " << pName 
+	 << std::setprecision(4)
+	 << G4endl;
+  G4cout << " const G4double factorBethe[98] = { 1.0, " << G4endl;
+  for(G4int j=0; j<98; ++j) {
+    const G4Material* mat = nist->FindOrBuildMaterial(mnames[j]);
+    G4int Z = G4int(mat->GetZ());
+    ELos0   = bragg->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos1   = bethe1->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos2   = bethe2->ComputeDEDXPerVolume(mat,part,Energy,Ecut);     
+    ELos3   = qo->ComputeDEDXPerVolume(mat,part,Energy,Ecut);
+    fact1[j]= ELos2/ELos3;
+    if(ELos2 > ELos0) {  fact1[j] *= ELos0/ELos1; }
+    fact2[j]= ELos3*fact1[j]/ELos0;
+    fact3[j]= ELos1/ELos2;
+    G4cout << fact1[j] << ", ";
+    if((Z/10)*10 == Z) { G4cout << "  // " << Z-9 << " - " << Z << G4endl; }
+  } 
+  G4cout << " } " << G4endl; 
+  G4cout << " ##### ICRU73(pbar)/Bragg(p) ratio at 2 MeV: " << G4endl; 
+  for(G4int j=1; j<98; ++j) {
+    G4int Z = j;
+    G4cout << fact2[j] << ", ";
+    if((Z/10)*10 == Z) { G4cout << "  // " << Z-9 << " - " << Z << G4endl; }
+  }
+  G4cout << "  " << G4endl; 
+  G4cout << " ##### p/pbar BetheBloch ratio at 2 MeV: " << G4endl; 
+  for(G4int j=1; j<98; ++j) {
+    G4int Z = j;
+    G4cout << fact3[j] << ", ";
+    if((Z/10)*10 == Z) { G4cout << "  // " << Z-9 << " - " << Z << G4endl; }
+  }
+  G4cout << "  " << G4endl; 
+  part = G4Proton::Proton();
+  pName = part->GetParticleName();
+  G4cout << "### E(MeV)= " << Energy/MeV << "  for " << pName 
+	 << " Bethe/Bragg" <<G4endl; 
+  G4cout << " const G4double factorBragg[98] = { 1.0, " << G4endl;
+  for(G4int j=0; j<98; ++j) {
+    const G4Material* mat = nist->FindOrBuildMaterial(mnames[j]);
+    G4int Z = G4int(mat->GetZ());
+    ELos1   = bragg->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos2   = bethe1->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    fact2[j]= ELos2/ELos1; 
+    G4cout << fact2[j] << ", ";  
+    if((Z/10)*10 == Z) { G4cout << "  // " << Z-9 << " - " << Z << G4endl; }
+  }  
+  G4cout << " } " << G4endl;  
+
+  Energy = 2.*MeV;
+  G4cout << "### E(MeV)= " << Energy/MeV << "  for " << pName 
+	 << std::setprecision(5) << G4endl;
+  for(G4int j=0; j<98; ++j) {
+    const G4Material* mat = nist->FindOrBuildMaterial(mnames[j]);
+    G4double Z = mat->GetZ();
+    ELos1   = bragg->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos2   = bethe1->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos3   = qo->ComputeDEDXPerVolume(mat,part,Energy,Ecut);
+    G4cout << "Z= " << Z << " p bragg/bethe-1= " << ELos1/ELos2 -1
+	   <<  "  go(pbar)/bragg(p)-1= " << ELos3/ELos1 -1 << "   " 
+	   << mnames[j] << "  Bethe(MeV*cm^2/g)= " 
+	   << ELos2*g/(cm2*MeV*mat->GetDensity()) << G4endl;    
+  }
+  Energy = 10.*MeV;
+  G4cout << "### E(MeV)= " << Energy/MeV << "  for " << pName 
+	 << std::setprecision(5) << G4endl;
+  for(G4int j=0; j<98; ++j) {
+    const G4Material* mat = nist->FindOrBuildMaterial(mnames[j]);
+    G4double Z = mat->GetZ();
+    ELos1   = bragg->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos2   = bethe1->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos3   = qo->ComputeDEDXPerVolume(mat,part,Energy,Ecut);
+    G4cout << "Z= " << Z << " p bragg/bethe-1= " << ELos1/ELos2 -1
+	   <<  "  go(pbar)/bragg(p)-1= " << ELos3/ELos1 -1 << "   " 
+	   << mnames[j] << "  Bethe(MeV*cm^2/g)= " 
+	   << ELos2*g/(cm2*MeV*mat->GetDensity()) << G4endl;    
+  }
+
+  part = G4AntiProton::AntiProton();
+  pName = part->GetParticleName();
+  Energy = 2.*MeV;
+  G4cout << "### E(MeV)= " << Energy/MeV << "  for " << pName 
+	 << std::setprecision(5) << G4endl;
+  for(G4int j=0; j<98; ++j) {
+    const G4Material* mat = nist->FindOrBuildMaterial(mnames[j]);
+    G4double Z = mat->GetZ();
+    ELos1   = bragg->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos2   = bethe2->ComputeDEDXPerVolume(mat,part,Energy,Ecut);     
+    ELos3   = qo->ComputeDEDXPerVolume(mat,part,Energy,Ecut);
+    G4cout << "Z= " << Z << "  bragg(p)/bethe(pbar)-1= " << ELos1/ELos2 -1
+	   <<  " pbar go/bethe-1= " << ELos3/ELos2 -1 << "   " 
+	   << mnames[j] << "  Bethe(MeV*cm^2/g)= " 
+	   << ELos2*g/(cm2*MeV*mat->GetDensity()) << G4endl;    
+  }
+  Energy = 10.*MeV;
+  G4cout << "### E(MeV)= " << Energy/MeV << "  for " << pName  
+	 << std::setprecision(5) << G4endl;
+  for(G4int j=0; j<98; ++j) {
+    const G4Material* mat = nist->FindOrBuildMaterial(mnames[j]);
+    G4double Z = mat->GetZ();
+    ELos1   = bragg->ComputeDEDXPerVolume(mat,prot,Energy,Ecut);     
+    ELos2   = bethe2->ComputeDEDXPerVolume(mat,part,Energy,Ecut);     
+    ELos3   = qo->ComputeDEDXPerVolume(mat,part,Energy,Ecut);
+    G4cout << "Z= " << Z << "  bragg(p)/bethe(pbar)-1= " << ELos1/ELos2 -1
+	   <<  " pbar go/bethe-1= " << ELos3/ELos2 -1 << "   " 
+	   << mnames[j] << "  Bethe(MeV*cm^2/g)= " 
+	   << ELos2*g/(cm2*MeV*mat->GetDensity()) << G4endl;    
+  }
+
+  // Write to file
   for (size_t i = 0; i < nBinTab+1; i++) {
     Energy = pVector->GetLowEdgeEnergy(i); 
     ELos1   = bragg->ComputeDEDXPerVolume(material,part,Energy,Ecut);     
-    ELos2   = bethe->ComputeDEDXPerVolume(material,part,Energy,Ecut);     
+    ELos2   = bethe2->ComputeDEDXPerVolume(material,part,Energy,Ecut);     
     ELos3   = qo->ComputeDEDXPerVolume(material,part,Energy,Ecut);     
     asciiFile << std::setiosflags(std::ios::fixed)
 	      << std::setprecision(5)
@@ -137,7 +256,7 @@ int main() {
 	      << std::setiosflags(std::ios::right)
 	      << std::setw(10);
     asciiFile << ELos3
-	      << G4endl;
+	      << G4endl; 
   }
 
     delete pVector;
