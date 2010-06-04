@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+4-Jun-2010 M.Kosov                             (hadr-chips-V09-03-04)
+-----------------------------------------------------------------------
+K0 elastic XS is corrected in G4QElastic
+
 5-Feb-2010 M.Kosov                             (hadr-chips-V09-03-03)
 -----------------------------------------------------------------------
 Mutual tag: accumulate bug fix and AntiBaryonElastic implementation

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.6 2010-02-16 07:53:05 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.7 2010-06-04 11:09:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -218,8 +218,8 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
 #endif
       G4double CSI=0.;                      // Prototype of CS(j,i) for the isotope
       if(!CSmanager2) CSI=CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG); // CS(j,i)
-      else CSI=(CSmanager->GetCrossSection(ccsf,Momentum,Z,N,pPDG)+
-                CSmanager2->GetCrossSection(ccsf,Momentum,Z,N,pPDG))/2.;
+      else CSI=(CSmanager->GetCrossSection(ccsf,Momentum,Z,N,-321)+
+                CSmanager2->GetCrossSection(ccsf,Momentum,Z,N,321) )/2.; // K0
 #ifdef debug
       G4cout<<"G4QEl::GMFP: jI="<<j<<", Zt="<<Z<<", Nt="<<N<<", Mom="<<Momentum<<", XSec="
             <<CSI/millibarn<<G4endl;
@@ -482,8 +482,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   G4double xSec=0.;
   if(!CSmanager2) xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,projPDG); //ReactionCS
-  else xSec=(CSmanager->GetCrossSection(false,Momentum,Z,N,projPDG)+
-             CSmanager2->GetCrossSection(false,Momentum,Z,N,projPDG))/2.;
+  else xSec=(CSmanager->GetCrossSection(false,Momentum,Z,N,-321)+
+             CSmanager2->GetCrossSection(false,Momentum,Z,N,321) )/2.; // K0
 #ifdef debug
   G4cout<<"G4QElast::PSDI:pPDG="<<projPDG<<",P="<<Momentum<<",CS="<<xSec/millibarn<<G4endl;
 #endif
