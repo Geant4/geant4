@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.29 2010-03-10 11:03:46 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.30 2010-06-04 15:27:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,8 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 #else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
 #endif
-  fHasToRepaint =false;
+  fHasToRepaint = false;
+  fIsRepainting = false;
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -180,7 +181,7 @@ void G4OpenGLStoredQtViewer::ComputeView () {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::ComputeView %d %d ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ \n",getWinWidth(), getWinHeight());
 #endif
-  fHasToRepaint =true;
+  fHasToRepaint = true;
 }
 
 
@@ -192,8 +193,10 @@ void G4OpenGLStoredQtViewer::resizeGL(
                                       ,int aHeight)
 {  
   // Set new size, it will be update when next Repaint()->SetView() called
-  ResizeWindow(aWidth,aHeight);
-  fHasToRepaint = sizeHasChanged();
+  if ((aWidth > 0) && (aHeight > 0)) {
+    ResizeWindow(aWidth,aHeight);
+    fHasToRepaint = sizeHasChanged();
+  }
 }
 
 
@@ -204,6 +207,10 @@ void G4OpenGLStoredQtViewer::resizeGL(
  
 void G4OpenGLStoredQtViewer::paintGL()
 {
+  if (fIsRepainting) {
+    return ;
+  }
+  fIsRepainting = true;
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ready:%d fHasTo:%d??\n",fReadyToPaint,fHasToRepaint);
 #endif
@@ -239,15 +246,16 @@ void G4OpenGLStoredQtViewer::paintGL()
 #endif
 
   SetView();
-          
+
   ClearView (); //ok, put the background correct
   ComputeView();
 
-  fHasToRepaint =false;
+  fHasToRepaint = false;
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
+  fIsRepainting = false;
 }
 
 void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *event) {

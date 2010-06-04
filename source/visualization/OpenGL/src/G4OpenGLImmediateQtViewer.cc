@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc,v 1.18 2010-03-10 11:03:46 lgarnier Exp $
+// $Id: G4OpenGLImmediateQtViewer.cc,v 1.19 2010-06-04 15:27:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,8 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 #else
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
 #endif
-  fHasToRepaint =false;
+  fHasToRepaint = false;
+  fIsRepainting = false;
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -147,13 +148,18 @@ void G4OpenGLImmediateQtViewer::resizeGL(
  int aWidth
 ,int aHeight)
 {  
-  ResizeWindow(aWidth,aHeight);
-  fHasToRepaint = sizeHasChanged();
+  if ((aWidth > 0) && (aHeight > 0)) {
+    ResizeWindow(aWidth,aHeight);
+    fHasToRepaint = sizeHasChanged();
+  }
 }
 
 
 void G4OpenGLImmediateQtViewer::paintGL()
 {
+  if (fIsRepainting) {
+    return ;
+  }
 #ifdef G4DEBUG_VIS_OGL
   printf("\n\nG4OpenGLImmediateQtViewer::paintGL ??\n");
 #endif
@@ -207,6 +213,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",fReadyToPaint);
 #endif
+  fIsRepainting = false;
 }
 
 void G4OpenGLImmediateQtViewer::mousePressEvent(QMouseEvent *event)

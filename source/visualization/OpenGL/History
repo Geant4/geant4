@@ -1,4 +1,4 @@
-$Id: History,v 1.177 2010-06-03 20:40:56 allison Exp $
+$Id: History,v 1.178 2010-06-04 15:27:47 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th June 2010  Laurent Garnier
+- G4OpenGLImmediate/StoredQtViewer : Add protection against multiple
+  repaint call. Add protection against resizeGl with bad values
 
 3rd June 2010  John Allison  (opengl-V09-03-06)
 - G4OpenGLImmediateSceneHandler: Re-instate

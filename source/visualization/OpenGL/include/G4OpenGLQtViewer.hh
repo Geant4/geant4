@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.22 2010-05-26 14:50:56 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.23 2010-06-04 15:27:47 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,6 +128,7 @@ protected:
 
   bool fHasToRepaint;
   bool fReadyToPaint;
+  bool fIsRepainting;
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
