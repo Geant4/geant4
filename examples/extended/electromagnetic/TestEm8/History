@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2010-05-21 18:15:04 maire Exp $
+$Id: History,v 1.36 2010-06-04 17:10:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-06-10 V.Ivant (testem8-V09-03-02)
+- PhysicsList, Em8DetectorConstruction - renamed "VertexDetector" by 
+  "GasDetector"
+- added cut per region into TestEm8.in
      
 21-05-10 mma (testem8-V09-03-01)
 - TestEm8.cc : introduction of G4UIExecutive
