@@ -1,389 +1,389 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/GDML_2_10_0/src/GDMLSchema/gdml.xsd">
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
   <define/>
 
   <materials>
-    <material Z="13" name="Al0x932cf0" state="solid">
+    <material Z="13" name="Al0xf830c0" state="solid">
       <D unit="g/cm3" value="2.7"/>
       <atom unit="g/mole" value="26.98"/>
     </material>
-    <element Z="7" name="Nitrogen0x90fe50">
+    <element Z="7" name="Nitrogen0xf744e0">
       <atom unit="g/mole" value="14.00674"/>
     </element>
-    <element Z="8" name="Oxygen0x91dc40">
+    <element Z="8" name="Oxygen0xf746e0">
       <atom unit="g/mole" value="15.9994"/>
     </element>
-    <material name="Vacuum0x916cf0" state="gas">
+    <material name="Vacuum0xf75460" state="gas">
       <D unit="g/cm3" value="1e-25"/>
-      <fraction n="0.7" ref="Nitrogen0x90fe50"/>
-      <fraction n="0.3" ref="Oxygen0x91dc40"/>
+      <fraction n="0.7" ref="Nitrogen0xf744e0"/>
+      <fraction n="0.3" ref="Oxygen0xf746e0"/>
     </material>
-    <element Z="55" name="Cesium0x90eed0">
+    <element Z="55" name="Cesium0xf75170">
       <atom unit="g/mole" value="132.90543"/>
     </element>
-    <element Z="53" name="Iodine0x61aa70">
+    <element Z="53" name="Iodine0xf74ef0">
       <atom unit="g/mole" value="126.90447"/>
     </element>
-    <material name="CsI0x935a90" state="solid">
+    <material name="CsI0xf86130" state="solid">
       <D unit="g/cm3" value="4.51"/>
-      <fraction n="0.511548751606463" ref="Cesium0x90eed0"/>
-      <fraction n="0.488451248393537" ref="Iodine0x61aa70"/>
+      <fraction n="0.511548751606463" ref="Cesium0xf75170"/>
+      <fraction n="0.488451248393537" ref="Iodine0xf74ef0"/>
     </material>
   </materials>
 
   <solids>
-    <tube aunit="deg" deltaphi="360" lunit="mm" name="tube0x941cb0" rmax="9.5" rmin="0" startphi="0" z="200"/>
-    <box lunit="mm" name="voxel0x93f120" x="20" y="200" z="20"/>
-    <box lunit="mm" name="cal0x941f60" x="50" y="50" z="60"/>
-    <box lunit="mm" name="AREA0x93e380" x="300" y="300" z="300"/>
+    <tube aunit="deg" deltaphi="360" lunit="mm" name="tube0xf92770" rmax="9.5" rmin="0" startphi="0" z="200"/>
+    <box lunit="mm" name="voxel0xf8fc30" x="20" y="200" z="20"/>
+    <box lunit="mm" name="cal0xf92a80" x="50" y="50" z="60"/>
+    <box lunit="mm" name="AREA0xf8bed0" x="300" y="300" z="300"/>
   </solids>
 
   <structure>
-    <volume name="tube0x941d60">
-      <materialref ref="Al0x932cf0"/>
-      <solidref ref="tube0x941cb0"/>
+    <volume name="tube0xf92860">
+      <materialref ref="Al0xf830c0"/>
+      <solidref ref="tube0xf92770"/>
     </volume>
-    <volume name="voxel0x93f1a0">
-      <materialref ref="Vacuum0x916cf0"/>
-      <solidref ref="voxel0x93f120"/>
-      <physvol name="tube0x941ee0">
-        <volumeref ref="tube0x941d60"/>
-        <rotation name="tube0x941ee0_rot" unit="deg" x="-90" y="0" z="0"/>
+    <volume name="voxel0xf8fcb0">
+      <materialref ref="Vacuum0xf75460"/>
+      <solidref ref="voxel0xf8fc30"/>
+      <physvol name="tube0xf929e0">
+        <volumeref ref="tube0xf92860"/>
+        <rotation name="tube0xf929e0_rot" unit="deg" x="-90" y="0" z="0"/>
       </physvol>
     </volume>
-    <volume name="cal0x941fe0">
-      <materialref ref="CsI0x935a90"/>
-      <solidref ref="cal0x941f60"/>
+    <volume name="cal0xf92b00">
+      <materialref ref="CsI0xf86130"/>
+      <solidref ref="cal0xf92a80"/>
     </volume>
-    <volume name="AREA_LV0x93e970">
-      <materialref ref="Vacuum0x916cf0"/>
-      <solidref ref="AREA0x93e380"/>
-      <physvol name="voxel0x93f2d0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f2d0_pos" unit="mm" x="-140" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f370">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f370_pos" unit="mm" x="-120" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f3f0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f3f0_pos" unit="mm" x="-100" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f4a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f4a0_pos" unit="mm" x="-80" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f520">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f520_pos" unit="mm" x="-60" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f5c0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f5c0_pos" unit="mm" x="-40" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f640">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f640_pos" unit="mm" x="-20" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f6c0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f6c0_pos" unit="mm" x="0" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f740">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f740_pos" unit="mm" x="20" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f570">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f570_pos" unit="mm" x="40" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f880">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f880_pos" unit="mm" x="60" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f900">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f900_pos" unit="mm" x="80" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93f980">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f980_pos" unit="mm" x="100" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93fa00">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fa00_pos" unit="mm" x="120" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93fa80">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fa80_pos" unit="mm" x="140" y="0" z="-130"/>
-      </physvol>
-      <physvol name="voxel0x93fb00">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fb00_pos" unit="mm" x="-140" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93fb80">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fb80_pos" unit="mm" x="-120" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93f7c0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93f7c0_pos" unit="mm" x="-100" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93fd10">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fd10_pos" unit="mm" x="-80" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93fd90">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fd90_pos" unit="mm" x="-60" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93fe10">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fe10_pos" unit="mm" x="-40" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93fe90">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fe90_pos" unit="mm" x="-20" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93ff10">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93ff10_pos" unit="mm" x="0" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x93ff90">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93ff90_pos" unit="mm" x="20" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940010">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940010_pos" unit="mm" x="40" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940090">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940090_pos" unit="mm" x="60" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940110">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940110_pos" unit="mm" x="80" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940190">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940190_pos" unit="mm" x="100" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940210">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940210_pos" unit="mm" x="120" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940290">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940290_pos" unit="mm" x="140" y="0" z="-110"/>
-      </physvol>
-      <physvol name="voxel0x940310">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940310_pos" unit="mm" x="-140" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940390">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940390_pos" unit="mm" x="-120" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940410">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940410_pos" unit="mm" x="-100" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x93fc00">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fc00_pos" unit="mm" x="-80" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x93fc80">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x93fc80_pos" unit="mm" x="-60" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x9406a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9406a0_pos" unit="mm" x="-40" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940720">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940720_pos" unit="mm" x="-20" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x9407a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9407a0_pos" unit="mm" x="0" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940820">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940820_pos" unit="mm" x="20" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x9408a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9408a0_pos" unit="mm" x="40" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940920">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940920_pos" unit="mm" x="60" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x9409a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9409a0_pos" unit="mm" x="80" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940a20">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940a20_pos" unit="mm" x="100" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940aa0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940aa0_pos" unit="mm" x="120" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940b20">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940b20_pos" unit="mm" x="140" y="0" z="-90"/>
-      </physvol>
-      <physvol name="voxel0x940ba0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940ba0_pos" unit="mm" x="-140" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940c20">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940c20_pos" unit="mm" x="-120" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940ca0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940ca0_pos" unit="mm" x="-100" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940d20">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940d20_pos" unit="mm" x="-80" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940da0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940da0_pos" unit="mm" x="-60" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940e20">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940e20_pos" unit="mm" x="-40" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940ea0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940ea0_pos" unit="mm" x="-20" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940f20">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940f20_pos" unit="mm" x="0" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x940fa0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940fa0_pos" unit="mm" x="20" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x941020">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941020_pos" unit="mm" x="40" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x9410a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9410a0_pos" unit="mm" x="60" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x941120">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941120_pos" unit="mm" x="80" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x9411a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9411a0_pos" unit="mm" x="100" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x941220">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941220_pos" unit="mm" x="120" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x9412a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9412a0_pos" unit="mm" x="140" y="0" z="-70"/>
-      </physvol>
-      <physvol name="voxel0x941320">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941320_pos" unit="mm" x="-140" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x9413a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9413a0_pos" unit="mm" x="-120" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941420">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941420_pos" unit="mm" x="-100" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x9414a0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9414a0_pos" unit="mm" x="-80" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941520">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941520_pos" unit="mm" x="-60" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x940490">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940490_pos" unit="mm" x="-40" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x940510">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940510_pos" unit="mm" x="-20" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x940590">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940590_pos" unit="mm" x="0" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x940610">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x940610_pos" unit="mm" x="20" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x9419b0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x9419b0_pos" unit="mm" x="40" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941a30">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941a30_pos" unit="mm" x="60" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941ab0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941ab0_pos" unit="mm" x="80" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941b30">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941b30_pos" unit="mm" x="100" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941bb0">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941bb0_pos" unit="mm" x="120" y="0" z="-50"/>
-      </physvol>
-      <physvol name="voxel0x941c30">
-        <volumeref ref="voxel0x93f1a0"/>
-        <position name="voxel0x941c30_pos" unit="mm" x="140" y="0" z="-50"/>
-      </physvol>
-      <physvol name="cal0x942110">
-        <volumeref ref="cal0x941fe0"/>
-        <position name="cal0x942110_pos" unit="mm" x="-100" y="0" z="20"/>
-      </physvol>
-      <physvol name="cal0x942190">
-        <volumeref ref="cal0x941fe0"/>
-        <position name="cal0x942190_pos" unit="mm" x="-50" y="0" z="20"/>
-      </physvol>
-      <physvol name="cal0x942210">
-        <volumeref ref="cal0x941fe0"/>
-        <position name="cal0x942210_pos" unit="mm" x="0" y="0" z="20"/>
-      </physvol>
-      <physvol name="cal0x942290">
-        <volumeref ref="cal0x941fe0"/>
-        <position name="cal0x942290_pos" unit="mm" x="50" y="0" z="20"/>
-      </physvol>
-      <physvol name="cal0x942310">
-        <volumeref ref="cal0x941fe0"/>
-        <position name="cal0x942310_pos" unit="mm" x="100" y="0" z="20"/>
+    <volume name="AREA_LV0xf8f4e0">
+      <materialref ref="Vacuum0xf75460"/>
+      <solidref ref="AREA0xf8bed0"/>
+      <physvol name="voxel0xf8fde0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf8fde0_pos" unit="mm" x="-140" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf8fe60">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf8fe60_pos" unit="mm" x="-120" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf8fee0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf8fee0_pos" unit="mm" x="-100" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf8ff90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf8ff90_pos" unit="mm" x="-80" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90010">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90010_pos" unit="mm" x="-60" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf900b0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf900b0_pos" unit="mm" x="-40" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90130">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90130_pos" unit="mm" x="-20" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf901b0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf901b0_pos" unit="mm" x="0" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90230">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90230_pos" unit="mm" x="20" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90060">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90060_pos" unit="mm" x="40" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90370">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90370_pos" unit="mm" x="60" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf903f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf903f0_pos" unit="mm" x="80" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90470">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90470_pos" unit="mm" x="100" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf904f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf904f0_pos" unit="mm" x="120" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf90570">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90570_pos" unit="mm" x="140" y="0" z="-130"/>
+      </physvol>
+      <physvol name="voxel0xf905f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf905f0_pos" unit="mm" x="-140" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90670">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90670_pos" unit="mm" x="-120" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90800">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90800_pos" unit="mm" x="-100" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90880">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90880_pos" unit="mm" x="-80" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90900">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90900_pos" unit="mm" x="-60" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90980">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90980_pos" unit="mm" x="-40" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90a00">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90a00_pos" unit="mm" x="-20" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90a80">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90a80_pos" unit="mm" x="0" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90b00">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90b00_pos" unit="mm" x="20" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90b80">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90b80_pos" unit="mm" x="40" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90c00">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90c00_pos" unit="mm" x="60" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90c80">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90c80_pos" unit="mm" x="80" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90d00">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90d00_pos" unit="mm" x="100" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90d80">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90d80_pos" unit="mm" x="120" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90e00">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90e00_pos" unit="mm" x="140" y="0" z="-110"/>
+      </physvol>
+      <physvol name="voxel0xf90e80">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90e80_pos" unit="mm" x="-140" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf90f00">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90f00_pos" unit="mm" x="-120" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf90f80">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90f80_pos" unit="mm" x="-100" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf906f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf906f0_pos" unit="mm" x="-80" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf90770">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90770_pos" unit="mm" x="-60" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91210">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91210_pos" unit="mm" x="-40" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91290">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91290_pos" unit="mm" x="-20" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91310">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91310_pos" unit="mm" x="0" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91390">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91390_pos" unit="mm" x="20" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91410">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91410_pos" unit="mm" x="40" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91490">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91490_pos" unit="mm" x="60" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91510">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91510_pos" unit="mm" x="80" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91590">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91590_pos" unit="mm" x="100" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91610">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91610_pos" unit="mm" x="120" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91690">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91690_pos" unit="mm" x="140" y="0" z="-90"/>
+      </physvol>
+      <physvol name="voxel0xf91710">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91710_pos" unit="mm" x="-140" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91790">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91790_pos" unit="mm" x="-120" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91810">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91810_pos" unit="mm" x="-100" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91890">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91890_pos" unit="mm" x="-80" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91910">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91910_pos" unit="mm" x="-60" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91990">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91990_pos" unit="mm" x="-40" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91a10">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91a10_pos" unit="mm" x="-20" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91a90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91a90_pos" unit="mm" x="0" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91b10">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91b10_pos" unit="mm" x="20" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91b90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91b90_pos" unit="mm" x="40" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91c10">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91c10_pos" unit="mm" x="60" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91c90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91c90_pos" unit="mm" x="80" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91d10">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91d10_pos" unit="mm" x="100" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91d90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91d90_pos" unit="mm" x="120" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91e10">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91e10_pos" unit="mm" x="140" y="0" z="-70"/>
+      </physvol>
+      <physvol name="voxel0xf91e90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91e90_pos" unit="mm" x="-140" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf91f10">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91f10_pos" unit="mm" x="-120" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf91f90">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91f90_pos" unit="mm" x="-100" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf92010">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf92010_pos" unit="mm" x="-80" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf92090">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf92090_pos" unit="mm" x="-60" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf90280">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90280_pos" unit="mm" x="-40" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf90fd0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf90fd0_pos" unit="mm" x="-20" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf91050">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91050_pos" unit="mm" x="0" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf910d0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf910d0_pos" unit="mm" x="20" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf91150">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf91150_pos" unit="mm" x="40" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf924f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf924f0_pos" unit="mm" x="60" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf92570">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf92570_pos" unit="mm" x="80" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf925f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf925f0_pos" unit="mm" x="100" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf92670">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf92670_pos" unit="mm" x="120" y="0" z="-50"/>
+      </physvol>
+      <physvol name="voxel0xf926f0">
+        <volumeref ref="voxel0xf8fcb0"/>
+        <position name="voxel0xf926f0_pos" unit="mm" x="140" y="0" z="-50"/>
+      </physvol>
+      <physvol name="cal0xf92c30">
+        <volumeref ref="cal0xf92b00"/>
+        <position name="cal0xf92c30_pos" unit="mm" x="-100" y="0" z="20"/>
+      </physvol>
+      <physvol name="cal0xf92cb0">
+        <volumeref ref="cal0xf92b00"/>
+        <position name="cal0xf92cb0_pos" unit="mm" x="-50" y="0" z="20"/>
+      </physvol>
+      <physvol name="cal0xf92d30">
+        <volumeref ref="cal0xf92b00"/>
+        <position name="cal0xf92d30_pos" unit="mm" x="0" y="0" z="20"/>
+      </physvol>
+      <physvol name="cal0xf92db0">
+        <volumeref ref="cal0xf92b00"/>
+        <position name="cal0xf92db0_pos" unit="mm" x="50" y="0" z="20"/>
+      </physvol>
+      <physvol name="cal0xf92e30">
+        <volumeref ref="cal0xf92b00"/>
+        <position name="cal0xf92e30_pos" unit="mm" x="100" y="0" z="20"/>
       </physvol>
     </volume>
   </structure>
 
   <setup name="Default" version="1.0">
-    <world ref="AREA_LV0x93e970"/>
+    <world ref="AREA_LV0xf8f4e0"/>
   </setup>
 
 </gdml>
