@@ -1,4 +1,4 @@
-q$Id: History,v 1.128 2010-06-04 10:22:14 mkossov Exp $
+q$Id: History,v 1.129 2010-06-04 10:44:07 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ track of all tags.
      ----------------------------------------------------------
 
 
-04-06-2010, M. Kosov                (phys-lists-V09-03-08)
+04-06-2010, M. Kosov                            (phys-lists-V09-03-09)
+particles're restricted to SU(3) hadrons (no pi0 & eta) in G4QElasticPhysics
+
+04-06-2010, M. Kosov                            (phys-lists-V09-03-08)
 bug fix for the virtual distructor in G4QElasticPhysics & G4QIonPhysics
 
 03-June, V.Ivantchenko, G.Folger        (phys-lists-V09-03-07)

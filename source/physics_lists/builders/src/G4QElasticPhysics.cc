@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElasticPhysics.cc,v 1.1 2010-06-03 09:31:40 mkossov Exp $
+// $Id: G4QElasticPhysics.cc,v 1.2 2010-06-04 10:44:07 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -86,8 +86,32 @@ void G4QElasticPhysics::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4String pname = particle->GetParticleName();
     G4ProcessManager* pmanager = particle->GetProcessManager();
-    pmanager->AddDiscreteProcess(process);
-    if(verbose > 0) G4cout<<"### G4QElastic process is added for particle="<<pname<<G4endl;
+    if(pname == "anti_neutron" ||
+       pname == "anti_proton"  ||
+       pname == "anti_lambda"  ||
+       pname == "anti_sigma-"  ||
+       pname == "anti_sigma0"  ||
+       pname == "anti_sigma+"  ||
+       pname == "anti_xi-"     ||
+       pname == "anti_xi0"     ||
+       pname == "anti_omega-"  || 
+       pname == "pi-"          ||
+       pname == "pi+"          ||
+       pname == "kaon-"        ||
+       pname == "kaon+"        ||
+       pname == "kaon0S"       ||
+       pname == "kaon0L"       ||
+       pname == "lambda"       ||
+       pname == "sigma-"       ||
+       pname == "sigma0"       ||
+       pname == "sigma+"       ||
+       pname == "xi-"          ||
+       pname == "xi0"          ||
+       pname == "omega-"       )
+    {
+      pmanager->AddDiscreteProcess(process);
+      if(verbose>0) G4cout<<"### G4QElastic process is added for particle="<<pname<<G4endl;
+    }
   }
 }
 
