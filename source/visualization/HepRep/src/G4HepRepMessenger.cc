@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.11 2009-11-23 05:42:28 perl Exp $
+// $Id: G4HepRepMessenger.cc,v 1.12 2010-06-05 06:25:03 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
@@ -100,6 +100,13 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	}
 	setCullInvisiblesCommand->AvailableForStates(G4State_Idle);
 		
+	renderCylAsPolygonsCommand = new G4UIcmdWithABool("/vis/heprep/renderCylAsPolygons", this);
+	renderCylAsPolygonsCommand->SetGuidance("Render cylinders and cones as polygons.");
+	renderCylAsPolygonsCommand->SetGuidance("This command is used by HepRepFile, not by HepRepXML.");
+	renderCylAsPolygonsCommand->SetParameterName("flag",false);
+	renderCylAsPolygonsCommand->SetDefaultValue(true);
+	renderCylAsPolygonsCommand->AvailableForStates(G4State_Idle);
+		
     setEventNumberSuffixCommand = new G4UIcmdWithAString("/vis/heprep/setEventNumberSuffix", this);
     setEventNumberSuffixCommand->SetGuidance("Write separate event files, appended with given suffix.");
     setEventNumberSuffixCommand->SetGuidance("Define the suffix with a pattern such as '-0000'.");
@@ -121,13 +128,13 @@ G4HepRepMessenger::G4HepRepMessenger() :
     addPointAttributesCommand->SetParameterName("flag",false);
     addPointAttributesCommand->SetDefaultValue(false);
     addPointAttributesCommand->AvailableForStates(G4State_Idle);
-
-    useSolidsCommand = new G4UIcmdWithABool("/vis/heprep/useSolids", this);
-    useSolidsCommand->SetGuidance("Use HepRep Solids, rather than Geant4 Primitives.");
-	useSolidsCommand->SetGuidance("This command is used by HepRepXML, not by HepRepFile.");
-    useSolidsCommand->SetParameterName("flag",false);
-    useSolidsCommand->SetDefaultValue(true);
-    useSolidsCommand->AvailableForStates(G4State_Idle);
+		
+	useSolidsCommand = new G4UIcmdWithABool("/vis/heprep/useSolids", this);
+	useSolidsCommand->SetGuidance("Use HepRep Solids, rather than Geant4 Primitives.");
+	useSolidsCommand->SetGuidance("This command is used by HepRepXML, not by HepRepFile..");
+	useSolidsCommand->SetParameterName("flag",false);
+	useSolidsCommand->SetDefaultValue(true);
+	useSolidsCommand->AvailableForStates(G4State_Idle);
 }
 
 G4HepRepMessenger::~G4HepRepMessenger() {
@@ -135,6 +142,7 @@ G4HepRepMessenger::~G4HepRepMessenger() {
 	delete setFileNameCommand;
 	delete setOverwriteCommand;
 	delete setCullInvisiblesCommand;
+    delete renderCylAsPolygonsCommand;
     delete setEventNumberSuffixCommand;
     delete appendGeometryCommand;
     delete addPointAttributesCommand;
@@ -151,6 +159,8 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
         return overwrite; 
     } else if (command==setCullInvisiblesCommand) {
         return cullInvisibles; 
+    } else if (command==renderCylAsPolygonsCommand) {
+        return renderCylAsPolygonsCommand->ConvertToString(cylAsPolygons);
     } else if (command==setEventNumberSuffixCommand) {
         return suffix; 
     } else if (command==appendGeometryCommand) {
@@ -173,6 +183,8 @@ void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
         overwrite = setOverwriteCommand->GetNewBoolValue(newValue);
     } else if (command==setCullInvisiblesCommand) {
 		cullInvisibles = setCullInvisiblesCommand->GetNewBoolValue(newValue);
+    } else if (command==renderCylAsPolygonsCommand) {
+        cylAsPolygons = renderCylAsPolygonsCommand->GetNewBoolValue(newValue);
     } else if (command==setEventNumberSuffixCommand) {
         suffix = newValue;
     } else if (command==appendGeometryCommand) {
@@ -198,6 +210,10 @@ G4bool G4HepRepMessenger::getOverwrite() {
 
 G4bool G4HepRepMessenger::getCullInvisibles() {
     return cullInvisibles;
+}
+
+G4bool G4HepRepMessenger::renderCylAsPolygons() {
+    return cylAsPolygons;
 }
 
 G4String G4HepRepMessenger::getEventNumberSuffix() {
