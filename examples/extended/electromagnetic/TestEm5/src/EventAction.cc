@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.7 2009-03-06 18:04:23 maire Exp $
+// $Id: EventAction.cc,v 1.8 2010-06-06 04:29:07 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,9 +36,6 @@
 #include "EventMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,23 +85,6 @@ void EventAction::EndOfEventAction(const G4Event* evt)
  runaction->CountReflect  (ReflectFlag);
 
  histoManager->FillHisto(1,EnergyDeposit);
-
- if (G4VVisManager::GetConcreteInstance())
-  {
-   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-   G4int n_trajectories = 0;
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
-   for (G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory*)
-                                      ((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory(1000);
-        else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(1000);
-        else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                               trj->DrawTrajectory(1000);
-			        
-      }
-  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

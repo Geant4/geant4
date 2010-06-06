@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2010-05-25 21:03:44 maire Exp $
+$Id: History,v 1.32 2010-06-06 04:33:47 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+03-06-10 J.Perl (testem11-V09-03-02)
+- Updated vis usage 
+
 25-05-10 mma (testem11-V09-03-01)
 - add PhysListStandardGS, PhysListStandardSS, PhysListStandardWVI
       

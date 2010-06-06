@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2010-05-19 09:19:51 maire Exp $
+$Id: History,v 1.49 2010-06-06 04:28:30 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+03-06-10 J.Perl (testem4-V09-03-01)
+- Updated vis usage 
+
 19-05-10 mma (testem4-V09-03-00)
 - TestEm4.cc : introduction of G4UIExecutive
      
