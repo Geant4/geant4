@@ -55,7 +55,7 @@ public:
 
   ~G4VecpssrKModel();
 			     
-  virtual G4double CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);
+  virtual G4double CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;
    
 
 private:

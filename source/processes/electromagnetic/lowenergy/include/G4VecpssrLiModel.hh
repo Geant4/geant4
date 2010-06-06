@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VecpssrLiModel.hh,v 1.1 2010-06-06 23:40:35 mantero Exp $
+// $Id: G4VecpssrLiModel.hh,v 1.2 2010-06-06 23:52:28 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -59,11 +59,11 @@ public:
 
   ~G4VecpssrLiModel();
 			     
-  virtual G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  virtual G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
-  virtual G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  virtual G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
-  virtual G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  virtual G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 				    
 
    

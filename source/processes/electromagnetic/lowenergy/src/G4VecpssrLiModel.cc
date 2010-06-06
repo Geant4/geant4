@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4VecpssrLiModel.cc,v 1.1 2010-06-06 23:40:35 mantero Exp $
+//$Id: G4VecpssrLiModel.cc,v 1.2 2010-06-06 23:52:28 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -55,7 +55,7 @@ G4VecpssrLiModel::~G4VecpssrLiModel()
 }
 
  
-G4double G4VecpssrLiModel::CalculateL1CrossSection(G4int ,G4double , G4double )
+/*G4double G4VecpssrLiModel::CalculateL1CrossSection(G4int ,G4double , G4double )
 { 
 
 }
@@ -72,4 +72,4 @@ G4double G4VecpssrLiModel::CalculateL3CrossSection(G4int ,G4double , G4double )
 { 
   
 }
-
+*/

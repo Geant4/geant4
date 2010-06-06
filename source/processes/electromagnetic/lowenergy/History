@@ -1,4 +1,4 @@
-$Id: History,v 1.436 2010-04-29 07:35:05 pandola Exp $
+$Id: History,v 1.437 2010-06-06 23:52:28 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07.06.2010, A.Mantero, tag emlowen-V09-03-30
+	    added analytical (ecpssr) and empirical (Paul and Orlic)
+	    models for the calculation of hadronc shell ionisation CS 
 
 29.04.2010, L. Pandola, tag emlowen-V09-03-29
 	    Removed the compiler warning in G4PenelopeIonisationModel.cc which 
