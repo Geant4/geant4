@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.hh,v 1.3 2006-06-29 17:43:31 gunter Exp $
+// $Id: RE01Trajectory.hh,v 1.4 2010-06-06 05:15:41 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,7 +80,7 @@ class RE01Trajectory : public G4VTrajectory
    { return (*positionRecord)[i]; }
 
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-   virtual void DrawTrajectory(G4int i_mode=0) const;
+   virtual void DrawTrajectory() const;
    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
    virtual std::vector<G4AttValue>* CreateAttValues() const;
    virtual void AppendStep(const G4Step* aStep);

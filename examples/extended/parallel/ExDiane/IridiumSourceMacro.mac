@@ -3,4 +3,7 @@
 /run/verbose 1
 /event/verbose 0
 /run/initialize
+#
+#/control/execute vis.mac
+#
 /run/beamOn  500

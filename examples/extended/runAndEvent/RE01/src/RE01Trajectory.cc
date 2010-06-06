@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.cc,v 1.3 2006-06-29 17:44:37 gunter Exp $
+// $Id: RE01Trajectory.cc,v 1.4 2010-06-06 05:15:41 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -154,7 +154,7 @@ void RE01Trajectory::ShowTrajectory(std::ostream& os) const
    }
 }
 
-void RE01Trajectory::DrawTrajectory(G4int) const
+void RE01Trajectory::DrawTrajectory() const
 {
 
    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

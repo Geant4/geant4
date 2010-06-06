@@ -90,7 +90,7 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode
     {
-      visManager = new G4VisExecutive();
+      visManager = new G4VisExecutive("Quiet");
       visManager->Initialize();
       G4UIsession * session;
 #ifdef G4UI_USE_TCSH

@@ -38,12 +38,11 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.3 2006-06-29 17:33:38 gunter Exp $
+// $Id: BrachyRunAction.cc,v 1.4 2010-06-06 05:06:03 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "BrachyRunAction.hh"
-#include "BrachyEventAction.hh"
 
 #ifdef G4ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"

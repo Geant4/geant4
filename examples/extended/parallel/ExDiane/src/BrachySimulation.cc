@@ -53,7 +53,6 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#include "BrachyEventAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPhantomSD.hh"
@@ -108,9 +107,6 @@ G4bool BrachySimulation::initialize(int ,char** )
 	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
 	 << G4endl;
 #endif
-
-  BrachyEventAction *pEventAction = new BrachyEventAction();
-  pRunManager -> SetUserAction(pEventAction );
 
   BrachyRunAction *pRunAction = new BrachyRunAction();
   pRunManager -> SetUserAction(pRunAction);

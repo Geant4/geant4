@@ -107,7 +107,7 @@
   5. VISUALIZATION:
  
      Visualisation of the geometry and the tracks is possible with many of the G4 visualisation packages. An
-     example of display the geometry and tracks using VRML is given in the macro file macros/vrml.mac.  
+     example of display the geometry and tracks using VRML is given in the macro file macros/vis.mac.  
 
   6. ANALYSIS:
 

@@ -5,4 +5,7 @@
 /source/switch Iodium
 /run/energy Iodium                                              
 /run/initialize
+#
+#/control/execute vis.mac
+#
 /run/beamOn  500

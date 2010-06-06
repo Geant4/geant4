@@ -30,12 +30,8 @@ using namespace std;
 #include "ExGflashHit.hh"
 #include "G4EventManager.hh"
 #include "G4SDManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4UImanager.hh"
 #include "G4TrajectoryContainer.hh"
-#include "G4VVisManager.hh"
 #include "G4Event.hh"
 //std
 #include <iostream>
@@ -165,14 +161,6 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 	G4int n_trajectories = 0;
 	if(trajectoryContainer){ n_trajectories = trajectoryContainer->entries(); }
 	G4cout << "    " << n_trajectories  << " trajectories stored in this event." << endl;
-	G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-	
-	if(pVVisManager)
-	{ 
-		cout << "DRAWING " <<n_trajectories << endl;
-		for(G4int i=0; i<n_trajectories; i++) { (*(evt->GetTrajectoryContainer()))[i]->DrawTrajectory(50); }
-	}
-	
 }
 
 

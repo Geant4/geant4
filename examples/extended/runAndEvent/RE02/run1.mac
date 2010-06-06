@@ -15,7 +15,7 @@
 # (Edit the next line(s) to choose another graphic system)
 #
 #/vis/open VRML2FILE
-#/vis/open OGLIX
+#/vis/open OGL
 #/vis/open DAWNFILE
 #
 # draw scene

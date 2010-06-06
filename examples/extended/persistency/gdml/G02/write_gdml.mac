@@ -10,7 +10,7 @@
 /run/initialize
 
 # Create a scene handler for a specific graphics system
-/vis/open OGLIX
+/vis/open OGL
 
 # draw scene
 /vis/viewer/zoom 1.5

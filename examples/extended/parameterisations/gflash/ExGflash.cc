@@ -48,7 +48,7 @@ using namespace std;
 #include "ExGflashRunAction.hh"
 
 #ifdef G4VIS_USE
-#include "ExGflashVisManager.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #ifdef G4_SOLVE_TEMPLATES
@@ -85,10 +85,10 @@ int main(int argc,char** argv)
 	runManager->SetUserAction(new ExGflashEventAction);
 	runManager->SetUserAction(new ExGflashRunAction);
 	
-	#ifdef G4VIS_USE
-	G4VisManager* visManager = new ExGflashVisManager;
+#ifdef G4VIS_USE
+	G4VisManager* visManager = new G4VisExecutive;
 	visManager->Initialize();
-	#endif
+#endif    
 	
 	G4UImanager* UI = G4UImanager::GetUIpointer();
 	UI->ApplyCommand("/run/verbose 0");
