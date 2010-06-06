@@ -46,7 +46,7 @@
 #
 # Viewer menu :
 /gui/addMenu viewer Viewer
-/gui/addButton viewer "Set style solid" "/vis/viewer/set/style solid"
+/gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
 /gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
 #/gui/addButton viewer viewer_update "/vis/viewer/update"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"

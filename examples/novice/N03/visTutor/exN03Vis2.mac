@@ -49,11 +49,11 @@
 /tracking/storeTrajectory 1
 
 #######################################################
-# Visualization with the OGLSX (OpenGL Stored X) driver
+# Visualization with the OGL (OpenGL) driver
 #######################################################
 
-# Invoke the OGLSX driver 
-/vis/open OGLSX
+# Invoke the OGL driver 
+/vis/open OGL
 
 # Create an empty scene and add the detector geometry to it 
 /vis/drawVolume

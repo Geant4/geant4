@@ -46,11 +46,11 @@
 
 ##############################################
 # Visualization of detector geometry and trajectories
-#  with the OGLIWin32 (OpenGL Immediate Windows) driver
+#  with the OGL (OpenGL) driver
 ##############################################
 
-# Invoke the OGLIWin32 driver
-/vis/open OGLIWin32
+# Invoke the OGL driver
+/vis/open OGL
 
 # Set camera 
 /vis/viewer/reset 

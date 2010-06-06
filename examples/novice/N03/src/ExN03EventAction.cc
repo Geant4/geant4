@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.29 2008-01-17 17:31:32 maire Exp $
+// $Id: ExN03EventAction.cc,v 1.30 2010-06-06 04:06:26 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,9 +38,6 @@
 #include "ExN03EventActionMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"

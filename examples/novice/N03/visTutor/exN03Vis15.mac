@@ -31,7 +31,7 @@
 
 # Invoke the Qt driver 
 #
-/vis/sceneHandler/create OGLSQt
+/vis/sceneHandler/create OGL
 /vis/viewer/create
 
 # Add the world volume to the current scene

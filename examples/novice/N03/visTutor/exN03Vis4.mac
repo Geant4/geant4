@@ -50,11 +50,11 @@
 #######################################################################
 
 ##########################################################
-# Visualization with the OGLIX driver
+# Visualization with the OGL driver
 ##########################################################
 
-# Invoke the OGLIX driver 
-/vis/open OGLIX
+# Invoke the OGL driver 
+/vis/open OGL
 
 # Set camera 
 /vis/viewer/reset

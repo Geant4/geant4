@@ -53,11 +53,11 @@
 
 ##############################################
 # Visualization of detector geometry 
-#  with the OGLIX (OpenGL Immediate X) driver
+#  with the OGL (OpenGL) driver
 ##############################################
 
-# Invoke the OGLIX driver
-/vis/open OGLIX
+# Invoke the OGL driver
+/vis/open OGL
 #/vis/open DAWNFILE
 
 # Set camera 

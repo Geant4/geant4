@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2008-04-10 16:26:53 maire Exp $
+$Id: README,v 1.18 2010-06-06 04:06:25 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,7 +87,7 @@ $Id: README,v 1.17 2008-04-10 16:26:53 maire Exp $
         HepRepFile or HepRepXML.
 	
 	The DAWNFILE, HepRepFile and HepRepXML drivers are always available 
-	(since they require no external libraries), but the OGLIX driver 
+	(since they require no external libraries), but the OGL driver 
 	requires:
 	    1- the visualisation & interfaces categories have been compiled
 	       with the environment variable G4VIS_BUILD_OPENGLX_DRIVER.

@@ -18,7 +18,7 @@
 /control/verbose 2
 /vis/verbose confirmations
 
-/vis/open OGLSX
+/vis/open OGL
 /vis/drawVolume
 /vis/scene/add/eventID
 /vis/scene/add/trajectories rich

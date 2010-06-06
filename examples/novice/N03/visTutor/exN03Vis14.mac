@@ -43,11 +43,11 @@
 
 ###########################################
 # Visualization of detector geometry 
-#  with the OGLSQT (OpenGL Stored QT) driver
+#  with the OGL (OpenGL) driver
 ###########################################
 
-# Invoke the OGLSQt driver 
-/vis/open OGLSQt
+# Invoke the OGL driver 
+/vis/open OGL
 
 # Bird's-eye view of the whole detector components (world)
 #

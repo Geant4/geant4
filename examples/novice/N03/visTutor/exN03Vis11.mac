@@ -45,11 +45,11 @@
 
 ###########################################
 # Visualization of detector geometry 
-#  with the OGLSXm (OpenGL Stored Motif) driver
+#  with the OGL (OpenGL) driver
 ###########################################
 
-# Invoke the OGLSXm driver 
-/vis/open OGLSXm
+# Invoke the OGL driver 
+/vis/open OGL
 
 # Bird's-eye view of the detector geometry 
 #
