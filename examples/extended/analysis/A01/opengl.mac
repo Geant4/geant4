@@ -10,7 +10,7 @@
 #   /vis/sceneHandler/create
 #   /vis/viewer/create
 #
-/vis/open OGLIX
+/vis/open OGL
 #
 # Create a scene.  One could use /vis/drawVolume, which is equivalent to:
 #   /vis/scene/create
