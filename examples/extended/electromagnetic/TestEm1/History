@@ -1,4 +1,4 @@
-$Id: History,v 1.94 2010-04-06 11:11:24 maire Exp $
+$Id: History,v 1.95 2010-06-06 04:25:24 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+03-06-10 J.Perl (testem1-V09-03-01)
+- Updated vis usage 
      
 06-04-10 mma (testem1-V09-03-00)
 - RunAction: replace ProcessCount by map<string, int> 
