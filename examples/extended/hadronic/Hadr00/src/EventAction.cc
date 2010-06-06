@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.1 2008-07-07 16:37:26 vnivanch Exp $
+// $Id: EventAction.cc,v 1.2 2010-06-06 04:58:40 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -42,9 +42,6 @@
 #include "EventActionMessenger.hh"
 
 #include "G4UImanager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -96,26 +93,6 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager) {
-    G4TrajectoryContainer* trjc = evt->GetTrajectoryContainer();
-    G4int n_trajectories = 0;
-    if (trjc) n_trajectories = trjc->entries();
-
-    for(G4int i=0; i<n_trajectories; i++) {
-      G4Trajectory* t = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-      if (drawFlag == "all") t->DrawTrajectory(1000);
-      else if ((drawFlag == "charged")&&(t->GetCharge() != 0.))
-                             t->DrawTrajectory(1000);
-      else if ((drawFlag == "neutral")&&(t->GetCharge() == 0.))
-                             t->DrawTrajectory(1000);
-      else if ((drawFlag == "charged+n")&&((t->GetCharge() != 0.)||
-                                           (t->GetCharge()==0.&&t->GetParticleName()=="neutron")))
-                             t->DrawTrajectory(1000);
-    }
-  }
-
   if(debugStarted) {
     UI->ApplyCommand("/tracking/verbose  0");
     debugStarted = false;

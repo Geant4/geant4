@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.5 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: monopole.cc,v 1.6 2010-06-06 04:53:49 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,13 @@ int main(int argc,char** argv) {
   QGSP_BERT* phys = new QGSP_BERT();
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
   phys->RegisterPhysics(theMonopole);
-
+    
+	// visualization manager
+#ifdef G4VIS_USE
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager->Initialize();
+#endif
+	
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
@@ -92,11 +98,6 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new TrackingAction(run));
   runManager->SetUserAction(new SteppingAction(det, run));
-
-#ifdef G4VIS_USE
-  //visualization manager
-  G4VisManager* visManager = 0;
-#endif
 
   if (argc!=1)   // batch mode
     {

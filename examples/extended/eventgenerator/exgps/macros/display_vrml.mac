@@ -1,9 +1,0 @@
-/vis/scene/create 
-/vis/open VRML2FILE
-/vis/viewer/reset
-/vis/viewer/zoom 1.
-/vis/viewer/set/style wireframe
-/vis/drawVolume
-/vis/scene/endOfEventAction accumulate
-/tracking/storeTrajectory 1
-
