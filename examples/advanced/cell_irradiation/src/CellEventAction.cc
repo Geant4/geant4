@@ -37,9 +37,6 @@
  
 #include "G4Event.hh"
 #include "G4EventManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
@@ -71,38 +68,6 @@ if (collisionID==-1)
  
 void CellEventAction::EndOfEventAction(const G4Event* evt)
 {
-  /*
- G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  
-  CellTrackerHitsCollection* hitCollection = 0;
-  G4int hitNumber = 0;
-    
-  if (HCE) hitCollection = (CellTrackerHitsCollection*)
-                                                     (HCE->GetHC(collisionID));
-  if(hitCollection)
-    {
-      hitNumber = hitCollection->entries();
-      for (G4int i=0;i<hitNumber;i++)
-	{
-	  totalEnergy += (*hitCollection)[i]->GetEdep();
-	}
-    }
-
-  CellAnalysisManager* analysis = CellAnalysisManager::getInstance();
-  analysis -> FillEnergyDeposit(totalEnergy/MeV);
-  */
-  G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-  G4int n_trajectories = 0;
-  if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-  if (G4VVisManager::GetConcreteInstance())
-    {
-     for (G4int i=0; i<n_trajectories; i++) 
-        { 
-         G4Trajectory* trj = (G4Trajectory*)
-	 ((*(evt->GetTrajectoryContainer()))[i]);
-	 trj -> DrawTrajectory(50);
-        }
-    }
 }
 
 G4int CellEventAction::GetEventNo()

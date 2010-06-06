@@ -31,12 +31,12 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLIX
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 20 180 deg
 /vis/viewer/zoom 1
 /vis/viewer/pan -10  0 cm
-/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate
 #/vis/specify RODetectorLog 1
 /vis/viewer/update

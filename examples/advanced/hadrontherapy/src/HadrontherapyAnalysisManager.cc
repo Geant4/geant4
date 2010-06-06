@@ -47,10 +47,10 @@ theROOTIonTuple(0),
 fragmentNtuple(0),
 metaData(0),
 eventCounter(0)
-#endif
 {
     fMess = new HadrontherapyAnalysisFileMessenger(this);
 }
+#endif
 /////////////////////////////////////////////////////////////////////////////
 
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager()

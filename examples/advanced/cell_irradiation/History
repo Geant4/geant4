@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2009-03-06 09:24:04 gbarrand Exp $
+$Id: History,v 1.4 2010-06-06 06:16:23 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-06-2010 Joseph Perl (tag test50-V09-03-00)
+           Updated vis usage
+
 6 March 2009 Guy Barrand (in agreement with G.Cosmo)
 - GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
   since it is handled already in the config/analysis.gmk.

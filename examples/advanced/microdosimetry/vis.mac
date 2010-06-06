@@ -1,38 +1,5 @@
-# ----------------------------------------------
-# Example macro file for the GammaRayTel
-# Visualization with VRML
-# ----------------------------------------------
-# Authors: R.Giannitrapani, F.Longo and G.Santin 
-# ----------------------------------------------
-
-#
-# Sets some default verbose
-# and initializes the graphic.
-#
-/control/verbose 2
-/control/saveHistory
-/run/verbose 2
-/gun/sourceGen true
-
-
-/control/execute emlowe.mac
-
-/run/initialize
-
-/gun/particle mu-
-/gun/energy 100 MeV
-/gun/vertexRadius 30. cm
-/gun/sourceType 2
-/gun/direction 0 0 -1
-
-# You can modify the geometry of the telescope via a messenger
-
-/control/execute emstd.mac
-/payload/setNbOfTKRLayers 10
-/payload/update
-
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 600x600-0+0
+/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -44,7 +11,7 @@
 #
 # Use this open statement to create a .wrl file suitable for
 # viewing in a VRML viewer:
-/vis/open VRML2FILE
+#/vis/open VRML2FILE
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -55,7 +22,7 @@
 /vis/drawVolume
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 90. 0.
+/vis/viewer/set/viewpointThetaPhi 70. 10.
 #
 # Specify zoom value:
 #/vis/viewer/zoom 2.
@@ -91,7 +58,7 @@
 #/vis/modeling/trajectories/drawByParticleID-0/set e- blue
 #
 # To superimpose all of the events from a given run:
-#/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
@@ -99,11 +66,3 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
-
-/run/beamOn 10
-
-
-
-
-
-

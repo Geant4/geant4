@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2010-02-16 12:03:08 pandola Exp $
+$Id: History,v 1.22 2010-06-06 06:25:02 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.21 2010-02-16 12:03:08 pandola Exp $
 
                       Category History file
                       ---------------------
+
+03.06.2010 - J.Perl (DMX-V09-03-01)
+             Change /vis/open OGLxxx to /vis/open OGL
 
 16.02.2010 - L. Pandola (DMX-V09-03-00)
 	     Copy of the previous tag, DMX-V09-02-02, which was not submitted for 

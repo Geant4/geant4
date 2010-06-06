@@ -56,7 +56,6 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#include "BrachyEventAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPhantomSD.hh"
@@ -95,10 +94,6 @@ int main(int argc ,char ** argv)
   // Initialize the primary particles
   BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
   pRunManager -> SetUserAction(primary);
-
-  // Initialize Optional User Action
-  BrachyEventAction *pEventAction = new BrachyEventAction();
-  pRunManager -> SetUserAction(pEventAction );
 
   BrachyRunAction *pRunAction = new BrachyRunAction();
   pRunManager -> SetUserAction(pRunAction);

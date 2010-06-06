@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microdosimetry.cc,v 1.2 2010-03-25 15:27:55 gunter Exp $
+// $Id: Microdosimetry.cc,v 1.3 2010-06-06 06:22:36 perl Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -42,7 +42,6 @@
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 
@@ -65,8 +64,6 @@ int main(int argc,char** argv)
   // Set optional user action classes
   RunAction* RunAct = new RunAction(detector);
   runManager->SetUserAction(RunAct);
- 
-  runManager->SetUserAction(new EventAction(RunAct));
 
   runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
   

@@ -22,7 +22,7 @@
 
 
 /vis/sceneHandler/create DAWNFILE
-/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/create OGL
 #/vis/sceneHandler/create RAYX
 
 #/vis/viewer/zoom 10.

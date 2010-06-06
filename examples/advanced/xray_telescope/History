@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2009-11-20 18:18:14 santin Exp $
+$Id: History,v 1.25 2010-06-06 06:26:05 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03.06.2010   Joseph Perl, Tag xraytel-V09-03-00
+             Update vis usage
 
 20.11.2009 - G.Santin, tag xraytel-V09-02-00
              Updated and simplified physics list

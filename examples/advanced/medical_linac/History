@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2009-11-19 09:54:39 cirrone Exp $
+$Id: History,v 1.28 2010-06-06 06:21:22 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03.06.2010   J.Perl tag medical_linac-V09-03-00
+	     Update vis usage		     
+
 19.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-05
 	     History corrected, changed the local environmental variables name		     
 

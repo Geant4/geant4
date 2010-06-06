@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.14 2006-07-24 09:53:27 guatelli Exp $
+// $Id: remsim.cc,v 1.15 2010-06-06 06:23:52 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RunManager.hh"
@@ -99,7 +99,7 @@ int main(int argc,char** argv)
       session = new G4UIterminal();
 #endif    
 
-      UI -> ApplyCommand("/control/execute vis.mac");    
+      UI -> ApplyCommand("/control/execute interactive.mac");    
       session -> SessionStart();
       delete session;
     }

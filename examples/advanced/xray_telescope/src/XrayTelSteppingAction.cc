@@ -66,7 +66,6 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4RunManager.hh"
-#include "XrayTelEventAction.hh"
 #include "XrayTelRunAction.hh"
 #include "XrayTelAnalysis.hh"
 
@@ -95,12 +94,7 @@ void XrayTelSteppingAction::UserSteppingAction(const G4Step* step)
     {
       entering = true;
 
-      // Notify the corresponding UserAction that the event must be visualised
       G4RunManager* runManager = G4RunManager::GetRunManager();
-      // Casting is safe here: one knows the RTTI of the UserActions 
-      // in the current application (otherwise one could dynamic_cast)
-      XrayTelEventAction* eventAction = (XrayTelEventAction*) runManager->GetUserEventAction();
-      eventAction->Update();
 
       // Notify the corresponding UserAction to update the run counters
       XrayTelRunAction* runAction = (XrayTelRunAction*) runManager->GetUserRunAction();

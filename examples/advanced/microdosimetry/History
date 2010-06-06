@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2010-03-25 15:27:35 gunter Exp $
+$Id: History,v 1.14 2010-06-06 06:22:36 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.13 2010-03-25 15:27:35 gunter Exp $
 
                        Package History file
                        --------------------
+
+03 June 2010 - J.Perl    - microdosimetry-V09-03-01
+- update vis usage
 
 25 March 2010 - G.Folger    - microdosimetry-V09-03-00
 - do not use G4UItcsh on windows

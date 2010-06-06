@@ -5,41 +5,30 @@
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
-#
 #### Add Hadronic Physics, muon physics and decay
-/physics/addPhysics hadronic-bertini
+/physics/addPhysics hadronic-binary
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
-#/physics/addPhysics hadronic-binary
 ##############################
 #### Sets some default verbose
 /control/verbose 1
-/run/verbose 2
+/run/verbose 1
 /event/verbose 0
-/tracking/verbose 0
 /run/initialize
+##############################
+# Geometrical configuration
+# Choose inflatable vehicle 
+/configuration/choose vehicle
+# Add 10 cm water shielding
+/configuration/AddShielding On
 ################
 ## Visualisation
-#/control/execute vis.mac
+/control/execute vis.mac
 ################
-# Geometrical configuration
-/configuration/choose vehicle
-/configuration/AddShielding On
-# Generation of primary particles
+# Define the primary particles
+# Galactic cosmic protons
 /gun/data gcr_min_z=1.txt
-#/tracking/verbose 1
-/run/beamOn 500
-
-
-
-
-
-
-
-
-
-
-
+/run/beamOn 10
 
 
 

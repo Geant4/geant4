@@ -83,7 +83,6 @@
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
 #include "G4VisExecutive.hh"
-#include "XrayTelEventAction.hh"
 #include "XrayTelRunAction.hh"
 #include "XrayTelSteppingAction.hh"
 #include "XrayTelPrimaryGeneratorAction.hh"
@@ -102,7 +101,6 @@ int main( int argc, char** argv )
   // set mandatory user action class
   runManager->SetUserAction(new XrayTelPrimaryGeneratorAction);
   runManager->SetUserAction(new XrayTelRunAction);
-  runManager->SetUserAction(new XrayTelEventAction);
   runManager->SetUserAction(new XrayTelSteppingAction);
 
   // visualization manager

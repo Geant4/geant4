@@ -77,7 +77,6 @@
 #/vis/viewer/pan 0 0 cm
 #/vis/scene/add/trajectories
 #/vis/scene/endOfEventAction accumulate
-#/tracking/storeTrajectory 1
 
 #/vis/viewer/update
 #/vis/scene/add/trajectories
@@ -86,11 +85,10 @@
 #/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 #/vis/scene/endOfEventAction accumulate
 
-####### OGLIX #######
+####### OGL #######
 #/vis/scene/create
-##/vis/open OGLSX
-#/vis/open OGLIX
-##/vis/open OGLIX 600x600-100+0
+#/vis/open OGL
+##/vis/open OGL 600x600-100+0
 ##/vis/drawVolume
 ##/vis/viewer/set/viewpointThetaPhi 0 0 deg
 #/vis/viewer/set/viewpointThetaPhi 45 45 deg
@@ -109,7 +107,7 @@
 #/vis/filtering/trajectories/particleFilter-0/add neutron
 #/vis/filtering/trajectories/particleFilter-0/add proton
 #/vis/filtering/trajectories/particleFilter-0/invert true # charged particles only
-#/tracking/storeTrajectory 1
+#/vis/scene/add/trajectories
 #/vis/scene/endOfEventAction accumulate
 
 ##########################

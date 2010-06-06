@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEventAction.cc,v 1.6 2006-06-29 16:05:29 gunter Exp $
+// $Id: MicrobeamEventAction.cc,v 1.7 2010-06-06 06:22:07 perl Exp $
 // -------------------------------------------------------------------
 
 #include "G4Event.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
 #include "Randomize.hh"
 
 #include "MicrobeamEventAction.hh"
@@ -80,42 +77,4 @@ else
 	G4cout << "   ===> Sorry, the incident alpha particle has missed the targeted cell !" << G4endl;
 	G4cout << G4endl;
 }
-
-
-if (G4VVisManager::GetConcreteInstance())
-    {
-      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
-      G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
-      
-      for (G4int i=0; i<n_trajectories; i++) 
-        { 
-	  //G4cout<< "Iteration" << i <<G4endl;
-	  G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
-	  if (drawFlag == "all")
-	    { 
-	      trj->DrawTrajectory(50);
-	    }
-	  else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))	    
-	    {
-	      trj->DrawTrajectory(50);
-	    }
-	} 
-
-            //save rndm status
-      
-      /*
-      if (Run->GetRndmFreq() == 2)
-	{
-	  HepRandom::saveEngineStatus("endOfEvent.rndm");   
-	  G4int evtNb = evt->GetEventID();
-	  if (evtNb%printModulo == 0)
-	    { 
-	      //G4cout << "\n---> End of Event: " << evtNb << G4endl;
-	      //HepRandom::showEngineStatus();
-	    }
-	}
-      */    
-    }
-
 }

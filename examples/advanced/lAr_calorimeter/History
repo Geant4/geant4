@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.19 2009-11-12 12:43:14 ribon Exp $
+$Id: History,v 1.20 2010-06-06 06:20:49 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.19 2009-11-12 12:43:14 ribon Exp $
 
                       Category History file
                       ---------------------
+
+04.06.2010   Joseph Perl (lAr_calorimeter-V09-03-00)
+             Updated vis usage
 
 12.11.2009 - A.Ribon (lAr_calorimeter-V09-02-01)
              Fixed mistake in GNUmakefile, and use QGSP_BIC_EMY

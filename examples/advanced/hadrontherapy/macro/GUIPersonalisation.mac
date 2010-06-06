@@ -25,7 +25,7 @@
 # Vis menu :
 /gui/addMenu vis Vis
 /gui/addButton vis "Create the Scene" "/vis/scene/create" 
-/gui/addButton vis "OGLIX" "/vis/open OGLIX"
+/gui/addButton vis "OGL" "/vis/open OGL"
 /gui/addButton vis "Macros for Visualisation" "/control/execute macro/visualisationMacro.mac"
 
 # Macro menu
@@ -35,7 +35,7 @@
 #
 # Viewer menu :
 /gui/addMenu viewer Viewer
-/gui/addButton viewer "Set style solid" "/vis/viewer/set/style solid"
+/gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
 /gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
 #/gui/addButton viewer viewer_update "/vis/viewer/update"
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"

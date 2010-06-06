@@ -51,10 +51,6 @@
 #include "G4VHitsCollection.hh"
 #include "G4GeneralParticleSource.hh" 
 
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-
 #ifdef G4ANALYSIS_USE
 #include "UltraAnalysisManager.hh"
 #endif
@@ -133,25 +129,6 @@ if(HCE){
   UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
   analysis->FillHistogram(2,nOptHits);
 #endif
-
-  // Define visualization atributes:
-
-  G4String drawFlag = "all";
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
-   G4int n_trajectories = 0;
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
-   for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory();
-        else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(); 
-      }
-  }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

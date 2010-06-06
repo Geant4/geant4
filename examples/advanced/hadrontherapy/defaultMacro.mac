@@ -33,20 +33,13 @@
 ##########################
 # Visualisation 
 #
-/vis/scene/create
-#/vis/open OGLIQt # only if QT library are installed
-#/vis/open OGLSX 600x600-0+0
-#/vis/open OGLIX
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
 /vis/viewer/pan -10  0 cm
-/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate
-# Accumulate events with no  limit
-#/vis/scene/endOfEventAction accumulate -1
-/vis/viewer/update
-
 
 ##########################
 # Set here the cut and the step max for the tracking. 

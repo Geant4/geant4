@@ -47,7 +47,6 @@
 #include "ML2WorldConstruction.hh"
 #include "ML2PhysicsList.hh"
 #include "ML2SteppingAction.hh"
-#include "ML2EventAction.hh"
 #include "ML2TrackingAction.hh"
 
 #include "G4UImanager.hh"
@@ -137,9 +136,6 @@ int main(int argc, char* argv[])
 		CML2Convergence *convergence=new CML2Convergence(myInputData->inputData.generalData.seed, myInputData->inputData.generalData.saving_in_Selected_Voxels_every_events, myInputData->inputData.generalData.fileExperimentalData, myInputData->inputData.generalData.bCompareExp, myInputData->inputData.generalData.minNumberOfEvents);
 		CML2SteppingAction *myStepAction=new CML2SteppingAction(convergence);
 		runManager->SetUserAction(myStepAction);
-
-		CML2EventAction *ML2EventAction = new CML2EventAction();
-		runManager->SetUserAction(ML2EventAction);
 
 		runManager->SetUserAction(new CML2TrackingAction);
 

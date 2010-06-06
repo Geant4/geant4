@@ -29,10 +29,10 @@
 #############################
 # 
 /vis/scene/create
-/vis/open OGLIX
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
-/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate -1 # this accumulate infinite tracks 
 # zoom to phantom...
 /vis/viewer/panTo 1.5 0.5

@@ -121,7 +121,7 @@ int main(int argc,char** argv) {
     // (the user can always change it later on) 
     // visCommand = "/vis/open DAWNFILE";
     // visCommand = "/vis/open VRML2FILE";
-    visCommand = "/vis/open OGLIX";
+    visCommand = "/vis/open OGL";
     UI->ApplyCommand(visCommand);
 
     visCommand = "/vis/viewer/flush";

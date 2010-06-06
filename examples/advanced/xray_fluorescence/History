@@ -1,4 +1,4 @@
-# $Id: History,v 1.9 2009-11-10 16:35:02 mantero Exp $
+# $Id: History,v 1.10 2010-06-06 06:25:35 perl Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-06-2010 Joseph Perl, Tag: XrayFluo-V09-03-00
+- Updated vis usage
 
 10-11-2009 Alf, Tag: XrayFluo-V09-02-01
 - Physics List  migrated to new Lowenergy physics processes design
