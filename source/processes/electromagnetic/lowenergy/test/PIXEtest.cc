@@ -42,7 +42,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: PIXEtest.cc,v 1.2 2009-06-18 16:18:42 mantero Exp $
+// $Id: PIXEtest.cc,v 1.3 2010-06-06 23:40:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -52,12 +52,11 @@
 #include <iostream>
 #include <fstream>
 #include "G4VhShellCrossSection.hh"
-#include "G4hShellCrossSection.hh"
-#include "G4hShellCrossSectionDoubleExp.hh"
 #include "G4teoCrossSection.hh"
 #include "G4empCrossSection.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4Proton.hh"
+#include "G4Alpha.hh"
 //#include "AIDA/AIDA.h"
 
 int main()
@@ -68,33 +67,63 @@ int main()
    G4double deltaEnergy;
    size_t shellNumber;
    G4String fileName;
+   G4String partType;
+   G4String shellName;
+   G4String model;
+   G4String nameId;
+   G4VhShellCrossSection* shellCS;
+   G4ParticleDefinition* particle;
 
    //    G4VhShellCrossSection* shellExp = new G4hShellCrossSectionDoubleExp();
-   //  here you deciude the implementation: G4teoCrossSection is ECPSSR for K + Orlic for L shells
+   //  here you deiude the implementation: G4teoCrossSection is ECPSSR theory: 
+   //  you can choose the "analytical" implementetation of the theory or the "interpolated" 
+   //  implementation from ISICS tables.
    //  G4hShellCrossSectionDoubleExp is previous work with ownmade fitting functions to Pauli for Alpha.
 
-   G4VhShellCrossSection* shellCS = new G4teoCrossSection("ecpssr");
-   //G4VhShellCrossSection* shellCS = new G4empCrossSection();
+   G4cout << "Enter model (analytical/interpolated): " << G4endl;
+   G4cin >> model;
 
-   //proton mass in Kg
-   //mass = 1.67262158e-27 * kg;   
-   G4Proton* aProtone = G4Proton::Proton();
-   mass = aProtone->GetPDGMass();
+   if (model == "analytical" || model == "interpolated") {
+
+     shellCS = new G4teoCrossSection(model);
+   }
+   else if (model == "empirical") {
+     shellCS = new G4empCrossSection();
+   }
+
+   G4cout << "Enter particle (p/a): " << G4endl;
+   G4cin >> partType;
+  
+   if (partType == "p") {
+   //  G4Proton* aProtone = G4Proton::Proton();
+     particle = G4Proton::Proton();
+   
+   }
+   else if (partType == "a") {
+     particle  = G4Alpha::Alpha();
+   }
+
+   mass = particle->GetPDGMass();
 
    std::vector<G4double> energies;
-   //Energy from 0.005 MeV to 500 MeV
-   for (G4double i=-5.5; i<6.5; i=i+0.125)
+
+   
+  for (G4double i=-2; i<123; i=i+1)
      {
-       energies.push_back(std::exp(i)*MeV);
+       energies.push_back(pow(10,(0.05*i+1)) *keV);
      } 
+  
 
    G4cout << "Enter shell number: " << G4endl;
    G4cin >> shellNumber;
 
-   G4cout << "Enter filename: " << G4endl;
-   G4cin >> fileName;
+   if (shellNumber == 0) {shellName = "K";}
+   else if (shellNumber == 1) {shellName = "L1";}
+   else if (shellNumber == 2) {shellName = "L2";}
+   else if (shellNumber == 3) {shellName = "L3";}
 
-   if (fileName == "" ) {fileName = "PIXECrossSection";}           
+   if (model  == "analytical" ) { nameId = "A";}
+   else if (model  == "interpolated" ) { nameId = "I";}
 
    G4String fileNameTxt = fileName;
    char buffer[3];
@@ -107,7 +136,7 @@ int main()
        snprintf(buffer, 3, "%d", Z);
 
        
-       fileNameTxt = fileName + buffer + ".dat";
+       fileNameTxt = nameId + "-" + shellName + "-" + partType + "-" + buffer + ".dat";
        
        myfile.open (fileNameTxt);
        
@@ -121,7 +150,7 @@ int main()
 	   std::vector<G4double> CS = shellCS->GetCrossSection(Z,incidentEnergy,mass,deltaEnergy,false);
 	   
 	   
-	   myfile << incidentEnergy << "\t" << CS[shellNumber] << G4endl;  //barn  //error in ecpssr/orlic class: correct units management!
+	   myfile << incidentEnergy << "\t\t" << CS[shellNumber] << G4endl;  //barn  //error in ecpssr/orlic class: correct units management!
 	   
 	   
 	 }

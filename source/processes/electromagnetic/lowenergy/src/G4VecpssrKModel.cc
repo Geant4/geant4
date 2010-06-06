@@ -23,59 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//$Id: G4VecpssrKModel.cc,v 1.1 2010-06-06 23:40:35 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
+// Author: Haifa Ben Abdelouahed
+//         
 //
-// GEANT4 Class file
-//
-//
-// File name:     G4VhShellCrossSection
-//
-// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
 // History:
 // -----------
-// 20 Oct 2001 V.Ivanchenko   1st implementation
-// 24 Oct 2001 MGP            Minor clean-up
-// 29 Oct 2001 VI             Add delta energy
+//  01 Sep 2009   ALF created
 //
 // -------------------------------------------------------------------
-
-#include "G4VhShellCrossSection.hh"
-#include "Randomize.hh"
-
-G4VhShellCrossSection::G4VhShellCrossSection()
-{ }
+// Class description:
+// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+// -------------------------------------------------------------------
 
 
-G4VhShellCrossSection::~G4VhShellCrossSection() 
-{ }
 
-void G4VhShellCrossSection :: SetTotalCS(G4double)
-{
+#include "G4VecpssrKModel.hh"
+
+
+G4VecpssrKModel::G4VecpssrKModel()
+{ 
+
 }
 
+G4VecpssrKModel::~G4VecpssrKModel()
+{ 
 
-G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
-                                               G4double incidentEnergy,
-					       G4double mass, 
-					       G4double deltaEnergy) const 
-//  returns the shell ionized if the shell exists. If the shell is not counted, it returns -1
+}
 
-{
-  std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy);
-  G4int shell = -1;
-  size_t nShells = p.size();
-  G4double q = G4UniformRand();
-  for (size_t i=0; i<nShells; i++) {
-    
-    if (p[i] >= q) {
-      shell = i;
-      break;
-    }
-    q -= p[i];
-  }
-  return shell;
+ 
+G4double G4VecpssrKModel::CalculateCrossSection(G4int,G4double,G4double)
+{ 
+
 }
 
 

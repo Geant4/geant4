@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,59 +24,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VecpssrLiModel.hh,v 1.1 2010-06-06 23:40:35 mantero Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// -------------------------------------------------------------------
+// Author: Haifa Ben Abdelouahed
+//         
 //
-// GEANT4 Class file
-//
-//
-// File name:     G4VhShellCrossSection
-//
-// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
 // History:
 // -----------
-// 20 Oct 2001 V.Ivanchenko   1st implementation
-// 24 Oct 2001 MGP            Minor clean-up
-// 29 Oct 2001 VI             Add delta energy
+//  23 Apr 2008   H. Ben Abdelouahed   1st implementation
+//  28 Apr 2008   MGP        Major revision according to a design iteration
+//  29 Apr 2009   ALF Updated Desing for Integration
 //
 // -------------------------------------------------------------------
 
-#include "G4VhShellCrossSection.hh"
-#include "Randomize.hh"
+// Class description:
+// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-G4VhShellCrossSection::G4VhShellCrossSection()
-{ }
+// -------------------------------------------------------------------
 
 
-G4VhShellCrossSection::~G4VhShellCrossSection() 
-{ }
+#ifndef G4VECPSSRLIMODEL_HH
+#define G4VECPSSRLIMODEL_HH 1
 
-void G4VhShellCrossSection :: SetTotalCS(G4double)
+#include "globals.hh"
+
+class G4VecpssrLiModel 
 {
-}
+
+public:
+
+  G4VecpssrLiModel();
+
+  ~G4VecpssrLiModel();
+			     
+  virtual G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+
+  virtual G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+
+  virtual G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+				    
+
+   
+
+private:
 
 
-G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
-                                               G4double incidentEnergy,
-					       G4double mass, 
-					       G4double deltaEnergy) const 
-//  returns the shell ionized if the shell exists. If the shell is not counted, it returns -1
+  G4VecpssrLiModel(const G4VecpssrLiModel&);
+  G4VecpssrLiModel & operator = (const G4VecpssrLiModel &right);
 
-{
-  std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy);
-  G4int shell = -1;
-  size_t nShells = p.size();
-  G4double q = G4UniformRand();
-  for (size_t i=0; i<nShells; i++) {
-    
-    if (p[i] >= q) {
-      shell = i;
-      break;
-    }
-    q -= p[i];
-  }
-  return shell;
-}
+};
 
-
+#endif

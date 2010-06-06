@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,58 +25,45 @@
 // ********************************************************************
 //
 //
-// -------------------------------------------------------------------
+// Author: Alfonso Mantero
+//         
 //
-// GEANT4 Class file
-//
-//
-// File name:     G4VhShellCrossSection
-//
-// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
 // History:
 // -----------
-// 20 Oct 2001 V.Ivanchenko   1st implementation
-// 24 Oct 2001 MGP            Minor clean-up
-// 29 Oct 2001 VI             Add delta energy
+//  01 Sep 2009   Alf Created
 //
 // -------------------------------------------------------------------
 
-#include "G4VhShellCrossSection.hh"
-#include "Randomize.hh"
+// Class description:
+// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-G4VhShellCrossSection::G4VhShellCrossSection()
-{ }
-
-
-G4VhShellCrossSection::~G4VhShellCrossSection() 
-{ }
-
-void G4VhShellCrossSection :: SetTotalCS(G4double)
-{
-}
+// -------------------------------------------------------------------
 
 
-G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
-                                               G4double incidentEnergy,
-					       G4double mass, 
-					       G4double deltaEnergy) const 
-//  returns the shell ionized if the shell exists. If the shell is not counted, it returns -1
+#ifndef G4VECPSSRKMODEL_HH
+#define G4VECPSSRKMODEL_HH 1
+
+#include "globals.hh"
+
+class G4VecpssrKModel 
 
 {
-  std::vector<G4double> p = Probabilities(Z,incidentEnergy,mass,deltaEnergy);
-  G4int shell = -1;
-  size_t nShells = p.size();
-  G4double q = G4UniformRand();
-  for (size_t i=0; i<nShells; i++) {
-    
-    if (p[i] >= q) {
-      shell = i;
-      break;
-    }
-    q -= p[i];
-  }
-  return shell;
-}
+public:
+
+  G4VecpssrKModel();
+
+  ~G4VecpssrKModel();
+			     
+  virtual G4double CalculateCrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);
+   
+
+private:
 
 
+  G4VecpssrKModel(const G4VecpssrKModel&);
+  G4VecpssrKModel & operator = (const G4VecpssrKModel &right);
+
+};
+
+#endif

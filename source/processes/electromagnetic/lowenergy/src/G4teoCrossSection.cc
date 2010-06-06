@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4teoCrossSection.cc,v 1.5 2009-11-11 09:14:53 mantero Exp $
+//$Id: G4teoCrossSection.cc,v 1.6 2010-06-06 23:40:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         
@@ -32,7 +32,6 @@
 // -----------
 //  21 Apr 2009   ALF   1st implementation
 //  29 Apr 2009   ALF Updated Desing for Integration
-//  11 Nov 2009   ALF update and code cleaning for the Dec Release 
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -49,27 +48,17 @@
 //#include "G4Alpha.hh"
 //#include <math.h>
 
-G4teoCrossSection::G4teoCrossSection(G4String shellModel = "ecpssr")
+G4teoCrossSection::G4teoCrossSection(G4String shellModel)
   :totalCS(0)
 { 
 
-  if (shellModel == "ecpssr") {
-
-    ecpssrShellK = new G4ecpssrKCrossSection();
-
-    ecpssrShellLi = new G4ecpssrLiCrossSection();
+  if (shellModel == "analytical") {
+   
+        
+    ecpssrShellK  = new G4AnalyticalEcpssrKCrossSection();  
+    ecpssrShellLi = new G4AnalyticalEcpssrLiCrossSection();
+    
   }
-  else {
-
-    G4cout << "G4teoCrossSection: sorry, only ECPSSR model available at the moment" << G4endl;
-
-    ecpssrShellK = new G4ecpssrKCrossSection();
-
-    ecpssrShellLi = new G4ecpssrLiCrossSection();
-
-  }
-
-
 }
 
 G4teoCrossSection::~G4teoCrossSection()

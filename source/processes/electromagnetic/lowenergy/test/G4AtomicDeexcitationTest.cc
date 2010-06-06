@@ -145,15 +145,20 @@ int main(int argc, char* argv[]){
 	vectorOfParticles = deexcitation-> GenerateParticles(Z,vacancyId);
       
 	G4cout<<  vectorOfParticles->size()<<" particles in the vector "<<G4endl;
-      
+
 	for (G4int k=0; k< vectorOfParticles->size();k++)
 	  {
+
 	    G4DynamicParticle* newParticle = (*vectorOfParticles)[k];
+
 	    if ( newParticle->GetDefinition()->GetParticleName() == "e-")
 	      {
+
 		G4DynamicParticle* newElectron = (*vectorOfParticles)[k];
 		G4ThreeVector augerDirection =newElectron ->GetMomentum();
 		G4double  augerEnergy =newElectron ->GetKineticEnergy();
+
+
 		if (startId==-1){
 		  
 		  tupleFluo->fill(0,Z);
@@ -173,14 +178,19 @@ int main(int argc, char* argv[]){
 		}
 	      }
 	    else{
+		G4cout << "pippo" << G4endl; 
+
 	      G4ThreeVector photonDirection = newParticle ->GetMomentum();
 	      G4double  photonEnergy =newParticle ->GetKineticEnergy();
-	      
+
 	      if (startId==-1){
+		G4cout << "pippo2" << G4endl;
 		tupleFluo->fill(0,Z);
+
 		tupleFluo->fill(1,1);
 		tupleFluo->fill(2,photonEnergy);
 		tupleFluo->addRow();		
+
 	      }
 	      else{
 		

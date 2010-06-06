@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ecpssrKCrossSection.hh,v 1.2 2009-06-11 15:46:18 mantero Exp $
+// $Id: G4AnalyticalEcpssrLiCrossSection.hh,v 1.1 2010-06-06 23:40:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -31,58 +32,66 @@
 //
 // History:
 // -----------
-//  21 Apr 2008   H. Ben Abdelouahed   1st implementation
-//  21 Apr 2008   MGP        Major revision according to a design iteration
-//  21 Apr 2009	  ALF Some correction for compatibility to G4VShellCrossSection
-//		  and changed name to G4ecpssrKCrossSection
+//  23 Apr 2008   H. Ben Abdelouahed   1st implementation
+//  28 Apr 2008   MGP        Major revision according to a design iteration
+//  29 Apr 2009   ALF Updated Desing for Integration
+//  01 Sep 2009   ALF Updated to G4AnalyticalEcpssrLiCrossSection
 //
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
+// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
 
-#ifndef G4ECPSSRKCROSSSECTION_HH
-#define G4ECPSSRKCROSSSECTION_HH 1
+#ifndef G4ANALYTICALECPSSRLICROSSSECTION_HH
+#define G4ANALYTICALECPSSRLICROSSSECTION_HH 1
 
+#include "G4VecpssrLiModel.hh"
 #include "globals.hh"
 #include <map>
 #include <vector>
 
-#include "G4DNACrossSectionDataSet.hh"
+class G4AnalyticalEcpssrLiCrossSection : public G4VecpssrLiModel
 
-
-class G4ecpssrKCrossSection
 {
 public:
 
-  G4ecpssrKCrossSection();
+  G4AnalyticalEcpssrLiCrossSection();
 
-  ~G4ecpssrKCrossSection();
+  ~G4AnalyticalEcpssrLiCrossSection();
 			     
-  
-  G4double CalculateCrossSection(G4int, G4double, G4double);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
-  
-  //  G4double CalculateVelocity(G4int zTarget,G4double massIncident, G4double energyIncident); 
-  
-  G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
-  
-  
-  
-private:
-  
-  G4ecpssrKCrossSection(const G4ecpssrKCrossSection&);
-  G4ecpssrKCrossSection & operator = (const G4ecpssrKCrossSection &right);
+  G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
-  G4double FunctionFK(G4double k, G4double theta);
+  G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+
+  G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+				    
+  G4double CalculateVelocity(G4int subShell, G4int zTarget,G4double massIncident, G4double energyIncident); 
+			      
+  G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
+
+   
+
+private:
+
+
+  G4AnalyticalEcpssrLiCrossSection(const G4AnalyticalEcpssrLiCrossSection&);
+  G4AnalyticalEcpssrLiCrossSection & operator = (const G4AnalyticalEcpssrLiCrossSection &right);
+
+  G4double FunctionFL1(G4double k, G4double theta);
+  
+  G4double FunctionFL2(G4double k, G4double theta);
+
 
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
-   
+ 
+  G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+  
   G4double QuadInterpolator(G4double e11, 
  		            G4double e12, 
 			    G4double e21, 
@@ -98,17 +107,20 @@ private:
 
   typedef std::map<double, std::map<double, double> > TriDimensionMap;
 
-  TriDimensionMap FKData;
-  std::vector<double> dummyVec;
+  TriDimensionMap FL1Data;
+  
+  TriDimensionMap FL2Data;
+  std::vector<double> dummyVec1;
+  std::vector<double> dummyVec2;
+
+
 
   typedef std::map<double, std::vector<double> > VecMap;
-  VecMap aVecMap;
+  VecMap aVecMap1;
+  VecMap aVecMap2;
 
   G4int verboseLevel;
 
-  G4DNACrossSectionDataSet* tableC1;
-  G4DNACrossSectionDataSet* tableC2;
-  G4DNACrossSectionDataSet* tableC3;
 };
-  
+
 #endif

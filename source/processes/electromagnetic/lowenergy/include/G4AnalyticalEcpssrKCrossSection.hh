@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,65 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ecpssrLiCrossSection.hh,v 1.2 2009-06-22 13:54:00 mantero Exp $
+// $Id: G4AnalyticalEcpssrKCrossSection.hh,v 1.1 2010-06-06 23:40:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Haifa Ben Abdelouahed
-//         
-//
-// History:
-// -----------
-//  23 Apr 2008   H. Ben Abdelouahed   1st implementation
-//  28 Apr 2008   MGP        Major revision according to a design iteration
-//  29 Apr 2009   ALF Updated Desing for Integration
-//
-// -------------------------------------------------------------------
 
-// Class description:
-// Low Energy Electromagnetic Physics, Cross section, p and alpha ionisation, L shell
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#ifndef G4ANALYTICALECPSSRKCROSSSECTION_HH
+#define G4ANALYTICALECPSSRKCROSSSECTION_HH 1
 
-// -------------------------------------------------------------------
-
-
-#ifndef G4ECPSSRLICROSSSECTION_HH
-#define G4ECPSSRLICROSSSECTION_HH 1
-
+#include "G4VecpssrKModel.hh"
 #include "globals.hh"
 #include <map>
 #include <vector>
 
-class G4ecpssrLiCrossSection 
+#include "G4DNACrossSectionDataSet.hh"
 
+
+class G4AnalyticalEcpssrKCrossSection : public G4VecpssrKModel
 {
 public:
 
-  G4ecpssrLiCrossSection();
+  G4AnalyticalEcpssrKCrossSection();
 
-  ~G4ecpssrLiCrossSection();
+  ~G4AnalyticalEcpssrKCrossSection();
 			     
-  G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
-
-  G4double CalculateL2CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
-
-  G4double CalculateL3CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
-				    
-  G4double CalculateVelocity(G4int subShell, G4int zTarget,G4double massIncident, G4double energyIncident); 
-			      
-  G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
-
-   
-
-private:
-
-
-  G4ecpssrLiCrossSection(const G4ecpssrLiCrossSection&);
-  G4ecpssrLiCrossSection & operator = (const G4ecpssrLiCrossSection &right);
-
-  G4double FunctionFL1(G4double k, G4double theta);
   
-  G4double FunctionFL2(G4double k, G4double theta);
+  G4double CalculateCrossSection(G4int, G4double, G4double);//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
+  
+  G4double  ExpIntFunction(G4int n,G4double x);//Exponential Integral Function
+  
+private:
+  
+  G4AnalyticalEcpssrKCrossSection(const G4AnalyticalEcpssrKCrossSection&);
+  G4AnalyticalEcpssrKCrossSection & operator = (const G4AnalyticalEcpssrKCrossSection &right);
 
+  G4double FunctionFK(G4double k, G4double theta);
 
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
@@ -103,15 +76,17 @@ private:
 
   typedef std::map<double, std::map<double, double> > TriDimensionMap;
 
-  TriDimensionMap FL1Data;
-  
-  TriDimensionMap FL2Data;
-
-std::vector<double> dummyVec;
+  TriDimensionMap FKData;
+  std::vector<double> dummyVec;
 
   typedef std::map<double, std::vector<double> > VecMap;
   VecMap aVecMap;
 
-};
+  G4int verboseLevel;
 
+  G4DNACrossSectionDataSet* tableC1;
+  G4DNACrossSectionDataSet* tableC2;
+  G4DNACrossSectionDataSet* tableC3;
+};
+  
 #endif

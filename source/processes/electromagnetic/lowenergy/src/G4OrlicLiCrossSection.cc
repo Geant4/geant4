@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLiCrossSection.cc,v 1.4 2009-11-11 09:14:53 mantero Exp $
+//$Id: G4OrlicLiCrossSection.cc,v 1.5 2010-06-06 23:40:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -35,7 +35,6 @@
 //  28 Apr 2008   MGP        Major revision according to a design iteration
 //  21 Apr 2009	  ALF Some correction for compatibility to G4VShellCrossSection
 //		  and changed name to G4OrlicLiCrossSection 
-//  11 Nov 2009	  ALF update and code cleaning for the Dec Release
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -199,7 +198,7 @@ G4double G4OrlicLiCrossSection::CalculateL1CrossSection(G4int zTarget, G4double 
 			}
 		      else
 			{ 
-			  G4cout << "ERROR: L1 Cross-Section exist only for ZTarget between 41 and 92!!! " << G4endl;
+			  G4cout << "ERROR: L1 Cross-Section exist only for ZTarget between 14 and 92!!! " << G4endl;
 			
 			}
 		    }
@@ -325,7 +324,7 @@ G4double G4OrlicLiCrossSection::CalculateL2CrossSection(G4int zTarget, G4double 
 			}
 		      else
 			{ 
-			  G4cout << "ERROR: L2 Cross-Section exist only for ZTarget between 41 and 92!!! " << G4endl;
+			  G4cout << "ERROR: L2 Cross-Section exist only for ZTarget between 14 and 92!!! " << G4endl;
 		       
 			}
 		    }
@@ -445,7 +444,7 @@ G4double G4OrlicLiCrossSection::CalculateL3CrossSection(G4int zTarget, G4double 
 			}
 		      else
 			{ 
-			  G4cout << "ERROR: L3 Cross-Section exist only for ZTarget between 41 and 92!!! " << G4endl;
+			  G4cout << "ERROR: L3 Cross-Section exist only for ZTarget between 14 and 92!!! " << G4endl;
 		       
 			}
 		    }

@@ -99,9 +99,8 @@
 // 03 Oct   2005 V.Ivanchenko change logic of definition of high energy limit for
 //               parametrised proton model: min(user value, model limit)
 // 26 Jan   2005 S. Chauvie added PrintInfoDefinition() for antiproton
-// 30 Sep   2009 ALF Removed dependencies to old shell Ionisation XS models
-// 11 Nov   2009 ALF Code cleaning for the Dec release
-//
+// 30 Sep   2009 A.Mantero Removed dependencies to old shell Ionisation XS models
+// 07 Jun    2010 Code Celaning for June beta Release
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1389,13 +1388,13 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
 void G4hLowEnergyIonisation::SelectShellIonisationCS(G4String val) {
 
-  if (shellCS) delete shellCS;
-
-  if (val == "empirical") {
-    shellCS = new G4empCrossSection();
-  }
- else {
+  if (val == "analytical" )  {  
+    if (shellCS) delete shellCS;
     shellCS = new G4teoCrossSection(val);
+  }
+  else if (val == "empirical") {
+    if (shellCS) delete shellCS;
+    shellCS = new G4empCrossSection();
   }
 }
 

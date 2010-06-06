@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4teoCrossSection.hh,v 1.4 2009-06-25 15:52:08 mantero Exp $
+// $Id: G4teoCrossSection.hh,v 1.5 2010-06-06 23:40:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         
@@ -48,8 +48,8 @@
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh"
 
-#include "G4ecpssrKCrossSection.hh"
-#include "G4ecpssrLiCrossSection.hh"
+#include "G4AnalyticalEcpssrKCrossSection.hh"
+#include "G4AnalyticalEcpssrLiCrossSection.hh"
 
 class G4teoCrossSection : public G4VhShellCrossSection 
 {
@@ -80,8 +80,8 @@ private:
   
   G4double totalCS;
               
-  G4ecpssrKCrossSection*  ecpssrShellK;
-  G4ecpssrLiCrossSection*  ecpssrShellLi;
+  G4VecpssrKModel*  ecpssrShellK;
+  G4VecpssrLiModel*  ecpssrShellLi;
 			
 			
   G4teoCrossSection(const G4teoCrossSection&);

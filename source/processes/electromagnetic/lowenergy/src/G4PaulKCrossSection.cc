@@ -28,7 +28,6 @@
 // -----------
 //  21 Apr 2008   H. Abdelohauwed - 1st implementation
 //  29 Apr 2009   ALF  Major Design Revision
-//  11 Nov 2009   ALF update and code cleaning for the Dec Release 
 //
 // -------------------------------------------------------------------
 
