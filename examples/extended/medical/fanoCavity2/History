@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2010-01-20 15:41:14 maire Exp $
+$Id: History,v 1.16 2010-06-06 05:03:18 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+04-06-10 J.Perl (fano2-V09-03-01)
+- Updated vis usage 
+
 20-01-10 mma (fano2-V09-03-00)
 - introduce PhysListEmStandard_option2 : UrbanMscModel93 without options
             PhysListEmStandard_WVI : WentzelVIModel
