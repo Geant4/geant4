@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN06.cc,v 1.16 2009-10-30 15:12:40 allison Exp $
+// $Id: exampleN06.cc,v 1.17 2010-06-06 04:08:35 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,7 +49,6 @@
 #include "ExN06PhysicsList.hh"
 #include "ExN06PrimaryGeneratorAction.hh"
 #include "ExN06RunAction.hh"
-#include "ExN06EventAction.hh"
 #include "ExN06StackingAction.hh"
 #include "ExN06SteppingVerbose.hh"
 
@@ -103,9 +102,6 @@ int main(int argc,char** argv)
   //
   G4VUserPrimaryGeneratorAction* gen_action = new ExN06PrimaryGeneratorAction;
   runManager->SetUserAction(gen_action);
-  //
-  G4UserEventAction* event_action = new ExN06EventAction;
-  runManager->SetUserAction(event_action);
   //
   G4UserStackingAction* stacking_action = new ExN06StackingAction;
   runManager->SetUserAction(stacking_action);
