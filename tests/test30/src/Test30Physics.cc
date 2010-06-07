@@ -93,7 +93,6 @@
 #include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
 #include "G4ChargeExchange.hh"
-#include "G4CascadeElasticInterface.hh"
 #include "G4QuasiElasticChannel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QStringChipsParticleLevelInterface.hh"
@@ -358,12 +357,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "DElastic") {
     G4DiffuseElastic* els = new G4DiffuseElastic();
-    sg = new Test30VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "BertiniElastic") {
-    G4CascadeElasticInterface* els = new G4CascadeElasticInterface();
     sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
