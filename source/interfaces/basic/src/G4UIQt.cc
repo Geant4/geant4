@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.42 2010-06-04 15:12:09 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.43 2010-06-07 17:07:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -1730,9 +1730,9 @@ const QString & text) {
   QStringList result = "";
 #else
   QStringList result = fG4cout.filter(text);
+  fCoutTBTextArea->setPlainText(result.join("\n"));
 #endif
 
-  fCoutTBTextArea->setPlainText(result.join("\n"));
   fCoutTBTextArea->repaint();
 #if QT_VERSION < 0x040000
   fCoutTBTextArea->verticalScrollBar()->setValue(fCoutTBTextArea->verticalScrollBar()->maxValue());
