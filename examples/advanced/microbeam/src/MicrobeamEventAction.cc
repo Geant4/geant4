@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEventAction.cc,v 1.7 2010-06-06 06:22:07 perl Exp $
+// $Id: MicrobeamEventAction.cc,v 1.8 2010-06-07 03:18:01 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4Event.hh"
@@ -56,7 +56,7 @@ void MicrobeamEventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void MicrobeamEventAction::EndOfEventAction(const G4Event* evt)
+void MicrobeamEventAction::EndOfEventAction(const G4Event* )
 {  
  
 // SAVE TOTAL ABSORBED DOSE IN PHANTOM
