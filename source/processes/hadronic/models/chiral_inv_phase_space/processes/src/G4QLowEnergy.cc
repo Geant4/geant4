@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.2 2010-01-14 11:24:36 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.3 2010-06-07 12:28:53 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -942,6 +942,34 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef pdebug
             G4cout<<"G4QLE::PSDI: rpA=1, rpZ"<<rpZ<<G4endl;
 #endif
+          }
+          else if(rpA==2 && rpZ==0)            // nn decay
+          {
+            theDefinition = aNeutron;
+            G4LorentzVector f4M=G4LorentzVector(0.,0.,0.,mNeut); // 4mom of 1st neutron
+            G4LorentzVector s4M=G4LorentzVector(0.,0.,0.,mNeut); // 4mom of 2nd neutron
+#ifdef pdebug
+            G4cout<<"G4QLE::CPS->n+n,nn="<<rp4M.m()<<" >? 2*MNeutron="<<2*mNeutron<<G4endl;
+#endif
+            if(!G4QHadron(rp4M).DecayIn2(f4M, s4M))
+            {
+              G4cout<<"*W*G4QLE::CPS->n+n,t="<<rp4M.m()<<" >? 2*Neutron="<<2*mAlph<<G4endl;
+            }
+            G4DynamicParticle* pNeu = new G4DynamicParticle(theDefinition, f4M);
+            aFraPTrack = new G4Track(pNeu, localtime, position );
+            aFraPTrack->SetWeight(weight);                    //    weighted
+            aFraPTrack->SetTouchableHandle(trTouchable);
+            tt4M-=f4M;
+#ifdef edebug
+            totBaN-=2;
+            tch4M -=f4M;
+            G4cout<<">>G4QLEn::PSDI:N,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->ProjSpectA4M="<<f4M<<G4endl;
+#endif
+            ++nSec;
+            rp4M=s4M;
           }
           else if(rpA==8 && rpZ==4)            // Be8 decay
           {
