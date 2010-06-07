@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.376 2010-06-04 13:16:28 gcosmo Exp $
+cvs log $Id: History,v 1.377 2010-06-07 09:01:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th June 2010  Gabriele Cosmo (config-V09-03-04)
+- Removed processes/hadronic/models/leading_particle module from include
+  paths list.
 
 3rd June 2010  Ben Morgan (config-V09-03-03)
 - Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
