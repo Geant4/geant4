@@ -1,4 +1,4 @@
-q$Id: History,v 1.130 2010-06-04 16:05:13 gunter Exp $
+q$Id: History,v 1.131 2010-06-07 15:36:46 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-06-2010, G.Folger                    (phys-lists-V09-03-11)
+-  remove few leftover declarations for G4bool Quasielastic in .icc files
+   for physics lists, not used any longer
+ 
 04-06-2010, G.Folger                    (phys-lists-V09-03-10)
 - New ctor for G4NeutronTrackingCut
 - Use new ctors in physics lists
