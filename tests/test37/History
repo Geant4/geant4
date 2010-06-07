@@ -16,6 +16,7 @@ track of all tags.
 
 07-06-10  V.Ivanchenko (test37-V09-03-02)
 - Updated scripts 
+- RunAction - use overwrite mode for Sandia.out file
 
 28-05-10  V.Ivanchenko (test37-V09-03-01)
 - Updated PhysList for WentzelVI model and scripts

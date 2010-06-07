@@ -262,7 +262,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	<< G4endl;
 
   asciiFileName="Sandia.out";
-  std::ofstream asciiFile(asciiFileName, std::ios::app);
+  std::ofstream asciiFile(asciiFileName);
   if(asciiFile.is_open()) {
     asciiFile << " FMR(z/r0)      ||       J(MeV/g/cm2)" << G4endl;
   } else {
