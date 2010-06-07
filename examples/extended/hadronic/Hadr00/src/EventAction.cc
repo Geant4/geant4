@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.2 2010-06-06 04:58:40 perl Exp $
+// $Id: EventAction.cc,v 1.3 2010-06-07 05:40:46 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+void EventAction::EndOfEventAction(const G4Event*)
 {
   if(debugStarted) {
     UI->ApplyCommand("/tracking/verbose  0");

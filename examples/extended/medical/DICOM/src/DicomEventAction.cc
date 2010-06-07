@@ -53,6 +53,6 @@ void DicomEventAction::BeginOfEventAction(const G4Event* evt)
   G4cout << "EV: " << evt->GetEventID() << G4endl;
 }
 
-void DicomEventAction::EndOfEventAction(const G4Event* evt)
+void DicomEventAction::EndOfEventAction(const G4Event*)
 {
 }

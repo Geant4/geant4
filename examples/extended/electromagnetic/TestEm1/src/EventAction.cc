@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.8 2010-06-06 04:25:24 perl Exp $
+// $Id: EventAction.cc,v 1.9 2010-06-07 05:40:45 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+void EventAction::EndOfEventAction(const G4Event*)
 {
   if (drawFlag != "none") G4cout << " Energy deposit: "
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")

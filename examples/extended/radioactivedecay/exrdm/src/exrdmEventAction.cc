@@ -61,7 +61,7 @@ void exrdmEventAction::BeginOfEventAction(const G4Event* )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmEventAction::EndOfEventAction(const G4Event* evt)
+void exrdmEventAction::EndOfEventAction(const G4Event*)
 {
   //analysis
   exrdmAnalysisManager::getInstance()->EndOfEvent();
