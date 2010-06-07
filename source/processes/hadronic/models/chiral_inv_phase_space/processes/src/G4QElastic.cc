@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.7 2010-06-04 11:09:13 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.8 2010-06-07 13:07:46 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -131,8 +131,8 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
     CSmanager2=G4QKaonPlusElasticCrossSection::GetPointer();  
   }
   else if(pPDG==3222) CSmanager=G4QHyperonPlusElasticCrossSection::GetPointer();  
-  else if(pPDG>3110 && pPDG<3334) CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  else if(pPDG>-3334&&pPDG<-1110) CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
+  else if(pPDG>3110 && pPDG<3335) CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+  else if(pPDG>-3335&&pPDG<-1110) CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
   else G4cout<<"*Warning*G4QElastic::GetMeanFreePath: wrong PDG="<<pPDG<<G4endl;
   G4QIsotope* Isotopes = G4QIsotope::Get(); // Pointer to the G4QIsotopes singleton
   G4double sigma=0.;                        // Sums over elements for the material

@@ -16,9 +16,13 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+7-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-05)
+-----------------------------------------------------------------------
+Omega- is included in G4QElastic (thanks to Andrea)
+
 7-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-04)
 -----------------------------------------------------------------------
-nn is decayed in G4QLowEnergy (thancs to Andrea)
+nn is decayed in G4QLowEnergy (thanks to Andrea)
 
 4-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-03)
 -----------------------------------------------------------------------
