@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.4 2010-01-11 17:04:32 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2010-06-07 09:28:56 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := textGeom
+name := exTextGeom
 G4TARGET := $(name)
 G4EXLIB := true
 
