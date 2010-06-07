@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.42 2006-01-27 15:29:58 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.43 2010-06-07 10:08:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,9 @@ Tst50SteppingAction::~Tst50SteppingAction()
 
 void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+#ifdef G4ANALYSIS_USE
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+#endif
 
   G4int runID = runAction->GetRunID();
 
@@ -103,6 +105,8 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
 	    }
 	}
     }
+
+#ifdef G4ANALYSIS_USE
 
   // Stopping Power and CSDA range tests ...
 
@@ -162,6 +166,9 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
 	    }
 	}
     }
+
+#endif
+
 }
 
 

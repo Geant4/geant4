@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.28 2006-06-29 22:05:26 gunter Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.29 2010-06-07 10:08:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -38,7 +38,8 @@
 // 17 May  2003   S. Guatelli   1st implementation
 //
 // -------------------------------------------------------------------
- 
+#ifdef G4ANALYSIS_USE
+
 #include <stdlib.h>
 #include <fstream>
 #include "Tst50AnalysisManager.hh"
@@ -213,10 +214,7 @@ void Tst50AnalysisManager::finish()
   theTree -> close();
 }
 
-
-
-
-
+#endif
 
 
 

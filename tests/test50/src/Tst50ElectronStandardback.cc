@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst50ElectronStandardback.cc,v 1.4 2010-04-01 09:48:30 sincerti Exp $
+// $Id: Tst50ElectronStandardback.cc,v 1.5 2010-06-07 10:08:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -70,7 +70,7 @@ void Tst50ElectronStandardback::ConstructProcess()
 	  manager->AddProcess(multipleScattering, -1, 1,1);
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-          multipleScattering->SetFacrange(0.00005);
+          multipleScattering->SetRangeFactor(0.00005);
 	}   
     }
 }

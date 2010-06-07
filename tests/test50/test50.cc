@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.33 2006-06-29 22:04:08 gunter Exp $
+// $Id: test50.cc,v 1.34 2010-06-07 10:08:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,10 +81,12 @@ int main(int argc,char** argv) {
                                                                 tst50Detector);
   runManager->SetUserAction(tst50SteppingAction);
 
+#ifdef G4ANALYSIS_USE
   Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
  
-   if (argc == 1) analysis->book("test50");
-    else    analysis->book(argv[1]);
+  if (argc == 1) analysis->book("test50");
+  else           analysis->book(argv[1]);
+#endif
   
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
@@ -113,7 +115,9 @@ int main(int argc,char** argv) {
       UI->ApplyCommand(command+fileName);
     }
 
+#ifdef G4ANALYSIS_USE
   analysis->finish();
+#endif
 
 #ifdef G4VIS_USE
   delete visManager;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst50RunAction.cc,v 1.26 2006-06-29 22:06:18 gunter Exp $
+// $Id: Tst50RunAction.cc,v 1.27 2010-06-07 10:08:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -105,7 +105,8 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
     }
 
   numberEvents = aRun->GetNumberOfEvent();
-  
+
+#ifdef G4ANALYSIS_USE
   if (primaryParticleName == "gamma")
     {
       G4double gammaTransmittedFraction = (gammaTransmitted/numberEvents);
@@ -134,6 +135,7 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
         analysis -> TransmittedEnergy(runID,primaryParticleEnergy/MeV, energyFraction);
 	}
     }
+#endif
 }
 
 void  Tst50RunAction::SetTransmissionTest(G4String newValue)

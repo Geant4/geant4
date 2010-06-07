@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst50PositronStandardBack.cc,v 1.3 2010-04-01 09:48:30 sincerti Exp $
+// $Id: Tst50PositronStandardBack.cc,v 1.4 2010-06-07 10:08:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -69,7 +69,7 @@ void Tst50PositronStandardBack::ConstructProcess()
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
 	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-          scattering->SetFacrange(0.00005);
+          scattering->SetRangeFactor(0.00005);
 	}   
     }
 }
