@@ -20,7 +20,7 @@ setenv PHYSLIST    standardGS
 set    phys = "optK"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-setenv PHYSLIST    standardIG
+setenv PHYSLIST    standard_opt2
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
