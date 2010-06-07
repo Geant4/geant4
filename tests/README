@@ -1,4 +1,4 @@
-$Id: README,v 1.30 2009-12-01 14:19:40 gcosmo Exp $
+$Id: README,v 1.31 2010-06-07 13:20:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -51,7 +51,7 @@ test28 ## Hadronic abrasion/ablation and em-dissociation.
 test29 ## Electroweak interface (G4QCaptureAtRest).
 test30 ## Hadronic generators test versus thin target data E<3 GeV (not for stt).
 test31 ## Test of stopping powers and energy loss for EM physics (not for stt) .
-test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
+test32 ## Free slot.
 test33 ## Importance biasing and scoring.
 test34 ## Shower parameterisation with 'gflash'.
 test35 ## Hadronic Generator test versus HARP data 3 GeV < E < 13 GeV (not for stt).
