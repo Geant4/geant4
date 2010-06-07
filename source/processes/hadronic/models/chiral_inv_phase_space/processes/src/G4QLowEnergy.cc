@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.3 2010-06-07 12:28:53 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.4 2010-06-07 15:19:55 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -963,13 +963,41 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef edebug
             totBaN-=2;
             tch4M -=f4M;
-            G4cout<<">>G4QLEn::PSDI:N,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+            G4cout<<">>G4QLEn::PSDI:n,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
 #endif
 #ifdef pdebug
             G4cout<<"G4QLowEn::PSDI:-->ProjSpectA4M="<<f4M<<G4endl;
 #endif
             ++nSec;
             rp4M=s4M;
+          }
+          else if(rpA>2 && rpZ==0)            // Z=0 decay
+          {
+            theDefinition = aNeutron;
+            G4LorentzVector f4M=rp4M/rpA;     // 4mom of 1st neutron
+#ifdef pdebug
+            G4cout<<"G4QLE::CPS->Nn,M="<<rp4M.m()<<" >? N*MNeutron="<<rpA*mNeutron<<G4endl;
+#endif
+            for(G4int it=1; it<rpA; ++it)     // Fill (N-1) neutrons to output
+            {
+              G4DynamicParticle* pNeu = new G4DynamicParticle(theDefinition, f4M);
+              G4Track* aNTrack = new G4Track(pNeu, localtime, position );
+              aNTrack->SetWeight(weight);                    //    weighted
+              aNTrack->SetTouchableHandle(trTouchable);
+              result.push_back(aNTrack);
+            }
+            G4int nesc = rpA-1;
+            tt4M-=f4M*nesc;
+#ifdef edebug
+            totBaN-=nesc;
+            tch4M -=f4M*nesc;
+            G4cout<<">G4QLEn::PSDI:Nn,tZ="<<totChg<<",tB="<<totBaN<<",t4M="<<tch4M<<G4endl;
+#endif
+#ifdef pdebug
+            G4cout<<"G4QLowEn::PSDI:-->ProjSpectA4M="<<f4M<<G4endl;
+#endif
+            nSec+=nesc;
+            rp4M=f4M;
           }
           else if(rpA==8 && rpZ==4)            // Be8 decay
           {
