@@ -32,7 +32,7 @@
 //    *                              *
 //    ********************************
 //
-// $Id: PurgMagEventAction.cc,v 1.5 2010-06-06 06:23:20 perl Exp $
+// $Id: PurgMagEventAction.cc,v 1.6 2010-06-07 05:18:38 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,7 +71,7 @@ void PurgMagEventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void PurgMagEventAction::EndOfEventAction(const G4Event* evt)
+void PurgMagEventAction::EndOfEventAction(const G4Event*)
 {  
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

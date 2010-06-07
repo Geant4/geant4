@@ -30,7 +30,7 @@
 //    **********************************
 //
 //
-// $Id: RemSimEventAction.cc,v 1.10 2010-06-06 06:23:52 perl Exp $
+// $Id: RemSimEventAction.cc,v 1.11 2010-06-07 05:19:47 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
@@ -55,6 +55,6 @@ void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
    G4cout << "\n---> Begin Of Event: " << evtNo << G4endl;
 }
 
-void RemSimEventAction::EndOfEventAction(const G4Event* evt)
+void RemSimEventAction::EndOfEventAction(const G4Event*)
 {
 }

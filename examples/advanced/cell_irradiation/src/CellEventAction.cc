@@ -66,7 +66,7 @@ if (collisionID==-1)
  totalEnergy = 0;
 }
  
-void CellEventAction::EndOfEventAction(const G4Event* evt)
+void CellEventAction::EndOfEventAction(const G4Event*)
 {
 }
 
