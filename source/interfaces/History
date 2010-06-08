@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2010-06-07 17:08:12 gcosmo Exp $
+$Id: History,v 1.145 2010-06-08 04:43:33 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8, June, 2010 K.Murakami (interfaces-V09-03-08)
+- G4VBasicShell : wrong version is in the cvs head.
+                  back to previous version (1.14) which includes 
+                  a correct bug fix.
 
 4th June  L. Garnier (interfaces-V09-03-07)
 - G4UIQt : Fix recursive repaint on windows and linux
