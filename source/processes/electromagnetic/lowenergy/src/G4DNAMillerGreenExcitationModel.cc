@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.8 2010-03-26 21:43:22 sincerti Exp $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.9 2010-06-08 21:50:00 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -278,7 +278,6 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
          ) 
       {
 	  G4DNAEmfietzoglouExcitationModel * excitationXS = new G4DNAEmfietzoglouExcitationModel();
-          excitationXS->Initialise(G4Electron::ElectronDefinition());
 
 	  G4double sigmaExcitation=0;
 	  G4double tmp =0.;
@@ -449,7 +448,6 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 	  i--;
          
           G4DNAEmfietzoglouExcitationModel * excitationXS = new G4DNAEmfietzoglouExcitationModel();
-          excitationXS->Initialise(G4Electron::ElectronDefinition());
          
 	  G4double sigmaExcitation=0;
 

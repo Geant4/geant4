@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.9 2010-01-07 18:10:50 sincerti Exp $
+// $Id: G4DNAEmfietzoglouExcitationModel.cc,v 1.10 2010-06-08 21:50:00 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,6 +44,8 @@ G4DNAEmfietzoglouExcitationModel::G4DNAEmfietzoglouExcitationModel(const G4Parti
   highEnergyLimit = 10 * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
+
+  nLevels = waterExcitation.NumberOfLevels();
 
   verboseLevel= 0;
   // Verbosity scale:
@@ -94,10 +96,6 @@ void G4DNAEmfietzoglouExcitationModel::Initialise(const G4ParticleDefinition* /*
         HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
     SetHighEnergyLimit(highEnergyLimit);
   }
-
-  //
-  
-  nLevels = waterExcitation.NumberOfLevels();
 
   //
   if( verboseLevel>0 ) 
@@ -157,7 +155,7 @@ G4double G4DNAEmfietzoglouExcitationModel::CrossSectionPerVolume(const G4Materia
   } 
 
  } 
-         
+       
  return sigma*material->GetAtomicNumDensityVector()[1];		   
 }
 
@@ -236,6 +234,7 @@ G4double G4DNAEmfietzoglouExcitationModel::PartialCrossSection(G4double t, G4int
 	* std::pow((1.- (exc/t)), pj[level]);
       sigma = excitationSigma / density;
   }
+
   return sigma;
 }
 
