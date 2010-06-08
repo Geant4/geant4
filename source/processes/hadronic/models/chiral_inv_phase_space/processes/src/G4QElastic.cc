@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.8 2010-06-07 13:07:46 mkossov Exp $
+// $Id: G4QElastic.cc,v 1.9 2010-06-08 11:25:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QElastic class -----------------
@@ -473,8 +473,8 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     CSmanager2=G4QKaonPlusElasticCrossSection::GetPointer();  
   }
   else if(projPDG==3222) CSmanager=G4QHyperonPlusElasticCrossSection::GetPointer();  
-  else if(projPDG>3110&&projPDG<3334)CSmanager=G4QHyperonElasticCrossSection::GetPointer();
-  else if(projPDG>-3334 && projPDG<-1110)
+  else if(projPDG>3110&&projPDG<3335)CSmanager=G4QHyperonElasticCrossSection::GetPointer();
+  else if(projPDG>-3335 && projPDG<-1110)
                                   CSmanager=G4QAntiBaryonElasticCrossSection::GetPointer();
   else G4cout<<"*Warning*G4QElastic::PostStepDoIt: wrong PDG="<<projPDG<<G4endl;
 #ifdef debug
@@ -638,8 +638,8 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
     else if(pPDG==310||pPDG==130) res=(KaMCSmanager->GetCrossSection(true, p, Z, N, pPDG)+
                                    KaPCSmanager->GetCrossSection(true, p, Z, N, pPDG))/2.;
     else if(pPDG==3222) res=HyPCSmanager->GetCrossSection(true, p, Z, N, pPDG);
-    else if(pPDG>3110 && pPDG<3334) res=HypCSmanager->GetCrossSection(true, p, Z, N, pPDG);
-    else if(pPDG>-3334 && pPDG<-1110) res=aBaCSmanager->GetCrossSection(true,p,Z,N,pPDG);
+    else if(pPDG>3110 && pPDG<3335) res=HypCSmanager->GetCrossSection(true, p, Z, N, pPDG);
+    else if(pPDG>-3335 && pPDG<-1110) res=aBaCSmanager->GetCrossSection(true,p,Z,N,pPDG);
     else G4cout<<"*Warning*G4QElastic::CalculateXSt: (o) wrong PDG="<<pPDG<<G4endl;
   }
   else if(!oxs && xst)                   // Calculate CrossSection & prepare differentialCS
@@ -653,8 +653,8 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
     else if(pPDG==310||pPDG==130) res=(KaMCSmanager->GetCrossSection(false, p, Z, N, pPDG)+
                                    KaPCSmanager->GetCrossSection(false, p, Z, N, pPDG))/2.;
     else if(pPDG==3222) res=HyPCSmanager->GetCrossSection(false, p, Z, N, pPDG);
-    else if(pPDG>3110 && pPDG<3334) res=HypCSmanager->GetCrossSection(false, p, Z,N, pPDG);
-    else if(pPDG>-3334 && pPDG<-1110) res=aBaCSmanager->GetCrossSection(false,p,Z,N,pPDG);
+    else if(pPDG>3110 && pPDG<3335) res=HypCSmanager->GetCrossSection(false, p, Z,N, pPDG);
+    else if(pPDG>-3335 && pPDG<-1110) res=aBaCSmanager->GetCrossSection(false,p,Z,N,pPDG);
     else G4cout<<"*Warning*G4QElastic::CalculateXSt: (x) wrong PDG="<<pPDG<<G4endl;
     // The XS for the nucleus must be calculated the last
     init=true;
@@ -696,12 +696,12 @@ G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G
       if(oxs) res=HyPCSmanager->GetHMaxT(); // Calculate the max_t value
       else res=HyPCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
     }
-    else if(pPDG<3334 && pPDG>1110)         // ==> Rest of Hyperons
+    else if(pPDG<3335 && pPDG>1110)         // ==> Rest of Hyperons
     {
       if(oxs) res=HypCSmanager->GetHMaxT(); // Calculate the max_t value
       else res=HypCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
     }
-    else if(pPDG>-3334 && pPDG<-1110)       // ==> AntiBaryons
+    else if(pPDG>-3335 && pPDG<-1110)       // ==> AntiBaryons
     {
       if(oxs) res=aBaCSmanager->GetHMaxT(); // Calculate the max_t value
       else res=aBaCSmanager->GetExchangeT(Z, N, pPDG);// functionallyRandomized -t in MeV^2
