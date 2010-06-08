@@ -1,4 +1,4 @@
-q$Id: History,v 1.131 2010-06-07 15:36:46 gunter Exp $
+q$Id: History,v 1.132 2010-06-08 09:00:22 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-06-2010, G.Folger                    (phys-lists-V09-03-12)
+-  3 more fixes for compilation warnings on unused variables.
 
 07-06-2010, G.Folger                    (phys-lists-V09-03-11)
 -  remove few leftover declarations for G4bool Quasielastic in .icc files
