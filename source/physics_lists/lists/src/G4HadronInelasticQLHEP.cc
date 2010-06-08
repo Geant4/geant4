@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQLHEP.cc,v 1.3 2010-06-04 09:41:11 vnivanch Exp $
+// $Id: G4HadronInelasticQLHEP.cc,v 1.4 2010-06-08 08:58:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(G4int ver)
   theHPXSecF = 0;
 }
 
-G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(const G4String& name, 
+G4HadronInelasticQLHEP::G4HadronInelasticQLHEP(const G4String&, 
     G4int ver, G4bool qgs, G4bool bert, G4bool bic, G4bool hp)
   : G4VPhysicsConstructor("hInelasticQLHEP"), verbose(ver), qgsFlag(qgs), 
     bertFlag(bert), bicFlag(bic), hpFlag(hp), wasActivated(false)
