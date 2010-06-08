@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.13 2010-05-26 15:06:49 gunter Exp $
+// $Id: G4PhysListFactory.cc,v 1.14 2010-06-08 16:06:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -63,12 +63,13 @@
 #include "QGSP_FTFP_BERT.hh"
 #include "QGS_BIC.hh"
 #include "QGSP_INCL_ABLA.hh"
+#include "Shielding.hh"
 
 G4PhysListFactory::G4PhysListFactory() 
 {
   defName = "QGSP_BERT";
-  nlists = 27;
-  G4String s[27] = {
+  nlists = 28;
+  G4String s[28] = {
     "CHIPS",
     "FTFP_BERT","FTFP_BERT_EMV","FTFP_BERT_EMX","FTFP_BERT_TRV","FTF_BIC",
     "LBE","LHEP","LHEP_EMV",
@@ -77,7 +78,8 @@ G4PhysListFactory::G4PhysListFactory()
     "QGSP_BERT","QGSP_BERT_EMV","QGSP_BERT_EMX","QGSP_BERT_HP",
     "QGSP_BERT_NOLEP","QGSP_BERT_TRV","QGSP_BERT_CHIPS",
     "QGSP_BIC","QGSP_BIC_EMY","QGSP_BIC_HP",
-    "QGSP_FTFP_BERT","QGS_BIC", "QGSP_INCL_ABLA"};
+    "QGSP_FTFP_BERT","QGS_BIC", "QGSP_INCL_ABLA",
+    "Shielding"};
 
   for(size_t i=0; i<nlists; i++) {
     listnames.push_back(s[i]);
@@ -137,6 +139,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
   else if(name == "QGSP_FTFP_BERT") {p = new QGSP_FTFP_BERT();}
   else if(name == "QGS_BIC") {p = new QGS_BIC();}
   else if(name == "QGSP_INCL_ABLA") {p = new QGSP_INCL_ABLA();}
+  else if(name == "Shielding") {p = new Shielding();}
   else {
     G4cout << "### G4PhysListFactory WARNING: "
 	   << "PhysicsList " << name << " is not known"
