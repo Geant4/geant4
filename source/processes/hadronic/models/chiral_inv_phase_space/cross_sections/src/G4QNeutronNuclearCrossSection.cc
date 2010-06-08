@@ -888,19 +888,19 @@ G4double G4QNeutronNuclearCrossSection::CrossSectionLin(G4int tZ, G4int tN, G4do
   //==> Ba(Z=56)
   static const G4int N56=7;
   static const G4double pZ56N74[4]={3.E-12, 500., .01, 2.5E-5}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N74=std::make_pair(70,pZ56N74);
+  static const std::pair<G4int, const G4double*> Z56N74=std::make_pair(74,pZ56N74);
   static const G4double pZ56N76[4]={3.E-12, 500., .01, 2.5E-5}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N76=std::make_pair(71,pZ56N76);
+  static const std::pair<G4int, const G4double*> Z56N76=std::make_pair(76,pZ56N76);
   static const G4double pZ56N78[4]={3.E-12, 500., .01, 2.5E-5}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N78=std::make_pair(72,pZ56N78);
+  static const std::pair<G4int, const G4double*> Z56N78=std::make_pair(78,pZ56N78);
   static const G4double pZ56N79[4]={3.E-12, 500., .01, 2.5E-5}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N79=std::make_pair(73,pZ56N79);
+  static const std::pair<G4int, const G4double*> Z56N79=std::make_pair(79,pZ56N79);
   static const G4double pZ56N80[4]={3.E-12, 500., .01, 2.5E-5}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N80=std::make_pair(74,pZ56N80);
+  static const std::pair<G4int, const G4double*> Z56N80=std::make_pair(80,pZ56N80);
   static const G4double pZ56N81[4]={3.E-12, 500., .01, 2.5E-5}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N81=std::make_pair(76,pZ56N81);
+  static const std::pair<G4int, const G4double*> Z56N81=std::make_pair(81,pZ56N81);
   static const G4double pZ56N82[4]={3.E-12, 500., .01, 2.5E-4}; // *** NotImplemented ***
-  static const std::pair<G4int, const G4double*> Z56N82=std::make_pair(78,pZ56N82);
+  static const std::pair<G4int, const G4double*> Z56N82=std::make_pair(82,pZ56N82);
   static const std::pair<G4int, const G4double*> Z56[N56]={Z56N74, Z56N76, Z56N78, Z56N79,
                                                            Z56N80, Z56N81, Z56N82};
   //==> La(Z=57)
