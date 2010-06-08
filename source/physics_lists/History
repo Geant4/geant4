@@ -1,4 +1,4 @@
-q$Id: History,v 1.132 2010-06-08 09:00:22 gunter Exp $
+q$Id: History,v 1.133 2010-06-08 16:04:58 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-06-2010, G.Folger                    (phys-lists-V09-03-13)
+-  Add Shielding list together with Tatsumi. This list is:
+    - based on FTFP_BERT
+    - using IonQMDPhysics, instead of LHEP ion physics
+    - Neutron_HP
+    - and Barashenkov + Glauber Gribov cross section via G4BGGNucleonInelasticXS
+       for neutron and proton
+    - and JENDL HE cross sections for neutrons
+        
 08-06-2010, G.Folger                    (phys-lists-V09-03-12)
 -  3 more fixes for compilation warnings on unused variables.
 
