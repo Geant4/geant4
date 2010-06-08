@@ -29,6 +29,8 @@
 //9.4beta #include "FTFP.hh"
 #include "FTFP_BERT.hh"
 #include "FTFP_BERT_TRV.hh"
+#include "FTFP_BERT_EMV.hh"
+#include "FTFP_BERT_EMX.hh"
 
 #include "LBE.hh"
 //9.4beta #include "LHEP_BERT_HP.hh"
@@ -52,9 +54,14 @@
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BERT.hh"
 #include "QGSP_BERT_EMX.hh"
+#include "QGSP_BERT_EMV.hh"
+#include "QGSP_BERT_CHIPS.hh"
+#include "QGSP_BERT_NOLEP.hh"
+#include "QGSP_BERT_TRV.hh"
 //#include "QGSP_BERT_DIF.hh"
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_BIC.hh"
+#include "QGSP_BIC_EMY.hh"
 #include "G4IonQMDPhysics.hh"
 //#include "QGSP_EMV.hh"
 //#include "QGSP_EMX.hh"
@@ -63,10 +70,11 @@
 #include "QGSP_INCL_ABLA.hh"
 
 #include "QGSP_FTFP_BERT.hh"
-#include "QGSP_BERT_CHIPS.hh"
 
 #include "QGS_BIC.hh"
 #include "FTF_BIC.hh"
+
+#include "Shielding.hh"
 
 #include "CLHEP/Random/RanluxEngine.h" 
 
@@ -81,6 +89,8 @@ int main(int argc,char** argv) {
 //9.4beta   G4VModularPhysicsList * theFTF2 = new FTFP;
   G4VModularPhysicsList * theFTF3 = new FTFP_BERT;
   G4VModularPhysicsList * theFTF3a = new FTFP_BERT_TRV;
+  G4VModularPhysicsList * theFTF3b = new FTFP_BERT_EMV;
+  G4VModularPhysicsList * theFTF3c = new FTFP_BERT_EMX;
 
   G4VModularPhysicsList *theLBE = new LBE; 
 
@@ -102,7 +112,10 @@ int main(int argc,char** argv) {
   G4VModularPhysicsList *thePL20 = new QGSP_BERT_HP; 
   G4VModularPhysicsList *thePL21 = new QGSP_BERT;
   G4VModularPhysicsList *thePL21a = new QGSP_BERT_EMX;
-  G4VModularPhysicsList *thePL21b = new QGSP_BERT_CHIPS;
+  G4VModularPhysicsList *thePL21b = new QGSP_BERT_EMV;
+  G4VModularPhysicsList *thePL21c = new QGSP_BERT_CHIPS;
+  G4VModularPhysicsList *thePL21d = new QGSP_BERT_NOLEP;
+  G4VModularPhysicsList *thePL21e = new QGSP_BERT_TRV;
 //9.4beta   G4VModularPhysicsList *thePL21b = new QGSP_BERT_DIF;
   G4VModularPhysicsList *thePL22 = new QGSP_BIC_HP; 
   G4VModularPhysicsList *thePL23 = new QGSP_BIC;
@@ -110,11 +123,12 @@ int main(int argc,char** argv) {
       G4IonQMDPhysics * ionQMD=new G4IonQMDPhysics("IonQMD",1);
       thePL23a->RegisterPhysics(ionQMD);
       ionQMD->ConstructProcess();
+  G4VModularPhysicsList *thePL30b = new QGSP_BIC_EMY;
 //9.4beta   G4VModularPhysicsList *thePL24 = new QGSP_EMV;
 //replaced  G4VModularPhysicsList *thePL25 = new QGSP_EMX;
   G4VModularPhysicsList *thePL27 = new QGSP;
 //9.4beta   G4VModularPhysicsList *thePL27a = new QGSP_DIF;
-//9.4beta   G4VModularPhysicsList *thePL28 = new QGSP_QEL;
+  G4VModularPhysicsList *thePL28 = new QGSP;
 //  G4VModularPhysicsList *thePL29 = new QGSP_CASC;
   G4VModularPhysicsList *thePL29 = new QGSP_INCL_ABLA;
   
@@ -123,6 +137,7 @@ int main(int argc,char** argv) {
   
   G4VModularPhysicsList *thePL40 = new QGSP_FTFP_BERT;
 
+  G4VModularPhysicsList *thePL50 = new Shielding;
 
   delete runManager; 
   return 0; 
