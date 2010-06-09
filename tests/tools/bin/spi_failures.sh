@@ -50,6 +50,9 @@ while test $# -gt 0 ; do
   --win) win="";
   	shift;	 
 	;;
+  --mac) mac="";
+  	shift;	 
+	;;
   --tag) slot=geant4_1;
   	  tagname=$2;
           logfile="${logfile}.${tagname}";
