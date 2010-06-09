@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GGNNCrossSectionDataTest.cc,v 1.4 2009-03-06 15:48:39 grichine Exp $
+// $Id: G4GGNNCrossSectionDataTest.cc,v 1.5 2010-06-09 08:29:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -132,7 +132,7 @@ int main()
 
   G4int choice;
   // G4cin >> choice;
-  choice = 13;
+  choice = 6;
 
 
   G4Element*     theElement;
@@ -253,11 +253,11 @@ int main()
   if (! g4State->SetNewState(G4State_Init) );
 
   // C
-  // G4int Z = 6;
-  // G4int A = 12;
+  G4int Z = 6;
+  G4int A = 12;
   // Ne
-  G4int Z = 10;
-  G4int A = 20;
+  // G4int Z = 10;
+  // G4int A = 20;
 
   G4DecayPhysics decays;
   decays.ConstructParticle();
@@ -291,8 +291,6 @@ int main()
   G4double ggTotXsc, ggElaXsc, ggIneXsc, ggProdXsc;
   // G4double ggDifXsc, ratio;
   G4double koxInXsc, shenInXsc, sihverInXsc, triInXsc;
-                                  
-  kinEnergy = 10*MeV;
 
 
   iMax = 100;
@@ -305,7 +303,7 @@ int main()
 
   
                   
-  kinEnergy = 0.01*GeV;
+  kinEnergy = 1.*MeV;
   iMax = 100;
   writegg <<iMax<< G4endl; 
  
@@ -341,7 +339,7 @@ int main()
 
      writegg << kinEnergy/A <<"  "<<  ggTotXsc/millibarn // <<  "  "<<  ggElaXsc/millibarn 
              <<"  " <<  ggIneXsc/millibarn <<"  " <<  ggProdXsc/millibarn
-       // <<"  " <<  ggElaXsc/millibarn 
+        <<"  " <<  ggElaXsc/millibarn 
              << G4endl;
     
      // G4cout << kinEnergy/GeV <<" GeV, in Xsc = "<<  ggIneXsc/millibarn << " mb; prod Xsc = "
@@ -371,8 +369,8 @@ int main()
 
   
                   
-  kinEnergy = 0.01*GeV;
-  iMax = 90;
+  kinEnergy = 1.*MeV;
+  iMax = 120;
   writenn <<iMax<< G4endl; 
  
 

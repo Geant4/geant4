@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataTest.cc,v 1.20 2010-03-26 11:11:25 grichine Exp $
+// $Id: G4CrossSectionDataTest.cc,v 1.21 2010-06-09 08:29:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,24 +102,25 @@ int main()
 {
   // Element definition
 
-  G4cout << " 1 copper" << G4endl;
-  G4cout << " 2 iron" << G4endl;
-  G4cout << " 3 lead" << G4endl;
-  G4cout << " 4 hydrogen" << G4endl;
-  G4cout << " 5 oxigen" << G4endl;
+  G4cout << " 1 hydrogen" << G4endl;
+  G4cout << " 2 helium" << G4endl;
+  G4cout << " 3 lithium" << G4endl;
+  G4cout << " 4 berillium" << G4endl;
+  G4cout << " 5 boron" << G4endl;
   G4cout << " 6 carbon" << G4endl;
   G4cout << " 7 nitrogen" << G4endl;
-  G4cout << " 8 argon" << G4endl;
-  G4cout << " 9 silicon" << G4endl;
-  G4cout << "10 tugnsten" << G4endl;
-  G4cout << "11 cadmium" << G4endl;
-  G4cout << "12 uranium" << G4endl;
-  G4cout << "13 berillium" << G4endl;
-  G4cout << "14 aluminium" << G4endl;
-  G4cout << "15 helium" << G4endl;
+  G4cout << " 8 oxigen" << G4endl;
+  G4cout << " 9 fluoride" << G4endl;
+  G4cout << "10 neon" << G4endl;
+  G4cout << "11 potassium" << G4endl;
+  G4cout << "12 magnesium" << G4endl;
+  G4cout << "13 aliminium" << G4endl;
+  G4cout << "14 silicon" << G4endl;
+  G4cout << "26 iron" << G4endl;
+  G4cout << "29 copper" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 6;
+  choice = 29;
 
 
 
@@ -132,32 +133,32 @@ int main()
   {
     case 1:
 
-      theElement  = man->FindOrBuildElement("Cu");
-      theMaterial = man->FindOrBuildMaterial("G4_Cu");
-      break;
-
-    case 2:
-
-      theElement  = man->FindOrBuildElement("Fe");
-      theMaterial = man->FindOrBuildMaterial("G4_Fe");
-      break;
-
-    case 3:
-
-      theElement  = man->FindOrBuildElement("Pb");
-      theMaterial = man->FindOrBuildMaterial("G4_Pb");
-      break;
-
-    case 4:
-
       theElement  = man->FindOrBuildElement("H");
       theMaterial = man->FindOrBuildMaterial("G4_H");
       break;
 
+    case 2:
+
+      theElement  = man->FindOrBuildElement("He");
+      theMaterial = man->FindOrBuildMaterial("G4_He");
+      break;
+
+    case 3:
+
+      theElement  = man->FindOrBuildElement("Li");
+      theMaterial = man->FindOrBuildMaterial("G4_Li");
+      break;
+
+    case 4:
+
+      theElement  = man->FindOrBuildElement("Be");
+      theMaterial = man->FindOrBuildMaterial("G4_Be");
+      break;
+
     case 5:
 
-      theElement  = man->FindOrBuildElement("O");
-      theMaterial = man->FindOrBuildMaterial("G4_O");
+      theElement  = man->FindOrBuildElement("B");
+      theMaterial = man->FindOrBuildMaterial("G4_B");
       break;
 
     case 6:
@@ -174,50 +175,56 @@ int main()
 
     case 8:
 
-      theElement  = man->FindOrBuildElement("Ar");
-      theMaterial = man->FindOrBuildMaterial("G4_Ar");
+      theElement  = man->FindOrBuildElement("O");
+      theMaterial = man->FindOrBuildMaterial("G4_O");
       break;
 
     case 9:
 
-      theElement  = man->FindOrBuildElement("Si");
-      theMaterial = man->FindOrBuildMaterial("G4_Si");
+      theElement  = man->FindOrBuildElement("F");
+      theMaterial = man->FindOrBuildMaterial("G4_F");
       break;
 
     case 10:
 
-      theElement  = man->FindOrBuildElement("W");
-      theMaterial = man->FindOrBuildMaterial("G4_W");
+      theElement  = man->FindOrBuildElement("Ne");
+      theMaterial = man->FindOrBuildMaterial("G4_Ne");
       break;
 
     case 11:
 
-      theElement  = man->FindOrBuildElement("Cd");
-      theMaterial = man->FindOrBuildMaterial("G4_Cd");
+      theElement  = man->FindOrBuildElement("Na");
+      theMaterial = man->FindOrBuildMaterial("G4_Na");
       break; 
  
     case 12:
 
-      theElement  = man->FindOrBuildElement("U");
-      theMaterial = man->FindOrBuildMaterial("G4_U");
+      theElement  = man->FindOrBuildElement("Mg");
+      theMaterial = man->FindOrBuildMaterial("G4_Mg");
       break;
   
     case 13:
 
-      theElement  = man->FindOrBuildElement("Be");
-      theMaterial = man->FindOrBuildMaterial("G4_Be");
+      theElement  = man->FindOrBuildElement("Al");
+      theMaterial = man->FindOrBuildMaterial("G4_Al");
       break; 
  
     case 14:
 
-      theElement  = man->FindOrBuildElement("Al");
-      theMaterial = man->FindOrBuildMaterial("G4_Al");
+      theElement  = man->FindOrBuildElement("Si");
+      theMaterial = man->FindOrBuildMaterial("G4_Si");
       break;
   
-    case 15:
+    case 26:
 
-      theElement  = man->FindOrBuildElement("He");
-      theMaterial = man->FindOrBuildMaterial("G4_He");
+      theElement  = man->FindOrBuildElement("Fe");
+      theMaterial = man->FindOrBuildMaterial("G4_Fe");
+      break;  
+
+    case 29:
+
+      theElement  = man->FindOrBuildElement("Cu");
+      theMaterial = man->FindOrBuildMaterial("G4_Cu");
       break;  
   }
    //   G4cout << "Dumping element info:" << G4endl;
@@ -390,7 +397,7 @@ int main()
   writef.setf( std::ios::scientific, std::ios::floatfield );
   G4double ratio = 1.;
 
-  /*
+  
 
   G4ProtonInelasticCrossSection hpwPrIn;
   G4NeutronInelasticCrossSection hpwNeIn;
@@ -412,20 +419,21 @@ int main()
   G4bool boolChips = true; 
 
                                   
-  kinEnergy = 0.01*MeV;
+  kinEnergy = 10.*MeV;
 
   G4double barashXsc, hpwXsc, geishaXsc, neutronhpXsc;
 
-  iMax = 90;
+  iMax = 50;
     
-  writef <<iMax<< G4endl; 
+  writef <<iMax<< G4endl;
+ 
   for(i = 0; i < iMax; i++)
   {
    
    theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(1.,0.,0.), 
                                               kinEnergy);
-    geishaXsc = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+   //geishaXsc = theCrossSectionDataStore.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
     // G4cout << "GHEISHA" <<" \t"<< sig/millibarn << " mb" << G4endl;
 
 
@@ -440,12 +448,13 @@ int main()
 
 
     // sig = hpwPrIn.GetCrossSection(theDynamicParticle, theElement, 273*kelvin);
-    hpwXsc = hpwNeIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+    // hpwXsc = hpwNeIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
     // G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
 
     barashXsc = barNucIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-    neutronhpXsc = nhpXscData.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-    // sig = barNucIn.GetTotalXsc();
+    // neutronhpXsc = nhpXscData.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
+    sig = barNucIn.GetTotalXsc();
+
     // sig = barNucIn.GetElasticXsc();
 
     // sig = barIn.GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
@@ -458,12 +467,10 @@ int main()
     // G4cout << kinEnergy/GeV <<" GeV, \t"<< sig/millibarn << " mb" << G4endl;
      //  G4cout << "Mean free path = " << mfp << " mm" << G4endl;
 
-G4cout << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
-       << hpwXsc/millibarn << " mb \t"<< barashXsc/millibarn << " mb \t"
-       << neutronhpXsc/millibarn << " mb \t" << G4endl;      
-writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
-       << hpwXsc/millibarn << " mb \t"<< barashXsc/millibarn << " mb \t"
-       << neutronhpXsc/millibarn << " mb \t" << G4endl;      
+    G4cout << kinEnergy/MeV <<" MeV, \t" << barashXsc/millibarn << " mb \t"
+           << sig/millibarn << " mb \t" << G4endl;      
+    writef << kinEnergy/MeV <<" \t" << barashXsc/millibarn << " \t"
+           << sig/millibarn << " \t"<< G4endl;      
 
 
     // writef << kinEnergy/GeV <<"\t"<< sig/millibarn << G4endl;
@@ -472,12 +479,12 @@ writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
     // G4cout << kinEnergy/GeV <<" GeV, \t"<< "chips qe/in = "<< ratio << G4endl;
     //  writef << kinEnergy/GeV <<"\t"<< ratio <<G4endl;
 
-    kinEnergy *= 1.138;
+    kinEnergy *= 1.15;
     delete theDynamicParticle;
   }
   G4cout<<"iz = "<<iz<<";  N = "<<N<<"; sum = "<<iz+N<<G4endl;                         
   
-*/  
+  /*  
   // Check Glauber-Gribov model
   G4cout<<"Check Glauber-Gribov model"<<G4endl;
 
@@ -536,7 +543,7 @@ writef  << kinEnergy/MeV <<" MeV, \t" << geishaXsc/millibarn << " mb \t"
      delete theDynamicParticle;
   }
               
-      
+  */      
 
  
   /*
