@@ -1,4 +1,4 @@
-$Id: History,v 1.244 2010-05-31 07:01:35 gcosmo Exp $
+$Id: History,v 1.245 2010-06-09 13:54:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 09, 2010  G.Cosmo (global-V09-03-08)
+- Changed date for release 9.4-beta.
 
 May 29, 2010  V.Ivantchenko (global-V09-03-07)
 - More safe numerical computation of A13 and logA methods in G4Pow.
