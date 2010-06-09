@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.6 2009-08-14 16:49:36 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.7 2010-06-09 17:31:08 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -132,6 +132,14 @@ void PhysicsList::ConstructProcess()
 #include "G4DNAChargeIncrease.hh"
 #include "G4DNADingfelderChargeIncreaseModel.hh"
 
+#include "G4CoulombScattering.hh"
+#include "G4DummyModel.hh"
+#include "G4hIonisation.hh"
+#include "G4alphaIonisation.hh"
+#include "G4BraggIonGasModel.hh"
+#include "G4BetheBlochIonGasModel.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PhysicsList::ConstructEM()
@@ -160,6 +168,15 @@ void PhysicsList::ConstructEM()
      	    
     } else if ( particleName == "proton" ) {
 
+      G4hIonisation* hion = new G4hIonisation();
+      G4BraggIonGasModel* b = new G4BraggIonGasModel();
+      b->SetActivationLowEnergyLimit(10*MeV);
+      hion->SetEmModel(b, 1);
+      G4BetheBlochIonGasModel* bb = new G4BetheBlochIonGasModel();
+      bb->SetActivationLowEnergyLimit(10*MeV);
+      hion->SetEmModel(bb, 2);
+      pmanager->AddProcess(hion, -1, 1, 1);
+
       pmanager->AddDiscreteProcess(new G4DNAExcitation("proton_G4DNAExcitation"));
       pmanager->AddDiscreteProcess(new G4DNAIonisation("proton_G4DNAIonisation"));
       pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"));
@@ -169,11 +186,34 @@ void PhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"));
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"));
 
+      G4CoulombScattering* sc = new G4CoulombScattering();
+      sc->SetBuildTableFlag(false);
+      G4DummyModel* dm = new G4DummyModel();
+      dm->SetHighEnergyLimit(10*MeV);
+      sc->AddEmModel(0, dm);
+      pmanager->AddDiscreteProcess(sc);
+
     } else if ( particleName == "alpha" ) {
+
+      G4alphaIonisation* hion = new G4alphaIonisation();
+      G4BraggIonGasModel* b = new G4BraggIonGasModel();
+      b->SetActivationLowEnergyLimit(10*MeV);
+      hion->SetEmModel(b, 1);
+      G4BetheBlochIonGasModel* bb = new G4BetheBlochIonGasModel();
+      bb->SetActivationLowEnergyLimit(10*MeV);
+      hion->SetEmModel(bb, 2);
+      pmanager->AddProcess(hion, -1, 1, 1);
 
       pmanager->AddDiscreteProcess(new G4DNAExcitation("alpha_G4DNAExcitation"));
       pmanager->AddDiscreteProcess(new G4DNAIonisation("alpha_G4DNAIonisation"));
       pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"));
+
+      G4CoulombScattering* sc = new G4CoulombScattering();
+      sc->SetBuildTableFlag(false);
+      G4DummyModel* dm = new G4DummyModel();
+      dm->SetHighEnergyLimit(10*MeV);
+      sc->AddEmModel(0, dm);
+      pmanager->AddDiscreteProcess(sc);
 
     } else if ( particleName == "alpha+" ) {
 

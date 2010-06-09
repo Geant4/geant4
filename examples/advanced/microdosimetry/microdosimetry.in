@@ -1,0 +1,7 @@
+/tracking/verbose 1
+/run/verbose 2
+/gun/particle alpha+
+/run/beamOn 1
+/gun/particle alpha
+/gun/energy 10.1 MeV
+/run/beamOn 1

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2008-06-04 12:57:55 sincerti Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2010-06-09 17:31:08 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -38,6 +38,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
+  particleGun->SetParticleEnergy(10.*keV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,6 +54,7 @@ G4float var;
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  /*
   G4int numEvent;
   numEvent=anEvent->GetEventID()+1;
   G4double x0,y0,z0,theta,phi,xMom0,yMom0,zMom0,e0;
@@ -78,7 +80,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4ParticleTable::GetParticleTable()->FindParticle("alpha+");
 
   particleGun->SetParticleDefinition(particle);
-  
+  */  
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   particleGun->GeneratePrimaryVertex(anEvent);
 
 }
