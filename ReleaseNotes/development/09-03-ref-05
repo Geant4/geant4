@@ -96,7 +96,7 @@ persistency/gdml                                 gdml-V09-03-02
 ----------------
 - Corrected dump of division axis in GDML writer.
 
-physics_lists                                    phys-lists-V09-03-02
+physics_lists                                    phys-lists-V09-03-03
 -------------
 - New physics list QGSP_BERT_CHIPS: use CHIPS inelastic for all "misc"
   particles, including anti-proton, anti-neutron and hyperons.
