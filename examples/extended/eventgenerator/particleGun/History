@@ -1,11 +1,11 @@
-$Id: History,v 1.1 2010-06-09 01:55:38 asaim Exp $
+$Id: History,v 1.2 2010-06-09 16:39:52 asaim Exp $
 -----------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    ParticleGun2 History file
+                    ParticleGun History file
                     ------------------------
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
@@ -13,6 +13,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
-    
-13-05-10 Michel Maire (particlegun2-V09-03-00)
+10-06-10 Makoto Asai (particleGunExam-V09-03-00)
+- Combine three original examples into one.
+
+13-05-10 Michel Maire 
 - Created.

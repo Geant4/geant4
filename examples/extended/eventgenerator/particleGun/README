@@ -1,20 +1,26 @@
-$Id: README,v 1.1 2010-06-09 01:55:38 asaim Exp $
+$Id: README,v 1.2 2010-06-09 16:39:52 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            ParticleGun2 
-                            ------------
+                            ParticleGun 
+                            -----------
 			    
- Divergent beam in an arbitrary direction.
- How to sample a tabulated function. 
+ This example demonstrates three ways of the usage of G4ParticleGun shooting
+ primary particles in different distributions. These are
+  1) Generate several vertices and particles per event
+  2) Divergent beam in an arbitrary direction to show how to sample a tabulated function 
+  3) Shooting primaries in spherical coordinates with rotation matrix.
+ These usages can be chosen by a UI command
+  /testem/selectGunAction <actionID>
+ where <actionID> corresponds to above distributions.
  	
  1- Geometry construction
     ---------------------
 
- It is a simple box which represente an 'infinite' homogeneous medium.
+ It is a simple box which represents an 'infinite' homogeneous medium.
   
  2- Physics list
     ------------
@@ -23,8 +29,22 @@ $Id: README,v 1.1 2010-06-09 01:55:38 asaim Exp $
          	
  3- Primary generator
     -----------------
- 
- One shoots a geantino randomly uniform around a given direction (theta, phi).
+
+ There are three concrete primary generator action classes (PrimaryGeneratorActionN, 
+ N=1,2,3) which can be used as an independent sample code. PrimaryGeneratorAction
+ is the class which uses and switches between these three concrete action classes. 
+ Each concrete generator action shoots geantinoes in a distribution decribed below.
+
+ 3.1- Generate several vertices and particles per event
+      -------------------------------------------------
+
+ particle 1 : a geantino uniformly randomized on a cylinder surface.
+ particle 2 and 3 : on opposite side of the cylnder surface to particle 1
+
+ 3.2- Divergent beam in an arbitrary direction to show how to sample a tabulated function
+      -----------------------------------------------------------------------------------
+
+ a geantino uniformly randomized around a given direction (theta, phi).
  
  a) Energy spectrum
  Energy is sampled from a tabulated function defined in InitFunction().
@@ -33,16 +53,36 @@ $Id: README,v 1.1 2010-06-09 01:55:38 asaim Exp $
  (see Particle Data book, Monte Carlo techniques).
  Histogram 1 shows generated energy spectrum.
  
- c) Momentum direction
+ b) Momentum direction
  One wants to limit particle direction uniformly around a given direction.
  First, one generates momentum direction in the master frame (eg. World).
  AlphaMax = opening angle around z axis.
  Then one rotates momentum in local frame, using rotateUz() function.
  RotateUz() transforms uz to newUz. It is composition of two simple rotations:
  theta around oy, then phi around oz (non commutative).
-http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
- Histograms 2-3 show momentum direction in local frame.
-  	
+  http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
+ Histograms 2,3 show momentum direction in local frame.
+  
+ 3.3- Shooting primaries in spherical coordinates with rotation matrix
+      ----------------------------------------------------------------
+
+ a geantino uniformly randomized within a spherical shell.
+
+ a) Vertex position
+ One wishes to shoot uniformly within a spherical shell.
+ One works in spherical coordinates. One uses inverse cumulative method with
+ analytical formulae.
+ Histograms 4,5,6 demonstrate uniform distribution of vertex position.
+
+ b) Momentum direction
+ One wants to limit particle direction uniformly within (alphaMin, alphaMax).
+ First, one generates momentum direction in the master frame (eg. World).
+ Then, one rotates momentum in vertex_position frame, using rotateUz() function.
+ RotateUz() transforms uz to ur. It is composition of two elementary rotations:
+ theta around oy, then phi around oz (non commutative).
+  http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
+ Histograms 7,8 show momentum direction in vertex_position frame.
+
  4- Visualisation
     -------------
  
@@ -58,29 +98,36 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  	% cd gun
  	% gmake
  		
-  - execute particleGun2 in 'batch' mode from macro files
- 	% ParticleGun2   run1.mac
+  - execute particleGun in 'batch' mode from macro files
+ 	% ParticleGun   run1.mac
  		
   - execute particleGun2 in 'interactive mode' with visualization
- 	% particleGun2
+ 	% particleGun
  	....
  	Idle>      ---> type your commands. For instance:
-	Idle> /run/beamOn 
-	....
+        Idle> /testem/selectGunAction 1
 	Idle> /run/beamOn 10
-	....				
+	....
  	Idle> exit
 	
  6- Histograms
     ----------
  
-  particleGun2 produces several 1D histograms which are saved as
+  particleGun produces several 1D histograms which are saved as
   particleGun.root by default.
 
       1 : energy spectrum dN/dE = f(E)
       2 : momentum direction: angular distr dN/dOmega = f(alpha)
       3 : momentum direction: angular distr dN/dOmega = f(psi)      
-            
+      4 : vertex position: radial  distr dN/dv = f(r)
+      5 : vertex position: angular distr dN/dv = f(theta)
+      6 : vertex position: angular distr dN/dv = f(phi)
+      7 : momentum direction: angular distr dN/dOmega = f(alpha)
+      8 : momentum direction: angular distr dN/dOmega = f(psi)
+
+   Please note that histograms 1,2,3 will be filled only if you use PrimaryGeneratorAction2
+   and 4 through 8 will be filled with PrimaryGeneratorAction3.
+
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
    /testem/histo/setHisto id nbBins  valMin valMax unit 
