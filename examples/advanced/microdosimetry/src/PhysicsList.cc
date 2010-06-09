@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.7 2010-06-09 17:31:08 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.8 2010-06-09 18:48:52 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -217,10 +217,26 @@ void PhysicsList::ConstructEM()
 
     } else if ( particleName == "alpha+" ) {
 
+      G4alphaIonisation* hion = new G4alphaIonisation();
+      G4BraggIonGasModel* b = new G4BraggIonGasModel();
+      b->SetActivationLowEnergyLimit(10*MeV);
+      hion->SetEmModel(b, 1);
+      G4BetheBlochIonGasModel* bb = new G4BetheBlochIonGasModel();
+      bb->SetActivationLowEnergyLimit(10*MeV);
+      hion->SetEmModel(bb, 2);
+      pmanager->AddProcess(hion, -1, 1, 1);
+
       pmanager->AddDiscreteProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"));
       pmanager->AddDiscreteProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"));
       pmanager->AddDiscreteProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"));
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"));
+
+      G4CoulombScattering* sc = new G4CoulombScattering();
+      sc->SetBuildTableFlag(false);
+      G4DummyModel* dm = new G4DummyModel();
+      dm->SetHighEnergyLimit(10*MeV);
+      sc->AddEmModel(0, dm);
+      pmanager->AddDiscreteProcess(sc);
 	    
     } else if ( particleName == "helium" ) {
 
