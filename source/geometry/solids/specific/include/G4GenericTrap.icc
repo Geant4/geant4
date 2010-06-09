@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.icc,v 1.3 2010-06-02 13:50:49 gcosmo Exp $
+// $Id: G4GenericTrap.icc,v 1.4 2010-06-09 07:39:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -88,6 +88,14 @@ G4double G4GenericTrap::GetTwistAngle(G4int index) const
 // --------------------------------------------------------------------
 
 inline
+G4bool G4GenericTrap::IsTwisted() const
+{
+  return fIsTwisted;
+}
+
+// --------------------------------------------------------------------
+
+inline
 void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
 {
   if ( (index<0) || (index >= G4int(fVertices.size())) )
@@ -99,22 +107,6 @@ void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
   {
     fTwist[index]=twist;
   }
-}
-
-// --------------------------------------------------------------------
-
-inline
-G4ThreeVector G4GenericTrap::GetMinimumBBox() const
-{
-  return fMinBBoxVector;
-}
-
-// --------------------------------------------------------------------
-
-inline
-G4ThreeVector G4GenericTrap::GetMaximumBBox() const
-{
-  return fMaxBBoxVector;
 }
 
 // --------------------------------------------------------------------
@@ -152,3 +144,20 @@ void G4GenericTrap::SetVisSubdivisions(G4int subdiv)
 }
 
 // --------------------------------------------------------------------
+
+inline
+G4ThreeVector G4GenericTrap::GetMinimumBBox() const
+{
+  return fMinBBoxVector;
+}
+
+// --------------------------------------------------------------------
+
+inline
+G4ThreeVector G4GenericTrap::GetMaximumBBox() const
+{
+  return fMaxBBoxVector;
+}
+
+// --------------------------------------------------------------------
+

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.8 2010-06-03 15:30:17 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.9 2010-06-09 07:39:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,608 +143,6 @@ G4GenericTrap::~G4GenericTrap()
   // Destructor
 }
 
-// --------------------------------------------------------------------
-
-G4bool G4GenericTrap::ComputeIsTwisted() 
-{
-  // Computes tangents of twist angles (angles between projections on XY plane 
-  // of corresponding -dz +dz edges). 
-
-  G4bool twisted = false;
-  G4double dx1, dy1, dx2, dy2;
-  G4int nv = fgkNofVertices/2;
-
-  for ( G4int i=0; i<4; i++ )
-  {
-    dx1 = fVertices[(i+1)%nv].x()-fVertices[i].x();
-    dy1 = fVertices[(i+1)%nv].y()-fVertices[i].y();
-    if ( (dx1 == 0) && (dy1 == 0) ) { continue; }
-
-    dx2 = fVertices[nv+(i+1)%nv].x()-fVertices[nv+i].x();
-    dy2 = fVertices[nv+(i+1)%nv].y()-fVertices[nv+i].y();
-
-    if ( dx2 == 0 && dy2 == 0 ) { continue; }
-    G4double twist_angle = std::fabs(dy1*dx2 - dx1*dy2);        
-    if ( twist_angle < fgkTolerance ) { continue; }
-    twisted = true;
-    SetTwistAngle(i,twist_angle);
-  }
-
-  return twisted;
-}
-
-// --------------------------------------------------------------------
-
-G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
-{
-  // Test if the vertices are in a clockwise order, if not reorder them.
-  // Also test if they're well defined without crossing opposite segments
-
-  G4bool clockwise_order=true;
-  G4double sum1 = 0.;
-  G4double sum2 = 0.;
-  G4int j;
-
-  for (G4int i=0; i<4; i++)
-  {
-    j = (i+1)%4;
-    sum1 += vertices[i].x()*vertices[j].y() - vertices[j].x()*vertices[i].y();
-    sum2 += vertices[i+4].x()*vertices[j+4].y()
-          - vertices[j+4].x()*vertices[i+4].y();
-  }
-  if (sum1*sum2 < -fgkTolerance)
-  {
-    G4String errorDescription = "InvalidSetup in \"";
-    errorDescription += GetName();
-    errorDescription += "\"";
-
-    G4Exception("G4GenericTrap::CheckOrder()", errorDescription, FatalException,
-                "Lower/upper faces defined with opposite clockwise.");
-   }
-   
-   if ((sum1 > 0.)||(sum2 > 0.))
-   {
-     G4String errorDescription = "WarningSetup in \"";
-     errorDescription += GetName();
-     errorDescription += "\"";
-     G4Exception("G4GenericTrap::CheckOrder()", errorDescription, JustWarning,
-       "Vertices must be defined in clockwise in XY planes! Re-ordering.. ");
-     clockwise_order = false;
-   }
-
-   // Check for illegal crossings
-   //
-   G4bool illegal_cross = false;
-   illegal_cross = IsSegCrossing(vertices[0],vertices[1],
-                                 vertices[2],vertices[3]);
-   if (!illegal_cross)
-   {
-     illegal_cross = IsSegCrossing(vertices[4],vertices[5],
-                                   vertices[6],vertices[7]);
-   }
-   if (illegal_cross)
-   {
-      G4String errorDescription = "InvalidSetup in \"";
-      errorDescription += GetName();
-      errorDescription += "\"";
-      G4Exception("G4GenericTrap::CheckOrderAndSetup()",
-                  errorDescription, FatalException,
-                  "Malformed polygone with opposite sides.");
-   }
-   return clockwise_order;
-}
-
-// --------------------------------------------------------------------
-
-void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
-{
-  // Reorder the vector of vertices 
-
-  std::vector<G4ThreeVector> oldVertices(vertices);
-
-  for ( G4int i=0; i < G4int(oldVertices.size()); ++i )
-  {
-    vertices[i] = oldVertices[oldVertices.size()-1-i];
-  }  
-} 
- 
-// --------------------------------------------------------------------
-
-G4bool
-G4GenericTrap::IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
-                             const G4TwoVector& c, const G4TwoVector& d) const
-{ 
-  // Check if segments [A,B] and [C,D] are crossing
-
-  G4bool stand1 = false;
-  G4bool stand2 = false;
-  G4double dx1,dx2,xm=0.,ym=0.,a1=0.,a2=0.,b1=0.,b2=0.;
-  dx1=(b-a).x();
-  dx2=(d-c).x();
-
-  if( std::fabs(dx1) < fgkTolerance )  { stand1 = true; }
-  if( std::fabs(dx2) < fgkTolerance )  { stand2 = true; }
-  if (!stand1)
-  {
-    a1 = (b.x()*a.y()-a.x()*b.y())/dx1;
-    b1 = (b-a).y()/dx1;
-  }
-  if (!stand2)
-  {
-    a2 = (d.x()*c.y()-c.x()*d.y())/dx2;
-    b2 = (d-c).y()/dx2;
-  }   
-  if (stand1 && stand2)
-  {
-    // Segments parallel and vertical
-    //
-    if (std::fabs(a.x()-c.x())<fgkTolerance)
-    {
-       // Check if segments are overlapping
-       //
-       if ( ((c.y()-a.y())*(c.y()-b.y())<-fgkTolerance)
-         || ((d.y()-a.y())*(d.y()-b.y())<-fgkTolerance)
-         || ((a.y()-c.y())*(a.y()-d.y())<-fgkTolerance)
-         || ((b.y()-c.y())*(b.y()-d.y())<-fgkTolerance) )  { return true; }
-
-       return false;
-    }
-    // Different x values
-    //
-    return false;
-  }
-   
-  if (stand1)    // First segment vertical
-  {
-    xm = a.x();
-    ym = a2+b2*xm; 
-  }
-  else
-  {
-    if (stand2)  // Second segment vertical
-    {
-      xm = c.x();
-      ym = a1+b1*xm;
-    }
-    else  // Normal crossing
-    {
-      if (std::fabs(b1-b2) < fgkTolerance)
-      {
-        // Parallel segments, are they aligned
-        //
-        if (std::fabs(c.y()-(a1+b1*c.x())) > fgkTolerance)  { return false; }
-
-        // Aligned segments, are they overlapping
-        //
-        if ( ((c.x()-a.x())*(c.x()-b.x())<-fgkTolerance)
-          || ((d.x()-a.x())*(d.x()-b.x())<-fgkTolerance)
-          || ((a.x()-c.x())*(a.x()-d.x())<-fgkTolerance)
-          || ((b.x()-c.x())*(b.x()-d.x())<-fgkTolerance) )  { return true; }
-
-        return false;
-      }
-      xm = (a1-a2)/(b2-b1);
-      ym = (a1*b2-a2*b1)/(b2-b1);
-    }
-  }
-
-  // Check if crossing point is both between A,B and C,D
-  //
-  G4double check = (xm-a.x())*(xm-b.x())+(ym-a.y())*(ym-b.y());
-  if (check > -fgkTolerance)  { return false; }
-  check = (xm-c.x())*(xm-d.x())+(ym-c.y())*(ym-d.y());
-  if (check > -fgkTolerance)  { return false; }
-
-  return true;
-}
-
-// --------------------------------------------------------------------
-
-G4VFacet*
-G4GenericTrap::MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                             G4int ind1, G4int ind2, G4int ind3) const 
-{
-  // Create a triangular facet from the polygon points given by indices
-  // forming the down side ( the normal goes in -z)
-  // Do not create facet if 2 vertices are the same
-
-  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
-       (fromVertices[ind2] == fromVertices[ind3]) ||
-       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
-
-  std::vector<G4ThreeVector> vertices;
-  vertices.push_back(fromVertices[ind1]);
-  vertices.push_back(fromVertices[ind2]);
-  vertices.push_back(fromVertices[ind3]);
-  
-  // first vertex most left
-  //
-  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
-
-  if ( cross.z() > 0.0 )
-  {
-    // Should not happen, as vertices should have been reordered at this stage
-
-    G4String errorDescription = "InvalidSetup in \"";
-    errorDescription += GetName();
-    errorDescription += "\"";
-    G4Exception("G4GenericTrap::MakeDownFacet", errorDescription,
-                FatalException, "Vertices in wrong order.");
-  }
-  
-  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
-}
-
-// --------------------------------------------------------------------
-
-G4VFacet*
-G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                           G4int ind1, G4int ind2, G4int ind3) const     
-{
-  // Create a triangular facet from the polygon points given by indices
-  // forming the upper side ( z>0 )
-
-  // Do not create facet if 2 vertices are the same
-  //
-  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
-       (fromVertices[ind2] == fromVertices[ind3]) ||
-       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
-
-  std::vector<G4ThreeVector> vertices;
-  vertices.push_back(fromVertices[ind1]);
-  vertices.push_back(fromVertices[ind2]);
-  vertices.push_back(fromVertices[ind3]);
-  
-  // First vertex most left
-  //
-  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
-
-  if ( cross.z() < 0.0 )
-  {
-    // Should not happen, as vertices should have been reordered at this stage
-
-    G4String errorDescription = "InvalidSetup in \"";
-    errorDescription += GetName();
-    errorDescription += "\"";
-    G4Exception("G4GenericTrap::MakeUpFacet", errorDescription,
-                FatalException, "Vertices in wrong order.");
-  }
-  
-  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
-}      
-
-// --------------------------------------------------------------------
-
-G4VFacet*
-G4GenericTrap::MakeSideFacet(const G4ThreeVector& downVertex0,
-                             const G4ThreeVector& downVertex1,
-                             const G4ThreeVector& upVertex1,
-                             const G4ThreeVector& upVertex0) const      
-{
-  // Creates a triangular facet from the polygon points given by indices
-  // forming the upper side ( z>0 )
-
-  if ( (downVertex0 == downVertex1) && (upVertex0 == upVertex1) )
-  {
-    return 0;
-  }
-
-  if ( downVertex0 == downVertex1 )
-  {
-    return new G4TriangularFacet(downVertex0, upVertex1, upVertex0, ABSOLUTE);
-  }
-
-  if ( upVertex0 == upVertex1 )
-  {
-    return new G4TriangularFacet(downVertex0, downVertex1, upVertex0, ABSOLUTE);
-  }
-
-  return new G4QuadrangularFacet(downVertex0, downVertex1, 
-                                 upVertex1, upVertex0, ABSOLUTE);   
-}    
-
-// --------------------------------------------------------------------
-
-G4TessellatedSolid* G4GenericTrap::CreateTessellatedSolid() const
-{
-  // 3D vertices
-  //
-  G4int nv = fgkNofVertices/2;
-  std::vector<G4ThreeVector> downVertices;
-  for ( G4int i=0; i<nv; i++ )
-  { 
-    downVertices.push_back(G4ThreeVector(fVertices[i].x(),
-                                         fVertices[i].y(), -fDz));
-  }
-
-  std::vector<G4ThreeVector> upVertices;
-  for ( G4int i=nv; i<2*nv; i++ )
-  { 
-    upVertices.push_back(G4ThreeVector(fVertices[i].x(),
-                                       fVertices[i].y(), fDz));
-  }
-                                         
-  // Reorder vertices if they are not ordered anti-clock wise
-  //
-  G4ThreeVector cross 
-    = (downVertices[1]-downVertices[0]).cross(downVertices[2]-downVertices[1]);
-   G4ThreeVector cross1 
-    = (upVertices[1]-upVertices[0]).cross(upVertices[2]-upVertices[1]);
-  if ( (cross.z() > 0.0) || (cross1.z() > 0.0) )
-  {
-    ReorderVertices(downVertices);
-    ReorderVertices(upVertices);
-  }
-    
-  G4TessellatedSolid* tessellatedSolid = new G4TessellatedSolid(GetName());
-  
-  G4VFacet* facet = 0;
-  facet = MakeDownFacet(downVertices, 0, 1, 2);
-  if (facet)  { tessellatedSolid->AddFacet( facet ); }
-  facet = MakeDownFacet(downVertices, 0, 2, 3);
-  if (facet)  { tessellatedSolid->AddFacet( facet ); }
-  facet = MakeUpFacet(upVertices, 0, 2, 1);
-  if (facet)  { tessellatedSolid->AddFacet( facet ); }
-  facet = MakeUpFacet(upVertices, 0, 3, 2);
-  if (facet)  { tessellatedSolid->AddFacet( facet ); }
-
-  // The quadrangular sides
-  //
-  for ( G4int i = 0; i < nv; ++i )
-  {
-    G4int j = (i+1) % nv;
-    facet = MakeSideFacet(downVertices[j], downVertices[i], 
-                          upVertices[i], upVertices[j]);
-
-    if ( facet )  { tessellatedSolid->AddFacet( facet ); }
-  }
-
-  tessellatedSolid->SetSolidClosed(true);
-
-  return tessellatedSolid;
-}  
-
-// --------------------------------------------------------------------
-
-void G4GenericTrap::ComputeBBox() 
-{
-  // Computes bounding box for a shape.
-
-  G4double minX, maxX, minY, maxY;
-  minX = maxX = fVertices[0].x();
-  minY = maxY = fVertices[0].y();
-   
-  for (G4int i=1; i< fgkNofVertices; i++)
-  {
-    if (minX>fVertices[i].x()) { minX=fVertices[i].x(); }
-    if (maxX<fVertices[i].x()) { maxX=fVertices[i].x(); }
-    if (minY>fVertices[i].y()) { minY=fVertices[i].y(); }
-    if (maxY<fVertices[i].y()) { maxY=fVertices[i].y(); }
-  }
-  fMinBBoxVector = G4ThreeVector(minX,minY,-fDz);
-  fMaxBBoxVector = G4ThreeVector(maxX,maxY, fDz);
-}
-
-// --------------------------------------------------------------------
-
-G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
-                                      const G4VoxelLimits& pVoxelLimit,
-                                      const G4AffineTransform& pTransform,
-                                      G4double& pMin, G4double& pMax) const
-{
-#ifdef G4TESS_TEST
-  if ( fTessellatedSolid )
-  {
-    return fTessellatedSolid->CalculateExtent(pAxis, pVoxelLimit,
-                                              pTransform, pmin, pmax);
-  }     
-#endif 
-
-  // Computes bounding vectors for a shape
-  //
-  G4double Dx,Dy;
-  G4ThreeVector minVec = GetMinimumBBox();
-  G4ThreeVector maxVec = GetMaximumBBox();
-  Dx = 0.5*(maxVec.x()- minVec.y());
-  Dy = 0.5*(maxVec.y()- minVec.y());
-
-  if (!pTransform.IsRotated())
-  {
-    // Special case handling for unrotated shapes
-    // Compute x/y/z mins and maxs respecting limits, with early returns
-    // if outside limits. Then switch() on pAxis
-    //
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
-
-    xoffset=pTransform.NetTranslation().x();
-    xMin=xoffset-Dx;
-    xMax=xoffset+Dx;
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-         || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-
-    yoffset=pTransform.NetTranslation().y();
-    yMin=yoffset-Dy;
-    yMax=yoffset+Dy;
-    if (pVoxelLimit.IsYLimited())
-    {
-      if (  (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-         || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-
-    zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset-fDz;
-    zMax=zoffset+fDz;
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-
-    switch (pAxis)
-    {
-      case kXAxis:
-        pMin = xMin;
-        pMax = xMax;
-        break;
-      case kYAxis:
-        pMin = yMin;
-        pMax = yMax;
-        break;
-      case kZAxis:
-        pMin = zMin;
-        pMax = zMax;
-        break;
-      default:
-        break;
-    }
-    pMin-=kCarTolerance;
-    pMax+=kCarTolerance;
-
-    return true;
-  }
-  else
-  {
-    // General rotated case - create and clip mesh to boundaries
-
-    G4bool existsAfterClip=false;
-    G4ThreeVectorList *vertices;
-
-    pMin=+kInfinity;
-    pMax=-kInfinity;
-
-    // Calculate rotated vertex coordinates
-    //
-    vertices=CreateRotatedVertices(pTransform);
-    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-
-    if ( (pMin!=kInfinity) || (pMax!=-kInfinity) )
-    {
-      existsAfterClip=true;
-    
-      // Add 2*tolerance to avoid precision troubles
-      //
-      pMin-=kCarTolerance;
-      pMax+=kCarTolerance;
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume.
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-      //
-      G4ThreeVector clipCentre(
-              (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-              (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-              (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-      {
-        existsAfterClip=true;
-        pMin=pVoxelLimit.GetMinExtent(pAxis);
-        pMax=pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
-}
-
-// --------------------------------------------------------------------
-
-G4ThreeVectorList*
-G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-  // Create a List containing the transformed vertices
-  // Ordering [0-3] -fDz cross section
-  //          [4-7] +fDz cross section such that [0] is below [4],
-  //                                             [1] below [5] etc.
-  // Note: caller has deletion responsibility
-
-  G4ThreeVector Min = GetMinimumBBox();
-  G4ThreeVector Max = GetMaximumBBox();
-
-  G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
-    
-  if (vertices)
-  {
-    G4ThreeVector vertex0(Min.x(),Min.y(),Min.z());
-    G4ThreeVector vertex1(Max.x(),Min.y(),Min.z());
-    G4ThreeVector vertex2(Max.x(),Max.y(),Min.z());
-    G4ThreeVector vertex3(Min.x(),Max.y(),Min.z());
-    G4ThreeVector vertex4(Min.x(),Min.y(),Max.z());
-    G4ThreeVector vertex5(Max.x(),Min.y(),Max.z());
-    G4ThreeVector vertex6(Max.x(),Max.y(),Max.z());
-    G4ThreeVector vertex7(Min.x(),Max.y(),Max.z());
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-    vertices->push_back(pTransform.TransformPoint(vertex4));
-    vertices->push_back(pTransform.TransformPoint(vertex5));
-    vertices->push_back(pTransform.TransformPoint(vertex6));
-    vertices->push_back(pTransform.TransformPoint(vertex7));
-  }
-  else
-  {
-    G4Exception("G4GenericTrap::CreateRotatedVertices()", "FatalError",
-                FatalException, "Out of memory - Cannot allocate vertices!");
-  }
-  return vertices;
-}
-  
 // --------------------------------------------------------------------
 
 EInside
@@ -1554,6 +952,226 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
 
 // --------------------------------------------------------------------
 
+G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
+                                      const G4VoxelLimits& pVoxelLimit,
+                                      const G4AffineTransform& pTransform,
+                                      G4double& pMin, G4double& pMax) const
+{
+#ifdef G4TESS_TEST
+  if ( fTessellatedSolid )
+  {
+    return fTessellatedSolid->CalculateExtent(pAxis, pVoxelLimit,
+                                              pTransform, pmin, pmax);
+  }     
+#endif 
+
+  // Computes bounding vectors for a shape
+  //
+  G4double Dx,Dy;
+  G4ThreeVector minVec = GetMinimumBBox();
+  G4ThreeVector maxVec = GetMaximumBBox();
+  Dx = 0.5*(maxVec.x()- minVec.y());
+  Dy = 0.5*(maxVec.y()- minVec.y());
+
+  if (!pTransform.IsRotated())
+  {
+    // Special case handling for unrotated shapes
+    // Compute x/y/z mins and maxs respecting limits, with early returns
+    // if outside limits. Then switch() on pAxis
+    //
+    G4double xoffset,xMin,xMax;
+    G4double yoffset,yMin,yMax;
+    G4double zoffset,zMin,zMax;
+
+    xoffset=pTransform.NetTranslation().x();
+    xMin=xoffset-Dx;
+    xMax=xoffset+Dx;
+    if (pVoxelLimit.IsXLimited())
+    {
+      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
+         || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (xMin<pVoxelLimit.GetMinXExtent())
+        {
+          xMin=pVoxelLimit.GetMinXExtent();
+        }
+        if (xMax>pVoxelLimit.GetMaxXExtent())
+        {
+          xMax=pVoxelLimit.GetMaxXExtent();
+        }
+      }
+    }
+
+    yoffset=pTransform.NetTranslation().y();
+    yMin=yoffset-Dy;
+    yMax=yoffset+Dy;
+    if (pVoxelLimit.IsYLimited())
+    {
+      if (  (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
+         || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (yMin<pVoxelLimit.GetMinYExtent())
+        {
+          yMin=pVoxelLimit.GetMinYExtent();
+        }
+        if (yMax>pVoxelLimit.GetMaxYExtent())
+        {
+          yMax=pVoxelLimit.GetMaxYExtent();
+        }
+      }
+    }
+
+    zoffset=pTransform.NetTranslation().z();
+    zMin=zoffset-fDz;
+    zMax=zoffset+fDz;
+    if (pVoxelLimit.IsZLimited())
+    {
+      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
+        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (zMin<pVoxelLimit.GetMinZExtent())
+        {
+          zMin=pVoxelLimit.GetMinZExtent();
+        }
+        if (zMax>pVoxelLimit.GetMaxZExtent())
+        {
+          zMax=pVoxelLimit.GetMaxZExtent();
+        }
+      }
+    }
+
+    switch (pAxis)
+    {
+      case kXAxis:
+        pMin = xMin;
+        pMax = xMax;
+        break;
+      case kYAxis:
+        pMin = yMin;
+        pMax = yMax;
+        break;
+      case kZAxis:
+        pMin = zMin;
+        pMax = zMax;
+        break;
+      default:
+        break;
+    }
+    pMin-=kCarTolerance;
+    pMax+=kCarTolerance;
+
+    return true;
+  }
+  else
+  {
+    // General rotated case - create and clip mesh to boundaries
+
+    G4bool existsAfterClip=false;
+    G4ThreeVectorList *vertices;
+
+    pMin=+kInfinity;
+    pMax=-kInfinity;
+
+    // Calculate rotated vertex coordinates
+    //
+    vertices=CreateRotatedVertices(pTransform);
+    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
+    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+
+    if ( (pMin!=kInfinity) || (pMax!=-kInfinity) )
+    {
+      existsAfterClip=true;
+    
+      // Add 2*tolerance to avoid precision troubles
+      //
+      pMin-=kCarTolerance;
+      pMax+=kCarTolerance;
+    }
+    else
+    {
+      // Check for case where completely enveloping clipping volume.
+      // If point inside then we are confident that the solid completely
+      // envelopes the clipping volume. Hence set min/max extents according
+      // to clipping volume extents along the specified axis.
+      //
+      G4ThreeVector clipCentre(
+              (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+              (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+              (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+
+      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+      {
+        existsAfterClip=true;
+        pMin=pVoxelLimit.GetMinExtent(pAxis);
+        pMax=pVoxelLimit.GetMaxExtent(pAxis);
+      }
+    }
+    delete vertices;
+    return existsAfterClip;
+  }
+}
+
+// --------------------------------------------------------------------
+
+G4ThreeVectorList*
+G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
+{
+  // Create a List containing the transformed vertices
+  // Ordering [0-3] -fDz cross section
+  //          [4-7] +fDz cross section such that [0] is below [4],
+  //                                             [1] below [5] etc.
+  // Note: caller has deletion responsibility
+
+  G4ThreeVector Min = GetMinimumBBox();
+  G4ThreeVector Max = GetMaximumBBox();
+
+  G4ThreeVectorList *vertices;
+  vertices=new G4ThreeVectorList();
+  vertices->reserve(8);
+    
+  if (vertices)
+  {
+    G4ThreeVector vertex0(Min.x(),Min.y(),Min.z());
+    G4ThreeVector vertex1(Max.x(),Min.y(),Min.z());
+    G4ThreeVector vertex2(Max.x(),Max.y(),Min.z());
+    G4ThreeVector vertex3(Min.x(),Max.y(),Min.z());
+    G4ThreeVector vertex4(Min.x(),Min.y(),Max.z());
+    G4ThreeVector vertex5(Max.x(),Min.y(),Max.z());
+    G4ThreeVector vertex6(Max.x(),Max.y(),Max.z());
+    G4ThreeVector vertex7(Min.x(),Max.y(),Max.z());
+
+    vertices->push_back(pTransform.TransformPoint(vertex0));
+    vertices->push_back(pTransform.TransformPoint(vertex1));
+    vertices->push_back(pTransform.TransformPoint(vertex2));
+    vertices->push_back(pTransform.TransformPoint(vertex3));
+    vertices->push_back(pTransform.TransformPoint(vertex4));
+    vertices->push_back(pTransform.TransformPoint(vertex5));
+    vertices->push_back(pTransform.TransformPoint(vertex6));
+    vertices->push_back(pTransform.TransformPoint(vertex7));
+  }
+  else
+  {
+    G4Exception("G4GenericTrap::CreateRotatedVertices()", "FatalError",
+                FatalException, "Out of memory - Cannot allocate vertices!");
+  }
+  return vertices;
+}
+  
+// --------------------------------------------------------------------
+
 std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
@@ -1732,6 +1350,388 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
   point=G4ThreeVector(v.x(),v.y(),zp);
 
   return point;
+}
+
+// --------------------------------------------------------------------
+
+G4bool G4GenericTrap::ComputeIsTwisted() 
+{
+  // Computes tangents of twist angles (angles between projections on XY plane 
+  // of corresponding -dz +dz edges). 
+
+  G4bool twisted = false;
+  G4double dx1, dy1, dx2, dy2;
+  G4int nv = fgkNofVertices/2;
+
+  for ( G4int i=0; i<4; i++ )
+  {
+    dx1 = fVertices[(i+1)%nv].x()-fVertices[i].x();
+    dy1 = fVertices[(i+1)%nv].y()-fVertices[i].y();
+    if ( (dx1 == 0) && (dy1 == 0) ) { continue; }
+
+    dx2 = fVertices[nv+(i+1)%nv].x()-fVertices[nv+i].x();
+    dy2 = fVertices[nv+(i+1)%nv].y()-fVertices[nv+i].y();
+
+    if ( dx2 == 0 && dy2 == 0 ) { continue; }
+    G4double twist_angle = std::fabs(dy1*dx2 - dx1*dy2);        
+    if ( twist_angle < fgkTolerance ) { continue; }
+    twisted = true;
+    SetTwistAngle(i,twist_angle);
+  }
+
+  return twisted;
+}
+
+// --------------------------------------------------------------------
+
+G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
+{
+  // Test if the vertices are in a clockwise order, if not reorder them.
+  // Also test if they're well defined without crossing opposite segments
+
+  G4bool clockwise_order=true;
+  G4double sum1 = 0.;
+  G4double sum2 = 0.;
+  G4int j;
+
+  for (G4int i=0; i<4; i++)
+  {
+    j = (i+1)%4;
+    sum1 += vertices[i].x()*vertices[j].y() - vertices[j].x()*vertices[i].y();
+    sum2 += vertices[i+4].x()*vertices[j+4].y()
+          - vertices[j+4].x()*vertices[i+4].y();
+  }
+  if (sum1*sum2 < -fgkTolerance)
+  {
+    G4String errorDescription = "InvalidSetup in \"";
+    errorDescription += GetName();
+    errorDescription += "\"";
+
+    G4Exception("G4GenericTrap::CheckOrder()", errorDescription, FatalException,
+                "Lower/upper faces defined with opposite clockwise.");
+   }
+   
+   if ((sum1 > 0.)||(sum2 > 0.))
+   {
+     G4String errorDescription = "WarningSetup in \"";
+     errorDescription += GetName();
+     errorDescription += "\"";
+     G4Exception("G4GenericTrap::CheckOrder()", errorDescription, JustWarning,
+       "Vertices must be defined in clockwise in XY planes! Re-ordering.. ");
+     clockwise_order = false;
+   }
+
+   // Check for illegal crossings
+   //
+   G4bool illegal_cross = false;
+   illegal_cross = IsSegCrossing(vertices[0],vertices[1],
+                                 vertices[2],vertices[3]);
+   if (!illegal_cross)
+   {
+     illegal_cross = IsSegCrossing(vertices[4],vertices[5],
+                                   vertices[6],vertices[7]);
+   }
+   if (illegal_cross)
+   {
+      G4String errorDescription = "InvalidSetup in \"";
+      errorDescription += GetName();
+      errorDescription += "\"";
+      G4Exception("G4GenericTrap::CheckOrderAndSetup()",
+                  errorDescription, FatalException,
+                  "Malformed polygone with opposite sides.");
+   }
+   return clockwise_order;
+}
+
+// --------------------------------------------------------------------
+
+void G4GenericTrap::ReorderVertices(std::vector<G4ThreeVector>& vertices) const
+{
+  // Reorder the vector of vertices 
+
+  std::vector<G4ThreeVector> oldVertices(vertices);
+
+  for ( G4int i=0; i < G4int(oldVertices.size()); ++i )
+  {
+    vertices[i] = oldVertices[oldVertices.size()-1-i];
+  }  
+} 
+ 
+// --------------------------------------------------------------------
+
+G4bool
+G4GenericTrap::IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
+                             const G4TwoVector& c, const G4TwoVector& d) const
+{ 
+  // Check if segments [A,B] and [C,D] are crossing
+
+  G4bool stand1 = false;
+  G4bool stand2 = false;
+  G4double dx1,dx2,xm=0.,ym=0.,a1=0.,a2=0.,b1=0.,b2=0.;
+  dx1=(b-a).x();
+  dx2=(d-c).x();
+
+  if( std::fabs(dx1) < fgkTolerance )  { stand1 = true; }
+  if( std::fabs(dx2) < fgkTolerance )  { stand2 = true; }
+  if (!stand1)
+  {
+    a1 = (b.x()*a.y()-a.x()*b.y())/dx1;
+    b1 = (b-a).y()/dx1;
+  }
+  if (!stand2)
+  {
+    a2 = (d.x()*c.y()-c.x()*d.y())/dx2;
+    b2 = (d-c).y()/dx2;
+  }   
+  if (stand1 && stand2)
+  {
+    // Segments parallel and vertical
+    //
+    if (std::fabs(a.x()-c.x())<fgkTolerance)
+    {
+       // Check if segments are overlapping
+       //
+       if ( ((c.y()-a.y())*(c.y()-b.y())<-fgkTolerance)
+         || ((d.y()-a.y())*(d.y()-b.y())<-fgkTolerance)
+         || ((a.y()-c.y())*(a.y()-d.y())<-fgkTolerance)
+         || ((b.y()-c.y())*(b.y()-d.y())<-fgkTolerance) )  { return true; }
+
+       return false;
+    }
+    // Different x values
+    //
+    return false;
+  }
+   
+  if (stand1)    // First segment vertical
+  {
+    xm = a.x();
+    ym = a2+b2*xm; 
+  }
+  else
+  {
+    if (stand2)  // Second segment vertical
+    {
+      xm = c.x();
+      ym = a1+b1*xm;
+    }
+    else  // Normal crossing
+    {
+      if (std::fabs(b1-b2) < fgkTolerance)
+      {
+        // Parallel segments, are they aligned
+        //
+        if (std::fabs(c.y()-(a1+b1*c.x())) > fgkTolerance)  { return false; }
+
+        // Aligned segments, are they overlapping
+        //
+        if ( ((c.x()-a.x())*(c.x()-b.x())<-fgkTolerance)
+          || ((d.x()-a.x())*(d.x()-b.x())<-fgkTolerance)
+          || ((a.x()-c.x())*(a.x()-d.x())<-fgkTolerance)
+          || ((b.x()-c.x())*(b.x()-d.x())<-fgkTolerance) )  { return true; }
+
+        return false;
+      }
+      xm = (a1-a2)/(b2-b1);
+      ym = (a1*b2-a2*b1)/(b2-b1);
+    }
+  }
+
+  // Check if crossing point is both between A,B and C,D
+  //
+  G4double check = (xm-a.x())*(xm-b.x())+(ym-a.y())*(ym-b.y());
+  if (check > -fgkTolerance)  { return false; }
+  check = (xm-c.x())*(xm-d.x())+(ym-c.y())*(ym-d.y());
+  if (check > -fgkTolerance)  { return false; }
+
+  return true;
+}
+
+// --------------------------------------------------------------------
+
+G4VFacet*
+G4GenericTrap::MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
+                             G4int ind1, G4int ind2, G4int ind3) const 
+{
+  // Create a triangular facet from the polygon points given by indices
+  // forming the down side ( the normal goes in -z)
+  // Do not create facet if 2 vertices are the same
+
+  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
+       (fromVertices[ind2] == fromVertices[ind3]) ||
+       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
+
+  std::vector<G4ThreeVector> vertices;
+  vertices.push_back(fromVertices[ind1]);
+  vertices.push_back(fromVertices[ind2]);
+  vertices.push_back(fromVertices[ind3]);
+  
+  // first vertex most left
+  //
+  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
+
+  if ( cross.z() > 0.0 )
+  {
+    // Should not happen, as vertices should have been reordered at this stage
+
+    G4String errorDescription = "InvalidSetup in \"";
+    errorDescription += GetName();
+    errorDescription += "\"";
+    G4Exception("G4GenericTrap::MakeDownFacet", errorDescription,
+                FatalException, "Vertices in wrong order.");
+  }
+  
+  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
+}
+
+// --------------------------------------------------------------------
+
+G4VFacet*
+G4GenericTrap::MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
+                           G4int ind1, G4int ind2, G4int ind3) const     
+{
+  // Create a triangular facet from the polygon points given by indices
+  // forming the upper side ( z>0 )
+
+  // Do not create facet if 2 vertices are the same
+  //
+  if ( (fromVertices[ind1] == fromVertices[ind2]) ||
+       (fromVertices[ind2] == fromVertices[ind3]) ||
+       (fromVertices[ind1] == fromVertices[ind3]) )  { return 0; }
+
+  std::vector<G4ThreeVector> vertices;
+  vertices.push_back(fromVertices[ind1]);
+  vertices.push_back(fromVertices[ind2]);
+  vertices.push_back(fromVertices[ind3]);
+  
+  // First vertex most left
+  //
+  G4ThreeVector cross=(vertices[1]-vertices[0]).cross(vertices[2]-vertices[1]);
+
+  if ( cross.z() < 0.0 )
+  {
+    // Should not happen, as vertices should have been reordered at this stage
+
+    G4String errorDescription = "InvalidSetup in \"";
+    errorDescription += GetName();
+    errorDescription += "\"";
+    G4Exception("G4GenericTrap::MakeUpFacet", errorDescription,
+                FatalException, "Vertices in wrong order.");
+  }
+  
+  return new G4TriangularFacet(vertices[0], vertices[1], vertices[2], ABSOLUTE);
+}      
+
+// --------------------------------------------------------------------
+
+G4VFacet*
+G4GenericTrap::MakeSideFacet(const G4ThreeVector& downVertex0,
+                             const G4ThreeVector& downVertex1,
+                             const G4ThreeVector& upVertex1,
+                             const G4ThreeVector& upVertex0) const      
+{
+  // Creates a triangular facet from the polygon points given by indices
+  // forming the upper side ( z>0 )
+
+  if ( (downVertex0 == downVertex1) && (upVertex0 == upVertex1) )
+  {
+    return 0;
+  }
+
+  if ( downVertex0 == downVertex1 )
+  {
+    return new G4TriangularFacet(downVertex0, upVertex1, upVertex0, ABSOLUTE);
+  }
+
+  if ( upVertex0 == upVertex1 )
+  {
+    return new G4TriangularFacet(downVertex0, downVertex1, upVertex0, ABSOLUTE);
+  }
+
+  return new G4QuadrangularFacet(downVertex0, downVertex1, 
+                                 upVertex1, upVertex0, ABSOLUTE);   
+}    
+
+// --------------------------------------------------------------------
+
+G4TessellatedSolid* G4GenericTrap::CreateTessellatedSolid() const
+{
+  // 3D vertices
+  //
+  G4int nv = fgkNofVertices/2;
+  std::vector<G4ThreeVector> downVertices;
+  for ( G4int i=0; i<nv; i++ )
+  { 
+    downVertices.push_back(G4ThreeVector(fVertices[i].x(),
+                                         fVertices[i].y(), -fDz));
+  }
+
+  std::vector<G4ThreeVector> upVertices;
+  for ( G4int i=nv; i<2*nv; i++ )
+  { 
+    upVertices.push_back(G4ThreeVector(fVertices[i].x(),
+                                       fVertices[i].y(), fDz));
+  }
+                                         
+  // Reorder vertices if they are not ordered anti-clock wise
+  //
+  G4ThreeVector cross 
+    = (downVertices[1]-downVertices[0]).cross(downVertices[2]-downVertices[1]);
+   G4ThreeVector cross1 
+    = (upVertices[1]-upVertices[0]).cross(upVertices[2]-upVertices[1]);
+  if ( (cross.z() > 0.0) || (cross1.z() > 0.0) )
+  {
+    ReorderVertices(downVertices);
+    ReorderVertices(upVertices);
+  }
+    
+  G4TessellatedSolid* tessellatedSolid = new G4TessellatedSolid(GetName());
+  
+  G4VFacet* facet = 0;
+  facet = MakeDownFacet(downVertices, 0, 1, 2);
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
+  facet = MakeDownFacet(downVertices, 0, 2, 3);
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
+  facet = MakeUpFacet(upVertices, 0, 2, 1);
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
+  facet = MakeUpFacet(upVertices, 0, 3, 2);
+  if (facet)  { tessellatedSolid->AddFacet( facet ); }
+
+  // The quadrangular sides
+  //
+  for ( G4int i = 0; i < nv; ++i )
+  {
+    G4int j = (i+1) % nv;
+    facet = MakeSideFacet(downVertices[j], downVertices[i], 
+                          upVertices[i], upVertices[j]);
+
+    if ( facet )  { tessellatedSolid->AddFacet( facet ); }
+  }
+
+  tessellatedSolid->SetSolidClosed(true);
+
+  return tessellatedSolid;
+}  
+
+// --------------------------------------------------------------------
+
+void G4GenericTrap::ComputeBBox() 
+{
+  // Computes bounding box for a shape.
+
+  G4double minX, maxX, minY, maxY;
+  minX = maxX = fVertices[0].x();
+  minY = maxY = fVertices[0].y();
+   
+  for (G4int i=1; i< fgkNofVertices; i++)
+  {
+    if (minX>fVertices[i].x()) { minX=fVertices[i].x(); }
+    if (maxX<fVertices[i].x()) { maxX=fVertices[i].x(); }
+    if (minY>fVertices[i].y()) { minY=fVertices[i].y(); }
+    if (maxY<fVertices[i].y()) { maxY=fVertices[i].y(); }
+  }
+  fMinBBoxVector = G4ThreeVector(minX,minY,-fDz);
+  fMaxBBoxVector = G4ThreeVector(maxX,maxY, fDz);
 }
 
 // --------------------------------------------------------------------

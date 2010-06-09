@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.6 2010-06-03 10:22:45 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.7 2010-06-09 07:39:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,41 +95,36 @@ class G4GenericTrap : public G4VSolid
     inline G4TwoVector GetVertex(G4int index) const;
     inline const std::vector<G4TwoVector>& GetVertices() const;
     inline G4double    GetTwistAngle(G4int index) const;
-    inline void        SetTwistAngle(G4int index, G4double twist);
     inline G4bool      IsTwisted() const;
-    inline G4ThreeVector GetMinimumBBox()const;
-    inline G4ThreeVector GetMaximumBBox() const;
     inline G4int       GetVisSubdivisions() const;
     inline void        SetVisSubdivisions(G4int subdiv);
 
     // Solid methods                                
 
-    inline G4double GetCubicVolume();
-    G4double GetSurfaceArea();
-
-    G4bool CalculateExtent(const EAxis pAxis,
-                           const G4VoxelLimits& pVoxelLimit,
-                           const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
-    G4ThreeVectorList* CreateRotatedVertices(const 
-                           G4AffineTransform& pTransform) const;
     EInside Inside(const G4ThreeVector& p) const;
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
     G4double DistanceToIn(const G4ThreeVector& p,
                           const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     G4double DistanceToOut(const G4ThreeVector& p,
                            const G4ThreeVector& v,
-                           const G4bool calcNorm=G4bool(false),
-                                 G4bool *validNorm=0,
-                                 G4ThreeVector *n=0) const;
+                           const G4bool calcNorm = false,
+                                 G4bool *validNorm = 0,
+                                 G4ThreeVector *n = 0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;
 
     inline G4GeometryType GetEntityType() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
     G4ThreeVector GetPointOnSurface() const ;
+
+    inline G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     // Visualisation functions
   
@@ -148,36 +143,41 @@ class G4GenericTrap : public G4VSolid
 
   private:
 
-      // Internal methods
+    // Internal methods
 
-      G4bool  ComputeIsTwisted() ;
-      G4bool  CheckOrder(const std::vector<G4TwoVector>& vertices) const;
-      G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
-                            const G4TwoVector& c, const G4TwoVector& d) const;
-      void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
-      void ComputeBBox() ;
+    inline void SetTwistAngle(G4int index, G4double twist);
+    G4bool  ComputeIsTwisted() ;
+    G4bool  CheckOrder(const std::vector<G4TwoVector>& vertices) const;
+    G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
+                          const G4TwoVector& c, const G4TwoVector& d) const;
+    G4ThreeVectorList* CreateRotatedVertices(const 
+                         G4AffineTransform& pTransform) const;
+    void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
+    void ComputeBBox();
+    inline G4ThreeVector GetMinimumBBox() const;
+    inline G4ThreeVector GetMaximumBBox() const;
       
-      G4VFacet* MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                              G4int ind1, G4int ind2, G4int ind3) const;
-      G4VFacet* MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
-                              G4int ind1, G4int ind2, G4int ind3) const;      
-      G4VFacet* MakeSideFacet(const G4ThreeVector& downVertex0, 
-                              const G4ThreeVector& downVertex1,
-                              const G4ThreeVector& upVertex1,
-                              const G4ThreeVector& upVertex0) const;
-      G4TessellatedSolid* CreateTessellatedSolid() const;
+    G4VFacet* MakeDownFacet(const std::vector<G4ThreeVector>& fromVertices, 
+                            G4int ind1, G4int ind2, G4int ind3) const;
+    G4VFacet* MakeUpFacet(const std::vector<G4ThreeVector>& fromVertices, 
+                            G4int ind1, G4int ind2, G4int ind3) const;      
+    G4VFacet* MakeSideFacet(const G4ThreeVector& downVertex0, 
+                            const G4ThreeVector& downVertex1,
+                            const G4ThreeVector& upVertex1,
+                            const G4ThreeVector& upVertex0) const;
+    G4TessellatedSolid* CreateTessellatedSolid() const;
      
-      EInside InsidePolygone(const G4ThreeVector& p,
-                             const std::vector<G4TwoVector>& poly) const;
-      G4double DistToPlane(const G4ThreeVector& p,
-                           const G4ThreeVector& v, const G4int ipl) const ;
-      G4ThreeVector NormalToPlane(const G4ThreeVector& p,
-                                  const G4int ipl) const;
-      G4double SafetyToFace(const G4ThreeVector& p, const G4int iseg) const;
-      G4double GetFaceSurfaceArea(const G4ThreeVector& p0,
-                                  const G4ThreeVector& p1,
-                                  const G4ThreeVector& p2,
-                                  const G4ThreeVector& p3) const;
+    EInside InsidePolygone(const G4ThreeVector& p,
+                           const std::vector<G4TwoVector>& poly) const;
+    G4double DistToPlane(const G4ThreeVector& p,
+                         const G4ThreeVector& v, const G4int ipl) const ;
+    G4ThreeVector NormalToPlane(const G4ThreeVector& p,
+                                const G4int ipl) const;
+    G4double SafetyToFace(const G4ThreeVector& p, const G4int iseg) const;
+    G4double GetFaceSurfaceArea(const G4ThreeVector& p0,
+                                const G4ThreeVector& p1,
+                                const G4ThreeVector& p2,
+                                const G4ThreeVector& p3) const;
   protected:
 
      mutable G4Polyhedron*   fpPolyhedron;
