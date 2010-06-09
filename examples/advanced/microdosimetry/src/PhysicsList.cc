@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.8 2010-06-09 18:48:52 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.9 2010-06-09 19:25:16 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -217,12 +217,13 @@ void PhysicsList::ConstructEM()
 
     } else if ( particleName == "alpha+" ) {
 
-      G4alphaIonisation* hion = new G4alphaIonisation();
+      G4hIonisation* hion = new G4hIonisation();
+      hion->SetBaseParticle(G4Proton::Proton());
       G4BraggIonGasModel* b = new G4BraggIonGasModel();
-      b->SetActivationLowEnergyLimit(10*MeV);
+      b->SetActivationLowEnergyLimit(10*MeV*1.0079/4.0026);
       hion->SetEmModel(b, 1);
       G4BetheBlochIonGasModel* bb = new G4BetheBlochIonGasModel();
-      bb->SetActivationLowEnergyLimit(10*MeV);
+      bb->SetActivationLowEnergyLimit(10*MeV*1.0079/4.0026);
       hion->SetEmModel(bb, 2);
       pmanager->AddProcess(hion, -1, 1, 1);
 
