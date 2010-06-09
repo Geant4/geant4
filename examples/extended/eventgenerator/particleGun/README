@@ -1,0 +1,111 @@
+$Id: README,v 1.1 2010-06-09 01:55:38 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ParticleGun2 
+                            ------------
+			    
+ Divergent beam in an arbitrary direction.
+ How to sample a tabulated function. 
+ 	
+ 1- Geometry construction
+    ---------------------
+
+ It is a simple box which represente an 'infinite' homogeneous medium.
+  
+ 2- Physics list
+    ------------
+
+ PhysicsList.cc defines only geantino and transportation process.
+         	
+ 3- Primary generator
+    -----------------
+ 
+ One shoots a geantino randomly uniform around a given direction (theta, phi).
+ 
+ a) Energy spectrum
+ Energy is sampled from a tabulated function defined in InitFunction().
+ The function is assumed positive, linear per segment, continuous.
+ Two sampling methods are illustrated : RejectAccept() and InverseCumul()
+ (see Particle Data book, Monte Carlo techniques).
+ Histogram 1 shows generated energy spectrum.
+ 
+ c) Momentum direction
+ One wants to limit particle direction uniformly around a given direction.
+ First, one generates momentum direction in the master frame (eg. World).
+ AlphaMax = opening angle around z axis.
+ Then one rotates momentum in local frame, using rotateUz() function.
+ RotateUz() transforms uz to newUz. It is composition of two simple rotations:
+ theta around oy, then phi around oz (non commutative).
+http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
+ Histograms 2-3 show momentum direction in local frame.
+  	
+ 4- Visualisation
+    -------------
+ 
+ Visualization Manager is set in the main().
+ Initialisation of the drawing is done via the commands
+ /vis/.. in the macro vis.mac. This macro is automatically read from the main 
+ in case of interactive running mode.
+ 
+ 5- How to start ?
+    --------------
+ 
+  - compile and link to generate an executable
+ 	% cd gun
+ 	% gmake
+ 		
+  - execute particleGun2 in 'batch' mode from macro files
+ 	% ParticleGun2   run1.mac
+ 		
+  - execute particleGun2 in 'interactive mode' with visualization
+ 	% particleGun2
+ 	....
+ 	Idle>      ---> type your commands. For instance:
+	Idle> /run/beamOn 
+	....
+	Idle> /run/beamOn 10
+	....				
+ 	Idle> exit
+	
+ 6- Histograms
+    ----------
+ 
+  particleGun2 produces several 1D histograms which are saved as
+  particleGun.root by default.
+
+      1 : energy spectrum dN/dE = f(E)
+      2 : momentum direction: angular distr dN/dOmega = f(alpha)
+      3 : momentum direction: angular distr dN/dOmega = f(psi)      
+            
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /testem/histo/setHisto id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /testem/histo/setFileName  name  (default particleGun)
+   
+   It is possible to choose the format of the histogram file (hbook, root, XML)
+   with the command /testem/histo/setFileType (root by default)
+   
+   It is also possible to print selected histograms on an ascii file:
+   /testem/histo/printHisto id
+   All selected histos will be written on a file name.ascii  (default particleGun) 
+
+  Note that, by default, histograms are disabled. To activate them, uncomment
+  the flag G4ANALYSIS_USE in GNUmakefile.
+ 
+  Before compilation of the example it is optimal to clean up old files:
+  	gmake histclean
+  	gmake 
+
+ 7- Using histograms
+    ---------------- 
+
+  To use histograms, at least one of the AIDA implementations should be 
+  available. See the file InstallAida.txt
+  

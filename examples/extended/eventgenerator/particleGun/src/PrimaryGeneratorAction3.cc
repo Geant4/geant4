@@ -1,0 +1,125 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: PrimaryGeneratorAction3.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+
+#include "PrimaryGeneratorAction3.hh"
+#include "PrimaryGeneratorAction.hh"
+
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "Randomize.hh"
+
+G4double PrimaryGeneratorAction3::Rmin3 = 0.;
+G4double PrimaryGeneratorAction3::GetRmin3() {return Rmin3;}
+G4double PrimaryGeneratorAction3::Rmax3 = 0.;
+G4double PrimaryGeneratorAction3::GetRmax3() {return Rmax3;}
+G4double PrimaryGeneratorAction3::cosAlphaMin = 0.;
+G4double PrimaryGeneratorAction3::GetCosAlphaMin() {return cosAlphaMin;}
+G4double PrimaryGeneratorAction3::cosAlphaMax = 0.;
+G4double PrimaryGeneratorAction3::GetCosAlphaMax() {return cosAlphaMax;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PrimaryGeneratorAction3::PrimaryGeneratorAction3()
+{
+  // default particle kinematic
+  //
+  // G4int n_particle = 1;
+  // particleGun  = new G4ParticleGun(n_particle);
+  //   
+  // G4ParticleDefinition* particle
+  //          = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
+  // particleGun->SetParticleDefinition(particle);
+  
+  particleGun = PrimaryGeneratorAction::GetParticleGun();
+
+  // vertex volume
+  //  
+  G4double Rmin = 2.*mm; 
+  G4double Rmax = 8.*mm;
+  Rmin3 = Rmin*Rmin*Rmin;
+  Rmax3 = Rmax*Rmax*Rmax;
+  
+  //opening angle
+  //
+  G4double alphaMin =  0.*deg;
+  G4double alphaMax = 10.*deg;
+  cosAlphaMin = std::cos(alphaMin);
+  cosAlphaMax = std::cos(alphaMax);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PrimaryGeneratorAction3::~PrimaryGeneratorAction3()
+{
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PrimaryGeneratorAction3::GeneratePrimaries(G4Event* anEvent)
+{  
+  //vertex position uniform in spherical shell
+  //
+  G4double cosTheta = 2*G4UniformRand() - 1;	//cosTheta uniform in [0, pi]
+  G4double sinTheta = std::sqrt(1. - cosTheta*cosTheta);
+  G4double phi      = twopi*G4UniformRand();	//phi uniform in [0, 2*pi]
+  G4ThreeVector ur(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
+  
+  G4double R3 = Rmin3 + G4UniformRand()*(Rmax3 - Rmin3);
+  G4double R  = std::pow(R3, 1./3);  
+        
+  particleGun->SetParticlePosition(R*ur);
+
+  //particle direction uniform around ur 
+  //    
+  //1- in World frame
+  //cosAlpha uniform in [cos(alphaMin), cos(alphaMax)]
+  G4double cosAlpha = cosAlphaMin - G4UniformRand()*(cosAlphaMin - cosAlphaMax); 
+  G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
+  G4double psi      = twopi*G4UniformRand();	//psi uniform in (0,2*pi)  
+  G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
+  
+  //2- rotate dir   (rotateUz transforms uz to ur)
+  dir.rotateUz(ur);	   
+
+  particleGun->SetParticleMomentumDirection(dir);
+  
+  //energy
+  //  
+  particleGun->SetParticleEnergy(1*MeV);
+  
+  //create vertex
+  //   
+  particleGun->GeneratePrimaryVertex(anEvent);
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
