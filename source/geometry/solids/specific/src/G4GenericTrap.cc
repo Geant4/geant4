@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.9 2010-06-09 07:39:31 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.10 2010-06-09 09:39:39 ivana Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -961,7 +961,7 @@ G4bool G4GenericTrap::CalculateExtent(const EAxis pAxis,
   if ( fTessellatedSolid )
   {
     return fTessellatedSolid->CalculateExtent(pAxis, pVoxelLimit,
-                                              pTransform, pmin, pmax);
+                                              pTransform, pMin, pMax);
   }     
 #endif 
 
