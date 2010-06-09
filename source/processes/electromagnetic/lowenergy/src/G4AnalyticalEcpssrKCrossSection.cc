@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.1 2010-06-06 23:40:35 mantero Exp $
+//$Id: G4AnalyticalEcpssrKCrossSection.cc,v 1.2 2010-06-09 07:15:50 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -263,20 +263,20 @@ G4double G4AnalyticalEcpssrKCrossSection::CalculateCrossSection(G4int zTarget,G4
 
   G4double electrIonizationEnergy;                                         
                                        
-  if (0.< x <= 0.035)
+  if ((0.< x) && (x <= 0.035))
     {
       electrIonizationEnergy= 0.75*pi*(std::log(1./(x*x))-1.);
     }
   else
     {
-      if ( 0.035 < x <=3.)
+      if ( (0.035 < x) && (x <=3.))
 	{
 	  electrIonizationEnergy =std::exp(-2.*x)/(0.031+(0.213*std::pow(x,0.5))+(0.005*x)-(0.069*std::pow(x,3./2.))+(0.324*x*x));
 	}
 
       else
 	{
-	  if ( 3.< x <=11.)
+	  if ( (3.< x) && (x<=11.))
 	   {
 	     electrIonizationEnergy =2.*std::exp(-2.*x)/std::pow(x,1.6);
 	   }
