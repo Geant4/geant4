@@ -6,14 +6,14 @@ Random_FAIL exam-ext-field-field04-run \
 	slc4_amd64_gcc34_dbg	\
 	i686-slc5-gcc43-opt
 	
-EXPECTED_FAIL exam-ext-g3tog4-clgeometry-build \
-	osx105_ia32_gcc401	\
-	osx105_ia32_gcc401_dbg
-	i686-slc5-gcc43-dbg
-			
-EXPECTED_FAIL exam-ext-g3tog4-cltog4-build \
-	osx105_ia32_gcc401	\
-	osx105_ia32_gcc401_dbg
+# changed cmt requirements file to compile g4tog4 on mac as well --> works
+#EXPECTED_FAIL exam-ext-g3tog4-clgeometry-build \
+#	osx105_ia32_gcc401	\
+#	osx105_ia32_gcc401_dbg
+#			
+#EXPECTED_FAIL exam-ext-g3tog4-cltog4-build \
+#	osx105_ia32_gcc401	\
+#	osx105_ia32_gcc401_dbg
 
 #  XercesC compile warnings ... fixed using XercesC 3.1 for slc5, 26 Feb 2010
 #EXPECTED_FAIL exam-ext-persistency-gdml-g01-build 
@@ -87,20 +87,21 @@ EXPECTED_FAIL test12-QGSBIC-run \
        slc4_ia32_gcc34_dbg     
 #       i686-slc5-gcc43-dbg    
 
-#new test Nov 09
-EXPECTED_FAIL bench-calo-HadCalCMS-run1-LBE \
-	slc4_amd64_gcc34	\
-	slc4_amd64_gcc34_dbg	\
-	slc4_ia32_gcc34		\
-	slc4_ia32_gcc34_dbg	\
-	x86_64-slc5-gcc43-opt	\
-	x86_64-slc5-gcc43-dbg	\
-	x86_64-slc5-gcc41-opt   \
-	x86_64-slc5-gcc41-dbg   \
-	i686-slc5-gcc43-opt	\
-	i686-slc5-gcc43-dbg	\
-	osx105_ia32_gcc401_dbg
-
+#new test Nov 09, removed from testing
+#EXPECTED_FAIL bench-calo-HadCalCMS-run1-LBE \
+#	slc4_amd64_gcc34	\
+#	slc4_amd64_gcc34_dbg	\
+#	slc4_ia32_gcc34 	\
+#	slc4_ia32_gcc34_dbg	\
+#	x86_64-slc5-gcc43-opt	\
+#	x86_64-slc5-gcc43-dbg	\
+#	x86_64-slc5-gcc41-opt	\
+#	x86_64-slc5-gcc41-dbg	\
+#	i686-slc5-gcc43-opt	\
+#	i686-slc5-gcc43-dbg	\
+#	osx105_ia32_gcc401_dbg  \
+#	x86_64-mac106-gcc42-dbg
+	
 EoI
 
 exit
