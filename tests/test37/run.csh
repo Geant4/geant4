@@ -16,11 +16,11 @@ setenv PHYSLIST    emstandard_opt3
 set    phys = "opt3"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-setenv PHYSLIST    standardGS
+setenv PHYSLIST    emlivermore
 set    phys = "optK"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
-setenv PHYSLIST    standard_opt2
+setenv PHYSLIST    emstandard_opt2
 set    phys = "optG"
 source ${dir}run_single.csh ${phys} ${work} ${dir}
 
