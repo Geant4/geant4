@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.24 2010-05-11 11:34:09 vnivanch Exp $
+// $Id: G4Evaporation.cc,v 1.25 2010-06-09 11:56:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -140,8 +140,15 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
     // check if it is stable, then finish evaporation
     G4int Z = theResidualNucleus->GetZ_asInt();
-    G4double abun = nist->GetIsotopeAbundance(Z, A);  
-    if(theResidualNucleus->GetExcitationEnergy() <= minExcitation && abun > 0.0) 
+    G4double abun = nist->GetIsotopeAbundance(Z, A); 
+    /*
+    G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
+	   << " A= " << A << " Eex(MeV)= " 
+	   << theResidualNucleus->GetExcitationEnergy()
+	   << " aban= " << abun << G4endl;
+    */
+    if(theResidualNucleus->GetExcitationEnergy() <= minExcitation && 
+       (abun > 0.0)) 
       {
 	theResult->push_back(theResidualNucleus);
 	return theResult;
@@ -191,7 +198,8 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     if(0.0 == totprob) {
 
       // if fragment is exotic, then try to decay it
-      if(0.0 == abun) {
+      if(0.0 == abun && Z < 20) {
+        //G4cout << "$$$ Decay exotic fragment" << G4endl;
 	theTempResult = unstableBreakUp.BreakUpFragment(theResidualNucleus);
 	if(theTempResult) {
 	  size_t nsec = theTempResult->size();
