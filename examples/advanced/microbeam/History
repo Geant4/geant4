@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.26 2010-06-09 18:13:46 sincerti Exp $
+$Id: History,v 1.27 2010-06-09 18:53:41 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.26 2010-06-09 18:13:46 sincerti Exp $
 
                        Package History file
                        --------------------
+
+09 June 2010 - J. Perl - tag microbeam-V09-03-05
+- Have vis.mac disabled by default
 
 09 June 2010 - S. Incerti - tag microbeam-V09-03-04
 - Switched to physics_list library.
