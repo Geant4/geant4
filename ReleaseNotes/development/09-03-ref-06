@@ -203,8 +203,8 @@ processes/hadronic                               hadr-V09-03-00
   o G4RadioactiveDecayMessenger: added the UI commands for SetICM, SETARM
     and SetHLThreshold.
 
-processes/run                                    run-V09-03-00
--------------
+run                                              run-V09-03-00
+---
 - Corrected printing of number of events processed on run abortion.
 
 tracking                                         tracking-V09-03-03
