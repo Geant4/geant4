@@ -40,7 +40,7 @@ environments                                     envs-V09-03-00
   o Revised usage of MultipleScattering classes to make use of new particle
     based processes.
   o Fixed bug in wrapping of G4GDMLParser
-- momo:
+- Momo:
   o Revised obsolete trajectory drawing.
 
 geometry/solids/specific                         geom-specific-V09-03-06
@@ -60,15 +60,15 @@ graphics_reps                                    greps-V09-03-02
 - G4VVisManager:
   o Added methods Draw(const G4VDigi&) and FilterDigi(const G4VDigi&).
     Removed temporary flag 'IsDefaultDrawTrajectory'.
-  o Added method DispatchToModel(const G4VTrajectory&), i.e., without i_mode,
+  o Added method DispatchToModel(const G4VTrajectory&), i.e., without 'i_mode',
     to distinguish usage and in preparation for i_mode migration.
-- G4VGraphicsScene: Added AddCompound (const G4VDigi&).
+- G4VGraphicsScene: added method AddCompound (const G4VDigi&).
 
 interfaces                                       interfaces-V09-03-07
 ----------
 - G4UIExective: changed order for session type; GUI session is prioritized.
 - G4VBasicShell: implemented improvements for command completion.
-- G4Qt: added a link to G4UIQt
+- G4Qt: added a link to G4UIQt.
 - G4UIQt: added tab widgets for visualization. Added new command in help tree
   for immediate update of the tree. Fixed warning in standard-output during
   viewer creation and fixed flush problem. Fixed recursive repaint problem.
@@ -209,7 +209,7 @@ processes/run                                    run-V09-03-00
 
 tracking                                         tracking-V09-03-03
 --------
-- G4VTrajectory: dded virtual method DrawTrajectory() in preparation for
+- G4VTrajectory: added virtual method DrawTrajectory() in preparation for
   i_mode migration. Added explicit once-only i_mode deprecation warning.
 - G4Trajectory and G4SmoothTrajectory: implemented i_mode migration.
 
