@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.7 2010-01-22 17:02:49 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.8 2010-06-09 12:56:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -2107,10 +2107,10 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #endif
     }
     if(!theDefinition)
-    {
-#ifdef debug
+    { // !! Commenting of this print costs days of searching for E/mom nonconservation !!
+      //#ifdef debug
       G4cout<<"---Warning---G4QInelastic::PostStepDoIt: drop PDG="<<PDGCode<<G4endl;
-#endif
+      //#endif
       delete hadr;
       continue;
     }

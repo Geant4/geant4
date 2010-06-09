@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+8-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-08)
+-----------------------------------------------------------------------
+Uncommented Warning for the dropped particle in G4QInelastic
+
 8-Jun-2010 M.Kosov                         (hadr-chips-proc-V09-03-07)
 -----------------------------------------------------------------------
 More Omega- corrections is included in G4QElastic (thanks to Andrea)
