@@ -1,5 +1,13 @@
 /tracking/storeTrajectory 1
 
+/microbeam/phys/addPhysics emlivermore
+/microbeam/phys/addPhysics binary
+/microbeam/phys/addPhysics binary_ion
+
+/run/initialize
+
+/process/inactivate nuclearStopping
+
 /control/execute vis.mac
 
 /tracking/verbose 0

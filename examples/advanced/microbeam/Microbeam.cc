@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.9 2007-08-28 09:48:40 gcosmo Exp $
+// $Id: Microbeam.cc,v 1.10 2010-06-09 18:13:46 sincerti Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.
@@ -89,7 +89,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector));
   
   // initialize G4 kernel
-  runManager->Initialize();
+  // runManager->Initialize();
     
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer(); 

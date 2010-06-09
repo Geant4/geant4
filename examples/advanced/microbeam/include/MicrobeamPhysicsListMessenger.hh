@@ -23,67 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: MicrobeamPhysicsList.hh,v 1.6 2010-06-09 18:13:46 sincerti Exp $
+// $Id: MicrobeamPhysicsListMessenger.hh,v 1.1 2010-06-09 18:13:46 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef MicrobeamPhysicsList_h
-#define MicrobeamPhysicsList_h 1
+#ifndef MicrobeamPhysicsListMessenger_h
+#define MicrobeamPhysicsListMessenger_h 1
 
-#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4VPhysicsConstructor;
-class G4StepLimiter;
-class MicrobeamPhysicsListMessenger;
+class MicrobeamPhysicsList;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class MicrobeamPhysicsList: public G4VModularPhysicsList
+class MicrobeamPhysicsListMessenger: public G4UImessenger
 {
-public:
-
-  MicrobeamPhysicsList();
-  virtual ~MicrobeamPhysicsList();
-
-  void ConstructParticle();
+  public:
+  
+    MicrobeamPhysicsListMessenger(MicrobeamPhysicsList* );
+   ~MicrobeamPhysicsListMessenger();
     
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-        
-  void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
+    void SetNewValue(G4UIcommand*, G4String);
     
-  void AddStepMax();       
-  G4StepLimiter* GetStepMaxProcess() {return stepMaxProcess;};
-
-private:
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
+  private:
+  
+    MicrobeamPhysicsList* pPhysicsList;
     
-  G4String                             emName;
-  G4VPhysicsConstructor*               emPhysicsList;
-  G4VPhysicsConstructor*               decPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
+    G4UIdirectory*             physDir;        
+    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+    G4UIcmdWithADoubleAndUnit* electCutCmd;
+    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* allCutCmd;    
+    G4UIcmdWithAString*        pListCmd;
     
-  G4StepLimiter* stepMaxProcess;
-
-  MicrobeamPhysicsListMessenger* pMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

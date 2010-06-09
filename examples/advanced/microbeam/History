@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.25 2010-06-07 03:18:01 sincerti Exp $
+$Id: History,v 1.26 2010-06-09 18:13:46 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.25 2010-06-07 03:18:01 sincerti Exp $
 
                        Package History file
                        --------------------
+
+09 June 2010 - S. Incerti - tag microbeam-V09-03-04
+- Switched to physics_list library.
+microbeam.mac adapted. 
 
 06 June 2010 - S. Incerti - tag microbeam-V09-03-03
 - Removed unused variable (evt) in MicrobeamEventAction.cc

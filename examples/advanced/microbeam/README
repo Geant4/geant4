@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.10 2007-02-27 12:02:09 sincerti Exp $
+$Id: README,v 1.11 2010-06-09 18:13:46 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 27/02/2007
+Last modified by S. Incerti, 09/06/2010
 
 ---->0. INTRODUCTION.                                                    
                                                                        
@@ -127,10 +127,6 @@ Published in Nucl.Instrum.Meth.B210:92-97, 2003
                                                                         
 - a standard Geant4 example GNUmakefile is provided                     
 
-setup with:                                                             
-compiler = gcc-3.2.3
-G4SYSTEM = linux-g++                                                    
-
 The following section gives the necessary environment variables.                     
 
 ------->>3.1  ENVIRONMENT VARIABLES
@@ -177,19 +173,14 @@ In interactive mode, run:
 
 > $G4WORDIR/bin/Linux-g++/Microbeam
 
-The macro microbeam.mac is executed by default. To get vizualisation, make
-sure to uncomment the /vis/... lines in the microbeam.mac macro.
-The Microbeam code reads the phantom.dat file containing all the necessary 
-information describing the cell phantom. 10 alphas particles are generated.
+The macro microbeam.mac is executed by default. 
+All visualisation commands are in the vis.mac macro file.
 
 
 ---->5. PHYSICS
 
-Low energy electromagnetic processes (for alphas, electrons, photons) and 
-hadronic elastic and inelastic scattering for alphas are activated by default. 
-Low energy electromagnetic electronic and nuclear stopping power are computed 
-from ICRU tables.
-	
+Livermore, Binary and Binary_ion physics lists are used by default,
+see microbeam.mac
 
 ---->6. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
