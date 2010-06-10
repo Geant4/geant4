@@ -1,0 +1,20 @@
+/control/verbose 2
+/run/verbose 2
+#
+/gun/particle ion
+/gun/ion 10 24
+/gun/energy 0. eV
+#
+/testem/histo/setFileName run1
+/testem/histo/setFileType hbook
+###/testem/histo/setFileType root
+/testem/histo/setHisto 1  100  0. 2000 keV	#e+ e-
+/testem/histo/setHisto 2  100  0. 2000 keV	#neutrino
+/testem/histo/setHisto 3  100  0. 1000 keV	#gamma
+/testem/histo/setHisto 5  100  0.  200 eV	#recoil ion
+/testem/histo/setHisto 6  100  -10. 10 keV	#E balance
+/testem/histo/setHisto 7  100  0. 1000 keV	#P balance
+#
+/radioActiv/event/printModulo 10000
+#  
+/run/beamOn 100000

@@ -1,0 +1,9 @@
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 2
+#
+/gun/particle ion
+/gun/ion 10 24
+/gun/energy 0. eV
+#  
+/run/beamOn 1
