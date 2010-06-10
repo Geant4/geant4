@@ -1,25 +1,12 @@
+# to bun run interactively with visualization
+#
 /control/verbose 2
-
-/testem/histo/setFileName run1
-###/testem/histo/setFileType hbook
-/testem/histo/setFileType root
-/testem/histo/setHisto 1  100  0. 200. keV	#energy spectrum for gun action #2
-/testem/histo/setHisto 2  90   0. 180 deg	#moment dN/dalfa for gun action #2
-/testem/histo/setHisto 3  180  0. 360 deg	#moment dN/dpsi for gun action #2
-/testem/histo/setHisto 4  100  0. 10.  mm       #vertex dN/dr for gun action #3
-/testem/histo/setHisto 5  90   0. 180 deg       #vertex dN/dteta for gun action #3
-/testem/histo/setHisto 6  180  0. 360 deg       #vertex dN/dphi for gun action #3
-/testem/histo/setHisto 7  90   0. 180 deg       #moment dN/dalfa for gun action #3
-/testem/histo/setHisto 8  180  0. 360 deg       #moment dN/dpsi for gun action #3
-
+/run/verbose 1
+#
 /testem/selectGunAction 1
+#
 /tracking/verbose 1
-/run/beamOn 10
+/run/beamOn 1
+#
 /tracking/verbose 0
-#  
-/testem/selectGunAction 2
-/run/beamOn 100000
-#  
-/testem/selectGunAction 3
-/run/beamOn 1000000
-
+/run/beamOn 5
