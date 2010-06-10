@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.23 2010-06-04 10:39:55 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.24 2010-06-10 14:48:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -173,7 +173,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->AddEmModel(0, new G4WentzelVIModel());
-      msc->SetRangeFactor(0.1);
+      msc->SetRangeFactor(0.04);
       //msc->AddEmModel(0, new G4UrbanMscModel93());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
@@ -186,7 +186,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->AddEmModel(0, new G4WentzelVIModel());
-      msc->SetRangeFactor(0.1);
+      msc->SetRangeFactor(0.04);
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
