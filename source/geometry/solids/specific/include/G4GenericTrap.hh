@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.7 2010-06-09 07:39:31 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.8 2010-06-10 21:39:04 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -171,6 +171,8 @@ class G4GenericTrap : public G4VSolid
                            const std::vector<G4TwoVector>& poly) const;
     G4double DistToPlane(const G4ThreeVector& p,
                          const G4ThreeVector& v, const G4int ipl) const ;
+    G4double DistToTriangle(const G4ThreeVector& p,
+			 const G4ThreeVector& v, const G4int ipl) const;
     G4ThreeVector NormalToPlane(const G4ThreeVector& p,
                                 const G4int ipl) const;
     G4double SafetyToFace(const G4ThreeVector& p, const G4int iseg) const;

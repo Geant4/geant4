@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.10 2010-06-09 09:39:39 ivana Exp $
+// $Id: G4GenericTrap.cc,v 1.11 2010-06-10 21:39:25 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
-//
+//Chère Madame,
 // G4GenericTrap.cc
 //
 // Authors:
@@ -152,6 +152,7 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
   static const G4double halfCarTolerance=kCarTolerance*0.5;
   EInside  in = kInside;
   G4double cross, len2;
+  G4int count=0;
 
   for (G4int i = 0; i < 4; i++)
   {
@@ -161,7 +162,7 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
             (p.y()-poly[i].y())*(poly[j].x()-poly[i].x());
 
     len2=(poly[i]-poly[j]).mag2();
-    if(len2)
+    if (len2 > kCarTolerance)
     {
       if(cross*cross<=len2*halfCarTolerance*halfCarTolerance)  // Surface check
       {
@@ -193,9 +194,13 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
         }
       }
       else if (cross<0.)  {return kOutside; }
-    }
+    } else{
+       count++;
+       }
   }
- 
+  //All collapsed vertices, Tet like
+   if(count==4){ 
+   if((fabs(p.x()-poly[0].x())+fabs(p.y()-poly[0].y()))>halfCarTolerance)in=kOutside;}
   return in;
 }
 
@@ -252,7 +257,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
 
   static const G4double halfCarTolerance=kCarTolerance*0.5;
  
-  G4ThreeVector lnorm, sumnorm(0.,0.,0.), p0,p1,p2, r1,r2,r3,r4;
+  G4ThreeVector lnorm, sumnorm(0.,0.,0.),apprnorm(0.,0.,1.), p0,p1,p2, r1,r2,r3,r4;
   G4int noSurfaces = 0; 
   G4double distxy,distz;
   G4bool zPlusSide=false;
@@ -295,9 +300,14 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
       p1=G4ThreeVector(fVertices[s+4].x(),fVertices[s+4].y(),fDz); 
     }
     p2=G4ThreeVector(vertices[(s+1)%4].x(),vertices[(s+1)%4].y(),p.z());
-    if((p2-p0).mag2()==0)
+    // Collapsed vertices
+    if ((p2-p0).mag2()<kCarTolerance)
     {
-      p2=G4ThreeVector(fVertices[(s+1)%4].x(),fVertices[(s+1)%4].y(),-fDz);
+      if (fabs(p.z()+fDz) > kCarTolerance){
+        p2=G4ThreeVector(fVertices[(s+1)%4].x(),fVertices[(s+1)%4].y(),-fDz);
+      } else {
+        p2=G4ThreeVector(fVertices[(s+1)%4+4].x(),fVertices[(s+1)%4+4].y(),fDz);
+      }
     }
     lnorm=(p1-p0).cross(p2-p0);
     lnorm=lnorm.unit();
@@ -333,6 +343,12 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
       // Negative sign for Normal is taken for Outside Normal
       //
       sumnorm=sumnorm+lnorm;
+    }
+
+    //For ApproxSurfaceNormal
+    if(distxy<distz){
+      distz=distxy;
+      apprnorm=lnorm;
     }      
   }  // End for loop
 
@@ -342,12 +358,12 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
   {
     G4Exception("G4GenericTrap::SurfaceNormal(p)", "Notification",
                 JustWarning, "Point p is not on surface !?" );
-
+    sumnorm=apprnorm;
     // Add Approximative Surface Normal Calculation?
   }
   else if ( noSurfaces == 1 )  { sumnorm = sumnorm; }
   else                         { sumnorm = sumnorm.unit(); }
-   
+
   return sumnorm ; 
 }    
 
@@ -391,9 +407,13 @@ G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
     p1=G4ThreeVector(fVertices[i+4].x(),fVertices[i+4].y(),fDz);
   }  
   p2=G4ThreeVector(v.x(),v.y(),p.z());
-  if ((p2-p0).mag2()==0)
-  {
-    p2=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
+  // Collapsed vertices
+  if ((p2-p0).mag2() < kCarTolerance){
+      if (fabs(p.z()+fDz)>halfCarTolerance){
+       p2=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);}
+      else {
+       p2=G4ThreeVector(fVertices[j+4].x(),fVertices[j+4].y(),fDz);
+       }
   }
   lnorm=-(p1-p0).cross(p2-p0);
   if (distz>-halfCarTolerance)  { lnorm=-lnorm.unit(); }
@@ -693,6 +713,50 @@ G4GenericTrap::SafetyToFace(const G4ThreeVector& p, const G4int iseg) const
  
   return safe;
 }
+//_____________________________________________________________________________
+G4double G4GenericTrap::DistToTriangle(const G4ThreeVector& p,
+                                    const G4ThreeVector& v,const G4int ipl)const
+{
+  static const G4double halfCarTolerance=kCarTolerance*0.5;
+
+  G4double xa=fVertices[ipl].x();
+  G4double ya=fVertices[ipl].y();
+  G4double xb=fVertices[ipl+4].x();
+  G4double yb=fVertices[ipl+4].y();
+  G4int j=(ipl+1)%4;
+  G4double xc=fVertices[j].x();
+  G4double yc=fVertices[j].y();
+  G4double zab=2*fDz;
+  G4double zac=0;
+  
+  if((fabs(xa-xc)+fabs(ya-yc))<halfCarTolerance){
+    
+    xc=fVertices[j+4].x();
+    yc=fVertices[j+4].y();
+    zac=2*fDz;
+    zab=2*fDz;
+     //Line case
+    if((fabs(xb-xc)+fabs(yb-yc))<halfCarTolerance){
+      return kInfinity;
+    }
+  }
+  G4double a=(yb-ya)*zac-(yc-ya)*zab;
+  G4double b=(xc-xa)*zab-(xb-xa)*zac;
+  G4double c=(xb-xa)*(yc-ya)-(xc-xa)*(yb-ya);
+  G4double d=-xa*a-ya*b+fDz*c;
+    
+  G4double t=a*v.x()+b*v.y()+c*v.z();
+  if (t!=0){
+      t=-(a*p.x()+b*p.y()+c*p.z()+d)/t;}
+  
+   if ((t<halfCarTolerance)&&(t>-halfCarTolerance)){
+    if(NormalToPlane(p,ipl).dot(v)<0){t=kInfinity;}
+    else{t=0;}
+  }
+  if(Inside(p+v*t)!=kSurface){t=kInfinity;}
+ 
+  return t;
+} 
 
 // --------------------------------------------------------------------
 
@@ -720,10 +784,14 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
   if (v.z() < 0)
   {
     distmin=(-fDz-p.z())/v.z();
+    if (calcNorm) {side=kMZ; *n=G4ThreeVector(0,0,-1);}
   }
   else
   {
-    if (v.z() > 0)  { distmin = (fDz-p.z())/v.z(); }
+    if (v.z() > 0)  { 
+     distmin = (fDz-p.z())/v.z(); 
+     if (calcNorm) {side=kPZ;*n=G4ThreeVector(0,0,1);} 
+     }
     else            { distmin = kInfinity; }
   }      
 
@@ -742,7 +810,14 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     yc=fVertices[j].y();
     xd=fVertices[4+j].x();
     yd=fVertices[4+j].y();
-     
+      if(((fabs(xb-xd)+fabs(yb-yd))<halfCarTolerance)||
+        ((fabs(xa-xc)+fabs(ya-yc))<halfCarTolerance)){
+       G4double s=DistToTriangle(p,v,ipl) ;
+       if((s>=0)&& (s<distmin)){
+        distmin=s;lateral_cross=true;side=ESide(ipl+1);
+       }
+       continue;
+      }
     G4double tx1 =dz2*(xb-xa);
     G4double ty1 =dz2*(yb-ya);
     G4double tx2 =dz2*(xd-xc);
@@ -799,7 +874,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
             {
               if (a > 0)  { s=0.5*(-b+std::sqrt(d))/a; }
               else        { s=0.5*(-b-std::sqrt(d))/a; }
-              if (( s > 0) && (s < distmin))
+              if (( s > halfCarTolerance) && (s < distmin))
               {
                 distmin=s;
                 lateral_cross = true;
@@ -828,7 +903,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
             {
               if (a > 0)  { s=0.5*(-b-std::sqrt(d))/a; }
               else        { s=0.5*(-b+std::sqrt(d))/a; }
-              if ( ( s > 0) && (s < distmin) )
+              if ( ( s > halfCarTolerance) && (s < distmin) )
               {
                 distmin=s;
                 lateral_cross = true;
