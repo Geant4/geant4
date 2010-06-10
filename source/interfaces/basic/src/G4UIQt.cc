@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.43 2010-06-07 17:07:57 gcosmo Exp $
+// $Id: G4UIQt.cc,v 1.44 2010-06-10 15:37:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -211,10 +211,11 @@ G4UIQt::G4UIQt (
 
   layoutCommandLine->addWidget(fCommandLabel);
   layoutCommandLine->addWidget(fCommandArea);
+  QVBoxLayout *mainLayout;
 #if QT_VERSION >= 0x040000
-  QVBoxLayout *mainLayout = new QVBoxLayout();
+  mainLayout = new QVBoxLayout();
 #else
-  QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+  mainLayout = new QVBoxLayout(mainWidget);
 #endif
 
   fHelpTBWidget = new QWidget(fToolBox);
@@ -341,16 +342,8 @@ G4UIQt::G4UIQt (
   fMainWindow->move(QPoint(50,100));
 #endif
 
-  // Set visible
-#if QT_VERSION >= 0x040000
- #if QT_VERSION >= 0x040200
-  fMainWindow->setVisible(true);
- #else
-  fMainWindow->show();
- #endif
-#else
-  fMainWindow->show();
-#endif
+  // Set not visible until session start
+  fMainWindow->setVisible(false);
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::G4UIQt END\n");
@@ -541,6 +534,10 @@ bool G4UIQt::AddTabWidget(
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::AddTabWidget %d %d\n",sizeX, sizeY);
 #endif
+
+  fLastQTabSizeX = sizeX;
+  fLastQTabSizeY = sizeY;
+
   if (!aWidget) {
     return false;
   }
@@ -555,8 +552,12 @@ bool G4UIQt::AddTabWidget(
 
 #if QT_VERSION < 0x040000
     fEmptyViewerTabLabel->reparent(0,0,QPoint(0,0));  
+    fEmptyViewerTabLabel->hide();
+
 #else
-    fEmptyViewerTabLabel->setParent(0);
+    fEmptyViewerTabLabel->hide();
+    fEmptyViewerTabLabel->setParent(NULL);
+
     fMyVSplitter->addWidget(fTabWidget);
 #endif
 
@@ -574,7 +575,21 @@ bool G4UIQt::AddTabWidget(
   printf("G4UIQt::AddTabWidget ADD %d %d + %d %d---------------------------------------------------\n",sizeX, sizeY,sizeX-fTabWidget->width(),sizeY-fTabWidget->height());
 #endif
   
-  fMainWindow->resize(fMainWindow->width()+sizeX-fTabWidget->width(),fMainWindow->height()+sizeY-fTabWidget->height());
+  if (fMainWindow->isVisible()) {
+
+    // get the size of the tabbar
+    int tabBarX;
+    int tabBarY;
+#if QT_VERSION < 0x040000
+    tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
+    tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
+#else
+    tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
+    tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
+#endif
+
+    fMainWindow->resize(tabBarX+fMainWindow->width()+sizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+sizeY-fTabWidget->height());
+  }
 
   // Problems with resize. The widgets are not realy drawn at this step,
   // then we have to force them on order to check the size
@@ -595,26 +610,13 @@ bool G4UIQt::AddTabWidget(
 #if QT_VERSION >= 0x040000
  #if QT_VERSION >= 0x040200
    fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
-   fMainWindow->setVisible(true);
  #else
    fTabWidget->setLastTabCreated(fTabWidget->currentIndex());
-   fMainWindow->show();
  #endif
 #else
   fTabWidget->setLastTabCreated(fTabWidget->currentPageIndex());
-  fMainWindow->show();
 #endif
   
-#if QT_VERSION >= 0x040000
- #if QT_VERSION >= 0x040200
-   fTabWidget->setVisible(true);
- #else
-   fTabWidget->show();
- #endif
-#else
-   fTabWidget->show();
-#endif
-
   return true;
 }
 
@@ -641,15 +643,7 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
   // Send this signal to unblock graphic updates !
   fTabWidget->setTabSelected(false);
 
-#if QT_VERSION >= 0x040000
- #if QT_VERSION >= 0x040200
-   fTabWidget->setVisible(true);
- #else
-   fTabWidget->show();
- #endif
-#else
-   fTabWidget->show();
-#endif
+  fTabWidget->setVisible(true);
 
   // This will send a paintEvent to OGL Viewers
   fTabWidget->setTabSelected(true);
@@ -696,29 +690,25 @@ G4UIsession* G4UIQt::SessionStart (
   Prompt("Session :");
   exitSession = false;
 
-#if QT_VERSION >= 0x040000
- #if QT_VERSION >= 0x040200
-  fTabWidget->setVisible(true);
-  fEmptyViewerTabLabel->setVisible(true);
- #else
-  fTabWidget->show();
-  fEmptyViewerTabLabel->show();
- #endif
-#else
-  fTabWidget->show();
-  fEmptyViewerTabLabel->show();
-#endif
+  if (fTabWidget->isVisible()) {
+    fEmptyViewerTabLabel->setVisible(false);
+  } else {
+    fEmptyViewerTabLabel->setVisible(true);
+  }
 
-
-#if QT_VERSION >= 0x040000
- #if QT_VERSION >= 0x040200
   fMainWindow->setVisible(true);
- #else
-  fMainWindow->show();
- #endif
+  // get the size of the tabbar
+  int tabBarX;
+  int tabBarY;
+#if QT_VERSION < 0x040000
+  tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
+  tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
 #else
-  fMainWindow->show();
+  tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
+  tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
 #endif
+
+  fMainWindow->resize(tabBarX+fMainWindow->width()+fLastQTabSizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+fLastQTabSizeY-fTabWidget->height());
 
 #if QT_VERSION < 0x040000
   QApplication::sendPostedEvents () ;
@@ -2092,7 +2082,10 @@ void G4UIQt::TabCloseCallback(int a){
 
   if (fTabWidget->count() == 0) {
     fMyVSplitter->addWidget(fEmptyViewerTabLabel);
+    fMyVSplitter->show();
+    fEmptyViewerTabLabel->show();
     fTabWidget->setParent(0);
+    fTabWidget->setVisible(false);
   }
 #endif
 }

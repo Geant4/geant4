@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.22 2010-06-02 15:13:51 lgarnier Exp $
+// $Id: G4UIQt.hh,v 1.23 2010-06-10 15:37:13 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIQt_h
@@ -194,6 +194,8 @@ private:
   QLabel *fEmptyViewerTabLabel;
   QSplitter * fMyVSplitter;
   QSplitter * fHelpVSplitter;
+  int fLastQTabSizeX;
+  int fLastQTabSizeY;
 
 private slots :
   void ExitSession();

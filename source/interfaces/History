@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2010-06-08 04:43:33 kmura Exp $
+$Id: History,v 1.146 2010-06-10 15:37:13 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th June L. Garnier
+- G4UIQt : Improvments on OpenGL tab at initialisation (tab size was 
+  too small). Remove some flicker effect at initialisation. Remove a
+  compilation warning. Improvment on Cout Filter for Qt3 
 
 8, June, 2010 K.Murakami (interfaces-V09-03-08)
 - G4VBasicShell : wrong version is in the cvs head.
