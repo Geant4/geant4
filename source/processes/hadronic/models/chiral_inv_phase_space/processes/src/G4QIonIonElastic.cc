@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QIonIonElastic.cc,v 1.2 2010-01-14 11:24:36 mkossov Exp $
+// $Id: G4QIonIonElastic.cc,v 1.3 2010-06-10 10:16:10 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QIonIonElastic class -----------------
@@ -408,7 +408,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
     pM=mProt;
     bvel=proj4M.vect()/proj4M.e();         // Lab->Antilab transition boost velocity
     proj4M=targ4M.boost(-bvel);            // Proton 4-mom in Antilab
-				targ4M=G4LorentzVector(0.,0.,0.,mProt);// Projectile nucleus 4-mom in Antilab
+    targ4M=G4LorentzVector(0.,0.,0.,tM);   // Projectile nucleus 4-mom in Antilab
     Momentum = proj4M.rho();               // Recalculate Momentum in Antilab
   }
   G4LorentzVector tot4M=proj4M+targ4M;     // Total 4-mom of the reaction
@@ -452,7 +452,7 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4double dtM=tM+tM;
   if(revkin)
   {
-    mint=PELmanager->GetExchangeT(tZ,tN,projPDG); // functional randomized -t in MeV^2
+    mint=PELmanager->GetExchangeT(tZ,tN,2212); // functional randomized -t in MeV^2
     maxt=PELmanager->GetHMaxT();
   }
   else
@@ -509,7 +509,8 @@ G4VParticleChange* G4QIonIonElastic::PostStepDoIt(const G4Track& track, const G4
   G4LorentzVector dir4M=tot4M-G4LorentzVector(0.,0.,0.,(tot4M.e()-tM-pM)*.01);
   if(!G4QHadron(tot4M).RelDecayIn2(scat4M, reco4M, dir4M, cost, cost))
   {
-    G4cerr<<"G4QIonIonE::PSDI:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="<<cost<<G4endl;
+    G4cout<<"-Warning-G4QIonIonE::PSDI:t4M="<<tot4M<<",pM="<<pM<<",tM="<<tM<<",cost="
+          <<cost<<G4endl;
   }
   if(revkin)
   {
