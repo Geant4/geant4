@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.46 2009-12-16 17:51:01 gunter Exp $
+// $Id: G4QNucleus.hh,v 1.47 2010-06-10 08:37:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -117,6 +117,7 @@ public:
   void       EvaporateNucleus(G4QHadron* hA, G4QHadronVector* oHV);// Evaporate Nucleus
   //void DecayBaryon(G4QHadron* dB, G4QHadronVector* oHV); // gamma+N or Delt->N+Pi @@later
   void       DecayDibaryon(G4QHadron* dB, G4QHadronVector* oHV);   // deuteron is kept
+  void       DecayAntiDibaryon(G4QHadron* dB, G4QHadronVector* oHV);// antiDeuteron is kept
   void       DecayIsonucleus(G4QHadron* dB, G4QHadronVector* oHV); // nP+(Pi+) or nN+(Pi-)
   void       DecayMultyBaryon(G4QHadron* dB, G4QHadronVector* oHV);// A*p, A*n or A*L
   void       DecayAntiStrange(G4QHadron* dB, G4QHadronVector* oHV);// nuclei with K+/K0
