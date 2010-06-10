@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2010-06-10 15:37:13 lgarnier Exp $
+$Id: History,v 1.147 2010-06-10 16:01:38 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th June L. Garnier
+- G4UIQt : Fix crash when del all viewer tabs and create a new one.
+           Fix widget QLabel strange effect on OSX 10.5
 
 10th June L. Garnier
 - G4UIQt : Improvments on OpenGL tab at initialisation (tab size was 

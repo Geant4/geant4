@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.44 2010-06-10 15:37:13 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.45 2010-06-10 16:01:38 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -170,16 +170,6 @@ G4UIQt::G4UIQt (
 
   // Set layouts
 
-  // Add a empty tabwidget
-  fTabWidget = new G4QTabWidget(fMyVSplitter);
-#if QT_VERSION >= 0x040500
-  fTabWidget->setTabsClosable (true); 
-#endif
-
-#if QT_VERSION >= 0x040200
-  fTabWidget->setUsesScrollButtons (true);
-#endif
-
   QWidget* commandLineWidget = new QWidget(mainWidget);
 #if QT_VERSION < 0x040000
   QVBoxLayout *layoutCommandLine = new QVBoxLayout(commandLineWidget);
@@ -240,17 +230,6 @@ G4UIQt::G4UIQt (
 
 
   fToolBox->setSizePolicy (QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-  fTabWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
-
-  QSizePolicy policy = fTabWidget->sizePolicy();
-#if QT_VERSION < 0x040000
-  policy.setHorStretch(1);
-  policy.setVerStretch(1);
-#else
-  policy.setHorizontalStretch(1);
-  policy.setVerticalStretch(1);
-#endif
-  fTabWidget->setSizePolicy(policy);
 
 #if QT_VERSION < 0x040000
   fEmptyViewerTabLabel = new QLabel(fToolBox,"         If you want to have a Viewer, please use /vis/open commands. ");
@@ -261,27 +240,18 @@ G4UIQt::G4UIQt (
   // Only at creation. Will be set visible when sessionStart();
 #if QT_VERSION >= 0x040000
  #if QT_VERSION >= 0x040200
-  fTabWidget->setVisible(false);
   fEmptyViewerTabLabel->setVisible(false);
  #else
-  fTabWidget->hide();
   fEmptyViewerTabLabel->hide();
  #endif
 #else
-  fTabWidget->hide();
   fEmptyViewerTabLabel->hide();
 #endif
 
 
-  //  fMyVSplitter->addWidget(fTabWidget);
-
-  // unset parent fot TabWidget
-#if QT_VERSION < 0x040000
-  fTabWidget->reparent(0,0,QPoint(0,0));  
-#else
+#if QT_VERSION >= 0x040000
   fMyVSplitter->addWidget(fToolBox);
   fMyVSplitter->addWidget(fEmptyViewerTabLabel);
-  fTabWidget->setParent(0);
 #endif
 
 
@@ -324,10 +294,6 @@ G4UIQt::G4UIQt (
 
   // Connect signal
   connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
-#if QT_VERSION >= 0x040500
-  connect(fTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
-#endif
-  connect(fTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int)));
   connect(fToolBox, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
@@ -535,6 +501,37 @@ bool G4UIQt::AddTabWidget(
   printf("G4UIQt::AddTabWidget %d %d\n",sizeX, sizeY);
 #endif
 
+  if (fTabWidget == NULL) {
+#ifdef G4DEBUG_INTERFACES_BASIC
+    printf("G4UIQt::AddTabWidget +++++\n");
+#endif
+    fTabWidget = new G4QTabWidget(fMyVSplitter);
+#if QT_VERSION >= 0x040500
+    fTabWidget->setTabsClosable (true); 
+#endif
+    
+#if QT_VERSION >= 0x040200
+    fTabWidget->setUsesScrollButtons (true);
+#endif
+    
+    fTabWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
+    
+    QSizePolicy policy = fTabWidget->sizePolicy();
+#if QT_VERSION < 0x040000
+    policy.setHorStretch(1);
+    policy.setVerStretch(1);
+#else
+    policy.setHorizontalStretch(1);
+    policy.setVerticalStretch(1);
+#endif
+    fTabWidget->setSizePolicy(policy);
+    
+#if QT_VERSION >= 0x040500
+    connect(fTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
+#endif
+    connect(fTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int))); 
+  }
+
   fLastQTabSizeX = sizeX;
   fLastQTabSizeY = sizeY;
 
@@ -553,10 +550,14 @@ bool G4UIQt::AddTabWidget(
 #if QT_VERSION < 0x040000
     fEmptyViewerTabLabel->reparent(0,0,QPoint(0,0));  
     fEmptyViewerTabLabel->hide();
+    delete fEmptyViewerTabLabel;
+    fEmptyViewerTabLabel = NULL;
 
 #else
     fEmptyViewerTabLabel->hide();
     fEmptyViewerTabLabel->setParent(NULL);
+    delete fEmptyViewerTabLabel;
+    fEmptyViewerTabLabel = NULL;
 
     fMyVSplitter->addWidget(fTabWidget);
 #endif
@@ -578,15 +579,17 @@ bool G4UIQt::AddTabWidget(
   if (fMainWindow->isVisible()) {
 
     // get the size of the tabbar
-    int tabBarX;
-    int tabBarY;
+    int tabBarX = 0;
+    int tabBarY = 0;
+    if (fTabWidget->count() >0) {
 #if QT_VERSION < 0x040000
-    tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
-    tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
+      tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
+      tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
 #else
-    tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
-    tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
+      tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
+      tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
 #endif
+    }
 
     fMainWindow->resize(tabBarX+fMainWindow->width()+sizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+sizeY-fTabWidget->height());
   }
@@ -690,10 +693,12 @@ G4UIsession* G4UIQt::SessionStart (
   Prompt("Session :");
   exitSession = false;
 
-  if (fTabWidget->isVisible()) {
-    fEmptyViewerTabLabel->setVisible(false);
-  } else {
-    fEmptyViewerTabLabel->setVisible(true);
+  if (fEmptyViewerTabLabel != NULL) {
+    if (fTabWidget->isVisible()) {
+      fEmptyViewerTabLabel->setVisible(false);
+    } else {
+      fEmptyViewerTabLabel->setVisible(true);
+    }
   }
 
   fMainWindow->setVisible(true);
@@ -2081,11 +2086,21 @@ void G4UIQt::TabCloseCallback(int a){
   delete temp;
 
   if (fTabWidget->count() == 0) {
+    if (fEmptyViewerTabLabel == NULL) {
+#if QT_VERSION < 0x040000
+      fEmptyViewerTabLabel = new QLabel(fToolBox,"         If you want to have a Viewer, please use /vis/open commands. ");
+#else
+      fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
+#endif
+    }
+
     fMyVSplitter->addWidget(fEmptyViewerTabLabel);
     fMyVSplitter->show();
     fEmptyViewerTabLabel->show();
     fTabWidget->setParent(0);
     fTabWidget->setVisible(false);
+    delete fTabWidget;
+    fTabWidget = NULL;
   }
 #endif
 }
