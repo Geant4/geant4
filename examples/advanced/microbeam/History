@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.27 2010-06-09 18:53:41 perl Exp $
+$Id: History,v 1.28 2010-06-10 09:54:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.27 2010-06-09 18:53:41 perl Exp $
 
                        Package History file
                        --------------------
+
+10 June 2010 - V.Ivanchenko - tag microbeam-V09-03-06
+- Added option "ionGasModel" to the Physics List
 
 09 June 2010 - J. Perl - tag microbeam-V09-03-05
 - Have vis.mac disabled by default

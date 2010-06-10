@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: MicrobeamPhysicsList.hh,v 1.6 2010-06-09 18:13:46 sincerti Exp $
+// $Id: MicrobeamPhysicsList.hh,v 1.7 2010-06-10 09:54:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,6 +67,8 @@ public:
   G4StepLimiter* GetStepMaxProcess() {return stepMaxProcess;};
 
 private:
+
+  void AddIonGasModels();
 
   G4double cutForGamma;
   G4double cutForElectron;
