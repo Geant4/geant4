@@ -1,4 +1,4 @@
-q$Id: History,v 1.133 2010-06-08 16:04:58 gunter Exp $
+q$Id: History,v 1.134 2010-06-10 15:15:23 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-06-2010, M. Kosov                            (*** Not tagged ***)
+reset of theParticleIterator in G4QPhotoNuclearPhysics
 
 08-06-2010, G.Folger                    (phys-lists-V09-03-13)
 -  Add Shielding list together with Tatsumi. This list is:
