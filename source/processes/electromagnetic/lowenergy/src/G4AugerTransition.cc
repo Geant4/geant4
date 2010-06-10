@@ -117,7 +117,7 @@ const G4DataVector* G4AugerTransition::AugerTransitionProbabilities(G4int startS
 
   std::map<G4int,G4DataVector,std::less<G4int> >::const_iterator shellId = augerTransitionProbabilitiesMap.find(startShellId);
 
-  if (shellId == augerTransitionEnergiesMap.end() ) 
+  if (shellId == augerTransitionProbabilitiesMap.end() ) 
     {G4Exception("G4AugerTransition: corresponding map element not found");}
   
   const G4DataVector* dataSet = &(*shellId).second;
