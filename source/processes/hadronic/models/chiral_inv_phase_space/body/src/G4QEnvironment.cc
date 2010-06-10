@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.165 2010-06-10 08:37:27 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.166 2010-06-10 16:09:49 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7346,10 +7346,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef pdebug
         else // If this Error shows up (lowProbable appearance) => now it is left as is
         {
-          G4double d=rlM+MLa-reM;
-          G4cerr<<"G4QE::F:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
-          d=rnM+mPi0-reM;
-          G4cerr<<"-W-G4QE::FSI:HypN="<<hPDG<<", M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
+          G4cout<<"-Warning-G4QEnv::F:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d1="
+                <<rlM+MLa-reM<<G4endl;
+          G4cout<<"-Warning-G4QEnv::FSI:HyperN="<<hPDG<<", M="<<reM<<"<"<<rnM+mPi0<<", d2="
+                <<rnM+mPi0-reM<<G4endl;
           //throw G4QException("G4QEnvironment::FSInteract: Hypernuclear conversion");
         }
 #endif
@@ -7515,12 +7515,22 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
             fM*=fS;
             sM+=sS;
-            if(reM>fM+sM-eps)                 // can be split or decayed
+            G4double mm=fM+sM;
+            G4double MM=reM+eps;
+            if(MM<=mm && fPDG==3122 && sPDG==3222) // Lamba,Sigma+ => Xi0,p (can be 50%)
+            {
+              fPDG= 2212;
+              fM  = mProt;
+              sPDG= 3322;
+              sM  = mXiZ;
+              mm  = fM+sM;
+            }
+            if(MM>mm)                         // can be split or decayed
             {
               G4LorentzVector f4M(0.,0.,0.,fM);
               G4LorentzVector s4M(0.,0.,0.,sM);
               G4double sum=fM+sM;
-              if(fabs(reM-sum)<eps)           // splitting
+              if(fabs(reM-sum)<=eps)           // splitting
               {
                 f4M=r4M*(fM/sum);
                 s4M=r4M*(sM/sum);
@@ -7553,7 +7563,8 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               }
             }
             // @@ Don't close this warning as it costs days to find out this growing point!
-            else G4cout<<"-Warning-G4QE::FSI:*Improve* S2, PDG="<<hPDG<<",M="<<reM<<G4endl;
+            else G4cout<<"-Warning-G4QE::FSI:*Improve* S2, PDG="<<hPDG<<",M="<<reM<<",fS="
+                       <<fS<<",sS="<<sS<<",fM="<<fM<<",sM="<<sM<<G4endl;
           }
           // @@ Do not close this warning as it costs days to find out this growing point !
           else G4cout<<"-Warning-G4QE::FSI:*Improve* 3Body's necessary,PDG="<<hPDG<<G4endl;

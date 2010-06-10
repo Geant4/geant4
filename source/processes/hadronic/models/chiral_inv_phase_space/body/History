@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+10-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-09) 
+-----------------------------------------------------------------------
+Bug fix in G4QEnvironment: when mass is small for Lam,SigP, use Xi0,p
+
 10-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-08) 
 -----------------------------------------------------------------------
 Important bug-fix in G4QPDGCode & G4QEnvironment (Omega-Sima+=Xi0Xi0)
