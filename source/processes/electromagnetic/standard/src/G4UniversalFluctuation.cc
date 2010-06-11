@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.22 2009-03-20 18:11:23 urban Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.23 2010-06-11 15:41:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -238,7 +238,16 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     p1 = G4double(G4Poisson(a1));
     loss += p1*e1;
     if(p1 > 0.) 
-      loss += (1.-2.*G4UniformRand())*e1;
+    {
+      G4double sigma = e1*sqrt(p1);
+      if(sigma > e1*p1/3.) sigma = e1*p1/3.;
+      G4double deltaloss = 0.;
+      G4double elimit = p1*e1;
+      do {
+           deltaloss = G4RandGauss::shoot(0.,sigma);
+         } while ((deltaloss < -elimit) || (deltaloss > elimit));
+      loss += deltaloss;
+    }
   }
 
   // excitation of type 2
@@ -252,7 +261,16 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     p2 = G4double(G4Poisson(a2));
     loss += p2*e2;
     if(p2 > 0.) 
-      loss += (1.-2.*G4UniformRand())*e2;
+    {
+      G4double sigma = e2*sqrt(p2);
+      if(sigma > e2*p2/3.) sigma = e2*p2/3.;
+      G4double deltaloss = 0.;
+      G4double elimit = p2*e2;
+      do {
+           deltaloss = G4RandGauss::shoot(0.,sigma);
+         } while ((deltaloss < -elimit) || (deltaloss > elimit));
+      loss += deltaloss;
+    }
   }
 
   // ionisation 
