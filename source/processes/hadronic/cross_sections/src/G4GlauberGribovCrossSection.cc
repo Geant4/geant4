@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// author: V. Grichine
+// 
 // 17.07.06 V. Grichine - first implementation
 // 22.01.07 V.Ivanchenko - add interface with Z and A
 // 05.03.07 V.Ivanchenko - add IfZAApplicable
-//
+// 11.06.10 V. Grichine - update for antiprotons
 
 #include "G4GlauberGribovCrossSection.hh"
 
@@ -360,37 +361,56 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double Z, G4double A,
   }
   // cofInelastic = 2.0;
 
+  if( A > 1.5 )
+  { 
+    nucleusSquare = cofTotal*pi*R*R;   // basically 2piRR
+    ratio = sigma/nucleusSquare;
 
-  nucleusSquare = cofTotal*pi*R*R;   // basically 2piRR
-  ratio = sigma/nucleusSquare;
+    xsection =  nucleusSquare*std::log( 1. + ratio );
 
-  xsection =  nucleusSquare*std::log( 1. + ratio );
+    xsection *= GetParticleBarCorTot(theParticle, Z);
 
-  xsection *= GetParticleBarCorTot(theParticle, Z);
-
-  fTotalXsc = xsection;
+    fTotalXsc = xsection;
 
   
 
-  fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
-  fInelasticXsc *= GetParticleBarCorIn(theParticle, Z);
+    fInelasticXsc *= GetParticleBarCorIn(theParticle, Z);
 
-  fElasticXsc   = fTotalXsc - fInelasticXsc;
+    fElasticXsc   = fTotalXsc - fInelasticXsc;
 
     
-  G4double difratio = ratio/(1.+ratio);
+    G4double difratio = ratio/(1.+ratio);
 
-  fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+    fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
 
 
-  sigma = GetHNinelasticXsc(aParticle, A, Z);
-  ratio = sigma/nucleusSquare;
+    sigma = GetHNinelasticXsc(aParticle, A, Z);
+    ratio = sigma/nucleusSquare;
 
-  fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
-  if (fElasticXsc < 0.) fElasticXsc = 0.;
-
+    if (fElasticXsc < 0.) fElasticXsc = 0.;
+  }
+  else // H
+  {
+    fTotalXsc = sigma;
+    xsection  = sigma;
+    
+    if ( theParticle != theAProton ) 
+    {
+      sigma         = GetHNinelasticXsc(aParticle, A, Z);
+      fInelasticXsc = sigma;
+      fElasticXsc   = fTotalXsc - fInelasticXsc;      
+    }
+    else
+    {
+      fElasticXsc   = fTotalXsc - fInelasticXsc;
+    }
+    if (fElasticXsc < 0.) fElasticXsc = 0.;
+      
+  }
   return xsection; 
 }
 
@@ -606,6 +626,7 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscPDG(const G4DynamicParticle* aPa
   G4double xsection;
 
   G4double Nt = At-Zt;              // number of neutrons
+
   if (Nt < 0.) Nt = 0.;  
 
 
@@ -739,6 +760,7 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
   G4double hnXsc(0);
 
   G4double Nt = At-Zt;              // number of neutrons
+
   if (Nt < 0.) Nt = 0.;  
 
 
@@ -886,22 +908,44 @@ G4GlauberGribovCrossSection::GetHadronNucleonXscNS(const G4DynamicParticle* aPar
     }    
     // xsection *= 0.95;
   } 
-  else if(theParticle == theAProton) 
+  else if( theParticle == theAProton ) 
   {
-    xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 42.53*std::pow(sMand,-eta1) + 33.34*std::pow(sMand,-eta2));
+    // xsection  = Zt*( 35.45 + B*std::pow(std::log(sMand/s0),2.) 
+    //                       + 42.53*std::pow(sMand,-eta1) + 33.34*std::pow(sMand,-eta2));
 
-    xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
-                          + 40.15*std::pow(sMand,-eta1) + 30.*std::pow(sMand,-eta2));
+    // xsection += Nt*( 35.80 + B*std::pow(std::log(sMand/s0),2.) 
+    //                    + 40.15*std::pow(sMand,-eta1) + 30.*std::pow(sMand,-eta2));
+
+    G4double logP = std::log(proj_momentum);
+
+    if( proj_momentum <= 1.0 )
+    {
+      xsection  = Zt*(65.55 + 53.84/(proj_momentum+1.e-6)  );
+    }
+    else
+    {
+      xsection  = Zt*( 41.1 + 77.2*std::pow( proj_momentum, -0.68) 
+                       + 0.293*logP*logP - 1.82*logP );
+    }
+    if ( Nt > 0.)  
+    {
+      xsection += Nt*( 41.9 + 96.2*std::pow( proj_momentum, -0.99) - 0.154*logP);
+    }
+    else // H
+    {
+      fInelasticXsc =   38.0 + 38.0*std::pow( proj_momentum, -0.96) 
+	                - 0.169*logP*logP;
+      fInelasticXsc *=  millibarn;
+    }    
   } 
-  else if(theParticle == thePiPlus) 
+  else if( theParticle == thePiPlus ) 
   {
     if(proj_momentum < 0.4)
     {
       G4double Ex3 = 180*std::exp(-(proj_momentum-0.29)*(proj_momentum-0.29)/0.085/0.085);
       hpXsc      = Ex3+20.0;
     }
-    else if(proj_momentum < 1.15)
+    else if( proj_momentum < 1.15 )
     {
       G4double Ex4 = 88*(std::log(proj_momentum/0.75))*(std::log(proj_momentum/0.75));
       hpXsc = Ex4+14.0;
@@ -1106,7 +1150,7 @@ G4GlauberGribovCrossSection::GetHNinelasticXscVU(const G4DynamicParticle* aParti
   G4double NumberOfTargetNucleons = At;
   G4double NumberOfTargetNeutrons = NumberOfTargetNucleons - NumberOfTargetProtons;
 
-  if(NumberOfTargetNeutrons < 0.) NumberOfTargetNeutrons = 0.;
+  if( NumberOfTargetNeutrons < 0.) NumberOfTargetNeutrons = 0.;
 
   G4double Xtotal, Xelastic, Xinelastic;
 
@@ -1285,7 +1329,7 @@ G4GlauberGribovCrossSection::GetHNinelasticXscVU(const G4DynamicParticle* aParti
   }
   Xinelastic = Xtotal - Xelastic;
 
-  if(Xinelastic < 0.) Xinelastic = 0.;
+  if( Xinelastic < 0.) Xinelastic = 0.;
 
   return Xinelastic*= millibarn;
 }
