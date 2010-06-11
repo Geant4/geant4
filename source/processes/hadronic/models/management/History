@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 June 2010 - V.Ivanchenko (hadr-modman-V09-03-02)
+------------------------------------------------------
+- G4VPreCompoundModel - constructor and destructor moved to the head
+
 02 April 2010 - Dennis Wright (hadr-modman-V09-03-01)
 -----------------------------------------------------
 - G4HadronicInteraction - add two methods, GetEnergyMomentumCheckLevels

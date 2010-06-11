@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.5 2007-01-11 05:29:34 dennis Exp $
+// $Id: G4VPreCompoundModel.hh,v 1.6 2010-06-11 15:26:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+
 class G4HadProjectile;
 class G4HadFinalState;
 class G4Nucleus;
@@ -53,12 +54,15 @@ public:
 
   G4VPreCompoundModel(G4ExcitationHandler* const value, 
                       const G4String& modelName = "PrecompoundModel");
-  virtual ~G4VPreCompoundModel() {};
+
+  virtual ~G4VPreCompoundModel();
   
 protected:
   // default constructor
-  G4VPreCompoundModel() {};
+  G4VPreCompoundModel();
+
 private:
+
   // copy constructor
   G4VPreCompoundModel(const G4VPreCompoundModel &) : G4HadronicInteraction() {};
   // operators
@@ -67,28 +71,22 @@ private:
   G4bool operator!=(const G4VPreCompoundModel &right) const;
 
 public:
+
   virtual G4HadFinalState * 
           ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) = 0;
   
   virtual G4ReactionProductVector* 
           DeExcite(const G4Fragment& aFragment) const = 0;
 
-  void SetExcitationHandler(G4ExcitationHandler *const  value);
+  inline void SetExcitationHandler(G4ExcitationHandler *const  value);
     
 protected:
 
-  const G4ExcitationHandler * GetExcitationHandler() const;
+  inline const G4ExcitationHandler * GetExcitationHandler() const;
   
 private:
   G4ExcitationHandler *theExcitationHandler;
 };
-
-
-
-inline const G4ExcitationHandler* G4VPreCompoundModel::GetExcitationHandler() const
-{
-  return theExcitationHandler;
-}
 
 inline void G4VPreCompoundModel::SetExcitationHandler(G4ExcitationHandler *const  value)
 {
@@ -96,6 +94,9 @@ inline void G4VPreCompoundModel::SetExcitationHandler(G4ExcitationHandler *const
 }
 
 
-
+inline const G4ExcitationHandler* G4VPreCompoundModel::GetExcitationHandler() const
+{
+  return theExcitationHandler;
+}
 
 #endif
