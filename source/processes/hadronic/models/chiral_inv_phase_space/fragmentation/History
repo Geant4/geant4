@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+11-Jun-2010 M.Kosov                           (hadr-chips-frag-V09-03-05)
+--------------------------------------------------------------------------
+Trap and cure for the bug: return to vacuum what appeared from vacuum
+
 1-Apr-2010 M.Kosov                            (hadr-chips-frag-V09-03-04)
 --------------------------------------------------------------------------
 Similar bug fix for Windows run time warning in another place
