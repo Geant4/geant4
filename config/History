@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.378 2010-06-11 10:02:04 gunter Exp $
+cvs log $Id: History,v 1.379 2010-06-11 10:02:27 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11 June 2010  Gunter Folger
+11 June 2010  Gunter Folger   (config-V09-03-05)
 - Increase stack size on Windows, in sys/WIN-VC add a /STACK:8368128 
    (ie. 8MB) option to LDFLAGS; Needed by some Chips based 
    examples and tests.
