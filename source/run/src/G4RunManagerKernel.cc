@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.47 2009-11-13 23:13:40 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.48 2010-06-11 09:02:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -430,7 +430,7 @@ void G4RunManagerKernel::CheckRegions()
   }
 }
 
-void G4RunManagerKernel::DumpRegion(G4String rname) const
+void G4RunManagerKernel::DumpRegion(const G4String& rname) const
 {
   G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
   if(region) DumpRegion(region);

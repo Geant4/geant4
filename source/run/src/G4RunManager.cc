@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.109 2010-05-11 12:31:13 allison Exp $
+// $Id: G4RunManager.cc,v 1.110 2010-06-11 09:02:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -453,7 +453,7 @@ void G4RunManager::rndmSaveThisEvent()
   if(verboseLevel>0) G4cout << "currentEvent.rndm is copied to file: " << fileOut << G4endl;  
 }
   
-void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
+void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 {
   G4String fileNameWithDirectory;
   if(fileN.index("/")==std::string::npos)
@@ -467,7 +467,7 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
   HepRandom::showEngineStatus();	 
 }
 
-void G4RunManager::DumpRegion(G4String rname) const
+void G4RunManager::DumpRegion(const G4String& rname) const
 {
   kernel->UpdateRegion();
   kernel->DumpRegion(rname);
