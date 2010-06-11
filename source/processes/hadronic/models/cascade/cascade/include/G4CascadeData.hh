@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeData.hh,v 1.5 2010-05-16 05:18:36 mkelsey Exp $
+// $Id: G4CascadeData.hh,v 1.6 2010-06-11 17:07:23 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
@@ -31,6 +31,8 @@
 //		Add new data member "sum" to separate summed xsec values
 //		from measured inclusive (tot) cross-sections.  Add two
 //		ctors to pass inclusive xsec array as input (for piN/NN).
+// 20100611  M. Kelsey -- Work around Intel ICC compiler warning about
+//		index[] subscripts out of range.  Dimension to full [9].
 
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
@@ -49,7 +51,7 @@ struct G4CascadeData
 
   enum { NM=N9?8:N8?7:6, NXS=N29 };	// Multiplicity and cross-section bins
 
-  G4int index[NM+1];			// Start and stop indices to xsec's
+  G4int index[9];			// Start and stop indices to xsec's
   G4double multiplicities[NM][NE];	// Multiplicity distributions
 
   const G4int (&x2bfs)[N2][2];		// Initialized from file-scope inputs
@@ -114,9 +116,8 @@ template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
 void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
   // Initialize index offsets for cross-section array (can't do globally)
   index[0] = 0;   index[1] = N02; index[2] = N23; index[3] = N24;
-  index[4] = N25; index[5] = N26; index[6] = N27; 
-  if (NM>6) index[7]=N28;
-  if (NM>7) index[8]=N29;
+  index[4] = N25; index[5] = N26; index[6] = N27; index[7] = N28;
+  index[8] = N29;
 
   // Initialize multiplicity array
   for (G4int m = 0; m < NM; m++) {
