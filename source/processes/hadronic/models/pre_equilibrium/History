@@ -14,7 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-09-April 2010 V.Ivanchenko  hadr-pre-V09-03-05
+11-June 2010 V.Ivanchenko  hadr-pre-V09-03-06
+---------------------------------------------------
+G4LowEIonFragmentation - cleanup comments
+G4PreCompoundModel - added deletion of ecitation handler (significant
+                     reduction of overall meamory leak at destruction);
+                     constructor and destructor are moved to the source
+
+01-June 2010 V.Ivanchenko  hadr-pre-V09-03-05
 ---------------------------------------------------
 G4LowEIonFragmentation - (J.M.Quesada) fixed exciton state
                          constructor and destructor moved to source

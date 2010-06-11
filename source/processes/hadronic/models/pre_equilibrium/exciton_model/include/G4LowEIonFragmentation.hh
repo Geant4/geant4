@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.4 2010-06-01 16:51:11 vnivanch Exp $
+// $Id: G4LowEIonFragmentation.hh,v 1.5 2010-06-11 15:34:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
+//
+// $Id: G4LowEIonFragmentation.hh,v 1.5 2010-06-11 15:34:18 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ClassName:   G4LowEIonFragmentation
 //
@@ -49,7 +52,7 @@ class G4LowEIonFragmentation : public G4HadronicInteraction
 {
 public:
   
-  G4LowEIonFragmentation(G4ExcitationHandler * const value); 
+  G4LowEIonFragmentation(G4ExcitationHandler * const value);
 
   G4LowEIonFragmentation();
 
@@ -66,7 +69,9 @@ private:
   G4bool operator!=(const G4LowEIonFragmentation &right) const;
 
 public:
+
   G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus);
+
   static G4double GetCrossSection() 
   {
 //    clog << "area/millibarn = "<<area/millibarn<<G4endl;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.18 2009-11-19 10:19:31 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.19 2010-06-11 15:34:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -60,9 +60,13 @@ G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value)
 {}
 
 G4PreCompoundModel::~G4PreCompoundModel() 
-{}
+{
+  delete GetExcitationHandler();
+}
 
 G4PreCompoundModel::G4PreCompoundModel() 
+  : G4VPreCompoundModel(0), useHETCEmission(false), useGNASHTransition(false), 
+    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true) 
 {}
 
 G4PreCompoundModel::G4PreCompoundModel(const G4PreCompoundModel &) 
