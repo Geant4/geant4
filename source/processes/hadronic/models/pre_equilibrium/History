@@ -17,9 +17,7 @@ code and to keep track of all tags.
 11-June 2010 V.Ivanchenko  hadr-pre-V09-03-06
 ---------------------------------------------------
 G4LowEIonFragmentation - cleanup comments
-G4PreCompoundModel - added deletion of ecitation handler (significant
-                     reduction of overall meamory leak at destruction);
-                     constructor and destructor are moved to the source
+G4PreCompoundModel - constructor and destructor are moved to the source
 
 01-June 2010 V.Ivanchenko  hadr-pre-V09-03-05
 ---------------------------------------------------
