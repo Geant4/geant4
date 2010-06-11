@@ -1,4 +1,4 @@
-q$Id: History,v 1.134 2010-06-10 15:15:23 mkossov Exp $
+q$Id: History,v 1.135 2010-06-11 13:37:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- G4EmStandardPhysics_option2 - RangeFactor for e+- is set to 0.04
 
 10-06-2010, M. Kosov                            (*** Not tagged ***)
 reset of theParticleIterator in G4QPhotoNuclearPhysics
