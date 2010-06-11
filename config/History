@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.377 2010-06-07 09:01:24 gcosmo Exp $
+cvs log $Id: History,v 1.378 2010-06-11 10:02:04 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 June 2010  Gunter Folger
+- Increase stack size on Windows, in sys/WIN-VC add a /STACK:8368128 
+   (ie. 8MB) option to LDFLAGS; Needed by some Chips based 
+   examples and tests.
 
 7th June 2010  Gabriele Cosmo (config-V09-03-04)
 - Removed processes/hadronic/models/leading_particle module from include
