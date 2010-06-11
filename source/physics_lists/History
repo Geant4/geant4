@@ -1,4 +1,4 @@
-q$Id: History,v 1.135 2010-06-11 13:37:38 vnivanch Exp $
+q$Id: History,v 1.136 2010-06-11 15:11:26 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-06-2011, G.Folger                    (phys-lists-V09-03-14)
+- tag changes of Vladimir & Mikhail
+
+11-06-2011, V.Ivantchenko
 - G4EmStandardPhysics_option2 - RangeFactor for e+- is set to 0.04
 
 10-06-2010, M. Kosov                            (*** Not tagged ***)
