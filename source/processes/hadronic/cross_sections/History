@@ -14,7 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-03 Lun 2010 Vladimir Ivanchenko (hadr-cross-V09-03-05)
+11 Jun 2010 Vladimir Ivanchenko (hadr-cross-V09-03-0X)
+- G4UPiNuclearCrossSection - fixed memory leak at destruction
+
+03 Jun 2010 Vladimir Ivanchenko (hadr-cross-V09-03-05)
 - G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS - substitute
      environment variable G4NEUTRONXS by G4NEUTRONXSDATA
 

@@ -53,6 +53,10 @@ G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
   piPlusInelastic ->clearAndDestroy();
   piMinusElastic  ->clearAndDestroy();
   piMinusInelastic->clearAndDestroy();
+  delete piPlusElastic;
+  delete piPlusInelastic;
+  delete piMinusElastic;
+  delete piMinusInelastic;
 }
 
 G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
