@@ -24,52 +24,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.hh,v 1.7 2010-06-11 05:50:20 kurasige Exp $
+// $Id: G4AntiNucleus.hh,v 1.1 2010-06-11 05:50:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+//      GEANT 4 class implementation file 
 //
-#ifndef G4ShortLivedConstructor_h
-#define G4ShortLivedConstructor_h 1
+//      first implementaion                11  June 2010 H.Kurashige
+//
+// ----------------------------------------------------------------
+#ifndef G4AntiNucleus_h
+#define G4AntiNucleus_h 1
+
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4VShortLivedParticle.hh"
 
-class G4ShortLivedConstructor
+// ######################################################################
+// ###                          AntiNucleus                                ###
+// ######################################################################
+
+class G4AntiNucleus : public G4VShortLivedParticle
 {
-  //This class is a utility class for construction 
-  //short lived particles
-
-  public:
-    G4ShortLivedConstructor();
-    ~G4ShortLivedConstructor();
-  
-  public:
-    static void ConstructParticle();
- 
-  protected:
-    static void ConstructResonances();
-    static void ConstructBaryons();
-    static void ConstructMesons();
-    static void ConstructQuarks();
-    static void ConstructAntiNuclei();
-
-  private:
-    static G4bool isConstructed;
-    // flag for checking whether resonces exist or not
+ public:
+   G4AntiNucleus(
+       const G4String&     aName,        G4double            mass,
+       G4double            width,        G4double            charge,   
+       G4int               iSpin,        G4int               iParity,    
+       G4int               iConjugation, G4int               iIsospin,   
+       G4int               iIsospin3,    G4int               gParity,
+       const G4String&     pType,        G4int               lepton,      
+       G4int               baryon,       G4int               encoding,
+       G4bool              stable,       G4double            lifetime,
+       G4DecayTable        *decaytable
+   );
+   virtual      ~G4AntiNucleus();
 };
 
+
 #endif
-
-
-
-
-
-
-
-
-
-
-

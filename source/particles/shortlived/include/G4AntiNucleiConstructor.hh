@@ -24,44 +24,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.hh,v 1.7 2010-06-11 05:50:20 kurasige Exp $
+// $Id: G4AntiNucleiConstructor.hh,v 1.1 2010-06-11 05:50:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
 //
-#ifndef G4ShortLivedConstructor_h
-#define G4ShortLivedConstructor_h 1
+//      GEANT 4 class implementation file 
+//
+//      first implementaion                11  June 2010 H.Kurashige
+//
+
+#ifndef G4AntiNucleiConstructor_h
+#define G4AntiNucleiConstructor_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
+class     G4DecayTable;
 
-class G4ShortLivedConstructor
+class G4AntiNucleiConstructor
 {
   //This class is a utility class for construction 
   //short lived particles
 
   public:
-    G4ShortLivedConstructor();
-    ~G4ShortLivedConstructor();
+    G4AntiNucleiConstructor();
+    virtual  ~G4AntiNucleiConstructor();
   
   public:
-    static void ConstructParticle();
+    void Construct();
  
-  protected:
-    static void ConstructResonances();
-    static void ConstructBaryons();
-    static void ConstructMesons();
-    static void ConstructQuarks();
-    static void ConstructAntiNuclei();
-
-  private:
-    static G4bool isConstructed;
-    // flag for checking whether resonces exist or not
 };
 
 #endif
+
 
 
 
