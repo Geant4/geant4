@@ -14,6 +14,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Added new data set G4NEUTRONXS (Evaluated neutron cross section
         data, version 1.0).
     + Removed 'leading_particle' hadronic module from include paths list.
+    + Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
+      the option to LDFLAGS.
 
   o Environments:
     ------------
@@ -127,6 +129,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       it is not created at construction of G4DynamicParticle but when
       AddElectron() or RemoveElectron() are invoked.
     + Fixed problems that error messages appear in cout and not in cerr.
+    + Added anti-nuclei as short-lived particles.
     + Code cleanup in G4DynamicParticle constructors.
 
   o Persistency (GDML):
@@ -204,6 +207,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
           correction in G4DNAMillerGreenExcitation.
         - Extended search range for maximum of DCS in G4DNARuddIonisationModel.
         - Changed default parameters in G4DNAEmfietzoglouExcitationModel.
+          Modified initialisation of e- Emfietzoglou excitation model to fix
+          memory leaks.
         - Changed computation of scattering angle in G4DNAChampionElasticModel.
       o Added analytical (ecpssr) and empirical (Paul and Orlic) models for the
         calculation of hadronic shell ionisation CS.
@@ -331,12 +336,19 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Added pion elastic and fixed a bug in CHIPS fragmentation.
       o Implemented isotope wise CHIPS elastic for neutrons.
       o Fix in G4QElasticCrossSection in parameter order for nH. 
+      o Bug fix in G4QNeutronNuclearCrossSection for Ba isotopes.
       o Bug fix in G4QNucleus::ChoosePosition() for looping.
       o Fix to use of Z+N instead of N for A.
       o Corrected Titanium and Zirconium isotopes in G4QIsotope.
       o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
       o Bug fix following G4NucleiProperties warning for A=0, Z=0.
+      o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
+        when mass is small for Lambda andSigma+, use Xi0,p.
       o Correction in G4QElastic for K0 elastic cross-sections.
+      o Corrected treatment of vacuum in fragmentation module.
+      o nn is decayed in G4QLowEnergy; Omega- is included in G4QElastic;
+        N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
+      o Bug-fix in K0 elastic & Ion-Ion Elastic.
     + models/coherent_elastic
       o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
         G4QElasticCrossSection; fixed initialization problem for
@@ -466,6 +478,10 @@ List of main features and fixes included in this Beta release since 9.3.p01:
   o Run
     ---
     + Corrected printing of number of events processed on run abortion.
+    + Fixed definition of path for Windows in G4RunManager for random seeds
+      directory: use '\' instead of '/' and suitable system command.
+    + Use "const G4String&" as arguments and return value wherever applicable
+      in G4RunManager and G4RunManagerKernel.
 
   o Tracking
     --------
@@ -570,6 +586,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + extended/eventgenerator/HepMC
       o Updated to make use of HepMC-2.06.00.
       o Use QGSP physics-list.
+    + extended/eventgenerator/particleGun
+      o New example demonstrating three different ways of usage of
+        G4ParticleGun, shooting primary particles in different cases.
     + extended/exoticphysics/monopole
       o Substituted QGSP list by QGSP_BERT.
       o Added new classes for monopole G4MonopoleEquation,

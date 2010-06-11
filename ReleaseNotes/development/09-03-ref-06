@@ -27,12 +27,14 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-03-04
+config                                           config-V09-03-05
 ------
 - Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
   version 1.0) to Configure script, which is updated accordingly (tag
   "Configure-V09-03-01").
 - Removed 'leading_particle' hadronic module from include paths list.
+- Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
+  the option to LDFLAGS.
 
 environments                                     envs-V09-03-00
 ------------
@@ -43,17 +45,18 @@ environments                                     envs-V09-03-00
 - Momo:
   o Revised obsolete trajectory drawing.
 
-geometry/solids/specific                         geom-specific-V09-03-06
+geometry/solids/specific                         geom-specific-V09-03-07
 ------------------------
 - Introducing new G4GenericTrap shape, a new solid representing an arbitrary
   trapezoid with up to 8 vertices standing on two parallel planes perpendicular
   to the Z axis.
 
-global                                           global-V09-03-07
+global                                           global-V09-03-08
 ------
 - More safe numerical computation of A13() and logA() methods in G4Pow.
 - Restored G4PVDataVector vectors in G4PhysicsVector owned by value instead
   of pointers, as originally was in released code.
+- Changed date for release 9.4-beta.
 
 graphics_reps                                    greps-V09-03-02
 -------------
@@ -64,7 +67,7 @@ graphics_reps                                    greps-V09-03-02
     to distinguish usage and in preparation for i_mode migration.
 - G4VGraphicsScene: added method AddCompound (const G4VDigi&).
 
-interfaces                                       interfaces-V09-03-07
+interfaces                                       interfaces-V09-03-08
 ----------
 - G4UIExective: changed order for session type; GUI session is prioritized.
 - G4VBasicShell: implemented improvements for command completion.
@@ -73,12 +76,16 @@ interfaces                                       interfaces-V09-03-07
   for immediate update of the tree. Fixed warning in standard-output during
   viewer creation and fixed flush problem. Fixed recursive repaint problem.
 
+particles                                        particles-V09-03-04
+---------
+- Added anti-nuclei as short-lived particles.
+
 persistency/gdml                                 gdml-V09-03-03
 ----------------
 - Added G4GenericTrap among the set of supported solids in both reader and
   writer, treating as 'arb8' GDML type.
 
-physics_lists                                    phys-lists-V09-03-10
+physics_lists                                    phys-lists-V09-03-12
 -------------
 - Moved QGSP_FTFP_BERT list to supported (was experimental).
 - Removed previously blocked lists (FTFP_EMV, QGSC_EFLOW, QGSP_EMX).
@@ -107,10 +114,13 @@ processes/electromagnetic/highenergy             emhighenergy-V09-03-01
 ------------------------------------
 - New model G4ICRU73NoDeltaModel, derived from G4ICRU73QOModel.
 
-processes/electromagnetic/lowenergy              emlowen-V09-03-30
+processes/electromagnetic/lowenergy              emlowen-V09-03-33
 -----------------------------------
 - Added analytical (ecpssr) and empirical (Paul and Orlic) models for the
   calculation of hadronic shell ionisation CS.
+- Modified initialisation of e- Emfietzoglou excitation model in
+  G4DNAEmfietzoglouExcitationModel and in G4DNAMillerGreenExcitationModel,
+  fixing memory leaks.
 
 processes/electromagnetic/muons                  emmuons-V09-03-01
 -------------------------------
@@ -166,15 +176,26 @@ processes/hadronic                               hadr-V09-03-00
     checking. Some code cleanup.
   o New G4HadronicEPTestMessenger class to provide energy/momentum test 
     commands available in UI.
-- models/cascade (hadr-casc-V09-03-41)
+- models/cascade (hadr-casc-V09-03-42)
   o 
-- models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-07)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-09)
   o Corrected Titanium and Zirconium isotopes in G4QIsotope.
   o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
-- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-04)
+  o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
+    when mass is small for Lambda andSigma+, use Xi0,p.
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-05)
   o Bug fix following G4NucleiProperties warning for A=0, Z=0.
-- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-03)
+  o Bug fix in G4QNeutronNuclearCrossSection for Ba isotopes.
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-05)
+  o Corrected treatment of vacuum.
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-09)
   o Correction in G4QElastic for K0 elastic cross-sections.
+  o nn is decayed in G4QLowEnergy; Omega- is included in G4QElastic;
+    N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
+  o Bug-fix in K0 elastic & Ion-Ion Elastic.
+- models/de_excitation (hadr-deex-V09-03-18)
+  o G4Evaporation: fixed problem of isotope production for high Z fragments.
+    A problem introduced in the recent revision of the model.
 - models/isotope_production (hadr-isopro-V09-03-00)
   o Cleanup of documents and added History file.
 - models/management (hadr-modman-V09-03-01)
@@ -203,9 +224,13 @@ processes/hadronic                               hadr-V09-03-00
   o G4RadioactiveDecayMessenger: added the UI commands for SetICM, SETARM
     and SetHLThreshold.
 
-run                                              run-V09-03-00
+run                                              run-V09-03-01
 ---
 - Corrected printing of number of events processed on run abortion.
+- Fixed definition of path for Windows in G4RunManager for random seeds
+  directory: use '\' instead of '/' and suitable system command.
+- Use "const G4String&" as arguments and return value wherever applicable
+  in G4RunManager and G4RunManagerKernel.
 
 tracking                                         tracking-V09-03-03
 --------
@@ -259,20 +284,20 @@ examples                                         examples-V09-03-06
 - Updated visualization setups for trajectory drawing in most examples
   (air_shower-V09-03-00, amsEcal-V09-03-01, ccal-V09-03-00,
    gammaraytel-V09-03-00, lAr_calorimeter-V09-03-00, medical_linac-V09-03-00,
-   microbeam-V09-03-03, microdosimetry-V09-03-01, purtag-V09-03-01,
-   radioprotection-V09-03-01, DMX-V09-03-01, XrayFluo-V09-03-00,
-   xraytel-V09-03-00, exampleA01-V09-03-00, ReverseMC01-V09-03-00,
-   testem1-V09-03-02, testem2-V09-03-04, testem3-V09-03-04, testem4-V09-03-02,
-   testem5-V09-03-02, testem6-V09-03-03, testem9-V09-03-03, testem10-V09-03-01,
-   testem11-V09-03-03, testem12-V09-03-03, testem13-V09-03-03,
-   testem14-V09-03-03, testem15-V09-03-02, testem16-V09-03-02,
-   testem17-V09-03-02, testem18-V09-03-02, exgps-V09-03-01, exHepMC-V09-03-02,
-   p6decayer-V09-03-01, fieldex01-V09-03-03, fieldex02-V09-03-03,
-   fieldex03-V09-03-03, g3tog4Tests-V09-03-01, exhadr00-V09-03-03,
-   exhadr01-V09-03-05, electronScattering-V09-03-06, exampleES2-V09-03-00,
-   fano-V09-03-03, fano2-V09-03-03, gtherapy-V09-03-01, ExDiane-V09-03-00,
-   MPI-V09-03-01, ParN02-V09-03-00, ParN04-V09-03-01, exgflash-V09-03-00,
-   G02-V09-03-00, G03-V09-03-01, exampleP01-V09-03-00, exampleP02-V09-03-00,
+   microdosimetry-V09-03-01, purtag-V09-03-01, radioprotection-V09-03-01,
+   DMX-V09-03-01, XrayFluo-V09-03-00, xraytel-V09-03-00, exampleA01-V09-03-00,
+   ReverseMC01-V09-03-00, testem1-V09-03-02, testem2-V09-03-04,
+   testem3-V09-03-04, testem4-V09-03-02, testem5-V09-03-02, testem6-V09-03-03,
+   testem9-V09-03-03, testem10-V09-03-01, testem11-V09-03-03,
+   testem12-V09-03-03, testem13-V09-03-03, testem14-V09-03-03,
+   testem15-V09-03-02, testem16-V09-03-02, testem17-V09-03-02,
+   testem18-V09-03-02, exgps-V09-03-01, exHepMC-V09-03-02, p6decayer-V09-03-01,
+   fieldex01-V09-03-03, fieldex02-V09-03-03, fieldex03-V09-03-03,
+   g3tog4Tests-V09-03-01, exhadr00-V09-03-03, exhadr01-V09-03-05,
+   electronScattering-V09-03-06, exampleES2-V09-03-00, fano-V09-03-03,
+   fano2-V09-03-03, gtherapy-V09-03-01, ExDiane-V09-03-00, MPI-V09-03-01,
+   ParN02-V09-03-00, ParN04-V09-03-01, exgflash-V09-03-00, G02-V09-03-00,
+   G03-V09-03-01, exampleP01-V09-03-00, exampleP02-V09-03-00,
    exampleP03-V09-03-01, expol01-V09-03-01, exrdm-V09-03-02,
    exampleRE01-V09-03-01, exampleRE02-V09-03-01, exampleN02-V09-03-01,
    exampleN03-V09-03-02, exampleN04-V09-03-01, exampleN05-V09-03-01,
@@ -282,6 +307,8 @@ examples                                         examples-V09-03-06
   o Use G4UIExecutive and some minor revisions.
 - advanced/human_phantom (human_phantom-V09-03-02)
   o Migrated physics-lists.
+- advanced/microbeam (microbeam-V09-03-06)
+  o Added option "ionGasModel" to the physics-list.
 - advanced/Rich (Rich-V09-03-02)
   o Use G4UIExecutive.
 - extended/electromagnetic/TestEm7 (testem7-V09-03-03)
@@ -293,6 +320,9 @@ examples                                         examples-V09-03-06
   o PhysicsList, Em8DetectorConstruction: renamed "VertexDetector" with
     "GasDetector"
   o Added cut per region in TestEm8.in.
+- extended/eventgenerator/particleGun (particleGunExample-V09-03-01)
+  o New example demonstrating three different ways of usage of G4ParticleGun
+    shooting primary particles in different cases.
 - extended/exoticphysics/monopole (monopole-V09-03-05)
   o Substituted QGSP list by QGSP_BERT.
   o Added new classes for monopole G4MonopoleEquation, G4MonopoleFieldSetup
@@ -328,10 +358,13 @@ tests                                            tests-V09-03-06
 - test28 (test28-V09-03-00)
 - test29 (test29-V09-03-00)
   o Migrated to use particle-based multiple-scattering process.
+- test30 (test30-V09-03-04)
+  o Removed usage of G4CascadeElasticInterface.
 - test31 (test31-V09-03-01)
   o Added pi- and anti_proton beams to test31.in.
-- test37 (test37-V09-03-01)
+- test37 (test37-V09-03-02)
   o Updated PhysList for WentzelVI model and scripts.
+  o RunAction: use overwrite mode for Sandia output file.
 - test39 (test39-V09-03-04)
   o Exclude use of G4ElasticCascadeInterface.
   o Migrated to use particle-based multiple-scattering process.
