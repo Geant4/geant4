@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2010-06-09 17:31:08 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2010-06-12 09:38:06 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -82,7 +82,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->SetParticleDefinition(particle);
   */  
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-0.499*mm));
   particleGun->GeneratePrimaryVertex(anEvent);
 
 }
