@@ -2,11 +2,11 @@
 /run/verbose 2
 /process/eLoss/verbose 1
 /gun/particle alpha+
-/gun/energy 10 keV
-/gun/energy 12 MeV
+/gun/energy 50 MeV
 /run/initialize
 /run/beamOn 1
 /gun/particle alpha
-/gun/energy 10.1 MeV
+/gun/position 0 0 0 mm
+/gun/energy 20 keV
 /run/beamOn 1
 
