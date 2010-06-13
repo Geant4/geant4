@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QPhotoNuclearPhysics.cc,v 1.4 2010-06-10 15:15:23 mkossov Exp $
+// $Id: G4QPhotoNuclearPhysics.cc,v 1.5 2010-06-13 20:41:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -203,7 +203,7 @@ void G4QPhotoNuclearPhysics::BuildSynchRad()
   if(SynchRActivated) return;
   SynchRActivated = true;
   synchrad = new G4QSynchRad();
-  theParticleIterator.reset();
+  theParticleIterator->reset();
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
