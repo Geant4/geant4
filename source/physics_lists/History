@@ -1,4 +1,4 @@
-q$Id: History,v 1.136 2010-06-11 15:11:26 gunter Exp $
+q$Id: History,v 1.137 2010-06-13 20:40:29 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-06-2011, G.Folger                    (phys-lists-V09-03-15)
+- fix compilation error in G4QPhotoNuclearPhysics
 
 11-06-2011, G.Folger                    (phys-lists-V09-03-14)
 - tag changes of Vladimir & Mikhail
