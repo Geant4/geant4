@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.129 2010-06-03 13:12:14 bmorgan Exp $
+# $Id: Configure,v 1.130 2010-06-14 12:26:22 bmorgan Exp $
 #
-# Generated on Thu Jun  3 14:10:32 BST 2010 [metaconfig 3.0 PL70]
+# Generated on Mon Jun 14 13:23:01 BST 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -5626,77 +5626,110 @@ esac
 #
 if test "X$g4lib_build_gdml" != "Xn"; then
 
-   if test "X$g4gdml_xercesc_root" = "X"; then
-      #probe for Xerces, using example from UI and Vis
-      xercesc_root=`find $g4gdml_xercesc_root /usr/include /usr/local/include \
-/opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
+    # If g4system is WIN32-VC, we need to force the input of a search path
+    # though we can use with_xercesc_root as the dflt.
+    if test "X$g4system" = "XWIN32-VC" ; then
+        g4message=`cat << EOM
+You have requested GDML support for Geant4 built on WIN32-VC.
+This requires the Xerces-C library built for MSVC, with
+binaries available for download from:
 
-      #If we got something, strip off the include/xerces part
-      if test "X$xercesc_root" != "X"; then
-	 g4gdml_xercesc_root=`dirname $xercesc_root`
-	 g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
+URL
 
-	 echo "checking for XercesC install... $g4gdml_xercesc_root"
-     echo " "
-      else
-         g4gdml_xercesc_root=""
-	 echo "checking for XercesC install... no"
-      fi
-   fi #END OF XERCES AUTOPROBE
+Please enter the path to the Xerces-C install (i.e. if XercesC is installed
+in PATH\include\xercesc, enter PATH), or type '-' to CANCEL the build of the 
+GDML module.
+XercesC path:
+EOM`
+        dflt=$with_xercesc_root
+        fn='d~(-)'
+	    rp=$g4message
+	    . ./getfile
+        with_xercesc_root=$ans
+        if test "X$with_xercesc_root" = "X-" ; then
+            g4lib_build_gdml=n
+            g4gdml_xercesc_root=""
+	        echo "G4LIB_BUILD_GDML cancelled..."
+		    echo " "
+        fi
+    fi
 
-   #
-   # If the autoprobe failed, prompt the user to enter the path to the Xerces
-   # install
-   #
-   if test "X$g4gdml_xercesc_root" = "X"; then
+    # We now have a suitable platform independent setup for probing for the
+    # Xerces-C install....
+    if test "X$with_xercesc_root" != "X-"; then
+    if test "X$with_xercesc_root" != "X" ; then
+        # Probe for Xerces-C in the supplied directory
+        xercesc_root=`find $with_xercesc_root/include -type d -name xercesc 2>/dev/null | xargs echo`
+    else
+        # Probe for Xerces-C in standard locations
+        xercesc_root=`find /usr/include /usr/local/include /opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
+    fi
 
-      promptend="no"
-      xercesloc="the standard locations"
+    # What did we find??
+    if test "X$xercesc_root" = "X" ; then
+        g4gdml_xercesc_root=""
+        echo "checking for XercesC install... no"
+    else
+        # We'll have PATH/include/xercesc if we found it
+        g4gdml_xercesc_root=`dirname $xercesc_root`
+        g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
+        
+        echo "checking for XercesC install... $g4gdml_xercesc_root"
+    fi
+
+    # If we didn't find anything, fall back to the user...
+    if test "X$g4gdml_xercesc_root" = "X" ; then
+        promptend="no"
+        if test "X$with_xercesc_root" = "X" ; then
+            xercescloc="the standard locations"
+        else
+            xercescloc=$with_xercesc_root
+        fi
       
-      while test "$promptend" = "no"; do
-	    g4message=`cat << EOM
+        while test "$promptend" = "no"; do
+	        g4message=`cat << EOM
 
-Autodetection failed to locate XercesC in $xercesloc on your system. 
+Autodetection failed to locate XercesC in $xercescloc on your system. 
 Please enter the path to your XercesC install (i.e. if XercesC is installed
 in PATH/include/xercesc, enter PATH), or type '-' to CANCEL the build of the 
 GDML module.
 XercesC path:
 EOM`
 
-	    dflt=$g4gdml_xercesc_root
-	    fn='d~(-)'
-	    rp=$g4message
-	    . ./getfile
+	        dflt=$g4gdml_xercesc_root
+	        fn='d~(-)'
+	        rp=$g4message
+	        . ./getfile
 
-	    #check for user cancellation
-	    if test "X$ans" = "X-"; then
-	       g4lib_build_gdml=n
-	       g4gdml_xercesc_root=""
-	       echo "G4LIB_BUILD_GDML cancelled..."
-		   echo " "
-	       promptend=yes
-	    else
-	       if test -r "$ans/include/xercesc"; then
-		  g4gdml_xercesc_root=$ans
-		  echo "checking for XercesC install... $g4gdml_xercesc_root"
-		  echo " "
-		  promptend=yes
-	       else
-	          xercesloc=$ans
-	          echo "checking for Xercesc install... no"
-	       fi
+	        #check for user cancellation
+	        if test "X$ans" = "X-"; then
+	            g4lib_build_gdml=n
+	            g4gdml_xercesc_root=""
+	            echo "G4LIB_BUILD_GDML cancelled..."
+		        echo " "
+	            promptend=yes
+	        else
+	            if test -r "$ans/include/xercesc"; then
+		            g4gdml_xercesc_root=$ans
+		            echo "checking for XercesC install... $g4gdml_xercesc_root"
+		            echo " "
+		            promptend=yes
+	            else
+	                xercesloc=$ans
+	                echo "checking for Xercesc install... no"
+	            fi
             fi #END OF USER INPUT CHECKING
-      done #END OF WHILE LOOP OVER USER INPUT
-   fi #END OF USER INPUT SECTION
+        done #END OF WHILE LOOP OVER USER INPUT
+    fi #END OF USER INPUT SECTION
 
-   #
-   # If a filter on g4gdml_xerces_root is needed to remove common system paths
-   # then it should be put here...
-   #
-	if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
-		g4gdml_xercesc_root=""
+    #
+    # If a filter on g4gdml_xerces_root is needed to remove common system paths
+    # then it should be put here...
+    #
+    if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
+        g4gdml_xercesc_root=""
 	fi
-
+    fi # End outer check of WIN32-VC module cancellation
 fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
