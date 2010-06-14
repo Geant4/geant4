@@ -219,7 +219,6 @@ void XrayFluoPhysicsList::ConstructProcess()
 // e+ - e- from standard
 
 #include "G4eMultipleScattering.hh"
-#include "G4MultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4UniversalFluctuation.hh"
@@ -242,9 +241,6 @@ void XrayFluoPhysicsList::ConstructProcess()
 #include "G4EmProcessOptions.hh"
 
 //#include "G4hIonisation.hh"
-#include "G4hMultipleScattering.hh"
-
-
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
