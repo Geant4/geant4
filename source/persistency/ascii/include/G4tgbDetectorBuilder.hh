@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorBuilder.hh,v 1.3 2009-05-15 16:19:48 arce Exp $
+// $Id: G4tgbDetectorBuilder.hh,v 1.4 2010-06-14 15:11:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,7 +60,7 @@ class G4tgbDetectorBuilder
  public:  // with description
 
   G4tgbDetectorBuilder();
-  ~G4tgbDetectorBuilder();
+  virtual ~G4tgbDetectorBuilder();
 
   virtual const G4tgrVolume* ReadDetector();
   virtual G4VPhysicalVolume* ConstructDetector( const G4tgrVolume* tgrVoltop, G4int parallelID = -1 );
