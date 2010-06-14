@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QLowEnergy.cc,v 1.4 2010-06-07 15:19:55 mkossov Exp $
+// $Id: G4QLowEnergy.cc,v 1.5 2010-06-14 16:11:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QLowEnergy class -----------------
@@ -253,6 +253,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   static const G4double third= 1./3.;
   static const G4ThreeVector zeroMom(0.,0.,0.);
   static G4ParticleDefinition* aGamma    = G4Gamma::Gamma();
+  static G4ParticleDefinition* aPiZero   = G4PionZero::PionZero();
+  static G4ParticleDefinition* aPiPlus   = G4PionPlus::PionPlus();
+  static G4ParticleDefinition* aPiMinus  = G4PionMinus::PionMinus();
   static G4ParticleDefinition* aProton   = G4Proton::Proton();
   static G4ParticleDefinition* aNeutron  = G4Neutron::Neutron();
   static G4ParticleDefinition* aLambda   = G4Lambda::Lambda();
@@ -1852,7 +1855,7 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
   {
     G4QHadron* rHadron = new G4QHadron(90000000+999*rZ+rA,res4Mom); // Input hadron-nucleus
     G4QHadronVector* evaHV = new G4QHadronVector; // Output vector of hadrons (delete!)
-    Nuc.EvaporateNucleus(rHadron, evaHV);
+    Nuc.EvaporateNucleus(rHadron, evaHV); // here a pion can appear !
     G4int nOut=evaHV->size();
     for(G4int i=0; i<nOut; i++)
     {
@@ -1867,6 +1870,9 @@ G4VParticleChange* G4QLowEnergy::PostStepDoIt(const G4Track& track, const G4Step
       else if(hPDG==90001000 || hPDG==2212) theDefinition = aProton;
       else if(hPDG==91000000 || hPDG==3122) theDefinition = aLambda;
       else if(hPDG==     22 )               theDefinition = aGamma;
+      else if(hPDG==     111)               theDefinition = aPiZero;
+      else if(hPDG==     211)               theDefinition = aPiPlus;
+      else if(hPDG==    -211)               theDefinition = aPiMinus;
       else
       {
         G4int hZ=curH->GetCharge();
