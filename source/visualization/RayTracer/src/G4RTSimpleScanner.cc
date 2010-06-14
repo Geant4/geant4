@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.4 2007-05-22 17:10:42 allison Exp $
+// $Id: G4RTSimpleScanner.cc,v 1.5 2010-06-14 14:33:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,11 +32,13 @@
 #include "G4RTSimpleScanner.hh"
 
 G4RTSimpleScanner::G4RTSimpleScanner():
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
+  G4VRTScanner(), theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
 {
   theGSName = "RayTracer";
   theGSNickname = "RayTracer";
 }
+
+G4RTSimpleScanner::~G4RTSimpleScanner(){}
 
 const G4String& G4RTSimpleScanner::GetGSName() const
 {return theGSName;}

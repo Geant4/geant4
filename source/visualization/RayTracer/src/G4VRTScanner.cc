@@ -24,70 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.hh,v 1.5 2010-06-14 14:33:34 gcosmo Exp $
+// $Id: G4VRTScanner.cc,v 1.1 2010-06-14 14:33:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
-#ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
-
-#ifndef G4RTXScanner_H
-#define G4RTXScanner_H 1
-
-// class description:
-//
-// G4RTXScanner
-// Provides a sequence of window coordinates suitable for a visible
-// window of ever increasing resolution.
-
 #include "G4VRTScanner.hh"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
-class G4ViewParameters;
-
-class G4RTXScanner: public G4VRTScanner {
-
-public: // with description
-
-  G4RTXScanner();
-  virtual ~G4RTXScanner();
-
-  // Compiler defaults for copy constructor and assignmemt.
-
-  virtual const G4String& GetGSName() const;
-  // Get name that acts as graphics system name.
-
-  virtual const G4String& GetGSNickname() const;
-  // Get name that acts as graphics system nickname.  It is this that
-  // the user specifies on the /vis/open and /vis/sceneHandler/create
-  // commands.
-
-  virtual void Initialize(G4int nRow, G4int nColumn);
-  // Intialises scanner for window with nRow rows and nColumn columns.
-
-  virtual G4bool Coords(G4int& iRow, G4int& iColumn);
-  // Supplies coordinate (iRow,iColumn) and returns false when the
-  // sequence has finished, i.e., on the call *after* suplying the
-  // last valid coordinate.
-
-  virtual void Draw
-  (unsigned char red, unsigned char green, unsigned char blue);
-  // Draw coloured square at current position.
-
-  G4bool GetXWindow(const G4String& name, G4ViewParameters&);
-
-protected:
-  G4String theGSName, theGSNickname;
-  G4int theNRow, theNColumn, theStep, theIRow, theIColumn;
-  // X Window variables...
-  Display* display;
-  Window win;
-  GC gc;
-  XStandardColormap *scmap;
-};
-
-#endif
-
-#endif
+G4VRTScanner::G4VRTScanner() {}
+G4VRTScanner::~G4VRTScanner() {}

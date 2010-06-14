@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRTScanner.hh,v 1.5 2006-06-29 21:23:53 gunter Exp $
+// $Id: G4VRTScanner.hh,v 1.6 2010-06-14 14:33:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,9 @@ class G4VRTScanner {
 
 public: // with description
 
+  G4VRTScanner();
+  virtual ~G4VRTScanner();
+  
   virtual const G4String& GetGSName() const = 0;
   // Get name that acts as graphics system name.
 
@@ -65,8 +68,7 @@ public: // with description
 
 };
 
-inline void G4VRTScanner::Draw
-(unsigned char, unsigned char, unsigned char)
-{}
+inline
+void G4VRTScanner::Draw(unsigned char, unsigned char, unsigned char) {}
 
 #endif
