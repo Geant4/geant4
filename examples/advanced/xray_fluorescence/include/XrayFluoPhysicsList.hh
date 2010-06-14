@@ -40,16 +40,18 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+//#include "G4LivermorePhotoElectricModel.hh"
+
 //#include "XrayFluoPlaneDetectorConstruction.hh"
 //#include "XrayFluoDetectorConstruction.hh"
 //#include "XrayFluoMercuryConstruction.hh"
 
-/*
+
 class G4LowEnergyIonisation;
-class G4LowEnergyPhotoElectric;
+class G4LivermorePhotoElectricModel;
 class G4LowEnergyBremsstrahlung;
 class G4eIonisation;
-*/
+
 
 class XrayFluoPhysicsListMessenger;
 class XrayFluoDetectorConstruction;
@@ -99,17 +101,15 @@ public:
   void SetGELowLimit(G4double);
 
   void SetLowEnSecPhotCut(G4double);
-  void SetLowEnSecElecCut(G4double);
+//  void SetLowEnSecElecCut(G4double);
   void SetProtonCut(G4double);
   void SetCutsByEnergy(G4double);
   
 
 private:
 
-//  G4LowEnergyIonisation*  LeIoprocess;
-//  G4LowEnergyPhotoElectric* LePeprocess;
-//  G4LowEnergyBremsstrahlung* LeBrprocess;
-  // G4eIonisation* eIoProcess; // modified
+
+  G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel;	
   XrayFluoPhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
   G4double cutForElectron;

@@ -103,6 +103,7 @@ public:
 
 private:
 
+
   G4bool LoadData(const G4String& dataFile);
 
   G4int z;

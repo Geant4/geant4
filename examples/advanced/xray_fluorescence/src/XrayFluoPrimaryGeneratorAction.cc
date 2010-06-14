@@ -74,7 +74,7 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
     = particleTable->FindParticle(particleName="gamma");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(10.*keV);
+  particleGun->SetParticleEnergy(10. * keV);
 
   G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));

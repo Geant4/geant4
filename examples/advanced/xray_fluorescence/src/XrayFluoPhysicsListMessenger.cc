@@ -79,14 +79,14 @@ XrayFluoPhysicsListMessenger::XrayFluoPhysicsListMessenger(XrayFluoPhysicsList *
   cutSecPhotCmd->SetDefaultValue(5e-5);
   cutSecPhotCmd->SetDefaultUnit("MeV");
   cutSecPhotCmd->AvailableForStates(G4State_Idle);
-
+/*
   cutSecElecCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/seceleccut",this);
   cutSecElecCmd->SetGuidance("Set production threshold for secondary e-");
   cutSecElecCmd->SetParameterName("energy",true);
   cutSecElecCmd->SetDefaultValue(5e-5);
   cutSecElecCmd->SetDefaultUnit("MeV");
   cutSecElecCmd->AvailableForStates(G4State_Idle);
-
+*/
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
   cutGCmd->SetParameterName("range",true);
@@ -125,7 +125,7 @@ XrayFluoPhysicsListMessenger::~XrayFluoPhysicsListMessenger()
   delete cutGLowLimCmd;
   delete cutELowLimCmd;
   delete cutGELowLimCmd;
-  delete cutSecElecCmd;
+  //delete cutSecElecCmd;
   delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
@@ -150,8 +150,8 @@ void XrayFluoPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String new
   if(command == cutSecPhotCmd)
     { XrayFluoList->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue));}
 
-  if(command == cutSecElecCmd)
-    { XrayFluoList->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue));}
+//  if(command == cutSecElecCmd)
+//    { XrayFluoList->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue));}
 
   if(command == cutGCmd)
     { XrayFluoList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
