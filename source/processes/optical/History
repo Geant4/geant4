@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th June 2010 Peter Gumplinger (op-V09-03-03)
+              ProposeLocalEnergyDeposit(thePhotonMomentum) every time the
+              photon is fStopAndKill because of NoRINDEX. This will trigger
+              scoring when a photon encounters a volume not defined as an
+              optical medium (indirect user request):
+              http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/335/1.html
+
 18th May 2010 Peter Gumplinger (op-V09-03-02)
               fix a bug reported at:
               http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/334/1/1.html
