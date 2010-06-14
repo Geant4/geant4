@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.11 2010-06-14 11:32:41 vnivanch Exp $
+// $Id: G4UniversalFluctuation93.hh,v 1.1 2010-06-14 11:32:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4UniversalFluctuation
+// File name:     G4UniversalFluctuation93
 //
 // Author:        V.Ivanchenko make a class with the Laszlo Urban model
 //
@@ -45,6 +45,7 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 07-02-05 define problim = 5.e-3 (mma)
+// 14-06-10 saved version of 9.3 model with the name G4UniversalFluctuation93
 //
 // Class Description:
 //
@@ -53,21 +54,21 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4UniversalFluctuation_h
-#define G4UniversalFluctuation_h 1
+#ifndef G4UniversalFluctuation93_h
+#define G4UniversalFluctuation93_h 1
 
 
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
 
-class G4UniversalFluctuation : public G4VEmFluctuationModel
+class G4UniversalFluctuation93 : public G4VEmFluctuationModel
 {
 
 public:
 
-  G4UniversalFluctuation(const G4String& nam = "UniFluc");
+  G4UniversalFluctuation93(const G4String& nam = "UniFluc");
 
-  virtual ~G4UniversalFluctuation();
+  virtual ~G4UniversalFluctuation93();
 
   virtual G4double SampleFluctuations(const G4Material*,
 				      const G4DynamicParticle*,
@@ -88,8 +89,8 @@ public:
 private:
 
   // hide assignment operator
-  G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
-  G4UniversalFluctuation(const  G4UniversalFluctuation&);
+  G4UniversalFluctuation93 & operator=(const  G4UniversalFluctuation93 &right);
+  G4UniversalFluctuation93(const  G4UniversalFluctuation93&);
 
   const G4ParticleDefinition* particle;
   const G4Material* lastMaterial;

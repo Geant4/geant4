@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.24 2010-06-14 11:32:41 vnivanch Exp $
+// $Id: G4UniversalFluctuation93.cc,v 1.1 2010-06-14 11:32:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4UniversalFluctuation
+// File name:     G4UniversalFluctuation93
 //
 // Author:        V.Ivanchenko make a class with the Laszlo Urban model
 // 
@@ -56,15 +56,15 @@
 //          regime any more (L.Urban)
 // 03-04-07 correction to get better width of eloss distr.(L.Urban)
 // 13-07-07 add protection for very small step or low-density material (VI)
-// 19-03-09 new width correction (does not depend on previous steps) (L.Urban)         
+// 19-03-09 new width correction (does not depend on previous steps) (L.Urban)
 // 20-03-09 modification in the width correction (L.Urban)
-// 14-06-10 fixed tail distribution - do not use uniform function (L.Urban)
+// 14-06-10 saved version of 9.3 model with the name G4UniversalFluctuation93
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4UniversalFluctuation.hh"
+#include "G4UniversalFluctuation93.hh"
 #include "Randomize.hh"
 #include "G4Poisson.hh"
 #include "G4Step.hh"
@@ -76,7 +76,7 @@
 
 using namespace std;
 
-G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
+G4UniversalFluctuation93::G4UniversalFluctuation93(const G4String& nam)
  :G4VEmFluctuationModel(nam),
   particle(0),
   minNumberInteractionsBohr(10.0),
@@ -90,12 +90,12 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4UniversalFluctuation::~G4UniversalFluctuation()
+G4UniversalFluctuation93::~G4UniversalFluctuation93()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
+void G4UniversalFluctuation93::InitialiseMe(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();
@@ -105,11 +105,12 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
-						    const G4DynamicParticle* dp,
-						    G4double& tmax,
-						    G4double& length,
-						    G4double& meanLoss)
+G4double 
+G4UniversalFluctuation93::SampleFluctuations(const G4Material* material,
+					     const G4DynamicParticle* dp,
+					     G4double& tmax,
+					     G4double& length,
+					     G4double& meanLoss)
 {
 // Calculate actual loss from the mean loss.
 // The model used to get the fluctuations is essentially the same
@@ -239,16 +240,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     p1 = G4double(G4Poisson(a1));
     loss += p1*e1;
     if(p1 > 0.) 
-    {
-      G4double sigma = e1*sqrt(p1);
-      if(sigma > e1*p1/3.) sigma = e1*p1/3.;
-      G4double deltaloss = 0.;
-      G4double elimit = p1*e1;
-      do {
-           deltaloss = G4RandGauss::shoot(0.,sigma);
-         } while ((deltaloss < -elimit) || (deltaloss > elimit));
-      loss += deltaloss;
-    }
+      loss += (1.-2.*G4UniformRand())*e1;
   }
 
   // excitation of type 2
@@ -262,16 +254,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     p2 = G4double(G4Poisson(a2));
     loss += p2*e2;
     if(p2 > 0.) 
-    {
-      G4double sigma = e2*sqrt(p2);
-      if(sigma > e2*p2/3.) sigma = e2*p2/3.;
-      G4double deltaloss = 0.;
-      G4double elimit = p2*e2;
-      do {
-           deltaloss = G4RandGauss::shoot(0.,sigma);
-         } while ((deltaloss < -elimit) || (deltaloss > elimit));
-      loss += deltaloss;
-    }
+      loss += (1.-2.*G4UniformRand())*e2;
   }
 
   // ionisation 
@@ -312,7 +295,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-G4double G4UniversalFluctuation::Dispersion(
+G4double G4UniversalFluctuation93::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
  				G4double& tmax,
@@ -333,9 +316,8 @@ G4double G4UniversalFluctuation::Dispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
-G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
-					     G4double q2)
+void G4UniversalFluctuation93::SetParticleAndCharge(
+          const G4ParticleDefinition* part, G4double q2)
 {
   if(part != particle) {
     particle       = part;
