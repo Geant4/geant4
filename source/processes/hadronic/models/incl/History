@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.27 2010-04-27 16:02:37 kaitanie Exp $
+$Id: History,v 1.28 2010-06-14 16:10:01 gcosmo Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,11 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+14 June 2010 - Gabriele Cosmo (hadr-incl-V09-03-01)
+------------------------------------------------------
+- Added missing virtual destructor to G4AblaFissionBase,
+  G4InclAblaVirtualData and G4InclRandomNumbers.
 
 27 April 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-00)
 ------------------------------------------------------

@@ -23,42 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFissionBase.hh,v 1.3 2010-06-14 16:10:01 gcosmo Exp $ 
+// $Id: G4AblaFissionBase.cc,v 1.1 2010-06-14 16:10:01 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
 // Alain Boudard, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
 
-#ifndef G4AblaFissionBase_hh
-#define G4AblaFissionBase_hh 1
+#include "G4AblaFissionBase.hh"
 
-#include "globals.hh"
-
-/*
- * Abstract interface to fission models.
- */
-
-class G4AblaFissionBase {
-
-public:
-  G4AblaFissionBase();
-  virtual ~G4AblaFissionBase();
-
-  virtual void doFission(G4double &A, G4double &Z, G4double &E,
-			 G4double &A1, G4double &Z1, G4double &E1, G4double &K1,
-			 G4double &A2, G4double &Z2, G4double &E2, G4double &K2) = 0;
-
-  void about() {
-    G4cout << aboutModel << G4endl;
-  }
-
-  void setAboutString(G4String about) {
-    aboutModel = about;
-  }
-
-private:
-  G4String aboutModel;
-};
-
-#endif
+G4AblaFissionBase::G4AblaFissionBase() {}
+G4AblaFissionBase::~G4AblaFissionBase() {}

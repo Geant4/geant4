@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaDataFile.cc,v 1.8 2010-04-27 16:02:37 kaitanie Exp $ 
+// $Id: G4InclAblaDataFile.cc,v 1.9 2010-06-14 16:10:01 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,9 +35,13 @@
 #include "globals.hh" // Needed for G4Exception.
 #include <fstream>
 
-G4InclAblaDataFile::G4InclAblaDataFile()
+G4InclAblaDataFile::G4InclAblaDataFile() : G4InclAblaVirtualData()
 {
   verboseLevel = 0;
+}
+
+G4InclAblaDataFile::~G4InclAblaDataFile()
+{
 }
 
 /**
