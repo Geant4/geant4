@@ -1,4 +1,4 @@
-$Id: History,v 1.438 2010-06-08 21:50:00 sincerti Exp $
+$Id: History,v 1.439 2010-06-14 21:04:31 alechner Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.06.2010, A. Lechner, tag emlowen-V09-03-32
+            Made desctructor of base class G4VIonDEDXScalingAlgorithm virtual
+            (avoids also compiler warnings).
 
 08.06.2010, S. Incerti, tag emlowen-V09-03-31
             modified initialisation of e- Emfietzoglou excitation
