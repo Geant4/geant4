@@ -231,6 +231,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	else {
 	        theStatus = NoRINDEX;
                 if ( verboseLevel > 0) BoundaryProcessVerbose();
+                aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
 		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -241,6 +242,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	else {
 	        theStatus = NoRINDEX;
                 if ( verboseLevel > 0) BoundaryProcessVerbose();
+                aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
 		aParticleChange.ProposeTrackStatus(fStopAndKill);
 		return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
@@ -310,6 +312,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   else {
 		     theStatus = NoRINDEX;
                      if ( verboseLevel > 0) BoundaryProcessVerbose();
+                     aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
                      aParticleChange.ProposeTrackStatus(fStopAndKill);
                      return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
                   }
@@ -374,6 +377,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	   }
            else if (theFinish == polishedbackpainted ||
                     theFinish == groundbackpainted ) {
+                      aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
                       aParticleChange.ProposeTrackStatus(fStopAndKill);
                       return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
            }
@@ -397,6 +401,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               else {
 		 theStatus = NoRINDEX;
                  if ( verboseLevel > 0) BoundaryProcessVerbose();
+                 aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
                  aParticleChange.ProposeTrackStatus(fStopAndKill);
                  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	      }
