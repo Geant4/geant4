@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+14-Jun-2010 M.Kosov                             (hadr-chips-cs-V09-03-06)
+------------------------------------------------------------------------
+Bug fix for GetExchangeT in G4QKaonMinusElasticCrossSection (for K0).
+
 8-Jun-2010 M.Kosov                             (hadr-chips-cs-V09-03-05)
 ------------------------------------------------------------------------
 Bug fix in G4QNeuronNuclearCrossSection for Ba isotopes.

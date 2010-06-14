@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QKaonMinusElasticCrossSection.cc,v 1.1 2010-02-16 07:53:05 mkossov Exp $
+// $Id: G4QKaonMinusElasticCrossSection.cc,v 1.2 2010-06-14 15:55:18 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -735,6 +735,7 @@ G4double G4QKaonMinusElasticCrossSection::GetExchangeT(G4int tgZ, G4int tgN, G4i
 #ifdef tdebug
   G4cout<<"G4QKaMiElCS::GetExchT:F="<<onlyCS<<",Z="<<tgZ<<",N="<<tgN<<",PDG="<<PDG<<G4endl;
 #endif
+  if(PDG==310 || PDG==130) PDG=-321;
   if(PDG!=-321)G4cout<<"*Warning*G4QKaonMinusElasticCrossSection::GetET:PDG="<<PDG<<G4endl;
   if(onlyCS) G4cout<<"*Warning*G4QKaonMinusElasticCrossSection::GetExT: onlyCS=1"<<G4endl;
   if(lastLP<-4.3) return lastTM*GeVSQ*G4UniformRand();// S-wave for p<14 MeV/c (kinE<.1MeV)
