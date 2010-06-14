@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.29 2009-10-12 04:11:25 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.30 2010-06-14 13:28:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,7 +54,7 @@ class G4VScoringMesh
 {
   public:
   G4VScoringMesh(G4String wName);
-  ~G4VScoringMesh();
+  virtual ~G4VScoringMesh();
 
   public: // with description
   // a pure virtual function to construct this mesh geometry
