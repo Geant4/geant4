@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_ext.cc,v 1.3 2010-03-25 15:39:35 gunter Exp $
+// $Id: gdml_ext.cc,v 1.4 2010-06-14 16:59:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -82,10 +82,10 @@ int main(int argc, char** argv)
   {
     // Open a tcsh session: will stay there until the user types "exit"
 
-#ifdef _WIN32
-    G4UIsession* session = new G4UIterminal();
-#else
+#ifdef G4UI_USE_TCSH
     G4UIsession* session = new G4UIterminal(new G4UItcsh);
+#else
+    G4UIsession* session = new G4UIterminal();
 #endif
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand("/control/execute vis.mac");
