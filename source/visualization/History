@@ -1,4 +1,4 @@
-$Id: History,v 1.480 2010-06-15 16:37:29 allison Exp $
+$Id: History,v 1.481 2010-06-15 16:41:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,10 +24,12 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-15th June 2010  John Allison
+15th June 2010  John Allison  (vis-V09-03-08)
 - visman-V09-03-10:
   o Added virtual destructors to fix compilation warnings.
   o Improved action after "/vis/geometry/..." commands.
+- raytracer-V09-03-02 (Gabriele Cosmo):
+  o Added virtual destructors to fix compilation warnings.
 
 4th June 2010  Joseph Perl  (vis-V09-03-07)
 - vis-HepRep-V09-03-02
