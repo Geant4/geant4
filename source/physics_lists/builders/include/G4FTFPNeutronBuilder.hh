@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPNeutronBuilder.hh,v 1.4 2009-04-23 18:54:57 japost Exp $
+// $Id: G4FTFPNeutronBuilder.hh,v 1.5 2010-06-15 11:03:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -79,6 +79,8 @@ class G4FTFPNeutronBuilder : public G4VNeutronBuilder
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
+    G4LundStringFragmentation * theLund;
+    G4ExcitationHandler * theHandler;
 
     G4double theMin;
     G4double theMax;

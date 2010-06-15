@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPNeutronBuilder.cc,v 1.5 2009-03-31 11:03:50 vnivanch Exp $
+// $Id: G4QGSPNeutronBuilder.cc,v 1.6 2010-06-15 11:03:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,11 +50,11 @@ G4QGSPNeutronBuilder(G4bool quasiElastic, G4bool projectileDiffraction)
   theModel = new G4TheoFSGenerator("QGSP");
 
   theStringModel = new G4QGSModel< G4QGSParticipants >;
-  theStringDecay = new G4ExcitedStringDecay(new G4QGSMFragmentation);
+  theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
   theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetTransport(theCascade);
@@ -73,8 +73,7 @@ G4QGSPNeutronBuilder(G4bool quasiElastic, G4bool projectileDiffraction)
   {  theProjectileDiffraction=0;}
 }
 
-G4QGSPNeutronBuilder::
-~G4QGSPNeutronBuilder() 
+G4QGSPNeutronBuilder::~G4QGSPNeutronBuilder() 
 {
   delete theStringDecay;
   delete theStringModel;
@@ -83,6 +82,8 @@ G4QGSPNeutronBuilder::
   if ( theQuasiElastic ) delete theQuasiElastic;
   if ( theProjectileDiffraction ) delete theProjectileDiffraction;
   delete theModel;
+  delete theQGSM;
+  delete theHandler;
 }
 
 void G4QGSPNeutronBuilder::

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPiKBuilder.hh,v 1.4 2009-03-31 11:04:01 vnivanch Exp $
+// $Id: G4QGSPPiKBuilder.hh,v 1.5 2010-06-15 11:03:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -87,6 +87,8 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4ProjectileDiffractiveChannel * theProjectileDiffraction;
+    G4QGSMFragmentation * theQGSM;
+    G4ExcitationHandler * theHandler;
     G4double theMin;
 
 };
