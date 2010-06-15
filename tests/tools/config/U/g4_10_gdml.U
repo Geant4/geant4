@@ -42,11 +42,7 @@ if test "X$g4lib_build_gdml" != "Xn"; then
     if test "X$g4system" = "XWIN32-VC" ; then
         g4message=`cat << EOM
 You have requested GDML support for Geant4 built on WIN32-VC.
-This requires the Xerces-C library built for MSVC, with
-binaries available for download from:
-
-URL
-
+This requires the Xerces-C library built for MSVC. 
 Please enter the path to the Xerces-C install (i.e. if XercesC is installed
 in PATH\include\xercesc, enter PATH), or type '-' to CANCEL the build of the 
 GDML module.
