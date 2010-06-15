@@ -19,6 +19,11 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
       the option to LDFLAGS.
 
+  o Digits+Hits:
+    -----------
+    + Added missing virtual destructor to G4VScoringMesh and removed
+      unnecessary virtual qualifiers to G4ScoringBox.
+
   o Environments:
     ------------
     + G4Py:
@@ -33,6 +38,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Improved logic in G4PrimaryTransformer. Addressing problem report #1101.
     + Fixed compilation warning in G4SmartTrackStack issued with gcc 4.5.0.
     + Added few accessors methods to G4SPSEneDistribution class.
+    + Removed obsolete CLHEP_HepMC option from G4EventManager class.
 
   o Geometry:
     --------
@@ -134,11 +140,12 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Added anti-nuclei as short-lived particles.
     + Code cleanup in G4DynamicParticle constructors.
 
-  o Persistency (GDML):
-    ------------------
-    + Added G4GenericTrap among the set of supported solids in both reader and
-      writer, treating as 'arb8' GDML type.
+  o Persistency:
+    -----------
+    + Added G4GenericTrap among the set of supported solids in both GDML reader
+      and writer, treating as 'arb8' GDML type.
     + Corrected dump of division axis in GDML writer.
+    + ASCII module: added missing virtual destructor to G4tgbDetectorBuilder.
 
   o Physics Lists:
     -------------
@@ -162,7 +169,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       Bug fix for the virtual destructor in G4QElasticPhysics & G4QIonPhysics.
       Particles are restricted to SU(3) hadrons (no pi0 & eta) in
       G4QElasticPhysics.
-    + G4EmStandardPhysics_option2: added G4WentzelVIMscModel for e+-.
+      Fix in G4QPhotoNuclearPhysics to reset particles iterator.
+    + G4EmStandardPhysics_option2: added G4WentzelVIMscModel and 'RangeFactor'
+      set to 0.04 for e+-.
     + G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
       G4EmLivermorePolarizedPhysics: added G4GoudsmitSaundersonMscModel for e+-;
       added 1 MeV upper limit for the Livermore ionisation model (was 1 GeV).
@@ -212,9 +221,14 @@ List of main features and fixes included in this Beta release since 9.3.p01:
           Modified initialisation of e- Emfietzoglou excitation model to fix
           memory leaks.
         - Changed computation of scattering angle in G4DNAChampionElasticModel.
+        - Replaced hard coded masses in G4DNADingfelderCharge* classes.
       o Added analytical (ecpssr) and empirical (Paul and Orlic) models for the
         calculation of hadronic shell ionisation CS.
-      o Replaced hard coded masses in G4DNADingfelderCharge* classes.
+      o Fix in G4AugerTransition to cure crash on Windows.
+      o Added missing virtual destructors where necessary.
+      o Corrected return value case in method GetPhotoElectronDirection()
+        in G4PhotoElectricAngularGeneratorSauterGavrila.
+        Addressing problem report #1120.
       o Requires new G4LEDATA data set, version 6.13.
     + Muons:
       o G4MuPairProductionModel: added sampling recoil of a primary particle
@@ -267,6 +281,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         allows to use G4WentzelVIModel with optical model of hadron scattering.
       o G4PAIModel, G4PAIPhotonModel: added printout for the model
         initialisation.
+      o G4UniversalFluctuation: fixed anomaly at the tail of distribution for
+        thin targets; new G4UniversalFluctuation93 class, same as version in
+        release 9.3 for G4UniversalFluctuation.
       o Removed obsolete models: G4UrbanMscModel, G4UrbanMscModel2,
         G4UrbanMscModel71, G4MultipleScattering, G4ComptonScattering52,
         G4PolarizedComptonScattering.
@@ -307,6 +324,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS: added
         path to new data set through environment variable G4NEUTRONXSDATA.
       o Implemented integer Z and A transition to G4CrossSectionDataStore.
+      o G4UPiNuclearCrossSection: fixed memory leak at destruction.
+      o Updated G4GlauberGribovCrossSection for anti-protons.
     + management
       o G4HadronicProcess: added methods CheckEnergyMomentumConservation(),
         SetEpReportLevel(), SetEnergyMomentumCheckLevels() and
@@ -339,6 +358,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Implemented isotope wise CHIPS elastic for neutrons.
       o Fix in G4QElasticCrossSection in parameter order for nH. 
       o Bug fix in G4QNeutronNuclearCrossSection for Ba isotopes.
+      o Bug fix for K0 in G4QKaonMinusElasticCrossSection::GetExchangeT().
       o Bug fix in G4QNucleus::ChoosePosition() for looping.
       o Fix to use of Z+N instead of N for A.
       o Corrected Titanium and Zirconium isotopes in G4QIsotope.
@@ -350,6 +370,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Corrected treatment of vacuum in fragmentation module.
       o nn is decayed in G4QLowEnergy; Omega- is included in G4QElastic;
         N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
+      o Bug-fix in G4QLowEnergy: pions as secondaries.
       o Bug-fix in K0 elastic & Ion-Ion Elastic.
     + models/coherent_elastic
       o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
@@ -419,16 +440,21 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Nuclear deformation and shell effect data reader now constructs the
         corresponding data tables correctly.
       o Added some internal logging facilities to INCL (disabled by default).
+      o Added missing virtual destructor to base classes where necessary.
     + models/management
       o G4HadronicInteraction: added two methods, GetEnergyMomentumCheckLevels()
         and SetEnergyMomentumCheckLevels() in order to implement checking
         of energy/momentum conservation.
+      o G4VPreCompoundModel: moved constructor and destructor to source.
     + models/neutron_hp
       o Modified sampling in G4NeutronHPInelasticCompFS.
       o  Fix bug about incidence energy in G4NeutronHPEnAngCorrelation.
+    + models/parton_string/diffraction (hadr-string-diff-V09-03-01)
+      o Added missing virtual destructor to G4DiffractiveHHScatterer.
     + models/parton_string/qgsm
       o Remove unused class G4PartonStringAnnihilator.
     + models/pre_equilibrium
+      o G4PreCompoundModel: moved constructor and destructor to source.
       o Removed unused dummy classes G4VPreCompoundIon and
         G4VPreCompoundNucleon. 
       o G4PreCompoundProton, G4PreCompoundDeuteron, G4PreCompoundTriton,
@@ -476,6 +502,10 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Fixed sampling of 'theFacetNormal' for 'polishedbackpainted' material
       in G4OpBoundaryProcess::DielectricDielectric() method. Address problem
       reported on Hypernews Optical Processes Forum, thread #334.
+    + Modified G4OpBoundaryProcess to call ProposeLocalEnergyDeposit() every
+      time a photon is in 'fStopAndKill' state because of NoRINDEX. This will
+      trigger scoring when a photon encounters a volume not defined as an
+      optical medium.
 
   o Run
     ---
@@ -525,6 +555,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Added protection against repeated initialisation.
     + RayTracer:
       o Added DrawTrajectory(); ready for i_mode migration.
+      o Added missing virtual destructor to G4VRTScanner, G4RTXScanner and
+        G4RTSimpleScanner classes.
 
   o Data Sets:
     ---------
@@ -596,6 +628,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Added new classes for monopole G4MonopoleEquation,
         G4MonopoleFieldSetup and G4MonopoleTransportation.
       o Added test on ionisation of heavy highly charged particle; some cleanup.
+    + extended/hadronic/Hadr01
+      o Cleanup of physics-list according to last update to physics_list
+        library.
     + extended/medical/DICOM
       o Added function to read nested items (defined and undefined)
       o Removed dependencies on CONQUEST
@@ -624,6 +659,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o exMPI02: use G4UIcsh instead of G4UItcsh since OpenMPI is now default.
     + examples/extended/persistency/gdml/G01
       o Added G4GenericTrap to the solids.gdml sample.
+    + examples/extended/persistency/gdml/G03
+      o Corrected selection of G4UItcsh in main(), to fix problem on Windows.
     + examples/novice/N04
       o Replaced QGSP list with QGSP_BERT.
 

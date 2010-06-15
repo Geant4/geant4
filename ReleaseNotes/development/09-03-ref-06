@@ -29,12 +29,19 @@ Summarised, the list of changes is the following:
 
 config                                           config-V09-03-05
 ------
-- Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
-  version 1.0) to Configure script, which is updated accordingly (tag
-  "Configure-V09-03-01").
+- Configure (Configure-V09-03-02)
+  o Fixed selection of XERCESCROOT path for Windows.
+  o Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
+    version 1.0).
+  o Updated data set G4EMLOW to version 6.13.
 - Removed 'leading_particle' hadronic module from include paths list.
 - Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
   the option to LDFLAGS.
+
+digits_hits/utils                                detutils-V09-03-00
+-----------------
+- Added missing virtual destructor to G4VScoringMesh and removed unnecessary
+  virtual qualifiers to G4ScoringBox.
 
 environments                                     envs-V09-03-00
 ------------
@@ -44,6 +51,10 @@ environments                                     envs-V09-03-00
   o Fixed bug in wrapping of G4GDMLParser
 - Momo:
   o Revised obsolete trajectory drawing.
+
+event                                            event-V09-03-03
+-----
+- Removed obsolete CLHEP_HepMC option from G4EventManager class.
 
 geometry/solids/specific                         geom-specific-V09-03-07
 ------------------------
@@ -80,12 +91,16 @@ particles                                        particles-V09-03-04
 ---------
 - Added anti-nuclei as short-lived particles.
 
+persistency/ascii                                ascii-V09-03-00
+-----------------
+- Added missing virtual destructor to G4tgbDetectorBuilder.
+
 persistency/gdml                                 gdml-V09-03-03
 ----------------
 - Added G4GenericTrap among the set of supported solids in both reader and
   writer, treating as 'arb8' GDML type.
 
-physics_lists                                    phys-lists-V09-03-12
+physics_lists                                    phys-lists-V09-03-15
 -------------
 - Moved QGSP_FTFP_BERT list to supported (was experimental).
 - Removed previously blocked lists (FTFP_EMV, QGSC_EFLOW, QGSP_EMX).
@@ -101,7 +116,9 @@ physics_lists                                    phys-lists-V09-03-12
   with G4QIonPhysics in the CHIPS physics-list 
   Bug fix for the virtual destructor in G4QElasticPhysics & G4QIonPhysics.
   Particles are restricted to SU(3) hadrons (no pi0 & eta) in G4QElasticPhysics.
-- G4EmStandardPhysics_option2: added G4WentzelVIMscModel for e+-.
+  Fix in G4QPhotoNuclearPhysics to reset particles iterator.
+- G4EmStandardPhysics_option2: added G4WentzelVIMscModel and 'RangeFactor' set
+  to 0.04 for e+-.
 - G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmDNAPhysics,
   G4EmLivermorePolarizedPhysics: added G4GoudsmitSaundersonMscModel for e+-;
   added 1 MeV upper limit for the Livermore ionisation model (was 1 GeV).
@@ -114,20 +131,25 @@ processes/electromagnetic/highenergy             emhighenergy-V09-03-01
 ------------------------------------
 - New model G4ICRU73NoDeltaModel, derived from G4ICRU73QOModel.
 
-processes/electromagnetic/lowenergy              emlowen-V09-03-33
+processes/electromagnetic/lowenergy              emlowen-V09-03-35
 -----------------------------------
 - Added analytical (ecpssr) and empirical (Paul and Orlic) models for the
   calculation of hadronic shell ionisation CS.
 - Modified initialisation of e- Emfietzoglou excitation model in
   G4DNAEmfietzoglouExcitationModel and in G4DNAMillerGreenExcitationModel,
   fixing memory leaks.
+- Fix in G4AugerTransition to cure crash on Windows.
+- Added missing virtual destructors where necessary.
+- Corrected return value case in method GetPhotoElectronDirection() in
+  G4PhotoElectricAngularGeneratorSauterGavrila.
+  Addressing problem report #1120.
 
 processes/electromagnetic/muons                  emmuons-V09-03-01
 -------------------------------
 - G4MuPairProductionModel: added sampling recoil of a primary particle
 - G4MuIonisation: use G4ICRU73QOModel for mu- for E< 0.2 MeV.
 
-processes/electromagnetic/standard               emstand-V09-03-17
+processes/electromagnetic/standard               emstand-V09-03-19
 ----------------------------------
 - G4BraggIonGasModel, G4BetheBlochIonGasModel: new ionisation models for low
   density media.
@@ -147,6 +169,9 @@ processes/electromagnetic/standard               emstand-V09-03-17
   improve speed by addition extra class members.
 - G4UrbanMscModel93: removed randomisation of step limit for the first step in
   any volume in the case of usage of safety.
+- G4UniversalFluctuation: fixed anomaly at the tail of distribution for thin
+  targets; new G4UniversalFluctuation93 class, same as version in release 9.3
+  for G4UniversalFluctuation.
 - Removed obsolete models: G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel71,
   G4MultipleScattering, G4ComptonScattering52, G4PolarizedComptonScattering.
 - G4PAIModel, G4PAIPhotonModel: added printout for the model initialisation.
@@ -165,10 +190,12 @@ processes/electromagnetic/xrays                  xrays-V09-03-00
 processes/hadronic                               hadr-V09-03-00
 ------------------
 - Removed obsolete code for 'leading_particle' model.
-- cross_sections (hadr-cross-V09-03-05)
+- cross_sections (hadr-cross-V09-03-06)
   o G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS: added
     path to new data set through environment variable G4NEUTRONXSDATA.
   o Implemented integer Z and A transition to G4CrossSectionDataStore.
+  o G4UPiNuclearCrossSection: fixed memory leak at destruction.
+  o Updated G4GlauberGribovCrossSection for anti-protons.
 - management (hadr-man-V09-03-02)
   o G4HadronicProcess: added methods CheckEnergyMomentumConservation(),
     SetEpReportLevel(), SetEnergyMomentumCheckLevels() and
@@ -176,32 +203,42 @@ processes/hadronic                               hadr-V09-03-00
     checking. Some code cleanup.
   o New G4HadronicEPTestMessenger class to provide energy/momentum test 
     commands available in UI.
-- models/cascade (hadr-casc-V09-03-42)
+- models/cascade (hadr-casc-V09-03-43)
   o 
 - models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-09)
   o Corrected Titanium and Zirconium isotopes in G4QIsotope.
   o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
   o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
     when mass is small for Lambda andSigma+, use Xi0,p.
-- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-05)
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-06)
   o Bug fix following G4NucleiProperties warning for A=0, Z=0.
   o Bug fix in G4QNeutronNuclearCrossSection for Ba isotopes.
+  o Bug fix for K0 in G4QKaonMinusElasticCrossSection::GetExchangeT().
 - models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-05)
   o Corrected treatment of vacuum.
-- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-09)
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-10)
   o Correction in G4QElastic for K0 elastic cross-sections.
   o nn is decayed in G4QLowEnergy; Omega- is included in G4QElastic;
     N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
+  o Bug-fix in G4QLowEnergy: pions as secondaries.
   o Bug-fix in K0 elastic & Ion-Ion Elastic.
 - models/de_excitation (hadr-deex-V09-03-18)
   o G4Evaporation: fixed problem of isotope production for high Z fragments.
     A problem introduced in the recent revision of the model.
+- models/incl (hadr-incl-V09-03-01)
+  o Added missing virtual destructor to base classes where necessary.
 - models/isotope_production (hadr-isopro-V09-03-00)
   o Cleanup of documents and added History file.
-- models/management (hadr-modman-V09-03-01)
+- models/management (hadr-modman-V09-03-02)
   o G4HadronicInteraction: added two methods, GetEnergyMomentumCheckLevels()
     and SetEnergyMomentumCheckLevels() in order to implement checking
     of energy/momentum conservation.
+  o G4VPreCompoundModel: moved constructor and destructor to source.
+- models/parton_string/diffraction (hadr-string-diff-V09-03-01)
+  o Added missing virtual destructor to G4DiffractiveHHScatterer.
+- models/pre_equilibrium (hadr-pre-V09-03-06)
+  o G4PreCompoundModel: moved constructor and destructor to source.
+  o G4LowEIonFragmentation: cleanup comment.
 - models/radioactive_decay (radioactive_decay-V09-03-00)
   o G4RadioactiveDecay:
     + In LoadDecayTable() create a decay table for isomers not included in RDM
@@ -223,6 +260,12 @@ processes/hadronic                               hadr-V09-03-00
       with their modifiers.
   o G4RadioactiveDecayMessenger: added the UI commands for SetICM, SETARM
     and SetHLThreshold.
+
+processes/optical                                op-V09-03-03
+-----------------
+- Modified G4OpBoundaryProcess to call ProposeLocalEnergyDeposit() every time
+  a photon is in 'fStopAndKill' state because of NoRINDEX. This will trigger
+  scoring when a photon encounters a volume not defined as an optical medium.
 
 run                                              run-V09-03-01
 ---
@@ -270,8 +313,10 @@ visualization                                    vis-V09-03-07
   o Use generic section and cutaway algorithm.
 - OpenInventor:
   o Added protection against repeated initialisation.
-- RayTracer:
+- RayTracer (raytracer-V09-03-02):
   o Added DrawTrajectory(); ready for i_mode migration.
+  o Added missing virtual destructor to G4VRTScanner, G4RTXScanner and
+    G4RTSimpleScanner classes.
 
 data
 ----
@@ -293,15 +338,14 @@ examples                                         examples-V09-03-06
    testem15-V09-03-02, testem16-V09-03-02, testem17-V09-03-02,
    testem18-V09-03-02, exgps-V09-03-01, exHepMC-V09-03-02, p6decayer-V09-03-01,
    fieldex01-V09-03-03, fieldex02-V09-03-03, fieldex03-V09-03-03,
-   g3tog4Tests-V09-03-01, exhadr00-V09-03-03, exhadr01-V09-03-05,
-   electronScattering-V09-03-06, exampleES2-V09-03-00, fano-V09-03-03,
-   fano2-V09-03-03, gtherapy-V09-03-01, ExDiane-V09-03-00, MPI-V09-03-01,
-   ParN02-V09-03-00, ParN04-V09-03-01, exgflash-V09-03-00, G02-V09-03-00,
-   G03-V09-03-01, exampleP01-V09-03-00, exampleP02-V09-03-00,
-   exampleP03-V09-03-01, expol01-V09-03-01, exrdm-V09-03-02,
-   exampleRE01-V09-03-01, exampleRE02-V09-03-01, exampleN02-V09-03-01,
-   exampleN03-V09-03-02, exampleN04-V09-03-01, exampleN05-V09-03-01,
-   exampleN06-V09-03-00, exampleN07-V09-03-01.
+   g3tog4Tests-V09-03-01, exhadr00-V09-03-03, electronScattering-V09-03-06,
+   exampleES2-V09-03-00, fano-V09-03-03, fano2-V09-03-03, gtherapy-V09-03-01,
+   ExDiane-V09-03-00, MPI-V09-03-01, ParN02-V09-03-00, ParN04-V09-03-01,
+   exgflash-V09-03-00, G02-V09-03-00, exampleP01-V09-03-00,
+   exampleP02-V09-03-00, exampleP03-V09-03-01, expol01-V09-03-01,
+   exrdm-V09-03-02, exampleRE01-V09-03-01, exampleRE02-V09-03-01,
+   exampleN02-V09-03-01, exampleN03-V09-03-02, exampleN04-V09-03-01,
+   exampleN05-V09-03-01, exampleN06-V09-03-00, exampleN07-V09-03-01.
 - advanced/brachytherapy (brachy-V09-03-01)
 - advanced/hadrontherapy (hadrontherapy-V09-03-04)
   o Use G4UIExecutive and some minor revisions.
@@ -330,6 +374,8 @@ examples                                         examples-V09-03-06
 - extended/field/field04 (fieldex04-V09-03-01)
   o Modified F04Trajectory class to compile without warnings by implementing
     a DrawTrajectory() method.
+- extended/hadronic/Hadr01 (exhadr01-V09-03-06)
+  o Cleanup of physics-list according to last update to physics_list library.
 - extended/medical/DICOM (DICOM-V09-03-03)
   o Added function to read nested items (defined and undefined)
   o Removed dependencies on CONQUEST
@@ -340,6 +386,8 @@ examples                                         examples-V09-03-06
     a DrawTrajectory() method.
 - examples/extended/persistency/gdml/G01 (G01-V09-03-03)
   o Added G4GenericTrap to the solids.gdml sample.
+- examples/extended/persistency/gdml/G03 (G03-V09-03-02)
+  o Corrected selection of G4UItcsh in main(), to fix problem on Windows.
 - examples/novice/N04 (exampleN04-V09-03-01)
   o Replaced QGSP list with QGSP_BERT.
 
@@ -362,9 +410,10 @@ tests                                            tests-V09-03-06
   o Removed usage of G4CascadeElasticInterface.
 - test31 (test31-V09-03-01)
   o Added pi- and anti_proton beams to test31.in.
-- test37 (test37-V09-03-02)
+- test37 (test37-V09-03-03)
   o Updated PhysList for WentzelVI model and scripts.
   o RunAction: use overwrite mode for Sandia output file.
+  o Fixed script for opt2 physics-list.
 - test39 (test39-V09-03-04)
   o Exclude use of G4ElasticCascadeInterface.
   o Migrated to use particle-based multiple-scattering process.
