@@ -22,8 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeT33piNChannel.cc,v 1.1 2010-05-14 21:05:03 mkelsey Exp $
+// $Id: G4CascadeT33piNChannel.cc,v 1.2 2010-06-15 14:47:25 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
 
 #include "G4CascadePiPlusPChannel.hh"
 #include "G4CascadePiMinusNChannel.hh"
@@ -68,10 +70,10 @@ namespace {
     {pip,neu,pip,pip,pim,pi0,pi0}, {pip,neu,pip,pi0,pi0,pi0,pi0}};
 
   static const G4int pipP8bfs[7][8] =
-   {{pim,neu,pip,pip,pip,pim,pim,pim}, {pim,neu,pip,pip,pim,pim,pi0,pi0},
-    {pim,neu,pip,pim,pi0,pi0,pi0,pi0}, {pim,neu,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pim,pro,pip,pip,pim,pim,pim,pi0}, {pim,pro,pip,pim,pim,pi0,pi0,pi0},
-    {pim,pro,pim,pi0,pi0,pi0,pi0,pi0}};
+   {{pip,pro,pip,pip,pip,pim,pim,pim}, {pip,pro,pip,pip,pim,pim,pi0,pi0},
+    {pip,pro,pip,pim,pi0,pi0,pi0,pi0}, {pip,pro,pi0,pi0,pi0,pi0,pi0,pi0},
+    {pip,neu,pip,pip,pip,pim,pim,pi0}, {pip,neu,pip,pip,pim,pi0,pi0,pi0},
+    {pip,neu,pip,pi0,pi0,pi0,pi0,pi0}};
 
   static const G4int pipP9bfs[8][9] =
    {{pip,pro,pip,pip,pip,pim,pim,pim,pi0}, {pip,pro,pip,pip,pim,pim,pi0,pi0,pi0},
@@ -118,10 +120,10 @@ namespace {
     {pim,pro,pip,pim,pim,pi0,pi0}, {pim,pro,pim,pi0,pi0,pi0,pi0}};
 
   static const G4int pimN8bfs[7][8] =
-   {{pip,pro,pip,pip,pip,pim,pim,pim}, {pip,pro,pip,pip,pim,pim,pi0,pi0},
-    {pip,pro,pip,pim,pi0,pi0,pi0,pi0}, {pip,pro,pi0,pi0,pi0,pi0,pi0,pi0},
-    {pip,neu,pip,pip,pip,pim,pim,pi0}, {pip,neu,pip,pip,pim,pi0,pi0,pi0},
-    {pip,neu,pip,pi0,pi0,pi0,pi0,pi0}};
+   {{pim,neu,pip,pip,pip,pim,pim,pim}, {pim,neu,pip,pip,pim,pim,pi0,pi0},
+    {pim,neu,pip,pim,pi0,pi0,pi0,pi0}, {pim,neu,pi0,pi0,pi0,pi0,pi0,pi0},
+    {pim,pro,pip,pip,pim,pim,pim,pi0}, {pim,pro,pip,pim,pim,pi0,pi0,pi0},
+    {pim,pro,pim,pi0,pi0,pi0,pi0,pi0}};
 
   static const G4int pimN9bfs[8][9] =
    {{pim,neu,pip,pip,pip,pim,pim,pim,pi0}, {pim,neu,pip,pip,pim,pim,pi0,pi0,pi0},
