@@ -11,8 +11,10 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Configure script:
       o Protected echos on LD_LIBRARY_PATH so that output from use of
         Configure post-install is clean.
+      o Fixed selection of XERCESCROOT path for Windows.
       o Added new data set G4NEUTRONXS (Evaluated neutron cross section
         data, version 1.0).
+      o Updated data set G4EMLOW to version 6.13.
     + Removed 'leading_particle' hadronic module from include paths list.
     + Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
       the option to LDFLAGS.
