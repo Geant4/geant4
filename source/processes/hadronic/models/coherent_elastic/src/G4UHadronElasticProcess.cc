@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.41 2010-01-26 13:34:01 mkossov Exp $
+// $Id: G4UHadronElasticProcess.cc,v 1.42 2010-06-15 15:24:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -301,7 +301,30 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
       } while (y > 0.0 && j < ni);
     }
     A = G4double((*isv)[j]->GetN());
-  } 
+  } else {
+
+    G4int nIso   = theDefaultIsotopes.GetNumberOfIsotopes(iz);
+    G4int idxIso = theDefaultIsotopes.GetFirstIsotope(iz);
+    A = theDefaultIsotopes.GetIsotopeNucleonCount(idxIso);
+
+    if(1 < nIso) {
+
+      G4double cross  = 0.0;
+
+      G4int i = 0;
+      for (; i<nIso; ++i) {
+        cross  += theDefaultIsotopes.GetAbundance(idxIso+i);
+        xsec[i] = cross;
+      }
+      cross *= G4UniformRand();
+      for (i = 0; i<nIso; ++i) {
+        if(cross <= xsec[i]) {
+          A = theDefaultIsotopes.GetIsotopeNucleonCount(idxIso+i);
+          break;
+        }
+      }
+    }
+  }
 
   G4HadronicInteraction* hadi = 
     ChooseHadronicInteraction( kineticEnergy, material, elm);
