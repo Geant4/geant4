@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT.cc,v 1.4 2010-06-03 10:42:44 gunter Exp $
+// $Id: HadronPhysicsQGSP_BERT.cc,v 1.5 2010-06-15 11:03:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -104,6 +104,7 @@ HadronPhysicsQGSP_BERT::~HadronPhysicsQGSP_BERT()
    delete theMiscLHEP;
    delete theQGSPNeutron;
    delete theLEPNeutron;
+   delete theNeutrons;
    delete theBertiniNeutron;
    delete theQGSPPro;
    delete theLEPPro;
