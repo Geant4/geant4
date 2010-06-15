@@ -24,8 +24,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4VCascadeCollider.hh,v 1.1 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4VCascadeCollider.hh,v 1.2 2010-06-15 22:47:25 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
+//
+// 20100615  M. Kelsey -- Split constructor to have verbose separately
 
 #include "globals.hh"
 #include "G4InteractionCase.hh"
@@ -36,7 +38,8 @@ class G4CollisionOutput;
 
 class G4VCascadeCollider {
 public:
-  G4VCascadeCollider(const char* name="G4VCascadeCollider", G4int verbose=0);
+  explicit G4VCascadeCollider(const char* name);
+  G4VCascadeCollider(const char* name, G4int verbose);
 
   virtual ~G4VCascadeCollider() {}
 

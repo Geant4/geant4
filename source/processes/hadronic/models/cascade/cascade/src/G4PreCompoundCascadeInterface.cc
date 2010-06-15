@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.13 2010-05-21 18:07:30 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.14 2010-06-15 22:47:25 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -252,7 +252,7 @@ G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProject
       // Copy local G4DynPart to public output (handle kaon mixing specially)
       if (outgoingType == kaonZero || outgoingType == kaonZeroBar) {
 	G4ThreeVector momDir = ipart->getMomentum().vect().unit();
-	G4double ekin = ipart->getKineticEnergy();
+	G4double ekin = ipart->getKineticEnergy()*GeV;	// Bertini -> G4 units
 
 	G4ParticleDefinition* pd = G4KaonZeroShort::Definition();
 	if (G4UniformRand() > 0.5) pd = G4KaonZeroLong::Definition();

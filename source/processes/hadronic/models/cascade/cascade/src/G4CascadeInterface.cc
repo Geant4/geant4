@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.77 2010-05-21 18:07:30 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.78 2010-06-15 22:47:25 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,6 +36,7 @@
 // 20100520  M. Kelsey -- Simplify collision loop, move momentum rotations to
 //		G4CollisionOutput, copy G4DynamicParticle directly from
 //		G4InuclParticle, no switch-block required.
+// 20100615  M. Kelsey -- Bug fix: For K0's need ekin in GEANT4 units
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -278,7 +279,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
       // Copy local G4DynPart to public output (handle kaon mixing specially)
       if (outgoingType == kaonZero || outgoingType == kaonZeroBar) {
 	G4ThreeVector momDir = ipart->getMomentum().vect().unit();
-	G4double ekin = ipart->getKineticEnergy();
+	G4double ekin = ipart->getKineticEnergy()*GeV;	// Bertini -> G4 units
 
 	G4ParticleDefinition* pd = G4KaonZeroShort::Definition();
 	if (G4UniformRand() > 0.5) pd = G4KaonZeroLong::Definition();
@@ -317,20 +318,21 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   // Report violations of energy, baryon conservation
   if (verboseLevel > 2) {
     if (sumBaryon != 0) {
-      G4cout << "ERROR: no baryon number conservation, sum of baryons = "
+      G4cerr << "ERROR: no baryon number conservation, sum of baryons = "
              << sumBaryon << G4endl;
     }
 
     if (sumEnergy > 0.01 ) {
-      G4cout << "Kinetic energy conservation violated by "
+      G4cerr << "Kinetic energy conservation violated by "
 	     << sumEnergy << " GeV" << G4endl;
     }
      
-    G4cout << "Total energy conservation at level ~"
+    G4cout << "Initial energy " << eInit << " final energy " << eTot << G4endl
+	   << "Total energy conservation at level ~"
 	   << (eInit - eTot) * GeV << " MeV" << G4endl;
     
     if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
-      G4cout << "FATAL ERROR: energy created  "
+      G4cerr << "FATAL ERROR: energy created  "
              << sumEnergy * GeV << " MeV" << G4endl;
     }
   }
