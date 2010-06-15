@@ -1,4 +1,4 @@
-$Id: History,v 1.91 2010-06-11 17:07:23 mkelsey Exp $
+$Id: History,v 1.92 2010-06-15 14:47:25 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,8 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11 June 2010 Michael Keley (hadr-casc-V09-03-43)
-------------------------------------------------
+12 June 2010 Michael Kelsey
+-------------------------------------------------
+- G4CascadeT33piNChannel.cc:  Swapped 8-body final state tables for pipP
+  vs. pimN.
+
+11 June 2010 Michael Kelsey (hadr-casc-V09-03-43)
+-------------------------------------------------
 - G4CascadeData.hh:  Equally trivial fix for compiler warking on Intel ICC
   for index[] array bounds in ::initialize().  Dimension array as [9], and
   set all values.
