@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.62 2009-05-13 23:20:54 japost Exp $
+// $Id: G4PathFinder.cc,v 1.63 2010-06-15 18:56:28 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -93,7 +93,7 @@ G4PathFinder::G4PathFinder()
    fNewTrack= false; 
    fNoGeometriesLimiting= 0; 
 
-   for( register int num=0; num<= fMaxNav; ++num )
+   for( register int num=0; num< fMaxNav; ++num )
    {
       fpNavigator[num] =  0;   
       fLimitTruth[num] = false;

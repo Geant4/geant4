@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.8 2008-10-24 14:00:03 gcosmo Exp $
+// $Id: G4MultiNavigator.cc,v 1.9 2010-06-15 18:56:28 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -60,7 +60,7 @@ G4MultiNavigator::G4MultiNavigator()
   fMinSafety= -DBL_MAX;  
   fMinStep=   -DBL_MAX;  
 
-  for(register int num=0; num<= fMaxNav; ++num )
+  for(register int num=0; num< fMaxNav; ++num )
   {
     fpNavigator[num] =  0;   
     fLimitTruth[num] = false;
