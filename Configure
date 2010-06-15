@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.130 2010-06-14 12:26:22 bmorgan Exp $
+# $Id: Configure,v 1.131 2010-06-15 09:48:42 bmorgan Exp $
 #
-# Generated on Mon Jun 14 13:23:01 BST 2010 [metaconfig 3.0 PL70]
+# Generated on Tue Jun 15 10:46:31 BST 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3285,7 +3285,7 @@ esac
 
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.9'
+g4data_g4emlow_version='G4EMLOW6.13'
 g4data_g4ndl_version='G4NDL3.13'
 g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
@@ -5631,11 +5631,7 @@ if test "X$g4lib_build_gdml" != "Xn"; then
     if test "X$g4system" = "XWIN32-VC" ; then
         g4message=`cat << EOM
 You have requested GDML support for Geant4 built on WIN32-VC.
-This requires the Xerces-C library built for MSVC, with
-binaries available for download from:
-
-URL
-
+This requires the Xerces-C library built for MSVC. 
 Please enter the path to the Xerces-C install (i.e. if XercesC is installed
 in PATH\include\xercesc, enter PATH), or type '-' to CANCEL the build of the 
 GDML module.
