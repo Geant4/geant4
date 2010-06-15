@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2010-06-14 12:24:39 bmorgan Exp $
+$Id: History,v 1.39 2010-06-15 09:47:18 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+15th June 2010 Ben Morgan
+- Configure: regenerated following changes below.
+- U/g4_03_dirs_data.U: Upgraded G4EMLOW to 6.13 (from 6.9).
+- U/g4_10_gdml.U: Tidied up user information text.
+
 14th June 2010 Ben Morgan
 - Configure: Regenerated following changes below.
 - U/g4_10_gdml.U: Reconfigured checks so that user is always prompted on 
