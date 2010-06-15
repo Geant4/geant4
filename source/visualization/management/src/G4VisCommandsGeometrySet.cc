@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc,v 1.7 2007-01-05 16:24:19 allison Exp $
+// $Id: G4VisCommandsGeometrySet.cc,v 1.8 2010-06-15 16:34:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/geometry commands - John Allison  31st January 2006
@@ -63,7 +63,7 @@ void G4VVisCommandGeometrySet::Set
     return;
   }
   if (fpVisManager->GetCurrentViewer()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
   }
 }
 
