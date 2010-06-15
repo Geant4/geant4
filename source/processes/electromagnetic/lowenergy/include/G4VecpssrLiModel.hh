@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VecpssrLiModel.hh,v 1.2 2010-06-06 23:52:28 mantero Exp $
+// $Id: G4VecpssrLiModel.hh,v 1.3 2010-06-15 08:03:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Haifa Ben Abdelouahed
@@ -57,7 +57,7 @@ public:
 
   G4VecpssrLiModel();
 
-  ~G4VecpssrLiModel();
+  virtual ~G4VecpssrLiModel();
 			     
   virtual G4double CalculateL1CrossSection(G4int zTarget,G4double massIncident, G4double energyIncident) = 0;//according to W.Brandt and G.Lapicki, Phys.Rev.A23(1981)
 
