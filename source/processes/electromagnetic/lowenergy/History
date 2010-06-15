@@ -1,4 +1,4 @@
-$Id: History,v 1.441 2010-06-14 21:13:52 alechner Exp $
+$Id: History,v 1.442 2010-06-15 08:04:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,16 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.06.2010, G. Cosmo, tag emlowen-V09-03-35
+            Corrected return value case in method GetPhotoElectronDirection()
+            in G4PhotoElectricAngularGeneratorSauterGavrila; addressing problem
+            report #1120.
+            Added missing virtual destructor to G4VecpssrKModel and
+            G4VecpssrLiModel base classes.
+
 14.06.2010, A. Lechner, tag emlowen-V09-03-34
             Made desctructor of base class G4VIonDEDXScalingAlgorithm virtual
             (avoids also compiler warnings).
+
+10.06.2010, A. Mantero, tag emlowen-V09-03-33
+            Fix in G4AugerTransition to cure crash on Windows.
+
+09.06.2010, A. Mantero, tag emlowen-V09-03-32
+            Fixed compilation warning in G4AnalyticalEcpssrKCrossSection.
 
 08.06.2010, S. Incerti, tag emlowen-V09-03-31
             modified initialisation of e- Emfietzoglou excitation
             model in G4DNAEmfietzoglouExcitationModel.cc and
             in G4DNAMillerGreenExcitationModel.cc
 
-07.06.2010, A.Mantero, tag emlowen-V09-03-30
+07.06.2010, A. Mantero, tag emlowen-V09-03-30
 	    added analytical (ecpssr) and empirical (Paul and Orlic)
 	    models for the calculation of hadronc shell ionisation CS 
 
