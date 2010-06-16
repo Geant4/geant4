@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.42 2008-05-15 13:45:15 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.43 2010-06-16 08:24:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1125,8 +1125,8 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
     }
     G4Polyhedron* polyhedron = new G4Polyhedron;
     G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces_vec);
-    delete faces_vec;
-    delete xyz;
+    delete [] faces_vec;
+    delete [] xyz;
     if (problem)
     {
       std::ostringstream oss;
