@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.2 2006-06-29 19:56:17 gunter Exp $
+// $Id: G4SynchrotronRadiationInMat.cc,v 1.3 2010-06-16 15:34:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -43,15 +43,13 @@
 #include "G4SynchrotronRadiationInMat.hh"
 #include "G4Integrator.hh"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////
 //
 // Constant for calculation of mean free path
 //
 
 const G4double
-G4SynchrotronRadiationInMat::fLambdaConst = sqrt(3.0)*electron_mass_c2/
+G4SynchrotronRadiationInMat::fLambdaConst = std::sqrt(3.0)*electron_mass_c2/
                                        (2.5*fine_structure_const*eplus*c_light) ;
 
 /////////////////////////////////////////////////////////////////////
@@ -316,18 +314,18 @@ G4SynchrotronRadiationInMat::PostStepDoIt(const G4Track& trackData,
 
       G4double Phi  = twopi * G4UniformRand() ;
 
-      G4double dirx = sin(Teta)*cos(Phi) , 
-               diry = sin(Teta)*sin(Phi) , 
-               dirz = cos(Teta) ;
+      G4double dirx = std::sin(Teta)*std::cos(Phi) , 
+               diry = std::sin(Teta)*std::sin(Phi) , 
+               dirz = std::cos(Teta) ;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);   
  
       // polarization of new gamma
 
-      // G4double sx =  cos(Teta)*cos(Phi);
-      // G4double sy =  cos(Teta)*sin(Phi);
-      // G4double sz = -sin(Teta);
+      // G4double sx =  std::cos(Teta)*std::cos(Phi);
+      // G4double sy =  std::cos(Teta)*std::sin(Phi);
+      // G4double sz = -std::sin(Teta);
 
       G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
       gammaPolarization = gammaPolarization.unit();

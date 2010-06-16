@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.cc,v 1.7 2006-06-29 19:56:19 gunter Exp $
+// $Id: G4TransitionRadiation.cc,v 1.8 2010-06-16 15:34:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation class -- implementation file
@@ -41,15 +41,9 @@
 
 
 #include <cmath>
-// #include "G4ios.hh"
-// #include <fstream.h>
-// #include <stdlib.h>
 
 #include "G4TransitionRadiation.hh"
 #include "G4Material.hh"
-
-// Init gamma array
-
 
 // Local constants
 
@@ -57,7 +51,6 @@ const G4int   G4TransitionRadiation::fSympsonNumber = 100 ;
 const G4int   G4TransitionRadiation::fGammaNumber = 15 ;
 const G4int   G4TransitionRadiation::fPointNumber = 100 ;
 
-using namespace std;
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -86,7 +79,7 @@ G4TransitionRadiation::~G4TransitionRadiation()
 ///////////////////////////////////////////////////////////////////
 //
 // Sympson integral of TR spectral-angle density over energy between
-// the limits energy 1 and energy2 at fixed varAngle = 1 - cos(Theta)
+// the limits energy 1 and energy2 at fixed varAngle = 1 - std::cos(Theta)
 
 G4double
 G4TransitionRadiation::IntegralOverEnergy( G4double energy1,

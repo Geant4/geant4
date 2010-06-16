@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.31 2010-05-27 20:49:40 gum Exp $
+// $Id: G4Scintillation.cc,v 1.32 2010-06-16 15:34:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -69,8 +69,6 @@
 #include "G4EmProcessSubType.hh"
 
 #include "G4Scintillation.hh"
-
-using namespace std;
 
 /////////////////////////
 // Class Implementation  
@@ -213,7 +211,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         if (MeanNumberOfPhotons > 10.)
         {
-          G4double sigma = ResolutionScale * sqrt(MeanNumberOfPhotons);
+          G4double sigma = ResolutionScale * std::sqrt(MeanNumberOfPhotons);
           NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
         else
@@ -280,10 +278,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
                  if ( ExcitationRatio == 1.0 ) {
-                    Num = G4int (min(YieldRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(YieldRatio,1.0) * NumPhotons);
                  }
                  else {
-                    Num = G4int (min(ExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(ExcitationRatio,1.0) * NumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
@@ -329,11 +327,11 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		// Generate random photon direction
 
                 G4double cost = 1. - 2.*G4UniformRand();
-                G4double sint = sqrt((1.-cost)*(1.+cost));
+                G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
 		G4double phi = twopi*G4UniformRand();
-		G4double sinp = sin(phi);
-		G4double cosp = cos(phi);
+		G4double sinp = std::sin(phi);
+		G4double cosp = std::cos(phi);
 
 		G4double px = sint*cosp;
 		G4double py = sint*sinp;
@@ -354,8 +352,8 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                 G4ThreeVector perp = photonMomentum.cross(photonPolarization);
 
 		phi = twopi*G4UniformRand();
-		sinp = sin(phi);
-		cosp = cos(phi);
+		sinp = std::sin(phi);
+		cosp = std::cos(phi);
 
                 photonPolarization = cosp * photonPolarization + sinp * perp;
 
@@ -391,7 +389,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                 // emission time distribution
                 if (ScintillationRiseTime==0.0) {
                    deltaTime = deltaTime - 
-                          ScintillationTime * log( G4UniformRand() );
+                          ScintillationTime * std::log( G4UniformRand() );
                 } else {
                    deltaTime = deltaTime +
                           sample_time(ScintillationRiseTime, ScintillationTime);
@@ -632,7 +630,7 @@ G4double G4Scintillation::sample_time(G4double tau1, G4double tau2)
           G4double d = (tau1+tau2)/tau2;
           // make sure the envelope function is 
           // always larger than the bi-exponential
-          G4double t = -1.0*tau2*log(1-ran1);
+          G4double t = -1.0*tau2*std::log(1-ran1);
           G4double g = d*single_exp(t,tau2);
           if (ran2 <= bi_exp(t,tau1,tau2)/g) return t;
         }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.5 2006-06-29 19:56:15 gunter Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.6 2010-06-16 15:34:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -43,10 +43,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include "G4SynchrotronRadiation.hh"
-// #include "G4Integrator.hh"
 #include "G4UnitsTable.hh"
-
-using namespace std;
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -64,7 +61,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
 
-  fLambdaConst = sqrt(3.0)*electron_mass_c2/
+  fLambdaConst = std::sqrt(3.0)*electron_mass_c2/
                            (2.5*fine_structure_const*eplus*c_light) ;
   fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2  ;
   verboseLevel=1;
@@ -168,7 +165,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
           G4cout
 	        << "  B = " << Btot/tesla << " Tesla"
             << "  perpB = " << perpB/tesla << " Tesla"
-            << "  Theta = " << Theta << " sin(Theta)=" << sin(Theta) << '\n'
+            << "  Theta = " << Theta << " std::sin(Theta)=" << std::sin(Theta) << '\n'
             << "  ptot  = " << G4BestUnit(ptot,"Energy")
             << "  rho   = " << G4BestUnit(rho,"Length")
   	        << G4endl;
@@ -261,18 +258,18 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
       G4double Phi  = twopi * G4UniformRand() ;
 
-      G4double dirx = sin(Teta)*cos(Phi) ,
-               diry = sin(Teta)*sin(Phi) ,
-               dirz = cos(Teta) ;
+      G4double dirx = std::sin(Teta)*std::cos(Phi) ,
+               diry = std::sin(Teta)*std::sin(Phi) ,
+               dirz = std::cos(Teta) ;
 
       G4ThreeVector gammaDirection ( dirx, diry, dirz);
       gammaDirection.rotateUz(particleDirection);
 
       // polarization of new gamma
 
-      // G4double sx =  cos(Teta)*cos(Phi);
-      // G4double sy =  cos(Teta)*sin(Phi);
-      // G4double sz = -sin(Teta);
+      // G4double sx =  std::cos(Teta)*std::cos(Phi);
+      // G4double sy =  std::cos(Teta)*std::sin(Phi);
+      // G4double sz = -std::sin(Teta);
 
       G4ThreeVector gammaPolarization = FieldValue.cross(gammaDirection);
       gammaPolarization = gammaPolarization.unit();
@@ -367,11 +364,11 @@ G4double G4SynchrotronRadiation::InvSynFracInt(G4double x)
   if(x<aa2)      return x*x*x*Chebyshev(aa1,aa2,cheb1,ncheb1,x);
   else if(x<aa3) return       Chebyshev(aa2,aa3,cheb2,ncheb2,x);
   else if(x<1-0.0000841363)
-  { G4double y=-log(1-x);
+  { G4double y=-std::log(1-x);
 	return y*Chebyshev(aa4,aa5,cheb3,ncheb3,y);
   }
   else
-  { G4double y=-log(1-x);
+  { G4double y=-std::log(1-x);
 	return y*Chebyshev(aa5,aa6,cheb4,ncheb4,y);
   }
 }
@@ -383,8 +380,8 @@ G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perp
 
   static G4bool FirstTime=true;
   if(verboseLevel > 0 && FirstTime)
-  { G4double Emean=8./(15.*sqrt(3.))*Ecr; // mean photon energy
-    G4double E_rms=sqrt(211./675.)*Ecr; // rms of photon energy distribution
+  { G4double Emean=8./(15.*std::sqrt(3.))*Ecr; // mean photon energy
+    G4double E_rms=std::sqrt(211./675.)*Ecr; // rms of photon energy distribution
     G4cout << "G4SynchrotronRadiation::GetRandomEnergySR :" << '\n' << std::setprecision(4)
 	<< "  Ecr   = "    << G4BestUnit(Ecr,"Energy") << '\n'
 	<< "  Emean = "    << G4BestUnit(Emean,"Energy") << '\n'
