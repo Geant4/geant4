@@ -149,7 +149,7 @@ processes/electromagnetic/muons                  emmuons-V09-03-01
 - G4MuPairProductionModel: added sampling recoil of a primary particle
 - G4MuIonisation: use G4ICRU73QOModel for mu- for E< 0.2 MeV.
 
-processes/electromagnetic/standard               emstand-V09-03-19
+processes/electromagnetic/standard               emstand-V09-03-17
 ----------------------------------
 - G4BraggIonGasModel, G4BetheBlochIonGasModel: new ionisation models for low
   density media.
@@ -169,9 +169,6 @@ processes/electromagnetic/standard               emstand-V09-03-19
   improve speed by addition extra class members.
 - G4UrbanMscModel93: removed randomisation of step limit for the first step in
   any volume in the case of usage of safety.
-- G4UniversalFluctuation: fixed anomaly at the tail of distribution for thin
-  targets; new G4UniversalFluctuation93 class, same as version in release 9.3
-  for G4UniversalFluctuation.
 - Removed obsolete models: G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel71,
   G4MultipleScattering, G4ComptonScattering52, G4PolarizedComptonScattering.
 - G4PAIModel, G4PAIPhotonModel: added printout for the model initialisation.
@@ -222,6 +219,9 @@ processes/hadronic                               hadr-V09-03-00
     N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
   o Bug-fix in G4QLowEnergy: pions as secondaries.
   o Bug-fix in K0 elastic & Ion-Ion Elastic.
+- models/coherent_elastic (hadr-cohe-V09-03-02)
+  o G4UHadronElasticProcess: fixed CHIPS warning for Cu, due to wrong
+    isotope sected; addressing problem report from ALICE.
 - models/de_excitation (hadr-deex-V09-03-18)
   o G4Evaporation: fixed problem of isotope production for high Z fragments.
     A problem introduced in the recent revision of the model.
@@ -281,7 +281,7 @@ tracking                                         tracking-V09-03-03
   i_mode migration. Added explicit once-only i_mode deprecation warning.
 - G4Trajectory and G4SmoothTrajectory: implemented i_mode migration.
 
-visualization                                    vis-V09-03-07
+visualization                                    vis-V09-03-08
 -------------
 - management:
   o Added generic drivers: OGL, OGLI, OGLS, OI.
@@ -290,10 +290,12 @@ visualization                                    vis-V09-03-07
   o Introduced DispatchToModel without i_mode.
   o Moved i-mode deprecation warnings to G4VTrajectory.
   o Improved /vis/viewer/rebuild.
+  o Improved action after "/vis/geometry/..." commands.
   o Restore previous viewer after /vis/drawTree.
   o Changed order of flags to follow G4UIExecutive.
   o G4VisManager, G4VisExecutive: introduced optional verbosity string
     argument in constructor; made 'fVerbosity' and GetVerbosity() static.
+  o Added virtual destructors to fix compilation warnings.
 - modeling:
   o Added G4DigiModel and G4DigiFilterFactories.
   o Added default colours to G4TrajectoryDrawByParticleID.
@@ -313,7 +315,7 @@ visualization                                    vis-V09-03-07
   o Use generic section and cutaway algorithm.
 - OpenInventor:
   o Added protection against repeated initialisation.
-- RayTracer (raytracer-V09-03-02):
+- RayTracer:
   o Added DrawTrajectory(); ready for i_mode migration.
   o Added missing virtual destructor to G4VRTScanner, G4RTXScanner and
     G4RTSimpleScanner classes.

@@ -281,9 +281,6 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         allows to use G4WentzelVIModel with optical model of hadron scattering.
       o G4PAIModel, G4PAIPhotonModel: added printout for the model
         initialisation.
-      o G4UniversalFluctuation: fixed anomaly at the tail of distribution for
-        thin targets; new G4UniversalFluctuation93 class, same as version in
-        release 9.3 for G4UniversalFluctuation.
       o Removed obsolete models: G4UrbanMscModel, G4UrbanMscModel2,
         G4UrbanMscModel71, G4MultipleScattering, G4ComptonScattering52,
         G4PolarizedComptonScattering.
@@ -376,6 +373,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
         G4QElasticCrossSection; fixed initialization problem for
         G4QNeutronElasticCrossSection.
+      o G4UHadronElasticProcess: fixed CHIPS warning for Cu, due to wrong
+        isotope sected; addressing problem report from ALICE.
     + models/de_excitation
       o G4ExcitationHandler: enabled Multi-Fragmentation model.
       o G4StatMFMacroTemperature: cleanup logic of solving equation for
@@ -530,10 +529,12 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Introduced DispatchToModel without i_mode.
       o Moved i-mode deprecation warnings to G4VTrajectory.
       o Improved /vis/viewer/rebuild.
+      o Improved action after "/vis/geometry/..." commands.
       o Restore previous viewer after /vis/drawTree.
       o Changed order of flags to follow G4UIExecutive.
       o G4VisManager, G4VisExecutive: introduced optional verbosity string
         argument in constructor; made 'fVerbosity' and GetVerbosity() static.
+      o Added virtual destructors to fix compilation warnings.
     + modeling:
       o Added G4DigiModel and G4DigiFilterFactories.
       o Added default colours to G4TrajectoryDrawByParticleID.
