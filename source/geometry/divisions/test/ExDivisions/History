@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2007-05-18 09:07:53 gcosmo Exp $
+$Id: History,v 1.7 2010-06-16 08:51:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-06-10 G.Cosmo
+----------------
+- Migrated physics-list to use particle-based multiple-scattering processes.
 
 18-05-07 G.Cosmo
 ----------------
