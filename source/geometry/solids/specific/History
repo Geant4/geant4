@@ -1,4 +1,4 @@
-$Id: History,v 1.170 2010-06-11 09:42:59 gcosmo Exp $
+$Id: History,v 1.171 2010-06-16 08:46:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-Jun-2010  G.Cosmo (geom-specific-V09-03-08)
+- Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+  and G4Polyhedra.
 
 11-Jun-2010  T.Nikitina (geom-specific-V09-03-07)
 - G4GenericTrap: fixed cases of zero dToIn/sToOut when vertices are collapsed
