@@ -13,7 +13,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         Configure post-install is clean.
       o Fixed selection of XERCESCROOT path for Windows.
       o Added new data set G4NEUTRONXS (Evaluated neutron cross section
-        data, version 1.0).
+        data, version 1.0), controlled by variable G4NEUTRONXSDATA.
       o Updated data set G4EMLOW to version 6.13.
     + Removed 'leading_particle' hadronic module from include paths list.
     + Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
@@ -260,19 +260,16 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         G4hMultipleScattering.
       o G4eBremsstrahlungRelModel, G4MollerBhabhaModel: set minimum cut value
         to 0.1 keV.
-      o G4PolarizedComptonScattering: added message that this process is
-        obsolete.
       o G4eBremsstrahlungModel: fix in SelectRandomAtom() method.
         Addressing problem report #1115.
       o G4UrbanMscModel93: added randomization of step limit for the first
-        step in any volume; do not use randomization in the case of usage of
-        safety.
+        step in any volume for option "UseDistanceTo Boundary".
       o G4BraggIonGasModel, G4BetheBlochIonGasModel: new ionisation models for
         low density media.
       o G4BraggModel: above 2 MeV use ICRU'49 parameterisation for all atoms.
       o New model G4ICRU73QOModel for anti-particles
       o G4hIonisation: use G4ICRU73QOModel for negatively charged particles
-        below 2 MeV and for anti-particles.
+        below 2 MeV.
       o G4WentzelOKandVIxSection: new class to compute cross sections and
         sample scattering angle.
       o G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel:
@@ -288,15 +285,16 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         G4PolarizedComptonScattering.
     + Utils:
       o G4VMscModel, G4VMultipleScattering: set skin=1.0 as default.
-      o G4LossTableManager: added new method GetNumberOfBinsPerDecade(), used
-        in G4VEmModel with Spline flag to initialise G4EmElementSelector.
+      o G4LossTableManager: added new method GetNumberOfBinsPerDecade(), which
+        is used in G4VEmModel for initialisation of G4EmElementSelector.
         Addressing problem report #1115.
-        Added methods PreparePhsyicsTables(), BuildPhysicsTables(), and changed
+        Added methods PreparePhsyicsTables(), BuildPhysicsTables(), fixing
         initialisation of models via G4EmConfigurator.
       o G4EmProcessOptions: removed extra initialisation code, already existing
         in G4LossTableManager.
       o G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: added
-        calls to new G4LossTableManager methods.
+        calls to new G4LossTableManager methods PreparePhsyicsTables() and
+        BuildPhysicsTables().
       o Added method GetCurrentElement() in G4VEmProcess, G4VEnergyLossProcess
         and G4VEmModel classes.
       o G4VEmProcess: cleanup printout at initialisation for scattering process.
@@ -305,11 +303,12 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o G4VEnergyLossProcess: call CorrectionsAlongStep() only for ions (minor
         CPU saving). Use the same method to build cross section table
         as DEDX table (use copy constructors to reduce number of calls to exp()).
-      o G4EmConfigurator: upgraded and fixed old problem.
       o G4EmCalculator: fix in GetCrossSection() method.
       o G4EmElementSelector: use Spline flag to construct vectors probabilities.
-      o G4EmModelManager: do not use min energy cut defined by models allowing
-        decreasing of cuts in limit to zero. Cleanup to comments.
+      o G4EmModelManager: do not use min energy cut defined by models, so
+        production threshold is defined only by range to energy conversion and
+        is limited only by low limit of energy threshold defined in 'cut'
+        category.
       o G4EmConfigurator: fix for case of more than one model added per a
         process.
       o G4EmCorrections: moved G4AtomicShell header into source.
@@ -378,13 +377,12 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o G4UHadronElasticProcess: fixed CHIPS warning for Cu, due to wrong
         isotope sected; addressing problem report from ALICE.
     + models/de_excitation
-      o G4ExcitationHandler: enabled Multi-Fragmentation model.
       o G4StatMFMacroTemperature: cleanup logic of solving equation for
         temperature; moved constructors and destructor to source.
       o G4ProtonEvaporationProbability, G4DeuteronEvaporationProbability,
         G4TritonEvaporationProbability, G4He3EvaporationProbability,
-        G4AlphaEvaporationProbability: return back to published variant OPT3
-        (Kalbach) parameterization of inverse cross section.
+        G4AlphaEvaporationProbability: return back to published variant
+        parameterization of inverse cross section (OPT3, Kalbach).
       o G4FermiFragmentsPool: extended list of stable fragments.
       o G4UnstableFragmentBreakUp: new class to decay exotic fragment
         (like 2n or 2p).
@@ -398,23 +396,22 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         G4ContinuumGammaDeexcitation: set energy tolerance 1 keV. More accurate
         Lorentz computations. Define destructors to be virtual.
       o G4DiscreteGammaTransition: removed unphysical corrections of gamma
-        energy; fixed default particle as gamma; avoid subtracting bounding
+        energy; fixed default particle as gamma; avoid subtracting binding
         energy in case of electron emission.
       o G4ExcitationHandler: apply FermiBreakUp to fragments with A>1 (before
-        was A>4) in order to reduce number of fake gamma produced in order
-        deexcite light fragments; added parameter 'minExcitation' equal to
-        1 keV. Added check on stability of primary; do evaporation if
+        was A>4) in order to reduce number of fake gamma produced in
+        deexcitation of light fragments; added parameter 'minExcitation' equal
+        to 1 keV. Added check on stability of primary; do evaporation if
         FermiBreakUp cannot deexcite a fragment. Added SetParameters() method.
-        Disabled MFM. Allow emission e- instead of gamma due to internal
-        conversion. Use BreakUpFragment() method for photon de-excitation.
-      o G4Evaporation: rewritten BreakUp() method; added Initialise() method,
-        to setup all options and not at run time. Added InitialiseEvaporation()
-        method to setup decay channels; changed order of decay channels: first
-        photon evaporation, then fission, finally all other channels as before.
-        Improved condition how to stop deexcitation loop.
+      o G4Evaporation: rewritten BreakUp() method; added Initialise() method at
+        construction, to setup all options and not at run time.
+        Added InitialiseEvaporation() method to setup decay channels; changed
+        order of decay channels: first photon evaporation, then fission,
+        finally all other channels as before. Improved condition on how to
+        stop deexcitation loop.
         Added call to G4UnstableFragmentBreakUp if natural abundances of cold
-        fragment is zero; optimized logic of stopping of evaporation loop
-        Set as a default variant evaporation combining standard plus GEM
+        fragment is zero and Z < 20; optimized logic of stopping of evaporation
+        loop. Set as a default variant evaporation combining standard plus GEM
         probabilities.
       o G4PhotonEvaporation: added correction of electron state after emission.
       o G4VEvaporationChannel, G4PhotonEvaporation: added two new virtual
