@@ -235,6 +235,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Muons:
       o G4MuPairProductionModel: added sampling recoil of a primary particle
       o G4MuIonisation: use G4ICRU73QOModel for mu- for E< 0.2 MeV.
+    + Polarisation:
+      o Fix in G4ePolarizedIonisation to use default vector size of
+        G4VEnergyLossProcess and avoid size mismatch in G4LossTableBuilder.
     + Standard:
       o G4GoudsmitSaundersonMscModel: fixed problems of small angle theta
         distributions. Improved numerical stability of computations for small
@@ -314,6 +317,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o G4EmCorrections: moved G4AtomicShell header into source.
     + Xrays:
       o Included scintillation rise time to G4Scintillation.
+      o Use std namespace for mathematical functions explicitly.
 
   o Hadronic Processes:
     ------------------

@@ -80,7 +80,7 @@ graphics_reps                                    greps-V09-03-02
     to distinguish usage and in preparation for i_mode migration.
 - G4VGraphicsScene: added method AddCompound (const G4VDigi&).
 
-interfaces                                       interfaces-V09-03-08
+interfaces                                       interfaces-V09-03-09
 ----------
 - G4UIExective: changed order for session type; GUI session is prioritized.
 - G4VBasicShell: implemented improvements for command completion.
@@ -151,6 +151,11 @@ processes/electromagnetic/muons                  emmuons-V09-03-01
 - G4MuPairProductionModel: added sampling recoil of a primary particle
 - G4MuIonisation: use G4ICRU73QOModel for mu- for E< 0.2 MeV.
 
+processes/electromagnetic/polarisation           empolar-V09-03-00
+--------------------------------------
+- Fix in G4ePolarizedIonisation to use default vector size of
+  G4VEnergyLossProcess and avoid size mismatch in G4LossTableBuilder.
+
 processes/electromagnetic/standard               emstand-V09-03-17
 ----------------------------------
 - G4BraggIonGasModel, G4BetheBlochIonGasModel: new ionisation models for low
@@ -182,9 +187,10 @@ processes/electromagnetic/utils                  emutils-V09-03-16
 - G4EmConfigurator: fix for case of more than one model added per a process.
 - G4EmCorrections: moved G4AtomicShell header into source.
 
-processes/electromagnetic/xrays                  xrays-V09-03-00
+processes/electromagnetic/xrays                  xrays-V09-03-01
 -------------------------------
 - Included scintillation rise time to G4Scintillation.
+- Use std namespace for mathematical functions explicitly.
 
 processes/hadronic                               hadr-V09-03-00
 ------------------
