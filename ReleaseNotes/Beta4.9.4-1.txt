@@ -66,6 +66,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         polygon vertices. Added a check for vertices ordering; if vertices
         are defined anti-clockwise their ordering is reverted.
         Fix in polygon facet triangularization for consequent concave vertices.
+      o Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+        and G4Polyhedra.
     + volumes:
       o Make use of specialized allocator for handling internal vector in
         G4NavigatorHistory, globally controlling the memory pool, to optimise

@@ -56,11 +56,13 @@ event                                            event-V09-03-03
 -----
 - Removed obsolete CLHEP_HepMC option from G4EventManager class.
 
-geometry/solids/specific                         geom-specific-V09-03-07
+geometry/solids/specific                         geom-specific-V09-03-08
 ------------------------
 - Introducing new G4GenericTrap shape, a new solid representing an arbitrary
   trapezoid with up to 8 vertices standing on two parallel planes perpendicular
   to the Z axis.
+- Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+  and G4Polyhedra.
 
 global                                           global-V09-03-08
 ------
