@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.15 2010-05-29 21:31:03 allison Exp $
+// $Id: G4VTrajectory.cc,v 1.16 2010-06-16 20:03:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -115,6 +115,7 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
   }
 }
 
+/***
 void G4VTrajectory::DrawTrajectory() const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -123,13 +124,14 @@ void G4VTrajectory::DrawTrajectory() const
     pVVisManager->DispatchToModel(*this);
   }
 }
+***/
 
 void G4VTrajectory::DrawTrajectory(G4int i_mode) const
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
   static G4bool warnedAboutIMode = false;
-  if (!warnedAboutIMode) {
+  if (!warnedAboutIMode && i_mode != 0) {
     G4Exception
         ("G4VTrajectory::DrawTrajectory",
          "",

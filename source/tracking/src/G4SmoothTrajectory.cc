@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.20 2010-05-29 21:31:03 allison Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.21 2010-06-16 20:03:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -119,12 +119,14 @@ void G4SmoothTrajectory::ShowTrajectory(std::ostream& os) const
   // ... or override with your own code here.
 }
 
+/***
 void G4SmoothTrajectory::DrawTrajectory() const
 {
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::DrawTrajectory();
   // ... or override with your own code here.
 }
+***/
 
 void G4SmoothTrajectory::DrawTrajectory(G4int i_mode) const
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.hh,v 1.13 2010-05-29 21:31:03 allison Exp $
+// $Id: G4SmoothTrajectory.hh,v 1.14 2010-06-16 20:03:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -101,7 +101,7 @@ public: // with description
 
 // Other member functions
    virtual void ShowTrajectory(std::ostream& os=G4cout) const;
-   virtual void DrawTrajectory() const;
+   //virtual void DrawTrajectory() const;
    virtual void DrawTrajectory(G4int i_mode) const;
    virtual void AppendStep(const G4Step* aStep);
    virtual int GetPointEntries() const { return positionRecord->size(); }

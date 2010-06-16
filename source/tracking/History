@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2010-05-29 21:31:28 allison Exp $
+$Id: History,v 1.142 2010-06-16 20:03:00 allison Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 June 2010 John Allison (tracking-V09-03-04)
+- G4VTrajectory, G4Trajectory, G4SmoothTrajectory:
+  o Reverted to original interface: DrawTrajectory(G4int i_mode = 0).
+    This to prevent compiler warnings about hiding.  We will
+    re-instate DrawTrajectory() at a future major release.
+  o Deprecation message is printed via G4Exception only once, and only
+    if a user invokes with a non-zero value of i_mode.
 
 29 May 2010 John Allison (tracking-V09-03-03)
 - G4VTrajectory:
