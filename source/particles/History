@@ -1,4 +1,4 @@
-$Id: History,v 1.189 2010-06-11 05:50:20 kurasige Exp $
+$Id: History,v 1.190 2010-06-17 01:46:36 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- Junei 11  2010    Hisaya Kurashige  (particles-V09-03-04)
+
+- June 16  2010    Peter Gumplinger  (particles-V09-03-05)
+- G4MuonRadiativeDecayChannelWithSpin.cc: correct a sign error in 
+  front of the som01 term; Pmu is -1 for mu+ and hence already 
+  takes care of the sign in equ. (70) of TWIST Technote 55"
+
+- June 11  2010    Hisaya Kurashige  (particles-V09-03-04)
 - Add anti-nuclei as shortlived
 
 - May 20 2010    Hisaya Kurashige  (particles-V09-03-03)
