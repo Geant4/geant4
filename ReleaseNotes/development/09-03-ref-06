@@ -29,8 +29,10 @@ Summarised, the list of changes is the following:
 
 config                                           config-V09-03-05
 ------
-- Configure (Configure-V09-03-02)
+- Configure (Configure-V09-03-03)
   o Fixed selection of XERCESCROOT path for Windows.
+  o Added removal of quotes from make version string to handle non-English
+    language systems.
   o Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
     version 1.0).
   o Updated data set G4EMLOW to version 6.13.

@@ -11,6 +11,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + Configure script:
       o Protected echos on LD_LIBRARY_PATH so that output from use of
         Configure post-install is clean.
+      o Added removal of quotes from make version string to handle non-English
+        language systems.
       o Fixed selection of XERCESCROOT path for Windows.
       o Added new data set G4NEUTRONXS (Evaluated neutron cross section
         data, version 1.0), controlled by variable G4NEUTRONXSDATA.
