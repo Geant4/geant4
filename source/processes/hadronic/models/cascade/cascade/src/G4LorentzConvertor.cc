@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.25 2010-06-17 16:34:04 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.26 2010-06-17 23:05:04 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -289,6 +289,7 @@ G4bool G4LorentzConvertor::reflectionNeeded() const {
     G4cout << " reflection across XY is"
 	   << ((v2>=small && (!degenerated || scm_momentum.z()<0.0))?"":" NOT")
 	   << " needed" << G4endl;
+  }
 
   return (v2>=small && (!degenerated || scm_momentum.z()<0.0));
 }
