@@ -140,6 +140,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       AddElectron() or RemoveElectron() are invoked.
     + Fixed problems that error messages appear in cout and not in cerr.
     + Added anti-nuclei as short-lived particles.
+    + G4MuonRadiativeDecayChannelWithSpin: corrected sign error.
     + Code cleanup in G4DynamicParticle constructors.
 
   o Persistency:
@@ -519,9 +520,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
 
   o Tracking
     --------
-    + G4VTrajectory: added virtual method DrawTrajectory() in preparation for
-      i_mode migration. Added explicit once-only i_mode deprecation warning.
-    + G4Trajectory and G4SmoothTrajectory: implemented i_mode migration.
+    + G4VTrajectory, G4Trajectory, G4SmoothTrajectory: added deprecation
+      message, being printed via G4Exception only once, and only if a user
+      invokes with a non-zero value of 'i_mode' in DrawTrajectory().
 
   o Visualization:
     -------------

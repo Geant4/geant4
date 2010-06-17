@@ -89,9 +89,10 @@ interfaces                                       interfaces-V09-03-09
   for immediate update of the tree. Fixed warning in standard-output during
   viewer creation and fixed flush problem. Fixed recursive repaint problem.
 
-particles                                        particles-V09-03-04
+particles                                        particles-V09-03-05
 ---------
 - Added anti-nuclei as short-lived particles.
+- G4MuonRadiativeDecayChannelWithSpin: corrected sign error.
 
 persistency/ascii                                ascii-V09-03-00
 -----------------
@@ -283,11 +284,11 @@ run                                              run-V09-03-01
 - Use "const G4String&" as arguments and return value wherever applicable
   in G4RunManager and G4RunManagerKernel.
 
-tracking                                         tracking-V09-03-03
+tracking                                         tracking-V09-03-04
 --------
-- G4VTrajectory: added virtual method DrawTrajectory() in preparation for
-  i_mode migration. Added explicit once-only i_mode deprecation warning.
-- G4Trajectory and G4SmoothTrajectory: implemented i_mode migration.
+- G4VTrajectory, G4Trajectory, G4SmoothTrajectory: added deprecation message,
+  being printed via G4Exception only once, and only if a user invokes with a
+  non-zero value of 'i_mode' in DrawTrajectory().
 
 visualization                                    vis-V09-03-08
 -------------
