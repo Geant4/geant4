@@ -69,8 +69,8 @@ using namespace std;
 int main()
 {
 
-  G4int i, j, k, iMax;
-  G4double x;
+  G4int k; // i, j, iMax;
+  // G4double x;
 
   G4DiffuseElastic* diffelastic = new G4DiffuseElastic();
   G4NuclNuclDiffuseElastic* nndiffelastic = new G4NuclNuclDiffuseElastic();
@@ -112,7 +112,7 @@ int main()
   G4int choice;
   // G4cin >> choice;
 
-  choice = 82;
+  choice = 8;
 
 
   switch (choice)
@@ -225,7 +225,7 @@ int main()
 
   G4ParticleDefinition* theParticleDefinition;
 
-  G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
+  //  G4NucleonNuclearCrossSection* barash = new G4NucleonNuclearCrossSection();
 
   // G4PiNuclearCrossSection* barash = new G4PiNuclearCrossSection();
 
@@ -290,28 +290,21 @@ int main()
       break;
 
   }
-  // Sampling array of scattering angles 
 
-  const G4int kAngle = 101;
-  G4double angleDistr[kAngle];
+  // G4double momentum = 9.92*GeV;
 
-  for( k = 0; k < kAngle; k++) angleDistr[k] = 0;
+  // G4double pMass    = theParticleDefinition->GetPDGMass();
 
-
-  G4double momentum = 9.92*GeV;
-
-  G4double pMass    = theParticleDefinition->GetPDGMass();
-
-  G4double thetaMax  = 15.*degree; 
+  // G4double thetaMax  = 15.*degree; 
 
   // G4double kinEnergy = std::sqrt(momentum*momentum + pMass*pMass) - pMass;
 
-  G4double kinEnergy = 1.*GeV;
+  G4double kinEnergy = 168.*MeV;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
                                               kinEnergy);
-  G4double m1 = theParticleDefinition->GetPDGMass();
+  // G4double m1 = theParticleDefinition->GetPDGMass();
   G4double plab = theDynamicParticle->GetTotalMomentum();
   G4cout <<"lab momentum, plab = "<<plab/GeV<<" GeV"<<G4endl;
   G4double plabLowLimit = 20.0*MeV;
@@ -319,19 +312,6 @@ int main()
   G4int Z   = G4int(theElement->GetZ());
   G4int A    = G4int(theElement->GetN()+0.5);
 
-
-  /*
-  G4ParticleDefinition * theTargetDef = 0;
-
-  if      (Z == 1 && A == 1) theTargetDef = G4Proton::Proton();
-  else if (Z == 1 && A == 2) theTargetDef = G4Deuteron::Deuteron();
-  else if (Z == 1 && A == 3) theTargetDef = G4Triton::Triton();
-  else if (Z == 2 && A == 3) theTargetDef = G4He3::He3();
-  else if (Z == 2 && A == 4) theTargetDef = G4Alpha::Alpha();
-  else                       theTargetDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
- 
-  G4double m2 = theTargetDef->GetPDGMass();
-  */
 
 
   G4double m2 = man->GetAtomicMassAmu(Z)*GeV;
@@ -348,180 +328,66 @@ int main()
   G4ThreeVector p1   = lv1.vect();
   G4double      ptot = p1.mag();
   G4cout <<"cms momentum, ptot = "<<ptot/GeV<<" GeV"<<G4endl;
-  G4double      tmax = 4.0*ptot*ptot;
-  G4double      t    = 0.0;
 
   // Choose generator
+
   G4bool swave = false;
 
   // S-wave for very low energy
+
   if(plab < plabLowLimit) swave = true;
 
   // Angle sampling
 
-  G4int  numberOfSimPoints = 0;
-  G4double pData, sData, dData, tData[200], sumsigma, coulsigma;
 
-  std::ifstream simRead;
+  G4double dData, thetaLab[200];
+  G4double distrDif[200], distrXsc[200];
 
-  // simRead.open("pPb9p92GeVc.dat");
-  simRead.open("pPbT1GeV.dat");
-  //  simRead.open("pSiT1GeV.dat");
-  // simRead.open("pipC9p92GeVc.exp");
-  // simRead.open("pipPb9p92GeVc.exp");
-  // simRead.open("pimPb9p92GeVc.exp");
+  G4double thetaCMS;
 
-  simRead>>numberOfSimPoints;
-
-  for( i = 0; i < numberOfSimPoints; i++ )
-  {
-    tData[i] = 0.0 ;
-  }
-  G4cout <<G4endl; 
-
-  for( i = 0; i < numberOfSimPoints; i++ )
-  {
-    // simRead>>pData>>sData>>dData;
-    // tData[i] = pData;   // pData*GeV*GeV;
-    simRead >> tData[i] >> sData;
-    G4cout << tData[i] << "\t" << sData <<G4endl;
-  }
-  simRead.close();
-  G4cout <<G4endl;
-
-  std::ofstream writes("sigma.dat", std::ios::out ) ;
-  writes.setf( std::ios::scientific, std::ios::floatfield );
-
-  G4double theta, thetaLab, thetaCMS,  sigma, integral;
-  // G4double thetaCMS2;
-
-
-  iMax = numberOfSimPoints;
-
-  G4cout<< "iMax = " << iMax <<G4endl;
-  G4cout <<G4endl;
-
-  writes << iMax  << G4endl;
-
-
-  for( i = 0; i < iMax; i++)
-  {
-
-    theta = tData[i]*degree;
-
-    // theta = tData[i]*milliradian;
-
-    thetaCMS = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,theta);
-
-    // thetaCMS2 = thetaCMS*thetaCMS;
-
-    // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    // sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
-    // coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, theta, plab, Z);
-
-    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, thetaCMS, ptot, A);
-    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, thetaCMS, ptot, A, Z);
-    coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, thetaCMS, ptot, Z);
-
-     G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
-     writes << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
-            << "\t" << coulsigma/millibarn << G4endl;
-
-  // G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
-    //  writes << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
-    //   << "\t" << coulsigma/millibarn << G4endl;
-
-
-
-  }
-  G4double sig = barash->GetCrossSection(theDynamicParticle,theElement, 273*kelvin);
-  // G4double sig = barash->GetElasticCrossSection(theDynamicParticle, G4double(Z), G4double(A));
-  // sig = barash->GetTotalXsc();
-  sig = barash->GetElasticXsc();
+  G4double rad, rad2;
   
-  G4double rad = diffelastic->GetNuclearRadius();
+  const G4int kAngle = 100; // number of angles
+  G4double thetaMin = 15.*degree;
+  dData = 30.*degree/kAngle;
 
-  integral *= rad*rad;
-  G4cout<<G4endl;
-  G4cout<<integral/millibarn<<"\t"<<sig/millibarn<<"\t"<<integral/sig<<G4endl;
+  nndiffelastic->SetCofLambda(1.01);  // 1.01, 1.03
+  nndiffelastic->SetCofDelta(0.092);   // 0.12, 0.09
+  nndiffelastic->SetCofAlpha(0.092);  // 0.09
 
-  /////////////////////////////////////////////////////////////
+  nndiffelastic->InitParameters(theParticleDefinition, ptot, Z, A);
 
-  std::ofstream writec("coulomb.dat", std::ios::out ) ;
-  writec.setf( std::ios::scientific, std::ios::floatfield );
+  std::ofstream writef("angle.dat", std::ios::out ) ;
+  writef.setf( std::ios::scientific, std::ios::floatfield );
 
-  iMax = 200;
+  writef <<kAngle<<G4endl;
 
-  G4double thetaMin, logThetaMin, logThetaMax, logTheta, dLogTheta;
-
-  thetaMin    = 1.0e-1*degree;
-  thetaMax    = 16*degree;
-
-  // thetaMin    = 1.0e-1*milliradian;
-  // thetaMax    = 36*milliradian;
-
-
-  logThetaMin = std::log10(thetaMin);
-  logThetaMax = std::log10(thetaMax);
-  dLogTheta   = (logThetaMax - logThetaMin)/iMax;
-
-  writec << iMax  << G4endl;
-
-  G4cout<<G4endl;
-  G4cout<<"theta"<<"\t\t"<<"Coulomb xsc"<<G4endl;
-  G4cout<<G4endl;
-
-  for( i = 0; i < iMax; i++)
+  for( k = 0; k < kAngle; k++) 
   {
-    logTheta = logThetaMin + dLogTheta*i;
-    theta    = std::pow(10.,logTheta);
-
-    thetaCMS = diffelastic->ThetaLabToThetaCMS(theDynamicParticle,m2,theta);
-
-
-    // sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, theta, plab, A);
-    // sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, theta, plab, A, Z);
-    // coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, theta, plab, Z);
+    thetaLab[k] = k*dData + thetaMin;
+    thetaCMS = thetaLab[k];
     
-    sigma = diffelastic->GetDiffuseElasticXsc( theParticleDefinition, thetaCMS, ptot, A);
-    sumsigma = diffelastic->GetDiffuseElasticSumXsc( theParticleDefinition, thetaCMS, ptot, A, Z);
-    coulsigma = diffelastic->GetCoulombElasticXsc( theParticleDefinition, thetaCMS, ptot, Z);
+    distrDif[k] = diffelastic->GetDiffuseElasticSumXsc(theParticleDefinition, thetaCMS, ptot, A, Z); 
 
-     G4cout << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn  << G4endl;
-     writec << theta/degree << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
-          << "\t" << coulsigma/millibarn<< G4endl;
+    distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
 
-    //  G4cout << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn << G4endl;
-    // writec << theta/milliradian << "\t" << "\t" << sigma/millibarn << "\t" << sumsigma/millibarn 
-    // << "\t" << coulsigma/millibarn << G4endl;
+    rad = diffelastic->GetNuclearRadius();
+    rad2 = rad*rad;
+
+    distrDif[k] /= rad2;
+    distrXsc[k] /= rad2;
+
+    G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+    writef <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+  
   }
-  G4cout<<G4endl;
 
-  sigma = diffelastic->GetCoulombTotalXsc( theParticleDefinition, plab, Z);
 
-  G4cout << "Total Coulomb xsc = " << sigma/millibarn  << " millibarn" << G4endl;
 
-  G4cout << "Coulomb length = " 
-         << 1./(sigma*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
 
-  G4cout << "Nuclear length = " 
-         << 1./(sig*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
 
-  G4cout<<G4endl;
 
-  sigma = diffelastic->GetCoulombIntegralXsc( theParticleDefinition, plab, Z, 2.*degree, 16*degree);
-  // sigma = diffelastic->GetCoulombIntegralXsc( theParticleDefinition, plab, Z, 4*milliradian, 
-  // 40*milliradian);
-
-  G4cout << "0-1*degree Coulomb xsc = " << sigma/millibarn  << " millibarn" << G4endl;
-
-  G4cout << "0-1*degree Coulomb length = " 
-         << 1./(sigma*theMaterial->GetTotNbOfAtomsPerVolume())/micrometer<<" micron"<<G4endl;
-
-  G4cout<<G4endl;
-
-  G4cout<<"energy in GeV"<<"\t"<<"cross-section in millibarn"<<G4endl;
-  G4cout << " elastic cross section for " <<
+  G4cout <<G4endl<< " elastic cross section for " <<
             theParticleDefinition->GetParticleName() <<
            " on " << theElement->GetName() << G4endl;
   G4cout <<"with atomic weight = "<<theElement->GetN() << G4endl;
