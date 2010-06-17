@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.23 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.24 2010-06-17 04:25:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -42,7 +42,6 @@ const G4double G4LorentzConvertor::small = 1.0e-10;
 
 G4LorentzConvertor::G4LorentzConvertor() 
   : verboseLevel(0), degenerated(false) {
-
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
   }
@@ -56,6 +55,7 @@ void G4LorentzConvertor::setBullet(const G4InuclParticle* bullet) {
 void G4LorentzConvertor::setTarget(const G4InuclParticle* target) {
   setTarget(target->getMomentum());
 }
+
 
 // Boost bullet and target four-vectors into destired frame
 
@@ -266,8 +266,17 @@ G4bool G4LorentzConvertor::reflectionNeeded() const {
 }
 
 
+// Reporting functions for diagnostics
 
+void G4LorentzConvertor::printBullet() const {
+  G4cout << " bullet: px " << bullet_mom.px() << " py " << bullet_mom.py()
+	 << " pz " << bullet_mom.pz() << " e " << bullet_mom.e()
+	 << " mass " << bullet_mom.m() << G4endl;
+  }
 
-
-
+void G4LorentzConvertor::printTarget() const {
+  G4cout << " target: px " << target_mom.px() << " py " << target_mom.py()
+	 << " pz " << target_mom.pz() << " e " << target_mom.e()
+	 << " mass " << target_mom.m() << G4endl;
+}
 

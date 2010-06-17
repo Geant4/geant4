@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.48 2010-05-26 18:29:28 dennis Exp $
+// $Id: G4NucleiModel.cc,v 1.49 2010-06-17 04:25:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,8 @@
 // 20100517  M. Kelsey -- Use G4CascadeINterpolator for cross-section
 //		calculations.  use G4Cascade*Channel for total xsec in pi-N
 //		N-N channels.  Move absorptionCrossSection() from SpecialFunc.
+// 20100610  M. Kelsey -- Replace another random-angle code block; add some
+//		diagnostic output for partner-list production.
 
 //#define CHC_CHECK
 
@@ -609,7 +611,13 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	}
 
       };
-      if (spath < path) thePartners.push_back(partner(particle, spath));
+      if (spath < path) {
+	if (verboseLevel > 3) {
+	  G4cout << " adding partner[" << thePartners.size() << "]: ";
+	  particle.printParticle();
+	}
+	thePartners.push_back(partner(particle, spath));
+      }
     };  
 
     if (verboseLevel > 2){
@@ -1135,15 +1143,9 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
      
 	if (ab < 3.0) { // deutron, simplest case
 	  G4double r = 2.214 - 3.4208 * std::log(1.0 - 0.981 * inuclRndm());
-	  G4double s = 2.0 * inuclRndm() - 1.0;
-	  G4double r1 = r * std::sqrt(1.0 - s * s);
-	  G4double phi = randomPHI();
-
-	  G4ThreeVector coord1(r1*std::cos(phi), r1*std::sin(phi), r*s);   
+	  G4ThreeVector coord1 = generateWithRandomAngles(r).vect();
 	  coordinates.push_back(coord1);
-
-	  coord1 *= -1.;
-	  coordinates.push_back(coord1);
+	  coordinates.push_back(-coord1);
 
 	  G4double p = 0.0;
 	  G4bool bad = true;
@@ -1407,9 +1409,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	}; 
       
 	G4InuclElementaryParticle dummy(small_ekin, 1);
-	G4LorentzConvertor toTheBulletRestFrame;
-	toTheBulletRestFrame.setBullet(dummy.getMomentum(), dummy.getMass());
-	toTheBulletRestFrame.setTarget(bullet->getMomentum(),bullet->getMass());
+	G4LorentzConvertor toTheBulletRestFrame(&dummy, bullet);
 	toTheBulletRestFrame.toTheTargetRestFrame();
 
 	particleIterator ipart;

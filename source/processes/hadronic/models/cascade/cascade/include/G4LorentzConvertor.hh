@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.hh,v 1.15 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4LorentzConvertor.hh,v 1.16 2010-06-17 04:25:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
 // 20100120  M. Kelsey -- BUG FIX:  scm_momentum should be G4ThreeVector
 // 20100126  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
+// 20100616  M. Kelsey -- Report bullet and target four-momenta when set
 
 #ifndef G4LORENTZ_CONVERTOR_HH
 #define G4LORENTZ_CONVERTOR_HH
@@ -66,23 +67,26 @@ public:
   void setTarget(const G4InuclParticle& target) { setTarget(&target); }
 
   // Use correct four-vectors as input
-  void setBullet(const G4LorentzVector& bmom) { bullet_mom = bmom; }
-  void setTarget(const G4LorentzVector& bmom) { target_mom = bmom; }
+  void setBullet(const G4LorentzVector& bmom) {
+    bullet_mom = bmom;
+    if (verboseLevel > 3) printBullet();
+  }
 
-  // NOTE:  These functions "repair" input 4-vectors using specified mass
+  void setTarget(const G4LorentzVector& bmom) {
+    target_mom = bmom;
+    if (verboseLevel > 3) printTarget();
+  }
+
+  // These functions "repair" input 4-vectors using specified mass
   void setBullet(const G4LorentzVector& bmom, G4double bmass) {
     bullet_mom.setVectM(bmom.vect(), bmass);
-
-    //  G4cout << " bullet: e " << bullet_mom.e() << " mass "
-    //         << bullet_mom.m() << G4endl;
-  };
-
+    if (verboseLevel > 3) printBullet();
+  }
+  
   void setTarget(const G4LorentzVector& tmom, G4double tmass) {
     target_mom.setVectM(tmom.vect(), tmass);
-
-    //  G4cout << " target: e " << target_mom.e() << " mass "
-    //         << target_mom.m() << G4endl;
-  };
+    if (verboseLevel > 3) printTarget();
+  }
 
   void toTheCenterOfMass();
   void toTheTargetRestFrame(); 
@@ -106,6 +110,10 @@ public:
   G4bool reflectionNeeded() const; 
 
   G4bool trivial() const { return degenerated; }
+
+  // Reporting functions for diagnostics
+  void printBullet() const;
+  void printTarget() const;
 
 private: 
   static const G4double small;
