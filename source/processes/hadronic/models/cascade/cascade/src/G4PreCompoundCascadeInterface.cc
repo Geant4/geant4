@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.14 2010-06-15 22:47:25 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.15 2010-06-17 15:32:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,6 +35,7 @@
 // 20100517  M. Kelsey -- Follow new ctors for G4*Collider family.
 // 20100520  M. Kelsey -- Add missing name string to ctor, follow code changes
 //		from G4CascadeInterface.
+// 20100617  M. Kelsey -- Rename "debug_" preprocessor flag to G4CASCADE_DEBUG
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -72,21 +73,22 @@ G4ReactionProductVector* G4PreCompoundCascadeInterface::Propagate(G4KineticTrack
   return 0;
 }
 
-// #define debug_G4PreCompoundCascadeInterface
-
-G4HadFinalState* G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
-							      G4Nucleus& theNucleus) {
-#ifdef debug_G4PreCompoundCascadeInterface
-  static G4int counter(0);
-  counter++;
-  G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
-#endif
-
-  theResult.Clear();
-
+G4HadFinalState* 
+G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
+					     G4Nucleus& theNucleus) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4PreCompoundCascadeInterface::ApplyYourself" << G4endl;
   };
+
+#ifdef G4CASCADE_DEBUG_INTERFACE
+  static G4int counter(0);
+  counter++;
+  G4cerr << "Reaction number "<< counter << " "
+	 << aTrack.GetDefinition()->GetParticleName() << " "
+	 << aTrack.GetKineticEnergy() << G4endl;
+#endif
+
+  theResult.Clear();
 
   G4double eInit     = 0.0;
   G4double eTot      = 0.0;

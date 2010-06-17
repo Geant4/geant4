@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.49 2010-06-17 04:25:14 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.50 2010-06-17 15:32:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -41,8 +41,8 @@
 //		N-N channels.  Move absorptionCrossSection() from SpecialFunc.
 // 20100610  M. Kelsey -- Replace another random-angle code block; add some
 //		diagnostic output for partner-list production.
-
-//#define CHC_CHECK
+// 20100617  M. Kelsey -- Replace preprocessor flag CHC_CHECK with
+//		G4CASCADE_DEBUG_CHARGE
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeInterpolator.hh"
@@ -851,18 +851,21 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	no_interaction = false;
 	current_nucl1 = 0;
 	current_nucl2 = 0;
-#ifdef CHC_CHECK
-	G4double out_charge = 0.0;
-	
-	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
-	  out_charge += outgoing_particles[ip].getCharge();
-	
-	G4cout << " multiplicity " << outgoing_particles.size() <<
-	  " bul type " << bullet.type() << " targ type " << target.type() << 
-	  G4endl << " initial charge " << bullet.getCharge() + target.getCharge() 
-	       << " out charge " << out_charge << G4endl;  
+
+#ifdef G4CASCADE_DEBUG_CHARGE
+	{
+	  G4double out_charge = 0.0;
+	  
+	  for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
+	    out_charge += outgoing_particles[ip].getCharge();
+	  
+	  G4cout << " multiplicity " << outgoing_particles.size() <<
+	    " bul type " << bullet.type() << " targ type " << target.type() << 
+	    G4endl << " initial charge " << bullet.getCharge() + target.getCharge() 
+		 << " out charge " << out_charge << G4endl;  
+	}
 #endif
-	
+	  
 	if (verboseLevel > 2){
 	  G4cout << " partner type " << target.type() << G4endl;
 	}

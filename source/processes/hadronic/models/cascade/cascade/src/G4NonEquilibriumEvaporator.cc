@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.29 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.30 2010-06-17 15:32:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,8 +31,7 @@
 // 20100412  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
 // 20100517  M. Kelsey -- Inherit from common base class
-
-#define RUN
+// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
 
 #include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
@@ -69,11 +68,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double a_cut = 5.0;
   const G4double z_cut = 3.0;
 
-#ifdef RUN 
   const G4double eexs_cut = 0.1;
-#else
-  const G4double eexs_cut = 100000.0;
-#endif
 
   const G4double coul_coeff = 1.4;
   const G4int itry_max = 1000;

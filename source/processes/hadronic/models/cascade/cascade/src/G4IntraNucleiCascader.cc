@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.36 2010-06-17 04:25:14 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.37 2010-06-17 15:32:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,10 +34,9 @@
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members
 // 20100616  M. Kelsey -- Add reporting of final residual particle
+// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
 
 #include "G4IntraNucleiCascader.hh"
-#define RUN
-
 #include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
@@ -83,7 +82,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     target->printParticle();
   }
 
-#ifdef RUN
   G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
   G4NucleiModel model(tnuclei);
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
@@ -338,34 +336,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       return;
     }; 
   };
-
-#else
-
-  // special branch to avoid the cascad generation but to get the input for evaporation etc
-
-  G4LorentzVector momentum_out;
-  G4InuclNuclei outgoing_nuclei(169, 69);
-
-  outgoing_nuclei.setMomentum(momentum_out);
-  outgoing_nuclei.setExitationEnergy(150.0);
-
-  G4ExitonConfiguration theExitonConfiguration(3.0, 3.0, 5.0, 6.0);
-
-  outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);	                           
-  output.addTargetFragment(outgoing_nuclei);
-
-  return;
-
-  /*
-    G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>
-    (bullet);
-    G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
-    output.addOutgoingParticle(*bparticle);
-    output.addTargetFragment(*tnuclei);
-    return;
-  */
-
-#endif
 
   if (verboseLevel > 3) {
     G4cout << " IntraNucleiCascader-> no inelastic interaction after " << itry_max << " attempts "

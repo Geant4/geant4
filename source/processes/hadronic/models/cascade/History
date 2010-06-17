@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2010-06-17 04:25:14 mkelsey Exp $
+$Id: History,v 1.96 2010-06-17 15:32:35 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,34 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+17 June 2010 Michael Kelsey
+---------------------------
+- cascade/GNUmakefile: Add series of "ifneq (,...)" blocks to map
+  environment variables for debugging onto "-D..." compiler flags:
+
+	G4CASCADE_COULOMB_DEV
+	G4CASCADE_DEBUG_CHARGE
+	G4CASCADE_DEBUG_INTERFACE
+	G4CASCADE_DEBUG_SORT
+	G4CASCADE_WATCHER_HIGHZ
+
+- G4CascadeInterface.cc: Replace preprocessor flags "debug_G4...Interface"
+  with G4CASCADE_DEBUG_INTERFACE, and "BERTDEV" with G4CASCADE_COULOMB_DEV.
+  Fix bug with information access in debugging block.
+
+- G4EquilibriumEvaporator.cc, G4IntraNucleiCascader.cc,
+  G4NonEquilibriumEvaporator.cc:  Eliminate preprocessor flag RUN and all
+  code contained in "#else" blocks.
+
+- G4NucleiModel: Replace preprocessor flag "CHC_CHECK" with
+  G4CASCADE_DEBUG_CHARGE.
+
+- G4PreCompoundCascadeInterface.cc: Replace preprocessor flag
+  "debug_G4...Interface" with G4CASCADE_DEBUG_INTERFACE.  Fix bug with
+  information access in debugging block.
+
+- G4WatcherGun.cc: Replace preprocessor flag "PB" with G4CASCADE_WATCHER_HIGHZ.
 
 16 June 2010 Michael Kelsey
 ---------------------------

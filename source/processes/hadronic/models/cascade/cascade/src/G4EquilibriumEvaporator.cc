@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.32 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.33 2010-06-17 15:32:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -38,8 +38,7 @@
 // 20100520  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members.  Rename timeToBigBang() to override
 //		base explosion().
-
-#define RUN
+// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -92,12 +91,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double G[6] = { 2.0, 2.0, 6.0, 6.0, 6.0, 4.0 };
   const G4double BE = 0.0063;
   const G4double fisssion_cut = 1000.0;
-
-#ifdef RUN
   const G4double cut_off_energy = 0.1;
-#else
-  const G4double cut_off_energy = 100000.0;
-#endif
 
   const G4double BF = 0.0242;
   const G4int itry_max = 1000;

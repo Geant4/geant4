@@ -22,13 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4WatcherGun.cc,v 1.13 2010-04-08 15:48:00 mkelsey Exp $
+// $Id: G4WatcherGun.cc,v 1.14 2010-06-17 15:32:35 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// To include numerous high-Z watchers (e.g., for proton-lead collisions)
+// set the preprocessor flag G4CASCADE_WATCHER_HIGHZ
 //
 // 20100407  M. Kelsey -- Replace std::vector<>::resize(0) with ::clear(),
 //		and create vectors pre-sized to maximum needed.
-
-//#define PB
+//
 
 #include "G4WatcherGun.hh"
 #include "G4ios.hh"
@@ -113,7 +115,7 @@ void G4WatcherGun::setWatchers() {
   errs.push_back(5.0);
   watchers.push_back(G4NuclWatcher(2.0, as, cs, errs, false, true));
 
-#ifdef PB
+#ifdef G4CASCADE_WATCHER_HIGHZ
   // Z = 22
   // watchers for pb208 + 1 GeV p
   as.clear();

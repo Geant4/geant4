@@ -1,14 +1,35 @@
-# $Id: GNUmakefile,v 1.9 2007-05-20 12:01:26 miheikki Exp $
+# $Id: GNUmakefile,v 1.10 2010-06-17 15:32:35 mkelsey Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
+#
+# Map user environment/GMake variables onto preprocessor debugging flags
 # -----------------------------------------------------------
 
 name := G4hadronic_bert_cascade
 
+ifdef G4CASCADE_COULOMB_DEV
+  CPPFLAGS += -DG4CASCADE_COULOMB_DEV=1
+endif
+
+ifdef G4CASCADE_DEBUG_CHARGE
+  CPPFLAGS += -DG4CASCADE_DEBUG_CHARGE=1
+endif
+
+ifdef G4CASCADE_DEBUG_INTERFACE
+  CPPFLAGS += -DG4CASCADE_DEBUG_INTERFACE=1
+endif
+
+ifdef G4CASCADE_DEBUG_SORT
+  CPPFLAGS += -DG4CASCADE_DEBUG_SORT=1
+endif
+
+ifdef G4CASCADE_WATCHER_HIGHZ
+  CPPFLAGS += -DG4CASCADE_WATCHER_HIGHZ=1
+endif
+
 ifndef G4INSTALL
   G4INSTALL = ../../../../../..
 endif
-
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \

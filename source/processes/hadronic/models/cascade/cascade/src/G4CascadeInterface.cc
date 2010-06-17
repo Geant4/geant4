@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.78 2010-06-15 22:47:25 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.79 2010-06-17 15:32:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -37,6 +37,8 @@
 //		G4CollisionOutput, copy G4DynamicParticle directly from
 //		G4InuclParticle, no switch-block required.
 // 20100615  M. Kelsey -- Bug fix: For K0's need ekin in GEANT4 units
+// 20100617  M. Kelsey -- Rename "debug_" preprocessor flag to G4CASCADE_DEBUG,
+//		and "BERTDEV" to "G4CASCADE_COULOMB_DEV"
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -56,8 +58,6 @@
 #include "G4V3DNucleus.hh"
 
 using namespace G4InuclParticleNames;
-
-//#define BERTDEV 1  // A flag to activate a development version of Bertini cascade
 
 typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
@@ -80,21 +80,22 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* ,
   return 0;
 }
 
-// #define debug_G4CascadeInterface
-
-G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
-						     G4Nucleus& theNucleus) {
-#ifdef debug_G4CascadeInterface
-  static G4int counter(0);
-  counter++;
-  G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
-#endif
-
-  theResult.Clear();
-
+G4HadFinalState* 
+G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
+				  G4Nucleus& theNucleus) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
   };
+
+#ifdef G4CASCADE_DEBUG_INTERFACE
+  static G4int counter(0);
+  counter++;
+  G4cerr << "Reaction number "<< counter << " "
+	 << aTrack.GetDefinition()->GetParticleName() << " "
+	 << aTrack.GetKineticEnergy() << G4endl;
+#endif
+
+  theResult.Clear();
 
   G4double eInit     = 0.0;
   G4double eTot      = 0.0;
@@ -157,7 +158,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
   G4int  nTries   = 0;  // try counter
 
-#ifdef BERTDEV
+#ifdef G4CASCADE_COULOMB_DEV
   G4int coulombOK =0;  // flag for correct Coulomb barrier
 #endif
   if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
@@ -212,14 +213,14 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     
     do { // we try to create inelastic interaction
 
-#ifdef BERTDEV
+#ifdef G4CASCADE_COULOMB_DEV
       coulombOK=0;  // by default coulomb analysis is OK
 #endif
       output.reset();
       collider->collide(bullet, target, output);
       nTries++;
       
-#ifdef BERTDEV
+#ifdef G4CASCADE_COULOMB_DEV
       G4double coulumbBarrier = 8.7 * MeV; 
       const std::vector<G4InuclElementaryParticle>& p= output.getOutgoingParticles();
       if(!p.empty()) { 
@@ -235,7 +236,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
     } while( 
 	    (nTries < maxTries) &&  // conditions for next try
 	    (output.getOutgoingParticles().size()!=0) &&
-#ifdef BERTDEV
+#ifdef G4CASCADE_COULOMB_DEV
 	    (coulombOK==1) &&
 	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
 #else
