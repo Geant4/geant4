@@ -82,7 +82,7 @@ graphics_reps                                    greps-V09-03-02
     to distinguish usage and in preparation for i_mode migration.
 - G4VGraphicsScene: added method AddCompound (const G4VDigi&).
 
-interfaces                                       interfaces-V09-03-10
+interfaces                                       interfaces-V09-03-08
 ----------
 - G4UIExective: changed order for session type; GUI session is prioritized.
 - G4VBasicShell: implemented improvements for command completion.
