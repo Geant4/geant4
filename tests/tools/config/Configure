@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.46 2010-06-15 09:46:57 bmorgan Exp $
+# $Id: Configure,v 1.47 2010-06-17 10:44:37 bmorgan Exp $
 #
-# Generated on Tue Jun 15 10:46:31 BST 2010 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 17 11:40:40 BST 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3650,7 +3650,7 @@ fi
 
 # Now see if make/gmake are GNU make.
 if test "x$g4_make_loc" != "xno" ; then
-    g4_make_version=`$g4_make_loc -v 2>/dev/null`
+    g4_make_version=`$g4_make_loc -v 2>/dev/null | sed s"/'//"`
 
     case $g4_make_version in
 	GNU*)
@@ -3665,7 +3665,7 @@ fi
 
 if test "x$g4osname" != "xWIN32" ; then
     if test "x$g4_gmake_loc" != "xno" ; then
-	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null`
+	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null | sed s"/'//"`
 
 	case $g4_gmake_version in
 	    GNU*)
@@ -3704,7 +3704,7 @@ EOM`
         gans=$ans
 
         #Check if this is GNU make...
-        g4_user_make_version=`$gans -v 2>/dev/null`
+        g4_user_make_version=`$gans -v 2>/dev/null | sed s"/'//"`
 
         case $g4_user_make_version in
 	    "GNU Make"*)
