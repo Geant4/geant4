@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.45 2010-06-10 16:01:38 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.46 2010-06-17 13:05:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -306,10 +306,9 @@ G4UIQt::G4UIQt (
   fMainWindow->setWindowTitle( tr("G4UI Session") ); 
   fMainWindow->resize(900,600); 
   fMainWindow->move(QPoint(50,100));
-#endif
-
   // Set not visible until session start
   fMainWindow->setVisible(false);
+#endif
 
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::G4UIQt END\n");
@@ -641,12 +640,11 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
   fTabWidget->setCurrentPage(tabNumber);
 #else
   fTabWidget->setCurrentIndex(tabNumber);
+  fTabWidget->setVisible(true);
 #endif
 
   // Send this signal to unblock graphic updates !
   fTabWidget->setTabSelected(false);
-
-  fTabWidget->setVisible(true);
 
   // This will send a paintEvent to OGL Viewers
   fTabWidget->setTabSelected(true);
@@ -666,7 +664,7 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 /** Send resize event to all tabs
  */
 void G4UIQt::ResizeTabWidget( QResizeEvent* e) {
-  for (int a=0;a<fTabWidget->count() ;a++) {
+  for (G4int a=0;a<fTabWidget->count() ;a++) {
 #ifdef G4DEBUG_INTERFACES_BASIC
     printf("G4UIQt::ResizeTabWidget +++++++++++++++++++++++++++++++++++++++\n");
 #endif
@@ -693,6 +691,13 @@ G4UIsession* G4UIQt::SessionStart (
   Prompt("Session :");
   exitSession = false;
 
+  // get the size of the tabbar
+  G4int tabBarX;
+  G4int tabBarY;
+#if QT_VERSION < 0x040000
+  tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
+  tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
+#else
   if (fEmptyViewerTabLabel != NULL) {
     if (fTabWidget->isVisible()) {
       fEmptyViewerTabLabel->setVisible(false);
@@ -700,15 +705,7 @@ G4UIsession* G4UIQt::SessionStart (
       fEmptyViewerTabLabel->setVisible(true);
     }
   }
-
   fMainWindow->setVisible(true);
-  // get the size of the tabbar
-  int tabBarX;
-  int tabBarY;
-#if QT_VERSION < 0x040000
-  tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
-  tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
-#else
   tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
   tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
 #endif
