@@ -58,6 +58,7 @@
 //#define debug
 //#define ppdebug
 //#define hdebug
+//#define spectr
 //#define lhepdbg
 //#define meandbg
 //#define ekindbg
@@ -72,7 +73,8 @@
 //#define preco
 //#define berti
 //#define binar
-//#define qgsc
+//#define qgsp
+//#define ftfp
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
 #include "globals.hh"
@@ -224,6 +226,8 @@
 #include "G4CascadeInterface.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
+#include "G4FTFModel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4Evaporation.hh"
 
 // New Histogramming (from AIDA and Anaphe):
@@ -274,6 +278,20 @@ int main()
   G4double sE2=0.;
   G4double nE=0.;
   G4double nD=0.;
+#endif
+#ifdef spectr
+  // Invariant spectrum of pi+ at 5 angles 70 deg (1.2217), 90 (1.5708), 118 (2.0595),
+  //   *** p 400 GeV on Ta ****                            137 (2.3911), 160 (2.7925).
+  const G4int nHst=26;
+  G4double Tmax=1300; // MeV
+  G4double dT= Tmax/nHst;
+  G4double dAng =.17;
+  G4double s70[nHst];
+  G4double s90[nHst];
+  G4double s118[nHst];
+  G4double s137[nHst];
+  G4double s160[nHst];
+  for(G4int l=0; l<nHst; ++l) {s70[l]=0.; s90[l]=0.; s118[l]=0.; s137[l]=0.; s160[l]=0.;}
 #endif
 #ifdef histdbg
   const G4int nHst=40;
@@ -401,7 +419,7 @@ int main()
   // LOOPs for the wide performance test
   G4double      aTime      = 0. ;
   //G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.);
-  G4ThreeVector aDirection = G4ThreeVector(0.,1.,0.); // @@ Temporary "not along Z"
+  G4ThreeVector aDirection = G4ThreeVector(0.,0.,1.); // @@ Temporary "not along Z"
   G4int tgm=1;                                        // By default only one target
   if(!tPDG) // Make max for the LOOP over all targets and define materials
   {
@@ -499,25 +517,53 @@ int main()
     G4cout<<"-Error-Test19: Process is not defined in HEP for PDG="<<pPDG<<G4endl;
   }
 #endif
-#ifdef qgsc
-  G4TheoFSGenerator* aModel = new G4TheoFSGenerator;           // The same for QGS & FTF
-  G4StringChipsParticleLevelInterface* theCHIPS=new G4StringChipsParticleLevelInterface;
-  //G4cout<<"Tst19:*> Nuclear fragmentation model is defined"<<G4endl;
-  //// ------------- Defines a Kind of nuclear fragmentation model--------
-  aModel->SetTransport(theCHIPS);
+#ifdef qgsp
+  G4TheoFSGenerator* aModel = new G4TheoFSGenerator("QGSP"); // The same for QGS & FTF
   G4QGSModel<G4QGSParticipants>* aStringModel = new G4QGSModel<G4QGSParticipants>;
-  //G4cout<<"Tst19:*> Intranuclear transport model is defined"<<G4endl;
-  //// ----------- Defines a Kind of the QGS model -------------
-  G4QGSMFragmentation aFragmentation;       // @@ Can be a general solution (move up)
-  G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(&aFragmentation);
+  G4QGSMFragmentation* aFragmentation = new G4QGSMFragmentation;
+  G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(aFragmentation);
   aStringModel->SetFragmentationModel(aStringDecay);
+
+  G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface;
+  G4PreCompoundModel* thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+  theCascade->SetDeExcitation(thePreEquilib);  
+
+  aModel->SetTransport(theCascade);
   aModel->SetHighEnergyGenerator(aStringModel);
+
   G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
   aModel->SetQuasiElasticChannel(theQuasiElastic);
-  //G4cout<<"Tst19:*> String model is defined"<<G4endl;
-  //// ----------- Defines energy limits of the model ----------
-  ///aModel->SetMinEnergy(8*GeV);                // Do we need this ?
-  ///aModel->SetMaxEnergy(100*TeV);              // Do we need that ?
+
+  G4ProjectileDiffractiveChannel* theProjectileDiffraction =
+                                                   new G4ProjectileDiffractiveChannel;
+  aModel->SetProjectileDiffraction(theProjectileDiffraction);
+
+  aModel->SetMinEnergy(0.);
+  aModel->SetMaxEnergy(100*TeV);
+#endif
+#ifdef ftfp
+      G4TheoFSGenerator* aModel = new G4TheoFSGenerator("FTFP"); // The same for QGS & FTF
+      G4FTFModel* aStringModel = new G4FTFModel;
+      G4LundStringFragmentation* aFragmentation = new G4LundStringFragmentation;
+      G4ExcitedStringDecay* aStringDecay = new G4ExcitedStringDecay(aFragmentation);
+      aStringModel->SetFragmentationModel(aStringDecay);
+
+      G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface;
+      G4PreCompoundModel* thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+      theCascade->SetDeExcitation(thePreEquilib);  
+
+      aModel->SetTransport(theCascade);
+      aModel->SetHighEnergyGenerator(aStringModel);
+
+      G4QuasiElasticChannel* theQuasiElastic = new G4QuasiElasticChannel;
+      aModel->SetQuasiElasticChannel(theQuasiElastic);
+
+      G4ProjectileDiffractiveChannel* theProjectileDiffraction =
+                                                       new G4ProjectileDiffractiveChannel;
+      aModel->SetProjectileDiffraction(theProjectileDiffraction);
+
+      aModel->SetMinEnergy(0.);
+      aModel->SetMaxEnergy(100*TeV);
 #endif
 #ifdef chips
   if(!proc)
@@ -1088,6 +1134,12 @@ int main()
 #ifdef debug
       G4cout<<"T19:AfterPostStepDoIt,nS="<<nSec<<",l="<<lead<<" =? fA="<<fAlive<<G4endl;
 #endif
+#ifdef pdebug
+	 G4cout<<"Test19:---DONE^^^^^*****^^^^^:ir="<<iter<<",N="<<nSec<<",L="<<lead<<G4endl;
+       G4cout<<"Test19: *********************************************************"<<G4endl;
+       G4cout<<"Test19: *********************************************************"<<G4endl;
+       if(!(iter%1000)) G4cerr<<"#"<<iter<<G4endl;
+#endif
       if(!nSec && lead==fAlive)
       {
         G4double eOut=aChange->GetEnergy();
@@ -1187,10 +1239,6 @@ int main()
         G4int nOmega=0;
         // @@ G4int nDec=0;
         // @@ G4int dirN=0;
-#ifdef pdebug
-        G4cout<<"Test19:----DONE^^^^^^^*******^^^^^^^^:ir="<<iter<<": #ofH="<<nSec<<G4endl;
-        if(!(iter%1000)) G4cerr<<"#"<<iter<<G4endl;
-#endif
         G4bool alarm=false;
         // @@ G4bool rad=false;
         // @@ G4bool hyp=false;
@@ -1422,8 +1470,29 @@ int main()
         sE2+=totKE*totKE;
         pE+=energy+mp;
 #endif
+#ifdef spectr
+        if(nPP) for(G4int i=begi; i<nSec; i++)
+        {
+          sec = aChange->GetSecondary(i)->GetDynamicParticle();
+          pd  = sec->GetDefinition();
+          c   = pd->GetPDGEncoding();
+          if(c == 211)
+          {
+            m   = pd->GetPDGMass();
+            mom = sec->GetMomentumDirection();
+            e   = sec->GetKineticEnergy();
+            G4int ie=static_cast<G4int>(e/dT);
+            p   = std::sqrt(e*(e + m + m));
+            G4double ang = std::acos(mom.z());
+            if     (std::fabs(ang-1.2217) < dAng)  s70[ie] += 1./p;
+            else if(std::fabs(ang-1.5708) < dAng)  s90[ie] += 1./p;
+            else if(std::fabs(ang-2.0595) < dAng) s118[ie] += 1./p;
+            else if(std::fabs(ang-2.3911) < dAng) s137[ie] += 1./p;
+            else if(std::fabs(ang-2.7925) < dAng) s160[ie] += 1./p;
+          }
+        }
+#endif
 #ifdef histdbg
-       
         if(nGamma>=nHst) nGamma=nHst-1;
         nGaH[nGamma]++;
         G4int nESG=static_cast<G4int>(EGamma+.00001);
@@ -1628,6 +1697,14 @@ int main()
           <<std::setw(9)<<rPzH[jh]<<std::setw(9)<<rPrH[jh]<<std::setw(9)<<dEnH[jh]
           <<std::setw(9)<<dPzH[jh]<<std::setw(9)<<dPrH[jh]<<G4endl;
   }
+#endif
+#ifdef spectr
+  G4cout<<std::setw(2)<<"T"<<" : "<<std::setw(9)<<"70"<<std::setw(9)<<"90"
+        <<std::setw(9)<<"118"<<std::setw(9)<<"137"<<std::setw(9)<<"160"<<G4endl;
+  G4double tm=-dT/2;
+  for(G4int jh=0; jh<nHst; jh++)
+    G4cout<<std::setw(2)<<tm+dT*jh<<" : "<<std::setw(9)<<s70[jh]<<std::setw(9)<<s90[jh]
+          <<std::setw(9)<<s118[jh]<<std::setw(9)<<s137[jh]<<std::setw(9)<<s160[jh]<<G4endl;
 #endif
 #ifdef synch
   s_s/=s_n;

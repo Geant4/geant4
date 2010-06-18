@@ -1,44 +1,53 @@
-macro run1 f=5 n=5 z=13 que=32-rb20-hp
+macro run1 f=5 n=1 z=73 que=32-rb20-hp
  nEvts = 2000 * [f]
- if [z] = 13 then	
-  exec preco ^27!Al al1314 13 14 90 450 [nEvts] [n] [que] 2 13 | 450 mb is reaction CS
- elseif [z] = 83 then
-  exec preco ^209!Bi bi83126 83 126 90 1800 [nEvts] [n] [que] 2 83 | 1800 mb is reaction CS
+ if [z] = 3 then	
+  exec preco ^7!Li li0304 3 4 400000 169 [nEvts] [n] [que] 2 81 | 169 mb is reaction CS
+ elseif [z] = 4 then	
+  exec preco ^9!Be be0405 4 5 400000 206 [nEvts] [n] [que] 2 81 | 206 mb is reaction CS
+ elseif [z] = 6 then	
+  exec preco ^12!C c0606 6 6 400000 254 [nEvts] [n] [que] 2 81 | 254 mb is reaction CS
+ elseif [z] = 13 then	
+  exec preco ^27!Al al1314 13 14 400000 446 [nEvts] [n] [que] 2 81 | 446 mb is reaction CS
+ elseif [z] = 29 then	
+  exec preco ^63!Al cu2934 29 34 400000 812 [nEvts] [n] [que] 2 81 | 812 mb is reaction CS
+ elseif [z] = 73 then
+  exec preco ^181!Ta ta73108 73 108 400000 1689 [nEvts] [n] [que] 2 81 | 1689 mb is CS
  endif
 return
 *
-macro run f=9 n=3 que=atsbhpd
+macro run f=25 n=1 que=atsbhpd
   nEvts = 2000 * [f]
-  exec preco ^27!Al al1314 13 14 90 999 [nEvts] [n] [que] 2 81
+  exec preco ^181!Ta ta73108 73 108 400000 1689 [nEvts] [n] [que] 2 73
 return
 *
 macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
-           runn=2000 next=3 pq=32-rb20-hp nzone=2 nvex=26 _
+           runn=2000 next=1 pq=32-rb20-hp nzone=2 nvex=26 _
            dir=./
 *
   hi/del *
   ve/del *
-  ve/cr angle(9) r 20 30 45 60 75 90 105 120 140
+  ve/cr angle(5) r 70 90 118 137 160
   exec creavec [nvex]
   do i = 35 , $sigma(34+[next])
    clo [i]
   enddo
+  awt=[np]+[nn]
 *
   exec chips [targ] [file] [np] [nn] [e] [runn] [next] [dir]
 *
   exec getdat [file] [e]
 *
-  chain -preco90
+  chain -p400
   hi/fil 35 [dir]chips_[file]_e[e]_1.hbook
   hrin 1
-  chain preco90 //LUN35
+  chain p400 //LUN35
   do i = 2 , [next]
     lun = 34 + [i]
     hi/fil [lun] [dir]chips_[file]_e[e]_[i].hbook
     hrin 1 ! 99999
-    chain preco90 //LUN[lun]
+    chain p400 //LUN[lun]
   enddo
-  cd //preco90
+  cd //p400
 *
   nevts = $hinfo(1,'sum')
   hi/del 1
@@ -46,25 +55,38 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   upcol   = violet
   downcol = red
   hxmin =  3.
-  hxmax =  90.0
+  hxmax =  1300.
   kxmin =  0.
-  kxmax =  90.
-  hymin =  1.0001e-6
-  if [np] = 13 then	
-    hymax =  .049999
-    yfnam =  .02
-  elseif [np] = 83 then
-    hymax =  .15
-    yfnam =  .05
+  kxmax =  1300.
+  hymin =  1.0001e-9
+  if [np] = 3 then
+    hymax =  .0004
+    yfnam =  2.e-9
+  elseif [np] = 4 then
+    hymax =  .0005
+    yfnam =  2.e-9
+  elseif [np] = 6 then
+    hymax =  .0006
+    yfnam =  2.e-9
+  elseif [np] = 13 then
+    hymax =  .002
+    yfnam =  2.e-9
+  elseif [np] = 29 then
+    hymax =  .003
+    yfnam =  2.e-9
+  elseif [np] = 73 then
+    hymax =  .009
+    yfnam =  2.e-9
   endif
   hzero =  0.1e-12
-  xfnam =  42.
+* with yfman above defines the particle name position
+  xfnam =  100.
   hfbin =  1
   hnbin =  50
   ptsize = 0.24
   lgndsz = 0.35
-  dangle = 7.5
-  pi = 3.141593
+  dangle = 9.
+  pi = 3.14159265
   *Alias/del paperX
   *Alias/cr  paperX '32.0' 
   *Alias/del paperY
@@ -79,60 +101,41 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   opt nzfl
   swi g
 *
-  1d         11 'T?n! at  20 deg (MeV)' [hnbin] [hlxmin] [hlxmax]
-  hi/copy 11 12 'T?n! at  30 deg (MeV)'
-  hi/copy 11 13 'T?n! at  45 deg (MeV)'
-  hi/copy 11 14 'T?n! at  60 deg (MeV)'
-  hi/copy 11 15 'T?n! at  75 deg (MeV)'
-  hi/copy 11 16 'T?n! at  90 deg (MeV)'
-  hi/copy 11 17 'T?n! at 105 deg (MeV)'
-  hi/copy 11 18 'T?n! at 120 deg (MeV)'
-  hi/copy 11 19 'T?n! at 135 deg (MeV)'
-  hi/copy 11 21 'T?p! at  20 deg (MeV)'
-  hi/copy 11 22 'T?p! at  30 deg (MeV)'
-  hi/copy 11 23 'T?p! at  45 deg (MeV)'
-  hi/copy 11 24 'T?p! at  60 deg (MeV)'
-  hi/copy 11 25 'T?p! at  75 deg (MeV)'
-  hi/copy 11 26 'T?p! at  90 deg (MeV)'
-  hi/copy 11 27 'T?p! at 105 deg (MeV)'
-  hi/copy 11 28 'T?p! at 120 deg (MeV)'
-  hi/copy 11 29 'T?p! at 140 deg (MeV)'
-  hi/copy 11 31 'T?d! at  20 deg (MeV)'
-  hi/copy 11 32 'T?d! at  30 deg (MeV)'
-  hi/copy 11 33 'T?d! at  45 deg (MeV)'
-  hi/copy 11 34 'T?d! at  60 deg (MeV)'
-  hi/copy 11 35 'T?d! at  75 deg (MeV)'
-  hi/copy 11 36 'T?d! at  90 deg (MeV)'
-  hi/copy 11 37 'T?d! at 105 deg (MeV)'
-  hi/copy 11 38 'T?d! at 120 deg (MeV)'
-  hi/copy 11 39 'T?d! at 140 deg (MeV)'
-  hi/copy 11 41 'T?t! at  20 deg (MeV)'
-  hi/copy 11 42 'T?t! at  30 deg (MeV)'
-  hi/copy 11 43 'T?t! at  45 deg (MeV)'
-  hi/copy 11 44 'T?t! at  60 deg (MeV)'
-  hi/copy 11 45 'T?t! at  75 deg (MeV)'
-  hi/copy 11 46 'T?t! at  90 deg (MeV)'
-  hi/copy 11 47 'T?t! at 105 deg (MeV)'
-  hi/copy 11 48 'T?t! at 120 deg (MeV)'
-  hi/copy 11 49 'T?t! at 140 deg (MeV)'
-  hi/copy 11 51 'T?3! at  20 deg (MeV)'
-  hi/copy 11 52 'T?3! at  30 deg (MeV)'
-  hi/copy 11 53 'T?3! at  45 deg (MeV)'
-  hi/copy 11 54 'T?3! at  60 deg (MeV)'
-  hi/copy 11 55 'T?3! at  75 deg (MeV)'
-  hi/copy 11 56 'T?3! at  90 deg (MeV)'
-  hi/copy 11 57 'T?3! at 105 deg (MeV)'
-  hi/copy 11 58 'T?3! at 120 deg (MeV)'
-  hi/copy 11 59 'T?3! at 140 deg (MeV)'
-  hi/copy 11 61 'T?4! at  20 deg (MeV)'
-  hi/copy 11 62 'T?4! at  30 deg (MeV)'
-  hi/copy 11 63 'T?4! at  45 deg (MeV)'
-  hi/copy 11 64 'T?4! at  60 deg (MeV)'
-  hi/copy 11 65 'T?4! at  75 deg (MeV)'
-  hi/copy 11 66 'T?4! at  90 deg (MeV)'
-  hi/copy 11 67 'T?4! at 105 deg (MeV)'
-  hi/copy 11 68 'T?4! at 120 deg (MeV)'
-  hi/copy 11 69 'T?4! at 140 deg (MeV)'
+  1d         11 'T?p! at  70 deg (MeV)' [hnbin] [hlxmin] [hlxmax]
+  hi/copy 11 12 'T?p! at  90 deg (MeV)'
+  hi/copy 11 13 'T?p! at 118 deg (MeV)'
+  hi/copy 11 14 'T?p! at 137 deg (MeV)'
+  hi/copy 11 15 'T?p! at 160 deg (MeV)'
+  hi/copy 11 21 'T?d! at  70 deg (MeV)'
+  hi/copy 11 22 'T?d! at  90 deg (MeV)'
+  hi/copy 11 23 'T?d! at 118 deg (MeV)'
+  hi/copy 11 24 'T?d! at 137 deg (MeV)'
+  hi/copy 11 25 'T?d! at 160 deg (MeV)'
+  hi/copy 11 31 'T?t! at  70 deg (MeV)'
+  hi/copy 11 32 'T?t! at  90 deg (MeV)'
+  hi/copy 11 33 'T?t! at 118 deg (MeV)'
+  hi/copy 11 34 'T?t! at 137 deg (MeV)'
+  hi/copy 11 35 'T?t! at 160 deg (MeV)'
+  hi/copy 11 41 'T?h! at  70 deg (MeV)'
+  hi/copy 11 42 'T?h! at  90 deg (MeV)'
+  hi/copy 11 43 'T?h! at 118 deg (MeV)'
+  hi/copy 11 44 'T?h! at 137 deg (MeV)'
+  hi/copy 11 45 'T?h! at 160 deg (MeV)'
+  hi/copy 11 51 'T?[p]+! at  70 deg (MeV)'
+  hi/copy 11 52 'T?[p]+! at  90 deg (MeV)'
+  hi/copy 11 53 'T?[p]+! at 118 deg (MeV)'
+  hi/copy 11 54 'T?[p]+! at 137 deg (MeV)'
+  hi/copy 11 55 'T?[p]+! at 160 deg (MeV)'
+  hi/copy 11 61 'T?[p]-! at  70 deg (MeV)'
+  hi/copy 11 62 'T?[p]-! at  90 deg (MeV)'
+  hi/copy 11 63 'T?[p]-! at 118 deg (MeV)'
+  hi/copy 11 64 'T?[p]-! at 137 deg (MeV)'
+  hi/copy 11 65 'T?[p]-! at 170 deg (MeV)'
+  *hi/copy 11 71 'T?a! at  70 deg (MeV)'
+  *hi/copy 11 72 'T?a! at  90 deg (MeV)'
+  *hi/copy 11 73 'T?a! at 118 deg (MeV)'
+  *hi/copy 11 74 'T?a! at 137 deg (MeV)'
+  *hi/copy 11 75 'T?a! at 160 deg (MeV)'
   hi/copy 11 81 'zero level'
   hi/copy 11 82 'dT in MeV'
   call hbarx(0)
@@ -147,21 +150,22 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   ve/del zerol
 *
   cut 0 -
-  cut $1 nd=0.and.PDG=2112.or.(ns=0.and.nz=0.and.nn=1) | neutrons
-  cut $2 nd=0.and.PDG=2212.or.(ns=0.and.nz=1.and.nn=0) | protons
-  cut $3 nd=0.and.ns=0.and.nz=1.and.nn=1               | deuteron
-  cut $4 nd=0.and.ns=0.and.nz=1.and.nn=2               | triton
-  cut $5 nd=0.and.ns=0.and.nz=2.and.nn=1               | he3
-  cut $6 nd=0.and.ns=0.and.nz=2.and.nn=2               | he4
-  zone 3 3
-  do i = 0 , 8
+  cut $1 nd=0.and.PDG=2212.or.(ns=0.and.nz=1.and.nn=0) | protons
+  cut $2 nd=0.and.ns=0.and.nz=1.and.nn=1               | deuteron
+  cut $3 nd=0.and.ns=0.and.nz=1.and.nn=2               | triton
+  cut $4 nd=0.and.ns=0.and.nz=2.and.nn=1               | he3
+  cut $5 nd=0.and.PDG=211                              | pi+
+  cut $6 nd=0.and.PDG=-211                             | pi-
+  *cut $7 nd=0.and.ns=0.and.nz=2.and.nn=2               | he4
+  zone 3 2
+  do i = 0 , 4
     k  = [i]+1
-    k1 = [k]+10 | n
-    k2 = [k]+20 | p
-    k3 = [k]+30 | d
-    k4 = [k]+40 | t
-    k5 = [k]+50 | He3
-    k6 = [k]+60 | He4
+    k1 = [k]+10 | p
+    k2 = [k]+20 | d
+    k3 = [k]+30 | t
+    k4 = [k]+40 | He3
+    k5 = [k]+50 | pi+
+    k6 = [k]+60 | pi-
     a=angle([k])
     arad =  $sigma([pi]*[a]/180.)
     message 'i=',[i],', adeg=',[a],', arad=',[arad]
@@ -179,7 +183,6 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
     nt/pl 70.log10(E-m+0.001) $[k5] ! ! -[k5]
     nt/pl 70.log10(E-m+0.001) $[k6] ! ! -[k6]
     domega = $sigma(2.*[pi]*(cos([arad]-[danrad])-cos([arad]+[danrad])))
-*    w = $sigma([cs]*1000000./[domega]/[nevts])
     w = $sigma([cs]/[domega]/[nevts])
 *    message 'selection is done dom=',[domega],', w=',[w],', cs=',[cs]
     div [k1] 82 [k1]  1. 1.
@@ -209,12 +212,14 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   set xwin 0.0001
   set ywin 0.0001
 *  model=lowen
-*  model=chips
-  model=preco
+  model=chips
+*  model=qgsp
+*  model=ftfp
+*  model=preco
 *  model=berti
 *  model=binar
 *  model=lepro
-  title [targ]//'(p,f)X,E='//[E]//'MeV,[q]=20,30,45,60,75,90,105,120,140^0!('//[model]//')'
+  title [targ]//'(p,f)X,E='//[E]//'MeV,[q]=70,90,118,137,160^0!('//[model]//')'
   clr
   zone 3 2
   set xval
@@ -229,34 +234,31 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
   opt utit
   set errx 0.01
   set xlab 1.25
-  ve/cr mrk(9) R 20 25 22 24 21 26 29 28 23
-  ve/cr md(9) R 1 2 1 2 1 2 1 2 1
-  ve/cr mas(6) R 939.565 938.272 1875.61 2809.25 2809.23 3727.4 
-  f1=neutron
-  f2=proton
-  f3=deuteron
-  f4=triton
-  f5=He3
-  f6=alpha
+  ve/cr mrk(5) R 20 25 22 24 21
+  ve/cr md(5) R 1 2 1 2 1
+*  ve/cr mas(6) R 939.565 938.272 1875.61 2809.25 2809.23 3727.4 
+  ve/cr mas(6) R 938.272 1875.61 2809.25 2809.23 139.57 139.57
+  f1=proton
+  f2=deuteron
+  f3=triton
+  f4=He3
+  f5=pi+
+  f6=pi-
   title ' ' u
   exec ~/PTOOL/black
   set xval
   set yval 70
-  xt=15
-  ve/cr xm(1) R 11.
-  ve/cr ym1(1) R .000448
-  ve/cr ym2(1) R .000224
-  ve/cr ym3(1) R .000112
-  ve/cr ym4(1) R .000056
-  ve/cr ym5(1) R .000028
-  ve/cr ym6(1) R .000014
-  ve/cr ym7(1) R .000007
-  ve/cr ym8(1) R .0000035
-  ve/cr ym9(1) R .00000175
+  xt=150
+* Legend of angles
+  ve/cr xm(1) R 110.
+  ve/cr ym1(1) R 9.0e-9
+  ve/cr ym2(1) R 2.7e-8
+  ve/cr ym3(1) R 8.1e-8
+  ve/cr ym4(1) R 2.4e-7
+  ve/cr ym5(1) R 7.2e-7
 * Vector of the center bins in Kinetic Energy for all spectra (the same)
   ve/cr lke([hnbin])
   get/absc 11 lke
-********  ve/copy $SIGMA(10**lke) ke
 * LOOP over secondary fragments
   do j = 1 , 6
     if [j] = 2 THEN
@@ -265,41 +267,46 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
     if [j] = 4 THEN
       set xval
       set yval
-      hymin=1.001e-7
-      if [np] = 13 then	
-        hymax=.02
-        yfnam=.005
-      elseif [np] = 83 then
-        hymax=.05
-        yfnam=.013
-      endif
+      hymin=1.001e-9
+* This is duplication for the second row
+*      if [np] = 3 then
+*        hymax =  .0004
+*        yfnam =  3.e-9
+*      elseif [np] = 4 then
+*        hymax =  .0005
+*        yfnam =  3.e-9
+*      elseif [np] = 6 then
+*        hymax =  .0006
+*        yfnam =  3.e-9
+*      elseif [np] = 13 then
+*        hymax =  .002
+*        yfnam =  3.e-9
+*      elseif [np] = 29 then
+*        hymax =  .003
+*        yfnam =  3.e-9
+*      elseif [np] = 73 then
+*        hymax =  .009999
+*        yfnam =  3.e-9
+*      endif
     endif
     if [j] = 5 THEN
       set xval 70
     endif
     null [kxmin] [kxmax] [hymin] [hymax]
-    if [j] = 2 THEN
+    if [j] = 1 THEN
       *ve/cr mrk(9) R 20 25 22 24 21 26 29 28 23
       h/symbols xm ym1 1 20 [ptsize]
       h/symbols xm ym2 1 25 [ptsize]
       h/symbols xm ym3 1 22 [ptsize]
       h/symbols xm ym4 1 24 [ptsize]
       h/symbols xm ym5 1 21 [ptsize]
-      h/symbols xm ym6 1 26 [ptsize]
-      h/symbols xm ym7 1 29 [ptsize]
-      h/symbols xm ym8 1 28 [ptsize]
-      h/symbols xm ym9 1 23 [ptsize]
-      itx [xt] .0003840 20
-      itx [xt] .0001920 30
-      itx [xt] .0000960 45
-      itx [xt] .0000480 60
-      itx [xt] .0000240 75
-      itx [xt] .0000120 90
-      itx [xt] .0000060 105
-      itx [xt] .0000030 120
-      itx [xt] .0000015 140
+      itx [xt] 6.0e-9 70
+      itx [xt] 1.8e-8 90
+      itx [xt] 5.4e-8 118
+      itx [xt] 1.6e-7 137
+      itx [xt] 4.8e-7 160
     endif
-    if [j] = 6 then
+    if [j] = 9 then
       exec ~/PTOOL/black
       *atitle 'k = (p+T)/2 (MeV)       ^!' ' '
       atitle 'T (MeV)       ^!' ' '
@@ -316,7 +323,7 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
     m = mas([j])
     exec ~/PTOOL/black
 *   LOOP over angles
-    do i = 0 , 8
+    do i = 0 , 4
       k    = [i]+1
       jk   = [j]*10+[k]
       mk=mrk([k])
@@ -324,10 +331,14 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
       a=angle([k])
       set lwid 7.
 **      fun/pl .11*EXP(-x/25) 30 250 S
-      ve/copy $sigma(sqrt(t[j][a]*(2.*[m]+t[j][a]))) p[j][a]
-      *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
-      h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
-               ?  $sigma(d[j][a]/p[j][a]) 25 [mk] [ptsize] 0
+*:*   For non-invariant ===================================
+*      ve/copy $sigma(sqrt(t[j][a]*(2.*[m]+t[j][a]))) p[j][a]
+*      *h/errors $sigma(0.5*(p[j][a]+t[j][a])) $sigma(s[j][a]/p[j][a])
+*      h/errors t[j][a] $sigma(s[j][a]/p[j][a]) _
+*               ?  $sigma(d[j][a]/p[j][a]) 25 [mk] [ptsize] 0
+*:*   For invariant /A GeV-2(GeV)===================================
+      h/errors $sigma(t[j][a]*1000.) $sigma(s[j][a]*[awt]/1000000) ? _
+               $sigma(d[j][a]*[awt]/1000000) 25 [mk] [ptsize] 0
 *      if [j] < 3 then
 *       mess 'data: h='//[j]//', ang='//[i]
 *       ve/pri $sigma(s[j][a]/p[j][a])
@@ -337,9 +348,9 @@ macro preco targ=^12!C file=c0606 np=6 nn=6 e=90 cs=999 _
       ve/cr v[jk]([hnbin])
       get/cont [jk] v[jk]
     enddo
-*   n(j=1),p(j=2),d(j=3),t(j=4),He3(j=5),He4(j=6)
-    ve/wri lke,v[j]1,v[j]2,v[j]3,v[j]4,v[j]5,v[j]6,v[j]7,v[j]8,v[j]9 _
-    p_[e]_[file]_[j]_[model].v '1X,F9.6,9E10.3' 'OC'
+*   p(j=1),d(j=2),t(j=3),He3(j=4),pi+(j=5),pi-(j=6)
+    ve/wri lke,v[j]1,v[j]2,v[j]3,v[j]4,v[j]5 _
+    p_[e]_[file]_[j]_[model].v '1X,F9.6,5E10.3' 'OC'
   enddo
 *
   exec ~/PTOOL/black
@@ -396,39 +407,39 @@ return
 *
 macro readpar  pf=chipstest.in
   ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rMed,solA_
-              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC' -/*/  
+              [pf] 'F7.2,F5.2,F5.2,I4,F8.0,F8.0,2I9,I9,3F5.2,F5.1,F5.3' 'OC' -/*/  
 return
 macro writepar pf=chipstest.in
   ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rMed,solA_
-              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC'
+              [pf] 'F7.2,F5.2,F5.2,I4,F8.0,F8.0,2I9,I9,3F5.2,F5.1,F5.3' 'OC'
 return
 *
-macro getdat file=al1314 e=90
+macro getdat file=al1314 e=400000
 *
-* -- in the preco_[file]_h_e[e]_ang.vexp the hadron(h:p,d,t,he3,he4) spectra are given in:
-* --  mbarn MeV^-1 Omega^-1, function of T in MeV 
-  *ve/cr angle(9) r 20 30 45 60 75 90 105 120 140
-  do i = 1 , 9
+  *ve/cr angle(5) r 70 90 118 137 160
+  * Ta is hardwired, rename the files according to [file]
+  do i = 1 , 5
     a  = angle([i])
-    ve/re t1[a],s1[a],r1[a] p_e[e]_[file]_n_[a].dat
-    ve/cop $SIGMA(r1[a]*s1[a]/100.) d1[a]
-    do j = 2 , 6
+    do j = 1 , 6
+      if [j] = 1 then
+        ve/re t[j][a],s[j][a],d[j][a] p400ta_p[a].dat
+      endif
       if [j] = 2 then
-        ve/re t[j][a],s[j][a] p_e[e]_[file]_p_[a].dat
+        ve/re t[j][a],s[j][a],d[j][a] p400ta_d[a].dat
       endif
       if [j] = 3 then
-        ve/re t[j][a],s[j][a] p_e[e]_[file]_d_[a].dat
+        ve/re t[j][a],s[j][a],d[j][a] p400ta_t[a].dat
       endif
       if [j] = 4 then
-        ve/re t[j][a],s[j][a] p_e[e]_[file]_t_[a].dat
+        ve/re t[j][a],s[j][a],d[j][a] p400ta_h[a].dat
       endif
       if [j] = 5 then
-        ve/re t[j][a],s[j][a] p_e[e]_[file]_he3_[a].dat
+        ve/re t[j][a],s[j][a],d[j][a] p400ta_pip[a].dat
       endif
       if [j] = 6 then
-        ve/re t[j][a],s[j][a] p_e[e]_[file]_he4_[a].dat
+        ve/re t[j][a],s[j][a],d[j][a] p400ta_pim[a].dat
       endif
-      ve/cop $SIGMA(s[j][a]/20.) d[j][a]
+*      ve/cop $SIGMA(s[j][a]/20.) d[j][a]
     enddo
   enddo
 return
@@ -478,34 +489,21 @@ macro creavec dimvex=13
  ve/cr clustP(1) r
  ve/cr rMed(1) r
  ve/cr solA(1) r
- if [dimvex]=13 then
-   ve/cr nptn(9) r 9 16 20 20 18 18 4 15 3
- elseif [dimvex]=83 then
-   ve/cr nptn(9) r 9 9 25 7 2 16 2 2 2
- endif
- do j = 1 , 9
-   a  = angle([j])
-   npt= nptn([j])
-   ve/cr t1[a]([npt]) r
-   ve/cr s1[a]([npt]) r
-   ve/cr d1[a]([npt]) r
-   ve/cr r1[a]([npt]) r
-   enddo
- *ve/cr angle(9) r 20 30 45 60 75 90 105 120 140
- if [dimvex]=13 then
-   ve/cr nptf(6) r 20 17 16 14 13 17
- elseif [dimvex]=83 then
-   ve/cr nptf(6) r 25 18 17 16 14 16
- endif
- do i = 2 , 6
-   npt=nptf([i])
-   do j = 1 , 9
-     a  = angle([j])
-     ve/cr t[i][a]([npt]) r
-     ve/cr s[i][a]([npt]) r
-     ve/cr d[i][a]([npt]) r
-   enddo
- enddo
+*===To avoid messeges about creation of vectors
+* if [dimvex]=13 then
+*   ve/cr nptn(5) r 25 25 25 25 25
+* elseif [dimvex]=73 then
+*   ve/cr nptn(5) r 25 25 25 25 25
+* endif
+* do i = 2 , 6
+*   npt=nptn([i])
+*   do j = 1 , 5
+*     a  = angle([j])
+*     ve/cr t[i][a]([npt]) r
+*     ve/cr s[i][a]([npt]) r
+*     ve/cr d[i][a]([npt]) r
+*   enddo
+* enddo
 return
 *
 macro prieps fnam=radshow fil=99
@@ -596,7 +594,7 @@ macro makehbk
  1d 1 'N events' 1 0. 2. 0.
  put/cont 1 nevts
  hi/fil 35 chips.hbook ! n
- mess '*** Number of events is read '
+ mess '*** #of Events is read '
  nt/create 70 'Incl' 43 //lun35 8096 _
   Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
   Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
@@ -618,7 +616,7 @@ macro makehbk
   Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
   Ma2p  Ma20  Mf2p
  nt/read 75 tuplevta.out ! ! 9000000
- mess '*** Ntuple 75 is read '
+ mess '*** Ntuple 72 is read '
  nt/create 77 'EvtQ' 33 //lun35 8096 _
   Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
   Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
