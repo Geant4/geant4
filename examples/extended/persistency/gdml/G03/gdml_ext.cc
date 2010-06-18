@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_ext.cc,v 1.4 2010-06-14 16:59:09 gcosmo Exp $
+// $Id: gdml_ext.cc,v 1.5 2010-06-18 10:10:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,32 +78,27 @@ int main(int argc, char** argv)
 
   // run initialisation macro
 
+    // Open a tcsh session: will stay there until the user types "exit"
+#ifdef G4UI_USE_TCSH
+  G4UIsession* session = new G4UIterminal(new G4UItcsh);
+#else
+  G4UIsession* session = new G4UIterminal();
+#endif
+  G4UImanager* UI = G4UImanager::GetUIpointer(); 
+
   if ( argc==1 )   // Define UI session for interactive mode. 
   {
-    // Open a tcsh session: will stay there until the user types "exit"
-
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
-#else
-    G4UIsession* session = new G4UIterminal();
-#endif
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand("/control/execute vis.mac");
-
-    session->SessionStart();
-    delete session;
   }
   else             // Batch mode
   { 
     G4String command = "/control/execute "; 
     G4String fileName = argv[1]; 
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand(command+fileName); 
-    session->SessionStart();
-    delete session;
   }
-  
+  session->SessionStart();
+  delete session;
+
   delete visManager;
   
   // Job termination
