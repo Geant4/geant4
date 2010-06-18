@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2009-11-16 16:37:49 gunter Exp $
+$Id: History,v 1.22 2010-06-18 15:24:13 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 Nune 2010 Gunter Folger               test12-V09-03-00
+- Allow NIST materials to be used
+- more Physics lists
 
 16 November 2009 Gunter Folger           test12-V09-02-07
 - added option to test QGS_BIC
