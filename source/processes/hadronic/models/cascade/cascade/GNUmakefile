@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2010-06-17 15:32:35 mkelsey Exp $
+# $Id: GNUmakefile,v 1.11 2010-06-18 14:09:25 mkelsey Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 #
@@ -25,6 +25,10 @@ endif
 
 ifdef G4CASCADE_WATCHER_HIGHZ
   CPPFLAGS += -DG4CASCADE_WATCHER_HIGHZ=1
+endif
+
+ifdef G4CASCADE_SKIP_ECONS
+  CPPFLAGS += -DG4CASCADE_SKIP_ECONS=1
 endif
 
 ifndef G4INSTALL
