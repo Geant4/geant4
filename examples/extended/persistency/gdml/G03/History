@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-06-14 16:59:09 gcosmo Exp $
+$Id: History,v 1.8 2010-06-18 10:10:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 18th, 2010  Gabriele Cosmo - G03-V09-03-03
+- Removed extra call to G4UItcsh in batch mode in main() and cleaned up ...
 
 June 14th, 2010  Gabriele Cosmo - G03-V09-03-02
 - Corrected selection of G4UItcsh in main() by protecting with its proper
