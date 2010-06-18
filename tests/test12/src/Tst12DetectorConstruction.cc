@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst12DetectorConstruction.cc,v 1.6 2007-08-24 13:06:56 gcosmo Exp $
+// $Id: Tst12DetectorConstruction.cc,v 1.7 2010-06-18 15:22:18 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,6 +42,8 @@
 #include "G4PVPlacement.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+
+#include "G4NistManager.hh"
 
 Tst12DetectorConstruction::Tst12DetectorConstruction()
 :simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),elN(0),elO(0)
@@ -102,8 +104,13 @@ void Tst12DetectorConstruction::SelectMaterialPointer()
   { selectedMaterial = Air; }
   else if(materialChoice=="Al")
   { selectedMaterial = Al; }
-  else
-  { selectedMaterial = Pb; }
+  else {
+    selectedMaterial=G4NistManager::Instance()->
+                           FindOrBuildMaterial(materialChoice);
+  }
+  
+  if ( ! selectedMaterial )
+    { selectedMaterial = Pb; }
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }
