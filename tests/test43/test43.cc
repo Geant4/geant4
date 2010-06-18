@@ -666,7 +666,7 @@ int main(int argc, char** argv)
           cs = new G4NeutronInelasticCrossSection();
 	  G4cout << "G4NeutronInelasticCrossSection" << G4endl;
       }  
-      if(part == pip || part == pi0 || part== pim)
+      if( (part == pip || part == pi0 || part== pim) && material->GetElement(0)->GetZ() > 1.5)
       {
           cs = new G4PiNuclearCrossSection();
 	  G4cout << "G4PiNuclearCrossSection" << G4endl;
@@ -832,7 +832,7 @@ int main(int argc, char** argv)
 
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
-
+      
       if(iter == 1000*(iter/1000)) {
         G4cerr << "##### " << iter << "-th event  #####" << G4endl;
       }

@@ -121,7 +121,6 @@
 
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4LElastic.hh"
-#include "G4CascadeElasticInterface.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -408,12 +407,6 @@ G4VProcess* Test43Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "HElastic") {
     G4ElasticHadrNucleusHE* els = new G4ElasticHadrNucleusHE();
-    sg = new Test43VSecondaryGenerator(els, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "BertiniElastic") {
-    G4CascadeElasticInterface* els = new G4CascadeElasticInterface();
     sg = new Test43VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
