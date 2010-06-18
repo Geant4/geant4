@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.79 2010-06-17 15:32:35 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.80 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,12 +39,12 @@
 // 20100615  M. Kelsey -- Bug fix: For K0's need ekin in GEANT4 units
 // 20100617  M. Kelsey -- Rename "debug_" preprocessor flag to G4CASCADE_DEBUG,
 //		and "BERTDEV" to "G4CASCADE_COULOMB_DEV"
+// 20100617  M. Kelsey -- Make G4InuclCollider a local data member
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DynamicParticle.hh"
-#include "G4InuclCollider.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -150,10 +150,9 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     }
   }
 
-  G4CollisionOutput output;
-
   // Colliders initialisation
-  G4InuclCollider* collider = new G4InuclCollider;
+  collider.setVerboseLevel(verboseLevel);
+  G4CollisionOutput output;
 
   G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
   G4int  nTries   = 0;  // try counter
@@ -187,7 +186,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       
       do {   // we try to create inelastic interaction
 	output.reset();
-	collider->collide(bullet, targetH, output);
+	collider.collide(bullet, targetH, output);
 	nTries++;
       } while(
 	      (nTries < maxTries) &&
@@ -197,7 +196,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	       )
 	      );
     } else { // only elastic collision is energetically possible
-      collider->collide(bullet, targetH, output);
+      collider.collide(bullet, targetH, output);
     }
     
     sumBaryon += 1;
@@ -217,7 +216,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       coulombOK=0;  // by default coulomb analysis is OK
 #endif
       output.reset();
-      collider->collide(bullet, target, output);
+      collider.collide(bullet, target, output);
       nTries++;
       
 #ifdef G4CASCADE_COULOMB_DEV
@@ -339,7 +338,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   delete bullet;
-  delete collider;
 
   if(target != 0) delete target;
   if(targetH != 0) delete targetH;

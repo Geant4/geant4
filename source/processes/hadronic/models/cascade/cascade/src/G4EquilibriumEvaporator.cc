@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.33 2010-06-17 15:32:35 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.34 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -38,7 +38,8 @@
 // 20100520  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members.  Rename timeToBigBang() to override
 //		base explosion().
-// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
+// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code,
+//		pass verbosity to colliders.
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -57,14 +58,9 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : G4VCascadeCollider("G4EquilibriumEvaporator"),
-    theFissioner(new G4Fissioner),
-    theBigBanger(new G4BigBanger) {}
+  : G4VCascadeCollider("G4EquilibriumEvaporator") {}
 
-G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {
-  delete theFissioner;
-  delete theBigBanger;
-}
+G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {}
 
 
 void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
@@ -80,6 +76,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4cerr << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
     return;
   }
+
+  theFissioner.setVerboseLevel(verboseLevel);
+  theBigBanger.setVerboseLevel(verboseLevel);
 
   // simple implementation of the equilibium evaporation a la Dostrowski
   const G4double huge_num = 50.0;
@@ -128,7 +127,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	G4cout << " big bang in eql start " << G4endl;
       }
 
-      theBigBanger->collide(0, target, output);
+      theBigBanger.collide(0, target, output);
       return;
     } else {     
 
@@ -174,7 +173,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  nuclei.setModel(6);
 	  nuclei.setExitationEnergy(EEXS);      
 
-	  theBigBanger->collide(0, &nuclei, output);
+	  theBigBanger.collide(0, &nuclei, output);
 	  return;	
 
 	} else { // normal chain
@@ -467,7 +466,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 		// Catch fission output separately for verification
 		G4CollisionOutput foutput;
-		theFissioner->collide(0, &nuclei, foutput);
+		theFissioner.collide(0, &nuclei, foutput);
 
 		if (foutput.getNucleiFragments().size() == 2) { // fission o'k
 		  // Copy fragment list and convert back to the lab

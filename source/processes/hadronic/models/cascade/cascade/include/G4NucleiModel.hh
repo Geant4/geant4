@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.25 2010-05-21 17:44:38 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.26 2010-06-18 02:57:44 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -38,6 +38,8 @@
 // 20100517  M. Kelsey -- Change cross-section tables to static arrays.  Move
 //		absorptionCrossSection() from SpecialFunc.
 // 20100520  M. Kelsey -- Add function to separate momentum from nucleon
+// 20100617  M. Kelsey -- Add setVerboseLevel() function, add generateModel()
+//		with particle input, and ctor with A/Z input.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -51,12 +53,16 @@ class G4InuclNuclei;
 class G4ElementaryParticleCollider;
 
 class G4NucleiModel {
-
 public:
-
   G4NucleiModel();
-  G4NucleiModel(G4InuclNuclei* nuclei);
+  G4NucleiModel(G4double a, G4double z);
+  explicit G4NucleiModel(G4InuclNuclei* nuclei);
 
+  ~G4NucleiModel() {}
+
+  void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
+
+  void generateModel(G4InuclNuclei* nuclei);
   void generateModel(G4double a, G4double z);
 
   void reset() {
@@ -64,9 +70,7 @@ public:
     protonNumberCurrent = protonNumber;
   }
 
-
   void printModel() const; 
-
 
   G4double getDensity(G4int ip, G4int izone) const {
     return nucleon_densities[ip - 1][izone];

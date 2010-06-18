@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.30 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.31 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -45,20 +45,9 @@
 
 
 G4InuclCollider::G4InuclCollider()
-  : G4VCascadeCollider("G4InuclCollider"),
-    theElementaryParticleCollider(new G4ElementaryParticleCollider),
-    theIntraNucleiCascader(new G4IntraNucleiCascader),
-    theNonEquilibriumEvaporator(new G4NonEquilibriumEvaporator),
-    theEquilibriumEvaporator(new G4EquilibriumEvaporator),
-    theBigBanger(new G4BigBanger) {}
+  : G4VCascadeCollider("G4InuclCollider") {}
 
-G4InuclCollider::~G4InuclCollider() {
-  delete theElementaryParticleCollider;
-  delete theIntraNucleiCascader;
-  delete theNonEquilibriumEvaporator;
-  delete theEquilibriumEvaporator;
-  delete theBigBanger;
-}
+G4InuclCollider::~G4InuclCollider() {}
 
 
 void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
@@ -66,6 +55,13 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   if (verboseLevel > 3) {
     G4cout << " >>> G4InuclCollider::collide" << G4endl;
   }
+
+  // Initialize colliders verbosity
+  theElementaryParticleCollider.setVerboseLevel(verboseLevel);
+  theIntraNucleiCascader.setVerboseLevel(verboseLevel);
+  theNonEquilibriumEvaporator.setVerboseLevel(verboseLevel);
+  theEquilibriumEvaporator.setVerboseLevel(verboseLevel);
+  theBigBanger.setVerboseLevel(verboseLevel);
 
   const G4int itry_max = 1000;
   		     
@@ -75,7 +71,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
       target->printParticle();
     }
 
-    theElementaryParticleCollider->collide(bullet, target, globalOutput);
+    theElementaryParticleCollider.collide(bullet, target, globalOutput);
   } else { // needs to call all machinery    	
     G4LorentzConvertor convertToTargetRestFrame;
 
@@ -124,7 +120,8 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	convertToTargetRestFrame.toTheTargetRestFrame();
 
 	if (verboseLevel > 3) {
-	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
+	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial()
+		 << G4endl;
 	}
 
 	G4LorentzVector bmom;
@@ -132,7 +129,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 
 	G4InuclNuclei ntarget(at, zt);		// Default is at rest
 
-	theIntraNucleiCascader->setInteractionCase(interCase.code());
+	theIntraNucleiCascader.setInteractionCase(interCase.code());
 	 
 	G4bool bad = true;
 	G4int itry = 0;
@@ -148,10 +145,10 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  if (interCase.hadNucleus()) {
 	    G4InuclElementaryParticle pbullet(bmom, btype);
 
-	    theIntraNucleiCascader->collide(&pbullet, &ntarget, output);
+	    theIntraNucleiCascader.collide(&pbullet, &ntarget, output);
 	  } else {
 	    G4InuclNuclei nbullet(bmom, ab, zb);
-	    theIntraNucleiCascader->collide(&nbullet, &ntarget, output);
+	    theIntraNucleiCascader.collide(&nbullet, &ntarget, output);
 	  };   
 
 	  if (verboseLevel > 3) {
@@ -170,10 +167,10 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 		G4cout << " big bang after cascade " << G4endl;
 	      };
 
-	      theBigBanger->collide(0,&cascad_rec_nuclei, TRFoutput);
+	      theBigBanger.collide(0,&cascad_rec_nuclei, TRFoutput);
 	    } else {
 	      output.reset();
-	      theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei, output);
+	      theNonEquilibriumEvaporator.collide(0, &cascad_rec_nuclei, output);
 
 	      if (verboseLevel > 3) {
 		G4cout << " After NonEquilibriumEvaporator " << G4endl;
@@ -184,7 +181,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	      G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
 
 	      output.reset();
-	      theEquilibriumEvaporator->collide(0, &exiton_rec_nuclei, output);
+	      theEquilibriumEvaporator.collide(0, &exiton_rec_nuclei, output);
 
 	      if (verboseLevel > 3) {
 		G4cout << " After EquilibriumEvaporator " << G4endl;

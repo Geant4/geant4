@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2010-06-18 02:55:38 mkelsey Exp $
+$Id: History,v 1.99 2010-06-18 02:57:44 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,18 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+17 June 2010 Michael Kelsey (hadr-casc-V09-03-47)
+-------------------------------------------------
+- G4CascadeInterface, G4PreCompoundCascadeInterface:  Make G4InuclCollider a
+  local data member, pass verbosity to it in ::ApplyYourself().
+
+- G4InuclCollider, G4ElementaryParticleCollider, G4IntraNucleiCascader,
+  G4EquilibriumEvaporator, G4BigBanger: Make all sub-colliders local data
+  members, pass verbosity to each of them.
+
+- G4NucleiModel:  Add ctors and generateModel() signatures so both can do
+  particle or A/Z initialization.  Add setVerboseLevel() function.
 
 17 June 2010 Michael Kelsey (hadr-casc-V09-03-46)
 -------------------------------------------------

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.hh,v 1.11 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.hh,v 1.12 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -34,10 +34,10 @@
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
 #include "G4VCascadeCollider.hh"
+#include "G4Fissioner.hh"
+#include "G4BigBanger.hh"
 
 class G4CollisionOutput;
-class G4Fissioner;
-class G4BigBanger;
 class G4InuclParticle;
 
 class G4EquilibriumEvaporator : public G4VCascadeCollider {
@@ -74,8 +74,8 @@ private:
 		 G4double z, 
 		 G4double e) const; 
 
-  G4Fissioner* theFissioner;
-  G4BigBanger* theBigBanger;
+  G4Fissioner theFissioner;
+  G4BigBanger theBigBanger;
 };        
 
 #endif /* G4EQUILIBRIUM_EVAPORATOR_HH */

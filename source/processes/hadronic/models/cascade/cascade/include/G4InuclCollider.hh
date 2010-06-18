@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.hh,v 1.13 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4InuclCollider.hh,v 1.14 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -33,20 +33,17 @@
 #define G4INUCL_COLLIDER_HH
 
 #include "G4VCascadeCollider.hh"
+#include "G4BigBanger.hh"
+#include "G4ElementaryParticleCollider.hh"
+#include "G4EquilibriumEvaporator.hh"
+#include "G4IntraNucleiCascader.hh"
+#include "G4NonEquilibriumEvaporator.hh"
 
-class G4BigBanger;
 class G4CollisionOutput;
-class G4ElementaryParticleCollider;
-class G4EquilibriumEvaporator;
-class G4IntraNucleiCascader;
 class G4InuclParticle;
-class G4NonEquilibriumEvaporator;
-
 
 class G4InuclCollider : public G4VCascadeCollider {
-
 public:
-
   G4InuclCollider();
   virtual ~G4InuclCollider();
 
@@ -54,11 +51,11 @@ public:
 	       G4CollisionOutput& output);
 
 private: 
-  G4ElementaryParticleCollider* theElementaryParticleCollider;
-  G4IntraNucleiCascader* theIntraNucleiCascader;
-  G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
-  G4EquilibriumEvaporator* theEquilibriumEvaporator;
-  G4BigBanger* theBigBanger;
+  G4ElementaryParticleCollider theElementaryParticleCollider;
+  G4IntraNucleiCascader theIntraNucleiCascader;
+  G4NonEquilibriumEvaporator theNonEquilibriumEvaporator;
+  G4EquilibriumEvaporator theEquilibriumEvaporator;
+  G4BigBanger theBigBanger;
 };        
 
 #endif /* G4INUCL_COLLIDER_HH */

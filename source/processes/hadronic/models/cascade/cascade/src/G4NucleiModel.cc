@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.50 2010-06-17 15:32:35 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.51 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -78,7 +78,23 @@ G4NucleiModel::G4NucleiModel() : verboseLevel(0) {
   }
 }
 
+G4NucleiModel::G4NucleiModel(G4double a, G4double z) : verboseLevel(0) {
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
+  }
+  generateModel(A,Z);
+}
+
 G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei) : verboseLevel(0) {
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4NucleiModel::G4NucleiModel" << G4endl;
+  }
+  generateModel(nuclei);
+}
+
+
+void 
+G4NucleiModel::generateModel(G4InuclNuclei* nuclei) {
   generateModel(nuclei->getA(), nuclei->getZ());
 }
 

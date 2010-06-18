@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.37 2010-06-17 15:32:35 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.38 2010-06-18 02:57:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,12 +34,13 @@
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members
 // 20100616  M. Kelsey -- Add reporting of final residual particle
-// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
+// 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code,
+//		pass verbosity to collider.  Make G4NucleiModel a data member,
+//		instead of creating and deleting on every cycle.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
-#include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -56,22 +57,21 @@ using namespace G4InuclSpecialFunctions;
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : G4VCascadeCollider("G4IntraNucleiCascader"),
-    theElementaryParticleCollider(new G4ElementaryParticleCollider) {}
+  : G4VCascadeCollider("G4IntraNucleiCascader") {}
 
-G4IntraNucleiCascader::~G4IntraNucleiCascader() {
-  delete theElementaryParticleCollider;
-}
+G4IntraNucleiCascader::~G4IntraNucleiCascader() {}
 
 
 void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,
 				    G4CollisionOutput& output) {
-
   if (verboseLevel > 3) {
     G4cout << " >>> G4IntraNucleiCascader::collide inter_case " << inter_case 
 	   << G4endl;
   }
+
+  model.setVerboseLevel(verboseLevel);
+  theElementaryParticleCollider.setVerboseLevel(verboseLevel);
 
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
@@ -83,7 +83,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   }
 
   G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
-  G4NucleiModel model(tnuclei);
+  model.generateModel(tnuclei);
+
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
                                       (1.+G4cbrt(tnuclei->getA()));
 
@@ -166,7 +167,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       }
 
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
-							theElementaryParticleCollider);
+							&theElementaryParticleCollider);
       if (verboseLevel > 2) {
 	G4cout << " ew particles " << new_cascad_particles.size() << G4endl;
       }
