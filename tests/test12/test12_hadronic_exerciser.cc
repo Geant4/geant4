@@ -66,7 +66,7 @@ static void OutputCases
 
 int main (int argc, char** argv) {
 
-  G4int N = 200;
+  G4int N = 100;
   if (argc > 1) {
     if (strcmp (argv[1], "large_N") == 0) {
       N = 2000;
