@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.46 2010-06-17 13:05:09 gcosmo Exp $
+// $Id: G4UIQt.cc,v 1.47 2010-06-18 13:34:07 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -306,8 +306,17 @@ G4UIQt::G4UIQt (
   fMainWindow->setWindowTitle( tr("G4UI Session") ); 
   fMainWindow->resize(900,600); 
   fMainWindow->move(QPoint(50,100));
+#endif
+
   // Set not visible until session start
+#if QT_VERSION >= 0x040000
+ #if QT_VERSION >= 0x040200
   fMainWindow->setVisible(false);
+ #else
+  fMainWindow->hide();
+ #endif
+#else
+  fMainWindow->hide();
 #endif
 
 #ifdef G4DEBUG_INTERFACES_BASIC
@@ -640,11 +649,20 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
   fTabWidget->setCurrentPage(tabNumber);
 #else
   fTabWidget->setCurrentIndex(tabNumber);
-  fTabWidget->setVisible(true);
 #endif
 
   // Send this signal to unblock graphic updates !
   fTabWidget->setTabSelected(false);
+
+#if QT_VERSION >= 0x040000
+ #if QT_VERSION >= 0x040200
+  fTabWidget->setVisible(true);
+ #else
+  fTabWidget->show();
+ #endif
+#else
+  fTabWidget->show();
+#endif
 
   // This will send a paintEvent to OGL Viewers
   fTabWidget->setTabSelected(true);
@@ -691,21 +709,46 @@ G4UIsession* G4UIQt::SessionStart (
   Prompt("Session :");
   exitSession = false;
 
+  if (fEmptyViewerTabLabel != NULL) {
+    if (fTabWidget->isVisible()) {
+#if QT_VERSION >= 0x040000
+  #if QT_VERSION >= 0x040200
+      fEmptyViewerTabLabel->setVisible(false);
+  #else
+      fEmptyViewerTabLabel->hide();
+  #endif
+#else
+      fEmptyViewerTabLabel->hide();
+#endif
+    } else {
+#if QT_VERSION >= 0x040000
+  #if QT_VERSION >= 0x040200
+      fEmptyViewerTabLabel->setVisible(true);
+  #else
+      fEmptyViewerTabLabel->show();
+  #endif
+#else
+      fEmptyViewerTabLabel->show();
+#endif
+    }
+  }
+
+#if QT_VERSION >= 0x040000
+  #if QT_VERSION >= 0x040200
+      fMainWindow->setVisible(true);
+  #else
+      fMainWindow->show();
+  #endif
+#else
+      fMainWindow->show();
+#endif
   // get the size of the tabbar
-  G4int tabBarX;
-  G4int tabBarY;
+  int tabBarX;
+  int tabBarY;
 #if QT_VERSION < 0x040000
   tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
   tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
 #else
-  if (fEmptyViewerTabLabel != NULL) {
-    if (fTabWidget->isVisible()) {
-      fEmptyViewerTabLabel->setVisible(false);
-    } else {
-      fEmptyViewerTabLabel->setVisible(true);
-    }
-  }
-  fMainWindow->setVisible(true);
   tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
   tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
 #endif
@@ -2095,7 +2138,15 @@ void G4UIQt::TabCloseCallback(int a){
     fMyVSplitter->show();
     fEmptyViewerTabLabel->show();
     fTabWidget->setParent(0);
-    fTabWidget->setVisible(false);
+#if QT_VERSION >= 0x040000
+  #if QT_VERSION >= 0x040200
+      fTabWidget->setVisible(false);
+  #else
+      fMainWindow->hide();
+  #endif
+#else
+      fMainWindow->hide();
+#endif
     delete fTabWidget;
     fTabWidget = NULL;
   }

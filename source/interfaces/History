@@ -1,4 +1,4 @@
-$Id: History,v 1.149 2010-06-17 13:06:59 gcosmo Exp $
+$Id: History,v 1.150 2010-06-18 13:34:07 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18, June L. Garnier
+- Fix Qt3 compilation bug (setVisible(...) unprotected
 
 17, June G. Cosmo (interfaces-V09-03-10)
 - Fixed compilation errors in G4UIQt for Qt3....
