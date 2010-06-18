@@ -818,13 +818,13 @@ int main(int argc, char** argv)
       dParticle.SetKineticEnergy(e0);
 
       gTrack->SetStep(step);
-      gTrack->SetKineticEnergy(Kinetic_energy);
+      gTrack->SetKineticEnergy(e0);
 
-      labv = G4LorentzVector(0.0, 0.0, pmax, Kinetic_energy + mass + nucleus_mass);
+      labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), e0 + mass + nucleus_mass);
       G4double Ecms=labv.mag2();
       G4ThreeVector bst = labv.boostVector();
 
-      G4LorentzVector labNN(0,0,pmax,Kinetic_energy + mass + G4Proton::Proton()->GetPDGMass());
+      G4LorentzVector labNN(0,0,std::sqrt(e0*(e0 + 2.*mass)),e0 + mass + G4Proton::Proton()->GetPDGMass());
       G4double NucleonNucleoncms=labNN.mag2();
       G4ThreeVector boostNN = labNN.boostVector();
       
