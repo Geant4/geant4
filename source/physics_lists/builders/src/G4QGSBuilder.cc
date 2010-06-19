@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBuilder.cc,v 1.2 2009-12-29 17:54:25 vnivanch Exp $
+// $Id: G4QGSBuilder.cc,v 1.3 2010-06-19 11:12:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -66,13 +66,15 @@ G4QGSBuilder::~G4QGSBuilder()
   delete theQuasiElastic;
   delete theQGStringDecay;
   delete theQGStringModel;
+  delete theQGSM;
 }                                     
 
 G4HadronicInteraction* G4QGSBuilder::BuildModel()
 {
   G4TheoFSGenerator* theQGSModel = new G4TheoFSGenerator(GetName());
   theQGStringModel  = new G4QGSModel< G4QGSParticipants >;
-  theQGStringDecay  = new G4ExcitedStringDecay(new G4QGSMFragmentation());
+  theQGSM = new G4QGSMFragmentation();
+  theQGStringDecay  = new G4ExcitedStringDecay(theQGSM);
   theQGStringModel->SetFragmentationModel(theQGStringDecay);
   theQGSModel->SetHighEnergyGenerator(theQGStringModel);
 
