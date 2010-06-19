@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.3 2010-06-03 10:42:44 gunter Exp $
+// $Id: HadronPhysicsQGSP_FTFP_BERT.cc,v 1.4 2010-06-19 11:12:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -56,8 +56,10 @@ HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(G4int)
    ProjectileDiffraction=false;
 }
 
-HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String& name, G4bool quasiElastic)
-                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
+HadronPhysicsQGSP_FTFP_BERT::HadronPhysicsQGSP_FTFP_BERT(const G4String&, 
+							 G4bool quasiElastic)
+                    :  G4VPhysicsConstructor("hInelastic QGSP_FTFP_BERT"), 
+		       QuasiElastic(quasiElastic)
 {
    ProjectileDiffraction=false;
 }
@@ -129,6 +131,7 @@ HadronPhysicsQGSP_FTFP_BERT::~HadronPhysicsQGSP_FTFP_BERT()
    delete theQGSPNeutron;
    delete theFTFPNeutron;
    delete theBertiniNeutron;
+   delete theNeutrons;
    delete theQGSPPro;
    delete theFTFPPro;
    delete thePro;
