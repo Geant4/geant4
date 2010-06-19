@@ -1,4 +1,4 @@
-q$Id: History,v 1.137 2010-06-13 20:40:29 gunter Exp $
+q$Id: History,v 1.138 2010-06-19 11:00:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-06-2011, V.Ivantchenko (phys-lists-V09-03-16)
+- G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
+  G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder -
+    added deletion of G4ExcitationHandler, G4QGSMFragmentation 
+  HadronPhysicsQGSP_BERT, HadronPhysicsFTFP_BERT - added deletion
+    of neutron builder 
 
 11-06-2011, G.Folger                    (phys-lists-V09-03-15)
 - fix compilation error in G4QPhotoNuclearPhysics
