@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.8 2010-06-09 12:56:01 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.9 2010-06-19 07:46:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -73,7 +73,7 @@ G4double G4QInelastic::EtaEtaprime=0.3;  // Supression of eta mesons (gg->qq/3g-
 G4double G4QInelastic::freeNuc=.35;      // Percentage of free nucleons on the surface
 G4double G4QInelastic::freeDib=.05;      // Percentage of free diBaryons on the surface
 G4double G4QInelastic::clustProb=5.;     // Nuclear clusterization parameter
-G4double G4QInelastic::mediRatio=10.;    // medium/vacuum hadronization ratio
+G4double G4QInelastic::mediRatio=1.;    // medium/vacuum hadronization ratio
 G4int    G4QInelastic::nPartCWorld=152;  // The#of particles initialized in CHIPS World
 G4double G4QInelastic::SolidAngle=0.5;   // Part of Solid Angle to capture (@@A-dep.)
 G4bool   G4QInelastic::EnergyFlux=false; // Flag for Energy Flux use (not MultyQuasmon)
@@ -231,7 +231,7 @@ G4double G4QInelastic::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
     CSmanager=G4QHyperonNuclearCrossSection::GetPointer();
     pPDG=3122;
   }
-  else if(pZ > 0 && pA > 1) // Ions (not implemented yet (should not be used)
+  else if(pZ > 0 && pA > 1) // Ions (not implemented yet, should not be used)
   {
     G4cout<<"-Warning-G4QInelastic::GetMeanFreePath: G4QInelastic called for ions"<<G4endl;
     CSmanager=G4QProtonNuclearCrossSection::GetPointer();
@@ -595,6 +595,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   //static const G4double nudM= 0.;           // for x limit
   //static const G4double nuD = mPPi;         // Multiperipheral threshold
   //static const G4double nuD2= mPPi2;
+  static const G4LorentzVector vacuum4M(0.,0.,0.,0.);
   //-------------------------------------------------------------------------------------
   static G4bool CWinit = true;              // CHIPS Warld needs to be initted
   if(CWinit)
@@ -746,6 +747,20 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QInelastic::PostStepDoIt: Z="<<Z<<", j="<<i<<", N(isotope)="<<N<<G4endl;
 #endif
+  G4double kinEnergy= projHadron->GetKineticEnergy();
+  G4ParticleMomentum dir = projHadron->GetMomentumDirection();
+  if(projPDG==22 && Z==1 && !N && Momentum<150.)
+  {
+#ifdef debug
+    G4cerr<<"---LowPHOTON---G4QInelastic::PSDoIt: Called for zero Cross-section"<<G4endl;
+#endif
+    //Do Nothing Action insead of the reaction
+    aParticleChange.ProposeEnergy(kinEnergy);
+    aParticleChange.ProposeLocalEnergyDeposit(0.);
+    aParticleChange.ProposeMomentumDirection(dir);
+    aParticleChange.ProposeTrackStatus(fAlive);
+    return G4VDiscreteProcess::PostStepDoIt(track,step);
+  }
   if(N<0)
   {
     G4cerr<<"-Warning-G4QInelastic::PostStepDoIt: Isotope with Z="<<Z<<", 0>N="<<N<<G4endl;
@@ -765,11 +780,6 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QInelastic::PostStepDoIt: N="<<N<<" for element with Z="<<Z<<G4endl;
 #endif
-  if(N<0)
-  {
-    G4cerr<<"---Warning---G4QInelastic::PostStepDoIt:Element with N="<<N<< G4endl;
-    return 0;
-  }
   aParticleChange.Initialize(track);
   G4double weight = track.GetWeight();
 #ifdef debug
@@ -807,8 +817,6 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
     G4cout<<"G4QInelastic::PostStDoIt:startSt="<<aParticleChange.GetTrackStatus()<<G4endl;
 #endif
-    G4double kinEnergy= projHadron->GetKineticEnergy();
-    G4ParticleMomentum dir = projHadron->GetMomentumDirection();
     G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
     G4double ml=me;
     G4double ml2=me2;
@@ -828,6 +836,10 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     if(!aProjPDG) G4cout<<"-Warning-G4QCollis::PostStepDoIt: (2) projectile PDG=0"<<G4endl;
     G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N,aProjPDG);// Recalculate XS
     // @@ check a possibility to separate p, n, or alpha (!)
+    if(Z==1 && !N && Momentum<150.) xSec=0.;
+#ifdef debug
+    G4cout<<"-Forse-G4QCol::PStDoIt: P="<<Momentum<<",PDG="<<projPDG<<",xS="<<xSec<<G4endl;
+#endif
     if(xSec <= 0.) // The cross-section is 0 -> Do Nothing
     {
 #ifdef debug
@@ -1941,7 +1953,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   //G4bool elF=false; // Flag of the ellastic scattering is "false" by default
   //G4double eWei=1.;
   // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End  
-#ifdef ldebug
+#ifdef debug
   G4cout<<"^^G4QInelastic::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
   const G4QNucleus targNuc(Z,N);                          // Define the target nucleus
@@ -1951,7 +1963,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     G4QNucleus projNuc(proj4M,projPDG);                   // Define the projectile nucleus
     G4QIonIonCollision IonIon(projNuc, targNuc);  // Define deep-inelastic ion-ion reaction
 #ifdef debug
-    G4cout<<"G4QCol::PStDoIt: ProjNuc="<<projPDG<<proj4M<<", TargNuc="<<targPDG<<G4endl;
+    G4cout<<"G4QInel::PStDoIt: ProjNuc="<<projPDG<<proj4M<<", TargNuc="<<targPDG<<G4endl;
 #endif
     try {output = IonIon.Fragment();}                     // DINR AA interaction products
     catch (G4QException& error)
@@ -1962,11 +1974,17 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
   }
   else                                                    // --> A projectile hadron
   {
+    // *** Let to produce elastic final states for acceleration ***
+#ifdef debug
     G4int maxCn=7;
+#endif
     G4int atCn=0;                                         // Attempts counter
     G4bool inel=false;
-    while (inel==false && ++atCn <= maxCn)                // To evoid elastic final state
-    {
+    //while (inel==false && ++atCn <= maxCn)                // To evoid elastic final state
+    //{
+#ifdef debug
+      G4cout<<"G4QInelastic::PStDoIt: atCn="<<atCn<<" <= maxCn="<<maxCn<<G4endl;
+#endif
       G4int outN=output->size();
       if(outN)                                            // The output is not empty
       {
@@ -1975,16 +1993,30 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       }
       delete output;                                      // Before the new output creation
       const G4QHadron projH(projPDG,proj4M);              // Define the projectile particle
-      G4QFragmentation DINR(targNuc, projH);              // Define deep-inel. h-A reaction
 #ifdef debug
-      G4cout<<"G4QInelastic::PStDoIt:Proj="<<projPDG<<proj4M<<",TargNuc="<<targPDG<<G4endl;
+      G4cout<<"G4QInelastic::PStDoIt: Before Fragmentation"<<G4endl;
 #endif
-      try {output = DINR.Fragment();}                     // DINR hA fragmentation
-      catch (G4QException& error)
-      {
-        G4cerr<<"***G4QInelastic::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
-        G4Exception("G4QInelastic::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
-      }
+      //if(aProjPDG==22 && projPDG==22 && proj4M.m2()<.01 && proj4M.e()<150.)
+      //{
+      //  G4QHadron* tgH= new G4QHadron(targNuc.GetPDGCode(),targNuc.Get4Momentum());
+      //  G4QHadron* prH= new G4QHadron(projPDG,proj4M);
+      //  output = new G4QHadronVector();
+      //  output->push_back(prH);
+      //  output->push_back(tgH);
+      //}
+      //else
+      //{
+        G4QFragmentation DINR(targNuc, projH);            // Define deep-inel. h-A reaction
+#ifdef debug
+        G4cout<<"G4QInelastic::PStDoIt:Proj="<<projPDG<<proj4M<<",TgNuc="<<targPDG<<G4endl;
+#endif
+        try {output = DINR.Fragment();}                   // DINR hA fragmentation
+        catch (G4QException& error)
+        {
+          G4cerr<<"***G4QInelastic::PostStepDoIt: G4QE Exception is catched in hA"<<G4endl;
+          G4Exception("G4QInelastic::PostStepDoIt:","27",FatalException,"CHIPS hA crash");
+        }
+	//}
       outN=output->size();
 #ifdef debug
       G4cout<<"G4QInelastic::PostStepDoIt:  At# "<<atCn<<", nSec="<<outN<<", fPDG="
@@ -2000,7 +2032,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
       if(atCn==maxCn) G4cout<<"-Warn-G4QCol::PostStDoIt:mAt="<<atCn<<" is reached"<<G4endl;
 #endif
-    }
+    //}
   }
   //
   // --- the scattered hadron with changed nature can be added here ---
@@ -2086,6 +2118,21 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     else if(PDGCode==91999000) theDefinition = G4XiMinus::XiMinus();
     else if(PDGCode==91999999) theDefinition = G4XiZero::XiZero();
     else if(PDGCode==92998999) theDefinition = G4OmegaMinus::OmegaMinus();
+    else if(PDGCode==90000000)
+    {
+#ifdef pdebug
+      G4cout<<"-Warning-G4QInelastic::PostStepDoIt:Vacuum PDG="<<PDGCode
+            <<", 4Mom="<<hadr->Get4Momentum()<<G4endl;
+#endif
+      theDefinition = G4Gamma::Gamma();
+      G4double hM2=(hadr->Get4Momentum()).m2();
+      if(std::fabs(hM2)>.01) G4cout<<"-Warning-G4QInel::PoStDoIt:90000000M2="<<hM2<<G4endl;
+      else if(hadr->Get4Momentum()==vacuum4M)
+      {
+        delete hadr;
+        continue;
+      }
+    }
     else if(PDGCode >80000000) // Defines hypernuclei as normal nuclei (N=N+S Correction!)
     {
       G4int aZ = hadr->GetCharge();
@@ -2108,9 +2155,9 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
     }
     if(!theDefinition)
     { // !! Commenting of this print costs days of searching for E/mom nonconservation !!
-      //#ifdef debug
-      G4cout<<"---Warning---G4QInelastic::PostStepDoIt: drop PDG="<<PDGCode<<G4endl;
-      //#endif
+      if(PDGCode!=90000000 || hadr->Get4Momentum()!=vacuum4M)
+        G4cout<<"---Warning---G4QInelastic::PostStepDoIt: drop PDG="<<PDGCode<<", 4Mom="
+              <<hadr->Get4Momentum()<<G4endl;
       delete hadr;
       continue;
     }

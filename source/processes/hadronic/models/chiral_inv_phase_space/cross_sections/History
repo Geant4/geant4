@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta debugging
+
 14-Jun-2010 M.Kosov                             (hadr-chips-cs-V09-03-06)
 ------------------------------------------------------------------------
 Bug fix for GetExchangeT in G4QKaonMinusElasticCrossSection (for K0).

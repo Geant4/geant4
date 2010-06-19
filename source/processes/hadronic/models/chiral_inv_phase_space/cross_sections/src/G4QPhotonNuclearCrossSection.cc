@@ -110,6 +110,7 @@ G4double G4QPhotonNuclearCrossSection::GetCrossSection(G4bool fCS, G4double pMom
 #endif
     return 0.;                         // projectile PDG=0 is a mistake (?!) @@
   }
+  if(pPDG==22 && tgZ==1 && !tgN && pMom<150.*MeV) return 0.; // Examle of pre-threshold (A)
   G4bool in=false;                     // By default the isotope must be found in the AMDB
   if(tgN!=lastN || tgZ!=lastZ || pPDG!=lastPDG)// The nucleus was not the last used isotope
   {

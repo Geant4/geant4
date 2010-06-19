@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIonIonCollision.cc,v 1.8 2010-04-01 15:03:35 mkossov Exp $
+// $Id: G4QIonIonCollision.cc,v 1.9 2010-06-19 07:46:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -3561,7 +3561,7 @@ G4double G4QIonIonCollision::ChooseX(G4double Xmin, G4double Xmax) const
   return x;
 } // End of ChooseX
 
-// Pt distribution @@ one can use 1/(1+A*Pt^2)^B
+// Add CHIPS exponential Pt distribution (see Fragmentation)
 G4ThreeVector G4QIonIonCollision::GaussianPt(G4double widthSq, G4double maxPtSquare) const
 {
 #ifdef debug

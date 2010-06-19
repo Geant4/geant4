@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the G4-9-4-beta debugging
+
 10-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-09) 
 -----------------------------------------------------------------------
 Bug fix in G4QEnvironment: when mass is small for Lam,SigP, use Xi0,p

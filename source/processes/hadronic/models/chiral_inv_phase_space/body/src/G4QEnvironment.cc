@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.166 2010-06-10 16:09:49 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.167 2010-06-19 07:46:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -142,7 +142,7 @@ G4QEnvironment::G4QEnvironment(const G4QHadronVector& projHadrons, const G4int t
             G4cerr<<"***G4QE::Const:iH#"<<ih<<","<<curQH->GetQC()<<curQH->Get4Momentum()
                   <<", chipoM="<<std::sqrt(chM2)<<" < m1="<<h1M<<"("<<h1QPDG<<") + m2="
                   <<h2M<<"("<<h2QPDG<<") = "<<h1M+h2M<<G4endl;
-            throw G4QException("G4QEnvironment::HadronizeQEnv: LowMassChipolino in Input");
+            throw G4QException("G4QEnvironment::Constructor: LowMassChipolino in Input");
           }
         }
         theQHadrons.push_back(curQH);        // (delete equivalent)
@@ -4137,7 +4137,48 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH,  G4bool fCGS)
 #ifdef debug
   G4cout<<"G4QE::EvaporateRes:Called for PDG="<<thePDG<<",4M="<<qH->Get4Momentum()<<G4endl;
 #endif
-  if(theS<0)                                 // Antistrange nucleus
+  if(thePDG==10)
+  {
+    G4QContent   chQC=qH->GetQC();         // Quark content of the Hadron-Chipolino
+    G4QChipolino QCh(chQC);                // Define a Chipolino instance for the Hadron
+    G4LorentzVector ch4M=qH->Get4Momentum(); // 4Mom of the Hadron-Chipolino
+    G4QPDGCode h1QPDG=QCh.GetQPDG1();      // QPDG of the first hadron
+    G4double   h1M   =h1QPDG.GetMass();    // Mass of the first hadron
+    G4QPDGCode h2QPDG=QCh.GetQPDG2();      // QPDG of the second hadron
+    G4double   h2M   =h2QPDG.GetMass();    // Mass of the second hadron
+    G4double   chM2  =ch4M.m2();           // Squared Mass of the Chipolino
+    if( sqr(h1M+h2M) < chM2 )              // Decay is possible
+    {
+      G4LorentzVector h14M(0.,0.,0.,h1M);
+      G4LorentzVector h24M(0.,0.,0.,h2M);
+      if(!G4QHadron(ch4M).DecayIn2(h14M,h24M))
+      {
+        G4cerr<<"***G4QE::EvaporateRes: CM="<<std::sqrt(chM2)<<" -> h1="<<h1QPDG<<"("
+              <<h1M<<") + h2="<<h1QPDG<<"("<<h2M<<") = "<<h1M+h2M<<" **Failed**"<<G4endl;
+        throw G4QException("**G4QEnvironment::EvaporateResidual: QChipolino DecIn2 error");
+      }
+      delete qH;                       // Kill the primary Chipolino
+      G4QHadron* h1H = new G4QHadron(h1QPDG.GetPDGCode(),h14M);
+      theQHadrons.push_back(h1H);      // (delete equivalent)
+#ifdef debug
+      G4cout<<"G4QE::EvaporateResidual: Chipolino -> H1="<<h1QPDG<<h14M<<G4endl;
+#endif
+      qH = new G4QHadron(h2QPDG.GetPDGCode(),h24M);
+      theQHadrons.push_back(qH);       // (delete equivalent)
+#ifdef debug
+      G4cout<<"G4QE::EvaporateResidual: Chipolino -> H2="<<h2QPDG<<h24M<<G4endl;
+#endif
+    }
+    else
+    {
+      G4cerr<<"***G4QEnv::EvaporateResid: ChipoMeson="<<qH->GetQC()<<qH->Get4Momentum()
+            <<", chipoM="<<std::sqrt(chM2)<<" < m1="<<h1M<<"("<<h1QPDG<<") + m2="<<h2M
+            <<"("<<h2QPDG<<") = "<<h1M+h2M<<G4endl;
+      throw G4QException("G4QEnvironment::EvaporateResidual: LowMassChipolino in Input");
+    }
+    return;
+  }
+  else if(theS<0)                                 // Antistrange nucleus
   {
 #ifdef debug
     G4cout<<"G4QE::EvaporateRes: AntistrangeNucleus="<<thePDG<<qH->Get4Momentum()<<G4endl;
@@ -4160,7 +4201,7 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH,  G4bool fCGS)
     G4cout<<"G4QE::EvaporateRes:(!)Meson(!) PDG="<<thePDG<<",4M="<<mesLV<<mesLV.m()
           <<",QC="<<qH->GetQC()<<",MPDG="<<G4QPDGCode(thePDG).GetMass()<<G4endl;
 #endif
-    //DecayMeson(qH);                        // @@
+    //DecayMeson(qH);                        // @@ To be written
     theQHadrons.push_back(qH);
     return;
   }
