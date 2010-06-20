@@ -8,7 +8,8 @@
 0
 #events
 1000000
-//--------Proton_processes
+#print
+100
 #particle
 pi+
 //--------
@@ -22,15 +23,10 @@ G4_Be
 25
 #nbinsd
 25
-#elim(MeV)
-1.
 #nangle
 5
 #angles
 30. 60. 90. 120. 150.  
-#dangle
-5.
-//--------
 #generator
 bertini
 #run
