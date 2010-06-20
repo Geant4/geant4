@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V09-03-05  20 June 2010 V.Ivanchenko
+- allowing to run in testing mode - SetModels.csh script may
+  not be called 
+
 test30-V09-03-04  07 June 2010 V.Ivanchenko
 - remove usage of G4CascadeElasticInterface 
 

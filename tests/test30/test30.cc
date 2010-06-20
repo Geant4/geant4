@@ -411,10 +411,13 @@ int main(int argc, char** argv)
 	  G4cout << "Generator <" << nameGen << "> is not included in the "
 		 << " list SetModels.csh, so is ignored!" 
 		 << G4endl; 
+	  G4cout << "Use #run command to overcome this limitation " << G4endl;
 	  continue;
 	}
 	G4String s(c);
 	if(s=="1") { break; }
+      } else if(line == "#run") { 
+	break; 
       } else if(line == "#verbose") {
         (*fin) >> verbose;
 	G4NistManager::Instance()->SetVerbose(verbose);
