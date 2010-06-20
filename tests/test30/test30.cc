@@ -1051,13 +1051,14 @@ int main(int argc, char** argv)
           if(pd == neutron) histo.fill(23,mom.phi()/degree,1.0);
 	}
 
-	if( (e == 0.0 || pt == 0.0) && warn < 10 ) {
+	if( (e > e0 || e == 0.0 || pt == 0.0) && warn < 10 ) {
           warn++;
           G4cout << "Warning! evt# " << iter 
 	         << "  " << i << "-th sec  "
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
                  << " Pt(MeV/c)= " << pt/MeV
+		 << " Ebeam(MeV)= " << e0/MeV
 		 << G4endl;
 	}
 	de += e;
