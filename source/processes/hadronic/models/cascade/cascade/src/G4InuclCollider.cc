@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.31 2010-06-18 02:57:44 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.32 2010-06-21 03:40:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,9 +32,12 @@
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members, consolidate code
+// 20100620  M. Kelsey -- Reorganize top level if-blocks to reduce nesting,
+//		use new four-vector conservation check.
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
+#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4EquilibriumEvaporator.hh"
@@ -52,7 +55,7 @@ G4InuclCollider::~G4InuclCollider() {}
 
 void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 			      G4CollisionOutput& globalOutput) {
-  if (verboseLevel > 3) {
+  if (verboseLevel > 1) {
     G4cout << " >>> G4InuclCollider::collide" << G4endl;
   }
 
@@ -63,166 +66,195 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   theEquilibriumEvaporator.setVerboseLevel(verboseLevel);
   theBigBanger.setVerboseLevel(verboseLevel);
 
+  // Special pseudo-collider to check energy-momentum conservation
+  G4CascadeCheckBalance balance(0.05, 0.1);	// Second is in GeV
+  balance.setVerboseLevel(verboseLevel);
+
   const G4int itry_max = 1000;
-  		     
+
+  // Particle-on-particle collision; no nucleus involved
   if (useEPCollider(bullet,target)) {
+    if (verboseLevel > 2)
+      G4cout << " InuclCollider -> particle on particle collision" << G4endl;
+ 
+    theElementaryParticleCollider.collide(bullet, target, globalOutput);
     if (verboseLevel > 2) {
-      bullet->printParticle();
-      target->printParticle();
+      balance.collide(bullet, target, globalOutput);
+      balance.okay();		// Do checks, but ignore result
     }
 
-    theElementaryParticleCollider.collide(bullet, target, globalOutput);
-  } else { // needs to call all machinery    	
-    G4LorentzConvertor convertToTargetRestFrame;
+    return;
+  }
+  
+  interCase.set(bullet,target);		// Classify collision type
+  if (verboseLevel > 2) {
+    G4cout << " InuclCollider -> inter case " << interCase.code() << G4endl;
+  }
 
-    interCase.set(bullet,target);
-    if (interCase.valid()) { // ok
-      G4InuclNuclei* ntarget =
-	dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
+  if (!interCase.valid()) {
+    if (verboseLevel > 1)
+      G4cerr << " InuclCollider -> no collision possible " << G4endl;
 
-      convertToTargetRestFrame.setTarget(ntarget);
-      G4int btype = 0;
-      G4double ab = 0.0;
-      G4double zb = 0.0;
-      G4double at = ntarget->getA();
-      G4double zt = ntarget->getZ();
-       
-      if (interCase.hadNucleus()) { // particle with nuclei
-	G4InuclElementaryParticle* pbullet = 
-	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
-         
-	if (pbullet->isPhoton()) {
-	  G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
+    globalOutput.trivialise(bullet, target);
+    return;
+  }
 
-	  globalOutput.trivialise(bullet, target);
-	  return;
-	} else {
-	  convertToTargetRestFrame.setBullet(pbullet);   
-	  btype = pbullet->type();
-	}; 
-
-      } else { // nuclei with nuclei
-	G4InuclNuclei* nbullet = 
-	  dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
-
-	convertToTargetRestFrame.setBullet(nbullet);   
-	ab = nbullet->getA();
-	zb = nbullet->getZ();
-      };
-       	
-      G4double ekin = convertToTargetRestFrame.getKinEnergyInTheTRS();
-
-      if (verboseLevel > 3) {
-	G4cout << " ekin in trs " << ekin << G4endl;
-      }
-
-      if (inelasticInteractionPossible(bullet, target, ekin)) {
-	convertToTargetRestFrame.toTheTargetRestFrame();
-
-	if (verboseLevel > 3) {
-	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial()
-		 << G4endl;
-	}
-
-	G4LorentzVector bmom;
-	bmom.setZ(convertToTargetRestFrame.getTRSMomentum());
-
-	G4InuclNuclei ntarget(at, zt);		// Default is at rest
-
-	theIntraNucleiCascader.setInteractionCase(interCase.code());
-	 
-	G4bool bad = true;
-	G4int itry = 0;
-	 
-	G4CollisionOutput TRFoutput;
-	G4CollisionOutput output;
-	while (bad && itry < itry_max) {
-	  itry++;
-
-	  output.reset();	// Clear buffers for this attempt
-	  TRFoutput.reset();
-
-	  if (interCase.hadNucleus()) {
-	    G4InuclElementaryParticle pbullet(bmom, btype);
-
-	    theIntraNucleiCascader.collide(&pbullet, &ntarget, output);
-	  } else {
-	    G4InuclNuclei nbullet(bmom, ab, zb);
-	    theIntraNucleiCascader.collide(&nbullet, &ntarget, output);
-	  };   
-
-	  if (verboseLevel > 3) {
-	    G4cout << " After Cascade " << G4endl;
-	    output.printCollisionOutput();
-	  }
-	  
-	  // the rest, if any
-	  // FIXME:  The code below still does too much copying!
-	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
-
-	  if (output.numberOfNucleiFragments() == 1) { // there is smth. after
-	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
-	    if (explosion(&cascad_rec_nuclei)) {
-	      if (verboseLevel > 3) {
-		G4cout << " big bang after cascade " << G4endl;
-	      };
-
-	      theBigBanger.collide(0,&cascad_rec_nuclei, TRFoutput);
-	    } else {
-	      output.reset();
-	      theNonEquilibriumEvaporator.collide(0, &cascad_rec_nuclei, output);
-
-	      if (verboseLevel > 3) {
-		G4cout << " After NonEquilibriumEvaporator " << G4endl;
-		output.printCollisionOutput();
-	      };
-
-	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
-	      G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
-
-	      output.reset();
-	      theEquilibriumEvaporator.collide(0, &exiton_rec_nuclei, output);
-
-	      if (verboseLevel > 3) {
-		G4cout << " After EquilibriumEvaporator " << G4endl;
-		output.printCollisionOutput();
-	      };
-
-	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
-	      TRFoutput.addTargetFragments(output.getNucleiFragments());
-	    };
-	  };
-	 
-	  // convert to the LAB
-	  TRFoutput.boostToLabFrame(convertToTargetRestFrame);
-
-	  globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
-	  globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
-	  globalOutput.setOnShell(bullet, target);
-	  if (globalOutput.acceptable()) return;
-
-	  globalOutput.reset();		// Clear and try again
-	};
-
-	if (verboseLevel > 3) {
-	  G4cout << " InuclCollider -> can not generate acceptable inter. after " 
-		 << itry_max << " attempts " << G4endl;
-	}
-      } else {
-	if (verboseLevel > 3) {
-	  G4cout << " InuclCollider -> inelastic interaction is impossible " << G4endl
-		 << " due to the coulomb barirer " << G4endl;
-	}
-      }
-
+  // Target must be a nucleus
+  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
+    
+  G4LorentzConvertor convertToTargetRestFrame;
+  convertToTargetRestFrame.setTarget(ntarget);
+  G4int btype = 0;
+  G4double ab = 0.0;
+  G4double zb = 0.0;
+  
+  if (interCase.hadNucleus()) { 	// particle with nuclei
+    G4InuclElementaryParticle* pbullet = 
+      dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
+    
+    if (pbullet->isPhoton()) {
+      G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
       globalOutput.trivialise(bullet, target);
       return;
     } else {
-      if (verboseLevel > 3) {
-	G4cout << " InuclCollider -> inter case " << interCase.code() << G4endl;
-      };
-    };       
-  };
+      convertToTargetRestFrame.setBullet(pbullet);   
+      btype = pbullet->type();
+    } 
+  } else { 				// nuclei with nuclei
+    G4InuclNuclei* nbullet = 
+      dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
+    
+    convertToTargetRestFrame.setBullet(nbullet);   
+    ab = nbullet->getA();
+    zb = nbullet->getZ();
+  }
+  
+  G4double ekin = convertToTargetRestFrame.getKinEnergyInTheTRS();
+  
+  if (verboseLevel > 3) G4cout << " ekin in trs " << ekin << G4endl;
 
+  if (!inelasticInteractionPossible(bullet, target, ekin)) {
+    if (verboseLevel > 3)
+      G4cout << " InuclCollider -> inelastic interaction is impossible\n"
+	     << " due to the coulomb barirer " << G4endl;
+
+    globalOutput.trivialise(bullet, target);
+    return;
+  }
+
+  // Generate interaction secondaries in rest frame of target nucleus
+  convertToTargetRestFrame.toTheTargetRestFrame();
+  if (verboseLevel > 3) {
+    G4cout << " degenerated? " << convertToTargetRestFrame.trivial()
+	   << G4endl;
+  }
+  
+  G4LorentzVector bmom;			// Bullet is along local Z
+  bmom.setZ(convertToTargetRestFrame.getTRSMomentum());
+  
+  theIntraNucleiCascader.setInteractionCase(interCase.code());
+
+  G4bool bad = true;
+  G4int itry = 0;
+  while (bad && itry < itry_max) {
+    itry++;
+    if (verboseLevel > 2)
+      G4cout << " IntraNucleiCascader itry " << itry << G4endl;
+
+    output.reset();			// Clear buffers for this attempt
+    TRFoutput.reset();
+    
+    if (interCase.hadNucleus()) {
+      G4InuclElementaryParticle pbullet(bmom, btype);
+      theIntraNucleiCascader.collide(&pbullet, ntarget, output);
+    } else {
+      G4InuclNuclei nbullet(bmom, ab, zb);
+      theIntraNucleiCascader.collide(&nbullet, ntarget, output);
+    }   
+    
+    if (verboseLevel > 2) {
+      G4cout << " After Cascade " << G4endl;
+      output.printCollisionOutput();
+
+      balance.collide(bullet, ntarget, output);
+      balance.okay();		// Do checks, but ignore result
+    }
+
+    // the rest, if any
+    // FIXME:  The code below still does too much copying!
+    TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+    
+    if (output.numberOfNucleiFragments() == 1) { // there is smth. after
+      G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
+      if (explosion(&cascad_rec_nuclei)) {
+	if (verboseLevel > 2) {
+	  G4cout << " big bang after cascade " << G4endl;
+	}
+	
+	theBigBanger.collide(0,&cascad_rec_nuclei, TRFoutput);
+      } else {
+	output.reset();
+	theNonEquilibriumEvaporator.collide(0, &cascad_rec_nuclei, output);
+	
+	if (verboseLevel > 2) {
+	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
+	  output.printCollisionOutput();
+
+	  balance.collide(0, &cascad_rec_nuclei, output);
+	  balance.okay();		// Do checks, but ignore result
+	}
+	
+	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+	G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
+	
+	output.reset();
+	theEquilibriumEvaporator.collide(0, &exiton_rec_nuclei, output);
+	
+	if (verboseLevel > 2) {
+	  G4cout << " After EquilibriumEvaporator " << G4endl;
+	  output.printCollisionOutput();
+
+	  balance.collide(0, &cascad_rec_nuclei, output);
+	  balance.okay();		// Do checks, but ignore result
+	}
+	
+	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
+	TRFoutput.addTargetFragments(output.getNucleiFragments());
+      }
+    }
+
+    if (verboseLevel > 2)
+      G4cout << " itry " << itry << " finished, moving to lab frame" << G4endl;
+
+    // convert to the LAB
+    TRFoutput.boostToLabFrame(convertToTargetRestFrame);
+
+    if (verboseLevel > 3) {
+      balance.collide(bullet, target, TRFoutput);
+      balance.okay();		// Do checks, but ignore result
+    }
+      
+    globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
+    globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
+
+    if (verboseLevel > 2) {
+      G4cout << " checking energy conservation before setOnShell" << G4endl;
+
+      balance.collide(bullet, target, globalOutput);
+      balance.okay();		// Do checks, but ignore result
+    }
+
+    globalOutput.setOnShell(bullet, target);
+    if (globalOutput.acceptable()) return;
+    
+    globalOutput.reset();		// Clear and try again
+  }
+  
+  if (verboseLevel > 3) {
+    G4cout << " InuclCollider -> can not generate acceptable inter. after " 
+	   << itry_max << " attempts " << G4endl;
+  }
+  
+  globalOutput.trivialise(bullet, target);
   return;
 }

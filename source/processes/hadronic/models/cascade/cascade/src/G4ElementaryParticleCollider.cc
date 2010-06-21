@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.64 2010-05-21 18:26:16 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.65 2010-06-21 03:40:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -115,6 +115,8 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 				      G4InuclParticle* target,
 				      G4CollisionOutput& output) 
 {
+  if (verboseLevel) G4cout << " >>> G4ElementaryParticleCollider::collide" << G4endl;
+
   if (!useEPCollider(bullet,target)) {		// Sanity check
     G4cerr << " ElementaryParticleCollider -> can collide only particle with particle " 
            << G4endl;
@@ -123,92 +125,95 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 
   interCase.set(bullet, target);	// To identify kind of collision
 
+  if (verboseLevel > 1) {
+    bullet->printParticle();
+    target->printParticle();
+  }
+
   G4InuclElementaryParticle* particle1 =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* particle2 =	
     dynamic_cast<G4InuclElementaryParticle*>(target);
 
   if (particle1->isPhoton() || particle2->isPhoton()) {
-    G4cout << " ElementaryParticleCollider -> cannot collide photons " 
+    G4cerr << " ElementaryParticleCollider -> cannot collide photons " 
            << G4endl;
-  } else {
+    return;
+  }
 
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron
 
-    if (particle1->nucleon() || particle2->nucleon()) { // ok
-      G4LorentzConvertor convertToSCM;
-      if(particle2->nucleon()) {
-	convertToSCM.setBullet(particle1);
-	convertToSCM.setTarget(particle2);
-      } else {
-	convertToSCM.setBullet(particle2);
-	convertToSCM.setTarget(particle1);
-      };  
-      convertToSCM.toTheCenterOfMass();
-      G4double ekin = convertToSCM.getKinEnergyInTheTRS();
-      G4double etot_scm = convertToSCM.getTotalSCMEnergy();
-      G4double pscm = convertToSCM.getSCMMomentum();
-
-      generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2,
-			    &convertToSCM);
-
-      if(verboseLevel > 2){
-	G4cout << " particles " << particles.size() << G4endl;
-
-	for(G4int i = 0; i < G4int(particles.size()); i++) 
-	  particles[i].printParticle();
-
-      }
-      if(!particles.empty()) { // convert back to Lab
-	G4LorentzVector mom;		// Buffer to avoid memory churn
-	particleIterator ipart;
-	for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
-	  mom = convertToSCM.backToTheLab(ipart->getMomentum());
-	  ipart->setMomentum(mom); 
+  if (particle1->nucleon() || particle2->nucleon()) { // ok
+    G4LorentzConvertor convertToSCM;
+    if(particle2->nucleon()) {
+      convertToSCM.setBullet(particle1);
+      convertToSCM.setTarget(particle2);
+    } else {
+      convertToSCM.setBullet(particle2);
+      convertToSCM.setTarget(particle1);
+    };  
+    convertToSCM.toTheCenterOfMass();
+    G4double ekin = convertToSCM.getKinEnergyInTheTRS();
+    G4double etot_scm = convertToSCM.getTotalSCMEnergy();
+    G4double pscm = convertToSCM.getSCMMomentum();
+    
+    generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2,
+			  &convertToSCM);
+    
+    if(verboseLevel > 2){
+      G4cout << " particles " << particles.size() << G4endl;
+      
+      for(G4int i = 0; i < G4int(particles.size()); i++) 
+	particles[i].printParticle();
+      
+    }
+    if(!particles.empty()) { // convert back to Lab
+      G4LorentzVector mom;		// Buffer to avoid memory churn
+      particleIterator ipart;
+      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {	
+	mom = convertToSCM.backToTheLab(ipart->getMomentum());
+	ipart->setMomentum(mom); 
+      };
+      std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+      output.addOutgoingParticles(particles);
+    };
+  } else {
+    if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
+      if(particle1->pion() || particle2->pion()) {
+	G4LorentzConvertor convertToSCM;
+	if(particle1->pion()) {
+	  convertToSCM.setBullet(particle1);
+	  convertToSCM.setTarget(particle2);
+	} else {
+	  convertToSCM.setBullet(particle2);
+	  convertToSCM.setTarget(particle1);
+	}; 
+	convertToSCM.toTheCenterOfMass(); 
+	G4double etot_scm = convertToSCM.getTotalSCMEnergy();
+	
+	generateSCMpionAbsorption(etot_scm, particle1, particle2);
+	
+	if(!particles.empty()) { // convert back to Lab
+	  G4LorentzVector mom;	// Buffer to avoid memory churn
+	  particleIterator ipart;
+	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
+	    mom = convertToSCM.backToTheLab(ipart->getMomentum());
+	    ipart->setMomentum(mom); 
+	  };
+	  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	  output.addOutgoingParticles(particles);
 	};
-	std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-	output.addOutgoingParticles(particles);
+	
+      } else {
+	G4cerr << " ElementaryParticleCollider -> can only collide pions with deuterons " 
+	       << G4endl;
       };
     } else {
-      if(particle1->quasi_deutron() || particle2->quasi_deutron()) {
-	if(particle1->pion() || particle2->pion()) {
-	  G4LorentzConvertor convertToSCM;
-	  if(particle1->pion()) {
-	    convertToSCM.setBullet(particle1);
-	    convertToSCM.setTarget(particle2);
-	  } else {
-	    convertToSCM.setBullet(particle2);
-	    convertToSCM.setTarget(particle1);
-	  }; 
-	  convertToSCM.toTheCenterOfMass(); 
-	  G4double etot_scm = convertToSCM.getTotalSCMEnergy();
-
-	  generateSCMpionAbsorption(etot_scm, particle1, particle2);
-
-	  if(!particles.empty()) { // convert back to Lab
-	    G4LorentzVector mom;	// Buffer to avoid memory churn
-	    particleIterator ipart;
-	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-	      mom = convertToSCM.backToTheLab(ipart->getMomentum());
-	      ipart->setMomentum(mom); 
-	    };
-	    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-	    output.addOutgoingParticles(particles);
-	  };
-
-	} else {
-	  G4cout << " ElementaryParticleCollider -> can only collide pions with deuterons " 
-                 << G4endl;
-	};
-      } else {
-	G4cout << " ElementaryParticleCollider -> can only collide something with nucleon or deuteron " 
-               << G4endl;
-      };
-    };  
-
-  } 
-
+      G4cerr << " ElementaryParticleCollider -> can only collide something with nucleon or deuteron " 
+	     << G4endl;
+    };
+  };  
 }
 
 

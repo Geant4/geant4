@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.hh,v 1.20 2010-05-21 18:07:30 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.21 2010-06-21 03:40:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -30,6 +30,7 @@
 // 20100409  M. Kelsey -- Move function code to .cc files, not inlinable
 // 20100418  M. Kelsey -- Add function to boost output lists to lab frame
 // 20100520  M. Kelsey -- Add function to rotate Z axis, from G4Casc.Interface
+// 20100620  M. Kelsey -- Add setVerboseLevel() function
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -45,10 +46,10 @@ class G4LorentzConvertor;
 class G4CollisionOutput {
 
 public:
-
   G4CollisionOutput();
-
   G4CollisionOutput& operator=(const G4CollisionOutput& right);
+
+  void setVerboseLevel(G4int verbose) { verboseLevel = verbose; };
 
   void reset();
 

@@ -1,3 +1,5 @@
+#ifndef G4CASCADE_CHECK_BALANCE_HH
+#define G4CASCADE_CHECK_BALANCE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -22,47 +24,43 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.hh,v 1.15 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.1 2010-06-21 03:40:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
-// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
-//		simple data members
-// 20100620  M. Kelsey -- Move output buffers here to reduce memory churn
-
-#ifndef G4INUCL_COLLIDER_HH
-#define G4INUCL_COLLIDER_HH
+// Verify and report four-momentum conservation for collision output; uses
+// same interface as collision generators.
 
 #include "G4VCascadeCollider.hh"
-#include "G4BigBanger.hh"
-#include "G4CollisionOutput.hh"
-#include "G4ElementaryParticleCollider.hh"
-#include "G4EquilibriumEvaporator.hh"
-#include "G4IntraNucleiCascader.hh"
-#include "G4NonEquilibriumEvaporator.hh"
+#include "globals.hh"
+#include "G4LorentzVector.hh"
 
-class G4CollisionOutput;
 class G4InuclParticle;
+class G4CollisionOutput;
 
-class G4InuclCollider : public G4VCascadeCollider {
+class G4CascadeCheckBalance : public G4VCascadeCollider {
 public:
-  G4InuclCollider();
-  virtual ~G4InuclCollider();
+  G4CascadeCheckBalance(G4double relative, G4double absolute);
+  virtual ~G4CascadeCheckBalance() {};
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
-private: 
-  G4ElementaryParticleCollider theElementaryParticleCollider;
-  G4IntraNucleiCascader theIntraNucleiCascader;
-  G4NonEquilibriumEvaporator theNonEquilibriumEvaporator;
-  G4EquilibriumEvaporator theEquilibriumEvaporator;
-  G4BigBanger theBigBanger;
+  G4bool energyOkay() const;
+  G4bool momentumOkay() const;
+  G4bool okay() const { return energyOkay() && momentumOkay(); }
 
-  G4CollisionOutput TRFoutput;		// Secondaries with local momenta
-  G4CollisionOutput output;		// Secondaries boosted to lab frame
-};        
+  G4double deltaE() const { return (final.e() - initial.e()); }
+  G4double relativeE() const { return (deltaE()==0.)?0.:deltaE()/initial.e(); }
 
-#endif /* G4INUCL_COLLIDER_HH */
+  G4double deltaP() const { return (final.rho() - initial.rho()); }
+  G4double relativeP() const { return (deltaP()==0.)?0.:deltaP()/initial.rho(); }
 
+private:
+  G4double relativeLimit;
+  G4double absoluteLimit;
 
+  G4LorentzVector initial;	// Four-vectors for computing violations
+  G4LorentzVector final;
+};
+
+#endif	/* G4CASCADE_CHECK_BALANCE_HH */

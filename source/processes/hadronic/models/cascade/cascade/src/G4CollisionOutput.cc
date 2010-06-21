@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.23 2010-05-21 18:07:30 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.24 2010-06-21 03:40:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,7 @@
 //		loop over push_back() with block insert().
 // 20100418  M. Kelsey -- Add function to boost output lists to lab frame
 // 20100520  M. Kelsey -- Add function to rotate Z axis, from G4Casc.Interface
+// 20100620  M. Kelsey -- Add some diagnostics in setOnShell, simplify if's
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -44,8 +45,7 @@ typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 G4CollisionOutput::G4CollisionOutput()
   : verboseLevel(0) {
-  
-  if (verboseLevel > 3)
+  if (verboseLevel > 1)
     G4cout << " >>> G4CollisionOutput::G4CollisionOutput" << G4endl;
 }
 
@@ -80,6 +80,9 @@ void G4CollisionOutput::addTargetFragments(const std::vector<G4InuclNuclei>& nuc
 
 
 G4LorentzVector G4CollisionOutput::getTotalOutputMomentum() const {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CollisionOutput::getTotalOutputMomentum" << G4endl;
+
   G4LorentzVector tot_mom;
   double eex_r = 0.0;
   G4int i(0);
@@ -111,6 +114,9 @@ void G4CollisionOutput::printCollisionOutput() const {
 // Boost particles and fragment to LAB -- "convertor" must already be configured
 
 void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CollisionOutput::boostToLabFrame" << G4endl;
+
   G4bool withReflection = convertor.reflectionNeeded();
 
   if (!outgoingParticles.empty()) { 
@@ -145,6 +151,9 @@ void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
 // Apply LorentzRotation to all particles in event
 
 void G4CollisionOutput::rotateEvent(const G4LorentzRotation& rotate) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CollisionOutput::rotateEvent" << G4endl;
+
   particleIterator ipart = outgoingParticles.begin();
   for(; ipart != outgoingParticles.end(); ipart++)
     ipart->setMomentum(ipart->getMomentum()*=rotate);
@@ -157,6 +166,9 @@ void G4CollisionOutput::rotateEvent(const G4LorentzRotation& rotate) {
 
 void G4CollisionOutput::trivialise(G4InuclParticle* bullet, 
 				   G4InuclParticle* target) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CollisionOutput::trivialize" << G4endl;
+
   if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     nucleiFragments.push_back(*nuclei_target);
   } else {
@@ -177,10 +189,8 @@ void G4CollisionOutput::trivialise(G4InuclParticle* bullet,
 
 void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, 
 				   G4InuclParticle* target) {
-
-  if (verboseLevel > 3) {
+  if (verboseLevel > 1)
     G4cout << " >>> G4CollisionOutput::setOnShell" << G4endl;
-  }
 
   const G4double accuracy = 0.00001; // momentum concerves at the level of 1 eV
 
@@ -192,14 +202,13 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   ini_mom += momt;
   
   G4LorentzVector out_mom = getTotalOutputMomentum();
-  G4LorentzVector mon_non_cons;
   if(verboseLevel > 2){
     G4cout << " bullet momentum = " << ini_mom.e() <<", "<< ini_mom.x() <<", "<< ini_mom.y()<<", "<< ini_mom.z()<<G4endl;
     G4cout << " target momentum = " << momt.e()<<", "<< momt.x()<<", "<< momt.y()<<", "<< momt.z()<<G4endl;
     G4cout << " Fstate momentum = " << out_mom.e()<<", "<< out_mom.x()<<", "<< out_mom.y()<<", "<< out_mom.z()<<G4endl;
   }
 
-  mon_non_cons = ini_mom - out_mom;
+  G4LorentzVector mon_non_cons = ini_mom - out_mom;
 
   G4double pnc = mon_non_cons.rho();
 
@@ -213,171 +222,173 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     G4cout << " remaining exitation " << eex_rest << G4endl;
   }
 
-  if(std::fabs(mon_non_cons.e()) > accuracy || pnc > accuracy) { // renormalization
-    G4int npart = outgoingParticles.size();
- 
-    if(npart > 0) {
+  if(std::fabs(mon_non_cons.e()) <= accuracy && pnc <= accuracy) {
+    on_shell = true;
+    return;
+  }
 
-      G4LorentzVector last_mom = outgoingParticles[npart - 1].getMomentum(); 
+  // Adjust "last" particle's four-momentum to balance event
 
-      last_mom += mon_non_cons;
-      outgoingParticles[npart - 1].setMomentum(last_mom);
-    }
-    else {
+  if (verboseLevel > 2) G4cout << " re-balancing four-momenta" << G4endl;
 
-      G4int nnuc = nucleiFragments.size();
- 
-      if(nnuc > 0) {
+  G4int npart = outgoingParticles.size();
+  G4int nnuc = nucleiFragments.size();
+  if (npart > 0) {
+    G4LorentzVector last_mom = outgoingParticles[npart - 1].getMomentum(); 
+    last_mom += mon_non_cons;
+    outgoingParticles[npart - 1].setMomentum(last_mom);
+  } else if (nnuc > 0) {
+    G4LorentzVector last_mom = nucleiFragments[nnuc - 1].getMomentum();
+    last_mom += mon_non_cons;
+    nucleiFragments[nnuc - 1].setMomentum(last_mom);
+  }
 
-        G4LorentzVector last_mom = nucleiFragments[nnuc - 1].getMomentum();
+  out_mom = getTotalOutputMomentum();
+  mon_non_cons = ini_mom - out_mom;
+  pnc = mon_non_cons.rho();
 
-        last_mom += mon_non_cons;
-	nucleiFragments[nnuc - 1].setMomentum(last_mom);
-	nucleiFragments[nnuc - 1].setEnergy();
-      };
-    }; 
-    out_mom = getTotalOutputMomentum();
-    mon_non_cons = ini_mom - out_mom;
-    pnc = mon_non_cons.rho();
+  if(verboseLevel > 2){
+    printCollisionOutput();
+    G4cout << " momentum non conservation after (1): " << G4endl 
+	   << " e " << mon_non_cons.e() << " p " << pnc << G4endl;
+  }
 
-    if(verboseLevel > 2){
-      printCollisionOutput();
-      G4cout << " momentum non conservation after (1): " << G4endl 
-	     << " e " << mon_non_cons.e() << " p " << pnc << G4endl;
-    }
-    G4bool need_hard_tuning = true;
-    
-    if(nucleiFragments.size() > 0) {
-      for(G4int i = 0; i < G4int(nucleiFragments.size()); i++) {
-
-        G4double eex = nucleiFragments[i].getExitationEnergyInGeV();
-
-	if(eex > 0.0 && eex + mon_non_cons.e() >= 0.0) {
-	  nucleiFragments[i].setExitationEnergy(1000.0 * (eex + mon_non_cons.e()));
-	  need_hard_tuning = false;
-	  break;
-	};
-      };
-      if(need_hard_tuning && mon_non_cons.e() > 0.) {
-	nucleiFragments[0].setExitationEnergy(1000.0 * mon_non_cons.e());
+  // Can energy be balanced just with nuclear excitation?
+  G4bool need_hard_tuning = true;
+  
+  G4double encMeV = mon_non_cons.e() / GeV;	// Excitation below is in MeV
+  if (nucleiFragments.size() > 0) {
+    for (G4int i=0; i < G4int(nucleiFragments.size()); i++) {
+      G4double eex = nucleiFragments[i].getExitationEnergy();
+      
+      if(eex > 0.0 && eex + encMeV >= 0.0) {
+	nucleiFragments[i].setExitationEnergy(eex+encMeV);
 	need_hard_tuning = false;
+	break;
+      }
+    }
+    if (need_hard_tuning && encMeV > 0.) {
+      nucleiFragments[0].setExitationEnergy(encMeV);
+      need_hard_tuning = false;
+    }
+  }
+  
+  if (!need_hard_tuning) {
+    on_shell = true;
+    return;
+  }
+
+  // Momentum (hard) tuning required for energy conservation
+  if (verboseLevel > 2)
+    G4cout << " trying hard (particle-pair) tuning" << G4endl;
+
+  std::pair<std::pair<G4int, G4int>, G4int> tune_par = selectPairToTune(mon_non_cons.e());
+  std::pair<G4int, G4int> tune_particles = tune_par.first;
+  G4int mom_ind = tune_par.second;
+  
+  if(verboseLevel > 2) {
+    G4cout << " p1 " << tune_particles.first << " p2 " << tune_particles.second
+	   << " ind " << mom_ind << G4endl;
+  }
+
+  G4bool tuning_possible = 
+    (tune_particles.first >= 0 && tune_particles.second >= 0 &&
+     mom_ind >= G4LorentzVector::X);
+
+  if (!tuning_possible) {
+    if (verboseLevel > 2) G4cout << " tuning impossible " << G4endl;
+    return;
+  }
+    
+  G4LorentzVector mom1 = outgoingParticles[tune_particles.first].getMomentum();
+  G4LorentzVector mom2 = outgoingParticles[tune_particles.second].getMomentum();
+  G4double newE12 = mom1.e() + mom2.e() + mon_non_cons.e();
+  G4double R = 0.5 * (newE12 * newE12 + mom2.e() * mom2.e() - mom1.e() * mom1.e()) / newE12;
+  G4double Q = -(mom1[mom_ind] + mom2[mom_ind]) / newE12;
+  G4double UDQ = 1.0 / (Q * Q - 1.0);
+  G4double W = (R * Q + mom2[mom_ind]) * UDQ;
+  G4double V = (mom2.e() * mom2.e() - R * R) * UDQ;
+  G4double DET = W * W + V;
+  
+  if (DET < 0.0) {
+    if (verboseLevel > 2) G4cout << " DET < 0 " << G4endl;
+    return;
+  }
+
+  // Tuning allowed only for non-negative determinant
+  G4double x1 = -(W + std::sqrt(DET));
+  G4double x2 = -(W - std::sqrt(DET));
+  
+  // choose the appropriate solution
+  G4bool xset = false;
+  G4double x = 0.0;
+  
+  if(mon_non_cons.e() > 0.0) { // x has to be > 0.0
+    if(x1 > 0.0) {
+      if(R + Q * x1 >= 0.0) {
+	x = x1;
+	xset = true;
+      };
+    };  
+    if(!xset && x2 > 0.0) {
+      if(R + Q * x2 >= 0.0) {
+	x = x2;
+	xset = true;
       };
     };
-    
-    if(need_hard_tuning) {
-     
-      std::pair<std::pair<G4int, G4int>, G4int> tune_par = selectPairToTune(mon_non_cons.e());
-      std::pair<G4int, G4int> tune_particles = tune_par.first;
-      G4int mom_ind = tune_par.second;
+  } else { 
+    if(x1 < 0.0) {
+      if(R + Q * x1 >= 0.) {
+	x = x1;
+	xset = true;
+      };
+    };  
+    if(!xset && x2 < 0.0) {
+      if(R + Q * x2 >= 0.0) {
+	x = x2;
+	xset = true;
+      };
+    };
+  }	// if(mon_non_cons.e() > 0.0)
+  
+  if(!xset) {
+    if(verboseLevel > 2)
+      G4cout << " no appropriate solution found " << G4endl;
+    return;
+  }	// if(xset)
 
-      if(verboseLevel > 2) {
-	G4cout << " p1 " << tune_particles.first << " p2 " << tune_particles.second
-	       << " ind " << mom_ind << G4endl;
-      }
-      if(tune_particles.first >= 0 && tune_particles.second >= 0 &&
-	 mom_ind >= G4LorentzVector::X) { // tunning possible
+  // retune momentums
+  mom1[mom_ind] += x;
+  mom2[mom_ind] -= x;
+  outgoingParticles[tune_particles.first ].setMomentum(mom1);
+  outgoingParticles[tune_particles.second].setMomentum(mom2);
+  out_mom = getTotalOutputMomentum();
+  std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
+  mon_non_cons = ini_mom - out_mom;
+  pnc = mon_non_cons.rho();
 
-        G4LorentzVector mom1 = outgoingParticles[tune_particles.first].getMomentum();
-        G4LorentzVector mom2 = outgoingParticles[tune_particles.second].getMomentum();
-        G4double newE12 = mom1.e() + mom2.e() + mon_non_cons.e();
-        G4double R = 0.5 * (newE12 * newE12 + mom2.e() * mom2.e() - mom1.e() * mom1.e()) / newE12;
-        G4double Q = -(mom1[mom_ind] + mom2[mom_ind]) / newE12;
-        G4double UDQ = 1.0 / (Q * Q - 1.0);
-        G4double W = (R * Q + mom2[mom_ind]) * UDQ;
-        G4double V = (mom2.e() * mom2.e() - R * R) * UDQ;
-        G4double DET = W * W + V;
+  on_shell = (std::fabs(mon_non_cons.e()) < accuracy || pnc < accuracy);
 
-        if(DET > 0.0) {
-
-          G4double x1 = -(W + std::sqrt(DET));
-   	  G4double x2 = -(W - std::sqrt(DET));
-	  // choose the appropriate solution
-          G4bool xset = false;
- 	  G4double x = 0.0;
-
-	  if(mon_non_cons.e() > 0.0) { // x has to be > 0.0
-	    if(x1 > 0.0) {
-	      if(R + Q * x1 >= 0.0) {
-	        x = x1;
-	        xset = true;
-	      };
-	    };  
-	    if(!xset && x2 > 0.0) {
-	      if(R + Q * x2 >= 0.0) {
-	        x = x2;
-	        xset = true;
-	      };
-	    };
-	  }
-	  else { 
-	    if(x1 < 0.0) {
-	      if(R + Q * x1 >= 0.) {
-	        x = x1;
-	        xset = true;
-	      };
-	    };  
-	    if(!xset && x2 < 0.0) {
-	      if(R + Q * x2 >= 0.0) {
-	        x = x2;
-	        xset = true;
-	      };
-	    };
-	  }	// if(mon_non_cons.e() > 0.0)
-          if(xset) { // retune momentums
-	    mom1[mom_ind] += x;
-	    mom2[mom_ind] -= x;
-            outgoingParticles[tune_particles.first ].setMomentum(mom1);
-            outgoingParticles[tune_particles.second].setMomentum(mom2);
-            out_mom = getTotalOutputMomentum();
-	    std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
-            mon_non_cons = ini_mom - out_mom;
-            pnc = mon_non_cons.rho();
-	    if(verboseLevel > 2){
-	      G4cout << " momentum non conservation tuning: " << G4endl 
-		     << " e " << mon_non_cons.e() << " p " << pnc << G4endl;
-	    }
-            if(std::fabs(mon_non_cons.e()) < accuracy || pnc < accuracy) on_shell = true;
-	  }
-	  else {
-	    if(verboseLevel > 2){
-	      G4cout << " no appropriate solution found " << G4endl;
-	    }
-	  }	// if(xset)
-        }
-	else {
-	  if(verboseLevel > 2){
-	    G4cout << " DET < 0 " << G4endl;
-	  }
-        }	// if(DET > 0.0)
-      }
-      else { 
-	if(verboseLevel > 2){
-	  G4cout << " tuning impossible " << G4endl;
-	}
-      }	// if (<tuning-possible>) 
-    }
-    else {
-      on_shell = true;
-    }	// if(need_hard_tuning)
+  if(verboseLevel > 2) {
+    G4cout << " momentum non conservation tuning: " << G4endl 
+	   << " e " << mon_non_cons.e() << " p " << pnc 
+	   << (on_shell?" success":" FAILURE") << G4endl;
   }
-  else {
-    on_shell = true;
-  };	// if (<renormalization>)
 }
+
 
 
 void G4CollisionOutput::setRemainingExitationEnergy() { 
   eex_rest = 0.0;
   for(G4int i = 0; i < G4int(nucleiFragments.size()); i++) 
-    eex_rest += 0.001 * nucleiFragments[i].getExitationEnergy();
+    eex_rest += nucleiFragments[i].getExitationEnergyInGeV();
 }
 
 
 std::pair<std::pair<G4int, G4int>, G4int> 
 G4CollisionOutput::selectPairToTune(G4double de) const {
-  if (verboseLevel > 3) {
+  if (verboseLevel > 2)
     G4cout << " >>> G4CollisionOutput::selectPairToTune" << G4endl;
-  }
 
   std::pair<G4int, G4int> tup(-1, -1);
   G4int i3 = -1; 
