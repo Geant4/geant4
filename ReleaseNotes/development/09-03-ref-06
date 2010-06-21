@@ -45,12 +45,13 @@ digits_hits/utils                                detutils-V09-03-00
 - Added missing virtual destructor to G4VScoringMesh and removed unnecessary
   virtual qualifiers to G4ScoringBox.
 
-environments                                     envs-V09-03-00
+environments                                     envs-V09-03-01
 ------------
 - G4Py:
   o Revised usage of MultipleScattering classes to make use of new particle
     based processes.
-  o Fixed bug in wrapping of G4GDMLParser
+  o Fixed bug in wrapping of G4GDMLParser.
+  o Updated run-manager and physics-lists.
 - Momo:
   o Revised obsolete trajectory drawing.
 

@@ -31,7 +31,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + G4Py:
       o Revised usage of MultipleScattering classes to make use of new particle
         based processes.
-      o Fixed bug in wrapping of G4GDMLParser
+      o Fixed bug in wrapping of G4GDMLParser.
+      o Updated run-manager and physics-lists.
     + Momo:
       o Revised obsolete trajectory drawing.
 
