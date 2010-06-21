@@ -92,7 +92,7 @@ void Histo::book()
   // Creating a tree mapped to a new hbook file.
 
   G4String nam = histName + "." + histType;
-  G4String options  = "uncompress";
+  G4String options  = "";
     
   tree = tf->create(nam,histType,false,true,options);
   delete tf;
