@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.10 2010-06-04 05:47:11 kmura Exp $
+// $Id: pyPhysicsLists.cc,v 1.11 2010-06-21 12:29:02 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyPhysicsLists.cc
@@ -50,7 +50,6 @@
 #include "LHEP_PRECO_HP.hh"
 #include "QBBC.hh"
 #include "QGSC.hh"
-#include "QGSC_EFLOW.hh"
 #include "QGSC_EMV.hh"
 #include "QGSP.hh"
 #include "QGSP_BERT.hh"
@@ -58,8 +57,9 @@
 #include "QGSP_BIC.hh"
 #include "QGSP_BIC_HP.hh"
 #include "QGSP_EMV.hh"
-#include "QGSP_EMX.hh"
 #include "QGSP_QEL.hh"
+//#include "QGSC_EFLOW.hh"  (dropped at 9.4.0)
+//#include "QGSP_EMX.hh"    (dropped at 9.4.0)
 
 #if G4VERSION_NUMBER <= 830
 #include "LHEP_BIC.hh"
@@ -76,7 +76,7 @@
 #endif
 
 #if G4VERSION_NUMBER >= 830
-#include "FTFP_EMV.hh"
+//#include "FTFP_EMV.hh"  (dropped at 9.4.0)
 #include "QGSP_BERT_EMV.hh"
 #include "QGSP_BERT_NQE.hh"
 #include "QGSP_BERT_TRV.hh"
@@ -159,7 +159,6 @@ void export_PhysicsLists()
   ADD_PHYSICS_LIST(LHEP_PRECO_HP);
   ADD_PHYSICS_LIST(QBBC);
   ADD_PHYSICS_LIST(QGSC);
-  ADD_PHYSICS_LIST(QGSC_EFLOW);
   ADD_PHYSICS_LIST(QGSC_EMV);
   ADD_PHYSICS_LIST(QGSP);
   ADD_PHYSICS_LIST(QGSP_BERT);
@@ -167,8 +166,9 @@ void export_PhysicsLists()
   ADD_PHYSICS_LIST(QGSP_BIC);
   ADD_PHYSICS_LIST(QGSP_BIC_HP);
   ADD_PHYSICS_LIST(QGSP_EMV);
-  ADD_PHYSICS_LIST(QGSP_EMX);
   ADD_PHYSICS_LIST(QGSP_QEL);
+  //ADD_PHYSICS_LIST(QGSC_EFLOW);
+  //ADD_PHYSICS_LIST(QGSP_EMX);
 
 #if G4VERSION_NUMBER <= 830
   ADD_PHYSICS_LIST(LHEP_BIC);
@@ -185,7 +185,7 @@ void export_PhysicsLists()
 #endif
 
 #if G4VERSION_NUMBER >= 830
-  ADD_PHYSICS_LIST(FTFP_EMV);
+  //ADD_PHYSICS_LIST(FTFP_EMV);
   ADD_PHYSICS_LIST(QGSP_BERT_EMV);
   ADD_PHYSICS_LIST(QGSP_BERT_NQE);
   ADD_PHYSICS_LIST(QGSP_BERT_TRV);
