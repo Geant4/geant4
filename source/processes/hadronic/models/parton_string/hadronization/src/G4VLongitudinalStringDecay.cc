@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.19 2009-12-06 11:23:36 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.20 2010-06-21 17:50:48 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------

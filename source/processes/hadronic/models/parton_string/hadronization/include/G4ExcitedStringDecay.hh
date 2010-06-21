@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.11 2009-12-06 11:23:36 vuzhinsk Exp $
+// $Id: G4ExcitedStringDecay.hh,v 1.12 2010-06-21 17:50:48 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4ExcitedStringDecay_h
@@ -81,7 +81,7 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
   G4LorentzVector KTsum(0.,0.,0.,0.);
   G4LorentzVector KTsecondaries(0.,0.,0.,0.);
   G4bool NeedEnergyCorrector=false;
- 
+
   for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
 	KTsum+= theStrings->operator[](astring)->Get4Momentum();
@@ -113,7 +113,6 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 		theResult->push_back(generatedKineticTracks->operator[](aTrack));
 		KTsum1+= (*generatedKineticTracks)[aTrack]->Get4Momentum();
 	}
-
 	KTsecondaries+=KTsum1;
 	
 	if  ( KTsum1.e() > 0 && std::abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 

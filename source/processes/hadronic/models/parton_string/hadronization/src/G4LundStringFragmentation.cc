@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.19 2009-12-06 11:23:36 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.20 2010-06-21 17:50:48 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -164,19 +164,23 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
         
         SetMassCut(160.*MeV); // For LightFragmentationTest it is required
                               // that no one pi-meson can be produced
+/*
+G4cout<<G4endl<<"G4LundStringFragmentation::"<<G4endl;
+G4cout<<"FragmentString Position"<<theString.GetPosition()/fermi<<" "<<
+theString.GetTimeOfCreation()/fermi<<G4endl;
+G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momentum().mag()<<G4endl;
+*/
+        G4FragmentingString aString(theString);
+        SetMinimalStringMass(&aString); 
 
-        G4FragmentingString *aString=new G4FragmentingString(theString);
-        SetMinimalStringMass(aString);
-        delete(aString);
-
-        if(theString.Get4Momentum().mag() < MinimalStringMass)
-        {
-         SetMassCut(theString.Get4Momentum().mag());
-        }
+       if((MinimalStringMass+WminLUND)*(1.-SmoothParam) > theString.Get4Momentum().mag())
+       {SetMassCut(1000.*MeV);}
+// V.U. 20.06.10 in order to put un correspondence LightFragTest and MinStrMass
 
 	G4KineticTrackVector * LeftVector=LightFragmentationTest(&theString);
 
 	if ( LeftVector != 0 ) {
+// Uzhi insert 6.05.08 start
           if(LeftVector->size() == 1){
  // One hadron is saved in the interaction
             LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
@@ -202,7 +206,6 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 
 //--------------------- The string can fragment -------------------------------	
 //--------------- At least two particles can be produced ----------------------
-
                                LeftVector =new G4KineticTrackVector;
 	G4KineticTrackVector * RightVector=new G4KineticTrackVector;
 
@@ -310,6 +313,8 @@ G4bool G4LundStringFragmentation::StopFragmenting(const G4FragmentingString * co
 {
   SetMinimalStringMass(string);                                           
 
+//G4cout<<"StopFragm MinMass "<<MinimalStringMass<<" String Mass "<<std::sqrt(string->Get4Momentum().mag2())<<G4endl; 
+//G4cout<<"WminLUND "<<WminLUND<<" SmoothParam "<<SmoothParam<<" "<<string->Mass()<<G4endl;
   return (MinimalStringMass + WminLUND)*
              (1 + SmoothParam * (1.-2*G4UniformRand())) >                
                    string->Mass();                        
