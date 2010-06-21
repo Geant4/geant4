@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.12 2010-06-05 06:25:03 perl Exp $
+// $Id: G4HepRepMessenger.cc,v 1.13 2010-06-21 04:43:07 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
@@ -43,6 +43,7 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	fileName("G4Data"),
 	overwrite(false),
 	cullInvisibles(false),
+	cylAsPolygons(false),
     suffix (""),
     geometry(true),
     solids(true),
@@ -104,7 +105,7 @@ G4HepRepMessenger::G4HepRepMessenger() :
 	renderCylAsPolygonsCommand->SetGuidance("Render cylinders and cones as polygons.");
 	renderCylAsPolygonsCommand->SetGuidance("This command is used by HepRepFile, not by HepRepXML.");
 	renderCylAsPolygonsCommand->SetParameterName("flag",false);
-	renderCylAsPolygonsCommand->SetDefaultValue(true);
+	renderCylAsPolygonsCommand->SetDefaultValue(false);
 	renderCylAsPolygonsCommand->AvailableForStates(G4State_Idle);
 		
     setEventNumberSuffixCommand = new G4UIcmdWithAString("/vis/heprep/setEventNumberSuffix", this);
