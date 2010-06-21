@@ -105,7 +105,7 @@ persistency/gdml                                 gdml-V09-03-03
 - Added G4GenericTrap among the set of supported solids in both reader and
   writer, treating as 'arb8' GDML type.
 
-physics_lists                                    phys-lists-V09-03-15
+physics_lists                                    phys-lists-V09-03-16
 -------------
 - Moved QGSP_FTFP_BERT list to supported (was experimental).
 - Removed previously blocked lists (FTFP_EMV, QGSC_EFLOW, QGSP_EMX).
@@ -131,6 +131,11 @@ physics_lists                                    phys-lists-V09-03-15
   all "misc" particles, including anti-proton, anti-neutron  and hyperons,
   and use interface to CHIPS cross-sections G4QHadronInelasticDataSet for
   kaons. Required changes to respective HadronPhysics* classes.     
+- G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
+  G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder, G4QGSBuilder:
+  added deletion of G4ExcitationHandler, G4QGSMFragmentation;
+  HadronPhysicsQGSP_BERT, HadronPhysicsFTFP_BERT, HadronPhysicsQGSP_FTFP_BERT:
+  added deletion of neutron builder.
 
 processes/electromagnetic/highenergy             emhighenergy-V09-03-01
 ------------------------------------
@@ -211,25 +216,26 @@ processes/hadronic                               hadr-V09-03-00
     checking. Some code cleanup.
   o New G4HadronicEPTestMessenger class to provide energy/momentum test 
     commands available in UI.
-- models/cascade (hadr-casc-V09-03-43)
+- models/cascade (hadr-casc-V09-03-48)
   o 
-- models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-09)
-  o Corrected Titanium and Zirconium isotopes in G4QIsotope.
-  o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
-  o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
+- models/chiral_inv_phase_space (hadr-chips-V09-03-06)
+  + body:
+    o Corrected Titanium and Zirconium isotopes in G4QIsotope.
+    o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
+    o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
     when mass is small for Lambda andSigma+, use Xi0,p.
-- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-06)
-  o Bug fix following G4NucleiProperties warning for A=0, Z=0.
-  o Bug fix in G4QNeutronNuclearCrossSection for Ba isotopes.
-  o Bug fix for K0 in G4QKaonMinusElasticCrossSection::GetExchangeT().
-- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-05)
-  o Corrected treatment of vacuum.
-- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-10)
-  o Correction in G4QElastic for K0 elastic cross-sections.
-  o nn is decayed in G4QLowEnergy; Omega- is included in G4QElastic;
-    N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
-  o Bug-fix in G4QLowEnergy: pions as secondaries.
-  o Bug-fix in K0 elastic & Ion-Ion Elastic.
+  + cross_sections:
+    o Bug fix following G4NucleiProperties warning for A=0, Z=0.
+    o Bug fix in G4QNeutronNuclearCrossSection for Ba isotopes.
+    o Bug fix for K0 in G4QKaonMinusElasticCrossSection::GetExchangeT().
+  + fragmentation:
+    o Corrected treatment of vacuum.
+  + processes:
+    o Correction in G4QElastic for K0 elastic cross-sections.
+    o nn is decayed in G4QLowEnergy; Omega- is included in G4QElastic;
+      N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
+    o Bug-fix in G4QLowEnergy: pions as secondaries.
+    o Bug-fix in K0 elastic & Ion-Ion Elastic.
 - models/coherent_elastic (hadr-cohe-V09-03-02)
   o G4UHadronElasticProcess: fixed CHIPS warning for Cu, due to wrong
     isotope sected; addressing problem report from ALICE.
@@ -312,7 +318,7 @@ visualization                                    vis-V09-03-08
   o Added default colours to G4TrajectoryDrawByParticleID.
   o Replace polyhedra with solids for sections and cutaways.
   o Trap use of i_mode and print warning.
-- HepRep:
+- HepRep (vis-HepRep-V09-03-03):
   o Added command 'renderCylAsPolygon'.
   o Added protection against multiple repaint call, and protection against
     resizeGl with bad values.
@@ -399,7 +405,7 @@ examples                                         examples-V09-03-06
     a DrawTrajectory() method.
 - examples/extended/persistency/gdml/G01 (G01-V09-03-03)
   o Added G4GenericTrap to the solids.gdml sample.
-- examples/extended/persistency/gdml/G03 (G03-V09-03-02)
+- examples/extended/persistency/gdml/G03 (G03-V09-03-03)
   o Corrected selection of G4UItcsh in main(), to fix problem on Windows.
 - examples/novice/N04 (exampleN04-V09-03-01)
   o Replaced QGSP list with QGSP_BERT.
@@ -413,14 +419,21 @@ tests                                            tests-V09-03-06
   o Added printout of total imprinted volumes for assemblies.
 - test10 (test10-V09-03-00)
   o Added G4GenericTrap solid to the test suite.
+- test12 (test12-V09-03-00)
+  o Allow NIST materials to be used.
+  o Added more Physics lists.
 - test18 (test18-V09-03-00)
+  o Migrated to use particle-based multiple-scattering process.
 - test19 (test19-V09-03-03)
+  o Added more processes to test. Corrections to QGS/FTF.
+  o Migrated to use particle-based multiple-scattering process.
 - test22 (test22-V09-03-02)
 - test28 (test28-V09-03-00)
 - test29 (test29-V09-03-00)
   o Migrated to use particle-based multiple-scattering process.
-- test30 (test30-V09-03-04)
+- test30 (test30-V09-03-05)
   o Removed usage of G4CascadeElasticInterface.
+  o Allowing to run in testing mode; SetModels.csh script may not be called.
 - test31 (test31-V09-03-01)
   o Added pi- and anti_proton beams to test31.in.
 - test37 (test37-V09-03-03)

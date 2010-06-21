@@ -186,6 +186,10 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       kaons. Required changes to respective HadronPhysics* classes.     
     + LBE: substituted obsolete G4MultipleScattering by particle wise processes.
     + QBBC: disabled multi-fragmentation model of deexcitation.
+    + G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
+      G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder, G4QGSBuilder:
+      added deletion of G4ExcitationHandler and G4QGSMFragmentation; added
+      deletion of neutron builder for QGSP_BERT, FTFP_BERT, QGSP_FTFP_BERT.
 
   o Electromagnetic Processes:
     -------------------------
