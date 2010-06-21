@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.83 2010-06-21 16:54:09 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.84 2010-06-21 17:29:27 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -42,13 +42,12 @@
 // 20100617  M. Kelsey -- Make G4InuclCollider a local data member
 // 20100618  M. Kelsey -- Deploy energy-conservation test on final state, with
 //		preprocessor flag G4CASCADE_SKIP_ECONS to skip test.
-// 20100620  M. Kelsey -- Use new energy-conservation pseudo-collider
+// 20100621  M. Kelsey -- Fix complier warning with GCC 4.5
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DynamicParticle.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -68,7 +67,10 @@ typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 G4CascadeInterface::G4CascadeInterface(const G4String& nam)
-  : G4VIntraNuclearTransportModel(nam), verboseLevel(0) {}
+  : G4VIntraNuclearTransportModel(nam), verboseLevel(0) {
+  if (verboseLevel > 3)
+    G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
+}
 
 
 G4CascadeInterface::~G4CascadeInterface() {}
@@ -81,7 +83,7 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* ,
 G4HadFinalState* 
 G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
 				  G4Nucleus& theNucleus) {
-  if (verboseLevel)
+  if (verboseLevel > 3)
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
 
 #ifdef G4CASCADE_DEBUG_INTERFACE
@@ -148,7 +150,9 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   collider.setVerboseLevel(verboseLevel);
   G4CollisionOutput output;
 
-  G4CascadeCheckBalance balance(0.05, 0.1);	// Second arg is in GeV
+#ifndef G4CASCADE_SKIP_ECONS
+  const G4double eViolationCut = 0.05;	// Maximum relative energy violation
+#endif
 
   G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
   G4int  nTries   = 0;  // try counter
@@ -193,6 +197,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       collider.collide(bullet, target, output);
     }
   } else {  			// treat all other targets excepet H(1,1)
+    G4double eFinal=0., energyViolation=0.;
     do { 			// we try to create inelastic interaction
       if (verboseLevel > 1) G4cout << " Generating cascade" << G4endl;
 
@@ -201,12 +206,15 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       nTries++;
 
       // Check energy conservation; discard result on violation
-      G4double eFinal = output.getTotalOutputMomentum().e();
-      if (verboseLevel > 3)
-	G4cout << " eFinal = " << eFinal << " eInit = " << eInit;
-
+      eFinal = output.getTotalOutputMomentum().e();
+      energyViolation = std::abs(eFinal-eInit) / eInit;
+      if (verboseLevel > 3) {
+	G4cout << " eFinal = " << eFinal << " eInit = " << eInit
+	       << " rel.diff. = " << energyViolation << G4endl;
+      }
 #ifndef G4CASCADE_SKIP_ECONS
-      balance.collide(bullet, target, output);
+      if (energyViolation > eViolationCut && verboseLevel > 1)
+	G4cerr << " cascade failed to conserve energy; rejecting" << G4endl;
 #endif
       
 #ifdef G4CASCADE_COULOMB_DEV
@@ -233,7 +241,9 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	     ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) < 2.5) &&  
 	     (output.getOutgoingParticles().begin()->type()==bullet->type())
 #endif
-	     ) || (!balance.energyOkay())
+#ifndef G4CASCADE_SKIP_ECONS
+	     ) || (energyViolation > eViolationCut)
+#endif
 	     );
   }
 
