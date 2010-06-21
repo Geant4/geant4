@@ -387,6 +387,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
       o Bug-fix in G4QLowEnergy: pions as secondaries.
       o Bug-fix in K0 elastic & Ion-Ion Elastic.
+      o Safety corrections in G4QEnvironment to fix energy non-conservation.
     + models/coherent_elastic
       o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
         G4QElasticCrossSection; fixed initialization problem for
