@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.167 2010-06-19 07:46:44 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.168 2010-06-21 07:36:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4475,9 +4475,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
   static const G4double mXiZ = G4QPDGCode(3322).GetMass();
   static const G4double mXiM = G4QPDGCode(3312).GetMass();
   static const G4double mOmM = G4QPDGCode(3334).GetMass();
-#ifdef debug
   static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
-#endif
   static const G4double mTrit= G4QPDGCode(2112).GetNuclMass(1,2,0);
   static const G4double mHe3 = G4QPDGCode(2112).GetNuclMass(2,1,0);
   static const G4double mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
@@ -5937,65 +5935,96 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
       G4LorentzVector cH4Mom = curHadr->Get4Momentum(); // 4-mom of the current hadron
       tot4Mom-=cH4Mom;                          // Reduce theTotal 4mom by theCurrent 4mom
+      totCharge-=curHadr->GetCharge();          // @!@
+      totBaryoN-=curHadr->GetBaryonNumber();    // @!@
+#ifdef pdebug
+        G4cout<<"G4QE::FSI:Cur4M="<<tot4Mom<<",tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
+#endif
       if(hadron+1==nHadr)                       // The Last Hadron in the set
       {
+#ifdef pdebug
+        G4cout<<"G4QE::FSI:Last4M="<<tot4Mom<<",tC="<<totCharge<<",tB="<<totBaryoN<<G4endl;
+#endif
+        G4double misM=0.;                       // @!@
+        G4int mPDG=0;                           // @!@
+        if(totCharge>=0 && totBaryoN > 0)       // @!@
+        {                                       // @!@
+          mPDG=90000000+999*totCharge+totBaryoN;// @!@
+          misM=G4QPDGCode(mPDG).GetMass();      // @!@
+        }                                       // @!@
         G4double re =tot4Mom.e();
         G4double rpx=tot4Mom.px();
         G4double rpy=tot4Mom.py();
         G4double rpz=tot4Mom.pz();
         G4double dmo=rpx*rpx+rpy*rpy+rpz*rpz;
         G4double dem=re*re+dmo;
+        G4double dm2=re*re-dmo;                 // @!
+        G4double sdm=0.;                        // @!
+        if(dm2>0.) sdm=std::sqrt(dm2);          // @!
 #ifdef debug
-        G4cout<<"G4QE::FSI: Is Energy&Mom conserved? t4M="<<tot4Mom<<",d2="<<dem<<G4endl;
+        G4cout<<"G4QE::FSI: Is En&Mom conserved? t4M="<<tot4Mom<<",dM="<<sdm<<", mM="<<misM
+              <<",mPDG="<<mPDG<<G4endl;
 #endif
-        //if(2>3)                                 //@@En/Mom conservation check is closed
-        if(dem>0.0001)                          // Energy or momentum is not conserved
+        G4LorentzVector cor4M(0.,0.,0.,0.);     // Prototype for the missing particle
+        if(dem>0.1)                             // Energy or momentum is not conserved
         {
-#ifdef debug
-          if(dem>.1)
+#ifdef pdebug
+          G4cout<<"--Warning--G4QE::FSI:dE/Mc4M="<<tot4Mom<<sdm<<". Correct it!"<<G4endl;
+#endif
+          if(sdm>0.1)
           {
-            G4cout<<"---Warning---G4QE::FSI:E/Mcons4M="<<tot4Mom<<dem<<".Correct!"<<G4endl;
-            G4LorentzVector cor4M(0.,0.,0.,mNeut);  // Prototype for the neutron
             if(dmo<0.0001 && re>900.)               // MomentumIsConserved - recoverMissing
             {
               if(fabs(re-mNeut)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by neutron"<<G4endl;
-                //cor4M=G4LorentzVector(0.,0.,0.,mNeut); // Made as a prototype
+#endif
+                cor4M=G4LorentzVector(0.,0.,0.,mNeut);
                 G4QHadron* theH = new G4QHadron(90000001,G4LorentzVector(0.,0.,0.,mNeut));
                 theQHadrons.push_back(theH);  // (delete equivalent for the proton)
               }
               else if(fabs(re-mProt)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by proton"<<G4endl;
+#endif
                 cor4M=G4LorentzVector(0.,0.,0.,mProt);
                 G4QHadron* theH = new G4QHadron(90001000,G4LorentzVector(0.,0.,0.,mProt));
                 theQHadrons.push_back(theH);  // (delete equivalent for the proton)
               }
               else if(fabs(re-mDeut)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by deuteron"<<G4endl;
+#endif
                 cor4M=G4LorentzVector(0.,0.,0.,mDeut);
                 G4QHadron* theH = new G4QHadron(90001001,G4LorentzVector(0.,0.,0.,mDeut));
                 theQHadrons.push_back(theH);  // (delete equivalent for the proton)
               }
               else if(fabs(re-mTrit)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by tritium"<<G4endl;
+#endif
                 cor4M=G4LorentzVector(0.,0.,0.,mTrit);
                 G4QHadron* theH = new G4QHadron(90001002,G4LorentzVector(0.,0.,0.,mTrit));
                 theQHadrons.push_back(theH);  // (delete equivalent for the proton)
               }
               else if(fabs(re-mHe3)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by He3"<<G4endl;
+#endif
                 cor4M=G4LorentzVector(0.,0.,0.,mHe3);
                 G4QHadron* theH = new G4QHadron(90002001,G4LorentzVector(0.,0.,0.,mHe3));
                 theQHadrons.push_back(theH);  // (delete equivalent for the proton)
               }
               else if(fabs(re-mAlph)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by alpha"<<G4endl;
+#endif
                 cor4M=G4LorentzVector(0.,0.,0.,mAlph);
                 G4QHadron* theH = new G4QHadron(90002002,G4LorentzVector(0.,0.,0.,mAlph));
                 theQHadrons.push_back(theH);  // (delete equivalent for the proton)
@@ -6003,7 +6032,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               else if(fabs(re-mNeut-mNeut)<.01)
               {
                 cor4M=G4LorentzVector(0.,0.,0.,mNeut+mNeut);
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by 2 neutrons"<<G4endl;
+#endif
                 G4QHadron* theH1 = new G4QHadron(90000001,G4LorentzVector(0.,0.,0.,mNeut));
                 theQHadrons.push_back(theH1); // (delete equivalent for the proton)
                 G4QHadron* theH2 = new G4QHadron(90000001,G4LorentzVector(0.,0.,0.,mNeut));
@@ -6011,33 +6042,73 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               }
               else if(fabs(re-mProt-mProt)<.01)
               {
+#ifdef pdebug
                 G4cout<<"...G4QE::FSI:E/M conservation is corrected by 2 protons"<<G4endl;
+#endif
                 cor4M=G4LorentzVector(0.,0.,0.,mProt+mProt);
                 G4QHadron* theH1 = new G4QHadron(90001000,G4LorentzVector(0.,0.,0.,mProt));
                 theQHadrons.push_back(theH1); // (delete equivalent for the proton)
                 G4QHadron* theH2 = new G4QHadron(90001000,G4LorentzVector(0.,0.,0.,mProt));
                 theQHadrons.push_back(theH2); // (delete equivalent for the proton)
               }
-              else throw G4QException("***G4QEnv::FSInteract: Increase theCorrectionEps");
+		  else throw G4QException("***G4QEnv::FSInteract: Try heavier nuclei at rest");
+            }
+            else if(sdm-misM >= -0.01)        // on flight correction @!@
+            {
+#ifdef pdebug
+              G4cout<<"...G4QE::FSI:E/M conservation is corrected by ResidualNucl"<<G4endl;
+#endif
+              G4QHadron* theH = new G4QHadron(mPDG,tot4Mom); // Create Residual Nucleus
+              cor4M=tot4Mom;                  // Complete correction
+              if(std::fabs(sdm-misM) <= 0.01) theQHadrons.push_back(theH); // As is
+              else EvaporateResidual(theH);   // Evaporate Residual Nucleus
             }
             else
             {
-              // @@ Temporary very bad correction: just to pass through @@
-              curHadr->Set4Momentum(cH4Mom+tot4Mom); // modify 4-mom of the Last hadron
-              G4cout<<"*!* G4QE::FSI:E/M dif is added to theLast="<<tot4Mom+cH4Mom<<G4endl;
-              if(curHadr->GetBaryonNumber()>1)
-              {
-                G4QHadron* theNew  = new G4QHadron(curHadr); // Make NewHadr of theLastHadr
-                theQHadrons.pop_back();       // theLastQHadron is excluded from theOUTPUT
-                delete curHadr;//!!When kill,DON'T forget to delete theLastQH as an inst.!!
-                EvaporateResidual(theNew);    // Try to evaporate Residual
+              G4QHadron* prevHadr = theQHadrons[nHadr-2]; // GetPointer to Prev to theLast
+              G4LorentzVector pH4Mom = prevHadr->Get4Momentum(); // 4mom of thePrevHadron
+              G4double cHM = curHadr->GetMass();  // Mass of the current hadron
+              G4double pHM = prevHadr->GetMass(); // Mass of the previous hadron
+              tot4Mom+=cH4Mom+pH4Mom;
+              G4double totRM=tot4Mom.m();
+              if(cHM+pHM<=totRM)                  // *** Make the final correction ***
+	        {
+                if(!G4QHadron(tot4Mom).DecayIn2(pH4Mom,cH4Mom))
+                {
+                  G4cout<<"***G4QE::FSI:**Correction**tot4M="<<tot4Mom<<totRM<<">sM="
+                        <<cHM+cHM<<G4endl;
+#ifdef pdebug
+                  throw G4QException("***G4QEnvironment::FSInteract:CORRECT DecIn2 error");
+#endif
+                }
+#ifdef chdebug
+                G4cout<<"---Warning---G4QE::FSI:***CORRECTION IS DONE*** d="<<dem<<G4endl;
+#endif
+                curHadr->Set4Momentum(cH4Mom);
+                prevHadr->Set4Momentum(pH4Mom);
               }
-              //throw G4QException("***G4QEnv::FSInteract: Energy/Momentum conservation");
+              else
+              {
+                G4cerr<<"*!*G4QE::FSI: "<<cHM<<"+"<<pHM<<"="<<cHM+pHM<<">"<<totRM<<G4endl;
+#ifdef pdebug
+                throw G4QException("***G4QEnvironment::FSInteraction:TEMPORARY EXCEPTION");
+#endif
+              }
             }
             tot4Mom=tot4Mom-cor4M;
+#ifdef pdebug
             G4cout<<"---Warning---G4QE::FSI:En/MomCons.Error is corrected:"<<cor4M<<G4endl;
-          }
 #endif
+          }
+          else                                             // @!@
+          {
+#ifdef pdebug
+            G4cout<<"...G4QE::FSI:E/M conservation is corrected by a photon"<<G4endl;
+#endif
+            cor4M=tot4Mom;                                 // Complete correction
+            G4QHadron* theH = new G4QHadron(22,tot4Mom);
+            theQHadrons.push_back(theH);    // (delete equivalent for the proton)
+          }
           G4double cHM = curHadr->GetMass();  // Mass of the current hadron
           G4int ch=0;
           for(ch=nHadr-2; ch>-1; --ch)
@@ -6076,8 +6147,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #endif
         }
 #ifdef debug
-        else G4cout<<"G4QE::FSI: Yes, it is. d="<<dem<<" for "<<nHadr<<" hadrons."<<G4endl;
+        else  G4cout<<"...G4QE::FSI:E/M conservation is good enough"<<G4endl;
+        G4cout<<"G4QE::FSI:EMCorrection by "<<theQHadrons.size()-nHadr<<" hadrons"<<G4endl;
 #endif
+        break;
       }
     } // End of the Back fusion LOOP
     // >| 2     | 2  | 2     | 2     | 2      | 2 - old    | 1. If gamma: add to sum4Mom
