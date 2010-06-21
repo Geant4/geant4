@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2010-06-21 03:40:00 mkelsey Exp $
+$Id: History,v 1.102 2010-06-21 16:54:09 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21 June 2010 Michael Kelsey (hadr-casc-V09-03-49)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Add parentheses in main iteration loop to support
+  mixed && and || (reported by gcc-4.5).
+
+- G4NucleiModel.cc:  Fix mistake in passing ctor args to generateModel().
 
 20 June 2010 Michael Kelsey (MHK-20100620)
 ------------------------------------------

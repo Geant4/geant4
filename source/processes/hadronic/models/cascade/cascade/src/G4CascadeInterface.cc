@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.82 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.83 2010-06-21 16:54:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -224,16 +224,16 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 #endif
 
     } while( 
-	    (nTries < maxTries) &&  		// conditions for next try
-	    (output.getOutgoingParticles().size()!=0) &&
+	    ((nTries < maxTries) &&  		// conditions for next try
+	     (output.getOutgoingParticles().size()!=0) &&
 #ifdef G4CASCADE_COULOMB_DEV
-	    (coulombOK) &&
-	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
+	     (coulombOK) &&
+	     ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
 #else
-	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) < 2.5) &&  
-	    (output.getOutgoingParticles().begin()->type()==bullet->type())
+	     ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) < 2.5) &&  
+	     (output.getOutgoingParticles().begin()->type()==bullet->type())
 #endif
-	    || (!balance.energyOkay())
+	     ) || (!balance.energyOkay())
 	     );
   }
 

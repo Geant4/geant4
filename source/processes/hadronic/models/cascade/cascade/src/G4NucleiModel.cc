@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.52 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.53 2010-06-21 16:54:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -45,6 +45,8 @@
 //		G4CASCADE_DEBUG_CHARGE
 // 20100620  M. Kelsey -- Improve error message on empty partners list, add
 //		four-momentum checking after EPCollider
+// 20100621  M. Kelsey -- In boundaryTransition() account for momentum transfer
+//		to secondary by boosting into recoil nucleus "rest" frame.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -78,7 +80,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 G4NucleiModel::G4NucleiModel() : verboseLevel(0) {}
 
 G4NucleiModel::G4NucleiModel(G4double a, G4double z) : verboseLevel(0) {
-  generateModel(A,Z);
+  generateModel(a,z);
 }
 
 G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei) : verboseLevel(0) {
