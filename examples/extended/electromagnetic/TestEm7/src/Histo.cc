@@ -92,7 +92,7 @@ void Histo::book()
   // Creating a tree mapped to a new hbook file.
 
   G4String nam = histName + "." + histType;
-  G4String options  = "--noErrors export=root uncompress";
+  G4String options  = "uncompress";
     
   tree = tf->create(nam,histType,false,true,options);
   delete tf;
@@ -130,10 +130,12 @@ void Histo::save()
 #ifdef G4ANALYSIS_USE
   // Write histogram file
   if(tree) {
-    tree->commit();
-    G4cout << "Closing the tree..." << G4endl;
+    G4cout << " Histo: closing the tree" << G4endl;
+    if(!tree->commit()) { 
+      G4cout << "!!! Warning Histo: fail to commit the tree" << G4endl;
+    }
     tree->close();
-    G4cout << "Histograms and Ntuples are saved" << G4endl;
+    G4cout << " Histo: Histograms and Ntuples are saved" << G4endl;
     delete tree;
     tree = 0;
   }
