@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2010-06-21 12:30:37 kmura Exp $
+$Id: History,v 1.51 2010-06-21 12:37:20 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ Geant4Py is a Geant4-Python bridge.
 
 21 June 2010 K.Murakami (tagged as environments-V09-03-01)
  - updates for changes of G4 classes (G4RunManager, physics list)
- - use G4xMultipleScattering instead if G4MultipleScattering class.
+ - use G4xMultipleScattering for EMLowEpl site-pacakage module
 
 4 June 2010 K.Murakami (tagged as environments-V09-03-00)
  - update for the 9.4 beta release
