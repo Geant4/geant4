@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.39 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.40 2010-06-21 23:48:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -37,10 +37,11 @@
 // 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code,
 //		pass verbosity to collider.  Make G4NucleiModel a data member,
 //		instead of creating and deleting on every cycle.
+// 20100620  M. Kelsey -- Improved diagnostic messages.  Simplify kinematics
+//		of recoil nucleus.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -73,9 +74,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   model.setVerboseLevel(verboseLevel);
   theElementaryParticleCollider.setVerboseLevel(verboseLevel);
-
-  G4CascadeCheckBalance balance(0.05,0.100);	// Second arg is GeV
-  balance.setVerboseLevel(verboseLevel);
 
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
@@ -283,35 +281,44 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (verboseLevel > 2)
 	G4cout << " adding recoil nucleus to output list" << G4endl;
 
-      // Need to "tweak" recoil four-vector to account for excitation energy
-      G4LorentzVector pnuc = momentum_in - momentum_out;
-
-      G4InuclNuclei outgoing_nuclei(pnuc, afin, zfin);
+      G4InuclNuclei outgoing_nuclei(afin, zfin);
       outgoing_nuclei.setModel(4);
+      
+      G4double mass = outgoing_nuclei.getMass();
+      momentum_out += outgoing_nuclei.getMomentum();
 
-      G4double nucEkx = pnuc.e()-outgoing_nuclei.getMass();	// Eex + Ekin
+      if (verboseLevel > 3)
+	G4cout << "  changed momentum_out energy by nuclear mass " << mass
+	       << G4endl;
+
+      momentum_out = momentum_in - momentum_out;
+      G4double nucEkx = momentum_out.e();			// Eex + Ekin
+
       if (verboseLevel > 3) G4cout << "  Eex + Ekin " << nucEkx <<  G4endl;
 
       if (nucEkx < 0.) {
 	if (verboseLevel > 2)
 	  G4cerr << " unphysical recoil with negative energy " << G4endl;
       } else {
-	G4double Eex = (nucEkx - outgoing_nuclei.getKineticEnergy())/GeV;
+	outgoing_nuclei.setMomentum(momentum_out);
+
+	G4double Eex = (nucEkx - outgoing_nuclei.getKineticEnergy()) * GeV;
 	if (verboseLevel > 3) G4cout << "  Eex  " << Eex  <<  G4endl;
 
 	if (goodCase(afin, zfin, Eex, ekin_in)) { // ok, exitation energy > cut
 	  std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(output_particles);
 
-	  outgoing_nuclei.setMomentum(momentum_out);
 	  outgoing_nuclei.setExitationEnergy(Eex);
 	  outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);
 	  if (verboseLevel > 3) outgoing_nuclei.printParticle();
 	                           	  
           output.addTargetFragment(outgoing_nuclei);
 	  return;
-	};
-      };
+	} else {
+	  if (verboseLevel > 2) G4cout << " nuclear recoil failed." << G4endl;
+	}
+      }
     } else { 	// special case, when one has no nuclei after the cascad
       if (afin == 1.0) { // recoiling nucleon
 	if (verboseLevel > 3)
@@ -335,8 +342,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   }		// while (itry < itry_max)
 
   if (verboseLevel > 3) {
-    G4cout << " IntraNucleiCascader-> no inelastic interaction after " << itry_max << " attempts "
-	   << G4endl;
+    G4cout << " IntraNucleiCascader-> no inelastic interaction after "
+	   << itry_max << " attempts " << G4endl;
   }
 
   output.trivialise(bullet, target);

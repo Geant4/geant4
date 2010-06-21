@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2010-06-21 20:29:58 mkelsey Exp $
+$Id: History,v 1.105 2010-06-21 23:48:11 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -19,6 +19,12 @@ code and to keep track of all tags.
 ---------------------------
 - G4CascadeInterface.cc:  Bring MHK-20100620 version back to HEAD, make same
   parenthesis fix for GCC 4.5 compilation.
+
+- G4IntraNucleiCascader.cc:  Bug fix nuclear recoil kinematics introduced in
+  MHK-20100620.
+
+- G4NucleiModel.cc:  Bring MHK-20100620 version back to HEAD, apply ctor
+  argument fix.
 
 21 June 2010 Michael Kelsey (hadr-casc-V09-03-49)
 -------------------------------------------------
