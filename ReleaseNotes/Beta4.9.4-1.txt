@@ -221,7 +221,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         run-time errors reports.
       o Fixed bugs in G4AtomicDeexcitation and G4AugerTransition.
       o G4DNA processes:
-        - Added new excitation model for electrons in G4DNABornExcitationModel.
+        - Added new prototype excitation model for electrons in
+          G4DNABornExcitationModel. Will be fully released in December.
         - Corrected G4DNABornIonisationModel for maximum kinetic energy
           transfer.
         - Modified method declaration in G4DNABornExcitation. Modified electron
@@ -232,8 +233,29 @@ List of main features and fixes included in this Beta release since 9.3.p01:
           memory leaks.
         - Changed computation of scattering angle in G4DNAChampionElasticModel.
         - Replaced hard coded masses in G4DNADingfelderCharge* classes.
-      o Added analytical (ecpssr) and empirical (Paul and Orlic) models for the
-        calculation of hadronic shell ionisation CS.
+      o New PIXE developments:
+        - G4ecpssrKCrossSection and G4ecpssrLiCrossSection classes: these
+          classes substitute the G4ecpssrCrossSection class, fixing existing
+          bugs and improving the goodness of the results especially at higher
+          energies.
+          The Geant4 PIXE developers are really thankful to Maria Grazia Pia
+          for searching for bugs in the previous Geant4 release, pointing
+          existing problems and propose solution in a very collaborative way
+          in: M.G.Pia et al., CHEP-2009 conference, March 2009, Prague (Czech
+          Republic).
+        - G4empCrossSection and G4teoCrossSection classes: these two classes,
+          deriving from G4VhShellCrossSection, provide the interface to
+          empirical ionization cross sections (Orlic for L shells and Paul
+          for K).
+        - G4hShellCrossSection, G4hShellCrossSectionDoubleExp,
+          G4hShellCrossSectionDoubleExpData, G4hShellCrossSectionExp,
+          G4hShellCrossSectionExpData classes are now discontinued.
+        - G4hLowEnergyIonisation has been updated to follow the new design
+          and let the user chose which model to use for the calculation of shell
+          ionization cross section through the method SelectShellIonisationCS().
+          Dependencies on old methods for cross sectiuon calculation have been
+          removed.
+        - Bugs fixes in G4OrlicLiCrossSection and G4PaulKCrossSection.
       o Fix in G4AugerTransition to cure crash on Windows.
       o Added missing virtual destructors where necessary.
       o Corrected return value case in method GetPhotoElectronDirection()
@@ -394,7 +416,6 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         N neutrons (A=N, Z=0) are decayed in G4QLowEnergy.
       o Bug-fix in G4QLowEnergy: pions as secondaries.
       o Bug-fix in K0 elastic & Ion-Ion Elastic.
-      o Safety corrections in G4QEnvironment to fix energy non-conservation.
     + models/coherent_elastic
       o Use G4Q(Proton/Neutron)ElasticCrossSection instead of
         G4QElasticCrossSection; fixed initialization problem for
