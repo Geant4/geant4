@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.55 2010-06-21 23:48:11 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.56 2010-06-22 03:29:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -47,6 +47,7 @@
 //		four-momentum checking after EPCollider
 // 20100621  M. Kelsey -- In boundaryTransition() account for momentum transfer
 //		to secondary by boosting into recoil nucleus "rest" frame.
+//		Don't need temporaries to create dummy "partners" for list.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -531,7 +532,10 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   if (path < -small) { 			// something wrong
-    G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
+    if (verboseLevel)
+      G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
+
+    thePartners.push_back(partner());	// Dummy -- no type or momentum
     return;
   }
 
@@ -539,10 +543,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     if (verboseLevel > 3)
       G4cout << " generateInteractionPartners-> zero path" << G4endl;
 
-    path = 0.0; 
-
-    G4InuclElementaryParticle particle;	// Dummy -- no type or momentum
-    thePartners.push_back(partner(particle, path));
+    thePartners.push_back(partner());	// Dummy -- no type or momentum
     return;
   }
 
@@ -734,8 +735,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   if (verboseLevel > 2) 
     G4cout << " got " << thePartners.size() << " partners" << G4endl;
 
-  G4InuclElementaryParticle particle;		// Dummy for end of list
-  thePartners.push_back(partner(particle, path));
+  thePartners.push_back(partner());	// Dummy -- no type or momentum
 }
 
 
@@ -963,6 +963,20 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   }
   
   mom.setVect(mom.vect() + pos*prr);
+
+  if (qv <= 0.0) {	// After reflection, account for nuclear recoil
+    G4LorentzVector recoil;
+    recoil.setVectM(-pos*prr, G4InuclNuclei::getNucleiMass(A,Z));
+    G4ThreeVector boost = recoil.boostVector();
+
+    if (verboseLevel > 3) {
+      G4cout << " nucleus recoils after reflection: x " << boost.x()
+	     << " y " << boost.y() << " z " << boost.z() << G4endl;
+    }
+
+    mom.boost(boost);	// Put particle _into_ frame of recoiling nucleus
+  }
+
   cparticle.updateParticleMomentum(mom);
 }
 
