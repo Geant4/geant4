@@ -217,10 +217,15 @@ processes/hadronic                               hadr-V09-03-00
     checking. Some code cleanup.
   o New G4HadronicEPTestMessenger class to provide energy/momentum test 
     commands available in UI.
-- models/cascade (hadr-casc-V09-03-48)
-  o 
+- models/cascade (hadr-casc-V09-03-49)
+  o Improved angular distributions for 2-body final states of pi-nucleon,
+    nucleon-nucleon, kaon-nucleon anf hyperon-nucleon scattering.
+  o Energy/momentum checks added which remove large energy non-conservation
+    events.
+  o CPU speed improvements from the removal of unnecessary class instantiations.
+  o Code re-organization to permit more speed improvements in the future.
 - models/chiral_inv_phase_space (hadr-chips-V09-03-06)
-  + body (hadr-chips-body-V09-03-10):
+  + body (hadr-chips-body-V09-03-11):
     o Corrected Titanium and Zirconium isotopes in G4QIsotope.
     o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
     o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
@@ -255,6 +260,10 @@ processes/hadronic                               hadr-V09-03-00
   o G4VPreCompoundModel: moved constructor and destructor to source.
 - models/parton_string/diffraction (hadr-string-diff-V09-03-01)
   o Added missing virtual destructor to G4DiffractiveHHScatterer.
+- models/parton_string/hadronization (had-hadronization-V09-03-00)
+  o Improved Lund string fragmentation.
+  o Fixed inconsistency between LightFragmentationTest and Lund fragmentation.
+  o Fixed problems of energy non-conservation in FTF.
 - models/pre_equilibrium (hadr-pre-V09-03-06)
   o G4PreCompoundModel: moved constructor and destructor to source.
   o G4LowEIonFragmentation: cleanup comment.
@@ -376,11 +385,12 @@ examples                                         examples-V09-03-06
   o Added option "ionGasModel" to the physics-list.
 - advanced/Rich (Rich-V09-03-02)
   o Use G4UIExecutive.
-- extended/electromagnetic/TestEm7 (testem7-V09-03-03)
+- extended/electromagnetic/TestEm7 (testem7-V09-03-04)
   o Added extra EM option "ionGasModels", which disables effective ion
     charge and enables use of new models G4BraggIonGasModel, 
     G4BetheBlochIonGasModel.
   o Added extra macro ionGasC12.mac.
+  o Fixed setup for histograms through JAIDA.
 - extended/electromagnetic/TestEm8 (testem8-V09-03-03)
   o PhysicsList, Em8DetectorConstruction: renamed "VertexDetector" with
     "GasDetector"

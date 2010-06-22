@@ -360,12 +360,19 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         2-body to 2-body scattering angular distributions with a new
         parameterization of elastic scattering data using the sum of two
         exponentials.
+      o Improved angular distributions for 2-body final states of pi-nucleon,
+        nucleon-nucleon, kaon-nucleon anf hyperon-nucleon scattering.
       o Replaced G4CascadeMomentum internal class with G4LorentzVector.
       o Completed first stage of migration from using internal Bertini particle
         types to Geant4 standard particle types.
+      o Energy/momentum checks added which remove large energy non-conservation
+        events.
       o Improved memory management: removed allocation of strings in various
         constuctors; replaced several cases of return-by-value with const or
         non-const reference, or by use of buffers.
+      o CPU speed improvements from the removal of unnecessary class
+        instantiations.. Code re-organization to permit more speed improvements
+        in the future.
     + models/chiral_inv_phase_space
       o Updated proton elastic and CHIPS parameters.
       o Implemented anti-baryon elastic interactions.
@@ -465,8 +472,12 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + models/neutron_hp
       o Modified sampling in G4NeutronHPInelasticCompFS.
       o  Fix bug about incidence energy in G4NeutronHPEnAngCorrelation.
-    + models/parton_string/diffraction (hadr-string-diff-V09-03-01)
+    + models/parton_string/diffraction
       o Added missing virtual destructor to G4DiffractiveHHScatterer.
+    + models/parton_string/hadronization
+      o Improved Lund string fragmentation.
+      o Fixed inconsistency between LightFragmentationTest and Lund
+        fragmentation. Fixed problems of energy non-conservation in FTF.
     + models/parton_string/qgsm
       o Remove unused class G4PartonStringAnnihilator.
     + models/pre_equilibrium
@@ -620,6 +631,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
         charge and enables use of new models G4BraggIonGasModel, 
         G4BetheBlochIonGasModel.
       o Added extra macro ionGasC12.mac.
+      o Fixed setup for histograms through JAIDA.
     + extended/electromagnetic/TestEm8
       o PhysicsList, Em8DetectorConstruction: renamed "VertexDetector" with
         "GasDetector"
