@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.168 2010-06-21 07:36:59 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.169 2010-06-22 06:25:15 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -5956,11 +5956,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         G4double rpx=tot4Mom.px();
         G4double rpy=tot4Mom.py();
         G4double rpz=tot4Mom.pz();
+        G4double re2=re*re;                     // @!@
         G4double dmo=rpx*rpx+rpy*rpy+rpz*rpz;
-        G4double dem=re*re+dmo;
-        G4double dm2=re*re-dmo;                 // @!
-        G4double sdm=0.;                        // @!
-        if(dm2>0.) sdm=std::sqrt(dm2);          // @!
+        G4double dem=re2+dmo;
+        G4double dm2=re2-dmo;                   // @!@
+        G4double sdm=0.;                        // @!@
+        if(dm2>0.) sdm=std::sqrt(dm2);          // @!@
 #ifdef debug
         G4cout<<"G4QE::FSI: Is En&Mom conserved? t4M="<<tot4Mom<<",dM="<<sdm<<", mM="<<misM
               <<",mPDG="<<mPDG<<G4endl;
@@ -5971,7 +5972,16 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef pdebug
           G4cout<<"--Warning--G4QE::FSI:dE/Mc4M="<<tot4Mom<<sdm<<". Correct it!"<<G4endl;
 #endif
-          if(sdm>0.1)
+	    if(sdm < 0.1 || (re2 > 0. && !totCharge && !totBaryoN && sdm/re2 < .0001)) // @!@
+          {
+#ifdef pdebug
+            G4cout<<"...G4QE::FSI:E/M conservation is corrected by a photon"<<G4endl;
+#endif
+            cor4M=tot4Mom;                                 // Complete correction
+            G4QHadron* theH = new G4QHadron(22,tot4Mom);
+            theQHadrons.push_back(theH);    // (delete equivalent for the proton)
+          }
+          else                                             // @!@
           {
             if(dmo<0.0001 && re>900.)               // MomentumIsConserved - recoverMissing
             {
@@ -6099,15 +6109,6 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef pdebug
             G4cout<<"---Warning---G4QE::FSI:En/MomCons.Error is corrected:"<<cor4M<<G4endl;
 #endif
-          }
-          else                                             // @!@
-          {
-#ifdef pdebug
-            G4cout<<"...G4QE::FSI:E/M conservation is corrected by a photon"<<G4endl;
-#endif
-            cor4M=tot4Mom;                                 // Complete correction
-            G4QHadron* theH = new G4QHadron(22,tot4Mom);
-            theQHadrons.push_back(theH);    // (delete equivalent for the proton)
           }
           G4double cHM = curHadr->GetMass();  // Mass of the current hadron
           G4int ch=0;
