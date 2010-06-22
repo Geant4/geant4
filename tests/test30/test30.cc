@@ -590,7 +590,8 @@ int main(int argc, char** argv)
     G4double bine = emax/(G4double)nbinse;
     G4double bind = emax/(G4double)nbinsd;
 
-    G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
+    G4cout << "energy = " << energy/MeV << " MeV   " 
+	   << " RMS(MeV)= " << sigmae/MeV << G4endl;
     if(verbose > 0) {
       G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
       G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
