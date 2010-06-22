@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2010-06-18 13:34:07 lgarnier Exp $
+$Id: History,v 1.151 2010-06-22 18:24:18 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22, June L. Garnier
+- G4UIQt : Fix crash when open UI with no vis tab
 
 18, June L. Garnier
 - Fix Qt3 compilation bug (setVisible(...) unprotected

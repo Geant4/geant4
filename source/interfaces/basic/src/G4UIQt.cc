@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.47 2010-06-18 13:34:07 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.48 2010-06-22 18:24:18 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -710,7 +710,13 @@ G4UIsession* G4UIQt::SessionStart (
   exitSession = false;
 
   if (fEmptyViewerTabLabel != NULL) {
-    if (fTabWidget->isVisible()) {
+    bool visible = false;
+    if (fTabWidget != NULL) {
+      if (fTabWidget->isVisible()) {
+        visible = true;
+      }
+    }
+    if (visible) {
 #if QT_VERSION >= 0x040000
   #if QT_VERSION >= 0x040200
       fEmptyViewerTabLabel->setVisible(false);
@@ -743,17 +749,19 @@ G4UIsession* G4UIQt::SessionStart (
       fMainWindow->show();
 #endif
   // get the size of the tabbar
-  int tabBarX;
-  int tabBarY;
-#if QT_VERSION < 0x040000
-  tabBarX = fTabWidget->width()-fTabWidget->page(0)->width();
-  tabBarY = fTabWidget->height()-fTabWidget->page(0)->height();
-#else
-  tabBarX = fTabWidget->width()-fTabWidget->widget(0)->width();
-  tabBarY = fTabWidget->height()-fTabWidget->widget(0)->height();
-#endif
+  int tabBarX = 0;
+  int tabBarY = 0;
 
-  fMainWindow->resize(tabBarX+fMainWindow->width()+fLastQTabSizeX-fTabWidget->width(),tabBarY+fMainWindow->height()+fLastQTabSizeY-fTabWidget->height());
+  if (fTabWidget != NULL) {
+#if QT_VERSION < 0x040000
+    tabBarX = -fTabWidget->page(0)->width();
+    tabBarY = -fTabWidget->page(0)->height();
+#else
+    tabBarX = -fTabWidget->widget(0)->width();
+    tabBarY = -fTabWidget->widget(0)->height();
+#endif
+  }
+  fMainWindow->resize(tabBarX+fMainWindow->width()+fLastQTabSizeX,tabBarY+fMainWindow->height()+fLastQTabSizeY);
 
 #if QT_VERSION < 0x040000
   QApplication::sendPostedEvents () ;
