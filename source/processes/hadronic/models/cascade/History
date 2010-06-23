@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2010-06-23 16:54:30 mkelsey Exp $
+$Id: History,v 1.109 2010-06-23 19:11:53 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,32 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+24 June 2010 Michael Kelsey
+---------------------------
+- G4CascadeInterface.cc:  Minor fix to rationalize version jumpings.
+- G4NucleiModel.cc:  Fix bug in partners list termination mods below, and
+  remove reflection-recoil from boundaryTransition().
+
+
+21 June 2010 Michael Kelsey (MHK-20100621)
+------------------------------------------
+- G4CascadeInterface.cc:  Bring MHK-20100620 version back to HEAD, make same
+  parenthesis fix for GCC 4.5 compilation.
+
+- G4IntraNucleiCascader.cc:  Bug fix nuclear recoil kinematics introduced in
+  MHK-20100620.
+
+- G4NucleiModel.cc:  Bring MHK-20100620 version back to HEAD, apply ctor
+  argument fix.  Eliminate creating temporaries for terminal "partners" on
+  list; default ctor will take care of it.  Hide negative path-length report
+  behind verbose flag, and don't return an empty list.
+
+  Add block of code in ::boundaryTransition() which recoils the nucleus when
+  the secondary is reflected off the potential, to balance the momentum
+  transfer.  This is implemented by computing the boost for the full nucleus
+  using the computed three-momentum transfer, and applying that boost to the
+  secondary.
 
 23 June 2010 Michael Kelsey (hadr-casc-V09-03-50)
 -------------------------------------------------
