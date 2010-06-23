@@ -225,10 +225,9 @@ processes/hadronic                               hadr-V09-03-00
   o CPU speed improvements from the removal of unnecessary class instantiations.
   o Code re-organization to permit more speed improvements in the future.
 - models/chiral_inv_phase_space (hadr-chips-V09-03-06)
-  + body (hadr-chips-body-V09-03-12):
+  + body:
     o Corrected Titanium and Zirconium isotopes in G4QIsotope.
     o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
-    o Safety corrections in G4QEnvironment to fix energy non-conservation.
     o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
       when mass is small for Lambda andSigma+, use Xi0,p.
   + cross_sections:
