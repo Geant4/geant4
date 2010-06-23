@@ -22,21 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.8 2010-04-07 17:28:35 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.9 2010-06-23 19:25:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
 //	     as temporary final-state fragments.
 // 20100319  M. Kelsey -- Add information message to makeNuclearFragment().
 //	     Use new GetBindingEnergy() function instead of bindingEnergy().
+// 20100622  M. Kelsey -- Use local "bindingEnergy()" function to call through.
 
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4Ions.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4HadTmpUtil.hh"
-#include "G4NucleiProperties.hh"
 #include <assert.h>
 #include <sstream>
 #include <map>
@@ -88,7 +87,7 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc) {
 
   // Simple minded mass calculation use constants in CLHEP (all in MeV)
   G4double mass = nz*proton_mass_c2 + nn*neutron_mass_c2
-    + G4NucleiProperties::GetBindingEnergy(G4lrint(a),G4lrint(z)) + exc;
+    + bindingEnergy(a,z) + exc;
 
   //    Arguments for constructor are as follows
   //               name             mass          width         charge

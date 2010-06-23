@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.12 2010-06-23 16:17:54 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.13 2010-06-23 19:25:35 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -38,7 +38,6 @@
 
 #include "G4VCascadeCollider.hh"
 #include "G4ElementaryParticleCollider.hh"
-#include "G4NucleiModel.hh"
 
 class G4CollisionOutput;
 class G4InuclParticle;

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.30 2010-06-17 15:32:35 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.31 2010-06-23 19:25:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,6 +32,7 @@
 // 20100413  M. Kelsey -- Pass buffers to paraMaker[Truncated]
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code
+// 20100622  M. Kelsey -- Use local "bindingEnergy()" function to call through.
 
 #include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
@@ -40,8 +41,6 @@
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
-#include "G4NucleiProperties.hh"
-#include "G4HadTmpUtil.hh"
 
 using namespace G4InuclSpecialFunctions;
 
@@ -139,12 +138,9 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	  G4double VP = coul_coeff * Z * AK1 / (G4cbrt(A - 1.0) + 1.0) /
 	    (1.0 + EEXS / E0);
-	  //	  G4double DM1 = bindingEnergy(A, Z);
-	  //	  G4double BN = DM1 - bindingEnergy(A - 1.0, Z);
-	  //	  G4double BP = DM1 - bindingEnergy(A - 1.0, Z - 1.0);
-          G4double DM1 = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
-	  G4double BN = DM1 - G4NucleiProperties::GetBindingEnergy(G4lrint(A-1.0), G4lrint(Z));
-	  G4double BP = DM1 - G4NucleiProperties::GetBindingEnergy(G4lrint(A-1.0), G4lrint(Z-1.0));
+          G4double DM1 = bindingEnergy(A,Z);
+	  G4double BN = DM1 - bindingEnergy(A-1.0,Z);
+	  G4double BP = DM1 - bindingEnergy(A-1.0,Z-1.0);
 	  G4double EMN = EEXS - BN;
 	  G4double EMP = EEXS - BP - VP * A / (A - 1.0);
 	  G4double ESP = 0.0;

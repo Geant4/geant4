@@ -22,53 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: bindingEnergy.cc,v 1.9 2010-06-23 19:25:36 mkelsey Exp $
 //
+// 20100622 M. Kelsey -- Replace all functionally with call-through to
+//		G4NucleiProperties.  Check for valid A/Z and return zero
+//		without warning message.
+
 #include "G4InuclSpecialFunctions.hh"
+#include "G4NucleiProperties.hh"
+#include "G4HadTmpUtil.hh"
+
 
 G4double G4InuclSpecialFunctions::bindingEnergy(G4double A, G4double Z) {
-  G4int verboseLevel = 2;
+  // NOTE:  Test condition copied from G4NucleiProperties.cc; not encapsulated
+  if (A < 1 || Z < 0 || Z > A) return 0.;
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::bindingEnergy" << G4endl;
-  }
-
-  // calculates the nuclei binding energy using Kummel or exact or asymptotic
-  // high temperature 
-  G4double DM;
-  G4double AN = A - Z;
-
-  if (AN < 0.1 || Z < 0.1) {
-    DM = 0.0;
-
-  } else {
-
-    if (A <= 256.0) {
-
-      if (AN >= 20. && Z >= 20) { 
-
-	if (Z < 1.7 * AN && Z > 0.3 * AN) { // standard
-	  DM = bindingEnergyKummel(A, Z);
-
-	} else { // bad case
-	  DM = bindingEnergyAsymptotic(A, Z);
-	}; 
-
-      } else {
-
-	if (A > 60.0 || Z > 21) { // bad case
-	  DM = bindingEnergyAsymptotic(A, Z);
-
-	} else { // exact case
-	  DM = bindingEnergyExact(A, Z);
-	}; 
-      }; 
-
-    } else {
-      DM = bindingEnergyAsymptotic(A, Z);
-    }; 
-  };  
-
-  // G4cout << " A " << A << " Z " << Z << " DM " << DM << G4endl;
-
-  return DM;
+  return G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
 }

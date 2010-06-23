@@ -22,18 +22,18 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4VCascadeCollider.cc,v 1.2 2010-06-15 22:47:25 mkelsey Exp $
+// $Id: G4VCascadeCollider.cc,v 1.3 2010-06-23 19:25:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
+// 20100623  M. Kelsey -- Use old bindingEnergy() wrapper (now returns
+//		G4NucleiProperties::GetBindingEnergy()).
 
 #include "G4VCascadeCollider.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4InteractionCase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4NucleiProperties.hh"
 #include "G4ios.hh"
 
 using namespace G4InuclSpecialFunctions;
@@ -43,13 +43,13 @@ using namespace G4InuclSpecialFunctions;
 
 G4VCascadeCollider::G4VCascadeCollider(const char* name)
   : theName(name), verboseLevel(0) {
-  if (verboseLevel > 3) G4cout << " >>> " << theName << " ctor " << G4endl;
+  if (verboseLevel) G4cout << " >>> " << theName << " ctor " << G4endl;
 }
 
 
 G4VCascadeCollider::G4VCascadeCollider(const char* name, G4int verbose)
   : theName(name), verboseLevel(verbose) {
-  if (verboseLevel > 3) G4cout << " >>> " << theName << " ctor " << G4endl;
+  if (verboseLevel) G4cout << " >>> " << theName << " ctor " << G4endl;
 }
 
 
@@ -65,7 +65,7 @@ G4bool G4VCascadeCollider::useEPCollider(G4InuclParticle* bullet,
 // Decide wether nuclear fragment is candidate for G4BigBanger
 
 G4bool G4VCascadeCollider::explosion(G4InuclNuclei* target) const {
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " >>> " << theName << "::explosion" << G4endl;
   }
 
@@ -78,7 +78,7 @@ G4bool G4VCascadeCollider::explosion(G4InuclNuclei* target) const {
 
   // Only small fragments with high excitations can explode
   G4bool explo = ((a <= a_cut) && 
-		  (eexs >= be_cut * G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z)))
+		  (eexs >= be_cut * bindingEnergy(a,z))
 		  );
 
   return explo;
@@ -91,7 +91,7 @@ G4bool
 G4VCascadeCollider::inelasticInteractionPossible(G4InuclParticle* bullet,
 						 G4InuclParticle* target, 
 						 G4double ekin) const {
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " >>> " << theName << "::inelasticInteractionPossible" << G4endl;
   }
 

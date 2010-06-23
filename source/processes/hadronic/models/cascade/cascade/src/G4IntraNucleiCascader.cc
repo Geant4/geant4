@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.41 2010-06-23 16:17:54 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.42 2010-06-23 19:25:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,18 +39,17 @@
 //		instead of creating and deleting on every cycle.
 // 20100620  M. Kelsey -- Improved diagnostic messages.  Simplify kinematics
 //		of recoil nucleus.
+// 20100622  M. Kelsey -- Use local "bindingEnergy()" to call through.
 // 20100623  M. Kelsey -- Undo G4NucleiModel change from 0617.  Does not work
 //		properly across multiple interactions.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
 #include "G4CollisionOutput.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4NucleiModel.hh"
-#include "G4NucleiProperties.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "Randomize.hh"
 #include <algorithm>
@@ -358,29 +357,26 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
 				       G4double z, 
 				       G4double eexs, 
 				       G4double ein) const {
-
-  if (verboseLevel > 3) {
+  if (verboseLevel > 1) {
     G4cout << " >>> G4IntraNucleiCascader::goodCase" << G4endl;
   }
 
-  const G4double eexs_cut = 0.0001;
-  const G4double reason_cut = 7.0;
-  const G4double ediv_cut = 5.0;
+  const G4double eexs_cut = 0.0001*MeV;
+  const G4double reason_cut = 7.0*MeV;
+  const G4double ediv_cut = 5.0*MeV;
 
   G4bool good = false;
 
   if (eexs > eexs_cut) {
-    G4double eexs_max0z = 1000.0 * ein / ediv_cut;
-    //    G4double dm = bindingEnergy(a, z);
-    G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
+    G4double eexs_max0z = 1000.0 * ein / ediv_cut;   // ein is GeV, eexs is MeV
+    G4double dm = bindingEnergy(a,z);
     G4double eexs_max = eexs_max0z > reason_cut*dm ? eexs_max0z : reason_cut * dm;
 
-    if(eexs < eexs_max) good = true;
+    good = (eexs < eexs_max);
 
     if (verboseLevel > 3) {
       G4cout << " eexs " << eexs << " max " << eexs_max << " dm " << dm << G4endl;
     }
-
   };
 
   return good; 

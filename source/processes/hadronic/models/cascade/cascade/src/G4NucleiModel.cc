@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.57 2010-06-23 19:11:39 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.58 2010-06-23 19:25:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -47,8 +47,15 @@
 //		four-momentum checking after EPCollider
 // 20100621  M. Kelsey -- In boundaryTransition() account for momentum transfer
 //		to secondary by boosting into recoil nucleus "rest" frame.
+//		Don't need temporaries to create dummy "partners" for list.
+// 20100622  M. Kelsey -- Restore use of "bindingEnergy()" function name, which
+//		is now a wrapper for G4NucleiProperties::GetBindingEnergy().
 // 20100623  M. Kelsey -- Eliminate some temporaries terminating partner-list,
-//		discard recoil boost for now.
+//		discard recoil boost for now. Initialize all data
+//		members in ctors.  Allow generateModel() to be called
+//		mutliple times, by clearing vectors each time through;
+//		avoid extra work by returning if A and Z are same as
+//		before.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -70,7 +77,6 @@
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4Neutron.hh"
-#include "G4NucleiProperties.hh"
 #include "G4Proton.hh"
 
 using namespace G4InuclParticleNames;
@@ -79,13 +85,22 @@ using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-G4NucleiModel::G4NucleiModel() : verboseLevel(0) {}
+G4NucleiModel::G4NucleiModel()
+  : verboseLevel(0), A(0), Z(0), neutronNumber(0), protonNumber(0),
+    neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
+    current_nucl2(0) {}
 
-G4NucleiModel::G4NucleiModel(G4double a, G4double z) : verboseLevel(0) {
+G4NucleiModel::G4NucleiModel(G4double a, G4double z)
+  : verboseLevel(0), A(0), Z(0), neutronNumber(0), protonNumber(0),
+    neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
+    current_nucl2(0) {
   generateModel(a,z);
 }
 
-G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei) : verboseLevel(0) {
+G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
+  : verboseLevel(0), A(0), Z(0), neutronNumber(0), protonNumber(0),
+    neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
+    current_nucl2(0) {
   generateModel(nuclei);
 }
 
@@ -115,6 +130,15 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   const G4double alfa3[3] = { 0.7, 0.3, 0.01 }; // listing zone radius
   const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
+  // If model already built, just return; otherwise intialize everything
+  if (a == A && z == Z) {
+    if (verboseLevel > 1)
+      G4cout << " model already generated for A=" << a << ", Z=" << z << G4endl;
+
+    reset();		// Zeros out neutron/proton evaporates
+    return;
+  }
+
   A = a;
   Z = z;
   neutronNumber = a - z;
@@ -122,12 +146,18 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   neutronNumberCurrent = neutronNumber;
   protonNumberCurrent = protonNumber;
 
-// Set binding energies
-//  G4double dm = bindingEnergy(a, z);
-  G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
+  // Clear all parameters arrays for reloading
+  binding_energies.clear();
+  nucleon_densities.clear();
+  zone_potentials.clear();
+  fermi_momenta.clear();
+  zone_radii.clear();
 
-  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z-1)) - dm)); // for P
-  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z)) - dm)); // for N
+  // Set binding energies
+  G4double dm = bindingEnergy(a,z);
+
+  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a-1,z-1)-dm)); // for P
+  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a-1,z)-dm));   // for N
 
   G4double CU = cuu*G4cbrt(a); // half-density radius * 2.8197
   G4double D1 = CU/AU;
@@ -1097,8 +1127,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
   if (ab < max_a_for_cascad) {
 
-    G4double benb = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(ab), G4lrint(zb)) / ab;
-    G4double bent = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(at), G4lrint(zt)) / at;
+    G4double benb = 0.001 * bindingEnergy(ab,zb) / ab;
+    G4double bent = 0.001 * bindingEnergy(at,zt) / at;
     G4double ben = benb < bent ? bent : benb;
 
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {
