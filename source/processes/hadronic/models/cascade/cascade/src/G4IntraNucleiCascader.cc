@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.40 2010-06-21 23:48:11 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.41 2010-06-23 16:17:54 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,8 @@
 //		instead of creating and deleting on every cycle.
 // 20100620  M. Kelsey -- Improved diagnostic messages.  Simplify kinematics
 //		of recoil nucleus.
+// 20100623  M. Kelsey -- Undo G4NucleiModel change from 0617.  Does not work
+//		properly across multiple interactions.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -72,6 +74,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	   << G4endl;
   }
 
+  G4NucleiModel model;
   model.setVerboseLevel(verboseLevel);
   theElementaryParticleCollider.setVerboseLevel(verboseLevel);
 
