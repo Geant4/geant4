@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.33 2009-02-23 09:49:24 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.34 2010-06-23 13:56:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCHIPSWorld ----------------
@@ -99,7 +99,8 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
 //                 ===========================================
 {
   //static const G4int mnofParts = 486;           // max number of particles (up to A=80)
-  static const G4int mnofParts = 494;           // max number of particles (up to A=80) IN
+  //static const G4int mnofParts = 494;           // max number of particles (up to A=80)
+  static const G4int mnofParts = 512; // max#of particles,A<57,G4QParticle::InitDecayVector
   static const G4bool cf = true;                // verbose=true G4QPDG construction flag
 #ifdef debug
   G4cout<<"G4QCHIPSWorld::GetParticles: n="<<nOfParts<<" particles"<<G4endl;

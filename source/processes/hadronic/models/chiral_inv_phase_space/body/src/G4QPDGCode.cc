@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.65 2010-06-10 08:37:27 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.66 2010-06-23 13:56:30 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -57,7 +57,12 @@ G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)
 #endif
   if(PDGCode==130) PDGCode= 311; // Safety. Should not happen.
   if(PDGCode==310) PDGCode=-311; // Safety. Should not happen.
-  if(PDGCode) theQCode=MakeQCode(PDGCode);
+  if(PDGCode==90000000)
+  {
+    thePDGCode=22;
+    theQCode=6;
+  }
+  else if(PDGCode) theQCode=MakeQCode(PDGCode);
   else        
   {
 #ifdef sdebug
@@ -328,7 +333,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
   }
   else if (PDGC>80000000 && PDGC<100000000) // Try to convert the NUCCoding to PDGCoding
   {
-    if(PDGC==90000000) return 6;
+    //if(PDGC==90000000) return 6;            // @@ already done in the constructor
     ConvertPDGToZNS(PDGC, z, n, s);
     G4int b=n+z+s;                                 // Baryon number
 #ifdef debug
@@ -379,35 +384,65 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
     {
       if(b==1)                                     // --> Baryons+Hyperons
       {
-        if(!s)                                     // --> Baryons
+        if(PDGC>80000000)
         {
-          if(z==-1)    return 34;                  // Delta-
-          else if(!z)  return 20;                  // neutron
-          else if(z==1)return 21;                  // proton
-          else if(z==2)return 37;                  // Delta++
-          else if(z==3||z==-2)return -1;           // Delta+pi Chipolino
-          else         return -2;                  // Not supported by Q Code
+          if(!s)                                     // --> Baryons
+          {
+            if     (!z)  return 90;                  // neutron
+            else if(z==1)return 91;                  // proton
+            else         return -2;                  // Not supported by Q Code
+          }
+          else if(s==1)                              // --> Hyperons
+          {
+            if(z==-1)    return 93;                  // Sigma-
+            else if(!z)  return 92;                  // Lambda
+            else if(z==1)return 94;                  // Sigma+
+            else         return -2;                  // Not supported by Q Code
+          }
+          else if(s==2)                              // --> Xi Hyperons
+          {
+            if(z==-1)    return 95;                  // Xi-
+            else if(!z)  return 96;                  // Xi0
+            else         return -2;                  // Not supported by Q Code
+          }
+          else if(s==3)                              // --> Xi Hyperons
+          {
+            if(z==-1)    return 97;                  // Omega-
+            else         return -2;                  // Not supported by Q Code
+          }
         }
-        else if(s==1)                              // --> Hyperons
+        else
         {
-          if(z==-1)    return 23;                  // Sigma-
-          else if(!z)  return 22;                  // Lambda (@@ 24->Sigma0)
-          else if(z==1)return 25;                  // Sigma+
-          else if(z==2||z==-2) return -1;          // Sigma+pi Chipolino
-          else         return -2;                  // Not supported by Q Code
-        }
-        else if(s==2)                              // --> Xi Hyperons
-        {
-          if(z==-1)    return 26;                  // Xi-
-          else if(!z)  return 27;                  // Xi0
-          else if(z==1||z==-2)return -1;           // Xi+pi Chipolino
-          else         return -2;                  // Not supported by Q Code
-        }
-        else if(s==3)                              // --> Xi Hyperons
-        {
-          if(z==-1)    return 44;                  // Omega-
-          else if(!z||z==-2)  return -1;           // Omega+pi Chipolino
-          else         return -2;                  // Not supported by Q Code
+          if(!s)                                     // --> Baryons
+          {
+            if(z==-1)    return 34;                  // Delta-
+            else if(!z)  return 20;                  // neutron
+            else if(z==1)return 21;                  // proton
+            else if(z==2)return 37;                  // Delta++
+            else if(z==3||z==-2)return -1;           // Delta+pi Chipolino
+            else         return -2;                  // Not supported by Q Code
+          }
+          else if(s==1)                              // --> Hyperons
+          {
+            if(z==-1)    return 23;                  // Sigma-
+            else if(!z)  return 22;                  // Lambda (@@ 24->Sigma0)
+            else if(z==1)return 25;                  // Sigma+
+            else if(z==2||z==-2) return -1;          // Sigma+pi Chipolino
+            else         return -2;                  // Not supported by Q Code
+          }
+          else if(s==2)                              // --> Xi Hyperons
+          {
+            if(z==-1)    return 26;                  // Xi-
+            else if(!z)  return 27;                  // Xi0
+            else if(z==1||z==-2)return -1;           // Xi+pi Chipolino
+            else         return -2;                  // Not supported by Q Code
+          }
+          else if(s==3)                              // --> Xi Hyperons
+          {
+            if(z==-1)    return 44;                  // Omega-
+            else if(!z||z==-2)  return -1;           // Omega+pi Chipolino
+            else         return -2;                  // Not supported by Q Code
+          }
         }
       }
       else
@@ -586,7 +621,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
           return -2;
         }
       }
-      G4int c=b/2;
+      G4int c=b/2;              // From here b>3: (4,5):c=2,g=0,1; (6,7):c=3,g=0,1; ...
       G4int g=b%2;
       G4int h=c*3;
       //G4int Q=57+c*15;
@@ -2197,7 +2232,6 @@ G4QContent G4QPDGCode::GetExQContent(G4int i, G4int o)  const
   else G4cerr<<"***G4QPDGCode::GetExQContent: strange exiting quark o="<<o<<G4endl;
   return cQC;
 }
-
 
 // Relative Cross Index for q_i->q_o (q=0(d),1(u),2(s), 7 means there is no such cluster)
 G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const

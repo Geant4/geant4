@@ -16,6 +16,10 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+23-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-13) 
+-----------------------------------------------------------------------
+Using HARP data a big bug is fixed, which influences CHIPS physics
+
 23-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-12) 
 -----------------------------------------------------------------------
 PDG=0 bug fix in G4QEnvironment similar to those made in 9.2.p2
