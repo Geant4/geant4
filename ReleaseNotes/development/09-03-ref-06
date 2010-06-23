@@ -217,7 +217,7 @@ processes/hadronic                               hadr-V09-03-00
     checking. Some code cleanup.
   o New G4HadronicEPTestMessenger class to provide energy/momentum test 
     commands available in UI.
-- models/cascade (hadr-casc-V09-03-49)
+- models/cascade (hadr-casc-V09-03-43)
   o Improved angular distributions for 2-body final states of pi-nucleon,
     nucleon-nucleon, kaon-nucleon anf hyperon-nucleon scattering.
   o Energy/momentum checks added which remove large energy non-conservation
