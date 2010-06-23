@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.9 2010-06-17 16:34:45 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.10 2010-06-23 15:51:27 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -202,6 +202,7 @@ public:
   G4double GetExpSin(G4double x);
   G4complex GetErfInt(G4complex z); // , G4int nMax);
 
+  G4double GetLegendrePol(G4int n, G4double x);
 
   G4complex TestErfcComp(G4complex z, G4int nMax);
   G4complex TestErfcSer(G4complex z, G4int nMax);
@@ -209,6 +210,7 @@ public:
 
   G4complex CoulombAmplitude(G4double theta);
   void CalculateCoulombPhaseZero();
+  G4double CalculateCoulombPhase(G4int n);
   void CalculateRutherfordAnglePar();
 
   G4double ProfileNear(G4double theta);
@@ -224,8 +226,23 @@ public:
   G4complex AmplitudeFar(G4double theta);
   G4complex Amplitude(G4double theta);
   G4double  AmplitudeMod2(G4double theta);
+
+  G4complex AmplitudeGla(G4double theta);
+  G4double  AmplitudeGlaMod2(G4double theta);
+
   void      InitParameters(const G4ParticleDefinition* theParticle,  
 			      G4double partMom, G4double Z, G4double A); 
+
+  void      InitParametersGla(const G4DynamicParticle* aParticle,  
+			      G4double partMom, G4double Z, G4double A);
+
+  G4double GetHadronNucleonXscNS( G4ParticleDefinition* pParticle, 
+                                                 G4double pTkin, 
+				  G4ParticleDefinition* tParticle);
+
+  G4double CalcMandelstamS( const G4double mp , 
+                                                       const G4double mt , 
+						    const G4double Plab );
 
   G4double GetProfileLambda(){return fProfileLambda;};
 
@@ -235,6 +252,8 @@ public:
   void SetCofLambda(G4double pa){fCofLambda = pa;};
   void SetCofAlpha(G4double pa){fCofAlpha = pa;};
   void SetCofDelta(G4double pa){fCofDelta = pa;};
+  void SetEtaRatio(G4double pa){fEtaRatio = pa;};
+  void SetMaxL(G4int l){fMaxL = l;};
 
 private:
 
@@ -271,6 +290,7 @@ private:
   G4double fNuclearRadius1;
   G4double fNuclearRadius2;
   G4double fNuclearRadius;
+  G4double fNuclearRadiusSquare;
 
   G4double fBeta;
   G4double fZommerfeld;
@@ -284,9 +304,14 @@ private:
   G4double fProfileLambda;
   G4double fProfileDelta;
   G4double fProfileAlpha;
+
   G4double fCofLambda;
   G4double fCofAlpha;
   G4double fCofDelta;
+
+  G4int    fMaxL;
+  G4double fSumSigma;
+  G4double fEtaRatio;
 
   G4double fReZ;
 
@@ -687,6 +712,30 @@ inline G4complex G4NuclNuclDiffuseElastic::GetErfcInt(G4complex z) // , G4int nM
   return erfcz;
 }
 
+inline  G4double G4NuclNuclDiffuseElastic::GetLegendrePol(G4int n, G4double theta)
+{
+  G4double legPol, epsilon = 1.e-6;
+  G4double x = std::cos(theta);
+
+  if     ( n  < 0 ) legPol = 0.;
+  else if( n == 0 ) legPol = 1.;
+  else if( n == 1 ) legPol = x;
+  else if( n == 2 ) legPol = (3.*x*x-1.)/2.;
+  else if( n == 3 ) legPol = (5.*x*x*x-3.*x)/2.;
+  else if( n == 4 ) legPol = (35.*x*x*x*x-30.*x*x+3.)/8.;
+  else if( n == 5 ) legPol = (63.*x*x*x*x*x-70.*x*x*x+15.*x)/8.;
+  else if( n == 6 ) legPol = (231.*x*x*x*x*x*x-315.*x*x*x*x+105.*x*x-5.)/16.;
+  else           
+  {
+    // legPol = ( (2*n-1)*x*GetLegendrePol(n-1,x) - (n-1)*GetLegendrePol(n-2,x) )/n;
+
+    legPol = std::sqrt( 2./(n*pi*std::sin(theta+epsilon)) )*std::sin( (n+0.5)*theta+0.25*pi );
+  }
+  return legPol; 
+}
+
+
+
 /////////////////////////////////////////////////////////////////
 //
 //
@@ -869,9 +918,11 @@ inline  G4complex G4NuclNuclDiffuseElastic::CoulombAmplitude(G4double theta)
   G4double sinHalfTheta  = std::sin(0.5*theta);
   G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta; 
   sinHalfTheta2         += fAm;
+
   G4double order         = 2.*fCoulombPhase0 - fZommerfeld*std::log(sinHalfTheta2);
   G4complex z            = G4complex(0., order);
   ca                     = std::exp(z);
+
   ca                    *= -fZommerfeld/(2.*fWaveVector*sinHalfTheta2);
 
   return ca; 
@@ -886,7 +937,19 @@ inline  void G4NuclNuclDiffuseElastic::CalculateCoulombPhaseZero()
 {
   G4complex z        = G4complex(1,fZommerfeld); 
   G4complex gammalog = GammaLogarithm(z);
-  fCoulombPhase0      = gammalog.imag();
+  fCoulombPhase0     = gammalog.imag();
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+
+inline  G4double G4NuclNuclDiffuseElastic::CalculateCoulombPhase(G4int n)
+{
+  G4complex z        = G4complex(1. + n, fZommerfeld); 
+  G4complex gammalog = GammaLogarithm(z);
+  return gammalog.imag();
 }
 
 
@@ -897,7 +960,7 @@ inline  void G4NuclNuclDiffuseElastic::CalculateCoulombPhaseZero()
 
 inline  void G4NuclNuclDiffuseElastic::CalculateRutherfordAnglePar()
 {
-  fHalfRutThetaTg  = fZommerfeld/(fWaveVector*fNuclearRadius);
+  fHalfRutThetaTg  = fZommerfeld/fProfileLambda;  // (fWaveVector*fNuclearRadius);
   fRutherfordTheta = 2.*std::atan(fHalfRutThetaTg);
   G4cout<<"fRutherfordTheta = "<<fRutherfordTheta/degree<<" degree"<<G4endl;
 
@@ -1084,11 +1147,47 @@ inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeMod2(G4double theta)
   return   mod2;
 }
 
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeGla(G4double theta)
+{
+  G4int n;
+  G4double T12b, b, b2; // cosTheta = std::cos(theta);
+  G4complex out = G4complex(0.,0.), shiftC, shiftN; 
+  G4complex im  = G4complex(0.,1.);
+
+  for( n = 0; n < fMaxL; n++)
+  {
+    shiftC = std::exp( im*2.*CalculateCoulombPhase(n) );
+    b = ( fZommerfeld + std::sqrt( fZommerfeld*fZommerfeld + n*(n+1) ) )/fWaveVector;
+    b2 = b*b;
+    T12b = fSumSigma*std::exp(-b2/fNuclearRadiusSquare)/pi/fNuclearRadiusSquare;         
+    shiftN = std::exp( -0.5*(1.-im*fEtaRatio)*T12b ) - 1.;
+    out +=  (2.*n+1.)*shiftC*shiftN*GetLegendrePol(n, theta);   
+  }
+  out /= 2.*im*fWaveVector;
+  out += CoulombAmplitude(theta);
+  return out;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeGlaMod2(G4double theta)
+{
+  G4complex out = AmplitudeGla(theta);
+  G4double mod2 = out.real()*out.real() + out.imag()*out.imag();
+  return   mod2;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Test for given particle and element table of momentum, angle probability.
-// For the moment in lab system. 
+// For the partMom in CMS. 
 
 inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition* theParticle,  
                                           G4double partMom, G4double Z, G4double A) 
@@ -1109,7 +1208,7 @@ inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition*
   fWaveVector = partMom/hbarc;
 
   G4double lambda = fCofLambda*fWaveVector*fNuclearRadius;
-
+  G4cout<<"kR = "<<lambda<<G4endl;
   if( z )
   {
       a           = partMom/m1; // beta*gamma for m1
@@ -1129,6 +1228,178 @@ inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition*
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Test for given particle and element table of momentum, angle probability.
+// For the partMom in CMS. 
+
+inline void G4NuclNuclDiffuseElastic::InitParametersGla(const G4DynamicParticle* aParticle,  
+                                          G4double partMom, G4double Z, G4double A) 
+{
+  fAtomicNumber  = Z;     // target atomic number
+  fAtomicWeight  = A;     // target number of nucleons
+
+  fNuclearRadius2 = CalculateNuclearRad(fAtomicWeight); // target nucleus radius
+  G4double A1     = G4double( aParticle->GetDefinition()->GetBaryonNumber() );   
+  fNuclearRadius1 = CalculateNuclearRad(A1); // projectile nucleus radius
+  fNuclearRadiusSquare = fNuclearRadius1*fNuclearRadius1+fNuclearRadius2*fNuclearRadius2;
+ 
+
+  G4double a  = 0., kR12;
+  G4double z  = aParticle->GetDefinition()->GetPDGCharge();
+  G4double m1 = aParticle->GetDefinition()->GetPDGMass();
+
+  fWaveVector = partMom/hbarc;
+
+  G4double pN = A1 - z;
+  if( pN < 0. ) pN = 0.;
+
+  G4double tN = A - Z;
+  if( tN < 0. ) tN = 0.;
+
+  G4double pTkin = aParticle->GetKineticEnergy();  
+  pTkin /= A1;
+
+
+  fSumSigma = (Z*z+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
+              (z*tN+pN*Z)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
+
+  G4cout<<"fSumSigma = "<<fSumSigma/millibarn<<" mb"<<G4endl;
+  G4cout<<"pi*R2 = "<<pi*fNuclearRadiusSquare/millibarn<<" mb"<<G4endl;
+  kR12 = fWaveVector*std::sqrt(fNuclearRadiusSquare);
+  G4cout<<"k*sqrt(R2) = "<<kR12<<" "<<G4endl;
+  fMaxL = (G4int(kR12)+1)*4;
+  G4cout<<"fMaxL = "<<fMaxL<<" "<<G4endl;
+
+  if( z )
+  {
+      a           = partMom/m1; // beta*gamma for m1
+      fBeta       = a/std::sqrt(1+a*a);
+      fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+      fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
+  }
+
+  CalculateCoulombPhaseZero();
+ 
+
+  return;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns nucleon-nucleon cross-section based on N. Starkov parametrisation of
+// data from mainly http://wwwppds.ihep.su:8001/c5-6A.html database
+// projectile nucleon is pParticle with pTkin shooting target nucleon tParticle
+
+inline G4double 
+G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle, 
+                                                 G4double pTkin, 
+                                                 G4ParticleDefinition* tParticle)
+{
+  G4double xsection(0), Delta, A0, B0;
+  G4double hpXsc(0);
+  G4double hnXsc(0);
+
+
+  G4double targ_mass     = tParticle->GetPDGMass();
+  G4double proj_mass     = pParticle->GetPDGMass(); 
+
+  G4double proj_energy   = proj_mass + pTkin; 
+  G4double proj_momentum = std::sqrt(pTkin*(pTkin+2*proj_mass));
+
+  G4double sMand = CalcMandelstamS ( proj_mass , targ_mass , proj_momentum );
+
+  sMand         /= GeV*GeV;  // in GeV for parametrisation
+  proj_momentum /= GeV;
+  proj_energy   /= GeV;
+  proj_mass     /= GeV;
+
+  // General PDG fit constants
+
+  //  G4double s0   = 5.38*5.38; // in Gev^2
+  //  G4double eta1 = 0.458;
+  //  G4double eta2 = 0.458;
+  //  G4double B    = 0.308;
+
+  
+
+
+  
+  if( proj_momentum >= 10. ) // high energy: pp = nn = np
+    // if( proj_momentum >= 2.)
+  {
+    Delta = 1.;
+
+    if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
+
+    if( proj_momentum >= 10.)
+    {
+        B0 = 7.5;
+        A0 = 100. - B0*std::log(3.0e7);
+
+        xsection = A0 + B0*std::log(proj_energy) - 11
+                  + 103*std::pow(2*0.93827*proj_energy + proj_mass*proj_mass+
+                     0.93827*0.93827,-0.165);        //  mb
+    }
+  }
+  else // low energy pp = nn != np
+  {
+      if(pParticle == tParticle) // pp or nn      // nn to be pp
+      {
+        if( proj_momentum < 0.73 )
+        {
+          hnXsc = 23 + 50*( std::pow( std::log(0.73/proj_momentum), 3.5 ) );
+        }
+        else if( proj_momentum < 1.05  )
+        {
+          hnXsc = 23 + 40*(std::log(proj_momentum/0.73))*
+                         (std::log(proj_momentum/0.73));
+        }
+        else  // if( proj_momentum < 10.  )
+        {
+          hnXsc = 39.0 + 
+              75*(proj_momentum - 1.2)/(std::pow(proj_momentum,3.0) + 0.15);
+        }
+        xsection = hnXsc;
+      }
+      else  // pn to be np
+      {
+        if( proj_momentum < 0.8 )
+        {
+          hpXsc = 33+30*std::pow(std::log(proj_momentum/1.3),4.0);
+        }      
+        else if( proj_momentum < 1.4 )
+        {
+          hpXsc = 33+30*std::pow(std::log(proj_momentum/0.95),2.0);
+        }
+        else    // if( proj_momentum < 10.  )
+        {
+          hpXsc = 33.3+
+              20.8*(std::pow(proj_momentum,2.0)-1.35)/
+                 (std::pow(proj_momentum,2.50)+0.95);
+        }
+        xsection = hpXsc;
+      }
+  }
+  xsection *= millibarn; // parametrised in mb
+  G4cout<<"xsection = "<<xsection/millibarn<<" mb"<<G4endl;
+  return xsection;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4NuclNuclDiffuseElastic::CalcMandelstamS( const G4double mp , 
+                                                       const G4double mt , 
+                                                       const G4double Plab )
+{
+  G4double Elab = std::sqrt ( mp * mp + Plab * Plab );
+  G4double sMand  = mp*mp + mt*mt + 2*Elab*mt ;
+
+  return sMand;
+}
 
 
 
