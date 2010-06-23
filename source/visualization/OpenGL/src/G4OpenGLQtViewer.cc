@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.51 2010-05-26 14:50:56 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.52 2010-06-23 13:29:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,7 +111,11 @@ void G4OpenGLQtViewer::CreateMainWindow (
   //  fWindow->makeCurrent();
 
 #ifdef G4DEBUG_VIS_OGL
+#if QT_VERSION < 0x040000
+  printf("G4OpenGLQtViewer::CreateMainWindow :: ++++++++++++++ add new TAB %s  W:%d H:%d SizeHinX:%d SizeHintY:%d\n",name.ascii(),getWinWidth(),getWinHeight(),fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+#else
   printf("G4OpenGLQtViewer::CreateMainWindow :: ++++++++++++++ add new TAB %s  W:%d H:%d SizeHinX:%d SizeHintY:%d\n",name.toStdString().c_str(),getWinWidth(),getWinHeight(),fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+#endif
 #endif
   //G4Qt* interactorManager = G4Qt::getInstance ();
 
@@ -133,7 +137,15 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
   G4UIQt * uiQt = static_cast<G4UIQt*> (UI->GetG4UIWindow());
   
-  bool isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+  bool isTabbedView = false;
+  if ( uiQt) {
+    isTabbedView = uiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+  }
+#ifdef G4DEBUG_VIS_OGL
+  else {
+    printf("G4OpenGLQtViewer::CreateMainWindow :: UIQt NOt found \n");
+  }
+#endif
 
   if (!isTabbedView) { // we have to do a dialog
 

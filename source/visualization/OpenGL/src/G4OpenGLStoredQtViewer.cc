@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc,v 1.31 2010-06-04 16:21:47 lgarnier Exp $
+// $Id: G4OpenGLStoredQtViewer.cc,v 1.32 2010-06-23 13:29:23 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -261,7 +261,7 @@ void G4OpenGLStoredQtViewer::paintGL()
   fIsRepainting = false;
 }
 
-void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *event) {
+void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
   if ( fHasToRepaint) {
     updateGL();
   }
@@ -282,7 +282,7 @@ void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event)
   G4wheelEvent(event);
 }
 
-void G4OpenGLStoredQtViewer::showEvent (QShowEvent * event) 
+void G4OpenGLStoredQtViewer::showEvent (QShowEvent *) 
 {
   fHasToRepaint = true;
 }
