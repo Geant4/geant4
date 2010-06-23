@@ -407,6 +407,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Fix to use of Z+N instead of N for A.
       o Corrected Titanium and Zirconium isotopes in G4QIsotope.
       o Added decay of Chipolino in the G4QEnvironment, when A_env=0.
+      o Safety corrections in G4QEnvironment to fix energy non-conservation.
       o Bug fix following G4NucleiProperties warning for A=0, Z=0.
       o Bug fix in G4QPDGCode and G4QEnvironment for Omega and Sigma;
         when mass is small for Lambda andSigma+, use Xi0,p.
