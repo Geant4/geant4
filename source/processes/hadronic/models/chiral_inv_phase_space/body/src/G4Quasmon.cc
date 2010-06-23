@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.125 2010-06-10 08:37:27 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.126 2010-06-23 06:48:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2381,7 +2381,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           G4double sumM=tmpTM+fraM;
           G4cerr<<"G4Q::HQ:EV-6:TotEVAPORATION:s="<<sPDG<<",T="<<kinE<<",RM="<<retN4Mom.m()
                 <<"<"<<tmpTM<<",tQC="<<transQC<<",E="<<excE<<",sM="<<sumM<<">tM="<<totMass
-                <<",sCB="<<sCB<<",nQ="<<nQuasms<<G4endl;
+                <<",nQ="<<nQuasms<<G4endl;
           throw G4QException("G4Quasmon::HadrQuasm: Why Fail?(6)ProductMasses>totalMass");
 #endif
 #ifdef debug
@@ -4528,10 +4528,10 @@ void G4Quasmon::CalculateHadronizationProbabilities
       G4bool pos=curCand->GetPossibility()&&totMass>tmpTM+frM;
       //G4bool pos=curCand->GetPossibility();
 #ifdef pdebug
-      //G4bool pPrint = abs(cPDG)%10<3 && cPDG<80000000 ||cPDG==90001000||cPDG==90000001||
-      //  cPDG==90000002||cPDG==90001001||cPDG==90001002||cPDG==90002001||cPDG==90002002;
+      G4bool pPrint = abs(cPDG)%10<3 && cPDG<80000000 ||cPDG==90001000||cPDG==90000001||
+        cPDG==90000002||cPDG==90001001||cPDG==90001002||cPDG==90002001||cPDG==90002002;
       //G4bool pPrint = cPDG==2212 || cPDG==2112 ||cPDG==90001000||cPDG==90000001;
-      G4bool pPrint = false;
+      //G4bool pPrint = false;
       if(pPrint) G4cout<<"G4Q::CHP:==****==>>>c="<<cPDG<<",dUD="<<dUD<<",pos="<<pos<<",eA="
                        <<envA<<",tM="<<totMass<<" > tmpTM+frM="<<tmpTM+frM<<G4endl;
 #endif
@@ -5070,8 +5070,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         // === The same as previous but "sr" instead of "st" ===
                         G4double lp=1.-(dkLS+sr+sr)/boundM;//qm=k+sqrt((E*(M-m)/M)^2-m^2)
 #ifdef debug
-                        if(pPrint) G4cout<<"G4Q::CHP:qa_k+sr="<<lp<<",sr="<<sr<<",m="
-                                         <<mex<<",M="<<frM<<G4endl;
+                        if(pPrint) G4cout<<"G4Q::CHP:qa_k+sr="<<lp<<",sr="<<sr
+                                         <<",M="<<frM<<G4endl;
 #endif
                         if(lp>0.&&lp<1.&&lp>lz)
                         {

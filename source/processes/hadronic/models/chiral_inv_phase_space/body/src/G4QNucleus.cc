@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.118 2010-06-10 08:37:27 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.119 2010-06-23 06:48:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -3133,7 +3133,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
 #endif
     }
     // @@ in case of the Ksi or Omega- capture it can disturb the simulation
-    else if(cPDG<80000000&&(abs(cPDG)%10>4||cST>2))// @@ PreClosed HighSpin/Strange hadrons
+    else if(cPDG<80000000&&(abs(cPDG)%10>4||cST>2))// @@ PreClosed HighSpin/HighStrange
     {
       curCand->SetPreProbability(0.);  
       curCand->SetDenseProbability(0.); 
@@ -3266,6 +3266,9 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
       }
       else
       {
+#ifdef cldebug
+        G4cout<<"G4QNucl::PrepCand:cPDG="<<cPDG<<",pos="<<pos<<G4endl;
+#endif
         curCand->SetPreProbability(pos);           // ===> Hadronic case in Vacuum     
         curCand->SetDenseProbability(0.);          // ===> Hadronic case in Vacuum
       }

@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.169 2010-06-22 06:25:15 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.170 2010-06-23 06:48:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -5964,7 +5964,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         if(dm2>0.) sdm=std::sqrt(dm2);          // @!@
 #ifdef debug
         G4cout<<"G4QE::FSI: Is En&Mom conserved? t4M="<<tot4Mom<<",dM="<<sdm<<", mM="<<misM
-              <<",mPDG="<<mPDG<<G4endl;
+              <<",mPDG="<<mPDG<<",dCH="<<totCharge<<",dBN="<<totBaryoN<<G4endl;
 #endif
         G4LorentzVector cor4M(0.,0.,0.,0.);     // Prototype for the missing particle
         if(dem>0.1)                             // Energy or momentum is not conserved
@@ -6063,11 +6063,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               }
 		  else throw G4QException("***G4QEnv::FSInteract: Try heavier nuclei at rest");
             }
-            else if(sdm-misM >= -0.01)        // on flight correction @!@
+            else if(std::abs(sdm-misM) < 0.01)        // on flight correction @!@
             {
 #ifdef pdebug
               G4cout<<"...G4QE::FSI:E/M conservation is corrected by ResidualNucl"<<G4endl;
 #endif
+              if(!misM) mPDG=22;
               G4QHadron* theH = new G4QHadron(mPDG,tot4Mom); // Create Residual Nucleus
               cor4M=tot4Mom;                  // Complete correction
               if(std::fabs(sdm-misM) <= 0.01) theQHadrons.push_back(theH); // As is

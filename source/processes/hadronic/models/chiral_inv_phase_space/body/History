@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 22-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-11) 
 -----------------------------------------------------------------------
+PDG=0 bug fix in G4QEnvironment similar to those made in 9.2.p2
+
+22-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-11) 
+-----------------------------------------------------------------------
 Photon correction improved in G4QEnvironment similar to those made in 9.2.p2
 
 21-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-10) 
