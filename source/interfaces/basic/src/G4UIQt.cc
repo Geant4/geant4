@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.48 2010-06-22 18:24:18 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.49 2010-06-23 13:06:16 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -1767,7 +1767,11 @@ void G4UIQt::CommandHistoryCallback(
 
 
 void G4UIQt::CoutFilterCallback(
+#if QT_VERSION < 0x040000
+const QString &) {
+#else
 const QString & text) {
+#endif
 
 #if QT_VERSION < 0x040000
   QStringList result = "";
@@ -2126,7 +2130,11 @@ G4QTabWidget::G4QTabWidget(
 
 
   
+#if QT_VERSION >= 0x040500
 void G4UIQt::TabCloseCallback(int a){
+#else
+void G4UIQt::TabCloseCallback(int){
+#endif
 #if QT_VERSION >= 0x040500
   QWidget* temp = fTabWidget->widget(a);
   fTabWidget->removeTab (a);
@@ -2175,7 +2183,7 @@ void G4UIQt::ToolBoxActivated(int a){
 }
 
 void G4QTabWidget::paintEvent(
-QPaintEvent * event
+QPaintEvent *
 )
 {
 
