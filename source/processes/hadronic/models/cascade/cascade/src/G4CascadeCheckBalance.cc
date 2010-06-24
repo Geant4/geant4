@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeCheckBalance.cc,v 1.3 2010-06-24 21:59:54 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.4 2010-06-24 22:19:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -61,6 +61,10 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   if (bullet) initial += bullet->getMomentum();
   if (target) initial += target->getMomentum();
 
+  initialCharge = 0;
+  if (bullet) initialCharge += bullet->getCharge();
+  if (target) initialCharge += target->getCharge();
+
   final = output.getTotalOutputMomentum();
 
   // Baryon number and charge must be computed "by hand"
@@ -75,8 +79,6 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   initialBaryon =
     ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
      (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
-
-  initialCharge = bullet->getCharge() + target->getCharge();
 
   const std::vector<G4InuclNuclei>& nout = output.getNucleiFragments();
   const std::vector<G4InuclElementaryParticle>& pout
