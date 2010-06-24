@@ -116,6 +116,8 @@
 #include "G4ForceCondition.hh"
 #include "G4TouchableHistory.hh"
 
+#include "G4NucleiProperties.hh"
+
 int main(int argc, char** argv)
 {
   G4cout << "========================================================" << G4endl;
@@ -250,6 +252,7 @@ int main(int argc, char** argv)
   Test30Physics*   phys = new Test30Physics();
 
   const G4ParticleDefinition* gamma = G4Gamma::Gamma();
+  const G4ParticleDefinition* electron = G4Electron::Electron();
   const G4ParticleDefinition* proton = G4Proton::Proton();
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
@@ -644,7 +647,7 @@ int main(int argc, char** argv)
 
       G4int i;
       // proton double differencial histograms are active by request
-      for(i=nanglpr; i<11; i++) {histo.activate(3+i, false);}
+      for(i=nanglpr; i<11; ++i) {histo.activate(3+i, false);}
 
       histo.add1D("15","E(MeV) for gamma",200,0.,energyg);
       histo.add1D("16","delta E (MeV) ",100,-balance,balance);
@@ -982,14 +985,19 @@ int main(int argc, char** argv)
       gTrack->SetKineticEnergy(e0);
       G4double amass = phys->GetNucleusMass();
 
+      // note: check of 4-momentum balance for CHIPS is not guranteed due to
+      // unknown isotope      
+      if(chips) { 
+	aChange = chips->PostStepDoIt(*gTrack,*step);
+	G4int Nt = chips->GetNumberOfNeutronsInTarget(); 
+        amass = G4NucleiProperties::GetNuclearMass(Nt, Z);
+      } else { 
+	aChange = proc->PostStepDoIt(*gTrack,*step); 
+      }
+
       labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), 
 			     e0 + mass + amass);
       G4ThreeVector bst = labv.boostVector();
-
-      // note: check of 4-momentum balance for CHIPS is not guranteed due to
-      // unknown isotope      
-      if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
-      else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
 
       // take into account local energy deposit
       G4double de = aChange->GetLocalEnergyDeposit();
@@ -1020,6 +1028,13 @@ int main(int argc, char** argv)
         m = pd->GetPDGMass();
 	p = mom.mag();
         labv -= fm;
+
+	// electron can come only from internal conversion
+	// its mass should be added to initial state
+        if(pd == electron) { 
+	  labv += G4LorentzVector(0.0,0.0,0.0,electron_mass_c2); 
+	}
+
         px = mom.x();
         py = mom.y();
         pz = mom.z();
@@ -1183,9 +1198,20 @@ int main(int argc, char** argv)
 
       if(usepaw) {
         histo.fill(0,(G4double)n,1.0);
-	histo.fill(15,labv.e()/MeV, 1.0);
-	histo.fill(16,pz/MeV, 1.0);
-	histo.fill(17,pt/MeV, 1.0);
+
+        G4double ex = labv.e()/MeV;
+        if(ex >= balance) { ex = balance - 0.0001; }
+        else if(ex <= -balance) { ex = -balance + 0.0001; }
+	histo.fill(15,ex, 1.0);
+
+        ex = pz/MeV;
+        if(ex >= balance) { ex = balance - 0.0001; }
+        else if(ex <= -balance) { ex = -balance + 0.0001; }
+	histo.fill(16,ex, 1.0);
+
+        ex = pt/MeV;
+        if(ex >= balance) { ex = balance - 0.0001; }
+	histo.fill(17,ex, 1.0);
       }
       aChange->Clear();
     }
