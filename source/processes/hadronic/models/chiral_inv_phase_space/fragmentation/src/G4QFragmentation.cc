@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.15 2010-06-19 07:46:44 mkossov Exp $
+// $Id: G4QFragmentation.cc,v 1.16 2010-06-24 16:20:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -52,8 +52,8 @@
 // Promoting model parameters from local variables class properties @@(? M.K.)
 
 // Definition of static parameters
-G4int    G4QFragmentation::nCutMax=7;
-G4double G4QFragmentation::stringTension=2.*GeV/fermi;
+G4int    G4QFragmentation::nCutMax=27;
+G4double G4QFragmentation::stringTension=1.5*GeV/fermi;
 //G4double G4QFragmentation::tubeDensity  =1./fermi;
 G4double G4QFragmentation::tubeDensity  =0./fermi;
 // Parameters of diffractional fragmentation (was .72*)
@@ -1757,6 +1757,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
   static const G4double  mNeut = G4QPDGCode(2112).GetMass(); // Mass of neutron
   static const G4double  mPiCh = G4QPDGCode(211).GetMass();  // Mass of chgdPion
   static const G4double  mPiZr = G4QPDGCode(111).GetMass();  // Mass of neutrPion
+  static const G4LorentzVector  nul4M(0.,0.,0.,0.);          // Zero (vacuum) 4M
 #ifdef debug
   G4cout<<"*******>G4QFragmentation::Fragment: ***Called***, Res="<<theResult<<G4endl;
 #endif
@@ -1986,9 +1987,12 @@ G4QHadronVector* G4QFragmentation::Fragment()
       G4int nOut=output->size();             // #ofHadrons in the Nuclear Fragmentation |
       for(G4int j=0; j<nOut; j++)            // LOOP over Hadrons transferring to LS    |
       {                                      //                                         |
-        G4QHadron* curHadron=(*output)[j];   // Hadron from the nucleus fragmentation   |
-        if(nucE) curHadron->Boost(nucVel);   // Boost it back to Laboratory System      |
-        theResult->push_back(curHadron);     // Transfer it to the result               |
+        G4QHadron* curHadr=(*output)[j];     // Hadron from the nucleus fragmentation   |
+        if(nucE) curHadr->Boost(nucVel);     // Boost it back to Laboratory System      |
+        G4int hPDG=curHadr->GetPDGCode();    // PDGC of the hadron                      |
+        G4LorentzVector h4M=curHadr->Get4Momentum(); // 4-mom of the hadron             |
+        if((hPDG!=90000000 && hPDG!=22) || h4M!=nul4M) theResult->push_back(curHadr); //|
+        else delete curHadr;                 // delete zero-photons                     |
       }                                      //                                         |
       delete output;                         // Delete the OUTPUT <-----<-----<-----<---+
     }
@@ -2140,8 +2144,27 @@ G4QHadronVector* G4QFragmentation::Fragment()
   {
     G4int found=0;
     G4int hPDG=(*theResult)[i]->GetPDGCode();
-    if(hPDG==90000000 && (*theResult)[i]->Get4Momentum()>0.)
-                                                           (*theResult)[i]->SetPDGCode(22);
+    if(hPDG==90000000 || hPDG==22)
+    {
+      G4QHadron* curHadr=(*theResult)[i];
+      G4LorentzVector curh4M=curHadr->Get4Momentum();
+      if     ( curh4M > 0.) curHadr->SetPDGCode(22);
+      else if( curh4M == nul4M)
+      {
+        G4QHadron* theLast = (*theResult)[nHd-1];
+        if(theLast != curHadr)
+        {
+          curHadr->Set4Momentum(theLast->Get4Momentum()); //4-Mom of CurHadr
+          G4QPDGCode lQP=theLast->GetQPDG();
+          if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP);
+          else curHadr->SetQC(theLast->GetQC());
+        }
+        theResult->pop_back(); // theLastQHadron is excluded from OUTPUT
+        --nHd;
+        delete theLast;        //*!!When kill, delete theLastQHadr as an Instance!*
+        break;
+      }
+    }
     else if(hPDG==2212 || hPDG==2112)
     {
       for(G4int j=i+1; j<nHd; ++j)

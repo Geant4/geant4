@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.119 2010-06-23 06:48:34 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.120 2010-06-24 16:20:11 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -108,6 +108,7 @@ G4QNucleus::G4QNucleus(G4int nucPDG):
   G4QHadron(nucPDG), maxClust(0), theNucleons(),
   currentNucleon(-1), rho0(1.), radius(1.), Tb(), TbActive(false), RhoActive(false)
 {
+  if(nucPDG==22) nucPDG=90000000;
   InitByPDG(nucPDG);
   G4LorentzVector p(0.,0.,0.,GetGSMass());
   Set4Momentum(p);

@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History (please, make changes only with Mikhail.Kossov@cern.ch approval)
 
+24-Jun-2010 M.Kosov                             (hadr-chips-V09-03-07)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the CHIPS-cand0 for the final implementation
+
 19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the G4-9-4-beta debugging
