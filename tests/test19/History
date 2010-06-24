@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2010-06-24 14:20:20 mkossov Exp $
+$Id: History,v 1.18 2010-06-24 15:36:24 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 24th, 2010  Mikhail Kossov (test19-V09-03-06)
+- base version for the test group (with harpcdp)
+
 Jun 24th, 2010  Mikhail Kossov (test19-V09-03-05)
-- harpcdp directory is added
+- harpcdp directory is added (working internal version)
 
 Jun 18th, 2010  Mikhail Kossov (test19-V09-03-04)
 - More processes to test, corrections in QGS/FTF

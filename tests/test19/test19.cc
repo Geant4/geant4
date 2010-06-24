@@ -45,7 +45,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
 //#define pdebug
-//#define nout
+#define nout
 //#define inter
 //#define pscan
 //#define csdebug
@@ -58,7 +58,7 @@
 //#define debug
 //#define ppdebug
 //#define hdebug
-#define spectr
+//#define spectr
 //#define lhepdbg
 //#define meandbg
 //#define ekindbg
@@ -66,7 +66,7 @@
 //--- Random seed
 //#define ranseed
 //--- Flags of models (only one must be chosen), CHIPS is a default for System Testing ---
-//#define chips
+#define chips
 //#define synch
 //#define lep
 //#define hep
@@ -74,7 +74,7 @@
 //#define berti
 //#define binar
 //#define qgsp
-#define ftfp
+//#define ftfp
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
 #include "globals.hh"
