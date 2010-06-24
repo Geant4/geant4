@@ -45,7 +45,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 
 //#define pdebug
-#define nout
+//#define nout
 //#define inter
 //#define pscan
 //#define csdebug
@@ -58,7 +58,7 @@
 //#define debug
 //#define ppdebug
 //#define hdebug
-//#define spectr
+#define spectr
 //#define lhepdbg
 //#define meandbg
 //#define ekindbg
@@ -66,7 +66,7 @@
 //--- Random seed
 //#define ranseed
 //--- Flags of models (only one must be chosen), CHIPS is a default for System Testing ---
-#define chips
+//#define chips
 //#define synch
 //#define lep
 //#define hep
@@ -74,7 +74,7 @@
 //#define berti
 //#define binar
 //#define qgsp
-//#define ftfp
+#define ftfp
 // ------------------------------------- FLAGS ------------------
 #include "G4UIterminal.hh"
 #include "globals.hh"
@@ -281,17 +281,44 @@ int main()
 #endif
 #ifdef spectr
   // Invariant spectrum of pi+ at 5 angles 70 deg (1.2217), 90 (1.5708), 118 (2.0595),
-  //   *** p 400 GeV on Ta ****                            137 (2.3911), 160 (2.7925).
-  const G4int nHst=26;
-  G4double Tmax=1300; // MeV
-  G4double dT= Tmax/nHst;
-  G4double dAng =.17;
-  G4double s70[nHst];
-  G4double s90[nHst];
-  G4double s118[nHst];
-  G4double s137[nHst];
-  G4double s160[nHst];
-  for(G4int l=0; l<nHst; ++l) {s70[l]=0.; s90[l]=0.; s118[l]=0.; s137[l]=0.; s160[l]=0.;}
+  //   *** p 3 GeV/ on Pb (pi+)****                            137 (2.3911), 160 (2.7925).
+  const G4int nHst=30;
+  G4double ptmax=1000.; // MeV/c
+  G4double ptmin=100.;  // MeV/c
+  G4double dpt= (ptmax-ptmin)/nHst;
+  G4double bang[9] ={0.3491,0.5236,0.6981,0.8727,1.0472,1.3090,1.5708,1.8326,2.1817};
+  G4double dOm[8] ={0.,0.,0.,0.,0.,0.,0.,0.};
+  for(G4int l=0; l<8; ++l) dOm[l]=2.*3.14159265*(std::cos(bang[l])-std::cos(bang[l+1]));
+  G4double p25[nHst];
+  G4double p35[nHst];
+  G4double p45[nHst];
+  G4double p55[nHst];
+  G4double p67[nHst];
+  G4double p82[nHst];
+  G4double p97[nHst];
+  G4double p112[nHst];
+  G4double n25[nHst];
+  G4double n35[nHst];
+  G4double n45[nHst];
+  G4double n55[nHst];
+  G4double n67[nHst];
+  G4double n82[nHst];
+  G4double n97[nHst];
+  G4double n112[nHst];
+  G4double c25[nHst];
+  G4double c35[nHst];
+  G4double c45[nHst];
+  G4double c55[nHst];
+  G4double c67[nHst];
+  G4double c82[nHst];
+  G4double c97[nHst];
+  G4double c112[nHst];
+  for(G4int l=0; l<nHst; ++l)
+  {
+    p25[l]=0.; p35[l]=0.; p45[l]=0.; p55[l]=0.; p67[l]=0.; p82[l]=0.; p97[l]=0.; p112[l]=0.;
+    n25[l]=0.; n35[l]=0.; n45[l]=0.; n55[l]=0.; n67[l]=0.; n82[l]=0.; n97[l]=0.; n112[l]=0.;
+    c25[l]=0.; c35[l]=0.; c45[l]=0.; c55[l]=0.; c67[l]=0.; c82[l]=0.; c97[l]=0.; c112[l]=0.;
+  }
 #endif
 #ifdef histdbg
   const G4int nHst=40;
@@ -965,22 +992,24 @@ int main()
      //G4cout<<"Test19: Cross-section process is defined pPDG="<<pPDG<<G4endl;
      // --- A temporary LOOP for calculation of total cross section ------------
      //G4double pMin=.02;                       // in GeV --> for protons
-     G4double pMax=370.;                      // in GeV ==> for HE (CHIPS/LHEP)
+     G4double pMax=20.;                         // in GeVc --- Working ---
+     ////G4double pMax=370.;                      // in GeV ==> for HE (CHIPS/LHEP)
      //G4double pMax=.22;                       // in GeV ==> for HP
      //G4double pMax=10000000.;                 // in GeV --> np
      //G4double pMax=1000.;                     // in GeV --> np->inelastic
      //G4double pMax=1.;                        // in GeV --> LHEP/CHIPS (Capture/Fission)
      //G4double pMin=.03;                       // in GeV --> np->dg
      //G4double pMin=.002;                      // in GeV --> for HE/HP
-     G4double pMin=.185;                          // in GeV --> for Wellish's NA
+     ////G4double pMin=.185;                        // in GeV --> for Wellish's NA
+     G4double pMin=2.5;                        // in GeV/c --- Working --
      //G4double pMin=.000000162;                // in GeV --> for neutrons (CHIPS,LHEP)
-     //G4double pMin=.000000177;                 // in GeV --> for neutrons (HP)
-     G4int nic=50;                            // Number of points
+     //G4double pMin=.000000177;                  // in GeV --> for neutrons (HP)
+     G4int nic=50;                              // Number of points
      G4double lpMin=std::log(pMin);
      G4double lpMax=std::log(pMax);
      G4double dlp=(lpMax-lpMin)/nic;
      G4double lmic=lpMin-dlp/2;
-     G4double hMa=0.;                         // Mass of a hadron in GeV
+     G4double hMa=0.;                           // Mass of a hadron in GeV
      if(pPDG==2212) hMa=.938272;                  // Mass of a proton in GeV
      else if(pPDG==2112) hMa=.93957;              // Mass of a neutron in GeV
      else if(pPDG==211 || pPDG==-211) hMa=.13957; // Mass of a charged pion in GeV
@@ -1476,19 +1505,53 @@ int main()
           sec = aChange->GetSecondary(i)->GetDynamicParticle();
           pd  = sec->GetDefinition();
           c   = pd->GetPDGEncoding();
-          if(c == 211)
+          m   = pd->GetPDGMass();
+          mom = sec->GetMomentumDirection();
+          e   = sec->GetKineticEnergy();
+          p   = std::sqrt(e*(e + m + m));
+          G4double coz = mom.z();
+          G4double siz = 1.-coz*coz;
+          G4int ipt=static_cast<G4int>((p*siz-ptmin)/dpt);
+          G4double ang = std::acos(coz);
+          if(ang > bang[0] && ang < bang[8] && ipt>=0)
           {
-            m   = pd->GetPDGMass();
-            mom = sec->GetMomentumDirection();
-            e   = sec->GetKineticEnergy();
-            G4int ie=static_cast<G4int>(e/dT);
-            p   = std::sqrt(e*(e + m + m));
-            G4double ang = std::acos(mom.z());
-            if     (std::fabs(ang-1.2217) < dAng)  s70[ie] += 1./p;
-            else if(std::fabs(ang-1.5708) < dAng)  s90[ie] += 1./p;
-            else if(std::fabs(ang-2.0595) < dAng) s118[ie] += 1./p;
-            else if(std::fabs(ang-2.3911) < dAng) s137[ie] += 1./p;
-            else if(std::fabs(ang-2.7925) < dAng) s160[ie] += 1./p;
+            if(ipt<nHst)
+            {
+              if(c == 211)
+              {
+                if     (ang < bang[0] < ang && ang <= bang[1]) c25[ipt] += siz;
+                else if(ang < bang[1] < ang && ang <= bang[2]) c35[ipt] += siz;
+                else if(ang < bang[2] < ang && ang <= bang[3]) c45[ipt] += siz;
+                else if(ang < bang[3] < ang && ang <= bang[4]) c55[ipt] += siz;
+                else if(ang < bang[4] < ang && ang <= bang[5]) c67[ipt] += siz;
+                else if(ang < bang[5] < ang && ang <= bang[6]) c82[ipt] += siz;
+                else if(ang < bang[6] < ang && ang <= bang[7]) c97[ipt] += siz;
+                else if(ang < bang[7] < ang && ang <= bang[8]) c112[ipt] += siz;
+              }
+              else if(c == -211)
+              {
+                if     (ang < bang[0] < ang && ang <= bang[1]) n25[ipt] += siz;
+                else if(ang < bang[1] < ang && ang <= bang[2]) n35[ipt] += siz;
+                else if(ang < bang[2] < ang && ang <= bang[3]) n45[ipt] += siz;
+                else if(ang < bang[3] < ang && ang <= bang[4]) n55[ipt] += siz;
+                else if(ang < bang[4] < ang && ang <= bang[5]) n67[ipt] += siz;
+                else if(ang < bang[5] < ang && ang <= bang[6]) n82[ipt] += siz;
+                else if(ang < bang[6] < ang && ang <= bang[7]) n97[ipt] += siz;
+                else if(ang < bang[7] < ang && ang <= bang[8]) n112[ipt] += siz;
+              }
+              else if(c == 2212)
+              {
+                if     (ang < bang[0] < ang && ang <= bang[1]) p25[ipt] += siz;
+                else if(ang < bang[1] < ang && ang <= bang[2]) p35[ipt] += siz;
+                else if(ang < bang[2] < ang && ang <= bang[3]) p45[ipt] += siz;
+                else if(ang < bang[3] < ang && ang <= bang[4]) p55[ipt] += siz;
+                else if(ang < bang[4] < ang && ang <= bang[5]) p67[ipt] += siz;
+                else if(ang < bang[5] < ang && ang <= bang[6]) p82[ipt] += siz;
+                else if(ang < bang[6] < ang && ang <= bang[7]) p97[ipt] += siz;
+                else if(ang < bang[7] < ang && ang <= bang[8]) p112[ipt] += siz;
+              }
+            }
+            //else G4cout<<"Teest19: c="<<c<<", ang="<<ang<<", pt="<<ipt*dpt<<G4endl;
           }
         }
 #endif
@@ -1699,12 +1762,35 @@ int main()
   }
 #endif
 #ifdef spectr
-  G4cout<<std::setw(2)<<"T"<<" : "<<std::setw(9)<<"70"<<std::setw(9)<<"90"
-        <<std::setw(9)<<"118"<<std::setw(9)<<"137"<<std::setw(9)<<"160"<<G4endl;
-  G4double tm=-dT/2;
+  G4double x0=ptmin-dpt/2;
+  G4double w=1865000./nEvt/dpt;
+  G4cout<<"Teest19: Spectra of protons in "<<pPDG<<"("<<momb<<" MeV/c) + "<<tPDG<<G4endl;  
+  G4cout<<std::setw(13)<<"pt"<<" : "<<std::setw(13)<<"25"<<std::setw(13)<<"35"<<std::setw(13)<<"45"
+        <<std::setw(13)<<"55"<<std::setw(13)<<"67"<<std::setw(13)<<"82"<<std::setw(13)<<"97"
+        <<std::setw(13)<<"112"<<G4endl;
   for(G4int jh=0; jh<nHst; jh++)
-    G4cout<<std::setw(2)<<tm+dT*jh<<" : "<<std::setw(9)<<s70[jh]<<std::setw(9)<<s90[jh]
-          <<std::setw(9)<<s118[jh]<<std::setw(9)<<s137[jh]<<std::setw(9)<<s160[jh]<<G4endl;
+    G4cout<<std::setw(13)<<x0+dpt*jh<<" : "<<std::setw(13)<<p25[jh]*w/dOm[0]<<std::setw(13)
+          <<p35[jh]*w/dOm[1]<<std::setw(13)<<p45[jh]*w/dOm[2]<<std::setw(13)<<p55[jh]*w/dOm[3]
+          <<std::setw(13)<<p67[jh]*w/dOm[4]<<std::setw(13)<<p82[jh]*w/dOm[5]<<std::setw(13)
+          <<p97[jh]*w/dOm[6]<<std::setw(13)<<p112[jh]*w/dOm[7]<<G4endl;
+  G4cout<<"Teest19: Spectra of pi+ in "<<pPDG<<"("<<momb<<" MeV/c) + "<<tPDG<<G4endl;  
+  G4cout<<std::setw(13)<<"pt"<<" : "<<std::setw(13)<<"25"<<std::setw(13)<<"35"<<std::setw(13)<<"45"
+        <<std::setw(13)<<"55"<<std::setw(13)<<"67"<<std::setw(13)<<"82"<<std::setw(13)<<"97"
+        <<std::setw(13)<<"112"<<G4endl;
+  for(G4int jh=0; jh<nHst; jh++)
+    G4cout<<std::setw(13)<<x0+dpt*jh<<" : "<<std::setw(13)<<c25[jh]*w/dOm[0]<<std::setw(13)
+          <<c35[jh]*w/dOm[1]<<std::setw(13)<<c45[jh]*w/dOm[2]<<std::setw(13)<<c55[jh]*w/dOm[3]
+          <<std::setw(13)<<c67[jh]*w/dOm[4]<<std::setw(13)<<c82[jh]*w/dOm[5]<<std::setw(13)
+          <<c97[jh]*w/dOm[6]<<std::setw(13)<<c112[jh]*w/dOm[7]<<G4endl;
+  G4cout<<"Teest19: Spectra of pi- in "<<pPDG<<"("<<momb<<" MeV/c) + "<<tPDG<<G4endl;  
+  G4cout<<std::setw(13)<<"pt"<<" : "<<std::setw(13)<<"25"<<std::setw(13)<<"35"<<std::setw(13)<<"45"
+        <<std::setw(13)<<"55"<<std::setw(13)<<"67"<<std::setw(13)<<"82"<<std::setw(13)<<"97"
+        <<std::setw(13)<<"112"<<G4endl;
+  for(G4int jh=0; jh<nHst; jh++)
+    G4cout<<std::setw(13)<<x0+dpt*jh<<" : "<<std::setw(13)<<n25[jh]*w/dOm[0]<<std::setw(13)
+          <<n35[jh]*w/dOm[1]<<std::setw(13)<<n45[jh]*w/dOm[2]<<std::setw(13)<<n55[jh]*w/dOm[3]
+          <<std::setw(13)<<n67[jh]*w/dOm[4]<<std::setw(13)<<n82[jh]*w/dOm[5]<<std::setw(13)
+          <<n97[jh]*w/dOm[6]<<std::setw(13)<<n112[jh]*w/dOm[7]<<G4endl;
 #endif
 #ifdef synch
   s_s/=s_n;

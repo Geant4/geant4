@@ -9,7 +9,7 @@ macro run1 f=5 n=1 z=73 que=32-rb20-hp
  elseif [z] = 13 then	
   exec preco ^27!Al al1314 13 14 400000 446 [nEvts] [n] [que] 2 81 | 446 mb is reaction CS
  elseif [z] = 29 then	
-  exec preco ^63!Al cu2934 29 34 400000 812 [nEvts] [n] [que] 2 81 | 812 mb is reaction CS
+  exec preco ^63!Cu cu2934 29 34 400000 812 [nEvts] [n] [que] 2 81 | 812 mb is reaction CS
  elseif [z] = 73 then
   exec preco ^181!Ta ta73108 73 108 400000 1689 [nEvts] [n] [que] 2 81 | 1689 mb is CS
  endif
