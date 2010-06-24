@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.47 2010-06-17 10:44:37 bmorgan Exp $
+# $Id: Configure,v 1.48 2010-06-24 15:22:01 bmorgan Exp $
 #
-# Generated on Thu Jun 17 11:40:40 BST 2010 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 24 16:21:02 BST 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2525,7 +2525,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 	    # will have a lib64 dir even on an i*86 machine...
 	    # We don't ever cross-compile Geant4, so must have the native libraries.
 	    # Double check for this craziness...
-            case `uname -m` in
+            case "`uname -m`" in
 		i*86)
 		    g4_qt_lib_dir=\$g4_qt_dir/lib
 		    ;;
