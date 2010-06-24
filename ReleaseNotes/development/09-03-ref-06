@@ -29,8 +29,9 @@ Summarised, the list of changes is the following:
 
 config                                           config-V09-03-05
 ------
-- Configure (Configure-V09-03-03)
+- Configure (Configure-V09-03-04)
   o Fixed selection of XERCESCROOT path for Windows.
+  o Added quoting of uname in Qt.U to prevent Power Mac problems.
   o Added removal of quotes from make version string to handle non-English
     language systems.
   o Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
