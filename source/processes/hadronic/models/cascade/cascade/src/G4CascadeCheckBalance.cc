@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeCheckBalance.cc,v 1.2 2010-06-24 20:44:24 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.3 2010-06-24 21:59:54 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -120,7 +120,6 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
   return (relokay && absokay);
 }
 
-G4bool ekinOkay() const;
 G4bool G4CascadeCheckBalance::ekinOkay() const {
   G4bool relokay = (relativeKE() < relativeLimit);
   G4bool absokay = (deltaKE() < absoluteLimit);
