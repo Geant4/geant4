@@ -316,7 +316,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 	    # will have a lib64 dir even on an i*86 machine...
 	    # We don't ever cross-compile Geant4, so must have the native libraries.
 	    # Double check for this craziness...
-            case `uname -m` in
+            case "`uname -m`" in
 		i*86)
 		    g4_qt_lib_dir=\$g4_qt_dir/lib
 		    ;;
