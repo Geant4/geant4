@@ -30,7 +30,9 @@
 // An abstract (base) class for the tools (simulation and analysis).
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modified:
+// Mikhail Kosov, 12/05/2010: double/int for fHnbin, fHfbin
 //
 // --------------------------------------------------------------------
 
@@ -52,41 +54,37 @@ using namespace ROOT;
 using namespace TMath;
 
 
-class G4TTool : public TObject {
-
+class G4TTool : public TObject
+{
   protected:
 
-		Double_t fHxmin;
-		Double_t fHxmax;
-		Double_t fHymin;
-		Double_t fHymax;
-		Double_t fHfbin;
-		Double_t fHnbin;
-		Double_t fDangle;
-		Double_t fPi;
-		Double_t fDanrad;
-		Double_t fHlxmin;
-		Double_t fHlxmax;
+  Double_t fHxmin;
+  Double_t fHxmax;
+  Double_t fHymin;
+  Double_t fHymax;
+  Int_t fHfbin;
+  Int_t fHnbin;
+  Double_t fDangle;
+  Double_t fPi;
+  Double_t fDanrad;
+  Double_t fHlxmin;
+  Double_t fHlxmax;
 
-		TH1F* fHZL;
-		TH1F* fHDT;
+  TH1F* fHZL;
+  TH1F* fHDT;
 
-		G4TData*		fPublication;
+  G4TData*  fPublication;
 
-		virtual void Initialize();
-		virtual void PrepareHistograms(Double_t hnbin, Double_t hlxmin, Double_t hlxmax);
-		virtual void RenderHSolid(TH1F* hist, Int_t hf, Int_t hn, Double_t m, Color_t color = 2, Bool_t noDots = false);
-
-
+  virtual void Initialize();
+  virtual void PrepareHistograms(Int_t hnbin, Double_t hlxmin, Double_t hlxmax);
+  virtual void RenderHSolid(TH1F* hist, Int_t hf, Int_t hn, Double_t m, Color_t color = 2,
+                            Bool_t noDots = false);
   public:
 
-		G4TTool() {
+  G4TTool() {}
+  virtual ~G4TTool () {}
 
-		}
-		virtual ~G4TTool () {}
-
-
-		ClassDef(G4TTool, 1)  //Base class for tools
+  ClassDef(G4TTool, 1)  //Base class for tools
 };
 
 #endif

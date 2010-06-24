@@ -30,9 +30,7 @@
 
 #include "G4TDataBase.h"
 
-
 G4TDataBase *gTestDB = new G4TDataBase();
-
 
 ClassImp(G4TDataBase)
 
@@ -44,36 +42,26 @@ using namespace TMath;
 //______________________________________________________________________________
 G4TData* G4TDataBase::LoadData(G4TData* object, Int_t secondaryPDG )
 {
-	object->SetDirectory(fDirectory);
-	object->Load(secondaryPDG);
-	return object;
+  object->SetDirectory(fDirectory);
+  object->Load(secondaryPDG);
+  return object;
 }
-
 
 //______________________________________________________________________________
 G4TData* G4TDataBase::LoadData(TString const& filename, Int_t secondaryPDG )
 {
-	G4TData* data = new G4TData(filename);
-	data->SetDirectory(fDirectory);
-	data->Load(secondaryPDG);
-	return data;
+  G4TData* data = new G4TData(filename);
+  data->SetDirectory(fDirectory);
+  data->Load(secondaryPDG);
+  return data;
 }
 
 //______________________________________________________________________________
 void G4TDataBase::SaveData(G4TData* object)
-{
-	object->SetDirectory(fDirectory);
-	object->Save();
-}
+{object->SetDirectory(fDirectory); object->Save();}
 
 //______________________________________________________________________________
-TString G4TDataBase::GetDirectory() const
-{
-	return fDirectory;
-}
+TString G4TDataBase::GetDirectory() const {return fDirectory;}
 
 //______________________________________________________________________________
-void G4TDataBase::SetDirectory(TString fDirectory)
-{
-	this->fDirectory = fDirectory;
-}
+void G4TDataBase::SetDirectory(TString fDir) {fDirectory = fDir;}

@@ -33,44 +33,43 @@
 //        $G4INSTALL/bin/$G4SYSTEM/test19
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modified:
+// Mikhail Kosov, 25/05/2010: transfer the model & pPDG name for G4 simulation
 //
-// --------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 #ifndef G4TSIMHELPER_H_
 #define G4TSIMHELPER_H_
 
 #include "../CommonHeaders.h"
 #include "../G4TModelParams.h"
 
-class G4TSimHelper : public TObject {
-
+class G4TSimHelper : public TObject
+{
   private:
 
-	  TString fEventsNumberFileName;
-
-	  TFile* MakeTree();
+  TString fEventsNumberFileName;
+  TFile* MakeTree();
 
   public:
 
+  G4TSimHelper() {fEventsNumberFileName = "histnevt.out";}
+  virtual ~G4TSimHelper () {}
 
-	  G4TSimHelper() {
-		  fEventsNumberFileName = "histnevt.out";
-	  }
-	  virtual ~G4TSimHelper () {}
+  //Static Members
+  static void LoadLibraries();
 
-	  //Static Members
-	  static void LoadLibraries();
+  //Public Members
+  TString const& GetEventsNumberFileName(){ return fEventsNumberFileName; }
+  void SetEventsNumberFileName(const TString& filename) {fEventsNumberFileName = filename;}
 
-	  //Public Members
-	  TString const& GetEventsNumberFileName(){ return fEventsNumberFileName; }
-	  void SetEventsNumberFileName(const TString& filename){ fEventsNumberFileName = filename; }
+  Int_t GetEventsNumber();
+  //--------------------------------------- Tkin=90 MeV (mom is in MeV/c) ------------
+  TFile* ExecuteTest(Int_t pPDG=2212, Int_t tPDG=90013014,  Double_t mom=421.,
+                     Int_t runNumber=25, Int_t nbEvents=50000, const TString& dir="" ,
+                     const TString& model="chips");
 
-	  Int_t GetEventsNumber();
-
-	  TFile* ExecuteTest(Int_t np = 13, Int_t nn = 14,  Int_t e = 90, Int_t runNumber = 25, Int_t nbEvents = 50000, const TString& dir = "" );
-
-
-	  ClassDef(G4TSimHelper, 1)  //The class for Geant4 Simulation
+  ClassDef(G4TSimHelper, 1)  //The class for Geant4 Simulation
 };
 
 R__EXTERN G4TSimHelper *gSimHelper;

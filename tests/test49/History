@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2010-06-01 14:57:47 gunter Exp $
+$Id: History,v 1.3 2010-06-24 14:39:23 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 24th, 2010  Mikhail Kosov  (test49-V09-03-01)
+- Generalization of thest49 for different spectra in different reactions
+
 Jun 1st, 2010  Gunter Folger  (test49-V09-03-00)
 - Migrate to new MultipleScattering classes
 
-Dec 1st, 2009  Mikhail  Kosov (test49-V09-02-00)
+Dec 1st, 2009  Mikhail Kosov (test49-V09-02-00)
 - Excluded G4QCollision and renamed to G4QInelastic.
 - Created History file.
 

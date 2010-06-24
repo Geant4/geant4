@@ -30,7 +30,9 @@
 // The GUI for the simulation tool
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modified:
+// Mikhail Kosov, 12/05/2010: Units for the cross-section
 //
 // --------------------------------------------------------------------
 #ifndef G4TSimulationGUI_H_
@@ -43,17 +45,18 @@
 
 #include "Riostream.h"
 
-
-class G4TSimulationGUI : public TGMainFrame {
-
+class G4TSimulationGUI : public TGMainFrame
+{
   private:
-  TGTextButton* bRun;
-  TGTextButton* bClose;
-  TGComboBox*  cPublication;
-  TGComboBox*  cModel;
+  TGTextButton*  bRun;
+  TGTextButton*  bClose;
+  TGComboBox*    cPublication;
+  TGComboBox*    cModel;
+  TGTextEntry*   tPostfix;
   TGNumberEntry* nCrossSection;
+  TGComboBox*    nUnits;
   TGNumberEntry* nRuns;
-  TGCheckButton*  cExisting;
+  TGCheckButton* cExisting;
 
   void Initialize();
 
@@ -62,21 +65,13 @@ class G4TSimulationGUI : public TGMainFrame {
 
   public:
 
+  G4TSimulationGUI(const TGWindow *p, UInt_t w, UInt_t h);
+  virtual ~G4TSimulationGUI ();
 
- G4TSimulationGUI(const TGWindow *p, UInt_t w, UInt_t h);
- virtual ~G4TSimulationGUI ();
+  virtual void CloseWindow();
+  virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
 
- virtual void CloseWindow();
- virtual Bool_t ProcessMessage(Long_t msg, Long_t parm1, Long_t parm2);
-
-
- ClassDef(G4TSimulationGUI, 1)  //The class for Geant4 Simulation
+  ClassDef(G4TSimulationGUI, 1)  //The class for Geant4 Simulation
 };
 
-
-
 #endif
-
-
-
-

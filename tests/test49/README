@@ -1,8 +1,6 @@
-====================================================================== 
-test49
-======================================================================
-
-Test for total cross-sctions in the process level simulation
+========================================================================
+test49: Test for inelastic G4 processes on the process level simulation
+========================================================================
 
 Authors: Mikhail Kosov
 
@@ -12,15 +10,14 @@ Authors: Mikhail Kosov
 
 ---- Input file for Geant4: chipstest.in
 
----- Output: screan or chip_{name}.log in the subdirectory made by kumac
----- Output ntuples: tuple3pi.out, tuplevta.out, tuplevtq.out, tuplincl.out
+---- Output: screan or chip_{name}.log in the subdirectory made by ROOT
+---- Output G4 ntuples: tuple3pi.out, tuplevta.out, tuplevtq.out, tuplincl.out
 
----- Location of the reference output: any name defined after >
+---- Location of the reference output: any name defined after ">"
 
----- Macros: run.C
+---- Macros: run.C (ROOT)
 
 ---- Other files required: ROOT files
-
 
 ---- How to compile and run it ?
 
@@ -38,44 +35,79 @@ source $ROOTSYS/bin/thisroot.csh
 make -f ROOTmakefile
 (make clean -f ROOTmakefile CAN BE USED)
 
-(The library libG4ModelTester.so is created in the current directory = test49)
+*********************************************************************************
+*                                                                               *
+* The library libG4ModelTester.so is created in the current directory = test49  *
+*                                                                               *
+* In the end of the ROOTmakefile a ReflexionDict.cpp is created:                *
+*                                                                               *
+*   ReflexionDict.cpp: $(HDRS)                                                  *
+*   @echo "Generating dictionary ..."                                           *
+*   @rootcint ReflexionDict.cpp -c $(HDRS) $(SRCDIR)LinkDef.h                   *
+*   @echo "done."                                                               *
+*                                                                               *
+* It invokes "rootcint" program, that actually does the reflection process,     *
+* using rootsrc/LinkDef.h file, which should be customized.                     *
+* This LinkDef file acts like a configuration file for the reflection process:  *
+* http://root.cern.ch/drupal/content/selecting-dictionary-entries-linkdefh      *
+*                                                                               *
+* If one needs to add a new class, that should involve 3 steps:                 *
+*                                                                               *
+*     * in ROOTmakefile, add to HDRS and OBJS variables;                        *
+*     * in ROOTmakefile, add to .o target (just before the reflection process); *
+*     * in LinkDef.h, add #pragma link C++ class G4T<YOUR CLASS>+;              *
+*                                                                               *
+*********************************************************************************
+
+To start the application, in the test49 directory print:
 
 root -l .x run.C               (-l means no log-screen)
 
+Short description of classes and ROOT source files:
+===================================================
 
-Description of classes and ROOT source files:
-
- * LinkDef.h: A file for link definitions of ROOT. More information here: http://root.cern.ch/drupal/content/selecting-dictionary-entries-linkdefh
+ * LinkDef.h: A file for link definitions of ROOT. More information here:
+              http://root.cern.ch/drupal/content/selecting-dictionary-entries-linkdefh
 
  * Makefile and Makefile.arch: Makefiles used to build the shared library.
 
- * CommonHeaders.h:  Contains the headers for the ROOT classes, included into each header file by default
+ * CommonHeaders.h: Contains the headers for the ROOT classes, included into each header
+                    file by default
 
- * G4TModelParams: Class that takes care of parsing (loading, saving) the chipstest.in file, uses also chipstest_default.in in order to take the defaults and transform them.
+ * G4TModelParams: Class that takes care of parsing (loading, saving) the chipstest.in
+                   file, uses also chipstest_default.in in order to take the defaults and
+                   transform them.
 
  * G4TTool: An abstract (base) class for the tools (simulation and analysis).
 
- * G4TSimulationTool: The simulation tool, performs a simulation (prepares chipstest.in and launches test19 executable), does the cuts and also plots the output histogram.
+ * G4TSimulationTool: The simulation tool, performs a simulation (prepares chipstest.in and
+                      launches test49 executable), does the cuts and also plots the output
+                      histogram.
 
- * G4TAnalysisTool: The analysis tool, takes a publication, searches for the simulation files and renders the model comparison plot.
+ * G4TAnalysisTool: The analysis tool, takes a publication, searches for the simulation
+                    files and renders the model comparison plot.
 
- * G4TCatalog: Handles the management of the catalog.txt (loads the items, inserts or updates them).
+ * G4TCatalog: Handles the management of the catalog.txt (loads the items, inserts or
+               updates them).
 
- * G4TDataBase: The class to handle loading and saving of the G4TData objects, it is recommended to only use this class and not use directly the Save() and Load() methods of G4TData class.
+ * G4TDataBase: The class to handle loading and saving of the G4TData objects, it is
+                recommended to only use this class and not use directly the Save() and
+                Load() methods of G4TData class.
 
- * G4TData: A class to represent a publication or simulation. Contains a header and a vector of G4TDataItem.
+ * G4TData: A class to represent a publication or simulation. Contains a header and a
+            vector of G4TDataItem.
 
- * G4TDataItem: A class to represent a sub-item of a publication or simulation. Contains and saves a TTree (data). Also used to hold the histogram (for plotting), but the histogram itself is not saved.
+ * G4TDataItem: A class to represent a sub-item of a publication or simulation. Contains
+                and saves a TTree (data). Also used to hold the histogram (for plotting),
+                but the histogram itself is not saved.
 
- * G4TParticlesDAL: Data access layer for the particles pdg. This class handles nuclear mass calculation, requests to get the particles by name or A and Z. 
+ * G4TParticlesDAL: Data access layer for the particles pdg. This class handles nuclear
+                    mass calculation, requests to get the particles by name or A and Z. 
 
  * G4TPlotHelper: This class is a simple wrapper/helper for ROOT plotting commands.
 
- * G4TSimHelper: This class makes use of G4TModelParams class in order to prepare the parameters and launch a simulation.
-
-
-
-
+ * G4TSimHelper: This class makes use of G4TModelParams class in order to prepare the
+                 parameters and launch a simulation.
 
 ---- Contactperson: Mikhail.Kossov@cern.ch
 

@@ -28,10 +28,12 @@
 // Class description:
 //
 // A class to represent a publication or simulation. Contains a header
-// and a vector of G4TDataItem.
+// and a vector of G4TDataItem's (one per secondary/"angle").
 //
 // History:
-// Roman Atachiants, 18/08/2009 - initial version
+// Created by Roman Atachiants, 18/08/2009
+// Modified:
+// Mikhail Kosov, 11.05.2010: Transfer the kin data to each data item
 //
 // --------------------------------------------------------------------
 
@@ -45,113 +47,131 @@
 
 struct DataObjectHeader_t
 {
-	  Int_t							fProjectilePDG;		// PDG code for a projectile
-	  Int_t							fTargetPDG;			// PDG code for a target
-	  Bool_t						fIsPublication;		// if false, then ModelName is required
-	  TString 						fModelName;			// required only if isPublication is true
-	  ArgEnum						fTypeVar;			// Energy in p90*.kumac
-	  Double_t						fTypeValue; 		// 90 MeV in p90
-	  UnitsEnum						fTypeUnits;			// MeV in p90
+  Int_t     fProjectilePDG; // PDG code for a projectile
+  Int_t     fTargetPDG;     // PDG code for a target
+  Bool_t    fIsPublication; // if false, then ModelName is required
+  TString   fModelName;     // required only if isPublication is false
+  TString   fComment;       // Comment for Publication and Postfix for Simulation
+  ArgEnum   fTypeVar;       // e.g. Energy in p90
+  Double_t  fTypeValue;     // e.g. 90 in p90
+  UnitsEnum fTypeUnits;     // e.g. MeV in p90
+  Double_t  fSigValue;      // total interaction cross-section
+  SigmaEnum fSigUnits;      // units of the interaction cross-section
 };
 
-class G4TData : public TObject {
-
+class G4TData : public TObject
+{
   protected:
+  // Body
+  Color_t              fRenderColor;
+  vector<G4TDataItem*> fItems;
+  Double_t             fCrossSection;
+  Int_t                fNumberOfEvents;
+  Bool_t               fIsLoaded;
+  TString              fDirectory;
+  Double_t             fPrMomentum; // projectile momentum (in MeV/c)
+  Double_t             fPrEnergy;   // projectile Energy (in MeV)
+  Double_t             fTgMass;     // target mass (in MeV/c2)
 
-	  // Other fields
-	  Color_t						fRenderColor;
-	  vector<G4TDataItem*>	fItems;
-	  Double_t						fCrossSection;
-	  Int_t							fNumberOfEvents;
-	  Bool_t						fIsLoaded;
-	  TString						fDirectory;
-
-	  // Methods
-	  TString						HeaderToString(DataObjectHeader_t header) const;
-	  DataObjectHeader_t			StringToHeader(TString headerStr) const;
+  // Methods
+  TString              HeaderToString(DataObjectHeader_t header) const;
+  DataObjectHeader_t   StringToHeader(TString headerStr) const;
+  void                 CalcKinValues();
 
   public:
-	  // Header
-	  DataObjectHeader_t			fHeader;			// The header of the object
+  // Header
+  DataObjectHeader_t   fHeader;   // The header of the object
 
-	  G4TData(TString const& headerString) {
-		  fHeader = StringToHeader(headerString);
-		  fDirectory = "./";
-		  fIsLoaded = false;
-		  if(fHeader.fIsPublication) fHeader.fModelName = "data";
-	  }
-	  G4TData(
-			  Int_t projectilePDG,
-			  Int_t targetPDG,
-			  Bool_t isPublication,
-			  TString const& modelName,
-			  ArgEnum typeVar,
-			  Double_t typeValue,
-			  UnitsEnum typeUnits,
-			  Color_t color
-		  )  {
-				  fHeader.fProjectilePDG = projectilePDG;
-				  fHeader.fTargetPDG = targetPDG;
-				  fHeader.fIsPublication = isPublication;
-				  fHeader.fModelName = modelName;
-				  fHeader.fTypeVar = typeVar;
-				  fHeader.fTypeValue = typeValue;
-				  fHeader.fTypeUnits = typeUnits;
+  G4TData(TString const& headerString)
+  {
+    fHeader = StringToHeader(headerString);
+    fDirectory = "./";
+    fIsLoaded = false;
+    if(fHeader.fIsPublication) fHeader.fModelName = "data";
+    CalcKinValues();
+  }
+  G4TData( Int_t projectilePDG,
+           Int_t targetPDG,
+           Bool_t isPublication,
+           TString const& modelName,
+           TString const& postComment,
+           ArgEnum typeVar,
+           Double_t typeValue,
+           UnitsEnum typeUnits,
+           Double_t sigValue,
+           SigmaEnum sigUnits,
+           Color_t color)
+  {
+    fHeader.fProjectilePDG = projectilePDG;
+    fHeader.fTargetPDG     = targetPDG;
+    fHeader.fIsPublication = isPublication;
+    fHeader.fModelName     = modelName;
+    fHeader.fComment       = postComment;
+    fHeader.fTypeVar       = typeVar;
+    fHeader.fTypeValue     = typeValue;
+    fHeader.fTypeUnits     = typeUnits;
+    fHeader.fSigValue      = sigValue;
+    fHeader.fSigUnits      = sigUnits;
 
-				  fDirectory = "./";
-				  fIsLoaded = false;
-				  if(fHeader.fIsPublication) fHeader.fModelName = "data";
+    fDirectory = "./";
+    fIsLoaded = false;
+    if(fHeader.fIsPublication) fHeader.fModelName = "data";
 
-				  fRenderColor = color;
-			  }
-	  virtual ~G4TData () {}
+    fRenderColor = color;
+    CalcKinValues();
+  }
 
+  virtual ~G4TData () {}
 
-	  void 		Save();
-	  void 		Load(Int_t secondaryPDG = 0);
-	  void 		PrepareHistograms(Double_t hnbin, Double_t hlxmin, Double_t hlxmax, Int_t particleIdx = 0/* 0 for ALL */, Int_t additionalIndex = -1 );
+  void   Save();
+  void   Load(Int_t secondaryPDG = 0);
+  void   BookHistograms( Int_t    hnbin,
+                         Double_t hlxmin,
+                         Double_t hlxmax,
+                         Int_t particleIdx = 0/* 0 for ALL */,
+                         Int_t additionalIndex = -1);
+  vector<G4TDataItem*>          GetItems() {return fItems;}
+  vector<Double_t>              GetCutValues();
+  vector<Int_t>                 GetSecondaryPDGs();
+  vector<Double_t>              GetCutValuesForSecondary(Int_t secondaryPDG);
+  vector<G4TDataItem*>          GetItemsForSecondary(Int_t secondaryPDG);
+  vector<G4TDataItem*>          GetItemsForSecondary(vector<Int_t> secondaries);
+  G4TDataItem*                  GetItem(Int_t secondaryPDG, Double_t cutValue);
+  TString                       GetModelName() const {return fHeader.fModelName;}
+  TString                       GetComment() const {return fHeader.fComment;}
+  TString                       GetHeader() const {return HeaderToString(fHeader);}
+  Double_t                      GetMaxT(Int_t secondaryIdx, Int_t padsPerRow);
+  Double_t                      GetMaxT();
+  std::pair<Double_t, Double_t> GetLimits(Int_t secondaryIdx, Int_t padsPerRow);
+  std::pair<Double_t, Double_t> GetLimits();
+  Bool_t                        IsLoaded() const {return fIsLoaded;}
 
+  // Selectors & Modifiers
+  Color_t       GetRenderColor() const              {return fRenderColor;}
+  void          SetRenderColor(Color_t fRColor)     {fRenderColor = fRColor;}
+  TString       GetDirectory() const                {return fDirectory;}
+  void          SetDirectory(TString fDir)          {fDirectory = fDir;}
+  Double_t      GetCrossSection() const             {return fCrossSection;}
+  void          SetCrossSection(Double_t fCS)       {fCrossSection = fCS;}
+  Double_t      GetProjEnergy()                     {return fPrEnergy;}
+  Double_t      GetProjMomentum()                   {return fPrMomentum;}
+  Double_t      GetTargMass()                       {return fTgMass;}
+  Int_t         GetNumberOfEvents() const           {return fNumberOfEvents;}
+  void          SetNumberOfEvents(Int_t fNOfEvents) {fNumberOfEvents = fNOfEvents;}
 
+  G4TDataItem*  AddItem( Int_t     SecondaryParticlePDG,
+                         ArgEnum   CutVar,
+                         UnitsEnum CutUnits,
+                         Double_t  CutValue,
+                         Double_t  CutDelta,
+                         FunctEnum FunctionVar,
+                         FunUnEnum FunctionUnits,
+				 ErrorType FunctErType,
+                         ArgEnum   ArgumentVar,
+                         UnitsEnum ArgumentUnits );
+  G4TDataItem*  AddItem( TString const& headerStr);
 
-	  vector<G4TDataItem*>			GetItems();
-	  vector<Double_t>				GetCutValues();
-	  vector<Int_t>					GetSecondaryPDGs();
-	  vector<Double_t>				GetCutValuesForSecondary(Int_t secondaryPDG);
-	  vector<G4TDataItem*>			GetItemsForSecondary(Int_t secondaryPDG);
-	  vector<G4TDataItem*>			GetItemsForSecondary(vector<Int_t> secondaries);
-	  G4TDataItem*					GetItem(Int_t secondaryPDG, Double_t cutValue);
-	  TString 						GetModelName() const;
-	  TString						GetHeader() const;
-	  DataItemLimit_t				GetLimits(Int_t secondaryIdx, Int_t padsPerRow);
-	  DataItemLimit_t				GetLimits();
-	  Bool_t 						IsLoaded() const;
-
-
-	  // Getters/Setters
-	  Color_t 						GetRenderColor() const;
-	  void 							SetRenderColor(Color_t);
-	  TString						GetDirectory() const;
-	  void							SetDirectory(TString fDirectory);
-	  Double_t 						GetCrossSection() const;
-	  void 							SetCrossSection(Double_t fCrossSection);
-	  Int_t							GetNumberOfEvents() const;
-	  void 							SetNumberOfEvents(Int_t fNumberOfEvents);
-
-
-	  G4TDataItem*			AddItem( Int_t 	SecondaryParticlePDG,
-											 CutEnum 	CutVar,
-											 UnitsEnum CutUnits,
-											 Double_t	CutValue,
-											 Double_t	CutDelta,
-											 FuncEnum	FunctionVar,
-											 UnitsEnum	FunctionUnits,
-											 ArgEnum	ArgumentVar,
-											 UnitsEnum	ArgumentUnits
-									);
-	  G4TDataItem*			AddItem( TString const& headerStr);
-
-
-	  ClassDef(G4TData, 1)  //The class for Geant4 Model Data handling
+  ClassDef(G4TData, 1)  //The class for Geant4 Model Data handling
 };
 
 
