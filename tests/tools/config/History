@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2010-06-17 10:45:05 bmorgan Exp $
+$Id: History,v 1.41 2010-06-24 15:22:34 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+24th June 2010 Ben Morgan
+- Configure: regenerated following changes below.
+- U/Qt.U: Quoted evaluation of uname in 64bit check as Macs may report
+as Power Macintosh on newer machines.
+
 17th June 2010 Ben Morgan
 - Configure: regenerated following changes below.
 - g4_12_gmake.U: Added removal of quotes from make version string to deal with
