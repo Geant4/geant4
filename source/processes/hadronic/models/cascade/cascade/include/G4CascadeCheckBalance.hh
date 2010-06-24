@@ -24,11 +24,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeCheckBalance.hh,v 1.1 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.2 2010-06-24 20:44:24 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
+//
+// 20100624  M. Kelsey -- Add baryon conservation check and kinetic energy
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -45,15 +47,36 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
+  // Checks on conservation laws (kinematics, baryon number, charge)
   G4bool energyOkay() const;
+  G4bool ekinOkay() const;
   G4bool momentumOkay() const;
-  G4bool okay() const { return energyOkay() && momentumOkay(); }
+  G4bool baryonOkay() const;
+  G4bool chargeOkay() const;
 
+  // Global check, used by G4CascadeInterface validation loop
+  G4bool okay() const { return (energyOkay() && momentumOkay() &&
+				baryonOkay() && chargeOkay()); }
+
+  // Calculations of conserved quantities from initial and final state
   G4double deltaE() const { return (final.e() - initial.e()); }
   G4double relativeE() const { return (deltaE()==0.)?0.:deltaE()/initial.e(); }
 
+  G4double deltaKE() const { return (ekin(final) - ekin(initial)); }
+  G4double relativeKE() const {
+    return (ekin(initial)<=0.) ? 0. : deltaKE()/ekin(initial);
+  }
+
   G4double deltaP() const { return (final.rho() - initial.rho()); }
   G4double relativeP() const { return (deltaP()==0.)?0.:deltaP()/initial.rho(); }
+
+  // Baryon number and charge are discrete; no bounds and no "relative" scale
+  G4double deltaB() const { return (finalBaryon - initialBaryon); }
+  G4double deltaQ() const { return (finalCharge - initialCharge); }
+
+protected:
+  // Utility function for kinetic energy
+  G4double ekin(const G4LorentzVector& p) const { return (p.e() - p.m()); }
 
 private:
   G4double relativeLimit;
@@ -61,6 +84,12 @@ private:
 
   G4LorentzVector initial;	// Four-vectors for computing violations
   G4LorentzVector final;
+
+  G4int initialBaryon;		// Total baryon number
+  G4int finalBaryon;
+
+  G4int initialCharge;		// Total charge
+  G4int finalCharge;
 };
 
 #endif	/* G4CASCADE_CHECK_BALANCE_HH */

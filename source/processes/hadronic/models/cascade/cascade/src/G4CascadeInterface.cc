@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.87 2010-06-23 19:11:39 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.88 2010-06-24 20:44:24 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -44,12 +44,17 @@
 //		preprocessor flag G4CASCADE_SKIP_ECONS to skip test.
 // 20100620  M. Kelsey -- Use new energy-conservation pseudo-collider
 // 20100621  M. Kelsey -- Fix compiler warning from GCC 4.5
+// 20100624  M. Kelsey -- Fix cascade loop to check nTries every time (had
+//		allowed for infinite loop on E-violation); dump event data
+//		to output if E-violation exceeds maxTries; use CheckBalance
+//		for baryon and charge conservation.
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DynamicParticle.hh"
 #include "G4CascadeCheckBalance.hh"
+#include "G4HadronicException.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -95,10 +100,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   theResult.Clear();
 
-  G4double eTot      = 0.0;
-  G4double sumBaryon = 0.0;
-  G4double sumEnergy = 0.0;
-
   // Make conversion between native Geant4 and Bertini cascade classes.
   // NOTE: Geant4 units are MeV = 1 and GeV = 1000. Cascade code by default use GeV = 1.
 
@@ -122,9 +123,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4InuclElementaryParticle* bullet =
     new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
-  sumEnergy += bullet->getKineticEnergy(); // In GeV 
-  sumBaryon += bullet->baryon();	// Returns baryon number (0, 1 or 2)
-
   // Set target
   G4double theNucleusA = theNucleus.GetN();
 
@@ -134,16 +132,12 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   else
     target = new G4InuclNuclei(theNucleusA, theNucleus.GetZ());
 
-  sumBaryon += theNucleusA;
-
   if (verboseLevel > 2) {
     G4cout << "Bullet:  " << G4endl;  
     bullet->printParticle();
     G4cout << "Target:  " << G4endl;  
     target->printParticle();
   }
-
-  G4double eInit = bullet->getEnergy() + target->getEnergy();
 
   // Colliders initialisation
   collider.setVerboseLevel(verboseLevel);
@@ -179,7 +173,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     cutElastic[xiMinus] = 1.0;
     
     if (momentumBullet.z() > cutElastic[bulletType]) {
-      
       do {   			// we try to create inelastic interaction
 	output.reset();
 	collider.collide(bullet, target, output);
@@ -203,14 +196,9 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       nTries++;
 
       // Check energy conservation; discard result on violation
-      G4double eFinal = output.getTotalOutputMomentum().e();
-      if (verboseLevel > 3)
-	G4cout << " eFinal = " << eFinal << " eInit = " << eInit;
-
-#ifndef G4CASCADE_SKIP_ECONS
       balance.collide(bullet, target, output);
-#endif
-      
+      if (verboseLevel > 2) balance.okay();		// Reports violations
+
 #ifdef G4CASCADE_COULOMB_DEV
       coulombOK = false;  		// by default coulomb analysis is OK
       G4double coulumbBarrier = 8.7 * MeV; 
@@ -224,21 +212,65 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	}
       }
 #endif
-
     } while( 
-	    ((nTries < maxTries) &&  		// conditions for next try
-	    (output.getOutgoingParticles().size()!=0) &&
+	    (nTries < maxTries) &&  		// conditions for next try
+	    ((output.getOutgoingParticles().size()!=0) &&
 #ifdef G4CASCADE_COULOMB_DEV
-	    (coulombOK) &&
-	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
+	     (coulombOK) &&
+	     ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
 #else
-	    ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) < 2.5) &&  
-	    (output.getOutgoingParticles().begin()->type()==bullet->type())
+	     ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) < 2.5) &&  
+	     (output.getOutgoingParticles().begin()->type()==bullet->type())
 #endif
-	     ) || (!balance.energyOkay())
+	     )
+#ifndef G4CASCADE_SKIP_ECONS
+	    || (!balance.okay())	// Checks E, p and B conservation
+#endif
 	     );
   }
 
+  // Check whether repeated attempts have all failed; report and exit
+  if (nTries >= maxTries && !balance.okay()) {
+    G4cerr << " >>> G4CascadeInterface::ApplyYourself()\n has non-conserving"
+	   << " cascade after " << nTries << " attempts." << G4endl;
+
+    G4String throwMsg = "G4CascadeInterface::ApplyYourself() - ";
+    if (!balance.energyOkay()) {
+      throwMsg += "Energy";
+      G4cerr << " Energy conservation violated by " << balance.deltaE()
+	     << " GeV (" << balance.relativeE() << ")" << G4endl;
+    }
+
+    if (!balance.momentumOkay()) {
+      throwMsg += "Momentum";
+      G4cerr << " Momentum conservation violated by " << balance.deltaP()
+	     << " GeV/c (" << balance.relativeP() << ")" << G4endl;
+    }
+
+    if (!balance.baryonOkay()) {
+      throwMsg += "Baryon number";
+      G4cerr << " Baryon number violated by " << balance.deltaB() << G4endl;
+    }
+
+    if (!balance.chargeOkay()) {
+      throwMsg += "Charge";
+      G4cerr << " Charge conservation violated by " << balance.deltaB()
+	     << G4endl;
+    }
+
+    G4cout << "\n Final event output, for debugging:"
+	   << "\n Bullet:  " << G4endl;  
+    bullet->printParticle();
+    G4cout << "\n Target:  " << G4endl;  
+    target->printParticle();
+
+    output.printCollisionOutput();
+
+    throwMsg += " non-conservation. More info in output.";
+    throw G4HadronicException(__FILE__, __LINE__, throwMsg);   // Job ends here!
+  }
+
+  // Successful cascade -- clean up and return
   if (verboseLevel > 1) {
     G4cout << " Cascade output: " << G4endl;
     output.printCollisionOutput();
@@ -259,10 +291,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     particleIterator ipart = particles.begin();
     for (; ipart != particles.end(); ipart++) {
       G4int outgoingType = ipart->type();
-
-      eTot += ipart->getEnergy();
-      sumBaryon -= ipart->baryon();
-      sumEnergy -= ipart->getKineticEnergy();
 
       if (!ipart->valid() || ipart->quasi_deutron()) {
         G4cerr << " ERROR: G4CascadeInterface::ApplyYourself incompatible"
@@ -292,12 +320,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   if (!nucleiFragments.empty()) { 
     nucleiIterator ifrag = nucleiFragments.begin();
     for (; ifrag != nucleiFragments.end(); ifrag++) {
-      eTot += ifrag->getEnergy();
-      sumBaryon -= ifrag->getA();
-      sumEnergy -= ifrag->getKineticEnergy();
-      
-      // hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
-      
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << G4endl;
 	ifrag->printParticle();
@@ -309,25 +331,35 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     }
   }
 
-  // Report violations of energy, baryon conservation
+  // Report violations of conservation laws
+  balance.collide(bullet, target, output);	// Redo with rotated vectors
+
   if (verboseLevel > 2) {
-    if (sumBaryon != 0) {
+    if (!balance.baryonOkay()) {
       G4cerr << "ERROR: no baryon number conservation, sum of baryons = "
-             << sumBaryon << G4endl;
+             << balance.deltaB() << G4endl;
     }
 
-    if (sumEnergy > 0.01 ) {
-      G4cerr << "Kinetic energy conservation violated by "
-	     << sumEnergy << " GeV" << G4endl;
+    if (!balance.chargeOkay()) {
+      G4cerr << "ERROR: no charge conservation, sum of charges = "
+	     << balance.deltaQ() << G4endl;
     }
-     
-    G4cout << "Initial energy " << eInit << " final energy " << eTot << G4endl
-	   << "Total energy conservation at level "
-	   << (eInit - eTot) * GeV << " MeV" << G4endl;
+
+    if (std::abs(balance.deltaKE()) > 0.01 ) {	// GeV
+      G4cerr << "Kinetic energy conservation violated by "
+	     << balance.deltaKE() << " GeV" << G4endl;
+    }
+
+    G4double eInit = bullet->getEnergy() + target->getEnergy();
+    G4double eFinal = eInit + balance.deltaE();
+
+    G4cout << "Initial energy " << eInit << " final energy " << eFinal
+	   << "\nTotal energy conservation at level "
+	   << balance.deltaE() * GeV << " MeV" << G4endl;
     
-    if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
+    if (balance.deltaKE() > 5.0e-5 ) { 	// 0.05 MeV
       G4cerr << "FATAL ERROR: kinetic energy created  "
-             << sumEnergy * GeV << " MeV" << G4endl;
+             << balance.deltaKE() * GeV << " MeV" << G4endl;
     }
   }
 
