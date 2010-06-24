@@ -90,11 +90,13 @@ List of main features and fixes included in this Beta release since 9.3.p01:
 
   o Graphical Representations:
     -------------------------
-    + G4VVisManager: added methods Draw(const G4VDigi&) and
-      FilterDigi(const G4VDigi&).
-      Added method DispatchToModel(const G4VTrajectory&), i.e., without i_mode,
-      to distinguish usage and in preparation for i_mode migration.
-    + G4VGraphicsScene: added AddCompound (const G4VDigi&).
+    + Added support for new command "/vis/scene/add/digits", analogous to the
+      already-existing "/vis/scene/add/hits": added methods Draw() and
+      FilterDigi() for digits in G4VVisManager; added method AddCompound ()
+      in G4VGraphicsScene.
+    + Added method DispatchToModel(const G4VTrajectory&), i.e., without i_mode,
+      to G4VVisManager in order to distinguish usage and in preparation for
+      'i_mode' migration.
 
   o Intercoms:
     ---------
@@ -572,14 +574,39 @@ List of main features and fixes included in this Beta release since 9.3.p01:
   o Visualization:
     -------------
     + management:
-      o Added generic drivers: OGL, OGLI, OGLS, OI.
-      o Added /vis/scene/add/digis and /vis/filtering/digi commands.
-      o Added AddCompound(const G4VDigi&).to drivers
-      o Introduced DispatchToModel without i_mode.
-      o Moved i-mode deprecation warnings to G4VTrajectory.
-      o Improved /vis/viewer/rebuild.
-      o Improved action after "/vis/geometry/..." commands.
-      o Restore previous viewer after /vis/drawTree.
+      o Added new "/vis/open" command for OpenGL viewers, "/vis/open OGL".
+        This new form allows the same macro to be used whether one is on
+        Linux or Windows (calling OGLIX on Linux and OGLIWin32 on Windows).
+        When the application has been built with Qt, it will use the Qt form
+        of OpenGL; when built with Motif, it will use the Motif form of OpenGL.
+        Also added options OGLI and OGLS to force Immediate or Stored modes.
+        The user is still free to use the older, specific viewer names, such
+        as OGLIX, but the simple form, OGL, will give the most portable macros.
+      o Added new "/vis/open" command for OpenInventor, "/vis/open OI".
+        This new form allows the same macro to be used whether one is on Linux
+        or Windows (calling OIX on Linux and OIWin32 on Windows).
+      o Added "/vis/scene/add/digis" and "/vis/filtering/digi" commands,
+        analogous to the already-existing commands "/vis/scene/add/hits" and
+        "/vis/filtering/hits". As with hits, it remains the user's
+        responsibility to provide the digitisation classes.
+        Added method AddCompound(const G4VDigi&) to drivers.
+      o Introduced DispatchToModel without 'i_mode'. The archaic form
+        G4VTrajectory::DrawTrajectory(i_mode) is replaced by the newer form,
+        G4VTrajectory::DrawTrajectory(). 'i_mode' used to be a parameter to
+        control whether the trajectory was drawn as a line, a line plus step
+        points, or only step points:
+        - i_mode > 0 meant draw lines and points, size of points in
+                     pixels = abs(i_mode)/1000
+        - i_mode = 0 meant draw only lines
+        - i_mode < 0 meant draw only points, size of points in
+                     pixels = abs(i_mode)/1000
+        Since release 8.1, better control has been available from the command
+        "/vis/modeling/trajectories". Since release 5.0, 'i_mode' less than
+        1000 has in fact drawn no points and 'i_mode' of 1000 has drawn points
+        that were so small (a single pixel wide) that they were overshadowed
+        by the trajectory itself except at endpoints of the trajectory or
+        where the trajectory made a sharp change of direction.
+        Use of 'i_mode' is now trapped and a warning gets printed.
       o Changed order of flags to follow G4UIExecutive.
       o G4VisManager, G4VisExecutive: introduced optional verbosity string
         argument in constructor; made 'fVerbosity' and GetVerbosity() static.
@@ -588,9 +615,9 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Added G4DigiModel and G4DigiFilterFactories.
       o Added default colours to G4TrajectoryDrawByParticleID.
       o Replace polyhedra with solids for sections and cutaways.
-      o Trap use of i_mode and print warning.
+      o Trap use of 'i_mode' and print warning.
     + HepRep:
-      o Added command 'renderCylAsPolygon'.
+      o Added command "/vis/heprep/renderCylAsPolygons".
       o Added protection against multiple repaint call, and protection against
         resizeGl with bad values.
     + gMocren:
@@ -600,11 +627,11 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o G4OpenGLQtViewer: better inclusion of new tabs in UI part.
         Many improvements to OpenGL Qt.
       o Speed improvements for polymarkers (e.g., trajectories).
+      o Corrected strdup usage in G4OpenGLViewer.
       o Use generic section and cutaway algorithm.
     + OpenInventor:
       o Added protection against repeated initialisation.
     + RayTracer:
-      o Added DrawTrajectory(); ready for i_mode migration.
       o Added missing virtual destructor to G4VRTScanner, G4RTXScanner and
         G4RTSimpleScanner classes.
 
@@ -626,7 +653,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
   o Examples:
     --------
     + Various fixes, improvements, adoption of new features.
-    + Updated visualization setups for trajectory drawing in most examples.
+    + Updated visualization usage in most examples, including macro sections
+      the user can uncomment to activate additional features.
     + Adopt G4UIExecutive to initialise UI sessions.
     + Migrated physics-lists to use particle-based multiple-scattering
       processes.
@@ -724,6 +752,16 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     are removed in this release; multiple-scattering particle-based processes,
     G4eMultipleScattering, G4hMultipleScattering and G4MuMultipleScattering are
     now mandatory; G4UrbanMscModel93 is now introduced.
+  o The visualization trajectory modeling command
+      "/vis/modeling/trajectories/create/drawByParticleID"
+    used to default all trajectories to grey, with the user having to
+    explicitly set any other color code. While the user can still set any
+    wished color code, the default has been improved to:
+    [e-/red; e+/blue; proton/cyan; gamma/green; neutron/yellow;
+     pi+,pi-,pi0/magenta; other/grey].
+  o In some examples, visualization that used to draw trajectories as simple
+    lines now also draws step points. Users who wish to disable step point
+    drawing can do so by commenting out a line in the visualization macro.
 
  ----------------------------------------------------------------------------
 
