@@ -576,7 +576,7 @@ List of main features and fixes included in this Beta release since 9.3.p01:
     + management:
       o Added new "/vis/open" command for OpenGL viewers, "/vis/open OGL".
         This new form allows the same macro to be used whether one is on
-        Linux or Windows (calling OGLIX on Linux and OGLIWin32 on Windows).
+        Linux or Windows (calling OGLSX on Linux and OGLSWin32 on Windows).
         When the application has been built with Qt, it will use the Qt form
         of OpenGL; when built with Motif, it will use the Motif form of OpenGL.
         Also added options OGLI and OGLS to force Immediate or Stored modes.
