@@ -694,11 +694,11 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
    
    G4double M = hadron->GetDefinition()->GetPDGMass();
    G4double pmag = std::sqrt ((E3+M)*(E3+M)-M*M) ;
-   G4ThreeVector p ( 0 , pmag*sqrt(1-omega3*omega3), pmag*omega3 );
+   G4ThreeVector p ( 0 , pmag*std::sqrt(1-omega3*omega3), pmag*omega3 );
 
    G4double M4 = residual->GetDefinition()->GetPDGMass();
    G4double pmag4 = std::sqrt ((E4+M4)*(E4+M4)-M4*M4) ;
-   G4ThreeVector p4 ( 0 , -pmag4*sqrt(1-omega4*omega4), pmag4*omega4 );
+   G4ThreeVector p4 ( 0 , -pmag4*std::sqrt(1-omega4*omega4), pmag4*omega4 );
 
 // Rotate to orginal target rest flame.
    p *= rot.inverse();

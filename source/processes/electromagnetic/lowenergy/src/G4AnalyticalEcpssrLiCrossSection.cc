@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.1 2010-06-06 23:40:35 mantero Exp $
+//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.2 2010-06-25 09:41:15 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -143,7 +143,7 @@ G4double G4AnalyticalEcpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
   if (n<0 || x<0.0 || (x==0.0 && (n==0 || n==1)))
   G4cout << "bad arguments in ExpIntFunction" << G4endl;
   else {
-       if (n==0) ans=exp(-x)/x;
+       if (n==0) ans=std::exp(-x)/x;
         else {
            if (x==0.0) ans=1.0/nm1;
               else {
@@ -159,13 +159,13 @@ G4double G4AnalyticalEcpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
 				  c=b+a/c;
 				  del=c*d;
 				  h *=del;
-				      if (fabs(del-1.0) < eps) {
-					ans=h*exp(-x);
+				      if (std::fabs(del-1.0) < eps) {
+					ans=h*std::exp(-x);
 					return ans;
 				      }
 				}
 		   } else {
-		     ans = (nm1!=0 ? 1.0/nm1 : -log(x)-euler);
+		     ans = (nm1!=0 ? 1.0/nm1 : -std::log(x)-euler);
 		     fact=1.0;
 		     for (i=1;i<=maxit;i++) {
 		       fact *=-x/i;
@@ -173,10 +173,10 @@ G4double G4AnalyticalEcpssrLiCrossSection::ExpIntFunction(G4int n,G4double x)
 		       else {
 			 psi = -euler;
 			 for (ii=1;ii<=nm1;ii++) psi +=1.0/ii;
-			 del=fact*(-log(x)+psi);
+			 del=fact*(-std::log(x)+psi);
 		       }
 		       ans += del;
-		       if (fabs(del) < fabs(ans)*eps) return ans;
+		       if (std::fabs(del) < std::fabs(ans)*eps) return ans;
 		     }
 		   }
 	      }
@@ -255,20 +255,20 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL1CrossSection(G4int zTarget
 
   G4double electrIonizationEnergyl1=0.;
 
-  if ( x1<=0.035)  electrIonizationEnergyl1= 0.75*pi*(log(1./(x1*x1))-1.);
+  if ( x1<=0.035)  electrIonizationEnergyl1= 0.75*pi*(std::log(1./(x1*x1))-1.);
   else
     {
       if ( x1<=3.)
-        electrIonizationEnergyl1 =exp(-2.*x1)/(0.031+(0.213*pow(x1,0.5))+(0.005*x1)-(0.069*pow(x1,3./2.))+(0.324*x1*x1));
+        electrIonizationEnergyl1 =std::exp(-2.*x1)/(0.031+(0.213*std::pow(x1,0.5))+(0.005*x1)-(0.069*std::pow(x1,3./2.))+(0.324*x1*x1));
       else
-	{if ( x1<=11.) electrIonizationEnergyl1 =2.*exp(-2.*x1)/pow(x1,1.6);}
+	{if ( x1<=11.) electrIonizationEnergyl1 =2.*std::exp(-2.*x1)/std::pow(x1,1.6);}
     }
 
-  G4double hFunctionl1 =(electrIonizationEnergyl1*2.*nl)/(tetal1*pow(velocityl1,3)); //takes into account the polarization effect
+  G4double hFunctionl1 =(electrIonizationEnergyl1*2.*nl)/(tetal1*std::pow(velocityl1,3)); //takes into account the polarization effect
 
     if (verboseLevel>0) G4cout << "  hFunctionl1=" << hFunctionl1<< G4endl;
 
-  G4double gFunctionl1 = (1.+(9.*velocityl1)+(31.*velocityl1*velocityl1)+(49.*pow(velocityl1,3.))+(162.*pow(velocityl1,4.))+(63.*pow(velocityl1,5.))+(18.*pow(velocityl1,6.))+(1.97*pow(velocityl1,7.)))/pow(1.+velocityl1,9.);//takes into account the reduced binding effect
+  G4double gFunctionl1 = (1.+(9.*velocityl1)+(31.*velocityl1*velocityl1)+(49.*std::pow(velocityl1,3.))+(162.*std::pow(velocityl1,4.))+(63.*std::pow(velocityl1,5.))+(18.*std::pow(velocityl1,6.))+(1.97*std::pow(velocityl1,7.)))/std::pow(1.+velocityl1,9.);//takes into account the reduced binding effect
 
     if (verboseLevel>0) G4cout << "  gFunctionl1=" << gFunctionl1<< G4endl;
 
@@ -330,12 +330,12 @@ sigmaPSSR_l1 = (sigma0/tetal1)*universalFunction_l1;// Plane-wave Born -Aproxima
 
     if (verboseLevel>0) G4cout << "  pssDeltal1=" << pssDeltal1<< G4endl;
 
-  G4double energyLossl1 = pow(1-pssDeltal1,0.5);
+  G4double energyLossl1 = std::pow(1-pssDeltal1,0.5);
 
     if (verboseLevel>0) G4cout << "  energyLossl1=" << energyLossl1<< G4endl;
 
   G4double coulombDeflectionl1 = 
-(8.*pi*zIncident/systemMass)*pow(tetal1*sigmaPSS_l1,-2.)*pow(velocityl1/sigmaPSS_l1,-3.)*(zTarget/screenedzTarget);
+(8.*pi*zIncident/systemMass)*std::pow(tetal1*sigmaPSS_l1,-2.)*std::pow(velocityl1/sigmaPSS_l1,-3.)*(zTarget/screenedzTarget);
 
  G4double cParameterl1 =2.* coulombDeflectionl1/(energyLossl1*(energyLossl1+1.));
 
@@ -430,20 +430,20 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL2CrossSection(G4int zTarget
 
   G4double electrIonizationEnergyl2=0.;
 
-  if ( x2<=0.035)  electrIonizationEnergyl2= 0.75*pi*(log(1./(x2*x2))-1.);
+  if ( x2<=0.035)  electrIonizationEnergyl2= 0.75*pi*(std::log(1./(x2*x2))-1.);
   else
     {
       if ( x2<=3.)
-        electrIonizationEnergyl2 =exp(-2.*x2)/(0.031+(0.210*pow(x2,0.5))+(0.005*x2)-(0.069*pow(x2,3./2.))+(0.324*x2*x2));
+        electrIonizationEnergyl2 =std::exp(-2.*x2)/(0.031+(0.210*std::pow(x2,0.5))+(0.005*x2)-(0.069*std::pow(x2,3./2.))+(0.324*x2*x2));
       else
-        {if ( x2<=11.) electrIonizationEnergyl2 =2.*exp(-2.*x2)/pow(x2,1.6);  }
+        {if ( x2<=11.) electrIonizationEnergyl2 =2.*std::exp(-2.*x2)/std::pow(x2,1.6);  }
     }
 
- G4double hFunctionl2 =(electrIonizationEnergyl2*2.*nl)/(tetal2*pow(velocityl2,3)); //takes into account  the polarization effect
+ G4double hFunctionl2 =(electrIonizationEnergyl2*2.*nl)/(tetal2*std::pow(velocityl2,3)); //takes into account  the polarization effect
 
    if (verboseLevel>0) G4cout << "  hFunctionl2=" << hFunctionl2<< G4endl;
 
-  G4double gFunctionl2 = (1.+(10.*velocityl2)+(45.*velocityl2*velocityl2)+(102.*pow(velocityl2,3.))+(331.*pow(velocityl2,4.))+(6.7*pow(velocityl2,5.))+(58.*pow(velocityl2,6.))+(7.8*pow(velocityl2,7.))+ (0.888*pow(velocityl2,8.)) )/pow(1.+velocityl2,10.);
+  G4double gFunctionl2 = (1.+(10.*velocityl2)+(45.*velocityl2*velocityl2)+(102.*std::pow(velocityl2,3.))+(331.*std::pow(velocityl2,4.))+(6.7*std::pow(velocityl2,5.))+(58.*std::pow(velocityl2,6.))+(7.8*std::pow(velocityl2,7.))+ (0.888*std::pow(velocityl2,8.)) )/std::pow(1.+velocityl2,10.);
   //takes into account the reduced binding effect
 
     if (verboseLevel>0) G4cout << "  gFunctionl2=" << gFunctionl2<< G4endl;
@@ -498,12 +498,12 @@ sigmaPSSR_l2 = (sigma0/tetal2)*universalFunction_l2;
  
 G4double pssDeltal2 = (4./(systemMass*sigmaPSS_l2*tetal2))*(sigmaPSS_l2/velocityl2)*(sigmaPSS_l2/velocityl2);
 
-G4double energyLossl2 = pow(1-pssDeltal2,0.5);
+G4double energyLossl2 = std::pow(1-pssDeltal2,0.5);
  
   if (verboseLevel>0) G4cout << "  energyLossl2=" << energyLossl2<< G4endl;
 
   G4double coulombDeflectionl2 
-=(8.*pi*zIncident/systemMass)*pow(tetal2*sigmaPSS_l2,-2.)*pow(velocityl2/sigmaPSS_l2,-3.)*(zTarget/screenedzTarget);
+=(8.*pi*zIncident/systemMass)*std::pow(tetal2*sigmaPSS_l2,-2.)*std::pow(velocityl2/sigmaPSS_l2,-3.)*(zTarget/screenedzTarget);
 
   G4double cParameterl2 = 2.*coulombDeflectionl2/(energyLossl2*(energyLossl2+1.));
 
@@ -596,20 +596,20 @@ G4double G4AnalyticalEcpssrLiCrossSection::CalculateL3CrossSection(G4int zTarget
 
   G4double electrIonizationEnergyl3=0.;
 
-  if ( x3<=0.035)  electrIonizationEnergyl3= 0.75*pi*(log(1./(x3*x3))-1.);
+  if ( x3<=0.035)  electrIonizationEnergyl3= 0.75*pi*(std::log(1./(x3*x3))-1.);
     else
     {
-      if ( x3<=3.) electrIonizationEnergyl3 =exp(-2.*x3)/(0.031+(0.210*pow(x3,0.5))+(0.005*x3)-(0.069*pow(x3,3./2.))+(0.324*x3*x3));
+      if ( x3<=3.) electrIonizationEnergyl3 =std::exp(-2.*x3)/(0.031+(0.210*std::pow(x3,0.5))+(0.005*x3)-(0.069*std::pow(x3,3./2.))+(0.324*x3*x3));
       else
 	{
-	  if ( x3<=11.) electrIonizationEnergyl3 =2.*exp(-2.*x3)/pow(x3,1.6);}
+	  if ( x3<=11.) electrIonizationEnergyl3 =2.*std::exp(-2.*x3)/std::pow(x3,1.6);}
     }
 
-  G4double hFunctionl3 =(electrIonizationEnergyl3*2.*nl)/(tetal3*pow(velocityl3,3));//takes into account the polarization effect
+  G4double hFunctionl3 =(electrIonizationEnergyl3*2.*nl)/(tetal3*std::pow(velocityl3,3));//takes into account the polarization effect
 
     if (verboseLevel>0) G4cout << "  hFunctionl3=" << hFunctionl3<< G4endl;
 
-  G4double gFunctionl3 = (1.+(10.*velocityl3)+(45.*velocityl3*velocityl3)+(102.*pow(velocityl3,3.))+(331.*pow(velocityl3,4.))+(6.7*pow(velocityl3,5.))+(58.*pow(velocityl3,6.))+(7.8*pow(velocityl3,7.))+ (0.888*pow(velocityl3,8.)) )/pow(1.+velocityl3,10.);
+  G4double gFunctionl3 = (1.+(10.*velocityl3)+(45.*velocityl3*velocityl3)+(102.*std::pow(velocityl3,3.))+(331.*std::pow(velocityl3,4.))+(6.7*std::pow(velocityl3,5.))+(58.*std::pow(velocityl3,6.))+(7.8*std::pow(velocityl3,7.))+ (0.888*std::pow(velocityl3,8.)) )/std::pow(1.+velocityl3,10.);
   //takes into account the reduced binding effect
 
     if (verboseLevel>0) G4cout << "  gFunctionl3=" << gFunctionl3<< G4endl;
@@ -665,12 +665,12 @@ G4double pssDeltal3 = (4./(systemMass*sigmaPSS_l3*tetal3))*(sigmaPSS_l3/velocity
 
 if (verboseLevel>0) G4cout << "  pssDeltal3=" << pssDeltal3<< G4endl;
 
-G4double energyLossl3 = pow(1-pssDeltal3,0.5);
+G4double energyLossl3 = std::pow(1-pssDeltal3,0.5);
 
 if (verboseLevel>0) G4cout << "  energyLossl3=" << energyLossl3<< G4endl;
 
   G4double coulombDeflectionl3 = 
-(8.*pi*zIncident/systemMass)*pow(tetal3*sigmaPSS_l3,-2.)*pow(velocityl3/sigmaPSS_l3,-3.)*(zTarget/screenedzTarget);
+(8.*pi*zIncident/systemMass)*std::pow(tetal3*sigmaPSS_l3,-2.)*std::pow(velocityl3/sigmaPSS_l3,-3.)*(zTarget/screenedzTarget);
 
   G4double cParameterl3 = 2.*coulombDeflectionl3/(energyLossl3*(energyLossl3+1.));
 

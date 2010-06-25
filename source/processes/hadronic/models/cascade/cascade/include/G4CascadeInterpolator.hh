@@ -1,5 +1,3 @@
-#ifndef G4CASCADE_INTERPOLATOR_HH
-#define G4CASCADE_INTERPOLATOR_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterpolator.hh,v 1.1 2010-05-14 18:01:28 mkelsey Exp $
+//
+// $Id: G4CascadeInterpolator.hh,v 1.2 2010-06-25 09:42:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
@@ -38,6 +37,9 @@
 // The interpolation action returns a simple double: the integer part
 // is the bin index, and the fractional part is, obviously, the
 // fractional part.
+
+#ifndef G4CASCADE_INTERPOLATOR_HH
+#define G4CASCADE_INTERPOLATOR_HH
 
 #include "globals.hh"
 #include <cfloat>

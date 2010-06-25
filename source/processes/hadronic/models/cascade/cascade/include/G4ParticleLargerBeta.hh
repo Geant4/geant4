@@ -1,5 +1,3 @@
-#ifndef G4ParticleLargerBeta_h
-#define G4ParticleLargerBeta_h
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,11 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerBeta.hh,v 1.6 2010-05-15 04:25:17 mkelsey Exp $
+//
+// $Id: G4ParticleLargerBeta.hh,v 1.7 2010-06-25 09:43:44 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Add additional operator() which uses pointers,
 //		also fix bug which returns wrong result
+
+#ifndef G4ParticleLargerBeta_h
+#define G4ParticleLargerBeta_h
 
 #include "G4InuclElementaryParticle.hh"
 

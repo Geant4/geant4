@@ -1,5 +1,3 @@
-#ifndef G4INUCL_NUCLEI_HH
-#define G4INUCL_NUCLEI_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.hh,v 1.16 2010-04-09 19:33:11 mkelsey Exp $
+//
+// $Id: G4InuclNuclei.hh,v 1.17 2010-06-25 09:43:26 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -32,6 +31,9 @@
 //	     as temporary final-state fragments.
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes.
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
+
+#ifndef G4INUCL_NUCLEI_HH
+#define G4INUCL_NUCLEI_HH
 
 #include "G4InuclParticle.hh"
 #include "G4ExitonConfiguration.hh"

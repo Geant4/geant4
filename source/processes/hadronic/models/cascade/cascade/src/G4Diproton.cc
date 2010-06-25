@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Diproton.cc,v 1.4 2010-05-06 20:46:04 mkelsey Exp $
+//
+// $Id: G4Diproton.cc,v 1.5 2010-06-25 09:44:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------

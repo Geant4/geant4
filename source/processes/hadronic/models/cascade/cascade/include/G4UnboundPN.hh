@@ -1,5 +1,3 @@
-#ifndef G4UNBOUNDPN_HH
-#define G4UNBOUNDPN_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4UnboundPN.hh,v 1.3 2010-04-13 05:30:10 mkelsey Exp $
+//
+// $Id: G4UnboundPN.hh,v 1.4 2010-06-25 09:43:52 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -35,6 +34,9 @@
 //	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 // ----------------------------------------------------------------
+
+#ifndef G4UNBOUNDPN_HH
+#define G4UNBOUNDPN_HH
 
 #include "G4VShortLivedParticle.hh"
 

@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticle.cc,v 1.6 2010-04-09 19:33:11 mkelsey Exp $
+//
+// $Id: G4InuclParticle.cc,v 1.7 2010-06-25 09:44:44 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.

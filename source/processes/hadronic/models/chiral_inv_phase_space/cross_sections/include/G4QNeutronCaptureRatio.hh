@@ -32,8 +32,7 @@
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 22-May-2009
 //
 // **********************************************************************
-// ****** This HEADER is property of the CHIPS model (M. Kosov) *********
-// ******************** DO NOT MAKE ANY CHANGE! (M.K.) ******************
+// This Header is a part of the CHIPS physics package (author: M. Kosov)
 //=======================================================================
 // Short description: (n,gamma) capture is a part of the incoherent
 // (inelastic) interaction. This part is calculated in the class.

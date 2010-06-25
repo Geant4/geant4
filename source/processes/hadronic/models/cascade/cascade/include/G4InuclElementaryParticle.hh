@@ -1,5 +1,3 @@
-#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
-#define G4INUCL_ELEMENTARY_PARTICLE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,12 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclElementaryParticle.hh,v 1.22 2010-04-29 19:39:55 mkelsey Exp $
+//
+// $Id: G4InuclElementaryParticle.hh,v 1.23 2010-06-25 09:43:24 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()", use enum names
+
+#ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
+#define G4INUCL_ELEMENTARY_PARTICLE_HH
 
 #include "G4InuclParticle.hh"
 #include "G4InuclParticleNames.hh"

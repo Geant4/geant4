@@ -1,5 +1,3 @@
-#ifndef G4NUCL_WATCHER_HH
-#define G4NUCL_WATCHER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,11 +22,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NuclWatcher.hh,v 1.13 2010-04-07 18:23:15 mkelsey Exp $
+//
+// $Id: G4NuclWatcher.hh,v 1.14 2010-06-25 09:43:40 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code into .cc file
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
+
+#ifndef G4NUCL_WATCHER_HH
+#define G4NUCL_WATCHER_HH
 
 #include "G4Types.hh"
 

@@ -491,7 +491,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       G4int iZ = (G4int) (*elementVector)[i]->GetZ();
       totalZ += iZ * (*StechiometricFactors)[i];
       totalMolecularWeight += (*elementVector)[i]->GetA() * (*StechiometricFactors)[i];
-      meanExcitationEnergy += iZ*log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
+      meanExcitationEnergy += iZ*std::log(meanAtomExcitationEnergy[iZ-1])*(*StechiometricFactors)[i];
       /*
       G4cout << iZ << " " << (*StechiometricFactors)[i] << " " << totalZ << " " << 
 	totalMolecularWeight/(g/mole) << " " << meanExcitationEnergy << " " << 
@@ -499,7 +499,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	G4endl;
       */
     }
-  meanExcitationEnergy = exp(meanExcitationEnergy/totalZ);
+  meanExcitationEnergy = std::exp(meanExcitationEnergy/totalZ);
 
   atomicNumber->insert(std::make_pair(material,totalZ));
   atomicMass->insert(std::make_pair(material,totalMolecularWeight));
@@ -545,10 +545,10 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	      G4double occup = elementData[2][i];
 	      if (shellID > 0)
 		{
-		  if (fabs(occup) > 0)
+		  if (std::fabs(occup) > 0)
 		    {
 		      G4PenelopeOscillator newOsc; 
-		      newOsc.SetOscillatorStrength(fabs(occup)*(*StechiometricFactors)[k]);
+		      newOsc.SetOscillatorStrength(std::fabs(occup)*(*StechiometricFactors)[k]);
 		      newOsc.SetIonisationEnergy(elementData[3][i]);
 		      newOsc.SetHartreeFactor(elementData[4][i]/fine_structure_const);
 		      newOsc.SetParentZ(elementData[0][i]);
@@ -564,7 +564,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 		      if (occup < 0)		  
 			{
 			  G4double ff = (*helper)[0].GetOscillatorStrength();
-			  ff += fabs(occup)*(*StechiometricFactors)[k];
+			  ff += std::fabs(occup)*(*StechiometricFactors)[k];
 			  (*helper)[0].SetOscillatorStrength(ff);
 			}	
 		    }
@@ -625,7 +625,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	    {
 	      quit = true;
 	      (*helper)[i].SetOscillatorStrength(oscStre-conductionStrengthCopy);
-	      if (fabs((*helper)[i].GetOscillatorStrength()) < 1e-12)
+	      if (std::fabs((*helper)[i].GetOscillatorStrength()) < 1e-12)
 		{
 		  conductionStrength += (*helper)[i].GetOscillatorStrength(); 
 		  (*helper)[i].SetOscillatorStrength(0.);
@@ -649,13 +649,13 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
     {
       sum += (*helper)[i].GetOscillatorStrength();
     }
-  if (fabs(sum-totalZ) > (1e-6*totalZ))
+  if (std::fabs(sum-totalZ) > (1e-6*totalZ))
     {
       G4cout << "G4PenelopeOscillatorManager - Inconsistent oscillator data " << G4endl;
       G4cout << sum << " " << totalZ << G4endl;
       G4Exception();
     }
-  if (fabs(sum-totalZ) > (1e-12*totalZ))
+  if (std::fabs(sum-totalZ) > (1e-12*totalZ))
     {
       G4double fact = totalZ/sum;
       for (size_t i=0;i<helper->size();i++)
@@ -671,7 +671,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       G4bool exit=false;
       for (size_t i=0;i<helper->size() && !exit;i++)
 	{
-	  if (fabs((*helper)[i].GetOscillatorStrength()) < 1e-12)
+	  if (std::fabs((*helper)[i].GetOscillatorStrength()) < 1e-12)
 	    {
 	      helper->erase(helper->begin()+i);
 	      exit = true;
@@ -718,7 +718,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   else
     {
       G4double ionEne = (*helper)[0].GetIonisationEnergy();
-      (*helper)[0].SetIonisationEnergy(fabs(ionEne));
+      (*helper)[0].SetIonisationEnergy(std::fabs(ionEne));
       (*helper)[0].SetResonanceEnergy(meanExcitationEnergy);
     }
   if (verbosityLevel > 1)
@@ -734,14 +734,14 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
       xcheck += (*helper)[i].GetOscillatorStrength()*std::log((*helper)[i].GetResonanceEnergy());
       TST += (*helper)[i].GetOscillatorStrength();
     }
-  if (fabs(TST-totalZ)>1e-8*totalZ)
+  if (std::fabs(TST-totalZ)>1e-8*totalZ)
     {
       G4cout << "G4PenelopeOscillatorManager - Inconsistent oscillator data " << G4endl;
       G4cout << TST << " " << totalZ << G4endl;
       G4Exception();
     }
   xcheck = std::exp(xcheck/totalZ);
-  if (fabs(xcheck-meanExcitationEnergy) > 1e-8*meanExcitationEnergy)
+  if (std::fabs(xcheck-meanExcitationEnergy) > 1e-8*meanExcitationEnergy)
     {
       G4cout << "G4PenelopeOscillatorManager - Error in Sterheimer factor calculation " << G4endl;
       G4cout << xcheck/eV << " " << meanExcitationEnergy/eV << G4endl;

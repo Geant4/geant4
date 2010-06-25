@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08RayleighModel.cc,v 1.1 2010-03-17 14:18:50 pandola Exp $
+// $Id: G4Penelope08RayleighModel.cc,v 1.2 2010-06-25 09:41:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -68,11 +68,11 @@ G4Penelope08RayleighModel::G4Penelope08RayleighModel(const G4ParticleDefinition*
   // 4 = entering in methods 
 
   //build the energy grid. It is the same for all materials
-  G4double logenergy = log(fIntrinsicLowEnergyLimit/2.);
-  G4double logmaxenergy = log(1.5*fIntrinsicHighEnergyLimit);
+  G4double logenergy = std::log(fIntrinsicLowEnergyLimit/2.);
+  G4double logmaxenergy = std::log(1.5*fIntrinsicHighEnergyLimit);
   //finer grid below 160 keV
-  G4double logtransitionenergy = log(160*keV); 
-  G4double logfactor1 = log(10.)/250.;
+  G4double logtransitionenergy = std::log(160*keV); 
+  G4double logfactor1 = std::log(10.)/250.;
   G4double logfactor2 = logfactor1*10;
   logEnergyGridPMax.push_back(logenergy);
   do{
@@ -218,9 +218,9 @@ G4double G4Penelope08RayleighModel::ComputeCrossSectionPerAtom(const G4ParticleD
 	 << G4endl;
        G4Exception();
      }
-   G4double logene = log(energy);
+   G4double logene = std::log(energy);
    G4double logXS = atom->Value(logene);
-   cross = exp(logXS);
+   cross = std::exp(logXS);
 
    if (verboseLevel > 2)
     G4cout << "Compton cross Section at " << energy/keV << " keV for Z=" << Z << 
@@ -287,7 +287,7 @@ void G4Penelope08RayleighModel::BuildFormFactorTable(const G4Material* material)
 	  ff2 += f*f*(*StechiometricFactors)[i];
 	}
       if (ff2)
-	theFFVec->PutValue(k,logQSquareGrid[k],log(ff2)); //NOTICE: THIS IS log(Q^2) vs. log(F^2)
+	theFFVec->PutValue(k,logQSquareGrid[k],std::log(ff2)); //NOTICE: THIS IS log(Q^2) vs. log(F^2)
     }
   logFormFactorTable->insert(std::make_pair(material,theFFVec));
 
@@ -467,7 +467,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       //dimensional quantities
       ene *= eV;
       xs *= cm2;
-      theVec->PutValue(i,log(ene),log(xs));
+      theVec->PutValue(i,std::log(ene),std::log(xs));
       if (file.eof() && i != (nPoints-1)) //file ended too early
 	{
 	  G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
@@ -520,7 +520,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       theFFVec->PutValue(i,q,ff);
       if (fillQGrid)
 	{
-	  logQSquareGrid.push_back(2.0*log(q));
+	  logQSquareGrid.push_back(2.0*std::log(q));
 	}
       if (file.eof() && i != (nPoints-1)) //file ended too early
 	{
@@ -546,7 +546,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
 G4double G4Penelope08RayleighModel::GetFSquared(const G4Material* mat, const G4double QSquared)
 {
   G4double f2 = 0;
-  G4double logQSquared = log(QSquared);
+  G4double logQSquared = std::log(QSquared);
   //last value of the table
   G4double maxlogQ2 = logQSquareGrid[logQSquareGrid.size()-1];
   //If the table has not been built for the material, do it!
@@ -565,7 +565,7 @@ G4double G4Penelope08RayleighModel::GetFSquared(const G4Material* mat, const G4d
   if (logQSquared < -20) // Q < 1e-9
     {
       G4double logf2 = (*theVec)[0]; //first value of the table
-      f2 = exp(logf2);
+      f2 = std::exp(logf2);
     }
   else if (logQSquared > maxlogQ2)
     f2 =0;
@@ -573,7 +573,7 @@ G4double G4Penelope08RayleighModel::GetFSquared(const G4Material* mat, const G4d
     {
       //log(Q^2) vs. log(F^2)
       G4double logf2 = theVec->Value(logQSquared);
-      f2 = exp(logf2);
+      f2 = std::exp(logf2);
 
     }
   if (verboseLevel > 3)
@@ -593,10 +593,10 @@ void G4Penelope08RayleighModel::InitializeSamplingAlgorithm(const G4Material* ma
   const size_t np = 150; //hard-coded in Penelope
   for (size_t i=1;i<logQSquareGrid.size();i++)
     {
-      G4double Q2 = exp(logQSquareGrid[i]);
+      G4double Q2 = std::exp(logQSquareGrid[i]);
       if (GetFSquared(mat,Q2) >  1e-35)
 	{
-	  q2max = exp(logQSquareGrid[i-1]);
+	  q2max = std::exp(logQSquareGrid[i-1]);
 	}
     }
   
@@ -1042,7 +1042,7 @@ void G4Penelope08RayleighModel::GetPMaxTable(const G4Material* mat)
 
   for (size_t ie=0;ie<logEnergyGridPMax.size();ie++)
     {
-      G4double energy = exp(logEnergyGridPMax[ie]);
+      G4double energy = std::exp(logEnergyGridPMax[ie]);
       G4double Qm = 2.0*energy/electron_mass_c2; //this is non-dimensional now
       G4double Qm2 = Qm*Qm;
       G4double firstQ2 = theTable->GetX(0);
@@ -1147,9 +1147,9 @@ void G4Penelope08RayleighModel::DumpFormFactorTable(const G4Material* mat)
   for (size_t i=0;i<theVec->GetVectorLength();i++)
     {
       G4double logQ2 = theVec->GetLowEdgeEnergy(i);
-      G4double Q = exp(0.5*logQ2);
+      G4double Q = std::exp(0.5*logQ2);
       G4double logF2 = (*theVec)[i];
-      G4double F = exp(0.5*logF2);
+      G4double F = std::exp(0.5*logF2);
       G4cout << Q << "              " << F << G4endl;
     }
   //DONE

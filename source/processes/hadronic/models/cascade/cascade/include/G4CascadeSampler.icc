@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeSampler.icc,v 1.2 2010-05-21 18:26:16 mkelsey Exp $
+//
+// $Id: G4CascadeSampler.icc,v 1.3 2010-06-25 09:42:44 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,

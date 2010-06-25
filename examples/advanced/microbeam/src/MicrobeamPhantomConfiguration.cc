@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhantomConfiguration.cc,v 1.8 2010-02-23 12:04:16 sincerti Exp $
+// $Id: MicrobeamPhantomConfiguration.cc,v 1.9 2010-06-25 09:41:03 gunter Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamPhantomConfiguration.hh"
@@ -86,19 +86,19 @@ G4int MicrobeamPhantomConfiguration::Initialize() {
   { 
     ncols = fscanf(fMap,"%f %f %f %i %i %f",&vx, &vy, &vz, &mat, &den, &tmp);
 
-    if (abs(mat-2)<1.e-30) // NUCLEUS
+    if (std::abs(mat-2)<1.e-30) // NUCLEUS
     	{
-	  if (abs(den-1)<1.e-30) density = denNucl1*(g/cm3);
-	  if (abs(den-2)<1.e-30) density = denNucl2*(g/cm3);
-	  if (abs(den-3)<1.e-30) density = denNucl3*(g/cm3);
+	  if (std::abs(den-1)<1.e-30) density = denNucl1*(g/cm3);
+	  if (std::abs(den-2)<1.e-30) density = denNucl2*(g/cm3);
+	  if (std::abs(den-3)<1.e-30) density = denNucl3*(g/cm3);
 	  nucleusMass   = nucleusMass   + density * dx * dy * dz ;
     	}
 
-    if (abs(mat-1)<1.e-30) // CYTOPLASM
+    if (std::abs(mat-1)<1.e-30) // CYTOPLASM
     	{ 
-	  if (abs(den-1)<1e-30) density = denCyto1*(g/cm3);
-	  if (abs(den-2)<1e-30) density = denCyto2*(g/cm3);
-	  if (abs(den-3)<1e-30) density = denCyto3*(g/cm3);
+	  if (std::abs(den-1)<1e-30) density = denCyto1*(g/cm3);
+	  if (std::abs(den-2)<1e-30) density = denCyto2*(g/cm3);
+	  if (std::abs(den-3)<1e-30) density = denCyto3*(g/cm3);
 	  cytoplasmMass = cytoplasmMass + density * dx * dy * dz ;
 	}
     

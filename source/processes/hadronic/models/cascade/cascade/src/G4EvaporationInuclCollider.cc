@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EvaporationInuclCollider.cc,v 1.10 2010-05-21 17:56:34 mkelsey Exp $
+//
+// $Id: G4EvaporationInuclCollider.cc,v 1.11 2010-06-25 09:44:28 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly

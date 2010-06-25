@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NuclWatcher.cc,v 1.2 2010-04-07 18:23:15 mkelsey Exp $
+//
+// $Id: G4NuclWatcher.cc,v 1.3 2010-06-25 09:44:54 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code here from .hh file, clean up

@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: bindingEnergyAsymptotic.cc,v 1.11 2010-04-08 15:48:00 mkelsey Exp $
+//
+// $Id: bindingEnergyAsymptotic.cc,v 1.12 2010-06-25 09:45:12 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Eliminate unnecessary use of std::pow()

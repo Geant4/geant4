@@ -1,5 +1,3 @@
-#ifndef G4PARTICLE_LARGER_EKIN_HH
-#define G4PARTICLE_LARGER_EKIN_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,13 +22,17 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ParticleLargerEkin.hh,v 1.11 2010-05-15 04:25:17 mkelsey Exp $
+//
+// $Id: G4ParticleLargerEkin.hh,v 1.12 2010-06-25 09:43:46 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Implements a *reverse* sorting: std::sort expects a less-than operator
 // which returns true if arg1<arg2.  This function returns true if arg1>=arg2.
 //
 // 20091125  M. Kelsey -- Add additional operator() which uses pointers
+
+#ifndef G4PARTICLE_LARGER_EKIN_HH
+#define G4PARTICLE_LARGER_EKIN_HH
 
 #include "G4InuclElementaryParticle.hh"
 

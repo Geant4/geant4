@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 #include "globals.hh"
 #include "G4ios.hh"
 
@@ -57,8 +82,8 @@ HistoITEPTest47::HistoITEPTest47(std::string namePart, std::string nameMat,
 
   for (unsigned int ii=0; ii<angles.size(); ii++) {
 
-    double cth1 = cos(std::min(angles[ii]+dtheta,180*deg));
-    double cth2 = cos(std::max(angles[ii]-dtheta,0.0*deg));
+    double cth1 = std::cos(std::min(angles[ii]+dtheta,180*deg));
+    double cth2 = std::cos(std::max(angles[ii]-dtheta,0.0*deg));
     dcth.push_back(std::abs(cth1-cth2));
     cthmin.push_back(std::min(cth1,cth2));
     cthmax.push_back(std::max(cth1,cth2));
@@ -96,14 +121,14 @@ void HistoITEPTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
     G4double ke   = (sec->GetKineticEnergy())/GeV;
     if (ke < 0.0) ke = 0.0;
     G4double m     = (pd->GetPDGMass())/GeV;
-    G4double p     = sqrt(ke*(ke + 2.0*m));
+    G4double p     = std::sqrt(ke*(ke + 2.0*m));
     mom           *= p;
     fm             = G4LorentzVector(mom, ke+m);
     labv          -= fm;
     G4int    type  = particleType(pd);
     if (type >= 0 && type <= 1) {
       G4double theta = mom.theta();
-      G4double cth   = cos(theta);
+      G4double cth   = std::cos(theta);
       G4double wt    = 1.0/p;
       for (unsigned int ii=0; ii<angles.size(); ii++) {
 	if (cth > cthmin[ii] && cth <= cthmax[ii]) {

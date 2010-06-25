@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QProtonElasticCrossSection.cc,v 1.3 2010-02-16 07:53:05 mkossov Exp $
+// $Id: G4QProtonElasticCrossSection.cc,v 1.4 2010-06-25 09:45:53 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1068,7 +1068,7 @@ G4double G4QProtonElasticCrossSection::GetTabValues(G4double lp, G4int PDG, G4in
 #endif
     //         p1               p2              p3            p6
     return (lastPAR[0]*dl*dl+lastPAR[1])/(1.+lastPAR[2]/p+lastPAR[5]/p6)+
-     lastPAR[3]/(p3+lastPAR[4]/p3)+lastPAR[7]/(p4+pow((lastPAR[8]/p),lastPAR[6]));
+     lastPAR[3]/(p3+lastPAR[4]/p3)+lastPAR[7]/(p4+std::pow((lastPAR[8]/p),lastPAR[6]));
     //   p4            p5               p8                 p9             p7
   }
   return 0.;

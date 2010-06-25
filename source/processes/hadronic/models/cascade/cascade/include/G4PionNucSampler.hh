@@ -1,5 +1,3 @@
-#ifndef G4_PION_NUC_SAMPLER_HH
-#define G4_PION_NUC_SAMPLER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,10 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PionNucSampler.hh,v 1.1 2010-05-15 00:55:01 mkelsey Exp $
+//
+// $Id: G4PionNucSampler.hh,v 1.2 2010-06-25 09:43:48 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100512  M. Kelsey -- Replaces G4FinalStateSampler
+
+#ifndef G4_PION_NUC_SAMPLER_HH
+#define G4_PION_NUC_SAMPLER_HH
 
 #include "G4CascadeSampler.hh"
 

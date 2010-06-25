@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08PhotoElectricModel.cc,v 1.3 2010-03-31 11:12:08 pandola Exp $
+// $Id: G4Penelope08PhotoElectricModel.cc,v 1.4 2010-06-25 09:41:19 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -155,9 +155,9 @@ G4double G4Penelope08PhotoElectricModel::ComputeCrossSectionPerAtom(
          << G4endl;
        G4Exception();
      }
-   G4double logene = log(energy);
+   G4double logene = std::log(energy);
    G4double logXS = totalXSLog->Value(logene);
-   cross = exp(logXS);
+   cross = std::exp(logXS);
  
   if (verboseLevel > 2)
     G4cout << "Photoelectric cross section at " << energy/MeV << " MeV for Z=" << Z <<
@@ -500,7 +500,7 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
       G4double aValue = 0;
       file >> energy ;
       energy *= eV;
-      G4double logene = log(energy);
+      G4double logene = std::log(energy);
       //loop on the columns
       for (size_t i=0;i<nShells+1;i++)
 	{
@@ -509,7 +509,7 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
 	  G4PhysicsFreeVector* theVec = (G4PhysicsFreeVector*) ((*thePhysicsTable)[i]);	 
 	  if (aValue < 1e-40*cm2) //protection against log(0)
 	    aValue = 1e-40*cm2;
-	  theVec->PutValue(k,logene,log(aValue));
+	  theVec->PutValue(k,logene,std::log(aValue));
 	}
     }
 
@@ -529,7 +529,7 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
 
 size_t G4Penelope08PhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
 {
-  G4double logEnergy = log(energy);
+  G4double logEnergy = std::log(energy);
 
   //Check if data have been read (it should be!)
   if (!logAtomicShellXS->count(Z))
@@ -552,7 +552,7 @@ size_t G4Penelope08PhotoElectricModel::SelectRandomShell(G4int Z,G4double energy
 
   G4PhysicsFreeVector* totalXSLog = (G4PhysicsFreeVector*) (*theTable)[0];
   G4double logXS = totalXSLog->Value(logEnergy);
-  G4double totalXS = exp(logXS);
+  G4double totalXS = std::exp(logXS);
 					   
   //Notice: totalXS is the total cross section and it does *not* correspond to 
   //the sum of partialXS's, since these include only K, L and M shells.
@@ -565,7 +565,7 @@ size_t G4Penelope08PhotoElectricModel::SelectRandomShell(G4int Z,G4double energy
     {
       G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];
       G4double logXS = partialXSLog->Value(logEnergy);
-      G4double partialXS = exp(logXS);
+      G4double partialXS = std::exp(logXS);
       sum += partialXS;
       tempVector->push_back(sum);     
     }
@@ -642,9 +642,9 @@ G4double G4Penelope08PhotoElectricModel::GetShellCrossSection(G4int Z,size_t she
          << G4endl;
        G4Exception();
      }
-   G4double logene = log(energy);
+   G4double logene = std::log(energy);
    G4double logXS = totalXSLog->Value(logene);
-   G4double cross = exp(logXS);
+   G4double cross = std::exp(logXS);
    if (cross < 2e-40*cm2) cross = 0;
    return cross;
 }

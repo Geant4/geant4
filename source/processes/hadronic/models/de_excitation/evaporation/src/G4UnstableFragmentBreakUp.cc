@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UnstableFragmentBreakUp.cc,v 1.7 2010-05-19 17:17:28 vnivanch Exp $
+// $Id: G4UnstableFragmentBreakUp.cc,v 1.8 2010-06-25 09:46:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -129,7 +129,7 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
     G4double cosTheta = 1. - 2. * G4UniformRand(); 
     G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
     G4double phi = twopi * G4UniformRand();
-    G4double mom = sqrt((e2 - mass2)*(e2 + mass2));
+    G4double mom = std::sqrt((e2 - mass2)*(e2 + mass2));
     G4LorentzVector mom2(mom * sinTheta * std::cos(phi),
 			 mom * sinTheta * std::sin(phi),
 			 mom * cosTheta,

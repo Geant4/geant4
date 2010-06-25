@@ -1,5 +1,3 @@
-#ifndef G4INUCL_PARTICLE_NAMES_HH
-#define G4INUCL_PARTICLE_NAMES_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,12 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclParticleNames.hh,v 1.2 2010-04-29 19:39:55 mkelsey Exp $
+//
+// $Id: G4InuclParticleNames.hh,v 1.3 2010-06-25 09:43:30 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Defines enums to map G4InuclElementaryParticle type codes to human
 // readable names.  Meant to replace similar local enums scattered through
 // the code.
+
+#ifndef G4INUCL_PARTICLE_NAMES_HH
+#define G4INUCL_PARTICLE_NAMES_HH
 
 namespace G4InuclParticleNames {
   enum Long { nuclei=0, proton=1, neutron=2,

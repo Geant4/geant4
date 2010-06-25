@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh,v 1.5 2010-06-01 11:13:31 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.hh,v 1.6 2010-06-25 09:41:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -194,7 +194,7 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
 inline void G4WentzelOKandVIxSection::SetTargetMass(G4double value)
 {
   targetMass = value;
-  factD = sqrt(mom2)/value;
+  factD = std::sqrt(mom2)/value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

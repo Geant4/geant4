@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08GammaConversionModel.cc,v 1.2 2010-04-23 14:49:46 pandola Exp $
+// $Id: G4Penelope08GammaConversionModel.cc,v 1.3 2010-06-25 09:41:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -168,11 +168,11 @@ G4double G4Penelope08GammaConversionModel::ComputeCrossSectionPerAtom(
      }
 
   G4double cs = 0;
-  G4double logene = log(energy);
+  G4double logene = std::log(energy);
   G4PhysicsFreeVector* theVec = logAtomicCrossSection->find(iZ)->second;
 
   G4double logXS = theVec->Value(logene);
-  cs = exp(logXS);
+  cs = std::exp(logXS);
 
   if (verboseLevel > 2)
     G4cout << "Gamma conversion cross section at " << energy/MeV << " MeV for Z=" << Z << 
@@ -241,7 +241,7 @@ G4Penelope08GammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticl
       //Complete calculation
       G4double effC = fEffectiveCharge->find(mat)->second;
       G4double alz = effC*fine_structure_const;
-      G4double T = sqrt(2.0*eki);
+      G4double T = std::sqrt(2.0*eki);
       G4double F00=(-1.774-1.210e1*alz+1.118e1*alz*alz)*T
          +(8.523+7.326e1*alz-4.441e1*alz*alz)*T*T
          -(1.352e1+1.211e2*alz-9.641e1*alz*alz)*T*T*T
@@ -268,9 +268,9 @@ G4Penelope08GammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticl
 	  {
 	    G4double  ru2m1 = 2.0*G4UniformRand()-1.0;
 	    if (ru2m1 < 0)
-	      eps = 0.5-xr*pow(std::abs(ru2m1),1./3.);
+	      eps = 0.5-xr*std::pow(std::abs(ru2m1),1./3.);
 	    else
-	      eps = 0.5+xr*pow(ru2m1,1./3.);
+	      eps = 0.5+xr*std::pow(ru2m1,1./3.);
 	    G4double B = eki/(invRad*eps*(1.0-eps));
 	    scree =  GetScreeningFunctions(B);
 	    g1 = scree.first;
@@ -456,7 +456,7 @@ void G4Penelope08GammaConversionModel::ReadDataFile(const G4int Z)
       xs *= barn;
       if (xs < 1e-40*cm2) //protection against log(0)
 	xs = 1e-40*cm2;
-      theVec->PutValue(i,log(ene),log(xs));      
+      theVec->PutValue(i,std::log(ene),std::log(xs));      
     }
   file.close();
 
@@ -562,7 +562,7 @@ void G4Penelope08GammaConversionModel::InitializeScreeningFunctions(const G4Mate
     fMaterialInvScreeningRadius->insert(std::make_pair(material,matRadius));
 
   std::pair<G4double,G4double> myPair(0,0);
-  G4double f0a = 4.0*log(fAtomicScreeningRadius[intZ-1]);
+  G4double f0a = 4.0*std::log(fAtomicScreeningRadius[intZ-1]);
   G4double f0b = f0a - 4.0*fc;
   myPair.first = f0a;
   myPair.second = f0b;
@@ -595,7 +595,7 @@ G4Penelope08GammaConversionModel::GetScreeningFunctions(G4double B)
   //
   std::pair<G4double,G4double> result(0.,0.);
   G4double BSquared = B*B;
-  G4double f1 = 2.0-2.0*log(1.0+BSquared);
+  G4double f1 = 2.0-2.0*std::log(1.0+BSquared);
   G4double f2 = f1 - 6.66666666e-1; // (-2/3)
   if (B < 1.0e-10)
     f1 = f1-twopi*B;
@@ -603,7 +603,7 @@ G4Penelope08GammaConversionModel::GetScreeningFunctions(G4double B)
     {
       G4double a0 = 4.0*B*std::atan(1./B);
       f1 = f1 - a0;
-      f2 += 2.0*BSquared*(4.0-a0-3.0*log((1.0+BSquared)/BSquared));
+      f2 += 2.0*BSquared*(4.0-a0-3.0*std::log((1.0+BSquared)/BSquared));
     }
   G4double g1 = 0.5*(3.0*f1-f2);
   G4double g2 = 0.25*(3.0*f1+f2);

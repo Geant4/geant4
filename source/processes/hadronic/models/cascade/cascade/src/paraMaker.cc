@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: paraMaker.cc,v 1.17 2010-06-01 17:20:31 mkelsey Exp $
+//
+// $Id: paraMaker.cc,v 1.18 2010-06-25 09:45:16 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument

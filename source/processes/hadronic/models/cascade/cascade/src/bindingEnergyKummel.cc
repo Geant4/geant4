@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: bindingEnergyKummel.cc,v 1.12 2010-03-19 05:03:23 mkelsey Exp $
+//
+// $Id: bindingEnergyKummel.cc,v 1.13 2010-06-25 09:45:14 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Eliminate unnecessary use of std::pow()

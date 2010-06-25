@@ -1,5 +1,3 @@
-#ifndef G4_CASCADE_PIMINUSN_CHANNEL_HH
-#define G4_CASCADE_PIMINUSN_CHANNEL_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,8 +22,12 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadePiMinusNChannel.hh,v 1.2 2010-05-15 00:55:01 mkelsey Exp $
+//
+// $Id: G4CascadePiMinusNChannel.hh,v 1.3 2010-06-25 09:42:30 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+
+#ifndef G4_CASCADE_PIMINUSN_CHANNEL_HH
+#define G4_CASCADE_PIMINUSN_CHANNEL_HH
 
 #include "G4CascadeData.hh"
 #include "G4CascadeFunctions.hh"

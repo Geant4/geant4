@@ -202,7 +202,7 @@ void G4DiscreteGammaTransition::SelectGamma()
       //09.05.2010 VI rewrite samling of decay time 
       //              assuming ordinary exponential low
       _gammaCreationTime = 0.;      
-      if(tau > 0.0) {  _gammaCreationTime = -tau*log(G4UniformRand()); }
+      if(tau > 0.0) {  _gammaCreationTime = -tau*std::log(G4UniformRand()); }
 
       //G4double tMin = 0;
       //G4double tMax = 10.0 * tau;

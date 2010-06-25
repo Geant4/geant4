@@ -1,5 +1,3 @@
-#ifndef G4_CASCADE_SAMPLER_HH
-#define G4_CASCADE_SAMPLER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,13 +22,17 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeSampler.hh,v 1.2 2010-05-15 00:55:01 mkelsey Exp $
+//
+// $Id: G4CascadeSampler.hh,v 1.3 2010-06-25 09:42:42 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100506  M. Kelsey -- Move functionality of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.
 // 20100512  M. Kelsey -- Make this templated on energy and multiplicity
 //		binning, as base to new sampler.
+
+#ifndef G4_CASCADE_SAMPLER_HH
+#define G4_CASCADE_SAMPLER_HH
 
 #include <vector>
 #include "globals.hh"

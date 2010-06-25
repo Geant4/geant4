@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.17 2010-05-09 17:31:23 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.cc,v 1.18 2010-06-25 09:46:13 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -174,7 +174,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
   G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
   G4double phi = twopi * G4UniformRand();
-  G4double mom = sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
+  G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
   G4LorentzVector Gamma4P(mom * sinTheta * std::cos(phi),
 			  mom * sinTheta * std::sin(phi),
 			  mom * cosTheta,

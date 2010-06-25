@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.7 2010-05-17 15:11:30 vnivanch Exp $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.8 2010-06-25 09:41:42 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -217,11 +217,11 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
 
   ///////////////////////////////////////////////////////////////////////////
   // Calculate some necessary coefficients for PDF and CPDF interpolation 
-  coeff=(log(LAMBDAN[KIndex+1]/LAMBDAN[KIndex]))*(log(A[JIndex+1]/A[JIndex]));
-  Ckj=(log(LAMBDAN[KIndex+1]/lambda))*(log(A[JIndex+1]/Chia2))/coeff;
-  CkjPlus1=(log(LAMBDAN[KIndex+1]/lambda))*(log(Chia2/A[JIndex]))/coeff;
-  CkPlus1j=(log(lambda/LAMBDAN[KIndex]))*(log(A[JIndex+1]/Chia2))/coeff;
-  CkPlus1jPlus1=(log(lambda/LAMBDAN[KIndex]))*(log(Chia2/A[JIndex]))/coeff;
+  coeff=(std::log(LAMBDAN[KIndex+1]/LAMBDAN[KIndex]))*(std::log(A[JIndex+1]/A[JIndex]));
+  Ckj=(std::log(LAMBDAN[KIndex+1]/lambda))*(std::log(A[JIndex+1]/Chia2))/coeff;
+  CkjPlus1=(std::log(LAMBDAN[KIndex+1]/lambda))*(std::log(Chia2/A[JIndex]))/coeff;
+  CkPlus1j=(std::log(lambda/LAMBDAN[KIndex]))*(std::log(A[JIndex+1]/Chia2))/coeff;
+  CkPlus1jPlus1=(std::log(lambda/LAMBDAN[KIndex]))*(std::log(Chia2/A[JIndex]))/coeff;
   ///////////////////////////////////////////////////////////////////////////
   // Calculate Interpolated PDF and CPDF arrays
   Ind0=320*(11*KIndex+JIndex);
@@ -245,7 +245,7 @@ G4double G4GoudsmitSaundersonTable::SampleTheta(G4double lambda, G4double Chia2,
        /(2.*(uvalues[IIndex+1]-uvalues[IIndex])))-rndm;
     if(F>0.)b=m;
     else a=m;
-  } while(fabs(b-a)>1.0e-9);
+  } while(std::fabs(b-a)>1.0e-9);
 
   return m;
 }

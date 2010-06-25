@@ -1,5 +1,3 @@
-#ifndef G4CASCAD_PARTICLE_HH
-#define G4CASCAD_PARTICLE_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,12 +22,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadParticle.hh,v 1.14 2010-03-16 22:10:26 mkelsey Exp $
+//
+// $Id: G4CascadParticle.hh,v 1.15 2010-06-25 09:41:50 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100126  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector,
 //		move ::print() to .cc file, fix uninitialized data members
+
+#ifndef G4CASCAD_PARTICLE_HH
+#define G4CASCAD_PARTICLE_HH
 
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"

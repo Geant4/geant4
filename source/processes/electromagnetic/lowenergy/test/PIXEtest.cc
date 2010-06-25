@@ -42,7 +42,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: PIXEtest.cc,v 1.3 2010-06-06 23:40:35 mantero Exp $
+// $Id: PIXEtest.cc,v 1.4 2010-06-25 09:41:32 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -110,7 +110,7 @@ int main()
    
   for (G4double i=-2; i<123; i=i+1)
      {
-       energies.push_back(pow(10,(0.05*i+1)) *keV);
+       energies.push_back(std::pow(10,(0.05*i+1)) *keV);
      } 
   
 

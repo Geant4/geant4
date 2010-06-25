@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeT31piNChannel.cc,v 1.1 2010-05-14 21:05:03 mkelsey Exp $
+//
+// $Id: G4CascadeT31piNChannel.cc,v 1.2 2010-06-25 09:44:14 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 
 #include "G4CascadePiMinusPChannel.hh"

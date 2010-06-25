@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.17 2010-05-27 20:48:35 gum Exp $
+// $Id: G4Scintillation.hh,v 1.18 2010-06-25 09:41:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -324,13 +324,13 @@ void G4Scintillation::DumpPhysicsTable() const
 inline
 G4double G4Scintillation::single_exp(G4double t, G4double tau2)
 {
-         return exp(-1.0*t/tau2)/tau2;
+         return std::exp(-1.0*t/tau2)/tau2;
 }
 
 inline
 G4double G4Scintillation::bi_exp(G4double t, G4double tau1, G4double tau2)
 {
-         return exp(-1.0*t/tau2)*(1-exp(-1.0*t/tau1))/tau2/tau2*(tau1+tau2);
+         return std::exp(-1.0*t/tau2)*(1-std::exp(-1.0*t/tau1))/tau2/tau2*(tau1+tau2);
 }
 
 #endif /* G4Scintillation_h */

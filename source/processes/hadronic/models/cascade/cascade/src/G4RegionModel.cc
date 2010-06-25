@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4RegionModel.cc,v 1.16 2010-03-19 05:03:23 mkelsey Exp $
+//
+// $Id: G4RegionModel.cc,v 1.17 2010-06-25 09:45:04 gunter Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Eliminate unnecessary use of std::pow()

@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 #include "globals.hh"
 #include "G4ios.hh"
 
@@ -53,18 +78,18 @@ void HistoBNLTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
     G4double ke    = (sec->GetKineticEnergy())/GeV;
     if (ke < 0.0) ke = 0.0;
     G4double m     = (pd->GetPDGMass())/GeV;
-    G4double p     = sqrt(ke*(ke + 2.0*m));
+    G4double p     = std::sqrt(ke*(ke + 2.0*m));
     G4double ee    = ke + m;
     mom           *= p;
     fm             = G4LorentzVector(mom, ee);
     labv          -= fm;
     if (type >= 0 && type <= 5) {
       G4double theta = mom.theta();
-      G4double pt    = p*sin(theta);
-      G4double pl    = p*cos(theta);
-      G4double mt    = sqrt (pt*pt + m*m);
+      G4double pt    = p*std::sin(theta);
+      G4double pl    = p*std::cos(theta);
+      G4double mt    = std::sqrt (pt*pt + m*m);
       G4double mtp   = (mt - std::abs(m));
-      G4double yv    = 0.5*log((ee+pl)/(ee-pl));
+      G4double yv    = 0.5*std::log((ee+pl)/(ee-pl));
       G4double wt    = 1./mt;
       for (unsigned int ii=0; ii<ymin.size(); ii++) {
 	if (yv > ymin[ii] && yv <= ymax[ii]) {

@@ -33,8 +33,7 @@
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 15-Feb-04
 // --------------------------------------------------------------------------------
 // ****************************************************************************************
-// ***** This HEADER is a property of the CHIPS hadronic package in Geant4 (M. Kosov) *****
-// *********** DO NOT MAKE ANY CHANGE without approval of Mikhail.Kossov@cern.ch **********
+// This Header is a part of the CHIPS physics package (author: M. Kosov)
 // ****************************************************************************************
 // Short description: CHIPS cross-sections for kaon(plus)-nuclear interactions
 // -------------------------------------------------------------------------------------

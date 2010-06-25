@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InteractionCase.hh,v 1.11 2010-05-21 17:56:34 mkelsey Exp $
+//
+// $Id: G4InteractionCase.hh,v 1.12 2010-06-25 09:43:18 gunter Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100518  M. Kelsey -- Why use std::pair<> at all?  Never exported; just

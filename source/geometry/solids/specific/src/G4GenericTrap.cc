@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.12 2010-06-11 09:42:28 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.13 2010-06-25 09:41:07 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -205,7 +205,7 @@ G4GenericTrap::InsidePolygone(const G4ThreeVector& p,
   //
   if(count==4)
   { 
-    if ( (fabs(p.x()-poly[0].x())+fabs(p.y()-poly[0].y())) > halfCarTolerance )
+    if ( (std::fabs(p.x()-poly[0].x())+std::fabs(p.y()-poly[0].y())) > halfCarTolerance )
     {
       in=kOutside;
     }
@@ -315,7 +315,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     //
     if ( (p2-p0).mag2() < kCarTolerance )
     {
-      if ( fabs(p.z()+fDz) > kCarTolerance )
+      if ( std::fabs(p.z()+fDz) > kCarTolerance )
       {
         p2=G4ThreeVector(fVertices[(s+1)%4].x(),fVertices[(s+1)%4].y(),-fDz);
       }
@@ -429,7 +429,7 @@ G4ThreeVector G4GenericTrap::NormalToPlane( const G4ThreeVector& p,
   //
   if ( (p2-p0).mag2() < kCarTolerance )
   {
-    if ( fabs(p.z()+fDz) > halfCarTolerance )
+    if ( std::fabs(p.z()+fDz) > halfCarTolerance )
     {
       p2=G4ThreeVector(fVertices[j].x(),fVertices[j].y(),-fDz);
     }
@@ -755,7 +755,7 @@ G4GenericTrap::DistToTriangle(const G4ThreeVector& p,
   G4double zab=2*fDz;
   G4double zac=0;
   
-  if ( (fabs(xa-xc)+fabs(ya-yc)) < halfCarTolerance )
+  if ( (std::fabs(xa-xc)+std::fabs(ya-yc)) < halfCarTolerance )
   {
     xc=fVertices[j+4].x();
     yc=fVertices[j+4].y();
@@ -764,7 +764,7 @@ G4GenericTrap::DistToTriangle(const G4ThreeVector& p,
 
     //Line case
     //
-    if ( (fabs(xb-xc)+fabs(yb-yc)) < halfCarTolerance )
+    if ( (std::fabs(xb-xc)+std::fabs(yb-yc)) < halfCarTolerance )
     {
       return kInfinity;
     }
@@ -849,8 +849,8 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
     xd=fVertices[4+j].x();
     yd=fVertices[4+j].y();
 
-    if ( ((fabs(xb-xd)+fabs(yb-yd))<halfCarTolerance)
-      || ((fabs(xa-xc)+fabs(ya-yc))<halfCarTolerance) )
+    if ( ((std::fabs(xb-xd)+std::fabs(yb-yd))<halfCarTolerance)
+      || ((std::fabs(xa-xc)+std::fabs(ya-yc))<halfCarTolerance) )
     {
       G4double s=DistToTriangle(p,v,ipl) ;
       if ( (s>=0) && (s<distmin) )
