@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.126 2010-06-23 06:48:34 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.127 2010-06-25 14:03:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -4447,7 +4447,8 @@ void G4Quasmon::ModifyInMatterCandidates()
 
 // Randomize the Resonance masses and calculate probabilities of hadronization for them
 void G4Quasmon::CalculateHadronizationProbabilities
-  (G4double E, G4double kVal, G4LorentzVector k4M,G4bool piF, G4bool gaF, G4bool first)
+  (G4double E, G4double kVal, G4LorentzVector k4M,G4bool piF, G4bool gaF, G4bool )
+  //(G4double E, G4double kVal, G4LorentzVector k4M,G4bool piF, G4bool gaF, G4bool first)
 //   =====================================================================E is not used====
 {                                                                  //       ^
   static const G4double mPi0 = G4QPDGCode(111).GetMass();          //       |
@@ -4528,10 +4529,12 @@ void G4Quasmon::CalculateHadronizationProbabilities
       G4bool pos=curCand->GetPossibility()&&totMass>tmpTM+frM;
       //G4bool pos=curCand->GetPossibility();
 #ifdef pdebug
-      G4bool pPrint = abs(cPDG)%10<3 && cPDG<80000000 ||cPDG==90001000||cPDG==90000001||
-        cPDG==90000002||cPDG==90001001||cPDG==90001002||cPDG==90002001||cPDG==90002002;
+      G4bool pPrint= (abs(cPDG)%10 <3 && cPDG <80000000) || (cPDG >80000000 && frM <5000.);
+      //G4bool pPrint = abs(cPDG)%10<3 && cPDG<80000000 ||cPDG==90001000||cPDG==90000001||
+      //  cPDG==90000002||cPDG==90001001||cPDG==90001002||cPDG==90002001||cPDG==90002002;
       //G4bool pPrint = cPDG==2212 || cPDG==2112 ||cPDG==90001000||cPDG==90000001;
       //G4bool pPrint = false;
+      //G4bool pPrint = true;
       if(pPrint) G4cout<<"G4Q::CHP:==****==>>>c="<<cPDG<<",dUD="<<dUD<<",pos="<<pos<<",eA="
                        <<envA<<",tM="<<totMass<<" > tmpTM+frM="<<tmpTM+frM<<G4endl;
 #endif
@@ -4714,8 +4717,9 @@ void G4Quasmon::CalculateHadronizationProbabilities
                     // *** Recent correction (****
                     //if ( (!piF && first && baryn < 3) || 
                     //     (!piF && !first) || 
-                    if ( (!piF && first && baryn < 3) || 
-                         (!piF && !first && baryn < 5 ) || 
+                    /////if ( (!piF && first && baryn < 3) || 
+                    /////     (!piF && !first && baryn < 5 ) || 
+                    if ( (!piF && baryn < 5 ) || 
                          ( piF && abs(dS) < 3) ) // Isotope Focusing for AtRest Reactions
                     //if(!qIso&&!dC||qIso>0&&dC<0||qIso<0&&dC>0)//MediumIsoFocusingForAll
                     //if(abs(dS)<3) // Universal IsotopeFocusing(<3) (Best for pi-capture)
@@ -4888,7 +4892,7 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //G4bool atrest=(eQ-mQ)/mQ<.001; // Q at rest (only PiCap)
                         // ***VTN*** CHECK IsNecessety toRecover theColTotRes to MinMassTot
                         if(mintM2>rtQ2) //==> Check of ResidualTotalNucleus ** Always **
-                        //if(2>3)  // Negligable difference difference
+                        //if(2>3)  // Negligable difference
                         {
                           G4double nz=0.;
                           if(atrest) nz=1.-(mintM2-rtQ2+pmk*dked)/(boundM*(rtEP+pmk));

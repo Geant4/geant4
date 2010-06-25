@@ -18,6 +18,10 @@ Summarize all code modifications & keep track of all tags in this file.
 
 <<<<<<< History (please, make changes only with Mikhail.Kossov@cern.ch approval)
 
+25-Jun-2010 M.Kosov                             (hadr-chips-V09-03-08)
+-----------------------------------------------------------------------
+Mutual CHIPS tag: Final implementation of the CHIPS Physics package
+
 24-Jun-2010 M.Kosov                             (hadr-chips-V09-03-07)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the CHIPS-cand0 for the final implementation
@@ -172,7 +176,6 @@ Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the Valgrind induced improvement
 
->>>>>>> 1.11
 21-Aug-2009 M.Kosov                              (hadr-chips-V09-02-06)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for added photon- and lepton-nuclear CHIPS inelastic

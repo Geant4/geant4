@@ -27,7 +27,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.170 2010-06-23 06:48:34 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.171 2010-06-25 14:03:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -5972,7 +5972,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
 #ifdef pdebug
           G4cout<<"--Warning--G4QE::FSI:dE/Mc4M="<<tot4Mom<<sdm<<". Correct it!"<<G4endl;
 #endif
-	    if(sdm < 0.1 || (re2 > 0. && !totCharge && !totBaryoN && sdm/re2 < .0001)) // @!@
+	    if(sdm < .01 || (re2 > 0. && !totCharge && !totBaryoN && sdm/re2 < .0001)) // @!@
           {
 #ifdef pdebug
             G4cout<<"...G4QE::FSI:E/M conservation is corrected by a photon"<<G4endl;

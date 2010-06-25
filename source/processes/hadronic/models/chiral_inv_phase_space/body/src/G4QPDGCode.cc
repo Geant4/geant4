@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.67 2010-06-24 16:20:11 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.68 2010-06-25 14:03:44 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -2261,13 +2261,14 @@ G4int G4QPDGCode::GetRelCrossIndex(G4int i, G4int o)  const
 
   if(theQCode<fragmStart) return 7;
   G4int sub=theQCode-fragmStart;
-  if ( (sub > 1 && sub < 8) || sub == 15) return 7;//Why they are in clusters?-Residuals(?)
+  if ( (sub > 1 && sub < 8) || (sub > 12 && sub <16)) return 7; // SuperIso & SuperStrange 
   G4int rel=sub;                         // case of nuclear baryons and isonuclei
-  if     (sub>31)rel =(sub-32)%15;       // case of heavy fragments (BaryNum>3)
-  else if(sub>15)rel = sub-16;           // case of nuclear di-baryon & tri-baryons
+  if     (sub>31) rel =(sub-32)%15;      // case of heavy fragments (BaryNum>3)
+  else if(sub>15) rel = sub-16;          // case of nuclear di-baryon & tri-baryons
 #ifdef debug
   G4cout<<"G4QPDGCode::RelGetCrossIndex:i="<<i<<",o="<<o<<",su="<<sub<<",re="<<rel<<G4endl;
 #endif
+  //if ( (rel > 5 && rel < 9) || (rel > 13 && rel <16)) return 7; // SuperStrange're closed
   if     (!i)                            // ==> input quark = 0(d) (d=-1/3)
   {
     if     (!o)       return 0;          // -> output quark = 0(d) => 0 = the same cluster
