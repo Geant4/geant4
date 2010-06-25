@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.11 2010-06-21 12:29:02 kmura Exp $
+// $Id: pyPhysicsLists.cc,v 1.12 2010-06-25 18:38:09 kmura Exp $
 // $Name: not supported by cvs2svn $
 // ====================================================================
 //   pyPhysicsLists.cc
@@ -216,7 +216,7 @@ void export_PhysicsLists()
   ADD_PHYSICS_LIST(QGSP_INCL_ABLA);
 #endif
 
-#if G4VERSION_NUMBER >= 930
+#if G4VERSION_NUMBER >= 940
   ADD_PHYSICS_LIST(QGSP_BERT_CHIPS);
 #endif
 
