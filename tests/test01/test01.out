@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
+ Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -39,6 +39,7 @@ World Size factor = 34641
 Total imprinted physical volumes for AssemblyDetector-1: 20
 Total imprinted physical volumes for AssemblyDetector-2: 6600
 Total imprinted physical volumes for AssemblyDetector-3: 4
+Imprinted volumes: av_5_impr_1_CONS_pv_0 - av_5_impr_1_CONS_pv_1 - av_5_impr_1_CONS_pv_2 - av_5_impr_1_CONS_pv_3 - 
 
 ---> Daughter CSG/Boolean will be made of Pb
 
