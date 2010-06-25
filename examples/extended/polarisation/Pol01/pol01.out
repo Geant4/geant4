@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
+ Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,15 +71,15 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+PolarizedMollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -88,12 +88,12 @@ pol-eBrem:   for  e-    SubType= 3
              PolBrem :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 1
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-PolarizedMollerBhabha :     Emin=          0 eV         Emax=   100 TeV
+PolarizedMollerBhabha :     Emin=          0 eV         Emax=   10 TeV
 
 pol-eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -158,33 +158,33 @@ Run Summary
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.784746 0.157031 0.881756 0.87597 0.815964 0.34493 0.585915 0.966517 0.344205 0.943876 0.807347 0.254181 0.938416 0.743521 0.639308 0.968436 0.268561 0.279301 0.147013 0.015922 0.590135 0.375176 0.423396 0.293763 
- i_lag = 3, j_lag = 13
- carry = 5.96046e-08, count24 = 13
+ float_seed_table[] = 0.806277 0.435074 0.641338 0.302137 0.289314 0.910982 0.26574 0.615783 0.802991 0.615199 0.0171965 0.355797 0.300653 0.264406 0.488926 0.643377 0.82808 0.421587 0.313535 0.913356 0.384442 0.287478 0.194851 0.374857 
+ i_lag = 0, j_lag = 10
+ carry = 5.96046e-08, count24 = 23
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31152
-	pol-compt = 248
-	pol-eBrem = 352
-	msc = 2989
-	pol-conv = 226
-	pol-phot = 167
-	pol-eIoni = 592
-	pol-annihil = 76
+	Transportation = 31140
+	pol-compt = 279
+	pol-eBrem = 326
+	msc = 2742
+	pol-conv = 204
+	pol-eIoni = 593
+	pol-phot = 149
+	pol-annihil = 60
  Gamma: 
-Mean Number per Event :1.0097
-Mean Energy :9.5775 MeV +- 1.9116 MeV
-Mean Polarization :-0.96267 +- 0.18817
+Mean Number per Event :1.0087
+Mean Energy :9.5869 MeV +- 1.8828 MeV
+Mean Polarization :-0.9648 +- 0.18329
  Electron: 
-Mean Number per Event :0.0325
-Mean Energy :5.2502 MeV +- 2.4196 MeV
-Mean Polarization :-0.72954 +- 0.28182
+Mean Number per Event :0.0336
+Mean Energy :5.2795 MeV +- 2.5025 MeV
+Mean Polarization :-0.73693 +- 0.27809
  Positron: 
-Mean Number per Event :0.0154
-Mean Energy :4.2103 MeV +- 2.0274 MeV
-Mean Polarization :-0.59722 +- 0.31426
+Mean Number per Event :0.0147
+Mean Energy :4.1367 MeV +- 2.1161 MeV
+Mean Polarization :-0.60891 +- 0.31626
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

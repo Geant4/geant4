@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
+ Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,7 +69,7 @@ The minimal step is equal to 0.01 mm
 F02PhysicsList::SetCuts:CutLength : 1 mm 
 
 total time(SetCuts)=0 s 
-Visualization Manager instantiating...
+Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
 
@@ -83,6 +83,9 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  OpenGLStoredX (OGL)
+  OpenGLImmediateX (OGLI)
+  OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
 
@@ -159,7 +162,6 @@ hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
@@ -168,7 +170,6 @@ hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
@@ -177,9 +178,8 @@ hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+            ICRU73QO :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 muMsc:   for mu+    SubType= 10
@@ -214,7 +214,7 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   200 keV
+            ICRU73QO :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
@@ -234,7 +234,6 @@ hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
@@ -249,9 +248,8 @@ hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+            ICRU73QO :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 ========= Table of registered couples ==============================
@@ -6367,7 +6365,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.08s Real=0.09s Sys=0.01s
+  User=0.09s Real=0.55s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

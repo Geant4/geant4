@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
+ Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,7 +52,7 @@ CsI Cs-I 4.51 273.15 6.32421e+08
      Nb of Material = 7
      Nb of Isotope =  0
      Nb of Element =  9
-Visualization Manager instantiating...
+Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
 
@@ -66,6 +66,9 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  OpenGLStoredX (OGL)
+  OpenGLImmediateX (OGLI)
+  OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
 

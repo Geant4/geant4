@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
+ Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -113,7 +113,6 @@ hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 GeV
@@ -164,7 +163,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=33.59s Real=33.59s Sys=0s
+  User=32.81s Real=48.36s Sys=0s
 
  ======================== run summary ======================
 

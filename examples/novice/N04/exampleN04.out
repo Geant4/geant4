@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-04    (9-April-2010)
+ Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,26 +12,10 @@
 
 
 <<< Geant4 Physics List engine packaging library: PACK 5.5
-<<< Geant4 Physics List simulation engine: QGSP 3.4
-
-*=====================================================================
-*                                                                     
-*   The Physics list QGSP is NO LONGER SUPPORTED !   
-*   and is likely to be deleted in a future release of Geant4             
-*                                                                     
-*    We recommend you try the physics lists QGSP_BERT,
-*      this offers similar functionality for most use cases            
-*                                                                      
-*                                                                      
-*   We invite you to report your use case for, and your experience with
-*    this physics list on the Geant4 User Forum dedicated to physics   
-*    lists:                                                            
-*  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/phys-list.html
-*                                                                      
-*=====================================================================*
+<<< Geant4 Physics List simulation engine: QGSP_BERT 3.4
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
-Visualization Manager instantiating...
+Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
 
@@ -45,6 +29,9 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
+  OpenGLStoredX (OGL)
+  OpenGLImmediateX (OGLI)
+  OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
 
@@ -86,7 +73,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -133,7 +120,6 @@ hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
@@ -168,16 +154,14 @@ hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   2 MeV
+            ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
@@ -198,9 +182,8 @@ hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
+            ICRU73QO :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
 hBrems:   for  kaon-    SubType= 3
@@ -247,7 +230,7 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   200 keV
+            ICRU73QO :     Emin=          0 eV         Emax=   200 keV
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   10 TeV
 
@@ -267,7 +250,6 @@ hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
@@ -294,9 +276,8 @@ hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      NuclearStopping= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :     Emin=          0 eV         Emax=   297.504 keV
+            ICRU73QO :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   10 TeV
 
 hBrems:   for  pi-    SubType= 3
@@ -333,12 +314,14 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                      Hadronic Processes for <kaon+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
    KaonPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                  G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                  G4LEKaonPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <kaon->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
   KaonMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                 G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                 G4LEKaonMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <lambda>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
@@ -351,24 +334,28 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                      Hadronic Processes for <neutron>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
     NeutronInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                   G4LENeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                   G4LENeutronInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
             nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
             nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
 
                      Hadronic Processes for <pi+>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
    PionPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                  G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                  G4LEPionPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <pi->
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
   PionMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                 G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                 G4LEPionMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <proton>
             hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
      ProtonInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
-                                    G4LEProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4LEProtonInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 ============================================================================================
 
 ========= Table of registered couples ==============================
@@ -415,9 +402,9 @@ Start Run processing.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     79 hits are stored in ExN04TrackerHitsCollection.
-     22 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.48210533 (GeV)
+     67 hits are stored in ExN04TrackerHitsCollection.
+     26 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.45910260004477 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -429,13 +416,13 @@ Stage 0->1 : 0 hits found in the muon chamber.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     75 hits are stored in ExN04TrackerHitsCollection.
-     20 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.4736239236114 (GeV)
+     44 hits are stored in ExN04TrackerHitsCollection.
+     26 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.65458864373915 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.88s Real=1.89s Sys=0s
+  User=2.6s Real=4.17s Sys=0.01s
 G4 kernel has come to Quit state.
 
