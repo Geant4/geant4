@@ -22,13 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeCheckBalance.cc,v 1.4 2010-06-24 22:19:41 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.5 2010-06-25 04:36:46 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
 //
 // 20100624  M. Kelsey -- Add baryon number, charge, and kinetic energy
+// 20100624  M. Kelsey -- Bug fix:  All checks should be |delta| !
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -62,8 +63,8 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   if (target) initial += target->getMomentum();
 
   initialCharge = 0;
-  if (bullet) initialCharge += bullet->getCharge();
-  if (target) initialCharge += target->getCharge();
+  if (bullet) initialCharge += G4int(bullet->getCharge());
+  if (target) initialCharge += G4int(target->getCharge());
 
   final = output.getTotalOutputMomentum();
 
@@ -88,7 +89,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   finalCharge = 0;
   for (unsigned ip=0; ip<pout.size(); ip++) {
     finalBaryon += pout[ip].baryon();
-    finalCharge += pout[ip].getCharge();
+    finalCharge += G4int(pout[ip].getCharge());
   }
 
   for (unsigned in=0; in<nout.size(); in++) {
@@ -99,19 +100,19 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   // Report results
   if (verboseLevel > 2) {
     G4cout << " initial px " << initial.px() << " py " << initial.py()
-	   << " pz " << initial.pz() << " E " << initial.e() << G4endl
-	   << " initial baryon number " << initialBaryon << G4endl
-	   << "   final px " << final.px() << " py " << final.py()
-	   << " pz " << final.pz() << " E " << final.e() << G4endl
-	   << "   final baryon number " << finalBaryon << G4endl;
+	   << " pz " << initial.pz() << " E " << initial.e()
+	   << " baryon " << initialBaryon << " charge " << initialCharge
+	   << "\nfinal px " << final.px() << " py " << final.py()
+	   << " pz " << final.pz() << " E " << final.e()
+	   << " baryon " << finalBaryon << " charge " << finalCharge << G4endl;
   }
 }
 
 // Compare relative and absolute violations to limits, and report
 
 G4bool G4CascadeCheckBalance::energyOkay() const {
-  G4bool relokay = (relativeE() < relativeLimit);
-  G4bool absokay = (deltaE() < absoluteLimit);
+  G4bool relokay = (std::abs(relativeE()) < relativeLimit);
+  G4bool absokay = (std::abs(deltaE()) < absoluteLimit);
 
   if (verboseLevel > 2)
     G4cout << " Energy conservation: relative " << relativeE()
@@ -123,8 +124,8 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
 }
 
 G4bool G4CascadeCheckBalance::ekinOkay() const {
-  G4bool relokay = (relativeKE() < relativeLimit);
-  G4bool absokay = (deltaKE() < absoluteLimit);
+  G4bool relokay = (std::abs(relativeKE()) < relativeLimit);
+  G4bool absokay = (std::abs(deltaKE()) < absoluteLimit);
 
   if (verboseLevel > 2)
     G4cout << " Kinetic energy balance: relative " << relativeKE()
@@ -136,8 +137,8 @@ G4bool G4CascadeCheckBalance::ekinOkay() const {
 }
 
 G4bool G4CascadeCheckBalance::momentumOkay() const {
-  G4bool relokay = (relativeP() < relativeLimit);
-  G4bool absokay = (deltaP() < absoluteLimit);
+  G4bool relokay = (std::abs(relativeP()) < relativeLimit);
+  G4bool absokay = (std::abs(deltaP()) < absoluteLimit);
 
   if (verboseLevel > 2)
     G4cout << " Momentum conservation: relative " << relativeP()
