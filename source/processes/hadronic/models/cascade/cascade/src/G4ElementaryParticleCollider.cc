@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4ElementaryParticleCollider.cc,v 1.65 2010-06-21 03:40:00 mkelsey Exp $
+//
+// $Id: G4ElementaryParticleCollider.cc,v 1.66 2010-06-26 04:51:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -57,6 +58,7 @@
 //		Use G4CascadeInterpolator for angular distributions.
 // 20100517  M. Kelsey -- Inherit from common base class, make arrays static
 // 20100519  M. Kelsey -- Use G4InteractionCase to compute "is" values.
+// 20100625  M. Kelsey -- Two bugs in n-body momentum, last particle recoil
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -349,7 +351,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	G4cout << " after rotation px " << mom.x() << " py " << mom.y() <<
 	  " pz " << mom.z() << G4endl;
       }
-      G4LorentzVector mom1 = -mom;
+      G4LorentzVector mom1(-mom.vect(), mom.e());
 
       particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0], 3));
       particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1],3));
@@ -394,10 +396,11 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	    }
 	    
 	    G4LorentzVector mom1 = generateWithFixedTheta(ct, modules[0]);
-	    
 	    mom1 = toSCM->rotate(mom3, mom1);
-	    
-	    G4LorentzVector mom2 = -(mom3 + mom1);
+
+	    // Second particle recoils off 1 & 3
+	    G4LorentzVector mom2(etot_scm);
+	    mom2 -= mom1+mom3;
 	    
 	    bad = false;
 	    generate = false;
@@ -482,8 +485,9 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	    mom = toSCM->rotate(tot_mom, mom);
 	    scm_momentums.push_back(mom);
 
-	    // and the last one
-	    G4LorentzVector mom1 = -(mom+tot_mom);
+	    // Last particle recoils off everything else
+	    G4LorentzVector mom1(etot_scm);
+	    mom1 -= mom+tot_mom;
 	    
 	    scm_momentums.push_back(mom1);  
 	    bad = false;
