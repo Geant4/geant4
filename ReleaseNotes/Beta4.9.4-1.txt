@@ -618,8 +618,6 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Trap use of 'i_mode' and print warning.
     + HepRep:
       o Added command "/vis/heprep/renderCylAsPolygons".
-      o Added protection against multiple repaint call, and protection against
-        resizeGl with bad values.
     + gMocren:
       o Removed dependency on G4VisManager. Improved printout.
     + OpenGL:
@@ -629,6 +627,8 @@ List of main features and fixes included in this Beta release since 9.3.p01:
       o Speed improvements for polymarkers (e.g., trajectories).
       o Corrected strdup usage in G4OpenGLViewer.
       o Use generic section and cutaway algorithm.
+      o Added protection against multiple repaint call, and protection against
+        resizeGl with bad values.
     + OpenInventor:
       o Added protection against repeated initialisation.
     + RayTracer:
