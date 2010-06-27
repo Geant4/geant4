@@ -276,6 +276,9 @@ int main(int argc, char** argv)
         (*fin) >> nbinsd;
       } else if(line == "#nbinspi") {
         (*fin) >> nbinspi;
+      } else if(line == "#paw") {
+        G4String sss;
+        (*fin) >> sss;
       } else if(line == "#nangle") {
         (*fin) >> nangl;
       } else if(line == "#nanglepi") {
@@ -332,8 +335,8 @@ int main(int argc, char** argv)
 	xssolang = false;
       } else if(line == "#xs_ghad") {
 	xsbgg = false;
-      } else if(line == "#run") {
-        break;
+	//} else if(line == "#run") {
+        //break;
       } else if(line == "#verbose") {
         (*fin) >> verbose;
         G4cout << "### New verbose level " << verbose << G4endl;
