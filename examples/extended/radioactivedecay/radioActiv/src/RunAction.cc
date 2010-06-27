@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: RunAction.cc,v 1.2 2010-06-27 21:46:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,6 +67,7 @@ void RunAction::ParticleCount(G4String name, G4double Ekin)
 {
   particleCount[name]++;
   Emean[name] += Ekin;
+  if (particleCount[name] == 1) Emin[name] = Emax[name] = Ekin;
   if (Ekin < Emin[name]) Emin[name] = Ekin;
   if (Ekin > Emax[name]) Emax[name] = Ekin;  
 }
@@ -77,10 +78,12 @@ void RunAction::Balance(G4double Ebal, G4double Pbal)
 {
   decayCount++;
   Ebalance[0] += Ebal;
+  if (decayCount == 1) Ebalance[1] = Ebalance[2] = Ebal;
   if (Ebal < Ebalance[1]) Ebalance[1] = Ebal;
   if (Ebal > Ebalance[2]) Ebalance[2] = Ebal;
   
   Pbalance[0] += Pbal;
+  if (decayCount == 1) Pbalance[1] = Pbalance[2] = Pbal;  
   if (Pbal < Pbalance[1]) Pbalance[1] = Pbal;
   if (Pbal > Pbalance[2]) Pbalance[2] = Pbal;    
 }

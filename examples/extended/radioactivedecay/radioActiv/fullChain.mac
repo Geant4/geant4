@@ -3,7 +3,6 @@
 #
 /gun/particle ion
 /gun/ion 92 238
-/gun/energy 0. eV
 #
 /radioActiv/tracking/fullChain true
 #

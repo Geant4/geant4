@@ -3,7 +3,6 @@
 #
 /gun/particle ion
 /gun/ion 27 60
-/gun/energy 0. eV
 #
 /tracking/verbose 2
 /run/beamOn 1

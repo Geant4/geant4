@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2010-06-10 18:56:24 maire Exp $
+$Id: History,v 1.2 2010-06-27 21:46:02 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
+27-06-10 mma
+- PrimaryGenerator : E=0*eV by default
+- RunAction : correct computation of min - max
     
-06-06-10 Michel Maire (radioActiv-V09-03-00)
+06-06-10 Michel Maire
 - Created.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2010-06-27 21:46:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,6 +44,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
+  
+  particleGun->SetParticleEnergy(0*eV);
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));          
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,9 +70,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
        = G4ParticleTable::GetParticleTable()->GetIon(Z,A,excitEnergy);
     particleGun->SetParticleDefinition(ion);
     particleGun->SetParticleCharge(ionCharge);
-    particleGun->SetParticleEnergy(0*eV);
-    particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
-    particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));        
   }  
   
   //create vertex

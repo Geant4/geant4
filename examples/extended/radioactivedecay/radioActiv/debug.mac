@@ -4,6 +4,5 @@
 #
 /gun/particle ion
 /gun/ion 10 24
-/gun/energy 0. eV
 #  
 /run/beamOn 1

@@ -3,7 +3,6 @@
 #
 /gun/particle ion
 /gun/ion 10 24
-/gun/energy 0. eV
 #
 /testem/histo/setFileName run1
 /testem/histo/setFileType hbook
