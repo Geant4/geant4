@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.9 2010-06-23 19:25:35 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.10 2010-06-27 07:56:09 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -63,53 +63,55 @@ G4InuclNuclei::makeDefinition(G4double a, G4double z, G4double exc) {
 // from G4IntraNuclearCascader
 
 G4ParticleDefinition* 
-G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc) {
+G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc)
+{
   G4int na=G4int(a), nz=G4int(z), nn=na-nz;	// # nucleon, proton, neutron
-
   // See G4IonTable.hh::GetNucleusEncoding for explanation
-  G4int code = ((100+nz)*1000 + na)*10 + (exc>0.)?1:0;
+  G4int code = ((100+nz)*1000 + na)*10 + (exc>0. ? 1:0);
 
   // Use local lookup table (see G4IonTable.hh) to maintain singletons
   // NOTE:  G4ParticleDefinitions don't need to be explicitly deleted
   //        (see comments in G4IonTable.cc::~G4IonTable)
+
   static std::map<G4int, G4ParticleDefinition*> fragmentList;
+  if (fragmentList.find(code) != fragmentList.end()) {
+    return fragmentList[code];
+  } else {
+    // Name string follows format in G4IonTable.cc::GetIonName(Z,A,E)
+    std::stringstream zstr, astr, estr;
+    zstr << nz;
+    astr << na;
+    estr << G4int(1000*exc+0.5);	// keV in integer form
 
-  if (fragmentList.find(code) != fragmentList.end()) return fragmentList[code];
+    G4String name = "Z" + zstr.str() + "A" + astr.str();
+    if (exc>0.) name += "["+estr.str()+"]";
 
-  // Name string follows format in G4IonTable.cc::GetIonName(Z,A,E)
-  std::stringstream zstr, astr, estr;
-  zstr << nz;
-  astr << na;
-  estr << G4int(1000*exc+0.5);	// keV in integer form
+    // Simple minded mass calculation use constants in CLHEP (all in MeV)
+    G4double mass = nz*proton_mass_c2 + nn*neutron_mass_c2
+      + bindingEnergy(a,z) + exc;
 
-  G4String name = "Z" + zstr.str() + "A" + astr.str();
-  if (exc>0.) name += "["+estr.str()+"]";
+    //    Arguments for constructor are as follows
+    //               name             mass          width         charge
+    //             2*spin           parity  C-conjugation
+    //          2*Isospin       2*Isospin3       G-parity
+    //               type    lepton number  baryon number   PDG encoding
+    //             stable         lifetime    decay table
+    //             shortlived      subType    anti_encoding Excitation-energy
 
-  // Simple minded mass calculation use constants in CLHEP (all in MeV)
-  G4double mass = nz*proton_mass_c2 + nn*neutron_mass_c2
-    + bindingEnergy(a,z) + exc;
+    G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
+           << "with non-standard PDGencoding." << G4endl;
 
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding Excitation-energy
-
-  G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
-	 << "with non-standard PDGencoding." << G4endl;
-
-  G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
-			      0,          +1,   0,
+    G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
+  			      0,          +1,   0,
 			      0,          0,    0,
 			      "nucleus",  0,    na, code,
 			      true,	  0.,   0,
 			      true, "generic",  0,  exc);
-  fragPD->SetAntiPDGEncoding(0);
-
-  fragmentList[code] = fragPD;		// Store in table for next lookup
-  return fragPD;
+    fragPD->SetAntiPDGEncoding(0);
+    //    G4cout << fragPD->GetParticleName() << G4endl;
+    fragmentList[code] = fragPD;		// Store in table for next lookup
+    return fragPD;
+  }
 }
 
 G4double G4InuclNuclei::getNucleiMass(G4double a, G4double z) {
