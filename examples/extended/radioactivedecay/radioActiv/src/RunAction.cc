@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.2 2010-06-27 21:46:02 maire Exp $
+// $Id: RunAction.cc,v 1.3 2010-06-27 22:28:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,9 +122,9 @@ void RunAction::EndOfRunAction(const G4Run* run)
          
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-	   << "  Emin = "  << std::setw(wid) << G4BestUnit(eMin,  "Energy")
-	   << "  Emax = "  << std::setw(wid) << G4BestUnit(eMax,  "Energy") 
-           << G4endl;
+	   << "\t( "  << G4BestUnit(eMin, "Energy")
+	   << " --> " << G4BestUnit(eMax, "Energy") 
+           << ")" << G4endl;	   
  }
  
  //energy momentum balance
@@ -133,20 +133,20 @@ void RunAction::EndOfRunAction(const G4Run* run)
  G4double Pbmean = Pbalance[0]/decayCount;
   
  G4cout << "\n Energy and momentum balance : initial state - final state"
-        << "\n (excluding gamma desexcitation) : \n"  
+        << "\n (excluding gamma desexcitation from momentum balance) : \n"  
         << G4endl;
          
  G4cout 
  << "  Energy:   mean = " << std::setw(wid) << G4BestUnit(Ebmean, "Energy")
-	    << "  min = " << std::setw(wid) << G4BestUnit(Ebalance[1], "Energy")
-	    << "  max = " << std::setw(wid) << G4BestUnit(Ebalance[2], "Energy")
-            << G4endl;
+	    << "\t( "  << G4BestUnit(Ebalance[1], "Energy")
+	    << " --> " << G4BestUnit(Ebalance[2], "Energy")
+            << ")" << G4endl;
 	   
  G4cout 
  << "  Momentum: mean = " << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
-	    << "  min = " << std::setw(wid) << G4BestUnit(Pbalance[1], "Energy")
-	    << "  max = " << std::setw(wid) << G4BestUnit(Pbalance[2], "Energy")
-            << "\n" << G4endl;
+	    << "\t( "  << G4BestUnit(Pbalance[1], "Energy")
+	    << " --> " << G4BestUnit(Pbalance[2], "Energy")
+            << ")\n" << G4endl;
 	   	         
  // remove all contents in particleCount
  // 

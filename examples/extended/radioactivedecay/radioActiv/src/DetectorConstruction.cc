@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2010-06-27 22:28:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +41,8 @@
 
 DetectorConstruction::DetectorConstruction()
 {
-  worldSizeXY = 2*cm;
-  worldSizeZ  = 2*cm;    
+  worldSizeXY = 2*mm;
+  worldSizeZ  = 2*mm;    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
