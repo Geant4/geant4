@@ -102,30 +102,46 @@ void G4TDataItem::LoadFromASCII(const TString& filename, Bool_t load3)
   Float_t dval = 0;
   Float_t sval = 0;
   Float_t rval = 0; // The branch "r" is not used later on (@@ how to get rid of it?)
-  switch(fHeader.fFunctErrorType)
+  //
+  TBranch* branchS = 0;
+  TBranch* branchD = 0;
+  Int_t   rEntries = 0;
+  // @@ Why switch does not work on some compilers ?
+  //switch(fHeader.fFunctErrorType)
+  //{
+  //case NoError:
+  if(fHeader.fFunctErrorType == NoError)
   {
-  case NoError:
     fData->ReadFile(filename.Data(),vname.Data());
     // wait for tree
     while(fData == NULL) gSystem->Sleep(10);
     // @@ OPTIMIZE (need a better way to do this)
     // in kumac: ve/cop $SIGMA(s[j][a]/20.) d[j][a]
+    branchS = fData->GetBranch("s");
+    branchD = fData->Branch("d", &dval, "d");
     TBranch* branchS = fData->GetBranch("s");
     TBranch* branchD = fData->Branch("d", &dval, "d");
     branchS->SetAddress(&sval);
-    Int_t rEntries = fData->GetEntries();
+    rEntries = fData->GetEntries();
+    //Int_t rEntries = fData->GetEntries();
     for(Int_t i = 0; i < rEntries; ++i)
     {
       branchS->GetEntry(i);
       dval = sval / 20;                  // Fake 5% errors
       branchD->Fill();
     }
-    break;
-  case Absolute:
+  }
+  else if(fHeader.fFunctErrorType == Absolute)
+  {
+		//  break;
+  //case Absolute:
     vname = "t:s:d";
     fData->ReadFile(filename.Data(),vname.Data());
-    break;
-  case Relative:
+  }
+  else if(fHeader.fFunctErrorType == Absolute)
+  {
+  //  break;
+  //case Relative:
     vname = "t:s:r";
     fData->ReadFile(filename.Data(),vname.Data());
     // wait for tree
@@ -145,8 +161,11 @@ void G4TDataItem::LoadFromASCII(const TString& filename, Bool_t load3)
       dval = rval * sval;
       branchD->Fill();
     }
-    break;
-  case InPerCent:
+  }
+  else if(fHeader.fFunctErrorType == InPerCent)
+  {
+  //  break;
+  //case InPerCent:
     vname = "t:s:p";
     fData->ReadFile(filename.Data(),vname.Data());
     // wait for tree
@@ -166,7 +185,12 @@ void G4TDataItem::LoadFromASCII(const TString& filename, Bool_t load3)
       dval = rval * sval / 100;
       branchD->Fill();
     }
-    break;
+  }
+  else
+  {
+  //  break;
+  //default:
+    cout<<"*Warning*G4TDataItem::LoadFromASCII:errorType= "<<fHeader.fFunctErrorType<<endl;
   }
 }
 

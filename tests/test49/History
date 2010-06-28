@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010-06-24 14:39:23 mkossov Exp $
+$Id: History,v 1.4 2010-06-28 07:22:20 mkossov Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 28th, 2010  Mikhail Kosov  (test49-V09-03-02)
+- G4TDataItem is modified, because of compilation problems on some platforms
 
 Jun 24th, 2010  Mikhail Kosov  (test49-V09-03-01)
 - Generalization of thest49 for different spectra in different reactions
