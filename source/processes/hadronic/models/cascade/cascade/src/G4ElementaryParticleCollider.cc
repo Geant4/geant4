@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.66 2010-06-26 04:51:23 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.67 2010-06-28 17:33:07 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -92,6 +92,7 @@
 #include "G4CascadeXiMinusPChannel.hh"
 #include "G4CascadeXiMinusNChannel.hh"
 
+#include "G4CascadeCheckBalance.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclParticleNames.hh"
@@ -143,6 +144,9 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     return;
   }
 
+  G4CascadeCheckBalance balance(0.005, 0.01);		// Tight tolerances
+  balance.setVerboseLevel(verboseLevel);
+
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron
 
@@ -163,13 +167,13 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2,
 			  &convertToSCM);
     
-    if(verboseLevel > 2){
+    if (verboseLevel > 2) {
       G4cout << " particles " << particles.size() << G4endl;
       
       for(G4int i = 0; i < G4int(particles.size()); i++) 
 	particles[i].printParticle();
-      
     }
+
     if(!particles.empty()) { // convert back to Lab
       G4LorentzVector mom;		// Buffer to avoid memory churn
       particleIterator ipart;
@@ -177,6 +181,12 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	mom = convertToSCM.backToTheLab(ipart->getMomentum());
 	ipart->setMomentum(mom); 
       };
+
+      if (verboseLevel > 2) {		// Check conservation laws
+	balance.collide(bullet, target, particles);
+	balance.okay();			// Report violations, ignore return
+      }
+
       std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
       output.addOutgoingParticles(particles);
     };
@@ -195,7 +205,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	G4double etot_scm = convertToSCM.getTotalSCMEnergy();
 	
 	generateSCMpionAbsorption(etot_scm, particle1, particle2);
-	
+
 	if(!particles.empty()) { // convert back to Lab
 	  G4LorentzVector mom;	// Buffer to avoid memory churn
 	  particleIterator ipart;
@@ -203,6 +213,12 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	    mom = convertToSCM.backToTheLab(ipart->getMomentum());
 	    ipart->setMomentum(mom); 
 	  };
+
+	  if (verboseLevel > 2) {	// Check conservation laws
+	    balance.collide(bullet, target, particles);
+	    balance.okay();		// Report violations, ignore return
+	  }
+
 	  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(particles);
 	};

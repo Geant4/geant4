@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.10 2010-06-27 07:56:09 dennis Exp $
+// $Id: G4InuclNuclei.cc,v 1.11 2010-06-28 17:33:07 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -30,7 +30,9 @@
 // 20100319  M. Kelsey -- Add information message to makeNuclearFragment().
 //	     Use new GetBindingEnergy() function instead of bindingEnergy().
 // 20100622  M. Kelsey -- Use local "bindingEnergy()" function to call through.
+// 20100627  M. Kelsey -- Test for non-physical fragments and abort job.
 
+#include "G4HadronicException.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4Ions.hh"
@@ -66,6 +68,14 @@ G4ParticleDefinition*
 G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc)
 {
   G4int na=G4int(a), nz=G4int(z), nn=na-nz;	// # nucleon, proton, neutron
+
+  if (na<0 or nz<0) {
+    G4cerr << " >>> G4InuclNuclei::makeNuclearFragment() called with"
+	   << " impossible arguments A=" << a << " Z=" << z << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__,
+			      "G4InuclNuclei impossible A/Z arguments");
+  }
+
   // See G4IonTable.hh::GetNucleusEncoding for explanation
   G4int code = ((100+nz)*1000 + na)*10 + (exc>0. ? 1:0);
 
@@ -109,7 +119,7 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc)
 			      true, "generic",  0,  exc);
     fragPD->SetAntiPDGEncoding(0);
     //    G4cout << fragPD->GetParticleName() << G4endl;
-    fragmentList[code] = fragPD;		// Store in table for next lookup
+    fragmentList[code] = fragPD;	// Store in table for next lookup
     return fragPD;
   }
 }

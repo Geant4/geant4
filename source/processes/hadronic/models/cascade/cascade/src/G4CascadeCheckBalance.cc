@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeCheckBalance.cc,v 1.5 2010-06-25 04:36:46 mkelsey Exp $
+//
+// $Id: G4CascadeCheckBalance.cc,v 1.6 2010-06-28 17:33:07 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -30,6 +31,9 @@
 //
 // 20100624  M. Kelsey -- Add baryon number, charge, and kinetic energy
 // 20100624  M. Kelsey -- Bug fix:  All checks should be |delta| !
+// 20100627  M. Kelsey -- Always report violations on cerr, regardless of
+//		verbosity.
+// 20100628  M. Kelsey -- Add interface to take list of particles directly
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -39,6 +43,7 @@
 #include "G4InuclParticle.hh"
 #include "G4CollisionOutput.hh"
 #include "G4LorentzVector.hh"
+#include <vector>
 
 
 // Constructor sets acceptance limits
@@ -102,11 +107,26 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     G4cout << " initial px " << initial.px() << " py " << initial.py()
 	   << " pz " << initial.pz() << " E " << initial.e()
 	   << " baryon " << initialBaryon << " charge " << initialCharge
-	   << "\nfinal px " << final.px() << " py " << final.py()
+	   << "\n  final px " << final.px() << " py " << final.py()
 	   << " pz " << final.pz() << " E " << final.e()
 	   << " baryon " << finalBaryon << " charge " << finalCharge << G4endl;
   }
 }
+
+// Take list of output particles directly (e.g., from G4EPCollider internals)
+
+void G4CascadeCheckBalance::collide(G4InuclParticle* bullet, 
+				    G4InuclParticle* target,
+    const std::vector<G4InuclElementaryParticle>& particles) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CascadeCheckBalance::collide(<vector>)" << G4endl;
+
+  static G4CollisionOutput tempOutput;		// Buffer for processing
+  tempOutput.reset();
+  tempOutput.addOutgoingParticles(particles);
+  collide(bullet, target, tempOutput);
+}
+
 
 // Compare relative and absolute violations to limits, and report
 
@@ -114,11 +134,15 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
   G4bool relokay = (std::abs(relativeE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaE()) < absoluteLimit);
 
-  if (verboseLevel > 2)
-    G4cout << " Energy conservation: relative " << relativeE()
+  if (!relokay || !absokay) {
+    G4cerr << " Energy conservation: relative " << relativeE()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaE()
 	   << (absokay ? " conserved" : " VIOLATED") << G4endl;
+  } else if (verboseLevel > 2) {
+    G4cout << " Energy conservation: relative " << relativeE()
+	   << " conserved absolute " << deltaE() << " conserved" << G4endl;
+  }
 
   return (relokay && absokay);
 }
@@ -127,11 +151,15 @@ G4bool G4CascadeCheckBalance::ekinOkay() const {
   G4bool relokay = (std::abs(relativeKE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaKE()) < absoluteLimit);
 
-  if (verboseLevel > 2)
-    G4cout << " Kinetic energy balance: relative " << relativeKE()
+  if (!relokay || !absokay) {
+    G4cerr << " Kinetic energy balance: relative " << relativeKE()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaKE()
 	   << (absokay ? " conserved" : " VIOLATED") << G4endl;
+  } else if (verboseLevel > 2) {
+    G4cout << " Kinetic energy balance: relative " << relativeKE()
+	   << " conserved absolute " << deltaKE() << " conserved" << G4endl;
+  }
 
   return (relokay && absokay);
 }
@@ -140,11 +168,15 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
   G4bool relokay = (std::abs(relativeP()) < relativeLimit);
   G4bool absokay = (std::abs(deltaP()) < absoluteLimit);
 
-  if (verboseLevel > 2)
-    G4cout << " Momentum conservation: relative " << relativeP()
+  if (!relokay || !absokay) {
+    G4cerr << " Momentum conservation: relative " << relativeP()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaP()
 	   << (absokay ? " conserved" : " VIOLATED") << G4endl;
+  } else if (verboseLevel > 2) {
+    G4cout << " Momentum conservation: relative " << relativeP()
+	   << " conserved absolute " << deltaP() << " conserved" << G4endl;
+  }
 
   return (relokay && absokay);
 }
@@ -152,7 +184,7 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
 G4bool G4CascadeCheckBalance::baryonOkay() const {
   G4bool bokay = (deltaB() == 0);	// Must be perfect!
 
-  if (!bokay && verboseLevel > 2)
+  if (!bokay)
     G4cerr << " Baryon number VIOLATED " << deltaB() << G4endl;
 
   return bokay;
@@ -161,7 +193,7 @@ G4bool G4CascadeCheckBalance::baryonOkay() const {
 G4bool G4CascadeCheckBalance::chargeOkay() const {
   G4bool qokay = (deltaQ() == 0);	// Must be perfect!
 
-  if (!qokay && verboseLevel > 2)
+  if (!qokay)
     G4cerr << " Charge conservation VIOLATED " << deltaB() << G4endl;
 
   return qokay;

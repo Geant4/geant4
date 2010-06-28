@@ -24,17 +24,21 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeCheckBalance.hh,v 1.2 2010-06-24 20:44:24 mkelsey Exp $
+//
+// $Id: G4CascadeCheckBalance.hh,v 1.3 2010-06-28 17:33:07 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
 // same interface as collision generators.
 //
 // 20100624  M. Kelsey -- Add baryon conservation check and kinetic energy
+// 20100628  M. Kelsey -- Add interface to take list of particles directly
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
 #include "G4LorentzVector.hh"
+#include "G4InuclElementaryParticle.hh"
+#include <vector>
 
 class G4InuclParticle;
 class G4CollisionOutput;
@@ -46,6 +50,10 @@ public:
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
+
+  // This is for use with G4EPCollider internal checks
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       const std::vector<G4InuclElementaryParticle>& particles);
 
   // Checks on conservation laws (kinematics, baryon number, charge)
   G4bool energyOkay() const;
