@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2010-06-28 17:33:07 mkelsey Exp $
+$Id: History,v 1.116 2010-06-29 00:24:45 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -17,24 +17,7 @@ code and to keep track of all tags.
 
 28 June 2010 Michael Kelsey
 ---------------------------
-- G4CascadeCheckBalance:  Add collide(...,<vector>) interface to allow use 
-  from within G4ElementaryParticleCollider.
-
-- G4ElementaryParticleCollider.cc:  Add conservation checks within ::collide().
-
-- G4IntraNucleiCascader.cc:  Add more diagnostic messages.  Test for
-  negative values of afin, zfin, and try again.
-
-27 June 2010 Michael Kelsey
----------------------------
-- G4CascadeCheckBalance.cc:  Report violations on G4cerr always, regardless
-  of verbosity level.
-
-- G4IntraNucleiCascader.cc:  Set round-off limit (1e-6), and test nuclear
-  recoil energy for bound (setting to zero) before doing energy-violation
-  test.
-
-- G4InuclNuclei.cc:  Abort job if passed negative Z or A argument.
+- G4BigBanger.cc:  Missed one instance of GetBindingEnergy().
 
 26 June 2010 Dennis Wright
 --------------------------

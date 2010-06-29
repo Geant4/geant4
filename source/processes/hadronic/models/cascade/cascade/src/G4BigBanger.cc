@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.30 2010-06-25 09:43:58 gunter Exp $
+// $Id: G4BigBanger.cc,v 1.31 2010-06-29 00:24:45 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +33,7 @@
 // 20100407  M. Kelsey -- Replace std::vector<> returns with data members.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, clean up code
+// 20100628  M. Kelsey -- Use old "bindingEnergy" fn as wrapper
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -83,7 +84,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   toTheNucleiSystemRestFrame.setTarget(nuclei_target);
   toTheNucleiSystemRestFrame.toTheTargetRestFrame();
   
-  G4double etot = (EEXS - G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z) ) ) * MeV/GeV;  // To Bertini units
+  G4double etot = (EEXS - bindingEnergy(A,Z)) * MeV/GeV;  // To Bertini units
   if (etot < 0.0) etot = 0.0;
   
   if (verboseLevel > 2) {
