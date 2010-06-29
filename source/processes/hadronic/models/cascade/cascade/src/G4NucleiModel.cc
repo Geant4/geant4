@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.58 2010-06-23 19:25:35 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.59 2010-06-29 00:32:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -56,6 +56,7 @@
 //		mutliple times, by clearing vectors each time through;
 //		avoid extra work by returning if A and Z are same as
 //		before.
+// 20100628  M. Kelsey -- Two momentum-recoil bugs; don't subtract energies!
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -1136,8 +1137,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
       while (casparticles.size() == 0 && itryg < itry_max) {      
 	itryg++;
-
-	if(itryg > 0) particles.clear();
+	particles.clear();
       
 	//    nucleons coordinates and momenta in nuclei rest frame
 	std::vector<G4ThreeVector> coordinates;
@@ -1373,6 +1373,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    // last momentum
 
 	    mom *= 0.;		// Cheap way to reset
+	    mom.setE(bullet->getEnergy()+target->getEnergy());
+
 	    for(G4int j=0; j< ia-1; j++) mom -= momentums[j]; 
 
 	    momentums.push_back(mom);
@@ -1458,7 +1460,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  };
 
 	  if(tr >= 0.0) { // cascad particle
-	    coordinates[ip] += mom*tr / pmod;
+	    coordinates[ip] += mom.vect()*tr / pmod;
 	    casparticles.push_back(G4CascadParticle(raw_particles[ip], 
 						    coordinates[ip], 
 						    number_of_zones, large, 0));

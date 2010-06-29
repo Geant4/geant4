@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.6 2010-06-28 17:33:07 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.7 2010-06-29 00:32:11 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -33,7 +33,8 @@
 // 20100624  M. Kelsey -- Bug fix:  All checks should be |delta| !
 // 20100627  M. Kelsey -- Always report violations on cerr, regardless of
 //		verbosity.
-// 20100628  M. Kelsey -- Add interface to take list of particles directly
+// 20100628  M. Kelsey -- Add interface to take list of particles directly,
+//		bug fix reporting of charge conservation error.
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -194,7 +195,7 @@ G4bool G4CascadeCheckBalance::chargeOkay() const {
   G4bool qokay = (deltaQ() == 0);	// Must be perfect!
 
   if (!qokay)
-    G4cerr << " Charge conservation VIOLATED " << deltaB() << G4endl;
+    G4cerr << " Charge conservation VIOLATED " << deltaQ() << G4endl;
 
   return qokay;
 }
