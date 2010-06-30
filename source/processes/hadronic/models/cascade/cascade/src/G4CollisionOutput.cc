@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.24 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.25 2010-06-30 23:07:04 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,6 +32,7 @@
 // 20100418  M. Kelsey -- Add function to boost output lists to lab frame
 // 20100520  M. Kelsey -- Add function to rotate Z axis, from G4Casc.Interface
 // 20100620  M. Kelsey -- Add some diagnostics in setOnShell, simplify if's
+// 20100630  M. Kelsey -- Use "getExcitationEnergyInGeV()" instead of ".001*"
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -91,7 +92,7 @@ G4LorentzVector G4CollisionOutput::getTotalOutputMomentum() const {
   }
   for(i = 0; i < G4int(nucleiFragments.size()); i++) {
     tot_mom += nucleiFragments[i].getMomentum();
-    eex_r += 0.001 * nucleiFragments[i].getExitationEnergy();
+    eex_r += nucleiFragments[i].getExitationEnergyInGeV();
   }
   tot_mom.setE(tot_mom.e() + eex_r);
   return tot_mom;

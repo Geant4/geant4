@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.43 2010-06-28 17:33:07 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.44 2010-06-30 23:07:04 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -127,6 +127,10 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     if (inter_case == 1) { 		// particle with nuclei
       if (verboseLevel > 2)
 	G4cout << " itry " << itry << " inter_case 1 " << G4endl;
+
+      if (verboseLevel > 3)
+	G4cout << " bparticle charge " << bparticle->getCharge()
+	       << " baryon number " << bparticle->baryon() << G4endl;
 
       zfin += bparticle->getCharge();
       afin += bparticle->baryon();
@@ -269,14 +273,19 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     particleIterator ipart;
 
     for (ipart = output_particles.begin(); ipart != output_particles.end(); ipart++) {
-      if (verboseLevel > 3) ipart->printParticle();
+      if (verboseLevel > 3) {
+	ipart->printParticle();
+	G4cout << "  charge " << ipart->getCharge() << " baryon number "
+	       << ipart->baryon() << G4endl;
+      }
+
       momentum_out += ipart->getMomentum();
 
       zfin -= ipart->getCharge();
       afin -= ipart->baryon();
     };
 
-    if (afin < 0. || zfin < 0.) {	// Sanity check before proceeding
+    if (afin<0. || zfin<0. || afin<zfin) {  // Sanity check before proceeding
       G4cerr << " >>> G4IntraNucleiCascader ERROR:  Recoil nucleus is not"
 	     << " physical! A=" << afin << " Z=" << zfin << G4endl;
       continue;				// Discard event and try again
@@ -304,6 +313,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       G4InuclNuclei outgoing_nuclei(afin, zfin);
       outgoing_nuclei.setModel(4);
       
+      // FIXME:  This is non-relativistic; can't just add mass to energy
       G4double mass = outgoing_nuclei.getMass();
       momentum_out += outgoing_nuclei.getMomentum();
 
@@ -326,21 +336,27 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       outgoing_nuclei.setMomentum(momentum_out);
       
       G4double Eex = (nucEkx - outgoing_nuclei.getKineticEnergy()) * GeV;
-      if (verboseLevel > 3) G4cout << "  Eex  " << Eex  <<  G4endl;
-      
-      if (goodCase(afin, zfin, Eex, ekin_in)) { // ok, exitation energy > cut
-	std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
-	output.addOutgoingParticles(output_particles);
-	
-	outgoing_nuclei.setExitationEnergy(Eex);
-	outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);
-	if (verboseLevel > 3) outgoing_nuclei.printParticle();
-	
-	output.addTargetFragment(outgoing_nuclei);
-	return;
-      } else {
-	if (verboseLevel > 2) G4cout << " nuclear recoil failed." << G4endl;
+      if (verboseLevel > 3) {
+	G4cout << " candidate outgoing nucleus " << G4endl;
+	outgoing_nuclei.printParticle();
+	G4cout << "  Eex  " << Eex  <<  G4endl;
       }
+
+      if (!goodCase(afin, zfin, Eex, ekin_in)) { 	// unphysical recoil
+	if (verboseLevel > 2) G4cout << " nuclear recoil failed." << G4endl;
+	continue;
+      }
+
+      outgoing_nuclei.setExitationEnergy(Eex);
+      outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);
+      if (verboseLevel > 3) outgoing_nuclei.printParticle();
+      
+      output.addTargetFragment(outgoing_nuclei);
+
+      std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
+      output.addOutgoingParticles(output_particles);
+      
+      return;
     } else { 	// special case, when one has no nuclei after the cascad
       if (afin == 1.0) { // recoiling nucleon
 	if (verboseLevel > 3)

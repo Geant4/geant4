@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.7 2010-06-29 00:32:11 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.8 2010-06-30 23:07:04 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -35,6 +35,7 @@
 //		verbosity.
 // 20100628  M. Kelsey -- Add interface to take list of particles directly,
 //		bug fix reporting of charge conservation error.
+// 20100630  M. Kelsey -- for nuclei, include excitation energies in total.
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -68,13 +69,13 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   if (bullet) initial += bullet->getMomentum();
   if (target) initial += target->getMomentum();
 
+  final = output.getTotalOutputMomentum();
+
+  // Baryon number and charge must be computed "by hand"
   initialCharge = 0;
   if (bullet) initialCharge += G4int(bullet->getCharge());
   if (target) initialCharge += G4int(target->getCharge());
 
-  final = output.getTotalOutputMomentum();
-
-  // Baryon number and charge must be computed "by hand"
   G4InuclElementaryParticle* pbullet =
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* ptarget =
@@ -86,6 +87,11 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   initialBaryon =
     ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
      (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
+
+  // For nuclei, add excitation energy to initial total energy
+  // c.f. G4CollisionOutput::getTotalOutputMomentum()
+  if (nbullet) initial.setE(initial.e() + nbullet->getExitationEnergyInGeV());
+  if (ntarget) initial.setE(initial.e() + ntarget->getExitationEnergyInGeV());
 
   const std::vector<G4InuclNuclei>& nout = output.getNucleiFragments();
   const std::vector<G4InuclElementaryParticle>& pout
@@ -108,7 +114,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     G4cout << " initial px " << initial.px() << " py " << initial.py()
 	   << " pz " << initial.pz() << " E " << initial.e()
 	   << " baryon " << initialBaryon << " charge " << initialCharge
-	   << "\n  final px " << final.px() << " py " << final.py()
+	   << "\n   final px " << final.px() << " py " << final.py()
 	   << " pz " << final.pz() << " E " << final.e()
 	   << " baryon " << finalBaryon << " charge " << finalCharge << G4endl;
   }
