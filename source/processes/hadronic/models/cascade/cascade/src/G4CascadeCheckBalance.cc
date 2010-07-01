@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.8 2010-06-30 23:07:04 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.9 2010-07-01 19:19:29 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -36,6 +36,7 @@
 // 20100628  M. Kelsey -- Add interface to take list of particles directly,
 //		bug fix reporting of charge conservation error.
 // 20100630  M. Kelsey -- for nuclei, include excitation energies in total.
+// 20100701  M. Kelsey -- Undo previous change, handled by G4InuclNuclei.
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -87,11 +88,6 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   initialBaryon =
     ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
      (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
-
-  // For nuclei, add excitation energy to initial total energy
-  // c.f. G4CollisionOutput::getTotalOutputMomentum()
-  if (nbullet) initial.setE(initial.e() + nbullet->getExitationEnergyInGeV());
-  if (ntarget) initial.setE(initial.e() + ntarget->getExitationEnergyInGeV());
 
   const std::vector<G4InuclNuclei>& nout = output.getNucleiFragments();
   const std::vector<G4InuclElementaryParticle>& pout

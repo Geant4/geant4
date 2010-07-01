@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.44 2010-06-30 23:07:04 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.45 2010-07-01 19:19:29 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -44,6 +44,8 @@
 //		properly across multiple interactions.
 // 20100627  M. Kelsey -- Protect recoil nucleus energy from floating roundoff
 //		by setting small +ve or -ve values to zero.
+// 20100701  M. Kelsey -- Let excitation energy be handled by G4InuclNuclei,
+//		allow for ground-state recoil (goodCase == true for Eex==0.)
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -82,7 +84,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
 
-  const G4double small = 1e-6;		// Allows for floating roundoffs
+  const G4double small_ekin = 0.001*MeV;	// Tolerance for round-off zero
+  const G4double quasielast_cut = 1*MeV;	// To recover elastic scatters
 
   if (verboseLevel > 3) {
     bullet->printParticle();
@@ -90,6 +93,12 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   }
 
   G4InuclNuclei* tnuclei = dynamic_cast<G4InuclNuclei*>(target);
+  if (!tnuclei) {
+    if (verboseLevel)
+      G4cerr << " Target is not a nucleus.  Abandoning." << G4endl;
+    return;
+  }
+
   model.generateModel(tnuclei);
 
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
@@ -291,10 +300,11 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       continue;				// Discard event and try again
     }
 
+    G4LorentzVector presid = momentum_in - momentum_out;
+
     if (verboseLevel > 3) {
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
 
-      G4LorentzVector presid = momentum_in - momentum_out;
       G4cout << " momentum_in:    px " << momentum_in.px()
 	     << " py " << momentum_in.py() << " pz " << momentum_in.pz()
 	     << " E " << momentum_in.e() << G4endl;
@@ -307,39 +317,31 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }
 
     if (afin > 1.0) {
-      if (verboseLevel > 2)
-	G4cout << " adding recoil nucleus to output list" << G4endl;
+      // Excitation is difference between outgoing and ground-state mass
+      G4double mass = G4InuclNuclei::getNucleiMass(afin, zfin);
+      G4double mres = presid.m();
 
-      G4InuclNuclei outgoing_nuclei(afin, zfin);
-      outgoing_nuclei.setModel(4);
-      
-      // FIXME:  This is non-relativistic; can't just add mass to energy
-      G4double mass = outgoing_nuclei.getMass();
-      momentum_out += outgoing_nuclei.getMomentum();
+      G4double Eex = (mres-mass)*GeV;		// Excitation is in MeV
+      if (std::abs(Eex) < small_ekin) Eex = 0.;	// Absorb round-off
 
-      if (verboseLevel > 3)
-	G4cout << "  changed momentum_out energy by nuclear mass " << mass
-	       << G4endl;
-
-      momentum_out = momentum_in - momentum_out;
-      G4double nucEkx = momentum_out.e();		// Eex + Ekin
-      if (std::abs(nucEkx) < small) nucEkx = 0.;	// Round-off errors
-
-      if (verboseLevel > 3) G4cout << "  Eex + Ekin " << nucEkx <<  G4endl;
-
-      if (nucEkx < 0.) {
-	G4cerr << " unphysical recoil with negative energy, setting to zero "
-	       << G4endl;
-	nucEkx = 0.;
+      // Quasi-elastic scattering 
+      if (output_particles.size() == 1 && std::abs(Eex) < quasielast_cut) {
+	if (verboseLevel > 3)
+	  G4cout << " quasi-elastic scatter with " << Eex << " MeV recoil"
+		 << G4endl;
+	Eex = 0.;
       }
 
-      outgoing_nuclei.setMomentum(momentum_out);
-      
-      G4double Eex = (nucEkx - outgoing_nuclei.getKineticEnergy()) * GeV;
+      if (Eex < 0.0) {
+	G4cerr << " unphysical negative-energy recoil " << Eex
+	       << " setting to zero ( " << output_particles.size()
+	       << " secondaries)" << G4endl;
+	Eex = 0.;
+      }
+
       if (verboseLevel > 3) {
-	G4cout << " candidate outgoing nucleus " << G4endl;
-	outgoing_nuclei.printParticle();
-	G4cout << "  Eex  " << Eex  <<  G4endl;
+	G4cout << " fragment mass " << mass << " recoil " << mres
+	       << "  Eex  " << Eex  << " MeV" << G4endl;
       }
 
       if (!goodCase(afin, zfin, Eex, ekin_in)) { 	// unphysical recoil
@@ -347,7 +349,11 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	continue;
       }
 
-      outgoing_nuclei.setExitationEnergy(Eex);
+      if (verboseLevel > 2)
+	G4cout << " adding recoil nucleus/fragment to output list" << G4endl;
+
+      G4InuclNuclei outgoing_nuclei(presid, afin, zfin, Eex);
+      outgoing_nuclei.setModel(4);
       outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);
       if (verboseLevel > 3) outgoing_nuclei.printParticle();
       
@@ -362,11 +368,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	if (verboseLevel > 3)
 	  G4cout << " adding recoiling nucleon to output list" << G4endl;
 
-	momentum_out = momentum_in - momentum_out;
-
 	G4int last_type = (zfin == 1.) ? 1 : 2;
 
-	G4InuclElementaryParticle last_particle(momentum_out, last_type, 4);
+	G4InuclElementaryParticle last_particle(presid, last_type, 4);
 	if (verboseLevel > 3) last_particle.printParticle();
 	
 	output_particles.push_back(last_particle);
@@ -401,18 +405,18 @@ G4bool G4IntraNucleiCascader::goodCase(G4double a,
   const G4double reason_cut = 7.0*MeV;
   const G4double ediv_cut = 5.0*MeV;
 
-  G4bool good = false;
+  G4bool good = (eexs <= eexs_cut);	// Always allow for unexcited recoil
 
   if (eexs > eexs_cut) {
-    G4double eexs_max0z = 1000.0 * ein / ediv_cut;   // ein is GeV, eexs is MeV
+    G4double eexs_max0z = ein*GeV / ediv_cut;   // ein is GeV, eexs is MeV
     G4double dm = bindingEnergy(a,z);
     G4double eexs_max = eexs_max0z > reason_cut*dm ? eexs_max0z : reason_cut * dm;
-
-    good = (eexs < eexs_max);
 
     if (verboseLevel > 3) {
       G4cout << " eexs " << eexs << " max " << eexs_max << " dm " << dm << G4endl;
     }
+
+    good = (eexs < eexs_max);
   };
 
   return good; 

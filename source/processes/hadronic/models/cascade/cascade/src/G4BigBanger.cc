@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.32 2010-06-30 23:07:04 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.33 2010-07-01 19:19:29 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,8 +35,8 @@
 // 20100517  M. Kelsey -- Inherit from common base class, clean up code
 // 20100628  M. Kelsey -- Use old "bindingEnergy" fn as wrapper, add balance
 //		checking after bang.
-// 20100630  M. Kelsey -- G4LorentzConverter can't handle isolated target.
-//		Just do simple boost.
+// 20100630  M. Kelsey -- Just do simple boost for target, instead of using
+//		G4LorentzConverter with dummy bullet.
 
 #include "G4BigBanger.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -45,7 +45,6 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
-#include "G4LorentzConvertor.hh"
 #include <algorithm>
 
 using namespace G4InuclSpecialFunctions;
@@ -74,14 +73,6 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   G4LorentzVector PEX = nuclei_target->getMomentum();
   G4double EEXS = nuclei_target->getExitationEnergy();
 
-  // FIXME: Excited "nucleus" hass excitation energy included in mass
-  G4double mEXS = nuclei_target->getMass() + EEXS/GeV;
-  PEX.setVectM(PEX.vect(), mEXS);
-
-  /*****
-  const G4double small_ekin = 1.0e-9;		// To create dummy "bullet"
-  G4InuclElementaryParticle dummy(small_ekin, 1);
-  *****/
   G4ThreeVector toTheLabFrame = PEX.boostVector();	// From rest to lab
 
   G4CascadeCheckBalance balance(0.005,0.01);	// Second arg is in GeV
