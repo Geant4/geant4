@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2010-07-01 19:19:29 mkelsey Exp $
+$Id: History,v 1.120 2010-07-01 22:56:43 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -17,6 +17,14 @@ code and to keep track of all tags.
 
 1 July 2010 Michael Kelsey
 --------------------------
+- G4InuclCollider.cc:  Used wrong input target for conservation-law checking
+  subsequent to G4EquilibriumEvaporator.
+
+- G4EquilibriumEvaporator.cc, G4NonEquilibriumEvaporator.cc:  Handle
+  excitation energy differently with new G4InuclNuclei interface.  Compute
+  updated values correctly, by taking nuclear mass difference then
+  subtracting energy of evaporated particle.
+
 - G4InuclNuclei:  Reorganization to properly incorporate excited states.
   Excitation energy included in mass in all cases.  setExcitationEnergy() now
   replaces G4PartDefn pointer with new excited state.  getNucleiMass() takes

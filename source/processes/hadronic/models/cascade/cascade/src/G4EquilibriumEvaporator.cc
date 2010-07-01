@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.35 2010-06-23 19:25:35 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.36 2010-07-01 22:56:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -41,6 +41,8 @@
 // 20100617  M. Kelsey -- Remove "RUN" preprocessor flag and all "#else" code,
 //		pass verbosity to colliders.
 // 20100620  M. Kelsey -- Use local "bindingEnergy()" function to call through.
+// 20100701  M. Kelsey -- Don't need to add excitation to nuclear mass; compute
+//		new excitation energies properly (mass differences)
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -74,6 +76,11 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   if (!nuclei_target) {
     G4cerr << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
     return;
+  }
+
+  if (verboseLevel > 2) {
+    G4cout << " evaporating target: " << G4endl;
+    target->printParticle();
   }
 
   theFissioner.setVerboseLevel(verboseLevel);
@@ -117,11 +124,12 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheNucleiSystemRestFrame;
+    toTheNucleiSystemRestFrame.setVerbose(verboseLevel);
+
     toTheNucleiSystemRestFrame.setBullet(dummy);
     G4LorentzVector ppout;
   
     if (explosion(A, Z, EEXS)) {
-
       if (verboseLevel > 3) {
 	G4cout << " big bang in eql start " << G4endl;
       }
@@ -137,10 +145,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	coul_coeff = 1.2;
       };   
    
-      G4InuclNuclei dummy_nuc;
       G4double EEXS_new;
-      G4LorentzVector pin = PEX;
-      pin.setE(pin.e() + 0.001 * EEXS);
+      G4LorentzVector pin = PEX;	// Save original target for testing
+
       G4bool try_again = true;  
       G4bool fission_open = true;
       G4double nuc_mass;  
@@ -152,31 +159,27 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       while (try_again && itry_global < itry_global_max) {
 	itry_global++;
 
-	if (verboseLevel > 2){
-	  G4cout << " A " << A << " Z " << Z << " EEXS " << EEXS << G4endl;
-	}
-
-	nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
+	nuc_mass = G4InuclNuclei::getNucleiMass(A, Z, EEXS); 
 	PEX.setVectM(PEX.vect(), nuc_mass);  	
 	toTheNucleiSystemRestFrame.setTarget(PEX, nuc_mass);
 	toTheNucleiSystemRestFrame.toTheTargetRestFrame();
 
+	if (verboseLevel > 2) {
+	  G4cout << " A " << A << " Z " << Z << " mass " << nuc_mass
+		 << " EEXS " << EEXS << G4endl;
+	}
+
 	if (explosion(A, Z, EEXS)) { // big bang
-      
 	  if (verboseLevel > 2){
 	    G4cout << " big bang in eql step " << G4endl;
 	  }
 
-	  G4InuclNuclei nuclei(PEX, A, Z);        
-
+	  G4InuclNuclei nuclei(PEX, A, Z, EEXS);        
 	  nuclei.setModel(6);
-	  nuclei.setExitationEnergy(EEXS);      
 
 	  theBigBanger.collide(0, &nuclei, output);
 	  return;	
-
 	} else { // normal chain
-
           if (EEXS > cut_off_energy) { 
 
 	    G4double E0 = getE0(A);
@@ -308,11 +311,12 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		};
 
 		if (itry < itry_max) {
-		  // new photon escape
-		  G4InuclElementaryParticle particle(10);
+		  if (verboseLevel > 2) G4cout << " photon escape " << G4endl;
 
+		  G4InuclElementaryParticle particle(10);
 		  particle.setModel(6);
-		  G4double pmod = 0.001 * S;
+
+		  G4double pmod = S / GeV;	// Convert to bertini units
 		  G4LorentzVector mom = generateWithRandomAngles(pmod, 0.);
 
 		  G4LorentzVector ex_mom;
@@ -321,14 +325,17 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 		  ex_mom = toTheNucleiSystemRestFrame.backToTheLab(ex_mom);
 
-		  EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
-				       mom.e() - ex_mom.e());
+		  EEXS_new = (PEX.m() - mom.e() - ex_mom.m()) *GeV;
+		  if (verboseLevel > 3)
+		    G4cout << " EEXS_new " << EEXS_new << G4endl;
 
 		  if (EEXS_new > 0.0) { // everything ok
 		    PEX = ex_mom;
 		    EEXS = EEXS_new;
 		    particle.setMomentum(mom);
 		    output.addOutgoingParticle(particle);
+
+		    if (verboseLevel > 3) particle.printParticle();
 
 		    ppout += mom;
 
@@ -358,6 +365,8 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      };
 
 	      if (icase < 6) { // particle or light nuclei escape
+		if (verboseLevel > 2) G4cout << " particle/light-ion escape " << G4endl;
+
 		G4double uc = 2.0 * std::sqrt(u[icase] * TM[icase]);
 		G4double ur = (uc > huge_num ? std::exp(huge_num) : std::exp(uc));
 		G4double d1 = 1.0 / ur;
@@ -379,20 +388,27 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  }; 
 	    
                   if (EPR > 0.0 && S > V[icase]) { // real escape
-		    S = 0.001 * S;
+		    S *= 0.001;
+
+		    if (verboseLevel > 2)
+		      G4cout << " escape itry1 " << itry1 << " icase "
+			     << icase << " S " << S << G4endl;
 
 		    if (icase < 2) { // particle escape
 		      G4int ptype = 2 - icase;
 		      G4InuclElementaryParticle particle(ptype);
-
 		      particle.setModel(6);
-		      G4double mass = particle.getMass();
+
+		      if (verboseLevel > 2)
+			G4cout << " particle " << ptype << " escape ?" << G4endl;
+
 		      // generate particle momentum
+		      G4double mass = particle.getMass();
 		      G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		      G4LorentzVector mom = generateWithRandomAngles(pmod, mass);
 
 		      G4double new_nuc_mass =
-			dummy_nuc.getNucleiMass(A1[icase], Z1[icase]);
+			G4InuclNuclei::getNucleiMass(A1[icase], Z1[icase], EEXS);
 
 		      G4LorentzVector ex_mom;
 		      ex_mom.setVectM(-mom.vect(), new_nuc_mass);
@@ -400,8 +416,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 		      ex_mom = toTheNucleiSystemRestFrame.backToTheLab(ex_mom);
 
-		      EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
-					   mom.e() - ex_mom.e());
+		      EEXS_new = (PEX.m() - mom.e() - ex_mom.m()) *GeV;
+		      if (verboseLevel > 3)
+			G4cout << " EEXS_new " << EEXS_new << G4endl;
 
 		      if (EEXS_new > 0.0) { // everything ok
 			PEX = ex_mom;
@@ -410,10 +427,17 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			Z = Z1[icase]; 	      
 			particle.setMomentum(mom);
 			output.addOutgoingParticle(particle);
+			if (verboseLevel > 3) particle.printParticle();
+
 			ppout += mom;
 			bad = false;
 		      };
 		    } else {
+		      if (verboseLevel > 2) {
+			G4cout << " nucleus A " << AN[icase] << " Z " << Q[icase]
+			       << " escape ? icase " << icase << G4endl;
+		      }
+
 		      G4InuclNuclei nuclei(AN[icase], Q[icase]);
 	              nuclei.setModel(6);
 		      G4double mass = nuclei.getMass();
@@ -422,7 +446,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
 
 		      G4double new_nuc_mass =
-			dummy_nuc.getNucleiMass(A1[icase], Z1[icase]);
+			G4InuclNuclei::getNucleiMass(A1[icase], Z1[icase], EEXS);
 
 		      G4LorentzVector ex_mom;
 		      ex_mom.setVectM(-mom.vect(), new_nuc_mass);
@@ -430,8 +454,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 		      ex_mom = toTheNucleiSystemRestFrame.backToTheLab(ex_mom);
 
-		      EEXS_new = 1000.0 * (PEX.e() + 0.001 * EEXS - 
-					   mom.e() - ex_mom.e());
+		      EEXS_new = (PEX.m() - mom.e() - ex_mom.m()) *GeV;
+		      if (verboseLevel > 3)
+			G4cout << " EEXS_new " << EEXS_new << G4endl;
 
 		      if (EEXS_new > 0.0) { // everything ok
 			PEX = ex_mom;
@@ -440,8 +465,11 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			Z = Z1[icase];
  	      
 			ppout += mom;
+
 			nuclei.setExitationEnergy(0.0);
 			nuclei.setMomentum(mom);
+			if (verboseLevel > 3) nuclei.printParticle();
+
 			output.addTargetFragment(nuclei);
 			bad = false;
 		      };
@@ -452,11 +480,10 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		if (itry1 == itry_max || bad)  try_again = false;
 
               } else { // fission
-		G4InuclNuclei nuclei(A, Z);        
+		G4InuclNuclei nuclei(A, Z, EEXS);        
 	        nuclei.setModel(6);
-		nuclei.setExitationEnergy(EEXS);
 
-		if (verboseLevel > 2){
+		if (verboseLevel > 2) {
 		  G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS <<
 		    " Wn " << W[0] << " Wf " << W[6] << G4endl;
 		}
@@ -491,23 +518,28 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       // this time it's final nuclei
 
       if (itry_global == itry_global_max) {
-
 	if (verboseLevel > 3) {
 	  G4cout << " ! itry_global " << itry_global_max << G4endl;
 	}
-
       }
 
       G4LorentzVector pnuc = pin - ppout;
 
-      G4InuclNuclei nuclei(pnuc, A, Z);
+      G4InuclNuclei nuclei(pnuc, A, Z, EEXS);
       nuclei.setModel(6);
+
+      /***** THIS SHOULD NOT BE NECESSARY IF EEXS WAS COMPUTED RIGHT
       pnuc = nuclei.getMomentum(); 
       G4double eout = pnuc.e() + ppout.e();  
       G4double eex_real = 1000.0 * (pin.e() - eout);        
-    
       nuclei.setExitationEnergy(eex_real);
-    
+      *****/
+
+      if (verboseLevel > 3) {
+	G4cout << " remaining nucleus " << G4endl;
+	nuclei.printParticle();
+      }
+
       output.addTargetFragment(nuclei);
     }
 

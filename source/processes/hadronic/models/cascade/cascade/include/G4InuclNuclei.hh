@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.18 2010-07-01 19:19:29 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.19 2010-07-01 22:56:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -55,7 +55,7 @@ public:
   G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z, G4double exc=0.)
     : G4InuclParticle(makeDefinition(a,z,exc), mom) {}
 
-  G4InuclNuclei(G4double ekin, G4double a, G4double z, G4double exc=0.) 
+  G4InuclNuclei(G4double ekin, G4double a, G4double z, G4double exc) 
     : G4InuclParticle(makeDefinition(a,z,exc), ekin) {}
 
   virtual ~G4InuclNuclei() {}
@@ -96,10 +96,10 @@ public:
 protected:
   // Convert nuclear configuration to standard GEANT4 pointer
   static G4ParticleDefinition*
-  makeDefinition(G4double a, G4double z, G4double exc=0.);
+  makeDefinition(G4double a, G4double z, G4double exc);
 
   static G4ParticleDefinition* 
-  makeNuclearFragment(G4double a, G4double z, G4double exc=0.);
+  makeNuclearFragment(G4double a, G4double z, G4double exc);
 
 private: 
   G4ExitonConfiguration theExitonConfiguration;
