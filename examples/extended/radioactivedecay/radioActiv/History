@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010-06-27 22:28:01 maire Exp $
+$Id: History,v 1.4 2010-07-01 11:09:35 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -13,8 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
-27-06-10 mma
-- DetectorConstruction : 2mm*2mm*2mm
+01-07-10 mma (radioActiv-V09-03-00)
+      
+27-06-10 mma 
+- DetectorConstruction : 2um*2um*2um
 - PrimaryGenerator : E=0*eV by default
 - RunAction : correct computation of min -> max
     

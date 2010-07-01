@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.2 2010-06-27 22:28:01 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2010-07-01 11:09:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,8 +41,7 @@
 
 DetectorConstruction::DetectorConstruction()
 {
-  worldSizeXY = 2*mm;
-  worldSizeZ  = 2*mm;    
+  worldSize = 2*um;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +64,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //
   G4Box*  
   solidWorld = new G4Box("World",				//its name
-                   worldSizeXY/2,worldSizeXY/2,worldSizeZ/2);	//its size
+                   worldSize/2,worldSize/2,worldSize/2);	//its size
 		   
   G4LogicalVolume*                         
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid

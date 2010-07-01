@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: radioActiv.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: radioActiv.cc,v 1.2 2010-07-01 11:09:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +66,7 @@ int main(int argc,char** argv) {
 
   // set mandatory initialization classes
   //
-  DetectorConstruction* detector = new DetectorConstruction;
-  runManager->SetUserInitialization(detector);
+  runManager->SetUserInitialization(new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
       
   // set user action classes

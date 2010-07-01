@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2010-07-01 11:09:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,12 +47,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
     G4VPhysicalVolume* Construct();
                         
-    G4double GetWorldSizeXY()     {return worldSizeXY;}; 
-    G4double GetWorldSizeZ()      {return worldSizeZ;};
+    G4double GetWorldSize() {return worldSize;}; 
 
   private:
   
-    G4double worldSizeXY, worldSizeZ;
+    G4double worldSize;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
