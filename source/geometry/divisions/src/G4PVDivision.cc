@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.22 2008-12-03 16:41:45 arce Exp $
+// $Id: G4PVDivision.cc,v 1.23 2010-07-02 10:46:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -62,19 +62,22 @@ G4PVDivision::G4PVDivision(const G4String& pName,
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_1);
   }
-  if (pLogical == pMotherLogical)
+  else
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_2);
+    if (pLogical == pMotherLogical)
+    {
+      G4String message_2 =
+        "Cannot place a volume inside itself! Volume: " + pName;
+      G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                  FatalException, message_2);
+    }
+    pMotherLogical->AddDaughter(this);
+    SetMotherLogical(pMotherLogical);
+    SetParameterisation(pMotherLogical, pAxis, nDivs,
+                        width, offset, DivNDIVandWIDTH);
+    CheckAndSetParameters (pAxis, nDivs, width, offset,
+                           DivNDIVandWIDTH, pMotherLogical);
   }
-  pMotherLogical->AddDaughter(this);
-  SetMotherLogical(pMotherLogical);
-  SetParameterisation(pMotherLogical, pAxis, nDivs,
-                      width, offset, DivNDIVandWIDTH);
-  CheckAndSetParameters (pAxis, nDivs, width, offset,
-                         DivNDIVandWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -94,17 +97,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_1);
   }
-  if (pLogical == pMotherLogical)
+  else
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_2);
+    if (pLogical == pMotherLogical)
+    {
+      G4String message_2 =
+        "Cannot place a volume inside itself! Volume: " + pName;
+      G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                  FatalException, message_2);
+    }
+    pMotherLogical->AddDaughter(this);
+    SetMotherLogical(pMotherLogical);
+    SetParameterisation(pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV);
+    CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical);
   }
-  pMotherLogical->AddDaughter(this);
-  SetMotherLogical(pMotherLogical);
-  SetParameterisation(pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV);
-  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -124,17 +130,20 @@ G4PVDivision::G4PVDivision(const G4String& pName,
     G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
                 FatalException, message_1);
   }
-  if (pLogical == pMotherLogical)
+  else
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + pName;
-    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
-                FatalException, message_2);
+    if (pLogical == pMotherLogical)
+    {
+      G4String message_2 =
+        "Cannot place a volume inside itself! Volume: " + pName;
+      G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                  FatalException, message_2);
+    }
+    pMotherLogical->AddDaughter(this);
+    SetMotherLogical(pMotherLogical);
+    SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
+    CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
   }
-  pMotherLogical->AddDaughter(this);
-  SetMotherLogical(pMotherLogical);
-  SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
-  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
