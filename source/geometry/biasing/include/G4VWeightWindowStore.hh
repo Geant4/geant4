@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowStore.hh,v 1.3 2006-06-29 18:16:57 gunter Exp $
+// $Id: G4VWeightWindowStore.hh,v 1.4 2010-07-02 09:36:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,8 +54,8 @@ public:  // with description
   G4VWeightWindowStore();
   virtual  ~G4VWeightWindowStore();
 
-  virtual G4double GetLowerWeitgh(const G4GeometryCell &gCell, 
-			 G4double partEnergy) const = 0;
+  virtual G4double GetLowerWeight(const G4GeometryCell &gCell, 
+			                G4double partEnergy) const = 0;
     // derive a lower weight bound value of a "cell" addresed by a 
     // G4GeometryCell and the coresponding energy from the store.
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowStore.cc,v 1.5 2006-06-29 18:18:05 gunter Exp $
+// $Id: G4WeightWindowStore.cc,v 1.6 2010-07-02 09:36:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,11 +53,12 @@ G4WeightWindowStore::~G4WeightWindowStore()
 {}
 
 
-G4double G4WeightWindowStore::GetLowerWeitgh(const G4GeometryCell &gCell, 
-					    G4double partEnergy) const
+G4double G4WeightWindowStore::GetLowerWeight(const G4GeometryCell &gCell, 
+					     G4double partEnergy) const
 {
   SetInternalIterator(gCell);
-  if (fCurrentIterator ==  fCellToUpEnBoundLoWePairsMap.end()) {
+  G4GeometryCellWeight::const_iterator gCellIterator = fCurrentIterator;
+  if (gCellIterator ==  fCellToUpEnBoundLoWePairsMap.end()) {
     Error("GetLowerWitgh: Cell does not exist");
   }
   G4UpperEnergyToLowerWeightMap upEnLoWeiPairs =
