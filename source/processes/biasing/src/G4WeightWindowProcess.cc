@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowProcess.cc,v 1.4 2008-04-21 09:10:29 ahoward Exp $
+// $Id: G4WeightWindowProcess.cc,v 1.5 2010-07-02 11:02:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -259,7 +259,7 @@ G4WeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
 				  fGhostPostStepPoint->GetTouchable()->GetReplicaNumber());
 	  G4Nsplit_Weight nw =
 	    fWeightWindowAlgorithm.Calculate(aTrack.GetWeight(),
-					     fWeightWindowStore.GetLowerWeitgh(postCell,
+					     fWeightWindowStore.GetLowerWeight(postCell,
                                                     aTrack.GetKineticEnergy()));
 	  fPostStepAction->DoIt(aTrack, fParticleChange, nw);
 	}
@@ -278,7 +278,7 @@ G4WeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
 	  
 	  G4Nsplit_Weight nw =
 	    fWeightWindowAlgorithm.Calculate(aTrack.GetWeight(),
-					     fWeightWindowStore.GetLowerWeitgh(postCell,
+					     fWeightWindowStore.GetLowerWeight(postCell,
 									       aTrack.GetKineticEnergy()));
 	  fPostStepAction->DoIt(aTrack, fParticleChange, nw);
 	}
