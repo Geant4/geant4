@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.17 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.18 2010-07-02 10:52:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -50,7 +50,8 @@ G4VParameterisationTrd::
 G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
                         G4double offset, G4VSolid* msolid,
                         DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid ),
+     bDivInTrap(false)
 {
   G4Trd* msol = (G4Trd*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
@@ -141,9 +142,12 @@ ComputeTransformation( const G4int copyNo,
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
   G4double posi;
-  if( !bDivInTrap ) {
+  if( !bDivInTrap )
+  {
     posi = -mdx + foffset + (copyNo+0.5)*fwidth;
-  } else {
+  }
+  else
+  {
     G4double aveHL = (msol->GetXHalfLength1()+msol->GetXHalfLength2())/2.;
     posi = - aveHL + foffset + (copyNo+0.5)*aveHL/fnDiv*2;
   }
@@ -203,7 +207,7 @@ ComputeSolid(const G4int i, G4VPhysicalVolume * pv)
   } 
   else 
   {
-    return theTrap;
+    return fmotherSolid;
   }
 }
 
@@ -249,7 +253,7 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
 void G4ParameterisationTrdX::CheckParametersValidity()
 {
   G4VDivisionParameterisation::CheckParametersValidity();
-
+/*
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
   G4double mpDx1 = msol->GetXHalfLength1();
@@ -258,8 +262,6 @@ void G4ParameterisationTrdX::CheckParametersValidity()
 
   if( std::fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
-    return;
-
     G4cerr << "ERROR - G4ParameterisationTrdX::CheckParametersValidity()"
            << G4endl
            << "        Making a division of a TRD along axis X," << G4endl
@@ -270,6 +272,7 @@ void G4ParameterisationTrdX::CheckParametersValidity()
                 "IllegalConstruct", FatalException,
                 "Invalid solid specification. NOT supported.");
   }
+*/
 }
 
 //--------------------------------------------------------------------------
