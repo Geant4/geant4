@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.19 2008-01-12 12:00:25 kurasige Exp $
+// $Id: G4Step.hh,v 1.20 2010-07-02 13:44:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,14 +120,7 @@ class G4Step
    G4SteppingControl GetControlFlag() const;
    void SetControlFlag(G4SteppingControl StepControlFlag);
 
-   // difference of position, time, momentum and energy
-   G4ThreeVector GetDeltaPosition() const;
-   G4double GetDeltaTime() const;
-
-   G4ThreeVector GetDeltaMomentum() const;
-   G4double GetDeltaEnergy() const;
-
-   // manipulation of total energy deposit 
+    // manipulation of total energy deposit 
    void AddTotalEnergyDeposit(G4double value);
    void ResetTotalEnergyDeposit();
 
@@ -144,6 +137,18 @@ class G4Step
    void ClearFirstStepFlag();
    void SetLastStepFlag();
    void ClearLastStepFlag();
+
+  // difference of position, time, momentum and energy
+   G4ThreeVector GetDeltaPosition() const;
+   G4double GetDeltaTime() const;
+
+  // These methods will be deleted 
+  // NOTE: use  GetTotalEnergyDeposit() to obtain 
+  //       energy loss in the material 
+  // 
+   G4ThreeVector GetDeltaMomentum() const;
+   G4double GetDeltaEnergy() const;
+
 
 // Other member functions
    void InitializeStep( G4Track* aValue );

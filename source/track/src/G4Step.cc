@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.cc,v 1.7 2006-10-30 09:50:13 kurasige Exp $
+// $Id: G4Step.cc,v 1.8 2010-07-02 13:44:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -67,4 +67,39 @@ G4Step::~G4Step()
 {
   delete fpPreStepPoint;
   delete fpPostStepPoint;
+}
+
+
+/////////////////
+ G4ThreeVector G4Step::GetDeltaMomentum() const
+/////////////////
+{ 
+  static G4bool isFirstTime = true;
+  if (isFirstTime) {
+    isFirstTime = false;
+#ifdef G4VERBOSE
+    G4Exception( "G4Step::GetDeltaMomentum()","Warning", JustWarning, 
+		 "This method is obsolete and will be removed soon");
+#endif
+  }
+
+  return fpPostStepPoint->GetMomentum()
+    - fpPreStepPoint->GetMomentum(); 
+}
+
+/////////////////
+G4double G4Step::GetDeltaEnergy() const
+  /////////////////
+{ 
+  static G4bool isFirstTime = true;
+  if (isFirstTime) {
+    isFirstTime = false;
+#ifdef G4VERBOSE
+    G4Exception( "G4Step::GetDeltaEnergy()","Warning", JustWarning, 
+		 "This method is obsolete and will be removed soon");
+#endif
+  }
+
+  return fpPostStepPoint->GetKineticEnergy()
+    - fpPreStepPoint->GetKineticEnergy(); 
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.19 2008-10-24 08:22:20 kurasige Exp $
+// $Id: G4Track.hh,v 1.20 2010-07-02 13:44:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,8 @@
 #include "G4TrackStatus.hh"           // Include from 'tracking'
 #include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
+
+#include "G4PhysicsLogVector.hh"
 
 #include "G4Material.hh"
 
@@ -234,6 +236,8 @@ public: // With description
 //---------
    private:
 //---------
+  // prepare velocity table
+  void PrepareVelocityTable();
 
 // Member data
    G4int fCurrentStepNumber;       // Total steps number up to now
@@ -276,6 +280,16 @@ public: // With description
    const G4VProcess* fpCreatorProcess; // Process which created the track
    
    G4VUserTrackInformation* fpUserInformation;
+
+   mutable G4Material*               prev_mat;
+   mutable G4MaterialPropertyVector* groupvel;
+   mutable G4double                  prev_velocity;
+   mutable G4double                  prev_momentum;
+
+   static G4PhysicsLogVector* velTable;
+   static const G4double maxT;
+   static const G4double minT;
+   G4bool              is_OpticalPhoton; 
 };
 #include "G4Step.hh"
 #include "G4Track.icc"
