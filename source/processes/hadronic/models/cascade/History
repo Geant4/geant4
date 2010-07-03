@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2010-07-03 00:07:55 mkelsey Exp $
+$Id: History,v 1.122 2010-07-03 06:15:30 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -21,6 +21,9 @@ code and to keep track of all tags.
   three-body decays, the angles are not ajustable (so always fails).
 
 - G4CascadeInterface.cc:  Set verbosity on G4CollisionOutput.
+
+- G4EquilibriumEvaporator.cc:  Simplify if-cascades to reduce nesting (test
+  for errors and exit up front, rather than in else-blocks).
 
 - G4InuclCollider.cc:  Set verbosity on G4CollisionOutput.
 
