@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.88 2010-06-24 20:44:24 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.89 2010-07-03 00:07:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -48,6 +48,7 @@
 //		allowed for infinite loop on E-violation); dump event data
 //		to output if E-violation exceeds maxTries; use CheckBalance
 //		for baryon and charge conservation.
+// 20100701  M. Kelsey -- Pass verbosity through to G4CollisionOutput
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -141,7 +142,9 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   // Colliders initialisation
   collider.setVerboseLevel(verboseLevel);
+
   G4CollisionOutput output;
+  output.setVerboseLevel(verboseLevel);
 
   G4CascadeCheckBalance balance(0.05, 0.1);	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);

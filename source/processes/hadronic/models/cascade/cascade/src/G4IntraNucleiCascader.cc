@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.45 2010-07-01 19:19:29 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.46 2010-07-03 00:07:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -46,6 +46,7 @@
 //		by setting small +ve or -ve values to zero.
 // 20100701  M. Kelsey -- Let excitation energy be handled by G4InuclNuclei,
 //		allow for ground-state recoil (goodCase == true for Eex==0.)
+// 20100702  M. Kelsey -- Negative energy recoil should be rejected
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -332,11 +333,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	Eex = 0.;
       }
 
-      if (Eex < 0.0) {
-	G4cerr << " unphysical negative-energy recoil " << Eex
-	       << " setting to zero ( " << output_particles.size()
-	       << " secondaries)" << G4endl;
-	Eex = 0.;
+      if (Eex < 0.0) {		// Unphysical recoil; reject cascade
+	if (verboseLevel > 2) G4cout << " unphysical recoil " << Eex << G4endl;
+	continue;
       }
 
       if (verboseLevel > 3) {
@@ -365,10 +364,19 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       return;
     } else { 	// special case, when one has no nuclei after the cascad
       if (afin == 1.0) { // recoiling nucleon
+	G4int last_type = (zfin == 1.) ? 1 : 2;
+
+	G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
+	G4double mres = presid.m();
+
+	if (mres-mass < -small_ekin) {		// Below round-off tolerance
+	  if (verboseLevel > 2) 
+	    G4cout << " unphysical recoil nucleon" << G4endl;
+	  continue;
+	}
+
 	if (verboseLevel > 3)
 	  G4cout << " adding recoiling nucleon to output list" << G4endl;
-
-	G4int last_type = (zfin == 1.) ? 1 : 2;
 
 	G4InuclElementaryParticle last_particle(presid, last_type, 4);
 	if (verboseLevel > 3) last_particle.printParticle();

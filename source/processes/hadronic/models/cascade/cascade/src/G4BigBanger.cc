@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.33 2010-07-01 19:19:29 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.34 2010-07-03 00:07:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -37,6 +37,7 @@
 //		checking after bang.
 // 20100630  M. Kelsey -- Just do simple boost for target, instead of using
 //		G4LorentzConverter with dummy bullet.
+// 20100701  M. Kelsey -- Re-throw momentum list, not just angles!
 
 #include "G4BigBanger.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -104,7 +105,13 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
       particles[i].printParticle();
   }
 
-  if (particles.empty()) return;	// No bang!  Don't know why...
+  if (particles.empty()) {	// No bang!  Don't know why...
+    G4cerr << " >>> G4BigBanger unable to process fragment "
+	   << nuclei_target->getDefinition()->GetParticleName() << G4endl;
+
+    // FIXME:  This will violate baryon number, momentum, energy, etc.
+    return;
+  }
 
   // convert back to Lab
   G4LorentzVector totscm;
@@ -166,7 +173,8 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4double a, G4double z) {
     return;
   }
      
-  generateMomentumModules(etot, a, z);
+  // NOTE:  If distribution fails, need to regenerate magnitudes and angles!
+  //*** generateMomentumModules(etot, a, z);
 
   std::vector<G4LorentzVector> scm_momentums(ia);
   G4LorentzVector tot_mom;
@@ -177,6 +185,7 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4double a, G4double z) {
     itry++;
     scm_momentums.clear();
 
+    generateMomentumModules(etot, a, z);
     if (ia == 2) {
       // This is only a three-vector, not a four-vector
       G4LorentzVector mom = generateWithRandomAngles(momModules[0]);
@@ -195,12 +204,11 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4double a, G4double z) {
 
       //                handle last two
       G4double tot_mod = tot_mom.rho(); 
-      G4double ct = -0.5 * (tot_mod*tot_mod + momModules[ia-2]*momModules[ia-2] -
-			    momModules[ia-1] * momModules[ia-1]) / tot_mod / momModules[ia-2];
+      G4double ct = -0.5*(tot_mod*tot_mod + momModules[ia-2]*momModules[ia-2]
+			  - momModules[ia-1]*momModules[ia-1]) / tot_mod
+	/ momModules[ia-2];
 
-      if (verboseLevel > 2) {
-	G4cout << " ct last " << ct << G4endl;
-      }
+      if (verboseLevel > 2) G4cout << " ct last " << ct << G4endl;
   
       if(std::fabs(ct) < ang_cut) {
 	// This is only a three-vector, not a four-vector

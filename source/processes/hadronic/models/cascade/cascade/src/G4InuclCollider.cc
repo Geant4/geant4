@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.33 2010-07-01 22:56:43 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.34 2010-07-03 00:07:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,7 +34,8 @@
 //		simple data members, consolidate code
 // 20100620  M. Kelsey -- Reorganize top level if-blocks to reduce nesting,
 //		use new four-vector conservation check.
-// 20100701  M. Kelsey -- Bug fix energy-conservation after equilibrium evap
+// 20100701  M. Kelsey -- Bug fix energy-conservation after equilibrium evap,
+//		pass verbosity through to G4CollisionOutput
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -66,6 +67,9 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   theNonEquilibriumEvaporator.setVerboseLevel(verboseLevel);
   theEquilibriumEvaporator.setVerboseLevel(verboseLevel);
   theBigBanger.setVerboseLevel(verboseLevel);
+
+  TRFoutput.setVerboseLevel(verboseLevel);
+  output.setVerboseLevel(verboseLevel);
 
   // Special pseudo-collider to check energy-momentum conservation
   G4CascadeCheckBalance balance(0.05, 0.1);	// Second is in GeV

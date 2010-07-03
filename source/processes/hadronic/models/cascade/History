@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2010-07-01 22:56:43 mkelsey Exp $
+$Id: History,v 1.121 2010-07-03 00:07:55 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,19 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+2 July 2010 Michael Kelsey
+--------------------------
+- G4BigBanger.cc:  Moving "generateMomentumModules()" inside loop.  For
+  three-body decays, the angles are not ajustable (so always fails).
+
+- G4CascadeInterface.cc:  Set verbosity on G4CollisionOutput.
+
+- G4InuclCollider.cc:  Set verbosity on G4CollisionOutput.
+
+- G4IntraNucleiCascader.cc:  Throw away casacde which leaves "negative energy
+  recoil" (i.e. rest-frame energy of recoil less than mass of nucleus or
+  nucleon).
 
 1 July 2010 Michael Kelsey
 --------------------------
