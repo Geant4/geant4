@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.9 2010-07-05 13:39:11 vnivanch Exp $
+// $Id: G4VComponentCrossSection.cc,v 1.1 2010-07-05 13:39:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,68 +31,33 @@
 // GEANT4 Class file
 //
 //
-// File name:    G4VCrossSectionDataSet
+// File name:    G4VComponentCrossSection
 //
-// Author  F.W. Jones, TRIUMF, 20-JAN-97
+// Authors:  G.Folger, V.Ivanchenko, D.Wright
 //
 // Modifications:
-// 23.01.2009 V.Ivanchenko move constructor and destructor to source
 //
 
-#include "G4VCrossSectionDataSet.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
-#include "G4Pow.hh"
+#include "G4VComponentCrossSection.hh"
 
-G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
+G4VComponentCrossSection::G4VComponentCrossSection(const G4String& nam) :
   verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(DBL_MAX),name(nam) 
-{
-  G4CrossSectionDataSetRegistry::Instance()->Register(this);
-}
+{}
 
-G4VCrossSectionDataSet::~G4VCrossSectionDataSet()
-{
-  G4CrossSectionDataSetRegistry::Instance()->DeRegister(this);
-}
-
-// Override thess methods to test for particle and isotope applicability
-G4bool 
-G4VCrossSectionDataSet::IsZAApplicable(const G4DynamicParticle*,
-                                       G4double /*ZZ*/, G4double /*AA*/)
-{
-  return true;
-}
-
-G4bool 
-G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle*,
-					G4int /*Z*/, G4int /*A*/)
-{
-  return true;
-}
+G4VComponentCrossSection::~G4VComponentCrossSection()
+{}
 
 G4double 
-G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* aParticle,
-                                           const G4Isotope* anIsotope,
-                                           G4double aTemperature)
+G4VComponentCrossSection::ComputeQuasiElasticRatio(const G4DynamicParticle*, 
+						   G4int /*Z*/, G4int /*N*/)
 {
-  G4double ZZ = anIsotope->GetZ();
-  G4double AA = anIsotope->GetN();
-  return GetIsoZACrossSection(aParticle, ZZ, AA, aTemperature);
+  return 0.0;
 }
 
-// Override this method to get real isotopic cross sections
+void 
+G4VComponentCrossSection::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
 
-G4double 
-G4VCrossSectionDataSet::GetIsoZACrossSection(const G4DynamicParticle*,
-                                             G4double /*ZZ*/, G4double AA,
-                                             G4double /*aTemperature*/)
-{
-  return 62*G4Pow::GetInstance()->A23(AA)*millibarn;
-}
-
-G4double 
-G4VCrossSectionDataSet::GetZandACrossSection(const G4DynamicParticle*,
-                                             G4int /*Z*/, G4int N,
-                                             G4double /*aTemperature*/)
-{
-  return 62*G4Pow::GetInstance()->Z23(N)*millibarn;
-}
+void 
+G4VComponentCrossSection::DumpPhysicsTable(const G4ParticleDefinition&)
+{}
