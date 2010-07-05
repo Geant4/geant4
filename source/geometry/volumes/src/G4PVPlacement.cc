@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.16 2007-04-11 07:56:38 gcosmo Exp $
+// $Id: G4PVPlacement.cc,v 1.17 2010-07-05 13:29:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,7 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
 //                            for usage restricted to object persistency.
 //
 G4PVPlacement::G4PVPlacement( __void__& a )
-  : G4VPhysicalVolume(a)
+  : G4VPhysicalVolume(a), fmany(false), fallocatedRotM(0), fcopyNo(0)
 {
 }
 

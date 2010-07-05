@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.cc,v 1.8 2006-06-29 18:57:53 gunter Exp $
+// $Id: G4GRSSolid.cc,v 1.9 2010-07-05 13:29:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,25 +40,23 @@ G4GRSSolid::~G4GRSSolid()
 }
 
 G4GRSSolid::G4GRSSolid(const G4GRSSolid& right)
-  : G4VTouchable()
+  : G4VTouchable(), fsolid(0)
 {
+  if (frot) { delete frot; frot = 0; }
   if ((&right) && (&right != this))
   {
     fsolid = right.fsolid;
     ftlate = right.ftlate;
-    if (frot)
-    {
-      delete frot;
-      frot = 0;
-    }
     if (right.frot)
+    {
       frot = new G4RotationMatrix(*(right.frot));
+    }
   }
 }
 
 G4GRSSolid& G4GRSSolid::operator=(const G4GRSSolid& right)
 {
-  if (&right == this) return *this;
+  if (&right == this)  { return *this; }
   if (&right)
   {
     fsolid = right.fsolid;
@@ -69,7 +67,9 @@ G4GRSSolid& G4GRSSolid::operator=(const G4GRSSolid& right)
       frot = 0;
     }
     if (right.frot)
+    {
       frot = new G4RotationMatrix(*(right.frot));
+    }
   }
   return *this;
 }
