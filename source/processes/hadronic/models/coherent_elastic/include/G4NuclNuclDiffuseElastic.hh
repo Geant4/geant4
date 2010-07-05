@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.10 2010-06-23 15:51:27 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.11 2010-07-05 06:42:49 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -188,6 +188,7 @@ public:
   // Technical math functions for strong Coulomb contribution
 
   G4complex GammaLogarithm(G4complex xx);
+  G4complex GammaLogB2n(G4complex xx);
 
   G4double  GetErf(G4double x);
 
@@ -229,6 +230,9 @@ public:
 
   G4complex AmplitudeGla(G4double theta);
   G4double  AmplitudeGlaMod2(G4double theta);
+
+  G4complex AmplitudeGG(G4double theta);
+  G4double  AmplitudeGGMod2(G4double theta);
 
   void      InitParameters(const G4ParticleDefinition* theParticle,  
 			      G4double partMom, G4double Z, G4double A); 
@@ -661,6 +665,28 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaLogarithm(G4complex zz)
   return -tmp + std::log(2.5066282746310005*ser);
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// For the calculation of arg Gamma(z) one needs complex extension 
+// of ln(Gamma(z)) here is approximate algorithm
+
+inline G4complex G4NuclNuclDiffuseElastic::GammaLogB2n(G4complex z)
+{
+  G4complex z1 = 12.*z;
+  G4complex z2 = z*z;
+  G4complex z3 = z2*z;
+  G4complex z5 = z2*z3;
+  G4complex z7 = z2*z5;
+
+  z3 *= 360.;
+  z5 *= 1260.;
+  z7 *= 1680.;
+
+  G4complex result  = (z-0.5)*std::log(z)-z+0.5*std::log(twopi);
+            result += 1./z1 - 1./z3 +1./z5 -1./z7;
+  return result;
+}
+
 /////////////////////////////////////////////////////////////////
 //
 //
@@ -936,7 +962,8 @@ inline  G4complex G4NuclNuclDiffuseElastic::CoulombAmplitude(G4double theta)
 inline  void G4NuclNuclDiffuseElastic::CalculateCoulombPhaseZero()
 {
   G4complex z        = G4complex(1,fZommerfeld); 
-  G4complex gammalog = GammaLogarithm(z);
+  // G4complex gammalog = GammaLogarithm(z);
+  G4complex gammalog = GammaLogB2n(z);
   fCoulombPhase0     = gammalog.imag();
 }
 
@@ -948,7 +975,8 @@ inline  void G4NuclNuclDiffuseElastic::CalculateCoulombPhaseZero()
 inline  G4double G4NuclNuclDiffuseElastic::CalculateCoulombPhase(G4int n)
 {
   G4complex z        = G4complex(1. + n, fZommerfeld); 
-  G4complex gammalog = GammaLogarithm(z);
+  // G4complex gammalog = GammaLogarithm(z);
+  G4complex gammalog = GammaLogB2n(z);
   return gammalog.imag();
 }
 
@@ -1161,7 +1189,8 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeGla(G4double theta)
   for( n = 0; n < fMaxL; n++)
   {
     shiftC = std::exp( im*2.*CalculateCoulombPhase(n) );
-    b = ( fZommerfeld + std::sqrt( fZommerfeld*fZommerfeld + n*(n+1) ) )/fWaveVector;
+    // b = ( fZommerfeld + std::sqrt( fZommerfeld*fZommerfeld + n*(n+1) ) )/fWaveVector;
+    b = ( std::sqrt( n*(n+1) ) )/fWaveVector;
     b2 = b*b;
     T12b = fSumSigma*std::exp(-b2/fNuclearRadiusSquare)/pi/fNuclearRadiusSquare;         
     shiftN = std::exp( -0.5*(1.-im*fEtaRatio)*T12b ) - 1.;
@@ -1179,6 +1208,47 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeGla(G4double theta)
 inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeGlaMod2(G4double theta)
 {
   G4complex out = AmplitudeGla(theta);
+  G4double mod2 = out.real()*out.real() + out.imag()*out.imag();
+  return   mod2;
+}
+
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeGG(G4double theta)
+{
+  G4int n;
+  G4double T12b, a, aTemp, b2, sinThetaH = std::sin(0.5*theta);
+  G4double sinThetaH2 = sinThetaH*sinThetaH;
+  G4complex out = G4complex(0.,0.); 
+  G4complex im  = G4complex(0.,1.);
+
+  a  = -fSumSigma/twopi/fNuclearRadiusSquare;
+  b2 = 2.*fWaveVector*fWaveVector*fNuclearRadiusSquare*sinThetaH2;
+
+  aTemp = a;
+
+  for( n = 1; n < fMaxL; n++)
+  {    
+    T12b   = aTemp*std::exp(-b2/n)/n;         
+    aTemp *= a;  
+    out   += T12b; 
+    G4cout<<"out = "<<out<<G4endl;  
+  }
+  out *= -4.*im*fWaveVector/pi;
+  out += CoulombAmplitude(theta);
+  return out;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeGGMod2(G4double theta)
+{
+  G4complex out = AmplitudeGG(theta);
   G4double mod2 = out.real()*out.real() + out.imag()*out.imag();
   return   mod2;
 }
@@ -1314,17 +1384,29 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
   proj_momentum /= GeV;
   proj_energy   /= GeV;
   proj_mass     /= GeV;
+  G4double logS = std::log(sMand);
 
   // General PDG fit constants
 
-  //  G4double s0   = 5.38*5.38; // in Gev^2
-  //  G4double eta1 = 0.458;
-  //  G4double eta2 = 0.458;
-  //  G4double B    = 0.308;
 
-  
+  // fEtaRatio=Re[f(0)]/Im[f(0)]
 
+  if( proj_momentum >= 1.2 )
+  {
+    fEtaRatio  = 0.13*(logS - 5.8579332)*std::pow(sMand,-0.18);
+  }       
+  else if( proj_momentum >= 0.6 )
+  { 
+    fEtaRatio = -75.5*(std::pow(proj_momentum,0.25)-0.95)/
+	  (std::pow(3*proj_momentum,2.2)+1);     
+  }
+  else 
+  {
+    fEtaRatio = 15.5*proj_momentum/(27*proj_momentum*proj_momentum*proj_momentum+2);
+  }
+  G4cout<<"fEtaRatio = "<<fEtaRatio<<G4endl;
 
+  // xsc
   
   if( proj_momentum >= 10. ) // high energy: pp = nn = np
     // if( proj_momentum >= 2.)
