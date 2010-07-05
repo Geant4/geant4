@@ -24,80 +24,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.icc,v 1.11 2010-07-05 09:22:58 gcosmo Exp $
+// $Id: G4LogicalSurface.cc,v 1.1 2010-07-05 09:22:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
-// Surface Class Inline Methods
+// G4LogicalSurface Class Implementation
 ////////////////////////////////////////////////////////////////////////
-//
-// File:        G4LogicalSurface.icc
-// Description: A Surface class 
-// Created:     1997-06-26
-// Author:      John Apostolakis
-//
-// ------------------------------------------------------------------------
 
-inline G4SurfaceProperty*
-G4LogicalSurface::GetSurfaceProperty() const
-{
-  return theSurfaceProperty;
-} 
+#include "G4LogicalSurface.hh"
 
-inline void
-G4LogicalSurface::SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty) 
-{
-  theSurfaceProperty = ptrSurfaceProperty;
-} 
+  ////////////////////////////
+  // Constructors & Destructor
+  ////////////////////////////
 
-inline const G4String&
-G4LogicalSurface::GetName() const
+G4LogicalSurface::G4LogicalSurface(const G4String& name,
+                                         G4SurfaceProperty* surfaceProperty) 
+  : theName(name), theSurfaceProperty(surfaceProperty), theTransRadSurface(0)
 {
-  return theName;
 }
 
-inline void
-G4LogicalSurface::SetName(const G4String& name)
+G4LogicalSurface::G4LogicalSurface(const G4LogicalSurface &r)
+  : theName(r.theName), theSurfaceProperty(r.theSurfaceProperty),
+    theTransRadSurface(r.theTransRadSurface)
 {
-  theName = name;
 }
 
-inline G4TransitionRadiationSurface*
-G4LogicalSurface::GetTransitionRadiationSurface() const
+G4LogicalSurface::~G4LogicalSurface()
 {
-  return theTransRadSurface;
-} 
-
-inline void
-G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
-                                                transRadSurf )
-{
-  theTransRadSurface= transRadSurf;
-} 
-
-  //////////////
-  // Operators
-  //////////////
-
-inline const G4LogicalSurface &
-G4LogicalSurface::operator=(const G4LogicalSurface &right)
-{
-  if (&right == this)  { return *this; }
-  theName = right.theName;
-  theSurfaceProperty = right.theSurfaceProperty;
-  theTransRadSurface = right.theTransRadSurface;
-        
-  return *this;
-}
-
-inline G4int
-G4LogicalSurface::operator==(const G4LogicalSurface &right) const
-{
-  return (this == (G4LogicalSurface *) &right);
-}
-
-inline G4int
-G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
-{
-  return (this != (G4LogicalSurface *) &right);
 }

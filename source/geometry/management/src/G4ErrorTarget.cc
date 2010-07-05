@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorTarget.cc,v 1.1 2007-05-16 12:50:52 gcosmo Exp $
+// $Id: G4ErrorTarget.cc,v 1.2 2010-07-05 09:22:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,8 +34,10 @@
 
 #include "G4ErrorTarget.hh"
 
-G4ErrorTarget::G4ErrorTarget(){}
-G4ErrorTarget::~G4ErrorTarget(){}
+G4ErrorTarget::G4ErrorTarget()
+ : theType(G4ErrorTarget_GeomVolume) {}
+
+G4ErrorTarget::~G4ErrorTarget() {}
 
 G4double G4ErrorTarget::GetDistanceFromPoint( const G4ThreeVector&,
                                               const G4ThreeVector& ) const

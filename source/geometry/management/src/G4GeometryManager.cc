@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.22 2008-05-16 13:46:48 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.23 2010-07-05 09:22:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -358,7 +358,8 @@ G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
   G4cout << "    Total memory consumed for geometry optimisation:   "
          << totalMemory/1024 << " kByte" << G4endl;
   G4cout << "    Total CPU time elapsed for geometry optimisation: " 
-         << std::setprecision(2) << totalCpuTime << " seconds" << G4endl;
+         << std::setprecision(2) << totalCpuTime << " seconds"
+         << std::setprecision(6) << G4endl;
  
   //
   // First list: sort by total CPU time

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.11 2006-11-08 09:56:33 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.12 2010-07-05 09:22:58 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -256,13 +256,14 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
 
   G4Point3D tmpPoint;
 
-// Calculate rotated vertex coordinates
+  // Calculate rotated vertex coordinates
 
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
+
     G4ThreeVector vertex0(x1,y1,z1) ;
     tmpPoint    = transform3D*G4Point3D(vertex0);
     vertex0     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
