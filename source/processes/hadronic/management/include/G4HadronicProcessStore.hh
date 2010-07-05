@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.hh,v 1.6 2010-04-21 17:55:13 dennis Exp $
+// $Id: G4HadronicProcessStore.hh,v 1.7 2010-07-05 14:50:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,6 +53,7 @@
 
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ThreeVector.hh"
 #include "G4HadronicProcess.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleDefinition.hh"

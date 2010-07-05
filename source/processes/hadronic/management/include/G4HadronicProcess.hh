@@ -23,7 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HadronicProcess.hh,v 1.42 2010-07-05 14:50:15 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// -------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+// G4HadronicProcess
 //
 // This is the top level Hadronic Process class
 // The inelastic, elastic, capture, and fission processes
@@ -33,7 +40,9 @@
 // J.L. Chuma, TRIUMF, 10-Mar-1997
 // Last modified: 04-Apr-1997
 // 19-May-2008 V.Ivanchenko cleanup and added comments
- 
+// 05-Jul-2010 V.Ivanchenko cleanup commented lines 
+//
+
 #ifndef G4HadronicProcess_h
 #define G4HadronicProcess_h 1
  
@@ -47,7 +56,7 @@
 #include "G4IsoParticleChange.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4VLeadingParticleBiasing.hh"
-//#include "G4Delete.hh"
+
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronicProcessType.hh"
 
@@ -187,10 +196,7 @@ private:
   { return theInitialNumberOfInteractionLength
       -G4VProcess::theNumberOfInteractionLengthLeft;
   }
-        
-  //  inline void SetCrossSectionDataStore(G4CrossSectionDataStore* aDataStore)
-  //  { theCrossSectionDataStore = aDataStore; }
-    
+            
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
