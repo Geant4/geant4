@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2010-07-03 06:15:30 mkelsey Exp $
+$Id: History,v 1.123 2010-07-06 19:36:24 dennis Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+6 July 2010 Dennis Wright
+-------------------------
+- G4IntraNucleiCascader.cc: add to final particle list those cascade 
+  particles which were formerly abandoned at cascade termination;
+- G4IntraNucleiCascader.cc: allow meson excitons to pass out of nucleus
+  since they are not proper excitons, and would be lost otherwise 
+  
+4 July 2010 Dennis Wright hadr-casc-V09-03-54
+---------------------------------------------
+- tag changes up to now 
 
 2 July 2010 Michael Kelsey
 --------------------------
