@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.46 2010-07-03 00:07:55 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.47 2010-07-06 19:26:12 dennis Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -144,8 +144,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       zfin += bparticle->getCharge();
       afin += bparticle->baryon();
-
       cascad_particles.push_back(model.initializeCascad(bparticle));
+
     } else {				// nuclei with nuclei
       if (verboseLevel > 2)
 	G4cout << " itry " << itry << " inter_case " << inter_case << G4endl;
@@ -197,7 +197,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
 							&theElementaryParticleCollider);
       if (verboseLevel > 2) {
-	G4cout << " New particles " << new_cascad_particles.size() << G4endl
+	G4cout << " After generate fate: New particles " << new_cascad_particles.size() << G4endl
 	       << " Discarding last cparticle from list " << G4endl;
       }
 
@@ -207,16 +207,26 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       if (new_cascad_particles.size() == 1) { // last particle goes without interaction
 	if (model.stillInside(new_cascad_particles[0])) {
-	  if (verboseLevel > 3) G4cout << " still inside " << G4endl;
+	  if (verboseLevel > 3) G4cout << " particle still inside nucleus " << G4endl;
 
 	  if (new_cascad_particles[0].getNumberOfReflections() < reflection_cut &&
 	      model.worthToPropagate(new_cascad_particles[0])) {
-	    if (verboseLevel > 3) G4cout << " survives " << G4endl;
+	    if (verboseLevel > 3) G4cout << " continue reflections " << G4endl;
 	    cascad_particles.push_back(new_cascad_particles[0]);
+
 	  } else {
-	    if (verboseLevel > 3) G4cout << " becomes an exiton " << G4endl;
-	    theExitonConfiguration.incrementQP(new_cascad_particles[0].getParticle().type());
+            G4int xtype = new_cascad_particles[0].getParticle().type();
+            if (xtype == 1 || xtype == 2) { 
+              // normal exciton
+              theExitonConfiguration.incrementQP(xtype);
+
+            } else {
+              // non-standard exciton; release it
+              // FIXME: this is a meson, so need to absorb it
+              output_particles.push_back(new_cascad_particles[0].getParticle() );
+            }
 	  }
+
         } else { // particle about to leave nucleus - check for Coulomb barrier
 	  if (verboseLevel > 3) G4cout << " possible escape " << G4endl;
 
@@ -245,8 +255,16 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	      }
 	      output_particles.push_back(currentParticle);
             } else {
-	      if (verboseLevel > 3) G4cout << " becomes an exciton " << G4endl;
-              theExitonConfiguration.incrementQP(currentParticle.type());
+	      if (verboseLevel > 3) 
+                G4cout << " becomes an exciton due to coulomb " << G4endl;
+              G4int xtype = currentParticle.type();
+              if (xtype == 1 || xtype == 2) {
+                theExitonConfiguration.incrementQP(currentParticle.type());
+              } else {
+                // non-standard exciton; release it
+                // FIXME: this is a meson, so need to absorb it
+                output_particles.push_back(currentParticle);
+              }
             }
           } else {
 	    if (verboseLevel > 3) {
@@ -272,6 +290,10 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       }		// if (new_cascad_particles ...
     }		// while cascade-list and model
 
+    // Add left-over cascade particles
+    for (G4int i = 0; i < G4int(cascad_particles.size()); i++)
+      output_particles.push_back(cascad_particles[i].getParticle());
+ 
     // Cascade is finished. Check if it's OK.
 
     if (verboseLevel > 3) {
