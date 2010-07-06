@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: TrackingAction.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "PrimaryGeneratorAction2.hh"
 #include "PrimaryGeneratorAction3.hh"
+#include "PrimaryGeneratorAction4.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
 
@@ -44,13 +45,13 @@
 TrackingAction::TrackingAction(HistoManager* histo)
 :histoManager(histo)
 { 
- // parameters for generator action #2
-  newUz = PrimaryGeneratorAction2::GetNewUz();
-
  // parameters for generator action #3
-  deltaR3 = (PrimaryGeneratorAction3::GetRmax3() - PrimaryGeneratorAction3::GetRmin3())/3.;
-  cosAlphaMin = PrimaryGeneratorAction3::GetCosAlphaMin();
-  cosAlphaMax = PrimaryGeneratorAction3::GetCosAlphaMax();
+  newUz = PrimaryGeneratorAction3::GetNewUz();
+
+ // parameters for generator action #4
+  deltaR3 = (PrimaryGeneratorAction4::GetRmax3() - PrimaryGeneratorAction4::GetRmin3())/3.;
+  cosAlphaMin = PrimaryGeneratorAction4::GetCosAlphaMin();
+  cosAlphaMax = PrimaryGeneratorAction4::GetCosAlphaMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,14 +59,17 @@ TrackingAction::TrackingAction(HistoManager* histo)
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
  G4int selectedGeneratorAction = PrimaryGeneratorAction::GetSelectedAction();
+ G4int id = 0;
 
  if(selectedGeneratorAction==2)
  {
   //energy spectrum
   //
-  G4int id = 1;   
+  id = 1;   
   histoManager->FillHisto(id, track->GetKineticEnergy());
-
+ }
+ else if(selectedGeneratorAction==3)
+ {
   //momentum direction : angular distr dN/dOmega = f(alpha)
   //
   id = 2;
@@ -85,11 +89,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4double psi = std::atan2(u2*um, u1*um);
   if (psi < 0.) psi += twopi;    
   G4double dpsi  = histoManager->GetBinWidth(id);
-  G4double alphaMax = PrimaryGeneratorAction2::GetAlphaMax();    
+  G4double alphaMax = PrimaryGeneratorAction3::GetAlphaMax();    
   dOmega = (1. - std::cos(alphaMax))*dpsi;     
   if (dOmega > 0.) histoManager->FillHisto(id, psi, 1./dOmega);  
  }
- else if(selectedGeneratorAction==3)
+ else if(selectedGeneratorAction==4)
  {
   G4ThreeVector vertex   = track->GetVertexPosition();
   G4double r = vertex.mag();
@@ -99,7 +103,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
   //vertex position: radial distribution : dN/dv = f(r)
   //
-  G4int id = 4;
+  id = 4;
   G4double dr = histoManager->GetBinWidth(id);
   G4double dv = 2*twopi*r*r*dr;
   if (dv > 0.) histoManager->FillHisto(id, r, 1./dv);

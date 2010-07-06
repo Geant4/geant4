@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2010-06-10 09:00:51 maire Exp $
+$Id: README,v 1.5 2010-07-06 13:30:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,15 +9,15 @@ $Id: README,v 1.4 2010-06-10 09:00:51 maire Exp $
                             -----------
 			    
  History:
-  13-05-2010 : Michale Maire - create as three examples
   10-06-2010 : Makoto Asai - merge into one example
-
- This example demonstrates three ways of the usage of G4ParticleGun shooting
+  13-05-2010 : Michel Maire - create as three examples
+  
+ This example demonstrates 4 ways of the usage of G4ParticleGun shooting
  primary particles in different cases. These are
   1) Generate several vertices and particles per event
-  2) Divergent beam in an arbitrary direction 
-    and to show how to sample a tabulated function (eg. energy spectrum)
-  3) Shooting primaries in spherical coordinates with rotation matrix.
+  2) Show how to sample a tabulated function (eg. energy spectrum)  
+  3) Divergent beam in an arbitrary direction 
+  4) Shooting primaries in spherical coordinates with rotation matrix.
  These usages can be chosen by a UI command
   /testem/selectGunAction <actionID>
  where <actionID> corresponds to above cases.
@@ -35,11 +35,11 @@ $Id: README,v 1.4 2010-06-10 09:00:51 maire Exp $
  3- Primary generator
     -----------------
 
- There are three concrete primary generator action classes
- (PrimaryGeneratorActionN, N=1,2,3) which can be used as an independent sample 
+ There are 4 concrete primary generator action classes
+ (PrimaryGeneratorActionN, N=1,2,3,4) which can be used as an independent sample
  code. 
  PrimaryGeneratorAction is the class which uses and switches between these 
- three concrete action classes. Each concrete generator action shoots geantinoes
+ 4 concrete action classes. Each concrete generator action shoots geantinoes
  in a distribution decribed below.
 
  3.1- Generate several vertices and particles per event
@@ -49,20 +49,19 @@ $Id: README,v 1.4 2010-06-10 09:00:51 maire Exp $
  particle 2 and 3 : on opposite side of the cylnder surface to particle 1
 
  3.2- Show how to sample a tabulated function (energy spectrum)
-      Divergent beam in an arbitrary direction with rotation matrix 
-      -------------------------------------------------------------
+      ---------------------------------------------------------
 
- a geantino uniformly randomized around a given direction (theta, phi).
- 
- a) Energy spectrum
  Energy is sampled from a tabulated function defined in InitFunction().
  The function is assumed positive, linear per segment, continuous.
  Two sampling methods are illustrated : RejectAccept() and InverseCumul()
  (see Particle Data book, Monte Carlo techniques).
  Histogram 1 shows generated energy spectrum.
- 
- b) Momentum direction
- One wants to limit particle direction uniformly around a given direction.
+       
+ 3.3- Divergent beam in an arbitrary direction with rotation matrix 
+      -------------------------------------------------------------
+
+ A geantino uniformly randomized around a given direction (theta, phi). 
+ One wants to limit particle direction uniformly around this direction.
  First, one generates momentum direction in the master frame (eg. World).
  AlphaMax = opening angle around z axis.
  Then one rotates momentum in local frame, using rotateUz() function.
@@ -71,7 +70,7 @@ $Id: README,v 1.4 2010-06-10 09:00:51 maire Exp $
 http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  Histograms 2,3 show momentum direction in local frame.
   
- 3.3- Shooting primaries in spherical coordinates with rotation matrix
+ 3.4- Shooting primaries in spherical coordinates with rotation matrix
       ----------------------------------------------------------------
 
  a geantino uniformly randomized within a spherical shell.
@@ -133,9 +132,9 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
       7 : momentum direction: angular distr dN/dOmega = f(alpha)
       8 : momentum direction: angular distr dN/dOmega = f(psi)
 
-  Please note that histograms 1,2,3 will be filled only if you use 
-  PrimaryGeneratorAction2 and 4 through 8 will be filled with 
-  PrimaryGeneratorAction3.
+  Please note that histogram 1 will be filled only if you use 
+  PrimaryGeneratorAction2, histos 2,3 with PrimaryGeneratorAction3
+  and 4 through 8 will be filled with PrimaryGeneratorAction4.
 
   The histograms are managed by the HistoManager class and its Messenger. 
   The histos can be individually activated with the command :

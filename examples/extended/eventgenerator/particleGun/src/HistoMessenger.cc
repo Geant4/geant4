@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: HistoMessenger.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,11 +100,11 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   selectActionCmd = new G4UIcmdWithAnInteger("/testem/selectGunAction",this);
   selectActionCmd->SetGuidance("Select primary generator action");
   selectActionCmd->SetGuidance(" id = 1 : Generate several vertices and particles per event");
-  selectActionCmd->SetGuidance(" id = 2 : Divergent beam in an arbitrary direction");
-  selectActionCmd->SetGuidance("          (showing how to sample a tabulated function)");
-  selectActionCmd->SetGuidance(" id = 3 : In spherical coordinates with rotation matrix");
+  selectActionCmd->SetGuidance(" id = 2 : Show how to sample a tabulated function");  
+  selectActionCmd->SetGuidance(" id = 3 : Divergent beam in an arbitrary direction");
+  selectActionCmd->SetGuidance(" id = 4 : In spherical coordinates with rotation matrix");
   selectActionCmd->SetParameterName("id",false);
-  selectActionCmd->SetRange("id>0 && id<4");
+  selectActionCmd->SetRange("id>0 && id<5");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

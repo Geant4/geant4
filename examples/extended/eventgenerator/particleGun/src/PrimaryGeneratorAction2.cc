@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction2.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: PrimaryGeneratorAction2.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,11 +38,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-
-G4ThreeVector PrimaryGeneratorAction2::newUz = G4ThreeVector(0.,0.,0.);
-G4ThreeVector PrimaryGeneratorAction2::GetNewUz() { return newUz; }
-G4double PrimaryGeneratorAction2::alphaMax = 0.;
-G4double PrimaryGeneratorAction2::GetAlphaMax() { return alphaMax; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,14 +56,6 @@ PrimaryGeneratorAction2::PrimaryGeneratorAction2()
 
   particleGun = PrimaryGeneratorAction::GetParticleGun();
     
-  // direction
-  //
-  G4double theta = 90*deg, phi = 45*deg;
-  newUz = G4ThreeVector(std::sin(theta)*std::cos(phi),
-                        std::sin(theta)*std::sin(phi),
-			std::cos(theta));
-			
-  alphaMax = 15*deg;			
     
   // energy distribution
   //
@@ -85,17 +72,11 @@ PrimaryGeneratorAction2::~PrimaryGeneratorAction2()
 
 void PrimaryGeneratorAction2::GeneratePrimaries(G4Event* anEvent)
 {
-  //particle direction uniform around newUz axis
-  //
-  //1- in World frame      
-  //cosAlpha uniform in [cos(0), cos(alphaMax)]
-  G4double cosAlpha = 1. - G4UniformRand()*(1.- std::cos(alphaMax));
+  //cosAlpha uniform in [cos(0), cos(pi)]
+  G4double cosAlpha = 1. - 2*G4UniformRand();
   G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
   G4double psi      = twopi*G4UniformRand();	//psi uniform in [0, 2*pi]  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
-  
-  //2- rotate dir   (rotateUz transforms uz to newUz)
-  dir.rotateUz(newUz);	   
 
   particleGun->SetParticleMomentumDirection(dir);
   

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 #include "PrimaryGeneratorAction1.hh"
 #include "PrimaryGeneratorAction2.hh"
 #include "PrimaryGeneratorAction3.hh"
+#include "PrimaryGeneratorAction4.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -65,7 +66,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   action1 = new PrimaryGeneratorAction1();
   action2 = new PrimaryGeneratorAction2();
   action3 = new PrimaryGeneratorAction3();
-
+  action4 = new PrimaryGeneratorAction4();
+  
   selectedAction = 1;
 }
 
@@ -77,6 +79,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
   delete action1;
   delete action2;
   delete action3;
+  delete action4;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,6 +97,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    case 3:
     action3->GeneratePrimaries(anEvent);
     break;
+   case 4:
+    action4->GeneratePrimaries(anEvent);
+    break;    
    default:
     G4cerr<<"Invalid generator action"<<G4endl;
   }

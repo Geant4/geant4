@@ -24,50 +24,45 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction4.hh,v 1.1 2010-07-06 13:30:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef PrimaryGeneratorAction4_h
+#define PrimaryGeneratorAction4_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
 #include <vector>
 
 class G4ParticleGun;
 class G4Event;
-class PrimaryGeneratorAction1;
-class PrimaryGeneratorAction2;
-class PrimaryGeneratorAction3;
-class PrimaryGeneratorAction4;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class PrimaryGeneratorAction4 : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();    
-   ~PrimaryGeneratorAction();
+    PrimaryGeneratorAction4();    
+   ~PrimaryGeneratorAction4();
 
   public:
     void GeneratePrimaries(G4Event*);
 
-  public:
-    static G4int GetSelectedAction();
-    static void SelectAction(G4int i);
-    static G4ParticleGun* GetParticleGun();
-
+    static G4double GetRmin3();
+    static G4double GetRmax3();
+    static G4double GetCosAlphaMin();
+    static G4double GetCosAlphaMax();
+            
   private:
-    static G4int selectedAction;
-    static G4ParticleGun*    particleGun;
-    PrimaryGeneratorAction1* action1;
-    PrimaryGeneratorAction2* action2;
-    PrimaryGeneratorAction3* action3;
-    PrimaryGeneratorAction4* action4;
+    static G4double Rmin3;
+    static G4double Rmax3;		//vertex volume
+    static G4double cosAlphaMin;
+    static G4double cosAlphaMax;	//opening angle
+
+    G4ParticleGun*  particleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

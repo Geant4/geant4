@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: TrackingAction.hh,v 1.2 2010-07-06 13:30:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,10 +53,10 @@ class TrackingAction : public G4UserTrackingAction {
   private:
     HistoManager*  histoManager;
 
-   // parameters for generator action #2
+   // parameters for generator action #3
     G4ThreeVector newUz;
 
-   // parameters for generator action #3
+   // parameters for generator action #4
     G4double deltaR3;
     G4double cosAlphaMin; 
     G4double cosAlphaMax;  //opening angle
