@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.37 2010-05-11 15:03:45 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.38 2010-07-07 15:48:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -147,11 +147,11 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
-  if (positionA == kInside) return kInside;
+  if (positionA == kInside)  { return kInside; }
 
   EInside positionB = fPtrSolidB->Inside(p);
 
-  if( positionA == kInside  || positionB == kInside   ||
+  if( positionB == kInside  ||
     ( positionA == kSurface && positionB == kSurface &&
         ( fPtrSolidA->SurfaceNormal(p) + 
           fPtrSolidB->SurfaceNormal(p) ).mag2() < 
@@ -161,10 +161,10 @@ EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
   }
   else
   {
-    if( ( positionA != kInside  && positionB == kSurface ) ||
-        ( positionB != kInside  && positionA == kSurface ) ||
-        ( positionA == kSurface && positionB == kSurface )    ) return kSurface;
-    else                                                        return kOutside;
+    if( ( positionB == kSurface ) || ( positionA == kSurface ) )
+      { return kSurface; }
+    else
+      { return kOutside; } 
   }
 }
 
