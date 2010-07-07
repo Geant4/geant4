@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.cc,v 1.12 2008-03-13 14:18:57 gcosmo Exp $
+// $Id: G4ProjectedSurface.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,9 +39,11 @@
 G4int G4ProjectedSurface::Splits=0;
 
 G4ProjectedSurface::G4ProjectedSurface()
+  : G4Surface(), ctl_points(0), dir(0), u_knots(0), v_knots(0),
+    projected_list(0), bezier_list(0), new_knots(0), ord(0),
+    lower(0), upper(0), oslo_m(0)
 {
   distance = 0;
-  oslo_m   =(G4OsloMatrix*)0;
 }
 
 
@@ -69,8 +71,12 @@ G4ProjectedSurface::~G4ProjectedSurface()
 }
 
 G4ProjectedSurface::G4ProjectedSurface(const G4ProjectedSurface&)
-  : G4Surface()
+  : G4Surface(), ctl_points(0), dir(0), u_knots(0), v_knots(0),
+    projected_list(0), bezier_list(0), new_knots(0), ord(0),
+    lower(0), upper(0), oslo_m(0)
 {
+  order[0] = 0;
+  order[1] = 0;
 }
 
 void  G4ProjectedSurface::CopySurface()

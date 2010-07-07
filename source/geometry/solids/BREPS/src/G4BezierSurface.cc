@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.10 2008-03-13 14:18:57 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.11 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,15 +46,15 @@ G4double G4BezierSurface::Tolerance=0;
 G4int G4BezierSurface::Clips=0;
 G4int G4BezierSurface::Splits=0;
 
-
 G4BezierSurface::G4BezierSurface()
+  : G4Surface(), bezier_list(0), smin(0.), smax(0.),
+    average_u(0.), average_v(0.), dir(0), u_knots(0), v_knots(0),
+    ctl_points(0), new_knots(0), ord(0), oslo_m(0), lower(0), upper(0),
+    u_min(0.), u_max(0.), v_min(0.), v_max(0.), old_points(0)
 {
-  oslo_m     = (G4OsloMatrix*)0;
-  new_knots  = (G4KnotVector*)0;
-  old_points = (G4ControlPoints*)0;
-
-  u[0]=0; u[1]=0;
-  v[0]=0; v[1]=0;
+  order[0]=0; order[1]=0;
+  u[0]=0.; u[1]=0.;
+  v[0]=0.; v[1]=0.;
 }
 
 G4BezierSurface::~G4BezierSurface()
@@ -79,8 +79,14 @@ G4BezierSurface::~G4BezierSurface()
 }
 
 G4BezierSurface::G4BezierSurface(const G4BezierSurface&)
-  : G4Surface()
+  : G4Surface(), bezier_list(0), smin(0.), smax(0.),
+    average_u(0.), average_v(0.), dir(0), u_knots(0), v_knots(0),
+    ctl_points(0), new_knots(0), ord(0), oslo_m(0), lower(0), upper(0),
+    u_min(0.), u_max(0.), v_min(0.), v_max(0.), old_points(0)
 {
+  order[0]=0; order[1]=0;
+  u[0]=0.; u[1]=0.;
+  v[0]=0.; v[1]=0.;
 }
 
 G4Vector3D G4BezierSurface::SurfaceNormal(const G4Point3D&) const

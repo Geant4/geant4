@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parabola.cc,v 1.9 2007-05-18 07:33:31 gcosmo Exp $
+// $Id: G4Parabola.cc,v 1.10 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -38,7 +38,7 @@
 #include "G4CurvePoint.hh"
 #include "G4GeometryTolerance.hh"
 
-G4Parabola::G4Parabola(){}
+G4Parabola::G4Parabola() : focalDist(0.) {}
 G4Parabola::~G4Parabola(){}
 
 G4Parabola::G4Parabola(const G4Parabola& right)

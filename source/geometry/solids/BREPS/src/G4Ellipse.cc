@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.cc,v 1.12 2007-05-18 07:33:31 gcosmo Exp $
+// $Id: G4Ellipse.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,6 +39,7 @@
 #include "G4GeometryTolerance.hh"
 
 G4Ellipse::G4Ellipse()
+  : semiAxis1(0.), semiAxis2(0.), ratioAxis2Axis1(0.), forTangent(.0)
 {
 }
 

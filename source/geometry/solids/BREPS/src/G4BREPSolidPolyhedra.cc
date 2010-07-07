@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.35 2008-01-22 16:04:58 tnikitin Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.36 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -813,6 +813,14 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra( __void__& a )
   : G4BREPSolid(a)
 {
+  constructorParams.start_angle    = 0.;
+  constructorParams.opening_angle  = 0.;
+  constructorParams.sides          = 0;
+  constructorParams.num_z_planes   = 0;
+  constructorParams.z_start        = 0.;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN = 0;
+  constructorParams.RMAX = 0;
 }
 
 G4BREPSolidPolyhedra::~G4BREPSolidPolyhedra()

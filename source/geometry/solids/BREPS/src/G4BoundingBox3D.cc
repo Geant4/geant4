@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.12 2007-07-16 08:06:55 gcosmo Exp $
+// $Id: G4BoundingBox3D.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -104,6 +104,8 @@ void G4BoundingBox3D::Init(const G4Point3D& p1, const G4Point3D& p2)
   // Calc half spaces
   GeantBox = (box_max - box_min)*0.5;
   MiddlePoint = (box_min + box_max)*0.5;
+
+  test_result = 0;
   distance = 0;
 }
 

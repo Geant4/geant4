@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.icc,v 1.9 2006-06-29 18:39:38 gunter Exp $
+// $Id: G4Hyperbola.icc,v 1.10 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -36,7 +36,7 @@
 // --------------------------------------------------------------------
 
 inline
-void G4Hyperbola::Init(G4Axis2Placement3D position0,
+void G4Hyperbola::Init(const G4Axis2Placement3D& position0,
                        G4double semiAxis0, G4double semiImagAxis0)
 {
   position= position0;

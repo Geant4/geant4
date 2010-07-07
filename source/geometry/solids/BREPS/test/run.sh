@@ -3,7 +3,7 @@
 # A simple script to run all the tests in this directory and check
 # their results against the expected (previous) results
 #
-# $Id: run.sh,v 1.5 2003-10-01 14:52:20 gcosmo Exp $
+# $Id: run.sh,v 1.6 2010-07-07 14:45:31 gcosmo Exp $
 # $Name: not supported by cvs2svn $
 #
 # Created:
@@ -21,7 +21,7 @@ for i in CurveTest.cc G4*.cc
 do
   target=`basename $i .cc`
   echo  "Compiling $target ... "
-  gmake G4TARGET=$target
+  make G4TARGET=$target
   echo -n "Executing $target .."
   $G4WORKDIR/bin/$G4SYSTEM/$target > $target.newout-$host
   echo  ".. difference from expected output: "

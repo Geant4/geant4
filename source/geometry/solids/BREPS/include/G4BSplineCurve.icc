@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.icc,v 1.7 2006-06-29 18:38:07 gunter Exp $
+// $Id: G4BSplineCurve.icc,v 1.8 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -48,14 +48,14 @@ G4BSplineCurve::GetControlPointsList() const
 }
 
 inline
-const G4BSplineCurve::G4doubleVector*
+const std::vector<G4double>*
 G4BSplineCurve::GetKnots() const
 {
   return knots;
 }
 
 inline
-const G4BSplineCurve::G4doubleVector*
+const std::vector<G4double>*
 G4BSplineCurve::GetWeightsData() const
 {
   return weightsData;

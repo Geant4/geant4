@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurvePoint.cc,v 1.5 2006-06-29 18:42:04 gunter Exp $
+// $Id: G4CurvePoint.cc,v 1.6 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@ const G4int G4CurvePoint::uFlag= 2;
 const G4int G4CurvePoint::allFlags= 0xFF; // lots of bits...
 
 G4CurvePoint::G4CurvePoint()
- : c(0)
+ : c(0), u(0.), notComputed(allFlags)
 {
 }
 

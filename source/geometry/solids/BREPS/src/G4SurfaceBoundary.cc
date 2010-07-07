@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceBoundary.cc,v 1.14 2006-06-29 18:42:46 gunter Exp $
+// $Id: G4SurfaceBoundary.cc,v 1.15 2010-07-07 14:45:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -131,15 +131,18 @@ G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
         a = newBounds.back();
         newBounds.pop_back();
         for (G4CurveVector::iterator i=newBounds.begin();
-                                     i!=newBounds.end(); i++)
+                                     i!=newBounds.end();)
         {
           if (*i==a)
           {
-	    newBounds.erase(i);
+	    i = newBounds.erase(i);
+          }
+          else
+          {
 	    i--;
           }
         } 
-        if ( a )  delete a;    
+        if ( a )  { delete a; }
       } 
       return 0;
     }
