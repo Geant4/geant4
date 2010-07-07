@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.11 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.12 2010-07-07 14:59:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -309,9 +309,11 @@ void G4BezierSurface::ClipSurface()
   //    G4cout << "\nBezier clip.";
   
   register G4int i,j;
-  register G4ConvexHull *ch_ptr=0, *ch_tmp=0, *ch_first=0;
   register G4int col_size = ctl_points->GetCols();
   register G4int row_size = ctl_points->GetRows();
+
+  G4ConvexHull *ch_tmp= new G4ConvexHull(0,1.0e8,-1.0e8);
+  G4ConvexHull *ch_ptr=0, *ch_first=0;
   
   // The four cornerpoints of the controlpoint mesh.
 
