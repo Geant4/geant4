@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeCurve.cc,v 1.14 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4CompositeCurve.cc,v 1.15 2010-07-07 15:03:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,6 +71,9 @@ G4CompositeCurve::~G4CompositeCurve()
       if (*i==a)
       {
 	i = segments.erase(i);
+      }
+      else
+      {
 	++i;
       }
     } 
@@ -105,6 +108,9 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
           if (*i==a)
           {
 	    i = newSegments.erase(i);
+          }
+          else
+          {
 	    ++i;
           }
         } 
