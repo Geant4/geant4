@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2010-05-25 09:19:02 gcosmo Exp $
+$Id: History,v 1.122 2010-07-08 16:31:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 08, 2010  G.Cosmo                    geom-csg-V09-03-02
+- Improved initialisation logic in constructor for: G4Box, G4Cons, G4Orb,
+  G4Para, G4Sphere, G4Torus, G4Trap, G4Trd, G4Tubs.
+- Corrected cases of not-restored cout precision in: G4Box, G4Cons, G4Orb,
+  G4Para, G4Torus, G4Trap, G4Tubs.
+- G4Torus: fixed call to internal method for finding roots, to avoid copy
+  of sdt::vector() by parameters. Some cleanup to avoid unnecessary protected
+  section and virtual table.
+- Updated unit test for G4Sphere (V.Grichine).
 
 May 25, 2010  G.Cosmo                    geom-csg-V09-03-01
 - G4Box: more minor fixes in coding style, following code review discussion.
