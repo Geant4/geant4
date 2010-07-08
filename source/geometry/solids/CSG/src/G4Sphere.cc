@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.84 2009-08-07 15:56:23 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.85 2010-07-08 16:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -91,23 +91,16 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
+  : G4CSGSolid(pName), fEpsilon(2.0e-11),
+    fFullPhiSphere(true), fFullThetaSphere(true)
 {
-  fEpsilon = 2.0e-11;  // relative radial tolerance constant
-
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check radii and set radial tolerances
 
   G4double kRadTolerance = G4GeometryTolerance::GetInstance()
                          ->GetRadialTolerance();
-  if ( (pRmin < pRmax) && (pRmax >= 10*kRadTolerance) && (pRmin >= 0) )
-  {
-    fRmin=pRmin; fRmax=pRmax;
-    fRminTolerance = (pRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
-    fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
-  }
-  else
+  if ( (pRmin >= pRmax) || (pRmax < 10*kRadTolerance) || (pRmin < 0) )
   {
     G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
            << "        Invalide values for radii ! - "
@@ -115,6 +108,9 @@ G4Sphere::G4Sphere( const G4String& pName,
     G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
                 "Invalid radii");
   }
+  fRmin=pRmin; fRmax=pRmax;
+  fRminTolerance = (pRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
+  fRmaxTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
 
   // Check angles
 
@@ -128,7 +124,13 @@ G4Sphere::G4Sphere( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Sphere::G4Sphere( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fEpsilon(0.), fRminTolerance(0.), fRmaxTolerance(0.),
+    kAngTolerance(0.), fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
+    fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
+    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
+    ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
+    tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
+    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true)
 {
 }
 
@@ -759,7 +761,7 @@ G4ThreeVector G4Sphere::ApproxSurfaceNormal( const G4ThreeVector& p ) const
                           cosETheta*std::sin(pPhi),
                          -sinETheta              );
       break;
-    default:
+    default:          // Should never reach this case ...
       DumpInfo();
       G4Exception("G4Sphere::ApproxSurfaceNormal()","Notification",JustWarning,
                   "Undefined side for valid surface normal to solid.");

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.27 2007-05-18 07:38:00 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.28 2010-07-08 16:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ class G4Torus : public G4CSGSolid
                   G4double pSPhi,
                   G4double pDPhi);
 
-    virtual ~G4Torus();
+   ~G4Torus();
     
     // Accessors
 
@@ -163,11 +163,12 @@ class G4Torus : public G4CSGSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-  protected:
+  private:
 
-    std::vector<G4double> TorusRootsJT(const G4ThreeVector& p,
-                                       const G4ThreeVector& v,
-                                             G4double r) const ;
+    void TorusRootsJT(const G4ThreeVector& p,
+                      const G4ThreeVector& v,
+                            G4double r,
+                            std::vector<G4double>& roots) const ;
 
     G4double SolveNumericJT(const G4ThreeVector& p,
                             const G4ThreeVector& v,
@@ -178,7 +179,11 @@ class G4Torus : public G4CSGSolid
     CreateRotatedVertices(const G4AffineTransform& pTransform,
                                 G4int& noPolygonVertices) const;
 
-  protected:
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface
+
+  private:
 
     G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
@@ -187,14 +192,6 @@ class G4Torus : public G4CSGSolid
 
     // used by normal
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-
-  private:
-
-    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
-      // Algorithm for SurfaceNormal() following the original
-      // specification for points not on the surface
-
-  private:
 
     G4double kRadTolerance, kAngTolerance;
       // Radial and angular tolerances

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.49 2010-05-25 10:14:41 gcosmo Exp $
+// $Id: G4Box.cc,v 1.50 2010-07-08 16:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,17 +62,11 @@ G4Box::G4Box(const G4String& pName,
                    G4double pX,
                    G4double pY,
                    G4double pZ)
-  : G4CSGSolid(pName)
+  : G4CSGSolid(pName), fDx(pX), fDy(pY), fDz(pZ)
 {
-  if ( (pX > 2*kCarTolerance)
-    && (pY > 2*kCarTolerance)
-    && (pZ > 2*kCarTolerance) )  // limit to thickness of surfaces
-  {
-    fDx = pX ;
-    fDy = pY ; 
-    fDz = pZ ;
-  }
-  else
+  if ( (pX < 2*kCarTolerance)
+    && (pY < 2*kCarTolerance)
+    && (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
   {
     G4cerr << "ERROR - G4Box()::G4Box(): " << GetName() << G4endl
            << "        Dimensions too small ! - "
@@ -88,7 +82,7 @@ G4Box::G4Box(const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4Box::G4Box( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fDx(0.), fDy(0.), fDz(0.)
 {
 }
 
@@ -824,6 +818,7 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(6);
         G4Exception("G4Box::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
@@ -889,10 +884,10 @@ G4ThreeVectorList*
 G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(-fDx,-fDy,-fDz) ;
     G4ThreeVector vertex1(fDx,-fDy,-fDz) ;
     G4ThreeVector vertex2(fDx,fDy,-fDz) ;

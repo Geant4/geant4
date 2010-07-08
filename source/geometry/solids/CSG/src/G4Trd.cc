@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.34 2006-10-19 15:33:38 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.35 2010-07-08 16:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -119,7 +119,7 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
 //                            for usage restricted to object persistency.
 //
 G4Trd::G4Trd( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fDx1(0.), fDx2(0.), fDy1(0.), fDy2(0.), fDz(0.)
 {
 }
 
@@ -1287,9 +1287,9 @@ G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
 {
   G4ThreeVectorList *vertices;
   vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(-fDx1,-fDy1,-fDz);
     G4ThreeVector vertex1(fDx1,-fDy1,-fDz);
     G4ThreeVector vertex2(fDx1,fDy1,-fDz);

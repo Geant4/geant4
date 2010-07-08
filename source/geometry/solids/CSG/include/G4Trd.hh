@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.16 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4Trd.hh,v 1.17 2010-07-08 16:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ class G4Trd : public G4CSGSolid
       //
       // Constructs a trapezoid with name, and half lengths
 
-    virtual ~G4Trd();
+   ~G4Trd();
       //
       // Destructor
 
@@ -144,12 +144,13 @@ class G4Trd : public G4CSGSolid
 
   public:  // without description
 
+    enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
+      // Codes for faces (kPX=plus x face,kMY= minus y face etc)
+
     G4Trd(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
-
-  protected:  // without description
 
     G4ThreeVectorList*
     CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
@@ -157,17 +158,13 @@ class G4Trd : public G4CSGSolid
       // Creates the List of transformed vertices in the format required
       // for G4CSGSolid:: ClipCrossSection and ClipBetweenSections
 
-    G4double fDx1,fDx2,fDy1,fDy2,fDz;
-
-    // Codes for faces (kPX=plus x face,kMY= minus y face etc)
-
-    enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
-
-  private:
-
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
+
+  private:
+
+    G4double fDx1,fDx2,fDy1,fDy2,fDz;
 };
 
 #include "G4Trd.icc"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.65 2009-11-26 10:31:06 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.66 2010-07-08 16:31:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -172,7 +172,8 @@ G4Torus::SetAllParameters( G4double pRmin,
 //                            for usage restricted to object persistency.
 //
 G4Torus::G4Torus( __void__& a )
-  : G4CSGSolid(a)
+  : G4CSGSolid(a), fRmin(0.), fRmax(0.), fRtor(0.), fSPhi(0.),
+    fDPhi(0.), kRadTolerance(0.), kAngTolerance(0.)
 {
 }
 
@@ -181,7 +182,8 @@ G4Torus::G4Torus( __void__& a )
 // Destructor
 
 G4Torus::~G4Torus()
-{}
+{
+}
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -202,14 +204,13 @@ void G4Torus::ComputeDimensions(       G4VPVParameterisation* p,
 // Calculate the real roots to torus surface. 
 // Returns negative solutions as well.
 
-std::vector<G4double> G4Torus::TorusRootsJT( const G4ThreeVector& p,
-                                             const G4ThreeVector& v,
-                                                   G4double r ) const
+void G4Torus::TorusRootsJT( const G4ThreeVector& p,
+                            const G4ThreeVector& v,
+                                  G4double r,
+                                  std::vector<G4double>& roots ) const
 {
-
   G4int i, num ;
   G4double c[5], sr[4], si[4] ;
-  std::vector<G4double> roots ;
 
   G4double Rtor2 = fRtor*fRtor, r2 = r*r  ;
 
@@ -232,9 +233,7 @@ std::vector<G4double> G4Torus::TorusRootsJT( const G4ThreeVector& p,
     if( si[i] == 0. )  { roots.push_back(sr[i]) ; }  // store real roots
   }  
 
-  std::sort(roots.begin() , roots.end() ) ;  // sorting  with < 
-
-  return roots;
+  std::sort(roots.begin() , roots.end() ) ;  // sorting  with <
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -258,7 +257,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
   //
   std::vector<G4double> roots ;
   std::vector<G4double> rootsrefined ;
-  roots = TorusRootsJT(p,v,r) ;
+  TorusRootsJT(p,v,r, roots) ;
 
   G4ThreeVector ptmp ;
 
@@ -273,7 +272,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
     if ( t > bigdist && t<kInfinity )    // problem with big distances
     {
       ptmp = p + t*v ;
-      rootsrefined = TorusRootsJT(ptmp,v,r) ;
+      TorusRootsJT(ptmp,v,r,rootsrefined) ;
       if ( rootsrefined.size()==roots.size() )
       {
         t = t + rootsrefined[k] ;
@@ -845,7 +844,7 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
     case kNEPhi:
       norm = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
       break;
-    default:
+    default:          // Should never reach this case ...
       DumpInfo();
       G4Exception("G4Torus::ApproxSurfaceNormal()",
                   "Notification", JustWarning,
@@ -1537,6 +1536,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(6);
         G4Exception("G4Torus::DistanceToOut(p,v,..)",
                     "Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
@@ -1660,10 +1660,10 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
     sAngle = fSPhi ;
   }
   vertices = new G4ThreeVectorList();
-  vertices->reserve(noCrossSections*4) ;
   
   if (vertices)
   {
+    vertices->reserve(noCrossSections*4) ;
     for (crossSection=0;crossSection<noCrossSections;crossSection++)
     {
       // Compute coordinates of cross section at section crossSection
