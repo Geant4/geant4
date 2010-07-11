@@ -1,7 +1,8 @@
 /control/verbose 2
 /vis/verbose warnings
 
-/vis/open OGLIX 600x600-0+0
+/vis/open OGL 600x600-0+0
+/vis/viewer/set/autoRefresh false
 
 /vis/drawVolume
 
@@ -13,3 +14,5 @@
 # Deselect problem volumes...
 #/test202/select Elliptical_Cone false
 #/test202/select Twisted_Trd false
+
+/vis/viewer/set/autoRefresh true
