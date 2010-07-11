@@ -1,8 +1,12 @@
-$Id: History,v 1.7 2009-11-21 12:03:15 allison Exp $
+$Id: History,v 1.8 2010-07-11 09:10:28 allison Exp $
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+
+10th July 2010  John Allison  (test202-V09-03-00)
+- test202.cc: Changed to QGSP_BERT.
+- vis.mac: Changed to /vis/open OGL.
 
 21st November 2009  John Allison  (test202-V09-02-01)
 - Introduced G4UIExecutive.
