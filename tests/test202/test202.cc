@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: test202.cc,v 1.3 2010-07-11 09:05:19 allison Exp $
+// $Id: test202.cc,v 1.4 2010-07-11 09:05:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,10 +38,9 @@
 #include "QGSP_BERT.hh"
 #include "Tst202DetectorConstruction.hh"
 #include "Tst202PrimaryGeneratorAction.hh"
-//#include "G4UIsession.hh"
-//#include "G4UImanager.hh"
 
 #include "G4RunManager.hh"
+#include "G4UImanager.hh"
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
