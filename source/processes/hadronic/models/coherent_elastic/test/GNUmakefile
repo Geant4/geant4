@@ -26,7 +26,7 @@ endif
 
 ifeq ($(G4SYSTEM),Linux-g++)
 #     EXTRALIBS+=-lf2c -lgcc
-      EXTRALIBS+=-lg2c -lm -lgcc -lc -lgcc
+#      EXTRALIBS+=-lg2c -lm -lgcc -lc -lgcc
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
