@@ -25,7 +25,7 @@
 //
 
 //
-// $Id: test202.cc,v 1.2 2009-11-21 12:03:15 allison Exp $
+// $Id: test202.cc,v 1.3 2010-07-11 09:05:19 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,7 +35,7 @@
 
 #include "globals.hh"
 
-#include "QGSP.hh"
+#include "QGSP_BERT.hh"
 #include "Tst202DetectorConstruction.hh"
 #include "Tst202PrimaryGeneratorAction.hh"
 //#include "G4UIsession.hh"
@@ -51,13 +51,7 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE_WIN32
-#include <windows.h>
-int WINAPI WinMain (
-HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpszCmdLine,int nCmdShow) {
-#else
 int main (int argc, char** argv) {
-#endif
 
   // Run manager
   G4cout << "RunManager is constructing...." << G4endl;
@@ -65,7 +59,7 @@ int main (int argc, char** argv) {
 
   // mandatory initialization classes
   runManager -> SetUserInitialization (new Tst202DetectorConstruction);
-  runManager -> SetUserInitialization (new QGSP);
+  runManager -> SetUserInitialization (new QGSP_BERT);
 
   // User Action classes.
   runManager -> SetUserAction (new Tst202PrimaryGeneratorAction);
@@ -75,9 +69,8 @@ int main (int argc, char** argv) {
   runManager -> Initialize();
 
 #ifdef G4VIS_USE
-  G4int visVerbose = 3;
   G4VisManager* visManager = new G4VisExecutive;
-  visManager -> SetVerboseLevel (visVerbose);
+  //G4VisManager* visManager = new G4VisExecutive("quiet");
   visManager -> Initialize ();
 #endif
 
