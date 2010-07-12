@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.34 2010-07-03 00:07:55 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.35 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -76,7 +76,7 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
 
   G4ThreeVector toTheLabFrame = PEX.boostVector();	// From rest to lab
 
-  G4CascadeCheckBalance balance(0.005,0.01);	// Second arg is in GeV
+  G4CascadeCheckBalance balance(0.005,0.01, theName);	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);
 
   // This "should" be difference between E-target and sum of m(nucleons)

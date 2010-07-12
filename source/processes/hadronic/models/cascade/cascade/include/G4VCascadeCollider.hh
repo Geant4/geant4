@@ -24,10 +24,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4VCascadeCollider.hh,v 1.2 2010-06-15 22:47:25 mkelsey Exp $
+// $Id: G4VCascadeCollider.hh,v 1.3 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
+// 20100711  M. Kelsey -- Allow name to be changed after ctor, by self
 
 #include "globals.hh"
 #include "G4InteractionCase.hh"
@@ -52,6 +53,8 @@ protected:
   const char* theName;
   G4int verboseLevel;
   G4InteractionCase interCase;		// Determine bullet vs. target
+
+  virtual void setName(const char* name) { theName = name; }
 
   // Decide whether to use G4ElementaryParticleCollider or not
   virtual G4bool useEPCollider(G4InuclParticle* bullet, 

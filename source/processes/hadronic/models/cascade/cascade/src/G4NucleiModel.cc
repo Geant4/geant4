@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.59 2010-06-29 00:32:11 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.60 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -782,7 +782,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
   }
 
   // Create four-vector checking
-  G4CascadeCheckBalance balance(0.05, 0.1);	// Second arg is in GeV
+  G4CascadeCheckBalance balance(0.05, 0.1, "G4NucleiModel");	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);
 
   outgoing_cparticles.clear();		// Clear return buffer for this event

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.29 2010-06-23 19:25:35 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.30 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,8 +32,10 @@
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100622  M. Kelsey -- Use local "bindingEnergy()" to call through
+// 20100711  M. Kelsey -- Add energy-conservation checking, reduce if-cascades
 
 #include "G4Fissioner.hh"
+#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -49,145 +51,139 @@ G4Fissioner::G4Fissioner() : G4VCascadeCollider("G4Fissioner") {}
 void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 			  G4InuclParticle* target,
 			  G4CollisionOutput& output) {
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " >>> G4Fissioner::collide" << G4endl;
   }
 
   //  const G4int itry_max = 1000;
 
-  if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
+  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
+  if (!nuclei_target) {
+    G4cerr << " >>> G4Fissioner -> target is not nuclei " << G4endl;
+    return;
+  }
 
-    if (verboseLevel > 3) {
-      G4cout << " Fissioner input " << G4endl;
+  if (verboseLevel > 1) {
+    G4cout << " Fissioner input " << G4endl;
+    nuclei_target->printParticle();
+  }
 
-      nuclei_target->printParticle();
-    }
-
-    G4double A = nuclei_target->getA();
-    G4double Z = nuclei_target->getZ();
-    G4double EEXS = nuclei_target->getExitationEnergy();
-    G4double mass_in = nuclei_target->getMass();
-    G4double e_in = mass_in + 0.001 * EEXS;
-    G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A - Z) + G4cbrt(Z));
-    G4double TEM = std::sqrt(EEXS / PARA);
-    G4double TETA = 0.494 * G4cbrt(A) * TEM;
-
-    TETA = TETA / std::sinh(TETA);
-
-    if (A < 246.0) PARA += (nucleiLevelDensity(A) - PARA) * TETA;
-
-    G4double A1 = G4int(A / 2.0 + 1.1);
-    G4double Z1;
-    G4double A2 = A - A1;
-    G4double ALMA = -1000.0;
-    G4double DM1 = bindingEnergy(A,Z);
-    G4double EVV = EEXS - DM1;
-    G4double DM2 = bindingEnergyAsymptotic(A, Z);
-    G4double DTEM = (A < 220.0 ? 0.5 : 1.15);
-
-    TEM += DTEM;
+  G4double A = nuclei_target->getA();
+  G4double Z = nuclei_target->getZ();
+  G4double EEXS = nuclei_target->getExitationEnergy();
+  G4double mass_in = nuclei_target->getMass();
+  G4double e_in = mass_in + 0.001 * EEXS;
+  G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A - Z) + G4cbrt(Z));
+  G4double TEM = std::sqrt(EEXS / PARA);
+  G4double TETA = 0.494 * G4cbrt(A) * TEM;
   
-    std::vector<G4double> AL1(2, -0.15);
-    std::vector<G4double> BET1(2, 0.05);
-    G4FissionStore fissionStore;
-    G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
+  TETA = TETA / std::sinh(TETA);
   
-    for (G4int i = 0; i < 50 && A1 > 30.0; i++) {
-      A1 -= 1.0;
-      A2 = A - A1;
-      G4double X3 = 1.0 / G4cbrt(A1);
-      G4double X4 = 1.0 / G4cbrt(A2);
-      Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
-      std::vector<G4double> EDEF1(2);
-      G4double Z2 = Z - Z1;
-      G4double VPOT, VCOUL;
-
-      potentialMinimization(VPOT, EDEF1, VCOUL, A1, A2, Z1, Z2, AL1, BET1, R12);
-
-      G4double DM3 = bindingEnergy(A1,Z1);
-      G4double DM4 = bindingEnergyAsymptotic(A1, Z1);
-      G4double DM5 = bindingEnergy(A2,Z2);
-      G4double DM6 = bindingEnergyAsymptotic(A2, Z2);
-      G4double DMT1 = DM4 + DM6 - DM2;
-      G4double DMT = DM3 + DM5 - DM1;
-      G4double EZL = EEXS + DMT - VPOT;
+  if (A < 246.0) PARA += (nucleiLevelDensity(A) - PARA) * TETA;
+  
+  G4double A1 = G4int(A / 2.0 + 1.1);
+  G4double Z1;
+  G4double A2 = A - A1;
+  G4double ALMA = -1000.0;
+  G4double DM1 = bindingEnergy(A,Z);
+  G4double EVV = EEXS - DM1;
+  G4double DM2 = bindingEnergyAsymptotic(A, Z);
+  G4double DTEM = (A < 220.0 ? 0.5 : 1.15);
+  
+  TEM += DTEM;
+  
+  std::vector<G4double> AL1(2, -0.15);
+  std::vector<G4double> BET1(2, 0.05);
+  G4FissionStore fissionStore;
+  G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
+  
+  for (G4int i = 0; i < 50 && A1 > 30.0; i++) {
+    A1 -= 1.0;
+    A2 = A - A1;
+    G4double X3 = 1.0 / G4cbrt(A1);
+    G4double X4 = 1.0 / G4cbrt(A2);
+    Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
+    std::vector<G4double> EDEF1(2);
+    G4double Z2 = Z - Z1;
+    G4double VPOT, VCOUL;
     
-      if(EZL > 0.0) { // generate fluctuations
-	//  faster, using randomGauss
-	G4double C1 = std::sqrt(getC2(A1, A2, X3, X4, R12) / TEM);
-	G4double DZ = randomGauss(C1);
-
-	DZ = DZ > 0.0 ? G4int(DZ + 0.5) : -G4int(std::fabs(DZ - 0.5));
-	Z1 += DZ;
-	Z2 -= DZ;
-
-	G4double DEfin = randomGauss(TEM);	
-	G4double EZ = (DMT1 + (DMT - DMT1) * TETA - VPOT + DEfin) / TEM;
-
-	if (EZ >= ALMA) ALMA = EZ;
-	G4double EK = VCOUL + DEfin + 0.5 * TEM;
-	G4double EV = EVV + bindingEnergy(A1,Z1) + bindingEnergy(A2,Z2) - EK;
-       
-	if (EV > 0.0) fissionStore.addConfig(A1, Z1, EZ, EK, EV);
-      };
+    potentialMinimization(VPOT, EDEF1, VCOUL, A1, A2, Z1, Z2, AL1, BET1, R12);
+    
+    G4double DM3 = bindingEnergy(A1,Z1);
+    G4double DM4 = bindingEnergyAsymptotic(A1, Z1);
+    G4double DM5 = bindingEnergy(A2,Z2);
+    G4double DM6 = bindingEnergyAsymptotic(A2, Z2);
+    G4double DMT1 = DM4 + DM6 - DM2;
+    G4double DMT = DM3 + DM5 - DM1;
+    G4double EZL = EEXS + DMT - VPOT;
+    
+    if(EZL > 0.0) { // generate fluctuations
+      //  faster, using randomGauss
+      G4double C1 = std::sqrt(getC2(A1, A2, X3, X4, R12) / TEM);
+      G4double DZ = randomGauss(C1);
+      
+      DZ = DZ > 0.0 ? G4int(DZ + 0.5) : -G4int(std::fabs(DZ - 0.5));
+      Z1 += DZ;
+      Z2 -= DZ;
+      
+      G4double DEfin = randomGauss(TEM);	
+      G4double EZ = (DMT1 + (DMT - DMT1) * TETA - VPOT + DEfin) / TEM;
+      
+      if (EZ >= ALMA) ALMA = EZ;
+      G4double EK = VCOUL + DEfin + 0.5 * TEM;
+      G4double EV = EVV + bindingEnergy(A1,Z1) + bindingEnergy(A2,Z2) - EK;
+      
+      if (EV > 0.0) fissionStore.addConfig(A1, Z1, EZ, EK, EV);
     };
+  };
+  
+  G4int store_size = fissionStore.size();
+  if (store_size == 0) return;		// No fission products
 
-    G4int store_size = fissionStore.size();
+  G4FissionConfiguration config = 
+    fissionStore.generateConfiguration(ALMA, inuclRndm());
+  
+  A1 = config.afirst;
+  A2 = A - A1;
+  Z1 = config.zfirst;
+  
+  G4double Z2 = Z - Z1;
+  
+  G4double mass1 = G4InuclNuclei::getNucleiMass(A1,Z1);
+  G4double mass2 = G4InuclNuclei::getNucleiMass(A2,Z2);
+  G4double EK = config.ekin;
+  G4double pmod = std::sqrt(0.001 * EK * mass1 * mass2 / mass_in);
+  
+  G4LorentzVector mom1 = generateWithRandomAngles(pmod, mass1);
+  G4LorentzVector mom2; mom2.setVectM(-mom1.vect(), mass2);
+  
+  G4double e_out = mom1.e() + mom2.e();
+  G4double EV = 1000.0 * (e_in - e_out) / A;
+  if (EV <= 0.0) return;		// No fission energy
 
-    if (store_size > 0) {
-      G4FissionConfiguration config = 
-	fissionStore.generateConfiguration(ALMA, inuclRndm());
+  G4double EEXS1 = EV*A1;
+  G4double EEXS2 = EV*A2;
+  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, 7);        
+  output.addTargetFragment(nuclei1);
+  
+  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, 7);        
+  output.addTargetFragment(nuclei2);
 
-      A1 = config.afirst;
-      A2 = A - A1;
-      Z1 = config.zfirst;
+  // Check energy conservation before exiting
+  G4CascadeCheckBalance balance(0.005, 0.01, theName);	// Second arg is GeV
+  balance.setVerboseLevel(verboseLevel);
 
-      G4double Z2 = Z - Z1;
-      G4InuclNuclei nuclei1(A1, Z1);
-      nuclei1.setModel(7); // sign in the modelId (=G4Fissioner)
-      G4InuclNuclei nuclei2(A2, Z2);        
-      nuclei2.setModel(7);
+  // Pass only last two nuclear fragments
+  static std::vector<G4InuclNuclei> frags(2);		// Always the same size!
+  frags[0] = nuclei1;
+  frags[1] = nuclei2;
+  balance.collide(0, target, frags);
+  balance.okay();
 
-      G4double mass1 = nuclei1.getMass();
-      G4double mass2 = nuclei2.getMass();
-      G4double EK = config.ekin;
-      G4double pmod = std::sqrt(0.001 * EK * mass1 * mass2 / mass_in);
-
-      G4LorentzVector mom1 = generateWithRandomAngles(pmod, mass1);
-      G4LorentzVector mom2; mom2.setVectM(-mom1.vect(), mass2);
-
-      G4double e_out = mom1.e() + mom2.e();
-      G4double EV = 1000.0 * (e_in - e_out) / A;
-
-      if (EV > 0.0) {
-	G4double EEXS1 = EV*A1;
-	G4double EEXS2 = EV*A2;
-	G4InuclNuclei nuclei1(mom1, A1, Z1);        
-
-        nuclei1.setModel(7);
-	nuclei1.setExitationEnergy(EEXS1);
-	nuclei1.setEnergy();
-	output.addTargetFragment(nuclei1);
-
-	G4InuclNuclei nuclei2(mom2, A2, Z2);        
-
-        nuclei2.setModel(7);
-	nuclei2.setExitationEnergy(EEXS2);
-	nuclei2.setEnergy();
-	output.addTargetFragment(nuclei2);
-
-	if (verboseLevel > 3) {
-	  nuclei1.printParticle();
-	  nuclei2.printParticle();
-	}
-      };
-    };
-
-  } else {
-    G4cout << " Fissioner -> target is not nuclei " << G4endl;    
-  }; 
-
-  return;
+  if (verboseLevel > 3) {
+    nuclei1.printParticle();
+    nuclei2.printParticle();
+  }
 }
 
 G4double G4Fissioner::getC2(G4double A1, 

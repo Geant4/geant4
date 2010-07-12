@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.3 2010-06-28 17:33:07 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.4 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -33,6 +33,8 @@
 //
 // 20100624  M. Kelsey -- Add baryon conservation check and kinetic energy
 // 20100628  M. Kelsey -- Add interface to take list of particles directly
+// 20100711  M. Kelsey -- Add name of parent Collider for reporting messages,
+//		allow changing parent name, add interface for nuclear fragments
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -45,8 +47,11 @@ class G4CollisionOutput;
 
 class G4CascadeCheckBalance : public G4VCascadeCollider {
 public:
-  G4CascadeCheckBalance(G4double relative, G4double absolute);
+  G4CascadeCheckBalance(G4double relative, G4double absolute,
+			const char* owner="G4CascadeCheckBalance");
   virtual ~G4CascadeCheckBalance() {};
+
+  void setOwner(const char* owner) { setName(owner); }
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
@@ -54,6 +59,10 @@ public:
   // This is for use with G4EPCollider internal checks
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       const std::vector<G4InuclElementaryParticle>& particles);
+
+  // This is for use with G4Fissioner internal checks
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       const std::vector<G4InuclNuclei>& fragments);
 
   // Checks on conservation laws (kinematics, baryon number, charge)
   G4bool energyOkay() const;

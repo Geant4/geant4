@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.67 2010-06-28 17:33:07 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.68 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -144,7 +144,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     return;
   }
 
-  G4CascadeCheckBalance balance(0.005, 0.01);		// Tight tolerances
+  G4CascadeCheckBalance balance(0.005, 0.01, theName);		// Tight tolerances
   balance.setVerboseLevel(verboseLevel);
 
   // Generate nucleon or pion collision with nucleon

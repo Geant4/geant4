@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.89 2010-07-03 00:07:55 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.90 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -146,7 +146,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4CollisionOutput output;
   output.setVerboseLevel(verboseLevel);
 
-  G4CascadeCheckBalance balance(0.05, 0.1);	// Second arg is in GeV
+  G4CascadeCheckBalance balance(0.05, 0.1, GetModelName());	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);
 
   G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.19 2010-07-01 22:56:43 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.20 2010-07-12 05:28:33 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -34,6 +34,7 @@
 // 20100630  M. Kelsey -- Add excitation energy as optional public ctor arg,
 //	     remove excitation energy data member (part of G4Ions).  Add
 //	     excitation energy to "getNucleiMass()" function, move print to .cc
+// 20100711  M. Kelsey -- Add optional model ID to constructors
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -49,14 +50,22 @@ class G4InuclNuclei : public G4InuclParticle {
 public:
   G4InuclNuclei() : G4InuclParticle() {}
 
-  G4InuclNuclei(G4double a, G4double z, G4double exc=0.)
-    : G4InuclParticle(makeDefinition(a,z,exc)) {}
+  G4InuclNuclei(G4double a, G4double z, G4double exc=0., G4int model=0)
+    : G4InuclParticle(makeDefinition(a,z,exc)) {
+    setModel(model);
+  }
 
-  G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z, G4double exc=0.)
-    : G4InuclParticle(makeDefinition(a,z,exc), mom) {}
+  G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z,
+		G4double exc=0., G4int model=0)
+    : G4InuclParticle(makeDefinition(a,z,exc), mom) {
+    setModel(model);
+  }
 
-  G4InuclNuclei(G4double ekin, G4double a, G4double z, G4double exc) 
-    : G4InuclParticle(makeDefinition(a,z,exc), ekin) {}
+  G4InuclNuclei(G4double ekin, G4double a, G4double z, G4double exc,
+		G4int model=0) 
+    : G4InuclParticle(makeDefinition(a,z,exc), ekin) {
+    setModel(model);
+  }
 
   virtual ~G4InuclNuclei() {}
 
