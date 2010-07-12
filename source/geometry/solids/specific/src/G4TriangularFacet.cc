@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.14 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4TriangularFacet.cc,v 1.15 2010-07-12 15:33:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,7 +131,7 @@ G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
     a   = E[0].mag2();
     b   = E[0].dot(E[1]);
     c   = E[1].mag2();
-    det = std::abs(a*c - b*b);
+    det = std::fabs(a*c - b*b);
     
     sMin = -0.5*kCarTolerance/std::sqrt(a);
     sMax = 1.0 - sMin;
@@ -634,7 +634,7 @@ G4bool G4TriangularFacet::Intersect (const G4ThreeVector &p,
       else
       {
         G4double dnormDist = normDist1-normDist0;
-        if (std::abs(dnormDist) < DBL_EPSILON)
+        if (std::fabs(dnormDist) < DBL_EPSILON)
         {
           distance = s0;
           normal   = surfaceNormal;

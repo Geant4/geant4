@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.cc,v 1.7 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4TwistTubsHypeSide.cc,v 1.8 2010-07-12 15:33:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -327,7 +327,7 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
       //
 
       G4double vz    = v.z();
-      G4double absvz = std::abs(vz);
+      G4double absvz = std::fabs(vz);
       G4double vrho  = v.getRho();       
       G4double vslope = vrho/vz;
       G4double vslope2 = vslope * vslope;

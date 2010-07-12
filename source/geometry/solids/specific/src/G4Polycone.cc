@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.45 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.46 2010-07-12 15:33:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -733,7 +733,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   else
   {
     rRand1 = RandFlat::shoot(fRMin1,fRMin2);
-    A1=std::abs(fRMin2*fRMin2-fRMin1*fRMin1);
+    A1=std::fabs(fRMin2*fRMin2-fRMin1*fRMin1);
   }
   if(fRMax1==fRMax2)
   {
@@ -742,7 +742,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   else
   {
     rRand2 = RandFlat::shoot(fRMax1,fRMax2);
-    Atot   = A1+std::abs(fRMax2*fRMax2-fRMax1*fRMax1);
+    Atot   = A1+std::fabs(fRMax2*fRMax2-fRMax1*fRMax1);
   }
   rCh   = RandFlat::shoot(0.,Atot);
  

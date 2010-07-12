@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.12 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.13 2010-07-12 15:33:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -56,7 +56,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.12 2010-07-12 15:25:37 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.13 2010-07-12 15:33:49 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -111,7 +111,7 @@ G4Tet::G4Tet(const G4String& pName,
     fV41=fV31;
     fV31=temp; 
   }
-  fCubicVolume = std::abs(signed_vol) / 6.;
+  fCubicVolume = std::fabs(signed_vol) / 6.;
 
   G4ThreeVector fV24=p2-p4;
   G4ThreeVector fV43=p4-p3;
@@ -132,7 +132,7 @@ G4Tet::G4Tet(const G4String& pName,
                              (p3-fMiddle).mag()),
                     (p4-fMiddle).mag());
 
-  G4bool degenerate=std::abs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
+  G4bool degenerate=std::fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
 
   if(degeneracyFlag) *degeneracyFlag=degenerate;
   else if (degenerate)
@@ -141,8 +141,8 @@ G4Tet::G4Tet(const G4String& pName,
                 "Degenerate tetrahedron not allowed.");
   }
 
-  fTol=1e-9*(std::abs(fXMin)+std::abs(fXMax)+std::abs(fYMin)
-            +std::abs(fYMax)+std::abs(fZMin)+std::abs(fZMax));
+  fTol=1e-9*(std::fabs(fXMin)+std::fabs(fXMax)+std::fabs(fYMin)
+            +std::fabs(fYMax)+std::fabs(fZMin)+std::fabs(fZMax));
   //fTol=kCarTolerance;
 
   fAnchor=anchor;
@@ -364,10 +364,10 @@ EInside G4Tet::Inside(const G4ThreeVector& p) const
 
 G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
 {
-  G4double r123=std::abs(p.dot(fNormal123)-fCdotN123);
-  G4double r134=std::abs(p.dot(fNormal134)-fCdotN134);
-  G4double r142=std::abs(p.dot(fNormal142)-fCdotN142);
-  G4double r234=std::abs(p.dot(fNormal234)-fCdotN234);
+  G4double r123=std::fabs(p.dot(fNormal123)-fCdotN123);
+  G4double r134=std::fabs(p.dot(fNormal134)-fCdotN134);
+  G4double r142=std::fabs(p.dot(fNormal142)-fCdotN142);
+  G4double r234=std::fabs(p.dot(fNormal234)-fCdotN234);
 
   if( (r123<=r134) && (r123<=r142) && (r123<=r234) )  { return fNormal123; }
   else if ( (r134<=r142) && (r134<=r234) )  { return fNormal134; }

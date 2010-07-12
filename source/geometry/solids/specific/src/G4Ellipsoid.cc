@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.25 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.26 2010-07-12 15:33:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -474,7 +474,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
     {
       // early exit since can't intercept curved surface if we reach here
-      if ( std::abs(distZ) < halfRadTolerance ) { distZ=0.; }
+      if ( std::fabs(distZ) < halfRadTolerance ) { distZ=0.; }
       return distMin= distZ;
     }
   }
@@ -485,7 +485,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
     {
       // early exit since can't intercept curved surface if we reach here
-      if ( std::abs(distZ) < halfRadTolerance ) { distZ=0.; }
+      if ( std::fabs(distZ) < halfRadTolerance ) { distZ=0.; }
       return distMin= distZ;
     }
   }
@@ -542,7 +542,7 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
     }
   }
   
-  if (std::abs(distMin)<halfRadTolerance) { distMin=0.; }
+  if (std::fabs(distMin)<halfRadTolerance) { distMin=0.; }
   return distMin;
 } 
 

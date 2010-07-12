@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.hh,v 1.12 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4IntersectingCone.hh,v 1.13 2010-07-12 15:33:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ class G4IntersectingCone
              rLo, rHi;  // R bounds of side
 
     G4bool   type1;    // True if cone is type 1
-                       //  (std::abs(z1-z2)>std::abs(r1-r2))
+                       //  (std::fabs(z1-z2)>std::fabs(r1-r2))
     G4double A, B;     // Cone radius parameter:
                        //  type 1: r = A + B*z
                        //  type 2: z = A + B*r
