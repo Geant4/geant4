@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.66 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.67 2010-07-12 07:44:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -252,6 +252,9 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
   G4double tmin = kInfinity ;
   G4double t, scal ;
 
+  static const G4double halfCarTolerance = 0.5*kCarTolerance;
+  static const G4double halfAngTolerance = 0.5*kAngTolerance;
+
   // calculate the distances to the intersections with the Torus
   // from a given point p and direction v.
   //
@@ -267,7 +270,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
   {
     t = roots[k] ;
 
-    if ( t < -0.5*kCarTolerance )  { continue ; }  // skip negative roots
+    if ( t < -halfCarTolerance )  { continue ; }  // skip negative roots
 
     if ( t > bigdist && t<kInfinity )    // problem with big distances
     {
@@ -285,27 +288,27 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
     
     if ( fSPhi >= 0 )
     {
-      if ( theta < - kAngTolerance*0.5 )  { theta += twopi; }
-      if ( (std::abs(theta) < kAngTolerance*0.5)
-        && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
+      if ( theta < - halfAngTolerance )  { theta += twopi; }
+      if ( (std::fabs(theta) < halfAngTolerance)
+        && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
       { 
         theta += twopi ; // 0 <= theta < 2pi
       }
     }
-    if ((fSPhi <= -pi )&&(theta>kAngTolerance*0.5)) { theta = theta-twopi; }
+    if ((fSPhi <= -pi )&&(theta>halfAngTolerance)) { theta = theta-twopi; }
        
     // We have to verify if this root is inside the region between
     // fSPhi and fSPhi + fDPhi
     //
-    if ( (theta - fSPhi >= - kAngTolerance*0.5)
-      && (theta - (fSPhi + fDPhi) <=  kAngTolerance*0.5) )
+    if ( (theta - fSPhi >= - halfAngTolerance)
+      && (theta - (fSPhi + fDPhi) <=  halfAngTolerance) )
     {
       // check if P is on the surface, and called from DistanceToIn
       // DistanceToIn has to return 0.0 if particle is going inside the solid
 
       if ( IsDistanceToIn == true )
       {
-        if (std::fabs(t) < 0.5*kCarTolerance )
+        if (std::fabs(t) < halfCarTolerance )
         {
           // compute scalar product at position p : v.n
           // ( n taken from SurfaceNormal, not normalized )
@@ -328,7 +331,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 
       if ( IsDistanceToIn == false )
       {
-        if (std::fabs(t) < 0.5*kCarTolerance )
+        if (std::fabs(t) < halfCarTolerance )
         {
           // compute scalar product at position p : v.n   
           //
@@ -347,7 +350,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 
       // check if distance is larger than 1/2 kCarTolerance
       //
-      if(  t > 0.5*kCarTolerance  )
+      if(  t > halfCarTolerance  )
       {
         tmin = t  ;
         return tmin  ;
@@ -585,15 +588,18 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 {
   G4double r2, pt2, pPhi, tolRMin, tolRMax ;
 
+  static const G4double halfAngTolerance = 0.5*kAngTolerance;
+  static const G4double halfRadTolerance = 0.5*kRadTolerance;
+
   EInside in = kOutside ;
                                               // General precals
   r2  = p.x()*p.x() + p.y()*p.y() ;
   pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
 
-  if (fRmin) tolRMin = fRmin + kRadTolerance*0.5 ;
+  if (fRmin) tolRMin = fRmin + halfRadTolerance ;
   else       tolRMin = 0 ;
 
-  tolRMax = fRmax - kRadTolerance*0.5;
+  tolRMax = fRmax - halfRadTolerance;
       
   if (pt2 >= tolRMin*tolRMin && pt2 <= tolRMax*tolRMax )
   {
@@ -608,29 +614,29 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 
       pPhi = std::atan2(p.y(),p.x()) ;
 
-      if ( pPhi < -kAngTolerance*0.5 )  { pPhi += twopi ; }  // 0<=pPhi<2pi
+      if ( pPhi < -halfAngTolerance )  { pPhi += twopi ; }  // 0<=pPhi<2pi
       if ( fSPhi >= 0 )
       {
-        if ( (std::abs(pPhi) < kAngTolerance*0.5)
-            && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
+        if ( (std::fabs(pPhi) < halfAngTolerance)
+            && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
         { 
             pPhi += twopi ; // 0 <= pPhi < 2pi
         }
-        if ( (pPhi >= fSPhi + kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi - kAngTolerance*0.5) )
+        if ( (pPhi >= fSPhi + halfAngTolerance)
+            && (pPhi <= fSPhi + fDPhi - halfAngTolerance) )
         {
           in = kInside ;
         }
-          else if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-                 && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
+          else if ( (pPhi >= fSPhi - halfAngTolerance)
+                 && (pPhi <= fSPhi + fDPhi + halfAngTolerance) )
         {
           in = kSurface ;
         }
       }
       else  // fSPhi < 0
       {
-          if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
-            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  {;}
+          if ( (pPhi <= fSPhi + twopi - halfAngTolerance)
+            && (pPhi >= fSPhi + fDPhi  + halfAngTolerance) )  {;}
           else
           {
             in = kSurface ;
@@ -640,8 +646,8 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   }
   else   // Try generous boundaries
   {
-    tolRMin = fRmin - kRadTolerance*0.5 ;
-    tolRMax = fRmax + kRadTolerance*0.5 ;
+    tolRMin = fRmin - halfRadTolerance ;
+    tolRMax = fRmax + halfRadTolerance ;
 
     if (tolRMin < 0 )  { tolRMin = 0 ; }
 
@@ -655,24 +661,24 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
       {
         pPhi = std::atan2(p.y(),p.x()) ;
 
-        if ( pPhi < -kAngTolerance*0.5 )  { pPhi += twopi ; }  // 0<=pPhi<2pi
+        if ( pPhi < -halfAngTolerance )  { pPhi += twopi ; }  // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
-          if ( (std::abs(pPhi) < kAngTolerance*0.5)
-            && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
+          if ( (std::fabs(pPhi) < halfAngTolerance)
+            && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
           { 
             pPhi += twopi ; // 0 <= pPhi < 2pi
           }
-          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
+          if ( (pPhi >= fSPhi - halfAngTolerance)
+            && (pPhi <= fSPhi + fDPhi + halfAngTolerance) )
           {
             in = kSurface;
           }
         }
         else  // fSPhi < 0
         {
-          if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
-            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  {;}
+          if ( (pPhi <= fSPhi + twopi - halfAngTolerance)
+            && (pPhi >= fSPhi + fDPhi  + halfAngTolerance) )  {;}
           else
           {
             in = kSurface ;
@@ -696,9 +702,11 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   G4double rho2, rho, pt2, pt, pPhi;
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
-  G4double delta = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4ThreeVector nR, nPs, nPe;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
+
+  static const G4double delta = 0.5*kCarTolerance;
+  static const G4double dAngle = 0.5*kAngTolerance;
 
   rho2 = p.x()*p.x() + p.y()*p.y();
   rho = std::sqrt(rho2);
@@ -884,6 +892,10 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
   G4double  s[4] ;
 
+  static const G4double halfCarTolerance = 0.5*kCarTolerance;
+  static const G4double halfAngTolerance = 0.5*kAngTolerance;
+  static const G4double halfRadTolerance = 0.5*kRadTolerance;
+
   // Precalculated trig for phi intersections - used by r,z intersections to
   //                                            check validity
 
@@ -909,8 +921,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     seg        = true ;
     hDPhi      = 0.5*fDPhi ;    // half delta phi
     cPhi       = fSPhi + hDPhi ;
-    hDPhiOT    = hDPhi+0.5*kAngTolerance ;  // outers tol' half delta phi 
-    hDPhiIT    = hDPhi - 0.5*kAngTolerance ;
+    hDPhiOT    = hDPhi + halfAngTolerance ;  // outers tol' half delta phi 
+    hDPhiIT    = hDPhi - halfAngTolerance ;
     sinCPhi    = std::sin(cPhi) ;
     cosCPhi    = std::cos(cPhi) ;
     cosHDPhiOT = std::cos(hDPhiOT) ;
@@ -923,16 +935,16 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
 
   if (fRmin > kRadTolerance) // Calculate tolerant rmin and rmax
   {
-    tolORMin2 = (fRmin - 0.5*kRadTolerance)*(fRmin - 0.5*kRadTolerance) ;
-    tolIRMin2 = (fRmin + 0.5*kRadTolerance)*(fRmin + 0.5*kRadTolerance) ;
+    tolORMin2 = (fRmin - halfRadTolerance)*(fRmin - halfRadTolerance) ;
+    tolIRMin2 = (fRmin + halfRadTolerance)*(fRmin + halfRadTolerance) ;
   }
   else
   {
     tolORMin2 = 0 ;
     tolIRMin2 = 0 ;
   }
-  tolORMax2 = (fRmax + 0.5*kRadTolerance)*(fRmax + 0.5*kRadTolerance) ;
-  tolIRMax2 = (fRmax - kRadTolerance*0.5)*(fRmax - kRadTolerance*0.5) ;
+  tolORMax2 = (fRmax + halfRadTolerance)*(fRmax + halfRadTolerance) ;
+  tolIRMax2 = (fRmax - halfRadTolerance)*(fRmax - halfRadTolerance) ;
 
   // Intersection with Rmax (possible return) and Rmin (must also check phi)
 
@@ -965,7 +977,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     {
       Dist = (p.y()*cosSPhi - p.x()*sinSPhi) ;
 
-      if (Dist < kCarTolerance*0.5)
+      if (Dist < halfCarTolerance)
       {
         sphi = Dist/Comp ;
         if (sphi < snxt)
@@ -997,7 +1009,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     {
       Dist = -(p.y()*cosEPhi - p.x()*sinEPhi) ;
 
-      if (Dist < kCarTolerance*0.5 )
+      if (Dist < halfCarTolerance )
       {
         sphi = Dist/Comp ;
         if (sphi < snxt )
@@ -1021,7 +1033,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
       }
     }
   }
-  if(snxt < 0.5*kCarTolerance)  { snxt = 0.0 ; }
+  if(snxt < halfCarTolerance)  { snxt = 0.0 ; }
 
   return snxt ;
 }
@@ -1090,6 +1102,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   ESide    side = kNull, sidephi = kNull ;
   G4double snxt = kInfinity, sphi, s[4] ;
 
+  static const G4double halfCarTolerance = 0.5*kCarTolerance;
+  static const G4double halfRadTolerance = 0.5*kRadTolerance;
+
   // Vars for phi intersection
   //
   G4double sinSPhi, cosSPhi, ePhi, sinEPhi, cosEPhi;
@@ -1116,7 +1131,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
 
-  G4double tolRMax = fRmax - kRadTolerance*0.5 ;
+  G4double tolRMax = fRmax - halfRadTolerance ;
    
   G4double vDotNmax   = pDotV - fRtor*(v.x()*p.x() + v.y()*p.y())/rho ;
   G4double pDotxyNmax = (1 - fRtor/rho) ;
@@ -1144,7 +1159,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   if ( fRmin )
   {
-    G4double tolRMin = fRmin + kRadTolerance*0.5 ;
+    G4double tolRMin = fRmin + halfRadTolerance ;
 
     if ( (pt2 < tolRMin*tolRMin) && (vDotNmax < 0) )
     {
@@ -1228,8 +1243,8 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
           else
           {
             sidephi=kSPhi;
-            if (pDistS>-kCarTolerance*0.5)  { sphi=0; }  // Leave by sphi
-                                                         // immediately
+            if (pDistS>-halfCarTolerance)  { sphi=0; }  // Leave by sphi
+                                                        // immediately
           }
         }
         else
@@ -1255,7 +1270,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
               // Leaving via ending phi
               //
               sidephi=kEPhi;
-              if (pDistE<=-kCarTolerance*0.5)
+              if (pDistE<=-halfCarTolerance)
               {
                 sphi=sphi2;
               }
@@ -1323,7 +1338,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
               // Leaving via Ending phi
               //
               sidephi = kEPhi ;
-              if (pDistE>-kCarTolerance*0.5)  { sphi=0; }
+              if (pDistE>-halfCarTolerance)  { sphi=0; }
             }
           }
           else
@@ -1391,7 +1406,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
               // Leaving via Starting phi
               //
               sidephi = kSPhi ;   
-              if (pDistS>-kCarTolerance*0.5)  { sphi=0; }
+              if (pDistS>-halfCarTolerance)  { sphi=0; }
             }
           }
           else
@@ -1571,6 +1586,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(6) ;
      G4Exception("G4Torus::DistanceToOut(p)", "Notification",
                  JustWarning, "Point p is outside !?" );
   }
@@ -1651,7 +1667,7 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
   // If complete in phi, set start angle such that mesh will be at fRmax
   // on the x axis. Will give better extent calculations when not rotated
 
-  if ( (fDPhi == pi*2.0) && (fSPhi == 0) )
+  if ( (fDPhi == twopi) && (fSPhi == 0) )
   {
     sAngle = -meshAngle*0.5 ;
   }
@@ -1795,7 +1811,7 @@ G4NURBS* G4Torus::CreateNURBS () const
   G4NURBS* pNURBS;
   if (fRmin != 0) 
   {
-    if (fDPhi >= 2.0 * pi) 
+    if (fDPhi >= twopi) 
     {
       pNURBS = new G4NURBStube(fRmin, fRmax, fRtor);
     }
@@ -1806,7 +1822,7 @@ G4NURBS* G4Torus::CreateNURBS () const
   }
   else 
   {
-    if (fDPhi >= 2.0 * pi) 
+    if (fDPhi >= twopi) 
     {
       pNURBS = new G4NURBScylinder (fRmax, fRtor);
     }
