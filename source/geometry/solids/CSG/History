@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2010-07-12 07:44:47 gcosmo Exp $
+$Id: History,v 1.124 2010-07-12 07:46:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Jul 12, 2010  G.Cosmo                    geom-csg-V09-03-03
-- Fixed condition in G4Tubs::Inside(p) for point on surface.
+- Fixed condition in G4Tubs::Inside(p) for point on surface (T.Nikitina).
 - Corrected use of std:fabs() in place of std::abs() in G4Tubs, G4Cons,
   G4Sphere and G4Torus. Use pre-computed half-tolerance constants in G4Torus.
 
