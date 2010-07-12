@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.80 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.81 2010-07-12 07:44:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -398,7 +398,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         // Try inner tolerant phi boundaries (=>inside)
         // if not inside, try outer tolerant phi boundaries
 
-        if ((tolRMin==0)&&(p.x()<=halfCarTolerance)&&(p.y()<=halfCarTolerance))
+        if ( (tolRMin==0) && (std::fabs(p.x())<=halfCarTolerance)
+                          && (std::fabs(p.y())<=halfCarTolerance) )
         {
           in=kSurface;
         }
@@ -409,8 +410,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 
           if ( fSPhi >= 0 )
           {
-            if ( (std::abs(pPhi) < halfAngTolerance)
-              && (std::abs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
+            if ( (std::fabs(pPhi) < halfAngTolerance)
+              && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
             { 
               pPhi += twopi ; // 0 <= pPhi < 2pi
             }
@@ -462,8 +463,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
           if ( pPhi < -halfAngTolerance)  { pPhi += twopi; } // 0<=pPhi<2pi
           if ( fSPhi >= 0 )
           {
-            if ( (std::abs(pPhi) < halfAngTolerance)
-              && (std::abs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
+            if ( (std::fabs(pPhi) < halfAngTolerance)
+              && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
             { 
               pPhi += twopi ; // 0 <= pPhi < 2pi
             }
@@ -507,8 +508,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         if ( pPhi < -halfAngTolerance )  { pPhi += twopi; }  // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
-          if ( (std::abs(pPhi) < halfAngTolerance)
-            && (std::abs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
+          if ( (std::fabs(pPhi) < halfAngTolerance)
+            && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
           { 
             pPhi += twopi ; // 0 <= pPhi < 2pi
           }
@@ -1420,7 +1421,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               // Check intersecting with correct half-plane
               // (if not -> no intersect)
               //
-              if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+              if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
               {
                 sidephi = kSPhi;
                 if (((fSPhi-halfAngTolerance)<=vphi)
@@ -1463,7 +1464,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               xi = p.x() + sphi2*v.x() ;
               yi = p.y() + sphi2*v.y() ;
               
-              if ((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
+              if ((std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance))
               {
                 // Leaving via ending phi
                 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.68 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.69 2010-07-12 07:44:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1821,8 +1821,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
             // Check intersecting with correct half-plane
             // (if not -> no intersect)
             //
-            if ( (std::abs(xi)<=kCarTolerance)
-              && (std::abs(yi)<=kCarTolerance) )
+            if ( (std::fabs(xi)<=kCarTolerance)
+              && (std::fabs(yi)<=kCarTolerance) )
             {
               sidephi= kSPhi;
               if ( ( fSPhi-halfAngTolerance <= vphi )
@@ -1868,8 +1868,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
             // Check intersecting with correct half-plane
 
-            if ( (std::abs(xi)<=kCarTolerance)
-              && (std::abs(yi)<=kCarTolerance) )
+            if ( (std::fabs(xi)<=kCarTolerance)
+              && (std::fabs(yi)<=kCarTolerance) )
             {
               // Leaving via ending phi
 

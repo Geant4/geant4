@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.85 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.86 2010-07-12 07:44:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2298,7 +2298,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
           // Check intersection with correct half-plane (if not -> no intersect)
           //
-          if( (std::abs(xi)<=kCarTolerance) && (std::abs(yi)<=kCarTolerance) )
+          if( (std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance) )
           {
             vphi = std::atan2(v.y(),v.x());
             sidephi = kSPhi;
@@ -2330,7 +2330,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
             // Check intersection with correct half-plane
             //
-            if ((std::abs(xi)<=kCarTolerance) && (std::abs(yi)<=kCarTolerance))
+            if ((std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance))
             {
               // Leaving via ending phi
               //
@@ -2398,7 +2398,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
-            if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+            if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
             {
               vphi = std::atan2(v.y(),v.x());
               sidephi = kSPhi;
@@ -2436,7 +2436,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+              if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
               {
                 vphi = std::atan2(v.y(),v.x());
                 sidephi = kSPhi;
@@ -2480,7 +2480,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
             // Check intersection in correct half-plane
             // (if not -> not leaving phi extent)
             //
-            if( (std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance) )
+            if( (std::fabs(xi)<=kCarTolerance)&&(std::fabs(yi)<=kCarTolerance) )
             {
               vphi = std::atan2(v.y(),v.x()) ;
               sidephi = kSPhi;
@@ -2518,7 +2518,7 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               // Check intersection in correct half-plane
               // (if not -> remain in extent)
               //
-              if((std::abs(xi)<=kCarTolerance) && (std::abs(yi)<=kCarTolerance))
+              if((std::fabs(xi)<=kCarTolerance) && (std::fabs(yi)<=kCarTolerance))
               {
                 vphi = std::atan2(v.y(),v.x()) ;
                 sidephi = kSPhi;
