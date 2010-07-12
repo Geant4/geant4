@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.18 2007-05-25 09:42:34 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.19 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,10 +200,11 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
 //* Fake default constructor ------------------------------------------
 
 G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
-  : G4VSolid(a), 
-    fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0),
-    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.),
+    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fDx(0.), fDy(0.), fAlph(0.),
+    fTAlph(0.), fdeltaX(0.), fdeltaY(0.), fPhiTwist(0.),
+    fLowerEndcap(0), fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0),
+    fSide270(0), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -427,10 +428,10 @@ CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
 
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(8);
 
   if (vertices)
   {
+    vertices->reserve(8);
 
     G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 

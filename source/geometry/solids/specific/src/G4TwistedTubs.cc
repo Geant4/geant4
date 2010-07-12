@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.24 2007-05-18 07:39:56 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.25 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,10 +192,18 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
 //* Fake default constructor ------------------------------------------
 
 G4TwistedTubs::G4TwistedTubs( __void__& a )
-  : G4VSolid(a), fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-    fFormerTwisted(0), fInnerHype(0), fOuterHype(0), fCubicVolume(0.),
-    fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), fPhiTwist(0.), fInnerRadius(0.), fOuterRadius(0.), fDPhi(0.),
+    fZHalfLength(0.), fInnerStereo(0.), fOuterStereo(0.), fTanInnerStereo(0.),
+    fTanOuterStereo(0.), fKappa(0.), fInnerRadius2(0.), fOuterRadius2(0.),
+    fTanInnerStereo2(0.), fTanOuterStereo2(0.), fLowerEndcap(0), fUpperEndcap(0),
+    fLatterTwisted(0), fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
+  fEndZ[0] = 0.; fEndZ[1] = 0.;
+  fEndInnerRadius[0] = 0.; fEndInnerRadius[1] = 0.;
+  fEndOuterRadius[0] = 0.; fEndOuterRadius[1] = 0.;
+  fEndPhi[0] = 0.; fEndPhi[1] = 0.;
+  fEndZ2[0] = 0.; fEndZ2[1] = 0.;
 }
 
 //=====================================================================

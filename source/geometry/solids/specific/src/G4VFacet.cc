@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFacet.cc,v 1.8 2008-12-18 12:57:38 gunter Exp $
+// $Id: G4VFacet.cc,v 1.9 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,17 +54,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4VFacet::G4VFacet ()
+  : geometryType("G4VFacet"), isDefined(false), nVertices(0),
+    radius(0.), radiusSqr(0.), dirTolerance(1.0E-14), area(0.)
 {
-  dirTolerance = 1.0E-14;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   P.clear();
   E.clear();
     
   circumcentre = G4ThreeVector(0.0,0.0,0.0);
-  radius    = 0.0;
-  radiusSqr = 0.0;
-  area      = 0.0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

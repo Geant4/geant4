@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.24 2009-09-24 15:51:02 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.25 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -77,11 +77,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
   // Check Semi-Axis
-  if ( (pxSemiAxis>0.) && (pySemiAxis>0.) && (pzSemiAxis>0.) )
-  {
-     SetSemiAxis(pxSemiAxis, pySemiAxis, pzSemiAxis);
-  }
-  else
+  if ( (pxSemiAxis<=0.) || (pySemiAxis<=0.) || (pzSemiAxis<=0.) )
   {
      G4cerr << "ERROR - G4Ellipsoid::G4Ellipsoid(): " << GetName() << G4endl
            << "         Invalid semi-axis !"
@@ -89,6 +85,7 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
      G4Exception("G4Ellipsoid::G4Ellipsoid()", "InvalidSetup",
                  FatalException, "Invalid semi-axis.");
   }
+  SetSemiAxis(pxSemiAxis, pySemiAxis, pzSemiAxis);
 
   if ( pzBottomCut == 0 && pzTopCut == 0 )
   {
@@ -115,7 +112,9 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Ellipsoid::G4Ellipsoid( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.)
+  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.), fCubicVolume(0.),
+    fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zSemiAxis(0.),
+    semiAxisMax(0.), zBottomCut(0.), zTopCut(0.)
 {
 }
 
@@ -687,7 +686,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
           truenorm *= 1.0/truenorm.mag();
           *n= truenorm;
         } break;
-        default:
+        default:           // Should never reach this case ...
           G4cout.precision(16);
           G4cout << G4endl;
           DumpInfo();
@@ -701,6 +700,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
           G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
           G4cout << "Proposed distance :" << G4endl << G4endl;
           G4cout << "distMin = "    << distMin/mm << " mm" << G4endl << G4endl;
+          G4cout.precision(6);
           G4Exception("G4Ellipsoid::DistanceToOut(p,v,..)",
                       "Notification", JustWarning,
                       "Undefined side for valid surface normal to solid.");
@@ -793,16 +793,18 @@ G4Ellipsoid::CreateRotatedVertices(const G4AffineTransform& pTransform,
 
   // Phi cross sections
   //
-  noPhiCrossSections=G4int (twopi/kMeshAngleDefault)+1;
+  noPhiCrossSections=G4int (twopi/kMeshAngleDefault)+1;  // = 9!
     
-  if (noPhiCrossSections<kMinMeshSections)
+/*
+  if (noPhiCrossSections<kMinMeshSections)        // <3
   {
     noPhiCrossSections=kMinMeshSections;
   }
-  else if (noPhiCrossSections>kMaxMeshSections)
+  else if (noPhiCrossSections>kMaxMeshSections)   // >37
   {
     noPhiCrossSections=kMaxMeshSections;
   }
+*/
   meshAnglePhi=twopi/(noPhiCrossSections-1);
     
   // Set start angle such that mesh will be at fRMax

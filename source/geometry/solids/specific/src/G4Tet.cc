@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.11 2006-11-13 08:58:03 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.12 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -56,7 +56,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.11 2006-11-13 08:58:03 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.12 2010-07-12 15:25:37 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -566,10 +566,10 @@ G4ThreeVectorList*
 G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
-  vertices->reserve(4);
 
   if (vertices)
   {
+    vertices->reserve(4);
     G4ThreeVector vertex0(fAnchor);
     G4ThreeVector vertex1(fP2);
     G4ThreeVector vertex2(fP3);
@@ -584,8 +584,8 @@ G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     DumpInfo();
     G4Exception("G4Tet::CreateRotatedVertices()",
-          "FatalError", FatalException,
-          "Error in allocation of vertices. Out of memory !");
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

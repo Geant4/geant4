@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.20 2010-04-28 16:21:21 flei Exp $
+// $Id: G4TessellatedSolid.cc,v 1.21 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,7 +131,7 @@ G4TessellatedSolid::G4TessellatedSolid( __void__& a )
     geometryType("G4TessellatedSolid"), cubicVolume(0.), surfaceArea(0.),
     vertexList(), xMinExtent(0.), xMaxExtent(0.),
     yMinExtent(0.), yMaxExtent(0.), zMinExtent(0.), zMaxExtent(0.),
-    solidClosed(false)
+    solidClosed(false), dirTolerance(1.0E-14)
 {
   SetRandomVectorSet();
 }
@@ -159,7 +159,10 @@ G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
   geometryType = "G4TessellatedSolid";
   facets.clear();
   solidClosed  = false;
-  
+
+  cubicVolume = s.cubicVolume;  
+  surfaceArea = s.surfaceArea;  
+
   xMinExtent =  kInfinity;
   xMaxExtent = -kInfinity;
   yMinExtent =  kInfinity;
@@ -181,6 +184,9 @@ G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
 {
   if (&s == this) { return *this; }
   
+  cubicVolume = s.cubicVolume;  
+  surfaceArea = s.surfaceArea;  
+
   DeleteObjects ();
   CopyObjects (s);
   
@@ -210,8 +216,6 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &s)
   }
   
   if ( s.GetSolidClosed() )  { SetSolidClosed(true); }
-
-//  cubicVolume = s.GetCubicVolume();  
 }
 
 ///////////////////////////////////////////////////////////////////////////////

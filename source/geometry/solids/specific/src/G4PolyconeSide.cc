@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.24 2010-02-24 11:31:49 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.25 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,8 +158,15 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 //                            for usage restricted to object persistency.
 //
 G4PolyconeSide::G4PolyconeSide( __void__& )
-  : phiIsOpen(false), cone(0), ncorners(0), corners(0)
+  : startPhi(0.), deltaPhi(0.), phiIsOpen(false), allBehind(false),
+    cone(0), rNorm(0.), zNorm(0.), rS(0.), zS(0.), length(0.),
+    prevRS(0.), prevZS(0.), nextRS(0.), nextZS(0.), ncorners(0), corners(0),
+    kCarTolerance(0.), fSurfaceArea(0.)
 {
+  r[0] = r[1] = 0.;
+  z[0] = z[1] = 0.;
+  rNormEdge[0]= rNormEdge[1] = 0.;
+  zNormEdge[0]= zNormEdge[1] = 0.;
 }
 
 
@@ -169,7 +176,7 @@ G4PolyconeSide::G4PolyconeSide( __void__& )
 G4PolyconeSide::~G4PolyconeSide()
 {
   delete cone;
-  if (phiIsOpen) delete [] corners;
+  if (phiIsOpen)  { delete [] corners; }
 }
 
 
@@ -177,7 +184,7 @@ G4PolyconeSide::~G4PolyconeSide()
 // Copy constructor
 //
 G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
-  : G4VCSGface()
+  : G4VCSGface(), ncorners(0), corners(0)
 {
   CopyStuff( source );
 }
@@ -188,10 +195,10 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
 //
 G4PolyconeSide& G4PolyconeSide::operator=( const G4PolyconeSide &source )
 {
-  if (this == &source) return *this;
+  if (this == &source)  { return *this; }
 
   delete cone;
-  if (phiIsOpen) delete [] corners;
+  if (phiIsOpen)  { delete [] corners; }
   
   CopyStuff( source );
   

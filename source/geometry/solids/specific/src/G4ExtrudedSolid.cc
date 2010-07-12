@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.19 2010-04-15 10:23:34 ivana Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.20 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -173,19 +173,23 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   // (the area is positive if polygon vertices are defined anti-clockwise)
   
   G4double area = 0.;
-  for ( G4int i=0; i<fNv; ++i ) {
+  for ( G4int i=0; i<fNv; ++i )
+  {
     G4int j = i+1;
-    if ( j == fNv ) j = 0;
-    area += 0.5 * ( polygon[i].x()*polygon[j].y() - polygon[j].x()*polygon[i].y());
+    if ( j == fNv )  { j = 0; }
+    area += 0.5 * ( polygon[i].x()*polygon[j].y()
+                  - polygon[j].x()*polygon[i].y());
   }
  
   // Copy polygon
   //
-  if  ( area < 0. ) {   
+  if  ( area < 0. )
+  {   
     // Polygon vertices are defined clockwise, we just copy the polygon       
     for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
   }
-  else {
+  else
+  {
     // Polygon vertices are defined anti-clockwise, we revert them
     //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", errorDescription,
     //            JustWarning, 
@@ -212,7 +216,8 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 //_____________________________________________________________________________
 
 G4ExtrudedSolid::G4ExtrudedSolid( __void__& a )
-  : G4TessellatedSolid(a)
+  : G4TessellatedSolid(a), fNv(0), fNz(0), fPolygon(), fZSections(),
+    fTriangles(), fIsConvex(false), fGeometryType("G4ExtrudedSolid")
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.

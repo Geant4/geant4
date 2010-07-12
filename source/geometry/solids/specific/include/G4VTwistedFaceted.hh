@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.10 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.11 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -185,8 +185,6 @@ class G4VTwistedFaceted: public G4VSolid
     
   G4double fPhiTwist;  // twist angle ( dphi in surface equation)
 
-  G4double fAngleSide;
-     
   G4VTwistSurface *fLowerEndcap ;  // surface of -ve z
   G4VTwistSurface *fUpperEndcap ;  // surface of +ve z
   

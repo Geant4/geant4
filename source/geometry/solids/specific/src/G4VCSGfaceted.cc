@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.26 2009-05-08 14:29:56 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.27 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,10 @@ G4VCSGfaceted::~G4VCSGfaceted()
 G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
   : G4VSolid( source )
 {
+  fStatistics = source.fStatistics;
+  fCubVolEpsilon = source.fCubVolEpsilon;
+  fAreaAccuracy = source.fAreaAccuracy;
+
   CopyStuff( source );
 }
 
@@ -108,6 +112,10 @@ const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
   if (&source == this) { return *this; }
   
+  fStatistics = source.fStatistics;
+  fCubVolEpsilon = source.fCubVolEpsilon;
+  fAreaAccuracy = source.fAreaAccuracy;
+
   DeleteStuff();
   CopyStuff( source );
   
@@ -134,6 +142,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
     *face = (*sourceFace)->Clone();
   } while( ++sourceFace, ++face < faces+numFace );
   fCubicVolume = source.fCubicVolume;
+  fSurfaceArea = source.fSurfaceArea;
   fpPolyhedron = source.fpPolyhedron;
 }
 
@@ -245,8 +254,8 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
 {
   G4double distance = kInfinity;
   G4double distFromSurface = kInfinity;
-  G4VCSGface *bestFace=0;
   G4VCSGface **face = faces;
+  G4VCSGface *bestFace = *face;
   do
   {
     G4double   faceDistance,
@@ -301,9 +310,9 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
   G4double distance = kInfinity;
   G4double distFromSurface = kInfinity;
   G4ThreeVector normal;
-  G4VCSGface *bestFace=0;
   
   G4VCSGface **face = faces;
+  G4VCSGface *bestFace = *face;
   do
   {
     G4double  faceDistance,

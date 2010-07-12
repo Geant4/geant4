@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.43 2010-06-16 08:24:14 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.44 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -365,7 +365,8 @@ void G4Polyhedra::Create( G4double phiStart,
 //                            for usage restricted to object persistency.
 //
 G4Polyhedra::G4Polyhedra( __void__& a )
-  : G4VCSGfaceted(a), genericPgon(false), corners(0),
+  : G4VCSGfaceted(a), numSide(0), startPhi(0.), endPhi(0.),
+    phiIsOpen(false), genericPgon(false), numCorner(0), corners(0),
     original_parameters(0), enclosingCylinder(0)
 {
 }
@@ -1156,7 +1157,8 @@ G4NURBS *G4Polyhedra::CreateNURBS() const
 // G4PolyhedraHistorical stuff
 //
 G4PolyhedraHistorical::G4PolyhedraHistorical()
-  : Z_values(0), Rmin(0), Rmax(0)
+  : Start_angle(0.), Opening_angle(0.), numSide(0), Num_z_planes(0),
+    Z_values(0), Rmin(0), Rmax(0)
 {
 }
 

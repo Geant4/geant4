@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistBoxSide.cc,v 1.6 2007-05-23 09:31:02 gcosmo Exp $
+// $Id: G4TwistBoxSide.cc,v 1.7 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,7 +131,11 @@ G4TwistBoxSide::G4TwistBoxSide(const G4String     &name,
 //* Fake default constructor ------------------------------------------
 
 G4TwistBoxSide::G4TwistBoxSide( __void__& a )
-  : G4VTwistSurface(a)
+  : G4VTwistSurface(a), fTheta(0.), fPhi(0.), fDy1(0.), fDx1(0.), fDx2(0.), 
+    fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fAlph(0.), fTAlph(0.), fPhiTwist(0.), 
+    fAngleSide(0.), fdeltaX(0.), fdeltaY(0.), fDx4plus2(0.), fDx4minus2(0.), 
+    fDx3plus1(0.), fDx3minus1(0.), fDy2plus1(0.), fDy2minus1(0.), fa1md1(0.), 
+    fa2md2(0.)
 {
 }
 

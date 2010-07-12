@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.13 2010-04-28 16:21:21 flei Exp $
+// $Id: G4TriangularFacet.cc,v 1.14 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -75,7 +75,7 @@
 G4TriangularFacet::G4TriangularFacet (const G4ThreeVector Pt0,
              const G4ThreeVector vt1, const G4ThreeVector vt2,
                    G4FacetVertexType vertexType)
-  : G4VFacet()
+  : G4VFacet(), sMin(0.), sMax(1.), tMin(0.), sqrDist(0.)
 {
   tGeomAlg  = G4TessellatedGeometryAlgorithms::GetInstance();
   P0        = Pt0;

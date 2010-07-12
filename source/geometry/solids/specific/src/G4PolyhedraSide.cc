@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.17 2010-02-24 11:31:49 gcosmo Exp $
+// $Id: G4PolyhedraSide.cc,v 1.18 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -294,8 +294,13 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 //                            for usage restricted to object persistency.
 //
 G4PolyhedraSide::G4PolyhedraSide( __void__&)
-  : cone(0), vecs(0), edges(0)
+  : numSide(0), startPhi(0.), deltaPhi(0.), endPhi(0.),
+    phiIsOpen(false), allBehind(false), cone(0), vecs(0), edges(0),
+    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), fSurfaceArea(0.)
 {
+  r[0] = r[1] = 0.;
+  z[0] = z[1] = 0.;
+  lenPhi[0] = lenPhi[1] = 0.;
 }
 
 
@@ -773,7 +778,7 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 //
 G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p,
                                             const G4ThreeVector &v,
-                                            const G4PolyhedraSideVec vec,
+                                            const G4PolyhedraSideVec& vec,
                                                   G4double normSign, 
                                                   G4double surfTolerance,
                                                   G4double &distance,

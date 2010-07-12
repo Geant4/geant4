@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.27 2006-10-20 13:45:21 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.28 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,7 +75,8 @@ G4EllipticalTube::G4EllipticalTube( const G4String &name,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalTube::G4EllipticalTube( __void__& a )
-  : G4VSolid(a), fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
+  : G4VSolid(a), dx(0.), dy(0.), dz(0.),
+    fCubicVolume(0.), fSurfaceArea(0.), fpPolyhedron(0)
 {
 }
 
@@ -515,10 +516,10 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
   //
   // Our normal is always valid
   //
-  if (calcNorm) *validNorm = true;
+  if (calcNorm)  { *validNorm = true; }
   
   G4double sBest = kInfinity;
-  const G4ThreeVector *nBest=0;
+  G4ThreeVector nBest(0,0,0);
   
   //
   // Might we intersect the -dz surface?
@@ -534,12 +535,15 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     //
     // Are we on the surface? If so, return zero
     //
-    if (p.z() < -dz+halfTol) {
-      if (calcNorm) *norm = normHere;
+    if (p.z() < -dz+halfTol)
+    {
+      if (calcNorm)  { *norm = normHere; }
       return 0;
     }
     else
-      nBest = &normHere;
+    {
+      nBest = normHere;
+    }
   }
   
   //
@@ -556,15 +560,16 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
     //
     // Are we on the surface? If so, return zero
     //
-    if (p.z() > +dz-halfTol) {
-      if (calcNorm) *norm = normHere;
+    if (p.z() > +dz-halfTol)
+    {
+      if (calcNorm)  { *norm = normHere; }
       return 0;
     }
     
     //
     // Best so far?
     //
-    if (s < sBest) { sBest = s; nBest = &normHere; }
+    if (s < sBest) { sBest = s; nBest = normHere; }
   }
   
   //
@@ -590,15 +595,16 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p,
       G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
       G4cout << "Proposed distance :" << G4endl << G4endl;
       G4cout << "snxt = "    << sBest/mm << " mm" << G4endl << G4endl;
+      G4cout.precision(6) ;
       G4Exception( "G4EllipticalTube::DistanceToOut(p,v,...)",
                    "Notification", JustWarning, "Point p is outside !?" );
     }
-    if (calcNorm) *norm = *nBest;
+    if (calcNorm)  { *norm = nBest; }
     return sBest;
   }
   else if (s[n-1] > sBest)
   {
-    if (calcNorm) *norm = *nBest;
+    if (calcNorm)  { *norm = nBest; }
     return sBest;
   }  
   sBest = s[n-1];

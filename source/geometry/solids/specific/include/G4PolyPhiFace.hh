@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.hh,v 1.12 2008-05-15 11:41:58 gcosmo Exp $
+// $Id: G4PolyPhiFace.hh,v 1.13 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ struct G4PolyPhiFaceVertex
 
 struct G4PolyPhiFaceEdge
 {
-  G4PolyPhiFaceEdge(): v0(0), v1(0) {}
+  G4PolyPhiFaceEdge(): v0(0), v1(0), tr(.0), tz(0.), length(0.) {}
   G4PolyPhiFaceVertex  *v0, *v1;  // Corners
   G4double tr, tz,                // Unit vector along edge
            length;                // Length of edge
@@ -211,7 +211,7 @@ class G4PolyPhiFace : public G4VCSGface
       // For details see "Computational Geometry in C" by Joseph O'Rourke.
 
     void Triangulate();
-      // Triangulisation by ear tips for Polycone or Polyhedra.
+      // Triangularisation by ear tips for Polycone or Polyhedra.
       // For details see "Computational Geometry in C" by Joseph O'Rourke.
       // NOTE: a copy of the shape is made and this copy is reordered in
       //       order to have a list of triangles. This list is used by the

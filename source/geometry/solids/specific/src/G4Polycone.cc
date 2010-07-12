@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.44 2010-06-16 08:24:14 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.45 2010-07-12 15:25:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -313,7 +313,8 @@ void G4Polycone::Create( G4double phiStart,
 //                            for usage restricted to object persistency.
 //
 G4Polycone::G4Polycone( __void__& a )
-  : G4VCSGfaceted(a), genericPcon(false), corners(0),
+  : G4VCSGfaceted(a), startPhi(0.),  endPhi(0.), phiIsOpen(false),
+    genericPcon(false), numCorner(0), corners(0),
     original_parameters(0), enclosingCylinder(0)
 {
 }
@@ -325,9 +326,8 @@ G4Polycone::G4Polycone( __void__& a )
 G4Polycone::~G4Polycone()
 {
   delete [] corners;
-  
-  if (original_parameters) delete original_parameters;
-  if (enclosingCylinder) delete enclosingCylinder;
+  delete original_parameters;
+  delete enclosingCylinder;
 }
 
 
@@ -1183,7 +1183,8 @@ G4NURBS *G4Polycone::CreateNURBS() const
 //
 
 G4PolyconeHistorical::G4PolyconeHistorical()
-  : Z_values(0), Rmin(0), Rmax(0)
+  : Start_angle(0.), Opening_angle(0.), Num_z_planes(0),
+    Z_values(0), Rmin(0), Rmax(0)
 {
 }
 
