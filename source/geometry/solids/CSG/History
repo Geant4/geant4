@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2010-07-08 16:31:42 gcosmo Exp $
+$Id: History,v 1.123 2010-07-12 07:44:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 12, 2010  G.Cosmo                    geom-csg-V09-03-03
+- Fixed condition in G4Tubs::Inside(p) for point on surface.
+- Corrected use of std:fabs() in place of std::abs() in G4Tubs, G4Cons,
+  G4Sphere and G4Torus. Use pre-computed half-tolerance constants in G4Torus.
 
 Jul 08, 2010  G.Cosmo                    geom-csg-V09-03-02
 - Improved initialisation logic in constructor for: G4Box, G4Cons, G4Orb,
