@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.10 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.11 2010-07-13 19:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -38,6 +38,7 @@
 // 20100630  M. Kelsey -- for nuclei, include excitation energies in total.
 // 20100701  M. Kelsey -- Undo previous change, handled by G4InuclNuclei.
 // 20100711  M. Kelsey -- Use name of parent collider for reporting messages
+// 20100713  M. kelsey -- Hide conservation errors behind verbosity
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -156,7 +157,7 @@ G4bool G4CascadeCheckBalance::energyOkay() const {
   G4bool relokay = (std::abs(relativeE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaE()) < absoluteLimit);
 
-  if (!relokay || !absokay) {
+  if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Energy conservation: relative " << relativeE()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaE()
@@ -173,7 +174,7 @@ G4bool G4CascadeCheckBalance::ekinOkay() const {
   G4bool relokay = (std::abs(relativeKE()) < relativeLimit);
   G4bool absokay = (std::abs(deltaKE()) < absoluteLimit);
 
-  if (!relokay || !absokay) {
+  if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Kinetic energy balance: relative "
 	   << relativeKE() << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaKE()
@@ -191,7 +192,7 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
   G4bool relokay = (std::abs(relativeP()) < relativeLimit);
   G4bool absokay = (std::abs(deltaP()) < absoluteLimit);
 
-  if (!relokay || !absokay) {
+  if (verboseLevel && (!relokay || !absokay)) {
     G4cerr << theName << ": Momentum conservation: relative " << relativeP()
 	   << (relokay ? " conserved" : " VIOLATED")
 	   << " absolute " << deltaP()
@@ -207,7 +208,7 @@ G4bool G4CascadeCheckBalance::momentumOkay() const {
 G4bool G4CascadeCheckBalance::baryonOkay() const {
   G4bool bokay = (deltaB() == 0);	// Must be perfect!
 
-  if (!bokay)
+  if (verboseLevel && !bokay)
     G4cerr << theName << ": Baryon number VIOLATED " << deltaB() << G4endl;
 
   return bokay;
@@ -216,7 +217,7 @@ G4bool G4CascadeCheckBalance::baryonOkay() const {
 G4bool G4CascadeCheckBalance::chargeOkay() const {
   G4bool qokay = (deltaQ() == 0);	// Must be perfect!
 
-  if (!qokay)
+  if (verboseLevel && !qokay)
     G4cerr << theName << ": Charge conservation VIOLATED " << deltaQ()
 	   << G4endl;
 

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.47 2010-07-06 19:26:12 dennis Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.48 2010-07-13 19:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -47,6 +47,10 @@
 // 20100701  M. Kelsey -- Let excitation energy be handled by G4InuclNuclei,
 //		allow for ground-state recoil (goodCase == true for Eex==0.)
 // 20100702  M. Kelsey -- Negative energy recoil should be rejected
+// 20100706  D. Wright -- Copy "abandoned" cparticles to output list, copy
+//		mesonic "excitons" to output list; should be absorbed, fix up
+//		diagnostic messages.
+// 20100720  M. Kelsey -- Add more diagnostics for Dennis' changes.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -102,6 +106,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   model.generateModel(tnuclei);
 
+  // FIXME:  This should depend on dynamic (model) nucleus, which
+  //         may have lost protons or neutrons, not original target
+  //	     ==> Should be moved down to "CBP" tunneling calculation
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
                                       (1.+G4cbrt(tnuclei->getA()));
 
@@ -131,6 +138,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     G4ExitonConfiguration theExitonConfiguration;
     std::vector<G4InuclElementaryParticle> output_particles;
 
+    // NOTE:  After deductions, these ought to match model "Current" values
     G4double afin = tnuclei->getA();	// Will deduct outgoing particles
     G4double zfin = tnuclei->getZ();	//    to determine recoil state
    
@@ -197,7 +205,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
 							&theElementaryParticleCollider);
       if (verboseLevel > 2) {
-	G4cout << " After generate fate: New particles " << new_cascad_particles.size() << G4endl
+	G4cout << " After generate fate: New particles "
+	       << new_cascad_particles.size() << G4endl
 	       << " Discarding last cparticle from list " << G4endl;
       }
 
@@ -206,32 +215,42 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       // handle the result of a new step
 
       if (new_cascad_particles.size() == 1) { // last particle goes without interaction
-	if (model.stillInside(new_cascad_particles[0])) {
-	  if (verboseLevel > 3) G4cout << " particle still inside nucleus " << G4endl;
+	const G4CascadParticle& currentCParticle = new_cascad_particles[0];
 
-	  if (new_cascad_particles[0].getNumberOfReflections() < reflection_cut &&
-	      model.worthToPropagate(new_cascad_particles[0])) {
+	if (model.stillInside(currentCParticle)) {
+	  if (verboseLevel > 3)
+	    G4cout << " particle still inside nucleus " << G4endl;
+
+	  if (currentCParticle.getNumberOfReflections() < reflection_cut &&
+	      model.worthToPropagate(currentCParticle)) {
 	    if (verboseLevel > 3) G4cout << " continue reflections " << G4endl;
-	    cascad_particles.push_back(new_cascad_particles[0]);
+	    cascad_particles.push_back(currentCParticle);
 
 	  } else {
-            G4int xtype = new_cascad_particles[0].getParticle().type();
-            if (xtype == 1 || xtype == 2) { 
-              // normal exciton
-              theExitonConfiguration.incrementQP(xtype);
+            G4int xtype = currentCParticle.getParticle().type();
+	    if (verboseLevel > 3)
+	      G4cout << " exciton of type " << xtype << G4endl;
 
+            if (xtype == 1 || xtype == 2) { 	             // normal exciton
+              theExitonConfiguration.incrementQP(xtype);
             } else {
               // non-standard exciton; release it
               // FIXME: this is a meson, so need to absorb it
-              output_particles.push_back(new_cascad_particles[0].getParticle() );
+	      if (verboseLevel > 3) {
+		G4cout << " non-standard should be absorbed, now released"
+		       << G4endl;
+		currentCParticle.print();
+	      }
+
+              output_particles.push_back(currentCParticle.getParticle() );
             }
-	  }
+	  }	// reflection or exciton
 
         } else { // particle about to leave nucleus - check for Coulomb barrier
 	  if (verboseLevel > 3) G4cout << " possible escape " << G4endl;
 
           const G4InuclElementaryParticle& currentParticle =
-	    new_cascad_particles[0].getParticle();
+	    currentCParticle.getParticle();
 
           G4double KE = currentParticle.getKineticEnergy();
           G4double mass = currentParticle.getMass();
@@ -243,27 +262,41 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
           if (KE < Q*coulombBarrier) {
      	    // Calculate barrier penetration
             G4double CBP = 0.0; 
+
+	    // FIXME:  This should depend on current (model) nucleus, which
+	    //         may have lost protons or neutrons, no original target
+
 	    // if (KE > 0.0001) CBP = std::exp(-0.00126*tnuclei->getZ()*0.25*
 	    //   (1./KE - 1./coulombBarrier));
             if (KE > 0.0001) CBP = std::exp(-0.0181*0.5*tnuclei->getZ()*
                                             (1./KE - 1./coulombBarrier)*
                                          std::sqrt(mass*(coulombBarrier-KE)) );
+
             if (G4UniformRand() < CBP) {
 	      if (verboseLevel > 3) {
 		G4cout << " tunneled " << G4endl;
+		// FIXME:  For particles which escape, should adjust KE
 		currentParticle.printParticle();
 	      }
 	      output_particles.push_back(currentParticle);
             } else {
-	      if (verboseLevel > 3) 
-                G4cout << " becomes an exciton due to coulomb " << G4endl;
               G4int xtype = currentParticle.type();
+	      if (verboseLevel > 3) 
+                G4cout << " becomes an exciton of type " << xtype
+		       << " due to coulomb " << G4endl;
               if (xtype == 1 || xtype == 2) {
                 theExitonConfiguration.incrementQP(currentParticle.type());
               } else {
                 // non-standard exciton; release it
                 // FIXME: this is a meson, so need to absorb it
-                output_particles.push_back(currentParticle);
+		if (verboseLevel > 3) {
+		  G4cout << " non-standard should be absorbed, now released"
+			 << G4endl;
+		  currentCParticle.print();
+		}
+ 
+		// FIXME:  For particles which escape, should adjust KE
+               output_particles.push_back(currentParticle);
               }
             }
           } else {
@@ -271,6 +304,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	      G4cout << " Goes out " << G4endl;
 	      currentParticle.printParticle();
 	    }
+	    // FIXME:  For particles which escape, should adjust KE
 	    output_particles.push_back(currentParticle);
           }
         } 
@@ -282,15 +316,32 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	  cascad_particles.push_back(new_cascad_particles[i]);
 
 	std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
+	if (verboseLevel > 3)
+	  G4cout << " adding new exciton holes " << holes.first << ","
+		 << holes.second << G4endl;
 
 	theExitonConfiguration.incrementHoles(holes.first);
 
 	if (holes.second > 0)
 	  theExitonConfiguration.incrementHoles(holes.second);
       }		// if (new_cascad_particles ...
+
+      if (verboseLevel > 2) {
+	G4cout << " at end of loop, " << cascad_particles.size()
+	       << " cparticles remaining; nucleus (model) has "
+	       << model.getNumberOfNeutrons() << " neutrons "
+	       << model.getNumberOfProtons() << " protons" << G4endl;
+      }
     }		// while cascade-list and model
 
     // Add left-over cascade particles
+    if (verboseLevel > 2) {
+      G4cout << " After cascade, " << cascad_particles.size()
+	     << " cparticles remaining; nucleus (model) has "
+	     << model.getNumberOfNeutrons() << " neutrons "
+	     << model.getNumberOfProtons() << " protons" << G4endl;
+    }
+
     for (G4int i = 0; i < G4int(cascad_particles.size()); i++)
       output_particles.push_back(cascad_particles[i].getParticle());
  
@@ -316,6 +367,23 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       zfin -= ipart->getCharge();
       afin -= ipart->baryon();
     };
+
+    // NOTE:  After deductions, afin/zfin ought to match model "Current" values
+    if (verboseLevel) {
+      if (zfin != model.getNumberOfProtons()) {
+	G4cerr << " >>> G4IntraNucleiCascader ERROR:  zfin " << zfin
+	       << " doesn't match protons left in model "
+	       << model.getNumberOfProtons() << G4endl;
+      }
+
+      G4double modelA = (model.getNumberOfNeutrons() +
+			 model.getNumberOfProtons());
+      if (afin != modelA) {
+	G4cerr << " >>> G4IntraNucleiCascader ERROR:  afin " << afin
+	       << " doesn't match nucleons left in model " << modelA
+	       << G4endl;
+      }
+    }
 
     if (afin<0. || zfin<0. || afin<zfin) {  // Sanity check before proceeding
       G4cerr << " >>> G4IntraNucleiCascader ERROR:  Recoil nucleus is not"

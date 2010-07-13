@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.35 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.36 2010-07-13 19:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -83,10 +83,9 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
       G4cout << " InuclCollider -> particle on particle collision" << G4endl;
  
     theElementaryParticleCollider.collide(bullet, target, globalOutput);
-    if (verboseLevel > 2) {
-      balance.collide(bullet, target, globalOutput);
-      balance.okay();		// Do checks, but ignore result
-    }
+
+    balance.collide(bullet, target, globalOutput);
+    balance.okay();			// Do checks, but ignore result
 
     return;
   }
@@ -177,12 +176,13 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
       theIntraNucleiCascader.collide(&nbullet, ntarget, output);
     }   
     
-    if (verboseLevel > 2) {
+    if (verboseLevel > 1) {
       G4cout << " After Cascade " << G4endl;
       output.printCollisionOutput();
     }
 
     // Check energy/momentum conservation from cascade
+    balance.setOwner("After IntraNucleiCascader");
     balance.collide(bullet, ntarget, output);
     balance.okay();			// Do checks, but ignore result
 
@@ -193,7 +193,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     if (output.numberOfNucleiFragments() == 1) { // there is smth. after
       G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
       if (explosion(&cascad_rec_nuclei)) {
-	if (verboseLevel > 2) {
+	if (verboseLevel > 1) {
 	  G4cout << " big bang after cascade " << G4endl;
 	}
 	
@@ -202,7 +202,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	output.reset();
 	theNonEquilibriumEvaporator.collide(0, &cascad_rec_nuclei, output);
 	
-	if (verboseLevel > 2) {
+	if (verboseLevel > 1) {
 	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
 	  output.printCollisionOutput();
 	}
@@ -218,7 +218,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	output.reset();
 	theEquilibriumEvaporator.collide(0, &exiton_rec_nuclei, output);
 	
-	if (verboseLevel > 2) {
+	if (verboseLevel > 1) {
 	  G4cout << " After EquilibriumEvaporator " << G4endl;
 	  output.printCollisionOutput();
 	}
@@ -255,7 +255,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     globalOutput.reset();		// Clear and try again
   }
   
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " InuclCollider -> can not generate acceptable inter. after " 
 	   << itry_max << " attempts " << G4endl;
   }

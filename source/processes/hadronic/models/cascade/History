@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2010-07-12 05:28:33 mkelsey Exp $
+$Id: History,v 1.126 2010-07-13 19:24:50 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,27 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+13 July 2010 Michael Kelsey
+---------------------------
+- G4CascadeCheckBalance.cc:  Hide violation reports behind verbose == 1.
+
+- G4ElementaryParticleCollider.cc:  Bump ::collide() message to verbose > 1.
+
+- G4EquilibriumEvaporator.cc:  Add conservation checking, collapse if-cascades
+  by doing failure tests and exits up front, add sanity check on eex_real.
+
+- G4IntraNucleiCascader.cc:  Add diagnostic messages and some FIXME
+  comments, validate afin/zfin against G4NucleiModel result.
+
+- G4InuclCollider.cc:  Move conservation check outside verbosity flag.  This
+  adds to CPU usage, so may need #ifdef protection later.  Adjust a few
+  verbosity levels.
+
+- G4LorentzConvertor.cc:  Bump all diagnostic messages to verbose > 1.
+
+- G4NucleiModel.cc:  Simplify main if-block to put failure up front; add
+  debugging messages when decrementing proton or neutron counts.
 
 11 July 2010 Michael Kelsey
 ---------------------------

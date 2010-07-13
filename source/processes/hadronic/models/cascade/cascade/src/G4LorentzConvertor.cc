@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.26 2010-06-17 23:05:04 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.27 2010-07-13 19:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -32,6 +32,7 @@
 // 20100409  M. Kelsey -- Protect std::sqrt(ga) against round-off negatives
 // 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 // 20100617  M. Kelsey -- Add more diagnostic messages with multiple levels
+// 20100713  M. Kelsey -- All diagnostic messages should be verbose > 1
 
 #include "G4LorentzConvertor.hh"
 #include "G4ThreeVector.hh"
@@ -60,7 +61,7 @@ void G4LorentzConvertor::setTarget(const G4InuclParticle* target) {
 // Boost bullet and target four-vectors into destired frame
 
 void G4LorentzConvertor::toTheCenterOfMass() {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4LorentzConvertor::toTheCenterOfMass" << G4endl;
 
   G4LorentzVector cm4v = target_mom + bullet_mom;
@@ -106,7 +107,7 @@ void G4LorentzConvertor::toTheCenterOfMass() {
 }
 
 void G4LorentzConvertor::toTheTargetRestFrame() {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4LorentzConvertor::toTheTargetRestFrame" << G4endl;
 
   velocity = target_mom.boostVector();
@@ -149,7 +150,7 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
 
 G4LorentzVector 
 G4LorentzConvertor::backToTheLab(const G4LorentzVector& mom) const {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4LorentzConvertor::backToTheLab" << G4endl;
 
   if (verboseLevel > 2)
@@ -193,7 +194,7 @@ G4double G4LorentzConvertor::getTRSMomentum() const {
 }
 
 G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom) const {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4LorentzConvertor::rotate(G4LorentzVector)" << G4endl;
 
   if (verboseLevel > 2) {
@@ -225,7 +226,7 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom) const {
 
 G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom1, 
 					   const G4LorentzVector& mom) const {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4LorentzConvertor::rotate(G4LorentzVector,G4LorentzVector)"
 	   << G4endl;
 
@@ -274,7 +275,7 @@ G4LorentzVector G4LorentzConvertor::rotate(const G4LorentzVector& mom1,
 }
 
 G4bool G4LorentzConvertor::reflectionNeeded() const {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4LorentzConvertor::reflectionNeeded (query)" << G4endl;
 
   if (verboseLevel > 2) {

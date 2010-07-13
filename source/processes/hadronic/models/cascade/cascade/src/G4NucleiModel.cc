@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.60 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.61 2010-07-13 19:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -144,8 +144,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   Z = z;
   neutronNumber = a - z;
   protonNumber = z;
-  neutronNumberCurrent = neutronNumber;
-  protonNumberCurrent = protonNumber;
+  reset();
 
   // Clear all parameters arrays for reloading
   binding_energies.clear();
@@ -348,7 +347,7 @@ G4double G4NucleiModel::getFermiKinetic(G4int ip, G4int izone) const {
 G4double
 G4NucleiModel::volNumInt(G4double r1, G4double r2, 
 			 G4double, G4double d1) const {
-  if (verboseLevel) {
+  if (verboseLevel > 1) {
     G4cout << " >>> G4NucleiModel::volNumInt" << G4endl;
   }
 
@@ -400,7 +399,7 @@ G4NucleiModel::volNumInt(G4double r1, G4double r2,
 G4double
 G4NucleiModel::volNumInt1(G4double r1, G4double r2, 
 			  G4double cu2) const {
-  if (verboseLevel) {
+  if (verboseLevel > 1) {
     G4cout << " >>> G4NucleiModel::volNumInt1" << G4endl;
   }
 
@@ -517,7 +516,7 @@ G4NucleiModel::generateQuasiDeutron(G4int type1, G4int type2,
 
 void
 G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
-  if (verboseLevel) {
+  if (verboseLevel > 1) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
   }
 
@@ -773,7 +772,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 const std::vector<G4CascadParticle>&
 G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
                                     G4ElementaryParticleCollider* theElementaryParticleCollider) {
-  if (verboseLevel)
+  if (verboseLevel > 1)
     G4cout << " >>> G4NucleiModel::generateParticleFate" << G4endl;
 
   if (verboseLevel > 2) {
@@ -840,60 +839,69 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       const std::vector<G4InuclElementaryParticle>& outgoing_particles = 
 	output.getOutgoingParticles();
       
-      if (passFermi(outgoing_particles, zone)) { 	// interaction
-	cparticle.propagateAlongThePath(thePartners[i].second);
-	G4ThreeVector new_position = cparticle.getPosition();
-	
-	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
-	  G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
-	  outgoing_cparticles.push_back(temp);
-	}
-	
-	no_interaction = false;
-	current_nucl1 = 0;
-	current_nucl2 = 0;
+      if (!passFermi(outgoing_particles, zone)) continue; // Interaction fails
 
+      // Successful interaction, add results to output list
+      cparticle.propagateAlongThePath(thePartners[i].second);
+      G4ThreeVector new_position = cparticle.getPosition();
+
+      if (verboseLevel > 2)
+	G4cout << " adding " << outgoing_particles.size()
+	       << " output particles" << G4endl;
+      
+      for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
+	G4CascadParticle temp(outgoing_particles[ip], new_position, zone, 0.0, 0);
+	outgoing_cparticles.push_back(temp);
+      }
+      
+      no_interaction = false;
+      current_nucl1 = 0;
+      current_nucl2 = 0;
+      
 #ifdef G4CASCADE_DEBUG_CHARGE
-	{
-	  G4double out_charge = 0.0;
-	  
-	  for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
-	    out_charge += outgoing_particles[ip].getCharge();
-	  
-	  G4cout << " multiplicity " << outgoing_particles.size()
-		 << " bul type " << bullet.type()
-		 << " targ type " << target.type()
-		 << "\n initial charge "
-		 << bullet.getCharge() + target.getCharge() 
-		 << " out charge " << out_charge << G4endl;  
-	}
+      {
+	G4double out_charge = 0.0;
+	
+	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
+	  out_charge += outgoing_particles[ip].getCharge();
+	
+	G4cout << " multiplicity " << outgoing_particles.size()
+	       << " bul type " << bullet.type()
+	       << " targ type " << target.type()
+	       << "\n initial charge "
+	       << bullet.getCharge() + target.getCharge() 
+	       << " out charge " << out_charge << G4endl;  
+      }
 #endif
-	  
-	if (verboseLevel > 2)
-	  G4cout << " partner type " << target.type() << G4endl;
-	
-	if (target.nucleon()) {
-	  current_nucl1 = target.type();
-	} else {
-	  if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
-	  current_nucl1 = (target.type() - 100) / 10;
-	  current_nucl2 = target.type() - 100 - 10 * current_nucl1;
-	}   
-	
-	if (current_nucl1 == 1) {
-	  protonNumberCurrent -= 1.0;
-	} else {
-	  neutronNumberCurrent -= 1.0;
-	}; 
-	
-	if (current_nucl2 == 1) {
-	  protonNumberCurrent -= 1.0;
-	} else if (current_nucl2 == 2) {
-	  neutronNumberCurrent -= 1.0;
-	};
-	
-	break;
-      }		// if (passFermi(... 
+      
+      if (verboseLevel > 2)
+	G4cout << " partner type " << target.type() << G4endl;
+      
+      if (target.nucleon()) {
+	current_nucl1 = target.type();
+      } else {
+	if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
+	current_nucl1 = (target.type() - 100) / 10;
+	current_nucl2 = target.type() - 100 - 10 * current_nucl1;
+      }   
+      
+      if (current_nucl1 == 1) {
+	if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
+	protonNumberCurrent -= 1.0;
+      } else {
+	if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
+	neutronNumberCurrent -= 1.0;
+      }; 
+      
+      if (current_nucl2 == 1) {
+	if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
+	protonNumberCurrent -= 1.0;
+      } else if (current_nucl2 == 2) {
+	if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
+	neutronNumberCurrent -= 1.0;
+      };
+      
+      break;
     }		// loop over partners
     
     if (no_interaction) { 		// still no interactions
@@ -904,8 +912,8 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       cparticle.incrementCurrentPath(thePartners[npart - 1].second);
       boundaryTransition(cparticle);
       outgoing_cparticles.push_back(cparticle);
-    };
-  }; 
+    }
+  }	// if (npart == 1) [else]
 
   return outgoing_cparticles;
 }
@@ -992,7 +1000,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 	   << prr*pos.y()  << " pz " << prr*pos.z() << " mag "
 	   << std::fabs(prr*r) << G4endl;
   }
-  
+
   mom.setVect(mom.vect() + pos*prr);
   cparticle.updateParticleMomentum(mom);
 }
@@ -1072,7 +1080,7 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
 
 G4CascadParticle 
 G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle) {
-  if (verboseLevel) {
+  if (verboseLevel > 1) {
     G4cout << " >>> G4NucleiModel::initializeCascad(particle)" << G4endl;
   }
 

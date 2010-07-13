@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.68 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.69 2010-07-13 19:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -59,6 +59,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class, make arrays static
 // 20100519  M. Kelsey -- Use G4InteractionCase to compute "is" values.
 // 20100625  M. Kelsey -- Two bugs in n-body momentum, last particle recoil
+// 20100713  M. Kelsey -- Bump collide start message up to verbose > 1
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -118,7 +119,8 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 				      G4InuclParticle* target,
 				      G4CollisionOutput& output) 
 {
-  if (verboseLevel) G4cout << " >>> G4ElementaryParticleCollider::collide" << G4endl;
+  if (verboseLevel > 1)
+    G4cout << " >>> G4ElementaryParticleCollider::collide" << G4endl;
 
   if (!useEPCollider(bullet,target)) {		// Sanity check
     G4cerr << " ElementaryParticleCollider -> can collide only particle with particle " 
