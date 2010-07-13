@@ -75,6 +75,7 @@
       <text>exam-ext-persistency-gdml-g01-run</text>
       <text>exam-ext-polarisation-pol01-run</text>
       <text>exam-ext-radioactivedecay-exrdm-run</text>
+      <text>exam-ext-radioactivedecay-radioActiv-run</text>
       <text>exam-nov-n01-run</text>
       <text>exam-nov-n02-run</text>
       <text>exam-nov-n03-run</text>
@@ -127,6 +128,8 @@
       <text>test60-run</text>
       <text>test61-run</text>
       <text>test62-run</text>
+      <text>test201-run</text>
+      <text>test202-run</text>
     </set>
   </argument>
 </extension>

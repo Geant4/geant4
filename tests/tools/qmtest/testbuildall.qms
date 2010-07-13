@@ -50,6 +50,7 @@
       <text>exam-ext-persistency-gdml-g03-build</text>
       <text>exam-ext-polarisation-pol01-build</text> 
       <text>exam-ext-radioactivedecay-exrdm-build</text>
+      <text>exam-ext-radioactivedecay-radioActiv-build</text>
       <text>exam-nov-n01-build</text>
       <text>exam-nov-n02-build</text>
       <text>exam-nov-n03-build</text>
@@ -97,6 +98,7 @@
       <text>test61-build</text>
       <text>test62-build</text>
       <text>test201-build</text>
+      <text>test202-build</text>
     </set>
   </argument>
 </extension>
