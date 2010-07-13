@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2010-07-05 09:26:00 gcosmo Exp $
+$Id: History,v 1.142 2010-07-13 16:45:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 13, 2010  G.Cosmo                     geommng-V09-03-02
+- G4SmartVoxelHeader: added protection against rare cases of zero computed
+  node width in BuildNodes().
 
 July 2, 2010  G.Cosmo                      geommng-V09-03-01
 - G4LogicalSurface: added missing initialisation for 'theTransRadSurface'
