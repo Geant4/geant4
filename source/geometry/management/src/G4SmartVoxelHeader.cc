@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.36 2010-07-05 09:22:58 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.37 2010-07-13 16:45:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -963,9 +963,10 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 #endif   
   }
   G4double nodeWidth = (motherMaxExtent-motherMinExtent)/noNodes;
+  if (nodeWidth==0)  { nodeWidth = 1.0; }
 
-// Create G4VoxelNodes. Will Add proxies before setting fslices
-//
+  // Create G4VoxelNodes. Will Add proxies before setting fslices
+  //
   G4NodeVector* nodeList = new G4NodeVector();
   if (!nodeList)
   {
@@ -987,6 +988,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
              << "        Node allocation failed." << G4endl;
       G4Exception("G4SmartVoxelHeader::BuildNodes()", "FatalError",
                   FatalException, "Node allocation error.");
+      return 0;
     }
     nodeList->push_back(pNode);
   }
@@ -1057,6 +1059,7 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
              << "        Proxy node allocation failed." << G4endl;
       G4Exception("G4SmartVoxelHeader::BuildNodes()", "FatalError",
                   FatalException, "Proxy node allocation failed.");
+      return 0;
     }
     proxyList->push_back(pProxyNode);
   }
