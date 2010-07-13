@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.11 2010-07-13 19:24:50 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.12 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -52,6 +52,8 @@
 
 
 // Constructor sets acceptance limits
+
+const G4double G4CascadeCheckBalance::tolerance = 1e-6;	// How small is zero?
 
 G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 					     G4double absolute,

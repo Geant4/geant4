@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.32 2010-07-01 22:56:43 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.33 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,9 +35,11 @@
 // 20100622  M. Kelsey -- Use local "bindingEnergy()" function to call through.
 // 20100701  M. Kelsey -- Don't need to add excitation to nuclear mass; compute
 //		new excitation energies properly (mass differences)
+// 20100713  M. Kelsey -- Add conservation checking, diagnostic messages.
 
 #include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
+#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -70,6 +72,9 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4cout << " evaporating target: " << G4endl;
     target->printParticle();
   }
+  
+  G4CascadeCheckBalance balance(0.005, 0.01, theName);	// Second arg is GeV
+  balance.setVerboseLevel(verboseLevel);
 
   const G4double a_cut = 5.0;
   const G4double z_cut = 3.0;
@@ -102,8 +107,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
     G4InuclElementaryParticle dummy(small_ekin, 1);
     G4LorentzConvertor toTheExitonSystemRestFrame;
-    toTheExitonSystemRestFrame.setVerbose(verboseLevel);
-
+    //*** toTheExitonSystemRestFrame.setVerbose(verboseLevel);
     toTheExitonSystemRestFrame.setBullet(dummy);
 
     G4double EFN = FermiEnergy(A, Z, 0);
@@ -123,7 +127,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	// update exiton system (include excitation energy!)
 	G4double nuc_mass = G4InuclNuclei::getNucleiMass(A, Z, EEXS); 
 	PEX.setVectM(PEX.vect(), nuc_mass);
-	toTheExitonSystemRestFrame.setTarget(PEX, nuc_mass);
+	toTheExitonSystemRestFrame.setTarget(PEX);
 	toTheExitonSystemRestFrame.toTheTargetRestFrame();
 
 	if (verboseLevel > 2) {
@@ -345,7 +349,6 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 			  G4LorentzVector ex_mom = 
 			    toTheExitonSystemRestFrame.backToTheLab(mom_at_rest);
-			  ex_mom.setVectM(ex_mom.vect(), new_exiton_mass);   
 
 			  // check energy conservation and set new exitation energy
 			  EEXS_new = (PEX.m() - part_mom.e() - ex_mom.m()) *GeV;
@@ -362,8 +365,8 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 			    A = A_new;
 			    Z = Z_new;
-			    PEX = ex_mom;
 			    EEXS = EEXS_new;
+			    PEX.setVectM(ex_mom.vect(), ex_mom.m()+(EEXS/GeV));
 			    NEX -= 1;
 			    QEX -= 1;
 			    QP -= 1.0;
@@ -451,9 +454,20 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     if (verboseLevel > 3) {
       G4cout << " remaining nucleus " << G4endl;
       nuclei.printParticle();
+
+      G4double eex_left = pin.m() - (nuclei.getMomentum()+ppout).m();	
+      eex_left /= GeV;		// Convert from Bertini units to MeV
+      G4cout << " Nucleus with EEXS " << EEXS << " get eex_left " << eex_left
+	     << G4endl;
     }
 
     output.addTargetFragment(nuclei);
+
+  if (verboseLevel > 3) output.printCollisionOutput();
+
+  balance.collide(0, target, output);		// Check energy conservation
+  balance.okay();
+
   return;
 }
 

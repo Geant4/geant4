@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.4 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.5 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -35,11 +35,13 @@
 // 20100628  M. Kelsey -- Add interface to take list of particles directly
 // 20100711  M. Kelsey -- Add name of parent Collider for reporting messages,
 //		allow changing parent name, add interface for nuclear fragments
+// 20100713  M. Kelsey -- Add (publicly adjustable) tolerance for zeroes
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
 #include "G4LorentzVector.hh"
 #include "G4InuclElementaryParticle.hh"
+#include <cmath>
 #include <vector>
 
 class G4InuclParticle;
@@ -47,6 +49,8 @@ class G4CollisionOutput;
 
 class G4CascadeCheckBalance : public G4VCascadeCollider {
 public:
+  static const G4double tolerance;	// Don't do floating zero!
+
   G4CascadeCheckBalance(G4double relative, G4double absolute,
 			const char* owner="G4CascadeCheckBalance");
   virtual ~G4CascadeCheckBalance() {};
@@ -76,16 +80,21 @@ public:
 				baryonOkay() && chargeOkay()); }
 
   // Calculations of conserved quantities from initial and final state
+  // FIXME:  Relative comparisons don't work for zero!
   G4double deltaE() const { return (final.e() - initial.e()); }
-  G4double relativeE() const { return (deltaE()==0.)?0.:deltaE()/initial.e(); }
+  G4double relativeE() const {
+    return (std::abs(deltaE())<tolerance) ? 0. : deltaE()/initial.e();
+  }
 
   G4double deltaKE() const { return (ekin(final) - ekin(initial)); }
   G4double relativeKE() const {
-    return (ekin(initial)<=0.) ? 0. : deltaKE()/ekin(initial);
+    return (std::abs(deltaKE())<tolerance) ? 0. : deltaKE()/ekin(initial);
   }
 
   G4double deltaP() const { return (final.rho() - initial.rho()); }
-  G4double relativeP() const { return (deltaP()==0.)?0.:deltaP()/initial.rho(); }
+  G4double relativeP() const {
+    return (std::abs(deltaP())<tolerance) ? 0. : deltaP()/initial.rho(); 
+  }
 
   // Baryon number and charge are discrete; no bounds and no "relative" scale
   G4double deltaB() const { return (finalBaryon - initialBaryon); }

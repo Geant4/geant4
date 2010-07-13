@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.30 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.31 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +33,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100622  M. Kelsey -- Use local "bindingEnergy()" to call through
 // 20100711  M. Kelsey -- Add energy-conservation checking, reduce if-cascades
+// 20100713  M. Kelsey -- Don't add excitation energy to mass (already there)
 
 #include "G4Fissioner.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -72,7 +73,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   G4double Z = nuclei_target->getZ();
   G4double EEXS = nuclei_target->getExitationEnergy();
   G4double mass_in = nuclei_target->getMass();
-  G4double e_in = mass_in + 0.001 * EEXS;
+  G4double e_in = mass_in; /**** + 0.001 * EEXS; ****/	// Mass includes EEXS
   G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A - Z) + G4cbrt(Z));
   G4double TEM = std::sqrt(EEXS / PARA);
   G4double TETA = 0.494 * G4cbrt(A) * TEM;

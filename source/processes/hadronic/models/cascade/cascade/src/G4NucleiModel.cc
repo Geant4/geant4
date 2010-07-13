@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.61 2010-07-13 19:24:50 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.62 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -793,7 +793,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     return outgoing_cparticles;
   }
 
-  G4int npart = thePartners.size();
+  G4int npart = thePartners.size();	// Last item is a total-path placeholder
 
   if (npart == 1) { 		// cparticle is on the next zone entry
     cparticle.propagateAlongThePath(thePartners[0].second);
@@ -815,7 +815,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     G4int zone = cparticle.getCurrentZone();
     
     G4CollisionOutput output;
-    for (G4int i=0; i<npart-1; i++) {
+    for (G4int i=0; i<npart-1; i++) {	// Last item is a total-path placeholder
       if (i > 0) cparticle.updatePosition(old_position); 
       
       G4InuclElementaryParticle target = thePartners[i].first; 
@@ -907,9 +907,10 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     if (no_interaction) { 		// still no interactions
       if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
 
+      // Last "partner" is just a total-path placeholder
       cparticle.updatePosition(old_position); 
-      cparticle.propagateAlongThePath(thePartners[npart - 1].second);
-      cparticle.incrementCurrentPath(thePartners[npart - 1].second);
+      cparticle.propagateAlongThePath(thePartners[npart-1].second);
+      cparticle.incrementCurrentPath(thePartners[npart-1].second);
       boundaryTransition(cparticle);
       outgoing_cparticles.push_back(cparticle);
     }

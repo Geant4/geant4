@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.48 2010-07-13 19:24:50 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.49 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -77,7 +77,7 @@ G4IntraNucleiCascader::~G4IntraNucleiCascader() {}
 void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,
 				    G4CollisionOutput& output) {
-  if (verboseLevel > 3) {
+  if (verboseLevel) {
     G4cout << " >>> G4IntraNucleiCascader::collide inter_case " << inter_case 
 	   << G4endl;
   }
@@ -106,9 +106,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   model.generateModel(tnuclei);
 
-  // FIXME:  This should depend on dynamic (model) nucleus, which
-  //         may have lost protons or neutrons, not original target
-  //	     ==> Should be moved down to "CBP" tunneling calculation
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
                                       (1.+G4cbrt(tnuclei->getA()));
 
@@ -138,7 +135,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     G4ExitonConfiguration theExitonConfiguration;
     std::vector<G4InuclElementaryParticle> output_particles;
 
-    // NOTE:  After deductions, these ought to match model "Current" values
     G4double afin = tnuclei->getA();	// Will deduct outgoing particles
     G4double zfin = tnuclei->getZ();	//    to determine recoil state
    
@@ -263,9 +259,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
      	    // Calculate barrier penetration
             G4double CBP = 0.0; 
 
-	    // FIXME:  This should depend on current (model) nucleus, which
-	    //         may have lost protons or neutrons, no original target
-
 	    // if (KE > 0.0001) CBP = std::exp(-0.00126*tnuclei->getZ()*0.25*
 	    //   (1./KE - 1./coulombBarrier));
             if (KE > 0.0001) CBP = std::exp(-0.0181*0.5*tnuclei->getZ()*
@@ -275,9 +268,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
             if (G4UniformRand() < CBP) {
 	      if (verboseLevel > 3) {
 		G4cout << " tunneled " << G4endl;
-		// FIXME:  For particles which escape, should adjust KE
 		currentParticle.printParticle();
 	      }
+	      // FIXME:  For particles which escape, should adjust KE
 	      output_particles.push_back(currentParticle);
             } else {
               G4int xtype = currentParticle.type();

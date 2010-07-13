@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.36 2010-07-13 19:24:50 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.37 2010-07-13 23:20:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -158,14 +158,14 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   
   theIntraNucleiCascader.setInteractionCase(interCase.code());
 
-  G4bool bad = true;
   G4int itry = 0;
-  while (bad && itry < itry_max) {
+  while (itry < itry_max) {
     itry++;
     if (verboseLevel > 2)
       G4cout << " IntraNucleiCascader itry " << itry << G4endl;
 
-    output.reset();			// Clear buffers for this attempt
+    globalOutput.reset();		// Clear buffers for this attempt
+    output.reset();	
     TRFoutput.reset();
     
     if (interCase.hadNucleus()) {
@@ -196,10 +196,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	if (verboseLevel > 1) {
 	  G4cout << " big bang after cascade " << G4endl;
 	}
-	
+
+	// Add result of explosion diretly to output
 	theBigBanger.collide(0,&cascad_rec_nuclei, TRFoutput);
       } else {
-	output.reset();
+	output.reset();			// Buffer for debugging evaporators
 	theNonEquilibriumEvaporator.collide(0, &cascad_rec_nuclei, output);
 	
 	if (verboseLevel > 1) {
@@ -213,6 +214,8 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	balance.okay();			// Do checks, but ignore result
 	
 	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+
+	// Use nuclear fragment left from non-equilibrium for next step
 	G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
 	
 	output.reset();
@@ -249,10 +252,9 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
       balance.okay();		// Do checks, but ignore result
     }
 
+    // Adjust final state particles to balance momentum and energy
     globalOutput.setOnShell(bullet, target);
     if (globalOutput.acceptable()) return;
-    
-    globalOutput.reset();		// Clear and try again
   }
   
   if (verboseLevel) {
