@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2010-07-12 11:40:10 gunter Exp $
+$Id: History,v 1.60 2010-07-13 12:24:51 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,6 +12,10 @@ $Id: History,v 1.59 2010-07-12 11:40:10 gunter Exp $
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Jul-2010 G.Folger                (testtools-QMtest-V09-03-11)
+-  enable to run test202
+- add new radioActiv extended example
+- increase timelimit in test12-FTFBIC-run
 
 12-Jul-2010 G.Folger                (testtools-QMtest-V09-03-10)
 - in ...gdml-g01-run add missing dep. on build
