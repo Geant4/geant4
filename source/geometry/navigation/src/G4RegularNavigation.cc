@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.9 2009-01-27 09:31:29 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.10 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -44,7 +44,7 @@
 
 //------------------------------------------------------------------
 G4RegularNavigation::G4RegularNavigation()
-  : fVerbose(1), fCheck(true)
+  : fverbose(false), fcheck(false), fnormalNav(0)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
@@ -293,7 +293,6 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
                                   const G4bool pLocatedOnEdge, 
                                   G4ThreeVector& localPoint )
 {
-  G4SmartVoxelHeader *motherVoxelHeader;
   G4VPhysicalVolume *motherPhysical, *pPhysical;
   G4PhantomParameterisation *pParam;
   G4LogicalVolume *motherLogical;
@@ -303,7 +302,6 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   
   motherPhysical = history.GetTopVolume();
   motherLogical = motherPhysical->GetLogicalVolume();
-  motherVoxelHeader = motherLogical->GetVoxelHeader();
   
   pPhysical = motherLogical->GetDaughter(0);
   pParam = (G4PhantomParameterisation*)(pPhysical->GetParameterisation());

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.hh,v 1.2 2007-10-18 14:18:36 gcosmo Exp $
+// $Id: G4RegularNavigation.hh,v 1.3 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -115,15 +115,15 @@ class G4RegularNavigation
 
     // Set and Get methods
 
-    void SetVerboseLevel(G4int level) { fVerbose = level; }
-    void CheckMode(G4bool mode) { fCheck = mode; }
+    void SetVerboseLevel(G4int level) { fverbose = level; }
+    void CheckMode(G4bool mode) { fcheck = mode; }
     void SetNormalNavigation( G4NormalNavigation* fnormnav )
       { fnormalNav = fnormnav; }
 
   private:
 
-    G4int fVerbose;
-    G4bool fCheck;
+    G4int fverbose;
+    G4bool fcheck;
 
     G4NormalNavigation* fnormalNav;
     G4double kCarTolerance;  

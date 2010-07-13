@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.12 2007-11-09 16:06:02 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.13 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,8 @@
 // ********************************************************************
 //
 G4ParameterisedNavigation::G4ParameterisedNavigation()
-  : fVoxelHeader(0)
+  : fVoxelAxis(kUndefined), fVoxelNoSlices(0), fVoxelSliceWidth(0.),
+    fVoxelNodeNo(0), fVoxelHeader(0)
 {
 }
 
