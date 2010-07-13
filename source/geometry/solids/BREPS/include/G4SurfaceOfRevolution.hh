@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceOfRevolution.hh,v 1.6 2009-11-13 14:29:52 gcamelli Exp $
+// $Id: G4SurfaceOfRevolution.hh,v 1.7 2010-07-13 14:44:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,6 @@
 // Definition of a surface of revolution.
 // (not implemented yet).
 //
-// Author: G.Camellini.
 // ----------------------------------------------------------------------
 #ifndef included_G4SurfaceOfRevolution
 #define included_G4SurfaceOfRevolution
