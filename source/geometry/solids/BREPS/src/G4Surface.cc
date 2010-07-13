@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.18 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4Surface.cc,v 1.19 2010-07-13 14:47:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -39,7 +39,8 @@
 #include "G4GeometryTolerance.hh"
 
 G4Surface::G4Surface()
-  : bbox(0), next(0), Intersected(0), Type(0), AdvancedFace(0),
+  : G4STEPEntity(),
+    bbox(0), next(0), Intersected(0), Type(0), AdvancedFace(0),
     active(1), distance(kInfinity), uhit(0.), vhit(0.)
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
@@ -53,7 +54,8 @@ G4Surface::~G4Surface()
 
 
 G4Surface::G4Surface( const G4Surface& c )
-  : bbox(c.bbox), next(c.next), Intersected(c.Intersected), Type(c.Type),
+  : G4STEPEntity(),
+    bbox(c.bbox), next(c.next), Intersected(c.Intersected), Type(c.Type),
     AdvancedFace(c.AdvancedFace), active(c.active), distance(c.distance),
     uhit(c.uhit), vhit(c.vhit)
 {
