@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPool.hh,v 1.6 2010-04-01 12:43:12 gcosmo Exp $
+// $Id: G4AllocatorPool.hh,v 1.7 2010-07-14 10:45:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,9 +57,6 @@ class G4AllocatorPool
     ~G4AllocatorPool();
       // Destructor. Return storage to the free store
 
-    G4AllocatorPool(const G4AllocatorPool& right);
-      // Copy constructor
-
     inline void* Alloc();
       // Allocate one element
     inline void  Free( void* b );
@@ -79,6 +76,8 @@ class G4AllocatorPool
 
   private:
 
+    G4AllocatorPool(const G4AllocatorPool& right);
+      // Provate copy constructor
     G4AllocatorPool& operator= (const G4AllocatorPool& right);
       // Private equality operator
 
