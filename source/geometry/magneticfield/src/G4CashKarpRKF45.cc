@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.15 2008-01-11 18:11:44 japost Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.16 2010-07-14 10:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -48,9 +48,9 @@
 G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs, 
 				 G4int noIntegrationVariables, 
 				 G4bool primary)
-  : G4MagIntegratorStepper(EqRhs, noIntegrationVariables)
+  : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
+    fLastStepLength(0.), fAuxStepper(0)
 {
-  // unsigned int noVariables= std::max(numberOfVariables,8); // For Time .. 7+1
   const G4int numberOfVariables = noIntegrationVariables;
 
   ak2 = new G4double[numberOfVariables] ;  
@@ -68,10 +68,10 @@ G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs,
 
   fMidVector = new G4double[numberOfVariables];
   fMidError =  new G4double[numberOfVariables];
-  fAuxStepper = 0;   
-  if( primary ) 
-      fAuxStepper = new G4CashKarpRKF45(EqRhs, numberOfVariables, !primary);
-
+  if( primary )
+  { 
+    fAuxStepper = new G4CashKarpRKF45(EqRhs, numberOfVariables, !primary);
+  }
 }
 
 /////////////////////////////////////////////////////////////////////

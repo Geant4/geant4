@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.15 2007-08-21 10:17:41 tnikitin Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.16 2010-07-14 10:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -34,18 +34,15 @@
 #include "G4Mag_EqRhs.hh"
 
 G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
-  : G4MagIntegratorStepper(EqRhs,6)
+  : G4MagIntegratorStepper(EqRhs,6), hStep(0.), fPtrMagEqOfMot(EqRhs)
 {
-  
-  fPtrMagEqOfMot=EqRhs;
-
 }
 
 G4RKG3_Stepper::~G4RKG3_Stepper()
 {
 }
 
-void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
+void G4RKG3_Stepper::Stepper(  const G4double yInput[7],
                                const G4double dydx[7],
                                      G4double Step,
                                      G4double yOut[7],

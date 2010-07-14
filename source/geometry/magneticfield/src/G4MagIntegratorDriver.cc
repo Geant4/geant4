@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.56 2009-11-12 18:41:03 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.57 2010-07-14 10:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
     fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0),
     fNoInitialSmallSteps(0), fDyerr_max(0.0), fDyerr_mx2(0.0), 
     fDyerrPos_smTot(0.0), fDyerrPos_lgTot(0.0), fDyerrVel_lgTot(0.0), 
-    fSumH_sm(0.0),   fSumH_lg(0.0),
+    fSumH_sm(0.0), fSumH_lg(0.0),
     fStatisticsVerboseLevel(statisticsVerbose)
 {  
   // In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8

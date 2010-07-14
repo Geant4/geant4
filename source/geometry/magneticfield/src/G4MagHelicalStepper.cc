@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.23 2007-09-05 12:20:17 gcosmo Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.24 2010-07-14 10:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -44,10 +44,10 @@ const G4double G4MagHelicalStepper::fUnitConstant = 0.299792458*(GeV/(tesla*m));
 
 
 G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
-   : G4MagIntegratorStepper(EqRhs, 6)  // integrate over 6 variables only !!
+   : G4MagIntegratorStepper(EqRhs, 6), // integrate over 6 variables only !!
                                        // position & velocity
+     fPtrMagEqOfMot(EqRhs), fAngCurve(0.), frCurve(0.), frHelix(0.)
 {
-  fPtrMagEqOfMot = EqRhs;
 }
 
 G4MagHelicalStepper::~G4MagHelicalStepper()

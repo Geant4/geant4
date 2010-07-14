@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithEDM.hh,v 1.1 2009-11-04 23:51:42 gum Exp $
+// $Id: G4EqEMFieldWithEDM.hh,v 1.2 2010-07-14 10:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -77,11 +77,10 @@ class G4EqEMFieldWithEDM : public G4EquationOfMotion
 
     G4double fElectroMagCof ;
     G4double fMassCof;
-
     G4double omegac;
     G4double anomaly;
     G4double eta;
-    G4double ParticleCharge;
+    G4double pcharge;
     G4double E;
     G4double gamma;
     G4double beta;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc,v 1.12 2006-06-29 18:24:42 gunter Exp $
+// $Id: G4Mag_UsualEqRhs.cc,v 1.13 2010-07-14 10:00:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,7 @@
 #include "G4MagneticField.hh"
 
 G4Mag_UsualEqRhs::G4Mag_UsualEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ) {}
+  : G4Mag_EqRhs( MagField ), fInvCurrentMomentumXc(0.) {}
 
 G4Mag_UsualEqRhs::~G4Mag_UsualEqRhs() {}
 
