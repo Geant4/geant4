@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.70 2010-07-14 15:41:13 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.71 2010-07-14 19:43:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -61,6 +61,9 @@
 // 20100625  M. Kelsey -- Two bugs in n-body momentum, last particle recoil
 // 20100713  M. Kelsey -- Bump collide start message up to verbose > 1
 // 20100714  M. Kelsey -- Move conservation checking to base class
+// 20100714  M. Kelsey -- Add sanity check for two-body final state, to ensure
+//		that final state total mass is below etot_scm; also compute
+//		kinematics without "rescaling" (which led to non-conservation)
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -157,12 +160,15 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     } else {
       convertToSCM.setBullet(particle2);
       convertToSCM.setTarget(particle1);
-    };  
+    };
+
+    convertToSCM.setVerbose(verboseLevel);
+
     convertToSCM.toTheCenterOfMass();
     G4double ekin = convertToSCM.getKinEnergyInTheTRS();
     G4double etot_scm = convertToSCM.getTotalSCMEnergy();
     G4double pscm = convertToSCM.getSCMMomentum();
-    
+
     generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2,
 			  &convertToSCM);
     
@@ -174,7 +180,18 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	ipart->setMomentum(mom); 
       };
 
-      validateOutput(bullet, target, particles);	// Check conservation
+      if (!validateOutput(bullet, target, particles)) {	// Check conservation
+	if (verboseLevel) {
+	  G4cout << " incoming particles: " << G4endl;
+	  particle1->printParticle();
+	  particle2->printParticle();
+	  G4cout << " outgoing particles: " << G4endl;
+	  for(ipart = particles.begin(); ipart != particles.end(); ipart++)
+	    ipart->printParticle();
+	  G4cout << " <<< Non-conservation in G4ElementaryParticleCollider"
+		 << G4endl;
+	}
+      }
 
       std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
       output.addOutgoingParticles(particles);
@@ -300,49 +317,51 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
   G4int multiplicity = 0;
   G4bool generate = true;
 
-  particles.clear();		// Initialize buffers for this event
-  particle_kinds.clear();
-
   while (generate) {
-    if(multiplicity == 0) {
-      multiplicity = generateMultiplicity(is, ekin);
-    } else {
-      multiplicity = generateMultiplicity(is, ekin);
-      particle_kinds.clear();
-    }
+    particles.clear();		// Initialize buffers for this event
+    particle_kinds.clear();
 
     // Generate list of final-state particles
-    generateOutgoingPartTypes(is, multiplicity, ekin);
+    multiplicity = generateMultiplicity(is, ekin);
 
+    generateOutgoingPartTypes(is, multiplicity, ekin);
     if (particle_kinds.empty()) continue;
-    // G4cout << " Particle kinds = " ;
-    // for (G4int i = 0; i < multiplicity; i++) G4cout << particle_kinds[i] << " , " ;
-    // G4cout << G4endl;
 
     if (multiplicity == 2) {
       // Identify charge or strangeness exchange (non-elastic scatter)
       G4int finaltype = particle_kinds[0]*particle_kinds[1];
       G4int kw = (finaltype != is) ? 2 : 1;
 
-      G4double pmod = pscm;	// May need to rescale momentum
-      if (kw == 2) {
-	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
-	m1 *= m1;
-	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
-	m2 *= m2;	 
-	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
-	G4double em = a * a - m1 * m2;
+      G4double pmod = pscm;	// Elastic scattering preserves CM momentum
 
-        if (em > 0) { 		//  It is possible to rescale
-	  pmod = std::sqrt( em / (m1 + m2 + 2.0 * a));
+      if (kw == 2) {		// Non-elastic needs new CM momentum value
+	G4double m1 = dummy.getParticleMass(particle_kinds[0]);
+	G4double m2 = dummy.getParticleMass(particle_kinds[1]);
+
+	if (etot_scm < m1+m2) {		// Can't produce final state
+	  if (verboseLevel > 2) {
+	    G4cerr << " bad final state " << particle_kinds[0]
+		   << " , " << particle_kinds[1] << " etot_scm " << etot_scm
+		   << " < m1+m2 " << m1+m2 << " , but ekin " << ekin << G4endl;
+	  }
+	  continue;
 	}
+
+	G4double ecm_sq = etot_scm*etot_scm;
+	G4double msumsq = m1+m2; msumsq *= msumsq;
+	G4double mdifsq = m1-m2; mdifsq *= mdifsq;
+
+	G4double a = (ecm_sq - msumsq) * (ecm_sq - mdifsq);
+
+	pmod = std::sqrt(a)/(2.*etot_scm);
       }
 
       G4LorentzVector mom = sampleCMmomentumFor2to2(is, kw, ekin, pmod);
 
-      if (verboseLevel > 3){
+      if (verboseLevel > 3) {
 	G4cout << " Particle kinds = " << particle_kinds[0] << " , "
 	       << particle_kinds[1] << G4endl
+	       << " pscm " << pscm << " pmod " << pmod << G4endl
 	       << " before rotation px " << mom.x() << " py " << mom.y()
 	       << " pz " << mom.z() << G4endl;
       }

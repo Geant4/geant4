@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.38 2010-07-14 15:41:13 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.39 2010-07-14 19:43:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -37,7 +37,8 @@
 //		use new four-vector conservation check.
 // 20100701  M. Kelsey -- Bug fix energy-conservation after equilibrium evap,
 //		pass verbosity through to G4CollisionOutput
-// 20100714  M. Kelsey -- Move conservation checking to base class
+// 20100714  M. Kelsey -- Move conservation checking to base class, report
+//		number of iterations at end
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -236,7 +237,12 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 
     // Adjust final state particles to balance momentum and energy
     globalOutput.setOnShell(bullet, target);
-    if (globalOutput.acceptable()) return;
+    if (globalOutput.acceptable()) {
+      if (verboseLevel) 
+	G4cout << " InuclCollider output after trials " << itry << G4endl;
+
+      return;
+    }
   }
   
   if (verboseLevel) {

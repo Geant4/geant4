@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.91 2010-07-14 15:41:13 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.92 2010-07-14 19:43:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -49,6 +49,7 @@
 //		to output if E-violation exceeds maxTries; use CheckBalance
 //		for baryon and charge conservation.
 // 20100701  M. Kelsey -- Pass verbosity through to G4CollisionOutput
+// 20100714  M. kelsey -- Report number of iterations before success
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -275,11 +276,11 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // Successful cascade -- clean up and return
-  if (verboseLevel > 1) {
-    G4cout << " Cascade output after " << nTries << " tries: " << G4endl;
-    output.printCollisionOutput();
+  if (verboseLevel) {
+    G4cout << " Cascade output after trials " << nTries << G4endl;
+    if (verboseLevel > 1) output.printCollisionOutput();
   }
-  
+
   // Rotate event to put Z axis along original projectile direction
   output.rotateEvent(toLabFrame);
 
