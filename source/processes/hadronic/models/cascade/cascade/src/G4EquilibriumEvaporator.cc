@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.39 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.40 2010-07-14 04:22:25 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -517,15 +517,11 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	if (foutput.getNucleiFragments().size() == 2) { // fission o'k
 	  if (verboseLevel > 2) G4cout << " fission done in eql" << G4endl;
 
-	  // Copy fragment list and convert back to the lab
-	  std::vector<G4InuclNuclei> nuclea(foutput.getNucleiFragments());
-	  G4LorentzVector mom;
-	  for(G4int i = 0; i < 2; i++) {
-	    mom = toTheNucleiSystemRestFrame.backToTheLab(nuclea[i].getMomentum());
-	    nuclea[i].setMomentum(mom);
-	  }
+	  // Move fission fragments to lab frame for processing
+	  foutput.boostToLabFrame(toTheNucleiSystemRestFrame);
 
 	  // Now evaporate the fission fragments individually
+	  std::vector<G4InuclNuclei>& nuclea = foutput.getNucleiFragments();
 	  this->collide(0, &nuclea[0], output);
 	  this->collide(0, &nuclea[1], output);
 
@@ -563,11 +559,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   if (verboseLevel > 3) {
     G4cout << " remaining nucleus " << G4endl;
     nuclei.printParticle();
-
-    G4double eex_left = pin.m() - (nuclei.getMomentum()+ppout).m();	
-    eex_left /= GeV;		// Convert from Bertini units to MeV
-    G4cout << " Nucleus with EEXS " << EEXS << " get eex_left " << eex_left
-	   << G4endl;
   }
 
   output.addTargetFragment(nuclei);

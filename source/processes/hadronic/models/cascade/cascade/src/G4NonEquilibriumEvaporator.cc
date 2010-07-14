@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.33 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.34 2010-07-14 04:22:25 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -454,11 +454,6 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     if (verboseLevel > 3) {
       G4cout << " remaining nucleus " << G4endl;
       nuclei.printParticle();
-
-      G4double eex_left = pin.m() - (nuclei.getMomentum()+ppout).m();	
-      eex_left /= GeV;		// Convert from Bertini units to MeV
-      G4cout << " Nucleus with EEXS " << EEXS << " get eex_left " << eex_left
-	     << G4endl;
     }
 
     output.addTargetFragment(nuclei);
