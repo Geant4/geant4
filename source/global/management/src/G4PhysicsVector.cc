@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.46 2010-05-28 05:13:43 kurasige Exp $
+// $Id: G4PhysicsVector.cc,v 1.47 2010-07-14 10:44:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -444,7 +444,7 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  if(!useSpline) return useSpline;
+  if(!useSpline)  { return useSpline; }
   secDerivative.clear();
   secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; ++j)
@@ -463,16 +463,17 @@ G4bool G4PhysicsVector::SplinePossible()
 std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning
-  out << std::setprecision(12) << pv.edgeMin;
-  out <<" " << pv.edgeMax <<" "  << pv.numberOfNodes << G4endl; 
+  out << std::setprecision(12) << pv.edgeMin << " "
+      << pv.edgeMax << " " << pv.numberOfNodes << G4endl; 
 
   // contents
   out << pv.dataVector.size() << G4endl; 
   for(size_t i = 0; i < pv.dataVector.size(); i++)
   {
-    out << std::setprecision(12) << pv.binVector[i] << "  "
-        << pv.dataVector[i] << G4endl;
+    out << pv.binVector[i] << "  " << pv.dataVector[i] << G4endl;
   }
+  out << std::setprecision(6);
+
   return out;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.9 2007-11-13 17:35:06 gcosmo Exp $
+// $Id: G4DataVector.cc,v 1.10 2010-07-14 10:44:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,11 +129,12 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     
 std::ostream& operator<<(std::ostream& out, const G4DataVector& pv)
 {
-  out << pv.size() << G4endl; 
+  out << pv.size() << std::setprecision(12) << G4endl; 
   for(size_t i = 0; i < pv.size(); i++)
   {
-    out << std::setprecision(12) << pv[i] << G4endl;
+    out << pv[i] << G4endl;
   }
+  out << std::setprecision(6);
 
   return out;
 }
