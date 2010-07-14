@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.hh,v 1.32 2010-06-25 09:43:12 gunter Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.33 2010-07-14 15:41:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -40,11 +40,12 @@
 // 20100511  M. Kelsey -- Remove G4PionSampler and G4NucleonSampler.  Expand
 //		particle-types selector to all modes, not just strangeness.
 // 20100517  M. Kelsey -- Inherit from common base class, make arrays static
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
 #include <vector>
@@ -53,7 +54,7 @@ class G4LorentzConvertor;
 class G4CollisionOutput;
 
 
-class G4ElementaryParticleCollider : public G4VCascadeCollider {
+class G4ElementaryParticleCollider : public G4CascadeColliderBase {
 public:
   G4ElementaryParticleCollider();
   virtual ~G4ElementaryParticleCollider() {};

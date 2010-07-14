@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationInuclCollider.cc,v 1.11 2010-06-25 09:44:28 gunter Exp $
+// $Id: G4EvaporationInuclCollider.cc,v 1.12 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,7 @@
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members.  Eliminate unnecessary G4InuclNuclei ctor.
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #include "G4EvaporationInuclCollider.hh"
 #include "G4CollisionOutput.hh"
@@ -43,7 +44,7 @@ typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 	 
 G4EvaporationInuclCollider::G4EvaporationInuclCollider()
-  : G4VCascadeCollider("G4EvaporationInuclCollider"),
+  : G4CascadeColliderBase("G4EvaporationInuclCollider"),
     theEquilibriumEvaporator(new G4EquilibriumEvaporator) {}
 
 void

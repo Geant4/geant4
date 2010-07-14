@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.13 2010-06-23 19:25:35 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.14 2010-07-14 15:41:12 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -32,18 +32,19 @@
 // 20100617  M. Kelsey -- Make G4NucleiModel a data member, instead of
 //		creating and deleting on every cycle.
 // 20100623  M. Kelsey -- Undo change from 0617.  G4NucleiModel not reusable.
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 #include "G4ElementaryParticleCollider.hh"
 
 class G4CollisionOutput;
 class G4InuclParticle;
 
 
-class G4IntraNucleiCascader : public G4VCascadeCollider {
+class G4IntraNucleiCascader : public G4CascadeColliderBase {
 public:
   G4IntraNucleiCascader();
   virtual ~G4IntraNucleiCascader();

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.90 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.91 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -192,7 +192,8 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     }
   } else {  			// treat all other targets excepet H(1,1)
     do { 			// we try to create inelastic interaction
-      if (verboseLevel > 1) G4cout << " Generating cascade" << G4endl;
+      if (verboseLevel > 1)
+	G4cout << " Generating cascade attempt " << nTries << G4endl;
 
       output.reset();
       collider.collide(bullet, target, output);
@@ -275,7 +276,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   // Successful cascade -- clean up and return
   if (verboseLevel > 1) {
-    G4cout << " Cascade output: " << G4endl;
+    G4cout << " Cascade output after " << nTries << " tries: " << G4endl;
     output.printCollisionOutput();
   }
   

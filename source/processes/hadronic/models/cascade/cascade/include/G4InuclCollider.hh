@@ -22,18 +22,19 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.hh,v 1.15 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4InuclCollider.hh,v 1.16 2010-07-14 15:41:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members
 // 20100620  M. Kelsey -- Move output buffers here to reduce memory churn
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #ifndef G4INUCL_COLLIDER_HH
 #define G4INUCL_COLLIDER_HH
 
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
@@ -44,7 +45,7 @@
 class G4CollisionOutput;
 class G4InuclParticle;
 
-class G4InuclCollider : public G4VCascadeCollider {
+class G4InuclCollider : public G4CascadeColliderBase {
 public:
   G4InuclCollider();
   virtual ~G4InuclCollider();

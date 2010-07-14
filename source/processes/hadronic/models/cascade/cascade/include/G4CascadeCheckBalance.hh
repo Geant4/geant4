@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.5 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.6 2010-07-14 15:41:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -40,10 +40,11 @@
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
 #include "G4LorentzVector.hh"
-#include "G4InuclElementaryParticle.hh"
 #include <cmath>
 #include <vector>
 
+class G4InuclElementaryParticle;
+class G4InuclNuclei;
 class G4InuclParticle;
 class G4CollisionOutput;
 

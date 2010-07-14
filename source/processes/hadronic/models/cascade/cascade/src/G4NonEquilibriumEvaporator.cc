@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.34 2010-07-14 04:22:25 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.35 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,21 +36,21 @@
 // 20100701  M. Kelsey -- Don't need to add excitation to nuclear mass; compute
 //		new excitation energies properly (mass differences)
 // 20100713  M. Kelsey -- Add conservation checking, diagnostic messages.
+// 20100714  M. Kelsey -- Move conservation checking to base class
 
-#include <cmath>
 #include "G4NonEquilibriumEvaporator.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
+#include <cmath>
 
 using namespace G4InuclSpecialFunctions;
 
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
-  : G4VCascadeCollider("G4NonEquilibriumEvaporator") {}
+  : G4CascadeColliderBase("G4NonEquilibriumEvaporator") {}
 
 
 void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
@@ -73,9 +73,6 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     target->printParticle();
   }
   
-  G4CascadeCheckBalance balance(0.005, 0.01, theName);	// Second arg is GeV
-  balance.setVerboseLevel(verboseLevel);
-
   const G4double a_cut = 5.0;
   const G4double z_cut = 3.0;
 
@@ -441,8 +438,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     // conservation
 
     G4LorentzVector pnuc = pin - ppout;
-    G4InuclNuclei nuclei(pnuc, A, Z, EEXS);
-    nuclei.setModel(5);
+    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, 5);
 
     /***** THIS SHOULD NOT BE NECESSARY IF EEXS WAS COMPUTED RIGHT
     pnuc = nuclei.getMomentum(); 
@@ -458,10 +454,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
     output.addTargetFragment(nuclei);
 
-  if (verboseLevel > 3) output.printCollisionOutput();
-
-  balance.collide(0, target, output);		// Check energy conservation
-  balance.okay();
+    validateOutput(0, target, output);	// Check energy conservation, etc.
 
   return;
 }

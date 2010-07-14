@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.49 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.50 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -50,7 +50,9 @@
 // 20100706  D. Wright -- Copy "abandoned" cparticles to output list, copy
 //		mesonic "excitons" to output list; should be absorbed, fix up
 //		diagnostic messages.
-// 20100720  M. Kelsey -- Add more diagnostics for Dennis' changes.
+// 20100713  M. Kelsey -- Add more diagnostics for Dennis' changes.
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class, remove
+//		sanity check on afin/zfin (not valid).
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -69,7 +71,7 @@ using namespace G4InuclSpecialFunctions;
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : G4VCascadeCollider("G4IntraNucleiCascader") {}
+  : G4CascadeColliderBase("G4IntraNucleiCascader") {}
 
 G4IntraNucleiCascader::~G4IntraNucleiCascader() {}
 
@@ -360,23 +362,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       zfin -= ipart->getCharge();
       afin -= ipart->baryon();
     };
-
-    // NOTE:  After deductions, afin/zfin ought to match model "Current" values
-    if (verboseLevel) {
-      if (zfin != model.getNumberOfProtons()) {
-	G4cerr << " >>> G4IntraNucleiCascader ERROR:  zfin " << zfin
-	       << " doesn't match protons left in model "
-	       << model.getNumberOfProtons() << G4endl;
-      }
-
-      G4double modelA = (model.getNumberOfNeutrons() +
-			 model.getNumberOfProtons());
-      if (afin != modelA) {
-	G4cerr << " >>> G4IntraNucleiCascader ERROR:  afin " << afin
-	       << " doesn't match nucleons left in model " << modelA
-	       << G4endl;
-      }
-    }
 
     if (afin<0. || zfin<0. || afin<zfin) {  // Sanity check before proceeding
       G4cerr << " >>> G4IntraNucleiCascader ERROR:  Recoil nucleus is not"

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.31 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.32 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,9 +34,9 @@
 // 20100622  M. Kelsey -- Use local "bindingEnergy()" to call through
 // 20100711  M. Kelsey -- Add energy-conservation checking, reduce if-cascades
 // 20100713  M. Kelsey -- Don't add excitation energy to mass (already there)
+// 20100714  M. Kelsey -- Move conservation checking to base class
 
 #include "G4Fissioner.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -47,7 +47,7 @@
 using namespace G4InuclSpecialFunctions;
 
 
-G4Fissioner::G4Fissioner() : G4VCascadeCollider("G4Fissioner") {}
+G4Fissioner::G4Fissioner() : G4CascadeColliderBase("G4Fissioner") {}
 
 void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 			  G4InuclParticle* target,
@@ -164,27 +164,17 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
   G4double EEXS1 = EV*A1;
   G4double EEXS2 = EV*A2;
-  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, 7);        
-  output.addTargetFragment(nuclei1);
-  
-  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, 7);        
-  output.addTargetFragment(nuclei2);
 
-  // Check energy conservation before exiting
-  G4CascadeCheckBalance balance(0.005, 0.01, theName);	// Second arg is GeV
-  balance.setVerboseLevel(verboseLevel);
+  G4InuclNuclei nuclei1(mom1, A1, Z1, EEXS1, 7);        
+  G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, 7);        
 
   // Pass only last two nuclear fragments
   static std::vector<G4InuclNuclei> frags(2);		// Always the same size!
   frags[0] = nuclei1;
   frags[1] = nuclei2;
-  balance.collide(0, target, frags);
-  balance.okay();
+  validateOutput(0, target, frags);		// Check energy conservation
 
-  if (verboseLevel > 3) {
-    nuclei1.printParticle();
-    nuclei2.printParticle();
-  }
+  output.addTargetFragments(frags);
 }
 
 G4double G4Fissioner::getC2(G4double A1, 

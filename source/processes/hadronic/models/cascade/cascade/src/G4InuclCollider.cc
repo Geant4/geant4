@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.cc,v 1.37 2010-07-13 23:20:10 mkelsey Exp $
+//
+// $Id: G4InuclCollider.cc,v 1.38 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,10 +37,10 @@
 //		use new four-vector conservation check.
 // 20100701  M. Kelsey -- Bug fix energy-conservation after equilibrium evap,
 //		pass verbosity through to G4CollisionOutput
+// 20100714  M. Kelsey -- Move conservation checking to base class
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4EquilibriumEvaporator.hh"
@@ -50,7 +51,7 @@
 
 
 G4InuclCollider::G4InuclCollider()
-  : G4VCascadeCollider("G4InuclCollider") {}
+  : G4CascadeColliderBase("G4InuclCollider") {}
 
 G4InuclCollider::~G4InuclCollider() {}
 
@@ -71,10 +72,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   TRFoutput.setVerboseLevel(verboseLevel);
   output.setVerboseLevel(verboseLevel);
 
-  // Special pseudo-collider to check energy-momentum conservation
-  G4CascadeCheckBalance balance(0.05, 0.1, theName);	// Second is in GeV
-  balance.setVerboseLevel(verboseLevel);
-
   const G4int itry_max = 1000;
 
   // Particle-on-particle collision; no nucleus involved
@@ -83,10 +80,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
       G4cout << " InuclCollider -> particle on particle collision" << G4endl;
  
     theElementaryParticleCollider.collide(bullet, target, globalOutput);
-
-    balance.collide(bullet, target, globalOutput);
-    balance.okay();			// Do checks, but ignore result
-
     return;
   }
   
@@ -178,13 +171,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     
     if (verboseLevel > 1) {
       G4cout << " After Cascade " << G4endl;
-      output.printCollisionOutput();
     }
 
     // Check energy/momentum conservation from cascade
     balance.setOwner("After IntraNucleiCascader");
-    balance.collide(bullet, ntarget, output);
-    balance.okay();			// Do checks, but ignore result
+    validateOutput(bullet, ntarget, output);	// Do checks, but ignore result
 
     // the rest, if any
     // FIXME:  The code below still does too much copying!
@@ -205,13 +196,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	
 	if (verboseLevel > 1) {
 	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
-	  output.printCollisionOutput();
 	}
 
 	// Check energy/momentum conservation from evaporator
 	balance.setOwner("After NonEquilibriumEvaporator");
-	balance.collide(0, &cascad_rec_nuclei, output);
-	balance.okay();			// Do checks, but ignore result
+	validateOutput(0, &cascad_rec_nuclei, output);
 	
 	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
@@ -223,13 +212,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	
 	if (verboseLevel > 1) {
 	  G4cout << " After EquilibriumEvaporator " << G4endl;
-	  output.printCollisionOutput();
 	}
 
 	// Check energy/momentum conservation from evaporator
 	balance.setOwner("After EquilibriumEvaporator");
-	balance.collide(0, &exiton_rec_nuclei, output);
-	balance.okay();			// Do checks, but ignore result
+	validateOutput(0, &exiton_rec_nuclei, output);
 	
 	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
 	TRFoutput.addTargetFragments(output.getNucleiFragments());
@@ -244,13 +231,8 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
     globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
 
-    if (verboseLevel > 2) {
-      G4cout << " checking energy conservation before setOnShell" << G4endl;
-
-      balance.setOwner(theName);
-      balance.collide(bullet, target, globalOutput);
-      balance.okay();		// Do checks, but ignore result
-    }
+    balance.setOwner("Before setOnShell");
+    validateOutput(bullet, target, globalOutput);
 
     // Adjust final state particles to balance momentum and energy
     globalOutput.setOnShell(bullet, target);

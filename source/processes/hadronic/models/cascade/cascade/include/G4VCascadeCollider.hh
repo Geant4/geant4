@@ -24,23 +24,21 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4VCascadeCollider.hh,v 1.3 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4VCascadeCollider.hh,v 1.4 2010-07-14 15:41:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100615  M. Kelsey -- Split constructor to have verbose separately
 // 20100711  M. Kelsey -- Allow name to be changed after ctor, by self
+// 20100714  M. Kelsey -- Move concrete functions to G4CascadeColliderBase
 
 #include "globals.hh"
-#include "G4InteractionCase.hh"
 
-class G4InuclNuclei;
 class G4InuclParticle;
 class G4CollisionOutput;
 
 class G4VCascadeCollider {
 public:
-  explicit G4VCascadeCollider(const char* name);
-  G4VCascadeCollider(const char* name, G4int verbose);
+  G4VCascadeCollider(const char* name, G4int verbose=0);
 
   virtual ~G4VCascadeCollider() {}
 
@@ -52,21 +50,8 @@ public:
 protected:
   const char* theName;
   G4int verboseLevel;
-  G4InteractionCase interCase;		// Determine bullet vs. target
 
   virtual void setName(const char* name) { theName = name; }
-
-  // Decide whether to use G4ElementaryParticleCollider or not
-  virtual G4bool useEPCollider(G4InuclParticle* bullet, 
-			       G4InuclParticle* target) const;
-
-  // Decide whether to use G4BigBanger or not
-  virtual G4bool explosion(G4InuclNuclei* target) const;
-
-  // Decide whether to use G4IntraNuclearCascader or not
-  virtual G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
-					      G4InuclParticle* target, 
-					      G4double ekin) const;
 };        
 
 #endif	/* G4V_CASCADE_COLLIDER_HH */

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundInuclCollider.cc,v 1.10 2010-06-25 09:45:02 gunter Exp $
+// $Id: G4PreCompoundInuclCollider.cc,v 1.11 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -32,6 +32,7 @@
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()"
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members, consolidate code
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #include "G4PreCompoundInuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -44,7 +45,7 @@
 
 	 
 G4PreCompoundInuclCollider::G4PreCompoundInuclCollider()
-  : G4VCascadeCollider("G4PreCompoundInuclCollider"),
+  : G4CascadeColliderBase("G4PreCompoundInuclCollider"),
     theElementaryParticleCollider(new G4ElementaryParticleCollider),
     theIntraNucleiCascader(new G4IntraNucleiCascader),
     theNonEquilibriumEvaporator(new G4NonEquilibriumEvaporator),

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.35 2010-07-12 05:28:33 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.36 2010-07-14 15:41:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -38,9 +38,9 @@
 // 20100630  M. Kelsey -- Just do simple boost for target, instead of using
 //		G4LorentzConverter with dummy bullet.
 // 20100701  M. Kelsey -- Re-throw momentum list, not just angles!
+// 20100714  M. Kelsey -- Move conservation checking to base class
 
 #include "G4BigBanger.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -52,7 +52,7 @@ using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-G4BigBanger::G4BigBanger() : G4VCascadeCollider("G4BigBanger") {}
+G4BigBanger::G4BigBanger() : G4CascadeColliderBase("G4BigBanger") {}
 
 void
 G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
@@ -75,9 +75,6 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   G4double EEXS = nuclei_target->getExitationEnergy();
 
   G4ThreeVector toTheLabFrame = PEX.boostVector();	// From rest to lab
-
-  G4CascadeCheckBalance balance(0.005,0.01, theName);	// Second arg is in GeV
-  balance.setVerboseLevel(verboseLevel);
 
   // This "should" be difference between E-target and sum of m(nucleons)
   G4double etot = (EEXS - bindingEnergy(A,Z)) * MeV/GeV;  // To Bertini units
@@ -132,9 +129,8 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
   }
   
   std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
-  
-  balance.collide(0, target, particles);	// Checks <vector> directly
-  balance.okay();				// Report violations
+
+  validateOutput(0, target, particles);		// Checks <vector> directly
   
   if (verboseLevel > 2) {
     G4cout << " In SCM: total outgoing momentum " << G4endl 

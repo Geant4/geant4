@@ -1,3 +1,5 @@
+#ifndef G4PRECOMPOUNDINUCL_COLLIDER_HH
+#define G4PRECOMPOUNDINUCL_COLLIDER_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,18 +25,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundInuclCollider.hh,v 1.7 2010-06-25 09:43:50 gunter Exp $
+// $Id: G4PreCompoundInuclCollider.hh,v 1.8 2010-07-14 15:41:12 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unneeded #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
-#ifndef G4PRECOMPOUNDINUCL_COLLIDER_HH
-#define G4PRECOMPOUNDINUCL_COLLIDER_HH
- 
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 
 class G4BigBanger;
 class G4CollisionOutput;
@@ -43,7 +43,7 @@ class G4IntraNucleiCascader;
 class G4InuclParticle;
 class G4NonEquilibriumEvaporator;
 
-class G4PreCompoundInuclCollider : public G4VCascadeCollider {
+class G4PreCompoundInuclCollider : public G4CascadeColliderBase {
 public:
   G4PreCompoundInuclCollider();
   virtual ~G4PreCompoundInuclCollider();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.69 2010-07-13 19:24:50 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.70 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -60,6 +60,7 @@
 // 20100519  M. Kelsey -- Use G4InteractionCase to compute "is" values.
 // 20100625  M. Kelsey -- Two bugs in n-body momentum, last particle recoil
 // 20100713  M. Kelsey -- Bump collide start message up to verbose > 1
+// 20100714  M. Kelsey -- Move conservation checking to base class
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -93,7 +94,6 @@
 #include "G4CascadeXiMinusPChannel.hh"
 #include "G4CascadeXiMinusNChannel.hh"
 
-#include "G4CascadeCheckBalance.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InuclParticleNames.hh"
@@ -111,7 +111,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : G4VCascadeCollider("G4ElementaryParticleCollider") {}
+  : G4CascadeColliderBase("G4ElementaryParticleCollider") {}
 
 
 void
@@ -146,9 +146,6 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     return;
   }
 
-  G4CascadeCheckBalance balance(0.005, 0.01, theName);		// Tight tolerances
-  balance.setVerboseLevel(verboseLevel);
-
   // Generate nucleon or pion collision with nucleon
   // or pion with quasi-deuteron
 
@@ -169,13 +166,6 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2,
 			  &convertToSCM);
     
-    if (verboseLevel > 2) {
-      G4cout << " particles " << particles.size() << G4endl;
-      
-      for(G4int i = 0; i < G4int(particles.size()); i++) 
-	particles[i].printParticle();
-    }
-
     if(!particles.empty()) { // convert back to Lab
       G4LorentzVector mom;		// Buffer to avoid memory churn
       particleIterator ipart;
@@ -184,10 +174,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	ipart->setMomentum(mom); 
       };
 
-      if (verboseLevel > 2) {		// Check conservation laws
-	balance.collide(bullet, target, particles);
-	balance.okay();			// Report violations, ignore return
-      }
+      validateOutput(bullet, target, particles);	// Check conservation
 
       std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
       output.addOutgoingParticles(particles);
@@ -216,10 +203,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	    ipart->setMomentum(mom); 
 	  };
 
-	  if (verboseLevel > 2) {	// Check conservation laws
-	    balance.collide(bullet, target, particles);
-	    balance.okay();		// Report violations, ignore return
-	  }
+	  validateOutput(bullet, target, particles);	// Check conservation
 
 	  std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(particles);

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.40 2010-07-14 04:22:25 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.41 2010-07-14 15:41:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -45,10 +45,10 @@
 //		new excitation energies properly (mass differences)
 // 20100702  M. Kelsey -- Simplify if-cascades, indentation
 // 20100712  M. Kelsey -- Add conservation checking
+// 20100714  M. Kelsey -- Move conservation checking to base class
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4Fissioner.hh"
@@ -62,7 +62,7 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : G4VCascadeCollider("G4EquilibriumEvaporator") {}
+  : G4CascadeColliderBase("G4EquilibriumEvaporator") {}
 
 G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {}
 
@@ -85,9 +85,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     G4cout << " evaporating target: " << G4endl;
     target->printParticle();
   }
-
-  G4CascadeCheckBalance balance(0.005, 0.01, theName);	// Second arg is GeV
-  balance.setVerboseLevel(verboseLevel);
 
   theFissioner.setVerboseLevel(verboseLevel);
   theBigBanger.setVerboseLevel(verboseLevel);
@@ -136,10 +133,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     if (verboseLevel > 1) G4cout << " big bang in eql start " << G4endl;
     theBigBanger.collide(0, target, output);
 
-    if (verboseLevel > 3) output.printCollisionOutput();
-
-    balance.collide(0, target, output);		// Check energy conservation
-    balance.okay();
+    validateOutput(0, target, output);		// Check energy conservation
     return;
   }
 
@@ -148,10 +142,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     if (verboseLevel > 1) G4cout << " no energy for evaporation" << G4endl;
     output.addTargetFragment(*nuclei_target);
 
-    if (verboseLevel > 3) output.printCollisionOutput();
-
-    balance.collide(0, target, output);		// Check energy conservation
-    balance.okay();
+    validateOutput(0, target, output);		// Check energy conservation
     return;
   }
 
@@ -191,10 +182,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       G4InuclNuclei nuclei(PEX, A, Z, EEXS, 6);        
       theBigBanger.collide(0, &nuclei, output);
 
-      if (verboseLevel > 3) output.printCollisionOutput();
-
-      balance.collide(0, &nuclei, output);	// Check energy conservation
-      balance.okay();
+      validateOutput(0, target, output);	// Check energy conservation
       return;	
     } 
 
@@ -521,14 +509,15 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  foutput.boostToLabFrame(toTheNucleiSystemRestFrame);
 
 	  // Now evaporate the fission fragments individually
-	  std::vector<G4InuclNuclei>& nuclea = foutput.getNucleiFragments();
+	  G4bool prevDoChecks = doConservationChecks;	// Turn off checking
+	  setConservationChecks(false);
+
+	  std::vector<G4InuclNuclei> nuclea = foutput.getNucleiFragments();
 	  this->collide(0, &nuclea[0], output);
 	  this->collide(0, &nuclea[1], output);
 
-	  if (verboseLevel > 3) output.printCollisionOutput();
-
-	  balance.collide(0, &nuclei, output);     // Check energy conservation
-	  balance.okay();
+	  setConservationChecks(prevDoChecks);	// Restore previous flag value
+	  validateOutput(0, target, output);	// Check energy conservation
 	  return;
 	} else { // fission forbidden now
 	  fission_open = false;
@@ -563,11 +552,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
   output.addTargetFragment(nuclei);
 
-  if (verboseLevel > 3) output.printCollisionOutput();
-
-  balance.collide(0, target, output);		// Check energy conservation
-  balance.okay();
-
+  validateOutput(0, target, output);		// Check energy conservation
   return;
 }		     
 

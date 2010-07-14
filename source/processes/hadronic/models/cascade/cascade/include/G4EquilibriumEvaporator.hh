@@ -22,25 +22,26 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.hh,v 1.12 2010-06-18 02:57:44 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.hh,v 1.13 2010-07-14 15:41:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members.  Rename timeToBigBang() to override
 //		base explosion().
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 #include "G4Fissioner.hh"
 #include "G4BigBanger.hh"
 
 class G4CollisionOutput;
 class G4InuclParticle;
 
-class G4EquilibriumEvaporator : public G4VCascadeCollider {
+class G4EquilibriumEvaporator : public G4CascadeColliderBase {
 public:
   G4EquilibriumEvaporator();
   virtual ~G4EquilibriumEvaporator();

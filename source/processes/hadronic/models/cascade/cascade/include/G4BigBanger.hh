@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.hh,v 1.14 2010-06-25 09:41:48 gunter Exp $
+// $Id: G4BigBanger.hh,v 1.15 2010-07-14 15:41:12 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
@@ -31,18 +31,19 @@
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100519  M. Kelsey -- Get rid of proton and neutron masses as arguments!
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
 
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include <vector>
 
 class G4CollisionOutput;
 
 
-class G4BigBanger : public G4VCascadeCollider {
+class G4BigBanger : public G4CascadeColliderBase {
 public:
   G4BigBanger();
   virtual ~G4BigBanger() {};

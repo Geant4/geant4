@@ -23,25 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationInuclCollider.hh,v 1.5 2010-05-21 17:56:34 mkelsey Exp $
+// $Id: G4EvaporationInuclCollider.hh,v 1.6 2010-07-14 15:41:12 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members
+// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 
 #ifndef G4EVAPORATIONINUCL_COLLIDER_HH
 #define G4EVAPORATIONINUCL_COLLIDER_HH
  
-#include "G4VCascadeCollider.hh"
+#include "G4CascadeColliderBase.hh"
 
 class G4InuclParticle;
 class G4CollisionOutput;
 class G4EquilibriumEvaporator;
 class G4BigBanger;
 
-class G4EvaporationInuclCollider : public G4VCascadeCollider {
+class G4EvaporationInuclCollider : public G4CascadeColliderBase {
 public:
   G4EvaporationInuclCollider();
 
