@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.26 2010-07-01 19:19:29 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.27 2010-07-14 23:50:37 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,6 +35,8 @@
 // 20100630  M. Kelsey -- Use "getExcitationEnergyInGeV()" instead of ".001*"
 // 20100701  M. Kelsey -- G4InuclNuclei now includes excitation energy as part
 //		of the reported mass and four-vector.
+// 20100714  M. Kelsey -- Modify setOnShell() to avoid creating particles
+//		with negative kinetic energy.
 
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -194,7 +196,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   if (verboseLevel > 1)
     G4cout << " >>> G4CollisionOutput::setOnShell" << G4endl;
 
-  const G4double accuracy = 0.00001; // momentum concerves at the level of 1 eV
+  const G4double accuracy = 0.00001; // momentum concerves at the level of 10 eV
 
   on_shell = false;
     
@@ -213,46 +215,58 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   G4LorentzVector mon_non_cons = ini_mom - out_mom;
 
   G4double pnc = mon_non_cons.rho();
+  G4double enc = mon_non_cons.e();
 
   setRemainingExitationEnergy();       
 
   if(verboseLevel > 2){
     printCollisionOutput();
     G4cout << " momentum non conservation: " << G4endl
-           << " e " << mon_non_cons.e()
-	   << " p " << pnc << G4endl;
+           << " e " << enc << " p " << pnc << G4endl;
     G4cout << " remaining exitation " << eex_rest << G4endl;
   }
 
-  if(std::fabs(mon_non_cons.e()) <= accuracy && pnc <= accuracy) {
+  if(std::fabs(enc) <= accuracy && pnc <= accuracy) {
     on_shell = true;
     return;
   }
 
   // Adjust "last" particle's four-momentum to balance event
+  // ONLY adjust particles with sufficient e or p to remain physical!
 
   if (verboseLevel > 2) G4cout << " re-balancing four-momenta" << G4endl;
 
   G4int npart = outgoingParticles.size();
   G4int nnuc = nucleiFragments.size();
   if (npart > 0) {
-    G4LorentzVector last_mom = outgoingParticles[npart - 1].getMomentum(); 
-    last_mom += mon_non_cons;
-    outgoingParticles[npart - 1].setMomentum(last_mom);
+    for (G4int ip=npart-1; ip>=0; ip--) {
+      if (outgoingParticles[ip].getKineticEnergy()+enc > 0.) {
+	G4LorentzVector last_mom = outgoingParticles[ip].getMomentum(); 
+	last_mom += mon_non_cons;
+	outgoingParticles[ip].setMomentum(last_mom);
+	break;
+      }
+    }
   } else if (nnuc > 0) {
-    G4LorentzVector last_mom = nucleiFragments[nnuc - 1].getMomentum();
-    last_mom += mon_non_cons;
-    nucleiFragments[nnuc - 1].setMomentum(last_mom);
+    for (G4int in=nnuc-1; in>=0; in--) {
+      if (nucleiFragments[in].getKineticEnergy()+enc > 0.) {
+	G4LorentzVector last_mom = nucleiFragments[in].getMomentum();
+	last_mom += mon_non_cons;
+	nucleiFragments[in].setMomentum(last_mom);
+	break;
+      }
+    }
   }
 
   out_mom = getTotalOutputMomentum();
   mon_non_cons = ini_mom - out_mom;
   pnc = mon_non_cons.rho();
+  enc = mon_non_cons.e();
 
   if(verboseLevel > 2){
     printCollisionOutput();
     G4cout << " momentum non conservation after (1): " << G4endl 
-	   << " e " << mon_non_cons.e() << " p " << pnc << G4endl;
+	   << " e " << enc << " p " << pnc << G4endl;
   }
 
   // Can energy be balanced just with nuclear excitation?
@@ -368,12 +382,13 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
   mon_non_cons = ini_mom - out_mom;
   pnc = mon_non_cons.rho();
+  enc = mon_non_cons.e();
 
-  on_shell = (std::fabs(mon_non_cons.e()) < accuracy || pnc < accuracy);
+  on_shell = (std::fabs(enc) < accuracy || pnc < accuracy);
 
   if(verboseLevel > 2) {
     G4cout << " momentum non conservation tuning: " << G4endl 
-	   << " e " << mon_non_cons.e() << " p " << pnc 
+	   << " e " << enc << " p " << pnc 
 	   << (on_shell?" success":" FAILURE") << G4endl;
   }
 }

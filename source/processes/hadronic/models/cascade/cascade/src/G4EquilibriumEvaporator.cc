@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.42 2010-07-14 22:45:50 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.43 2010-07-14 23:50:37 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -320,36 +320,18 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  G4double pmod = S;
 	  G4LorentzVector mom = generateWithRandomAngles(pmod, 0.);
 
-	  /***** DON'T NEED ex_mom FOR ANYTHING
-	  G4double new_nuc_mass = G4InuclNuclei::getNucleiMass(A,Z,EEXS);
-	  G4LorentzVector ex_mom;		// Reduced excitiation state
-	  ex_mom.setVectM(-mom.vect(), new_nuc_mass);
-	  *****/
-
-	  // Push evaporate and residual nucleus into current rest frame
+	  // Push evaporated particle into current rest frame
 	  mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
-	  /***** DON'T NEED ex_mom FOR ANYTHING
-	  ex_mom = toTheNucleiSystemRestFrame.backToTheLab(ex_mom);
-	  *****/
 
-	  if (verboseLevel > 2) {
+	  if (verboseLevel > 3) {
 	    G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
 		   << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
 		   << " evaporate px " << mom.px() << " py " << mom.py()
 		   << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-	      /*****
-		   << " remainder px " << ex_mom.px() << " py " << ex_mom.py()
-		   << " pz " << ex_mom.pz() << " E " << ex_mom.e() << G4endl;
-	      *****/
 	  }
 
 	  PEX -= mom;			// Remaining four-momentum
 	  EEXS -= S*GeV;		// New excitation energy (in MeV)
-
-	  if (verboseLevel > 2) {
-	    G4cout << " check new EEXS " << EEXS << " vs. PEX.m() - m(A,Z)"
-		   << PEX.m() - G4InuclNuclei::getNucleiMass(A,Z) << G4endl;
-	  }
 
 	  G4InuclElementaryParticle particle(mom, 10, 6);
 	  output.addOutgoingParticle(particle);
@@ -419,39 +401,28 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		G4LorentzVector mom = generateWithRandomAngles(pmod, mass);
 
-		/***** DON'T NEED ex_mom FOR ANYTHING
-		G4double new_nuc_mass =
-		  G4InuclNuclei::getNucleiMass(A1[icase], Z1[icase], EEXS);
-		
-		G4LorentzVector ex_mom;		// Reduced excitiation state
-		ex_mom.setVectM(-mom.vect(), new_nuc_mass);
-		*****/
-
-		// Push evaporate and residual nucleus into current rest frame
+		// Push evaporated particle into current rest frame
 		mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
-		/***** DON'T NEED ex_mom FOR ANYTHING
-		ex_mom = toTheNucleiSystemRestFrame.backToTheLab(ex_mom);
-		*****/
 
 		if (verboseLevel > 2) {
 		  G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
 			 << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
 			 << " evaporate px " << mom.px() << " py " << mom.py()
 			 << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-		    /***** DON'T NEED ex_mom FOR ANYTHING
-			 << " remainder px " << ex_mom.px() << " py " << ex_mom.py()
-			 << " pz " << ex_mom.pz() << " E " << ex_mom.e() << G4endl;
-		  if ((PEX-mom-ex_mom).mag() > 1e-3) G4cout << " off balance!" << G4endl;
-		    *****/
 		}
 		
+		// New excitation energy depends on residual nuclear state
+		G4double mass_new =
+		  G4InuclNuclei::getNucleiMass(A1[icase],Z1[icase]);
+
+		G4double EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
+		if (EEXS_new < 0.0) continue;	// Sanity check for new nucleus
+
 		PEX -= mom;		// Remaining four-momentum
+		EEXS = EEXS_new;
 
 		A = A1[icase];
 		Z = Z1[icase]; 	      
-
-		// New excitation energy depends on residual nuclear state
-		EEXS = (PEX.m() - G4InuclNuclei::getNucleiMass(A,Z))*GeV;
 
 		particle.setMomentum(mom);
 		output.addOutgoingParticle(particle);
@@ -472,33 +443,25 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		G4double pmod = std::sqrt((2.0 * mass + S) * S);
 		G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
 		
-		/***** DON'T NEED ex_mom FOR ANYTHING
-		G4double new_nuc_mass =
-		  G4InuclNuclei::getNucleiMass(A1[icase], Z1[icase], EEXS);
-		
-		G4LorentzVector ex_mom;		// Reduced excitiation state
-		ex_mom.setVectM(-mom.vect(), new_nuc_mass);
-		*****/
-		
-		// Push evaporate and residual nucleus into current rest frame
+		// Push evaporated particle into current rest frame
 		mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
-		/***** DON'T NEED ex_mom FOR ANYTHING
-		ex_mom = toTheNucleiSystemRestFrame.backToTheLab(ex_mom);
-		*****/
 
 		if (verboseLevel > 2) {
 		  G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
 			 << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
 			 << " evaporate px " << mom.px() << " py " << mom.py()
 			 << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-		    /***** DON'T NEED ex_mom FOR ANYTHING
-			 << " remainder px " << ex_mom.px() << " py " << ex_mom.py()
-			 << " pz " << ex_mom.pz() << " E " << ex_mom.e() << G4endl;
-		  if ((PEX-mom-ex_mom).mag() > 1e-3) G4cout << " off balance!" << G4endl;
-		    *****/
 		}
 		
+		// New excitation energy depends on residual nuclear state
+		G4double mass_new =
+		  G4InuclNuclei::getNucleiMass(A1[icase],Z1[icase]);
+
+		G4double EEXS_new = ((PEX-mom).m() - mass_new)*GeV;
+		if (EEXS_new < 0.0) continue;	// Sanity check for new nucleus
+
 		PEX -= mom;		// Remaining four-momentum
+		EEXS = EEXS_new;
 
 		A = A1[icase];
 		Z = Z1[icase];
