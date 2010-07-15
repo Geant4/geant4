@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.40 2010-07-15 19:34:09 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.41 2010-07-15 21:06:22 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,8 @@
 //		pass verbosity through to G4CollisionOutput
 // 20100714  M. Kelsey -- Move conservation checking to base class, report
 //		number of iterations at end
+// 20100715  M. Kelsey -- Remove all the "Before xxx" and "After xxx"
+//		conservation checks, as the colliders now all do so.
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -219,11 +221,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     TRFoutput.boostToLabFrame(convertToTargetRestFrame);
     globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
     globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
-
-    // Check energy conservation before mucking everything up
-    balance.setOwner("Before-setOnShell");
-    validateOutput(bullet, target, globalOutput);
-    balance.setOwner(theName);
 
     // Adjust final state particles to balance momentum and energy
     globalOutput.setOnShell(bullet, target);

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.52 2010-07-15 19:34:09 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.53 2010-07-15 21:06:22 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -379,9 +379,11 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
     G4LorentzVector presid = momentum_in - momentum_out;
 
-    if (verboseLevel > 3) {
+    if (verboseLevel > 1) {
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
+    }
 
+    if (verboseLevel > 3) {
       G4cout << " momentum_in:    px " << momentum_in.px()
 	     << " py " << momentum_in.py() << " pz " << momentum_in.pz()
 	     << " E " << momentum_in.e() << G4endl;
@@ -442,13 +444,18 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
       G4double mres = presid.m();
-      
-      if (mres-mass < -small_ekin) {		// Below round-off tolerance
-	if (verboseLevel > 2) 
-	  G4cout << " unphysical recoil nucleon" << G4endl;
-	continue;
+
+      if (verboseLevel > 1) {		// Report recoil consistency problems
+	if (mres-mass < -small_ekin) {		// Insufficient recoil energy
+	  G4cerr << " unphysical recoil nucleon" << G4endl;
+	  continue;
+	}
+
+	if (mres-mass > small_ekin) {		// Too much extra energy
+	  G4cout << " extra energy with recoil nucleon" << G4endl;
+	}
       }
-      
+
       if (verboseLevel > 3)
 	G4cout << " adding recoiling nucleon to output list" << G4endl;
       
