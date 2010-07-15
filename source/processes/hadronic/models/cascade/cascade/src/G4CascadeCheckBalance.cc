@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.13 2010-07-15 19:34:09 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.14 2010-07-15 23:02:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -39,6 +39,8 @@
 // 20100701  M. Kelsey -- Undo previous change, handled by G4InuclNuclei.
 // 20100711  M. Kelsey -- Use name of parent collider for reporting messages
 // 20100713  M. kelsey -- Hide conservation errors behind verbosity
+// 20100715  M. Kelsey -- Use new G4CollisionOutput totals instead of loops,
+//		move temporary buffer to be data member
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -76,8 +78,6 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   if (bullet) initial += bullet->getMomentum();
   if (target) initial += target->getMomentum();
 
-  final = output.getTotalOutputMomentum();
-
   // Baryon number and charge must be computed "by hand"
   initialCharge = 0;
   if (bullet) initialCharge += G4int(bullet->getCharge());
@@ -95,21 +95,10 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
      (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
 
-  const std::vector<G4InuclNuclei>& nout = output.getNucleiFragments();
-  const std::vector<G4InuclElementaryParticle>& pout
-    = output.getOutgoingParticles();
-
-  finalBaryon = 0;
-  finalCharge = 0;
-  for (unsigned ip=0; ip<pout.size(); ip++) {
-    finalBaryon += pout[ip].baryon();
-    finalCharge += G4int(pout[ip].getCharge());
-  }
-
-  for (unsigned in=0; in<nout.size(); in++) {
-    finalBaryon += G4lrint(nout[in].getA());
-    finalCharge += G4lrint(nout[in].getZ());
-  }
+  // Final state totals are computed for us
+  final = output.getTotalOutputMomentum();
+  finalBaryon = output.getTotalBaryonNumber();
+  finalCharge = output.getTotalCharge();
 
   // Report results
   if (verboseLevel > 2) {
@@ -131,8 +120,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide(<vector>)"
 	   << G4endl;
 
-  static G4CollisionOutput tempOutput;		// Buffer for processing
-  tempOutput.reset();
+  tempOutput.reset();			// Buffer for processing
   tempOutput.addOutgoingParticles(particles);
   collide(bullet, target, tempOutput);
 }
@@ -147,8 +135,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     G4cout << " >>> G4CascadeCheckBalance(" << theName << ")::collide(<vector>)"
 	   << G4endl;
 
-  static G4CollisionOutput tempOutput;		// Buffer for processing
-  tempOutput.reset();
+  tempOutput.reset();			// Buffer for processing
   tempOutput.addTargetFragments(fragments);
   collide(bullet, target, tempOutput);
 }
@@ -163,8 +150,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
     G4cout << " >>> G4CascadeCheckBalance(" << theName
 	   << ")::collide(<cparticles>)" << G4endl;
 
-  static G4CollisionOutput tempOutput;		// Buffer for processing
-  tempOutput.reset();
+  tempOutput.reset();			// Buffer for processing
   for (unsigned i=0; i<particles.size(); i++)
     tempOutput.addOutgoingParticle(particles[i].getParticle());
 

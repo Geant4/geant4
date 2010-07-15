@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.hh,v 1.21 2010-06-21 03:40:00 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.22 2010-07-15 23:02:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -31,6 +31,8 @@
 // 20100418  M. Kelsey -- Add function to boost output lists to lab frame
 // 20100520  M. Kelsey -- Add function to rotate Z axis, from G4Casc.Interface
 // 20100620  M. Kelsey -- Add setVerboseLevel() function
+// 20100715  M. Kelsey -- Add total charge and baryon number functions, and a
+//		combined "add()" function to put two of these together.
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -51,7 +53,14 @@ public:
 
   void setVerboseLevel(G4int verbose) { verboseLevel = verbose; };
 
-  void reset();
+  // ===== Accumulate contents of lists =====
+
+  void reset();		// Empties lists for new event
+
+  void add(const G4CollisionOutput& right) {
+    addOutgoingParticles(right.outgoingParticles);
+    addTargetFragments(right.nucleiFragments);
+  }
 
   void addOutgoingParticle(const G4InuclElementaryParticle& particle) {
     outgoingParticles.push_back(particle);
@@ -65,41 +74,38 @@ public:
 
   void addTargetFragments(const std::vector<G4InuclNuclei>& nuclea);
 
+  // ===== Access contents of lists =====
+
+  G4int numberofOutgoingParticles() const { return outgoingParticles.size(); }
+    
   const std::vector<G4InuclElementaryParticle>& getOutgoingParticles() const {
     return outgoingParticles;
   };
 
-  G4int numberOfNucleiFragments() const { 
-    return nucleiFragments.size(); 
-  };
+  G4int numberOfNucleiFragments() const { return nucleiFragments.size(); };
  
   const std::vector<G4InuclNuclei>& getNucleiFragments() const {
     return nucleiFragments;
   };
 
+  // ===== Get event totals for conservation checking, recoil, etc. ======
+
   G4LorentzVector getTotalOutputMomentum() const;
+  G4int getTotalCharge() const;			// NOTE:  No fractional charges!
+  G4int getTotalBaryonNumber() const;
 
   void printCollisionOutput() const;
 
+  // ===== Manipulate final-state particles for kinematics =====
+
   void boostToLabFrame(const G4LorentzConvertor& convertor);
-
   void rotateEvent(const G4LorentzRotation& rotate);
-
-  void trivialise(G4InuclParticle* bullet, 
-		  G4InuclParticle* target);
-
-  void setOnShell(G4InuclParticle* bullet, 
-		  G4InuclParticle* target);
-
+  void trivialise(G4InuclParticle* bullet, G4InuclParticle* target);
+  void setOnShell(G4InuclParticle* bullet, G4InuclParticle* target);
   void setRemainingExitationEnergy();
 
-  double getRemainingExitationEnergy() const { 
-    return eex_rest; 
-  };
-
-  G4bool acceptable() const { 
-    return on_shell; 
-  };
+  double getRemainingExitationEnergy() const { return eex_rest; };
+  G4bool acceptable() const { return on_shell; };
 
 private: 
   G4int verboseLevel;
@@ -110,7 +116,6 @@ private:
   std::pair<std::pair<G4int,G4int>, G4int> selectPairToTune(G4double de) const; 
 
   G4bool on_shell;
-
 };        
 
 #endif // G4COLLISION_OUTPUT_HH 

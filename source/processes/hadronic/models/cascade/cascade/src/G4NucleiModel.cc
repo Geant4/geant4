@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.63 2010-07-15 19:34:09 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.64 2010-07-15 23:02:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -58,7 +58,7 @@
 //		before.
 // 20100628  M. Kelsey -- Two momentum-recoil bugs; don't subtract energies!
 // 20100715  M. Kelsey -- Make G4InuclNuclei in generateModel(), use for
-//		balance checking in generateParticleFate().
+//		balance checking (only verbose>2) in generateParticleFate().
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -927,8 +927,10 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       outgoing_cparticles.push_back(cparticle);
 
       // Check conservation for simple scattering (ignore target nucleus!)
-      balance.collide(&prescatCP, 0, outgoing_cparticles);
-      balance.okay();		// Report violations, but don't act on them
+      if (verboseLevel > 2) {
+	balance.collide(&prescatCP, 0, outgoing_cparticles);
+	balance.okay();		// Report violations, but don't act on them
+      }
     }
   }	// if (npart == 1) [else]
 

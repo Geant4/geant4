@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.8 2010-07-15 19:34:09 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.9 2010-07-15 23:02:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -39,10 +39,12 @@
 // 20100715  M. Kelsey -- FPE!  Need to check initial values before computing
 //		relative error.
 // 20100715  M. Kelsey -- Add G4CascadParticle interface for G4NucleiModel;
-//		do momentum check on direction, not just magnitude.
+//		do momentum check on direction, not just magnitude.  Move
+//		temporary G4CollisionOutput buffer here, for thread-safety
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
+#include "G4CollisionOutput.hh"
 #include "G4LorentzVector.hh"
 #include <cmath>
 #include <vector>
@@ -51,7 +53,6 @@ class G4CascadParticle;
 class G4InuclElementaryParticle;
 class G4InuclNuclei;
 class G4InuclParticle;
-class G4CollisionOutput;
 
 class G4CascadeCheckBalance : public G4VCascadeCollider {
 public:
@@ -129,6 +130,8 @@ private:
 
   G4int initialCharge;		// Total charge
   G4int finalCharge;
+
+  G4CollisionOutput tempOutput;		// Buffer for direct-list interfaces
 };
 
 #endif	/* G4CASCADE_CHECK_BALANCE_HH */

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.41 2010-07-15 21:06:22 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.42 2010-07-15 23:02:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -40,7 +40,9 @@
 // 20100714  M. Kelsey -- Move conservation checking to base class, report
 //		number of iterations at end
 // 20100715  M. Kelsey -- Remove all the "Before xxx" and "After xxx"
-//		conservation checks, as the colliders now all do so.
+//		conservation checks, as the colliders now all do so.  Move
+//		local buffers outside while() loop, use new "combined add()"
+//		interface for copying local buffers to global.
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -197,7 +199,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
 	}
 
-	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+	TRFoutput.add(output);
 
 	// Use nuclear fragment left from non-equilibrium for next step
 	G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
@@ -209,8 +211,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  G4cout << " After EquilibriumEvaporator " << G4endl;
 	}
 
-	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
-	TRFoutput.addTargetFragments(output.getNucleiFragments());
+	TRFoutput.add(output);
       }
     }
 
@@ -219,8 +220,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 
     // convert to the LAB
     TRFoutput.boostToLabFrame(convertToTargetRestFrame);
-    globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
-    globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
+    globalOutput.add(TRFoutput);
 
     // Adjust final state particles to balance momentum and energy
     globalOutput.setOnShell(bullet, target);

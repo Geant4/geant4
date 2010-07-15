@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.53 2010-07-15 21:06:22 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.54 2010-07-15 23:02:21 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -132,14 +132,18 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4InuclElementaryParticle* bparticle = 
                           dynamic_cast<G4InuclElementaryParticle*>(bullet);
 
+  // Buffers for collection result of cascade (each iteration)
+  std::vector<G4CascadParticle> cascad_particles;
+  std::vector<G4InuclElementaryParticle> output_particles;
+
   G4int itry = 0;
   while (itry < itry_max) {
     itry++;
     model.reset();
+    cascad_particles.clear();
+    output_particles.clear();
 
-    std::vector<G4CascadParticle> cascad_particles;
     G4ExitonConfiguration theExitonConfiguration;
-    std::vector<G4InuclElementaryParticle> output_particles;
 
     G4double afin = tnuclei->getA();	// Will deduct outgoing particles
     G4double zfin = tnuclei->getZ();	//    to determine recoil state
@@ -171,8 +175,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       cascad_particles = all_particles.first;
 
-      for (G4int ip = 0; ip < G4int(all_particles.second.size()); ip++) 
-	output_particles.push_back(all_particles.second[ip]);
+      output_particles.insert(output_particles.end(),
+			      all_particles.second.begin(),
+			      all_particles.second.end());
 
       if (cascad_particles.size() == 0) { // compound nuclei
 	G4int ia = G4int(ab + 0.5);
@@ -189,8 +194,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
 	for (i = 0; i < ihn; i++) theExitonConfiguration.incrementHoles(2);
 	for (i = 0; i < ihz; i++) theExitonConfiguration.incrementHoles(1);
-      };
-    }; 
+      }
+    }	// if (inter_case ...
 
     std::vector<G4CascadParticle> new_cascad_particles;
     G4int iloop = 0;
@@ -338,13 +343,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }		// while cascade-list and model
 
     // Add left-over cascade particles
-    if (verboseLevel > 2) {
-      G4cout << " After cascade, " << cascad_particles.size()
-	     << " cparticles; nucleus (model) has "
-	     << model.getNumberOfNeutrons() << " neutrons "
-	     << model.getNumberOfProtons() << " protons" << G4endl;
-    }
-
     for (G4int i = 0; i < G4int(cascad_particles.size()); i++)
       output_particles.push_back(cascad_particles[i].getParticle());
  
@@ -433,8 +431,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (verboseLevel > 2)
 	G4cout << " adding recoil nucleus/fragment to output list" << G4endl;
 
-      G4InuclNuclei outgoing_nuclei(presid, afin, zfin, Eex);
-      outgoing_nuclei.setModel(4);
+      G4InuclNuclei outgoing_nuclei(presid, afin, zfin, Eex, 4);
       outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);
       if (verboseLevel > 3) outgoing_nuclei.printParticle();
       
