@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.12 2010-07-01 19:19:29 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.13 2010-07-15 05:48:29 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -32,6 +32,8 @@
 // 20100622  M. Kelsey -- Use local "bindingEnergy()" function to call through.
 // 20100627  M. Kelsey -- Test for non-physical fragments and abort job.
 // 20100630  M. Kelsey -- Use excitation energy in G4Ions
+// 20100714  M. Kelsey -- Use G4DynamicParticle::theDynamicalMass to deal with
+//	     excitation energy without instantianting "infinite" G4PartDefns.
 
 #include "G4HadronicException.hh"
 #include "G4InuclNuclei.hh"
@@ -48,48 +50,19 @@
 using namespace G4InuclSpecialFunctions;
 
 
-// Access excitation energy as data member of G4Ions
-
-void G4InuclNuclei::setExitationEnergy(G4double e) {
-  if (e == getExitationEnergy()) return;	// Already set
-
-  // Need to replace existing definition with new one
-  G4ParticleDefinition *newPD = makeDefinition(getA(), getZ(), e);
-
-  // If standard definition didn't work, make custom
-  if (!newPD) newPD = makeNuclearFragment(getA(), getZ(), e);
-
-  // If unable to make custom excited state, job must fail
-  if (!newPD) {
-    G4cerr << " >>> G4InuclNuclei::setExitationEnergy() unable to change"
-	   << " nuclear state" << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,
-			      "G4InuclNuclei failed to create excited state");
-  }
-
-  // Replace current definition with new one
-  setDefinition(newPD);
-}
-
-G4double G4InuclNuclei::getExitationEnergy(const G4ParticleDefinition* pd) {
-  const G4Ions* npd = dynamic_cast<const G4Ions*>(pd);
-  return (npd ? npd->GetExcitationEnergy() : 0.);
-}
-
 // Convert nuclear configuration to standard GEANT4 pointer
 
 // WARNING:  Opposite conventions!  G4InuclNuclei uses (A,Z) everywhere, while
 //	  G4ParticleTable::GetIon() uses (Z,A)!
 
-G4ParticleDefinition* 
-G4InuclNuclei::makeDefinition(G4double a, G4double z, G4double exc) {
+G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4double a, G4double z) {
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition *pd = pTable->GetIon(G4int(z), G4int(a), exc);
+  G4ParticleDefinition *pd = pTable->GetIon(G4int(z), G4int(a), 0.);
 
   // SPECIAL CASE:  Non-physical nuclear fragment, for final-state return
-  if (!pd) pd = makeNuclearFragment(a,z,exc);
+  if (!pd) pd = makeNuclearFragment(a,z);
 
-  return pd;
+  return pd;		// This could return a null pointer if above fails
 }
 
 // Creates a non-standard excited nucleus
@@ -98,8 +71,7 @@ G4InuclNuclei::makeDefinition(G4double a, G4double z, G4double exc) {
 // from G4IntraNuclearCascader
 
 G4ParticleDefinition* 
-G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc)
-{
+G4InuclNuclei::makeNuclearFragment(G4double a, G4double z) {
   G4int na=G4int(a), nz=G4int(z);	// # nucleons and protons
 
   if (na<=0 || nz<0 || na<nz) {
@@ -109,34 +81,24 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc)
 			      "G4InuclNuclei impossible A/Z arguments");
   }
 
-  G4int code = G4IonTable::GetNucleusEncoding(nz, na, exc);
+  G4int code = G4IonTable::GetNucleusEncoding(nz, na);
 
   // Use local lookup table (see G4IonTable.hh) to maintain singletons
   // NOTE:  G4ParticleDefinitions don't need to be explicitly deleted
   //        (see comments in G4IonTable.cc::~G4IonTable)
 
-  // If correct nucleus already created return it, or increment isomer index
+  // If correct nucleus already created return it
   static std::map<G4int, G4ParticleDefinition*> fragmentList;
-  while (fragmentList.find(code) != fragmentList.end()) {
-    static const G4double excTolerance = 1e-4;
-
-    G4ParticleDefinition* fragPD = fragmentList[code];
-    if (std::abs(exc-getExitationEnergy(fragPD)) < excTolerance) return fragPD;
-
-    if (code%10 == 9) code = (code-9) + 100000000;   // More than 9 isomers!?!
-    code++;			// Increment isomer index to make new nucleus
-  }
+  if (fragmentList.find(code) != fragmentList.end()) return fragmentList[code];
 
   // Name string follows format in G4IonTable.cc::GetIonName(Z,A,E)
-  std::stringstream zstr, astr, estr;
+  std::stringstream zstr, astr;
   zstr << nz;
   astr << na;
-  estr << G4int(1000*exc+0.5);	// keV in integer form
   
   G4String name = "Z" + zstr.str() + "A" + astr.str();
-  if (exc>0.) name += "["+estr.str()+"]";
   
-  G4double mass = getNucleiMass(a,z,exc) *GeV;	// From Bertini to GEANT4 units
+  G4double mass = getNucleiMass(a,z) *GeV/MeV;	// From Bertini to GEANT4 units
   
   //    Arguments for constructor are as follows
   //               name             mass          width         charge
@@ -154,11 +116,10 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z, G4double exc)
 			      0,          0,    0,
 			      "nucleus",  0,    na, code,
 			      true,	  0.,   0,
-			      true, "generic",  0,  exc);
+			      true, "generic",  0,  0.);
   fragPD->SetAntiPDGEncoding(0);
-  //    G4cout << fragPD->GetParticleName() << G4endl;
-  fragmentList[code] = fragPD;	// Store in table for next lookup
-  return fragPD;
+
+  return (fragmentList[code] = fragPD);     // Store in table for next lookup
 }
 
 G4double G4InuclNuclei::getNucleiMass(G4double a, G4double z, G4double exc) {
