@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.6 2010-07-14 15:41:12 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.7 2010-07-15 16:30:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -36,6 +36,8 @@
 // 20100711  M. Kelsey -- Add name of parent Collider for reporting messages,
 //		allow changing parent name, add interface for nuclear fragments
 // 20100713  M. Kelsey -- Add (publicly adjustable) tolerance for zeroes
+// 20100715  M. Kelsey -- FPE!  Need to check initial values before computing
+//		relative error.
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -84,17 +86,20 @@ public:
   // FIXME:  Relative comparisons don't work for zero!
   G4double deltaE() const { return (final.e() - initial.e()); }
   G4double relativeE() const {
-    return (std::abs(deltaE())<tolerance) ? 0. : deltaE()/initial.e();
+    return ( (std::abs(deltaE())<tolerance) ? 0. : 
+	     (initial.e()<tolerance) ? 1. : deltaE()/initial.e() );
   }
 
   G4double deltaKE() const { return (ekin(final) - ekin(initial)); }
   G4double relativeKE() const {
-    return (std::abs(deltaKE())<tolerance) ? 0. : deltaKE()/ekin(initial);
+    return ( (std::abs(deltaKE())<tolerance) ? 0. : 
+	     (ekin(initial)<tolerance) ? 1. : deltaKE()/ekin(initial) );
   }
 
   G4double deltaP() const { return (final.rho() - initial.rho()); }
   G4double relativeP() const {
-    return (std::abs(deltaP())<tolerance) ? 0. : deltaP()/initial.rho(); 
+    return ( (std::abs(deltaP())<tolerance) ? 0. : 
+	     (initial.rho()<tolerance) ? 1. : deltaP()/initial.rho() );
   }
 
   // Baryon number and charge are discrete; no bounds and no "relative" scale

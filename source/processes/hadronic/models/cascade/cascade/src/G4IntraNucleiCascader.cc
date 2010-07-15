@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.50 2010-07-14 15:41:13 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.51 2010-07-15 16:30:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -53,6 +53,8 @@
 // 20100713  M. Kelsey -- Add more diagnostics for Dennis' changes.
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class, remove
 //		sanity check on afin/zfin (not valid).
+// 20100715  M. Kelsey -- Add diagnostic for ekin_in vs. actual ekin; reduce
+//		KE across Coulomb barrier
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -60,6 +62,7 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
+#include "G4LorentzConvertor.hh"
 #include "G4NucleiModel.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "Randomize.hh"
@@ -272,7 +275,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 		G4cout << " tunneled " << G4endl;
 		currentParticle.printParticle();
 	      }
-	      // FIXME:  For particles which escape, should adjust KE
+	      // Tunnelling through barrier leaves KE unchanged
 	      output_particles.push_back(currentParticle);
             } else {
               G4int xtype = currentParticle.type();
@@ -282,25 +285,29 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
               if (xtype == 1 || xtype == 2) {
                 theExitonConfiguration.incrementQP(currentParticle.type());
               } else {
-                // non-standard exciton; release it
-                // FIXME: this is a meson, so need to absorb it
+                // non-standard exciton
+                // FIXME: this is a meson, so should absorb it
 		if (verboseLevel > 3) {
 		  G4cout << " non-standard should be absorbed, now released"
 			 << G4endl;
 		  currentCParticle.print();
 		}
- 
-		// FIXME:  For particles which escape, should adjust KE
-               output_particles.push_back(currentParticle);
+		// Tunnelling through barrier leaves KE unchnged
+		output_particles.push_back(currentParticle);
               }
             }
           } else {
-	    if (verboseLevel > 3) {
-	      G4cout << " Goes out " << G4endl;
-	      currentParticle.printParticle();
-	    }
-	    // FIXME:  For particles which escape, should adjust KE
+	    if (verboseLevel > 3) G4cout << " Goes out " << G4endl;
+
 	    output_particles.push_back(currentParticle);
+
+	    /*****
+	    // Adjust kinetic energy by height of potential (+ve or -ve)
+	    G4double newKE = KE - Q*coulombBarrier;
+	    output_particles.back().setKineticEnergy(newKE);
+	    *****/
+
+	    if (verboseLevel > 3) output_particles.back().printParticle();
           }
         } 
       } else { // interaction 
@@ -322,8 +329,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       }		// if (new_cascad_particles ...
 
       if (verboseLevel > 2) {
-	G4cout << " at end of loop, " << cascad_particles.size()
-	       << " cparticles remaining; nucleus (model) has "
+	G4cout << " cparticles remaining " << cascad_particles.size()
+	       << " nucleus (model) has "
 	       << model.getNumberOfNeutrons() << " neutrons "
 	       << model.getNumberOfProtons() << " protons" << G4endl;
       }
@@ -332,7 +339,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     // Add left-over cascade particles
     if (verboseLevel > 2) {
       G4cout << " After cascade, " << cascad_particles.size()
-	     << " cparticles remaining; nucleus (model) has "
+	     << " cparticles; nucleus (model) has "
 	     << model.getNumberOfNeutrons() << " neutrons "
 	     << model.getNumberOfProtons() << " protons" << G4endl;
     }

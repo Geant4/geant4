@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.hh,v 1.20 2010-06-25 09:43:28 gunter Exp $
+// $Id: G4InuclParticle.hh,v 1.21 2010-07-15 16:30:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20100519  M. Kelsey -- Add public access to G4DynamicParticle content
+// 20100715  M. Kelsey -- Add setKineticEnergy() function
 
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
@@ -59,6 +60,8 @@ public:
 
   // These are call-throughs to G4DynamicParticle
   void setMomentum(const G4LorentzVector& mom);
+
+  void setKineticEnergy(G4double ekin) { pDP.SetKineticEnergy(ekin*GeV/MeV); }
 
   void setMass(G4double mass) { pDP.SetMass(mass*GeV/MeV); }
 
