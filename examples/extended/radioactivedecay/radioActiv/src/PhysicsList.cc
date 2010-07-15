@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2010-07-15 07:45:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,6 +87,8 @@ void PhysicsList::ConstructProcess()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCuts()
-{ }
+{
+  SetCutsWithDefault();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
