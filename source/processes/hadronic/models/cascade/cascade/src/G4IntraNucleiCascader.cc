@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.51 2010-07-15 16:30:34 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.52 2010-07-15 19:34:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -54,7 +54,8 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class, remove
 //		sanity check on afin/zfin (not valid).
 // 20100715  M. Kelsey -- Add diagnostic for ekin_in vs. actual ekin; reduce
-//		KE across Coulomb barrier
+//		KE across Coulomb barrier.  Rearrange end-of-loop if blocks,
+//		add conservation check at end.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -393,6 +394,10 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }
 
     if (afin > 1.0) {
+      // FIXME: Want to disperse balls of neutrons (Z==0) without creating
+      //	temporary fragments.  Could EPCollider's N-body phase-space
+      //	do the job?
+
       // Excitation is difference between outgoing and ground-state mass
       G4double mass = G4InuclNuclei::getNucleiMass(afin, zfin);
       G4double mres = presid.m();
@@ -432,46 +437,44 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (verboseLevel > 3) outgoing_nuclei.printParticle();
       
       output.addTargetFragment(outgoing_nuclei);
+    } else if (afin == 1.0) { 	       // Just single nucleon left in "recoil"
+      G4int last_type = (zfin == 1.) ? 1 : 2;
 
-      std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
-      output.addOutgoingParticles(output_particles);
+      G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
+      G4double mres = presid.m();
       
-      return;
-    } else { 	// special case, when one has no nuclei after the cascad
-      if (afin == 1.0) { // recoiling nucleon
-	G4int last_type = (zfin == 1.) ? 1 : 2;
+      if (mres-mass < -small_ekin) {		// Below round-off tolerance
+	if (verboseLevel > 2) 
+	  G4cout << " unphysical recoil nucleon" << G4endl;
+	continue;
+      }
+      
+      if (verboseLevel > 3)
+	G4cout << " adding recoiling nucleon to output list" << G4endl;
+      
+      G4InuclElementaryParticle last_particle(presid, last_type, 4);
+      if (verboseLevel > 3) last_particle.printParticle();
+      
+      output_particles.push_back(last_particle);
+    }		// if (afin > 1) else if (afin == 1)
 
-	G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
-	G4double mres = presid.m();
-
-	if (mres-mass < -small_ekin) {		// Below round-off tolerance
-	  if (verboseLevel > 2) 
-	    G4cout << " unphysical recoil nucleon" << G4endl;
-	  continue;
-	}
-
-	if (verboseLevel > 3)
-	  G4cout << " adding recoiling nucleon to output list" << G4endl;
-
-	G4InuclElementaryParticle last_particle(presid, last_type, 4);
-	if (verboseLevel > 3) last_particle.printParticle();
-	
-	output_particles.push_back(last_particle);
-      }; 
-
-      std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
-      output.addOutgoingParticles(output_particles);
-
-      return;
-    }		// if (afin > 1)
+    // Put final-state particle in "leading order" and return
+    std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
+    output.addOutgoingParticles(output_particles);
+    break;
   }		// while (itry < itry_max)
 
-  if (verboseLevel > 3) {
-    G4cout << " IntraNucleiCascader-> no inelastic interaction after "
-	   << itry_max << " attempts " << G4endl;
+  if (itry == itry_max) {
+    if (verboseLevel > 3) {
+      G4cout << " IntraNucleiCascader-> no inelastic interaction after "
+	     << itry_max << " attempts " << G4endl;
+    }
+
+    output.trivialise(bullet, target);
   }
 
-  output.trivialise(bullet, target);
+  // Check energy and momentum conservation before returning
+  validateOutput(bullet, target, output);
 
   return;
 }

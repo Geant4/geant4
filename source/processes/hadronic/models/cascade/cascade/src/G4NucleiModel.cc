@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.62 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.63 2010-07-15 19:34:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -57,6 +57,8 @@
 //		avoid extra work by returning if A and Z are same as
 //		before.
 // 20100628  M. Kelsey -- Two momentum-recoil bugs; don't subtract energies!
+// 20100715  M. Kelsey -- Make G4InuclNuclei in generateModel(), use for
+//		balance checking in generateParticleFate().
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -87,19 +89,22 @@ using namespace G4InuclSpecialFunctions;
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4NucleiModel::G4NucleiModel()
-  : verboseLevel(0), A(0), Z(0), neutronNumber(0), protonNumber(0),
+  : verboseLevel(0), A(0), Z(0), theNucleus(0),
+    neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {}
 
 G4NucleiModel::G4NucleiModel(G4double a, G4double z)
-  : verboseLevel(0), A(0), Z(0), neutronNumber(0), protonNumber(0),
+  : verboseLevel(0), A(0), Z(0), theNucleus(0),
+    neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {
   generateModel(a,z);
 }
 
 G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
-  : verboseLevel(0), A(0), Z(0), neutronNumber(0), protonNumber(0),
+  : verboseLevel(0), A(0), Z(0), theNucleus(0),
+    neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {
   generateModel(nuclei);
@@ -142,6 +147,9 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
 
   A = a;
   Z = z;
+  delete theNucleus;
+  theNucleus = new G4InuclNuclei(A,Z);		// For conservation checking
+
   neutronNumber = a - z;
   protonNumber = z;
   reset();
@@ -781,7 +789,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
   }
 
   // Create four-vector checking
-  G4CascadeCheckBalance balance(0.05, 0.1, "G4NucleiModel");	// Second arg is in GeV
+  G4CascadeCheckBalance balance(0.005, 0.01, "G4NucleiModel");	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);
 
   outgoing_cparticles.clear();		// Clear return buffer for this event
@@ -907,12 +915,20 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
     if (no_interaction) { 		// still no interactions
       if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
 
+      // For conservation checking (below), get particle before updating
+      static G4InuclElementaryParticle prescatCP;	// Avoid memory churn
+      prescatCP = cparticle.getParticle();
+
       // Last "partner" is just a total-path placeholder
       cparticle.updatePosition(old_position); 
       cparticle.propagateAlongThePath(thePartners[npart-1].second);
       cparticle.incrementCurrentPath(thePartners[npart-1].second);
       boundaryTransition(cparticle);
       outgoing_cparticles.push_back(cparticle);
+
+      // Check conservation for simple scattering (ignore target nucleus!)
+      balance.collide(&prescatCP, 0, outgoing_cparticles);
+      balance.okay();		// Report violations, but don't act on them
     }
   }	// if (npart == 1) [else]
 

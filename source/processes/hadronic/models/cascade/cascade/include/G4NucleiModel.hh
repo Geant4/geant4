@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.26 2010-06-18 02:57:44 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.27 2010-07-15 19:34:09 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -40,6 +40,7 @@
 // 20100520  M. Kelsey -- Add function to separate momentum from nucleon
 // 20100617  M. Kelsey -- Add setVerboseLevel() function, add generateModel()
 //		with particle input, and ctor with A/Z input.
+// 20100715  M. Kelsey -- Add G4InuclNuclei object for use with balance checks
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -186,6 +187,7 @@ private:
 
   G4double A;
   G4double Z;
+  G4InuclNuclei* theNucleus;
 
   G4double neutronNumber;
   G4double protonNumber;

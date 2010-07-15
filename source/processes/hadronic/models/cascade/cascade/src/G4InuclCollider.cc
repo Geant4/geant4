@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.39 2010-07-14 19:43:30 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.40 2010-07-15 19:34:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -174,10 +174,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
       G4cout << " After Cascade " << G4endl;
     }
 
-    // Check energy/momentum conservation from cascade
-    balance.setOwner("After IntraNucleiCascader");
-    validateOutput(bullet, ntarget, output);	// Do checks, but ignore result
-
     // the rest, if any
     // FIXME:  The code below still does too much copying!
     TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
@@ -199,10 +195,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
 	}
 
-	// Check energy/momentum conservation from evaporator
-	balance.setOwner("After NonEquilibriumEvaporator");
-	validateOutput(0, &cascad_rec_nuclei, output);
-	
 	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
 	// Use nuclear fragment left from non-equilibrium for next step
@@ -215,10 +207,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  G4cout << " After EquilibriumEvaporator " << G4endl;
 	}
 
-	// Check energy/momentum conservation from evaporator
-	balance.setOwner("After EquilibriumEvaporator");
-	validateOutput(0, &exiton_rec_nuclei, output);
-	
 	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());  
 	TRFoutput.addTargetFragments(output.getNucleiFragments());
       }
@@ -232,8 +220,10 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     globalOutput.addOutgoingParticles(TRFoutput.getOutgoingParticles());
     globalOutput.addTargetFragments(TRFoutput.getNucleiFragments());
 
-    balance.setOwner("Before setOnShell");
+    // Check energy conservation before mucking everything up
+    balance.setOwner("Before-setOnShell");
     validateOutput(bullet, target, globalOutput);
+    balance.setOwner(theName);
 
     // Adjust final state particles to balance momentum and energy
     globalOutput.setOnShell(bullet, target);

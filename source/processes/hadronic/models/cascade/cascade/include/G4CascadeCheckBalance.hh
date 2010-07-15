@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.7 2010-07-15 16:30:34 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.8 2010-07-15 19:34:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -38,6 +38,8 @@
 // 20100713  M. Kelsey -- Add (publicly adjustable) tolerance for zeroes
 // 20100715  M. Kelsey -- FPE!  Need to check initial values before computing
 //		relative error.
+// 20100715  M. Kelsey -- Add G4CascadParticle interface for G4NucleiModel;
+//		do momentum check on direction, not just magnitude.
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -45,6 +47,7 @@
 #include <cmath>
 #include <vector>
 
+class G4CascadParticle;
 class G4InuclElementaryParticle;
 class G4InuclNuclei;
 class G4InuclParticle;
@@ -71,6 +74,10 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       const std::vector<G4InuclNuclei>& fragments);
 
+  // This is for use with G4NucleiModel internal checks
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       const std::vector<G4CascadParticle>& particles);
+
   // Checks on conservation laws (kinematics, baryon number, charge)
   G4bool energyOkay() const;
   G4bool ekinOkay() const;
@@ -96,7 +103,7 @@ public:
 	     (ekin(initial)<tolerance) ? 1. : deltaKE()/ekin(initial) );
   }
 
-  G4double deltaP() const { return (final.rho() - initial.rho()); }
+  G4double deltaP() const { return (final-initial).rho(); }
   G4double relativeP() const {
     return ( (std::abs(deltaP())<tolerance) ? 0. : 
 	     (initial.rho()<tolerance) ? 1. : deltaP()/initial.rho() );

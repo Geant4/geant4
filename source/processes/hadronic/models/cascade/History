@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2010-07-15 16:30:34 mkelsey Exp $
+$Id: History,v 1.135 2010-07-15 19:34:09 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -17,11 +17,22 @@ code and to keep track of all tags.
 
 15 July 2010 Michael Kelsey
 ---------------------------
-- G4CascadeCheckBalance.hh:  Add layer of protection in relativeX() (check
-  initial values) to avoid divide-by-zero errors.
+- G4CascadeCheckBalance:  Add layer of protection in relativeX() (check
+  initial values) to avoid divide-by-zero errors.  Add another interface to
+  accept list of G4CascadParticles, for use with G4NucleiModel.  Add check
+  of momentum direction balance, not just magnitudes.
+
+- G4IntraNucleiCascader.cc:  Rearrange end-of-loop if-blocks to allow for
+  conservation checking prior to return.
+
+- G4InuclCollider.cc:  Remove re-named conservation checks, now all done by
+  colliders themselves.
 
 - G4InuclParticle.hh:  Add setKineticEnergy() function to simplify handling
   of some kinematics.
+
+- G4NucleiModel:  Add G4InuclNuclei data member (created in generateModel()),
+  for use with conservation checks.  Do check at end of generateParticleFate().
 
 15 July 2010 Michael Kelsey (hadr-casc-V09-03-59)
 -------------------------------------------------
