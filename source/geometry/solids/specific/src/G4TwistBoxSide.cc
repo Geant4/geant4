@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistBoxSide.cc,v 1.7 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4TwistBoxSide.cc,v 1.8 2010-07-16 15:58:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -244,7 +244,7 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
   G4cout << "Local direction v = " << v << G4endl ; 
 #endif
 
-  G4double phi,u ;  // parameters
+  G4double phi=0.,u=0.,q=0.;  // parameters
 
   // temporary variables
 
@@ -267,11 +267,19 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
 
   if ( v.z() == 0. ) {         
 
-    if ( std::fabs(p.z()) <= L ) {     // intersection possible in z
+    if ( (std::fabs(p.z()) <= L) && fPhiTwist ) {  // intersection possible in z
       
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
 
-      u = (2*(-(fdeltaY*phi*v.x()) + fPhiTwist*p.y()*v.x() + fdeltaX*phi*v.y() - fPhiTwist*p.x()*v.y()) + (fDx4plus2*fPhiTwist + 2*fDx4minus2*phi)*(v.y()*std::cos(phi) - v.x()*std::sin(phi)))/(2.* fPhiTwist*((v.x() - fTAlph*v.y())*std::cos(phi) + (fTAlph*v.x() + v.y())*std::sin(phi)))  ;
+      q = (2.* fPhiTwist*((v.x() - fTAlph*v.y())*std::cos(phi)
+                             + (fTAlph*v.x() + v.y())*std::sin(phi)));
+      
+      if (q) {
+        u = (2*(-(fdeltaY*phi*v.x()) + fPhiTwist*p.y()*v.x()
+                + fdeltaX*phi*v.y() - fPhiTwist*p.x()*v.y())
+             + (fDx4plus2*fPhiTwist + 2*fDx4minus2*phi)
+             * (v.y()*std::cos(phi) - v.x()*std::sin(phi))) / q;
+      }
 
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;
@@ -333,13 +341,17 @@ G4int G4TwistBoxSide::DistanceToSurface(const G4ThreeVector &gp,
   
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
-      if ( si[i]==0.0 ) {  // only real solutions
+      if ( (si[i]==0.0) && fPhiTwist ) {  // only real solutions
 #ifdef G4TWISTDEBUG
         G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
         phi = std::fmod(sr[i] , pihalf)  ;
 
-        u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z() - fDx4plus2*fPhiTwist*v.z()*std::sin(phi) - 2*fDx4minus2*phi*v.z()*std::sin(phi))/(2*fPhiTwist*v.z()*std::cos(phi) + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
+        u   = (2*phiyz + 4*fDz*phi*v.y() - 2*fdeltaY*phi*v.z()
+             - fDx4plus2*fPhiTwist*v.z()*std::sin(phi)
+             - 2*fDx4minus2*phi*v.z()*std::sin(phi))
+             /(2*fPhiTwist*v.z()*std::cos(phi)
+               + 2*fPhiTwist*fTAlph*v.z()*std::sin(phi)) ;
 
         xbuftmp.phi = phi ;
         xbuftmp.u = u ;

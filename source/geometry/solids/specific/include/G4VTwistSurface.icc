@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.icc,v 1.4 2010-07-12 15:33:49 gcosmo Exp $
+// $Id: G4VTwistSurface.icc,v 1.5 2010-07-16 15:58:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,9 @@ G4double G4VTwistSurface::DistanceToPlaneWithV(const G4ThreeVector &p,
                                           const G4ThreeVector &n0,
                                                 G4ThreeVector &xx)
 {
-   G4double t = (n0 * (x0 - p)) / (n0 * v);
+   G4double q = n0 * v;
+   G4double t = kInfinity;
+   if (q) { t = (n0 * (x0 - p)) / q; }
    xx = p + t * v;
    return t;
 }
