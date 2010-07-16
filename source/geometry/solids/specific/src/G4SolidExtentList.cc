@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidExtentList.cc,v 1.6 2010-02-10 16:38:37 gcosmo Exp $
+// $Id: G4SolidExtentList.cc,v 1.7 2010-07-16 15:59:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,8 @@ G4SolidExtentList::G4SolidExtentList()
 {
   axis = kZAxis;
   limited = false;
-  minLimit = -kInfinity;
-  maxLimit = +kInfinity;
+  minLimit = -INT_MAX/2;
+  maxLimit =  INT_MAX/2;
 }
 
 
@@ -71,8 +71,8 @@ G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis,
   }
   else
   {
-    minLimit = -kInfinity;
-    maxLimit = +kInfinity;
+    minLimit = -INT_MAX/2;
+    maxLimit =  INT_MAX/2;
   }
 }
 
