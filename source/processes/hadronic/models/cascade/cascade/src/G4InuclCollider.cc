@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.42 2010-07-15 23:02:21 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.43 2010-07-16 00:09:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -199,7 +199,8 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
 	}
 
-	TRFoutput.add(output);
+	// Copy evaporated particles (only!) to output
+	TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
 	// Use nuclear fragment left from non-equilibrium for next step
 	G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
@@ -211,7 +212,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	  G4cout << " After EquilibriumEvaporator " << G4endl;
 	}
 
-	TRFoutput.add(output);
+	TRFoutput.add(output);		// Evaporated particles and nucleus
       }
     }
 
