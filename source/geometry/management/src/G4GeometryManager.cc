@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.23 2010-07-05 09:22:58 gcosmo Exp $
+// $Id: G4GeometryManager.cc,v 1.24 2010-07-16 15:52:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GeometryManager
@@ -260,7 +260,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
      // Don't create voxels for this node
 #ifdef G4GEOMETRY_VOXELDEBUG
      G4cout << "**** G4GeometryManager::BuildOptimisations" << G4endl
-            << "     Skipping logical volume name = " << volume->GetName()
+            << "     Skipping logical volume name = " << tVolume->GetName()
             << G4endl;
 #endif
    }
