@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction2.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction2.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,22 +41,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction2::PrimaryGeneratorAction2()
-{
-  // default particle kinematic
-  //
-  // G4int n_particle = 1;
-  // particleGun  = new G4ParticleGun(n_particle);
-  //
-  // G4ParticleDefinition* particle
-  //          = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
-  // particleGun->SetParticleDefinition(particle);
-  //
-  // particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
-
-  particleGun = PrimaryGeneratorAction::GetParticleGun();
-    
-    
+PrimaryGeneratorAction2::PrimaryGeneratorAction2(G4ParticleGun* gun)
+: particleGun(gun)
+{    
   // energy distribution
   //
   InitFunction();
@@ -65,8 +52,7 @@ PrimaryGeneratorAction2::PrimaryGeneratorAction2()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction2::~PrimaryGeneratorAction2()
-{
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

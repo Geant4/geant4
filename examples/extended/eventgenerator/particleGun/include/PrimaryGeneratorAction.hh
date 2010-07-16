@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,15 +35,15 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
-#include <vector>
 
-class G4ParticleGun;
-class G4Event;
 class PrimaryGeneratorAction1;
 class PrimaryGeneratorAction2;
 class PrimaryGeneratorAction3;
 class PrimaryGeneratorAction4;
+class PrimaryGeneratorMessenger;
+
+class G4ParticleGun;
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,17 +57,24 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GeneratePrimaries(G4Event*);
 
   public:
-    static G4int GetSelectedAction();
-    static void SelectAction(G4int i);
-    static G4ParticleGun* GetParticleGun();
-
+    G4ParticleGun* GetParticleGun() { return particleGun; };
+    
+    void SelectAction(G4int i) { selectedAction = i; };    
+    G4int GetSelectedAction()  { return selectedAction; };    
+    PrimaryGeneratorAction1*  GetAction1() { return action1; };
+    PrimaryGeneratorAction2*  GetAction2() { return action2; };
+    PrimaryGeneratorAction3*  GetAction3() { return action3; };
+    PrimaryGeneratorAction4*  GetAction4() { return action4; };            
+    
   private:
-    static G4int selectedAction;
-    static G4ParticleGun*    particleGun;
+    G4ParticleGun*           particleGun;
     PrimaryGeneratorAction1* action1;
     PrimaryGeneratorAction2* action2;
     PrimaryGeneratorAction3* action3;
     PrimaryGeneratorAction4* action4;
+    G4int                    selectedAction;
+        
+    PrimaryGeneratorMessenger* gunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

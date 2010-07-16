@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.hh,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: HistoMessenger.hh,v 1.2 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +66,6 @@ class HistoMessenger: public G4UImessenger
    G4UIcommand*            histoCmd;
    G4UIcmdWithAnInteger*   prhistoCmd;   
    G4UIcmdWithAnInteger*   rmhistoCmd;
-   G4UIcmdWithAnInteger*   selectActionCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

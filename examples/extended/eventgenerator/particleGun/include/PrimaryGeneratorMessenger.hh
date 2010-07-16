@@ -23,48 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PrimaryGeneratorAction4.hh,v 1.2 2010-07-16 07:37:48 maire Exp $
+// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PrimaryGeneratorAction4_h
-#define PrimaryGeneratorAction4_h 1
+#ifndef PrimaryGeneratorMessenger_h
+#define PrimaryGeneratorMessenger_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
-#include <vector>
 
-class G4ParticleGun;
-class G4Event;
+class PrimaryGeneratorAction;
+class G4UIdirectory;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction4
+class PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
-    PrimaryGeneratorAction4(G4ParticleGun*);    
-   ~PrimaryGeneratorAction4();
-
-  public:
-    void GeneratePrimaries(G4Event*);
-
-    G4double GetRmin3() {return Rmin3;};
-    G4double GetRmax3() {return Rmax3;};
-    G4double GetCosAlphaMin() {return cosAlphaMin;};
-    G4double GetCosAlphaMax() {return cosAlphaMax;};
-            
+    PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+   ~PrimaryGeneratorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
   private:
-    G4double Rmin3;
-    G4double Rmax3;		//vertex volume
-    G4double cosAlphaMin;
-    G4double cosAlphaMax;	//opening angle
-
-    G4ParticleGun*  particleGun;
+    PrimaryGeneratorAction* Action;
+    
+    G4UIdirectory*        Dir;       
+    G4UIcmdWithAnInteger* selectActionCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

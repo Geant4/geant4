@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,18 +35,13 @@
 #include "PrimaryGeneratorAction2.hh"
 #include "PrimaryGeneratorAction3.hh"
 #include "PrimaryGeneratorAction4.hh"
+#include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-
-G4int PrimaryGeneratorAction::selectedAction = 0;
-G4int PrimaryGeneratorAction::GetSelectedAction() { return selectedAction; }
-void PrimaryGeneratorAction::SelectAction(G4int i) { selectedAction = i; }
-G4ParticleGun* PrimaryGeneratorAction::particleGun = 0;
-G4ParticleGun* PrimaryGeneratorAction::GetParticleGun() { return particleGun; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,23 +58,27 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
         
   particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
   
-  action1 = new PrimaryGeneratorAction1();
-  action2 = new PrimaryGeneratorAction2();
-  action3 = new PrimaryGeneratorAction3();
-  action4 = new PrimaryGeneratorAction4();
+  action1 = new PrimaryGeneratorAction1(particleGun);
+  action2 = new PrimaryGeneratorAction2(particleGun);
+  action3 = new PrimaryGeneratorAction3(particleGun);
+  action4 = new PrimaryGeneratorAction4(particleGun);
   
   selectedAction = 1;
+  
+  //create a messenger for this class
+  gunMessenger = new PrimaryGeneratorMessenger(this);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
   delete action1;
   delete action2;
   delete action3;
-  delete action4;  
+  delete action4;
+  delete particleGun;  
+  delete gunMessenger;      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,7 +100,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     action4->GeneratePrimaries(anEvent);
     break;    
    default:
-    G4cerr<<"Invalid generator action"<<G4endl;
+    G4cerr << "Invalid generator action" << G4endl;
   }
 }
 

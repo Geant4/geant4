@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2010-07-06 13:30:51 maire Exp $
+$Id: README,v 1.6 2010-07-16 07:37:48 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,7 +19,7 @@ $Id: README,v 1.5 2010-07-06 13:30:51 maire Exp $
   3) Divergent beam in an arbitrary direction 
   4) Shooting primaries in spherical coordinates with rotation matrix.
  These usages can be chosen by a UI command
-  /testem/selectGunAction <actionID>
+  /gunExample/selectGunAction <actionID>
  where <actionID> corresponds to above cases.
  	
  1- Geometry construction
@@ -112,7 +112,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  	% particleGun
  	....
  	Idle>      ---> type your commands. For instance:
-        Idle> /testem/selectGunAction 1
+        Idle> /gunExample/selectGunAction 1
 	Idle> /run/beamOn 10
 	....
  	Idle> exit
@@ -138,17 +138,17 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
 
   The histograms are managed by the HistoManager class and its Messenger. 
   The histos can be individually activated with the command :
-  /testem/histo/setHisto id nbBins  valMin valMax unit 
+  /gunExample/histo/setHisto id nbBins  valMin valMax unit 
   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
   One can control the name of the histograms file with the command:
-  /testem/histo/setFileName  name  (default particleGun)
+  /gunExample/histo/setFileName  name  (default particleGun)
    
   It is possible to choose the format of the histogram file (hbook, root, XML)
-  with the command /testem/histo/setFileType (root by default)
+  with the command /gunExample/histo/setFileType (root by default)
    
   It is also possible to print selected histograms on an ascii file:
-  /testem/histo/printHisto id
+  /gunExample/histo/printHisto id
   All selected histos will be written on a file name.ascii (default particleGun)
 
   Note that, by default, histograms are disabled. To activate them, uncomment

@@ -2,6 +2,6 @@
 /control/verbose 2
 /run/verbose 1
 #
-/testem/selectGunAction 3
+/gunExample/selectGunAction 3
 #
 /run/beamOn 10000

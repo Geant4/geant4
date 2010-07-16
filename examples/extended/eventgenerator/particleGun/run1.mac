@@ -3,7 +3,7 @@
 /control/verbose 2
 /run/verbose 1
 #
-/testem/selectGunAction 1
+/gunExample/selectGunAction 1
 #
 /tracking/verbose 1
 /run/beamOn 1

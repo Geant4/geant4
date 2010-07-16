@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction3.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction3.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,28 +39,11 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 
-G4ThreeVector PrimaryGeneratorAction3::newUz = G4ThreeVector(0.,0.,0.);
-G4ThreeVector PrimaryGeneratorAction3::GetNewUz() { return newUz; }
-G4double PrimaryGeneratorAction3::alphaMax = 0.;
-G4double PrimaryGeneratorAction3::GetAlphaMax() { return alphaMax; }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction3::PrimaryGeneratorAction3()
-{
-  // default particle kinematic
-  //
-  // G4int n_particle = 1;
-  // particleGun  = new G4ParticleGun(n_particle);
-  //
-  // G4ParticleDefinition* particle
-  //          = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
-  // particleGun->SetParticleDefinition(particle);
-  //
-  // particleGun->SetParticlePosition(G4ThreeVector(0., 0., 0.));
-
-  particleGun = PrimaryGeneratorAction::GetParticleGun();
-    
+PrimaryGeneratorAction3::PrimaryGeneratorAction3(G4ParticleGun* gun)
+: particleGun(gun)
+{    
   // direction
   //
   G4double theta = 90*deg, phi = 45*deg;
@@ -74,8 +57,7 @@ PrimaryGeneratorAction3::PrimaryGeneratorAction3()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction3::~PrimaryGeneratorAction3()
-{
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

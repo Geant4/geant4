@@ -23,48 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PrimaryGeneratorAction4.hh,v 1.2 2010-07-16 07:37:48 maire Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PrimaryGeneratorAction4_h
-#define PrimaryGeneratorAction4_h 1
-
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
-#include <vector>
-
-class G4ParticleGun;
-class G4Event;
+#include "PrimaryGeneratorMessenger.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction4
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
+                                             PrimaryGeneratorAction* Gun)
+:Action(Gun)
 {
-  public:
-    PrimaryGeneratorAction4(G4ParticleGun*);    
-   ~PrimaryGeneratorAction4();
-
-  public:
-    void GeneratePrimaries(G4Event*);
-
-    G4double GetRmin3() {return Rmin3;};
-    G4double GetRmax3() {return Rmax3;};
-    G4double GetCosAlphaMin() {return cosAlphaMin;};
-    G4double GetCosAlphaMax() {return cosAlphaMax;};
-            
-  private:
-    G4double Rmin3;
-    G4double Rmax3;		//vertex volume
-    G4double cosAlphaMin;
-    G4double cosAlphaMax;	//opening angle
-
-    G4ParticleGun*  particleGun;
-};
+  Dir = new G4UIdirectory("/gunExample/");
+  Dir->SetGuidance("this example");
+    
+  selectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
+  selectActionCmd->SetGuidance("Select primary generator action");
+  selectActionCmd->SetGuidance(" id = 1 : Generate several vertices and particles per event");
+  selectActionCmd->SetGuidance(" id = 2 : Show how to sample a tabulated function");  
+  selectActionCmd->SetGuidance(" id = 3 : Divergent beam in an arbitrary direction");
+  selectActionCmd->SetGuidance(" id = 4 : In spherical coordinates with rotation matrix");
+  selectActionCmd->SetParameterName("id",false);
+  selectActionCmd->SetRange("id>0 && id<5");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
+{
+  delete selectActionCmd;
+  delete Dir;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String newValue)
+{ 
+  if (command == selectActionCmd)
+    Action->SelectAction(selectActionCmd->GetNewIntValue(newValue));      
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

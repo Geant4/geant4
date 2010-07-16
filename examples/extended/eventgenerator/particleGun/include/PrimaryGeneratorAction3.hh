@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction3.hh,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction3.hh,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,29 +36,28 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include <vector>
 
 class G4ParticleGun;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction3 : public G4VUserPrimaryGeneratorAction
+class PrimaryGeneratorAction3
 {
   public:
-    PrimaryGeneratorAction3();    
+    PrimaryGeneratorAction3(G4ParticleGun* );    
    ~PrimaryGeneratorAction3();
 
   public:
     void GeneratePrimaries(G4Event*);
 
   public:
-    static G4ThreeVector GetNewUz();
-    static G4double GetAlphaMax();
+    G4ThreeVector GetNewUz() { return newUz; };
+    G4double GetAlphaMax()   { return alphaMax; };
     
   private:
-    static G4ThreeVector          newUz;   
-    static G4double               alphaMax;	//max angle
+    G4ThreeVector          newUz;   
+    G4double               alphaMax;	//max angle
     
     G4ParticleGun*         particleGun;
 };

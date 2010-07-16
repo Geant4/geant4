@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction4.cc,v 1.1 2010-07-06 13:30:51 maire Exp $
+// $Id: PrimaryGeneratorAction4.cc,v 1.2 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,30 +39,11 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 
-G4double PrimaryGeneratorAction4::Rmin3 = 0.;
-G4double PrimaryGeneratorAction4::GetRmin3() {return Rmin3;}
-G4double PrimaryGeneratorAction4::Rmax3 = 0.;
-G4double PrimaryGeneratorAction4::GetRmax3() {return Rmax3;}
-G4double PrimaryGeneratorAction4::cosAlphaMin = 0.;
-G4double PrimaryGeneratorAction4::GetCosAlphaMin() {return cosAlphaMin;}
-G4double PrimaryGeneratorAction4::cosAlphaMax = 0.;
-G4double PrimaryGeneratorAction4::GetCosAlphaMax() {return cosAlphaMax;}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction4::PrimaryGeneratorAction4()
+PrimaryGeneratorAction4::PrimaryGeneratorAction4(G4ParticleGun* gun)
+: particleGun(gun)
 {
-  // default particle kinematic
-  //
-  // G4int n_particle = 1;
-  // particleGun  = new G4ParticleGun(n_particle);
-  //   
-  // G4ParticleDefinition* particle
-  //          = G4ParticleTable::GetParticleTable()->FindParticle("geantino");
-  // particleGun->SetParticleDefinition(particle);
-  
-  particleGun = PrimaryGeneratorAction::GetParticleGun();
-
   // vertex volume
   //  
   G4double Rmin = 2.*mm; 
@@ -81,8 +62,7 @@ PrimaryGeneratorAction4::PrimaryGeneratorAction4()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction4::~PrimaryGeneratorAction4()
-{
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: TrackingAction.hh,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "G4ThreeVector.hh"
 #include "globals.hh"
 
+class PrimaryGeneratorAction;
 class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,13 +45,14 @@ class HistoManager;
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(HistoManager*);
+    TrackingAction(PrimaryGeneratorAction*, HistoManager*);
    ~TrackingAction() {};
    
     void  PreUserTrackingAction(const G4Track*);
     void PostUserTrackingAction(const G4Track*);
     
   private:
+    PrimaryGeneratorAction* primary;
     HistoManager*  histoManager;
 
    // parameters for generator action #3

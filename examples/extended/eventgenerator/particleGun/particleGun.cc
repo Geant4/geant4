@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: particleGun.cc,v 1.1 2010-06-09 01:55:38 asaim Exp $
+// $Id: particleGun.cc,v 1.2 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,7 +74,7 @@ int main(int argc,char** argv) {
   HistoManager*           histo = new HistoManager();  
   RunAction*              run   = new RunAction(histo);
   PrimaryGeneratorAction* prim  = new PrimaryGeneratorAction();
-  TrackingAction*         track = new TrackingAction(histo);
+  TrackingAction*         track = new TrackingAction(prim,histo);
         
   runManager->SetUserAction(run);
   runManager->SetUserAction(prim);  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.2 2010-07-06 13:30:51 maire Exp $
+// $Id: TrackingAction.cc,v 1.3 2010-07-16 07:37:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,23 +42,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(HistoManager* histo)
-:histoManager(histo)
+TrackingAction::TrackingAction(PrimaryGeneratorAction* prim,HistoManager* histo)
+:primary(prim),histoManager(histo)
 { 
  // parameters for generator action #3
-  newUz = PrimaryGeneratorAction3::GetNewUz();
+  newUz = primary->GetAction3()->GetNewUz();
 
  // parameters for generator action #4
-  deltaR3 = (PrimaryGeneratorAction4::GetRmax3() - PrimaryGeneratorAction4::GetRmin3())/3.;
-  cosAlphaMin = PrimaryGeneratorAction4::GetCosAlphaMin();
-  cosAlphaMax = PrimaryGeneratorAction4::GetCosAlphaMax();
+  deltaR3 = 
+    (primary->GetAction4()->GetRmax3() - primary->GetAction4()->GetRmin3())/3.;
+  cosAlphaMin = primary->GetAction4()->GetCosAlphaMin();
+  cosAlphaMax = primary->GetAction4()->GetCosAlphaMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
- G4int selectedGeneratorAction = PrimaryGeneratorAction::GetSelectedAction();
+ G4int selectedGeneratorAction = primary->GetSelectedAction();
  G4int id = 0;
 
  if(selectedGeneratorAction==2)
@@ -89,7 +90,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4double psi = std::atan2(u2*um, u1*um);
   if (psi < 0.) psi += twopi;    
   G4double dpsi  = histoManager->GetBinWidth(id);
-  G4double alphaMax = PrimaryGeneratorAction3::GetAlphaMax();    
+  G4double alphaMax = primary->GetAction3()->GetAlphaMax();    
   dOmega = (1. - std::cos(alphaMax))*dpsi;     
   if (dOmega > 0.) histoManager->FillHisto(id, psi, 1./dOmega);  
  }
