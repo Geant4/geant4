@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.28 2010-07-15 23:02:21 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.29 2010-07-16 22:16:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -41,6 +41,7 @@
 //		combined "add()" function to put two of these together
 
 #include "G4CollisionOutput.hh"
+#include "G4CascadParticle.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzRotation.hh"
@@ -80,9 +81,19 @@ void G4CollisionOutput::addOutgoingParticles(const std::vector<G4InuclElementary
 			   particles.begin(), particles.end());
 }
 
-
 void G4CollisionOutput::addTargetFragments(const std::vector<G4InuclNuclei>& nuclea) {
   nucleiFragments.insert(nucleiFragments.end(), nuclea.begin(), nuclea.end());
+}
+
+// These are primarily for G4IntraNucleiCascader internal checks
+
+void G4CollisionOutput::addOutgoingParticle(const G4CascadParticle& cparticle) {
+  addOutgoingParticle(cparticle.getParticle());
+}
+
+void G4CollisionOutput::addOutgoingParticles(const std::vector<G4CascadParticle>& cparticles) {
+  for (unsigned i=0; i<cparticles.size(); i++)
+    addOutgoingParticle(cparticles[i].getParticle());
 }
 
 

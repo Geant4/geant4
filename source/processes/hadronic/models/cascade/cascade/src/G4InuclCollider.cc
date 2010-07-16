@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.43 2010-07-16 00:09:34 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.44 2010-07-16 22:16:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -43,6 +43,7 @@
 //		conservation checks, as the colliders now all do so.  Move
 //		local buffers outside while() loop, use new "combined add()"
 //		interface for copying local buffers to global.
+// 20100716  M. Kelsey -- Drop G4IntraNucleiCascader::setInteractionCase()
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -154,8 +155,6 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   G4LorentzVector bmom;			// Bullet is along local Z
   bmom.setZ(convertToTargetRestFrame.getTRSMomentum());
   
-  theIntraNucleiCascader.setInteractionCase(interCase.code());
-
   G4int itry = 0;
   while (itry < itry_max) {
     itry++;

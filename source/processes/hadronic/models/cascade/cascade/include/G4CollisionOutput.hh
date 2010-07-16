@@ -22,7 +22,8 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.hh,v 1.22 2010-07-15 23:02:21 mkelsey Exp $
+//
+// $Id: G4CollisionOutput.hh,v 1.23 2010-07-16 22:16:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +34,7 @@
 // 20100620  M. Kelsey -- Add setVerboseLevel() function
 // 20100715  M. Kelsey -- Add total charge and baryon number functions, and a
 //		combined "add()" function to put two of these together.
+// 20100716  M. Kelsey -- Add interface to handle G4CascadParticles
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -43,6 +45,7 @@
 #include <algorithm>
 #include <vector>
 
+class G4CascadParticle;
 class G4LorentzConvertor;
 
 class G4CollisionOutput {
@@ -73,6 +76,10 @@ public:
   };
 
   void addTargetFragments(const std::vector<G4InuclNuclei>& nuclea);
+
+  // These are primarily for G4IntraNucleiCascader internal checks
+  void addOutgoingParticle(const G4CascadParticle& cparticle);
+  void addOutgoingParticles(const std::vector<G4CascadParticle>& cparticles);
 
   // ===== Access contents of lists =====
 

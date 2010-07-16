@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.14 2010-07-14 15:41:12 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.15 2010-07-16 22:16:17 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -33,14 +33,19 @@
 //		creating and deleting on every cycle.
 // 20100623  M. Kelsey -- Undo change from 0617.  G4NucleiModel not reusable.
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100716  M. Kelsey -- Eliminate inter_case; use base-class functionality,
+//		add function to compute recoil nuclear mass on the fly
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
 #include "G4CascadeColliderBase.hh"
 #include "G4ElementaryParticleCollider.hh"
+#include <vector>
 
+class G4CascadParticle;
 class G4CollisionOutput;
+class G4InuclElementaryParticle;
 class G4InuclParticle;
 
 
@@ -52,18 +57,14 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
-  // FIXME:  This should come from (or be determined by) G4InteractionCase
-  void setInteractionCase(G4int intcase) { 
-    inter_case = intcase; 
-  };
-
 private: 
   G4ElementaryParticleCollider theElementaryParticleCollider;
 
-  // FIXME:  This should come from (or be determined by) G4InteractionCase
-  G4int inter_case;
-
   G4bool goodCase(G4double a, G4double z, G4double eexs, G4double ein) const; 
+
+  G4double getResidualMass(G4InuclParticle* bullet, G4InuclParticle* target,
+			   const std::vector<G4InuclElementaryParticle>& output,
+			   const std::vector<G4CascadParticle>& inprocess);
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */

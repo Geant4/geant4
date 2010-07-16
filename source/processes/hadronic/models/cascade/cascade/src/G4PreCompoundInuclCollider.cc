@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundInuclCollider.cc,v 1.11 2010-07-14 15:41:13 mkelsey Exp $
+// $Id: G4PreCompoundInuclCollider.cc,v 1.12 2010-07-16 22:16:17 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -33,6 +33,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class, make other colliders
 //		simple data members, consolidate code
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100716  M. Kelsey -- Drop G4IntraNucleiCascader::setInteractionCase()
 
 #include "G4PreCompoundInuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -132,8 +133,6 @@ void G4PreCompoundInuclCollider::collide(G4InuclParticle* bullet,
 
 	G4InuclNuclei ntarget(at, zt);		// Default is at rest
 
-	theIntraNucleiCascader->setInteractionCase(interCase.code());
-	 
 	G4bool bad = true;
 	G4int itry = 0;
 	 
