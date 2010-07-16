@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.37 2010-07-13 16:45:22 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.38 2010-07-16 15:53:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -551,7 +551,8 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
   faxis=goodSliceAxis;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
-  G4cout << G4endl << "     Selected axis = " << faxis << G4endl;
+  G4cout << G4endl << "     Volume = " << pVolume->GetName()
+         << G4endl << "     Selected axis = " << faxis << G4endl;
   for (size_t islice=0; islice<fslices.size(); islice++)
   {
     G4cout << "     Node #" << islice << " = {";
@@ -869,6 +870,14 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
     minExtents[nVol] = targetMinExtent;
     maxExtents[nVol] = targetMaxExtent;
 
+#ifdef G4GEOMETRY_VOXELDEBUG
+   G4cout << "---------------------------------------------------" << G4endl
+          << "     Volume = " << pDaughter->GetName() << G4endl
+          << " Min Extent = " << targetMinExtent << G4endl
+          << " Max Extent = " << targetMaxExtent << G4endl
+          << "---------------------------------------------------" << G4endl;
+#endif
+
     // Check not entirely outside mother when processing toplevel nodes
     //
     if ( (!pLimits.IsLimited()) && ((targetMaxExtent<=motherMinExtent)
@@ -963,7 +972,6 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 #endif   
   }
   G4double nodeWidth = (motherMaxExtent-motherMinExtent)/noNodes;
-  if (nodeWidth==0)  { nodeWidth = 1.0; }
 
   // Create G4VoxelNodes. Will Add proxies before setting fslices
   //
