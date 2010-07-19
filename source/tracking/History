@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2010-06-16 20:03:00 allison Exp $
+$Id: History,v 1.143 2010-07-19 13:41:40 gcosmo Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 July 2010 Gabriele Cosmo (tracking-V09-03-05)
+- Added dummy initialisation to members in constructors in classes:
+  G4AdjointSteppingAction, G4UserSteppingAction, G4UserTrackingAction
+  and G4VSteppingVerbose.
+- G4SteppingManager:  and use canonical form for G4Exception.
+  Added protection for possible negative index in method ApplyProductionCut()
+  and some printout formatting.
+- Added redundant return statement after exception in G4SteppingManager2.
+- Fixed restoring of output settings in G4SteppingVerbose.
+- Use 0 instead of NULL where applicable.
 
 16 June 2010 John Allison (tracking-V09-03-04)
 - G4VTrajectory, G4Trajectory, G4SmoothTrajectory:
