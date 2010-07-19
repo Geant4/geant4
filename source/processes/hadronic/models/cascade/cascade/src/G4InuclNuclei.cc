@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.13 2010-07-15 05:48:29 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.14 2010-07-19 22:26:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -34,6 +34,7 @@
 // 20100630  M. Kelsey -- Use excitation energy in G4Ions
 // 20100714  M. Kelsey -- Use G4DynamicParticle::theDynamicalMass to deal with
 //	     excitation energy without instantianting "infinite" G4PartDefns.
+// 20100719  M. Kelsey -- Change excitation energy without altering momentum
 
 #include "G4HadronicException.hh"
 #include "G4InuclNuclei.hh"
@@ -48,6 +49,20 @@
 #include <map>
 
 using namespace G4InuclSpecialFunctions;
+
+
+// Change excitation energy while keeping momentum vector constant
+
+void G4InuclNuclei::setExitationEnergy(G4double e) {
+  G4double emass = getNucleiMass() + e*MeV/GeV;		// From Bertini to G4 units
+
+  static G4LorentzVector mom;		// Local buffer avoids memory churn
+  mom = getMomentum();
+  mom.setVectM(mom.vect(), emass);	// Same three-momentum, new mass value
+
+  setMass(emass);
+  setMomentum(mom);
+}
 
 
 // Convert nuclear configuration to standard GEANT4 pointer

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.43 2010-07-14 23:50:37 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.44 2010-07-19 22:26:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -49,6 +49,7 @@
 //		_generated_ evaporate energy (S) to adjust EEXS directly,
 //		and test for S < EEXS before any particle generation; shift
 //		nucleus momentum (PEX) by evaporate momentum directly
+// 20100719  M. Kelsey -- Remove duplicative EESX_new calculation.
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -465,9 +466,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 		A = A1[icase];
 		Z = Z1[icase];
-
-		// New excitation energy depends on residual nuclear state
-		EEXS = (PEX.m() - G4InuclNuclei::getNucleiMass(A,Z))*GeV;
 
 		nuclei.setMomentum(mom);
 		output.addTargetFragment(nuclei);

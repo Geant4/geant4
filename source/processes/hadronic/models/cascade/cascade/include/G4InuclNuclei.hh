@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.21 2010-07-15 05:48:29 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.22 2010-07-19 22:26:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -37,6 +37,7 @@
 // 20100711  M. Kelsey -- Add optional model ID to constructors
 // 20100714  M. Kelsey -- Use G4DynamicParticle::theDynamicalMass to deal with
 //	     excitation energy without instantianting "infinite" G4PartDefns.
+// 20100719  M. Kelsey -- Move setExitationEnergy implementation to .cc file.
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -82,9 +83,7 @@ public:
   G4InuclNuclei& operator=(const G4InuclNuclei& right);
 
   // Excitation energy is stored as dynamical mass of particle
-  void setExitationEnergy(G4double e) {
-    setMass(getNucleiMass() + e*MeV/GeV);	// From Bertini to G4 units
-  }
+  void setExitationEnergy(G4double e);
 
   void setExitonConfiguration(const G4ExitonConfiguration& config) { 
     theExitonConfiguration = config;

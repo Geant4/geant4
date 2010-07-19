@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.14 2010-07-15 23:02:21 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.15 2010-07-19 22:26:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -41,6 +41,7 @@
 // 20100713  M. kelsey -- Hide conservation errors behind verbosity
 // 20100715  M. Kelsey -- Use new G4CollisionOutput totals instead of loops,
 //		move temporary buffer to be data member
+// 20100719  M. Kelsey -- Change zero tolerance to 10 keV instead of 1 keV.
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.hh,v 1.23 2010-07-16 22:16:17 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.24 2010-07-19 22:26:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -83,7 +83,7 @@ public:
 
   // ===== Access contents of lists =====
 
-  G4int numberofOutgoingParticles() const { return outgoingParticles.size(); }
+  G4int numberOfOutgoingParticles() const { return outgoingParticles.size(); }
     
   const std::vector<G4InuclElementaryParticle>& getOutgoingParticles() const {
     return outgoingParticles;
