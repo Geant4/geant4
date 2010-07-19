@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.16 2010-06-16 20:03:00 allison Exp $
+// $Id: G4VTrajectory.cc,v 1.17 2010-07-19 13:41:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -133,11 +133,10 @@ void G4VTrajectory::DrawTrajectory(G4int i_mode) const
   static G4bool warnedAboutIMode = false;
   if (!warnedAboutIMode && i_mode != 0) {
     G4Exception
-        ("G4VTrajectory::DrawTrajectory",
-         "",
-         JustWarning,
-"WARNING: DEPRECATED: The use of i_mode argument in DrawTrajectory"
-"\n  is deprecated and will be removed at the next major release.");
+        ("G4VTrajectory::DrawTrajectory()",
+         "Tracking0100", JustWarning,
+         "DEPRECATED! The use of i_mode argument in DrawTrajectory()"
+         "\n  is deprecated and will be removed at the next major release.");
     warnedAboutIMode = true;
   }
 

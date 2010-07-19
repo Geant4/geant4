@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.21 2010-06-16 20:03:00 allison Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.22 2010-07-19 13:41:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -78,7 +78,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
 
    // The first point has no auxiliary points, so set the auxiliary
    // points vector to NULL (jacek 31/10/2002)
-   positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), NULL));
+   positionRecord->push_back(new G4SmoothTrajectoryPoint(aTrack->GetPosition(), 0));
 }
 
 G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory()
