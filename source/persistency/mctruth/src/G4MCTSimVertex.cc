@@ -42,7 +42,7 @@
 
 /////////////////////////////////////
 G4MCTSimVertex::G4MCTSimVertex()  
-  : inParticleTrackID(0),id(-1), 
+  : inParticleTrackID(0),id(-1), time(0.),
     volumeName(""), volumeNumber(-1),
     creatorProcessName("none"),
     storeFlag(false)

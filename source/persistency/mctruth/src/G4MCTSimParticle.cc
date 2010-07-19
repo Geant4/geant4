@@ -42,7 +42,7 @@
 
 /////////////////////////////////
 G4MCTSimParticle::G4MCTSimParticle()
-  : parentParticle(0), 
+  : parentParticle(0), pdgID(0),
     trackID(0), parentTrackID(0),
     primaryFlag(false), 
     vertex(0), storeFlag(false)

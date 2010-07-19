@@ -36,9 +36,7 @@
 #include <vector>
 #include <map>
 #include "G4HCIOcatalog.hh"
-#include "G4VHCIOentry.hh"
 #include "G4DCIOcatalog.hh"
-#include "G4VDCIOentry.hh"
 
 #ifndef WIN32
   #include "G4FileUtilities.hh"
