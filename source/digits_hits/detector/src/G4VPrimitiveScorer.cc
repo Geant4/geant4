@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc,v 1.2 2006-06-29 18:06:03 gunter Exp $
+// $Id: G4VPrimitiveScorer.cc,v 1.3 2010-07-20 07:33:54 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VPrimitiveScorer
@@ -36,7 +36,8 @@
 
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
- :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth)
+  :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth),
+   unitName("NoUnit"),unitValue(1.0)
 {;} 
 
 G4VPrimitiveScorer::~G4VPrimitiveScorer()

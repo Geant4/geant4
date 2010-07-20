@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSEnergyDeposit.hh,v 1.2 2010-07-20 07:33:54 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,7 +46,8 @@ class G4PSEnergyDeposit : public G4VPrimitiveScorer
 {
  
  public: // with description
-      G4PSEnergyDeposit(G4String name, G4int depth=0);
+      G4PSEnergyDeposit(G4String name, G4int depth=0); // default unit
+      G4PSEnergyDeposit(G4String name, const G4String& unit, G4int depth=0);
       virtual ~G4PSEnergyDeposit();
 
  protected: // with description
@@ -58,6 +59,10 @@ class G4PSEnergyDeposit : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
+      virtual G4String GetUnit() const;
+
 
   private:
       G4int HCID;
