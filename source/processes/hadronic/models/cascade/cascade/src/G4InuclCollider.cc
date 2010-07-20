@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.44 2010-07-16 22:16:17 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.45 2010-07-20 06:10:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -44,6 +44,8 @@
 //		local buffers outside while() loop, use new "combined add()"
 //		interface for copying local buffers to global.
 // 20100716  M. Kelsey -- Drop G4IntraNucleiCascader::setInteractionCase()
+// 20100720  M. Kelsey -- Make all the collders pointer members (to reducde
+//		external compile dependences).
 
 #include "G4InuclCollider.hh"
 #include "G4BigBanger.hh"
@@ -57,9 +59,20 @@
 
 
 G4InuclCollider::G4InuclCollider()
-  : G4CascadeColliderBase("G4InuclCollider") {}
+  : G4CascadeColliderBase("G4InuclCollider"),
+    theElementaryParticleCollider(new G4ElementaryParticleCollider),
+    theIntraNucleiCascader(new G4IntraNucleiCascader),
+    theNonEquilibriumEvaporator(new G4NonEquilibriumEvaporator),
+    theEquilibriumEvaporator(new G4EquilibriumEvaporator),
+    theBigBanger(new G4BigBanger) {}
 
-G4InuclCollider::~G4InuclCollider() {}
+G4InuclCollider::~G4InuclCollider() {
+  delete theElementaryParticleCollider;
+  delete theIntraNucleiCascader;
+  delete theNonEquilibriumEvaporator;
+  delete theEquilibriumEvaporator;
+  delete theBigBanger;
+}
 
 
 void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
@@ -69,11 +82,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   }
 
   // Initialize colliders verbosity
-  theElementaryParticleCollider.setVerboseLevel(verboseLevel);
-  theIntraNucleiCascader.setVerboseLevel(verboseLevel);
-  theNonEquilibriumEvaporator.setVerboseLevel(verboseLevel);
-  theEquilibriumEvaporator.setVerboseLevel(verboseLevel);
-  theBigBanger.setVerboseLevel(verboseLevel);
+  theElementaryParticleCollider->setVerboseLevel(verboseLevel);
+  theIntraNucleiCascader->setVerboseLevel(verboseLevel);
+  theNonEquilibriumEvaporator->setVerboseLevel(verboseLevel);
+  theEquilibriumEvaporator->setVerboseLevel(verboseLevel);
+  theBigBanger->setVerboseLevel(verboseLevel);
 
   TRFoutput.setVerboseLevel(verboseLevel);
   output.setVerboseLevel(verboseLevel);
@@ -85,7 +98,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     if (verboseLevel > 2)
       G4cout << " InuclCollider -> particle on particle collision" << G4endl;
  
-    theElementaryParticleCollider.collide(bullet, target, globalOutput);
+    theElementaryParticleCollider->collide(bullet, target, globalOutput);
     return;
   }
   
@@ -167,10 +180,10 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     
     if (interCase.hadNucleus()) {
       G4InuclElementaryParticle pbullet(bmom, btype);
-      theIntraNucleiCascader.collide(&pbullet, ntarget, output);
+      theIntraNucleiCascader->collide(&pbullet, ntarget, output);
     } else {
       G4InuclNuclei nbullet(bmom, ab, zb);
-      theIntraNucleiCascader.collide(&nbullet, ntarget, output);
+      theIntraNucleiCascader->collide(&nbullet, ntarget, output);
     }   
     
     if (verboseLevel > 1) {
@@ -189,10 +202,10 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	}
 
 	// Add result of explosion diretly to output
-	theBigBanger.collide(0,&cascad_rec_nuclei, TRFoutput);
+	theBigBanger->collide(0,&cascad_rec_nuclei, TRFoutput);
       } else {
 	output.reset();			// Buffer for debugging evaporators
-	theNonEquilibriumEvaporator.collide(0, &cascad_rec_nuclei, output);
+	theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei, output);
 	
 	if (verboseLevel > 1) {
 	  G4cout << " After NonEquilibriumEvaporator " << G4endl;
@@ -205,7 +218,7 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	G4InuclNuclei exiton_rec_nuclei = output.getNucleiFragments()[0];
 	
 	output.reset();
-	theEquilibriumEvaporator.collide(0, &exiton_rec_nuclei, output);
+	theEquilibriumEvaporator->collide(0, &exiton_rec_nuclei, output);
 	
 	if (verboseLevel > 1) {
 	  G4cout << " After EquilibriumEvaporator " << G4endl;

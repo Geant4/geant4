@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.55 2010-07-16 22:16:17 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.56 2010-07-20 06:10:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -59,9 +59,11 @@
 // 20100716  M. Kelsey -- Eliminate inter_case; use base-class functionality.
 //		Add minimum-fragment requirement for recoil, in order to
 //		allow for momentum balancing
+// 20100720  M. Kelsey -- Make EPCollider pointer member
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
+#include "G4ElementaryParticleCollider.hh"
 #include "G4CollisionOutput.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -79,7 +81,8 @@ using namespace G4InuclSpecialFunctions;
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
-  : G4CascadeColliderBase("G4IntraNucleiCascader") {}
+  : G4CascadeColliderBase("G4IntraNucleiCascader"),
+    theElementaryParticleCollider(new G4ElementaryParticleCollider) {}
 
 G4IntraNucleiCascader::~G4IntraNucleiCascader() {}
 
@@ -91,7 +94,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   G4NucleiModel model;
   model.setVerboseLevel(verboseLevel);
-  theElementaryParticleCollider.setVerboseLevel(verboseLevel);
+  theElementaryParticleCollider->setVerboseLevel(verboseLevel);
 
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
@@ -218,7 +221,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       }
 
       new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
-							&theElementaryParticleCollider);
+							theElementaryParticleCollider);
       if (verboseLevel > 2) {
 	G4cout << " After generate fate: New particles "
 	       << new_cascad_particles.size() << G4endl
@@ -480,6 +483,15 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     // Put final-state particle in "leading order" and return
     std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
     output.addOutgoingParticles(output_particles);
+
+    // Adjust final state without fragment to balance momentum and energy
+    if (afin <= 1) {
+      output.setVerboseLevel(verboseLevel);
+      output.setOnShell(bullet, target);
+      output.setVerboseLevel(0);
+      if (verboseLevel > 2 && !output.acceptable())
+	G4cout << " setOnShell() failed to balance energy-momentum" << G4endl;
+    }
 
     // Check energy and momentum conservation before returning
     if (validateOutput(bullet, target, output)) break;

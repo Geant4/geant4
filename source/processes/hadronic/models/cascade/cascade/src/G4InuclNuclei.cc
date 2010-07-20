@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.14 2010-07-19 22:26:28 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.15 2010-07-20 06:10:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -54,14 +54,15 @@ using namespace G4InuclSpecialFunctions;
 // Change excitation energy while keeping momentum vector constant
 
 void G4InuclNuclei::setExitationEnergy(G4double e) {
-  G4double emass = getNucleiMass() + e*MeV/GeV;		// From Bertini to G4 units
+  G4double ekin = getKineticEnergy();		// Current kinetic energy
 
-  static G4LorentzVector mom;		// Local buffer avoids memory churn
-  mom = getMomentum();
-  mom.setVectM(mom.vect(), emass);	// Same three-momentum, new mass value
+  G4double emass = getNucleiMass() + e*MeV/GeV;	// From Bertini to G4 units
 
-  setMass(emass);
-  setMomentum(mom);
+  // Directly compute new kinetic energy from old
+  G4double ekin_new = std::sqrt(emass*emass + ekin*(2.*getMass()+ekin)) - emass;
+
+  setMass(emass);	       // Momentum is computed from mass and Ekin
+  setKineticEnergy(ekin_new);
 }
 
 

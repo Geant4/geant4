@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.cc,v 1.1 2010-07-14 15:42:37 mkelsey Exp $
+// $Id: G4CascadeColliderBase.cc,v 1.2 2010-07-20 06:10:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
@@ -30,6 +30,7 @@
 //		and control flag.
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4InteractionCase.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -38,6 +39,17 @@
 #include "G4ios.hh"
 
 using namespace G4InuclSpecialFunctions;
+
+
+// Constructor and destructor
+
+G4CascadeColliderBase::G4CascadeColliderBase(const char* name, G4int verbose)
+  : G4VCascadeCollider(name, verbose), doConservationChecks(true),
+    balance(new G4CascadeCheckBalance(0.001, 0.001, name)) {}
+
+G4CascadeColliderBase::~G4CascadeColliderBase() {
+  delete balance;
+}
 
 
 // Both bullet and target must be hadrons or leptons for this to work
@@ -122,9 +134,9 @@ G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
   // Show final state particles
   if (verboseLevel > 2) output.printCollisionOutput();
 
-  balance.setVerboseLevel(verboseLevel);
-  balance.collide(bullet, target, output);
-  return balance.okay();			// Returns false if violations
+  balance->setVerboseLevel(verboseLevel);
+  balance->collide(bullet, target, output);
+  return balance->okay();			// Returns false if violations
 }
 
 G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
@@ -135,9 +147,9 @@ G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
   if (verboseLevel > 1)
     G4cout << " >>> " << theName << "::validateOutput" << G4endl;
 
-  balance.setVerboseLevel(verboseLevel);
-  balance.collide(bullet, target, particles);
-  return balance.okay();			// Returns false if violations
+  balance->setVerboseLevel(verboseLevel);
+  balance->collide(bullet, target, particles);
+  return balance->okay();			// Returns false if violations
 }
 
 G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
@@ -148,7 +160,7 @@ G4bool G4CascadeColliderBase::validateOutput(G4InuclParticle* bullet,
   if (verboseLevel > 1)
     G4cout << " >>> " << theName << "::validateOutput" << G4endl;
 
-  balance.setVerboseLevel(verboseLevel);
-  balance.collide(bullet, target, fragments);
-  return balance.okay();			// Returns false if violations
+  balance->setVerboseLevel(verboseLevel);
+  balance->collide(bullet, target, fragments);
+  return balance->okay();			// Returns false if violations
 }

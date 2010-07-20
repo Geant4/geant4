@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2010-07-19 22:26:28 mkelsey Exp $
+$Id: History,v 1.141 2010-07-20 06:10:38 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,20 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20 July 2010 Michael Kelsey (hadr-casc-V09-03-64)
+-------------------------------------------------
+- G4CascadeColliderBase: Make G4CascadeCheckBalance a pointer member, move
+  ctor and dtor to .cc file.  Change balance tolerances to 1 per mil and 1
+  MeV.
+
+- G4InuclCollder:  Make all colliders pointer members.
+
+- G4IntraNucleiCascader:  Make EPCollider a pointer member, and call
+  G4CollisionOutput::setOnShell() to balance energy-momentum for null fragments.
+
+- G4InuclNuclei.cc:  Preserve momentum magnitude when setting excitation
+  energy by setting mass and kinetic energy.
 
 19 July 2010 Michael Kelsey (hadr-casc-V09-03-63)
 -------------------------------------------------

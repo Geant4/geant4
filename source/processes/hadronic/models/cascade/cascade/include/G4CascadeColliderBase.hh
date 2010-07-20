@@ -24,17 +24,17 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.hh,v 1.1 2010-07-14 15:42:37 mkelsey Exp $
+// $Id: G4CascadeColliderBase.hh,v 1.2 2010-07-20 06:10:38 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
 //		and control flag.
+// 20100720  M. Kelsey -- Change G4CascadeCheckBalance to pointer member
 
 #include "G4VCascadeCollider.hh"
 
 #include "globals.hh"
-#include "G4CascadeCheckBalance.hh"
 #include "G4InteractionCase.hh"
 #include <vector>
 
@@ -42,14 +42,12 @@ class G4InuclElementaryParticle;
 class G4InuclNuclei;
 class G4InuclParticle;
 class G4CollisionOutput;
+class G4CascadeCheckBalance;
 
 class G4CascadeColliderBase : public G4VCascadeCollider {
 public:
-  G4CascadeColliderBase(const char* name, G4int verbose=0)
-    : G4VCascadeCollider(name, verbose),
-      doConservationChecks(true), balance(0.005, 0.01, name) {}
-
-  virtual ~G4CascadeColliderBase() {}
+  G4CascadeColliderBase(const char* name, G4int verbose=0);
+  virtual ~G4CascadeColliderBase();
 
   virtual void setConservationChecks(G4bool doBalance=true) {
     doConservationChecks = doBalance;
@@ -58,7 +56,7 @@ public:
 protected:
   G4InteractionCase interCase;		// Determine bullet vs. target
   G4bool doConservationChecks;		// Conservation-law validation
-  G4CascadeCheckBalance balance;
+  G4CascadeCheckBalance* balance;
 
   // Decide whether to use G4ElementaryParticleCollider or not
   virtual G4bool useEPCollider(G4InuclParticle* bullet, 
