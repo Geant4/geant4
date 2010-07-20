@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: TrackingAction.hh,v 1.2 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +59,8 @@ class TrackingAction : public G4UserTrackingAction {
     RunAction*          run;
     EventAction*        event;
     TrackingMessenger*  trackMessenger;
-        
+    
+    G4double charge;        
     G4bool fullChain;
 };
 

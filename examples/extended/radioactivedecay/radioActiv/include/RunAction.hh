@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: RunAction.hh,v 1.2 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +54,7 @@ class RunAction : public G4UserRunAction
     
     void ParticleCount(G4String, G4double);
     void Balance(G4double,G4double);
+    void EventTiming(G4double);
     
   private:
     HistoManager*           histoManager;
@@ -65,7 +66,8 @@ class RunAction : public G4UserRunAction
     std::map<G4String,G4double> Emax;
     G4int    decayCount;
     G4double Ebalance[3];
-    G4double Pbalance[3];                    
+    G4double Pbalance[3];
+    G4double EventTime[3];                    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

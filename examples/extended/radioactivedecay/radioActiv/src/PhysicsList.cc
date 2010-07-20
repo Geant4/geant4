@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2010-07-15 07:45:59 maire Exp $
+// $Id: PhysicsList.cc,v 1.3 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "PhysicsList.hh"
+#include "G4UnitsTable.hh"
 #include "G4ParticleTypes.hh"
 #include "G4IonConstructor.hh"
 #include "G4ProcessManager.hh"
@@ -40,7 +41,18 @@
 
 PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
-{ }
+{
+  //add new units for radioActive decays
+  // 
+  const G4double minute = 60*second;
+  const G4double hour   = 60*minute;
+  const G4double day    = 24*hour;
+  const G4double year   = 365*day;
+  new G4UnitDefinition("minute", "min", "Time", minute);
+  new G4UnitDefinition("hour",   "h",   "Time", hour);
+  new G4UnitDefinition("day",    "d",   "Time", day);
+  new G4UnitDefinition("year",   "y",   "Time", year);        
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

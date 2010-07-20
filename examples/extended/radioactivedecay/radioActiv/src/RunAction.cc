@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.3 2010-06-27 22:28:01 maire Exp $
+// $Id: RunAction.cc,v 1.4 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run*)
 { 
   decayCount = 0;
-  for (G4int i=0; i<3; i++) Ebalance[i] = Pbalance[i] = 0. ;
+  for (G4int i=0; i<3; i++) Ebalance[i] = Pbalance[i] = EventTime[i] = 0. ;
        
   //histograms
   //
@@ -87,7 +87,16 @@ void RunAction::Balance(G4double Ebal, G4double Pbal)
   if (Pbal < Pbalance[1]) Pbalance[1] = Pbal;
   if (Pbal > Pbalance[2]) Pbalance[2] = Pbal;    
 }
-    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EventTiming(G4double time)
+{  
+  EventTime[0] += time;
+  if (decayCount == 1) EventTime[1] = EventTime[2] = time;  
+  if (time < EventTime[1]) EventTime[1] = time;
+  if (time > EventTime[2]) EventTime[2] = time;    
+}    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* run)
@@ -146,8 +155,21 @@ void RunAction::EndOfRunAction(const G4Run* run)
  << "  Momentum: mean = " << std::setw(wid) << G4BestUnit(Pbmean, "Energy")
 	    << "\t( "  << G4BestUnit(Pbalance[1], "Energy")
 	    << " --> " << G4BestUnit(Pbalance[2], "Energy")
+            << ")" << G4endl;
+	    
+ //Timing
+ //
+ G4double Tmean = EventTime[0]/nbEvents;
+ G4double halfLife = Tmean*std::log(2.);
+   
+ G4cout << "\n Total time of an event : mean = "
+            << std::setw(wid) << G4BestUnit(Tmean, "Time")
+	    << "  Half-life = "
+	    << std::setw(wid) << G4BestUnit(halfLife, "Time")
+	    << "\t( "  << G4BestUnit(EventTime[1], "Time")
+	    << " --> " << G4BestUnit(EventTime[2], "Time")
             << ")\n" << G4endl;
-	   	         
+	    	   	         
  // remove all contents in particleCount
  // 
  particleCount.clear(); 

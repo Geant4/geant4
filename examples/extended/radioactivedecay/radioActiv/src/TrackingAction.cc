@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: TrackingAction.cc,v 1.2 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 {
   G4ParticleDefinition* particle = track->GetDefinition();
   G4String name   = particle->GetParticleName();
-  G4double charge = particle->GetPDGCharge();
+  charge = particle->GetPDGCharge();
   
   G4double Ekin = track->GetKineticEnergy();
   G4int ID      = track->GetTrackID();  
@@ -92,18 +92,23 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     if (fullChain) tr->SetTrackStatus(fStopButAlive);
     if (ID == 1) event->AddDecayChain(name);
       else       event->AddDecayChain(" ---> " + name); 
-  }       
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
+  //keep only ions
+  //
+  if (charge < 3. ) return;
+  
   //energy and momentum balance (from secondaries)
   //
   G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
   size_t nbtrk = (*secondaries).size();
   if (nbtrk) {
+    //there are secondaries --> it is a decay
     G4double Ebalance = track->GetTotalEnergy();
     G4ThreeVector Pbalance = track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
@@ -118,6 +123,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     histoManager->FillHisto(6,Ebalance);
     histoManager->FillHisto(7,Pbal);  
   }
+  
+  //time
+  //  
+  if (!nbtrk) {
+    //no secondaries --> end of chain  
+    G4double time = track->GetGlobalTime();
+    run->EventTiming(time);
+    histoManager->FillHisto(8,time);                
+  }           
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

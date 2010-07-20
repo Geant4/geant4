@@ -4,15 +4,18 @@
 /gun/particle ion
 /gun/ion 10 24
 #
-/testem/histo/setFileName run1
-/testem/histo/setFileType hbook
-###/testem/histo/setFileType root
-/testem/histo/setHisto 1  100  0. 2000 keV	#e+ e-
-/testem/histo/setHisto 2  100  0. 2000 keV	#neutrino
-/testem/histo/setHisto 3  100  0. 1000 keV	#gamma
-/testem/histo/setHisto 5  100  0.  200 eV	#recoil ion
-/testem/histo/setHisto 6  100  -10. 10 keV	#E balance
-/testem/histo/setHisto 7  100  0. 1000 keV	#P balance
+/radioActiv/tracking/fullChain false
+#
+/radioActiv/histo/setFileName run1
+###/radioActiv/histo/setFileType hbook
+/radioActiv/histo/setFileType root
+/radioActiv/histo/setHisto 1  100  0. 2000 keV	#e+ e-
+/radioActiv/histo/setHisto 2  100  0. 2000 keV	#neutrino
+/radioActiv/histo/setHisto 3  100  0. 1000 keV	#gamma
+/radioActiv/histo/setHisto 5  100  0.  200 eV	#recoil ion
+/radioActiv/histo/setHisto 6  100 -10.  10 keV	#E balance
+/radioActiv/histo/setHisto 7  100  0.    1 eV	#P balance
+/radioActiv/histo/setHisto 8  100  0.   70 min	#total time
 #
 /radioActiv/event/printModulo 10000
 #  

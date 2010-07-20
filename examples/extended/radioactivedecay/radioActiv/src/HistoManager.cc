@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: HistoManager.cc,v 1.2 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,7 +165,7 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" };
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
   const G4String title[] = 
           { "dummy",				//0
             "energy spectrum: e+ e-",		//1
@@ -174,7 +174,8 @@ void HistoManager::SetHisto(G4int ih,
             "energy spectrum: alpha",		//4
             "energy spectrum: ions",		//5
             "energy balance",			//6	    	    
-            "momentum balance"			//7
+            "momentum balance",			//7
+            "total time per event"		//8	    
           };
 
 

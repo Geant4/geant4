@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventMessenger.hh,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: EventMessenger.hh,v 1.2 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,7 @@ class EventMessenger: public G4UImessenger
   private:
     EventAction* eventAction;
     
+    G4UIdirectory*        Dir;       
     G4UIdirectory*        eventDir;   
     G4UIcmdWithAnInteger* PrintCmd;    
 };

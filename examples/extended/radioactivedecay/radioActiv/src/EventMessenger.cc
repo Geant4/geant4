@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventMessenger.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: EventMessenger.cc,v 1.2 2010-07-20 17:57:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,10 @@
 
 EventMessenger::EventMessenger(EventAction* EvAct)
 :eventAction(EvAct)
-{ 
+{   
+  Dir = new G4UIdirectory("/radioActiv/");
+  Dir->SetGuidance("this example");
+
   eventDir = new G4UIdirectory("/radioActiv/event/");
   eventDir ->SetGuidance("event control");
       
@@ -56,7 +59,8 @@ EventMessenger::EventMessenger(EventAction* EvAct)
 EventMessenger::~EventMessenger()
 {
   delete PrintCmd;
-  delete eventDir;   
+  delete eventDir;
+  delete Dir;     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

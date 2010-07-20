@@ -6,16 +6,17 @@
 #
 /radioActiv/tracking/fullChain true
 #
-/testem/histo/setFileName run2
-/testem/histo/setFileType hbook
-###/testem/histo/setFileType root
-/testem/histo/setHisto 1  100  0. 4000 keV	#e+ e-
-/testem/histo/setHisto 2  100  0. 4000 keV	#neutrino
-/testem/histo/setHisto 3  100  0. 4000 keV	#gamma
-/testem/histo/setHisto 4  100  0. 10   MeV	#alpha
-/testem/histo/setHisto 5  100  0. 200  keV	#recoil ion
-/testem/histo/setHisto 6  100 -5. 0.5  MeV	#E balance
-/testem/histo/setHisto 7  100  0. 300  MeV	#P balance
+/radioActiv/histo/setFileName run2
+###/radioActiv/histo/setFileType hbook
+/radioActiv/histo/setFileType root
+/radioActiv/histo/setHisto 1  100  0. 4000 keV	#e+ e-
+/radioActiv/histo/setHisto 2  100  0. 4000 keV	#neutrino
+/radioActiv/histo/setHisto 3  100  0. 4000 keV	#gamma
+/radioActiv/histo/setHisto 4  100  0. 10   MeV	#alpha
+/radioActiv/histo/setHisto 5  100  0. 200  keV	#recoil ion
+/radioActiv/histo/setHisto 6  100 -6. 0.5  MeV	#E balance
+/radioActiv/histo/setHisto 7  100  0. 300  MeV	#P balance
+/radioActiv/histo/setHisto 8  100  0. 1.e+11 y	#total time
 #
 /radioActiv/event/printModulo 10000
 #  
