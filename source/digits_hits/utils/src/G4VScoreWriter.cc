@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.5 2008-03-04 23:19:09 taso Exp $
+// $Id: G4VScoreWriter.cc,v 1.6 2010-07-20 14:11:01 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,8 +86,14 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 	   << psName << "\"." << G4endl;
     return;
   }
+
+  G4double unitValue = fScoringMesh->GetPSUnitValue(psName);
+  G4String unit = fScoringMesh->GetPSUnit(psName);
+
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
-  ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
+  ofile << "# primitive scorer name: " << msMapItr->first;
+  if(unit.size() > 0) ofile << "   [" << unit << "]";
+  ofile << G4endl;
 
   // "sequence" option: write header info 
   if(opt.find("sequence") != std::string::npos) {
@@ -110,7 +116,7 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
 	if(value == score->end()) {
 	  ofile << 0.;
 	} else {
-	  ofile << *(value->second);
+	  ofile << *(value->second)/unitValue;
 	}
 
 	if(opt.find("csv") != std::string::npos) {
@@ -159,8 +165,15 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
   MeshScoreMap::const_iterator msMapItr = fSMap.begin();
   std::map<G4int, G4double*> * score;
   for(; msMapItr != fSMap.end(); msMapItr++) {
+
+    G4String psname = msMapItr->first;
+    G4double unitValue = fScoringMesh->GetPSUnitValue(psname);
+    G4String unit = fScoringMesh->GetPSUnit(psname);
+
     score = msMapItr->second->GetMap();
-    ofile << "# primitive scorer name: " << msMapItr->first << G4endl;
+    ofile << "# primitive scorer name: " << msMapItr->first;
+    if(unit.size() > 0) ofile << "   [" << unit << "]";
+    ofile << G4endl;
 
     // "sequence" option: write header info 
     if(opt.find("sequence") != std::string::npos) {
@@ -183,7 +196,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
 	  if(value == score->end()) {
 	    ofile << 0.;
 	  } else {
-	    ofile << *(value->second);
+	    ofile << *(value->second)/unitValue;
 	  }
 
 	  if(opt.find("csv") != std::string::npos) {

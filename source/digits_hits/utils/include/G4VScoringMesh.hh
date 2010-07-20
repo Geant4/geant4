@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.30 2010-06-14 13:28:17 gcosmo Exp $
+// $Id: G4VScoringMesh.hh,v 1.31 2010-07-20 14:11:01 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -130,6 +130,11 @@ class G4VScoringMesh
     if(fCurrentPS == NULL) return true;
     else return false;
   }
+  // get unit of primitive scorer by the name
+  G4String GetPSUnit(G4String & psname);
+  // get unit value of primitive scorer by the name
+  G4double GetPSUnitValue(G4String & psname);
+
   // set current  primitive scorer to NULL
   void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
   // set verbose level

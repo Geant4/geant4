@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.37 2009-10-12 04:11:25 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.38 2010-07-20 14:11:01 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -149,6 +149,23 @@ G4bool G4VScoringMesh::FindPrimitiveScorer(G4String & psname) {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
   if(itr == fMap.end()) return false;
   return true;
+}
+
+G4String G4VScoringMesh::GetPSUnit(G4String & psname) {
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  if(itr == fMap.end()) {
+    return G4String("");
+  } else {
+    return GetPrimitiveScorer(psname)->GetUnit();
+  }
+}
+G4double G4VScoringMesh::GetPSUnitValue(G4String & psname) {
+  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
+  if(itr == fMap.end()) {
+    return 1.;
+  } else {
+    return GetPrimitiveScorer(psname)->GetUnitValue();
+  }
 }
 
 G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {
