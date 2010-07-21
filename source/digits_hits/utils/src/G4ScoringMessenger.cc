@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.39 2008-11-26 21:27:35 asaim Exp $
+// $Id: G4ScoringMessenger.cc,v 1.40 2010-07-21 03:04:25 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -234,6 +234,7 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("maxValue",'d',false);
   colorMapMinMaxCmd->SetParameter(param);
 
+  /*
   chartCmd = new G4UIcommand("/score/drawChart",this);
   chartCmd->SetGuidance("Draw color chart on the screen.");
   chartCmd->SetGuidance("[usage] /score/drawChart");
@@ -251,7 +252,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   param = new G4UIparameter("scale",'s',true);
   param->SetDefaultValue("linear");
   chartCmd->SetParameter(param);
-  
+  */
+
   // Dump a scored quantity 
   dumpQtyToFileCmd = new G4UIcommand("/score/dumpQuantityToFile", this);
   dumpQtyToFileCmd->SetGuidance("Dump one scored quantity to file.");
