@@ -1,4 +1,4 @@
-$Id: History,v 1.194 2010-06-11 09:03:14 gcosmo Exp $
+$Id: History,v 1.195 2010-07-21 14:21:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 21st, 2010 G.Cosmo (run-V09-03-02)
+- Added dummy initialisation of data members in constructors for classes:
+  G4AdjointPrimaryGeneratorAction, 
+- Use canonical form for exceptions in G4RunManager and added dummy return
+  statements; same in G4VUserPhysicsList.
+
 June 10th, 2010 G.Cosmo (run-V09-03-01)
 - Fixed definition of path for Windows in G4RunManager for random seeds
   directory: use '\' instead of '/' and suitable system command.
 - Use "const G4String&" as arguments and return value wherever applicable
   in G4RunManager and G4RunManagerKernel.
+- Avoid case of dereferencing null pointer in G4RunManagerKernel.
 
 May 30th, 2010 M.Asai (run-V09-03-00)
 - Tag for v9.4-beta release
