@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.33 2010-07-02 13:44:14 kurasige Exp $
+// $Id: G4Track.cc,v 1.34 2010-07-21 09:30:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,6 +106,21 @@ G4Track::G4Track()
 //////////////////
 G4Track::G4Track(const G4Track& right)
 //////////////////
+  : fCurrentStepNumber(0),    
+    fGlobalTime(0),           fLocalTime(0.),
+    fTrackLength(0.),
+    fParentID(0),             fTrackID(0),
+    fpDynamicParticle(0),
+    fTrackStatus(fAlive),
+    fBelowThreshold(false),   fGoodForTracking(false),
+    fStepLength(0.0),         fWeight(1.0),
+    fpStep(0),
+    fVtxKineticEnergy(0.0),
+    fpLVAtVertex(0),          fpCreatorProcess(0),
+    fpUserInformation(0),
+    prev_mat(0),  groupvel(0),
+    prev_velocity(0.0), prev_momentum(0.0),
+    is_OpticalPhoton(false) 
 {
   *this = right;
 }
@@ -199,8 +214,8 @@ G4double G4Track::GetVelocity() const
       }
     }
     // check if previous step is in the same volume
-    //  and get new GROUPVELOVITY table if necessary 
-    if ((mat != prev_mat)||(groupvel==0)) {
+    //  and get new GROUPVELOCITY table if necessary 
+    if ((mat != 0) && ((mat != prev_mat)||(groupvel==0))) {
 	groupvel = 0;
 	if(mat->GetMaterialPropertiesTable() != 0)
 	  groupvel = mat->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");

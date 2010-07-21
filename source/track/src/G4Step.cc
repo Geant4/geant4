@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.cc,v 1.8 2010-07-02 13:44:14 kurasige Exp $
+// $Id: G4Step.cc,v 1.9 2010-07-21 09:30:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,6 +53,8 @@
 ////////////////
 G4Step::G4Step()
 ////////////////
+   : fStepLength(0.), fpTrack(0), fSecondary(0),
+     fpVectorOfAuxiliaryPointsPointer(0)
 {
   fpPreStepPoint  = new G4StepPoint();
   fpPostStepPoint = new G4StepPoint();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.16 2006-06-29 21:14:31 gunter Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.17 2010-07-21 09:30:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,7 +125,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
 
   private:
     G4bool     isMomentumChanged;
-    //  The flag which is set if mometum is changed in this stepi
+    //  The flag which is set if momentum is changed in current step
     G4Material* theMaterialChange;
     const G4MaterialCutsCouple* theMaterialCutsCoupleChange;
     G4VSensitiveDetector* theSensitiveDetectorChange;

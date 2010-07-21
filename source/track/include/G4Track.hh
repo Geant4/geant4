@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.20 2010-07-02 13:44:14 kurasige Exp $
+// $Id: G4Track.hh,v 1.21 2010-07-21 09:30:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -291,7 +291,7 @@ public: // With description
    static const G4double minT;
    G4bool              is_OpticalPhoton; 
 };
-#include "G4Step.hh"
+
 #include "G4Track.icc"
 
 #endif
