@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.4 2009-05-04 15:57:33 akimura Exp $
+// $Id: G4VScoreColorMap.cc,v 1.5 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,7 +47,7 @@ G4VScoreColorMap::G4VScoreColorMap(G4String mName)
 G4VScoreColorMap::~G4VScoreColorMap()
 {;}
 
-void G4VScoreColorMap::DrawColorChart(G4int _nPoint) {
+void G4VScoreColorMap::DrawColorChart(G4String unit, G4int _nPoint) {
 
   fVisManager = G4VVisManager::GetConcreteInstance();
   if(!fVisManager) {
@@ -56,7 +56,7 @@ void G4VScoreColorMap::DrawColorChart(G4int _nPoint) {
   }
 
   DrawColorChartBar(_nPoint);
-  DrawColorChartText(_nPoint);
+  DrawColorChartText(unit, _nPoint);
 }
 
 void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
@@ -78,7 +78,8 @@ void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
   }
 
 }
-void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
+//void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
+void G4VScoreColorMap::DrawColorChartText(G4String unit, G4int _nPoint) {
   G4double min = this->GetMin();
   G4double max = this->GetMax();
   G4double c[4];
@@ -114,4 +115,26 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
 
     fVisManager->Draw2D(text);
   }
+
+
+
+  // draw unit
+  // background color
+  G4int len = unit.size();
+  for(int l = 0; l < 21; l++) {
+    G4Polyline line;
+    line.push_back(G4Point3D(-0.66, -0.9+0.002*l, 0.));
+    line.push_back(G4Point3D(-0.66+len*0.03, -0.9+0.002*l, 0.));
+    G4VisAttributes attblack(black);
+    line.SetVisAttributes(&attblack);
+    fVisManager->Draw2D(line);
+  }
+  // unit
+  G4Text psunit(unit, G4Point3D(-0.65, -0.9, 0.));
+  G4double size = 12.;
+  psunit.SetScreenSize(size);
+  G4Colour color(1., 1., 1.);
+  G4VisAttributes att(color);
+  psunit.SetVisAttributes(&att);
+  fVisManager->Draw2D(psunit);
 }

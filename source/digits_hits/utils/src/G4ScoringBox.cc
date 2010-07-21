@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.54 2008-08-29 02:50:05 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.55 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -267,7 +267,9 @@ void G4ScoringBox::List() const {
   G4VScoringMesh::List();
 }
 
-void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
+//void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
+void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
+			G4VScoreColorMap* colorMap, G4int axflg) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
@@ -291,6 +293,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     std::vector<std::vector<double> > xzcell; // xzcell[X][Z]
     for(int x = 0; x < fNSegment[0]; x++) xzcell.push_back(ez);
 
+    // search max. & min. values in each slice
     G4double xymin = DBL_MAX, yzmin = DBL_MAX, xzmin = DBL_MAX;
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
     G4int q[3];
@@ -298,15 +301,15 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
     for(; itr != map->end(); itr++) {
       GetXYZ(itr->first, q);
 
-      xycell[q[0]][q[1]] += *(itr->second);
+      xycell[q[0]][q[1]] += *(itr->second)/unitValue;
       if(xymin > xycell[q[0]][q[1]]) xymin = xycell[q[0]][q[1]];
       if(xymax < xycell[q[0]][q[1]]) xymax = xycell[q[0]][q[1]];
 
-      yzcell[q[1]][q[2]] += *(itr->second);
+      yzcell[q[1]][q[2]] += *(itr->second)/unitValue;
       if(yzmin > yzcell[q[1]][q[2]]) yzmin = yzcell[q[1]][q[2]];
       if(yzmax < yzcell[q[1]][q[2]]) yzmax = yzcell[q[1]][q[2]];
 
-      xzcell[q[0]][q[2]] += *(itr->second);
+      xzcell[q[0]][q[2]] += *(itr->second)/unitValue;
       if(xzmin > xzcell[q[0]][q[2]]) xzmin = xzcell[q[0]][q[2]];
       if(xzmax < xzcell[q[0]][q[2]]) xzmax = xzcell[q[0]][q[2]];
     }  
@@ -403,7 +406,7 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colo
       }
     }
   }
-  colorMap->DrawColorChart();
+  colorMap->DrawColorChart(unit);
 }
 
 G4ThreeVector G4ScoringBox::GetReplicaPosition(G4int x, G4int y, G4int z) {
@@ -428,8 +431,10 @@ G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
   return x + y*fNSegment[0] + z*fNSegment[0]*fNSegment[1];
 }
 
-void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
-                          G4int idxProj, G4int idxColumn) 
+//void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap,
+//			      G4int idxProj, G4int idxColumn) 
+void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
+			      G4VScoreColorMap* colorMap, G4int idxProj, G4int idxColumn) 
 {
   if(idxColumn<0 || idxColumn>=fNSegment[idxProj])
   {
@@ -459,6 +464,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
     std::vector<std::vector<double> > xzcell; // xzcell[X][Z]
     for(int x = 0; x < fNSegment[0]; x++) xzcell.push_back(ez);
 
+    // search max. & min. values in each slice
     G4double xymax = 0., yzmax = 0., xzmax = 0.;
     G4int q[3];
     std::map<G4int, G4double*>::iterator itr = map->begin();
@@ -466,15 +472,15 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
       GetXYZ(itr->first, q);
 
       if(idxProj == 0 && q[2] == idxColumn) { // xy plane
-	xycell[q[0]][q[1]] += *(itr->second);
+	xycell[q[0]][q[1]] += *(itr->second)/unitValue;
 	if(xymax < xycell[q[0]][q[1]]) xymax = xycell[q[0]][q[1]];
       }
       if(idxProj == 1 && q[0] == idxColumn) { // yz plane
-	yzcell[q[1]][q[2]] += *(itr->second);
+	yzcell[q[1]][q[2]] += *(itr->second)/unitValue;
 	if(yzmax < yzcell[q[1]][q[2]]) yzmax = yzcell[q[1]][q[2]];
       }
       if(idxProj == 2 && q[1] == idxColumn) { // zx plane
-	xzcell[q[0]][q[2]] += *(itr->second);
+	xzcell[q[0]][q[2]] += *(itr->second)/unitValue;
 	if(xzmax < xzcell[q[0]][q[2]]) xzmax = xzcell[q[0]][q[2]];
       }
     }  
@@ -551,7 +557,7 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap
     }
   }
 
-  colorMap->DrawColorChart();
+  colorMap->DrawColorChart(unit);
 }
 
 

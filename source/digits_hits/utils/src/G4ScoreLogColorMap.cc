@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.3 2009-05-04 15:57:33 akimura Exp $
+// $Id: G4ScoreLogColorMap.cc,v 1.4 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -124,7 +124,7 @@ void G4ScoreLogColorMap::DrawColorChartBar(G4int _nPoint) {
   }
 
 }
-void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
+void G4ScoreLogColorMap::DrawColorChartText(G4String unit, G4int _nPoint) {
   G4bool lmin = true, lmax = true;
   if(fMinVal <= 0.) lmin = false;
   if(fMaxVal <= 0.) lmax = false;
@@ -171,4 +171,26 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
 
     fVisManager->Draw2D(text);
   }
+
+
+
+  // draw unit
+  // background color
+  for(int l = 0; l < 21; l++) {
+    G4Polyline line;
+    line.push_back(G4Point3D(-0.66, -0.9+0.002*l, 0.));
+    line.push_back(G4Point3D(-0.36, -0.9+0.002*l, 0.));
+    G4VisAttributes attblack(black);
+    line.SetVisAttributes(&attblack);
+    fVisManager->Draw2D(line);
+  }
+  // unit
+  G4Text psunit(unit, G4Point3D(-0.65, -0.9, 0.));
+  G4double size = 12.;
+  psunit.SetScreenSize(size);
+  G4Colour color(1., 1., 1.);
+  G4VisAttributes att(color);
+  psunit.SetVisAttributes(&att);
+  fVisManager->Draw2D(psunit);
+
 }

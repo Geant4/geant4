@@ -28,4 +28,5 @@
 #
 /score/drawProjection cylinderMesh_1 nOfStepPSgamma ! 10
 /score/drawProjection cylinderMesh_1 nOfStepPSgamma logColorMap 101
+/score/drawProjection cylinderMesh_1 eDep logColorMap 101
 #

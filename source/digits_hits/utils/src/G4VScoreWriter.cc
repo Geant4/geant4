@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.6 2010-07-20 14:11:01 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.7 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -91,8 +91,12 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
   G4String unit = fScoringMesh->GetPSUnit(psName);
 
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
-  ofile << "# primitive scorer name: " << msMapItr->first;
-  if(unit.size() > 0) ofile << "   [" << unit << "]";
+  ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
+
+  // unit
+  ofile << "# unit: ";
+  if(unit.size() > 0) ofile << "[" << unit << "]";
+  else ofile << "none";
   ofile << G4endl;
 
   // "sequence" option: write header info 
@@ -172,8 +176,13 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
 
     score = msMapItr->second->GetMap();
     ofile << "# primitive scorer name: " << msMapItr->first;
-    if(unit.size() > 0) ofile << "   [" << unit << "]";
+
+    // unit
+    ofile << "# unit: ";
+    if(unit.size() > 0) ofile << "[" << unit << "]";
+    else ofile << "none";
     ofile << G4endl;
+
 
     // "sequence" option: write header info 
     if(opt.find("sequence") != std::string::npos) {

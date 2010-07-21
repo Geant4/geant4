@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.hh,v 1.19 2010-06-14 13:28:17 gcosmo Exp $
+// $Id: G4ScoringBox.hh,v 1.20 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,9 +50,13 @@ public:
 public:
   void Construct(G4VPhysicalVolume* fWorldPhys);
   void List() const;
-  void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-  void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
-                          G4int idxProj, G4int idxColumn); 
+  //void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
+  void Draw(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
+	    G4VScoreColorMap* colorMap, G4int axflg=111);
+  //void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+  //                        G4int idxProj, G4int idxColumn); 
+  void DrawColumn(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
+		  G4VScoreColorMap* colorMap, G4int idxProj, G4int idxColumn); 
 
   // set a direction to segment this mesh
   void SetSegmentDirection(G4int dir) {fSegmentDirection = dir;}

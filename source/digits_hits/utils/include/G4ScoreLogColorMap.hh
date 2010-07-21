@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.hh,v 1.1 2008-03-25 02:18:39 akimura Exp $
+// $Id: G4ScoreLogColorMap.hh,v 1.2 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,8 @@ class G4ScoreLogColorMap : public G4VScoreColorMap
 
   // draw a color chart
   virtual void DrawColorChartBar(G4int nPoint);
-  virtual void DrawColorChartText(G4int nPoint);
+  //virtual void DrawColorChartText(G4int nPoint);
+  virtual void DrawColorChartText(G4String unit, G4int nPoint);
 
 };
 

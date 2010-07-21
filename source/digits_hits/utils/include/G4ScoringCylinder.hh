@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.hh,v 1.2 2008-03-23 14:32:12 akimura Exp $
+// $Id: G4ScoringCylinder.hh,v 1.3 2010-07-21 02:54:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,9 +48,13 @@ class G4ScoringCylinder : public G4VScoringMesh
   public:
       virtual void Construct(G4VPhysicalVolume* fWorldPhys);
       virtual void List() const;
-      virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
-      virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
-                              G4int idxProj, G4int idxColumn); 
+  //virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
+  //virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+  //                            G4int idxProj, G4int idxColumn); 
+      virtual void Draw(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
+			G4VScoreColorMap* colorMap, G4int axflg=111);
+      virtual void DrawColumn(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
+			      G4VScoreColorMap* colorMap, G4int idxProj, G4int idxColumn); 
 
 
   void SetRMinMax(G4double rMinMax[2]) {
