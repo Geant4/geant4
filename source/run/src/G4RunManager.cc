@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.110 2010-06-11 09:02:55 gcosmo Exp $
+// $Id: G4RunManager.cc,v 1.111 2010-07-21 14:21:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,10 @@ G4RunManager::G4RunManager()
  currentWorld(0),nParallelWorlds(0)
 {
   if(fRunManager)
-  { G4Exception("G4RunManager constructed twice."); }
+  {
+    G4Exception("G4RunManager::G4RunManager()", "Run0001",
+                FatalException, "G4RunManager constructed twice.");
+  }
   fRunManager = this;
 
   kernel = new G4RunManagerKernel();
@@ -258,8 +261,9 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 {
   if(!userPrimaryGeneratorAction)
   {
-    G4Exception
-    ("G4RunManager::BeamOn - G4VUserPrimaryGeneratorAction is not defined.");
+    G4Exception("G4RunManager::GenerateEvent()", "Run0002", FatalException,
+                "G4VUserPrimaryGeneratorAction is not defined!");
+    return 0;
   }
 
   G4Event* anEvent = new G4Event(i_event);
@@ -330,7 +334,7 @@ void G4RunManager::Initialize()
   if(currentState!=G4State_PreInit && currentState!=G4State_Idle)
   {
     G4cerr << "Illegal application state - "
-         << "G4RunManager::Initialize() ignored." << G4endl;
+           << "G4RunManager::Initialize() ignored." << G4endl;
     return;
   }
 
@@ -343,8 +347,9 @@ void G4RunManager::InitializeGeometry()
 {
   if(!userDetector)
   {
-    G4Exception
-    ("G4RunManager::InitializeGeometry - G4VUserDetectorConstruction is not defined.");
+    G4Exception("G4RunManager::InitializeGeometry", "Run0003",
+                FatalException, "G4VUserDetectorConstruction is not defined!");
+    return;
   }
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
@@ -363,7 +368,8 @@ void G4RunManager::InitializePhysics()
   }
   else
   {
-    G4Exception("G4VUserPhysicsList is not defined");
+    G4Exception("G4RunManager::InitializePhysics()", "Run0004",
+                FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;
 }
