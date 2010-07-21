@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.92 2010-07-14 19:43:30 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.93 2010-07-21 19:59:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -49,7 +49,8 @@
 //		to output if E-violation exceeds maxTries; use CheckBalance
 //		for baryon and charge conservation.
 // 20100701  M. Kelsey -- Pass verbosity through to G4CollisionOutput
-// 20100714  M. kelsey -- Report number of iterations before success
+// 20100714  M. Kelsey -- Report number of iterations before success
+// 20100720  M. Kelsey -- Use G4CASCADE_SKIP_ECONS flag for reporting
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -200,9 +201,11 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       collider.collide(bullet, target, output);
       nTries++;
 
-      // Check energy conservation; discard result on violation
+      // Check energy conservation; discard event on violation
       balance.collide(bullet, target, output);
-      if (verboseLevel > 2) balance.okay();		// Reports violations
+#ifdef G4CASCADE_SKIP_ECONS	/* Report here if not done in while() below */
+      if (verboseLevel > 2) balance.okay();
+#endif
 
 #ifdef G4CASCADE_COULOMB_DEV
       coulombOK = false;  		// by default coulomb analysis is OK

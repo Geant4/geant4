@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.71 2010-07-14 19:43:30 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.72 2010-07-21 19:59:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -180,17 +180,16 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 	ipart->setMomentum(mom); 
       };
 
-      if (!validateOutput(bullet, target, particles)) {	// Check conservation
-	if (verboseLevel) {
-	  G4cout << " incoming particles: " << G4endl;
-	  particle1->printParticle();
-	  particle2->printParticle();
-	  G4cout << " outgoing particles: " << G4endl;
-	  for(ipart = particles.begin(); ipart != particles.end(); ipart++)
-	    ipart->printParticle();
-	  G4cout << " <<< Non-conservation in G4ElementaryParticleCollider"
-		 << G4endl;
-	}
+      // Check conservation in mutlibody final state
+      if (verboseLevel && !validateOutput(bullet, target, particles)) {
+	G4cout << " incoming particles: " << G4endl;
+	particle1->printParticle();
+	particle2->printParticle();
+	G4cout << " outgoing particles: " << G4endl;
+	for(ipart = particles.begin(); ipart != particles.end(); ipart++)
+	  ipart->printParticle();
+	G4cout << " <<< Non-conservation in G4ElementaryParticleCollider"
+	       << G4endl;
       }
 
       std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());

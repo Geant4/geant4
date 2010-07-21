@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.56 2010-07-20 06:10:38 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.57 2010-07-21 19:59:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -60,6 +60,8 @@
 //		Add minimum-fragment requirement for recoil, in order to
 //		allow for momentum balancing
 // 20100720  M. Kelsey -- Make EPCollider pointer member
+// 20100721  M. Kelsey -- Turn on conservation checks unconditionally (override
+//		new G4CASCADE_CHECK_ECONS setting
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -494,6 +496,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }
 
     // Check energy and momentum conservation before returning
+    setConservationChecks(true);	// Override compile-time default
     if (validateOutput(bullet, target, output)) break;
 
     if (verboseLevel > 2) 

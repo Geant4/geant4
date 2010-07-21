@@ -22,12 +22,14 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.cc,v 1.2 2010-07-20 06:10:38 mkelsey Exp $
+// $Id: G4CascadeColliderBase.cc,v 1.3 2010-07-21 19:59:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
 //		and control flag.
+// 20100721  M. Kelsey -- Use G4CASCADE_CHECK_ECONS to set default control
+//		flag for validations.
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -44,7 +46,12 @@ using namespace G4InuclSpecialFunctions;
 // Constructor and destructor
 
 G4CascadeColliderBase::G4CascadeColliderBase(const char* name, G4int verbose)
-  : G4VCascadeCollider(name, verbose), doConservationChecks(true),
+  : G4VCascadeCollider(name, verbose),
+#ifdef G4CASCADE_CHECK_ECONS    
+    doConservationChecks(true),
+#else
+    doConservationChecks(false),
+#endif
     balance(new G4CascadeCheckBalance(0.001, 0.001, name)) {}
 
 G4CascadeColliderBase::~G4CascadeColliderBase() {

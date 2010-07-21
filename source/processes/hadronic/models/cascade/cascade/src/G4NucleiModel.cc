@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.64 2010-07-15 23:02:21 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.65 2010-07-21 19:59:41 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -59,6 +59,7 @@
 // 20100628  M. Kelsey -- Two momentum-recoil bugs; don't subtract energies!
 // 20100715  M. Kelsey -- Make G4InuclNuclei in generateModel(), use for
 //		balance checking (only verbose>2) in generateParticleFate().
+// 20100721  M. Kelsey -- Use new G4CASCADE_CHECK_ECONS for conservation checks
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -789,8 +790,10 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
   }
 
   // Create four-vector checking
+#ifdef G4CASCADE_CHECK_ECONS
   G4CascadeCheckBalance balance(0.005, 0.01, "G4NucleiModel");	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);
+#endif
 
   outgoing_cparticles.clear();		// Clear return buffer for this event
   generateInteractionPartners(cparticle);	// Fills "thePartners" data
@@ -839,8 +842,10 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       
       if (verboseLevel > 2) {
 	output.printCollisionOutput();
+#ifdef G4CASCADE_CHECK_ECONS
 	balance.collide(&bullet, &target, output);
 	balance.okay();		// Do checks, but ignore result
+#endif
       }
 
       // Don't need to copy list, as "output" isn't changed again below
@@ -927,10 +932,12 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       outgoing_cparticles.push_back(cparticle);
 
       // Check conservation for simple scattering (ignore target nucleus!)
+#ifdef G4CASCADE_CHECK_ECONS
       if (verboseLevel > 2) {
 	balance.collide(&prescatCP, 0, outgoing_cparticles);
 	balance.okay();		// Report violations, but don't act on them
       }
+#endif
     }
   }	// if (npart == 1) [else]
 
