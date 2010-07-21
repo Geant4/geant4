@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstRK4.cc,v 1.3 2010-07-14 10:00:36 gcosmo Exp $
+// $Id: G4ConstRK4.cc,v 1.4 2010-07-21 13:24:07 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,8 +148,6 @@ G4ConstRK4::Stepper( const G4double yInput[],
                            G4double yError [] )
 {
    const G4int nvar = 8 ;
-   const G4int maxvar= 8;
-
    G4int i;
 
    // Correction for Richardson extrapolation
@@ -164,7 +162,6 @@ G4ConstRK4::Stepper( const G4double yInput[],
    yMiddle[7] = yInput[7];  // Copy the time from initial value 
    yOneStep[7] = yInput[7]; // As it contributes to final value of yOutput ?
    yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
-   for (i=nvar;i<maxvar;i++) { yOutput[i]=yInput[i]; }
    yError[7] = 0.0;         
 
    G4double halfStep = hstep * 0.5; 
