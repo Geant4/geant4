@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.10 2010-07-14 10:00:36 gcosmo Exp $ 
+// $Id: G4ExactHelixStepper.cc,v 1.11 2010-07-21 13:46:01 tnikitin Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
@@ -45,13 +45,9 @@
 G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs *EqRhs)
   : G4MagHelicalStepper(EqRhs),
     fBfieldValue(DBL_MAX, DBL_MAX, DBL_MAX),
-    yInitialEHS(DBL_MAX), yFinalEHS(-DBL_MAX), fPtrMagEqOfMot(EqRhs)
+    fPtrMagEqOfMot(EqRhs)
 {
-  const G4int nvar = 7;
-  for(G4int i=0;i<nvar;i++)
-  {
-    fYInSav[i]= DBL_MAX;
-  }
+  ;
 }
 
 G4ExactHelixStepper::~G4ExactHelixStepper() {} 
@@ -68,11 +64,6 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
    G4int i;
    G4ThreeVector Bfld_value;
 
-   for (i=0;i<nvar;i++)
-   {
-     fYInSav[i]= yInput[i];
-   }
-
    MagFieldEvaluate(yInput, Bfld_value);        
    AdvanceHelix(yInput, Bfld_value, hstep, yOut);
 
@@ -83,8 +74,6 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
     yErr[i] = 0.0 ;
   }
 
-  yInitialEHS = G4ThreeVector( yInput[0], yInput[1], yInput[2]); 
-  yFinalEHS   = G4ThreeVector( yOut[0],   yOut[1],   yOut[2]); 
   fBfieldValue=Bfld_value;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExactHelixStepper.hh,v 1.6 2010-07-14 10:00:36 gcosmo Exp $ 
+// $Id: G4ExactHelixStepper.hh,v 1.7 2010-07-21 13:45:37 tnikitin Exp $ 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -84,9 +84,6 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
 
     G4ThreeVector    fBfieldValue;
       //  Initial value of field at last step
-    G4ThreeVector    yInitialEHS,  yFinalEHS;  
-    G4double         fYInSav[7];     // Starting state of  x, p, ...
-     // Values saved for calculating mid-point for chord
     G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
