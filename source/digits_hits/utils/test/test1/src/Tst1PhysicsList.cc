@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1PhysicsList.cc,v 1.1 2007-07-13 05:55:34 asaim Exp $
+// $Id: Tst1PhysicsList.cc,v 1.2 2010-07-21 02:51:58 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -119,16 +119,17 @@ void Tst1PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
-
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 
 void Tst1PhysicsList::ConstructEM()
@@ -148,7 +149,7 @@ void Tst1PhysicsList::ConstructEM()
 
     } else if (particleName == "e-") {
     //electron
-      G4MultipleScattering* theeminusMultipleScattering = new G4MultipleScattering();
+      G4eMultipleScattering* theeminusMultipleScattering = new G4eMultipleScattering();
       theeminusMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* theeminusIonisation         = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
@@ -170,7 +171,7 @@ void Tst1PhysicsList::ConstructEM()
 
     } else if (particleName == "e+") {
     //positron
-      G4MultipleScattering* theeplusMultipleScattering = new G4MultipleScattering();
+      G4eMultipleScattering* theeplusMultipleScattering = new G4eMultipleScattering();
       theeplusMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* theeplusIonisation         = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
@@ -199,7 +200,7 @@ void Tst1PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
     //muon  
-      G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+      G4MuMultipleScattering* aMultipleScattering = new G4MuMultipleScattering();
       aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
       G4VProcess* aPairProduction     = new G4MuPairProduction();
@@ -228,7 +229,7 @@ void Tst1PhysicsList::ConstructEM()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino     
-     G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+     G4hMultipleScattering* aMultipleScattering = new G4hMultipleScattering();
      aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
      G4VProcess* anIonisation        = new G4hIonisation();
      //
