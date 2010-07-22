@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.9 2010-07-22 02:04:39 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.10 2010-07-22 07:48:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,15 +52,13 @@
 
 
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
-  :G4VScoringMesh(wName), fSegmentDirection(-1), 
-   fMeshElementLogical(0)
+  :G4VScoringMesh(wName), fMeshElementLogical(0)
 {
   fShape = cylinderMesh;
 }
 
 G4ScoringCylinder::~G4ScoringCylinder()
-{
-}
+{;}
 
 void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
 {
@@ -106,26 +104,22 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
-  //-- fisrt nested layer (replicated along r direction)
+  //-- fisrt nested layer (replicated along z direction)
   if(verboseLevel > 9) G4cout << "layer 1 :" << G4endl;
   layerSolid[0] = new G4Tubs(layerName[0],
 			     0.,
-			     fSize[0]/fNSegment[0],
-			     fSize[1],
+			     fSize[0],
+			     fSize[1]/fNSegment[0],
 			     0., twopi*rad);
   layerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
   if(fNSegment[0] > 1) {
-    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along r direction" << G4endl;
-    G4double r = fSize[0]/fNSegment[0];
-    //if(G4ScoringManager::GetReplicaLevel()>0) {
-    if(false) { // always use G4PVDivision
+    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along z direction" << G4endl;
+    if(G4ScoringManager::GetReplicaLevel()>0) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kRho,
-		      fNSegment[0], r, 0.);
+      new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[0], fSize[1]/fNSegment[0]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
-      new G4PVDivision(layerName[0], layerLogical[0], tubsLogical, kRho,
-		       fNSegment[0], 0.);
+      new G4PVDivision(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[0], 0.);
     }
   } else if(fNSegment[0] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
@@ -136,35 +130,23 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << "in placement of the first nested layer." << G4endl;
   }
 
-  if(verboseLevel > 9) {
-    G4cout << fSize[0] << ", "
-	   << fSize[1] 
-	   << G4endl;
-    G4cout << layerName[0] << ": kRho, "
-	   << fNSegment[0] << ", "
-	   << fSize[0]/fNSegment[0] << G4endl;
-  }
-
-  // second nested layer (replicated along z direction)
+  // second nested layer (replicated along phi direction)
   if(verboseLevel > 9) G4cout << "layer 2 :" << G4endl;
   layerSolid[1] = new G4Tubs(layerName[1],
 			     0.,
-			     fSize[0],///fNSegment[0],
-			     fSize[1]/fNSegment[1],
-			     0., twopi*rad);
+			     fSize[0],
+			     fSize[1]/fNSegment[0],
+			     0., twopi*rad/fNSegment[1]);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
   if(fNSegment[1] > 1)  {
-    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along z direction" << G4endl;
-    G4double width = fSize[1]/fNSegment[1]*2.;
-    //if(G4ScoringManager::GetReplicaLevel()>1) {
-    if(false) { // always use G4PVDivision
+    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
+    if(G4ScoringManager::GetReplicaLevel()>1) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kZAxis,
-		      fNSegment[1], width);
+      new G4PVReplica(layerName[1], layerLogical[1], layerLogical[0], kPhi,
+		      fNSegment[1], twopi*rad/fNSegment[1]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
-      new G4PVDivision(layerName[1], layerLogical[1], layerLogical[0], kZAxis,
-		       fNSegment[1], 0.);
+      new G4PVDivision(layerName[1], layerLogical[1], layerLogical[0], kPhi, fNSegment[1], 0.);
     }
   } else if(fNSegment[1] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
@@ -174,38 +156,26 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 	   << fNSegment[1] << ") "
 	   << "in placement of the second nested layer." << G4endl;
 
-  if(verboseLevel > 9) {
-    G4cout << fSize[0]/fNSegment[0] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
-    G4cout << layerName[1] << ": kZAxis, "
-	   << fNSegment[1] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
-  }
-
-
   // mesh elements
   if(verboseLevel > 9) G4cout << "mesh elements :" << G4endl;
   G4String elementName = tubsName +"3";
   G4VSolid * elementSolid = new G4Tubs(elementName,
 				       0.,
-				       fSize[0],//fNSegment[0],
-				       fSize[1]/fNSegment[1],
-				       0., twopi*rad/fNSegment[2]);
+				       fSize[0]/fNSegment[2],
+				       fSize[1]/fNSegment[0],
+				       0., twopi*rad/fNSegment[1]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[2] > 1) {
 
-    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
+    if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along r direction" << G4endl;
 
-    G4double angle = twopi*rad/fNSegment[2];
-    //if(G4ScoringManager::GetReplicaLevel()>2) {
-    if(false) { // always use G4PVDivision
+    if(G4ScoringManager::GetReplicaLevel()>2) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kPhi,
-			fNSegment[2], angle, 0.);
+      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kRho,
+			fNSegment[2], fSize[0]/fNSegment[2]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
-      new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kPhi,
-		       fNSegment[2], 0.);
+      new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kRho, fNSegment[2], 0.);
     }
   } else if(fNSegment[2] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
@@ -214,13 +184,6 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     G4cerr << "G4ScoringCylinder::SetupGeometry() : "
 	   << "invalid parameter (" << fNSegment[2] << ") "
 	   << "in mesh element placement." << G4endl;
-  }
-
-  if(verboseLevel > 9) {
-    G4cout << fSize[0]/fNSegment[0] << ", "
-	   << fSize[1]/fNSegment[1] << G4endl;
-    G4cout << elementName << ": kPhi, "
-	   << fNSegment[2] << G4endl;
   }
 
   // set the sensitive detector
