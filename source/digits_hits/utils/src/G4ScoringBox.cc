@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.57 2010-07-22 02:04:39 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.58 2010-07-22 06:38:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -183,20 +183,20 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 				      fSize[1]/fNSegment[1],
 				      fSize[2]/fNSegment[2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
-  if(fNSegment[2] > 1) 
+  if(fNSegment[2] > 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to z direction" << G4endl;
 
-  if(G4ScoringManager::GetReplicaLevel()>2)
+    if(G4ScoringManager::GetReplicaLevel()>2) 
     { 
       new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
 		      fNSegment[2], 2.*fSize[2]/fNSegment[2]);
     }
-  else
+    else
     {
       new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
 		       fNSegment[2], 0.);
     }
-  else if(fNSegment[2] == 1) {
+  } else if(fNSegment[2] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);
   } else
