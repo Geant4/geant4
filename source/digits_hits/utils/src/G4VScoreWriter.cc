@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.7 2010-07-21 02:54:31 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.8 2010-07-22 09:04:04 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -175,12 +175,11 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
     G4String unit = fScoringMesh->GetPSUnit(psname);
 
     score = msMapItr->second->GetMap();
-    ofile << "# primitive scorer name: " << msMapItr->first;
+    ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
 
     // unit
     ofile << "# unit: ";
     if(unit.size() > 0) ofile << "[" << unit << "]";
-    else ofile << "none";
     ofile << G4endl;
 
 
