@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.35 2010-07-22 02:04:39 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.36 2010-07-22 06:44:59 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -110,6 +110,10 @@ class G4VScoringMesh
     if(fRotationMatrix) return *fRotationMatrix;
     else return G4RotationMatrix::IDENTITY;
   }
+  // set number of segments of this mesh
+  void SetNumberOfSegments(G4int nSegment[3]);
+  // get number of segments of this mesh
+  void GetNumberOfSegments(G4int nSegment[3]);
 
   // register a primitive scorer to the MFD & set it to the current primitive scorer
   void SetPrimitiveScorer(G4VPrimitiveScorer * ps);
