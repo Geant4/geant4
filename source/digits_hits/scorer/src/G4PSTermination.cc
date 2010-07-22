@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSTermination.cc,v 1.4 2010-07-22 08:51:34 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSTermination
@@ -42,7 +42,9 @@
 
 G4PSTermination::G4PSTermination(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
-{;}
+{
+    SetUnit("");
+}
 
 G4PSTermination::~G4PSTermination()
 {;}
@@ -86,5 +88,17 @@ void G4PSTermination::PrintAll()
 	   << "  collisions: " << *(itr->second)
 	   << G4endl;
   }
+}
+
+void G4PSTermination::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+    G4String msg = GetName() + "Invalid unit "+unit;
+    G4Exception(msg);
+  }
+
 }
 
