@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc,v 1.3 2010-07-20 07:33:54 akimura Exp $
+// $Id: G4VPrimitiveScorer.cc,v 1.4 2010-07-22 07:31:06 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VPrimitiveScorer
@@ -33,7 +33,7 @@
 #include "G4SDManager.hh"
 #include "G4Step.hh"
 #include "G4TouchableHistory.hh"
-
+#include "G4UnitsTable.hh"
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
   :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth),
@@ -74,3 +74,13 @@ G4int G4VPrimitiveScorer::GetIndex(G4Step* aStep)
   return th->GetReplicaNumber(indexDepth);
 }
 
+void G4VPrimitiveScorer::CheckAndSetUnit(const G4String& unit,
+					 const G4String& category){
+    if ( G4UnitDefinition::GetCategory(unit) == category){
+	unitName = unit;
+	unitValue = G4UnitDefinition::GetValueOf(unit);
+    } else {
+	G4String msg = GetName() + "Invalid unit "+unit;
+	G4Exception(msg);
+    }
+}

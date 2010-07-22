@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.hh,v 1.4 2010-07-20 07:33:53 akimura Exp $
+// $Id: G4VPrimitiveScorer.hh,v 1.5 2010-07-22 07:30:48 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,8 @@ class G4TouchableHistory;
 //  A concrete class object derived from this base class can be
 // used either as a sensitive detector or to be registered to 
 // G4MultiFunctionalDetector to define multiple functionalities.
+//
+// 
 
 class G4VPrimitiveScorer
 {
@@ -78,10 +80,12 @@ class G4VPrimitiveScorer
       // These methods are invoked by G4SDManager through G4MultiFunctionalDetector.
 
       //virtual void SetUnit(const G4String& unit)=0;
-      //virtual G4String& GetUnit() const=0;
-      virtual void SetUnit(const G4String& unit){unitName=unit;}
-       virtual G4String GetUnit() const { return unitName;}
+       virtual void SetUnit(const G4String& unit){unitName=unit;}
+       G4String GetUnit() const { return unitName;}
        G4double  GetUnitValue() const { return unitValue;}
+
+  protected:
+     void CheckAndSetUnit(const G4String& unit,const G4String& category);
 
   protected:
       G4String primitiveName;
