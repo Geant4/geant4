@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.7 2010-07-21 02:54:31 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.8 2010-07-22 01:23:09 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,9 +37,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4PVDivision.hh"
-#include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
-//#include "G4ScoringCylinderParameterisation.hh"
 #include "G4VVisManager.hh"
 #include "G4VScoreColorMap.hh"
 
@@ -196,23 +194,6 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[2] > 1) {
 
-    /*
-    if(fSegmentPositions.size() > 0) {
-      G4double motherDims[3] ={fSize[0]/fsegParam[2][0],
-			       fSize[1]/fsegParam[2][1],
-			       fSize[2]/fsegParam[2][2]};
-      G4int nelement = fSegmentPositions.size() + 1;
-      //G4ScoringCylinderParameterisation * param =
-      G4VPVParameterisation * param =
-	new G4ScoringCylinderParameterisation(axis[2], motherDims, fSegmentPositions);
-      new G4PVParameterised(elementName,
-			    fMeshElementLogical,
-			    layerLogical[1],
-			    axis[2],
-			    nelement,
-			    param);
-    } else {
-    */
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
 
     G4double angle = twopi*rad/fNSegment[2];
@@ -226,7 +207,6 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
       new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kPhi,
 		       fNSegment[2], 0.);
     }
-    //}
   } else if(fNSegment[2] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Placement" << G4endl;
     new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), fMeshElementLogical, elementName, layerLogical[1], false, 0);

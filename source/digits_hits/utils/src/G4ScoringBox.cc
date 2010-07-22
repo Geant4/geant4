@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.55 2010-07-21 02:54:31 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.56 2010-07-22 01:23:09 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -36,9 +36,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
 #include "G4PVDivision.hh"
-#include "G4PVParameterised.hh"
 #include "G4VisAttributes.hh"
-#include "G4ScoringBoxParameterisation.hh"
 #include "G4VVisManager.hh"
 #include "G4VScoreColorMap.hh"
 
@@ -186,43 +184,17 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 				      fSize[2]/fNSegment[2]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[2] > 1) 
-    if(fSegmentPositions.size() > 0) {
-      if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Parameterise to z direction" << G4endl;
-      G4double motherDims[3] ={fSize[0]/fNSegment[0],
-			       fSize[1]/fNSegment[1],
-			       fSize[2]/fNSegment[2]};
-      G4int nelement = fNSegment[2];
-      fSegmentPositions.push_back(fSize[2]*2.);
-      //G4ScoringBoxParameterisation * param =
-      G4VPVParameterisation * param =
-	new G4ScoringBoxParameterisation(kZAxis, motherDims, fSegmentPositions);
-      new G4PVParameterised(elementName,
-			    fMeshElementLogical,
-			    layerLogical[1],
-			    kZAxis,
-			    nelement,
-			    param);
+    if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to z direction" << G4endl;
 
-      if(verboseLevel > 9) {
-	G4cout << motherDims[0] << ", " << motherDims[1] << ", " << motherDims[2] << G4endl;
-	for(int i = 0; i < (int)fSegmentPositions.size(); i++)
-	  G4cout << fSegmentPositions[i] << ", ";
-	G4cout << G4endl;
-      }
-
-    } else {
-      if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Replicate to z direction" << G4endl;
-
-      if(G4ScoringManager::GetReplicaLevel()>2)
-      { 
-        new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
+  if(G4ScoringManager::GetReplicaLevel()>2)
+    { 
+      new G4PVReplica(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
 		      fNSegment[2], 2.*fSize[2]/fNSegment[2]);
-      }
-      else
-      {
-        new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
-		      fNSegment[2], 0.);
-      }
+    }
+  else
+    {
+      new G4PVDivision(elementName, fMeshElementLogical, layerLogical[1], kZAxis,
+		       fNSegment[2], 0.);
     }
   else if(fNSegment[2] == 1) {
     if(verboseLevel > 9) G4cout << "G4ScoringBox::Construct() : Placement" << G4endl;
