@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.2 2008-12-28 20:32:00 asaim Exp $
+// $Id: G4PSDoseDeposit.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit
@@ -40,12 +40,22 @@
 // 
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSDoseDeposit::G4PSDoseDeposit(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1)
-{;}
+{
+    SetUnit("Gy");
+}
+
+G4PSDoseDeposit::G4PSDoseDeposit(G4String name, const G4String& unit,
+				 G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1)
+{
+    SetUnit(unit);
+}
 
 G4PSDoseDeposit::~G4PSDoseDeposit()
 {;}
@@ -105,8 +115,17 @@ void G4PSDoseDeposit::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  dose deposit: " << G4BestUnit(*(itr->second),"Dose")
+	   << "  dose deposit: " 
+	   << *(itr->second)/GetUnitValue()
+	   << " ["<<GetUnit() <<"]"
 	   << G4endl;
   }
 }
+
+void G4PSDoseDeposit::SetUnit(const G4String& unit)
+{
+	CheckAndSetUnit(unit,"Dose");
+}
+
+
 

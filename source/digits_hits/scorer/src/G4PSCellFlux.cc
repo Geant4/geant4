@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.cc,v 1.2 2008-12-28 20:32:00 asaim Exp $
+// $Id: G4PSCellFlux.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCellFlux
@@ -47,12 +47,23 @@
 //
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
+    :G4VPrimitiveScorer(name,depth),HCID(-1)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSCellFlux::~G4PSCellFlux()
 {;}
@@ -111,8 +122,20 @@ void G4PSCellFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  cell flux : " << *(itr->second)*cm*cm << " [cm^-2]"
+	   << "  cell flux : " << *(itr->second)/GetUnitValue() 
+	   << " [" << GetUnit() << "]"
 	   << G4endl;
   }
 }
 
+void G4PSCellFlux::SetUnit(const G4String& unit)
+{
+    CheckAndSetUnit(unit,"Per Unit Surface");
+}
+
+void G4PSCellFlux::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+}

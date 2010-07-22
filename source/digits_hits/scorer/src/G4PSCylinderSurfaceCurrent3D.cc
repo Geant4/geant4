@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
+// $Id: G4PSCylinderSurfaceCurrent3D.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCylinderSurfaceCurrent3D
@@ -46,6 +46,7 @@
 //
 //
 // Created: 2008-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCylinderSurfaceCurrent3D::G4PSCylinderSurfaceCurrent3D(G4String name,
@@ -58,6 +59,20 @@ G4PSCylinderSurfaceCurrent3D::G4PSCylinderSurfaceCurrent3D(G4String name,
     fNi=ni;
     fNj=nj;
     fNk=nk;
+}
+
+G4PSCylinderSurfaceCurrent3D::G4PSCylinderSurfaceCurrent3D(G4String name,
+							   G4int direction,
+							   const G4String& unit,
+					     G4int ni, G4int nj, G4int nk,
+					     G4int di, G4int dj, G4int dk)
+    :G4PSCylinderSurfaceCurrent(name,direction),
+     fDepthi(di),fDepthj(dj),fDepthk(dk)
+{
+    fNi=ni;
+    fNj=nj;
+    fNk=nk;
+    SetUnit(unit);
 }
 
 G4PSCylinderSurfaceCurrent3D::~G4PSCylinderSurfaceCurrent3D()

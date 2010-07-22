@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
+// $Id: G4PSPassageCellCurrent3D.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellCurrent3D
@@ -37,6 +37,7 @@
 //  into account.
 //
 // Created: 2007-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 

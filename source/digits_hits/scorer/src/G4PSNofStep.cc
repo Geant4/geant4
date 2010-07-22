@@ -24,22 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.cc,v 1.2 2007-08-29 06:36:42 taso Exp $
+// $Id: G4PSNofStep.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofStep
 #include "G4PSNofStep.hh"
+#include "G4UnitsTable.hh"
 
 // (Description)
 //   This is a primitive scorer class for scoring number of steps in the
 //  Cell.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 
 G4PSNofStep::G4PSNofStep(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),boundaryFlag(false)
-{;}
+{
+    SetUnit("");
+}
 
 G4PSNofStep::~G4PSNofStep()
 {;}
@@ -81,7 +85,21 @@ void G4PSNofStep::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  num of step: " << *(itr->second)
+	   << " [steps] "
 	   << G4endl;
   }
 }
+
+void G4PSNofStep::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+    G4String msg = GetName() + "Invalid unit "+unit;
+    G4Exception(msg);
+  }
+
+}
+
 

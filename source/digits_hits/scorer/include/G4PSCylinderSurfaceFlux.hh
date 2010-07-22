@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.hh,v 1.1 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSCylinderSurfaceFlux.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,6 +52,7 @@
 //   2  OUT                    |<-  |        fFlux_Out
 //
 // Created: 2007-03-29  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -59,6 +60,8 @@ class G4PSCylinderSurfaceFlux : public G4VPrimitiveScorer
 {
   public: // with description
       G4PSCylinderSurfaceFlux(G4String name,G4int direction, G4int depth=0);
+      G4PSCylinderSurfaceFlux(G4String name,G4int direction, 
+			      const G4String& unit, G4int depth=0);
       virtual ~G4PSCylinderSurfaceFlux();
 
   protected: // with description
@@ -71,6 +74,11 @@ class G4PSCylinderSurfaceFlux : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
+
+  protected:
+      virtual void DefineUnitAndCategory();
 
   private:
       G4int  HCID;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent.cc,v 1.1 2007-08-14 21:30:46 taso Exp $
+// $Id: G4PSPassageCellCurrent.cc,v 1.2 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellCurrent
@@ -40,13 +40,16 @@
 //  into account.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
      weighted(true)
-{;}
+{
+    SetUnit("");
+}
 
 G4PSPassageCellCurrent::~G4PSPassageCellCurrent()
 {;}
@@ -117,7 +120,20 @@ void G4PSPassageCellCurrent::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  cell current : " << *(itr->second)
+	   << " [tracks] "
 	   << G4endl;
   }
 }
+
+void G4PSPassageCellCurrent::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+    G4String msg = GetName() + "Invalid unit "+unit;
+    G4Exception(msg);
+  }
+}
+
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit.cc,v 1.2 2010-07-20 07:33:54 akimura Exp $
+// $Id: G4PSEnergyDeposit.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSEnergyDeposit
@@ -35,6 +35,7 @@
 //   This is a primitive scorer class for scoring energy deposit.
 // 
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -92,24 +93,13 @@ void G4PSEnergyDeposit::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  energy deposit: " 
-	   << *(itr->second)/unitValue
-	   << " " << unitName
+	   << *(itr->second)/GetUnitValue()
+	   << " [" << GetUnit()<<"]"
 	   << G4endl;
   }
 }
 
 void G4PSEnergyDeposit::SetUnit(const G4String& unit)
 {
-  if ( G4UnitDefinition::GetCategory(unit) == "Energy" ){
-    unitName = unit;
-    unitValue = G4UnitDefinition::GetValueOf(unit);
-  }else{
-    G4String msg = "Invalid unit "+unit;
-    G4Exception(msg);
-  }
-
+	CheckAndSetUnit(unit,"Energy");
 }
-
-G4String G4PSEnergyDeposit::GetUnit() const
-{ return unitName; }
-

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration3D.cc,v 1.3 2007-08-29 06:36:42 taso Exp $
+// $Id: G4PSMinKinEAtGeneration3D.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSMinKinEAtGeneration3D
@@ -36,6 +36,7 @@
 //  newly produced particles in the geometry.
 //
 // Created: 2007-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,19 @@ G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(G4String name,
   fNi=ni;
   fNj=nj;
   fNk=nk;
+}
+
+G4PSMinKinEAtGeneration3D::G4PSMinKinEAtGeneration3D(G4String name,
+						     const G4String& unit,
+						     G4int ni, G4int nj, G4int nk,
+						     G4int depi, G4int depj, G4int depk)
+    :G4PSMinKinEAtGeneration(name),
+     fDepthi(depi),fDepthj(depj),fDepthk(depk)
+{
+  fNi=ni;
+  fNj=nj;
+  fNk=nk;
+  SetUnit(unit);
 }
 
 G4PSMinKinEAtGeneration3D::~G4PSMinKinEAtGeneration3D()

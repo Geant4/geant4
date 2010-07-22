@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc,v 1.3 2009-11-14 00:01:13 asaim Exp $
+// $Id: G4PSSphereSurfaceFlux.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceFlux
@@ -49,13 +49,27 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
 					 G4int direction, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
+					     G4int direction,
+					     const G4String& unit,
+					     G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSSphereSurfaceFlux::~G4PSSphereSurfaceFlux()
 {;}
@@ -204,8 +218,21 @@ void G4PSSphereSurfaceFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  current  : " << *(itr->second)
+	   << "  current  : " << *(itr->second)/GetUnitValue()
+	   << " ["<<GetUnit()<<"]"
 	   << G4endl;
   }
+}
+
+void G4PSSphereSurfaceFlux::SetUnit(const G4String& unit)
+{
+	CheckAndSetUnit(unit,"Per Unit Surface");
+}
+
+void G4PSSphereSurfaceFlux::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.4 2009-11-14 00:01:13 asaim Exp $
+// $Id: G4PSCylinderSurfaceFlux.cc,v 1.5 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // // G4PSCylinderSurfaceFlux
@@ -49,12 +49,26 @@
 //   2  OUT                    |<-  |
 //
 // Created: 2007-03-29  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, 
 						 G4int direction, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, 
+						 G4int direction, 
+						 const G4String& unit, 
+						 G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSCylinderSurfaceFlux::~G4PSCylinderSurfaceFlux()
 {;}
@@ -200,8 +214,22 @@ void G4PSCylinderSurfaceFlux::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  flux  : " << *(itr->second)*cm*cm << " [cm^-2]"
+	   << "  flux  : " << *(itr->second)/GetUnitValue()
+	   << " ["<<GetUnit()<<"]"
 	   << G4endl;
   }
 }
+
+void G4PSCylinderSurfaceFlux::SetUnit(const G4String& unit)
+{
+	CheckAndSetUnit(unit,"Per Unit Surface");
+}
+
+void G4PSCylinderSurfaceFlux::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+}
+
 

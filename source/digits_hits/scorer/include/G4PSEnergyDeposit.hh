@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit.hh,v 1.2 2010-07-20 07:33:54 akimura Exp $
+// $Id: G4PSEnergyDeposit.hh,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,7 @@
 //   This is a primitive scorer class for scoring energy deposit.
 // 
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,8 +62,6 @@ class G4PSEnergyDeposit : public G4VPrimitiveScorer
       virtual void PrintAll();
 
       virtual void SetUnit(const G4String& unit);
-      virtual G4String GetUnit() const;
-
 
   private:
       G4int HCID;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.hh,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSNofSecondary.hh,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,7 @@
 //                       specifying a particluar secondary. If the pointer
 //                       particleDef is not set, it accepts all secondaies.
 //                       But onece user sets it, it accepts only the particle.
+//          2010-07-22   Introduce Unit specification.
 //
 // 
 ///////////////////////////////////////////////////////////////////////////////
@@ -73,6 +74,8 @@ class G4PSNofSecondary : public G4VPrimitiveScorer
   public:
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent.hh,v 1.1 2007-08-14 21:30:45 taso Exp $
+// $Id: G4PSPassageCellCurrent.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,6 +41,7 @@
 //  into account.
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -68,6 +69,8 @@ class G4PSPassageCellCurrent : public G4VPrimitiveScorer
   public:
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
 
   private:
       G4int HCID;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSEnergyDeposit3D.hh,v 1.3 2010-07-20 07:33:54 akimura Exp $
+// $Id: G4PSEnergyDeposit3D.hh,v 1.4 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,7 @@
 //   This is a primitive scorer class for 3D scoring energy deposit.
 //
 // Created: 2007-08-14  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
 

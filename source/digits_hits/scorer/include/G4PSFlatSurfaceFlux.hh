@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSFlatSurfaceFlux.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,12 +56,15 @@
 // 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
 //                      Bug fix. Area definition.
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
+// 2010-07-22   Introduce Unit specification.
 ///////////////////////////////////////////////////////////////////////////////
 
 class G4PSFlatSurfaceFlux : public G4VPrimitiveScorer
 {
   public: // with description
       G4PSFlatSurfaceFlux(G4String name,G4int direction, G4int depth=0);
+      G4PSFlatSurfaceFlux(G4String name,G4int direction, 
+			  const G4String& unit, G4int depth=0);
       virtual ~G4PSFlatSurfaceFlux();
 
   protected: // with description
@@ -74,6 +77,11 @@ class G4PSFlatSurfaceFlux : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);
+
+  protected:
+      virtual void DefineUnitAndCategory();
 
   private:
       G4int  HCID;

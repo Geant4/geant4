@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.hh,v 1.1 2007-07-11 01:29:28 asaim Exp $
+// $Id: G4PSCellFlux.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,6 +47,7 @@
 //
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -55,6 +56,7 @@ class G4PSCellFlux : public G4VPrimitiveScorer
 {
    public: // with description
       G4PSCellFlux(G4String name, G4int depth=0);
+      G4PSCellFlux(G4String name, const G4String& unit, G4int depth=0);
       virtual ~G4PSCellFlux();
 
   protected: // with description
@@ -66,6 +68,11 @@ class G4PSCellFlux : public G4VPrimitiveScorer
       virtual void clear();
       virtual void DrawAll();
       virtual void PrintAll();
+
+      virtual void SetUnit(const G4String& unit);    
+
+  protected:
+      virtual void DefineUnitAndCategory();
 
   private:
       G4int HCID;

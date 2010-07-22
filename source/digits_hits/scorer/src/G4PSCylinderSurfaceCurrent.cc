@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.3 2009-11-14 00:01:13 asaim Exp $
+// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCylinderSurfaceCurrent
@@ -48,6 +48,7 @@
 //   2  OUT                    |<-  |
 //
 // Created: 2007-03-21  Tsukasa ASO
+// 2010-07-22   Introduce Unit specification.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -56,7 +57,21 @@ G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name,
 					 G4int direction, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
    weighted(true),divideByArea(true)
-{;}
+{
+    DefineUnitAndCategory();
+    SetUnit("percm2");
+}
+
+G4PSCylinderSurfaceCurrent::G4PSCylinderSurfaceCurrent(G4String name, 
+						       G4int direction, 
+						       const G4String& unit,
+						       G4int depth)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+   weighted(true),divideByArea(true)
+{
+    DefineUnitAndCategory();
+    SetUnit(unit);
+}
 
 G4PSCylinderSurfaceCurrent::~G4PSCylinderSurfaceCurrent()
 {;}
@@ -178,9 +193,35 @@ void G4PSCylinderSurfaceCurrent::PrintAll()
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
 	   << "  current  : " ;
-    if ( divideByArea ) G4cout << *(itr->second)*cm*cm << " [/cm2]";
-    else G4cout << *(itr->second) << " [track]";
+    if ( divideByArea ) {
+	G4cout << *(itr->second)/GetUnitValue() 
+	       << " ["<<GetUnit()<<"]";
+    } else {
+	G4cout << *(itr->second) << " [tracks]";
+    }
     G4cout << G4endl;
   }
+}
+
+void G4PSCylinderSurfaceCurrent::SetUnit(const G4String& unit)
+{
+    if ( divideByArea ) {
+	CheckAndSetUnit(unit,"Per Unit Surface");
+    } else {
+	if (unit == "" ){
+	    unitName = unit;
+	    unitValue = 1.0;
+	}else{
+	    G4String msg = GetName() + "Invalid unit "+unit;
+	    G4Exception(msg);
+	}
+    }
+}
+
+void G4PSCylinderSurfaceCurrent::DefineUnitAndCategory(){
+   // Per Unit Surface
+   new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
+   new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
+   new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
 }
 

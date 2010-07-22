@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.2 2007-08-14 21:23:51 taso Exp $
+// $Id: G4PSNofSecondary.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofSecondary
@@ -98,8 +98,19 @@ void G4PSNofSecondary::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  num of step: " << *(itr->second)
+	   << "  num of step: " << *(itr->second)/GetUnitValue()
 	   << G4endl;
+  }
+}
+
+void G4PSNofSecondary::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+    G4String msg = GetName() + "Invalid unit "+unit;
+    G4Exception(msg);
   }
 }
 

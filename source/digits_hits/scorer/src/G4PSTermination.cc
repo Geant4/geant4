@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTermination.cc,v 1.2 2007-12-10 16:29:42 gunter Exp $
+// $Id: G4PSTermination.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSTermination
@@ -36,6 +36,7 @@
 //  the cell.
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 ///////////////////////////////////////////////////////////////////////////////
 

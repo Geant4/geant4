@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPopulation.cc,v 1.1 2007-07-11 01:31:03 asaim Exp $
+// $Id: G4PSPopulation.cc,v 1.2 2010-07-22 07:23:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPopulation
@@ -36,12 +36,15 @@
 //   This is a primitive scorer class for scoring population in a cell.
 //
 // Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
+// 2010-07-22   Introduce Unit specification.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPopulation::G4PSPopulation(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
-{;}
+{
+    SetUnit("");
+}
 
 G4PSPopulation::~G4PSPopulation()
 {;}
@@ -88,8 +91,20 @@ void G4PSPopulation::PrintAll()
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
     G4cout << "  copy no.: " << itr->first
-	   << "  population: " << *(itr->second)
+	   << "  population: " << *(itr->second)/GetUnitValue()
+	   << " [tracks]"
 	   << G4endl;
   }
 }
 
+void G4PSPopulation::SetUnit(const G4String& unit)
+{
+  if (unit == "" ){
+    unitName = unit;
+    unitValue = 1.0;
+  }else{
+    G4String msg = GetName() + "Invalid unit "+unit;
+    G4Exception(msg);
+  }
+
+}
