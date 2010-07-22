@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.8 2010-07-22 01:23:09 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.9 2010-07-22 02:04:39 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -249,9 +249,7 @@ void G4ScoringCylinder::List() const {
 }
 
 
-//void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
-void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
-			     G4VScoreColorMap* colorMap, G4int axflg) {
+void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg) {
 
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
   if(pVisManager) {
@@ -283,15 +281,15 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4String & unit, 
     for(; itr != map->end(); itr++) {
       GetRZPhi(itr->first, q);
 
-      rzcell[q[0]][q[1]] += *(itr->second)/unitValue;
+      rzcell[q[0]][q[1]] += *(itr->second)/fDrawUnitValue;
       if(rzmin > rzcell[q[0]][q[1]]) rzmin = rzcell[q[0]][q[1]];
       if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
 
-      zphicell[q[1]][q[2]] += *(itr->second)/unitValue;
+      zphicell[q[1]][q[2]] += *(itr->second)/fDrawUnitValue;
       if(zphimin > zphicell[q[1]][q[2]]) zphimin = zphicell[q[1]][q[2]];
       if(zphimax < zphicell[q[1]][q[2]]) zphimax = zphicell[q[1]][q[2]];
 
-      rphicell[q[0]][q[2]] += *(itr->second)/unitValue;
+      rphicell[q[0]][q[2]] += *(itr->second)/fDrawUnitValue;
       if(rphimin > rphicell[q[0]][q[2]]) rphimin = rphicell[q[0]][q[2]];
       if(rphimax < rphicell[q[0]][q[2]]) rphimax = rphicell[q[0]][q[2]];
     }  
@@ -389,14 +387,12 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4String & unit, 
 	}
       }
     }
-    colorMap->DrawColorChart(unit);
+    colorMap->DrawColorChart(fDrawUnit);
   }
 }
 
-//void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
-//				   G4int idxProj, G4int idxColumn) 
-void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4String & unit, G4double unitValue,
-				   G4VScoreColorMap* colorMap, G4int idxProj, G4int idxColumn) 
+void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
+				   G4int idxProj, G4int idxColumn) 
 {
 
   if(idxColumn<0 || idxColumn>=fNSegment[idxProj])
@@ -435,15 +431,15 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4String & 
       GetRZPhi(itr->first, q);
 
       if(idxProj == 0 && q[0] == idxColumn) { // zphi plane
-	zphicell[q[1]][q[2]] += *(itr->second)/unitValue;
+	zphicell[q[1]][q[2]] += *(itr->second)/fDrawUnitValue;
 	if(zphimax < zphicell[q[1]][q[2]]) zphimax = zphicell[q[1]][q[2]];
       }
       if(idxProj == 1 && q[1] == idxColumn) { // rphi plane
-	rphicell[q[0]][q[2]] += *(itr->second)/unitValue;
+	rphicell[q[0]][q[2]] += *(itr->second)/fDrawUnitValue;
 	if(rphimax < rphicell[q[0]][q[2]]) rphimax = rphicell[q[0]][q[2]];
       }
       if(idxProj == 2 && q[2] == idxColumn) { // rz plane
-	rzcell[q[0]][q[1]] += *(itr->second)/unitValue; 
+	rzcell[q[0]][q[1]] += *(itr->second)/fDrawUnitValue; 
 	if(rzmax < rzcell[q[0]][q[1]]) rzmax = rzcell[q[0]][q[1]];
       }
     }  
@@ -547,7 +543,7 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4String & 
     }
   }
 
-  colorMap->DrawColorChart(unit);
+  colorMap->DrawColorChart(fDrawUnit);
 
 }
 
