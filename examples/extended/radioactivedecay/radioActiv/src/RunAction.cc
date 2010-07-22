@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.4 2010-07-20 17:57:29 maire Exp $
+// $Id: RunAction.cc,v 1.5 2010-07-22 14:40:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,7 +157,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
 	    << " --> " << G4BestUnit(Pbalance[2], "Energy")
             << ")" << G4endl;
 	    
- //Timing
+ //time life
  //
  G4double Tmean = EventTime[0]/nbEvents;
  G4double halfLife = Tmean*std::log(2.);
@@ -166,10 +166,26 @@ void RunAction::EndOfRunAction(const G4Run* run)
             << std::setw(wid) << G4BestUnit(Tmean, "Time")
 	    << "  Half-life = "
 	    << std::setw(wid) << G4BestUnit(halfLife, "Time")
-	    << "\t( "  << G4BestUnit(EventTime[1], "Time")
-	    << " --> " << G4BestUnit(EventTime[2], "Time")
-            << ")\n" << G4endl;
-	    	   	         
+	    << "   ( "  << G4BestUnit(EventTime[1], "Time")
+	    << " --> "  << G4BestUnit(EventTime[2], "Time")
+            << ")" << G4endl;
+	    
+ //activity
+ //
+ G4double molMass = particle->GetAtomicMass()*g/mole;
+ G4double nAtoms = Avogadro/molMass;
+ G4double ActivPerAtom = decayCount/EventTime[0];
+ G4double ActivPerMass = ActivPerAtom*nAtoms;
+   
+ G4cout << "\n mean Activity = "
+            << std::setw(wid) << ActivPerMass*g/becquerel
+	    << " Bq/g \n " << G4endl;
+	    
+  //normalise histo 9
+  G4double binW = histoManager->GetBinWidth(9);
+  G4double factor = (nAtoms*gram)/(binW*nbEvents*becquerel);	    
+  histoManager->Normalize(9,factor);
+    	    	   	         
  // remove all contents in particleCount
  // 
  particleCount.clear(); 

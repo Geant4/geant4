@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.2 2010-07-20 17:57:29 maire Exp $
+// $Id: TrackingAction.cc,v 1.3 2010-07-22 14:40:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,6 +103,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //
   if (charge < 3. ) return;
   
+  G4double time = track->GetGlobalTime();
+    
   //energy and momentum balance (from secondaries)
   //
   G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
@@ -121,14 +123,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     G4double Pbal = Pbalance.mag();  
     run->Balance(Ebalance,Pbal);  
     histoManager->FillHisto(6,Ebalance);
-    histoManager->FillHisto(7,Pbal);  
+    histoManager->FillHisto(7,Pbal);
+    //activity
+    histoManager->FillHisto(9,time);       
   }
   
-  //time
+  //time of event
   //  
   if (!nbtrk) {
     //no secondaries --> end of chain  
-    G4double time = track->GetGlobalTime();
     run->EventTiming(time);
     histoManager->FillHisto(8,time);                
   }           

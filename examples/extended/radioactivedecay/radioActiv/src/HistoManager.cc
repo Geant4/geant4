@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.2 2010-07-20 17:57:29 maire Exp $
+// $Id: HistoManager.cc,v 1.3 2010-07-22 14:40:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,7 +165,7 @@ void HistoManager::SetHisto(G4int ih,
     return;
   }
   
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" , "9" };
   const G4String title[] = 
           { "dummy",				//0
             "energy spectrum: e+ e-",		//1
@@ -175,7 +175,8 @@ void HistoManager::SetHisto(G4int ih,
             "energy spectrum: ions",		//5
             "energy balance",			//6	    	    
             "momentum balance",			//7
-            "total time per event"		//8	    
+            "total time per event",		//8
+            "activity in Bq/g"			//9	    	    
           };
 
 
@@ -201,6 +202,20 @@ void HistoManager::SetHisto(G4int ih,
          << nbins << " bins from "
          << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::Normalize(G4int ih, G4double fac)
+{
+  if (ih >= MaxHisto) {
+    G4cout << "---> warning from HistoManager::Normalize() : histo " << ih
+           << "  fac= " << fac << G4endl;
+    return;
+  }
+#ifdef G4ANALYSIS_USE
+  if(exist[ih]) histo[ih]->scale(fac);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

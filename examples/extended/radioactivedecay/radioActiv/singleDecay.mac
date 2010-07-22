@@ -16,6 +16,7 @@
 /radioActiv/histo/setHisto 6  100 -10.  10 keV	#E balance
 /radioActiv/histo/setHisto 7  100  0.    1 eV	#P balance
 /radioActiv/histo/setHisto 8  100  0.   70 min	#total time
+/radioActiv/histo/setHisto 9  100  0.   70 min	#activity
 #
 /radioActiv/event/printModulo 10000
 #  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.hh,v 1.2 2010-07-20 17:57:29 maire Exp $
+// $Id: HistoManager.hh,v 1.3 2010-07-22 14:40:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@ namespace AIDA {
 
 class HistoMessenger;
 
-const G4int MaxHisto = 9;
+const G4int MaxHisto = 10;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,6 +63,7 @@ class HistoManager
     void save();
     void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
+    void Normalize(G4int id, G4double fac);    
     void RemoveHisto (G4int);
     void PrintHisto  (G4int);
     

@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2010-07-20 17:57:29 maire Exp $
+$Id: README,v 1.3 2010-07-22 14:40:27 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -91,7 +91,8 @@ $Id: README,v 1.2 2010-07-20 17:57:29 maire Exp $
       6 : energy balance
       7 : momentum balance
       8 : total time per event          
-            
+      9 : activity = f(t)
+                            
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
    /radioActiv/histo/setHisto id nbBins  valMin valMax unit 

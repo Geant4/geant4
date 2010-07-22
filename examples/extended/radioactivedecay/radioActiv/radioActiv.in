@@ -11,3 +11,7 @@
 /radioActiv/event/printModulo 10000
 #  
 /run/beamOn 100000
+#
+/radioActiv/tracking/fullChain true
+#  
+/run/beamOn 100000
