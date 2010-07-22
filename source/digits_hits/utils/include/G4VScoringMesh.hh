@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.36 2010-07-22 06:44:59 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.37 2010-07-22 22:16:45 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -130,6 +130,10 @@ class G4VScoringMesh
   }
   // get unit of primitive scorer by the name
   G4String GetPSUnit(G4String & psname);
+  // get unit of current primitive scorer
+  G4String GetCurrentPSUnit();
+  // set unit of current primitive scorer
+  void SetCurrentPSUnit(const G4String& unit);
   // get unit value of primitive scorer by the name
   G4double GetPSUnitValue(G4String & psname);
 

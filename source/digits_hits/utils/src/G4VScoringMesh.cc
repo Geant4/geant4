@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.39 2010-07-22 02:04:39 akimura Exp $
+// $Id: G4VScoringMesh.cc,v 1.40 2010-07-22 22:17:43 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -160,6 +160,29 @@ G4String G4VScoringMesh::GetPSUnit(G4String & psname) {
     return GetPrimitiveScorer(psname)->GetUnit();
   }
 }
+
+G4String G4VScoringMesh::GetCurrentPSUnit(){
+    G4String unit = "";
+  if(fCurrentPS == NULL) {
+      G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
+      msg += " Current primitive scorer is null.";
+      G4cerr << msg << G4endl;
+  }else{
+     unit =  fCurrentPS->GetUnit();
+  }
+  return unit;
+}
+
+void  G4VScoringMesh::SetCurrentPSUnit(const G4String& unit){
+  if(fCurrentPS == NULL) {
+      G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
+      msg += " Current primitive scorer is null.";
+      G4cerr << msg << G4endl;
+  }else{
+      fCurrentPS->SetUnit(unit);
+  }
+}
+
 G4double G4VScoringMesh::GetPSUnitValue(G4String & psname) {
   std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.find(psname);;
   if(itr == fMap.end()) {
