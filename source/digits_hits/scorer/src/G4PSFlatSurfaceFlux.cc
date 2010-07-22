@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSFlatSurfaceFlux.cc,v 1.4 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceFlux
@@ -53,11 +53,13 @@
 // 18-Nov-2005  T.Aso,  To use always positive value for anglefactor.
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted and divideByAre options
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSFlatSurfaceFlux::G4PSFlatSurfaceFlux(G4String name, 
 					 G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+     weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -120,11 +122,13 @@ G4bool G4PSFlatSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       //
       G4double angleFactor = localdir.z();
       if ( angleFactor < 0 ) angleFactor *= -1.;
-      G4double flux = preStep->GetWeight(); // Current (Particle Weight)
+      G4double flux = 1.0;
+      if ( weighted ) flux *=preStep->GetWeight(); // Current (Particle Weight)
       //
       G4double square = 4.*boxSolid->GetXHalfLength()*boxSolid->GetYHalfLength();
       //
-      flux = flux/angleFactor/square;  // Flux with angle.
+      flux = flux/angleFactor;  // Flux with angle.
+      if ( divideByArea ) flux /= square;
       //
       G4int index = GetIndex(aStep);
       EvtMap->add(index,flux);

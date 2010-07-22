@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSCellFlux.cc,v 1.4 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCellFlux
@@ -48,11 +48,12 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -89,7 +90,7 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   }
 
   G4double CellFlux = stepLength / (solid->GetCubicVolume());
-  CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
+  if (weighted) CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int index = GetIndex(aStep);
   EvtMap->add(index,CellFlux);
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellCurrent.cc,v 1.2 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSPassageCellCurrent.cc,v 1.3 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellCurrent
@@ -41,6 +41,7 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.5 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSCylinderSurfaceFlux.cc,v 1.6 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // // G4PSCylinderSurfaceFlux
@@ -50,11 +50,13 @@
 //
 // Created: 2007-03-29  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted and divideByArea options
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCylinderSurfaceFlux::G4PSCylinderSurfaceFlux(G4String name, 
 						 G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+     weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -129,10 +131,12 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       G4double square = 2.*tubsSolid->GetZHalfLength()
 	*tubsSolid->GetInnerRadius()* tubsSolid->GetDeltaPhiAngle()/radian;
     
-      G4double flux = preStep->GetWeight();  
+      G4double flux = 1.0;
+      if ( weighted ) flux *=preStep->GetWeight();  
       // Current (Particle Weight)
 
-      flux = flux/angleFactor/square;   
+      flux = flux/angleFactor;   
+      if ( divideByArea ) flux /= square;
       //Flux with angle.
       G4int index = GetIndex(aStep);
       EvtMap->add(index,flux);

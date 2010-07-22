@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSPassageCellFlux.hh,v 1.3 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -46,6 +46,7 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +58,9 @@ class G4PSPassageCellFlux : public G4VPrimitiveScorer
       G4PSPassageCellFlux(G4String name, const G4String& unit, G4int depth=0);
 
       virtual ~G4PSPassageCellFlux();
+
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -79,6 +83,7 @@ class G4PSPassageCellFlux : public G4VPrimitiveScorer
       G4int fCurrentTrkID;
       G4double fCellFlux;
       G4THitsMap<G4double>* EvtMap;
+      G4bool  weighted;
 
 };
 

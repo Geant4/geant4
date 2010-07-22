@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.hh,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSNofSecondary.hh,v 1.4 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,6 +60,9 @@ class G4PSNofSecondary : public G4VPrimitiveScorer
     // Scoring option
       void SetParticle(const G4String& particleName);
 
+    inline void Weighted(G4bool flg=true) { weighted = flg; }
+    // Multiply track weight
+
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
 
@@ -81,6 +84,7 @@ class G4PSNofSecondary : public G4VPrimitiveScorer
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
       G4ParticleDefinition* particleDef;
+      G4bool weighted;
 
   public:
 

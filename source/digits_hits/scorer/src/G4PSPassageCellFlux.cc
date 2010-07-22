@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSPassageCellFlux.cc,v 1.4 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSPassageCellFlux
@@ -47,11 +47,13 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
+     weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -103,7 +105,7 @@ G4bool G4PSPassageCellFlux::IsPassed(G4Step* aStep){
 
   G4int  trkid  = aStep->GetTrack()->GetTrackID();
   G4double trklength  = aStep->GetStepLength();
-  trklength *= aStep->GetPreStepPoint()->GetWeight();
+  if ( weighted ) trklength *= aStep->GetPreStepPoint()->GetWeight();
 
   if ( IsEnter &&IsExit ){         // Passed at one step
     fCellFlux = trklength;         // Track length is absolutely given.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellFlux.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSCellFlux.hh,v 1.3 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -48,6 +48,7 @@
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted option
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -58,6 +59,9 @@ class G4PSCellFlux : public G4VPrimitiveScorer
       G4PSCellFlux(G4String name, G4int depth=0);
       G4PSCellFlux(G4String name, const G4String& unit, G4int depth=0);
       virtual ~G4PSCellFlux();
+
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -77,6 +81,8 @@ class G4PSCellFlux : public G4VPrimitiveScorer
   private:
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
+      G4bool  weighted;
+
 };
 #endif
 

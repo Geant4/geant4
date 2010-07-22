@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofSecondary.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSNofSecondary.cc,v 1.4 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSNofSecondary
@@ -38,7 +38,8 @@
 //
 
 G4PSNofSecondary::G4PSNofSecondary(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),particleDef(0)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),particleDef(0),
+     weighted(true)
 {;}
 
 G4PSNofSecondary::~G4PSNofSecondary()
@@ -56,7 +57,8 @@ G4bool G4PSNofSecondary::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   //
   //- This is a newly produced secondary particle.
   G4int  index = GetIndex(aStep);
-  G4double weight = aStep->GetPreStepPoint()->GetWeight();
+  G4double weight = 1.0;
+  if ( weighted ) weight *= aStep->GetPreStepPoint()->GetWeight();
   EvtMap->add(index,weight);  
   return TRUE;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSSphereSurfaceFlux.cc,v 1.5 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSSphereSurfaceFlux
@@ -50,12 +50,14 @@
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted and divideByAre options
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
 					 G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+     weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -135,8 +137,9 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       G4double enth   = stth+sphereSolid->GetDeltaThetaAngle()/radian;
       G4double square = radi*radi*dph*( -std::cos(enth) + std::cos(stth) );
 
-      G4double current = thisStep->GetWeight(); // Flux (Particle Weight)
-      current = current/square;  // Flux with angle.
+      G4double current = 1.0;
+      if ( weighted ) thisStep->GetWeight(); // Flux (Particle Weight)
+      if ( divideByArea ) current = current/square;  // Flux with angle.
 
       current /= anglefactor;
 

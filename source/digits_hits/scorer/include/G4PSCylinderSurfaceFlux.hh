@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.hh,v 1.2 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSCylinderSurfaceFlux.hh,v 1.3 2010-07-22 23:42:01 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,6 +53,7 @@
 //
 // Created: 2007-03-29  Tsukasa ASO
 // 2010-07-22   Introduce Unit specification.
+// 2010-07-22   Add weighted and divideByArea options
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -63,6 +64,13 @@ class G4PSCylinderSurfaceFlux : public G4VPrimitiveScorer
       G4PSCylinderSurfaceFlux(G4String name,G4int direction, 
 			      const G4String& unit, G4int depth=0);
       virtual ~G4PSCylinderSurfaceFlux();
+
+      inline void Weighted(G4bool flg=true) { weighted = flg; }
+      // Multiply track weight
+
+      inline void DivideByArea(G4bool flg=true) { divideByArea = flg; }
+      // Divided by Area.
+
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -84,7 +92,8 @@ class G4PSCylinderSurfaceFlux : public G4VPrimitiveScorer
       G4int  HCID;
       G4int  fDirection;
       G4THitsMap<G4double>* EvtMap;
-
+      G4bool weighted;
+      G4bool divideByArea;
 };
 
 #endif
