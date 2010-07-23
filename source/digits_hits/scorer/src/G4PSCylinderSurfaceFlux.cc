@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.6 2010-07-22 23:42:01 taso Exp $
+// $Id: G4PSCylinderSurfaceFlux.cc,v 1.7 2010-07-23 01:44:06 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // // G4PSCylinderSurfaceFlux
@@ -226,7 +226,17 @@ void G4PSCylinderSurfaceFlux::PrintAll()
 
 void G4PSCylinderSurfaceFlux::SetUnit(const G4String& unit)
 {
+    if ( divideByArea ) {
 	CheckAndSetUnit(unit,"Per Unit Surface");
+    } else {
+	if (unit == "" ){
+	    unitName = unit;
+	    unitValue = 1.0;
+	}else{
+	    G4String msg = GetName() + "Invalid unit "+unit;
+	    G4Exception(msg);
+	}
+    }
 }
 
 void G4PSCylinderSurfaceFlux::DefineUnitAndCategory(){
