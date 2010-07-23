@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.3 2010-07-22 14:40:27 maire Exp $
+// $Id: HistoManager.cc,v 1.4 2010-07-23 08:49:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,7 +175,7 @@ void HistoManager::SetHisto(G4int ih,
             "energy spectrum: ions",		//5
             "energy balance",			//6	    	    
             "momentum balance",			//7
-            "total time per event",		//8
+            "time of life",			//8
             "activity in Bq/g"			//9	    	    
           };
 

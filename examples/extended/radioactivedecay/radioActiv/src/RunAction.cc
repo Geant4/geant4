@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.5 2010-07-22 14:40:27 maire Exp $
+// $Id: RunAction.cc,v 1.6 2010-07-23 08:49:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,14 +157,14 @@ void RunAction::EndOfRunAction(const G4Run* run)
 	    << " --> " << G4BestUnit(Pbalance[2], "Energy")
             << ")" << G4endl;
 	    
- //time life
+ //time of life
  //
  G4double Tmean = EventTime[0]/nbEvents;
  G4double halfLife = Tmean*std::log(2.);
    
- G4cout << "\n Total time of an event : mean = "
+ G4cout << "\n Time of life : mean = "
             << std::setw(wid) << G4BestUnit(Tmean, "Time")
-	    << "  Half-life = "
+	    << "  half-life = "
 	    << std::setw(wid) << G4BestUnit(halfLife, "Time")
 	    << "   ( "  << G4BestUnit(EventTime[1], "Time")
 	    << " --> "  << G4BestUnit(EventTime[2], "Time")
@@ -177,7 +177,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
  G4double ActivPerAtom = decayCount/EventTime[0];
  G4double ActivPerMass = ActivPerAtom*nAtoms;
    
- G4cout << "\n mean Activity = "
+ G4cout << "\n Activity = "
             << std::setw(wid) << ActivPerMass*g/becquerel
 	    << " Bq/g \n " << G4endl;
 	    

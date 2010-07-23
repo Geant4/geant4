@@ -16,7 +16,7 @@
 /radioActiv/histo/setHisto 5  100  0. 200  keV	#recoil ion
 /radioActiv/histo/setHisto 6  100 -6. 0.5  MeV	#E balance
 /radioActiv/histo/setHisto 7  100  0. 300  MeV	#P balance
-/radioActiv/histo/setHisto 8  100  0. 1.e+11 y	#total time
+/radioActiv/histo/setHisto 8  100  0. 1.e+11 y	#time of life
 /radioActiv/histo/setHisto 9  100  0. 1.e+11 y	#activity
 #
 /radioActiv/event/printModulo 10000
