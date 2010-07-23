@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.10 2010-07-22 07:48:07 asaim Exp $
+// $Id: G4ScoringCylinder.cc,v 1.11 2010-07-23 02:33:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -86,7 +86,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // Scoring Mesh
   if(verboseLevel > 9) G4cout << fWorldName << G4endl;
-  G4String tubsName = fWorldName;
+  G4String tubsName = fWorldName+"_mesh";
 
   if(verboseLevel > 9) G4cout << fSize[0] << ", " << fSize[1] << G4endl;
   G4VSolid * tubsSolid = new G4Tubs(tubsName+"0", // name
@@ -116,7 +116,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along z direction" << G4endl;
     if(G4ScoringManager::GetReplicaLevel()>0) {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replica" << G4endl;
-      new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[0], fSize[1]/fNSegment[0]);
+      new G4PVReplica(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[0], 2.*fSize[1]/fNSegment[0]);
     } else {
       if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Division" << G4endl;
       new G4PVDivision(layerName[0], layerLogical[0], tubsLogical, kZAxis, fNSegment[0], 0.);
