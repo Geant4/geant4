@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.16 2010-07-14 10:00:36 gcosmo Exp $
+// $Id: G4RKG3_Stepper.cc,v 1.17 2010-07-23 14:13:49 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,10 +42,10 @@ G4RKG3_Stepper::~G4RKG3_Stepper()
 {
 }
 
-void G4RKG3_Stepper::Stepper(  const G4double yInput[7],
-                               const G4double dydx[7],
+void G4RKG3_Stepper::Stepper(  const G4double yInput[8],
+                               const G4double dydx[6],
                                      G4double Step,
-                                     G4double yOut[7],
+                                     G4double yOut[8],
                                      G4double yErr[])
 {
    G4double  B[3];
@@ -53,10 +53,11 @@ void G4RKG3_Stepper::Stepper(  const G4double yInput[7],
    G4int i;
    G4double  by15 = 1. / 15. ; // was  0.066666666 ;
 
-   G4double yTemp[7], dydxTemp[6], yIn[7] ;
+   G4double yTemp[8], dydxTemp[6], yIn[8] ;
    //  Saving yInput because yInput and yOut can be aliases for same array
    for(i=0;i<nvar;i++) yIn[i]=yInput[i];
-
+   yIn[6] = yInput[6];
+   yIn[7] = yInput[7];
    G4double h = Step * 0.5; 
    hStep=Step;
    // Do two half steps
@@ -78,7 +79,7 @@ void G4RKG3_Stepper::Stepper(  const G4double yInput[7],
    // Do a full Step
 
    h *= 2 ;
-   StepNoErr(yIn,dydx,h,yTemp,B); // ,beTemp2) ;
+   StepNoErr(yIn,dydx,h,yTemp,B); 
    for(i=0;i<nvar;i++)
    {
       yErr[i] = yOut[i] - yTemp[i] ;
@@ -123,17 +124,17 @@ void G4RKG3_Stepper::StepWithEst( const G4double*,
 // error and delta geometry considerations. B[3] is magnetic field which 
 // is passed from substep to substep.
 
-void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
-                               const G4double dydx[7],
+void G4RKG3_Stepper::StepNoErr(const G4double tIn[8],
+                               const G4double dydx[6],
                                      G4double Step,
-                                     G4double tOut[7],
+                                     G4double tOut[8],
                                      G4double B[3]      )     // const
    
 { 
   
   //  Copy and edit the routine above, to delete alpha2, beta2, ...
    G4double K1[7],K2[7],K3[7],K4[7] ;
-   G4double tTemp[7], yderiv[6] ;
+   G4double tTemp[8], yderiv[6] ;
 
   // Need Momentum value to give correct values to the coefficients in equation
   // Integration on unit velocity, but  tIn[3,4,5] is momentum 
@@ -184,7 +185,8 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
       tOut[i] = tIn[i] + Step*(tIn[i+3]*inverse_mom+ (K1[i] + K2[i] + K3[i])*c3) ;
       tOut[i+3] = tIn[i+3] + mom*(K1[i] + 2*K2[i] + 2*K3[i] +K4[i])*c3 ;
    }
-  
+   tOut[6] = tIn[6];
+   tOut[7] = tIn[7];
    // NormaliseTangentVector( tOut );
   
 
