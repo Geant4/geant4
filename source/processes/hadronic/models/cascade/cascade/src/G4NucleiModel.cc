@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.66 2010-07-23 17:25:03 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.67 2010-07-23 20:21:49 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -273,15 +273,15 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
 
     // pion stuff (primitive)
-    std::vector<G4double> vp(number_of_zones, pion_vp);
+    const std::vector<G4double> vp(number_of_zones, pion_vp);
     zone_potentials.push_back(vp);
 
     // kaon potential (primitive)
-    std::vector<G4double> kp(number_of_zones, -0.015);
+    const std::vector<G4double> kp(number_of_zones, -0.015);
     zone_potentials.push_back(kp);
 
     // hyperon potential (primitive)
-    std::vector<G4double> hp(number_of_zones, 0.03);
+    const std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
 
   } else { // a < 5
@@ -324,15 +324,15 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
 
     // pion (primitive)
-    std::vector<G4double> vp(number_of_zones, pion_vp_small);
+    const std::vector<G4double> vp(number_of_zones, pion_vp_small);
     zone_potentials.push_back(vp);
   
     // kaon potential (primitive)
-    std::vector<G4double> kp(number_of_zones, -0.015);
+    const std::vector<G4double> kp(number_of_zones, -0.015);
     zone_potentials.push_back(kp);
 
     // hyperon potential (primitive)
-    std::vector<G4double> hp(number_of_zones, 0.03);
+    const std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
   }
 
@@ -639,10 +639,11 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       G4cout << " trying quasi-deuterons with bullet: ";
       cparticle.getParticle().printParticle();
     }
-    
-    std::vector<G4InuclElementaryParticle> qdeutrons(3);
-    std::vector<G4double> acsecs(3);
-    
+
+    // Initialize buffers for results
+    qdeutrons.clear();
+    acsecs.clear();
+
     G4double tot_abs_csec = 0.0;
     G4double abs_sec;
     G4double vol = zone_radii[zone]*zone_radii[zone]*zone_radii[zone];
@@ -1173,8 +1174,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	particles.clear();
       
 	//    nucleons coordinates and momenta in nuclei rest frame
-	std::vector<G4ThreeVector> coordinates;
-	std::vector<G4LorentzVector> momentums;
+	coordinates.clear();
+	momentums.clear();
      
 	if (ab < 3.0) { // deutron, simplest case
 	  G4double r = 2.214 - 3.4208 * std::log(1.0 - 0.981 * inuclRndm());
@@ -1436,7 +1437,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	};  
 
 	// all nucleons at rest
-	std::vector<G4InuclElementaryParticle> raw_particles;
+	raw_particles.clear();
 	G4int ia = G4int(ab + 0.5);
 	G4int iz = G4int(zb + 0.5);
 

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.28 2010-07-23 17:25:03 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.29 2010-07-23 20:21:49 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -41,7 +41,8 @@
 // 20100617  M. Kelsey -- Add setVerboseLevel() function, add generateModel()
 //		with particle input, and ctor with A/Z input.
 // 20100715  M. Kelsey -- Add G4InuclNuclei object for use with balance checks
-// 20100723  M. Kelsey -- Move G4CollisionOutput buffer here for reuse
+// 20100723  M. Kelsey -- Move G4CollisionOutput buffer, along with all
+//		std::vector<> buffers, here for reuse
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -171,8 +172,16 @@ private:
 
   G4double getRatio(G4int ip) const;
 
-  G4CollisionOutput EPCoutput;		// Buffer for individual interactions
+  // Buffers for processing interactions on each cycle
   std::vector<G4CascadParticle> outgoing_cparticles;	// Return buffer
+  G4CollisionOutput EPCoutput;		// For N-body inelastic collisions
+
+  std::vector<G4InuclElementaryParticle> qdeutrons;	// For h+(NN) trials
+  std::vector<G4double> acsecs;
+    
+  std::vector<G4ThreeVector> coordinates;	// for initializeCascad()
+  std::vector<G4LorentzVector> momentums;
+  std::vector<G4InuclElementaryParticle> raw_particles;
 
   std::vector<std::vector<G4double> > nucleon_densities;
   std::vector<std::vector<G4double> > zone_potentials;
@@ -181,6 +190,7 @@ private:
   std::vector<G4double> binding_energies;
   G4double nuclei_radius;
   G4int number_of_zones;
+
   G4double A;
   G4double Z;
   G4InuclNuclei* theNucleus;
