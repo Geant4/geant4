@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSCylinderSurfaceCurrent.cc,v 1.5 2010-07-23 04:35:38 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSCylinderSurfaceCurrent
@@ -94,10 +94,6 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-//  if( solid->GetEntityType() != "G4Tubs" ){
-//    G4Exception("G4PSCylinderSurfaceCurrentScorer. - Solid type is not supported.");
-//    return FALSE;
-//  }
   G4Tubs* tubsSolid = (G4Tubs*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
@@ -136,9 +132,6 @@ G4int G4PSCylinderSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsS
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
     if ( std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    //if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()
-    //	  -(tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
-    //       < kCarTolerance ){
     G4double localR2 = localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y();
     G4double InsideRadius = tubsSolid->GetInnerRadius();
     if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
@@ -153,9 +146,6 @@ G4int G4PSCylinderSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsS
     G4ThreeVector localpos2 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
     if ( std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    //if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y() 
-    //	  - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
-    //       <kCarTolerance ){
     G4double localR2 = localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y();
     G4double InsideRadius = tubsSolid->GetInnerRadius();
     if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
@@ -212,8 +202,8 @@ void G4PSCylinderSurfaceCurrent::SetUnit(const G4String& unit)
 	    unitName = unit;
 	    unitValue = 1.0;
 	}else{
-	    G4String msg = GetName() + "Invalid unit "+unit;
-	    G4Exception(msg);
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
 	}
     }
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc,v 1.4 2010-07-22 07:31:06 taso Exp $
+// $Id: G4VPrimitiveScorer.cc,v 1.5 2010-07-23 04:34:59 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VPrimitiveScorer
@@ -80,7 +80,7 @@ void G4VPrimitiveScorer::CheckAndSetUnit(const G4String& unit,
 	unitName = unit;
 	unitValue = G4UnitDefinition::GetValueOf(unit);
     } else {
-	G4String msg = GetName() + "Invalid unit "+unit;
-	G4Exception(msg);
+	G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	G4Exception(GetName(),"DetPS0000",JustWarning,msg);
     }
 }

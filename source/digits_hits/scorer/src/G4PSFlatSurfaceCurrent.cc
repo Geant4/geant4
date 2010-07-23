@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceCurrent.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSFlatSurfaceCurrent.cc,v 1.5 2010-07-23 04:35:38 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSFlatSurfaceCurrent
@@ -96,10 +96,6 @@ G4bool G4PSFlatSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-//  if( solid->GetEntityType() != "G4Box" ){
-//    G4Exception("G4PSFlatSurfaceCurrentScorer. - Solid type is not supported.");
-//    return FALSE;
-//  }
   G4Box* boxSolid = (G4Box*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,boxSolid);
@@ -193,8 +189,8 @@ void G4PSFlatSurfaceCurrent::SetUnit(const G4String& unit)
 	    unitName = unit;
 	    unitValue = 1.0;
 	}else{
-	    G4String msg = GetName() + "Invalid unit "+unit;
-	    G4Exception(msg);
+	    G4String msg = "Invalid unit ["+unit+"] (Current  unit is [" +GetUnit()+"] )";
+	    G4Exception(GetName(),"DetScorer0000",JustWarning,msg);
 	}
     }
 }
