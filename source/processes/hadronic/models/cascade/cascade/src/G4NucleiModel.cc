@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.65 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.66 2010-07-23 17:25:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -60,6 +60,7 @@
 // 20100715  M. Kelsey -- Make G4InuclNuclei in generateModel(), use for
 //		balance checking (only verbose>2) in generateParticleFate().
 // 20100721  M. Kelsey -- Use new G4CASCADE_CHECK_ECONS for conservation checks
+// 20100723  M. Kelsey -- Move G4CollisionOutput buffer to .hh for reuse
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -85,7 +86,6 @@
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
-
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
@@ -821,15 +821,14 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       G4cout << " processing " << npart-1 << " possible interactions" << G4endl;
 
     G4ThreeVector old_position = cparticle.getPosition();
-    G4InuclElementaryParticle bullet = cparticle.getParticle();
+    G4InuclElementaryParticle& bullet = cparticle.getParticle();
     G4bool no_interaction = true;
     G4int zone = cparticle.getCurrentZone();
     
-    G4CollisionOutput output;
     for (G4int i=0; i<npart-1; i++) {	// Last item is a total-path placeholder
       if (i > 0) cparticle.updatePosition(old_position); 
       
-      G4InuclElementaryParticle target = thePartners[i].first; 
+      G4InuclElementaryParticle& target = thePartners[i].first; 
 
       if (verboseLevel > 3) {
 	if (target.quasi_deutron()) G4cout << " try absorption: ";
@@ -837,20 +836,20 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	       << G4endl;
       }
 
-      output.reset();
-      theElementaryParticleCollider->collide(&bullet, &target, output);
+      EPCoutput.reset();
+      theElementaryParticleCollider->collide(&bullet, &target, EPCoutput);
       
       if (verboseLevel > 2) {
-	output.printCollisionOutput();
+	EPCoutput.printCollisionOutput();
 #ifdef G4CASCADE_CHECK_ECONS
-	balance.collide(&bullet, &target, output);
+	balance.collide(&bullet, &target, EPCoutput);
 	balance.okay();		// Do checks, but ignore result
 #endif
       }
 
       // Don't need to copy list, as "output" isn't changed again below
       const std::vector<G4InuclElementaryParticle>& outgoing_particles = 
-	output.getOutgoingParticles();
+	EPCoutput.getOutgoingParticles();
       
       if (!passFermi(outgoing_particles, zone)) continue; // Interaction fails
 

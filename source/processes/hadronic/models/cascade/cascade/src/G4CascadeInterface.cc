@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.93 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.94 2010-07-23 17:25:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -51,6 +51,7 @@
 // 20100701  M. Kelsey -- Pass verbosity through to G4CollisionOutput
 // 20100714  M. Kelsey -- Report number of iterations before success
 // 20100720  M. Kelsey -- Use G4CASCADE_SKIP_ECONS flag for reporting
+// 20100723  M. Kelsey -- Move G4CollisionOutput to .hh file for reuse
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -144,9 +145,8 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   // Colliders initialisation
   collider.setVerboseLevel(verboseLevel);
-
-  G4CollisionOutput output;
   output.setVerboseLevel(verboseLevel);
+  output.reset();
 
   G4CascadeCheckBalance balance(0.05, 0.1, GetModelName());	// Second arg is in GeV
   balance.setVerboseLevel(verboseLevel);

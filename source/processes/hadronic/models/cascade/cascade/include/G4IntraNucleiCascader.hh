@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.16 2010-07-20 06:10:38 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.17 2010-07-23 17:25:03 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -36,11 +36,13 @@
 // 20100716  M. Kelsey -- Eliminate inter_case; use base-class functionality,
 //		add function to compute recoil nuclear mass on the fly
 // 20100720  M. Kelsey -- Make EPCollider pointer member
+// 20100722  M. Kelsey -- Move cascade output buffers to .hh file
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CollisionOutput.hh"
 #include <vector>
 
 class G4CascadParticle;
@@ -66,6 +68,12 @@ private:
   G4double getResidualMass(G4InuclParticle* bullet, G4InuclParticle* target,
 			   const std::vector<G4InuclElementaryParticle>& output,
 			   const std::vector<G4CascadParticle>& inprocess);
+
+  // Buffers for collecting result of cascade (reset on each iteration)
+  G4CollisionOutput output;
+  std::vector<G4CascadParticle> cascad_particles;
+  std::vector<G4CascadParticle> new_cascad_particles;
+  std::vector<G4InuclElementaryParticle> output_particles;
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */
