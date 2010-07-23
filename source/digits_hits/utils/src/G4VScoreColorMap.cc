@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.6 2010-07-22 07:22:43 akimura Exp $
+// $Id: G4VScoreColorMap.cc,v 1.7 2010-07-23 06:25:31 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -47,7 +47,7 @@ G4VScoreColorMap::G4VScoreColorMap(G4String mName)
 G4VScoreColorMap::~G4VScoreColorMap()
 {;}
 
-void G4VScoreColorMap::DrawColorChart(G4String unit, G4int _nPoint) {
+void G4VScoreColorMap::DrawColorChart(G4int _nPoint) {
 
   fVisManager = G4VVisManager::GetConcreteInstance();
   if(!fVisManager) {
@@ -56,7 +56,7 @@ void G4VScoreColorMap::DrawColorChart(G4String unit, G4int _nPoint) {
   }
 
   DrawColorChartBar(_nPoint);
-  DrawColorChartText(unit, _nPoint);
+  DrawColorChartText(_nPoint);
 }
 
 void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
@@ -78,8 +78,8 @@ void G4VScoreColorMap::DrawColorChartBar(G4int _nPoint) {
   }
 
 }
-//void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
-void G4VScoreColorMap::DrawColorChartText(G4String unit, G4int _nPoint) {
+void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
+
   G4double min = this->GetMin();
   G4double max = this->GetMax();
   G4double c[4];
@@ -116,11 +116,33 @@ void G4VScoreColorMap::DrawColorChartText(G4String unit, G4int _nPoint) {
     fVisManager->Draw2D(text);
   }
 
+  // draw ps name
+  // background
+  G4int lpsname = fPSName.size();
+  if(lpsname > 0) {
+    for(int l = 0; l < 22; l++) {
+      G4Polyline line;
+      line.push_back(G4Point3D(-0.9, -0.965+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.9+0.4*lpsname, -0.965+0.002*l, 0.));
+      G4VisAttributes attblack(black);
+      line.SetVisAttributes(&attblack);
+      fVisManager->Draw2D(line);
+    }
+    // unit
+    G4Text txtpsname(fPSName, G4Point3D(-0.9, -0.96, 0.));
+    G4double size = 12.;
+    txtpsname.SetScreenSize(size);
+    G4Colour color(1., 1., 1.);
+    G4VisAttributes att(color);
+    txtpsname.SetVisAttributes(&att);
+    fVisManager->Draw2D(txtpsname);
+  }
+
 
 
   // draw unit
   // background
-  G4int len = unit.size();
+  G4int len = fPSUnit.size();
   if(len > 0) {
     for(int l = 0; l < 21; l++) {
       G4Polyline line;
@@ -131,7 +153,7 @@ void G4VScoreColorMap::DrawColorChartText(G4String unit, G4int _nPoint) {
       fVisManager->Draw2D(line);
     }
     // unit
-    G4String psunit = "[" + unit + "]";
+    G4String psunit = "[" + fPSUnit + "]";
     G4Text txtunit(psunit, G4Point3D(-0.69, -0.9, 0.));
     G4double size = 12.;
     txtunit.SetScreenSize(size);

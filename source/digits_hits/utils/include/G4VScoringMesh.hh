@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.37 2010-07-22 22:16:45 taso Exp $
+// $Id: G4VScoringMesh.hh,v 1.38 2010-07-23 06:25:30 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -136,6 +136,8 @@ class G4VScoringMesh
   void SetCurrentPSUnit(const G4String& unit);
   // get unit value of primitive scorer by the name
   G4double GetPSUnitValue(G4String & psname);
+  // set PS name to be drawn
+  void SetDrawPSName(G4String & psname) {fDrawPSName = psname;}
 
   // set current  primitive scorer to NULL
   void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
@@ -174,6 +176,7 @@ protected:
 
   G4String fDrawUnit;
   G4double fDrawUnitValue;
+  G4String fDrawPSName;
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
@@ -199,6 +202,7 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
 
 void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
 {
+  fDrawPSName = psName;
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
   if(fMapItr!=fMap.end()) {
     fDrawUnit = GetPSUnit(psName);
@@ -211,6 +215,7 @@ void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int a
 
 void G4VScoringMesh::DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
 {
+  fDrawPSName = psName;
   std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
   if(fMapItr!=fMap.end()) {
     fDrawUnit = GetPSUnit(psName);

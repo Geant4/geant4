@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.31 2008-03-25 02:18:38 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.32 2010-07-23 06:25:30 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
