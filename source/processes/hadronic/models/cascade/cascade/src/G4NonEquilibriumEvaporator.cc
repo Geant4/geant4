@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.37 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.38 2010-07-24 06:18:55 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -38,6 +38,7 @@
 // 20100713  M. Kelsey -- Add conservation checking, diagnostic messages.
 // 20100714  M. Kelsey -- Move conservation checking to base class
 // 20100719  M. Kelsey -- Simplify EEXS calculations with particle evaporation.
+// 20100724  M. Kelsey -- Replace std::vector<> D with trivial D[3] array.
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4CollisionOutput.hh"
@@ -181,7 +182,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	    if (F1 > 0.0 && F2 > 0.0) {
 	      G4double F = F2 / F1;
 	      G4double M1 = 2.77 * MELE * PL;
-	      std::vector<G4double> D(3, 0.0);
+	      G4double D[3] = { 0., 0., 0. };
 	      D[0] = M1 * F2 * F2 * std::pow(F, NEX - 1) / (QEX + 1.0);
 	      
 	      if (D[0] > 0.0) {
