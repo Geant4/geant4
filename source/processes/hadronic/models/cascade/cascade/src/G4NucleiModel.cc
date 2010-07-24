@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.68 2010-07-24 06:18:55 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.69 2010-07-24 06:49:53 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -178,7 +178,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   number_of_zones = (a < 5) ? 1 : (a < 100) ? 3 : 6;
 
   if (a > 4.5) {
-    std::vector<G4double> ur(number_of_zones);
+    std::vector<G4double> ur(number_of_zones+1);
     G4int icase = 0;
 
     if (a > 99.5) {
