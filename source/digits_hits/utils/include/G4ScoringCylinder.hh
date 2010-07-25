@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.hh,v 1.5 2010-07-22 07:48:07 asaim Exp $
+// $Id: G4ScoringCylinder.hh,v 1.6 2010-07-25 11:05:03 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,6 +61,9 @@ class G4ScoringCylinder : public G4VScoringMesh
   void GetRZPhi(G4int index, G4int q[3]) const;
 
 private:
+  //enum IDX {IR, IZ, IPHI};
+  enum IDX {IZ, IPHI, IR};
+
   G4LogicalVolume * fMeshElementLogical;
   
   void SetupGeometry(G4VPhysicalVolume * fWorldPhys);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.40 2010-07-21 03:04:25 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.41 2010-07-25 11:05:03 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -199,7 +199,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   // Draw column
   drawColumnCmd = new G4UIcommand("/score/drawColumn",this);
   drawColumnCmd->SetGuidance("Draw a cell column.");
-  drawColumnCmd->SetGuidance(" plane = 0 : xy, 1: yz, 2: zx");
+  drawColumnCmd->SetGuidance(" plane = 0 : x-y, 1: y-z, 2: z-x  for box mesh");
+  drawColumnCmd->SetGuidance("         0 : z-phi, 1: r-phi, 2: r-z  for cylinder mesh");
   param = new G4UIparameter("meshName",'s',false);
   drawColumnCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
@@ -542,9 +543,20 @@ void G4ScoringMessenger::MeshBinCommand(G4VScoringMesh* mesh,G4TokenVec& token){
     G4int Nj = StoI(token[1]);
     G4int Nk = StoI(token[2]);
     G4int nSegment[3];
-    nSegment[0] = Ni;
-    nSegment[1] = Nj;
-    nSegment[2] = Nk;
+
+    if(dynamic_cast<G4ScoringBox*>(mesh)) {
+      G4cout << ".... G4ScoringMessenger::MeshBinCommand - G4ScoringBox" << G4endl;
+      nSegment[0] = Ni;
+      nSegment[1] = Nj;
+      nSegment[2] = Nk;
+    } else if(dynamic_cast<G4ScoringCylinder*>(mesh)) {
+      G4cout << ".... G4ScoringMessenger::MeshBinCommand - G4ScoringCylinder" << G4endl;
+      nSegment[0] = Nj;
+      nSegment[1] = Nk;
+      nSegment[2] = Ni;
+    } else {
+      G4Exception("G4ScoringMessenger::MeshBinCommand()", "001", FatalException, "invalid mesh type");
+    }
     //
     mesh->SetNumberOfSegments(nSegment);
 }
