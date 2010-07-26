@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.6 2010-07-23 06:25:30 akimura Exp $
+// $Id: G4ScoreLogColorMap.cc,v 1.7 2010-07-26 03:52:33 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -175,17 +175,18 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
 
   // draw ps name
   // background
-  G4int lpsname = fPSName.size();
+  G4int lpsname = 20;// fPSName.size();
   if(lpsname > 0) {
     for(int l = 0; l < 22; l++) {
       G4Polyline line;
       line.push_back(G4Point3D(-0.9, -0.965+0.002*l, 0.));
-      line.push_back(G4Point3D(-0.9+0.4*lpsname, -0.965+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.9+0.025*lpsname, -0.965+0.002*l, 0.));
       G4VisAttributes attblack(black);
+      //G4VisAttributes attblack(G4Colour(.0, .5, .0));
       line.SetVisAttributes(&attblack);
       fVisManager->Draw2D(line);
     }
-    // unit
+    // ps name
     G4Text txtpsname(fPSName, G4Point3D(-0.9, -0.96, 0.));
     G4double size = 12.;
     txtpsname.SetScreenSize(size);
@@ -204,8 +205,9 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
     for(int l = 0; l < 21; l++) {
       G4Polyline line;
       line.push_back(G4Point3D(-0.7, -0.9+0.002*l, 0.));
-      line.push_back(G4Point3D(-0.7+0.4, -0.9+0.002*l, 0.));
+      line.push_back(G4Point3D(-0.7+0.3, -0.9+0.002*l, 0.));
       G4VisAttributes attblack(black);
+      //G4VisAttributes attblack(G4Colour(.5, .0, .0));
       line.SetVisAttributes(&attblack);
       fVisManager->Draw2D(line);
     }

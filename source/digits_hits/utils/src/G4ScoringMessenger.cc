@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc,v 1.41 2010-07-25 11:05:03 akimura Exp $
+// $Id: G4ScoringMessenger.cc,v 1.42 2010-07-26 03:52:33 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------
@@ -184,7 +184,8 @@ G4ScoringMessenger::G4ScoringMessenger(G4ScoringManager* SManager)
   drawCmd = new G4UIcommand("/score/drawProjection",this);
   drawCmd->SetGuidance("Draw projection(s) of scored quantities.");
   drawCmd->SetGuidance("Parameter <proj> specified which projection(s) to be drawn.");
-  drawCmd->SetGuidance("  100 : xy-plane, 010 : yz-place, 001 : zx-plane -- default 111");
+  drawCmd->SetGuidance("  100 : xy-plane, 010 : yz-plane,    001 : zx-plane -- default 111");
+  drawCmd->SetGuidance("  100 : N/A,      010 : z_phi-plane, 001 : r_phi-plane -- default 111");
   param = new G4UIparameter("meshName",'s',false);
   drawCmd->SetParameter(param);
   param = new G4UIparameter("psName",'s',false);
