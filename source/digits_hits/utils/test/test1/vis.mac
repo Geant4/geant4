@@ -11,6 +11,7 @@
 # draw scene
 #
 /vis/drawVolume worlds
+/vis/viewer/set/lightsThetaPhi 120 135                  
 /vis/viewer/set/viewpointThetaPhi 105 165 deg
 # Set specific colur for identification
 ###/vis/geometry/set/colour Calor-AP_LayerLog ! yellow
