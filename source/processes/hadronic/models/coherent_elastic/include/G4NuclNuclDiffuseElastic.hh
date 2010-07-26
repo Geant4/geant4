@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.11 2010-07-05 06:42:49 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.12 2010-07-26 04:14:56 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -256,6 +256,8 @@ public:
   void SetCofLambda(G4double pa){fCofLambda = pa;};
   void SetCofAlpha(G4double pa){fCofAlpha = pa;};
   void SetCofDelta(G4double pa){fCofDelta = pa;};
+  void SetCofPhase(G4double pa){fCofPhase = pa;};
+  void SetCofFar(G4double pa){fCofFar = pa;};
   void SetEtaRatio(G4double pa){fEtaRatio = pa;};
   void SetMaxL(G4int l){fMaxL = l;};
 
@@ -303,6 +305,7 @@ private:
 
   G4double fCoulombPhase0;
   G4double fHalfRutThetaTg;
+  G4double fHalfRutThetaTg2;
   G4double fRutherfordTheta;
 
   G4double fProfileLambda;
@@ -312,6 +315,8 @@ private:
   G4double fCofLambda;
   G4double fCofAlpha;
   G4double fCofDelta;
+  G4double fCofPhase;
+  G4double fCofFar;
 
   G4int    fMaxL;
   G4double fSumSigma;
@@ -988,8 +993,9 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateCoulombPhase(G4int n)
 
 inline  void G4NuclNuclDiffuseElastic::CalculateRutherfordAnglePar()
 {
-  fHalfRutThetaTg  = fZommerfeld/fProfileLambda;  // (fWaveVector*fNuclearRadius);
-  fRutherfordTheta = 2.*std::atan(fHalfRutThetaTg);
+  fHalfRutThetaTg   = fZommerfeld/fProfileLambda;  // (fWaveVector*fNuclearRadius);
+  fRutherfordTheta  = 2.*std::atan(fHalfRutThetaTg);
+  fHalfRutThetaTg2  = fHalfRutThetaTg*fHalfRutThetaTg;
   G4cout<<"fRutherfordTheta = "<<fRutherfordTheta/degree<<" degree"<<G4endl;
 
 }
@@ -1038,9 +1044,11 @@ inline   G4double G4NuclNuclDiffuseElastic::ProfileFar(G4double theta)
 inline   G4complex G4NuclNuclDiffuseElastic::PhaseNear(G4double theta)
 {
   G4double twosigma = 2.*fCoulombPhase0; 
-  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg*fHalfRutThetaTg/(1.+fHalfRutThetaTg*fHalfRutThetaTg));
+  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg2/(1.+fHalfRutThetaTg2));
   twosigma += fRutherfordTheta*fZommerfeld/fHalfRutThetaTg - halfpi;
   twosigma -= fProfileLambda*theta - 0.25*pi;
+
+  twosigma *= fCofPhase;
 
   G4complex z = G4complex(0., twosigma);
 
@@ -1054,9 +1062,11 @@ inline   G4complex G4NuclNuclDiffuseElastic::PhaseNear(G4double theta)
 inline   G4complex G4NuclNuclDiffuseElastic::PhaseFar(G4double theta)
 {
   G4double twosigma = 2.*fCoulombPhase0; 
-  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg*fHalfRutThetaTg/(1.+fHalfRutThetaTg*fHalfRutThetaTg));
+  twosigma -= fZommerfeld*std::log(fHalfRutThetaTg2/(1.+fHalfRutThetaTg2));
   twosigma += fRutherfordTheta*fZommerfeld/fHalfRutThetaTg - halfpi;
   twosigma += fProfileLambda*theta - 0.25*pi;
+
+  twosigma *= fCofPhase;
 
   G4complex z = G4complex(0., twosigma);
 
@@ -1070,8 +1080,8 @@ inline   G4complex G4NuclNuclDiffuseElastic::PhaseFar(G4double theta)
 
 inline G4complex G4NuclNuclDiffuseElastic::GammaLess(G4double theta)
 {
-  G4double sinThetaR      = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg*fHalfRutThetaTg);
-  G4double cosHalfThetaR2 = 1./(1. + fHalfRutThetaTg*fHalfRutThetaTg);
+  G4double sinThetaR      = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
+  G4double cosHalfThetaR2 = 1./(1. + fHalfRutThetaTg2);
 
   G4double u              = std::sqrt(0.5*fProfileLambda/sinThetaR);
   G4double kappa          = u/std::sqrt(pi);
@@ -1083,6 +1093,7 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaLess(G4double theta)
   G4complex im            = G4complex(0.,1.);
   G4complex order         = G4complex(u,u);
   order                  /= std::sqrt(2.);
+
   G4complex gamma         = pi*kappa*GetErfcInt(-order)*std::exp(im*(u*u+0.25*pi));
   G4complex a0            = 0.5*(1. + 4.*(1.+im*u2)*cosHalfThetaR2/3.)/sinThetaR;
   G4complex a1            = 0.5*(1. + 2.*(1.+im*u2m2p3)*cosHalfThetaR2)/sinThetaR;
@@ -1097,8 +1108,8 @@ inline G4complex G4NuclNuclDiffuseElastic::GammaLess(G4double theta)
 
 inline G4complex G4NuclNuclDiffuseElastic::GammaMore(G4double theta)
 {
-  G4double sinThetaR      = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg*fHalfRutThetaTg);
-  G4double cosHalfThetaR2 = 1./(1. + fHalfRutThetaTg*fHalfRutThetaTg);
+  G4double sinThetaR      = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
+  G4double cosHalfThetaR2 = 1./(1. + fHalfRutThetaTg2);
 
   G4double u              = std::sqrt(0.5*fProfileLambda/sinThetaR);
   G4double kappa          = u/std::sqrt(pi);
@@ -1126,16 +1137,19 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeNear(G4double theta)
 {
   G4double kappa = std::sqrt(0.5*fProfileLambda/std::sin(theta)/pi);
   G4complex out = G4complex(kappa/fWaveVector,0.);
+
   out *= PhaseNear(theta);
 
-  if(theta <= fRutherfordTheta)
+  if( theta <= fRutherfordTheta )
   {
     out *= GammaLess(theta) + ProfileNear(theta);
+    // out *= GammaMore(theta) + ProfileNear(theta);
     out += CoulombAmplitude(theta);
   }
   else
   {
     out *= GammaMore(theta) + ProfileNear(theta);
+    // out *= GammaLess(theta) + ProfileNear(theta);
   }
   return out;
 }
@@ -1148,7 +1162,8 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeFar(G4double theta)
 {
   G4double kappa = std::sqrt(0.5*fProfileLambda/std::sin(theta)/pi);
   G4complex out = G4complex(kappa/fWaveVector,0.);
-  out *= ProfileFar(theta)*PhaseFar(theta);
+  out *= ProfileFar(theta);
+  out *= PhaseFar(theta);
   return out;
 }
 
@@ -1160,7 +1175,9 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeFar(G4double theta)
 inline  G4complex G4NuclNuclDiffuseElastic::Amplitude(G4double theta)
 {
  
-  G4complex out = AmplitudeNear(theta) + AmplitudeFar(theta);
+  G4complex out = AmplitudeNear(theta) + fCofFar*AmplitudeFar(theta);
+  // G4complex out = AmplitudeNear(theta);
+  // G4complex out = AmplitudeFar(theta);
   return    out;
 }
 
@@ -1226,7 +1243,7 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeGG(G4double theta)
   G4complex im  = G4complex(0.,1.);
 
   a  = -fSumSigma/twopi/fNuclearRadiusSquare;
-  b2 = 2.*fWaveVector*fWaveVector*fNuclearRadiusSquare*sinThetaH2;
+  b2 = fWaveVector*fWaveVector*fNuclearRadiusSquare*sinThetaH2;
 
   aTemp = a;
 
@@ -1279,12 +1296,13 @@ inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition*
 
   G4double lambda = fCofLambda*fWaveVector*fNuclearRadius;
   G4cout<<"kR = "<<lambda<<G4endl;
+
   if( z )
   {
-      a           = partMom/m1; // beta*gamma for m1
-      fBeta       = a/std::sqrt(1+a*a);
-      fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
-      fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
+    a           = partMom/m1; // beta*gamma for m1
+    fBeta       = a/std::sqrt(1+a*a);
+    fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+    fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
   }
   fProfileLambda = lambda*std::sqrt(1.-2*fZommerfeld/lambda);
   G4cout<<"fProfileLambda = "<<fProfileLambda<<G4endl;

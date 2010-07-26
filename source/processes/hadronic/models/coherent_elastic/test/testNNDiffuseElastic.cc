@@ -351,15 +351,17 @@ int main()
   G4double thetaMin = 15.*degree;
   dData = 30.*degree/kAngle;
 
-  nndiffelastic->SetCofLambda(1.03);  // 1.01, 1.03
-  nndiffelastic->SetCofDelta(0.087);   // 0.12, 0.09
-  nndiffelastic->SetCofAlpha(0.087);   // 0.09
+  nndiffelastic->SetCofLambda(1.01);  // 1.01, 
+  nndiffelastic->SetCofDelta(0.095);   // 0.092
+  nndiffelastic->SetCofAlpha(0.095);   // 0.092
+  nndiffelastic->SetCofPhase(1.03);   
+  nndiffelastic->SetCofFar(1.0);    
   // nndiffelastic->SetEtaRatio(1.40);   // 1
 
-  // nndiffelastic->InitParameters(theParticleDefinition, ptot, Z, A);
+  nndiffelastic->InitParameters(theParticleDefinition, ptot, Z, A);
 
-  nndiffelastic->InitParametersGla(theDynamicParticle, ptot, Z, A);
-  nndiffelastic->SetMaxL(10);   // 10
+  // nndiffelastic->InitParametersGla(theDynamicParticle, ptot, Z, A);
+  // nndiffelastic->SetMaxL(10);   // 10
   // nndiffelastic->SetEtaRatio(7.50);   // 1
 
   std::ofstream writef("angle.dat", std::ios::out ) ;
@@ -374,9 +376,9 @@ int main()
     
     distrDif[k] = diffelastic->GetDiffuseElasticSumXsc(theParticleDefinition, thetaCMS, ptot, A, Z); 
 
-    // distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
+    distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGlaMod2(thetaCMS);
-    distrXsc[k] = nndiffelastic->AmplitudeGGMod2(thetaCMS);
+    // distrXsc[k] = nndiffelastic->AmplitudeGGMod2(thetaCMS);
 
     rad = diffelastic->GetNuclearRadius();
     rad2 = rad*rad;
