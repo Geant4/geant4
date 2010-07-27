@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.hh,v 1.15 2010-07-14 15:41:12 mkelsey Exp $
+// $Id: G4BigBanger.hh,v 1.16 2010-07-27 04:20:03 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
@@ -32,6 +32,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100519  M. Kelsey -- Get rid of proton and neutron masses as arguments!
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
@@ -68,6 +69,7 @@ private:
   // Buffers for big-bang results
   std::vector<G4InuclElementaryParticle> particles;
   std::vector<G4double> momModules;
+  std::vector<G4LorentzVector> scm_momentums;
 };        
 
 #endif /* G4BIG_BANGER_HH */

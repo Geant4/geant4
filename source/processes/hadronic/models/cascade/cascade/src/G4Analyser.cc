@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4Analyser.cc,v 1.21 2010-07-27 04:20:03 mkelsey Exp $
+//
+// 20100726  M. Kelsey -- Use references for fetched lists
+
 #include "G4Analyser.hh"
 #include <cmath>
 #include <iomanip>
@@ -111,7 +115,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   }
 
   if (withNuclei) {
-    std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
+    const std::vector<G4InuclNuclei>& nucleus = output.getNucleiFragments();
 
     //    if (nucleus.size() >= 0) {
     if (nucleus.size() > 0) {
@@ -135,7 +139,8 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 
       if (nbig > 1) fissy_prob += 1.0;
       eventNumber += 1.0;
-      std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+      const std::vector<G4InuclElementaryParticle>& particles =
+	output.getOutgoingParticles();
       averageMultiplicity += particles.size();
 
       for (G4int i = 0; i < G4int(particles.size()); i++) {
@@ -182,7 +187,8 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 
   } else {
     eventNumber += 1.0;
-    std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+    const std::vector<G4InuclElementaryParticle>& particles =
+      output.getOutgoingParticles();
     averageMultiplicity += particles.size();
 
     for (G4int i = 0; i < G4int(particles.size()); i++) {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.hh,v 1.33 2010-07-14 15:41:12 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.hh,v 1.34 2010-07-27 04:20:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -41,6 +41,7 @@
 //		particle-types selector to all modes, not just strangeness.
 // 20100517  M. Kelsey -- Inherit from common base class, make arrays static
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100726  M. Kelsey -- Move remaining std::vector<> buffers here
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -106,7 +107,9 @@ private:
 
   // Internal buffers for lists of secondaries
   std::vector<G4InuclElementaryParticle> particles;
+  std::vector<G4LorentzVector> scm_momentums;
   std::vector<G4double> modules;
+  std::vector<G4double> masses2;
   std::vector<G4int> particle_kinds;
 
   // Parameter arrays

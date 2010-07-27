@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.72 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.73 2010-07-27 04:20:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -64,6 +64,7 @@
 // 20100714  M. Kelsey -- Add sanity check for two-body final state, to ensure
 //		that final state total mass is below etot_scm; also compute
 //		kinematics without "rescaling" (which led to non-conservation)
+// 20100726  M. Kelsey -- Move remaining std::vector<> buffers to .hh file
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -431,8 +432,8 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	  };
 	} else { // multiplicity > 3
 	  // generate first mult - 2 momentums
-	  std::vector<G4LorentzVector> scm_momentums;
 	  G4LorentzVector tot_mom;
+	  scm_momentums.clear();
 	  
 	  for (G4int i = 0; i < multiplicity - 2; i++) {
 	    G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
@@ -563,9 +564,10 @@ G4ElementaryParticleCollider::generateMomModules(G4int mult,
 
   // FIXME:  Code below wants to set modules[i] directly.  Bad practice
   modules.clear();			// Initialize buffer for this attempt
-  modules.insert(modules.begin(), mult, 0.);
+  modules.resize(mult,0.);
 
-  std::vector<G4double> masses2(mult);
+  masses2.clear();
+  masses2.resize(mult,0.);		// Allows direct [i] setting
 
   for (G4int i = 0; i < mult; i++) {
     G4double mass = dummy.getParticleMass(particle_kinds[i]);

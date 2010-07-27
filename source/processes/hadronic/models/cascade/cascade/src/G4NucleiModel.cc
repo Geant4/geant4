@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.69 2010-07-24 06:49:53 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.70 2010-07-27 04:20:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -61,7 +61,7 @@
 //		balance checking (only verbose>2) in generateParticleFate().
 // 20100721  M. Kelsey -- Use new G4CASCADE_CHECK_ECONS for conservation checks
 // 20100723  M. Kelsey -- Move G4CollisionOutput buffer to .hh for reuse
-// 20100724  M. Kelsey -- Preallocate arrays with number_of_zones dimension.
+// 20100726  M. Kelsey -- Preallocate arrays with number_of_zones dimension.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -177,71 +177,72 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   // This will be used to pre-allocate lots of arrays below
   number_of_zones = (a < 5) ? 1 : (a < 100) ? 3 : 6;
 
+  // Buffers used for zone-by-zone calculations
+  G4double ur[7];
+  G4double v[6];
+  G4double v1[6];
+
+  // These are passed into nested vectors, so can't be made C arrays
+  std::vector<G4double> rod(number_of_zones);
+  std::vector<G4double> pf(number_of_zones);
+  std::vector<G4double> vz(number_of_zones);
+
   if (a > 4.5) {
-    std::vector<G4double> ur(number_of_zones+1);
     G4int icase = 0;
 
     if (a > 99.5) {
-      ur.push_back(-D1);
-
+      ur[0] = -D1;
       for (G4int i = 0; i < number_of_zones; i++) {
         G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
         zone_radii.push_back(CU + AU * y);
-        ur.push_back(y);
+        ur[i+1] = y;
       }
-
     } else if (a > 11.5) {
-      ur.push_back(-D1);
-
+      ur[0] = -D1;
       for (G4int i = 0; i < number_of_zones; i++) {
 	G4double y = std::log((1.0 + D)/alfa3[i] - 1.0);
 	zone_radii.push_back(CU + AU * y);
-	ur.push_back(y);
+	ur[i+1] = y;
       }
-
     } else {
       icase = 1;
-      ur.push_back(0.0);
  
       G4double CU1 = CU * CU;
       CU2 = std::sqrt(CU1 * (1.0 - 1.0 / a) + 6.4);
 
+      ur[0] = 0.0;
       for (G4int i = 0; i < number_of_zones; i++) {
 	G4double y = std::sqrt(-std::log(alfa3[i]));
 	zone_radii.push_back(CU2 * y);
-	ur.push_back(y);
+	ur[i+1] = y;
       }
     }
 
     G4double tot_vol = 0.0;
-    std::vector<G4double> v(number_of_zones);
-    std::vector<G4double> v1(number_of_zones);
-
     G4int i(0);
     for (i = 0; i < number_of_zones; i++) {
       G4double v0;
 
       if (icase == 0) {
-	v0 = volNumInt(ur[i], ur[i + 1], CU, D1);
-
+	v0 = volNumInt(ur[i], ur[i+1], CU, D1);
       } else {
-	v0 = volNumInt1(ur[i], ur[i + 1], CU2);
-      };
+	v0 = volNumInt1(ur[i], ur[i+1], CU2);
+      }
  
-      v.push_back(v0);
+      v[i] = v0;
       tot_vol += v0;
 
       v0 = zone_radii[i]*zone_radii[i]*zone_radii[i];
       if (i > 0) v0 -= zone_radii[i-1]*zone_radii[i-1]*zone_radii[i-1];
 
-      v1.push_back(v0);
+      v1[i] = v0;
     }
 
     // Protons
     G4double dd0 = z/tot_vol/piTimes4thirds;
-    std::vector<G4double> rod(number_of_zones);
-    std::vector<G4double> pf(number_of_zones);
-    std::vector<G4double> vz(number_of_zones);
+    rod.clear();
+    pf.clear();
+    vz.clear();
 
     for (i = 0; i < number_of_zones; i++) {
       G4double rd = dd0 * v[i] / v1[i];
@@ -292,9 +293,6 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     G4double vol = 1.0 / piTimes4thirds / (zone_radii[0]*zone_radii[0]*zone_radii[0]);
 
     // proton
-    std::vector<G4double> rod(number_of_zones);
-    std::vector<G4double> pf(number_of_zones);
-    std::vector<G4double> vz(number_of_zones);
     for (G4int i = 0; i < number_of_zones; i++) {
       G4double rd = vol*z;
       rod.push_back(rd);

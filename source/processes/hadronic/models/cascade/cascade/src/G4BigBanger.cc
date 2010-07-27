@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.37 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.38 2010-07-27 04:20:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,7 @@
 //		G4LorentzConverter with dummy bullet.
 // 20100701  M. Kelsey -- Re-throw momentum list, not just angles!
 // 20100714  M. Kelsey -- Move conservation checking to base class
+// 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -172,7 +173,7 @@ void G4BigBanger::generateBangInSCM(G4double etot, G4double a, G4double z) {
   // NOTE:  If distribution fails, need to regenerate magnitudes and angles!
   //*** generateMomentumModules(etot, a, z);
 
-  std::vector<G4LorentzVector> scm_momentums(ia);
+  scm_momentums.reserve(ia);
   G4LorentzVector tot_mom;
 
   G4bool bad = true;
