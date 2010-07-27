@@ -218,10 +218,11 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
       foutG4DCM << ii << " " << (*ite).second << G4endl;
     }
     //--- Write number of voxels (assume only one voxel in Z)
-    foutG4DCM << rows/compression << " " << columns/compression << " 1 " << G4endl;
+    foutG4DCM << columns/compression << " " << rows/compression << " 1 " << G4endl;
     //--- Write minimum and maximum extensions
-    foutG4DCM << -pixelSpacingX*rows/2 << " " << pixelSpacingX*rows/2 << G4endl;
-    foutG4DCM << -pixelSpacingY*columns/2 << " " << pixelSpacingY*columns/2 << G4endl;
+    foutG4DCM << -pixelSpacingX*columns/2. << " " << pixelSpacingX*columns/2. << G4endl;
+    foutG4DCM << -pixelSpacingY*rows/2. << " " << pixelSpacingY*rows/2. << 
+G4endl;
     foutG4DCM << sliceLocation-sliceThickness/2. << " " << sliceLocation+sliceThickness/2. << G4endl;
     //    foutG4DCM << compression << G4endl;
     
@@ -561,8 +562,8 @@ G4int DicomHandler::ReadData(FILE *dicom,char * filename2)
     unsigned int rowsC = rows/compression;
     unsigned int columnsC = columns/compression;
     unsigned int planesC = 1;
-    G4float pixelLocationXM = -pixelSpacingX*rows/2.;
-    G4float pixelLocationXP = pixelSpacingX*rows/2.;
+    G4float pixelLocationXM = -pixelSpacingX*columns/2.;
+    G4float pixelLocationXP = pixelSpacingX*columns/2.;
     G4float pixelLocationYM = -pixelSpacingY*rows/2.;
     G4float pixelLocationYP = pixelSpacingY*rows/2.;
     G4float sliceLocationZM = sliceLocation-sliceThickness/2.;
