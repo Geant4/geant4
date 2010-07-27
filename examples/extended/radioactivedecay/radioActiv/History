@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-07-22 14:40:27 maire Exp $
+$Id: History,v 1.8 2010-07-27 19:39:16 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -13,7 +13,7 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
-22-07-10 mma (radioActiv-V09-03-03)
+27-07-10 mma (radioActiv-V09-03-03)
 - TrackingAction : activity = f(t). Plot (histo 9)
      
 20-07-10 mma (radioActiv-V09-03-02)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.6 2010-07-23 08:49:57 maire Exp $
+// $Id: RunAction.cc,v 1.7 2010-07-27 19:39:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -179,7 +179,9 @@ void RunAction::EndOfRunAction(const G4Run* run)
    
  G4cout << "\n Activity = "
             << std::setw(wid) << ActivPerMass*g/becquerel
-	    << " Bq/g \n " << G4endl;
+	    << " Bq/g   ("    << ActivPerMass*g/curie
+	    << " Ci/g) \n" 
+	    << G4endl;
 	    
   //normalise histo 9
   G4double binW = histoManager->GetBinWidth(9);
