@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.14 2010-07-27 01:04:05 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.15 2010-07-27 01:44:54 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -56,9 +56,9 @@ G4ScoringCylinder::G4ScoringCylinder(G4String wName)
 {
   fShape = cylinderMesh;
 
-  fDividedAxisNames[0] = "Z";
-  fDividedAxisNames[1] = "PHI";
-  fDividedAxisNames[2] = "R";
+  fDivisionAxisNames[0] = "Z";
+  fDivisionAxisNames[1] = "PHI";
+  fDivisionAxisNames[2] = "R";
 }
 
 G4ScoringCylinder::~G4ScoringCylinder()

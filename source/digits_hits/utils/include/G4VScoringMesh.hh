@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.39 2010-07-27 01:04:05 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.40 2010-07-27 01:44:54 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -139,8 +139,8 @@ class G4VScoringMesh
   // set PS name to be drawn
   void SetDrawPSName(G4String & psname) {fDrawPSName = psname;}
 
-  // get axis names of the hierarchical divided structure in the divided order
-  void GetDividedAxisNames(G4String dividedAxisNames[3]);
+  // get axis names of the hierarchical division in the divided order
+  void GetDivisionAxisNames(G4String divisionAxisNames[3]);
 
   // set current  primitive scorer to NULL
   void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
@@ -181,7 +181,7 @@ protected:
   G4double fDrawUnitValue;
   G4String fDrawPSName;
 
-  G4String fDividedAxisNames[3];
+  G4String fDivisionAxisNames[3];
 };
 
 void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)

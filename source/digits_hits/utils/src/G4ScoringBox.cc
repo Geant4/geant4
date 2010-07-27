@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc,v 1.60 2010-07-27 01:04:05 akimura Exp $
+// $Id: G4ScoringBox.cc,v 1.61 2010-07-27 01:44:54 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,9 +54,9 @@ G4ScoringBox::G4ScoringBox(G4String wName)
    fMeshElementLogical(0)
 {
   fShape = boxMesh;
-  fDividedAxisNames[0] = "X";
-  fDividedAxisNames[1] = "Y";
-  fDividedAxisNames[2] = "Z";
+  fDivisionAxisNames[0] = "X";
+  fDivisionAxisNames[1] = "Y";
+  fDivisionAxisNames[2] = "Z";
 }
 
 G4ScoringBox::~G4ScoringBox()
