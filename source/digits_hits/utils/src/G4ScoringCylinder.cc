@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.13 2010-07-25 11:05:03 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.14 2010-07-27 01:04:05 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,10 @@ G4ScoringCylinder::G4ScoringCylinder(G4String wName)
   :G4VScoringMesh(wName), fMeshElementLogical(0)
 {
   fShape = cylinderMesh;
+
+  fDividedAxisNames[0] = "Z";
+  fDividedAxisNames[1] = "PHI";
+  fDividedAxisNames[2] = "R";
 }
 
 G4ScoringCylinder::~G4ScoringCylinder()
@@ -94,7 +98,7 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 				    fSize[0],     // R max
 				    fSize[1],     // Dz
 				    0.,           // starting phi
-				    twopi*rad);   // segment phi
+                                    twopi*rad);   // segment phi
   G4LogicalVolume *  tubsLogical = new G4LogicalVolume(tubsSolid, 0, tubsName);
   new G4PVPlacement(fRotationMatrix, fCenterPosition,
 		    tubsLogical, tubsName+"0", worldLogical, false, 0);
@@ -139,7 +143,8 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 			     0.,
 			     fSize[0],
 			     fSize[1]/fNSegment[IZ],
-			     0., twopi*rad/fNSegment[IPHI]);
+			     0.,
+                             twopi*rad/fNSegment[IPHI]);
   layerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
   if(fNSegment[IPHI] > 1)  {
     if(verboseLevel > 9) G4cout << "G4ScoringCylinder::Construct() : Replicate along phi direction" << G4endl;
@@ -166,7 +171,8 @@ void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 				       0.,
 				       fSize[0]/fNSegment[IR],
 				       fSize[1]/fNSegment[IZ],
-				       0., twopi*rad/fNSegment[IPHI]);
+				       0.,
+                                       twopi*rad/fNSegment[IPHI]);
   fMeshElementLogical = new G4LogicalVolume(elementSolid, 0, elementName);
   if(fNSegment[IR] > 1) {
 
@@ -237,7 +243,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
     std::map<G4int, G4double*>::iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
       if(itr->first < 0) {
-	//G4cout << itr->first << G4endl;
+	G4cout << itr->first << G4endl;
 	continue;
       }
       GetRZPhi(itr->first, q);
@@ -396,7 +402,7 @@ void G4ScoringCylinder::DrawColumn(std::map<G4int, G4double*> * map, G4VScoreCol
     std::map<G4int, G4double*>::iterator itr = map->begin();
     for(; itr != map->end(); itr++) {
       if(itr->first < 0) {
-	//G4cout << itr->first << G4endl;
+	G4cout << itr->first << G4endl;
 	continue;
       }
       GetRZPhi(itr->first, q);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.40 2010-07-22 22:17:43 taso Exp $
+// $Id: G4VScoringMesh.cc,v 1.41 2010-07-27 01:04:05 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,7 @@ G4VScoringMesh::G4VScoringMesh(G4String wName)
 
   fSize[0] = fSize[1] = fSize[2] = 0.;
   fNSegment[0] = fNSegment[1] = fNSegment[2] = 1;
+  fDividedAxisNames[0] = fDividedAxisNames[1] = fDividedAxisNames[2] = "";
 }
 
 G4VScoringMesh::~G4VScoringMesh()
@@ -190,6 +191,10 @@ G4double G4VScoringMesh::GetPSUnitValue(G4String & psname) {
   } else {
     return GetPrimitiveScorer(psname)->GetUnitValue();
   }
+}
+
+void G4VScoringMesh::GetDividedAxisNames(G4String dividedAxisNames[3]) {
+  for(int i = 0; i < 3; i++) dividedAxisNames[i] = fDividedAxisNames[i];
 }
 
 G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(G4String & name) {

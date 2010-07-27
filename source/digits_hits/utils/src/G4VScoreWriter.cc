@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.8 2010-07-22 09:04:04 akimura Exp $
+// $Id: G4VScoreWriter.cc,v 1.9 2010-07-27 01:04:05 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -87,16 +87,22 @@ void G4VScoreWriter::DumpQuantityToFile(G4String & psName, G4String & fileName, 
     return;
   }
 
-  G4double unitValue = fScoringMesh->GetPSUnitValue(psName);
-  G4String unit = fScoringMesh->GetPSUnit(psName);
 
   std::map<G4int, G4double*> * score = msMapItr->second->GetMap();
   ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
 
-  // unit
-  ofile << "# unit: ";
+
+  G4double unitValue = fScoringMesh->GetPSUnitValue(psName);
+  G4String unit = fScoringMesh->GetPSUnit(psName);
+  G4String dividedAxisNames[3];
+  fScoringMesh->GetDividedAxisNames(dividedAxisNames);
+  // index order
+  ofile << "# i" << dividedAxisNames[0]
+	<< ", i" << dividedAxisNames[1]
+	<< ", i" << dividedAxisNames[2];
+  // unit of scored value
+  ofile << ", value ";
   if(unit.size() > 0) ofile << "[" << unit << "]";
-  else ofile << "none";
   ofile << G4endl;
 
   // "sequence" option: write header info 
@@ -171,14 +177,20 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
   for(; msMapItr != fSMap.end(); msMapItr++) {
 
     G4String psname = msMapItr->first;
-    G4double unitValue = fScoringMesh->GetPSUnitValue(psname);
-    G4String unit = fScoringMesh->GetPSUnit(psname);
 
     score = msMapItr->second->GetMap();
     ofile << "# primitive scorer name: " << msMapItr->first << std::endl;
 
-    // unit
-    ofile << "# unit: ";
+    G4double unitValue = fScoringMesh->GetPSUnitValue(psname);
+    G4String unit = fScoringMesh->GetPSUnit(psname);
+    G4String dividedAxisNames[3];
+    fScoringMesh->GetDividedAxisNames(dividedAxisNames);
+    // index order
+    ofile << "# i" << dividedAxisNames[0]
+	  << ", i" << dividedAxisNames[1]
+	  << ", i" << dividedAxisNames[2];
+    // unit of scored value
+    ofile << ", value ";
     if(unit.size() > 0) ofile << "[" << unit << "]";
     ofile << G4endl;
 
