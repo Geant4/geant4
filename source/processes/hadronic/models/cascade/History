@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2010-07-28 15:18:10 mkelsey Exp $
+$Id: History,v 1.148 2010-07-28 15:59:06 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -22,6 +22,11 @@ code and to keep track of all tags.
 
 - G4EquilibriumEvaporator.cc:  Change some fixed length std::vector<> to
   simple C arrays.
+
+- G4Fissioner.cc:  Move G4FissionStore to class data member for reuse.
+
+- G4FissionStore:  Add ::clear() function to support reuse, move addConfig()
+  implementation to .cc file.
 
 - G4IntraNucleiCascader:  Move G4NucleiModel to class-level data member
   (pointer) so it can be reused across collisions.

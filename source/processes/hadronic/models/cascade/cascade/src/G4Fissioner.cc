@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.33 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.34 2010-07-28 15:59:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,6 +35,8 @@
 // 20100711  M. Kelsey -- Add energy-conservation checking, reduce if-cascades
 // 20100713  M. Kelsey -- Don't add excitation energy to mass (already there)
 // 20100714  M. Kelsey -- Move conservation checking to base class
+// 20100728  M. Kelsey -- Make fixed arrays static, move G4FissionStore to data
+//		member and reuse
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -69,6 +71,10 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     nuclei_target->printParticle();
   }
 
+  // Initialize buffer for fission possibilities
+  fissionStore.setVerboseLevel(verboseLevel);
+  fissionStore.clear();
+
   G4double A = nuclei_target->getA();
   G4double Z = nuclei_target->getZ();
   G4double EEXS = nuclei_target->getExitationEnergy();
@@ -93,9 +99,9 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   
   TEM += DTEM;
   
-  std::vector<G4double> AL1(2, -0.15);
-  std::vector<G4double> BET1(2, 0.05);
-  G4FissionStore fissionStore;
+  static std::vector<G4double> AL1(2, -0.15);
+  static std::vector<G4double> BET1(2, 0.05);
+
   G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
   
   for (G4int i = 0; i < 50 && A1 > 30.0; i++) {

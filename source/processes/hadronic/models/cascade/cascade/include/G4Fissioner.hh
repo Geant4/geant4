@@ -23,18 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fissioner.hh,v 1.14 2010-07-14 15:41:12 mkelsey Exp $
+// $Id: G4Fissioner.hh,v 1.15 2010-07-28 15:59:06 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100728  M. Kelsey -- Move G4FissionStore to data member and reuse
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4FissionStore.hh"
 #include <vector>
 
 class G4CollisionOutput;
@@ -50,6 +52,8 @@ public:
 	       G4CollisionOutput& output);
 
 private: 
+  G4FissionStore fissionStore;
+
   G4double getC2(G4double A1, 
 		 G4double A2, 
 		 G4double X3, 
