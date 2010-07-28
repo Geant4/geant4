@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08PhotoElectricModel.cc,v 1.4 2010-06-25 09:41:19 gunter Exp $
+// $Id: G4Penelope08PhotoElectricModel.cc,v 1.5 2010-07-28 07:09:16 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -41,7 +41,6 @@
 #include "G4PhysicsFreeVector.hh"
 #include "G4ElementTable.hh"
 #include "G4Element.hh"
-#include "G4CrossSectionHandler.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
@@ -485,8 +484,6 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
   //the table has to contain nShell+1 G4PhysicsFreeVectors, 
   //(theTable)[0] --> total cross section
   //(theTable)[ishell] --> cross section for shell (ishell-1)
-
-
 
   //reserve space for the vectors
   //everything is log-log

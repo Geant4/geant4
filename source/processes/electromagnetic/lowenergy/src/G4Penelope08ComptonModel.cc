@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.cc,v 1.6 2010-04-12 13:53:29 pandola Exp $
+// $Id: G4Penelope08ComptonModel.cc,v 1.7 2010-07-28 07:09:16 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -41,8 +41,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4VEMDataSet.hh"
 #include "G4PhysicsTable.hh"
-#include "G4ElementTable.hh"
-#include "G4Element.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"

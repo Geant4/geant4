@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08RayleighModel.cc,v 1.2 2010-06-25 09:41:28 gunter Exp $
+// $Id: G4Penelope08RayleighModel.cc,v 1.3 2010-07-28 07:09:16 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -42,7 +42,6 @@
 #include "G4PhysicsTable.hh"
 #include "G4ElementTable.hh"
 #include "G4Element.hh"
-#include "G4PenelopeIntegrator.hh"
 #include "G4PhysicsFreeVector.hh"
 
 
@@ -223,7 +222,7 @@ G4double G4Penelope08RayleighModel::ComputeCrossSectionPerAtom(const G4ParticleD
    cross = std::exp(logXS);
 
    if (verboseLevel > 2)
-    G4cout << "Compton cross Section at " << energy/keV << " keV for Z=" << Z << 
+    G4cout << "Rayleigh cross section at " << energy/keV << " keV for Z=" << Z << 
       " = " << cross/barn << " barn" << G4endl;
     return cross;
 }
@@ -413,7 +412,6 @@ void G4Penelope08RayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*
   fParticleChange->ProposeMomentumDirection(photonDirection1) ;
   fParticleChange->SetProposedKineticEnergy(photonEnergy0) ;
  
-
   return;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08GammaConversionModel.cc,v 1.3 2010-06-25 09:41:17 gunter Exp $
+// $Id: G4Penelope08GammaConversionModel.cc,v 1.4 2010-07-28 07:09:16 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -86,7 +86,6 @@ G4Penelope08GammaConversionModel::~G4Penelope08GammaConversionModel()
     delete fMaterialInvScreeningRadius;
   if (fScreeningFunction)
     delete fScreeningFunction;
-
 }
 
 
