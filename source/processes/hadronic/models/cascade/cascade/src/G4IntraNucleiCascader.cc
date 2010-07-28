@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.58 2010-07-23 17:25:03 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.59 2010-07-28 15:18:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -63,6 +63,8 @@
 // 20100721  M. Kelsey -- Turn on conservation checks unconditionally (override
 //		new G4CASCADE_CHECK_ECONS setting
 // 20100722  M. Kelsey -- Move cascade output buffers to .hh file
+// 20100728  M. Kelsey -- Make G4NucleiModel data member for persistence,
+//		delete colliders in destructor
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -85,9 +87,13 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
   : G4CascadeColliderBase("G4IntraNucleiCascader"),
+    model(new G4NucleiModel),
     theElementaryParticleCollider(new G4ElementaryParticleCollider) {}
 
-G4IntraNucleiCascader::~G4IntraNucleiCascader() {}
+G4IntraNucleiCascader::~G4IntraNucleiCascader() {
+  delete model;
+  delete theElementaryParticleCollider;
+}
 
 
 void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
@@ -95,8 +101,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 				    G4CollisionOutput& globalOutput) {
   if (verboseLevel) G4cout << " >>> G4IntraNucleiCascader::collide " << G4endl;
 
-  G4NucleiModel model;
-  model.setVerboseLevel(verboseLevel);
+  model->setVerboseLevel(verboseLevel);
   theElementaryParticleCollider->setVerboseLevel(verboseLevel);
 
   const G4int itry_max = 1000;
@@ -123,7 +128,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   interCase.set(bullet,target);		// Classify collision type
 
-  model.generateModel(tnuclei);
+  model->generateModel(tnuclei);
 
   G4double coulombBarrier = 0.00126*tnuclei->getZ()/
                                       (1.+G4cbrt(tnuclei->getA()));
@@ -134,7 +139,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4double ekin_in = bullet->getKineticEnergy();
 
   if (verboseLevel > 3) {
-    model.printModel();
+    model->printModel();
     G4cout << " intitial momentum  E " << momentum_in.e() << " Px "
 	   << momentum_in.x() << " Py " << momentum_in.y() << " Pz "
 	   << momentum_in.z() << G4endl;
@@ -153,7 +158,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	     << G4endl;
     }
 
-    model.reset();    			// Start new cascade process
+    model->reset();    			// Start new cascade process
     output.reset();
     cascad_particles.clear();
     output_particles.clear();
@@ -170,7 +175,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       zfin += bparticle->getCharge();
       afin += bparticle->baryon();
-      cascad_particles.push_back(model.initializeCascad(bparticle));
+      cascad_particles.push_back(model->initializeCascad(bparticle));
 
     } else {				// nuclei with nuclei
       G4double ab = bnuclei->getA();
@@ -180,7 +185,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       zfin += zb;
 
       G4NucleiModel::modelLists all_particles;    // Buffer to receive lists
-      model.initializeCascad(bnuclei, tnuclei, all_particles);
+      model->initializeCascad(bnuclei, tnuclei, all_particles);
 
       cascad_particles = all_particles.first;
 
@@ -209,7 +214,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     new_cascad_particles.clear();
     G4int iloop = 0;
 
-    while (!cascad_particles.empty() && !model.empty()) {
+    while (!cascad_particles.empty() && !model->empty()) {
       iloop++;
 
       if (verboseLevel > 2) {
@@ -218,7 +223,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	cascad_particles.back().print();
       }
 
-      new_cascad_particles = model.generateParticleFate(cascad_particles.back(),
+      new_cascad_particles = model->generateParticleFate(cascad_particles.back(),
 							theElementaryParticleCollider);
       if (verboseLevel > 2) {
 	G4cout << " After generate fate: New particles "
@@ -233,12 +238,12 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (new_cascad_particles.size() == 1) { // last particle goes without interaction
 	const G4CascadParticle& currentCParticle = new_cascad_particles[0];
 
-	if (model.stillInside(currentCParticle)) {
+	if (model->stillInside(currentCParticle)) {
 	  if (verboseLevel > 3)
 	    G4cout << " particle still inside nucleus " << G4endl;
 
 	  if (currentCParticle.getNumberOfReflections() < reflection_cut &&
-	      model.worthToPropagate(currentCParticle)) {
+	      model->worthToPropagate(currentCParticle)) {
 	    if (verboseLevel > 3) G4cout << " continue reflections " << G4endl;
 	    cascad_particles.push_back(currentCParticle);
 
@@ -332,7 +337,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	for (G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
 	  cascad_particles.push_back(new_cascad_particles[i]);
 
-	std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
+	std::pair<G4int, G4int> holes = model->getTypesOfNucleonsInvolved();
 	if (verboseLevel > 3)
 	  G4cout << " adding new exciton holes " << holes.first << ","
 		 << holes.second << G4endl;
@@ -350,8 +355,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (verboseLevel > 2) {
 	G4cout << " cparticles remaining " << cascad_particles.size()
 	       << " nucleus (model) has "
-	       << model.getNumberOfNeutrons() << " n, "
-	       << model.getNumberOfProtons() << " p "
+	       << model->getNumberOfNeutrons() << " n, "
+	       << model->getNumberOfProtons() << " p "
 	       << " residual fragment A " << aresid << G4endl;
       }
 

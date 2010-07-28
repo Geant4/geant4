@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.44 2010-07-19 22:26:28 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.45 2010-07-28 15:18:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -111,12 +111,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
   const G4int itry_gam_max = 100;
 
-  std::vector<G4double> W(8);
-  std::vector<G4double> A1(6);
-  std::vector<G4double> Z1(6);
-  std::vector<G4double> u(6);
-  std::vector<G4double> V(6);
-  std::vector<G4double> TM(6);
+  G4double W[8], A1[6], Z1[6], u[6], V[6], TM[6];
 
   G4double A = nuclei_target->getA();
   G4double Z = nuclei_target->getZ();

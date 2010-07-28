@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.70 2010-07-27 04:20:03 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.71 2010-07-28 15:18:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -122,7 +122,8 @@ G4NucleiModel::generateModel(G4InuclNuclei* nuclei) {
 void 
 G4NucleiModel::generateModel(G4double a, G4double z) {
   if (verboseLevel) {
-    G4cout << " >>> G4NucleiModel::generateModel" << G4endl;
+    G4cout << " >>> G4NucleiModel::generateModel A " << a << " Z " << z
+	   << G4endl;
   }
 
   const G4double AU = 1.7234;
@@ -639,8 +640,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     }
 
     // Initialize buffers for results
-    qdeutrons.clear();
-    acsecs.clear();
+    qdeutrons.clear(); qdeutrons.resize(3);
+    acsecs.clear(); acsecs.resize(3, 0.);
 
     G4double tot_abs_csec = 0.0;
     G4double abs_sec;
@@ -672,7 +673,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       abs_sec = 0.0;
     }; 
     
-    // abs_sec = 0.0;
     tot_abs_csec += abs_sec;
     acsecs.push_back(abs_sec);
     qdeutrons.push_back(ppd);

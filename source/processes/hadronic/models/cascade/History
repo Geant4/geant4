@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2010-07-27 04:20:03 mkelsey Exp $
+$Id: History,v 1.147 2010-07-28 15:18:10 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+28 July 2010 Michael Kelsey
+---------------------------
+- G4NucleiModel.cc:  Set deuteron arrays to fixed length (3).  Add A/Z
+  values to generateModel diagnostic message.
+
+- G4EquilibriumEvaporator.cc:  Change some fixed length std::vector<> to
+  simple C arrays.
+
+- G4IntraNucleiCascader:  Move G4NucleiModel to class-level data member
+  (pointer) so it can be reused across collisions.
 
 26 July 2010 Michael Kelsey
 ---------------------------

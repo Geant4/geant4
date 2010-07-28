@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.17 2010-07-23 17:25:03 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.18 2010-07-28 15:18:10 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -37,6 +37,7 @@
 //		add function to compute recoil nuclear mass on the fly
 // 20100720  M. Kelsey -- Make EPCollider pointer member
 // 20100722  M. Kelsey -- Move cascade output buffers to .hh file
+// 20100728  M. Kelsey -- Move G4NucleiModel here, as pointer member
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -47,9 +48,10 @@
 
 class G4CascadParticle;
 class G4CollisionOutput;
-class G4InuclElementaryParticle;
 class G4ElementaryParticleCollider;
+class G4InuclElementaryParticle;
 class G4InuclParticle;
+class G4NucleiModel;
 
 
 class G4IntraNucleiCascader : public G4CascadeColliderBase {
@@ -61,6 +63,7 @@ public:
 	       G4CollisionOutput& output);
 
 private: 
+  G4NucleiModel* model;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
 
   G4bool goodCase(G4double a, G4double z, G4double eexs, G4double ein) const; 
