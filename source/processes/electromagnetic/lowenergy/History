@@ -1,4 +1,4 @@
-$Id: History,v 1.443 2010-07-26 10:00:45 pandola Exp $
+$Id: History,v 1.444 2010-07-28 07:14:59 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.07.2010, L. Pandola, tag emlowen-V09-03-37
+            First full version of G4Penelope08IonisationModel, model for e+/e- 
+            ionisation according to Penelope v2008. Still beta version. 
 
 26.07.2010, L. Pandola, tag emlowen-V09-03-36
             Added class G4PenelopeCrossSection to store/handle cross sections 
