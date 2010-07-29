@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.6 2010-06-03 16:28:39 gunter Exp $
+// $Id: G4HadronElasticPhysics.hh,v 1.7 2010-07-29 10:52:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4HadronElasticPhysics
 //
-// Author: 11 April 2006 V. Ivanchenko
+// Author: 23 November 2006 V. Ivanchenko
 //
 // Modified:
-// 05.07.2006 V.Ivanchenko fix problem of initialisation of HP
-// 23.11.2006 V.Ivanchenko remove variables
+// 29.07.2010 V.Ivanchenko rename this class from G4HadronHElasticPhysics to
+//                         G4HadronElasticPhysics, old version of the class
+//                         is renamed to G4HadronElasticPhysics93
 //
 //----------------------------------------------------------------------------
 //
@@ -44,21 +45,18 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4UHadronElasticProcess.hh"
-#include "G4HadronElastic.hh"
-#include "G4NeutronHPElastic.hh"
-#include "G4NeutronHPElasticData.hh"
 
 class G4HadronElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
-   G4HadronElasticPhysics(G4int ver = 1);
-   G4HadronElasticPhysics(const G4String& name,
-			 G4int ver = 0, G4bool hp = false,
-                         G4bool glauber = false);
+
+  G4HadronElasticPhysics(G4int ver = 0); 
+
+  // obsolete
+  G4HadronElasticPhysics(G4int ver, G4bool hp, const G4String& type="");
+
   virtual ~G4HadronElasticPhysics();
 
-public: 
   // This method will be invoked in the Construct() method. 
   // each particle type will be instantiated
   virtual void ConstructParticle();
@@ -70,15 +68,7 @@ public:
 
 private:
 
-  G4HadronicInteraction* model;
-  G4HadronicInteraction* neutronModel;
-  G4HadronicInteraction* neutronHPModel;
-
-  G4String mname;
-
   G4int    verbose;
-  G4bool   hpFlag;
-  G4bool   glFlag;
   G4bool   wasActivated;
 };
 

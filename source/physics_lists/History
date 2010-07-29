@@ -1,4 +1,4 @@
-q$Id: History,v 1.139 2010-06-19 11:12:58 vnivanch Exp $
+q$Id: History,v 1.140 2010-07-29 10:52:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-07-2011, V.Ivantchenko (phys-lists-V09-03-17)
+- G4DataQuestionaire - for optical physics G4REALSURFACEDATA is checked
+  instead of G4LEDATA (bug report #1125), the check is disabled, because
+  not clear if this dataset is mandatory or not; check on new
+  G4NEUTRONXSDATA is added
+- QBBC - added check on G4NEUTRONXSDATA, use G4HadronElasticPhysics
+- G4NeutronCrossSectionXS - added check on G4NEUTRONXSDATA
+- G4HadronElasticPhysics renamed to G4HadronElasticPhysics93
+- G4HadronHElasticPhysics is copied to G4HadronElasticPhysics
+- QGSP_BERT_EMV use G4HadronElasticPhysics instead of G4HadronHElasticPhysics
+- G4HadronHElasticPhysics is marked as obsolete
 
 19-06-2011, V.Ivantchenko (phys-lists-V09-03-16)
 - G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,

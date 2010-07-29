@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.7 2010-06-04 13:34:42 vnivanch Exp $
+// $Id: QBBC.cc,v 1.8 2010-07-29 10:52:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -55,14 +55,13 @@
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronDElasticPhysics.hh"
-#include "G4HadronHElasticPhysics.hh"
 #include "G4ChargeExchangePhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 QBBC::QBBC( G4int ver, const G4String& type )
 {
-  G4DataQuestionaire it(photon, neutron);
+  G4DataQuestionaire it(photon, neutron, no, no, no, neutronxs);
   G4cout << "<<< Geant4 Physics List simulation engine: QBBC of type <"
 	 << type <<">" <<G4endl;	
   G4cout <<G4endl;
@@ -83,7 +82,7 @@ QBBC::QBBC( G4int ver, const G4String& type )
   if(type == "QBBC") {
     RegisterPhysics( new G4HadronElasticPhysics(ver) );
   } else if(type == "QBBC_XGG") { 
-    RegisterPhysics( new G4HadronHElasticPhysics(ver) );
+    RegisterPhysics( new G4HadronElasticPhysics(ver) );
   } else if(type == "QBBC_XGGSN") { 
     RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
   } else if(type == "QBBC_HP") { 
