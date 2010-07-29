@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 July 2010  Tatsumi Koi (hadr-hpn-V09-03-04)
+- Add model name in constructor Problem #1116
+	G4NeutronHPThermalScattering.cc
+
 25 April 2010  Tatsumi Koi (hadr-hpn-V09-03-03)
 - Fix compiler warning
 	G4NeutronHPInelasticCompFS.cc
