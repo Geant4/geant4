@@ -94,6 +94,5 @@ GetCrossSection(G4double anEnergy, G4double atomicNumber, G4double nOfProtons)
   G4double corr2 =1./second;
 
   G4double xsec = corr*corr2*part1*part2*10.*millibarn;
-  if(xsec < 0.0) { xsec = 0.0; }
   return xsec;
 }
