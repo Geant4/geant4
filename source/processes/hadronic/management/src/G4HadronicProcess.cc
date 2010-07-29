@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc,v 1.90 2010-07-05 14:50:15 vnivanch Exp $
+// $Id: G4HadronicProcess.cc,v 1.91 2010-07-29 14:12:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -158,8 +158,10 @@ GetMicroscopicCrossSection(const G4DynamicParticle *aParticle,
 			   const G4Element *anElement, 
 			   G4double aTemp )
 {
-  return
+  G4double x =
     theCrossSectionDataStore->GetCrossSection(aParticle, anElement, aTemp);
+  if(x < 0.0) { x = 0.0; }
+  return x;
 }
 
 G4VParticleChange *G4HadronicProcess::PostStepDoIt(
