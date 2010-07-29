@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2008-05-09 10:13:55 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.2 2010-07-29 14:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -63,6 +63,7 @@ public:
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
+  void SetCutForProton(G4double);
         
   void AddPhysicsList(const G4String& name);
   void ConstructProcess();
@@ -81,6 +82,7 @@ private:
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
+  G4double cutForProton;
 
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  particleList;
