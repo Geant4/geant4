@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.82 2010-04-12 11:45:03 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.83 2010-07-29 11:01:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -293,7 +293,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
   if(verboseLevel>0 && ( num == "e-" || num == "mu+" ||  
                          num == "proton" || num == "pi-" || 
-			 num == "GenericIon")) {
+			 num == "kaon+" || num == "GenericIon")) {
     PrintInfoDefinition();
     if(2 < verboseLevel && theLambdaTable) G4cout << *theLambdaTable << G4endl;
   }
