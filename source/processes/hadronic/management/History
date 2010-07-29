@@ -14,7 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 July 2010  Vladimir Ivanchenko (hadr-man-V09-03-03)
+------------------------------------------------
+- G4HadronicProcess - added protection against negative cross section;
+                      removed commented old code
+- G4HadronicProcessStore - reduce number of const_cast 
+
 01 June 2010  Gunter Folger (hadr-man-V09-03-02)
+------------------------------------------------
 -  restore #include for <typeinfo>
 
 21 April 2010 Dennis Wright (hadr-man-V09-03-01)
