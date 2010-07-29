@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.101 2010-06-04 15:33:56 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.102 2010-07-29 11:13:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -94,6 +94,7 @@
 #include "G4EmCorrections.hh"
 #include "G4EmSaturation.hh"
 #include "G4EmConfigurator.hh"
+#include "G4ElectronIonPair.hh"
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
 #include "G4Region.hh"
@@ -139,6 +140,7 @@ G4LossTableManager::~G4LossTableManager()
   delete tableBuilder;
   delete emCorrections;
   delete emSaturation;
+  delete emElectronIonPair;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -181,6 +183,7 @@ G4LossTableManager::G4LossTableManager()
   emCorrections= new G4EmCorrections();
   emSaturation = new G4EmSaturation();
   emConfigurator = new G4EmConfigurator(verbose);
+  emElectronIonPair = new G4ElectronIonPair();
   tableBuilder->SetSplineFlag(splineFlag);
 }
 
@@ -895,6 +898,7 @@ void G4LossTableManager::SetVerbose(G4int val)
   //tableBuilder->SetVerbose(val);
   //emCorrections->SetVerbose(val);
   emSaturation->SetVerbose(val);
+  emElectronIonPair->SetVerbose(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1041,6 +1045,13 @@ G4EmSaturation* G4LossTableManager::EmSaturation()
 G4EmConfigurator* G4LossTableManager::EmConfigurator()
 {
   return emConfigurator;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ElectronIonPair* G4LossTableManager::ElectronIonPair()
+{
+  return emElectronIonPair;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

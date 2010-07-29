@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc,v 1.8 2010-06-04 15:33:56 vnivanch Exp $
+// $Id: G4EmConfigurator.cc,v 1.9 2010-07-29 11:13:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -171,7 +171,7 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
       //G4cout << processName << " in list of " << np << G4endl;
 
       G4VProcess* proc = 0;
-      for(G4int i=0; i<np; i++) {
+      for(G4int i=0; i<np; ++i) {
 	if(processName == (*plist)[i]->GetProcessName()) {
 	  proc = (*plist)[i];
 	  break;
@@ -181,11 +181,10 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
 	G4cout << "### G4EmConfigurator WARNING: fails to find a process <"
 	       << processName << "> for " << particleName << G4endl;
         return;	
-
       } 
 
       if(mod) {
-	if(!UpdateModelEnergyRange(mod, emin,emax)) { return; }
+	if(!UpdateModelEnergyRange(mod, emin, emax)) { return; }
       }
       // classify process
       G4int ii = proc->GetProcessSubType();

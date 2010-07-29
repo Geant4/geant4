@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.58 2010-04-27 16:59:52 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.59 2010-07-29 11:13:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,6 +92,7 @@ class G4VEmProcess;
 class G4EmCorrections;
 class G4EmSaturation;
 class G4EmConfigurator;
+class G4ElectronIonPair;
 class G4LossTableBuilder;
 class G4Region;
 
@@ -258,13 +259,16 @@ public:
 
   const std::vector<G4VMultipleScattering*>& GetMultipleScatteringVector();
 
-  inline G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
+  inline 
+  G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
 
   G4EmCorrections* EmCorrections();
 
   G4EmSaturation* EmSaturation();
 
   G4EmConfigurator* EmConfigurator();
+
+  G4ElectronIonPair* ElectronIonPair();
 
 private:
 
@@ -344,6 +348,7 @@ private:
   G4EmCorrections*            emCorrections;
   G4EmSaturation*             emSaturation;
   G4EmConfigurator*           emConfigurator;
+  G4ElectronIonPair*          emElectronIonPair;
 
   G4int nbinsLambda;
   G4int nbinsPerDecade;
