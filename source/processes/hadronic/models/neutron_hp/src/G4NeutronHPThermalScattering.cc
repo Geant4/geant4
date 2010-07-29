@@ -39,6 +39,7 @@
 
 // 070625 Fix memory leaking at destructor by T. Koi 
 // 081201 Fix memory leaking at destructor by T. Koi 
+// 100729 Add model name in constructor Problem #1116
 
 #include "G4NeutronHPThermalScattering.hh"
 #include "G4Neutron.hh"
@@ -47,6 +48,7 @@
 
 
 G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
+                             :G4HadronicInteraction("NeutronHPThermalScattering")
 {
 
    theHPElastic = new G4NeutronHPElastic();
