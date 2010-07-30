@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.3 2010-06-03 15:03:53 gunter Exp $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.4 2010-07-30 14:20:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -50,6 +50,7 @@
 #include "G4TripathiCrossSection.hh"
 #include "G4TripathiLightCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
+#include "G4IonProtonCrossSection.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -83,6 +84,7 @@ G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
     delete fTripathi;
     delete fTripathiLight;
     delete fShen;
+    delete fIonH;
     delete fLEDModel;
     delete fLETModel;
     delete fLEAModel;
@@ -96,7 +98,7 @@ G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
 
 void G4IonBinaryCascadePhysics::ConstructProcess()
 {
-  if(wasActivated) return;
+  if(wasActivated) { return; }
   wasActivated = true;
 
   G4BinaryLightIonReaction* fBC= new G4BinaryLightIonReaction();
@@ -104,6 +106,7 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
   fShen = new G4IonsShenCrossSection;
   fTripathi = new G4TripathiCrossSection;
   fTripathiLight = new G4TripathiLightCrossSection;
+  fIonH = new G4IonProtonCrossSection;
 
   fLEDModel = new G4LEDeuteronInelastic();
   fLETModel = new G4LETritonInelastic();
@@ -129,6 +132,7 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   hadi->AddDataSet(fShen);
   hadi->AddDataSet(fTripathi);
   hadi->AddDataSet(fTripathiLight);
+  if(p == G4GenericIon::GenericIon()) { hadi->AddDataSet(fIonH); }
   hmodel->SetMinEnergy(eminBIC);
   hmodel->SetMaxEnergy(emax);
   hadi->RegisterMe(hmodel);

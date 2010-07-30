@@ -1,4 +1,4 @@
-q$Id: History,v 1.140 2010-07-29 10:52:13 vnivanch Exp $
+q$Id: History,v 1.141 2010-07-30 14:20:08 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29-07-2011, V.Ivantchenko (phys-lists-V09-03-17)
+29-07-2011, V.Ivanchenko (phys-lists-V09-03-18)
+- G4IonBinaryCascadePhysics - added G4IonProtonCrossSection
+
+29-07-2011, V.Ivanchenko (phys-lists-V09-03-17)
 - G4DataQuestionaire - for optical physics G4REALSURFACEDATA is checked
   instead of G4LEDATA (bug report #1125), the check is disabled, because
   not clear if this dataset is mandatory or not; check on new
@@ -27,7 +30,7 @@ track of all tags.
 - QGSP_BERT_EMV use G4HadronElasticPhysics instead of G4HadronHElasticPhysics
 - G4HadronHElasticPhysics is marked as obsolete
 
-19-06-2011, V.Ivantchenko (phys-lists-V09-03-16)
+19-06-2011, V.Ivanchenko (phys-lists-V09-03-16)
 - G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
   G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder 
   G4QGSBuilder - added deletion of G4ExcitationHandler, G4QGSMFragmentation 
@@ -40,7 +43,7 @@ track of all tags.
 11-06-2011, G.Folger                    (phys-lists-V09-03-14)
 - tag changes of Vladimir & Mikhail
 
-11-06-2011, V.Ivantchenko
+11-06-2011, V.Ivanchenko
 - G4EmStandardPhysics_option2 - RangeFactor for e+- is set to 0.04
 
 10-06-2010, M. Kosov                            (*** Not tagged ***)
@@ -79,7 +82,7 @@ particles're restricted to SU(3) hadrons (no pi0 & eta) in G4QElasticPhysics
 04-06-2010, M. Kosov                            (phys-lists-V09-03-08)
 bug fix for the virtual distructor in G4QElasticPhysics & G4QIonPhysics
 
-03-June, V.Ivantchenko, G.Folger        (phys-lists-V09-03-07)
+03-June, V.Ivanchenko, G.Folger        (phys-lists-V09-03-07)
 - Introduce new ctor for all builders with signature
     AbcPhysics::AbcPhyics(G4int ver=value);
   Existing ctor kept, but updated default arguments to avoid ambigous 
@@ -707,7 +710,7 @@ G4EmStandardPhysics_option3 - added G4LowEnergyRayleigh, set 120 bins
 - define StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
   in order to have backward compatibility with the previous release
 
-02.12.2005, G.Folger & V.Ivantchenko - phys-lists-V07-01-01
+02.12.2005, G.Folger & V.Ivanchenko - phys-lists-V07-01-01
 - Includes tags: emphys-V07-01-01 and hadr-lists-V07-01-02.
 - Implemented migration of physics lists to non static particles scheme.
 
