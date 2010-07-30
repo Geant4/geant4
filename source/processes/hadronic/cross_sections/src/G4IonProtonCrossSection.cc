@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.cc,v 1.1 2010-07-30 14:11:45 vnivanch Exp $
+// $Id: G4IonProtonCrossSection.cc,v 1.2 2010-07-30 14:33:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,7 +86,7 @@ G4IonProtonCrossSection::GetIsoZACrossSection(const G4DynamicParticle* dp,
 					      G4double /*temperature*/)
 {
   const G4ParticleDefinition* p = dp->GetDefinition();
-  G4double e = dp->GetKineticEnergy()*p->GetPDGMass()/proton_mass_c2;
+  G4double e = dp->GetKineticEnergy()*proton_mass_c2/p->GetPDGMass();
   return theForward->GetCrossSection(e, p->GetBaryonNumber(),
 				     p->GetPDGCharge()/eplus);
 }
