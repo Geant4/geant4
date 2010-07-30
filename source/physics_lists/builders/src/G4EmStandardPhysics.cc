@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.21 2010-06-02 17:21:29 vnivanch Exp $
+// $Id: G4EmStandardPhysics.cc,v 1.22 2010-07-30 18:43:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -69,6 +69,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4alphaIonisation.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -185,7 +186,7 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "He3") {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+      pmanager->AddProcess(new G4alphaIonisation,     -1, 2, 2);
 
     } else if (particleName == "GenericIon") {
 

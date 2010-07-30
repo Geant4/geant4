@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.cc,v 1.9 2010-06-02 17:21:29 vnivanch Exp $
+// $Id: G4EmPenelopePhysics.cc,v 1.10 2010-07-30 18:43:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmPenelopePhysics.hh"
@@ -80,6 +80,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4alphaIonisation.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
@@ -312,7 +313,7 @@ void G4EmPenelopePhysics::ConstructProcess()
       
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
 
-      G4ionIonisation* ionIoni = new G4ionIonisation();
+      G4alphaIonisation* ionIoni = new G4alphaIonisation();
       ionIoni->SetStepFunction(0.1, 20*um);
       pmanager->AddProcess(ionIoni,                   -1, 2, 2);
       pmanager->AddProcess(new G4NuclearStopping(),   -1, 3,-1);

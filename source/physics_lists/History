@@ -1,4 +1,4 @@
-q$Id: History,v 1.141 2010-07-30 14:20:08 vnivanch Exp $
+q$Id: History,v 1.142 2010-07-30 18:43:06 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-29-07-2011, V.Ivanchenko (phys-lists-V09-03-18)
+30-07-2010, V.Ivanchenko (phys-lists-V09-03-19)
+- In all EM builders use G4alphaIonisation for He3 and He4 ions
+
+29-07-2010, V.Ivanchenko (phys-lists-V09-03-18)
 - G4IonBinaryCascadePhysics - added G4IonProtonCrossSection
 
-29-07-2011, V.Ivanchenko (phys-lists-V09-03-17)
+29-07-2010, V.Ivanchenko (phys-lists-V09-03-17)
 - G4DataQuestionaire - for optical physics G4REALSURFACEDATA is checked
   instead of G4LEDATA (bug report #1125), the check is disabled, because
   not clear if this dataset is mandatory or not; check on new
@@ -30,20 +33,20 @@ track of all tags.
 - QGSP_BERT_EMV use G4HadronElasticPhysics instead of G4HadronHElasticPhysics
 - G4HadronHElasticPhysics is marked as obsolete
 
-19-06-2011, V.Ivanchenko (phys-lists-V09-03-16)
+19-06-2010, V.Ivanchenko (phys-lists-V09-03-16)
 - G4FTFPNeutronBuilder, G4FTFPPiKBuilder, G4FTFPProtonBuilder,
   G4QGSPNeutronBuilder, G4QGSPPiKBuilder, G4QGSPProtonBuilder 
   G4QGSBuilder - added deletion of G4ExcitationHandler, G4QGSMFragmentation 
   HadronPhysicsQGSP_BERT, HadronPhysicsFTFP_BERT,
   HadronPhysicsQGSP_FTFP_BERT - added deletion of neutron builder 
 
-11-06-2011, G.Folger                    (phys-lists-V09-03-15)
+11-06-2010, G.Folger                    (phys-lists-V09-03-15)
 - fix compilation error in G4QPhotoNuclearPhysics
 
-11-06-2011, G.Folger                    (phys-lists-V09-03-14)
+11-06-2010, G.Folger                    (phys-lists-V09-03-14)
 - tag changes of Vladimir & Mikhail
 
-11-06-2011, V.Ivanchenko
+11-06-2010, V.Ivanchenko
 - G4EmStandardPhysics_option2 - RangeFactor for e+- is set to 0.04
 
 10-06-2010, M. Kosov                            (*** Not tagged ***)
