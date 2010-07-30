@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.53 2010-04-13 10:58:03 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.54 2010-07-30 18:35:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -791,8 +791,8 @@ G4bool G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p,
 	 && currentParticleName != "hydrogen"
 	 ) {
 	isIon = true;
-	massRatio = theGenericIon->GetPDGMass()/p->GetPDGMass();
-        baseParticle = theGenericIon;
+	//massRatio = theGenericIon->GetPDGMass()/p->GetPDGMass();
+        //baseParticle = theGenericIon;
 	//      G4cout << p->GetParticleName()
 	// << " in " << currentMaterial->GetName()
 	//       << "  e= " << kinEnergy << G4endl;
