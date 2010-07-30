@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 July 2010 Vladimir Ivanchenko (hadr-cross-V09-03-08)
+- G4IonProtonCrossSection - move virtual methods to source,
+                            add constructor and destructor,
+                            make G4ProtonInelasticCrossSection class member,
+                            fix bug in kinematics
+
 05 July 2010 Vladimir Ivanchenko (hadr-cross-V09-03-07)
 - G4VComponentCrossSection - new interface for cross sections
 - G4VCrossSectionDataSet - added name, min and max kinetic energy and access 
