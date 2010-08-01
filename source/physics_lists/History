@@ -1,4 +1,4 @@
-q$Id: History,v 1.142 2010-07-30 18:43:06 vnivanch Exp $
+q$Id: History,v 1.143 2010-08-01 17:10:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ track of all tags.
      ----------------------------------------------------------
 
 30-07-2010, V.Ivanchenko (phys-lists-V09-03-19)
-- In all EM builders use G4alphaIonisation for He3 and He4 ions
+- In all EM builders use G4ionIonisation for He3 and He4 ions
 
 29-07-2010, V.Ivanchenko (phys-lists-V09-03-18)
 - G4IonBinaryCascadePhysics - added G4IonProtonCrossSection
