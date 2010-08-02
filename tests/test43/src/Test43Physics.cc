@@ -218,6 +218,7 @@ G4VProcess* Test43Physics::GetProcess(const G4String& gen_name,
   else if(part_name == "kaon-") man = new G4ProcessManager(G4KaonMinus::KaonMinus());
   else if(part_name == "kaon0L") man = new G4ProcessManager(G4KaonZeroLong::KaonZeroLong());
   else if(part_name == "kaon0S") man = new G4ProcessManager(G4KaonZeroShort::KaonZeroShort());
+  else if(part_name == "anti_proton") man = new G4ProcessManager(G4AntiProton::AntiProton());
   else {
        G4cerr << "Test43Physics::GetProcess() - Fatal error: particle "<< part_name << " not implemeted" << G4endl;
        G4Exception("Test43Physics::GetProcess() " ) ;
