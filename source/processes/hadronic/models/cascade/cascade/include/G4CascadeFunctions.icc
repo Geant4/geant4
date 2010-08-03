@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeFunctions.icc,v 1.3 2010-06-25 09:41:58 gunter Exp $
+// $Id: G4CascadeFunctions.icc,v 1.4 2010-08-03 23:09:36 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
 //		getOutgoingPartTypes().
+// 20100803  M. Kelsey -- Add printing function for debugging
 
 #ifndef G4_CASCADE_FUNCTIONS_ICC
 #define G4_CASCADE_FUNCTIONS_ICC
@@ -74,7 +75,7 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke) {
 	 << ": channel=" << channel << G4endl;
 #endif
 
-  // Identify final-state array to be copies
+  // Identify final-state array to be copied
   const G4int* chan = 0;
   if (mult == 2) chan = DATA::data.x2bfs[channel];
   if (mult == 3) chan = DATA::data.x3bfs[channel];
@@ -93,6 +94,13 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke) {
 
   kinds.insert(kinds.begin(), chan, chan+mult);	// Transfer data into vector
   return;
+}
+
+
+template <class DATA, class SAMP> inline 
+void G4CascadeFunctions<DATA,SAMP>::printTable() {
+  instance.print();
+  DATA::data.print();
 }
 
 #endif	/* G4_CASCADE_FUNCTIONS_ICC */

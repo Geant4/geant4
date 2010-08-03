@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterpolator.hh,v 1.2 2010-06-25 09:42:00 gunter Exp $
+// $Id: G4CascadeInterpolator.hh,v 1.3 2010-08-03 23:09:36 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
@@ -37,6 +37,8 @@
 // The interpolation action returns a simple double: the integer part
 // is the bin index, and the fractional part is, obviously, the
 // fractional part.
+//
+// 20100803  M. Kelsey -- Add printBins() function for debugging
 
 #ifndef G4CASCADE_INTERPOLATOR_HH
 #define G4CASCADE_INTERPOLATOR_HH
@@ -62,6 +64,8 @@ public:
   // Apply bin position from first input to second (array)
   G4double interpolate(const G4double x, const G4double (&yb)[nBins]) const;
   G4double interpolate(const G4double (&yb)[nBins]) const;
+
+  void printBins() const;	// Show bin edges for debugging purposes
 
 private:
   const G4double (&xBins)[nBins];

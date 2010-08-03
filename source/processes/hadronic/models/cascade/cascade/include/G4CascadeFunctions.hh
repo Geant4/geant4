@@ -22,8 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: G4CascadeFunctions.hh,v 1.6 2010-06-25 09:41:56 gunter Exp $
+// $Id: G4CascadeFunctions.hh,v 1.7 2010-08-03 23:09:36 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
@@ -37,6 +36,7 @@
 //		up to 9-body final states.  Add second argument specifying
 //		which Sampler is used.  Move implementations to .icc file.
 // 20100511  M. Kelsey -- Pass "kinds" buffer as input to getOutputPartTypes
+// 20100803  M. Kelsey -- Add printing function for debugging
 
 #ifndef G4_CASCADE_FUNCTIONS_HH
 #define G4_CASCADE_FUNCTIONS_HH
@@ -61,6 +61,8 @@ public:
 
   static void
   getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke);
+
+  static void printTable();
 
 private:
   G4CascadeFunctions() : SAMP() {}

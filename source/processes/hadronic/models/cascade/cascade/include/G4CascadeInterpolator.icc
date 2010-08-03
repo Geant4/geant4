@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterpolator.icc,v 1.6 2010-06-25 09:42:02 gunter Exp $
+// $Id: G4CascadeInterpolator.icc,v 1.7 2010-08-03 23:09:36 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
@@ -42,8 +42,11 @@
 //		at upper edge (== last + 0.0), just return bin value.
 // 20100520  M. Kelsey -- Second bug fix:  Loop in bin search should start at
 //		i=1, not i=0 (since i-1 is the key).
+// 20100803  M. Kelsey -- Add printBins() function for debugging
 
+#include "globals.hh"
 #include "G4CascadeInterpolator.hh"
+#include <iomanip>
 
 
 // Find bin position (index and fraction) using input argument and array
@@ -101,3 +104,17 @@ interpolate(const G4double (&yb)[nBins]) const {
   // Special case:  if exactly on upper bin edge, just return value
   return (i==last) ? yb[last] : (yb[i] + frac*(yb[i+1]-yb[i]));
 }
+
+
+// Print bin edges for debugging
+
+template <int NBINS>
+void G4CascadeInterpolator<NBINS>::printBins() const {
+  G4cout << " G4CascadeInterpolator<" << NBINS << "> : " << G4endl;
+  for (G4int k=0; k<NBINS; k++) {
+    G4cout << " " << std::setw(5) << xBins[k];
+    if ((k+1)%12 == 0) G4cout << G4endl;
+  }
+  G4cout << G4endl;
+}
+
