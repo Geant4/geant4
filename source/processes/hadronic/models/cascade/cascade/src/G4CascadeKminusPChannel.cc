@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeKminusPChannel.cc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 //
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeKminusPChannel.hh"
 
@@ -854,4 +856,4 @@ namespace {
 G4CascadeKminusPChannelData::data_t
 G4CascadeKminusPChannelData::data(kmp2bfs, kmp3bfs, kmp4bfs,
 				  kmp5bfs, kmp6bfs, kmp7bfs,
-				  kmpCrossSections);
+				  kmpCrossSections, "KminusP");

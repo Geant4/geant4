@@ -1,3 +1,5 @@
+#ifndef G4_CASCADE_FUNCTIONS_ICC
+#define G4_CASCADE_FUNCTIONS_ICC
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,15 +25,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeFunctions.icc,v 1.4 2010-08-03 23:09:36 mkelsey Exp $
+// $Id: G4CascadeFunctions.icc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
 //		getOutgoingPartTypes().
 // 20100803  M. Kelsey -- Add printing function for debugging
+// 20100804  M. Kelsey -- Pretty up printing function
 
-#ifndef G4_CASCADE_FUNCTIONS_ICC
-#define G4_CASCADE_FUNCTIONS_ICC
+#include "G4CascadeFunctions.hh"
+#include "globals.hh"
 
 
 // Make sure singleton is instantiated
@@ -54,6 +57,8 @@ G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) {
   return instance.findMultiplicity(ke, DATA::data.multiplicities);
 }
 
+
+// Generate list of final state particles
 
 template <class DATA, class SAMP> inline 
 void G4CascadeFunctions<DATA,SAMP>::
@@ -97,10 +102,14 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds, G4int mult, G4double ke) {
 }
 
 
+// Dump lookup tables, including interpolation bins, to log file
+
 template <class DATA, class SAMP> inline 
 void G4CascadeFunctions<DATA,SAMP>::printTable() {
+  G4cout << " ---------- " << DATA::data.name << " ----------" << G4endl;
   instance.print();
   DATA::data.print();
+  G4cout << " ------------------------------" << G4endl;
 }
 
 #endif	/* G4_CASCADE_FUNCTIONS_ICC */

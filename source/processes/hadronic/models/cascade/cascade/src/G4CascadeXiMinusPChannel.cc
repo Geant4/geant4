@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeXiMinusPChannel.cc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 //
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeXiMinusPChannel.hh"
 
@@ -315,4 +317,4 @@ namespace {
 G4CascadeXiMinusPChannelData::data_t
 G4CascadeXiMinusPChannelData::data(xmp2bfs, xmp3bfs, xmp4bfs,
 				   xmp5bfs, xmp6bfs, xmp7bfs,
-				   xmpCrossSections);
+				   xmpCrossSections, "XiMinusP");

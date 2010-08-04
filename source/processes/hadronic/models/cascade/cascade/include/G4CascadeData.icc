@@ -25,10 +25,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.icc,v 1.1 2010-08-04 00:07:05 mkelsey Exp $
+// $Id: G4CascadeData.icc,v 1.2 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
-// 20100803  M. Kelsey -- Move implementations to this .icc file
+// 20100803  M. Kelsey -- Move implementations to this .icc file.  Use name
+//		string to report output
 
 #include "G4CascadeData.hh"
 #include <iomanip>
@@ -79,11 +80,12 @@ printXsec(const G4double (&xsec)[NE]) const {
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
 void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(G4int mult) const {
   if (mult < 0) {
-    G4cout << " Total cross section (" << NE << " bins):" << G4endl;
+    G4cout << "\n " << name << " Total cross section:" << G4endl;
     printXsec(tot);
-    G4cout << " Summed cross section (" << NE << " bins):" << G4endl;
+    G4cout << "\n Summed cross section:" << G4endl;
     printXsec(sum);
-    G4cout << " Individual channel cross sections" << G4endl;
+    G4cout << "\n Individual channel cross sections" << G4endl;
+
     for (int m=2; m<NM+2; m++) print(m);
     return;
   }

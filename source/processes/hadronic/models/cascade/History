@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2010-08-04 00:07:05 mkelsey Exp $
+$Id: History,v 1.151 2010-08-04 05:28:24 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,21 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+4 August 2010 Michael Kelsey
+----------------------------
+- G4CascadeData:  Add name data member and optional ctor argument, use
+  when printing tables.
+
+- G4CascadeFunctions.icc:  Pretty-up printing output using name string.
+
+- G4Cascade*Channel.cc:  Add name string to data() ctor, use central part of
+  class name, e.g., "PiMinusP" for G4CascadePiMinusPChannel.
+
+- G4ElementaryParticleCollider.cc:  Add printing of all final-state tables,
+  one time only, protected by G4CASCADE_DEBUG_SAMPLER.
+
+- GNUmakefile:  Add G4CASCADE_DEBUG_SAMPLER preprocessor flag.
 
 3 August 2010 Michael Kelsey (hadr-casc-V09-03-68)
 --------------------------------------------------

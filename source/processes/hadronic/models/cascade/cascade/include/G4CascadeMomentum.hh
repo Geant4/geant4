@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeMomentum.hh,v 1.5 2010-03-16 22:10:26 mkelsey Exp $
+// $Id: G4CascadeMomentum.hh,v 1.6 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class G4CascadeMomentum

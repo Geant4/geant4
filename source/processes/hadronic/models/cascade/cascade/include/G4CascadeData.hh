@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.hh,v 1.9 2010-08-04 00:07:05 mkelsey Exp $
+// $Id: G4CascadeData.hh,v 1.10 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
@@ -35,13 +35,14 @@
 // 20100611  M. Kelsey -- Work around Intel ICC compiler warning about
 //		index[] subscripts out of range.  Dimension to full [9].
 // 20100803  M. Kelsey -- Add printing function for debugging, split
-//		implementation code to .icc file.
+//		implementation code to .icc file.  Add name argument.
 
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
 
 #include "globals.hh"
 #include "G4CascadeSampler.hh"		/* To get number of energy bins */
+#include "G4String.hh"
 
 
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8=0,int N9=0>
@@ -74,6 +75,8 @@ struct G4CascadeData
   static const G4int empty8bfs[1][8];	// For multiplicity==7 case
   static const G4int empty9bfs[1][9];
 
+  const G4String name;			// For diagnostic purposes
+
   G4int maxMultiplicity() const { return NM+1; }  // Used by G4CascadeFunctions
 
   void print(G4int mult=-1) const;	// Dump multiplicty tables (-1 == all)
@@ -83,39 +86,43 @@ struct G4CascadeData
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
-		const G4double (&xsec)[NXS][NE])
+		const G4double (&xsec)[NXS][NE],
+		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
-      crossSections(xsec), tot(sum) { initialize(); }
+      crossSections(xsec), tot(sum), name(aName) { initialize(); }
 
   // Constructor for kaon/hyperon channels, with multiplicity <= 7 and inclusive
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
-		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE])
+		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
+		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(empty8bfs), x9bfs(empty9bfs),
-      crossSections(xsec), tot(theTot) { initialize(); }
+      crossSections(xsec), tot(theTot), name(aName) { initialize(); }
 
   // Constructor for pion/nuleon channels, with multiplicity > 7
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
-		const G4double (&xsec)[NXS][NE])
+		const G4double (&xsec)[NXS][NE],
+		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
-      crossSections(xsec), tot(sum) { initialize(); }
+      crossSections(xsec), tot(sum), name(aName) { initialize(); }
 
   // Constructor for pion/nuleon channels, with multiplicity > 7 and inclusive
   G4CascadeData(const G4int (&the2bfs)[N2][2], const G4int (&the3bfs)[N3][3],
 		const G4int (&the4bfs)[N4][4], const G4int (&the5bfs)[N5][5],
 		const G4int (&the6bfs)[N6][6], const G4int (&the7bfs)[N7][7],
 		const G4int (&the8bfs)[N8D][8], const G4int (&the9bfs)[N9D][9],
-		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE])
+		const G4double (&xsec)[NXS][NE], const G4double (&theTot)[NE],
+		const G4String& aName="G4CascadeData")
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
-      crossSections(xsec), tot(theTot) { initialize(); }
+      crossSections(xsec), tot(theTot), name(aName) { initialize(); }
 
   void initialize();			// Fill summed arrays from input
 };

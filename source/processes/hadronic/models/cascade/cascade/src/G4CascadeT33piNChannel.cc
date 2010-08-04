@@ -22,10 +22,11 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeT33piNChannel.cc,v 1.2 2010-06-15 14:47:25 mkelsey Exp $
+// $Id: G4CascadeT33piNChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadePiPlusPChannel.hh"
 #include "G4CascadePiMinusNChannel.hh"
@@ -536,10 +537,10 @@ G4CascadePiPlusPChannelData::data_t
 G4CascadePiPlusPChannelData::data(pipP2bfs, pipP3bfs, pipP4bfs,
 				  pipP5bfs, pipP6bfs, pipP7bfs,
 				  pipP8bfs, pipP9bfs, pipPCrossSections,
-				  pipPtotXSec);
+				  pipPtotXSec, "PiPlusP");
 
 G4CascadePiMinusNChannelData::data_t
 G4CascadePiMinusNChannelData::data(pimN2bfs, pimN3bfs, pimN4bfs,
 				   pimN5bfs, pimN6bfs, pimN7bfs,
 				   pimN8bfs, pimN9bfs, pipPCrossSections,
-				   pipPtotXSec);
+				   pipPtotXSec, "PiMinusN");

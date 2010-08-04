@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeKzeroBarPChannel.cc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 //
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeKzeroBarPChannel.hh"
 
@@ -711,4 +713,4 @@ namespace {
 G4CascadeKzeroBarPChannelData::data_t
 G4CascadeKzeroBarPChannelData::data(kzbp2bfs, kzbp3bfs, kzbp4bfs,
 				    kzbp5bfs, kzbp6bfs, kzbp7bfs,
-				    kzbpCrossSections);
+				    kzbpCrossSections, "KzeroBarP");

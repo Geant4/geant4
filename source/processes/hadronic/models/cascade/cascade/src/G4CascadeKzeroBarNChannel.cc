@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeKzeroBarNChannel.cc,v 1.6 2010-06-25 09:44:06 gunter Exp $
+// $Id: G4CascadeKzeroBarNChannel.cc,v 1.7 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeKzeroBarNChannel.hh"
 
@@ -856,4 +858,4 @@ namespace {
 G4CascadeKzeroBarNChannelData::data_t
 G4CascadeKzeroBarNChannelData::data(kzbn2bfs, kzbn3bfs, kzbn4bfs,
 				    kzbn5bfs, kzbn6bfs, kzbn7bfs,
-				    kzbnCrossSections);
+				    kzbnCrossSections, "KzeroBarN");

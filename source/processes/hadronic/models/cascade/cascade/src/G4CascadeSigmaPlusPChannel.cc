@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeSigmaPlusPChannel.cc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 //
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeSigmaPlusPChannel.hh"
 
@@ -661,4 +663,4 @@ namespace {
 G4CascadeSigmaPlusPChannelData::data_t
 G4CascadeSigmaPlusPChannelData::data(spp2bfs, spp3bfs, spp4bfs,
 				     spp5bfs, spp6bfs, spp7bfs,
-				     sppCrossSections);
+				     sppCrossSections, "SigmaPlusP");

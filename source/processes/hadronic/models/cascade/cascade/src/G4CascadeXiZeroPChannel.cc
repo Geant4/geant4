@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeXiZeroPChannel.cc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 //
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeXiZeroPChannel.hh"
 
@@ -493,4 +495,4 @@ namespace {
 G4CascadeXiZeroPChannelData::data_t
 G4CascadeXiZeroPChannelData::data(x0p2bfs, x0p3bfs, x0p4bfs,
 				  x0p5bfs, x0p6bfs, x0p7bfs,
-				  x0pCrossSections);
+				  x0pCrossSections, "XiZeroP");

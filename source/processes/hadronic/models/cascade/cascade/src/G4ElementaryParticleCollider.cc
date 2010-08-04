@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.73 2010-07-27 04:20:03 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.74 2010-08-04 05:28:24 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -65,6 +65,8 @@
 //		that final state total mass is below etot_scm; also compute
 //		kinematics without "rescaling" (which led to non-conservation)
 // 20100726  M. Kelsey -- Move remaining std::vector<> buffers to .hh file
+// 20100804  M. Kelsey -- Add printing of final-state tables, protected by
+//		G4CASCADE_DEBUG_SAMPLER preprocessor flag
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -131,6 +133,14 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
            << G4endl;
     return;
   }
+
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  static G4bool doPrintTables = true;	// Once and only once per job
+  if (doPrintTables) {
+    printFinalStateTables();		// For diagnostic reporting
+    doPrintTables = false;
+  }
+#endif
 
   interCase.set(bullet, target);	// To identify kind of collision
 
@@ -1008,6 +1018,41 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   particles.push_back(G4InuclElementaryParticle(mom2, particle_kinds[1],3));
 
   return;
+}
+
+
+// Dump lookup tables for N-body final states
+
+void G4ElementaryParticleCollider::printFinalStateTables() const {
+  G4CascadeKminusNChannel::printTable();
+  G4CascadeKminusPChannel::printTable();
+  G4CascadeKplusNChannel::printTable();
+  G4CascadeKplusPChannel::printTable();
+  G4CascadeKzeroBarNChannel::printTable();
+  G4CascadeKzeroBarPChannel::printTable();
+  G4CascadeKzeroNChannel::printTable();
+  G4CascadeKzeroPChannel::printTable();
+  G4CascadeLambdaNChannel::printTable();
+  G4CascadeLambdaPChannel::printTable();
+  G4CascadeNNChannel::printTable();
+  G4CascadeNPChannel::printTable();
+  G4CascadePPChannel::printTable();
+  G4CascadePiMinusNChannel::printTable();
+  G4CascadePiMinusPChannel::printTable();
+  G4CascadePiPlusNChannel::printTable();
+  G4CascadePiPlusPChannel::printTable();
+  G4CascadePiZeroNChannel::printTable();
+  G4CascadePiZeroPChannel::printTable();
+  G4CascadeSigmaMinusNChannel::printTable();
+  G4CascadeSigmaMinusPChannel::printTable();
+  G4CascadeSigmaPlusNChannel::printTable();
+  G4CascadeSigmaPlusPChannel::printTable();
+  G4CascadeSigmaZeroNChannel::printTable();
+  G4CascadeSigmaZeroPChannel::printTable();
+  G4CascadeXiMinusNChannel::printTable();
+  G4CascadeXiMinusPChannel::printTable();
+  G4CascadeXiZeroNChannel::printTable();
+  G4CascadeXiZeroPChannel::printTable();
 }
 
 

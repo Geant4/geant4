@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 2010-07-21 19:59:41 mkelsey Exp $
+# $Id: GNUmakefile,v 1.13 2010-08-04 05:28:24 mkelsey Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 #
@@ -17,6 +17,10 @@ endif
 
 ifdef G4CASCADE_DEBUG_INTERFACE
   CPPFLAGS += -DG4CASCADE_DEBUG_INTERFACE=1
+endif
+
+ifdef G4CASCADE_DEBUG_SAMPLER
+  CPPFLAGS += -DG4CASCADE_DEBUG_SAMPLER=1
 endif
 
 ifdef G4CASCADE_DEBUG_SORT

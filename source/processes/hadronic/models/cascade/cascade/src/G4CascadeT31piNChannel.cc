@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT31piNChannel.cc,v 1.2 2010-06-25 09:44:14 gunter Exp $
+// $Id: G4CascadeT31piNChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadePiMinusPChannel.hh"
 #include "G4CascadePiPlusNChannel.hh"
@@ -688,10 +690,10 @@ G4CascadePiMinusPChannelData::data_t
 G4CascadePiMinusPChannelData::data(pimP2bfs, pimP3bfs, pimP4bfs,
 				   pimP5bfs, pimP6bfs, pimP7bfs,
 				   pimP8bfs, pimP9bfs, pimPCrossSections,
-				   pimPtotXSec);
+				   pimPtotXSec, "PiMinusP");
 
 G4CascadePiPlusNChannelData::data_t
 G4CascadePiPlusNChannelData::data(pipN2bfs, pipN3bfs, pipN4bfs,
 				  pipN5bfs, pipN6bfs, pipN7bfs,
 				  pipN8bfs, pipN9bfs, pimPCrossSections,
-				  pimPtotXSec);
+				  pimPtotXSec, "PiPlusN");

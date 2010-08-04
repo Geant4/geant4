@@ -22,7 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4CascadeSigmaZeroNChannel.cc,v 1.5 2010-08-04 05:28:24 mkelsey Exp $
 //
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadeSigmaZeroNChannel.hh"
 
@@ -903,4 +905,4 @@ namespace {
 G4CascadeSigmaZeroNChannelData::data_t
 G4CascadeSigmaZeroNChannelData::data(s0n2bfs, s0n3bfs, s0n4bfs,
 				     s0n5bfs, s0n6bfs, s0n7bfs,
-				     s0nCrossSections);
+				     s0nCrossSections, "SigmaZeroN");

@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT1NNChannel.cc,v 1.2 2010-06-25 09:44:12 gunter Exp $
+// $Id: G4CascadeT1NNChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
+//
+// 20100804  M. Kelsey -- Add name string to ctor
 
 #include "G4CascadePPChannel.hh"
 #include "G4CascadeNNChannel.hh"
@@ -642,8 +644,10 @@ namespace {
 
 G4CascadePPChannelData::data_t
 G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
-			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec);
+			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
+			     "ProtonProton");
 
 G4CascadeNNChannelData::data_t
 G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
-			     nn8bfs, nn9bfs, ppCrossSections, ppTotXSec);
+			     nn8bfs, nn9bfs, ppCrossSections, ppTotXSec,
+			     "NeutronNeutron");
