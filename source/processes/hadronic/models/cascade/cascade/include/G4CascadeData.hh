@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeData.hh,v 1.8 2010-08-03 23:09:36 mkelsey Exp $
+// $Id: G4CascadeData.hh,v 1.9 2010-08-04 00:07:05 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100507  M. Kelsey -- Use template arguments to dimension const-refs
@@ -34,14 +34,14 @@
 //		ctors to pass inclusive xsec array as input (for piN/NN).
 // 20100611  M. Kelsey -- Work around Intel ICC compiler warning about
 //		index[] subscripts out of range.  Dimension to full [9].
-// 20100803  M. Kelsey -- Add printing function for debugging
+// 20100803  M. Kelsey -- Add printing function for debugging, split
+//		implementation code to .icc file.
 
 #ifndef G4_CASCADE_DATA_HH
 #define G4_CASCADE_DATA_HH
 
 #include "globals.hh"
 #include "G4CascadeSampler.hh"		/* To get number of energy bins */
-#include <iomanip>
 
 
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8=0,int N9=0>
@@ -116,92 +116,9 @@ struct G4CascadeData
     : x2bfs(the2bfs), x3bfs(the3bfs), x4bfs(the4bfs), x5bfs(the5bfs),
       x6bfs(the6bfs), x7bfs(the7bfs), x8bfs(the8bfs), x9bfs(the9bfs),
       crossSections(xsec), tot(theTot) { initialize(); }
+
   void initialize();			// Fill summed arrays from input
 };
-
-template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::initialize() {
-  // Initialize index offsets for cross-section array (can't do globally)
-  index[0] = 0;   index[1] = N02; index[2] = N23; index[3] = N24;
-  index[4] = N25; index[5] = N26; index[6] = N27; index[7] = N28;
-  index[8] = N29;
-
-  // Initialize multiplicity array
-  for (G4int m = 0; m < NM; m++) {
-    G4int start = index[m];
-    G4int stop = index[m+1];
-    for (G4int k = 0; k < NE; k++) {
-      multiplicities[m][k] = 0.0;
-      for (G4int i = start; i < stop; i++) {
- 	multiplicities[m][k] += crossSections[i][k];
-      }
-    }
-  }
-  
-  // Initialize total cross section array
-  for (G4int k = 0; k < NE; k++) {
-    sum[k] = 0.0;
-    for (G4int m = 0; m < NM; m++) {
-      sum[k] += multiplicities[m][k];
-    }
-  }
-}
-
-
-// Dump individual cross-section table
-template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::
-printXsec(const G4double (&xsec)[NE]) const {
-  for (G4int k=0; k<NE; k++) {
-    G4cout << " " << std::setw(5) << xsec[k];
-    if ((k+1)%12 == 0) G4cout << G4endl;
-  }
-  G4cout << G4endl;
-}
-
-// Dump tables for specified multiplicity
-template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9> inline
-void G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::print(G4int mult) const {
-  if (mult < 0) {
-    G4cout << " Total cross section (" << NE << " bins):" << G4endl;
-    printXsec(tot);
-    G4cout << " Summed cross section (" << NE << " bins):" << G4endl;
-    printXsec(sum);
-    G4cout << " Individual channel cross sections" << G4endl;
-    for (int m=2; m<NM+2; m++) print(m);
-    return;
-  }
-
-  G4int im = mult-2;		// Convert multiplicity to array index
-
-  G4int start = index[im];
-  G4int stop = index[im+1];
-  G4cout << "\n Mulitplicity " << mult << " (indices " << start << " to "
-	 << stop-1 << ") summed cross section:" << G4endl;
-
-  printXsec(multiplicities[im]);
-  
-  for (G4int i=start; i<stop; i++) {
-    G4int ichan=i-start;
-    G4cout << "\n final state x" << mult << "bfs[" << ichan << "] : ";
-    for (G4int fsi=0; fsi<mult; fsi++) {
-      switch (mult) {
-      case 2: G4cout << " " << x2bfs[ichan][fsi]; break;
-      case 3: G4cout << " " << x3bfs[ichan][fsi]; break;
-      case 4: G4cout << " " << x4bfs[ichan][fsi]; break;
-      case 5: G4cout << " " << x5bfs[ichan][fsi]; break;
-      case 6: G4cout << " " << x6bfs[ichan][fsi]; break;
-      case 7: G4cout << " " << x7bfs[ichan][fsi]; break;
-      case 8: G4cout << " " << x8bfs[ichan][fsi]; break;
-      case 9: G4cout << " " << x9bfs[ichan][fsi]; break;
-      default: ;
-      }
-    }
-    G4cout << " -- cross section [" << i << "]:" << G4endl;
-    printXsec(crossSections[i]);
-  }
-}
-
 
 // Dummy arrays for use when optional template arguments are skipped
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
@@ -209,5 +126,8 @@ const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty8bfs[1][8] = {{0}};
 
 template <int NE,int N2,int N3,int N4,int N5,int N6,int N7,int N8,int N9>
 const G4int G4CascadeData<NE,N2,N3,N4,N5,N6,N7,N8,N9>::empty9bfs[1][9] = {{0}};
+
+// GCC and other compilers require template implementations here
+#include "G4CascadeData.icc"
 
 #endif
