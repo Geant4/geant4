@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.20 2010-06-21 17:50:48 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.21 2010-08-05 08:44:37 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -322,6 +322,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
 		        G4FragmentingString *string, 
 			G4FragmentingString *&newString)
 {
+//G4cout<<"Start SplitUP"<<G4endl;
        //... random choice of string end to use for creating the hadron (decay)   
        SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
        if (SideOfDecay < 0)
@@ -340,10 +341,13 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
        } else {
            HadronDefinition= DiQuarkSplitup(string->GetDecayParton(), newStringEnd);
        }      
+
+//G4cout<<"New had "<<HadronDefinition->GetParticleName()<<G4endl;
 // create new String from old, ie. keep Left and Right order, but replace decay
 
        newString=new G4FragmentingString(*string,newStringEnd); // To store possible
                                                                 // quark containt of new string
+//G4cout<<"SplitEandP "<<G4endl;
        G4LorentzVector* HadronMomentum=SplitEandP(HadronDefinition, string, newString);
 
        delete newString; newString=0;                          
@@ -359,6 +363,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
 
 	   delete HadronMomentum;
        }      
+//G4cout<<"End SplitUP"<<G4endl;
        return Hadron;
 }
 

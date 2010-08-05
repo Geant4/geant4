@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.20 2010-06-21 17:50:48 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.21 2010-08-05 08:44:37 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -52,7 +52,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
     MinimalStringMass  = 0.;              
     MinimalStringMass2 = 0.;              
 // ------ Minimal invariant mass used at a string fragmentation -
-    WminLUND = 0.7*GeV;                   // Uzhi 0.8 1.5
+    WminLUND = 0.23*GeV;                   // Uzhi 0.7 -> 0.23 3.8.10 //0.8 1.5
 // ------ Smooth parameter used at a string fragmentation for ---
 // ------ smearinr sharp mass cut-off ---------------------------
     SmoothParam  = 0.2;                   
@@ -159,6 +159,8 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
 {
 //    Can no longer modify Parameters for Fragmentation.
 	PastInitPhase=true;
+//SetVectorMesonProbability(1.);
+//SetSpinThreeHalfBarionProbability(1.);
 
 // 	check if string has enough mass to fragment...
         
@@ -166,18 +168,63 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(
                               // that no one pi-meson can be produced
 /*
 G4cout<<G4endl<<"G4LundStringFragmentation::"<<G4endl;
-G4cout<<"FragmentString Position"<<theString.GetPosition()/fermi<<" "<<
-theString.GetTimeOfCreation()/fermi<<G4endl;
+//G4cout<<"FragmentString Position"<<theString.GetPosition()/fermi<<" "<<theString.GetTimeOfCreation()/fermi<<G4endl;
 G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momentum().mag()<<G4endl;
 */
-        G4FragmentingString aString(theString);
+        G4FragmentingString  aString(theString);
         SetMinimalStringMass(&aString); 
 
-       if((MinimalStringMass+WminLUND)*(1.-SmoothParam) > theString.Get4Momentum().mag())
-       {SetMassCut(1000.*MeV);}
-// V.U. 20.06.10 in order to put un correspondence LightFragTest and MinStrMass
+/*
+G4cout<<"St Frag "<<MinimalStringMass<<" "<<WminLUND<<" "<<(1.-SmoothParam)<<" "<< theString.Get4Momentum().mag()<<G4endl;
+G4cout<<(MinimalStringMass+WminLUND)*(1.-SmoothParam)<<" "<<theString.Get4Momentum().mag()<<G4endl;
 
-	G4KineticTrackVector * LeftVector=LightFragmentationTest(&theString);
+       if((MinimalStringMass+WminLUND)*(1.-SmoothParam) > theString.Get4Momentum().mag())
+            {SetMassCut(1000.*MeV);}
+       else {SetMassCut(160.*MeV);}
+*/
+// V.U. 20.06.10 in order to put in correspondence LightFragTest and MinStrMass
+
+G4KineticTrackVector * LeftVector(0);
+//	G4KineticTrackVector * LeftVector=LightFragmentationTest(&theString);
+//G4cout<<"Min Str Mass "<<MinimalStringMass<<G4endl;
+if(!IsFragmentable(&aString)) // produce 1 hadron
+{
+//G4cout<<"Non fragmentable"<<G4endl;
+ SetMassCut(1000.*MeV);
+ LeftVector=LightFragmentationTest(&theString);
+ SetMassCut(160.*MeV);
+
+
+//G4cout<<"Prod hadron "<<LeftVector->operator[](0)->GetDefinition()->GetParticleName()<<G4endl;
+/*
+ if(LeftVector->size() == 1)
+ {
+  if(! (std::abs(LeftVector->operator[](0)->GetDefinition()->GetPDGMass()-
+                       theString.Get4Momentum().mag()) < 100*MeV))
+  {  // produce a particle with arbitrary isospin
+G4cout<<" produce a particle with arbitrary isospin"<<G4endl;
+
+   pDefPair hadrons((G4ParticleDefinition *)0,(G4ParticleDefinition *)0);
+   Pcreate build=&G4HadronBuilder::Build;
+   FragmentationMass(&aString,build,&hadrons);   // 0->1
+G4cout<<"Hadron PDG "<<hadrons.first->GetPDGEncoding()<<G4endl;
+   if ( hadrons.second ==0 )
+   {// Substitute string by light hadron, Note that Energy is not conserved here!
+    // Cleaning up the previously produced hadrons ------------------------------
+    std::for_each(LeftVector->begin() , LeftVector->end() , DeleteKineticTrack());
+    LeftVector->clear();
+
+    G4ThreeVector Mom3 = aString.Get4Momentum().vect();
+    G4LorentzVector Mom(Mom3,std::sqrt(Mom3.mag2() + sqr(hadrons.first->GetPDGMass())));
+    LeftVector->push_back(new G4KineticTrack(hadrons.first, 0, 
+                                                  theString.GetPosition(),
+                                                          Mom));
+   } // end of if ( hadrons.second ==0 )
+  }  // end of produce a particle with arbitrary isospin
+
+ } // end of if(LeftVector->size() == 1)
+*/
+}  // end of if(!IsFragmentable(&aString))
 
 	if ( LeftVector != 0 ) {
 // Uzhi insert 6.05.08 start
@@ -206,6 +253,7 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 
 //--------------------- The string can fragment -------------------------------	
 //--------------- At least two particles can be produced ----------------------
+//G4cout<<"Fragmentable"<<G4endl;
                                LeftVector =new G4KineticTrackVector;
 	G4KineticTrackVector * RightVector=new G4KineticTrackVector;
 
@@ -217,7 +265,7 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 	while ( !success && attempt++ < StringLoopInterrupt )
 	{ // If the string fragmentation do not be happend, repeat the fragmentation---
 		G4FragmentingString *currentString=new G4FragmentingString(*theStringInCMS);
-
+//G4cout<<"Main loop start whilecounter "<<attempt<<G4endl;
           // Cleaning up the previously produced hadrons ------------------------------
 		std::for_each(LeftVector->begin() , LeftVector->end() , DeleteKineticTrack());
 		LeftVector->clear();
@@ -229,12 +277,14 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 		inner_sucess=true;  // set false on failure..
 		while (! StopFragmenting(currentString) )
 		{  // Split current string into hadron + new string
-			G4FragmentingString *newString=0;  // used as output from SplitUp...
 
+			G4FragmentingString *newString=0;  // used as output from SplitUp...
+//G4cout<<"SplitUp"<<G4endl;
 			G4KineticTrack * Hadron=Splitup(currentString,newString);
 
 			if ( Hadron != 0 )  // Store the hadron                               
 			{
+//G4cout<<"Hadron prod at fragm. "<<Hadron->GetDefinition()->GetParticleName()<<G4endl;
 			   if ( currentString->GetDecayDirection() > 0 )
 				   LeftVector->push_back(Hadron);
        			   else
@@ -281,10 +331,12 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
         G4double      TimeOftheStringCreation=theString.GetTimeOfCreation();
         G4ThreeVector PositionOftheStringCreation(theString.GetPosition());
 
+//G4cout<<"# prod hadrons "<<LeftVector->size()<<G4endl;
 	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 	   G4KineticTrack* Hadron = LeftVector->operator[](C1);
 	   G4LorentzVector Momentum = Hadron->Get4Momentum();
+//G4cout<<Hadron->GetDefinition()->GetParticleName()<<" "<<Momentum<<G4endl;
 	   Momentum = toObserverFrame*Momentum;
 	   Hadron->Set4Momentum(Momentum);
 
@@ -305,7 +357,8 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 G4bool G4LundStringFragmentation::IsFragmentable(const G4FragmentingString * const string)
 {
   SetMinimalStringMass(string);                                                     
-  return sqr(MinimalStringMass + WminLUND) < string->Get4Momentum().mag2();         
+//  return sqr(MinimalStringMass + WminLUND) < string->Get4Momentum().mag2();
+  return MinimalStringMass < string->Get4Momentum().mag(); // 21.07.2010
 }
 
 //----------------------------------------------------------------------------------------
@@ -313,11 +366,18 @@ G4bool G4LundStringFragmentation::StopFragmenting(const G4FragmentingString * co
 {
   SetMinimalStringMass(string);                                           
 
-//G4cout<<"StopFragm MinMass "<<MinimalStringMass<<" String Mass "<<std::sqrt(string->Get4Momentum().mag2())<<G4endl; 
-//G4cout<<"WminLUND "<<WminLUND<<" SmoothParam "<<SmoothParam<<" "<<string->Mass()<<G4endl;
+/*
+G4cout<<"StopFragm MinMass "<<MinimalStringMass<<" String Mass "<<string->Get4Momentum().mag()<<G4endl; 
+G4cout<<"WminLUND "<<WminLUND<<" SmoothParam "<<SmoothParam<<" "<<string->Mass()<<G4endl;
+//G4cout<<std::exp(-(string->Mass()*string->Mass()-MinimalStringMass2)/WminLUND/WminLUND)<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
+*/
+//
   return (MinimalStringMass + WminLUND)*
              (1 + SmoothParam * (1.-2*G4UniformRand())) >                
                    string->Mass();                        
+//
+//  return G4UniformRand() < std::exp(-(string->Mass()*string->Mass()-MinimalStringMass2)/WminLUND/WminLUND);
 }
 
 //----------------------------------------------------------------------------------------
@@ -326,7 +386,7 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
     					     G4KineticTrackVector * RightVector)
 {
     //... perform last cluster decay
-
+//G4cout<<"Split last"<<G4endl;
     G4LorentzVector Str4Mom=string->Get4Momentum();
 
     G4ThreeVector ClusterVel =string->Get4Momentum().boostVector();
@@ -369,9 +429,11 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
               quark = QuarkPair.second;
 
               LeftHadron=hadronizer->Build(QuarkPair.first, string->GetLeftParton());
+//              LeftHadron=hadronizer->BuildLowSpin(QuarkPair.first, string->GetLeftParton());
            }
 
-           RightHadron = hadronizer->Build(string->GetRightParton(), quark);
+              RightHadron = hadronizer->Build(string->GetRightParton(), quark);
+//             RightHadron = hadronizer->BuildLowSpin(string->GetRightParton(), quark);
         } else
         {
             // The string is qq-qqbar type. Diquarks are on the string ends
@@ -401,6 +463,7 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
     } 
     while (ResidualMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass());
 
+//G4cout<<LeftHadron->GetParticleName()<<" "<<RightHadron->GetParticleName()<<G4endl;
     //... compute hadron momenta and energies   
 
     G4LorentzVector  LeftMom, RightMom;
@@ -490,12 +553,16 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
 G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * pHadron,
 	G4FragmentingString * string, G4FragmentingString * newString)
 { 
+//G4cout<<"Start SplitEandP "<<G4endl;
        G4LorentzVector String4Momentum=string->Get4Momentum();
        G4double StringMT2=string->Get4Momentum().mt2();
 
        G4double HadronMass = pHadron->GetPDGMass();
 
-       SetMinimalStringMass(newString);                                        
+       SetMinimalStringMass(newString);            
+//G4cout<<"HadM MinimalStringMassLeft StringM "<<HadronMass<<" "<<MinimalStringMass<<" "<<String4Momentum.mag()<<G4endl;
+   
+if(HadronMass + MinimalStringMass > String4Momentum.mag()) {return 0;}// have to start all over!
        String4Momentum.setPz(0.);
        G4ThreeVector StringPt=String4Momentum.vect();
 
@@ -516,7 +583,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 
         G4double Pz2 = (sqr(StringMT2 - HadronMassT2 - ResidualMassT2) -             
                                       4*HadronMassT2 * ResidualMassT2)/4./StringMT2;
-
+//G4cout<<"Pz2 "<<Pz2<<G4endl;
         if(Pz2 < 0 ) {return 0;}          // have to start all over!           
 
        //... then compute allowed z region  z_min <= z <= z_max 
@@ -525,12 +592,13 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
        G4double zMin = (std::sqrt(HadronMassT2+Pz2) - Pz)/std::sqrt(StringMT2);  
        G4double zMax = (std::sqrt(HadronMassT2+Pz2) + Pz)/std::sqrt(StringMT2);  
 
+//G4cout<<"if (zMin >= zMax) return 0 "<<zMin<<" "<<zMax<<G4endl;
        if (zMin >= zMax) return 0;		// have to start all over!
 	
        G4double z = GetLightConeZ(zMin, zMax,
 		       string->GetDecayParton()->GetPDGEncoding(), pHadron,
 		       HadronPt.x(), HadronPt.y());      
-       
+//G4cout<<"z "<<z<<G4endl;       
        //... now compute hadron longitudinal momentum and energy
        // longitudinal hadron momentum component HadronPz
 
@@ -542,7 +610,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 				  HadronMassT2/(z * string->LightConeDecay()));
 
        G4LorentzVector * a4Momentum= new G4LorentzVector(HadronPt,HadronE);
-
+//G4cout<<"Out SplitEandP "<<G4endl;
        return a4Momentum;
 }
 
