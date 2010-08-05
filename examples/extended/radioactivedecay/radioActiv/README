@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2010-07-23 08:49:57 maire Exp $
+$Id: README,v 1.5 2010-08-05 17:42:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -30,14 +30,18 @@ $Id: README,v 1.4 2010-07-23 08:49:57 maire Exp $
          	
  4- Physics
     -------
- 
- At each decay, one counts and plots energy spectrum of created particles and
- ions, and energy, momentum balances of that decay.
- 
  As said above, all particles and ions behave as geantino, eg. no energy loss.
- 
+     
  A flag, /radioActiv/tracking/fullChain (false or true), allows to limit to
- single decay (default) or full chain decays. Time of life is plotted.
+ single decay (default) or full decay chain.
+ 
+ In case of full decay chain, TrackStatus of ions is set to fStopButAlive
+ in order to force decay at rest.  
+   
+ At each decay, one counts and plots energy spectrum of created particles and
+ ions, and energy-momentum balance of that decay.
+ 
+ Total time of life of decay chain is plotted. Activity is computed.
  
  Few macros are given in example. Debug.mac is to be run in interactive mode. 
   	
@@ -90,7 +94,7 @@ $Id: README,v 1.4 2010-07-23 08:49:57 maire Exp $
       5 : energy spectrum: ions
       6 : energy balance
       7 : momentum balance
-      8 : time of life          
+      8 : time of life of decay chain          
       9 : activity = f(t)
                             
    The histograms are managed by the HistoManager class and its Messenger. 
