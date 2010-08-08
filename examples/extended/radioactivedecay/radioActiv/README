@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2010-08-05 17:42:19 maire Exp $
+$Id: README,v 1.6 2010-08-08 10:51:58 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,7 +8,8 @@ $Id: README,v 1.5 2010-08-05 17:42:19 maire Exp $
                             radioActiv 
                             ----------
 			    
- Survey G4RadioactiveDecay process (See Physics Reference Manual, chapter 36).
+ Survey G4RadioactiveDecay process. See Physics Reference Manual, chapter 36.
+ See also http://ie.lbl.gov/decay.html
  	
  1- Geometry construction
     ---------------------
