@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.11 2010-06-14 11:32:41 vnivanch Exp $
+// $Id: G4UniversalFluctuation.hh,v 1.12 2010-08-08 08:19:59 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,14 +109,16 @@ private:
   G4double e2LogFluct;
   G4double ipotLogFluct;
   G4double e0;
+  G4double esmall;
 
   G4double e1,e2;
 
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minLoss;
-  G4double nmaxCont1;
-  G4double nmaxCont2;
+  G4double nmaxCont;
+  G4double rate,fw;
+
 
 };
 
