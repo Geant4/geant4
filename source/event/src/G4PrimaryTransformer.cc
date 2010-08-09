@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.28 2010-04-19 19:49:54 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.29 2010-08-09 14:38:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -175,14 +175,24 @@ void G4PrimaryTransformer::GenerateSingleTrack
     }
     if(primaryParticle->GetProperTime()>0.0)
     { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
-    // Set Charge if it is specified
-    if (primaryParticle->GetCharge()<DBL_MAX) {
-      DP->SetCharge(primaryParticle->GetCharge());
-    } 
+
     // Set Mass if it is specified
     G4double pmas = primaryParticle->GetMass();
     if(pmas>=0.)
     { DP->SetMass(pmas); }
+
+    // Set Charge if it is specified
+    if (primaryParticle->GetCharge()<DBL_MAX) {
+      if (partDef->GetAtomicNumber() <0) {
+	DP->SetCharge(primaryParticle->GetCharge());
+      } else {
+	// ions
+	G4int iz = partDef->GetAtomicNumber();
+	G4int iq = static_cast<int>(primaryParticle->GetCharge()/eplus);
+	G4int n_e = iz - iq;
+	if (n_e>0) DP->AddElectron(0,n_e);  
+       }
+    } 
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Set primary particle
@@ -210,6 +220,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     track->SetWeight(wv*(primaryParticle->GetWeight()));
     // Store it to G4TrackVector
     TV.push_back( track );
+
   }
 }
 
