@@ -61,7 +61,7 @@ G4VParticleChange* G4DecayWithSpin::DecayIt(const G4Track& aTrack, const G4Step&
 
 // get particle
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+  const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
 
 // get parent_polarization
   G4ThreeVector parent_polarization = aParticle->GetPolarization();

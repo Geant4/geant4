@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.30 2008-09-19 03:19:53 kurasige Exp $
+// $Id: G4Decay.cc,v 1.31 2010-08-10 14:06:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,7 @@ G4double G4Decay::GetMeanLifeTime(const G4Track& aTrack  ,
 
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+   const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aLife = aParticleDef->GetPDGLifeTime();
 
    // check if the particle is stable?
@@ -126,7 +126,7 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
 {
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+   const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aMass = aParticle->GetMass();
    G4double aLife = aParticleDef->GetPDGLifeTime();
 
@@ -185,7 +185,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   // get particle 
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+  const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
 
   // check if  the particle is stable
   if (aParticleDef->GetPDGStable()) return &fParticleChangeForDecay ;
