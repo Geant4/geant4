@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.17 2010-04-19 00:23:08 kurasige Exp $
+// $Id: G4DynamicParticle.icc,v 1.18 2010-08-10 15:47:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,7 +192,7 @@ inline G4double G4DynamicParticle::GetTotalMomentum() const
 
 inline G4ParticleDefinition* G4DynamicParticle::GetDefinition() const
 {
-  return theParticleDefinition;
+  return const_cast<G4ParticleDefinition*>(theParticleDefinition);
 }
 
 inline const G4ThreeVector& G4DynamicParticle::GetPolarization() const

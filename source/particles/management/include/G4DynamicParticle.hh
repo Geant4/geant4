@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.20 2010-04-20 00:50:18 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.21 2010-08-10 15:47:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,14 +82,14 @@ class G4DynamicParticle
   //- constructors 
      G4DynamicParticle();
 
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                         const G4ThreeVector& aMomentumDirection,
                         G4double aKineticEnergy);
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                         const G4ThreeVector& aParticleMomentum);
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                         const G4LorentzVector    &aParticleMomentum);
-     G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
 			G4double aTotalEnergy,
                         const G4ThreeVector &aParticleMomentum);
 
@@ -182,7 +182,7 @@ class G4DynamicParticle
      void   RemoveElectron(G4int orbit, G4int number = 1);
  
      G4ParticleDefinition* GetDefinition() const;
-     void SetDefinition(G4ParticleDefinition * aParticleDefinition);
+     void SetDefinition(const G4ParticleDefinition * aParticleDefinition);
       //   Set/Get particle definition  
 
      
@@ -208,7 +208,7 @@ class G4DynamicParticle
      G4ThreeVector theMomentumDirection;
       //  The normalized momentum vector
 
-     G4ParticleDefinition *theParticleDefinition;
+     const G4ParticleDefinition *theParticleDefinition;
       //  Contains the static information of this particle.
 
      G4ThreeVector thePolarization;

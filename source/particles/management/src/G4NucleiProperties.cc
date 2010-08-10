@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.cc,v 1.22 2010-05-20 01:01:07 kurasige Exp $
+// $Id: G4NucleiProperties.cc,v 1.23 2010-08-10 15:47:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 G4double G4NucleiProperties::GetNuclearMass(const G4int A, const G4int Z)
 {
   if (mass_proton  <= 0.0 ) {
-    G4ParticleDefinition * nucleus = 0;
+    const G4ParticleDefinition * nucleus = 0;
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
     if (nucleus!=0) mass_proton = nucleus->GetPDGMass();
     nucleus = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 

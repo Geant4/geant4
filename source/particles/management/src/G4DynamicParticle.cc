@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.29 2010-05-20 01:01:07 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.30 2010-08-10 15:47:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ G4DynamicParticle::G4DynamicParticle():
 ////////////////////
 // -- constructors ----
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
 				     const G4ThreeVector& aMomentumDirection,
 				     G4double aKineticEnergy):
 		   theMomentumDirection(aMomentumDirection),
@@ -112,7 +112,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                    thePDGcode(0) {}
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                                      const G4ThreeVector& aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
 		   theKineticEnergy(0.0),
@@ -133,7 +133,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 }
 
 ////////////////////
-G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
 				     const G4LorentzVector   &aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
 		   theKineticEnergy(0.0),
@@ -153,7 +153,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   Set4Momentum(aParticleMomentum);
 }
 
-G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
+G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
                                      G4double totalEnergy,
 				     const G4ThreeVector &aParticleMomentum):
                    theParticleDefinition(aParticleDefinition),
@@ -266,7 +266,7 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
 }
 
 ////////////////////
-void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition)
+void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefinition)
 {
   // remove preassigned decay
   if (thePreAssignedDecayProducts != 0) {
@@ -317,7 +317,7 @@ G4int G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
 ////////////////////
 void  G4DynamicParticle::AllocateElectronOccupancy()
 {
-  G4ParticleDefinition* particle = GetDefinition();
+  const G4ParticleDefinition* particle = GetDefinition();
 
   if (G4IonTable::IsIon(particle)) {
     // Only ions can have ElectronOccupancy

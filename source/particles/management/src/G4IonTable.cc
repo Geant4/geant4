@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.61 2010-05-20 01:01:07 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.62 2010-08-10 15:47:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -366,7 +366,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   }
   // Search ions with A, Z ,E
   //  !! J is omitted now !!
-  G4ParticleDefinition* ion=0;
+  const G4ParticleDefinition* ion=0;
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
@@ -385,7 +385,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   }
 
   if ( isFound ){ 
-    return ion;
+    return const_cast<G4ParticleDefinition*>(ion);
   } else {
     return 0;
   }
@@ -413,7 +413,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
   }
   // Search ions with A, Z ,E
   //  !! J is omitted now !!
-  G4ParticleDefinition* ion=0;
+  const G4ParticleDefinition* ion=0;
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
@@ -434,7 +434,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
   }
 
   if ( isFound ){ 
-    return ion;
+    return const_cast<G4ParticleDefinition*>(ion);
   } else {
     return 0;
   }
@@ -612,7 +612,7 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
 /////////////////
 #include <algorithm>
 
-G4bool G4IonTable::IsLightIon(G4ParticleDefinition* particle) const
+G4bool G4IonTable::IsLightIon(const G4ParticleDefinition* particle) const
 {
   static const std::string names[] = { "proton", "neutron", "alpha", "deuteron",
                            "triton", "He3", "GenericIon"};
@@ -626,12 +626,12 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 {
   // returns pointer to pre-defined ions 
   static G4bool isInitialized = false;
-  static G4ParticleDefinition* p_proton=0;
-  static G4ParticleDefinition* p_neutron=0;
-  static G4ParticleDefinition* p_deuteron=0;
-  static G4ParticleDefinition* p_triton=0;
-  static G4ParticleDefinition* p_alpha=0;
-  static G4ParticleDefinition* p_He3=0;
+  static const G4ParticleDefinition* p_proton=0;
+  static const G4ParticleDefinition* p_neutron=0;
+  static const G4ParticleDefinition* p_deuteron=0;
+  static const G4ParticleDefinition* p_triton=0;
+  static const G4ParticleDefinition* p_alpha=0;
+  static const G4ParticleDefinition* p_He3=0;
   
   if (!isInitialized) {
     p_proton   = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
@@ -643,7 +643,7 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
     isInitialized = true;
   }
 
-  G4ParticleDefinition* ion=0;
+  const G4ParticleDefinition* ion=0;
   if ( (Z<=2) ) {
     if ( (Z==1)&&(A==1) ) {
       ion = p_proton;
@@ -659,7 +659,7 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
       ion = p_He3;
     }
   }
-  return ion;
+  return const_cast<G4ParticleDefinition*>(ion);
 }
 
 /////////////////
@@ -682,7 +682,7 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
   G4double mass;
   if (L == 0) {
     // calculate nucleus mass
-    G4ParticleDefinition* ion=GetLightIon(Z, A);
+    const G4ParticleDefinition* ion=GetLightIon(Z, A);
     
     if (ion!=0) {
       mass = ion->GetPDGMass();
@@ -707,7 +707,7 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A, G4int L) const
 /////////////////
 // -- Methods for handling conatiner  ---
 /////////////////
-void G4IonTable::Insert(G4ParticleDefinition* particle)
+void G4IonTable::Insert(const G4ParticleDefinition* particle)
 {
   if (!IsIon(particle)) return;
   if (Contains(particle)) return;
@@ -717,12 +717,12 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
   G4int L = particle->GetQuarkContent(3);  //strangeness 
   G4int encoding=GetNucleusEncoding(Z, A, L);
 
-  fIonList->insert( std::pair<G4int, G4ParticleDefinition*>(encoding, particle) );
+  fIonList->insert( std::pair<G4int, const G4ParticleDefinition*>(encoding, particle) );
 
 }
 
 /////////////////
-void G4IonTable::Remove(G4ParticleDefinition* particle)
+void G4IonTable::Remove(const G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
     G4int Z = particle->GetAtomicNumber();
@@ -756,7 +756,7 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
 /////////////////
 void G4IonTable::DumpTable(const G4String &particle_name) const
 {
-  G4ParticleDefinition* ion;
+  const G4ParticleDefinition* ion;
   G4IonList::iterator idx;
   for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
     ion = idx->second;
@@ -904,7 +904,9 @@ G4ParticleDefinition* G4IonTable::GetParticle(G4int index) const
     G4IonList::iterator idx = fIonList->begin();
     G4int counter = 0;
     while( idx != fIonList->end() ){
-      if ( counter == index ) return idx->second;
+      if ( counter == index ) {
+	return const_cast<G4ParticleDefinition*>(idx->second);
+      }
       counter++;
       idx++;
     }

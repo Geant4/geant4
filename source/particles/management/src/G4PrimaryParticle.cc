@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.5 2007-10-06 06:49:29 kurasige Exp $
+// $Id: G4PrimaryParticle.cc,v 1.6 2010-08-10 15:47:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,14 +73,14 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  { mass = -1.0; }
 }
 
-G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode)
+G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode)
 :G4code(Gcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
-G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
+G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
@@ -88,7 +88,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
  Weight0(1.0),properTime(0.0),userInfo(0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
-G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
+G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz,G4double E)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),

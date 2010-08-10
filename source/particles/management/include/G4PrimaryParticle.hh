@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.4 2006-09-28 14:29:43 kurasige Exp $
+// $Id: G4PrimaryParticle.hh,v 1.5 2010-08-10 15:47:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,10 +76,10 @@ class G4PrimaryParticle
                         G4double px,G4double py,G4double pz);
       G4PrimaryParticle(G4int Pcode,
                         G4double px,G4double py,G4double pz,G4double E);
-      G4PrimaryParticle(G4ParticleDefinition* Gcode);
-      G4PrimaryParticle(G4ParticleDefinition* Gcode,
+      G4PrimaryParticle(const G4ParticleDefinition* Gcode);
+      G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz);
-      G4PrimaryParticle(G4ParticleDefinition* Gcode,
+      G4PrimaryParticle(const G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz,G4double E);
       ~G4PrimaryParticle();
 
@@ -93,7 +93,7 @@ class G4PrimaryParticle
 
   private:
       G4int PDGcode;
-      G4ParticleDefinition * G4code;
+      const G4ParticleDefinition * G4code;
       G4double Px;
       G4double Py;
       G4double Pz;
@@ -129,7 +129,7 @@ class G4PrimaryParticle
       inline G4int GetPDGcode() const
       { return PDGcode; }
       inline G4ParticleDefinition * GetG4code() const
-      { return G4code; }
+      { return const_cast<G4ParticleDefinition*>(G4code); }
       inline G4ThreeVector GetMomentum() const
       { return G4ThreeVector(Px,Py,Pz); }
       inline G4double GetPx() const
