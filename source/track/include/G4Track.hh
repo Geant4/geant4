@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.21 2010-07-21 09:30:15 gcosmo Exp $
+// $Id: G4Track.hh,v 1.22 2010-08-11 17:11:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -117,6 +117,9 @@ public: // With description
    const G4DynamicParticle* GetDynamicParticle() const;
 
   // particle definition
+    const G4ParticleDefinition* GetParticleDefinition() const;
+   //  following method of GetDefinition remains 
+   //  because of backward compatiblity. It will be removed in future 
    G4ParticleDefinition* GetDefinition() const;
 
    // position, time 

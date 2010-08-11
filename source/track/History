@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2010-07-21 09:38:04 gcosmo Exp $
+$Id: History,v 1.112 2010-08-11 17:11:54 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 12, 2010 Hisaya Kurashige (track-V09-03-03)
+- Add G4Track::GetParticleDefinition giving 'const' pointer
 
 July 21, 2010 Gabriele Cosmo (track-V09-03-02)
 - Added protection against possible null pointer in G4Track::GetVelocity().

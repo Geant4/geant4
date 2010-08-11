@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.17 2010-07-21 09:30:15 gcosmo Exp $
+// $Id: G4Track.icc,v 1.18 2010-08-11 17:11:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -71,6 +71,10 @@
 // particle definition
    inline G4ParticleDefinition* G4Track::GetDefinition() const
    { return fpDynamicParticle->GetDefinition(); }
+
+// particle definition
+   inline const G4ParticleDefinition* G4Track::GetParticleDefinition() const
+   { return fpDynamicParticle->GetParticleDefinition(); }
 
 // parent track ID
    inline G4int G4Track::GetParentID() const
