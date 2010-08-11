@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.21 2010-08-10 15:47:42 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.22 2010-08-11 17:14:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -181,10 +181,14 @@ class G4DynamicParticle
      void   AddElectron(G4int orbit, G4int number = 1);
      void   RemoveElectron(G4int orbit, G4int number = 1);
  
-     G4ParticleDefinition* GetDefinition() const;
+ 
+     const G4ParticleDefinition* GetParticleDefinition() const;
      void SetDefinition(const G4ParticleDefinition * aParticleDefinition);
-      //   Set/Get particle definition  
-
+     //   Set/Get particle definition  
+     //  following method of GetDefinition remains 
+     //  because of backward compatiblity. It will be removed in future 
+     G4ParticleDefinition* GetDefinition() const;
+ 
      
      const G4DecayProducts *GetPreAssignedDecayProducts() const;
      void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);

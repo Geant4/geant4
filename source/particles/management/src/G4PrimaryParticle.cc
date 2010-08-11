@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.6 2010-08-10 15:47:43 kurasige Exp $
+// $Id: G4PrimaryParticle.cc,v 1.7 2010-08-11 17:14:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -119,7 +119,12 @@ void G4PrimaryParticle::SetPDGcode(G4int Pcode)
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode);
 }
 
-void G4PrimaryParticle::SetG4code(G4ParticleDefinition* Gcode)
+void G4PrimaryParticle::SetG4code(const G4ParticleDefinition* Gcode)
+{
+  SetParticleDefinition(Gcode);
+}
+
+void G4PrimaryParticle::SetParticleDefinition(const G4ParticleDefinition* Gcode)
 {
   G4code = Gcode;
   PDGcode = Gcode->GetPDGEncoding();

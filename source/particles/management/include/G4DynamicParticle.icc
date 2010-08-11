@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.18 2010-08-10 15:47:42 kurasige Exp $
+// $Id: G4DynamicParticle.icc,v 1.19 2010-08-11 17:14:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -191,6 +191,11 @@ inline G4double G4DynamicParticle::GetTotalMomentum() const
 }
 
 inline G4ParticleDefinition* G4DynamicParticle::GetDefinition() const
+{
+  return const_cast<G4ParticleDefinition*>(theParticleDefinition);
+}
+
+inline const G4ParticleDefinition* G4DynamicParticle::GetParticleDefinition() const
 {
   return const_cast<G4ParticleDefinition*>(theParticleDefinition);
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.5 2010-08-10 15:47:42 kurasige Exp $
+// $Id: G4PrimaryParticle.hh,v 1.6 2010-08-11 17:14:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,6 +130,8 @@ class G4PrimaryParticle
       { return PDGcode; }
       inline G4ParticleDefinition * GetG4code() const
       { return const_cast<G4ParticleDefinition*>(G4code); }
+      inline const G4ParticleDefinition * GetParticleDefinition() const
+      { return G4code; }
       inline G4ThreeVector GetMomentum() const
       { return G4ThreeVector(Px,Py,Pz); }
       inline G4double GetPx() const
@@ -161,7 +163,8 @@ class G4PrimaryParticle
   public: // with description
       // Followings are available Set methods.
       void SetPDGcode(G4int Pcode);
-      void SetG4code(G4ParticleDefinition * Gcode);
+      void SetG4code(const G4ParticleDefinition * Gcode);
+      void SetParticleDefinition(const G4ParticleDefinition * pdef);
       inline void SetMomentum(G4double px, G4double py, G4double pz)
       { 
         Px = px;
