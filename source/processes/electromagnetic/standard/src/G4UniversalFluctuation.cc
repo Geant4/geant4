@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.26 2010-08-12 04:44:28 urban Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.27 2010-08-12 11:05:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // File name:     G4UniversalFluctuation
 //
-// Author:        Vladimir Ivanchenko 
+// Author:        Laszlo Urban
 // 
 // Creation date: 03.01.2002
 //
@@ -56,11 +56,11 @@
 //          regime any more (L.Urban)
 // 03-04-07 correction to get better width of eloss distr.(L.Urban)
 // 13-07-07 add protection for very small step or low-density material (VI)
-// 19-03-09 new width correction (does not depend on previous steps) (L.Urban)         
+// 19-03-09 new width correction (does not depend on previous steps) (L.Urban)
 // 20-03-09 modification in the width correction (L.Urban)
 // 14-06-10 fixed tail distribution - do not use uniform function (L.Urban)
 // 08-08-10 width correction algorithm has bee modified -->
-//          better results for thin targets
+//          better results for thin targets (L.Urban)
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
