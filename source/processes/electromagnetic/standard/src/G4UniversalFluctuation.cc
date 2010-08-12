@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.25 2010-08-08 08:19:59 urban Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.26 2010-08-12 04:44:28 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -33,7 +33,7 @@
 //
 // File name:     G4UniversalFluctuation
 //
-// Author:        V.Ivanchenko make a class with the Laszlo Urban model
+// Author:        Vladimir Ivanchenko 
 // 
 // Creation date: 03.01.2002
 //
@@ -43,7 +43,7 @@
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
-// 07-11-03 Fix problem of rounding of double 
+// 07-11-03 Fix problem of rounding of double in G4UniversalFluctuations
 // 06-02-04 Add control on big sigma > 2*meanLoss (V.Ivanchenko)
 // 26-04-04 Comment out the case of very small step (V.Ivanchenko)
 // 07-02-05 define problim = 5.e-3 (mma)
@@ -193,8 +193,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
     if(w2 > ipotLogFluct && w2 > e2LogFluct && tmax> ipotFluct)  {
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-      a1 = C*f1Fluct*(w2-log(e1Fluct))/e1Fluct;
-      a2 = C*f2Fluct*(w2-log(e2Fluct))/e2Fluct;
+      a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
+      a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
          
 
   if(a1 < nmaxCont) 
@@ -246,16 +246,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     p1 = G4double(G4Poisson(a1));
     loss += p1*e1;
     if(p1 > 0.) 
-    {
-      G4double sigma = e1*sqrt(p1);
-      if(sigma > e1*p1/3.) sigma = e1*p1/3.;
-      G4double deltaloss = 0.;
-      G4double elimit = p1*e1;
-      do {
-           deltaloss = G4RandGauss::shoot(0.,sigma);
-         } while ((deltaloss < -elimit) || (deltaloss > elimit));
-      loss += deltaloss;
-    }
+      loss += (1.-2.*G4UniformRand())*e1;
   }
 
   // excitation of type 2
@@ -269,16 +260,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     p2 = G4double(G4Poisson(a2));
     loss += p2*e2;
     if(p2 > 0.) 
-    {
-      G4double sigma = e2*sqrt(p2);
-      if(sigma > e2*p2/3.) sigma = e2*p2/3.;
-      G4double deltaloss = 0.;
-      G4double elimit = p2*e2;
-      do {
-           deltaloss = G4RandGauss::shoot(0.,sigma);
-         } while ((deltaloss < -elimit) || (deltaloss > elimit));
-      loss += deltaloss;
-    }
+      loss += (1.-2.*G4UniformRand())*e2;
   }
 
   // ionisation 
