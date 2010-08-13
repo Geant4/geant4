@@ -69,6 +69,9 @@
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
+#include "G4QInelastic.hh"
+#include "G4ForceCondition.hh"
+#include "G4TouchableHistory.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4ExcitationHandler.hh"
@@ -252,13 +255,13 @@ int main(int argc, char** argv) {
 	CLHEP::HepRandom::setTheSeed(myseed);
 	G4cout << "###### Set Random Seed to " << myseed << "     #####" << G4endl;
       } else if ( line == "#jobID") {
-	(*fin) >> jobid ;
-	histoITEP.setJobID(jobid);
-	histoBNL.setJobID(jobid);
+        (*fin) >> jobid ;
+        histoITEP.setJobID(jobid);
+        histoBNL.setJobID(jobid);
       } else if ( line == "#clusterID") {
-	(*fin) >> clusterid ;
-	histoITEP.setClusterID(clusterid);
-	histoBNL.setClusterID(clusterid);
+        (*fin) >> clusterid ;
+        histoITEP.setClusterID(clusterid);
+        histoBNL.setClusterID(clusterid);
       }
     } while(end);
 
@@ -276,6 +279,8 @@ int main(int argc, char** argv) {
       (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+    G4QInelastic* chips = 0;
+    if(nameGen == "CHIPS") { chips = new G4QInelastic(); }
     G4double amass = phys->GetNucleusMass();
 
     if (!proc) { 
@@ -311,7 +316,9 @@ int main(int argc, char** argv) {
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "LElastic" || nameGen == "elastic") {
+    if(chips) {
+      chips->SetParameters();
+    } else if(nameGen == "LElastic" || nameGen == "BertiniElastic" || nameGen == "elastic") {
       cs = new G4HadronElasticDataSet();
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
@@ -326,25 +333,18 @@ int main(int argc, char** argv) {
       cs = new G4HadronInelasticDataSet();
     }
 
-    if(cs) {
-      cs->BuildPhysicsTable(*part);
-      cross_sec = cs->GetCrossSection(&dParticle, elm);
-    } else {
-      cross_sec = (G4HadronCrossSections::Instance())->
-        GetInelasticCrossSection(&dParticle, elm);
-    }
-    cross_sec /= millibarn;
-    G4cout << "    cross(b)= " << cross_sec << " mb" << G4endl;
-
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
+    G4TouchableHandle fpTouchable(new G4TouchableHistory());
+    gTrack->SetTouchableHandle(fpTouchable);
 
-    // Step
+    // -------- Step
 
     G4Step* step;
     step = new G4Step();
     step->SetTrack(gTrack);
-
+    gTrack->SetStep(step);
+    
     G4StepPoint *aPoint, *bPoint;
     aPoint = new G4StepPoint();
     aPoint->SetPosition(aPosition);
@@ -359,6 +359,21 @@ int main(int argc, char** argv) {
     bPoint->SetPosition(bPosition);
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
+
+    if(chips) {
+      G4ForceCondition condition = NotForced;
+      cross_sec = 1.0/(material->GetTotNbOfAtomsPerVolume()*
+		       chips->GetMeanFreePath(*gTrack, DBL_MAX, 
+					      &condition));
+    } else if(cs) {
+      cs->BuildPhysicsTable(*part);
+      cross_sec = cs->GetCrossSection(&dParticle, elm);
+    } else {
+      cross_sec = (G4HadronCrossSections::Instance())->
+        GetInelasticCrossSection(&dParticle, elm);
+    }
+    cross_sec /= millibarn;
+    G4cout << "    cross(b)= " << cross_sec << " mb" << G4endl;
 
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
       G4cout << "G4StateManager PROBLEM! " << G4endl;
@@ -383,7 +398,8 @@ int main(int argc, char** argv) {
       gTrack->SetKineticEnergy(e0);
       labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass))/GeV,
                              (e0 + mass + amass)/GeV);
-      aChange = proc->PostStepDoIt(*gTrack,*step);
+      if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
+      else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
 
       G4int n = aChange->GetNumberOfSecondaries();
       if (verbose>1) {
