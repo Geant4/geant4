@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_EMV.icc,v 1.7 2010-07-29 10:52:14 vnivanch Exp $
+// $Id: QGSP_BERT_EMV.icc,v 1.8 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,13 +35,12 @@
 //
 // Modified:
 // 04.06.2010 G.Folger: Use new ctor for builders
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
 //----------------------------------------------------------------------------
 //
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

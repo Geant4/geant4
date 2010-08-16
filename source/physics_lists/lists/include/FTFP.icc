@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP.icc,v 1.8 2010-06-03 15:46:04 vnivanch Exp $
+// $Id: FTFP.icc,v 1.9 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,13 +42,12 @@
 // 16.05.2007 V.Ivanchenko: rename EM builders
 // 19.06.2008 G.Folger: don't use chips quasielastic in FTF
 // 27.11.2009 G.Folger: Mark as obsolete
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
 //----------------------------------------------------------------------------
 //
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

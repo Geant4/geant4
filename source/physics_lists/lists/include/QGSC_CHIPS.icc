@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_CHIPS.icc,v 1.5 2010-06-07 15:34:32 gunter Exp $
+// $Id: QGSC_CHIPS.icc,v 1.6 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 27.11.2009 G.Folger: Mark as obsolete
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
 //-------------------------------------------------------------------------------
 //  Short description: In tis file the aim is to get rid of LHEP, use the
@@ -45,11 +46,9 @@
 //  fragmentation CHIPS algorithm is the same in both models, but the first
 //  interaction is temporary taken from the QGSC algorithm, which is not expected
 //  to work at low energies, but temporary can be used as an interface to CHIPS.
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.icc,v 1.1 2010-06-08 16:05:48 gunter Exp $
+// $Id: Shielding.icc,v 1.2 2010-08-16 07:14:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,13 +35,12 @@
 //   created from FTFP_BERT
 //
 // Modified:
+// 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 //
 //----------------------------------------------------------------------------
 //
 
 #include "globals.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

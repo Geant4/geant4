@@ -45,7 +45,8 @@
 // Modified:
 //
 // 14-02-03 Fix bugs in msc and hIon instanciation + cut per region
-//
+// 16-08-10 Remove inclusion of obsolete class of G4ParticleWithCuts 
+// 
 // --------------------------------------------------------------
 
 
@@ -53,8 +54,6 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProductionCutsTable.hh"
