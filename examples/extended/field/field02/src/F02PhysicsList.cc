@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.14 2010-04-08 14:11:06 gcosmo Exp $
+// $Id: F02PhysicsList.cc,v 1.15 2010-08-16 08:24:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -34,8 +34,6 @@
 #include "F02DetectorConstruction.hh"
 #include "F02PhysicsListMessenger.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

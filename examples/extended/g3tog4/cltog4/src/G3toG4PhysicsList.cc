@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4PhysicsList.cc,v 1.6 2010-03-18 09:44:13 gcosmo Exp $
+// $Id: G3toG4PhysicsList.cc,v 1.7 2010-08-16 08:23:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,6 @@
 
 #include "G3toG4PhysicsList.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapPhysicsList.cc,v 1.2 2006-06-29 17:23:07 gunter Exp $
+// $Id: OlapPhysicsList.cc,v 1.3 2010-08-16 08:23:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,6 @@
 #include "OlapPhysicsList.hh"
 
 #include "G4ios.hh"              
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
