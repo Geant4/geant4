@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc,v 1.91 2010-07-29 14:12:43 vnivanch Exp $
+// $Id: G4HadronicProcess.cc,v 1.92 2010-08-17 09:48:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -189,8 +189,8 @@ G4VParticleChange *G4HadronicProcess::PostStepDoIt(
   G4double kineticEnergy = originalEnergy;
 
   // Get kinetic energy per nucleon for ions
-  if(aParticle->GetDefinition()->GetBaryonNumber() > 1.5)
-          kineticEnergy/=aParticle->GetDefinition()->GetBaryonNumber();
+  if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5)
+          kineticEnergy/=aParticle->GetParticleDefinition()->GetBaryonNumber();
 
   G4Element* anElement = 0;
   try
@@ -338,16 +338,19 @@ G4HadronicProcess::ExtractResidualNucleus(const G4Track&,
   
   // loop over aResult, and decrement A, Z accordingly
   // cash the max
-  for(G4int i=0; i<aResult->GetNumberOfSecondaries(); i++)
+  for(G4int i=0; i<aResult->GetNumberOfSecondaries(); ++i)
   {
     G4HadSecondary* aSecTrack = aResult->GetSecondary(i);
-    if(bufferA<aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber())
+    const G4ParticleDefinition* part = aSecTrack->GetParticle()->GetParticleDefinition(); 
+    G4double Q = part->GetPDGCharge()/eplus;
+    G4double N = part->GetBaryonNumber();
+    if(bufferA < N)
     {
-      bufferA = aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber();
-      bufferZ = aSecTrack->GetParticle()->GetDefinition()->GetPDGCharge();
+      bufferA = N;
+      bufferZ = Q;
     }
-    Z-=aSecTrack->GetParticle()->GetDefinition()->GetPDGCharge();
-    A-=aSecTrack->GetParticle()->GetDefinition()->GetBaryonNumber();
+    Z -= Q;
+    A -= N;
   }
   
   // if the fragment was part of the final state, it is 
@@ -430,11 +433,11 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     {
       theTotalResult->ProposeParentWeight( XBiasSurvivalProbability()*aT.GetWeight() );
       G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
-      G4double newM=aT.GetDefinition()->GetPDGMass();
+      G4double newM=aT.GetParticleDefinition()->GetPDGMass();
       G4double newE=aR->GetEnergyChange() + newM;
       G4double newP=std::sqrt(newE*newE - newM*newM);
       G4DynamicParticle * aNew = 
-      new G4DynamicParticle(aT.GetDefinition(), newE, newP*aR->GetMomentumChange());
+      new G4DynamicParticle(aT.GetParticleDefinition(), newE, newP*aR->GetMomentumChange());
       G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
       aR->AddSecondary(theSec);
     }
@@ -468,7 +471,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     // Use for debugging:   G4double newWeight = theTotalResult->GetParentWeight();
 
     G4double newKE = std::max(DBL_MIN, aR->GetEnergyChange());
-    G4DynamicParticle* aNew = new G4DynamicParticle(aT.GetDefinition(), 
+    G4DynamicParticle* aNew = new G4DynamicParticle(aT.GetParticleDefinition(), 
                                                     aR->GetMomentumChange(), 
                                                     newKE);
     G4HadSecondary* theSec = new G4HadSecondary(aNew, 1.0);
@@ -484,7 +487,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 
   if(aR->GetStatusChange() != stopAndKill)
   {
-    G4double newM=aT.GetDefinition()->GetPDGMass();
+    G4double newM=aT.GetParticleDefinition()->GetPDGMass();
     G4double newE=aR->GetEnergyChange() + newM;
     G4double newP=std::sqrt(newE*newE - newM*newM);
     G4ThreeVector newPV = newP*aR->GetMomentumChange();
@@ -494,7 +497,7 @@ G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
     theTotalResult->ProposeMomentumDirection(newP4.vect().unit());
   }
 
-  for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
+  for(G4int i=0; i<aR->GetNumberOfSecondaries(); ++i)
   {
     G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
     theM.rotate(rotation, it);
@@ -643,7 +646,7 @@ void G4HadronicProcess::DumpState(const G4Track& aTrack, const G4String& method)
   G4cout << "Unrecoverable error in the method " << method << " of " 
 	 << GetProcessName() << G4endl;
   G4cout << "TrackID= "<< aTrack.GetTrackID() << "  ParentID= " << aTrack.GetParentID()
-	 << "  " << aTrack.GetDefinition()->GetParticleName() << G4endl;
+	 << "  " << aTrack.GetParticleDefinition()->GetParticleName() << G4endl;
   G4cout << "Ekin(GeV)= " << aTrack.GetKineticEnergy()/CLHEP::GeV 
 	 << ";  direction= " << aTrack.GetMomentumDirection() << G4endl; 
   G4cout << "Position(mm)= " << aTrack.GetPosition()/CLHEP::mm 
