@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.15 2010-07-05 14:50:15 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.16 2010-08-17 09:47:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -649,7 +649,7 @@ G4HadronicProcess* G4HadronicProcessStore::FindProcess(
   if(part != currentParticle) {
     isNew = true;
     currentParticle = part;
-    localDP.SetDefinition(const_cast<G4ParticleDefinition*>(part));
+    localDP.SetDefinition(part);
   } else if(!currentProcess) {
     isNew = true;
   } else if(subType == currentProcess->GetProcessSubType()) {
