@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.8 2010-07-29 10:52:14 vnivanch Exp $
+// $Id: QBBC.cc,v 1.9 2010-08-17 14:08:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -52,6 +52,7 @@
 #include "G4DataQuestionaire.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysics93.hh"
 #include "G4HadronElasticPhysicsXS.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronDElasticPhysics.hh"
@@ -80,11 +81,11 @@ QBBC::QBBC( G4int ver, const G4String& type )
 
    // Hadron Physics
   if(type == "QBBC") {
-    RegisterPhysics( new G4HadronElasticPhysics(ver) );
+    RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
   } else if(type == "QBBC_XGG") { 
     RegisterPhysics( new G4HadronElasticPhysics(ver) );
   } else if(type == "QBBC_XGGSN") { 
-    RegisterPhysics( new G4HadronElasticPhysicsXS(ver) );
+    RegisterPhysics( new G4HadronElasticPhysics93(ver) );
   } else if(type == "QBBC_HP") { 
     RegisterPhysics( new G4HadronElasticPhysicsHP(ver) );
   }
