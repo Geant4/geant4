@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.33 2010-06-11 17:01:26 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.34 2010-08-17 10:49:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -323,7 +323,7 @@ void PhysicsList::SetBuilderList1(G4bool flagHP)
   if(flagHP) {
     hadronPhys.push_back( new G4HadronElasticPhysicsHP(verboseLevel) );
   } else {
-    hadronPhys.push_back( new G4HadronHElasticPhysics(verboseLevel) );
+    hadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel) );
   }
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonPhysics(verboseLevel));
@@ -376,7 +376,7 @@ void PhysicsList::SetBuilderList5(G4bool)
 void PhysicsList::SetBuilderList6(G4bool)
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  hadronPhys.push_back( new G4HadronHElasticPhysics(verboseLevel));
+  hadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel));
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
