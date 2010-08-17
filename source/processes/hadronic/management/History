@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 August 2010  Vladimir Ivanchenko (hadr-man-V09-03-04)
+------------------------------------------------
+- G4HadronicProcess - use const GetParticleDefinition method of 
+                      G4DynamicParticle
+- G4HadronicProcessStore - remove const_cast 
+
 29 July 2010  Vladimir Ivanchenko (hadr-man-V09-03-03)
 ------------------------------------------------
 - G4HadronicProcess - added protection against negative cross section;
