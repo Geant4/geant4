@@ -1,4 +1,4 @@
-q$Id: History,v 1.143 2010-08-01 17:10:52 vnivanch Exp $
+q$Id: History,v 1.144 2010-08-17 09:21:05 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-08-2010, V.Ivanchenko (phys-lists-V09-03-20)
+- Obsolete G4ParticleWithCut.hh header removed from many .icc files
+  by H.Kurashige 
 
 30-07-2010, V.Ivanchenko (phys-lists-V09-03-19)
 - In all EM builders use G4ionIonisation for He3 and He4 ions
