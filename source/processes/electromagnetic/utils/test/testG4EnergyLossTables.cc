@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4EnergyLossTables.cc,v 1.7 2006-06-29 19:55:29 gunter Exp $
+// $Id: testG4EnergyLossTables.cc,v 1.8 2010-08-17 17:44:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-------------------------------------------------------------------
@@ -442,13 +442,13 @@ int main()
     outFile << "  " << G4endl;
     outFile << " M S C test **********************************************" << G4endl ;
     outFile << "  " << G4endl;
-    palongget = aParticle.GetDefinition()->GetProcessManager()
+    palongget = aParticle.GetParticleDefinition()->GetProcessManager()
                                  ->GetAlongStepProcessVector(0);
-    ppostget = aParticle.GetDefinition()->GetProcessManager()
+    ppostget = aParticle.GetParticleDefinition()->GetProcessManager()
                                  ->GetPostStepProcessVector(0);
-    palongdo = aParticle.GetDefinition()->GetProcessManager()
+    palongdo = aParticle.GetParticleDefinition()->GetProcessManager()
                                  ->GetAlongStepProcessVector(1);
-    ppostdo = aParticle.GetDefinition()->GetProcessManager()
+    ppostdo = aParticle.GetParticleDefinition()->GetProcessManager()
                                  ->GetPostStepProcessVector(1);
 
 //---------------------------------- Physics --------------------------------
