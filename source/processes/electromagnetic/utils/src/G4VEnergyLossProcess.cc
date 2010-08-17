@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.167 2010-05-26 10:41:34 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.168 2010-08-17 17:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -910,7 +910,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // initialisation of material, mass, charge, model at the beginning of the step
   DefineMaterial(track.GetMaterialCutsCouple());
 
-  const G4ParticleDefinition* currPart = track.GetDefinition();
+  const G4ParticleDefinition* currPart = track.GetParticleDefinition();
   if(theGenericIon == particle) {
     massRatio = proton_mass_c2/currPart->GetPDGMass();
   }  
@@ -998,7 +998,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
  
   /*  
   if(-1 < verboseLevel) {
-    const G4ParticleDefinition* d = track.GetDefinition();
+    const G4ParticleDefinition* d = track.GetParticleDefinition();
     G4cout << "AlongStepDoIt for "
            << GetProcessName() << " and particle "
            << d->GetParticleName()
@@ -1127,7 +1127,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  for(G4int i=0; i<n; ++i) {
 	    G4Track* t = scTracks[i];
 	    G4double e = t->GetKineticEnergy();
-	    if (t->GetDefinition() == thePositron) { e += 2.0*electron_mass_c2; }
+	    if (t->GetParticleDefinition() == thePositron) { 
+	      e += 2.0*electron_mass_c2; 
+	    }
 	    esec += e;
 	    pParticleChange->AddSecondary(t);
 	  }      
@@ -1181,7 +1183,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     finalT = 0.0;
   } else if(isIon) {
     fParticleChange.SetProposedCharge(
-      currentModel->GetParticleCharge(track.GetDefinition(),currentMaterial,finalT));
+      currentModel->GetParticleCharge(track.GetParticleDefinition(),
+				      currentMaterial,finalT));
   }
 
   fParticleChange.SetProposedKineticEnergy(finalT);
@@ -1259,7 +1262,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
       G4bool addSec = true;
       /*
       // do not track very low-energy delta-electrons
-      if(theSecondaryRangeTable && (*it)->GetDefinition() == theElectron) {
+      if(theSecondaryRangeTable && (*it)->GetParticleDefinition() == theElectron) {
 	G4double ekin = (*it)->GetKineticEnergy();
 	G4double rg = ((*theSecondaryRangeTable)[idx]->Value(ekin));
 	//          if(rg < currentMinSafety) {
@@ -1277,7 +1280,7 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 
 	/*	
 	if(-1 < verboseLevel) 
-	  G4cout << "New track " << t->GetDefinition()->GetParticleName()
+	  G4cout << "New track " << t->GetParticleDefinition()->GetParticleName()
 		 << " e(keV)= " << t->GetKineticEnergy()/keV
 		 << " fragment= " << fragment
 		 << G4endl;

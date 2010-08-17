@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.75 2010-05-26 10:41:34 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.76 2010-08-17 17:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -376,7 +376,7 @@ inline const G4Element* G4VEmModel::GetCurrentElement() const
 inline 
 G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
 {
-  return MaxSecondaryEnergy(dynPart->GetDefinition(),
+  return MaxSecondaryEnergy(dynPart->GetParticleDefinition(),
                             dynPart->GetKineticEnergy());
 }
 

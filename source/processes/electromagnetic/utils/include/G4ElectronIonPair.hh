@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.hh,v 1.2 2008-10-17 14:46:16 vnivanch Exp $
+// $Id: G4ElectronIonPair.hh,v 1.3 2010-08-17 17:36:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,7 +140,7 @@ private:
 inline G4double 
 G4ElectronIonPair::MeanNumberOfIonsAlongStep(const G4Step* step)
 {
-  return MeanNumberOfIonsAlongStep(step->GetTrack()->GetDefinition(),
+  return MeanNumberOfIonsAlongStep(step->GetTrack()->GetParticleDefinition(),
 				   step->GetPreStepPoint()->GetMaterial(),
 				   step->GetTotalEnergyDeposit(),
 				   step->GetNonIonizingEnergyDeposit());
@@ -160,7 +160,7 @@ G4int G4ElectronIonPair::ResidualeChargePostStep(const G4Step* step)
   G4int subtype = -1;
   const G4VProcess* proc = step->GetPostStepPoint()->GetProcessDefinedStep();
   if(proc) subtype = proc->GetProcessSubType();
-  return ResidualeChargePostStep(step->GetTrack()->GetDefinition(),
+  return ResidualeChargePostStep(step->GetTrack()->GetParticleDefinition(),
 				 step->GetSecondary(),
 				 subtype);
 }

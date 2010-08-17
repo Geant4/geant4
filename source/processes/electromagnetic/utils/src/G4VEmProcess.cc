@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.87 2010-05-10 13:35:32 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.88 2010-08-17 17:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -515,7 +515,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
      
     for (G4int i=0; i<num; ++i) {
       G4DynamicParticle* dp = secParticles[i];
-      const G4ParticleDefinition* p = dp->GetDefinition();
+      const G4ParticleDefinition* p = dp->GetParticleDefinition();
       G4double e = dp->GetKineticEnergy();
       G4bool good = true;
       if(applyCuts) {

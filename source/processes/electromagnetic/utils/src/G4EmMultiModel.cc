@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.7 2010-07-04 17:51:09 vnivanch Exp $
+// $Id: G4EmMultiModel.cc,v 1.8 2010-08-17 17:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -141,7 +141,7 @@ void G4EmMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     G4int i;
     G4double cross = 0.0;
     for(i=0; i<nModels; ++i) {
-      cross += (model[i])->CrossSection(couple, dp->GetDefinition(), 
+      cross += (model[i])->CrossSection(couple, dp->GetParticleDefinition(), 
                                         dp->GetKineticEnergy(), minEnergy, maxEnergy);
       cross_section[i] = cross;
     }

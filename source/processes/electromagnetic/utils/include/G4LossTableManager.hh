@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.59 2010-07-29 11:13:28 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.60 2010-08-17 17:36:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -468,7 +468,7 @@ inline  G4double G4LossTableManager::GetDEDXDispersion(
     const G4DynamicParticle* dp,
           G4double& length)
 {
-  const G4ParticleDefinition* aParticle = dp->GetDefinition();
+  const G4ParticleDefinition* aParticle = dp->GetParticleDefinition();
   if(aParticle != currentParticle) {
     std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
