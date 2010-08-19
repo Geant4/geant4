@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.7 2010-07-14 10:00:36 gcosmo Exp $
+// $Id: G4NystromRK4.cc,v 1.8 2010-08-19 10:06:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -48,9 +48,9 @@ G4NystromRK4::G4NystromRK4(G4Mag_EqRhs* magEqRhs, G4double distanceConstField)
     m_imom( 0.0 ),
     m_cachedMom( false )
 {
-  m_fldPosition[0]  = m_iPoint[0] = m_fPoint[0] = m_iPoint[0] = 9.9999999e+99 ;
-  m_fldPosition[1]  = m_iPoint[1] = m_fPoint[1] = m_iPoint[1] = 9.9999999e+99 ;
-  m_fldPosition[2]  = m_iPoint[2] = m_fPoint[2] = m_iPoint[2] = 9.9999999e+99 ;
+  m_fldPosition[0]  = m_iPoint[0] = m_fPoint[0] = m_mPoint[0] = 9.9999999e+99 ;
+  m_fldPosition[1]  = m_iPoint[1] = m_fPoint[1] = m_mPoint[1] = 9.9999999e+99 ;
+  m_fldPosition[2]  = m_iPoint[2] = m_fPoint[2] = m_mPoint[2] = 9.9999999e+99 ;
   m_fldPosition[3]  = -9.9999999e+99;
   m_lastField[0] = m_lastField[1] = m_lastField[2] = 0.0;
 
