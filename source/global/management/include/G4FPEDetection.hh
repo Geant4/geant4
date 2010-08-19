@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPEDetection.hh,v 1.3 2010-07-14 10:45:46 gcosmo Exp $
+// $Id: G4FPEDetection.hh,v 1.4 2010-08-19 09:32:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,50 +44,6 @@
 #include <iostream>
 #include <stdlib.h>  // abort(), exit()
 
-static void TerminationSignalHandler(int sig)
-{
-  std::cerr << "ERROR: " << sig;
-  std::string message;
-  switch (SIGFPE)
-  {
-  #ifdef FPE_NOOP  // occurs in OS X
-    case FPE_NOOP:
-      message = "No Operation.";
-      break;
-  #endif
-    case FPE_INTDIV:
-      message = "Integer divide by zero.";
-      break;
-    case FPE_INTOVF:
-      message = "Integer overflow.";
-      break;
-    case FPE_FLTDIV:
-      message = "Floating point divide by zero.";
-      break;
-    case FPE_FLTOVF:
-      message = "Floating point overflow.";
-      break;
-    case FPE_FLTUND:
-      message = "Floating point underflow.";
-      break;
-    case FPE_FLTRES:
-      message = "Floating point inexact result.";
-      break;
-    case FPE_FLTINV:
-      message = "Floating point invalid operation.";
-      break;
-    case FPE_FLTSUB:
-      message = "Subscript out of range.";
-      break;
-    default:
-      message = "Unknown error.";
-      break;
-  }
-  std::cerr << " - " << message << std::endl;
-
-  ::abort();
-}
-
 #ifdef __linux__
 #ifdef __GNUC__
   #include <features.h>
@@ -95,6 +51,50 @@ static void TerminationSignalHandler(int sig)
   #include <csignal>
 
   struct sigaction termaction, oldaction;
+
+  static void TerminationSignalHandler(int sig)
+  {
+    std::cerr << "ERROR: " << sig;
+    std::string message;
+    switch (SIGFPE)
+    {
+    #ifdef FPE_NOOP  // occurs in OS X
+      case FPE_NOOP:
+        message = "No Operation.";
+        break;
+    #endif
+      case FPE_INTDIV:
+        message = "Integer divide by zero.";
+        break;
+      case FPE_INTOVF:
+        message = "Integer overflow.";
+        break;
+      case FPE_FLTDIV:
+        message = "Floating point divide by zero.";
+        break;
+      case FPE_FLTOVF:
+        message = "Floating point overflow.";
+        break;
+      case FPE_FLTUND:
+        message = "Floating point underflow.";
+        break;
+      case FPE_FLTRES:
+        message = "Floating point inexact result.";
+        break;
+      case FPE_FLTINV:
+        message = "Floating point invalid operation.";
+        break;
+      case FPE_FLTSUB:
+        message = "Subscript out of range.";
+        break;
+      default:
+        message = "Unknown error.";
+        break;
+    }
+    std::cerr << " - " << message << std::endl;
+
+    ::abort();
+  }
 
   static void InvalidOperationDetection()
   {
@@ -196,6 +196,50 @@ static void TerminationSignalHandler(int sig)
     }
 
   #endif  // PPC or INTEL enabling
+
+  static void TerminationSignalHandler(int sig)
+  {
+    std::cerr << "ERROR: " << sig;
+    std::string message;
+    switch (SIGFPE)
+    {
+    #ifdef FPE_NOOP  // occurs in OS X
+      case FPE_NOOP:
+        message = "No Operation.";
+        break;
+    #endif
+      case FPE_INTDIV:
+        message = "Integer divide by zero.";
+        break;
+      case FPE_INTOVF:
+        message = "Integer overflow.";
+        break;
+      case FPE_FLTDIV:
+        message = "Floating point divide by zero.";
+        break;
+      case FPE_FLTOVF:
+        message = "Floating point overflow.";
+        break;
+      case FPE_FLTUND:
+        message = "Floating point underflow.";
+        break;
+      case FPE_FLTRES:
+        message = "Floating point inexact result.";
+        break;
+      case FPE_FLTINV:
+        message = "Floating point invalid operation.";
+        break;
+      case FPE_FLTSUB:
+        message = "Subscript out of range.";
+        break;
+      default:
+        message = "Unknown error.";
+        break;
+    }
+    std::cerr << " - " << message << std::endl;
+
+    ::abort();
+  }
 
   static void InvalidOperationDetection()
   {
