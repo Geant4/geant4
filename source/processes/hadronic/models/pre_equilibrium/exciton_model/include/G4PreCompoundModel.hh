@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.hh,v 1.8 2010-08-19 17:05:51 vnivanch Exp $
+// $Id: G4PreCompoundModel.hh,v 1.9 2010-08-20 07:41:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -44,6 +44,7 @@
 //                - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
 //                - CEM transition probabilities (if useCEMtr=true)
 // 30.10.2009 J.M.Quesada CEM transition probabilities are set as default
+// 20.08.2010 V.Ivanchenko Cleanup of the code - changed data members and inline methods
 
 #ifndef G4PreCompoundModel_h
 #define G4PreCompoundModel_h 1
@@ -67,10 +68,10 @@ public:
 
   virtual ~G4PreCompoundModel();
 
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
-				  G4Nucleus & theNucleus);
+  virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, 
+					  G4Nucleus & theNucleus);
 
-  G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
+  virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment);
 
   void UseHETCEmission();
   void UseDefaultEmission();
@@ -95,8 +96,9 @@ public:
 
 private:  
 
-  inline void PerformEquilibriumEmission(const G4Fragment & aFragment, 
-					 G4ReactionProductVector * theResult) const;
+  inline 
+  void PerformEquilibriumEmission(const G4Fragment & aFragment, 
+				  G4ReactionProductVector * theResult) const;
 
   G4PreCompoundModel();
   G4PreCompoundModel(const G4PreCompoundModel &);

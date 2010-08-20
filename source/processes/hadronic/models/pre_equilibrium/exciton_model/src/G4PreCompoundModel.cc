@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundModel.cc,v 1.21 2010-08-19 17:05:51 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.22 2010-08-20 07:41:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -39,7 +38,11 @@
 //                      - "never go back"  hipothesis (useNGB=true) 
 //                      - soft cutoff from preeq. to equlibrium (useSCO=true)
 //                      - CEM transition probabilities (useCEMtr=true)  
-
+// 20.08.2010 V.Ivanchenko Cleanup of the code: 
+//                      - integer Z and A;
+//                      - emission and transition classes created at initialisation
+//                      - options are set at initialisation
+//                      - do not use copy-constructors for G4Fragment  
 
 #include "G4PreCompoundModel.hh"
 #include "G4PreCompoundEmission.hh"
@@ -67,12 +70,18 @@ G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value)
     OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true) 
 {
   theParameters = G4PreCompoundParameters::GetAddress();
+
   theEmission = new G4PreCompoundEmission();
+  if(useHETCEmission) { theEmission->SetHETCModel(); }
+  else { theEmission->SetDefaultModel(); }
   theEmission->SetOPTxs(OPTxs);
   theEmission->UseSICB(useSICB);
-  theTransition = new G4PreCompoundTransitions();
+
+  if(useGNASHTransition) { theTransition = new G4GNASHTransitions; }
+  else { theTransition = new G4PreCompoundTransitions(); }
   theTransition->UseNGB(useNGB);
   theTransition->UseCEMtr(useCEMtr);
+
   proton = G4Proton::Proton();
   neutron = G4Neutron::Neutron();
 }
@@ -112,7 +121,7 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
   anInitialState.SetNumberOfParticles(2);
   anInitialState.SetNumberOfHoles(1);
   anInitialState.SetNumberOfCharged(1);
-
+  anInitialState.SetCreationTime(thePrimary.GetGlobalTime());
   /*
   // Number of Excited Particles
   anInitialState.SetNumberOfParticles(1+thePrimary.GetDefinition()->GetBaryonNumber());
@@ -167,10 +176,8 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-G4ReactionProductVector* 
-G4PreCompoundModel::DeExcite(const G4Fragment & theInitialState) const
+G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 {
-  G4Fragment aFragment(theInitialState);  
   G4ReactionProductVector * Result = new G4ReactionProductVector;
   G4double Eex = aFragment.GetExcitationEnergy();
   G4int A = aFragment.GetA_asInt(); 
@@ -247,7 +254,7 @@ G4PreCompoundModel::DeExcite(const G4Fragment & theInitialState) const
       
       //J.M. Quesada (May. 08). Physical criterium (lamdas)  PREVAILS over 
       //                        approximation (critical exciton number)
-      if(P1<=(P2+P3)) { go_ahead = false; }
+      if(P1 <= P2+P3) { go_ahead = false; }
         
       if (go_ahead &&  aFragment.GetA_asInt() > 4) 
 	{
@@ -277,7 +284,7 @@ G4PreCompoundModel::DeExcite(const G4Fragment & theInitialState) const
 	      // It will be transition to state with a new number of excitons
 	      ThereIsTransition = true;		
 	      // Perform the transition
-	      aFragment = theTransition->PerformTransition(aFragment);
+	      theTransition->PerformTransition(aFragment);
 	    } 
 	  else 
 	    {
