@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.29 2010-08-02 13:27:35 tnikitin Exp $
+// $Id: G4EllipticalTube.cc,v 1.30 2010-08-20 08:07:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,39 +263,40 @@ G4ThreeVector G4EllipticalTube::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distR1 = CheckXY( p.x(), p.y(),+ halfTol );
   G4double distR2 = CheckXY( p.x(), p.y(),- halfTol );
  
-  if (  (distZ  < halfTol ) && ( distR1 <= 1 ) ){
+  if (  (distZ  < halfTol ) && ( distR1 <= 1 ) )
+  {
     noSurfaces++;
     sumnorm=G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
-    
   }
-  if( (distR1 <= 1 ) && ( distR2 >= 1 ) ){
+  if( (distR1 <= 1 ) && ( distR2 >= 1 ) )
+  {
     noSurfaces++;
     norm= G4ThreeVector( p.x()*dy*dy, p.y()*dx*dx, 0.0 ).unit();
     sumnorm+=norm;
   }
- if ( noSurfaces == 0 )
-   {
- #ifdef G4DEBUG
-     G4Exception("G4EllipticalTube::SurfaceNormal(p)", "Notification",
-                 JustWarning, "Point p is not on surface !?" );
-     G4cout.precision(20);
-     G4cout<< "G4EllipticalTube::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "
-           << G4endl << G4endl;
- #endif 
-      norm = ApproxSurfaceNormal(p);
+  if ( noSurfaces == 0 )
+  {
+#ifdef G4SPECSDEBUG
+    G4Exception("G4EllipticalTube::SurfaceNormal(p)", "Notification",
+                JustWarning, "Point p is not on surface !?" );
+#endif 
+    norm = ApproxSurfaceNormal(p);
   }
   else if ( noSurfaces == 1 )  { norm = sumnorm; }
   else                         { norm = sumnorm.unit(); }
  
   return norm;
 }
+
+
 //
 // ApproxSurfaceNormal
 //
-G4ThreeVector G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
+G4ThreeVector
+G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   //
-  // Which of the three surfaces are we closest to (approximately)?
+  // Which of the three surfaces are we closest to (approximatively)?
   //
   G4double distZ = std::fabs(p.z()) - dz;
   
@@ -305,15 +306,16 @@ G4ThreeVector G4EllipticalTube::ApproxSurfaceNormal( const G4ThreeVector& p ) co
   //
   // Closer to z?
   //
-  if (distZ*distZ < distR2) 
+  if (distZ*distZ < distR2)
+  {
     return G4ThreeVector( 0.0, 0.0, p.z() < 0 ? -1.0 : 1.0 );
+  }
 
   //
   // Closer to x/y
   //
   return G4ThreeVector( p.x()*dy*dy, p.y()*dx*dx, 0.0 ).unit();
 }
-
 
 
 //

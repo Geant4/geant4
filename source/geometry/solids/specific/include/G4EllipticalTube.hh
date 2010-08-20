@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.19 2010-08-02 13:27:07 tnikitin Exp $
+// $Id: G4EllipticalTube.hh,v 1.20 2010-08-20 08:07:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -134,9 +134,9 @@ class G4EllipticalTube : public G4VSolid
 
   private:
 
-   G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
-       // Algorithm for SurfaceNormal() following the original
-       // specification for points not on the surface
+    G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
+      // Algorithm for SurfaceNormal() following the original
+      // specification for points not on the surface.
 
     G4double fCubicVolume;
     G4double fSurfaceArea;
