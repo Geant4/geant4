@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.6 2010-06-11 15:26:36 vnivanch Exp $
+// $Id: G4VPreCompoundModel.hh,v 1.7 2010-08-20 07:43:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,14 +57,12 @@ public:
 
   virtual ~G4VPreCompoundModel();
   
-protected:
-  // default constructor
-  G4VPreCompoundModel();
-
 private:
 
+  // default constructor
+  G4VPreCompoundModel();
   // copy constructor
-  G4VPreCompoundModel(const G4VPreCompoundModel &) : G4HadronicInteraction() {};
+  G4VPreCompoundModel(const G4VPreCompoundModel &);
   // operators
   const G4VPreCompoundModel& operator=(const G4VPreCompoundModel &right);
   G4bool operator==(const G4VPreCompoundModel &right) const;
@@ -75,8 +73,7 @@ public:
   virtual G4HadFinalState * 
           ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus) = 0;
   
-  virtual G4ReactionProductVector* 
-          DeExcite(const G4Fragment& aFragment) const = 0;
+  virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
 
   inline void SetExcitationHandler(G4ExcitationHandler *const  value);
     
