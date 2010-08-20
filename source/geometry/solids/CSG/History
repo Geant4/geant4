@@ -1,4 +1,4 @@
-$Id: History,v 1.125 2010-07-12 07:48:39 gcosmo Exp $
+$Id: History,v 1.126 2010-08-20 08:49:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 19, 2010  T.Nikitina                 geom-csg-V09-03-04
+- G4Torus: fix in DistanceToOut(p,v,...) to address problem report #1081.
 
 Jul 12, 2010  G.Cosmo                    geom-csg-V09-03-03
 - Fixed condition in G4Tubs::Inside(p) for point on surface (T.Nikitina).
