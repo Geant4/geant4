@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4LowEIonFragmentation.cc,v 1.5 2010-06-01 16:51:11 vnivanch Exp $
+// $Id: G4LowEIonFragmentation.cc,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -130,7 +129,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
       }
     }
   }
-  hits ++;
+  hits++;
 
   // From target:
   G4double targetHorizon = impactParameter-projectileOuterRadius;

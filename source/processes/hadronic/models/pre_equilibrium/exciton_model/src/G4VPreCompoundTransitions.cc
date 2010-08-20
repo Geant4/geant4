@@ -23,37 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GNASHTransitions.hh,v 1.4 2010-08-20 07:42:19 vnivanch Exp $
+// $Id: G4VPreCompoundTransitions.cc,v 1.1 2010-08-20 07:42:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-#ifndef G4GNASHTransitions_hh
-#define G4GNASHTransitions_hh 1
-
+// V.Ivanchenko 20.08.2010
+//
+ 
 #include "G4VPreCompoundTransitions.hh"
-#include "G4Fragment.hh"
 
-class G4GNASHTransitions : public G4VPreCompoundTransitions
-{
-public:
+G4VPreCompoundTransitions::G4VPreCompoundTransitions()
+  :useNGB(false),useCEMtr(false),  
+   TransitionProb1(0.0), TransitionProb2(0.0), TransitionProb3(0.0)
+{}
 
-  G4GNASHTransitions();
-
-  virtual ~G4GNASHTransitions();
-
-  virtual G4double CalculateProbability(const G4Fragment & aFragment);
-  
-  virtual void PerformTransition(G4Fragment & aFragment);
-
-private:
-
-G4GNASHTransitions(const G4GNASHTransitions &);
-const G4GNASHTransitions& operator=(const G4GNASHTransitions &right);
-
-  G4bool operator==(const G4GNASHTransitions &right) const;
-
-  G4bool operator!=(const G4GNASHTransitions &right) const;
-
-
-};
-
-#endif
+G4VPreCompoundTransitions::~G4VPreCompoundTransitions() 
+{}
