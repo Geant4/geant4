@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2010-07-16 16:01:13 gcosmo Exp $
+$Id: History,v 1.175 2010-08-20 08:07:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-Aug-2010  T.Nikitina (geom-specific-V09-03-11)
+- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement
+  with canonical form. Added unit test testG4EllipticalTube.cc.
 
 16-Jul-2010  G.Cosmo (geom-specific-V09-03-10)
 - Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.
