@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.12 2010-08-10 13:05:49 tnikitin Exp $
+// $Id: G4GeomTestSegment.cc,v 1.13 2010-08-20 09:03:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -281,12 +281,12 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
   G4double dist;
   switch(solid->Inside(p)) {
     case kInside:
-       dist = solid->DistanceToOut(p,vSearch);
-       if (dist >= kInfinity) {
-           logger->SolidProblem( solid,
+      dist = solid->DistanceToOut(p,vSearch);
+      if (dist >= kInfinity) {
+        logger->SolidProblem( solid,
                 "DistanceToOut(p,v) = kInfinity for point inside", p );
         return;
-       }
+      }
       s += sign*dist;
       entering = false;
       break;
@@ -298,7 +298,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
       break;
     case kSurface:
       vSurfN=v.dot(solid->SurfaceNormal(p));
-      if(std::abs(vSurfN)<kCarTolerance)vSurfN=0;
+      if(std::fabs(vSurfN)<kCarTolerance)vSurfN=0;
       entering = (vSurfN < 0);
       break;
     default:
