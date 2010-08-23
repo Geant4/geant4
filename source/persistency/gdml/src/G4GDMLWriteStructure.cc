@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.81 2010-05-20 12:56:57 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.82 2010-08-23 12:52:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -74,7 +74,7 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
    else if (axis==kYAxis) { axisString = "kYAxis"; }
    else if (axis==kZAxis) { axisString = "kZAxis"; }
    else if (axis==kRho)   { axisString = "kRho";     }
-   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "degree"; }
+   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "rad"; }
 
    const G4String name
          = GenerateName(divisionvol->GetName(),divisionvol);
@@ -187,7 +187,8 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    else if(axis==kRho)
      { dirElement->setAttributeNode(NewAttribute("rho","1")); }
    else if(axis==kPhi)
-     { dirElement->setAttributeNode(NewAttribute("phi","1")); }
+     { dirElement->setAttributeNode(NewAttribute("phi","1"));
+       unitString="rad"; }
    replicateElement->appendChild(dirElement);
 
    xercesc::DOMElement* widthElement = NewElement("width");
