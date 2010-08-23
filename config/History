@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.379 2010-06-11 10:02:27 gunter Exp $
+cvs log $Id: History,v 1.380 2010-08-23 16:51:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-11 June 2010  Gunter Folger   (config-V09-03-05)
-- Increase stack size on Windows, in sys/WIN-VC add a /STACK:8368128 
-   (ie. 8MB) option to LDFLAGS; Needed by some Chips based 
-   examples and tests.
+23rd August 2010  Gabriele Cosmo (config-V09-03-06)
+- Simplified QTLIBPATH setup in Linux-g++.gmk.
+
+11th June 2010  Gunter Folger (config-V09-03-05)
+- Increased stack size on Windows, in sys/WIN-VC added option /STACK:8368128 
+  (i.e. 8MB) option to LDFLAGS; needed by some CHIPS-based examples and tests.
 
 7th June 2010  Gabriele Cosmo (config-V09-03-04)
 - Removed processes/hadronic/models/leading_particle module from include
