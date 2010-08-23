@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.168 2010-08-17 17:36:59 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.169 2010-08-23 15:11:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1295,9 +1295,12 @@ void G4VEnergyLossProcess::SampleSubCutSecondaries(
 G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
                                                       const G4Step&)
 {
+  // In all cases clear number of interaction lengths
+  theNumberOfInteractionLengthLeft = -1.0;
+
   fParticleChange.InitializeForPostStep(track);
   G4double finalT = track.GetKineticEnergy();
-  if(finalT <= lowestKinEnergy) return &fParticleChange;
+  if(finalT <= lowestKinEnergy) { return &fParticleChange; }
 
   G4double postStepScaledEnergy = finalT*massRatio;
 
@@ -1323,8 +1326,9 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
       ++nWarnings;
     }
     */
-    if(preStepLambda*G4UniformRand() > lx) {
-      ClearNumberOfInteractionLengthLeft();
+    if(lx <= 0.0) {
+      return &fParticleChange;
+    } else if(preStepLambda*G4UniformRand() > lx) {
       return &fParticleChange;
     }
   }
@@ -1362,7 +1366,6 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  ClearNumberOfInteractionLengthLeft();
   return &fParticleChange;
 }
 
