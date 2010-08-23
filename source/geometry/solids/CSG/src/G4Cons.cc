@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.69 2010-07-12 07:44:30 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.70 2010-08-23 12:59:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,7 +99,7 @@ G4Cons::G4Cons( const G4String& pName,
 
   // Check radii
   //
-  if ((pRmin1>=pRmax1) || (pRmin2>=pRmax2) || (pRmin1<0) && (pRmin2<0))
+  if (((pRmin1>=pRmax1) || (pRmin2>=pRmax2) || (pRmin1<0)) && (pRmin2<0))
   {
     G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
            << "        Invalide values for radii ! - "
