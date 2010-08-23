@@ -107,13 +107,10 @@ ifeq ($(G4SYSTEM),Linux-g++)
     endif
   endif
   ifndef QTLIBPATH
-    QT_SEARCH_LIB1 := $(shell ls  $(QTHOME)/lib/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
-    QT_SEARCH_LIB2 := $(shell ls  $(QTHOME)/lib/libq*  2>/dev/null | wc -l )
-    ifneq ($(QT_SEARCH_LIB1),0)
-      QTLIBPATH   := $(QTHOME)/lib/qt$(QT_VERSION)
-    endif
-    ifneq ($(QT_SEARCH_LIB2),0)
-      QTLIBPATH   := $(QTHOME)/lib
+    QTLIBPATH := $(QTHOME)/lib
+    QT_SEARCH_LIB := $(shell ls  $(QTLIBPATH)/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
+    ifneq ($(QT_SEARCH_LIB),0)
+      QTLIBPATH := $(QTHOME)/lib/qt$(QT_VERSION)
     endif
   endif
   ifndef QTLIBS
