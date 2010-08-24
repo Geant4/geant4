@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.cc,v 1.3 2010-08-23 15:14:11 vnivanch Exp $
+// $Id: G4Pow.cc,v 1.4 2010-08-24 08:12:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,3 +88,16 @@ G4Pow::~G4Pow()
 {}
 
 // -------------------------------------------------------------------
+
+G4double G4Pow::powN(G4double x, G4int n)
+{
+  G4double res = 1.0;
+  if(n >= 0) { for(G4int i=0; i<n; ++i) { res *= x; } }
+  else if((n < 0) && (x != 0.0))
+  {
+    G4double y = 1.0/x;
+    G4int nn = -n;
+    for(G4int i=0; i<nn; ++i) { res *= y; }
+  }
+  return res;
+}
