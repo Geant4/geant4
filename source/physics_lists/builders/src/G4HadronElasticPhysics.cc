@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.13 2010-07-29 10:52:14 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.14 2010-08-24 09:32:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -76,8 +76,8 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver)
   }
 }
 
-G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver, G4bool,
-						 const G4String&)
+G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String&,
+    G4int ver, G4bool, const G4String&)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
     wasActivated(false)
 {
