@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2010-08-16 08:23:55 kurasige Exp $
+$Id: History,v 1.13 2010-08-24 07:57:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Aug. 16th, 2010  H.KUrashige
-- Remove G4ParticleWithCuts
+August 24th, 2010  G.Cosmo - olapex-V09-03-01
+- Fixed compilation error for setting of kRadTolerance.
+
+August 16th, 2010  H.Kurashige
+- Removed inclusion of G4ParticleWithCuts header.
 
 May 12th, 2010  J.Allison - olapex-V09-03-00
 - Introduced G4UIExecutive.
