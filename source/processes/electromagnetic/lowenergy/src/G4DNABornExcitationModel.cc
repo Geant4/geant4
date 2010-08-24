@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.cc,v 1.9 2010-03-27 11:32:41 sincerti Exp $
+// $Id: G4DNABornExcitationModel.cc,v 1.10 2010-08-24 13:51:06 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,9 +77,6 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* particle,
 
   if (verboseLevel > 3)
     G4cout << "Calling G4DNABornExcitationModel::Initialise()" << G4endl;
-
-  // Energy limits
-  // Energy limits
 
   G4String fileElectron("dna/sigma_excitation_e_born");
   G4String fileProton("dna/sigma_excitation_p_born");
