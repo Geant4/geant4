@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.16 2010-08-25 06:35:10 sincerti Exp $
+$Id: History,v 1.17 2010-08-25 06:35:55 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,7 +10,7 @@ $Id: History,v 1.16 2010-08-25 06:35:10 sincerti Exp $
                        --------------------
 
 25 August 2010 - S. Incerti - microdosimetry-V09-03-03
-- switeched to G4DNABornExcitationModel for electrons
+- switched to G4DNABornExcitationModel for electrons
 
 12 June 2010 - V.Ivanchenko    - microdosimetry-V09-03-02
 - added target region and defined DNA physics for this region

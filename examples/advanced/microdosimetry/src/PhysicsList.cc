@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.10 2010-06-12 09:38:06 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.11 2010-08-25 06:35:10 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -300,8 +300,8 @@ void PhysicsList::ConstructEM()
   em_config->SetExtraEmModel("e-","e-_G4DNAElastic",mod,"Target",0.0,1*MeV);
   mod = new G4DNABornIonisationModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAIonisation",mod,"Target",11*eV,1*MeV);
-  mod = new G4DNAEmfietzoglouExcitationModel();
-  em_config->SetExtraEmModel("e-","e-_G4DNAExcitation",mod,"Target",8.23*eV,10*MeV);
+  mod = new G4DNABornExcitationModel();
+  em_config->SetExtraEmModel("e-","e-_G4DNAExcitation",mod,"Target",9*eV,1*MeV);
 
   // proton
   mod = new G4BraggIonGasModel();
