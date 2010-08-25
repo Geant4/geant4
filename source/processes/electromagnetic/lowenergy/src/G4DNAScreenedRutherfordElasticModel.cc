@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.11 2010-08-24 13:51:06 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.12 2010-08-25 06:58:15 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,7 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel
   lowEnergyLimit = 0 * eV; 
   lowEnergyLimitOfModel = 7 * eV; // The model lower energy is 7 eV
   intermediateEnergyLimit = 200 * eV; // Switch between two final state models
-  highEnergyLimit = 10 * MeV;
+  highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
