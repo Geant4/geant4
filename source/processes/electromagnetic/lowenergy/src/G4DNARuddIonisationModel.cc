@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.17 2010-04-07 20:08:31 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.18 2010-08-25 07:57:28 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -158,7 +158,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
     tableFile[alphaPlusPlus] = fileAlphaPlusPlus;
 
     lowEnergyLimit[alphaPlusPlus] = lowEnergyLimitForZ2;
-    highEnergyLimit[alphaPlusPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlusPlus] = 400. * MeV;
 
     // Cross section
 
@@ -180,7 +180,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
     tableFile[alphaPlus] = fileAlphaPlus;
 
     lowEnergyLimit[alphaPlus] = lowEnergyLimitForZ2;
-    highEnergyLimit[alphaPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlus] = 400. * MeV;
 
     // Cross section
 
@@ -201,7 +201,7 @@ void G4DNARuddIonisationModel::Initialise(const G4ParticleDefinition* particle,
     tableFile[helium] = fileHelium;
 
     lowEnergyLimit[helium] = lowEnergyLimitForZ2;
-    highEnergyLimit[helium] = 10. * MeV;
+    highEnergyLimit[helium] = 400. * MeV;
 
     // Cross section
 
@@ -362,52 +362,6 @@ G4double G4DNARuddIonisationModel::CrossSectionPerVolume(const G4Material* mater
          {
 	      sigma = table->FindValue(k);
 
-	      // BEGIN ELECTRON CORRECTION
-	      // add ONE or TWO electron-water excitation for alpha+ and helium
-   
-	      if ( particleDefinition == instance->GetIon("alpha+") 
-		   ||
-		   particleDefinition == instance->GetIon("helium")
-		   ) 
-	      {
-      
-		  G4DNACrossSectionDataSet* electronDataset = new G4DNACrossSectionDataSet 
-		    (new G4LogLogInterpolation, eV, (1./3.343e22)*m*m);
-       
-		  electronDataset->LoadData("dna/sigma_ionisation_e_born");
-
-		  G4double kElectron = k * 0.511/3728;
-
-		  if ( particleDefinition == instance->GetIon("alpha+") ) 
-		  {
-		      G4double tmp1 = table->FindValue(k) + electronDataset->FindValue(kElectron);
-		      delete electronDataset;
-		      if (verboseLevel > 3)
-                      {
-                        G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
-                        G4cout << " - Cross section per water molecule (cm^2)=" << tmp1/cm/cm << G4endl;
-                        G4cout << " - Cross section per water molecule (cm^-1)=" << 
-			tmp1*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-                      } 
-		      return tmp1*material->GetAtomicNumDensityVector()[1];
-		  }
-
-		  if ( particleDefinition == instance->GetIon("helium") ) 
-		  {
-		      G4double tmp2 = table->FindValue(k) +  2. * electronDataset->FindValue(kElectron);
-		      delete electronDataset;
-		      if (verboseLevel > 3)
-                      {
-                        G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
-                        G4cout << " - Cross section per water molecule (cm^2)=" << tmp2/cm/cm << G4endl;
-                        G4cout << " - Cross section per water molecule (cm^-1)=" << tmp2*
-			material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
-                      } 
-		      return tmp2*material->GetAtomicNumDensityVector()[1];
-		  }
-              }      
-
-	      // END ELECTRON CORRECTION
          }
       }
       else
@@ -655,7 +609,9 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   G4double D2 ; 
   G4double alphaConst ;
 
-  const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV};
+//  const G4double Bj[5] = {12.61*eV, 14.73*eV, 18.55*eV, 32.20*eV, 539.7*eV};
+// The following values are provided by M. dingfelder (priv. comm)
+  const G4double Bj[5] = {12.60*eV, 14.70*eV, 18.40*eV, 32.20*eV, 540*eV};
 
   if (j == 4) 
   {
@@ -680,7 +636,9 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
       D1 = -0.80; 
       E1 = 0.38; 
       A2 = 1.07; 
-      B2 = 14.6;
+      // Value provided by M. Dingfelder (priv. comm)
+      B2 = 11.6;
+      //
       C2 = 0.60; 
       D2 = 0.04; 
       alphaConst = 0.64;
@@ -696,6 +654,9 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   if (wBig<0) return 0.;
 
   G4double w = wBig / Bj[ionizationLevelIndex];
+  // Note that the following (j==4) cases are provided by   M. Dingfelder (priv. comm)
+  if (j==4) w = wBig / waterStructure.IonisationEnergy(ionizationLevelIndex);
+
   G4double Ry = 13.6*eV;
 
   G4double tau = 0.;
@@ -712,11 +673,16 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   {
       tau = (0.511/3728.) * k ;
   }
- 
+
   G4double S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/Bj[ionizationLevelIndex]),2);
+  if (j==4) S = 4.*pi * Bohr_radius*Bohr_radius * n * std::pow((Ry/waterStructure.IonisationEnergy(ionizationLevelIndex)),2);
+
   G4double v2 = tau / Bj[ionizationLevelIndex];
+  if (j==4) v2 = tau / waterStructure.IonisationEnergy(ionizationLevelIndex);
+
   G4double v = std::sqrt(v2);
   G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj[ionizationLevelIndex]));
+  if (j==4) wc = 4.*v2 - 2.*v - (Ry/(4.*waterStructure.IonisationEnergy(ionizationLevelIndex)));
 
   G4double L1 = (C1* std::pow(v,(D1))) / (1.+ E1*std::pow(v, (D1+4.)));
   G4double L2 = C2*std::pow(v,(D2));
@@ -730,9 +696,14 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
     * Gj[j] * (S/Bj[ionizationLevelIndex]) 
     * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 
+  if (j==4) sigma = CorrectionFactor(particleDefinition, k) 
+    * Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) 
+    * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
+
   if ( (particleDefinition == instance->GetIon("hydrogen")) && (ionizationLevelIndex==4)) 
 
-    sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) 
+//    sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) 
+    sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) 
     * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
 
   if (    particleDefinition == G4Proton::ProtonDefinition() 
@@ -755,8 +726,10 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   if (particleDefinition == instance->GetIon("alpha+") ) 
   {
       slaterEffectiveCharge[0]=2.0;
-      slaterEffectiveCharge[1]=1.15;
-      slaterEffectiveCharge[2]=1.15;
+      // The following values are provided by M. Dingfelder (priv. comm)    
+      slaterEffectiveCharge[1]=2.0;
+      slaterEffectiveCharge[2]=2.0;
+      //
       sCoefficient[0]=0.7;
       sCoefficient[1]=0.15;
       sCoefficient[2]=0.15;
@@ -779,6 +752,9 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
   {
       sigma = Gj[j] * (S/Bj[ionizationLevelIndex]) * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
     
+      if (j==4) sigma = Gj[j] * (S/waterStructure.IonisationEnergy(ionizationLevelIndex)) 
+                              * ( (F1+w*F2) / ( std::pow((1.+w),3) * ( 1.+std::exp(alphaConst*(w-wc)/v))) );
+
       G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
   
       zEff -= ( sCoefficient[0] * S_1s(k, energyTransfer, slaterEffectiveCharge[0], 1.) +
@@ -851,7 +827,9 @@ G4double G4DNARuddIonisationModel::R(G4double t,
   // Dingfelder, in Chattanooga 2005 proceedings, p 4
 
   G4double tElectron = 0.511/3728. * t;
-  G4double value = 2. * tElectron * slaterEffectiveChg / (energyTransferred * shellNumber);
+  // The following values are provided by M. Dingfelder (priv. comm)    
+  G4double H = 2.*13.60569172 * eV;
+  G4double value = std::sqrt ( 2. * tElectron / H ) / ( energyTransferred / H ) *  (slaterEffectiveChg/shellNumber);
   
   return value;
 }
@@ -871,7 +849,8 @@ G4double G4DNARuddIonisationModel::CorrectionFactor(G4ParticleDefinition* partic
     if (particleDefinition == instance->GetIon("hydrogen")) 
     { 
 	G4double value = (std::log10(k/eV)-4.2)/0.5;
-	return((0.8/(1+std::exp(value))) + 0.9);
+	// The following values are provided by M. Dingfelder (priv. comm)    
+        return((0.6/(1+std::exp(value))) + 0.9);
     }
     else 
     {    
@@ -890,6 +869,8 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
    
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
+
+/*
   G4double kElectron(0);
 
   G4DNACrossSectionDataSet * electronDataset = new G4DNACrossSectionDataSet (new G4LogLogInterpolation, eV, (1./3.343e22)*m*m);
@@ -906,6 +887,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
   }      
   
   // END PART 1/2 OF ELECTRON CORRECTION
+*/
   
   G4int level = 0;
 
@@ -930,7 +912,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 	  { 
 	      i--;
 	      valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-
+/*
 	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
 	      // Use only electron partial cross sections
 	      
@@ -941,7 +923,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + 2*electronDataset->GetComponent(i)->FindValue(kElectron); }
 
 	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
-
+*/
 	      value += valuesBuffer[i];
 	  }
 	    
@@ -958,8 +940,9 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 	      {
 		  delete[] valuesBuffer;
 		  
+/*
 		  if (electronDataset) delete electronDataset;
-		  
+*/		  
 		  return i;
 	      }
 	      value -= valuesBuffer[i];
@@ -974,7 +957,9 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
     G4Exception("G4DNARuddIonisationModel::RandomSelect: attempting to calculate cross section for wrong particle");
   }
 
+/*
   delete electronDataset;
+*/
       
   return level;
 }

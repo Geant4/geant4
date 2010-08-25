@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.9 2010-06-08 21:50:00 sincerti Exp $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.10 2010-08-25 07:57:28 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -105,7 +105,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
   {
     alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlusPlus] = 1. * keV;
-    highEnergyLimit[alphaPlusPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlusPlus] = 400. * MeV;
 
     kineticEnergyCorrection[1] = 0.9382723/3.727417;
     slaterEffectiveCharge[0][1]=0.;
@@ -124,12 +124,15 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
   {
     alphaPlus = alphaPlusDef->GetParticleName();
     lowEnergyLimit[alphaPlus] = 1. * keV;
-    highEnergyLimit[alphaPlus] = 10. * MeV;
+    highEnergyLimit[alphaPlus] = 400. * MeV;
 
     kineticEnergyCorrection[2] = 0.9382723/3.727417;
     slaterEffectiveCharge[0][2]=2.0;
-    slaterEffectiveCharge[1][2]=1.15;
-    slaterEffectiveCharge[2][2]=1.15;
+
+// Following values provided by M. Dingfelder
+    slaterEffectiveCharge[1][2]=2.00;
+    slaterEffectiveCharge[2][2]=2.00;
+//
     sCoefficient[0][2]=0.7;
     sCoefficient[1][2]=0.15;
     sCoefficient[2][2]=0.15;
@@ -143,7 +146,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
   {
     helium = heliumDef->GetParticleName();
     lowEnergyLimit[helium] = 1. * keV;
-    highEnergyLimit[helium] = 10. * MeV;
+    highEnergyLimit[helium] = 400. * MeV;
     
     kineticEnergyCorrection[3] = 0.9382723/3.727417;
     slaterEffectiveCharge[0][3]=1.7;
@@ -152,6 +155,7 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     sCoefficient[0][3]=0.5;
     sCoefficient[1][3]=0.25;
     sCoefficient[2][3]=0.25;
+
   }
   else
   {
@@ -271,13 +275,15 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
       instance = G4DNAGenericIonsManager::Instance();
 
       // add ONE or TWO electron-water excitation for alpha+ and helium
-  
+/*  
       if ( particleDefinition == instance->GetIon("alpha+") 
            ||
            particleDefinition == instance->GetIon("helium")
          ) 
       {
+
 	  G4DNAEmfietzoglouExcitationModel * excitationXS = new G4DNAEmfietzoglouExcitationModel();
+          excitationXS->Initialise(G4Electron::ElectronDefinition());
 
 	  G4double sigmaExcitation=0;
 	  G4double tmp =0.;
@@ -293,7 +299,29 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
 	    crossSection = crossSection + 2*sigmaExcitation ;
 	  
 	  delete excitationXS;
+
+          // Alternative excitation model
+
+          G4DNABornExcitationModel * excitationXS = new G4DNABornExcitationModel();
+          excitationXS->Initialise(G4Electron::ElectronDefinition());
+
+	  G4double sigmaExcitation=0;
+	  G4double tmp=0;
+
+	  if (k*0.511/3728 > 9*eV && k*0.511/3728 < 1*MeV ) sigmaExcitation = 
+	    excitationXS->CrossSectionPerVolume(material,G4Electron::ElectronDefinition(),k*0.511/3728,tmp,tmp)
+	    /material->GetAtomicNumDensityVector()[1];
+       
+	  if ( particleDefinition == instance->GetIon("alpha+") ) 
+	    crossSection = crossSection +  sigmaExcitation ;
+	  
+	  if ( particleDefinition == instance->GetIon("helium") ) 
+	    crossSection = crossSection + 2*sigmaExcitation ;
+	  
+	  delete excitationXS; 
+	  
       }      
+*/      
 
     }
 
@@ -326,7 +354,12 @@ void G4DNAMillerGreenExcitationModel::SampleSecondaries(std::vector<G4DynamicPar
   
   G4int level = RandomSelect(particleEnergy0,aDynamicParticle->GetDefinition());
 
-  G4double excitationEnergy = waterExcitation.ExcitationEnergy(level);
+  //  G4double excitationEnergy = waterExcitation.ExcitationEnergy(level);
+
+  // Dingfelder's excitation levels
+  const G4double excitation[]={ 8.17*eV, 10.13*eV, 11.31*eV, 12.91*eV, 14.50*eV};
+  G4double excitationEnergy = excitation[level];
+
   G4double newEnergy = particleEnergy0 - excitationEnergy;
   
   if (newEnergy>0)
@@ -363,6 +396,9 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   const G4double jj[]={19820.*eV, 23490.*eV, 27770.*eV, 30830.*eV, 33080.*eV};
   const G4double omegaj[]={0.85, 0.88, 0.88, 0.78, 0.78};
   
+  // Dingfelder's excitation levels
+  const G4double Eliq[5]={ 8.17*eV, 10.13*eV, 11.31*eV, 12.91*eV, 14.50*eV};
+
   G4int particleTypeIndex = 0;
   G4DNAGenericIonsManager* instance;
   instance = G4DNAGenericIonsManager::Instance();
@@ -376,14 +412,14 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   tCorrected = k * kineticEnergyCorrection[particleTypeIndex];
 
   // SI - added protection 
-  if (tCorrected < waterExcitation.ExcitationEnergy(excitationLevel)) return 0;
+  if (tCorrected < Eliq[excitationLevel]) return 0;
   //
   
   G4int z = 10;
 
   G4double numerator;
   numerator = std::pow(z * aj[excitationLevel], omegaj[excitationLevel]) * 
-    std::pow(tCorrected - waterExcitation.ExcitationEnergy(excitationLevel), nu);
+    std::pow(tCorrected - Eliq[excitationLevel], nu);
 
   G4double power;
   power = omegaj[excitationLevel] + nu;
@@ -393,11 +429,12 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
 
   G4double zEff = particleDefinition->GetPDGCharge() / eplus + particleDefinition->GetLeptonNumber();
 
-  zEff -= ( sCoefficient[0][particleTypeIndex] * S_1s(k, waterExcitation.ExcitationEnergy(excitationLevel), slaterEffectiveCharge[0][particleTypeIndex], 1.) +
-	    sCoefficient[1][particleTypeIndex] * S_2s(k, waterExcitation.ExcitationEnergy(excitationLevel), slaterEffectiveCharge[1][particleTypeIndex], 2.) +
-	    sCoefficient[2][particleTypeIndex] * S_2p(k, waterExcitation.ExcitationEnergy(excitationLevel), slaterEffectiveCharge[2][particleTypeIndex], 2.) );
+  zEff -= ( sCoefficient[0][particleTypeIndex] * S_1s(k, Eliq[excitationLevel], slaterEffectiveCharge[0][particleTypeIndex], 1.) +
+	    sCoefficient[1][particleTypeIndex] * S_2s(k, Eliq[excitationLevel], slaterEffectiveCharge[1][particleTypeIndex], 2.) +
+	    sCoefficient[2][particleTypeIndex] * S_2p(k, Eliq[excitationLevel], slaterEffectiveCharge[2][particleTypeIndex], 2.) );
 
   G4double cross = sigma0 * zEff * zEff * numerator / denominator;
+
 
   return cross;
 }
@@ -414,7 +451,10 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
   instance = G4DNAGenericIonsManager::Instance();
 
   if ( particle == instance->GetIon("alpha++") ||
-       particle == G4Proton::ProtonDefinition()  )
+       particle == G4Proton::ProtonDefinition()||  
+       particle == instance->GetIon("alpha+")  ||
+       particle == instance->GetIon("helium")
+     )
   {  
      while (i > 0)
      {
@@ -436,6 +476,7 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
      }
   } 
 
+/*
   // add ONE or TWO electron-water excitation for alpha+ and helium
    
   if ( particle == instance->GetIon("alpha+") 
@@ -448,14 +489,17 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 	  i--;
          
           G4DNAEmfietzoglouExcitationModel * excitationXS = new G4DNAEmfietzoglouExcitationModel();
+          excitationXS->Initialise(G4Electron::ElectronDefinition());
          
 	  G4double sigmaExcitation=0;
 
 	  if (k*0.511/3728 > 8.23*eV && k*0.511/3728 < 10*MeV ) sigmaExcitation = excitationXS->PartialCrossSection(k*0.511/3728,i);
  
 	  G4double partial = PartialCrossSection(k,i,particle);
+
 	  if (particle == instance->GetIon("alpha+")) partial = PartialCrossSection(k,i,particle) + sigmaExcitation;
 	  if (particle == instance->GetIon("helium")) partial = PartialCrossSection(k,i,particle) + 2*sigmaExcitation;
+
 	  values.push_front(partial);
 	  value += partial;
 	  delete excitationXS;
@@ -473,6 +517,7 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 	  value-=values[i];
     }
   }    	
+*/
 
   return 0;
 }
@@ -551,8 +596,11 @@ G4double G4DNAMillerGreenExcitationModel::R(G4double t,
   // Dingfelder, in Chattanooga 2005 proceedings, p 4
 
   G4double tElectron = 0.511/3728. * t;
-  G4double value = 2. * tElectron * slaterEffectiveCharge / (energyTransferred * shellNumber);
   
+  // The following is provided by M. Dingfelder
+  G4double H = 2.*13.60569172 * eV;
+  G4double value = std::sqrt ( 2. * tElectron / H ) / ( energyTransferred / H ) *  (slaterEffectiveCharge/shellNumber);
+
   return value;
 }
 
