@@ -1,4 +1,4 @@
-q$Id: History,v 1.144 2010-08-17 09:21:05 vnivanch Exp $
+q$Id: History,v 1.145 2010-08-25 16:49:11 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-08-2010, G.Folger                    (phys-lists-V09-03-22)
+-  Correct obsolete ctor of G4HadronElasticPhysics in header 
+
+24-08-2010, V.Ivanchenko (phys-lists-V09-03-21)
+-  don't use
 
 17-08-2010, V.Ivanchenko (phys-lists-V09-03-20)
 - Obsolete G4ParticleWithCut.hh header removed from many .icc files
