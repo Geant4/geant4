@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2010-06-12 09:39:23 vnivanch Exp $
+$Id: History,v 1.16 2010-08-25 06:35:10 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.15 2010-06-12 09:39:23 vnivanch Exp $
 
                        Package History file
                        --------------------
+
+25 August 2010 - S. Incerti - microdosimetry-V09-03-03
+- switeched to G4DNABornExcitationModel for electrons
 
 12 June 2010 - V.Ivanchenko    - microdosimetry-V09-03-02
 - added target region and defined DNA physics for this region
