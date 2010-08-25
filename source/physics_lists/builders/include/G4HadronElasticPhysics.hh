@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.8 2010-08-24 09:32:24 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.hh,v 1.9 2010-08-25 16:49:51 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
   G4HadronElasticPhysics(G4int ver = 0); 
 
   // obsolete
-  G4HadronElasticPhysics(const G4String& name = "", 
+  G4HadronElasticPhysics(const G4String& name , 
 			 G4int ver = 0, G4bool hp = false, 
 			 const G4String& type="");
 
