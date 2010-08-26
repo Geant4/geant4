@@ -1,0 +1,327 @@
+
+                       geant4-09-03-ref-07
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Several Q/A fixes in geometry modules
+ o Implemented customizable pool size in G4Allocator.
+ o First full Beta version of model for e+/e- ionisation according to
+   Penelope v2008.
+ o Updated & extended G4DNS Rudd and Miller & Green models; requiring
+   new data set version, G4LEDATA 6.15.
+ o Revised width correction in G4UniversalFluctuation providing better
+   results for thin targets and a good tail; added new class
+   G4UniversalFluctuation93 keeping original 9.3 version.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-03-06
+------
+- Simplified QTLIBPATH setup in Linux-g++.gmk.
+
+event                                            event-V09-03-04
+-----
+- Fixed electron mass correction for ions in G4PrimaryTransformer.
+
+geometry/biasing                                 geombias-V09-03-00
+----------------
+- G4IStore: corrected use of internal cell-importance iterator to avoid
+  invalidation in methods GetImportance().
+- Corrected mispelled name for GetLowerWeight() method in classes
+  G4WeightWindowStore and G4VWeightWindowStore. Fixed use of internal
+  cell-importance iterator in G4WeightWindowStore::GetLowerWeight() to
+  avoid cases of invalidation.
+- Fixed initialization of data in copy-constructor for G4GeometryCell
+  and corrected mispelled name for data member pointer.
+
+geometry/divisions                               geomdiv-V09-03-00
+------------------
+- Improved logic in G4PVDivision constructors and in method
+  G4PVDivisionFactory::CreatePVDivision() in case of invalid construct.
+- Properly initialise Boolean flag 'bDivInTrap' in G4VParameterisationTrd
+  constructor.
+- G4ParameterisationTrd: disabled unreachable error message in method
+  G4ParameterisationTrdX::CheckParametersValidity().
+- Removed uninitialised member in G4ParameterisationTrdX and correction in
+  method ComputeSolid().
+- Get rid of unnecessary virtual specification for leaf classes in the
+  hierarchy.
+
+geometry/magneticfield                           field-V09-03-01
+----------------------
+- Fixed cases of memory corruption in G4RKG3_Stepper.
+- Fixed case of unused array data member in G4ExactHelixStepper.
+- Removed useless code never executed in G4ConstRK4::Stepper().
+- Fixed initialization in G4NystromRK4 constructor.
+- Added dummy initialization of data members in constructors.
+
+geometry/management                              geommng-V09-03-03
+-------------------
+- Fixed compilation errors for code within G4GEOMETRY_VOXELDEBUG flag
+  in G4GeometryManager and G4SmartVoxelHeader.
+- Added printout of voxel limits in G4SmartVoxelHeader::Buildnodes().
+- G4LogicalSurface: added missing initialisation for 'theTransRadSurface'
+  data member. Made virtual destructor and constructors not inline.
+- G4ErrorTarget: added missing default initialisation of a data member.
+- G4SmartVoxelHeader: added return statement after exceptions in methods
+  BuildVoxelsWithinLimits() and BuildNodes(); fixed case of invalid iterator
+  in deletion of test slices in BuildVoxelsWithinLimits(); added protection
+  for cases of invalide number of nodes in RefineNodes(), and added return
+  statement after exceptions.
+- G4GeometryManager: restore cout precision after printing voxel statistics.
+- G4LogicalVolume: added return statement after exception in GetMass().
+- G4ReflectedSolid: moved reserve() statement for 'vertices' within null-check
+  condition in CalculateExtent().
+
+geometry/navigation                              geomnav-V09-03-02
+-------------------
+- Fix in G4GeomTestSegment::FindSomePoints(), to address problem report #980.
+- Fixed array out of bound error in G4MultipleNavigator and G4PathFinder
+  constructors.
+- Fixed cout precision restoring in G4BrentLocator, G4PropagatorInField,
+  G4SimpleLocator, G4VIntersectionLocator and G4MultiLevelLocator.
+- Removed unused private data members in G4MultiLevelLocator.
+- Replaced use of DBL_MAX for distances with kInfinity in G4MultiNavigator
+  and G4Navigator internals.
+- Exchanged conditions for initialization of members in G4TransportationManager
+  constructor.
+- Added dummy initialisation of data members in constructors.
+
+geometry/solids/Boolean                          geom-bool-V09-03-01
+-----------------------
+- Simplified logic in G4UnionSolid::Inside() to exclude obvious conditional
+  cases.
+
+geometry/solids/CSG                              geom-csg-V09-03-05
+-------------------
+- G4Torus: fix in DistanceToOut(p,v,...) to address problem report #1081.
+  Fixed call to internal method for finding roots, to avoid copy
+  of sdt::vector() by parameters. Some cleanup to avoid unnecessary protected
+  section and virtual table.
+- Fixed condition in G4Tubs::Inside(p) for point on surface.
+- Corrected use of std::fabs() in place of std::abs() in G4Tubs, G4Cons,
+  G4Sphere and G4Torus. Use pre-computed half-tolerance constants in G4Torus.
+- Improved initialisation logic in several constructors.
+- Corrected cases of not-restored cout precision in several classes.
+- G4Torus: 
+
+geometry/solids/specific                         geom-specific-V09-03-08
+------------------------
+- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement
+  with canonical form.
+- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.
+- Use INT_MAX as initialisation for max limits in G4SolidExtentList.
+- Added dummy initialization of data members in constructors.
+- Fixed potential case of dereferencing null pointer in methods
+  G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
+  and G4VCSGfaceted::DistanceToOut(p,v).
+- Fixed unecessary object copy as argument in method
+  G4PolyhedraSide::IntersectSidePlane().
+- Fixed possible case of derefencing null pointer in G4ReduciblePolygon
+  RemoveDuplicateVertices() and RemoveRedundantVertices() methods.
+- Replaced calls to std::abs() with std::fabs() where suitable.
+
+geometry/volumes                                 geomvol-V09-03-07
+----------------
+- G4GRSSolid, G4GRSVolume: safer initialisation in copy constructor.
+- G4PVPlacement, G4PVReplica: added fake initialisation for all members in
+  specialized constructor for I/O persistency. Added fake return statements
+  after exceptions.
+- G4NavigationHistory: restore original implementation for constructor.
+
+global                                           global-V09-03-12
+------
+- G4Allocator: implemented customizable pool size.
+- G4AllocatorPool: moved dummy copy constructor to private section.
+- Added methods logfactorial() and powN() to G4Pow class.
+- G4UnitsTable: added new category "Solid angle".
+- Added INT_MAX and INT_MIN portability macros in templates.hh.
+- Fixed cases of invalidated iterator in G4StateManager.
+- Fixed restoring of cout/cerr formatting in G4DataVector, G4PhysicsVector.
+- Added dummy initialization of data members in constructors.
+- Added experimental code for MacOSX in G4FPEDetection.hh.
+
+intercoms                                        intercoms-V09-03-02
+---------
+- Add new commands to G4UIcommand:
+  /control/if, /control/add, /control/subtract, /control/multiply and
+  /control/divide.
+- Implemented range check of UI commands for units.
+
+particles                                        particles-V09-03-08
+---------
+- Fixed logic bug in G4ExcitedMesonConstructor::Add3PiMode().
+- Added G4DynamicParticle::GetParticleDefinition() giving 'const' pointer.
+- Code clean up to use const pointer of G4ParticleDefinition where possible.
+
+persistency/gdml                                 gdml-V09-03-04
+----------------
+- Fixed printout of unit in G4GDMLWriteStructure for replicas and divisions,
+  in the case of angles.
+
+persistency/mctruth                              mctruth-V09-03-00
+-------------------
+- Fixed recursive header inclusion in G4PersistencyCenter class.
+- Added dummy initialization of data members in constructors.
+- Added missing History file.
+
+physics_lists                                    phys-lists-V09-03-22
+-------------
+- Use G4ionIonisation for He3 and He4 ions in all EM builders.
+- G4IonBinaryCascadePhysics: added G4IonProtonCrossSection.
+- G4DataQuestionaire: fix for problem report #1125 for optical physics, to
+  correctly check on G4REALSURFACEDATA path.
+- Added check on new G4NEUTRONXSDATA data set for QBBC and in
+  G4NeutronCrossSectionXS.
+- G4HadronElasticPhysics renamed to G4HadronElasticPhysics93
+  G4HadronElasticPhysics is now a copy of G4HadronHElasticPhysics.
+  Applied related changes to QGSP_BERT_EMV.
+  G4HadronHElasticPhysics is now marked as obsolete
+  Corrected obsolete constructor of G4HadronElasticPhysics in header.
+- Removed inclusion of obsolete G4ParticleWithCut header in several files.
+
+processes/biasing                                procbiasing-V09-03-00
+-----------------
+- G4WeightWindowProcess: corrected call to G4WeightWindowStore::GetLowerWeight()
+  after correction of mispelled name.
+
+processes/electromagnetic/lowenergy              emlowen-V09-03-40
+-----------------------------------
+- First full version of G4Penelope08IonisationModel, model for e+/e-
+  ionisation according to Penelope v2008. Still beta version.
+- Added class G4PenelopeCrossSection to store/handle cross sections
+  (and higher momenta, like stopping powers) for the updated Penelope08
+  e+/e- models (ionisation and bremsstrahlung).
+- Updated & extended Rudd and Miller & Green models
+- Adapted all high energy limits of G4DNA electron models.
+- Changed low energy limit of G4DNA elastic scattering models for e-
+- Switched default excitation model for e- to Born
+- New data set required, G4LEDATA 6.15.
+
+processes/electromagnetic/standard               emstand-V09-03-17
+----------------------------------
+- G4UniversalFluctuation: revision of width correction providing better
+  results for thin targets and a good tail
+- New class G4UniversalFluctuation93 keeping original version as in release
+  9.3 for G4UniversalFluctuation.
+
+processes/electromagnetic/utils                  emutils-V09-03-18
+-------------------------------
+- G4VEnergyLossProcess: minor optimisation to PostStepDoIt() to reduce calls
+  to log() for random numbers.
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel,
+  G4EmMultiModel: replaced obsolete method GetDefinition() of G4DynamicParticle
+  with the new one GetParticleDefinition().
+- G4EmMultiModel: minor fix and clean up.
+- G4VMultipleScattering: added more detailed printout for kaon+.
+- G4LossTableManager: added pointer and accessor to G4ElectronIonPair.
+
+processes/decay                                  decay-V09-03-00
+---------------
+- Make use of 'const' pointer to G4ParticleDefinition.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-03-08)
+  o G4VComponentCrossSection: new interface for cross sections.
+  o G4VCrossSectionDataSet: added name, min and max kinetic energy and related
+    accessors.
+  o G4IonProtonCrossSection: some code clenup; moved virtual methods to source,
+    added constructor and destructor, make G4ProtonInelasticCrossSection class
+    member. Fixed bug in kinematics.
+- management (hadr-man-V09-03-02)
+  o G4HadronicProcess: use new const GetParticleDefinition method of
+    G4DynamicParticle. Added protection against negative cross section;
+    some cleanup.
+  o G4HadronicProcessStore: removed 'const_cast'.
+- models/cascade (hadr-casc-V09-03-66)
+  o FILL HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+- models/chiral_inv_phase_space (hadr-chips-V09-03-08)
+  o Bug fix in 'body' module following tests on HARP data.
+  o G4QEnvironment: PDG=0 bug fix; photon and safety corrections similar
+    to those made in 9.2.p02.
+- models/neutron_hp (hadr-hpn-V09-03-05)
+  o Added safety for zero length cross-section table in
+    G4NeutronHPFissionData. Addressing problem report #1118.
+  o Added model name in constructor of G4NeutronHPThermalScattering.
+    Addressing problem report #1116.
+
+run                                              run-V09-03-02
+---
+- Added dummy initialisation of data members in constructors.
+- Use canonical form for exceptions in G4RunManager and added dummy return
+  statements; same in G4VUserPhysicsList.
+
+track                                            track-V09-03-03
+-----
+- Added G4Track::GetParticleDefinition() returning 'const' pointer.
+- Added protection against possible null pointer in G4Track::GetVelocity().
+  Use PhysicsVector for calculation of GetVelocity().
+- Removed extra inclusion of G4Step.hh in G4Track header.
+- Fixed cases of restoring cout/cerr precision formatting in several classes.
+- Added dummy initialisation to data members in constructors.
+- Added warning exception if GetDeltaEnergy/Momentum() methods are invoked.
+  These methods are now obsolete and planned to be removed.
+
+tracking                                         tracking-V09-03-05
+--------
+- Added dummy initialisation to data members in constructors.
+- G4SteppingManager: use canonical form for G4Exception. Added protection for
+  possible negative index in method ApplyProductionCut() and some printout
+  formatting.
+- Added redundant return statement after exception in G4SteppingManager2.
+- Fixed restoring of output settings in G4SteppingVerbose.
+- Use 0 instead of NULL where applicable.
+
+data
+----
+- G4EMLOW-6.15:
+  o Added sigma_excitation_e_born.dat file for G4DNABornIonisationModel.
+  o Updated G4DNA data tables.
+
+examples                                         examples-V09-03-07
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm9 (testem9-V09-03-04)
+  o Histo: use empty option when opening file
+  o PhysicsList: use default constructor for elastic builder.
+- extended/eventgenerator/particleGun (particleGunExample-V09-03-03)
+  o Removed static data members and functions.
+  o Corrected UI commands: /testem/ -> /gunExample/
+  o Split PrimaryGeneratorAction2 in two: sampling methods, rotateUz.
+- extended/field/field01 (fieldex01-V09-03-04)
+- extended/field/field02 (fieldex02-V09-03-04)
+- extended/field/field03 (fieldex03-V09-03-04)
+- extended/geometry/g3tog4 (g3tog4Tests-V09-03-02)
+  o Removed inclusion of obsolete G4ParticleWithCuts header.
+- extended/geometry/olap (olap-V09-03-02)
+  o Fixed compilation error for setting of kRadTolerance.
+  o Removed inclusion of obsolete G4ParticleWithCuts header.
+- extended/hadronic/Hadr01 (exhadr01-V09-03-07)
+  o PhysicsList: use deafault elastic builder for majority of cases.
+
+tests                                            tests-V09-03-07
+-----
+- Updated reference outputs and tools.
+- test19 (test19-V09-03-06)
+  o Base version for the test group (with harpcdp);
+    added directory harpcdp (working internal version).
+- test30 (test30-V09-03-06)
+  o Updated 4-momentum balance computations.
+- test35 (test35-V09-03-02)
+  o Allow for backward compatibility between old and new scripts.
+- test44 (test44-V09-03-00)
+  o PhysicsList and its messenger are taken from Hadr01 example to
+    be coherent with the recent updates of physics_list library.
+- test47 (test47-V09-03-01)
+  o Changed the access of cross-sections for CHIPS and the plotting
+    functionality to go through multiple directories.
+- test202 (test202-V09-03-00)
+  o Changed to QGSP_BERT in main().
+  o vis.mac: changed to /vis/open OGL.
