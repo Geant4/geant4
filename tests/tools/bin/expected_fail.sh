@@ -99,15 +99,16 @@ EXPECTED_FAIL test29-run \
 #	x86_64-mac106-gcc42-dbg
 
 #new test Jul 2010, fail to run so far....
-EXPECTED_FAIL exam-ext-radioactivedecay-radioActiv-run \
-	slc4_amd64_gcc34	\
-	slc4_amd64_gcc34_dbg	\
-	slc4_ia32_gcc34		\
-	slc4_ia32_gcc34_dbg	\
-	i686-slc5-gcc43-opt	\
-	i686-slc5-gcc43-dbg	\
-	x86_64-slc5-gcc43-opt	\
-	x86_64-slc5-gcc43-dbg
+# fix Aug 2010
+#EXPECTED_FAIL exam-ext-radioactivedecay-radioActiv-run \
+#	slc4_amd64_gcc34	\
+#	slc4_amd64_gcc34_dbg	\
+#	slc4_ia32_gcc34		\
+#	slc4_ia32_gcc34_dbg	\
+#	i686-slc5-gcc43-opt	\
+#	i686-slc5-gcc43-dbg	\
+#	x86_64-slc5-gcc43-opt	\
+#	x86_64-slc5-gcc43-dbg
 
 #newly in  testing Jul 2010, fail to run for graphics so far....
 EXPECTED_FAIL test201-run \
