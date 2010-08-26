@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2009-06-29 16:27:49 gcosmo Exp $
+$Id: History,v 1.2 2010-08-26 15:01:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 13, 2010 - Sunanda Banerjee (test47-V09-03-01)
+- Changed the access of cross-sections for CHIPS and the plotting
+  functionality to go through multiple directories.
 
 June 10, 2009 - Sunanda Banerjee (test47-V09-02-00)
 - Created. First release.
