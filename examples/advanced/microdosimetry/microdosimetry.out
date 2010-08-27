@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,6 +47,7 @@ Registered filter factories:
   attributeFilter
 
 PhysicsList::SetCuts:CutLength : 1 nm 
+G4DNAChampionElasticModel: high energy limit decreased from 10 MeV to 1 MeV
 
 e-_G4DNAElastic:   for  e-    SubType= 51
  Total cross sections computed from DNAChampionElasticModel model
@@ -54,9 +55,9 @@ e-_G4DNAElastic:   for  e-    SubType= 51
 DNAChampionElasticModel :     Emin=          0 eV         Emax=   10 MeV
 
 e-_G4DNAExcitation:   for  e-    SubType= 51
- Total cross sections computed from DNAEmfietzoglouExcitationModel
+ Total cross sections computed from DNABornExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAEmfietzoglouExcitationModel :     Emin=          0 eV         Emax=   10 MeV
+DNABornExcitationModel :     Emin=          0 eV         Emax=   1 MeV
 
 e-_G4DNAIonisation:   for  e-    SubType= 51
  Total cross sections computed from DNABornIonisationModel

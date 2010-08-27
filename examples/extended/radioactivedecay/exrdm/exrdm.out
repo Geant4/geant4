@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -90,11 +90,10 @@ Registered filter factories:
 
 
 ----> The target has been changed to 3 cm of Lead
-NeutronHP: /Elastic/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Elastic///CrossSection/8_17_Oxygen
+/afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13
 NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Capture//CrossSection/8_17_Oxygen
 NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Elastic//CrossSection/8_17_Oxygen
 NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Inelastic//CrossSection/8_17_Oxygen
-/afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13
 NeutronHP: /Capture/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Capture///CrossSection/8_17_Oxygen
 ### exrdmPhysicsList::ConstructProcess is done
 world cuts are set
@@ -104,12 +103,12 @@ Detector cuts are set
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
                      Hadronic Processes for <anti_neutron>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <anti_proton>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                 G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
@@ -121,17 +120,17 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                                         TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
                      Hadronic Processes for <kaon+>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
    KaonPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                   G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
                      Hadronic Processes for <kaon->
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
   KaonMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                  G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
                      Hadronic Processes for <lambda>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
      LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                     G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
@@ -139,8 +138,7 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
           muMinusCaptureAtRest
 
                      Hadronic Processes for <neutron>
-            hElastic  Models:          NeutronHPElastic: Emin(GeV)=     0  Emax(GeV)= 0.02
-                                        G4HadronElastic: Emin(GeV)= 0.0195  Emax(GeV)= 100000
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
     NeutronInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                    G4LENeutronInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
                                          Binary Cascade: Emin(GeV)= 0.0199  Emax(GeV)= 9.9
@@ -151,17 +149,19 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
                                        NeutronHPFission: Emin(GeV)=     0  Emax(GeV)= 0.02
 
                      Hadronic Processes for <pi+>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
    PionPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                   G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
                      Hadronic Processes for <pi->
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
   PionMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                  G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
                      Hadronic Processes for <proton>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
      ProtonInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                     G4LEProtonInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
                                          Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9

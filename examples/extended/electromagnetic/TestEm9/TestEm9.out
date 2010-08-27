@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -143,6 +143,12 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -344,43 +350,43 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.85s Real=2.86s Sys=0s
+  User=2.02s Real=2.03s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         404.1
-Average number of gamma      680.3
-Average number of e+         48.44
-Average number of steps      3032
-Edep 1x1 =                   0.8268 +- 0.003033  res=  3.576 %
-Edep 3x3 =                   0.9564 +- 0.00132  res=  1.36 %
-Edep 5x5 =                   0.98 +- 0.0007972  res=  0.8052 %
+Average number of e-         405.7
+Average number of gamma      685.5
+Average number of e+         49.64
+Average number of steps      3038
+Edep 1x1 =                   0.8255 +- 0.002628  res=  3.119 %
+Edep 3x3 =                   0.9569 +- 0.001198  res=  1.246 %
+Edep 5x5 =                   0.98 +- 0.0008141  res=  0.8224 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8215 +- 0.003784  res=  4.607 %
-Edep 3x3 =                   0.9552 +- 0.001452  res=  1.52 %
-Edep 5x5 =                   0.9793 +- 0.0009604  res=  0.9807 %
+Edep 1x1 =                   0.8213 +- 0.003294  res=  4.011 %
+Edep 3x3 =                   0.9562 +- 0.001381  res=  1.445 %
+Edep 5x5 =                   0.9789 +- 0.001183  res=  1.209 %
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8599 +- 0.003448
-  E1/E25 =                   0.8388 +- 0.003691
-  E9/E25 =                   0.9754 +- 0.001015
+  E1/E9  =                   0.8588 +- 0.003025
+  E1/E25 =                   0.839 +- 0.00329
+  E9/E25 =                   0.9768 +- 0.0009412
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8268  delEdep1x1= -0.0003204 nrms= -0.1077
-Erms1x1: 0.02957  delErms1x1= -0.0001739 nrms= -0.05847
-Edep3x3: 0.9564  delEdep3x3= -0.0006442 nrms= -0.5009
-Erms3x3: 0.01301  delErms3x3= 0.0001451 nrms= 0.1128
-Edep5x5: 0.98  delEdep5x5= 0.0007303 nrms= 0.8261
-Erms5x5: 0.007892  delErms5x5= -0.0009484 nrms= -1.073
+Edep1x1: 0.8255  delEdep1x1= -0.001557 nrms= -0.5237
+Erms1x1: 0.02575  delErms1x1= -0.00399 nrms= -1.342
+Edep3x3: 0.9569  delEdep3x3= -0.0001169 nrms= -0.09093
+Erms3x3: 0.01192  delErms3x3= -0.0009374 nrms= -0.7289
+Edep5x5: 0.98  delEdep5x5= 0.0007084 nrms= 0.8014
+Erms5x5: 0.008059  delErms5x5= -0.0007809 nrms= -0.8833
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         158           0
-  53         284          41           0          45
-  55         298          48           0          49
+  13           0           0         159           0
+  53         286          42           0          47
+  55         298          49           0          49
 #
 G4 kernel has come to Quit state.
 

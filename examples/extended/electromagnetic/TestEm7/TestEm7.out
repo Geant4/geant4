@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -184,6 +184,12 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -379,28 +385,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=14.67s Real=18.57s Sys=0.29s
+  User=13.37s Real=13.71s Sys=0.34s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 17.7674 cm    rms= 3.10465 mm 
- Mean number of primary steps = 188.615
+ Projected Range= 17.7726 cm    rms= 2.43417 mm 
+ Mean number of primary steps = 188.661
  Total energy deposit= 160 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	4.52743 GeV	0.282964 % 	9.06718e-05 Gy
- tally 1: 	 	4.95286 GeV	0.309554 % 	9.91919e-05 Gy
- tally 2: 	 	3.29423 GeV	0.205889 % 	6.59742e-05 Gy
- tally 3: 	 	1.91614 GeV	0.119758 % 	3.83748e-05 Gy
+ tally 0: 	 	4.6029 GeV	0.287681 % 	9.21832e-05 Gy
+ tally 1: 	 	4.94603 GeV	0.309127 % 	9.90551e-05 Gy
+ tally 2: 	 	3.39794 GeV	0.212371 % 	6.80512e-05 Gy
+ tally 3: 	 	2.00775 GeV	0.125485 % 	4.02097e-05 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 567759070, 309223076
+ Current couple of seeds = 207759379, 1038546145
 ----------------------------------------
 /testem/stepMax 100 mm
 /gun/particle ion
@@ -430,7 +436,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 567759070, 309223076
+ Current couple of seeds = 207759379, 1038546145
 ----------------------------------------
 Start Run processing.
 
@@ -438,28 +444,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.24s Real=5.33s Sys=0.05s
+  User=5.34s Real=5.37s Sys=0.03s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 16.4851 cm    rms= 470.241 um 
- Mean number of primary steps = 127.035
+ Projected Range= 16.4881 cm    rms= 450.834 um 
+ Mean number of primary steps = 126.671
  Total energy deposit= 3.49997 GeV
- NIEL energy deposit = 1.33982 MeV
+ NIEL energy deposit = 1.33977 MeV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.0602 GeV	0.316005 % 	0.000221504 Gy
- tally 1: 	 	12.3113 GeV	0.351751 % 	0.000246561 Gy
- tally 2: 	 	15.5997 GeV	0.445707 % 	0.000312419 Gy
- tally 3: 	 	23.2103 GeV	0.663151 % 	0.000464837 Gy
+ tally 0: 	 	10.8983 GeV	0.31138 % 	0.000218263 Gy
+ tally 1: 	 	12.3837 GeV	0.35382 % 	0.000248011 Gy
+ tally 2: 	 	15.2891 GeV	0.436832 % 	0.000306198 Gy
+ tally 3: 	 	21.6482 GeV	0.61852 % 	0.000433553 Gy
 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 289091108, 1884059862
+ Current couple of seeds = 1021243855, 906772078
 ----------------------------------------
 /testem/det/setMat G4_Cu
 /testem/det/tallyMat G4_Cu
@@ -627,6 +633,12 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -801,7 +813,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 289091108, 1884059862
+ Current couple of seeds = 1021243855, 906772078
 ----------------------------------------
 Start Run processing.
 
@@ -809,19 +821,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.63s Real=5.69s Sys=0.03s
+  User=5.29s Real=5.33s Sys=0.03s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.11349 cm    rms= 1.77452 mm 
- Mean number of primary steps = 19.989
- Total energy deposit= 284.244 MeV
+ Projected Range= 2.12007 cm    rms= 1.43632 mm 
+ Mean number of primary steps = 20.117
+ Total energy deposit= 283.268 MeV
  NIEL energy deposit = 0 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	2.51645 GeV	2.51645 % 	5.62471e-06 Gy
- tally 1: 	 	32.5865 keV	3.25865e-05 % 	7.28366e-11 Gy
+ tally 0: 	 	2.43035 GeV	2.43035 % 	5.43228e-06 Gy
+ tally 1: 	 	74.7829 keV	7.47829e-05 % 	1.67153e-10 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
 
@@ -830,7 +842,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1968598092, 1623671030
+ Current couple of seeds = 1542432735, 1141081208
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/tallyMat TechVacuum
@@ -998,6 +1010,12 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1177,7 +1195,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1968598092, 1623671030
+ Current couple of seeds = 1542432735, 1141081208
 ----------------------------------------
 Start Run processing.
 
@@ -1185,18 +1203,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0.01s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 324.555 um    rms= 92.5084 um 
- Mean number of primary steps = 5.31
+ Projected Range= 330.491 um    rms= 101.813 um 
+ Mean number of primary steps = 5.29
  Total energy deposit= 265 eV 
- NIEL energy deposit = 175.832 eV 
+ NIEL energy deposit = 177.931 eV 
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	11.1831 keV	42.2004 % 	2.23967e-05 Gy
+ tally 0: 	 	12.9198 keV	48.754 % 	2.58747e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1206,7 +1224,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1729482278, 1310294582
+ Current couple of seeds = 362595393, 1272324138
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/tallyMat G4_WATER
@@ -1374,6 +1392,12 @@ hIoni:   for  anti_proton    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1553,7 +1577,7 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1729482278, 1310294582
+ Current couple of seeds = 362595393, 1272324138
 ----------------------------------------
 Start Run processing.
 
@@ -1561,18 +1585,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.04s Real=0.17s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.42764 mm    rms= 40.5907 um 
- Mean number of primary steps = 30.4
+ Projected Range= 6.42163 mm    rms= 47.0752 um 
+ Mean number of primary steps = 30.46
  Total energy deposit= 100 MeV
- NIEL energy deposit = 57.2175 keV
+ NIEL energy deposit = 57.5266 keV
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
- tally 0: 	 	748.313 MeV	7.48313 % 	1.49866e-05 Gy
+ tally 0: 	 	821.324 MeV	8.21324 % 	1.64488e-05 Gy
  tally 1: 	 	0 eV 	0 % 	0 Gy
  tally 2: 	 	0 eV 	0 % 	0 Gy
  tally 3: 	 	0 eV 	0 % 	0 Gy
@@ -1582,7 +1606,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1429738487, 350077603
+ Current couple of seeds = 924546361, 602704037
 ----------------------------------------
 G4 kernel has come to Quit state.
 

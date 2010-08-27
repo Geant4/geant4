@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -221,6 +221,12 @@ hIoni:   for  anti_proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
 
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
+
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV in 240 bins, spline: 1
@@ -375,7 +381,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=12.36s Real=13.63s Sys=0.52s
+  User=12.46s Real=12.96s Sys=0.5s
 
  ======================== run summary ======================
 
@@ -383,20 +389,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 443.666 keV +- 110.109 keV
+ Total Energy deposited        = 443.934 keV +- 108.492 keV
 
- Track length of primary track = 870.965 um  +- 199.370 um 
+ Track length of primary track = 871.539 um  +- 199.781 um 
  Range from EmCalculator       = 943.428 um  (from full dE/dx)
 
- Projected range               = 321.497 um  +- 208.092 um 
+ Projected range               = 323.764 um  +- 208.517 um 
 
- Nb of steps of primary track  = 87.62 +- 19.93	 Step size= 9.929 um  +- 123.724 nm 
+ Nb of steps of primary track  = 87.68 +- 19.96	 Step size= 9.930 um  +- 100.563 nm 
 
- absorbed = 76.69 %   transmit = 5.10 %   reflected = 18.20 %
+ absorbed = 76.44 %   transmit = 5.59 %   reflected = 17.96 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1325532186, 417920133
+ Current couple of seeds = 1870460552, 1525593697
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

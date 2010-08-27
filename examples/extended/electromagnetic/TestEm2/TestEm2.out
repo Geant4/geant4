@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -180,6 +180,12 @@ hIoni:   for  anti_proton    SubType= 2
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
+
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
@@ -345,25 +351,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.07s Real=9.12s Sys=0s
+  User=7.21s Real=7.21s Sys=0s
 
  SUMMARY 
 
- energy deposit :   94.69 % E0 +-    1.11 % E0
- charged traklen:  479.10 radl +-    5.93 radl
- neutral traklen: 4445.58 radl +-  130.36 radl
+ energy deposit :   94.59 % E0 +-    1.24 % E0
+ charged traklen:  478.64 radl +-    6.47 radl
+ neutral traklen: 4439.61 radl +-  126.09 radl
 
- 90.00 % confinement: radius = 3.10 radl  (2.76 cm )
+ 90.00 % confinement: radius = 3.10 radl  (2.77 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 859713455, 2085840081
+ Current couple of seeds = 479899078, 590827574
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94689776  delEdep= -0.0021022368 nrms= -2.5637034
-Erms: 0.01113771  delErms= 0.0029377098 nrms= 3.5825729
-<<<<END>>>>   IS ACCEPTED
+Edep: 0.945856  delEdep= -0.00314424 nrms= -3.83444
+Erms: 0.0124444  delErms= 0.00424438 nrms= 5.17607
+<<<<END>>>>   IS NOT ACCEPTED
 
 G4 kernel has come to Quit state.
 

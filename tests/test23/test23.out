@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -119,6 +119,12 @@ hIoni:   for  kaon+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
+
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -255,6 +261,6 @@ Test23 event # 700
 Test23 event # 800
 Test23 event # 900
 Test23 event # 1000
-Test23_Result: gam=67(3.0704392), e-=1325(20.53462), e+=5(2.3800486), p=256(3.5368446), n=2186(2.8005454), d=50(6.5269555), t=6(3.5861128), He3=0(0), alph=194(2.7754446), nu=1353(54.477054), anu=745(33.123193), others=25969*0.077985732
+Test23_Result: gam=118(4.51695), e-=1745(15.6797), e+=16(4.72838), p=354(5.55187), n=1727(4.75603), d=54(1.72412), t=26(4.1669), He3=3(14.4438), alph=182(2.34869), nu=1335(53.3782), anu=741(33.5898), others=16747*0.110359
 Test23 is done
 

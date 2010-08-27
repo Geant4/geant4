@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -264,6 +264,12 @@ hIoni:   for  anti_proton    SubType= 2
             ICRU73QO :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 220 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
+
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
@@ -365,10 +371,8 @@ CoulombScat:   for  mu-    SubType= 1
   eCoulombScattering :     Emin=          0 eV         Emax=   10 TeV
 G4NeutronInelasticXS::BuildPhysicsTable: 
 neutron
-G4NEUTRONXSDATA environment variable not set
 G4NeutronCaptureXS::BuildPhysicsTable: 
 neutron
-G4NEUTRONXSDATA environment variable not set
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -562,18 +566,22 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 3 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.6101508140564
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.035633563995361
 
 -> Event # 4 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32617983222008
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.037377636879683
 
 -> Event # 5 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.35554075241089
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.024478178471327
 
 -> Event # 6 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32255533337593
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.022024262696505
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 7 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -588,7 +596,7 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 1
+-> Total number of particles detected by the gas detector : 3
 
 Idle> Graphics systems deleted.
 Visualization Manager deleting...

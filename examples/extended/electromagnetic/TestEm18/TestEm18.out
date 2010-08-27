@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-06    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -289,7 +289,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.92s Real=1.93s Sys=0s
+  User=1.65s Real=1.66s Sys=0s
 
  ======================== run summary ======================
 
@@ -297,19 +297,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0004 cm 	 nb of steps= 1.5793  stepSize= 6.3345 mm 
+ trackLength= 1.0004 cm 	 nb of steps= 1.5799  stepSize= 6.3319 mm 
 
- d-rays  : eLoss/primary= 244.71 keV	  nb of d-rays= 0.23138  <Tkin>= 1.0576 MeV  Tmin= 351.89 keV  Tmax= 4.9635 MeV
+ d-rays  : eLoss/primary= 246.54 keV	  nb of d-rays= 0.23236  <Tkin>= 1.061 MeV  Tmin= 351.9 keV  Tmax= 4.9579 MeV
 
- brems   : eLoss/primary= 174.25 keV	  nb of gammas= 0.30571  <Tkin>= 569.99 keV  Tmin= 2.9419 keV  Tmax= 9.6093 MeV
+ brems   : eLoss/primary= 174.64 keV	  nb of gammas= 0.30573  <Tkin>= 571.23 keV  Tmin= 2.9418 keV  Tmax= 9.762 MeV
 
- deposit : eLoss/primary= 1.7345 MeV	 <dEcut > table= 1.7358 MeV   ---> simul/reference= 0.99926
+ deposit : eLoss/primary= 1.7346 MeV	 <dEcut > table= 1.7358 MeV   ---> simul/reference= 0.99929
 
- total   : eLoss/primary= 2.1535 MeV	 <dEfull> table= 2.1628 MeV   ---> simul/reference= 0.99569
+ total   : eLoss/primary= 2.1558 MeV	 <dEfull> table= 2.1628 MeV   ---> simul/reference= 0.99675
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1745407570, 996125143
+ Current couple of seeds = 1914288255, 952098167
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
