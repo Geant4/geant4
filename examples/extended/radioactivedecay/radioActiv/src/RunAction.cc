@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.7 2010-07-27 19:39:16 maire Exp $
+// $Id: RunAction.cc,v 1.8 2010-08-27 09:50:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include <iomanip>
 
@@ -53,12 +54,18 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 { 
+  //initialize arrays
+  //
   decayCount = 0;
   for (G4int i=0; i<3; i++) Ebalance[i] = Pbalance[i] = EventTime[i] = 0. ;
        
   //histograms
   //
   histoManager->book();
+  
+  //inform the runManager to save random number seed
+  //
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,7 +148,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
  G4double Ebmean = Ebalance[0]/decayCount;
  G4double Pbmean = Pbalance[0]/decayCount;
   
- G4cout << "\n Energy and momentum balance : initial state - final state"
+ G4cout << "\n Energy and momentum balance : final state - initial state"
         << "\n (excluding gamma desexcitation from momentum balance) : \n"  
         << G4endl;
          

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.3 2010-07-20 17:57:29 maire Exp $
+// $Id: PhysicsList.cc,v 1.4 2010-08-27 09:50:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,6 +92,10 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  radioactiveDecay->SetHLThreshold(0.*s);
+  radioactiveDecay->SetICM(false);
+  radioactiveDecay->SetARM(false);
+      
   G4ProcessManager* pmanager = G4GenericIon::GenericIon()->GetProcessManager();  
   pmanager->AddProcess(radioactiveDecay, 0, -1, 1);    
 }

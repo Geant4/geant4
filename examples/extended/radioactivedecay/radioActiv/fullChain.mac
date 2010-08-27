@@ -14,7 +14,7 @@
 /radioActiv/histo/setHisto 3  100  0. 4000 keV	#gamma
 /radioActiv/histo/setHisto 4  100  0. 10   MeV	#alpha
 /radioActiv/histo/setHisto 5  100  0. 200  keV	#recoil ion
-/radioActiv/histo/setHisto 6  100 -6. 0.5  MeV	#E balance
+/radioActiv/histo/setHisto 6  100 -0.5  6  MeV	#E balance
 /radioActiv/histo/setHisto 7  100  0. 300  MeV	#P balance
 /radioActiv/histo/setHisto 8  100  0. 1.e+11 y	#time of life
 /radioActiv/histo/setHisto 9  100  0. 1.e+11 y	#activity
