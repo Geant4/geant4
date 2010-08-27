@@ -4,8 +4,8 @@
 
 Some of the development/fixes included since the last development tag are:
 
- o Several Q/A fixes in geometry modules
  o Implemented customizable pool size in G4Allocator.
+ o Q/A code review in geometry modules.
  o First full Beta version of model for e+/e- ionisation according to
    Penelope v2008.
  o Updated & extended G4DNS Rudd and Miller & Green models; requiring
@@ -13,7 +13,8 @@ Some of the development/fixes included since the last development tag are:
  o Revised width correction in G4UniversalFluctuation providing better
    results for thin targets and a good tail; added new class
    G4UniversalFluctuation93 keeping original 9.3 version.
-
+ o Fixes for energy conservation in nuclear breakup in Bertini hadronic
+   model and several software-wise improvements in the code.
 
 ---------- Reference-tag 'Release Notes' -----------
 
@@ -240,8 +241,24 @@ processes/hadronic
     some cleanup.
   o G4HadronicProcessStore: removed 'const_cast'.
 - models/cascade (hadr-casc-V09-03-66)
-  o FILL HERE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+  o Improved, but not completely fixed, energy conservation in nuclear breakup.
+    Introduced 4-momentum conservation at each elementary interaction and at 
+    the end of most sub-model stages. Some violation still remains for the
+    case of break-up of light nuclei.
+  o Bug fix of energy non-conservation in N-body phase space generator.
+  o Introduced temporary particle types for nuclear fragments far from
+    stability. These later disappear after the fragments are broken up.
+  o Added 4-momentum checking after each sub-model.
+  o Added -D compiler flags for debugging at several stages throughout
+    the model.
+  o Removed unnecessary creates and deletes of large classes.
+  o Improved handling of nuclear excitation energy, now part of nuclear mass.
+  o Recover secondaries from elementary hadron-nucleon interactions which were
+    deleted in original Bertini model.
+  o Replace std::vectors with fixed-length arrays in places where speed is
+    affected. Use G4cerr for error reporting. Added more verbosity.
+  o General improvement of code design. Several collider classes re-designed
+    so that they can be re-used.
 - models/chiral_inv_phase_space (hadr-chips-V09-03-08)
   o Bug fix in 'body' module following tests on HARP data.
   o G4QEnvironment: PDG=0 bug fix; photon and safety corrections similar
