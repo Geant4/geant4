@@ -13,6 +13,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28-Aug-2010, V.Ivanchenko                had-binary-V09-03-00
+- G4GeneratorPrecompoundInterface - minor cleanup as a part of PreCompound
+                                    model cleanup: use integer Z and A,
+                                    added pointers to proton and neutron
+
 4-Dec-2009, Gunter Folger                had-binary-V09-02-06
 - Bug fix in G4BinaryCascade::ApplyCollision; decay products outside
    nucleus were nevertheless counted in currentZ/A as if these were within
