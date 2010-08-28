@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28-August 2010 V.Ivanchenko  hadr-pre-V09-03-07
+---------------------------------------------------
+General cleaup of all classes: constructors and destructors moved to the 
+                               source, integer Z and A, G4Pow class
+                               is used to speedup computations
+G4PreCompoundModel - Emission and Transition classes become members created
+                     at construction and not at run time,
+                     initialisation is performed at construction or when options
+                     are changed and not in run time, G4Fragment is not const,
+                     it is modified during process of emission of particles
+
 11-June 2010 V.Ivanchenko  hadr-pre-V09-03-06
 ---------------------------------------------------
 G4LowEIonFragmentation - cleanup comments

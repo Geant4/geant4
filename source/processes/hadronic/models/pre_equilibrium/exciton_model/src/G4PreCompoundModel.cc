@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.22 2010-08-20 07:41:48 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.23 2010-08-28 15:16:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -181,6 +181,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   G4ReactionProductVector * Result = new G4ReactionProductVector;
   G4double Eex = aFragment.GetExcitationEnergy();
   G4int A = aFragment.GetA_asInt(); 
+
+  //G4cout << aFragment << G4endl;
  
   // Perform Equilibrium Emission 
   if (A < 5 || Eex < keV || Eex > 3.*MeV*A) {

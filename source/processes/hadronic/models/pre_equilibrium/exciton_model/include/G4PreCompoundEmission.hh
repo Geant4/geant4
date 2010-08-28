@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh,v 1.7 2009-11-12 14:33:44 gunter Exp $
+// $Id: G4PreCompoundEmission.hh,v 1.8 2010-08-28 15:16:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -33,6 +33,9 @@
 // cross section option
 // JMQ (06 September 2008) Also external choice has been added for:
 //                      - superimposed Coulomb barrier (if useSICB=true) 
+// 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
+//                         use int Z and A and cleanup; 
+//                         inline methods moved from icc file to hh
 
 #ifndef G4PreCompoundEmission_h
 #define G4PreCompoundEmission_h 1
@@ -40,61 +43,56 @@
 #include "G4VPreCompoundFragment.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Fragment.hh"
-#include "Randomize.hh"
-#include "G4PreCompoundParameters.hh"
 #include "G4PreCompoundFragmentVector.hh"
 
 class G4VPreCompoundEmissionFactory;
 
+class G4Pow;
+class G4PreCompoundParameters;
 
 class G4PreCompoundEmission
 {
 public:
+
   G4PreCompoundEmission();
+
   ~G4PreCompoundEmission();
 
+  void SetDefaultModel();
+
+  void SetHETCModel();
+
+  G4ReactionProduct * PerformEmission(G4Fragment & aFragment);
+
+  inline G4double GetTotalProbability(const G4Fragment & aFragment);
+
+  inline void SetUp(const G4Fragment & aFragment);
+
+  inline void Initialize(const G4Fragment & aFragment);
+
+  inline void SetOPTxs(G4int);
+
+  inline void UseSICB(G4bool);
+
 private:
+
+  void AngularDistribution(G4VPreCompoundFragment * theFragment,
+			   const G4Fragment& aFragment,
+			   G4double KineticEnergy);
+		
+  G4double rho(G4int p, G4int h, G4double g, G4double E, G4double Ef) const;
+
   G4PreCompoundEmission(const G4PreCompoundEmission &right);
   const G4PreCompoundEmission& operator=(const G4PreCompoundEmission &right);
   G4bool operator==(const G4PreCompoundEmission &right) const;
   G4bool operator!=(const G4PreCompoundEmission &right) const;
 
-public:
-
-  inline void SetUp(const G4Fragment & aFragment);
-  inline void Initialize(const G4Fragment & aFragment);
-	
-  inline G4double GetTotalProbability(const G4Fragment & aFragment);
-	
-  G4ReactionProduct * PerformEmission(G4Fragment & aFragment);
-
-  void SetDefaultModel();
-  void SetHETCModel();
-
-private:
-
-  G4ThreeVector AngularDistribution(G4VPreCompoundFragment * theFragment,
-				    const G4Fragment& aFragment,
-				    const G4double KineticEnergy) const;
-		
-
-
-  G4double rho(const G4double p, const G4double h, const G4double g, 
-	       const G4double E, const G4double Ef) const;
-
-  G4double factorial(G4double a) const;
-  G4double logfactorial(G4double a) const;
-
-  //for inverse cross section choice
-public:
-  inline void SetOPTxs(G4int);
-  //for superimposed CoulomBarrier for inverse cross sections
-  inline void UseSICB(G4bool);
-
-
   //==============
   // Data Members
   //==============
+
+  G4Pow* g4pow;
+  G4PreCompoundParameters* theParameters;
 
   // A vector with the allowed emission fragments 
   G4PreCompoundFragmentVector * theFragmentsVector;
@@ -105,9 +103,40 @@ public:
 
   // Projectile direction
   G4ThreeVector theIncidentDirection;
-
+  // Momentum of emitted fragment
+  G4ThreeVector theFinalMomentum;
 };
 
-#include "G4PreCompoundEmission.icc"
+inline G4double 
+G4PreCompoundEmission::GetTotalProbability(const G4Fragment& aFragment) 
+{
+  return theFragmentsVector->CalculateProbabilities(aFragment);
+}
+
+inline void G4PreCompoundEmission::SetUp(const G4Fragment& aFragment)
+{
+  // This should be the projectile energy. If I would know which is 
+  // the projectile (proton, neutron) I could remove the binding energy. 
+  // But, what happens if INC precedes precompound? This approximation
+  // seems to work well enough
+  ProjEnergy = aFragment.GetExcitationEnergy();
+  theIncidentDirection = aFragment.GetMomentum().vect().unit();
+}
+
+inline void 
+G4PreCompoundEmission::Initialize(const G4Fragment& aFragment) 
+{
+  theFragmentsVector->Initialize(aFragment);
+}
+
+inline void G4PreCompoundEmission::SetOPTxs(G4int opt)
+{
+  theFragmentsVector->SetOPTxs(opt);
+}
+
+inline void G4PreCompoundEmission::UseSICB(G4bool use)
+{
+  theFragmentsVector->UseSICB(use);
+}
 
 #endif

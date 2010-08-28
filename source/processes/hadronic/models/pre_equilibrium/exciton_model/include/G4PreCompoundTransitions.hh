@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.hh,v 1.7 2010-08-20 07:42:19 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.hh,v 1.8 2010-08-28 15:16:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -48,6 +48,7 @@
 #include "G4Fragment.hh"
 
 class G4ParticleDefinition;
+class G4Pow;
 
 class G4PreCompoundTransitions : public G4VPreCompoundTransitions
 {
@@ -68,6 +69,7 @@ private:
   G4bool operator==(const G4PreCompoundTransitions &right) const;
   G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
+  G4Pow* g4pow;
   const G4ParticleDefinition* proton;
 
   G4double FermiEnergy;

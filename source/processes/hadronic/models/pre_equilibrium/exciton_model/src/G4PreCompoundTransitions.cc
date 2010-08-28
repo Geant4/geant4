@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.23 2010-08-20 07:42:19 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.24 2010-08-28 15:16:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,6 +51,7 @@
 #include "G4PreCompoundParameters.hh"
 #include "G4Proton.hh"
 #include "Randomize.hh"
+#include "G4Pow.hh"
 
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {
@@ -58,19 +59,17 @@ G4PreCompoundTransitions::G4PreCompoundTransitions()
   FermiEnergy = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
   r0 = G4PreCompoundParameters::GetAddress()->GetTransitionsr0();
   aLDP = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  g4pow = G4Pow::GetInstance();
 }
 
 G4PreCompoundTransitions::~G4PreCompoundTransitions() 
 {}
 
-// Calculates transition probabilities with DeltaN = +2 (Trans1) -2 (Trans2) and 0 (Trans3)
-
+// Calculates transition probabilities with 
+// DeltaN = +2 (Trans1) -2 (Trans2) and 0 (Trans3)
 G4double G4PreCompoundTransitions::
 CalculateProbability(const G4Fragment & aFragment)
 {
-  //G4cout<<"In G4PreCompoundTransitions.cc  useNGB="<<useNGB<<G4endl;
-  //G4cout<<"In G4PreCompoundTransitions.cc  useCEMtr="<<useCEMtr<<G4endl;
-
   // Number of holes
   G4int H = aFragment.GetNumberOfHoles();
   // Number of Particles 
@@ -97,24 +96,31 @@ CalculateProbability(const G4Fragment & aFragment)
     // Sample kind of nucleon-projectile 
     G4bool ChargedNucleon(false);
     G4double chtest = 0.5;
-    if (P > 0) { chtest = G4double(aFragment.GetNumberOfCharged())/G4double(P); }
+    if (P > 0) { 
+      chtest = G4double(aFragment.GetNumberOfCharged())/G4double(P); 
+    }
     if (G4UniformRand() < chtest) { ChargedNucleon = true; }
     
     // Relative Velocity: 
     // <V_{rel}>^2
     G4double RelativeVelocitySqr(0.0);
-    if (ChargedNucleon) { RelativeVelocitySqr = 2.0*RelativeEnergy/proton_mass_c2; }
-    else { RelativeVelocitySqr = 2.0*RelativeEnergy/neutron_mass_c2; }
+    if (ChargedNucleon) { 
+      RelativeVelocitySqr = 2.0*RelativeEnergy/CLHEP::proton_mass_c2; 
+    } else { 
+      RelativeVelocitySqr = 2.0*RelativeEnergy/CLHEP::neutron_mass_c2; 
+    }
     
     // <V_{rel}>
     G4double RelativeVelocity = std::sqrt(RelativeVelocitySqr);
     
     // Proton-Proton Cross Section
     G4double ppXSection = 
-      (10.63/RelativeVelocitySqr - 29.92/RelativeVelocity + 42.9)*millibarn;
+      (10.63/RelativeVelocitySqr - 29.92/RelativeVelocity + 42.9)
+      * CLHEP::millibarn;
     // Proton-Neutron Cross Section
     G4double npXSection = 
-      (34.10/RelativeVelocitySqr - 82.20/RelativeVelocity + 82.2)*millibarn;
+      (34.10/RelativeVelocitySqr - 82.20/RelativeVelocity + 82.2)
+      * CLHEP::millibarn;
     
     // Averaged Cross Section: \sigma(V_{rel})
     //  G4double AveragedXSection = (ppXSection+npXSection)/2.0;
@@ -122,12 +128,13 @@ CalculateProbability(const G4Fragment & aFragment)
     if (ChargedNucleon)
       {
         //JMQ: small bug fixed
-        //      AveragedXSection = ((Z-1.0) * ppXSection + (A-Z-1.0) * npXSection) / (A-1.0);
-        AveragedXSection = ((Z-1) * ppXSection + (A-Z) * npXSection) / (A-1);
+        //AveragedXSection=((Z-1.0) * ppXSection + (A-Z-1.0) * npXSection)/(A-1.0);
+        AveragedXSection = ((Z-1)*ppXSection + (A-Z)*npXSection)/G4double(A-1);
       }
     else 
       {
-        AveragedXSection = ((A-Z-1) * ppXSection + Z * npXSection) / (A-1);
+        AveragedXSection = ((A-Z-1)*ppXSection + Z*npXSection)/G4double(A-1);
+        //AveragedXSection = ((A-Z-1)*npXSection + Z*ppXSection)/G4double(A-1);
       }
     
     // Fermi relative energy ratio
@@ -138,19 +145,22 @@ CalculateProbability(const G4Fragment & aFragment)
     if (FermiRelRatio > 0.5) {
       G4double x = 2.0 - 1.0/FermiRelRatio;
       PauliFactor += 0.4*FermiRelRatio*x*x*std::sqrt(x);
-      //PauliFactor += (2.0/5.0)*FermiRelRatio*std::pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
+      //PauliFactor += 
+      //(2.0/5.0)*FermiRelRatio*std::pow(2.0 - (1.0/FermiRelRatio), 5.0/2.0);
     }
     // Interaction volume 
-    //  G4double Vint = (4.0/3.0)*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
-    G4double xx=2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity);
-    G4double Vint = (4.0/3.0)*pi*xx*xx*xx;
+    //  G4double Vint = (4.0/3.0)
+    //*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
+    G4double xx = 2.0*r0 + hbarc/(CLHEP::proton_mass_c2*RelativeVelocity);
+    G4double Vint = (4.0/3.0)*CLHEP::pi*xx*xx*xx;
     
     // Transition probability for \Delta n = +2
     
-    TransitionProb1 = 
-      AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
+    TransitionProb1 = AveragedXSection*PauliFactor
+      *std::sqrt(2.0*RelativeEnergy/CLHEP::proton_mass_c2)/Vint;
 
-    //JMQ 281009  phenomenological factor in order to increase equilibrium contribution
+    //JMQ 281009  phenomenological factor in order to increase 
+    //   equilibrium contribution
     //   G4double factor=5.0;
     //   TransitionProb1 *= factor;
     //
@@ -171,12 +181,12 @@ CalculateProbability(const G4Fragment & aFragment)
     // F(p+1,h+1)
     G4double Fph1 = Fph + N/2.0;
     
-    G4double ProbFactor = std::pow((GE-Fph)/(GE-Fph1),N+1.0);
+    G4double ProbFactor = g4pow->powN((GE-Fph)/(GE-Fph1),N+1);
     
     if (NeverGoBack)
       {
-      TransitionProb2 = 0.0;
-      TransitionProb3 = 0.0;
+	TransitionProb2 = 0.0;
+	TransitionProb3 = 0.0;
       }
     else 
       {
@@ -187,7 +197,7 @@ CalculateProbability(const G4Fragment & aFragment)
         
         // Transition probability for \Delta n = 0 (at F(p,h) = 0)
         TransitionProb3 = TransitionProb1*(N+1)* ProbFactor  
-	  * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(N*(GE-Fph));
+	  * (P*(P-1) + 4.0*P*H + H*(H-1))/(N*(GE-Fph));
         if (TransitionProb3 < 0.0) { TransitionProb3 = 0.0; }
       }
   } else {
@@ -198,7 +208,8 @@ CalculateProbability(const G4Fragment & aFragment)
     G4double Kmfp=2.;
         
     //TransitionProb1=1./Kmfp*3./8.*1./c_light*1.0e-9*(1.4e+21*U-2./(N+1)*6.0e+18*U*U);
-    TransitionProb1 = 3.0e-9*(1.4e+21*U-2./(N+1)*6.0e+18*U*U)/(8*Kmfp*c_light);
+    TransitionProb1 = 3.0e-9*(1.4e+21*U - 1.2e+19*U*U/G4double(N+1))
+      /(8*Kmfp*CLHEP::c_light);
     if (TransitionProb1 < 0.0) { TransitionProb1 = 0.0; }
 
     TransitionProb2=0.;
@@ -207,7 +218,7 @@ CalculateProbability(const G4Fragment & aFragment)
     if (!useNGB && N > 1) {
       // TransitionProb2=1./Kmfp*3./8.*1./c_light*1.0e-9*(N-1.)*(N-2.)*P*H/(GE*GE)*(1.4e+21*U - 2./(N-1)*6.0e+18*U*U);      
       TransitionProb2 = 
-	3.0e-9*(N-2)*P*H*(1.4e+21*U*(N-1) - 12.0e+18*U*U)/(8*Kmfp*c_light*GE*GE);      
+	3.0e-9*(N-2)*P*H*(1.4e+21*U*(N-1) - 1.2e+19*U*U)/(8*Kmfp*c_light*GE*GE);      
       if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
     }
   }
