@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronStandard.cc,v 1.3 2010-04-01 08:52:16 sincerti Exp $
+// $Id: Tst14ElectronStandard.cc,v 1.4 2010-08-28 20:35:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,6 +39,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
+
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -63,9 +64,22 @@ void Tst14ElectronStandard::ConstructProcess()
      
       if (particleName == "e-") 
 	{
+/*
 	  manager->AddProcess(new G4eMultipleScattering, -1, 1,1);
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+*/
+
+// From Option3
+
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      manager->AddProcess(msc,                   -1, 1, 1);
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.2, 100*um);      
+      manager->AddProcess(eIoni,                 -1, 2, 2);
+      manager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
+
 	}   
     }
 }

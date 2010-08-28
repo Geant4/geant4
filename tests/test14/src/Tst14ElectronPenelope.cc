@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronPenelope.cc,v 1.5 2010-04-01 08:52:16 sincerti Exp $
+// $Id: Tst14ElectronPenelope.cc,v 1.6 2010-08-28 20:35:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -41,10 +41,21 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
+
+// OLD PENELOPE
+/*
 #include "G4eMultipleScattering.hh"
 #include "G4PenelopeIonisation.hh"
 #include "G4PenelopeBremsstrahlung.hh"
+*/
 
+#include "G4eMultipleScattering.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4eIonisation.hh"
+#include "G4PenelopeIonisationModel.hh"
+#include "G4UniversalFluctuation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4PenelopeBremsstrahlungModel.hh"
 
 Tst14ElectronPenelope::Tst14ElectronPenelope(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -66,9 +77,35 @@ void Tst14ElectronPenelope::ConstructProcess()
      
       if (particleName == "e-") 
 	{
+
+// OLD PENELOPE
+/*
 	  manager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
 	  manager->AddProcess(new G4PenelopeIonisation,    -1, 2,2);
 	  manager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
+*/
+
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      manager->AddProcess(msc,                   -1, 1, 1);
+      
+      //Ionisation
+      G4eIonisation* eIoni = new G4eIonisation();
+      G4PenelopeIonisationModel* theIoniPenelope = 
+	new G4PenelopeIonisationModel();
+      eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
+      eIoni->SetStepFunction(0.2, 100*um); //     
+      manager->AddProcess(eIoni,                 -1, 2, 2);
+      
+      //Bremsstrahlung
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      G4PenelopeBremsstrahlungModel* theBremPenelope = new 
+	G4PenelopeBremsstrahlungModel();
+      eBrem->AddEmModel(0,theBremPenelope);
+      manager->AddProcess(eBrem, -1,-3, 3);
+	
+		
 	}            
     }
 }

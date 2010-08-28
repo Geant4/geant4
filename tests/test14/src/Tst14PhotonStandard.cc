@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhotonStandard.cc,v 1.2 2006-06-29 21:42:14 gunter Exp $
+// $Id: Tst14PhotonStandard.cc,v 1.3 2010-08-28 20:35:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -42,6 +42,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
 
 Tst14PhotonStandard::Tst14PhotonStandard(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -63,9 +64,10 @@ void Tst14PhotonStandard::ConstructProcess()
      
       if (particleName == "gamma") 
 	{
-	  manager->AddDiscreteProcess(new G4PhotoElectricEffect);
-	  manager->AddDiscreteProcess(new G4ComptonScattering);
-	  manager->AddDiscreteProcess(new G4GammaConversion);
+         manager->AddDiscreteProcess(new G4PhotoElectricEffect);
+         manager->AddDiscreteProcess(new G4ComptonScattering);
+         manager->AddDiscreteProcess(new G4GammaConversion);
+         manager->AddDiscreteProcess(new G4RayleighScattering);
 	}   
     }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronEEDL.cc,v 1.3 2010-04-01 08:52:16 sincerti Exp $
+// $Id: Tst14ElectronEEDL.cc,v 1.4 2010-08-28 20:35:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,9 +39,21 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
+
+// OLD LIVERMORE
+/*
 #include "G4eMultipleScattering.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+*/
+
+#include "G4eMultipleScattering.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4eIonisation.hh"
+#include "G4LivermoreIonisationModel.hh"
+#include "G4UniversalFluctuation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
 
 Tst14ElectronEEDL::Tst14ElectronEEDL(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -63,9 +75,35 @@ void Tst14ElectronEEDL::ConstructProcess()
      
       if (particleName == "e-") 
 	{
+
+// OLD LIVERMORE
+/*
 	  manager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
 	  manager->AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
 	  manager->AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
+*/
+
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      manager->AddProcess(msc,                   -1, 1, 1);
+      
+      // Ionisation
+      G4eIonisation* eIoni = new G4eIonisation();
+      G4LivermoreIonisationModel* theIoniLivermore = new
+        G4LivermoreIonisationModel();
+      theIoniLivermore->SetHighEnergyLimit(1*MeV); 
+      eIoni->AddEmModel(0, theIoniLivermore, new G4UniversalFluctuation() );
+      eIoni->SetStepFunction(0.2, 100*um); //     
+      manager->AddProcess(eIoni,                 -1, 2, 2);
+      
+      // Bremsstrahlung
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      G4LivermoreBremsstrahlungModel* theBremLivermore = new
+        G4LivermoreBremsstrahlungModel();
+      eBrem->AddEmModel(0, theBremLivermore);
+      manager->AddProcess(eBrem, -1,-3, 3);
+	
 	}   
     }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhotonEPDL.cc,v 1.2 2006-06-29 21:42:08 gunter Exp $
+// $Id: Tst14PhotonEPDL.cc,v 1.3 2010-08-28 20:35:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,10 +39,23 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
+
+// OLD LIVERMORE
+/*
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyRayleigh.hh"
+*/
+
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+#include "G4RayleighScattering.hh"
+#include "G4LivermoreRayleighModel.hh"
 
 Tst14PhotonEPDL::Tst14PhotonEPDL(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -64,10 +77,39 @@ void Tst14PhotonEPDL::ConstructProcess()
      
       if (particleName == "gamma") 
 	{
+/*
 	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
 	  manager->AddDiscreteProcess(new G4LowEnergyCompton);
 	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
 	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-	}   
+*/
+
+
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
+	new G4LivermorePhotoElectricModel();
+      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      manager->AddDiscreteProcess(thePhotoElectricEffect);
+
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4LivermoreComptonModel* theLivermoreComptonModel = 
+	new G4LivermoreComptonModel();
+      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      manager->AddDiscreteProcess(theComptonScattering);
+
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
+	new G4LivermoreGammaConversionModel();
+      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      manager->AddDiscreteProcess(theGammaConversion);
+
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      theRayleigh->AddEmModel(0, theRayleighModel);
+      manager->AddDiscreteProcess(theRayleigh);
+
+
+
+		}   
     }
 }

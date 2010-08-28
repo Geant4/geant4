@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhotonPenelope.cc,v 1.2 2006-06-29 21:42:10 gunter Exp $
+// $Id: Tst14PhotonPenelope.cc,v 1.3 2010-08-28 20:35:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -39,10 +39,22 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
+/*
 #include "G4PenelopeCompton.hh"
 #include "G4PenelopeGammaConversion.hh"
 #include "G4PenelopePhotoElectric.hh"
 #include "G4PenelopeRayleigh.hh"
+*/
+
+#include "G4PhotoElectricEffect.hh"
+#include "G4PenelopePhotoElectricModel.hh"
+#include "G4ComptonScattering.hh"
+#include "G4PenelopeComptonModel.hh"
+#include "G4GammaConversion.hh"
+#include "G4PenelopeGammaConversionModel.hh"
+#include "G4RayleighScattering.hh"
+#include "G4PenelopeRayleighModel.hh"
+
 
 Tst14PhotonPenelope::Tst14PhotonPenelope(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -64,10 +76,42 @@ void Tst14PhotonPenelope::ConstructProcess()
      
       if (particleName == "gamma") 
 	{
+/*
 	  manager->AddDiscreteProcess(new G4PenelopePhotoElectric);
 	  manager->AddDiscreteProcess(new G4PenelopeCompton);
 	  manager->AddDiscreteProcess(new G4PenelopeGammaConversion);
 	  manager->AddDiscreteProcess(new G4PenelopeRayleigh);
+*/
+
+      //Photo-electric effect
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
+	G4PenelopePhotoElectricModel();
+      thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
+      manager->AddDiscreteProcess(thePhotoElectricEffect);
+
+      //Compton scattering
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4PenelopeComptonModel* theComptonPenelopeModel = 
+	new G4PenelopeComptonModel();
+      theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
+      manager->AddDiscreteProcess(theComptonScattering);
+
+      //Gamma conversion
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4PenelopeGammaConversionModel* theGCPenelopeModel = 
+	new G4PenelopeGammaConversionModel();
+      theGammaConversion->AddEmModel(0,theGCPenelopeModel);
+      manager->AddDiscreteProcess(theGammaConversion);
+
+      //Rayleigh scattering
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4PenelopeRayleighModel* theRayleighPenelopeModel = 
+	new G4PenelopeRayleighModel();
+      theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
+      manager->AddDiscreteProcess(theRayleigh);
+
+
 	}   
     }
 }
