@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 August 2010 - V.Ivanchenko (hadr-modman-V09-03-03)
+------------------------------------------------------
+- G4VPreCompoundModel - make deexcited G4Fragment non-const
+- G4VIntraNuclearTransportModel - moved constructor and destructor 
+                                  to the source
+
 11 June 2010 - V.Ivanchenko (hadr-modman-V09-03-02)
 ------------------------------------------------------
 - G4VPreCompoundModel - constructor and destructor moved to the head
