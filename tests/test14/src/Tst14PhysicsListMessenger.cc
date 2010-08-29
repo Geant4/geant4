@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.cc,v 1.12 2006-06-29 21:42:18 gunter Exp $
+// $Id: Tst14PhysicsListMessenger.cc,v 1.13 2010-08-29 19:50:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -73,20 +73,6 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * physList
   cutGELowLimCmd->SetDefaultUnit("MeV");
   cutGELowLimCmd->AvailableForStates(G4State_Idle);
 
-  cutSecPhotCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/secphotcut",this);
-  cutSecPhotCmd->SetGuidance("Set production threshold for secondary Gamma");
-  cutSecPhotCmd->SetParameterName("energy",true);
-  cutSecPhotCmd->SetDefaultValue(5e-5);
-  cutSecPhotCmd->SetDefaultUnit("MeV");
-  cutSecPhotCmd->AvailableForStates(G4State_Idle);
-
-  cutSecElecCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/seceleccut",this);
-  cutSecElecCmd->SetGuidance("Set production threshold for secondary e-");
-  cutSecElecCmd->SetParameterName("energy",true);
-  cutSecElecCmd->SetDefaultValue(5e-5);
-  cutSecElecCmd->SetDefaultUnit("MeV");
-  cutSecElecCmd->AvailableForStates(G4State_Idle);
-
   cutGCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutG",this);
   cutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
   cutGCmd->SetParameterName("range",true);
@@ -101,26 +87,12 @@ Tst14PhysicsListMessenger::Tst14PhysicsListMessenger(Tst14PhysicsList * physList
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_Idle);
 
-  // Auger activation
-  augerCmd = new G4UIcmdWithABool("/lowenergy/auger",this);
-  augerCmd->SetGuidance("Set flag Auger electrons production.");
-  augerCmd->SetParameterName("Auger",true);
-  augerCmd->SetDefaultValue(false);
-  augerCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   // Building modular PhysicsList
 
   physicsListCmd = new G4UIcmdWithAString("/lowenergy/addPhysics",this);  
   physicsListCmd->SetGuidance("Add chunks of PhysicsList.");
   physicsListCmd->SetParameterName("physList",false);
   physicsListCmd->AvailableForStates(G4State_PreInit);  
-
-  // Select angular distribution
-  
-  angularDistributionCmd = new G4UIcmdWithAString("/lowenergy/angular",this);  
-  angularDistributionCmd->SetGuidance("Select angular distribution: tsai or 2bn or 2bs");
-  angularDistributionCmd->SetParameterName("angularDistribution",false);
-  angularDistributionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
 }
 
@@ -130,13 +102,9 @@ Tst14PhysicsListMessenger::~Tst14PhysicsListMessenger()
   delete cutGLowLimCmd;
   delete cutELowLimCmd;
   delete cutGELowLimCmd;
-  delete cutSecElecCmd;
-  delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
-  delete augerCmd;
   delete physicsListCmd;
-  delete angularDistributionCmd;
   delete lowEnDir;
 }
 
@@ -150,27 +118,16 @@ void Tst14PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVal
   
   if (command == cutGELowLimCmd)
     { physicsList->SetGELowLimit(cutGELowLimCmd->GetNewDoubleValue(newValue)); }
-  
-  if (command == cutSecPhotCmd)
-    { physicsList->SetLowEnSecPhotCut(cutSecPhotCmd->GetNewDoubleValue(newValue)); }
-
-  if (command == cutSecElecCmd)
-    { physicsList->SetLowEnSecElecCut(cutSecElecCmd->GetNewDoubleValue(newValue)); }
-  
+   
   if (command == cutGCmd)
     { physicsList->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue)); }
   
   if (command == cutECmd)
     { physicsList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue)); }
   
-  if (command == augerCmd)
-    { physicsList->ActivateAuger(augerCmd->GetNewBoolValue(newValue)); }
-  
   if (command == physicsListCmd)
     { physicsList->AddPhysicsList(newValue); }
   
-  if (command == angularDistributionCmd)
-    { physicsList->SetAngularDistribution(newValue); }
 }
 
 

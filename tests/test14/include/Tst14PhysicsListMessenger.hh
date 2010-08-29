@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsListMessenger.hh,v 1.12 2006-06-29 21:41:38 gunter Exp $
+// $Id: Tst14PhysicsListMessenger.hh,v 1.13 2010-08-29 19:50:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,17 +76,10 @@ private:
   G4UIcmdWithADoubleAndUnit* cutELowLimCmd;
   G4UIcmdWithADoubleAndUnit* cutGELowLimCmd;
 
-  G4UIcmdWithADoubleAndUnit* cutSecPhotCmd;
-  G4UIcmdWithADoubleAndUnit* cutSecElecCmd;
-
   G4UIcmdWithADoubleAndUnit* cutGCmd;
   G4UIcmdWithADoubleAndUnit* cutECmd;
 
-  G4UIcmdWithABool*          augerCmd;
-
   G4UIcmdWithAString*        physicsListCmd;
-
-  G4UIcmdWithAString*        angularDistributionCmd;
 
 };
 

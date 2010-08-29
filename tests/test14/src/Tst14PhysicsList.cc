@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.cc,v 1.24 2008-12-15 10:22:59 pandola Exp $
+// $Id: Tst14PhysicsList.cc,v 1.25 2010-08-29 19:50:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -56,9 +56,15 @@
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4VProcess.hh"
+/*
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
+*/
+#include "G4PhotoElectricEffect.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+
 
 
 Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
@@ -66,7 +72,7 @@ Tst14PhysicsList::Tst14PhysicsList(): G4VModularPhysicsList(),
 				      positronIsRegistered(false),
 				      photonIsRegistered(false)
 {
-  defaultCutValue = 0.1 * mm;
+  defaultCutValue = 0.01 * um;
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
 
@@ -269,15 +275,18 @@ void Tst14PhysicsList::SetElectronLowLimit(G4double cut)
 
 void Tst14PhysicsList::SetGammaCut(G4double value)
 {
-  ResetCuts();
+  //ResetCuts();
   cutForGamma = value;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 
 void Tst14PhysicsList::SetElectronCut(G4double value)
 {
-  ResetCuts();
-  cutForElectron = value;
+ // ResetCuts();
+  cutForElectron = value;  
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
+
 }
 
 
@@ -286,231 +295,6 @@ void Tst14PhysicsList::SetCuts()
   SetCutValue(cutForGamma,"gamma");
   SetCutValue(cutForElectron,"e-");
   SetCutValue(cutForElectron,"e+");
-}
-
-
-void Tst14PhysicsList::SetLowEnSecPhotCut(G4double cut)
-{
-  // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
-
-  // Get the ProcessManager for photons and the list of photon processes
-  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
-  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
-  G4int nPhotonProcesses = photonProcesses->size();
-
-  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
-    {
-      G4VProcess* process = (*photonProcesses)[iPhoton];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnPhotoElec");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the cut stting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	     lowEProcess->SetCutForLowEnSecPhotons(cut);
-	     G4cout << "Low energy secondary photons cut is now set to: "
-		    << cut * MeV
-		    << " (MeV) for LowEnergyPhotoElectric"
-		    << G4endl;
-	    }
-	}
-    }
-  
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation or LowEnergyBremsstrahlung
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-
-      G4String nameIoni("LowEnergyIoni");
-      if (name == nameIoni)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->SetCutForLowEnSecPhotons(cut);
-	      G4cout << "Low energy secondary photons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyIonisation"
-		     << G4endl;
-	    }
-	}
-
-      G4String nameBrems("LowEnBrem");
-      if (name == nameBrems)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->SetCutForLowEnSecPhotons(cut);
-	      G4cout << "Low energy secondary photons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyBremsstrahlung"
-		     << G4endl;
-	    }
-	}
-    }
-}
-
-
-void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut)
-{  
-  // This m.f. is pertinent to LowEnergy EPDL/EEDL processes only
-
-  // Get the ProcessManager for photons and the list of photon processes
-  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
-  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
-  G4int nPhotonProcesses = photonProcesses->size();
-
-  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
-    {
-      G4VProcess* process = (*photonProcesses)[iPhoton];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnPhotoElec");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the cut stting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	     lowEProcess->SetCutForLowEnSecElectrons(cut);
-	     G4cout << "Low energy secondary electrons cut is now set to: "
-		    << cut * MeV
-		    << " (MeV) for LowEnergyPhotoElectric"
-		    << G4endl;
-	    }
-	}
-    }
-  
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnergyIoni");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->SetCutForLowEnSecElectrons(cut);
-	      G4cout << "Low energy secondary electrons cut is now set to: "
-		     << cut * MeV
-		     << " (MeV) for LowEnergyIonisation"
-		     << G4endl;
-	    }
-	}
-    }
-}
-
-
-void Tst14PhysicsList::ActivateAuger(G4bool value)
-{  
-  // Get the ProcessManager for photons and the list of photon processes
-  G4ProcessManager* photonManager = G4Gamma::GammaDefinition()->GetProcessManager();
-  G4ProcessVector* photonProcesses = photonManager->GetProcessList();
-  G4int nPhotonProcesses = photonProcesses->size();
-
-  // Loop over photon processes until one retrieves LowEnergyPhotoElectric
-  for (G4int iPhoton=0; iPhoton<nPhotonProcesses; iPhoton++)
-    {
-      G4VProcess* process = (*photonProcesses)[iPhoton];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnPhotoElec");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the Auger activation is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyPhotoElectric* lowEProcess = dynamic_cast<G4LowEnergyPhotoElectric*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	     lowEProcess->ActivateAuger(value);
-	      G4cout << "Auger electron production flag is " << value
-		     << " for LowEnergyPhotoElectric process" << G4endl;
-	    }
-	}
-    }
-  
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-      G4String nameLowE("LowEnergyIoni");
-      if (name == nameLowE)
-	{
-	  // The only way to get access to the Auger activation is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyIonisation* lowEProcess = dynamic_cast<G4LowEnergyIonisation*>(process);
-	  if (lowEProcess != 0) 
-	    {
-	      lowEProcess->ActivateAuger(value);
-	      G4cout << "Auger electron production flag is " << value
-		     << " for LowEnergyIonisation process" << G4endl;
-	    }
-	}
-    }
-}
-
-void Tst14PhysicsList::SetAngularDistribution(const G4String& angularName)
-{
-
-  G4cout << "Setting angular distribution to " << angularName << G4endl;
-
-  // Get the ProcessManager for electrons and the list of electron processes
-  G4ProcessManager* electronManager = G4Electron::ElectronDefinition()->GetProcessManager();
-  G4ProcessVector* electronProcesses = electronManager->GetProcessList();
-  G4int nElectronProcesses = electronProcesses->size();
-
-  // Loop over electron processes until one retrieves LowEnergyIonisation
-  for (G4int iElectron=0; iElectron<nElectronProcesses; iElectron++)
-    {
-      G4VProcess* process = (*electronProcesses)[iElectron];
-      const G4String& name = process->GetProcessName();
-      G4String nameBrems("LowEnBrem");
-
-      if (name == nameBrems)
-	{
-	  // The only way to get access to the cut setting is through a dynamic_cast
-	  // (it is ugly!)
-	  G4LowEnergyBremsstrahlung* lowEProcess = dynamic_cast<G4LowEnergyBremsstrahlung*>(process);
-	  if (lowEProcess != 0) 
-	    {
-              lowEProcess->SetAngularGenerator(angularName);
-	      G4cout << "Low energy Bremsstrahlung angular distribution is set to: "
-		     << angularName
-		     << G4endl;
-	    }
-	}
-    }
-
 }
 
 

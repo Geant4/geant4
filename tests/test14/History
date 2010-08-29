@@ -1,4 +1,4 @@
--n $Id: History,v 1.37 2010-08-28 20:35:36 sincerti Exp $
+-n $Id: History,v 1.38 2010-08-29 19:50:17 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 Aug 2010 - S. Incerti tag test14-V09-03-03
+              -updated handling of cuts in PhysicsList and PhysicsListMessenger
+              -updated test14.in
 
 29 Aug 2010 - S. Incerti tag test14-V09-03-02
               migrated all physics models

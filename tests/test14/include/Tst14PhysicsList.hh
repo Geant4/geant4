@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhysicsList.hh,v 1.14 2006-06-29 21:41:36 gunter Exp $
+// $Id: Tst14PhysicsList.hh,v 1.15 2010-08-29 19:50:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -69,16 +69,6 @@ public:
   void SetGammaLowLimit(G4double cut);
   void SetElectronLowLimit(G4double cut);
   void SetGELowLimit(G4double cut);
-
-  // Cut for generation of secondaries for EEDL/EPDL processes
-  void SetLowEnSecPhotCut(G4double cut);
-  void SetLowEnSecElecCut(G4double cut);
- 
-  // Activation of Auger effect in electron ionisation and photoelectric effect
-  void ActivateAuger(G4bool flag);
-
-  // Select angular distribution
-  void SetAngularDistribution(const G4String& name);
 
 private:
 
