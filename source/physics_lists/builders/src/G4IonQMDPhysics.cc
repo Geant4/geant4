@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.cc,v 1.2 2010-06-03 15:03:53 gunter Exp $
+// $Id: G4IonQMDPhysics.cc,v 1.3 2010-08-30 16:04:46 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -146,7 +146,7 @@ void G4IonQMDPhysics::AddProcess(const G4String& name,
 
   if(QMD) {
     QMD->SetMinEnergy(eminQMD);
-    BIC->SetMaxEnergy(eminQMD-overlap);
+    BIC->SetMaxEnergy(eminQMD+overlap);
     QMD->SetMaxEnergy(emaxQMD);
     hadi->RegisterMe(QMD);
   }  
