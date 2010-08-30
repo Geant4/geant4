@@ -4,20 +4,26 @@
 #
 /control/verbose 2
 /run/verbose 2
+#
+/lowenergy/addPhysics photon-epdl
+/lowenergy/addPhysics electron-eedl
+/lowenergy/addPhysics positron-standard
 /run/initialize
+#
+/process/list
+/particle/list
+#
+/lowenergy/cutG .01 micrometer
+/lowenergy/cutE .01 micrometer
+/lowenergy/lowlimG 2.5e-4
+/lowenergy/lowlimE 2.5e-4
+#
+/run/particle/dumpCutValues
 #
 /calor/setAbsThick 10 cm  
 /calor/setAbsRad 12.0 cm
 /calor/update
 #
-/lowenergy/lowlimG 2.5e-4
-/lowenergy/lowlimE 2.5e-4
-/lowenergy/cutG .01 micrometer
-/lowenergy/cutE .01 micrometer
-/lowenergy/secphotcut 10 eV
-/process/list
-/particle/list
-/run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
 #
@@ -27,25 +33,25 @@
 #------------------
 # 
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 # 
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
@@ -53,25 +59,25 @@
 /gun/particle e-
 #---------------
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
@@ -83,25 +89,25 @@
 #------------------
 #
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 # 
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
@@ -109,25 +115,25 @@
 /gun/particle e-
 #---------------
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
@@ -140,25 +146,25 @@
 #------------------
 #
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 # 
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
@@ -166,39 +172,37 @@
 /gun/particle e-
 #-----------------
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/particle gamma
 #------------------
-/process/inactivate LowEnRayleigh
-/process/inactivate LowEnCompton
-/process/inactivate LowEnPhotoElec
+/process/inactivate Rayl
+/process/inactivate compt
+/process/inactivate phot
 /process/inactivate eIoni
-/process/inactivate LowEnergyIoni
 /process/inactivate msc
 /process/inactivate eBrem
-/process/inactivate LowEnBrem
 
 /calor/setAbsMat Aluminium
 #======================

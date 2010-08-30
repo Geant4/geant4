@@ -7,6 +7,7 @@
 #
 /lowenergy/addPhysics photon-epdl
 /lowenergy/addPhysics electron-eedl
+/lowenergy/addPhysics positron-standard
 /run/initialize
 #
 /process/list
@@ -32,25 +33,25 @@
 #------------------
 # 
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 # 
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
@@ -58,25 +59,25 @@
 /gun/particle e-
 #---------------
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
@@ -88,25 +89,25 @@
 #------------------
 #
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 # 
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
@@ -114,25 +115,25 @@
 /gun/particle e-
 #---------------
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
@@ -145,25 +146,25 @@
 #------------------
 #
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 # 
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
@@ -171,25 +172,25 @@
 /gun/particle e-
 #-----------------
 /gun/energy 10 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 2 keV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 600 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 300 eV
-/tracking/verbose 2
+/tracking/verbose 1
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
