@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2010-07-13 12:24:51 gunter Exp $
+$Id: History,v 1.61 2010-08-30 14:33:17 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,10 @@ $Id: History,v 1.60 2010-07-13 12:24:51 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-Aug-2010 G.Folger                (testtools-QMtest-V09-03-12)
+- add particleGun example with run{1,2,3,4}.mac input files.
+- new macros for test14 (LEEM) with two more test cases, test14.in retired
 
 13-Jul-2010 G.Folger                (testtools-QMtest-V09-03-11)
 -  enable to run test202
