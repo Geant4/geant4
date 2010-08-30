@@ -12,7 +12,7 @@
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-ext-eventgenerator-particleGun1-build</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-ext-eventgenerator-particleGun-build</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/eventgenerator/particleGun1;$G4BIN/$G4SYSTEM/particleGun1 run1.mac</text>
+    <text>cd $G4INSTALL/examples/extended/eventgenerator/particleGun;$G4BIN/$G4SYSTEM/particleGun run3.mac</text>
   </argument>
   <argument name="stderr">
     <text/>

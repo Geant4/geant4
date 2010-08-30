@@ -6,8 +6,11 @@
   </argument>
   <argument name="test_ids">
     <set>
-      <text>exam-ext-eventgenerator-particleGun3-build</text>
-      <text>exam-ext-eventgenerator-particleGun3-run</text>
+      <text>exam-ext-eventgenerator-particleGun-build</text>
+      <text>exam-ext-eventgenerator-particleGun-r1-run</text>
+      <text>exam-ext-eventgenerator-particleGun-r2-run</text>
+      <text>exam-ext-eventgenerator-particleGun-r3-run</text>
+      <text>exam-ext-eventgenerator-particleGun-r4-run</text>
     </set>
   </argument>
 </extension>
