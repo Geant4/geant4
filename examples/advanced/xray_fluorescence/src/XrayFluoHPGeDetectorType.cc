@@ -324,7 +324,7 @@ void XrayFluoHPGeDetectorType::LoadResponseData(G4String fileName)
 
 void XrayFluoHPGeDetectorType::LoadEfficiencyData(G4String fileName)
 {
-
+  /*
   char* path = getenv("XRAYDATA");
   G4String dirFile;
   if (path) {
@@ -336,8 +336,8 @@ void XrayFluoHPGeDetectorType::LoadEfficiencyData(G4String fileName)
     G4String pathString(path);
     dirFile = pathString + "/" + fileName;
   }
-  
+  */
   interpolation4 = new G4LogLogInterpolation();
-  efficiencySet = new XrayFluoDataSet(1,dirFile,interpolation4,keV,1);
+  efficiencySet = new XrayFluoDataSet(1,fileName,interpolation4,keV,1);
 }
 

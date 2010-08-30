@@ -52,16 +52,7 @@
 #include "G4BaryonConstructor.hh"
 /////////////////////////////////////////
 
-
-// #include "G4ParticleDefinition.hh"
-// #include "G4ParticleWithCuts.hh"
-// #include "G4ProcessManager.hh"
-// #include "G4ParticleTypes.hh"
-// #include "G4ParticleTable.hh"
-// #include "G4ios.hh"
 #include "G4StepLimiter.hh"
-// #include "G4EnergyLossTables.hh"
-
 
 //#include "G4Region.hh"
 //#include "G4RegionStore.hh"
@@ -265,8 +256,6 @@ void XrayFluoPhysicsList::ConstructEM()
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
       theLivermorePhotoElectricModel->ActivateAuger(true);
-      //theLivermorePhotoElectricModel->SetCutForLowEnSecPhotons(0.010 * keV);
-      //theLivermorePhotoElectricModel->SetCutForLowEnSecElectrons(0.010 * keV);
       thePhotoElectricEffect->SetModel(theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
      

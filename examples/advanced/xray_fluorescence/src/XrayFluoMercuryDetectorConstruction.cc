@@ -186,11 +186,11 @@ void XrayFluoMercuryDetectorConstruction::DefineDefaultMaterials()
   //define materials of the apparate
   
   mercuryMaterial = materials->GetMaterial("Anorthosite");
-  screenMaterial = materials->GetMaterial("Lead");
-  pixelMaterial = materials->GetMaterial("Silicon");
-  OhmicPosMaterial = materials->GetMaterial("Copper");
-  OhmicNegMaterial = materials->GetMaterial("Lead");
-  defaultMaterial = materials->GetMaterial("Galactic");
+  screenMaterial = materials->GetMaterial("G4_Pb");
+  pixelMaterial = materials->GetMaterial("G4_Si");
+  OhmicPosMaterial = materials->GetMaterial("G4_Cu");
+  OhmicNegMaterial = materials->GetMaterial("G4_Pb");
+  defaultMaterial = materials->GetMaterial("G4_Galactic");
   
   
 }

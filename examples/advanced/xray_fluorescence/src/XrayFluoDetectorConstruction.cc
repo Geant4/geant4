@@ -214,27 +214,27 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
 
   sampleMaterial = materials->GetMaterial("Dolorite");
   Dia1Material = materials->GetMaterial("G4_Pb");
-  Dia3Material = materials->GetMaterial("Galactic");
+  Dia3Material = materials->GetMaterial("G4_Galactic");
   pixelMaterial = materials->GetMaterial("SiLi");
-  //pixelMaterial = materials->GetMaterial(detectorType->GetDetectorMaterial());
+  //OhmicPosMaterial = materials->GetMaterial("G4_Cu");
   OhmicPosMaterial = materials->GetMaterial("G4_Ni");
   OhmicNegMaterial = materials->GetMaterial("G4_Pb");
-  defaultMaterial = materials->GetMaterial("Galactic");
+  defaultMaterial = materials->GetMaterial("G4_Galactic");
   windowMaterial = materials->GetMaterial("G4_Be");
-  
 }
 
-  void XrayFluoDetectorConstruction::SetOhmicPosThickness(G4double val)
+void XrayFluoDetectorConstruction::SetOhmicPosThickness(G4double val)
 {
   
   if (!phaseSpaceFlag) {    
     
     
     if (val == 0.0) {
-      OhmicPosMaterial = materials->GetMaterial("Galactic");
+      OhmicPosMaterial = materials->GetMaterial("G4_Galactic");
     }
     else {
       OhmicPosThickness = val;
+      //OhmicPosMaterial = materials->GetMaterial("G4_Cu");
       OhmicPosMaterial = materials->GetMaterial("G4_Ni");
     }
     
