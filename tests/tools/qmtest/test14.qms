@@ -7,7 +7,9 @@
   <argument name="test_ids">
     <set>
       <text>test14-build</text>
-      <text>test14-run</text>
+      <text>test14-lowE-run</text>
+      <text>test14-penelope-run</text>
+      <text>test14-std-run</text>
     </set>
   </argument>
 </extension>
