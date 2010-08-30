@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringCylinder.cc,v 1.15 2010-07-27 01:44:54 akimura Exp $
+// $Id: G4ScoringCylinder.cc,v 1.16 2010-08-30 08:15:20 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -279,7 +279,7 @@ void G4ScoringCylinder::Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap*
 	  G4double angle = twopi/fNSegment[IPHI]*phi;
 	  G4double dphi = twopi/fNSegment[IPHI];
 	  G4Tubs cylinder("z-phi",                    // name
-			  fSize[1]*0.99, fSize[1],  // inner radius, outer radius
+			  fSize[0]*0.99, fSize[0],  // inner radius, outer radius
 			  zhalf,                      // half length in z
 			  angle, dphi*0.99999);       // starting phi angle, delta angle
 	  //-
