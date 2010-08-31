@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.7 2010-07-26 03:52:33 akimura Exp $
+// $Id: G4ScoreLogColorMap.cc,v 1.8 2010-08-31 06:53:38 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,9 +52,46 @@ G4ScoreLogColorMap::~G4ScoreLogColorMap()
 void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
 {
   G4bool lmin = true, lmax = true, lval = true;
-  if(fMinVal <= 0.) lmin = false;
-  if(fMaxVal <= 0.) lmax = false;
-  if(val <= 0.) lval = false;
+  if(fMinVal <= 0.) {
+    lmin = false;
+    G4String message = "    The min. value (fMinVal) is negative. : ";
+    message += fMinVal;
+    G4Exception("G4ScoreLogColorMap::GetMapColor()",
+		"DigiHitsUtilsScoreLogColorMap000", JustWarning,
+		message);
+  }
+  if(fMaxVal <= 0.) {
+    lmax = false;
+    G4String message = "    The max. value (fMaxVal) is negative. : ";
+    message += fMaxVal;
+    G4Exception("G4ScoreLogColorMap::GetMapColor()",
+		"DigiHitsUtilsScoreLogColorMap001", JustWarning,
+		message);
+  }
+  if(!lmin || !lmax) {
+    color[0] = 0.;
+    color[1] = 0.;
+    color[2] = 0.;
+    color[3] = 0.;
+    return;
+  }
+
+  if(val <= 0.) {
+    lval = false;
+    G4String message = "     'val' (first argument) is negative : ";
+    message += fMaxVal;
+    G4Exception("G4ScoreLogColorMap::GetMapColor()",
+		"DigiHitsUtilsScoreLogColorMap002", JustWarning,
+		message);
+  }
+  if(!lval) {
+    color[0] = 0.;
+    color[1] = 0.;
+    color[2] = 0.;
+    color[3] = -1.;
+    return;
+  }
+
   G4double logmin = 0., logmax = 0., logval = 0.;
   if(lmin) logmin = std::log10(fMinVal);
   if(lmax) logmax = std::log10(fMaxVal);
@@ -100,6 +137,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
 
 void G4ScoreLogColorMap::DrawColorChartBar(G4int _nPoint) {
 
+  G4cout << "++++++ " << fMinVal << " - " << fMaxVal << G4endl;
   G4bool lmin = true, lmax = true;
   if(fMinVal <= 0.) lmin = false;
   if(fMaxVal <= 0.) lmax = false;
@@ -117,6 +155,8 @@ void G4ScoreLogColorMap::DrawColorChartBar(G4int _nPoint) {
     line.push_back(G4Point3D(-0.91, y, 0.));
     G4double val = std::pow(10., (ra*max+rb*min)/(ra+rb));
     this->GetMapColor(val, c);
+    if(c[0] == 0 && c[1] == 0 && c[2] == 0 && c[3] == 0) return;
+    if(c[0] == 0 && c[1] == 0 && c[2] == 0 && c[3] == -1.) continue;
     G4Colour col(c[0], c[1], c[2]);
     G4VisAttributes att(col);
     line.SetVisAttributes(&att);
@@ -131,19 +171,24 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
 
   G4double min = 0.;
   if(lmin) min = std::log10(fMinVal);
-  if(min > 0.) min = std::floor(min);
-  else min = std::ceil(min);
+  //if(min > 0.) min = std::floor(min);
+  //else min = std::ceil(min);
 
   G4double max = 0.;
   if(lmax) max = std::log10(fMaxVal);
-  if(max > 0.) max = std::floor(max);
-  else max = std::ceil(max);
+  //if(max > 0.) max = std::ceil(max);
+  //else max = std::floor(max);
 
   G4double c[4];
   G4Colour black(0., 0., 0.);
   for(int n = 0; n < _nPoint; n++) {
     G4double a = n/(_nPoint-1.), b = 1.-a;
     G4double v = (a*max + b*min)/(a+b);
+
+    this->GetMapColor(std::pow(10., v), c);
+    if(c[0] == 0 && c[1] == 0 && c[2] == 0 && c[3] == 0) return;
+    if(c[0] == 0 && c[1] == 0 && c[2] == 0 && c[3] == -1.) continue;
+
     // background color
     for(int l = 0; l < 21; l++) {
       G4Polyline line;
@@ -164,7 +209,7 @@ void G4ScoreLogColorMap::DrawColorChartText(G4int _nPoint) {
     G4Text text(value, G4Point3D(-0.9, -0.9+0.05*n, 0));
     G4double size = 12.;
     text.SetScreenSize(size);
-    this->GetMapColor(std::pow(10., v), c);
+    //this->GetMapColor(std::pow(10., v), c);
     G4Colour color(c[0], c[1], c[2]);
     G4VisAttributes att(color);
     text.SetVisAttributes(&att);
