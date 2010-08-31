@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.2 2008-06-11 13:44:04 antoni Exp $
+// $Id: HistoManager.cc,v 1.3 2010-08-31 13:15:01 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ HistoManager::HistoManager()
   emin1     = -.05*MeV;
   emax1     = 5.05*MeV;
   emin2     = 5.5*MeV;
-  emax2     = 50.5*MeV;
+  emax2     = 70.5*MeV;
   de1       =  0.1*MeV;
   de2       =  1.0*MeV;
 }
