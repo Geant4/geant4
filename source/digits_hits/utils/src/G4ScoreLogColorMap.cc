@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.8 2010-08-31 06:53:38 akimura Exp $
+// $Id: G4ScoreLogColorMap.cc,v 1.9 2010-08-31 09:49:14 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ G4ScoreLogColorMap::~G4ScoreLogColorMap()
 void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
 {
   G4bool lmin = true, lmax = true, lval = true;
-  if(fMinVal <= 0.) {
+  if(fMinVal < 0.) {
     lmin = false;
     G4String message = "    The min. value (fMinVal) is negative. : ";
     message += fMinVal;
@@ -60,7 +60,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
 		"DigiHitsUtilsScoreLogColorMap000", JustWarning,
 		message);
   }
-  if(fMaxVal <= 0.) {
+  if(fMaxVal < 0.) {
     lmax = false;
     G4String message = "    The max. value (fMaxVal) is negative. : ";
     message += fMaxVal;
@@ -76,7 +76,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
     return;
   }
 
-  if(val <= 0.) {
+  if(val < 0.) {
     lval = false;
     G4String message = "     'val' (first argument) is negative : ";
     message += fMaxVal;
