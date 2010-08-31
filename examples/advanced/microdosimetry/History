@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.17 2010-08-25 06:35:55 sincerti Exp $
+$Id: History,v 1.18 2010-08-31 11:25:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.17 2010-08-25 06:35:55 sincerti Exp $
 
                        Package History file
                        --------------------
+
+31 August 2010 - V.Ivanchenko - microdosimetry-V09-03-04
+- added electron capture process inside the target
 
 25 August 2010 - S. Incerti - microdosimetry-V09-03-03
 - switched to G4DNABornExcitationModel for electrons
