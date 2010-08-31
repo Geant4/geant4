@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.23 2010-08-28 15:16:55 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.24 2010-08-31 14:37:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -182,6 +182,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   G4double Eex = aFragment.GetExcitationEnergy();
   G4int A = aFragment.GetA_asInt(); 
 
+  //G4cout << "### G4PreCompoundModel::DeExcite" << G4endl;
   //G4cout << aFragment << G4endl;
  
   // Perform Equilibrium Emission 
@@ -252,7 +253,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       G4double P1 = theTransition->GetTransitionProb1();
       G4double P2 = theTransition->GetTransitionProb2();
       G4double P3 = theTransition->GetTransitionProb3();
-      //       G4cout<<"P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
+      //G4cout<<"P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
       
       //J.M. Quesada (May. 08). Physical criterium (lamdas)  PREVAILS over 
       //                        approximation (critical exciton number)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.24 2010-08-28 15:16:55 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.25 2010-08-31 14:37:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,6 +80,8 @@ CalculateProbability(const G4Fragment & aFragment)
   G4int A = aFragment.GetA_asInt();
   G4int Z = aFragment.GetZ_asInt();
   G4double U = aFragment.GetExcitationEnergy();
+
+  //G4cout << aFragment << G4endl;
   
   if(U < 10*eV) { return 0.0; }
   
@@ -237,6 +239,7 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
   G4int Nexcitons = result.GetNumberOfExcitons();
   G4int Npart     = result.GetNumberOfParticles();
   G4int Ncharged  = result.GetNumberOfCharged();
+  G4int Nholes    = result.GetNumberOfHoles();
   if (ChosenTransition <= TransitionProb1) 
     {
       // Number of excitons is increased on \Delta n = +2
@@ -253,29 +256,35 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
   // PROVIDED that there are charged particles
   deltaN /= 2;
 
-  if(deltaN < 0 && Ncharged >= 1 && G4int(Npart*G4UniformRand()) <= Ncharged) 
-    { 
-      result.SetNumberOfCharged(Ncharged+deltaN); // deltaN is negative!
-    }
+  //G4cout << "deltaN= " << deltaN << G4endl;
 
   // JMQ the following lines have to be before SetNumberOfCharged, otherwise the check on 
   // number of charged vs. number of particles fails
   result.SetNumberOfParticles(Npart+deltaN);
-  result.SetNumberOfHoles(Npart+deltaN); 
+  result.SetNumberOfHoles(Nholes+deltaN); 
 
-  G4int A = result.GetA_asInt();
-  G4int Z = result.GetZ_asInt();
+  if(deltaN < 0) {
+    if( Ncharged >= 1 && G4int(Npart*G4UniformRand()) <= Ncharged) 
+      { 
+	result.SetNumberOfCharged(Ncharged+deltaN); // deltaN is negative!
+      }
 
-  // With weight Z/A, number of charged particles is increased with +1
-  if ( deltaN > 0 && G4int(std::max(1, A - Nexcitons)*G4UniformRand()) <= Z) 
-    {
-      result.SetNumberOfCharged(Ncharged+deltaN);
-    }
+  } else if ( deltaN > 0 ) {
+    // With weight Z/A, number of charged particles is increased with +1
+    G4int A = result.GetA_asInt();
+    G4int Z = result.GetZ_asInt();
+    if( G4int(std::max(1, A - Nexcitons)*G4UniformRand()) <= Z) 
+      {
+	result.SetNumberOfCharged(Ncharged+deltaN);
+      }
+  }
   
   // Number of charged can not be greater that number of particles
   if ( Npart < Ncharged ) 
     {
       result.SetNumberOfCharged(Npart);
     }
+  //G4cout << "### After transition" << G4endl;
+  //G4cout << result << G4endl;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc,v 1.29 2010-08-28 15:16:55 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.30 2010-08-31 14:37:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -156,6 +156,9 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
 	
   // Create a G4ReactionProduct 
   G4ReactionProduct * MyRP = thePreFragment->GetReactionProduct();
+
+  //G4cout << "G4PreCompoundEmission::Fragment emitted" << G4endl;
+  //G4cout << thePreFragment << G4endl;
 
   return MyRP;
 }
