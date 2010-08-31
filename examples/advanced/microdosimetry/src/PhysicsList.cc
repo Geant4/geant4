@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.11 2010-08-25 06:35:10 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.12 2010-08-31 11:23:58 vnivanch Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,6 +148,8 @@ void PhysicsList::ConstructProcess()
 #include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
 
+#include "G4ElectronCapture.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PhysicsList::ConstructEM()
@@ -187,6 +189,10 @@ void PhysicsList::ConstructEM()
       G4DNAIonisation* dnaioni = new G4DNAIonisation("e-_G4DNAIonisation");
       dnaioni->SetModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnaioni);
+
+      // Capture of low-energy e-
+      G4ElectronCapture* ecap = new G4ElectronCapture("Target", 11.01*eV);
+      pmanager->AddDiscreteProcess(ecap);
      	    
     } else if ( particleName == "proton" ) {
 
