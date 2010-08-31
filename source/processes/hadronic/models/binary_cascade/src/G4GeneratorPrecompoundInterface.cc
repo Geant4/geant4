@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GeneratorPrecompoundInterface.cc,v 1.9 2010-08-28 16:01:01 vnivanch Exp $
+// $Id: G4GeneratorPrecompoundInterface.cc,v 1.10 2010-08-31 16:16:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -45,12 +45,16 @@
 #include "G4Nucleon.hh"
 #include "G4FragmentVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4ExcitationHandler.hh"
 
-G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface()
+G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p) 
   : CaptureThreshold(80*MeV)
 {
   proton = G4Proton::Proton();
   neutron = G4Neutron::Neutron();
+  if(p) { SetDeExcitation(p); }
+  else  { SetDeExcitation(new G4PreCompoundModel(new G4ExcitationHandler())); }
 }
          
 G4GeneratorPrecompoundInterface::~G4GeneratorPrecompoundInterface()
@@ -65,7 +69,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4KineticTrackVector *result1, *secondaries, *result;
   result1=theSecondaries;
   result=new G4KineticTrackVector();
-
+  //G4cout << "### G4GeneratorPrecompoundInterface::Propagate " 
+  //	 << result1->size() << " tracks " << theDeExcitation << G4endl;
   for (unsigned int aResult=0; aResult < result1->size(); ++aResult)
     {
       G4ParticleDefinition * pdef;
@@ -90,6 +95,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	  delete secondaries;
 	}
     }
+  //G4cout << "Delete tracks" << G4endl;
   std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
   delete result1;
      
@@ -152,11 +158,6 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       theCurrentNucleon = theNucleus->GetNextNucleon();
     }   
  
-  //if(!theDeExcitation)
-  //  {
-  // throw G4HadronicException(__FILE__, __LINE__, "Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
-  //   }
-
   if(0!=anA && 0!=aZ)
     {
       G4double fMass =  G4NucleiProperties::GetNuclearMass(anA, aZ);
@@ -179,11 +180,6 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 	 }
        delete aPreResult;
     }
-  //  else
-  //  {
-  // throw G4HadronicException(__FILE__, __LINE__, "Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
-  //   }
-  // now return
      
   std::for_each(result->begin(), result->end(), DeleteKineticTrack());
   delete result;
@@ -193,7 +189,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 G4HadFinalState* G4GeneratorPrecompoundInterface::
 ApplyYourself(const G4HadProjectile &, G4Nucleus & )
 {
-  G4cout << "G4GeneratorPrecompoundInterface: ApplyYourself interface called stand-allone."<< G4endl;
+  G4cout << "G4GeneratorPrecompoundInterface: ApplyYourself interface called stand-allone."
+	 << G4endl;
   G4cout << "This class is only a mediator between generator and precompound"<<G4endl;
   G4cout << "Please remove from your physics list."<<G4endl;
   throw G4HadronicException(__FILE__, __LINE__, "SEVERE: G4GeneratorPrecompoundInterface model interface called stand-allone.");

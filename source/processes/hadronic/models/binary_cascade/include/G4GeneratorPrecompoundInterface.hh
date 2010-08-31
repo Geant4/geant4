@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeneratorPrecompoundInterface.hh,v 1.5 2010-08-28 16:01:01 vnivanch Exp $
+// $Id: G4GeneratorPrecompoundInterface.hh,v 1.6 2010-08-31 16:16:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ class G4GeneratorPrecompoundInterface : public G4VIntraNuclearTransportModel
 {
 public:
 
-  G4GeneratorPrecompoundInterface();    
+  G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p = 0);    
   virtual ~G4GeneratorPrecompoundInterface();
 
   virtual G4HadFinalState* 
