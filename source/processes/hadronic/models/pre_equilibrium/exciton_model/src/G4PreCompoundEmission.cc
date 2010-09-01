@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc,v 1.31 2010-09-01 14:51:21 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.32 2010-09-01 15:11:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -245,8 +245,7 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
   
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  theFinalMomentum = 
-    G4ThreeVector(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,pmag*cost);
+  theFinalMomentum.set(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,pmag*cost);
 
   // theta is the angle wrt the incident direction
   G4ThreeVector theIncidentDirection = aFragment.GetMomentum().vect().unit();
