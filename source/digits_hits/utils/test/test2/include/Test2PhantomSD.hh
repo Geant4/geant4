@@ -49,10 +49,6 @@ public:
 
 private:
   Test2PhantomHitsCollection * fPhantomCollection;
-  int fCellID[10][10][10];
-  const int fNumberOfCellsInX;
-  const int fNumberOfCellsInY;
-  const int fNumberOfCellsInZ;
 
 };
 

@@ -36,8 +36,7 @@
 #include "G4ios.hh"
 
 Test2PhantomSD::Test2PhantomSD(G4String name)
-  :G4VSensitiveDetector(name),
-   fNumberOfCellsInX(10), fNumberOfCellsInY(10), fNumberOfCellsInZ(10) {
+  :G4VSensitiveDetector(name) {
 
   G4String HCname;
   collectionName.insert(HCname = "PhantomCollection");
@@ -52,13 +51,6 @@ void Test2PhantomSD::Initialize(G4HCofThisEvent *) {
 
   fPhantomCollection = new Test2PhantomHitsCollection(SensitiveDetectorName,
 						      collectionName[0]); 
-  for(G4int i = 0; i < fNumberOfCellsInZ; i++) {
-    for(G4int j = 0; j < fNumberOfCellsInY; j++) {
-      for(G4int k = 0; k < fNumberOfCellsInX; k++) {
-	fCellID[i][j][k] = -1;
-      }
-    }
-  }
   verboseLevel = 0;
 }
 
@@ -71,32 +63,20 @@ G4bool Test2PhantomSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
   if(edep > 0. || trklen > 0.) {
 
     G4TouchableHistory * hist = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
-    G4VPhysicalVolume* physVol = hist->GetVolume();
     G4int copyIDinX = hist->GetReplicaNumber(0);
     G4int copyIDinY = hist->GetReplicaNumber(1);
     G4int copyIDinZ = hist->GetReplicaNumber(2);
 
-    if(fCellID[copyIDinX][copyIDinY][copyIDinZ] == -1) {
-      Test2PhantomHit* phantomHit
-	= new Test2PhantomHit(physVol->GetLogicalVolume(), copyIDinX, copyIDinY, copyIDinZ);
-      phantomHit->SetEdep(edep);
-      phantomHit->SetTrackLength(trklen);
-      phantomHit->SetParticleName(aStep->GetTrack()->GetParticleDefinition()->GetParticleName());
-      G4AffineTransform aTrans = hist->GetHistory()->GetTopTransform();
-      aTrans.Invert();
-      phantomHit->SetPos(aTrans.NetTranslation());
-      phantomHit->SetRot(aTrans.NetRotation());
-      G4int icell = fPhantomCollection->insert(phantomHit);
-      fCellID[copyIDinX][copyIDinY][copyIDinZ] = icell - 1;
-      if(verboseLevel > 0) {
-	G4cout << " New Calorimeter Hit on fCellID " 
-	       << copyIDinX << ", " << copyIDinY << ", " << copyIDinZ << G4endl; }
-    } else { 
-      (*fPhantomCollection)[fCellID[copyIDinX][copyIDinY][copyIDinZ]]->AddEdep(edep);
-      (*fPhantomCollection)[fCellID[copyIDinX][copyIDinY][copyIDinZ]]->AddTrackLength(trklen);
-      if(verboseLevel > 0) {
-	G4cout << " Energy added to fCellID " 
-	       << copyIDinX << ", " << copyIDinY << ", " << copyIDinZ << G4endl; }
+    Test2PhantomHit* phantomHit
+	= new Test2PhantomHit(copyIDinX, copyIDinY, copyIDinZ);
+    phantomHit->SetEdep(edep);
+    phantomHit->SetTrackLength(trklen);
+    phantomHit->SetParticleName(aStep->GetTrack()->GetParticleDefinition()->GetParticleName());
+    fPhantomCollection->insert(phantomHit);
+    if(verboseLevel > 0) {
+      G4cout << " A hit of Test2PhantomHit is created in copy-id (" 
+	     << copyIDinX << ", " << copyIDinY << ", " << copyIDinZ
+	     << ")" << G4endl;
     }
   }
 

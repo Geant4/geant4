@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2ParallelWorld.cc,v 1.1 2010-09-01 08:03:10 akimura Exp $
+// $Id: Test2ParallelWorld.cc,v 1.2 2010-09-01 12:56:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,10 +75,12 @@ void Test2ParallelWorld::SetupGeometry()
   G4int nSegment[3] = {30, 30, 30};
 
   //  phantom box
-  G4VSolid* phantomSolid = new G4Box("PhantomBoxParallel", phantomSize[0], phantomSize[1], phantomSize[2]);
-  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, 0, "Phantom");
-  new G4PVPlacement(0,G4ThreeVector(), phantomLogical, "PhantomParallel",
-                         worldLogical, false, 0);
+  G4VSolid* phantomSolid = new G4Box("PhantomBoxParallel", phantomSize[0], 
+				     phantomSize[1], phantomSize[2]);
+  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, 0,
+							"Phantom");
+  new G4PVPlacement(0, G4ThreeVector(), phantomLogical, "PhantomParallel",
+		    worldLogical, false, 0);
 
   G4String layerName[3] = {"layerX", "layerY", "layerZ"};
   G4VSolid * layerSolid[3];
@@ -108,8 +110,9 @@ void Test2ParallelWorld::SetupGeometry()
 			    phantomSize[1]/nSegment[1],
 			    phantomSize[2]/nSegment[2]);
   fLayerLogical[2] = new G4LogicalVolume(layerSolid[2], 0, layerName[2]);
-  fPhantomPhys = new G4PVDivision(layerName[2], fLayerLogical[2], fLayerLogical[1], kZAxis,
-		  nSegment[2], 0.);
+  fPhantomPhys = new G4PVDivision(layerName[2], fLayerLogical[2],
+				  fLayerLogical[1], kZAxis,
+				  nSegment[2], 0.);
 
   //                                        
   // Visualization attributes
@@ -137,14 +140,11 @@ void Test2ParallelWorld::SetupGeometry()
 
 void Test2ParallelWorld::SetupDetectors() {
   //
-  // sensitive detectors
+  // primitive scorers
   //
   G4SDManager * sdManager = G4SDManager::GetSDMpointer();
   sdManager->SetVerboseLevel(1);
 
-  //
-  // primitive scorers
-  //
   G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector("ScoringWorld");
 
   // filters
@@ -163,17 +163,17 @@ void Test2ParallelWorld::SetupDetectors() {
   primitive = new G4PSTrackLength("trackLengthGamma");
   primitive->SetFilter(gammaFilter);
   det->RegisterPrimitive(primitive);
-  primitive = new G4PSNofStep("nStepGamma");
-  primitive->SetFilter(gammaFilter);
-  det->RegisterPrimitive(primitive);
   primitive = new G4PSTrackLength("trackLengthElec");
-  primitive->SetFilter(electronFilter);
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSNofStep("nStepElec");
   primitive->SetFilter(electronFilter);
   det->RegisterPrimitive(primitive);
   primitive = new G4PSTrackLength("trackLengthPosi");
   primitive->SetFilter(positronFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSNofStep("nStepGamma");
+  primitive->SetFilter(gammaFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSNofStep("nStepElec");
+  primitive->SetFilter(electronFilter);
   det->RegisterPrimitive(primitive);
   primitive = new G4PSNofStep("nStepPosi");
   primitive->SetFilter(positronFilter);

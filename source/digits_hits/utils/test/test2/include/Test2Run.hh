@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2Run.hh,v 1.2 2010-09-01 08:03:10 akimura Exp $
+// $Id: Test2Run.hh,v 1.3 2010-09-01 12:56:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -65,20 +65,14 @@ private:
   G4int colIDSum[7];
   
   //-- traditional sensitive detetector
-  G4int sdID;
-  G4double sdTotalEdep;
-  G4double sdTotalTrackLengthGamma;
-  G4double sdTotalTrackLengthElec;
-  G4double sdTotalTrackLengthPosi;
+  G4int fSdID;
+  G4double fSdQuantities[7]; // The indices are the same ones as the above primitive scorers
 
 public:
   inline G4double GetTotal(G4int i) const
   { return GetTotal(mapSum[i]); }
 
-  inline G4double GetSDTotalEdep() const {return sdTotalEdep;}
-  inline G4double GetSDTrackLengthGamma() const {return sdTotalTrackLengthGamma;}
-  inline G4double GetSDTrackLengthElec() const {return sdTotalTrackLengthElec;}
-  inline G4double GetSDTrackLengthPosi() const {return sdTotalTrackLengthPosi;}
+  inline G4double GetSdQuantity(G4int i) const {return fSdQuantities[i];}
 };
 
 #endif

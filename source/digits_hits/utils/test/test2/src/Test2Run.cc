@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2Run.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
+// $Id: Test2Run.cc,v 1.3 2010-09-01 12:56:56 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,10 +40,10 @@ Test2Run::Test2Run() {
   G4String detName = "ScoringWorld";
   G4String primNameSum[NPRIM] = {"eDep",
 				 "trackLengthGamma",
-				 "nStepGamma",
 				 "trackLengthElec",
-				 "nStepElec",
 				 "trackLengthPosi",
+				 "nStepGamma",
+				 "nStepElec",
 				 "nStepPosi"};
   G4SDManager * SDMan = G4SDManager::GetSDMpointer();
   SDMan->SetVerboseLevel(1);
@@ -54,12 +54,10 @@ Test2Run::Test2Run() {
   }
 
   //
-  sdID =  SDMan->GetCollectionID(fullName="PhantomCollection");
-  sdTotalEdep = 0.;
-  sdTotalTrackLengthGamma = 0.;
-  sdTotalTrackLengthElec = 0.;
-  sdTotalTrackLengthPosi = 0.;
-  SDMan->SetVerboseLevel(0);
+  fSdID =  SDMan->GetCollectionID(fullName="PhantomCollection");
+  for(G4int i = 0; i < NPRIM; i++) {
+    fSdQuantities[i] = 0.;
+  }
 }
 
 Test2Run::~Test2Run() {;}
@@ -76,18 +74,21 @@ void Test2Run::RecordEvent(const G4Event* evt) {
     mapSum[i] += *evtMap;
   }
 
-  Test2PhantomHitsCollection * phantomHC = (Test2PhantomHitsCollection*)(HCE->GetHC(sdID));
+  Test2PhantomHitsCollection * phantomHC = (Test2PhantomHitsCollection*)(HCE->GetHC(fSdID));
   if(phantomHC) {
     G4int nent = phantomHC->entries();
     for(G4int i = 0; i < nent; i++) {
       Test2PhantomHit * sdHit = (Test2PhantomHit*)(phantomHC->GetHit(i));
-      sdTotalEdep += sdHit->GetEdep();
+      fSdQuantities[0] += sdHit->GetEdep();
       if(sdHit->GetParticleName() == "gamma") {
-	sdTotalTrackLengthGamma += sdHit->GetTrackLength();
+	fSdQuantities[1] += sdHit->GetTrackLength();
+	fSdQuantities[4] += 1;
       } else if(sdHit->GetParticleName() == "e-") {
-	sdTotalTrackLengthElec += sdHit->GetTrackLength();
+	fSdQuantities[2] += sdHit->GetTrackLength();
+	fSdQuantities[5] += 1;
       } else if(sdHit->GetParticleName() == "e+") {
-	  sdTotalTrackLengthPosi += sdHit->GetTrackLength();
+	fSdQuantities[3] += sdHit->GetTrackLength();
+	fSdQuantities[6] += 1;
       }
       /*
       G4cout << sdHit->GetEdep() << " at "
