@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: Test2DetectorConstruction.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
+// $Id: Test2ParallelWorld.cc,v 1.1 2010-09-01 08:03:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#include "Test2DetectorConstruction.hh"
+#include "Test2ParallelWorld.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -41,88 +41,43 @@
 #include "G4Colour.hh"
 #include "G4ios.hh"
 
-#include "Test2PhantomSD.hh"
 
-Test2DetectorConstruction::Test2DetectorConstruction()
-:fbConstructed(false)
+Test2ParallelWorld::Test2ParallelWorld(G4String worldName)
+  :G4VUserParallelWorld(worldName), fbConstructed(false)
 {;}
 
-Test2DetectorConstruction::~Test2DetectorConstruction()
+Test2ParallelWorld::~Test2ParallelWorld()
 {;}
 
-G4VPhysicalVolume* Test2DetectorConstruction::Construct()
-{
+void Test2ParallelWorld::Construct() {
+
   if(!fbConstructed)
   { 
     fbConstructed = true;
-    DefineMaterials();
     SetupGeometry();
     SetupDetectors();
   }
-  return fWorldPhys;
 }
 
-void Test2DetectorConstruction::DefineMaterials()
-{ 
-  G4String name, symbol;             //a=mass of a mole;
-  G4double a, z, density;            //z=mean number of protons;  
-
-  G4int ncomponents, natoms;
-  G4double fractionmass;
-
-  //
-  // define Elements
-  //
-
-  a = 1.01*g/mole;
-  G4Element* H  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
-
-  a = 14.01*g/mole;
-  G4Element* N  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
-
-  a = 16.00*g/mole;
-  G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
-
-  //
-  // define a material from elements.   case 1: chemical molecule
-  //
- 
-  density = 1.000*g/cm3;
-  fWaterMat = new G4Material(name="Water", density, ncomponents=2);
-  fWaterMat->AddElement(H, natoms=2);
-  fWaterMat->AddElement(O, natoms=1);
-
-  //
-  // define a material from elements.   case 2: mixture by fractional mass
-  //
-
-  density = 1.290*mg/cm3;
-  fAirMat = new G4Material(name="Air"  , density, ncomponents=2);
-  fAirMat->AddElement(N, fractionmass=0.7);
-  fAirMat->AddElement(O, fractionmass=0.3);
-}
-
-void Test2DetectorConstruction::SetupGeometry()
+void Test2ParallelWorld::SetupGeometry()
 {
   //     
   // World
   //
-  G4VSolid* worldSolid = new G4Box("World",2.*m,2.*m,2.*m);
-  G4LogicalVolume* worldLogical = new G4LogicalVolume(worldSolid,fAirMat,"World");
-  fWorldPhys = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"World",
-                        0,false,0);
-  
+  G4VPhysicalVolume * ghostWorld = GetWorld();
+  G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
+
   //                               
   // 3D nested phantom
   //
   // parameters
   G4double phantomSize[3] = {1.*m, 1.*m, 1.*m};
-  G4int nSegment[3] = {10, 10, 10};
+  G4int nSegment[3] = {30, 30, 30};
 
   //  phantom box
-  G4VSolid* phantomSolid = new G4Box("PhantomBox", phantomSize[0], phantomSize[1], phantomSize[2]);
-  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, fWaterMat, "Phantom");
-  new G4PVPlacement(0,G4ThreeVector(), phantomLogical, "Phantom",
+  G4VSolid* phantomSolid = new G4Box("PhantomBoxParallel", phantomSize[0], phantomSize[1], phantomSize[2]);
+  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, 0, "Phantom");
+  new G4PVPlacement(0,G4ThreeVector(), phantomLogical, "PhantomParallel",
                          worldLogical, false, 0);
 
   G4String layerName[3] = {"layerX", "layerY", "layerZ"};
@@ -134,7 +89,7 @@ void Test2DetectorConstruction::SetupGeometry()
 			    phantomSize[0]/nSegment[0],
 			    phantomSize[1],
 			    phantomSize[2]);
-  fLayerLogical[0] = new G4LogicalVolume(layerSolid[0], fWaterMat, layerName[0]);
+  fLayerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
   new G4PVReplica(layerName[0], fLayerLogical[0], phantomLogical, kXAxis,
 		  nSegment[0], phantomSize[0]/nSegment[0]*2.);
 
@@ -143,7 +98,7 @@ void Test2DetectorConstruction::SetupGeometry()
 			    phantomSize[0]/nSegment[0],
 			    phantomSize[1]/nSegment[1],
 			    phantomSize[2]);
-  fLayerLogical[1] = new G4LogicalVolume(layerSolid[1], fWaterMat, layerName[1]);
+  fLayerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
   new G4PVReplica(layerName[1], fLayerLogical[1], fLayerLogical[0], kYAxis,
 		  nSegment[1], phantomSize[1]/nSegment[1]*2.);
 
@@ -152,9 +107,7 @@ void Test2DetectorConstruction::SetupGeometry()
 			    phantomSize[0]/nSegment[0],
 			    phantomSize[1]/nSegment[1],
 			    phantomSize[2]/nSegment[2]);
-  fLayerLogical[2] = new G4LogicalVolume(layerSolid[2], fWaterMat, layerName[2]);
-  //fPhantomPhys = new G4PVReplica(layerName[2], fLayerLogical[2], fLayerLogical[1], kZAxis,
-  //		  nSegment[2], phantomSize[2]/nSegment[2]*2.);
+  fLayerLogical[2] = new G4LogicalVolume(layerSolid[2], 0, layerName[2]);
   fPhantomPhys = new G4PVDivision(layerName[2], fLayerLogical[2], fLayerLogical[1], kZAxis,
 		  nSegment[2], 0.);
 
@@ -162,15 +115,12 @@ void Test2DetectorConstruction::SetupGeometry()
   // Visualization attributes
   //
   //  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
-  simpleBoxVisAtt->SetVisibility(true);
-  phantomLogical->SetVisAttributes(simpleBoxVisAtt);
-
   G4VisAttributes * invisatt = new G4VisAttributes(G4Colour(.0,.0,.0));
   invisatt->SetVisibility(false);
+  phantomLogical->SetVisAttributes(invisatt);
   fLayerLogical[0]->SetVisAttributes(invisatt);
   fLayerLogical[1]->SetVisAttributes(invisatt);
-  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(.8,.8,.8));
+  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(1.,.7,.7));
   visatt->SetVisibility(true);
   fLayerLogical[2]->SetVisAttributes(visatt);
 
@@ -178,20 +128,59 @@ void Test2DetectorConstruction::SetupGeometry()
 
 
 #include "G4SDManager.hh"
+#include "G4MultiFunctionalDetector.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4PSEnergyDeposit.hh"
+#include "G4PSTrackLength.hh"
+#include "G4PSNofStep.hh"
+#include "G4SDParticleFilter.hh"
 
-void Test2DetectorConstruction::SetupDetectors() {
+void Test2ParallelWorld::SetupDetectors() {
   //
   // sensitive detectors
   //
   G4SDManager * sdManager = G4SDManager::GetSDMpointer();
   sdManager->SetVerboseLevel(1);
 
-  G4String phantomSDName = "MassWorld/Phantom";
-  Test2PhantomSD * phantomSD = new Test2PhantomSD(phantomSDName);
-  sdManager->AddNewDetector(phantomSD);
-  fLayerLogical[2]->SetSensitiveDetector(phantomSD);
+  //
+  // primitive scorers
+  //
+  G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector("ScoringWorld");
 
+  // filters
+  G4String filterName, particleName;
+  G4SDParticleFilter* gammaFilter
+    = new G4SDParticleFilter(filterName="gammaFilter",particleName="gamma");
+  G4SDParticleFilter* electronFilter
+    = new G4SDParticleFilter(filterName="electronFilter",particleName="e-");
+  G4SDParticleFilter* positronFilter
+    = new G4SDParticleFilter(filterName="positronFilter",particleName="e+");
+
+  // primitive scorers
+  G4VPrimitiveScorer* primitive;
+  primitive = new G4PSEnergyDeposit("eDep");
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSTrackLength("trackLengthGamma");
+  primitive->SetFilter(gammaFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSNofStep("nStepGamma");
+  primitive->SetFilter(gammaFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSTrackLength("trackLengthElec");
+  primitive->SetFilter(electronFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSNofStep("nStepElec");
+  primitive->SetFilter(electronFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSTrackLength("trackLengthPosi");
+  primitive->SetFilter(positronFilter);
+  det->RegisterPrimitive(primitive);
+  primitive = new G4PSNofStep("nStepPosi");
+  primitive->SetFilter(positronFilter);
+  det->RegisterPrimitive(primitive);
+
+  sdManager->AddNewDetector(det);
+  fLayerLogical[2]->SetSensitiveDetector(det);
   sdManager->SetVerboseLevel(0);
-
 }
 

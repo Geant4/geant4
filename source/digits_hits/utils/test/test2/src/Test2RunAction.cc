@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2RunAction.cc,v 1.1 2010-07-23 06:15:41 akimura Exp $
+// $Id: Test2RunAction.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,35 +40,44 @@ Test2RunAction::Test2RunAction()
 Test2RunAction::~Test2RunAction()
 {;}
 
-G4Run* Test2RunAction::GenerateRun()
-{ return new Test2Run; }
+G4Run* Test2RunAction::GenerateRun() {
+  return new Test2Run; 
+}
 
 void Test2RunAction::BeginOfRunAction(const G4Run*)
 {;}
 
-void Test2RunAction::EndOfRunAction(const G4Run* aRun)
-{
+void Test2RunAction::EndOfRunAction(const G4Run* aRun) {
+
   const Test2Run* theRun = (const Test2Run*)aRun;
   
-  G4cout
-    << "############################################################" << G4endl;
-  G4cout 
-    << " Run Summary - Number of events : " << theRun->GetNumberOfEvent() 
-    << G4endl;
-  G4cout
-    << "############################################################" << G4endl;
-  G4cout
-    << "Total energy deposition in phantom : "
-    << G4BestUnit(theRun->GetTotal(0),"Energy") << G4endl;
-  G4cout
-    << "Gamma -       track length " << G4BestUnit(theRun->GetTotal(1),"Length")
-    << "   nStep " << theRun->GetTotal(2) << G4endl;
-  G4cout
-    << "Electron -    track length " << G4BestUnit(theRun->GetTotal(3),"Length")
-    << "   nStep " << theRun->GetTotal(4) << G4endl;
-  G4cout
-    << "Positron -    track length " << G4BestUnit(theRun->GetTotal(5),"Length")
-    << "   nStep " << theRun->GetTotal(6) << G4endl;
+  G4cout << "############################################################" << G4endl;
+  G4cout << " Run Summary - Number of events : " << theRun->GetNumberOfEvent() << G4endl;
+  G4cout << "############################################################" << G4endl;
+
+  // output of primitive scorers
+  G4cout << "                   == Primitive Scorers ==" << G4endl;
+  G4cout << "Total energy deposition in phantom : "
+	 << G4BestUnit(theRun->GetTotal(0),"Energy") << G4endl;
+  G4cout << "Gamma -       track length " << G4BestUnit(theRun->GetTotal(1),"Length")
+	 << "   nStep " << theRun->GetTotal(2) << G4endl;
+  G4cout << "Electron -    track length " << G4BestUnit(theRun->GetTotal(3),"Length")
+	 << "   nStep " << theRun->GetTotal(4) << G4endl;
+  G4cout << "Positron -    track length " << G4BestUnit(theRun->GetTotal(5),"Length")
+	 << "   nStep " << theRun->GetTotal(6) << G4endl;
   G4cout << G4endl;
+
+  // output of traditional sensitive manager
+  G4cout << "           == Traditional Sensitive Detector ==" << G4endl;
+  G4cout << "Total energy deposition in phantom : "
+	 << G4BestUnit(theRun->GetSDTotalEdep(),"Energy") << G4endl;
+  G4cout << "Gamma -       track length " << G4BestUnit(theRun->GetSDTrackLengthGamma(),"Length") << G4endl;
+  //	 << "   nStep " << theRun->GetTotal(2) << G4endl;
+  G4cout << "Electron -    track length " << G4BestUnit(theRun->GetSDTrackLengthElec(),"Length") << G4endl;
+    //<< "   nStep " << theRun->GetTotal(4) << G4endl;
+  G4cout << "Positron -    track length " << G4BestUnit(theRun->GetSDTrackLengthPosi(),"Length") << G4endl;
+    //	 << "   nStep " << theRun->GetTotal(6) << G4endl;
+  G4cout << G4endl;
+  
 }
 

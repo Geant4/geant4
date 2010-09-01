@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2Run.hh,v 1.1 2010-07-23 06:15:41 akimura Exp $
+// $Id: Test2Run.hh,v 1.2 2010-09-01 08:03:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,32 +40,45 @@ class G4Event;
 
 class Test2Run : public G4Run
 {
-  public:
-    Test2Run();
-    virtual ~Test2Run();
+public:
+  Test2Run();
+  virtual ~Test2Run();
 
-  public:
-    virtual void RecordEvent(const G4Event*);
+public:
+  virtual void RecordEvent(const G4Event*);
 
-  private:
-    G4double GetTotal(const G4THitsMap<G4double> &map) const;
+private:
+  G4double GetTotal(const G4THitsMap<G4double> &map) const;
 
-  private:
-    // Maps for accumulation
-    // mapSum[7]
-    //  i = 0 : eDep
-    //  i = 1 : trackLengthGamma
-    //  i = 2 : trackLengthElec
-    //  i = 3 : trackLengthPosi
-    //  i = 4 : nStepGamma
-    //  i = 5 : nStepElec
-    //  i = 6 : nStepPosi
-    G4THitsMap<G4double> mapSum[7];
-    G4int colIDSum[7];
+private:
+  //-- primitive scorers
+  // Maps for accumulation
+  // mapSum[7]
+  //  i = 0 : eDep
+  //  i = 1 : trackLengthGamma
+  //  i = 2 : trackLengthElec
+  //  i = 3 : trackLengthPosi
+  //  i = 4 : nStepGamma
+  //  i = 5 : nStepElec
+  //  i = 6 : nStepPosi
+  G4THitsMap<G4double> mapSum[7];
+  G4int colIDSum[7];
+  
+  //-- traditional sensitive detetector
+  G4int sdID;
+  G4double sdTotalEdep;
+  G4double sdTotalTrackLengthGamma;
+  G4double sdTotalTrackLengthElec;
+  G4double sdTotalTrackLengthPosi;
 
-  public:
-    inline G4double GetTotal(G4int i) const
-    { return GetTotal(mapSum[i]); }
+public:
+  inline G4double GetTotal(G4int i) const
+  { return GetTotal(mapSum[i]); }
+
+  inline G4double GetSDTotalEdep() const {return sdTotalEdep;}
+  inline G4double GetSDTrackLengthGamma() const {return sdTotalTrackLengthGamma;}
+  inline G4double GetSDTrackLengthElec() const {return sdTotalTrackLengthElec;}
+  inline G4double GetSDTrackLengthPosi() const {return sdTotalTrackLengthPosi;}
 };
 
 #endif

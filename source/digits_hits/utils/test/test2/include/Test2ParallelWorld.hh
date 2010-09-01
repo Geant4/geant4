@@ -24,38 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: Test2DetectorConstruction.hh,v 1.2 2010-09-01 08:03:10 akimura Exp $
+// $Id: Test2ParallelWorld.hh,v 1.1 2010-09-01 08:03:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#ifndef Test2DetectorConstruction_h
-#define Test2DetectorConstruction_h 1
+#ifndef Test2ParallelWorld_h
+#define Test2ParallelWorld_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VUserParallelWorld.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
 class G4Material;
 class G4LogicalVolume;
 
-class Test2DetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    Test2DetectorConstruction();
-    virtual ~Test2DetectorConstruction();
+class Test2ParallelWorld : public G4VUserParallelWorld {
+public:
+  Test2ParallelWorld(G4String worldName);
+  virtual ~Test2ParallelWorld();
 
   public:
-    virtual G4VPhysicalVolume* Construct();
+    virtual void Construct();
      
   private:
-    void DefineMaterials();
     void SetupGeometry();
     void SetupDetectors();
 
   private:
-    G4Material* fAirMat;
-    G4Material* fWaterMat;
     G4VPhysicalVolume* fWorldPhys;
     G4VPhysicalVolume* fPhantomPhys;
     G4LogicalVolume * fLayerLogical[3];

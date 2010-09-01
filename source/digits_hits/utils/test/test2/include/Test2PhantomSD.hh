@@ -48,11 +48,11 @@ public:
   void PrintAll();
 
 private:
-  Test2PhantomHitsCollection * phantomCollection;
-  int CellID[10][10][10];
-  const int numberOfCellsInX;
-  const int numberOfCellsInY;
-  const int numberOfCellsInZ;
+  Test2PhantomHitsCollection * fPhantomCollection;
+  int fCellID[10][10][10];
+  const int fNumberOfCellsInX;
+  const int fNumberOfCellsInY;
+  const int fNumberOfCellsInZ;
 
 };
 

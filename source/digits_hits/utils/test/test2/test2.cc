@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test2.cc,v 1.1 2010-07-23 06:15:40 akimura Exp $
+// $Id: test2.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4VisExecutive.hh"
 #endif
 #include "Test2DetectorConstruction.hh"
+#include "Test2ParallelWorld.hh"
 #include "Test2PhysicsList.hh"
 #include "Test2PrimaryGeneratorAction.hh"
 #include "Test2RunAction.hh"
@@ -50,13 +51,17 @@ int main(int argc,char** argv)
  //
  G4RunManager * runManager = new G4RunManager;
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
- scManager->SetVerboseLevel(1);
+ scManager->SetVerboseLevel(0);
 
  // Set mandatory initialization classes
  //
+ // mass world
  G4VUserDetectorConstruction* detector = new Test2DetectorConstruction;
+ // parallel world
+ detector->RegisterParallelWorld(new Test2ParallelWorld("ParallelScoringWorld"));
  runManager->SetUserInitialization(detector);
- //
+
+  //
  G4VUserPhysicsList* physics = new Test2PhysicsList;
  runManager->SetUserInitialization(physics);
     

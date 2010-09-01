@@ -27,68 +27,66 @@
 #ifndef Test2PhantomHit_h
 #define Test2PhantomHit_h 1
 
+#include "globals.hh"
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
-#include "G4LogicalVolume.hh"
-#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
+#include "G4ParticleDefinition.hh"
 
+class G4LogicalVolume;
 class G4AttDef;
 
-class Test2PhantomHit : public G4VHit
-{
-  public:
+class Test2PhantomHit : public G4VHit {
+public:
+  Test2PhantomHit();
+  Test2PhantomHit(G4LogicalVolume* logVol,G4int & x, G4int & y, G4int & z);
+  ~Test2PhantomHit();
+  Test2PhantomHit(const Test2PhantomHit & right);
+  const Test2PhantomHit & operator=(const Test2PhantomHit & right);
+  G4int operator==(const Test2PhantomHit & right) const;
 
-      Test2PhantomHit();
-      Test2PhantomHit(G4LogicalVolume* logVol,G4int z,G4int phi);
-      ~Test2PhantomHit();
-      Test2PhantomHit(const Test2PhantomHit &right);
-      const Test2PhantomHit& operator=(const Test2PhantomHit &right);
-      G4int operator==(const Test2PhantomHit &right) const;
+  inline void * operator new(size_t);
+  inline void operator delete(void * aHit);
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+  void Draw();
+  const std::map<G4String,G4AttDef> * GetAttDefs() const;
+  std::vector<G4AttValue> * CreateAttValues() const;
+  void Print();
 
-      void Draw();
-      const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      std::vector<G4AttValue>* CreateAttValues() const;
-      void Print();
+private:
+  G4int fXCellID, fYCellID, fZCellID;
+  G4double fEdep;
+  G4double fTrackLength;
+  G4String fParticleName;
+  G4ThreeVector fPos;
+  G4RotationMatrix fRotMat;
+  const G4LogicalVolume* fpLogV;
+  static std::map<G4String,G4AttDef> fAttDefs;
 
-  private:
-      G4int ZCellID;
-      G4int PhiCellID;
-      G4double edep;
-      G4ThreeVector pos;
-      G4RotationMatrix rot;
-      const G4LogicalVolume* pLogV;
-      static std::map<G4String,G4AttDef> fAttDefs;
-
-  public:
-      inline void SetCellID(G4int z,G4int phi)
-      {
-        ZCellID = z;
-        PhiCellID = phi;
-      }
-      inline G4int GetZ() { return ZCellID; }
-      inline G4int GetPhi() { return PhiCellID; }
-      inline void SetEdep(G4double de)
-      { edep = de; }
-      inline void AddEdep(G4double de)
-      { edep += de; }
-      inline G4double GetEdep()
-      { return edep; }
-      inline void SetPos(G4ThreeVector xyz)
-      { pos = xyz; }
-      inline G4ThreeVector GetPos()
-      { return pos; }
-      inline void SetRot(G4RotationMatrix rmat)
-      { rot = rmat; }
-      inline G4RotationMatrix GetRot()
-      { return rot; }
-      inline const G4LogicalVolume * GetLogV()
-      { return pLogV; }
+public:
+  inline void SetCellID(G4int x, G4int y, G4int z) {
+    fXCellID = x;
+    fYCellID = y;
+    fZCellID = z;
+  }
+  inline G4int GetX() { return fXCellID; }
+  inline G4int GetY() { return fYCellID; }
+  inline G4int GetZ() { return fZCellID; }
+  inline void SetEdep(G4double de) { fEdep = de; }
+  inline void AddEdep(G4double de) { fEdep += de; }
+  inline G4double GetEdep() { return fEdep; }
+  inline void SetTrackLength(G4double tl) { fTrackLength = tl; }
+  inline void AddTrackLength(G4double tl) { fTrackLength += tl; }
+  inline G4double GetTrackLength() { return fTrackLength; }
+  inline void SetParticleName(G4String pn) { fParticleName = pn; }
+  inline G4String GetParticleName() { return fParticleName; }
+  inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+  inline G4ThreeVector GetPos() { return fPos; }
+  inline void SetRot(G4RotationMatrix rmat) { fRotMat = rmat; }
+  inline G4RotationMatrix GetRot() { return fRotMat; }
+  inline const G4LogicalVolume * GetLogV() { return fpLogV; }
 
 };
 

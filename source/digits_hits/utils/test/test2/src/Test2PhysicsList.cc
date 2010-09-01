@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2PhysicsList.cc,v 1.1 2010-07-23 06:15:41 akimura Exp $
+// $Id: Test2PhysicsList.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -249,21 +249,29 @@ void Test2PhysicsList::ConstructEM()
 }
 
 #include "G4Decay.hh"
+#include "G4ParallelWorldScoringProcess.hh"
 
 void Test2PhysicsList::ConstructGeneral()
 {
   // Add Decay Process and Parallel world Scoring Process
   G4Decay* theDecayProcess = new G4Decay();
+  G4ParallelWorldScoringProcess * theParallelWorldScoringProcess
+  = new G4ParallelWorldScoringProcess("ParallelScoringProc");
+ theParallelWorldScoringProcess->SetParallelWorld("ParallelScoringWorld");
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
-      pmanager ->AddProcess(theDecayProcess);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+      pmanager->AddProcess(theDecayProcess);
+      pmanager->SetProcessOrdering(theDecayProcess, idxPostStep);
+      pmanager->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+    pmanager->AddProcess(theParallelWorldScoringProcess);
+    pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+    pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAlongStep, 1);
+    pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
   }
 }
 

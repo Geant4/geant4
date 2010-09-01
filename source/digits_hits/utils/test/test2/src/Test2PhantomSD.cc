@@ -37,11 +37,10 @@
 
 Test2PhantomSD::Test2PhantomSD(G4String name)
   :G4VSensitiveDetector(name),
-   numberOfCellsInX(10), numberOfCellsInY(10), numberOfCellsInZ(10)
- {
+   fNumberOfCellsInX(10), fNumberOfCellsInY(10), fNumberOfCellsInZ(10) {
 
   G4String HCname;
-  collectionName.insert(HCname = "phantomCollection");
+  collectionName.insert(HCname = "PhantomCollection");
 
 }
 
@@ -51,74 +50,75 @@ Test2PhantomSD::~Test2PhantomSD() {
 
 void Test2PhantomSD::Initialize(G4HCofThisEvent *) {
 
-  phantomCollection = new Test2PhantomHitsCollection(SensitiveDetectorName,
-						    collectionName[0]); 
-  for(G4int i = 0; i < numberOfCellsInZ; i++) {
-    for(G4int j = 0; j < numberOfCellsInY; j++) {
-      for(G4int k = 0; k < numberOfCellsInX; k++) {
-	CellID[i][j][k] = -1;
+  fPhantomCollection = new Test2PhantomHitsCollection(SensitiveDetectorName,
+						      collectionName[0]); 
+  for(G4int i = 0; i < fNumberOfCellsInZ; i++) {
+    for(G4int j = 0; j < fNumberOfCellsInY; j++) {
+      for(G4int k = 0; k < fNumberOfCellsInX; k++) {
+	fCellID[i][j][k] = -1;
       }
     }
   }
   verboseLevel = 0;
 }
 
-G4bool Test2PhantomSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
-{
-  if(!ROhist) return false;
+G4bool Test2PhantomSD::ProcessHits(G4Step * aStep, G4TouchableHistory *) {
+
+  // total energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
-  if(verboseLevel>1) G4cout << "Next step edep(MeV) = " << edep/MeV << G4endl;
-  if(edep==0.) return false;
+  G4double trklen = aStep->GetStepLength();
+  if(verboseLevel > 1) G4cout << "Next step edep [MeV] = " << edep/MeV << G4endl;
+  if(edep > 0. || trklen > 0.) {
 
-  G4VPhysicalVolume* physVol = ROhist->GetVolume();
-  //ROhist->MoveUpHistory();
-  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
-  G4int copyIDinZ = ROhist->GetReplicaNumber();
-  G4int copyIDinPhi = ROhist->GetReplicaNumber(1);
+    G4TouchableHistory * hist = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
+    G4VPhysicalVolume* physVol = hist->GetVolume();
+    G4int copyIDinX = hist->GetReplicaNumber(0);
+    G4int copyIDinY = hist->GetReplicaNumber(1);
+    G4int copyIDinZ = hist->GetReplicaNumber(2);
 
-  if(CellID[copyIDinZ][copyIDinPhi][0]==-1)
-  {
-    Test2PhantomHit* calHit
-      = new Test2PhantomHit(physVol->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
-    calHit->SetEdep( edep );
-    G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
-    aTrans.Invert();
-    calHit->SetPos(aTrans.NetTranslation());
-    calHit->SetRot(aTrans.NetRotation());
-    G4int icell = phantomCollection->insert( calHit );
-    CellID[copyIDinZ][copyIDinPhi][0] = icell - 1;
-    if(verboseLevel>0)
-    { G4cout << " New Calorimeter Hit on CellID " 
-           << copyIDinZ << " " << copyIDinPhi << G4endl; }
-  }
-  else
-  { 
-    (*phantomCollection)[CellID[copyIDinZ][copyIDinPhi][0]]->AddEdep(edep);
-    if(verboseLevel>0)
-    { G4cout << " Energy added to CellID " 
-           << copyIDinZ << " " << copyIDinPhi << G4endl; }
+    if(fCellID[copyIDinX][copyIDinY][copyIDinZ] == -1) {
+      Test2PhantomHit* phantomHit
+	= new Test2PhantomHit(physVol->GetLogicalVolume(), copyIDinX, copyIDinY, copyIDinZ);
+      phantomHit->SetEdep(edep);
+      phantomHit->SetTrackLength(trklen);
+      phantomHit->SetParticleName(aStep->GetTrack()->GetParticleDefinition()->GetParticleName());
+      G4AffineTransform aTrans = hist->GetHistory()->GetTopTransform();
+      aTrans.Invert();
+      phantomHit->SetPos(aTrans.NetTranslation());
+      phantomHit->SetRot(aTrans.NetRotation());
+      G4int icell = fPhantomCollection->insert(phantomHit);
+      fCellID[copyIDinX][copyIDinY][copyIDinZ] = icell - 1;
+      if(verboseLevel > 0) {
+	G4cout << " New Calorimeter Hit on fCellID " 
+	       << copyIDinX << ", " << copyIDinY << ", " << copyIDinZ << G4endl; }
+    } else { 
+      (*fPhantomCollection)[fCellID[copyIDinX][copyIDinY][copyIDinZ]]->AddEdep(edep);
+      (*fPhantomCollection)[fCellID[copyIDinX][copyIDinY][copyIDinZ]]->AddTrackLength(trklen);
+      if(verboseLevel > 0) {
+	G4cout << " Energy added to fCellID " 
+	       << copyIDinX << ", " << copyIDinY << ", " << copyIDinZ << G4endl; }
+    }
   }
 
   return true;
 }
 
-void Test2PhantomSD::EndOfEvent(G4HCofThisEvent*HCE)
-{
+void Test2PhantomSD::EndOfEvent(G4HCofThisEvent * HCE) {
+
   static G4int HCID = -1;
-  if(HCID<0)
-  { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection( HCID, phantomCollection );
+  if(HCID < 0) { HCID = GetCollectionID(0); }
+  HCE->AddHitsCollection( HCID, fPhantomCollection );
 }
 
-void Test2PhantomSD::clear()
-{
+void Test2PhantomSD::clear() {
+  ;
 } 
 
-void Test2PhantomSD::DrawAll()
-{
+void Test2PhantomSD::DrawAll() {
+  ;
 } 
 
-void Test2PhantomSD::PrintAll()
-{
+void Test2PhantomSD::PrintAll() {
+  ;
 } 
 

@@ -25,100 +25,113 @@
 //
 
 #include "Test2PhantomHit.hh"
-#include "G4ios.hh"
-#include "G4VVisManager.hh"
-#include "G4Colour.hh"
-#include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ThreeVector.hh"
+#include "G4Transform3D.hh"
+#include "G4RotationMatrix.hh"
 #include "G4UIcommand.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 #include "G4AttValue.hh"
 #include "G4AttDef.hh"
 #include "G4AttCheck.hh"
+#include "G4Colour.hh"
 
 G4Allocator<Test2PhantomHit> Test2PhantomHitAllocator;
 
-Test2PhantomHit::Test2PhantomHit()
-{pLogV=0;}
-
-Test2PhantomHit::Test2PhantomHit(G4LogicalVolume* logVol,G4int z,G4int phi)
-: ZCellID(z), PhiCellID(phi), pLogV(logVol)
-{;}
-
-Test2PhantomHit::~Test2PhantomHit()
-{;}
-
-Test2PhantomHit::Test2PhantomHit(const Test2PhantomHit &right)
-  : G4VHit()
-{
-  ZCellID = right.ZCellID;
-  PhiCellID = right.PhiCellID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
+Test2PhantomHit::Test2PhantomHit() {
+  fpLogV = 0;
 }
 
-const Test2PhantomHit& Test2PhantomHit::operator=(const Test2PhantomHit &right)
-{
-  ZCellID = right.ZCellID;
-  PhiCellID = right.PhiCellID;
-  edep = right.edep;
-  pos = right.pos;
-  rot = right.rot;
-  pLogV = right.pLogV;
+Test2PhantomHit::Test2PhantomHit(G4LogicalVolume * logVol,
+				 G4int & x, G4int & y, G4int & z)
+  : fXCellID(x), fYCellID(y), fZCellID(z), fpLogV(logVol) {
+  ;
+}
+
+Test2PhantomHit::~Test2PhantomHit() {
+  ;
+}
+
+Test2PhantomHit::Test2PhantomHit(const Test2PhantomHit & right)
+  : G4VHit() {
+
+  fXCellID = right.fXCellID;
+  fYCellID = right.fYCellID;
+  fZCellID = right.fZCellID;
+  fEdep = right.fEdep;
+  fTrackLength = right.fTrackLength;
+  fParticleName = right.fParticleName;
+  fPos = right.fPos;
+  fRotMat = right.fRotMat;
+  fpLogV = right.fpLogV;
+}
+
+const Test2PhantomHit & Test2PhantomHit::operator=(const Test2PhantomHit & right) {
+
+  fXCellID = right.fXCellID;
+  fYCellID = right.fYCellID;
+  fZCellID = right.fZCellID;
+  fEdep = right.fEdep;
+  fTrackLength = right.fTrackLength;
+  fParticleName = right.fParticleName;
+  fPos = right.fPos;
+  fRotMat = right.fRotMat;
+  fpLogV = right.fpLogV;
+
   return *this;
 }
 
-G4int Test2PhantomHit::operator==(const Test2PhantomHit &right) const
-{
-  return ((ZCellID==right.ZCellID)&&(PhiCellID==right.PhiCellID));
+G4int Test2PhantomHit::operator==(const Test2PhantomHit &right) const {
+
+  return ((fXCellID == right.fXCellID) &&
+	  (fYCellID == right.fYCellID) &&
+	  (fZCellID == right.fZCellID));
 }
 
-std::map<G4String,G4AttDef> Test2PhantomHit::fAttDefs;
+std::map<G4String, G4AttDef> Test2PhantomHit::fAttDefs;
 
-void Test2PhantomHit::Draw()
-{
+void Test2PhantomHit::Draw() {
+
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Transform3D trans(rot,pos);
+  if(pVVisManager) {
+    G4Transform3D trans(fRotMat, fPos);
     G4VisAttributes attribs;
-    const G4VisAttributes* pVA = pLogV->GetVisAttributes();
+    const G4VisAttributes* pVA = fpLogV->GetVisAttributes();
     if(pVA) attribs = *pVA;
     G4Colour colour(1.,0.,0.);
     attribs.SetColour(colour);
     attribs.SetForceSolid(true);
-    pVVisManager->Draw(*pLogV,attribs,trans);
+    pVVisManager->Draw(*fpLogV, attribs, trans);
   }
 }
 
-const std::map<G4String,G4AttDef>* Test2PhantomHit::GetAttDefs() const
-{
+const std::map<G4String,G4AttDef>* Test2PhantomHit::GetAttDefs() const {
+
   // G4AttDefs have to have long life.  Use static member...
   if (fAttDefs.empty()) {
     fAttDefs["HitType"] =
       G4AttDef("HitType","Type of hit","Physics","","G4String");
+    fAttDefs["XID"] = G4AttDef("XID","X Cell ID","Physics","","G4int");
+    fAttDefs["YID"] = G4AttDef("YID","Y Cell ID","Physics","","G4int");
     fAttDefs["ZID"] = G4AttDef("ZID","Z Cell ID","Physics","","G4int");
-    fAttDefs["PhiID"] = G4AttDef("PhiID","Phi Cell ID","Physics","","G4int");
     fAttDefs["EDep"] =
       G4AttDef("EDep","Energy deposited","Physics","G4BestUnit","G4double");
   }
   return &fAttDefs;
 }
 
-std::vector<G4AttValue>* Test2PhantomHit::CreateAttValues() const
-{
+std::vector<G4AttValue>* Test2PhantomHit::CreateAttValues() const {
+
   // Create expendable G4AttsValues for picking...
   std::vector<G4AttValue>* attValues = new std::vector<G4AttValue>;
-  attValues->push_back
-    (G4AttValue("HitType","Test2PhantomHit",""));
-  attValues->push_back
-    (G4AttValue("ZID",G4UIcommand::ConvertToString(ZCellID),""));
-  attValues->push_back
-    (G4AttValue("PhiID",G4UIcommand::ConvertToString(PhiCellID),""));
-  attValues->push_back
-    (G4AttValue("EDep",G4BestUnit(edep,"Energy"),""));
+  attValues->push_back(G4AttValue("HitType","Test2PhantomHit",""));
+  attValues->push_back(G4AttValue("XID",G4UIcommand::ConvertToString(fXCellID),""));
+  attValues->push_back(G4AttValue("YID",G4UIcommand::ConvertToString(fYCellID),""));
+  attValues->push_back(G4AttValue("ZID",G4UIcommand::ConvertToString(fZCellID),""));
+  attValues->push_back(G4AttValue("EDep",G4BestUnit(fEdep,"Energy"),""));
   //G4cout << "Checking...\n" << G4AttCheck(attValues, GetAttDefs());
   return attValues;
 }
