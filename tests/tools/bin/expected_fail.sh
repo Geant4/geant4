@@ -123,8 +123,10 @@ EXPECTED_FAIL test201-run \
 	x86_64-mac106-gcc42-opt	\
 	x86_64-mac106-gcc42-dbg	\
 	i686-winxp-vc9-opt	\
-	i686-winxp-vc9-dbg
-	
+	i686-winxp-vc9-dbg	\
+	x86_64-mac106-gcc42-opt	\
+	x86_64-mac106-gcc42-deb
+
 #newly in  testing Jul 2010, fail to run for graphics so far....
 EXPECTED_FAIL test202-build \
 	i686-winxp-vc9-opt	\
@@ -141,7 +143,10 @@ EXPECTED_FAIL test202-run \
 	x86_64-slc5-gcc43-opt	\
 	x86_64-slc5-gcc43-dbg	\
 	x86_64-mac106-gcc42-opt	\
-	x86_64-mac106-gcc42-dbg
+	x86_64-mac106-gcc42-dbg	\
+	x86_64-mac106-gcc42-opt	\
+	x86_64-mac106-gcc42-deb
+
 	
 	
 	
