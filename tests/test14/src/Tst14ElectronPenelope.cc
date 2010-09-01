@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronPenelope.cc,v 1.6 2010-08-28 20:35:36 sincerti Exp $
+// $Id: Tst14ElectronPenelope.cc,v 1.7 2010-09-01 17:29:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -75,6 +75,8 @@ void Tst14ElectronPenelope::ConstructProcess()
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
+      G4double PenelopeHighEnergyLimit = 1.0*GeV;
+
       if (particleName == "e-") 
 	{
 
@@ -86,6 +88,7 @@ void Tst14ElectronPenelope::ConstructProcess()
 */
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       manager->AddProcess(msc,                   -1, 1, 1);
@@ -94,6 +97,7 @@ void Tst14ElectronPenelope::ConstructProcess()
       G4eIonisation* eIoni = new G4eIonisation();
       G4PenelopeIonisationModel* theIoniPenelope = 
 	new G4PenelopeIonisationModel();
+      theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
       eIoni->SetStepFunction(0.2, 100*um); //     
       manager->AddProcess(eIoni,                 -1, 2, 2);
@@ -102,6 +106,7 @@ void Tst14ElectronPenelope::ConstructProcess()
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4PenelopeBremsstrahlungModel* theBremPenelope = new 
 	G4PenelopeBremsstrahlungModel();
+      theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eBrem->AddEmModel(0,theBremPenelope);
       manager->AddProcess(eBrem, -1,-3, 3);
 	

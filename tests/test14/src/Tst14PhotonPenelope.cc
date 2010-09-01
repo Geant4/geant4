@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhotonPenelope.cc,v 1.3 2010-08-28 20:35:36 sincerti Exp $
+// $Id: Tst14PhotonPenelope.cc,v 1.4 2010-09-01 17:29:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -73,6 +73,8 @@ void Tst14PhotonPenelope::ConstructProcess()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
+
+      G4double PenelopeHighEnergyLimit = 1.0*GeV;
      
       if (particleName == "gamma") 
 	{
@@ -87,6 +89,7 @@ void Tst14PhotonPenelope::ConstructProcess()
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4PenelopePhotoElectricModel* thePEPenelopeModel = new 
 	G4PenelopePhotoElectricModel();
+      thePEPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0,thePEPenelopeModel);
       manager->AddDiscreteProcess(thePhotoElectricEffect);
 
@@ -94,6 +97,7 @@ void Tst14PhotonPenelope::ConstructProcess()
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4PenelopeComptonModel* theComptonPenelopeModel = 
 	new G4PenelopeComptonModel();
+      theComptonPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theComptonScattering->AddEmModel(0,theComptonPenelopeModel);
       manager->AddDiscreteProcess(theComptonScattering);
 
@@ -108,6 +112,7 @@ void Tst14PhotonPenelope::ConstructProcess()
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4PenelopeRayleighModel* theRayleighPenelopeModel = 
 	new G4PenelopeRayleighModel();
+      theRayleighPenelopeModel->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       theRayleigh->AddEmModel(0,theRayleighPenelopeModel);
       manager->AddDiscreteProcess(theRayleigh);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14ElectronEEDL.cc,v 1.4 2010-08-28 20:35:36 sincerti Exp $
+// $Id: Tst14ElectronEEDL.cc,v 1.5 2010-09-01 17:29:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -73,6 +73,8 @@ void Tst14ElectronEEDL::ConstructProcess()
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
+      G4double LivermoreHighEnergyLimit = GeV;
+
       if (particleName == "e-") 
 	{
 
@@ -84,6 +86,7 @@ void Tst14ElectronEEDL::ConstructProcess()
 */
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       manager->AddProcess(msc,                   -1, 1, 1);
@@ -101,6 +104,7 @@ void Tst14ElectronEEDL::ConstructProcess()
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4LivermoreBremsstrahlungModel* theBremLivermore = new
         G4LivermoreBremsstrahlungModel();
+      theBremLivermore->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       eBrem->AddEmModel(0, theBremLivermore);
       manager->AddProcess(eBrem, -1,-3, 3);
 	

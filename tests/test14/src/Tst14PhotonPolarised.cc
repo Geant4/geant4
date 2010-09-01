@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhotonPolarised.cc,v 1.5 2010-08-28 20:35:36 sincerti Exp $
+// $Id: Tst14PhotonPolarised.cc,v 1.6 2010-09-01 17:29:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -74,6 +74,8 @@ void Tst14PhotonPolarised::ConstructProcess()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
+
+      G4double LivermoreHighEnergyLimit = GeV;
      
       if (particleName == "gamma") 
 	{
@@ -87,25 +89,27 @@ void Tst14PhotonPolarised::ConstructProcess()
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4LivermorePolarizedPhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePolarizedPhotoElectricModel();
+      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       manager->AddDiscreteProcess(thePhotoElectricEffect);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4LivermorePolarizedComptonModel* theLivermoreComptonModel = new G4LivermorePolarizedComptonModel();
+      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
       manager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4LivermorePolarizedGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermorePolarizedGammaConversionModel();
+      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       manager->AddDiscreteProcess(theGammaConversion);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4LivermorePolarizedRayleighModel* theRayleighModel = new G4LivermorePolarizedRayleighModel();
+      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theRayleigh->AddEmModel(0, theRayleighModel);
       manager->AddDiscreteProcess(theRayleigh);
-
-
 
 	}   
     }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PhotonEPDL.cc,v 1.3 2010-08-28 20:35:36 sincerti Exp $
+// $Id: Tst14PhotonEPDL.cc,v 1.4 2010-09-01 17:29:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -75,6 +75,8 @@ void Tst14PhotonEPDL::ConstructProcess()
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
+      G4double LivermoreHighEnergyLimit = GeV;
+
       if (particleName == "gamma") 
 	{
 /*
@@ -88,27 +90,29 @@ void Tst14PhotonEPDL::ConstructProcess()
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
       G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
 	new G4LivermorePhotoElectricModel();
+      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       manager->AddDiscreteProcess(thePhotoElectricEffect);
 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
       G4LivermoreComptonModel* theLivermoreComptonModel = 
 	new G4LivermoreComptonModel();
+      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
       manager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
       G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
 	new G4LivermoreGammaConversionModel();
+      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       manager->AddDiscreteProcess(theGammaConversion);
 
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
       G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theRayleigh->AddEmModel(0, theRayleighModel);
       manager->AddDiscreteProcess(theRayleigh);
-
-
 
 		}   
     }

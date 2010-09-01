@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst14PositronPenelope.cc,v 1.2 2010-04-01 08:52:16 sincerti Exp $
+// $Id: Tst14PositronPenelope.cc,v 1.3 2010-09-01 17:29:29 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola (pandola@lngs.infn.it)
@@ -40,10 +40,21 @@
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4eMultipleScattering.hh"
+/*
 #include "G4PenelopeIonisation.hh"
 #include "G4PenelopeBremsstrahlung.hh"
 #include "G4PenelopeAnnihilation.hh"
+*/
 
+#include "G4eMultipleScattering.hh"
+#include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4eIonisation.hh"
+#include "G4PenelopeIonisationModel.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4PenelopeBremsstrahlungModel.hh"
+#include "G4eplusAnnihilation.hh"
+#include "G4PenelopeAnnihilationModel.hh"
+#include "G4UniversalFluctuation.hh"
 
 Tst14PositronPenelope::Tst14PositronPenelope(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -63,12 +74,48 @@ void Tst14PositronPenelope::ConstructProcess()
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
+      G4double PenelopeHighEnergyLimit = 1.0*GeV;
+
       if (particleName == "e+") 
 	{
+/*
 	  manager->AddProcess(new G4eMultipleScattering,     -1, 1,1);
 	  manager->AddProcess(new G4PenelopeIonisation,     -1, 2, 2);
 	  manager->AddProcess(new G4PenelopeBremsstrahlung, -1,-1,3);
 	  manager->AddProcess(new G4PenelopeAnnihilation,    0,-1, 4);
+*/
+
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      //msc->AddEmModel(0, new G4UrbanMscModel93());
+      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      manager->AddProcess(msc,                   -1, 1, 1);
+
+      //Ionisation
+      G4eIonisation* eIoni = new G4eIonisation();
+      G4PenelopeIonisationModel* theIoniPenelope = 
+	new G4PenelopeIonisationModel();
+      theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+      eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
+      eIoni->SetStepFunction(0.2, 100*um); //     
+      manager->AddProcess(eIoni,                 -1, 2, 2);
+
+       //Bremsstrahlung
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      G4PenelopeBremsstrahlungModel* theBremPenelope = new 
+	G4PenelopeBremsstrahlungModel();
+      theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+      eBrem->AddEmModel(0,theBremPenelope);
+      manager->AddProcess(eBrem, -1,-3, 3);
+      
+      //Annihilation
+      G4eplusAnnihilation* eAnni = new G4eplusAnnihilation();
+      G4PenelopeAnnihilationModel* theAnnPenelope = new 
+	G4PenelopeAnnihilationModel();
+      theAnnPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
+      eAnni->AddEmModel(0,theAnnPenelope);
+      manager->AddProcess(eAnni,0,-1, 4);
+
 	}   
     }
 }
