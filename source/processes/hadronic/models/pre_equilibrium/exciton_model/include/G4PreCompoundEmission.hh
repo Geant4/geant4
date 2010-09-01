@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh,v 1.8 2010-08-28 15:16:55 vnivanch Exp $
+// $Id: G4PreCompoundEmission.hh,v 1.9 2010-09-01 14:51:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -66,8 +66,6 @@ public:
 
   inline G4double GetTotalProbability(const G4Fragment & aFragment);
 
-  inline void SetUp(const G4Fragment & aFragment);
-
   inline void Initialize(const G4Fragment & aFragment);
 
   inline void SetOPTxs(G4int);
@@ -98,11 +96,6 @@ private:
   G4PreCompoundFragmentVector * theFragmentsVector;
   G4VPreCompoundEmissionFactory * theFragmentsFactory;
 
-  // Projectile energy
-  G4double ProjEnergy;
-
-  // Projectile direction
-  G4ThreeVector theIncidentDirection;
   // Momentum of emitted fragment
   G4ThreeVector theFinalMomentum;
 };
@@ -111,16 +104,6 @@ inline G4double
 G4PreCompoundEmission::GetTotalProbability(const G4Fragment& aFragment) 
 {
   return theFragmentsVector->CalculateProbabilities(aFragment);
-}
-
-inline void G4PreCompoundEmission::SetUp(const G4Fragment& aFragment)
-{
-  // This should be the projectile energy. If I would know which is 
-  // the projectile (proton, neutron) I could remove the binding energy. 
-  // But, what happens if INC precedes precompound? This approximation
-  // seems to work well enough
-  ProjEnergy = aFragment.GetExcitationEnergy();
-  theIncidentDirection = aFragment.GetMomentum().vect().unit();
 }
 
 inline void 

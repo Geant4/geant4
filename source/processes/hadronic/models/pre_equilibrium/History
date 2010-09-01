@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1-September 2010 V.Ivanchenko  hadr-pre-V09-03-09
+---------------------------------------------------
+G4PreCompoundEmission - removed SetUp inline method and move its functionality
+                        to the PerformEmission method in order to fix 
+                        initialisation problem 
+
 31-August 2010 V.Ivanchenko  hadr-pre-V09-03-08
 ---------------------------------------------------
 G4PreCompoundTransition - fixed typo introduced in previous tag

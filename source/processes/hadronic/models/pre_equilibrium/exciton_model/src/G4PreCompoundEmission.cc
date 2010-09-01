@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc,v 1.30 2010-08-31 14:37:58 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.31 2010-09-01 14:51:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -211,6 +211,12 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
 
     G4double zeta = std::max(1.0,9.3/std::sqrt(ekin/MeV));
   
+    // This should be the projectile energy. If I would know which is 
+    // the projectile (proton, neutron) I could remove the binding energy. 
+    // But, what happens if INC precedes precompound? This approximation
+    // seems to work well enough
+    G4double ProjEnergy = aFragment.GetExcitationEnergy();
+
     an = 3*std::sqrt((ProjEnergy+Ef)*Eeff)/(zeta*Eav);
 
     G4int ne = aFragment.GetNumberOfExcitons() - 1;
@@ -241,7 +247,9 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
 
   theFinalMomentum = 
     G4ThreeVector(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,pmag*cost);
+
   // theta is the angle wrt the incident direction
+  G4ThreeVector theIncidentDirection = aFragment.GetMomentum().vect().unit();
   theFinalMomentum.rotateUz(theIncidentDirection);
 }
 
