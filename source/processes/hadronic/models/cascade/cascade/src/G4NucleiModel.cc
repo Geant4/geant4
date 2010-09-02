@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.72 2010-09-02 15:45:50 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.73 2010-09-02 16:13:52 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -41,23 +41,34 @@
 //		Restores baseline physics behaviour (data/MC xsec ~1).
 //		Interface re-upgraded to latest revision; code content will
 //		be revised incrementally.
-
-//#define CHC_CHECK
+//		1)  Replace CHC_CHECK with G4CASCADE_DEBUG_CHARGE
+//		2)  Update cross-section tables and interpolator
 
 #include "G4NucleiModel.hh"
+#include "G4CascadeInterpolator.hh"
+#include "G4CascadeNNChannel.hh"
+#include "G4CascadeNPChannel.hh"
+#include "G4CascadePPChannel.hh"
+#include "G4CascadePiMinusNChannel.hh"
+#include "G4CascadePiMinusPChannel.hh"
+#include "G4CascadePiPlusNChannel.hh"
+#include "G4CascadePiPlusPChannel.hh"
+#include "G4CascadePiZeroNChannel.hh"
+#include "G4CascadePiZeroPChannel.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
+#include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4NucleiProperties.hh"
 #include "G4HadTmpUtil.hh"
-#include "G4InuclSpecialFunctions.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
 using namespace G4InuclSpecialFunctions;
+using namespace G4InuclParticleNames;
 
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -786,7 +797,7 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
 	no_interaction = false;
 	current_nucl1 = 0;
 	current_nucl2 = 0;
-#ifdef CHC_CHECK
+#ifdef G4CASCADE_DEBUG_CHARGE
 	G4double out_charge = 0.0;
 	
 	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
@@ -1460,119 +1471,55 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
 
 G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
 {
-  const G4double keScale[30] = {
+  const G4double keScale[] = {
     0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
     0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
     2.4,  3.2,  4.2,   5.6,   7.5,  10.0,  13.0,  18.0,  24.0,  32.0};
+  static const G4int NBINS = sizeof(keScale)/sizeof(G4double);
 
-  G4int ik = 29;
-  G4double sk = 1.0;
-  for (G4int i = 1; i < 30; i++) {
-    if (ke <= keScale[i]) {
-      ik = i;
-      sk = (ke - keScale[ik - 1]) / (keScale[ik] - keScale[ik - 1]);
-      break;
-    }
-  }
+  static G4CascadeInterpolator<NBINS> interp(keScale);
 
-  G4double csec = 0.0;
-
-  // pp, nn
-  if (rtype == 1 || rtype == 4) {
-    csec = PPtot[ik - 1] + sk * (PPtot[ik] - PPtot[ik - 1]);
-
-  // np
-  } else if (rtype == 2) {
-    csec = NPtot[ik - 1] + sk * (NPtot[ik] - NPtot[ik - 1]);
-
-  // pi+p, pi-n  
-  } else if (rtype == 3 || rtype == 10) { 
-    csec = pipPtot[ik - 1] + sk * (pipPtot[ik] - pipPtot[ik - 1]);
-
-  // pi-p, pi+n 
-  } else if (rtype == 5 || rtype == 6) {
-    csec = pimPtot[ik - 1] + sk * (pimPtot[ik] - pimPtot[ik - 1]);
-
-  // pi0p, pi0n
-  } else if (rtype == 7 || rtype == 14) {
-    csec = pizPtot[ik - 1] + sk * (pizPtot[ik] - pizPtot[ik - 1]);
-
-    // k+ p, k0 n 
-  } else if (rtype == 11 || rtype == 30) {
-    csec = kpPtot[ik - 1] + sk * (kpPtot[ik] - kpPtot[ik - 1]);
-
-  // k- p, k0b n
-  } else if (rtype == 13 || rtype == 34) {
-    csec = kmPtot[ik - 1] + sk * (kmPtot[ik] - kmPtot[ik - 1]);
-
-  // k+ n, k0 p
-  } else if (rtype == 22 || rtype == 15) {
-    csec = kpNtot[ik - 1] + sk * (kpNtot[ik] - kpNtot[ik - 1]);
-
-  // k- n, k0b p
-  } else if (rtype == 26 || rtype == 17) {
-    csec = kmNtot[ik - 1] + sk * (kmNtot[ik] - kmNtot[ik - 1]);
-
-  // L p, L n, S0 p, S0 n
-  } else if (rtype == 21 || rtype == 25 || rtype == 42 || rtype == 50) {
-    csec = lPtot[ik - 1] + sk * (lPtot[ik] - lPtot[ik - 1]);
-
-  // Sp p, Sm n
-  } else if (rtype == 23 || rtype == 54) {
-    csec = spPtot[ik - 1] + sk * (spPtot[ik] - spPtot[ik - 1]);
-
-  // Sm p, Sp n
-  } else if (rtype == 27 || rtype == 46) {
-    csec = smPtot[ik - 1] + sk * (smPtot[ik] - smPtot[ik - 1]);
-
-  // Xi0 p, Xi- n
-  } else if (rtype == 29 || rtype == 62) {
-    csec = xi0Ptot[ik - 1] + sk * (xi0Ptot[ik] - xi0Ptot[ik - 1]);
-
-  // Xi- p, Xi0 n
-  } else if (rtype == 31 || rtype == 58) {
-    csec = ximPtot[ik - 1] + sk * (ximPtot[ik] - ximPtot[ik - 1]);
-
-  } else {
+  // Pion and nucleon scattering cross-sections are available elsewhere
+  switch (rtype) {
+  case pro*pro: return G4CascadePPChannel::getCrossSection(ke); break;
+  case pro*neu: return G4CascadeNPChannel::getCrossSection(ke); break;
+  case pip*pro: return G4CascadePiPlusPChannel::getCrossSection(ke); break;
+  case neu*neu: return G4CascadeNNChannel::getCrossSection(ke); break;
+  case pim*pro: return G4CascadePiMinusPChannel::getCrossSection(ke); break;
+  case pip*neu: return G4CascadePiPlusNChannel::getCrossSection(ke); break;
+  case pi0*pro: return G4CascadePiZeroPChannel::getCrossSection(ke); break;
+  case pim*neu: return G4CascadePiMinusNChannel::getCrossSection(ke); break;
+  case pi0*neu: return G4CascadePiZeroNChannel::getCrossSection(ke); break;
+    // Remaining channels are handled locally until arrays are moved
+  case kpl*pro:			     
+  case k0*neu:  return interp.interpolate(ke, kpPtot); break;
+  case kmi*pro:			     
+  case k0b*neu: return interp.interpolate(ke, kmPtot); break;
+  case kpl*neu:			     
+  case k0*pro:  return interp.interpolate(ke, kpNtot); break;
+  case kmi*neu:			     
+  case k0b*pro: return interp.interpolate(ke, kmNtot); break;
+  case lam*pro:			     
+  case lam*neu:			     
+  case s0*pro:			     
+  case s0*neu:  return interp.interpolate(ke, lPtot); break;
+  case sp*pro:			     
+  case sm*neu:  return interp.interpolate(ke, spPtot); break;
+  case sm*pro:			     
+  case sp*neu:  return interp.interpolate(ke, smPtot); break;
+  case xi0*pro:			     
+  case xim*neu: return interp.interpolate(ke, xi0Ptot); break;
+  case xim*pro:			     
+  case xi0*neu: return interp.interpolate(ke, ximPtot); break;
+  default:
     G4cout << " unknown collison type = " << rtype << G4endl; 
   }
 
-  return csec;
+  return 0.;		// Failure
 }
 
 
 // Initialize cross-section tables as global (static) variables
-
-const G4double G4NucleiModel::PPtot[30] = {
-  17613.0, 302.9, 257.1, 180.6, 128.4,  90.5,  66.1,  49.4,  36.9, 29.6,
-     26.0,  23.1,  22.6,  23.0,  27.0,  32.0,  44.0,  47.04, 44.86, 46.03,
-     44.09, 41.81, 41.17, 40.65, 40.15, 40.18, 39.26, 38.36, 38.39, 38.41};
-
-const G4double G4NucleiModel::NPtot[30] = {
-  20357.0, 912.6, 788.6, 582.1, 415.0, 272.0, 198.8, 145.0, 100.4,  71.1,
-     58.8,  45.7,  38.9,  34.4,  34.0,  35.0,  37.5,  39.02, 40.29, 40.72,
-     42.36, 41.19, 42.04, 41.67, 40.96, 39.48, 39.79, 39.39, 39.36, 39.34};
-
-const G4double G4NucleiModel::pipPtot[30] = {
-    0.0,   1.2,   2.5,   3.8,   5.0,  7.0,   9.0,  15.0, 30.0,  64.0,
-  130.0, 190.0, 130.0,  56.0,  28.0, 17.14, 19.28, 27.4, 40.05, 32.52,
-   30.46, 29.0,  27.26, 25.84, 25.5, 24.5,  24.0,  23.5, 23.0,  23.0};
-
-const G4double G4NucleiModel::pimPtot[30] = {
-    6.13,  6.4,   6.67,  6.94,  7.22,  7.5,  8.3,  12.0,  14.4,  24.0,
-   46.0,  72.04, 43.02, 27.19, 27.32, 43.8, 37.08, 51.37, 34.21, 34.79,
-   32.08, 31.19, 30.32, 28.5,  27.0,  25.9, 25.5,  25.2,  25.0,  24.8};
-
-  //const G4double G4NucleiModel::pizPtot[30] = {
-  //    0.0,   3.55,  4.65,  5.9,   7.75, 10.1,  11.8,  18.0,  27.7, 52.5,
-  //  102.0, 150.0, 102.64, 51.03, 34.94, 34.52, 32.45, 44.05, 40.2, 34.93,
-  //   32.0,  30.0,  28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0, 23.9};
-
-  // New test
-const G4double G4NucleiModel::pizPtot[30] = {
-    6.43,  7.18,  7.54,  8.01,  8.52,  9.13, 10.22, 14.37, 20.96, 34.73,
-   61.07, 98.23, 61.97, 32.62, 28.07, 31.37, 35.15, 40.17, 37.27, 33.49,
-   31.06, 29.52, 28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0,  23.9};
 
 const G4double G4NucleiModel::kpPtot[30] = {
    10.0,  10.34, 10.44, 10.61, 10.82, 11.09, 11.43, 11.71, 11.75, 11.8,
