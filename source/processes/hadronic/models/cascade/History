@@ -1,4 +1,4 @@
-$Id: History,v 1.154 2010-09-02 16:13:52 mkelsey Exp $
+$Id: History,v 1.155 2010-09-02 17:29:16 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -23,12 +23,15 @@ code and to keep track of all tags.
   revision has better data/MC matching (ratio near 1), it is restored as the
   baseline version, and changes will be re-done incrementally.
 
-	o Implement new ctor and generateModel() calls
-	o Make cross-section tables statically initialized
-	o Include absorptionCrossSection definition
-	o Use lookup tables for cross-sections, and new interpolator
-	o Change CHC_CHECK to G4CASCADE_DEBUG_CHARGE
-	o Use this package's bindingEnergy() function
+	0) Implement new ctor and generateModel() calls
+	   Make cross-section tables statically initialized
+	   Include absorptionCrossSection definition
+	1) Use lookup tables for cross-sections, and new interpolator
+	   Change CHC_CHECK to G4CASCADE_DEBUG_CHARGE
+	2) Use this package's bindingEnergy() function
+	   Update diagnostic messages and verbosity levels
+	3) Add missing initializers to all constructors
+	   Use data member buffers in place of local variables
 
 4 August 2010 Michael Kelsey (hadr-casc-V09-03-69)
 --------------------------------------------------
