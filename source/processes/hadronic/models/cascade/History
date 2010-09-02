@@ -1,4 +1,4 @@
-$Id: History,v 1.158 2010-09-02 21:15:34 mkelsey Exp $
+$Id: History,v 1.159 2010-09-02 22:13:24 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -37,6 +37,9 @@ NOTE:  Each increment after (0) is tagged "kelsey-20100902x", x=a,b,c,d etc.
 	4)  Use generateWithRandomAngles() everywhere appropriate;
 	    Collapse if-cascades to use if-return where possible
 	5)  Make generateModel() re-usable with data-member buffers
+	6)  Energy-momentum conservation checking;
+	    Implement generateNucleonMomentum;
+	    Remove extraneous semicolons and blank lines
 
 4 August 2010 Michael Kelsey (hadr-casc-V09-03-69)
 --------------------------------------------------
