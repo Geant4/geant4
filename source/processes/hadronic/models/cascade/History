@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2010-09-02 19:00:37 mkelsey Exp $
+$Id: History,v 1.157 2010-09-02 20:23:44 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -32,6 +32,8 @@ code and to keep track of all tags.
 	3) Update diagnostic messages and verbosity levels;
 	   Add missing initializers to all constructors;
 	   Use data-member buffer for G4CollisionOutput
+	4) Use generateWithRandomAngles() everywhere appropriate;
+	   Collapse if-cascades to use if-return where possible
 
 4 August 2010 Michael Kelsey (hadr-casc-V09-03-69)
 --------------------------------------------------
