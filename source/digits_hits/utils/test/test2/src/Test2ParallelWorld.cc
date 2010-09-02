@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2ParallelWorld.cc,v 1.2 2010-09-01 12:56:56 akimura Exp $
+// $Id: Test2ParallelWorld.cc,v 1.3 2010-09-02 11:10:30 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,8 +75,8 @@ void Test2ParallelWorld::SetupGeometry()
   G4int nSegment[3] = {30, 30, 30};
 
   //  phantom box
-  G4VSolid* phantomSolid = new G4Box("PhantomBoxParallel", phantomSize[0], 
-				     phantomSize[1], phantomSize[2]);
+  G4VSolid * phantomSolid = new G4Box("PhantomBoxParallel", phantomSize[0], 
+				      phantomSize[1], phantomSize[2]);
   G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, 0,
 							"Phantom");
   new G4PVPlacement(0, G4ThreeVector(), phantomLogical, "PhantomParallel",

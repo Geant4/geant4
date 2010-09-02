@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2Run.cc,v 1.3 2010-09-01 12:56:56 akimura Exp $
+// $Id: Test2Run.cc,v 1.4 2010-09-02 11:10:30 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -82,13 +82,13 @@ void Test2Run::RecordEvent(const G4Event* evt) {
       fSdQuantities[0] += sdHit->GetEdep();
       if(sdHit->GetParticleName() == "gamma") {
 	fSdQuantities[1] += sdHit->GetTrackLength();
-	fSdQuantities[4] += 1;
+	fSdQuantities[4] += 1;      // including zero steps
       } else if(sdHit->GetParticleName() == "e-") {
 	fSdQuantities[2] += sdHit->GetTrackLength();
-	fSdQuantities[5] += 1;
+	fSdQuantities[5] += 1;      // including zero steps
       } else if(sdHit->GetParticleName() == "e+") {
 	fSdQuantities[3] += sdHit->GetTrackLength();
-	fSdQuantities[6] += 1;
+	fSdQuantities[6] += 1;      // including zero steps
       }
       /*
       G4cout << sdHit->GetEdep() << " at "
