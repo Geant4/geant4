@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.73 2010-09-02 16:13:52 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.74 2010-09-02 16:46:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -43,6 +43,7 @@
 //		be revised incrementally.
 //		1)  Replace CHC_CHECK with G4CASCADE_DEBUG_CHARGE
 //		2)  Update cross-section tables and interpolator
+//		3)  Use Bertini's bindingEnergy() call-through function
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeInterpolator.hh"
@@ -57,13 +58,10 @@
 #include "G4CascadePiZeroPChannel.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
-#include "G4NucleiProperties.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
@@ -117,11 +115,10 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
   protonNumberCurrent = protonNumber;
 
 // Set binding energies
-//  G4double dm = bindingEnergy(a, z);
-  G4double dm = G4NucleiProperties::GetBindingEnergy(G4lrint(a), G4lrint(z));
+  G4double dm = bindingEnergy(a, z);
 
-  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z-1)) - dm)); // for P
-  binding_energies.push_back(0.001 * std::fabs(G4NucleiProperties::GetBindingEnergy(G4lrint(a-1), G4lrint(z)) - dm)); // for N
+  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a-1,z-1) - dm)); // for P
+  binding_energies.push_back(0.001 * std::fabs(bindingEnergy(a-1,z) - dm)); // for N
 
   G4double CU = cuu * G4cbrt(a);
   G4double D1 = CU / AU;
@@ -1071,8 +1068,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
   if (ab < max_a_for_cascad) {
 
-    G4double benb = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(ab), G4lrint(zb)) / ab;
-    G4double bent = 0.001 * G4NucleiProperties::GetBindingEnergy(G4lrint(at), G4lrint(zt)) / at;
+    G4double benb = 0.001 * bindingEnergy(ab,zb) / ab;
+    G4double bent = 0.001 * bindingEnergy(at,zt) / at;
     G4double ben = benb < bent ? bent : benb;
 
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {
