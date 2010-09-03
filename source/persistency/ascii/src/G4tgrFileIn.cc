@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.9 2008-12-18 12:59:50 gunter Exp $
+// $Id: G4tgrFileIn.cc,v 1.10 2010-09-03 15:44:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "G4tgrFileIn.hh"
 #include "G4tgrMessenger.hh"

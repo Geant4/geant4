@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.cc,v 1.8 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgrVolumeMgr.cc,v 1.9 2010-09-03 15:51:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -399,7 +399,7 @@ void G4tgrVolumeMgr::DumpVolumeLeaf( const G4tgrVolume* vol,
          << "   copy No " << copyNo << G4endl;
 
   //---------- construct the children of this VOL
-  std::pair<G4mmapspl::const_iterator, G4mmapspl::const_iterator> children
+  std::pair<G4mmapspl::iterator, G4mmapspl::iterator> children
     = GetChildren( vol->GetName() );
   G4mmapspl::const_iterator cite; 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.hh,v 1.6 2009-05-15 16:19:48 arce Exp $
+// $Id: G4tgrVolumeMgr.hh,v 1.7 2010-09-03 15:45:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,8 +52,8 @@
 
 #include <map>
 
-typedef std::map< const G4String, const G4tgrSolid* > G4mapssol;
-typedef std::map< const G4String, const G4tgrVolume* > G4mapsvol;
+typedef std::map< G4String, G4tgrSolid* > G4mapssol;
+typedef std::map< G4String, G4tgrVolume* > G4mapsvol;
 typedef std::multimap< const G4String, const G4tgrPlace* > G4mmapspl;
 
 //----------------------------------------------------------------------------  
