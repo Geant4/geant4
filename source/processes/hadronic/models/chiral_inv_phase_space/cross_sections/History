@@ -12,6 +12,12 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+3-Sep-2010 G.Cosmo                              (hadr-chips-cs-V09-03-07)
+-------------------------------------------------------------------------
+Simplified initialisation of pairs in G4QNeutronCaptureRatio,
+G4QNeutronElasticCrossSection, G4QNeutronNuclearCrossSection and
+G4QuasiFreeRatios.
+
 19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
 -----------------------------------------------------------------------
 Mutual CHIPS tag for the G4-9-4-beta debugging
