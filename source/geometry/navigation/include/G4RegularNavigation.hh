@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.hh,v 1.3 2010-07-13 15:59:42 gcosmo Exp $
+// $Id: G4RegularNavigation.hh,v 1.4 2010-09-03 16:29:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,7 @@ class G4RegularNavigation
       // so when a track enters the mother it automatically enters a voxel.
   
     G4double ComputeStepSkippingEqualMaterials( 
-                          const G4ThreeVector localPoint,
+                                G4ThreeVector& localPoint,
                           const G4ThreeVector& globalDirection,
                           const G4double currentProposedStepLength,
                                 G4double& newSafety,

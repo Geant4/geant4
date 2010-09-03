@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.10 2010-07-13 15:59:42 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.11 2010-09-03 16:29:43 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -121,7 +121,7 @@ G4double G4RegularNavigation::
 
 //------------------------------------------------------------------
 G4double G4RegularNavigation::ComputeStepSkippingEqualMaterials(
-                                G4ThreeVector localPoint,
+                                      G4ThreeVector& localPoint,
                                 const G4ThreeVector& localDirection,
                                 const G4double currentProposedStepLength,
                                 G4double& newSafety,
