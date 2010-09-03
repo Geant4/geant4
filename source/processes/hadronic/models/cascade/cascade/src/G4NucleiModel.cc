@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.81 2010-09-03 00:44:26 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.82 2010-09-03 02:41:47 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -56,6 +56,7 @@
 //		7)  Use local variables in passFermi();
 //		    Fix some minor LorentzVector calculations;
 //		    Use generateNucleonMomentum() for quasi-deuterons
+//		8)  Use data-member buffers for quasideuterons, coords, mom.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -618,8 +619,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       cparticle.getParticle().printParticle();
     }
 
-    std::vector<G4InuclElementaryParticle> qdeutrons;
-    std::vector<G4double> acsecs;
+    qdeutrons.clear();
+    acsecs.clear();
 
     G4double tot_abs_csec = 0.0;
     G4double abs_sec = 0.0;
@@ -1100,10 +1101,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	itryg++;
 
 	particles.clear();
-
-	//    nucleons coordinates and momenta in nuclei rest frame
-	std::vector<G4ThreeVector> coordinates;
-	std::vector<G4LorentzVector> momentums;
+	coordinates.clear();
+	momentums.clear();
      
 	if (ab < 3.0) { // deutron, simplest case
 	  G4double r = 2.214 - 3.4208 * std::log(1.0 - 0.981 * inuclRndm());

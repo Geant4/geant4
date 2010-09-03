@@ -1,4 +1,4 @@
-$Id: History,v 1.160 2010-09-03 00:44:26 mkelsey Exp $
+$Id: History,v 1.161 2010-09-03 02:41:47 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -43,6 +43,7 @@ NOTE:  Each increment after (0) is tagged "kelsey-20100902x", x=a,b,c,d etc.
 	7)  Use local variables in passFermi();
 	    Fix some minor LorentzVector calculations;
 	    Use generateNucleonMomentum() for quasi-deuterons
+	8)  Use data-member buffers for quasideuterons, coords, mom.
 
 4 August 2010 Michael Kelsey (hadr-casc-V09-03-69)
 --------------------------------------------------
