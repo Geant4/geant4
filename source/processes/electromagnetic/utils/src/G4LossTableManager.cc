@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.102 2010-07-29 11:13:28 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.103 2010-09-03 10:09:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,7 @@
 #include "G4ElectronIonPair.hh"
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
+#include "G4VAtomDeexcitation.hh"
 #include "G4Region.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
@@ -141,6 +142,7 @@ G4LossTableManager::~G4LossTableManager()
   delete emCorrections;
   delete emSaturation;
   delete emElectronIonPair;
+  delete atomDeexcitation;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -185,6 +187,7 @@ G4LossTableManager::G4LossTableManager()
   emConfigurator = new G4EmConfigurator(verbose);
   emElectronIonPair = new G4ElectronIonPair();
   tableBuilder->SetSplineFlag(splineFlag);
+  atomDeexcitation = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -440,6 +443,9 @@ void G4LossTableManager::BuildPhysicsTable(
   if(0 == run && startInitialisation) {
     emConfigurator->Clear();
     firstParticle = aParticle; 
+  }
+  if(startInitialisation && atomDeexcitation) {
+    atomDeexcitation->InitialiseAtomicDeexcitation();
   }
   startInitialisation = false;
 
@@ -899,6 +905,7 @@ void G4LossTableManager::SetVerbose(G4int val)
   //emCorrections->SetVerbose(val);
   emSaturation->SetVerbose(val);
   emElectronIonPair->SetVerbose(val);
+  if(atomDeexcitation) { atomDeexcitation->SetVerboseLevel(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1054,4 +1061,17 @@ G4ElectronIonPair* G4LossTableManager::ElectronIonPair()
   return emElectronIonPair;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VAtomDeexcitation* G4LossTableManager::AtomDeexcitation()
+{
+  return atomDeexcitation;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ 
+void G4LossTableManager::SetAtomDeexcitation(G4VAtomDeexcitation* p)
+{
+  atomDeexcitation = p;
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

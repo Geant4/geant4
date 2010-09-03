@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.60 2010-08-17 17:36:59 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.61 2010-09-03 10:09:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,6 +94,7 @@ class G4EmSaturation;
 class G4EmConfigurator;
 class G4ElectronIonPair;
 class G4LossTableBuilder;
+class G4VAtomDeexcitation;
 class G4Region;
 
 class G4LossTableManager
@@ -270,6 +271,10 @@ public:
 
   G4ElectronIonPair* ElectronIonPair();
 
+  G4VAtomDeexcitation* AtomDeexcitation();
+
+  void SetAtomDeexcitation(G4VAtomDeexcitation*);
+
 private:
 
   //-------------------------------------------------
@@ -349,6 +354,7 @@ private:
   G4EmSaturation*             emSaturation;
   G4EmConfigurator*           emConfigurator;
   G4ElectronIonPair*          emElectronIonPair;
+  G4VAtomDeexcitation*        atomDeexcitation;
 
   G4int nbinsLambda;
   G4int nbinsPerDecade;
