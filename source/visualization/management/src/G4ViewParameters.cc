@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.36 2009-01-21 17:05:12 lgarnier Exp $
+// $Id: G4ViewParameters.cc,v 1.37 2010-09-03 15:57:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  19th July 1996
 // View parameters and options.
+
+#include <sstream>
 
 #include "G4ViewParameters.hh"
 

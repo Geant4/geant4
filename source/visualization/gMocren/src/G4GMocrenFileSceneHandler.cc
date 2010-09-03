@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc,v 1.16 2010-06-01 16:18:26 allison Exp $
+// $Id: G4GMocrenFileSceneHandler.cc,v 1.17 2010-09-03 16:01:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,6 +39,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #include "globals.hh"
 #include "G4GMocrenFile.hh"
