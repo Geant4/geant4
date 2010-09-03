@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimMessenger.cc,v 1.2 2009-11-18 18:02:06 gcosmo Exp $
+// $Id: G4AdjointSimMessenger.cc,v 1.3 2010-09-03 15:24:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -33,6 +33,8 @@
 //	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////
+
+#include <sstream>
 
 #include "G4AdjointSimMessenger.hh"
 #include "G4AdjointSimManager.hh"
