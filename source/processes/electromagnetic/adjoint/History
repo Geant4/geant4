@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-04-12 18:57:15 vnivanch Exp $
+$Id: History,v 1.7 2010-09-03 14:33:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 Sep 2010: G.Cosmo (emadjoint-V09-03-01)
+- G4AdjointAlongStepWeightCorrection: get rid of call to non-Standard isnan(),
+  replaced by explicit validity test.  
+
 12 Apr 2010: V.Ivanchenko (emadjoint-V09-03-00)
-- G4AdjointhMultipleScattering - removed obsolete unused header
+- G4AdjointhMultipleScattering: removed obsolete unused header.
 
 23 Nov 2009: G.Cosmo (emadjoint-V09-02-02)
 - Corrected compilation error on Windows for G4AdjointAlongStepWeightCorrection.
