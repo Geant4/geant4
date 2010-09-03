@@ -1,4 +1,4 @@
-$Id: History,v 1.195 2010-07-21 14:21:38 gcosmo Exp $
+$Id: History,v 1.196 2010-09-03 15:24:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 3rd, 2010 G.Cosmo (run-V09-03-03)
+- Added missing inclusion of <sstream> header in G4AdjointSimMessenger.cc.
 
 July 21st, 2010 G.Cosmo (run-V09-03-02)
 - Added dummy initialisation of data members in constructors for classes:
