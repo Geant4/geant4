@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.62 2010-08-10 15:47:42 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.63 2010-09-03 14:13:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -717,7 +717,7 @@ void G4IonTable::Insert(const G4ParticleDefinition* particle)
   G4int L = particle->GetQuarkContent(3);  //strangeness 
   G4int encoding=GetNucleusEncoding(Z, A, L);
 
-  fIonList->insert( std::pair<G4int, const G4ParticleDefinition*>(encoding, particle) );
+  fIonList->insert( std::pair<const G4int, const G4ParticleDefinition*>(encoding, particle) );
 
 }
 
