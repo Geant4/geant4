@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.82 2010-09-03 02:41:47 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.83 2010-09-03 04:38:04 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -57,6 +57,8 @@
 //		    Fix some minor LorentzVector calculations;
 //		    Use generateNucleonMomentum() for quasi-deuterons
 //		8)  Use data-member buffers for quasideuterons, coords, mom.
+//		9)  Use enum labels for quasideuteron codes
+//		10) Restore Dennis' improved potential (6-zone) calculations
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -119,16 +121,15 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
 
   const G4double AU = 1.7234;
   const G4double cuu = 3.3836; 
-  const G4double oneBypiTimes4 = 0.0795775; // 1 / 4 Pi	FIXME
   const G4double pf_coeff = 1.932;
   const G4double pion_vp = 0.007; // in GeV
   const G4double pion_vp_small = 0.007; 
   const G4double radForSmall = 8.0; // fermi
-  const G4double piTimes4thirds = 4.189; // 4 Pi/3	FIXME
+  const G4double piTimes4thirds = 4.188790204786; // 4 Pi/3
   const G4double mproton = G4Proton::Definition()->GetPDGMass() / GeV;
   const G4double mneutron = G4Neutron::Definition()->GetPDGMass() / GeV;
   const G4double alfa3[3] = { 0.7, 0.3, 0.01 }; // listing zone radius
-  //  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
+  const G4double alfa6[6] = { 0.9, 0.6, 0.4, 0.2, 0.1, 0.05 };
 
   // If model already built, just return; otherwise intialize everything
   if (a == A && z == Z) {
@@ -167,63 +168,66 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
   G4double CU2 = 0.0; 
 
   // This will be used to pre-allocate lots of arrays below
-  number_of_zones = (a < 4) ? 1 : 3;
+  number_of_zones = (a < 5) ? 1 : (a < 100) ? 3 : 6;
 
   // Buffers used for zone-by-zone calculations
-  // FIXME:  These should be made into data-member buffers for reuse
-  std::vector<G4double> ur;
-  std::vector<G4double> v;
-  std::vector<G4double> v1;
+  G4double ur[7], v[6], v1[6];
 
   // These are passed into nested vectors, so can't be made C arrays
   // FIXME:  These should be made into data-member buffers for reuse
-  std::vector<G4double> rod;
-  std::vector<G4double> pf;
-  std::vector<G4double> vz;
+  std::vector<G4double> rod(number_of_zones);
+  std::vector<G4double> pf(number_of_zones);
+  std::vector<G4double> vz(number_of_zones);
 
   G4int i=0;		// Loop index used repeatedly below
 
-  if (a > 3.5) { // a > 3
+  if (a > 4.5) { // a > 4
     G4int icase = 0;
 
-    if (a > 11.5) { // a > 11
-      ur.push_back(-D1);
+    if (a > 99.5) {	// a > 99
+      ur[0] = -D1;
+      for (G4int i = 0; i < number_of_zones; i++) {
+        G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
+        zone_radii.push_back(CU + AU * y);
+        ur[i+1] = y;
+      }
+    } else if (a > 11.5) { // a > 11
+      ur[0] = -D1;
       for (i = 0; i < number_of_zones; i++) {
 	G4double y = std::log((1.0 + D)/alfa3[i] - 1.0);
 	zone_radii.push_back(CU + AU * y);
-	ur.push_back(y);
+	ur[i+1] = y;
       }
-    } else {
+    } else {	// a < 12
       icase = 1;
  
       G4double CU1 = CU * CU;
       CU2 = std::sqrt(CU1 * (1.0 - 1.0 / a) + 6.4);
 
-      ur.push_back(0.0);
+      ur[0] = 0.0;
       for (i = 0; i < number_of_zones; i++) {
 	G4double y = std::sqrt(-std::log(alfa3[i]));
 	zone_radii.push_back(CU2 * y);
-	ur.push_back(y);
+	ur[i+1] = y;
       }
     } 
 
     G4double tot_vol = 0.0;
     for (i = 0; i < number_of_zones; i++) {
-      G4double v0;
-      if (icase == 0) v0 = volNumInt(ur[i], ur[i+1], CU, D1);
-      else v0 = volNumInt1(ur[i], ur[i+1], CU2);
- 
-      v.push_back(v0);
+      G4double v0 = (icase==0) ? volNumInt(ur[i], ur[i+1], CU, D1)
+			       : volNumInt1(ur[i], ur[i+1], CU2);
+
+      v[i] = v0;
       tot_vol += v0;
 
       v0 = zone_radii[i]*zone_radii[i]*zone_radii[i];
       if (i > 0) v0 -= zone_radii[i-1]*zone_radii[i-1]*zone_radii[i-1];
 
-      v1.push_back(v0);
+      v1[i] = v0;
     }
 
     // proton
-    G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
+    G4double dd0 = protonNumber/tot_vol/piTimes4thirds;
     rod.clear();
     pf.clear();
     vz.clear();
@@ -241,7 +245,7 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
 
     //  neutron stuff
-    dd0 = 3.0 * (a - z) * oneBypiTimes4 / tot_vol;
+    dd0 = neutronNumber/tot_vol/piTimes4thirds;
     rod.clear();
     pf.clear();
     vz.clear();
@@ -269,8 +273,11 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
     // hyperon potential (primitive)
     const std::vector<G4double> hp(number_of_zones, 0.03);
     zone_potentials.push_back(hp);
-  } else { // a < 4
-    zone_radii.push_back(radForSmall);
+  } else { // a < 5
+    G4double smallRad = radForSmall;
+    if (a == 4) smallRad *= 0.7;
+    zone_radii.push_back(smallRad);
+
     G4double vol = 1.0 / piTimes4thirds / (zone_radii[0]*zone_radii[0]*zone_radii[0]);
 
     // Protons
@@ -279,7 +286,7 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
     vz.clear();
 
     for (i = 0; i < number_of_zones; i++) {
-      G4double rd = vol;
+      G4double rd = vol*protonNumber;
       rod.push_back(rd);
       G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
@@ -296,7 +303,7 @@ void G4NucleiModel::generateModel(G4double a, G4double z) {
     vz.clear();
 
     for (i = 0; i < number_of_zones; i++) {
-      G4double rd = vol;
+      G4double rd = vol*neutronNumber;
       rod.push_back(rd);
       G4double pff = pf_coeff * G4cbrt(rd);
       pf.push_back(pff);
@@ -498,9 +505,9 @@ G4NucleiModel::generateQuasiDeutron(G4int type1, G4int type2,
   G4LorentzVector dmom = mom1 + mom2;
 
   G4int dtype = 0;
-       if (type1*type2 == 1) dtype = 111;	// proton-proton
-  else if (type1*type2 == 2) dtype = 112;	// proton-neutron
-  else if (type1*type2 == 4) dtype = 122;	// neutron-neutron
+       if (type1*type2 == pro*pro) dtype = 111;	// proton-proton
+  else if (type1*type2 == pro*neu) dtype = 112;	// proton-neutron
+  else if (type1*type2 == neu*neu) dtype = 122;	// neutron-neutron
 
   return G4InuclElementaryParticle(dmom, dtype);
 }
