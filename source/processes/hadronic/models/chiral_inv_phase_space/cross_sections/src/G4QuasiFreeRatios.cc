@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiFreeRatios.cc,v 1.3 2010-01-22 17:02:48 mkossov Exp $
+// $Id: G4QuasiFreeRatios.cc,v 1.4 2010-09-03 15:19:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -653,7 +653,7 @@ std::pair<G4double,G4double> G4QuasiFreeRatios::FetchElTot(G4double p, G4int PDG
   static G4double lastP=0.;              // The last momentum for which XS was calculated
   static G4int    lastH=0;               // The last projPDG for which XS was calculated
   static G4bool   lastF=true;            // The last nucleon for which XS was calculated
-  static std::pair<G4double,G4double> lastR=std::make_pair(0.,0.); // The last result
+  static std::pair<G4double,G4double> lastR(0.,0.); // The last result
   // Local Associative Data Base:
   static std::vector<G4int>     vI;      // Vector of index for which XS was calculated
   static std::vector<G4double>  vM;      // Vector of rel max ln(p) initialized in LogTable
