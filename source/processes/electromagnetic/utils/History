@@ -1,4 +1,4 @@
-$Id: History,v 1.429 2010-08-23 15:11:51 vnivanch Exp $
+$Id: History,v 1.430 2010-09-03 13:33:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 September 10: V.Ivant (emutils-V09-03-20)
+- G4LossTableManager - a little cleanup of interfaces
+- G4ElectronIonPair - added method SampleNumberOfIonsAlongStep
+- G4EmCalculator - return back tag 18
 
 23 August 10: V.Ivant (emutils-V09-03-19)
 G4VEnergyLossProcess - minor optimisation of PostStepDoIt (in some cases
