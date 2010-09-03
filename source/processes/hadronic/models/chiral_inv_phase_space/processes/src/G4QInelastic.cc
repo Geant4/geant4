@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QInelastic.cc,v 1.11 2010-06-25 14:03:44 mkossov Exp $
+// $Id: G4QInelastic.cc,v 1.12 2010-09-03 14:39:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QInelastic class -----------------
@@ -1987,7 +1987,7 @@ G4VParticleChange* G4QInelastic::PostStepDoIt(const G4Track& track, const G4Step
       G4int outN=output->size();
       if(outN)                                            // The output is not empty
       {
-        for_each(output->begin(), output->end(), DeleteQHadron());
+        std::for_each(output->begin(), output->end(), DeleteQHadron());
         output->clear();
       }
       delete output;                                      // Before the new output creation
