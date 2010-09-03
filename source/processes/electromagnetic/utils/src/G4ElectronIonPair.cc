@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.cc,v 1.3 2010-07-29 11:13:28 vnivanch Exp $
+// $Id: G4ElectronIonPair.cc,v 1.4 2010-09-03 13:31:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@ G4ElectronIonPair::G4ElectronIonPair()
   curMaterial = 0;
   curMeanEnergy = 0.0;
   nMaterials = 0;
+  FanoFactor = 0.2;
   Initialise();
 }
 
@@ -105,20 +106,18 @@ G4double G4ElectronIonPair::MeanNumberOfIonsAlongStep(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 std::vector<G4ThreeVector>* 
-G4ElectronIonPair::SampleIonsAlongStep(const G4ThreeVector& prePos,
-				       const G4ThreeVector& postPos,
-				       G4double meanion)
+G4ElectronIonPair::SampleIonsAlongStep(const G4Step* step)
 {
   std::vector<G4ThreeVector>* v = new std::vector<G4ThreeVector>;
 
-  G4double sig = 0.2*std::sqrt(meanion);
-  G4int nion = G4int(G4RandGauss::shoot(meanion,sig) + 0.5);
+  G4int nion = SampleNumberOfIonsAlongStep(step);
 
   // sample ionisation along step
   if(nion > 0) {
 
-    G4ThreeVector deltaPos = postPos - prePos;  
-    for(G4int i=0; i<nion; i++) {
+    G4ThreeVector prePos = step->GetPreStepPoint()->GetPosition();
+    G4ThreeVector deltaPos = step->GetPostStepPoint()->GetPosition() - prePos;  
+    for(G4int i=0; i<nion; ++i) {
       v->push_back( prePos + deltaPos*G4UniformRand() );
     }
     if(verbose > 1 ) { 
