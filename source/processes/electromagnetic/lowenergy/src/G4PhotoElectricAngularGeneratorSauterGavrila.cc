@@ -78,7 +78,10 @@ G4ThreeVector G4PhotoElectricAngularGeneratorSauterGavrila::GetPhotoElectronDire
   G4double gamma   = 1. + eKineticEnergy/electron_mass_c2;
 
   if (gamma > 5.) {
-    return G4ThreeVector(sinteta*cosphi, sinteta*sinphi, costeta);
+    G4ThreeVector direction (sinteta*cosphi, sinteta*sinphi, costeta);
+    return direction; 
+    // Bugzilla 1120
+    // SI on 05/09/2010 as suggested by JG 04/09/10 
   }
 
   G4double beta  = std::sqrt(gamma*gamma-1.)/gamma;
