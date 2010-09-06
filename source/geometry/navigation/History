@@ -1,4 +1,4 @@
-$Id: History,v 1.142 2010-09-03 16:30:08 gcosmo Exp $
+$Id: History,v 1.143 2010-09-06 09:49:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 6th, 2010 - G.Cosmo (geomnav-V09-03-04)
+-----------------------------
+- Added missing initialization for 'fNewSafety' and 'fTrueMinStep' in
+  G4MultiNavigator constructor.
 
 September 3rd, 2010 - G.Cosmo (geomnav-V09-03-03)
 -----------------------------
