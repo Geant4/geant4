@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2010-07-02 10:46:46 gcosmo Exp $
+$Id: History,v 1.33 2010-09-06 09:28:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September, 6th, 2010         G.Cosmo (geomdiv-V09-03-01)
+- Removed obvious else statement in constructors of G4PVDivision.
 
 July, 2nd, 2010         G.Cosmo (geomdiv-V09-03-00)
 - Improved logic in G4PVDivision constructors and in method
