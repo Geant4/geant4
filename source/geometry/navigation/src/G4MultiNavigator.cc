@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc,v 1.10 2010-07-13 15:59:42 gcosmo Exp $
+// $Id: G4MultiNavigator.cc,v 1.11 2010-09-06 09:49:15 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -58,14 +58,14 @@ G4MultiNavigator::G4MultiNavigator()
   fMinSafety_PreStepPt=  -1.0; 
   fMinSafety_atSafLocation= -1.0; 
   fMinSafety= -kInfinity;  
-  fMinStep=   -kInfinity;  
+  fTrueMinStep= fMinStep= -kInfinity;  
 
   for(register int num=0; num< fMaxNav; ++num )
   {
     fpNavigator[num] =  0;   
     fLimitTruth[num] = false;
     fLimitedStep[num] = kUndefLimited;
-    fCurrentStepSize[num] = -1.0; 
+    fCurrentStepSize[num] = fNewSafety[num] = -1.0; 
     fLocatedVolume[num] = 0; 
   }
 
