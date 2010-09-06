@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.cc,v 1.9 2010-07-05 13:29:12 gcosmo Exp $
+// $Id: G4GRSSolid.cc,v 1.10 2010-09-06 10:02:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,8 @@ G4GRSSolid::~G4GRSSolid()
 G4GRSSolid::G4GRSSolid(const G4GRSSolid& right)
   : G4VTouchable(), fsolid(0)
 {
-  if (frot) { delete frot; frot = 0; }
+  if (frot) { delete frot; }
+  frot = 0;
   if ((&right) && (&right != this))
   {
     fsolid = right.fsolid;
