@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4BoundingBox3D.cc,v 1.14 2010-09-06 16:02:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,8 @@ const G4BoundingBox3D G4BoundingBox3D::
 
 G4BoundingBox3D::G4BoundingBox3D()
 {
-  distance =0;
+  distance = 0;
+  test_result = 0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
@@ -114,6 +115,7 @@ void G4BoundingBox3D::Init(const G4Point3D& p)
 {
   box_min= box_max= MiddlePoint= p;
   GeantBox= G4Point3D(0, 0, 0);
+  test_result = 0;
   distance= 0;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }

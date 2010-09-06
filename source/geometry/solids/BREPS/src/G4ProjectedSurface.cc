@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.cc,v 1.13 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4ProjectedSurface.cc,v 1.14 2010-09-06 16:02:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,6 +44,7 @@ G4ProjectedSurface::G4ProjectedSurface()
     lower(0), upper(0), oslo_m(0)
 {
   distance = 0;
+  order[0] = order[1] = 0;
 }
 
 

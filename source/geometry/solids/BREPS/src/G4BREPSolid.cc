@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.38 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.39 2010-09-06 16:02:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -508,6 +508,7 @@ G4bool G4BREPSolid::IsConvex()
     if (Left&&Right)
     {
       Convex = 0;
+      delete [] ConnectedList;
       return 0;
     }
     Connections=0;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.11 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4ToroidalSurface.cc,v 1.12 2010-09-06 16:02:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -59,6 +59,7 @@ G4ToroidalSurface::G4ToroidalSurface(const G4Vector3D& Location,
 
 G4ToroidalSurface::~G4ToroidalSurface()
 {
+  delete TransMatrix;
 }
 
 

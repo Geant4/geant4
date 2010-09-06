@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.11 2006-06-29 18:41:32 gunter Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.12 2010-09-06 16:02:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -127,7 +127,7 @@ G4double G4BREPSolidSphere::DistanceToOut(register const G4ThreeVector& Pt,
   {
     if(calcNorm)
     {
-      *validNorm = true;
+      if(validNorm) *validNorm = true;
       *n = SurfaceNormal(Pt);
     }
 
