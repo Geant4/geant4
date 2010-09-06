@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.15 2010-07-02 09:36:50 gcosmo Exp $
+// $Id: G4IStore.cc,v 1.16 2010-09-06 09:13:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -109,6 +109,7 @@ G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
   G4GeometryCellImportance::const_iterator gCellIterator = fCurrentIterator;
   if (gCellIterator==fGeometryCelli.end()) {
     Error("GetImportance: Region does not exist");
+    return 0.;
   }
   return (*fCurrentIterator).second;
 }
@@ -123,6 +124,7 @@ G4double G4IStore::GetImportance(const G4GeometryCell &gCell) const
     G4cout << "Not found in: " << G4endl;
     G4cout << fGeometryCelli << G4endl;
     Error("GetImportance(gCell): Region does not exist");
+    return 0.;
   }
   return (*fCurrentIterator).second;
 }
