@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.38 2010-07-16 15:53:50 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.39 2010-09-06 09:39:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -537,6 +537,7 @@ G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
     G4Exception("G4SmartVoxelHeader::BuildVoxelsWithinLimits()",
                 "InvalidSetup", FatalException,
                 "Cannot select more than 3 axis for optimisation.");
+    return;
   }
 
   // 
