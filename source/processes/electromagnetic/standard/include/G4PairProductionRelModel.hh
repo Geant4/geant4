@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.3 2009-06-04 13:45:53 gunter Exp $
+// $Id: G4PairProductionRelModel.hh,v 1.4 2010-09-06 18:01:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -213,10 +213,13 @@ inline void G4PairProductionRelModel::SetCurrentElement(const G4double Z)
       Fel = facFel - lnZ/3. ;
       Finel = facFinel - 2.*lnZ/3. ;
     }
-
+    if(GetCurrentElement()->GetZ() != Z) {
+      G4VEmModel::SetCurrentElement(nist->FindOrBuildElement(G4int(Z)));
+    }
     fCoulomb=GetCurrentElement()->GetfCoulomb();
   }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4PairProductionRelModel::Phi1(G4double delta) const
