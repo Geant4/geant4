@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2010-07-16 15:57:44 gcosmo Exp $
+$Id: History,v 1.144 2010-09-06 09:39:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 6, 2010  G.Cosmo                 geommng-V09-03-04
+- Fixed false-positive null forward case in G4SmartVoxelHeader.
 
 July 16, 2010  G.Cosmo                     geommng-V09-03-03
 - Fixed compilation errors for code within G4GEOMETRY_VOXELDEBUG flag
