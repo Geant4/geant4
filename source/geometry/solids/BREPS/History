@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2010-07-13 14:48:01 gcosmo Exp $
+$Id: History,v 1.74 2010-09-06 16:02:40 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06/09/2010 : G. Cosmo          breps-V09-03-02
+- Fixed possible leak in G4BREPSolid::IsConvex() method.
+- Corrected possible dereferencing of null pointer in method
+  G4BREPSolidSphere::DistanceToOut().
+- Corrected deletion of internal data in G4BSplineCurve::Project() method.
+- Fixed possible leak in G4BezierSurface::ClipSurface() method, and fixed
+  case of dereferenciation of null pointer.
+- Fixed leak in destructor of G4ToroidalSurface.
+- Added dummy initialisation of static data in G4BoundingBox3D,
+  G4ProjectedSurface and G4Surface.
 
 13/07/2010 : G. Cosmo          breps-V09-03-01
 - Fixed compilation warning on Linux for G4Surface...
