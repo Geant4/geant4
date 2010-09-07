@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.12 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4ReduciblePolygon.cc,v 1.13 2010-09-07 09:42:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -283,7 +283,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
   //
   // Loop over all vertices
   //
-  ABVertex *curr = vertexHead, *next = 0;
+  ABVertex *curr = vertexHead, *next = 0, *tmp = 0;
   while( curr )
   {
     next = curr->next;
@@ -338,7 +338,7 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       else
         vertexHead = test;  // New head
         
-      delete next;
+      if (curr != next) delete next;
       
       numVertices--;
       
@@ -349,7 +349,9 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( G4double tolerance )
       next = test;
       da = dat; db = dbt;
     }
+    tmp = curr;
     curr = curr->next;
+    delete tmp;
   }
   
   //
