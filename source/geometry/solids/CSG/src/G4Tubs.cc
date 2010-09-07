@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.81 2010-07-12 07:44:30 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.82 2010-09-07 07:57:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -616,9 +616,10 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
     G4Exception("G4Tube::SurfaceNormal(p)", "Notification",
                 JustWarning, "Point p is not on surface !?" );
-    G4cout.precision(20);
+    G4int oldprc = G4cout.precision(20);
     G4cout<< "G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "
           << G4endl << G4endl;
+    G4cout.precision(oldprc) ;
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
@@ -1611,13 +1612,14 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-    G4cout.precision(16) ;
+    G4int oldprc = G4cout.precision(16) ;
     G4cout << G4endl ;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl ;
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+    G4cout.precision(oldprc) ;
     G4Exception("G4Tubs::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?");
   }

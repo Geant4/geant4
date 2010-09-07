@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.70 2010-08-23 12:59:01 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.71 2010-09-07 07:57:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2014,7 +2014,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
-    G4cout.precision(16) ;
+    G4int oldprc=G4cout.precision(16) ;
     G4cout << G4endl ;
     DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl ;
@@ -2028,6 +2028,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
       G4cout << "point phi = "   << std::atan2(p.y(),p.x())/degree
              << " degree" << G4endl << G4endl ; 
     }
+    G4cout.precision(oldprc) ;
     G4Exception("G4Cons::DistanceToOut(p)", "Notification",
                 JustWarning, "Point p is outside !?" );
   }
@@ -2128,10 +2129,10 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     sAngle = fSPhi ;
   } 
   vertices = new G4ThreeVectorList();
-  vertices->reserve(noCrossSections*4) ;
 
   if (vertices)
   {
+    vertices->reserve(noCrossSections*4) ;
     for (crossSection = 0 ; crossSection < noCrossSections ; crossSection++)
     {
       // Compute coordinates of cross section at section crossSection
