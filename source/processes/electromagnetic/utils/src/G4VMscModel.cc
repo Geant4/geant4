@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.17 2010-09-07 12:13:45 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.18 2010-09-07 16:05:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,8 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   skin(1.0),
   dtrl(0.05),
   lambdalimit(mm),
-  geommax(1.e50*mm),
+  geomMin(1.e-6*CLHEP::mm),
+  geomMax(1.e50*CLHEP::mm),
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
@@ -105,7 +106,7 @@ void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,
 				      G4double displacement,
 				      G4double postsafety)
 {
-  if(displacement <= 0.0) { return; }
+  if(displacement <= geomMin) { return; }
   const G4ThreeVector* pos = fParticleChange->GetProposedPosition();
 
   // displaced point is definitely within the volume
@@ -122,9 +123,9 @@ void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,
   G4double newsafety = safetyHelper->ComputeSafety(*pos);
 
   // add a factor which ensure numerical stability
-  G4double r = std::min(displacement, newsafety)*0.9999; 
+  G4double r = std::min(displacement, newsafety*0.99); 
 
-  if(r > 0.0) {
+  if(r > geomMin) {
 
     // compute new endpoint of the Step
     G4ThreeVector newPosition = *pos + r*dir;
