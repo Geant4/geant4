@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.22 2010-07-19 22:26:28 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.23 2010-09-07 19:06:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -38,6 +38,7 @@
 // 20100714  M. Kelsey -- Use G4DynamicParticle::theDynamicalMass to deal with
 //	     excitation energy without instantianting "infinite" G4PartDefns.
 // 20100719  M. Kelsey -- Move setExitationEnergy implementation to .cc file.
+// 20100906  M. Kelsey -- Add fill() functions to rewrite contents
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -81,6 +82,17 @@ public:
       theExitonConfiguration(right.theExitonConfiguration) {}
 
   G4InuclNuclei& operator=(const G4InuclNuclei& right);
+
+  // Overwrite data structure (avoids creating/copying temporaries)
+  void fill(G4double a, G4double z, G4double exc=0., G4int model=0) {
+    fill(0., a, z, exc, model);
+  }
+
+  void fill(const G4LorentzVector& mom, G4double a, G4double z,
+	    G4double exc=0., G4int model=0);
+
+  void fill(G4double ekin, G4double a, G4double z, G4double exc,
+	    G4int model=0);
 
   // Excitation energy is stored as dynamical mass of particle
   void setExitationEnergy(G4double e);

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.59 2010-07-28 15:18:10 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.60 2010-09-07 19:06:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -65,6 +65,8 @@
 // 20100722  M. Kelsey -- Move cascade output buffers to .hh file
 // 20100728  M. Kelsey -- Make G4NucleiModel data member for persistence,
 //		delete colliders in destructor
+// 20100906  M. Kelsey -- Hide "non-physical fragment" behind verbose flag
+// 20100907  M. Kelsey -- Add makeResidualFragment function to create object
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -391,8 +393,10 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     };
 
     if (afin<0. || zfin<0. || afin<zfin) {  // Sanity check before proceeding
-      G4cerr << " >>> G4IntraNucleiCascader ERROR:  Recoil nucleus is not"
-	     << " physical! A=" << afin << " Z=" << zfin << G4endl;
+      if (verboseLevel > 1)
+	G4cerr << " Recoil nucleus is not physical: A=" << afin << " Z="
+	       << zfin << G4endl;
+
       continue;				// Discard event and try again
     }
 
@@ -531,7 +535,66 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 }
 
 
-// Compute mass (A) of nuclear fragment recoiling against current particles
+// Construct recoiling nuclear fragment for current configuration
+// FIXME:  This does not check for sensible A/Z values!
+
+void
+G4IntraNucleiCascader::makeResidualFragment(G4InuclParticle* bullet, 
+					    G4InuclParticle* target,
+		   const std::vector<G4InuclElementaryParticle>& outgoing,
+		   const std::vector<G4CascadParticle>& inprocess) {
+  if (verboseLevel > 2)
+    G4cout << " >>> G4IntraNucleiCascader::makeResidualFragment" << G4endl;
+
+  // FIXME:  CODE BELOW WAS COPIED FROM G4CascadeCheckBalance.cc.  ENCAPSULATE!
+
+  G4LorentzVector initialMomentum;
+  if (bullet) initialMomentum += bullet->getMomentum();
+  if (target) initialMomentum += target->getMomentum();
+  
+  G4int initialCharge = 0;
+  if (bullet) initialCharge += G4int(bullet->getCharge());
+  if (target) initialCharge += G4int(target->getCharge());
+
+  G4InuclElementaryParticle* pbullet =
+    dynamic_cast<G4InuclElementaryParticle*>(bullet);
+  G4InuclElementaryParticle* ptarget =
+    dynamic_cast<G4InuclElementaryParticle*>(target);
+
+  G4InuclNuclei* nbullet = dynamic_cast<G4InuclNuclei*>(bullet);
+  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
+
+  G4int initialBaryon =
+    ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
+     (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
+
+  // Use G4CollisionOutput to sum up final-state particles
+  static G4CollisionOutput tempOutput;		// Avoid memory churn
+  tempOutput.setVerboseLevel(verboseLevel);
+  tempOutput.reset();
+  tempOutput.addOutgoingParticles(outgoing);
+  tempOutput.addOutgoingParticles(inprocess);
+
+  G4int finalCharge = tempOutput.getTotalCharge();
+  G4int finalBaryon = tempOutput.getTotalBaryonNumber();
+
+  // FIXME:  Bertini is still using floating-point A and Z
+  G4double fragZ = G4double(initialCharge-finalCharge);
+  G4double fragA = G4double(initialBaryon-finalBaryon);
+
+  G4LorentzVector fragMomentum =
+    initialMomentum - tempOutput.getTotalOutputMomentum();
+
+  // Excitation energy is "mass difference", in MeV (not Bertini's GeV!)
+  G4double fragEexc =
+    (fragMomentum.m() - G4InuclNuclei::getNucleiMass(fragA, fragZ)) * GeV/MeV;
+
+  // Overwrite previous version of recoil with new kinematics
+  theResidualFragment.fill(fragMomentum, fragA, fragZ, fragEexc, 4);
+}
+
+
+// Return mass (A) of nuclear fragment recoiling against current particles
 
 G4double 
 G4IntraNucleiCascader::getResidualMass(G4InuclParticle* bullet, 
@@ -575,9 +638,9 @@ G4IntraNucleiCascader::getResidualMass(G4InuclParticle* bullet,
 
   if (verboseLevel > 3)
     G4cout << " Charge initial " << initialCharge << " final " << finalCharge
-	   << " fragment Z " << fragZ << G4endl
-	   << " Baryon initial " << initialBaryon << " final " << finalBaryon
-	   << " fragment A " << fragA << G4endl;
+           << " fragment Z " << fragZ << G4endl
+           << " Baryon initial " << initialBaryon << " final " << finalBaryon
+           << " fragment A " << fragA << G4endl;
 
   // FIXME:  For now, just returning mass.  Would like to return both A and Z
   return fragA;

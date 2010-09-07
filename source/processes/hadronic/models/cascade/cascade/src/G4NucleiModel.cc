@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.84 2010-09-03 06:12:35 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.85 2010-09-07 19:06:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -63,6 +63,8 @@
 // 20100723  M. Kelsey -- Move G4CollisionOutput buffer to .hh for reuse
 // 20100726  M. Kelsey -- Preallocate arrays with number_of_zones dimension.
 // 20100902  M. Kelsey -- Remove resize(3) directives from qdeutron/acsecs
+// 20100907  M. Kelsey -- Limit interaction targets based on current nucleon
+//		counts (e.g., no pp if protonNumberCurrent < 2!)
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -133,8 +135,8 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   const G4double pf_coeff = 1.932;
   const G4double pion_vp = 0.007; // in GeV
   const G4double pion_vp_small = 0.007; 
-  const G4double radForSmall = 8.0; // fermi
-  const G4double piTimes4thirds = 4.189; // 4 Pi/3
+  const G4double radForSmall = 8.0;	// Units 0.f fm?  R_p = 0.8768 fm
+  const G4double piTimes4thirds = 4.189; // 4 Pi/3	FIXME!
   const G4double mproton = G4Proton::Definition()->GetPDGMass() / GeV;
   const G4double mneutron = G4Neutron::Definition()->GetPDGMass() / GeV;
   const G4double alfa3[3] = { 0.7, 0.3, 0.01 }; // listing zone radius
@@ -529,7 +531,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
   }
 
-  const G4double pi4by3 = 4.1887903; // 4 Pi / 3
+  const G4double pi4by3 = 4.1887903; // 4 Pi / 3	FIXME!
   const G4double small = 1.0e-10;
   const G4double huge_num = 50.0;
   const G4double pn_spec = 1.0;
@@ -586,13 +588,17 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 
   G4LorentzConvertor dummy_convertor;
   dummy_convertor.setBullet(pmom, pmass);
-  
-  for (G4int ip = 1; ip < 3; ip++) { 
+
+  for (G4int ip = 1; ip < 3; ip++) {
+    // Only process nucleons which remain active in target
+    if (ip==1 && protonNumberCurrent < 1) continue;
+    if (ip==2 && neutronNumberCurrent < 1) continue;
+
+    // All nucleons are assumed to be at rest when colliding
     G4InuclElementaryParticle particle = generateNucleon(ip, zone);
     dummy_convertor.setTarget(particle.getMomentum(), particle.getMass());
     G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
     
-    // Total cross section converted from mb to fm**2
     G4double csec = totalCrossSection(ekin, ptype * ip);
     
     if(verboseLevel > 2) {
@@ -640,7 +646,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       cparticle.getParticle().printParticle();
     }
 
-    // Initialize buffers for results
+    // Initialize buffers for quasi-deuteron results
     qdeutrons.clear();
     acsecs.clear();
 
@@ -653,10 +659,15 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     
     G4double rat  = getRatio(1); 
     G4double rat1 = getRatio(2); 
-    
+
+    // FIXME:  Shouldn't be creating zero-cross-section states!
+
+    // Proton-proton state interacts with pi-, pi0 only
     G4InuclElementaryParticle ppd = generateQuasiDeutron(1, 1, zone);
     
-    if (ptype == 7 || ptype == 5) {
+    if (protonNumberCurrent < 2 || !(ptype == pi0 || ptype == pim)) {
+      abs_sec = 0.0;
+    } else {
       dummy_convertor.setTarget(ppd.getMomentum(), ppd.getMass());
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
@@ -669,36 +680,42 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       abs_sec = absorptionCrossSection(ekin, ptype);
       abs_sec *= nucleon_densities[0][zone] * nucleon_densities[0][zone]*
 	rat * rat * vol; 
-      
-    } else {
-      abs_sec = 0.0;
-    } 
+    }
     
     tot_abs_csec += abs_sec;
     acsecs.push_back(abs_sec);
     qdeutrons.push_back(ppd);
     
+    // Proton-neutron state interacts with any pion type
     G4InuclElementaryParticle npd = generateQuasiDeutron(1, 2, zone);
-    
-    dummy_convertor.setTarget(npd.getMomentum(), npd.getMass());
-    
-    G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
 
-    if (verboseLevel > 2) {
-      G4cout << " using np target" << G4endl;
-      npd.printParticle();
+    if (protonNumberCurrent < 1 || neutronNumberCurrent < 1) {
+      abs_sec = 0.0;
+    } else {
+      dummy_convertor.setTarget(npd.getMomentum(), npd.getMass());
+      
+      G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
+      
+      if (verboseLevel > 2) {
+	G4cout << " using np target" << G4endl;
+	npd.printParticle();
+      }
+      
+      abs_sec = absorptionCrossSection(ekin, ptype); 
+      abs_sec *= pn_spec * nucleon_densities[0][zone] * nucleon_densities[1][zone] *
+	rat * rat1 * vol;
     }
-    
-    abs_sec = absorptionCrossSection(ekin, ptype); 
-    abs_sec *= pn_spec * nucleon_densities[0][zone] * nucleon_densities[1][zone] *
-      rat * rat1 * vol; 
+
     tot_abs_csec += abs_sec;
     acsecs.push_back(abs_sec);
     qdeutrons.push_back(npd);
 
+    // Neutron-neutron state interacts with pi+, pi0 only
     G4InuclElementaryParticle nnd = generateQuasiDeutron(2, 2, zone);
     
-    if (ptype == 7 || ptype == 3) {
+    if (neutronNumberCurrent < 2 || !(ptype == pi0 || ptype == pip)) {
+      abs_sec = 0.0;
+    } else {
       dummy_convertor.setTarget(nnd.getMomentum(), nnd.getMass());
       
       G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
@@ -711,14 +728,13 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       abs_sec = absorptionCrossSection(ekin, ptype); 
       abs_sec *= nucleon_densities[1][zone] * nucleon_densities[1][zone] *
 	rat1 * rat1 * vol; 
-    } else {
-      abs_sec = 0.0;
     } 
 
     tot_abs_csec += abs_sec;
     acsecs.push_back(abs_sec);
     qdeutrons.push_back(nnd);
-    
+
+    // Select quasideuteron interaction from non-zero cross-section choices
     if (verboseLevel > 2){
       G4cout << " rod1 " << acsecs[0] << " rod2 " << acsecs[1]  
 	     << " rod3 " << acsecs[2] << G4endl;
@@ -762,19 +778,16 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }  
   
   if (verboseLevel > 2) {
-    G4cout << " after deutrons " << thePartners.size() << G4endl;
+    G4cout << " after deuterons " << thePartners.size() << " partners"
+	   << G4endl;
   }
   
   if (thePartners.size() > 1) {		// Sort list by path length
     std::sort(thePartners.begin(), thePartners.end(), sortPartners);
   }
   
-  if (verboseLevel > 2) 
-    G4cout << " got " << thePartners.size() << " partners" << G4endl;
-
   G4InuclElementaryParticle particle;		// Total path at end of list
   thePartners.push_back(partner(particle, path));
-
 }
 
 

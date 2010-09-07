@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2010-09-03 06:12:35 mkelsey Exp $
+$Id: History,v 1.164 2010-09-07 19:06:30 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,21 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+6 September 2010 Michael Kelsey (hadr-casc-V09-03-71)
+-----------------------------------------------------
+- G4NucleiModel:  Add protections in generateInteractionPartners() so that
+  nucleon and quasideuteron interactions are only selected if there are
+  "enough" nucleons of the necessary type still available (xxxNumberCurrent).
+
+- G4InuclNuclei:  Add fill() functions which overwrite the entire particle
+  structure, with same argument lists as constructors.  Will be used mainly
+  by G4IntraNucleiCascader::makeResidualFragment().
+
+- G4IntraNucleiCascader:  Hide non-physical nucleus message behind verbose
+  flag.  Add function and data member to build recoil nucleus (fragment) at
+  end of every iteration; will eventually replace functionality of
+  getResidualMass().
 
 2 September 2010 Michael Kelsey (hadr-casc-V09-03-70)
 -----------------------------------------------------

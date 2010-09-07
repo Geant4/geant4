@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.18 2010-07-28 15:18:10 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.19 2010-09-07 19:06:30 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -38,6 +38,8 @@
 // 20100720  M. Kelsey -- Make EPCollider pointer member
 // 20100722  M. Kelsey -- Move cascade output buffers to .hh file
 // 20100728  M. Kelsey -- Move G4NucleiModel here, as pointer member
+// 20100907  M. Kelsey -- Replace "getResidualMass" with "makeResidualFragment"
+//		to create G4InuclNuclei at current stage of cascade
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -72,11 +74,17 @@ private:
 			   const std::vector<G4InuclElementaryParticle>& output,
 			   const std::vector<G4CascadParticle>& inprocess);
 
+  void makeResidualFragment(G4InuclParticle* bullet, G4InuclParticle* target,
+			   const std::vector<G4InuclElementaryParticle>& output,
+			   const std::vector<G4CascadParticle>& inprocess);
+
   // Buffers for collecting result of cascade (reset on each iteration)
   G4CollisionOutput output;
   std::vector<G4CascadParticle> cascad_particles;
   std::vector<G4CascadParticle> new_cascad_particles;
   std::vector<G4InuclElementaryParticle> output_particles;
+
+  G4InuclNuclei theResidualFragment;
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */
