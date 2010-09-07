@@ -21,8 +21,8 @@
 /run/setCutForRegion Detector 50 cm
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
-/grdm/verbose 0
+/tracking/verbose 2
+/grdm/verbose 1
 /grdm/noVolumes
 /grdm/selectVolume Target
 #
@@ -33,20 +33,20 @@
 #
 # complete chain decays
 /histo/fileName f24c
-/run/beamOn 1000
+/run/beamOn 1
 #
 # complete chain decays in VR mode
 /grdm/analogueMC 0
 /histo/fileName f24c-b
-/run/beamOn 1000
+/run/beamOn 1
 #
 # No daughter decays in analogue MC mode
 /histo/fileName f24
 /grdm/analogueMC 1
 /grdm/nucleusLimits 24 24 9 9
-/run/beamOn 1000
+/run/beamOn 1
 # No daughter decays in VR MC mode
 /histo/fileName f24-b
 /grdm/analogueMC 0
 /grdm/BRbias 0
-/run/beamOn 1000
+/run/beamOn 1

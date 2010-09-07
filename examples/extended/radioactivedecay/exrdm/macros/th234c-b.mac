@@ -24,7 +24,7 @@
 /run/setCutForRegion Detector 50 cm
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
+/tracking/verbose 2
 /grdm/verbose 0
 /grdm/noVolumes
 /grdm/selectVolume Target
@@ -36,6 +36,6 @@
 /gps/particle ion
 /gps/ion 90 234 0  0
 /gps/energy 0 keV
-/run/beamOn 100
+/run/beamOn 1
 
 

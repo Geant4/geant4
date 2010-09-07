@@ -27,8 +27,8 @@
 /run/setCutForRegion Detector 50 cm
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
-/grdm/verbose 0
+/tracking/verbose 2
+/grdm/verbose 1
 /grdm/noVolumes
 /grdm/selectVolume Target
 #
@@ -41,12 +41,12 @@
 # 
 #  Analogue MC
 /histo/fileName as74
-/run/beamOn 10000
+/run/beamOn 1
 
 #  VR MC
 /histo/fileName as74-b
 /grdm/analogueMC 0
-/run/beamOn 10000
+/run/beamOn 1
 
 
 

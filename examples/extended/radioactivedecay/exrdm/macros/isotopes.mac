@@ -16,7 +16,7 @@
 /run/setCutForRegion Detector 50 cm
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
+/tracking/verbose 2
 /grdm/verbose 0
 /grdm/noVolumes
 /grdm/selectVolume Target
@@ -38,20 +38,20 @@
 /histo/setHisto 5 50 0 10 MeV
 /histo/setHisto 6 50 0 10 MeV
 /gps/ion 11 24 0 0
-/run/beamOn 1000
+/run/beamOn 1
 #
 # NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
 #
 /histo/fileName na24m
 /gps/ion 11 24 0 472
-/run/beamOn 1000
+/run/beamOn 1
 #
 # NE-24 BETA- DECAY.
 #
 /histo/fileName ne24.aida
 /grdm/nucleusLimits 24 24 10 10
 /gps/ion 10 24 0 0
-/run/beamOn 1000
+/run/beamOn 1
 
 #
 # AL-24 (GND-STATE) BETA+ DECAY.
@@ -66,7 +66,7 @@
 /histo/setHisto 6 50 0 15 MeV
 /grdm/nucleusLimits 24 24 13 13
 /gps/ion 13 24 0 0
-/run/beamOn 1000
+/run/beamOn 1
 #
 # CR-46 BETA+ DECAY.
 #
@@ -80,7 +80,7 @@
 /histo/setHisto 6 50 0 10 MeV
 /grdm/nucleusLimits 46 46 24 24
 /gps/ion 24 46 0 0
-/run/beamOn 1000
+/run/beamOn 1
 #
 #
 # PO-215 ALPHA DECAY.
@@ -89,4 +89,4 @@
 /grdm/nucleusLimits 215 215 84 84
 /gps/ion 84 215 0 0
 /run/beamOn
-/run/beamOn 1000
+/run/beamOn 1

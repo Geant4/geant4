@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.5 2010-08-27 09:50:52 maire Exp $
+// $Id: TrackingAction.cc,v 1.6 2010-09-07 15:59:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +99,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   
   //example of saving random number seed of this event, under condition
   //
-  // condition = ((ih == 3) && (Ekin< 1*MeV));
+  ////condition = (ih == 3);
   if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();      
 }
 

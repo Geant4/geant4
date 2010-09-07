@@ -31,16 +31,16 @@
 #
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 0
-/grdm/verbose 0
+/tracking/verbose 2
+/grdm/verbose 1
 #
 # rdm is only applied to the target volume
-/grdm/noVolumes
-/grdm/selectVolume Target
+#/grdm/noVolumes
+#/grdm/selectVolume Target
 #
 # place the isotopes in the middle of the target(source) 
 /gps/position 0 0 0	
 /gps/energy 0 keV	
 /gps/particle ion
 /gps/ion 92 238 0 0
-/run/beamOn 1000
+/run/beamOn 1
