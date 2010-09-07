@@ -60,6 +60,8 @@
 #include "G4KleinNishinaCompton.hh"
 #include "G4HeatedKleinNishinaCompton.hh"
 #include "G4PEEffectModel.hh"
+#include "G4PairProductionRelModel.hh"
+#include "G4BetheHeitlerModel.hh"
 
 
 using namespace std;
@@ -101,7 +103,7 @@ int main()
   G4cout << "92 uranium" << G4endl;
   G4int choice;
   // G4cin >> choice;
-  choice = 54;
+  choice = 6;
 
 
   switch (choice)
@@ -297,10 +299,11 @@ int main()
 
   kinEnergy = 25.0*GeV;
 
-  // G4VEmModel* comp = new G4KleinNishinaCompton();
-  G4VEmModel* comp = new G4HeatedKleinNishinaCompton();
+  G4VEmModel* comp = new G4KleinNishinaCompton();
+  // G4VEmModel* comp = new G4HeatedKleinNishinaCompton();
   G4VEmModel* photo = new G4PEEffectModel();
-
+  G4VEmModel* pair = new G4PairProductionRelModel(theParticleDefinition,"pp");
+  G4VEmModel* bhpair = new G4BetheHeitlerModel(theParticleDefinition,"bhpp");
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -325,16 +328,24 @@ int main()
          <<expXrad<<"  mm"<<G4endl<<G4endl;
 
 
+  //  energyMscXR = 2*MeV;
+  //xsc = pair->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
+
 
   iMax = 130;
 
   writef<<iMax<<G4endl;
 
+
+
+
   for( i = 0; i < iMax; i++ )
   {
     energyMscXR = std::exp(i*0.2)*0.001*keV;
-    //xsc = comp->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,G4double(Z ) );
-    xsc = photo->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,G4double(Z ) );
+    // xsc = comp->ComputeCrossSectionPerAtom(theParticleDefinition,energyMscXR,G4double(Z ) );
+    // xsc = photo->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
+    // xsc = pair->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
+    xsc = bhpair->ComputeCrossSectionPerAtom(theParticleDefinition, energyMscXR, G4double(Z ) );
     G4cout<<energyMscXR/MeV<<"\t\t"<<xsc/barn<<G4endl;
     writef<<energyMscXR/MeV<<"\t\t"<<xsc/barn<<G4endl;
   }
