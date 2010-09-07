@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc,v 1.16 2010-04-06 09:24:46 vnivanch Exp $
+// $Id: G4VMscModel.cc,v 1.17 2010-09-07 12:13:45 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -105,35 +105,30 @@ void G4VMscModel::ComputeDisplacement(G4ParticleChangeForMSC* fParticleChange,
 				      G4double displacement,
 				      G4double postsafety)
 {
+  if(displacement <= 0.0) { return; }
   const G4ThreeVector* pos = fParticleChange->GetProposedPosition();
-  G4double r = displacement;
-  if(r >  postsafety) {
-    G4double newsafety = safetyHelper->ComputeSafety(*pos);
-    if(r > newsafety) r = newsafety;
+
+  // displaced point is definitely within the volume
+  if(displacement < postsafety) {
+
+    // compute new endpoint of the Step
+    G4ThreeVector newPosition = *pos + displacement*dir;
+    safetyHelper->ReLocateWithinVolume(newPosition);
+    fParticleChange->ProposePosition(newPosition);
+    return;
   }
-  if(r > 0.) {
+
+  // displaced point may be outside the volume
+  G4double newsafety = safetyHelper->ComputeSafety(*pos);
+
+  // add a factor which ensure numerical stability
+  G4double r = std::min(displacement, newsafety)*0.9999; 
+
+  if(r > 0.0) {
 
     // compute new endpoint of the Step
     G4ThreeVector newPosition = *pos + r*dir;
-
-    // definitely not on boundary
-    if(displacement == r) {
-      safetyHelper->ReLocateWithinVolume(newPosition);
-
-    } else {
-      // check safety after displacement
-      G4double postsafety = safetyHelper->ComputeSafety(newPosition);
-
-      // displacement to boundary
-      if(postsafety <= 0.0) {
-	safetyHelper->Locate(newPosition, 
-			     *fParticleChange->GetProposedMomentumDirection());
-
-	// not on the boundary
-      } else {
-	safetyHelper->ReLocateWithinVolume(newPosition);
-      }
-    }
+    safetyHelper->ReLocateWithinVolume(newPosition);
     fParticleChange->ProposePosition(newPosition);
   }
 }
