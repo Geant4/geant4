@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.13 2010-06-25 09:41:07 gunter Exp $
+// $Id: G4GenericTrap.cc,v 1.14 2010-09-07 09:43:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,7 +101,7 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
 
   // Compute Twist
   //
-  for( G4int i=0; i<4; i++) { fTwist[i]=0; }
+  for( G4int i=0; i<4; i++) { fTwist[i]=0.; }
   fIsTwisted = ComputeIsTwisted();
 
   // Compute Bounding Box 
@@ -130,10 +130,11 @@ G4GenericTrap::G4GenericTrap( __void__& a )
     fVisSubdivisions(0),
     fSurfaceArea(0.),
     fCubicVolume(0.)
-   
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
+
+  for( G4int i=0; i<4; i++) { fTwist[i]=0.; }
 }
 
 // --------------------------------------------------------------------
@@ -1016,7 +1017,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
         *n=G4ThreeVector(0,0,-1);
         break;
       default:
-        G4cout.precision(16);
+        G4int oldprc = G4cout.precision(16);
         G4cout << G4endl;
         DumpInfo();
         G4cout << "Position:"  << G4endl << G4endl;
@@ -1029,6 +1030,7 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "distmin = "    << distmin/mm << " mm" << G4endl << G4endl;
+        G4cout.precision(oldprc);
         G4Exception("G4GenericTrap::DistanceToOut(p,v,..)",
                     "Notification", JustWarning,
                     "Undefined side for valid surface normal to solid.");
@@ -1258,10 +1260,10 @@ G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 
   G4ThreeVectorList *vertices;
   vertices=new G4ThreeVectorList();
-  vertices->reserve(8);
     
   if (vertices)
   {
+    vertices->reserve(8);
     G4ThreeVector vertex0(Min.x(),Min.y(),Min.z());
     G4ThreeVector vertex1(Max.x(),Min.y(),Min.z());
     G4ThreeVector vertex2(Max.x(),Max.y(),Min.z());

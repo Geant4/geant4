@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.22 2010-07-12 15:33:49 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.23 2010-09-07 09:43:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -660,7 +660,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
 #if G4SPECSDEBUG
   if ( Inside(p) == kInside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -668,6 +668,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p,
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToIn(p,v)", "Notification", JustWarning, 
                  "Point p is already inside!?" );
   }
@@ -714,7 +715,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
 #if G4SPECSDEBUG
   if ( Inside(p) == kInside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -722,6 +723,7 @@ G4double G4TessellatedSolid::DistanceToIn (const G4ThreeVector &p) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToOut(p) == " << DistanceToOut(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToIn(p)", "Notification", JustWarning, 
                  "Point p is already inside!?" );
   }
@@ -767,7 +769,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
 #if G4SPECSDEBUG
   if ( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -775,6 +777,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p,
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is already outside !?" );
   }
@@ -840,7 +843,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 #if G4SPECSDEBUG
   if ( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      //     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
@@ -848,6 +851,7 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "DistanceToIn(p) == " << DistanceToIn(p) << G4endl;
+     G4cout.precision(oldprc) ;
      G4Exception("G4TriangularFacet::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is already outside !?" );
   }

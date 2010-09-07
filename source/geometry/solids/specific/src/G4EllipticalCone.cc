@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.17 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.18 2010-09-07 09:43:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -801,7 +801,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
         break;
 
         default:            // Should never reach this case ...
-          G4cout.precision(16);
+          G4int oldprc = G4cout.precision(16);
           G4cout << G4endl;
           DumpInfo();
           G4cout << "Position:"  << G4endl << G4endl;
@@ -814,7 +814,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
           G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
           G4cout << "Proposed distance :" << G4endl << G4endl;
           G4cout << "distMin = "    << distMin/mm << " mm" << G4endl << G4endl;
-          G4cout.precision(6);
+          G4cout.precision(oldprc);
           G4Exception("G4EllipticalCone::DistanceToOut(p,v,..)",
                       "Notification", JustWarning,
                       "Undefined side for valid surface normal to solid.");

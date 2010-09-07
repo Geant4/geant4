@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.26 2010-07-12 15:33:49 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.27 2010-09-07 09:43:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -687,7 +687,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
           *n= truenorm;
         } break;
         default:           // Should never reach this case ...
-          G4cout.precision(16);
+          G4int oldprc = G4cout.precision(16);
           G4cout << G4endl;
           DumpInfo();
           G4cout << "Position:"  << G4endl << G4endl;
@@ -700,7 +700,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
           G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
           G4cout << "Proposed distance :" << G4endl << G4endl;
           G4cout << "distMin = "    << distMin/mm << " mm" << G4endl << G4endl;
-          G4cout.precision(6);
+          G4cout.precision(oldprc);
           G4Exception("G4Ellipsoid::DistanceToOut(p,v,..)",
                       "Notification", JustWarning,
                       "Undefined side for valid surface normal to solid.");
@@ -723,13 +723,14 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p) const
 #ifdef G4SPECSDEBUG
   if( Inside(p) == kOutside )
   {
-     G4cout.precision(16) ;
+     G4int oldprc = G4cout.precision(16) ;
      G4cout << G4endl ;
      DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout.precision(oldprc) ;
      G4Exception("G4Ellipsoid::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
@@ -814,16 +815,18 @@ G4Ellipsoid::CreateRotatedVertices(const G4AffineTransform& pTransform,
 
   // Theta cross sections
     
-  noThetaSections = G4int(pi/kMeshAngleDefault)+3;
-    
-  if (noThetaSections<kMinMeshSections)
+  noThetaSections = G4int(pi/kMeshAngleDefault)+3;  //  = 7!
+
+/*
+  if (noThetaSections<kMinMeshSections)       // <3
   {
     noThetaSections=kMinMeshSections;
   }
-  else if (noThetaSections>kMaxMeshSections)
+  else if (noThetaSections>kMaxMeshSections)  // >37
   {
     noThetaSections=kMaxMeshSections;
   }
+*/
   meshTheta= pi/(noThetaSections-2);
     
   // Set start angle such that mesh will be at fRMax

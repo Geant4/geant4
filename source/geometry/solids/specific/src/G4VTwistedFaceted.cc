@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.19 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.20 2010-09-07 09:43:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -927,9 +927,9 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    // checking last value
    //
 
-   
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
+
    if (fLastDistanceToOut.p == p)
    {
       return fLastDistanceToOut.value;
@@ -946,73 +946,79 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    //
    
    EInside currentside = Inside(p);
+   G4double     retval = kInfinity;   
 
    switch (currentside)
    {
       case (kOutside) :
       {
 #ifdef G4SPECSDEBUG
-        G4cout.precision(16) ;
+        G4int oldprc = G4cout.precision(16) ;
         G4cout << G4endl ;
         DumpInfo();
         G4cout << "Position:"  << G4endl << G4endl ;
         G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
         G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
         G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+        G4cout.precision(oldprc) ;
         G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "Notification",
                     JustWarning, "Point p is outside !?" );
 #endif
+        break;
       }
       case (kSurface) :
       {
         *tmpdist = 0.;
-         return fLastDistanceToOut.value;
+        retval = fLastDistanceToOut.value;
+        break;
       }
       
       case (kInside) :
       {
-         // Initialize
-         //
-         G4double      distance = kInfinity;
+        // Initialize
+        //
+        G4double      distance = kInfinity;
    
-         // find intersections and choose nearest one
-         //
-         G4VTwistSurface *surfaces[6];
+        // find intersections and choose nearest one
+        //
+        G4VTwistSurface *surfaces[6];
 
-         surfaces[0] = fSide0;
-         surfaces[1] = fSide90 ;
-         surfaces[2] = fSide180 ;
-         surfaces[3] = fSide270 ;
-         surfaces[4] = fLowerEndcap;
-         surfaces[5] = fUpperEndcap;
+        surfaces[0] = fSide0;
+        surfaces[1] = fSide90 ;
+        surfaces[2] = fSide180 ;
+        surfaces[3] = fSide270 ;
+        surfaces[4] = fLowerEndcap;
+        surfaces[5] = fUpperEndcap;
 
-         G4int i;
-         G4int besti = -1;
-         G4ThreeVector xx;
-         G4ThreeVector bestxx;
-         for (i=0; i< 6; i++)
-         {
-            G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-            if (tmpdistance < distance)
-            {
-               distance = tmpdistance;
-               bestxx = xx;
-               besti = i;
-            }
-         }
-         *tmpdist = distance;
+        G4int i;
+        G4int besti = -1;
+        G4ThreeVector xx;
+        G4ThreeVector bestxx;
+        for (i=0; i< 6; i++)
+        {
+          G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
+          if (tmpdistance < distance)
+          {
+            distance = tmpdistance;
+            bestxx = xx;
+            besti = i;
+          }
+        }
+        *tmpdist = distance;
    
-         return fLastDistanceToOut.value;
+        retval = fLastDistanceToOut.value;
+        break;
       }
       
       default :
       {
-         G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "InvalidCondition",
-                     FatalException, "Unknown point location!");
+        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "InvalidCondition",
+                    FatalException, "Unknown point location!");
+        break;
       }
    } // switch end
 
-   return kInfinity;
+   return retval;
 }
 
 
