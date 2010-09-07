@@ -1,4 +1,4 @@
-$Id: History,v 1.127 2010-08-23 12:59:15 gcosmo Exp $
+$Id: History,v 1.128 2010-09-07 07:58:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 07, 2010  G.Cosmo                    geom-csg-V09-03-06
+- Fix within G4CSGDEBUG code for restoring cout precision.
 
 Aug 23, 2010  G.Cosmo                    geom-csg-V09-03-05
 - G4Cons: fixed trivial compilation warning on Linux.
