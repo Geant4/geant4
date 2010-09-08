@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.12 2010-08-25 06:58:15 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.13 2010-09-08 13:39:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,11 +40,10 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel
 :G4VEmModel(nam),isInitialised(false)
 {
 
-  killBelowEnergy = 9*eV; // Minimum e- energy for energy loss by excitation
+  killBelowEnergy = 0.025*eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 
-  lowEnergyLimitOfModel = 7 * eV; // The model lower energy is 7 eV
   intermediateEnergyLimit = 200 * eV; // Switch between two final state models
-  highEnergyLimit = 1. * MeV;
+  highEnergyLimit = 10 * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
@@ -173,10 +172,6 @@ G4double G4DNAScreenedRutherfordElasticModel::CrossSectionPerVolume(const G4Mate
 
   if (ekin < highEnergyLimit)
   {
-      
-      //SI : XS must not be zero otherwise sampling of secondaries method ignored
-      if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
-      //
       
       G4double z = 10.;
       G4double n = ScreeningFactor(ekin,z);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.2 2010-01-07 18:10:19 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.hh,v 1.3 2010-09-08 13:39:11 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -66,8 +66,7 @@ private:
 
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
-  G4double lowEnergyLimitOfModel;  
-  G4double intermediateEnergyLimit; 
+  G4double intermediateEnergyLimit;
   G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
