@@ -13,6 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 Sep 2010, G.Folger		         had-binary-V09-03-02
+- Binary{LightIon}Cascade: use integer (A,Z) interface of nucleus
+- *Field.cc: use integer A,Z from G4V3DNucleus, and for G4FermiMomentum
+
 31-Aug-2010, V.Ivanchenko                had-binary-V09-03-01
 - G4GeneratorPrecompoundInterface - define default deexcitation with 
                                     G4PreCompoundModel in the constructor
