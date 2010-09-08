@@ -39,7 +39,7 @@ class G4FermiMomentum
     G4FermiMomentum();
     ~G4FermiMomentum();
     
-    inline void Init(G4double anA, G4double aZ) {theA = anA; theZ = aZ;}
+    inline void Init(G4int anA, G4int aZ) {theA = anA; theZ = aZ;}
     
     inline G4double GetFermiMomentum(G4double density)
     {
@@ -66,8 +66,8 @@ class G4FermiMomentum
 
   private:
   
-    G4double theA;
-    G4double theZ;
+    G4int theA;
+    G4int theZ;
       // pmax= hbar * c * ( 3* pi**2 * rho )**(1/3) =
       //       hbar * c * ( 3* pi**2 )**(1/3) * rho**(1/3)=
       //       constofpmax * rho**(1/3)

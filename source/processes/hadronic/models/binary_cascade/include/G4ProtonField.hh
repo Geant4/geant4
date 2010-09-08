@@ -75,8 +75,8 @@ private:
     return theFermi.GetFermiMomentum(aDensity);
   }
   
-  G4double theA;
-  G4double theZ;
+  G4int theA;
+  G4int theZ;
   G4double theBarrier;
   G4double theRadius;
   G4FermiMomentum theFermi;

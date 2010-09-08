@@ -52,10 +52,10 @@ G4HadFinalState *G4BinaryLightIonReaction::
   eventcounter++;
   if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number starts ######### "<<eventcounter<<G4endl;
     G4ping debug("debug_G4BinaryLightIonReaction");
-    G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
-    G4double z1=aTrack.GetDefinition()->GetPDGCharge();
-    G4double a2=targetNucleus.GetN();
-    G4double z2=targetNucleus.GetZ();
+    G4int a1=aTrack.GetDefinition()->GetBaryonNumber();
+    G4int z1=G4lrint(aTrack.GetDefinition()->GetPDGCharge());
+    G4int a2=targetNucleus.GetA_asInt();
+    G4int z2=targetNucleus.GetZ_asInt();
     debug.push_back(a1);
     debug.push_back(z1);
     debug.push_back(a2);
@@ -69,29 +69,21 @@ G4HadFinalState *G4BinaryLightIonReaction::
     G4bool swapped = false;
     if(a2<a1)
     {
-      debug.push_back("swapping....");
       swapped = true;
-      G4double tmp(0);
+      G4int tmp(0);
       tmp = a2; a2=a1; a1=tmp;
       tmp = z2; z2=z1; z1=tmp;
-      G4double m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z1),G4lrint(a1));
+      G4double m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z1,a1);
       G4LorentzVector it(m1, G4ThreeVector(0,0,0));
       mom = toBreit*it;
     }
-    debug.push_back("After swap");
-    debug.push_back(a1);
-    debug.push_back(z1);
-    debug.push_back(a2);
-    debug.push_back(z2);
-    debug.push_back(mom);
-    debug.dump();
 
     G4ReactionProductVector * result = NULL;
     G4ReactionProductVector * cascaders= new G4ReactionProductVector;
     G4double m_nucl(0);      // to check energy balance 
 
 
-//    G4double m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z1),G4lrint(a1));
+//    G4double m1=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z1,a1);
 //    G4cout << "Entering the decision point "
 //           << (mom.t()-mom.mag())/a1 << " "
 //	   << a1<<" "<< z1<<" "
@@ -106,17 +98,17 @@ G4HadFinalState *G4BinaryLightIonReaction::
       G4Fragment aPreFrag;
       aPreFrag.SetA(a1+a2);
       aPreFrag.SetZ(z1+z2);
-      aPreFrag.SetNumberOfParticles(G4lrint(a1));
-      aPreFrag.SetNumberOfCharged(G4lrint(z1));
+      aPreFrag.SetNumberOfParticles(a1);
+      aPreFrag.SetNumberOfCharged(z1);
       aPreFrag.SetNumberOfHoles(0);
       G4ThreeVector plop(0.,0., mom.vect().mag());
-      G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z2),G4lrint(a2));
+      G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2,a2);
       m_nucl=m2;
       G4LorentzVector aL(mom.t()+m2, plop);
       aPreFrag.SetMomentum(aL);
       G4ParticleDefinition * preFragDef;
       preFragDef = G4ParticleTable::GetParticleTable()
-                      ->FindIon(G4lrint(z1+z2),G4lrint(a1+a2),0,G4lrint(z1+z2));  
+                      ->FindIon(z1+z2,a1+a2,0,z1+z2);  
       aPreFrag.SetParticleDefinition(preFragDef);
 
 //      G4cout << "Fragment INFO "<< a1+a2 <<" "<<z1+z2<<" "
@@ -224,8 +216,8 @@ G4HadFinalState *G4BinaryLightIonReaction::
 		       << "," << aTrack.GetDefinition()->GetPDGCharge() << ") "
 	               << ", kinetic energy " << aTrack.GetKineticEnergy() 
 		       << G4endl;
-	      G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetN()
-	               << "," << targetNucleus.GetZ() << G4endl;
+	      G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetA_asInt()
+	               << "," << targetNucleus.GetZ_asInt() << G4endl;
 	      G4cerr << " if frequent, please submit above information as bug report"
   		      << G4endl << G4endl;
 		
@@ -398,7 +390,7 @@ G4HadFinalState *G4BinaryLightIonReaction::
 	aProRes.SetZ(resZ);
 	aProRes.SetNumberOfParticles(0);
 	aProRes.SetNumberOfCharged(0);
-	aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
+	aProRes.SetNumberOfHoles(a1-resA);
 	G4double mFragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(resZ,resA);
 	G4LorentzVector pFragment(0,0,0,mFragment+std::max(0.,theStatisticalExEnergy) );
 	aProRes.SetMomentum(pFragment);
@@ -419,8 +411,8 @@ G4HadFinalState *G4BinaryLightIonReaction::
 		    << "," << aTrack.GetDefinition()->GetPDGCharge() << ") "
 	            << ", kinetic energy " << aTrack.GetKineticEnergy() 
 		    << G4endl;
-	   G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetN()
-	            << "," << targetNucleus.GetZ() << G4endl;
+	   G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetA_asInt()
+	            << "," << targetNucleus.GetZ_asInt() << G4endl;
 	   G4cerr << " if frequent, please submit above information as bug report"
   	     	   << G4endl << G4endl;
 

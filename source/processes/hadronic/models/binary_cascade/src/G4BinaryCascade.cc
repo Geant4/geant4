@@ -205,7 +205,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
       products=0;
     }
 
-    the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
+    the3DNucleus->Init(aNucleus.GetA_asInt(), aNucleus.GetZ_asInt());
     thePropagator->Init(the3DNucleus);
     //      GF Leak on kt??? but where to delete?
     G4KineticTrack * kt;// = new G4KineticTrack(definition, 0., initialPosition, initial4Momentum);

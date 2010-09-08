@@ -84,9 +84,9 @@ G4double G4AntiProtonField::GetField(const G4ThreeVector & aPosition)
   G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProtonDefinition();
   G4double antiProtonMass = anAntiProton->GetPDGMass();
 
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
-  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
+  G4int A = theNucleus->GetMassNumber();
+  G4int Z = theNucleus->GetCharge();
+  G4double bindingEnergy = G4NucleiProperties::GetBindingEnergy(A, Z);
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = antiProtonMass*nucleusMass/(antiProtonMass+nucleusMass);
 
@@ -98,8 +98,8 @@ G4double G4AntiProtonField::GetField(const G4ThreeVector & aPosition)
 
 G4double G4AntiProtonField::GetBarrier()
 {
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
+  G4int A = theNucleus->GetMassNumber();
+  G4int Z = theNucleus->GetCharge();
   G4double coulombBarrier = (1.44/1.14) * MeV * Z / (1.0 + std::pow(A,1./3.));
   return -coulombBarrier;
 }
