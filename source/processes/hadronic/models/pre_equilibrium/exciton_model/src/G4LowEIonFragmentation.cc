@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.cc,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
+// $Id: G4LowEIonFragmentation.cc,v 1.7 2010-09-08 16:38:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -70,12 +70,12 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   theResult.SetEnergyChange( 0.0 );
 
   // Get Target A, Z
-  G4double aTargetA = theNucleus.GetN();
-  G4double aTargetZ = theNucleus.GetZ();
+  G4int aTargetA = theNucleus.GetA_asInt();
+  G4int aTargetZ = theNucleus.GetZ_asInt();
 
   // Get Projectile A, Z
-  G4double aProjectileA = thePrimary.GetDefinition()->GetBaryonNumber();
-  G4double aProjectileZ = thePrimary.GetDefinition()->GetPDGCharge();
+  G4int aProjectileA = thePrimary.GetDefinition()->GetBaryonNumber();
+  G4int aProjectileZ = G4lrint(thePrimary.GetDefinition()->GetPDGCharge());
 
   // Get Maximum radius of both
   
@@ -155,14 +155,14 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
   
   G4double compoundEnergy = thePrimary.GetTotalEnergy()*particlesFromProjectile/aProjectileA;  
   G4double targetMass = G4ParticleTable::GetParticleTable()
-                        ->GetIonTable()->GetIonMass(static_cast<G4int>(aTargetZ) ,static_cast<G4int>(aTargetA));
+                        ->GetIonTable()->GetIonMass(aTargetZ, aTargetA);
   compoundEnergy += targetMass;
   G4LorentzVector fragment4Momentum(exciton3Momentum, compoundEnergy);
  
   // take the nucleons and fill the Fragments
   G4Fragment anInitialState;
-  anInitialState.SetA(aTargetA+particlesFromProjectile);
-  anInitialState.SetZ(aTargetZ+chargedFromProjectile);
+  anInitialState.SetZandA_asInt(aTargetZ+chargedFromProjectile,
+  				aTargetA+particlesFromProjectile);
   // M.A. Cortes fix
   //anInitialState.SetNumberOfParticles(particlesFromProjectile);
   anInitialState.SetNumberOfParticles(particlesFromProjectile+particlesFromTarget);
@@ -185,8 +185,8 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     G4LorentzVector residual4Momentum(residual3Momentum, residualEnergy);  
  
     G4Fragment initialState2;
-    initialState2.SetA(aProjectileA-particlesFromProjectile);
-    initialState2.SetZ(aProjectileZ-chargedFromProjectile);
+    initialState2.SetZandA_asInt(aProjectileZ-chargedFromProjectile,
+    				 aProjectileA-particlesFromProjectile);
     initialState2.SetNumberOfHoles(static_cast<G4int>((aProjectileA-particlesFromProjectile)/2.0));
     initialState2.SetNumberOfParticles(static_cast<G4int>((aProjectileZ-chargedFromProjectile)/2.0));
     initialState2.SetNumberOfCharged(static_cast<G4int>((aProjectileZ-chargedFromProjectile)/2.0));

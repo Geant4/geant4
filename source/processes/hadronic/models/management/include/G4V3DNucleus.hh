@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.7 2009-11-19 14:29:05 gunter Exp $
+// $Id: G4V3DNucleus.hh,v 1.8 2010-09-08 16:39:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4V3DNucleus_h
@@ -51,7 +51,7 @@ class G4V3DNucleus
       int operator!=(const G4V3DNucleus &right) const;
 
   public:
-      virtual void Init(G4double theA, G4double theZ) = 0;
+      virtual void Init(G4int theA, G4int theZ) = 0;
       virtual G4bool StartLoop() = 0;
       virtual G4Nucleon * GetNextNucleon() = 0;
       virtual const std::vector<G4Nucleon *> & GetNucleons() = 0;
