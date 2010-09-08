@@ -23,9 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.cc,v 1.19 2010-06-04 17:08:15 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.20 2010-09-08 09:12:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   PhysicsList
+//
+// Description: EM physics with a possibility to add PAI model
+//
+// Author:      V.Ivanchenko 01.09.2010
+//
+//----------------------------------------------------------------------------
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +47,8 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4DecayPhysics.hh"
 
 #include "G4PAIModel.hh"
@@ -46,6 +57,7 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Proton.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -66,6 +78,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
+  cutForProton    = defaultCutValue;
 
   stepMaxProcess  = 0;
 
@@ -139,6 +152,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
 
+  } else if (name == "emlivermore") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
+
+  } else if (name == "empenelope") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+
   } else if (name == "pai") {
 
     emName = name;
@@ -194,6 +219,7 @@ void PhysicsList::SetCuts()
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
+  SetCutValue(cutForProton, "proton");
 
   if ( verboseLevel > 0 ) { DumpCutValuesTable(); }
 }
@@ -220,6 +246,14 @@ void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetCutForProton(G4double cut)
+{
+  cutForPositron = cut;
+  SetParticleCuts(cutForProton, G4Proton::Proton());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
