@@ -1,4 +1,4 @@
-$Id: History,v 1.176 2010-09-07 09:44:03 gcosmo Exp $
+$Id: History,v 1.177 2010-09-08 07:40:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-Sep-2010  G.Cosmo (geom-specific-V09-03-13)
+- Correction to previous fix in G4ReduciblePolygon to avoid deleting current
+  'vertexHead' pointer.
 
 07-Sep-2010  G.Cosmo (geom-specific-V09-03-12)
 - Fix within G4CSGDEBUG code for restoring cout precision.
