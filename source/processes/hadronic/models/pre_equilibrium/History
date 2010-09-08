@@ -14,11 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-1-September 2010 V.Ivanchenko  hadr-pre-V09-03-09
+8-September 2010 G.Folger      hadr-pre-V09-03-10
 ---------------------------------------------------
 G4PreCompoundEmission - removed SetUp inline method and move its functionality
-                        to the PerformEmission method in order to fix 
-                        initialisation problem 
+
+1-September 2010 V.Ivanchenko  hadr-pre-V09-03-09
+---------------------------------------------------
+G4LowEIonFragmentation: use integer A and Z
 
 31-August 2010 V.Ivanchenko  hadr-pre-V09-03-08
 ---------------------------------------------------

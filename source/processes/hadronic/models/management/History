@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 September 2010 - G.Folger   (hadr-modman-V09-03-04)
+------------------------------------------------------
+- G4V3DNucleus; use integer for A and Z
+
 28 August 2010 - V.Ivanchenko (hadr-modman-V09-03-03)
 ------------------------------------------------------
 - G4VPreCompoundModel - make deexcited G4Fragment non-const
