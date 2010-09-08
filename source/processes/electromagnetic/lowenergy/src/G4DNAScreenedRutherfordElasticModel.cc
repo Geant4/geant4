@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.13 2010-09-08 13:39:11 sincerti Exp $
+// $Id: G4DNAScreenedRutherfordElasticModel.cc,v 1.14 2010-09-08 14:07:16 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,7 +43,7 @@ G4DNAScreenedRutherfordElasticModel::G4DNAScreenedRutherfordElasticModel
   killBelowEnergy = 0.025*eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 
   intermediateEnergyLimit = 200 * eV; // Switch between two final state models
-  highEnergyLimit = 10 * MeV;
+  highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
 
