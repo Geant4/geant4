@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.34 2009-12-15 19:14:31 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.35 2010-09-08 16:51:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -98,7 +98,7 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
 	theProjectile = aProjectile;  
-	theParticipants.Init(aNucleus.GetN(),aNucleus.GetZ()); 
+	theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt()); 
 // ----------- N-mass number Z-charge -------------------------
 
 // --- cms energy
