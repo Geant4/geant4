@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc,v 1.4 2010-06-02 17:21:29 vnivanch Exp $
+// $Id: G4EmDNAPhysics.cc,v 1.5 2010-09-09 10:32:37 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmDNAPhysics.hh"
@@ -38,19 +38,11 @@
 #include "G4DNAScreenedRutherfordElasticModel.hh"
 
 #include "G4DNAExcitation.hh"
-#include "G4DNAEmfietzoglouExcitationModel.hh"
-#include "G4DNAMillerGreenExcitationModel.hh"
-#include "G4DNABornExcitationModel.hh"
-
+#include "G4DNAAttachment.hh"
+#include "G4DNAVibExcitation.hh"
 #include "G4DNAIonisation.hh"
-#include "G4DNABornIonisationModel.hh"
-#include "G4DNARuddIonisationModel.hh"
-
 #include "G4DNAChargeDecrease.hh"
-#include "G4DNADingfelderChargeDecreaseModel.hh"
-
 #include "G4DNAChargeIncrease.hh"
-#include "G4DNADingfelderChargeIncreaseModel.hh"
 
 // particles
 
@@ -149,6 +141,12 @@ void G4EmDNAPhysics::ConstructProcess()
 
       // *** Ionisation ***
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
+
+      // *** Vibrational excitation ***
+      pmanager->AddDiscreteProcess(new G4DNAVibExcitation());
+      
+      // *** Attachment ***
+      pmanager->AddDiscreteProcess(new G4DNAAttachment()); 
 
     
     } else if ( particleName == "proton" ) {
