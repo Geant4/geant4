@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.15 2010-07-19 22:26:28 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.16 2010-09-09 19:11:27 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -42,6 +42,7 @@
 // 20100715  M. Kelsey -- Use new G4CollisionOutput totals instead of loops,
 //		move temporary buffer to be data member
 // 20100719  M. Kelsey -- Change zero tolerance to 10 keV instead of 1 keV.
+// 20100909  M. Kelsey -- Add interface for both kinds of particle lists
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -142,7 +143,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 }
 
 
-// Take list of "cparticles") (e.g., from G4NucleiModel internals)
+// Take list of "cparticles" (e.g., from G4NucleiModel internals)
 
 void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 				    G4InuclParticle* target,
@@ -152,11 +153,27 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 	   << ")::collide(<cparticles>)" << G4endl;
 
   tempOutput.reset();			// Buffer for processing
-  for (unsigned i=0; i<particles.size(); i++)
-    tempOutput.addOutgoingParticle(particles[i].getParticle());
-
+  tempOutput.addOutgoingParticles(particles);
   collide(bullet, target, tempOutput);
 }
+
+
+// Take lists of both G4InuclEP & G4CP (e.g., from G4IntraNucleiCascader)
+
+void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
+				   G4InuclParticle* target,
+	     const std::vector<G4InuclElementaryParticle>& particles,
+	     const std::vector<G4CascadParticle>& cparticles) {
+  if (verboseLevel > 1)
+    G4cout << " >>> G4CascadeCheckBalance(" << theName
+	   << ")::collide(<EP>,<CP>)" << G4endl;
+
+  tempOutput.reset();			// Buffer for processing
+  tempOutput.addOutgoingParticles(particles);
+  tempOutput.addOutgoingParticles(cparticles);
+  collide(bullet, target, tempOutput);
+}
+
 
 // Compare relative and absolute violations to limits, and report
 

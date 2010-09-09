@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.9 2010-07-15 23:02:21 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.10 2010-09-09 19:11:27 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -41,6 +41,8 @@
 // 20100715  M. Kelsey -- Add G4CascadParticle interface for G4NucleiModel;
 //		do momentum check on direction, not just magnitude.  Move
 //		temporary G4CollisionOutput buffer here, for thread-safety
+// 20100909  M. Kelsey -- Add interface to get four-vector difference, and
+//		to supply both kinds of particle lists (G4IntraNucleiCascader)
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -79,6 +81,11 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       const std::vector<G4CascadParticle>& particles);
 
+  // This is for use with G4IntraNucleiCascader
+  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+	       const std::vector<G4InuclElementaryParticle>& particles,
+	       const std::vector<G4CascadParticle>& cparticles);
+
   // Checks on conservation laws (kinematics, baryon number, charge)
   G4bool energyOkay() const;
   G4bool ekinOkay() const;
@@ -104,11 +111,13 @@ public:
 	     (ekin(initial)<tolerance) ? 1. : deltaKE()/ekin(initial) );
   }
 
-  G4double deltaP() const { return (final-initial).rho(); }
+  G4double deltaP() const { return deltaLV().rho(); }
   G4double relativeP() const {
     return ( (std::abs(deltaP())<tolerance) ? 0. : 
 	     (initial.rho()<tolerance) ? 1. : deltaP()/initial.rho() );
   }
+
+  G4LorentzVector deltaLV() const { return final - initial; }
 
   // Baryon number and charge are discrete; no bounds and no "relative" scale
   G4double deltaB() const { return (finalBaryon - initialBaryon); }
