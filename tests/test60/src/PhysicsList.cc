@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.2 2009-11-12 03:13:46 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.3 2010-09-09 10:16:15 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -110,69 +110,6 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-/*
-// NON MIGRATED Geant4-DNA
-
-#include "G4DNAGenericIonsManager.hh"
-#include "G4FinalStateProduct.hh"
-#include "G4DNAProcess.hh"
-
-#include "G4CrossSectionExcitationEmfietzoglou.hh"
-#include "G4FinalStateExcitationEmfietzoglou.hh"
-
-#include "G4CrossSectionElasticScreenedRutherfordLE.hh"
-#include "G4CrossSectionElasticScreenedRutherfordHE.hh"
-#include "G4FinalStateElasticScreenedRutherford.hh"
-#include "G4FinalStateElasticBrennerZaider.hh"
-
-#include "G4CrossSectionExcitationBorn.hh"
-#include "G4FinalStateExcitationBorn.hh"
-
-#include "G4CrossSectionIonisationBorn.hh"
-#include "G4FinalStateIonisationBorn.hh"
-
-#include "G4CrossSectionIonisationRudd.hh"
-#include "G4FinalStateIonisationRudd.hh"
-
-#include "G4CrossSectionExcitationMillerGreen.hh"
-#include "G4FinalStateExcitationMillerGreen.hh"
-
-#include "G4CrossSectionChargeDecrease.hh"
-#include "G4FinalStateChargeDecrease.hh"
-
-#include "G4CrossSectionChargeIncrease.hh"
-#include "G4FinalStateChargeIncrease.hh"
-
-// Processes definition
-
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordHE,G4FinalStateElasticScreenedRutherford> 
-  ElasticScreenedRutherfordHE;
-
-typedef G4DNAProcess<G4CrossSectionElasticScreenedRutherfordLE,G4FinalStateElasticBrennerZaider> 
-  ElasticScreenedRutherfordLE;
-
-typedef G4DNAProcess<G4CrossSectionExcitationEmfietzoglou,G4FinalStateExcitationEmfietzoglou> 
-  ExcitationEmfietzoglou;
-  
-typedef G4DNAProcess<G4CrossSectionExcitationBorn,G4FinalStateExcitationBorn> 
-  ExcitationBorn;
-  
-typedef G4DNAProcess<G4CrossSectionIonisationBorn,G4FinalStateIonisationBorn> 
-  IonisationBorn;
-  
-typedef G4DNAProcess<G4CrossSectionIonisationRudd,G4FinalStateIonisationRudd> 
-  IonisationRudd;
-  
-typedef G4DNAProcess<G4CrossSectionExcitationMillerGreen,G4FinalStateExcitationMillerGreen> 
-  ExcitationMillerGreen;
-  
-typedef G4DNAProcess<G4CrossSectionChargeDecrease,G4FinalStateChargeDecrease> 
-  ChargeDecrease;
-  
-typedef G4DNAProcess<G4CrossSectionChargeIncrease,G4FinalStateChargeIncrease> 
-  ChargeIncrease;
-*/
-
 // MIGRATED Geant4-DNA MODELS
 
 #include "G4DNAElastic.hh"
@@ -180,19 +117,11 @@ typedef G4DNAProcess<G4CrossSectionChargeIncrease,G4FinalStateChargeIncrease>
 #include "G4DNAScreenedRutherfordElasticModel.hh"
 
 #include "G4DNAExcitation.hh"
-#include "G4DNAEmfietzoglouExcitationModel.hh"
-#include "G4DNAMillerGreenExcitationModel.hh"
-#include "G4DNABornExcitationModel.hh"
-
 #include "G4DNAIonisation.hh"
-#include "G4DNABornIonisationModel.hh"
-#include "G4DNARuddIonisationModel.hh"
-
 #include "G4DNAChargeDecrease.hh"
-#include "G4DNADingfelderChargeDecreaseModel.hh"
-
 #include "G4DNAChargeIncrease.hh"
-#include "G4DNADingfelderChargeIncreaseModel.hh"
+#include "G4DNAAttachment.hh"
+#include "G4DNAVibExcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -207,44 +136,6 @@ void PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-/*
-// NON MIGRATED Geant4-DNA
-
-   if (particleName == "e-") {
-       pmanager->AddDiscreteProcess(new ExcitationEmfietzoglou("ExcitationEmfietzoglou"));
-       pmanager->AddDiscreteProcess(new ElasticScreenedRutherfordLE("ElasticScreenedRutherfordLE"));
-       pmanager->AddDiscreteProcess(new ElasticScreenedRutherfordHE("ElasticScreenedRutherfordHE"));
-       pmanager->AddDiscreteProcess(new IonisationBorn("IonisationBorn"));
-
-    } else if ( particleName == "proton" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
-       pmanager->AddDiscreteProcess(new ExcitationBorn("ExcitationBorn"));
-       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
-       pmanager->AddDiscreteProcess(new IonisationBorn("IonisationBorn"));
-       pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
-
-    } else if ( particleName == "hydrogen" ) {
-       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
-       pmanager->AddDiscreteProcess(new ChargeIncrease("ChargeIncrease"));
-
-    } else if ( particleName == "alpha" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
-       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
-       pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
-    
-    } else if ( particleName == "alpha+" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
-       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
-       pmanager->AddDiscreteProcess(new ChargeDecrease("ChargeDecrease"));
-       pmanager->AddDiscreteProcess(new ChargeIncrease("ChargeIncrease"));
-    
-    } else if ( particleName == "helium" ) {
-       pmanager->AddDiscreteProcess(new ExcitationMillerGreen("ExcitationMillerGreen"));
-       pmanager->AddDiscreteProcess(new IonisationRudd("IonisationRudd"));
-       pmanager->AddDiscreteProcess(new ChargeIncrease("ChargeIncrease"));
-    }
-*/    
-
 // MIGRATED Geant4-DNA
 
     if (particleName == "e-") {
@@ -256,6 +147,9 @@ void PhysicsList::ConstructEM()
 
       pmanager->AddDiscreteProcess(new G4DNAExcitation());
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
+      pmanager->AddDiscreteProcess(new G4DNAVibExcitation());
+      pmanager->AddDiscreteProcess(new G4DNAAttachment()); 
+
      	    
     } else if ( particleName == "proton" ) {
 

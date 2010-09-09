@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010-03-25 15:38:23 gunter Exp $
+$Id: History,v 1.7 2010-09-09 10:15:21 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 Sep 2010 - S. Incerti  tag test60-V09-03-01
+              Added new vibrational and attachment e- models
+              To be used with G4LEDATA 6.16 and above
 
 25 Mar 2010 - G.Folger    tag test60-V09-03-00
 	      Do not G4UItcsh on Windows
