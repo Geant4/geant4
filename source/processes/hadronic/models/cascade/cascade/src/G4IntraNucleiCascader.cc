@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.61 2010-09-10 18:03:40 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.62 2010-09-10 20:43:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -69,6 +69,7 @@
 // 20100907  M. Kelsey -- Add makeResidualFragment function to create object
 // 20100909  M. Kelsey -- Remove all local "fragment" stuff, use RecoilMaker.
 //		move goodCase() to RecoilMaker.
+// 20100910  M. Kelsey -- Use RecoilMaker::makeRecoilFragment().
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -421,14 +422,13 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	continue;
       }
 
-      G4InuclNuclei* outgoing_nuclei = theRecoilMaker->getRecoilFragment();
+      G4InuclNuclei* outgoing_nuclei = theRecoilMaker->makeRecoilFragment(4);
       if (!outgoing_nuclei) {
 	G4cerr << "Got null pointer for recoil nucleus!" << G4endl;
 	continue;
       }
 
       outgoing_nuclei->setExitonConfiguration(theExitonConfiguration);
-      outgoing_nuclei->setModel(4);
 
       if (verboseLevel > 2)
 	G4cout << " adding recoil nucleus/fragment to output list" << G4endl;

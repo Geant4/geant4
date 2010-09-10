@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.cc,v 1.2 2010-09-10 18:03:40 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.cc,v 1.3 2010-09-10 20:43:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -31,13 +31,15 @@
 // 20100909  M. Kelsey -- Inspired by G4CascadeCheckBalance
 // 20100909  M. Kelsey -- Move G4IntraNucleiCascader::goodCase() here, add
 //		tolerance for "almost zero" excitation energy
+// 20100910  M. Kelsey -- Drop getRecoilFragment() in favor of user calling
+//		makeRecoilFragment() with returned non-const pointer.  Drop
+//		handling of excitons.
 
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
 #include "G4CascadParticle.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
-#include "G4ExitonConfiguration.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -75,7 +77,7 @@ void G4CascadeRecoilMaker::collide(G4InuclParticle* bullet,
 
   balance->setVerboseLevel(verboseLevel);
   balance->collide(bullet, target, output);
-  makeRecoilFragment();
+  fillRecoil();
 }
 
 // This is for use with G4IntraNucleiCascader
@@ -92,26 +94,24 @@ void G4CascadeRecoilMaker::collide(G4InuclParticle* bullet,
 
   balance->setVerboseLevel(verboseLevel);
   balance->collide(bullet, target, particles, cparticles);
-  makeRecoilFragment();
+  fillRecoil();
 }
 
 
-// Used current event configuration to compute recoil
+// Used current event configuration to construct recoil nucleus
 // NOTE:  CheckBalance uses "final-initial", we want "initial-final"
 
-void G4CascadeRecoilMaker::makeRecoilFragment() {
+void G4CascadeRecoilMaker::fillRecoil() {
   recoilZ = -(balance->deltaQ());		// Charge "non-conservation"
   recoilA = -(balance->deltaB());		// Baryon "non-conservation"
   recoilMomentum = -(balance->deltaLV());
 
-  // Nuclear excitation energy, which may be "slightly" negative
-  if (goodFragment()) {
-    excitationEnergy =				// Bertini uses MeV for this
-      (recoilMomentum.m() - G4InuclNuclei::getNucleiMass(recoilA,recoilZ)) * GeV;
-  } else {
-    excitationEnergy = 0.;
-  }
+  // Nuclear excitation energy -- Bertini uses MeV for this
+  if (!goodFragment()) excitationEnergy = 0.;
+  else excitationEnergy =
+	 (recoilMomentum.m() - G4InuclNuclei::getNucleiMass(recoilA,recoilZ)) * GeV;
 
+  // Allow for very small negative mass difference, and round to zero
   if (std::abs(excitationEnergy) < excTolerance) excitationEnergy = 0.;
 
   if (verboseLevel > 2) {
@@ -122,25 +122,22 @@ void G4CascadeRecoilMaker::makeRecoilFragment() {
 	   << "\n  recoil mass " << recoilMomentum.m()
 	   << " 'excitation' energy " << excitationEnergy << G4endl;
   }
+}
 
-  if (goodFragment() && !wholeEvent()) {	// Allow for neg. excitation
-    theRecoilFragment.fill(recoilMomentum, recoilA, recoilZ, excitationEnergy);
-  } else {
-    if (verboseLevel > 2 && !wholeEvent())
-      G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
+
+// Construct physical nucleus from recoil parameters, if reasonable
+
+G4InuclNuclei* G4CascadeRecoilMaker::makeRecoilFragment(G4int model) {
+  if (goodRecoil()) {
+    theRecoilFragment.fill(recoilMomentum, recoilA, recoilZ,
+			   excitationEnergy, model);
+    return &theRecoilFragment;
   }
-}
 
+  if (verboseLevel > 2 && !wholeEvent())
+    G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
 
-// Modify both local data member and nucleus configuraiton
-
-void G4CascadeRecoilMaker::setRecoilExcitation(G4double Eexc) {
-  theRecoilFragment.setExitationEnergy(excitationEnergy = Eexc);
-}
-
-void G4CascadeRecoilMaker::
-setRecoilExcitonConfig(const G4ExitonConfiguration& excConfig) {
-  theRecoilFragment.setExitonConfiguration(excConfig);
+  return 0;		// Null pointer means no fragment
 }
 
 
@@ -155,10 +152,10 @@ G4bool G4CascadeRecoilMaker::goodRecoil() const {
 }
 
 G4bool G4CascadeRecoilMaker::wholeEvent() const {
-  return (recoilA==0 && recoilZ==0 && recoilMomentum.rho() < 1e-6 &&
-	  std::abs(recoilMomentum.e()) < 1e-6);
+  return (recoilA==0 && recoilZ==0 && 
+	  recoilMomentum.rho() < excTolerance/GeV &&
+	  std::abs(recoilMomentum.e()) < excTolerance/GeV);
 }
-
 
 // Determine whether desired nuclear fragment is constructable outcome
 
