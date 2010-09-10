@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NystromRK4.cc,v 1.8 2010-08-19 10:06:46 gcosmo Exp $
+// $Id: G4NystromRK4.cc,v 1.9 2010-09-10 15:42:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -196,7 +196,8 @@ G4NystromRK4::DistChord() const
 void 
 G4NystromRK4::ComputeRightHandSide(const G4double P[],G4double dPdS[])
 {
-  getField(P);
+  G4double P4vec[4]= { P[0], P[1], P[2], P[7] }; // Time is P[7]
+  getField(P4vec);
   m_mom   = std::sqrt(P[3]*P[3]+P[4]*P[4]+P[5]*P[5])     ; 
   m_imom  = 1./m_mom                                ;
   m_cof   = m_fEq->FCof()*m_imom                    ;
