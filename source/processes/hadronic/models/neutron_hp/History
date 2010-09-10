@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+9 September 2010  Tatsumi Koi (hadr-hpn-V09-03-06)
+- Add safty for negative value
+	G4NeutronHPInelasticCompFS.cc
+
 29 July 2010  Tatsumi Koi (hadr-hpn-V09-03-05)
 - Add safty for zero lenght cross section table Problem #1118
         G4NeutronHPFissionData.cc
