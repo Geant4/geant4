@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.16 2010-09-07 19:06:30 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.17 2010-09-10 19:14:44 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -36,6 +36,7 @@
 //	     excitation energy without instantianting "infinite" G4PartDefns.
 // 20100719  M. Kelsey -- Change excitation energy without altering momentum
 // 20100906  M. Kelsey -- Add fill() functions to rewrite contents
+// 20100910  M. Kelsey -- Add clearExitonConfiguration() to fill() functions
 
 #include "G4HadronicException.hh"
 #include "G4InuclNuclei.hh"
@@ -59,6 +60,7 @@ void G4InuclNuclei::fill(const G4LorentzVector& mom, G4double a, G4double z,
   setDefinition(makeDefinition(a,z));
   setMomentum(mom);
   setExitationEnergy(exc);
+  clearExitonConfiguration();
   setModel(model);
 }
 
@@ -67,6 +69,7 @@ void G4InuclNuclei::fill(G4double ekin, G4double a, G4double z, G4double exc,
   setDefinition(makeDefinition(a,z));
   setKineticEnergy(ekin);
   setExitationEnergy(exc);
+  clearExitonConfiguration();
   setModel(model);
 }
 
