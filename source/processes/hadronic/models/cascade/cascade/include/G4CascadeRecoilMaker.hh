@@ -24,13 +24,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.hh,v 1.1 2010-09-09 19:11:27 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.hh,v 1.2 2010-09-10 18:03:40 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
 // and computes the nuclear recoil kinematics needed to balance the event.
 //
 // 20100909  M. Kelsey -- Inspired by G4CascadeCheckBalance
+// 20100909  M. Kelsey -- Move G4IntraNucleiCascader::goodCase() here, add
+//		tolerance for "almost zero" excitation energy, add function
+//		to manually override excitation energy
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -39,8 +42,9 @@
 #include <cmath>
 #include <vector>
 
-class G4CascadeCheckBalance;
 class G4CascadParticle;
+class G4CascadeCheckBalance;
+class G4ExitonConfiguration;
 class G4InuclElementaryParticle;
 class G4InuclNuclei;
 class G4InuclParticle;
@@ -48,7 +52,7 @@ class G4InuclParticle;
 
 class G4CascadeRecoilMaker : public G4VCascadeCollider {
 public:
-  G4CascadeRecoilMaker();
+  explicit G4CascadeRecoilMaker(G4double tolerance=0.001*MeV);
   virtual ~G4CascadeRecoilMaker();
 
   // Standard Collider interface (non-const output "buffer")
@@ -60,24 +64,43 @@ public:
 	       const std::vector<G4InuclElementaryParticle>& particles,
 	       const std::vector<G4CascadParticle>& cparticles);
 
-  // Access constructed nucleus (may return null pointer complete event!)
+  // Access constructed nucleus (may return null pointer if non-physical)
   const G4InuclNuclei* getRecoilFragment() const { 
     return (goodRecoil() ? &theRecoilFragment : 0); }
 
+  G4InuclNuclei* getRecoilFragment() { 
+    return (goodRecoil() ? &theRecoilFragment : 0); }
+
+  // Access individual nucleus parameters, even if not constructable
   G4double getRecoilA() const { return recoilA; }
   G4double getRecoilZ() const { return recoilZ; }
+  G4double getRecoilExcitation() const { return excitationEnergy; }
   const G4LorentzVector& getRecoilMomentum() const { return recoilMomentum; }
 
   // Data quality checks
-  G4bool goodRecoil() const;
-  G4bool wholeEvent() const;
+  G4bool goodFragment() const;		// Verify A, Z both meaningful
+  G4bool goodRecoil() const;		// And sensible four-vector
+  G4bool wholeEvent() const;		// Zero recoil
   G4bool unphysicalRecoil() const { return !wholeEvent() && !goodRecoil(); }
+
+  G4bool goodNucleus() const;	// Ensure that fragment is energetically okay
+
+  // Modify parameters (including nucleus configuration)
+  void setTolerance(G4double tolerance) { excTolerance = tolerance; }
+
+  void setRecoilExcitation(G4double Eexc);
+  void setRecoilExcitonConfig(const G4ExitonConfiguration& excConfig);
+
 
 protected:
   void makeRecoilFragment();	// Convert recoil parameters into object
 
 private:
   G4CascadeCheckBalance* balance;	// Used to do kinematics calculations
+
+  G4double excTolerance;	// Minimum excitation energy, rounds to zero
+
+  G4double inputEkin;			// Available initial kinetic energy
 
   G4double recoilA;			// Nuclear parameters of recoil
   G4double recoilZ;

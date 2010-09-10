@@ -1,4 +1,4 @@
-$Id: History,v 1.165 2010-09-09 19:11:27 mkelsey Exp $
+$Id: History,v 1.166 2010-09-10 18:03:40 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,22 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+10 September 2010 Michael Kelsey
+--------------------------------
+- G4CascadeRecoilMaker:  Add new goodNucleus() function with functionality
+  from G4IntraNucleiCascader::goodCase().  Add parameter to set "rounding
+  tolerance" for small/negative mass differences.  Add non-const access to
+  G4InuclNuclei, and ways to modify nuclear configuration.
+
+- G4IntraNucleiCascader: Remove previously introduced getResidualMass() and
+  makeResidualFragment() functions, along with G4InuclNuclei object.
+  Replace with new RecoilMaker utility.  Move goodCase() to RecoilMaker, and
+  begin to simplify end-of-cascade processing.
+
+- G4ExitonConfiguration.hh:  Add function to reset values to zero.
+
+- G4InuclNuclei.hh:  Add function to zero out exiton configuration.
 
 9 September 2010 Michael Kelsey
 -------------------------------

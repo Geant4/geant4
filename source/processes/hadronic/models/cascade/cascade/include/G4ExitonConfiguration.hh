@@ -22,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4ExitonConfiguration.hh,v 1.6 2010-09-10 18:03:40 mkelsey Exp $
 //
+// 20100909  Add function to reset values to zero
+
 #ifndef G4EXITON_CONFIGURATION_HH
 #define G4EXITON_CONFIGURATION_HH
 
@@ -46,7 +49,14 @@ public:
     protonHoles(qph), 
     neutronHoles(qnh) {
   };
- 
+
+  void clear() {
+    protonQuasiParticles = 0.0;
+    neutronQuasiParticles = 0.0;
+    protonHoles = 0.0;
+    neutronHoles = 0.0;
+  }
+
   void incrementQP(G4int ip) {
     if(ip < 3) {
       if(ip == 1) {
@@ -81,7 +91,6 @@ public:
   G4double neutronQuasiParticles;
   G4double protonHoles;
   G4double neutronHoles;
-
 };        
 
 #endif // G4EXITON_CONFIGURATION_HH 

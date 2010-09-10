@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.23 2010-09-07 19:06:30 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.24 2010-09-10 18:03:40 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -39,6 +39,7 @@
 //	     excitation energy without instantianting "infinite" G4PartDefns.
 // 20100719  M. Kelsey -- Move setExitationEnergy implementation to .cc file.
 // 20100906  M. Kelsey -- Add fill() functions to rewrite contents
+// 20100909  M. Kelsey -- Add function to discard exciton configuration
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -100,6 +101,8 @@ public:
   void setExitonConfiguration(const G4ExitonConfiguration& config) { 
     theExitonConfiguration = config;
   }
+
+  void clearExitonConfiguration() { theExitonConfiguration.clear(); }
 
   G4double getA() const { return getDefinition()->GetAtomicMass(); }
 

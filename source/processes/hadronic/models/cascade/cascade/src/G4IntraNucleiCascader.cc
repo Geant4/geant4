@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.60 2010-09-07 19:06:30 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.61 2010-09-10 18:03:40 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -67,9 +67,12 @@
 //		delete colliders in destructor
 // 20100906  M. Kelsey -- Hide "non-physical fragment" behind verbose flag
 // 20100907  M. Kelsey -- Add makeResidualFragment function to create object
+// 20100909  M. Kelsey -- Remove all local "fragment" stuff, use RecoilMaker.
+//		move goodCase() to RecoilMaker.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
+#include "G4CascadeRecoilMaker.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CollisionOutput.hh"
 #include "G4HadTmpUtil.hh"
@@ -90,11 +93,13 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 G4IntraNucleiCascader::G4IntraNucleiCascader()
   : G4CascadeColliderBase("G4IntraNucleiCascader"),
     model(new G4NucleiModel),
-    theElementaryParticleCollider(new G4ElementaryParticleCollider) {}
+    theElementaryParticleCollider(new G4ElementaryParticleCollider),
+    theRecoilMaker(new G4CascadeRecoilMaker) {}
 
 G4IntraNucleiCascader::~G4IntraNucleiCascader() {
   delete model;
   delete theElementaryParticleCollider;
+  delete theRecoilMaker;
 }
 
 
@@ -103,14 +108,17 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 				    G4CollisionOutput& globalOutput) {
   if (verboseLevel) G4cout << " >>> G4IntraNucleiCascader::collide " << G4endl;
 
-  model->setVerboseLevel(verboseLevel);
-  theElementaryParticleCollider->setVerboseLevel(verboseLevel);
-
   const G4int itry_max = 1000;
   const G4int reflection_cut = 500;
 
   const G4double small_ekin = 0.001*MeV;	// Tolerance for round-off zero
   const G4double quasielast_cut = 1*MeV;	// To recover elastic scatters
+
+  // Configure processing modules
+  model->setVerboseLevel(verboseLevel);
+  theElementaryParticleCollider->setVerboseLevel(verboseLevel);
+  theRecoilMaker->setVerboseLevel(verboseLevel);
+  theRecoilMaker->setTolerance(small_ekin);
 
   // Energy/momentum conservation usually requires a recoiling nuclear fragment
   // This cut will be increased on each "itry" if momentum could not balance.
@@ -136,9 +144,6 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
                                       (1.+G4cbrt(tnuclei->getA()));
 
   G4LorentzVector momentum_in = bullet->getMomentum() + target->getMomentum();
-
-  // FIXME:  This assumes target at rest!  Should it be momentum_in.e()-m()?
-  G4double ekin_in = bullet->getKineticEnergy();
 
   if (verboseLevel > 3) {
     model->printModel();
@@ -167,24 +172,15 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
     G4ExitonConfiguration theExitonConfiguration;
 
-    G4double afin = tnuclei->getA();	// Will deduct outgoing particles
-    G4double zfin = tnuclei->getZ();	//    to determine recoil state
-
     if (interCase.hadNucleus()) { 		// particle with nuclei
       if (verboseLevel > 3)
 	G4cout << " bparticle charge " << bparticle->getCharge()
 	       << " baryon number " << bparticle->baryon() << G4endl;
 
-      zfin += bparticle->getCharge();
-      afin += bparticle->baryon();
       cascad_particles.push_back(model->initializeCascad(bparticle));
-
     } else {				// nuclei with nuclei
       G4double ab = bnuclei->getA();
       G4double zb = bnuclei->getZ();
-
-      afin += ab;
-      zfin += zb;
 
       G4NucleiModel::modelLists all_particles;    // Buffer to receive lists
       model->initializeCascad(bnuclei, tnuclei, all_particles);
@@ -336,8 +332,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	if (verboseLevel > 3)
 	  G4cout << " interacted, adding new to list " << G4endl;
 
-	for (G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
-	  cascad_particles.push_back(new_cascad_particles[i]);
+	cascad_particles.insert(cascad_particles.end(),
+				new_cascad_particles.begin(),
+				new_cascad_particles.end());
 
 	std::pair<G4int, G4int> holes = model->getTypesOfNucleonsInvolved();
 	if (verboseLevel > 3)
@@ -351,9 +348,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       }		// if (new_cascad_particles ...
 
       // Evaluate nuclear residue
-      G4double aresid =
-	getResidualMass(bullet, target, output_particles, cascad_particles);
+      theRecoilMaker->collide(bullet,target,output_particles,cascad_particles);
 
+      G4double aresid = theRecoilMaker->getRecoilA();
       if (verboseLevel > 2) {
 	G4cout << " cparticles remaining " << cascad_particles.size()
 	       << " nucleus (model) has "
@@ -370,52 +367,33 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       output_particles.push_back(cascad_particles[i].getParticle());
  
     // Cascade is finished. Check if it's OK.
-
     if (verboseLevel > 3) {
       G4cout << " Cascade finished  " << G4endl
 	     << " output_particles  " << output_particles.size() <<  G4endl;
-    }
 
-    G4LorentzVector momentum_out;
-    particleIterator ipart;
-
-    for (ipart = output_particles.begin(); ipart != output_particles.end(); ipart++) {
-      if (verboseLevel > 3) {
+      particleIterator ipart = output_particles.begin();
+      for (; ipart != output_particles.end(); ipart++) {
 	ipart->printParticle();
 	G4cout << "  charge " << ipart->getCharge() << " baryon number "
 	       << ipart->baryon() << G4endl;
       }
+    }
 
-      momentum_out += ipart->getMomentum();
+    // Use last created recoil fragment instead of re-constructing
+    G4double afin = theRecoilMaker->getRecoilA();
+    G4double zfin = theRecoilMaker->getRecoilZ();
 
-      zfin -= ipart->getCharge();
-      afin -= ipart->baryon();
-    };
-
-    if (afin<0. || zfin<0. || afin<zfin) {  // Sanity check before proceeding
+    if (!theRecoilMaker->goodFragment()) {  // Sanity check before proceeding
       if (verboseLevel > 1)
 	G4cerr << " Recoil nucleus is not physical: A=" << afin << " Z="
 	       << zfin << G4endl;
-
       continue;				// Discard event and try again
     }
 
-    G4LorentzVector presid = momentum_in - momentum_out;
+    const G4LorentzVector& presid = theRecoilMaker->getRecoilMomentum();
 
     if (verboseLevel > 1) {
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
-    }
-
-    if (verboseLevel > 3) {
-      G4cout << " momentum_in:    px " << momentum_in.px()
-	     << " py " << momentum_in.py() << " pz " << momentum_in.pz()
-	     << " E " << momentum_in.e() << G4endl;
-      G4cout << " momentum_out:   px " << momentum_out.px()
-	     << " py " << momentum_out.py() << " pz " << momentum_out.pz()
-	     << " E " << momentum_out.e() << G4endl;
-      G4cout << " resid (in-out): px " << presid.px()
-	     << " py " << presid.py() << " pz " << presid.pz()
-	     << " E " << presid.e() << G4endl;
     }
 
     if (afin > 1.0) {
@@ -423,44 +401,41 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       //	temporary fragments.  Could EPCollider's N-body phase-space
       //	do the job?
 
-      // Excitation is difference between outgoing and ground-state mass
-      G4double mass = G4InuclNuclei::getNucleiMass(afin, zfin);
-      G4double mres = presid.m();
-
-      G4double Eex = (mres-mass)*GeV;		// Excitation is in MeV
-      if (std::abs(Eex) < small_ekin) Eex = 0.;	// Absorb round-off
+      G4double Eex = theRecoilMaker->getRecoilExcitation();
 
       // Quasi-elastic scattering 
       if (output_particles.size() == 1 && std::abs(Eex) < quasielast_cut) {
-	if (verboseLevel > 3)
+	if (verboseLevel > 3) {
 	  G4cout << " quasi-elastic scatter with " << Eex << " MeV recoil"
 		 << G4endl;
-	Eex = 0.;
+	}
+	theRecoilMaker->setRecoilExcitation(Eex=0.);
+	if (verboseLevel > 3) {
+	  G4cout << " Eex reset to " << theRecoilMaker->getRecoilExcitation()
+		 << G4endl;
+	}
       }
 
-      if (Eex < 0.0) {		// Unphysical recoil; reject cascade
-	if (verboseLevel > 2) G4cout << " unphysical recoil " << Eex << G4endl;
-	continue;
-      }
-
-      if (verboseLevel > 3) {
-	G4cout << " fragment mass " << mass << " recoil " << mres
-	       << "  Eex  " << Eex  << " MeV" << G4endl;
-      }
-
-      if (!goodCase(afin, zfin, Eex, ekin_in)) { 	// unphysical recoil
+      if (!theRecoilMaker->goodNucleus()) { 	// unphysical recoil
 	if (verboseLevel > 2) G4cout << " nuclear recoil failed." << G4endl;
 	continue;
       }
 
+      G4InuclNuclei* outgoing_nuclei = theRecoilMaker->getRecoilFragment();
+      if (!outgoing_nuclei) {
+	G4cerr << "Got null pointer for recoil nucleus!" << G4endl;
+	continue;
+      }
+
+      outgoing_nuclei->setExitonConfiguration(theExitonConfiguration);
+      outgoing_nuclei->setModel(4);
+
       if (verboseLevel > 2)
 	G4cout << " adding recoil nucleus/fragment to output list" << G4endl;
 
-      G4InuclNuclei outgoing_nuclei(presid, afin, zfin, Eex, 4);
-      outgoing_nuclei.setExitonConfiguration(theExitonConfiguration);
-      if (verboseLevel > 3) outgoing_nuclei.printParticle();
+      if (verboseLevel > 3) outgoing_nuclei->printParticle();
       
-      output.addTargetFragment(outgoing_nuclei);
+      output.addTargetFragment(*outgoing_nuclei);
     } else if (afin == 1.0) { 	       // Just single nucleon left in "recoil"
       G4int last_type = (zfin == 1.) ? 1 : 2;
 
@@ -532,148 +507,4 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   // Copy final generated cascade to output buffer for return
   globalOutput.add(output);
   return;
-}
-
-
-// Construct recoiling nuclear fragment for current configuration
-// FIXME:  This does not check for sensible A/Z values!
-
-void
-G4IntraNucleiCascader::makeResidualFragment(G4InuclParticle* bullet, 
-					    G4InuclParticle* target,
-		   const std::vector<G4InuclElementaryParticle>& outgoing,
-		   const std::vector<G4CascadParticle>& inprocess) {
-  if (verboseLevel > 2)
-    G4cout << " >>> G4IntraNucleiCascader::makeResidualFragment" << G4endl;
-
-  // FIXME:  CODE BELOW WAS COPIED FROM G4CascadeCheckBalance.cc.  ENCAPSULATE!
-
-  G4LorentzVector initialMomentum;
-  if (bullet) initialMomentum += bullet->getMomentum();
-  if (target) initialMomentum += target->getMomentum();
-  
-  G4int initialCharge = 0;
-  if (bullet) initialCharge += G4int(bullet->getCharge());
-  if (target) initialCharge += G4int(target->getCharge());
-
-  G4InuclElementaryParticle* pbullet =
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-  G4InuclElementaryParticle* ptarget =
-    dynamic_cast<G4InuclElementaryParticle*>(target);
-
-  G4InuclNuclei* nbullet = dynamic_cast<G4InuclNuclei*>(bullet);
-  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
-
-  G4int initialBaryon =
-    ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
-     (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
-
-  // Use G4CollisionOutput to sum up final-state particles
-  static G4CollisionOutput tempOutput;		// Avoid memory churn
-  tempOutput.setVerboseLevel(verboseLevel);
-  tempOutput.reset();
-  tempOutput.addOutgoingParticles(outgoing);
-  tempOutput.addOutgoingParticles(inprocess);
-
-  G4int finalCharge = tempOutput.getTotalCharge();
-  G4int finalBaryon = tempOutput.getTotalBaryonNumber();
-
-  // FIXME:  Bertini is still using floating-point A and Z
-  G4double fragZ = G4double(initialCharge-finalCharge);
-  G4double fragA = G4double(initialBaryon-finalBaryon);
-
-  G4LorentzVector fragMomentum =
-    initialMomentum - tempOutput.getTotalOutputMomentum();
-
-  // Excitation energy is "mass difference", in MeV (not Bertini's GeV!)
-  G4double fragEexc =
-    (fragMomentum.m() - G4InuclNuclei::getNucleiMass(fragA, fragZ)) * GeV/MeV;
-
-  // Overwrite previous version of recoil with new kinematics
-  theResidualFragment.fill(fragMomentum, fragA, fragZ, fragEexc, 4);
-}
-
-
-// Return mass (A) of nuclear fragment recoiling against current particles
-
-G4double 
-G4IntraNucleiCascader::getResidualMass(G4InuclParticle* bullet, 
-				       G4InuclParticle* target,
-		   const std::vector<G4InuclElementaryParticle>& outgoing,
-		   const std::vector<G4CascadParticle>& inprocess) {
-  if (verboseLevel > 2)
-    G4cout << " >>> G4IntraNucleiCascader::getResidualMass" << G4endl;
-
-  // FIXME:  CODE BELOW WAS COPIED FROM G4CascadeCheckBalance.cc.  ENCAPSULATE!
-
-  G4int initialCharge = 0;
-  if (bullet) initialCharge += G4int(bullet->getCharge());
-  if (target) initialCharge += G4int(target->getCharge());
-
-  G4InuclElementaryParticle* pbullet =
-    dynamic_cast<G4InuclElementaryParticle*>(bullet);
-  G4InuclElementaryParticle* ptarget =
-    dynamic_cast<G4InuclElementaryParticle*>(target);
-
-  G4InuclNuclei* nbullet = dynamic_cast<G4InuclNuclei*>(bullet);
-  G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
-
-  G4int initialBaryon =
-    ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
-     (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
-
-  // Use G4CollisionOutput to sum up final-state particles
-  static G4CollisionOutput tempOutput;		// Avoid memory churn
-  tempOutput.setVerboseLevel(verboseLevel);
-  tempOutput.reset();
-  tempOutput.addOutgoingParticles(outgoing);
-  tempOutput.addOutgoingParticles(inprocess);
-
-  G4int finalCharge = tempOutput.getTotalCharge();
-  G4int finalBaryon = tempOutput.getTotalBaryonNumber();
-
-  // FIXME:  Bertini is still using floating-point A and Z
-  G4double fragZ = G4double(initialCharge-finalCharge);
-  G4double fragA = G4double(initialBaryon-finalBaryon);
-
-  if (verboseLevel > 3)
-    G4cout << " Charge initial " << initialCharge << " final " << finalCharge
-           << " fragment Z " << fragZ << G4endl
-           << " Baryon initial " << initialBaryon << " final " << finalBaryon
-           << " fragment A " << fragA << G4endl;
-
-  // FIXME:  For now, just returning mass.  Would like to return both A and Z
-  return fragA;
-}
-
-
-// Determine whether desired nuclear fragment can be constructed or not
-
-G4bool G4IntraNucleiCascader::goodCase(G4double a, 
-				       G4double z, 
-				       G4double eexs, 
-				       G4double ein) const {
-  if (verboseLevel > 1) {
-    G4cout << " >>> G4IntraNucleiCascader::goodCase" << G4endl;
-  }
-
-  const G4double eexs_cut = 0.0001*MeV;
-  const G4double reason_cut = 7.0*MeV;
-  const G4double ediv_cut = 5.0*MeV;
-
-  G4bool good = (eexs <= eexs_cut);	// Always allow for unexcited recoil
-
-  if (eexs > eexs_cut) {
-    G4double eexs_max0z = ein*GeV / ediv_cut;   // ein is GeV, eexs is MeV
-    G4double dm = bindingEnergy(a,z);
-    G4double eexs_max = eexs_max0z > reason_cut*dm ? eexs_max0z : reason_cut * dm;
-
-    if (verboseLevel > 3) {
-      G4cout << " eexs " << eexs << " max " << eexs_max << " dm " << dm << G4endl;
-    }
-
-    good = (eexs < eexs_max);
-  };
-
-  return good; 
 }
