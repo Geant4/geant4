@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagErrorStepper.hh,v 1.11 2006-06-29 18:22:50 gunter Exp $
+// $Id: G4MagErrorStepper.hh,v 1.12 2010-09-10 15:52:53 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,8 +51,7 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 {
   public:  // with description
 
-    // G4MagErrorStepper(G4Mag_EqRhs *EqRhs, G4int numberOfVariables);
-    G4MagErrorStepper(G4EquationOfMotion *EqRhs, G4int numberOfVariables);
+    G4MagErrorStepper(G4EquationOfMotion *EqRhs, G4int numberOfVariables, G4int numStateVariables=12);
     virtual ~G4MagErrorStepper();
   
     void Stepper( const G4double y[],
