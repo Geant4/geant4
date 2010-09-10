@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstRK4.cc,v 1.4 2010-07-21 13:24:07 tnikitin Exp $
+// $Id: G4ConstRK4.cc,v 1.5 2010-09-10 15:51:10 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,15 +37,20 @@
 
 //////////////////////////////////////////////////////////////////
 //
-// Constructor sets the number of variables (default = 8)
+// Constructor sets the number of *State* variables (default = 8)
+//   The number of variables integrated is always 6
 
-G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numberOfVariables)
-  : G4MagErrorStepper(EqRhs, numberOfVariables)
+G4ConstRK4::G4ConstRK4(G4Mag_EqRhs* EqRhs, G4int numStateVariables)
+  : G4MagErrorStepper(EqRhs, 6, numStateVariables)
 {
-  if(numberOfVariables !=8 )
+  // const G4int numberOfVariables= 6;
+  if( numStateVariables < 8 ) 
   {
+    G4cerr << "ERROR in G4ConstRK4::G4ConstRK4 " 
+	   << "   The number of State variables at least 8 " << G4endl;
+    G4cerr << "   Instead it is  numStateVariables= " << numStateVariables << G4endl; 
     G4Exception("G4ConstRK4::G4ConstRK4()", "InvalidSetup", FatalException,
-                "Valid only for number of variables=8. Use another Stepper!");
+	"Valid only for number of state variables of 8 or more. Use another Stepper!");
   }
 
   fEq = EqRhs;
@@ -147,21 +152,24 @@ G4ConstRK4::Stepper( const G4double yInput[],
                            G4double yOutput[],
                            G4double yError [] )
 {
-   const G4int nvar = 8 ;
-   G4int i;
+   const G4int nvar = 6;  // number of variables integrated
+   const G4int maxvar= GetNumberOfStateVariables();
 
    // Correction for Richardson extrapolation
-   //
    G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
+
+   G4int i;
    
    // Saving yInput because yInput and yOutput can be aliases for same array
+   for (i=0;    i<maxvar; i++) { yInitial[i]= yInput[i]; }
+ 
+   // Must copy the part of the state *not* integrated to the output
+   for (i=nvar; i<maxvar; i++) { yOutput[i]=  yInput[i]; }
 
-   for (i=0;i<nvar;i++) { yInitial[i]=yInput[i]; }
-
-   yInitial[7]= yInput[7];  // Copy the time in case...even if not really needed
-   yMiddle[7] = yInput[7];  // Copy the time from initial value 
-   yOneStep[7] = yInput[7]; // As it contributes to final value of yOutput ?
-   yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
+   // yInitial[7]= yInput[7];  //  The time is typically needed
+   yMiddle[7]  = yInput[7];   // Copy the time from initial value 
+   yOneStep[7] = yInput[7];   // As it contributes to final value of yOutput ?
+   // yOutput[7] = yInput[7];  // -> dumb stepper does it too for RK4
    yError[7] = 0.0;         
 
    G4double halfStep = hstep * 0.5; 
