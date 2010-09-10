@@ -39,6 +39,7 @@
 //        Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 // 100406 "nothingWasKnownOnHadron=1" then sample mu isotropic in CM 
 //        add two_body_reaction
+// 100909 add safty 
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -275,24 +276,21 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
 
-      aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
-                        std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
-                                  aHadron.GetMass()*aHadron.GetMass()));
+      //aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
+      //                  std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+      //                            aHadron.GetMass()*aHadron.GetMass()));
 
-/*
-      G4double p2 = ( aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-aHadron.GetMass()*aHadron.GetMass() );
+      //TK add safty 100909
+      G4double p2 = ( aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy() - aHadron.GetMass()*aHadron.GetMass() );
       G4double p = 0.0;
-      if ( p2 > 0.0 )
-      { 
-         p = std::sqrt( p ); 
-      } 
+      if ( p2 > 0.0 ) p = std::sqrt( p ); 
+
       aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*p );
-*/
 
     }
     else
     {
-      while( iLevel!=-1 && theGammas.GetLevel(iLevel)==0 ) { iLevel--; }
+      while( iLevel!=-1 && theGammas.GetLevel(iLevel) == 0 ) { iLevel--; }
     }
 
 
