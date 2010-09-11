@@ -8,10 +8,10 @@
 /run/beamOn 1
 #
 /tracking/verbose 0
-/radioActiv/event/printModulo 10000
+/rdecay1/event/printModulo 10000
 #  
 /run/beamOn 100000
 #
-/radioActiv/tracking/fullChain true
+/rdecay1/fullChain true
 #  
 /run/beamOn 100000

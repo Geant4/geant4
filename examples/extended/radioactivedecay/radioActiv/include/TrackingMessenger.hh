@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.hh,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: TrackingMessenger.hh,v 1.2 2010-09-11 18:28:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,7 +36,6 @@
 #include "G4UImessenger.hh"
 
 class TrackingAction;
-class G4UIdirectory;
 class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +51,6 @@ class TrackingMessenger: public G4UImessenger
   private:
     TrackingAction* trackingAction;
     
-    G4UIdirectory*    trackDir;              
     G4UIcmdWithABool* TrackingCmd;
 };
 

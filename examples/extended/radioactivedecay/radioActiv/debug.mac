@@ -6,7 +6,7 @@
 ##/gun/ion 10 24
 /gun/ion 77 192
 #
-/radioActiv/tracking/fullChain false
+/rdecay1/fullChain false
 #
 ###/random/resetEngineFrom ir192/run1evt3.rndm
 #  

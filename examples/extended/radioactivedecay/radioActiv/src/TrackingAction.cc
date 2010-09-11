@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.6 2010-09-07 15:59:04 maire Exp $
+// $Id: TrackingAction.cc,v 1.7 2010-09-11 18:28:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,7 +88,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   else if (charge > 2.) ih = 5;
   if (ih) histoManager->FillHisto(ih, Ekin);
   
-  //stop ion and print decay chain
+  //fullChain: stop ion and print decay chain
   //
   if (charge > 2.) {
     G4Track* tr = (G4Track*) track;
@@ -121,6 +121,12 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   size_t nbtrk = (*secondaries).size();
   if (nbtrk) {
     //there are secondaries --> it is a decay
+    //
+    //force 'single' decay
+    G4int ID = track->GetTrackID();
+    if ((!fullChain)&&(ID > 1)) G4RunManager::GetRunManager()->AbortEvent();
+    //
+    //balance    
     G4double Ebalance = - track->GetTotalEnergy();
     G4ThreeVector Pbalance = - track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
@@ -144,7 +150,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     //no secondaries --> end of chain  
     run->EventTiming(time);
     histoManager->FillHisto(8,time);                
-  }           
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

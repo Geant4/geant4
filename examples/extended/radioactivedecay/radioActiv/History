@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2010-08-27 09:50:52 maire Exp $
+$Id: History,v 1.11 2010-09-11 18:28:43 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      
+09-09-10 mma (radioActiv-V09-03-06)
+- TrackingAction : AbortEvent() in single decay mode
+- UI commands : radioActiv --> rdecay1 
+    
 27-08-10 mma (radioActiv-V09-03-05)
 - PhysicsList : time life threshold = 0. sec; no ICM; no ARM 
 - TrackingAction : save rndm event under condition

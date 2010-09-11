@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.5 2010-08-05 17:42:19 maire Exp $
+// $Id: HistoManager.cc,v 1.6 2010-09-11 18:28:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,7 @@ HistoManager::HistoManager()
   }
 #endif 
  
-  fileName[0] = "radioActiv";
+  fileName[0] = "rdecay1";
   fileType    = "root";
   fileOption  = "export=root";
   // histograms

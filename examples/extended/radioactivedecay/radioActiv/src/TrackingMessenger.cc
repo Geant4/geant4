@@ -23,17 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.cc,v 1.1 2010-06-10 18:56:24 maire Exp $
+// $Id: TrackingMessenger.cc,v 1.2 2010-09-11 18:28:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingMessenger.hh"
-
 #include "TrackingAction.hh"
 
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,10 +39,7 @@
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
 :trackingAction(trackA)
 {
-  trackDir = new G4UIdirectory("/radioActiv/tracking/");
-  trackDir->SetGuidance("tracking control");
-   
-  TrackingCmd = new G4UIcmdWithABool("/radioActiv/tracking/fullChain",this);
+  TrackingCmd = new G4UIcmdWithABool("/rdecay1/fullChain",this);
   TrackingCmd->SetGuidance("allow full decay chain");
   TrackingCmd->SetParameterName("flag",true);
   TrackingCmd->SetDefaultValue(true);
@@ -55,7 +50,6 @@ TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
 TrackingMessenger::~TrackingMessenger()
 {
   delete TrackingCmd;
-  delete trackDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

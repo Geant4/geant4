@@ -1,12 +1,12 @@
-$Id: README,v 1.6 2010-08-08 10:51:58 maire Exp $
+$Id: README,v 1.7 2010-09-11 18:28:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            radioActiv 
-                            ----------
+                            RDecay1 
+                            -------
 			    
  Survey G4RadioactiveDecay process. See Physics Reference Manual, chapter 36.
  See also http://ie.lbl.gov/decay.html
@@ -33,7 +33,7 @@ $Id: README,v 1.6 2010-08-08 10:51:58 maire Exp $
     -------
  As said above, all particles and ions behave as geantino, eg. no energy loss.
      
- A flag, /radioActiv/tracking/fullChain (false or true), allows to limit to
+ A flag, /rdecay1/fullChain (false or true), allows to limit to
  single decay (default) or full decay chain.
  
  In case of full decay chain, TrackStatus of ions is set to fStopButAlive
@@ -66,14 +66,14 @@ $Id: README,v 1.6 2010-08-08 10:51:58 maire Exp $
     --------------
  
   - compile and link to generate an executable
- 	% cd radioActiv
+ 	% cd RDecay1
  	% gmake
  		
-  - execute radioActiv in 'batch' mode from macro files
- 	% radioActiv   singleDecay.mac
+  - execute RDecay1 in 'batch' mode from macro files
+ 	% RDecay1   singleDecay.mac
  		
-  - execute radioActiv in 'interactive mode' with visualization
- 	% radioActiv
+  - execute RDecay1 in 'interactive mode' with visualization
+ 	% RDecay1
  	....
  	Idle>   ---> type your commands. For instance:
 	Idle> /control/execute debug.mac 
@@ -85,8 +85,8 @@ $Id: README,v 1.6 2010-08-08 10:51:58 maire Exp $
  7- Histograms
     ----------
  
-  radioActiv produces several 1D histograms which are saved as
-  rarioActiv.root by default.
+  RDecay1 produces several 1D histograms which are saved as
+  rdecay1.root by default.
 
       1 : energy spectrum: e+ e-
       2 : energy spectrum: nu_e anti_nu_ev
@@ -100,18 +100,18 @@ $Id: README,v 1.6 2010-08-08 10:51:58 maire Exp $
                             
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
-   /radioActiv/histo/setHisto id nbBins  valMin valMax unit 
+   /rdecay1/histo/setHisto id nbBins  valMin valMax unit 
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
    One can control the name of the histograms file with the command:
-   /radioActiv/histo/setFileName  name  (default particleGun)
+   /rdecay1/histo/setFileName  name  (default particleGun)
    
    It is possible to choose the format of the histogram file (hbook, root, XML)
-   with the command /radioActiv/histo/setFileType (root by default)
+   with the command /rdecay1/histo/setFileType (root by default)
    
    It is also possible to print selected histograms on an ascii file:
-   /radioActiv/histo/printHisto id
-   All selected histos will be written on a file name.ascii (default radioActiv)
+   /rdecay1/histo/printHisto id
+   All selected histos will be written on a file name.ascii (default RDecay1)
 
   Note that, by default, histograms are disabled. To activate them, uncomment
   the flag G4ANALYSIS_USE in GNUmakefile.
