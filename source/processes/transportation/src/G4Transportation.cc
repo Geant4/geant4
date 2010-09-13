@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.78 2007-12-07 17:07:40 japost Exp $
+// $Id: G4Transportation.cc,v 1.79 2010-09-13 17:07:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -41,6 +41,7 @@
 //
 // =======================================================================
 // Modified:   
+//   20 Nov  2008, J.Apostolakis: Push safety to helper - after ComputeSafety
 //    9 Nov  2007, J.Apostolakis: Flag for short steps, push safety to helper
 //   19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
 //   11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
@@ -60,8 +61,8 @@
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
 #include "G4SafetyHelper.hh"
-class G4VSensitiveDetector;
 #include "G4FieldManagerStore.hh"
+class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -75,10 +76,10 @@ G4Transportation::G4Transportation( G4int verboseLevel )
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
-    fUnimportant_Energy( 1 * MeV ), 
+    fUnimportant_Energy( 1 * MeV ),  // Not used
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fShortStepOptimisation(true),    // Old default: true (=fast short steps)
+    fShortStepOptimisation(false),    // Old default: true (=fast short steps)
     fVerboseLevel( verboseLevel )
 {
   G4TransportationManager* transportMgr ; 
@@ -87,23 +88,17 @@ G4Transportation::G4Transportation( G4int verboseLevel )
 
   fLinearNavigator = transportMgr->GetNavigatorForTracking() ; 
 
-#ifdef G4VERBOSE
-  G4cout << " G4Transportation constructor> set fShortStepOptimisation to "; 
-  if ( fShortStepOptimisation )  G4cout << "true"  << G4endl;
-  else                           G4cout << "false" << G4endl;
-#endif
+  // fGlobalFieldMgr = transportMgr->GetFieldManager() ;
 
   fFieldPropagator = transportMgr->GetPropagatorInField() ;
 
   fpSafetyHelper =   transportMgr->GetSafetyHelper();  // New 
 
-  // Cannot determine whether a field exists here,
-  //  because it would only work if the field manager has informed 
-  //  about the detector's field before this transportation process 
-  //  is constructed.
+  // Cannot determine whether a field exists here, as it would 
+  //  depend on the relative order of creating the detector's 
+  //  field and this process. That order is not guaranted.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  // The following assignment corrected a small memory leak (from new)
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
 
@@ -218,7 +213,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        geometryStepLength   = currentMinimumStep ;
        fGeometryLimitedStep = false ;
-       // G4cout << " Short step " << G4endl;
      }
      else
      {
@@ -232,7 +226,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
        //
        fPreviousSftOrigin = startPosition ;
        fPreviousSafety    = newSafety ; 
-       fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+       // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
 
        // The safety at the initial point has been re-calculated:
        //
@@ -311,7 +305,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      fPreviousSftOrigin = startPosition ;
      fPreviousSafety    = currentSafety ;         
-     fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
+     // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
        
      // Get the End-Position and End-Momentum (Dir-ection)
      //
@@ -414,26 +408,32 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   if( currentSafety < endpointDistance ) 
   {
-      G4double endSafety =
-               fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
-      currentSafety      = endSafety ;
-      fPreviousSftOrigin = fTransportEndPosition ;
-      fPreviousSafety    = currentSafety ; 
-      fpSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
+      // if( particleCharge == 0.0 ) 
+      //    G4cout  << "  Avoiding call to ComputeSafety : charge = 0.0 " << G4endl;
+ 
+      if( particleCharge != 0.0 ) {
 
-      // Because the Stepping Manager assumes it is from the start point, 
-      //  add the StepLength
-      //
-      currentSafety     += endpointDistance ;
+	 G4double endSafety =
+               fLinearNavigator->ComputeSafety( fTransportEndPosition) ;
+	 currentSafety      = endSafety ;
+	 fPreviousSftOrigin = fTransportEndPosition ;
+	 fPreviousSafety    = currentSafety ; 
+	 fpSafetyHelper->SetCurrentSafety( currentSafety, fTransportEndPosition);
+
+	 // Because the Stepping Manager assumes it is from the start point, 
+	 //  add the StepLength
+	 //
+	 currentSafety     += endpointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
-      G4cout.precision(12) ;
-      G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
-      G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
-             << "    and it returned safety= " << endSafety << G4endl ; 
-      G4cout << "  Adding endpoint distance " << endpointDistance 
-             << "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
+	 G4cout.precision(12) ;
+	 G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
+	 G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
+		<< "    and it returned safety= " << endSafety << G4endl ; 
+	 G4cout << "  Adding endpoint distance " << endpointDistance 
+		<< "   to obtain pseudo-safety= " << currentSafety << G4endl ; 
 #endif
+      }
   }            
 
   fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
@@ -598,7 +598,8 @@ PostStepGetPhysicalInteractionLength( const G4Track&,
 G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
                                                    const G4Step& )
 {
-  G4TouchableHandle retCurrentTouchable ;   // The one to return
+   G4TouchableHandle retCurrentTouchable ;   // The one to return
+   G4bool isLastStep= false; 
 
   // Initialize ParticleChange  (by setting all its members equal
   //                             to corresponding members in G4Track)
@@ -608,7 +609,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
 
   // If the Step was determined by the volume boundary,
   // logically relocate the particle
-  
+
   if(fGeometryLimitedStep)
   {  
     // fCurrentTouchable will now become the previous touchable, 
@@ -630,6 +631,22 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     }
     retCurrentTouchable = fCurrentTouchableHandle ;
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
+
+    // Update the Step flag which identifies the Last Step in a volume
+    isLastStep =  fLinearNavigator->ExitedMotherVolume() 
+                       | fLinearNavigator->EnteredDaughterVolume() ;
+
+#ifdef G4DEBUG_TRANSPORT
+    //  Checking first implementation of flagging Last Step in Volume
+    G4bool exiting =  fLinearNavigator->ExitedMotherVolume();
+    G4bool entering = fLinearNavigator->EnteredDaughterVolume();
+    if( ! (exiting || entering) ) { 
+    G4cout << " Transport> :  Proposed isLastStep= " << isLastStep 
+           << " Exiting "  << fLinearNavigator->ExitedMotherVolume()          
+	   << " Entering " << fLinearNavigator->EnteredDaughterVolume() 
+	   << G4endl;
+    } 
+#endif
   }
   else                 // fGeometryLimitedStep  is false
   {                    
@@ -644,7 +661,16 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     //
     fParticleChange.SetTouchableHandle( track.GetTouchableHandle() ) ;
     retCurrentTouchable = track.GetTouchableHandle() ;
+
+    isLastStep= false;
+#ifdef G4DEBUG_TRANSPORT
+    //  Checking first implementation of flagging Last Step in Volume
+    G4cout << " Transport> Proposed isLastStep= " << isLastStep
+	   << " Geometry did not limit step. " << G4endl;
+#endif
   }         // endif ( fGeometryLimitedStep ) 
+
+  fParticleChange.ProposeLastStepInVolume(isLastStep);    
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
   const G4Material* pNewMaterial   = 0 ;
