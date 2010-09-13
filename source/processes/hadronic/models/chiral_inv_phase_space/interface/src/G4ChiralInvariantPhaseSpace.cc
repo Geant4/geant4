@@ -23,8 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Created: H.-P. Wellicsh: GHAD model wrapper for the CHIPS model (1997)
+
+// Modified:
+// 24.08.10 A. Dotti (andrea.dotti@cern.ch) handle exceptions
+//          thrown by Q4QEnvironment::Fragment retying interaction
+// 17.06.10 A. Dotti (andrea.dotti@cern.ch) handle case in which 
+//          Q4QEnvironment returns a 90000000 fragment (see code comments)
+
+// Created:
 // 16.01.08 V.Ivanchenko use initialization similar to other CHIPS models
 //
 
@@ -34,6 +40,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4IonTable.hh"
 #include "G4Neutron.hh"
+#include "G4Gamma.hh"
 
 G4ChiralInvariantPhaseSpace::G4ChiralInvariantPhaseSpace()
 {}
@@ -94,37 +101,56 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
                            halfTheStrangenessOfSee,
 			   etaToEtaPrime);
   //  G4QEnvironment::SetParameters(solidAngle);
-  //  G4cout << "Input info "<< projectilePDGCode << " " 
-  //         << targetPDGCode <<" "
-  //	 << 1./MeV*proj4Mom<<" "
-  //	 << 1./MeV*targ4Mom << " "
-  //	 << nop << G4endl;
+//  G4cout << "Input info "<< projectilePDGCode << " " 
+//         << targetPDGCode <<" "
+//	 << 1./MeV*proj4Mom<<" "
+//	 << 1./MeV*targ4Mom << " "
+//	 << nop << G4endl;
   G4QHadronVector projHV;
   G4QHadron* iH = new G4QHadron(projectilePDGCode, 1./MeV*proj4Mom);
   projHV.push_back(iH);
-  G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
-  //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode,
-  //                              1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
+
+  //AND
+  //A. Dotti 24 Aug. : Trying to handle situation when G4QEnvironment::Fragment throws an exception
+  //                   Seen by ATLAS for gamma+Nuclear interaction for Gamma@2.4GeV on Al
+  //                   The poor-man solution here is to re-try interaction if a G4QException is catched
+  //                   Warning: G4QExcpetion does NOT inherit from base class G4HadException
   G4QHadronVector* output=0;
-  try
-  {
-    output = pan->Fragment();
-  }
-  catch(G4HadronicException & aR)
-  {
-    G4cerr << "Exception thrown passing through G4ChiralInvariantPhaseSpace "<<G4endl;
-    G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
-    G4cerr << " Dumping the information in the pojectile list"<<G4endl;
-    for(size_t i=0; i< projHV.size(); i++)
+
+  bool retry=true;
+  int retryes=0;
+  int maxretries=10;
+
+  while ( retry && retryes < maxretries ) 
     {
-      G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
-             <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+      G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+
+      try
+	{
+	  ++retryes;
+	  output = pan->Fragment();
+	  retry=false;//If here, Fragment did not throw! (AND)
+	}
+      catch( ... )
+	{
+	  G4cerr << "***WARNING*** Exception thrown passing through G4ChiralInvariantPhaseSpace "<<G4endl;
+	  G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
+	  G4cerr << " Dumping the information in the pojectile list"<<G4endl;
+	  for(size_t i=0; i< projHV.size(); i++)
+	    {
+	      G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+		     <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+	    }
+	  G4cerr << "Retrying interaction "<<G4endl; //AND
+	  //throw; //AND
+	}
+      delete pan;
+    } //AND
+  if ( retryes >= maxretries ) //AND
+    {
+      G4cerr << "***ERROR*** Maximum number of retries ("<<maxretries<<") reached for G4QEnvironment::Fragment(), exception is being thrown" << G4endl;
+      throw G4HadronicException(__FILE__,__LINE__,"G4ChiralInvariantPhaseSpace::ApplyYourself(...) - Maximum number of re-tries reached, abandon interaction");
     }
-    throw;
-  }
-  std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
-  projHV.clear();
-  delete pan;
   
   // Fill the particle change.
   G4DynamicParticle * theSec;
@@ -132,6 +158,8 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
   G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="
 	 <<output->size()<<G4endl;
 #endif
+
+
   unsigned int particle;
   for( particle = 0; particle < output->size(); particle++)
   {
@@ -159,17 +187,62 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,anN+aZ,0,aZ);
       if(aZ == 0 && anN == 1) theDefinition = G4Neutron::Neutron();
     }
+    //AND
+    else if ( pdgCode == 90000000 && output->operator[](particle)->Get4Momentum().m()<1*MeV )
+      {
+	//A. Dotti: 
+	//We cure the case the model returns a (A,Z)=0,0 G4QHadron with a very small mass
+	//We convert this to a gamma. According to the author of the model this is the 
+	//correct thing to do and it is done also in other parts of the CHIPS package
+	theDefinition = G4Gamma::Gamma();
+      }
+    //AND
     else
     {
       theDefinition = G4ParticleTable::GetParticleTable()
 	->FindParticle(output->operator[](particle)->GetPDGCode());
     }
+
+    //AND
+    //A. Dotti: Handle problematic cases in which one of the products has not been recognized
+    //          This should never happen but we want to add an extra-protection
+    if ( theDefinition == NULL )
+      {
+	//If we arrived here something bad really happened. We do not know how to handle the products of the interaction, we give up, resetting the 
+	//result and keeping the primary alive.
+	G4cerr<<"**WARNING*** G4ChiralInvariantPhaseSpace::ApplyYourself(...) : G4QEnvironment::Fragment() returns an invalid fragment\n with fourMom(MeV)=";
+	G4cerr<<output->operator[](particle)->Get4Momentum()<<" and mass(MeV)="<<output->operator[](particle)->Get4Momentum().m();
+	G4cerr<<". Offending PDG is:"<<pdgCode<<" abandon interaction. \n Taget PDG was:"<<targetPDGCode<<" \n Dumping the information in the projectile list:\n";
+	for(size_t i=0; i< projHV.size(); i++)
+	  {
+	    G4cerr <<" Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+		 <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<"\n";
+	  }
+	G4cerr<<"\n Please report as bug \n***END OF MESSAGE***"<<G4endl;
+
+	for ( unsigned int cparticle=0 ; cparticle<output->size();++cparticle)
+	  delete output->operator[](cparticle);
+	delete output;
+	std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
+	projHV.clear();
+
+	aResult->Clear();
+	aResult->SetStatusChange(isAlive);
+	aResult->SetEnergyChange(aTrack.GetKineticEnergy());
+        aResult->SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+	return aResult;
+      }
+    //AND
+
+
     theSec->SetDefinition(theDefinition);
     theSec->SetMomentum(output->operator[](particle)->Get4Momentum().vect());
     aResult->AddSecondary(theSec); 
     delete output->operator[](particle);
   }
   delete output;
+  std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
+  projHV.clear();
   return aResult;
 }
 

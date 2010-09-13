@@ -11,6 +11,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+13-Sep-2010 A. Dotti                           (hadr-chips-inter-V09-03-01)
+---------------------------------------------------------------------------
+Handle exceptions thrown by Q4QEnvironment::Fragment retying interaction
+Hndle case in which Q4QEnvironment returns a 90000000 fragmen. Convert it to 
+a gamma
 
 25-May-2010 M.Kosov                            (hadr-chips-inter-V09-03-00)
 ---------------------------------------------------------------------------
