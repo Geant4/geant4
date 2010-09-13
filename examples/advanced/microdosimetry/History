@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.18 2010-08-31 11:25:38 vnivanch Exp $
+$Id: History,v 1.19 2010-09-13 08:42:59 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.18 2010-08-31 11:25:38 vnivanch Exp $
 
                        Package History file
                        --------------------
+
+13 September 2010 - S. Incerti - microdosimetry-V09-03-05
+- added new G4DNA electron processes
+- updated SteppingAction and plot.C accordingly
 
 31 August 2010 - V.Ivanchenko - microdosimetry-V09-03-04
 - added electron capture process inside the target

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.12 2010-08-31 11:23:58 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.13 2010-09-13 08:42:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,7 +118,6 @@ void PhysicsList::ConstructProcess()
 #include "G4DNAScreenedRutherfordElasticModel.hh"
 
 #include "G4DNAExcitation.hh"
-#include "G4DNAEmfietzoglouExcitationModel.hh"
 #include "G4DNAMillerGreenExcitationModel.hh"
 #include "G4DNABornExcitationModel.hh"
 
@@ -131,6 +130,14 @@ void PhysicsList::ConstructProcess()
 
 #include "G4DNAChargeIncrease.hh"
 #include "G4DNADingfelderChargeIncreaseModel.hh"
+
+#include "G4DNAAttachment.hh"
+#include "G4DNAMeltonAttachmentModel.hh"
+
+#include "G4DNAVibExcitation.hh"
+#include "G4DNASancheExcitationModel.hh"
+
+//
 
 #include "G4LossTableManager.hh"
 #include "G4EmConfigurator.hh"
@@ -163,7 +170,10 @@ void PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-    // Processes for the world
+    // ***************************
+    // 1) Processes for the world
+    // ***************************
+
     if (particleName == "e-") {
 
       // msc is active in the world
@@ -190,9 +200,21 @@ void PhysicsList::ConstructEM()
       dnaioni->SetModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnaioni);
 
+      // DNA attachment is not active in the world 
+      G4DNAAttachment* dnaatt = new G4DNAAttachment("e-_G4DNAAttachment");
+      dnaatt->SetModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaatt);
+
+      // DNA vib. excitation is not active in the world 
+      G4DNAVibExcitation* dnavib = new G4DNAVibExcitation("e-_G4DNAVibExcitation");
+      dnavib->SetModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnavib);
+
+      // THE FOLLOWING PROCESS WILL KILL ALL ELECTRONS BELOW A GIVEN ENERY THRESHOLD
       // Capture of low-energy e-
-      G4ElectronCapture* ecap = new G4ElectronCapture("Target", 11.01*eV);
+      G4ElectronCapture* ecap = new G4ElectronCapture("Target", 5.1*eV);
       pmanager->AddDiscreteProcess(ecap);
+
      	    
     } else if ( particleName == "proton" ) {
 
@@ -287,7 +309,10 @@ void PhysicsList::ConstructEM()
     }
   }
 
-  // Define processes for Target volume 
+  // **************************************
+  // 2) Define processes for Target volume 
+  // **************************************
+
   G4double standEnergyLimit = 9.9*MeV;
   G4double massFactor = 1.0079/4.0026;
   G4EmConfigurator* em_config = G4LossTableManager::Instance()->EmConfigurator();
@@ -308,6 +333,10 @@ void PhysicsList::ConstructEM()
   em_config->SetExtraEmModel("e-","e-_G4DNAIonisation",mod,"Target",11*eV,1*MeV);
   mod = new G4DNABornExcitationModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAExcitation",mod,"Target",9*eV,1*MeV);
+  mod = new G4DNAMeltonAttachmentModel();
+  em_config->SetExtraEmModel("e-","e-_G4DNAAttachment",mod,"Target",4*eV,13*eV);
+  mod = new G4DNASancheExcitationModel();
+  em_config->SetExtraEmModel("e-","e-_G4DNAVibExcitation",mod,"Target",0.025*eV,100*eV);
 
   // proton
   mod = new G4BraggIonGasModel();

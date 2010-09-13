@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.3 2009-04-29 14:17:03 sincerti Exp $
+// $Id: plot.C,v 1.4 2010-09-13 08:42:59 sincerti Exp $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -37,15 +37,15 @@ c1.cd(1);
   gStyle->SetOptStat(000000);
   ntuple->Draw("process","");
   ntuple->SetFillColor(2);
-  ntuple->Draw("process","process==12||process==14||process==19||process==22||process==26","same");
+  ntuple->Draw("process","process==12||process==15||process==17||process==22||process==25||process==29","same");
   ntuple->SetFillColor(3);
   ntuple->Draw("process","process==11","same");
   ntuple->SetFillColor(4);
-  ntuple->Draw("process","process==13||process==15||process==17||process==20||process==23||process==27","same");
+  ntuple->Draw("process","process==13||process==18||process==20||process==23||process==26||process==30||process==32||process==33","same");
   ntuple->SetFillColor(5);
-  ntuple->Draw("process","process==16||process==21||process==24","same");
+  ntuple->Draw("process","process==19||process==24||process==27","same");
   ntuple->SetFillColor(6);
-  ntuple->Draw("process","process==18||process==25||process==28","same");
+  ntuple->Draw("process","process==21||process==28||process==31","same");
   
   gPad->SetLogy();
   htemp->GetXaxis()->SetLabelSize(0.025);
@@ -57,23 +57,15 @@ c1.cd(1);
   htemp->GetYaxis()->SetTitleOffset(1.4);
   htemp->GetXaxis()->SetTitle("Process");
   htemp->GetYaxis()->SetTitle("");
-  htemp->SetTitle("Geant4-DNA Processes");
+  htemp->SetTitle("Processes");
 
 c1.cd(2);
-  ntuple->SetMarkerColor(1);
-  ntuple->Draw("x:y:z/1000","");
-
   ntuple->SetMarkerColor(2);
-  ntuple->Draw("x:y:z/1000","process==12||process==14||process==19||process==22||process==26","same");
-  ntuple->SetMarkerColor(3);
-  ntuple->Draw("x:y:z/1000","process==11","same");
+  ntuple->Draw("x:y:z/1000","part==1");
 
   ntuple->SetMarkerColor(4);
-  ntuple->Draw("x:y:z/1000","process==13||process==15||process==17||process==20||process==23||process==27","same");
-  ntuple->SetMarkerColor(5);
-  ntuple->Draw("x:y:z/1000","process==16||process==21||process==24","same");
-  ntuple->SetMarkerColor(6);
-  ntuple->Draw("x:y:z/1000","process==18||process==25||process==28","same");
+  ntuple->SetMarkerSize(4);
+  ntuple->Draw("x:y:z/1000","part==5","same");
 
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);

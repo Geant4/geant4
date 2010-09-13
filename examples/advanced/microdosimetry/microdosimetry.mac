@@ -1,9 +1,8 @@
-/tracking/storeTrajectory 1
-
 #/control/execute vis.mac
-
 /tracking/verbose 0
-
-/run/verbose 0
-
+/run/verbose 2
+/process/eLoss/verbose 1
+/gun/particle alpha+
+/gun/energy 50 MeV
+/run/initialize
 /run/beamOn 1
