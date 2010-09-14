@@ -18,10 +18,11 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.3.p02
 
 Summarised, the list of changes is the following:
 
-config                                           config-V09-03-02
+config                                           config-V09-03-02            (+)
 ------
 - Updated internal scripts for Configure: protected echos on LD_LIBRARY_PATH
   so that output from use of Configure post-install is clean.
@@ -47,7 +48,7 @@ geometry/solids/Boolean                          geom-bool-V09-03-00
   Helps in reducing the number of cases of "Error in Boolean processor" for
   visualization; still some stubborn cases are left.
 
-geometry/solids/specific                         geom-specific-V09-03-03
+geometry/solids/specific                         geom-specific-V09-03-03     (+)
 ------------------------
 - Fix in G4TriangularFacet and G4TessellatedSolid to correct treatment of
   optical photon transport related to internal reflection at surface.
@@ -92,7 +93,7 @@ particles                                        particles-V09-03-03
 - Fixed problems that error messages appear in cout and not in cerr.
 - Code cleanup in G4DynamicParticle constructors.
 
-persistency/gdml                                 gdml-V09-03-02
+persistency/gdml                                 gdml-V09-03-02              (+)
 ----------------
 - Corrected dump of division axis in GDML writer.
 
@@ -107,7 +108,7 @@ physics_lists                                    phys-lists-V09-03-03
 
 processes/electromagnetic/standard               emstand-V09-03-11
 ----------------------------------
-- G4eBremsstrahlungModel: fix in SelectRandomAtom() method.
+- G4eBremsstrahlungModel: fix in SelectRandomAtom() method.                  (+)
   Addressing problem report #1115.
 - G4UrbanMscModel93: added randomization of step limit for the first step in
   any volume.
@@ -124,7 +125,7 @@ processes/hadronic
   o G4Diproton, G4Dineutron, G4UnboundPN: fixed issue with FTFP de-excitation,
     which occasionally may pick up these 'internal' particles and put it onto
     a final-state particle list by mistake.
-- models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-03)
+- models/chiral_inv_phase_space/body (hadr-chips-body-V09-03-03)             (+)
   o Bug fix in G4QNucleus::ChoosePosition() for looping.
 - models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-03-00)
   o Fix to use of Z+N instead of N for A.
@@ -185,7 +186,7 @@ processes/hadronic
     Minor speedup by adding member and access method to GroundStateMass.
     Some code cleanup: single return in inline methods.
 
-processes/optical                                op-V09-03-02
+processes/optical                                op-V09-03-02                (+)
 -----------------
 - Fixed sampling of 'theFacetNormal' for 'polishedbackpainted' material
   in G4OpBoundaryProcess::DielectricDielectric() method. Address problem
@@ -201,7 +202,7 @@ examples                                         examples-V09-03-05
 - Updated reference outputs.
 - advanced/amsEcal (amsEcal-V09-03-00)
   o Introduction of G4UIExecutive in main().
-- advanced/human_phantom (human_phantom-V09-03-00)
+- advanced/human_phantom (human_phantom-V09-03-00)                           (+)
   o Added missing includes, causing compilation error.
   o Migrated multiple-scattering process in physics-list to particle-based
     (e+/e-) multiple-scattering.
@@ -257,7 +258,7 @@ examples                                         examples-V09-03-05
   o exMPI01: use G4UIcsh instead of G4UItcsh since OpenMPI is now default; 
     use G4eMultipleScattering instead of obsolete G4MultipleScattering.
   o exMPI02: use G4UIcsh instead of G4UItcsh since OpenMPI is now default.
-- extended/radioactivedecay/exrdm (exrdm-V09-03-00)
+- extended/radioactivedecay/exrdm (exrdm-V09-03-00)                          (+)
   o Replaced G4MultipleScattering by particle specialized processes.
 
 tests                                            tests-V09-03-05

@@ -20,15 +20,16 @@ Some of the development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 9.3.p01
+(+)  Fixes included in release 9.3.p02
 
 Summarised, the list of changes is the following:
 
-event                                            event-V09-03-01
+event                                            event-V09-03-01             (+)
 -----
 - Improved logic in G4PrimaryTransformer. Addressing problem report #1101.
 - Fixed compilation warning in G4SmartTrackStack issued with gcc 4.5.0.
 
-geometry/solids/specific                         geom-specific-V09-03-02
+geometry/solids/specific                         geom-specific-V09-03-02     (+)
 ------------------------
 - G4ExtrudedSolid: eliminated requirement for clockwise ordering of polygon
   vertices. Added a check for vertices ordering; if vertices are defined
@@ -41,14 +42,14 @@ geometry/volumes                                 geomvol-V09-03-06
   G4NavigatorHistory, globally controlling the memory pool.
   Measured ~2% average run-time speed-up.
 - Adopth assign() in G4NavigatorHistory copy-constructor.                    (o)
-- Added Reset() method to G4ReflectionFactory for clearing maps of
+- Added Reset() method to G4ReflectionFactory for clearing maps of           (+)
   constituent and reflected volumes.
 
 global                                           global-V09-03-04
 ------
 - Changed date for release 9.3.p01.                                          (o)
 
-interfaces                                       interfaces-V09-03-00
+interfaces                                       interfaces-V09-03-00        (+)
 ----------
 - Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
   allow for porting on gcc-4.5.0.
@@ -69,7 +70,7 @@ physics_lists                                    phys-lists-V09-03-01
 -------------
 - LBE: substituted obsolete G4MultipleScattering by particle wise processes.
 
-processes/electromagnetic/adjoint                emadjoint-V09-03-00
+processes/electromagnetic/adjoint                emadjoint-V09-03-00         (+)
 ---------------------------------
 - G4AdjointhMultipleScattering: removed unused header.
 
@@ -96,7 +97,7 @@ processes/electromagnetic/standard               emstand-V09-03-09
 - G4ASTARStopping, G4PSTARTStopping: replaced C-arrays with G4PhysicsVector
   with Spline interpolation. Reviewed names of materials (G4_PHOTO_EMULSION,
   G4_He, G4_NYLON-6-6).
-- Fixed G4_O data in G4ASTARStopping. Fixed G4_Pt and G4_PROPANE data in
+- Fixed G4_O data in G4ASTARStopping. Fixed G4_Pt and G4_PROPANE data in     (+)
   G4PSTARStopping.
 - Cleanup in GetElectronicDEDX() method in G4WaterStopping.
 - G4eMultipleScattering, G4hMultipleScattering: improved printout at
@@ -138,10 +139,10 @@ processes/hadronic
 - models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-03)
   o Implementated isotope wise CHIPS elastic for neutrons.
   o Fix in G4QElasticCrossSection in parameter order for nH. 
-- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-04)
+- models/chiral_inv_phase_space/fragmentation (hadr-chips-frag-V09-03-04)    (+)
   o Fix for run-time warning on Windows.
 - models/de_excitation (hadr-deex-V09-03-06)
-  o Fixed numerical problem (division by zero) in G4GEMProbability.
+  o Fixed numerical problem (division by zero) in G4GEMProbability.          (+)
   o G4ExcitationHandler: enabled Multi-Fragmentation model.
   o G4StatMFMacroTemperature: cleanup logic of solving equation for
     temperature; moved constructors and destructor to source.
@@ -153,9 +154,9 @@ processes/hadronic
   o Nuclear deformation and shell effect data reader now constructs the
     corresponding data tables correctly.
   o Added some internal logging facilities to INCL (disabled by default).
-- models/neutron_hp (hadr-hpn-V09-03-03)
+- models/neutron_hp (hadr-hpn-V09-03-03)                                     (+)
   o Modified sampling in G4NeutronHPInelasticCompFS.
-  o  Fix bug about incidence energy in G4NeutronHPEnAngCorrelation.
+  o Fix bug about incidence energy in G4NeutronHPEnAngCorrelation.
 - models/pre_equilibrium (hadr-pre-V09-03-04)
   o G4PreCompoundProton, G4PreCompoundDeuteron, G4PreCompoundTriton,
     G4PreCompoundHe3, G4PreCompoundAlpha: return back to published variant OPT3
@@ -164,7 +165,7 @@ processes/hadronic
   o Added interface for integer A&Z to G4Nucleus, and modified G4LightMedia,
     G4HadronicWhiteBoard and G4ReactionDynamics to use the new interface.
 
-processes/optical                                op-V09-03-01
+processes/optical                                op-V09-03-01                (+)
 -----------------
 - Fix for backpainted surfaces to avoid applying twice reflectivity.
   Addressing problem report #1114.
@@ -182,7 +183,7 @@ data sets
 examples                                         examples-V09-03-04
 --------
 - Updated reference outputs.
-- advanced/Rich (Rich-V09-03-00)
+- advanced/Rich (Rich-V09-03-00)                                             (+)
   o Updated physics-lists to use particle-based multiple-scattering processes.
 - extended/analysis/N03Con (exampleN03Con-V09-03-00)                                     (o)
   o Updated physics-lists as for in novice exampleN03.
@@ -193,7 +194,7 @@ examples                                         examples-V09-03-04
   o Introduction of G4UIExecutive in main().
 - extended/electromagnetic/TestEm3 (testem3-V09-03-01)
   o PhysicsList: removed inclusion of obsolete header.
-- extended/electromagnetic/TestEm6 (testem6-V09-03-00)
+- extended/electromagnetic/TestEm6 (testem6-V09-03-00)                       (+)
   o PhysicsList: removed obsolete multiple-scattering from comments.
 - extended/electromagnetic/TestEm8 (testem8-V09-03-00)
   o Use pointer to G4EmConfigurator and not as data member.
@@ -209,13 +210,13 @@ examples                                         examples-V09-03-04
   o Updated README.
 - extended/exoticphysics/monopole (monopole-V09-03-01)
   o PhysicsList: removed inclusion of obsolete header.
-- extended/field/field01 (fieldex01-V09-03-01)
-- extended/field/field02 (fieldex02-V09-03-01)
-- extended/field/field03 (fieldex03-V09-03-01)
+- extended/field/field01 (fieldex01-V09-03-01)                               (+)
+- extended/field/field02 (fieldex02-V09-03-01)                               (+)
+- extended/field/field03 (fieldex03-V09-03-01)                               (+)
   o Removed unused pointers to G4MultipleScattering left.
-- extended/runAndEvent/RE01 (exampleRE01-V09-03-00)
-- extended/runAndEvent/RE02 (exampleRE02-V09-03-00)
-- extended/runAndEvent/RE03 (exampleRE03-V09-03-00)
+- extended/runAndEvent/RE01 (exampleRE01-V09-03-00)                          (+)
+- extended/runAndEvent/RE02 (exampleRE02-V09-03-00)                          (+)
+- extended/runAndEvent/RE03 (exampleRE03-V09-03-00)                          (+)
   o Updated physics-lists to use particle-based multiple-scattering processes.
 
 tests                                            tests-V09-03-04

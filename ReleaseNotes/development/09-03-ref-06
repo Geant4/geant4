@@ -24,26 +24,27 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.3.p02
 
 Summarised, the list of changes is the following:
 
 config                                           config-V09-03-05
 ------
 - Configure (Configure-V09-03-04)
-  o Fixed selection of XERCESCROOT path for Windows.
-  o Added quoting of uname in Qt.U to prevent Power Mac problems.
-  o Added removal of quotes from make version string to handle non-English
+  o Fixed selection of XERCESCROOT path for Windows.                         (+)
+  o Added quoting of uname in Qt.U to prevent Power Mac problems.            (+)
+  o Added removal of quotes from make version string to handle non-English   (+)
     language systems.
   o Added new data set G4NEUTRONXS (Evaluated neutron cross section data,
     version 1.0).
   o Updated data set G4EMLOW to version 6.13.
 - Removed 'leading_particle' hadronic module from include paths list.
-- Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding
+- Increased stack size on WIN32-VC setup (i.e. 8MB as on Linux), adding      (+)
   the option to LDFLAGS.
 
 digits_hits/utils                                detutils-V09-03-00
 -----------------
-- Added missing virtual destructor to G4VScoringMesh and removed unnecessary
+- Added missing virtual destructor to G4VScoringMesh and removed unnecessary (+)
   virtual qualifiers to G4ScoringBox.
 
 environments                                     envs-V09-03-01
@@ -58,19 +59,19 @@ environments                                     envs-V09-03-01
 
 event                                            event-V09-03-03
 -----
-- Removed obsolete CLHEP_HepMC option from G4EventManager class.
+- Removed obsolete CLHEP_HepMC option from G4EventManager class.             (+)
 
 geometry/solids/specific                         geom-specific-V09-03-08
 ------------------------
 - Introducing new G4GenericTrap shape, a new solid representing an arbitrary
   trapezoid with up to 8 vertices standing on two parallel planes perpendicular
   to the Z axis.
-- Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone
+- Fixed deletion of internal arrays in CreatePolyhedron() for G4Polycone     (+)
   and G4Polyhedra.
 
 global                                           global-V09-03-08
 ------
-- More safe numerical computation of A13() and logA() methods in G4Pow.
+- More safe numerical computation of A13() and logA() methods in G4Pow.      (+)
 - Restored G4PVDataVector vectors in G4PhysicsVector owned by value instead
   of pointers, as originally was in released code.
 - Changed date for release 9.4-beta.
@@ -96,9 +97,9 @@ interfaces                                       interfaces-V09-03-11
 particles                                        particles-V09-03-05
 ---------
 - Added anti-nuclei as short-lived particles.
-- G4MuonRadiativeDecayChannelWithSpin: corrected sign error.
+- G4MuonRadiativeDecayChannelWithSpin: corrected sign error.                 (+)
 
-persistency/ascii                                ascii-V09-03-00
+persistency/ascii                                ascii-V09-03-00             (+)
 -----------------
 - Added missing virtual destructor to G4tgbDetectorBuilder.
 
@@ -150,9 +151,9 @@ processes/electromagnetic/lowenergy              emlowen-V09-03-35
 - Modified initialisation of e- Emfietzoglou excitation model in
   G4DNAEmfietzoglouExcitationModel and in G4DNAMillerGreenExcitationModel,
   fixing memory leaks.
-- Fix in G4AugerTransition to cure crash on Windows.
+- Fix in G4AugerTransition to cure crash on Windows.                         (+)
 - Added missing virtual destructors where necessary.
-- Corrected return value case in method GetPhotoElectronDirection() in
+- Corrected return value case in method GetPhotoElectronDirection() in       (+)
   G4PhotoElectricAngularGeneratorSauterGavrila.
   Addressing problem report #1120.
 
@@ -161,7 +162,7 @@ processes/electromagnetic/muons                  emmuons-V09-03-01
 - G4MuPairProductionModel: added sampling recoil of a primary particle
 - G4MuIonisation: use G4ICRU73QOModel for mu- for E< 0.2 MeV.
 
-processes/electromagnetic/polarisation           empolar-V09-03-00
+processes/electromagnetic/polarisation           empolar-V09-03-00           (+)
 --------------------------------------
 - Fix in G4ePolarizedIonisation to use default vector size of
   G4VEnergyLossProcess and avoid size mismatch in G4LossTableBuilder.
@@ -260,7 +261,7 @@ processes/hadronic                               hadr-V09-03-00
   o G4VPreCompoundModel: moved constructor and destructor to source.
 - models/parton_string/diffraction (hadr-string-diff-V09-03-01)
   o Added missing virtual destructor to G4DiffractiveHHScatterer.
-- models/parton_string/hadronization (had-hadronization-V09-03-00)
+- models/parton_string/hadronization (had-hadronization-V09-03-00)           (+)
   o Improved Lund string fragmentation.
   o Fixed inconsistency between LightFragmentationTest and Lund fragmentation.
   o Fixed problems of energy non-conservation in FTF.
@@ -295,7 +296,7 @@ processes/optical                                op-V09-03-03
   a photon is in 'fStopAndKill' state because of NoRINDEX. This will trigger
   scoring when a photon encounters a volume not defined as an optical medium.
 
-run                                              run-V09-03-01
+run                                              run-V09-03-01               (+)
 ---
 - Corrected printing of number of events processed on run abortion.
 - Fixed definition of path for Windows in G4RunManager for random seeds
@@ -379,7 +380,7 @@ examples                                         examples-V09-03-06
 - advanced/brachytherapy (brachy-V09-03-01)
 - advanced/hadrontherapy (hadrontherapy-V09-03-04)
   o Use G4UIExecutive and some minor revisions.
-- advanced/human_phantom (human_phantom-V09-03-02)
+- advanced/human_phantom (human_phantom-V09-03-02)                           (+)
   o Migrated physics-lists.
 - advanced/microbeam (microbeam-V09-03-06)
   o Added option "ionGasModel" to the physics-list.
@@ -417,7 +418,7 @@ examples                                         examples-V09-03-06
     a DrawTrajectory() method.
 - examples/extended/persistency/gdml/G01 (G01-V09-03-03)
   o Added G4GenericTrap to the solids.gdml sample.
-- examples/extended/persistency/gdml/G03 (G03-V09-03-03)
+- examples/extended/persistency/gdml/G03 (G03-V09-03-03)                     (+)
   o Corrected selection of G4UItcsh in main(), to fix problem on Windows.
 - examples/novice/N04 (exampleN04-V09-03-01)
   o Replaced QGSP list with QGSP_BERT.

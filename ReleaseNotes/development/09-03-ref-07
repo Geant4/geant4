@@ -18,18 +18,19 @@ Some of the development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.3.p02
 
 Summarised, the list of changes is the following:
 
 config                                           config-V09-03-06
 ------
-- Simplified QTLIBPATH setup in Linux-g++.gmk.
+- Simplified QTLIBPATH setup in Linux-g++.gmk.                               (+)
 
 event                                            event-V09-03-04
 -----
-- Fixed electron mass correction for ions in G4PrimaryTransformer.
+- Fixed electron mass correction for ions in G4PrimaryTransformer.           (+)
 
-geometry/biasing                                 geombias-V09-03-00
+geometry/biasing                                 geombias-V09-03-00          (+)
 ----------------
 - G4IStore: corrected use of internal cell-importance iterator to avoid
   invalidation in methods GetImportance().
@@ -40,7 +41,7 @@ geometry/biasing                                 geombias-V09-03-00
 - Fixed initialization of data in copy-constructor for G4GeometryCell
   and corrected mispelled name for data member pointer.
 
-geometry/divisions                               geomdiv-V09-03-00
+geometry/divisions                               geomdiv-V09-03-00           (+)
 ------------------
 - Improved logic in G4PVDivision constructors and in method
   G4PVDivisionFactory::CreatePVDivision() in case of invalid construct.
@@ -53,7 +54,7 @@ geometry/divisions                               geomdiv-V09-03-00
 - Get rid of unnecessary virtual specification for leaf classes in the
   hierarchy.
 
-geometry/magneticfield                           field-V09-03-01
+geometry/magneticfield                           field-V09-03-01             (+)
 ----------------------
 - Fixed cases of memory corruption in G4RKG3_Stepper.
 - Fixed case of unused array data member in G4ExactHelixStepper.
@@ -61,7 +62,7 @@ geometry/magneticfield                           field-V09-03-01
 - Fixed initialization in G4NystromRK4 constructor.
 - Added dummy initialization of data members in constructors.
 
-geometry/management                              geommng-V09-03-03
+geometry/management                              geommng-V09-03-03           (+)
 -------------------
 - Fixed compilation errors for code within G4GEOMETRY_VOXELDEBUG flag
   in G4GeometryManager and G4SmartVoxelHeader.
@@ -79,7 +80,7 @@ geometry/management                              geommng-V09-03-03
 - G4ReflectedSolid: moved reserve() statement for 'vertices' within null-check
   condition in CalculateExtent().
 
-geometry/navigation                              geomnav-V09-03-02
+geometry/navigation                              geomnav-V09-03-02           (+)
 -------------------
 - Fix in G4GeomTestSegment::FindSomePoints(), to address problem report #980.
 - Fixed array out of bound error in G4MultipleNavigator and G4PathFinder
@@ -100,32 +101,31 @@ geometry/solids/Boolean                          geom-bool-V09-03-01
 
 geometry/solids/CSG                              geom-csg-V09-03-05
 -------------------
-- G4Torus: fix in DistanceToOut(p,v,...) to address problem report #1081.
+- G4Torus: fix in DistanceToOut(p,v,...) to address problem report #1081.    (+)
   Fixed call to internal method for finding roots, to avoid copy
   of sdt::vector() by parameters. Some cleanup to avoid unnecessary protected
   section and virtual table.
-- Fixed condition in G4Tubs::Inside(p) for point on surface.
-- Corrected use of std::fabs() in place of std::abs() in G4Tubs, G4Cons,
+- Fixed condition in G4Tubs::Inside(p) for point on surface.                 (+)
+- Corrected use of std::fabs() in place of std::abs() in G4Tubs, G4Cons,     (+)
   G4Sphere and G4Torus. Use pre-computed half-tolerance constants in G4Torus.
-- Improved initialisation logic in several constructors.
-- Corrected cases of not-restored cout precision in several classes.
-- G4Torus: 
+- Improved initialisation logic in several constructors.                     (+)
+- Corrected cases of not-restored cout precision in several classes.         (+)
 
 geometry/solids/specific                         geom-specific-V09-03-08
 ------------------------
-- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement
+- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement (+)
   with canonical form.
-- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.
-- Use INT_MAX as initialisation for max limits in G4SolidExtentList.
-- Added dummy initialization of data members in constructors.
-- Fixed potential case of dereferencing null pointer in methods
+- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.     (+)
+- Use INT_MAX as initialisation for max limits in G4SolidExtentList.         (+)
+- Added dummy initialization of data members in constructors.                (+)
+- Fixed potential case of dereferencing null pointer in methods              (+)
   G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
   and G4VCSGfaceted::DistanceToOut(p,v).
-- Fixed unecessary object copy as argument in method
+- Fixed unecessary object copy as argument in method                         (+)
   G4PolyhedraSide::IntersectSidePlane().
-- Fixed possible case of derefencing null pointer in G4ReduciblePolygon
+- Fixed possible case of derefencing null pointer in G4ReduciblePolygon      (+)
   RemoveDuplicateVertices() and RemoveRedundantVertices() methods.
-- Replaced calls to std::abs() with std::fabs() where suitable.
+- Replaced calls to std::abs() with std::fabs() where suitable.              (+)
 
 geometry/volumes                                 geomvol-V09-03-07
 ----------------
@@ -141,10 +141,10 @@ global                                           global-V09-03-12
 - G4AllocatorPool: moved dummy copy constructor to private section.
 - Added methods logfactorial() and powN() to G4Pow class.
 - G4UnitsTable: added new category "Solid angle".
-- Added INT_MAX and INT_MIN portability macros in templates.hh.
-- Fixed cases of invalidated iterator in G4StateManager.
+- Added INT_MAX and INT_MIN portability macros in templates.hh.              (+)
+- Fixed cases of invalidated iterator in G4StateManager.                     (+)
 - Fixed restoring of cout/cerr formatting in G4DataVector, G4PhysicsVector.
-- Added dummy initialization of data members in constructors.
+- Added dummy initialization of data members in constructors.                (+)
 - Added experimental code for MacOSX in G4FPEDetection.hh.
 
 intercoms                                        intercoms-V09-03-02
@@ -156,16 +156,16 @@ intercoms                                        intercoms-V09-03-02
 
 particles                                        particles-V09-03-08
 ---------
-- Fixed logic bug in G4ExcitedMesonConstructor::Add3PiMode().
+- Fixed logic bug in G4ExcitedMesonConstructor::Add3PiMode().                (+)
 - Added G4DynamicParticle::GetParticleDefinition() giving 'const' pointer.
 - Code clean up to use const pointer of G4ParticleDefinition where possible.
 
 persistency/gdml                                 gdml-V09-03-04
 ----------------
-- Fixed printout of unit in G4GDMLWriteStructure for replicas and divisions,
+- Fixed printout of unit in G4GDMLWriteStructure for replicas and divisions, (+)
   in the case of angles.
 
-persistency/mctruth                              mctruth-V09-03-00
+persistency/mctruth                              mctruth-V09-03-00           (+)
 -------------------
 - Fixed recursive header inclusion in G4PersistencyCenter class.
 - Added dummy initialization of data members in constructors.
@@ -186,7 +186,7 @@ physics_lists                                    phys-lists-V09-03-22
   Corrected obsolete constructor of G4HadronElasticPhysics in header.
 - Removed inclusion of obsolete G4ParticleWithCut header in several files.
 
-processes/biasing                                procbiasing-V09-03-00
+processes/biasing                                procbiasing-V09-03-00       (+)
 -----------------
 - G4WeightWindowProcess: corrected call to G4WeightWindowStore::GetLowerWeight()
   after correction of mispelled name.
@@ -263,13 +263,13 @@ processes/hadronic
   o Bug fix in 'body' module following tests on HARP data.
   o G4QEnvironment: PDG=0 bug fix; photon and safety corrections similar
     to those made in 9.2.p02.
-- models/neutron_hp (hadr-hpn-V09-03-05)
+- models/neutron_hp (hadr-hpn-V09-03-05)                                     (+)
   o Added safety for zero length cross-section table in
     G4NeutronHPFissionData. Addressing problem report #1118.
   o Added model name in constructor of G4NeutronHPThermalScattering.
     Addressing problem report #1116.
 
-run                                              run-V09-03-02
+run                                              run-V09-03-02               (+)
 ---
 - Added dummy initialisation of data members in constructors.
 - Use canonical form for exceptions in G4RunManager and added dummy return
@@ -317,7 +317,7 @@ examples                                         examples-V09-03-07
 - extended/field/field03 (fieldex03-V09-03-04)
 - extended/geometry/g3tog4 (g3tog4Tests-V09-03-02)
   o Removed inclusion of obsolete G4ParticleWithCuts header.
-- extended/geometry/olap (olap-V09-03-02)
+- extended/geometry/olap (olap-V09-03-02)                                    (+)
   o Fixed compilation error for setting of kRadTolerance.
   o Removed inclusion of obsolete G4ParticleWithCuts header.
 - extended/hadronic/Hadr01 (exhadr01-V09-03-07)
