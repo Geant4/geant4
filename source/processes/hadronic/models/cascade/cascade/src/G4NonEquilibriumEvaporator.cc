@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.38 2010-07-24 06:18:55 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.39 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,8 @@
 // 20100714  M. Kelsey -- Move conservation checking to base class
 // 20100719  M. Kelsey -- Simplify EEXS calculations with particle evaporation.
 // 20100724  M. Kelsey -- Replace std::vector<> D with trivial D[3] array.
+// 20100914  M. Kelsey -- Migrate to integer A and Z: this involves replacing
+//		a number of G4double terms with G4int, with consequent casts.
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4CollisionOutput.hh"
@@ -75,8 +77,8 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     target->printParticle();
   }
   
-  const G4double a_cut = 5.0;
-  const G4double z_cut = 3.0;
+  const G4int a_cut = 5;
+  const G4int z_cut = 3;
 
   const G4double eexs_cut = 0.1;
 
@@ -85,8 +87,8 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
   const G4double width_cut = 0.005;
 
-  G4double A = nuclei_target->getA();
-  G4double Z = nuclei_target->getZ();
+  G4int A = nuclei_target->getA();
+  G4int Z = nuclei_target->getZ();
   
   G4LorentzVector PEX = nuclei_target->getMomentum();
   G4LorentzVector pin = PEX;		// Save original four-vector for later
@@ -95,14 +97,14 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   
   G4ExitonConfiguration config = nuclei_target->getExitonConfiguration();  
   
-  G4double QPP = config.protonQuasiParticles;
-  G4double QNP = config.neutronQuasiParticles; 
-  G4double QPH = config.protonHoles;
-  G4double QNH = config.neutronHoles; 
+  G4int QPP = config.protonQuasiParticles;
+  G4int QNP = config.neutronQuasiParticles; 
+  G4int QPH = config.protonHoles;
+  G4int QNH = config.neutronHoles; 
   
-  G4double QP = QPP + QNP;
-  G4double QH = QPH + QNH;
-  G4double QEX = QP + QH;
+  G4int QP = QPP + QNP;
+  G4int QH = QPH + QNH;
+  G4int QEX = QP + QH;
   
   G4InuclElementaryParticle dummy(small_ekin, 1);
   G4LorentzConvertor toTheExitonSystemRestFrame;
@@ -112,9 +114,9 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4double EFN = FermiEnergy(A, Z, 0);
   G4double EFP = FermiEnergy(A, Z, 1);
   
-  G4double AR = A - QP;
-  G4double ZR = Z - QPP;  
-  G4int NEX = G4int(QEX + 0.5);
+  G4int AR = A - QP;
+  G4int ZR = Z - QPP;  
+  G4int NEX = QEX;
   G4LorentzVector ppout;
   G4bool try_again = (NEX > 0);
   
@@ -149,20 +151,20 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	const G4double& AK1 = parms.first;
 	const G4double& CPA1 = parms.second;
 	
-	G4double VP = coul_coeff * Z * AK1 / (G4cbrt(A - 1.0) + 1.0) /
+	G4double VP = coul_coeff * Z * AK1 / (G4cbrt(A-1) + 1.0) /
 	  (1.0 + EEXS / E0);
 	G4double DM1 = bindingEnergy(A,Z);
-	G4double BN = DM1 - bindingEnergy(A-1.0,Z);
-	G4double BP = DM1 - bindingEnergy(A-1.0,Z-1.0);
+	G4double BN = DM1 - bindingEnergy(A-1,Z);
+	G4double BP = DM1 - bindingEnergy(A-1,Z-1);
 	G4double EMN = EEXS - BN;
-	G4double EMP = EEXS - BP - VP * A / (A - 1.0);
+	G4double EMP = EEXS - BP - VP * A / (A-1);
 	G4double ESP = 0.0;
 	
 	if (EMN > eexs_cut) { // ok
 	  G4int icase = 0;
 	  
 	  if (NEX > 1) {
-	    G4double APH = 0.25 * (QP * QP + QH * QH + QP - 3.0 * QH);
+	    G4double APH = 0.25 * (QP * QP + QH * QH + QP - 3 * QH);
 	    G4double APH1 = APH + 0.5 * (QP + QH);
 	    ESP = EEXS / QEX;
 	    G4double MELE = MEL / ESP / (A*A*A);
@@ -183,7 +185,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      G4double F = F2 / F1;
 	      G4double M1 = 2.77 * MELE * PL;
 	      G4double D[3] = { 0., 0., 0. };
-	      D[0] = M1 * F2 * F2 * std::pow(F, NEX - 1) / (QEX + 1.0);
+	      D[0] = M1 * F2 * F2 * std::pow(F, NEX-1) / (QEX+1);
 	      
 	      if (D[0] > 0.0) {
 		
@@ -194,9 +196,8 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    D[2] = D[1] * std::pow(EMP / EEXS, NEX) * (1.0 + CPA1);
 		  D[1] *= std::pow(EMN / EEXS, NEX) * getAL(A);   
 		  
-		  if (QNP < 1.0) D[1] = 0.0;
-		  
-		  if (QPP < 1.0) D[2] = 0.0;
+		  if (QNP < 1) D[1] = 0.0;
+		  if (QPP < 1) D[2] = 0.0;
 		  
 		  try_again = NEX > 1 && (D[1] > width_cut * D[0] || 
 					  D[2] > width_cut * D[0]);
@@ -234,7 +235,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		
 		if (icase == 1) { // neutron escape
 		  
-		  if (QNP < 1.0) { 
+		  if (QNP < 1) { 
 		    icase = 0;
 		    
 		  } else {
@@ -244,7 +245,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		  };    
 		  
 		} else { // proton esape
-		  if (QPP < 1.0) { 
+		  if (QPP < 1) { 
 		    icase = 0;
 		    
 		  } else {
@@ -252,13 +253,13 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		    V = VP;
 		    ptype = 1;
 		    
-		    if (Z - 1.0 < 1.0) try_again = false;
+		    if (Z-1 < 1) try_again = false;
 		  };   
 		};
 	        
 		if (try_again && icase != 0) {
 		  G4double EB = EEXS - B;
-		  G4double E = EB - V * A / (A - 1.0);
+		  G4double E = EB - V * A / (A-1);
 		  
 		  if (E < 0.0) icase = 0;
 		  else {
@@ -282,7 +283,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			  
 			} else {		         
 			  G4double QEX2 = 1.0 / QEX;
-			  G4double QEX1 = 1.0 / (QEX - 1.0);
+			  G4double QEX1 = 1.0 / (QEX-1);
 			  X = std::pow(0.5 * R, QEX2);
 			  
 			  for (G4int i = 0; i < 1000; i++) {
@@ -295,7 +296,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 			  };
 			}; 
 			EPART = EB - X * E1;
-			EEXS_new = EB - EPART * A / (A - 1.0);
+			EEXS_new = EB - EPART * A / (A-1);
 		      }	// while (EEXS_new < 0.0...
 		      
 		      if (itry == itry_max || EEXS_new < 0.0) {
@@ -320,11 +321,11 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      mom = toTheExitonSystemRestFrame.backToTheLab(mom);
 		      
 		      // Adjust quasiparticle and nucleon counts
-		      G4double QPP_new = QPP;
-		      G4double QNP_new = QNP;
+		      G4int QPP_new = QPP;
+		      G4int QNP_new = QNP;
 		      
-		      G4double A_new = A - 1.0;
-		      G4double Z_new = Z;
+		      G4int A_new = A-1;
+		      G4int Z_new = Z;
 		      
 		      if (ptype == 1) {
 			QPP_new--;
@@ -355,9 +356,9 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		      A = A_new;
 		      Z = Z_new;
 		      
-		      NEX -= 1;
-		      QEX -= 1;
-		      QP -= 1.0;
+		      NEX--;
+		      QEX--;
+		      QP--;
 		      QPP = QPP_new;
 		      QNP = QNP_new;
 		      
@@ -393,22 +394,22 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	      G4double PN = (QPP * SPN2 + QNP * SNN2) * (AR - ZR);
 	      G4double PW = PP + PN;
 	      NEX += 2;
-	      QEX += 2.0; 
-	      QP += 1.0;
-	      QH += 1.0;
-	      AR -= 1.0;
+	      QEX += 2; 
+	      QP++;
+	      QH++;
+	      AR--;
 	      
-	      if (AR > 1.0) {
+	      if (AR > 1) {
 		G4double SL = PW * inuclRndm();
 		
 		if (SL > PP) {
-		  QNP += 1.0;
-		  QNH += 1.0;
+		  QNP++;
+		  QNH++;
 		} else {
-		  QPP += 1.0;
-		  QPH += 1.0;
-		  ZR -= 1.0;
-		  if (ZR < 2.0) try_again = false;
+		  QPP++;
+		  QPH++;
+		  ZR--;
+		  if (ZR < 2) try_again = false;
 		}  
 	      } else try_again = false;
 	    }	// if (icase==0 && try_again)
@@ -437,7 +438,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   return;
 }
 
-G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
+G4double G4NonEquilibriumEvaporator::getMatrixElement(G4int A) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getMatrixElement" << G4endl;
@@ -445,21 +446,14 @@ G4double G4NonEquilibriumEvaporator::getMatrixElement(G4double A) const {
 
   G4double me;
 
-  if (A > 150.0) {
-    me = 100.0;
-
-  } else if(A > 20.0) {
-    me = 140.0;
-
-  } else {
-    me = 70.0;
-  }; 
+  if (A > 150) me = 100.0;
+  else if (A > 20) me = 140.0;
+  else me = 70.0;
  
   return me;
 }
 
-G4double G4NonEquilibriumEvaporator::getE0(G4double ) const {
-
+G4double G4NonEquilibriumEvaporator::getE0(G4int ) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getEO" << G4endl;
   }
@@ -469,8 +463,8 @@ G4double G4NonEquilibriumEvaporator::getE0(G4double ) const {
   return e0;   
 }
 
-G4double G4NonEquilibriumEvaporator::getParLev(G4double A, 
-					       G4double ) const {
+G4double G4NonEquilibriumEvaporator::getParLev(G4int A, 
+					       G4int ) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getParLev" << G4endl;

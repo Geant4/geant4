@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.29 2010-07-23 20:21:49 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.30 2010-09-14 17:51:36 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -43,6 +43,7 @@
 // 20100715  M. Kelsey -- Add G4InuclNuclei object for use with balance checks
 // 20100723  M. Kelsey -- Move G4CollisionOutput buffer, along with all
 //		std::vector<> buffers, here for reuse
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -59,7 +60,7 @@ class G4ElementaryParticleCollider;
 class G4NucleiModel {
 public:
   G4NucleiModel();
-  G4NucleiModel(G4double a, G4double z);
+  G4NucleiModel(G4int a, G4int z);
   explicit G4NucleiModel(G4InuclNuclei* nuclei);
 
   ~G4NucleiModel() {}
@@ -67,7 +68,7 @@ public:
   void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
 
   void generateModel(G4InuclNuclei* nuclei);
-  void generateModel(G4double a, G4double z);
+  void generateModel(G4int a, G4int z);
 
   void reset() {
     neutronNumberCurrent = neutronNumber;
@@ -100,12 +101,12 @@ public:
 		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
 
 
-  G4double getNumberOfNeutrons() const { 
+  G4int getNumberOfNeutrons() const { 
     return neutronNumberCurrent; 
   }
 
 
-  G4double getNumberOfProtons() const { 
+  G4int getNumberOfProtons() const { 
     return protonNumberCurrent; 
   }
 
@@ -191,15 +192,15 @@ private:
   G4double nuclei_radius;
   G4int number_of_zones;
 
-  G4double A;
-  G4double Z;
+  G4int A;
+  G4int Z;
   G4InuclNuclei* theNucleus;
 
-  G4double neutronNumber;
-  G4double protonNumber;
+  G4int neutronNumber;
+  G4int protonNumber;
 
-  G4double neutronNumberCurrent;
-  G4double protonNumberCurrent;
+  G4int neutronNumberCurrent;
+  G4int protonNumberCurrent;
 
   G4int current_nucl1;
   G4int current_nucl2;

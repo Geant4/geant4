@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.hh,v 1.3 2010-09-10 20:43:50 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.hh,v 1.4 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -37,6 +37,7 @@
 // 20100910  M. Kelsey -- Drop getRecoilFragment() in favor of user calling
 //		makeRecoilFragment() with returned non-const pointer.  Drop
 //		handling of excitons.
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -75,8 +76,8 @@ public:
   G4InuclNuclei* makeRecoilFragment(G4int model=0);
 
   // Access nuclear configuration parameters
-  G4double getRecoilA() const { return recoilA; }
-  G4double getRecoilZ() const { return recoilZ; }
+  G4int getRecoilA() const { return recoilA; }
+  G4int getRecoilZ() const { return recoilZ; }
   G4double getRecoilExcitation() const { return excitationEnergy; }
   const G4LorentzVector& getRecoilMomentum() const { return recoilMomentum; }
 
@@ -98,8 +99,8 @@ private:
 
   G4double inputEkin;			// Available initial kinetic energy
 
-  G4double recoilA;			// Nuclear parameters of recoil
-  G4double recoilZ;
+  G4int recoilA;			// Nuclear parameters of recoil
+  G4int recoilZ;
   G4LorentzVector recoilMomentum;
   G4double excitationEnergy;
 

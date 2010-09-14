@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: paraMaker.cc,v 1.18 2010-06-25 09:45:16 gunter Exp $
+// $Id: paraMaker.cc,v 1.19 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100412  M. Kelsey -- Modify paraMaker[Truncated] to take buffer as argument
 // 20100517  M. Kelsey -- BUG FIX:  Must check for array boundary "if (Z>=70)"
 // 20100517  M. Kelsey -- Use G4CascadeInterpolator, which handles boundaries
 // 20100601  M. Kelsey -- Bug fix from Gunter Folger; resize(6,0.), not clear()
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4InuclSpecialFunctions.hh"
 #include "G4CascadeInterpolator.hh"

@@ -1,4 +1,4 @@
-$Id: History,v 1.169 2010-09-14 04:57:59 mkelsey Exp $
+$Id: History,v 1.170 2010-09-14 17:51:36 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -16,6 +16,33 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 14 September 2010 Michael Kelsey
+--------------------------------
+Migrate to integer A and Z values for nuclear configurations.  Includes both
+explicit arguments for G4InuclNuclei, and function arguments, computational
+parameters involved in nuclear configurations, breakup, etc.
+
+	G4CascadeCheckBalance.cc
+	G4CascadeRecoilMaker.hh
+	G4Fissioner.hh,cc
+	G4InuclNuclei.hh,cc
+	G4InuclSpecialFunctions.hh
+	G4NonEquilibriumEvaporator.hh,cc
+	G4NucleiModel.hh,cc
+	bindingEnergy.cc
+	bindingEnergyAsymptotic.cc
+	nuclearLevelDensity.cc
+	paraMaker.cc
+
+- G4InuclSpecialFunctions.hh:  Eliminate bindingEnergy functions which are
+  no longer used, along with their .cc files:
+
+	bindingEnergyKummel
+	bindingEnergyExact
+
+Migration validated using 100 events (20 GeV pi+ on lead) with verbose==4.
+Entire log files (9.6M lines, 433 MB) identical before and after migration.
+
+13 September 2010 Michael Kelsey
 --------------------------------
 - G4InuclElementaryParticle:  Move printParticle() implementation to .cc,
   and add printing of particle name to output.

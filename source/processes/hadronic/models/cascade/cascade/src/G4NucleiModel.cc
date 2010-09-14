@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.85 2010-09-07 19:06:30 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.86 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -65,6 +65,7 @@
 // 20100902  M. Kelsey -- Remove resize(3) directives from qdeutron/acsecs
 // 20100907  M. Kelsey -- Limit interaction targets based on current nucleon
 //		counts (e.g., no pp if protonNumberCurrent < 2!)
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -99,7 +100,7 @@ G4NucleiModel::G4NucleiModel()
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {}
 
-G4NucleiModel::G4NucleiModel(G4double a, G4double z)
+G4NucleiModel::G4NucleiModel(G4int a, G4int z)
   : verboseLevel(0), A(0), Z(0), theNucleus(0),
     neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
@@ -123,7 +124,7 @@ G4NucleiModel::generateModel(G4InuclNuclei* nuclei) {
 
 
 void 
-G4NucleiModel::generateModel(G4double a, G4double z) {
+G4NucleiModel::generateModel(G4int a, G4int z) {
   if (verboseLevel) {
     G4cout << " >>> G4NucleiModel::generateModel A " << a << " Z " << z
 	   << G4endl;
@@ -191,17 +192,17 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
   std::vector<G4double> pf(number_of_zones);
   std::vector<G4double> vz(number_of_zones);
 
-  if (a > 4.5) {
+  if (a > 4) {
     G4int icase = 0;
 
-    if (a > 99.5) {
+    if (a > 99) {
       ur[0] = -D1;
       for (G4int i = 0; i < number_of_zones; i++) {
         G4double y = std::log((1.0 + D) / alfa6[i] - 1.0);
         zone_radii.push_back(CU + AU * y);
         ur[i+1] = y;
       }
-    } else if (a > 11.5) {
+    } else if (a > 11) {
       ur[0] = -D1;
       for (G4int i = 0; i < number_of_zones; i++) {
 	G4double y = std::log((1.0 + D)/alfa3[i] - 1.0);
@@ -243,7 +244,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     }
 
     // Protons
-    G4double dd0 = z/tot_vol/piTimes4thirds;
+    G4double dd0 = G4double(z)/tot_vol/piTimes4thirds;
     rod.clear();
     pf.clear();
     vz.clear();
@@ -261,7 +262,7 @@ G4NucleiModel::generateModel(G4double a, G4double z) {
     fermi_momenta.push_back(pf);
 
     // Neutrons
-    dd0 = (a - z)/tot_vol/piTimes4thirds;
+    dd0 = G4double(a-z)/tot_vol/piTimes4thirds;
     rod.clear();
     pf.clear();
     vz.clear();
@@ -1070,50 +1071,29 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
   return worth;
 }
 
+
 G4double G4NucleiModel::getRatio(G4int ip) const {
   if (verboseLevel > 1) {
     G4cout << " >>> G4NucleiModel::getRatio" << G4endl;
   }
 
-  G4double rat;
-  //  G4double ratm;
-
-  // Calculate number of protons and neutrons in local region
-  //  G4double Athird = G4cbrt(A);
-  //  G4double Nneut = Athird*(A-Z)/A;
-  //  G4double Nprot = Athird*Z/A;
-
-  // Reduce number of 
   if (ip == 1) {
     if (verboseLevel > 2) {
       G4cout << " current " << protonNumberCurrent << " inp " << protonNumber
 	     << G4endl;
     }
+    return G4double(protonNumberCurrent)/G4double(protonNumber);
+  }
 
-    rat = protonNumberCurrent/protonNumber;
-
-    // Calculate ratio modified for local region
-    //    G4double deltaP = protonNumber - protonNumberCurrent;
-    //    G4cout << " deltaP = " << deltaP << G4endl;
-    //    ratm = std::max(0.0, (Nprot - deltaP)/Nprot);
-
-  } else {
+  if (ip == 2) {
     if (verboseLevel > 2){
       G4cout << " current " << neutronNumberCurrent << " inp " << neutronNumber
 	     << G4endl;
     }
-
-    rat = neutronNumberCurrent/neutronNumber;
-
-    // Calculate ratio modified for local region
-    //    G4double deltaN = neutronNumber - neutronNumberCurrent;
-    //   G4cout << " deltaN = " << deltaN << G4endl;
-    //    ratm = std::max(0.0, (Nneut - deltaN)/Nneut);
+    return G4double(neutronNumberCurrent)/G4double(neutronNumber);
   }
 
-  //  G4cout << " get ratio: ratm =  " << ratm << G4endl;
-  return rat;
-  //  return ratm;
+  return 0.;
 }
 
 G4CascadParticle 
@@ -1165,17 +1145,17 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
   particles.clear();
 
   // first decide whether it will be cascad or compound final nuclei
-  G4double ab = bullet->getA();
-  G4double zb = bullet->getZ();
-  G4double at = target->getA();
-  G4double zt = target->getZ();
+  G4int ab = bullet->getA();
+  G4int zb = bullet->getZ();
+  G4int at = target->getA();
+  G4int zt = target->getZ();
 
   G4double massb = bullet->getMass();	// For creating LorentzVectors below
 
   if (ab < max_a_for_cascad) {
 
-    G4double benb = 0.001 * bindingEnergy(ab,zb) / ab;
-    G4double bent = 0.001 * bindingEnergy(at,zt) / at;
+    G4double benb = 0.001 * bindingEnergy(ab,zb) / G4double(ab);
+    G4double bent = 0.001 * bindingEnergy(at,zt) / G4double(at);
     G4double ben = benb < bent ? bent : benb;
 
     if (bullet->getKineticEnergy()/ab > ekin_cut*ben) {
@@ -1189,7 +1169,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	coordinates.clear();
 	momentums.clear();
      
-	if (ab < 3.0) { // deutron, simplest case
+	if (ab < 3) { // deuteron, simplest case
 	  G4double r = 2.214 - 3.4208 * std::log(1.0 - 0.981 * inuclRndm());
 	  G4ThreeVector coord1 = generateWithRandomAngles(r).vect();
 	  coordinates.push_back(coord1);
@@ -1224,15 +1204,13 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	  mom.setVect(-mom.vect());
 	  momentums.push_back(-mom);
 	} else {
-	  G4int ia = int(ab + 0.5);
-
 	  G4ThreeVector coord1;
 
 	  G4bool badco = true;
 
 	  G4int itry = 0;
         
-	  if (ab < 4.0) { // a == 3
+	  if (ab == 3) {
 	    while (badco && itry < itry_max) {
 	      if (itry > 0) coordinates.clear();
 	      itry++;	
@@ -1312,7 +1290,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      itry++;
 	      G4int i(0);
 	    
-	      for (i = 0; i < ia-1; i++) {
+	      for (i = 0; i < ab-1; i++) {
 		G4int itry1 = 0;
 		G4double s, u; 
 
@@ -1342,7 +1320,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      }
 
 	      coord1 *= 0.0;	// Cheap way to reset
-	      for(G4int j = 0; j < ia -1; j++) coord1 -= coordinates[j];
+	      for(G4int j = 0; j < ab -1; j++) coord1 -= coordinates[j];
 
 	      coordinates.push_back(coord1);   
 
@@ -1352,8 +1330,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    
 	      G4bool large_dist = false;
 
-	      for (i = 0; i < ia-1; i++) {
-		for (G4int j = i+1; j < ia; j++) {
+	      for (i = 0; i < ab-1; i++) {
+		for (G4int j = i+1; j < ab; j++) {
 	     
 		  G4double r2 = (coordinates[i]-coordinates[j]).mag2();
 
@@ -1387,9 +1365,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4double p, u, x;
 	    G4LorentzVector mom;
 	    //G4bool badp = True;
-	    G4int i(0);
 
-	    for (i = 0; i < ia - 1; i++) {
+	    for (G4int i = 0; i < ab - 1; i++) {
 	      G4int itry = 0;
 
 	      while(itry < itry_max) {
@@ -1421,7 +1398,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    mom *= 0.;		// Cheap way to reset
 	    mom.setE(bullet->getEnergy()+target->getEnergy());
 
-	    for(G4int j=0; j< ia-1; j++) mom -= momentums[j]; 
+	    for(G4int j=0; j< ab-1; j++) mom -= momentums[j]; 
 
 	    momentums.push_back(mom);
 	  } 
@@ -1450,11 +1427,9 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	// all nucleons at rest
 	raw_particles.clear();
-	G4int ia = G4int(ab + 0.5);
-	G4int iz = G4int(zb + 0.5);
 
-	for (G4int ipa = 0; ipa < ia; ipa++) {
-	  G4int knd = ipa < iz ? 1 : 2;
+	for (G4int ipa = 0; ipa < ab; ipa++) {
+	  G4int knd = ipa < zb ? 1 : 2;
 	  raw_particles.push_back(G4InuclElementaryParticle(momentums[ipa], knd));
 	} 
       

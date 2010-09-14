@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.24 2010-09-10 18:03:40 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.25 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -40,6 +40,7 @@
 // 20100719  M. Kelsey -- Move setExitationEnergy implementation to .cc file.
 // 20100906  M. Kelsey -- Add fill() functions to rewrite contents
 // 20100909  M. Kelsey -- Add function to discard exciton configuration
+// 20100914  M. Kelsey -- Use integers for A and Z
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -55,20 +56,20 @@ class G4InuclNuclei : public G4InuclParticle {
 public:
   G4InuclNuclei() : G4InuclParticle() {}
 
-  G4InuclNuclei(G4double a, G4double z, G4double exc=0., G4int model=0)
+  G4InuclNuclei(G4int a, G4int z, G4double exc=0., G4int model=0)
     : G4InuclParticle(makeDefinition(a,z)) {
     setExitationEnergy(exc);
     setModel(model);
   }
 
-  G4InuclNuclei(const G4LorentzVector& mom, G4double a, G4double z,
+  G4InuclNuclei(const G4LorentzVector& mom, G4int a, G4int z,
 		G4double exc=0., G4int model=0)
     : G4InuclParticle(makeDefinition(a,z), mom) {
     setExitationEnergy(exc);
     setModel(model);
   }
 
-  G4InuclNuclei(G4double ekin, G4double a, G4double z, G4double exc,
+  G4InuclNuclei(G4double ekin, G4int a, G4int z, G4double exc,
 		G4int model=0) 
     : G4InuclParticle(makeDefinition(a,z), ekin) {
     setExitationEnergy(exc);
@@ -85,14 +86,14 @@ public:
   G4InuclNuclei& operator=(const G4InuclNuclei& right);
 
   // Overwrite data structure (avoids creating/copying temporaries)
-  void fill(G4double a, G4double z, G4double exc=0., G4int model=0) {
+  void fill(G4int a, G4int z, G4double exc=0., G4int model=0) {
     fill(0., a, z, exc, model);
   }
 
-  void fill(const G4LorentzVector& mom, G4double a, G4double z,
+  void fill(const G4LorentzVector& mom, G4int a, G4int z,
 	    G4double exc=0., G4int model=0);
 
-  void fill(G4double ekin, G4double a, G4double z, G4double exc,
+  void fill(G4double ekin, G4int a, G4int z, G4double exc,
 	    G4int model=0);
 
   // Excitation energy is stored as dynamical mass of particle
@@ -104,9 +105,8 @@ public:
 
   void clearExitonConfiguration() { theExitonConfiguration.clear(); }
 
-  G4double getA() const { return getDefinition()->GetAtomicMass(); }
-
-  G4double getZ() const { return getDefinition()->GetAtomicNumber(); }
+  G4int getA() const { return getDefinition()->GetAtomicMass(); }
+  G4int getZ() const { return getDefinition()->GetAtomicNumber(); }
 
   G4double getNucleiMass() const {
     return getDefinition()->GetPDGMass()*MeV/GeV;	// From G4 to Bertini
@@ -122,14 +122,14 @@ public:
     return theExitonConfiguration;
   }
 
-  static G4double getNucleiMass(G4double a, G4double z, G4double exc=0.);
+  static G4double getNucleiMass(G4int a, G4int z, G4double exc=0.);
 
   virtual void printParticle() const;
 
 protected:
   // Convert nuclear configuration to standard GEANT4 pointer
-  static G4ParticleDefinition* makeDefinition(G4double a, G4double z);
-  static G4ParticleDefinition* makeNuclearFragment(G4double a, G4double z);
+  static G4ParticleDefinition* makeDefinition(G4int a, G4int z);
+  static G4ParticleDefinition* makeNuclearFragment(G4int a, G4int z);
 
 private: 
   G4ExitonConfiguration theExitonConfiguration;

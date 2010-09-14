@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fissioner.hh,v 1.15 2010-07-28 15:59:06 mkelsey Exp $
+// $Id: G4Fissioner.hh,v 1.16 2010-09-14 17:51:36 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
@@ -31,6 +31,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100728  M. Kelsey -- Move G4FissionStore to data member and reuse
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
@@ -54,15 +55,15 @@ public:
 private: 
   G4FissionStore fissionStore;
 
-  G4double getC2(G4double A1, 
-		 G4double A2, 
+  G4double getC2(G4int A1, 
+		 G4int A2, 
 		 G4double X3, 
 		 G4double X4, 
 		 G4double R12) const; 
 
-  G4double getZopt(G4double A1, 
-		   G4double A2, 
-		   G4double ZT, 
+  G4double getZopt(G4int A1, 
+		   G4int A2, 
+		   G4int ZT, 
                    G4double X3, 
 		   G4double X4, 
 		   G4double R12) const;
@@ -70,10 +71,10 @@ private:
   void potentialMinimization(G4double& VP, 
 			     std::vector<G4double>& ED, 
 			     G4double& VC,
-			     G4double AF, 
-			     G4double AS, 
-			     G4double ZF, 
-			     G4double ZS,
+			     G4int AF, 
+			     G4int AS, 
+			     G4int ZF, 
+			     G4int ZS,
 			     std::vector<G4double>& AL1, 
 			     std::vector<G4double>& BET1, 
 			     G4double& R12) const; 

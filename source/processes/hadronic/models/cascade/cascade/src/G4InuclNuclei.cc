@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.19 2010-09-14 06:27:13 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.20 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -56,7 +56,7 @@ using namespace G4InuclSpecialFunctions;
 
 // Overwrite data structure (avoids creating/copying temporaries)
 
-void G4InuclNuclei::fill(const G4LorentzVector& mom, G4double a, G4double z,
+void G4InuclNuclei::fill(const G4LorentzVector& mom, G4int a, G4int z,
 			 G4double exc, G4int model) {
   setDefinition(makeDefinition(a,z));
   setMomentum(mom);
@@ -65,7 +65,7 @@ void G4InuclNuclei::fill(const G4LorentzVector& mom, G4double a, G4double z,
   setModel(model);
 }
 
-void G4InuclNuclei::fill(G4double ekin, G4double a, G4double z, G4double exc,
+void G4InuclNuclei::fill(G4double ekin, G4int a, G4int z, G4double exc,
 			 G4int model) {
   setDefinition(makeDefinition(a,z));
   setKineticEnergy(ekin);
@@ -95,9 +95,9 @@ void G4InuclNuclei::setExitationEnergy(G4double e) {
 // WARNING:  Opposite conventions!  G4InuclNuclei uses (A,Z) everywhere, while
 //	  G4ParticleTable::GetIon() uses (Z,A)!
 
-G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4double a, G4double z) {
+G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4int a, G4int z) {
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition *pd = pTable->GetIon(G4int(z), G4int(a), 0.);
+  G4ParticleDefinition *pd = pTable->GetIon(z, a, 0.);
 
   // SPECIAL CASE:  Non-physical nuclear fragment, for final-state return
   if (!pd) pd = makeNuclearFragment(a,z);
@@ -111,17 +111,15 @@ G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4double a, G4double z) {
 // from G4IntraNuclearCascader
 
 G4ParticleDefinition* 
-G4InuclNuclei::makeNuclearFragment(G4double a, G4double z) {
-  G4int na=G4int(a), nz=G4int(z);	// # nucleons and protons
-
-  if (na<=0 || nz<0 || na<nz) {
+G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
+  if (a<=0 || z<0 || a<z) {
     G4cerr << " >>> G4InuclNuclei::makeNuclearFragment() called with"
 	   << " impossible arguments A=" << a << " Z=" << z << G4endl;
     throw G4HadronicException(__FILE__, __LINE__,
 			      "G4InuclNuclei impossible A/Z arguments");
   }
 
-  G4int code = G4IonTable::GetNucleusEncoding(nz, na);
+  G4int code = G4IonTable::GetNucleusEncoding(z, a);
 
   // Use local lookup table (see G4IonTable.hh) to maintain singletons
   // NOTE:  G4ParticleDefinitions don't need to be explicitly deleted
@@ -133,8 +131,8 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z) {
 
   // Name string follows format in G4IonTable.cc::GetIonName(Z,A,E)
   std::stringstream zstr, astr;
-  zstr << nz;
-  astr << na;
+  zstr << z;
+  astr << a;
   
   G4String name = "Z" + zstr.str() + "A" + astr.str();
   
@@ -154,7 +152,7 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z) {
   G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
   			      0,          +1,   0,
 			      0,          0,    0,
-			      "nucleus",  0,    na, code,
+			      "nucleus",  0,    a, code,
 			      true,	  0.,   0,
 			      true, "generic",  0,  0.);
   fragPD->SetAntiPDGEncoding(0);
@@ -162,7 +160,7 @@ G4InuclNuclei::makeNuclearFragment(G4double a, G4double z) {
   return (fragmentList[code] = fragPD);     // Store in table for next lookup
 }
 
-G4double G4InuclNuclei::getNucleiMass(G4double a, G4double z, G4double exc) {
+G4double G4InuclNuclei::getNucleiMass(G4int a, G4int z, G4double exc) {
   // Simple minded mass calculation use constants in CLHEP (all in MeV)
   G4double mass = G4NucleiProperties::GetNuclearMass(a,z) + exc;
 

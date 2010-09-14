@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclSpecialFunctions.cc,v 1.20 2010-06-25 09:44:46 gunter Exp $
+// $Id: G4InuclSpecialFunctions.cc,v 1.21 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
+// 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard pointless
+//		verbosity.
 
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzVector.hh"
@@ -34,64 +36,40 @@
 #include "Randomize.hh"
 #include <cmath>
 
-G4double G4InuclSpecialFunctions::getAL(G4double A) {
-  G4int verboseLevel = 2;
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::getAL" << G4endl;
-  }
-
+G4double G4InuclSpecialFunctions::getAL(G4int A) {
   return 0.76 + 2.2 / G4cbrt(A);
 }
 
 G4double G4InuclSpecialFunctions::csNN(G4double e) {
-  G4int verboseLevel = 2;
- 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::csNN" << G4endl;
-  }
-
   G4double snn;
 
   if (e < 40.0) {
     snn = -1174.8 / (e * e) + 3088.5 / e + 5.3107;
-
   } else {
     snn = 93074.0 / (e * e) - 11.148 / e + 22.429;
-  };
+  }
 
   return snn; 
 }
 
 G4double G4InuclSpecialFunctions::csPN(G4double e) {
-  G4int verboseLevel = 2;
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::csPN" << G4endl;
-  }
-
   G4double spn;
 
   if (e < 40.0) {
     spn = -5057.4 / (e * e) + 9069.2 / e + 6.9466;
-
   } else {
     spn = 239380.0 / (e * e) + 1802.0 / e + 27.147;
-  };
+  }
 
   return spn; 
 }
 
-G4double G4InuclSpecialFunctions::FermiEnergy(G4double A, G4double Z, G4int ntype) {
-  // calculates the nuclei Fermi energy for 0 - neutron and 1 - proton
-  G4int verboseLevel = 2;
+// calculates the nuclei Fermi energy for 0 - neutron and 1 - proton
 
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::FermiEnergy" << G4endl;
-  }
-
+G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype) {
   const G4double C = 55.4;
-  G4double arg = (ntype==0) ? (A-Z)/A : Z/A;
+  G4double arg = (ntype==0) ? G4double(A-Z)/A : G4double(Z)/A;
 
   return C * G4cbrt(arg*arg);	// 2/3 power
 }
@@ -101,24 +79,11 @@ G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
 }
 
 G4double G4InuclSpecialFunctions::inuclRndm() { 
-  G4int verboseLevel = 2;
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::inuclRndm" << G4endl;
-  }
-
   G4double rnd = G4UniformRand(); 
-
   return rnd;
 } 
 
 G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
-  G4int verboseLevel = 2;
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::randomGauss" << G4endl;
-  }
-
   const G4double eps = 1.0e-6;
   const G4double twopi = 6.2831854;
   G4double r1 = inuclRndm();
@@ -131,37 +96,19 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
 } 
 
 G4double G4InuclSpecialFunctions::randomPHI() { 
-  G4int verboseLevel = 2;
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::randomPHI" << G4endl;
-  }
-
   const G4double twopi = 6.2831853;
-
   return twopi * inuclRndm();
 } 
 
 std::pair<G4double, G4double> G4InuclSpecialFunctions::randomCOS_SIN() {
-  G4int verboseLevel = 2;
-
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::randomCOS_SIN" << G4endl;
-  }
-
   G4double CT = 1.0 - 2.0 * inuclRndm();
 
-  return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT * CT));
+  return std::pair<G4double, G4double>(CT, std::sqrt(1.0 - CT*CT));
 }
 
 G4LorentzVector 
 G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p, 
 						G4double m) {
-  const G4int verboseLevel = 0;
-  if (verboseLevel > 3) {
-    G4cout << " >>> G4InuclSpecialFunctions::generateWithFixedTheta" << G4endl;
-  }
-
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
 

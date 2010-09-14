@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.16 2010-09-09 19:11:27 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.17 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -47,7 +47,6 @@
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
 #include "G4CascadParticle.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -94,8 +93,8 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
   G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
 
   initialBaryon =
-    ((pbullet ? pbullet->baryon() : nbullet ? G4lrint(nbullet->getA()) : 0) +
-     (ptarget ? ptarget->baryon() : ntarget ? G4lrint(ntarget->getA()) : 0) );
+    ((pbullet ? pbullet->baryon() : nbullet ? nbullet->getA() : 0) +
+     (ptarget ? ptarget->baryon() : ntarget ? ntarget->getA() : 0) );
 
   // Final state totals are computed for us
   final = output.getTotalOutputMomentum();

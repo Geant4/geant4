@@ -22,20 +22,20 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: bindingEnergy.cc,v 1.9 2010-06-23 19:25:36 mkelsey Exp $
+// $Id: bindingEnergy.cc,v 1.10 2010-09-14 17:51:36 mkelsey Exp $
 //
 // 20100622 M. Kelsey -- Replace all functionally with call-through to
 //		G4NucleiProperties.  Check for valid A/Z and return zero
 //		without warning message.
+// 20100914 M. Kelsey -- Migrate to integer A and Z
 
 #include "G4InuclSpecialFunctions.hh"
 #include "G4NucleiProperties.hh"
-#include "G4HadTmpUtil.hh"
 
 
-G4double G4InuclSpecialFunctions::bindingEnergy(G4double A, G4double Z) {
+G4double G4InuclSpecialFunctions::bindingEnergy(G4int A, G4int Z) {
   // NOTE:  Test condition copied from G4NucleiProperties.cc; not encapsulated
   if (A < 1 || Z < 0 || Z > A) return 0.;
 
-  return G4NucleiProperties::GetBindingEnergy(G4lrint(A), G4lrint(Z));
+  return G4NucleiProperties::GetBindingEnergy(A, Z);
 }

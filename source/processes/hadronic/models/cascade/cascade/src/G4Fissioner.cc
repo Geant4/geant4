@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.34 2010-07-28 15:59:06 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.35 2010-09-14 17:51:36 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -37,6 +37,7 @@
 // 20100714  M. Kelsey -- Move conservation checking to base class
 // 20100728  M. Kelsey -- Make fixed arrays static, move G4FissionStore to data
 //		member and reuse
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
@@ -75,27 +76,29 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   fissionStore.setVerboseLevel(verboseLevel);
   fissionStore.clear();
 
-  G4double A = nuclei_target->getA();
-  G4double Z = nuclei_target->getZ();
+  G4int A = nuclei_target->getA();
+  G4int Z = nuclei_target->getZ();
+
   G4double EEXS = nuclei_target->getExitationEnergy();
   G4double mass_in = nuclei_target->getMass();
   G4double e_in = mass_in; /**** + 0.001 * EEXS; ****/	// Mass includes EEXS
-  G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A - Z) + G4cbrt(Z));
+  G4double PARA = 0.055 * G4cbrt(A*A) * (G4cbrt(A-Z) + G4cbrt(Z));
   G4double TEM = std::sqrt(EEXS / PARA);
   G4double TETA = 0.494 * G4cbrt(A) * TEM;
   
   TETA = TETA / std::sinh(TETA);
   
-  if (A < 246.0) PARA += (nucleiLevelDensity(A) - PARA) * TETA;
+  if (A < 246) PARA += (nucleiLevelDensity(A) - PARA) * TETA;
   
-  G4double A1 = G4int(A / 2.0 + 1.1);
-  G4double Z1;
-  G4double A2 = A - A1;
+  G4int A1 = A/2 + 1;
+  G4int Z1;
+  G4int A2 = A - A1;
+
   G4double ALMA = -1000.0;
   G4double DM1 = bindingEnergy(A,Z);
   G4double EVV = EEXS - DM1;
   G4double DM2 = bindingEnergyAsymptotic(A, Z);
-  G4double DTEM = (A < 220.0 ? 0.5 : 1.15);
+  G4double DTEM = (A < 220 ? 0.5 : 1.15);
   
   TEM += DTEM;
   
@@ -104,14 +107,14 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
 
   G4double R12 = G4cbrt(A1) + G4cbrt(A2); 
   
-  for (G4int i = 0; i < 50 && A1 > 30.0; i++) {
-    A1 -= 1.0;
+  for (G4int i = 0; i < 50 && A1 > 30; i++) {
+    A1--;
     A2 = A - A1;
     G4double X3 = 1.0 / G4cbrt(A1);
     G4double X4 = 1.0 / G4cbrt(A2);
-    Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
+    Z1 = getZopt(A1, A2, Z, X3, X4, R12) - 1;
     std::vector<G4double> EDEF1(2);
-    G4double Z2 = Z - Z1;
+    G4int Z2 = Z - Z1;
     G4double VPOT, VCOUL;
     
     potentialMinimization(VPOT, EDEF1, VCOUL, A1, A2, Z1, Z2, AL1, BET1, R12);
@@ -154,7 +157,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   A2 = A - A1;
   Z1 = config.zfirst;
   
-  G4double Z2 = Z - Z1;
+  G4int Z2 = Z - Z1;
   
   G4double mass1 = G4InuclNuclei::getNucleiMass(A1,Z1);
   G4double mass2 = G4InuclNuclei::getNucleiMass(A2,Z2);
@@ -183,8 +186,8 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   output.addTargetFragments(frags);
 }
 
-G4double G4Fissioner::getC2(G4double A1, 
-			    G4double A2, 
+G4double G4Fissioner::getC2(G4int A1, 
+			    G4int A2, 
 			    G4double X3, 
 			    G4double X4, 
 			    G4double R12) const {
@@ -199,9 +202,9 @@ G4double G4Fissioner::getC2(G4double A1,
   return C2;   
 }
 
-G4double G4Fissioner::getZopt(G4double A1, 
-			      G4double A2, 
-			      G4double ZT, 
+G4double G4Fissioner::getZopt(G4int A1, 
+			      G4int A2, 
+			      G4int ZT, 
 			      G4double X3, 
 			      G4double X4, 
 			      G4double R12) const {
@@ -220,10 +223,10 @@ G4double G4Fissioner::getZopt(G4double A1,
 void G4Fissioner::potentialMinimization(G4double& VP, 
 					std::vector<G4double> & ED,
 					G4double& VC, 
-					G4double AF, 
-					G4double AS, 
-					G4double ZF, 
-					G4double ZS,
+					G4int AF, 
+					G4int AS, 
+					G4int ZF, 
+					G4int ZS,
 					std::vector<G4double>& AL1, 
 					std::vector<G4double>& BET1, 
 					G4double& R12) const {
@@ -237,12 +240,8 @@ void G4Fissioner::potentialMinimization(G4double& VP,
   const G4double DSOL1 = 1.0e-6;
   const G4double DS1 = 0.3;
   const G4double DS2 = 1.0 / DS1 / DS1; 
-  G4double A1[2];
-  A1[0] = AF;
-  A1[1] = AS;
-  G4double Z1[2];
-  Z1[0] = ZF;
-  Z1[1] = ZS;
+  G4int A1[2] = { AF, AS };
+  G4int Z1[2] = { ZF, ZS };
   G4double D = 1.01844 * ZF * ZS;
   G4double D0 = 1.0e-3 * D;
   G4double R[2];
