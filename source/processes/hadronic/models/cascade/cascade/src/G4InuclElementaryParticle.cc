@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.cc,v 1.8 2010-09-14 04:57:59 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.cc,v 1.9 2010-09-14 05:58:58 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
@@ -150,7 +150,7 @@ G4double G4InuclElementaryParticle::getParticleMass(G4int type) {
 
 // Print particle parameters
 
-virtual void G4InuclElementaryParticle::printParticle() const {
+void G4InuclElementaryParticle::printParticle() const {
   G4InuclParticle::printParticle();
   G4cout << " Particle: " << getDefinition()->GetParticleName() 
 	 << " type " << type() << " mass " << getMass()
