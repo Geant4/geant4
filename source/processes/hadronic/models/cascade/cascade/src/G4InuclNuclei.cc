@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.17 2010-09-10 19:14:44 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.18 2010-09-14 04:57:59 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -37,6 +37,7 @@
 // 20100719  M. Kelsey -- Change excitation energy without altering momentum
 // 20100906  M. Kelsey -- Add fill() functions to rewrite contents
 // 20100910  M. Kelsey -- Add clearExitonConfiguration() to fill() functions
+// 20100914  M. Kelsey -- Make printout symmetric with G4InuclElemPart
 
 #include "G4HadronicException.hh"
 #include "G4InuclNuclei.hh"
@@ -178,8 +179,8 @@ G4InuclNuclei& G4InuclNuclei::operator=(const G4InuclNuclei& right) {
 // Dump particle properties for diagnostics
 
 void G4InuclNuclei::printParticle() const {
-  G4cout << getDefinition()->GetParticleName() 
+  G4InuclParticle::printParticle();
+  G4cout << "Nucleus: " << getDefinition()->GetParticleName() 
 	 << " A " << getA() << " Z " << getZ() << " mass " << getMass()
 	 << " Eex (MeV) " << getExitationEnergy() << G4endl;
-  G4InuclParticle::printParticle();
 }

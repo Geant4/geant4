@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.hh,v 1.23 2010-06-25 09:43:24 gunter Exp $
+// $Id: G4InuclElementaryParticle.hh,v 1.24 2010-09-14 04:57:59 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()", use enum names
+// 20100914  M. Kelsey -- Move printout to .cc file
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -84,11 +85,7 @@ public:
 
   G4bool valid() const { return type()>0; }
 
-  virtual void printParticle() const {
-    G4InuclParticle::printParticle();
-    G4cout << " Particle: type " << type() << " mass " << getMass()
-	   << " ekin " << getKineticEnergy() << G4endl; 
-  }
+  virtual void printParticle() const;
 
   void setGeneration(G4int gen) { generation = gen; }
   G4int getGeneration() const { return generation; }
