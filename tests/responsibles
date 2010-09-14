@@ -23,15 +23,15 @@ graphics_reps                John.Allison@man.ac.uk          John Allison
 intercoms                    asai@slac.stanford.edu          Makoto Asai
 interfaces                   Koichi.Murakami@kek.jp          Koichi Murakami
 "/basic                      Koichi.Murakami@kek.jp          Koichi Murakami
-"/GAG                        yoshidah@keiei.shikoku-u.ac.jp  Hajime Yoshida
+"/GAG                        Koichi.Murakami@kek.jp          Koichi Murakami
 "/common                     barrand@lal.in2p3.fr            Guy Barrand
 materials                    Marc.Verderi@in2p3.fr           Marc Verderi
 parameterisations/gflash     Marc.Verderi@in2p3.fr           Marc Verderi
 particles                    kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 persistency                  Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 "/ascii                      Pedro.Arce@ciemat.es            Pedro Arce
-"/gdml                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-"/mctruth                    Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+"/gdml                       Witold.Pokorski@cern.ch         Witold Pokorski
+"/mctruth                    Witold.Pokorski@cern.ch         Witold Pokorski
 physics_lists                Gunter.Folger@cern.ch           Gunter Folger
 processes                    John Apostolakis                John Apostolakis
 "/biasing                    Alexander.Howard@cern.ch        Alexander Howard
@@ -47,25 +47,25 @@ processes                    John Apostolakis                John Apostolakis
 "/"/processes                dwright@slac.stanford.edu       Dennis Wright
 "/"/models/abrasion          flei@space.qinetiq.com          Fan Lei
 "/"/"/binary_cascade         Gunter.Folger@cern.ch           Gunter Folger
-"/"/"/cascade                Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/cascade                dwright@slac.stanford.edu       Dennis Wright
 "/"/"/chiral_inv_phase_space Mikhail.Kossov@cern.ch          Mikhail Kossov
 "/"/"/coherent_elastic       Nikolai.Starkov@cern.ch         Nikolai Starkov
-"/"/"/de_excitation          Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/de_excitation          dwright@slac.stanford.edu       Dennis Wright
 "/"/"/"/ablation             PRTruscott@space.qinetiq.com    Pete Truscott
-"/"/"/"/evaporation          Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/fermi_breakup        Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/fission              Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/gem_evaporation      Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/handler              Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/management           Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/multifragmentation   Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/photon_evaporation   Aatos.Heikkinen@cern.ch         Aatos Heikkinen
-"/"/"/"/util                 Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/"/evaporation          dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/fermi_breakup        dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/fission              dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/gem_evaporation      dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/handler              dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/management           dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/multifragmentation   dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/photon_evaporation   dwright@slac.stanford.edu       Dennis Wright
+"/"/"/"/util                 dwright@slac.stanford.edu       Dennis Wright
 "/"/"/em_dissociation        PRTruscott@space.qinetiq.com    Pete Truscott
 "/"/"/high_energy            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/im_r_matrix            Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/incl                   kaitanie@cc.helsinki.fi	     Pekka Kaitaniemi
-"/"/"/isotope_production     Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/isotope_production     dwright@slac.stanford.edu       Dennis Wright
 "/"/"/leading_particle       asai@slac.stanford.edu          Makoto Asai
 "/"/"/lll_fission            dwright@slac.stanford.edu       Dennis Wright
 "/"/"/low_energy             dwright@slac.stanford.edu       Dennis Wright
@@ -77,7 +77,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/"/qgsm                 Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/photolepton_hadron     dwright@slac.stanford.edu       Dennis Wright
 "/"/"/qmd                    tkoi@slac.stanford.edu          Tatsumi Koi
-"/"/"/pre_equilibrium        Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+"/"/"/pre_equilibrium        dwright@slac.stanford.edu       Dennis Wright
 "/"/"/radioactive_decay      flei@space.qinetiq.com          Fan Lei
 "/"/"/theo_high_energy       Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/util                   Gunter.Folger@cern.ch           Gunter Folger
@@ -102,7 +102,7 @@ visualization/VRML           stanaka@media.ritsumei.ac.jp    Satoshi Tanaka
 visualization/XXX            John.Allison@man.ac.uk          John Allison
 environments                 Koichi.Murakami@kek.jp          Koichi Murakami
   g4py                       Koichi.Murakami@kek.jp          Koichi Murakami
-  MOMO                       yoshidah@keiei.shikoku-u.ac.jp  Hajime Yoshida
+  MOMO                       Koichi.Murakami@kek.jp          Koichi Murakami
 examples                     asai@slac.stanford.edu          Makoto Asai
 examples/novice/N01          asai@slac.stanford.edu          Makoto Asai
 examples/novice/N02          John.Apostolakis@cern.ch        John Apostolakis
@@ -115,18 +115,18 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   air_shower                 bernardo@lip.pt                 Bernardo Tome
   amsEcal                    Michel.Maire@lapp.in2p3.fr      Michel Maire
   brachytherapy              susanna@uow.edu.au              Susanna Guatelli
-  composite_calorimeter      Alberto.Ribon@cern.ch           Alberto Ribon
+  composite_calorimeter      Andrea.Dotti@cern.ch            Andrea Dotti
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
   hadrontherapy              cirrone@lns.infn.it             Pablo Cirrone
   human_phantom              susanna@uow.edu.au              Susanna Guatelli
-  lAr_calorimeter            Alberto.Ribon@cern.ch           Alberto Ribon
+  lAr_calorimeter            Andrea.Dotti@cern.ch            Andrea Dotti
   medical_linac              cirrone@lns.infn.it             Pablo Cirrone
   microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
   microdosimetry             incerti@cenbg.in2p3.fr          Sebastien Incerti
   nanobeam                   incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
   radioprotection            cirrone@lns.infn.it             Pablo Cirrone
-  Rich                       Alberto.Ribon@cern.ch           Alberto Ribon
+  Rich                       Andrea.Dotti@cern.ch            Andrea Dotti
   underground_physics        Alexander.Howard@cern.ch        Alexander Howard 
   xray_fluorescence          Alfonso.Mantero@ge.infn.it      Alfonso Mantero
   xray_telescope             Giovanni.Santin@esa.int         Giovanni Santin
@@ -177,7 +177,7 @@ examples/extended
     MPI                      Koichi.Murakami@kek.jp          Koichi Murakami
   parameterisations/gflash   Marc.Verderi@in2p3.fr           Marc Verderi
   persistency
-    gdml                     Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+    gdml                     Witold.Pokorski@cern.ch         Witold Pokorski
     P01                      Witold.Pokorski@cern.ch         Witold Pokorski
     P02                      Witold.Pokorski@cern.ch         Witold Pokorski
     P03                      Pedro.Arce@ciemat.es            Pedro Arce
@@ -207,7 +207,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test12                 Gunter.Folger@cern.ch           Gunter Folger
       test13                 Gunter.Folger@cern.ch           Gunter Folger
       test14                 incerti@cenbg.in2p3.fr          Sebastien Incerti
-      test15                 Aatos.Heikkinen@cern.ch         Aatos Heikkinen
+      test15                 dwright@slac.stanford.edu       Dennis Wright
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
