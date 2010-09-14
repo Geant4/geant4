@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.18 2010-09-14 04:57:59 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.19 2010-09-14 06:27:13 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -180,7 +180,7 @@ G4InuclNuclei& G4InuclNuclei::operator=(const G4InuclNuclei& right) {
 
 void G4InuclNuclei::printParticle() const {
   G4InuclParticle::printParticle();
-  G4cout << "Nucleus: " << getDefinition()->GetParticleName() 
+  G4cout << " Nucleus: " << getDefinition()->GetParticleName() 
 	 << " A " << getA() << " Z " << getZ() << " mass " << getMass()
 	 << " Eex (MeV) " << getExitationEnergy() << G4endl;
 }
