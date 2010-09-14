@@ -11,11 +11,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
 13-Sep-2010 A. Dotti                           (hadr-chips-inter-V09-03-01)
 ---------------------------------------------------------------------------
-Handle exceptions thrown by Q4QEnvironment::Fragment retying interaction
-Hndle case in which Q4QEnvironment returns a 90000000 fragmen. Convert it to 
-a gamma
+- Fix in G4ChiralInvariantPhaseSpace to catch previously un-handled exceptions
+  produced when a 'chipolino' pseudo-particle is produced by the model and
+  thrown by Q4QEnvironment::Fragment, retrying the interaction; handles the
+  case in which Q4QEnvironment returns a 90000000 fragment, and converts it
+  to a gamma. Addressing problem report #1138.
 
 25-May-2010 M.Kosov                            (hadr-chips-inter-V09-03-00)
 ---------------------------------------------------------------------------
