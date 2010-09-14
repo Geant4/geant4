@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.94 2010-07-23 17:25:03 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.95 2010-09-14 18:20:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -52,6 +52,7 @@
 // 20100714  M. Kelsey -- Report number of iterations before success
 // 20100720  M. Kelsey -- Use G4CASCADE_SKIP_ECONS flag for reporting
 // 20100723  M. Kelsey -- Move G4CollisionOutput to .hh file for reuse
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -128,13 +129,14 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
     new G4InuclElementaryParticle(momentumBullet, bulletType); 
 
   // Set target
-  G4double theNucleusA = theNucleus.GetN();
+  G4int theNucleusA = theNucleus.GetA_asInt();
+  G4int theNucleusZ = theNucleus.GetZ_asInt();
 
   G4InuclParticle* target = 0;
-  if (G4int(theNucleusA) == 1)
+  if (theNucleusA == 1)
     target = new G4InuclElementaryParticle(proton);
   else
-    target = new G4InuclNuclei(theNucleusA, theNucleus.GetZ());
+    target = new G4InuclNuclei(theNucleusA, theNucleusZ);
 
   if (verboseLevel > 2) {
     G4cout << "Bullet:  " << G4endl;  

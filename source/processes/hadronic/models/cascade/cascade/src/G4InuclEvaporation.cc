@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.19 2010-06-25 09:44:40 gunter Exp $
+// $Id: G4InuclEvaporation.cc,v 1.20 2010-09-14 18:20:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -37,14 +37,15 @@
 // 20100520  M. Kelsey -- Simplify collision loop, move momentum rotations to
 //		G4CollisionOutput, copy G4DynamicParticle directly from
 //		G4InuclParticle, no switch-block required.  Fix scaling factors.
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
+#include "G4InuclEvaporation.hh"
 #include <numeric>
 #include "G4IonTable.hh"
 #include "globals.hh"
 #include "G4V3DNucleus.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4EvaporationInuclCollider.hh"
-#include "G4InuclEvaporation.hh"
 #include "G4InuclNuclei.hh"
 #include "G4Track.hh"
 #include "G4Nucleus.hh"
@@ -101,8 +102,8 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
     return theResult;
   }
 
-  G4double A = theNucleus.GetA();
-  G4double Z = theNucleus.GetZ();
+  G4int A = theNucleus.GetA_asInt();
+  G4int Z = theNucleus.GetZ_asInt();
   G4double mTar  = G4NucleiProperties::GetNuclearMass(A, Z); // Mass of the target nucleus
 
   G4ThreeVector momentum =  theNucleus.GetMomentum().vect() / GeV;
@@ -170,8 +171,8 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
       G4LorentzVector vlab = ifrag->getMomentum().boost(boostToLab);
  
-      G4int A = G4int(ifrag->getA());
-      G4int Z = G4int(ifrag->getZ());
+      G4int A = ifrag->getA();
+      G4int Z = ifrag->getZ();
       if (verboseLevel > 2) {
 	G4cout << "boosted v" << vlab << G4endl;
       }

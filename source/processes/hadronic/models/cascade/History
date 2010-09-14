@@ -1,4 +1,4 @@
-$Id: History,v 1.171 2010-09-14 17:52:13 mkelsey Exp $
+$Id: History,v 1.172 2010-09-14 18:20:06 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -22,12 +22,15 @@ explicit arguments for G4InuclNuclei, and function arguments, computational
 parameters involved in nuclear configurations, breakup, etc.
 
 	G4CascadeCheckBalance.cc
+	G4CascadeInterface.cc
 	G4CascadeRecoilMaker.hh
 	G4Fissioner.hh,cc
+	G4InuclEvaporation.cc
 	G4InuclNuclei.hh,cc
 	G4InuclSpecialFunctions.hh
 	G4NonEquilibriumEvaporator.hh,cc
 	G4NucleiModel.hh,cc
+	G4PreCompoundCascadeInterface.cc
 	bindingEnergy.cc
 	bindingEnergyAsymptotic.cc
 	nuclearLevelDensity.cc

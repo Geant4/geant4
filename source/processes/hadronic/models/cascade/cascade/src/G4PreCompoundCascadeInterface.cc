@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundCascadeInterface.cc,v 1.15 2010-06-17 15:32:35 mkelsey Exp $
+// $Id: G4PreCompoundCascadeInterface.cc,v 1.16 2010-09-14 18:20:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,6 +36,7 @@
 // 20100520  M. Kelsey -- Add missing name string to ctor, follow code changes
 //		from G4CascadeInterface.
 // 20100617  M. Kelsey -- Rename "debug_" preprocessor flag to G4CASCADE_DEBUG
+// 20100914  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4PreCompoundCascadeInterface.hh"
 #include "globals.hh"
@@ -125,10 +126,11 @@ G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4InuclNuclei*   target  = 0;
   G4InuclParticle* targetH = 0;
 
-  G4double theNucleusA = theNucleus.GetN();
+  G4int theNucleusA = theNucleus.GetA_asInt();
+  G4int theNucleusZ = theNucleus.GetZ_asInt();
 
-  if ( !(G4int(theNucleusA) == 1) ) {
-    target  = new G4InuclNuclei(theNucleusA, theNucleus.GetZ());
+  if (theNucleusA != 1) {
+    target = new G4InuclNuclei(theNucleusA, theNucleusZ);
     eInit = bullet->getEnergy() + target->getEnergy();
 
     sumBaryon += theNucleusA;
@@ -151,7 +153,7 @@ G4PreCompoundCascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4int  maxTries = 10; // maximum tries for inelastic collision to avoid infinite loop
   G4int  nTries   = 0;  // try counter
 
-  if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
+  if (theNucleusA == 1) { // special treatment for target H(1,1) (proton)
 
     targetH = new G4InuclElementaryParticle(1);
 
