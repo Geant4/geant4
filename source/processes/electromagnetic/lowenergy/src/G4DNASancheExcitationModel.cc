@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc,v 1.2 2010-09-15 05:47:33 sincerti Exp $
+// $Id: G4DNASancheExcitationModel.cc,v 1.3 2010-09-15 17:53:25 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -124,6 +124,11 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
   std::ostringstream eFullFileName;
   eFullFileName << path << "/dna/sigma_excitationvib_e_sanche.dat";
   std::ifstream input(eFullFileName.str().c_str());
+
+  if (!input)
+  { 
+    G4Exception("G4DNASancheExcitationModel:::ERROR OPENING XS DATA FILE");
+  }
   
   while(!input.eof())
   {
