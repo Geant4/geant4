@@ -8,3 +8,8 @@ flalpha.dat - alpha ground state deformation
   vgsld.dat - difference between deformed g.s. and ldm value
   pace2.dat - default mass for A, Z nucleus
 
+DRESNER data files:
+ bertini1
+ bertini2
+ bertini3
+
