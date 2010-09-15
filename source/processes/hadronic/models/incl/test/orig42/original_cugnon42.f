@@ -524,20 +524,20 @@ C  ALREM,BEREM,GAREM=DIRECTION COSINES OF THE REMNANT
 c************************************************************************
 C cascade imposee pour test p+Pb->p(5deg)+Pb(E*=200MeV)
 C************************************************************************
-C		NOPART=1
-C		KIND(1)=1
-C		EP(1)=799.835
-C		ALPHA(1)=0.08716
-C		BETA2(1)=0.
-C		GAM(1)=0.99619
-C		IZREM=82
-C		IAREM=208
-C		ESREM=200.
-C		ERECREM=0.18870
-C		ALREM=-0.47101
-C		BEREM=0.
-C		GAREM=0.88213
-C		BIMPACT=2.
+C$$$		NOPART=1
+C$$$		KIND(1)=1
+C$$$		EP(1)=799.835
+C$$$		ALPHA(1)=0.08716
+C$$$		BETA2(1)=0.
+C$$$		GAM(1)=0.99619
+C$$$		IZREM=82
+C$$$		IAREM=208
+C$$$		ESREM=200.
+C$$$		ERECREM=0.18870
+C$$$		ALREM=-0.47101
+C$$$		BEREM=0.
+C$$$		GAREM=0.88213
+C$$$		BIMPACT=2.
 
 C	WRITE(6,*) 'cascade, NOPART, Z,A,E*,T remnant:', 
 C     s              NOPART,IZREM,IAREM,ESREM,ERECREM
@@ -753,7 +753,7 @@ C --------------------------------------------------
 	IZFIS=0
 	IAFIS=0
 	
-C      IF ((ZPRF.GT.0).AND.(APRF.GT.0).AND.(ESREM.GT.0.01)) THEN
+      IF ((ZPRF.GT.0).AND.(APRF.GT.0).AND.(ESREM.GT.0.01)) THEN
 
 C **************************************************************************
 C                            EVAPORATION step                                       
@@ -803,432 +803,432 @@ C *************************  FIN EVPORATION GEM ***************
       ELSE	  
 C *************************  EVAPORATION KHS *********	  
 
-C$$$      IF(ESREM.GE.1.E-3) THEN	       
+      IF(ESREM.GE.1.E-3) THEN	       
                                                 
-C$$$      CALL EVAPORA(ZPRF,APRF,EE,JPRF,ZF,AF,MTOTA,PLEVA,PXEVA,           
-C$$$     &             PYEVA,FF,INTTYPE,INUM)
+      CALL EVAPORA(ZPRF,APRF,EE,JPRF,ZF,AF,MTOTA,PLEVA,PXEVA,           
+     &             PYEVA,FF,INTTYPE,INUM)
        
-C$$$      ELSE
-C$$$         FF=0
-C$$$	 ZF=ZPRF
-C$$$	 AF=APRF
-C$$$	 PXEVA=PXREM
-C$$$	 PYEVA=PYREM
-C$$$	 PLEVA=PZREM
-C$$$      ENDIF
+      ELSE
+         FF=0
+	 ZF=ZPRF
+	 AF=APRF
+	 PXEVA=PXREM
+	 PYEVA=PYREM
+	 PLEVA=PZREM
+      ENDIF
 
      
-C$$$C                                                                       
-C$$$C AFP,ZFP is the final fragment if no fission occurs (FF=0)                   
-C$$$C In case of fission (FF=1) it is the nucleus that undergoes fission.          
-C$$$C                                                                       
-C$$$           ZFP = IDNINT(ZF)                                                  
-C$$$           AFP = IDNINT(AF)
+C                                                                       
+C AFP,ZFP is the final fragment if no fission occurs (FF=0)                   
+C In case of fission (FF=1) it is the nucleus that undergoes fission.          
+C                                                                       
+           ZFP = IDNINT(ZF)                                                  
+           AFP = IDNINT(AF)
                                               
 
-C$$$      IF (FF.EQ.1) THEN   
-C$$$C ---------------------  Here, a FISSION occures --------------------------
-C$$$C                                                                       
-C$$$C FEE: (EE) energy of fissioning nucleus ABOVE the fission barrier.          
-C$$$C                                                                       
-C$$$             nfis = nfis +1
-C$$$             FEE = EE                                                                                                    
-C$$$	KFIS=1		!Drapeau de fission copie dans le NTUPLE
-C$$$C
-C$$$C  calcul des impulsions des particules evaporees (avant fission) 
-C$$$C                dans le systeme labo:
-C$$$c
-C$$$      TREM = DBLE(ERECREM)
-C$$$C      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC	!Canonic
-C$$$C      REMMASS = MCOREM  + DBLE(ESREM)				!OK
-C$$$C      REMMASS = MCOREM						!Cugnon
-C$$$C      GAMREM = (REMMASS + TREM)/REMMASS
-C$$$C      ETREM = DSQRT(TREM*(TREM + 2.*REMMASS))/REMMASS
+      IF (FF.EQ.1) THEN   
+C ---------------------  Here, a FISSION occures --------------------------
+C                                                                       
+C FEE: (EE) energy of fissioning nucleus ABOVE the fission barrier.          
+C                                                                       
+             nfis = nfis +1
+             FEE = EE                                                                                                    
+	KFIS=1		!Drapeau de fission copie dans le NTUPLE
+C
+C  calcul des impulsions des particules evaporees (avant fission) 
+C                dans le systeme labo:
+c
+      TREM = DBLE(ERECREM)
+C      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC	!Canonic
+C      REMMASS = MCOREM  + DBLE(ESREM)				!OK
+C      REMMASS = MCOREM						!Cugnon
+C      GAMREM = (REMMASS + TREM)/REMMASS
+C      ETREM = DSQRT(TREM*(TREM + 2.*REMMASS))/REMMASS
 
-C$$$C This is not treated as accurately as for the non fission case for which
-C$$$C the remnant mass is computed to satisfy the energy conservation 
-C$$$C of evaporated particles. But it is not bad and more canonical!      
-C$$$      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC+DBLE(ESREM) !canonic
-C$$$C Essais avec la masse de KHS (9/2002):
-C$$$	   CALL MGLMS(APRF,ZPRF,0,EL)
-C$$$      REMMASS = ZPRF*FMP + (APRF-ZPRF)*FMN + EL + DBLE(ESREM)
+C This is not treated as accurately as for the non fission case for which
+C the remnant mass is computed to satisfy the energy conservation 
+C of evaporated particles. But it is not bad and more canonical!      
+      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC+DBLE(ESREM) !canonic
+C Essais avec la masse de KHS (9/2002):
+	   CALL MGLMS(APRF,ZPRF,0,EL)
+      REMMASS = ZPRF*FMP + (APRF-ZPRF)*FMN + EL + DBLE(ESREM)
        
 
-C$$$      GAMREM=DSQRT(PCOREM**2+REMMASS**2)/REMMASS
-C$$$      ETREM=PCOREM/REMMASS
+      GAMREM=DSQRT(PCOREM**2+REMMASS**2)/REMMASS
+      ETREM=PCOREM/REMMASS
       
-C$$$      CSREM(1)=ALREM
-C$$$      CSREM(2)=BEREM
-C$$$      CSREM(3)=GAREM
+      CSREM(1)=ALREM
+      CSREM(2)=BEREM
+      CSREM(3)=GAREM
       
-C$$$C Pour Vérif Remnant = evapo(Pre fission) + Noyau_fissionant (système  Remnant)
-C$$$	Bil_E=0.
-C$$$	Bil_Px=0.
-C$$$	Bil_Py=0.
-C$$$	Bil_Pz=0.
-C$$$      DO iloc=1,iv
-C$$$        CALL MGLMS(DBLE(acv(iloc)),DBLE(zpcv(iloc)),0,EL)
-C$$$	MASSE = zpcv(iloc)*FMP + (acv(iloc)-zpcv(iloc))*FMN + EL
-C$$$	Bil_E = Bil_E + DSQRT(pcv(iloc)**2 + MASSE**2)
-C$$$	Bil_Px = Bil_Px	+ pcv(iloc)*xcv(iloc)
-C$$$	Bil_Py = Bil_Py	+ pcv(iloc)*ycv(iloc)
-C$$$	Bil_Pz = Bil_Pz	+ pcv(iloc)*zcv(iloc)
-C$$$      ENDDO
-C$$$C Ce bilan (impulsion nulle) est parfait. (Bil_Px=Bil_Px+PXEVA....)
+C Pour Vérif Remnant = evapo(Pre fission) + Noyau_fissionant (système  Remnant)
+	Bil_E=0.
+	Bil_Px=0.
+	Bil_Py=0.
+	Bil_Pz=0.
+      DO iloc=1,iv
+        CALL MGLMS(DBLE(acv(iloc)),DBLE(zpcv(iloc)),0,EL)
+	MASSE = zpcv(iloc)*FMP + (acv(iloc)-zpcv(iloc))*FMN + EL
+	Bil_E = Bil_E + DSQRT(pcv(iloc)**2 + MASSE**2)
+	Bil_Px = Bil_Px	+ pcv(iloc)*xcv(iloc)
+	Bil_Py = Bil_Py	+ pcv(iloc)*ycv(iloc)
+	Bil_Pz = Bil_Pz	+ pcv(iloc)*zcv(iloc)
+      ENDDO
+C Ce bilan (impulsion nulle) est parfait. (Bil_Px=Bil_Px+PXEVA....)
 
-C$$$        NDEC = 1
-C$$$      IF(iv.NE.0) THEN
-C$$$        CALL TRANSLAB(GAMREM,ETREM,CSREM,NOPART,NDEC)
-C$$$      ENDIF          
-C$$$	NBPEVAP = iv	!Nombre de particules d'evaporation traitees
-C$$$C                                                                       
-C$$$C Now calculation of the fission fragment distribution including                  
-C$$$C evaporation from the fragments.                                           
-C$$$C                                   
+        NDEC = 1
+      IF(iv.NE.0) THEN
+        CALL TRANSLAB(GAMREM,ETREM,CSREM,NOPART,NDEC)
+      ENDIF          
+	NBPEVAP = iv	!Nombre de particules d'evaporation traitees
+C                                                                       
+C Now calculation of the fission fragment distribution including                  
+C evaporation from the fragments.                                           
+C                                   
 
-C$$$C Distribution of the fission fragments:
+C Distribution of the fission fragments:
                                                                        
-C$$$         CALL FISSION_DISTRI(SNGL(AF),SNGL(ZF),SNGL(EE),AFF1,           
-C$$$     &        ZFF1,EFF1,AFF2,ZFF2,EFF2)
-C$$$C verif des A et Z decimaux:
-C$$$      NA_F=AF+0.5
-C$$$      NZ_F=ZF+0.5
-C$$$      	IZFIS=NZ_F	!Copie dans le NTUPLE
-C$$$      	IAFIS=NA_F
-C$$$      NA_PF1=AFF1+0.5
-C$$$      NZ_PF1=ZFF1+0.5     
-C$$$      NA_PF2=AFF2+0.5
-C$$$      NZ_PF2=ZFF2+0.5
-C$$$      IF((NA_F.NE.(NA_PF1+NA_PF2)).OR.(NZ_F.NE.(NZ_PF1+NZ_PF2)))
-C$$$     s    THEN
-C$$$	  WRITE(6,*) 'Problemes arrondis dans la fission'
-C$$$	  WRITE(6,*) 'AF,ZF,AFF1,ZFF1,AFF2,ZFF2',
-C$$$     s                AF,ZF,AFF1,ZFF1,AFF2,ZFF2    
-C$$$	  WRITE(6,*) 'A,Z,A1,Z1,A2,Z2 integer',
-C$$$     s                NA_F,NZ_F,NA_PF1,NZ_PF1,NA_PF2,NZ_PF2 
-C$$$      ENDIF   
-C$$$C Calcul de l'impulsion des PF dans le syteme noyau de fission:
-C$$$           Kboud = IDNINT(ZF)                                                  
-C$$$           Jboud = IDNINT(AF-ZF)                                             
-C$$$           EF = EFA(Kboud,Jboud)	!barriere de fission
-C$$$           ESTFIS=EE+EF   		!Copie dans le NTUPLE   
+         CALL FISSION_DISTRI(SNGL(AF),SNGL(ZF),SNGL(EE),AFF1,           
+     &        ZFF1,EFF1,AFF2,ZFF2,EFF2)
+C verif des A et Z decimaux:
+      NA_F=AF+0.5
+      NZ_F=ZF+0.5
+      	IZFIS=NZ_F	!Copie dans le NTUPLE
+      	IAFIS=NA_F
+      NA_PF1=AFF1+0.5
+      NZ_PF1=ZFF1+0.5     
+      NA_PF2=AFF2+0.5
+      NZ_PF2=ZFF2+0.5
+      IF((NA_F.NE.(NA_PF1+NA_PF2)).OR.(NZ_F.NE.(NZ_PF1+NZ_PF2)))
+     s    THEN
+	  WRITE(6,*) 'Problemes arrondis dans la fission'
+	  WRITE(6,*) 'AF,ZF,AFF1,ZFF1,AFF2,ZFF2',
+     s                AF,ZF,AFF1,ZFF1,AFF2,ZFF2    
+	  WRITE(6,*) 'A,Z,A1,Z1,A2,Z2 integer',
+     s                NA_F,NZ_F,NA_PF1,NZ_PF1,NA_PF2,NZ_PF2 
+      ENDIF   
+C Calcul de l'impulsion des PF dans le syteme noyau de fission:
+           Kboud = IDNINT(ZF)                                                  
+           Jboud = IDNINT(AF-ZF)                                             
+           EF = EFA(Kboud,Jboud)	!barriere de fission
+           ESTFIS=EE+EF   		!Copie dans le NTUPLE   
            
      
-C$$$C           MASSEF = pace2(AF,ZF)
-C$$$C      	   MASSEF = MASSEF + AF*UMA - ZF*MELEC + EE + EF
-C$$$C           MASSE1 = pace2(DBLE(AFF1),DBLE(ZFF1))
-C$$$C      	   MASSE1 = MASSE1 + AFF1*UMA - ZFF1*MELEC + EFF1
-C$$$C           MASSE2 = pace2(DBLE(AFF2),DBLE(ZFF2))
-C$$$C      	   MASSE2 = MASSE2 + AFF2*UMA - ZFF2*MELEC + EFF2
-C$$$C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2
-C$$$C MGLMS est la fonction de masse cohérente avec KHS evapo-fis.
-C$$$C   Attention aux parametres, ici 0=OPTSHP, NO microscopic correct. 
-C$$$	   CALL MGLMS(AF,ZF,0,EL)
-C$$$	   MASSEF = ZF*FMP + (AF-ZF)*FMN + EL + EE + EF
-C$$$	   CALL MGLMS(DBLE(AFF1),DBLE(ZFF1),0,EL)
-C$$$      	   MASSE1 = ZFF1*FMP + (AFF1-ZFF1)*FMN + EL + EFF1
-C$$$	   CALL MGLMS(DBLE(AFF2),DBLE(ZFF2),0,EL)
-C$$$      	   MASSE2 = ZFF2*FMP + (AFF2-ZFF2)*FMN + EL + EFF2
-C$$$C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2	   
-C$$$           B = MASSEF-MASSE1-MASSE2
-C$$$	   IF(B.LT.0.) THEN
-C$$$	   	B=0.
-C$$$		WRITE(6,*) 'anomalie dans la fission:', 
-C$$$     s     inum,AF,ZF,massef,AFF1,ZFF1,masse1,AFF2,ZFF2,masse2
-C$$$	   ENDIF
-C$$$           T1=B*(B+2.*MASSE2)/(2.*MASSEF)
-C$$$           P1 = DSQRT(T1*(T1+2.*MASSE1))
+C           MASSEF = pace2(AF,ZF)
+C      	   MASSEF = MASSEF + AF*UMA - ZF*MELEC + EE + EF
+C           MASSE1 = pace2(DBLE(AFF1),DBLE(ZFF1))
+C      	   MASSE1 = MASSE1 + AFF1*UMA - ZFF1*MELEC + EFF1
+C           MASSE2 = pace2(DBLE(AFF2),DBLE(ZFF2))
+C      	   MASSE2 = MASSE2 + AFF2*UMA - ZFF2*MELEC + EFF2
+C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2
+C MGLMS est la fonction de masse cohérente avec KHS evapo-fis.
+C   Attention aux parametres, ici 0=OPTSHP, NO microscopic correct. 
+	   CALL MGLMS(AF,ZF,0,EL)
+	   MASSEF = ZF*FMP + (AF-ZF)*FMN + EL + EE + EF
+	   CALL MGLMS(DBLE(AFF1),DBLE(ZFF1),0,EL)
+      	   MASSE1 = ZFF1*FMP + (AFF1-ZFF1)*FMN + EL + EFF1
+	   CALL MGLMS(DBLE(AFF2),DBLE(ZFF2),0,EL)
+      	   MASSE2 = ZFF2*FMP + (AFF2-ZFF2)*FMN + EL + EFF2
+C        WRITE(6,*) 'MASSEF,MASSE1,MASSE2',MASSEF,MASSE1,MASSE2	   
+           B = MASSEF-MASSE1-MASSE2
+	   IF(B.LT.0.) THEN
+	   	B=0.
+		WRITE(6,*) 'anomalie dans la fission:', 
+     s     inum,AF,ZF,massef,AFF1,ZFF1,masse1,AFF2,ZFF2,masse2
+	   ENDIF
+           T1=B*(B+2.*MASSE2)/(2.*MASSEF)
+           P1 = DSQRT(T1*(T1+2.*MASSE1))
            
-C$$$           CALL RIBM(rndm,IY(14))
-C$$$           CTET1 = 2.*rndm-1.
-C$$$           CALL RIBM(rndm,IY(10))
-C$$$           PHI1 = rndm*2.*3.141592654
+           CALL RIBM(rndm,IY(14))
+           CTET1 = 2.*rndm-1.
+           CALL RIBM(rndm,IY(10))
+           PHI1 = rndm*2.*3.141592654
            
-C$$$C ----Coefs de la transformation de Lorentz (noyau de fission -> Remnant) 
-C$$$      PEVA = PXEVA**2+PYEVA**2+PLEVA**2
-C$$$      GAMFIS = DSQRT(MASSEF**2 + PEVA)/MASSEF
-C$$$      PEVA = DSQRT(PEVA)
-C$$$      ETFIS = PEVA/MASSEF
+C ----Coefs de la transformation de Lorentz (noyau de fission -> Remnant) 
+      PEVA = PXEVA**2+PYEVA**2+PLEVA**2
+      GAMFIS = DSQRT(MASSEF**2 + PEVA)/MASSEF
+      PEVA = DSQRT(PEVA)
+      ETFIS = PEVA/MASSEF
       
-C$$$C ----Matrice de rotation (noyau de fission -> Remnant)
-C$$$      SITET = 0.
-C$$$      IF(PEVA.GE.1.E-4)SITET = SQRT(PXEVA**2+PYEVA**2)/PEVA
-C$$$      IF(SITET.GT.1.E-5)THEN
-C$$$        CSTET = PLEVA/PEVA
-C$$$        SIPHI = PYEVA/(SITET*PEVA)
-C$$$        CSPHI = PXEVA/(SITET*PEVA)
+C ----Matrice de rotation (noyau de fission -> Remnant)
+      SITET = 0.
+      IF(PEVA.GE.1.E-4)SITET = SQRT(PXEVA**2+PYEVA**2)/PEVA
+      IF(SITET.GT.1.E-5)THEN
+        CSTET = PLEVA/PEVA
+        SIPHI = PYEVA/(SITET*PEVA)
+        CSPHI = PXEVA/(SITET*PEVA)
 	
-C$$$	R(1,1) = CSTET*CSPHI
-C$$$	R(1,2) = -SIPHI
-C$$$	R(1,3) = SITET*CSPHI
-C$$$	R(2,1) = CSTET*SIPHI
-C$$$	R(2,2) = CSPHI
-C$$$	R(2,3) = SITET*SIPHI
-C$$$	R(3,1) = -SITET
-C$$$	R(3,2) = 0.
-C$$$	R(3,3) = CSTET
-C$$$      ELSE
-C$$$734	R(1,1) = 1.
-C$$$	R(1,2) = 0.
-C$$$	R(1,3) = 0.
-C$$$	R(2,1) = 0.
-C$$$	R(2,2) = 1.
-C$$$	R(2,3) = 0.
-C$$$	R(3,1) = 0.
-C$$$	R(3,2) = 0.
-C$$$	R(3,3) = 1.
-C$$$      ENDIF
+	R(1,1) = CSTET*CSPHI
+	R(1,2) = -SIPHI
+	R(1,3) = SITET*CSPHI
+	R(2,1) = CSTET*SIPHI
+	R(2,2) = CSPHI
+	R(2,3) = SITET*SIPHI
+	R(3,1) = -SITET
+	R(3,2) = 0.
+	R(3,3) = CSTET
+      ELSE
+734	R(1,1) = 1.
+	R(1,2) = 0.
+	R(1,3) = 0.
+	R(2,1) = 0.
+	R(2,2) = 1.
+	R(2,3) = 0.
+	R(3,1) = 0.
+	R(3,2) = 0.
+	R(3,3) = 1.
+      ENDIF
 	           
-C$$$c test de verif:                                      
-C$$$         IF( (ZFF1.LE.0.D0).OR.(AFF1.LE.0.D0).OR.(AFF1.LT.ZFF1)) THEN   
-C$$$                        WRITE(6,*) ZF,AF,EE,ZFF1,AFF1                                
-C$$$         ELSE
+c test de verif:                                      
+         IF( (ZFF1.LE.0.D0).OR.(AFF1.LE.0.D0).OR.(AFF1.LT.ZFF1)) THEN   
+                        WRITE(6,*) ZF,AF,EE,ZFF1,AFF1                                
+         ELSE
                                                                     
-C$$$C ---------------------- PF1 will evaporate 
-C$$$         EPF1_IN=DBLE(EFF1)
-C$$$	 EPF1_OUT=EPF1_IN
-C$$$         CALL EVAPORA(DBLE(ZFF1),DBLE(AFF1),EPF1_OUT,0.D0,            
-C$$$     &   ZF1,AF1,MALPHA1,FFPLEVA1,FFPXEVA1,FFPYEVA1,FF1,FTYPE1,INUM)
+C ---------------------- PF1 will evaporate 
+         EPF1_IN=DBLE(EFF1)
+	 EPF1_OUT=EPF1_IN
+         CALL EVAPORA(DBLE(ZFF1),DBLE(AFF1),EPF1_OUT,0.D0,            
+     &   ZF1,AF1,MALPHA1,FFPLEVA1,FFPXEVA1,FFPYEVA1,FF1,FTYPE1,INUM)
      
-C$$$C On ajoute le fragment:
-C$$$         iv = iv +1
-C$$$         acv(iv) = AF1
-C$$$         zpcv(iv) = ZF1        
-C$$$         PEVA = DSQRT(FFPXEVA1**2+FFPYEVA1**2+FFPLEVA1**2)
-C$$$         pcv(iv) = PEVA
-C$$$	IF(PEVA.GT.0.001) THEN
-C$$$         xcv(iv) = FFPXEVA1/PEVA
-C$$$         ycv(iv) = FFPYEVA1/PEVA
-C$$$         zcv(iv) = FFPLEVA1/PEVA 
-C$$$        ELSE
-C$$$         xcv(iv)=1.
-C$$$         ycv(iv)=0.
-C$$$         zcv(iv)=0.
-C$$$        END IF
+C On ajoute le fragment:
+         iv = iv +1
+         acv(iv) = AF1
+         zpcv(iv) = ZF1        
+         PEVA = DSQRT(FFPXEVA1**2+FFPYEVA1**2+FFPLEVA1**2)
+         pcv(iv) = PEVA
+	IF(PEVA.GT.0.001) THEN
+         xcv(iv) = FFPXEVA1/PEVA
+         ycv(iv) = FFPYEVA1/PEVA
+         zcv(iv) = FFPLEVA1/PEVA 
+        ELSE
+         xcv(iv)=1.
+         ycv(iv)=0.
+         zcv(iv)=0.
+        END IF
 	        
-C$$$C Pour Vérif evapo de PF1 dans le systeme du Noyau Fissionant
-C$$$	Bil1_E=0.
-C$$$	Bil1_Px=0.
-C$$$	Bil1_Py=0.
-C$$$	Bil1_Pz=0.
-C$$$      DO iloc=NBPEVAP+1,iv
-C$$$	CALL MGLMS(DBLE(acv(iloc)),DBLE(zpcv(iloc)),0,EL)
-C$$$      	MASSE = zpcv(iloc)*FMP + (acv(iloc)-zpcv(iloc))*FMN + EL 
-C$$$	Bil1_E = Bil1_E + DSQRT(pcv(iloc)**2 + MASSE**2)
-C$$$	Bil1_Px = Bil1_Px	+ pcv(iloc)*xcv(iloc)
-C$$$	Bil1_Py = Bil1_Py	+ pcv(iloc)*ycv(iloc)
-C$$$	Bil1_Pz = Bil1_Pz	+ pcv(iloc)*zcv(iloc)
-C$$$      ENDDO
+C Pour Vérif evapo de PF1 dans le systeme du Noyau Fissionant
+	Bil1_E=0.
+	Bil1_Px=0.
+	Bil1_Py=0.
+	Bil1_Pz=0.
+      DO iloc=NBPEVAP+1,iv
+	CALL MGLMS(DBLE(acv(iloc)),DBLE(zpcv(iloc)),0,EL)
+      	MASSE = zpcv(iloc)*FMP + (acv(iloc)-zpcv(iloc))*FMN + EL 
+	Bil1_E = Bil1_E + DSQRT(pcv(iloc)**2 + MASSE**2)
+	Bil1_Px = Bil1_Px	+ pcv(iloc)*xcv(iloc)
+	Bil1_Py = Bil1_Py	+ pcv(iloc)*ycv(iloc)
+	Bil1_Pz = Bil1_Pz	+ pcv(iloc)*zcv(iloc)
+      ENDDO
        
-C$$$C ----Calcul des cosinus directeurs de PF1 dans le Remnant et calcul
-C$$$c des coefs pour la transformation de Lorentz Systeme PF --> Systeme Remnant
+C ----Calcul des cosinus directeurs de PF1 dans le Remnant et calcul
+c des coefs pour la transformation de Lorentz Systeme PF --> Systeme Remnant
 	
-C$$$        CALL TRANSLABPF(MASSE1,T1,P1,CTET1,PHI1,GAMFIS,ETFIS,R,
-C$$$     s   PLAB1,GAM1,ETA1,CSDIR1)
+        CALL TRANSLABPF(MASSE1,T1,P1,CTET1,PHI1,GAMFIS,ETFIS,R,
+     s   PLAB1,GAM1,ETA1,CSDIR1)
      
-C$$$C
-C$$$C  calcul des impulsions des particules evaporees dans le systeme Remnant:
-C$$$c
-C$$$         CALL TRANSLAB(GAM1,ETA1,CSDIR1,NOPART,NBPEVAP+1)
-C$$$         MEMIV = NBPEVAP+1		!Memoires pour la future transformation
-C$$$         MEMPAW = NOPART		!remnant->labo pour PF1 ET PF2.
-C$$$         LMI_PF1 = NOPART + NBPEVAP+1	!indices min et max dans /VAR_NTP/
-C$$$	 LMA_PF1 = NOPART + iv		! des particules issues de PF1
-C$$$	 NBPEVAP = iv	!Nombre de particules d'evaporation traitees
+C
+C  calcul des impulsions des particules evaporees dans le systeme Remnant:
+c
+         CALL TRANSLAB(GAM1,ETA1,CSDIR1,NOPART,NBPEVAP+1)
+         MEMIV = NBPEVAP+1		!Memoires pour la future transformation
+         MEMPAW = NOPART		!remnant->labo pour PF1 ET PF2.
+         LMI_PF1 = NOPART + NBPEVAP+1	!indices min et max dans /VAR_NTP/
+	 LMA_PF1 = NOPART + iv		! des particules issues de PF1
+	 NBPEVAP = iv	!Nombre de particules d'evaporation traitees
 
-C$$$         END IF
-C$$$C --------------------- End of PF1 calculation
+         END IF
+C --------------------- End of PF1 calculation
 
-C$$$c test de verif:                                                                                                         
-C$$$         IF( (ZFF2.LE.0.D0).OR.(AFF2.LE.0.D0).OR.(AFF2.LT.ZFF2)) THEN   
-C$$$           		WRITE(6,*) ZF,AF,EE,ZFF2,AFF2                                
-C$$$         ELSE                                                           
+c test de verif:                                                                                                         
+         IF( (ZFF2.LE.0.D0).OR.(AFF2.LE.0.D0).OR.(AFF2.LT.ZFF2)) THEN   
+           		WRITE(6,*) ZF,AF,EE,ZFF2,AFF2                                
+         ELSE                                                           
                                                                     
-C$$$C ---------------------- PF2 will evaporate 
-C$$$         EPF2_IN=DBLE(EFF2)
-C$$$	 EPF2_OUT=EPF2_IN
-C$$$         CALL EVAPORA(DBLE(ZFF2),DBLE(AFF2),EPF2_OUT,0.D0,            
-C$$$     &   ZF2,AF2,MALPHA2,FFPLEVA2,FFPXEVA2,FFPYEVA2,FF2,FTYPE2,INUM)        
+C ---------------------- PF2 will evaporate 
+         EPF2_IN=DBLE(EFF2)
+	 EPF2_OUT=EPF2_IN
+         CALL EVAPORA(DBLE(ZFF2),DBLE(AFF2),EPF2_OUT,0.D0,            
+     &   ZF2,AF2,MALPHA2,FFPLEVA2,FFPXEVA2,FFPYEVA2,FF2,FTYPE2,INUM)        
      
-C$$$C On ajoute le fragment:
-C$$$         iv = iv +1
-C$$$         acv(iv) = AF2
-C$$$         zpcv(iv) = ZF2        
-C$$$         PEVA = DSQRT(FFPXEVA2**2+FFPYEVA2**2+FFPLEVA2**2)
-C$$$         pcv(iv) = PEVA
-C$$$	IF(PEVA.GT.0.001) THEN
-C$$$         xcv(iv) = FFPXEVA2/PEVA
-C$$$         ycv(iv) = FFPYEVA2/PEVA
-C$$$         zcv(iv) = FFPLEVA2/PEVA 
-C$$$        ELSE
-C$$$         xcv(iv)=1.
-C$$$         ycv(iv)=0.
-C$$$         zcv(iv)=0.
-C$$$        END IF        
-C$$$C Pour Vérif evapo de PF1 dans le systeme du Noyau Fissionant
-C$$$	Bil2_E=0.
-C$$$	Bil2_Px=0.
-C$$$	Bil2_Py=0.
-C$$$	Bil2_Pz=0.
-C$$$      DO iloc=NBPEVAP+1,iv
-C$$$	CALL MGLMS(DBLE(acv(iloc)),DBLE(zpcv(iloc)),0,EL)
-C$$$      	MASSE = zpcv(iloc)*FMP + (acv(iloc)-zpcv(iloc))*FMN + EL 
-C$$$	Bil2_E = Bil2_E + DSQRT(pcv(iloc)**2 + MASSE**2)
-C$$$	Bil2_Px = Bil2_Px	+ pcv(iloc)*xcv(iloc)
-C$$$	Bil2_Py = Bil2_Py	+ pcv(iloc)*ycv(iloc)
-C$$$	Bil2_Pz = Bil2_Pz	+ pcv(iloc)*zcv(iloc)
-C$$$      ENDDO
+C On ajoute le fragment:
+         iv = iv +1
+         acv(iv) = AF2
+         zpcv(iv) = ZF2        
+         PEVA = DSQRT(FFPXEVA2**2+FFPYEVA2**2+FFPLEVA2**2)
+         pcv(iv) = PEVA
+	IF(PEVA.GT.0.001) THEN
+         xcv(iv) = FFPXEVA2/PEVA
+         ycv(iv) = FFPYEVA2/PEVA
+         zcv(iv) = FFPLEVA2/PEVA 
+        ELSE
+         xcv(iv)=1.
+         ycv(iv)=0.
+         zcv(iv)=0.
+        END IF        
+C Pour Vérif evapo de PF1 dans le systeme du Noyau Fissionant
+	Bil2_E=0.
+	Bil2_Px=0.
+	Bil2_Py=0.
+	Bil2_Pz=0.
+      DO iloc=NBPEVAP+1,iv
+	CALL MGLMS(DBLE(acv(iloc)),DBLE(zpcv(iloc)),0,EL)
+      	MASSE = zpcv(iloc)*FMP + (acv(iloc)-zpcv(iloc))*FMN + EL 
+	Bil2_E = Bil2_E + DSQRT(pcv(iloc)**2 + MASSE**2)
+	Bil2_Px = Bil2_Px	+ pcv(iloc)*xcv(iloc)
+	Bil2_Py = Bil2_Py	+ pcv(iloc)*ycv(iloc)
+	Bil2_Pz = Bil2_Pz	+ pcv(iloc)*zcv(iloc)
+      ENDDO
 
-C$$$C ----Calcul des cosinus directeurs de PF2 dans le Remnant et calcul
-C$$$c des coefs pour la transformation de Lorentz Systeme PF --> Systeme Remnant
-C$$$     	T2 = B - T1
-C$$$     	CTET2 = -CTET1
-C$$$     	PHI2 = DMOD(PHI1+3.141592654,6.283185308D+00)
-C$$$     	P2 = DSQRT(T2*(T2+2.*MASSE2))
+C ----Calcul des cosinus directeurs de PF2 dans le Remnant et calcul
+c des coefs pour la transformation de Lorentz Systeme PF --> Systeme Remnant
+     	T2 = B - T1
+     	CTET2 = -CTET1
+     	PHI2 = DMOD(PHI1+3.141592654,6.283185308D+00)
+     	P2 = DSQRT(T2*(T2+2.*MASSE2))
      
-C$$$        CALL TRANSLABPF(MASSE2,T2,P2,CTET2,PHI2,GAMFIS,ETFIS,R,
-C$$$     s   PLAB2,GAM2,ETA2,CSDIR2)
+        CALL TRANSLABPF(MASSE2,T2,P2,CTET2,PHI2,GAMFIS,ETFIS,R,
+     s   PLAB2,GAM2,ETA2,CSDIR2)
 
-C$$$C
-C$$$C  calcul des impulsions des particules evaporees dans le systeme Remnant:
-C$$$c
-C$$$        CALL TRANSLAB(GAM2,ETA2,CSDIR2,NOPART,NBPEVAP+1 )
-C$$$         LMI_PF2 = NOPART + NBPEVAP+1	!indices min et max dans /VAR_NTP/
-C$$$	 LMA_PF2 = NOPART + iv		! des particules issues de PF2
+C
+C  calcul des impulsions des particules evaporees dans le systeme Remnant:
+c
+        CALL TRANSLAB(GAM2,ETA2,CSDIR2,NOPART,NBPEVAP+1 )
+         LMI_PF2 = NOPART + NBPEVAP+1	!indices min et max dans /VAR_NTP/
+	 LMA_PF2 = NOPART + iv		! des particules issues de PF2
 
-C$$$        END IF
-C$$$C --------------------- End of PF2 calculation
+        END IF
+C --------------------- End of PF2 calculation
 
-C$$$C Pour vérifications: calculs du noyau fissionant et des PF dans 
-C$$$C    le systeme du remnant.
-C$$$      DO iloc=1,3
-C$$$        PFIS_REM(iloc)=0.
-C$$$      ENDDO 
-C$$$      CALL LOR_AB(GAMFIS,ETFIS,MASSEF,PFIS_REM,EFIS_REM,PFIS_TRAV)
-C$$$      CALL ROT_AB(R,PFIS_TRAV,PFIS_REM)
-C$$$C      WRITE(6,*) (PFIS_REM(iloc),iloc=1,3)
-C$$$C      WRITE(6,*) CTET1,CTET2,PHI1,PHI2,P1,P2
+C Pour vérifications: calculs du noyau fissionant et des PF dans 
+C    le systeme du remnant.
+      DO iloc=1,3
+        PFIS_REM(iloc)=0.
+      ENDDO 
+      CALL LOR_AB(GAMFIS,ETFIS,MASSEF,PFIS_REM,EFIS_REM,PFIS_TRAV)
+      CALL ROT_AB(R,PFIS_TRAV,PFIS_REM)
+C      WRITE(6,*) (PFIS_REM(iloc),iloc=1,3)
+C      WRITE(6,*) CTET1,CTET2,PHI1,PHI2,P1,P2
       
-C$$$      STET1=SQRT(1.-CTET1**2)
-C$$$      PF1_REM(1)=P1*STET1*COS(PHI1)
-C$$$      PF1_REM(2)=P1*STET1*SIN(PHI1)
-C$$$      PF1_REM(3)=P1*CTET1
-C$$$      CALL LOR_AB(GAMFIS,ETFIS,MASSE1+T1,PF1_REM,E1_REM,PFIS_TRAV)
-C$$$      CALL ROT_AB(R,PFIS_TRAV,PF1_REM)  
+      STET1=SQRT(1.-CTET1**2)
+      PF1_REM(1)=P1*STET1*COS(PHI1)
+      PF1_REM(2)=P1*STET1*SIN(PHI1)
+      PF1_REM(3)=P1*CTET1
+      CALL LOR_AB(GAMFIS,ETFIS,MASSE1+T1,PF1_REM,E1_REM,PFIS_TRAV)
+      CALL ROT_AB(R,PFIS_TRAV,PF1_REM)  
 
-C$$$      STET2=SQRT(1.-CTET2**2)
-C$$$      PF2_REM(1)=P2*STET2*COS(PHI2)
-C$$$      PF2_REM(2)=P2*STET2*SIN(PHI2)
-C$$$      PF2_REM(3)=P2*CTET2
-C$$$      CALL LOR_AB(GAMFIS,ETFIS,MASSE2+T2,PF2_REM,E2_REM,PFIS_TRAV)
-C$$$      CALL ROT_AB(R,PFIS_TRAV,PF2_REM)
-C$$$C Verif 0: Remnant = evapo_pre_fission + Noyau Fissionant
-C$$$	Bil_E = REMMASS - EFIS_REM - Bil_E
-C$$$	Bil_Px = Bil_Px + PFIS_REM(1)  
-C$$$	Bil_Py = Bil_Py + PFIS_REM(2)  
-C$$$	Bil_Pz = Bil_Pz + PFIS_REM(3)  
-C$$$C Verif 1: noyau fissionant = PF1 + PF2 dans le systeme remnant
-C$$$	Bilan_E = EFIS_REM - E1_REM - E2_REM
-C$$$	Bilan_PX = PFIS_REM(1) - PF1_REM(1) - PF2_REM(1)
-C$$$	Bilan_PY = PFIS_REM(2) - PF1_REM(2) - PF2_REM(2)
-C$$$	Bilan_PZ = PFIS_REM(3) - PF1_REM(3) - PF2_REM(3)
-C$$$C Verif 2: PF1 et PF2 egaux a toutes leurs particules evaporees
-C$$$C   (Systeme remnant)
-C$$$      IF((LMA_PF1-LMI_PF1).NE.0) THEN
-C$$$	Bil_E_PF1 = E1_REM - EPF1_OUT
-C$$$	Bil_PX_PF1 = PF1_REM(1) 
-C$$$	Bil_PY_PF1 = PF1_REM(2) 
-C$$$	Bil_PZ_PF1 = PF1_REM(3)
-C$$$        DO ipf1=LMI_PF1,LMA_PF1
-C$$$		 Bil_E_PF1 = Bil_E_PF1 
-C$$$     s		 - (PLAB(ipf1)**2 + ENERJ(ipf1)**2)/(2.*ENERJ(ipf1))
-C$$$		 CST = COS(TETLAB(ipf1)/57.2957795)
-C$$$		 SST = SIN(TETLAB(ipf1)/57.2957795)
-C$$$		 CSF = COS(PHILAB(ipf1)/57.2957795)
-C$$$		 SSF = SIN(PHILAB(ipf1)/57.2957795)
-C$$$		 Bil_PX_PF1 = Bil_PX_PF1 - PLAB(ipf1)*SST*CSF
-C$$$		 Bil_PY_PF1 = Bil_PY_PF1 - PLAB(ipf1)*SST*SSF
-C$$$		 Bil_PZ_PF1 = Bil_PZ_PF1 - PLAB(ipf1)*CST		 
-C$$$        ENDDO
-C$$$	ENDIF
+      STET2=SQRT(1.-CTET2**2)
+      PF2_REM(1)=P2*STET2*COS(PHI2)
+      PF2_REM(2)=P2*STET2*SIN(PHI2)
+      PF2_REM(3)=P2*CTET2
+      CALL LOR_AB(GAMFIS,ETFIS,MASSE2+T2,PF2_REM,E2_REM,PFIS_TRAV)
+      CALL ROT_AB(R,PFIS_TRAV,PF2_REM)
+C Verif 0: Remnant = evapo_pre_fission + Noyau Fissionant
+	Bil_E = REMMASS - EFIS_REM - Bil_E
+	Bil_Px = Bil_Px + PFIS_REM(1)  
+	Bil_Py = Bil_Py + PFIS_REM(2)  
+	Bil_Pz = Bil_Pz + PFIS_REM(3)  
+C Verif 1: noyau fissionant = PF1 + PF2 dans le systeme remnant
+	Bilan_E = EFIS_REM - E1_REM - E2_REM
+	Bilan_PX = PFIS_REM(1) - PF1_REM(1) - PF2_REM(1)
+	Bilan_PY = PFIS_REM(2) - PF1_REM(2) - PF2_REM(2)
+	Bilan_PZ = PFIS_REM(3) - PF1_REM(3) - PF2_REM(3)
+C Verif 2: PF1 et PF2 egaux a toutes leurs particules evaporees
+C   (Systeme remnant)
+      IF((LMA_PF1-LMI_PF1).NE.0) THEN
+	Bil_E_PF1 = E1_REM - EPF1_OUT
+	Bil_PX_PF1 = PF1_REM(1) 
+	Bil_PY_PF1 = PF1_REM(2) 
+	Bil_PZ_PF1 = PF1_REM(3)
+        DO ipf1=LMI_PF1,LMA_PF1
+		 Bil_E_PF1 = Bil_E_PF1 
+     s		 - (PLAB(ipf1)**2 + ENERJ(ipf1)**2)/(2.*ENERJ(ipf1))
+		 CST = COS(TETLAB(ipf1)/57.2957795)
+		 SST = SIN(TETLAB(ipf1)/57.2957795)
+		 CSF = COS(PHILAB(ipf1)/57.2957795)
+		 SSF = SIN(PHILAB(ipf1)/57.2957795)
+		 Bil_PX_PF1 = Bil_PX_PF1 - PLAB(ipf1)*SST*CSF
+		 Bil_PY_PF1 = Bil_PY_PF1 - PLAB(ipf1)*SST*SSF
+		 Bil_PZ_PF1 = Bil_PZ_PF1 - PLAB(ipf1)*CST		 
+        ENDDO
+	ENDIF
 	 
-C$$$      IF((LMA_PF2-LMI_PF2).NE.0) THEN
-C$$$	Bil_E_PF2 =  E2_REM - EPF2_OUT
-C$$$	Bil_PX_PF2 = PF2_REM(1) 
-C$$$	Bil_PY_PF2 = PF2_REM(2) 
-C$$$	Bil_PZ_PF2 = PF2_REM(3)
-C$$$        DO ipf2=LMI_PF2,LMA_PF2
-C$$$		 Bil_E_PF2 = Bil_E_PF2 
-C$$$     s		 - (PLAB(ipf2)**2 + ENERJ(ipf2)**2)/(2.*ENERJ(ipf2))
-C$$$		 CST = COS(TETLAB(ipf2)/57.2957795)
-C$$$		 SST = SIN(TETLAB(ipf2)/57.2957795)
-C$$$		 CSF = COS(PHILAB(ipf2)/57.2957795)
-C$$$		 SSF = SIN(PHILAB(ipf2)/57.2957795)
-C$$$		 Bil_PX_PF2 = Bil_PX_PF2 - PLAB(ipf2)*SST*CSF
-C$$$		 Bil_PY_PF2 = Bil_PY_PF2 - PLAB(ipf2)*SST*SSF
-C$$$		 Bil_PZ_PF2 = Bil_PZ_PF2 - PLAB(ipf2)*CST		 
-C$$$        ENDDO
-C$$$	ENDIF 
-C$$$C
-C$$$C ---- Transformation systeme Remnant -> systeme labo. (evapo de PF1 ET PF2)
-C$$$C
-C$$$	CALL TRANSLAB(GAMREM,ETREM,CSREM,MEMPAW,MEMIV)
+      IF((LMA_PF2-LMI_PF2).NE.0) THEN
+	Bil_E_PF2 =  E2_REM - EPF2_OUT
+	Bil_PX_PF2 = PF2_REM(1) 
+	Bil_PY_PF2 = PF2_REM(2) 
+	Bil_PZ_PF2 = PF2_REM(3)
+        DO ipf2=LMI_PF2,LMA_PF2
+		 Bil_E_PF2 = Bil_E_PF2 
+     s		 - (PLAB(ipf2)**2 + ENERJ(ipf2)**2)/(2.*ENERJ(ipf2))
+		 CST = COS(TETLAB(ipf2)/57.2957795)
+		 SST = SIN(TETLAB(ipf2)/57.2957795)
+		 CSF = COS(PHILAB(ipf2)/57.2957795)
+		 SSF = SIN(PHILAB(ipf2)/57.2957795)
+		 Bil_PX_PF2 = Bil_PX_PF2 - PLAB(ipf2)*SST*CSF
+		 Bil_PY_PF2 = Bil_PY_PF2 - PLAB(ipf2)*SST*SSF
+		 Bil_PZ_PF2 = Bil_PZ_PF2 - PLAB(ipf2)*CST		 
+        ENDDO
+	ENDIF 
+C
+C ---- Transformation systeme Remnant -> systeme labo. (evapo de PF1 ET PF2)
+C
+	CALL TRANSLAB(GAMREM,ETREM,CSREM,MEMPAW,MEMIV)
 	
-C$$$C *******************  END of fission calculations ************************
+C *******************  END of fission calculations ************************
 
-C$$$      ELSE
+      ELSE
        
-C$$$C ************************ Evapo sans fission *****************************
-C$$$C Here, FF=0, --> Evapo sans fission, on ajoute le fragment:
-C$$$C *************************************************************************
-C$$$         iv = iv +1
-C$$$         acv(iv) = AF
-C$$$         zpcv(iv) = ZF
-C$$$         PEVA = DSQRT(PXEVA**2+PYEVA**2+PLEVA**2)
-C$$$         pcv(iv) = PEVA
-C$$$	IF(PEVA.GT.0.001) THEN
-C$$$         xcv(iv) = PXEVA/PEVA
-C$$$         ycv(iv) = PYEVA/PEVA
-C$$$         zcv(iv) = PLEVA/PEVA        
-C$$$        ELSE
-C$$$         xcv(iv)=1.
-C$$$         ycv(iv)=0.
-C$$$         zcv(iv)=0.
-C$$$        END IF        
+C ************************ Evapo sans fission *****************************
+C Here, FF=0, --> Evapo sans fission, on ajoute le fragment:
+C *************************************************************************
+         iv = iv +1
+         acv(iv) = AF
+         zpcv(iv) = ZF
+         PEVA = DSQRT(PXEVA**2+PYEVA**2+PLEVA**2)
+         pcv(iv) = PEVA
+	IF(PEVA.GT.0.001) THEN
+         xcv(iv) = PXEVA/PEVA
+         ycv(iv) = PYEVA/PEVA
+         zcv(iv) = PLEVA/PEVA        
+        ELSE
+         xcv(iv)=1.
+         ycv(iv)=0.
+         zcv(iv)=0.
+        END IF        
 	
-C$$$C
-C$$$C  calcul des impulsions des particules evaporees dans le systeme labo:
-C$$$c
-C$$$      TREM = DBLE(ERECREM)
-C$$$C      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC	!Canonic
-C$$$C      REMMASS = MCOREM  + DBLE(ESREM)				!OK
-C$$$      REMMASS = MCOREM						!Cugnon
-C$$$C      GAMREM = (REMMASS + TREM)/REMMASS			!OK
-C$$$C      ETREM = DSQRT(TREM*(TREM + 2.*REMMASS))/REMMASS		!OK
-C$$$      CSREM(1)=ALREM
-C$$$      CSREM(2)=BEREM
-C$$$      CSREM(3)=GAREM
+C
+C  calcul des impulsions des particules evaporees dans le systeme labo:
+c
+      TREM = DBLE(ERECREM)
+C      REMMASS = pace2(APRF,ZPRF) + APRF*UMA - ZPRF*MELEC	!Canonic
+C      REMMASS = MCOREM  + DBLE(ESREM)				!OK
+      REMMASS = MCOREM						!Cugnon
+C      GAMREM = (REMMASS + TREM)/REMMASS			!OK
+C      ETREM = DSQRT(TREM*(TREM + 2.*REMMASS))/REMMASS		!OK
+      CSREM(1)=ALREM
+      CSREM(2)=BEREM
+      CSREM(3)=GAREM
       
 
-C$$$      e_evapo=0.
-C$$$      DO j=1,iv
-C$$$        CALL MGLMS(DBLE(acv(j)),DBLE(zpcv(j)),0,EL)
-C$$$	fmcv = zpcv(j)*FMP + (acv(j)-zpcv(j))*FMN + EL
-C$$$	e_evapo = e_evapo + DSQRT(pcv(j)**2 + fmcv**2)
-C$$$      ENDDO
+      e_evapo=0.
+      DO j=1,iv
+        CALL MGLMS(DBLE(acv(j)),DBLE(zpcv(j)),0,EL)
+	fmcv = zpcv(j)*FMP + (acv(j)-zpcv(j))*FMN + EL
+	e_evapo = e_evapo + DSQRT(pcv(j)**2 + fmcv**2)
+      ENDDO
       
-C$$$C Redefinition pour conservation d'impulsion!!!
-C$$$C   this mass obtained by energy balance is very close to the
-C$$$C   mass of the remnant computed by pace2 + excitation energy (EE). (OK)      
-C$$$      REMMASS = e_evapo
+C Redefinition pour conservation d'impulsion!!!
+C   this mass obtained by energy balance is very close to the
+C   mass of the remnant computed by pace2 + excitation energy (EE). (OK)      
+      REMMASS = e_evapo
       
-C$$$      GAMREM=DSQRT(PCOREM**2+REMMASS**2)/REMMASS
-C$$$      ETREM=PCOREM/REMMASS
+      GAMREM=DSQRT(PCOREM**2+REMMASS**2)/REMMASS
+      ETREM=PCOREM/REMMASS
       
-C$$$        CALL TRANSLAB(GAMREM,ETREM,CSREM,NOPART,1)
+        CALL TRANSLAB(GAMREM,ETREM,CSREM,NOPART,1)
                   
-C$$$C End of the (FISSION - NO FISSION) condition (FF=1 or 0)                                          
-C$$$      END IF 
+C End of the (FISSION - NO FISSION) condition (FF=1 or 0)                                          
+      END IF 
 C *********************** FIN de l'EVAPO KHS ******************** 
                                                           
       ENDIF 	!choix de l'evaporation (KHS-GEM)  
@@ -1238,7 +1238,7 @@ C *************************************************************************
 C                         FIN DE L'EVAPORATION 
 C *************************************************************************
 
-C      ELSE	! Evaporation impossible
+      ELSE	! Evaporation impossible
       	NTRACK=NTRACK+1		! on recopie le remnant dans le ntuple
       	ITYPCASC(NTRACK)=1
       	AVV(NTRACK)=IAREM
@@ -1248,7 +1248,7 @@ C      ELSE	! Evaporation impossible
 	TETLAB(NTRACK)=180.*ACOS(GAREM)/3.141592654
 	PHILAB(NTRACK)=180.*ATAN2(BEREM,ALREM)/3.141592654
 
-C      END IF	! Fin du test evapo possible
+      END IF	! Fin du test evapo possible
       
       	  
 C count of n and p during the evaporation step, number of particles ...          

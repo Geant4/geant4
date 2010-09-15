@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.16 2010-04-27 16:02:37 kaitanie Exp $ 
+// $Id: G4Incl.hh,v 1.17 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -38,6 +38,7 @@
 #include "G4InclDataDefs.hh"
 #include "G4Abla.hh"
 #include <fstream>
+#include "G4VInclLogger.hh"
 
 using namespace std;
 /**
@@ -86,6 +87,19 @@ public:
   void dumpBl3(std::ofstream& dumpOut); // Dump the contents of G4Bl3.
 
   /**
+   * Set Fermi break-up use flag.
+   */
+  void setUseFermiBreakUp(G4bool useIt);
+
+  /**
+   * Set projectile spectator use flag.
+   *
+   * Select whether or not to produce so-called spectator nucleus from
+   * the projectile nucleons that do not hit the target.
+   */
+  void setUseProjectileSpectators(G4bool useIt);
+
+  /**
    * Set verbosity level.
    */
   void setVerboseLevel(G4int level);
@@ -100,7 +114,7 @@ public:
   void setSaxwData(G4Saxw *newSaxw);
   void setSpl2Data(G4Spl2 *newSpl2);
   void setMatData(G4Mat *newMat);
-  void setCalinclData(G4Calincl *newCalincl);
+  void setInput(G4Calincl *newCalincl);
   void setLightNucData(G4LightNuc *newLightNuc);
   void setLightGausNucData(G4LightGausNuc *newLightGausNuc);
   void setBl1Data(G4Bl1 *newBl1);
@@ -113,6 +127,16 @@ public:
   void setBl9Data(G4Bl9 *newBl9);
   void setBl10Data(G4Bl10 *newBl10);
   void setKindData(G4Kind *newKind);
+
+  /**
+   * Register the logger.
+   */
+  void registerLogger(G4VInclLogger *aLogger) {
+    if(aLogger != 0) {
+      theLogger = aLogger;
+      abla->registerLogger(aLogger);
+   }
+  }
 
 public:
   /**
@@ -279,7 +303,12 @@ public: // Main INCL routines
    */
   void pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p, G4double *esrem_p,
 	   G4double *erecrem_p, G4double *alrem_p, G4double *berem_p, G4double *garem_p,
-	   G4double *bimpact_p, G4int *l_p);
+	   G4double *bimpact_p, G4int *l_p, G4double *xjrem, G4double *yjrem, G4double *zjrem);
+     
+  //C projection de JREM sur Z:
+  //        MREM=ANINT(ZJREM/197.328)
+  //	IF (MREM.GT.JREM) MREM=JREM
+  //	IF (MREM.LT.-JREM) MREM=-JREM
 
   /**
    * Single nucleon-nucleon collision.
@@ -459,7 +488,16 @@ public: // Main INCL routines
    * @param v0 
    * @return a double value
    */
-  G4double transmissionProb(G4double E, G4double iz, G4double izn, G4double r, G4double v0);
+  //  G4double transmissionProb(G4double E, G4double iz, G4double izn, G4double r, G4double v0);
+  //  G4double transmissionProb(G4double E, G4int iz, G4int izn, G4double r, G4double v0)
+  G4double transmissionProb(G4double E, G4int iz, G4int ia, G4int izn, G4double r, G4double v0);
+  //  G4double transmissionProb(G4double E, G4int iz, G4int ia, G4int izn,G4double R, G4double v0);
+  //  G4double transmissionProb(G4double E, G4double iz, G4double izn, G4double r, G4double v0);
+
+  void projo_spec(G4int ia1, G4int ips,
+			G4double fmpinc, G4double pinc, G4double tlab);
+
+  void ordered(G4double t, G4int nb);
 
   /**
    *
@@ -745,6 +783,11 @@ public: // Utilities
   G4Kind *kindstruct;
 
   /**
+   * Projectile properties.
+   */
+  G4Bev *bev;
+
+  /**
    *
    */
   G4Paul *paul;
@@ -819,16 +862,39 @@ public: // Utilities
    */
   G4int densFunction;
 
+  /**
+   * Use fermi break-up?
+   */
+  G4bool useFermiBreakup;
+
+  /**
+   * Projectile spectator nucleus support?
+   */
+  G4bool useProjSpect;
+
+  /**
+   * Type of the particle at index i.
+   *
+   * The extension to large composite projectiles the value is
+   * negative for projectile spectators. Otherwise the particle types
+   * are given in exactly the same way as in G4Calincl::f[6].
+   * @see G4Calincl::f
+   */
   G4int kind[300]; //= (*kind_p);
   G4double ep[300]; // = (*ep_p);
   G4double alpha[300]; // = (*alpha_p); 
   G4double beta[300]; // = (*beta_p);
   G4double gam[300]; // = (*gam_p);
 
+  G4VBe *be;
+  G4InclProjSpect *ps;
+  G4InclFermi *fermi;
+  G4QuadvectProjo *qvp;
   G4Volant *volant;
   G4Abla *abla;
   G4InclRandomInterface *randomGenerator;
 
+  G4VInclLogger *theLogger;
   G4int inside_step; // Flag to determine whether we are inside or outside a simulation step
 };
 

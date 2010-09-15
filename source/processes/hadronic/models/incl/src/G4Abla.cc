@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.20 2009-11-18 10:43:14 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.21 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -97,6 +97,15 @@ G4Abla::G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp)
   opt = new G4Opt();
 }
 
+void G4Abla::setVerboseLevel(G4int level)
+{
+  verboseLevel = level;
+  if(verboseLevel > G4InclUtils::silent) {
+    G4cout <<";; G4Abla: Setting verbose level to " << verboseLevel << G4endl;
+  }
+  fissionModel->setVerboseLevel(verboseLevel);
+}
+
 G4Abla::~G4Abla()
 {
   delete randomGenerator;
@@ -108,6 +117,12 @@ G4Abla::~G4Abla()
   delete fb;
   delete fiss;
   delete opt;
+}
+
+void G4Abla::registerLogger(G4VInclLogger *theLogger) {
+  if(theLogger != NULL) {
+    this->theLogger = theLogger;
+  }
 }
 
 // Main interface to the evaporation
@@ -207,6 +222,9 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
   //volant->iv = 1;
   
   G4double pcorem = std::sqrt(erecrem*(erecrem +2.*938.2796*nucleusA));
+#ifdef G4INCLDEBUG
+  theLogger->fillHistogram1D("pcorem", pcorem);
+#endif
     // G4double pcorem = std::sqrt(std::pow(momX,2) + std::pow(momY,2) + std::pow(momZ,2));
   if(pcorem != 0) { // Guard against division by zero.
     alrem = pxrem/pcorem;

@@ -438,6 +438,12 @@ C Coulomb en entree seulement pour les particules ci-dessous
 	AP=4.D0
 	ZP=2.D0
 	ENDIF
+	IF(f(7).EQ.-12.) THEN
+	MPROJO=12.0*939.56563
+	PBEAM=SQRT(f(3)*(f(3)+2.*MPROJO))  !12C
+	AP=12.D0
+	ZP=6.D0
+	ENDIF
 	       
 	AT=f(1)
 	ZT=f(2)
@@ -704,6 +710,7 @@ C calcul de la masse (impulsion) du remnant coherente avec la conservation d'ene
 C        MCOREM = MCOREM -ERECREM -ESREM			!OK
 C        PCOREM=SQRT(ERECREM*(ERECREM+2.*(MCOREM+ESREM)))	!OK
         	PCOREM=SQRT(ERECREM*(ERECREM +2.*938.2796*IAREM))  !Cugnon
+                call hfill(501, pcorem, 0.0, 1.0)
 C        	PCOREM=SQRT(ERECREM*2.*938.2796*IAREM)  !Cugnon
         	MCOREM=938.2796*IAREM 				!Cugnon
 		
@@ -1602,11 +1609,33 @@ c      string='/home/crash2/il2_crash/volant/kheinz/r2bis45.hbook'
      
 C      CALL HBOOK1(1,'J_rem_INCL',100,0.,100.,0.)
 C      CALL HBOOK1(2,'J_rem_KHS',100,0.,100.,0.)
+      call hbook1(201, 'intResult', 600, -1.0, 30.0, 0.0);
+      call hbook2(200, 'fIntPoints', 600, 0.0, 20.0, 600, 0.0,
+     +1.0, 0.0)
+      call hbook1(202, 'refXV', 800, -2.0, 6.0, 0.0);
+      call hbook1(203, 'refInterpR', 600, -1.0, 30.0, 0.0);
+      call hbook1(204, 'refRXVgt1', 600, -1.0, 30.0, 0.0);
 
+C     Cross section histograms
+      call hbook1(301, "totalCXResult", 1000, -10.0, 200.0, 0.0);
+      call hbook2(303, "NDCX", 1000, -10.0, 10000.0, 1000, -10.0, 200.0,
+     +0.0);
+      call hbook2(304, "DDCX", 1000, -10.0, 10000.0, 1000, -10.0, 200.0,
+     +0.0);
+      call hbook2(305, "ppCX", 1000, -10.0, 10000.0, 1000, -10.0, 200.0,
+     +0.0);
+      call hbook2(306, "pnCX", 1000, -10.0, 10000.0, 1000, -10.0, 200.0,
+     +0.0);
+      call hbook2(307, "nnCX", 1000, -10.0, 10000.0, 1000, -10.0, 200.0,
+     +0.0);
+
+      call hbook1(501, "pcorem", 1000, 0.0, 2000.0, 0.0);
 C Pour verif de la densite du noyau cible:
-C	CALL HBOOK1(3,'r_distrib',900,0.,15.,0.)
-C	CALL HBOOK1(4,'p_distrib',900,0.,300.,0.)
-
+C      CALL HBOOK1(9,'r_space',200,0.,20.,0.)
+C      CALL HBOOK1(10,'p_space',200,0.,400.,0.)
+	CALL HBOOK1(3,'r_distrib',900,0.,15.,0.)
+	CALL HBOOK1(4,'p_distrib',900,0.,300.,0.)
+        CALL HBOOK2(21,'r-p correl',50,0.,12.,50,0.,500.,0.)
 C Second NTUPLE optionnel pour etude des avatars en fonction du temps 
 C de la cascade.
 

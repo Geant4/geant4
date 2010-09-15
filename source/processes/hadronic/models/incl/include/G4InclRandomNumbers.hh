@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclRandomNumbers.hh,v 1.4 2010-06-14 16:10:01 gcosmo Exp $
+// $Id: G4InclRandomNumbers.hh,v 1.5 2010-09-15 21:54:04 kaitanie Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -53,7 +53,7 @@ public:
    * Provide evenly distributed random numbers.
    */
   virtual G4double getRandom() = 0;
-
+  virtual void printSeeds() = 0;
 private:
   G4long seed;
 };
@@ -76,6 +76,8 @@ public:
   G4double getRandom() {
     return 0.5;
   }
+
+  void printSeeds() {};
 };
 
 /**
@@ -95,6 +97,10 @@ public:
   G4double getRandom() {
     return G4UniformRand();
   }
+
+  void printSeeds() {
+    G4cout <<"Using Geant4 random number generator." << G4endl;
+  };
 };
 
 #endif

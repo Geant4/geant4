@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFissionBase.cc,v 1.1 2010-06-14 16:10:01 gcosmo Exp $ 
+// $Id: G4AblaFissionBase.cc,v 1.2 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,5 +32,9 @@
 
 #include "G4AblaFissionBase.hh"
 
-G4AblaFissionBase::G4AblaFissionBase() {}
+G4AblaFissionBase::G4AblaFissionBase()
+{
+  verboseLevel = 0;
+}
+
 G4AblaFissionBase::~G4AblaFissionBase() {}

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Program for running the same test case using both FORTRAN and C++
 # versions. The script parses runs.conf file. The entries in the file

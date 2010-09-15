@@ -292,21 +292,21 @@ C      STATUS=IO
 C                                                                       
 C------------ CONTROL OUTPUT TO LOG-FILE                                
 C                                                                       
-C$$$      WRITE(6,*) 'IFIS',IFIS                                            
-C$$$      WRITE(6,*) 'OPTSHP',OPTSHP                                          
-C$$$      WRITE(6,*) 'OPTEMD',OPTEMD                                          
-C$$$      WRITE(6,*) 'OPTCHA',OPTCHA                                         
-C$$$      WRITE(6,*) 'AKAP',AKAP                                           
-C$$$      WRITE(6,*) 'BET',BET                                            
-C$$$      WRITE(6,*) 'HOMEGA',HOMEGA                                         
-C$$$      WRITE(6,*) 'KOEFF',KOEFF                                          
-C$$$      WRITE(6,*) 'OPTCOL',OPTCOL                                         
-C$$$      WRITE(6,*) 'OPTLES',OPTLES                                         
-C$$$      WRITE(6,*) 'EEFAC',EEFAC                                          
-C$$$      WRITE(6,*) 'OPTAFAN',OPTAFAN                                        
-C$$$      WRITE(6,*) 'AV',AV                                             
-C$$$      WRITE(6,*) 'AS',AS                                             
-C$$$      WRITE(6,*) 'AK',AK                                             
+      WRITE(6,*) 'IFIS',IFIS                                            
+      WRITE(6,*) 'OPTSHP',OPTSHP                                          
+      WRITE(6,*) 'OPTEMD',OPTEMD                                          
+      WRITE(6,*) 'OPTCHA',OPTCHA                                         
+      WRITE(6,*) 'AKAP',AKAP                                           
+      WRITE(6,*) 'BET',BET                                            
+      WRITE(6,*) 'HOMEGA',HOMEGA                                         
+      WRITE(6,*) 'KOEFF',KOEFF                                          
+      WRITE(6,*) 'OPTCOL',OPTCOL                                         
+      WRITE(6,*) 'OPTLES',OPTLES                                         
+      WRITE(6,*) 'EEFAC',EEFAC                                          
+      WRITE(6,*) 'OPTAFAN',OPTAFAN                                        
+      WRITE(6,*) 'AV',AV                                             
+      WRITE(6,*) 'AS',AS                                             
+      WRITE(6,*) 'AK',AK                                             
 C      WRITE(6,*) TUPLE(2:30),TUPLE(33:80)                               
 C      WRITE(6,*) FINA1(2:30),FINA1(33:100)                              
 C      WRITE(6,*) FINA1(2:30),FINA2(33:100)                              
@@ -341,7 +341,6 @@ C      OPEN(UNIT =13,STATUS='UNKNOWN',SHARED,READONLY,FILE=DEFTAB(33:80))
 C                                                                       
 C Verif par DIFF file1 file2: pas de differences dans les tables...(A.B.)                                          
       FILEDAT = 'frldm.tab'
-C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/frldm.tab'
       long=0
       i=0
       DO WHILE(long.EQ.0)
@@ -352,13 +351,11 @@ C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/frldm.tab'
       OPEN(UNIT = 9,STATUS='UNKNOWN',FILE=FILENAME)
 C                                                                       
       FILEDAT = 'vgsld.tab'                                                   
-C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/vgsld.tab'                                                   
       FILENAME=RACINE(1:long)//FILEDAT                                                                                                      
       OPEN(UNIT =11,STATUS='UNKNOWN',FILE=FILENAME)
 C                                                                       
                                                  
       FILEDAT = 'flalpha.tab'                                                   
-C      FILEDAT = './crash46/CODES_SPAL/TRAVAIL/KHS/flalpha.tab'                                                   
       FILENAME=RACINE(1:long)//FILEDAT                                                                                                      
       OPEN(UNIT =13,STATUS='UNKNOWN',FILE=FILENAME)    
 C
@@ -577,7 +574,6 @@ C  /    (actuellement PTEVA n'est pas correct; mauvaise norme...)
 C  /____________________________________________________________________
 C                                                                       
       SAVE                                                              
-      common/debug/idebug
       COMMON /ABLAMAIN/ AP,ZP,AT,ZT,EAP,BETA,BMAXNUC,CRTOT,CRNUC,R_0,   
      +                  R_P,R_T,IMAX,IRNDM,PI,BFPRO,SNPRO,SPPRO,SHELL   
       REAL*8 AP,ZP,AT,ZT,EAP,BETA,BMAXNUC,CRTOT,CRNUC,R_0,R_P,R_T,PI,   
@@ -608,8 +604,8 @@ C ial generateur pour le cascade (et les IY pour eviter les correlations)
        common/hazard/ial,IY
 
       real*4 acv,zpcv,pcv,xcv,ycv,zcv
-      common/volant/acv(200),zpcv(200),pcv(200),xcv(200),
-     s              ycv(200),zcv(200),iv 
+      common/volant/acv(300),zpcv(300),pcv(300),xcv(300),
+     s              ycv(300),zcv(300),iv 
 C                                                                       
 C-----------------------------------------------------------------------
 C     IRNDM             DUMMY ARGUMENT FOR RANDOM-NUMBER FUNCTION       
@@ -653,10 +649,6 @@ C     RNDZ              RECOIL MOMENTUM IN Z-DIRECTION IN A SINGLE STEP
 C     RNDN              NORMALIZATION OF RECOIL MOMENTUM FOR EACH STEP  
 C-----------------------------------------------------------------------
 C                                                                       
-      SAVE                                                              
-      itest = 0
-      idebug = 0
-
       ZF = ZPRF                                                         
       AF = APRF
       PLEVA = 0.D0                                                      
@@ -667,6 +659,7 @@ C
       SORTIE = 0                                                        
       FF = 0          
 
+      itest = 0
 c       if (ZF.eq.92) itest = 1 
       if (itest.eq.1) write(6,*) '***************************'
                                                   
@@ -684,18 +677,6 @@ C PLUS SEPARATION ENERGIES AND KINETIC ENERGIES OF THE PARTICLES
 C             
       CALL DIRECT(ZF,AF,EE,JPRF,PROBP,PROBN,PROBA,PROBF,PTOTL,          
      +            SN,SBP,SBA,ECN,ECP,ECA,BP,BA,INTTYPE,INUM,itest)  
-C$$$      write(6,*)'ZF = ',ZF,' AF = ',AF
-C$$$      write(6,*)'ECN = ',ECN
-C$$$      write(6,*)'ECP = ',ECP,' BP = ',BP
-C$$$      write(6,*)'ECA = ',ECA,' BA = ',BA
-C$$$      if((ECP+BP).LT.0) then
-C$$$         write(6,*)'ECP+BP = ',ECP+BP
-C$$$         stop
-C$$$      endif
-C$$$      if((ECA+BA).LT.0) then
-C$$$         write(6,*)'ECA+BA = ',ECA+BA
-C$$$         stop
-C$$$      endif
 C 
 C modif A.B. incorporee OK!
       K = IDNINT(ZF)
@@ -748,18 +729,14 @@ C HERE THE NORMAL EVAPORATION CASCADE STARTS
 C                                                                             
 C RANDOM NUMBER FOR THE EVAPORATION                                     
 C                                                                       
-      if(idebug.eq.1) then
-         X = DBLE(ranecu(irndm))*PTOTL
-      else
-         X = DBLE(RNDM(IRNDM))*PTOTL                                       
-      endif
+      X = DBLE(RNDM(IRNDM))*PTOTL                                       
 C                                                                       
       IF (X.LT.PROBA) THEN                                              
 
 C                                                                       
 C ALPHA EVAPORATION                                                     
 C                                                                       
-        if (itest.eq.1) write(6,*) 'PK::: < alpha evaporation >'
+        if (itest.eq.1) write(6,*) '< alpha evaporation >'
         AMOINS = 4.D0                                                   
         ZMOINS = 2.D0                                                   
         EPSILN = SBA+ECA
@@ -775,7 +752,7 @@ C Volant:
 C                                                                       
 C PROTON EVAPORATION                                                    
 C                                                                       
-          if (itest.eq.1) write(6,*) 'PK::: < proton evaporation >'
+          if (itest.eq.1) write(6,*) '< proton evaporation >'
           AMOINS = 1.D0                                                 
           ZMOINS = 1.D0                                                 
           EPSILN = SBP+ECP                                              
@@ -791,12 +768,11 @@ C Volant:
 C                                                                       
 C NEUTRON EVAPORATION                                                   
 C                                                                       
-          if (itest.eq.1) write(6,*) 'PK::: < neutron evaporation >'
+          if (itest.eq.1) write(6,*) '< neutron evaporation >'
           AMOINS = 1.D0                                                 
           ZMOINS = 0.D0                                                 
           EPSILN = SN+ECN           
           PC = DSQRT((1.D0+(ECN)/9.3956D2)**2-1.D0) * 9.3956D2          
-          if(itest.eq.1) write(6,*) 'PK::: pc =',pc
           MALPHA = 0.D0                                                  
 C Volant:
 	iv = iv + 1
@@ -812,7 +788,7 @@ C IN CASE OF FISSION-EVENTS THE FRAGMENT NUCLEUS IS THE MOTHER NUCLEUS
 C BEFORE FISSION OCCURS WITH EXCITATION ENERGY ABOVE THE FIS.- BARRIER. 
 C FISSION FRAGMENT MASS DISTRIBUTION IS CALULATED IN SUBROUTINE FISDIS  
 C                                                                       
-          if (itest.eq.1) write(6,*) 'PK::: < fission >'
+          if (itest.eq.1) write(6,*) '< fission >'
           AMOINS = 0.D0                                                 
           ZMOINS = 0.D0                                                 
           EPSILN = EF                                                   
@@ -837,15 +813,9 @@ C      END IF
 C                                                                       
 
       if (itest.EQ.1) then
-         if(idebug.eq.1) then
-        write(6,*)'PK::: SN,SBP,SBA,EF',SN,SBP,SBA,EF
-        write(6,*)'PK::: PROBN,PROBP,PROBA,PROBF,PTOTL'
-     &            ,PROBN,PROBP,PROBA,PROBF,PTOTL
-         else
         write(6,*)'SN,SBP,SBA,EF',SN,SBP,SBA,EF
         write(6,*)'PROBN,PROBP,PROBA,PROBF,PTOTL'
-     &            ,PROBN,PROBP,PROBA,PROBF,PTOTL
-        endif
+     &            ,PROBN,PROBP,PROBA,PROBF,PTOTL 
       endif
 
 C CALCULATION OF THE DAUGHTER NUCLEUS                                   
@@ -867,11 +837,7 @@ C      RNDN = DSQRT(RNDX**2+RNDY**2+RNDZ**2)
 C----> (ancien)      PTEVA = PTEVA + PC * RNDX/RNDN
 
 	IF(FF.EQ.0) THEN
-           if(idebug.eq.1) then
-              RND = ranecu(IY(9))
-           else
-              CALL RIBM(RND,IY(9))
-           endif
+           CALL RIBM(RND,IY(9))
            CTET1 = 2.*RND-1.
            CALL RIBM(RND,IY(5))
            PHI1 = RND*2.*3.141592654
@@ -1005,6 +971,7 @@ C ial generateur pour le cascade (et les IY pour eviter les correlations)
 C
 C     Switch to calculate Maxwellian distribution of kinetic energies (1=Max)                                                  
       imaxwell = 1                           
+                   
 C
 C LIMITING OF EXCITATION ENERGY WHERE FISSION OCCURS                    
 C !!! THIS IS NOT THE DYNAMICAL HINDRANCE (SEE END OF ROUTINE) !!!      
@@ -1153,29 +1120,9 @@ C
       DEFBET = 1.58533D0 * SPDEF(IDNINT(A),IDNINT(ZPRF),OPTXFIS)        
 C                                                                       
 C LEVEL DENSITY AND TEMPERATURE AT THE SADDLE POINT                     
-C                  
-C$$$      a = 202
-C$$$      zprf = 80
-C$$$      ee = 4596.88
-C$$$C      ef = 114183
-C$$$      ef = 4000.0
-C$$$      bshell = 0
-C$$$      bs = 1.26423
-C$$$      bk = 1.40766
-C$$$      defbet = 1.5211
-C$$$      write(6,*)'a = ',a
-C$$$      write(6,*)'zprf = ',zprf
-C$$$      write(6,*)'ee = ',ee
-C$$$      write(6,*)'ef = ',ef
-C$$$      write(6,*)'bshell = ',bshell
-C$$$      write(6,*)'bs = ',bs
-C$$$      write(6,*)'bk = ',bk
-C$$$      write(6,*)'defbet = ',defbet
+C                                                                       
       CALL DENSNIV(A,ZPRF,EE,EF,DENSF,BSHELL,BS,BK,TEMP,                
      &             OPTSHP,OPTCOL,DEFBET)                                
-C      write(6,*)'densf = ',densf
-C      write(6,*)'temp = ',temp
-C      stop
       FT=TEMP                                                           
       IF (IZ.GE.2) THEN                                                 
        BSHELL = ECGNZ(IN,IZ-1) - VGSLD(IN,IZ-1)                         
@@ -1226,8 +1173,6 @@ C
        CALL DENSNIV(A-1.0,ZPRF,EE,SN,DENSN,BSHELL,                      
      &		    1.D0,1.D0,TEMP,OPTSHP,OPTCOL,DEFBET)                        
        NT = TEMP                                                        
-       idebug=0
-       if(idebug.eq.1) write(6,*)'PK::: nt =',nt
        if (imaxwell.eq.1) then
 c*** Valentina - random kinetic energy in a Maxwelliam distribution
 C Modif Juin/2002 A.B. C.V. for light targets; limit on the energy
@@ -1599,9 +1544,7 @@ C
       ER=28.0D0                                                         
       AFP=IDNINT(A)                                                     
       IZ=IDNINT(Z)                                                      
-C :::FORMULA::: a= 0.073A 1/(MeV) + O.095B*A**2/3 1/(MeV**2)
-C :::FORMULA::: B = dimensionless surface area of the nucleus
-C :::FORMULA::: A = mass number 
+C                                                                       
 C LEVEL DENSITY PARAMETER                                               
 C                                                                       
       IF(OPTAFAN.EQ.1) THEN                                             
@@ -1754,10 +1697,8 @@ C
          QR   = 1.D0                                                    
       END IF                                                            
       DENS = DENS * QR                                                  
-C      write(6,*)'PK::: dens =',dens
 C                                                                       
 C     WRITE(6,*)'AFP, IZ, ECOR, ECOR1',AFP,IZ,ECOR,ECOR1                
-C      WRITE(6,*)'PK::: AFP, IZ, ECOR, ECOR1',AFP,IZ,ECOR,ECOR1
 C                                                                       
       RETURN                                                            
       END                                                               
@@ -1908,7 +1849,7 @@ C
 C      IF (((A.LE.0.0).OR.(Z.LE.0.0)).OR.(A-Z.LE.0.0)) THEN             
 C                                                                       
       IF ( (A1.LE.0).OR.(Z1.LE.0).OR.((A1-Z1).LE.0) )  THEN 
-C Modif pour recuperer une masse p et n correcte:
+C Modif pour récupérer une masse p et n correcte:
          EL=0.                  
 C        EL = 1.0E38                                                     
         GO TO 50                                                        
@@ -2345,10 +2286,10 @@ C
 C      IMPLICIT REAL*8 (A-H,O-Z)                                        
       REAL*4 SBFIS,SEGS,SELMAX                                          
       REAL*8 ELZCOF,ELMCOF,EMNCOF,PA,PZ,PL,EMXCOF,EGSCOF,EGS1,EGS2      
-      REAL*8 EGS3,EGS4,A,Z,L,AMIN,AMAX,AMIN2,AMAX2,AA,ZZ,BFIS           
+      REAL*8 EGS3,EGS4,A,Z,AMIN,AMAX,AMIN2,AMAX2,AA,ZZ,BFIS           
       REAL*8 BFIS0,ELL,EL,EGS,EL80,EL20,ELMAX,SEL80,SEL20,X,Y,Q,QA,QB   
       REAL*8 AJ,AK,A1,A2                                                
-      INTEGER*4 IA,IZ,IL,I,J,K,M                                        
+      INTEGER*4 IA,IZ,IL,I,J,K,L,M                                        
       DIMENSION  ELZCOF(7,7),ELMCOF(5,4),EMNCOF(5,4),PA(7),PZ(7),PL(10) 
       DIMENSION  EMXCOF(6,4),EGSCOF(5,6,4),EGS1(5,6),EGS2(5,6),         
      1           EGS3(5,6),EGS4(5,6)                                    
@@ -2712,7 +2653,7 @@ C   	do i=1,261
 C===============================================================================
 C=	"PACE2"                                                                =
 C=  	Cette fonction retourne le defaut de masse du noyau A,Z en MeV
-C              Revisee pour a, z flottants 25/4/2002	                       =
+C              Révisée pour a, z flottants 25/4/2002	                       =
 C===============================================================================
 
       	function pace2(a,z)
@@ -2752,7 +2693,7 @@ C===============================================================================
 C=	"GUET"                                                                 =
 C=	TABLE DE MASSES ET FORMULE DE MASSE TIRE DU PAPIER DE BRACK-GUET       =
 C=   	Gives the theoritical value for mass excess...                         =
-C              Revisee pour x, z flottants 25/4/2002	                       =
+C              Révisée pour x, z flottants 25/4/2002	                       =
 C===============================================================================
  
       	subroutine guet(X,Z,FIND)
@@ -2807,4 +2748,4 @@ C===============================================================================
         RETURN 
         END
 C=======================================================================
-
+                                                                        

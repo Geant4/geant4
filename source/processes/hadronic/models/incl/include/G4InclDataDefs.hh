@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.7 2009-11-18 10:43:14 kaitanie Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.8 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,15 +35,196 @@
 #ifndef InclDataDefs_hh
 #define InclDataDefs_hh 1
 
+#include "G4Nucleus.hh"
+#include "G4HadProjectile.hh"
+#include "G4ParticleTable.hh"
+#include "G4Track.hh"
+
+class G4InclFermi {
+public:
+  G4InclFermi() {
+    G4double hc = 197.328;
+    G4double fmp = 938.2796;
+    pf=1.37*hc;
+    pf2=pf*pf;
+    tf=std::sqrt(pf*pf+fmp*fmp)-fmp;
+  };
+  ~G4InclFermi() {};
+
+  G4double tf,pf,pf2;
+};
+
+#define max_a_proj 61
+
+/**
+ * (eps_c,p1_s,p2_s,p3_s,eps_c used to store the kinematics of
+ * nucleons for composit projectiles before entering the potential)
+ */
+class G4QuadvectProjo {
+public:
+  G4QuadvectProjo() {};
+  ~G4QuadvectProjo() {};
+
+  G4double eps_c[max_a_proj],p3_c[max_a_proj],
+    p1_s[max_a_proj],p2_s[max_a_proj],p3_s[max_a_proj],
+    t_c[max_a_proj];
+};
+
+class G4VBe {
+public:
+  G4VBe() {};
+  ~G4VBe() {};
+
+  G4int ia_be, iz_be;
+  G4double rms_be, pms_be, bind_be;
+};
+
+/**
+ * Projectile spectator
+ */
+class G4InclProjSpect {
+public:
+  G4InclProjSpect() {
+    //    G4cout <<"Projectile spectator data structure created!" << G4endl;
+  };
+  ~G4InclProjSpect() {};
+
+  void clear() {
+    for(G4int i = 0; i < 21; i++) tab[i] = 0.0;
+    for(G4int i = 0; i < 61; i++) n_projspec[i] = 0.0;
+    a_projspec = 0;
+    z_projspec = 0;
+    m_projspec = 0.0;
+    ex_projspec = 0.0;
+    p1_projspec = 0.0;
+    p2_projspec = 0.0;
+    p3_projspec = 0.0;
+  };
+
+  G4double tab[21];
+  G4int n_projspec[61];
+  G4int a_projspec,z_projspec;
+  G4double ex_projspec,t_projspec, p1_projspec, p2_projspec, p3_projspec, m_projspec;
+};
+
 #define FSIZE 15
 /**
  * Initial values of a hadronic cascade problem.
  */
 class G4Calincl {
 public:
-  G4Calincl() {};
+  G4Calincl() {
+    isExtendedProjectile = false;
+  };
+
+  G4Calincl(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus, G4bool inverseKinematics = false) {
+    for(int i = 0; i < 15; i++) {
+      f[i] = 0.0; // Initialize INCL input data
+    }
+
+    usingInverseKinematics = inverseKinematics;
+
+    f[0] = theNucleus.GetA_asInt(); // Target mass number
+    f[1] = theNucleus.GetZ_asInt(); // Target charge number
+    f[6] = getBulletType(aTrack.GetDefinition()); // Projectile type (INCL particle code)
+    f[2] = aTrack.GetKineticEnergy() / MeV; // Projectile energy (total, in MeV)
+    f[5] = 1.0; // Time scaling
+    f[4] = 45.0; // Nuclear potential
+    setExtendedProjectileInfo(aTrack.GetDefinition());
+    //    G4cout <<"Projectile type = " << f[6] << G4endl;
+    //    G4cout <<"Energy = " << f[2] << G4endl;
+    //    G4cout <<"Target A = " << f[0] << " Z = " << f[1] << G4endl;
+  };
+
   ~G4Calincl() {};
   
+  static void printProjectileTargetInfo(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
+    G4cout <<"Projectile = " << aTrack.GetDefinition()->GetParticleName() << G4endl;
+    G4cout <<"    four-momentum: " << aTrack.Get4Momentum() << G4endl;
+    G4cout <<"Energy = " << aTrack.GetKineticEnergy() / MeV << G4endl;
+    G4cout <<"Target A = " << theNucleus.GetA_asInt() << " Z = " << theNucleus.GetZ_asInt() << G4endl;
+  }
+
+  static G4bool canUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
+    G4int targetA = theNucleus.GetA_asInt();
+    const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
+    G4int projectileA = projectileDef->GetAtomicMass();
+    //    G4int projectileZ = projectileDef->GetAtomicNumber();
+    if(targetA > 0 && targetA < 18 && (projectileDef != G4Proton::Proton() &&
+				       projectileDef != G4Neutron::Neutron() &&
+				       projectileDef != G4PionPlus::PionPlus() &&
+				       projectileDef != G4PionZero::PionZero() &&
+				       projectileDef != G4PionMinus::PionMinus()) &&
+       projectileA > 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  G4double bulletE() {
+    return f[2];
+  }
+
+  G4int getBulletType() {
+    return G4int(f[6]);
+  };
+
+  void setExtendedProjectileInfo(const G4ParticleDefinition *pd) {
+    if(getBulletType(pd) == -666) {
+      extendedProjectileA = pd->GetAtomicMass();
+      extendedProjectileZ = pd->GetAtomicNumber();
+      isExtendedProjectile = true;
+    } else {
+      isExtendedProjectile = false;
+    }
+  };
+
+  G4int getBulletType(const G4ParticleDefinition *pd) {
+    G4ParticleTable *pt = G4ParticleTable::GetParticleTable();
+
+    if(pd == G4Proton::Proton()) {
+      return 1;
+    } else if(pd == G4Neutron::Neutron()) {
+      return 2;
+    } else if(pd == G4PionPlus::PionPlus()) {
+      return 3;
+    } else if(pd == G4PionMinus::PionMinus()) {
+      return 5;
+    } else if(pd == G4PionZero::PionZero()) {
+      return 4;
+    } else if(pd == G4Deuteron::Deuteron()) {
+      return 6;
+    } else if(pd == G4Triton::Triton()) {
+      return 7;
+    } else if(pd == G4He3::He3()) {
+      return 8;
+    } else if(pd == G4Alpha::Alpha()) {
+      return 9;
+    } else if(pd == pt->GetIon(6, 12, 0.0)) { // C12 special case. This should be phased-out in favor of "extended projectile"
+      return -12;
+    } else { // Is this extended projectile?
+      G4int A = pd->GetAtomicMass();
+      G4int Z = pd->GetAtomicNumber();
+      if(A > 4 && A <= 16 && Z > 2 && Z <= 8) { // Ions from Lithium to Oxygen
+	return -666; // Code of an extended projectile
+      }
+    }
+    G4cout <<"Error! Projectile " << pd->GetParticleName() << " not defined!" << G4endl;
+    return 0;
+  };
+
+  G4bool isInverseKinematics() {
+    return usingInverseKinematics;
+  };
+
+  G4double targetA() { return f[0]; };
+  G4double targetZ() { return f[1]; };
+
+  G4int extendedProjectileA;
+  G4int extendedProjectileZ;
+  G4bool isExtendedProjectile;
+
   /**
    * Here f is an array containing the following initial values:
    * - f[0] : target mass number
@@ -68,6 +249,8 @@ public:
    * Number of events to be processed.
    */
   G4int icoup;
+
+  G4bool usingInverseKinematics;
 };
 
 #define IGRAINESIZE 19
@@ -205,7 +388,9 @@ public:
  */
 class G4Ws {
 public:
-  G4Ws() {};
+  G4Ws() {
+    fneck = 0.0;
+  };
   ~G4Ws() {};
   
   /**
@@ -255,6 +440,8 @@ public:
    * Maximum impact parameter
    */
   G4double bmax;
+
+  G4double fneck;
 };
 
 #define DTONSIZE 13
@@ -310,6 +497,16 @@ public:
   G4double eps[BL1SIZE];
   G4int ind1[BL1SIZE],ind2[BL1SIZE];
   G4double ta;
+
+  void dump(G4int numberOfParticles) {
+    static G4int dumpNumber = 0;
+    G4cout <<"Dump number" << dumpNumber << " of particle 4-momenta (G4Bl1):" << G4endl;
+    G4cout <<"ta = " << ta << G4endl;
+    for(G4int i = 0; i < numberOfParticles; i++) {
+      G4cout <<"i = " << i << "   p1 = " << p1[i] << "   p2 = " << p2[i] << "   p3 = " << p3[i] << "   eps = " << eps[i] << G4endl;
+    }
+    dumpNumber++;
+  }
 };
 
 #define BL2CROISSIZE 19900
@@ -382,6 +579,18 @@ public:
    * rab2
    */
   G4double rab2;
+
+  void dump() {
+    static G4int dumpNumber = 0;
+    G4cout <<"Dump number" << dumpNumber << " of particle positions (G4Bl3):" << G4endl;
+    G4cout <<" ia1 = " << ia1 << G4endl;
+    G4cout <<" ia2 = " << ia2 << G4endl;
+    G4cout <<" rab2 = " << rab2 << G4endl;
+    for(G4int i = 0; i <= (ia1 + ia2); i++) {
+      G4cout <<"i = " << i << "   x1 = " << x1[i] << "   x2 = " << x2[i] << "   x3 = " << x3[i] << G4endl;
+    }
+    dumpNumber++;
+  }
 };
 
 /**
@@ -509,6 +718,49 @@ public:
   G4int kindf7;
 };
 
+/**
+ * Projectile parameters.
+ */
+class G4Bev {
+public:
+  /**
+   * Initialize all variables to zero.
+   */
+  G4Bev() {
+    ia_be = 0;
+    iz_be = 0;
+    rms_be = 0.0;
+    pms_be = 0.0;
+    bind_be = 0.0;
+  };
+  ~G4Bev() {};
+
+  /**
+   * Mass number.
+   */
+  G4int ia_be;
+
+  /**
+   * Charge number.
+   */
+  G4int iz_be;
+
+  /**
+   * rms
+   */
+  G4double rms_be;
+
+  /**
+   * pms
+   */
+  G4double pms_be;
+
+  /**
+   * bind
+   */
+  G4double bind_be;
+};
+
 #define VARSIZE 3
 #define VAEPSSIZE 250
 #define VAAVM 1000
@@ -566,7 +818,7 @@ public:
   G4double bloc_paul[VAAVM],bloc_cdpp[VAAVM],go_out[VAAVM];
 };
 
-#define VARNTPSIZE 255
+#define VARNTPSIZE 301
 class G4VarNtp {
 public:
   G4VarNtp() {};
@@ -581,6 +833,16 @@ public:
     projEnergy = 0.0;
     targetA = 0;
     targetZ = 0;
+    masp = 0.0; mzsp = 0.0; exsp = 0.0;
+    // To be deleted?
+    spectatorA = 0;
+    spectatorZ = 0;
+    spectatorEx = 0.0;
+    spectatorM = 0.0;
+    spectatorT = 0.0;
+    spectatorP1 = 0.0;
+    spectatorP2 = 0.0;
+    spectatorP3 = 0.0;
     massini = 0;
     mzini = 0;
     exini = 0;
@@ -589,6 +851,7 @@ public:
     pxrem = 0;
     pyrem = 0;
     pzrem = 0;
+    erecrem = 0;
     mulncasc = 0;
     mulnevap = 0;
     mulntot = 0;
@@ -599,6 +862,7 @@ public:
     izfis = 0;
     iafis = 0;
     ntrack = 0;
+    needsFermiBreakup = false;
     for(G4int i = 0; i < VARNTPSIZE; i++) {
       itypcasc[i] = 0;
       avv[i] = 0;
@@ -611,6 +875,9 @@ public:
     }
   }
 
+  /**
+   * Add a particle to the INCL/ABLA final output.
+   */
   void addParticle(G4double A, G4double Z, G4double E, G4double P, G4double theta, G4double phi) {
     if(full[particleIndex]) {
       G4cout <<"G4VarNtp: Error. Index i = " << particleIndex << " is already occupied by particle:" << G4endl;
@@ -751,6 +1018,51 @@ public:
   G4int targetZ;
 
   /**
+   * Projectile spectator A, Z, Eex;
+   */
+  G4double masp, mzsp, exsp, mrem;
+
+  /**
+   * Spectator nucleus mass number for light ion projectile support.
+   */
+  G4int spectatorA;
+
+  /**
+   * Spectator nucleus charge number for light ion projectile support.
+   */
+  G4int spectatorZ;
+
+  /**
+   * Spectator nucleus excitation energy for light ion projectile support.
+   */
+  G4double spectatorEx;
+
+  /**
+   * Spectator nucleus mass.
+   */
+  G4double spectatorM;
+
+  /**
+   * Spectator nucleus kinetic energy.
+   */
+  G4double spectatorT;
+
+  /**
+   * Spectator nucleus momentum x-component.
+   */
+  G4double spectatorP1;
+
+  /**
+   * Spectator nucleus momentum y-component.
+   */
+  G4double spectatorP2;
+
+  /**
+   * Spectator nucleus momentum z-component.
+   */
+  G4double spectatorP3;
+
+  /**
    * A of the remnant.
    */
   G4double massini;
@@ -765,7 +1077,7 @@ public:
    */
   G4double exini;
 
-  G4double pcorem, mcorem, pxrem, pyrem, pzrem;
+  G4double pcorem, mcorem, pxrem, pyrem, pzrem, erecrem;
 
   /**
    * Cascade n multip.
@@ -823,6 +1135,14 @@ public:
    * false = free
    */
   G4bool full[VARNTPSIZE];
+
+  /**
+   * Does this nucleus require Fermi break-up treatment? Only
+   * applicable when used together with Geant4.
+   * true = do fermi break-up (and skip ABLA part)
+   * false = use ABLA
+   */
+  G4bool needsFermiBreakup;
 
   /**
    * emitted in cascade (0) or evaporation (1).

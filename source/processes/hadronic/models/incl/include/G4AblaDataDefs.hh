@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaDataDefs.hh,v 1.9 2008-06-25 17:20:04 kaitanie Exp $ 
+// $Id: G4AblaDataDefs.hh,v 1.10 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -188,7 +188,7 @@ public:
 };
 
 //#define VOLANTSIZE 200
-#define VOLANTSIZE 2000
+#define VOLANTSIZE 301
 /**
  * Evaporation and fission output data.
  */

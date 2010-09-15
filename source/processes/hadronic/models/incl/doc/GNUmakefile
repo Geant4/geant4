@@ -1,5 +1,7 @@
 # GNUmakefile for building the reference documentation with Doxygen.
 
+VERSION := $(shell git describe --tags)
+
 all: physref
 
 rl:
@@ -23,11 +25,12 @@ physref: useIncl.tex Incl.tex
 	make clean; latex useIncl; bibtex useIncl; latex useIncl; latex useIncl; dvips useIncl.dvi -o useIncl.ps;
 
 referencedocs: clean
-	mkdir -p reference/*
+	mkdir -p reference/
+	cat Doxyfile.in | sed s/INCLABLAVERSION/$(VERSION)/g > Doxyfile
 	doxygen
 
 uploaddocs:
-	chmod -R a+r reference/
-	chmod a+x reference/
-	chmod a+x reference/html/
-	scp -r reference/ kaitanie@melkki.cs.helsinki.fi:~/public_html/inclabla/
+	chmod -R a+r reference/*
+	chmod a+x reference/*
+	chmod a+x reference/html/*
+	scp -r reference/html/* kaitanie@shell.dx.fi:~/public_html/incl/

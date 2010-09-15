@@ -4,14 +4,26 @@ TESTPROGRAM =
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+ifdef G4INCLDEBUG
+  CPPFLAGS += -DG4INCLDEBUG
+  FFLAGS += -DG4INCLDEBUG
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
+
+LDFLAGS += -lG4hadronic_deex_fermi_breakup
 
 G4INCLUDES = -I$(G4INSTALL)/include
 G4LIBDIRUNIT = -L$(G4INSTALL)/lib/$(G4SYSTEM)
 G4LIBSUNIT = -lG4hadronic_incl_cascade
 G4LIBSUNIT += -lG4hadronic_inclabla_utils
 G4LIBSUNIT += -lG4globman
+
+flow:
+	cp cu43.in_FOR_TEST cu43.in
+	./cugnon43_khsv3p
+	cat tmp/test.out | grep checkpoint | sed s/\@/\'/g > fortran.lisp
+	./incl full 12 6 -12 1200 1 test.root | grep checkpoint > cpp.lisp
 
 demo: clean-build build
 	./run.sh run0 # Make a short run to be used for demo.
@@ -30,12 +42,15 @@ abladebugc: abla
 	./abla 208 82 100 10 1 > tmp/abladebugc.out
 	grep PK::: tmp/abladebugc.out > tmp/abladebugcfilt.out
 
-build: incl abla build-reference
+build: clean-incl incl abla build-reference
 	mkdir -p tmp
 
 clean-build: clean-reference clean
 	rm -f incl
 	rm -f abla
+
+clean-incl:
+	rm -f incl
 
 clean-tmp: 
 	rm -f tmp/*
@@ -72,8 +87,10 @@ endif
 
 # FORTRAN INCL/ABLA object files:
 INCLABLAOBJS = orig/FISSION_DISTRI.o orig/abla_v3p.o \
-orig/incl4.2.o orig/init_incl42.o orig/utils.o \
-orig/abla_init.o
+orig/incl4.3_be.o orig/init_incl43.o orig/utils.o \
+orig/abla_init.o \
+orig/init_dresner.o \
+orig/dresner.o orig/drein1.o orig/drein2.o
 
 # CERNLIB libraries:
 ifndef KERNLIB
@@ -105,13 +122,13 @@ build-reference : cugnon noevap
 
 # cugnon : The original example provided with INCL4 and ABLA code.
 cugnon : $(INCLABLAOBJS)
-	$(FC) $(FFLAGS) -c -o orig/cugnon42_khs_gem.o orig/cugnon42_khs_gem.f
-	$(FC) -o cugnon42_khs_gem orig/cugnon42_khs_gem.o $(INCLABLAOBJS) $(STATICLIBSCERN)
+	$(FC) $(FFLAGS) -c -o orig/cugnon43_khsv3p.o orig/cugnon43_khsv3p.f
+	$(FC) -o cugnon43_khsv3p orig/cugnon43_khsv3p.o $(INCLABLAOBJS) $(STATICLIBSCERN)
 
 # noevap : INCL4 cascade only.
 noevap : $(INCLABLAOBJS)
-	$(FC) $(FFLAGS) -c -o orig/cugnon42_noevapfis.o orig/cugnon42_noevapfis.f
-	$(FC) -o cugnon42_noevapfis orig/cugnon42_noevapfis.o $(INCLABLAOBJS) $(STATICLIBSCERN)
+#	$(FC) $(FFLAGS) -c -o orig/cugnon42_noevapfis.o orig/cugnon42_noevapfis.f
+#	$(FC) -o cugnon42_noevapfis orig/cugnon42_noevapfis.o $(INCLABLAOBJS) $(STATICLIBSCERN)
 
 # evap : ABLA only.
 evap : $(INCLABLAOBJS)

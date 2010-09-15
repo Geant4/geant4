@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.11 2008-06-25 17:20:03 kaitanie Exp $ 
+// $Id: G4Abla.hh,v 1.12 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -32,6 +32,7 @@
 
 #include "globals.hh"
 
+#include "G4VInclLogger.hh"
 #include "G4InclRandomNumbers.hh"
 #include "G4AblaDataDefs.hh"
 #include "G4InclDataDefs.hh"
@@ -74,11 +75,14 @@ public:
   ~G4Abla();
 
   /**
+   * Register the INCL/ABLA internal variable logger.
+   */
+  void registerLogger(G4VInclLogger *theLogger);
+
+  /**
    * Set verbosity level.
    */
-  void setVerboseLevel(G4int level) {
-    verboseLevel = level;
-  }
+  void setVerboseLevel(G4int level);
 
   /**
    * Get the internal output data structure pointer.
@@ -321,6 +325,8 @@ private:
   G4Opt *opt;
   G4Volant *volant;
   G4VarNtp *varntp;  
+
+  G4VInclLogger *theLogger;
 };
 
 #endif

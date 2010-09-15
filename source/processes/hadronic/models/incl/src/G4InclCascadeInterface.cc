@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclCascadeInterface.cc,v 1.10 2007-12-10 16:32:02 gunter Exp $ 
+// $Id: G4InclCascadeInterface.cc,v 1.11 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -91,8 +91,8 @@ G4HadFinalState* G4InclCascadeInterface::ApplyYourself(const G4HadProjectile& aT
   G4cout <<"Bullet energy = " << bulletE / MeV << G4endl;
 #endif
 
-  G4double targetA = theNucleus.GetN();
-  G4double targetZ = theNucleus.GetZ();
+  G4int targetA = theNucleus.GetA_asInt();
+  G4int targetZ = theNucleus.GetZ_asInt();
 
   G4double eKin;
   G4double momx = 0.0, momy = 0.0, momz = 0.0;

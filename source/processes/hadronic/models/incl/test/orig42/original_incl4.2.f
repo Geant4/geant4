@@ -557,7 +557,7 @@ c     READ 12,(TEM(IT),IT=1,NTM)                                        P-N02600
       tem(1)=100000.
 c   temfin (time at which the INC is stopped), tmax5 defined after chosing b
  
-c   on conserve pour memoire
+c   on conserve pour mÈmoire
       nrun=1
       ncase=25
       xp=10.
@@ -2396,7 +2396,7 @@ C      ENDIF
       IF (RNDM.GT.TP) GO TO 601                                         P-N11720
 	
 C-------------------------------------------------------------------
-C Ici la particule L1 s'echappe du noyau:
+C Ici la particule L1 s'échappe du noyau:
       NESC(L1)=1                                                        P-N11730
       nbquit=nbquit+1
       ITCH=ITCH-(1+IND2(L1))/2                                          P-N11740
@@ -4094,10 +4094,10 @@ c   result = texp(x)
       end                                                               
 
       SUBROUTINE sig_reac(iprojo,e,a,sig)
-C parametrisation de la section efficace de reaction calculee par INCL4.1
+C parametrisation de la section efficace de réaction calculée par INCL4.1
 c iprojo=1 proton incident, iprojo=2, neutron incident).
 C Entre Al et U, entre 10 et 100 MeV protons, 20 et 100 MeV neutrons.
-C Bon ordre de grandeur pour les noyaux legers (C, O ...), tres faux
+C Bon ordre de grandeur pour les noyaux légers (C, O ...), trés faux
 C a energie sup a 100 MeV.
       implicit double precision (a-h,o-z)
       REAL*4 sig                               
@@ -4361,7 +4361,7 @@ c
 C------------------------------------------------------------------------------
       SUBROUTINE FORCE_ABSOR(nopart,F,IAREM,IZREM,ESREM,ERECREM,
      s  ALREM,BEREM,GAREM,JREM) 
-C Absorption forcee pour p (10-100 MeV) et n (20-100MeV)
+C Absorption forcée pour p (10-100 MeV) et n (20-100MeV)
 
       DIMENSION F(15)
       REAL*4 ia1,iz1

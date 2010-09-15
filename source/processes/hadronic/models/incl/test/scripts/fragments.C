@@ -340,7 +340,7 @@ void residus() {
 
   c1->Clear();
   c1->SetLogy(1);
-  hista_on_measured->GetXaxis()->SetTitle("A");
+  hista_on_measured->GetXaxis()->SetTitle("Mass number");
   hista_on_measured->GetYaxis()->SetTitle("Cross section (mb)");
   hista_on_measured->SetTitle(titre);
   hista_on_measured->Draw();
@@ -349,6 +349,29 @@ void residus() {
   c1->SaveAs("fragments.png");
   c1->SaveAs("fragments.eps");
   c1->Print(psFileName_debut,"Portrait"); // saving the ps file
+
+  TCanvas *remnantCanvas = new TCanvas();
+  remnantCanvas->Divide(2,1);
+  remnantCanvas->cd(1);
+  remnantCanvas->SetLogy(1);
+  ref->SetLineColor(kRed);
+  reffort->Draw("Massini");
+  ref->Draw("Massini", "", "same");
+  reffort->GetHistogram()->SetTitle("p(1 GeV) + 208Pb after INCL cascade");
+  reffort->GetHistogram()->GetXaxis()->SetTitleSize(0.04);
+  reffort->GetHistogram()->GetYaxis()->SetTitleSize(0.04);
+  reffort->GetHistogram()->GetXaxis()->SetTitle("Remnant nucleus mass number");
+  reffort->GetHistogram()->GetYaxis()->SetTitle("Counts");
+  remnantCanvas->cd(2);
+  remnantCanvas->SetLogy(1);
+  reffort->Draw("Exini", "", "");
+  ref->Draw("Exini", "", "same");
+  reffort->GetHistogram()->SetTitle("");
+  reffort->GetHistogram()->GetXaxis()->SetTitleSize(0.04);
+  reffort->GetHistogram()->GetYaxis()->SetTitleSize(0.04);
+  reffort->GetHistogram()->GetXaxis()->SetTitle("Remnant nucleus excitation energy");
+  reffort->GetHistogram()->GetYaxis()->SetTitle("Counts");
+  remnantCanvas->SaveAs("run2remnants.png");
 
   // Second page, isotopic cross sections
   Int_t zDebut=84;

@@ -2,7 +2,7 @@
 INCL/ABLA tests README
 
 Pekka Kaitaniemi, HIP
-pekka.kaitaniemi@helsinki.fi
+pekka.kaitaniemi@gmail.com
 
 
 I CONTENTS OF THE TEST/ DIRECTORY
@@ -17,7 +17,7 @@ scripts/            Scripts for plotting with ROOT (GUI provided by tests.C)
 ex1/                An example Geant4 program using INCL/ABLA
 data/		    See data/README
 orig/               Reference to original FORTRAN code
-
+physics_list/       Development workspace for INCL/ABLA physics lists
 
 II REQUIREMENTS AND DEPENDENCIES
 

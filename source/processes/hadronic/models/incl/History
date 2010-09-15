@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.28 2010-06-14 16:10:01 gcosmo Exp $
+$Id: History,v 1.29 2010-09-15 21:54:04 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,30 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+14 September 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-02)
+----------------------------------------------------------
+- Migrated to integer A and Z when using G4Nucleus
+- Bugfixes:
+  o Make sure we use Geant4 random number generators everywhere
+  o Silenced some unnecessary warnings
+  o Make sure we use INCL for all light ion projectiles up to Carbon-12
+
+16 August 2010 - Pekka Kaitaniemi
+---------------------------------
+- Moved the INCL input initialization to the INCL input class
+- Implemented inverse-kinematics treatment for ion-hydrogen collisions
+
+01 June 2010 - Pekka Kaitaniemi
+-------------------------------
+- Improved the Fermi break-up configuration
+
+26 February 2010 - Pekka Kaitaniemi
+-----------------------------------
+- Merged INCL light ion projectile support to the integration branch
+  o Support infrastructure for light ions up to Carbon
+  o Use Geant4 Fermi break-up for projectile spectators and light cascade
+  remnants
 
 14 June 2010 - Gabriele Cosmo (hadr-incl-V09-03-01)
 ------------------------------------------------------
@@ -97,6 +121,11 @@ code and to keep track of all tags.
 24 October 2008 - Dennis Wright (hadr-incl-V09-01-03)
 -----------------------------------------------------
 - use GetNuclearMass() instead of GetAtomicMass() in G4AblaEvaporation.cc
+
+10 October 2008 - Pekka Kaitaniemi
+------------------------------------
+- Added ability to use Geant4 Fermi break-up
+  for light cascade remnants
 
 12 September 2008 - Pekka Kaitaniemi (hadr-incl-V09-01-02)
 ------------------------------------

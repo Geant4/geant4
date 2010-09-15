@@ -318,15 +318,15 @@ c***  excitation energy at saddle without and with shell effect
 C***       EXCITATION ENERGIES AT THE SCISSION POINT      **************
                                                                         
 c excitation energy of heavy fragment without and with shell effect     
-     	   epsilon0_1_scission = (E+E_saddle_scission - (Zheavy1-Zsymm)**2
+     	epsilon0_1_scission = (E+E_saddle_scission - (Zheavy1-Zsymm)**2
      #                           * CZ_symm) * Aheavy1/A                 
-     	   epsilon_1_scission = epsilon0_1_scission - (Delta_U1)*Aheavy1/A
+     	epsilon_1_scission = epsilon0_1_scission - (Delta_U1)*Aheavy1/A
                                                                         
 c excitation energy of heavy fragment without and with and shell effect 
-     	   epsilon0_2_scission = (E+E_saddle_scission - (Zheavy2-Zsymm)**2
+     	epsilon0_2_scission = (E+E_saddle_scission - (Zheavy2-Zsymm)**2
      #                        * CZ_symm) * Aheavy2/A                    
 c excitation energy of heavy fragment */                                
-     	   epsilon_2_scission = epsilon0_2_scission - (Delta_U2)*Aheavy2/A
+     	epsilon_2_scission = epsilon0_2_scission - (Delta_U2)*Aheavy2/A
                                                                         
      	   epsilon_symm_scission = E+E_saddle_scission                    
                                                                         
@@ -339,7 +339,7 @@ c***  excitation energy at saddle without and with shell effect
      #                           (Zheavy1-Zsymm)**2*CZ_symm)            
                                                                         
 c***  excitation energy at saddle without and with shell effect         
-     	   epsilon0_2_saddle = (epsilon_symm_saddle - (Zheavy2-Zsymm)**2  
+     	epsilon0_2_saddle = (epsilon_symm_saddle - (Zheavy2-Zsymm)**2  
      #                         *CZ_symm)                                
      	   epsilon_2_saddle = epsilon0_2_saddle - Delta_U2                
                                                                         
@@ -512,7 +512,7 @@ c                       sig_0**2  = 1.16*2 = 1.35    n units for Z=cte
      #               EXP(-epsilon_2_saddle*gamma_heavy2).LT.0)  THEN    
      	   Sasymm2 = -10                                                  
      	ELSE                                                              
-     	   Sasymm2 = 2.E0 * SQRT(A_levdens*(epsilon0_2_saddle - Delta_U2 *
+     	Sasymm2 = 2.E0 * SQRT(A_levdens*(epsilon0_2_saddle - Delta_U2 *
      #               EXP(-epsilon_2_saddle*gamma_heavy2)))              
       	END IF                                                           
                                                                         
@@ -973,45 +973,29 @@ C=======================================================================
 C***      SI K=<-1 ON INITIALISE                                        
 C***      SI K=-1 C'EST REPRODUCTIBLE                                   
 C***      SI K<>-1 CE N'EST PAS REPRODUCTIBLE
-       SAVE
-	common/debug/idebug
+
+       SAVE                           
+                                                                        
           IF (K.LE.-1) THEN                                             
              IF(K.EQ.-1)THEN                                            
                               IX=0                                      
                         ELSE                                            
                               X=0.                                      
-                              Y=SECNDS(X)       
+                              Y=SECNDS(X)                               
                               IX=Y*100+43543000                         
                               IF(MOD(IX,2).EQ.0)IX=IX+1                 
              END IF                                                     
-	     if(idebug.eq.1) then
-		X=ranecu(ix)
-	     else
-		X=RANF(IX)                                                  
-	     endif
+             X=RANF(IX)                                                  
              DO I=1,110                                                 
-		if(idebug.eq.1) then
-		   P(I)=ranecu(ix)
-		else
-		   P(I)=RANF(IX)                                                  
-		endif
-             END DO                                                   
-	     if(idebug.eq.1) then
-		A=ranecu(ix)
-	     else
-		A=RANF(IX)                                                  
-	     endif
+                P(I)=RANF(IX)                                            
+             END DO                                                     
+             A=RANF(IX)                                                  
              K=0                                                        
           END IF                                                        
           I=NINT(100*A)+1                                               
           HAZ=P(I)                                                      
- 
-	  if(idebug.eq.1) then
-	     A=ranecu(ix)
-	  else
-	     A=RANF(IX)                                                     
-	  endif
-          P(I)=A
+          A=RANF(IX)                                                     
+          P(I)=A                                                        
           RETURN                                                        
         END                                                             
                                                                         
@@ -1041,8 +1025,5 @@ C*** TIRAGE ALEATOIRE DANS UNE GAUSSIENNE DE LARGEUR SIG ET MOYENNE XMOY
         RETURN                                                          
         END                                                             
                                                                         
-	subroutine p(a,b)
-	real*4 a, b
-	write(6,*) a,b
-	return
-	end
+                                                                        
+                 

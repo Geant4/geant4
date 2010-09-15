@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Program for running INCL/ABLA FORTRAN version from command line. It
 # generates cu42.in run configuration file based on command line
@@ -16,17 +16,72 @@ writeRunFile() # Prepare setup file cu42.in
 # Arg_6 = Log file (ASCII)
 # Arg_7 = Output of the calculation (HBOOK)
 {
-rm -f cu42.in
-cat > cu42.in <<EOF
-'$6'	* name of output file (a few numbers for identification of the calculation)
-979678188 1		* first random, choice evapo (KHS=1,GEM=2)
-$5 0  0	* number of events, print_event_i, seeds given 0/1=No/Yes (IF yes, 20 values given after)
-$3 $4		* type projectile (1:p, 2:n, 6:d), total kinetic energy (MeV)
-$1 $2	   	* A Z of the target
-45. 1. -2  8. 0	* Nuclear potential (MeV), t=t0*fact, NOSURF, XFOISA, NPAULSTR
-'./data/'	* path to get the .tab et .dat (look at "open" in abla_v3p.f and setup_AB.f)	
-'./$7'		* ntuple
-0  'C12_avat.hbk'	* sortie ntuple avatars 0/1=No/Yes (be careful, yes for a few events only!)     
+if [ $3 -eq 1 ]; then
+    projA=1
+    projZ=1
+fi
+if [ $3 -eq 2 ]; then
+    projA=1
+    projZ=0
+fi
+if [ $3 -eq 3 ]; then
+    projA=-1
+    projZ=1
+fi
+if [ $3 -eq 4 ]; then
+    projA=-1
+    projZ=0
+fi
+if [ $3 -eq 5 ]; then
+    projA=-1
+    projZ=-1
+fi
+if [ $3 -eq 6 ]; then
+    projA=2
+    projZ=1
+fi
+if [ $3 -eq 7 ]; then
+    projA=3
+    projZ=1
+fi
+if [ $3 -eq 8 ]; then
+    projA=3
+    projZ=2
+fi
+if [ $3 -eq 9 ]; then
+    projA=4
+    projZ=2
+fi
+if [ $3 -eq -12 ]; then
+    projA=12
+    projZ=6
+fi
+
+if [ $1 -le 18 ]; then
+    evapo=4
+else
+    evapo=1
+fi
+
+rm -f cu43.in
+cat > cu43.in <<EOF
+'$6'	* fichier de sortie
+'INCL43 special HI for GEANT4'    * Comment
+38035 $evapo  	* first random, choice evapo (KHS=1,GEM=2,Dresner=4)
+$5  0  0	* Beam projectiles, print_event_i, seeds given 0/1=N/Y
+$projA $projZ $4	* Projectile A and Z (A=-1 for pions), TOTAL kinetic energy (MeV)
+$1 $2		* A Z of the target
+45. 1. -2  10. 0	* Nuclear Pot. (MeV), t=t0*fact, NOSURF, XFOISA, NPAULSTR
+0		* Coulomb barrier IN (0=NO,1=LAHET,2=INCL)
+0  0  0.        * Not used, clusters (0=NO,1=Coul bar R0,2=coul bar R0+RMS+FNECK),FNECK  
+0     		* Forced absorption (0/1=NO/YES)
+'./data/'	* Path for .tab et .dat
+'$7'		* ntuple physics
+0  'pb1000_cu43_abla_loce_t5_avat.hbk'	* ntuple avatars 0/1=NO/Yes
+4  2.51  100.  58.17	* Z, rms_R, rms_P, Binding_E
+4 2.36 100. 58.17 10.	* Z, rms_R, rms_P, Binding_E, Amin for breakup
+6 2.44 100. 92.17 10.	* Z, rms_R, rms_P, Binding_E, Amin for breakup 
+6 2.44 100. 92.17 10.	* Z, rms_R, rms_P, Binding_E, Amin for breakup 
 EOF
 }
 
@@ -36,7 +91,7 @@ runProgram() # Run INCL/ABLA program
 # Arg_1 = program name
 {
 $1
-rm -f cu42.in
+#rm -f cu43.in
 }
 
 if [ $# -ne 7 ]; then
@@ -52,7 +107,7 @@ if [ $# -ne 7 ]; then
 fi
 
 # Main:
-cascade_evaporation_program="./cugnon42_khs_gem"
+cascade_evaporation_program="./cugnon43_khsv3p"
 cascade_only_program="./cugnon42_noevapfis"
 evaporation_only_program="./evap"
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.13 2009-12-04 13:16:57 kaitanie Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.14 2010-09-15 21:54:04 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -33,6 +33,7 @@
 //#define DEBUGINCL 1
 
 #include "G4InclAblaCascadeInterface.hh"
+#include "G4FermiBreakUp.hh"
 #include "math.h"
 #include "G4GenericIon.hh"
 #include "CLHEP/Random/Random.h"
@@ -49,6 +50,9 @@ G4InclAblaCascadeInterface::G4InclAblaCascadeInterface(const G4String& nam)
   ws = new G4Ws();
   mat = new G4Mat();
   incl = new G4Incl(hazard, calincl, ws, mat, varntp);
+  if(!getenv("G4INCLABLANOFERMIBREAKUP")) { // Use Fermi Break-up by default if it is NOT explicitly disabled
+    incl->setUseFermiBreakUp(true);
+  }
 
   verboseLevel = 0;
 }
@@ -92,13 +96,17 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
   G4cout <<"Bullet energy = " << bulletE / MeV << G4endl;
 #endif
 
-  G4double targetA = theNucleus.GetN();
-  G4double targetZ = theNucleus.GetZ();
+  G4int targetA = theNucleus.GetA_asInt();
+  G4int targetZ = theNucleus.GetZ_asInt();
 
   G4double eKin;
   G4double momx = 0.0, momy = 0.0, momz = 0.0;
   G4DynamicParticle *cascadeParticle = 0;
   G4ParticleDefinition *aParticleDefinition = 0;
+  
+  G4FermiBreakUp *fermiBreakUp = new G4FermiBreakUp();
+  G4FragmentVector *theFermiBreakupResult = 0;
+  G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
 
   // INCL assumes the projectile particle is going in the direction of
   // the Z-axis. Here we construct proper rotation to convert the
@@ -327,7 +335,6 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
 
       if((varntp->avv[particleI] > 1) && (varntp->zvv[particleI] >= 1)) { // Nucleus fragment
         G4ParticleDefinition * aIonDef = 0;
-        G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
 
         G4int A = G4int(varntp->avv[particleI]);
         G4int Z = G4int(varntp->zvv[particleI]);
@@ -405,6 +412,105 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       }
     }
 
+    // Finally do Fermi break-up if needed
+    if(varntp->needsFermiBreakup) {
+      //      baryonNumberBalanceInINCL -= varntp->massini;
+      //      chargeNumberBalanceInINCL -= varntp->mzini;
+      // Call Fermi Break-up
+      G4double nuclearMass = G4NucleiProperties::GetNuclearMass(G4int(varntp->massini), G4int(varntp->mzini)) + varntp->exini * MeV;
+      G4LorentzVector fragmentMomentum(varntp->pxrem * MeV, varntp->pyrem * MeV, varntp->pzrem * MeV,
+				       varntp->erecrem * MeV + nuclearMass);
+      G4double momentumScaling = G4InclUtils::calculate4MomentumScaling(G4int(varntp->massini), G4int(varntp->mzini),
+									varntp->exini,
+									varntp->erecrem,
+									varntp->pxrem,
+									varntp->pyrem,
+									varntp->pzrem);
+      G4LorentzVector p4(momentumScaling * varntp->pxrem * MeV, momentumScaling * varntp->pyrem * MeV,
+			 momentumScaling * varntp->pzrem * MeV,
+      			 varntp->erecrem + nuclearMass);
+
+      // For four-momentum, baryon number and charge conservation check:
+      G4LorentzVector fourMomentumBalance = p4;
+      G4int baryonNumberBalance = varntp->massini;
+      G4int chargeBalance = varntp->mzini;
+
+      G4LorentzRotation toFragmentZ;
+      toFragmentZ.rotateZ(-p4.theta());
+      toFragmentZ.rotateY(-p4.phi());
+      G4LorentzRotation toFragmentLab = toFragmentZ.inverse();
+      //      p4 *= toFragmentZ;
+
+      G4LorentzVector p4rest = p4;
+      //      p4rest.boost(-p4.boostVector());
+      if(verboseLevel > 0) {
+	G4cout <<"Cascade remnant nucleus:" << G4endl;
+	G4cout <<"p4: " << G4endl;
+	G4cout <<" px: " << p4.px() <<" py: " << p4.py() <<" pz: " << p4.pz() << G4endl;
+	G4cout <<" E = " << p4.e() << G4endl;
+
+	G4cout <<"p4rest: " << G4endl;
+	G4cout <<" px: " << p4rest.px() <<" py: " << p4rest.py() <<" pz: " << p4rest.pz() << G4endl;
+	G4cout <<" E = " << p4rest.e() << G4endl;
+      }
+
+      G4Fragment theCascadeRemnant(G4int(varntp->massini), G4int(varntp->mzini), p4rest);
+      theFermiBreakupResult = fermiBreakUp->BreakItUp(theCascadeRemnant);
+      if(theFermiBreakupResult != 0) {
+      G4FragmentVector::iterator fragment;
+      for(fragment = theFermiBreakupResult->begin(); fragment != theFermiBreakupResult->end(); fragment++) {
+	G4ParticleDefinition *theFragmentDefinition = 0;
+	if((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 0) { // Neutron
+	  theFragmentDefinition = G4Neutron::NeutronDefinition();
+	} else if ((*fragment)->GetA_asInt() == 1 && (*fragment)->GetZ_asInt() == 1) {
+	  theFragmentDefinition = G4Proton::ProtonDefinition();
+	} else {
+	  theFragmentDefinition = theTableOfParticles->GetIon((*fragment)->GetZ_asInt(), (*fragment)->GetA_asInt(), (*fragment)->GetExcitationEnergy());
+	}
+
+	if(theFragmentDefinition != 0) {
+	  G4DynamicParticle *theFragment = new G4DynamicParticle(theFragmentDefinition, (*fragment)->GetMomentum());
+	  G4LorentzVector labMomentum = theFragment->Get4Momentum();
+	  //	  labMomentum.boost(p4.boostVector());
+	  //	  labMomentum *= toFragmentLab;
+	  //	  labMomentum *= toLabFrame;
+	  theFragment->Set4Momentum(labMomentum);
+	  fourMomentumBalance -= theFragment->Get4Momentum();
+	  baryonNumberBalance -= theFragmentDefinition->GetAtomicMass();
+	  chargeBalance -= theFragmentDefinition->GetAtomicNumber();
+	  if(verboseLevel > 0) {
+	    G4cout <<"Resulting fragment: " << G4endl;
+	    G4cout <<" kinetic energy = " << theFragment->GetKineticEnergy() / MeV << " MeV" << G4endl;
+	    G4cout <<" momentum = " << theFragment->GetMomentum().mag() / MeV << " MeV" << G4endl;
+	  }
+	  theResult.AddSecondary(theFragment);
+	} else {
+	  G4cout <<"G4InclAblaCascadeInterface: Error. Fragment produced by Fermi break-up does not exist." << G4endl;
+	  G4cout <<"Resulting fragment: " << G4endl;
+	  G4cout <<" Z = " << (*fragment)->GetZ_asInt() << G4endl;
+	  G4cout <<" A = " << (*fragment)->GetA_asInt() << G4endl;
+	  G4cout <<" Excitation : " << (*fragment)->GetExcitationEnergy() / MeV << " MeV" << G4endl;
+	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
+	}
+      }
+      if(std::abs(fourMomentumBalance.mag() / MeV) > 0.1 * MeV) { 
+	G4cout <<"Four-momentum balance after remnant nucleus Fermi break-up:" << G4endl;
+	G4cout <<"Magnitude: " << fourMomentumBalance.mag() / MeV << " MeV" << G4endl;
+	G4cout <<"Vector components (px, py, pz, E) = ("
+	       << fourMomentumBalance.px() << ", "
+	       << fourMomentumBalance.py() << ", "
+	       << fourMomentumBalance.pz() << ", "
+	       << fourMomentumBalance.e() << ")" << G4endl;
+      }
+      if(baryonNumberBalance != 0) {
+	G4cout <<"Baryon number balance after remnant nucleus Fermi break-up: " << baryonNumberBalance << G4endl;
+      }
+      if(chargeBalance != 0) {
+	G4cout <<"Charge balance after remnant nucleus Fermi break-up: " << chargeBalance << G4endl;
+      }
+    }
+    }
+
 #ifdef DEBUGINCL
     G4cout <<"--------------------------------------------------------------------------------" << G4endl;
     G4double pt = std::sqrt(std::pow(labv.x(), 2) + std::pow(labv.y(), 2));
@@ -448,7 +554,6 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
   else { // If the bullet type was not recognized by the interface, it will be returned back without any interaction.
     theResult.SetStatusChange(stopAndKill);
 
-    G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
     cascadeParticle = new G4DynamicParticle(theTableOfParticles->FindParticle(aTrack.GetDefinition()), aTrack.Get4Momentum());
 
     theResult.AddSecondary(cascadeParticle);
@@ -499,6 +604,7 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
     }
   }
 
+  delete fermiBreakUp;
   return &theResult;
 } 
 

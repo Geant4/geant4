@@ -205,7 +205,7 @@ void nCrossSection(){
   Double_t emin  = 1.;
   Double_t emax  = 2000.;
   Int_t    logE  = 1; // log E scale True=1, False=0
-  Double_t fnorm = 2153.16/(100000.0*2.0*pi);
+  Double_t fnorm = 2153.16/(1000000.0*2.0*pi);
 
   cout << "Normalisation factor: " << fnorm << endl;
 	
@@ -240,9 +240,9 @@ void nCrossSection(){
   TH1F* hist0;
   Int_t first=1;
   Double_t fnora=1.0;
-  //plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet0,fnor0,fnora,"0 Deg",first);
-  //first=0;
-  first=1;
+  plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet0,fnor0,fnora,"0^{o}",first);
+  first=0;
+  plotTheorTheta(reffort,titre,c1,emin,emax,logE,neutron,thet0,fnor0,fnora,"0^{o}",first, kBlack);
   fnora=fnora/10.;
   plotTheorTheta(ref,titre,c1,emin,emax,logE,neutron,thet10,fnor10,fnora,"10^{o}",first);
   first=0;
@@ -280,7 +280,7 @@ void nCrossSection(){
 
   // Experimental points:
   Float_t fnorexp=1.;
-  //  plotExpTheta("p800fe30_000",racine,fnorexp);
+  plotExpTheta("p800fe30_000",racine,fnorexp);
   fnorexp = fnorexp/10.;
   plotExpTheta("p800fe30_010",racine,fnorexp);
   fnorexp = fnorexp/10.;

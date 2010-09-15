@@ -314,7 +314,7 @@ C calcul de q/PF=F(R)
 		F_R=RES_DWS/FNOR
 	      	END IF
 	      END IF    		
-C Modif le 20/10/2003; eviter les valeurs negatives AVANT **1/3 !
+C Modif le 20/10/2003; éviter les valeurs négatives AVANT **1/3 !
 C      		F_R=F_R**(1./3.)
       	ENDIF
       		IF(F_R.GT.0.0) THEN
