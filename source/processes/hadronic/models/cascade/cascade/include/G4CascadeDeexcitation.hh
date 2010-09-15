@@ -1,3 +1,5 @@
+#ifndef G4CASCADE_DEEXCITATION_HH
+#define G4CASCADE_DEEXCITATION_HH
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -22,47 +24,37 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.hh,v 1.18 2010-09-15 20:16:16 mkelsey Exp $
+// $Id: G4CascadeDeexcitation.hh,v 1.1 2010-09-15 20:16:16 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
-// 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
-// 20100517  M. Kelsey -- Inherit from common base class, make other colliders
-//		simple data members
-// 20100620  M. Kelsey -- Move output buffers here to reduce memory churn
-// 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
-// 20100720  M. Kelsey -- Make all the collders pointer members (to reducde
-//		external compile dependences).
-// 20100915  M. Kelsey -- Move de-excitation colliders to G4CascadeDeexcitation
-
-#ifndef G4INUCL_COLLIDER_HH
-#define G4INUCL_COLLIDER_HH
+// Takes an arbitrary excited or unphysical nuclear state and produces
+// a final state with evaporated particles and (possibly) a stable nucleus.
 
 #include "G4CascadeColliderBase.hh"
+#include "globals.hh"
 #include "G4CollisionOutput.hh"
 
 class G4InuclParticle;
-class G4CascadeDeexcitation;
-class G4ElementaryParticleCollider;
-class G4IntraNucleiCascader;
+class G4BigBanger;
+class G4EquilibriumEvaporator;
+class G4NonEquilibriumEvaporator;
 
 
-class G4InuclCollider : public G4CascadeColliderBase {
+class G4CascadeDeexcitation : public G4CascadeColliderBase {
 public:
-  G4InuclCollider();
-  virtual ~G4InuclCollider();
+  G4CascadeDeexcitation();
+  virtual ~G4CascadeDeexcitation();
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
+  // Standard Collider interface (bullet is not used in this case)
+  void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
 	       G4CollisionOutput& globalOutput);
 
-private: 
-  G4ElementaryParticleCollider* theElementaryParticleCollider;
-  G4IntraNucleiCascader* theIntraNucleiCascader;
-  G4CascadeDeexcitation* theDeexcitation;
+private:
+  G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
+  G4EquilibriumEvaporator* theEquilibriumEvaporator;
+  G4BigBanger* theBigBanger;
 
-  G4CollisionOutput output;		// Secondaries from main cascade
-  G4CollisionOutput DEXoutput;		// Secondaries from de-excitation
-};        
+  G4CollisionOutput output;	// Local buffer for de-excitation stages
+};
 
-#endif /* G4INUCL_COLLIDER_HH */
-
-
+#endif	/* G4CASCADE_DEEXCITATION_HH */

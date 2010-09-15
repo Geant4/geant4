@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.hh,v 1.16 2010-06-17 04:25:14 mkelsey Exp $
+// $Id: G4LorentzConvertor.hh,v 1.17 2010-09-15 20:16:16 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -30,6 +30,7 @@
 // 20100126  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100519  M. Kelsey -- Add interfaces to pass G4InuclParticles directly
 // 20100616  M. Kelsey -- Report bullet and target four-momenta when set
+// 20100915  M. Kelsey -- Move constructors to .cc file, add initializers
 
 #ifndef G4LORENTZ_CONVERTOR_HH
 #define G4LORENTZ_CONVERTOR_HH
@@ -41,22 +42,14 @@
 class G4InuclParticle;
 
 class G4LorentzConvertor {
-
 public:
-
   G4LorentzConvertor();
 
   G4LorentzConvertor(const G4LorentzVector& bmom, G4double bmass, 
-		     const G4LorentzVector& tmom, G4double tmass) {
-    setBullet(bmom, bmass);
-    setTarget(tmom, tmass);
-  }
+		     const G4LorentzVector& tmom, G4double tmass);
 
   G4LorentzConvertor(const G4InuclParticle* bullet, 
-		     const G4InuclParticle* target) {
-    setBullet(bullet);
-    setTarget(target);
-  }
+		     const G4InuclParticle* target);
 
   void setVerbose(G4int vb=0) { verboseLevel = vb; }
 

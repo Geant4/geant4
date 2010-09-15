@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4LorentzConvertor.cc,v 1.28 2010-07-13 23:20:10 mkelsey Exp $
+// $Id: G4LorentzConvertor.cc,v 1.29 2010-09-15 20:16:16 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100108  Michael Kelsey -- Use G4LorentzVector internally
@@ -43,9 +43,28 @@
 const G4double G4LorentzConvertor::small = 1.0e-10;
 
 G4LorentzConvertor::G4LorentzConvertor() 
-  : verboseLevel(0), degenerated(false) {
+  : verboseLevel(0), velocity(0.), gamma(0.), v2(0.), ecm_tot(0.),
+    ga(0.), gb(0.), gbpp(0.), gapp(0.), degenerated(false) {
   if (verboseLevel)
     G4cout << " >>> G4LorentzConvertor::G4LorentzConvertor" << G4endl;
+}
+
+G4LorentzConvertor::
+G4LorentzConvertor(const G4LorentzVector& bmom, G4double bmass, 
+		   const G4LorentzVector& tmom, G4double tmass) 
+  : verboseLevel(0), velocity(0.), gamma(0.), v2(0.), ecm_tot(0.),
+    ga(0.), gb(0.), gbpp(0.), gapp(0.), degenerated(false) {
+  setBullet(bmom, bmass);
+  setTarget(tmom, tmass);
+}
+
+G4LorentzConvertor::
+G4LorentzConvertor(const G4InuclParticle* bullet, 
+		   const G4InuclParticle* target) 
+  : verboseLevel(0), velocity(0.), gamma(0.), v2(0.), ecm_tot(0.),
+    ga(0.), gb(0.), gbpp(0.), gapp(0.), degenerated(false) {
+  setBullet(bullet);
+  setTarget(target);
 }
 
 // Extract four-vectors from input particles
