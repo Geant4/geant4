@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit3D.cc,v 1.4 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSDoseDeposit3D.cc,v 1.5 2010-09-15 21:16:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit3D
@@ -73,5 +73,24 @@ G4int G4PSDoseDeposit3D::GetIndex(G4Step* aStep)
   G4int j = touchable->GetReplicaNumber(fDepthj);
   G4int k = touchable->GetReplicaNumber(fDepthk);
   
+if(i<0)
+{ 
+  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
+              "GetReplicaNumber is negative");
+  G4cerr << "touchable->GetReplicaNumber(fDepthi) returns " << i << G4endl;
+}
+if(j<0)
+{
+  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
+              "GetReplicaNumber is negative");
+  G4cerr << "touchable->GetReplicaNumber(fDepthj) returns " << j << G4endl;
+}
+if(k<0)
+{
+  G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
+              "GetReplicaNumber is negative");
+  G4cerr << "touchable->GetReplicaNumber(fDepthk) returns " << k << G4endl;
+}
+
   return i*fNj*fNk+j*fNk+k;
 }

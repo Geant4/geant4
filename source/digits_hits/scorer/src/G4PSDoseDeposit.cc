@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.3 2010-07-22 07:23:45 taso Exp $
+// $Id: G4PSDoseDeposit.cc,v 1.4 2010-09-15 21:16:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit
@@ -72,6 +72,12 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   { // for parameterized volume
     G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
                 ->GetReplicaNumber(indexDepth);
+    if(idx<0)
+    {
+      G4Exception("G4PSDoseDeposit","G4PSDoseDeposit::ProcessHits",JustWarning,
+                  "Incorrect replica number");
+      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
+    }
     solid = physParam->ComputeSolid(idx, physVol);
     solid->ComputeDimensions(physParam,idx,physVol);
   }

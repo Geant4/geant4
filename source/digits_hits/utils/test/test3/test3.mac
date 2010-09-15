@@ -1,0 +1,26 @@
+#
+/control/execute vis.mac
+#
+########################################
+#
+/score/create/cylinderMesh cylinderMesh_1
+#
+/score/mesh/cylinderSize 1. 1. m
+/score/mesh/translate/xyz 0. 0. 0. cm
+#
+/score/mesh/nBin 30 30 30
+#
+/score/quantity/doseDeposit eDepPS
+#
+/score/close
+#
+########################################
+#
+/score/list
+#
+/run/beamOn 100
+#
+########################################
+#
+/score/drawProjection cylinderMesh_1 eDepPS
+#
