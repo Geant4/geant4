@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMeltonAttachmentModel.cc,v 1.1 2010-09-08 13:46:45 sincerti Exp $
+// $Id: G4DNAMeltonAttachmentModel.cc,v 1.2 2010-09-15 05:47:33 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+// Created by Z. Francis
 
 #include "G4DNAMeltonAttachmentModel.hh"
 
@@ -111,7 +113,7 @@ void G4DNAMeltonAttachmentModel::Initialise(const G4ParticleDefinition* /*partic
   
   G4double scaleFactor = 1e-18*cm*cm;
 
-  G4String fileElectron("dna/melton_cr");
+  G4String fileElectron("dna/sigma_attachment_e_melton");
 
   G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
   G4String electron;
@@ -202,7 +204,7 @@ G4double G4DNAMeltonAttachmentModel::CrossSectionPerVolume(const G4Material* mat
   } 
 
  } // if water
-         
+        
  return sigma*material->GetAtomicNumDensityVector()[1];		   
 }
 

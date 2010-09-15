@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc,v 1.1 2010-09-08 13:46:45 sincerti Exp $
+// $Id: G4DNASancheExcitationModel.cc,v 1.2 2010-09-15 05:47:33 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Created by Z. Francis
 
@@ -124,7 +122,7 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
 
   char *path = getenv("G4LEDATA");
   std::ostringstream eFullFileName;
-  eFullFileName << path << "/dna/sanche_cr.dat";
+  eFullFileName << path << "/dna/sigma_excitationvib_e_sanche.dat";
   std::ifstream input(eFullFileName.str().c_str());
   
   while(!input.eof())
@@ -172,6 +170,7 @@ G4double G4DNASancheExcitationModel::CrossSectionPerVolume(const G4Material* mat
   } 
 
  } // if water
+
 
   return sigma*2*material->GetAtomicNumDensityVector()[1];
   // see papers for factor 2 description		   
