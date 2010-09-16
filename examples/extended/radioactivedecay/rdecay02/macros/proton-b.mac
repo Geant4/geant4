@@ -1,0 +1,39 @@
+#################################################################################
+#                                                                              	#
+# THIS TEST TO DEMONSTRATE THAT ISOTOPES GENERATED IN HADRONIC                  #
+# PROCESSES CAN BE TREATED BY THE RDM.					        # 
+#                                                                              	#
+#################################################################################
+#
+#
+#/exrdm/phys/SelectPhysics LHEP_BIC_HP
+/exrdm/phys/SelectPhysics Hadron
+#/geometry/material/add NaI Na-I 3.67
+# material definitions has to be done before /run/initilalize
+/exrdm/det/setTargetMate Lead
+/histo/fileName proton-b
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/grdm/analogueMC 0
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+/grdm/sourceTimeProfile beam.data
+/grdm/decayBiasProfile measures.data
+#/grdm/BRbias 0
+
+/gps/particle proton 
+/gps/energy 1 GeV
+/tracking/verbose 0
+/random/setSavingFlag
+/random/resetEngineFrom oldEvent.rndm
+/run/beamOn 10000
+
+
+ 
+
+
+
+
+

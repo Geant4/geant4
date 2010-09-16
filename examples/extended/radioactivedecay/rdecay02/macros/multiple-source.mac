@@ -1,0 +1,28 @@
+#/exrdm/phys/SelectPhysics LHEP_BIC_HP
+/exrdm/det/setTargetRadius 10 mm
+/exrdm/det/setTargetLength 10 mm
+/run/initialize
+/histo/fileName multiple-source
+/run/setCut 1000 cm
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/gps/pos/type Volume
+/gps/pos/centre 0 0 0
+/gps/pos/shape Cylinder
+/gps/pos/radius 10 mm
+/gps/pos/halfz 5 mm
+#
+/gps/particle ion
+/gps/energy 0 keV
+# first isotope Cf240 with strength of 2.
+/gps/source/intensity 2.
+/gps/ion 98 240
+# second isotope Cs137 with strength of 1.
+/gps/source/add 1.
+/gps/ion 55 137
+# third isotope U238 with strength of 1.5
+/gps/source/add 1.5
+/gps/ion 92 238
+/gps/source/list
+/tracking/verbose 0
+/run/beamOn 1000

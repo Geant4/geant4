@@ -1,0 +1,255 @@
+
+    =========================================================
+    Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+    =========================================================
+
+                       Extended Example rdecay02
+                       -------------------------
+
+  Rdecay02 is created to show how to use the G4RadioactiveDecay process to simulate the decays of 
+  radioactive isotopes as well as the induced radioactivity resulted from nuclear interactions. 
+
+  In this example a simple geometry consists of a cylindric target placed in the centre of a tube detector 
+  is constructed. Various primary event generation and tallying options are available. Further documentations 
+  are available at
+
+	  http://reat.space.qinetiq.com/septimess/exrdm
+
+  1. GEOMETRY
+
+     Material: There are 7 pre-defined materials: 
+	"Vacuum" "Air" "Silicon" "Aluminium" "Lead" "Germanium" and "CsI"
+
+     User can add a new material at the "PreIni" state, using the command
+	/geometry/material/add
+
+     For the geometry, the world is filled with "Air" and there are two components in it	     
+ 
+       - Target:  A cylinder placed at the origin along the z-axis. The default size of the cylinder is 
+	          0.5 cm radius and 1 cm in length, and its default material is "CsI".
+		  
+       - Detector:A tube cerntred at the origin along the z-axis, with inner radius matching the
+	          radius of the target. The default thickness of the tube is 2 cm and it is  
+                  5 cm long. The default material is "Germanium".
+
+     The user can change the target/detector size and material at the at the "PreIni" state, using the 
+     commands in the directory
+		  
+		/exrdm/det
+
+  2. PHYSICS
+
+     The following physics processes are included by default:
+
+       - Standard electromagnetic:
+           photo-electric effect
+           Compton scattering
+           pair production
+           bremsstrahlung
+           ionization
+           multiple scattering
+           annihilation
+
+       - Decay
+
+       - Radioactive Decay
+	  By default it is applied through out the geometry. The user can limit it to just the target by 
+	  commands
+
+	        /grdm/noVolumes
+	        /grdm/selectVolume Target
+
+       - Hadronic processes:
+	  Hadronic processes are not invoked by default. They can be activated by the user at the "PreIni" 
+ 	  state via the command
+
+		/exrdm/phys/SelectPhysics
+
+	  The options are:
+ 
+		"Hadron" - Physicslist comsists of Binary_Cascade, HP_Neutron, QGSP, and LHEP, or
+		the standdard hadron physics list avaible in the G4 distribution, i.e. 
+		"QGSP_BERT", "QGSP_BIC", "QGSP_HP", "LHEP_BERT", "LHEP_BERT_HP", "LHEP_BIC",
+		"LHEP_BIC_HP".
+
+  3. EVENT:
+
+     The event generator is based on the G4GeneralParticleSource (GPS) which allows the user to 
+     control all aspects of the initial states of the events. In this example, however, only simple features 
+     of the GPS are employed to generate the incident beam or the initial radio-isotopes. By default the 
+     incident particle is travelling along the + z-axis and the incident position is at the -Z end 
+     of the geometry.      
+
+  4. DETECTOR RESPONSE:
+
+     No Geant4 HITS and SD are defined in this example. If the variable "G4ANALYSIS_USE" is defined, all 
+     the relevant information of the simulation is collected  at the "UserSteppingAction" stage. These 
+     include:
+
+       - Emission particles in the RadioactiveDecay process: 
+           particle PDGcode,
+           partilce kinetic energy,
+	   particle creation time,
+           particle weight.
+
+	Note: the residual nuclei is not considered as an emitted particle.
+
+       - Radio-Isotopes. All the radioactive isotopes produced in the simulation: 
+           isotope  PDGcode,
+           isotope  creation time,
+           isotope  weight.
+ 
+       - Energy depositions in the target and detector by prodicts of the RadioactiveDecay process: 
+           energy depostion (positive volue for target and negative for detector), 
+           time,
+           weight.
+  
+  5. VISUALIZATION:
+ 
+     Visualisation of the geometry and the tracks is possible with many of the G4 visualisation packages. An
+     example of display the geometry and tracks using VRML is given in the macro file macros/vis.mac.  
+
+  6. ANALYSIS:
+
+     This example implements an AIDA-compliant analysis system as well as the ROOT system, for accumulating 
+     and output histograms and ntuples. If the the user has an AIDA-compliant tool such as 
+     AIDAJNI, ANAPHE, OpenScientist or PI installed, the analysis part of this example can 
+     be activated by 
+	
+	setenv G4ANALYSIS_USE 1
+
+     before building the executable.  
+
+     The user can also use the executable with the ROOT system, if it is available. This is done by 
+      
+       setenv G4ANALYSIS_USE_ROOT 1
+       
+     again before the compilation. The AIDA and ROOT systems can be used individually, or in parallel 
+     at the same time!
+
+     If no analysis system is activated, there is no output file produced apart from the screen dump. 
+     A file called "exrdm.aida" is produced by default for AIDA system and "exrdm.root" if the ROOT 
+     system is selected. 
+  
+     The user can change the name of this output file with the command
+
+	/histo/fileName new-filename
+
+     The output AIDA file by default is in xml format. The AIDA system allows the use of other file format
+     such as "root" and "hbook". User can change the output format to "hbook"  or "root" using the command 
+     /histo/fileType.e.g.
+	
+	/histo/fileType hbook  
+	/histo/fileType root
+     
+     When "root" format is selected for the AIDA system, the output AIDA file name is changed to 
+     fileName_aida.root. This is to separate it from the the ROOT system output file fileName.root, in case 
+     both systems are used.
+    
+     The output file, in "aida" or "hbook" or "root" format, conatins the 3 ntuples (100,200,300) which have 
+     been described in section 4. In addition, there are 7 histograms in the file:
+
+	histogram 10: The Pulse Height Spectrum (PHS) of the target.
+	histogram 11: The PHS of the detector.
+	histogram 12: The combined PHS of the target and detector.
+	histogram 13: The anti-coincidece PHS of the target.
+	histogram 14: The anti-coincidece PHS of the detector.
+	histogram 15: The coincidece PHS between the target and detector.
+	histogram 16: The emitted particle energy spectrum.
+
+     The binnings of each histogram can be changed with the command 
+        
+        /histo/setHisto
+
+     It is assumed the detector and target pulses both have an integration time of 1 microsecond, and the 
+     gate is 2 microsecond for the coincidence spectrum. The target and detctor have a threshold of 10 keV 
+     in the anti-/coincidence modes.        
+
+     Histograms 10-15 were derived from the same data stored in ntuple-300(the energy depositions), while
+     Histogram 16 is obtained with data in ntuple-100 (the emission particles). The user should be able to
+     reproduce these histograms, or new histograms, with the ntuple data in an off-line analyis tool.
+
+  7. GETTING STARTED:
+
+     i) If you have an AIDA-compliant analysis system installed than you shall switch on the analysis part of
+     example by 
+
+	setenv G4ANALYSIS_USE 1
+ 
+     in addition if you want to add the ROOT link to the ROOT system, do
+       
+        setenv G4ANALYSIS_USE_ROOT 1
+
+     Otherwise make sure the G4ANALYSIS_USE and G4ANALYSIS_USE_ROOT are not definded
+ 
+	unsetenv G4ANALYSIS_USE
+	unsetenv G4ANALYSIS_USE_ROOT
+	 
+     ii) Build the exRDM executable:
+
+         cd to rdecay02
+         gmake clean
+         gmake
+
+     The executable, named rdecay02, will be in $G4WORKDIR/bin/$G4SYSTEM/ directory.
+
+     iii) Run the executable: while in the rdecay02 directory do 
+
+          rdecay02 rdecay02.in
+
+     If all goes well, the execution shall be terminated in a few seconds. If G4ANALYSIS_USE is defined, one
+     should see a "proton.aida" file created. If G4ANALYSIS_USE_ROOT is defined, there will be 
+     a proton.root file in the same directory.
+
+ 8. FURTHER EXAMPLES:
+
+    There are a number of g4mac files in the ./macros subdirectory, to show the features of the 
+    G4RadioactiveDecay process. Most of them will lead to the creation of an aida file in the same name 
+    of the micro file, which can be examed and analysed with an analysis tool such as OpenScientist ,or JAS3.
+ 
+	vrml.mac:  to visulise the geometry and the incident of one 100 MeV Cf240 isotope and its decay. A vrml
+             	   file (g4_xx.vrml) is created at the end. If a default vrml viewer has been set, one shall  
+                   see the geometru and track displayed automatically.
+
+	u238c.mac: shows the decays of the U238 chain in analogue MC mode.
+
+	th234c-b.mac: shows the decays of Th234 in variance reduction MC mode. All its secondaies in along the 
+          	      decay chains are generated. The default source profile and decay biasing schemes are used
+	              to determine the decay times and weights of the secondaries.
+
+	proton-1gev.mac: simulation of 1 GeV protons incident on a lead target. The decays of the radio-siotopes 
+        		 created in the proton-lead interactions are simulated with RadioactiveDecay in analogue 
+                         MC mode.   
+
+	proton-b.mac: same as proton-1geV.mac, but the decays of the radio-siotopes created in the  proton-lead 
+ 		      interactions are simulated with RadioactiveDecay in variance reduction MC mode. The isotopes 
+		      and those along the decay chains are forced to decay in the time windows specified by the 
+                      user in file measures.data, and the weights of the decay products are determined by the 
+                      beam profile as defined in the beam.data file and their decay times. 
+
+   	one-iso.mac: simple macro file to show how to simulate the decay of a specific radio-isotope. User can 
+		     edit it to simulate which ever isotope he/she likes to try.
+
+	neutron.mac: macrofile to show the incident of low energy neutrons on an user specified NaI target and 
+		     the decays of the induced radio-isotopes. This shows how to define a new material in exrdm.
+
+	ne24.mac: this shows the decays of Ne-24 to Na-24 in variance reduction MC mode. Further decays of Na-24 
+                  are not simulated by applying the nucleuslimits in RadioactiveDecay. Two runs are carried out.
+		  One with the bracjing ratio biasing applied and one without. 
+
+	multiple-source.mac: to show the decays of different isotopes uniformly distributed through the target 
+ 			     volume in a single run. 
+
+	isotopes.mac: to show the decays of a number of different isotopes in a single macro file.
+
+
+	f24.mac: to show the different treatments one can apply to the decays of F24. i) the complete decay chain 
+		 from F24 to Mg24, in analogue mode; ii) the complete chain, but in variance reduction mode; 
+                 iii) restrict to the decay of F24 only in analogue mode; iv) restrict to the decay of F24 only but
+                 in variance reduction mode.
+
+	as74.mac: The decays of As74 which has a rather complicated decay scheme. i) in analogue MC mode; ii) in 
+		  variance reduction MC mode.
+
+	test.mac: macro used to check if the right physics processes are assigned to different particles.
+  

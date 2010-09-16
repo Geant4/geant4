@@ -1,0 +1,40 @@
+#/exrdm/phys/SelectPhysics QGSP_BERT
+/exrdm/phys/SelectPhysics Hadron
+#/geometry/material/add NaI Na-I 3.67
+/exrdm/det/setDetectorThickness 30 mm
+/exrdm/det/setTargetLength 3 cm
+/exrdm/det/setTargetMate Lead
+# material definitions has to be done before /run/initilalize
+/run/initialize
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+/grdm/analogueMC 1
+/grdm/verbose 0
+/grdm/noVolumes
+/grdm/selectVolume Target
+#
+# first simulate 1GeV proton beam on the NaI target
+#/histo/fileName exrdm-proton
+#/gps/particle proton
+#/gps/energy 1 GeV
+/tracking/verbose 0
+#/run/beamOn 1000
+#
+# now try to decay 10 F-24 isotopes, floowing the chain down to Mg-24 
+/gps/particle ion
+#/gps/ion 39 86
+/gps/ion 27 57 0 0
+/gps/position 0 0 0
+/gps/energy 0 keV
+#/histo/fileType 
+/histo/fileName test
+/run/beamOn 10
+/particle/select proton
+/particle/process/dump 
+/particle/select GenericIon
+/particle/process/dump
+/particle/select pi+
+/particle/process/dump
+
+
+
