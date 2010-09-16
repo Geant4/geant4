@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit3D.cc,v 1.5 2010-09-15 21:16:41 asaim Exp $
+// $Id: G4PSDoseDeposit3D.cc,v 1.6 2010-09-16 14:58:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit3D
@@ -77,19 +77,25 @@ if(i<0)
 { 
   G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
               "GetReplicaNumber is negative");
-  G4cerr << "touchable->GetReplicaNumber(fDepthi) returns " << i << G4endl;
+  G4cerr << "touchable->GetReplicaNumber(fDepthi) returns " << i << G4endl
+         << "for volume: " << touchable->GetVolume(fDepthi)->GetName()
+         << G4endl;
 }
 if(j<0)
 {
   G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
               "GetReplicaNumber is negative");
-  G4cerr << "touchable->GetReplicaNumber(fDepthj) returns " << j << G4endl;
+  G4cerr << "touchable->GetReplicaNumber(fDepthj) returns " << j << G4endl
+         << "for volume: " << touchable->GetVolume(fDepthj)->GetName()
+         << G4endl;
 }
 if(k<0)
 {
   G4Exception("G4PSEnergyDeposit3D","G4PSEnergyDeposit3D::GetIndex",JustWarning,
               "GetReplicaNumber is negative");
-  G4cerr << "touchable->GetReplicaNumber(fDepthk) returns " << k << G4endl;
+  G4cerr << "touchable->GetReplicaNumber(fDepthk) returns " << k << G4endl
+         << "for volume: " << touchable->GetVolume(fDepthk)->GetName()
+         << G4endl;
 }
 
   return i*fNj*fNk+j*fNk+k;
