@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclParticle.hh,v 1.21 2010-07-15 16:30:34 mkelsey Exp $
+// $Id: G4InuclParticle.hh,v 1.22 2010-09-16 05:21:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20100519  M. Kelsey -- Add public access to G4DynamicParticle content
 // 20100715  M. Kelsey -- Add setKineticEnergy() function
+// 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
 
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
@@ -42,6 +43,9 @@
 class G4InuclParticle {
 public:
   G4InuclParticle() : modelId(0) {}
+
+  explicit G4InuclParticle(const G4DynamicParticle& dynPart)
+    : pDP(dynPart), modelId(0) {}
 
   explicit G4InuclParticle(const G4LorentzVector& mom) : modelId(0) {
     pDP.Set4Momentum(mom*GeV/MeV);		// From Bertini to G4 units

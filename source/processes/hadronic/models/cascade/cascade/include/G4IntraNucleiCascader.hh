@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.hh,v 1.20 2010-09-10 18:03:40 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.hh,v 1.21 2010-09-16 05:21:00 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directory and unnecessary #includes.
@@ -43,6 +43,8 @@
 // 20100909  M. Kelsey -- Drop makeResidualFragment(), getResidualMass() and
 //		local G4InuclNuclei object, replace with new RecoilMaker.
 //		Move goodCase() to RecoilMaker.
+// 20100916  M. Kelsey -- Add functions to handle trapped particles, and to
+//		decay hyperons.
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -68,6 +70,10 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
+protected:
+  void processTrappedParticle(const G4CascadParticle& trapped);
+  void decayTrappedParticle(const G4CascadParticle& trapped);
+
 private: 
   G4NucleiModel* model;
   G4ElementaryParticleCollider* theElementaryParticleCollider;
@@ -78,6 +84,7 @@ private:
   std::vector<G4CascadParticle> cascad_particles;
   std::vector<G4CascadParticle> new_cascad_particles;
   std::vector<G4InuclElementaryParticle> output_particles;
+  G4ExitonConfiguration theExitonConfiguration;
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */

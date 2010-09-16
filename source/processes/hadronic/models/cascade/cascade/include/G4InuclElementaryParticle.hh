@@ -23,13 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.hh,v 1.24 2010-09-14 04:57:59 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.hh,v 1.25 2010-09-16 05:21:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100409  M. Kelsey -- Drop unused string argument from ctors.
 // 20100429  M. Kelsey -- Change "photon()" to "isPhoton()", use enum names
 // 20100914  M. Kelsey -- Move printout to .cc file
+// 20100915  M. Kelsey -- Add hyperon() identification function, ctor for
+//		G4DynamicParticle
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -47,6 +49,11 @@ public:
 
   explicit G4InuclElementaryParticle(G4int type) 
     : G4InuclParticle(makeDefinition(type)), generation(0) {}
+
+  G4InuclElementaryParticle(const G4DynamicParticle& dynPart, G4int model=0)
+    : G4InuclParticle(dynPart), generation(0) {
+    setModel(model);
+  }
 
   G4InuclElementaryParticle(const G4LorentzVector& mom,
 			    G4int type, G4int model=0) 
@@ -81,7 +88,13 @@ public:
     return getDefinition()->GetBaryonNumber();
   }
 
+  G4bool hyperon() const {
+    return (baryon() && getStrangeness() != 0.);
+  }
+
   G4bool quasi_deutron() const { return (type() > 100); }
+
+  G4double getStrangeness() const { return getStrangeness(type()); }
 
   G4bool valid() const { return type()>0; }
 

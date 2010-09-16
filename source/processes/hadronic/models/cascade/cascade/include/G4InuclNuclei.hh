@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.25 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.26 2010-09-16 05:21:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -41,6 +41,7 @@
 // 20100906  M. Kelsey -- Add fill() functions to rewrite contents
 // 20100909  M. Kelsey -- Add function to discard exciton configuration
 // 20100914  M. Kelsey -- Use integers for A and Z
+// 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -55,6 +56,11 @@ class G4ParticleDefinition;
 class G4InuclNuclei : public G4InuclParticle {
 public:
   G4InuclNuclei() : G4InuclParticle() {}
+
+  G4InuclNuclei(const G4DynamicParticle& dynPart, G4int model=0)
+    : G4InuclParticle(dynPart) {
+    setModel(model);
+  }
 
   G4InuclNuclei(G4int a, G4int z, G4double exc=0., G4int model=0)
     : G4InuclParticle(makeDefinition(a,z)) {

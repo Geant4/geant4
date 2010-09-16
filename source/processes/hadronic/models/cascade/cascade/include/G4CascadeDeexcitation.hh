@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeDeexcitation.hh,v 1.1 2010-09-15 20:16:16 mkelsey Exp $
+// $Id: G4CascadeDeexcitation.hh,v 1.2 2010-09-16 05:21:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
@@ -36,8 +36,8 @@
 
 class G4InuclParticle;
 class G4BigBanger;
-class G4EquilibriumEvaporator;
 class G4NonEquilibriumEvaporator;
+class G4EquilibriumEvaporator;
 
 
 class G4CascadeDeexcitation : public G4CascadeColliderBase {
@@ -50,9 +50,9 @@ public:
 	       G4CollisionOutput& globalOutput);
 
 private:
+  G4BigBanger* theBigBanger;
   G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
   G4EquilibriumEvaporator* theEquilibriumEvaporator;
-  G4BigBanger* theBigBanger;
 
   G4CollisionOutput output;	// Local buffer for de-excitation stages
 };

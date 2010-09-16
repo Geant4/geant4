@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.62 2010-09-10 20:43:50 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.63 2010-09-16 05:21:00 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -70,12 +70,16 @@
 // 20100909  M. Kelsey -- Remove all local "fragment" stuff, use RecoilMaker.
 //		move goodCase() to RecoilMaker.
 // 20100910  M. Kelsey -- Use RecoilMaker::makeRecoilFragment().
+// 20100915  M. Kelsey -- Define functions to deal with trapped particles,
+//		move the exciton container to a data member
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
 #include "G4CascadeRecoilMaker.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CollisionOutput.hh"
+#include "G4DecayTable.hh"
+#include "G4DecayProducts.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -170,8 +174,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     output.reset();
     cascad_particles.clear();
     output_particles.clear();
-
-    G4ExitonConfiguration theExitonConfiguration;
+    theExitonConfiguration.clear();
 
     if (interCase.hadNucleus()) { 		// particle with nuclei
       if (verboseLevel > 3)
@@ -180,8 +183,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       cascad_particles.push_back(model->initializeCascad(bparticle));
     } else {				// nuclei with nuclei
-      G4double ab = bnuclei->getA();
-      G4double zb = bnuclei->getZ();
+      G4int ab = bnuclei->getA();
+      G4int zb = bnuclei->getZ();
 
       G4NucleiModel::modelLists all_particles;    // Buffer to receive lists
       model->initializeCascad(bnuclei, tnuclei, all_particles);
@@ -193,17 +196,15 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 			      all_particles.second.end());
 
       if (cascad_particles.size() == 0) { // compound nuclei
-	G4int ia = G4int(ab + 0.5);
-	G4int iz = G4int(zb + 0.5);
 	G4int i;
 
-	for (i = 0; i < ia; i++) {
-	  G4int knd = i < iz ? 1 : 2;
+	for (i = 0; i < ab; i++) {
+	  G4int knd = i < zb ? 1 : 2;
 	  theExitonConfiguration.incrementQP(knd);
 	};
 
-	G4int ihn = G4int(2.0 * (ab - zb) * inuclRndm() + 0.5);
-	G4int ihz = G4int(2.0 * zb * inuclRndm() + 0.5);
+	G4int ihn = G4int(2 * (ab-zb) * inuclRndm() + 0.5);
+	G4int ihz = G4int(2 * zb * inuclRndm() + 0.5);
 
 	for (i = 0; i < ihn; i++) theExitonConfiguration.incrementHoles(2);
 	for (i = 0; i < ihz; i++) theExitonConfiguration.incrementHoles(1);
@@ -245,25 +246,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	      model->worthToPropagate(currentCParticle)) {
 	    if (verboseLevel > 3) G4cout << " continue reflections " << G4endl;
 	    cascad_particles.push_back(currentCParticle);
-
 	  } else {
-            G4int xtype = currentCParticle.getParticle().type();
-	    if (verboseLevel > 3)
-	      G4cout << " exciton of type " << xtype << G4endl;
-
-            if (xtype == 1 || xtype == 2) { 	             // normal exciton
-              theExitonConfiguration.incrementQP(xtype);
-            } else {
-              // non-standard exciton; release it
-              // FIXME: this is a meson, so need to absorb it
-	      if (verboseLevel > 3) {
-		G4cout << " non-standard should be absorbed, now released"
-		       << G4endl;
-		currentCParticle.print();
-	      }
-
-              output_particles.push_back(currentCParticle.getParticle() );
-            }
+	    processTrappedParticle(currentCParticle);
 	  }	// reflection or exciton
 
         } else { // particle about to leave nucleus - check for Coulomb barrier
@@ -297,23 +281,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	      // Tunnelling through barrier leaves KE unchanged
 	      output_particles.push_back(currentParticle);
             } else {
-              G4int xtype = currentParticle.type();
-	      if (verboseLevel > 3) 
-                G4cout << " becomes an exciton of type " << xtype
-		       << " due to coulomb " << G4endl;
-              if (xtype == 1 || xtype == 2) {
-                theExitonConfiguration.incrementQP(currentParticle.type());
-              } else {
-                // non-standard exciton
-                // FIXME: this is a meson, so should absorb it
-		if (verboseLevel > 3) {
-		  G4cout << " non-standard should be absorbed, now released"
-			 << G4endl;
-		  currentCParticle.print();
-		}
-		// Tunnelling through barrier leaves KE unchnged
-		output_particles.push_back(currentParticle);
-              }
+	      processTrappedParticle(currentCParticle);
             }
           } else {
 	    if (verboseLevel > 3) G4cout << " Goes out " << G4endl;
@@ -381,8 +349,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }
 
     // Use last created recoil fragment instead of re-constructing
-    G4double afin = theRecoilMaker->getRecoilA();
-    G4double zfin = theRecoilMaker->getRecoilZ();
+    G4int afin = theRecoilMaker->getRecoilA();
+    G4int zfin = theRecoilMaker->getRecoilZ();
 
     if (!theRecoilMaker->goodFragment()) {  // Sanity check before proceeding
       if (verboseLevel > 1)
@@ -397,7 +365,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
     }
 
-    if (afin > 1.0) {
+    if (afin > 1) {
       // FIXME: Want to disperse balls of neutrons (Z==0) without creating
       //	temporary fragments.  Could EPCollider's N-body phase-space
       //	do the job?
@@ -436,8 +404,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (verboseLevel > 3) outgoing_nuclei->printParticle();
       
       output.addTargetFragment(*outgoing_nuclei);
-    } else if (afin == 1.0) { 	       // Just single nucleon left in "recoil"
-      G4int last_type = (zfin == 1.) ? 1 : 2;
+    } else if (afin == 1) { 	       // Just single nucleon left in "recoil"
+      G4int last_type = 3 - zfin;	// Proton is 1, neutron is 2
 
       G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
       G4double mres = presid.m();
@@ -507,4 +475,85 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   // Copy final generated cascade to output buffer for return
   globalOutput.add(output);
   return;
+}
+
+
+// Convert particles which cannot escape into excitons (or eject/decay them)
+
+void G4IntraNucleiCascader::
+processTrappedParticle(const G4CascadParticle& trapped) {
+  const G4InuclElementaryParticle& trappedP = trapped.getParticle();
+
+  G4int xtype = trappedP.type();
+  if (verboseLevel > 3) G4cout << " exciton of type " << xtype << G4endl;
+  
+  if (trappedP.nucleon()) {	// normal exciton (proton or neutron)
+    theExitonConfiguration.incrementQP(xtype);
+    return;
+  }
+
+  if (trappedP.hyperon()) {	// Not nucleon, so must be hyperon
+    decayTrappedParticle(trapped);
+    return;
+  }
+
+  // non-standard exciton; release it
+  // FIXME: this is a meson, so need to absorb it
+  if (verboseLevel > 3) {
+    G4cout << " non-standard should be absorbed, now released" << G4endl;
+    trapped.print();
+  }
+  
+  output_particles.push_back(trappedP);
+}
+
+
+// Decay unstable trapped particles, and add secondaries to processing list
+
+void G4IntraNucleiCascader::
+decayTrappedParticle(const G4CascadParticle& trapped) {
+  if (verboseLevel > 3) 
+    G4cout << " unstable must be decayed in flight" << G4endl;
+
+  const G4InuclElementaryParticle& trappedP = trapped.getParticle();
+
+  G4DecayTable* unstable = trappedP.getDefinition()->GetDecayTable();
+  if (!unstable) {			// No decay table; cannot decay!
+    if (verboseLevel > 3)
+      G4cerr << " no decay table!  Releasing trapped particle" << G4endl;
+
+    output_particles.push_back(trappedP);
+    return;
+  }
+
+  // Get secondaries from decay in particle's rest frame
+  G4DecayProducts* daughters = unstable->SelectADecayChannel()->DecayIt();
+  if (!daughters) {			// No final state; cannot decay!
+    if (verboseLevel > 3)
+      G4cerr << " no daughters from trapped particle decay" << G4endl;
+
+    output_particles.push_back(trappedP);
+    return;
+  }
+
+  if (verboseLevel > 3) daughters->DumpInfo();
+
+  // Convert secondaries to lab frame
+  G4double decayEnergy = trappedP.getEnergy();
+  G4ThreeVector decayDir = trappedP.getMomentum().vect().unit();
+  daughters->Boost(decayEnergy, decayDir);
+
+  // Put all the secondaries onto the list for propagation
+  const G4ThreeVector& decayPos = trapped.getPosition();
+  G4int zone = trapped.getCurrentZone();
+  G4int gen = trapped.getGeneration()+1;
+
+  for (G4int i=0; i<daughters->entries(); i++) {
+    G4DynamicParticle* idaug = (*daughters)[i];
+
+    // FIXME:  Whole lot of copying goin' on...
+    G4InuclElementaryParticle idaugEP(*idaug, 4);
+    G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., gen);
+    cascad_particles.push_back(idaugCP);
+  }
 }
