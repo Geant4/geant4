@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.19 2010-07-23 17:25:03 mkelsey Exp $
+// $Id: G4CascadeInterface.hh,v 1.20 2010-09-16 21:18:11 mkelsey Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -32,20 +32,26 @@
 // 20100519  M. Kelsey -- Remove Collider data members
 // 20100617  M. Kelsey -- Make G4InuclCollider a local data member
 // 20100723  M. Kelsey -- Move G4CollisionOutput here for reuse
+// 20100916  M. Kelsey -- Add functions to encapsulate ApplyYourself() actions,
+//		make colliders pointers (don't expose dependencies)
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
 
 #include "G4VIntraNuclearTransportModel.hh"
-#include "G4CollisionOutput.hh"
 #include "G4FragmentVector.hh"
-#include "G4InuclCollider.hh"
 #include "G4KineticTrackVector.hh"
+#include "G4LorentzRotation.hh"
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
 #include "G4ParticleChange.hh"
 #include "G4ReactionProduct.hh"
 #include "G4ReactionProductVector.hh"
+
+class G4InuclCollider;
+class G4CollisionOutput;
+class G4CascadeCheckBalance;
+class G4V3DNucleus;
 
 
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
@@ -63,6 +69,24 @@ public:
 
   void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
 
+protected:
+  // Convert input projectile and target to Bertini internal types
+  void createBullet(const G4HadProjectile& aTrack);
+  void createTarget(G4Nucleus& theNucleus);
+
+  // Evaluate whether any outgoing particles penetrated Coulomb barrier
+  G4bool coulombBarrierViolation() const;
+
+  // Conditions for rejecting cascade attempt
+  G4bool retryInelasticProton() const;
+  G4bool retryInelasticNucleus() const;
+
+  // Fill sparse array with minimum momenta for inelastic on hydrogen
+  void initializeElasticCuts();
+
+  // Transfer Bertini internal final state to hadronics interface
+  void copyOutputToHadronicResult();
+
 private:
   G4int operator==(const G4CascadeInterface& right) const {
     return (this == &right);
@@ -72,12 +96,22 @@ private:
     return (this != &right);
   }
 
-  G4int verboseLevel;
+  static const G4int maximumTries;	// Number of iterations for inelastic
 
-private:
+  static G4double cutElastic[32];	// Bullet momenta for hydrogen target
+
+  G4int verboseLevel;
+  G4int numberOfTries;
+
   G4HadFinalState theResult;
-  G4InuclCollider collider;
-  G4CollisionOutput output;
+  G4InuclCollider* collider;
+  G4CascadeCheckBalance* balance;
+
+  G4InuclParticle* bullet;
+  G4InuclParticle* target;
+  G4CollisionOutput* output;
+
+  G4LorentzRotation bulletInLabFrame;
 };
 
 #endif // G4CASCADEINTERFACE_H
