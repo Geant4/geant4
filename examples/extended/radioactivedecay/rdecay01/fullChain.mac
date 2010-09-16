@@ -1,0 +1,24 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 92 238
+#
+/rdecay1/fullChain true
+#
+/rdecay1/histo/setFileName run2
+###/rdecay1/histo/setFileType hbook
+/rdecay1/histo/setFileType root
+/rdecay1/histo/setHisto 1  100  0. 4000 keV	#e+ e-
+/rdecay1/histo/setHisto 2  100  0. 4000 keV	#neutrino
+/rdecay1/histo/setHisto 3  100  0. 4000 keV	#gamma
+/rdecay1/histo/setHisto 4  100  0. 10   MeV	#alpha
+/rdecay1/histo/setHisto 5  100  0. 200  keV	#recoil ion
+/rdecay1/histo/setHisto 6  100 -0.5  6  MeV	#E balance
+/rdecay1/histo/setHisto 7  100  0. 300  MeV	#P balance
+/rdecay1/histo/setHisto 8  100  0. 1.e+11 y	#time of life
+/rdecay1/histo/setHisto 9  100  0. 1.e+11 y	#activity
+#
+/rdecay1/event/printModulo 10000
+#  
+/run/beamOn 100000
