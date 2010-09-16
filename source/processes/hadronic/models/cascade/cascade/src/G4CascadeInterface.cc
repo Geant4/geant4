@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.97 2010-09-16 21:18:11 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.98 2010-09-16 22:17:18 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -58,7 +58,7 @@
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
-#include "G4CascadeCheckBalance->hh"
+#include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
 #include "G4DynamicParticle.hh"
 #include "G4HadronicException.hh"
@@ -169,8 +169,13 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   numberOfTries = 0;
 
-  if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
-    if (bullet.getMomModule() > cutElastic[bulletType]) {
+  // special treatment for target H(1,1) (proton)
+  if (theNucleus.GetA_asInt() == 1) {
+    G4int btype = dynamic_cast<G4InuclElementaryParticle*>(bullet)->type();
+
+    if (bullet->getMomModule() <= cutElastic[btype]) {
+      collider->collide(bullet, target, *output);	// Only elastic
+    } else {
       do {   			// we try to create inelastic interaction
 	if (verboseLevel > 1)
 	  G4cout << " Generating cascade attempt " << numberOfTries << G4endl;
@@ -181,8 +186,6 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
 	numberOfTries++;
       } while(retryInelasticProton());
-    } else { 		// only elastic collision is energetically possible
-      collider->collide(bullet, target, *output);
     }
   } else {  			// treat all other targets excepet H(1,1)
     do { 			// we try to create inelastic interaction
@@ -374,9 +377,11 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
   const std::vector<G4InuclElementaryParticle>& out =
     output->getOutgoingParticles();
 
+  G4int btype = dynamic_cast<G4InuclElementaryParticle*>(bullet)->type();
+
   return ( (numberOfTries < maximumTries) &&
 	   (out.size() == 2) &&
-	   (out.begin()->type() == bulletType ||
+	   (out.begin()->type() == btype ||
 	    out.begin()->type() == proton)
 	   );
 }
@@ -384,7 +389,7 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
 // Check whether generic inelastic collision failed
 // NOTE:  some conditions are set by compiler flags
 
-G4bool G4CascadeInterface::retryInelasticNucleus(G4bool coulombRetry) const {
+G4bool G4CascadeInterface::retryInelasticNucleus() const {
   if (numberOfTries >= maximumTries) return false;
 
   G4int npart = output->numberOfOutgoingParticles();
@@ -396,8 +401,9 @@ G4bool G4CascadeInterface::retryInelasticNucleus(G4bool coulombRetry) const {
 #ifdef G4CASCADE_COULOMB_DEV
   if (!coulombBarrierViolation() || npart+nfrag < 3) return false;
 #else
+  G4int btype = dynamic_cast<G4InuclElementaryParticle*>(bullet)->type();
   if (npart+nfrag > 2 || 
-      output->getOutgoingParticles().begin()->type() != bullet->type())
+      output->getOutgoingParticles().begin()->type() != btype)
     return false;
 #endif
 
