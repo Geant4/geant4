@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.4 2010-09-15 21:16:41 asaim Exp $
+// $Id: G4PSDoseDeposit.cc,v 1.5 2010-09-16 06:44:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit
@@ -86,7 +86,7 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     solid = physVol->GetLogicalVolume()->GetSolid();
   }
 
-  G4double density = aStep->GetTrack()->GetMaterial()->GetDensity();
+  G4double density = aStep->GetTrack()->GetStep()->GetPreStepPoint()->GetMaterial()->GetDensity();
   G4double dose    = edep / ( density * (solid->GetCubicVolume()) );
   dose *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int  index = GetIndex(aStep);
