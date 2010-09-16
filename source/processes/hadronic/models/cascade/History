@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2010-09-16 05:21:00 mkelsey Exp $
+$Id: History,v 1.175 2010-09-16 17:06:23 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+16 September 2010 Michael Kelsey
+--------------------------------
+- G4CascadeInterface.cc:  Add parentheses in end-of-while block to fix
+  compilation warning in GCC 4.3.
+
+- G4IntraNucleiCascader.cc:  In decayTrappedParticle(), check for photon
+  daughters and put them directly onto output list.
 
 16 September 2010 Michael Kelsey
 --------------------------------

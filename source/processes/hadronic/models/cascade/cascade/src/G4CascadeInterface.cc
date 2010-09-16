@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.95 2010-09-14 18:20:06 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.96 2010-09-16 17:06:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -186,10 +186,9 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	nTries++;
       } while(
 	      (nTries < maxTries) &&
-	      (output.getOutgoingParticles().size() == 2 &&
-	       (output.getOutgoingParticles().begin()->type() == bulletType ||
-		output.getOutgoingParticles().begin()->type() == proton)
-	       )
+	      (output.getOutgoingParticles().size() == 2) &&
+	      (output.getOutgoingParticles().begin()->type() == bulletType ||
+	       output.getOutgoingParticles().begin()->type() == proton)
 	      );
     } else { 		// only elastic collision is energetically possible
       collider.collide(bullet, target, output);
@@ -223,8 +222,8 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
       }
 #endif
     } while( 
-	    (nTries < maxTries) &&  		// conditions for next try
-	    ((output.getOutgoingParticles().size()!=0) &&
+	    ((nTries < maxTries) &&  		// conditions for next try
+	     (output.getOutgoingParticles().size()!=0) &&
 #ifdef G4CASCADE_COULOMB_DEV
 	     (coulombOK) &&
 	     ((output.getOutgoingParticles().size() + output.getNucleiFragments().size()) > 2.5)
@@ -234,7 +233,7 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 #endif
 	     )
 #ifndef G4CASCADE_SKIP_ECONS
-	    || (!balance.okay())	// Checks E, p and B conservation
+	     || (!balance.okay())	// Checks E, p and B conservation
 #endif
 	     );
   }

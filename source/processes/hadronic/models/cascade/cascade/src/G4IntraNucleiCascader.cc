@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.63 2010-09-16 05:21:00 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.64 2010-09-16 17:06:23 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -72,6 +72,7 @@
 // 20100910  M. Kelsey -- Use RecoilMaker::makeRecoilFragment().
 // 20100915  M. Kelsey -- Define functions to deal with trapped particles,
 //		move the exciton container to a data member
+// 20100916  M. Kelsey -- Put decay photons directly onto output list
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -551,9 +552,13 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
   for (G4int i=0; i<daughters->entries(); i++) {
     G4DynamicParticle* idaug = (*daughters)[i];
 
-    // FIXME:  Whole lot of copying goin' on...
     G4InuclElementaryParticle idaugEP(*idaug, 4);
-    G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., gen);
-    cascad_particles.push_back(idaugCP);
+
+    // Only hadronic secondaries can be propagated; photons escape
+    if (idaugEP.isPhoton()) output_particles.push_back(idaugEP);
+    else {
+      G4CascadParticle idaugCP(idaugEP, decayPos, zone, 0., gen);
+      cascad_particles.push_back(idaugCP);
+    }
   }
 }
