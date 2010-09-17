@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2010-09-17 07:50:36 gcosmo Exp $
+$Id: History,v 1.130 2010-09-17 10:32:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 17, 2010  G.Cosmo                    geom-csg-V09-03-08
+- Implemented copy-constructor and assignment operator for all solids
+  to facilitate conversion to Geant4-MT.
 
 Sep 17, 2010  G.Cosmo                    geom-csg-V09-03-07
 - Added missing validity checks on radii to modifiers in G4Tubs.
