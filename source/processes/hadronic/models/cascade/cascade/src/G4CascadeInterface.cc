@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.98 2010-09-16 22:17:18 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.99 2010-09-17 04:44:28 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -54,7 +54,8 @@
 // 20100723  M. Kelsey -- Move G4CollisionOutput to .hh file for reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20100916  M. Kelsey -- Simplify ApplyYourself() by encapsulating code blocks
-//		into numerous functions; make data-member colliders pointers
+//		into numerous functions; make data-member colliders pointers;
+//		provide support for projectile nucleus
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -256,29 +257,42 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
 
 // Convert input projectile to Bertini internal object
-// FIXME:  Only produces hadron projectiles at the moment
 
 void G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
-  G4int bulletType;
-  if (aTrack.GetDefinition() == G4KaonZeroLong::KaonZeroLong() ||
-      aTrack.GetDefinition() == G4KaonZeroShort::KaonZeroShort() )
-    bulletType = (G4UniformRand() > 0.5) ? kaonZero : kaonZeroBar;
-  else 
-    bulletType = G4InuclElementaryParticle::type(aTrack.GetDefinition());
+  const G4ParticleDefinition* trkDef = aTrack.GetDefinition();
+
+  G4int bulletType = 0;			// For elementary particles
+  G4int bulletA = 0, bulletZ = 0;	// For nucleus projectile
+
+  if (trkDef->GetAtomicMass() <= 1) {
+    if (trkDef == G4KaonZeroLong::KaonZeroLong() ||
+	trkDef == G4KaonZeroShort::KaonZeroShort() )
+      bulletType = (G4UniformRand() > 0.5) ? kaonZero : kaonZeroBar;
+    else 
+      bulletType = G4InuclElementaryParticle::type(trkDef);
+  } else {
+    bulletA = trkDef->GetAtomicMass();
+    bulletZ = trkDef->GetAtomicNumber();
+  }
 
   // Code momentum and energy -- Bertini wants z-axis and GeV units
   G4LorentzVector projectileMomentum = aTrack.Get4Momentum()/GeV;
-
+  
   // Rrotation/boost to get from z-axis back to original frame
   bulletInLabFrame = G4LorentzRotation::IDENTITY;	// Initialize
   bulletInLabFrame.rotateZ(-projectileMomentum.phi());
   bulletInLabFrame.rotateY(-projectileMomentum.theta());
   bulletInLabFrame.invert();
-
+  
   G4LorentzVector momentumBullet(0., 0., projectileMomentum.rho(),
 				 projectileMomentum.e());
 
-  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType);
+  if (bulletType > 0)
+    bullet = new G4InuclElementaryParticle(momentumBullet, bulletType);
+  else
+    bullet = new G4InuclNuclei(momentumBullet, bulletA, bulletZ);
+
+  return;
 }
 
 
@@ -292,6 +306,8 @@ void G4CascadeInterface::createTarget(G4Nucleus& theNucleus) {
     target = new G4InuclElementaryParticle((theNucleusZ==1)?proton:neutron);
   else
     target = new G4InuclNuclei(theNucleusA, theNucleusZ);
+
+  return;
 }
 
 
@@ -377,12 +393,10 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
   const std::vector<G4InuclElementaryParticle>& out =
     output->getOutgoingParticles();
 
-  G4int btype = dynamic_cast<G4InuclElementaryParticle*>(bullet)->type();
-
   return ( (numberOfTries < maximumTries) &&
 	   (out.size() == 2) &&
-	   (out.begin()->type() == btype ||
-	    out.begin()->type() == proton)
+	   (out[0].getDefinition() == bullet->getDefinition() ||
+	    out[1].getDefinition() == bullet->getDefinition())
 	   );
 }
 
@@ -401,9 +415,9 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 #ifdef G4CASCADE_COULOMB_DEV
   if (!coulombBarrierViolation() || npart+nfrag < 3) return false;
 #else
-  G4int btype = dynamic_cast<G4InuclElementaryParticle*>(bullet)->type();
-  if (npart+nfrag > 2 || 
-      output->getOutgoingParticles().begin()->type() != btype)
+  const G4ParticleDefinition* firstOut = 
+    output->getOutgoingParticles().begin()->getDefinition();
+  if (npart+nfrag > 2 || firstOut != bullet->getDefinition())
     return false;
 #endif
 
