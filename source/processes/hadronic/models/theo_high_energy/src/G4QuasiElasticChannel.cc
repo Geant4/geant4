@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElasticChannel.cc,v 1.8 2010-09-16 09:57:27 gunter Exp $
+// $Id: G4QuasiElasticChannel.cc,v 1.9 2010-09-17 11:34:29 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,8 @@ G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,
       G4cout << "G4QuasiElasticChannel:: P=" << thePrimary.GetTotalMomentum()
              << ", pPDG=" << thePrimary.GetDefinition()->GetPDGEncoding()
              << ", Z = "  << theNucleus.GetZ_asInt())
-             << ", N = "  << theNucleus.GetN_asInt() << G4endl;
+             << ", N = "  << theNucleus.GetN_asInt())
+             << ", A = "  << theNucleus.GetA_asInt() << G4endl;
     #endif
 
   std::pair<G4double,G4double> ratios;
@@ -83,7 +84,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
   G4int A=theNucleus.GetA_asInt();
   G4int Z=theNucleus.GetZ_asInt();
   //   build Nucleus and choose random nucleon to scatter with
-  the3DNucleus.Init(theNucleus.GetN_asInt(),theNucleus.GetZ_asInt());
+  the3DNucleus.Init(theNucleus.GetA_asInt(),theNucleus.GetZ_asInt());
   const std::vector<G4Nucleon *> nucleons=the3DNucleus.GetNucleons();
   G4double targetNucleusMass=the3DNucleus.GetMass();                  // M.K. ResNuc
   G4LorentzVector targetNucleus4Mom(0.,0.,0.,targetNucleusMass);      // M.K. ResNuc
