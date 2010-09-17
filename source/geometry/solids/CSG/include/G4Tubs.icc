@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.15 2010-09-17 07:49:20 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.16 2010-09-17 19:27:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -144,7 +144,7 @@ inline void G4Tubs::CheckPhiAngles(G4double sPhi, G4double dPhi)
 inline
 void G4Tubs::SetInnerRadius (G4double newRMin)
 {
-  if ( ( newRMin < 0 ) || (newRMin >= fRMax) ) // Check radii
+  if ( newRMin < 0 ) // Check radii
   {
     G4cerr << "ERROR - G4Tubs()::SetInnerRadius()" << G4endl
            << "        Invalid values for radii in solid " << GetName()
