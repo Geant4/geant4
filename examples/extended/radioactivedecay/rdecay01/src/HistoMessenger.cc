@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// $Id: HistoMessenger.cc,v 1.2 2010-09-17 11:21:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,20 +46,20 @@
 HistoMessenger::HistoMessenger(HistoManager* manager)
 :histoManager (manager)
 {
-  histoDir = new G4UIdirectory("/rdecay1/histo/");
+  histoDir = new G4UIdirectory("/rdecay01/histo/");
   histoDir->SetGuidance("histograms control");
 
-  factoryCmd = new G4UIcmdWithAString("/rdecay1/histo/setFileName",this);
+  factoryCmd = new G4UIcmdWithAString("/rdecay01/histo/setFileName",this);
   factoryCmd->SetGuidance("set name for the histograms file");
 
-  typeCmd = new G4UIcmdWithAString("/rdecay1/histo/setFileType",this);
+  typeCmd = new G4UIcmdWithAString("/rdecay01/histo/setFileType",this);
   typeCmd->SetGuidance("set histograms file type: hbook, root, XML");
   typeCmd->SetCandidates("hbook root XML");
 
-  optionCmd = new G4UIcmdWithAString("/rdecay1/histo/setFileOption",this);
+  optionCmd = new G4UIcmdWithAString("/rdecay01/histo/setFileOption",this);
   optionCmd->SetGuidance("set option for the histograms file");
   
-  histoCmd = new G4UIcommand("/rdecay1/histo/setHisto",this);
+  histoCmd = new G4UIcommand("/rdecay01/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
   //
@@ -86,12 +86,12 @@ HistoMessenger::HistoMessenger(HistoManager* manager)
   unit->SetDefaultValue("none");
   histoCmd->SetParameter(unit);
   
-  prhistoCmd = new G4UIcmdWithAnInteger("/rdecay1/histo/printHisto",this);
+  prhistoCmd = new G4UIcmdWithAnInteger("/rdecay01/histo/printHisto",this);
   prhistoCmd->SetGuidance("print histo #id on ascii file");
   prhistoCmd->SetParameterName("id",false);
   prhistoCmd->SetRange("id>0");
     
-  rmhistoCmd = new G4UIcmdWithAnInteger("/rdecay1/histo/removeHisto",this);
+  rmhistoCmd = new G4UIcmdWithAnInteger("/rdecay01/histo/removeHisto",this);
   rmhistoCmd->SetGuidance("desactivate histo  #id");
   rmhistoCmd->SetParameterName("id",false);
   rmhistoCmd->SetRange("id>0");

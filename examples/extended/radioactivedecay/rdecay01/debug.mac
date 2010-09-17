@@ -6,7 +6,7 @@
 ##/gun/ion 10 24
 /gun/ion 77 192
 #
-/rdecay1/fullChain false
+/rdecay01/fullChain false
 #
 ###/random/resetEngineFrom ir192/run1evt3.rndm
 #  

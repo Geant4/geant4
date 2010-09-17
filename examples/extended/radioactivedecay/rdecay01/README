@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+$Id: README,v 1.2 2010-09-17 11:21:45 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -33,7 +33,7 @@ $Id: README,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
     -------
  As said above, all particles and ions behave as geantino, eg. no energy loss.
      
- A flag, /rdecay1/fullChain (false or true), allows to limit to
+ A flag, /rdecay01/fullChain (false or true), allows to limit to
  single decay (default) or full decay chain.
  
  In case of full decay chain, TrackStatus of ions is set to fStopButAlive
@@ -66,14 +66,14 @@ $Id: README,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
     --------------
  
   - compile and link to generate an executable
- 	% cd RDecay1
+ 	% cd rdecay01
  	% gmake
  		
-  - execute RDecay1 in 'batch' mode from macro files
- 	% RDecay1   singleDecay.mac
+  - execute rdecay01 in 'batch' mode from macro files
+ 	% rdecay01   singleDecay.mac
  		
-  - execute RDecay1 in 'interactive mode' with visualization
- 	% RDecay1
+  - execute rdecay01 in 'interactive mode' with visualization
+ 	% rdecay01
  	....
  	Idle>   ---> type your commands. For instance:
 	Idle> /control/execute debug.mac 
@@ -85,8 +85,8 @@ $Id: README,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
  7- Histograms
     ----------
  
-  RDecay1 produces several 1D histograms which are saved as
-  rdecay1.root by default.
+  rdecay01 produces several 1D histograms which are saved as
+  rdecay01.root by default.
 
       1 : energy spectrum: e+ e-
       2 : energy spectrum: nu_e anti_nu_ev

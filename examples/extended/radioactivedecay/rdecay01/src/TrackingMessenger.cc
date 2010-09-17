@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TrackingMessenger.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// $Id: TrackingMessenger.cc,v 1.2 2010-09-17 11:21:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 TrackingMessenger::TrackingMessenger(TrackingAction* trackA)
 :trackingAction(trackA)
 {
-  TrackingCmd = new G4UIcmdWithABool("/rdecay1/fullChain",this);
+  TrackingCmd = new G4UIcmdWithABool("/rdecay01/fullChain",this);
   TrackingCmd->SetGuidance("allow full decay chain");
   TrackingCmd->SetParameterName("flag",true);
   TrackingCmd->SetDefaultValue(true);

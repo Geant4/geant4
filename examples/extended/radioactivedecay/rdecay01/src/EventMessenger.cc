@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventMessenger.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// $Id: EventMessenger.cc,v 1.2 2010-09-17 11:21:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,13 +41,13 @@
 EventMessenger::EventMessenger(EventAction* EvAct)
 :eventAction(EvAct)
 {   
-  Dir = new G4UIdirectory("/rdecay1/");
+  Dir = new G4UIdirectory("/rdecay01/");
   Dir->SetGuidance("this example");
 
-  eventDir = new G4UIdirectory("/rdecay1/event/");
+  eventDir = new G4UIdirectory("/rdecay01/event/");
   eventDir ->SetGuidance("event control");
       
-  PrintCmd = new G4UIcmdWithAnInteger("/rdecay1/event/printModulo",this);
+  PrintCmd = new G4UIcmdWithAnInteger("/rdecay01/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
