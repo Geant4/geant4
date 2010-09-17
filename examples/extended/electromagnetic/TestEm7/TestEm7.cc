@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: TestEm7.cc,v 1.9 2010-05-21 18:00:26 maire Exp $
+// $Id: TestEm7.cc,v 1.10 2010-09-17 18:45:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,7 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -65,20 +66,27 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-  DetectorConstruction* det;
-  PhysicsList* phys;
-  PrimaryGeneratorAction* kin;
-  runManager->SetUserInitialization(det  = new DetectorConstruction);
-  runManager->SetUserInitialization(phys = new PhysicsList);
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+  //
+  DetectorConstruction*   det  = new DetectorConstruction();
+  PhysicsList*            phys = new PhysicsList();
+  
+  runManager->SetUserInitialization(det);
+  runManager->SetUserInitialization(phys);
   
   //set user action classes
-   RunAction* run;
+  //
+  HistoManager*           histo = new HistoManager();
+  PrimaryGeneratorAction* kin   = new PrimaryGeneratorAction(det);  
+  RunAction*              run   = new RunAction(det,phys,histo,kin);
+  EventAction*            event = new EventAction();
+  TrackingAction*         track = new TrackingAction(det,histo,run);
+  SteppingAction*         step  = new SteppingAction(det,histo,run);
   
-  runManager->SetUserAction(run = new RunAction(det,phys,kin)); 
-  runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new TrackingAction(run));  
-  runManager->SetUserAction(new SteppingAction(det,run));
+  runManager->SetUserAction(kin); 
+  runManager->SetUserAction(run); 
+  runManager->SetUserAction(event);
+  runManager->SetUserAction(track);  
+  runManager->SetUserAction(step);
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

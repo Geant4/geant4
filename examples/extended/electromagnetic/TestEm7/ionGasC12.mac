@@ -1,4 +1,4 @@
-# $Id: ionGasC12.mac,v 1.1 2010-06-04 15:42:23 vnivanch Exp $
+# $Id: ionGasC12.mac,v 1.2 2010-09-17 18:45:43 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -40,10 +40,10 @@
 #
 /testem/event/printModulo 1000
 #
-/testem/histo/fileName c12
-/testem/histo/fileType root
-/testem/histo/setHisto 1 100 80 90
-/testem/histo/setHisto 2 100 80 90
+/testem/histo/setFileName c12
+/testem/histo/setFileType root
+/testem/histo/setHisto 2 100 80 90 mm
+/testem/histo/setHisto 3 100 80 90 mm
 #
 /run/beamOn 1000
 /gun/particle ion
