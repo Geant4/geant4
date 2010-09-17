@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.16 2010-09-17 19:27:30 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.17 2010-09-17 19:29:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -151,7 +151,7 @@ void G4Tubs::SetInnerRadius (G4double newRMin)
            << G4endl
            << "        newRMin = " << newRMin
            << ", fRMax = " << fRMax << G4endl
-           << "        Review your settings, or set correct outer radius first!"
+           << "        Negative inner radius!"
            << G4endl;
     G4Exception("G4Tubs::SetInnerRadius()", "InvalidSetup", FatalException,
                 "Invalid radii.");
