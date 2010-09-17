@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.22 2009-03-31 09:56:24 gcosmo Exp $
+// $Id: G4Cons.hh,v 1.23 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -153,6 +153,10 @@ class G4Cons : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Cons(const G4Cons& rhs);
+    G4Cons& operator=(const G4Cons& rhs); 
+      // Copy constructor and assignment operator.
 
     //  Old access functions
 

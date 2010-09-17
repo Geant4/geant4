@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.71 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.72 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -136,6 +136,51 @@ G4Cons::G4Cons( __void__& a )
 
 G4Cons::~G4Cons()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Cons::G4Cons(const G4Cons& rhs)
+  : G4CSGSolid(rhs), kRadTolerance(rhs.kRadTolerance),
+    kAngTolerance(rhs.kAngTolerance), fRmin1(rhs.fRmin1), fRmin2(rhs.fRmin2),
+    fRmax1(rhs.fRmax1), fRmax2(rhs.fRmax2), fDz(rhs.fDz), fSPhi(rhs.fSPhi),
+    fDPhi(rhs.fDPhi), sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
+    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
+    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi), sinEPhi(rhs.sinEPhi),
+    cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Cons& G4Cons::operator = (const G4Cons& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   kRadTolerance = rhs.kRadTolerance;
+   kAngTolerance = rhs.kAngTolerance;
+   fRmin1 = rhs.fRmin1; fRmin2 = rhs.fRmin2;
+   fRmax1 = rhs.fRmax1; fRmax2 = rhs.fRmax2;
+   fDz = rhs.fDz; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
+   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
+   sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
+   sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
+   fPhiFullCone = rhs.fPhiFullCone;
+
+   return *this;
 }
 
 /////////////////////////////////////////////////////////////////////

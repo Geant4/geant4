@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.86 2010-07-12 07:44:30 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.87 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -82,6 +82,8 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
+const G4double G4Sphere::fEpsilon = 2.e-11;  // relative tolerance of radii
+
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -91,8 +93,7 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4CSGSolid(pName), fEpsilon(2.0e-11),
-    fFullPhiSphere(true), fFullThetaSphere(true)
+  : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
 {
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
@@ -124,8 +125,8 @@ G4Sphere::G4Sphere( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4Sphere::G4Sphere( __void__& a )
-  : G4CSGSolid(a), fEpsilon(0.), fRminTolerance(0.), fRmaxTolerance(0.),
-    kAngTolerance(0.), fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
+  : G4CSGSolid(a), fRminTolerance(0.), fRmaxTolerance(0.), kAngTolerance(0.),
+    fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
     fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
     ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
@@ -140,6 +141,63 @@ G4Sphere::G4Sphere( __void__& a )
 
 G4Sphere::~G4Sphere()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Sphere::G4Sphere(const G4Sphere& rhs)
+  : G4CSGSolid(rhs), fRminTolerance(rhs.fRminTolerance),
+    fRmaxTolerance(rhs.fRmaxTolerance), kAngTolerance(rhs.kAngTolerance),
+    fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
+    fSTheta(rhs.fSTheta), fDTheta(rhs.fDTheta),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
+    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
+    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi),
+    hDPhi(rhs.hDPhi), cPhi(rhs.cPhi), ePhi(rhs.ePhi),
+    sinSTheta(rhs.sinSTheta), cosSTheta(rhs.cosSTheta),
+    sinETheta(rhs.sinETheta), cosETheta(rhs.cosETheta),
+    tanSTheta(rhs.tanSTheta), tanSTheta2(rhs.tanSTheta2),
+    tanETheta(rhs.tanETheta), tanETheta2(rhs.tanETheta2), eTheta(rhs.eTheta),
+    fFullPhiSphere(rhs.fFullPhiSphere), fFullThetaSphere(rhs.fFullThetaSphere),
+    fFullSphere(rhs.fFullSphere)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Sphere& G4Sphere::operator = (const G4Sphere& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fRminTolerance = rhs.fRminTolerance; fRmaxTolerance = rhs.fRmaxTolerance;
+   kAngTolerance = rhs.kAngTolerance; fRmin = rhs.fRmin; fRmax = rhs.fRmax;
+   fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi; fSTheta = rhs.fSTheta;
+   fDTheta = rhs.fDTheta; sinCPhi = rhs.sinCPhi; cosCPhi = rhs.cosCPhi;
+   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiIT;
+   sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
+   sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
+   hDPhi = rhs.hDPhi; cPhi = rhs.cPhi; ePhi = rhs.ePhi;
+   sinSTheta = rhs.sinSTheta; cosSTheta = rhs.cosSTheta;
+   sinETheta = rhs.sinETheta; cosETheta = rhs.cosETheta;
+   tanSTheta = rhs.tanSTheta; tanSTheta2 = rhs.tanSTheta2;
+   tanETheta = rhs.tanETheta; tanETheta2 = rhs.tanETheta2;
+   eTheta = rhs.eTheta; fFullPhiSphere = rhs.fFullPhiSphere;
+   fFullThetaSphere = rhs.fFullThetaSphere; fFullSphere = rhs.fFullSphere;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////

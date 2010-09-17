@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.17 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Trd.hh,v 1.18 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,6 +151,10 @@ class G4Trd : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Trd(const G4Trd& rhs);
+    G4Trd& operator=(const G4Trd& rhs); 
+      // Copy constructor and assignment operator.
 
     G4ThreeVectorList*
     CreateRotatedVertices( const G4AffineTransform& pTransform ) const;

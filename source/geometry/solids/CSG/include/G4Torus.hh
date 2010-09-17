@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.28 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Torus.hh,v 1.29 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -162,6 +162,10 @@ class G4Torus : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Torus(const G4Torus& rhs);
+    G4Torus& operator=(const G4Torus& rhs); 
+      // Copy constructor and assignment operator.
 
   private:
 

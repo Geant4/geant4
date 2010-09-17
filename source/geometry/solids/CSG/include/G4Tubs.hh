@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.22 2009-03-26 16:25:44 gcosmo Exp $
+// $Id: G4Tubs.hh,v 1.23 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,6 +149,10 @@ class G4Tubs : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Tubs(const G4Tubs& rhs);
+    G4Tubs& operator=(const G4Tubs& rhs); 
+      // Copy constructor and assignment operator.
 
     //  Older names for access functions
 

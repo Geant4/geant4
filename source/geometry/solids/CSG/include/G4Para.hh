@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.18 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4Para.hh,v 1.19 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -152,6 +152,10 @@ class G4Para : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Para(const G4Para& rhs);
+    G4Para& operator=(const G4Para& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // without description
 

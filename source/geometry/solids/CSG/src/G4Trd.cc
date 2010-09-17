@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.36 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.37 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -129,6 +129,39 @@ G4Trd::G4Trd( __void__& a )
 
 G4Trd::~G4Trd()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Trd::G4Trd(const G4Trd& rhs)
+  : G4CSGSolid(rhs), fDx1(rhs.fDx1), fDx2(rhs.fDx2),
+    fDy1(rhs.fDy1), fDy2(rhs.fDy2), fDz(rhs.fDz)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Trd& G4Trd::operator = (const G4Trd& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fDx1 = rhs.fDx1; fDx2 = rhs.fDx2;
+   fDy1 = rhs.fDy1; fDy2 = rhs.fDy2;
+   fDz = rhs.fDz;
+
+   return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////////

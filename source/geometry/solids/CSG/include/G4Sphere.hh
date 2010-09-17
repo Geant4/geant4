@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.25 2010-07-08 16:31:28 gcosmo Exp $
+// $Id: G4Sphere.hh,v 1.26 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -160,6 +160,10 @@ class G4Sphere : public G4CSGSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4Sphere(const G4Sphere& rhs);
+    G4Sphere& operator=(const G4Sphere& rhs); 
+      // Copy constructor and assignment operator.
+
     // Old access functions
 
     inline G4double  GetRmin()   const;
@@ -211,7 +215,7 @@ class G4Sphere : public G4CSGSolid
     //
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-    const G4double fEpsilon;
+    static const G4double fEpsilon;
       //
       // Relative radial tolerance constant
 

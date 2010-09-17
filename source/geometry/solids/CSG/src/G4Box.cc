@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.51 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Box.cc,v 1.52 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,6 +92,38 @@ G4Box::G4Box( __void__& a )
 
 G4Box::~G4Box()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Box::G4Box(const G4Box& rhs)
+  : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Box& G4Box::operator = (const G4Box& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fDx = rhs.fDx;
+   fDy = rhs.fDy;
+   fDz = rhs.fDz;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////////

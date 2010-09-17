@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.82 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.83 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,6 +138,50 @@ G4Tubs::G4Tubs( __void__& a )
 
 G4Tubs::~G4Tubs()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Tubs::G4Tubs(const G4Tubs& rhs)
+  : G4CSGSolid(rhs),
+    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
+    fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
+    fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
+    sinCPhi(rhs.sinCPhi), cosCPhi(rhs.sinCPhi),
+    cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiOT),
+    sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi),
+    sinEPhi(rhs.sinEPhi), cosEPhi(rhs.cosEPhi), fPhiFullTube(rhs.fPhiFullTube)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Tubs& G4Tubs::operator = (const G4Tubs& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
+   fRMin = rhs.fRMin; fRMax = rhs.fRMax; fDz = rhs.fDz;
+   fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
+   sinCPhi = rhs.sinCPhi; cosCPhi = rhs.sinCPhi;
+   cosHDPhiOT = rhs.cosHDPhiOT; cosHDPhiIT = rhs.cosHDPhiOT;
+   sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
+   sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
+   fPhiFullTube = rhs.fPhiFullTube;
+
+   return *this;
 }
 
 /////////////////////////////////////////////////////////////////////////

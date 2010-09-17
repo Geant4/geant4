@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.41 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Para.cc,v 1.42 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -166,6 +166,40 @@ G4Para::G4Para( __void__& a )
 
 G4Para::~G4Para()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Para::G4Para(const G4Para& rhs)
+  : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz),
+    fTalpha(rhs.fTalpha), fTthetaCphi(rhs.fTthetaCphi),
+    fTthetaSphi(rhs.fTthetaSphi)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Para& G4Para::operator = (const G4Para& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz;
+   fTalpha = rhs.fTalpha; fTthetaCphi = rhs.fTthetaCphi;
+   fTthetaSphi = rhs.fTthetaSphi;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////

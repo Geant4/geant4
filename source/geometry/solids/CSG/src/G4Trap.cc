@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.47 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.48 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -525,6 +525,56 @@ G4Trap::G4Trap( __void__& a )
 
 G4Trap::~G4Trap()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Trap::G4Trap(const G4Trap& rhs)
+  : G4CSGSolid(rhs), fDz(rhs.fDz),
+    fTthetaCphi(rhs.fTthetaCphi), fTthetaSphi(rhs.fTthetaSphi),
+    fDy1(rhs.fDy1), fDx1(rhs.fDx1), fDx2(rhs.fDx2), fTalpha1(rhs.fTalpha1),
+    fDy2(rhs.fDy2), fDx3(rhs.fDx3), fDx4(rhs.fDx4), fTalpha2(rhs.fTalpha2)
+{
+  for (size_t i=0; i<4; ++i)
+  {
+    fPlanes[i].a = rhs.fPlanes[i].a;
+    fPlanes[i].b = rhs.fPlanes[i].b;
+    fPlanes[i].c = rhs.fPlanes[i].c;
+    fPlanes[i].d = rhs.fPlanes[i].d;
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Trap& G4Trap::operator = (const G4Trap& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4CSGSolid::operator=(rhs);
+
+  // Copy data
+  //
+  fDz = rhs.fDz;
+  fTthetaCphi = rhs.fTthetaCphi; fTthetaSphi = rhs.fTthetaSphi;
+  fDy1 = rhs.fDy1; fDx1 = rhs.fDx1; fDx2 = rhs.fDx2; fTalpha1 = rhs.fTalpha1;
+  fDy2 = rhs.fDy2; fDx3 = rhs.fDx3; fDx4 = rhs.fDx4; fTalpha2 = rhs.fTalpha2;
+  for (size_t i=0; i<4; ++i)
+  {
+    fPlanes[i].a = rhs.fPlanes[i].a;
+    fPlanes[i].b = rhs.fPlanes[i].b;
+    fPlanes[i].c = rhs.fPlanes[i].c;
+    fPlanes[i].d = rhs.fPlanes[i].d;
+  }
+
+  return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////

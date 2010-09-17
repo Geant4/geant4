@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.69 2010-08-20 08:49:24 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.70 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -183,6 +183,40 @@ G4Torus::G4Torus( __void__& a )
 
 G4Torus::~G4Torus()
 {}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Torus::G4Torus(const G4Torus& rhs)
+  : G4CSGSolid(rhs), fRmin(rhs.fRmin),fRmax(rhs.fRmax),
+    fRtor(rhs.fRtor),fSPhi(rhs.fSPhi),fDPhi(rhs.fDPhi),
+    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Torus& G4Torus::operator = (const G4Torus& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fRmin = rhs.fRmin; fRmax = rhs.fRmax;
+   fRtor = rhs.fRtor; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
+   kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
+
+   return *this;
+}
 
 //////////////////////////////////////////////////////////////////////
 //

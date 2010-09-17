@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.12 2006-10-19 15:33:37 gcosmo Exp $
+// $Id: G4CSGSolid.hh,v 1.13 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -64,6 +64,10 @@ class G4CSGSolid : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4CSGSolid(const G4CSGSolid& rhs);
+    G4CSGSolid& operator=(const G4CSGSolid& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:
 

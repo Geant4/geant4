@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.18 2010-05-18 10:07:52 gcosmo Exp $
+// $Id: G4Box.hh,v 1.19 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -113,6 +113,10 @@ class G4Box : public G4CSGSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Box(const G4Box& rhs);
+    G4Box& operator=(const G4Box& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // with description
 

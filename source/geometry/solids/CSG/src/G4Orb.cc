@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.33 2010-09-07 07:57:53 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.34 2010-09-17 10:32:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -108,6 +108,37 @@ G4Orb::G4Orb( __void__& a )
 
 G4Orb::~G4Orb()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Orb::G4Orb(const G4Orb& rhs)
+  : G4CSGSolid(rhs), fRmax(rhs.fRmax), fRmaxTolerance(rhs.fRmaxTolerance)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Orb& G4Orb::operator = (const G4Orb& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4CSGSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fRmax = rhs.fRmax;
+   fRmaxTolerance = rhs.fRmaxTolerance;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////
