@@ -1,4 +1,4 @@
-$Id: History,v 1.178 2010-09-17 20:49:43 mkelsey Exp $
+$Id: History,v 1.179 2010-09-17 21:04:13 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -17,19 +17,6 @@ code and to keep track of all tags.
 
 16 September 2010 Michael Kelsey (hadr-casc-V09-03-75)
 ------------------------------------------------------
-- G4CascadeInterface:  Add support to pass nucleus projectiles into
-  collider.  Not tested or guaranteed to work, but G4IntraNucleiCascader is
-  supposed to deal with them.
-
-16 September 2010 Michael Kelsey
---------------------------------
-- G4CascadeInterface:  Extensive reorganization, moving most
-  functionality out of ApplyYourself and into small member functions.
-  Complicated end-of-loop conditions encapsulated.  Data members made into
-  pointers to hide dependences from outside world.
-
-16 September 2010 Michael Kelsey
---------------------------------
 - G4CascadeInterface.cc:  Add parentheses in end-of-while block to fix
   compilation warning in GCC 4.3.
 
