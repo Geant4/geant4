@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.28 2010-05-28 05:13:43 kurasige Exp $
+// $Id: G4PhysicsVector.icc,v 1.29 2010-09-18 07:38:28 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,6 +163,11 @@ inline
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 {
   dataVector[binNumber] = theValue;
+
+  // Fill the bin which is hidden to user with theValue. This is to 
+  // handle correctly when Energy=theEmax in getValue.
+  if(binNumber==numberOfNodes-2) { dataVector[binNumber+1] = theValue; }
+
 }
 
 //---------------------------------------------------------------
