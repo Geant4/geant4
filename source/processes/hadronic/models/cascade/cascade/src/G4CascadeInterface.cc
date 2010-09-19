@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.99 2010-09-17 04:44:28 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.100 2010-09-19 22:44:49 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -56,6 +56,7 @@
 // 20100916  M. Kelsey -- Simplify ApplyYourself() by encapsulating code blocks
 //		into numerous functions; make data-member colliders pointers;
 //		provide support for projectile nucleus
+// 20100919  M. Kelsey -- Fix incorrect logic in retryInelasticNucleus()
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -404,30 +405,25 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
 // NOTE:  some conditions are set by compiler flags
 
 G4bool G4CascadeInterface::retryInelasticNucleus() const {
-  if (numberOfTries >= maximumTries) return false;
-
+  // Quantities necessary for conditional block below
   G4int npart = output->numberOfOutgoingParticles();
   G4int nfrag = output->numberOfNucleiFragments();
 
-  if (npart == 0) return false;
-
-  // Check final state for sensible content
-#ifdef G4CASCADE_COULOMB_DEV
-  if (!coulombBarrierViolation() || npart+nfrag < 3) return false;
-#else
-  const G4ParticleDefinition* firstOut = 
+  const G4ParticleDefinition* firstOut = (npart == 0) ? 0 :
     output->getOutgoingParticles().begin()->getDefinition();
-  if (npart+nfrag > 2 || firstOut != bullet->getDefinition())
-    return false;
-#endif
 
-  // Check energy conservation
-#ifdef G4CASCADE_SKIP_ECONS
-  if (verboseLevel > 2) balance->okay();	// Report possible violations
-  return true;
+  return ( ((numberOfTries < maximumTries) &&
+	    (npart != 0) &&
+#ifdef G4CASCADE_COULOMB_DEV
+	    (coulombBarrierViolation() && npart+nfrag > 2)
 #else
-  return (!balance->okay());
+	    (npart+nfrag < 3 && firstOut == bullet->getDefinition())
 #endif
+	    )
+#ifndef G4CASCADE_SKIP_ECONS
+	   || (!balance->okay())
+#endif
+	   );
 }
 
 
