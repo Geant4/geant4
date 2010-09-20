@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.35 2010-09-08 16:51:49 gunter Exp $
+// $Id: G4FTFModel.cc,v 1.36 2010-09-20 15:50:46 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -98,7 +98,9 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
 	theProjectile = aProjectile;  
+
 	theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt()); 
+
 // ----------- N-mass number Z-charge -------------------------
 
 // --- cms energy
@@ -112,6 +114,8 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
                                           s);
 
 //theParameters->SetProbabilityOfElasticScatt(0.); 
+//G4cout<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
 // To turn on/off (1/0) elastic scattering
 
 }
@@ -124,18 +128,20 @@ struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){ delete
 G4ExcitedStringVector * G4FTFModel::GetStrings()
 { 
         G4ExcitedStringVector * theStrings(0);
-
+//G4cout<<"GetString"<<G4endl;
 	theParticipants.GetList(theProjectile,theParameters);
-
+//G4cout<<"Reggeon"<<G4endl;
         ReggeonCascade(); 
 
         G4bool Success(true);
         if( PutOnMassShell() )
         {
+//G4cout<<"PutOn mass Shell OK"<<G4endl;
          if( ExciteParticipants() )
          {
+//G4cout<<"Excite partic OK"<<G4endl;
 	  theStrings = BuildStrings();
-
+//G4cout<<"Build String OK"<<G4endl;
           GetResidualNucleus();
 
           if( theParameters != 0 )
@@ -193,7 +199,7 @@ void G4FTFModel::ReggeonCascade()
 
            TheInvolvedNucleon[NumberOfInvolvedNucleon]=TargetNucleon;
            NumberOfInvolvedNucleon++;
-
+//G4cout<<"Prim NumberOfInvolvedNucleon "<<NumberOfInvolvedNucleon<<G4endl;
            G4double XofWoundedNucleon = TargetNucleon->GetPosition().x();
            G4double YofWoundedNucleon = TargetNucleon->GetPosition().y();
 
@@ -213,6 +219,7 @@ void G4FTFModel::ReggeonCascade()
 
               TheInvolvedNucleon[NumberOfInvolvedNucleon]=Neighbour;
               NumberOfInvolvedNucleon++;
+//G4cout<<"Seco NumberOfInvolvedNucleon "<<NumberOfInvolvedNucleon<<G4endl;
 
               G4VSplitableHadron *targetSplitable; 
               targetSplitable = new G4DiffractiveSplitableHadron(*Neighbour); 
@@ -273,6 +280,7 @@ G4bool G4FTFModel::PutOnMassShell()
 	G4VSplitableHadron * primary = theParticipants.GetInteraction().GetProjectile();
 	G4LorentzVector Pprojectile=primary->Get4Momentum();
 
+//G4cout<<"Pprojectile "<<Pprojectile<<G4endl;
 // To get original projectile particle
 
         if(Pprojectile.z() < 0.){return false;}
@@ -283,7 +291,7 @@ G4bool G4FTFModel::PutOnMassShell()
 	G4LorentzVector Psum      = Pprojectile;
         G4double        SumMasses = Mprojectile + 20.*MeV; // 13.12.09
                                                // Separation energy for projectile
-
+//G4cout<<"SumMasses Pr "<<SumMasses<<G4endl;
 //--------------- Target nucleus ------------------------------
         G4V3DNucleus *theNucleus = GetWoundedNucleus();
         G4Nucleon * aNucleon;
@@ -304,6 +312,7 @@ G4bool G4FTFModel::PutOnMassShell()
           Psum += aNucleon->Get4Momentum();
           SumMasses += aNucleon->GetDefinition()->GetPDGMass();
           SumMasses += 20.*MeV;   // 13.12.09 Separation energy for a nucleon
+//G4cout<<"SumMasses Tr "<<SumMasses<<G4endl;
           ResidualMassNumber--;
           ResidualCharge-=(G4int) aNucleon->GetDefinition()->GetPDGCharge();
           ResidualExcitationEnergy+=ExcitationEnergyPerWoundedNucleon;
@@ -315,7 +324,7 @@ G4bool G4FTFModel::PutOnMassShell()
 	}   // end of while (theNucleus->GetNextNucleon())
 
         Psum += PnuclearResidual;
-
+//G4cout<<"ResidualCharge ,ResidualMassNumber "<<ResidualCharge<<" "<<ResidualMassNumber<<G4endl;
         G4double ResidualMass(0.);
         if(ResidualMassNumber == 0)
         {
@@ -330,13 +339,16 @@ G4bool G4FTFModel::PutOnMassShell()
         }
  
 //      ResidualMass +=ResidualExcitationEnergy; // Will be given after checks
+//G4cout<<"SumMasses End ResidualMass "<<SumMasses<<" "<<ResidualMass<<G4endl;
         SumMasses += ResidualMass;
-
+//G4cout<<"SumMasses + ResM "<<SumMasses<<G4endl;
+//G4cout<<"Psum "<<Psum<<G4endl;
 //-------------------------------------------------------------
 
         G4double SqrtS=Psum.mag();
         G4double     S=Psum.mag2();
 
+//G4cout<<"SqrtS < SumMasses "<<SqrtS<<" "<<SumMasses<<G4endl;
         if(SqrtS < SumMasses)      {return false;} // It is impossible to simulate
                                                    // after putting nuclear nucleons
                                                    // on mass-shell
@@ -345,7 +357,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
         ResidualMass +=ResidualExcitationEnergy;
         SumMasses    +=ResidualExcitationEnergy;
-
+//G4cout<<"ResidualMass "<<ResidualMass<<" "<<SumMasses<<G4endl;
 //-------------------------------------------------------------
 // Sampling of nucleons what are transfered to delta-isobars --
         G4int MaxNumberOfDeltas = (int)((SqrtS - SumMasses)/(400.*MeV));
@@ -372,6 +384,7 @@ G4bool G4FTFModel::PutOnMassShell()
           }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
         }   // end of if(theNucleus.GetMassNumber() != 1)
 //-------------------------------------------------------------
+
         G4LorentzRotation toCms(-1*Psum.boostVector());
         G4LorentzVector Ptmp=toCms*Pprojectile;
         if ( Ptmp.pz() <= 0. )                                
@@ -392,7 +405,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
         G4double AveragePt2  = theParameters->GetPt2ofNuclearDestruction();
         G4double maxPtSquare = theParameters->GetMaxPt2ofNuclearDestruction();
-
+//G4cout<<"Dcor "<<Dcor<<" AveragePt2 "<<AveragePt2<<G4endl;
         G4double M2target(0.);
         G4double WminusTarget(0.);
         G4double WplusProjectile(0.);
@@ -408,6 +421,7 @@ G4bool G4FTFModel::PutOnMassShell()
           {     // while (DecayMomentum < 0.)
 
             NumberOfTries++;
+//G4cout<<"NumberOfTries "<<NumberOfTries<<G4endl;
             if(NumberOfTries == 100*(NumberOfTries/100))   // 100
             { // At large number of tries it would be better to reduce the values
               ScaleFactor/=2.;
@@ -438,6 +452,7 @@ G4bool G4FTFModel::PutOnMassShell()
                XminusSum+=Xminus;
 
                G4LorentzVector tmp(tmpPt.x(),tmpPt.y(),Xminus,0.);
+//G4cout<<"Inv i mom "<<i<<" "<<tmp<<G4endl;
                aNucleon->SetMomentum(tmp);
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
@@ -446,6 +461,7 @@ G4bool G4FTFModel::PutOnMassShell()
              G4double DeltaY(0.);
              G4double DeltaXminus(0.);
 
+//G4cout<<"ResidualMassNumber "<<ResidualMassNumber<<" "<<PtSum<<G4endl;
              if(ResidualMassNumber == 0)
              {
               DeltaX      = PtSum.x()/NumberOfInvolvedNucleon;
@@ -456,7 +472,7 @@ G4bool G4FTFModel::PutOnMassShell()
              {
               DeltaXminus = -1./theNucleus->GetMassNumber();
              }
-
+//G4cout<<"Dx y xmin "<<DeltaX<<" "<<DeltaY<<" "<<DeltaXminus<<G4endl;
              XminusSum=1.;
              M2target =0.;
 
@@ -466,10 +482,16 @@ G4bool G4FTFModel::PutOnMassShell()
 
                Xminus = aNucleon->Get4Momentum().pz() - DeltaXminus;
                XminusSum-=Xminus;               
+//G4cout<<" i X-sum "<<i<<" "<<Xminus<<" "<<XminusSum<<G4endl;
+               if(ResidualMassNumber == 0)                // Uzhi 5.07.10
+               {
+                if((Xminus <= 0.)   || (Xminus > 1.))    {InerSuccess=false; break;}
+               } else
+               {
+                if((Xminus <= 0.)   || (Xminus > 1.) || 
+                   (XminusSum <=0.) || (XminusSum > 1.)) {InerSuccess=false; break;}
+               }                                          // Uzhi 5.07.10
 
-               if((Xminus <= 0.)   || (Xminus > 1.) || 
-                  (XminusSum <=0.) || (XminusSum > 1.)) {InerSuccess=false; break;}
- 
                G4double Px=aNucleon->Get4Momentum().px() - DeltaX;
                G4double Py=aNucleon->Get4Momentum().py() - DeltaY;
 
@@ -481,10 +503,14 @@ G4bool G4FTFModel::PutOnMassShell()
                aNucleon->SetMomentum(tmp);
              }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
+//G4cout<<"Rescale O.K."<<G4endl;
+
              if(InerSuccess && (ResidualMassNumber != 0))
              {
               M2target +=(ResidualMass*ResidualMass + PtSum.mag2())/XminusSum;
              }
+//G4cout<<"InerSuccess "<<InerSuccess<<G4endl;
+//G4int Uzhi;G4cin>>Uzhi;
             } while(!InerSuccess);
           } while (SqrtS < Mprojectile + std::sqrt(M2target));
 //-------------------------------------------------------------
@@ -494,6 +520,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
           WminusTarget=(S-M2projectile+M2target+std::sqrt(DecayMomentum2))/2./SqrtS;
           WplusProjectile=SqrtS - M2target/WminusTarget;
+//G4cout<<"DecayMomentum2 "<<DecayMomentum2<<G4endl;
 //-------------------------------------------------------------
 	  for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
           {
@@ -510,6 +537,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
            if( E+Pz > WplusProjectile ){OuterSuccess=false; break;}
           }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
+//G4int Uzhi;G4cin>>Uzhi;
         } while(!OuterSuccess);
 
 //-------------------------------------------------------------
@@ -574,15 +602,38 @@ G4bool G4FTFModel::ExciteParticipants()
 //    do {                           // } while (Successfull == false) // Closed 15.12.09
         Successfull=false;
         theParticipants.StartLoop();
+
+G4int MaxNumOfInelCollisions=G4int(theParameters->GetMaxNumberOfCollisions());
+G4double NumberOfInel(0.);
+//
+if(MaxNumOfInelCollisions > 0)  
+{   //  Plab > Pbound, Normal application of FTF is possible
+ G4double ProbMaxNumber=theParameters->GetMaxNumberOfCollisions()-MaxNumOfInelCollisions;
+ if(G4UniformRand() < ProbMaxNumber) {MaxNumOfInelCollisions++;}
+ NumberOfInel=MaxNumOfInelCollisions;
+} else
+{   //  Plab < Pbound, Normal application of FTF is impossible, low energy corrections
+ if(theParticipants.theNucleus->GetMassNumber() > 1)
+ {
+  NumberOfInel = theParameters->GetProbOfInteraction();
+  MaxNumOfInelCollisions = 1;
+ } else
+ { // Special case for hadron-nucleon interactions
+  NumberOfInel = 1.;
+  MaxNumOfInelCollisions = 1;
+ }
+}  // end of if(MaxNumOfInelCollisions > 0)
+//
 	while (theParticipants.Next())
 	{	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
 
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();
-
+//G4cout<<"ProbabilityOfElasticScatt "<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
            if(G4UniformRand()< theParameters->GetProbabilityOfElasticScatt())
            { //   Elastic scattering -------------------------
+//G4cout<<"Elastic FTF"<<G4endl;
             if(theElastic->ElasticScattering(projectile, target, theParameters))
             {
             Successfull = Successfull || true;
@@ -594,6 +645,7 @@ G4bool G4FTFModel::ExciteParticipants()
            }
            else
            { //   Inelastic scattering ---------------------- 
+/*
             if(theExcitation->ExciteParticipants(projectile, target, 
                                                  theParameters, theElastic))
             {
@@ -603,6 +655,31 @@ G4bool G4FTFModel::ExciteParticipants()
              Successfull = Successfull || false;
              target->SetStatus(2);
             }
+*/
+//G4cout<<"InElastic FTF"<<G4endl;
+            if(G4UniformRand()< NumberOfInel/MaxNumOfInelCollisions)
+            {
+             if(theExcitation->ExciteParticipants(projectile, target, 
+                                                 theParameters, theElastic))
+             {
+              Successfull = Successfull || true; 
+NumberOfInel--;
+             } else
+             {
+              Successfull = Successfull || false;
+              target->SetStatus(2);
+             }
+            } else // If NumOfInel
+            {
+             if(theElastic->ElasticScattering(projectile, target, theParameters))
+             {
+              Successfull = Successfull || true;
+             } else
+             {
+              Successfull = Successfull || false;
+              target->SetStatus(2);
+             }
+            }   // end if NumOfInel
            }
         }       // end of while (theParticipants.Next())
 //       } while (Successfull == false);                        // Closed 15.12.09
@@ -623,7 +700,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
         G4ExcitedString * SecondString(0);    // two strings will be produced.
 
 	theParticipants.StartLoop();    // restart a loop 
-
+//
 	while ( theParticipants.Next() ) 
 	{
 	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
@@ -633,7 +710,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
                                                 interaction.GetProjectile()) )
 	    	primaries.push_back(interaction.GetProjectile());     
 	}
-	    
+
 	unsigned int ahadron;
 	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
 	{
@@ -649,7 +726,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	    if(FirstString  != 0) strings->push_back(FirstString);
             if(SecondString != 0) strings->push_back(SecondString);
 	}
-
+//
 	for (G4int ahadron=0; ahadron < NumberOfInvolvedNucleon ; ahadron++)
 	{
             if(TheInvolvedNucleon[ahadron]->GetSplitableHadron()->GetStatus() !=0) //== 2)
@@ -668,7 +745,6 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 
 	std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
 	primaries.clear();
-
 	return strings;
 }
 // ------------------------------------------------------------

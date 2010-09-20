@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.13 2009-12-16 17:51:15 gunter Exp $
+// $Id: G4FTFParameters.cc,v 1.14 2010-09-20 15:50:46 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,9 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                      (2*TargetMass);
     G4double Plab = std::sqrt(Elab * Elab - ProjectileMass*ProjectileMass);
 
+    G4double Ylab=0.5*std::log((Elab+Plab)/(Elab-Plab));
+
+    Plab/=GeV;                               // Uzhi 8.07.10
     G4double LogPlab = std::log( Plab );
     G4double sqrLogPlab = LogPlab * LogPlab;
 
@@ -185,6 +188,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       SetElastisCrossSection(Xelastic);
       SetInelasticCrossSection(Xtotal-Xelastic);
 
+//G4cout<<"Xtotal, Xelastic "<<Xtotal<<" "<<Xelastic<<G4endl;
 //  // Interactions with elastic and inelastic collisions
       SetProbabilityOfElasticScatt(Xtotal, Xelastic);
       SetRadiusOfHNinteractions2(Xtotal/pi/10.);
@@ -195,6 +199,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 */ //=======================================================
 
 //-----------------------------------------------------------------------------------  
+
       SetSlope( Xtotal*Xtotal/16./pi/Xelastic/0.3894 ); // Slope parameter of elastic scattering
                                                         //      (GeV/c)^(-2))
 //-----------------------------------------------------------------------------------
@@ -208,19 +213,21 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 //----------- Parameters of excitations ---------------------------------------------
            if( absPDGcode > 1000 )                        //------Projectile is baryon --------
              {
-              SetMagQuarkExchange(3.4); //3.8); 
-              SetSlopeQuarkExchange(1.2);
-              SetDeltaProbAtQuarkExchange(0.1); //(0.1*4.);
+              SetMagQuarkExchange(1.84);//(3.63);
+              SetSlopeQuarkExchange(0.7);//(1.2);
+              SetDeltaProbAtQuarkExchange(0.);
 
-              SetProjMinDiffMass(1.1);                    // GeV
-              SetProjMinNonDiffMass(1.1);                 // GeV
-              SetProbabilityOfProjDiff(0.76*std::pow(s/GeV/GeV,-0.35));
+              SetProjMinDiffMass(1.16);                   // GeV 
+              SetProjMinNonDiffMass(1.16);                // GeV
+              
+SetProbabilityOfProjDiff(0.805*std::exp(-0.35*Ylab));// 0.5
 
-              SetTarMinDiffMass(1.1);                     // GeV
-              SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.76*std::pow(s/GeV/GeV,-0.35));
+              SetTarMinDiffMass(1.16);                    // GeV
+              SetTarMinNonDiffMass(1.16);                 // GeV
+              
+SetProbabilityOfTarDiff(0.805*std::exp(-0.35*Ylab));// 0.5
 
-              SetAveragePt2(0.3);                         // GeV^2
+              SetAveragePt2(0.15);                        // 0.15 GeV^2
              }
            else if( absPDGcode == 211 || PDGcode ==  111) //------Projectile is Pion -----------
              {
@@ -285,21 +292,45 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
     if( absPDGcode < 1000 ) 
     {
-      SetCofNuclearDestruction(1.); //1.0);                 // for meson projectile
-    } else if( theA > 20. )
+      SetMaxNumberOfCollisions(1000.,1.); //(Plab,2.); //3.); ##############################
+
+      SetCofNuclearDestruction(0.3); //1.0);           // for meson projectile
+
+      SetDofNuclearDestruction(0.4);
+      SetPt2ofNuclearDestruction(0.17*GeV*GeV);
+      SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
+
+      SetExcitationEnergyPerWoundedNucleon(100*MeV);
+    } else                                             // for baryon projectile
     {
-      SetCofNuclearDestruction(0.2); //2);                 // for baryon projectile and heavy target
-    } else
-    {
-      SetCofNuclearDestruction(0.2); //1.0);                 // for baryon projectile and light target
+//      SetMaxNumberOfCollisions(Plab,0.1); //6.); // ##############################
+      SetMaxNumberOfCollisions(Plab,4.); //6.); // ##############################
+
+      SetCofNuclearDestruction(0.62*std::exp(4.*(Ylab-2.1))/(1.+std::exp(4.*(Ylab-2.1)))); 
+
+      SetDofNuclearDestruction(0.4);
+      SetPt2ofNuclearDestruction((0.035+
+          0.04*std::exp(4.*(Ylab-2.5))/(1.+std::exp(4.*(Ylab-2.5))))*GeV*GeV); //0.09
+      SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
+
+      SetExcitationEnergyPerWoundedNucleon(75.*MeV);
     }
 
     SetR2ofNuclearDestruction(1.5*fermi*fermi);
 
-    SetExcitationEnergyPerWoundedNucleon(100*MeV);
+//SetCofNuclearDestruction(0.47*std::exp(2.*(Ylab-2.5))/(1.+std::exp(2.*(Ylab-2.5)))); 
+//SetPt2ofNuclearDestruction((0.035+0.1*std::exp(4.*(Ylab-3.))/(1.+std::exp(4.*(Ylab-3.))))*GeV*GeV);
 
-    SetDofNuclearDestruction(0.4);
-    SetPt2ofNuclearDestruction(0.17*GeV*GeV);
-    SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
+//SetProbabilityOfElasticScatt(1.,1.); //(Xtotal, Xelastic);
+//SetProbabilityOfProjDiff(1.*0.62*std::pow(s/GeV/GeV,-0.51)); // 0->1
+//SetProbabilityOfTarDiff(4.*0.62*std::pow(s/GeV/GeV,-0.51)); // 2->4
+//SetAveragePt2(0.3);                              //(0.15);
+//SetAvaragePt2ofElasticScattering(0.);
+
+//SetCofNuclearDestruction(0.6); //(0.4);                  
+SetExcitationEnergyPerWoundedNucleon(75.*MeV); //(75.*MeV); 
+//SetDofNuclearDestruction(0.6); //(0.4);                  
+//SetPt2ofNuclearDestruction(0.12*GeV*GeV); //(0.168*GeV*GeV); 
+
 } 
 //**********************************************************************************************

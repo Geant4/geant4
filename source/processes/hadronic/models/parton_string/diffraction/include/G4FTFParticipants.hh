@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.6 2009-08-03 13:14:19 vuzhinsk Exp $
+// $Id: G4FTFParticipants.hh,v 1.7 2010-09-20 15:50:46 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
