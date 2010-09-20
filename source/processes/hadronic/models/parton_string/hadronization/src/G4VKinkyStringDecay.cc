@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKinkyStringDecay.cc,v 1.4 2008-04-25 14:20:14 vuzhinsk Exp $
+// $Id: G4VKinkyStringDecay.cc,v 1.5 2010-09-20 12:46:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  Maxim Komogorov
 //

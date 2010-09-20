@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.21 2010-08-05 08:44:37 vuzhinsk Exp $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.22 2010-09-20 12:46:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    ClusterLoopInterrupt   =  500;
 
 // Changable Parameters below.
-   SigmaQT = 0.5 * GeV;
+   SigmaQT = 0.5 * GeV;  // 0.5
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
    DiquarkSuppress  = 0.07;
@@ -249,6 +249,7 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
 
            Hadron1 = (minMassHadronizer->*build)(string->GetLeftParton(),
 			                         string->GetRightParton());
+//G4cout<<"Hadron1 "<<Hadron1->GetParticleName()<<G4endl;
            mass= (Hadron1)->GetPDGMass();
         } else
         {

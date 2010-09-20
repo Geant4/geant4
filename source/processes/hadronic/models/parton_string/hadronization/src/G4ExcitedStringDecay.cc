@@ -64,8 +64,9 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentString
 				(const G4ExcitedString &theString)
 {
 	if ( theStringDecay == NULL ) 
+
 	    theStringDecay=new G4LundStringFragmentation();
-	    
+    
 	return theStringDecay->FragmentString(theString);
 }
 	
@@ -93,7 +94,6 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 	theResult->clear();
 
 	attempts++;
-
 	G4LorentzVector KTsecondaries(0.,0.,0.,0.);
 	G4bool NeedEnergyCorrector=false;
 
@@ -138,7 +138,7 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings
 	}
 //--DEBUG  G4cout << "Strings/secs total  4 momentum " << KTsum << " " <<KTsecondaries << G4endl;
 
-//  G4bool success=true;
+        success=true;
 	if ( NeedEnergyCorrector ) success=EnergyAndMomentumCorrector(theResult, KTsum);
 
   } while(!success && (attempts < 100));

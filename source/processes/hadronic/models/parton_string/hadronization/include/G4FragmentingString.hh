@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh,v 1.4 2007-12-20 15:38:06 vuzhinsk Exp $
+// $Id: G4FragmentingString.hh,v 1.5 2010-09-20 12:46:23 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
