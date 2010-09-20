@@ -142,7 +142,7 @@ List of fixes included in this public patch since the public release 9.3.p01:
   o Interfaces:
     ----------
     + Fixed call to contructor QKeySequence() in G4UIQt:AddButton() to
-      allow for porting on gcc-4.5.0.
+      allow for porting on gcc-4.5.0. Addresses problem report #1127.
 
   o Particles:
     ---------
