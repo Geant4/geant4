@@ -134,9 +134,6 @@ List of fixes included in this public patch since the public release 9.3.p01:
   o Global:
     ------
     + More safe numerical computation of A13() and logA() methods in G4Pow.
-    + Fixed bug in G4PhysicsVector::PutValue() to correctly handle last bin
-      when calling getValue() (problem introduced with removal of obsolete
-      hidden bin approach).
     + Added INT_MAX and INT_MIN portability macros in templates.hh.
     + Fixed cases of invalidated iterator in G4StateManager.
     + Added dummy initialization of data members in constructors.
