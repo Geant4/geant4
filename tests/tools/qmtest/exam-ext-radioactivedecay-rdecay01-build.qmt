@@ -11,9 +11,7 @@
     <text/>
   </argument>
   <argument name="prerequisites">
-    <set>
-      <tuple><text>exam-ext-radioactivedecay-radioActiv-build</text><enumeral>PASS</enumeral></tuple>
-    </set>
+    <set/>
   </argument>
   <argument name="stdin">
     <text/>
@@ -25,7 +23,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/radioactivedecay/radioActiv;$G4BIN/$G4SYSTEM/radioActiv singleDecay.mac</text>
+    <text>cd $G4INSTALL/examples/extended/radioactivedecay/rdecay01;make</text>
   </argument>
   <argument name="stderr">
     <text/>

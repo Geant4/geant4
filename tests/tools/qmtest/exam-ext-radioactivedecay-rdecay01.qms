@@ -6,8 +6,8 @@
   </argument>
   <argument name="test_ids">
     <set>
-      <text>exam-ext-radioactivedecay-exrdm-build</text>
-      <text>exam-ext-radioactivedecay-exrdm-run</text>
+      <text>exam-ext-radioactivedecay-rdecay01-build</text>
+      <text>exam-ext-radioactivedecay-rdecay01-run</text>
     </set>
   </argument>
 </extension>
