@@ -1,4 +1,4 @@
-$Id: History,v 1.252 2010-09-20 07:54:48 gcosmo Exp $
+$Id: History,v 1.253 2010-09-20 07:56:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Sep 18, 2010  H.Kurashige (global-V09-03-13)
-- Fix bug in G4PhysicsVector::PutValue() to correctly handle last bin
+- Fixed bug in G4PhysicsVector::PutValue() to correctly handle last bin
   when Energy=theEmax in getValue(). The bug was introduced in tag
   "global-V09-02-06" (i.e. with removal of old obsolete hidden bin approach).
 
