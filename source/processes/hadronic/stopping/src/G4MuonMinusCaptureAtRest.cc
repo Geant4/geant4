@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.54 2009-01-24 11:55:38 vnivanch Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.55 2010-09-20 12:53:00 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -301,7 +301,7 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   // pick random proton inside nucleus 
   G4double eEx;
   do {
-    theN->Init(targetA, targetZ); 
+    theN->Init(ia, iz); 
     G4LorentzVector thePMom;
     G4Nucleon * aNucleon = 0;
     G4int theProtonCounter = G4int( targetZ * G4UniformRand() );
