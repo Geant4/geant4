@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.14 2010-09-07 09:43:41 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.15 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -134,7 +134,7 @@ G4GenericTrap::G4GenericTrap( __void__& a )
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
 
-  for( G4int i=0; i<4; i++) { fTwist[i]=0.; }
+  for (size_t i=0; i<4; ++i)  { fTwist[i]=0.; }
 }
 
 // --------------------------------------------------------------------
@@ -142,6 +142,53 @@ G4GenericTrap::G4GenericTrap( __void__& a )
 G4GenericTrap::~G4GenericTrap()
 {
   // Destructor
+  delete fTessellatedSolid;
+}
+
+// --------------------------------------------------------------------
+
+G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
+  : G4VSolid(rhs),
+    fpPolyhedron(rhs.fpPolyhedron), fDz(rhs.fDz), fVertices(rhs.fVertices),
+    fIsTwisted(rhs.fIsTwisted), fTessellatedSolid(0),
+    fMinBBoxVector(rhs.fMinBBoxVector), fMaxBBoxVector(rhs.fMaxBBoxVector),
+    fVisSubdivisions(rhs.fVisSubdivisions),
+    fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume) 
+{
+   for (size_t i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
+#ifdef G4TESS_TEST
+   if (rhs.fTessellatedSolid && !fIsTwisted )
+   { fTessellatedSolid = CreateTessellatedSolid(); } 
+#endif
+}
+
+// --------------------------------------------------------------------
+
+G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fpPolyhedron = rhs.fpPolyhedron; fDz = rhs.fDz; fVertices = rhs.fVertices;
+   fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = 0;
+   fMinBBoxVector = rhs.fMinBBoxVector; fMaxBBoxVector = rhs.fMaxBBoxVector;
+   fVisSubdivisions = rhs.fVisSubdivisions;
+   fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
+
+   for (size_t i=0; i<4; ++i)  { fTwist[i] = rhs.fTwist[i]; }
+#ifdef G4TESS_TEST
+   if (rhs.fTessellatedSolid && !fIsTwisted )
+   { delete fTessellatedSolid; fTessellatedSolid = CreateTessellatedSolid(); } 
+#endif
+
+   return *this;
 }
 
 // --------------------------------------------------------------------

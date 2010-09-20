@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.28 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.29 2010-09-20 15:03:02 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -144,6 +144,54 @@ G4Hype::G4Hype( __void__& a  )
 G4Hype::~G4Hype()
 {
   delete fpPolyhedron;
+}
+
+
+//
+// Copy constructor
+//
+G4Hype::G4Hype(const G4Hype& rhs)
+  : G4VSolid(rhs), innerRadius(rhs.innerRadius),
+    outerRadius(rhs.outerRadius), halfLenZ(rhs.halfLenZ),
+    innerStereo(rhs.innerStereo), outerStereo(rhs.outerStereo),
+    tanInnerStereo(rhs.tanInnerStereo), tanOuterStereo(rhs.tanOuterStereo),
+    tanInnerStereo2(rhs.tanInnerStereo2), tanOuterStereo2(rhs.tanOuterStereo2),
+    innerRadius2(rhs.innerRadius2), outerRadius2(rhs.outerRadius2),
+    endInnerRadius2(rhs.endInnerRadius2), endOuterRadius2(rhs.endOuterRadius2),
+    endInnerRadius(rhs.endInnerRadius), endOuterRadius(rhs.endOuterRadius),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(rhs.fpPolyhedron)
+{
+}
+
+
+//
+// Assignment operator
+//
+G4Hype& G4Hype::operator = (const G4Hype& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   innerRadius = rhs.innerRadius; outerRadius = rhs.outerRadius;
+   halfLenZ = rhs.halfLenZ;
+   innerStereo = rhs.innerStereo; outerStereo = rhs.outerStereo;
+   tanInnerStereo = rhs.tanInnerStereo; tanOuterStereo = rhs.tanOuterStereo;
+   tanInnerStereo2 = rhs.tanInnerStereo2; tanOuterStereo2 = rhs.tanOuterStereo2;
+   innerRadius2 = rhs.innerRadius2; outerRadius2 = rhs.outerRadius2;
+   endInnerRadius2 = rhs.endInnerRadius2; endOuterRadius2 = rhs.endOuterRadius2;
+   endInnerRadius = rhs.endInnerRadius; endOuterRadius = rhs.endOuterRadius;
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = rhs.fpPolyhedron; 
+
+   return *this;
 }
 
 

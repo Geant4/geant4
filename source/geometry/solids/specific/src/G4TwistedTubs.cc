@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.25 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.26 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -218,6 +218,87 @@ G4TwistedTubs::~G4TwistedTubs()
    if (fInnerHype)     { delete fInnerHype;     }
    if (fOuterHype)     { delete fOuterHype;     }
    if (fpPolyhedron)   { delete fpPolyhedron;   }
+}
+
+//=====================================================================
+//* Copy constructor --------------------------------------------------
+
+G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
+  : G4VSolid(rhs), fPhiTwist(rhs.fPhiTwist),
+    fInnerRadius(rhs.fInnerRadius), fOuterRadius(rhs.fOuterRadius),
+    fDPhi(rhs.fDPhi), fZHalfLength(rhs.fZHalfLength),
+    fInnerStereo(rhs.fInnerStereo), fOuterStereo(rhs.fOuterStereo),
+    fTanInnerStereo(rhs.fTanInnerStereo), fTanOuterStereo(rhs.fTanOuterStereo),
+    fKappa(rhs.fKappa), fInnerRadius2(rhs.fInnerRadius2), 
+    fOuterRadius2(rhs.fOuterRadius2), fTanInnerStereo2(rhs.fTanInnerStereo2),
+    fTanOuterStereo2(rhs.fTanOuterStereo2),
+    fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0), fFormerTwisted(0),
+    fInnerHype(0), fOuterHype(0),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(rhs.fpPolyhedron),
+    fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
+    fLastDistanceToIn(rhs.fLastDistanceToIn),
+    fLastDistanceToOut(rhs.fLastDistanceToOut),
+    fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
+    fLastDistanceToOutWithV(rhs.fLastDistanceToOutWithV)
+{
+  for (size_t i=0; i<2; ++i)
+  {
+    fEndZ[i] = rhs.fEndZ[i];
+    fEndInnerRadius[i] = rhs.fEndInnerRadius[i];
+    fEndOuterRadius[i] = rhs.fEndOuterRadius[i];
+    fEndPhi[i] = rhs.fEndPhi[i];
+    fEndZ2[i] = rhs.fEndZ2[i];
+  }
+  CreateSurfaces();
+}
+
+
+//=====================================================================
+//* Assignment operator -----------------------------------------------
+
+G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fPhiTwist= rhs.fPhiTwist;
+   fInnerRadius= rhs.fInnerRadius; fOuterRadius= rhs.fOuterRadius;
+   fDPhi= rhs.fDPhi; fZHalfLength= rhs.fZHalfLength;
+   fInnerStereo= rhs.fInnerStereo; fOuterStereo= rhs.fOuterStereo;
+   fTanInnerStereo= rhs.fTanInnerStereo; fTanOuterStereo= rhs.fTanOuterStereo;
+   fKappa= rhs.fKappa; fInnerRadius2= rhs.fInnerRadius2; 
+   fOuterRadius2= rhs.fOuterRadius2; fTanInnerStereo2= rhs.fTanInnerStereo2;
+   fTanOuterStereo2= rhs.fTanOuterStereo2;
+   fLowerEndcap= fUpperEndcap= fLatterTwisted= fFormerTwisted= 0;
+   fInnerHype= fOuterHype= 0;
+   fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
+   fpPolyhedron= rhs.fpPolyhedron;
+   fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
+   fLastDistanceToIn= rhs.fLastDistanceToIn;
+   fLastDistanceToOut= rhs.fLastDistanceToOut;
+   fLastDistanceToInWithV= rhs.fLastDistanceToInWithV;
+   fLastDistanceToOutWithV= rhs.fLastDistanceToOutWithV;
+ 
+   for (size_t i=0; i<2; ++i)
+   {
+     fEndZ[i] = rhs.fEndZ[i];
+     fEndInnerRadius[i] = rhs.fEndInnerRadius[i];
+     fEndOuterRadius[i] = rhs.fEndOuterRadius[i];
+     fEndPhi[i] = rhs.fEndPhi[i];
+     fEndZ2[i] = rhs.fEndZ2[i];
+   }
+ 
+   CreateSurfaces();
+
+   return *this;
 }
 
 //=====================================================================

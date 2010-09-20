@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.12 2006-06-29 18:49:20 gunter Exp $
+// $Id: G4TwistedBox.cc,v 1.13 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,6 +64,31 @@ G4TwistedBox::G4TwistedBox( __void__& a )
 G4TwistedBox::~G4TwistedBox()
 {
 }
+
+
+// Copy constructor
+//
+G4TwistedBox::G4TwistedBox(const G4TwistedBox& rhs)
+  : G4VTwistedFaceted(rhs)
+{
+}
+
+
+// Assignment operator
+//
+G4TwistedBox& G4TwistedBox::operator = (const G4TwistedBox& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VTwistedFaceted::operator=(rhs);
+
+   return *this;
+}
+
 
 std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 {

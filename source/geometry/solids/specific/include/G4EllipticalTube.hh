@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.20 2010-08-20 08:07:03 gcosmo Exp $
+// $Id: G4EllipticalTube.hh,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -117,6 +117,10 @@ class G4EllipticalTube : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4EllipticalTube(const G4EllipticalTube& rhs);
+    G4EllipticalTube& operator=(const G4EllipticalTube& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // without description
 

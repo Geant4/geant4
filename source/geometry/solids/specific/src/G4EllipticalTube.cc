@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.30 2010-08-20 08:07:03 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.31 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,40 @@ G4EllipticalTube::G4EllipticalTube( __void__& a )
 G4EllipticalTube::~G4EllipticalTube()
 {
   delete fpPolyhedron;
+}
+
+
+//
+// Copy constructor
+//
+G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
+  : G4VSolid(rhs), dx(rhs.dx), dy(rhs.dy), dz(rhs.dz),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(rhs.fpPolyhedron)
+{
+}
+
+
+//
+// Assignment operator
+//
+G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   dx = rhs.dx; dy = rhs.dy; dz = rhs.dz;
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = rhs.fpPolyhedron;
+
+   return *this;
 }
 
 

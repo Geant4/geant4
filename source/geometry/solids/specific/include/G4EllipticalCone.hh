@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.12 2008-11-21 09:26:22 gcosmo Exp $
+// $Id: G4EllipticalCone.hh,v 1.13 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,6 +149,10 @@ class G4EllipticalCone : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4EllipticalCone(const G4EllipticalCone& rhs);
+    G4EllipticalCone& operator=(const G4EllipticalCone& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // without description
  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.15 2006-10-20 13:45:20 gcosmo Exp $
+// $Id: G4Hype.hh,v 1.16 2010-09-20 15:03:02 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -130,6 +130,10 @@ class G4Hype : public G4VSolid
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
+
+  G4Hype(const G4Hype& rhs);
+  G4Hype& operator=(const G4Hype& rhs); 
+    // Copy constructor and assignment operator.
 
  protected:  // without description
   

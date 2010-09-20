@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.14 2006-06-29 18:49:23 gunter Exp $
+// $Id: G4TwistedTrap.cc,v 1.15 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,28 @@ G4TwistedTrap::G4TwistedTrap( __void__& a )
 
 G4TwistedTrap::~G4TwistedTrap()
 {
+}
+
+// Copy constructor
+//
+G4TwistedTrap::G4TwistedTrap(const G4TwistedTrap& rhs)
+  : G4VTwistedFaceted(rhs)
+{
+}
+
+// Assignment operator
+//
+G4TwistedTrap& G4TwistedTrap::operator = (const G4TwistedTrap& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VTwistedFaceted::operator=(rhs);
+
+   return *this;
 }
 
 std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const

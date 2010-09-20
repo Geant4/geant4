@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.20 2010-09-07 09:43:41 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -221,6 +221,62 @@ G4VTwistedFaceted::~G4VTwistedFaceted()
   if (fSide180)     delete fSide180 ;
   if (fSide270)     delete fSide270 ;
   if (fpPolyhedron) delete fpPolyhedron;
+}
+
+//=====================================================================
+//* Copy constructor --------------------------------------------------
+
+G4VTwistedFaceted::G4VTwistedFaceted(const G4VTwistedFaceted& rhs)
+  : G4VSolid(rhs), fTheta(rhs.fTheta), fPhi(rhs.fPhi),
+    fDy1(rhs.fDy1), fDx1(rhs.fDx1), fDx2(rhs.fDx2), fDy2(rhs.fDy2),
+    fDx3(rhs.fDx3), fDx4(rhs.fDx4), fDz(rhs.fDz), fDx(rhs.fDx), fDy(rhs.fDy),
+    fAlph(rhs.fAlph), fTAlph(rhs.fTAlph), fdeltaX(rhs.fdeltaX),
+    fdeltaY(rhs.fdeltaY), fPhiTwist(rhs.fPhiTwist), fLowerEndcap(0),
+    fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0), fSide270(0),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(rhs.fpPolyhedron),
+    fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
+    fLastDistanceToIn(rhs.fLastDistanceToIn),
+    fLastDistanceToOut(rhs.fLastDistanceToOut),
+    fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
+    fLastDistanceToOutWithV(rhs.fLastDistanceToOutWithV)
+{
+  CreateSurfaces();
+}
+
+
+//=====================================================================
+//* Assignment operator -----------------------------------------------
+
+G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fTheta = rhs.fTheta; fPhi = rhs.fPhi;
+   fDy1= rhs.fDy1; fDx1= rhs.fDx1; fDx2= rhs.fDx2; fDy2= rhs.fDy2;
+   fDx3= rhs.fDx3; fDx4= rhs.fDx4; fDz= rhs.fDz; fDx= rhs.fDx; fDy= rhs.fDy;
+   fAlph= rhs.fAlph; fTAlph= rhs.fTAlph; fdeltaX= rhs.fdeltaX;
+   fdeltaY= rhs.fdeltaY; fPhiTwist= rhs.fPhiTwist; fLowerEndcap= 0;
+   fUpperEndcap= 0; fSide0= 0; fSide90= 0; fSide180= 0; fSide270= 0;
+   fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
+   fpPolyhedron= rhs.fpPolyhedron;
+   fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
+   fLastDistanceToIn= rhs.fLastDistanceToIn;
+   fLastDistanceToOut= rhs.fLastDistanceToOut;
+   fLastDistanceToInWithV= rhs.fLastDistanceToInWithV;
+   fLastDistanceToOutWithV= rhs.fLastDistanceToOutWithV;
+ 
+   CreateSurfaces();
+
+   return *this;
 }
 
 //=====================================================================

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.6 2006-06-29 18:48:04 gunter Exp $
+// $Id: G4TwistedTrd.hh,v 1.7 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,6 +92,10 @@ class G4TwistedTrd : public G4VTwistedFaceted
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4TwistedTrd(const G4TwistedTrd& rhs);
+    G4TwistedTrd& operator=(const G4TwistedTrd& rhs); 
+      // Copy constructor and assignment operator.
 
 } ;
 

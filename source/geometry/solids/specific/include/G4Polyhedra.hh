@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.20 2008-05-15 13:45:15 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,9 +108,6 @@ class G4Polyhedra : public G4VCSGfaceted
                const G4double z[]       ); // z coordinate of these corners
 
   virtual ~G4Polyhedra();
-  
-  G4Polyhedra( const G4Polyhedra &source );
-  const G4Polyhedra &operator=( const G4Polyhedra &source );
 
   // Methods for solid
 
@@ -157,6 +154,10 @@ class G4Polyhedra : public G4VCSGfaceted
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
+
+  G4Polyhedra( const G4Polyhedra &source );
+  const G4Polyhedra &operator=( const G4Polyhedra &source );
+    // Copy constructor and assignment operator.
 
  protected:  // without description
 

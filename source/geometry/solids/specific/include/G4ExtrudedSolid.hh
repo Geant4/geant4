@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh,v 1.8 2010-04-15 10:23:34 ivana Exp $
+// $Id: G4ExtrudedSolid.hh,v 1.9 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,6 +129,10 @@ class G4ExtrudedSolid : public G4TessellatedSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4ExtrudedSolid(const G4ExtrudedSolid& rhs);
+    G4ExtrudedSolid& operator=(const G4ExtrudedSolid& rhs); 
+      // Copy constructor and assignment operator.
 
   private:
 

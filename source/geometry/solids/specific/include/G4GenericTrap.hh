@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.9 2010-06-11 09:42:28 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.10 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,6 +140,10 @@ class G4GenericTrap : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4GenericTrap(const G4GenericTrap& rhs);
+    G4GenericTrap& operator=(const G4GenericTrap& rhs); 
+      // Copy constructor and assignment operator.
 
   private:
 

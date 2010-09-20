@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.7 2006-06-29 18:49:25 gunter Exp $
+// $Id: G4TwistedTrd.cc,v 1.8 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,28 @@ G4TwistedTrd::G4TwistedTrd( __void__& a )
 
 G4TwistedTrd::~G4TwistedTrd()
 {
+}
+
+// Copy constructor
+//
+G4TwistedTrd::G4TwistedTrd(const G4TwistedTrd& rhs)
+  : G4VTwistedFaceted(rhs)
+{
+}
+
+// Assignment operator
+//
+G4TwistedTrd& G4TwistedTrd::operator = (const G4TwistedTrd& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VTwistedFaceted::operator=(rhs);
+
+   return *this;
 }
 
 std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const

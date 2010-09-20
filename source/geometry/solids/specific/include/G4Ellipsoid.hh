@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipsoid.hh,v 1.12 2007-05-18 07:39:56 gcosmo Exp $
+// $Id: G4Ellipsoid.hh,v 1.13 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,6 +116,10 @@ class G4Ellipsoid : public G4VSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4Ellipsoid(const G4Ellipsoid& rhs);
+    G4Ellipsoid& operator=(const G4Ellipsoid& rhs); 
+      // Copy constructor and assignment operator.
 
   protected:  // without description
  

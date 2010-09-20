@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh,v 1.11 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4VTwistedFaceted.hh,v 1.12 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------------
@@ -148,6 +148,10 @@ class G4VTwistedFaceted: public G4VSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4VTwistedFaceted(const G4VTwistedFaceted& rhs);
+  G4VTwistedFaceted& operator=(const G4VTwistedFaceted& rhs); 
+    // Copy constructor and assignment operator.
+
  protected:  // with description
 
   G4ThreeVectorList*
@@ -203,13 +207,18 @@ class G4VTwistedFaceted: public G4VSolid
     public:
       LastState()
       {
-        p.set(kInfinity,kInfinity,kInfinity);
-        inside = kOutside;
+        p.set(kInfinity,kInfinity,kInfinity); inside = kOutside;
       }
       ~LastState(){}
+      LastState(const LastState& r) : p(r.p), inside(r.inside){}
+      LastState& operator=(const LastState& r)
+      {
+        p = r.p; inside = r.inside;
+        return *this;
+      }
     public:
       G4ThreeVector p;
-        EInside       inside;
+      EInside       inside;
   };
               
   class LastVector             // last SurfaceNormal result
@@ -225,10 +234,22 @@ class G4VTwistedFaceted: public G4VSolid
       {
         delete [] surface;
       }
+      LastVector(const LastVector& r) : p(r.p), vec(r.vec)
+      {
+        surface = new G4VTwistSurface*[1];
+        surface[0] = r.surface[0];
+      }
+      LastVector& operator=(const LastVector& r)
+      {
+        p = r.p; vec = r.vec;
+        delete [] surface; surface = new G4VTwistSurface*[1];
+        surface[0] = r.surface[0];
+        return *this;
+      }
     public:
       G4ThreeVector   p;
       G4ThreeVector   vec;
-      G4VTwistSurface    **surface;
+      G4VTwistSurface **surface;
   };
 
   class LastValue              // last G4double value
@@ -240,6 +261,12 @@ class G4VTwistedFaceted: public G4VSolid
         value = DBL_MAX;
       }
       ~LastValue(){}
+      LastValue(const LastValue& r) : p(r.p), value(r.value){}
+      LastValue& operator=(const LastValue& r)
+      {
+        p = r.p; value = r.value;
+        return *this;
+      }
     public:
       G4ThreeVector p;
       G4double      value;
@@ -255,10 +282,17 @@ class G4VTwistedFaceted: public G4VSolid
         value = DBL_MAX;
       }
       ~LastValueWithDoubleVector(){}
-      public:
-        G4ThreeVector p;
-        G4ThreeVector vec;
-        G4double      value;
+      LastValueWithDoubleVector(const LastValueWithDoubleVector& r)
+        : p(r.p), vec(r.vec), value(r.value){}
+      LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
+      {
+        p = r.p; vec = r.vec; value = r.value;
+        return *this;
+      }
+    public:
+      G4ThreeVector p;
+      G4ThreeVector vec;
+      G4double      value;
   };
               
   LastState    fLastInside;

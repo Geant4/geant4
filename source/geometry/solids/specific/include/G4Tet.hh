@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.9 2006-11-13 08:58:03 gcosmo Exp $
+// $Id: G4Tet.hh,v 1.10 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,7 @@
 // 03.09.2004 - M.H.Mendenhall & R.A.Weller (Vanderbilt University, USA)
 // 10.02.2005 - D.Anninos (CERN) - Added GetPointOnSurface() method.
 // 12.11.2006 - M.H.Mendenhall - Added GetSurfaceArea() concrete implementation.
+// 20.09.2010 - G.Cosmo (CERN) - Added copy-ctor and operator=().
 // --------------------------------------------------------------------
 #ifndef G4TET_HH
 #define G4TET_HH
@@ -115,8 +116,12 @@ class G4Tet : public G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4Tet(const G4Tet& rhs);
+    G4Tet& operator=(const G4Tet& rhs); 
+      // Copy constructor and assignment operator.
+
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.9 2006-11-13 08:58:03 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.10 2010-09-20 15:03:02 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)

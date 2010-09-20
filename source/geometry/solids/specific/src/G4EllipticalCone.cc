@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.18 2010-09-07 09:43:41 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.19 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -118,6 +118,43 @@ G4EllipticalCone::G4EllipticalCone( __void__& a )
 //
 G4EllipticalCone::~G4EllipticalCone()
 {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+//
+G4EllipticalCone::G4EllipticalCone(const G4EllipticalCone& rhs)
+  : G4VSolid(rhs),
+    fpPolyhedron(rhs.fpPolyhedron), kRadTolerance(rhs.kRadTolerance),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis), zheight(rhs.zheight),
+    semiAxisMax(rhs.semiAxisMax), zTopCut(rhs.zTopCut)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+//
+G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fpPolyhedron = rhs.fpPolyhedron; kRadTolerance = rhs.kRadTolerance;
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
+   zheight = rhs.zheight; semiAxisMax = rhs.semiAxisMax; zTopCut = rhs.zTopCut;
+
+   return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

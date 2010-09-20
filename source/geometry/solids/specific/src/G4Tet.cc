@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.13 2010-07-12 15:33:49 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.14 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -51,12 +51,13 @@
 //  20041103 - MHM removed many unused variables from class
 //  20040803 - Dionysios Anninos, added GetPointOnSurface() method
 //  20061112 - MHM added code for G4VSolid GetSurfaceArea()
+//  20100920 - Gabriele Cosmo added copy-ctor and operator=()
 //
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.13 2010-07-12 15:33:49 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.14 2010-09-20 15:03:02 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -204,6 +205,58 @@ G4Tet::G4Tet( __void__& a )
 G4Tet::~G4Tet()
 {
   delete fpPolyhedron;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4Tet::G4Tet(const G4Tet& rhs)
+  : G4VSolid(rhs),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
+    fpPolyhedron(rhs.fpPolyhedron), fAnchor(rhs.fAnchor),
+    fP2(rhs.fP2), fP3(rhs.fP3), fP4(rhs.fP4), fMiddle(rhs.fMiddle),
+    fNormal123(rhs.fNormal123), fNormal142(rhs.fNormal142),
+    fNormal134(rhs.fNormal134), fNormal234(rhs.fNormal234),
+    warningFlag(rhs.warningFlag), fCdotN123(rhs.fCdotN123),
+    fCdotN142(rhs.fCdotN142), fCdotN134(rhs.fCdotN134),
+    fCdotN234(rhs.fCdotN234), fXMin(rhs.fXMin), fXMax(rhs.fXMax),
+    fYMin(rhs.fYMin), fYMax(rhs.fYMax), fZMin(rhs.fZMin), fZMax(rhs.fZMax),
+    fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), fTol(rhs.fTol),
+    fMaxSize(rhs.fMaxSize)
+{
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4Tet& G4Tet::operator = (const G4Tet& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
+   fpPolyhedron = rhs.fpPolyhedron; fAnchor = rhs.fAnchor;
+   fP2 = rhs.fP2; fP3 = rhs.fP3; fP4 = rhs.fP4; fMiddle = rhs.fMiddle;
+   fNormal123 = rhs.fNormal123; fNormal142 = rhs.fNormal142;
+   fNormal134 = rhs.fNormal134; fNormal234 = rhs.fNormal234;
+   warningFlag = rhs.warningFlag; fCdotN123 = rhs.fCdotN123;
+   fCdotN142 = rhs.fCdotN142; fCdotN134 = rhs.fCdotN134;
+   fCdotN234 = rhs.fCdotN234; fXMin = rhs.fXMin; fXMax = rhs.fXMax;
+   fYMin = rhs.fYMin; fYMax = rhs.fYMax; fZMin = rhs.fZMin; fZMax = rhs.fZMax;
+   fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
+   fMaxSize = rhs.fMaxSize;
+
+   return *this;
 }
 
 //////////////////////////////////////////////////////////////////////////

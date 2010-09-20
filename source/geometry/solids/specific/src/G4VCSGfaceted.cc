@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.27 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.28 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,6 +112,12 @@ const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
   if (&source == this) { return *this; }
   
+  // Copy base class data
+  //
+  G4VSolid::operator=(source);
+
+  // Copy data
+  //
   fStatistics = source.fStatistics;
   fCubVolEpsilon = source.fCubVolEpsilon;
   fAreaAccuracy = source.fAreaAccuracy;

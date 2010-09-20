@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.23 2010-09-07 09:43:41 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.24 2010-09-20 15:03:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -184,6 +184,12 @@ G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
 {
   if (&s == this) { return *this; }
   
+  // Copy base class data
+  //
+  G4VSolid::operator=(s);
+
+  // Copy data
+  //
   cubicVolume = s.cubicVolume;  
   surfaceArea = s.surfaceArea;  
 
