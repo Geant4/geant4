@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2010-08-30 14:33:17 gunter Exp $
+$Id: History,v 1.62 2010-09-20 15:50:17 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,11 @@ $Id: History,v 1.61 2010-08-30 14:33:17 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-Sep-2010 G.Folger                (testtools-QMtest-V09-03-13)
+- rename of examples for radioactiv:
+   exrdm -> rdecay02
+   radioActiv -> rdecay01
 
 30-Aug-2010 G.Folger                (testtools-QMtest-V09-03-12)
 - add particleGun example with run{1,2,3,4}.mac input files.
