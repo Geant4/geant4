@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.34 2010-07-21 09:30:15 gcosmo Exp $
+// $Id: G4Track.cc,v 1.35 2010-09-21 00:33:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -266,8 +266,9 @@ G4double G4Track::GetVelocity() const
 void G4Track::PrepareVelocityTable()
 ///////////////////
 {
-  velTable = new G4PhysicsLogVector(minT, maxT, 300);
-  for (G4int i=0; i<300; i++){
+  const G4int NBIN=300;
+  velTable = new G4PhysicsLogVector(minT, maxT, NBIN);
+  for (G4int i=0; i<=NBIN; i++){
     G4double T = velTable->Energy(i);
     velTable->PutValue(i, c_light*std::sqrt(T*(T+2.))/(T+1.0) );
   }

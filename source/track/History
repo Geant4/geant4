@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2010-08-11 17:11:54 kurasige Exp $
+$Id: History,v 1.113 2010-09-21 00:33:05 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Sep 21, 2010  Hisaya Kurashige (track-V09-03-04)
+- Fill the last bin contents in G4Track::PrepareVelocityTable() 
+   to fix the bug in calculation of GetVelocity
 
 Aug 12, 2010 Hisaya Kurashige (track-V09-03-03)
 - Add G4Track::GetParticleDefinition giving 'const' pointer
