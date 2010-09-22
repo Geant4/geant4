@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2010-08-04 05:28:24 mkelsey Exp $
+# $Id: GNUmakefile,v 1.14 2010-09-22 22:14:45 yarba Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 #
@@ -17,10 +17,6 @@ endif
 
 ifdef G4CASCADE_DEBUG_INTERFACE
   CPPFLAGS += -DG4CASCADE_DEBUG_INTERFACE=1
-endif
-
-ifdef G4CASCADE_DEBUG_SAMPLER
-  CPPFLAGS += -DG4CASCADE_DEBUG_SAMPLER=1
 endif
 
 ifdef G4CASCADE_DEBUG_SORT
@@ -58,7 +54,14 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	    -I$(G4BASE)/processes/hadronic/models/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include/ \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include/ \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include/ \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include/ \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include/ \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include/ \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include/ \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include/ \
 	    -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	    -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
 	    -I$(G4BASE)/particles/management/include \
