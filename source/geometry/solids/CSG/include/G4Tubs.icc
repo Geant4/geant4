@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.17 2010-09-17 19:29:32 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.18 2010-09-22 08:31:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -163,14 +163,14 @@ void G4Tubs::SetInnerRadius (G4double newRMin)
 inline
 void G4Tubs::SetOuterRadius (G4double newRMax)
 {
-  if ( fRMin >= newRMax ) // Check radii
+  if ( newRMax <= 0 ) // Check radii
   {
     G4cerr << "ERROR - G4Tubs()::SetOuterRadius()" << G4endl
            << "        Invalid values for radii in solid " << GetName()
            << G4endl
            << "        fRMin = " << fRMin
            << ", newRMax = " << newRMax << G4endl
-           << "        Review your settings, or set correct inner radius first!"
+           << "        Invalid outer radius!"
            << G4endl;
     G4Exception("G4Tubs::SetOuterRadius()", "InvalidSetup", FatalException,
                 "Invalid radii.");
