@@ -1,5 +1,5 @@
 
-$Id: History,v 1.65 2010-07-07 15:48:28 gcosmo Exp $
+$Id: History,v 1.66 2010-09-22 14:58:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ September 22, 2010  G.Cosmo              geom-bool-V09-03-02
+  - Implemented copy-constructor and assignment operator for concrete
+    solids classes to facilitate conversion to Geant4-MT.
 
  July 7, 2010  G.Cosmo                    geom-bool-V09-03-01
   - Simplified logic in G4UnionSolid::Inside() to exclude obvious
