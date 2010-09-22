@@ -23,35 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundCascadeInterface.hh,v 1.3 2010-05-21 18:07:30 mkelsey Exp $
-// Defines an interface to Bertini (BERT) INC with exitons. Evaporation is NOT included
+// $Id: G4PreCompoundCascadeInterface.hh,v 1.4 2010-09-22 22:17:08 yarba Exp $
+// Defines an interface to Bertini (BERT) cascade
+// based on INUCL  intra-nuclear transport.models 
+// with bullet hadron energy ~< 10 GeV
 //
-// 20100520 M. Kelsey -- Add missing name string to ctor, follow code changes from
-//		G4CascadeInterface.
+// 20100405  M. Kelsey -- Fix constness of op== and op!=
+// 20100519  M. Kelsey -- Remove Collider data members
+// 20100617  M. Kelsey -- Make G4InuclCollider a local data member
+// 20100723  M. Kelsey -- Move G4CollisionOutput here for reuse
+// 20100916  M. Kelsey -- Add functions to encapsulate ApplyYourself() actions,
+//		make colliders pointers (don't expose dependencies)
 
 #ifndef G4PRECOMPOUNDCASCADEINTERFACE_H
 #define G4PRECOMPOUNDCASCADEINTERFACE_H 1
 
+// #include "G4VIntraNuclearTransportModel.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4FragmentVector.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4LorentzRotation.hh"
 #include "G4Nucleon.hh"
 #include "G4Nucleus.hh"
-#include "G4VIntraNuclearTransportModel.hh"
-#include "G4KineticTrackVector.hh"
-#include "G4FragmentVector.hh"
 #include "G4ParticleChange.hh"
-#include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+#include "G4ReactionProductVector.hh"
 
-class G4PreCompoundCascadeInterface : public G4VIntraNuclearTransportModel {
+class G4CascadeColliderBase;
+class G4PreCompoundInuclCollider;
+class G4InuclParticle;
+class G4CollisionOutput;
+class G4CascadeCheckBalance;
+class G4V3DNucleus;
+
+
+class G4PreCompoundCascadeInterface : public G4HadronicInteraction {
+//class G4PreCompoundCascadeInterface : public G4VIntraNuclearTransportModel {
 
 public:
-  G4PreCompoundCascadeInterface(const G4String& nam="PreCompound Bertini Cascade");
+  G4PreCompoundCascadeInterface(const G4String& name = "BertiniCascade+PreCompound");
 
-  ~G4PreCompoundCascadeInterface(){
-  }
+  virtual ~G4PreCompoundCascadeInterface();
 
-  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
+  G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
+				     G4V3DNucleus* theNucleus);
+  
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+				 G4Nucleus& theNucleus); 
 
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
+  void setDeExcitation( G4CascadeColliderBase* deExcitation );
+  
+  void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
+
+protected:
+  // Convert input projectile and target to Bertini internal types
+  void createBullet(const G4HadProjectile& aTrack);
+  void createTarget(G4Nucleus& theNucleus);
+
+  // Evaluate whether any outgoing particles penetrated Coulomb barrier
+  G4bool coulombBarrierViolation() const;
+
+  // Conditions for rejecting cascade attempt
+  G4bool retryInelasticProton() const;
+  G4bool retryInelasticNucleus() const;
+
+  // Fill sparse array with minimum momenta for inelastic on hydrogen
+  void initializeElasticCuts();
+
+  // Transfer Bertini internal final state to hadronics interface
+  void copyOutputToHadronicResult();
+
+  // Terminate job because of energy/momentum/etc. violations
+  void throwNonConservationFailure();
 
 private:
   G4int operator==(const G4PreCompoundCascadeInterface& right) const {
@@ -62,11 +105,22 @@ private:
     return (this != &right);
   }
 
-  G4int verboseLevel;
+  static const G4int maximumTries;	// Number of iterations for inelastic
 
-private:
-  G4HadFinalState theResult;  
-  
+  G4double cutElastic[32];		// Bullet momenta for hydrogen target
+
+  G4int verboseLevel;
+  G4int numberOfTries;
+
+  G4HadFinalState theResult;
+  G4PreCompoundInuclCollider* collider;
+  G4CascadeCheckBalance* balance;
+
+  G4InuclParticle* bullet;
+  G4InuclParticle* target;
+  G4CollisionOutput* output;
+
+  G4LorentzRotation bulletInLabFrame;
 };
 
 #endif // G4PRECOMPOUNDCASCADEINTERFACE_H
