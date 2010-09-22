@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.22 2010-09-20 12:46:23 vuzhinsk Exp $
+// $Id: G4LundStringFragmentation.cc,v 1.23 2010-09-22 12:36:37 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -720,7 +720,7 @@ G4bool G4LundStringFragmentation::SplitLast(G4FragmentingString * string,
     G4double StringMass   = string->Mass(); 
     G4double StringMassSqr= sqr(StringMass); 
 
-    G4ParticleDefinition * LeftHadron, * RightHadron;
+    G4ParticleDefinition * LeftHadron(0), * RightHadron(0);
     G4double LeftHadronMass(0.), RightHadronMass(0.);
 
     G4ParticleDefinition * FS_LeftHadron[25], * FS_RightHadron[25];
@@ -958,7 +958,7 @@ if(NumberOf_FS > 24)
 
      G4double ksi=G4UniformRand();
      G4double Sum=0.;
-     G4int SampledState;
+     G4int SampledState(0);
 
      for(G4int i=0; i<NumberOf_FS; i++) 
      {
