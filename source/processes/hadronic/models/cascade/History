@@ -1,4 +1,4 @@
-$Id: History,v 1.181 2010-09-19 22:44:49 mkelsey Exp $
+$Id: History,v 1.182 2010-09-22 22:56:22 yarba Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,42 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+
+22 September 2010 Julia Yarba 
+------------------------------------------------------
+
+Added 1st prototype of interface between Bartini cascade and PreCompound model 
+(post-cascade de-excitation).
+
+Changes only to:
+/geant4/source/processes/hadronic/models/cascade/cascade
+
+New developments are those G4PreCompound* classes; the GNUmakefile adapted to 
+include necessary links.
+
+The PreComp wrapper is GePreCompundDeexcitation class.
+
+The logic, loops, conditions, etc., in the event processing are the same as in 
+the "native" Bertini code. I actually copied it over from G4CascadeInterface,
+and started from there.
+
+However, there're a few technical changes that I'd like to mention.
+
+1. G4PreCompoundInterface inherits directly from G4HadronicInteraction.
+I felt that we'd not need G4VIntra..., because its only advantage is a pointer 
+(and related access methods) to G4VPreCompoundModel.
+This has now moved to the de-excitation wrapper.
+
+2. In the Collider itself, I've made the data member to be
+ G4CascadeColliderBase* theDeexcitation
+This way, it can be transparently set to the native one or the PreComp one 
+(both inherit from G4CascadeColliderBase).
+
+3. There's a setDeExcitation(...) methond in the collider, and also in the interface 
+(which will pass it down to the collider).
+
+
 
 19 September 2010 Michael Kelsey (hadr-casc-V09-03-77)
 ------------------------------------------------------
