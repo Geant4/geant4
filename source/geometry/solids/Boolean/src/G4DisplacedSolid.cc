@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.27 2006-06-29 18:43:41 gunter Exp $
+// $Id: G4DisplacedSolid.cc,v 1.28 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -119,6 +119,42 @@ G4DisplacedSolid::~G4DisplacedSolid()
   CleanTransformations();
   delete fpPolyhedron;
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4DisplacedSolid::G4DisplacedSolid(const G4DisplacedSolid& rhs)
+  : G4VSolid (rhs), fPtrSolid(rhs.fPtrSolid), fpPolyhedron(0)
+{
+  fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
+  fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4DisplacedSolid& G4DisplacedSolid::operator = (const G4DisplacedSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4VSolid::operator=(rhs);
+
+  // Copy data
+  //
+  fPtrSolid = rhs.fPtrSolid;
+  delete fPtrTransform; delete fDirectTransform;
+  fPtrTransform = new G4AffineTransform(*(rhs.fPtrTransform));
+  fDirectTransform = new G4AffineTransform(*(rhs.fDirectTransform));
+  delete fpPolyhedron; fpPolyhedron= 0;
+
+  return *this;
+}  
 
 G4GeometryType G4DisplacedSolid::GetEntityType() const 
 {

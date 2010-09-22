@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh,v 1.10 2006-06-29 18:43:37 gunter Exp $
+// $Id: G4UnionSolid.hh,v 1.11 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,6 +79,10 @@ class G4UnionSolid : public G4BooleanSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4UnionSolid(const G4UnionSolid& rhs);
+    G4UnionSolid& operator=(const G4UnionSolid& rhs);
+      // Copy constructor and assignment operator.
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

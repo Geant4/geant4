@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.hh,v 1.9 2006-06-29 18:43:35 gunter Exp $
+// $Id: G4SubtractionSolid.hh,v 1.10 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,6 +80,10 @@ class G4SubtractionSolid : public G4BooleanSolid
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
+
+    G4SubtractionSolid(const G4SubtractionSolid& rhs);
+    G4SubtractionSolid& operator=(const G4SubtractionSolid& rhs);
+      // Copy constructor and assignment operator.
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

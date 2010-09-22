@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh,v 1.17 2010-05-11 15:03:45 gcosmo Exp $
+// $Id: G4BooleanSolid.hh,v 1.18 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -105,6 +105,10 @@ class G4BooleanSolid : public G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4BooleanSolid(const G4BooleanSolid& rhs);
+    G4BooleanSolid& operator=(const G4BooleanSolid& rhs);
+      // Copy constructor and assignment operator.
+
   protected:
   
     G4VSolid* fPtrSolidA;
@@ -113,12 +117,6 @@ class G4BooleanSolid : public G4VSolid
     G4Polyhedron* StackPolyhedron(HepPolyhedronProcessor&,
                                   const G4VSolid*) const;
       // Stack polyhedra for processing. Return top polyhedron.
-
-  private:
-
-    G4BooleanSolid(const G4BooleanSolid&);
-    G4BooleanSolid& operator=(const G4BooleanSolid&);
-      // Private copy constructor and assignment operator.
 
   private:
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.23 2010-05-11 15:03:45 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.24 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -115,6 +115,44 @@ G4BooleanSolid::~G4BooleanSolid()
   }
   delete fpPolyhedron;
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4BooleanSolid::G4BooleanSolid(const G4BooleanSolid& rhs)
+  : G4VSolid (rhs), fPtrSolidA(rhs.fPtrSolidA), fPtrSolidB(rhs.fPtrSolidB),
+    fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
+    fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
+    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0),
+    createdDisplacedSolid(rhs.createdDisplacedSolid)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4BooleanSolid& G4BooleanSolid::operator = (const G4BooleanSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4VSolid::operator=(rhs);
+
+  // Copy data
+  //
+  fPtrSolidA= rhs.fPtrSolidA; fPtrSolidB= rhs.fPtrSolidB;
+  fStatistics= rhs.fStatistics; fCubVolEpsilon= rhs.fCubVolEpsilon;
+  fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
+  fSurfaceArea= rhs.fSurfaceArea; fpPolyhedron= 0;
+  createdDisplacedSolid= rhs.createdDisplacedSolid;
+
+  return *this;
+}  
 
 ///////////////////////////////////////////////////////////////
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.38 2010-07-07 15:48:05 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.39 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -107,6 +107,32 @@ G4UnionSolid::G4UnionSolid( __void__& a )
 G4UnionSolid::~G4UnionSolid()
 {
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
+  : G4BooleanSolid (rhs)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4UnionSolid& G4UnionSolid::operator = (const G4UnionSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BooleanSolid::operator=(rhs);
+
+  return *this;
+}  
 
 ///////////////////////////////////////////////////////////////
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.19 2006-06-29 18:43:31 gunter Exp $
+// $Id: G4DisplacedSolid.hh,v 1.20 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -147,6 +147,10 @@ class G4DisplacedSolid : public G4VSolid
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    G4DisplacedSolid(const G4DisplacedSolid& rhs);
+    G4DisplacedSolid& operator=(const G4DisplacedSolid& rhs);
+      // Copy constructor and assignment operator.
+
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
@@ -159,12 +163,6 @@ class G4DisplacedSolid : public G4VSolid
     G4AffineTransform* fPtrTransform ;
     G4AffineTransform* fDirectTransform ;
     mutable G4Polyhedron* fpPolyhedron;
-
-  private:
-
-    G4DisplacedSolid(const G4DisplacedSolid&);
-    G4DisplacedSolid& operator=(const G4DisplacedSolid&);
-      // Private copy constructor and assignment operator.
 } ;
 
 #endif

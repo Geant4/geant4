@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.32 2010-05-11 15:03:45 gcosmo Exp $
+// $Id: G4IntersectionSolid.cc,v 1.33 2010-09-22 14:57:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -107,6 +107,33 @@ G4IntersectionSolid::G4IntersectionSolid( __void__& a )
 G4IntersectionSolid::~G4IntersectionSolid()
 {
 }
+
+///////////////////////////////////////////////////////////////
+//
+// Copy constructor
+
+G4IntersectionSolid::G4IntersectionSolid(const G4IntersectionSolid& rhs)
+  : G4BooleanSolid (rhs)
+{
+}
+
+///////////////////////////////////////////////////////////////
+//
+// Assignment operator
+
+G4IntersectionSolid&
+G4IntersectionSolid::operator = (const G4IntersectionSolid& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BooleanSolid::operator=(rhs);
+
+  return *this;
+}  
 
 ///////////////////////////////////////////////////////////////
 //
