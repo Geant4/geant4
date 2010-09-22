@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.hh,v 1.10 2008-01-22 16:03:13 tnikitin Exp $
+// $Id: G4BREPSolidBox.hh,v 1.11 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -87,11 +87,13 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidBox(const G4BREPSolidBox& rhs);
+  G4BREPSolidBox& operator=(const G4BREPSolidBox& rhs);
+    // Copy constructor and assignment operator.
+
 private:
 
-  G4BREPSolidBox(const G4BREPSolidBox&);
-  G4BREPSolidBox& operator=(const G4BREPSolidBox&);
-    // Private copy constructor and assignment operator.
+  void InitializeBox();
 
 private:
 

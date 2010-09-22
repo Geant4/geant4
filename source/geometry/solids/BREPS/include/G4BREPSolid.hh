@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.17 2006-10-19 15:35:36 gcosmo Exp $
+// $Id: G4BREPSolid.hh,v 1.18 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -181,6 +181,10 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolid(const G4BREPSolid& rhs);
+  G4BREPSolid& operator=(const G4BREPSolid& rhs); 
+    // Copy constructor and assignment operator.
+
 protected:
  
   G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform&) const;
@@ -229,6 +233,11 @@ protected:
 
 private:
 
+  G4int IsBox();
+  G4int FinalEvaluation(register const G4Ray&, G4int =0) const;
+
+private:
+
   G4int    fStatistics;
   G4double fCubVolEpsilon;
   G4double fAreaAccuracy;
@@ -237,13 +246,6 @@ private:
     // Statistics, error accuracy and cached value for volume and area.
 
   mutable G4Polyhedron* fpPolyhedron;
-
-  G4BREPSolid(const G4BREPSolid&);
-  G4BREPSolid& operator=(const G4BREPSolid&);
-    // Private copy constructor and assignment operator.
-
-  G4int IsBox();
-  G4int FinalEvaluation(register const G4Ray&, G4int =0) const;
 
 };
 

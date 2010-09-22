@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.hh,v 1.9 2006-06-29 18:37:55 gunter Exp $
+// $Id: G4BREPSolidOpenPCone.hh,v 1.10 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,11 +83,22 @@ class G4BREPSolidOpenPCone : public G4IntersectionSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone& rhs);
+  G4BREPSolidOpenPCone& operator=(const G4BREPSolidOpenPCone& rhs);
+
  private:
 
-  G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone&);
-  G4BREPSolidOpenPCone& operator=(const G4BREPSolidOpenPCone&);
+  void InitializeOPCone();
 
+ private:
+
+  struct G4BREPCylinderParams
+  {
+    G4double start_angle, opening_angle;
+    G4int num_z_planes;       // sections
+    G4double z_start;
+    G4double *z_values, *RMIN, *RMAX;
+  } constructorParams;
 };
 
 #endif

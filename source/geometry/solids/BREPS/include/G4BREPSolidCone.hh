@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCone.hh,v 1.11 2006-06-29 18:37:51 gunter Exp $
+// $Id: G4BREPSolidCone.hh,v 1.12 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -107,12 +107,14 @@ class G4BREPSolidCone : public G4BREPSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidCone(const G4BREPSolidCone& rhs);
+  G4BREPSolidCone& operator=(const G4BREPSolidCone& rhs);
+    // Copy constructor and assignment operator.
+  
  private:
 
-  G4BREPSolidCone(const G4BREPSolidCone&);
-  G4BREPSolidCone& operator=(const G4BREPSolidCone&);
-    // Private copy constructor and assignment operator.
-  
+  void InitializeCone();
+
  private:
      
   struct G4BREPConeParams

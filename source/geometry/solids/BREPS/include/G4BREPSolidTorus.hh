@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.hh,v 1.10 2006-06-29 18:38:03 gunter Exp $
+// $Id: G4BREPSolidTorus.hh,v 1.11 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -75,11 +75,15 @@ class G4BREPSolidTorus : public G4BREPSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidTorus(const G4BREPSolidTorus& rhs);
+  G4BREPSolidTorus& operator=(const G4BREPSolidTorus& rhs);
+    // Copy constructor and assignment operator.
+
  private:
 
-  G4BREPSolidTorus(const G4BREPSolidTorus&);
-  G4BREPSolidTorus& operator=(const G4BREPSolidTorus&);
-    // Private copy constructor and assignment operator.
+  void InitializeTorus();
+
+ private:
 
   struct G4BREPTorusParams
   {

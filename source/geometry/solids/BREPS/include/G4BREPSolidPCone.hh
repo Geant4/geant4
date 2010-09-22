@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPCone.hh,v 1.14 2006-06-29 18:37:57 gunter Exp $
+// $Id: G4BREPSolidPCone.hh,v 1.15 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -131,18 +131,20 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidPCone(const G4BREPSolidPCone& rhs);
+  G4BREPSolidPCone& operator=(const G4BREPSolidPCone& rhs);
+    // Copy constructor and assignment operator.
+
 private:
-  
+
+  void InitializePCone();
+
   G4Surface* ComputePlanarSurface( G4double r1, G4double r2,
                                    G4ThreeVector& origin,
                                    G4ThreeVector& planeAxis,
                                    G4ThreeVector& planeDirection,
                                    G4int surfSense );
     // For a given radius values compute a planar surface
-
-  G4BREPSolidPCone(const G4BREPSolidPCone&);
-  G4BREPSolidPCone& operator=(const G4BREPSolidPCone&);
-    // Private copy constructor and assignment operator.
 
   // The following is only utilised in storing the shape parameters for
   // use in visualising this shape.  J.A. Feb  24, 1997

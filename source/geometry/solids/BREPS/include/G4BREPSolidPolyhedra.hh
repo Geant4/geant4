@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.14 2006-06-29 18:37:59 gunter Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.15 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -133,17 +133,19 @@ public:  // without description
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra& rhs);
+  G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra& rhs);
+    // Copy constructor and assignment operator.
+  
 private:
 
-  G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra&);
-  G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra&);
-    // Private copy constructor and assignment operator.
-  
   typedef enum _SF {
     EInverse = 0,
     ENormal = 1
   } ESurfaceSense;
-    
+
+  void InitializePolyhedra();
+
   G4Surface* CreateTrapezoidalSurface( G4double r1, G4double r2,
                                        const G4Point3D& origin, G4double zDistance,
                                        G4Vector3D& xAxis, G4double partAngle,

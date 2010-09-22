@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.hh,v 1.11 2006-06-29 18:38:01 gunter Exp $
+// $Id: G4BREPSolidSphere.hh,v 1.12 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -111,18 +111,22 @@ class G4BREPSolidSphere : public G4BREPSolid
 
   inline void SphReset() { active=1; }
 
+  G4BREPSolidSphere(const G4BREPSolidSphere& rhs);
+  G4BREPSolidSphere& operator=(const G4BREPSolidSphere& rhs);
+    // Copy constructor and assignment operator.
+
  private:
 
-  G4BREPSolidSphere(const G4BREPSolidSphere&);
-  G4BREPSolidSphere& operator=(const G4BREPSolidSphere&);
-    // Private copy constructor and assignment operator.
+  void InitializeSphere();
+
+ private:
 
   struct G4BREPSphereParams
   {
     G4Vector3D origin;
-	  G4Vector3D xhat;
-	  G4Vector3D zhat;
-	  G4double   radius;
+    G4Vector3D xhat;
+    G4Vector3D zhat;
+    G4double   radius;
   } constructorParams;
 };
 

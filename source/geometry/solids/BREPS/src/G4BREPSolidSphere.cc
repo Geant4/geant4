@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.12 2010-09-06 16:02:12 gcosmo Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.13 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -43,22 +43,14 @@ G4BREPSolidSphere::G4BREPSolidSphere(const G4String& name,
 				     const G4Vector3D& zhat,
 				     G4double radius)
   : G4BREPSolid(name)
-{
-  SurfaceVec    = new G4Surface*[1];
-  G4double ph1  = 0;
-  G4double ph2  = 2*pi;
-  G4double th1  = 0;
-  G4double th2  = pi;
-  SurfaceVec[0] = new G4SphericalSurface(origin, xhat, zhat, radius, ph1, ph2, th1, th2);
-  nb_of_surfaces = 1;
-  
+{  
   constructorParams.origin = origin;
-	constructorParams.xhat   = xhat;
-	constructorParams.zhat   = zhat;
-	constructorParams.radius = radius;
+  constructorParams.xhat   = xhat;
+  constructorParams.zhat   = zhat;
+  constructorParams.radius = radius;
   
   active=1;
-  Initialize();
+  InitializeSphere();
 }
 
 G4BREPSolidSphere::G4BREPSolidSphere( __void__& a )
@@ -68,6 +60,56 @@ G4BREPSolidSphere::G4BREPSolidSphere( __void__& a )
 
 G4BREPSolidSphere::~G4BREPSolidSphere()
 {
+}
+
+G4BREPSolidSphere::G4BREPSolidSphere(const G4BREPSolidSphere& rhs)
+  : G4BREPSolid(rhs)
+{
+  constructorParams.origin = rhs.constructorParams.origin;
+  constructorParams.xhat   = rhs.constructorParams.xhat;
+  constructorParams.zhat   = rhs.constructorParams.zhat;
+  constructorParams.radius = rhs.constructorParams.radius;
+  
+  InitializeSphere();
+}
+
+G4BREPSolidSphere&
+G4BREPSolidSphere::operator = (const G4BREPSolidSphere& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  constructorParams.origin = rhs.constructorParams.origin;
+  constructorParams.xhat   = rhs.constructorParams.xhat;
+  constructorParams.zhat   = rhs.constructorParams.zhat;
+  constructorParams.radius = rhs.constructorParams.radius;
+
+  InitializeSphere();
+
+  return *this;
+}  
+
+void G4BREPSolidSphere::InitializeSphere()
+{
+  SurfaceVec    = new G4Surface*[1];
+  G4double ph1  = 0;
+  G4double ph2  = 2*pi;
+  G4double th1  = 0;
+  G4double th2  = pi;
+  SurfaceVec[0] = new G4SphericalSurface(constructorParams.origin,
+                                         constructorParams.xhat,
+                                         constructorParams.zhat,
+                                         constructorParams.radius,
+                                         ph1, ph2, th1, th2);
+  nb_of_surfaces = 1;
+  Initialize();
 }
 
 EInside G4BREPSolidSphere::Inside(register const G4ThreeVector& Pt) const

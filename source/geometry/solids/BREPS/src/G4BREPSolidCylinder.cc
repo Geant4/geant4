@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.11 2006-06-29 18:41:18 gunter Exp $
+// $Id: G4BREPSolidCylinder.cc,v 1.12 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,51 +42,10 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
 					 const G4ThreeVector& origin,
 					 const G4ThreeVector& axis,
 					 const G4ThreeVector& direction,
-					 G4double radius,
-					 G4double length)
+					       G4double radius,
+					       G4double length)
   : G4BREPSolid(name)
 {
-  SurfaceVec = new G4Surface*[3];
-  G4CurveVector cv;
-  G4CircularCurve* tmp;
-
-
-
-  // Creation of the cylindrical surface
-  SurfaceVec[0] = new G4FCylindricalSurface(origin, axis, radius , length);
-  //SurfaceVec[0]->SetBoundaries(&cv);
-  //cv.clear();
-
-
-  // Creation of the first circular surface, which origin is origin
-  G4Point3D  ArcStart1 = G4Point3D( origin + ( radius*direction ) );
-  G4Vector3D axis1     = G4Vector3D( axis.cross( direction ) );
-
-  tmp = new G4CircularCurve;
-  tmp->Init( G4Axis2Placement3D(direction, axis1, origin), radius );
-  tmp->SetBounds(ArcStart1, ArcStart1);
-  cv.push_back(tmp);
-
-  SurfaceVec[1] = new G4FPlane(direction, axis1, origin);
-  SurfaceVec[1]->SetBoundaries(&cv);
-  cv.clear();
-  
-
-  // Creation of the second circular surface
-  G4Point3D  origin2   = G4Point3D( origin  + ( length*axis ) );  
-  G4Point3D  ArcStart2 = origin2 + G4Point3D( radius*direction );
-  G4Vector3D axis2     = axis1;
-
-  tmp = new G4CircularCurve;
-  tmp->Init( G4Axis2Placement3D(direction, axis2, origin2), radius);
-  tmp->SetBounds(ArcStart2, ArcStart2);
-  cv.push_back(tmp);
-
-  SurfaceVec[2] = new G4FPlane(direction, axis2, origin2);
-  SurfaceVec[2]->SetBoundaries(&cv);
-  cv.clear();
-
-
   nb_of_surfaces = 3;
   active=1;
   
@@ -97,7 +56,7 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
   constructorParams.length       = length;
   constructorParams.radius       = radius;
   
-  Initialize();
+  InitializeCylinder();
 }
 
 G4BREPSolidCylinder::G4BREPSolidCylinder( __void__& a )
@@ -107,6 +66,98 @@ G4BREPSolidCylinder::G4BREPSolidCylinder( __void__& a )
 
 G4BREPSolidCylinder::~G4BREPSolidCylinder()
 {
+}
+
+G4BREPSolidCylinder::G4BREPSolidCylinder(const G4BREPSolidCylinder& rhs)
+  : G4BREPSolid(rhs)
+{
+  constructorParams.origin       = rhs.constructorParams.origin;
+  constructorParams.axis         = rhs.constructorParams.axis;
+  constructorParams.direction    = rhs.constructorParams.direction;
+  constructorParams.length       = rhs.constructorParams.length;
+  constructorParams.radius       = rhs.constructorParams.radius;
+  
+  InitializeCylinder();
+}
+
+G4BREPSolidCylinder&
+G4BREPSolidCylinder::operator = (const G4BREPSolidCylinder& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  constructorParams.origin       = rhs.constructorParams.origin;
+  constructorParams.axis         = rhs.constructorParams.axis;
+  constructorParams.direction    = rhs.constructorParams.direction;
+  constructorParams.length       = rhs.constructorParams.length;
+  constructorParams.radius       = rhs.constructorParams.radius;
+  
+  InitializeCylinder();
+
+  return *this;
+}  
+
+void G4BREPSolidCylinder::InitializeCylinder()
+{
+  SurfaceVec = new G4Surface*[3];
+  G4CurveVector cv;
+  G4CircularCurve* tmp;
+
+  // Creation of the cylindrical surface
+  SurfaceVec[0] = new G4FCylindricalSurface(constructorParams.origin,
+                                            constructorParams.axis,
+                                            constructorParams.radius,
+                                            constructorParams.length);
+  //SurfaceVec[0]->SetBoundaries(&cv);
+  //cv.clear();
+
+  // Creation of the first circular surface, which origin is origin
+  G4Point3D  ArcStart1 = G4Point3D( constructorParams.origin
+                                + ( constructorParams.radius
+                                *   constructorParams.direction ) );
+  G4Vector3D axis1 = G4Vector3D( constructorParams.axis.cross( constructorParams.direction ) );
+
+  tmp = new G4CircularCurve;
+  tmp->Init( G4Axis2Placement3D(constructorParams.direction, axis1,
+                                constructorParams.origin),
+             constructorParams.radius );
+  tmp->SetBounds(ArcStart1, ArcStart1);
+  cv.push_back(tmp);
+
+  SurfaceVec[1] = new G4FPlane(constructorParams.direction, axis1,
+                               constructorParams.origin);
+  SurfaceVec[1]->SetBoundaries(&cv);
+  cv.clear();
+  
+
+  // Creation of the second circular surface
+  G4Point3D  origin2   = G4Point3D( constructorParams.origin
+                                + ( constructorParams.length
+                                *   constructorParams.axis ) );  
+  G4Point3D  ArcStart2 = origin2
+                       + G4Point3D( constructorParams.radius
+                                  * constructorParams.direction );
+  G4Vector3D axis2     = axis1;
+
+  tmp = new G4CircularCurve;
+  tmp->Init( G4Axis2Placement3D(constructorParams.direction,
+                                axis2, origin2),
+             constructorParams.radius);
+  tmp->SetBounds(ArcStart2, ArcStart2);
+  cv.push_back(tmp);
+
+  SurfaceVec[2] = new G4FPlane(constructorParams.direction, axis2, origin2);
+  SurfaceVec[2]->SetBoundaries(&cv);
+  cv.clear();
+
+  Initialize();
 }
 
 // Streams solid contents to output stream.

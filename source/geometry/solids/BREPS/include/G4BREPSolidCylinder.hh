@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.10 2006-06-29 18:37:53 gunter Exp $
+// $Id: G4BREPSolidCylinder.hh,v 1.11 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -76,11 +76,15 @@ class G4BREPSolidCylinder : public G4BREPSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
+  G4BREPSolidCylinder(const G4BREPSolidCylinder& rhs);
+  G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder& rhs);
+    // Copy constructor and assignment operator.
+
  private:
 
-    G4BREPSolidCylinder(const G4BREPSolidCylinder&);
-    G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder&);
-      // Private copy constructor and assignment operator.
+  void InitializeCylinder();
+
+ private:
 
   struct G4BREPCylinderParams
   {

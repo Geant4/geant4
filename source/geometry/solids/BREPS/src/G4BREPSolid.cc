@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.39 2010-09-06 16:02:12 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.40 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -86,20 +86,62 @@ G4BREPSolid::G4BREPSolid( __void__& a )
 
 G4BREPSolid::~G4BREPSolid()
 {
-  if(place)
-    delete place;
+  delete place;
+  delete bbox;
   
-  if(bbox)
-    delete bbox;
+  for(G4int a=0;a<nb_of_surfaces;++a)
+    { delete SurfaceVec[a]; }
   
-  for(G4int a=0;a<nb_of_surfaces;a++)
-    delete SurfaceVec[a];
-  
-  if( nb_of_surfaces > 0 && SurfaceVec != 0 )
-    delete [] SurfaceVec;
-
+  delete [] SurfaceVec;
   delete fpPolyhedron;
 }
+
+G4BREPSolid::G4BREPSolid(const G4BREPSolid& rhs)
+  : G4VSolid(rhs), Box(rhs.Box), Convex(rhs.Convex), AxisBox(rhs.AxisBox),
+    PlaneSolid(rhs.PlaneSolid), place(0), bbox(0),
+    intersectionDistance(rhs.intersectionDistance), active(rhs.active),
+    startInside(rhs.startInside), nb_of_surfaces(rhs.nb_of_surfaces),
+    intersection_point(rhs.intersection_point), SurfaceVec(0),
+    RealDist(rhs.RealDist), solidname(rhs.solidname), Id(rhs.Id),
+    fStatistics(rhs.fStatistics), fCubVolEpsilon(rhs.fCubVolEpsilon),
+    fAreaAccuracy(rhs.fAreaAccuracy), fCubicVolume(rhs.fCubicVolume),
+    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0)
+{
+  Initialize();
+}
+
+G4BREPSolid& G4BREPSolid::operator = (const G4BREPSolid& rhs) 
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VSolid::operator=(rhs);
+
+   // Copy data
+   //
+   Box= rhs.Box; Convex= rhs.Convex; AxisBox= rhs.AxisBox;
+   PlaneSolid= rhs.PlaneSolid;
+   intersectionDistance= rhs.intersectionDistance; active= rhs.active;
+   startInside= rhs.startInside; nb_of_surfaces= rhs.nb_of_surfaces;
+   intersection_point= rhs.intersection_point;
+   RealDist= rhs.RealDist; solidname= rhs.solidname; Id= rhs.Id;
+   fStatistics= rhs.fStatistics; fCubVolEpsilon= rhs.fCubVolEpsilon;
+   fAreaAccuracy= rhs.fAreaAccuracy; fCubicVolume= rhs.fCubicVolume;
+   fSurfaceArea= rhs.fSurfaceArea;
+
+   delete place; delete bbox; place= 0; bbox= 0;
+   for(G4int a=0;a<nb_of_surfaces;++a)
+     { delete SurfaceVec[a]; }
+   delete [] SurfaceVec; SurfaceVec= 0;
+   delete fpPolyhedron; fpPolyhedron= 0;
+
+   Initialize();
+
+   return *this;
+}  
 
 void G4BREPSolid::Initialize()
 {

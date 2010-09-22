@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.39 2010-07-07 14:45:31 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.40 2010-09-22 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -64,8 +64,113 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
                                          G4double  RMAX[] )
   : G4BREPSolid(name)
 {
-  G4int sections= num_z_planes-1;
+  // Save contructor parameters
+  //
+  constructorParams.start_angle    = start_angle;
+  constructorParams.opening_angle  = opening_angle;
+  constructorParams.num_z_planes   = num_z_planes;
+  constructorParams.z_start        = z_start;
+  constructorParams.z_values       = 0;
+  constructorParams.RMIN           = 0;
+  constructorParams.RMAX           = 0;
+  
+  if( num_z_planes > 0 )
+  {               
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; idx++ )
+    {
+      constructorParams.z_values[idx] = z_values[idx];
+      constructorParams.RMIN[idx]     = RMIN[idx];
+      constructorParams.RMAX[idx]     = RMAX[idx];      
+    }
+  }
+
+  active=1;
+  InitializePCone();
+}
+
+G4BREPSolidPCone::G4BREPSolidPCone( __void__& a )
+  : G4BREPSolid(a)
+{
+  constructorParams.start_angle    = 0.;
+  constructorParams.opening_angle  = 0.;
+  constructorParams.num_z_planes   = 0;
+  constructorParams.z_start        = 0.;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN = 0;
+  constructorParams.RMAX = 0;
+}
+
+G4BREPSolidPCone::~G4BREPSolidPCone()
+{
+  if( constructorParams.num_z_planes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+  }
+}
+
+G4BREPSolidPCone::G4BREPSolidPCone(const G4BREPSolidPCone& rhs)
+  : G4BREPSolid(rhs)
+{
+  constructorParams.start_angle   = rhs.constructorParams.start_angle;
+  constructorParams.opening_angle = rhs.constructorParams.opening_angle;
+  constructorParams.num_z_planes  = rhs.constructorParams.num_z_planes;
+  constructorParams.z_start       = rhs.constructorParams.z_start;
+  constructorParams.z_values      = 0;
+  constructorParams.RMIN          = 0;
+  constructorParams.RMAX          = 0;
+  
+  InitializePCone();
+}
+
+G4BREPSolidPCone&
+G4BREPSolidPCone::operator = (const G4BREPSolidPCone& rhs) 
+{
+  // Check assignment to self
+  //
+  if (this == &rhs)  { return *this; }
+
+  // Copy base class data
+  //
+  G4BREPSolid::operator=(rhs);
+
+  // Copy data
+  //
+  constructorParams.start_angle   = rhs.constructorParams.start_angle;
+  constructorParams.opening_angle = rhs.constructorParams.opening_angle;
+  constructorParams.num_z_planes  = rhs.constructorParams.num_z_planes;
+  constructorParams.z_start       = rhs.constructorParams.z_start;
+  if( constructorParams.num_z_planes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+  }
+  constructorParams.z_values      = 0;
+  constructorParams.RMIN          = 0;
+  constructorParams.RMAX          = 0;
+  
+  InitializePCone();
+
+  return *this;
+}  
+
+void G4BREPSolidPCone::InitializePCone()
+{
+  G4double  opening_angle = constructorParams.opening_angle;
+  G4int     num_z_planes  = constructorParams.num_z_planes;
+  G4double  z_start       = constructorParams.z_start;
+  G4double* z_values      = constructorParams.z_values;
+  G4double* RMIN          = constructorParams.RMIN;
+  G4double* RMAX          = constructorParams.RMAX;
+
+  G4int sections= constructorParams.num_z_planes-1;
   nb_of_surfaces = 2*sections+2;
+
   SurfaceVec = new G4Surface*[nb_of_surfaces];
   G4ThreeVector Axis(0,0,1);
   G4ThreeVector Origin(0,0,z_start);    
@@ -179,7 +284,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
              << "] & RMAX[" << a+1 << "] or RMAX[" << a
              << "] & RMIN[" << a+1 << "] "
              << "generate an invalid configuration for solid: "
-             << name.c_str() << "!" << G4endl;
+             << GetName().c_str() << "!" << G4endl;
           G4String message = os.str();
           G4Exception("G4BREPSolidPCone::G4BREPSolidPCone()",
                       "InvalidSetup", FatalException, message );
@@ -531,53 +636,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     nb_of_surfaces--;    
   }
 
-  // Save contructor parameters
-  //
-  constructorParams.start_angle    = start_angle;
-  constructorParams.opening_angle  = opening_angle;
-  constructorParams.num_z_planes   = num_z_planes;
-  constructorParams.z_start        = z_start;
-  constructorParams.z_values       = 0;
-  constructorParams.RMIN           = 0;
-  constructorParams.RMAX           = 0;
-  
-  if( num_z_planes > 0 )
-  {               
-    constructorParams.z_values       = new G4double[num_z_planes];
-    constructorParams.RMIN           = new G4double[num_z_planes];
-    constructorParams.RMAX           = new G4double[num_z_planes];
-    for( G4int idx = 0; idx < num_z_planes; idx++ )
-    {
-      constructorParams.z_values[idx] = z_values[idx];
-      constructorParams.RMIN[idx]     = RMIN[idx];
-      constructorParams.RMAX[idx]     = RMAX[idx];      
-    }
-  }
-
-  active=1;
   Initialize();
-}
-
-G4BREPSolidPCone::G4BREPSolidPCone( __void__& a )
-  : G4BREPSolid(a)
-{
-  constructorParams.start_angle    = 0.;
-  constructorParams.opening_angle  = 0.;
-  constructorParams.num_z_planes   = 0;
-  constructorParams.z_start        = 0.;
-  constructorParams.z_values = 0;
-  constructorParams.RMIN = 0;
-  constructorParams.RMAX = 0;
-}
-
-G4BREPSolidPCone::~G4BREPSolidPCone()
-{
-  if( constructorParams.num_z_planes > 0 )
-  {
-    delete [] constructorParams.z_values;
-    delete [] constructorParams.RMIN;
-    delete [] constructorParams.RMAX;
-  }
 }
 
 void G4BREPSolidPCone::Initialize()
