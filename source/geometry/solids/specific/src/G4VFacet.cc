@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFacet.cc,v 1.10 2010-09-23 10:27:25 gcosmo Exp $
+// $Id: G4VFacet.cc,v 1.11 2010-09-23 10:30:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -101,6 +101,8 @@ const G4VFacet &G4VFacet::operator=(G4VFacet &rhs)
    radius = rhs.radius; radiusSqr = rhs.radiusSqr;
    dirTolerance = rhs.dirTolerance; kCarTolerance = rhs.kCarTolerance;
    area = rhs.area;
+
+   return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
