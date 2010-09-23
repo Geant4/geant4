@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.hh,v 1.4 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.hh,v 1.5 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -38,10 +38,14 @@
 //		makeRecoilFragment() with returned non-const pointer.  Drop
 //		handling of excitons.
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
+//		Repurpose "makeRecoilFragment()" to return G4Fragment.
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
+#include "G4InuclNuclei.hh"
+#include "G4Fragment.hh"
 #include "G4LorentzVector.hh"
 #include <cmath>
 #include <vector>
@@ -49,7 +53,6 @@
 class G4CascadParticle;
 class G4CascadeCheckBalance;
 class G4InuclElementaryParticle;
-class G4InuclNuclei;
 class G4InuclParticle;
 
 
@@ -73,7 +76,13 @@ public:
   void setRecoilExcitation(G4double Eexc) { excitationEnergy = Eexc; }
 
   // Build nucleus from current parameters, if physically reasonable
-  G4InuclNuclei* makeRecoilFragment(G4int model=0);
+  G4InuclNuclei* makeRecoilNuclei(G4int model=0);
+  G4Fragment* makeRecoilFragment();	// For use with PreCompound
+
+  // Attach exciton configuration for use by "nucleus makers"
+  void addExcitonConfiguration(const G4ExitonConfiguration exciton) {
+    theExcitons = exciton;
+  }
 
   // Access nuclear configuration parameters
   G4int getRecoilA() const { return recoilA; }
@@ -104,7 +113,10 @@ private:
   G4LorentzVector recoilMomentum;
   G4double excitationEnergy;
 
-  G4InuclNuclei theRecoilFragment;	// Reusable buffer for recoil
+  G4ExitonConfiguration theExcitons;	// Used by G4InuclNuclei and G4Fragment
+
+  G4InuclNuclei theRecoilNuclei;	// Reusable buffers for recoil
+  G4Fragment theRecoilFragment;
 };
 
 #endif	/* G4CASCADE_RECOIL_MAKER_HH */

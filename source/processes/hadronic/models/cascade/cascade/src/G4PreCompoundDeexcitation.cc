@@ -22,51 +22,47 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.cc,v 1.1 2010-09-22 22:17:08 yarba Exp $
+// $Id: G4PreCompoundDeexcitation.cc,v 1.2 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
+//
+// 20100922  M. Kelsey -- Remove convertFragment() function, pass buffer
+//		instead of copying, clean up code somewhat
+
 
 #include "G4PreCompoundDeexcitation.hh"
-
-#include "G4PreCompoundModel.hh"
-
 #include "globals.hh"
-
+#include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
-#include "G4CascadeMomentum.hh"
+#include "G4InuclParticleNames.hh"
+#include "G4PreCompoundModel.hh"
+
+using namespace G4InuclParticleNames;
+
 
 // Constructor and destructor
 
 G4PreCompoundDeexcitation::G4PreCompoundDeexcitation() 
   : G4CascadeColliderBase("G4PreCompoundDeexcitation"),
-    theExcitationHandler( new G4ExcitationHandler )
-{
+    theExcitationHandler(new G4ExcitationHandler),
+    theDeExcitation(new G4PreCompoundModel(theExcitationHandler)) {}
 
-   theDeExcitation = new G4PreCompoundModel( theExcitationHandler );
-
-}
-
-G4PreCompoundDeexcitation::~G4PreCompoundDeexcitation() 
-{
-
-   delete theExcitationHandler; // we need to delete here because G4PreComp does NOT delete it
-   delete theDeExcitation;
-
+G4PreCompoundDeexcitation::~G4PreCompoundDeexcitation() {
+  // we need to delete here because G4PreComp does NOT delete it
+  delete theExcitationHandler;
+  delete theDeExcitation;
 }
 
 // Main processing
 
 void G4PreCompoundDeexcitation::collide(G4InuclParticle* /*bullet*/, 
 			  	        G4InuclParticle* target,
-				        G4CollisionOutput& globalOutput) 
-{
-
-  if (verboseLevel > 1) {
+				        G4CollisionOutput& globalOutput) {
+  if (verboseLevel)
     G4cout << " >>> G4PreCompoundDeexcitation::collide" << G4endl;
-  }
   
   // Ensure that input state is sensible
   G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(target);
@@ -75,92 +71,77 @@ void G4PreCompoundDeexcitation::collide(G4InuclParticle* /*bullet*/,
 	   << G4endl;
     return;
   }
-  
-  std::vector<G4InuclElementaryParticle> particles;
-  
-  if ( ntarget->getExitationEnergy() > 0. && ntarget->getA() > 1.5 )
-  {
-      getDeExcitedFragments( ntarget, particles );  
+
+  // NOTE:  Should not get this case, as G4IntraNucleiCascade should catch it
+  if (ntarget->getA() == 1) {		// Just a nucleon; move to output list
+    G4int type = (ntarget->getZ() == 0) ? neutron : proton;
+    G4InuclElementaryParticle ptarget(target->getMomentum(), type, 9);
+
+    globalOutput.addOutgoingParticle(ptarget);
+    return;
   }
-  else
-  {
-     convertFragment( ntarget, particles );
-  }
-   
-  globalOutput.addOutgoingParticles(particles);		// Evaporated particles and nucleus
-  
-  return;
-  
-}
-  
-void G4PreCompoundDeexcitation::convertFragment( G4InuclNuclei* rfrag, 
-                                                 std::vector<G4InuclElementaryParticle> particles )
-{
 
-   G4ParticleTable* theTableOfParticles = G4ParticleTable::GetParticleTable();
+  getDeExcitedFragments(ntarget);
+  validateOutput(0, target, output);	// Check conservation from PreCompound
 
-   const G4CascadeMomentum& mom = rfrag->getMomentum();
-   G4int A = G4int(rfrag->getA());
-   G4int Z = G4int(rfrag->getZ());
-   G4double eKin = rfrag->getKineticEnergy() * GeV;
-   G4ParticleDefinition * aIonDef = theTableOfParticles->FindIon(Z, A, 0, Z);
-   G4ThreeVector aMom(mom[1], mom[2], mom[3]);
-   aMom = aMom.unit();
-   G4DynamicParticle aFragment( aIonDef, aMom, eKin );
-   particles.push_back( G4InuclElementaryParticle(aFragment) );
-
-   return;
-   
+  globalOutput.add(output);		// Add evaporates and fragments
 }
 
-void G4PreCompoundDeexcitation::getDeExcitedFragments( G4InuclNuclei* rfrag, 
-                                                       std::vector<G4InuclElementaryParticle> particles )
-{
+  
+void G4PreCompoundDeexcitation::getDeExcitedFragments(G4InuclNuclei* rfrag) {
+  if (verboseLevel > 1) {
+    G4cout << " getDeExcitedFragments " << G4endl;
+    rfrag->printParticle();
+  }
 
-  const G4CascadeMomentum& mom = rfrag->getMomentum();
+  G4LorentzVector mom = rfrag->getMomentum()*GeV;
   G4int A = G4int(rfrag->getA());
   G4int Z = G4int(rfrag->getZ());
-  G4LorentzVector aMomentum = G4LorentzVector(mom[1]*GeV,mom[2]*GeV,
-					      mom[3]*GeV,mom[0]*GeV);
   G4ExitonConfiguration exiton = rfrag->getExitonConfiguration();
     
-  G4Fragment frag(A,Z,aMomentum);
-  frag.SetParticleDefinition( (rfrag->getDynamicParticle()).GetDefinition() );
+  G4Fragment frag(A,Z,mom);
+  frag.SetParticleDefinition(rfrag->getDefinition());
   
   // this is a dummy method, the exec complains about it at run time
   //
-  // frag.SetExcitationEnergy((rfrag->getExitationEnergy())*MeV);
-  
-  
+  // frag.SetExcitationEnergy(rfrag->getExitationEnergy());
+
+  // FIXME:  Why does G4ExitonConfiguration use doubles?!?
   frag.SetNumberOfHoles((G4int)(exiton.protonHoles+exiton.neutronHoles));
   frag.SetNumberOfParticles((G4int)(exiton.protonQuasiParticles+exiton.protonQuasiParticles));
   frag.SetNumberOfCharged((G4int)(exiton.protonQuasiParticles));
 
   G4ReactionProductVector* precompoundProducts = 0;
-  
-  if (  ( explosion(rfrag) || Z==0 ) && theExcitationHandler ) // in principle, the explosion(...) stuff should also 
-                                                     // handle properly the case of Z=0 (neutron blob)
-  {
-     precompoundProducts=theExcitationHandler->BreakItUp(frag);
-  }
-  else
-  {
-     precompoundProducts = theDeExcitation->DeExcite(frag);
+
+  // FIXME: in principle, the explosion(...) stuff should also 
+  //        handle properly the case of Z=0 (neutron blob) 
+  if ( (explosion(rfrag) || Z==0) && theExcitationHandler) {
+    precompoundProducts = theExcitationHandler->BreakItUp(frag);
+  } else {
+    precompoundProducts = theDeExcitation->DeExcite(frag);
   }
 
-  //  G4LorentzVector pSumPreco(0), pPreco(0);
-  if ( precompoundProducts )  {
-    std::vector<G4ReactionProduct *>::iterator j;
+  // Transfer output of de-excitation back into Bertini objects
+  output.reset();
+  if (precompoundProducts) {
+    G4ReactionProductVector::iterator j;
     for(j=precompoundProducts->begin(); j!=precompoundProducts->end(); ++j) {
-      G4DynamicParticle aFragment((*j)->GetDefinition(), 
-				  (*j)->GetMomentum(), 
-				  (*j)->GetKineticEnergy());
+      G4ParticleDefinition* pd = (*j)->GetDefinition();
 
-      particles.push_back( G4InuclElementaryParticle(aFragment) );
+      // FIXME:  This is expensive and unnecessary copying!
+      G4DynamicParticle aFragment(pd, (*j)->GetMomentum());
+
+      // Nucleons and nuclei are jumbled together in the list
+      if (G4InuclElementaryParticle::type(pd)) {
+	output.addOutgoingParticle(G4InuclElementaryParticle(aFragment, 9));
+      } else {
+	output.addTargetFragment(G4InuclNuclei(aFragment, 9));
+      }
     }
+
     precompoundProducts->clear();
     delete precompoundProducts;
   }
 
-   return;
+  return;
 }

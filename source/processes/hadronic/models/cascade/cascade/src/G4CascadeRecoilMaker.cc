@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.cc,v 1.3 2010-09-10 20:43:50 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.cc,v 1.4 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -34,12 +34,15 @@
 // 20100910  M. Kelsey -- Drop getRecoilFragment() in favor of user calling
 //		makeRecoilFragment() with returned non-const pointer.  Drop
 //		handling of excitons.
+// 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
+//		Repurpose "makeRecoilFragment()" to return G4Fragment.
 
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
 #include "G4CascadParticle.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
+#include "G4Fragment.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -106,6 +109,8 @@ void G4CascadeRecoilMaker::fillRecoil() {
   recoilA = -(balance->deltaB());		// Baryon "non-conservation"
   recoilMomentum = -(balance->deltaLV());
 
+  theExcitons.clear();		// Discard previous exciton configuraiton
+
   // Nuclear excitation energy -- Bertini uses MeV for this
   if (!goodFragment()) excitationEnergy = 0.;
   else excitationEnergy =
@@ -127,19 +132,48 @@ void G4CascadeRecoilMaker::fillRecoil() {
 
 // Construct physical nucleus from recoil parameters, if reasonable
 
-G4InuclNuclei* G4CascadeRecoilMaker::makeRecoilFragment(G4int model) {
-  if (goodRecoil()) {
-    theRecoilFragment.fill(recoilMomentum, recoilA, recoilZ,
-			   excitationEnergy, model);
-    return &theRecoilFragment;
+G4InuclNuclei* G4CascadeRecoilMaker::makeRecoilNuclei(G4int model) {
+  if (!goodRecoil()) {
+    if (verboseLevel > 2 && !wholeEvent())
+      G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
+
+    return 0;		// Null pointer means no fragment
   }
 
-  if (verboseLevel > 2 && !wholeEvent())
-    G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
+  theRecoilNuclei.fill(recoilMomentum, recoilA, recoilZ,
+		       excitationEnergy, model);
+  theRecoilNuclei.setExitonConfiguration(theExcitons);
 
-  return 0;		// Null pointer means no fragment
+  return &theRecoilNuclei;
 }
 
+
+// Construct pre-compound nuclear fragment from recoil parameters
+
+G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
+  if (!goodRecoil()) {
+    if (verboseLevel > 2 && !wholeEvent())
+      G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
+
+    return 0;		// Null pointer means no fragment
+  }
+
+  theRecoilFragment.SetZandA_asInt(recoilZ, recoilA);	// Note convention!
+  theRecoilFragment.SetMomentum(recoilMomentum);
+
+  theRecoilFragment.SetExcitationEnergy(excitationEnergy);
+
+  // Note:  exciton configuration has to be set piece by piece
+  theRecoilFragment.SetNumberOfHoles(theExcitons.protonHoles
+				     + theExcitons.neutronHoles);
+
+  theRecoilFragment.SetNumberOfParticles(theExcitons.protonQuasiParticles 
+			       + theExcitons.neutronQuasiParticles);
+
+  theRecoilFragment.SetNumberOfCharged(theExcitons.protonQuasiParticles);
+
+  return &theRecoilFragment;
+}
 
 // Data quality checks
 

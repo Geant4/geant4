@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.46 2010-09-15 20:16:16 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.47 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -48,9 +48,12 @@
 //		external compile dependences).
 // 20100915  M. Kelsey -- Move post-cascade colliders to G4CascadeDeexcitation,
 //		simplify operational code somewhat
+// 20100922  M. Kelsey -- Add functions to select de-excitation method;
+//		default is G4CascadeDeexcitation (i.e., built-in modules)
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeDeexcitation.hh"
+#include "G4PreCompoundDeexcitation.hh"
 #include "G4CollisionOutput.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4IntraNucleiCascader.hh"
@@ -71,6 +74,21 @@ G4InuclCollider::~G4InuclCollider() {
   delete theDeexcitation;
 }
 
+
+// Select post-cascade processing (default will be CascadeDeexcitation)
+
+void G4InuclCollider::useCascadeDeexcitation() {
+  delete theDeexcitation;
+  theDeexcitation = new G4CascadeDeexcitation;
+}
+
+void G4InuclCollider::usePreCompoundModel() {
+  delete theDeexcitation;
+  theDeexcitation = new G4PreCompoundDeexcitation;
+}
+
+
+// Main action
 
 void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 			      G4CollisionOutput& globalOutput) {

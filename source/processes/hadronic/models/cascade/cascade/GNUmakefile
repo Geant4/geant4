@@ -1,8 +1,10 @@
-# $Id: GNUmakefile,v 1.14 2010-09-22 22:14:45 yarba Exp $
+# $Id: GNUmakefile,v 1.15 2010-09-23 05:02:14 mkelsey Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 #
 # Map user environment/GMake variables onto preprocessor debugging flags
+#
+# 20100922 J. Yarba -- Add include directories for pre-compound model
 # -----------------------------------------------------------
 
 name := G4hadronic_bert_cascade
@@ -17,6 +19,10 @@ endif
 
 ifdef G4CASCADE_DEBUG_INTERFACE
   CPPFLAGS += -DG4CASCADE_DEBUG_INTERFACE=1
+endif
+
+ifdef G4CASCADE_DEBUG_SAMPLER
+  CPPFLAGS += -DG4CASCADE_DEBUG_SAMPLER=1
 endif
 
 ifdef G4CASCADE_DEBUG_SORT

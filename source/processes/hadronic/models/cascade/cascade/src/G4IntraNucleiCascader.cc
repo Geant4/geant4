@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.64 2010-09-16 17:06:23 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.65 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -73,6 +73,7 @@
 // 20100915  M. Kelsey -- Define functions to deal with trapped particles,
 //		move the exciton container to a data member
 // 20100916  M. Kelsey -- Put decay photons directly onto output list
+// 20100921  M. Kelsey -- Migrate to RecoilMaker::makeRecoilNuclei().
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -391,13 +392,13 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	continue;
       }
 
-      G4InuclNuclei* outgoing_nuclei = theRecoilMaker->makeRecoilFragment(4);
+      theRecoilMaker->addExcitonConfiguration(theExitonConfiguration);
+
+      G4InuclNuclei* outgoing_nuclei = theRecoilMaker->makeRecoilNuclei(4);
       if (!outgoing_nuclei) {
 	G4cerr << "Got null pointer for recoil nucleus!" << G4endl;
 	continue;
       }
-
-      outgoing_nuclei->setExitonConfiguration(theExitonConfiguration);
 
       if (verboseLevel > 2)
 	G4cout << " adding recoil nucleus/fragment to output list" << G4endl;

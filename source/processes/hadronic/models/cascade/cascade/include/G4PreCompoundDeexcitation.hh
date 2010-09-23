@@ -24,19 +24,26 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.hh,v 1.1 2010-09-22 22:17:08 yarba Exp $
+// $Id: G4PreCompoundDeexcitation.hh,v 1.2 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
+//
+// 20100922  M. Kelsey -- Remove convertFragment() function, pass buffer
+//		instead of copying
 
 #include "G4CascadeColliderBase.hh"
 #include "globals.hh"
 #include "G4CollisionOutput.hh"
+#include <vector>
 
-// class G4InuclParticle;
+class G4InuclElementaryParticle;
+class G4InuclParticle;
+class G4InuclNuclei;
 class G4ExcitationHandler;
 class G4VPreCompoundModel;
+
 
 class G4PreCompoundDeexcitation : public G4CascadeColliderBase {
 
@@ -50,17 +57,14 @@ public:
                G4InuclParticle* target,
 	       G4CollisionOutput& globalOutput);
 
-
 private:
+  void getDeExcitedFragments(G4InuclNuclei* rfrag);
 
-   void convertFragment( G4InuclNuclei* rfrag, std::vector<G4InuclElementaryParticle> particles );
-   void getDeExcitedFragments( G4InuclNuclei* rfrag, std::vector<G4InuclElementaryParticle> particles );
-
-   // data members
-   //
-   G4ExcitationHandler* theExcitationHandler;
-   G4VPreCompoundModel* theDeExcitation;
-
+  // data members
+  //
+  G4ExcitationHandler* theExcitationHandler;
+  G4VPreCompoundModel* theDeExcitation;
+  
   G4CollisionOutput output;	// Local buffer for de-excitation stages
 };
 

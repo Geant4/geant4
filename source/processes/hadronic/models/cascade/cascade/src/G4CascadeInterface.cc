@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.100 2010-09-19 22:44:49 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.101 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -57,6 +57,7 @@
 //		into numerous functions; make data-member colliders pointers;
 //		provide support for projectile nucleus
 // 20100919  M. Kelsey -- Fix incorrect logic in retryInelasticNucleus()
+// 20100922  M. Kelsey -- Add functions to select de-excitation method
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -127,6 +128,17 @@ void G4CascadeInterface::initializeElasticCuts() {
   cutElastic[xiMinus]     = 1.0;
 }
 
+
+// Select post-cascade processing (default will be CascadeDeexcitation)
+// NOTE:  Currently just calls through to Collider, in future will do something
+
+void G4CascadeInterface::useCascadeDeexcitation() {
+  collider->useCascadeDeexcitation();
+}
+
+void G4CascadeInterface::usePreCompoundModel() {
+  collider->usePreCompoundModel();
+}
 
 // Main Actions
 

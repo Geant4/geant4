@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.hh,v 1.18 2010-09-15 20:16:16 mkelsey Exp $
+// $Id: G4InuclCollider.hh,v 1.19 2010-09-23 05:02:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -33,6 +33,8 @@
 // 20100720  M. Kelsey -- Make all the collders pointer members (to reducde
 //		external compile dependences).
 // 20100915  M. Kelsey -- Move de-excitation colliders to G4CascadeDeexcitation
+// 20100922  M. Kelsey -- Add functions to select de-excitation method, change
+//		"theDeexcitation" to be a base-class pointer for switching
 
 #ifndef G4INUCL_COLLIDER_HH
 #define G4INUCL_COLLIDER_HH
@@ -41,7 +43,6 @@
 #include "G4CollisionOutput.hh"
 
 class G4InuclParticle;
-class G4CascadeDeexcitation;
 class G4ElementaryParticleCollider;
 class G4IntraNucleiCascader;
 
@@ -54,10 +55,15 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& globalOutput);
 
+  // Select betweeen different post-cascade de-excitation models
+  void useCascadeDeexcitation();
+  void usePreCompoundModel();
+
 private: 
   G4ElementaryParticleCollider* theElementaryParticleCollider;
   G4IntraNucleiCascader* theIntraNucleiCascader;
-  G4CascadeDeexcitation* theDeexcitation;
+
+  G4CascadeColliderBase* theDeexcitation;	// User switchable!
 
   G4CollisionOutput output;		// Secondaries from main cascade
   G4CollisionOutput DEXoutput;		// Secondaries from de-excitation
