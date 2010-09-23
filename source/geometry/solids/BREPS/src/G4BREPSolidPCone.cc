@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.40 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.41 2010-09-23 09:12:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -79,7 +79,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     constructorParams.z_values       = new G4double[num_z_planes];
     constructorParams.RMIN           = new G4double[num_z_planes];
     constructorParams.RMAX           = new G4double[num_z_planes];
-    for( G4int idx = 0; idx < num_z_planes; idx++ )
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
     {
       constructorParams.z_values[idx] = z_values[idx];
       constructorParams.RMIN[idx]     = RMIN[idx];
@@ -120,9 +120,19 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4BREPSolidPCone& rhs)
   constructorParams.opening_angle = rhs.constructorParams.opening_angle;
   constructorParams.num_z_planes  = rhs.constructorParams.num_z_planes;
   constructorParams.z_start       = rhs.constructorParams.z_start;
-  constructorParams.z_values      = 0;
-  constructorParams.RMIN          = 0;
-  constructorParams.RMAX          = 0;
+  G4int nplanes = constructorParams.num_z_planes;
+  if( nplanes > 0 )
+  {
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for( G4int idx = 0; idx < nplanes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
+  }
   
   InitializePCone();
 }
@@ -144,15 +154,22 @@ G4BREPSolidPCone::operator = (const G4BREPSolidPCone& rhs)
   constructorParams.opening_angle = rhs.constructorParams.opening_angle;
   constructorParams.num_z_planes  = rhs.constructorParams.num_z_planes;
   constructorParams.z_start       = rhs.constructorParams.z_start;
-  if( constructorParams.num_z_planes > 0 )
+  G4int nplanes = constructorParams.num_z_planes;
+  if( nplanes > 0 )
   {
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
     delete [] constructorParams.RMAX;
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for( G4int idx = 0; idx < nplanes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
   }
-  constructorParams.z_values      = 0;
-  constructorParams.RMIN          = 0;
-  constructorParams.RMAX          = 0;
   
   InitializePCone();
 

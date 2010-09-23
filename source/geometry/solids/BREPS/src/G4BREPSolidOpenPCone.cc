@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.12 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.13 2010-09-23 09:12:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -62,11 +62,20 @@ G4BREPSolidOpenPCone ( const G4String& name,
   constructorParams.opening_angle = oangle;
   constructorParams.num_z_planes = nplanes;
   constructorParams.z_start = zstart;
-  for ( G4int i = 0; i < nplanes; ++i )
-  { 
-    constructorParams.z_values[i] = zvalues[i];
-    constructorParams.RMIN[i] = radmin[i];
-    constructorParams.RMAX[i] = radmax[i];
+  constructorParams.z_values = 0;
+  constructorParams.RMIN     = 0;
+  constructorParams.RMAX     = 0;
+  if ( nplanes>0 )
+  {
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for ( G4int i = 0; i < nplanes; ++i )
+    { 
+      constructorParams.z_values[i] = zvalues[i];
+      constructorParams.RMIN[i] = radmin[i];
+      constructorParams.RMAX[i] = radmax[i];
+    }
   }
 
   // compute max radius
@@ -77,10 +86,23 @@ G4BREPSolidOpenPCone ( const G4String& name,
 G4BREPSolidOpenPCone::G4BREPSolidOpenPCone( __void__& a )
   : G4IntersectionSolid(a)
 {
+  constructorParams.start_angle    = 0.;
+  constructorParams.opening_angle  = 0.;
+  constructorParams.num_z_planes   = 0;
+  constructorParams.z_start        = 0.;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN = 0;
+  constructorParams.RMAX = 0;
 }
 
 G4BREPSolidOpenPCone::~G4BREPSolidOpenPCone()
 {
+  if( constructorParams.num_z_planes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+  }
 }
 
 G4BREPSolidOpenPCone::G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone& rhs)
@@ -102,11 +124,18 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone& rhs)
   constructorParams.opening_angle = rhs.constructorParams.opening_angle;
   constructorParams.num_z_planes = rhs.constructorParams.num_z_planes;
   constructorParams.z_start = rhs.constructorParams.z_start;
-  for ( G4int i = 0; i < constructorParams.num_z_planes; ++i )
-  { 
-    constructorParams.z_values[i] = rhs.constructorParams.z_values[i];
-    constructorParams.RMIN[i] = rhs.constructorParams.RMIN[i];
-    constructorParams.RMAX[i] = rhs.constructorParams.RMAX[i];
+  G4int nplanes = constructorParams.num_z_planes;
+  if( nplanes > 0 )
+  {
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for ( G4int i = 0; i < nplanes; ++i )
+    { 
+      constructorParams.z_values[i] = rhs.constructorParams.z_values[i];
+      constructorParams.RMIN[i] = rhs.constructorParams.RMIN[i];
+      constructorParams.RMAX[i] = rhs.constructorParams.RMAX[i];
+    }
   }
   InitializeOPCone();
 }
@@ -129,11 +158,21 @@ G4BREPSolidOpenPCone::operator = (const G4BREPSolidOpenPCone& rhs)
   constructorParams.opening_angle = rhs.constructorParams.opening_angle;
   constructorParams.num_z_planes = rhs.constructorParams.num_z_planes;
   constructorParams.z_start = rhs.constructorParams.z_start;
-  for ( G4int i = 0; i < constructorParams.num_z_planes; ++i )
-  { 
-    constructorParams.z_values[i] = rhs.constructorParams.z_values[i];
-    constructorParams.RMIN[i] = rhs.constructorParams.RMIN[i];
-    constructorParams.RMAX[i] = rhs.constructorParams.RMAX[i];
+  G4int nplanes = constructorParams.num_z_planes;
+  if( nplanes > 0 )
+  {
+    delete [] constructorParams.z_values;
+    delete [] constructorParams.RMIN;
+    delete [] constructorParams.RMAX;
+    constructorParams.z_values = new G4double[nplanes];
+    constructorParams.RMIN     = new G4double[nplanes];
+    constructorParams.RMAX     = new G4double[nplanes];
+    for( G4int idx = 0; idx < nplanes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
   }
   InitializeOPCone();
 
