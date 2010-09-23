@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.13 2010-09-23 09:12:06 gcosmo Exp $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.14 2010-09-23 09:23:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -124,6 +124,9 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone(const G4BREPSolidOpenPCone& rhs)
   constructorParams.opening_angle = rhs.constructorParams.opening_angle;
   constructorParams.num_z_planes = rhs.constructorParams.num_z_planes;
   constructorParams.z_start = rhs.constructorParams.z_start;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN     = 0;
+  constructorParams.RMAX     = 0;
   G4int nplanes = constructorParams.num_z_planes;
   if( nplanes > 0 )
   {

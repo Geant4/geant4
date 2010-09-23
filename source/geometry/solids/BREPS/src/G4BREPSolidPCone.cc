@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.41 2010-09-23 09:12:06 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.42 2010-09-23 09:23:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -120,6 +120,9 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4BREPSolidPCone& rhs)
   constructorParams.opening_angle = rhs.constructorParams.opening_angle;
   constructorParams.num_z_planes  = rhs.constructorParams.num_z_planes;
   constructorParams.z_start       = rhs.constructorParams.z_start;
+  constructorParams.z_values = 0;
+  constructorParams.RMIN     = 0;
+  constructorParams.RMAX     = 0;
   G4int nplanes = constructorParams.num_z_planes;
   if( nplanes > 0 )
   {

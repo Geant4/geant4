@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.37 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.38 2010-09-23 09:23:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -99,7 +99,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     constructorParams.z_values       = new G4double[num_z_planes];
     constructorParams.RMIN           = new G4double[num_z_planes];
     constructorParams.RMAX           = new G4double[num_z_planes];
-    for( G4int idx = 0; idx < num_z_planes; idx++ )
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
     {
       constructorParams.z_values[idx] = z_values[idx];
       constructorParams.RMIN[idx]     = RMIN[idx];
@@ -163,7 +163,20 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4BREPSolidPolyhedra& rhs)
   constructorParams.z_values       = 0;
   constructorParams.RMIN           = 0;
   constructorParams.RMAX           = 0;
-  
+  G4int num_z_planes = constructorParams.num_z_planes;
+  if( num_z_planes > 0 )
+  {               
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
+  }
+
   InitializePolyhedra();
 }
 
@@ -185,15 +198,22 @@ G4BREPSolidPolyhedra::operator = (const G4BREPSolidPolyhedra& rhs)
   constructorParams.sides          = rhs.constructorParams.sides;
   constructorParams.num_z_planes   = rhs.constructorParams.num_z_planes;
   constructorParams.z_start        = rhs.constructorParams.z_start;
-  if( constructorParams.num_z_planes > 0 )
-  {
+  G4int num_z_planes = constructorParams.num_z_planes;
+  if( num_z_planes > 0 )
+  {               
     delete [] constructorParams.z_values;
     delete [] constructorParams.RMIN;
     delete [] constructorParams.RMAX;
-  }  
-  constructorParams.z_values       = 0;
-  constructorParams.RMIN           = 0;
-  constructorParams.RMAX           = 0;
+    constructorParams.z_values       = new G4double[num_z_planes];
+    constructorParams.RMIN           = new G4double[num_z_planes];
+    constructorParams.RMAX           = new G4double[num_z_planes];
+    for( G4int idx = 0; idx < num_z_planes; ++idx )
+    {
+      constructorParams.z_values[idx] = rhs.constructorParams.z_values[idx];
+      constructorParams.RMIN[idx]     = rhs.constructorParams.RMIN[idx];
+      constructorParams.RMAX[idx]     = rhs.constructorParams.RMAX[idx];      
+    }
+  }
   
   InitializePolyhedra();
 
