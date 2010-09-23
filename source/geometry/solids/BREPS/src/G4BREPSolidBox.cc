@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.12 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidBox.cc,v 1.13 2010-09-23 08:01:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -60,6 +60,8 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
   constructorParams[5] = Pt6;
   constructorParams[6] = Pt7;
   constructorParams[7] = Pt8;  
+
+  InitializeBox();
 }
 
 G4BREPSolidBox::G4BREPSolidBox( __void__& a )
