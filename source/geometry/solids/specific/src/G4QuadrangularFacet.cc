@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrangularFacet.cc,v 1.8 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4QuadrangularFacet.cc,v 1.9 2010-09-23 10:27:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -142,6 +142,36 @@ G4QuadrangularFacet::~G4QuadrangularFacet ()
   P.clear();
   E.clear();
   I.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4QuadrangularFacet::G4QuadrangularFacet (const G4QuadrangularFacet &rhs)
+  : G4VFacet(rhs)
+{
+  facet1 = new G4TriangularFacet(*(rhs.facet1));
+  facet2 = new G4TriangularFacet(*(rhs.facet2));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+const G4QuadrangularFacet &
+G4QuadrangularFacet::operator=(G4QuadrangularFacet &rhs)
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VFacet::operator=(rhs);
+
+   // Copy data
+   //
+   delete facet1; facet1 = new G4TriangularFacet(*(rhs.facet1));
+   delete facet2; facet2 = new G4TriangularFacet(*(rhs.facet2));
+
+   return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

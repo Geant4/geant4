@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TriangularFacet.cc,v 1.15 2010-07-12 15:33:49 gcosmo Exp $
+// $Id: G4TriangularFacet.cc,v 1.16 2010-09-23 10:27:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -161,6 +161,40 @@ G4TriangularFacet::~G4TriangularFacet ()
   P.clear();
   E.clear();
   I.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copy constructor
+//
+G4TriangularFacet::G4TriangularFacet (const G4TriangularFacet &rhs)
+  : G4VFacet(rhs), a(rhs.a), b(rhs.b), c(rhs.c), det(rhs.det),
+    sMin(rhs.sMin), sMax(rhs.sMax), tMin(rhs.tMin), sqrDist(rhs.sqrDist)
+{
+  tGeomAlg = G4TessellatedGeometryAlgorithms::GetInstance();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Assignment operator
+//
+const G4TriangularFacet &G4TriangularFacet::operator=(G4TriangularFacet &rhs)
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy base class data
+   //
+   G4VFacet::operator=(rhs);
+
+   // Copy data
+   //
+   a = rhs.a; b = rhs.b; c = rhs.c; det = rhs.det;
+   sMin = rhs.sMin; sMax = rhs.sMax; tMin = rhs.tMin; sqrDist = rhs.sqrDist;
+   tGeomAlg = G4TessellatedGeometryAlgorithms::GetInstance();
+
+   return *this;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

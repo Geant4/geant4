@@ -25,7 +25,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFacet.cc,v 1.9 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4VFacet.cc,v 1.10 2010-09-23 10:27:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -71,6 +71,36 @@ G4VFacet::~G4VFacet ()
 {
   P.clear();
   E.clear();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+G4VFacet::G4VFacet (const G4VFacet &rhs)
+  : geometryType(rhs.geometryType), isDefined(rhs.isDefined),
+    nVertices(rhs.nVertices), P0(rhs.P0), P(rhs.P), E(rhs.E), I(rhs.I),
+    surfaceNormal(rhs.surfaceNormal), circumcentre(rhs.circumcentre),
+    radius(rhs.radius), radiusSqr(rhs.radiusSqr),
+    dirTolerance(rhs.dirTolerance), kCarTolerance(rhs.kCarTolerance),
+    area(rhs.area)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+const G4VFacet &G4VFacet::operator=(G4VFacet &rhs)
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy data
+   //
+   geometryType = rhs.geometryType; isDefined = rhs.isDefined;
+   nVertices = rhs.nVertices; P0 = rhs.P0; P = rhs.P; E = rhs.E; I = rhs.I;
+   surfaceNormal = rhs.surfaceNormal; circumcentre = rhs.circumcentre;
+   radius = rhs.radius; radiusSqr = rhs.radiusSqr;
+   dirTolerance = rhs.dirTolerance; kCarTolerance = rhs.kCarTolerance;
+   area = rhs.area;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
