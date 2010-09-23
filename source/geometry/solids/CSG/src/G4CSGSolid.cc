@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.14 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4CSGSolid.cc,v 1.15 2010-09-23 09:33:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4CSGSolid::~G4CSGSolid()
 
 G4CSGSolid::G4CSGSolid(const G4CSGSolid& rhs)
   : G4VSolid(rhs), fCubicVolume(rhs.fCubicVolume),
-    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(rhs.fpPolyhedron)
+    fSurfaceArea(rhs.fSurfaceArea), fpPolyhedron(0)
 {
 }
 
@@ -92,7 +92,7 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    //
    fCubicVolume = rhs.fCubicVolume;
    fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = rhs.fpPolyhedron;
+   fpPolyhedron = 0;
 
    return *this;
 }  
