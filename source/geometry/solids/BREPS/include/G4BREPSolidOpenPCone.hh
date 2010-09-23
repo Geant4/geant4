@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.hh,v 1.10 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidOpenPCone.hh,v 1.11 2010-09-23 08:01:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -92,7 +92,7 @@ class G4BREPSolidOpenPCone : public G4IntersectionSolid
 
  private:
 
-  struct G4BREPCylinderParams
+  struct G4BREPOpenPConeParams
   {
     G4double start_angle, opening_angle;
     G4int num_z_planes;       // sections
