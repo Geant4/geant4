@@ -14,11 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-23 SEptember 2010 Vladimir Ivanchenko (hadr-cross-V09-03-09)
-- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS - use std 
-                            vectors instead of C arrays; use 
-                            G4HadronNucleonXsc class for cross sections 
-                            off Hydrogen
+23 September 2010 Vladimir Ivanchenko (hadr-cross-V09-03-09)
+- G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS cleanup:
+                    use std vectors instead of C arrays;
+                    use G4HadronNucleonXsc class and PDG parameterisation
+                    for high energy cross sections off Hydrogen;
+                    removed Get/Set methods for verboseLevel
 
 30 July 2010 Vladimir Ivanchenko (hadr-cross-V09-03-08)
 - G4IonProtonCrossSection - move virtual methods to source,

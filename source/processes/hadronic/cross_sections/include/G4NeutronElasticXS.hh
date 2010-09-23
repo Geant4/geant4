@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh,v 1.4 2010-09-23 16:13:17 vnivanch Exp $
+// $Id: G4NeutronElasticXS.hh,v 1.5 2010-09-23 17:12:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,11 @@
 // Modifications:
 //
  
+// Class Description:
+// This is a base class for neutron elastic hadronic cross section based on
+// data files from G4NEUTRONXSDATA data set 
+// Class Description - End
+
 #ifndef G4NeutronElasticXS_h
 #define G4NeutronElasticXS_h 1
 
@@ -60,7 +65,6 @@ public: // With Description
 
   virtual ~G4NeutronElasticXS();
 
-  // The following methods need to be implemented for each new data set.
   virtual
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
@@ -79,18 +83,7 @@ public: // With Description
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&);
 
-public: // Without Description
-
-  inline void SetVerboseLevel(G4int value)
-  {
-    verboseLevel = value;
-  }
-  inline G4int GetVerboseLevel()
-  {
-    return verboseLevel;
-  }
-
-private: // Without Description
+private: 
 
   void Initialise(G4int Z, G4DynamicParticle* dp = 0, const char* = 0);
 
