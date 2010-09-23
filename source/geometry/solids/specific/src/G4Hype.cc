@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.29 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.30 2010-09-23 10:27:38 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -160,7 +160,7 @@ G4Hype::G4Hype(const G4Hype& rhs)
     endInnerRadius2(rhs.endInnerRadius2), endOuterRadius2(rhs.endOuterRadius2),
     endInnerRadius(rhs.endInnerRadius), endOuterRadius(rhs.endOuterRadius),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(rhs.fpPolyhedron)
+    fpPolyhedron(0)
 {
 }
 
@@ -189,7 +189,7 @@ G4Hype& G4Hype::operator = (const G4Hype& rhs)
    endInnerRadius2 = rhs.endInnerRadius2; endOuterRadius2 = rhs.endOuterRadius2;
    endInnerRadius = rhs.endInnerRadius; endOuterRadius = rhs.endOuterRadius;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = rhs.fpPolyhedron; 
+   fpPolyhedron = 0; 
 
    return *this;
 }

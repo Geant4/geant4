@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.14 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.15 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -57,7 +57,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.14 2010-09-20 15:03:02 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.15 2010-09-23 10:27:38 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -214,7 +214,7 @@ G4Tet::~G4Tet()
 G4Tet::G4Tet(const G4Tet& rhs)
   : G4VSolid(rhs),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(rhs.fpPolyhedron), fAnchor(rhs.fAnchor),
+    fpPolyhedron(0), fAnchor(rhs.fAnchor),
     fP2(rhs.fP2), fP3(rhs.fP3), fP4(rhs.fP4), fMiddle(rhs.fMiddle),
     fNormal123(rhs.fNormal123), fNormal142(rhs.fNormal142),
     fNormal134(rhs.fNormal134), fNormal234(rhs.fNormal234),
@@ -245,7 +245,7 @@ G4Tet& G4Tet::operator = (const G4Tet& rhs)
    // Copy data
    //
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = rhs.fpPolyhedron; fAnchor = rhs.fAnchor;
+   fpPolyhedron = 0; fAnchor = rhs.fAnchor;
    fP2 = rhs.fP2; fP3 = rhs.fP3; fP4 = rhs.fP4; fMiddle = rhs.fMiddle;
    fNormal123 = rhs.fNormal123; fNormal142 = rhs.fNormal142;
    fNormal134 = rhs.fNormal134; fNormal234 = rhs.fNormal234;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.15 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.16 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,7 +149,7 @@ G4GenericTrap::~G4GenericTrap()
 
 G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
   : G4VSolid(rhs),
-    fpPolyhedron(rhs.fpPolyhedron), fDz(rhs.fDz), fVertices(rhs.fVertices),
+    fpPolyhedron(0), fDz(rhs.fDz), fVertices(rhs.fVertices),
     fIsTwisted(rhs.fIsTwisted), fTessellatedSolid(0),
     fMinBBoxVector(rhs.fMinBBoxVector), fMaxBBoxVector(rhs.fMaxBBoxVector),
     fVisSubdivisions(rhs.fVisSubdivisions),
@@ -176,7 +176,7 @@ G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs)
 
    // Copy data
    //
-   fpPolyhedron = rhs.fpPolyhedron; fDz = rhs.fDz; fVertices = rhs.fVertices;
+   fpPolyhedron = 0; fDz = rhs.fDz; fVertices = rhs.fVertices;
    fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = 0;
    fMinBBoxVector = rhs.fMinBBoxVector; fMaxBBoxVector = rhs.fMaxBBoxVector;
    fVisSubdivisions = rhs.fVisSubdivisions;

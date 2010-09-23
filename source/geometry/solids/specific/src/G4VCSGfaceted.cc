@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.28 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.29 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,7 +149,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
   } while( ++sourceFace, ++face < faces+numFace );
   fCubicVolume = source.fCubicVolume;
   fSurfaceArea = source.fSurfaceArea;
-  fpPolyhedron = source.fpPolyhedron;
+  fpPolyhedron = 0;
 }
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.26 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.27 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -235,8 +235,7 @@ G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
     fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0), fFormerTwisted(0),
     fInnerHype(0), fOuterHype(0),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(rhs.fpPolyhedron),
-    fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
+    fpPolyhedron(0), fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
     fLastDistanceToIn(rhs.fLastDistanceToIn),
     fLastDistanceToOut(rhs.fLastDistanceToOut),
     fLastDistanceToInWithV(rhs.fLastDistanceToInWithV),
@@ -280,7 +279,7 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
    fLowerEndcap= fUpperEndcap= fLatterTwisted= fFormerTwisted= 0;
    fInnerHype= fOuterHype= 0;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
-   fpPolyhedron= rhs.fpPolyhedron;
+   fpPolyhedron= 0;
    fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
    fLastDistanceToIn= rhs.fLastDistanceToIn;
    fLastDistanceToOut= rhs.fLastDistanceToOut;

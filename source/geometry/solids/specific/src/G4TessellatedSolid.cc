@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.24 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.25 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,7 +150,7 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 // Define copy constructor.
 //
 G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
-  : G4VSolid(s)
+  : G4VSolid(s), fpPolyhedron(0)
 {
   if (&s == this) { return; }
 
@@ -191,7 +191,8 @@ G4TessellatedSolid::operator= (const G4TessellatedSolid &s)
   // Copy data
   //
   cubicVolume = s.cubicVolume;  
-  surfaceArea = s.surfaceArea;  
+  surfaceArea = s.surfaceArea;
+  fpPolyhedron = 0; 
 
   DeleteObjects ();
   CopyObjects (s);

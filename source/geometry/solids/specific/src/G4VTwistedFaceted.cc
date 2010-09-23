@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.22 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -234,7 +234,7 @@ G4VTwistedFaceted::G4VTwistedFaceted(const G4VTwistedFaceted& rhs)
     fdeltaY(rhs.fdeltaY), fPhiTwist(rhs.fPhiTwist), fLowerEndcap(0),
     fUpperEndcap(0), fSide0(0), fSide90(0), fSide180(0), fSide270(0),
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
-    fpPolyhedron(rhs.fpPolyhedron),
+    fpPolyhedron(0),
     fLastInside(rhs.fLastInside), fLastNormal(rhs.fLastNormal),
     fLastDistanceToIn(rhs.fLastDistanceToIn),
     fLastDistanceToOut(rhs.fLastDistanceToOut),
@@ -267,7 +267,7 @@ G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs)
    fdeltaY= rhs.fdeltaY; fPhiTwist= rhs.fPhiTwist; fLowerEndcap= 0;
    fUpperEndcap= 0; fSide0= 0; fSide90= 0; fSide180= 0; fSide270= 0;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
-   fpPolyhedron= rhs.fpPolyhedron;
+   fpPolyhedron= 0;
    fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
    fLastDistanceToIn= rhs.fLastDistanceToIn;
    fLastDistanceToOut= rhs.fLastDistanceToOut;

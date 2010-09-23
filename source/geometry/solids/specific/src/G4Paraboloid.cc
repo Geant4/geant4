@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.12 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4Paraboloid.cc,v 1.13 2010-09-23 10:27:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Paraboloid
@@ -110,7 +110,7 @@ G4Paraboloid::~G4Paraboloid()
 // Copy constructor
 
 G4Paraboloid::G4Paraboloid(const G4Paraboloid& rhs)
-  : G4VSolid(rhs), fpPolyhedron(rhs.fpPolyhedron),
+  : G4VSolid(rhs), fpPolyhedron(0),
     fSurfaceArea(rhs.fSurfaceArea), fCubicVolume(rhs.fCubicVolume),
     dz(rhs.dz), r1(rhs.r1), r2(rhs.r2), k1(rhs.k1), k2(rhs.k2)
 {
@@ -133,7 +133,7 @@ G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs)
 
    // Copy data
    //
-   fpPolyhedron = rhs.fpPolyhedron; 
+   fpPolyhedron = 0; 
    fSurfaceArea = rhs.fSurfaceArea; fCubicVolume = rhs.fCubicVolume;
    dz = rhs.dz; r1 = rhs.r1; r2 = rhs.r2; k1 = rhs.k1; k2 = rhs.k2;
 
