@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclElementaryParticle.cc,v 1.9 2010-09-14 05:58:58 mkelsey Exp $
+// $Id: G4InuclElementaryParticle.cc,v 1.10 2010-09-23 05:33:56 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100428  M. Kelsey -- Use G4InuclParticleNames enums instead of numbers,
 //		add Omega and antinucleons.
 // 20100429  M. Kelsey -- Change "case gamma:" to "case photon:"
+// 20100923  M. Kelsey -- Drop "uups" message when converting G4PartDef to code
 
 #include "G4InuclElementaryParticle.hh"
 
@@ -119,8 +120,7 @@ G4int G4InuclElementaryParticle::type(const G4ParticleDefinition *pd) {
   if (pd == G4UnboundPN::Definition())    return unboundPN; // Bertini class!
   if (pd == G4Dineutron::Definition())    return dineutron; // Bertini class!
 
-  G4cerr << " uups, unknown G4ParticleDefinition type" << G4endl;
-  return 0;
+  return 0;	// Unknown objects return zero (e.g., nuclei)
 }
 
 void G4InuclElementaryParticle::setType(G4int ityp) {
