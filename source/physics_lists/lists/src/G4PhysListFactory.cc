@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc,v 1.14 2010-06-08 16:06:18 gunter Exp $
+// $Id: G4PhysListFactory.cc,v 1.15 2010-09-23 18:53:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -81,7 +81,7 @@ G4PhysListFactory::G4PhysListFactory()
     "QGSP_FTFP_BERT","QGS_BIC", "QGSP_INCL_ABLA",
     "Shielding"};
 
-  for(size_t i=0; i<nlists; i++) {
+  for(size_t i=0; i<nlists; ++i) {
     listnames.push_back(s[i]);
   }
 }
@@ -147,7 +147,7 @@ G4VModularPhysicsList* G4PhysListFactory::GetReferencePhysList(
 	   << "    Default Physics Lists " << defName
 	   << " is instantiated" 
 	   << G4endl;
-    p = new QGSP_BERT();
+    //    p = new QGSP_BERT();
   }
   return p;
 }
