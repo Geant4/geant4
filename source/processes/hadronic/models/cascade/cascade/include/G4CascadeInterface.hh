@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.22 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4CascadeInterface.hh,v 1.23 2010-09-23 18:13:32 mkelsey Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -73,7 +73,7 @@ public:
 
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
-  void usePreCompoundModel();
+  void usePreCompoundDeexcitation();
 
 protected:
   // Convert input projectile and target to Bertini internal types

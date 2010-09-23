@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.47 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.48 2010-09-23 18:13:32 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -82,7 +82,7 @@ void G4InuclCollider::useCascadeDeexcitation() {
   theDeexcitation = new G4CascadeDeexcitation;
 }
 
-void G4InuclCollider::usePreCompoundModel() {
+void G4InuclCollider::usePreCompoundDeexcitation() {
   delete theDeexcitation;
   theDeexcitation = new G4PreCompoundDeexcitation;
 }
@@ -92,9 +92,7 @@ void G4InuclCollider::usePreCompoundModel() {
 
 void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 			      G4CollisionOutput& globalOutput) {
-  if (verboseLevel > 1) {
-    G4cout << " >>> G4InuclCollider::collide" << G4endl;
-  }
+  if (verboseLevel) G4cout << " >>> G4InuclCollider::collide" << G4endl;
 
   // Initialize colliders verbosity
   theElementaryParticleCollider->setVerboseLevel(verboseLevel);

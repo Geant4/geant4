@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclCollider.hh,v 1.19 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4InuclCollider.hh,v 1.20 2010-09-23 18:13:32 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -57,7 +57,7 @@ public:
 
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();
-  void usePreCompoundModel();
+  void usePreCompoundDeexcitation();
 
 private: 
   G4ElementaryParticleCollider* theElementaryParticleCollider;

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.101 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.102 2010-09-23 18:13:32 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -136,8 +136,8 @@ void G4CascadeInterface::useCascadeDeexcitation() {
   collider->useCascadeDeexcitation();
 }
 
-void G4CascadeInterface::usePreCompoundModel() {
-  collider->usePreCompoundModel();
+void G4CascadeInterface::usePreCompoundDeexcitation() {
+  collider->usePreCompoundDeexcitation();
 }
 
 // Main Actions
