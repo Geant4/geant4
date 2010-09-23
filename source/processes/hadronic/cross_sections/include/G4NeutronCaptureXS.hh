@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh,v 1.1 2009-11-12 00:36:01 vnivanch Exp $
+// $Id: G4NeutronCaptureXS.hh,v 1.2 2010-09-23 16:13:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,12 +38,12 @@
 // Modifications:
 //
  
-
 #ifndef G4NeutronCaptureXS_h
 #define G4NeutronCaptureXS_h 1
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
@@ -54,7 +54,6 @@ class G4NeutronCaptureXS : public G4VCrossSectionDataSet
 {
 public: // With Description
 
-  G4int Z;
   G4NeutronCaptureXS();
 
   virtual ~G4NeutronCaptureXS();
@@ -97,8 +96,9 @@ private: // Without Description
   G4NeutronCaptureXS & operator=(const G4NeutronCaptureXS &right);
   G4NeutronCaptureXS(const G4NeutronCaptureXS&);
 
-  G4double         emax;
-  G4PhysicsVector* data[93];
+  G4double emax;
+  G4int    maxZ;
+  std::vector<G4PhysicsVector*> data;
 
   G4bool  isInitialized;
 

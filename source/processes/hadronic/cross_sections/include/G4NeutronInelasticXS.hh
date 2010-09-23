@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.hh,v 1.3 2009-11-19 11:52:27 vnivanch Exp $
+// $Id: G4NeutronInelasticXS.hh,v 1.4 2010-09-23 16:13:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,18 +44,19 @@
 
 #include "G4VCrossSectionDataSet.hh"
 #include "globals.hh"
+#include <vector>
 
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
 class G4PhysicsVector;
 class G4GlauberGribovCrossSection;
+class G4HadronNucleonXsc;
 
 class G4NeutronInelasticXS : public G4VCrossSectionDataSet
 {
 public: // With Description
 
-  G4int Z;
   G4NeutronInelasticXS();
 
   virtual ~G4NeutronInelasticXS();
@@ -98,9 +99,13 @@ private: // Without Description
   G4NeutronInelasticXS(const G4NeutronInelasticXS&);
   
   G4GlauberGribovCrossSection* ggXsection;
+  G4HadronNucleonXsc* fNucleon;
 
-  G4PhysicsVector* data[93];
-  G4double         coeff[93];
+  const G4ParticleDefinition* proton;
+
+  std::vector<G4PhysicsVector*> data;
+  std::vector<G4double>         coeff;
+  G4int   maxZ;
 
   G4bool  isInitialized;
 

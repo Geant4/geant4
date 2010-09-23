@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.3 2010-06-03 11:50:21 vnivanch Exp $
+// $Id: G4NeutronCaptureXS.cc,v 1.4 2010-09-23 16:13:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,22 +47,24 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 using namespace std;
 
 G4NeutronCaptureXS::G4NeutronCaptureXS() 
+  : emax(20*MeV),maxZ(92)
 {
-  verboseLevel = 0;
-  emax = 20.*MeV;
-  G4cout  << "G4NeutronCaptureXS::G4NeutronCaptureXS: Initialise " << G4endl;
-  for(G4int i=0; i<93; ++i) {
-    data[i] = 0;
+  //  verboseLevel = 0;
+  if(verboseLevel > 0){
+    G4cout  << "G4NeutronCaptureXS::G4NeutronCaptureXS: Initialise for Z < "
+	    << maxZ + 1 << G4endl;
   }
+  data.resize(maxZ+1, 0);
   isInitialized = false;
 }
 
 G4NeutronCaptureXS::~G4NeutronCaptureXS()
 {
-  for(G4int i=0; i<92; ++i) {
+  for(G4int i=0; i<=maxZ; ++i) {
     delete data[i];
   }
 }
@@ -89,7 +91,7 @@ G4NeutronCaptureXS::GetCrossSection(const G4DynamicParticle* aParticle,
 {
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
-  if(ekin > emax) return xs;
+  if(ekin > emax) { return xs; }
 
   G4int Z = G4int(elm->GetZ());
   G4PhysicsVector* pv = data[Z];
@@ -98,7 +100,7 @@ G4NeutronCaptureXS::GetCrossSection(const G4DynamicParticle* aParticle,
   if(!pv) {
     Initialise(Z);
     pv = data[Z];
-    if(!pv) return xs;
+    if(!pv) { return xs; }
   }
 
   G4int n = pv->GetVectorLength() - 1;
@@ -117,12 +119,11 @@ G4NeutronCaptureXS::GetCrossSection(const G4DynamicParticle* aParticle,
 void 
 G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  G4cout << "G4NeutronCaptureXS::BuildPhysicsTable: " << G4endl;
-  G4cout << p.GetParticleName() << G4endl;
-  if(p.GetParticleName() != "neutron") {
-    return;
+  if(verboseLevel > 0){
+    G4cout << "G4NeutronCaptureXS::BuildPhysicsTable for " 
+	   << p.GetParticleName() << G4endl;
   }
-  if(isInitialized) return;
+  if(isInitialized || p.GetParticleName() != "neutron") { return; }
   isInitialized = true;
 
 
@@ -139,8 +140,8 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(numOfElm > 0) {
     for(size_t i=0; i<numOfElm; ++i) {
       G4int Z = G4int(((*theElmTable)[i])->GetZ());
-      if(Z < 1) Z = 1;
-      else if(Z > 92) Z = 92;
+      if(Z < 1)         { Z = 1; }
+      else if(Z > maxZ) { Z = maxZ; }
       //G4cout << "Z= " << Z << G4endl;
       // Initialisation 
       if(!data[Z]) { Initialise(Z, path); }
@@ -156,7 +157,7 @@ G4NeutronCaptureXS::DumpPhysicsTable(const G4ParticleDefinition&)
 void 
 G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
 {
-  if(data[Z]) return;
+  if(data[Z]) { return; }
   const char* path = p;
   if(!p) {
   // check environment variable 

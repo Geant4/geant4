@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc,v 1.4 2010-06-03 11:50:21 vnivanch Exp $
+// $Id: G4NeutronInelasticXS.cc,v 1.5 2010-09-23 16:13:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,28 +46,34 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsVector.hh"
 #include "G4GlauberGribovCrossSection.hh"
+#include "G4HadronNucleonXsc.hh"
 #include "G4NistManager.hh"
+#include "G4Proton.hh"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 using namespace std;
 
 G4NeutronInelasticXS::G4NeutronInelasticXS() 
+  : proton(G4Proton::Proton()), maxZ(92)
 {
-  verboseLevel = 0;
-  G4cout  << "G4NeutronInelasticXS::G4NeutronInelasticXS: Initialise " << G4endl;
-  for(G4int i=0; i<93; ++i) {
-    data[i] = 0;
-    coeff[i]= 1.0;
+  //  verboseLevel = 0;
+  if(verboseLevel > 0){
+    G4cout  << "G4NeutronInelasticXS::G4NeutronInelasticXS Initialise for Z < " 
+	    << maxZ + 1 << G4endl;
   }
+  data.resize(maxZ+1, 0);
+  coeff.resize(maxZ+1, 1.0);
   ggXsection = new G4GlauberGribovCrossSection();
+  fNucleon = new G4HadronNucleonXsc();
   isInitialized = false;
 }
 
 G4NeutronInelasticXS::~G4NeutronInelasticXS()
 {
-  for(G4int i=0; i<92; ++i) {
+  for(G4int i=0; i<=maxZ; ++i) {
     delete data[i];
   }
 }
@@ -96,6 +102,7 @@ G4NeutronInelasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
   G4double ekin = aParticle->GetKineticEnergy();
 
   G4int Z = G4int(elm->GetZ());
+  if(Z < 1 || Z > maxZ) { return xs; }
   G4PhysicsVector* pv = data[Z];
   //  G4cout  << "G4NeutronInelasticXS::GetCrossSection e= " << ekin << " Z= " << Z << G4endl;
 
@@ -103,22 +110,25 @@ G4NeutronInelasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
   if(!pv) {
     Initialise(Z);
     pv = data[Z];
-    if(!pv) return xs;
+    if(!pv) { return xs; }
   }
 
   G4double e1 = pv->Energy(0);
-  if(ekin <= e1) return xs;
+  if(ekin <= e1) { return xs; }
 
   G4int n = pv->GetVectorLength() - 1;
   G4double e2 = pv->Energy(n);
   if(ekin <= e2) { 
     xs = pv->Value(ekin); 
+  } else if(1 == Z) { 
+    fNucleon->GetHadronNucleonXscPDG(aParticle, proton);
+    xs = coeff[1]*fNucleon->GetInelasticHadronNucleonXsc();
   } else {          
     ggXsection->GetCrossSection(aParticle, elm);
     xs = coeff[Z]*ggXsection->GetInelasticGlauberGribovXsc();
   }
 
-  if(verboseLevel > 0){
+  if(verboseLevel > 0) {
     G4cout  << "ekin= " << ekin << ",  XSinel= " << xs << G4endl;
   }
   return xs;
@@ -128,14 +138,12 @@ G4NeutronInelasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
 void 
 G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
-  G4cout << "G4NeutronInelasticXS::BuildPhysicsTable: " << G4endl;
-  G4cout << p.GetParticleName() << G4endl;
-  if(p.GetParticleName() != "neutron") {
-    return;
+  if(verboseLevel > 0){
+    G4cout << "G4NeutronInelasticXS::BuildPhysicsTable for " 
+	   << p.GetParticleName() << G4endl;
   }
-  if(isInitialized) return;
+  if(isInitialized || p.GetParticleName() != "neutron") { return; }
   isInitialized = true;
-
 
   // check environment variable 
   // Build the complete string identifying the file with the data set
@@ -153,8 +161,8 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   if(numOfElm > 0) {
     for(size_t i=0; i<numOfElm; ++i) {
       G4int Z = G4int(((*theElmTable)[i])->GetZ());
-      if(Z < 1) Z = 1;
-      else if(Z > 92) Z = 92;
+      if(Z < 1)         { Z = 1; }
+      else if(Z > maxZ) { Z = maxZ; }
       //G4cout << "Z= " << Z << G4endl;
       // Initialisation 
       if(!data[Z]) { Initialise(Z, dynParticle, path); }
@@ -172,7 +180,7 @@ void
 G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp, 
 				 const char* p)
 {
-  if(data[Z]) return;
+  if(data[Z]) { return; }
   const char* path = p;
   if(!p) {
   // check environment variable 
@@ -214,8 +222,14 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     G4double emax = data[Z]->Energy(n);
     G4double sig1 = (*data[Z])[n];
     dynParticle->SetKineticEnergy(emax);
-    ggXsection->GetCrossSection(dynParticle, Elem);
-    G4double sig2 = ggXsection->GetInelasticGlauberGribovXsc();
+    G4double sig2 = 0.0;
+    if(1 == Z) {
+      fNucleon->GetHadronNucleonXscPDG(dynParticle, proton);
+      sig2 = fNucleon->GetInelasticHadronNucleonXsc();
+    } else {
+      ggXsection->GetCrossSection(dynParticle, Elem);
+      sig2 = ggXsection->GetInelasticGlauberGribovXsc();
+    }
     if(sig2 > 0.) { coeff[Z] = sig1/sig2; }
   } 
   if(!dp) { delete dynParticle; }
