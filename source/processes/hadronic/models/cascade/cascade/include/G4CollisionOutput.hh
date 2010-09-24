@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.hh,v 1.26 2010-09-24 21:09:01 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.27 2010-09-24 21:52:32 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -36,11 +36,13 @@
 //		combined "add()" function to put two of these together.
 // 20100716  M. Kelsey -- Add interface to handle G4CascadParticles
 // 20100924  M. Kelsey -- Use "OutgoingNuclei" name consistently, replacing
-//		old "TargetFragment".
+//		old "TargetFragment".  Add new (reusable) G4Fragment buffer 
+//		and access functions for initial post-cascade processing.
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
 
+#include "G4Fragment.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzRotation.hh"
@@ -65,7 +67,7 @@ public:
   void add(const G4CollisionOutput& right) {
     addOutgoingParticles(right.outgoingParticles);
     addOutgoingNuclei(right.outgoingNuclei);
-    
+    theRecoilFragment = right.theRecoilFragment;
   }
 
   void addOutgoingParticle(const G4InuclElementaryParticle& particle) {
@@ -84,6 +86,15 @@ public:
   void addOutgoingParticle(const G4CascadParticle& cparticle);
   void addOutgoingParticles(const std::vector<G4CascadParticle>& cparticles);
 
+  // Special buffer for initial, possible unstable fragment from cascade
+  void addRecoilFragment(const G4Fragment* aFragment) {
+    if (aFragment) addRecoilFragment(*aFragment);
+  }
+
+  void addRecoilFragment(const G4Fragment& aFragment) {
+    theRecoilFragment = aFragment;
+  }
+
   // ===== Access contents of lists =====
 
   G4int numberOfOutgoingParticles() const { return outgoingParticles.size(); }
@@ -97,6 +108,8 @@ public:
   const std::vector<G4InuclNuclei>& getOutgoingNuclei() const {
     return outgoingNuclei;
   };
+
+  const G4Fragment& getRecoilFragment() const { return theRecoilFragment; }
 
   // ===== Get event totals for conservation checking, recoil, etc. ======
 
@@ -119,9 +132,12 @@ public:
 
 private: 
   G4int verboseLevel;
+
   std::vector<G4InuclElementaryParticle> outgoingParticles;
   std::vector<G4InuclNuclei> outgoingNuclei;
-  G4double eex_rest;
+  G4Fragment theRecoilFragment;
+
+  G4double eex_rest;		// Used by setOnShell() for kinematics
 
   std::pair<std::pair<G4int,G4int>, G4int> selectPairToTune(G4double de) const; 
 

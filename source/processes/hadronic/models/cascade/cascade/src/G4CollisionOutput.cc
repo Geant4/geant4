@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.31 2010-09-24 21:09:01 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.32 2010-09-24 21:52:32 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -40,7 +40,8 @@
 // 20100715  M. Kelsey -- Add total charge and baryon number functions, and a
 //		combined "add()" function to put two of these together
 // 20100924  M. Kelsey -- Use "OutgoingNuclei" name consistently, replacing
-//		old "TargetFragment".
+//		old "TargetFragment".  Add new (reusable) G4Fragment buffer 
+//		and access functions for initial post-cascade processing.
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
@@ -66,6 +67,7 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
     verboseLevel = right.verboseLevel;
     outgoingParticles = right.outgoingParticles;
     outgoingNuclei = right.outgoingNuclei; 
+    theRecoilFragment = right.theRecoilFragment;
     eex_rest = right.eex_rest;
     on_shell = right.on_shell;
   }
@@ -75,6 +77,9 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
 void G4CollisionOutput::reset() {
   outgoingNuclei.clear();
   outgoingParticles.clear();
+
+  static const G4Fragment emptyFragment;	// Default ctor is all zeros
+  theRecoilFragment = emptyFragment;
 }
 
 
@@ -153,9 +158,11 @@ void G4CollisionOutput::printCollisionOutput() const {
   for(i=0; i < G4int(outgoingParticles.size()); i++)
     outgoingParticles[i].printParticle(); 
 
-  G4cout << " Nuclei fragments: " << outgoingNuclei.size() << G4endl;      
+  G4cout << " Outgoing Nuclei: " << outgoingNuclei.size() << G4endl;      
   for(i=0; i < G4int(outgoingNuclei.size()); i++)
     outgoingNuclei[i].printParticle();
+
+  G4cout << " Recoil Fragment: " << theRecoilFragment << G4endl;
 }
 
 
@@ -240,7 +247,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   if (verboseLevel > 1)
     G4cout << " >>> G4CollisionOutput::setOnShell" << G4endl;
 
-  const G4double accuracy = 0.00001; // momentum concerves at the level of 10 eV
+  const G4double accuracy = 0.00001; // momentum concerves at the level of 10 keV
 
   on_shell = false;
     

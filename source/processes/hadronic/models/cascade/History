@@ -1,4 +1,4 @@
-$Id: History,v 1.187 2010-09-24 19:57:25 mkelsey Exp $
+$Id: History,v 1.188 2010-09-24 21:52:32 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -19,6 +19,31 @@ code and to keep track of all tags.
 --------------------------------
 - G4IntraNucleiCascader.cc:  Minor shuffle of post-cascade recoil checking,
   in preparation for moving fragment construction and processing away.
+
+- G4CollisionOutput.cc:  Replace names "TargetFragment*" and "NucleiFragment*" 
+  with "OutgoingNuclei" and "OutgoingNucleus" for consistency with
+  "OutgoingParticles" names.  This affects the following source files, all
+  of which are modified to match (using |sed|):
+
+	cascade/include/G4Analyser.hh
+	cascade/include/G4CollisionOutput.hh
+	cascade/src/G4Analyser.cc
+	cascade/src/G4CascadeCheckBalance.cc
+	cascade/src/G4CascadeDeexcitation.cc
+	cascade/src/G4CascadeInterface.cc
+	cascade/src/G4CollisionOutput.cc
+	cascade/src/G4EquilibriumEvaporator.cc
+	cascade/src/G4Fissioner.cc
+	cascade/src/G4IntraNucleiCascader.cc
+	cascade/src/G4InuclCollider.cc
+	cascade/src/G4InuclEvaporation.cc
+	cascade/src/G4NonEquilibriumEvaporator.cc
+	cascade/src/G4PreCompoundDeexcitation.cc
+
+- G4CollisionOutput:  Add new G4Fragment data member, with get() and add()
+  accessors.  This fragment is *not* used by setOnShell() or by any of the
+  event-total calculations.  It will be filled by G4IntraNucleiCascader for
+  use by de-excitation modules.
 
 24 September 2010 Michael Kelsey (hadr-casc-V09-03-79)
 ------------------------------------------------------
