@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CHIPSElasticXS.cc,v 1.1 2010-09-23 18:28:00 vnivanch Exp $
+// $Id: G4CHIPSElasticXS.cc,v 1.2 2010-09-24 13:56:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,24 +64,24 @@ G4CHIPSElasticXS::~G4CHIPSElasticXS()
 {}
 
 G4bool 
-G4CHIPSElasticXS::IsApplicable(const G4DynamicParticle*, 
+G4CHIPSElasticXS::IsApplicable(const G4DynamicParticle* dyn, 
 			       const G4Element* elm)
 {
-  return (elm->GetZ() < 2.5); 
+  return (elm->GetZ() < 2.5 && dyn->GetKineticEnergy() > thEnergy); 
 }
 
 G4bool 
-G4CHIPSElasticXS::IsZAApplicable(const G4DynamicParticle*,
+G4CHIPSElasticXS::IsZAApplicable(const G4DynamicParticle* dyn,
 				 G4double ZZ, G4double /*AA*/)
 {
-  return (ZZ < 2.5);
+  return (ZZ < 2.5 && dyn->GetKineticEnergy() > thEnergy);
 }
 
 G4bool 
-G4CHIPSElasticXS::IsIsoApplicable(const G4DynamicParticle*, 
+G4CHIPSElasticXS::IsIsoApplicable(const G4DynamicParticle* dyn, 
 				  G4int Z, G4int /*N*/)
 {
-  return (Z <= 2);
+  return (Z <= 2 && dyn->GetKineticEnergy() > thEnergy);
 }
 
 G4double 
@@ -95,7 +95,7 @@ G4CHIPSElasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
   G4int ni = 0;
   if(isv) { ni = isv->size(); }
 
-  if(ni == 0) {
+  if(ni <= 1) {
     G4int A = G4int(elm->GetN()+0.5);
     xs = GetZandACrossSection(aParticle, Z, A);
   } else {
@@ -137,9 +137,7 @@ G4double
 G4CHIPSElasticXS::GetZandACrossSection(const G4DynamicParticle* dyn, 
 				       G4int Z, G4int A, G4double)
 {
-  G4double ekin = dyn->GetKineticEnergy();
-  if(ekin < thEnergy) { ekin = thEnergy; }
-  G4double momentum = std::sqrt(ekin*(ekin + 2*dyn->GetMass())); 
+  G4double momentum = dyn->GetTotalMomentum();
 
   // only proton, deuteron and He4 x-sections
   G4int N = A - Z;
