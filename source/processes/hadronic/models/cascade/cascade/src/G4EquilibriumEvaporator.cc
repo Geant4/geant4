@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.45 2010-07-28 15:18:10 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.46 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -50,6 +50,7 @@
 //		and test for S < EEXS before any particle generation; shift
 //		nucleus momentum (PEX) by evaporate momentum directly
 // 20100719  M. Kelsey -- Remove duplicative EESX_new calculation.
+// 20100923  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4BigBanger.hh"
@@ -111,10 +112,11 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
   const G4int itry_gam_max = 100;
 
-  G4double W[8], A1[6], Z1[6], u[6], V[6], TM[6];
+  G4double W[8], u[6], V[6], TM[6];
+  G4int A1[6], Z1[6];
 
-  G4double A = nuclei_target->getA();
-  G4double Z = nuclei_target->getZ();
+  G4int A = nuclei_target->getA();
+  G4int Z = nuclei_target->getZ();
   G4LorentzVector PEX = nuclei_target->getMomentum();
   G4double EEXS = nuclei_target->getExitationEnergy();
   
@@ -541,8 +543,8 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   return;
 }		     
 
-G4bool G4EquilibriumEvaporator::explosion(G4double a, 
-					  G4double z, 
+G4bool G4EquilibriumEvaporator::explosion(G4int a, 
+					  G4int z, 
 					  G4double e) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::explosion" << G4endl;
@@ -551,26 +553,26 @@ G4bool G4EquilibriumEvaporator::explosion(G4double a,
   const G4double be_cut = 3.0;
 
   // Different criteria from base class, since nucleus more "agitated"
-  G4bool bigb = (!(a >= 12 && z >= 6.0 && z < 3.0 * (a - z)) &&
+  G4bool bigb = (!(a >= 12 && z >= 0 && z < 3*(a-z)) &&
 		 (e >= be_cut * bindingEnergy(a,z))
 		 );
 
   return bigb;
 }
 
-G4bool G4EquilibriumEvaporator::goodRemnant(G4double a, 
-					    G4double z) const {
+G4bool G4EquilibriumEvaporator::goodRemnant(G4int a, 
+					    G4int z) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::goodRemnant" << G4endl;
   }
 
-  return a > 1.0 && z > 0.0 && a > z;
+  return a > 1 && z > 0 && a > z;
 }
 
 G4double G4EquilibriumEvaporator::getQF(G4double x, 
 					G4double x2, 
-					G4double a,
-					G4double , 
+					G4int a,
+					G4int /*z*/, 
 					G4double ) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getQF" << G4endl;
@@ -649,8 +651,8 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
 }
 
 G4double G4EquilibriumEvaporator::getAF(G4double , 
-					G4double , 
-					G4double , 
+					G4int /*a*/, 
+					G4int /*z*/, 
 					G4double e) const {
 
   if (verboseLevel > 3) {
@@ -666,8 +668,8 @@ G4double G4EquilibriumEvaporator::getAF(G4double ,
   return AF;
 }	
 
-G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double , 
-					       G4double ) const {
+G4double G4EquilibriumEvaporator::getPARLEVDEN(G4int /*a*/, 
+					       G4int /*z*/) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getPARLEVDEN" << G4endl;
@@ -678,7 +680,7 @@ G4double G4EquilibriumEvaporator::getPARLEVDEN(G4double ,
   return par;
 }
 
-G4double G4EquilibriumEvaporator::getE0(G4double ) const {
+G4double G4EquilibriumEvaporator::getE0(G4int /*a*/) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4EquilibriumEvaporator::getE0" << G4endl;

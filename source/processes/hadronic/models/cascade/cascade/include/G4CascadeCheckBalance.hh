@@ -25,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.hh,v 1.10 2010-09-09 19:11:27 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.hh,v 1.11 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -43,6 +43,7 @@
 //		temporary G4CollisionOutput buffer here, for thread-safety
 // 20100909  M. Kelsey -- Add interface to get four-vector difference, and
 //		to supply both kinds of particle lists (G4IntraNucleiCascader)
+// 20100923  M. Kelsey -- Baryon and charge deltas should have been integer
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -120,8 +121,8 @@ public:
   G4LorentzVector deltaLV() const { return final - initial; }
 
   // Baryon number and charge are discrete; no bounds and no "relative" scale
-  G4double deltaB() const { return (finalBaryon - initialBaryon); }
-  G4double deltaQ() const { return (finalCharge - initialCharge); }
+  G4int deltaB() const { return (finalBaryon - initialBaryon); }
+  G4int deltaQ() const { return (finalCharge - initialCharge); }
 
 protected:
   // Utility function for kinetic energy

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.cc,v 1.38 2010-07-27 04:20:03 mkelsey Exp $
+// $Id: G4BigBanger.cc,v 1.39 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -40,6 +40,7 @@
 // 20100701  M. Kelsey -- Re-throw momentum list, not just angles!
 // 20100714  M. Kelsey -- Move conservation checking to base class
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
+// 20100923  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4BigBanger.hh"
 #include "G4CollisionOutput.hh"
@@ -69,8 +70,8 @@ G4BigBanger::collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
     return;
   }
 
-  G4double A = nuclei_target->getA();
-  G4double Z = nuclei_target->getZ();
+  G4int A = nuclei_target->getA();
+  G4int Z = nuclei_target->getZ();
 
   G4LorentzVector PEX = nuclei_target->getMomentum();
   G4double EEXS = nuclei_target->getExitationEnergy();

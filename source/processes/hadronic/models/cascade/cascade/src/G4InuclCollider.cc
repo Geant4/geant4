@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.48 2010-09-23 18:13:32 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.49 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -50,6 +50,7 @@
 //		simplify operational code somewhat
 // 20100922  M. Kelsey -- Add functions to select de-excitation method;
 //		default is G4CascadeDeexcitation (i.e., built-in modules)
+// 20100924  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeDeexcitation.hh"
@@ -130,8 +131,8 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
     
   G4int btype = 0;
-  G4double ab = 0.0;
-  G4double zb = 0.0;
+  G4int ab = 0;
+  G4int zb = 0;
   
   if (interCase.hadNucleus()) { 	// particle with nuclei
     G4InuclElementaryParticle* pbullet = 

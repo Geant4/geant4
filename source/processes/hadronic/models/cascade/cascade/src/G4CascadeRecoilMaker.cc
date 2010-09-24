@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.cc,v 1.4 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.cc,v 1.5 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -58,7 +58,7 @@ using namespace G4InuclSpecialFunctions;
 G4CascadeRecoilMaker::G4CascadeRecoilMaker(G4double tolerance)
   : G4VCascadeCollider("G4CascadeRecoilMaker"),
     excTolerance(tolerance), inputEkin(0.),
-    recoilA(0.), recoilZ(0.), excitationEnergy(0.) {
+    recoilA(0), recoilZ(0), excitationEnergy(0.) {
   balance = new G4CascadeCheckBalance(tolerance, tolerance, theName);
 }
   
@@ -168,7 +168,7 @@ G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
 				     + theExcitons.neutronHoles);
 
   theRecoilFragment.SetNumberOfParticles(theExcitons.protonQuasiParticles 
-			       + theExcitons.neutronQuasiParticles);
+					 + theExcitons.neutronQuasiParticles);
 
   theRecoilFragment.SetNumberOfCharged(theExcitons.protonQuasiParticles);
 

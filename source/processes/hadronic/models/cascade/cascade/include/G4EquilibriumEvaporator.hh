@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.hh,v 1.13 2010-07-14 15:41:12 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.hh,v 1.14 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100413  M. Kelsey -- Pass G4CollisionOutput by ref to ::collide()
@@ -30,6 +30,7 @@
 //		simple data members.  Rename timeToBigBang() to override
 //		base explosion().
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
+// 20100923  M. Kelsey -- Migrate to integer A and Z
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
@@ -52,27 +53,27 @@ public:
 private: 
   // Replace base class verision
   virtual G4bool explosion(G4InuclNuclei*) const { return false; }
-  virtual G4bool explosion(G4double a, 
-			   G4double z, 
+  virtual G4bool explosion(G4int a, 
+			   G4int z, 
 			   G4double e) const;
 
-  G4bool goodRemnant(G4double a, 
-		     G4double z) const; 
+  G4bool goodRemnant(G4int a, 
+		     G4int z) const; 
 
-  G4double getE0(G4double A) const; 
+  G4double getE0(G4int A) const; 
 
-  G4double getPARLEVDEN(G4double A, 
-			G4double Z) const; 
+  G4double getPARLEVDEN(G4int A, 
+			G4int Z) const; 
 
   G4double getQF(G4double x, 
 		 G4double x2, 
-		 G4double a, 
-		 G4double z, 
+		 G4int a, 
+		 G4int z, 
 		 G4double e) const;
 
   G4double getAF(G4double x, 
-		 G4double a, 
-		 G4double z, 
+		 G4int a, 
+		 G4int z, 
 		 G4double e) const; 
 
   G4Fissioner theFissioner;

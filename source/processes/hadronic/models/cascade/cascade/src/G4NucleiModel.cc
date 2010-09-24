@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.86 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.87 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -913,18 +913,18 @@ G4NucleiModel::generateParticleFate(G4CascadParticle& cparticle,
       
       if (current_nucl1 == 1) {
 	if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
-	protonNumberCurrent -= 1.0;
+	protonNumberCurrent--;
       } else {
 	if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
-	neutronNumberCurrent -= 1.0;
+	neutronNumberCurrent--;
       } 
       
       if (current_nucl2 == 1) {
 	if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
-	protonNumberCurrent -= 1.0;
+	protonNumberCurrent--;
       } else if (current_nucl2 == 2) {
 	if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
-	neutronNumberCurrent -= 1.0;
+	neutronNumberCurrent--;
       }
       
       break;

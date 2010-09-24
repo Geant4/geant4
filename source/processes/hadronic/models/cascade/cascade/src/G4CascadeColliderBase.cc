@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.cc,v 1.3 2010-07-21 19:59:41 mkelsey Exp $
+// $Id: G4CascadeColliderBase.cc,v 1.4 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
@@ -30,6 +30,7 @@
 //		and control flag.
 // 20100721  M. Kelsey -- Use G4CASCADE_CHECK_ECONS to set default control
 //		flag for validations.
+// 20100923  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -73,19 +74,17 @@ G4bool G4CascadeColliderBase::useEPCollider(G4InuclParticle* bullet,
 G4bool G4CascadeColliderBase::explosion(G4InuclNuclei* target) const {
   if (verboseLevel) G4cout << " >>> " << theName << "::explosion ?" << G4endl;
 
-  const G4double a_cut = 20.0;
+  const G4int a_cut = 20;
   const G4double be_cut = 3.0;
 
-  G4double a = target->getA();
-  G4double z = target->getZ();
+  G4int a = target->getA();
+  G4int z = target->getZ();
   G4double eexs = target->getExitationEnergy();
 
   // Only small fragments with high excitations can explode
-  G4bool explo = ((a <= a_cut) && 
-		  (eexs >= be_cut * bindingEnergy(a,z))
-		  );
-
-  return explo;
+  return ((a <= a_cut) && 
+	  (eexs >= be_cut * bindingEnergy(a,z))
+	  );
 }
 
 

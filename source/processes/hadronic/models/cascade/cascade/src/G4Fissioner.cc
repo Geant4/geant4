@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.35 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.36 2010-09-24 06:26:06 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -41,6 +41,7 @@
 
 #include "G4Fissioner.hh"
 #include "G4CollisionOutput.hh"
+#include "G4HadTmpUtil.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
 #include "G4FissionStore.hh"
@@ -112,7 +113,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
     A2 = A - A1;
     G4double X3 = 1.0 / G4cbrt(A1);
     G4double X4 = 1.0 / G4cbrt(A2);
-    Z1 = getZopt(A1, A2, Z, X3, X4, R12) - 1;
+    Z1 = G4lrint(getZopt(A1, A2, Z, X3, X4, R12) - 1.);
     std::vector<G4double> EDEF1(2);
     G4int Z2 = Z - Z1;
     G4double VPOT, VCOUL;
@@ -132,9 +133,9 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
       G4double C1 = std::sqrt(getC2(A1, A2, X3, X4, R12) / TEM);
       G4double DZ = randomGauss(C1);
       
-      DZ = DZ > 0.0 ? G4int(DZ + 0.5) : -G4int(std::fabs(DZ - 0.5));
-      Z1 += DZ;
-      Z2 -= DZ;
+      DZ = DZ > 0.0 ? DZ + 0.5 : -std::fabs(DZ - 0.5);
+      Z1 += G4int(DZ);
+      Z2 -= G4int(DZ);
       
       G4double DEfin = randomGauss(TEM);	
       G4double EZ = (DMT1 + (DMT - DMT1) * TETA - VPOT + DEfin) / TEM;
@@ -153,9 +154,9 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   G4FissionConfiguration config = 
     fissionStore.generateConfiguration(ALMA, inuclRndm());
   
-  A1 = config.afirst;
+  A1 = G4int(config.afirst);
   A2 = A - A1;
-  Z1 = config.zfirst;
+  Z1 = G4int(config.zfirst);
   
   G4int Z2 = Z - Z1;
   
