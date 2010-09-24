@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc,v 1.32 2010-07-23 06:25:30 akimura Exp $
+// $Id: G4ScoringManager.cc,v 1.33 2010-09-24 05:51:27 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,7 @@
 
 G4ScoringManager* G4ScoringManager::fSManager = 0;
 
-G4int G4ScoringManager::replicaLevel = 2;
+G4int G4ScoringManager::replicaLevel = 3;
 
 G4ScoringManager* G4ScoringManager::GetScoringManager()
 {
