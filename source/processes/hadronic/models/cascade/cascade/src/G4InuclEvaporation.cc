@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.21 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.22 2010-09-24 21:09:01 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -38,6 +38,7 @@
 //		G4CollisionOutput, copy G4DynamicParticle directly from
 //		G4InuclParticle, no switch-block required.  Fix scaling factors.
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20100924  M. Kelsey -- Migrate to "OutgoingNuclei" names in CollisionOutput 
 
 #include "G4InuclEvaporation.hh"
 #include <numeric>
@@ -131,7 +132,7 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4CollisionOutput output;
   evaporator->collide(0, nucleus, output);
 
-  const std::vector<G4InuclNuclei>& nucleiFragments = output.getOutgoingNuclei();
+  const std::vector<G4InuclNuclei>& outgoingNuclei = output.getOutgoingNuclei();
   const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   G4double eTot=0.0;
@@ -160,9 +161,9 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
 
   //  G4cout << "# fragments " << output.getOutgoingNuclei().size() << G4endl;
   i=1; 
-  if (!nucleiFragments.empty()) { 
-    nucleiIterator ifrag = nucleiFragments.begin();
-    for (; ifrag != nucleiFragments.end(); ifrag++) {
+  if (!outgoingNuclei.empty()) { 
+    nucleiIterator ifrag = outgoingNuclei.begin();
+    for (; ifrag != outgoingNuclei.end(); ifrag++) {
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << i << G4endl; i++;
       }

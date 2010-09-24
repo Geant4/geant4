@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.hh,v 1.25 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.26 2010-09-24 21:09:01 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -35,6 +35,8 @@
 // 20100715  M. Kelsey -- Add total charge and baryon number functions, and a
 //		combined "add()" function to put two of these together.
 // 20100716  M. Kelsey -- Add interface to handle G4CascadParticles
+// 20100924  M. Kelsey -- Use "OutgoingNuclei" name consistently, replacing
+//		old "TargetFragment".
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -62,7 +64,8 @@ public:
 
   void add(const G4CollisionOutput& right) {
     addOutgoingParticles(right.outgoingParticles);
-    addOutgoingNuclei(right.nucleiFragments);
+    addOutgoingNuclei(right.outgoingNuclei);
+    
   }
 
   void addOutgoingParticle(const G4InuclElementaryParticle& particle) {
@@ -72,7 +75,7 @@ public:
   void addOutgoingParticles(const std::vector<G4InuclElementaryParticle>& particles);
 
   void addOutgoingNucleus(const G4InuclNuclei& nuclei) {
-    nucleiFragments.push_back(nuclei);
+    outgoingNuclei.push_back(nuclei);
   };
 
   void addOutgoingNuclei(const std::vector<G4InuclNuclei>& nuclea);
@@ -89,10 +92,10 @@ public:
     return outgoingParticles;
   };
 
-  G4int numberOfOutgoingNuclei() const { return nucleiFragments.size(); };
+  G4int numberOfOutgoingNuclei() const { return outgoingNuclei.size(); };
  
   const std::vector<G4InuclNuclei>& getOutgoingNuclei() const {
-    return nucleiFragments;
+    return outgoingNuclei;
   };
 
   // ===== Get event totals for conservation checking, recoil, etc. ======
@@ -117,7 +120,7 @@ public:
 private: 
   G4int verboseLevel;
   std::vector<G4InuclElementaryParticle> outgoingParticles;
-  std::vector<G4InuclNuclei> nucleiFragments;
+  std::vector<G4InuclNuclei> outgoingNuclei;
   G4double eex_rest;
 
   std::pair<std::pair<G4int,G4int>, G4int> selectPairToTune(G4double de) const; 

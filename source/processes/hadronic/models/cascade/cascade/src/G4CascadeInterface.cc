@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.103 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.104 2010-09-24 21:09:01 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -58,6 +58,7 @@
 //		provide support for projectile nucleus
 // 20100919  M. Kelsey -- Fix incorrect logic in retryInelasticNucleus()
 // 20100922  M. Kelsey -- Add functions to select de-excitation method
+// 20100924  M. Kelsey -- Migrate to "OutgoingNuclei" names in CollisionOutput 
 
 #include "G4CascadeInterface.hh"
 #include "globals.hh"
@@ -327,7 +328,7 @@ void G4CascadeInterface::createTarget(G4Nucleus& theNucleus) {
 // Transfer Bertini internal final state to hadronics interface
 
 void G4CascadeInterface::copyOutputToHadronicResult() {
-  const std::vector<G4InuclNuclei>& nucleiFragments = output->getOutgoingNuclei();
+  const std::vector<G4InuclNuclei>& outgoingNuclei = output->getOutgoingNuclei();
   const std::vector<G4InuclElementaryParticle>& particles = output->getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
@@ -365,9 +366,9 @@ void G4CascadeInterface::copyOutputToHadronicResult() {
 
   // get nuclei fragments
   G4DynamicParticle * aFragment = 0;
-  if (!nucleiFragments.empty()) { 
-    nucleiIterator ifrag = nucleiFragments.begin();
-    for (; ifrag != nucleiFragments.end(); ifrag++) {
+  if (!outgoingNuclei.empty()) { 
+    nucleiIterator ifrag = outgoingNuclei.begin();
+    for (; ifrag != outgoingNuclei.end(); ifrag++) {
       if (verboseLevel > 2) {
 	G4cout << " Nuclei fragment: " << G4endl;
 	ifrag->printParticle();

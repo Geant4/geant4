@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.30 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.31 2010-09-24 21:09:01 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,8 @@
 //		with negative kinetic energy.
 // 20100715  M. Kelsey -- Add total charge and baryon number functions, and a
 //		combined "add()" function to put two of these together
+// 20100924  M. Kelsey -- Use "OutgoingNuclei" name consistently, replacing
+//		old "TargetFragment".
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
@@ -63,7 +65,7 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
   if (this != &right) {
     verboseLevel = right.verboseLevel;
     outgoingParticles = right.outgoingParticles;
-    nucleiFragments = right.nucleiFragments; 
+    outgoingNuclei = right.outgoingNuclei; 
     eex_rest = right.eex_rest;
     on_shell = right.on_shell;
   }
@@ -71,7 +73,7 @@ G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
 }
 
 void G4CollisionOutput::reset() {
-  nucleiFragments.clear();
+  outgoingNuclei.clear();
   outgoingParticles.clear();
 }
 
@@ -82,7 +84,7 @@ void G4CollisionOutput::addOutgoingParticles(const std::vector<G4InuclElementary
 }
 
 void G4CollisionOutput::addOutgoingNuclei(const std::vector<G4InuclNuclei>& nuclea) {
-  nucleiFragments.insert(nucleiFragments.end(), nuclea.begin(), nuclea.end());
+  outgoingNuclei.insert(outgoingNuclei.end(), nuclea.begin(), nuclea.end());
 }
 
 // These are primarily for G4IntraNucleiCascader internal checks
@@ -106,8 +108,8 @@ G4LorentzVector G4CollisionOutput::getTotalOutputMomentum() const {
   for(i=0; i < G4int(outgoingParticles.size()); i++) {
     tot_mom += outgoingParticles[i].getMomentum();
   }
-  for(i=0; i < G4int(nucleiFragments.size()); i++) {
-    tot_mom += nucleiFragments[i].getMomentum();
+  for(i=0; i < G4int(outgoingNuclei.size()); i++) {
+    tot_mom += outgoingNuclei[i].getMomentum();
   }
   return tot_mom;
 }
@@ -121,8 +123,8 @@ G4int G4CollisionOutput::getTotalCharge() const {
   for(i=0; i < G4int(outgoingParticles.size()); i++) {
     charge += G4int(outgoingParticles[i].getCharge());
   }
-  for(i=0; i < G4int(nucleiFragments.size()); i++) {
-    charge += G4int(nucleiFragments[i].getCharge());
+  for(i=0; i < G4int(outgoingNuclei.size()); i++) {
+    charge += G4int(outgoingNuclei[i].getCharge());
   }
   return charge;
 }
@@ -136,8 +138,8 @@ G4int G4CollisionOutput::getTotalBaryonNumber() const {
   for(i=0; i < G4int(outgoingParticles.size()); i++) {
     baryon += outgoingParticles[i].baryon();
   }
-  for(i=0; i < G4int(nucleiFragments.size()); i++) {
-    baryon += G4int(nucleiFragments[i].getA());
+  for(i=0; i < G4int(outgoingNuclei.size()); i++) {
+    baryon += G4int(outgoingNuclei[i].getA());
   }
   return baryon;
 }
@@ -151,9 +153,9 @@ void G4CollisionOutput::printCollisionOutput() const {
   for(i=0; i < G4int(outgoingParticles.size()); i++)
     outgoingParticles[i].printParticle(); 
 
-  G4cout << " Nuclei fragments: " << nucleiFragments.size() << G4endl;      
-  for(i=0; i < G4int(nucleiFragments.size()); i++)
-    nucleiFragments[i].printParticle();
+  G4cout << " Nuclei fragments: " << outgoingNuclei.size() << G4endl;      
+  for(i=0; i < G4int(outgoingNuclei.size()); i++)
+    outgoingNuclei[i].printParticle();
 }
 
 
@@ -179,10 +181,10 @@ void G4CollisionOutput::boostToLabFrame(const G4LorentzConvertor& convertor) {
     std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
   }
   
-  if (!nucleiFragments.empty()) { 
-    nucleiIterator inuc = nucleiFragments.begin();
+  if (!outgoingNuclei.empty()) { 
+    nucleiIterator inuc = outgoingNuclei.begin();
     
-    for (; inuc != nucleiFragments.end(); inuc++) {
+    for (; inuc != outgoingNuclei.end(); inuc++) {
       G4LorentzVector mom = inuc->getMomentum(); 
       
       if (withReflection) mom.setZ(-mom.z());
@@ -204,8 +206,8 @@ void G4CollisionOutput::rotateEvent(const G4LorentzRotation& rotate) {
   for(; ipart != outgoingParticles.end(); ipart++)
     ipart->setMomentum(ipart->getMomentum()*=rotate);
 
-  nucleiIterator inuc = nucleiFragments.begin();
-  for (; inuc != nucleiFragments.end(); inuc++)
+  nucleiIterator inuc = outgoingNuclei.begin();
+  for (; inuc != outgoingNuclei.end(); inuc++)
     inuc->setMomentum(inuc->getMomentum()*=rotate);
 }
 
@@ -216,7 +218,7 @@ void G4CollisionOutput::trivialise(G4InuclParticle* bullet,
     G4cout << " >>> G4CollisionOutput::trivialize" << G4endl;
 
   if (G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
-    nucleiFragments.push_back(*nuclei_target);
+    outgoingNuclei.push_back(*nuclei_target);
   } else {
     G4InuclElementaryParticle* particle =
       dynamic_cast<G4InuclElementaryParticle*>(target);
@@ -224,7 +226,7 @@ void G4CollisionOutput::trivialise(G4InuclParticle* bullet,
   }
 
   if (G4InuclNuclei* nuclei_bullet = dynamic_cast<G4InuclNuclei*>(bullet)) {
-    nucleiFragments.push_back(*nuclei_bullet);
+    outgoingNuclei.push_back(*nuclei_bullet);
   } else {
     G4InuclElementaryParticle* particle =
       dynamic_cast<G4InuclElementaryParticle*>(bullet);
@@ -279,7 +281,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   if (verboseLevel > 2) G4cout << " re-balancing four-momenta" << G4endl;
 
   G4int npart = outgoingParticles.size();
-  G4int nnuc = nucleiFragments.size();
+  G4int nnuc = outgoingNuclei.size();
   if (npart > 0) {
     for (G4int ip=npart-1; ip>=0; ip--) {
       if (outgoingParticles[ip].getKineticEnergy()+enc > 0.) {
@@ -291,10 +293,10 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     }
   } else if (nnuc > 0) {
     for (G4int in=nnuc-1; in>=0; in--) {
-      if (nucleiFragments[in].getKineticEnergy()+enc > 0.) {
-	G4LorentzVector last_mom = nucleiFragments[in].getMomentum();
+      if (outgoingNuclei[in].getKineticEnergy()+enc > 0.) {
+	G4LorentzVector last_mom = outgoingNuclei[in].getMomentum();
 	last_mom += mon_non_cons;
-	nucleiFragments[in].setMomentum(last_mom);
+	outgoingNuclei[in].setMomentum(last_mom);
 	break;
       }
     }
@@ -315,18 +317,18 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
   G4bool need_hard_tuning = true;
   
   G4double encMeV = mon_non_cons.e() / GeV;	// Excitation below is in MeV
-  if (nucleiFragments.size() > 0) {
-    for (G4int i=0; i < G4int(nucleiFragments.size()); i++) {
-      G4double eex = nucleiFragments[i].getExitationEnergy();
+  if (outgoingNuclei.size() > 0) {
+    for (G4int i=0; i < G4int(outgoingNuclei.size()); i++) {
+      G4double eex = outgoingNuclei[i].getExitationEnergy();
       
       if(eex > 0.0 && eex + encMeV >= 0.0) {
-	nucleiFragments[i].setExitationEnergy(eex+encMeV);
+	outgoingNuclei[i].setExitationEnergy(eex+encMeV);
 	need_hard_tuning = false;
 	break;
       }
     }
     if (need_hard_tuning && encMeV > 0.) {
-      nucleiFragments[0].setExitationEnergy(encMeV);
+      outgoingNuclei[0].setExitationEnergy(encMeV);
       need_hard_tuning = false;
     }
   }
@@ -439,8 +441,8 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
 
 void G4CollisionOutput::setRemainingExitationEnergy() { 
   eex_rest = 0.0;
-  for(G4int i=0; i < G4int(nucleiFragments.size()); i++) 
-    eex_rest += nucleiFragments[i].getExitationEnergyInGeV();
+  for(G4int i=0; i < G4int(outgoingNuclei.size()); i++) 
+    eex_rest += outgoingNuclei[i].getExitationEnergyInGeV();
 }
 
 
