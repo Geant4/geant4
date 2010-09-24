@@ -2,7 +2,7 @@
                  Geant4 9.2 - patch-04 Release Notes
                  -----------------------------------
 
-                                                            17 September 2010
+                                                            16 September 2010
 
 List of fixes included in this public patch since the public release 9.2.p03:
 
