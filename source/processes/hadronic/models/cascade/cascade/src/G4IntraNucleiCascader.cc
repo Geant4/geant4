@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.65 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.66 2010-09-24 19:57:25 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -74,6 +74,7 @@
 //		move the exciton container to a data member
 // 20100916  M. Kelsey -- Put decay photons directly onto output list
 // 20100921  M. Kelsey -- Migrate to RecoilMaker::makeRecoilNuclei().
+// 20100924  M. Kelsey -- Minor shuffling of post-cascade recoil building.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -354,7 +355,8 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     G4int afin = theRecoilMaker->getRecoilA();
     G4int zfin = theRecoilMaker->getRecoilZ();
 
-    if (!theRecoilMaker->goodFragment()) {  // Sanity check before proceeding
+    // Sanity check before proceeding
+    if (!theRecoilMaker->goodFragment() && !theRecoilMaker->wholeEvent()) {
       if (verboseLevel > 1)
 	G4cerr << " Recoil nucleus is not physical: A=" << afin << " Z="
 	       << zfin << G4endl;
@@ -367,23 +369,53 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
     }
 
-    if (afin > 1) {
+    if (afin == 1) {		// Add bare nucleon to particle list
+      G4int last_type = (zfin==1) ? 1 : 2;	// proton=1, neutron=2
+
+      G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
+      G4double mres = presid.m();
+
+      // Check for sensible kinematics
+      if (mres-mass < -small_ekin) {		// Insufficient recoil energy
+	if (verboseLevel > 2) G4cerr << " unphysical recoil nucleon" << G4endl;
+	continue;
+      }
+
+      if (mres-mass > small_ekin) {		// Too much extra energy
+	if (verboseLevel > 2)
+	  G4cerr << " extra energy with recoil nucleon" << G4endl;
+
+	// FIXME:  For now, we add the nucleon as unbalanced, and let
+	//	   "SetOnShell" fudge things.  This should be abandoned.
+      }
+
+      G4InuclElementaryParticle last_particle(presid, last_type, 4);
+
+      if (verboseLevel > 3) {
+	G4cout << " adding recoiling nucleon to output list" << G4endl;
+	last_particle.printParticle();
+      }
+
+      output_particles.push_back(last_particle);
+    } else if (afin > 1) {		// Check kinematics of nuclear fragment
       // FIXME: Want to disperse balls of neutrons (Z==0) without creating
       //	temporary fragments.  Could EPCollider's N-body phase-space
       //	do the job?
 
-      G4double Eex = theRecoilMaker->getRecoilExcitation();
+      // Check for quasi-elastic scattering -- energy imbalance within cut
+      if (output_particles.size() == 1) {
+	G4double Eex = theRecoilMaker->getRecoilExcitation();
+	if (std::abs(Eex) < quasielast_cut) {
+	  if (verboseLevel > 3) {
+	    G4cout << " quasi-elastic scatter with " << Eex << " MeV recoil"
+		   << G4endl;
+	  }
 
-      // Quasi-elastic scattering 
-      if (output_particles.size() == 1 && std::abs(Eex) < quasielast_cut) {
-	if (verboseLevel > 3) {
-	  G4cout << " quasi-elastic scatter with " << Eex << " MeV recoil"
-		 << G4endl;
-	}
-	theRecoilMaker->setRecoilExcitation(Eex=0.);
-	if (verboseLevel > 3) {
-	  G4cout << " Eex reset to " << theRecoilMaker->getRecoilExcitation()
-		 << G4endl;
+	  theRecoilMaker->setRecoilExcitation(Eex=0.);
+	  if (verboseLevel > 3) {
+	    G4cout << " Eex reset to " << theRecoilMaker->getRecoilExcitation()
+		   << G4endl;
+	  }
 	}
       }
 
@@ -406,31 +438,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       if (verboseLevel > 3) outgoing_nuclei->printParticle();
       
       output.addTargetFragment(*outgoing_nuclei);
-    } else if (afin == 1) { 	       // Just single nucleon left in "recoil"
-      G4int last_type = 3 - zfin;	// Proton is 1, neutron is 2
-
-      G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
-      G4double mres = presid.m();
-
-      if (verboseLevel > 2) {		// Report recoil consistency problems
-	if (mres-mass < -small_ekin) {		// Insufficient recoil energy
-	  G4cerr << " unphysical recoil nucleon" << G4endl;
-	  continue;
-	}
-
-	if (mres-mass > small_ekin) {		// Too much extra energy
-	  G4cout << " extra energy with recoil nucleon" << G4endl;
-	}
-      }
-
-      if (verboseLevel > 3)
-	G4cout << " adding recoiling nucleon to output list" << G4endl;
-      
-      G4InuclElementaryParticle last_particle(presid, last_type, 4);
-      if (verboseLevel > 3) last_particle.printParticle();
-      
-      output_particles.push_back(last_particle);
-    }		// if (afin > 1) else if (afin == 1)
+    }
 
     // Put final-state particle in "leading order" and return
     std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
