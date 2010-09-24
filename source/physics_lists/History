@@ -1,4 +1,4 @@
-q$Id: History,v 1.148 2010-09-23 18:53:20 vnivanch Exp $
+q$Id: History,v 1.149 2010-09-24 12:54:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-09-2010, V.Ivanchenko (phys-lists-V09-03-26)
+- G4HadronElasticPhysics - attempt to use exactly the same cross section 
+                           for p and n as in 9.4beta 
 
 23-09-2010, V.Ivanchenko (phys-lists-V09-03-25)
 - G4HadronElasticPhysics, G4HadronElasticPhysicsHP - added CHIPS cross 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc,v 1.15 2010-09-23 18:53:20 vnivanch Exp $
+// $Id: G4HadronElasticPhysics.cc,v 1.16 2010-09-24 12:54:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -158,7 +158,7 @@ void G4HadronElasticPhysics::ConstructProcess()
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
       if(pname == "proton") { 
-	hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+	//hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
 	hel->AddDataSet(new G4CHIPSElasticXS());
 	hel->RegisterMe(chipsp);
       } else if (pname == "pi+" || pname == "pi-") { 
@@ -179,7 +179,7 @@ void G4HadronElasticPhysics::ConstructProcess()
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4WHadronElasticProcess* hel = new G4WHadronElasticProcess();
-      hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
       hel->AddDataSet(new G4CHIPSElasticXS());
       hel->RegisterMe(chipsn);
 
