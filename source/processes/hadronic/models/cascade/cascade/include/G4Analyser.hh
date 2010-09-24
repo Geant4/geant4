@@ -67,7 +67,7 @@ private:
   G4double averageNeutronKinEnergy;
   G4double averagePionKinEnergy;
   G4double averageExitationEnergy;
-  G4double averageNucleiFragments;
+  G4double averageOutgoingNuclei;
   G4double fissy_prob;
   G4double averagePionPl;
   G4double averagePionMin;

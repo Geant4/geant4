@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4Fissioner.cc,v 1.36 2010-09-24 06:26:06 mkelsey Exp $
+// $Id: G4Fissioner.cc,v 1.37 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -184,7 +184,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   frags[1] = nuclei2;
   validateOutput(0, target, frags);		// Check energy conservation
 
-  output.addTargetFragments(frags);
+  output.addOutgoingNuclei(frags);
 }
 
 G4double G4Fissioner::getC2(G4int A1, 

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.cc,v 1.3 2010-09-24 06:26:06 mkelsey Exp $
+// $Id: G4PreCompoundDeexcitation.cc,v 1.4 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
@@ -134,7 +134,7 @@ void G4PreCompoundDeexcitation::getDeExcitedFragments(G4InuclNuclei* rfrag) {
       if (G4InuclElementaryParticle::type(pd)) {
 	output.addOutgoingParticle(G4InuclElementaryParticle(aFragment, 9));
       } else {
-	output.addTargetFragment(G4InuclNuclei(aFragment, 9));
+	output.addOutgoingNucleus(G4InuclNuclei(aFragment, 9));
       }
     }
 

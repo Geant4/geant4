@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.66 2010-09-24 19:57:25 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.67 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -437,7 +437,7 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
       if (verboseLevel > 3) outgoing_nuclei->printParticle();
       
-      output.addTargetFragment(*outgoing_nuclei);
+      output.addOutgoingNucleus(*outgoing_nuclei);
     }
 
     // Put final-state particle in "leading order" and return

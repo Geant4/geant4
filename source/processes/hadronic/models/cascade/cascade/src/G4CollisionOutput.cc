@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.29 2010-07-16 22:16:17 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.30 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -81,7 +81,7 @@ void G4CollisionOutput::addOutgoingParticles(const std::vector<G4InuclElementary
 			   particles.begin(), particles.end());
 }
 
-void G4CollisionOutput::addTargetFragments(const std::vector<G4InuclNuclei>& nuclea) {
+void G4CollisionOutput::addOutgoingNuclei(const std::vector<G4InuclNuclei>& nuclea) {
   nucleiFragments.insert(nucleiFragments.end(), nuclea.begin(), nuclea.end());
 }
 

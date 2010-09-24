@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NonEquilibriumEvaporator.cc,v 1.39 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4NonEquilibriumEvaporator.cc,v 1.40 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -422,7 +422,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   // everything finished, set output nuclei
 
   if (output.numberOfOutgoingParticles() == 0) {
-    output.addTargetFragment(*nuclei_target);
+    output.addOutgoingNucleus(*nuclei_target);
   } else {
     G4LorentzVector pnuc = pin - ppout;
     G4InuclNuclei nuclei(pnuc, A, Z, EEXS, 5);
@@ -431,7 +431,7 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       G4cout << " remaining nucleus " << G4endl;
       nuclei.printParticle();
     }
-    output.addTargetFragment(nuclei);
+    output.addOutgoingNucleus(nuclei);
   }
 
   validateOutput(0, target, output);	// Check energy conservation, etc.

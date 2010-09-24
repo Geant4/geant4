@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeInterface.cc,v 1.102 2010-09-23 18:13:32 mkelsey Exp $
+// $Id: G4CascadeInterface.cc,v 1.103 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -327,7 +327,7 @@ void G4CascadeInterface::createTarget(G4Nucleus& theNucleus) {
 // Transfer Bertini internal final state to hadronics interface
 
 void G4CascadeInterface::copyOutputToHadronicResult() {
-  const std::vector<G4InuclNuclei>& nucleiFragments = output->getNucleiFragments();
+  const std::vector<G4InuclNuclei>& nucleiFragments = output->getOutgoingNuclei();
   const std::vector<G4InuclElementaryParticle>& particles = output->getOutgoingParticles();
 
   theResult.SetStatusChange(stopAndKill);
@@ -419,7 +419,7 @@ G4bool G4CascadeInterface::retryInelasticProton() const {
 G4bool G4CascadeInterface::retryInelasticNucleus() const {
   // Quantities necessary for conditional block below
   G4int npart = output->numberOfOutgoingParticles();
-  G4int nfrag = output->numberOfNucleiFragments();
+  G4int nfrag = output->numberOfOutgoingNuclei();
 
   const G4ParticleDefinition* firstOut = (npart == 0) ? 0 :
     output->getOutgoingParticles().begin()->getDefinition();

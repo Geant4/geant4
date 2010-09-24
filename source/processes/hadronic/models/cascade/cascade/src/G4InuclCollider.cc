@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.49 2010-09-24 06:26:06 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.50 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -202,9 +202,9 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
     //         remove initial fragment from list (or get it a different way)
     DEXoutput.addOutgoingParticles(output.getOutgoingParticles());
     
-    if (output.numberOfNucleiFragments() == 1) {	// Residual fragment
+    if (output.numberOfOutgoingNuclei() == 1) {	// Residual fragment
       // FIXME:  Making a copy here because of constness issues
-      G4InuclNuclei recoil_nucleus = output.getNucleiFragments()[0];
+      G4InuclNuclei recoil_nucleus = output.getOutgoingNuclei()[0];
       theDeexcitation->collide(0, &recoil_nucleus, DEXoutput);
     }
 

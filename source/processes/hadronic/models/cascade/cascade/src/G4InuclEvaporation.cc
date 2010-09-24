@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclEvaporation.cc,v 1.20 2010-09-14 18:20:06 mkelsey Exp $
+// $Id: G4InuclEvaporation.cc,v 1.21 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -131,7 +131,7 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
   G4CollisionOutput output;
   evaporator->collide(0, nucleus, output);
 
-  const std::vector<G4InuclNuclei>& nucleiFragments = output.getNucleiFragments();
+  const std::vector<G4InuclNuclei>& nucleiFragments = output.getOutgoingNuclei();
   const std::vector<G4InuclElementaryParticle>& particles = output.getOutgoingParticles();
 
   G4double eTot=0.0;
@@ -158,7 +158,7 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
     }  
   }
 
-  //  G4cout << "# fragments " << output.getNucleiFragments().size() << G4endl;
+  //  G4cout << "# fragments " << output.getOutgoingNuclei().size() << G4endl;
   i=1; 
   if (!nucleiFragments.empty()) { 
     nucleiIterator ifrag = nucleiFragments.begin();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Analyser.cc,v 1.21 2010-07-27 04:20:03 mkelsey Exp $
+// $Id: G4Analyser.cc,v 1.22 2010-09-24 20:51:05 mkelsey Exp $
 //
 // 20100726  M. Kelsey -- Use references for fetched lists
 
@@ -48,7 +48,7 @@ G4Analyser::G4Analyser()
   averageNeutronNumber = 0.0;
   averagePionNumber = 0.0;
   averageExitationEnergy = 0.0;
-  averageNucleiFragments = 0.0;
+  averageOutgoingNuclei = 0.0;
   averagePionPl = 0.0;
   averagePionMin = 0.0;
   averagePion0 = 0.0;
@@ -115,12 +115,12 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   }
 
   if (withNuclei) {
-    const std::vector<G4InuclNuclei>& nucleus = output.getNucleiFragments();
+    const std::vector<G4InuclNuclei>& nucleus = output.getOutgoingNuclei();
 
     //    if (nucleus.size() >= 0) {
     if (nucleus.size() > 0) {
       G4int nbig = 0;
-      averageNucleiFragments += nucleus.size();
+      averageOutgoingNuclei += nucleus.size();
 
       for (G4int in = 0; in < G4int(nucleus.size()); in++) {
 	averageExitationEnergy += nucleus[in].getExitationEnergy();
@@ -235,8 +235,8 @@ void G4Analyser::printResultsSimple() {
   if (withNuclei) {
     G4cout		   
       << " average Exitation Energy " << 
-      averageExitationEnergy / averageNucleiFragments << G4endl
-      << " average num of fragments " << averageNucleiFragments / eventNumber << G4endl;
+      averageExitationEnergy / averageOutgoingNuclei << G4endl
+      << " average num of fragments " << averageOutgoingNuclei / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
       inel_csec * fissy_prob / eventNumber << G4endl;
   }
@@ -270,8 +270,8 @@ void G4Analyser::printResults() {
       << " average A " << averageA / eventNumber << G4endl 		   
       << " average Z " << averageZ / eventNumber << G4endl 		   
       << " average Exitation Energy " << 
-      averageExitationEnergy / averageNucleiFragments << G4endl
-      << " average num of fragments " << averageNucleiFragments / eventNumber << G4endl;
+      averageExitationEnergy / averageOutgoingNuclei << G4endl
+      << " average num of fragments " << averageOutgoingNuclei / eventNumber << G4endl;
     G4cout << " fission prob. " << fissy_prob / eventNumber << " c.sec " <<
       inel_csec * fissy_prob / eventNumber << G4endl;
     handleWatcherStatistics();

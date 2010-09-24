@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4EquilibriumEvaporator.cc,v 1.47 2010-09-24 06:32:21 mkelsey Exp $
+// $Id: G4EquilibriumEvaporator.cc,v 1.48 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -141,7 +141,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   // If nucleus is in ground state, no evaporation
   if (EEXS < cut_off_energy) {
     if (verboseLevel > 1) G4cout << " no energy for evaporation" << G4endl;
-    output.addTargetFragment(*nuclei_target);
+    output.addOutgoingNucleus(*nuclei_target);
 
     validateOutput(0, target, output);		// Check energy conservation
     return;
@@ -465,7 +465,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 		Z = Z1[icase];
 
 		nuclei.setMomentum(mom);
-		output.addTargetFragment(nuclei);
+		output.addOutgoingNucleus(nuclei);
 		if (verboseLevel > 3) nuclei.printParticle();
 
 		ppout += mom;
@@ -489,7 +489,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	G4CollisionOutput foutput;
 	theFissioner.collide(0, &nuclei, foutput);
 
-	if (foutput.getNucleiFragments().size() == 2) { // fission o'k
+	if (foutput.getOutgoingNuclei().size() == 2) { // fission o'k
 	  if (verboseLevel > 2) G4cout << " fission done in eql" << G4endl;
 
 	  // Move fission fragments to lab frame for processing
@@ -499,7 +499,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 	  G4bool prevDoChecks = doConservationChecks;	// Turn off checking
 	  setConservationChecks(false);
 
-	  std::vector<G4InuclNuclei> nuclea = foutput.getNucleiFragments();
+	  std::vector<G4InuclNuclei> nuclea = foutput.getOutgoingNuclei();
 	  this->collide(0, &nuclea[0], output);
 	  this->collide(0, &nuclea[1], output);
 
@@ -537,7 +537,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     nuclei.printParticle();
   }
 
-  output.addTargetFragment(nuclei);
+  output.addOutgoingNucleus(nuclei);
 
   validateOutput(0, target, output);		// Check energy conservation
   return;

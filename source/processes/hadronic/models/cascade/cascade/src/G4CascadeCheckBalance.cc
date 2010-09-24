@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.17 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.18 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -137,7 +137,7 @@ void G4CascadeCheckBalance::collide(G4InuclParticle* bullet,
 	   << G4endl;
 
   tempOutput.reset();			// Buffer for processing
-  tempOutput.addTargetFragments(fragments);
+  tempOutput.addOutgoingNuclei(fragments);
   collide(bullet, target, tempOutput);
 }
 

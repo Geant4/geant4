@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeDeexcitation.cc,v 1.1 2010-09-15 20:16:16 mkelsey Exp $
+// $Id: G4CascadeDeexcitation.cc,v 1.2 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
@@ -95,7 +95,7 @@ void G4CascadeDeexcitation::collide(G4InuclParticle* /*bullet*/,
     
   // Use nuclear fragment left from non-equilibrium for next step
   // NOT:  Must make a copy before reset occurs below
-  G4InuclNuclei exciton = output.getNucleiFragments()[0];
+  G4InuclNuclei exciton = output.getOutgoingNuclei()[0];
     
   output.reset();
   theEquilibriumEvaporator->collide(0, &exciton, output);

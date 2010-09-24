@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.hh,v 1.24 2010-07-19 22:26:28 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.25 2010-09-24 20:51:05 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -62,7 +62,7 @@ public:
 
   void add(const G4CollisionOutput& right) {
     addOutgoingParticles(right.outgoingParticles);
-    addTargetFragments(right.nucleiFragments);
+    addOutgoingNuclei(right.nucleiFragments);
   }
 
   void addOutgoingParticle(const G4InuclElementaryParticle& particle) {
@@ -71,11 +71,11 @@ public:
 
   void addOutgoingParticles(const std::vector<G4InuclElementaryParticle>& particles);
 
-  void addTargetFragment(const G4InuclNuclei& nuclei) {
+  void addOutgoingNucleus(const G4InuclNuclei& nuclei) {
     nucleiFragments.push_back(nuclei);
   };
 
-  void addTargetFragments(const std::vector<G4InuclNuclei>& nuclea);
+  void addOutgoingNuclei(const std::vector<G4InuclNuclei>& nuclea);
 
   // These are primarily for G4IntraNucleiCascader internal checks
   void addOutgoingParticle(const G4CascadParticle& cparticle);
@@ -89,9 +89,9 @@ public:
     return outgoingParticles;
   };
 
-  G4int numberOfNucleiFragments() const { return nucleiFragments.size(); };
+  G4int numberOfOutgoingNuclei() const { return nucleiFragments.size(); };
  
-  const std::vector<G4InuclNuclei>& getNucleiFragments() const {
+  const std::vector<G4InuclNuclei>& getOutgoingNuclei() const {
     return nucleiFragments;
   };
 
