@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.34 2010-09-25 06:44:30 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.35 2010-09-25 20:48:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -175,10 +175,7 @@ void G4CollisionOutput::printCollisionOutput() const {
     outgoingNuclei[i].printParticle();
 
   if (theRecoilFragment.GetA() > 0) {
-    // FIXME:  G4Fragment messes up floating point output; need to save
-    std::streamsize ioprec = G4cout.precision();
-    G4cout << " Recoil Fragment: " << theRecoilFragment << G4endl;
-    G4cout.precision(ioprec);
+    G4cout << theRecoilFragment << G4endl;
   }
 }
 
