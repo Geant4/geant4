@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.16 2010-05-18 18:52:07 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.17 2010-09-25 20:26:23 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -36,7 +36,8 @@
 // Modifications:
 // 03.05.2010 V.Ivanchenko General cleanup; moved obsolete methods from
 //            inline to source 
-//
+// 25.09.2010 M. Kelsey -- Change "setprecision" to "setwidth" in printout,
+//	      add null pointer check.
 
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
@@ -183,14 +184,23 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
 
 std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 {
+  if (!theFragment) {
+    out << "Fragment: null pointer ";
+    return out;
+  }
+
   std::ios::fmtflags old_floatfield = out.flags();
   out.setf(std::ios::floatfield);
 
   out 
-    << "Fragment: A = " << std::setprecision(3) << theFragment->theA 
-    << ", Z = " << std::setprecision(3) << theFragment->theZ ;
+    << "Fragment: A = " << std::setw(3) << theFragment->theA 
+    << ", Z = " << std::setw(3) << theFragment->theZ ;
   out.setf(std::ios::scientific,std::ios::floatfield);
-  out
+
+  // Store user's precision setting and reset to (3) here: back-compatibility
+  std::streamsize floatPrec = out.precision();
+
+  out << std::setprecision(3)
     << ", U = " << theFragment->GetExcitationEnergy()/MeV 
     << " MeV" << G4endl
     << "          P = (" 
@@ -210,6 +220,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 	<< ", #Charged = " << theFragment->numberOfCharged;
   }
   out.setf(old_floatfield,std::ios::floatfield);
+  out.precision(floatPrec);
 
   return out;
     
