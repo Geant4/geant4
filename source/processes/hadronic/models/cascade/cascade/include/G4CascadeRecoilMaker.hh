@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.hh,v 1.5 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.hh,v 1.6 2010-09-25 06:44:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -40,6 +40,7 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
 //		Repurpose "makeRecoilFragment()" to return G4Fragment.
+// 20100924  M. Kelsey -- Add raw excitation energy (mass difference) function
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -100,6 +101,7 @@ public:
 
 protected:
   void fillRecoil();		// Set recoil parameters from CheckBalance
+  G4double deltaM() const;	// Mass difference from current parameters
 
 private:
   G4CascadeCheckBalance* balance;	// Used to do kinematics calculations

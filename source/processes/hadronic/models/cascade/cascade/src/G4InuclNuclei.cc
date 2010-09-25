@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.21 2010-09-25 04:35:03 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.22 2010-09-25 06:44:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -63,7 +63,7 @@ using namespace G4InuclSpecialFunctions;
 G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment, G4int model)
   : G4InuclParticle(makeDefinition(aFragment.GetA_asInt(),
 				   aFragment.GetZ_asInt()),
-		    aFragment.GetMomentum()) {
+		    aFragment.GetMomentum()/GeV) {	// Bertini units
   setExitationEnergy(aFragment.GetExcitationEnergy());
   setModel(model);
 
@@ -82,7 +82,7 @@ G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment, G4int model)
 
 // FIXME:  Should we have a local buffer and return by const-reference instead?
 G4Fragment G4InuclNuclei::makeG4Fragment() const {
-  G4Fragment frag(getA(), getZ(), getMomentum());
+  G4Fragment frag(getA(), getZ(), getMomentum()*GeV);	// From Bertini units
 
   // Note:  exciton configuration has to be set piece by piece
   frag.SetNumberOfHoles(theExitonConfiguration.protonHoles

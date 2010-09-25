@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4IntraNucleiCascader.cc,v 1.67 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4IntraNucleiCascader.cc,v 1.68 2010-09-25 06:44:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -75,6 +75,7 @@
 // 20100916  M. Kelsey -- Put decay photons directly onto output list
 // 20100921  M. Kelsey -- Migrate to RecoilMaker::makeRecoilNuclei().
 // 20100924  M. Kelsey -- Minor shuffling of post-cascade recoil building.
+//		Create G4Fragment for recoil and store in output.
 
 #include "G4IntraNucleiCascader.hh"
 #include "G4CascadParticle.hh"
@@ -369,7 +370,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       G4cout << "  afin " << afin << " zfin " << zfin <<  G4endl;
     }
 
-    if (afin == 1) {		// Add bare nucleon to particle list
+    if (afin == 0) break;		// Whole event fragmented, exit
+
+    if (afin == 1) {			// Add bare nucleon to particle list
       G4int last_type = (zfin==1) ? 1 : 2;	// proton=1, neutron=2
 
       G4double mass = G4InuclElementaryParticle::getParticleMass(last_type);
@@ -397,50 +400,48 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       }
 
       output_particles.push_back(last_particle);
-    } else if (afin > 1) {		// Check kinematics of nuclear fragment
-      // FIXME: Want to disperse balls of neutrons (Z==0) without creating
-      //	temporary fragments.  Could EPCollider's N-body phase-space
-      //	do the job?
+    }
 
-      // Check for quasi-elastic scattering -- energy imbalance within cut
-      if (output_particles.size() == 1) {
-	G4double Eex = theRecoilMaker->getRecoilExcitation();
-	if (std::abs(Eex) < quasielast_cut) {
-	  if (verboseLevel > 3) {
-	    G4cout << " quasi-elastic scatter with " << Eex << " MeV recoil"
-		   << G4endl;
-	  }
-
-	  theRecoilMaker->setRecoilExcitation(Eex=0.);
-	  if (verboseLevel > 3) {
-	    G4cout << " Eex reset to " << theRecoilMaker->getRecoilExcitation()
-		   << G4endl;
-	  }
+    // Process recoil fragment for consistency, exit or reject
+    if (output_particles.size() == 1) {
+      G4double Eex = theRecoilMaker->getRecoilExcitation();
+      if (std::abs(Eex) < quasielast_cut) {
+	if (verboseLevel > 3) {
+	  G4cout << " quasi-elastic scatter with " << Eex << " MeV recoil"
+		 << G4endl;
+	}
+	
+	theRecoilMaker->setRecoilExcitation(Eex=0.);
+	if (verboseLevel > 3) {
+	  G4cout << " Eex reset to " << theRecoilMaker->getRecoilExcitation()
+		 << G4endl;
 	}
       }
-
-      if (!theRecoilMaker->goodNucleus()) { 	// unphysical recoil
-	if (verboseLevel > 2) G4cout << " nuclear recoil failed." << G4endl;
+    }
+    
+    if (theRecoilMaker->goodNucleus()) {
+      theRecoilMaker->addExcitonConfiguration(theExitonConfiguration);
+    
+      G4Fragment* recoilFrag = theRecoilMaker->makeRecoilFragment();
+      if (!recoilFrag) {
+	G4cerr << "Got null pointer for recoil fragment!" << G4endl;
 	continue;
       }
+      output.addRecoilFragment(*recoilFrag);
 
-      theRecoilMaker->addExcitonConfiguration(theExitonConfiguration);
-
-      G4InuclNuclei* outgoing_nuclei = theRecoilMaker->makeRecoilNuclei(4);
-      if (!outgoing_nuclei) {
+      // TEMPORARY:  Add both frag and nuclei, for code validation
+      G4InuclNuclei* recoilNucl = theRecoilMaker->makeRecoilNuclei(4);
+      if (!recoilFrag) {
 	G4cerr << "Got null pointer for recoil nucleus!" << G4endl;
 	continue;
       }
-
+      output.addOutgoingNucleus(*recoilNucl);
+      
       if (verboseLevel > 2)
 	G4cout << " adding recoil nucleus/fragment to output list" << G4endl;
-
-      if (verboseLevel > 3) outgoing_nuclei->printParticle();
-      
-      output.addOutgoingNucleus(*outgoing_nuclei);
     }
 
-    // Put final-state particle in "leading order" and return
+    // Put final-state particle in "leading order" for return
     std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
     output.addOutgoingParticles(output_particles);
 
@@ -449,17 +450,11 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       output.setVerboseLevel(verboseLevel);
       output.setOnShell(bullet, target);
       output.setVerboseLevel(0);
-      if (verboseLevel > 2 && !output.acceptable())
-	G4cout << " setOnShell() failed to balance energy-momentum" << G4endl;
-    }
 
-    // Check energy and momentum conservation before returning
-    setConservationChecks(true);	// Override compile-time default
-    if (validateOutput(bullet, target, output)) break;
+      if (output.acceptable()) break;
+    } else if (theRecoilMaker->goodNucleus()) break;
 
-    if (verboseLevel > 2) 
-      G4cerr << " unable to balance energy-momentum from cascade" << G4endl;
-
+    // Cascade not physically reasonable
     if (afin <= minimum_recoil_A && minimum_recoil_A < tnuclei->getA()) {
       ++minimum_recoil_A;
       if (verboseLevel > 3) {
@@ -467,8 +462,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	       << G4endl;
       }
     }
-  }		// while (itry < itry_max)
+  }	// while (itry < itry_max)
 
+  // Cascade completed, for good or ill
   if (itry == itry_max) {
     if (verboseLevel > 3) {
       G4cout << " IntraNucleiCascader-> no inelastic interaction after "
@@ -476,11 +472,9 @@ void G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     }
 
     output.trivialise(bullet, target);
-  } else {
-    if (verboseLevel)
-      G4cout << " IntraNucleiCascader output after trials " << itry << G4endl;
+  } else if (verboseLevel) {
+    G4cout << " IntraNucleiCascader output after trials " << itry << G4endl;
   }
-
 
   // Copy final generated cascade to output buffer for return
   globalOutput.add(output);

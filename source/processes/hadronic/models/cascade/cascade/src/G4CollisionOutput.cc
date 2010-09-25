@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.33 2010-09-25 04:35:02 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.34 2010-09-25 06:44:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -42,6 +42,7 @@
 // 20100924  M. Kelsey -- Use "OutgoingNuclei" name consistently, replacing
 //		old "TargetFragment".  Add new (reusable) G4Fragment buffer 
 //		and access functions for initial post-cascade processing.
+//		Move implementation of add() to .cc file.
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
@@ -82,6 +83,17 @@ void G4CollisionOutput::reset() {
   theRecoilFragment = emptyFragment;
 }
 
+
+// Merge two complete objects
+
+void G4CollisionOutput::add(const G4CollisionOutput& right) {
+  addOutgoingParticles(right.outgoingParticles);
+  addOutgoingNuclei(right.outgoingNuclei);
+  theRecoilFragment = right.theRecoilFragment;
+}
+
+
+// Append to lists
 
 void G4CollisionOutput::addOutgoingParticles(const std::vector<G4InuclElementaryParticle>& particles) {
   outgoingParticles.insert(outgoingParticles.end(),

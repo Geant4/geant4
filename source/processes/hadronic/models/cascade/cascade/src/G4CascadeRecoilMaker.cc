@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.cc,v 1.6 2010-09-25 04:35:02 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.cc,v 1.7 2010-09-25 06:44:30 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -36,7 +36,9 @@
 //		handling of excitons.
 // 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
 //		Repurpose "makeRecoilFragment()" to return G4Fragment.
-// 20100924  M. Kelsey -- Remove unusable G4Fragment::SetExcitationEnergy()
+// 20100924  M. Kelsey -- Remove unusable G4Fragment::SetExcitationEnergy().
+//		Add deltaM to compute mass difference, use excitationEnergy
+//		to force G4Fragment four-vector to match.
 
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
@@ -112,10 +114,9 @@ void G4CascadeRecoilMaker::fillRecoil() {
 
   theExcitons.clear();		// Discard previous exciton configuraiton
 
-  // Nuclear excitation energy -- Bertini uses MeV for this
+  // Bertini uses MeV for excitation energy
   if (!goodFragment()) excitationEnergy = 0.;
-  else excitationEnergy =
-	 (recoilMomentum.m() - G4InuclNuclei::getNucleiMass(recoilA,recoilZ)) * GeV;
+  else excitationEnergy = deltaM() * GeV;
 
   // Allow for very small negative mass difference, and round to zero
   if (std::abs(excitationEnergy) < excTolerance) excitationEnergy = 0.;
@@ -134,6 +135,9 @@ void G4CascadeRecoilMaker::fillRecoil() {
 // Construct physical nucleus from recoil parameters, if reasonable
 
 G4InuclNuclei* G4CascadeRecoilMaker::makeRecoilNuclei(G4int model) {
+  if (verboseLevel > 1) 
+    G4cout << " >>> G4CascadeRecoilMaker::makeRecoilNuclei" << G4endl;
+
   if (!goodRecoil()) {
     if (verboseLevel > 2 && !wholeEvent())
       G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
@@ -152,6 +156,9 @@ G4InuclNuclei* G4CascadeRecoilMaker::makeRecoilNuclei(G4int model) {
 // Construct pre-compound nuclear fragment from recoil parameters
 
 G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
+  if (verboseLevel > 1) 
+    G4cout << " >>> G4CascadeRecoilMaker::makeRecoilFragment" << G4endl;
+
   if (!goodRecoil()) {
     if (verboseLevel > 2 && !wholeEvent())
       G4cout << theName << ": event recoil is not a physical nucleus" << G4endl;
@@ -160,7 +167,13 @@ G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
   }
 
   theRecoilFragment.SetZandA_asInt(recoilZ, recoilA);	// Note convention!
-  theRecoilFragment.SetMomentum(recoilMomentum);
+
+  // User may have overridden excitation energy; force four-momentum to match
+  G4double fragMass = 
+    G4InuclNuclei::getNucleiMass(recoilA,recoilZ) + excitationEnergy/GeV;
+
+  G4LorentzVector fragMom; fragMom.setVectM(recoilMomentum.vect(), fragMass);
+  theRecoilFragment.SetMomentum(fragMom*GeV);	// Bertini uses GeV!
 
   // Note:  exciton configuration has to be set piece by piece
   theRecoilFragment.SetNumberOfHoles(theExcitons.protonHoles
@@ -173,6 +186,15 @@ G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
 
   return &theRecoilFragment;
 }
+
+
+// Compute raw mass difference from recoil parameters
+
+G4double G4CascadeRecoilMaker::deltaM() const {
+  G4double nucMass = G4InuclNuclei::getNucleiMass(recoilA,recoilZ);
+  return (recoilMomentum.m() - nucMass);
+}
+
 
 // Data quality checks
 
