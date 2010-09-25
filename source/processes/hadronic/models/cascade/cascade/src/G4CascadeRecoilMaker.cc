@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeRecoilMaker.cc,v 1.5 2010-09-24 06:26:06 mkelsey Exp $
+// $Id: G4CascadeRecoilMaker.cc,v 1.6 2010-09-25 04:35:02 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Collects generated cascade data (using Collider::collide() interface)
@@ -36,6 +36,7 @@
 //		handling of excitons.
 // 20100921  M. Kelsey -- Return G4InuclNuclei using "makeRecoilNuclei()".
 //		Repurpose "makeRecoilFragment()" to return G4Fragment.
+// 20100924  M. Kelsey -- Remove unusable G4Fragment::SetExcitationEnergy()
 
 #include "G4CascadeRecoilMaker.hh"
 #include "globals.hh"
@@ -160,8 +161,6 @@ G4Fragment* G4CascadeRecoilMaker::makeRecoilFragment() {
 
   theRecoilFragment.SetZandA_asInt(recoilZ, recoilA);	// Note convention!
   theRecoilFragment.SetMomentum(recoilMomentum);
-
-  theRecoilFragment.SetExcitationEnergy(excitationEnergy);
 
   // Note:  exciton configuration has to be set piece by piece
   theRecoilFragment.SetNumberOfHoles(theExcitons.protonHoles

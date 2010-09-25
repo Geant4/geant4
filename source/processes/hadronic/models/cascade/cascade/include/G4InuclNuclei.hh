@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.hh,v 1.26 2010-09-16 05:21:00 mkelsey Exp $
+// $Id: G4InuclNuclei.hh,v 1.27 2010-09-25 04:35:02 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  Michael Kelsey -- Replace G4CascadeMomentum with G4LorentzVector
@@ -42,6 +42,8 @@
 // 20100909  M. Kelsey -- Add function to discard exciton configuration
 // 20100914  M. Kelsey -- Use integers for A and Z
 // 20100915  M. Kelsey -- Add constructor to copy G4DynamicParticle input
+// 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
+//		functions to create G4Fragment.
 
 #ifndef G4INUCL_NUCLEI_HH
 #define G4INUCL_NUCLEI_HH
@@ -50,6 +52,7 @@
 #include "G4LorentzVector.hh"
 #include "G4ExitonConfiguration.hh"
 
+class G4Fragment;
 class G4ParticleDefinition;
 
 
@@ -81,6 +84,8 @@ public:
     setExitationEnergy(exc);
     setModel(model);
   }
+
+  G4InuclNuclei(const G4Fragment& aFragment, G4int model=0);
 
   virtual ~G4InuclNuclei() {}
 
@@ -131,6 +136,10 @@ public:
   static G4double getNucleiMass(G4int a, G4int z, G4double exc=0.);
 
   virtual void printParticle() const;
+
+  // Convert contents to G4Fragment for use outside package
+  G4Fragment makeG4Fragment() const;
+  operator G4Fragment() const;
 
 protected:
   // Convert nuclear configuration to standard GEANT4 pointer

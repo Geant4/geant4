@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4InuclNuclei.cc,v 1.20 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4InuclNuclei.cc,v 1.21 2010-09-25 04:35:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
@@ -37,10 +37,14 @@
 // 20100719  M. Kelsey -- Change excitation energy without altering momentum
 // 20100906  M. Kelsey -- Add fill() functions to rewrite contents
 // 20100910  M. Kelsey -- Add clearExitonConfiguration() to fill() functions
-// 20100914  M. Kelsey -- Make printout symmetric with G4InuclElemPart
+// 20100914  M. Kelsey -- Make printout symmetric with G4InuclElemPart,
+//		migrate to integer A and Z
+// 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
+//		functions to create G4Fragment
 
-#include "G4HadronicException.hh"
 #include "G4InuclNuclei.hh"
+#include "G4Fragment.hh"
+#include "G4HadronicException.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4Ions.hh"
 #include "G4IonTable.hh"
@@ -52,6 +56,49 @@
 #include <map>
 
 using namespace G4InuclSpecialFunctions;
+
+
+// Convert contents from (via constructor) and to G4Fragment
+
+G4InuclNuclei::G4InuclNuclei(const G4Fragment& aFragment, G4int model)
+  : G4InuclParticle(makeDefinition(aFragment.GetA_asInt(),
+				   aFragment.GetZ_asInt()),
+		    aFragment.GetMomentum()) {
+  setExitationEnergy(aFragment.GetExcitationEnergy());
+  setModel(model);
+
+  // Exciton configuration must be set by hand
+  theExitonConfiguration.protonQuasiParticles = aFragment.GetNumberOfCharged();
+
+  theExitonConfiguration.neutronQuasiParticles =
+    aFragment.GetNumberOfCharged() - aFragment.GetNumberOfCharged();
+
+  // Split hole count evenly between protons and neutrons (arbitrary!)
+  theExitonConfiguration.protonHoles = aFragment.GetNumberOfHoles()/2;
+
+  theExitonConfiguration.neutronHoles =
+    aFragment.GetNumberOfHoles() - theExitonConfiguration.protonHoles;
+}
+
+// FIXME:  Should we have a local buffer and return by const-reference instead?
+G4Fragment G4InuclNuclei::makeG4Fragment() const {
+  G4Fragment frag(getA(), getZ(), getMomentum());
+
+  // Note:  exciton configuration has to be set piece by piece
+  frag.SetNumberOfHoles(theExitonConfiguration.protonHoles
+			+ theExitonConfiguration.neutronHoles);
+
+  frag.SetNumberOfParticles(theExitonConfiguration.protonQuasiParticles 
+			    + theExitonConfiguration.neutronQuasiParticles);
+
+  frag.SetNumberOfCharged(theExitonConfiguration.protonQuasiParticles);
+
+  return frag;
+}
+
+G4InuclNuclei::operator G4Fragment() const {
+  return makeG4Fragment();
+}
 
 
 // Overwrite data structure (avoids creating/copying temporaries)

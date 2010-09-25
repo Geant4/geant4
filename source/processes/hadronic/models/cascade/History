@@ -1,4 +1,4 @@
-$Id: History,v 1.188 2010-09-24 21:52:32 mkelsey Exp $
+$Id: History,v 1.189 2010-09-25 04:35:02 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -43,7 +43,14 @@ code and to keep track of all tags.
 - G4CollisionOutput:  Add new G4Fragment data member, with get() and add()
   accessors.  This fragment is *not* used by setOnShell() or by any of the
   event-total calculations.  It will be filled by G4IntraNucleiCascader for
-  use by de-excitation modules.
+  use by de-excitation modules.  Include G4Fragment in diagnostic output if
+  not empty.
+
+- G4CascadeRecoilMaker.cc:  Remove G4Fragment::SetExcitationEnergy() call.
+
+- G4InuclNuclei:  Add new constructor to create from G4Fragment input, and
+  new makeG4Fragment() to spit out a G4Fragment.  Also provide a casting
+  operator for the latter.
 
 24 September 2010 Michael Kelsey (hadr-casc-V09-03-79)
 ------------------------------------------------------
