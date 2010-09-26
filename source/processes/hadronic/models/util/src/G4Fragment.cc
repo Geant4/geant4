@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.17 2010-09-25 20:26:23 mkelsey Exp $
+// $Id: G4Fragment.cc,v 1.18 2010-09-26 18:05:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -56,13 +56,12 @@ G4Fragment::G4Fragment() :
   theMomentum(0),
   theAngularMomentum(0),
   numberOfParticles(0),
-  numberOfHoles(0),
   numberOfCharged(0),
+  numberOfHoles(0),
+  numberOfChargedHoles(0),
+  numberOfShellElectrons(0),
   theParticleDefinition(0),
   theCreationTime(0.0)
-#ifdef PRECOMPOUND_TEST 
-  ,theCreatorModel("No name")
-#endif
 {}
 
 // Copy Constructor
@@ -75,31 +74,29 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    theMomentum  = right.theMomentum;
    theAngularMomentum = right.theAngularMomentum;
    numberOfParticles = right.numberOfParticles;
-   numberOfHoles = right.numberOfHoles;
    numberOfCharged = right.numberOfCharged;
+   numberOfHoles = right.numberOfHoles;
+   numberOfChargedHoles = right.numberOfChargedHoles;
+   numberOfShellElectrons = right.numberOfShellElectrons;
    theParticleDefinition = right.theParticleDefinition;
    theCreationTime = right.theCreationTime;
-#ifdef PRECOMPOUND_TEST 
-   theCreatorModel = right.theCreatorModel;
-#endif
 }
 
 G4Fragment::~G4Fragment()
 {}
 
-G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMomentum) :
+G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   theA(A),
   theZ(Z),
   theMomentum(aMomentum),
   theAngularMomentum(0),
   numberOfParticles(0),
-  numberOfHoles(0),
   numberOfCharged(0),
+  numberOfHoles(0),
+  numberOfChargedHoles(0),
+  numberOfShellElectrons(0),
   theParticleDefinition(0),
   theCreationTime(0.0)
-#ifdef PRECOMPOUND_TEST
-  ,theCreatorModel("No name")
-#endif
 {
   theExcitationEnergy = 0.0;
   theGroundStateMass = 0.0;
@@ -107,23 +104,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector& aMom
     CalculateGroundStateMass();
     CalculateExcitationEnergy(); 
   }
-  /*
-  theExcitationEnergy = theMomentum.mag() - 
-                        G4ParticleTable::GetParticleTable()->GetIonTable()
-			->GetIonMass( G4lrint(theZ), G4lrint(theA) );
-  if (theExcitationEnergy < 0.0) {
-    if (theExcitationEnergy > -10.0 * eV || 0 == G4lrint(theA)) {
-      theExcitationEnergy = 0.0;
-    } else {
-      G4cout << "A, Z, momentum, theExcitationEnergy"<<
-           A<<" "<<Z<<" "<<aMomentum<<" "<<theExcitationEnergy<<G4endl;
-      G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
-      throw G4HadronicException(__FILE__, __LINE__, text);
-    }
-  }
-  */
 }
-
 
 // This constructor is for initialize photons or electrons
 G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, 
@@ -133,13 +114,12 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   theMomentum(aMomentum),
   theAngularMomentum(0),
   numberOfParticles(0),
-  numberOfHoles(0),
   numberOfCharged(0),
+  numberOfHoles(0),
+  numberOfChargedHoles(0),
+  numberOfShellElectrons(0),
   theParticleDefinition(aParticleDefinition),
   theCreationTime(0.0)
-#ifdef PRECOMPOUND_TEST 
-  ,theCreatorModel("No name")
-#endif
 {
   theExcitationEnergy = 0.0;
   if(aParticleDefinition != G4Gamma::Gamma() && 
@@ -161,13 +141,12 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theMomentum  = right.theMomentum;
     theAngularMomentum = right.theAngularMomentum;
     numberOfParticles = right.numberOfParticles;
-    numberOfHoles = right.numberOfHoles;
     numberOfCharged = right.numberOfCharged;
+    numberOfHoles = right.numberOfHoles;
+    numberOfChargedHoles = right.numberOfChargedHoles;
+    numberOfShellElectrons = right.numberOfShellElectrons;
     theParticleDefinition = right.theParticleDefinition;
     theCreationTime = right.theCreationTime;
-#ifdef PRECOMPOUND_TEST 
-    theCreatorModel = right.theCreatorModel;
-#endif
   }
   return *this;
 }
@@ -192,38 +171,38 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
   std::ios::fmtflags old_floatfield = out.flags();
   out.setf(std::ios::floatfield);
 
-  out 
-    << "Fragment: A = " << std::setw(3) << theFragment->theA 
-    << ", Z = " << std::setw(3) << theFragment->theZ ;
+  out << "Fragment: A = " << std::setw(3) << theFragment->theA 
+      << ", Z = " << std::setw(3) << theFragment->theZ ;
   out.setf(std::ios::scientific,std::ios::floatfield);
 
   // Store user's precision setting and reset to (3) here: back-compatibility
   std::streamsize floatPrec = out.precision();
 
   out << std::setprecision(3)
-    << ", U = " << theFragment->GetExcitationEnergy()/MeV 
-    << " MeV" << G4endl
-    << "          P = (" 
-    << theFragment->theMomentum.x()/MeV << ","
-    << theFragment->theMomentum.y()/MeV << ","
-    << theFragment->theMomentum.z()/MeV 
-    << ") MeV   E = " 
-    << theFragment->theMomentum.t()/MeV << " MeV";
+      << ", U = " << theFragment->GetExcitationEnergy()/CLHEP::MeV 
+      << " MeV" << G4endl
+      << "          P = (" 
+      << theFragment->theMomentum.x()/CLHEP::MeV << ","
+      << theFragment->theMomentum.y()/CLHEP::MeV << ","
+      << theFragment->theMomentum.z()/CLHEP::MeV 
+      << ") MeV   E = " 
+      << theFragment->theMomentum.t()/CLHEP::MeV << " MeV";
 
   // What about Angular momentum???
 
   if (theFragment->GetNumberOfExcitons() != 0) {
-    out << G4endl;
+    //    out << G4endl;
     out << "          " 
-	<< "#Particles = " << theFragment->numberOfParticles 
-	<< ", #Holes = "   << theFragment->numberOfHoles
-	<< ", #Charged = " << theFragment->numberOfCharged;
+	<< "#Particles= " << theFragment->numberOfParticles 
+	<< ", #Charged= " << theFragment->numberOfCharged
+	<< ", #Holes= "   << theFragment->numberOfHoles
+	<< ", #ChargedHoles= " << theFragment->numberOfChargedHoles
+	<< G4endl;
   }
   out.setf(old_floatfield,std::ios::floatfield);
   out.precision(floatPrec);
 
   return out;
-    
 }
 
 std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
@@ -234,12 +213,12 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 
 void G4Fragment::ExcitationEnegryWarning()
 {
-  if (theExcitationEnergy < -10.0 * eV) {
+  if (theExcitationEnergy < -10 * CLHEP::eV) {
     ++errCount;
     if ( errCount <= 10 ) {
       G4cout << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy = "
-	     << theExcitationEnergy/MeV << " MeV for A = " 
-	     <<theA << " and Z= " << theZ << G4endl;
+	     << theExcitationEnergy/CLHEP::MeV << " MeV for A = " 
+	     << theA << " and Z= " << theZ << G4endl;
       if( errCount == 10 ) {
 	G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
 	throw G4HadronicException(__FILE__, __LINE__, text);
@@ -249,7 +228,16 @@ void G4Fragment::ExcitationEnegryWarning()
   theExcitationEnergy = 0.0;
 }
 
-G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const
+void G4Fragment::NumberOfExitationWarning(G4int value)
+{
+  G4cout << "G4Fragment::SetNumberOfCharged(): Ncharged = " << value
+	 << " > Nparticles= " << numberOfParticles
+	 << " A= " << theA << " and Z= " << theZ << G4endl;
+  G4String text = "G4Fragment::G4Fragment wrong exciton number ";
+  throw G4HadronicException(__FILE__, __LINE__, text);
+}
+
+G4ThreeVector G4Fragment::IsotropicRandom3Vector(G4double Magnitude) const
   // Create a unit vector with a random direction isotropically distributed
 {
   G4double CosTheta = 1.0 - 2.0*G4UniformRand();
@@ -261,21 +249,10 @@ G4ThreeVector G4Fragment::IsotropicRandom3Vector(const G4double Magnitude) const
 
   return Vector;		
 }
-
+/*
 void G4Fragment::SetExcitationEnergy(const G4double )
 {
   //   theExcitationEnergy = value;
   G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << G4endl;
 }
-
-#ifdef PRECOMPOUND_TEST 
-G4String G4Fragment::GetCreatorModel() const 
-{ 
-  return theCreatorModel; 
-}
-
-void G4Fragment::SetCreatorModel(const G4String & aModel) 
-{ 
-  theCreatorModel = aModel; 
-}
-#endif
+*/
