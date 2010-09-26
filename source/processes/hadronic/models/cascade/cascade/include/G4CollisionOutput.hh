@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CollisionOutput.hh,v 1.28 2010-09-25 06:44:30 mkelsey Exp $
+// $Id: G4CollisionOutput.hh,v 1.29 2010-09-26 04:06:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -39,6 +39,7 @@
 //		old "TargetFragment".  Add new (reusable) G4Fragment buffer 
 //		and access functions for initial post-cascade processing.
 //		Move implementation of add() to .cc file.
+// 20100925  M. Kelsey -- Add function to process G4ReactionProduct list
 
 #ifndef G4COLLISION_OUTPUT_HH
 #define G4COLLISION_OUTPUT_HH
@@ -47,14 +48,15 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzRotation.hh"
+#include "G4ReactionProductVector.hh"
 #include <algorithm>
 #include <vector>
 
 class G4CascadParticle;
 class G4LorentzConvertor;
 
-class G4CollisionOutput {
 
+class G4CollisionOutput {
 public:
   G4CollisionOutput();
   G4CollisionOutput& operator=(const G4CollisionOutput& right);
@@ -82,6 +84,8 @@ public:
   // These are primarily for G4IntraNucleiCascader internal checks
   void addOutgoingParticle(const G4CascadParticle& cparticle);
   void addOutgoingParticles(const std::vector<G4CascadParticle>& cparticles);
+
+  void addOutgoingParticles(const G4ReactionProductVector* rproducts);
 
   // Special buffer for initial, possible unstable fragment from cascade
   void addRecoilFragment(const G4Fragment* aFragment) {

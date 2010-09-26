@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.cc,v 1.4 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4PreCompoundDeexcitation.cc,v 1.5 2010-09-26 04:06:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
@@ -30,7 +30,9 @@
 //
 // 20100922  M. Kelsey -- Remove convertFragment() function, pass buffer
 //		instead of copying, clean up code somewhat
-
+// 20100925  M. Kelsey -- Use new G4InuclNuclei->G4Fragment conversion, and
+//		G4ReactionProducts -> G4CollisionOutput convertor.  Move Z==0
+//		explosion condition to base-class function.
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -39,6 +41,7 @@
 #include "G4InuclParticle.hh"
 #include "G4InuclParticleNames.hh"
 #include "G4PreCompoundModel.hh"
+#include "G4ReactionProductVector.hh"
 
 using namespace G4InuclParticleNames;
 
@@ -94,27 +97,13 @@ void G4PreCompoundDeexcitation::getDeExcitedFragments(G4InuclNuclei* rfrag) {
     rfrag->printParticle();
   }
 
-  G4LorentzVector mom = rfrag->getMomentum()*GeV;
-  G4int A = G4int(rfrag->getA());
-  G4int Z = G4int(rfrag->getZ());
-  G4ExitonConfiguration exiton = rfrag->getExitonConfiguration();
-    
-  G4Fragment frag(A,Z,mom);
-  frag.SetParticleDefinition(rfrag->getDefinition());
-  
-  // this is a dummy method, the exec complains about it at run time
-  //
-  // frag.SetExcitationEnergy(rfrag->getExitationEnergy());
-
-  frag.SetNumberOfHoles(exiton.protonHoles+exiton.neutronHoles);
-  frag.SetNumberOfParticles(exiton.protonQuasiParticles+exiton.protonQuasiParticles);
-  frag.SetNumberOfCharged(exiton.protonQuasiParticles);
+  G4Fragment frag(*rfrag);	// Uses casting operator for construction
 
   G4ReactionProductVector* precompoundProducts = 0;
 
   // FIXME: in principle, the explosion(...) stuff should also 
   //        handle properly the case of Z=0 (neutron blob) 
-  if ( (explosion(rfrag) || Z==0) && theExcitationHandler) {
+  if (explosion(&frag) && theExcitationHandler) {
     precompoundProducts = theExcitationHandler->BreakItUp(frag);
   } else {
     precompoundProducts = theDeExcitation->DeExcite(frag);
@@ -123,21 +112,7 @@ void G4PreCompoundDeexcitation::getDeExcitedFragments(G4InuclNuclei* rfrag) {
   // Transfer output of de-excitation back into Bertini objects
   output.reset();
   if (precompoundProducts) {
-    G4ReactionProductVector::iterator j;
-    for(j=precompoundProducts->begin(); j!=precompoundProducts->end(); ++j) {
-      G4ParticleDefinition* pd = (*j)->GetDefinition();
-
-      // FIXME:  This is expensive and unnecessary copying!
-      G4DynamicParticle aFragment(pd, (*j)->GetMomentum());
-
-      // Nucleons and nuclei are jumbled together in the list
-      if (G4InuclElementaryParticle::type(pd)) {
-	output.addOutgoingParticle(G4InuclElementaryParticle(aFragment, 9));
-      } else {
-	output.addOutgoingNucleus(G4InuclNuclei(aFragment, 9));
-      }
-    }
-
+    output.addOutgoingParticles(precompoundProducts);
     precompoundProducts->clear();
     delete precompoundProducts;
   }

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.35 2010-09-25 20:48:14 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.36 2010-09-26 04:06:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -49,6 +49,8 @@
 #include "G4ParticleLargerEkin.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzRotation.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
 #include <algorithm>
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
@@ -113,6 +115,27 @@ void G4CollisionOutput::addOutgoingParticle(const G4CascadParticle& cparticle) {
 void G4CollisionOutput::addOutgoingParticles(const std::vector<G4CascadParticle>& cparticles) {
   for (unsigned i=0; i<cparticles.size(); i++)
     addOutgoingParticle(cparticles[i].getParticle());
+}
+
+// This comes from PreCompound de-excitation, both particles and nuclei
+
+void G4CollisionOutput::addOutgoingParticles(const G4ReactionProductVector* rproducts) {
+  if (!rproducts) return;		// Sanity check, no error if null
+
+  G4ReactionProductVector::const_iterator j;
+  for (j=rproducts->begin(); j!=rproducts->end(); ++j) {
+    G4ParticleDefinition* pd = (*j)->GetDefinition();
+
+    // FIXME:  This is expensive and unnecessary copying!
+    G4DynamicParticle aFragment(pd, (*j)->GetMomentum());
+    
+    // Nucleons and nuclei are jumbled together in the list
+    if (G4InuclElementaryParticle::type(pd)) {
+      addOutgoingParticle(G4InuclElementaryParticle(aFragment, 9));
+    } else {
+      addOutgoingNucleus(G4InuclNuclei(aFragment, 9));
+    }
+  }
 }
 
 

@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.cc,v 1.4 2010-09-24 06:26:06 mkelsey Exp $
+// $Id: G4CascadeColliderBase.cc,v 1.5 2010-09-26 04:06:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
@@ -31,10 +31,13 @@
 // 20100721  M. Kelsey -- Use G4CASCADE_CHECK_ECONS to set default control
 //		flag for validations.
 // 20100923  M. Kelsey -- Migrate to integer A and Z
+// 20100925  M. Kelsey -- Add explosion() interfaces for G4Fragment and for
+//		(A,Z,E).  Move implementation to latter.  Add Z==0 condition.
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CascadeCheckBalance.hh"
 #include "G4CollisionOutput.hh"
+#include "G4Fragment.hh"
 #include "G4InteractionCase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -72,18 +75,26 @@ G4bool G4CascadeColliderBase::useEPCollider(G4InuclParticle* bullet,
 // Decide wether nuclear fragment is candidate for G4BigBanger
 
 G4bool G4CascadeColliderBase::explosion(G4InuclNuclei* target) const {
+  return target && explosion(target->getA(), target->getZ(), 
+			     target->getExitationEnergy());	// in MeV
+}
+
+G4bool G4CascadeColliderBase::explosion(G4Fragment* fragment) const {
+  return fragment && explosion(fragment->GetA_asInt(), fragment->GetZ_asInt(),
+			       fragment->GetExcitationEnergy());     // in MeV
+}
+
+G4bool 
+G4CascadeColliderBase::explosion(G4int A, G4int Z,
+				 G4double excitation) const {
   if (verboseLevel) G4cout << " >>> " << theName << "::explosion ?" << G4endl;
 
   const G4int a_cut = 20;
   const G4double be_cut = 3.0;
 
-  G4int a = target->getA();
-  G4int z = target->getZ();
-  G4double eexs = target->getExitationEnergy();
-
-  // Only small fragments with high excitations can explode
-  return ((a <= a_cut) && 
-	  (eexs >= be_cut * bindingEnergy(a,z))
+  // Neutron balls, or small fragments with high excitations can explode
+  return ((A <= a_cut || Z==0) && 
+	  (excitation >= be_cut * bindingEnergy(A,Z))
 	  );
 }
 

@@ -24,13 +24,15 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeColliderBase.hh,v 1.2 2010-07-20 06:10:38 mkelsey Exp $
+// $Id: G4CascadeColliderBase.hh,v 1.3 2010-09-26 04:06:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100714  M. Kelsey -- Move functionality from G4VCascadeCollider, and
 //		provide conservation-checking here, with wrapper function
 //		and control flag.
 // 20100720  M. Kelsey -- Change G4CascadeCheckBalance to pointer member
+// 20010925  M. Kelsey -- Add explosion(A,Z,Eex) and explosion(G4Fragment)
+//		interfaces
 
 #include "G4VCascadeCollider.hh"
 
@@ -43,6 +45,7 @@ class G4InuclNuclei;
 class G4InuclParticle;
 class G4CollisionOutput;
 class G4CascadeCheckBalance;
+class G4Fragment;
 
 class G4CascadeColliderBase : public G4VCascadeCollider {
 public:
@@ -64,6 +67,8 @@ protected:
 
   // Decide whether to use G4BigBanger or not
   virtual G4bool explosion(G4InuclNuclei* target) const;
+  virtual G4bool explosion(G4Fragment* target) const;
+  virtual G4bool explosion(G4int A, G4int Z, G4double excitation) const;
 
   // Decide whether to use G4IntraNuclearCascader or not
   virtual G4bool inelasticInteractionPossible(G4InuclParticle* bullet,
