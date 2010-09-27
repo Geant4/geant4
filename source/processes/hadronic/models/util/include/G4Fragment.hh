@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.12 2010-09-26 18:05:21 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.13 2010-09-27 11:07:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -42,7 +42,8 @@
 //            many times
 // 26.09.2010 V.Ivanchenko added number of protons, neutrons, proton holes
 //            and neutron holes as members of the class and Get/Set methods;
-//            removed not needed 'const'; removed old debug staff 
+//            removed not needed 'const'; removed old debug staff;
+//            add comments and reorder methods for better reading
 
 #ifndef G4Fragment_h
 #define G4Fragment_h 1
@@ -60,7 +61,6 @@
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
-//#include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
 
 class G4ParticleDefinition;
@@ -99,42 +99,50 @@ public:
   friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
   friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
 
-  // ============= METHODS ==================
+  // ============= GENERAL METHODS ==================
 
-  // obsolete methods
-  inline G4double GetZ() const;
-  inline G4double GetA() const;
-  inline void SetZ(G4double value);
-  inline void SetA(G4double value);
-
-  // recomended methods
   inline G4int GetZ_asInt() const;
   inline G4int GetA_asInt() const;
   inline void SetZandA_asInt(G4int Znew, G4int Anew);
   
   inline G4double GetExcitationEnergy() const;
-  //  void SetExcitationEnergy(G4double value);
+
+  inline G4double GetGroundStateMass() const;
+   
+  inline G4double GetBindingEnergy() const;
   
   inline const G4LorentzVector& GetMomentum() const;
   inline void SetMomentum(const G4LorentzVector& value);
   
   inline const G4ThreeVector& GetAngularMomentum() const;
   inline void SetAngularMomentum(const G4ThreeVector& value);
+
+  // computation of mass for any Z and A
+  inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
+
+  // obsolete methods
+  inline G4double GetZ() const;
+  inline G4double GetA() const;
+  inline void SetZ(G4double value);
+  inline void SetA(G4double value);
   
-  // methods for pre-compound model 
+  // ============= METHODS FOR PRE-COMPOUND MODEL ===============
 
   inline G4int GetNumberOfExcitons() const;
   
+  inline G4int GetNumberOfParticles() const;
+  inline G4int GetNumberOfCharged() const;
+  inline void SetNumberOfExcitedParticle(G4int valueTot, G4int valueP);
+
   inline G4int GetNumberOfHoles() const;
+  inline G4int GetNumberOfChargedHoles() const;
   inline void SetNumberOfHoles(G4int valueTot, G4int valueP=0);
   
-  inline G4int GetNumberOfCharged() const;
-  void SetNumberOfCharged(G4int value);
-
-  inline G4int GetNumberOfParticles() const;
+  // these methods will be removed in future
   inline void SetNumberOfParticles(G4int value);
+  inline void SetNumberOfCharged(G4int value);
 
-  // methods for photon evaporation
+  // ============= METHODS FOR PHOTON EVAPORATION ===============
 
   inline G4int GetNumberOfElectrons() const;
   inline void SetNumberOfElectrons(G4int value);
@@ -145,25 +153,18 @@ public:
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
 
-  inline G4double GetGroundStateMass() const;
-   
-  inline G4double GetBindingEnergy() const;
-
-  // computation of mass for any Z and A
-  inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
+  // ============= PRIVATE METHODS ==============================
 
 private:
 
-  void ExcitationEnegryWarning();
+  void ExcitationEnergyWarning();
 
-  void NumberOfExitationWarning(G4int);
-
-  inline void CalculateGroundStateMass();
+  void NumberOfExitationWarning(const G4String&);
 
   inline void CalculateExcitationEnergy();
 
-  G4ThreeVector IsotropicRandom3Vector(G4double Magnitude = 1.0) const;
-  
+  inline void CalculateGroundStateMass();
+
   // ============= DATA MEMBERS ==================
 
   static G4int errCount;
@@ -180,7 +181,7 @@ private:
   
   G4ThreeVector theAngularMomentum;
 
-  // exiton model
+  // exciton model
   
   G4int numberOfParticles;
   
@@ -200,32 +201,17 @@ private:
 
 };
 
-// Class G4Fragment 
+// ============= INLINE METHOD IMPLEMENTATIONS ===================
+
+inline void G4Fragment::CalculateExcitationEnergy()
+{
+  theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
+  if(theExcitationEnergy < 0.0) { ExcitationEnergyWarning(); }
+}
+	 
 inline void G4Fragment::CalculateGroundStateMass() 
 {
   theGroundStateMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
-}
-
-inline G4double G4Fragment::GetA() const
-{
-  return G4double(theA);
-}
-
-inline void G4Fragment::SetA(const G4double value)
-{
-  theA = G4lrint(value);
-  CalculateGroundStateMass();
-}
-
-inline G4double G4Fragment::GetZ()  const
-{
-  return G4double(theZ);
-}
-
-inline void G4Fragment::SetZ(const G4double value)
-{
-  theZ = G4lrint(value);
-  CalculateGroundStateMass();
 }
 
 inline G4int G4Fragment::GetA_asInt() const
@@ -250,9 +236,26 @@ inline G4double G4Fragment::GetExcitationEnergy()  const
   return theExcitationEnergy;
 }
 
+inline G4double G4Fragment::GetGroundStateMass() const
+{
+  return theGroundStateMass; 
+}
+
+inline G4double G4Fragment::GetBindingEnergy() const
+{
+  return (theA-theZ)*CLHEP::neutron_mass_c2 + theZ*CLHEP::proton_mass_c2 
+    - theGroundStateMass;
+}
+
 inline const G4LorentzVector& G4Fragment::GetMomentum()  const
 {
   return theMomentum;
+}
+
+inline void G4Fragment::SetMomentum(const G4LorentzVector& value)
+{
+  theMomentum = value;
+  CalculateExcitationEnergy();
 }
 
 inline const G4ThreeVector& G4Fragment::GetAngularMomentum()  const
@@ -265,6 +268,91 @@ inline void G4Fragment::SetAngularMomentum(const G4ThreeVector& value)
   theAngularMomentum = value;
 }
 
+inline G4double 
+G4Fragment::ComputeGroundStateMass(G4int Z, G4int A) const
+{
+  return G4NucleiProperties::GetNuclearMass(A, Z); 
+}
+
+inline G4double G4Fragment::GetZ()  const
+{
+  return G4double(theZ);
+}
+
+inline G4double G4Fragment::GetA() const
+{
+  return G4double(theA);
+}
+
+inline void G4Fragment::SetZ(const G4double value)
+{
+  theZ = G4lrint(value);
+  CalculateGroundStateMass();
+}
+
+inline void G4Fragment::SetA(const G4double value)
+{
+  theA = G4lrint(value);
+  CalculateGroundStateMass();
+}
+
+inline G4int G4Fragment::GetNumberOfExcitons()  const
+{
+  return numberOfParticles + numberOfHoles;
+}
+
+inline G4int G4Fragment::GetNumberOfParticles()  const
+{
+  return numberOfParticles;
+}
+
+inline G4int G4Fragment::GetNumberOfCharged()  const
+{
+  return numberOfCharged;
+}
+
+inline 
+void G4Fragment::SetNumberOfExcitedParticle(G4int valueTot, G4int valueP)
+{
+  numberOfParticles = valueTot;
+  numberOfCharged = valueP;
+  if(valueTot < valueP)  { 
+    NumberOfExitationWarning("SetNumberOfExcitedParticle"); 
+  }
+}
+
+inline G4int G4Fragment::GetNumberOfHoles()  const
+{
+  return numberOfHoles;
+}
+
+inline G4int G4Fragment::GetNumberOfChargedHoles()  const
+{
+  return numberOfChargedHoles;
+}
+
+inline void G4Fragment::SetNumberOfHoles(G4int valueTot, G4int valueP)
+{
+  numberOfHoles = valueTot;
+  numberOfChargedHoles = valueP;
+  if(valueTot < valueP)  { 
+    NumberOfExitationWarning("SetNumberOfHoles"); 
+  }
+}
+
+inline void G4Fragment::SetNumberOfParticles(G4int value)
+{
+  numberOfParticles = value;
+}
+
+inline void G4Fragment::SetNumberOfCharged(G4int value)
+{
+  numberOfCharged = value;
+  if(value > numberOfParticles)  { 
+    NumberOfExitationWarning("SetNumberOfCharged"); 
+  }
+}
+
 inline G4int G4Fragment::GetNumberOfElectrons() const
 {
   return numberOfShellElectrons;
@@ -275,44 +363,8 @@ inline void G4Fragment::SetNumberOfElectrons(G4int value)
   numberOfShellElectrons = value;
 }
 
-inline G4int G4Fragment::GetNumberOfExcitons()  const
-{
-  return numberOfParticles + numberOfHoles;
-}
-
-inline void G4Fragment::SetNumberOfParticles(G4int value)
-{
-  numberOfParticles = value;
-}
-
-inline G4int G4Fragment::GetNumberOfHoles()  const
-{
-  return numberOfHoles;
-}
-
-inline void G4Fragment::SetNumberOfHoles(G4int valueTot, G4int valueP)
-{
-  numberOfHoles = valueTot;
-  numberOfChargedHoles = valueP;
-}
-
-inline G4int G4Fragment::GetNumberOfCharged()  const
-{
-  return numberOfCharged;
-}
-
-inline void G4Fragment::SetNumberOfCharged(G4int value)
-{
-  numberOfCharged = value;
-  if(value > numberOfParticles)  { NumberOfExitationWarning(value); }
-}
-
-inline G4int G4Fragment::GetNumberOfParticles()  const
-{
-  return numberOfParticles;
-}
-
-inline G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
+inline 
+G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
 {
   return theParticleDefinition;
 }
@@ -330,35 +382,6 @@ inline G4double G4Fragment::GetCreationTime() const
 inline void G4Fragment::SetCreationTime(G4double time)
 {
   theCreationTime = time;
-}
-
-inline G4double G4Fragment::GetGroundStateMass() const
-{
-  return theGroundStateMass; 
-}
-
-inline G4double 
-G4Fragment::ComputeGroundStateMass(G4int Z, G4int A) const
-{
-  return G4NucleiProperties::GetNuclearMass(A, Z); 
-}
-
-inline void G4Fragment::CalculateExcitationEnergy()
-{
-  theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
-  if(theExcitationEnergy < 0.0) { ExcitationEnegryWarning(); }
-}
-	
-inline G4double G4Fragment::GetBindingEnergy() const
-{
-  return (theA-theZ)*CLHEP::neutron_mass_c2 + theZ*CLHEP::proton_mass_c2 
-    - theGroundStateMass;
-}
-
-inline void G4Fragment::SetMomentum(const G4LorentzVector& value)
-{
-  theMomentum = value;
-  CalculateExcitationEnergy();
 }
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.18 2010-09-26 18:05:21 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.19 2010-09-27 11:07:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -211,7 +211,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
   return out; 
 }
 
-void G4Fragment::ExcitationEnegryWarning()
+void G4Fragment::ExcitationEnergyWarning()
 {
   if (theExcitationEnergy < -10 * CLHEP::eV) {
     ++errCount;
@@ -228,31 +228,11 @@ void G4Fragment::ExcitationEnegryWarning()
   theExcitationEnergy = 0.0;
 }
 
-void G4Fragment::NumberOfExitationWarning(G4int value)
+void G4Fragment::NumberOfExitationWarning(const G4String& value)
 {
-  G4cout << "G4Fragment::SetNumberOfCharged(): Ncharged = " << value
-	 << " > Nparticles= " << numberOfParticles
-	 << " A= " << theA << " and Z= " << theZ << G4endl;
+  G4cout << "G4Fragment::"<< value << " ERROR "
+	 << G4endl;
+  G4cout << this << G4endl; 
   G4String text = "G4Fragment::G4Fragment wrong exciton number ";
   throw G4HadronicException(__FILE__, __LINE__, text);
 }
-
-G4ThreeVector G4Fragment::IsotropicRandom3Vector(G4double Magnitude) const
-  // Create a unit vector with a random direction isotropically distributed
-{
-  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
-  G4double Phi = twopi*G4UniformRand();
-  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-                       Magnitude*std::sin(Phi)*SinTheta,
-                       Magnitude*CosTheta);
-
-  return Vector;		
-}
-/*
-void G4Fragment::SetExcitationEnergy(const G4double )
-{
-  //   theExcitationEnergy = value;
-  G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << G4endl;
-}
-*/
