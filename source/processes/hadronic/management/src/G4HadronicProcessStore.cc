@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc,v 1.16 2010-08-17 09:47:54 vnivanch Exp $
+// $Id: G4HadronicProcessStore.cc,v 1.17 2010-09-27 17:10:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -541,6 +541,7 @@ void G4HadronicProcessStore::Dump(G4int level)
 			   pname == "kaon+" ||
 			   pname == "kaon-" ||
 			   pname == "lambda" ||
+			   pname == "GenericIon" ||
 			   pname == "anti_neutron" ||
 			   pname == "anti_proton")) yes = true;
     if(yes) {
