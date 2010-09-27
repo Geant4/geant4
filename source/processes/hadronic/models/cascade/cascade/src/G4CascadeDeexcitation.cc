@@ -22,11 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeDeexcitation.cc,v 1.2 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4CascadeDeexcitation.cc,v 1.3 2010-09-27 04:03:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
+//
+// 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
 
 #include "G4CascadeDeexcitation.hh"
 #include "globals.hh"
@@ -40,7 +42,7 @@
 // Constructor and destructor
 
 G4CascadeDeexcitation::G4CascadeDeexcitation() 
-  : G4CascadeColliderBase("G4CascadeDeexcitation"),
+  : G4VCascadeDeexcitation("G4CascadeDeexcitation"),
     theBigBanger(new G4BigBanger),
     theNonEquilibriumEvaporator(new G4NonEquilibriumEvaporator),
     theEquilibriumEvaporator(new G4EquilibriumEvaporator) {}
@@ -50,6 +52,27 @@ G4CascadeDeexcitation::~G4CascadeDeexcitation() {
   delete theNonEquilibriumEvaporator;
   delete theEquilibriumEvaporator;
 }
+
+
+// Convert generic G4Fragment into Bertini particle
+
+void G4CascadeDeexcitation::deExcite(G4Fragment* fragment,
+				     G4CollisionOutput& globalOutput) {
+  if (verboseLevel > 1) {
+    G4cout << " >>> G4CascadeDeexcitation::deExcite" << G4endl;
+  }
+
+  if (!fragment) {
+    if (verboseLevel > 1) G4cerr << " NULL pointer fragment" << G4endl;
+    return;
+  }
+
+  if (verboseLevel > 1) G4cout << *fragment << G4endl;
+
+  G4InuclNuclei target(*fragment);
+  collide(0, &target, globalOutput);
+}
+
 
 // Main processing
 
@@ -104,6 +127,8 @@ void G4CascadeDeexcitation::collide(G4InuclParticle* /*bullet*/,
     G4cout << " After EquilibriumEvaporator " << G4endl;
   }
     
+  validateOutput(0, target, output);	// Check conservation
+
   globalOutput.add(output);		// Evaporated particles and nucleus
 }
   

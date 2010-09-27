@@ -24,7 +24,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.hh,v 1.2 2010-09-23 05:02:14 mkelsey Exp $
+// $Id: G4PreCompoundDeexcitation.hh,v 1.3 2010-09-27 04:03:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
@@ -32,40 +32,34 @@
 //
 // 20100922  M. Kelsey -- Remove convertFragment() function, pass buffer
 //		instead of copying
+// 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
 
-#include "G4CascadeColliderBase.hh"
+#include "G4VCascadeDeexcitation.hh"
 #include "globals.hh"
-#include "G4CollisionOutput.hh"
-#include <vector>
 
-class G4InuclElementaryParticle;
-class G4InuclParticle;
 class G4InuclNuclei;
+class G4InuclParticle;
 class G4ExcitationHandler;
 class G4VPreCompoundModel;
 
 
-class G4PreCompoundDeexcitation : public G4CascadeColliderBase {
+class G4PreCompoundDeexcitation : public G4VCascadeDeexcitation {
 
 public:
   G4PreCompoundDeexcitation();
   virtual ~G4PreCompoundDeexcitation();
 
   // Standard Collider interface (bullet is not used in this case)
-  //
-  void collide(G4InuclParticle* /*bullet*/, 
-               G4InuclParticle* target,
+  void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
 	       G4CollisionOutput& globalOutput);
 
-private:
-  void getDeExcitedFragments(G4InuclNuclei* rfrag);
+  // Interface specific to pre-compound (post-cascade) processing
+  virtual void deExcite(G4Fragment* fragment,
+			G4CollisionOutput& globalOutput);
 
-  // data members
-  //
+private:
   G4ExcitationHandler* theExcitationHandler;
   G4VPreCompoundModel* theDeExcitation;
-  
-  G4CollisionOutput output;	// Local buffer for de-excitation stages
 };
 
 #endif	/* G4PRECOMPOUND_DEEXCITATION_HH */

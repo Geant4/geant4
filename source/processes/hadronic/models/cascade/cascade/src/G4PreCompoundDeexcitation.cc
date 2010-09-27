@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4PreCompoundDeexcitation.cc,v 1.5 2010-09-26 04:06:03 mkelsey Exp $
+// $Id: G4PreCompoundDeexcitation.cc,v 1.6 2010-09-27 04:03:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
@@ -33,6 +33,8 @@
 // 20100925  M. Kelsey -- Use new G4InuclNuclei->G4Fragment conversion, and
 //		G4ReactionProducts -> G4CollisionOutput convertor.  Move Z==0
 //		explosion condition to base-class function.
+// 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class,
+//		replace getDeexcitationFragments() with deExcite().
 
 #include "G4PreCompoundDeexcitation.hh"
 #include "globals.hh"
@@ -49,7 +51,7 @@ using namespace G4InuclParticleNames;
 // Constructor and destructor
 
 G4PreCompoundDeexcitation::G4PreCompoundDeexcitation() 
-  : G4CascadeColliderBase("G4PreCompoundDeexcitation"),
+  : G4VCascadeDeexcitation("G4PreCompoundDeexcitation"),
     theExcitationHandler(new G4ExcitationHandler),
     theDeExcitation(new G4PreCompoundModel(theExcitationHandler)) {}
 
@@ -84,38 +86,41 @@ void G4PreCompoundDeexcitation::collide(G4InuclParticle* /*bullet*/,
     return;
   }
 
-  getDeExcitedFragments(ntarget);
-  validateOutput(0, target, output);	// Check conservation from PreCompound
+  G4Fragment frag(*ntarget);
 
-  globalOutput.add(output);		// Add evaporates and fragments
+  output.reset();		// Use temporary buffer for conservation checks
+  deExcite(&frag, output);
+  validateOutput(0, target, output);
+
+  globalOutput.add(output);	// Return results
 }
 
-  
-void G4PreCompoundDeexcitation::getDeExcitedFragments(G4InuclNuclei* rfrag) {
-  if (verboseLevel > 1) {
-    G4cout << " getDeExcitedFragments " << G4endl;
-    rfrag->printParticle();
+void G4PreCompoundDeexcitation::deExcite(G4Fragment* fragment,
+					 G4CollisionOutput& globalOutput) {
+  if (verboseLevel)
+    G4cout << " >>> G4PreCompoundDeexcitation::deExcite" << G4endl;
+
+  if (!fragment) {
+    if (verboseLevel > 1) G4cerr << " NULL pointer fragment" << G4endl;
+    return;
   }
 
-  G4Fragment frag(*rfrag);	// Uses casting operator for construction
+  if (verboseLevel > 1) G4cout << *fragment << G4endl;
 
   G4ReactionProductVector* precompoundProducts = 0;
 
   // FIXME: in principle, the explosion(...) stuff should also 
   //        handle properly the case of Z=0 (neutron blob) 
-  if (explosion(&frag) && theExcitationHandler) {
-    precompoundProducts = theExcitationHandler->BreakItUp(frag);
+  if (explosion(fragment) && theExcitationHandler) {
+    precompoundProducts = theExcitationHandler->BreakItUp(*fragment);
   } else {
-    precompoundProducts = theDeExcitation->DeExcite(frag);
+    precompoundProducts = theDeExcitation->DeExcite(*fragment);
   }
 
   // Transfer output of de-excitation back into Bertini objects
-  output.reset();
   if (precompoundProducts) {
-    output.addOutgoingParticles(precompoundProducts);
+    globalOutput.addOutgoingParticles(precompoundProducts);
     precompoundProducts->clear();
     delete precompoundProducts;
   }
-
-  return;
 }

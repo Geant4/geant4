@@ -24,15 +24,16 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CascadeDeexcitation.hh,v 1.2 2010-09-16 05:21:00 mkelsey Exp $
+// $Id: G4CascadeDeexcitation.hh,v 1.3 2010-09-27 04:03:43 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Takes an arbitrary excited or unphysical nuclear state and produces
 // a final state with evaporated particles and (possibly) a stable nucleus.
+//
+// 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
 
-#include "G4CascadeColliderBase.hh"
+#include "G4VCascadeDeexcitation.hh"
 #include "globals.hh"
-#include "G4CollisionOutput.hh"
 
 class G4InuclParticle;
 class G4BigBanger;
@@ -40,21 +41,23 @@ class G4NonEquilibriumEvaporator;
 class G4EquilibriumEvaporator;
 
 
-class G4CascadeDeexcitation : public G4CascadeColliderBase {
+class G4CascadeDeexcitation : public G4VCascadeDeexcitation {
 public:
   G4CascadeDeexcitation();
   virtual ~G4CascadeDeexcitation();
 
   // Standard Collider interface (bullet is not used in this case)
-  void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
-	       G4CollisionOutput& globalOutput);
+  virtual void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
+		       G4CollisionOutput& globalOutput);
+
+  // Interface specific to pre-compound (post-cascade) processing
+  virtual void deExcite(G4Fragment* fragment,
+			G4CollisionOutput& globalOutput);
 
 private:
   G4BigBanger* theBigBanger;
   G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
   G4EquilibriumEvaporator* theEquilibriumEvaporator;
-
-  G4CollisionOutput output;	// Local buffer for de-excitation stages
 };
 
 #endif	/* G4CASCADE_DEEXCITATION_HH */
