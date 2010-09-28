@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.15 2010-09-28 16:06:23 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.16 2010-09-28 16:09:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -49,8 +49,6 @@
 #ifndef G4Fragment_h
 #define G4Fragment_h 1
 
-//#include "G4ios.hh"
-//#include <iomanip>
 #include <vector>
 
 #include "globals.hh"

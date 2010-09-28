@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.20 2010-09-28 10:14:35 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.21 2010-09-28 16:06:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -41,9 +41,10 @@
 
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
-#include "G4HadTmpUtil.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4ios.hh"
+#include <iomanip>
 
 G4int G4Fragment::errCount = 0;
 
