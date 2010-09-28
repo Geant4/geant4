@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.12 2010-07-26 04:14:56 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.13 2010-09-28 16:28:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1207,7 +1207,7 @@ inline  G4complex G4NuclNuclDiffuseElastic::AmplitudeGla(G4double theta)
   {
     shiftC = std::exp( im*2.*CalculateCoulombPhase(n) );
     // b = ( fZommerfeld + std::sqrt( fZommerfeld*fZommerfeld + n*(n+1) ) )/fWaveVector;
-    b = ( std::sqrt( n*(n+1) ) )/fWaveVector;
+    b = ( std::sqrt( G4double(n*(n+1)) ) )/fWaveVector;
     b2 = b*b;
     T12b = fSumSigma*std::exp(-b2/fNuclearRadiusSquare)/pi/fNuclearRadiusSquare;         
     shiftN = std::exp( -0.5*(1.-im*fEtaRatio)*T12b ) - 1.;
