@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2010-09-28 10:14:35 vnivanch Exp $
+$Id: History,v 1.40 2010-09-28 17:03:26 vnivanch Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -19,7 +19,7 @@ code and to keep track of all tags.
 - G4Fragment - added members numberOfChargedHoles, numberOfShellElectrons
                and corresponding Get/Set methods;
                reodered inline methods and extended comments;
-               removed unused private methods 
+               removed unused private methods and headers
 
 25 Sep 2010 Michael Kelsey
 - G4Fragment - Change "setprecision" to "setw" in operator<<, add null
