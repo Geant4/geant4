@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.cc,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
+// $Id: Histo.cc,v 1.2 2010-09-28 19:08:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -91,7 +91,7 @@ void Histo::book()
   // Creating a tree mapped to a new hbook file.
 
   G4String nam = histName + "." + histType;
-  G4String options  = "";
+  G4String options = "";
   //G4String options  = "--noErrors export=root uncompress";
   
   tree = tf->create(nam,histType,false,true,options);
