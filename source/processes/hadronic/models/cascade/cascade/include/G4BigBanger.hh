@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BigBanger.hh,v 1.16 2010-07-27 04:20:03 mkelsey Exp $
+// $Id: G4BigBanger.hh,v 1.17 2010-09-28 20:15:00 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100315  M. Kelsey -- Remove "using" directive and unnecessary #includes.
@@ -33,6 +33,7 @@
 // 20100519  M. Kelsey -- Get rid of proton and neutron masses as arguments!
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
+// 20100928  M. Kelsey -- Migrate to integer A and Z
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
@@ -53,18 +54,15 @@ public:
 	       G4CollisionOutput& output);
 
 private: 
-  void generateBangInSCM(G4double etot, G4double a, G4double z);
+  void generateBangInSCM(G4double etot, G4int a, G4int z);
 
-  void generateMomentumModules(G4double etot, G4double a, G4double z); 
+  void generateMomentumModules(G4double etot, G4int a, G4int z); 
 
-  G4double xProbability(G4double x, 
-			G4int ia) const; 
+  G4double xProbability(G4double x, G4int a) const; 
 
-  G4double maxProbability(G4double a) const;
+  G4double maxProbability(G4int a) const;
 
-  G4double generateX(G4int ia, 
-		     G4double a, 
-		     G4double promax) const; 
+  G4double generateX(G4int ia, G4double promax) const; 
 
   // Buffers for big-bang results
   std::vector<G4InuclElementaryParticle> particles;
