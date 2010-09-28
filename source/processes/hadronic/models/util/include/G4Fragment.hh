@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.14 2010-09-28 10:14:35 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.15 2010-09-28 16:06:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -49,16 +49,16 @@
 #ifndef G4Fragment_h
 #define G4Fragment_h 1
 
-#include "G4ios.hh"
-#include <iomanip>
+//#include "G4ios.hh"
+//#include <iomanip>
 #include <vector>
 
 #include "globals.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "G4NucleiProperties.hh"
-#include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
+//#include "G4ParticleTable.hh"
+//#include "G4IonTable.hh"
 #include "Randomize.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
