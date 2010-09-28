@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.19 2010-09-27 11:07:11 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.20 2010-09-28 10:14:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -53,8 +53,8 @@ G4Fragment::G4Fragment() :
   theZ(0),
   theExcitationEnergy(0.0),
   theGroundStateMass(0.0),
-  theMomentum(0),
-  theAngularMomentum(0),
+  theMomentum(G4LorentzVector(0,0,0,0)),
+  theAngularMomentum(G4ThreeVector(0,0,0)),
   numberOfParticles(0),
   numberOfCharged(0),
   numberOfHoles(0),
@@ -89,7 +89,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   theA(A),
   theZ(Z),
   theMomentum(aMomentum),
-  theAngularMomentum(0),
+  theAngularMomentum(G4ThreeVector(0,0,0)),
   numberOfParticles(0),
   numberOfCharged(0),
   numberOfHoles(0),
@@ -112,7 +112,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   theA(0),
   theZ(0),
   theMomentum(aMomentum),
-  theAngularMomentum(0),
+  theAngularMomentum(G4ThreeVector(0,0,0)),
   numberOfParticles(0),
   numberOfCharged(0),
   numberOfHoles(0),
@@ -186,12 +186,12 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
       << theFragment->theMomentum.y()/CLHEP::MeV << ","
       << theFragment->theMomentum.z()/CLHEP::MeV 
       << ") MeV   E = " 
-      << theFragment->theMomentum.t()/CLHEP::MeV << " MeV";
-
+      << theFragment->theMomentum.t()/CLHEP::MeV << " MeV"
+      << G4endl;
+       
   // What about Angular momentum???
 
   if (theFragment->GetNumberOfExcitons() != 0) {
-    //    out << G4endl;
     out << "          " 
 	<< "#Particles= " << theFragment->numberOfParticles 
 	<< ", #Charged= " << theFragment->numberOfCharged

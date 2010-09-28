@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.13 2010-09-27 11:07:11 vnivanch Exp $
+// $Id: G4Fragment.hh,v 1.14 2010-09-28 10:14:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -42,8 +42,9 @@
 //            many times
 // 26.09.2010 V.Ivanchenko added number of protons, neutrons, proton holes
 //            and neutron holes as members of the class and Get/Set methods;
-//            removed not needed 'const'; removed old debug staff;
-//            add comments and reorder methods for better reading
+//            removed not needed 'const'; removed old debug staff and unused
+//            private methods; add comments and reorder methods for 
+//            better reading
 
 #ifndef G4Fragment_h
 #define G4Fragment_h 1
@@ -86,7 +87,7 @@ public:
   // A,Z and 4-momentum - main constructor for fragment
   G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum);
 
-  // 4-momentum and pointer to G4particleDefinition (for gammas)
+  // 4-momentum and pointer to G4particleDefinition (for gammas, e-)
   G4Fragment(const G4LorentzVector& aMomentum, 
 	     G4ParticleDefinition* aParticleDefinition);
 
@@ -181,7 +182,7 @@ private:
   
   G4ThreeVector theAngularMomentum;
 
-  // exciton model
+  // Exciton model data members
   
   G4int numberOfParticles;
   
@@ -191,7 +192,7 @@ private:
   
   G4int numberOfChargedHoles;
 
-  // Gamma evaporation requeriments
+  // Gamma evaporation data members
 
   G4int numberOfShellElectrons;
 
