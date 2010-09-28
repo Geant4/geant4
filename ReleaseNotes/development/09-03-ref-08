@@ -1,0 +1,301 @@
+
+                       geant4-09-03-ref-08
+                       ===================
+
+Some of the development/fixes included since the last development tag are:
+
+ o Added copy-constructors and operator=() for all shapes for use in Geant4-MT.
+ o New G4DNA low-energy processes and e- models for vibrational and attachment,
+   requiring new data set G4LEDATA-6.16.
+ o Fixed anomaly at the tail of distribution for thin targets and revised width
+   correction in G4UniversalFluctuation. Added frozen 9.3 implementation class
+   G4UniversalFluctuation93.
+ o Migration to use integer interface for Z and A in hadronic models.
+ o Fix problems of energy non-conservation in Bertini Cascade and more
+   improvements.
+ o New tuning of parameters for nuclear destruction in FTF model based on
+   HARP-CDP data for p+Cu interactions.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(+)  Fixes included in release 9.3.p02
+
+Summarised, the list of changes is the following:
+
+geometry/biasing                                 geombias-V09-03-01          (+)
+----------------
+- Fixed false-positive cases of invalid iterator in G4IStore and
+  G4WeightWindowStore.
+
+geometry/divisions                               geomdiv-V09-03-01           (+)
+------------------
+- Removed obvious else statement in constructors of G4PVDivision.
+
+geometry/magneticfield                           field-V09-03-03
+----------------------
+- Fixed passing of time in G4NystromRK4.                                     (+)
+- Revised constructor of G4MagErrorStepper to add number of State variables.
+- Corrected MagErrorStepper to copy state variable to output.
+- Enabled G4ConstRK4 to copy remaining state variables.
+
+geometry/management                              geommng-V09-03-04           (+)
+-------------------
+- Fixed false-positive null forward case in G4SmartVoxelHeader.
+
+geometry/navigation                              geomnav-V09-03-03           (+)
+-------------------
+- Added missing initialization for 'fNewSafety' and 'fTrueMinStep' in
+  G4MultiNavigator constructor.
+
+geometry/solids/Boolean                          geom-bool-V09-03-02
+-----------------------
+- Implemented copy-constructor and assignment operator for concrete
+  solids classes to facilitate conversion to Geant4-MT.
+
+geometry/solids/BREPS                            breps-V09-03-03
+---------------------
+- Implemented copy-constructor and assignment operator for solids classes
+  to facilitate conversion to Geant4-MT.
+- Fixed possible leak in G4BREPSolid::IsConvex() method.                     (+)
+- Corrected possible dereferencing of null pointer in method                 (+)
+  G4BREPSolidSphere::DistanceToOut().
+- Corrected deletion of internal data in G4BSplineCurve::Project() method.   (+)
+- Fixed possible leak in G4BezierSurface::ClipSurface() method, and fixed    (+)
+  case of dereferenciation of null pointer.
+- Fixed leak in destructor of G4ToroidalSurface.                             (+)
+- Added dummy initialisation of static data in G4BoundingBox3D,              (+)
+  G4ProjectedSurface and G4Surface.
+
+geometry/solids/CSG                              geom-csg-V09-03-10
+-------------------
+- Implemented copy-constructor and assignment operator for all solids
+  to facilitate conversion to Geant4-MT.
+- Added missing validity checks on radii to modifiers in G4Tubs.
+- Fix within G4CSGDEBUG code for restoring cout precision.                   (+)
+
+geometry/solids/specific                         geom-specific-V09-03-15
+------------------------
+- Implemented copy-constructor and assignment operator for all solids
+  to facilitate conversion to Geant4-MT.
+- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement (+)
+  with canonical form. Added unit test testG4EllipticalTube.cc.
+- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.     (+)
+- Use INT_MAX as initialisation for max limits in G4SolidExtentList.         (+)
+- Added dummy initialization to members in struct                            (+)
+  G4PolyPhiFace::G4PolyPhiFaceEdge, struct G4ReduciblePolygon::ABVertex.
+  G4Ellipsoid, G4EllipticalTube, G4EnclosingCylinder, G4ExtrudedSolid, G4Hype,
+  G4IntersectingCone, G4Paraboloid, G4PolyPhiFace, G4Polycone, G4PolyconeSide,
+  G4Polyhedra, G4PolyhedraSide, G4QuadrangularFacet, G4ReduciblePolygon,
+  G4TessellatedSolid, G4TriangularFacet, G4TwistBoxSide, G4TwistTrapAlphaSide,
+  G4TwistTrapFlatSide, G4TwistTrapParallelSide, G4TwistTubsFlatSide,
+  G4TwistTubsHypeSide, G4TwistTubsSide, G4TwistedTubs, G4VCSGfaceted, G4VFacet,
+  G4VTwistSurface, G4VTwistedFaceted.
+- Fixed case of dereferencing null pointer in methods                        (+)
+  G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
+  and G4VCSGfaceted::DistanceToOut(p,v).
+- Fixed unecessary object copy as argument in method                         (+)
+  G4PolyhedraSide::IntersectSidePlane().
+- Avoid possible case of derefencing null pointer in G4ReduciblePolygon
+  RemoveDuplicateVertices() and RemoveRedundantVertices() methods.
+- Replaced calls to std::abs() with std::fabs() where suitable.              (+)
+- Fix within G4CSGDEBUG code for restoring cout precision.                   (+)
+
+geometry/volumes                                 geomvol-V09-03-08
+----------------
+- Fixed false-positive cases for initialization in copy-constructor of
+  G4GRSSolid amd G4GRSVolume.
+
+global                                           global-V09-03-14
+------
+- Synchronised with HEAD revisions. No functionality changes.
+
+particles/management                             partman-V09-03-00
+--------------------
+- Fixed signature for std::pair in G4IonTable source code for compliance
+  to ISO/C++ Standard.
+
+persistency/ascii                                ascii-V09-03-01             (+)
+-----------------
+- Fixed signature for std::map in G4tgrVolumeMgr.hh..
+- Added missing inclusion of <sstream> header in G4tgrFileIn.cc.
+
+physics_lists                                    phys-lists-V09-03-26
+-------------
+- G4PhysicsListFactory: return NULL if the name is wrong.
+- Added new e- G4DNA processes to G4EmDNAPhysics in builders.
+- Bug fix in G4IonQMDPhysics: wrong energy limit for overlap with BIC.
+- G4HadronElasticPhysics: restored cross-sections for p and n as in 9.4beta.
+- G4HadronElasticPhysicsHP: added CHIPS cross  sections for p and n on
+  Hydrogen and Helium targets.
+
+processes/electromagnetic/adjoint                emadjoint-V09-03-01         (+)
+-----------------
+- G4AdjointAlongStepWeightCorrection: get rid of call to non-Standard isnan(),
+  replaced by explicit validity test.
+
+processes/electromagnetic/lowenergy              emlowen-V09-03-47
+-----------------------------------
+- Added new G4DNA processes and e- models for vibrational and attachment
+  as in Z. Francis et al., Appl. Rad. Isot. (2010):
+  http://dx.doi.org/10.1016/j.apradiso.2010.08.011
+  Requires new data set G4LEDATA-6.16
+- Updated high energy limits of G4DNAExcitation and G4DNAIonisation.
+  Added protection in xs file opening for G4DNA Sanche excitation.
+- Set high energy limit of G4DNAScreenedRutherfordModel to 1 MeV.
+  and decreased low energy limit.
+
+processes/electromagnetic/polarisation           empolar-V09-03-01
+--------------------------------------
+- Fixed signature to G4VPolarizedCrossSection::TotalXSection() in source file.
+
+processes/electromagnetic/standard               emstand-V09-03-21
+----------------------------------
+- G4UniversalFluctuation: fixed anomaly at the tail of distribution for thin
+  targets and revised width correction. Improved comments.
+- New class G4UniversalFluctuation93, frozen version from release 9.3.
+- G4BetheBlochModel: fixed shell corrections.
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel: fix in method
+  SetCurrentElement().
+
+processes/electromagnetic/utils                  emutils-V09-03-20
+-------------------------------
+- G4VMscModel: added protection in computation of the displacement to limit
+  it inside current volume. Addressing problem report #1128.
+- G4ElectronIonPair: added method SampleNumberOfIonsAlongStep().
+- G4VEnergyLossProcess: minor optimisation of PostStepDoIt to reduce calls
+  to log() for random numbers in some cases.
+- G4LossTableManager: minor cleanup of interfaces.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-03-09)
+  o G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS cleanup:
+    use vectors instead of C arrays; use G4HadronNucleonXsc class and PDG
+    parameterisation for high energy cross sections of Hydrogen; removed
+    accessors and modifiers for 'verboseLevel'.
+- models/binary_cascade (had-binary-V09-03-02)
+  o Binary{LightIon}Cascade: use integer (A,Z) interface of nucleus;
+    use integer A,Z from G4V3DNucleus, for Field classes and for
+    G4FermiMomentum.
+  o G4GeneratorPrecompoundInterface: define default deexcitation with 
+    G4PreCompoundModel in the constructor of the class
+    Minor cleanup as a part of PreCompound model cleanup: use integer Z and A,
+    and added pointers to proton and neutron.
+- models/cascade (hadr-casc-V09-03-79)
+
+  o <<<<<<< NOTES FROM DENNIS <<<<<<<<<<<
+
+- models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-07)
+  o Simplified initialisation of pairs in classes G4QNeutronCaptureRatio,
+    G4QNeutronElasticCrossSection, G4QNeutronNuclearCrossSection and
+    G4QuasiFreeRatios.
+- models/chiral_inv_phase_space/interface (hadr-chips-inter-V09-03-01)       (+)
+  o Fix in G4ChiralInvariantPhaseSpace to catch previously un-handled
+    exceptions produced when a 'chipolino' pseudo-particle is produced by the
+    model and thrown by Q4QEnvironment::Fragment, retrying the interaction;
+    handles the case in which Q4QEnvironment returns a 90000000 fragment, and
+    converts it to a gamma. Addressing problem report #1138.
+- models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-11)
+  o Added missing std:: to call to 'for_each' algorithm in G4QInelastic.
+- models/coherent_elastic (hadr-cohe-V09-03-04)
+  o New class G4CHIPSElasticXS extracted from G4UHadronElasticProcess,
+    following hadronic framework design and with limited applicability
+    to 19 MeV.
+- models/de_excitation (hadr-deex-V09-03-19)
+  o G4NeutronRadCapture: use G4PhotonEvaporation instead of simplified
+    one gamma emission method. Use integer Z and A.
+- models/management (hadr-modman-V09-03-04)
+  o G4V3DNucleus: use integer for A and Z.
+  o G4VPreCompoundModel: make de-excited G4Fragment non-const.
+  o G4VIntraNuclearTransportModel: moved constructor and destructor to source.
+- models/neutron_hp (hadr-hpn-V09-03-06)                                     (+)
+  o Added safty for negative value in G4NeutronHPInelasticCompFS.
+- models/parton_string/diffraction (hadr-string-diff-V09-03-03)
+  o Implemented new tuned parameters of nuclear destruction in FTF model;
+    parameters were tuned using HARP-CDP data on p+Cu interactions.
+    Still additional tuning required for heavy nuclei.
+  o Use integer interface of G4Nucleus in G4FTFModel.
+- models/parton_string/hadronization (had-hadronization-V09-03-01)
+  o Introduced an action in FragmentStrings; string fragmentation is repeated
+    to avoid energy-momentum violation.
+  o Introduced phase space restrictions at small mass string fragmentation.
+  o Moved inline methods in G4ExcitedStringDecay to source.
+  o Fixed warning messages in G4LundStringFragmentation.
+- models/parton_string/management (had-partonstring-mgt-V09-03-00)
+  o Use integer interface of G4Nucleus for A and Z.
+- models/parton_string/qgsm (hadr-qgsm-V09-03-01)
+  o Use integer interface of G4Nucleus for A and Z in G4QGSModel.
+- models/photolepton_hadron/muon_nuclear (hadr-munuclear-V09-03-00)          (+)
+  o G4MuNuclearInteraction: clear hadronic tracks in PostStepDoIt().
+- models/pre_equilibrium (hadr-pre-V09-03-10)
+  o General cleaup of all classes: constructors and destructors moved to the 
+    source; use integer Z and A interface; use G4Pow class to speedup
+    computations.
+  o G4PreCompoundModel: Emission and Transition classes become members created
+    at construction and no longer at run time; initialisation is performed at
+    construction or when options are changed; G4Fragment is no longer const,
+    it is modified during process of emission of particles.
+  o G4PreCompoundEmission: removed SetUp() inline method and moved its
+    functionality.
+- models/theo_high_energy (had-theo-HE-V09-03-01)
+  o Use integer interface for A and Z in G4QuasiElasticChannel.
+- models/util (hadr-mod-util-V09-03-03)
+  o G4Fancy3DNucleus: added integer (A,Z) and Init(A,Z).
+  o G4DecayStrongResonances: cleanup of unused #include statements.
+- stopping (hadr-stopping-V09-03-00)
+  o Use integer interface for A and Z for G4Fancy3DNucleus in
+    G4MuonMinusCaptureAtRest.
+
+processes/transportation                         transport-V09-03-00         (+)
+------------------------
+- Fix to G4Transportation to properly update the step flag which identifies
+  the last step in a volume (applies for linear steps only, i.e. no field).
+  Partially addressing problem report #1032.
+
+run                                              run-V09-03-03
+---
+- Added missing inclusion of <sstream> header in G4AdjointSimMessenger source.
+
+track                                            track-V09-03-04
+-----
+- Fill the last bin contents in G4Track::PrepareVelocityTable() 
+  to fix the bug in calculation of GetVelocity() introduced in previous tag.
+
+visualization
+-------------
+- gMocren (gMocren-V09-03-04)
+  o Added missing inclusion of <sstream> header in G4GMocrenFileSceneHandler
+    source.
+- management (visman-V09-03-11)
+  o Added missing inclusion of <sstream> header in G4ViewParameters source.
+
+data
+----
+- G4EMLOW-6.16:
+  o added two new Geant4-DNA files for for vibrational excitation and
+    attachment sigma.
+
+examples                                         examples-V09-03-08
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm7 (testem7-V09-03-06)
+  o Added standard HistoManager.
+  o Fixed normalisation factor in histograms 2 and 3.
+- extended/electromagnetic/TestEm8 (testem8-V09-03-04)
+  o Completely revised in physics, scoring and histograms for treatment of
+    ionisation in thin absorbers and gaseous detectors.
+- extended/radioactivedecay (radioactivedecay_examples-V09-03-00)
+  o New example "rdecay01" to demonstrate basic functionality of the
+    G4RadioactiveDecay process. (rdecay01-V09-03-01)
+  o Renamed "exrdm" example to "rdecay02".
+
+tests                                            tests-V09-03-08
+-----
+- Updated reference outputs and tools.
+- test14 (test19-V09-03-05)
+  o Migrated all physics models; added migrated Penelope positron models;
+    added high energy limits to Physics.
+  o Updated handling of cuts in PhysicsList and PhysicsListMessenger.
+  o Updated all input macros.
+- test60 (test30-V09-03-01)
+  o Added new vibrational and attachment e- models.
