@@ -197,7 +197,7 @@ processes/hadronic
     converts it to a gamma. Addressing problem report #1138.
 - models/chiral_inv_phase_space/processes (hadr-chips-proc-V09-03-11)
   o Added missing std:: to call to 'for_each' algorithm in G4QInelastic.
-- models/coherent_elastic (hadr-cohe-V09-03-04)
+- models/coherent_elastic (hadr-cohe-V09-03-05)
   o New class G4CHIPSElasticXS extracted from G4UHadronElasticProcess,
     following hadronic framework design and with limited applicability
     to 19 MeV.
