@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.70 2009-11-27 20:06:32 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.71 2010-09-28 15:50:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,6 @@
 #include "G4ionIonisation.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-//#include "G4Alpha.hh"
 #include "G4GenericIon.hh"
 #include "G4BraggModel.hh"
 #include "G4BraggIonModel.hh"
@@ -82,11 +81,9 @@ using namespace std;
 
 G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    corr(0),
     theParticle(0),
     isInitialised(false),
-    stopDataActive(true),
-    nuclearStopping(true)
+    stopDataActive(true)
 {
   SetLinearLossLimit(0.02);
   SetStepFunction(0.1, 0.1*mm);
@@ -135,24 +132,24 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     // define base particle
     const G4ParticleDefinition* theBaseParticle = 0;
 
-    if(part == ion)     theBaseParticle = 0;
-    else if(bpart == 0) theBaseParticle = ion;
-    else                theBaseParticle = bpart;
+    if(part == ion)     { theBaseParticle = 0; }
+    else if(bpart == 0) { theBaseParticle = ion; }
+    else                { theBaseParticle = bpart; }
 
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    if (!EmModel(1)) SetEmModel(new G4BraggIonModel(), 1);
+    if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
 
     // model limit defined for protons
     eth = (EmModel(1)->HighEnergyLimit())*part->GetPDGMass()/proton_mass_c2;
     EmModel(1)->SetHighEnergyLimit(eth);
 
-    if (!FluctModel()) SetFluctModel(new G4IonFluctuations());
+    if (!FluctModel()) { SetFluctModel(new G4IonFluctuations()); }
     AddEmModel(1, EmModel(1), FluctModel());
 
-    if (!EmModel(2)) SetEmModel(new G4BetheBlochModel(),2);  
+    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }  
     EmModel(2)->SetLowEnergyLimit(eth);
     EmModel(2)->SetHighEnergyLimit(MaxKinEnergy());
     AddEmModel(2, EmModel(2), FluctModel());    
@@ -165,9 +162,7 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     isInitialised = true;
   }
   // reinitialisation of corrections for the new run
-  EmModel(1)->ActivateNuclearStopping(nuclearStopping);
-  EmModel(2)->ActivateNuclearStopping(nuclearStopping);
-  if(part == ion) corr->InitialiseForNewRun();
+  if(part == ion) { corr->InitialiseForNewRun(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -177,7 +172,7 @@ void G4ionIonisation::PrintInfo()
   if (stopDataActive && G4GenericIon::GenericIon() == theParticle) {
     G4cout << "      Stopping Power data for " 
            << corr->GetNumberOfStoppingVectors()
-	   << " ion/material pairs, nuclearStopping: " << nuclearStopping
+	   << " ion/material pairs "
            << G4endl;
   }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.27 2009-11-22 18:00:23 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.28 2010-09-28 15:50:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -121,7 +121,7 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" &&
-       pname != "deuteron" && pname != "triton") isIon = true;
+       pname != "deuteron" && pname != "triton") { isIon = true; }
 
     corr = G4LossTableManager::Instance()->EmCorrections();
 

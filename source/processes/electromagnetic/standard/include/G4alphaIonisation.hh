@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.hh,v 1.1 2009-11-10 11:50:30 vnivanch Exp $
+// $Id: G4alphaIonisation.hh,v 1.2 2010-09-28 15:50:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -70,8 +70,6 @@ public:
   // Print out of the class parameters
   virtual void PrintInfo();
 
-  void ActivateNuclearStopping(G4bool);
-
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
@@ -81,8 +79,6 @@ protected:
 				   const G4Material*, G4double cut);
 
   inline G4double BetheBlochEnergyThreshold();
-
-  inline G4bool NuclearStoppingFlag();
 
 private:
 
@@ -97,29 +93,14 @@ private:
   G4double   eth;
 
   G4bool     isInitialised;
-  G4bool     nuclearStopping;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4alphaIonisation::ActivateNuclearStopping(G4bool val)
-{
-  nuclearStopping = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4alphaIonisation::BetheBlochEnergyThreshold()
 {
   return eth;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4alphaIonisation::NuclearStoppingFlag()
-{
-  return nuclearStopping;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
