@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:06:21 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:27:59 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -117,6 +117,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundTriton.cc
         G4VPreCompoundEmissionFactory.cc
         G4VPreCompoundFragment.cc
+        G4VPreCompoundTransitions.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
