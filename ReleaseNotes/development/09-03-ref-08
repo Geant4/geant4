@@ -285,7 +285,7 @@ examples                                         examples-V09-03-08
 - extended/electromagnetic/TestEm7 (testem7-V09-03-06)
   o Added standard HistoManager.
   o Fixed normalisation factor in histograms 2 and 3.
-- extended/electromagnetic/TestEm8 (testem8-V09-03-04)
+- extended/electromagnetic/TestEm8 (testem8-V09-03-05)
   o Completely revised in physics, scoring and histograms for treatment of
     ionisation in thin absorbers and gaseous detectors.
 - extended/radioactivedecay (radioactivedecay_examples-V09-03-00)
