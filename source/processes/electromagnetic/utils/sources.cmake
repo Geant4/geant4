@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:54:21 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:16:43 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -86,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EnergyLossTables.cc
         G4LossTableBuilder.cc
         G4LossTableManager.cc
+        G4VAtomdeexcitation.cc
         G4VEmFluctuationModel.cc
         G4VEmModel.cc
         G4VEmProcess.cc
