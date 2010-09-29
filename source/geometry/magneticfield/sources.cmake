@@ -11,7 +11,7 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-09-29 20:05:55 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-09-29 20:43:15 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_SpinEqRhs.cc
         G4Mag_UsualEqRhs.cc
         G4MagneticField.cc
-        G4MonopoleEq.hh
+        G4MonopoleEq.cc
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
         G4RKG3_Stepper.cc
