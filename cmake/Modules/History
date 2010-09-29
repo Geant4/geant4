@@ -1,0 +1,25 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarise all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+24th September 2010 Ben Morgan
+Geant4MacroLibraryTargets.cmake - Added granular library target macro and
+allowed global library macro to take one component for mixed libraries.
+
+Geant4MacroDefineModule.cmake - cleaned up and added dependency variables.
+
+21st September 2010 Ben Morgan
+- Initial copy of cmake module files into ref-07 tag.
+
