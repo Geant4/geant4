@@ -9,9 +9,9 @@
 # Lists the internal granular and global dependencies of the library.
 # Source specific properties should be added at the end.
 #
-# Generated on : 24/9/2010
+# Generated on : 29/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:41:19 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:05:55 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -73,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_EqRhs.hh
         G4Mag_SpinEqRhs.hh
         G4Mag_UsualEqRhs.hh
+        G4MonopoleEq.hh
         G4MagneticField.hh
         G4NystromRK4.hh
         G4QuadrupoleMagField.hh
@@ -118,6 +119,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4Mag_SpinEqRhs.cc
         G4Mag_UsualEqRhs.cc
         G4MagneticField.cc
+        G4MonopoleEq.hh
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
         G4RKG3_Stepper.cc
