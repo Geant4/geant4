@@ -181,7 +181,7 @@ processes/hadronic
     G4PreCompoundModel in the constructor of the class
     Minor cleanup as a part of PreCompound model cleanup: use integer Z and A,
     and added pointers to proton and neutron.
-- models/cascade (hadr-casc-V09-03-79)
+- models/cascade (hadr-casc-V09-03-81)
 
   o <<<<<<< NOTES FROM DENNIS <<<<<<<<<<<
 
@@ -239,9 +239,13 @@ processes/hadronic
     functionality.
 - models/theo_high_energy (had-theo-HE-V09-03-01)
   o Use integer interface for A and Z in G4QuasiElasticChannel.
-- models/util (hadr-mod-util-V09-03-03)
+- models/util (hadr-mod-util-V09-03-04)
   o G4Fancy3DNucleus: added integer (A,Z) and Init(A,Z).
   o G4DecayStrongResonances: cleanup of unused #include statements.
+  o G4Fragment: added members 'numberOfChargedHoles', 'numberOfShellElectrons'
+    and corresponding accessors; reodered inline methods and extended comments;
+    removed unused private methods and headers; changed setprecision() to
+    setw() in operator<<(), add added null pointer check there as well.
 - stopping (hadr-stopping-V09-03-00)
   o Use integer interface for A and Z for G4Fancy3DNucleus in
     G4MuonMinusCaptureAtRest.
