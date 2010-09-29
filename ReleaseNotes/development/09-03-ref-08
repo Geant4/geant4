@@ -22,88 +22,71 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-geometry/biasing                                 geombias-V09-03-01          (+)
-----------------
-- Fixed false-positive cases of invalid iterator in G4IStore and
-  G4WeightWindowStore.
-
-geometry/divisions                               geomdiv-V09-03-01           (+)
-------------------
-- Removed obvious else statement in constructors of G4PVDivision.
-
-geometry/magneticfield                           field-V09-03-03
-----------------------
-- Fixed passing of time in G4NystromRK4.                                     (+)
-- Revised constructor of G4MagErrorStepper to add number of State variables.
-- Corrected MagErrorStepper to copy state variable to output.
-- Enabled G4ConstRK4 to copy remaining state variables.
-
-geometry/management                              geommng-V09-03-04           (+)
--------------------
-- Fixed false-positive null forward case in G4SmartVoxelHeader.
-
-geometry/navigation                              geomnav-V09-03-03           (+)
--------------------
-- Added missing initialization for 'fNewSafety' and 'fTrueMinStep' in
-  G4MultiNavigator constructor.
-
-geometry/solids/Boolean                          geom-bool-V09-03-02
------------------------
-- Implemented copy-constructor and assignment operator for concrete
-  solids classes to facilitate conversion to Geant4-MT.
-
-geometry/solids/BREPS                            breps-V09-03-03
----------------------
-- Implemented copy-constructor and assignment operator for solids classes
-  to facilitate conversion to Geant4-MT.
-- Fixed possible leak in G4BREPSolid::IsConvex() method.                     (+)
-- Corrected possible dereferencing of null pointer in method                 (+)
-  G4BREPSolidSphere::DistanceToOut().
-- Corrected deletion of internal data in G4BSplineCurve::Project() method.   (+)
-- Fixed possible leak in G4BezierSurface::ClipSurface() method, and fixed    (+)
-  case of dereferenciation of null pointer.
-- Fixed leak in destructor of G4ToroidalSurface.                             (+)
-- Added dummy initialisation of static data in G4BoundingBox3D,              (+)
-  G4ProjectedSurface and G4Surface.
-
-geometry/solids/CSG                              geom-csg-V09-03-10
--------------------
-- Implemented copy-constructor and assignment operator for all solids
-  to facilitate conversion to Geant4-MT.
-- Added missing validity checks on radii to modifiers in G4Tubs.
-- Fix within G4CSGDEBUG code for restoring cout precision.                   (+)
-
-geometry/solids/specific                         geom-specific-V09-03-15
-------------------------
-- Implemented copy-constructor and assignment operator for all solids
-  to facilitate conversion to Geant4-MT.
-- G4EllipticalTube: extended implementation of SurfaceNormal(p) in agreement (+)
-  with canonical form. Added unit test testG4EllipticalTube.cc.
-- Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.     (+)
-- Use INT_MAX as initialisation for max limits in G4SolidExtentList.         (+)
-- Added dummy initialization to members in struct                            (+)
-  G4PolyPhiFace::G4PolyPhiFaceEdge, struct G4ReduciblePolygon::ABVertex.
-  G4Ellipsoid, G4EllipticalTube, G4EnclosingCylinder, G4ExtrudedSolid, G4Hype,
-  G4IntersectingCone, G4Paraboloid, G4PolyPhiFace, G4Polycone, G4PolyconeSide,
-  G4Polyhedra, G4PolyhedraSide, G4QuadrangularFacet, G4ReduciblePolygon,
-  G4TessellatedSolid, G4TriangularFacet, G4TwistBoxSide, G4TwistTrapAlphaSide,
-  G4TwistTrapFlatSide, G4TwistTrapParallelSide, G4TwistTubsFlatSide,
-  G4TwistTubsHypeSide, G4TwistTubsSide, G4TwistedTubs, G4VCSGfaceted, G4VFacet,
-  G4VTwistSurface, G4VTwistedFaceted.
-- Fixed case of dereferencing null pointer in methods                        (+)
-  G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
-  and G4VCSGfaceted::DistanceToOut(p,v).
-- Fixed unecessary object copy as argument in method                         (+)
-  G4PolyhedraSide::IntersectSidePlane().
-- Avoid possible case of derefencing null pointer in G4ReduciblePolygon
-  RemoveDuplicateVertices() and RemoveRedundantVertices() methods.
-- Replaced calls to std::abs() with std::fabs() where suitable.              (+)
-- Fix within G4CSGDEBUG code for restoring cout precision.                   (+)
-
-geometry/volumes                                 geomvol-V09-03-08
-----------------
-- Fixed false-positive cases for initialization in copy-constructor of
-  G4GRSSolid amd G4GRSVolume.
+geometry
+--------
+- biasing (geombias-V09-03-01)                                               (+)
+  o Fixed false-positive cases of invalid iterator in G4IStore and
+    G4WeightWindowStore.
+- divisions (geomdiv-V09-03-01)                                              (+)
+  o Removed obvious else statement in constructors of G4PVDivision.
+- magneticfield (field-V09-03-03)
+  o Fixed passing of time in G4NystromRK4.                                   (+)
+  o Revised constructor of G4MagErrorStepper to add number of State variables.
+  o Corrected MagErrorStepper to copy state variable to output.
+  o Enabled G4ConstRK4 to copy remaining state variables.
+- management (geommng-V09-03-04)                                             (+)
+  o Fixed false-positive null forward case in G4SmartVoxelHeader.
+- navigation (geomnav-V09-03-03)                                             (+)
+  o Added missing initialization for 'fNewSafety' and 'fTrueMinStep' in
+    G4MultiNavigator constructor.
+- solids/Boolean (geom-bool-V09-03-02)
+  o Implemented copy-constructor and assignment operator for concrete
+    solids classes to facilitate conversion to Geant4-MT.
+- solids/BREPS (breps-V09-03-03)
+  o Implemented copy-constructor and assignment operator for solids classes
+    to facilitate conversion to Geant4-MT.
+  o Fixed possible leak in G4BREPSolid::IsConvex() method.                   (+)
+  o Corrected possible dereferencing of null pointer in method               (+)
+    G4BREPSolidSphere::DistanceToOut().
+  o Corrected deletion of internal data in G4BSplineCurve::Project() method. (+)
+  o Fixed possible leak in G4BezierSurface::ClipSurface() method, and fixed  (+)
+    case of dereferenciation of null pointer.
+  o Fixed leak in destructor of G4ToroidalSurface.                           (+)
+  o Added dummy initialisation of static data in G4BoundingBox3D,            (+)
+    G4ProjectedSurface and G4Surface.
+- solids/CSG (geom-csg-V09-03-10)
+  o Implemented copy-constructor and assignment operator for all solids
+    to facilitate conversion to Geant4-MT.
+  o Added missing validity checks on radii to modifiers in G4Tubs.
+  o Fix within G4CSGDEBUG code for restoring cout precision.                 (+)
+- solids/specific (geom-specific-V09-03-15)
+  o Implemented copy-constructor and assignment operator for all solids
+    to facilitate conversion to Geant4-MT.
+  o G4EllipticalTube: extended implementation of SurfaceNormal(p) in         (+)
+    agreement with canonical form.
+  o Fixed cases of division by zero in G4VTwistSurface and G4TwistBoxSide.   (+)
+  o Use INT_MAX as initialisation for max limits in G4SolidExtentList.       (+)
+  o Added dummy initialization to members in struct                          (+)
+    G4PolyPhiFace::G4PolyPhiFaceEdge, struct G4ReduciblePolygon::ABVertex.
+    G4Ellipsoid, G4EllipticalTube, G4EnclosingCylinder, G4ExtrudedSolid, G4Hype,
+    G4IntersectingCone, G4Paraboloid, G4PolyPhiFace, G4Polycone, G4PolyconeSide,
+    G4Polyhedra, G4PolyhedraSide, G4QuadrangularFacet, G4ReduciblePolygon,
+    G4TessellatedSolid, G4TriangularFacet, G4TwistBoxSide, G4TwistTrapAlphaSide,
+    G4TwistTrapFlatSide, G4TwistTrapParallelSide, G4TwistTubsFlatSide,
+    G4TwistTubsHypeSide, G4TwistTubsSide, G4TwistedTubs, G4VCSGfaceted,
+    G4VFacet, G4VTwistSurface, G4VTwistedFaceted.
+  o Fixed case of dereferencing null pointer in methods                      (+)
+    G4EllipticalTube::DistanceToOut(p,v), G4VCSGfaceted::DistanceToIn(p,v)
+    and G4VCSGfaceted::DistanceToOut(p,v).
+  o Fixed unecessary object copy as argument in method                       (+)
+    G4PolyhedraSide::IntersectSidePlane().
+  o Avoid possible case of derefencing null pointer in G4ReduciblePolygon
+    RemoveDuplicateVertices() and RemoveRedundantVertices() methods.
+  o Replaced calls to std::abs() with std::fabs() where suitable.            (+)
+  o Fix within G4CSGDEBUG code for restoring cout precision.                 (+)
+- geometry/volumes (geomvol-V09-03-08)
+  o Fixed false-positive cases for initialization in copy-constructor of
+    G4GRSSolid and G4GRSVolume.
 
 global                                           global-V09-03-14
 ------
