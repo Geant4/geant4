@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:54:05 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:14:39 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -65,12 +65,14 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4InitXscPAI.hh
         G4IonFluctuations.hh
         G4KleinNishinaCompton.hh
+        G4KleinNishinaModel.hh
         G4MollerBhabhaModel.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
         G4PAIPhotonModel.hh
         G4PAIxSection.hh
         G4PAIySection.hh
+        G4PEEffectFluoModel.hh
         G4PEEffectModel.hh
         G4PSTARStopping.hh
         G4PairProductionRelModel.hh
@@ -117,12 +119,14 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4InitXscPAI.cc
         G4IonFluctuations.cc
         G4KleinNishinaCompton.cc
+        G4KleinNishinaModel.cc
         G4MollerBhabhaModel.cc
         G4NuclearStopping.cc
         G4PAIModel.cc
         G4PAIPhotonModel.cc
         G4PAIxSection.cc
         G4PAIySection.cc
+        G4PEEffectFluoModel.cc
         G4PEEffectModel.cc
         G4PSTARStopping.cc
         G4PairProductionRelModel.cc
