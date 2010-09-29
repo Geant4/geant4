@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:58:46 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:26:23 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -50,6 +50,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
     HEADERS
         G4CHIPSElastic.hh
+        G4CHIPSElasticXS.hh
         G4ChargeExchange.hh
         G4ChargeExchangeProcess.hh
         G4DiffuseElastic.hh
@@ -65,6 +66,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4WHadronElasticProcess.hh
     SOURCES
         G4CHIPSElastic.cc
+        G4CHIPSElasticXS.cc
         G4ChargeExchange.cc
         G4ChargeExchangeProcess.cc
         G4DiffuseElastic.cc
