@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:42:13 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:47:19 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -52,7 +52,6 @@ GEANT4_DEFINE_MODULE(NAME G4brep
         G4ProjectedSurface.hh
         G4BREPSolidCylinder.hh
         G4Ray.icc
-        G4BREPSolidOfRevolution.hh
         G4Ray.hh
         G4BREPSolidOpenPCone.hh
         G4Sort.hh
