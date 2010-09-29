@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:07:43 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-29 20:31:16 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4SampleResonance.hh
         G4WilsonRadius.hh
     SOURCES
+        G4DecayStrongResonances.cc
         G4ExcitedString.cc
         G4Fancy3DNucleus.cc
         G4FermiMomentum.cc
