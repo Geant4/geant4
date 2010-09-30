@@ -4,6 +4,8 @@
 
 Some of the development/fixes included since the last development tag are:
 
+ o First 'alpha' version of a new build infrastructure based on CMake
+   (see http://www.cmake.org/).
  o Added copy-constructors and operator=() for all shapes for use in Geant4-MT.
  o New G4DNA low-energy processes and e- models for vibrational and attachment,
    requiring new data set G4LEDATA-6.16.
@@ -24,6 +26,9 @@ Summarised, the list of changes is the following:
 
 config                                           config-V09-03-07
 ------
+- First 'alpha' version of a new build infrastructure based on CMake (see
+  http://www.cmake.org/). Added scripts and file catalogues to all source
+  modules.
 - Added 'obj' target to globlib.gmk to allow for creation of object files only.
 
 geometry
