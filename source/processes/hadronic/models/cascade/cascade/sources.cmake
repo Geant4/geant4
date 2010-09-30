@@ -9,9 +9,9 @@
 # Lists the internal granular and global dependencies of the library.
 # Source specific properties should be added at the end.
 #
-# Generated on : 24/9/2010
+# Generated on : 30/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-09-29 20:23:41 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-09-30 09:31:41 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -38,7 +38,14 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/inc
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
@@ -205,6 +212,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4had_mod_util
         G4hadronic_bert_cascade
         G4hadronic_deex_evaporation
+        G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_handler
+        G4hadronic_deex_management
+        G4hadronic_deex_multifragmentation
+        G4hadronic_deex_photon_evaporation
+        G4hadronic_deex_util
         G4hadronic_hetcpp_utils
         G4hadronic_mgt
         G4hadronic_proc
