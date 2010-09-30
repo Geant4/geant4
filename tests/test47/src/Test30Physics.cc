@@ -208,6 +208,14 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
+  } else if(gen_name == "bertP") {
+    G4CascadeInterface* hkm = new G4CascadeInterface();
+    hkm->SetMaxEnergy(15.*GeV);
+    hkm->usePreCompoundDeexcitation();
+    sg = new Test30VSecondaryGenerator(hkm, mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
+
   } else if(gen_name == "incl") {
     G4InclAblaCascadeInterface* hkm = new G4InclAblaCascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
@@ -260,8 +268,10 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
     G4TheoFSGenerator* theModel = new G4TheoFSGenerator;
     G4FTFModel* theStringModel = new G4FTFModel();
-    G4GeneratorPrecompoundInterface* theCascade = 
+    G4GeneratorPrecompoundInterface* theCascade =
       new G4GeneratorPrecompoundInterface;
+    theCascade->SetDeExcitation(thePreCompound);
+    theCascade->SetCaptureThreshold(10*MeV);   // Uzhi 25.09.10
     G4ExcitedStringDecay* theStringDecay = 
       new G4ExcitedStringDecay(new G4LundStringFragmentation());
     theStringModel->SetFragmentationModel(theStringDecay);

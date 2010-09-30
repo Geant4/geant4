@@ -317,7 +317,57 @@ void plotKEp(char element[2], char ene[6], int first=0, int logy=0, int save=0,
     } else {
       if (save > 0) tag = ".eps";
     }
-    sprintf (fname, "%s%stoproton_1%s", beam, element, tag.c_str());
+    sprintf (fname, "%stoproton_1%s", beam, element, tag.c_str());
+    myc->SaveAs(fname);
+  }
+
+}
+
+void plotKEpx(char ene[6], int first=0, int logy=0, int save=0,
+	      double ymin=-1., double ymax=-1., char beam[8]="proton", 
+	      bool ratio=false, bool error=true, int leg1=1, int leg2=1, 
+	      char dir[20]=".", char dird[40]=".", char mark=' ') {
+
+  setStyle();  
+  TCanvas *myc = new TCanvas("myc","",800,600); myc->Divide(2,2);
+
+  int leg=leg1; if (leg2 < leg) leg=leg2;
+  char markf[4]=" ";
+  myc->cd(1); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(a)");
+  if (ratio)
+    plotKERatio("C", ene," 59.1",first,logy,ymin,ymax,"proton",beam,error,leg1,dir,dird,markf);
+  else
+    plotKE("C",ene," 59.1",first,logy,ymin,ymax,"proton",beam,leg1,dir,dird,markf);
+  myc->cd(2); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(b)");
+  if (ratio)
+    plotKERatio("U",ene," 59.1",first,logy,ymin,ymax,"proton",beam,error,leg2,dir,dird,markf);
+  else
+    plotKE("U",ene," 59.1",first,logy,ymin,ymax,"proton",beam,leg2,dir,dird,markf);
+  myc->cd(3); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(c)");
+  if (ratio)
+    plotKERatio("C",ene,"119.0",first,logy,ymin,ymax,"proton",beam,error,leg,dir,dird,markf);
+  else
+    plotKE("C",ene,"119.0",first,logy,ymin,ymax,"proton",beam,leg,dir,dird,markf);
+  myc->cd(4); if (logy != 0) gPad->SetLogy(1); gPad->SetLeftMargin(0.15);
+  if (mark == 'y') sprintf(markf, "(d)");
+  if (ratio)
+    plotKERatio("U",ene,"119.0",first,logy,ymin,ymax,"proton",beam,error,leg,dir,dird,markf);
+  else
+    plotKE("U",ene,"119.0",first,logy,ymin,ymax,"proton",beam,leg,dir,dird,markf);
+
+  char fname[160];
+  if (save != 0) {
+    std::string tag=".gif";
+    if (ratio) {
+      if (save > 0) tag = "R.eps";
+      else          tag = "R.gif";
+    } else {
+      if (save > 0) tag = ".eps";
+    }
+    sprintf (fname, "%sCUtop_1%s", beam, tag.c_str());
     myc->SaveAs(fname);
   }
 
@@ -412,6 +462,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int firstMode=0,
 	    char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   int first = 0, models = modelsITEP;
+  gPad->SetTopMargin(0.05); gPad->SetBottomMargin(0.15); 
   bool mode = true;
   if (firstMode < 0) {
     mode  = false;
@@ -426,7 +477,11 @@ void plotKE(char element[2], char ene[6], char angle[6], int firstMode=0,
   int i=0, icol=1, isty=1;
   sprintf (titlx, "Kinetic Energy of %s (GeV)", particle);
   double  ymx0=1, ymi0=100., xlow=0.06, xhigh=0.26;
-  if (particle == "neutron") {xlow= 0.0; xhigh=0.20;}
+  if (particle == "neutron")      {xlow= 0.0; xhigh=0.20;}
+  else if (particle == "piplus")  {xlow= 0.0; xhigh=2.0;}
+  else if (particle == "piminus") {xlow= 0.0; xhigh=2.0;}
+  else if (particle == "kplus")   {xlow= 0.0; xhigh=2.0;}
+  else if (particle == "kminus")  {xlow= 0.0; xhigh=2.0;}
   for (i=0; i<models; i++) {
     icol = colModel[i]; isty = stylModel[i];
     if (mode) {
@@ -457,7 +512,8 @@ void plotKE(char element[2], char ene[6], char angle[6], int firstMode=0,
       hi[i]->GetXaxis()->SetRangeUser(xlow, xhigh); hi[i]->SetTitle("");
       hi[i]->GetXaxis()->SetTitle(titlx);
       hi[i]->SetLineStyle(isty);  hi[i]->SetLineWidth(2); hi[i]->SetLineColor(icol);
-      hi[i]->GetXaxis()->SetLabelSize(0.035);hi[i]->GetYaxis()->SetLabelSize(0.035);
+      hi[i]->GetXaxis()->SetLabelSize(0.05);hi[i]->GetYaxis()->SetLabelSize(0.05);
+      hi[i]->GetXaxis()->SetTitleSize(0.05);hi[i]->GetYaxis()->SetTitleSize(0.05);
     }
     //    file->Close();
   }
@@ -500,7 +556,7 @@ void plotKE(char element[2], char ene[6], char angle[6], int firstMode=0,
     if (hi[i] != 0) hi[i]->GetYaxis()->SetRangeUser(ymi0,ymx0);
   }
 
-  hi[first]->GetYaxis()->SetTitleOffset(1.6);
+  hi[first]->GetYaxis()->SetTitleOffset(1.2);
   hi[first]->Draw();
   for (i=0; i<models; i++) {
     if (i != first && hi[i] != 0) hi[i]->Draw("same");
@@ -509,10 +565,10 @@ void plotKE(char element[2], char ene[6], char angle[6], int firstMode=0,
 
   TLegend *leg1;
   if (legend < 0) {
-    leg1 = new TLegend(0.60,0.55,0.90,0.90);
+    leg1 = new TLegend(0.60,0.55,0.90,0.95);
   } else {
-    if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.90);
-    else              leg1 = new TLegend(0.38,0.70,0.90,0.90);
+    if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.95);
+    else              leg1 = new TLegend(0.38,0.70,0.90,0.95);
   }
   for (i=0; i<models; i++) {
     if (hi[i] != 0) {
@@ -526,6 +582,10 @@ void plotKE(char element[2], char ene[6], char angle[6], int firstMode=0,
   else if (beam == "piminus") sprintf (beamx, "#pi^{-}");
   else                        sprintf (beamx, "p");
   if      (particle == "neutron") sprintf (partx, "n");
+  else if (particle == "piplus")  sprintf (partx, "#pi^{+}");
+  else if (particle == "piminus") sprintf (partx, "#pi^{-}");
+  else if (particle == "kplus")   sprintf (partx, "K^{+}");
+  else if (particle == "kminus")  sprintf (partx, "K^{-}");
   else                            sprintf (partx, "p");
   if (legend < 0) {
     sprintf (header,"%s+A #rightarrow %s+X", beamx, partx);
@@ -549,6 +609,7 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int firstMode=0,
 
   //Decide the mode
   int first = 0, models = modelsITEP;
+  gPad->SetTopMargin(0.05); gPad->SetBottomMargin(0.15);
   bool mode = true;
   if (firstMode < 0) {
     mode  = false;
@@ -637,8 +698,8 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int firstMode=0,
       gr[i]->SetLineStyle(stylModel[i]); gr[i]->SetLineWidth(2); 
       gr[i]->SetLineColor(icol);         gr[i]->SetMarkerColor(icol); 
       gr[i]->SetMarkerStyle(ityp);       gr[i]->SetMarkerSize(1.0); 
-      gr[i]->GetXaxis()->SetLabelSize(0.035);
-      gr[i]->GetYaxis()->SetLabelSize(0.035);
+      gr[i]->GetXaxis()->SetLabelSize(0.05); gr[i]->GetYaxis()->SetLabelSize(0.05);
+      gr[i]->GetXaxis()->SetTitleSize(0.05); gr[i]->GetYaxis()->SetTitleSize(0.05);
     } else {
       gr[i] = 0;
     }
@@ -653,8 +714,8 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int firstMode=0,
   gref->SetLineStyle(1);    gref->SetLineWidth(1); 
   gref->SetLineColor(1);    gref->SetMarkerColor(1); 
   gref->SetMarkerStyle(20); gref->SetMarkerSize(0.1); 
-  gref->GetXaxis()->SetLabelSize(0.035);
-  gref->GetYaxis()->SetLabelSize(0.035);
+  gref->GetXaxis()->SetLabelSize(0.05); gref->GetYaxis()->SetLabelSize(0.05);
+  gref->GetXaxis()->SetTitleSize(0.05); gref->GetYaxis()->SetTitleSize(0.05);
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
@@ -674,10 +735,10 @@ void plotKERatio(char element[2], char ene[6], char angle[6], int firstMode=0,
 
   TLegend *leg1;
   if (legend < 0) {
-    leg1 = new TLegend(0.60,0.55,0.90,0.90);
+    leg1 = new TLegend(0.60,0.55,0.90,0.95);
   } else {
-    if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.90);
-    else              leg1 = new TLegend(0.38,0.70,0.90,0.90);
+    if (markf == " ") leg1 = new TLegend(0.42,0.55,0.90,0.95);
+    else              leg1 = new TLegend(0.38,0.70,0.90,0.95);
   }
   for (i=0; i<models; i++) {
     if (gr[i] != 0) {
@@ -867,8 +928,8 @@ void plotCT(char element[2], char ene[6], double ke, int firstMode=0,
   if (gr1) gr1->Draw("p");
 
   TLegend *leg1;
-  if (legend == 1) leg1 = new TLegend(0.15,0.70,0.62,0.90);
-  else             leg1 = new TLegend(0.15,0.55,0.62,0.90);
+  if (legend == 1) leg1 = new TLegend(0.15,0.70,0.62,0.95);
+  else             leg1 = new TLegend(0.15,0.55,0.62,0.95);
   for (i=0; i<models; i++) {
     if (hi[i] != 0) {
       if (mode) sprintf (list, "%s", ModelNamesI[i].c_str()); 
@@ -1066,7 +1127,7 @@ void plotBE(char element[2], char angle[6], double ke, int logy=0, int scan=1,
     for (i=0; i<modelsITEP; i++)
       gr[i]->Draw("lp");
   
-    TLegend *leg1 = new TLegend(0.35,0.60,0.90,0.90);
+    TLegend *leg1 = new TLegend(0.35,0.60,0.90,0.95);
     for (i=0; i<modelsITEP; i++) {
       sprintf (list, "%s", ModelNamesI[i].c_str());
       leg1->AddEntry(gr[i],list,"LP");
@@ -1215,6 +1276,7 @@ void plotMT(char element[2], char ene[6], char rapid[6], int firstMode=0,
 	    char dir[20]=".", char dird[40]=".", char markf[4]=" ") {
 
   int first = 0, models = modelsBNL;
+  gPad->SetTopMargin(0.05); gPad->SetBottomMargin(0.15); 
   bool mode = true;
   if (firstMode < 0) {
     mode  = false;
@@ -1264,6 +1326,8 @@ void plotMT(char element[2], char ene[6], char rapid[6], int firstMode=0,
       hi[i]->GetXaxis()->SetRangeUser(xlow, xhigh); hi[i]->SetTitle("");
       hi[i]->GetXaxis()->SetTitle(titlx);
       hi[i]->SetLineStyle(1);  hi[i]->SetLineWidth(2); hi[i]->SetLineColor(icol);
+      hi[i]->GetXaxis()->SetLabelSize(0.05);hi[i]->GetYaxis()->SetLabelSize(0.05);
+      hi[i]->GetXaxis()->SetTitleSize(0.05);hi[i]->GetYaxis()->SetTitleSize(0.05);
     }
     //    file->Close();
   }
@@ -1311,10 +1375,10 @@ void plotMT(char element[2], char ene[6], char rapid[6], int firstMode=0,
 
   TLegend *leg1;
   if (legend < 0) {
-    leg1 = new TLegend(0.50,0.55,0.90,0.90);
+    leg1 = new TLegend(0.50,0.55,0.90,0.95);
   } else {
-    if (markf == " " ) leg1 = new TLegend(0.42,0.70,0.90,0.90);
-    else               leg1 = new TLegend(0.38,0.70,0.90,0.90);
+    if (markf == " " ) leg1 = new TLegend(0.42,0.70,0.90,0.95);
+    else               leg1 = new TLegend(0.38,0.70,0.90,0.95);
   }
   for (i=0; i<models; i++) {
     if (hi[i] != 0) {
@@ -1349,6 +1413,7 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int firstMode=0,
 		 char dird[40]=".", char markf[4]=" ") {
 
   int first = 0, models = modelsBNL;
+  gPad->SetTopMargin(0.05); gPad->SetBottomMargin(0.15);
   bool mode = true;
   if (firstMode < 0) {
     mode  = false;
@@ -1437,6 +1502,8 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int firstMode=0,
       gr[i]->SetLineStyle(stylModel[i]); gr[i]->SetLineWidth(2); 
       gr[i]->SetLineColor(icol);         gr[i]->SetMarkerColor(icol); 
       gr[i]->SetMarkerStyle(ityp);       gr[i]->SetMarkerSize(1.0); 
+      gr[i]->GetXaxis()->SetLabelSize(0.05); gr[i]->GetYaxis()->SetLabelSize(0.05);
+      gr[i]->GetXaxis()->SetTitleSize(0.05); gr[i]->GetYaxis()->SetTitleSize(0.05);
     } else {
       gr[i] = 0;
     }
@@ -1449,8 +1516,8 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int firstMode=0,
   gref->SetLineStyle(1);    gref->SetLineWidth(1); 
   gref->SetLineColor(1);    gref->SetMarkerColor(1); 
   gref->SetMarkerStyle(20); gref->SetMarkerSize(0.1); 
-  gref->GetXaxis()->SetLabelSize(0.035);
-  gref->GetYaxis()->SetLabelSize(0.035);
+  gref->GetXaxis()->SetLabelSize(0.05); gref->GetYaxis()->SetLabelSize(0.05);
+  gref->GetXaxis()->SetTitleSize(0.05); gref->GetYaxis()->SetTitleSize(0.05);
 
   if (logy == 0) {ymx0 *= 1.5; ymi0 *= 0.8;}
   else           {ymx0 *=10.0; ymi0 *= 0.2; }
@@ -1473,10 +1540,10 @@ void plotMTRatio(char element[2], char ene[6], char rapid[6], int firstMode=0,
 
     TLegend *leg1;
     if (legend < 0) {
-      leg1 = new TLegend(0.50,0.55,0.90,0.90);
+      leg1 = new TLegend(0.50,0.55,0.90,0.95);
     } else {
-      if (markf == " " ) leg1 = new TLegend(0.42,0.70,0.90,0.90);
-      else               leg1 = new TLegend(0.38,0.70,0.90,0.90);
+      if (markf == " " ) leg1 = new TLegend(0.42,0.70,0.90,0.95);
+      else               leg1 = new TLegend(0.38,0.70,0.90,0.95);
     }
     for (i=0; i<models; i++) {
       if (gr[i] != 0) {

@@ -57,6 +57,8 @@ private:
   HistoEPTest47         epTest;
   std::vector<TH1F*>    hiKE11, hiKE12, hiCT11, hiCT12;
   std::vector<TH1F*>    hiKE21, hiKE22, hiCT21, hiCT22;
+  std::vector<TH1F*>    hiKE31, hiKE32, hiKE41, hiKE42;
+  std::vector<TH1F*>    hiKE51, hiKE52, hiKE61, hiKE62;
   std::vector<G4double> energies, emin, emax, angles, cthmin, cthmax, dcth;
   
 };

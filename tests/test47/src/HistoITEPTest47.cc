@@ -126,29 +126,50 @@ void HistoITEPTest47::fill(G4VParticleChange* aChange, G4LorentzVector pinit) {
     fm             = G4LorentzVector(mom, ke+m);
     labv          -= fm;
     G4int    type  = particleType(pd);
-    if (type >= 0 && type <= 1) {
+    if (type >= 0 && type <= 5) {
       G4double theta = mom.theta();
       G4double cth   = std::cos(theta);
       G4double wt    = 1.0/p;
       for (unsigned int ii=0; ii<angles.size(); ii++) {
 	if (cth > cthmin[ii] && cth <= cthmax[ii]) {
-	  if (type == 0) {
+          switch (type) {
+          case 0:
 	    hiKE11[ii]->Fill(ke);
 	    hiKE12[ii]->Fill(ke,wt);
-	  } else {
+            break;
+          case 1:
 	    hiKE21[ii]->Fill(ke);
 	    hiKE22[ii]->Fill(ke,wt);
+            break;
+          case 2:
+	    hiKE31[ii]->Fill(ke);
+	    hiKE32[ii]->Fill(ke,wt);
+            break;
+          case 3:
+	    hiKE41[ii]->Fill(ke);
+	    hiKE42[ii]->Fill(ke,wt);
+            break;
+          case 4:
+	    hiKE51[ii]->Fill(ke);
+	    hiKE52[ii]->Fill(ke,wt);
+            break;
+          case 5:
+	    hiKE61[ii]->Fill(ke);
+	    hiKE62[ii]->Fill(ke,wt);
+	    break;
 	  }
 	}
       }
-      for (unsigned int ii=0; ii<energies.size(); ii++) {
-	if (ke > emin[ii] && ke <= emax[ii]) {
-	  if (type == 0) {
-	    hiCT11[ii]->Fill(cth);
-	    hiCT12[ii]->Fill(cth,wt);
-	  } else {
-	    hiCT21[ii]->Fill(cth);
-	    hiCT22[ii]->Fill(cth,wt);
+      if (type <= 1) {
+	for (unsigned int ii=0; ii<energies.size(); ii++) {
+	  if (ke > emin[ii] && ke <= emax[ii]) {
+	    if (type == 0) {
+	      hiCT11[ii]->Fill(cth);
+	      hiCT12[ii]->Fill(cth,wt);
+	    } else {
+	      hiCT21[ii]->Fill(cth);
+	      hiCT22[ii]->Fill(cth,wt);
+	    }
 	  }
 	}
       }
@@ -162,7 +183,7 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
 
   char name[100], title[100];
   G4double xbin, scale;
-  std::vector<TH1F*> hiKE10, hiKE20;
+  std::vector<TH1F*> hiKE10, hiKE20, hiKE30, hiKE40, hiKE50, hiKE60;
   for (unsigned int ii=0; ii<angles.size(); ii++) {
     xbin = hiKE11[ii]->GetBinWidth(1);
     sprintf (title, "Kinetic Energy of p (GeV)");
@@ -197,6 +218,74 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
     hiKE20[ii]->SetName(name); 
     hiKE20[ii]->Scale(scale);
     hiKE20[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
+
+    xbin = hiKE31[ii]->GetBinWidth(1);
+    sprintf (title, "Kinetic Energy of #pi+ (GeV)");
+    hiKE31[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events/%6.3f GeV", xbin);
+    hiKE31[ii]->GetYaxis()->SetTitle(title);
+    xbin  = hiKE32[ii]->GetBinWidth(1);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth[ii]);
+    sprintf (title, "Kinetic Energy of #pi+ (GeV)");
+    hiKE32[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    hiKE32[ii]->GetYaxis()->SetTitle(title);
+    sprintf (name, "KEpiplus0%s%5.1f", tag1Name,  angles[ii]/deg);
+    hiKE30.push_back((TH1F*)hiKE32[ii]->Clone());
+    hiKE30[ii]->SetName(name); 
+    hiKE30[ii]->Scale(scale);
+    hiKE30[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
+
+    xbin = hiKE41[ii]->GetBinWidth(1);
+    sprintf (title, "Kinetic Energy of #pi- (GeV)");
+    hiKE41[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events/%6.3f GeV", xbin);
+    hiKE41[ii]->GetYaxis()->SetTitle(title);
+    xbin  = hiKE42[ii]->GetBinWidth(1);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth[ii]);
+    sprintf (title, "Kinetic Energy of #pi- (GeV)");
+    hiKE42[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    hiKE42[ii]->GetYaxis()->SetTitle(title);
+    sprintf (name, "KEpiminus0%s%5.1f", tag1Name,  angles[ii]/deg);
+    hiKE40.push_back((TH1F*)hiKE42[ii]->Clone());
+    hiKE40[ii]->SetName(name); 
+    hiKE40[ii]->Scale(scale);
+    hiKE40[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
+
+    xbin = hiKE51[ii]->GetBinWidth(1);
+    sprintf (title, "Kinetic Energy of K+ (GeV)");
+    hiKE51[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events/%6.3f GeV", xbin);
+    hiKE51[ii]->GetYaxis()->SetTitle(title);
+    xbin  = hiKE52[ii]->GetBinWidth(1);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth[ii]);
+    sprintf (title, "Kinetic Energy of K+ (GeV)");
+    hiKE52[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    hiKE52[ii]->GetYaxis()->SetTitle(title);
+    sprintf (name, "KEkplus0%s%5.1f", tag1Name,  angles[ii]/deg);
+    hiKE50.push_back((TH1F*)hiKE52[ii]->Clone());
+    hiKE50[ii]->SetName(name); 
+    hiKE50[ii]->Scale(scale);
+    hiKE50[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
+
+    xbin = hiKE61[ii]->GetBinWidth(1);
+    sprintf (title, "Kinetic Energy of K- (GeV)");
+    hiKE61[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events/%6.3f GeV", xbin);
+    hiKE61[ii]->GetYaxis()->SetTitle(title);
+    xbin  = hiKE62[ii]->GetBinWidth(1);
+    scale = cross_sec/(((double)(std::max(nevt,1)))*xbin*2.*pi*dcth[ii]);
+    sprintf (title, "Kinetic Energy of K- (GeV)");
+    hiKE62[ii]->GetXaxis()->SetTitle(title);
+    sprintf (title, "Events (scaled by #frac{1}{p})/%6.3f GeV", xbin);
+    hiKE62[ii]->GetYaxis()->SetTitle(title);
+    sprintf (name, "KEkminus0%s%5.1f", tag1Name,  angles[ii]/deg);
+    hiKE60.push_back((TH1F*)hiKE62[ii]->Clone());
+    hiKE60[ii]->SetName(name); 
+    hiKE60[ii]->Scale(scale);
+    hiKE60[ii]->GetYaxis()->SetTitle("E#frac{d^{3}#sigma}{dp^{3}} (mb/GeV^{2})");
   }
 
   std::vector<TH1F*> hiCT10, hiCT20;
@@ -236,6 +325,10 @@ void HistoITEPTest47::write(G4double cross_sec, G4int nevt) {
   for (unsigned int ii=0; ii<angles.size(); ii++) {
     hiKE11[ii]->Write(); hiKE10[ii]->Write(); hiKE12[ii]->Write();
     hiKE21[ii]->Write(); hiKE20[ii]->Write(); hiKE22[ii]->Write();
+    hiKE31[ii]->Write(); hiKE30[ii]->Write(); hiKE32[ii]->Write();
+    hiKE41[ii]->Write(); hiKE40[ii]->Write(); hiKE42[ii]->Write();
+    hiKE51[ii]->Write(); hiKE50[ii]->Write(); hiKE52[ii]->Write();
+    hiKE61[ii]->Write(); hiKE60[ii]->Write(); hiKE62[ii]->Write();
   }
   for (unsigned int ii=0; ii<energies.size(); ii++) {
     hiCT11[ii]->Write(); hiCT10[ii]->Write(); hiCT12[ii]->Write();
@@ -274,19 +367,40 @@ void HistoITEPTest47::book() {
 
   char name[100], title[160];
   hiKE11.clear(); hiKE12.clear(); hiKE21.clear(); hiKE22.clear();
+  hiKE31.clear(); hiKE32.clear(); hiKE41.clear(); hiKE42.clear();
+  hiKE51.clear(); hiKE52.clear(); hiKE61.clear(); hiKE62.clear();
   for (unsigned int ii=0; ii<angles.size(); ii++) {
-    sprintf (name, "KEproton1%s%5.1f", tag1Name,  angles[ii]/deg);
-    sprintf (title, "%s to p %s (#theta = %8.2f)", tag2Name, tag3Name,
-	     angles[ii]/deg);
+    double ang = angles[ii]/deg;
+    sprintf (name, "KEproton1%s%5.1f", tag1Name,  ang);
+    sprintf (title, "%s to p %s (#theta = %8.2f)", tag2Name, tag3Name, ang);
     hiKE11.push_back(new TH1F (name, title, 800, 0., 8.));
-    sprintf (name, "KEproton2%s%5.1f", tag1Name,  angles[ii]/deg);
+    sprintf (name, "KEproton2%s%5.1f", tag1Name,  ang);
     hiKE12.push_back(new TH1F (name, title, 800, 0., 8.));
-    sprintf (name, "KEneutron1%s%5.1f", tag1Name,  angles[ii]/deg);
-    sprintf (title, "%s to n %s (#theta = %8.2f)", tag2Name, tag3Name,
-	     angles[ii]/deg);
+    sprintf (name, "KEneutron1%s%5.1f", tag1Name,  ang);
+    sprintf (title, "%s to n %s (#theta = %8.2f)", tag2Name, tag3Name, ang);
     hiKE21.push_back(new TH1F (name, title, 800, 0., 8.));
-    sprintf (name, "KEneutron2%s%5.1f", tag1Name,  angles[ii]/deg);
+    sprintf (name, "KEneutron2%s%5.1f", tag1Name,  ang);
     hiKE22.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEpiplus1%s%5.1f", tag1Name,  ang);
+    sprintf (title, "%s to #pi+ %s (#theta = %8.2f)", tag2Name, tag3Name, ang);
+    hiKE31.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEpiplu2%s%5.1f", tag1Name,  ang);
+    hiKE32.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEpiminus1%s%5.1f", tag1Name,  ang);
+    sprintf (title, "%s to #pi- %s (#theta = %8.2f)", tag2Name, tag3Name, ang);
+    hiKE41.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEpiminus2%s%5.1f", tag1Name,  ang);
+    hiKE42.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEkplus1%s%5.1f", tag1Name,  ang);
+    sprintf (title, "%s to K+ %s (#theta = %8.2f)", tag2Name, tag3Name, ang);
+    hiKE51.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEkplu2%s%5.1f", tag1Name,  ang);
+    hiKE52.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KEkminus1%s%5.1f", tag1Name,  ang);
+    sprintf (title, "%s to K- %s (#theta = %8.2f)", tag2Name, tag3Name, ang);
+    hiKE61.push_back(new TH1F (name, title, 800, 0., 8.));
+    sprintf (name, "KElminus2%s%5.1f", tag1Name,  ang);
+    hiKE62.push_back(new TH1F (name, title, 800, 0., 8.));
   }
 
   hiCT11.clear (); hiCT12.clear(); hiCT21.clear(); hiCT22.clear();
