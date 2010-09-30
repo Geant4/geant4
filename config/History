@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.380 2010-08-23 16:51:38 gcosmo Exp $
+cvs log $Id: History,v 1.381 2010-09-30 09:04:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th September 2010  Gabriele Cosmo (config-V09-03-07)
+- Added 'obj' target to globlib.gmk to allow for just creation of object files.
 
 23rd August 2010  Gabriele Cosmo (config-V09-03-06)
 - Simplified QTLIBPATH setup in Linux-g++.gmk.
