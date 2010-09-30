@@ -174,9 +174,13 @@ processes/hadronic
     Minor cleanup as a part of PreCompound model cleanup: use integer Z and A,
     and added pointers to proton and neutron.
 - models/cascade (hadr-casc-V09-03-81)
-
-  o <<<<<<< NOTES FROM DENNIS <<<<<<<<<<<
-
+  o More code re-organization to allow re-use.
+  o A bug resulting in factor of 2 reduction of double differential 
+    cross-section in validation at several GeV, is now fixed.
+  o New interface to G4Precompound model added and tested.
+  o Migrated to integer Z and A interface.
+  o Fixed bug leading to very low hyperon energies and high CPU usage.
+  o Removed several unused classes and did additional code clean-up.
 - models/chiral_inv_phase_space/cross_sections (hadr-chips-cs-V09-03-07)
   o Simplified initialisation of pairs in classes G4QNeutronCaptureRatio,
     G4QNeutronElasticCrossSection, G4QNeutronNuclearCrossSection and
