@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:11:58 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-09-30 13:50:34 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -102,6 +102,7 @@ GEANT4_DEFINE_MODULE(NAME G4visHepRep
         G4modeling
         G4tracking
         G4vis_management
+        G4zlib
     LINK_LIBRARIES
 )
 
