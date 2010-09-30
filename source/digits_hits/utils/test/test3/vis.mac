@@ -17,7 +17,7 @@
 ###/vis/geometry/set/colour Calor-AP_LayerLog ! yellow
 ###/vis/geometry/set/colour Calor-BP_LayerLog ! yellow
 ###/vis/geometry/set/colour Calor-CP_LayerLog ! yellow
-/vis/viewer/zoom 2.0
+#############/vis/viewer/zoom 2.0
 ##############/vis/viewer/flush
 #
 # for drawing the tracks

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2010-09-15 21:16:41 asaim Exp $
+# $Id: GNUmakefile,v 1.2 2010-09-30 20:53:08 asaim Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -6,10 +6,6 @@
 name := test3
 G4TARGET := $(name)
 G4EXLIB := true
-
-ifndef G4INSTALL
-  G4INSTALL = ../../../..
-endif
 
 .PHONY: all
 all: lib bin

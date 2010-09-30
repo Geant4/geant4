@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst1DetectorConstruction.cc,v 1.1 2010-09-15 21:16:41 asaim Exp $
+// $Id: Tst1DetectorConstruction.cc,v 1.2 2010-09-30 20:53:08 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,10 +35,11 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-
+#include "G4UniformMagField.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-
 #include "G4ios.hh"
 
 Tst1DetectorConstruction::Tst1DetectorConstruction()
@@ -116,6 +117,18 @@ void Tst1DetectorConstruction::SetupGeometry()
   G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid,water,"Phantom");
   phantomPhys = new G4PVPlacement(0,G4ThreeVector(),phantomLogical,"Phantom",
                          worldLogical,false,0);
+
+  //
+  // Magnetic field
+  //
+  G4UniformMagField* myField
+    = new G4UniformMagField(G4ThreeVector(0.,0.,10.0*tesla));
+//    = new G4UniformMagField(G4ThreeVector(1.0*tesla,0.,0.));
+  G4FieldManager* fieldMgr
+    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  fieldMgr->SetDetectorField(myField);
+  fieldMgr->CreateChordFinder(myField);
+
   //                                        
   // Visualization attributes
   //
