@@ -22,6 +22,10 @@ Some of the development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
+config                                           config-V09-03-07
+------
+- Added 'obj' target to globlib.gmk to allow for creation of object files only.
+
 geometry
 --------
 - biasing (geombias-V09-03-01)                                               (+)
