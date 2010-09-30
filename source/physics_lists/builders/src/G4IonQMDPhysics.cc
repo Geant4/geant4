@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonQMDPhysics.cc,v 1.3 2010-08-30 16:04:46 gunter Exp $
+// $Id: G4IonQMDPhysics.cc,v 1.4 2010-09-30 21:23:05 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -117,10 +117,10 @@ void G4IonQMDPhysics::ConstructProcess()
   fLETModel = new G4LETritonInelastic();
   fLEAModel = new G4LEAlphaInelastic();
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC,0, fLEDModel);
-  AddProcess("tInelastic",G4Triton::Triton(),      fBC,0, fLETModel);
-  AddProcess("He3Inelastic",G4He3::He3(),          fBC,0, 0);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),   fBC,0, fLEAModel);
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC, fQMD, fLEDModel );
+  AddProcess("tInelastic",G4Triton::Triton(),      fBC, fQMD, fLETModel );
+  AddProcess("He3Inelastic",G4He3::He3(),          fBC, fQMD, 0 );
+  AddProcess("alphaInelastic", G4Alpha::Alpha(),   fBC, fQMD, fLEAModel );
   AddProcess("ionInelastic",G4GenericIon::GenericIon(), fBC, fQMD, 0);
 
 }
