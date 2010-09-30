@@ -11,7 +11,7 @@
 #
 # Generated on : 30/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-09-30 09:31:41 bmorgan Exp $
+# $Id: sources.cmake,v 1.4 2010-09-30 12:02:28 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -140,6 +140,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4VCascadeDeexcitation.hh
         G4WatcherGun.hh
     SOURCES
+        bindingEnergyAsymptotic.cc
+        bindingEnergy.cc
         G4Analyser.cc
         G4BigBanger.cc
         G4CascadeChannel.cc
@@ -210,6 +212,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4globman
         G4had_mod_man
         G4had_mod_util
+        G4had_preequ_exciton
         G4hadronic_bert_cascade
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
