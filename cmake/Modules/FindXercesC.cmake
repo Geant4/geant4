@@ -58,7 +58,7 @@ find_library(
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-    XERCESC
+    XercesC
     DEFAULT_MSG
     XERCESC_LIBRARY
     XERCESC_INCLUDE_DIR
