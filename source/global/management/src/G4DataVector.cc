@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.10 2010-07-14 10:44:54 gcosmo Exp $
+// $Id: G4DataVector.cc,v 1.11 2010-10-01 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,7 +87,7 @@ G4bool G4DataVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   clear();
-  size_t sizeV=0;
+  G4int sizeV=0;
   
   // retrieve in ascii mode
   if (ascii)
@@ -97,7 +97,7 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     if (fIn.fail())  { return false; }
     
     reserve(sizeV);
-    for(size_t i = 0; i < sizeV ; i++)
+    for(G4int i = 0; i < sizeV ; i++)
     {
       G4double vData=0.0;
       fIn >> vData;
@@ -119,7 +119,7 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
   }
 
   reserve(sizeV);
-  for(size_t i = 0; i < sizeV; i++) 
+  for(G4int i = 0; i < sizeV; i++) 
   {
     push_back(value[i]);
   }

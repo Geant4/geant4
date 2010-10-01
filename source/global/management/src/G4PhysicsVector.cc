@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.47 2010-07-14 10:44:54 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.48 2010-10-01 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -204,15 +204,15 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     fIn >> edgeMin >> edgeMax >> numberOfNodes; 
     if (fIn.fail())  { return false; }
     // contents
-    size_t size=0;
-    fIn >> size;
+    G4int siz=0;
+    fIn >> siz;
     if (fIn.fail())  { return false; }
 
-    binVector.reserve(size);
-    dataVector.reserve(size);
+    binVector.reserve(siz);
+    dataVector.reserve(siz);
     G4double vBin, vData;
 
-    for(size_t i = 0; i < size ; i++)
+    for(G4int i = 0; i < siz ; i++)
     {
       vBin = 0.;
       vData= 0.;

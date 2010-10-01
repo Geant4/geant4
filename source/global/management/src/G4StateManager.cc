@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.14 2010-07-14 10:43:59 gcosmo Exp $
+// $Id: G4StateManager.cc,v 1.15 2010-10-01 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ G4StateManager::~G4StateManager()
     {
       if (*i==state)
       {
-        i == theDependentsList.erase(i);
+        i = theDependentsList.erase(i);
       }
       else
       {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.cc,v 1.6 2007-11-13 17:35:06 gcosmo Exp $
+// $Id: G4OrderedTable.cc,v 1.7 2010-10-01 16:36:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -133,7 +133,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
   clearAndDestroy();
   
   // Number of elements
-  size_t tableSize=0; 
+  G4int tableSize=0; 
   if (!ascii)
   {
     fIn.read((char*)(&tableSize), sizeof tableSize); 
@@ -145,7 +145,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
   reserve(tableSize); 
 
   // Physics Vector
-  for (size_t idx=0; idx<tableSize; ++idx)
+  for (G4int idx=0; idx<tableSize; ++idx)
   {
     G4int vType=0;
     if (!ascii)
@@ -178,6 +178,7 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
       G4cerr << fileName << G4endl;
 #endif          
       fIn.close();
+      delete pVec;
       return false;
     }
 
