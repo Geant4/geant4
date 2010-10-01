@@ -26,10 +26,13 @@ Summarised, the list of changes is the following:
 
 config                                           config-V09-03-07
 ------
+- Added 'obj' target to globlib.gmk to allow for creation of object files only.
+
+cmake                                            cmake-V09-03-00
+-----
 - First 'alpha' version of a new build infrastructure based on CMake (see
   http://www.cmake.org/). Added scripts and file catalogues to all source
   modules.
-- Added 'obj' target to globlib.gmk to allow for creation of object files only.
 
 geometry
 --------
@@ -111,11 +114,12 @@ persistency/ascii                                ascii-V09-03-01             (+)
 - Fixed signature for std::map in G4tgrVolumeMgr.hh..
 - Added missing inclusion of <sstream> header in G4tgrFileIn.cc.
 
-physics_lists                                    phys-lists-V09-03-26
+physics_lists                                    phys-lists-V09-03-27
 -------------
 - G4PhysicsListFactory: return NULL if the name is wrong.
 - Added new e- G4DNA processes to G4EmDNAPhysics in builders.
-- Bug fix in G4IonQMDPhysics: wrong energy limit for overlap with BIC.
+- Fixed bugs in G4IonQMDPhysics: wrong energy limit for overlap with BIC;
+  also use QMD for d, alpha.
 - G4HadronElasticPhysics: restored cross-sections for p and n as in 9.4beta.
 - G4HadronElasticPhysicsHP: added CHIPS cross  sections for p and n on
   Hydrogen and Helium targets.
@@ -297,5 +301,8 @@ tests                                            tests-V09-03-08
     added high energy limits to Physics.
   o Updated handling of cuts in PhysicsList and PhysicsListMessenger.
   o Updated all input macros.
+- test47 (test47-V09-03-02)
+  o Added possibility of testing Bertini with de-excitation from default.
+    Also added histograms to look at pion and kaon production at ITEP energies.
 - test60 (test30-V09-03-01)
   o Added new vibrational and attachment e- models.
