@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.cc,v 1.19 2008-09-18 08:37:27 kurasige Exp $
+// $Id: G4AntiLambda.cc,v 1.20 2010-10-01 02:41:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ G4AntiLambda* G4AntiLambda::Definition()
   //             shortlived      subType    anti_encoding
 
     anInstance = new G4ParticleDefinition(
-                 name,    1.115683*GeV,  2.518e-12*MeV,         0.0, 
+                 name,    1.115683*GeV,  2.501e-12*MeV,         0.0, 
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            -1,       -3122,

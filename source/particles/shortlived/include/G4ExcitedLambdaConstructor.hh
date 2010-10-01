@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.hh,v 1.8 2006-06-29 19:26:34 gunter Exp $
+// $Id: G4ExcitedLambdaConstructor.hh,v 1.9 2010-10-01 02:41:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,8 +56,8 @@ class G4ExcitedLambdaConstructor: public G4ExcitedBaryonConstructor
     virtual  G4int    GetQuarkContents(G4int, G4int);
     virtual  G4String GetName(G4int iIso3, G4int iState);
     virtual  G4String GetMultipletName(G4int iState);
-    virtual  G4double GetMass(G4int iState);
-    virtual  G4double GetWidth(G4int iState);
+    virtual  G4double GetMass( G4int state, G4int iso);
+    virtual  G4double GetWidth( G4int state, G4int iso);
     virtual  G4int    GetiSpin(G4int iState);
     virtual  G4int    GetiParity(G4int iState);
     virtual  G4int    GetEncodingOffset(G4int iState);
@@ -104,13 +104,13 @@ class G4ExcitedLambdaConstructor: public G4ExcitedBaryonConstructor
 };
 
 inline
- G4double G4ExcitedLambdaConstructor::GetMass(G4int iState)
+ G4double G4ExcitedLambdaConstructor::GetMass(G4int iState, G4int)
 { 
   return mass[iState]; 
 }
 
 inline
- G4double G4ExcitedLambdaConstructor::GetWidth(G4int iState)
+ G4double G4ExcitedLambdaConstructor::GetWidth(G4int iState, G4int)
 {
   return width[iState];
 }

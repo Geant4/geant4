@@ -1,4 +1,4 @@
-$Id: History,v 1.194 2010-09-03 14:18:07 gcosmo Exp $
+$Id: History,v 1.195 2010-10-01 02:41:43 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- September 3  2010    Gabriele Cosmo
+- October 1  2010  Hisaya Kurashige (particles-V09-03-08)
+- Update mass/width of  muons, taus, mesons, and baryons biased on PDG2010 
 - Fixed signature for std::pair in G4IonTable source code for compliance
-  to ISO/C++ Standard.
+  to ISO/C++ Standard. (Sep. 3 by G.Cosmo)
 
 - August 12  2010    Hisaya Kurashige (particles-V09-03-08)
 - Add G4DynamicParticle::GetParticleDefinition giving 'const' pointer

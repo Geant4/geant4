@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedBaryonConstructor.hh,v 1.6 2006-06-29 19:26:28 gunter Exp $
+// $Id: G4ExcitedBaryonConstructor.hh,v 1.7 2010-10-01 02:41:44 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,8 +77,8 @@ class G4ExcitedBaryonConstructor
     virtual  G4int    GetQuarkContents(G4int, G4int)=0;
     virtual  G4String GetName(G4int, G4int )=0;
     virtual  G4String GetMultipletName(G4int)=0;
-    virtual  G4double GetMass( G4int )=0;
-    virtual  G4double GetWidth( G4int )=0;
+    virtual  G4double GetMass( G4int state, G4int iso)=0;
+    virtual  G4double GetWidth( G4int state, G4int iso)=0;
     virtual  G4int    GetiSpin( G4int )=0;
     virtual  G4int    GetiParity( G4int )=0;
     virtual  G4int    GetEncodingOffset( G4int )=0;
