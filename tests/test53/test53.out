@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-08    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -413,13 +413,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=13.56s Real=13.59s Sys=0.02s
+  User=13.19s Real=13.21s Sys=0.02s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 769.03 MeV :  25.57 MeV     3.325 +- 0.3325 %        55 cm  +- 1.89 cm 
-   liquidArgon: 206.29 MeV :  17.13 MeV     8.305 +- 0.8305 %      1.02 m   +- 8.87 cm 
+          Lead: 764.31 MeV :  39.25 MeV     5.136 +- 0.5136 %      54.7 cm  +- 2.87 cm 
+   liquidArgon: 205.81 MeV :  17.83 MeV     8.661 +- 0.8661 %      1.02 m   +- 8.95 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -427,15 +427,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 769.03 MeV
-liquidArgon:	 206.294 MeV
+      Lead:	 764.308 MeV
+liquidArgon:	 205.814 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1471239349, 1732524115
+ Current couple of seeds = 1552660085, 1259452458
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand

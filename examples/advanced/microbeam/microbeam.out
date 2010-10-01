@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-08    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -136,8 +136,6 @@ Registered filter factories:
 
 ### G4GoudsmitSaundersonTable loading PDF data
 ### G4GoudsmitSaundersonMscModel loading ELSEPA data
-G4NeutronInelasticXS::G4NeutronInelasticXS: Initialise 
-G4NeutronCaptureXS::G4NeutronCaptureXS: Initialise 
 PhysicsList::SetCuts:CutLength : 10 nm 
 G4ProcessTable::Insert : arguments are 0 pointer 
 G4ProcessTable::Insert : arguments are 0 pointer 
@@ -369,10 +367,6 @@ CoulombScat:   for  mu-    SubType= 1
       11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :     Emin=          0 eV         Emax=   10 TeV
-G4NeutronInelasticXS::BuildPhysicsTable: 
-neutron
-G4NeutronCaptureXS::BuildPhysicsTable: 
-neutron
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -578,7 +572,7 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
    -----> total absorbed dose within Nucleus   is (Gy) = 0.35554075241089
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.024478178471327
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.024478180333972
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !

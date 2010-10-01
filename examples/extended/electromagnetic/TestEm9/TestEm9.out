@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-07    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-08    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -350,43 +350,43 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.02s Real=2.03s Sys=0s
+  User=2.14s Real=2.15s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
 Number of events             100
-Average number of e-         405.7
-Average number of gamma      685.5
-Average number of e+         49.64
-Average number of steps      3038
-Edep 1x1 =                   0.8255 +- 0.002628  res=  3.119 %
-Edep 3x3 =                   0.9569 +- 0.001198  res=  1.246 %
-Edep 5x5 =                   0.98 +- 0.0008141  res=  0.8224 %
+Average number of e-         404.9
+Average number of gamma      682.8
+Average number of e+         48.21
+Average number of steps      3033
+Edep 1x1 =                   0.8296 +- 0.002805  res=  3.347 %
+Edep 3x3 =                   0.9569 +- 0.001256  res=  1.293 %
+Edep 5x5 =                   0.9799 +- 0.0008004  res=  0.8045 %
 ===========  Mean values without trancating =====================
-Edep 1x1 =                   0.8213 +- 0.003294  res=  4.011 %
-Edep 3x3 =                   0.9562 +- 0.001381  res=  1.445 %
-Edep 5x5 =                   0.9789 +- 0.001183  res=  1.209 %
+Edep 1x1 =                   0.8274 +- 0.00318  res=  3.843 %
+Edep 3x3 =                   0.9558 +- 0.001369  res=  1.432 %
+Edep 5x5 =                   0.9788 +- 0.0009928  res=  1.014 %
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8588 +- 0.003025
-  E1/E25 =                   0.839 +- 0.00329
-  E9/E25 =                   0.9768 +- 0.0009412
+  E1/E9  =                   0.8656 +- 0.002886
+  E1/E25 =                   0.8453 +- 0.00321
+  E9/E25 =                   0.9765 +- 0.001024
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8255  delEdep1x1= -0.001557 nrms= -0.5237
-Erms1x1: 0.02575  delErms1x1= -0.00399 nrms= -1.342
-Edep3x3: 0.9569  delEdep3x3= -0.0001169 nrms= -0.09093
-Erms3x3: 0.01192  delErms3x3= -0.0009374 nrms= -0.7289
-Edep5x5: 0.98  delEdep5x5= 0.0007084 nrms= 0.8014
-Erms5x5: 0.008059  delErms5x5= -0.0007809 nrms= -0.8833
+Edep1x1: 0.8296  delEdep1x1= 0.002505 nrms= 0.8424
+Erms1x1: 0.02777  delErms1x1= -0.001974 nrms= -0.6637
+Edep3x3: 0.9569  delEdep3x3= -6.015e-05 nrms= -0.04677
+Erms3x3: 0.01237  delErms3x3= -0.0004874 nrms= -0.379
+Edep5x5: 0.9799  delEdep5x5= 0.0006188 nrms= 0.7001
+Erms5x5: 0.007883  delErms5x5= -0.000957 nrms= -1.083
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
   13           0           0         159           0
-  53         286          42           0          47
-  55         298          49           0          49
+  53         281          42           0          46
+  55         304          48           0          48
 #
 G4 kernel has come to Quit state.
 
