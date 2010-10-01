@@ -14,6 +14,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th September 2010 Ben Morgan
+Geant4MacroLibraryTargets.cmake - Used new variable name for global sources and
+headers to prevent duplication of source names in global target.
+
+FindXercesC.cmake - Fixed case of NAME argument to FindPackagHandleStandardArgs.
+
+
 24th September 2010 Ben Morgan
 Geant4MacroLibraryTargets.cmake - Added granular library target macro and
 allowed global library macro to take one component for mixed libraries.
