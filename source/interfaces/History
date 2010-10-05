@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2010-06-23 13:06:16 lgarnier Exp $
+$Id: History,v 1.154 2010-10-05 10:10:58 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5, June L. Garnier
+- G4UIQt : Fix some bug on helpTree view
 
 23, June L. Garnier
 - G4UIQt : Fix compilation warnings on Qt3 and Qt4

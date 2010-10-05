@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.49 2010-06-23 13:06:16 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.50 2010-10-05 10:10:58 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -106,13 +106,15 @@ G4UIQt::G4UIQt (
  int argc
 ,char** argv
 )
-:fG4cout("")
+:fHelpArea(NULL)
+,fG4cout("")
 ,fHelpTreeWidget(NULL)
 ,fHelpTBWidget(NULL)
 ,fHistoryTBWidget(NULL)
 ,fCoutTBWidget(NULL)
 ,fVisParametersTBWidget(NULL)
 ,fViewComponentsTBWidget(NULL)
+,fHelpLine(NULL)
 ,fTabWidget(NULL)
 ,fCoutText("Output")
 {
@@ -583,7 +585,7 @@ bool G4UIQt::AddTabWidget(
 #ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::AddTabWidget ADD %d %d + %d %d---------------------------------------------------\n",sizeX, sizeY,sizeX-fTabWidget->width(),sizeY-fTabWidget->height());
 #endif
-  
+
   if (fMainWindow->isVisible()) {
 
     // get the size of the tabbar
@@ -1110,6 +1112,25 @@ void G4UIQt::FillHelpTree()
 {
   if (! fHelpTreeWidget ) {
     InitHelpTree();
+  }
+
+  // clear old help tree
+  fHelpTreeWidget->clear();
+
+  if (fHelpArea) {
+#if QT_VERSION < 0x040200
+    fHelpArea->clear();
+#else
+    fHelpArea->setText("");
+#endif
+  }
+
+  if (fHelpLine) {
+#if QT_VERSION < 0x040200
+    fHelpLine->clear();
+#else
+    fHelpLine->setText("");
+#endif
   }
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -1824,7 +1845,6 @@ void G4UIQt::OpenHelpTreeOnCommand(
  const QString & searchText
 )
 {
-
   // the help tree
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
@@ -1946,11 +1966,22 @@ void G4UIQt::OpenHelpTreeOnCommand(
     }
 #if QT_VERSION < 0x040000
     newItem = new QListViewItem(fHelpTreeWidget);
-    newItem->setText(0,i.data().simplifyWhiteSpace());
+    QString commandStr = i.data().simplifyWhiteSpace();
 #else
     newItem = new QTreeWidgetItem(fHelpTreeWidget);
-    newItem->setText(0,i.value().trimmed());
+    QString commandStr = i.value().trimmed();
 #endif
+
+#if QT_VERSION < 0x040000
+    if (commandPath.find("/") == 0) {
+      commandStr = commandStr.right(commandStr.length()-1);
+#else
+    if (commandStr.indexOf("/") == 0) {
+      commandStr = commandStr.right(commandStr.size()-1);
+#endif
+    }
+      
+    newItem->setText(0,commandStr);
     newItem->setText(1,progressStr);
     
 #if QT_VERSION >= 0x040200
