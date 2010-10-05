@@ -69,11 +69,21 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    ifeq ($(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/'),9)
+    MAC_G4VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
+    ifeq ($(MAC_G4VERSION),9)
+
       # the following lines are for building on MacOSX 10.5 "Leopard"
       OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo "-L/usr/X11R6/lib -lGLU -lGL -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
     else
-      OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+
+      # the following lines are for building on MacOSX < 10.5
+      ifeq ($(shell test $(MAC_G4VERSION) -lt 9 && echo "0" || echo "1"),0)
+        OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+      else
+
+      # the following lines are for building on MacOSX > 10.5
+        OGLLIBS   := -F/System/Library/Frameworks/ -framework OpenGL -framework AGL
+      endif
     endif
   endif
 
@@ -105,7 +115,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     ifeq ($(QT_VERSION),3)
       QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "$(QTHOME)/lib/qt3/lib" || echo "$(QTHOME)/lib" )
     else
-      QTLIBPATH  := -F$(QTHOME)/lib -F$(QTHOME)
+      QTLIBPATH  :=  -F$(QTHOME)
     endif
   endif
   ifndef QTLIBS
