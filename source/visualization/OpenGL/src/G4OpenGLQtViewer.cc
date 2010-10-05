@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.53 2010-10-05 15:45:19 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.54 2010-10-05 15:53:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1222,9 +1222,9 @@ void G4OpenGLQtViewer::toggleHaloing(bool check) {
 */
 void G4OpenGLQtViewer::toggleAux(bool check) {
   if (check) {
-    fVP.SetAuxEdgeVisible(false);
-  } else {
     fVP.SetAuxEdgeVisible(true);
+  } else {
+    fVP.SetAuxEdgeVisible(false);
   }
   SetNeedKernelVisit (true);
   updateQWidget();
