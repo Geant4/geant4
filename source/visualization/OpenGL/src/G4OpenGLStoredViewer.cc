@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.27 2010-10-05 15:45:19 lgarnier Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.28 2010-10-05 15:58:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -164,12 +164,16 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	G4OpenGLTransform3D oglt (to.fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
 	if (fVP.IsPicking()) glLoadName(to.fPickName);
-	G4Colour& c = to.fColour;
+	const G4Colour& c = to.fColour;
+	const G4Colour& bg = fVP.GetBackgroundColour();
 	G4double bsf = 1.;  // Brightness scaling factor.
 	if (fFadeFactor > 0. && to.fEndTime < fEndTime)
 	  bsf = 1. - fFadeFactor *
 	    ((fEndTime - to.fEndTime) / (fEndTime - fStartTime));
-	glColor3d(bsf * c.GetRed (), bsf * c.GetGreen (), bsf * c.GetBlue ());
+	glColor3d
+	  (bsf * c.GetRed() + (1. - bsf) * bg.GetRed(),
+	   bsf * c.GetGreen() + (1. - bsf) * bg.GetGreen(),
+	   bsf * c.GetBlue() + (1. - bsf) * bg.GetBlue());
 	glCallList (to.fDisplayListId);
 	glPopMatrix();
       }
