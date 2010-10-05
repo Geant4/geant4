@@ -70,23 +70,19 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
   ifndef OGLLIBS
     MAC_G4VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
-    MAC_G4VERSION = 7
     ifeq ($(MAC_G4VERSION),9)
 
       # the following lines are for building on MacOSX 10.5 "Leopard"
       OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo "-L/usr/X11R6/lib -lGLU -lGL -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-      CXXFLAGS  += -D_______9______
     else
 
       # the following lines are for building on MacOSX < 10.5
       ifeq ($(shell test $(MAC_G4VERSION) -lt 9; echo $$?),0)
         OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
-        CXXFLAGS  += -D_______8______
       else
 
       # the following lines are for building on MacOSX > 10.5
         OGLLIBS   := -F/System/Library/Frameworks/ -framework OpenGL -framework AGL
-        CXXFLAGS  += -D_______10______
       endif
     endif
   endif
