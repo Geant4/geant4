@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.23 2010-06-04 15:27:47 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.24 2010-10-05 15:45:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,8 +115,15 @@ protected:
   void G4keyPressEvent (QKeyEvent * event); 
   void rotateQtScene(float, float);
   void rotateQtCamera(float, float);
+  void rotateQtSceneInViewDirection(float, float);
+  void rotateQtCameraInViewDirection(float, float);
   void moveScene(float, float, float,bool);
   void FinishView();
+#if QT_VERSION < 0x040000
+  void updateKeyModifierState(Qt::ButtonState);
+#else
+  void updateKeyModifierState(Qt::KeyboardModifiers);
+#endif
 
 
 protected:
@@ -196,6 +203,13 @@ private:
   int fNbMaxFramesPerSec;
   float fNbMaxAnglePerSec;
   int fLaunchSpinDelay;
+
+  G4double fXRot;
+  G4double fYRot;
+  bool fNoKeyPress;
+  bool fAltKeyPress;
+  bool fControlKeyPress;
+  bool fShiftKeyPress;
 
 signals:
  void rotateTheta(int);

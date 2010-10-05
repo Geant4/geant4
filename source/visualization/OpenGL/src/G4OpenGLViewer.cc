@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.62 2010-05-11 10:22:37 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.63 2010-10-05 15:45:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -174,9 +174,9 @@ void G4OpenGLViewer::ResizeGLView()
     }
   }
     
-  glViewport(0, 0, fWinSize_x,fWinSize_y); 
+  glViewport(0, 0, fWinSize_x,fWinSize_y);   
 
-  
+
 }
 
 
@@ -835,15 +835,6 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   // to avoid z rotation flipping
   // to allow more than 360° rotation
 
-  const G4Point3D targetPoint
-    = fSceneHandler.GetScene()->GetStandardTargetPoint()
-    + fVP.GetCurrentTargetPoint ();
-  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
-  if(radius<=0.) radius = 1.;
-  const G4double cameraDistance = fVP.GetCameraDistance (radius);
-  const G4Point3D cameraPosition =
-    targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
-
   if (fVP.GetLightsMoveWithCamera()) {
     new_up = (new_vp.cross(yprime)).unit();
     if (new_vp.z()*vp.z() <0) {
@@ -873,6 +864,55 @@ void G4OpenGLViewer::rotateScene(G4double dx, G4double dy,G4double deltaRotation
   viewPoint = new_vp.unit() + delta;
   
   fVP.SetViewAndLights (viewPoint);
+}
+
+
+void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy,G4double deltaRotation)
+{
+  if (!fSceneHandler.GetScene()) {
+    return;
+  }
+
+  G4Vector3D vp;
+  G4Vector3D up;
+  
+  G4Vector3D xprime;
+  G4Vector3D yprime;
+  G4Vector3D zprime;
+  
+  G4Vector3D new_vp;
+  G4Vector3D new_up;
+  
+  G4Vector3D a1;
+  G4Vector3D a2;
+  G4Vector3D delta;
+  G4Vector3D viewPoint;
+
+    
+  //phi spin stuff here
+  
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLViewer::rotateScene dx:%f dy:%f delta:%f\n",dx,dy, deltaRotation);
+#endif
+
+  vp = fVP.GetViewpointDirection ().unit();
+  up = fVP.GetUpVector ().unit();
+
+  G4Vector3D zPrimeVector = G4Vector3D(up.y()*vp.z()-up.z()*vp.y(),
+                             up.z()*vp.x()-up.x()*vp.z(),
+                             up.x()*vp.y()-up.y()*vp.x());
+
+  viewPoint = vp/deltaRotation + (zPrimeVector*dx - up*dy) ;
+  new_up = G4Vector3D(viewPoint.y()*zPrimeVector.z()-viewPoint.z()*zPrimeVector.y(),
+                       viewPoint.z()*zPrimeVector.x()-viewPoint.x()*zPrimeVector.z(),
+                       viewPoint.x()*zPrimeVector.y()-viewPoint.y()*zPrimeVector.x());
+
+  G4Vector3D new_upUnit = new_up.unit();
+  
+  
+
+   fVP.SetUpVector(new_upUnit);
+   fVP.SetViewAndLights (viewPoint);
 }
 
 #endif

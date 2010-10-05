@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.26 2009-04-08 16:55:44 lgarnier Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.27 2010-10-05 15:45:19 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -155,7 +155,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
 #ifdef G4DEBUG_VIS_OGL
-      printf("-");
+      //      printf("-");
 #endif
       G4OpenGLStoredSceneHandler::TO& to =
 	fG4OpenGLStoredSceneHandler.fTOList[i];
