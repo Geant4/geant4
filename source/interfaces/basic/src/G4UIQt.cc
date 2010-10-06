@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.50 2010-10-05 10:10:58 lgarnier Exp $
+// $Id: G4UIQt.cc,v 1.51 2010-10-06 15:30:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -718,6 +718,7 @@ G4UIsession* G4UIQt::SessionStart (
         visible = true;
       }
     }
+    /****
     if (visible) {
 #if QT_VERSION >= 0x040000
   #if QT_VERSION >= 0x040200
@@ -739,6 +740,7 @@ G4UIsession* G4UIQt::SessionStart (
       fEmptyViewerTabLabel->show();
 #endif
     }
+    ****/
   }
 
 #if QT_VERSION >= 0x040000
