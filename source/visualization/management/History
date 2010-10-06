@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2010-09-03 15:57:22 gcosmo Exp $
+$Id: History,v 1.154 2010-10-06 10:15:38 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+6th October 2010  John Allison
+- Added /vis/viewer/set/defaultColour and /vis/viewer/set/defaultTextColour.
 
 3rd September 2010  Gabriele Cosmo  (visman-V09-03-11)
 - Added missing inclusion of <sstream> header in G4ViewParameters.cc.
