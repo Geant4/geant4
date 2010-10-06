@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.20 2010-07-02 13:44:14 kurasige Exp $
+// $Id: G4Step.hh,v 1.21 2010-10-06 13:07:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,6 +130,8 @@ class G4Step
 
 
   // Get/Set/Clear flag for initial/last step
+   // NOTE:  following flags are not used 
+   //        will be ready in later release
    G4bool IsFirstStepInVolume() const;
    G4bool IsLastStepInVolume() const;
 
@@ -194,13 +196,24 @@ class G4Step
    G4bool fLastStepInVolume;
 
 // Secondary buckets
+// NOTE: Secondary bucket of the Step contains 
+//       all secondaries during tracking the current track
+//       (i.e. NOT secondaries produced in the current step)
 public:
-   G4TrackVector* GetSecondary() const;
+   // all following methods give same object (i.e. G4TrackVector  )
+   // but 2nd one will create bucket in addition  
+   const G4TrackVector* GetSecondary() const ;
    G4TrackVector* GetfSecondary();
    G4TrackVector* NewSecondaryVector();
+
+   // just delete secondary bucket
+   //  NOTE: G4Track objects inside the bucket are not deleted 
    void DeleteSecondaryVector();
+
+   // Add secondary tracks to the bucket 
    void SetSecondary( G4TrackVector* value);
-private:    
+private: 
+   // Secondaty bucket implemented by using  std::vector of G4Track*   
    G4TrackVector* fSecondary;
 
   // Prototyping implementation of smooth representation of curved

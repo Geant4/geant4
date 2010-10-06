@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.20 2010-07-02 13:44:14 kurasige Exp $
+// $Id: G4Step.icc,v 1.21 2010-10-06 13:07:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -241,10 +241,10 @@ inline
    fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
 }
 
-inline G4TrackVector* G4Step::GetfSecondary()  {
+inline const G4TrackVector* G4Step::GetSecondary() const  {
    return fSecondary;
     }
-inline G4TrackVector* G4Step::GetSecondary() const {
+inline G4TrackVector* G4Step::GetfSecondary()  {
    return fSecondary;
     }
 inline void G4Step::SetSecondary(G4TrackVector* value)  {

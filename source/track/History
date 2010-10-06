@@ -1,4 +1,4 @@
-$Id: History,v 1.113 2010-09-21 00:33:05 kurasige Exp $
+$Id: History,v 1.114 2010-10-06 13:07:34 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct. 6, 2010  Hisaya Kurashige (track-V09-03-05)
+-  G4Step::GetSecondary() gives back const G4TrackVector*
+   and G4Step::GetfSecondary() gives back non-const pointer
+ 
 Sep 21, 2010  Hisaya Kurashige (track-V09-03-04)
 - Fill the last bin contents in G4Track::PrepareVelocityTable() 
    to fix the bug in calculation of GetVelocity

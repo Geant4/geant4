@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.cc,v 1.9 2010-07-21 09:30:15 gcosmo Exp $
+// $Id: G4Step.cc,v 1.10 2010-10-06 13:07:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -73,7 +73,7 @@ G4Step::~G4Step()
 
 
 /////////////////
- G4ThreeVector G4Step::GetDeltaMomentum() const
+G4ThreeVector G4Step::GetDeltaMomentum() const
 /////////////////
 { 
   static G4bool isFirstTime = true;
