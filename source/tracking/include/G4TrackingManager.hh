@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.hh,v 1.22 2010-07-19 13:41:21 gcosmo Exp $
+// $Id: G4TrackingManager.hh,v 1.23 2010-10-06 13:17:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -180,7 +180,7 @@ public: // without description
    }
     
    inline G4TrackVector* G4TrackingManager::GimmeSecondaries() const { 
-     return fpSteppingManager->GetSecondary(); 
+     return fpSteppingManager->GetfSecondary(); 
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserTrackingAction* apAction){

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.31 2007-10-09 03:51:06 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.32 2010-10-06 13:17:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -112,7 +112,7 @@ public: //without description
 
 // Get/Set functions
 
-   G4TrackVector* GetSecondary() const;
+   const G4TrackVector* GetSecondary() const;
    void SetUserAction(G4UserSteppingAction* apAction);
    G4Track* GetTrack() const;
    void SetVerboseLevel(G4int vLevel);
@@ -458,7 +458,7 @@ public: //without description
    return fGPILSelection;
   }
 
-  inline G4TrackVector* G4SteppingManager::GetSecondary() const {
+  inline const G4TrackVector* G4SteppingManager::GetSecondary() const {
     return fStep->GetSecondary(); 
   }
 
