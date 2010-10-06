@@ -23,38 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: RunAction.hh,v 1.2 2010-10-06 14:39:41 sincerti Exp $
-// -------------------------------------------------------------------
+// $Id: HistoManager.hh,v 1.1 2010-10-06 14:39:41 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#include "DetectorConstruction.hh"
-#include "HistoManager.hh"
-
-#include "G4UserRunAction.hh"
 #include "globals.hh"
-#include <iostream>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
+namespace AIDA {
+ class IAnalysisFactory;
+ class ITree;
+ class ITuple;
+}
 
-class RunAction : public G4UserRunAction
+const G4int MaxNtupl = 1;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoManager
 {
-public:
-  
-  RunAction(DetectorConstruction*, HistoManager *);
-  ~RunAction();
+  public:
 
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+    HistoManager();
+   ~HistoManager();
 
-private:
+    void book();
+    void save();   
+    void FillNtuple(G4int id, G4int column, G4double value);
+    void AddRowNtuple(G4int id);
 
-  DetectorConstruction* Detector;    
-  HistoManager* Histo;
-  
+  private:
+
+    G4String                 fileName[2];
+    G4String                 fileType;
+    G4String                 fileOption;    
+    AIDA::IAnalysisFactory*  af;
+    AIDA::ITree*             tree;
+    AIDA::ITuple*      	     ntupl0;    
+ 
+    G4bool                   factoryOn;
+    
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+

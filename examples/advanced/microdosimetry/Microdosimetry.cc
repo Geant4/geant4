@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microdosimetry.cc,v 1.3 2010-06-06 06:22:36 perl Exp $
+// $Id: Microdosimetry.cc,v 1.4 2010-10-06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,6 +44,7 @@
 #include "RunAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -61,11 +62,13 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new PrimaryGeneratorAction(detector));
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
 
+  HistoManager*  histo = new HistoManager();
+
   // Set optional user action classes
-  RunAction* RunAct = new RunAction(detector);
+  RunAction* RunAct = new RunAction(detector,histo);
   runManager->SetUserAction(RunAct);
 
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
+  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary,histo));
   
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
@@ -75,8 +78,8 @@ int main(int argc,char** argv)
   // Initialize G4 kernel
   runManager->Initialize();
     
-  system ("rm -rf track.txt");
-
+  system ("rm -rf microbeam.root");  
+    
   // Get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 

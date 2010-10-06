@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.4 2010-09-13 08:42:59 sincerti Exp $
+// $Id: SteppingAction.cc,v 1.5 2010-10-06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -33,6 +33,7 @@
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
@@ -40,8 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri)
-:Run(run),Detector(det),Primary(pri)
+SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri, HistoManager* his)
+:Run(run),Detector(det),Primary(pri),Histo(his)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,8 +54,9 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* s)
 { 
- G4int flagParticle=0;
- G4int flagProcess=0;
+ G4double flagParticle=0.;
+ G4double flagProcess=0.;
+ G4double x,y,z;
  
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "e-")       flagParticle = 1;    
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")   flagParticle = 2;
@@ -98,17 +100,16 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
       &&
       s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation"
     )
- {
-   FILE* myFile;
-   myFile=fopen("track.txt","a");
-   fprintf 
-   ( myFile,"%i %i %e %e %e \n",
-          flagParticle,
-	  flagProcess,
-	  (s->GetTrack()->GetPosition().x())/nanometer,
-	  (s->GetTrack()->GetPosition().y())/nanometer,
-	  (s->GetTrack()->GetPosition().z())/nanometer
-    );
-   fclose (myFile);
+ {  
+   x=s->GetPreStepPoint()->GetPosition().x()/nanometer;
+   y=s->GetPreStepPoint()->GetPosition().y()/nanometer;
+   z=s->GetPreStepPoint()->GetPosition().z()/nanometer;
+   
+   Histo->FillNtuple(0, 0, flagParticle);
+   Histo->FillNtuple(0, 1, flagProcess);
+   Histo->FillNtuple(0, 2, x);
+   Histo->FillNtuple(0, 3, y);
+   Histo->FillNtuple(0, 4, z);
+   Histo->AddRowNtuple(0);      
  }
 }    

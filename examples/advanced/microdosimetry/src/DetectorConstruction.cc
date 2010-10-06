@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.4 2010-06-12 09:38:06 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2010-10-06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
@@ -121,13 +121,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   logicTarget->SetVisAttributes(worldVisAtt1);
 
   // Create Target G4Region and add logical volume
+  
   fRegion = new G4Region("Target");
+  
   G4ProductionCuts* cuts = new G4ProductionCuts();
+  
   G4double defCut = 1*nanometer;
   cuts->SetProductionCut(defCut,"gamma");
   cuts->SetProductionCut(defCut,"e-");
   cuts->SetProductionCut(defCut,"e+");
   cuts->SetProductionCut(defCut,"proton");
+  
   fRegion->SetProductionCuts(cuts);
   fRegion->AddRootLogicalVolume(logicTarget); 
 

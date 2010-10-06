@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.7 2010-09-13 08:42:59 sincerti Exp $
+$Id: README,v 1.8 2010-10-06 14:39:41 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,7 +11,7 @@ $Id: README,v 1.7 2010-09-13 08:42:59 sincerti Exp $
 
                            CORRESPONDING AUTHOR 
 
-S. Incerti (a, *) et al.
+S. Incerti (a, *), V. Ivanchenko.
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
@@ -31,7 +31,12 @@ water, which dimensions are ten times smaller than the dimensions of the World v
                                                                         
 Make sure G4LEDATA points to the low energy electromagnetic libraries.
 
-Simply type gmake to compile the Microdosimetry example. 
+The variable G4ANALYSIS_USE must be set to 1.
+
+In order to generate histograms, at least one of the AIDA implementations should be 
+ available.
+  
+The code should be compiled with gmake.
 
 ---->3. HOW TO RUN THE EXAMPLE                                         
 
@@ -46,8 +51,10 @@ To get visualization, make sure to uncomment the #/control/execute vis.mac
 
 ---->4. PHYSICS
 
-This example shows how to use the Geant4-DNA processes, how to affect them a
-name and how to combine them with Standard EM Physics.
+This example shows:
+- how to use the Geant4-DNA processes, 
+- how to affect them a name
+- how to combine them with Standard EM Physics.
 
 A simple electron capture process is also provided in order to kill electrons 
 below a chosen energy threshold, set in the Physics list.
@@ -56,8 +63,7 @@ Look at the PhyscisList.cc file.
 
 ---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
-This example does not need any external analysis package. 
-The output results consists in a track.txt file, containing at each line :
+The output results consists in a microdosimetry.root file, containing for each simulation step:
 - the type of particle for the current step
 - the type of process for the current step
 - the track position of the current step (in nanometers)

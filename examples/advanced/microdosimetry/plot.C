@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.4 2010-09-13 08:42:59 sincerti Exp $
+// $Id: plot.C,v 1.5 2010-10-06 14:39:41 sincerti Exp $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -17,37 +17,39 @@ Double_t scale;
 c1 = new TCanvas ("c1","",20,20,1000,500);
 c1.Divide(2,1);
 
-FILE * fp = fopen("track.txt","r");
-Float_t process,part,x,y,z;
-Int_t ncols=0;
-Int_t nlines = 0;
+TFile f("microdosimetry.root"); 
 
-TNtuple *ntuple = new TNtuple("result","ntuple","process:part:x:y:z");
-
-while (1) 
-{
-   ncols = fscanf(fp,"%f %f %f %f %f",&part,&process,&x,&y,&z);
-   if (ncols < 0) break;
-   ntuple->Fill(process,part,x,y,z);
-   nlines++;
-}
-fclose(fp);
-      
+TNtuple* ntuple0;
+ntuple0 = (TNtuple*)f->Get("ntuple0"); 
+     
 c1.cd(1);
   gStyle->SetOptStat(000000);
-  ntuple->Draw("process","");
-  ntuple->SetFillColor(2);
-  ntuple->Draw("process","process==12||process==15||process==17||process==22||process==25||process==29","same");
-  ntuple->SetFillColor(3);
-  ntuple->Draw("process","process==11","same");
-  ntuple->SetFillColor(4);
-  ntuple->Draw("process","process==13||process==18||process==20||process==23||process==26||process==30||process==32||process==33","same");
-  ntuple->SetFillColor(5);
-  ntuple->Draw("process","process==19||process==24||process==27","same");
-  ntuple->SetFillColor(6);
-  ntuple->Draw("process","process==21||process==28||process==31","same");
+  
+  // All
+  ntuple0->Draw("flagProcess","");
+  ntuple0->SetFillColor(2);
+  
+  // Excitation
+  ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||flagProcess==22||flagProcess==25||flagProcess==29","same");
+  ntuple0->SetFillColor(3);
+  
+  // Elastic
+  ntuple0->Draw("flagProcess","flagProcess==11","same");
+  ntuple0->SetFillColor(4);
+  
+  // Ionisation
+  ntuple0->Draw("flagProcess","flagProcess==13||flagProcess==18||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30||flagProcess==32||flagProcess==33","same");
+  ntuple0->SetFillColor(5);
+  
+  // Charge decrease
+  ntuple0->Draw("flagProcess","flagProcess==19||flagProcess==24||flagProcess==27","same");
+  ntuple0->SetFillColor(6);
+  
+  // Charge increase
+  ntuple0->Draw("flagProcess","flagProcess==21||flagProcess==28||flagProcess==31","same");
   
   gPad->SetLogy();
+/*
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);
   htemp->GetZaxis()->SetLabelSize(0.025);
@@ -55,18 +57,19 @@ c1.cd(1);
   htemp->GetYaxis()->SetTitleSize(0.035);
   htemp->GetXaxis()->SetTitleOffset(1.4);
   htemp->GetYaxis()->SetTitleOffset(1.4);
-  htemp->GetXaxis()->SetTitle("Process");
+  htemp->GetXaxis()->SetTitle("flagProcess");
   htemp->GetYaxis()->SetTitle("");
-  htemp->SetTitle("Processes");
+  htemp->SetTitle("flagProcesses");
+*/
 
 c1.cd(2);
-  ntuple->SetMarkerColor(2);
-  ntuple->Draw("x:y:z/1000","part==1");
+  ntuple0->SetMarkerColor(2);
+  ntuple0->Draw("x:y:z/1000","flagParticle==1");
 
-  ntuple->SetMarkerColor(4);
-  ntuple->SetMarkerSize(4);
-  ntuple->Draw("x:y:z/1000","part==5","same");
-
+  ntuple0->SetMarkerColor(4);
+  ntuple0->SetMarkerSize(4);
+  ntuple0->Draw("x:y:z/1000","flagParticle==4 || flagParticle==5 || flagParticle==6","same");
+/*
   htemp->GetXaxis()->SetLabelSize(0.025);
   htemp->GetYaxis()->SetLabelSize(0.025);
   htemp->GetZaxis()->SetLabelSize(0.025);
@@ -80,5 +83,5 @@ c1.cd(2);
   htemp->GetYaxis()->SetTitle("x (nanometer)");
   htemp->GetZaxis()->SetTitle("y (nanometer)");
   htemp->SetTitle("Track Structure in liquid water");
-  
+*/  
 }
