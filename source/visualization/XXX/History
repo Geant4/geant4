@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2010-10-06 10:12:03 allison Exp $
+$Id: History,v 1.30 2010-10-06 15:49:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
-6th October 2010  John Allison
+6th October 2010  John Allison  (visXXX-V08-03-00)
 - G4XXXSGViewer.cc, G4XXXStoredViewer.cc:
   o Added default colour and default text colour to list of parameters
     that trigger a kernel visit.
