@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2010-10-06 12:16:59 sincerti Exp $
+$Id: History,v 1.9 2010-10-06 13:21:06 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.8 2010-10-06 12:16:59 sincerti Exp $
 
                        Package History file
                        --------------------
+
+06 October 2010 - tag nanobeam-V09-03-02 - S. Incerti
+- added post step point information to SteppingAction
 
 06 October 2010 - tag nanobeam-V09-03-01 - S. Incerti
 - major update using AIDA

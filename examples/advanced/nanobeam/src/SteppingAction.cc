@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.3 2010-10-06 12:16:59 sincerti Exp $
+// $Id: SteppingAction.cc,v 1.4 2010-10-06 13:21:06 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "SteppingAction.hh"
@@ -124,8 +124,8 @@ if (Detector->GetGrid()==1)
          && (s->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "ControlVol_GridShadow")
          && (s->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "World") )
 	{
-     	      xIn = s->GetTrack()->GetPosition().x();
-	      yIn = s->GetTrack()->GetPosition().y();
+     	      xIn = s->GetPostStepPoint()->GetPosition().x();
+	      yIn = s->GetPostStepPoint()->GetPosition().y();
               E   = s->GetTrack()->GetKineticEnergy();
 
 	      Histo->FillNtuple(1, 0, xIn/um);
