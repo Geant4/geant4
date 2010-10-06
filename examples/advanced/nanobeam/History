@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.7 2010-03-18 07:42:33 sincerti Exp $
+$Id: History,v 1.8 2010-10-06 12:16:59 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.7 2010-03-18 07:42:33 sincerti Exp $
 
                        Package History file
                        --------------------
+
+06 October 2010 - tag nanobeam-V09-03-01 - S. Incerti
+- major update using AIDA
 
 18 March 2010 - tag nanobeam-V09-03-00 - S. Incerti
 - updated multiple scattering class for e+- and mu

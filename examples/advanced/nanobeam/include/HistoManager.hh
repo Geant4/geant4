@@ -23,50 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: SteppingAction.hh,v 1.3 2010-10-06 12:16:59 sincerti Exp $
-// -------------------------------------------------------------------
+// $Id: HistoManager.hh,v 1.1 2010-10-06 12:16:59 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef SteppingAction_h
-#define SteppingAction_h 1
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#include "G4UserSteppingAction.hh"
-#include "G4SteppingManager.hh"
+#include "globals.hh"
 
-#include "RunAction.hh"
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
-#include "G4Proton.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+namespace AIDA {
+ class IAnalysisFactory;
+ class ITree;
+ class ITuple;
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+const G4int MaxNtupl = 3;
 
-class SteppingAction : public G4UserSteppingAction
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoManager
 {
-public:
-  SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*,HistoManager*);
-  ~SteppingAction();
-  
-  void UserSteppingAction(const G4Step*);
-  
-private:
-  RunAction*            Run;
-  DetectorConstruction* Detector; 
-  PrimaryGeneratorAction* Primary;
-  HistoManager* Histo;
-  
-  G4double xIn,x0;
-  G4double yIn,y0;
-  G4double zIn,z0;
-  G4double theta0, phi0;
-  G4double thetaIn, phiIn;
-  G4double E;
-        
+  public:
+
+    HistoManager();
+   ~HistoManager();
+
+    void book();
+    void save();   
+    void FillNtuple(G4int id, G4int column, G4double value);
+    void AddRowNtuple(G4int id);
+
+  private:
+
+    G4String                 fileName[2];
+    G4String                 fileType;
+    G4String                 fileOption;    
+    AIDA::IAnalysisFactory*  af;
+    AIDA::ITree*             tree;
+    AIDA::ITuple*      	     ntupl0;    
+    AIDA::ITuple*      	     ntupl1;    
+    AIDA::ITuple*      	     ntupl2;    
+ 
+    G4bool                   factoryOn;
+    
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
 

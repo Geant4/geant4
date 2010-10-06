@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.5 2010-03-18 07:42:33 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.6 2010-10-06 12:16:59 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "PhysicsList.hh"
@@ -118,6 +118,8 @@ void PhysicsList::ConstructProcess()
 #include "G4hMultipleScattering.hh"
 #include "G4ionIonisation.hh"
 #include "G4hIonisation.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
 
 #include "G4StepLimiter.hh"
 
@@ -125,6 +127,10 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::ConstructEM()
 {
+
+// ****************************************************************
+// Identical to G4EmStandardPhysics but added G4StepLimiter process
+// ****************************************************************
 
   theParticleIterator->reset();
 
@@ -143,23 +149,23 @@ void PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
 
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
 
     } else if (particleName == "e+") {
 
       pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
+      pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
 
       pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);       
+      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);       
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ||
@@ -168,14 +174,13 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,      -1, 2, 2);
      
-    } else if ((!particle->IsShortLived()) &&
-               (particle->GetPDGCharge() != 0.0) && 
-               (particle->GetParticleName() != "chargedgeantino")) {
-      //all others charged particles except geantino and short-lived
+    } else if (particleName == "proton") {
       pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4hBremsstrahlung,    -1,-3, 3);
+      pmanager->AddProcess(new G4hPairProduction,    -1,-4, 4);
 
-      pmanager->AddProcess(new G4StepLimiter(),-1,-1,3);
+      pmanager->AddProcess(new G4StepLimiter(),-1,-1,5);
             
     }
   }
