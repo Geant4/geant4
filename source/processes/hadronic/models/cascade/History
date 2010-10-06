@@ -1,4 +1,4 @@
-$Id: History,v 1.192 2010-09-28 20:15:00 mkelsey Exp $
+$Id: History,v 1.193 2010-10-06 07:08:43 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,22 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+05 October 2010 Michael Kelsey
+------------------------------
+- G4NucleiModel:  Major reorganization of generateModel() code.
+  1) Rename integration functions from "volNumInt[1]" to "zoneIntegralxxx"
+     with "xxx" = "WoodsSaxon" or "Gaussian".
+  2) Move hardwired constants out to static data members, give clear names.
+  3) Split function into separate pieces to set binding energies, zone
+     radii, volume/density values, and potential heights.
+  4) Within new functions, simplify if-cascades where possible, eliminate
+     duplicated code.
+  5) Move std::vector<> buffers out to data members.
+
+  Also, modify worthToPropagate() to use non-nucleon potential heights to
+  terminate propagation.  Previously, non-nucleons could never fail, as the
+  "getFermiKinetic" always returned zero.
 
 28 September 2010 Michael Kelsey (hadr-casc-V09-03-81)
 ------------------------------------------------------

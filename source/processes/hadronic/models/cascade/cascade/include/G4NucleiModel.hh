@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.30 2010-09-14 17:51:36 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.31 2010-10-06 07:08:43 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -44,6 +44,7 @@
 // 20100723  M. Kelsey -- Move G4CollisionOutput buffer, along with all
 //		std::vector<> buffers, here for reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20101004  M. Kelsey -- Rename and create functions used to generate model
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -112,7 +113,7 @@ public:
 
 
   G4bool empty() const { 
-    return neutronNumberCurrent < 1.0 && protonNumberCurrent < 1.0; 
+    return neutronNumberCurrent < 1 && protonNumberCurrent < 1; 
   }
 
 
@@ -166,10 +167,22 @@ private:
     return (p2.second > p1.second);
   }
 
-  G4double volNumInt(G4double r1, G4double r2, G4double cu, 
-		     G4double d1) const; 
+  // Functions used to generate model nuclear structure
+  void fillBindingEnergies();
 
-  G4double volNumInt1(G4double r1, G4double r2, G4double cu2) const; 
+  void fillZoneRadii(G4double nuclearRadius, G4double skinDepth, G4double ur[]);
+
+  G4double fillZoneVolumes(const G4double ur[], G4double nuclearRadius, 
+			   G4double v[], G4double v1[]);
+
+  void fillPotentials(G4int type, G4double tot_vol, const G4double v[],
+		      const G4double v1[]);
+
+  G4double zoneIntegralWoodsSaxon(G4double ur1, G4double ur2,
+				  G4double nuclearRadius) const;
+
+  G4double zoneIntegralGaussian(G4double ur1, G4double ur2,
+				G4double nuclearRadius) const; 
 
   G4double getRatio(G4int ip) const;
 
@@ -184,6 +197,12 @@ private:
   std::vector<G4LorentzVector> momentums;
   std::vector<G4InuclElementaryParticle> raw_particles;
 
+  // Temporary buffers for computing nuclear model
+  std::vector<G4double> rod;	// Nucleon density
+  std::vector<G4double> pf;	// Fermi momentum
+  std::vector<G4double> vz;	// Nucleo potential
+
+  // Nuclear model configuration
   std::vector<std::vector<G4double> > nucleon_densities;
   std::vector<std::vector<G4double> > zone_potentials;
   std::vector<std::vector<G4double> > fermi_momenta;
@@ -205,12 +224,24 @@ private:
   G4int current_nucl1;
   G4int current_nucl2;
 
-  // Total cross sections
-  static const G4double PPtot[30];
-  static const G4double NPtot[30];
-  static const G4double pipPtot[30];
-  static const G4double pimPtot[30];
-  static const G4double pizPtot[30];
+  // Symbolic names for nuclear potentials
+  enum PotentialType { WoodsSaxon=0, Gaussian=1 };
+
+  // Parameters for nuclear structure
+  static const G4double skinDepth;
+  static const G4double radiusScale;
+  static const G4double radiusForSmall;
+  static const G4double fermiMomentum;
+  static const G4double alfa3[3], alfa6[6];
+  static const G4double pion_vp;
+  static const G4double pion_vp_small;
+  static const G4double kaon_vp;
+  static const G4double hyperon_vp;
+
+  // FIXME:  We should not be using this!
+  static const G4double piTimes4thirds;
+
+  // Total cross sections (for kaons and hyperons only)
   static const G4double kpPtot[30];
   static const G4double kpNtot[30];
   static const G4double kmPtot[30];
