@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGViewer.cc,v 1.4 2006-08-29 16:11:25 allison Exp $
+// $Id: G4XXXSGViewer.cc,v 1.5 2010-10-06 10:12:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,6 +132,10 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+      (lastVP.GetDefaultVisAttributes()->GetColour() !=
+       fVP.GetDefaultVisAttributes()->GetColour())                ||
+      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
+       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
       ) {
     return true;

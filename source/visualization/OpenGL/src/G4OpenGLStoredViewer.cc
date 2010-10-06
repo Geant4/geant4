@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.28 2010-10-05 15:58:46 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.29 2010-10-06 10:05:52 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,6 +87,10 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
+      (lastVP.GetDefaultVisAttributes()->GetColour() !=
+       fVP.GetDefaultVisAttributes()->GetColour())                ||
+      (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
+       fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())
       )

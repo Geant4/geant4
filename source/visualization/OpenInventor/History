@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2010-05-26 14:30:46 allison Exp $
+$Id: History,v 1.106 2010-10-06 10:09:57 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+6th October 2010  John Allison
+- G4OpenInventorViewer.cc:
+  o Added default colour and default text colour to list of parameters
+    that trigger a kernel visit.
 
 26th May 2010  John Allison  (openinventor-V09-03-00)
 - G4OpenInventorWin.cc, G4OpenInventorXt.cc: Protection against
