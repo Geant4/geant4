@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2010-04-26 16:28:18 lgarnier Exp $
+$Id: History,v 1.17 2010-10-06 15:55:08 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+6th October 2010, John Allison  (visexternal-V09-03-00)
+- Tagged.
 
 26th April 2010, Laurent Garnier
  - G4OpenGL2PSAction : add new method to set viewport
