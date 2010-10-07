@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4NuclearLevel.hh,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -36,7 +37,11 @@
 // 
 //      Creation date: 25 October 1998
 //
-//      Modifications: 
+//      Modifications:
+//	  06 Oct 2010, M. Kelsey (kelsey@slac.stanford.edu)
+//		Add friendship for G4NuclearLevelManager; define private
+//		constructors without vectors.
+//
 //        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
 //              Added K->N+ internal  conversion coefficiencies and their access
 //              functions      
@@ -58,7 +63,6 @@ class G4NuclearLevel
 {
 
 public:
-
   G4NuclearLevel(const G4double energy, const G4double halfLife,
 		 const G4double angularMomentum, const std::vector<double>& eGamma,
 		 const std::vector<double>& wGamma, const std::vector<double>& polarities,
@@ -154,9 +158,15 @@ public:
 protected:
 
 private:  
+  friend class G4NuclearLevelManager;
 
-  G4NuclearLevel() {G4cout << "Calling default constructor"<<G4endl;};
-      
+  G4NuclearLevel();
+
+  G4NuclearLevel(const G4double energy, const G4double halfLife,
+		 const G4double angularMomentum);
+
+  void Finalize();
+
   void MakeProbabilities();
   void MakeCumProb();
   
@@ -183,8 +193,6 @@ private:
   G4double _halfLife;
   G4double _angularMomentum;
   G4int _nGammas;
-  
-
 };
 
 #endif

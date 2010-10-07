@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+7 October 2010 Michael Kelsey
+-----------------------------
+- G4NuclearLevelStore, G4NuclearLevelManager, G4NuclearLevel:  Eliminate
+  passing and copying of vectors; fill NuclearLevel directly by Manager.
+- G4ContinuumGammaTransition.cc:  Follow G4NuclearLevelManager changes.
+
 9 September 2010 Vladimir Ivanchenko (hadr-deex-V09-03-19)
 ----------------------------------------------------------
 - G4NeutronRadCapture - use G4PhotonEvaporation instead of simplfied

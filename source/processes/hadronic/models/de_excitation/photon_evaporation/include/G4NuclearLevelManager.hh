@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4NuclearLevelManager.hh,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -45,7 +45,8 @@
 //              Added half-life, angular momentum, parity, emissioni type
 //              reading from experimental data. 
 //        02 May 2003,   Vladimir Ivanchenko remove rublic copy contructor
-//      
+//        06 Oct 2010, M. Kelsey -- Use object storage, not pointers, drop
+//		public access to list
 // -------------------------------------------------------------------
 
 #ifndef G4NUCLEARLEVELMANAGER_HH
@@ -53,9 +54,10 @@
 
 #include "globals.hh"
 #include "G4PtrLevelVector.hh"
-#include "G4NuclearLevel.hh"
-#include "G4ios.hh"
-#include <fstream>
+#include <iosfwd>
+
+class G4NuclearLevel;
+
 
 class G4NuclearLevelManager 
 {
@@ -70,13 +72,14 @@ public:
   
   void SetNucleus(const G4int Z, const G4int A, const G4String& filename);
 
-  G4bool IsValid() const;
+  G4bool IsValid() const { return _validity; }
 
-  G4int NumberOfLevels() const;
+  G4int NumberOfLevels() const { return (_levels ? _levels->size() : 0); }
 
-  const G4PtrLevelVector* GetLevels() const;
+  const G4NuclearLevel* GetLevel(G4int i) const;
 
-  const G4NuclearLevel* NearestLevel(const G4double energy, const G4double eDiffMax=9999.*GeV) const;
+  const G4NuclearLevel* NearestLevel(const G4double energy,
+				     const G4double eDiffMax=9999.*GeV) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;
@@ -87,7 +90,6 @@ public:
   void PrintAll();
   
 private:  
-
   const G4NuclearLevelManager& operator=(const G4NuclearLevelManager &right);
   G4bool operator==(const G4NuclearLevelManager &right) const;
   G4bool operator!=(const G4NuclearLevelManager &right) const;
@@ -95,13 +97,19 @@ private:
   G4bool Read(std::ifstream& aDataFile);
  
   void MakeLevels();
+  void ClearLevels();
+
+  G4NuclearLevel* UseLevelOrMakeNew(G4NuclearLevel* level);
+  void AddDataToLevel(G4NuclearLevel* level);
+  void FinishLevel(G4NuclearLevel* level);
 
   G4int _nucleusA;
   G4int _nucleusZ;
   G4String _fileName;
   G4bool _validity;
   G4PtrLevelVector* _levels;
-  
+
+  // Buffers for reading data file
   G4double _levelEnergy;
   G4double _gammaEnergy;
   G4double _probability;

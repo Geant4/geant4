@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4NuclearLevel.cc,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -38,6 +38,9 @@
 //      Creation date: 24 October 1998
 //
 //      Modifications: 
+//	  06 Oct 2010, M. Kelsey (kelsey@slac.stanford.edu)
+//		Add friendship for G4NuclearLevelManager; define private
+//		constructors without vectors.
 //
 //        09 Sep. 2002, Fan Lei  (flei@space.qinetiq.com)
 //              Added IC probability when calculate the channel probabilities in 
@@ -64,6 +67,18 @@ G4int G4NuclearLevel::Increment(G4int aF)
   return instanceCount;
 }
 
+G4NuclearLevel::G4NuclearLevel()
+  : _energy(0.), _halfLife(0.), _angularMomentum(0.), _nGammas(0) {
+  // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
+}
+
+G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
+			       const G4double angularMomentum)
+  : _energy(energy), _halfLife(halfLife), _angularMomentum(angularMomentum),
+    _nGammas(0) {
+  // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
+}
+
 G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
 			       const G4double angularMomentum,
 			       const std::vector<double>& eGamma,
@@ -76,32 +91,14 @@ G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
 			       const std::vector<double>& m5CC, const std::vector<double>& nPlusCC,
 			       const std::vector<double>& totalCC)
 
+  : _energies(eGamma), _weights(wGamma), _polarities(polarities),
+     _kCC(kCC), _l1CC(l1CC), _l2CC(l2CC), _l3CC(l3CC),
+    _m1CC(m1CC), _m2CC(m2CC), _m3CC(m3CC), _m4CC(m4CC), _m5CC(m5CC),
+    _nPlusCC(nPlusCC), _totalCC(totalCC),
+    _energy(energy), _halfLife(halfLife), _angularMomentum(angularMomentum)
 {
-  _energy = energy;
-  _halfLife = halfLife;
-  _angularMomentum = angularMomentum;
-  unsigned int i;
-  for (i=0; i<eGamma.size(); i++)
-    {
-      _energies.push_back(eGamma[i]);
-      _weights.push_back(wGamma[i]);
-      _polarities.push_back(polarities[i]);
-      _kCC.push_back( kCC[i]);
-      _l1CC.push_back( l1CC[i]);
-      _l2CC.push_back( l2CC[i]);
-      _l3CC.push_back( l3CC[i]);
-      _m1CC.push_back( m1CC[i]);
-      _m2CC.push_back( m2CC[i]);
-      _m3CC.push_back( m3CC[i]);
-      _m4CC.push_back( m4CC[i]);
-      _m5CC.push_back( m5CC[i]);
-      _nPlusCC.push_back( nPlusCC[i]);
-      _totalCC.push_back( totalCC[i]);
-    }
-  _nGammas = _energies.size();
-  MakeProbabilities();
-  MakeCumProb();
- // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
+  Finalize();
+  // G4cout << "####### Incrementing "<<Increment(1)<<G4endl;
 }
 
 G4NuclearLevel::~G4NuclearLevel()
@@ -254,7 +251,14 @@ void G4NuclearLevel::PrintAll() const
 
   return;
 }
- 
+
+
+void G4NuclearLevel::Finalize() {
+  _nGammas = _energies.size();
+  MakeProbabilities();
+  MakeCumProb();
+}
+
 
 void G4NuclearLevel::MakeProbabilities()
 {
@@ -267,7 +271,7 @@ void G4NuclearLevel::MakeProbabilities()
 
   for (i=0; i<_nGammas; i++)
     {
-      if (sum > 0.) { _prob.push_back(_weights[i]*(1+_totalCC[i])/ sum); }
+      if (sum > 0.) { _prob.push_back(_weights[i]*(1+_totalCC[i])/sum); }
       else { _prob.push_back(1./_nGammas); }
     }
   return;

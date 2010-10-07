@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
+// $Id: G4ContinuumGammaTransition.cc,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -41,7 +41,7 @@
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
 //        02 May 2003,   Vladimir Ivanchenko change interface to G4NuclearlevelManager
-//      
+//        06 Oct 2010, M. Kelsey -- follow changes to G4NuclearLevelManager
 // -------------------------------------------------------------------
 //
 //  Class G4ContinuumGammaTransition.cc
@@ -62,17 +62,15 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
 			    G4int verbose):
   _nucleusA(A), _nucleusZ(Z), _excitation(excitation), _levelManager(levelManager) 
 {
-  const G4PtrLevelVector* levels = _levelManager->GetLevels();
   G4double eTolerance = 0.;
-  if (levels != 0)
-  {
-    G4int lastButOne = _levelManager->NumberOfLevels() - 2;
-    if (lastButOne >= 0)
+  G4int lastButOne = _levelManager->NumberOfLevels() - 2;
+  if (lastButOne >= 0)
     {
-      eTolerance = _levelManager->MaxLevelEnergy() - levels->operator[](lastButOne)->Energy();
+      eTolerance = (_levelManager->MaxLevelEnergy() -
+		    _levelManager->GetLevel(lastButOne)->Energy());
       if (eTolerance < 0.) eTolerance = 0.;
     }
-  }
+  
 
   _verbose = verbose;
   _eGamma = 0.;
