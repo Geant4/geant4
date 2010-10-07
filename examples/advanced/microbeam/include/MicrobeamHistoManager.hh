@@ -23,40 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: MicrobeamSteppingAction.hh,v 1.6 2010-10-07 14:03:11 sincerti Exp $
-// -------------------------------------------------------------------
+// $Id: MicrobeamHistoManager.hh,v 1.1 2010-10-07 14:03:11 sincerti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef MicrobeamSteppingAction_h
-#define MicrobeamSteppingAction_h 1
+#ifndef MicrobeamHistoManager_h
+#define MicrobeamHistoManager_h 1
 
-#include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
-#include "MicrobeamRunAction.hh"
-#include "MicrobeamDetectorConstruction.hh"
-#include "MicrobeamHistoManager.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+namespace AIDA {
+ class IAnalysisFactory;
+ class ITree;
+ class ITuple;
+}
 
-class MicrobeamSteppingAction : public G4UserSteppingAction
+const G4int MaxNtupl = 5;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class MicrobeamHistoManager
 {
-public:
-  MicrobeamSteppingAction(MicrobeamRunAction* ,MicrobeamDetectorConstruction*,
-  MicrobeamHistoManager *);
-  ~MicrobeamSteppingAction();
-  
-  void UserSteppingAction(const G4Step*);
-  
-private:
-  MicrobeamRunAction*            Run;
-  MicrobeamDetectorConstruction* Detector;
-  MicrobeamHistoManager* 	 Histo;
-  G4float massPhantom;
+  public:
 
+    MicrobeamHistoManager();
+   ~MicrobeamHistoManager();
+
+    void book();
+    void save();   
+    void FillNtuple(G4int id, G4int column, G4double value);
+    void AddRowNtuple(G4int id);
+
+  private:
+
+    G4String                 fileName[2];
+    G4String                 fileType;
+    G4String                 fileOption;    
+    AIDA::IAnalysisFactory*  af;
+    AIDA::ITree*             tree;
+    AIDA::ITuple*      	     ntupl0; // MicrobeamSteppingAction   
+    AIDA::ITuple*      	     ntupl1; // MicrobeamSteppingAction   
+    AIDA::ITuple*      	     ntupl2; // MicrobeamSteppingAction   
+    AIDA::ITuple*      	     ntupl3; // MicrobeamEventAction   
+    AIDA::ITuple*      	     ntupl4; // MicrobeamRunAction   
+ 
+    G4bool                   factoryOn;
+    
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
 

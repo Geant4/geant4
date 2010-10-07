@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.28 2010-06-10 09:54:05 vnivanch Exp $
+$Id: History,v 1.29 2010-10-07 14:03:11 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,9 @@ $Id: History,v 1.28 2010-06-10 09:54:05 vnivanch Exp $
                        Package History file
                        --------------------
 
+07 October 2010 - S. Incerti - tag microbeam-V09-03-07
+- Updated for use of AIDA fof histograms.
+
 10 June 2010 - V.Ivanchenko - tag microbeam-V09-03-06
 - Added option "ionGasModel" to the Physics List
 
@@ -16,8 +19,7 @@ $Id: History,v 1.28 2010-06-10 09:54:05 vnivanch Exp $
 - Have vis.mac disabled by default
 
 09 June 2010 - S. Incerti - tag microbeam-V09-03-04
-- Switched to physics_list library.
-microbeam.mac adapted. 
+- Switched to physics_list library. microbeam.mac adapted. 
 
 06 June 2010 - S. Incerti - tag microbeam-V09-03-03
 - Removed unused variable (evt) in MicrobeamEventAction.cc

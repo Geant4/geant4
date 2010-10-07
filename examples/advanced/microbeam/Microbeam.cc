@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microbeam.cc,v 1.10 2010-06-09 18:13:46 sincerti Exp $
+// $Id: Microbeam.cc,v 1.11 2010-10-07 14:03:11 sincerti Exp $
 // -------------------------------------------------------------------
 //  GEANT4 - Microbeam example
 //  Developed by S. Incerti et al.
@@ -52,6 +52,7 @@
 #include "MicrobeamTrackingAction.hh"
 #include "MicrobeamSteppingAction.hh"
 #include "MicrobeamSteppingVerbose.hh"
+#include "MicrobeamHistoManager.hh"
 
 int main(int argc,char** argv) {
 
@@ -81,12 +82,14 @@ int main(int argc,char** argv) {
   MicrobeamPrimaryGeneratorAction* KinAct = new MicrobeamPrimaryGeneratorAction(detector);
   runManager->SetUserAction(KinAct);
  
-  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector);
+  MicrobeamHistoManager*  histo = new MicrobeamHistoManager();
+
+  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector,histo);
   
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new MicrobeamEventAction(RunAct));
+  runManager->SetUserAction(new MicrobeamEventAction(RunAct,histo));
   runManager->SetUserAction(new MicrobeamTrackingAction(RunAct)); 
-  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector));
+  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector,histo));
   
   // initialize G4 kernel
   // runManager->Initialize();
@@ -95,11 +98,7 @@ int main(int argc,char** argv) {
   G4UImanager* UI = G4UImanager::GetUIpointer(); 
   
   // local user files created by the simulation
-  system ("rm -rf dose.txt");
-  system ("rm -rf 3DDose.txt");
-  system ("rm -rf stoppingPower.txt");
-  system ("rm -rf range.txt");
-  system ("rm -rf beamPosition.txt");
+  system ("rm -rf microbeam.root");
        
   if (argc==1)   // define UI session for interactive mode.
     {

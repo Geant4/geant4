@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEventAction.cc,v 1.8 2010-06-07 03:18:01 sincerti Exp $
+// $Id: MicrobeamEventAction.cc,v 1.9 2010-10-07 14:03:11 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4Event.hh"
@@ -32,11 +32,13 @@
 
 #include "MicrobeamEventAction.hh"
 #include "MicrobeamRunAction.hh"
+#include "MicrobeamHistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MicrobeamEventAction::MicrobeamEventAction(MicrobeamRunAction* run)
-  :Run(run),drawFlag("all"),printModulo(10000)
+MicrobeamEventAction::MicrobeamEventAction(MicrobeamRunAction* run,
+MicrobeamHistoManager * his)
+:Run(run),Histo(his),drawFlag("all"),printModulo(10000)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,10 +65,10 @@ void MicrobeamEventAction::EndOfEventAction(const G4Event* )
 
 if (Run->GetDoseN()>0 || Run->GetDoseC()>0) 
 {
-	FILE* myFile;
-	myFile=fopen("dose.txt","a");
-	fprintf(myFile,"%e %e\n",Run->GetDoseN(),Run->GetDoseC());
-	fclose (myFile);
+	Histo->FillNtuple(3,0,Run->GetDoseN());
+	Histo->FillNtuple(3,1,Run->GetDoseC());
+        Histo->AddRowNtuple(3);			
+
         G4cout << "   ===> The incident alpha particle has reached the targeted cell :" << G4endl;
 	G4cout << "   -----> total absorbed dose within Nucleus   is (Gy) = " << Run->GetDoseN() << G4endl;
 	G4cout << "   -----> total absorbed dose within Cytoplasm is (Gy) = " << Run->GetDoseC() << G4endl;
