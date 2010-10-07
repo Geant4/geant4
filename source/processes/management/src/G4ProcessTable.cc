@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.13 2007-10-06 05:33:58 kurasige Exp $
+// $Id: G4ProcessTable.cc,v 1.14 2010-10-07 13:51:31 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -348,7 +348,7 @@ G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find(
 
   G4ProcTableVector::iterator itr; 
   G4bool isFound = false;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr) {
     anElement = (*itr);
     // check name
@@ -377,7 +377,7 @@ G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find(
 
   G4ProcTableVector::iterator itr; 
   G4bool isFound = false;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr) {
     anElement = (*itr);
     // check name
@@ -390,7 +390,7 @@ G4ProcessTable::G4ProcTableVector* G4ProcessTable::Find(
 #ifdef G4VERBOSE
   if (!isFound && verboseLevel>0){
     G4cout << " G4ProcessTable::Find :" ;
-    G4cout << " The Process[" << anElement->GetProcessName() << "] is not found  " << G4endl;
+    G4cout << " The ProcessType[" << processType << "] is not found  " << G4endl;
   }
 #endif
   
