@@ -55,13 +55,14 @@
 //        9 May 2010, V.Ivanchenko
 //              Removed unphysical corretions of gamma energy; fixed default particle 
 //              as gamma; do not subtract bounding energy in case of electron emmision
-//      
+//
 // -------------------------------------------------------------------
 
 #include "G4DiscreteGammaTransition.hh"
 #include "Randomize.hh"
 #include "G4RandGeneralTmp.hh"
 #include "G4AtomicShells.hh"
+#include "G4NuclearLevel.hh"
 //JMQ: 
 #include "G4NuclearLevelStore.hh"
 #include "G4Pow.hh"

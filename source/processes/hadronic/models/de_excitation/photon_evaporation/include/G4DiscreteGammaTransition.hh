@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.hh,v 1.4 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4DiscreteGammaTransition.hh,v 1.5 2010-10-07 12:31:00 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,8 @@
 //              Corrections added for taking into account mismatch between tabulated 
 //              gamma energies and level energy differences (fake photons eliminated) 
 //   
+//	  6 October 2010, M. Kelsey
+//		Store NuclearLevel as const-reference, not as copied value.
 // -------------------------------------------------------------------
 
 #ifndef G4DiscreteGammaTransition_hh
@@ -66,10 +68,11 @@
 
 #include "globals.hh"
 #include "G4VGammaTransition.hh"
-#include "G4NuclearLevel.hh"
 
+class G4NuclearLevel;
 //JMQ 180410
 class G4NuclearLevelManager;
+
 
 class G4DiscreteGammaTransition : public G4VGammaTransition
 {
@@ -107,7 +110,7 @@ private:
   G4bool _icm;
 
   G4double _gammaEnergy;
-  G4NuclearLevel _level;     
+  const G4NuclearLevel& _level;     
   G4double _excitation;
   G4double _gammaCreationTime;
   //JMQ 180410

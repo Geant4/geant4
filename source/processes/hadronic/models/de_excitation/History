@@ -19,6 +19,7 @@ code and to keep track of all tags.
 - G4NuclearLevelStore, G4NuclearLevelManager, G4NuclearLevel:  Eliminate
   passing and copying of vectors; fill NuclearLevel directly by Manager.
 - G4ContinuumGammaTransition.cc:  Follow G4NuclearLevelManager changes.
+- G4DiscreteGammaTransition:  Use const-ref for G4NuclerLevel data member.
 
 9 September 2010 Vladimir Ivanchenko (hadr-deex-V09-03-19)
 ----------------------------------------------------------
