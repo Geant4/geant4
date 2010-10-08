@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.10 2010-08-25 07:57:28 sincerti Exp $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.11 2010-10-08 08:53:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,11 +73,13 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
   G4ParticleDefinition* protonDef = G4Proton::ProtonDefinition();
+  G4ParticleDefinition* hydrogenDef = instance->GetIon("hydrogen");
   G4ParticleDefinition* alphaPlusPlusDef = instance->GetIon("alpha++");
   G4ParticleDefinition* alphaPlusDef = instance->GetIon("alpha+");
   G4ParticleDefinition* heliumDef = instance->GetIon("helium");
 
   G4String proton;
+  G4String hydrogen;
   G4String alphaPlusPlus;
   G4String alphaPlus;
   G4String helium;
@@ -101,6 +103,25 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     G4Exception("G4DNAMillerGreenExcitationModel::Initialise: proton is not defined");
   }
 
+  if (hydrogenDef != 0)
+  {
+    hydrogen = hydrogenDef->GetParticleName();
+    lowEnergyLimit[hydrogen] = 10. * eV;
+    highEnergyLimit[hydrogen] = 500. * keV;
+    
+    kineticEnergyCorrection[0] = 1.;
+    slaterEffectiveCharge[0][0] = 0.;
+    slaterEffectiveCharge[1][0] = 0.;
+    slaterEffectiveCharge[2][0] = 0.;
+    sCoefficient[0][0] = 0.;
+    sCoefficient[1][0] = 0.;
+    sCoefficient[2][0] = 0.;
+  }
+  else
+  {
+    G4Exception("G4DNAMillerGreenExcitationModel::Initialise: hydrogen is not defined");
+    
+  }
   if (alphaPlusPlusDef != 0)
   {
     alphaPlusPlus = alphaPlusPlusDef->GetParticleName();
@@ -168,6 +189,12 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
     SetHighEnergyLimit(highEnergyLimit[proton]);
   }
 
+  if (particle==hydrogenDef) 
+  {
+    SetLowEnergyLimit(lowEnergyLimit[hydrogen]);
+    SetHighEnergyLimit(highEnergyLimit[hydrogen]);
+  }
+
   if (particle==alphaPlusPlusDef) 
   {
     SetLowEnergyLimit(lowEnergyLimit[alphaPlusPlus]);
@@ -233,6 +260,8 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
 
   if (
       particleDefinition != G4Proton::ProtonDefinition()
+      &&
+      particleDefinition != instance->GetIon("hydrogen")
       &&
       particleDefinition != instance->GetIon("alpha++")
       &&
@@ -404,6 +433,7 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   instance = G4DNAGenericIonsManager::Instance();
 
   if (particleDefinition == G4Proton::ProtonDefinition()) particleTypeIndex=0;
+  if (particleDefinition == instance->GetIon("hydrogen")) particleTypeIndex=0;
   if (particleDefinition == instance->GetIon("alpha++")) particleTypeIndex=1;
   if (particleDefinition == instance->GetIon("alpha+")) particleTypeIndex=2;
   if (particleDefinition == instance->GetIon("helium")) particleTypeIndex=3;
@@ -421,6 +451,13 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   numerator = std::pow(z * aj[excitationLevel], omegaj[excitationLevel]) * 
     std::pow(tCorrected - Eliq[excitationLevel], nu);
 
+  // H case : see S. Uehara et al. IJRB 77, 2, 139-154 (2001) - section 3.3
+  
+  if (particleDefinition == instance->GetIon("hydrogen")) 
+     numerator = std::pow(z * 0.75*aj[excitationLevel], omegaj[excitationLevel]) * 
+     std::pow(tCorrected - Eliq[excitationLevel], nu);
+
+
   G4double power;
   power = omegaj[excitationLevel] + nu;
 
@@ -432,6 +469,8 @@ G4double G4DNAMillerGreenExcitationModel::PartialCrossSection(G4double k, G4int 
   zEff -= ( sCoefficient[0][particleTypeIndex] * S_1s(k, Eliq[excitationLevel], slaterEffectiveCharge[0][particleTypeIndex], 1.) +
 	    sCoefficient[1][particleTypeIndex] * S_2s(k, Eliq[excitationLevel], slaterEffectiveCharge[1][particleTypeIndex], 2.) +
 	    sCoefficient[2][particleTypeIndex] * S_2p(k, Eliq[excitationLevel], slaterEffectiveCharge[2][particleTypeIndex], 2.) );
+
+  if (particleDefinition == instance->GetIon("hydrogen")) zEff = 1.;
 
   G4double cross = sigma0 * zEff * zEff * numerator / denominator;
 
@@ -452,6 +491,7 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 
   if ( particle == instance->GetIon("alpha++") ||
        particle == G4Proton::ProtonDefinition()||  
+       particle == instance->GetIon("hydrogen")  ||
        particle == instance->GetIon("alpha+")  ||
        particle == instance->GetIon("helium")
      )

@@ -1,4 +1,4 @@
-$Id: History,v 1.454 2010-09-15 17:53:24 sincerti Exp $
+$Id: History,v 1.455 2010-10-08 08:53:17 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08.10.2010, S. Incerti, tag emlowen-V09-03-48
+            Added new excitation model for H
 
 15.09.2010, S. Incerti, tag emlowen-V09-03-47
             Added protection in xs file opening for G4DNA Sanche excitation
