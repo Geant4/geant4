@@ -1,4 +1,4 @@
-$Id: History,v 1.185 2010-10-08 10:07:54 lgarnier Exp $
+$Id: History,v 1.186 2010-10-08 14:02:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -22,7 +22,8 @@ committal in the CVS repository !
   o Add menu for changing text color, default color, background color
   o Toogle projection now call directly command instead of redefinding it
 
-6th October 2010  John Allison  (opengl-V09-03-08)
+6th October 2010  John Allison  (opengl-V09-03-08 with co-working tags...)
+- Co-working tags: interfaces-V09-03-12 + config-V09-03-08
 - G4OpenGLStoredViewer.cc:
   o Added default colour and default text colour to list of parameters
     that trigger a kernel visit.
