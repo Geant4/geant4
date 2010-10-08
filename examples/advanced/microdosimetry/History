@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.20 2010-10-06 14:39:41 sincerti Exp $
+$Id: History,v 1.21 2010-10-08 10:01:35 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.20 2010-10-06 14:39:41 sincerti Exp $
 
                        Package History file
                        --------------------
+
+08 October 2010 - S. Incerti - microdosimetry-V09-03-07
+- added H excitation
 
 06 October 2010 - S. Incerti - microdosimetry-V09-03-06
 - update for production of histograms with AIDA

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.8 2010-10-06 14:39:41 sincerti Exp $
+$Id: README,v 1.9 2010-10-08 10:01:35 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -98,24 +98,25 @@ proton_G4DNAExcitation		17
 proton_G4DNAIonisation		18
 proton_G4DNAChargeDecrease	19
 
-hydrogen_G4DNAIonisation	20
-hydrogen_G4DNAChargeIncrease	21
+hydrogen_G4DNAExcitation	20
+hydrogen_G4DNAIonisation	21
+hydrogen_G4DNAChargeIncrease	22
 
-alpha_G4DNAExcitation		22
-alpha_G4DNAIonisation		23
-alpha_G4DNAChargeDecrease	24
+alpha_G4DNAExcitation		23
+alpha_G4DNAIonisation		24
+alpha_G4DNAChargeDecrease	25
 
-alpha+_G4DNAExcitation		25
-alpha+_G4DNAIonisation		26
-alpha+_G4DNAChargeDecrease	27
-alpha+_G4DNAChargeIncrease	28
+alpha+_G4DNAExcitation		26
+alpha+_G4DNAIonisation		27
+alpha+_G4DNAChargeDecrease	28
+alpha+_G4DNAChargeIncrease	29
 
-helium_G4DNAExcitation		29
-helium_G4DNAIonisation		30
-helium_G4DNAChargeIncrease	31
+helium_G4DNAExcitation		30
+helium_G4DNAIonisation		31
+helium_G4DNAChargeIncrease	32
 
-hIoni				32
-eIoni				33
+hIoni				33
+eIoni				34
 
 
 ---------------------------------------------------------------------------

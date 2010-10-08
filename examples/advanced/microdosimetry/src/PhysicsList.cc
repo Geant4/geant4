@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PhysicsList.cc,v 1.13 2010-09-13 08:42:59 sincerti Exp $
+// $Id: PhysicsList.cc,v 1.14 2010-10-08 10:01:35 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -245,6 +245,7 @@ void PhysicsList::ConstructEM()
 
       // DNA processes active in the world 
       pmanager->AddDiscreteProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"));
+      pmanager->AddDiscreteProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"));
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"));
 
     } else if ( particleName == "alpha" ) {

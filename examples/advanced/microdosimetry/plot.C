@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------
-// $Id: plot.C,v 1.5 2010-10-06 14:39:41 sincerti Exp $
+// $Id: plot.C,v 1.6 2010-10-08 10:01:35 sincerti Exp $
 // -------------------------------------------------------------------
 //
 // *********************************************************************
@@ -30,7 +30,8 @@ c1.cd(1);
   ntuple0->SetFillColor(2);
   
   // Excitation
-  ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||flagProcess==22||flagProcess==25||flagProcess==29","same");
+ 
+ntuple0->Draw("flagProcess","flagProcess==12||flagProcess==15||flagProcess==17||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30","same");
   ntuple0->SetFillColor(3);
   
   // Elastic
@@ -38,15 +39,15 @@ c1.cd(1);
   ntuple0->SetFillColor(4);
   
   // Ionisation
-  ntuple0->Draw("flagProcess","flagProcess==13||flagProcess==18||flagProcess==20||flagProcess==23||flagProcess==26||flagProcess==30||flagProcess==32||flagProcess==33","same");
+  ntuple0->Draw("flagProcess","flagProcess==13||flagProcess==18||flagProcess==21||flagProcess==24||flagProcess==27||flagProcess==31||flagProcess==33||flagProcess==34","same");
   ntuple0->SetFillColor(5);
   
   // Charge decrease
-  ntuple0->Draw("flagProcess","flagProcess==19||flagProcess==24||flagProcess==27","same");
+  ntuple0->Draw("flagProcess","flagProcess==19||flagProcess==25||flagProcess==28","same");
   ntuple0->SetFillColor(6);
   
   // Charge increase
-  ntuple0->Draw("flagProcess","flagProcess==21||flagProcess==28||flagProcess==31","same");
+  ntuple0->Draw("flagProcess","flagProcess==22||flagProcess==29||flagProcess==32","same");
   
   gPad->SetLogy();
 /*
