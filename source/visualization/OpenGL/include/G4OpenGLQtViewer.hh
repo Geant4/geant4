@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.24 2010-10-05 15:45:19 lgarnier Exp $
+// $Id: G4OpenGLQtViewer.hh,v 1.25 2010-10-08 10:07:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -230,6 +230,9 @@ private slots :
   void actionDrawingSurfaceRemoval();
   void actionDrawingLineSurfaceRemoval();
   void actionSaveImage();
+  void actionChangeBackgroundColor();
+  void actionChangeTextColor();
+  void actionChangeDefaultColor();
   void actionMovieParameters();
 
   void showShortcuts();
@@ -237,7 +240,6 @@ private slots :
   void toggleMouseAction(mouseActions);
   void toggleRepresentation(bool);
   void toggleProjection(bool);
-  void toggleBackground(bool);
   void toggleTransparency(bool);
   void toggleAntialiasing(bool);
   void toggleHaloing(bool);

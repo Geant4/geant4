@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.54 2010-10-05 15:53:24 allison Exp $
+// $Id: G4OpenGLQtViewer.cc,v 1.55 2010-10-08 10:07:31 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,7 @@
 #include <qpainter.h>
 #include <qgl.h> // include <qglwidget.h>
 #include <qdialog.h>
+#include <qcolordialog.h>
 #include <qevent.h> //include <qcontextmenuevent.h>
 
 
@@ -544,37 +545,86 @@ void G4OpenGLQtViewer::createPopupMenu()    {
                     SLOT(actionDrawingLineSurfaceRemoval()));
 #endif
 
+  // Background Color
 
-
+  QAction *backgroundColorChooser ;
 #if QT_VERSION < 0x040000
-  QPopupMenu *mBackground = new QPopupMenu(mStyle);
-  mStyle->insertItem("&Background color",mBackground);
+  QPopupMenu *mBackgroundColor = new QPopupMenu(mStyle);
+  mStyle->insertItem("&Background color",mBackgroundColor);
 
 #if QT_VERSION < 0x030200
-  QAction *white = new QAction("&White","&White",CTRL+Key_W,mBackground,0,true);
-  QAction *black =  new QAction("&Black","&Black",CTRL+Key_B,mBackground,0,true);
+  backgroundColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mBackgroundColor,0,true);
 #else
-  QAction *white = new QAction("&White",CTRL+Key_W,mBackground);
-  QAction *black =  new QAction("&Black",CTRL+Key_B,mBackground);
-  white->setToggleAction(true);
-  black->setToggleAction(true);
+  backgroundColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mBackgroundColor);
 #endif
-  white->addTo(mBackground);
-  black->addTo(mBackground);
+  backgroundColorChooser->addTo(mBackgroundColor);
+  QObject ::connect(backgroundColorChooser, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionChangeBackgroundColor()));
 
 #else
-  QMenu *mBackground = mStyle->addMenu("&Background color");
-  QAction *white = mBackground->addAction("White");
-  QAction *black = mBackground->addAction("Black");
-
+  // === Action Menu ===
+  backgroundColorChooser = mStyle->addAction("Background color");
+  QObject ::connect(backgroundColorChooser, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionChangeBackgroundColor()));
 #endif
-  if (background.GetRed() == 1. &&
-      background.GetGreen() == 1. &&
-      background.GetBlue() == 1.) {
-    createRadioAction(white,black,SLOT(toggleBackground(bool)),1);
-  } else {
-    createRadioAction(white,black,SLOT(toggleBackground(bool)),2);
-  }
+
+  // Text Color
+
+  QAction *textColorChooser ;
+#if QT_VERSION < 0x040000
+  QPopupMenu *mTextColor = new QPopupMenu(mStyle);
+  mStyle->insertItem("&Text color",mTextColor);
+
+#if QT_VERSION < 0x030200
+  textColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mTextColor,0,true);
+#else
+  textColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mTextColor);
+#endif
+  textColorChooser->addTo(mTextColor);
+  QObject ::connect(textColorChooser, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionChangeTextColor()));
+
+#else
+  // === Action Menu ===
+  textColorChooser = mStyle->addAction("Text color");
+  QObject ::connect(textColorChooser, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionChangeTextColor()));
+#endif
+
+  // Default Color
+
+  QAction *defaultColorChooser ;
+#if QT_VERSION < 0x040000
+  QPopupMenu *mDefaultColor = new QPopupMenu(mStyle);
+  mStyle->insertItem("&Default color",mDefaultColor);
+
+#if QT_VERSION < 0x030200
+  defaultColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mDefaultColor,0,true);
+#else
+  defaultColorChooser =  new QAction("&Choose ...","&Choose ...",CTRL+Key_C,mDefaultColor);
+#endif
+  defaultColorChooser->addTo(mDefaultColor);
+  QObject ::connect(defaultColorChooser, 
+                    SIGNAL(activated()),
+                    this,
+                    SLOT(actionChangeDefaultColor()));
+
+#else
+  // === Action Menu ===
+  defaultColorChooser = mStyle->addAction("Default color");
+  QObject ::connect(defaultColorChooser, 
+                    SIGNAL(triggered()),
+                    this,
+                    SLOT(actionChangeDefaultColor()));
+#endif
 
 
 #if QT_VERSION < 0x040000
@@ -1093,76 +1143,13 @@ void G4OpenGLQtViewer::toggleRepresentation(bool check) {
 void G4OpenGLQtViewer::toggleProjection(bool check) {
 
   if (check == 1) {
-    fVP.SetFieldHalfAngle (0);
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/projection o");
   } else {
-
-    // look for the default parameter hidden in G4UIcommand parameters
-    G4UImanager* UI = G4UImanager::GetUIpointer();
-    if(UI==NULL)
-      return;
-    G4UIcommandTree * treeTop = UI->GetTree();
-
-    // find command
-    G4UIcommand* command = treeTop->FindPath("/vis/viewer/set/projection");
-    if (!command)
-      return;
-
-    // find param
-    G4UIparameter * angleParam = NULL;
-    for(G4int i=0;  i<command->GetParameterEntries(); i++)
-    {
-      if( command->GetParameter(i)->GetParameterName() == "field-half-angle" ) {
-        angleParam = command->GetParameter(i);
-      }
-    }
-    if (!angleParam)
-      return;
-
-    // find unit
-    G4UIparameter * unitParam = NULL;
-    for(G4int i=0;  i<command->GetParameterEntries(); i++)
-    {
-      if( command->GetParameter(i)->GetParameterName() == "unit" ) {
-        unitParam = command->GetParameter(i);
-      }
-    }
-    if (!unitParam)
-      return;
-
-    G4double defaultValue = command->ConvertToDouble(angleParam->GetDefaultValue())
-                            * G4UnitDefinition::GetValueOf(unitParam->GetDefaultValue()); 
-    if (defaultValue > 89.5 || defaultValue <= 0.0) {
-      G4cerr << "Field half angle should be 0 < angle <= 89.5 degrees. Check your default Field half angle parameter";
-    } else {
-      G4cout << "Perspective view has been set to default value. Field half angle="<<angleParam->GetDefaultValue() <<" " << G4endl;
-      fVP.SetFieldHalfAngle (defaultValue);
-      SetView ();
-    }
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/projection p");
   }  
   updateQWidget();
 }
 
-
-/**
-   SLOT Activate by a click on the background menu
-@param check : 1 white, 0 black
-*/
-void G4OpenGLQtViewer::toggleBackground(bool check) {
-
-  //   //I need to revisit the kernel if the background colour changes and
-  //   //hidden line removal is enabled, because hlr drawing utilises the
-  //   //background colour in its drawing...
-  //   // (Note added by JA 13/9/2005) Background now handled in view
-  //   // parameters.  A kernel visit is triggered on change of background.
-  if (check == 1) {
-    ((G4ViewParameters&)this->GetViewParameters()).
-      SetBackgroundColour(G4Colour(1.,1.,1.));  // White
-  } else {
-    ((G4ViewParameters&)this->GetViewParameters()).
-      SetBackgroundColour(G4Colour(0.,0.,0.));  // Black
-  }
-  updateQWidget();
-}
 
 /**
    SLOT Activate by a click on the transparency menu
@@ -1389,6 +1376,59 @@ void G4OpenGLQtViewer::actionSaveImage() {
     return;
   }
   
+}
+
+
+void G4OpenGLQtViewer::actionChangeBackgroundColor() {
+
+  //   //I need to revisit the kernel if the background colour changes and
+  //   //hidden line removal is enabled, because hlr drawing utilises the
+  //   //background colour in its drawing...
+  //   // (Note added by JA 13/9/2005) Background now handled in view
+  //   // parameters.  A kernel visit is triggered on change of background.
+
+  QColor color;
+  color = QColorDialog::getColor(Qt::black, fGLWindow);
+  if (color.isValid()) {
+    QString com = "/vis/viewer/set/background ";
+    QString num;
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+    updateQWidget();
+  }
+}
+
+void G4OpenGLQtViewer::actionChangeTextColor() {
+
+  QColor color;
+  color = QColorDialog::getColor(Qt::yellow, fGLWindow);
+  if (color.isValid()) {
+    QString com = "/vis/viewer/set/defaultTextColour ";
+    QString num;
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+    updateQWidget();
+  }
+}
+
+void G4OpenGLQtViewer::actionChangeDefaultColor() {
+
+  QColor color;
+  color = QColorDialog::getColor(Qt::white, fGLWindow);
+  printf("actionChangeDefaultColor\n");
+  if (color.isValid()) {
+    QString com = "/vis/viewer/set/defaultColour ";
+    QString num;
+    com += num.setNum(((float)color.red())/256)+" ";
+    com += num.setNum(((float)color.green())/256)+" ";
+    com += num.setNum(((float)color.blue())/256)+" ";
+    G4UImanager::GetUIpointer()->ApplyCommand(com.toStdString().c_str());
+    updateQWidget();
+  }
 }
 
 
