@@ -1,4 +1,4 @@
-$Id: History,v 1.482 2010-10-07 13:06:14 allison Exp $
+$Id: History,v 1.483 2010-10-08 13:54:13 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,8 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-8th October 2010  John Allison  (vis-V09-03-09)
+8th October 2010  John Allison  (vis-V09-03-09 with co-working tags...)
+- Co-working tags: interfaces-V09-03-12 + config-V09-03-08
 - visman-V09-03-12:
   o Added /vis/viewer/set/defaultColour and defaultTextColour.
 - opengl-V09-03-07/08:
