@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.51 2010-10-06 15:30:05 allison Exp $
+// $Id: G4UIQt.cc,v 1.52 2010-10-08 10:14:54 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
@@ -718,29 +718,6 @@ G4UIsession* G4UIQt::SessionStart (
         visible = true;
       }
     }
-    /****
-    if (visible) {
-#if QT_VERSION >= 0x040000
-  #if QT_VERSION >= 0x040200
-      fEmptyViewerTabLabel->setVisible(false);
-  #else
-      fEmptyViewerTabLabel->hide();
-  #endif
-#else
-      fEmptyViewerTabLabel->hide();
-#endif
-    } else {
-#if QT_VERSION >= 0x040000
-  #if QT_VERSION >= 0x040200
-      fEmptyViewerTabLabel->setVisible(true);
-  #else
-      fEmptyViewerTabLabel->show();
-  #endif
-#else
-      fEmptyViewerTabLabel->show();
-#endif
-    }
-    ****/
   }
 
 #if QT_VERSION >= 0x040000
@@ -1116,8 +1093,18 @@ void G4UIQt::FillHelpTree()
     InitHelpTree();
   }
 
-  // clear old help tree
-  fHelpTreeWidget->clear();
+  QString searchText = fHelpLine->text();
+
+  if (searchText =="") {
+    // clear old help tree
+    fHelpTreeWidget->clear();
+#if QT_VERSION < 0x040000
+    fHelpTreeWidget->removeColumn(1);
+    fHelpTreeWidget->removeColumn(0);
+#endif
+  } else {
+    return; 
+  }
 
   if (fHelpArea) {
 #if QT_VERSION < 0x040200
