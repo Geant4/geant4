@@ -1,8 +1,6 @@
 #
 # ------ MacOS-X ------
-#                                 MacOS 10.3 gcc-3.3
-#                                 MacOS 10.4 gcc-4.0
-#                                 MacOS 10.5 gcc-4.0
+#                                 MacOS 10.6 gcc-4.2
 #
 # Original author: Helmut Burkhardt - CERN
 #       Revisions: Guy Barrand - LAL
@@ -69,18 +67,15 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
-    MAC_G4VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
-    ifeq ($(MAC_G4VERSION),9)
-
+    DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
+    ifeq ($(DARWIN_VERSION),9)
       # the following lines are for building on MacOSX 10.5 "Leopard"
       OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo "-L/usr/X11R6/lib -lGLU -lGL -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
     else
-
       # the following lines are for building on MacOSX < 10.5
-      ifeq ($(shell test $(MAC_G4VERSION) -lt 9; echo $$?),0)
+      ifeq ($(shell test $(DARWIN_VERSION) -lt 9; echo $$?),0)
         OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
       else
-
       # the following lines are for building on MacOSX > 10.5
         OGLLIBS   := -F/System/Library/Frameworks/ -framework OpenGL -framework AGL
       endif
@@ -88,8 +83,9 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   endif
 
 # ---- QT Setup block -------------------------------------------------------
+
   ifndef QTHOME
-    QTHOME   := $(shell test -f /Library/Frameworks/Qt3Support.framework/Qt3Support && echo  "/Library/Frameworks" || echo "/sw")
+    QTHOME := /sw
   endif
   ifndef QTMOC
    ifeq ($(QTHOME),/Library/Frameworks)
@@ -112,34 +108,14 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     endif
   endif
   ifndef QTLIBPATH
-    ifeq ($(QT_VERSION),3)
-      QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "$(QTHOME)/lib/qt3/lib" || echo "$(QTHOME)/lib" )
-    else
-      QTLIBPATH  :=  -F$(QTHOME)
-    endif
+    QTLIBPATH   := -F$(QTHOME)
   endif
   ifndef QTLIBS
-    ifeq ($(QT_VERSION),3)
-      QTLIBS   := -L$(QTLIBPATH)
-      QT3_MT  := $(shell ls  $(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
-      ifneq ($(QT3_MT),0)
-        QTLIBS  += -lqt-mt
-      else
-        QTLIBS  += -lqt
-      endif
-      QTLIBS   += -lqui
-    else
-      QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-    endif
+    QTLIBS      := $(QTLIBPATH) -framework QtCore -framework QtGui
   endif
   ifndef GLQTLIBS
-    ifeq ($(QT_VERSION),3)
-        # already done in QTLIBS
-        #      GLQTLIBS    := $(QTLIBS)
-    else
-      GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
-      GLQTLIBS    += -framework QtOpenGL
-    endif
+    GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
+    GLQTLIBS    += -framework QtOpenGL
   endif
 #----------------------------------------------------------------------------
 
