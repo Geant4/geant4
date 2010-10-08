@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc,v 1.5 2010-09-09 10:32:37 sincerti Exp $
+// $Id: G4EmDNAPhysics.cc,v 1.6 2010-10-08 09:21:02 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmDNAPhysics.hh"
@@ -155,6 +155,7 @@ void G4EmDNAPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4DNAChargeDecrease());
 
     } else if ( particleName == "hydrogen" ) {
+      pmanager->AddDiscreteProcess(new G4DNAExcitation());
       pmanager->AddDiscreteProcess(new G4DNAIonisation());
       pmanager->AddDiscreteProcess(new G4DNAChargeIncrease());
 
