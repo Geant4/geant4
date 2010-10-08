@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.383 2010-10-08 07:47:04 gcosmo Exp $
+cvs log $Id: History,v 1.384 2010-10-08 13:24:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5th October 2010  Laurent Garnier, Gabriele Cosmo (config-V09-03-08)
+5th October 2010  Laurent Garnier (config-V09-03-08)
 - Darwin-g++.gmk: fixed mix between X11 OpenGL and Native OpenGL on mac 10.6.
-  Removed Qt3 setup no longer supported.
 
 30th September 2010  Gabriele Cosmo (config-V09-03-07)
 - Added 'obj' target to globlib.gmk to allow for just creation of object files.
