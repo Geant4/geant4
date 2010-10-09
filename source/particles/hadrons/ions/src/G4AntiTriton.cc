@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.17 2010-10-09 10:36:02 kurasige Exp $
+// $Id: G4AntiTriton.cc,v 1.1 2010-10-09 10:36:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,19 +37,19 @@
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include "G4Triton.hh"
+#include "G4AntiTriton.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
-// ###                           TRITON                               ###
+// ###                         ANTI  TRITON                           ###
 // ######################################################################
 
-G4Triton* G4Triton::theInstance = 0;
+G4AntiTriton* G4AntiTriton::theInstance = 0;
 
-G4Triton* G4Triton::Definition()
+G4AntiTriton* G4AntiTriton::Definition()
 {
   if (theInstance !=0) return theInstance;
-  const G4String name = "triton";
+  const G4String name = "anti_triton";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
@@ -66,31 +66,31 @@ G4Triton* G4Triton::Definition()
   //             shortlived      subType    anti_encoding
   //             excitation 
     anInstance = new G4Ions(
-                 name,    2.808921*GeV,       0.0*MeV,  +1.0*eplus,
+                 name,    2.808921*GeV,       0.0*MeV,  -1.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
-            "nucleus",               0,            +3, 1000010030,
+       "anti_nucleus",               0,            -3, -1000010030,
                  true,            -1.0,          NULL,
-		false,        "static",   -1000010030, 
+		false,        "static",    1000010030,
                   0.0
               );
  
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 2.97896248 * mN);
+    anInstance->SetPDGMagneticMoment( -2.97896248 * mN);
 
    }
 
-  theInstance = reinterpret_cast<G4Triton*>(anInstance);
+  theInstance = reinterpret_cast<G4AntiTriton*>(anInstance);
   return theInstance;
 }
 
-G4Triton*  G4Triton::TritonDefinition()
+G4AntiTriton*  G4AntiTriton::AntiTritonDefinition()
 {
   return Definition();
 }
 
-G4Triton*  G4Triton::Triton()
+G4AntiTriton*  G4AntiTriton::AntiTriton()
 {
   return Definition();
 }

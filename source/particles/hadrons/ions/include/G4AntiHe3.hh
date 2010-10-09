@@ -24,57 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonConstructor.cc,v 1.5 2010-10-09 10:36:02 kurasige Exp $
+// $Id: G4AntiHe3.hh,v 1.1 2010-10-09 10:36:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+// ------------------------------------------------------------
+//      GEANT 4 class header file
 //
+//      History: first implementation, based on object model of
+//      24-th April 1998,H.Kurashige
+// ****************************************************************
+//  New implementation as a utility class  M.Asai, 26 July 2004
+// ----------------------------------------------------------------
 
-#include "G4IonConstructor.hh"
+#ifndef G4AntiHe3_h
+#define G4AntiHe3_h 1
 
+#include "globals.hh"
+#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-// Nuclei
-#include "G4Alpha.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4He3.hh"
-#include "G4GenericIon.hh"
-// AntiNuclei
-#include "G4AntiAlpha.hh"
-#include "G4AntiDeuteron.hh"
-#include "G4AntiTriton.hh"
-#include "G4AntiHe3.hh"
+#include "G4Ions.hh"
 
-G4IonConstructor::G4IonConstructor()
+// ######################################################################
+// ###                          ANTI  He3                             ###
+// ######################################################################
+
+class G4AntiHe3 : public G4Ions
 {
-}
+ private:
+   static G4AntiHe3* theInstance;
+   G4AntiHe3(){}
+   ~G4AntiHe3(){}
 
-G4IonConstructor::~G4IonConstructor()
-{
-}
+ public:
+   static G4AntiHe3* Definition();
+   static G4AntiHe3* AntiHe3Definition();
+   static G4AntiHe3* AntiHe3();
+};
 
-
-void G4IonConstructor::ConstructParticle()
-{
-  ConstructLightIons();
-}
-
-void G4IonConstructor::ConstructLightIons()
-{
-  //  nuclei
-  G4Alpha::AlphaDefinition();
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4He3::He3Definition();
-  //  anti_nuclei
-  G4AntiAlpha::AntiAlphaDefinition();
-  G4AntiDeuteron::AntiDeuteronDefinition();
-  G4AntiTriton::AntiTritonDefinition();
-  G4AntiHe3::AntiHe3Definition();
-  //  generic ion
-  G4GenericIon::GenericIonDefinition();
-}
-
+#endif

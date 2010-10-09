@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.12 2009-04-02 02:24:53 kurasige Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.13 2010-10-09 10:36:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ G4int  G4PDGCodeChecker::CheckPDGCode( G4int    PDGcode,
   }
 
   // check code for nuclei
-  if (theParticleType == "nucleus"){
+  if ((theParticleType == "nucleus")||(theParticleType == "anti_nucleus")) {
     return CheckForNuclei();
   }
 
@@ -358,7 +358,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
 /////////////
 G4int G4PDGCodeChecker::CheckForNuclei()
 {
-  G4int pcode = code;
+  G4int pcode = abs(code);
   if (pcode < 1000000000) {
     // anti particle   
     return 0;
@@ -387,10 +387,16 @@ G4int G4PDGCodeChecker::CheckForNuclei()
   G4int n_s    =   L;
 
   // Fill Quark contents
-  theQuarkContent[0] = n_up;
-  theQuarkContent[1] = n_down;
-  theQuarkContent[2] = n_s;
-
+  if (code>0) {
+    theQuarkContent[0] = n_up;
+    theQuarkContent[1] = n_down;
+    theQuarkContent[2] = n_s;
+   } else {
+    // anti_nucleus
+    theQuarkContent[0] = -1*n_up;
+    theQuarkContent[1] = -1*n_down;
+    theQuarkContent[2] = -1*n_s;
+  }
   return code;
 }
  

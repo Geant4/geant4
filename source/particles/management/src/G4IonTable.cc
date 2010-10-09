@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.63 2010-09-03 14:13:55 gcosmo Exp $
+// $Id: G4IonTable.cc,v 1.64 2010-10-09 10:36:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -600,10 +600,30 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
   // neutron is not ion
   if ((particle->GetAtomicMass() >0) && (particle->GetAtomicNumber()>0)) return true;
    
-  //  particles derived from G4VIon and G4Ions
+  //  particles derived from G4Ions
   if (particle->GetParticleType() == nucleus) return true;
 
   // proton (Hydrogen nucleus)
+  if (particle->GetParticleName() == proton) return true;
+
+  return false;
+}
+
+/////////////////
+G4bool G4IonTable::IsAntiIon(const G4ParticleDefinition* particle)
+{
+  // return true if the particle is ion
+
+  static G4String nucleus("anti_nucleus");
+  static G4String proton("anti_proton");
+
+  // anti_neutron is not ion
+  if ((particle->GetAtomicMass() >0) && (particle->GetAtomicNumber()>0)) return true;
+   
+  //  particles derived from G4Ions
+  if (particle->GetParticleType() == nucleus) return true;
+
+  // anti_proton (Anti_Hydrogen nucleus)
   if (particle->GetParticleName() == proton) return true;
 
   return false;
@@ -614,11 +634,20 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
 
 G4bool G4IonTable::IsLightIon(const G4ParticleDefinition* particle) const
 {
-  static const std::string names[] = { "proton", "neutron", "alpha", "deuteron",
-                           "triton", "He3", "GenericIon"};
+  static const std::string names[] = { "proton", "alpha", "deuteron",
+                           "triton", "He3"};
 
    // return true if the particle is pre-defined ion
-  return std::find(names, names+7, particle->GetParticleName())!=names+7;
+  return std::find(names, names+5, particle->GetParticleName())!=names+5;
+} 
+
+G4bool G4IonTable::IsLightAntiIon(const G4ParticleDefinition* particle) const
+{
+  static const std::string names[] = { "anti_proton", "anti_alpha", "anti_deuteron",
+                           "anti_triton", "anti_He3"};
+
+   // return true if the particle is pre-defined ion
+  return std::find(names, names+5, particle->GetParticleName())!=names+5;
 } 
 
 /////////////////
@@ -627,7 +656,6 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
   // returns pointer to pre-defined ions 
   static G4bool isInitialized = false;
   static const G4ParticleDefinition* p_proton=0;
-  static const G4ParticleDefinition* p_neutron=0;
   static const G4ParticleDefinition* p_deuteron=0;
   static const G4ParticleDefinition* p_triton=0;
   static const G4ParticleDefinition* p_alpha=0;
@@ -635,7 +663,6 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
   
   if (!isInitialized) {
     p_proton   = G4ParticleTable::GetParticleTable()->FindParticle("proton"); // proton 
-    p_neutron  = G4ParticleTable::GetParticleTable()->FindParticle("neutron"); // neutron 
     p_deuteron = G4ParticleTable::GetParticleTable()->FindParticle("deuteron"); // deuteron 
     p_triton   = G4ParticleTable::GetParticleTable()->FindParticle("triton"); // tritoon 
     p_alpha    = G4ParticleTable::GetParticleTable()->FindParticle("alpha"); // alpha 
@@ -647,8 +674,6 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
   if ( (Z<=2) ) {
     if ( (Z==1)&&(A==1) ) {
       ion = p_proton;
-    } else if ( (Z==0)&&(A==1) ) {
-      ion = p_neutron;
     } else if ( (Z==1)&&(A==2) ) {
       ion = p_deuteron;
     } else if ( (Z==1)&&(A==3) ) {
@@ -661,6 +686,44 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
   }
   return const_cast<G4ParticleDefinition*>(ion);
 }
+
+/////////////////
+G4ParticleDefinition* G4IonTable::GetLightAntiIon(G4int Z, G4int A) const
+{
+  // returns pointer to pre-defined ions 
+  static G4bool isInitialized = false;
+  static const G4ParticleDefinition* p_proton=0;
+  static const G4ParticleDefinition* p_deuteron=0;
+  static const G4ParticleDefinition* p_triton=0;
+  static const G4ParticleDefinition* p_alpha=0;
+  static const G4ParticleDefinition* p_He3=0;
+  
+  if (!isInitialized) {
+    p_proton   = G4ParticleTable::GetParticleTable()->FindParticle("anti_proton"); // proton 
+    p_deuteron = G4ParticleTable::GetParticleTable()->FindParticle("anti_deuteron"); // deuteron 
+    p_triton   = G4ParticleTable::GetParticleTable()->FindParticle("anti_triton"); // tritoon 
+    p_alpha    = G4ParticleTable::GetParticleTable()->FindParticle("anti_alpha"); // alpha 
+    p_He3      = G4ParticleTable::GetParticleTable()->FindParticle("anti_He3"); // He3 
+    isInitialized = true;
+  }
+
+  const G4ParticleDefinition* ion=0;
+  if ( (Z<=2) ) {
+    if ( (Z==1)&&(A==1) ) {
+      ion = p_proton;
+    } else if ( (Z==1)&&(A==2) ) {
+      ion = p_deuteron;
+    } else if ( (Z==1)&&(A==3) ) {
+      ion = p_triton;
+    } else if ( (Z==2)&&(A==4) ) {
+      ion = p_alpha;
+    } else if ( (Z==2)&&(A==3) ) {
+      ion = p_He3;
+    }
+  }
+  return const_cast<G4ParticleDefinition*>(ion);
+}
+
 
 /////////////////
 // -- GetNucleusMass/GetIonMass ---

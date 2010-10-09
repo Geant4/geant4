@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.17 2010-10-09 10:36:02 kurasige Exp $
+// $Id: G4AntiHe3.cc,v 1.1 2010-10-09 10:36:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,28 +32,28 @@
 //      GEANT 4 class implementation file
 //
 //      History: first implementation, based on object model of
-//      4th April 1996, G.Cosmo
+//      24th April 1998, H.Kurashige
 // **********************************************************************
 //  New impelemenataion as an utility class  M.Asai, 26 July 2004
 // ----------------------------------------------------------------------
 
-#include "G4Triton.hh"
+#include "G4AntiHe3.hh"
 #include "G4ParticleTable.hh"
 
 // ######################################################################
-// ###                           TRITON                               ###
+// ###                     ANTI  He3                                  ###
 // ######################################################################
 
-G4Triton* G4Triton::theInstance = 0;
+G4AntiHe3* G4AntiHe3::theInstance = 0;
 
-G4Triton* G4Triton::Definition()
+G4AntiHe3* G4AntiHe3::Definition()
 {
   if (theInstance !=0) return theInstance;
-  const G4String name = "triton";
+  const G4String name = "anti_He3";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
-  if (anInstance ==0)
+  if (anInstance ==0) 
   {
   // create particle
   //
@@ -66,31 +66,31 @@ G4Triton* G4Triton::Definition()
   //             shortlived      subType    anti_encoding
   //             excitation 
     anInstance = new G4Ions(
-                 name,    2.808921*GeV,       0.0*MeV,  +1.0*eplus,
+                 name,    2.808391*GeV,       0.0*MeV,  -2.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
-            "nucleus",               0,            +3, 1000010030,
+       "anti_nucleus",               0,            -3, -1000020030,
                  true,            -1.0,          NULL,
-		false,        "static",   -1000010030, 
+		false,        "static",    1000020030,
                   0.0
               );
  
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
-    anInstance->SetPDGMagneticMoment( 2.97896248 * mN);
+    anInstance->SetPDGMagneticMoment( 2.12762485 * mN);
 
-   }
+  }
 
-  theInstance = reinterpret_cast<G4Triton*>(anInstance);
+  theInstance = reinterpret_cast<G4AntiHe3*>(anInstance);
   return theInstance;
 }
 
-G4Triton*  G4Triton::TritonDefinition()
+G4AntiHe3*  G4AntiHe3::AntiHe3Definition()
 {
   return Definition();
 }
 
-G4Triton*  G4Triton::Triton()
+G4AntiHe3*  G4AntiHe3::AntiHe3()
 {
   return Definition();
 }

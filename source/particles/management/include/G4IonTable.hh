@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.29 2010-08-10 15:47:42 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.30 2010-10-09 10:36:02 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,6 +139,10 @@ class G4IonTable
    static G4bool        IsIon(const G4ParticleDefinition*);
    // return true if the particle is ion
 
+   static G4bool        IsAntiIon(const G4ParticleDefinition*);
+   // return true if the particle is anti_ion
+
+
    const G4String&  GetIonName(G4int Z, G4int A, G4double E) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E) const;
    // get ion name
@@ -217,9 +221,10 @@ class G4IonTable
    // Ask properties of isotopes to this G4VIsotopeTable 
    
    G4ParticleDefinition* GetLightIon(G4int Z, G4int A) const;
-   
+   G4ParticleDefinition* GetLightAntiIon(G4int Z, G4int A) const;
    
    G4bool                IsLightIon(const G4ParticleDefinition*) const;
+   G4bool                IsLightAntiIon(const G4ParticleDefinition*) const;
    // return true if the particle is pre-defined ion
  
    void                  AddProcessManager(const G4String& ionName);
