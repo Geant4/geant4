@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2010-10-06 13:21:06 sincerti Exp $
+$Id: History,v 1.10 2010-10-09 16:30:27 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.9 2010-10-06 13:21:06 sincerti Exp $
 
                        Package History file
                        --------------------
+
+09 October 2010 - tag nanobeam-V09-03-03 - S. Incerti
+- corrected removal of ROOT file in Nanobeam.cc
 
 06 October 2010 - tag nanobeam-V09-03-02 - S. Incerti
 - added post step point information to SteppingAction

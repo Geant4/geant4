@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.7 2010-10-06 12:16:59 sincerti Exp $
+// $Id: Nanobeam.cc,v 1.8 2010-10-09 16:30:27 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -79,7 +79,7 @@ int main(int argc,char** argv) {
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
   //
-  system ("rm -r nanobeam.root");
+  system ("rm -rf nanobeam.root");
   
   if (argc==1)   // Define UI session for interactive mode.
   { 
