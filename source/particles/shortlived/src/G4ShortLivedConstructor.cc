@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.20 2010-10-01 02:41:44 kurasige Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.21 2010-10-09 10:02:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,6 @@
 //      Fix spin/isospin number for quarks 06  Apr. 2001 H.Kurashige
 //      update quark mass                  11  Oct. 2006 H.Kurashige
 //      update meson/baryon masses         11  Oct. 2006 H.Kurashige
-//      Add AntiNucleiConstructor          11  June 2010 H.Kurashige
 
 #include "G4ShortLivedConstructor.hh"
 
@@ -62,17 +61,8 @@ void G4ShortLivedConstructor::ConstructParticle()
   if (!isConstructed){
     ConstructQuarks();
     ConstructResonances();
-    ConstructAntiNuclei();
     isConstructed = true;
   }
-}
-
-#include "G4AntiNucleiConstructor.hh"
-void G4ShortLivedConstructor::ConstructAntiNuclei()
-{
-  G4AntiNucleiConstructor antiN;
-  antiN.Construct();
-
 }
 
 #include "G4DiQuarks.hh"
