@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.hh,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
+// $Id: G4NuclearLevelManager.hh,v 1.5 2010-10-10 23:01:39 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -95,7 +95,10 @@ private:
   G4bool operator!=(const G4NuclearLevelManager &right) const;
 
   G4bool Read(std::ifstream& aDataFile);
- 
+  G4bool ReadDataLine(std::ifstream& dataFile);
+  G4bool ReadDataItem(std::istream& dataFile, G4double& x);
+  void ProcessDataLine();
+
   void MakeLevels();
   void ClearLevels();
 
@@ -110,6 +113,7 @@ private:
   G4PtrLevelVector* _levels;
 
   // Buffers for reading data file
+  char buffer[30];		// For doubles in scientific notation
   G4double _levelEnergy;
   G4double _gammaEnergy;
   G4double _probability;

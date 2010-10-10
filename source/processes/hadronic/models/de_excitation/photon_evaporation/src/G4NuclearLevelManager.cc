@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc,v 1.12 2010-10-07 07:50:13 mkelsey Exp $
+// $Id: G4NuclearLevelManager.cc,v 1.13 2010-10-10 23:01:39 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -143,71 +143,105 @@ const G4NuclearLevel* G4NuclearLevelManager::LowestLevel() const
 }
 
 
-G4bool G4NuclearLevelManager::Read(std::ifstream& dataFile)
-{
-  const G4double minProbability = 1e-8;
+G4bool G4NuclearLevelManager::Read(std::ifstream& dataFile) {
+  G4bool goodRead = ReadDataLine(dataFile);
   
-  G4bool result = true;
+  if (goodRead) ProcessDataLine();
+  return goodRead;
+}
 
+// NOTE:  Standard stream I/O generates a 45 byte std::string per item!
+
+G4bool G4NuclearLevelManager::ReadDataLine(std::ifstream& dataFile) {
+  /***** DO NOT USE REGULAR STREAM I/O
+  G4bool result = true;
   if (dataFile >> _levelEnergy)
     {
       dataFile >> _gammaEnergy >> _probability >> _polarity >> _halfLife
 	       >> _angularMomentum  >> _totalCC >> _kCC >> _l1CC >> _l2CC 
 	       >> _l3CC >> _m1CC >> _m2CC >> _m3CC >> _m4CC >> _m5CC
 	       >> _nPlusCC;
-      _levelEnergy *= keV;
-      _gammaEnergy *= keV;
-      _halfLife *= second;
-	
-      // The following adjustment is needed to take care of anomalies in 
-      // data files, where some transitions show up with relative probability
-      // zero
-      if (_probability < minProbability) _probability = minProbability;
-      // the folowwing is to convert icc probability to accumulative ones
-      _l1CC += _kCC;
-      _l2CC += _l1CC;
-      _l3CC += _l2CC;
-      _m1CC += _l3CC;
-      _m2CC += _m1CC;
-      _m3CC += _m2CC;
-      _m4CC += _m3CC;
-      _m5CC += _m4CC;
-      _nPlusCC += _m5CC;
-      if(_nPlusCC!=0)
-      {
-        _kCC /= _nPlusCC;
-        _l1CC /= _nPlusCC;
-        _l2CC /= _nPlusCC;
-        _l3CC /= _nPlusCC;
-        _m1CC /= _nPlusCC;
-        _m2CC /= _nPlusCC;
-        _m3CC /= _nPlusCC;
-        _m4CC /= _nPlusCC;
-        _m5CC /= _nPlusCC;
-        _nPlusCC /= _nPlusCC;  
-      }
-      else
-      {
-        _kCC = 1;
-        _l1CC = 1;
-        _l2CC = 1;
-        _l3CC = 1;
-        _m1CC = 1;
-        _m2CC = 1;
-        _m3CC = 1;
-        _m4CC = 1;
-        _m5CC = 1;
-        _nPlusCC = 1;  
-      }
-	
-      // G4cout << "Read " << _levelEnergy << " " << _gammaEnergy << " " << _probability << G4endl;
     }
-    else
-    {
-	result = false;
-    }
-    
-    return result;
+  else result = false;
+  *****/
+
+  // Each item will return iostream status
+  return (ReadDataItem(dataFile, _levelEnergy) &&
+	  ReadDataItem(dataFile, _gammaEnergy) &&
+	  ReadDataItem(dataFile, _probability) &&
+	  ReadDataItem(dataFile, _polarity) &&
+	  ReadDataItem(dataFile, _halfLife) &&
+	  ReadDataItem(dataFile, _angularMomentum) &&
+	  ReadDataItem(dataFile, _totalCC) &&
+	  ReadDataItem(dataFile, _kCC) &&
+	  ReadDataItem(dataFile, _l1CC) &&
+	  ReadDataItem(dataFile, _l2CC) &&
+	  ReadDataItem(dataFile, _l3CC) &&
+	  ReadDataItem(dataFile, _m1CC) &&
+	  ReadDataItem(dataFile, _m2CC) &&
+	  ReadDataItem(dataFile, _m3CC) &&
+	  ReadDataItem(dataFile, _m4CC) &&
+	  ReadDataItem(dataFile, _m5CC) &&
+	  ReadDataItem(dataFile, _nPlusCC) );
+}
+
+G4bool 
+G4NuclearLevelManager::ReadDataItem(std::istream& dataFile, G4double& x) {
+  G4bool okay = (dataFile >> buffer);		// Get next token
+  if (okay) x = strtod(buffer, NULL);
+
+  return okay;
+}
+
+
+void G4NuclearLevelManager::ProcessDataLine() {
+  const G4double minProbability = 1e-8;
+  
+  // Assign units for dimensional quantities
+  _levelEnergy *= keV;
+  _gammaEnergy *= keV;
+  _halfLife *= second;
+  
+  // The following adjustment is needed to take care of anomalies in 
+  // data files, where some transitions show up with relative probability
+  // zero
+  if (_probability < minProbability) _probability = minProbability;
+  // the folowwing is to convert icc probability to accumulative ones
+  _l1CC += _kCC;
+  _l2CC += _l1CC;
+  _l3CC += _l2CC;
+  _m1CC += _l3CC;
+  _m2CC += _m1CC;
+  _m3CC += _m2CC;
+  _m4CC += _m3CC;
+  _m5CC += _m4CC;
+  _nPlusCC += _m5CC;
+
+  if (_nPlusCC!=0) {	// Normalize to probabilities
+    _kCC /= _nPlusCC;
+    _l1CC /= _nPlusCC;
+    _l2CC /= _nPlusCC;
+    _l3CC /= _nPlusCC;
+    _m1CC /= _nPlusCC;
+    _m2CC /= _nPlusCC;
+    _m3CC /= _nPlusCC;
+    _m4CC /= _nPlusCC;
+    _m5CC /= _nPlusCC;
+    _nPlusCC /= _nPlusCC;  
+  } else {		// Total was zero, reset to unity
+    _kCC = 1;
+    _l1CC = 1;
+    _l2CC = 1;
+    _l3CC = 1;
+    _m1CC = 1;
+    _m2CC = 1;
+    _m3CC = 1;
+    _m4CC = 1;
+    _m5CC = 1;
+    _nPlusCC = 1;
+  }
+	
+  // G4cout << "Read " << _levelEnergy << " " << _gammaEnergy << " " << _probability << G4endl;
 }
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevel.cc,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
+// $Id: G4NuclearLevel.cc,v 1.5 2010-10-10 23:01:39 mkelsey Exp $
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -264,35 +264,33 @@ void G4NuclearLevel::MakeProbabilities()
 {
   G4double sum = 0.;
   G4int i = 0;
-  for (i=0; i<_nGammas; i++)
-    {
-      sum += _weights[i]*(1+_totalCC[i]);
-    }
+  for (i=0; i<_nGammas; i++) {
+    sum += _weights[i]*(1.+_totalCC[i]);
+  }
 
-  for (i=0; i<_nGammas; i++)
-    {
-      if (sum > 0.) { _prob.push_back(_weights[i]*(1+_totalCC[i])/sum); }
-      else { _prob.push_back(1./_nGammas); }
+  if (sum <= 0.) _prob.resize(_nGammas, 1./_nGammas);	// Fast fill
+  else {
+    _prob.reserve(_nGammas);
+    for (i=0; i<_nGammas; i++) {
+      _prob.push_back(_weights[i]*(1.+_totalCC[i])/sum);
     }
-  return;
+  }
 }
 
 
 void G4NuclearLevel::MakeCumProb()
 {
-  if (_nGammas > 0)
-    {
-      G4double sum = _prob[0];
-      _cumProb.push_back(sum);
-      
-      G4int i = 0;
-      for (i=1; i<_nGammas; i++)
-	{
-	  sum += _prob[i];
-          _cumProb.push_back(sum);
-	}
-    }
-  return;
+  if (_nGammas <= 0) return;
+
+  _cumProb.reserve(_nGammas);
+
+  G4double sum = _prob[0];
+  _cumProb.push_back(sum);
+  
+  for (G4int i=1; i<_nGammas; i++) {
+    sum += _prob[i];
+    _cumProb.push_back(sum);
+  }
 }
 
 
