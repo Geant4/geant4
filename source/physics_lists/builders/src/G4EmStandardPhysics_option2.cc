@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.26 2010-08-01 17:10:10 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.27 2010-10-10 15:18:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -227,7 +227,9 @@ void G4EmStandardPhysics_option2::ConstructProcess()
                particleName == "kaon-" ||
                particleName == "proton" ) {
 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      msc->AddEmModel(0, new G4WentzelVIModel());
+      pmanager->AddProcess(msc,                       -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4hBremsstrahlung,     -1,-3, 3);
       pmanager->AddProcess(new G4hPairProduction,     -1,-4, 4);
@@ -238,6 +240,9 @@ void G4EmStandardPhysics_option2::ConstructProcess()
 	       particleName == "D-" ||
 	       particleName == "Ds+" ||
 	       particleName == "Ds-" ||
+               particleName == "anti_He3" ||
+               particleName == "anti_alpha" ||
+               particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -245,6 +250,7 @@ void G4EmStandardPhysics_option2::ConstructProcess()
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
+               particleName == "anti_triton" ||
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||

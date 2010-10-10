@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.10 2010-08-01 17:10:10 vnivanch Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.11 2010-10-10 15:18:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -317,6 +317,9 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
 	       particleName == "D-" ||
 	       particleName == "Ds+" ||
 	       particleName == "Ds-" ||
+               particleName == "anti_He3" ||
+               particleName == "anti_alpha" ||
+               particleName == "anti_deuteron" ||
                particleName == "anti_lambda_c+" ||
                particleName == "anti_omega-" ||
                particleName == "anti_proton" ||
@@ -324,6 +327,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
                particleName == "anti_sigma_c++" ||
                particleName == "anti_sigma+" ||
                particleName == "anti_sigma-" ||
+               particleName == "anti_triton" ||
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
