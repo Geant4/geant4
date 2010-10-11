@@ -122,6 +122,7 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   icmCmd->SetGuidance("True: ICM is applied; false: no");
   icmCmd->SetParameterName("applyICM",true);
   icmCmd->SetDefaultValue(true);
+  icmCmd->AvailableForStates(G4State_PreInit);
   //
   // Command contols whether ARM will be applied or not
   //
@@ -129,15 +130,16 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   armCmd->SetGuidance("True: ARM is applied; false: no");
   armCmd->SetParameterName("applyARM",true);
   armCmd->SetDefaultValue(true);
+  armCmd->AvailableForStates(G4State_PreInit);
   //
   // Command to set the h-l thresold for isomer production
   //
   hlthCmd = new G4UIcmdWithADoubleAndUnit("/grdm/hlThreshold",this);
   hlthCmd->SetGuidance("Set the h-l threshold for isomer production");
   hlthCmd->SetParameterName("hlThreshold",false);
-  hlthCmd->SetRange("hlThreshold>0.");
+  // hlthCmd->SetRange("hlThreshold>0.");
   hlthCmd->SetUnitCategory("Time");
-  hlthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  hlthCmd->AvailableForStates(G4State_PreInit);
   //
   // Command to define the incident particle source time profile.
   //

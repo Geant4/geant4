@@ -169,7 +169,7 @@ G4RadioactiveDecay::G4RadioactiveDecay
   BRBias      = true ;
   applyICM    = true ;
   applyARM    = true ;
-  halflifethreshold = 1e-6*second;
+  halflifethreshold = 0.*second;
   //
   // RDM applies to xall logical volumes as default
   SelectAllVolumes();
@@ -771,6 +771,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition &theParen
 		    G4BetaMinusDecayChannel *aBetaMinusChannel = new
 		      G4BetaMinusDecayChannel (GetVerboseLevel(), &theParentNucleus,
 					       b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
+		    aBetaMinusChannel->SetICM(applyICM);
+		    aBetaMinusChannel->SetARM(applyARM);
+		    aBetaMinusChannel->SetHLThreshold(halflifethreshold);
 		    theDecayTable->Insert(aBetaMinusChannel);
 		    modeSumBR[1] += b;
 		    delete[] pdf;
@@ -815,6 +818,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition &theParen
 		    G4BetaPlusDecayChannel *aBetaPlusChannel = new 
 		      G4BetaPlusDecayChannel (GetVerboseLevel(), &theParentNucleus,
 					      b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
+		    aBetaPlusChannel->SetICM(applyICM);
+		    aBetaPlusChannel->SetARM(applyARM);
+		    aBetaPlusChannel->SetHLThreshold(halflifethreshold);
 		    theDecayTable->Insert(aBetaPlusChannel);
 		    modeSumBR[2] += b;
 				
@@ -890,6 +896,9 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition &theParen
 		  G4AlphaDecayChannel *anAlphaChannel = new
 		    G4AlphaDecayChannel (GetVerboseLevel(), &theParentNucleus,
 					 b, c*MeV, a*MeV);
+		  anAlphaChannel->SetICM(applyICM);
+		  anAlphaChannel->SetARM(applyARM);
+		  anAlphaChannel->SetHLThreshold(halflifethreshold);
 		  theDecayTable->Insert(anAlphaChannel);
 		  //	      delete anAlphaChannel;
 		  modeSumBR[6] += b;

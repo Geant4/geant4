@@ -14,11 +14,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 Oct 2010 F. Lei (radioactive_decay-V09-03-01)
+
+- G4RadioactiveDecay.cc: apply SetICM(), SetARM() & SetHLThreshold() in all decay modes
+- G4RadioactiveDecay.cc:  halflifethreshold = 0.*second;
+- G4RadioactiveDecaymessenger.cc: removed (>0.) restrictions to hlCMD
+- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlCMD are available at PreInit state only. 
+
 26 May 2010 Dennis Wright (radioactive_decay-V09-03-00)
 -------------------------------------------------------
 tag HEAD to submit for testing
 
-11 may 2010 F.Lei
+11 May 2010 F.Lei
 - G4RadioactiveDecay.cc::LoadDecayTable:line 931 create a decaytable for isomers not included in RDM database and assume 
   they all under go IT decay.
 - G4RadioactiveDecay.cc: line 1434 after DoDecay() check if there is any secondary produced. Kill the track if not to 
