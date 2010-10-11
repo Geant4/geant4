@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.34 2010-08-17 10:49:36 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.35 2010-10-11 10:37:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -51,11 +51,12 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4HadronElasticPhysics.hh"
-#include "G4HadronDElasticPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronElasticPhysicsXS.hh"
+#include "G4HadronElasticPhysics93.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsLHEP.hh"
 #include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
 #include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4QStoppingPhysics.hh"
@@ -65,7 +66,6 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
 
-#include "HadronPhysicsFTFP_BERT_TRV.hh"
 #include "HadronPhysicsFTFP.hh"
 #include "HadronPhysicsFTFP_BERT.hh"
 #include "HadronPhysicsFTF_BIC.hh"
@@ -153,9 +153,9 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
-  if (verboseLevel>0)
+  if (verboseLevel>0) {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
-
+  }
   if (name == "emstandard_opt2") {
 
     delete emPhysicsList;
@@ -191,11 +191,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     SetBuilderList1();
     hadronPhys.push_back( new HadronPhysicsFTFP_BERT());
 
-  } else if (name == "FTFP_BERT_TRV") {
-
-    SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsFTFP_BERT_TRV());
-
   } else if (name == "FTF_BIC") {
 
     SetBuilderList0();
@@ -209,37 +204,31 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "LHEP_EMV") {
 
     AddPhysicsList("emstandard_opt1");
-    SetBuilderList3();
+    SetBuilderList2(true);
     hadronPhys.push_back( new HadronPhysicsLHEP_EMV());
 
   } else if (name == "QBBC") {
 
     AddPhysicsList("emstandard_opt2");
-    SetBuilderList6();
+    SetBuilderList3(name);
     hadronPhys.push_back( new G4HadronInelasticQBBC());
 
   } else if (name == "QBBC_XGG") {
 
     AddPhysicsList("emstandard_opt2");
-    SetBuilderList6();
-    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC_XGG",verboseLevel));
+    SetBuilderList3(name);
+    hadronPhys.push_back( new G4HadronInelasticQBBC(name,verboseLevel));
 
   } else if (name == "QBBC_XGGSN") {
 
     AddPhysicsList("emstandard_opt2");
-    SetBuilderList6();
-    hadronPhys.push_back( new G4HadronInelasticQBBC("QBBC_XGG",verboseLevel));
-
+    SetBuilderList3(name);
+    hadronPhys.push_back( new G4HadronInelasticQBBC(name,verboseLevel));
 
   } else if (name == "QGSC_BERT") {
 
     SetBuilderList4();
     hadronPhys.push_back( new HadronPhysicsQGSC_BERT());
-
-  } else if (name == "QGSC_CHIPS") {
-
-    SetBuilderList4();
-    hadronPhys.push_back( new HadronPhysicsQGSC_CHIPS());
 
   } else if (name == "QGSP_BERT") {
 
@@ -332,53 +321,41 @@ void PhysicsList::SetBuilderList1(G4bool flagHP)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PhysicsList::SetBuilderList2(G4bool)
+void PhysicsList::SetBuilderList2(G4bool addStopping)
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   hadronPhys.push_back( new G4HadronElasticPhysicsLHEP(verboseLevel));
+  if(addStopping) { hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel)); }
   hadronPhys.push_back( new G4IonPhysics(verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PhysicsList::SetBuilderList3(G4bool)
+void PhysicsList::SetBuilderList3(const G4String& type)
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  hadronPhys.push_back( new G4HadronElasticPhysicsLHEP(verboseLevel));
+  if(type == "QBBC") {
+    RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
+  } else if(type == "QBBC_XGG") {
+    RegisterPhysics( new G4HadronElasticPhysics(verboseLevel) );
+  } else if(type == "QBBC_XGGSN") {
+    RegisterPhysics( new G4HadronElasticPhysics93(verboseLevel) );
+  } else if(type == "QBBC_HP") {
+    RegisterPhysics( new G4HadronElasticPhysicsHP(verboseLevel) );
+  }
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  hadronPhys.push_back( new G4IonPhysics(verboseLevel));
+  hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
+  hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PhysicsList::SetBuilderList4(G4bool)
+void PhysicsList::SetBuilderList4()
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
   hadronPhys.push_back( new G4HadronQElasticPhysics(verboseLevel));
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonPhysics(verboseLevel));
-  hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void PhysicsList::SetBuilderList5(G4bool)
-{
-  hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  hadronPhys.push_back( new G4HadronDElasticPhysics(verboseLevel));
-  hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
-  hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void PhysicsList::SetBuilderList6(G4bool)
-{
-  hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  hadronPhys.push_back( new G4HadronElasticPhysics(verboseLevel));
-  hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
-  hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
 }
 
@@ -436,11 +413,11 @@ void PhysicsList::SetCutForProton(G4double cut)
 
 void PhysicsList::List()
 {
-  G4cout << "### PhysicsLists available: FTFP_BERT FTFP_BERT_EMV FTFP_BERT_EMX FTFP_BERT_TRV FTF_BIC"
+  G4cout << "### PhysicsLists available: FTFP_BERT FTFP_BERT_EMV FTFP_BERT_EMX FTF_BIC"
 	 << G4endl;
   G4cout << "                            LHEP LHEP_EMV QBBC QBBC_XGG QBBC_XGGSN"
 	 << G4endl; 
-  G4cout << "                            QGSC_BERT QGSC_CHIPS QGSP_BERT QGSP_BERT_EMV QGSP_BIC_EMY"
+  G4cout << "                            QGSC_BERT QGSP_BERT QGSP_BERT_EMV QGSP_BIC_EMY"
 	 << G4endl; 
   G4cout << "                            QGSP_BERT_EMX QGSP_BERT_HP QGSP_BIC QGSP_BIC_HP" 
 	 << G4endl; 

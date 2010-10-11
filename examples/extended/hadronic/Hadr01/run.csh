@@ -1,6 +1,6 @@
 #/bin/csh
 
-setenv HISTODIR 20100606
+setenv HISTODIR 20100909a
 mkdir -p $HISTODIR
 
 setenv PHYSLIST LHEP
