@@ -546,7 +546,7 @@ int main(int argc, char** argv)
     if (!ionParticle) {
       part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
     } else {
-      part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0.);
+      part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0, ionZ);
     }
     if (!part) {
       G4cout << " Sorry, No definition for particle" <<namePart 
