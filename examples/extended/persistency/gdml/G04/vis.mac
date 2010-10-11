@@ -1,0 +1,16 @@
+###################################################
+# Visualization of detector geometry and events  
+###################################################
+
+# create empty scene
+/vis/scene/create
+
+# Create a scene handler for a specific graphics system
+/vis/open OGL
+
+# draw scene
+/vis/viewer/zoom 1.4
+/vis/viewer/flush
+
+# (if you prefer not refreshing each event, uncomment next line)
+# /vis/scene/endOfEventAction accumulate
