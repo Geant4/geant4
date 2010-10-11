@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.6 2010-05-27 18:09:56 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.7 2010-10-11 11:02:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -92,7 +92,6 @@ HistoManager::HistoManager()
   nBinsE    = 800;
   nBinsP    = 700;
 
-  needsReset    = false;
   isInitialised = false;
 }
 
@@ -107,8 +106,6 @@ HistoManager::~HistoManager()
 
 void HistoManager::BeginOfRun()
 {
-  needsReset  = false;
-
   G4double p1 = std::log10(minMomentum/GeV);
   G4double p2 = std::log10(maxMomentum/GeV);
   G4double e1 = std::log10(minKinEnergy/MeV);
@@ -156,7 +153,6 @@ void HistoManager::EndOfRun()
   if(verbose > 0) {
     G4cout << "HistoManager: End of run actions are started" << G4endl;
   }
-  if(needsReset) BeginOfRun();
 
   const G4Element* elm = 
     G4NistManager::Instance()->FindOrBuildElement(elementName);
@@ -170,7 +166,7 @@ void HistoManager::EndOfRun()
     G4cout << "------------------------------------------------------------------------" 
 	   << G4endl;
     G4cout << "    N     E(MeV)   Elastic(b)   Inelastic(b)";
-    if(particle == neutron) G4cout << " Capture(b)   Fission(b)";
+    if(particle == neutron) { G4cout << " Capture(b)   Fission(b)"; }
     G4cout << "   Total(b)" << G4endl;     
     G4cout << "------------------------------------------------------------------------" 
 	   << G4endl;
@@ -241,9 +237,8 @@ void HistoManager::EndOfRun()
 	   << G4endl;
   }
   G4cout.precision(prec);
-  if(verbose > 1) histo->print(0);
+  if(verbose > 1) { histo->print(0); }
   histo->save();
-  histo->reset();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

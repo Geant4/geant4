@@ -43,20 +43,19 @@
 #include <AIDA/AIDA.h>
 #endif
 
-//#include <iomanip>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 Histo::Histo(G4int ver)
 {
   verbose    = ver;
   histName   = "histo";
-  histType   = "hbook";
-  option     = "--noErrors uncompress";
+  histType   = "root";
+  option     = "";
   nHisto     = 0;
   defaultAct = 1;
   messenger  = new HistoMessenger(this);
+#ifdef G4ANALYSIS_USE
+  tree = 0;
+  af   = 0;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,9 +64,7 @@ Histo::~Histo()
 {
   delete messenger;
 #ifdef G4ANALYSIS_USE
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) delete histo[i];
-  }
+  delete af;
 #endif
 }
 
@@ -79,9 +76,9 @@ void Histo::book()
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
   AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
-  if(verbose>0)
+  if(verbose>0) {
     G4cout<<"Histo books analysis factory"<<G4endl;
-
+  }
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory();
   if(verbose>0)
@@ -98,15 +95,14 @@ void Histo::book()
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
     if(active[i]) {
-      if(verbose>0)
-	G4cout<<" I am in book: histogram "<< i << " id= " << ids[i] <<G4endl;
-
+      if(verbose>0) {
+	G4cout<<"Histo::book: histogram "<< i << " id= " << ids[i] <<G4endl;
+      }
       histo[i] = hf->createHistogram1D(ids[i], tittles[i], bins[i], xmin[i], xmax[i]);
     }
   }
   delete hf;
   delete tf;
-  delete af;
 #endif
 } 
 
@@ -120,18 +116,8 @@ void Histo::save()
   G4cout << "Closing the tree..." << G4endl;
   tree->close();
   G4cout << "Histograms and Ntuples are saved" << G4endl;
-  reset();
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Histo::reset()
-{
-#ifdef G4ANALYSIS_USE
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) histo[i]->reset();
-  }
+  delete tree;
+  tree = 0;
 #endif
 }
 
@@ -139,8 +125,8 @@ void Histo::reset()
 
 void Histo::setFileType(const G4String& nam) 
 {
-  if(nam == "hbook" || nam == "root" || nam == "aida") histType = nam;
-  else if(nam == "XML" || nam == "xml") histType = "aida";
+  if(nam == "hbook" || nam == "root" || nam == "aida") { histType = nam; }
+  else if(nam == "XML" || nam == "xml") { histType = "aida"; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,17 +135,17 @@ void Histo::add1D(const G4String& id, const G4String& name, G4int nb,
                   G4double x1, G4double x2, G4double u)
 {
   if(nHisto > 0) {
-    for(G4int i=0; i<nHisto; i++) {
+    for(G4int i=0; i<nHisto; ++i) {
       if(ids[i] == id) return;
     }
   }
 
-  if(verbose > 0) 
+  if(verbose > 0) {
     G4cout << "New histogram will be booked: #" << id << "  <" << name
            << "  " << nb << "  " << x1 << "  " << x2 << "  " << u
            << G4endl;
-
-  nHisto++;
+  }
+  ++nHisto;
   x1 /= u;
   x2 /= u;
   active.push_back(defaultAct);
@@ -177,8 +163,7 @@ void Histo::add1D(const G4String& id, const G4String& name, G4int nb,
 void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
 {
   if(i>=0 && i<nHisto) {
-    if(verbose > 0) 
-    {
+    if(verbose > 0) {
       G4cout << "Update histogram: #" << i  
              << "  " << nb << "  " << x1 << "  " << x2 << "  " << u 
              << G4endl;
@@ -216,9 +201,9 @@ void Histo::fill(G4int i, G4double x, G4double w)
 
 void Histo::scale(G4int i, G4double x)
 {
-  if(verbose > 0) 
+  if(verbose > 0) {
     G4cout << "Scale histogram: #" << i << " by factor " << x << G4endl;   
-
+  }
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {
     histo[i]->scale(x);
