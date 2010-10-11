@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.24 2010-08-31 14:37:58 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.25 2010-10-11 13:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -186,7 +186,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   //G4cout << aFragment << G4endl;
  
   // Perform Equilibrium Emission 
-  if (A < 5 || Eex < keV || Eex > 3.*MeV*A) {
+  if (A < 5 || Eex < keV /*|| Eex > 3.*MeV*A*/) {
     PerformEquilibriumEmission(aFragment, Result);
     return Result;
   }

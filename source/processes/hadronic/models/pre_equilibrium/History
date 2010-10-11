@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11-October 2010 V.Ivanchenko   hadr-pre-V09-03-11
+---------------------------------------------------
+G4PreCompoundTransitions - JMQ fixed bug in the PerformTransition method
+                       (use number of particles instead of number of excitons)
+G4PreCompoundModel - disabled upper limit on excitation energy
+
 8-September 2010 G.Folger      hadr-pre-V09-03-10
 ---------------------------------------------------
 G4LowEIonFragmentation: use integer A and Z
@@ -22,11 +28,11 @@ G4LowEIonFragmentation: use integer A and Z
 ---------------------------------------------------
 G4PreCompoundEmission - removed SetUp inline method and move its functionality
 
-31-August 2010 V.Ivanchenko  hadr-pre-V09-03-08
+31-August 2010 V.Ivanchenko    hadr-pre-V09-03-08
 ---------------------------------------------------
 G4PreCompoundTransition - fixed typo introduced in previous tag
 
-28-August 2010 V.Ivanchenko  hadr-pre-V09-03-07
+28-August 2010 V.Ivanchenko    hadr-pre-V09-03-07
 ---------------------------------------------------
 General cleaup of all classes: constructors and destructors moved to the 
                                source, integer Z and A, G4Pow class

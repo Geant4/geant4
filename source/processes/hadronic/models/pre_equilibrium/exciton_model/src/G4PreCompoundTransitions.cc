@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.25 2010-08-31 14:37:58 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.26 2010-10-11 13:54:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -154,7 +154,8 @@ CalculateProbability(const G4Fragment & aFragment)
     //  G4double Vint = (4.0/3.0)
     //*pi*std::pow(2.0*r0 + hbarc/(proton_mass_c2*RelativeVelocity) , 3.0);
     G4double xx = 2.0*r0 + hbarc/(CLHEP::proton_mass_c2*RelativeVelocity);
-    G4double Vint = (4.0/3.0)*CLHEP::pi*xx*xx*xx;
+    //    G4double Vint = (4.0/3.0)*CLHEP::pi*xx*xx*xx;
+    G4double Vint = CLHEP::pi*xx*xx*xx/0.75;
     
     // Transition probability for \Delta n = +2
     
@@ -273,7 +274,7 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
     // With weight Z/A, number of charged particles is increased with +1
     G4int A = result.GetA_asInt();
     G4int Z = result.GetZ_asInt();
-    if( G4int(std::max(1, A - Nexcitons)*G4UniformRand()) <= Z) 
+    if( G4int(std::max(1, A - Npart)*G4UniformRand()) <= Z) 
       {
 	result.SetNumberOfCharged(Ncharged+deltaN);
       }
