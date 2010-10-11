@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: reportParticles.cc,v 1.11 2009-09-15 14:40:26 kurasige Exp $
+// $Id: reportParticles.cc,v 1.12 2010-10-11 03:08:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,13 +85,14 @@ int main()
     G4String type = particle->GetParticleType();
     if  (type=="lepton") {
       aPPR = pLepton;
+
     } else  if  (type=="meson") {
       aPPR = pMeson;
 
     } else  if  (type=="baryon") {
       aPPR = pBaryon;
 
-    } else  if  (type=="nucleus") {
+    } else  if  ( (type=="nucleus") ||(type=="anti_nucleus") ){
       aPPR = pIon;
 
     } else  if  ((type=="quarks")||(type=="diquarks")||(type=="gluons")) {
