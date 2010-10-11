@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// $Id: RunAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -181,7 +181,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
  //
  G4double molMass = particle->GetAtomicMass()*g/mole;
  G4double nAtoms = Avogadro/molMass;
- G4double ActivPerAtom = decayCount/EventTime[0];
+ G4double ActivPerAtom = 1./Tmean;
  G4double ActivPerMass = ActivPerAtom*nAtoms;
    
  G4cout << "\n Activity = "

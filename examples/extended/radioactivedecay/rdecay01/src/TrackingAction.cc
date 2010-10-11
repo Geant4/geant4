@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// $Id: TrackingAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -140,16 +140,14 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     run->Balance(Ebalance,Pbal);  
     histoManager->FillHisto(6,Ebalance);
     histoManager->FillHisto(7,Pbal);
-    //activity
-    histoManager->FillHisto(9,time);
   }
   
-  //time of life
+  //no secondaries --> end of chain    
   //  
   if (!nbtrk) {
-    //no secondaries --> end of chain  
-    run->EventTiming(time);
-    histoManager->FillHisto(8,time);                
+    run->EventTiming(time);		//time of life
+    histoManager->FillHisto(8,time);
+    histoManager->FillHisto(9,time);	//activity                    
   }
 }
 
