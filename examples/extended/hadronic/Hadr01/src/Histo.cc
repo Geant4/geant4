@@ -51,7 +51,7 @@ Histo::Histo(G4int ver)
   verbose    = ver;
   histName   = "histo";
   histType   = "root";
-  option     = "--noErrors uncompress";
+  option     = "";
   nHisto     = 0;
   defaultAct = 1;
   tupleName  = "tree.root";
@@ -85,17 +85,17 @@ void Histo::book()
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
   if(!af) af = AIDA_createAnalysisFactory();
-  if(verbose>0)
+  if(verbose>0) {
     G4cout<<"HIsto books analysis factory ......... "<<G4endl;
-
+  }
   // Creating the tree factory
   AIDA::ITreeFactory* tf = af->createTreeFactory();
-  if(verbose>0)
+  if(verbose>0) {
     G4cout<<"Histo books tree factory ......... "<<G4endl;
-
+  }
   G4String histExt = "";
   char* path = getenv("PHYSLIST");
-  if (path) histExt = "_" + G4String(path);
+  if (path) { histExt = "_" + G4String(path); }
 
   G4String histDir = "";
   path = getenv("HISTODIR");
@@ -113,12 +113,12 @@ void Histo::book()
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
     if(active[i]) {
-      if(verbose>0)
+      if(verbose>0) {
 	G4cout<<" I am in book: histogram "<< i << " id= " << ids[i] <<G4endl;
-
+      }
       G4String idd;
-      if(histType == "root") idd = "h" +  ids[i];
-      else                   idd = ids[i];
+      if(histType == "root") { idd = "h" +  ids[i]; }
+      else                   { idd = ids[i]; }
       histo[i] = hf->createHistogram1D(idd, tittles[i], bins[i], xmin[i], xmax[i]);
     } else {
       histo[i] = 0;
@@ -127,9 +127,9 @@ void Histo::book()
   delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree
   if(tupleList != "") {
-    if(verbose>0)
+    if(verbose>0) {
       G4cout<<"Histo books tuple factory for "<<tupleName <<G4endl;
-
+    }
     AIDA::ITupleFactory* tpf = af->createTupleFactory( *tree );
     ntup = tpf->create(tupleId, tupleName, tupleList);
     delete tpf;
@@ -224,10 +224,11 @@ void Histo::setHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
 
 void Histo::fill(G4int i, G4double x, G4double w)
 {
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "fill histogram: #" << i << " at x= " << x 
            << "  weight= " << w << " unit= " << unit[i]
-           << G4endl;   
+           << G4endl;
+  }   
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {
     histo[i]->fill(x/unit[i], w);
@@ -241,9 +242,9 @@ void Histo::fill(G4int i, G4double x, G4double w)
 
 void Histo::scale(G4int i, G4double x)
 {
-  if(verbose > 0) 
+  if(verbose > 0) { 
     G4cout << "Scale histogram: #" << i << " by factor " << x << G4endl;   
-
+  }
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {
     histo[i]->scale(x);
@@ -268,9 +269,9 @@ void Histo::addTuple(const G4String& w1, const G4String& w2, const G4String& w3)
 
 void Histo::fillTuple(const G4String& parname, G4double x)
 {
-  if(verbose > 1) 
+  if(verbose > 1) {
     G4cout << "fill tuple by parameter <" << parname << "> = " << x << G4endl; 
- 
+  }
 #ifdef G4ANALYSIS_USE  
   if(ntup) ntup->fill(ntup->findColumn(parname), (float)x);
 #endif
