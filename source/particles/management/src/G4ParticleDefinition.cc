@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.36 2010-05-20 01:01:07 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.37 2010-10-11 03:33:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,6 +150,10 @@ G4ParticleDefinition::G4ParticleDefinition(
      SetAtomicMass( GetBaryonNumber() );
    }
   
+   if (theParticleTable->GetIonTable()->IsAntiIon(this)) {
+     SetAtomicNumber( abs(G4int(GetPDGCharge()/eplus)) );
+     SetAtomicMass( abs(GetBaryonNumber()) );
+   }
    
    // check name and register this particle into ParticleTable
    theParticleTable->Insert(this);
@@ -283,6 +287,11 @@ void G4ParticleDefinition::DumpTable() const
   G4cout << " Particle type : " << theParticleType ;
   G4cout << " [" << theParticleSubType << "]" << G4endl;
 
+  if (   (theParticleTable->GetIonTable()->IsIon(this)) 
+      || (theParticleTable->GetIonTable()->IsAntiIon(this)) ) {
+    G4cout << " Atomic Number : " << GetAtomicNumber();
+    G4cout << "  Atomic Mass : " << GetAtomicMass()  << G4endl;
+  }
   if ( fShortLivedFlag ){
     G4cout << " ShortLived : ON" << G4endl;
   }
@@ -315,16 +324,3 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
      << "gamma, e- and e+." << G4endl;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

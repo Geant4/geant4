@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiAlpha.cc,v 1.1 2010-10-09 10:36:02 kurasige Exp $
+// $Id: G4AntiAlpha.cc,v 1.2 2010-10-11 03:33:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ G4AntiAlpha* G4AntiAlpha::Definition()
                  name,    3.727379*GeV,       0.0*MeV,  -2.0*eplus,
                     0,              +1,             0,
                     0,               0,             0,
-        "anti_ucleus",               0,            -4,  -1000020040,
+       "anti_nucleus",               0,            -4,  -1000020040,
                  true,            -1.0,          NULL,
 		 false,       "static",    1000020040,
                  0.0
