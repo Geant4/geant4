@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.9 2010-02-17 18:06:25 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.10 2010-10-11 08:44:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -144,9 +144,15 @@ G4GDMLParser::GetWorldVolume(const G4String& setupName) const
 
 inline 
 G4GDMLAuxListType
-G4GDMLParser::GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
+G4GDMLParser::GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const
 {
   return reader->GetVolumeAuxiliaryInformation(logvol);
+}
+
+inline
+const G4GDMLAuxMapType* G4GDMLParser::GetAuxMap() const
+{
+  return reader->GetAuxMap();
 }
 
 inline

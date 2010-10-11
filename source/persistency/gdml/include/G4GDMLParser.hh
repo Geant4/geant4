@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.59 2010-02-17 18:06:25 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.60 2010-10-11 08:44:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,7 +100,8 @@ class G4GDMLParser
    inline G4GDMLMatrix GetMatrix(const G4String& name) const;
    inline G4LogicalVolume* GetVolume(const G4String& name) const;
    inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default") const;
-   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
+   inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const;
+   inline const G4GDMLAuxMapType* GetAuxMap() const;
    inline void StripNamePointers() const;
    inline void SetOverlapCheck(G4bool);
 

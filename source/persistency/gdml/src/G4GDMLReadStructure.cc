@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.62 2009-09-24 15:04:34 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.63 2010-10-11 08:44:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -77,7 +77,8 @@ AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="auxtype") { auxpair.type = attValue; } else
-      if (attName=="auxvalue") { auxpair.value = eval.Evaluate(attValue); }
+	//      if (attName=="auxvalue") { auxpair.value = eval.Evaluate(attValue); }
+      if (attName=="auxvalue") { auxpair.value = attValue; }
    }
 
    return auxpair;
@@ -767,7 +768,7 @@ GetAssembly(const G4String& ref) const
 }
 
 G4GDMLAuxListType G4GDMLReadStructure::
-GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol)
+GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const
 {
    G4GDMLAuxMapType::const_iterator pos = auxMap.find(logvol);
    if (pos != auxMap.end()) { return pos->second; }
