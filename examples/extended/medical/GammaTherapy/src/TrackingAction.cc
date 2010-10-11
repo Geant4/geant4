@@ -55,33 +55,32 @@
 
 TrackingAction::TrackingAction():
   theHisto(Histo::GetPointer())
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TrackingAction::~TrackingAction()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
   theHisto->ScoreNewTrack(aTrack);
-  G4int pid = aTrack->GetParentID();
-  const G4String name = aTrack->GetDefinition()->GetParticleName();
 
   if(1 < theHisto->GetVerbose() &&
-    (theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && pid > 0))
-  {
-    G4cout << "Track #"
-           << aTrack->GetTrackID() << " of " << name
-           << " Emax(MeV)= " << theHisto->GetMaxEnergy()/MeV
-           << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
-           << " ## EventID= "
-           << (G4EventManager::GetEventManager())->GetConstCurrentEvent()
-              ->GetEventID()
-           << G4endl;
-  }
+     theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy() && 
+     aTrack->GetParentID() > 0)
+    {
+      G4cout << "Track #"
+	     << aTrack->GetTrackID() << " of " 
+	     << aTrack->GetParticleDefinition()->GetParticleName()
+	     << " Emax(MeV)= " << theHisto->GetMaxEnergy()/MeV
+	     << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
+	     << " ## EventID= "
+	     << (G4EventManager::GetEventManager())->GetConstCurrentEvent()->GetEventID()
+	     << G4endl;
+    }
 
 }
 

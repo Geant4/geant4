@@ -45,7 +45,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "globals.hh"
-#include <vector>
 #include "G4DynamicParticle.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
@@ -99,44 +98,44 @@ public: // Without description
   void AddTargetPhoton(const G4DynamicParticle*);
   void AddPhantomElectron(const G4DynamicParticle*);
   void AddTargetElectron(const G4DynamicParticle*);
-  void AddPositron(const G4DynamicParticle*) {n_posit++;};
-  void AddStepInTarget() {n_step_target++;};
+  inline void AddPositron(const G4DynamicParticle*) { ++n_posit;};
+  inline void AddStepInTarget() { ++n_step_target;};
 
-  void SetVerbose(G4int val) {verbose = val;};
-  G4int GetVerbose() const {return verbose;};
+  inline void SetVerbose(G4int val) {verbose = val;};
+  inline G4int GetVerbose() const {return verbose;};
 
-  void SetHistoNumber(G4int val) {nHisto = val;};
-  void SetNtuple(G4bool val) {nTuple = val;};
+  inline void SetHistoNumber(G4int val) {nHisto = val;};
+  inline void SetNtuple(G4bool val) {nTuple = val;};
 
-  void SetNumberDivZ(G4int val) {nBinsZ = val; };
-  G4int GetNumberDivZ() const    {return nBinsZ;};
-  void SetNumberDivR(G4int val) {nBinsR = val; };
-  G4int GetNumberDivR() const    {return nBinsR;};
-  void SetNumberDivE(G4int val) {nBinsE = val; };
+  inline void SetNumberDivZ(G4int val) {nBinsZ = val; };
+  inline G4int GetNumberDivZ() const    {return nBinsZ;};
+  inline void SetNumberDivR(G4int val) {nBinsR = val; };
+  inline G4int GetNumberDivR() const    {return nBinsR;};
+  inline void SetNumberDivE(G4int val) {nBinsE = val; };
 
-  void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
-  G4int FirstEventToDebug() const {return nEvt1;};
-  void SetLastEventToDebug(G4int val) {nEvt2 = val;};
-  G4int LastEventToDebug() const {return nEvt2;};
+  inline void SetFirstEventToDebug(G4int val) {nEvt1 = val;};
+  inline G4int FirstEventToDebug() const {return nEvt1;};
+  inline void SetLastEventToDebug(G4int val) {nEvt2 = val;};
+  inline G4int LastEventToDebug() const {return nEvt2;};
 
-  void SetAbsorberZ(G4double val) {absorberZ = val;};
-  void SetAbsorberR(G4double val) {absorberR = val;};
-  void SetScoreZ(G4double val)    {scoreZ = val;};
+  inline void SetAbsorberZ(G4double val) {absorberZ = val;};
+  inline void SetAbsorberR(G4double val) {absorberR = val;};
+  inline void SetScoreZ(G4double val)    {scoreZ = val;};
 
-  void SetMaxEnergy(G4double val) {maxEnergy = val;};
-  G4double  GetMaxEnergy() const {return maxEnergy;};
+  inline void SetMaxEnergy(G4double val) {maxEnergy = val;};
+  inline G4double  GetMaxEnergy() const {return maxEnergy;};
 
-  void AddEvent() {n_evt++;};
-  void AddStep() {n_step++;};
+  inline void AddEvent() { ++n_evt; };
+  inline void AddStep()  { ++n_step; };
 
-  void SetCheckVolume(G4VPhysicalVolume* v) {checkVolume = v;};
-  void SetGasVolume(G4VPhysicalVolume* v) {gasVolume = v;};
-  G4VPhysicalVolume* CheckVolume() const {return checkVolume;};
-  G4VPhysicalVolume* GasVolume() const {return gasVolume;};
+  inline void SetCheckVolume(G4VPhysicalVolume* v) {checkVolume = v;};
+  inline void SetGasVolume(G4VPhysicalVolume* v) {gasVolume = v;};
+  inline G4VPhysicalVolume* CheckVolume() const {return checkVolume;};
+  inline G4VPhysicalVolume* GasVolume() const {return gasVolume;};
 
-  void SetPhantom(G4VPhysicalVolume* v) {phantom = v;};
-  void SetTarget1(G4VPhysicalVolume* v) {target1 = v;};
-  void SetTarget2(G4VPhysicalVolume* v) {target2 = v;};
+  inline void SetPhantom(G4VPhysicalVolume* v) {phantom = v;};
+  inline void SetTarget1(G4VPhysicalVolume* v) {target1 = v;};
+  inline void SetTarget2(G4VPhysicalVolume* v) {target2 = v;};
   
   void AddStep(G4double e, G4double r1, G4double z1, G4double r2, G4double z2,
                              G4double r0, G4double z0);
@@ -147,6 +146,11 @@ private:
 
   // MEMBERS
   static Histo* fManager;
+
+  const G4ParticleDefinition* gamma;
+  const G4ParticleDefinition* electron;
+  const G4ParticleDefinition* positron;
+  const G4ParticleDefinition* neutron;
 
   G4VPhysicalVolume* checkVolume;
   G4VPhysicalVolume* gasVolume;
