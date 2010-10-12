@@ -14,14 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-10-10 G. Cosmo  exampleN03Con-V09-03-02
+- Moved G4ConvergenceTester to kernel inside global/HEPNumerics.
+
 12-05-10 J. Allison  exampleN03Con-V09-03-01
 - Introduced G4UIExecutive.
 
 31-03-10 T. Koi  exampleN03Con-V09-03-00 
-Update Physics list corresponding to the "exampleN03-V09-03-01"
-	include/ExN03PhysicsList.hh
-	src/ExN03PhysicsList.cc
+- Updated physics-list as in exampleN03.
 
 25-05-07 T. Koi  exampleN03Con-V08-03-01 
-
 - Created.
