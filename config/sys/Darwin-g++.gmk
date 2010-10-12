@@ -62,22 +62,23 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   DLDLIBS   := -ldl
   ifndef OGLHOME
     OGLHOME  := /usr/X11R6
+#   OGLHOME  := /System/Library/Frameworks/OpenGL.framework
   endif
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
+#   OGLFLAGS := -I$(OGLHOME)/Headers 
   endif
   ifndef OGLLIBS
-    DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
-    ifeq ($(DARWIN_VERSION),9)
-      # the following lines are for building on MacOSX 10.5 "Leopard"
-      OGLLIBS   := $(shell test -f /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib && echo "-L/usr/X11R6/lib -lGLU -lGL -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-    else
-      # the following lines are for building on MacOSX < 10.5
-      ifeq ($(shell test $(DARWIN_VERSION) -lt 9; echo $$?),0)
-        OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+    QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
+    ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
+      DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
+      ifeq ($(DARWIN_VERSION),9)
+        # the following lines are for building on MacOSX 10.5 "Leopard"
+        OGLLIBS += -Wl,-dylib_file,$QTGLPATH/Versions/A/Libraries/libGL.dylib
       else
-      # the following lines are for building on MacOSX > 10.5
-        OGLLIBS   := -F/System/Library/Frameworks/ -framework OpenGL -framework AGL
+        # the following lines are for building on MacOSX > 10.5
+        OGLLIBS += -F/System/Library/Frameworks -framework OpenGL -framework AGL
       endif
     endif
   endif
@@ -85,7 +86,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 # ---- QT Setup block -------------------------------------------------------
 
   ifndef QTHOME
-    QTHOME := /sw
+    QTHOME   := $(shell echo "/Library/Frameworks" || echo "/sw")
   endif
   ifndef QTMOC
    ifeq ($(QTHOME),/Library/Frameworks)
@@ -98,25 +99,22 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
 
   ifndef QTFLAGS
-    ifeq ($(QT_VERSION),4)
-      QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
-      QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
-      QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
-      QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
-    else
-      QTFLAGS   := -I $(QTHOME)/include/Qt -I$(QTHOME)/include
-    endif
+    QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
+    QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
+    QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+    QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
   endif
   ifndef QTLIBPATH
-    QTLIBPATH   := -F$(QTHOME)
+    QTLIBPATH  := -F$(QTHOME)/lib -F$(QTHOME)
   endif
   ifndef QTLIBS
-    QTLIBS      := $(QTLIBPATH) -framework QtCore -framework QtGui
+    QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
   endif
   ifndef GLQTLIBS
     GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
     GLQTLIBS    += -framework QtOpenGL
   endif
+
 #----------------------------------------------------------------------------
 
   define build-granular-shared-lib
