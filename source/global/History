@@ -1,4 +1,4 @@
-$Id: History,v 1.255 2010-10-01 16:36:46 gcosmo Exp $
+$Id: History,v 1.256 2010-10-12 07:24:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 12, 2010  G.Cosmo (global-V09-03-16)
+- Added class G4ConvergenceTester, moved from extended example N03Con,
+  implementing a facility for estimating the quality of the simulation,
+  by providing statistical information to assist in establishing valid
+  confidence intervals for Monte Carlo results.
 
 Oct 1, 2010  G.Cosmo (global-V09-03-15)
 - Fixed typo in destructor of G4StateManager.
