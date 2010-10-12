@@ -16,6 +16,7 @@ track of all tags.
 
 test30-V09-03-07  11 October 2010 V.Ivanchenko
 - update accordingly to interface change for projectile ions
+- (V.Uzhinsly) fixed target mass for CHIPS 
 
 test30-V09-03-06  20 June 2010 V.Ivanchenko
 - updated 4-momentum balance computations
