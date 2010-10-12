@@ -990,7 +990,7 @@ int main(int argc, char** argv)
       if(chips) { 
 	aChange = chips->PostStepDoIt(*gTrack,*step);
 	G4int Nt = chips->GetNumberOfNeutronsInTarget(); 
-        amass = G4NucleiProperties::GetNuclearMass(Nt, Z);
+        amass = G4NucleiProperties::GetNuclearMass(Nt+Z, Z);
       } else { 
 	aChange = proc->PostStepDoIt(*gTrack,*step); 
       }
