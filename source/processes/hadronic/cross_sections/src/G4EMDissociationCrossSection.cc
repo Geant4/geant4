@@ -64,12 +64,12 @@
 #include "G4PhysicsFreeVector.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4HadTmpUtil.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4EMDissociationCrossSection::G4EMDissociationCrossSection ()
 {
-//
 //
 // This function makes use of the class which can sample the virtual photon
 // spectrum, G4EMDissociationSpectrum.
@@ -93,8 +93,9 @@ G4EMDissociationCrossSection::~G4EMDissociationCrossSection()
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4EMDissociationCrossSection::IsZAApplicable
-(const G4DynamicParticle* theDynamicParticle, G4double /*ZZ*/, G4double AA)
+G4bool
+G4EMDissociationCrossSection::IsIsoApplicable(const G4DynamicParticle* theDynamicParticle,
+                                              G4int /*ZZ*/, G4int AA)
 {
 //
 // The condition for the applicability of this class is that the projectile
@@ -104,7 +105,7 @@ G4bool G4EMDissociationCrossSection::IsZAApplicable
 // Z, the probability of the EMD process is, I think, VERY small.
 //
   if (G4ParticleTable::GetParticleTable()->GetIonTable()->
-    IsIon(theDynamicParticle->GetDefinition()) && AA > 1.0)
+    IsIon(theDynamicParticle->GetDefinition()) && AA > 1)
     return true;
   else
     return false;
@@ -113,8 +114,9 @@ G4bool G4EMDissociationCrossSection::IsZAApplicable
 G4bool G4EMDissociationCrossSection::IsApplicable
   (const G4DynamicParticle* theDynamicParticle, const G4Element* theElement)
 {
-  return IsZAApplicable(theDynamicParticle, 0., theElement->GetN());
+  return IsIsoApplicable(theDynamicParticle, 0, G4lrint(theElement->GetN()));
 }
+
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -129,44 +131,46 @@ G4double G4EMDissociationCrossSection::GetCrossSection
     G4double sig;
     G4IsotopeVector* isoVector = theElement->GetIsotopeVector();
     G4double* abundVector = theElement->GetRelativeAbundanceVector();
-    G4double ZZ;
-    G4double AA;
+    G4int ZZ;
+    G4int AA;
      
     for (G4int i = 0; i < nIso; i++) {
-      ZZ = G4double( (*isoVector)[i]->GetZ() );
-      AA = G4double( (*isoVector)[i]->GetN() );
-      sig = GetIsoZACrossSection(theDynamicParticle, ZZ, AA, temperature);
+      ZZ = (*isoVector)[i]->GetZ();
+      AA = (*isoVector)[i]->GetN();
+      sig = GetZandACrossSection(theDynamicParticle, ZZ, AA, temperature);
       crossSection += sig*abundVector[i];
     }
    
   } else {
     crossSection =
-      GetIsoZACrossSection(theDynamicParticle, theElement->GetZ(), 
-                           theElement->GetN(), temperature);
+      GetZandACrossSection(theDynamicParticle,
+                           G4lrint(theElement->GetZ()), 
+                           G4lrint(theElement->GetN()),
+                           temperature);
   }
     
   return crossSection;
 }
 
 
-G4double G4EMDissociationCrossSection::GetIsoZACrossSection
-  (const G4DynamicParticle *theDynamicParticle, G4double ZZ, G4double AA,
-   G4double /*temperature*/)
+G4double
+G4EMDissociationCrossSection::GetZandACrossSection(const G4DynamicParticle* theDynamicParticle,
+                                                   G4int ZZ, G4int AA, G4double /*temperature*/)
 {
 //
 //
 // Get relevant information about the projectile and target (A, Z) and
 // velocity of the projectile.
 //
-  G4ParticleDefinition *definitionP = theDynamicParticle->GetDefinition();
-  G4double AP   = definitionP->GetBaryonNumber();
-  G4double ZP   = definitionP->GetPDGCharge();
-  G4double b    = theDynamicParticle->Get4Momentum().beta();
+  G4ParticleDefinition* definitionP = theDynamicParticle->GetDefinition();
+  G4double AP = definitionP->GetBaryonNumber();
+  G4double ZP = definitionP->GetPDGCharge();
+  G4double b = theDynamicParticle->Get4Momentum().beta();
 //  G4double bsq  = b * b;
   
-  G4double AT   = AA;
-  G4double ZT   = ZZ;
-  G4double bmin = thePhotonSpectrum->GetClosestApproach(AP, ZP, AT, ZT, b);
+  G4double AT = AA;
+  G4double ZT = ZZ;
+  G4double bmin = thePhotonSpectrum->GetClosestApproach(AP, ZP, AA, ZZ, b);
 //
 //
 // Calculate the cross-section for the projectile and then the target.  The
@@ -256,20 +260,19 @@ G4PhysicsFreeVector *
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4double
-  G4EMDissociationCrossSection::GetWilsonProbabilityForProtonDissociation
-  (G4double A, G4double Z)
+G4EMDissociationCrossSection::GetWilsonProbabilityForProtonDissociation
+        (G4int A, G4int Z)
 {
-//
 //
 // This is a simple algorithm to choose whether a proton or neutron is ejected
 // from the nucleus in the EMD interaction.
 //
   G4double p = 0.0;
-  if (Z < 6.0)
+  if (Z < 6)
     p = 0.5;
-  else if (Z < 8.0)
+  else if (Z < 8)
     p = 0.6;
-  else if (Z < 14.0)
+  else if (Z < 14)
     p = 0.7;
   else
   {
