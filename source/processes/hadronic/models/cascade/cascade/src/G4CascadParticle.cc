@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadParticle.cc,v 1.15 2010-06-25 09:44:00 gunter Exp $
+// $Id: G4CascadParticle.cc,v 1.16 2010-10-12 23:55:14 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -34,7 +34,7 @@
 #include <cmath>
 
 G4CascadParticle::G4CascadParticle()
-  : verboseLevel(0), current_zone(-1), current_path(-1.), movingIn(false),
+  : verboseLevel(4), current_zone(-1), current_path(-1.), movingIn(false),
     reflectionCounter(0), reflected(false), generation(-1) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadParticle::G4CascadParticle" << G4endl;
@@ -44,7 +44,8 @@ G4CascadParticle::G4CascadParticle()
 G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in, 
 						G4double rz_out) {
   if (verboseLevel > 3) {
-    G4cout << " >>> G4CascadParticle::getPathToTheNextZone" << G4endl;
+    G4cout << " >>> G4CascadParticle::getPathToTheNextZone rz_in " << rz_in
+	   << " rz_out " << rz_out << G4endl;
   }
 
   const G4LorentzVector& mom = getMomentum();
@@ -58,11 +59,20 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
   pp = std::sqrt(pp);
   G4double ds;
   G4double d2;
- 
+
+  G4cout << " current_zone " << current_zone << " rr " << rr << " rp " << rp
+	 << " pp " << pp << " ra " << ra << G4endl;
+
   if (current_zone == 0 || rp > 0.0) {
     d2 = rz_out * rz_out - ra;
-    ds = 1.0;
-    movingIn = false; 
+    if (d2 > 0.0) {
+      ds = 1.0;
+      movingIn = false;
+    } else {
+      d2 = rz_in * rz_in - ra;
+      ds = -1.0;
+      movingIn = true;
+    }
   } else { 
     d2 = rz_in * rz_in - ra;
     if (d2 > 0.0) {
@@ -74,6 +84,8 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
       movingIn = false;
     }
   }
+
+  G4cout << " ds " << ds << " d2 " << d2 << G4endl;
 
   path = ds * std::sqrt(d2) - rp / pp;
 
