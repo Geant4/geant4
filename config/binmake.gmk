@@ -1,10 +1,10 @@
-# $Id: binmake.gmk,v 1.146 2010-06-07 09:01:10 gcosmo Exp $
+# $Id: binmake.gmk,v 1.147 2010-10-12 13:23:17 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
 # ----------------------------------------------------------
 
-ifndef LDFLAGS
+ifndef G4DUMMY_VARIABLE
   include $(G4INSTALL)/config/architecture.gmk
 endif
 
