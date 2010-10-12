@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc,v 1.8 2010-10-12 06:02:54 dennis Exp $
+// $Id: G4BGGNucleonInelasticXS.cc,v 1.9 2010-10-12 06:16:19 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,7 +165,7 @@ void G4BGGNucleonInelasticXS::Initialise()
     G4double Z = G4double(iz);
     A = G4lrint(nist->GetAtomicMassAmu(iz));
 
-    csup = fGlauber->GetInelasticGlauberGribov(&dp, Z, A);
+    csup = fGlauber->GetInelasticGlauberGribov(&dp, iz, A);
 //    csdn = fNucleon->GetIsoZACrossSection(&dp, Z, A);
     csdn = fNucleon->GetZandACrossSection(&dp, iz, A);
 
