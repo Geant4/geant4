@@ -47,21 +47,11 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     QTMOC     := $(QTHOME)/bin/moc
   endif
 
-  QT_VERSION  := $(shell test -f $(QTHOME)/lib/Qt3Support4.lib && echo QT4 || echo QT3)
-
   ifndef QTLIBS
-    ifeq ($(QT_VERSION),QT3)
-      QTLIBS   := -L$(QTHOME)/lib -lqt-mt
-    else
-      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib
-    endif
+    QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib
   endif
   ifndef GLQTLIBS
-    ifeq ($(QT_VERSION),QT3)
-      GLQTLIBS   := -L$(QTHOME)/lib -lqt-mt
-    else
-      GLQTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
-    endif
+    GLQTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
   endif
 
 #
