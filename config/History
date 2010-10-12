@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.385 2010-10-08 13:30:42 gcosmo Exp $
+cvs log $Id: History,v 1.386 2010-10-12 13:23:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8th October 2010  Gabriele Cosmo
-- Darwin-g++.gmk: removed obsolete Qt3 setup.
+12th October 2010  Gabriele Cosmo (config-V09-03-09)
+- Force definition of LDFLAGS in architecture.gmk to avoid occasional fatal
+  clashes with settings in user's environment.
+
+10th October 2010  Gabriele Cosmo
+- Removed obsolete Qt3 setup for Darwin-g++, Linux-g++ and WIN32-VC.
 
 5th October 2010  Laurent Garnier (config-V09-03-08)
 - Darwin-g++.gmk: fixed mix between X11 OpenGL and Native OpenGL on mac 10.6.
