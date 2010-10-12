@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:44:17 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-12 07:24:27 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -29,6 +29,7 @@ GEANT4_DEFINE_MODULE(NAME G4hepnumerics
     HEADERS
         G4AnalyticalPolSolver.hh
         G4ChebyshevApproximation.hh
+        G4ConvergenceTester.hh
         G4DataInterpolation.hh
         G4GaussChebyshevQ.hh
         G4GaussHermiteQ.hh
@@ -47,6 +48,7 @@ GEANT4_DEFINE_MODULE(NAME G4hepnumerics
     SOURCES
         G4AnalyticalPolSolver.cc
         G4ChebyshevApproximation.cc
+        G4ConvergenceTester.cc
         G4DataInterpolation.cc
         G4GaussChebyshevQ.cc
         G4GaussHermiteQ.cc
