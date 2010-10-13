@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.9 2010-01-08 12:58:40 gcosmo Exp $
+// $Id: load_gdml.cc,v 1.10 2010-10-13 14:11:07 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -107,7 +107,7 @@ int main(int argc,char **argv)
      for( ipair = auxInfo.begin(); ipair != auxInfo.end(); ipair++ )
      {
        G4String str=ipair->type;
-       G4double val=ipair->value;
+       G4String val=ipair->value;
        G4cout << " Auxiliary Information is found for Logical Volume :  "
               << (*lvciter)->GetName() << G4endl;
        G4cout << " Name of Auxiliary type is     :  " << str << G4endl;
