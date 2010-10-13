@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2010-06-06 05:10:22 perl Exp $
+$Id: History,v 1.17 2010-10-13 14:40:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,22 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 13th, 2010  Gabriele Cosmo G01-V09-03-04
+- Use OGLIX in vis.mac to restore visualization, not working with OGL ...
+
+October 13th, 2010  Witold Pokorski
+- Use string as second item in auxiliary-value in main().
+
 June 4th, 2010  Joseph Perl G01-V09-03-03
 - Updated vis usage.
 
-Jun 3rd, 2010  Tatiana Nikitina - G01-V09-03-02
+June 3rd, 2010  Tatiana Nikitina - G01-V09-03-02
 - Added G4GenericTrap to the solids.gdml sample.
 
-Jan 19th, 2010  Gabriele Cosmo - G01-V09-03-01
+January 19th, 2010  Gabriele Cosmo - G01-V09-03-01
 - Corrected typo in replicated.gdml file.
 
-Jan 8th, 2010  Gabriele Cosmo - G01-V09-03-00
+January 8th, 2010  Gabriele Cosmo - G01-V09-03-00
 - Added printout of associated auxiliary information value.
 
-Oct 14th, 2009  Gabriele Cosmo - G01-V09-02-05
+October 14th, 2009  Gabriele Cosmo - G01-V09-02-05
 - Added usage of 'expression' and 'quantity' in solids.gdml.
 
-Sep 24th, 2009  Gabriele Cosmo - G01-V09-02-04
+September 24th, 2009  Gabriele Cosmo - G01-V09-02-04
 - Added assembly.gdml to demonstrate support for 'assembly' tags.
 
 May 12th, 2009  Gabriele Cosmo - G01-V09-02-03
