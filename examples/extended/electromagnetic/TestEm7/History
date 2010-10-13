@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2010-09-21 17:55:58 maire Exp $
+$Id: History,v 1.99 2010-10-13 12:21:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-10-10 V.Ivant (testem7-V09-03-07)
+- PhysListEmStandardNR - removed obsolete set of nuclear stopping flag 
      
 21-09-10 mma (testem7-V09-03-06)
 - add HistoManager in cvs !     
