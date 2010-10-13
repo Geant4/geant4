@@ -23,18 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadParticle.cc,v 1.16 2010-10-12 23:55:14 mkelsey Exp $
+// $Id: G4CascadParticle.cc,v 1.17 2010-10-13 00:25:09 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100114  M. Kelsey -- Replace vector<G4Double> position with G4ThreeVector 
+// 20101012  M. Kelsey -- Check for negative d2 in getPathToTheNextZone()
 
 #include "G4CascadParticle.hh"
 #include "G4ios.hh"
 #include <cmath>
 
 G4CascadParticle::G4CascadParticle()
-  : verboseLevel(4), current_zone(-1), current_path(-1.), movingIn(false),
+  : verboseLevel(0), current_zone(-1), current_path(-1.), movingIn(false),
     reflectionCounter(0), reflected(false), generation(-1) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadParticle::G4CascadParticle" << G4endl;
