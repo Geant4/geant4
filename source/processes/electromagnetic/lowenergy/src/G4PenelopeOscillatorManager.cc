@@ -65,6 +65,7 @@ G4PenelopeOscillatorManager::G4PenelopeOscillatorManager() :
 G4PenelopeOscillatorManager::~G4PenelopeOscillatorManager()
 {
   Clear();
+  delete instance;
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
