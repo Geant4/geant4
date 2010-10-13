@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2010-06-07 05:40:46 perl Exp $
+$Id: History,v 1.14 2010-10-13 13:50:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-10-10 V.Ivanchenko (testem14-V09-03-03)
+- SteppingAction - use const pointers for step/track objects;
+                   use process subtype instead of name
      
 06-06-10 J.Perl (testem16-V09-03-02)
 - Remove unused variable in EventAction
