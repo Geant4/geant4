@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlace.hh,v 1.5 2009-05-15 16:19:48 arce Exp $
+// $Id: G4tgrPlace.hh,v 1.6 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,26 +62,16 @@ class G4tgrPlace
     const G4String& GetType() const { return theType; }
     void SetVolume( G4tgrVolume* vol ) { theVolume = vol; }
     void SetType( const G4String& typ ){ theType = typ; }
-    void SetParentName(G4String pName ) {
-      theParentName = pName;
-    }  
 
     virtual G4ThreeVector GetPlacement() const;
-
-    G4int GetParallelID() const { 
-      return theParallelID;
-    }
-    void SetParallelID( G4int paraID ) { 
-      theParallelID = paraID;
-    }
 
   protected:
 
     G4tgrVolume* theVolume;
       // The detunit to which it belongs
- 
+
     G4String theParentName;  
-     // The parent (by name, as we will allow that a child
+      // The parent (by name, as we will allow that a child
       // is placed in the file before the parent is created) 
 
     unsigned int theCopyNo;
@@ -89,8 +79,6 @@ class G4tgrPlace
 
     G4String theType;
       // The type (simple/replica/param)
-
-  G4int theParallelID;
 };
 
 #endif

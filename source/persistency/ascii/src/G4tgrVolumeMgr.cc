@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolumeMgr.cc,v 1.9 2010-09-03 15:51:11 gcosmo Exp $
+// $Id: G4tgrVolumeMgr.cc,v 1.10 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -290,45 +290,29 @@ G4tgrVolumeMgr::FindVolumes( const G4String& volname, G4bool exists )
 
 
 //-------------------------------------------------------------
-const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume(G4int parallelID)
+const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume()
 {
   //--- Start from any G4tgrVolume and go upwards until you get to the top.
   //    Check that indeed all volumes drive to the same top volume 
-  const G4tgrVolume* topVol = 0;
 
-  if( theG4tgrVolumeMap.size() == 1 ) { //only world, no placements
-    return theG4tgrVolumeList[0];
-  }
+  const G4tgrVolume* topVol = 0;
   G4mapsvol::const_iterator itetv;
   for( itetv = theG4tgrVolumeMap.begin();
        itetv != theG4tgrVolumeMap.end(); itetv++ )
   {
     const G4tgrVolume* vol = (*itetv).second;
-    //    G4cout << " trying vol " << vol->GetName() << G4endl;
-    std::vector<G4tgrPlace*> places = vol->GetPlacements();
-
-    if( places.size() == 0 ) topVol = vol; //neeeded for the case of empty world
-
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 3 )
     {
       G4cout << " G4tgrVolumeMgr::GetTopVolume() - Vol: "
              << vol->GetName() << " no place = "
-             << places.size() << G4endl;
+             <<  vol->GetPlacements().size() << G4endl;
     }
 #endif
-    
-    G4bool placeInWorld = false; // true if there is a placement in this world/parallel world
-    while( places.size() != 0 )
+      
+    while( vol->GetPlacements().size() != 0 )
     {
-      size_t ivol;
-      for( ivol = 0; ivol < places.size(); ivol++ ){
-	if( places[ivol]->GetParallelID() == parallelID ) break;
-      }  
-      if( ivol == places.size() ) break;
-      placeInWorld = true;
-      vol = FindVolume(places[ivol]->GetParentName(), 1);
-      places = vol->GetPlacements();
+      vol = FindVolume((*(vol->GetPlacements()).begin())->GetParentName(), 1);
 #ifdef G4VERBOSE
       if( G4tgrMessenger::GetVerboseLevel() >= 3 )
       {
@@ -338,28 +322,17 @@ const G4tgrVolume* G4tgrVolumeMgr::GetTopVolume(G4int parallelID)
       }
 #endif
     }
-    if( placeInWorld ) {
-      if ( (topVol != 0) && (topVol != vol)
-	   && (topVol->GetType() != "VOLDivision")
-	   && (vol->GetType() != "VOLDivision") ) 
-	{
-	  G4Exception("G4tgrVolumeMgr::GetTopVolume()",
-		      "Two world volumes found, second will be taken", JustWarning,
-		      (G4String("Both volumes are at the top of a hierarchy: ")
-		       + topVol->GetName() + " & " + vol->GetName() ).c_str());
-	}
-      topVol = vol;
+    if ( (topVol != 0) && (topVol != vol)
+      && (topVol->GetType() != "VOLDivision")
+      && (vol->GetType() != "VOLDivision") ) 
+    {
+      G4Exception("G4tgrVolumeMgr::GetTopVolume()",
+                  "Two world volumes found, second will be taken", JustWarning,
+                  (G4String("Both volumes are at the top of a hierarchy: ")
+                   + topVol->GetName() + " & " + vol->GetName() ).c_str());
     }
+    topVol = vol;
   }
-
-#ifdef G4VERBOSE
-  if( G4tgrMessenger::GetVerboseLevel() >= 3 )
-  {
-    G4cout << " G4tgrVolumeMgr::GetTopVolume() - return Top Volume: "
-	   << topVol->GetName() 
-	   << " parallel " << parallelID << G4endl;
-  }
-#endif
 
   return topVol;
 }

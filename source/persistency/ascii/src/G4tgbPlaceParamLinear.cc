@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParamLinear.cc,v 1.5 2008-12-03 16:16:01 arce Exp $
+// $Id: G4tgbPlaceParamLinear.cc,v 1.6 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

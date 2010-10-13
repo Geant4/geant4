@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElement.hh,v 1.2 2008-12-18 12:58:30 gunter Exp $
+// $Id: G4tgrElement.hh,v 1.3 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.hh,v 1.5 2009-05-19 20:24:32 arce Exp $
+// $Id: G4tgbVolumeMgr.hh,v 1.6 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,14 +75,12 @@ class G4tgbVolumeMgr
       // Get the only instance 
 
     void AddTextFile( const G4String& fname );
-    void AddTextFileParallel(const G4String& fname, G4int parallelID);
-
     G4VPhysicalVolume* ReadAndConstructDetector();
 
     void CopyVolumes();
       // Build a G4tgbVolume per each G4tgbVolume
 
-    G4tgbVolume* FindVolume( const G4String& volname, G4bool bMustExist = true);
+    G4tgbVolume* FindVolume( const G4String& volname);
       // Find a G4tgbVolume by name
 
     void RegisterMe( const G4tgbVolume* vol );
@@ -137,10 +135,6 @@ class G4tgbVolumeMgr
       { theDetectorBuilder = db; }
     G4tgbDetectorBuilder* GetDetectorBuilder() const
       { return theDetectorBuilder; }
-
-  G4mssvol GetVolumeList() const {
-    return theVolumeList;
-  }
 
   private:
 

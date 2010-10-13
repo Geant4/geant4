@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbDetectorBuilder.cc,v 1.5 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgbDetectorBuilder.cc,v 1.6 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@ const G4tgrVolume* G4tgbDetectorBuilder::ReadDetector()
 
 //---------------------------------------------------------------------
 G4VPhysicalVolume*
-G4tgbDetectorBuilder::ConstructDetector( const G4tgrVolume* tgrVoltop, G4int parallelID )
+G4tgbDetectorBuilder::ConstructDetector( const G4tgrVolume* tgrVoltop )
 {
   //---------- copy list of G4tgrVolume's to list of G4tgbVolume's
   //           (just a trick to make all GEANT4 volume building in this class)
@@ -85,10 +85,9 @@ G4tgbDetectorBuilder::ConstructDetector( const G4tgrVolume* tgrVoltop, G4int par
   
   //---------- ConstructG4Volumes of top G4tgbVolume
   //           (it will recursively build the whole tree)
-  tgbVoltop->ConstructG4Volumes( 0, (const G4LogicalVolume*)0, parallelID );
+  tgbVoltop->ConstructG4Volumes( 0, (const G4LogicalVolume*)0 );
 
-  //  G4VPhysicalVolume* physvol = tgbVolmgr->GetTopPhysVol(parallelID);
-  G4VPhysicalVolume* physvol = tgbVolmgr->FindG4PhysVol( tgbVoltop->GetName(), true );
+  G4VPhysicalVolume* physvol = tgbVolmgr->GetTopPhysVol();
 
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )

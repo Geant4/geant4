@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceSimple.cc,v 1.6 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgrPlaceSimple.cc,v 1.7 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,9 +40,8 @@
 #include "G4tgrMessenger.hh"
 
 // -------------------------------------------------------------------------
-G4tgrPlaceSimple::G4tgrPlaceSimple() 
+G4tgrPlaceSimple::G4tgrPlaceSimple()
 {
-  theParallelID = -1;
 }
 
 
@@ -82,8 +81,6 @@ G4tgrPlaceSimple::G4tgrPlaceSimple( const std::vector<G4String>& wl )
      G4cout << " Created " << *this << G4endl;
   }
 #endif
-
-  theParallelID = -1;
 }
 
 

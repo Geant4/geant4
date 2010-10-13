@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrElementFromIsotopes.cc,v 1.5 2008-12-18 12:59:46 gunter Exp $
+// $Id: G4tgrElementFromIsotopes.cc,v 1.6 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

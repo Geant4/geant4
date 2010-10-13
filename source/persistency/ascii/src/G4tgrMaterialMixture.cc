@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialMixture.cc,v 1.7 2008-12-18 12:59:56 gunter Exp $
+// $Id: G4tgrMaterialMixture.cc,v 1.8 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

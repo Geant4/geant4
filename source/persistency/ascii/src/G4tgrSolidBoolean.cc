@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrSolidBoolean.cc,v 1.4 2008-12-18 13:00:12 gunter Exp $
+// $Id: G4tgrSolidBoolean.cc,v 1.5 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrLineProcessor.hh,v 1.2 2009-05-15 16:19:48 arce Exp $
+// $Id: G4tgrLineProcessor.hh,v 1.3 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,6 @@
 
 class G4tgrVolume;
 class G4tgrVolumeMgr;
-class G4tgrPlace;
 
 class G4tgrLineProcessor
 {
@@ -63,7 +62,6 @@ class G4tgrLineProcessor
     G4tgrVolume* FindVolume( const G4String& volname );
 
   private:
-    G4tgrPlace* ProcessPlacement( const G4String& wl0, const std::vector<G4String>& wl );
 
     G4tgrVolumeMgr* volmgr;
 };

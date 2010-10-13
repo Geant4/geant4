@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlaceParameterisation.cc,v 1.7 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgrPlaceParameterisation.cc,v 1.8 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,6 @@
 //-------------------------------------------------------------
 G4tgrPlaceParameterisation::G4tgrPlaceParameterisation()
 {
-  theParallelID = -1;
 }
 
 
@@ -86,9 +85,6 @@ G4tgrPlaceParameterisation( const std::vector<G4String>& wl )
      G4cout << " Created " << *this << G4endl;
   }
 #endif
-
-  theParallelID = -1;
-
 }
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileReader.cc,v 1.5 2009-05-15 16:25:31 arce Exp $
+// $Id: G4tgrFileReader.cc,v 1.6 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,6 @@
 
 
 G4tgrFileReader* G4tgrFileReader::theInstance = 0;
-G4int G4tgrFileReader::ReadingParallelFile = -1;
 
 
 //---------------------------------------------------------------
@@ -79,13 +78,6 @@ G4tgrFileReader* G4tgrFileReader::GetInstance()
 }
 
 //---------------------------------------------------------------
-void G4tgrFileReader::AddTextFileParallel(const G4String& fname, G4int parallelNumber)
-{
-  theParallelFiles[theTextFiles.size()] = parallelNumber;
-  theTextFiles.push_back( fname ); 
-}
-
-//---------------------------------------------------------------
 G4bool G4tgrFileReader::ReadFiles() 
 {
 
@@ -107,13 +99,6 @@ G4bool G4tgrFileReader::ReadFiles()
 
   for( size_t ii = 0; ii < theTextFiles.size(); ii++ )
   {
-    std::map<G4int,G4int>::const_iterator ite = theParallelFiles.find(ii);
-    if( ite != theParallelFiles.end() ){
-      ReadingParallelFile = (*ite).second;
-    } else {
-      ReadingParallelFile = -1;
-    }
-
 #ifdef G4VERBOSE
     if( G4tgrMessenger::GetVerboseLevel() >= 1 )
     {
@@ -170,4 +155,3 @@ G4bool G4tgrFileReader::ReadFiles()
   }  
   return 1;
 }
-

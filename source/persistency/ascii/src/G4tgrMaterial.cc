@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.cc,v 1.3 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgrMaterial.cc,v 1.4 2010-10-13 07:56:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

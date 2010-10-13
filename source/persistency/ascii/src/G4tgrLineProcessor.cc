@@ -46,9 +46,7 @@
 #include "G4tgrMaterialFactory.hh"
 #include "G4tgrRotationMatrixFactory.hh"
 #include "G4tgrMessenger.hh"
-#include "G4UIcommand.hh"
-#include "G4tgbParallelGeomMgr.hh"
-#include "G4tgrFileReader.hh"
+
 
 //---------------------------------------------------------------
 G4tgrLineProcessor::G4tgrLineProcessor()
@@ -175,35 +173,54 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
     G4tgrVolume* vol = new G4tgrVolume( wl );
     volmgr->RegisterMe( vol );
     
+    //--------------------------------- single placement
   }
-  //--------------------------------- placements
-  else if( wl0 == ":PLACE" 
-	   || wl0 == ":PLACE_PARAM" 
-	   || wl0 == ":REPL" 
-	   || wl0 == ":PLACE_ASSEMBLY" )
+  else if( wl0 == ":PLACE" )
   {
-    ProcessPlacement( wl0, wl );
-    if( G4tgrFileReader::ReadingParallelFile != -1 ) {
-      G4tgbParallelGeomMgr::GetInstance()
-	->AddParallelWorldIndex(G4tgrFileReader::ReadingParallelFile);
-    }
+    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
+    G4tgrPlace* vpl = vol->AddPlace( wl );
+    volmgr->RegisterMe( vpl );
+    
+    //--------------------------------- parameterisation
   }
-  //--------------------------------- division
-  else if( wl0 == ":DIV_NDIV" 
-	   || wl0 == ":DIV_WIDTH"
-	   || wl0 == ":DIV_NDIV_WIDTH" )
+  else if( wl0 == ":PLACE_PARAM" )
+  {
+    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
+    G4tgrPlaceParameterisation* vpl = vol->AddPlaceParam( wl );
+    volmgr->RegisterMe( vpl );
+
+    //--------------------------------- division
+  }
+  else if( (wl0 == ":DIV_NDIV") || (wl0 == ":DIV_WIDTH")
+        || (wl0 == ":DIV_NDIV_WIDTH") )
   {
     //---------- Create G4tgrVolumeDivision and fill the volume params
     G4tgrVolumeDivision* vol = new G4tgrVolumeDivision( wl );
     volmgr->RegisterMe( vol );
+
+    //--------------------------------- replica
+  }
+  else if( wl0 == ":REPL" )
+  {
+    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
+    G4tgrPlaceDivRep* vpl = vol->AddPlaceReplica( wl );
+    volmgr->RegisterMe( vpl );
     
-  } 
-  //----------------------------- assembly volume: definition of components
+    //----------------------------- assembly volume: definition of components
+  }
   else if( wl0 == ":VOLU_ASSEMBLY" )
   {
     G4tgrVolumeAssembly* vol = new G4tgrVolumeAssembly( wl );
     volmgr->RegisterMe( vol );
     
+    //----------------------------- assembly volume: definition of components
+  }
+  else if( wl0 == ":PLACE_ASSEMBLY" )
+  {
+    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
+    G4tgrPlace* vpl = vol->AddPlace( wl );
+    volmgr->RegisterMe( vpl );
+
     //---------------------------------  rotation matrix
   }
   else if( wl0 == ":ROTM" )
@@ -246,11 +263,10 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
     {
       vols[ii]->AddCheckOverlaps( wl );
     }
-    
-  } else
     //--------------------------------- ERROR
+  }
+  else
   {
-    G4cout << " TQG NOT FOUND " << wl0 << " " <<  wl0.substr(0,10) << G4endl;
     return 0;
   } 
 
@@ -277,47 +293,4 @@ G4tgrVolume* G4tgrLineProcessor::FindVolume( const G4String& volname )
   }
 
   return vol;
-}
-
-
-//---------------------------------------------------------------
-G4tgrPlace* G4tgrLineProcessor::ProcessPlacement( const G4String& wl0, const std::vector<G4String>& wl )
-{ 
-  G4tgrPlace* vpl;
-  //--------------------------------- single placement
-  if( wl0 == ":PLACE" )
-  {
-    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
-    vpl = vol->AddPlace( wl );
-    volmgr->RegisterMe( vpl );
-    //  return vpl;      
-  }
-  //--------------------------------- parameterisation
-  else if( wl0 == ":PLACE_PARAM" )
-  {
-    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
-    vpl = vol->AddPlaceParam( wl );
-    volmgr->RegisterMe( vpl );
-    //  return vpl;      
-    
-  }
-  //--------------------------------- replica
-  else if( wl0 == ":REPL" )
-    {
-    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
-    vpl = vol->AddPlaceReplica( wl );
-    volmgr->RegisterMe( vpl );
-    //    return vpl;      
-    
-  }
-  //----------------------------- assembly volume: definition of components
-  else if( wl0 == ":PLACE_ASSEMBLY" )
-  {
-    G4tgrVolume* vol = FindVolume( G4tgrUtils::GetString( wl[1] ) );
-    vpl = vol->AddPlace( wl );
-    volmgr->RegisterMe( vpl );
-  }
-
-  vpl->SetParallelID( G4tgrFileReader::ReadingParallelFile );
-  return vpl;      
 }

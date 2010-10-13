@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParameterisation.hh,v 1.4 2008-11-21 15:37:18 gcosmo Exp $
+// $Id: G4tgbPlaceParameterisation.hh,v 1.5 2010-10-13 07:56:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
