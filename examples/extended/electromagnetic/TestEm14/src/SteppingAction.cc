@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2010-04-02 13:22:02 maire Exp $
+// $Id: SteppingAction.cc,v 1.7 2010-10-13 13:42:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,6 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
-
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,10 +51,10 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();     
   G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
-  if (transmit) runAction->CountProcesses(procName);
+  if (transmit) { runAction->CountProcesses(procName); }
   else {                         
     //count real processes and sum track length
     G4double stepLength = aStep->GetStepLength();
@@ -81,20 +80,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //secondaries
   //
-  G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
   for (size_t lp=0; lp<(*secondary).size(); lp++) {
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
-    if (charge != 0.) id = 3; else id = 5;
+    if (charge != 0.) { id = 3; } else { id = 5; }
     G4double energy = (*secondary)[lp]->GetKineticEnergy();
     histoManager->FillHisto(id,energy);
 
-    id++;
+    ++id;
     G4ThreeVector direction = (*secondary)[lp]->GetMomentumDirection();      
     G4double costeta = direction.x();
     histoManager->FillHisto(id,costeta);
       
     //energy tranferred to charged secondaries
-    if (charge != 0.) runAction->SumeTransf(energy);         
+    if (charge != 0.) { runAction->SumeTransf(energy); }         
   }
          
   // kill event after first interaction
