@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.11 2010-03-26 09:32:50 pandola Exp $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.12 2010-10-13 07:15:42 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -303,7 +303,7 @@ void G4LivermorePhotoElectricModel::ActivateAuger(G4bool augerbool)
 {
   if (!DeexcitationFlag() && augerbool)
     {
-      G4cout << "WARNING - G4PenelopePhotoElectricModel" << G4endl;
+      G4cout << "WARNING - G4LivermorePhotoElectricModel" << G4endl;
       G4cout << "The use of the Atomic Deexcitation Manager is set to false " << G4endl;
       G4cout << "Therefore, Auger electrons will be not generated anyway" << G4endl;
     }
