@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbVolumeMgr.cc,v 1.8 2010-10-13 07:56:55 gcosmo Exp $
+// $Id: G4tgbVolumeMgr.cc,v 1.9 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -184,12 +184,10 @@ G4VSolid* G4tgbVolumeMgr::FindG4Solid( const G4String& name )
 #endif
 
   G4VSolid* oldSolid = 0;
-  G4mmssol::const_iterator mmsscite;
   std::pair<G4mmssol::iterator, G4mmssol::iterator> mmssdi;
   mmssdi = theSolids.equal_range( name );
+  G4mmssol::const_iterator mmsscite = mmssdi.first;
 
-  for( mmsscite = mmssdi.first; mmsscite != mmssdi.second; mmsscite++ )
-  {
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )
   {
@@ -211,7 +209,7 @@ G4VSolid* G4tgbVolumeMgr::FindG4Solid( const G4String& name )
        with the same name (therefore we will not allow two solids with
        equal name and different parameters (POSP) )
     */
-    oldSolid = (*mmsscite).second;
+  oldSolid = (*mmsscite).second;
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 1 )
   {
@@ -219,8 +217,6 @@ G4VSolid* G4tgbVolumeMgr::FindG4Solid( const G4String& name )
            << name << G4endl; 
   }
 #endif
-    break;
-  }
  
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 2 )

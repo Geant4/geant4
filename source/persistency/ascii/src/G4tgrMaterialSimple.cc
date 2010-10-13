@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterialSimple.cc,v 1.8 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrMaterialSimple.cc,v 1.9 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 
 //-------------------------------------------------------------
 G4tgrMaterialSimple::G4tgrMaterialSimple()
-  : name("MaterialSimple")
+  : name("MaterialSimple"), theA(0.), theZ(0.)
 {
 }
 

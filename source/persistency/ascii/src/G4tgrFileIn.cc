@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrFileIn.cc,v 1.11 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrFileIn.cc,v 1.12 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,6 +50,7 @@ std::vector<G4tgrFileIn*> G4tgrFileIn::theInstances;
 
 //-----------------------------------------------------------------------
 G4tgrFileIn::G4tgrFileIn()
+  : theCurrentFile(-1), theName("geom.txt")
 {
 }
 
@@ -57,12 +58,13 @@ G4tgrFileIn::G4tgrFileIn()
 //-----------------------------------------------------------------------
 G4tgrFileIn::~G4tgrFileIn()
 {
-  return;
+/*
   std::vector<G4tgrFileIn*>::const_iterator vfcite;
   for( vfcite = theInstances.begin(); vfcite != theInstances.end(); vfcite++)
   {
     delete *vfcite;
   }
+*/
 }
 
 

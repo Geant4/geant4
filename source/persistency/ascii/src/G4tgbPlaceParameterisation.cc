@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbPlaceParameterisation.cc,v 1.5 2010-10-13 07:56:55 gcosmo Exp $
+// $Id: G4tgbPlaceParameterisation.cc,v 1.6 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4tgbPlaceParameterisation
@@ -44,6 +44,7 @@
 
 G4tgbPlaceParameterisation::
 G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam)
+  : theNCopies(0), theAxis(kUndefined)
 {
   theRotationMatrix = G4tgbRotationMatrixMgr::GetInstance()
                     ->FindOrBuildG4RotMatrix( tgrParam->GetRotMatName() );
@@ -51,6 +52,7 @@ G4tgbPlaceParameterisation( G4tgrPlaceParameterisation* tgrParam)
 
 G4tgbPlaceParameterisation::~G4tgbPlaceParameterisation()
 {
+  delete theRotationMatrix;
 }
 
 void G4tgbPlaceParameterisation::

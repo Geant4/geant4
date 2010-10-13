@@ -157,6 +157,7 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
     {
       G4Exception("G4tgrLineProcessor::ProcessLine()", "Material not found",
                   FatalException, G4tgrUtils::GetString( wl[1] ) );
+      return false;
     }
     mate->SetIonisationMeanExcitationEnergy( G4tgrUtils::GetDouble( wl[2] ) );
 

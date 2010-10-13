@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrPlace.cc,v 1.5 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrPlace.cc,v 1.6 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 
 // -------------------------------------------------------------------------
 G4tgrPlace::G4tgrPlace()
+   : theVolume(0), theParentName(""), theCopyNo(0), theType("")
 {
 }
 

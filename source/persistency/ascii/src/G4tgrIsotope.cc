@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrIsotope.cc,v 1.6 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrIsotope.cc,v 1.7 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,6 +41,7 @@
 
 //-------------------------------------------------------------
 G4tgrIsotope::G4tgrIsotope()
+  : theName(""), theZ(0), theN(0), theA(0.)
 {
 }
 

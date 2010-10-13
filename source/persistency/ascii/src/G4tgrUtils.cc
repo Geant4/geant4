@@ -77,7 +77,7 @@ G4bool G4tgrUtils::IsSeparator( const char ch)
 //-------------------------------------------------------------
 G4bool G4tgrUtils::IsNumber( const G4String& str)
 {
-  G4int isnum = 1;
+  G4int isnum = true;
   G4int numE = 0;
   for(size_t ii=0; ii<str.length(); ii++)
   {
@@ -89,14 +89,14 @@ G4bool G4tgrUtils::IsNumber( const G4String& str)
         if( ii == 0 )  { return 0; }
         if(numE != 0 || ii == str.length()-1)
         {
-          isnum = 0;
+          isnum = false;
           break;
         }
         numE++;
       }
       else
       {
-        isnum = 0; 
+        isnum = false; 
         break;
       }
     }
@@ -122,7 +122,8 @@ G4bool G4tgrUtils::IsInteger( const G4double val, const G4double precision )
 //-------------------------------------------------------------
 void G4tgrUtils::Dump3v( const G4ThreeVector& vec, const char* msg) 
 {
-  G4cout << msg << std::setprecision(8) << vec << G4endl;
+  G4cout << msg << std::setprecision(8)
+         << vec << std::setprecision(6) << G4endl;
 }
 
 
@@ -551,7 +552,6 @@ G4bool G4tgrUtils::CheckListSize( unsigned int nWreal, unsigned int nWcheck,
 //-------------------------------------------------------------
 G4bool G4tgrUtils::WordIsUnit( const G4String& word ) 
 {
-  return !IsNumber(word);
   if(    word == "mm"
       || word == "cm"
       || word == "m" 

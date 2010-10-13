@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbMaterialMgr.cc,v 1.6 2010-10-13 07:56:55 gcosmo Exp $
+// $Id: G4tgbMaterialMgr.cc,v 1.7 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -150,7 +150,9 @@ void G4tgbMaterialMgr::CopyMaterials()
       tgb = new G4tgbMaterialMixtureByNoAtoms( tgr );
     } else if( tgr->GetType() == "MaterialMixtureByVolume" ) {
       tgb = new G4tgbMaterialMixtureByVolume( tgr );
-    } 
+    } else {
+      return;
+    }
     theG4tgbMaterials[tgb->GetName()] = tgb;
   }
 }

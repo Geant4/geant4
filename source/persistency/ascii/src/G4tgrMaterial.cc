@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.cc,v 1.4 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrMaterial.cc,v 1.5 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,8 +39,9 @@
 
 // -------------------------------------------------------------------------
 G4tgrMaterial::G4tgrMaterial()
+   : theName("Material"), theDensity(0.), theNoComponents(0),
+     theMateType("Material"), theIonisationMeanExcitationEnergy(-1.)
 {
-  theIonisationMeanExcitationEnergy = -1.;
 }
 
 

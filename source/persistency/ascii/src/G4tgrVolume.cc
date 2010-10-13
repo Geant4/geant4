@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.11 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrVolume.cc,v 1.12 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,6 +48,9 @@
 
 //-------------------------------------------------------------
 G4tgrVolume::G4tgrVolume()
+  : theName("Logical-volume"), theType("VOLSimple"),
+    theMaterialName("Material"), theSolid(0), theVisibility(false),
+    theRGBColour(0), theCheckOverlaps(false)
 {
 }
 
@@ -55,6 +58,7 @@ G4tgrVolume::G4tgrVolume()
 //-------------------------------------------------------------
 G4tgrVolume::~G4tgrVolume()
 {
+  delete [] theRGBColour;
 }
 
 
@@ -103,7 +107,6 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
         }
 #endif
     }
-
 }
 
 

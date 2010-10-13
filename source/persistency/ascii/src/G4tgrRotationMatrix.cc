@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrRotationMatrix.cc,v 1.6 2010-10-13 07:56:56 gcosmo Exp $
+// $Id: G4tgrRotationMatrix.cc,v 1.7 2010-10-13 15:20:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,6 +41,7 @@
 
 // -------------------------------------------------------------------------
 G4tgrRotationMatrix::G4tgrRotationMatrix()
+  : theName("Rotation-Matrix"), theInputType(rm9)
 {
 }
 
@@ -52,7 +53,8 @@ G4tgrRotationMatrix::~G4tgrRotationMatrix()
 
 
 // -------------------------------------------------------------------------
-G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl ) 
+G4tgrRotationMatrix::G4tgrRotationMatrix( const std::vector<G4String>& wl )
+  : theInputType(rm9) 
 {
   theName = G4tgrUtils::GetString( wl[1] );
 
