@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.8 2010-03-26 09:32:50 pandola Exp $
+// $Id: G4LivermoreIonisationModel.cc,v 1.9 2010-10-13 07:28:47 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -43,6 +43,12 @@
 // 23 Oct 2009   L Pandola
 //                  - atomic deexcitation managed via G4VEmModel::DeexcitationFlag() is
 //                    set as "true" (default would be false)
+// 12 Oct 2010   L Pandola
+//                  - add debugging information about energy in 
+//                    SampleDeexcitationAlongStep()
+//                  - generate fluorescence SampleDeexcitationAlongStep() only above 
+//                    the cuts.
+// 
 //
 
 #include "G4LivermoreIonisationModel.hh"
@@ -124,7 +130,7 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
       energySpectrum = 0;
     }
   energySpectrum = new G4eIonisationSpectrum();
-  if (verboseLevel > 0)
+  if (verboseLevel > 3)
     G4cout << "G4VEnergySpectrum is initialized" << G4endl;
 
   //Initialize cross section handler
@@ -158,7 +164,7 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
 	     << G4endl;
     }
 
-  if (verboseLevel > 1)
+  if (verboseLevel > 3)
     {
       G4cout << "Cross section data: " << G4endl; 
       crossSectionHandler->PrintData();
@@ -439,10 +445,14 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
   //(including fluctuations) and produces explicit fluorescence/Auger 
   //secondaries. The eloss value is updated.
   G4double energyLossBefore = eloss;
-  if (verboseLevel > 2)
-    G4cout << "Energy loss along step before deexcitation : " << energyLossBefore/keV << 
-      " keV" << G4endl;
 
+  if (verboseLevel > 2)
+    {
+      G4cout << "-----------------------------------------------------------" << G4endl;
+      G4cout << " SampleDeexcitationAlongStep() from G4LivermoreIonisation" << G4endl;
+      G4cout << "Energy loss along step before deexcitation : " << energyLossBefore/keV << 
+	" keV" << G4endl;
+    }
   G4double incidentEnergy = theTrack.GetDynamicParticle()->GetKineticEnergy();
 
   G4ProductionCutsTable* theCoupleTable = 
@@ -452,9 +462,6 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
   G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
   G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
   
-  //Notice: in LowEnergyIonisation, fluorescence is always generated above 250 eV
-  //not above the tracking cut.
-  //G4double cutForLowEnergySecondaryParticles = 250.0*eV;
 
   std::vector<G4DynamicParticle*>* deexcitationProducts =
     new std::vector<G4DynamicParticle*>;
@@ -504,7 +511,10 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 			    if (aSecondary) 
 			      {
 				e = aSecondary->GetKineticEnergy();
-				if ( eTot + e <= eloss )
+				G4double itsCut = cutg;
+				if (aSecondary->GetParticleDefinition() == G4Electron::Electron())
+				  itsCut = cute;
+				if ( eTot + e <= eloss && e > itsCut )
 				  {
 				    eTot += e;
 				    deexcitationProducts->push_back(aSecondary);
@@ -523,10 +533,14 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 	}
     }
 
+  G4double energyLossInFluorescence = 0.0;
   size_t nSecondaries = deexcitationProducts->size();
   if (nSecondaries > 0) 
     {
-      fParticleChange->SetNumberOfSecondaries(nSecondaries);
+      //You may have already secondaries produced by SampleSubCutSecondaries()
+      //at the process G4VEnergyLossProcess
+      G4int secondariesBefore = fParticleChange->GetNumberOfSecondaries();
+      fParticleChange->SetNumberOfSecondaries(nSecondaries+secondariesBefore);
       const G4StepPoint* preStep = theTrack.GetStep()->GetPreStepPoint();
       const G4StepPoint* postStep = theTrack.GetStep()->GetPostStepPoint();
       G4ThreeVector r = preStep->GetPosition();
@@ -537,7 +551,7 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
       deltaT -= t;
       G4double time, q;
       G4ThreeVector position;
-      
+
       for (size_t i=0; i<nSecondaries; i++) 
 	{
 	  G4DynamicParticle* part = (*deexcitationProducts)[i];
@@ -552,6 +566,7 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
 		  position  = deltaR*q;
 		  position += r;
 		  G4Track* newTrack = new G4Track(part, time, position);
+	          energyLossInFluorescence += eSecondary;
 		  pParticleChange->AddSecondary(newTrack);
 		}
 	      else
@@ -565,9 +580,32 @@ void G4LivermoreIonisationModel::SampleDeexcitationAlongStep(const G4Material* t
     }
   delete deexcitationProducts;
   
+  //Check and verbosities. Ensure energy conservation
   if (verboseLevel > 2)
-    G4cout << "Energy loss along step after deexcitation : " << eloss/keV <<  
-      " keV" << G4endl;
+    {
+      G4cout << "Energy loss along step after deexcitation : " << eloss/keV <<  
+	" keV" << G4endl;
+    }
+  if (verboseLevel > 1)
+    {
+      G4cout << "------------------------------------------------------------------" << G4endl;
+      G4cout << "Energy in fluorescence: " << energyLossInFluorescence/keV << " keV" << G4endl;
+      G4cout << "Residual energy loss: " << eloss/keV << " keV " << G4endl;
+      G4cout << "Total final: " << (energyLossInFluorescence+eloss)/keV << " keV" << G4endl;
+      G4cout << "Total initial: " << energyLossBefore/keV << " keV" << G4endl;	
+      G4cout << "------------------------------------------------------------------" << G4endl;
+    }
+  if (verboseLevel > 0)
+    {
+      if (std::fabs(energyLossBefore-energyLossInFluorescence-eloss)>10*eV)
+	{
+	  G4cout << "Found energy non-conservation at SampleDeexcitationAlongStep() " << G4endl;
+	  G4cout << "Energy in fluorescence: " << energyLossInFluorescence/keV << " keV" << G4endl;
+	  G4cout << "Residual energy loss: " << eloss/keV << " keV " << G4endl;
+	  G4cout << "Total final: " << (energyLossInFluorescence+eloss)/keV << " keV" << G4endl;
+	  G4cout << "Total initial: " << energyLossBefore/keV << " keV" << G4endl;	
+	}
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -654,7 +692,7 @@ void G4LivermoreIonisationModel::InitialiseFluorescence()
 	   G4VEMDataSet* p = new G4EMDataSet(iZ,energyVector,ksi,interp,1.,1.);
 	   xsis->AddComponent(p);
 	 }
-       if(verboseLevel>0) xsis->PrintData();
+       if(verboseLevel>3) xsis->PrintData();
        shellVacancy->AddXsiTable(xsis);
     }
 }
