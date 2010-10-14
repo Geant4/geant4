@@ -100,18 +100,13 @@ G4PersistencyCenter* G4PersistencyCenter::GetPersistencyCenter()
 // Implementation of SelectSystem
 void G4PersistencyCenter::SelectSystem(std::string systemName)
 {
-  int st = 0;
+  G4int st = 0;
 
   if (f_currentManager!=0) delete f_currentManager;
 
   G4PersistencyManager* pm = 0;
 
-  if (systemName=="None")
-  {
-    G4cout<<" G4PersistencyCenter: Default is selected."<< G4endl;
-    pm = new G4PersistencyManager(this, "Default");
-  }
-  else if (systemName=="ROOT")
+  if (systemName=="ROOT")
   {
     G4cout<<" G4PersistencyCenter: \"ROOT\" Persistency Package is selected."
           <<G4endl;
@@ -132,6 +127,12 @@ void G4PersistencyCenter::SelectSystem(std::string systemName)
       pm = GetPersistencyManager("ODBMS");
     }
   }
+  else
+  {
+    G4cout<<" G4PersistencyCenter: Default is selected."<< G4endl;
+    pm = new G4PersistencyManager(this, "Default");
+  }
+
   if ( st == 0 ) {
     f_currentManager = pm->Create();
     if (f_currentManager!=0) f_currentManager->SetVerboseLevel(m_verbose);
