@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.3 2010-06-16 15:34:15 gcosmo Exp $
+// $Id: G4SynchrotronRadiationInMat.cc,v 1.4 2010-10-14 18:33:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -131,6 +131,7 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
   G4TransportationManager* transportMgr = G4TransportationManager::GetTransportationManager();
 
   fFieldPropagator = transportMgr->GetPropagatorInField();
+  SetProcessSubType(fSynchrotronRadiation);
 
 }
  
@@ -140,9 +141,7 @@ G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& process
 //
  
 G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat()
-{
-     ;
-}
+{}
  
  
 /////////////////////////////// METHODS /////////////////////////////////

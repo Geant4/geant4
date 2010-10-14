@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2010-06-16 15:34:31 gcosmo Exp $
+$Id: History,v 1.73 2010-10-14 18:33:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 October 10: V. Ivanchenko (xrays-V09-03-02)
+- G4SynchrotronRadiationInMat, G4SynchrotronRadiation, 
+  G4TransitionRadiation - added process sub-types
 
 16 June 10: G. Cosmo (xrays-V09-03-01)
 - Use mathematical functions in std namespace explicitely.

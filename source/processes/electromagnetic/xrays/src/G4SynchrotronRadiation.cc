@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.6 2010-06-16 15:34:15 gcosmo Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.7 2010-10-14 18:33:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -64,6 +64,8 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   fLambdaConst = std::sqrt(3.0)*electron_mass_c2/
                            (2.5*fine_structure_const*eplus*c_light) ;
   fEnergyConst = 1.5*c_light*c_light*eplus*hbar_Planck/electron_mass_c2  ;
+
+  SetProcessSubType(fSynchrotronRadiation);
   verboseLevel=1;
 }
 
@@ -73,9 +75,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
 //
 
 G4SynchrotronRadiation::~G4SynchrotronRadiation()
-{
-     ;
-}
+{}
 
 /////////////////////////////// METHODS /////////////////////////////////
 //

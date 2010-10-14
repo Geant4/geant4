@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.cc,v 1.8 2010-06-16 15:34:15 gcosmo Exp $
+// $Id: G4TransitionRadiation.cc,v 1.9 2010-10-14 18:33:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation class -- implementation file
@@ -61,6 +61,7 @@ G4TransitionRadiation::
 G4TransitionRadiation( const G4String& processName, G4ProcessType type )
   : G4VDiscreteProcess(processName, type)
 {
+  SetProcessSubType(fTransitionRadiation);
   //  fMatIndex1 = pMat1->GetIndex() ;
   //  fMatIndex2 = pMat2->GetIndex() ;
 }
@@ -71,9 +72,7 @@ G4TransitionRadiation( const G4String& processName, G4ProcessType type )
 //
 
 G4TransitionRadiation::~G4TransitionRadiation()
-{
-	;
-}
+{}
 
 
 ///////////////////////////////////////////////////////////////////
