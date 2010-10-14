@@ -8,11 +8,15 @@ http://geant4.web.cern.ch/geant4/support/download.shtml
 
 under the Data files heading. In order to use the radioactive decay module
 correctly, you must download and unpack the above directory in your local
-area, and set the environment variable    to point to it. 
+area, and set the environment variable
+
+G4RADIOACTIVEDATA
+
+to point to it. 
 
 **************************************************************************
-
-Lines beginning with either a 'W' or a '#' are comments
+In each of the files, lines beginning with either a 'W' or a '#' are 
+comments.
 
 Lines beginning with a 'P' are headers, each of which describes a level of
 the nucleus.  The first number is the excitation energy in keV, the second 
