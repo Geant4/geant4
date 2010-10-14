@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.82 2010-08-23 12:52:40 gcosmo Exp $
+// $Id: G4GDMLWriteStructure.cc,v 1.83 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteStructure Implementation
@@ -231,8 +231,15 @@ BorderSurfaceCache(const G4LogicalBorderSurface* const bsurf)
 
    if (FindOpticalSurface(psurf))
    {
-     OpticalSurfaceWrite(solidsElement,
-                         dynamic_cast<const G4OpticalSurface*>(psurf));
+     const G4OpticalSurface* opsurf =
+       dynamic_cast<const G4OpticalSurface*>(psurf);
+     if (!opsurf)
+     {
+       G4Exception("G4GDMLWriteStructure::BorderSurfaceCache()",
+                   "InvalidSetup", FatalException, "No optical surface found!");
+       return;
+     }
+     OpticalSurfaceWrite(solidsElement, opsurf);
    }
 
    borderElementVec.push_back(borderElement);
@@ -260,8 +267,15 @@ SkinSurfaceCache(const G4LogicalSkinSurface* const ssurf)
 
    if (FindOpticalSurface(psurf))
    {
-     OpticalSurfaceWrite(solidsElement,
-                         dynamic_cast<const G4OpticalSurface*>(psurf));
+     const G4OpticalSurface* opsurf =
+       dynamic_cast<const G4OpticalSurface*>(psurf);
+     if (!opsurf)
+     {
+       G4Exception("G4GDMLWriteStructure::SkinSurfaceCache()",
+                   "InvalidSetup", FatalException, "No optical surface found!");
+       return;
+     }
+     OpticalSurfaceWrite(solidsElement, opsurf);
    }
 
    skinElementVec.push_back(skinElement);

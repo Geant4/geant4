@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.31 2010-06-03 14:19:49 gcosmo Exp $
+// $Id: G4GDMLReadSolids.cc,v 1.32 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadSolids Implementation
@@ -101,6 +101,12 @@ BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::BooleanRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -114,6 +120,12 @@ BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::BooleanRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="first") { first = RefRead(child); } else
@@ -185,6 +197,12 @@ void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::BoxRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -230,6 +248,12 @@ void G4GDMLReadSolids::ConeRead(const xercesc::DOMElement* const coneElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ConeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -280,6 +304,12 @@ ElconeRead(const xercesc::DOMElement* const elconeElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ElconeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -324,6 +354,12 @@ EllipsoidRead(const xercesc::DOMElement* const ellipsoidElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::EllipsoidRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -368,6 +404,12 @@ EltubeRead(const xercesc::DOMElement* const eltubeElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::EltubeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -404,6 +446,12 @@ void G4GDMLReadSolids::XtruRead(const xercesc::DOMElement* const xtruElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::XtruRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -421,6 +469,12 @@ void G4GDMLReadSolids::XtruRead(const xercesc::DOMElement* const xtruElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::XtruRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="twoDimVertex")
@@ -457,6 +511,12 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::HypeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -499,6 +559,12 @@ void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::OrbRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -538,6 +604,12 @@ void G4GDMLReadSolids::ParaRead(const xercesc::DOMElement* const paraElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ParaRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -586,6 +658,12 @@ ParaboloidRead(const xercesc::DOMElement* const paraElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ParaboloidRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -627,6 +705,12 @@ PolyconeRead(const xercesc::DOMElement* const polyconeElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::PolyconeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -649,6 +733,12 @@ PolyconeRead(const xercesc::DOMElement* const polyconeElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::PolyconeRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="zplane") { zplaneList.push_back(ZplaneRead(child)); }
@@ -695,6 +785,12 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::PolyhedraRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -718,6 +814,12 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::PolyhedraRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="zplane") { zplaneList.push_back(ZplaneRead(child)); }
@@ -764,6 +866,12 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::QuadrangularRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return 0;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -807,6 +915,12 @@ ReflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ReflectedSolidRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -855,6 +969,12 @@ SectionRead(const xercesc::DOMElement* const sectionElement,G4double lunit)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::SectionRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return G4ExtrudedSolid::ZSection(zPosition,Offset,scalingFactor);
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -898,6 +1018,12 @@ SphereRead(const xercesc::DOMElement* const sphereElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::SphereRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -941,6 +1067,12 @@ TessellatedRead(const xercesc::DOMElement* const tessellatedElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TessellatedRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -956,6 +1088,12 @@ TessellatedRead(const xercesc::DOMElement* const tessellatedElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::TessellatedRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="triangular")
@@ -989,6 +1127,12 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TetRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1032,6 +1176,12 @@ void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TorusRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1078,6 +1228,12 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::GenTrapRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1146,6 +1302,12 @@ void G4GDMLReadSolids::TrapRead(const xercesc::DOMElement* const trapElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TrapRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1204,6 +1366,12 @@ void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TrdRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1248,6 +1416,12 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TriangularRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return 0;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1289,6 +1463,12 @@ void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TubeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1336,6 +1516,12 @@ TwistedboxRead(const xercesc::DOMElement* const twistedboxElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TwistedboxRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1388,6 +1574,12 @@ TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TwistedtrapRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1450,6 +1642,12 @@ TwistedtrdRead(const xercesc::DOMElement* const twistedtrdElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TwistedtrdRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1500,6 +1698,12 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TwistedtubsRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1540,6 +1744,12 @@ TwoDimVertexRead(const xercesc::DOMElement* const element, G4double lunit)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::TwoDimVertexRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return vec;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1553,7 +1763,7 @@ TwoDimVertexRead(const xercesc::DOMElement* const element, G4double lunit)
 G4GDMLReadSolids::zplaneType G4GDMLReadSolids::
 ZplaneRead(const xercesc::DOMElement* const zplaneElement)
 {
-   zplaneType zplane;
+   zplaneType zplane = {0.,0.,0.};
 
    const xercesc::DOMNamedNodeMap* const attributes
          = zplaneElement->getAttributes();
@@ -1568,6 +1778,12 @@ ZplaneRead(const xercesc::DOMElement* const zplaneElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::ZplaneRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return zplane;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1602,6 +1818,12 @@ OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::OpticalSurfaceRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -1704,6 +1926,12 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::SolidsRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
       if (tag=="define") { DefineRead(child);  }  else 
       if (tag=="box")    { BoxRead(child); } else

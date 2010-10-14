@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.25 2010-02-18 17:38:24 gcosmo Exp $
+// $Id: G4GDMLWriteMaterials.cc,v 1.26 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteMaterials Implementation
@@ -40,13 +40,12 @@
 #include "G4Isotope.hh"
 #include "G4Material.hh"
 
-G4GDMLWriteMaterials::
-G4GDMLWriteMaterials() : G4GDMLWriteDefine()
+G4GDMLWriteMaterials::G4GDMLWriteMaterials()
+  : G4GDMLWriteDefine(), materialsElement(0)
 {
 }
 
-G4GDMLWriteMaterials::
-~G4GDMLWriteMaterials()
+G4GDMLWriteMaterials::~G4GDMLWriteMaterials()
 {
 }
 

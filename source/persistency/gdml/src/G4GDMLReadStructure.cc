@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.63 2010-10-11 08:44:07 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.64 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -46,7 +46,8 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4VisAttributes.hh"
 
-G4GDMLReadStructure::G4GDMLReadStructure() : G4GDMLReadParamvol()
+G4GDMLReadStructure::G4GDMLReadStructure()
+  : G4GDMLReadParamvol(), pMotherLogical(0)
 {
 }
 
@@ -57,7 +58,7 @@ G4GDMLReadStructure::~G4GDMLReadStructure()
 G4GDMLAuxPairType G4GDMLReadStructure::
 AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
 {
-   G4GDMLAuxPairType auxpair;
+   G4GDMLAuxPairType auxpair = {"",""};
 
    const xercesc::DOMNamedNodeMap* const attributes
          = auxiliaryElement->getAttributes();
@@ -73,6 +74,12 @@ AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::AuxiliaryRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return auxpair;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -107,6 +114,12 @@ BorderSurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::BorderSurfaceRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -123,6 +136,12 @@ BorderSurfaceRead(const xercesc::DOMElement* const bordersurfaceElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::BorderSurfaceRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag != "physvolref")  { continue; }
@@ -162,6 +181,12 @@ DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::DivisionvolRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -190,10 +215,18 @@ DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::DivisionvolRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref") { logvol = GetVolume(GenerateName(RefRead(child))); }
    }
+
+   if (!logvol)  { return; }
 
    G4PVDivisionFactory::GetInstance();
    G4PhysicalVolumesPair pair;
@@ -239,6 +272,12 @@ FileRead(const xercesc::DOMElement* const fileElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::FileRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return 0;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -299,6 +338,12 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
 
      const xercesc::DOMAttr* const attribute
            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+     if (!attribute)
+     {
+       G4Exception("G4GDMLReadStructure::PhysvolRead()",
+                   "InvalidRead", FatalException, "No attribute found!");
+       return;
+     }
      const G4String attName = Transcode(attribute->getName());
      const G4String attValue = Transcode(attribute->getValue());
 
@@ -312,6 +357,12 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
 
      const xercesc::DOMElement* const child
            = dynamic_cast<xercesc::DOMElement*>(iter);
+     if (!child)
+     {
+       G4Exception("G4GDMLReadStructure::PhysvolRead()",
+                   "InvalidRead", FatalException, "No child found!");
+       return;
+     }
      const G4String tag = Transcode(child->getTagName());
 
      if (tag=="volumeref")
@@ -339,6 +390,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
           G4String error_msg = "Unknown tag in physvol: " + tag;
           G4Exception("G4GDMLReadStructure::PhysvolRead()", "ReadError",
                       FatalException, error_msg);
+          return;
         }
    }
 
@@ -378,6 +430,12 @@ ReplicavolRead(const xercesc::DOMElement* const replicavolElement, G4int number)
 
     const xercesc::DOMElement* const child
           = dynamic_cast<xercesc::DOMElement*>(iter);
+    if (!child)
+    {
+      G4Exception("G4GDMLReadStructure::ReplicavolRead()",
+                  "InvalidRead", FatalException, "No child found!");
+      return;
+    }
     const G4String tag = Transcode(child->getTagName());
 
     if (tag=="volumeref")
@@ -386,7 +444,7 @@ ReplicavolRead(const xercesc::DOMElement* const replicavolElement, G4int number)
     }
     else if (tag=="replicate_along_axis")
     {
-      ReplicaRead(child,logvol,number);
+      if (logvol)  { ReplicaRead(child,logvol,number); }
     }
     else
     {
@@ -415,6 +473,12 @@ ReplicaRead(const xercesc::DOMElement* const replicaElement,
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::ReplicaRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName()); 
 
       if (tag=="position")
@@ -451,7 +515,6 @@ ReplicaRead(const xercesc::DOMElement* const replicaElement,
 EAxis G4GDMLReadStructure::
 AxisRead(const xercesc::DOMElement* const axisElement)
 {
-   
    EAxis axis = kUndefined;
 
    const xercesc::DOMNamedNodeMap* const attributes
@@ -468,6 +531,12 @@ AxisRead(const xercesc::DOMElement* const axisElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::AxisRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return axis;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
       if (attName=="x")
@@ -503,6 +572,12 @@ QuantityRead(const xercesc::DOMElement* const readElement)
         { continue; }
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::QuantityRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return value;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -531,6 +606,12 @@ VolumeRead(const xercesc::DOMElement* const volumeElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::VolumeRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="auxiliary")
@@ -565,6 +646,12 @@ AssemblyRead(const xercesc::DOMElement* const assemblyElement)
       if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE) { continue; }
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::AssemblyRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="physvol")
@@ -600,6 +687,12 @@ SkinSurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadStructure::SkinsurfaceRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
@@ -616,6 +709,12 @@ SkinSurfaceRead(const xercesc::DOMElement* const skinsurfaceElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::SkinsurfaceRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="volumeref")
@@ -643,6 +742,12 @@ Volume_contentRead(const xercesc::DOMElement* const volumeElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::Volume_contentRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if ((tag=="auxiliary") || (tag=="materialref") || (tag=="solidref"))
@@ -674,6 +779,12 @@ Volume_contentRead(const xercesc::DOMElement* const volumeElement)
           }
           const xercesc::DOMAttr* const attribute
                 = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+          if (!attribute)
+          {
+            G4Exception("G4GDMLReadStructure::Volume_contentRead()",
+                        "InvalidRead", FatalException, "No attribute found!");
+            return;
+          }
           const G4String attName = Transcode(attribute->getName());
           const G4String attValue = Transcode(attribute->getValue());
           if (attName=="number")
@@ -711,6 +822,12 @@ StructureRead(const xercesc::DOMElement* const structureElement)
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadStructure::StructureRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="bordersurface") { BorderSurfaceRead(child); } else

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.55 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.56 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -44,7 +44,7 @@
 
 G4bool G4GDMLWrite::addPointerToName = true;
 
-G4GDMLWrite::G4GDMLWrite() : extElement(0)
+G4GDMLWrite::G4GDMLWrite() : doc(0), extElement(0)
 {
 }
 
@@ -154,10 +154,10 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
                         // so clear it only at once!
 
    xercesc::XMLString::transcode("LS", tempStr, 99);
-   xercesc::DOMImplementation* impl =
      xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
    xercesc::XMLString::transcode("Range", tempStr, 99);
-   impl = xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
+   xercesc::DOMImplementation* impl =
+     xercesc::DOMImplementationRegistry::getDOMImplementation(tempStr);
    xercesc::XMLString::transcode("gdml", tempStr, 99);
    doc = impl->createDocument(0,tempStr,0);
    xercesc::DOMElement* gdml = doc->getDocumentElement();
@@ -254,21 +254,25 @@ void G4GDMLWrite::AddModule(const G4VPhysicalVolume* const physvol)
    {
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "Invalid NULL pointer is specified for modularization!");
+     return;
    }
    if (dynamic_cast<const G4PVDivision*>(physvol))
    {
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "It is not possible to modularize by divisionvol!");
+     return;
    }
    if (physvol->IsParameterised())
    {
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "It is not possible to modularize by parameterised volume!");
+     return;
    }
    if (physvol->IsReplicated())
    {
      G4Exception("G4GDMLWrite::AddModule()", "InvalidSetup", FatalException,
                  "It is not possible to modularize by replicated volume!");
+     return;
    }
 
    PvolumeMap()[physvol] = fname;

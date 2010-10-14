@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.47 2009-05-12 15:46:43 gcosmo Exp $
+// $Id: G4GDMLRead.cc,v 1.48 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -198,6 +198,12 @@ void G4GDMLRead::LoopRead(const xercesc::DOMElement* const element,
 
       const xercesc::DOMAttr* const attribute
             = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLRead::LoopRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
       const G4String attribute_name = Transcode(attribute->getName());
       const G4String attribute_value = Transcode(attribute->getValue());
 
@@ -304,6 +310,7 @@ void G4GDMLRead::Read(const G4String& fileName,
      G4String error_msg = "Unable to open document: " + fileName;
      G4Exception("G4GDMLRead::Read()", "InvalidRead",
                  FatalException, error_msg);
+     return;
    }
    xercesc::DOMElement* element = doc->getDocumentElement();
 
@@ -311,6 +318,7 @@ void G4GDMLRead::Read(const G4String& fileName,
    {
      G4Exception("G4GDMLRead::Read()", "InvalidRead",
                  FatalException, "Empty document!");
+     return;
    }
 
    for (xercesc::DOMNode* iter = element->getFirstChild();
@@ -320,6 +328,12 @@ void G4GDMLRead::Read(const G4String& fileName,
 
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLRead::Read()", "InvalidRead",
+                    FatalException, "No child found!");
+        return;
+      }
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="define")    { DefineRead(child);    } else
@@ -336,8 +350,8 @@ void G4GDMLRead::Read(const G4String& fileName,
       }
    }
 
-   if (parser)  { delete parser;  }
-   if (handler) { delete handler; }
+   delete parser;
+   delete handler;
 
    if (isModule)
    {

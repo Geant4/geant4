@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.68 2010-06-03 14:19:49 gcosmo Exp $
+// $Id: G4GDMLWriteSolids.cc,v 1.69 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteSolids Implementation
@@ -67,13 +67,12 @@
 #include "G4OpticalSurface.hh"
 #include "G4SurfaceProperty.hh"
 
-G4GDMLWriteSolids::
-G4GDMLWriteSolids() : G4GDMLWriteMaterials()
+G4GDMLWriteSolids::G4GDMLWriteSolids()
+  : G4GDMLWriteMaterials(), solidsElement(0)
 {
 }
 
-G4GDMLWriteSolids::
-~G4GDMLWriteSolids()
+G4GDMLWriteSolids::~G4GDMLWriteSolids()
 {
 }
 

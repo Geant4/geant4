@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc,v 1.19 2009-03-24 15:47:33 gcosmo Exp $
+// $Id: G4GDMLWriteDefine.cc,v 1.20 2010-10-14 16:19:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWriteDefine Implementation
@@ -39,7 +39,8 @@ const G4double G4GDMLWriteDefine::kRelativePrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kAngularPrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kLinearPrecision = DBL_EPSILON;
 
-G4GDMLWriteDefine::G4GDMLWriteDefine() : G4GDMLWrite()
+G4GDMLWriteDefine::G4GDMLWriteDefine()
+  : G4GDMLWrite(), defineElement(0)
 {
 }
 
