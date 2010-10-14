@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2010-03-21 15:38:37 vnivanch Exp $
+$Id: History,v 1.48 2010-10-14 14:11:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 October 2010  V.Ivanchenko (test17-V09-03-01)
+             Temporary disable PIXE in the Physics List
 
 21 March 2010  V.Ivanchenko (test17-V09-03-00)
              Cleanup Physics List - substitute obsolete classes
