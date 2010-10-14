@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.46 2010-04-28 18:39:40 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.47 2010-10-14 15:17:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,7 @@
 // 27-03-06  Fix calculation of fl parameter at low energy (energy loss) (VI)
 // 15-02-07  correct LPMconstant by a factor 2, thanks to G. Depaola (mma)
 // 09-09-08  MigdalConstant increased in (2pi)^2 times (A.Schaelicke) 
+// 13-10-10  Add angular distributon interface (VI)
 //
 // Class Description:
 //
@@ -74,6 +75,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4ModifiedTsai.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -92,6 +94,7 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
   if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
   minThreshold = 0.1*keV;
+  SetAngularDistribution(new G4ModifiedTsai());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -494,7 +497,7 @@ G4double G4eBremsstrahlungModel::ComputeCrossSectionPerAtom(
  
 {
   G4double cross = 0.0 ;
-  if ( kineticEnergy < 1*keV || kineticEnergy < cut) return cross;
+  if ( kineticEnergy < 1*keV || kineticEnergy < cut) { return cross; }
 
   static const G4double ksi=2.0, alfa=1.00;
   static const G4double csigh = 0.127, csiglow = 0.25, asiglow = 0.020*MeV ;
@@ -663,7 +666,7 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = min(maxEnergy, kineticEnergy);
-  if(tmin >= tmax) return;
+  if(tmin >= tmax) { return; }
 
 //
 // GEANT4 internal units.
@@ -708,8 +711,8 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   G4double xmin     = tmin/kineticEnergy;
   G4double xmax     = tmax/kineticEnergy;
   G4double kappa    = 0.0;
-  if(xmax >= 1.) xmax = 1.;
-  else     kappa    = log(xmax)/log(xmin);
+  if(xmax >= 1.) { xmax = 1.; }
+  else   { kappa    = log(xmax)/log(xmin); }
   G4double epsilmin = tmin/totalEnergy;
   G4double epsilmax = tmax/totalEnergy;
 
@@ -811,18 +814,6 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	*/
       } while( greject < G4UniformRand()*grejmax );
     }
-    /*
-    if(x > 0.999) {
-      G4cout << "### G4eBremsstrahlungModel Warning: e= " << kineticEnergy
-	     << " tlow= " << tlow
-	     << " x= " << x
-	     << " greject= " << greject 
-	     << " grejmax= " << grejmax
-	     << " migdal= " << migdal
-	     << G4endl; 
-      //      if(x >= 1.0) G4Exception("X=1");
-    }
-    */
     gammaEnergy = x*kineticEnergy; 
 
     if (LPMFlag()) {
@@ -836,19 +827,12 @@ void G4eBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   } while (!LPMOK);
 
   //
-  //  angles of the emitted gamma. ( Z - axis along the parent particle)
+  // angles of the emitted gamma. ( Z - axis along the parent particle)
+  // use general interface
   //
-  //  universal distribution suggested by L. Urban 
-  // (Geant3 manual (1993) Phys211),
-  //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
-
-  G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
-
-  if (9./(9.+d) > G4UniformRand()) u = - log(G4UniformRand()*G4UniformRand())/a1;
-     else                          u = - log(G4UniformRand()*G4UniformRand())/a2;
-
-  G4double theta = u*electron_mass_c2/totalEnergy;
+  G4double theta = GetAngularDistribution()->PolarAngle(totalEnergy,
+							totalEnergy-gammaEnergy,
+							(G4int)anElement->GetZ());
 
   G4double sint = sin(theta);
 

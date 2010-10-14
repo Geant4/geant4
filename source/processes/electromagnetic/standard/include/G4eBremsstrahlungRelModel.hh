@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.12 2010-09-07 08:36:04 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.13 2010-10-14 15:17:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -194,12 +194,8 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
       Finel = facFinel - 2.*lnZ/3. ;
     }
 
-    const G4Element* elm = GetCurrentElement();
-    if(!elm || elm->GetZ() != Z) {
-      G4VEmModel::SetCurrentElement(nist->FindOrBuildElement(G4int(Z)));
-    }
-    fCoulomb=GetCurrentElement()->GetfCoulomb();
-    fMax   =  Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
+    fCoulomb = GetCurrentElement()->GetfCoulomb();
+    fMax = Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
   }
 }
 
