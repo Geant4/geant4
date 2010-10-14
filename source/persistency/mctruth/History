@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 October, 10  G.Cosmo (mctruth-V09-03-01)
+- Fixed possible case of NULL forward in G4PersistencyCenter class.
+
 19 July, 10  G.Cosmo (mctruth-V09-03-00)
 - Fixed recursive header inclusion in G4PersistencyCenter class.
 - Added dummy initialization of data members in constructors in classes:
