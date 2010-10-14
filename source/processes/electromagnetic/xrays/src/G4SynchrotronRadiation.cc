@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.7 2010-10-14 18:33:01 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.8 2010-10-14 18:38:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -44,6 +44,7 @@
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmProcessSubType.hh"
 
 ///////////////////////////////////////////////////////////////////////
 //

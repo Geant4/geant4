@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.cc,v 1.9 2010-10-14 18:33:01 vnivanch Exp $
+// $Id: G4TransitionRadiation.cc,v 1.10 2010-10-14 18:38:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation class -- implementation file
@@ -44,6 +44,7 @@
 
 #include "G4TransitionRadiation.hh"
 #include "G4Material.hh"
+#include "G4EmProcessSubType.hh"
 
 // Local constants
 

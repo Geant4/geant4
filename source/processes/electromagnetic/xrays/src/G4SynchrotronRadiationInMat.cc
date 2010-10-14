@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc,v 1.4 2010-10-14 18:33:01 vnivanch Exp $
+// $Id: G4SynchrotronRadiationInMat.cc,v 1.5 2010-10-14 18:38:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -42,6 +42,7 @@
 
 #include "G4SynchrotronRadiationInMat.hh"
 #include "G4Integrator.hh"
+#include "G4EmProcessSubType.hh"
 
 ////////////////////////////////////////////////////////////////////
 //
