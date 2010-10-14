@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.88 2010-10-06 07:08:43 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.89 2010-10-14 20:53:24 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -341,7 +341,7 @@ G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
 
   G4double d2 = 2.0 * skinRatio;
   G4double dr = r2 - r1;
-  G4doulbe fr1 = r1 * (r1 + d2) / (1.0 + std::exp(r1));
+  G4double fr1 = r1 * (r1 + d2) / (1.0 + std::exp(r1));
   G4double fr2 = r2 * (r2 + d2) / (1.0 + std::exp(r2));
   G4double fi = (fr1 + fr2) / 2.;
   G4double fun1 = fi * dr;
