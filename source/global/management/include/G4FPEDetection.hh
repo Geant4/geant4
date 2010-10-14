@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FPEDetection.hh,v 1.4 2010-08-19 09:32:31 gcosmo Exp $
+// $Id: G4FPEDetection.hh,v 1.5 2010-10-14 17:02:52 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 #define G4FPEDetection_h 1
 
 #include <iostream>
-#include <stdlib.h>  // abort(), exit()
+#include <stdlib.h>  /* abort(), exit() */
 
 #ifdef __linux__
 #ifdef __GNUC__
@@ -52,17 +52,16 @@
 
   struct sigaction termaction, oldaction;
 
-  static void TerminationSignalHandler(int sig)
+  static void TerminationSignalHandler(int sig, siginfo_t* sinfo, void* /* context */)
   {
     std::cerr << "ERROR: " << sig;
-    std::string message;
-    switch (SIGFPE)
-    {
-    #ifdef FPE_NOOP  // occurs in OS X
+    std::string message = "Floating-point exception (FPE).";
+
+    if (sinfo) {
+      switch (sinfo->si_code) {
+#ifdef FPE_NOOP		/* BUG: MacOSX uses this instead of INTDIV */
       case FPE_NOOP:
-        message = "No Operation.";
-        break;
-    #endif
+#endif
       case FPE_INTDIV:
         message = "Integer divide by zero.";
         break;
@@ -90,9 +89,11 @@
       default:
         message = "Unknown error.";
         break;
+      }
     }
-    std::cerr << " - " << message << std::endl;
 
+    std::cerr << " - " << message << std::endl;
+    
     ::abort();
   }
 
@@ -111,16 +112,13 @@
     //(void) feenableexcept( FE_OVERFLOW );
     //(void) feenableexcept( FE_UNDERFLOW );
 
-    sigset_t *def_set;
-    def_set=&termaction.sa_mask;
-    sigfillset(def_set);
-    sigdelset(def_set,SIGFPE);
-    termaction.sa_handler=TerminationSignalHandler;
-    termaction.sa_flags=0;
-    sigaction(SIGFPE, &termaction,&oldaction);
+    sigdelset(&termaction.sa_mask,SIGFPE);
+    termaction.sa_sigaction=TerminationSignalHandler;
+    termaction.sa_flags=SA_SIGINFO;
+    sigaction(SIGFPE, &termaction, &oldaction);
   }
 #endif
-#elif __MACH__      // MacOSX
+#elif __MACH__      /* MacOSX */
 
   #include <fenv.h>
   #include <signal.h>
@@ -133,7 +131,7 @@
     #define FE_EXCEPT_SHIFT 22  // shift flags right to get masks
     #define FM_ALL_EXCEPT    FE_ALL_EXCEPT >> FE_EXCEPT_SHIFT 
 
-    static int feenableexcept (unsigned int excepts)
+    static inline int feenableexcept (unsigned int excepts)
     {
       static fenv_t fenv;
       unsigned int new_excepts = (excepts & FE_ALL_EXCEPT) >> FE_EXCEPT_SHIFT,
@@ -146,7 +144,7 @@
       return ( fesetenv (&fenv) ? -1 : old_excepts );
     }
 
-    static int fedisableexcept (unsigned int excepts)
+    static inline int fedisableexcept (unsigned int excepts)
     {
       static fenv_t fenv;
       unsigned int still_on = ~((excepts & FE_ALL_EXCEPT) >> FE_EXCEPT_SHIFT),
@@ -161,7 +159,7 @@
 
   #elif DEFINED_INTEL
 
-    static int feenableexcept (unsigned int excepts)
+    static inline int feenableexcept (unsigned int excepts)
     {
       static fenv_t fenv;
       unsigned int new_excepts = excepts & FE_ALL_EXCEPT,
@@ -178,7 +176,7 @@
       return ( fesetenv (&fenv) ? -1 : old_excepts );
     }
 
-    static int fedisableexcept (unsigned int excepts)
+    static inline int fedisableexcept (unsigned int excepts)
     {
       static fenv_t fenv;
       unsigned int new_excepts = excepts & FE_ALL_EXCEPT,
@@ -195,19 +193,18 @@
       return ( fesetenv (&fenv) ? -1 : old_excepts );
     }
 
-  #endif  // PPC or INTEL enabling
+  #endif  /* PPC or INTEL enabling */
 
-  static void TerminationSignalHandler(int sig)
+  static void TerminationSignalHandler(int sig, siginfo_t* sinfo, void* /* context */)
   {
     std::cerr << "ERROR: " << sig;
-    std::string message;
-    switch (SIGFPE)
-    {
-    #ifdef FPE_NOOP  // occurs in OS X
+    std::string message = "Floating-point exception (FPE).";
+
+    if (sinfo) {
+      switch (sinfo->si_code) {
+#ifdef FPE_NOOP		/* BUG: MacOSX uses this instead of INTDIV */
       case FPE_NOOP:
-        message = "No Operation.";
-        break;
-    #endif
+#endif
       case FPE_INTDIV:
         message = "Integer divide by zero.";
         break;
@@ -235,15 +232,17 @@
       default:
         message = "Unknown error.";
         break;
+      }
     }
-    std::cerr << " - " << message << std::endl;
 
+    std::cerr << " - " << message << std::endl;
+    
     ::abort();
   }
 
   static void InvalidOperationDetection()
   {
-    struct sigaction termaction;
+    struct sigaction termaction, oldaction;
 
     std::cout << std::endl
               << "        "
@@ -255,18 +254,15 @@
 
     feenableexcept ( FE_DIVBYZERO );
     feenableexcept ( FE_INVALID   );
-    fedisableexcept( FE_OVERFLOW  );
-    fedisableexcept( FE_UNDERFLOW );
+    // fedisableexcept( FE_OVERFLOW  );
+    // fedisableexcept( FE_UNDERFLOW );
 
-//    sigfillset (&termaction.sa_mask);
-//    sigemptyset(&termaction.sa_mask);
-    sigdelset  (&termaction.sa_mask,SIGFPE);
-    termaction.sa_handler = TerminationSignalHandler;
-//    termaction.sa_flags=SA_SIGINFO;
-    
-    sigaction(SIGFPE, &termaction, 0);
+    sigdelset(&termaction.sa_mask,SIGFPE);
+    termaction.sa_sigaction=TerminationSignalHandler;
+    termaction.sa_flags=SA_SIGINFO;
+    sigaction(SIGFPE, &termaction, &oldaction);
   }
-#else  // Not Linux, nor MacOSX ...
+#else  /* Not Linux, nor MacOSX ... */
 
   static void InvalidOperationDetection() {;}
 
