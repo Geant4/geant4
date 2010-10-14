@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.61 2010-10-14 16:27:35 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.62 2010-10-14 18:35:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -462,25 +462,6 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	if(tcutmax < subcut) { subcut = tcutmax; }
       }
     }
-    /*
-    G4int nm = setOfRegionModels[reg]->NumberOfModels();
-    for(G4int j=0; j<nm; ++j) {
-
-      G4VEmModel* model = models[setOfRegionModels[reg]->ModelIndex(j)];
-      G4double tcutmin = model->MinEnergyCut(particle, couple);
-
-      if(cut < tcutmin)    { cut = tcutmin; }
-      if(subcut < tcutmin) { subcut = tcutmin; }
-      if(1 < verboseLevel) {
-            G4cout << "The model # " << j
-                   << "; tcutmin(MeV)= " << tcutmin/MeV
-                   << "; tcut(MeV)= " << cut/MeV
-                   << "; tsubcut(MeV)= " << subcut/MeV
-                   << " for " << particle->GetParticleName()
-		   << G4endl;
-      }
-    }
-    */
     theCuts[i] = cut;
     if(minSubRange < 1.0) { theSubCuts[i] = subcut; }
   }
@@ -669,9 +650,9 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	G4cout << m->GetName() << " :     Emin= " 
 	       << std::setw(10) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
 	       << "        Emax=   " 
-	       << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	       << std::setw(10) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
 	G4VEmAngularDistribution* an = m->GetAngularDistribution();
-        if(an) { G4cout << "  " << std::setw(15) << an->GetName(); }
+        if(an) { G4cout << "  " << an->GetName(); }
 	G4cout << G4endl;
       }  
     }
