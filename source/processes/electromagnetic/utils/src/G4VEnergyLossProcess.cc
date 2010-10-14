@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.169 2010-08-23 15:11:51 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.170 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,6 +143,7 @@
 #include "G4SafetyHelper.hh"
 #include "G4TransportationManager.hh"
 #include "G4EmConfigurator.hh"
+#include "G4VAtomDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -221,6 +222,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   // initialise model
   (G4LossTableManager::Instance())->Register(this);
   fluctModel = 0;
+  atomDeexcitation = 0;
 
   scTracks.reserve(5);
   secParticles.reserve(5);
@@ -569,7 +571,11 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   // Added tracking cut to avoid tracking artifacts
-  if(isIonisation) { fParticleChange.SetLowEnergyLimit(lowestKinEnergy); }
+  if(isIonisation) { 
+    fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
+    atomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+    if(atomDeexcitation) { useDeexcitation = true; }
+  }
 
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
@@ -851,7 +857,7 @@ void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
   if (nDERegions) {
     for (G4int i=0; i<nDERegions; ++i) {
       if (reg == deRegions[i]) {
-	if(!val) deRegions[i] = 0;
+	if(!val) { deRegions[i] = 0; }
         return;
       }
     }
@@ -1018,10 +1024,13 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if (length >= fRange) {
     eloss = preStepKinEnergy;
     if (useDeexcitation) {
-      if(idxDERegions[currentMaterialIndex]) {
+      if(atomDeexcitation) { 
+	atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
+						eloss, currentMaterialIndex);
+      } else if(idxDERegions[currentMaterialIndex]) {
 	currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
-	if(eloss < 0.0) eloss = 0.0;
       }
+      if(eloss < 0.0) { eloss = 0.0; }
     }
     fParticleChange.SetProposedKineticEnergy(0.0);
     fParticleChange.ProposeLocalEnergyDeposit(eloss);
@@ -1170,16 +1179,18 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // deexcitation
   if (useDeexcitation) {
-    if(idxDERegions[currentMaterialIndex] && eloss > 0.0) {
+    if(atomDeexcitation) { 
+      atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
+					      eloss, currentMaterialIndex);
+    } else if(idxDERegions[currentMaterialIndex] && eloss > 0.0) {
       currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
-      if(eloss < 0.0) { eloss = 0.0; }
     }
   }
 
   // Energy balanse
   G4double finalT = preStepKinEnergy - eloss - esec;
   if (finalT <= lowestKinEnergy) {
-    eloss  = preStepKinEnergy - esec;
+    eloss += finalT;
     finalT = 0.0;
   } else if(isIon) {
     fParticleChange.SetProposedCharge(
@@ -1187,6 +1198,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 				      currentMaterial,finalT));
   }
 
+  if(eloss < 0.0) { eloss = 0.0; }
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
 

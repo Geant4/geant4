@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.1 2010-09-03 09:51:33 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.cc,v 1.2 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,13 +58,15 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "Randomize.hh"
-
+#include "G4VParticleChange.hh"
 
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
   : verbose(1), name(modname), namePIXE(pname)
 {
   activeZ.resize(93, false);
+  vdyn.reserve(5);
+  secVect.reserve(5);
 }
 
 G4VAtomDeexcitation::~G4VAtomDeexcitation()
@@ -138,11 +140,12 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname)
 }
 
 void 
-G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>* secVect,  
+G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
 					   const G4Step& step, 
-					   G4double eLoss)
+					   G4double& eLoss,
+                                           G4int coupleIndex)
 {
-  if(eLoss == 0.0) { return; }
+  if(!CheckDeexcitationActiveRegion(coupleIndex) || eLoss == 0.0) { return; }
 
   // step parameters
   const G4StepPoint* preStep = step.GetPreStepPoint();
@@ -158,11 +161,9 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>* secVect,
   G4double ekin = preStep->GetKineticEnergy() - 0.5*eLoss;
 
   // media parameters
-  const G4MaterialCutsCouple* couple = track->GetMaterialCutsCouple();
-  const G4Material* material = couple->GetMaterial();
-  G4int idx = couple->GetIndex();
-  G4double gCut = (*theCoupleTable->GetEnergyCutsVector(idx))[0];
-  G4double eCut = (*theCoupleTable->GetEnergyCutsVector(idx))[1];
+  G4double gCut = (*theCoupleTable->GetEnergyCutsVector(coupleIndex))[0];
+  G4double eCut = (*theCoupleTable->GetEnergyCutsVector(coupleIndex))[1];
+  const G4Material* material = preStep->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4int nelm = material->GetNumberOfElements();
@@ -195,19 +196,36 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>* secVect,
 		GenerateParticles(&vdyn, shell, Z, gCut, eCut); 
 		G4int nsec = vdyn.size();
                 if(nsec > 0) {
+		  secVect.clear();
                   G4ThreeVector r = prePos  + stot*delta;
                   G4double time   = preTime + stot*dt;
                   for(G4int j=0; j<nsec; ++j) {
                     G4DynamicParticle* dp = vdyn[j];
-		    G4Track* t = new G4Track(dp, time, r);
-		    secVect->push_back(t);                    
+                    G4double e = dp->GetKineticEnergy();
+
+		    // save new secondary if there is enough energy
+                    if(e <= eLoss) {
+		      G4Track* t = new G4Track(dp, time, r);
+		      secVect.push_back(t); 
+                      eLoss -= e;
+		    } else {
+                      delete dp;
+		    }                   
 		  }
 		}
-	      } while ( stot < 1.0 );
+	      } while ( stot < 1.0 && eLoss > 0.0);
 	    }
 	  }
 	}
       } 
+    }
+  }
+  G4int nsec = secVect.size(); 
+  if(nsec > 0) {
+    G4int secondariesBefore = pParticleChange->GetNumberOfSecondaries();
+    pParticleChange->SetNumberOfSecondaries(nsec+secondariesBefore);
+    for(G4int j=0; j<nsec; ++j) {
+      pParticleChange->AddSecondary(secVect[j]);
     }
   }
 }

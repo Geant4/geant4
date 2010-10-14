@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.36 2010-08-17 17:36:59 vnivanch Exp $
+// $Id: G4VEmModel.cc,v 1.37 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,10 +60,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::G4VEmModel(const G4String& nam):
-  fluc(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
+  flucModel(0),anglModel(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
   eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(0.0),secondaryThreshold(DBL_MAX),theLPMflag(false),
-  pParticleChange(0),nuclearStopping(false),
+  pParticleChange(0),/*nuclearStopping(false),*/
   currentCouple(0),currentElement(0),
   nsec(5),flagDeexcitation(false) 
 {
@@ -83,6 +83,7 @@ G4VEmModel::~G4VEmModel()
       delete elmSelectors[i]; 
     }
   }
+  delete anglModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -293,5 +294,14 @@ G4double G4VEmModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 void G4VEmModel::SetupForMaterial(const G4ParticleDefinition*,
 				  const G4Material*, G4double)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void 
+G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
+{
+  if(p && pParticleChange != p) { pParticleChange = p; }
+  flucModel = f;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

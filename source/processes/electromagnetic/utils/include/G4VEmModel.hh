@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.76 2010-08-17 17:36:59 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.77 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,6 +66,7 @@
 //          CorrectionsAlongStep, ActivateNuclearStopping (VI)
 // 16-02-09 Moved implementations of virtual methods to source (VI)
 // 07-04-09 Moved msc methods from G4VEmModel to G4VMscModel (VI)
+// 13-10-10 Added G4VEmAngularDistribution (VI)
 //
 // Class Description:
 //
@@ -86,6 +87,7 @@
 #include "G4ElementVector.hh"
 #include "G4DataVector.hh"
 #include "G4VEmFluctuationModel.hh"
+#include "G4VEmAngularDistribution.hh"
 #include "G4EmElementSelector.hh"
 #include "Randomize.hh"
 #include <vector>
@@ -145,6 +147,7 @@ public:
 					      G4double maxEnergy = DBL_MAX);
 				      				     
   // min cut in kinetic energy allowed by the model
+  // obsolete method will be removed
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 				const G4MaterialCutsCouple*);
 
@@ -251,7 +254,13 @@ public:
   // Get/Set methods
   //------------------------------------------------------------------------
 
+  void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel* f=0);
+
   inline G4VEmFluctuationModel* GetModelOfFluctuations();
+
+  inline G4VEmAngularDistribution* GetAngularDistribution();
+
+  inline void SetAngularDistribution(G4VEmAngularDistribution*);
 
   inline G4double HighEnergyLimit() const;
 
@@ -283,13 +292,9 @@ public:
 
   inline void SetDeexcitationFlag(G4bool val);
 
-  inline void ActivateNuclearStopping(G4bool);
-
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
   inline const G4String& GetName() const;
-
-  inline void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel*);
 
   inline void SetCurrentCouple(const G4MaterialCutsCouple*);
 
@@ -309,7 +314,8 @@ private:
 
   // ======== Parameters of the class fixed at construction =========
 
-  G4VEmFluctuationModel* fluc;
+  G4VEmFluctuationModel* flucModel;
+  G4VEmAngularDistribution* anglModel;
   const G4String   name;
 
   // ======== Parameters of the class fixed at initialisation =======
@@ -328,7 +334,7 @@ private:
 protected:
 
   G4VParticleChange*  pParticleChange;
-  G4bool              nuclearStopping;
+  //  G4bool              nuclearStopping;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -478,7 +484,21 @@ inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 
 inline G4VEmFluctuationModel* G4VEmModel::GetModelOfFluctuations()
 {
-  return fluc;
+  return flucModel;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4VEmAngularDistribution* G4VEmModel::GetAngularDistribution()
+{
+  return anglModel;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetAngularDistribution(G4VEmAngularDistribution* p)
+{
+  anglModel = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -586,27 +606,11 @@ inline void G4VEmModel::SetDeexcitationFlag(G4bool val)
   flagDeexcitation = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmModel::ActivateNuclearStopping(G4bool val)
-{
-  nuclearStopping = val;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline const G4String& G4VEmModel::GetName() const 
 {
   return name;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4VEmModel::SetParticleChange(G4VParticleChange* p,  
-                                          G4VEmFluctuationModel* f = 0)
-{
-  if(p && pParticleChange != p) { pParticleChange = p; }
-  fluc = f;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.60 2010-04-12 18:28:40 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.61 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -655,7 +655,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
 void G4EmModelManager::DumpModelList(G4int verb)
 {
-  if(verb == 0) return;
+  if(verb == 0) { return; }
   for(G4int i=0; i<nRegions; ++i) {
     G4RegionModels* r = setOfRegionModels[i];
     const G4Region* reg = r->Region();
@@ -664,13 +664,15 @@ void G4EmModelManager::DumpModelList(G4int verb)
       G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
 	     << " ======" << G4endl;;
       for(G4int j=0; j<n; ++j) {
-	const G4VEmModel* m = models[r->ModelIndex(j)];
+	G4VEmModel* m = models[r->ModelIndex(j)];
 	G4cout << std::setw(20);
 	G4cout << m->GetName() << " :     Emin= " 
 	       << std::setw(10) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
 	       << "        Emax=   " 
-	       << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy")
-	       << G4endl;
+	       << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	G4VEmAngularDistribution* an = m->GetAngularDistribution();
+        if(an) { G4cout << "  " << std::setw(15) << an->GetName(); }
+	G4cout << G4endl;
       }  
     }
     if(1 == nEmModels) break; 

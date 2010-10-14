@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.92 2010-04-28 14:43:13 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.93 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -113,6 +113,7 @@ class G4VEmFluctuationModel;
 class G4DataVector;
 class G4Region;
 class G4SafetyHelper;
+class G4VAtomDeexcitation;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -465,6 +466,7 @@ private:
 
   std::vector<G4VEmModel*>              emModels;
   G4VEmFluctuationModel*                fluctModel;
+  G4VAtomDeexcitation*                  atomDeexcitation;
   std::vector<const G4Region*>          scoffRegions;
   std::vector<const G4Region*>          deRegions;
   G4int                                 nSCoffRegions;

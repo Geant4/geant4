@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.4 2010-09-03 09:51:33 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.hh,v 1.5 2010-10-14 16:27:35 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
+class G4VParticleChange;
 
 enum G4AtomicShellEnumerator
 {
@@ -156,9 +157,10 @@ public:
 					    G4double kinE) = 0;
 
   // Sampling of PIXE for ionisation processes
-  void AlongStepDeexcitation(std::vector<G4Track*>* secVect,  
+  void AlongStepDeexcitation(G4VParticleChange* pParticleChange,  
 			     const G4Step& step, 
-			     G4double eLoss);
+			     G4double& eLoss,
+                             G4int coupleIndex);
 
 private:
 
@@ -176,6 +178,7 @@ private:
   std::vector<G4bool>   activeDeexcitationMedia;
   std::vector<G4String> activeRegions;
   std::vector<G4DynamicParticle*> vdyn;
+  std::vector<G4Track*> secVect;
 };
 
 inline void G4VAtomDeexcitation::SetAugerActive(G4bool val)
