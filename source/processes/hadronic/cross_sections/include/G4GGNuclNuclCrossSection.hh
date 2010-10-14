@@ -30,9 +30,6 @@
 // the framework of simplified Glauber-Gribov approach
 //
 //
-//
-//
-//
 // 24.11.08 V. Grichine - first implementation based on G4GlauberGribovCrossSection
 //
 //
@@ -59,7 +56,7 @@ public:
   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double Z, G4double A);
+  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
@@ -67,12 +64,12 @@ public:
 			   G4double aTemperature = 0.0);
 
   virtual
-  G4double GetIsoZACrossSection(const G4DynamicParticle*, 
-				G4double Z, G4double A, 
+  G4double GetZandACrossSection(const G4DynamicParticle*, 
+				G4int Z, G4int A, 
 				G4double aTemperature = 0.0);
 
   G4double GetCoulombBarier(const G4DynamicParticle*, 
-				G4double Z, G4double A, G4double pR, G4double tR);
+			    G4double Z, G4double A, G4double pR, G4double tR);
 
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&)
@@ -86,27 +83,18 @@ public:
   G4double GetRatioQE(const G4DynamicParticle*, G4double At, G4double Zt);
 
   G4double GetHadronNucleonXsc(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleonXsc(const G4DynamicParticle*, G4double At, G4double Zt);
+  G4double GetHadronNucleonXsc(const G4DynamicParticle*, G4int At, G4int Zt);
 
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, const G4Element*);
-  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4double At, G4double Zt);
-
-  // G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
-  // G4double GetHadronNucleonXscNS(const G4DynamicParticle*,G4double At, G4double Zt);
-
+  G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4int At, G4int Zt);
   G4double GetHadronNucleonXscNS(G4ParticleDefinition*,G4double pTkin, G4ParticleDefinition*);
 
-  // G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
-  // G4double GetHNinelasticXsc(const G4DynamicParticle*, G4double At, G4double Zt);
-
-  G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4double At, G4double Zt);
-
-  G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
-
+  G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4int At, G4int Zt);
+  G4double CalculateEcmValue(const G4double, const G4double, const G4double); 
   G4double CalcMandelstamS( const G4double , const G4double , const G4double );
 
-  G4double GetElasticGlauberGribov(const G4DynamicParticle*,G4double Z, G4double A);
-  G4double GetInelasticGlauberGribov(const G4DynamicParticle*,G4double Z, G4double A);
+  G4double GetElasticGlauberGribov(const G4DynamicParticle*,G4int Z, G4int A);
+  G4double GetInelasticGlauberGribov(const G4DynamicParticle*,G4int Z, G4int A);
 
   G4double GetTotalGlauberGribovXsc()    { return fTotalXsc;     }; 
   G4double GetElasticGlauberGribovXsc()  { return fElasticXsc;   }; 
@@ -117,11 +105,9 @@ public:
 
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
 
-
   G4double GetNucleusRadius(G4double At);
   G4double GetNucleusRadiusGG(G4double At);
   G4double GetNucleusRadiusDE(G4double At);
-
 
   inline void SetEnergyLowerLimit(G4double E ){fLowerLimit=E;};
 
@@ -143,24 +129,22 @@ private:
 //
 // Inlines
 
-inline
-G4double G4GGNuclNuclCrossSection::GetElasticGlauberGribov(
-	 const G4DynamicParticle* dp, G4double Z, G4double A)
+inline G4double
+G4GGNuclNuclCrossSection::GetElasticGlauberGribov(const G4DynamicParticle* dp,
+                                                  G4int Z, G4int A)
 {
-  GetIsoZACrossSection(dp, Z, A);
+  GetZandACrossSection(dp, Z, A);
   return fElasticXsc;
 }
 
 /////////////////////////////////////////////////////////////////
 
-inline
-G4double G4GGNuclNuclCrossSection::GetInelasticGlauberGribov(
-         const G4DynamicParticle* dp, G4double Z, G4double A)
+inline G4double
+G4GGNuclNuclCrossSection::GetInelasticGlauberGribov(const G4DynamicParticle* dp,
+                                                    G4int Z, G4int A)
 {
-  GetIsoZACrossSection(dp, Z, A);
+  GetZandACrossSection(dp, Z, A);
   return fInelasticXsc;
 }
-
-
 
 #endif
