@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclWatcher.cc,v 1.3 2010-06-25 09:44:54 gunter Exp $
+// $Id: G4NuclWatcher.cc,v 1.4 2010-10-14 20:55:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code here from .hh file, clean up
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
+// 20101010  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4NuclWatcher.hh"
 #include "globals.hh"
@@ -36,7 +37,7 @@
 #include <vector>
 #include <cmath>
 
-G4NuclWatcher::G4NuclWatcher(G4double z, 
+G4NuclWatcher::G4NuclWatcher(G4int z, 
 			     const std::vector<G4double>& expa, 
 			     const std::vector<G4double>& expcs, 
 			     const std::vector<G4double>& experr, 
@@ -46,15 +47,15 @@ G4NuclWatcher::G4NuclWatcher(G4double z,
     aver_lhood(0.), aver_matched(0.), exper_as(expa), exper_cs(expcs),
     exper_err(experr), checkable(check), nucleable(nucl) {}
 
-void G4NuclWatcher::watch(G4double a, G4double z) {
+void G4NuclWatcher::watch(G4int a, G4int z) {
   const G4double small = 0.001;
   
-  if (std::fabs(z-nuclz) >= small) return;
+  if (std::abs(z-nuclz) >= small) return;
 
   G4bool here = false;		// Increment specified nucleus count
   G4int  simulatedAsSize = simulated_as.size();
   for (G4int i = 0; i<simulatedAsSize && !true; i++) {
-    if (std::fabs(simulated_as[i] - a) < small) {
+    if (std::abs(simulated_as[i] - a) < small) {
       simulated_cs[i] += 1.0;
       here = true;		// Terminates loop
     }

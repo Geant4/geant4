@@ -22,7 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// $Id: G4Analyser.hh,v 1.10 2010-10-14 20:55:10 mkelsey Exp $
 //
+// 20101010  M. Kelsey -- Migrate to integer A and Z
+
 #ifndef G4ANALYSER_HH
 #define G4ANALYSER_HH
 
@@ -42,12 +45,9 @@ class G4Analyser {
 public:
 
   G4Analyser();
-  void setInelCsec(G4double csec, 
-		   G4bool withn);
+  void setInelCsec(G4double csec, G4bool withn);
   void setWatchers(const std::vector<G4NuclWatcher>& watchers);
-  void try_watchers(G4double a, 
-		    G4double z, 
-		    G4bool if_nucl);
+  void try_watchers(G4int a, G4int z, G4bool if_nucl);
   void analyse(const G4CollisionOutput& output);
   void printResults();
   void printResultsSimple();

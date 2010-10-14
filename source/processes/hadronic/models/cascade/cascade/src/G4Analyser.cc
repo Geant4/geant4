@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Analyser.cc,v 1.22 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4Analyser.cc,v 1.23 2010-10-14 20:55:10 mkelsey Exp $
 //
 // 20100726  M. Kelsey -- Use references for fetched lists
+// 20101010  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4Analyser.hh"
 #include <cmath>
@@ -59,8 +60,7 @@ G4Analyser::G4Analyser()
   fissy_prob = 0.0;
 }
 
-void G4Analyser::setInelCsec(G4double csec, 
-			     G4bool withn) {
+void G4Analyser::setInelCsec(G4double csec, G4bool withn) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::setInelCsec" << G4endl;
@@ -86,9 +86,7 @@ void G4Analyser::setWatchers(const std::vector<G4NuclWatcher>& watchers) {
   }
 }
 
-void G4Analyser::try_watchers(G4double a, 
-			      G4double z, 
-			      G4bool if_nucl) {
+void G4Analyser::try_watchers(G4int a, G4int z, G4bool if_nucl) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::try_watchers" << G4endl;
@@ -125,15 +123,15 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
       for (G4int in = 0; in < G4int(nucleus.size()); in++) {
 	averageExitationEnergy += nucleus[in].getExitationEnergy();
 
-	G4double a = nucleus[in].getA();
-	G4double z = nucleus[in].getZ();
+	G4int a = nucleus[in].getA();
+	G4int z = nucleus[in].getZ();
 
 	if (in == 0) { 
 	  averageA += a; 
 	  averageZ += z; 
 	};
 
-	if (a > 10.0) nbig++;
+	if (a > 10) nbig++;
 	try_watchers(a, z, true);
       };
 
@@ -144,21 +142,21 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
       averageMultiplicity += particles.size();
 
       for (G4int i = 0; i < G4int(particles.size()); i++) {
-	G4double ap = 0.0;
-	G4double zp = 0.0;
+	G4int ap = 0;
+	G4int zp = 0;
 
 	if (particles[i].nucleon()) {
 	  averageNucleonKinEnergy += particles[i].getKineticEnergy();
 
 	  if (particles[i].type() == 1) {
-	    zp = 1.0;
-	    ap = 1.0;
+	    zp = 1;
+	    ap = 1;
 	    averageProtonNumber += 1.0;
 	    averageProtonKinEnergy += particles[i].getKineticEnergy();
 
 	  } else {
-	    ap = 1.0;
-	    zp = 0.0;
+	    ap = 1;
+	    zp = 0;
 	    averageNeutronNumber += 1.0;
 	    averageNeutronKinEnergy += particles[i].getKineticEnergy();
 	  };  
@@ -166,18 +164,18 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 	} else if (particles[i].pion()) {
 	  averagePionKinEnergy += particles[i].getKineticEnergy();
 	  averagePionNumber += 1.0;
-	  ap = 0.0;
+	  ap = 0;
 
 	  if (particles[i].type() == 3) {
-	    zp = 1.0;
+	    zp = 1;
 	    averagePionPl += 1.0;
 
 	  } else if (particles[i].type() == 5) {  
-	    zp = -1.0;
+	    zp = -1;
 	    averagePionMin += 1.0;
 
 	  } else if (particles[i].type() == 7) { 
-	    zp = 0.0;
+	    zp = 0;
 	    averagePion0 += 1.0;
 	  };
 	};

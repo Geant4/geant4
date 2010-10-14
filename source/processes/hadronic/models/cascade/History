@@ -1,4 +1,4 @@
-$Id: History,v 1.195 2010-10-14 20:53:24 mkelsey Exp $
+$Id: History,v 1.196 2010-10-14 20:55:10 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -18,6 +18,14 @@ code and to keep track of all tags.
 14 October 2010 Michael Kelsey
 ------------------------------
 - G4NucleiModel.cc:  Fix misspelled "G4doulbe" -> G4double.
+
+Pick up several missed bits of the "integer A and Z migration," mostly in
+test and diagnostic code:
+
+	cascade/include/G4Analyser.hh,cc
+	cascade/include/G4FissionConfiguration.hh
+	cascade/include/G4FissionStore.hh,cc
+	cascade/include/G4NuclWatcher.hh,cc
 
 14 October 2010 Michael Kelsey (hadr-casc-V09-03-82)
 ----------------------------------------------------

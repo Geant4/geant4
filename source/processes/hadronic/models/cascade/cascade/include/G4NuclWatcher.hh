@@ -23,11 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclWatcher.hh,v 1.14 2010-06-25 09:43:40 gunter Exp $
+// $Id: G4NuclWatcher.hh,v 1.15 2010-10-14 20:55:10 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code into .cc file
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
+// 20101010  M. Kelsey -- Migrate to integer A and Z
 
 #ifndef G4NUCL_WATCHER_HH
 #define G4NUCL_WATCHER_HH
@@ -40,7 +41,7 @@
 
 class G4NuclWatcher {
 public:
-  G4NuclWatcher(G4double z, 
+  G4NuclWatcher(G4int z, 
 		const std::vector<G4double>& expa, 
 		const std::vector<G4double>& expcs, 
 		const std::vector<G4double>& experr, 
@@ -49,7 +50,7 @@ public:
 
   ~G4NuclWatcher() {}
 
-  void watch(G4double a, G4double z);
+  void watch(G4int a, G4int z);
   void setInuclCs(G4double csec, G4int nev);
 
   G4double getChsq() const { return izotop_chsq; }
@@ -68,7 +69,7 @@ public:
   void print();
 
 private: 
-  G4double nuclz;
+  G4int nuclz;
   G4double izotop_chsq;
   G4double average_ratio;
   G4double aver_rat_err;
