@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.29 2010-10-15 10:08:19 antoni Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.30 2010-10-15 11:50:59 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1731,25 +1731,24 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_GRAPHITE", 2.21, 6, 78.);
   AddChemicalFormula("G4_GRAPHITE","Graphite");
 
+  AddMaterial("G4_CYTOSINE", 1.55, 0, 72., 4);
+  AddElementByAtomCount("H", 5);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 1);
 
+  AddMaterial("G4_THYMINE", 1.23, 0, 72., 4);
+  AddElementByAtomCount("H", 6);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
 
-  AddMaterial("G4_CYTOSINE", 1.55, 0, 71.4, 4);
-  AddElementByWeightFraction( 1, 0.045360);
-  AddElementByWeightFraction( 6, 0.432364);
-  AddElementByWeightFraction( 7, 0.378274);
-  AddElementByWeightFraction( 8, 0.144001);
+  AddMaterial("G4_URACIL", 1.32, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
 
-  AddMaterial("G4_THYMINE", 1.23, 0, 71.4, 4);
-  AddElementByWeightFraction( 1, 0.047955);
-  AddElementByWeightFraction( 6, 0.476141);
-  AddElementByWeightFraction( 7, 0.222173);
-  AddElementByWeightFraction( 8, 0.253731);
-
-  AddMaterial("G4_URACIL", 1.32, 0, 71.4, 4);
-  AddElementByWeightFraction( 1, 0.035970);
-  AddElementByWeightFraction( 6, 0.428577);
-  AddElementByWeightFraction( 7, 0.249973);
-  AddElementByWeightFraction( 8, 0.285480);
 
   nNIST = nMaterials;
 }
