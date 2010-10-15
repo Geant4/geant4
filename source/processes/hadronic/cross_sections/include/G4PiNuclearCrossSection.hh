@@ -41,7 +41,8 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
   G4PiNuclearCrossSection();
   virtual ~G4PiNuclearCrossSection();
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
+  G4bool IsApplicable(const G4DynamicParticle* aParticle,
+                      const G4Element* anElement)
   {
     G4bool result = false;
     if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
@@ -51,31 +52,33 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     return result;
   }
 
-  G4bool IsZAApplicable(const G4DynamicParticle* particle,
-                        G4double ZZ, G4double /*AA*/)
+  G4bool
+  IsIsoApplicable(const G4DynamicParticle* particle, G4int ZZ, G4int /*AA*/)
   {
     G4bool result = false;
     if(particle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
     if(particle->GetDefinition() == G4PionPlus::PionPlus())   result=true;
-    if(G4lrint(ZZ) == 1) result = false;
+    if(ZZ == 1) result = false;
     if(particle->GetKineticEnergy() > 99.9*TeV) result=false;
     return result;
   }
+
 
   G4double GetCrossSection(const G4DynamicParticle* particle, 
                            const G4Element* element,
                            G4double temperature)
   {
-    return GetIsoZACrossSection(particle, element->GetZ(), 
-                                element->GetN(), temperature);
+    G4int Z = G4lrint(element->GetZ());
+    G4int A = G4lrint(element->GetN());
+    return GetZandACrossSection(particle, Z, A, temperature);
   }
 
-  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle,
-                                G4double ZZ, G4double AA,
+  G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
+                                G4int ZZ, G4int AA,
                                 G4double /*aTemperature*/);
 
-  G4double GetTotalXsc()  { return fTotalXsc;   };
-  G4double GetElasticXsc(){ return fElasticXsc; };
+  G4double GetTotalXsc() {return fTotalXsc;};
+  G4double GetElasticXsc() {return fElasticXsc;};
 
 
   void BuildPhysicsTable(const G4ParticleDefinition&) {}
