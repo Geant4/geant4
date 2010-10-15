@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.386 2010-10-12 13:23:35 gcosmo Exp $
+cvs log $Id: History,v 1.387 2010-10-15 10:40:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th October 2010  Gabriele Cosmo (config-V09-03-10)
+- More refinements to Darwin-g++ to correct and simplify Qt4 setup.
 
 12th October 2010  Gabriele Cosmo (config-V09-03-09)
 - Force definition of LDFLAGS in architecture.gmk to avoid occasional fatal
