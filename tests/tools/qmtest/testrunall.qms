@@ -39,7 +39,10 @@
       <text>exam-adv-microbeam-run</text>
       <text>exam-adv-microdosimetry-run</text>
       <text>exam-adv-nanobeam-run</text>
+      <text>exam-ext-analysis-a01-run</text>
+      <text>exam-ext-analysis-n03con-run</text>
       <text>exam-ext-biasing-b01-run</text>
+      <text>exam-ext-biasing-ReverseMC01-build</text>
       <text>exam-ext-electromagnetic-testem0-run</text>
       <text>exam-ext-electromagnetic-testem1-run</text>
       <text>exam-ext-electromagnetic-testem10-run</text>

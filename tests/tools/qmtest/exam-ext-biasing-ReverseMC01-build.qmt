@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE extension PUBLIC "-//QM/2.4/Extension//EN" "http://www.codesourcery.com/qm/dtds/2.4/-//qm/2.4/extension//en.dtd">
+<extension class="Geant4Test.Geant4Test" kind="test">
+  <argument name="target_group">
+    <text>.*</text>
+  </argument>
+  <argument name="timeout">
+    <integer>3000</integer>
+  </argument>
+  <argument name="stdout">
+    <text/>
+  </argument>
+  <argument name="prerequisites">
+    <set/>
+  </argument>
+  <argument name="stdin">
+    <text/>
+  </argument>
+  <argument name="exit_code">
+    <integer>0</integer>
+  </argument>
+  <argument name="environment">
+    <set/>
+  </argument>
+  <argument name="command">
+    <text>cd $G4INSTALL/examples/extended/biasing/ReverseMC01;make</text>
+  </argument>
+  <argument name="stderr">
+    <text/>
+  </argument>
+  <argument name="resources">
+    <set/>
+  </argument>
+</extension>

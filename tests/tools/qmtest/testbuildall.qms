@@ -12,7 +12,10 @@
       <text>exam-adv-microbeam-build</text>
       <text>exam-adv-microdosimetry-build</text>
       <text>exam-adv-nanobeam-build</text>
+      <text>exam-ext-analysis-a01-build</text>
+      <text>exam-ext-analysis-n03con-build</text>
       <text>exam-ext-biasing-b01-build</text>
+      <text>exam-ext-biasing-ReverseMC01-build</text>
       <text>exam-ext-electromagnetic-testem0-build</text>
       <text>exam-ext-electromagnetic-testem1-build</text>
       <text>exam-ext-electromagnetic-testem10-build</text>
