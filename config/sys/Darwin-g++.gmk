@@ -69,16 +69,19 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 #   OGLFLAGS := -I$(OGLHOME)/Headers 
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
     QTGLPATH  := $(shell test -f /System/Library/Frameworks/OpenGL.framework/OpenGL && echo "/System/Library/Frameworks/OpenGL.framework")
     ifeq ($(QTGLPATH),/System/Library/Frameworks/OpenGL.framework)
       DARWIN_VERSION = $(shell uname -r | sed 's/\([0-9]*\).[0-9]*.[0-9]*/\1/')
       ifeq ($(DARWIN_VERSION),9)
         # the following lines are for building on MacOSX 10.5 "Leopard"
-        OGLLIBS += -Wl,-dylib_file,$QTGLPATH/Versions/A/Libraries/libGL.dylib
+        OGLLIBS := -Wl,-dylib_file,$QTGLPATH/Versions/A/Libraries/libGL.dylib
       else
+        ifeq ($(DARWIN_VERSION),10)
         # the following lines are for building on MacOSX > 10.5
-        OGLLIBS += -F/System/Library/Frameworks -framework OpenGL -framework AGL
+          OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL
+        else
+          OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
+        endif
       endif
     endif
   endif
@@ -86,18 +89,15 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 # ---- QT Setup block -------------------------------------------------------
 
   ifndef QTHOME
-    QTHOME   := $(shell echo "/Library/Frameworks" || echo "/sw")
+    QTHOME := /Library/Frameworks
   endif
   ifndef QTMOC
-   ifeq ($(QTHOME),/Library/Frameworks)
-     QTMOC      := /usr/bin/moc
-   else
-     QTMOC      := $(QTHOME)/bin/moc
-   endif
+    ifeq ($(QTHOME),/Library/Frameworks)
+      QTMOC      := /usr/bin/moc
+    else
+      QTMOC      := $(QTHOME)/bin/moc
+    endif
   endif
-
-  QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
-
   ifndef QTFLAGS
     QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
     QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
@@ -105,7 +105,11 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
   endif
   ifndef QTLIBPATH
-    QTLIBPATH  := -F$(QTHOME)/lib -F$(QTHOME)
+    ifeq ($(QTHOME),/Library/Frameworks)
+      QTLIBPATH  := -F$(QTHOME)
+    else
+      QTLIBPATH  := -F$(QTHOME)/lib
+    endif
   endif
   ifndef QTLIBS
     QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
