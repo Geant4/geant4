@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.28 2010-10-14 12:23:42 antoni Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.29 2010-10-15 10:08:19 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1732,6 +1732,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddChemicalFormula("G4_GRAPHITE","Graphite");
 
 
+
   AddMaterial("G4_CYTOSINE", 1.55, 0, 71.4, 4);
   AddElementByWeightFraction( 1, 0.045360);
   AddElementByWeightFraction( 6, 0.432364);
@@ -1740,9 +1741,9 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
 
   AddMaterial("G4_THYMINE", 1.23, 0, 71.4, 4);
   AddElementByWeightFraction( 1, 0.047955);
-  AddElementByWeightFraction( 6, 0.);
-  AddElementByWeightFraction( 7, 0.);
-  AddElementByWeightFraction( 8, 0.);
+  AddElementByWeightFraction( 6, 0.476141);
+  AddElementByWeightFraction( 7, 0.222173);
+  AddElementByWeightFraction( 8, 0.253731);
 
   AddMaterial("G4_URACIL", 1.32, 0, 71.4, 4);
   AddElementByWeightFraction( 1, 0.035970);
