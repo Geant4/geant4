@@ -1,4 +1,4 @@
-$Id: History,v 1.258 2010-10-15 08:20:00 gcosmo Exp $
+$Id: History,v 1.259 2010-10-15 12:51:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 15, 2010  G.Cosmo (global-V09-03-18)
+- Fixed compilation error on WIN32-VC for G4ConvergenceTester. Also, added
+  explicit initialization of static data to constructor.
 
 Oct 14, 2010  M.Kelsey (global-V09-03-17)
 - Modified FPE handler to get correct SIGINFO data for error messages.
