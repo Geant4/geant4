@@ -1,4 +1,4 @@
-$Id: History,v 1.257 2010-10-14 17:02:52 mkelsey Exp $
+$Id: History,v 1.258 2010-10-15 08:20:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 14, 2010  M.Kelsey
-- Modify FPE handler to get SIGINFO data for error messages.
+Oct 14, 2010  M.Kelsey (global-V09-03-17)
+- Modified FPE handler to get correct SIGINFO data for error messages.
 
 Oct 12, 2010  G.Cosmo (global-V09-03-16)
 - Added class G4ConvergenceTester, moved from extended example N03Con,
