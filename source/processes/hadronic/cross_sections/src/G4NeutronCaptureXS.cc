@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.4 2010-09-23 16:13:17 vnivanch Exp $
+// $Id: G4NeutronCaptureXS.cc,v 1.5 2010-10-15 22:36:13 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,8 +77,8 @@ G4NeutronCaptureXS::IsApplicable(const G4DynamicParticle*,
 }
 
 G4bool 
-G4NeutronCaptureXS::IsZAApplicable(const G4DynamicParticle*,
-				      G4double /*ZZ*/, G4double /*AA*/)
+G4NeutronCaptureXS::IsIsoApplicable(const G4DynamicParticle*,
+				    G4int /*ZZ*/, G4int /*AA*/)
 {
   return false;
 }
@@ -151,8 +151,8 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 void 
 G4NeutronCaptureXS::DumpPhysicsTable(const G4ParticleDefinition&)
-{
-}
+{}
+
 
 void 
 G4NeutronCaptureXS::Initialise(G4int Z, const char* p)

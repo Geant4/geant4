@@ -51,19 +51,21 @@ public:
   G4NucleonNuclearCrossSection();
   virtual ~G4NucleonNuclearCrossSection();
 
-  virtual G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement);
+  virtual G4bool IsApplicable(const G4DynamicParticle* aParticle,
+                              const G4Element* anElement);
 
-  virtual G4bool IsZAApplicable(const G4DynamicParticle* aParticle, G4double Z, G4double A);
+  virtual G4bool IsIsoApplicable(const G4DynamicParticle* aParticle,
+                                 G4int Z, G4int A);
 
   G4double GetCrossSection(const G4DynamicParticle* aParticle, 
                            const G4Element* anElement,
                            G4double T=0.);
 
-  G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle, 
-                                G4double ZZ, G4double AA, G4double T=0. );
+  G4double GetZandACrossSection(const G4DynamicParticle* aParticle, 
+                                G4int ZZ, G4int AA, G4double T=0. );
 
   G4double GetElasticCrossSection(const G4DynamicParticle* aParticle, 
-				  G4double ZZ, G4double AA);
+				  G4int ZZ, G4int AA);
 
   G4double GetTotalXsc()  { return fTotalXsc;   };
   G4double GetElasticXsc(){ return fElasticXsc; };
@@ -189,9 +191,9 @@ std::vector< G4PiData* > thePimData;
 
 inline
 G4double G4NucleonNuclearCrossSection::GetElasticCrossSection(
-         const G4DynamicParticle* dp, G4double ZZ, G4double AA)
+         const G4DynamicParticle* dp, G4int ZZ, G4int AA)
 {
-  GetIsoZACrossSection(dp, ZZ, AA);
+  GetZandACrossSection(dp, ZZ, AA);
   return fElasticXsc;
 }
 

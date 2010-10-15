@@ -57,8 +57,8 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
      return result;
    }
 
-   G4bool IsZAApplicable(const G4DynamicParticle* aPart,
-                         G4double ZZ, G4double /*AA*/)
+   G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
+                          G4int ZZ, G4int /*AA*/)
    {
      G4bool result = false;
      if(( aPart->GetDefinition() == G4Neutron::Neutron()) &&
@@ -73,15 +73,16 @@ class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
    G4double GetCrossSection(const G4DynamicParticle*, 
                             const G4Element*, G4double aTemperature);
 
-   G4double GetIsoZACrossSection(const G4DynamicParticle* aParticle,
-                                 G4double ZZ, G4double AA,
+   G4double GetZandACrossSection(const G4DynamicParticle* aParticle,
+                                 G4int ZZ, G4int AA,
                                  G4double /*aTemperature*/)
    {
      return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
    }
   
 
-   G4double GetCrossSection(G4double anEnergy, G4double anA, G4double aZ);
+   G4double GetCrossSection(G4double anEnergy, G4int anA, G4int aZ);
+
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)

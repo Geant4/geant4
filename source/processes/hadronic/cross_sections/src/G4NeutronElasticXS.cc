@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc,v 1.5 2010-09-23 16:13:17 vnivanch Exp $
+// $Id: G4NeutronElasticXS.cc,v 1.6 2010-10-15 22:35:58 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -86,16 +86,15 @@ G4NeutronElasticXS::IsApplicable(const G4DynamicParticle*,
 }
 
 G4bool 
-G4NeutronElasticXS::IsZAApplicable(const G4DynamicParticle*,
-				   G4double /*ZZ*/, G4double /*AA*/)
+G4NeutronElasticXS::IsIsoApplicable(const G4DynamicParticle*,
+                                    G4int /*ZZ*/, G4int /*AA*/)
 {
   return false;
 }
 
 G4double 
 G4NeutronElasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
-				    const G4Element* elm,
-				    G4double)
+				    const G4Element* elm, G4double)
 {
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();

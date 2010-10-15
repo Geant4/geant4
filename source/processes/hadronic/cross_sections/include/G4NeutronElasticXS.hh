@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.hh,v 1.5 2010-09-23 17:12:41 vnivanch Exp $
+// $Id: G4NeutronElasticXS.hh,v 1.6 2010-10-15 22:32:55 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -69,8 +69,7 @@ public: // With Description
   G4bool IsApplicable(const G4DynamicParticle*, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle*, 
-			G4double /*Z*/, G4double /*A*/);
+  G4bool IsIsoApplicable(const G4DynamicParticle*, G4int /*Z*/, G4int /*A*/);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle*, 
