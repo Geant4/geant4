@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.cc,v 1.2 2010-10-15 12:46:11 gcosmo Exp $
+// $Id: G4ConvergenceTester.cc,v 1.3 2010-10-15 12:49:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Convergence Tests for Monte Carlo results.
@@ -444,7 +444,7 @@ void G4ConvergenceTester::check_stat_history()
 
    for ( i = 0 ; i < N ; i++ ) 
    {
-      first_ally [ i ] = 1.0 / std::sqrt ( history_grid [ N + i ] );
+      first_ally [ i ] = 1.0 / std::sqrt ( G4double(history_grid [ N + i ]) );
       second_ally [ i ] = r_history [ N + i ];
    }
 
