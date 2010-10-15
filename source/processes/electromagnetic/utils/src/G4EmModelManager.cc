@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.62 2010-10-14 18:35:37 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.63 2010-10-15 10:22:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -647,10 +647,10 @@ void G4EmModelManager::DumpModelList(G4int verb)
       for(G4int j=0; j<n; ++j) {
 	G4VEmModel* m = models[r->ModelIndex(j)];
 	G4cout << std::setw(20);
-	G4cout << m->GetName() << " :     Emin= " 
-	       << std::setw(10) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
-	       << "        Emax=   " 
-	       << std::setw(10) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
+	G4cout << m->GetName() << " :   Emin= " 
+	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j),"Energy")
+	       << "      Emax=   " 
+	       << std::setw(8) << G4BestUnit(r->LowEdgeEnergy(j+1),"Energy");
 	G4VEmAngularDistribution* an = m->GetAngularDistribution();
         if(an) { G4cout << "  " << an->GetName(); }
 	G4cout << G4endl;

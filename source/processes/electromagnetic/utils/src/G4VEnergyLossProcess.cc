@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.170 2010-10-14 16:27:35 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.171 2010-10-15 10:22:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -107,6 +107,7 @@
 // 25-04-07 move initialisation of safety helper to BuildPhysicsTable (VI)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
+// 15-10-10 Fixed 4-momentum balance if deexcitation is active (L.Pandola)
 //
 // Class Description:
 //
@@ -1179,12 +1180,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // deexcitation
   if (useDeexcitation) {
+    G4double eloss_before = eloss;
     if(atomDeexcitation) { 
       atomDeexcitation->AlongStepDeexcitation(&fParticleChange, step, 
 					      eloss, currentMaterialIndex);
     } else if(idxDERegions[currentMaterialIndex] && eloss > 0.0) {
       currentModel->SampleDeexcitationAlongStep(currentMaterial, track, eloss);
     }
+    esec += eloss_before - eloss;
   }
 
   // Energy balanse
