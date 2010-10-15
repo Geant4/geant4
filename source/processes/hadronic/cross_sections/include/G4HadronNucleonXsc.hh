@@ -30,8 +30,6 @@
 //
 //
 //
-//
-//
 // 14.03.07 V. Grichine - first implementation
 //
 //
@@ -58,7 +56,7 @@ public:
   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double Z, G4double A);
+  G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int Z, G4int A);
 
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&) 

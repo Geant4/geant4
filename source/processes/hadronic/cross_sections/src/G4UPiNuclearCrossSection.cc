@@ -59,8 +59,9 @@ G4UPiNuclearCrossSection::~G4UPiNuclearCrossSection()
   delete piMinusInelastic;
 }
 
-G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
-	 const G4DynamicParticle* dp, G4double Z, G4double A)
+G4double
+G4UPiNuclearCrossSection::GetElasticCrossSection(const G4DynamicParticle* dp,
+                                                 G4int Z, G4int A)
 {
   G4double cross = 0.0;
   G4PhysicsTable* table = 0;
@@ -72,8 +73,9 @@ G4double G4UPiNuclearCrossSection::GetElasticCrossSection(
   return cross;
 }
 
-G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
-	 const G4DynamicParticle* dp, G4double Z, G4double A)
+G4double
+G4UPiNuclearCrossSection::GetInelasticCrossSection(const G4DynamicParticle* dp,
+                                                   G4int Z, G4int A)
 {
   G4double cross = 0.0;
   G4double fact  = 1.0;
@@ -81,7 +83,7 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
   G4PhysicsTable* table = 0;
   const G4ParticleDefinition* part = dp->GetDefinition();
 
-  // Coulomb barier
+  // Coulomb barrier
   if(part == piPlus) {
     if(ekin > elowest) {
       table = piPlusInelastic;
@@ -100,11 +102,11 @@ G4double G4UPiNuclearCrossSection::GetInelasticCrossSection(
 }
 
 G4double G4UPiNuclearCrossSection::Interpolate(
-	 G4double Z, G4double A, G4double ekin, G4PhysicsTable* table)
+	 G4int Z, G4int A, G4double ekin, G4PhysicsTable* table)
 {
   G4double res = 0.0;
   G4int idx;
-  G4int iz = G4int(Z + 0.5);
+  G4int iz = Z;
   if(iz > 92) iz = 92;
   for(idx=0; idx<NZ; idx++) {if(theZ[idx] >= iz) break;}
   if(idx >= NZ) idx = NZ - 1;
@@ -122,8 +124,8 @@ G4double G4UPiNuclearCrossSection::Interpolate(
 
     G4int iz1 = theZ[idx-1];
     G4double x1 = (((*table)[idx-1])->Value(ekin))*APower[iz]/APower[iz1];
-    G4double w1 = A - theA[idx-1];
-    G4double w2 = theA[idx] - A;
+    G4double w1 = G4double(A) - theA[idx-1];
+    G4double w2 = theA[idx] - G4double(A);
     res = (w1*x2 + w2*x1)/(w1 + w2); 
   }
   return res;

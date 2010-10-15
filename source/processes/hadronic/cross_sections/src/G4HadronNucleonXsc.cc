@@ -32,10 +32,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
-
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//
+#include "G4HadTmpUtil.hh"
 
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
@@ -79,8 +76,7 @@ G4HadronNucleonXsc::G4HadronNucleonXsc()
 //
 
 G4HadronNucleonXsc::~G4HadronNucleonXsc()
-{
-}
+{}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -90,27 +86,28 @@ G4HadronNucleonXsc::~G4HadronNucleonXsc()
 
 G4bool 
 G4HadronNucleonXsc::IsApplicable(const G4DynamicParticle* aDP, 
-					  const G4Element*  anElement)
+                                 const G4Element* anElement)
 {
-  return IsZAApplicable(aDP, anElement->GetZ(), anElement->GetN());
+  G4int Z = G4lrint(anElement->GetZ());
+  G4int A = G4lrint(anElement->GetN());
+  return IsIsoApplicable(aDP, Z, A);
 } 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //
-//
 
 G4bool 
-G4HadronNucleonXsc::IsZAApplicable(const G4DynamicParticle* aDP, 
-					    G4double Z, G4double)
+G4HadronNucleonXsc::IsIsoApplicable(const G4DynamicParticle* aDP, 
+                                    G4int Z, G4int)
 {
-  G4bool applicable      = false;
+  G4bool applicable = false;
   // G4int baryonNumber     = aDP->GetDefinition()->GetBaryonNumber();
   G4double kineticEnergy = aDP->GetKineticEnergy();
 
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
   if ( ( kineticEnergy  >= fLowerLimit &&
-         Z > 1.5 &&      // >=  He
+         Z > 1 &&      // >=  He
        ( theParticle == theAProton   ||
          theParticle == theGamma     ||
          theParticle == theKPlus     ||
@@ -118,7 +115,7 @@ G4HadronNucleonXsc::IsZAApplicable(const G4DynamicParticle* aDP,
          theParticle == theSMinus)      )    ||  
 
        ( kineticEnergy  >= 0.1*fLowerLimit &&
-         Z > 1.5 &&      // >=  He
+         Z > 1 &&      // >=  He
        ( theParticle == theProton    ||
          theParticle == theNeutron   ||   
          theParticle == thePiPlus    ||
@@ -126,8 +123,6 @@ G4HadronNucleonXsc::IsZAApplicable(const G4DynamicParticle* aDP,
 
   return applicable;
 }
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -209,9 +204,6 @@ G4HadronNucleonXsc::GetHadronNucleonXscEL(const G4DynamicParticle* aParticle,
 }
 
 
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////
 //
 // Returns hadron-nucleon Xsc according to PDG parametrisation (2005):
@@ -241,14 +233,12 @@ G4HadronNucleonXsc::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle,
   G4double eta2 = 0.458;
   G4double B    = 0.308;
 
-
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
 
   G4bool pORn = (nucleon == theProton || nucleon == theNeutron  );  
   G4bool proton = (nucleon == theProton);
   G4bool neutron = (nucleon == theNeutron);
   
-
   if(theParticle == theNeutron) // proton-neutron fit 
   {
     if ( proton )
@@ -357,7 +347,6 @@ G4HadronNucleonXsc::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle,
 
   return xsection;
 }
-
 
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -756,8 +745,6 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
   G4bool pORn = (nucleon == theProton || nucleon == theNeutron  );  
   G4bool proton = (nucleon == theProton);
   G4bool neutron = (nucleon == theNeutron);
-
-
 
    
   if( absPDGcode > 1000 && pORn )  //------Projectile is baryon -
