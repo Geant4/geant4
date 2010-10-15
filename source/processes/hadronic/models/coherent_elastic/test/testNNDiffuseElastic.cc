@@ -376,7 +376,8 @@ int main()
     
     distrDif[k] = diffelastic->GetDiffuseElasticSumXsc(theParticleDefinition, thetaCMS, ptot, A, Z); 
 
-    distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
+    // distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
+    distrXsc[k] = nndiffelastic->AmplitudeSimMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGlaMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGGMod2(thetaCMS);
 

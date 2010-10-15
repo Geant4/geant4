@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.13 2010-09-28 16:28:58 gcosmo Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.14 2010-10-15 08:33:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -225,8 +225,12 @@ public:
 
   G4complex AmplitudeNear(G4double theta);
   G4complex AmplitudeFar(G4double theta);
+
   G4complex Amplitude(G4double theta);
   G4double  AmplitudeMod2(G4double theta);
+
+  G4complex AmplitudeSim(G4double theta);
+  G4double  AmplitudeSimMod2(G4double theta);
 
   G4complex AmplitudeGla(G4double theta);
   G4double  AmplitudeGlaMod2(G4double theta);
@@ -1188,6 +1192,40 @@ inline  G4complex G4NuclNuclDiffuseElastic::Amplitude(G4double theta)
 inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeMod2(G4double theta)
 {
   G4complex out = Amplitude(theta);
+  G4double mod2 = out.real()*out.real() + out.imag()*out.imag();
+  return   mod2;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
+{
+  G4double sinThetaR  = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
+  G4double dTheta     = 0.5*(theta - fRutherfordTheta);
+  G4double sindTheta  = std::sin(dTheta);
+
+  G4complex order     = G4complex(1.,1.);
+  order              /= std::sqrt(2.);
+
+  G4complex out       = GetErfcInt(order*std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*sindTheta);
+  out                *= CoulombAmplitude(theta);
+
+  return out;
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4double  G4NuclNuclDiffuseElastic::AmplitudeSimMod2(G4double theta)
+{
+  G4complex out = AmplitudeSim(theta);
   G4double mod2 = out.real()*out.real() + out.imag()*out.imag();
   return   mod2;
 }
