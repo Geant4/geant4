@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.cc,v 1.1 2010-10-12 07:24:27 gcosmo Exp $
+// $Id: G4ConvergenceTester.cc,v 1.2 2010-10-15 12:46:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Convergence Tests for Monte Carlo results.
@@ -45,14 +45,16 @@
 #include "G4ConvergenceTester.hh"
 
 G4ConvergenceTester::G4ConvergenceTester()
+ : n(0), sum(0.), mean(0.), var(0.), sd(0.), r(0.), efficiency(0.),
+   r2eff(0.), r2int(0.), shift(0.), vov(0.), fom(0.), largest(0.),
+   largest_score_happened(0), mean_1(0.), var_1(0.), sd_1(0.), r_1(0.),
+   shift_1(0.), vov_1(0.), fom_1(0.), noBinOfHistory(16), slope(0.),
+   noBinOfPDF(10), noPass(0), noTotal(0)
 {
-
    nonzero_histories.clear();
    largest_scores.clear();
    largest_scores.push_back( 0.0 );
-   n=0;
-   sum=0;
-   noBinOfHistory = 16; 
+
    history_grid.resize( noBinOfHistory , 0 );
    mean_history.resize( noBinOfHistory , 0.0 );
    var_history.resize( noBinOfHistory , 0.0 );
@@ -69,12 +71,6 @@ G4ConvergenceTester::G4ConvergenceTester()
    timer->Start();
    cpu_time.clear();
    cpu_time.push_back( 0.0 );
-
-   noBinOfPDF = 10; // this will be used calculating SLOPE
-
-   noPass = 0;
-   noTotal = 8;
-
 }
 
 
@@ -162,7 +158,7 @@ void G4ConvergenceTester::calStat()
 
    sd = std::sqrt ( var );
 
-   r = sd / mean / std::sqrt ( n ); 
+   r = sd / mean / std::sqrt ( G4double(n) ); 
 
    r2eff = ( 1 - efficiency ) / ( efficiency * n );
    r2int = sum_x2 / ( sum * sum ) - 1 / ( efficiency * n );
@@ -223,7 +219,7 @@ void G4ConvergenceTester::calStat()
 
    sd_1 = std::sqrt ( var_1 );
 
-   r_1 = sd_1 / mean_1 / std::sqrt ( n + 1 ); 
+   r_1 = sd_1 / mean_1 / std::sqrt ( G4double(n + 1) ); 
 
    shift_1 = shift_1 / ( 2 * var_1 * ( n + 1 ) );
 
