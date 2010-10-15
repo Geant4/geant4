@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.cc,v 1.2 2010-07-30 14:33:33 vnivanch Exp $
+// $Id: G4IonProtonCrossSection.cc,v 1.3 2010-10-15 21:06:48 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
+#include "G4HadTmpUtil.hh"
 
 using namespace std;
 
@@ -60,29 +61,34 @@ G4bool
 G4IonProtonCrossSection::IsApplicable(const G4DynamicParticle* dp, 
 				      const G4Element* elm)
 {
-  return IsZAApplicable(dp, elm->GetZ(), elm->GetN());
+  G4int Z = G4lrint(elm->GetZ());
+  G4int A = G4lrint(elm->GetN());
+  return IsIsoApplicable(dp, Z, A);
 }
 
+
 G4bool 
-G4IonProtonCrossSection::IsZAApplicable(const G4DynamicParticle* dp,
-					G4double Z, G4double A)
+G4IonProtonCrossSection::IsIsoApplicable(const G4DynamicParticle* dp,
+					 G4int Z, G4int A)
 {
   G4bool result = false;
-  if(Z < 1.1 && A < 1.1 && dp->GetDefinition()->GetPDGCharge()/eplus > 2.5) 
+  if(Z < 2 && A < 2 && dp->GetDefinition()->GetPDGCharge()/eplus > 2.5) 
     { result = true;}
   return result;
 }
+
 
 G4double 
 G4IonProtonCrossSection::GetCrossSection(const G4DynamicParticle* dp, 
 					 const G4Element*, G4double)
 {
-  return GetIsoZACrossSection(dp);
+  return GetZandACrossSection(dp);
 }
 
+
 G4double 
-G4IonProtonCrossSection::GetIsoZACrossSection(const G4DynamicParticle* dp, 
-					      G4double /*ZZ*/, G4double /*AA*/, 
+G4IonProtonCrossSection::GetZandACrossSection(const G4DynamicParticle* dp, 
+					      G4int /*ZZ*/, G4int /*AA*/, 
 					      G4double /*temperature*/)
 {
   const G4ParticleDefinition* p = dp->GetDefinition();

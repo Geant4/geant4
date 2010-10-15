@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonProtonCrossSection.hh,v 1.11 2010-07-30 14:11:45 vnivanch Exp $
+// $Id: G4IonProtonCrossSection.hh,v 1.12 2010-10-15 21:05:10 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,16 +67,16 @@ public:
   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* anEle);
 
   virtual
-  G4bool IsZAApplicable(const G4DynamicParticle* aPart, G4double Z,
-			G4double A);
+  G4bool IsIsoApplicable(const G4DynamicParticle* aPart,
+                         G4int Z, G4int A);
 
   virtual
   G4double GetCrossSection(const G4DynamicParticle* aPart, 
 			   const G4Element*, G4double);
   
   virtual
-  G4double GetIsoZACrossSection(const G4DynamicParticle* aPart, 
-				G4double Z=1., G4double A=1., G4double T=0.);
+  G4double GetZandACrossSection(const G4DynamicParticle* aPart, 
+				G4int Z=1, G4int A=1, G4double T=0.);
 
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 

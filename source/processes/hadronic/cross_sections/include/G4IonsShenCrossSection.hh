@@ -60,18 +60,18 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
    {
-      return IsZAApplicable(aDP, 0., 0.);
+     return IsIsoApplicable(aDP, 0, 0);
    }
 
    virtual
-   G4bool IsZAApplicable(const G4DynamicParticle* aDP,
-                         G4double /*ZZ*/, G4double /*AA*/)
+   G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
+                          G4int /*ZZ*/, G4int /*AA*/)
    {
-      G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
-      G4double kineticEnergy = aDP->GetKineticEnergy(); 
-      if ( kineticEnergy / baryonNumber <= upperLimit ) 
-         return true;
-      return false;
+     G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
+     G4double kineticEnergy = aDP->GetKineticEnergy(); 
+     if ( kineticEnergy / baryonNumber <= upperLimit ) 
+        return true;
+     return false;
    }
 
 
@@ -80,8 +80,8 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
                             const G4Element*, G4double aTemperature);
 
    virtual
-   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double ZZ, 
-                                 G4double AA, G4double aTemperature);
+   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
+                                 G4int AA, G4double aTemperature);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)
@@ -96,8 +96,8 @@ class G4IonsShenCrossSection : public G4VCrossSectionDataSet
       const G4double lowerLimit; 
       const G4double r0;
 
-      G4double calEcmValue ( const G4double , const G4double , const G4double ); 
-      G4double calCeValue ( const G4double ); 
+      G4double calEcmValue(const G4double, const G4double, const G4double); 
+      G4double calCeValue(const G4double); 
 };
 
 #endif

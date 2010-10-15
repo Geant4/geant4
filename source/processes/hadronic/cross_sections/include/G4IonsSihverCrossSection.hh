@@ -53,12 +53,12 @@ class G4IonsSihverCrossSection : public G4VCrossSectionDataSet
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
    {
-     return IsZAApplicable(aDP, 0., 0.);
+     return IsIsoApplicable(aDP, 0, 0);
    }
 
    virtual 
-   G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double /*ZZ*/, 
-                         G4double /*AA*/)
+   G4bool IsIsoApplicable(const G4DynamicParticle* aDP, G4int /*ZZ*/, 
+                          G4int /*AA*/)
    {
       G4int BaryonNumber = aDP->GetDefinition()->GetBaryonNumber();
       G4double KineticEnergy = aDP->GetKineticEnergy(); 
@@ -72,8 +72,8 @@ class G4IonsSihverCrossSection : public G4VCrossSectionDataSet
                             const G4Element*, G4double aTemperature);
 
    virtual
-   G4double GetIsoZACrossSection(const G4DynamicParticle*, G4double ZZ, 
-                                 G4double AA, G4double aTemperature);
+   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
+                                 G4int AA, G4double aTemperature);
 
    virtual
    void BuildPhysicsTable(const G4ParticleDefinition&)
