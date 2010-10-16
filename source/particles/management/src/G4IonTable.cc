@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.64 2010-10-09 10:36:02 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.65 2010-10-16 06:04:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -598,7 +598,12 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
   static G4String proton("proton");
 
   // neutron is not ion
-  if ((particle->GetAtomicMass() >0) && (particle->GetAtomicNumber()>0)) return true;
+  if ((particle->GetAtomicMass()>0)   && 
+      (particle->GetAtomicNumber()>0) ){
+   if (particle->GetBaryonNumber()>0)  return true;
+   else return false;
+  }
+
    
   //  particles derived from G4Ions
   if (particle->GetParticleType() == nucleus) return true;
@@ -614,17 +619,21 @@ G4bool G4IonTable::IsAntiIon(const G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
-  static G4String nucleus("anti_nucleus");
-  static G4String proton("anti_proton");
+  static G4String anti_nucleus("anti_nucleus");
+  static G4String anti_proton("anti_proton");
 
   // anti_neutron is not ion
-  if ((particle->GetAtomicMass() >0) && (particle->GetAtomicNumber()>0)) return true;
-   
+  if ((particle->GetAtomicMass()>0)   && 
+      (particle->GetAtomicNumber()>0) ){
+   if (particle->GetBaryonNumber()<0)  return true;
+   else return false;
+  }
+
   //  particles derived from G4Ions
-  if (particle->GetParticleType() == nucleus) return true;
+  if (particle->GetParticleType() == anti_nucleus) return true;
 
   // anti_proton (Anti_Hydrogen nucleus)
-  if (particle->GetParticleName() == proton) return true;
+  if (particle->GetParticleName() == anti_proton) return true;
 
   return false;
 }
