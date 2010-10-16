@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2010-10-13 14:40:27 gcosmo Exp $
+$Id: History,v 1.18 2010-10-16 10:51:24 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 16th, 2010  John Allison  G01-V09-03-05
+- Introduced G4UIExecutive.
+- Reverted to OGL in vis.mac.
 
 October 13th, 2010  Gabriele Cosmo G01-V09-03-04
 - Use OGLIX in vis.mac to restore visualization, not working with OGL ...

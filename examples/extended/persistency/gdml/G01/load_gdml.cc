@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.10 2010-10-13 14:11:07 witoldp Exp $
+// $Id: load_gdml.cc,v 1.11 2010-10-16 10:51:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,9 +37,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIsession.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "G4LogicalVolumeStore.hh"
 #include "G4TransportationManager.hh"
@@ -50,6 +47,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "G4GDMLParser.hh"
@@ -92,7 +93,7 @@ int main(int argc,char **argv)
 
    runManager->Initialize();
 
-   G4UImanager* UI = G4UImanager::GetUIpointer();
+   G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
    ///////////////////////////////////////////////////////////////////////
    //
@@ -123,29 +124,22 @@ int main(int argc,char **argv)
    {
      G4String command = "/control/execute ";
      G4String fileName = argv[3];
-     UI->ApplyCommand(command+fileName);
+     UImanager->ApplyCommand(command+fileName);
    }
    else           // interactive mode
    {
+#ifdef G4UI_USE
+     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
      G4VisManager* visManager = new G4VisExecutive;
      visManager->Initialize();
+     UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
-
-     G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-     session = new G4UIterminal(new G4UItcsh);
-#else
-     session = new G4UIterminal();
-#endif
-#ifdef G4VIS_USE
-     UI->ApplyCommand("/control/execute vis.mac");
-#endif
-     session->SessionStart();
-     delete session;
-
+     ui->SessionStart();
 #ifdef G4VIS_USE
      delete visManager;
+#endif
+     delete ui;
 #endif
    }
 
