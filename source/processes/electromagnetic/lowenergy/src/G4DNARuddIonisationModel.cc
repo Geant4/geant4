@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.18 2010-08-25 07:57:28 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.19 2010-10-17 11:28:51 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -528,6 +528,7 @@ G4double G4DNARuddIonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefi
       if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
   }
   
+ 
   G4double secElecKinetic = 0.;
   
   do
@@ -569,7 +570,14 @@ void G4DNARuddIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
   }
   
   phi = twopi * G4UniformRand();
-  cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+  
+  //cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+
+  // Restriction below 100 eV from Emfietzoglou (2000)
+
+  if (secKinetic>100*eV) cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+  else cosTheta = (2.*G4UniformRand())-1.;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -869,26 +877,7 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
    
   G4DNAGenericIonsManager *instance;
   instance = G4DNAGenericIonsManager::Instance();
-
-/*
-  G4double kElectron(0);
-
-  G4DNACrossSectionDataSet * electronDataset = new G4DNACrossSectionDataSet (new G4LogLogInterpolation, eV, (1./3.343e22)*m*m);
  
-  if ( particle == instance->GetIon("alpha+")->GetParticleName()
-       ||
-       particle == instance->GetIon("helium")->GetParticleName()
-       ) 
-  {     
-      electronDataset->LoadData("dna/sigma_ionisation_e_born");
-
-      kElectron = k * 0.511/3728;
-       
-  }      
-  
-  // END PART 1/2 OF ELECTRON CORRECTION
-*/
-  
   G4int level = 0;
 
   // Retrieve data table corresponding to the current particle type  
@@ -912,18 +901,6 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 	  { 
 	      i--;
 	      valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-/*
-	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
-	      // Use only electron partial cross sections
-	      
-	      if (particle == instance->GetIon("alpha+")->GetParticleName()) 
-		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + electronDataset->GetComponent(i)->FindValue(kElectron); }
-
-	      if (particle == instance->GetIon("helium")->GetParticleName()) 
-		{valuesBuffer[i]=table->GetComponent(i)->FindValue(k) + 2*electronDataset->GetComponent(i)->FindValue(kElectron); }
-
-	      // BEGIN PART 2/2 OF ELECTRON CORRECTION
-*/
 	      value += valuesBuffer[i];
 	  }
 	    
@@ -939,10 +916,6 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
 	      if (valuesBuffer[i] > value)
 	      {
 		  delete[] valuesBuffer;
-		  
-/*
-		  if (electronDataset) delete electronDataset;
-*/		  
 		  return i;
 	      }
 	      value -= valuesBuffer[i];
@@ -957,10 +930,6 @@ G4int G4DNARuddIonisationModel::RandomSelect(G4double k, const G4String& particl
     G4Exception("G4DNARuddIonisationModel::RandomSelect: attempting to calculate cross section for wrong particle");
   }
 
-/*
-  delete electronDataset;
-*/
-      
   return level;
 }
 

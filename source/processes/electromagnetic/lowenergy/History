@@ -1,4 +1,4 @@
-$Id: History,v 1.457 2010-10-14 15:09:46 vnivanch Exp $
+$Id: History,v 1.458 2010-10-17 11:28:51 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.10.2010, S. Incerti, tag emlowen-V09-03-51
+            extended low energy coverage of G4DNA electron models
+            to be used with G4LEDATA 6.17
 
 14.10.2010, V. Ivanchenko, tag emlowen-V09-03-50
             G4GeneratorBS - optimise computations to speedup, fixed comments

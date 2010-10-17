@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.14 2010-08-25 06:58:15 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.cc,v 1.15 2010-10-17 11:28:51 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,9 +40,9 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
 :G4VEmModel(nam),isInitialised(false)
 {
 
-  killBelowEnergy = 9*eV; // Minimum e- energy for energy loss by excitation
+  killBelowEnergy = 0.025*eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 
-  lowEnergyLimitOfModel = 7.4 * eV; // The model lower energy is 7.4 eV
+  lowEnergyLimitOfModel = 0.025 * eV; 
   highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
@@ -138,7 +138,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     G4Exception("G4FinalStateElasticChampion::Initialise: G4LEDATA environment variable not set");
 
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/dna/sigmadiff_cumulated_elastic_e_champion.dat";
+    eFullFileName << path << "/dna/sigmadiff_cumulatedshort_elastic_e_champion.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) G4Exception("G4DNAChampionElasticModel::Initialise: error opening electron DATA FILE");

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.16 2010-03-26 18:10:43 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.17 2010-10-17 11:28:51 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -506,7 +506,14 @@ void G4DNABornIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
   {
     G4double maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
     phi = twopi * G4UniformRand();
-    cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+    
+    // cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+    
+    // Restriction below 100 eV from Emfietzoglou (2000)
+    
+    if (secKinetic>100*eV) cosTheta = std::sqrt(secKinetic / maxSecKinetic);
+    else cosTheta = (2.*G4UniformRand())-1.;
+        
   }			
 }
 
