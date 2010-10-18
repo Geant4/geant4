@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.11 2010-10-16 10:51:24 allison Exp $
+// $Id: load_gdml.cc,v 1.12 2010-10-18 14:55:55 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,11 +71,6 @@ int main(int argc,char **argv)
 
    G4GDMLParser parser;
    parser.Read(argv[1]);
-
-   if (argc>=3)
-   {
-      parser.Write(argv[2],parser.GetWorldVolume());
-   }
    
    if (argc>4)
    {
@@ -92,6 +87,12 @@ int main(int argc,char **argv)
    runManager->SetUserAction(new PrimaryGeneratorAction);
 
    runManager->Initialize();
+
+   if (argc>=3)
+   {
+      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()->
+		   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+   }
 
    G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
