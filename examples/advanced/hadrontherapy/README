@@ -3,12 +3,12 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revsion: G.A.P.Cirrone, November 2009;
-Released with the Geant4 9.3 version (December 2009)
+Last revsion: G.A.P.Cirrone, October 20010;
+Released with the Geant4 9.3 version (December 2010)
 
 ------------------------------------------------------------------------------------------------
 ADVERTISEMENT: this is the text version of the README file of the hadrontherapy application, 
-as it has been released in the official Geant4 9.3 release
+as it has been released in the official Geant4 9.4 release
 
 A more complete and updated version of this file is published inside the web pages of Hadrontherapy:
 http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
@@ -44,7 +44,7 @@ Please refer to the web-published version to know the last and future developmen
 -------------------------------------------------------------------------------------------------
 
 HADRONTHERAPY: 
-WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE           
+WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
 Hadrontherapy is a Geant4-based application specifically developed to address typical needs related to the proton and ion therapy. 
 It first release was in 2004. At that time Hadrontherapy was only capable to simulate a well specified proton therapy facility: the passive transport beam line installed at  Laboratori Nazionali del Sud (INFN) in Catania, Italy.
 
@@ -82,7 +82,7 @@ If you have troubles with the Geant4 installation please send an e-mail to us.
 
 
 SISTEM SET-UP: enviroment variables 
-A standard Geant4 example GNUmakefile is provided                                                         
+A standard Geant4 example GNUmakefile is provided
 
 The following section reports the environment variables that are necessary for the run of Hadrontherapy.
 #-------------------------------------
@@ -228,9 +228,10 @@ analysis: root RootScripts/iaeaBenchmark/fragmentEnergy.C
 PHYSICS PROCESSES AND PHYSICS MODELS IMPLEMENTATION 
 A particular care is addressed to the simulation of the physic processes.
 Three different approaches can be used for the choose of the physic models. 
+
 Approach 1: 
 Using the macro command:
-/physic/addPhysics/<physics List name>.
+/Physics/addPhysics/<physics List name>.
 
 In this case the models (for electromagnetic, hadronic elastic and hadronic inelastic) can be activated directly calling the name of the Physics Lists that are available inside the
 Geant4 kernel in the directory:
@@ -239,28 +240,21 @@ $G4INSTALL/source/physics_lists/builders/include
 
 An example of the use of the Physics List can be found in the macro files:
 proton_therapy.mac and ion_therapy.mac 
+
 Approach 2: 
 A set of built-in physic models are also contained inside the Hadrontherapy directory. These are called Local*.cc and Local*.hh and can be activated using the macro command:
-/physic/addPhysics/<name>. 
-Approach 3: 
-We developed this approach in order to simplify the choice of the physic models to
-be used in the application.
-With this approach the user must only insert a command line in his/her .mac file using the: /physics/addPackage <PACKAGE_NAME>
-    
-This permits to switch-on an already build physic package.
-Various packages are already present in the Geant4 tree: they are in the directory: geant4/source/physics_lists/lists/include
+/Physics/addPhysics/<name>. 
 
-In this case hadronic inelastic models are directly activated for every particle.
 
-NOTE: we do not recommend the use of local physics lists while we recommend the use of the Physics Lists or of the Reference Physics Lists (Approach 1 or 3)
+NOTE: we do not recommend the use of local physics lists while we recommend the use of the Physics Lists
 
 --------------------------------------------------------------------------------
-SUGGESTED PHYSIC FOR ION BEAMS IN THE RANGE 0 - 400 MeV
+SUGGESTED PHYSIC FOR PROTON AND ION BEAMS IN THE RANGE 0 - 400 MeV
 --------------------------------------------------------------------------------
 Two macro files (proton_therapy.mac and ion_therapy.mac) can be used for proton and ion
 simulations.
 
-Also the QGSP_BIC_EMY package can be used if the *Approach 3* is preferred.
+Also the QGSP_BIC_EMY reference physics list can be used as shown in the same macro files
 
 INTERACTIVE COMMANDS 
 How to change Phantom and Detector geometries 

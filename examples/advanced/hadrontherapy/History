@@ -7,7 +7,14 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
-03.06.2010 J.Perl; Tag: Hadrontherapy-V09-03-04
+18.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-05
+	   - Updated the physics class adding directly the QGSP_BIC_EMY
+	     reference physics list
+	   - Added the separation between cut for the transport beam line and detector
+	   - Updated macro files
+	   -- Updated README
+
+03.06.2010 J.Perl; Tag: hadrontherapy-V09-03-04
            - Updated vis usage
 
 01.06.2010: G.A.P.Cirrone; Tag: harontherapy-V09-03-03

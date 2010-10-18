@@ -14,13 +14,17 @@
 ##########################
 # Set of the physic models
 #
-/physic/addPhysics emstandard_opt3                     # Electromagnetic model    (Geant4 native physic list)
-/physic/addPhysics elastic                             # Hadronic elastic model   (Geant4 native physic list)
-/physic/addPhysics binary                              # Hadronic inelastic model for proton and neutron (Geant4 native physic list)
-/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
-/physic/addPhysics radioactive_decay
+#/physic/addPhysics standard_opt3                       # Electromagnetic model
+#/physic/addPhysics elastic                             # Hadronic elastic model
+#/physic/addPhysics binary                              # Hadronic inelastic model
+#/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+#/Physics/addPhysics radioactive_decay
 
-#Alternatively to *local_ion_ion_inelastic* the native "binary-ion" can be also used
+#
+# Or alternatively:
+#
+/Physics/addPhysics QGSP_BIC_EMY
+/Physics/addPhysics radioactive_decay
 
 ##########################
 # Initialisation procedure

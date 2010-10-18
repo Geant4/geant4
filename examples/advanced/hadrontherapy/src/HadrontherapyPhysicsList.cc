@@ -30,30 +30,17 @@
 // Each model can be setted via macro commands;
 // Inside Hadrontherapy the models can be activate with three different complementar methods:
 //
-// 1. Use of the *Packages*.
-//    Packages (that are contained inside the
-//    Geant4 distribution at $G4INSTALL/source/physics_lists/lists) provide a full set
-//    of models (both electromagnetic and hadronic).
-//    The User can use this method simply add the line /physic/addPackage <nameOfPackage>
-//    in his/her macro file. No other action is required.
-//    For Hadrontherapy applications we suggest the use of the QGSP_BIC package
-//    for proton beams. The same can be used
-//    also for ligth ion beam.
-//    Example of use of package can be found in the packageQGSP_BIC.mac file.
-//
-// 2. Use of the *Physic Lists*.
-//    Physic lists are also already ready to use inside the Geant4 distribution
-//    ($G4INSTALL/source/physics_lists/builders). To use them the simple
-//    /physic/addPhysics <nameOfPhysicList> command must be used in the macro.
-//    In Hadrontherapy we provide physics list to activate Electromagnetic,
-//    Hadronic elastic and Hadronic inelastic models.
-//
 //    For Hadrontherapy we suggest the use of:
 //
-//    /physic/addPhysic/emstandard_option3 (electromagnetic model)
-//    /physic/addPhysic/QElastic (hadronic elastic model)
-//    /physic/addPhysic/binary (hadronic inelastic models for proton and neutrons)
-//    /physic/addPhysic/binary_ion (hadronic inelastic models for ions)
+//    /Physic/addPhysics/emstandard_option3 (electromagnetic model)
+//    /Physic/addPhysics/QElastic (hadronic elastic model)
+//    /Physic/addPhysics/binary (hadronic inelastic models for proton and neutrons)
+//    /Physic/addPhysics/binary_ion (hadronic inelastic models for ions)
+//
+// or alternatevely write only the following command in the macro file to activate
+// a Reference physics list containing all the processes:
+//
+//    /Physics/addPhysics QGSP_BIC_EMY 
 //
 //    Example of the use of physics lists can be found in the macro files included in the
 //    'macro' folder .
@@ -65,16 +52,12 @@
 //    implementation containing the new ICRU73 data table for ions stopping powers)
 //    and the LocalIonIonInelasticPhysic.cc (physic list to use for the ion-ion interaction
 //    case)
-//    The *local* physics can be activated with the same /physic/addPhysic <nameOfPhysic> command;
-//
-//    While Packages approch must be used exclusively, Physics List and Local physics can
-//    be activated, if necessary, contemporaneously in the same simulation run.
+//    The *local* physics can be activated with the same /Physic/addPhysics <nameOfPhysic> command;
 //
 //    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND THE USE OF THE MACROS:
-//    proton_therapy.mac: use of the built-in Geant4 physics list for proton beams)
-//    ion_therapy.mac   : use of mixed combination of native Geant4 physic lists
-//                        and local physic for ion-ion enelastic processes)
-
+//    proton_therapy.mac: for proton beams;
+//    ion_therapy.mac   : for ion beams;
+ 
 #include "G4RunManager.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
@@ -92,19 +75,23 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmExtraPhysics.hh"
+
+#include "G4QStoppingPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4Decay.hh"
-
+#include "G4NeutronTrackingCut.hh"
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ProcessManager.hh"
-
+#include "HadronPhysicsQGSP_BIC.hh"
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
@@ -158,11 +145,11 @@ void HadrontherapyPhysicsList::AddPackage(const G4String& name)
   const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
   G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
   while (elem !=0)
-	{
-	  RegisterPhysics(tmp);
-	  elem= phys->GetPhysics(++i) ;
-	  tmp = const_cast<G4VPhysicsConstructor*> (elem);
-	}
+    {
+      RegisterPhysics(tmp);
+      elem= phys->GetPhysics(++i) ;
+      tmp = const_cast<G4VPhysicsConstructor*> (elem);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -206,7 +193,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   /////////////////////////////////////////////////////////////////////////////
   //   ELECTROMAGNETIC MODELS
   /////////////////////////////////////////////////////////////////////////////
-    if (name == "standard_opt3") {
+  if (name == "standard_opt3") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
@@ -262,13 +249,22 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "local_incl_ion_ion_inelastic" && !locIonIonInelasticIsRegistered) {
     hadronPhys.push_back(new LocalINCLIonIonInelasticPhysic());
     locIonIonInelasticIsRegistered = true;
-
+      
   } else if (name == "radioactive_decay" && !radioactiveDecayIsRegisted ) {
     hadronPhys.push_back(new G4RadioactiveDecayPhysics());
     radioactiveDecayIsRegisted = true;
-
+      
+  } else if (name == "QGSP_BIC_EMY") {
+    AddPhysicsList("emstandard_opt3");
+    hadronPhys.push_back( new G4EmExtraPhysics());
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    hadronPhys.push_back( new G4QStoppingPhysics());
+    hadronPhys.push_back( new G4IonBinaryCascadePhysics());
+    hadronPhys.push_back( new G4NeutronTrackingCut());
+    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+      
   } else {
-
+      
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;

@@ -18,12 +18,17 @@
 ##########################
 # Set of the physic models
 #
-/physic/addPhysics standard_opt3                       # Electromagnetic model
-/physic/addPhysics elastic                             # Hadronic elastic model
-/physic/addPhysics binary                              # Hadronic inelastic model
-/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+#/physic/addPhysics standard_opt3                       # Electromagnetic model
+#/physic/addPhysics elastic                             # Hadronic elastic model
+#/physic/addPhysics binary                              # Hadronic inelastic model
+#/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+#/Physics/addPhysics radioactive_decay
 
-
+#
+# Or alternatively:
+#
+/Physics/addPhysics QGSP_BIC_EMY
+/Physics/addPhysics radioactive_decay
 
 ##########################
 # Initialisation procedure
@@ -33,7 +38,8 @@
 ##########################
 # Visualisation 
 #
-/vis/open OGL
+/vis/scene/create
+/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
@@ -45,7 +51,12 @@
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-/physic/setCuts 0.01 mm
+# Set cuts ONLY inside detector
+/Physics/setDetectorCuts 0.01 mm
+
+# Set cuts outside detector 
+/Physics/setCuts 1 km
+
 /Step/waterPhantomStepMax 0.01 mm 
 
 #########################

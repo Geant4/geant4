@@ -37,50 +37,50 @@
 HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {
-  physDir = new G4UIdirectory("/physic/");
+  physDir = new G4UIdirectory("/Physics/");
   physDir->SetGuidance("Commands to activate physics models and set cuts");
    
-  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setGCut",this);  
+  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setGCut",this);  
   gammaCutCmd->SetGuidance("Set gamma cut.");
   gammaCutCmd->SetParameterName("Gcut",false);
   gammaCutCmd->SetUnitCategory("Length");
   gammaCutCmd->SetRange("Gcut>0.0");
   gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  electCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setECut",this);  
+  electCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setECut",this);  
   electCutCmd->SetGuidance("Set electron cut.");
   electCutCmd->SetParameterName("Ecut",false);
   electCutCmd->SetUnitCategory("Length");
   electCutCmd->SetRange("Ecut>0.0");
   electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setPCut",this);  
+  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setPCut",this);  
   protoCutCmd->SetGuidance("Set positron cut.");
   protoCutCmd->SetParameterName("Pcut",false);
   protoCutCmd->SetUnitCategory("Length");
   protoCutCmd->SetRange("Pcut>0.0");
   protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  allCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setCuts",this);  
+  allCutCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setCuts",this);  
   allCutCmd->SetGuidance("Set cut for all.");
   allCutCmd->SetParameterName("cut",false);
   allCutCmd->SetUnitCategory("Length");
   allCutCmd->SetRange("cut>0.0");
   allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  allDetectorCmd = new G4UIcmdWithADoubleAndUnit("/physic/setDetectorCuts",this);  
+  allDetectorCmd = new G4UIcmdWithADoubleAndUnit("/Physics/setDetectorCuts",this);  
   allDetectorCmd->SetGuidance("Set cut for all. into Detector");
   allDetectorCmd->SetParameterName("cut",false);
   allDetectorCmd->SetUnitCategory("Length");
   allDetectorCmd->SetRange("cut>0.0");
   allDetectorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
-  pListCmd = new G4UIcmdWithAString("/physic/addPhysics",this);  
+  pListCmd = new G4UIcmdWithAString("/Physics/addPhysics",this);  
   pListCmd->SetGuidance("Add physics list.");
   pListCmd->SetParameterName("PList",false);
   pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);  
 
-  packageListCmd = new G4UIcmdWithAString("/physic/addPackage",this);
+  packageListCmd = new G4UIcmdWithAString("/Physics/addPackage",this);
   packageListCmd->SetGuidance("Add physics package.");
   packageListCmd->SetParameterName("package",false);
   packageListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
