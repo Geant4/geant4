@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18/10/2010 - G.Folger (exgps-V09-03-02)
+- Fix compilation warning; occurs only if G4ANALYSIS_USE not set
+
 03/06/2010 - J.Perl (exgps-V09-03-01)
 - Updated vis usage
 
