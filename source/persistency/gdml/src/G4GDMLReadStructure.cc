@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.64 2010-10-14 16:19:40 gcosmo Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.65 2010-10-18 09:49:57 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -903,7 +903,17 @@ GetWorldVolume(const G4String& setupName)
 {    
    G4LogicalVolume* volume = GetVolume(Strip(GetSetup(setupName)));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
-   G4VPhysicalVolume* pvWorld =
-     new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,setupName,0,0,0);
+
+   G4VPhysicalVolume* pvWorld = 0;
+
+   if(setuptoPV[setupName])
+     {
+       pvWorld = setuptoPV[setupName];
+     }
+   else
+     {
+       pvWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,volume->GetName()+"_PV",0,0,0);
+       setuptoPV[setupName] = pvWorld;
+     }
    return pvWorld;
 }

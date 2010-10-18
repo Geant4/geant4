@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.29 2010-10-11 08:44:07 gcosmo Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.30 2010-10-18 09:49:57 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -100,7 +100,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4GDMLAuxMapType auxMap;
    G4GDMLAssemblyMapType assemblyMap;
    G4LogicalVolume *pMotherLogical;
-
+   std::map<std::string, G4VPhysicalVolume*> setuptoPV;
 };
 
 #endif
