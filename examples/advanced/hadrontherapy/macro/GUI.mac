@@ -18,11 +18,11 @@
 ##########################
 # Set of the physic models
 #
-/physic/addPhysics emstandard_opt3                     # Electromagnetic model
-/physic/addPhysics elastic                             # Hadronic elastic model
-/physic/addPhysics binary                              # Hadronic inelastic model
-/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
-/physic/addPhysics radioactive_decay                   # Radioactive decay
+/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
+/Physics/addPhysics elastic                             # Hadronic elastic model
+/Physics/addPhysics binary                              # Hadronic inelastic model
+/Physics/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+/Physics/addPhysics radioactive_decay                   # Radioactive decay
 
 ##########################
 # Initialisation procedure
@@ -44,7 +44,7 @@
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-/physic/setCuts 0.01 mm
+/Physics/setCuts 0.01 mm
 /Step/waterPhantomStepMax 0.01 mm 
 
 #########################

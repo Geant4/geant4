@@ -50,7 +50,13 @@
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-/physic/setCuts 0.01 km
+
+# Set cuts ONLY inside detector
+/Physics/setDetectorCuts 0.01 mm
+
+# Set cuts outside detector 
+/Physics/setCuts 1 m
+
 /Step/waterPhantomStepMax 0.01 mm 
 
 ##########################
@@ -59,9 +65,11 @@
 /vis/scene/create
 /vis/open OGLIX
 /vis/viewer/flush
-#/vis/viewer/set/viewpointThetaPhi 30 140 deg
-/vis/viewer/zoomTo 3
-/vis/viewer/panTo 100  20 cm
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoomTo 1
+#/vis/viewer/panTo 100  20 cm
+/vis/viewer/panTo -10  0 cm
+/vis/scene/add/trajectories
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
@@ -73,8 +81,16 @@
 # during the run
 # 
 /event/printEventNumber 100
+
 #/changeDetector/voxelSize 0 1 1 mm
 #/changePhantom/update
+
+# Default material is liquid water (G4_WATER)
+#/changePhantom/material G4_Pb
+
+# If secondaries dose/fluence are needed
+#/analysis/secondaries true 
+
 /run/beamOn 5000
 
 #########################

@@ -161,9 +161,9 @@ int main(int argc ,char ** argv)
 	// the program run and, at the end, authomatically call the exit state.
 	// With a such configuration, it is possible to send in background a simulation
 	// and correctly get the output file.
+	G4UIsession* session = 0;
 	if (argc!=1)   
 	{
-		G4UIsession* session = 0;
 		G4String command = "/control/execute ";
 		G4String fileName = argv[1];
 		UI -> ApplyCommand(command+fileName);
@@ -174,11 +174,9 @@ int main(int argc ,char ** argv)
 #endif
 		// Only if the User Interface is needed!
 		//session -> SessionStart();
-		//delete session;
 	}
 	else  // interactive mode : define visualization UI terminal
 	{
-		G4UIsession* session = 0;
 		
 			// If the enviroment variable for the TCSH terminal is active, it is used and the
 			// defaultMacro.mac file is executed
@@ -201,8 +199,8 @@ int main(int argc ,char ** argv)
 		UI -> ApplyCommand("/control/execute defaultMacro.mac");
 		session -> SessionStart();
 #endif
-		delete session;
 	}
+		delete session;
 	
 		// Job termination
 #ifdef G4ANALYSIS_USE_ROOT

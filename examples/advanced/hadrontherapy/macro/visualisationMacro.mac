@@ -43,7 +43,7 @@
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #
-/physic/setCuts 0.01 mm
+/Physics/setCuts 0.01 mm
 /Step/waterPhantomStepMax 0.01 mm 
 
 #########################

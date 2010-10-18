@@ -12,7 +12,7 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 	     reference physics list
 	   - Added the separation between cut for the transport beam line and detector
 	   - Updated macro files
-	   -- Updated README
+	   - Updated README
 
 03.06.2010 J.Perl; Tag: hadrontherapy-V09-03-04
            - Updated vis usage
