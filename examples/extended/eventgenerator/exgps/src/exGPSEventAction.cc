@@ -67,8 +67,11 @@ void exGPSEventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#ifdef G4ANALYSIS_USE 
 void exGPSEventAction::EndOfEventAction(const G4Event* evt)
+#else
+void exGPSEventAction::EndOfEventAction(const G4Event*)
+#endif
 {
   //  G4int evtNb = evt->GetEventID();
 
