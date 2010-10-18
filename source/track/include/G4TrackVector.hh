@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackVector.hh,v 1.2 2006-07-17 13:48:28 asaim Exp $
+// $Id: G4TrackVector.hh,v 1.3 2010-10-18 23:52:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -46,12 +46,35 @@
 #define G4TrackVector_h 1
 
 #include <vector>
-//#include "G4Track.hh"              // Include form 'tracking'
 class G4Track;
+class G4Step;
+
 
 ///////////////////////////////////////////////////
-typedef std::vector<G4Track*> G4TrackVector;
+//typedef std::vector<G4Track*> G4TrackVector;
 ///////////////////////////////////////////////////
+class  G4TrackVector : public  std::vector<G4Track*>
+{
+  typedef G4Track* T;
+
+  // this class is used by G4Step!!!
+  friend class G4Step;
+  private:
+  std::vector<const G4Track*> secondaryInCurrent;
+  
+
+  public:
+  virtual ~G4TrackVector(){
+             secondaryInCurrent.clear();
+          }
+   
+  void push_back( const T& x){
+                std::vector<G4Track*>::push_back(x);
+                secondaryInCurrent.push_back(x);
+       }
+
+};
+
 
 #endif
 

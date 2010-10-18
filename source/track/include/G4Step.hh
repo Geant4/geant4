@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.21 2010-10-06 13:07:34 kurasige Exp $
+// $Id: G4Step.hh,v 1.22 2010-10-18 23:52:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -196,10 +196,13 @@ class G4Step
    G4bool fLastStepInVolume;
 
 // Secondary buckets
-// NOTE: Secondary bucket of the Step contains 
-//       all secondaries during tracking the current track
-//       (i.e. NOT secondaries produced in the current step)
 public:
+   // secodaries in the current step
+   const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
+  
+   // NOTE: Secondary bucket of the Step contains  
+   //       all secondaries during tracking the current track 
+   //       (i.e. NOT secondaries produced in the current step)
    // all following methods give same object (i.e. G4TrackVector  )
    // but 2nd one will create bucket in addition  
    const G4TrackVector* GetSecondary() const ;
@@ -212,6 +215,7 @@ public:
 
    // Add secondary tracks to the bucket 
    void SetSecondary( G4TrackVector* value);
+
 private: 
    // Secondaty bucket implemented by using  std::vector of G4Track*   
    G4TrackVector* fSecondary;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.21 2010-10-06 13:07:34 kurasige Exp $
+// $Id: G4Step.icc,v 1.22 2010-10-18 23:52:04 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,10 +149,13 @@ inline
 
 inline 
  void G4Step::CopyPostToPreStepPoint( )
- { 
+ {
+   //This method is called at the beggining of each step 
    *(fpPreStepPoint) = *(fpPostStepPoint);
    fpPostStepPoint->SetStepStatus(fUndefined);
- }
+   // clear secondary in current
+   fSecondary->secondaryInCurrent.clear();
+}
 
 
 //-------------------------------------------------------------
@@ -208,7 +211,9 @@ inline
    fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge()); 
    fpPreStepPoint->SetWeight(fpTrack->GetWeight());
    
-   
+   // clear secondary in current	
+   fSecondary->secondaryInCurrent.clear();
+ 
    (*fpPostStepPoint) = (*fpPreStepPoint);
  }
 
@@ -237,23 +242,39 @@ inline
    fpTrack->SetNextTouchableHandle(fpPostStepPoint->GetTouchableHandle());
    fpTrack->SetWeight(fpPostStepPoint->GetWeight());
 
+
    // set velocity 
    fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
 }
 
-inline const G4TrackVector* G4Step::GetSecondary() const  {
+inline   
+ const std::vector<const G4Track*>* G4Step::GetSecondaryInCurrentStep() const 
+{
+  return  &fSecondary->secondaryInCurrent;
+}
+
+inline const G4TrackVector* G4Step::GetSecondary() const  
+{
    return fSecondary;
-    }
-inline G4TrackVector* G4Step::GetfSecondary()  {
+}
+
+inline G4TrackVector* G4Step::GetfSecondary()  
+{
    return fSecondary;
-    }
-inline void G4Step::SetSecondary(G4TrackVector* value)  {
+}
+
+inline void G4Step::SetSecondary(G4TrackVector* value)  
+{
    fSecondary=value;
-    }
-inline G4TrackVector* G4Step::NewSecondaryVector()  {
+}
+
+inline 
+ G4TrackVector* G4Step::NewSecondaryVector()  
+{
    fSecondary=new G4TrackVector();
    return fSecondary;
-    }
+}
+
 inline void G4Step::DeleteSecondaryVector()  {
    delete fSecondary;
     }
