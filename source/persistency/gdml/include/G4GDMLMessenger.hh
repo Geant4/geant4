@@ -24,47 +24,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.15 2010-10-18 14:53:37 witoldp Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//
-// class G4GDMLParser Implementation
-//
-// -------------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4GDMLParser.hh"
+#ifndef G4GDMLMessenger_h
+#define G4GDMLMessenger_h 1
 
-G4GDMLParser::G4GDMLParser()
-  : urcode(false), uwcode(false)
+#include "globals.hh"
+#include "G4UImessenger.hh"
+#include "G4VPhysicalVolume.hh"
+
+class G4GDMLParser;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4GDMLMessenger: public G4UImessenger
 {
-  reader = new G4GDMLReadStructure;
-  writer = new G4GDMLWriteStructure;
+  public:
+  G4GDMLMessenger(G4GDMLParser*);
+   ~G4GDMLMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    G4GDMLParser* myParser;
+    G4LogicalVolume* topvol;
+    
+    G4UIdirectory*             persistencyDir;
+    G4UIdirectory*             gdmlDir;
+    G4UIcmdWithAString*        ReaderCmd;
+    G4UIcmdWithAString*        WriterCmd;    
+    G4UIcmdWithAString*        TopVolCmd;    
+};
 
-  messenger = new G4GDMLMessenger(this);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  xercesc::XMLPlatformUtils::Initialize();
-}
+#endif
 
-G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr)
-  : urcode(true), uwcode(false)
-{
-  reader = extr;
-  writer = new G4GDMLWriteStructure;
-  xercesc::XMLPlatformUtils::Initialize();
-}
-
-G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr,
-                           G4GDMLWriteStructure* extw)
-  : urcode(true), uwcode(true)
-{
-  reader = extr;
-  writer = extw;
-  xercesc::XMLPlatformUtils::Initialize();
-}
-
-G4GDMLParser::~G4GDMLParser()
-{
-  xercesc::XMLPlatformUtils::Terminate();
-  if (!urcode) { delete reader; }
-  if (!uwcode) { delete writer; }
-}

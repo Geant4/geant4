@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.10 2010-10-11 08:44:07 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.11 2010-10-18 14:53:37 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,26 +46,16 @@ void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
 
 inline
 void G4GDMLParser::Write(const G4String& filename,
-                         const G4VPhysicalVolume* const pvol,
+                         const G4LogicalVolume* lvol,
                                G4bool refs,
                          const G4String& schemaLocation)
 { 
   const G4int depth = 0;
-  G4LogicalVolume* lvol = 0;
 
-  if (!pvol)
+  if (!lvol)
   {
-    G4VPhysicalVolume* worldPV = GetWorldVolume();
-    if (!worldPV)
-    {
-      G4Exception("G4DMLParser::Write()", "InvalidSetup", FatalException,
-                  "Detector-Construction needs to be registered first!");
-    }
-    lvol = worldPV->GetLogicalVolume();
-  }
-  else
-  {
-    lvol = pvol->GetLogicalVolume();
+    lvol = G4TransportationManager::GetTransportationManager()->
+      GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
   }
   writer->Write(filename,lvol,schemaLocation,depth,refs);
 }

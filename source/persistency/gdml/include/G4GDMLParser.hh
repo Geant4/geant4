@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.60 2010-10-11 08:44:07 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.61 2010-10-18 14:53:37 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,6 +44,11 @@
 #include "G4GDMLReadStructure.hh"
 #include "G4GDMLWriteStructure.hh"
 #include "G4STRead.hh"
+#include "G4GDMLMessenger.hh"
+
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
+
 
 #define G4GDML_DEFAULT_SCHEMALOCATION G4String("http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd")
 
@@ -69,7 +74,7 @@ class G4GDMLParser
      // in input. Validation against schema is activated by default.
 
    inline void Write(const G4String& filename,
-                     const G4VPhysicalVolume* const pvol = 0,
+                     const G4LogicalVolume* lvol = 0,
                            G4bool storeReferences = true,
                      const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
      //
@@ -115,6 +120,7 @@ class G4GDMLParser
 
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
+   G4GDMLMessenger* messenger;
    G4bool urcode, uwcode;
 
 };
