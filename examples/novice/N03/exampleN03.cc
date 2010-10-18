@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.37 2009-10-30 15:06:01 allison Exp $
+// $Id: exampleN03.cc,v 1.38 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,13 +36,13 @@
 
 #include "Randomize.hh"
 
-#include "ExN03DetectorConstruction.hh"
-#include "ExN03PhysicsList.hh"
-#include "ExN03PrimaryGeneratorAction.hh"
-#include "ExN03RunAction.hh"
-#include "ExN03EventAction.hh"
-#include "ExN03SteppingAction.hh"
-#include "ExN03SteppingVerbose.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -62,7 +62,7 @@ int main(int argc,char** argv)
   
   // User Verbose output class
   //
-  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
      
   // Construct the default run manager
   //
@@ -70,26 +70,26 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  ExN03DetectorConstruction* detector = new ExN03DetectorConstruction;
+  DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new ExN03PhysicsList;
+  PhysicsList* physics = new PhysicsList;
   runManager->SetUserInitialization(physics);
     
   // Set user action classes
   //
-  G4VUserPrimaryGeneratorAction* gen_action = 
-                          new ExN03PrimaryGeneratorAction(detector);
+  PrimaryGeneratorAction* gen_action = 
+                          new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(gen_action);
   //
-  ExN03RunAction* run_action = new ExN03RunAction;  
+  RunAction* run_action = new RunAction;  
   runManager->SetUserAction(run_action);
   //
-  ExN03EventAction* event_action = new ExN03EventAction(run_action);
+  EventAction* event_action = new EventAction(run_action);
   runManager->SetUserAction(event_action);
   //
-  G4UserSteppingAction* stepping_action =
-                    new ExN03SteppingAction(detector, event_action);
+  SteppingAction* stepping_action =
+                    new SteppingAction(detector, event_action);
   runManager->SetUserAction(stepping_action);
   
   // Initialize G4 kernel

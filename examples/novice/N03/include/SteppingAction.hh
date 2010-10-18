@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.30 2010-06-06 04:06:26 perl Exp $
+// $Id: SteppingAction.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,74 +32,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03EventAction.hh"
+#ifndef SteppingAction_h
+#define SteppingAction_h 1
 
-#include "ExN03RunAction.hh"
-#include "ExN03EventActionMessenger.hh"
+#include "G4UserSteppingAction.hh"
 
-#include "G4Event.hh"
-#include "G4UnitsTable.hh"
-
-#include "Randomize.hh"
-#include <iomanip>
+class DetectorConstruction;
+class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventAction::ExN03EventAction(ExN03RunAction* run)
-:runAct(run),printModulo(1),eventMessenger(0)
+class SteppingAction : public G4UserSteppingAction
 {
-  eventMessenger = new ExN03EventActionMessenger(this);
-}
+public:
+  SteppingAction(DetectorConstruction*, EventAction*);
+  virtual ~SteppingAction();
+
+  void UserSteppingAction(const G4Step*);
+    
+private:
+  DetectorConstruction* detector;
+  EventAction*          eventaction;  
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventAction::~ExN03EventAction()
-{
-  delete eventMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
-{  
-  G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0) { 
-    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-    CLHEP::HepRandom::showEngineStatus();
-}
- 
- // initialisation per event
- EnergyAbs = EnergyGap = 0.;
- TrackLAbs = TrackLGap = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03EventAction::EndOfEventAction(const G4Event* evt)
-{
-  //accumulates statistic
-  //
-  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
-  
-  //print per event (modulo n)
-  //
-  G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0) {
-    G4cout << "---> End of event: " << evtNb << G4endl;	
-
-    G4cout
-       << "   Absorber: total energy: " << std::setw(7)
-                                        << G4BestUnit(EnergyAbs,"Energy")
-       << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(TrackLAbs,"Length")
-       << G4endl
-       << "        Gap: total energy: " << std::setw(7)
-                                        << G4BestUnit(EnergyGap,"Energy")
-       << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(TrackLGap,"Length")
-       << G4endl;
-	  
-  }
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

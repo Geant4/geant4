@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.hh,v 1.10 2007-07-02 13:22:08 vnivanch Exp $
+// $Id: PhysicsList.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,29 +32,36 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03SteppingAction_h
-#define ExN03SteppingAction_h 1
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
-#include "G4UserSteppingAction.hh"
-
-class ExN03DetectorConstruction;
-class ExN03EventAction;
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03SteppingAction : public G4UserSteppingAction
+class PhysicsList: public G4VUserPhysicsList
 {
 public:
-  ExN03SteppingAction(ExN03DetectorConstruction*, ExN03EventAction*);
-  virtual ~ExN03SteppingAction();
+  PhysicsList();
+  virtual ~PhysicsList();
 
-  void UserSteppingAction(const G4Step*);
-    
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
+ 
+  void SetCuts();
+   
 private:
-  ExN03DetectorConstruction* detector;
-  ExN03EventAction*          eventaction;  
+
+  // these methods Construct physics processes and register them
+  void ConstructDecay();
+  void ConstructEM();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+

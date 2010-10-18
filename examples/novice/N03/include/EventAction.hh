@@ -24,34 +24,52 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.hh,v 1.9 2006-06-29 17:48:52 gunter Exp $
+// $Id: EventAction.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class ExN03SteppingVerbose;
-
-#ifndef ExN03SteppingVerbose_h
-#define ExN03SteppingVerbose_h 1
-
-#include "G4SteppingVerbose.hh"
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03SteppingVerbose : public G4SteppingVerbose
+#ifndef EventAction_h
+#define EventAction_h 1
+
+#include "G4UserEventAction.hh"
+#include "globals.hh"
+
+class RunAction;
+class EventActionMessenger;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class EventAction : public G4UserEventAction
 {
- public:   
+public:
+  EventAction(RunAction*);
+  virtual ~EventAction();
 
-   ExN03SteppingVerbose();
-  ~ExN03SteppingVerbose();
-
-   void StepInfo();
-   void TrackingStarted();
-
+  void  BeginOfEventAction(const G4Event*);
+  void    EndOfEventAction(const G4Event*);
+    
+  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
+  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+                     
+  void SetPrintModulo(G4int    val)  {printModulo = val;};
+    
+private:
+   RunAction*  runAct;
+   
+   G4double  EnergyAbs, EnergyGap;
+   G4double  TrackLAbs, TrackLGap;
+                     
+   G4int     printModulo;
+                             
+   EventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+    

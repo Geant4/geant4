@@ -24,54 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.9 2006-06-29 17:49:09 gunter Exp $
+// $Id: SteppingVerbose.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03PrimaryGeneratorMessenger.hh"
+class SteppingVerbose;
 
-#include "ExN03PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#ifndef SteppingVerbose_h
+#define SteppingVerbose_h 1
+
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
-                                          ExN03PrimaryGeneratorAction* ExN03Gun)
-:ExN03Action(ExN03Gun)
+class SteppingVerbose : public G4SteppingVerbose
 {
-  gunDir = new G4UIdirectory("/N03/gun/");
-  gunDir->SetGuidance("PrimaryGenerator control");
-   
-  RndmCmd = new G4UIcmdWithAString("/N03/gun/rndm",this);
-  RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on(default), off");
-  RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("on");
-  RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
+ public:   
+
+   SteppingVerbose();
+  ~SteppingVerbose();
+
+   void StepInfo();
+   void TrackingStarted();
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PrimaryGeneratorMessenger::~ExN03PrimaryGeneratorMessenger()
-{
-  delete RndmCmd;
-  delete gunDir;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03PrimaryGeneratorMessenger::SetNewValue(
-                                        G4UIcommand* command, G4String newValue)
-{ 
-  if( command == RndmCmd )
-   { ExN03Action->SetRndmFlag(newValue);}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.12 2007-07-02 13:22:08 vnivanch Exp $
+// $Id: EventAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,44 +32,74 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03EventAction_h
-#define ExN03EventAction_h 1
+#include "EventAction.hh"
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "RunAction.hh"
+#include "EventActionMessenger.hh"
 
-class ExN03RunAction;
-class ExN03EventActionMessenger;
+#include "G4Event.hh"
+#include "G4UnitsTable.hh"
+
+#include "Randomize.hh"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03EventAction : public G4UserEventAction
+EventAction::EventAction(RunAction* run)
+:runAct(run),printModulo(1),eventMessenger(0)
 {
-public:
-  ExN03EventAction(ExN03RunAction*);
-  virtual ~ExN03EventAction();
-
-  void  BeginOfEventAction(const G4Event*);
-  void    EndOfEventAction(const G4Event*);
-    
-  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
-  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
-                     
-  void SetPrintModulo(G4int    val)  {printModulo = val;};
-    
-private:
-   ExN03RunAction*  runAct;
-   
-   G4double  EnergyAbs, EnergyGap;
-   G4double  TrackLAbs, TrackLGap;
-                     
-   G4int     printModulo;
-                             
-   ExN03EventActionMessenger*  eventMessenger;
-};
+  eventMessenger = new EventActionMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+EventAction::~EventAction()
+{
+  delete eventMessenger;
+}
 
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::BeginOfEventAction(const G4Event* evt)
+{  
+  G4int evtNb = evt->GetEventID();
+  if (evtNb%printModulo == 0) { 
+    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+    CLHEP::HepRandom::showEngineStatus();
+}
+ 
+ // initialisation per event
+ EnergyAbs = EnergyGap = 0.;
+ TrackLAbs = TrackLGap = 0.;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::EndOfEventAction(const G4Event* evt)
+{
+  //accumulates statistic
+  //
+  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
+  
+  //print per event (modulo n)
+  //
+  G4int evtNb = evt->GetEventID();
+  if (evtNb%printModulo == 0) {
+    G4cout << "---> End of event: " << evtNb << G4endl;	
+
+    G4cout
+       << "   Absorber: total energy: " << std::setw(7)
+                                        << G4BestUnit(EnergyAbs,"Energy")
+       << "       total track length: " << std::setw(7)
+                                        << G4BestUnit(TrackLAbs,"Length")
+       << G4endl
+       << "        Gap: total energy: " << std::setw(7)
+                                        << G4BestUnit(EnergyGap,"Energy")
+       << "       total track length: " << std::setw(7)
+                                        << G4BestUnit(TrackLGap,"Length")
+       << G4endl;
+	  
+  }
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

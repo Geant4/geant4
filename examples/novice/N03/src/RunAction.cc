@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.19 2008-01-17 17:31:32 maire Exp $
+// $Id: RunAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03RunAction.hh"
+#include "RunAction.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -38,17 +38,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03RunAction::ExN03RunAction()
+RunAction::RunAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03RunAction::~ExN03RunAction()
+RunAction::~RunAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run* aRun)
 { 
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
@@ -63,7 +63,7 @@ void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::fillPerEvent(G4double EAbs, G4double EGap,
+void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
                                   G4double LAbs, G4double LGap)
 {
   //accumulate statistic
@@ -77,7 +77,7 @@ void ExN03RunAction::fillPerEvent(G4double EAbs, G4double EGap,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::EndOfRunAction(const G4Run* aRun)
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;

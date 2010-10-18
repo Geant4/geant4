@@ -24,30 +24,30 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.cc,v 1.13 2006-06-29 17:49:16 gunter Exp $
+// $Id: SteppingVerbose.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03SteppingVerbose.hh"
+#include "SteppingVerbose.hh"
 
 #include "G4SteppingManager.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03SteppingVerbose::ExN03SteppingVerbose()
+SteppingVerbose::SteppingVerbose()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03SteppingVerbose::~ExN03SteppingVerbose()
+SteppingVerbose::~SteppingVerbose()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03SteppingVerbose::StepInfo()
+void SteppingVerbose::StepInfo()
 {
   CopyState();
   
@@ -141,7 +141,7 @@ void ExN03SteppingVerbose::StepInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03SteppingVerbose::TrackingStarted()
+void SteppingVerbose::TrackingStarted()
 {
 
   CopyState();

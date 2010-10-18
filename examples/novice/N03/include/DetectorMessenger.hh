@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.12 2006-10-26 14:28:00 allison Exp $
+// $Id: DetectorMessenger.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,42 +32,45 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03EventActionMessenger.hh"
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
 
-#include "ExN03EventAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
+
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
-:eventAction(EvAct)
+class DetectorMessenger: public G4UImessenger
 {
-  eventDir = new G4UIdirectory("/N03/event/");
-  eventDir->SetGuidance("event control");
-   
-  PrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-}
+  public:
+    DetectorMessenger(DetectorConstruction* );
+   ~DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    DetectorConstruction* Detector;
+    
+    G4UIdirectory*             N03Dir;
+    G4UIdirectory*             detDir;
+    G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithAString*        GapMaterCmd;
+    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* GapThickCmd;
+    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
+    G4UIcmdWithAnInteger*      NbLayersCmd;    
+    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventActionMessenger::~ExN03EventActionMessenger()
-{
-  delete PrintCmd;
-  delete eventDir;   
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03EventActionMessenger::SetNewValue(
-                                        G4UIcommand* command,G4String newValue)
-{ 
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

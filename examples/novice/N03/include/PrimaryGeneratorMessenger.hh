@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.hh,v 1.8 2007-07-02 13:22:08 vnivanch Exp $
+// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,30 +32,30 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03PrimaryGeneratorMessenger_h
-#define ExN03PrimaryGeneratorMessenger_h 1
+#ifndef PrimaryGeneratorMessenger_h
+#define PrimaryGeneratorMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class ExN03PrimaryGeneratorAction;
+class PrimaryGeneratorAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03PrimaryGeneratorMessenger: public G4UImessenger
+class PrimaryGeneratorMessenger: public G4UImessenger
 {
 public:
-  ExN03PrimaryGeneratorMessenger(ExN03PrimaryGeneratorAction*);
-  virtual ~ExN03PrimaryGeneratorMessenger();
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+  virtual ~PrimaryGeneratorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  ExN03PrimaryGeneratorAction* ExN03Action;
-  G4UIdirectory*               gunDir; 
-  G4UIcmdWithAString*          RndmCmd;
+  PrimaryGeneratorAction* Action;
+  G4UIdirectory*          gunDir; 
+  G4UIcmdWithAString*     RndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

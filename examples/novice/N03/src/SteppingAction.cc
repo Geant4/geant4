@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorAction.hh,v 1.8 2007-07-02 13:22:08 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,38 +32,47 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03PrimaryGeneratorAction_h
-#define ExN03PrimaryGeneratorAction_h 1
+#include "SteppingAction.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
+#include "DetectorConstruction.hh"
+#include "EventAction.hh"
 
-class G4ParticleGun;
-class G4Event;
-class ExN03DetectorConstruction;
-class ExN03PrimaryGeneratorMessenger;
+#include "G4Step.hh"
+
+////#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+SteppingAction::SteppingAction(DetectorConstruction* det,
+                                         EventAction* evt)
+:detector(det), eventaction(evt)					 
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-public:
-  ExN03PrimaryGeneratorAction(ExN03DetectorConstruction*);    
-  virtual ~ExN03PrimaryGeneratorAction();
-
-  void GeneratePrimaries(G4Event*);
-  void SetRndmFlag(G4String val) { rndmFlag = val;}
-
-private:
-  G4ParticleGun*                particleGun;	  //pointer a to G4  class
-  ExN03DetectorConstruction*    ExN03Detector;    //pointer to the geometry
-    
-  ExN03PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
-  G4String                      rndmFlag;	  //flag for a rndm impact point
-};
+  // get volume of the current step
+  G4VPhysicalVolume* volume 
+  = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+  
+  // collect energy and track length step by step
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  
+  G4double stepl = 0.;
+  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
+    stepl = aStep->GetStepLength();
+      
+  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
+  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
+  
+  //example of saving random number seed of this event, under condition
+  //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
-

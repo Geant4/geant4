@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.15 2006-06-29 17:49:13 gunter Exp $
+// $Id: EventActionMessenger.hh,v 1.1 2010-10-18 15:56:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,47 +32,32 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03SteppingAction.hh"
+#ifndef EventActionMessenger_h
+#define EventActionMessenger_h 1
 
-#include "ExN03DetectorConstruction.hh"
-#include "ExN03EventAction.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-#include "G4Step.hh"
-
-////#include "G4RunManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN03SteppingAction::ExN03SteppingAction(ExN03DetectorConstruction* det,
-                                         ExN03EventAction* evt)
-:detector(det), eventaction(evt)					 
-{ }
+class EventAction;
+class G4UIdirectory;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03SteppingAction::~ExN03SteppingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
+class EventActionMessenger: public G4UImessenger
 {
-  // get volume of the current step
-  G4VPhysicalVolume* volume 
-  = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  
-  // collect energy and track length step by step
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  
-  G4double stepl = 0.;
-  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
-    stepl = aStep->GetStepLength();
-      
-  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
-  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
-  
-  //example of saving random number seed of this event, under condition
-  //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 
-}
+public:
+  EventActionMessenger(EventAction*);
+  virtual ~EventActionMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+  EventAction*          eventAction;
+  G4UIdirectory*        eventDir;   
+  G4UIcmdWithAnInteger* PrintCmd;    
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
