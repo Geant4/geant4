@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:48:20 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-19 12:44:06 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -32,6 +32,10 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4ions
     HEADERS
         G4Alpha.hh
+        G4AntiAlpha.hh
+        G4AntiDeuteron.hh
+        G4AntiHe3.hh
+        G4AntiTriton.hh
         G4Deuteron.hh
         G4GenericIon.hh
         G4He3.hh
@@ -39,6 +43,10 @@ GEANT4_DEFINE_MODULE(NAME G4ions
         G4Triton.hh
     SOURCES
         G4Alpha.cc
+        G4AntiAlpha.cc
+        G4AntiDeuteron.cc
+        G4AntiHe3.cc
+        G4AntiTriton.cc
         G4Deuteron.cc
         G4GenericIon.cc
         G4He3.cc

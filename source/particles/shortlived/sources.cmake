@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:49:24 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-19 12:44:06 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -31,8 +31,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4shortlived
     HEADERS
-        G4AntiNucleiConstructor.hh
-        G4AntiNucleus.hh
         G4DiQuarks.hh
         G4ExcitedBaryonConstructor.hh
         G4ExcitedBaryons.hh
@@ -48,8 +46,6 @@ GEANT4_DEFINE_MODULE(NAME G4shortlived
         G4ShortLivedConstructor.hh
         G4VShortLivedParticle.hh
     SOURCES
-        G4AntiNucleiConstructor.cc
-        G4AntiNucleus.cc
         G4DiQuarks.cc
         G4ExcitedBaryonConstructor.cc
         G4ExcitedBaryons.cc

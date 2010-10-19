@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.4 2006-07-20 15:14:43 gcosmo Exp $
+// $Id: G4PrimaryVertex.hh,v 1.5 2010-10-19 12:44:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -139,7 +139,7 @@ class G4PrimaryVertex
       { return userInfo; }
 };
 
-#if defined G4PARTICLES_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
