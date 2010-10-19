@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2004-11-12 09:05:05 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2010-10-19 10:18:01 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for geometry/management library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -11,7 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
+CPPFLAGS += -DG4ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/management/include \
