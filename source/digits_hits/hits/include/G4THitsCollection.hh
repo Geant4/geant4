@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.hh,v 1.5 2006-06-29 18:06:34 gunter Exp $
+// $Id: G4THitsCollection.hh,v 1.6 2010-10-19 09:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -59,7 +59,7 @@ class G4HitsCollection : public G4VHitsCollection
       void* theCollection;
 };
 
-#if defined G4DIGI_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4HitsCollection> anHCAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4HitsCollection> anHCAllocator;

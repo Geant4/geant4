@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh,v 1.6 2006-06-29 18:06:16 gunter Exp $
+// $Id: G4TDigiCollection.hh,v 1.7 2010-10-19 09:54:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,7 +58,7 @@ class G4DigiCollection : public G4VDigiCollection
       void* theCollection;
 };
 
-#if defined G4DIGI_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4DigiCollection> aDCAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4DigiCollection> aDCAllocator;

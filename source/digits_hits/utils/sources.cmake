@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:39:16 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-19 09:54:03 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -47,7 +47,6 @@ GEANT4_DEFINE_MODULE(NAME G4detutils
         G4ScoreLogColorMap.hh
         G4ScoreQuantityMessenger.hh
         G4ScoringBox.hh
-        G4ScoringBoxParameterisation.hh
         G4ScoringCylinder.hh
         G4ScoringManager.hh
         G4ScoringMessenger.hh
@@ -60,7 +59,6 @@ GEANT4_DEFINE_MODULE(NAME G4detutils
         G4ScoreQuantityMessenger.cc
         G4ScoreQuantityMessengerQCmd.cc
         G4ScoringBox.cc
-        G4ScoringBoxParameterisation.cc
         G4ScoringCylinder.cc
         G4ScoringManager.cc
         G4ScoringMessenger.cc
