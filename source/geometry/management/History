@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2010-09-06 09:39:39 gcosmo Exp $
+$Id: History,v 1.145 2010-10-19 15:20:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 19, 2010  G.Cosmo                  geommng-V09-03-05
+- Added Clone() virtual method to G4VSolid, to return a pointer to a
+  dynamically allocated copy of the solid. To be used by Geant4-MT.
+- Added copy-ctr and assignment operator to G4ReflectedSolid, now also
+  implementing the Clone() method.
 
 September 6, 2010  G.Cosmo                 geommng-V09-03-04
 - Fixed false-positive null forward case in G4SmartVoxelHeader.
