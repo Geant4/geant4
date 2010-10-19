@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2010-06-14 14:33:34 gcosmo Exp $
+$Id: History,v 1.65 2010-10-19 12:52:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+19th October 2010  Gabriele Cosmo (raytracer-V09-03-03)
+- Replaced G4VIS_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
+  symbols.
 
 14th June 2010  Gabriele Cosmo  (raytracer-V09-03-02)
 - Added missing virtual destructor to G4VRTScanner, G4RTXScanner and
