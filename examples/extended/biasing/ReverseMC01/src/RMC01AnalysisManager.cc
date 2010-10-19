@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.4 2009-12-16 17:54:09 gunter Exp $
+// $Id: RMC01AnalysisManager.cc,v 1.5 2010-10-19 13:18:50 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -316,7 +316,7 @@ void RMC01AnalysisManager::EndOfEvent(const G4Event* anEvent)
    	G4double  n_adj_evt= nb_event/nb_evt_per_adj_evt;
 	// nb_event/nb_evt_per_adj_evt;
 	if (n_adj_evt*nb_evt_per_adj_evt == nb_event) {
-		nb_event =n_adj_evt;
+		nb_event =static_cast<G4int>(n_adj_evt);
 		factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun();
 	}	
 	else nb_event=0;
