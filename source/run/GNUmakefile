@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 2007-07-13 05:56:42 asaim Exp $
+# $Id: GNUmakefile,v 1.17 2010-10-19 09:11:24 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------
@@ -21,7 +21,7 @@ ifdef G4FPE_DEBUG
   CPPFLAGS += -DG4FPE_DEBUG
 endif
 
-CPPFLAGS += -DG4RUN_ALLOC_EXPORT
+CPPFLAGS += -DG4ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
