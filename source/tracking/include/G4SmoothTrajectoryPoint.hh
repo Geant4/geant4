@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.13 2006-06-29 21:15:29 gunter Exp $
+// $Id: G4SmoothTrajectoryPoint.hh,v 1.14 2010-10-19 09:33:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -87,7 +87,7 @@ public: // without description
    std::vector<G4ThreeVector>* fAuxiliaryPointVector;
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.27 2010-06-16 20:03:00 allison Exp $
+// $Id: G4Trajectory.hh,v 1.28 2010-10-19 09:33:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -135,7 +135,7 @@ public: // with description
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4Trajectory> aTrajectoryAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4Trajectory> aTrajectoryAllocator;

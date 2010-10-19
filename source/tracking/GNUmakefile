@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2004-06-11 14:30:16 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2010-10-19 09:33:19 gcosmo Exp $
 # ----------------------------------------------------------
 # GNUmakefile for tracking library.  Katsuya Amako, 5/9/95.
 # ----------------------------------------------------------
@@ -16,7 +16,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4TRACKING_ALLOC_EXPORT
+CPPFLAGS += -DG4ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \

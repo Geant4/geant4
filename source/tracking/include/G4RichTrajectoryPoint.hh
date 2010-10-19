@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.hh,v 1.7 2009-11-24 10:04:14 perl Exp $
+// $Id: G4RichTrajectoryPoint.hh,v 1.8 2010-10-19 09:33:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -107,7 +107,7 @@ private:
   G4TouchableHandle fpPostStepPointVolume;
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
 extern G4DLLEXPORT G4Allocator<G4RichTrajectoryPoint>
 aRichTrajectoryPointAllocator;
 #else
