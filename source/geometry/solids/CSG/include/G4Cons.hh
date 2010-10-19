@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.23 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Cons.hh,v 1.24 2010-10-19 15:42:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,6 +138,8 @@ class G4Cons : public G4CSGSolid
         
     G4ThreeVector GetPointOnSurface() const; 
         
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions

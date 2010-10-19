@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.34 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Orb.cc,v 1.35 2010-10-19 15:42:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -649,6 +649,15 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
 G4GeometryType G4Orb::GetEntityType() const
 {
   return G4String("G4Orb");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Orb::Clone() const
+{
+  return new G4Orb(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

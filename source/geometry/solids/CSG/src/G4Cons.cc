@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.72 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.73 2010-10-19 15:42:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2225,6 +2225,15 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 G4GeometryType G4Cons::GetEntityType() const
 {
   return G4String("G4Cons");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Cons::Clone() const
+{
+  return new G4Cons(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

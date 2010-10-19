@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.70 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.71 2010-10-19 15:42:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1630,6 +1630,15 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
 G4GeometryType G4Torus::GetEntityType() const
 {
   return G4String("G4Torus");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Torus::Clone() const
+{
+  return new G4Torus(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

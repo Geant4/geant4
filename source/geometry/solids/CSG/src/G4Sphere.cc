@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.87 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.88 2010-10-19 15:42:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -2999,6 +2999,15 @@ G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
 G4GeometryType G4Sphere::GetEntityType() const
 {
   return G4String("G4Sphere");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Sphere::Clone() const
+{
+  return new G4Sphere(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

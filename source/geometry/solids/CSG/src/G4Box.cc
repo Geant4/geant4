@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.52 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Box.cc,v 1.53 2010-10-19 15:42:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1017,6 +1017,15 @@ G4ThreeVector G4Box::GetPointOnSurface() const
     else                      { px = -fDx; }
   } 
   return G4ThreeVector(px,py,pz);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4Box::Clone() const
+{
+  return new G4Box(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

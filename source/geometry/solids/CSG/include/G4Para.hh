@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.19 2010-09-17 10:32:03 gcosmo Exp $
+// $Id: G4Para.hh,v 1.20 2010-10-19 15:42:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -137,6 +137,8 @@ class G4Para : public G4CSGSolid
     G4GeometryType GetEntityType() const;
 
     G4ThreeVector GetPointOnSurface() const; 
+
+    G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
