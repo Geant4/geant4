@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.hh,v 1.10 2006-06-29 18:09:09 gunter Exp $
+// $Id: G4StackedTrack.hh,v 1.11 2010-10-19 09:06:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,7 @@ class G4StackedTrack
       { nextStackedTrack = value; }
 };
 
-#if defined G4EVENT_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4StackedTrack> aStackedTrackAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4StackedTrack> aStackedTrackAllocator;

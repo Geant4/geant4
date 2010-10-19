@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh,v 1.15 2006-06-29 18:09:15 gunter Exp $
+// $Id: G4TrajectoryContainer.hh,v 1.16 2010-10-19 09:06:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -76,7 +76,7 @@ class G4TrajectoryContainer
     TrajectoryVector* vect;
 };
 
-#if defined G4EVENT_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;

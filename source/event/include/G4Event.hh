@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.17 2007-03-08 23:56:12 asaim Exp $
+// $Id: G4Event.hh,v 1.18 2010-10-19 09:06:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -196,7 +196,7 @@ class G4Event
       }
 };
 
-#if defined G4EVENT_ALLOC_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4Event> anEventAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4Event> anEventAllocator;
