@@ -96,7 +96,7 @@ LIBPATH=$HOME/Geant4Library
 
 export G4SYSTEM=Linux-g++
 
-# Path to the directory in wich you put your Geant4 installation
+# Path to the directory in wich you put your Geant4 installation, i.e. $HOME/geant4-09-03 in this case
 export G4INSTALL=$HOME/${VERSION}
 
 export G4LIB=$G4INSTALL/lib
@@ -183,7 +183,7 @@ There is also a facility that allows the user to make a choice between alternati
 where <name> is either "default" for the standard hadrontherapy geometry or "IAEA" for the IAEA benchmark geometry. Both geometries are described below. By default the standard "default" geometry is used. 
 The water phantom to collect informations 
 At the end of the beam line a phantom (a box of uniform material) is reproduced. Inside it, a user-defined region is divided (via the ROGeomtry classes of Geant4) in cubic and identical voxels. The voxels size can be varied as well as the voxelized region.
-At the end of a simulation run the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file or as a .root (if the G4ANALYSIS_USE variable is defined and the AIDA interface is activated).  
+At the end of a simulation run the dose deposited by primaries and secondaries in each voxel is collected. This information is available as an .out file or as a .root (if the G4ANALYSIS_USE_ROOT variable is defined).  
 
 The default sizes of the active voxelized region are 40x40x40 mm and actually the default voxel configuration is 200 x 1 x 1, which means 200 slices with 0.2 mm of thickness.
 Of course this default can be modified in order to obtain, for example, a matrix of 80x80x80 cubic voxels each with a lateral dimension of 0.5 mm.

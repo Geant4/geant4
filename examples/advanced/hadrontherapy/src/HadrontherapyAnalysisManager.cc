@@ -33,8 +33,9 @@
 
 HadrontherapyAnalysisManager* HadrontherapyAnalysisManager::instance = 0;
 
-HadrontherapyAnalysisManager::HadrontherapyAnalysisManager(): 
+HadrontherapyAnalysisManager::HadrontherapyAnalysisManager() 
 #ifdef G4ANALYSIS_USE_ROOT 
+:
 analysisFileName("DoseDistribution.root"),theTFile(0), histo1(0), histo2(0), histo3(0),
 histo4(0), histo5(0), histo6(0), histo7(0), histo8(0), histo9(0), histo10(0), histo11(0), histo12(0), histo13(0), histo14(0), histo15(0), histo16(0),
 kinFragNtuple(0),
@@ -55,7 +56,7 @@ eventCounter(0)
 
 HadrontherapyAnalysisManager::~HadrontherapyAnalysisManager()
 {
-    delete(fMess); 
+    delete fMess; 
 #ifdef G4ANALYSIS_USE_ROOT
     Clear();	
 #endif
