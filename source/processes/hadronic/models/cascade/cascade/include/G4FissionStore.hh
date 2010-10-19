@@ -22,10 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FissionStore.hh,v 1.10 2010-10-14 20:55:10 mkelsey Exp $
+// $Id: G4FissionStore.hh,v 1.11 2010-10-19 21:33:58 mkelsey Exp $
 //
 // 20100728  Move ::addConfig() to .cc file, add setVerboseLevel(), clear()
-// 20101010  M. Kelsey -- Migrate to integer A and Z
 
 #ifndef G4FISSION_STORE_HH
 #define G4FISSION_STORE_HH
@@ -39,13 +38,13 @@ public:
 
   void setVerboseLevel(G4int verbose=1) { verboseLevel = verbose; }
 
-  void addConfig(G4int a, G4int z, G4int ez, G4double ek, G4double ev);
+  void addConfig(G4double a, G4double z, G4double ez, G4double ek, G4double ev);
 
   void clear() { configurations.clear(); }
 
   G4int size() const { return configurations.size(); }
 
-  G4FissionConfiguration generateConfiguration(G4int amax, 
+  G4FissionConfiguration generateConfiguration(G4double amax, 
 					       G4double rand) const;
 
 private:

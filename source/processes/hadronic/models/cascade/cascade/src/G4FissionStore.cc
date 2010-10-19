@@ -22,10 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4FissionStore.cc,v 1.15 2010-10-14 20:55:10 mkelsey Exp $
+// $Id: G4FissionStore.cc,v 1.16 2010-10-19 21:33:58 mkelsey Exp $
 //
 // 20100728  Move ::addConfig() implementation to .cc file
-// 20101010  M. Kelsey -- Migrate to integer A and Z
 
 #include "G4FissionStore.hh"
 #include "G4FissionConfiguration.hh"
@@ -36,15 +35,15 @@ G4FissionStore::G4FissionStore() : verboseLevel(0) {
     G4cout << " >>> G4FissionStore::G4FissionStore" << G4endl;
 }
 
-void G4FissionStore::addConfig(G4int a, G4int z, G4int ez, 
+void G4FissionStore::addConfig(G4double a, G4double z, G4double ez, 
 			       G4double ek, G4double ev) {
   G4FissionConfiguration config(a, z, ez, ek, ev);
   configurations.push_back(config);
   if (verboseLevel > 2) config.print();
 }
 
-G4FissionConfiguration 
-G4FissionStore::generateConfiguration(G4int amax, G4double rand) const {
+G4FissionConfiguration G4FissionStore::generateConfiguration(G4double amax, 
+							     G4double rand) const {
   if (verboseLevel > 1)
     G4cout << " >>> G4FissionStore::generateConfiguration" << G4endl;
   
