@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.29 2008-09-10 13:18:42 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.30 2010-10-19 15:19:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -191,6 +191,11 @@ class G4VSolid
 
     virtual G4ThreeVector GetPointOnSurface() const;
       // Returns a random point located on the surface of the solid.
+
+    virtual G4VSolid* Clone() const;
+      // Returns a pointer of a dynamically allocated copy of the solid.
+      // Returns NULL pointer with warning in case the concrete solid does not
+      // implement this method. The caller has responsibility for ownership.
 
     virtual std::ostream& StreamInfo(std::ostream& os) const = 0;
       // Dumps contents of the solid to a stream.
