@@ -11,9 +11,7 @@
     <text/>
   </argument>
   <argument name="prerequisites">
-    <set>
-      <tuple><text>exam-ext-eventgenerator-exgps-build</text><enumeral>PASS</enumeral></tuple>
-    </set>
+    <set/>
   </argument>
   <argument name="stdin">
     <text/>
@@ -25,8 +23,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd
-    $G4INSTALL/examples/extended/eventgenerator/exgps;$G4BIN/$G4SYSTEM/exGPS exgps_batch.in</text>
+    <text>cd $G4INSTALL/examples/extended/persistency/gdml/G04;make</text>
   </argument>
   <argument name="stderr">
     <text/>

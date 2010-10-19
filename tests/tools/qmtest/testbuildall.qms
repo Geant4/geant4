@@ -35,6 +35,8 @@
       <text>exam-ext-electromagnetic-testem7-build</text>
       <text>exam-ext-electromagnetic-testem8-build</text>
       <text>exam-ext-electromagnetic-testem9-build</text>
+      <text>exam-ext-errorpropagation-build</text>
+      <text>exam-ext-eventgenerator-exgps-build</text>
       <text>exam-ext-eventgenerator-particleGun-build</text>
       <text>exam-ext-field-field01-build</text>
       <text>exam-ext-field-field02-build</text>
@@ -52,6 +54,7 @@
       <text>exam-ext-persistency-gdml-g01-build</text>
       <text>exam-ext-persistency-gdml-g02-build</text>
       <text>exam-ext-persistency-gdml-g03-build</text>
+      <text>exam-ext-persistency-gdml-g04-build</text>
       <text>exam-ext-polarisation-pol01-build</text> 
       <text>exam-ext-radioactivedecay-rdecay01-build</text>
       <text>exam-ext-radioactivedecay-rdecay02-build</text>

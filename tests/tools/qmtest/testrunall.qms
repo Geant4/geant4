@@ -62,6 +62,8 @@
       <text>exam-ext-electromagnetic-testem7-run</text>
       <text>exam-ext-electromagnetic-testem8-run</text>
       <text>exam-ext-electromagnetic-testem9-run</text>
+      <text>exam-ext-errorpropagation-run</text>
+      <text>exam-ext-eventgenerator-exgps-run</text>
       <text>exam-ext-eventgenerator-particleGun-r1-run</text>
       <text>exam-ext-eventgenerator-particleGun-r2-run</text>
       <text>exam-ext-eventgenerator-particleGun-r3-run</text>
@@ -80,6 +82,7 @@
       <text>exam-ext-optical-lxe-run</text>
       <text>exam-ext-optical-wls-run</text>
       <text>exam-ext-persistency-gdml-g01-run</text>
+      <text>exam-ext-persistency-gdml-g04-run</text>
       <text>exam-ext-polarisation-pol01-run</text>
       <text>exam-ext-radioactivedecay-rdecay01-run</text>
       <text>exam-ext-radioactivedecay-rdecay02-run</text>
@@ -137,8 +140,6 @@
       <text>test60-run</text>
       <text>test61-run</text>
       <text>test62-run</text>
-      <text>test201-run</text>
-      <text>test202-run</text>
     </set>
   </argument>
 </extension>

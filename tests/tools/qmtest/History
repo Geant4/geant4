@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2010-10-15 15:36:31 gunter Exp $
+$Id: History,v 1.64 2010-10-19 15:47:23 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,14 @@ $Id: History,v 1.63 2010-10-15 15:36:31 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-Oct-2010 G.Folger                (testtools-QMtest-V09-03-15)
+-  add test for new example/extented/persistency/g04
+-  enable tests for extended examples
+    - errorpropagation
+    - eventgenerator/exgps
+-  only build, but do not run test201/202, these fail for no X display;     
+
 
 15-Oct-2010 G.Folger                (testtools-QMtest-V09-03-14)
 -  add testing of more examples/extended:
