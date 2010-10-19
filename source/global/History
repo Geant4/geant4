@@ -1,4 +1,4 @@
-$Id: History,v 1.259 2010-10-15 12:51:40 gcosmo Exp $
+$Id: History,v 1.260 2010-10-19 12:25:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 19, 2010  G.Cosmo (global-V09-03-19)
+- Replaced G4IOS_EXPORT flag with G4ALLOC_EXPORT for DLL exported symbols.
 
 Oct 15, 2010  G.Cosmo (global-V09-03-18)
 - Fixed compilation error on WIN32-VC for G4ConvergenceTester. Also, added
