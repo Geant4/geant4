@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4CollisionOutput.cc,v 1.36 2010-09-26 04:06:03 mkelsey Exp $
+// $Id: G4CollisionOutput.cc,v 1.37 2010-10-19 19:48:34 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -43,6 +43,7 @@
 //		old "TargetFragment".  Add new (reusable) G4Fragment buffer 
 //		and access functions for initial post-cascade processing.
 //		Move implementation of add() to .cc file.
+// 20101019  M. Kelsey -- CoVerity report: unitialized constructor
 
 #include "G4CollisionOutput.hh"
 #include "G4CascadParticle.hh"
@@ -58,7 +59,7 @@ typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 
 G4CollisionOutput::G4CollisionOutput()
-  : verboseLevel(0) {
+  : verboseLevel(0), eex_rest(0), on_shell(false) {
   if (verboseLevel > 1)
     G4cout << " >>> G4CollisionOutput::G4CollisionOutput" << G4endl;
 }

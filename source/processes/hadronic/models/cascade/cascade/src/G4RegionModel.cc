@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RegionModel.cc,v 1.17 2010-06-25 09:45:04 gunter Exp $
+// $Id: G4RegionModel.cc,v 1.18 2010-10-19 19:49:12 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Eliminate unnecessary use of std::pow()
+// 20101019  M. Kelsey -- CoVerity report: unitialized constructor
 
 #include "G4RegionModel.hh"
 #include "G4HadronicException.hh"
@@ -37,7 +38,9 @@ using namespace G4InuclSpecialFunctions;
 const G4double G4RegionModel::radius0 = 1.0E-15; 
 const G4double G4RegionModel::BE = 7;
 
-G4RegionModel::G4RegionModel(const G4int numberOfLayers, const G4int A, const G4int Z)
+G4RegionModel::G4RegionModel(const G4int numberOfLayers,
+			     const G4int A, const G4int Z)
+  : massNumber(A), protonNumber(Z)
 {
   //count the radiuses, densities and fermi momenta with A and Z
   G4double r = radius0*G4cbrt(A);

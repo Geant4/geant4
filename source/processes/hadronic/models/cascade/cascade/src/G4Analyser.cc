@@ -23,41 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Analyser.cc,v 1.23 2010-10-14 20:55:10 mkelsey Exp $
+// $Id: G4Analyser.cc,v 1.24 2010-10-19 19:48:15 mkelsey Exp $
 //
 // 20100726  M. Kelsey -- Use references for fetched lists
 // 20101010  M. Kelsey -- Migrate to integer A and Z
+// 20101019  M. Kelsey -- CoVerity report, unitialized constructor
 
 #include "G4Analyser.hh"
 #include <cmath>
 #include <iomanip>
 
 G4Analyser::G4Analyser()
-  :verboseLevel(0)  {
-
+  : verboseLevel(0), eventNumber(0.0), averageMultiplicity(0.0),
+    averageProtonNumber(0.0), averageNeutronNumber(0.0),
+    averagePionNumber(0.0),  averageNucleonKinEnergy(0.0),
+    averageProtonKinEnergy(0.0), averageNeutronKinEnergy(0.0),
+    averagePionKinEnergy(0.0), averageExitationEnergy(0.0),
+    averageOutgoingNuclei(0.0), fissy_prob(0.0), averagePionPl(0.0),
+    averagePionMin(0.0), averagePion0(0.0), averageA(0.0), averageZ(0.0),
+    inel_csec(0.0), withNuclei(false) {
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::G4Analyser" << G4endl;
   }
-
-  eventNumber = 0.0;
-  averageMultiplicity = 0.0;
-  averageNucleonKinEnergy = 0.0;
-  averageProtonKinEnergy = 0.0;
-  averageNeutronKinEnergy = 0.0;
-  averagePionKinEnergy = 0.0;
-  averageProtonNumber = 0.0;
-  averageNeutronNumber = 0.0;
-  averagePionNumber = 0.0;
-  averageExitationEnergy = 0.0;
-  averageOutgoingNuclei = 0.0;
-  averagePionPl = 0.0;
-  averagePionMin = 0.0;
-  averagePion0 = 0.0;
-  averageA = 0.0;
-  averageZ = 0.0;
- 
-  withNuclei = false;
-  fissy_prob = 0.0;
 }
 
 void G4Analyser::setInelCsec(G4double csec, G4bool withn) {

@@ -1,3 +1,5 @@
+#ifndef G4CASCADE_SAMPLER_ICC
+#define G4CASCADE_SAMPLER_ICC
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,13 +25,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeSampler.icc,v 1.4 2010-08-03 23:09:36 mkelsey Exp $
+// $Id: G4CascadeSampler.icc,v 1.5 2010-10-19 19:48:01 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,
 //		use as base class to G4CascadeFunctions<T>.
 // 20100512 M. Kelsey -- Move implementation to .icc with templating
 // 20100803 M. Kelsey -- Add print function for debugging.
+// 20101019  M. Kelsey -- CoVerity report: recursive #include
 
 #include "G4CascadeSampler.hh"
 #include "Randomize.hh"
@@ -115,3 +118,4 @@ void G4CascadeSampler<NBINS,NMULT>::print() const {
   interpolator.printBins();
 }
 
+#endif	/* G4CASCADE_SAMPLER_ICC */

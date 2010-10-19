@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.31 2010-10-06 07:08:43 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.32 2010-10-19 19:48:05 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -45,6 +45,7 @@
 //		std::vector<> buffers, here for reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20101004  M. Kelsey -- Rename and create functions used to generate model
+// 20101019  M. Kelsey -- CoVerity report: dtor leak; move dtor to .cc file
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -64,7 +65,7 @@ public:
   G4NucleiModel(G4int a, G4int z);
   explicit G4NucleiModel(G4InuclNuclei* nuclei);
 
-  ~G4NucleiModel() {}
+  ~G4NucleiModel();
 
   void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
 

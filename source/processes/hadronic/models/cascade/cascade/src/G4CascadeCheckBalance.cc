@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeCheckBalance.cc,v 1.18 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4CascadeCheckBalance.cc,v 1.19 2010-10-19 19:48:32 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // Verify and report four-momentum conservation for collision output; uses
@@ -43,6 +43,7 @@
 //		move temporary buffer to be data member
 // 20100719  M. Kelsey -- Change zero tolerance to 10 keV instead of 1 keV.
 // 20100909  M. Kelsey -- Add interface for both kinds of particle lists
+// 20101019  M. Kelsey -- CoVerity report: unitialized constructor
 
 #include "G4CascadeCheckBalance.hh"
 #include "globals.hh"
@@ -63,7 +64,8 @@ G4CascadeCheckBalance::G4CascadeCheckBalance(G4double relative,
 					     G4double absolute,
 					     const char* owner)
   : G4VCascadeCollider(owner), relativeLimit(relative),
-    absoluteLimit(absolute), initialBaryon(0), finalBaryon(0) {}
+    absoluteLimit(absolute), initialBaryon(0), finalBaryon(0),
+    initialCharge(0), finalCharge(0) {}
 
 
 // Pseudo-collision just computes input and output four-vectors

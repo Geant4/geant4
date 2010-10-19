@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.89 2010-10-14 20:53:24 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.90 2010-10-19 19:49:03 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -71,6 +71,7 @@
 //		move hardwired numbers out to static data members, factor out
 //		all the model construction pieces to separate functions, fix
 //		wrong value for 4/3 pi.
+// 20101019  M. Kelsey -- CoVerity reports: unitialized constructor, dtor leak
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -121,25 +122,30 @@ const G4double G4NucleiModel::piTimes4thirds = 4.188790204786;
 
 // Constructors
 G4NucleiModel::G4NucleiModel()
-  : verboseLevel(0), A(0), Z(0), theNucleus(0),
-    neutronNumber(0), protonNumber(0),
+  : verboseLevel(0), nuclei_radius(0.), number_of_zones(0),
+    A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {}
 
 G4NucleiModel::G4NucleiModel(G4int a, G4int z)
-  : verboseLevel(0), A(0), Z(0), theNucleus(0),
-    neutronNumber(0), protonNumber(0),
+  : verboseLevel(0), nuclei_radius(0.), number_of_zones(0),
+    A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {
   generateModel(a,z);
 }
 
 G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
-  : verboseLevel(0), A(0), Z(0), theNucleus(0),
-    neutronNumber(0), protonNumber(0),
+  : verboseLevel(0), nuclei_radius(0.), number_of_zones(0),
+    A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
     current_nucl2(0) {
   generateModel(nuclei);
+}
+
+G4NucleiModel::~G4NucleiModel() {
+  delete theNucleus;
+  theNucleus = 0;
 }
 
 

@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclWatcher.cc,v 1.4 2010-10-14 20:55:10 mkelsey Exp $
+// $Id: G4NuclWatcher.cc,v 1.5 2010-10-19 19:48:57 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100202  M. Kelsey -- Move most code here from .hh file, clean up
 // 20100405  M. Kelsey -- Pass const-ref std::vector<>
 // 20101010  M. Kelsey -- Migrate to integer A and Z
+// 20101019  M. Kelsey -- CoVerity report: "!true" should be "!here"
 
 #include "G4NuclWatcher.hh"
 #include "globals.hh"
@@ -54,7 +55,7 @@ void G4NuclWatcher::watch(G4int a, G4int z) {
 
   G4bool here = false;		// Increment specified nucleus count
   G4int  simulatedAsSize = simulated_as.size();
-  for (G4int i = 0; i<simulatedAsSize && !true; i++) {
+  for (G4int i = 0; i<simulatedAsSize && !here; i++) {
     if (std::abs(simulated_as[i] - a) < small) {
       simulated_cs[i] += 1.0;
       here = true;		// Terminates loop

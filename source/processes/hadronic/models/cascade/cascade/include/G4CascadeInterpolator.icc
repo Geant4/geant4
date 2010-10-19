@@ -1,3 +1,5 @@
+#ifndef G4CASCADE_INTERPOLATOR_ICC
+#define G4CASCADE_INTERPOLATOR_ICC
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,7 +25,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterpolator.icc,v 1.7 2010-08-03 23:09:36 mkelsey Exp $
+// $Id: G4CascadeInterpolator.icc,v 1.8 2010-10-19 19:48:00 mkelsey Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  Michael Kelsey <kelsey@slac.stanford.edu>
@@ -43,6 +45,7 @@
 // 20100520  M. Kelsey -- Second bug fix:  Loop in bin search should start at
 //		i=1, not i=0 (since i-1 is the key).
 // 20100803  M. Kelsey -- Add printBins() function for debugging
+// 20101019  M. Kelsey -- CoVerity reports: recursive #include, index overrun
 
 #include "globals.hh"
 #include "G4CascadeInterpolator.hh"
@@ -68,7 +71,7 @@ G4double G4CascadeInterpolator<NBINS>::getBin(const G4double x) const {
     xdiff = doExtrapolation ? x-xBins[last] : 0.;
   } else {				// Assume nBins small; linear search
     int i;
-    for (i=1; i<nBins && x>xBins[i]; i++) {;}	// Stops when x within bin i-1
+    for (i=1; i<last && x>xBins[i]; i++) {;}	// Stops when x within bin i-1
     xindex = i-1;
     xbin = xBins[i] - xBins[i-1];
     xdiff = x - xBins[i-1];
@@ -118,3 +121,4 @@ void G4CascadeInterpolator<NBINS>::printBins() const {
   G4cout << G4endl;
 }
 
+#endif	/* G4CASCADE_INTERPOLATOR_ICC */

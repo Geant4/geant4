@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.74 2010-08-04 05:28:24 mkelsey Exp $
+// $Id: G4ElementaryParticleCollider.cc,v 1.75 2010-10-19 19:48:35 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -67,6 +67,7 @@
 // 20100726  M. Kelsey -- Move remaining std::vector<> buffers to .hh file
 // 20100804  M. Kelsey -- Add printing of final-state tables, protected by
 //		G4CASCADE_DEBUG_SAMPLER preprocessor flag
+// 20101019  M. Kelsey -- CoVerity report: check dynamic_cast<> for null
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -153,6 +154,12 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
     dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4InuclElementaryParticle* particle2 =	
     dynamic_cast<G4InuclElementaryParticle*>(target);
+
+  if (!particle1 || !particle2) {	// Redundant with useEPCollider()
+    G4cerr << " ElementaryParticleCollider -> can collide only particle with particle " 
+           << G4endl;
+    return;
+  }
 
   if (particle1->isPhoton() || particle2->isPhoton()) {
     G4cerr << " ElementaryParticleCollider -> cannot collide photons " 

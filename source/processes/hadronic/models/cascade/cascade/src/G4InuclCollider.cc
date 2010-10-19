@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclCollider.cc,v 1.50 2010-09-24 20:51:05 mkelsey Exp $
+// $Id: G4InuclCollider.cc,v 1.51 2010-10-19 19:48:39 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -51,6 +51,7 @@
 // 20100922  M. Kelsey -- Add functions to select de-excitation method;
 //		default is G4CascadeDeexcitation (i.e., built-in modules)
 // 20100924  M. Kelsey -- Migrate to integer A and Z
+// 20101019  M. Kelsey -- CoVerity report: check dynamic_cast<> for null
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeDeexcitation.hh"
@@ -129,7 +130,13 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
 
   // Target must be a nucleus
   G4InuclNuclei* ntarget = dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
-    
+  if (!ntarget) {
+    G4cerr << " InuclCollider -> ERROR target is not a nucleus " << G4endl;
+
+    globalOutput.trivialise(bullet, target);
+    return;
+  }
+
   G4int btype = 0;
   G4int ab = 0;
   G4int zb = 0;
@@ -137,8 +144,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   if (interCase.hadNucleus()) { 	// particle with nuclei
     G4InuclElementaryParticle* pbullet = 
       dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
-    
-    if (pbullet->isPhoton()) {
+    if (!pbullet) {
+      G4cerr << " InuclCollider -> ERROR bullet is not a hadron " << G4endl;
+      globalOutput.trivialise(bullet, target);
+      return;
+    } else if (pbullet->isPhoton()) {
       G4cerr << " InuclCollider -> can not collide with photon " << G4endl;
       globalOutput.trivialise(bullet, target);
       return;
@@ -148,6 +158,11 @@ void G4InuclCollider::collide(G4InuclParticle* bullet, G4InuclParticle* target,
   } else { 				// nuclei with nuclei
     G4InuclNuclei* nbullet = 
       dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
+    if (!nbullet) {
+      G4cerr << " InuclCollider -> ERROR bullet is not a nucleus " << G4endl;
+      globalOutput.trivialise(bullet, target);
+      return;
+    }
     
     ab = nbullet->getA();
     zb = nbullet->getZ();
