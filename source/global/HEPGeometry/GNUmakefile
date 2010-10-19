@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004-06-11 14:18:56 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2010-10-19 12:25:10 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global HEPGeometry.  Gabriele Cosmo, 26/9/96.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4IOS_EXPORT
+CPPFLAGS += -DG4ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include
 
 include $(G4INSTALL)/config/common.gmk

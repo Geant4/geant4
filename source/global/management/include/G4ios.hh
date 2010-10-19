@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.hh,v 1.10 2006-06-29 19:03:43 gunter Exp $
+// $Id: G4ios.hh,v 1.11 2010-10-19 12:25:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 
 #include <iostream>
 
-#if defined G4IOS_EXPORT
+#if defined G4ALLOC_EXPORT
   extern G4DLLEXPORT std::ostream G4cout;
   extern G4DLLEXPORT std::ostream G4cerr;
 #else

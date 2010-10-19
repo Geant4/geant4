@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2009-01-27 08:45:28 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2010-10-19 12:25:10 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global management.  Gabriele Cosmo, 26/9/96.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4IOS_EXPORT
+CPPFLAGS += -DG4ALLOC_EXPORT
 ifdef G4RF_DEBUG
   CPPFLAGS += -DG4RF_DEBUG
 endif
