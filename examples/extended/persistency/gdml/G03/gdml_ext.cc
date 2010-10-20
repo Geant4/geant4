@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_ext.cc,v 1.5 2010-06-18 10:10:36 gcosmo Exp $
+// $Id: gdml_ext.cc,v 1.6 2010-10-20 15:07:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@
 
 // A pre-built physics list
 //
-#include "QGSP_EMV.hh"
+#include "QGSP_BERT_EMV.hh"
 
 // Example includes
 //
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new QGSP_EMV);
+  runManager->SetUserInitialization(new QGSP_BERT_EMV);
   runManager->SetUserAction(new PrimaryGeneratorAction);
   RunAction* runAction = new RunAction;
   runManager->SetUserAction(runAction);
