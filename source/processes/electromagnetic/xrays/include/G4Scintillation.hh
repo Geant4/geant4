@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.18 2010-06-25 09:41:46 gunter Exp $
+// $Id: G4Scintillation.hh,v 1.19 2010-10-20 00:52:18 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,11 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     2005-07-28 add G4ProcessType to constructor
+// Updated:     2010-10-20 Allow the scintillation yield to be a function
+//                         of energy deposited by particle type
+//                         Thanks to Zach Hartwig (Department of Nuclear
+//                         Science and Engineeering - MIT)
+//              2005-07-28 add G4ProcessType to constructor
 //              2002-11-21 change to user G4Poisson for small MeanNumPotons
 //              2002-11-07 allow for fast and slow scintillation
 //              2002-11-05 make use of constant material properties
@@ -184,6 +188,16 @@ public: // With description
         G4EmSaturation* GetSaturation() const { return emSaturation; }
         // Returns the Birks Saturation.
 
+        void SetScintillationByParticleType(const G4bool scintType)
+        { scintillationByParticleType = scintType; }
+        // Called by the user to set the scintillation yield as a function
+        // of energy deposited by particle type
+
+        G4bool GetScintillationByParticleType() const
+        { return scintillationByParticleType; }
+        // Return the boolean that determines the method of scintillation
+        // production
+
         void DumpPhysicsTable() const;
         // Prints the fast and slow scintillation integral tables.
 
@@ -209,6 +223,8 @@ protected:
         G4double YieldFactor;
 
         G4double ExcitationRatio;
+
+        G4bool scintillationByParticleType;
 
 private:
 
