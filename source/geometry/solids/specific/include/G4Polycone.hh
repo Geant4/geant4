@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.23 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.24 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,6 +118,8 @@ class G4Polycone : public G4VCSGfaceted
                           const G4VPhysicalVolume* pRep );
 
   G4GeometryType GetEntityType() const;
+
+  G4VSolid* Clone() const;
 
   std::ostream& StreamInfo(std::ostream& os) const;
 

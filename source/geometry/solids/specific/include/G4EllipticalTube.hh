@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4EllipticalTube.hh,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -86,6 +86,8 @@ class G4EllipticalTube : public G4VSolid
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
     G4GeometryType GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 

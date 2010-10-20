@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.25 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.26 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -883,6 +883,15 @@ G4double G4TessellatedSolid::DistanceToOut (const G4ThreeVector &p) const
 G4GeometryType G4TessellatedSolid::GetEntityType () const
 {
   return geometryType;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4TessellatedSolid::Clone() const
+{
+  return new G4TessellatedSolid(*this);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

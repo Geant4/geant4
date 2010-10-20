@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.27 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.28 2010-10-20 08:54:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1214,6 +1214,14 @@ void G4TwistedTubs::CreateSurfaces()
 G4GeometryType G4TwistedTubs::GetEntityType() const
 {
   return G4String("G4TwistedTubs");
+}
+
+//=====================================================================
+//* Clone -------------------------------------------------------------
+
+G4VSolid* G4TwistedTubs::Clone() const
+{
+  return new G4TwistedTubs(*this);
 }
 
 //=====================================================================

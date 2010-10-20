@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.16 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4GenericTrap.cc,v 1.17 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1339,6 +1339,20 @@ G4GenericTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   
 // --------------------------------------------------------------------
 
+G4GeometryType G4GenericTrap::GetEntityType() const
+{
+  return G4String("G4GenericTrap");
+}
+  
+// --------------------------------------------------------------------
+
+G4VSolid* G4GenericTrap::Clone() const
+{
+  return new G4GenericTrap(*this);
+}
+
+// --------------------------------------------------------------------
+
 std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
@@ -1357,79 +1371,6 @@ std::ostream& G4GenericTrap::StreamInfo(std::ostream& os) const
   
   return os;
 } 
-
-// --------------------------------------------------------------------
-
-G4double G4GenericTrap::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else
-  {
-    std::vector<G4ThreeVector> vertices;
-    for (G4int i=0; i<4;i++)
-    {
-      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
-    }
-    for (G4int i=4; i<8;i++)
-    {
-      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
-    }
-
-    // Surface Area of Planes(only estimation for twisted)
-    //
-    G4double fSurface0=GetFaceSurfaceArea(vertices[0],vertices[1],
-                                          vertices[2],vertices[3]);//-fDz plane
-    G4double fSurface1=GetFaceSurfaceArea(vertices[0],vertices[1],
-                                          vertices[5],vertices[4]);// Lat plane
-    G4double fSurface2=GetFaceSurfaceArea(vertices[3],vertices[0],
-                                          vertices[4],vertices[7]);// Lat plane 
-    G4double fSurface3=GetFaceSurfaceArea(vertices[2],vertices[3],
-                                          vertices[7],vertices[6]);// Lat plane
-    G4double fSurface4=GetFaceSurfaceArea(vertices[2],vertices[1],
-                                          vertices[5],vertices[6]);// Lat plane
-    G4double fSurface5=GetFaceSurfaceArea(vertices[4],vertices[5],
-                                          vertices[6],vertices[7]);// fDz plane 
-
-    // Total Surface Area
-    //
-    if(!fIsTwisted)
-    {
-      fSurfaceArea = fSurface0+fSurface1+fSurface2
-                   + fSurface3+fSurface4+fSurface5;
-    }
-    else
-    {
-      fSurfaceArea = G4VSolid::GetSurfaceArea();
-    }
-  }
-  return fSurfaceArea;
-}
-
-// --------------------------------------------------------------------
-
-G4double G4GenericTrap::GetFaceSurfaceArea(const G4ThreeVector& p0,
-                                           const G4ThreeVector& p1, 
-                                           const G4ThreeVector& p2,
-                                           const G4ThreeVector& p3) const
-{
-  // Auxiliary method for Get Surface Area of Face
-  
-  G4double aOne, aTwo;
-  G4ThreeVector t, u, v, w, Area, normal;
-
-  t = p2 - p1;
-  u = p0 - p1;
-  v = p2 - p3;
-  w = p0 - p3;
-  
-  Area = w.cross(v);
-  aOne = 0.5*Area.mag();
-  
-  Area = t.cross(u);
-  aTwo = 0.5*Area.mag();
- 
-  return aOne + aTwo;
-}
 
 // --------------------------------------------------------------------
 
@@ -1517,6 +1458,88 @@ G4ThreeVector G4GenericTrap::GetPointOnSurface() const
   point=G4ThreeVector(v.x(),v.y(),zp);
 
   return point;
+}
+
+// --------------------------------------------------------------------
+
+G4double G4GenericTrap::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) {;}
+  else   { fCubicVolume = G4VSolid::GetCubicVolume(); }
+  return fCubicVolume;
+}
+
+// --------------------------------------------------------------------
+
+G4double G4GenericTrap::GetSurfaceArea()
+{
+  if(fSurfaceArea != 0.) {;}
+  else
+  {
+    std::vector<G4ThreeVector> vertices;
+    for (G4int i=0; i<4;i++)
+    {
+      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),-fDz));
+    }
+    for (G4int i=4; i<8;i++)
+    {
+      vertices.push_back(G4ThreeVector(fVertices[i].x(),fVertices[i].y(),fDz));
+    }
+
+    // Surface Area of Planes(only estimation for twisted)
+    //
+    G4double fSurface0=GetFaceSurfaceArea(vertices[0],vertices[1],
+                                          vertices[2],vertices[3]);//-fDz plane
+    G4double fSurface1=GetFaceSurfaceArea(vertices[0],vertices[1],
+                                          vertices[5],vertices[4]);// Lat plane
+    G4double fSurface2=GetFaceSurfaceArea(vertices[3],vertices[0],
+                                          vertices[4],vertices[7]);// Lat plane 
+    G4double fSurface3=GetFaceSurfaceArea(vertices[2],vertices[3],
+                                          vertices[7],vertices[6]);// Lat plane
+    G4double fSurface4=GetFaceSurfaceArea(vertices[2],vertices[1],
+                                          vertices[5],vertices[6]);// Lat plane
+    G4double fSurface5=GetFaceSurfaceArea(vertices[4],vertices[5],
+                                          vertices[6],vertices[7]);// fDz plane 
+
+    // Total Surface Area
+    //
+    if(!fIsTwisted)
+    {
+      fSurfaceArea = fSurface0+fSurface1+fSurface2
+                   + fSurface3+fSurface4+fSurface5;
+    }
+    else
+    {
+      fSurfaceArea = G4VSolid::GetSurfaceArea();
+    }
+  }
+  return fSurfaceArea;
+}
+
+// --------------------------------------------------------------------
+
+G4double G4GenericTrap::GetFaceSurfaceArea(const G4ThreeVector& p0,
+                                           const G4ThreeVector& p1, 
+                                           const G4ThreeVector& p2,
+                                           const G4ThreeVector& p3) const
+{
+  // Auxiliary method for Get Surface Area of Face
+  
+  G4double aOne, aTwo;
+  G4ThreeVector t, u, v, w, Area, normal;
+
+  t = p2 - p1;
+  u = p0 - p1;
+  v = p2 - p3;
+  w = p0 - p3;
+  
+  Area = w.cross(v);
+  aOne = 0.5*Area.mag();
+  
+  Area = t.cross(u);
+  aTwo = 0.5*Area.mag();
+ 
+  return aOne + aTwo;
 }
 
 // --------------------------------------------------------------------

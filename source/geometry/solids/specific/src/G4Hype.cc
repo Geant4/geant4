@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.30 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.31 2010-10-20 08:54:18 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -1361,6 +1361,15 @@ G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
 G4GeometryType G4Hype::GetEntityType() const
 {
   return G4String("G4Hype");
+}
+
+
+//
+// Clone
+//
+G4VSolid* G4Hype::Clone() const
+{
+  return new G4Hype(*this);
 }
 
 

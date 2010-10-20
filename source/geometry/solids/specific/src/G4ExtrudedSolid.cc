@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4ExtrudedSolid.cc,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -724,6 +724,13 @@ G4GeometryType G4ExtrudedSolid::GetEntityType () const
   // Return entity type
 
   return fGeometryType;
+}
+
+//_____________________________________________________________________________
+
+G4VSolid* G4ExtrudedSolid::Clone() const
+{
+  return new G4ExtrudedSolid(*this);
 }
 
 //_____________________________________________________________________________

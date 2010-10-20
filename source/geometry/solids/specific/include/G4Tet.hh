@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh,v 1.10 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4Tet.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -97,6 +97,8 @@ class G4Tet : public G4VSolid
 
     G4GeometryType GetEntityType() const;
 
+    G4VSolid* Clone() const;
+
     std::ostream& StreamInfo(std::ostream& os) const;
 
     G4ThreeVector GetPointOnSurface() const;
@@ -121,7 +123,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh,v 1.10 2010-09-20 15:03:02 gcosmo Exp $"; }
+      { return "$Id: G4Tet.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)

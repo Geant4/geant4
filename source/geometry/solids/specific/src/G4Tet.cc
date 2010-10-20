@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc,v 1.15 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4Tet.cc,v 1.16 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Tet
@@ -57,7 +57,7 @@
 
 #include "G4Tet.hh"
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.15 2010-09-23 10:27:38 gcosmo Exp $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc,v 1.16 2010-10-20 08:54:18 gcosmo Exp $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -650,6 +650,15 @@ G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 G4GeometryType G4Tet::GetEntityType() const
 {
   return G4String("G4Tet");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4Tet::Clone() const
+{
+  return new G4Tet(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

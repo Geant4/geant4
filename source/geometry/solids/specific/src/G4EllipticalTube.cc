@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.32 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4EllipticalTube.cc,v 1.33 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -849,6 +849,15 @@ G4int G4EllipticalTube::IntersectXY( const G4ThreeVector &p,
 G4GeometryType G4EllipticalTube::GetEntityType() const
 {
   return G4String("G4EllipticalTube");
+}
+
+
+//
+// Make a clone of the object
+//
+G4VSolid* G4EllipticalTube::Clone() const
+{
+  return new G4EllipticalTube(*this);
 }
 
 

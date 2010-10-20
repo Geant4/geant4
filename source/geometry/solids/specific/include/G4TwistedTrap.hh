@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.11 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4TwistedTrap.hh,v 1.12 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -112,6 +112,8 @@ class G4TwistedTrap : public G4VTwistedFaceted
     inline G4double GetAzimuthalAnglePhi() const { return GetPhi()   ; }
 
     G4GeometryType GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
     std::ostream &StreamInfo(std::ostream& os) const;
 

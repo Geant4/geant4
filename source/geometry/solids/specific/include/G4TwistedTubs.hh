@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.15 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4TwistedTubs.hh,v 1.16 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -166,6 +166,7 @@ class G4TwistedTubs : public G4VSolid
   
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
+  G4VSolid* Clone() const;
 
   G4double GetCubicVolume();
     // Returns an estimation of the geometrical cubic volume of the

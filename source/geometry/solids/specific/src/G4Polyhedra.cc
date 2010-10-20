@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.44 2010-07-12 15:25:37 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.45 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -566,6 +566,15 @@ void G4Polyhedra::ComputeDimensions(       G4VPVParameterisation* p,
 G4GeometryType G4Polyhedra::GetEntityType() const
 {
   return G4String("G4Polyhedra");
+}
+
+
+//
+// Make a clone of the object
+//
+G4VSolid* G4Polyhedra::Clone() const
+{
+  return new G4Polyhedra(*this);
 }
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.20 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4EllipticalCone.cc,v 1.21 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -919,6 +919,15 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
 G4GeometryType G4EllipticalCone::GetEntityType() const
 {
   return G4String("G4EllipticalCone");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4EllipticalCone::Clone() const
+{
+  return new G4EllipticalCone(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

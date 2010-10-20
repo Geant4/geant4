@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.10 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,13 +117,15 @@ class G4GenericTrap : public G4VSolid
                            const G4AffineTransform& pTransform,
                                  G4double& pmin, G4double& pmax) const;
 
-    inline G4GeometryType GetEntityType() const;
+    G4GeometryType GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
     G4ThreeVector GetPointOnSurface() const ;
 
-    inline G4double GetCubicVolume();
+    G4double GetCubicVolume();
     G4double GetSurfaceArea();
 
     // Visualisation functions

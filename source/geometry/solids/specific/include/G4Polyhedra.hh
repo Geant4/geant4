@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.21 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,6 +121,8 @@ class G4Polyhedra : public G4VCSGfaceted
                           const G4VPhysicalVolume* pRep);
 
   G4GeometryType  GetEntityType() const;
+
+  G4VSolid* Clone() const;
 
   G4ThreeVector GetPointOnSurface() const;
 

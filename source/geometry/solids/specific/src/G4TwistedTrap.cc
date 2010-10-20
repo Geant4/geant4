@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.15 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4TwistedTrap.cc,v 1.16 2010-10-20 08:54:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,4 +144,12 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 G4GeometryType G4TwistedTrap::GetEntityType() const
 {
   return G4String("G4TwistedTrap");
+}
+
+//=====================================================================
+//* Clone -------------------------------------------------------------
+
+G4VSolid* G4TwistedTrap::Clone() const
+{
+  return new G4TwistedTrap(*this);
 }

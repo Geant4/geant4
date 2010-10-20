@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.7 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4TwistedTrd.hh,v 1.8 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,6 +83,8 @@ class G4TwistedTrd : public G4VTwistedFaceted
     inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
 
     G4GeometryType GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
     std::ostream&  StreamInfo(std::ostream& os) const;
 

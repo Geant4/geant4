@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.icc,v 1.4 2010-06-09 07:39:31 gcosmo Exp $
+// $Id: G4GenericTrap.icc,v 1.5 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -107,24 +107,6 @@ void G4GenericTrap::SetTwistAngle(G4int index, G4double twist)
   {
     fTwist[index]=twist;
   }
-}
-
-// --------------------------------------------------------------------
-
-inline 
-G4GeometryType G4GenericTrap::GetEntityType() const
-{
-  return G4String("G4GenericTrap");
-}
-  
-// --------------------------------------------------------------------
-
-inline
-G4double G4GenericTrap::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = G4VSolid::GetCubicVolume(); }
-  return fCubicVolume;
 }
 
 // --------------------------------------------------------------------

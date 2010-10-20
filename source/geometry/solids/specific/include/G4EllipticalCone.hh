@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.13 2010-09-20 15:03:02 gcosmo Exp $
+// $Id: G4EllipticalCone.hh,v 1.14 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -131,6 +131,8 @@ class G4EllipticalCone : public G4VSolid
 
     G4GeometryType GetEntityType() const;
   
+    G4VSolid* Clone() const;
+
     G4ThreeVector GetPointOnSurface() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;

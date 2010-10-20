@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.46 2010-07-12 15:33:49 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.47 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -507,6 +507,14 @@ void G4Polycone::ComputeDimensions(       G4VPVParameterisation* p,
 G4GeometryType  G4Polycone::GetEntityType() const
 {
   return G4String("G4Polycone");
+}
+
+//
+// Make a clone of the object
+//
+G4VSolid* G4Polycone::Clone() const
+{
+  return new G4Polycone(*this);
 }
 
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.29 2010-09-23 10:27:38 gcosmo Exp $
+// $Id: G4Ellipsoid.cc,v 1.30 2010-10-20 08:54:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Ellipsoid
@@ -939,6 +939,15 @@ G4Ellipsoid::CreateRotatedVertices(const G4AffineTransform& pTransform,
 G4GeometryType G4Ellipsoid::GetEntityType() const
 {
   return G4String("G4Ellipsoid");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4Ellipsoid::Clone() const
+{
+  return new G4Ellipsoid(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////
