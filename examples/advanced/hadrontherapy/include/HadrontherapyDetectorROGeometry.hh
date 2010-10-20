@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyDetectorROGeometry.hh; 
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 //The detectior is devided in voxels. 
 //
@@ -38,13 +39,13 @@ class HadrontherapyDetectorROGeometry : public G4VReadOutGeometry
 {
 public:
   HadrontherapyDetectorROGeometry(G4String aString,
-		         G4ThreeVector detectorPos,
-				 G4double detectorDimX,
-				 G4double detectorDimY,
-				 G4double detectorDimZ,
-				 G4int numberOfVoxelsX,
-				 G4int numberOfVoxelsY,
-				 G4int numberOfVoxelsZ);
+				  G4ThreeVector detectorPos,
+				  G4double detectorDimX,
+				  G4double detectorDimY,
+				  G4double detectorDimZ,
+				  G4int numberOfVoxelsX,
+				  G4int numberOfVoxelsY,
+				  G4int numberOfVoxelsZ);
 
   ~HadrontherapyDetectorROGeometry();
 

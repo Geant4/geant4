@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// PassiveBeamLine.cc;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -91,54 +92,54 @@ G4VPhysicalVolume* PassiveProtonBeamLine::Construct()
   return physicalTreatmentRoom;
 }
 
-  // In the following method the DEFAULTS used in the geometry of 
-  // passive beam line are provided
-  // HERE THE USER CAN CHANGE THE GEOMETRY CHARACTERISTICS OF BEAM
-  // LINE ELEMENTS, ALTERNATIVELY HE/SHE CAN USE THE MACRO FILE (IF A 
-  // MESSENGER IS PROVIDED)
-  //
-  // DEFAULT MATERIAL ARE ALSO PROVIDED	
-  // and COLOURS ARE ALSO DEFINED
-  // ----------------------------------------------------------
+// In the following method the DEFAULTS used in the geometry of 
+// passive beam line are provided
+// HERE THE USER CAN CHANGE THE GEOMETRY CHARACTERISTICS OF BEAM
+// LINE ELEMENTS, ALTERNATIVELY HE/SHE CAN USE THE MACRO FILE (IF A 
+// MESSENGER IS PROVIDED)
+//
+// DEFAULT MATERIAL ARE ALSO PROVIDED	
+// and COLOURS ARE ALSO DEFINED
+// ----------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::SetDefaultDimensions()
 {
   // Set of coulors that can be used
-	white = new G4VisAttributes( G4Colour());
-	white -> SetVisibility(true);
-	white -> SetForceSolid(true);
+  white = new G4VisAttributes( G4Colour());
+  white -> SetVisibility(true);
+  white -> SetForceSolid(true);
 	
-	blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
-	blue -> SetVisibility(true);
-	blue -> SetForceSolid(true);
+  blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
+  blue -> SetVisibility(true);
+  blue -> SetForceSolid(true);
 	
-	gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
-	gray-> SetVisibility(true);
-	gray-> SetForceSolid(true);
+  gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
+  gray-> SetVisibility(true);
+  gray-> SetForceSolid(true);
 	
-	red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
-	red-> SetVisibility(true);
-	red-> SetForceSolid(true);
+  red = new G4VisAttributes(G4Colour(1. ,0. ,0.));
+  red-> SetVisibility(true);
+  red-> SetForceSolid(true);
 	
-	yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
-	yellow-> SetVisibility(true);
-	yellow-> SetForceSolid(true);
+  yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
+  yellow-> SetVisibility(true);
+  yellow-> SetForceSolid(true);
 	
-	green = new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
-	green -> SetVisibility(true);
-	green -> SetForceSolid(true);
+  green = new G4VisAttributes( G4Colour(25/255. , 255/255. ,  25/255. ));
+  green -> SetVisibility(true);
+  green -> SetForceSolid(true);
 	
-	darkGreen = new G4VisAttributes( G4Colour(0/255. , 100/255. ,  0/255. ));
-	darkGreen -> SetVisibility(true);
-	darkGreen -> SetForceSolid(true);
+  darkGreen = new G4VisAttributes( G4Colour(0/255. , 100/255. ,  0/255. ));
+  darkGreen -> SetVisibility(true);
+  darkGreen -> SetForceSolid(true);
 		
-	darkOrange3 = new G4VisAttributes( G4Colour(205/255. , 102/255. ,  000/255. ));
-	darkOrange3 -> SetVisibility(true);
-	darkOrange3 -> SetForceSolid(true);
+  darkOrange3 = new G4VisAttributes( G4Colour(205/255. , 102/255. ,  000/255. ));
+  darkOrange3 -> SetVisibility(true);
+  darkOrange3 -> SetForceSolid(true);
 	
-	skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
-	skyBlue -> SetVisibility(true);
-	skyBlue -> SetForceSolid(true);
+  skyBlue = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
+  skyBlue -> SetVisibility(true);
+  skyBlue -> SetForceSolid(true);
   
 
   // VACUUM PIPE: first track of the beam line is inside vacuum;
@@ -313,199 +314,199 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   MOPIFirstAluminumLayerXPosition = defaultMOPIFirstAluminumLayerXPosition;
   
   G4double defaultMOPIFirstAluminumLayerYPosition = 0.0 *mm;
- MOPIFirstAluminumLayerYPosition = defaultMOPIFirstAluminumLayerYPosition;
+  MOPIFirstAluminumLayerYPosition = defaultMOPIFirstAluminumLayerYPosition;
  
- G4double defaultMOPIFirstAluminumLayerZPosition = 0.0 *mm;
- MOPIFirstAluminumLayerZPosition = defaultMOPIFirstAluminumLayerZPosition;
+  G4double defaultMOPIFirstAluminumLayerZPosition = 0.0 *mm;
+  MOPIFirstAluminumLayerZPosition = defaultMOPIFirstAluminumLayerZPosition;
  
- // First Air gap of MOPI
- G4double defaultMOPIFirstAirGapXSize = 6000 *um;
- MOPIFirstAirGapXSize = defaultMOPIFirstAirGapXSize;
+  // First Air gap of MOPI
+  G4double defaultMOPIFirstAirGapXSize = 6000 *um;
+  MOPIFirstAirGapXSize = defaultMOPIFirstAirGapXSize;
  
- G4double defaultMOPIFirstAirGapYSize = 30 *cm;
- MOPIFirstAirGapYSize = defaultMOPIFirstAirGapYSize;
+  G4double defaultMOPIFirstAirGapYSize = 30 *cm;
+  MOPIFirstAirGapYSize = defaultMOPIFirstAirGapYSize;
  
- G4double defaultMOPIFirstAirGapZSize = 30 *cm;
- MOPIFirstAirGapZSize = defaultMOPIFirstAirGapZSize;
+  G4double defaultMOPIFirstAirGapZSize = 30 *cm;
+  MOPIFirstAirGapZSize = defaultMOPIFirstAirGapZSize;
 
- G4double defaultMOPIFirstAirGapXPosition = 
-   MOPIFirstAluminumLayerXPosition + MOPIFirstAluminumLayerXSize/2 + MOPIFirstAirGapXSize/2;
- MOPIFirstAirGapXPosition = defaultMOPIFirstAirGapXPosition;
+  G4double defaultMOPIFirstAirGapXPosition = 
+    MOPIFirstAluminumLayerXPosition + MOPIFirstAluminumLayerXSize/2 + MOPIFirstAirGapXSize/2;
+  MOPIFirstAirGapXPosition = defaultMOPIFirstAirGapXPosition;
  
- G4double defaultMOPIFirstAirGapYPosition = 0.0 *mm;
- MOPIFirstAirGapYPosition = defaultMOPIFirstAirGapYPosition;
+  G4double defaultMOPIFirstAirGapYPosition = 0.0 *mm;
+  MOPIFirstAirGapYPosition = defaultMOPIFirstAirGapYPosition;
 
- G4double defaultMOPIFirstAirGapZPosition = 0.0 *mm;
- MOPIFirstAirGapZPosition = defaultMOPIFirstAirGapZPosition;
+  G4double defaultMOPIFirstAirGapZPosition = 0.0 *mm;
+  MOPIFirstAirGapZPosition = defaultMOPIFirstAirGapZPosition;
 
- // Cathode of MOPI
- G4double defaultMOPICathodeXSize = 25.0 *um;
- MOPICathodeXSize = defaultMOPICathodeXSize;
+  // Cathode of MOPI
+  G4double defaultMOPICathodeXSize = 25.0 *um;
+  MOPICathodeXSize = defaultMOPICathodeXSize;
 
- G4double defaultMOPICathodeYSize = 30.0 *cm;
- MOPICathodeYSize = defaultMOPICathodeYSize;
+  G4double defaultMOPICathodeYSize = 30.0 *cm;
+  MOPICathodeYSize = defaultMOPICathodeYSize;
 
- G4double defaultMOPICathodeZSize = 30.0 *cm;
- MOPICathodeZSize = defaultMOPICathodeZSize;
+  G4double defaultMOPICathodeZSize = 30.0 *cm;
+  MOPICathodeZSize = defaultMOPICathodeZSize;
  
- G4double defaultMOPICathodeXPosition = 
-   MOPIFirstAirGapXPosition + MOPIFirstAirGapXSize/2 + MOPICathodeXSize/2;
- MOPICathodeXPosition = defaultMOPICathodeXPosition;
+  G4double defaultMOPICathodeXPosition = 
+    MOPIFirstAirGapXPosition + MOPIFirstAirGapXSize/2 + MOPICathodeXSize/2;
+  MOPICathodeXPosition = defaultMOPICathodeXPosition;
 
- G4double defaultMOPICathodeYPosition = 0.0 *mm;
- MOPICathodeYPosition = defaultMOPICathodeYPosition;
+  G4double defaultMOPICathodeYPosition = 0.0 *mm;
+  MOPICathodeYPosition = defaultMOPICathodeYPosition;
 
- G4double defaultMOPICathodeZPosition = 0.0 *mm;
- MOPICathodeZPosition = defaultMOPICathodeZPosition;
+  G4double defaultMOPICathodeZPosition = 0.0 *mm;
+  MOPICathodeZPosition = defaultMOPICathodeZPosition;
 
- // Second Air gap of MOPI
- G4double defaultMOPISecondAirGapXSize = 6000 *um;
- MOPISecondAirGapXSize = defaultMOPISecondAirGapXSize;
+  // Second Air gap of MOPI
+  G4double defaultMOPISecondAirGapXSize = 6000 *um;
+  MOPISecondAirGapXSize = defaultMOPISecondAirGapXSize;
 
- G4double defaultMOPISecondAirGapYSize = 30 *cm;
- MOPISecondAirGapYSize = defaultMOPISecondAirGapYSize;
+  G4double defaultMOPISecondAirGapYSize = 30 *cm;
+  MOPISecondAirGapYSize = defaultMOPISecondAirGapYSize;
 
- G4double defaultMOPISecondAirGapZSize = 30 *cm;
- MOPISecondAirGapZSize = defaultMOPISecondAirGapZSize;
+  G4double defaultMOPISecondAirGapZSize = 30 *cm;
+  MOPISecondAirGapZSize = defaultMOPISecondAirGapZSize;
 
- G4double defaultMOPISecondAirGapXPosition = 
-   MOPICathodeXPosition + MOPICathodeXSize/2 + MOPISecondAirGapXSize/2;
- MOPISecondAirGapXPosition = defaultMOPISecondAirGapXPosition;
+  G4double defaultMOPISecondAirGapXPosition = 
+    MOPICathodeXPosition + MOPICathodeXSize/2 + MOPISecondAirGapXSize/2;
+  MOPISecondAirGapXPosition = defaultMOPISecondAirGapXPosition;
 
- G4double defaultMOPISecondAirGapYPosition = 0.0 *mm;
- MOPISecondAirGapYPosition = defaultMOPISecondAirGapYPosition;
+  G4double defaultMOPISecondAirGapYPosition = 0.0 *mm;
+  MOPISecondAirGapYPosition = defaultMOPISecondAirGapYPosition;
 
- G4double defaultMOPISecondAirGapZPosition = 0.0 *mm;
- MOPISecondAirGapZPosition = defaultMOPISecondAirGapZPosition;
+  G4double defaultMOPISecondAirGapZPosition = 0.0 *mm;
+  MOPISecondAirGapZPosition = defaultMOPISecondAirGapZPosition;
 
- //Second Aluminum  Layer of MOPI
- G4double defaultMOPISecondAluminumLayerXSize = 15 *um; 
- MOPISecondAluminumLayerXSize = defaultMOPISecondAluminumLayerXSize;
+  //Second Aluminum  Layer of MOPI
+  G4double defaultMOPISecondAluminumLayerXSize = 15 *um; 
+  MOPISecondAluminumLayerXSize = defaultMOPISecondAluminumLayerXSize;
  
- G4double defaultMOPISecondAluminumLayerYSize = 30 *cm; 
- MOPISecondAluminumLayerYSize = defaultMOPISecondAluminumLayerYSize;
+  G4double defaultMOPISecondAluminumLayerYSize = 30 *cm; 
+  MOPISecondAluminumLayerYSize = defaultMOPISecondAluminumLayerYSize;
  
- G4double defaultMOPISecondAluminumLayerZSize = 30 *cm; 
- MOPISecondAluminumLayerZSize = defaultMOPISecondAluminumLayerZSize;
+  G4double defaultMOPISecondAluminumLayerZSize = 30 *cm; 
+  MOPISecondAluminumLayerZSize = defaultMOPISecondAluminumLayerZSize;
  
- G4double defaultMOPISecondAluminumLayerXPosition = 
-   MOPISecondAirGapXPosition + MOPISecondAirGapXSize/2 + MOPISecondAluminumLayerXSize/2;
- MOPISecondAluminumLayerXPosition = defaultMOPISecondAluminumLayerXPosition;
+  G4double defaultMOPISecondAluminumLayerXPosition = 
+    MOPISecondAirGapXPosition + MOPISecondAirGapXSize/2 + MOPISecondAluminumLayerXSize/2;
+  MOPISecondAluminumLayerXPosition = defaultMOPISecondAluminumLayerXPosition;
  
- G4double defaultMOPISecondAluminumLayerYPosition = 0.0 *mm;
- MOPISecondAluminumLayerYPosition = defaultMOPISecondAluminumLayerYPosition;
+  G4double defaultMOPISecondAluminumLayerYPosition = 0.0 *mm;
+  MOPISecondAluminumLayerYPosition = defaultMOPISecondAluminumLayerYPosition;
 
- G4double defaultMOPISecondAluminumLayerZPosition = 0.0 *mm;
- MOPISecondAluminumLayerZPosition = defaultMOPISecondAluminumLayerZPosition;
+  G4double defaultMOPISecondAluminumLayerZPosition = 0.0 *mm;
+  MOPISecondAluminumLayerZPosition = defaultMOPISecondAluminumLayerZPosition;
  
- // Second Kapton Layer of MOPI
- G4double defaultMOPISecondKaptonLayerXSize = 35 *um; 
- MOPISecondKaptonLayerXSize = defaultMOPISecondKaptonLayerXSize;
+  // Second Kapton Layer of MOPI
+  G4double defaultMOPISecondKaptonLayerXSize = 35 *um; 
+  MOPISecondKaptonLayerXSize = defaultMOPISecondKaptonLayerXSize;
 
- G4double defaultMOPISecondKaptonLayerYSize = 30 *cm; 
- MOPISecondKaptonLayerYSize = defaultMOPISecondKaptonLayerYSize;
+  G4double defaultMOPISecondKaptonLayerYSize = 30 *cm; 
+  MOPISecondKaptonLayerYSize = defaultMOPISecondKaptonLayerYSize;
  
- G4double defaultMOPISecondKaptonLayerZSize = 30 *cm; 
- MOPISecondKaptonLayerZSize = defaultMOPISecondKaptonLayerZSize;
+  G4double defaultMOPISecondKaptonLayerZSize = 30 *cm; 
+  MOPISecondKaptonLayerZSize = defaultMOPISecondKaptonLayerZSize;
 
- G4double defaultMOPISecondKaptonLayerXPosition = 
-   MOPISecondAluminumLayerXPosition + MOPISecondAluminumLayerXSize/2 + MOPISecondKaptonLayerXSize/2;
- MOPISecondKaptonLayerXPosition = defaultMOPISecondKaptonLayerXPosition;
+  G4double defaultMOPISecondKaptonLayerXPosition = 
+    MOPISecondAluminumLayerXPosition + MOPISecondAluminumLayerXSize/2 + MOPISecondKaptonLayerXSize/2;
+  MOPISecondKaptonLayerXPosition = defaultMOPISecondKaptonLayerXPosition;
 
- G4double defaultMOPISecondKaptonLayerYPosition = 0.0 *mm;
- MOPISecondKaptonLayerYPosition = defaultMOPISecondKaptonLayerYPosition;
+  G4double defaultMOPISecondKaptonLayerYPosition = 0.0 *mm;
+  MOPISecondKaptonLayerYPosition = defaultMOPISecondKaptonLayerYPosition;
   
- G4double defaultMOPISecondKaptonLayerZPosition = 0.0 *mm;
- MOPISecondKaptonLayerZPosition = defaultMOPISecondKaptonLayerZPosition;
+  G4double defaultMOPISecondKaptonLayerZPosition = 0.0 *mm;
+  MOPISecondKaptonLayerZPosition = defaultMOPISecondKaptonLayerZPosition;
 
 
- // FINAL COLLIMATOR: is the collimator giving the final transversal shape
- // of the beam 
- G4double defaultinnerRadiusFinalCollimator = 7.5 *mm;
- innerRadiusFinalCollimator = defaultinnerRadiusFinalCollimator;
+  // FINAL COLLIMATOR: is the collimator giving the final transversal shape
+  // of the beam 
+  G4double defaultinnerRadiusFinalCollimator = 7.5 *mm;
+  innerRadiusFinalCollimator = defaultinnerRadiusFinalCollimator;
  
- // DEFAULT DEFINITION OF THE MATERIALS
+  // DEFAULT DEFINITION OF THE MATERIALS
   // All elements and compound definition follows the NIST database
  
- // ELEMENTS
- G4bool isotopes = false;
- G4Material* aluminumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al", isotopes);
- G4Material* tantalumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta", isotopes); 
- G4Material* copperNistAsMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);
- G4Element* zincNist = G4NistManager::Instance()->FindOrBuildElement("Zn");
- G4Element* copperNist = G4NistManager::Instance()->FindOrBuildElement("Cu");
+  // ELEMENTS
+  G4bool isotopes = false;
+  G4Material* aluminumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al", isotopes);
+  G4Material* tantalumNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta", isotopes); 
+  G4Material* copperNistAsMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu", isotopes);
+  G4Element* zincNist = G4NistManager::Instance()->FindOrBuildElement("Zn");
+  G4Element* copperNist = G4NistManager::Instance()->FindOrBuildElement("Cu");
 
- // COMPOUND
- G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
- G4Material* kaptonNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON", isotopes);
- G4Material* galacticNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic", isotopes);
- G4Material* PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
- G4Material* mylarNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_MYLAR", isotopes);
+  // COMPOUND
+  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+  G4Material* kaptonNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON", isotopes);
+  G4Material* galacticNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic", isotopes);
+  G4Material* PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
+  G4Material* mylarNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_MYLAR", isotopes);
 
- G4double d; // Density
- G4int nComponents;// Number of components 
- G4double fractionmass; // Fraction in mass of an element in a material
+  G4double d; // Density
+  G4int nComponents;// Number of components 
+  G4double fractionmass; // Fraction in mass of an element in a material
 
- d = 8.40*g/cm3;
- nComponents = 2;
- G4Material* brass = new G4Material("Brass", d, nComponents);  
- brass -> AddElement(zincNist, fractionmass = 30 *perCent);
- brass -> AddElement(copperNist, fractionmass = 70 *perCent);
+  d = 8.40*g/cm3;
+  nComponents = 2;
+  G4Material* brass = new G4Material("Brass", d, nComponents);  
+  brass -> AddElement(zincNist, fractionmass = 30 *perCent);
+  brass -> AddElement(copperNist, fractionmass = 70 *perCent);
 
  
- // MATERIAL ASSIGNMENT
- // Range shifter
- rangeShifterMaterial = airNist;
+  // MATERIAL ASSIGNMENT
+  // Range shifter
+  rangeShifterMaterial = airNist;
 
- // Support of the beam line
- beamLineSupportMaterial = aluminumNist;
+  // Support of the beam line
+  beamLineSupportMaterial = aluminumNist;
 
- // Vacuum pipe
- vacuumZoneMaterial = galacticNist;
+  // Vacuum pipe
+  vacuumZoneMaterial = galacticNist;
 
- // Material of the fisrt scattering foil
- firstScatteringFoilMaterial = tantalumNist;
+  // Material of the fisrt scattering foil
+  firstScatteringFoilMaterial = tantalumNist;
  
- // Material of kapton window 
- kaptonWindowMaterial = kaptonNist;
+  // Material of kapton window 
+  kaptonWindowMaterial = kaptonNist;
  
- // Material of the stopper
- stopperMaterial = brass;
+  // Material of the stopper
+  stopperMaterial = brass;
  
- // Material of the second scattering foil 
- secondScatteringFoilMaterial = tantalumNist;
+  // Material of the second scattering foil 
+  secondScatteringFoilMaterial = tantalumNist;
  
- // Materials of the collimators
- firstCollimatorMaterial = PMMANist;
- holeFirstCollimatorMaterial = airNist;
+  // Materials of the collimators
+  firstCollimatorMaterial = PMMANist;
+  holeFirstCollimatorMaterial = airNist;
  
- // Box containing the modulator wheel
- modulatorBoxMaterial = aluminumNist;
- holeModulatorBoxMaterial = airNist;
+  // Box containing the modulator wheel
+  modulatorBoxMaterial = aluminumNist;
+  holeModulatorBoxMaterial = airNist;
  
- // Materials of the monitor chamber
- layer1MonitorChamberMaterial = kaptonNist;
- layer2MonitorChamberMaterial = copperNistAsMaterial;
- layer3MonitorChamberMaterial = airNist;
- layer4MonitorChamberMaterial = copperNistAsMaterial;
+  // Materials of the monitor chamber
+  layer1MonitorChamberMaterial = kaptonNist;
+  layer2MonitorChamberMaterial = copperNistAsMaterial;
+  layer3MonitorChamberMaterial = airNist;
+  layer4MonitorChamberMaterial = copperNistAsMaterial;
  
- // Mother volume of the MOPI detector
- MOPIMotherVolumeMaterial = airNist;
- MOPIFirstKaptonLayerMaterial = kaptonNist;
- MOPIFirstAluminumLayerMaterial = aluminumNist;
- MOPIFirstAirGapMaterial = airNist;
- MOPICathodeMaterial = mylarNist;
- MOPISecondAirGapMaterial = airNist;
- MOPISecondAluminumLayerMaterial = aluminumNist;
- MOPISecondKaptonLayerMaterial = kaptonNist;
+  // Mother volume of the MOPI detector
+  MOPIMotherVolumeMaterial = airNist;
+  MOPIFirstKaptonLayerMaterial = kaptonNist;
+  MOPIFirstAluminumLayerMaterial = aluminumNist;
+  MOPIFirstAirGapMaterial = airNist;
+  MOPICathodeMaterial = mylarNist;
+  MOPISecondAirGapMaterial = airNist;
+  MOPISecondAluminumLayerMaterial = aluminumNist;
+  MOPISecondKaptonLayerMaterial = kaptonNist;
 
- // material of the final nozzle
- nozzleSupportMaterial = PMMANist;
- holeNozzleSupportMaterial = brass;
- seconHoleNozzleSupportMaterial = airNist;
+  // material of the final nozzle
+  nozzleSupportMaterial = PMMANist;
+  holeNozzleSupportMaterial = brass;
+  seconHoleNozzleSupportMaterial = airNist;
 
- // Material of the final collimator
- finalCollimatorMaterial = brass;
+  // Material of the final collimator
+  finalCollimatorMaterial = brass;
 }
 
 void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
@@ -602,8 +603,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 				   beamLineCoverZSize);
 
   G4LogicalVolume* logicBeamLineCover = new G4LogicalVolume(beamLineCover,
-		  		  beamLineSupportMaterial, 
-				  "BeamLineCover");
+							    beamLineSupportMaterial, 
+							    "BeamLineCover");
 
   physiBeamLineCover = new G4PVPlacement(0, G4ThreeVector(beamLineCoverXPosition,
 							  beamLineCoverYPosition,
@@ -643,7 +644,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   G4Box* vacuumZone = new G4Box("VacuumZone", vacuumZoneXSize, vacuumZoneYSize, vacuumZoneZSize);
   G4LogicalVolume* logicVacuumZone = new G4LogicalVolume(vacuumZone, vacuumZoneMaterial, "VacuumZone");
   G4VPhysicalVolume* physiVacuumZone = new G4PVPlacement(0, G4ThreeVector(vacuumZoneXPosition, 0., 0.),
-				      "VacuumZone", logicVacuumZone, physicalTreatmentRoom, false, 0);
+							 "VacuumZone", logicVacuumZone, physicalTreatmentRoom, false, 0);
   // --------------------------//
   // THE FIRST SCATTERING FOIL //
   // --------------------------//
@@ -655,8 +656,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 				  firstScatteringFoilZSize);
 
   G4LogicalVolume* logicFirstScatteringFoil = new G4LogicalVolume(firstScatteringFoil,
-		  firstScatteringFoilMaterial,
-		  "FirstScatteringFoil");
+								  firstScatteringFoilMaterial,
+								  "FirstScatteringFoil");
   
   physiFirstScatteringFoil = new G4PVPlacement(0, G4ThreeVector(firstScatteringFoilXPosition, 0.,0.),
 					       "FirstScatteringFoil", logicFirstScatteringFoil, physiVacuumZone, 
@@ -673,14 +674,14 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 				       kaptonWindowZSize);
 
   G4LogicalVolume* logicKaptonWindow = new G4LogicalVolume(solidKaptonWindow, 
-		  kaptonWindowMaterial,
-		  "KaptonWindow");
+							   kaptonWindowMaterial,
+							   "KaptonWindow");
 
   physiKaptonWindow = new G4PVPlacement(0, G4ThreeVector(kaptonWindowXPosition, 0., 0.), 
 					"KaptonWindow", logicKaptonWindow,
 					physiVacuumZone, false,	0); 
 
-    logicKaptonWindow -> SetVisAttributes(darkOrange3);
+  logicKaptonWindow -> SetVisAttributes(darkOrange3);
 
   // ------------//
   // THE STOPPER //
@@ -691,7 +692,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   G4double phi = 90. *deg;
   // Matrix definition for a 90 deg rotation with respect to Y axis
   G4RotationMatrix rm;
-    rm.rotateY(phi);
+  rm.rotateY(phi);
 
   solidStopper = new G4Tubs("Stopper", innerRadiusStopper,outerRadiusStopper,heightStopper, 
 			    startAngleStopper,spanningAngleStopper);
@@ -718,8 +719,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 				   secondScatteringFoilZSize);
   
   G4LogicalVolume* logicSecondScatteringFoil = new G4LogicalVolume(secondScatteringFoil, 
-		  secondScatteringFoilMaterial,
-		  "SecondScatteringFoil");
+								   secondScatteringFoilMaterial,
+								   "SecondScatteringFoil");
   
   physiSecondScatteringFoil = new G4PVPlacement(0, G4ThreeVector(secondScatteringFoilXPosition,
 								 secondScatteringFoilYPosition,
@@ -755,7 +756,7 @@ void PassiveProtonBeamLine::HadrontherapyRangeShifter()
 
  
   logicRangeShifterBox -> SetVisAttributes(yellow);
- }
+}
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 {
@@ -839,27 +840,27 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   // ------------------------------//
   // Hole of the second collimator //
   // ------------------------------//
-   physiHoleSecondCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
+  physiHoleSecondCollimator = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
 						"HoleSecondCollimator",
 						logicHoleFirstCollimator, 
 						physiSecondCollimator, 
 						false, 
 						0); 
 
-   // --------------------------------------//
-   // FIRST SIDE OF THE MODULATOR BOX      //
-   // --------------------------------------//
-   // The modulator box is an aluminum box in which
-   // the range shifter and the energy modulator are located
-   // In this example only the entrance and exit
-   // faces of the box are simulated. 
-   // Each face is an aluminum slab with an hole in its center 
+  // --------------------------------------//
+  // FIRST SIDE OF THE MODULATOR BOX      //
+  // --------------------------------------//
+  // The modulator box is an aluminum box in which
+  // the range shifter and the energy modulator are located
+  // In this example only the entrance and exit
+  // faces of the box are simulated. 
+  // Each face is an aluminum slab with an hole in its center 
 
-   const G4double firstCollimatorModulatorXSize = 10.*mm;
-   const G4double firstCollimatorModulatorYSize = 200.*mm;
-   const G4double firstCollimatorModulatorZSize = 200.*mm;
+  const G4double firstCollimatorModulatorXSize = 10.*mm;
+  const G4double firstCollimatorModulatorYSize = 200.*mm;
+  const G4double firstCollimatorModulatorZSize = 200.*mm;
    
-   const G4double firstCollimatorModulatorXPosition = -2223.00*mm;
+  const G4double firstCollimatorModulatorXPosition = -2223.00*mm;
   const G4double firstCollimatorModulatorYPosition = 0.*mm;
   const G4double firstCollimatorModulatorZPosition = 0.*mm;
 
@@ -923,8 +924,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 						       secondCollimatorModulatorZSize);
   
   G4LogicalVolume* logicSecondCollimatorModulatorBox = new G4LogicalVolume(solidSecondCollimatorModulatorBox, 
-		  modulatorBoxMaterial,
-		  "SecondCollimatorModulatorBox");
+									   modulatorBoxMaterial,
+									   "SecondCollimatorModulatorBox");
   
   physiSecondCollimatorModulatorBox = new G4PVPlacement(0, G4ThreeVector(secondCollimatorModulatorXPosition,
 									 secondCollimatorModulatorYPosition,
@@ -943,11 +944,11 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   const G4double spanningAngleHoleSecondCollimatorModulatorBox = 360.*deg;
 
   G4Tubs* solidHoleSecondCollimatorModulatorBox  = new G4Tubs("HoleSecondCollimatorModulatorBox",
-							     innerRadiusHoleSecondCollimatorModulatorBox,
-							     outerRadiusHoleSecondCollimatorModulatorBox,
-							     hightHoleSecondCollimatorModulatorBox ,
-							     startAngleHoleSecondCollimatorModulatorBox,
-							     spanningAngleHoleSecondCollimatorModulatorBox);
+							      innerRadiusHoleSecondCollimatorModulatorBox,
+							      outerRadiusHoleSecondCollimatorModulatorBox,
+							      hightHoleSecondCollimatorModulatorBox ,
+							      startAngleHoleSecondCollimatorModulatorBox,
+							      spanningAngleHoleSecondCollimatorModulatorBox);
 
   G4LogicalVolume* logicHoleSecondCollimatorModulatorBox = new G4LogicalVolume(solidHoleSecondCollimatorModulatorBox,
 									       holeModulatorBoxMaterial,
@@ -992,8 +993,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 					     monitorZSize);
 
   G4LogicalVolume* logicFirstMonitorLayer1 = new G4LogicalVolume(solidFirstMonitorLayer1, 
-		  layer1MonitorChamberMaterial,
-		  "FirstMonitorLayer1");
+								 layer1MonitorChamberMaterial,
+								 "FirstMonitorLayer1");
 
   physiFirstMonitorLayer1 = new G4PVPlacement(0,
 					      G4ThreeVector(monitor1XPosition,0.*cm,0.*cm),
@@ -1009,8 +1010,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 					     monitorZSize);
  
   G4LogicalVolume* logicFirstMonitorLayer2 = new G4LogicalVolume(solidFirstMonitorLayer2,
-		  layer2MonitorChamberMaterial,
-		  "FirstMonitorLayer2");
+								 layer2MonitorChamberMaterial,
+								 "FirstMonitorLayer2");
  
   physiFirstMonitorLayer2 = new G4PVPlacement(0, G4ThreeVector(monitor2XPosition,0.*cm,0.*cm),
 					      "FirstMonitorLayer2", 
@@ -1025,8 +1026,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 					     monitorZSize);
 
   G4LogicalVolume* logicFirstMonitorLayer3 = new G4LogicalVolume(solidFirstMonitorLayer3, 
-		  layer3MonitorChamberMaterial, 
-		  "FirstMonitorLayer3");
+								 layer3MonitorChamberMaterial, 
+								 "FirstMonitorLayer3");
 
   physiFirstMonitorLayer3 = new G4PVPlacement(0, 
 					      G4ThreeVector(0.*mm,0.*cm,0.*cm), 
@@ -1042,8 +1043,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 					     monitorZSize);
 
   G4LogicalVolume* logicFirstMonitorLayer4 = new G4LogicalVolume(solidFirstMonitorLayer4, 
-		  layer4MonitorChamberMaterial, 
-		  "FirstMonitorLayer4");
+								 layer4MonitorChamberMaterial, 
+								 "FirstMonitorLayer4");
 
   physiFirstMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm), 
 					      "FirstMonitorLayer4",
@@ -1059,7 +1060,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
 					       logicFirstMonitorLayer2, physiSecondMonitorLayer1, false, 0);
   
   physiSecondMonitorLayer3 = new G4PVPlacement(0, G4ThreeVector(0.*mm,0.*cm,0.*cm), "MonitorLayer3",
-						logicFirstMonitorLayer3, physiSecondMonitorLayer1, false, 0);
+					       logicFirstMonitorLayer3, physiSecondMonitorLayer1, false, 0);
    
   physiSecondMonitorLayer4 = new G4PVPlacement(0, G4ThreeVector(monitor4XPosition,0.*cm,0.*cm), "SecondMonitorLayer4",
 					       logicFirstMonitorLayer4, physiSecondMonitorLayer1, false, 0);
@@ -1115,8 +1116,8 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 					MOPIFirstKaptonLayerZSize/2);
   
   logicMOPIFirstKaptonLayer = new G4LogicalVolume(solidMOPIFirstKaptonLayer, 
-		  MOPIFirstKaptonLayerMaterial, 
-		  "MOPIFirstKaptonLayer");
+						  MOPIFirstKaptonLayerMaterial, 
+						  "MOPIFirstKaptonLayer");
   
   physiMOPIFirstKaptonLayer = new G4PVPlacement(0,
 						G4ThreeVector(MOPIFirstKaptonLayerXPosition,
@@ -1129,14 +1130,14 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 						0); 
   
   // First Aluminum layer
-    solidMOPIFirstAluminumLayer = new G4Box("MOPIFirstAluminumLayer",
+  solidMOPIFirstAluminumLayer = new G4Box("MOPIFirstAluminumLayer",
 					  MOPIFirstAluminumLayerXSize/2, 
 					  MOPIFirstAluminumLayerYSize/2 ,
 					  MOPIFirstAluminumLayerZSize/2);
   
   logicMOPIFirstAluminumLayer = new G4LogicalVolume(solidMOPIFirstAluminumLayer,
-		  MOPIFirstAluminumLayerMaterial,
-		  "MOPIFirstAluminumLayer");
+						    MOPIFirstAluminumLayerMaterial,
+						    "MOPIFirstAluminumLayer");
   
   physiMOPIFirstAluminumLayer = new G4PVPlacement(0,
 						  G4ThreeVector(MOPIFirstAluminumLayerXPosition,
@@ -1199,14 +1200,14 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 					    logicMOPISecondAirGap, physiMOPIMotherVolume, false, 0); 
   
   // Second Aluminum layer
-    solidMOPISecondAluminumLayer = new G4Box("MOPISecondAluminumLayer",
-					  MOPISecondAluminumLayerXSize/2, 
-					  MOPISecondAluminumLayerYSize/2 ,
-					  MOPISecondAluminumLayerZSize/2);
+  solidMOPISecondAluminumLayer = new G4Box("MOPISecondAluminumLayer",
+					   MOPISecondAluminumLayerXSize/2, 
+					   MOPISecondAluminumLayerYSize/2 ,
+					   MOPISecondAluminumLayerZSize/2);
   
   logicMOPISecondAluminumLayer = new G4LogicalVolume(solidMOPISecondAluminumLayer, 
-		  MOPISecondAluminumLayerMaterial,
-		  "MOPISecondAluminumLayer");
+						     MOPISecondAluminumLayerMaterial,
+						     "MOPISecondAluminumLayer");
   
   physiMOPISecondAluminumLayer = new G4PVPlacement(0,
 						   G4ThreeVector(MOPISecondAluminumLayerXPosition,
@@ -1225,8 +1226,8 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 					 MOPISecondKaptonLayerZSize/2);
   
   logicMOPISecondKaptonLayer = new G4LogicalVolume(solidMOPISecondKaptonLayer, 
-		  MOPIFirstKaptonLayerMaterial,
-		  "MOPISecondKaptonLayer");
+						   MOPIFirstKaptonLayerMaterial,
+						   "MOPISecondKaptonLayer");
   
   physiMOPISecondKaptonLayer = new G4PVPlacement(0,
 						 G4ThreeVector(MOPISecondKaptonLayerXPosition,
@@ -1273,8 +1274,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 					nozzleSupportZSize);
 
   G4LogicalVolume* logicNozzleSupport = new G4LogicalVolume(solidNozzleSupport, 
-		  nozzleSupportMaterial, 
-		  "NozzleSupport");
+							    nozzleSupportMaterial, 
+							    "NozzleSupport");
  
   physiNozzleSupport = new G4PVPlacement(0, G4ThreeVector(nozzleSupportXPosition,0., 0.),
 					 "NozzleSupport", 
@@ -1309,7 +1310,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 								0, 0, 0);
 
   physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(holeNozzleSupportXPosition,
-									      0., 0.)),
+									     0., 0.)),
 					     "HoleNozzleSupport", logicHoleNozzleSupport, physicalTreatmentRoom, false, 0); 
 
   logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
@@ -1331,11 +1332,11 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 						    spanningAngleSecondHoleNozzleSupport);
 
   G4LogicalVolume* logicSecondHoleNozzleSupport = new G4LogicalVolume(solidSecondHoleNozzleSupport, 
-		  seconHoleNozzleSupportMaterial,
-		  "SecondHoleNozzleSupport",
-		  0, 
-		  0,
-		  0);
+								      seconHoleNozzleSupportMaterial,
+								      "SecondHoleNozzleSupport",
+								      0, 
+								      0,
+								      0);
 
   physiSecondHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
 						   "SecondHoleNozzleSupport",
@@ -1418,7 +1419,7 @@ void PassiveProtonBeamLine::SetSecondScatteringFoilXSize(G4double value)
   secondScatteringFoil -> SetXHalfLength(value);
   G4RunManager::GetRunManager() -> GeometryHasBeenModified();
   G4cout <<"The X size of the second scattering foil is (mm):"<<  
-  ((secondScatteringFoil -> GetXHalfLength())*2.)/mm 
+    ((secondScatteringFoil -> GetXHalfLength())*2.)/mm 
 	 << G4endl;
 }
 

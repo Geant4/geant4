@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyMatrix.hh;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyMatrix_H
 #define HadrontherapyMatrix_H 1
@@ -38,19 +39,19 @@
 
 // type struct useful to store nucludes data
 struct ion 
- { 
-     G4bool isPrimary;   // true if particle is primary
-     G4int PDGencoding;  // Particle data group id for the particle
-     //G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
-     G4String name;   	 // simple name without excitation energy: He3, He4, Li7, ...
-     G4int len; 	 // name length
-     G4int Z; 		 // atomic number
-     G4int A; 		 // mass number
-     G4double *dose; 	 // pointer to dose matrix
-     unsigned int    *fluence;  // pointer to fluence matrix
-     //friend bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
-     G4bool operator<(const ion& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
- };
+{ 
+  G4bool isPrimary;   // true if particle is primary
+  G4int PDGencoding;  // Particle data group id for the particle
+  //G4String extName; //  AZ[excitation energy]: like He3[1277.4], He4[0.0], Li7[231.4], ...
+  G4String name;   	 // simple name without excitation energy: He3, He4, Li7, ...
+  G4int len; 	 // name length
+  G4int Z; 		 // atomic number
+  G4int A; 		 // mass number
+  G4double *dose; 	 // pointer to dose matrix
+  unsigned int    *fluence;  // pointer to fluence matrix
+  //friend bool operator<(const ion& a, const ion& b) {return (a.Z == b.Z) ? b.A < a.A : b.Z < a.Z ;}
+  G4bool operator<(const ion& a) const{return (this->Z == a.Z) ? this-> A < a.A : this->Z < a.Z ;}
+};
 
 class HadrontherapyMatrix 
 {

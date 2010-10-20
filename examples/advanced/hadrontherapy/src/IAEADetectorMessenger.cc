@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorMessenger.cc;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #include "IAEADetectorMessenger.hh"
 #include "IAEADetectorConstruction.hh"
@@ -34,7 +35,7 @@
 
 IAEADetectorMessenger::IAEADetectorMessenger(IAEADetectorConstruction* detector)
   :IAEADetector(detector)
-  {
+{
 
   setIAEAWaterPhantomThicknessCmd = new G4UIcmdWithADoubleAndUnit("/iaea/waterPhantomThickness",this);
   setIAEAWaterPhantomThicknessCmd -> SetGuidance("Set size of water phantom");
@@ -52,8 +53,8 @@ IAEADetectorMessenger::~IAEADetectorMessenger()
 void IAEADetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == setIAEAWaterPhantomThicknessCmd ){
-		IAEADetector->setWaterThickness(setIAEAWaterPhantomThicknessCmd->GetNewDoubleValue(newValue));
-		}
+    IAEADetector->setWaterThickness(setIAEAWaterPhantomThicknessCmd->GetNewDoubleValue(newValue));
+  }
 
 }
 

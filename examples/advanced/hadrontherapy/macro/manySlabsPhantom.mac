@@ -11,10 +11,6 @@
 /run/verbose 1
 /event/verbose 0
 
-
-##########################
-#       Physic models    #
-##########################
 ##########################
 # Set of the Physic models
 #
@@ -28,7 +24,6 @@
 # Or alternatively:
 #
 /Physics/addPhysics QGSP_BIC_EMY
-/Physics/addPhysics radioactive_decay
 
 # Initialize geometry and Physics 
 /run/initialize

@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyPhysicsList.cc
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 // This class provides all the physic models that can be activated inside Hadrontherapy;
 // Each model can be setted via macro commands;
@@ -87,6 +88,7 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4Decay.hh"
+#include "G4DecayPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -262,6 +264,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     hadronPhys.push_back( new G4IonBinaryCascadePhysics());
     hadronPhys.push_back( new G4NeutronTrackingCut());
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+    hadronPhys.push_back( new G4DecayPhysics());
       
   } else {
       

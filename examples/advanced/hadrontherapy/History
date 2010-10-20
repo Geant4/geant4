@@ -7,6 +7,16 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+
+20.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-07
+	    - Improved and updated some classes comments
+
+19.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-06
+	   - Physics list 'QGSP_BIC_EMY' definition has been updated
+	     in the physics lists class to to be constistent with the definition 
+       	     of the one defined in the Geant4 kernel ($G4INSTALL/source/physics_lists/)
+	   - Macro file consequently updated
+
 18.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-05
 	   - Updated the physics class adding directly the QGSP_BIC_EMY
 	     reference physics list

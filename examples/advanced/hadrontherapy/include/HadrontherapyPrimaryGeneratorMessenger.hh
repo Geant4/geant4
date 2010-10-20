@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyPrimaryGeneratorMessenger.hh;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyPrimaryGeneratorMessenger_h
 #define HadrontherapyPrimaryGeneratorMessenger_h 1
@@ -39,27 +40,27 @@ class G4UIcmdWithADouble;
 
 class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
-   ~HadrontherapyPrimaryGeneratorMessenger();
+public:
+  HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
+  ~HadrontherapyPrimaryGeneratorMessenger();
     
   void SetNewValue(G4UIcommand*, G4String);
 
- private:
-    HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
-    G4UIdirectory*                    beamParametersDir;
-    G4UIdirectory*                    EnergyDir;
-    G4UIdirectory*                    particlePositionDir;
-    G4UIdirectory*                    MomentumDir;
-    G4UIcmdWithADoubleAndUnit*        meanKineticEnergyCmd;    
-    G4UIcmdWithADoubleAndUnit*        sigmaEnergyCmd;  
-    G4UIcmdWithADoubleAndUnit*        XpositionCmd;   
-    G4UIcmdWithADoubleAndUnit*        YpositionCmd; 
-    G4UIcmdWithADoubleAndUnit*        ZpositionCmd; 
-    G4UIcmdWithADoubleAndUnit*        sigmaYCmd; 
-    G4UIcmdWithADoubleAndUnit*        sigmaZCmd; 
-    G4UIcmdWithADouble*        sigmaMomentumYCmd; 
-    G4UIcmdWithADouble*        sigmaMomentumZCmd; 
+private:
+  HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
+  G4UIdirectory*                    beamParametersDir;
+  G4UIdirectory*                    EnergyDir;
+  G4UIdirectory*                    particlePositionDir;
+  G4UIdirectory*                    MomentumDir;
+  G4UIcmdWithADoubleAndUnit*        meanKineticEnergyCmd;    
+  G4UIcmdWithADoubleAndUnit*        sigmaEnergyCmd;  
+  G4UIcmdWithADoubleAndUnit*        XpositionCmd;   
+  G4UIcmdWithADoubleAndUnit*        YpositionCmd; 
+  G4UIcmdWithADoubleAndUnit*        ZpositionCmd; 
+  G4UIcmdWithADoubleAndUnit*        sigmaYCmd; 
+  G4UIcmdWithADoubleAndUnit*        sigmaZCmd; 
+  G4UIcmdWithADouble*        sigmaMomentumYCmd; 
+  G4UIcmdWithADouble*        sigmaMomentumZCmd; 
 
 
 };

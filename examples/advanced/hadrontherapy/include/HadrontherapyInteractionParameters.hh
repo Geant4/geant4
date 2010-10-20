@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: HadrontherapyInteractionParameters.hh;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyInteractionParameters_H
 #define HadrontherapyInteractionParameters_H 1
@@ -54,46 +55,46 @@ class HadrontherapyInteractionParameters : public G4EmCalculator
 {
 public:
 
-    HadrontherapyInteractionParameters(G4bool);
-    ~HadrontherapyInteractionParameters();
+  HadrontherapyInteractionParameters(G4bool);
+  ~HadrontherapyInteractionParameters();
 
-// Get data for Mass SP    
-// G4NistMaterialBuilder class materials
-// User must provide: material kinetic energy lower limit, kinetic energy upper limit, number of points to retrieve,
-// [particle], [output filename].
+  // Get data for Mass SP    
+  // G4NistMaterialBuilder class materials
+  // User must provide: material kinetic energy lower limit, kinetic energy upper limit, number of points to retrieve,
+  // [particle], [output filename].
 
-    G4bool GetStoppingTable (const G4String& vararg);
-    G4double GetStopping (G4double energy,
-			  const G4ParticleDefinition*, 
-			  const G4Material*, 
-			  G4double density = 0.);
+  G4bool GetStoppingTable (const G4String& vararg);
+  G4double GetStopping (G4double energy,
+			const G4ParticleDefinition*, 
+			const G4Material*, 
+			G4double density = 0.);
 #ifdef G4ANALYSIS_USE_ROOT 
-    void PlotStopping(const G4String&);
+  void PlotStopping(const G4String&);
 #endif
-    void ListOfNistMaterials (const G4String& vararg);
-    void BeamOn();
-    bool ParseArg (const G4String& vararg);	
+  void ListOfNistMaterials (const G4String& vararg);
+  void BeamOn();
+  bool ParseArg (const G4String& vararg);	
 
 private:
-    G4Material* GetNistMaterial(G4String material);
-    G4NistElementBuilder* nistEle;
-    G4NistMaterialBuilder* nistMat;
-    std::ofstream outfile;
-    std::ostream data;
-    G4Material* Pmaterial;
-    HadrontherapyParameterMessenger* pMessenger; 
-    bool beamFlag;
+  G4Material* GetNistMaterial(G4String material);
+  G4NistElementBuilder* nistEle;
+  G4NistMaterialBuilder* nistMat;
+  std::ofstream outfile;
+  std::ostream data;
+  G4Material* Pmaterial;
+  HadrontherapyParameterMessenger* pMessenger; 
+  bool beamFlag;
 
 #ifdef G4ANALYSIS_USE_ROOT 
-    TCanvas *theRootCanvas;
-    TGraph *theRootGraph;
-    TAxis *axisX, *axisY;
+  TCanvas *theRootCanvas;
+  TGraph *theRootGraph;
+  TAxis *axisX, *axisY;
 #endif
-    G4double kinEmin, kinEmax, npoints;
-    G4String particle, material, filename; 
-    G4double dedxtot, density;
-    std::vector<G4double> energy;
-    std::vector<G4double> massDedx;
+  G4double kinEmin, kinEmax, npoints;
+  G4String particle, material, filename; 
+  G4double dedxtot, density;
+  std::vector<G4double> energy;
+  std::vector<G4double> massDedx;
 
 };
 #endif

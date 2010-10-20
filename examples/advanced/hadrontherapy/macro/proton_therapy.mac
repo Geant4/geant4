@@ -25,7 +25,6 @@
 # Or alternatively:
 #
 /Physics/addPhysics QGSP_BIC_EMY
-/Physics/addPhysics radioactive_decay
 ##########################
 # Initialisation procedure
 #

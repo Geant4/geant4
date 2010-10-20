@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyEventActionMessenger.hh;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyEventActionMessenger_h
 #define HadrontherapyEventActionMessenger_h 1
@@ -39,17 +40,17 @@ class G4UIcmdWithAnInteger;
 
 class HadrontherapyEventActionMessenger: public G4UImessenger
 {
-  public:
-    HadrontherapyEventActionMessenger(HadrontherapyEventAction*);
-   ~HadrontherapyEventActionMessenger();
+public:
+  HadrontherapyEventActionMessenger(HadrontherapyEventAction*);
+  ~HadrontherapyEventActionMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    HadrontherapyEventAction*          eventAction;
-    G4UIdirectory*        eventDir;        
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;    
+private:
+  HadrontherapyEventAction*          eventAction;
+  G4UIdirectory*        eventDir;        
+  G4UIcmdWithAString*   DrawCmd;
+  G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 #endif

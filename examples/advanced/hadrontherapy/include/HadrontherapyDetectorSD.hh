@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: HadrontherapyDetectorSD.hh; 
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyDetectorSD_h
 #define HadrontherapyDetectorSD_h 1
@@ -42,7 +43,7 @@ public:
   HadrontherapyDetectorSD(G4String name);
   ~HadrontherapyDetectorSD();
 
-    std::ofstream ofs;
+  std::ofstream ofs;
   void Initialize(G4HCofThisEvent*);
  
   G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);

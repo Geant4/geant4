@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyDetectorMessenger.hh;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef IAEADetectorMessenger_h
 #define IAEADetectorMessenger_h 1
@@ -38,11 +39,11 @@ class G4UIcmdWithADoubleAndUnit;
 
 class IAEADetectorMessenger: public G4UImessenger
 {
-  public:
+public:
   IAEADetectorMessenger(IAEADetectorConstruction* );
   ~IAEADetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
 private:
 

@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// IAEAScoreWriter.cc
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #include "IAEAScoreWriter.hh"
 
@@ -53,7 +54,7 @@ void IAEAScoreWriter::DumpQuantityToFiles(G4String & psName, G4String & option) 
     G4cout << "User-defined DumpQuantityToFile() method is invoked."
            << G4endl;
     G4cout << "Will write energy deposits along phantom"
-		   << G4endl;
+	   << G4endl;
   }
 
   // change the option string into lowercase to the case-insensitive.
@@ -63,7 +64,7 @@ void IAEAScoreWriter::DumpQuantityToFiles(G4String & psName, G4String & option) 
   // confirm the option
   if(opt.size() == 0) opt = "csv";
 
-    // retrieve the map
+  // retrieve the map
   MeshScoreMap fSMap = fScoringMesh->GetScoreMap();
   
 
@@ -102,17 +103,17 @@ void IAEAScoreWriter::DumpQuantityToFiles(G4String & psName, G4String & option) 
 #endif
   for(int x = 0; x < fNMeshSegments[0]; x++) {
     for(int y = 0; y < fNMeshSegments[1]; y++) {
-/* There is one unused mashdimension here, but for now I've decided to ignore it */
+      /* There is one unused mashdimension here, but for now I've decided to ignore it */
 	
-  if(verboseLevel > 0) {
-      std::cout << x << "\t" << projxy[x][y] << G4endl;
-	}
+      if(verboseLevel > 0) {
+	std::cout << x << "\t" << projxy[x][y] << G4endl;
+      }
 #ifdef G4ANALYSIS_USE_ROOT
-	analysis->BraggPeak(x, projxy[x][y]);
+      analysis->BraggPeak(x, projxy[x][y]);
 #endif
     } // y
   } // x
- // ofile << std::setprecision(6);
+  // ofile << std::setprecision(6);
 
   // close the file
   //ofile.close();

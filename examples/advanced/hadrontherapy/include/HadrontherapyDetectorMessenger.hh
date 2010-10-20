@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
-// HadrontherapyDetectorMessenger.hh;
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyDetectorMessenger_h
 #define HadrontherapyDetectorMessenger_h 1
@@ -40,7 +41,7 @@ class G4UIcmdWithAString;
 
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
-  public:
+public:
   HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
   ~HadrontherapyDetectorMessenger();
     
@@ -56,10 +57,10 @@ private:
   G4UIcmdWithoutParameter   *updateCmd;
   G4UIcmdWithAString        *changeThePhantomMaterialCmd; 
   G4UIcmdWith3VectorAndUnit *changeThePhantomSizeCmd,
-			    *changeThePhantomPositionCmd, 
-			    *changeTheDetectorSizeCmd, 
-			    *changeTheDetectorToPhantomPositionCmd,
-			    *changeTheDetectorVoxelCmd;
+    *changeThePhantomPositionCmd, 
+    *changeTheDetectorSizeCmd, 
+    *changeTheDetectorToPhantomPositionCmd,
+    *changeTheDetectorVoxelCmd;
 };
 #endif
 

@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyParametersMessenger.hh;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyParameterMessenger_h
 #define HadrontherapyParameterMessenger_h 1
@@ -40,17 +41,17 @@ class G4UIcmdWithoutParameter;
 
 class HadrontherapyParameterMessenger : public G4UImessenger
 {
-    public:
-    HadrontherapyParameterMessenger(HadrontherapyInteractionParameters* );
-    ~HadrontherapyParameterMessenger();
+public:
+  HadrontherapyParameterMessenger(HadrontherapyInteractionParameters* );
+  ~HadrontherapyParameterMessenger();
 
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
 
-    private:
-    HadrontherapyInteractionParameters* pParam;
+private:
+  HadrontherapyInteractionParameters* pParam;
 
-    G4UIdirectory           *paramDir;
-    G4UIcmdWithAString      *dedxCmd, *listCmd;  
+  G4UIdirectory           *paramDir;
+  G4UIcmdWithAString      *dedxCmd, *listCmd;  
 
 };
 #endif

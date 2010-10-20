@@ -22,10 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// LocalINCLIonIonInelasticPhysic.cc
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 //
 // In this class the models for ion-ion interactions at intermediate energies (0 - 1 GeV per nucleon)
 // can be activate. This class can be used alternatively to the "binary_ion" physics list
@@ -96,7 +96,7 @@ void LocalINCLIonIonInelasticPhysic::ConstructProcess()
   WilsonModel -> SetMinEnergy(0*MeV);
   WilsonModel -> SetMaxEnergy(10 *GeV);
 
-//  G4InclAblaLightIonInterface* INCLIonModel = new G4InclAblaLightIonInterface();
+  //  G4InclAblaLightIonInterface* INCLIonModel = new G4InclAblaLightIonInterface();
 
   G4TripathiCrossSection* TripatiCrossSections = new G4TripathiCrossSection;
   G4TripathiCrossSection* TripatiLightCrossSections = new G4TripathiCrossSection;
@@ -142,17 +142,17 @@ void LocalINCLIonIonInelasticPhysic::ConstructProcess()
   // *** He3   ***
   // *************
   /*
-  G4He3InelasticProcess* he3InelasticProcess = new G4He3InelasticProcess;
+    G4He3InelasticProcess* he3InelasticProcess = new G4He3InelasticProcess;
   
-  he3InelasticProcess -> AddDataSet(ShenCrossSections);
-  he3InelasticProcess -> AddDataSet(TripatiCrossSections);
-  he3InelasticProcess -> AddDataSet(TripatiLightCrossSections);
+    he3InelasticProcess -> AddDataSet(ShenCrossSections);
+    he3InelasticProcess -> AddDataSet(TripatiCrossSections);
+    he3InelasticProcess -> AddDataSet(TripatiLightCrossSections);
 
-  he3InelasticProcess -> RegisterMe(INCLIonModel);
+    he3InelasticProcess -> RegisterMe(INCLIonModel);
 
-  particle = G4He3::He3();
-  processManager = particle -> GetProcessManager();
-  processManager -> AddDiscreteProcess(he3InelasticProcess);           
+    particle = G4He3::He3();
+    processManager = particle -> GetProcessManager();
+    processManager -> AddDiscreteProcess(he3InelasticProcess);           
   */
   // *************
   // *** Alpha ***
@@ -165,8 +165,8 @@ void LocalINCLIonIonInelasticPhysic::ConstructProcess()
 
   //alphaInelasticProcess -> RegisterMe(INCLIonModel);
   //alphaInelasticProcess -> RegisterMe(lightBinary);
- alphaInelasticProcess -> RegisterMe(JQMDmodel);
- //alphaInelasticProcess -> RegisterMe(WilsonModel);
+  alphaInelasticProcess -> RegisterMe(JQMDmodel);
+  //alphaInelasticProcess -> RegisterMe(WilsonModel);
 
   particle = G4Alpha::Alpha();
   processManager = particle -> GetProcessManager();

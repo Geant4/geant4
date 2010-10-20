@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// HadrontherapyPhysicsListsMessenger.hh
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyPhysicsListMessenger_h
 #define HadrontherapyPhysicsListMessenger_h 1
@@ -41,14 +42,14 @@ class G4UIcmdWithAString;
 
 class HadrontherapyPhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* );
-   ~HadrontherapyPhysicsListMessenger();
+  HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* );
+  ~HadrontherapyPhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
   HadrontherapyPhysicsList* pPhysicsList;
     

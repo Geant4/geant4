@@ -22,13 +22,12 @@
 #/physic/addPhysics elastic                             # Hadronic elastic model
 #/physic/addPhysics binary                              # Hadronic inelastic model
 #/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
-#/Physics/addPhysics radioactive_decay
 
 #
 # Or alternatively:
 #
 /Physics/addPhysics QGSP_BIC_EMY
-/Physics/addPhysics radioactive_decay
+#/Physics/addPhysics radioactive_decay
 
 ##########################
 # Initialisation procedure
@@ -39,7 +38,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGLIX
+#/vis/open OGLIX
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
@@ -72,13 +71,18 @@
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 10
+/event/printEventNumber 1000
 
 #########################
 # Start of the run
 #
 # If secondaries dose/fluence are needed
-/analysis/secondaries true 
+#/analysis/secondaries true 
+
+/run/beamOn 100000
+
+# Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
+# /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 
 /run/beamOn 1000
 

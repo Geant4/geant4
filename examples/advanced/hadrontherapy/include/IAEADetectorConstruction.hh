@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// IAEADetectorConstruction.hh; 
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef IAEADetectorConstruction_H
 #define IAEADetectorConstruction_H 1
@@ -81,7 +82,7 @@ private:
   HadrontherapyDetectorROGeometry* detectorROGeometry; //<Pointer to ROGeometry 
 
   PassiveProtonBeamLine* passiveProtonBeamLine; //<Pointer to the beam line 
-                                   // geometry component
+  // geometry component
 
   HadrontherapyModulator* modulator; // Pointer to the modulator 
                                      // geometry component

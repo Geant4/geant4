@@ -24,7 +24,6 @@
 # Or alternatively:
 #
 /Physics/addPhysics QGSP_BIC_EMY
-/Physics/addPhysics radioactive_decay
 
 # Initialize geometry and physic 
 /run/initialize

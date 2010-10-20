@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
-// HadrontherapyAnalysisFileMessenger.hh.
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #ifndef HadrontherapyAnalysisFileMessenger_h
 #define HadrontherapyAnalysisFileMessenger_h 1
@@ -38,38 +39,38 @@ class G4UIcmdWithAString;
 class G4UIcmdWithABool; 
 
 /**
-* A messenger object of this class is created by the AnalysisManager.
-* The point of a messenger is to connect the G4UI with the simulation
-* functionality.
-* The messenger needs to contain a command object and to have SetValue
-* method that is called once a command is set.
-* 
-* @see HadrontherapyAnalysisManager
-*/
+ * A messenger object of this class is created by the AnalysisManager.
+ * The point of a messenger is to connect the G4UI with the simulation
+ * functionality.
+ * The messenger needs to contain a command object and to have SetValue
+ * method that is called once a command is set.
+ * 
+ * @see HadrontherapyAnalysisManager
+ */
 class HadrontherapyAnalysisFileMessenger: public G4UImessenger
 {
-  public:
-    HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*);
-   ~HadrontherapyAnalysisFileMessenger();
+public:
+  HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*);
+  ~HadrontherapyAnalysisFileMessenger();
 
-	/**   
-	* Called when new command given.
-	* @param command is a pointer to the given command object
-	* @param newValue holds the argument given as a G4String
-	* @return is void   
-	*/     
-    void SetNewValue(G4UIcommand* command, G4String newValue);
+  /**   
+   * Called when new command given.
+   * @param command is a pointer to the given command object
+   * @param newValue holds the argument given as a G4String
+   * @return is void   
+   */     
+  void SetNewValue(G4UIcommand* command, G4String newValue);
     
-  private:
-    HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
+private:
+  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
 
-	/**   
-	* G4 user interface command (that takes a string argument) object
-	* Constructor requires command name and messenger class(this).
-	*/ 
-    G4UIcmdWithABool *secondariesCmd; 
+  /**   
+   * G4 user interface command (that takes a string argument) object
+   * Constructor requires command name and messenger class(this).
+   */ 
+  G4UIcmdWithABool *secondariesCmd; 
 #ifdef G4ANALYSIS_USE_ROOT
-    G4UIcmdWithAString *FileNameCmd;
+  G4UIcmdWithAString *FileNameCmd;
 #endif
 };
 

@@ -22,9 +22,10 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// passiveProtonBeamLineMessenger.cc;
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
 // See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+//
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #include "PassiveProtonBeamLineMessenger.hh"
 #include "PassiveProtonBeamLine.hh"
@@ -33,17 +34,17 @@
 #include "G4UIcmdWithAString.hh"
 
 
-   PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
+PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
   :passiveProton(beamLine)
 
 {
-	changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
-	changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
+  changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
+  changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
 	
-    changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
-	changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
-	changeTheBeamLineNameCmd -> SetParameterName("List",false);
-	changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
+  changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
+  changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
+  changeTheBeamLineNameCmd -> SetParameterName("List",false);
+  changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
 	
   modulatorDir = new G4UIdirectory("/modulator/");
   modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
@@ -147,33 +148,33 @@ void PassiveProtonBeamLineMessenger::SetNewValue(G4UIcommand* command,G4String n
 { 
   if( command == modulatorAngleCmd )
     { passiveProton -> SetModulatorAngle
-           (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
+	(modulatorAngleCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == rangeShifterMatCmd )
     { passiveProton -> SetRSMaterial(newValue);}
 
   else if( command == rangeShifterXSizeCmd )
     { passiveProton -> SetRangeShifterXSize
-            (rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
+	(rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == rangeShifterXPositionCmd )
     { passiveProton -> SetRangeShifterXPosition
-                  (rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
+	(rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == firstScatteringFoilXSizeCmd )
     { passiveProton -> SetFirstScatteringFoilXSize
-                  (firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
+	(firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == secondScatteringFoilXSizeCmd )
     { passiveProton -> SetSecondScatteringFoilXSize
-                  (secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
+	(secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == outerRadiusStopperCmd )
     { passiveProton -> SetOuterRadiusStopper(
-                    outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
+					     outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == innerRadiusFinalCollimatorCmd )
     { passiveProton -> SetInnerRadiusFinalCollimator
-                  (innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
+	(innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
 }
 
