@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.20 2010-09-22 14:57:59 gcosmo Exp $
+// $Id: G4DisplacedSolid.hh,v 1.21 2010-10-20 07:31:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -108,10 +108,11 @@ class G4DisplacedSolid : public G4VSolid
 
   public:  // with description 
 
-    virtual G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const;
+    G4VSolid* Clone() const;
 
-    virtual const G4DisplacedSolid* GetDisplacedSolidPtr() const   ;
-    virtual       G4DisplacedSolid* GetDisplacedSolidPtr();
+    const G4DisplacedSolid* GetDisplacedSolidPtr() const;
+          G4DisplacedSolid* GetDisplacedSolidPtr();
       // If the Solid is a "G4DisplacedSolid",
       // return a self pointer else return 0.
 
@@ -154,7 +155,7 @@ class G4DisplacedSolid : public G4VSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
     G4NURBS*      CreateNURBS      () const ;
-    virtual G4Polyhedron* GetPolyhedron () const;
+    G4Polyhedron* GetPolyhedron    () const ;
       // For creating graphical representations (ie for visualisation).
 
   protected:

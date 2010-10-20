@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.28 2010-09-22 14:57:59 gcosmo Exp $
+// $Id: G4DisplacedSolid.cc,v 1.29 2010-10-20 07:31:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -155,11 +155,6 @@ G4DisplacedSolid& G4DisplacedSolid::operator = (const G4DisplacedSolid& rhs)
 
   return *this;
 }  
-
-G4GeometryType G4DisplacedSolid::GetEntityType() const 
-{
-  return G4String("G4DisplacedSolid");
-}
 
 void G4DisplacedSolid::CleanTransformations()
 {
@@ -389,6 +384,24 @@ G4ThreeVector G4DisplacedSolid::GetPointOnSurface() const
 {
   G4ThreeVector p =  fPtrSolid->GetPointOnSurface();
   return fDirectTransform->TransformPoint(p);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Return object type name
+
+G4GeometryType G4DisplacedSolid::GetEntityType() const 
+{
+  return G4String("G4DisplacedSolid");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+//
+G4VSolid* G4DisplacedSolid::Clone() const
+{
+  return new G4DisplacedSolid(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////

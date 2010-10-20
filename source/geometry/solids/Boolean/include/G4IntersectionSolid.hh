@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.hh,v 1.10 2010-09-22 14:57:59 gcosmo Exp $
+// $Id: G4IntersectionSolid.hh,v 1.11 2010-10-20 07:31:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,7 +72,9 @@ class G4IntersectionSolid : public G4BooleanSolid
 
     virtual ~G4IntersectionSolid() ;
 
-    virtual G4GeometryType  GetEntityType() const;
+    G4GeometryType  GetEntityType() const;
+
+    G4VSolid* Clone() const;
 
   public:  // without description
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.39 2010-09-22 14:57:59 gcosmo Exp $
+// $Id: G4UnionSolid.cc,v 1.40 2010-10-20 07:31:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -450,6 +450,15 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
 G4GeometryType G4UnionSolid::GetEntityType() const 
 {
   return G4String("G4UnionSolid");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UnionSolid::Clone() const
+{
+  return new G4UnionSolid(*this);
 }
 
 //////////////////////////////////////////////////////////////
