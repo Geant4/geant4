@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.26 2010-10-11 13:54:59 vnivanch Exp $
+// $Id: G4PreCompoundTransitions.cc,v 1.27 2010-10-20 00:47:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -237,7 +237,7 @@ void G4PreCompoundTransitions::PerformTransition(G4Fragment & result)
   G4double ChosenTransition = 
     G4UniformRand()*(TransitionProb1 + TransitionProb2 + TransitionProb3);
   G4int deltaN = 0;
-  G4int Nexcitons = result.GetNumberOfExcitons();
+  //  G4int Nexcitons = result.GetNumberOfExcitons();
   G4int Npart     = result.GetNumberOfParticles();
   G4int Ncharged  = result.GetNumberOfCharged();
   G4int Nholes    = result.GetNumberOfHoles();
