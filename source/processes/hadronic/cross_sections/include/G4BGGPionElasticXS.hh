@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.hh,v 1.6 2010-10-12 06:04:15 dennis Exp $
+// $Id: G4BGGPionElasticXS.hh,v 1.7 2010-10-20 09:07:38 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,6 +137,7 @@ G4bool G4BGGPionElasticXS::IsIsoApplicable(const G4DynamicParticle*,
 }
 
 
+inline 
 G4double G4BGGPionElasticXS::GetCrossSection(const G4DynamicParticle* dp, 
 					     const G4Element* elm, 
 					     G4double temp)
