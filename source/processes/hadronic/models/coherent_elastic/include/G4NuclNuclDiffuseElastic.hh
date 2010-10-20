@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.14 2010-10-15 08:33:14 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.15 2010-10-20 08:19:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1205,12 +1205,24 @@ inline G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
   G4double sinThetaR  = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
   G4double dTheta     = 0.5*(theta - fRutherfordTheta);
   G4double sindTheta  = std::sin(dTheta);
+  G4double persqrt2   = std::sqrt(0.5);
 
-  G4complex order     = G4complex(1.,1.);
-  order              /= std::sqrt(2.);
+  G4complex order     = G4complex(persqrt2,persqrt2);
+  // order              *= std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*sindTheta;
+  order              *= std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*dTheta;
 
-  G4complex out       = GetErfcInt(order*std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*sindTheta);
-  out                *= CoulombAmplitude(theta);
+  G4complex out;
+
+  if ( theta <= fRutherfordTheta )
+  {
+    out = 1. - 0.5*GetErfcInt(-order)*ProfileNear(theta);
+  }
+  else
+  {
+    out = 0.5*GetErfcInt(order)*ProfileNear(theta);
+  }
+
+  out *= CoulombAmplitude(theta);
 
   return out;
 }

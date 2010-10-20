@@ -358,6 +358,7 @@ int main()
   nndiffelastic->SetCofFar(1.0);    
   // nndiffelastic->SetEtaRatio(1.40);   // 1
 
+
   nndiffelastic->InitParameters(theParticleDefinition, ptot, Z, A);
 
   // nndiffelastic->InitParametersGla(theDynamicParticle, ptot, Z, A);
@@ -391,8 +392,6 @@ int main()
     writef <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
   
   }
-
-
 
 
 
