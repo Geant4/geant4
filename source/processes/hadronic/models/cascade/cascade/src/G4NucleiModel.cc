@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.91 2010-10-20 21:14:22 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.92 2010-10-20 23:33:31 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -74,6 +74,7 @@
 // 20101019  M. Kelsey -- CoVerity reports: unitialized constructor, dtor leak
 // 20101020  M. Kelsey -- Bug fixes to refactoring changes (5 Oct).  Back out
 //		worthToPropagate() changes for better regression testing.
+// 20101020  M. Kelsey -- Re-activate worthToPropagate() changes.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -1042,19 +1043,17 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
 
   G4bool worth = true;
 
-  // NOTE:  Temporarily backing out changes flagged "***" below
-
   if (cparticle.reflectedNow()) {	// Just reflected -- keep going?
     G4int zone = cparticle.getCurrentZone();
     G4int ip = cparticle.getParticle().type();
 
     G4double ekin_cut = (cparticle.getParticle().nucleon()) ?
-      getFermiKinetic(ip, zone) : 0.;	//*** getPotential(ip, zone);
+      getFermiKinetic(ip, zone) : getPotential(ip, zone);
 
     worth = cparticle.getParticle().getKineticEnergy()/ekin_scale > ekin_cut;
 
     if (verboseLevel > 3) {
-      G4cout //*** << " type=" << ip
+      G4cout << " type=" << ip
 	     << " ekin=" << cparticle.getParticle().getKineticEnergy()
 	     << " potential=" << ekin_cut
 	     << " : worth? " << worth << G4endl;

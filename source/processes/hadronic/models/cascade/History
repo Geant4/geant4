@@ -1,4 +1,4 @@
-$Id: History,v 1.200 2010-10-20 21:14:22 mkelsey Exp $
+$Id: History,v 1.201 2010-10-20 23:33:31 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,8 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20 October 2010 Michael Kelsey
-------------------------------
+20 October 2010 Michael Kelsey (kelsey-20101020a)
+-------------------------------------------------
+- G4NucleiModel:  Re-activate changes in worthToPropagate() to use existing
+  nuclear potential values for kaons and hyperons to decide on trapping.
+
+20 October 2010 Michael Kelsey (kelsey-20101020)
+------------------------------------------------
 - G4NucleiModel:  Clean up some bugs in refactoring generateModel().  Back
   out changes (28 Sep) in worthToPropagate() in order to compare refactored
   to production code.
