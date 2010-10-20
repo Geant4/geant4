@@ -1,4 +1,4 @@
-q$Id: History,v 1.152 2010-10-10 15:18:34 vnivanch Exp $
+q$Id: History,v 1.153 2010-10-20 07:13:33 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-10-2010, L.Pandola                   (phys-lists-V09-03-30)
+- updated physics list LBE to comply with the new EM design 
+  (use Livermore models rather than LowEnergy processes)
 
 10-10-2010, V.Ivanchenko                (phys-lists-V09-03-29)
 - anti_deuteron, anti_triton, anti_alpha, anti_He3 are included
