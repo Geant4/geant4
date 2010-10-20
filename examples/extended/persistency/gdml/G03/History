@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2010-06-18 10:10:55 gcosmo Exp $
+$Id: History,v 1.9 2010-10-20 15:08:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 20th, 2010  Gabriele Cosmo G03-V09-03-04
+- Fixed use of obsolete physics-list.
+- Temporarly restored OGLIX in macros until migration to G4UIExecutive will
+  be applied.
 
 June 18th, 2010  Gabriele Cosmo - G03-V09-03-03
 - Removed extra call to G4UItcsh in batch mode in main() and cleaned up ...
