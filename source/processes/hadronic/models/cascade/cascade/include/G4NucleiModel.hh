@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.32 2010-10-19 19:48:05 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.33 2010-10-20 21:14:22 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -171,13 +171,11 @@ private:
   // Functions used to generate model nuclear structure
   void fillBindingEnergies();
 
-  void fillZoneRadii(G4double nuclearRadius, G4double skinDepth, G4double ur[]);
+  void fillZoneRadii(G4double nuclearRadius);
 
-  G4double fillZoneVolumes(const G4double ur[], G4double nuclearRadius, 
-			   G4double v[], G4double v1[]);
+  G4double fillZoneVolumes(G4double nuclearRadius);
 
-  void fillPotentials(G4int type, G4double tot_vol, const G4double v[],
-		      const G4double v1[]);
+  void fillPotentials(G4int type, G4double tot_vol);
 
   G4double zoneIntegralWoodsSaxon(G4double ur1, G4double ur2,
 				  G4double nuclearRadius) const;
@@ -199,6 +197,9 @@ private:
   std::vector<G4InuclElementaryParticle> raw_particles;
 
   // Temporary buffers for computing nuclear model
+  G4double ur[7];		// Number of skin depths for each zone
+  G4double v[6];		// Density integrals by zone
+  G4double v1[6];		// Pseudo-volume (delta r^3) by zone
   std::vector<G4double> rod;	// Nucleon density
   std::vector<G4double> pf;	// Fermi momentum
   std::vector<G4double> vz;	// Nucleo potential

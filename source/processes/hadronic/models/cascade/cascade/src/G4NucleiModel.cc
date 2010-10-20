@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.90 2010-10-19 19:49:03 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.91 2010-10-20 21:14:22 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -72,6 +72,8 @@
 //		all the model construction pieces to separate functions, fix
 //		wrong value for 4/3 pi.
 // 20101019  M. Kelsey -- CoVerity reports: unitialized constructor, dtor leak
+// 20101020  M. Kelsey -- Bug fixes to refactoring changes (5 Oct).  Back out
+//		worthToPropagate() changes for better regression testing.
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -117,7 +119,7 @@ const G4double G4NucleiModel::kaon_vp = -0.015;		// WHY NEGATIVE?
 const G4double G4NucleiModel::hyperon_vp = 0.030;
 
 // FIXME:  We should not be using this!
-const G4double G4NucleiModel::piTimes4thirds = 4.188790204786;
+const G4double G4NucleiModel::piTimes4thirds = 4.189; // 4.188790204786;
 
 
 // Constructors
@@ -182,18 +184,20 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   // This will be used to pre-allocate lots of arrays below
   number_of_zones = (A < 5) ? 1 : (A < 100) ? 3 : 6;
 
-  // Buffers used for zone-by-zone calculations
-  G4double ur[7] = { 7*0. };	// Number of skin depths for each zone
-  G4double v[6]  = { 6*0. };	// Density integrals by zone
-  G4double v1[6] = { 6*0. };	// Pseudo-volume (delta r^3) by zone
+  // Clear all parameters arrays for reloading
+  binding_energies.clear();
+  nucleon_densities.clear();
+  zone_potentials.clear();
+  fermi_momenta.clear();
+  zone_radii.clear();
 
   fillBindingEnergies();
-  fillZoneRadii(nuclearRadius, skinDepth, ur);
+  fillZoneRadii(nuclearRadius);
 
-  G4double tot_vol = fillZoneVolumes(ur, nuclearRadius, v, v1);
+  G4double tot_vol = fillZoneVolumes(nuclearRadius);
 
-  fillPotentials(proton, tot_vol, v, v1);		// Protons
-  fillPotentials(neutron, tot_vol, v, v1);		// Neutrons
+  fillPotentials(proton, tot_vol);		// Protons
+  fillPotentials(neutron, tot_vol);		// Neutrons
 
   // Additional flat zone potentials for other hadrons
   const std::vector<G4double> vp(number_of_zones, (A>4)?pion_vp:pion_vp_small);
@@ -216,8 +220,6 @@ void G4NucleiModel::fillBindingEnergies() {
 
   G4double dm = bindingEnergy(A,Z);
 
-  binding_energies.clear();
-
   // Binding energy differences for proton and neutron loss, respectively
   binding_energies.push_back(std::fabs(bindingEnergy(A-1,Z-1)-dm)/GeV);
   binding_energies.push_back(std::fabs(bindingEnergy(A-1,Z)-dm)/GeV);
@@ -225,12 +227,9 @@ void G4NucleiModel::fillBindingEnergies() {
 
 // Load zone boundary radius array for current nucleus
 void 
-G4NucleiModel::fillZoneRadii(G4double nuclearRadius, G4double skinDepth,
-			     G4double ur[]) {
+G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
   if (verboseLevel > 1)
     G4cout << " >>> G4NucleiModel::fillZoneRadii" << G4endl;
-
-  zone_radii.clear();
 
   G4double skinRatio = nuclearRadius/skinDepth;
   G4double skinDecay = std::exp(-skinRatio);    
@@ -240,14 +239,15 @@ G4NucleiModel::fillZoneRadii(G4double nuclearRadius, G4double skinDepth,
     if (A == 4) smallRad *= 0.7;	// Alpha is most tightly bound
     zone_radii.push_back(smallRad);
     ur[0] = 0.;
+    ur[1] = 1.;
   } else if (A < 12) {		// Small nuclei have Gaussian potential
     G4double rSq = nuclearRadius * nuclearRadius;
-    G4double nuclearRadius2 = std::sqrt(rSq * (1.0 - 1.0/A) + 6.4);
+    G4double gaussRadius = std::sqrt(rSq * (1.0 - 1.0/A) + 6.4);
     
     ur[0] = 0.0;
     for (G4int i = 0; i < number_of_zones; i++) {
       G4double y = std::sqrt(-std::log(alfa3[i]));
-      zone_radii.push_back(nuclearRadius2 * y);
+      zone_radii.push_back(gaussRadius * y);
       ur[i+1] = y;
     }
   } else if (A < 100) {		// Intermediate nuclei have three-zone W-S
@@ -269,8 +269,7 @@ G4NucleiModel::fillZoneRadii(G4double nuclearRadius, G4double skinDepth,
 
 // Compute zone-by-zone density integrals
 G4double 
-G4NucleiModel::fillZoneVolumes(const G4double ur[], G4double nuclearRadius, 
-			       G4double v[], G4double v1[]) {
+G4NucleiModel::fillZoneVolumes(G4double nuclearRadius) {
   if (verboseLevel > 1)
     G4cout << " >>> G4NucleiModel::fillZoneVolumes" << G4endl;
 
@@ -294,15 +293,14 @@ G4NucleiModel::fillZoneVolumes(const G4double ur[], G4double nuclearRadius,
     tot_vol += v[i];
     
     v1[i] = zone_radii[i]*zone_radii[i]*zone_radii[i];
-    if (i > 0) v[1] -= zone_radii[i-1]*zone_radii[i-1]*zone_radii[i-1];
+    if (i > 0) v1[i] -= zone_radii[i-1]*zone_radii[i-1]*zone_radii[i-1];
   }
 
   return tot_vol;
 }
 
 // Load potentials for nucleons (using G4InuclParticle codes)
-void G4NucleiModel::fillPotentials(G4int type, G4double tot_vol,
-				   const G4double v[], const G4double v1[]) {
+void G4NucleiModel::fillPotentials(G4int type, G4double tot_vol) {
   if (verboseLevel > 1) 
     G4cout << " >>> G4NucleiModel::fillZoneVolumes(" << type << ")" << G4endl;
 
@@ -343,7 +341,6 @@ G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
   const G4int itry_max = 1000;
 
   G4double skinRatio = nuclearRadius / skinDepth;
-  G4double skinRatio3 = skinRatio*skinRatio*skinRatio;
 
   G4double d2 = 2.0 * skinRatio;
   G4double dr = r2 - r1;
@@ -381,19 +378,21 @@ G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
   if (verboseLevel > 2 && itry == itry_max)
     G4cout << " zoneIntegralWoodsSaxon-> n iter " << itry_max << G4endl;
 
-  return skinRatio3 * (fun + skinRatio*skinRatio*std::log((1.0 + std::exp(-r1)) / (1.0 + std::exp(-r2))));
+  G4double skinDepth3 = 5.11864; //*** skinDepth*skinDepth*skinDepth;
+
+  return skinDepth3 * (fun + skinRatio*skinRatio*std::log((1.0 + std::exp(-r1)) / (1.0 + std::exp(-r2))));
 }
 
 
 // Zone integral of Gaussian density function
 G4double
 G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2, 
-			  G4double nucRad) const {
+				    G4double nucRad) const {
   if (verboseLevel > 1) {
     G4cout << " >>> G4NucleiModel::zoneIntegralGaussian" << G4endl;
   }
 
-  G4double radiusScale = std::sqrt(nucRad*nucRad * (1.0 - 1.0/A) + 6.4);
+  G4double gaussRadius = std::sqrt(nucRad*nucRad * (1.0 - 1.0/A) + 6.4);
 
   const G4double epsilon = 1.0e-3;
   const G4int itry_max = 1000;
@@ -432,7 +431,7 @@ G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2,
   if (verboseLevel > 2 && itry == itry_max)
     G4cerr << " zoneIntegralGaussian-> n iter " << itry_max << G4endl;
 
-  return radiusScale*radiusScale*radiusScale * fun;
+  return gaussRadius*gaussRadius*gaussRadius * fun;
 }
 
 
@@ -1043,17 +1042,19 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
 
   G4bool worth = true;
 
+  // NOTE:  Temporarily backing out changes flagged "***" below
+
   if (cparticle.reflectedNow()) {	// Just reflected -- keep going?
     G4int zone = cparticle.getCurrentZone();
     G4int ip = cparticle.getParticle().type();
 
     G4double ekin_cut = (cparticle.getParticle().nucleon()) ?
-      getFermiKinetic(ip, zone) : getPotential(ip, zone);
+      getFermiKinetic(ip, zone) : 0.;	//*** getPotential(ip, zone);
 
     worth = cparticle.getParticle().getKineticEnergy()/ekin_scale > ekin_cut;
 
     if (verboseLevel > 3) {
-      G4cout << " type=" << ip
+      G4cout //*** << " type=" << ip
 	     << " ekin=" << cparticle.getParticle().getKineticEnergy()
 	     << " potential=" << ekin_cut
 	     << " : worth? " << worth << G4endl;
