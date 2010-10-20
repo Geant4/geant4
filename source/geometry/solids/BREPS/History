@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2010-09-22 16:37:49 gcosmo Exp $
+$Id: History,v 1.76 2010-10-20 09:14:25 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20/10/2010 : G.Cosmo           breps-V09-03-04
+- Implemented Clone() virtual method for all solids, returning a pointer
+  to a dynamically allocated copy of the solid. To be used by Geant4-MT.
 
 22/09/2010 : G. Cosmo          breps-V09-03-03
 - Implemented copy-constructor and assignment operator for solids classes
