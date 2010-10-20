@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadParticle.cc,v 1.17 2010-10-13 00:25:09 mkelsey Exp $
+// $Id: G4CascadParticle.cc,v 1.18 2010-10-20 14:34:26 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -61,8 +61,10 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
   G4double ds;
   G4double d2;
 
-  G4cout << " current_zone " << current_zone << " rr " << rr << " rp " << rp
-	 << " pp " << pp << " ra " << ra << G4endl;
+  if (verboseLevel > 3) {
+    G4cout << " current_zone " << current_zone << " rr " << rr
+	   << " rp " << rp << " pp " << pp << " ra " << ra << G4endl;
+  }
 
   if (current_zone == 0 || rp > 0.0) {
     d2 = rz_out * rz_out - ra;
@@ -86,7 +88,7 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
     }
   }
 
-  G4cout << " ds " << ds << " d2 " << d2 << G4endl;
+  if (verboseLevel > 3) G4cout << " ds " << ds << " d2 " << d2 << G4endl;
 
   path = ds * std::sqrt(d2) - rp / pp;
 
