@@ -1,4 +1,4 @@
-$Id: History,v 1.179 2010-09-23 10:28:03 gcosmo Exp $
+$Id: History,v 1.180 2010-10-20 08:54:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-Oct-2010  G.Cosmo (geom-specific-V09-03-16)
+- Implemented Clone() virtual method for all solids, returning a pointer
+  to a dynamically allocated copy of the solid. To be used by Geant4-MT.
 
 23-Sep-2010  G.Cosmo (geom-specific-V09-03-15)
 - Initialize fpPolyhedron to zero in copy-ctor and operator=().
