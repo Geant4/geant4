@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.14 2010-09-23 09:23:44 gcosmo Exp $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.15 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -202,9 +202,15 @@ void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
   scene.AddSolid ( *this );
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidOpenPCone::Clone() const
+{
+  return new G4BREPSolidOpenPCone(*this);
+}
+
 std::ostream& G4BREPSolidOpenPCone::StreamInfo(std::ostream& os) const
 {  
+  // Streams solid contents to output stream.
+
   G4IntersectionSolid::StreamInfo( os );
 
   return os;

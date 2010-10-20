@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.11 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidCylinder.hh,v 1.12 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -66,7 +66,10 @@ class G4BREPSolidCylinder : public G4BREPSolid
   ~G4BREPSolidCylinder();
     // Empty destructor.
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
  public:  // without description

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.42 2010-09-23 09:23:44 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.43 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1040,6 +1040,11 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
     return 0;
   else
     return std::fabs(Dist);
+}
+
+G4VSolid* G4BREPSolidPCone::Clone() const
+{
+  return new G4BREPSolidPCone(*this);
 }
 
 std::ostream& G4BREPSolidPCone::StreamInfo(std::ostream& os) const

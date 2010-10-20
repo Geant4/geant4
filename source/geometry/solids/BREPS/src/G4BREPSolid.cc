@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.40 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.41 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -164,6 +164,11 @@ void G4BREPSolid::Initialize()
 G4String G4BREPSolid::GetEntityType() const
 {
   return "Closed_Shell";
+}
+
+G4VSolid* G4BREPSolid::Clone() const
+{
+  return new G4BREPSolid(*this);
 }
 
 void G4BREPSolid::Reset() const

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.cc,v 1.13 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidSphere.cc,v 1.14 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -185,9 +185,15 @@ G4double G4BREPSolidSphere::DistanceToOut(const G4ThreeVector& Pt) const
   return  std::fabs(SurfaceVec[0]->HowNear(Pt));
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidSphere::Clone() const
+{
+  return new G4BREPSolidSphere(*this);
+}
+
 std::ostream& G4BREPSolidSphere::StreamInfo(std::ostream& os) const
 {
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n origin: " << constructorParams.origin
   << "\n xhat:   " << constructorParams.xhat

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.cc,v 1.10 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidTorus.cc,v 1.11 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -114,9 +114,15 @@ void G4BREPSolidTorus::InitializeTorus()
   Initialize();
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidTorus::Clone() const
+{
+  return new G4BREPSolidTorus(*this);
+}
+
 std::ostream& G4BREPSolidTorus::StreamInfo(std::ostream& os) const
 {
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin
   << "\n axis:         " << constructorParams.axis

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.12 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidCylinder.cc,v 1.13 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -160,9 +160,15 @@ void G4BREPSolidCylinder::InitializeCylinder()
   Initialize();
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidCylinder::Clone() const
+{
+  return new G4BREPSolidCylinder(*this);
+}
+
 std::ostream& G4BREPSolidCylinder::StreamInfo(std::ostream& os) const
 {
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin
   << "\n axis:         " << constructorParams.axis

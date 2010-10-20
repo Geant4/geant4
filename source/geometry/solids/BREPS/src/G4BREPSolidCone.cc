@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCone.cc,v 1.16 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidCone.cc,v 1.17 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -266,9 +266,15 @@ G4double G4BREPSolidCone::DistanceToOut(const G4ThreeVector& Pt) const
   return dist1;
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidCone::Clone() const
+{
+  return new G4BREPSolidCone(*this);
+}
+
 std::ostream& G4BREPSolidCone::StreamInfo(std::ostream& os) const
 {
+  // Streams solid contents to output stream.
+
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin
   << "\n axis:         " << constructorParams.axis

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.hh,v 1.11 2010-09-23 08:01:34 gcosmo Exp $
+// $Id: G4BREPSolidOpenPCone.hh,v 1.12 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -73,7 +73,10 @@ class G4BREPSolidOpenPCone : public G4IntersectionSolid
   void DescribeYourselfTo (G4VGraphicsScene& scene) const;
     // Dispatch function which identifies the solid to the graphics scene.
   
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
  public:  // without description

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.13 2010-09-23 08:01:14 gcosmo Exp $
+// $Id: G4BREPSolidBox.cc,v 1.14 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -166,9 +166,15 @@ EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
   return kSurface;
 }
 
-// Streams solid contents to output stream.
+G4VSolid* G4BREPSolidBox::Clone() const
+{
+  return new G4BREPSolidBox(*this);
+}
+
 std::ostream& G4BREPSolidBox::StreamInfo(std::ostream& os) const
 {
+     // Streams solid contents to output stream.
+
      G4BREPSolid::StreamInfo( os )
      << "\n"
      << "   Pt1: " << constructorParams[0]

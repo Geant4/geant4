@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.38 2010-09-23 09:23:44 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.39 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1347,9 +1347,13 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
   }
 }
 
-std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
-{  
+G4VSolid* G4BREPSolidPolyhedra::Clone() const
+{
+  return new G4BREPSolidPolyhedra(*this);
+}
 
+std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
+{
   // Streams solid contents to output stream.
 
   G4BREPSolid::StreamInfo( os )

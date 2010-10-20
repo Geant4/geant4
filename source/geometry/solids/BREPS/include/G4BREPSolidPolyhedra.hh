@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.15 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.16 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -115,7 +115,10 @@ public:  // with description
     // solid to any boundary of this solid.
     // Return 0 if the point is already outside.	
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 public:

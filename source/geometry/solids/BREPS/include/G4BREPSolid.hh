@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.18 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolid.hh,v 1.19 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -115,6 +115,10 @@ public: // with description
   virtual G4String GetEntityType() const;
     // Returns identifier for solid type entity.
     // A generic BREP solid is considered a "Closed_Shell".
+
+  virtual G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+    // The caller has responsibility for ownership.
 
   virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.

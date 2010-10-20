@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.hh,v 1.11 2010-09-22 16:36:31 gcosmo Exp $
+// $Id: G4BREPSolidBox.hh,v 1.12 2010-10-20 09:14:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -77,7 +77,10 @@ public: // with description
     // Determines if the point Pt is inside, outside or on the surface
     // of the solid.
 
-  virtual std::ostream& StreamInfo(std::ostream& os) const;
+  G4VSolid* Clone() const;
+    // Returns a pointer of a dynamically allocated copy of the solid.
+
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 public:  // without description
