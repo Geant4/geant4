@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.5 2010-10-19 13:18:50 stesting Exp $
+// $Id: RMC01AnalysisManager.cc,v 1.6 2010-10-21 14:38:03 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -626,7 +626,7 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(const G4Event* anEvent,G4doub
    if (nb_event>0) {
    	  mean = accumulated_edep/nb_event;
 	  G4double mean_x2 =accumulated_edep2/nb_event;
-  	  error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(nb_event);
+  	  error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(G4double(nb_event));
 	  mean *=factor;
    }
 }
