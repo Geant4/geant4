@@ -16,7 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14th June 2010 Peter Gumplinger (op-V09-03-03)
+21th Oct 2010 Peter Gumplinger (op-V09-03-04)
+              Fix Bug 207; Thanks to Xin Qian (Kellogg Radiation Lab of Caltech)
+
+14th Jun 2010 Peter Gumplinger (op-V09-03-03)
               ProposeLocalEnergyDeposit(thePhotonMomentum) every time the
               photon is fStopAndKill because of NoRINDEX. This will trigger
               scoring when a photon encounters a volume not defined as an
