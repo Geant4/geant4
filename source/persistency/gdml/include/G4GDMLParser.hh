@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.61 2010-10-18 14:53:37 witoldp Exp $
+// $Id: G4GDMLParser.hh,v 1.62 2010-10-21 11:15:46 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,17 @@ class G4GDMLParser
      //
      // Imports a single GDML module, specified by the GDML filename
      // in input. Validation against schema is activated by default.
+
+   inline void Write(const G4String& filename,
+                     const G4VPhysicalVolume* pvol = 0,
+                           G4bool storeReferences = true,
+                     const G4String& SchemaLocation = G4GDML_DEFAULT_SCHEMALOCATION);
+     //
+     // Exports on a GDML file, specified by 'filename' a geometry tree
+     // starting from 'pvol' as top volume. Uniqueness of stored entities
+     // is guaranteed by storing pointer-references by default.
+     // Alternative path for the schema location can be specified; by default
+     // the URL to the GDML web site is used.
 
    inline void Write(const G4String& filename,
                      const G4LogicalVolume* lvol = 0,
