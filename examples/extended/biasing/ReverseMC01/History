@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-10-19 13:20:47 stesting Exp $
+$Id: History,v 1.8 2010-10-21 14:39:12 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-October-2010, Gunter Folger (ReverseMC01-V09-03-03)
+-  fix compilation error on ambigous std::sqrt on Windows 
 
 19-October-2010, Gunter Folger (ReverseMC01-V09-03-02)
 - src/RMC01AnalysisManager.cc: explicit conversion to G4int, to avoid compiler
