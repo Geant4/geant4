@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: SensitiveDetector.cc,v 1.1 2010-10-11 08:40:51 gcosmo Exp $
+// $Id: SensitiveDetector.cc,v 1.2 2010-10-21 13:13:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -51,7 +51,7 @@ void SensitiveDetector::Initialize(G4HCofThisEvent*)
 }
 
 
-G4bool SensitiveDetector::ProcessHits(G4Step* aStep, G4TouchableHistory*)
+G4bool SensitiveDetector::ProcessHits(G4Step*, G4TouchableHistory*)
 {
   G4cout << "Processing hits ...." << G4endl; 
   return true;
