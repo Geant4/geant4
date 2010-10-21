@@ -22,7 +22,11 @@
     <integer>0</integer>
   </argument>
   <argument name="environment">
-    <set/>
+    <set>
+      <text>G4ERROR_TARGET=PLANE_SURFACE</text>
+      <text>G4ERROR_MODE=BACKWARDS</text>
+      <text>G4ERROR_PROP=UNTIL_TARGET</text>
+    </set>
   </argument>
   <argument name="command">
     <text>cd $G4INSTALL/examples/extended/errorpropagation;$G4BIN/$G4SYSTEM/errprop</text>
