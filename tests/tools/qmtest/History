@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2010-10-19 15:47:23 gunter Exp $
+$Id: History,v 1.65 2010-10-21 15:08:44 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.64 2010-10-19 15:47:23 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-Oct-2010 G.Folger                (testtools-QMtest-V09-03-16)
+- provide required env. variables for the errorpropagation ext. example
 
 18-Oct-2010 G.Folger                (testtools-QMtest-V09-03-15)
 -  add test for new example/extented/persistency/g04
