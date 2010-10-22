@@ -1,4 +1,4 @@
-$Id: History,v 1.202 2010-10-20 23:51:07 mkelsey Exp $
+$Id: History,v 1.203 2010-10-22 20:41:05 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22 October 2010 Michael Kelsey (hadr-casc-V09-03-84)
+----------------------------------------------------
+- G4WatcherGun.cc: Change first numeric argument to G4NuclWatcher to int.
+
+NOTE:  Only this change is include in tag.
 
 20 October 2010 Michael Kelsey (kelsey-20101020b)
 -------------------------------------------------
