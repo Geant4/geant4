@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22th Oct 2010 Peter Gumplinger (op-V09-03-05)
+              Add Mie Scattering of Optical Photons
+              Thanks to Xin Qian (Kellogg Radiation Lab of Caltech)
+              Based on work from Vlasios Vasileiou (University of Maryland)
+              Henyey-Greenstein phase functions
+
 21th Oct 2010 Peter Gumplinger (op-V09-03-04)
               Fix Bug 207; Thanks to Xin Qian (Kellogg Radiation Lab of Caltech)
 
