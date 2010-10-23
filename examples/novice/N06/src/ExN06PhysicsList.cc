@@ -24,14 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.18 2010-10-23 19:07:59 gum Exp $
+// $Id: ExN06PhysicsList.cc,v 1.19 2010-10-23 19:14:03 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//#include "G4ios.hh"
-//#include <iomanip>
 
 #include "globals.hh"
 #include "ExN06PhysicsList.hh"
@@ -41,11 +38,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4Material.hh"
-#include "G4MaterialTable.hh"
-
 #include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
 
 #include "G4Cerenkov.hh"
 #include "G4Scintillation.hh"
