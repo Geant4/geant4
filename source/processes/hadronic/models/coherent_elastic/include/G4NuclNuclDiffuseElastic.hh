@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.15 2010-10-20 08:19:17 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.16 2010-10-24 13:59:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -192,6 +192,13 @@ public:
 
   G4double  GetErf(G4double x);
 
+  G4double GetCosHaPit2(G4double t){return std::cos(halfpi*t*t);};
+  G4double GetSinHaPit2(G4double t){return std::sin(halfpi*t*t);};
+
+  G4double  GetCint(G4double x);
+  G4double  GetSint(G4double x);
+
+
   G4complex GetErfcComp(G4complex z, G4int nMax);
   G4complex GetErfcSer(G4complex z, G4int nMax);
   G4complex GetErfcInt(G4complex z); // , G4int nMax);
@@ -203,6 +210,9 @@ public:
   G4double GetExpSin(G4double x);
   G4complex GetErfInt(G4complex z); // , G4int nMax);
 
+
+  
+
   G4double GetLegendrePol(G4int n, G4double x);
 
   G4complex TestErfcComp(G4complex z, G4int nMax);
@@ -210,6 +220,9 @@ public:
   G4complex TestErfcInt(G4complex z); // , G4int nMax);
 
   G4complex CoulombAmplitude(G4double theta);
+  G4double  CoulombAmplitudeMod2(G4double theta);
+
+
   void CalculateCoulombPhaseZero();
   G4double CalculateCoulombPhase(G4int n);
   void CalculateRutherfordAnglePar();
@@ -231,6 +244,9 @@ public:
 
   G4complex AmplitudeSim(G4double theta);
   G4double  AmplitudeSimMod2(G4double theta);
+
+  G4double  GetElCoulRatioSim(G4double theta);
+  
 
   G4complex AmplitudeGla(G4double theta);
   G4double  AmplitudeGlaMod2(G4double theta);
@@ -941,6 +957,36 @@ inline G4complex G4NuclNuclDiffuseElastic::GetErfInt(G4complex z) // , G4int nMa
   return G4complex(outRe, outIm);
 }
 
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4NuclNuclDiffuseElastic::GetCint(G4double x)
+{
+  G4double out;
+
+  G4Integrator<G4NuclNuclDiffuseElastic,G4double(G4NuclNuclDiffuseElastic::*)(G4double)> integral;
+
+  out= integral.Legendre96(this,&G4NuclNuclDiffuseElastic::GetCosHaPit2, 0., x );
+
+  return out;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4NuclNuclDiffuseElastic::GetSint(G4double x)
+{
+  G4double out;
+
+  G4Integrator<G4NuclNuclDiffuseElastic,G4double(G4NuclNuclDiffuseElastic::*)(G4double)> integral;
+
+  out= integral.Legendre96(this,&G4NuclNuclDiffuseElastic::GetSinHaPit2, 0., x );
+
+  return out;
+}
+
 
 /////////////////////////////////////////////////////////////////
 //
@@ -961,6 +1007,18 @@ inline  G4complex G4NuclNuclDiffuseElastic::CoulombAmplitude(G4double theta)
   ca                    *= -fZommerfeld/(2.*fWaveVector*sinHalfTheta2);
 
   return ca; 
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline  G4double G4NuclNuclDiffuseElastic::CoulombAmplitudeMod2(G4double theta)
+{
+  G4complex ca = CoulombAmplitude(theta);
+  G4double out = ca.real()*ca.real() + ca.imag()*ca.imag();
+
+  return  out;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -1208,8 +1266,8 @@ inline G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
   G4double persqrt2   = std::sqrt(0.5);
 
   G4complex order     = G4complex(persqrt2,persqrt2);
-  // order              *= std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*sindTheta;
-  order              *= std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*dTheta;
+  order              *= std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*sindTheta;
+  // order              *= std::sqrt(0.5*fProfileLambda/sinThetaR)*2.*dTheta;
 
   G4complex out;
 
@@ -1224,6 +1282,24 @@ inline G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
 
   out *= CoulombAmplitude(theta);
 
+  return out;
+}
+/////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4NuclNuclDiffuseElastic::GetElCoulRatioSim(G4double theta)
+{
+  G4double sinThetaR  = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
+  G4double dTheta     = 0.5*(theta - fRutherfordTheta);
+  G4double sindTheta  = std::sin(dTheta);
+
+  G4double order      = std::sqrt(fProfileLambda/sinThetaR/pi)*2.*sindTheta;
+  
+  G4double cosFresnel = 0.5 - GetCint(order);  
+  G4double sinFresnel = 0.5 - GetSint(order);  
+
+  G4double out = 0.5*( cosFresnel*cosFresnel + sinFresnel*sinFresnel );
   return out;
 }
 
