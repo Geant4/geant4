@@ -159,6 +159,8 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command, G4String newVa
                                             GetOpAbsorptionProcess();
     else if ( newValue == "OpRayleigh" )    fSelectedProcess = fOpticalPhysics->
                                             GetOpRayleighProcess();
+    else if ( newValue == "OpMieHG" )       fSelectedProcess = fOpticalPhysics->
+                                            GetOpMieHGProcess();
     else if ( newValue == "OpBoundary" )    fSelectedProcess = fOpticalPhysics->
                                             GetOpBoundaryProcess();
     else if ( newValue == "OpWLS" )         fSelectedProcess = fOpticalPhysics->

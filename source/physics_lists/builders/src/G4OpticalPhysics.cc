@@ -51,6 +51,7 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose)
     fOpWLSProcess(0),
     fOpAbsorptionProcess(0),
     fOpRayleighScatteringProcess(0),
+    fOpMieHGScatteringProcess(0),
     fOpBoundaryProcess(0),
     fMaxNumPhotons(100),
     fMaxBetaChange(10.0),
@@ -73,6 +74,7 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fOpWLSProcess(0),
     fOpAbsorptionProcess(0),
     fOpRayleighScatteringProcess(0),
+    fOpMieHGScatteringProcess(0),
     fOpBoundaryProcess(0),
     fMaxNumPhotons(100),
     fMaxBetaChange(10.0),
@@ -100,6 +102,7 @@ G4OpticalPhysics::~G4OpticalPhysics()
 
      delete fOpAbsorptionProcess;
      delete fOpRayleighScatteringProcess;
+     delete fOpMieHGScatteringProcess;
      delete fOpBoundaryProcess;
 
   }
@@ -135,6 +138,7 @@ void G4OpticalPhysics::ConstructProcess()
 
   fOpAbsorptionProcess  = new G4OpAbsorption();
   fOpRayleighScatteringProcess = new G4OpRayleigh();
+  fOpMieHGScatteringProcess = new G4OpMieHG();
 
   fOpBoundaryProcess    = new G4OpBoundaryProcess();
   fOpBoundaryProcess->SetModel(fSurfaceModel);
@@ -154,6 +158,7 @@ void G4OpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(fOpAbsorptionProcess);
   pManager->AddDiscreteProcess(fOpRayleighScatteringProcess);
+  pManager->AddDiscreteProcess(fOpMieHGScatteringProcess);
   pManager->AddDiscreteProcess(fOpBoundaryProcess);
   pManager->AddDiscreteProcess(fOpWLSProcess);
 

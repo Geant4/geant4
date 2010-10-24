@@ -53,6 +53,7 @@
 
 #include "G4OpAbsorption.hh"
 #include "G4OpRayleigh.hh"
+#include "G4OpMieHG.hh"
 #include "G4OpBoundaryProcess.hh"
 
 #include "G4OpticalSurface.hh"
@@ -84,16 +85,19 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     // get methods
     virtual G4Scintillation* GetScintillationProcess() 
-                                         { return fScintillationProcess; }
-    virtual G4Cerenkov* GetCerenkovProcess() { return fCerenkovProcess; }
+                                       { return fScintillationProcess; }
+    virtual G4Cerenkov* GetCerenkovProcess()
+                                       { return fCerenkovProcess; }
     virtual G4OpWLS* GetOpWLSProcess() { return fOpWLSProcess; }
 
     virtual G4OpAbsorption* GetOpAbsorptionProcess()
-                                         { return fOpAbsorptionProcess; }
+                                       { return fOpAbsorptionProcess; }
     virtual G4OpRayleigh* GetOpRayleighProcess()
                                        { return fOpRayleighScatteringProcess; }
+    virtual G4OpMieHG* GetOpMieHGProcess()
+                                       { return fOpMieHGScatteringProcess; }
     virtual G4OpBoundaryProcess* GetOpBoundaryProcess()
-                                         { return fOpBoundaryProcess; }
+                                       { return fOpBoundaryProcess; }
 
     // set methods
 
@@ -122,6 +126,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     G4OpAbsorption*      fOpAbsorptionProcess;
     G4OpRayleigh*        fOpRayleighScatteringProcess;
+    G4OpMieHG*           fOpMieHGScatteringProcess;
     G4OpBoundaryProcess* fOpBoundaryProcess;
 
     /// max number of Cerenkov photons per step
