@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 October 2010 Vladimir Ivanchenko (hadr-cross-V09-03-12)
+- G4VComponentCrossSection - use G4ParticleDefinition and kinetic 
+   energy instead of G4DynamicParticle
+
 20 October 2010 Gunter Folger (hadr-cross-V09-03-11)
 - add missing inline for GetCrossSection in G4BGGPionElasticXS.hh
 

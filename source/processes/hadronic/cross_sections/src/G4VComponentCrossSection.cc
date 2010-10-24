@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VComponentCrossSection.cc,v 1.1 2010-07-05 13:39:11 vnivanch Exp $
+// $Id: G4VComponentCrossSection.cc,v 1.2 2010-10-24 13:04:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,7 +48,8 @@ G4VComponentCrossSection::~G4VComponentCrossSection()
 {}
 
 G4double 
-G4VComponentCrossSection::ComputeQuasiElasticRatio(const G4DynamicParticle*, 
+G4VComponentCrossSection::ComputeQuasiElasticRatio(const G4ParticleDefinition*,
+                                                   G4double /*kinEnergy*/, 
 						   G4int /*Z*/, G4int /*N*/)
 {
   return 0.0;

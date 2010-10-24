@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VComponentCrossSection.hh,v 1.1 2010-07-05 13:39:11 vnivanch Exp $
+// $Id: G4VComponentCrossSection.hh,v 1.2 2010-10-24 13:04:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,7 +46,6 @@
 #ifndef G4VComponentCrossSection_h
 #define G4VComponentCrossSection_h 1
 
-#include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Element.hh"
 #include "globals.hh"
@@ -60,43 +59,53 @@ public: //with description
   virtual ~G4VComponentCrossSection();
 
   inline
-  G4double GetTotalCrossSection(const G4DynamicParticle*, 
+  G4double GetTotalCrossSection(const G4ParticleDefinition*,
+				G4double kinEnergy,
 				const G4Element*);
 
   virtual
-  G4double GetTotalZandACrossSection(const G4DynamicParticle*, 
+  G4double GetTotalZandACrossSection(const G4ParticleDefinition*,
+				     G4double kinEnergy,
 				     G4int /*Z*/, G4int /*N*/) = 0;
 
   virtual
-  G4double ComputeTotalCrossSection(const G4DynamicParticle*, 
+  G4double ComputeTotalCrossSection(const G4ParticleDefinition*,
+				    G4double kinEnergy, 
 				    G4int /*Z*/, G4double /*N*/) = 0;
 
   inline
-  G4double GetInelasticCrossSection(const G4DynamicParticle*, 
+  G4double GetInelasticCrossSection(const G4ParticleDefinition*,
+				    G4double kinEnergy, 
 				    const G4Element*);
 
   virtual
-  G4double GetInelasticZandACrossSection(const G4DynamicParticle*, 
+  G4double GetInelasticZandACrossSection(const G4ParticleDefinition*,
+					 G4double kinEnergy, 
 					 G4int /*Z*/, G4int /*N*/) = 0;
 
   virtual
-  G4double ComputeInelasticCrossSection(const G4DynamicParticle*, 
+  G4double ComputeInelasticCrossSection(const G4ParticleDefinition*,
+					G4double kinEnergy, 
 					G4int /*Z*/, G4double /*N*/) = 0;
 
   inline
-  G4double GetElasticCrossSection(const G4DynamicParticle*, 
+  G4double GetElasticCrossSection(const G4ParticleDefinition*,
+				  G4double kinEnergy, 
 				  const G4Element*);
 
   virtual
-  G4double GetElasticZandACrossSection(const G4DynamicParticle*, 
+  G4double GetElasticZandACrossSection(const G4ParticleDefinition*,
+				       G4double kinEnergy, 
 				       G4int /*Z*/, G4int /*N*/) = 0;
 
   virtual
-  G4double ComputeElasticCrossSection(const G4DynamicParticle*, 
+  G4double ComputeElasticCrossSection(const G4ParticleDefinition*,
+				      G4double kinEnergy, 
 				      G4int /*Z*/, G4double /*N*/) = 0;
 
   virtual
-  G4double ComputeQuasiElasticRatio(const G4DynamicParticle*, 
+  G4double ComputeQuasiElasticRatio(const G4ParticleDefinition*,
+				    G4double kinEnergy, 
 				    G4int /*Z*/, G4int /*N*/);
 
   virtual
@@ -135,24 +144,27 @@ private:
 };
 
 inline G4double 
-G4VComponentCrossSection::GetTotalCrossSection(const G4DynamicParticle* dp, 
+G4VComponentCrossSection::GetTotalCrossSection(const G4ParticleDefinition* p,
+					       G4double kinEnergy, 
 					       const G4Element* elm)
 {
-  return ComputeTotalCrossSection(dp, (G4int)elm->GetZ(), elm->GetN());
+  return ComputeTotalCrossSection(p, kinEnergy, (G4int)elm->GetZ(), elm->GetN());
 }
 
 inline G4double 
-G4VComponentCrossSection::GetInelasticCrossSection(const G4DynamicParticle* dp, 
+G4VComponentCrossSection::GetInelasticCrossSection(const G4ParticleDefinition* p,
+						   G4double kinEnergy, 
 						   const G4Element* elm)
 {
-  return ComputeInelasticCrossSection(dp, (G4int)elm->GetZ(), elm->GetN());
+  return ComputeInelasticCrossSection(p, kinEnergy, (G4int)elm->GetZ(), elm->GetN());
 }
 
 inline G4double 
-G4VComponentCrossSection::GetElasticCrossSection(const G4DynamicParticle* dp, 
+G4VComponentCrossSection::GetElasticCrossSection(const G4ParticleDefinition* p,
+						 G4double kinEnergy, 
 						 const G4Element* elm)
 {
-  return ComputeElasticCrossSection(dp, (G4int)elm->GetZ(), elm->GetN());
+  return ComputeElasticCrossSection(p, kinEnergy, (G4int)elm->GetZ(), elm->GetN());
 }
 
 inline void G4VComponentCrossSection::SetVerboseLevel(G4int value)
