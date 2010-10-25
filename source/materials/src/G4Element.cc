@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.35 2010-04-30 13:19:26 vnivanch Exp $
+// $Id: G4Element.cc,v 1.36 2010-10-25 07:58:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,13 +138,14 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     G4cout << "G4Element ERROR:  " << fName << G4endl; 
     G4Exception ("ERROR from G4Element::AddIsotope!"
 		 " Trying to add an Isotope before contructing the element.");
+    return;
   }
   G4int iz = isotope->GetZ();
 
   // filling ...
   if ( fNumberOfIsotopes < theIsotopeVector->size() ) {
     // check same Z
-    if (fNumberOfIsotopes==0) fZeff = G4double(iz);
+    if (fNumberOfIsotopes==0) { fZeff = G4double(iz); }
     else if (G4double(iz) != fZeff) { 
       G4Exception ("ERROR from G4Element::AddIsotope!"
 		   " Try to add isotopes with different Z");
@@ -199,6 +200,18 @@ void G4Element::InitializePointers()
   fIonisation = 0;
   fNumberOfIsotopes = 0;
   fNaturalAbandances = false;
+
+  // add initialisation of all remaining members
+  fZeff = 0;
+  fNeff = 0;
+  fAeff = 0;
+  fNbOfAtomicShells = 0; 
+  fCountUse = 0;
+  fIndexZ = 0;
+  fIndexInTable = 0;
+  fNaturalAbandances = false;
+  fCoulomb = 0.0;
+  fRadTsai = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -207,11 +220,9 @@ void G4Element::InitializePointers()
 //                            for usage restricted to object persistency
 
 G4Element::G4Element( __void__& )
-  : fZeff(0), fNeff(0), fAeff(0), fNbOfAtomicShells(0), 
-    fAtomicShells(0), fNbOfShellElectrons(0), fNumberOfIsotopes(0), theIsotopeVector(0), 
-    fRelativeAbundanceVector(0), fCountUse(0), fIndexInTable(0), 
-    fCoulomb(0), fRadTsai(0), fIonisation(0)
+  : fZeff(0), fNeff(0), fAeff(0)
 {
+  InitializePointers();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -220,11 +231,11 @@ G4Element::~G4Element()
 {
   //  G4cout << "### Destruction of element " << fName << " started" <<G4endl;
 
-  if (theIsotopeVector)         delete theIsotopeVector;
-  if (fRelativeAbundanceVector) delete [] fRelativeAbundanceVector;
-  if (fAtomicShells)            delete [] fAtomicShells;
-  if (fNbOfShellElectrons)      delete [] fNbOfShellElectrons;
-  if (fIonisation)              delete    fIonisation;
+  if (theIsotopeVector)         { delete theIsotopeVector; }
+  if (fRelativeAbundanceVector) { delete [] fRelativeAbundanceVector; }
+  if (fAtomicShells)            { delete [] fAtomicShells; }
+  if (fNbOfShellElectrons)      { delete [] fNbOfShellElectrons; }
+  if (fIonisation)              { delete    fIonisation; }
   
   //remove this element from theElementTable
   theElementTable[fIndexInTable] = 0;
@@ -253,7 +264,7 @@ void G4Element::ComputeDerivedQuantities()
   ComputeLradTsaiFactor(); 
 
   // parameters for energy loss by ionisation 
-  if (fIonisation) delete fIonisation;  
+  if (fIonisation) { delete fIonisation; }  
   fIonisation = new G4IonisParamElm(fZeff);
 }
 
