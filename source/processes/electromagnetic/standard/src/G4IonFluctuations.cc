@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.26 2009-03-31 13:24:40 toshito Exp $
+// $Id: G4IonFluctuations.cc,v 1.27 2010-10-25 19:13:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,10 @@ G4IonFluctuations::G4IonFluctuations(const G4String& nam)
     minFraction(0.2),
     xmin(0.2),
     minLoss(0.001*eV)
-{}
+{
+  kineticEnergy = 0.0;
+  beta2 = 0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
