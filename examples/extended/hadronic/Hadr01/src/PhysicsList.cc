@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.35 2010-10-11 10:37:48 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.36 2010-10-25 16:15:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -74,8 +74,6 @@
 #include "G4HadronInelasticQBBC.hh"
 #include "HadronPhysicsQGSC.hh"
 #include "HadronPhysicsQGSC_BERT.hh"
-#include "HadronPhysicsQGSC_CHIPS.hh"
-#include "HadronPhysicsQGSC_QGSC.hh"
 #include "HadronPhysicsQGSP.hh"
 #include "HadronPhysicsQGSP_BERT.hh"
 #include "HadronPhysicsQGSP_BERT_HP.hh"
@@ -84,7 +82,6 @@
 #include "HadronPhysicsQGSP_FTFP_BERT.hh"
 #include "HadronPhysicsQGS_BIC.hh"
 
-#include "G4HadronInelasticQLHEP.hh"
 #include "G4IonPhysics.hh"
 
 #include "G4LossTableManager.hh"
@@ -275,11 +272,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList0(true);
     hadronPhys.push_back( new HadronPhysicsQGSP_BIC_HP());
-
-  } else if (name == "QGSP_BIC_EMY") {
-
-    AddPhysicsList("emstandard_opt3");
-    AddPhysicsList("QGSP_BIC");
 
   } else {
 
