@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.84 2010-08-17 17:36:59 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.85 2010-10-25 17:23:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -352,7 +352,7 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   if(x > 0.0 && ekin > 0.0 && currentModel->IsActive(ekin)) {
     G4double tPathLength = 
       currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
-    if (tPathLength < x) *selection = CandidateForSelection;
+    if (tPathLength < x) { *selection = CandidateForSelection; }
     x = currentModel->ComputeGeomPathLength(tPathLength);
     //  G4cout << "tPathLength= " << tPathLength
     //         << " stepLimit= " << x
@@ -403,9 +403,11 @@ G4double G4VMultipleScattering::GetContinuousStepLimit(
                                        G4double currentMinimalStep,
                                        G4double& currentSafety)
 {
-  G4GPILSelection* selection = 0;
-  return AlongStepGetPhysicalInteractionLength(track,previousStepSize,currentMinimalStep,
-					       currentSafety, selection);
+  G4GPILSelection selection = NotCandidateForSelection;
+  G4double x = AlongStepGetPhysicalInteractionLength(track,previousStepSize,
+						     currentMinimalStep,
+						     currentSafety, *selection);
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

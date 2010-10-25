@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.55 2010-09-03 13:31:21 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.56 2010-10-25 17:23:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -97,6 +97,7 @@ G4EmCalculator::G4EmCalculator()
   baseParticle       = 0;
   currentLambda      = 0;
   currentModel       = 0;
+  currentProcess     = 0;
   loweModel          = 0;
   chargeSquare       = 1.0;
   massRatio          = 1.0;

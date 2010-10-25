@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.hh,v 1.4 2010-09-03 13:31:34 vnivanch Exp $
+// $Id: G4ElectronIonPair.hh,v 1.5 2010-10-25 17:23:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -110,15 +110,13 @@ public:
 
 private:
 
-  // hide assignment operator
-  G4ElectronIonPair & operator=(const G4ElectronIonPair &right);
-  G4ElectronIonPair(const G4ElectronIonPair&);
+  void Initialise();
 
   G4double FindMeanEnergyPerIonPair(const G4Material*);
 
-  void Initialise();
-
-  const G4ParticleDefinition* gamma;
+  // hide assignment operator
+  G4ElectronIonPair & operator=(const G4ElectronIonPair &right);
+  G4ElectronIonPair(const G4ElectronIonPair&);
 
   // cash
   const G4Material*  curMaterial;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronIonPair.cc,v 1.4 2010-09-03 13:31:34 vnivanch Exp $
+// $Id: G4ElectronIonPair.cc,v 1.5 2010-10-25 17:23:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,7 +45,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4ElectronIonPair.hh"
-#include "G4Gamma.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4StepPoint.hh"
@@ -97,7 +96,7 @@ G4double G4ElectronIonPair::MeanNumberOfIonsAlongStep(
 	  curMeanEnergy = FindG4MeanEnergyPerIonPair(material);
 	} 
       }
-      if(curMeanEnergy > 0.0) nion = (edep - niel)/curMeanEnergy;
+      if(curMeanEnergy > 0.0) { nion = (edep - niel)/curMeanEnergy; }
     }
   }
   return nion;
@@ -108,13 +107,14 @@ G4double G4ElectronIonPair::MeanNumberOfIonsAlongStep(
 std::vector<G4ThreeVector>* 
 G4ElectronIonPair::SampleIonsAlongStep(const G4Step* step)
 {
-  std::vector<G4ThreeVector>* v = new std::vector<G4ThreeVector>;
+  std::vector<G4ThreeVector>* v = 0;
 
   G4int nion = SampleNumberOfIonsAlongStep(step);
 
   // sample ionisation along step
   if(nion > 0) {
 
+    v = new std::vector<G4ThreeVector>;
     G4ThreeVector prePos = step->GetPreStepPoint()->GetPosition();
     G4ThreeVector deltaPos = step->GetPostStepPoint()->GetPosition() - prePos;  
     for(G4int i=0; i<nion; ++i) {
@@ -136,7 +136,7 @@ G4int G4ElectronIonPair::ResidualeChargePostStep(const G4ParticleDefinition*,
 {
   G4int nholes = 0;
 
-  if(2 == subType || 12 == subType || 13 == subType) nholes = 1;
+  if(2 == subType || 12 == subType || 13 == subType) { nholes = 1; }
   return nholes;
 }
 
@@ -171,7 +171,7 @@ void G4ElectronIonPair:: DumpMeanEnergyPerIonPair()
   const G4MaterialTable* mtable = G4Material::GetMaterialTable();
   if(nmat > 0) {
     G4cout << "### G4ElectronIonPair: mean energy per ion pair avalable:" << G4endl;
-    for(G4int i=0; i<nmat; i++) {
+    for(G4int i=0; i<nmat; ++i) {
       const G4Material* mat = (*mtable)[i];
       G4double x = mat->GetIonisation()->GetMeanEnergyPerIonPair();
       if(x > 0.0) {
@@ -189,7 +189,7 @@ void G4ElectronIonPair::DumpG4MeanEnergyPerIonPair()
   if(nMaterials > 0) {
     G4cout << "### G4ElectronIonPair: mean energy per ion pair "
 	   << " for Geant4 materials" << G4endl;
-    for(G4int i=0; i<nMaterials; i++) {
+    for(G4int i=0; i<nMaterials; ++i) {
       G4cout << "   " << g4MatNames[i] << "    Epair= " 
 	     << g4MatData[i]/eV << " eV" << G4endl;
     }
