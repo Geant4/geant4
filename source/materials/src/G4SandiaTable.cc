@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4SandiaTable.cc,v 1.34 2007-10-02 10:13:33 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.35 2010-10-25 15:16:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -47,8 +46,8 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-G4int    G4SandiaTable::fCumulInterval[101];
-G4double G4SandiaTable::fSandiaCofPerAtom[4];
+G4int    G4SandiaTable::fCumulInterval[101]  = {0};
+G4double G4SandiaTable::fSandiaCofPerAtom[4] = {0.0};
 G4double const G4SandiaTable::funitc[4] = {cm2*keV/g,     
 					   cm2*keV*keV/g,     
 					   cm2*keV*keV*keV/g,     
@@ -65,14 +64,16 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 
   //build the CumulInterval array
   fCumulInterval[0] = 1;
-  for (G4int Z=1; Z<101; Z++) {
+  for (G4int Z=1; Z<101; ++Z) {
     fCumulInterval[Z] = fCumulInterval[Z-1] + fNbOfIntervals[Z];
   }
   //compute macroscopic Sandia coefs for a material   
   ComputeMatSandiaMatrix();
   
   //initialisation of fnulcof
-  fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;   
+  fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;
+
+  fMaxInterval = 0;
 }
 							
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -81,7 +82,7 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 //                            for usage restricted to object persistency
 
 G4SandiaTable::G4SandiaTable(__void__&)
-  : fMaterial(0), fMatSandiaMatrix(0), fPhotoAbsorptionCof(0)
+  : fMaterial(0),fMatSandiaMatrix(0),fMatSandiaMatrixPAI(0),fPhotoAbsorptionCof(0)
 {
 }
 
@@ -461,6 +462,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
   else
   {
     G4Exception("G4SandiaTable::G4SandiaTable(G4int matIndex): wrong matIndex ");
+    return;
   }
   ComputeMatTable();
 }
