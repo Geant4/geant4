@@ -63,8 +63,8 @@ Histo* Histo::GetInstance()
 Histo::Histo()
 {
   m_verbose    = 0;
-  m_histName   = "histo";
-  m_histType   = "hbook";
+  m_histName   = "test31";
+  m_histType   = "root";
   m_Histo      = 0;
   m_Clouds     = 0;
   m_Tuple      = 0;
@@ -107,7 +107,7 @@ void Histo::clear()
   for(G4int k=0; k<m_Clouds; k++) {
     m_cloud[k] = 0;
   }
-  if(m_tree) delete m_tree;
+  if(m_tree) { delete m_tree; }
   m_tree = 0;
 #endif
 }
@@ -125,8 +125,7 @@ void Histo::book()
   AIDA::ITreeFactory* tf = m_af->createTreeFactory();
 
   // Creating a tree mapped to a new file.
-  G4String comp = "uncompress";
-  if(m_histType == "xml") comp = "compress";
+  G4String comp = "";
 
   G4String nam = m_histName + "." + m_histType;
 

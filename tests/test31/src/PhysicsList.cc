@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.27 2010-04-13 08:59:58 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.28 2010-10-25 16:06:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -43,8 +43,6 @@
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
-
-#include "ParticlesBuilder.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -91,7 +89,7 @@ PhysicsList::PhysicsList()
   pMessenger = new PhysicsListMessenger(this);
 
   // Add Physics builders
-  RegisterPhysics(new ParticlesBuilder());
+  RegisterPhysics(new G4DecayPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +112,7 @@ void PhysicsList::ConstructProcess()
 {
   if(verbose > 0) 
     G4cout << "### PhysicsList Construte Processes" << G4endl;
-  if(!emBuilderIsRegisted) AddPhysicsList("emstandard");
+  if(!emBuilderIsRegisted) { AddPhysicsList("emstandard"); }
   G4VModularPhysicsList::ConstructProcess();
   /*
   // Define energy interval for loss processes
@@ -163,7 +161,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "penelope" && !emBuilderIsRegisted) {
+  } else if (name == "empenelope" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmPenelopePhysics());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
@@ -171,11 +169,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "step_limit" && !stepLimiterIsRegisted && emBuilderIsRegisted) {
     RegisterPhysics(new G4StepLimiterBuilder());
     stepLimiterIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-
-  } else if (name == "decay" && !decayIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4DecayPhysics());
-    decayIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "elastic" && !helIsRegisted && emBuilderIsRegisted) {
@@ -216,7 +209,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
-
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");

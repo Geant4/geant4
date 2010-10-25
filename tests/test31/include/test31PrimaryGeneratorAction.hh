@@ -81,9 +81,6 @@ public:
   void SetBeamEnergy(G4double val); 
   void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
   void SetVerbose(G4int val) {verbose = val;};
-  G4ThreeVector GetBeamPosition() const {return position;}; 
-  G4ThreeVector GetBeamDirection() const {return direction;};
-  G4ThreeVector GetBeamEnergy() const {return energy;};
   G4int GetVerbose() const {return verbose;};
   void SetBeamBeta(G4double val);
   void SetSigmaBeta(G4double val);

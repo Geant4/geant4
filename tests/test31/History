@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2010-05-28 09:41:49 vnivanch Exp $
+$Id: History,v 1.29 2010-10-25 16:06:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-10-10  V.Ivant (test31-V09-03-02)
+- test31PrimaryGeneratorAction - removed old unused methods
+- test31.in - added anti_deuteron run
+- Histo - fixed AIDA options
+- ParticleBuilder is removed
 
 28-05-10  V.Ivant (test31-V09-03-01)
 - Added pi- and anti_proton beams to test31.in
