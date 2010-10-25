@@ -1004,7 +1004,7 @@ ge = 8.35533e-09
     6  -2.32 mm   1.31 cm   2.09 cm      0 eV    242 keV   602 um    978 um         Tank       eIoni
     7  -2.32 mm   1.31 cm   2.09 cm      0 eV      0 eV      0 fm    978 um         Tank  Scintillation
 Number of optical photons produced in this event : 20
-number of event = 1 User=0.01s Real=0.02s Sys=0s
+number of event = 1 User=0.02s Real=0.01s Sys=0.01s
 #
 #/process/inactivate Scintillation
 #/N06/phys/verbose 0
