@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.30 2010-10-15 11:50:59 antoni Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.31 2010-10-25 13:04:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -112,9 +112,9 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
     if (name == names[i]) {
 
       // Build new Nist material 
-      if(matIndex[i] == -1) mat = BuildMaterial(i, isotopes);
+      if(matIndex[i] == -1) { mat = BuildMaterial(i, isotopes); }
       // Nist material was already built
-      else                  mat = (*theMaterialTable)[matIndex[i]];
+      else                  { mat = (*theMaterialTable)[matIndex[i]]; }
 
       return mat;
 
@@ -145,11 +145,12 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
                                                  G4bool isotopes)
 
 {
-  if (verbose > 1) G4cout << "G4NistMaterialBuilder: BuildMaterial " << name
-                          << G4endl;
-
+  if (verbose > 1) {
+    G4cout << "G4NistMaterialBuilder: BuildMaterial " << name
+	   << G4endl;
+  }
   G4Material* mat = 0;
-  if (nMaterials == 0)  return mat;
+  if (nMaterials == 0) { return mat; }
 
   for (G4int i=0; i<nMaterials; ++i) {
     if (name == names[i]) {
@@ -162,27 +163,33 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i,
-                                                 G4bool isotopes)
-
+G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
 {
-  if (verbose > 1) G4cout << "G4NistMaterialBuilder: BuildMaterial #" << i
-                          << G4endl;
-
+  if (verbose > 1) {
+    G4cout << "G4NistMaterialBuilder: BuildMaterial #" << i
+	   << G4endl;
+  }
   G4Material* mat = 0;
-  if (nMaterials == 0)  return mat;
+  if (nMaterials == 0) { return mat; }
 
   G4int nc = components[i];
   mat = new G4Material(names[i],densities[i],nc,
 		       states[i],temperatures[i], presures[i]);
 
-  if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
+  if (verbose>1) { G4cout << "New material nComponents= " << nc << G4endl; }
   if (nc > 0) {
     G4int idx = indexes[i];
     for (G4int j=0; j<nc; j++) {
       G4int Z = elements[idx+j];
-      G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
-      mat->AddElement(elm,fractions[idx+j]);
+      G4Element* el = elmBuilder->FindOrBuildElement(Z, isotopes);
+      if(!el) {
+	G4cout << "G4NistMaterialBuilder::BuildMaterial:"
+	       << "  ERROR: elements Z= " << Z << " is not found"
+	       << G4endl;
+	G4Exception("G4NistMaterialBuilder::BuildMaterial: Fail to construct material");
+	return 0;
+      }
+      mat->AddElement(el,fractions[idx+j]);
     }
   }
 
@@ -193,9 +200,9 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i,
     mat->GetIonisation()->SetMeanExcitationEnergy(exc);
   }
 
-  if (ionPotentials[i] != 0.0)
+  if (ionPotentials[i] != 0.0) {
     mat->GetIonisation()->SetMeanExcitationEnergy(ionPotentials[i]);
-
+  }
   matIndex[i] = mat->GetIndex();
 
   return mat;
@@ -218,6 +225,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
     G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
            << "  WARNING: empty list of elements for " << name
 	   << G4endl;
+    G4cout << "                       Material is not constructed" << G4endl;
     return 0;
   } 
 
@@ -226,8 +234,15 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
 
   for (G4int i=0; i<nm; ++i) {
-    G4int Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
-    AddElementByAtomCount(Z, nbAtoms[i]);
+    G4Element* el = elmBuilder->FindOrBuildElement(elm[i]);
+    if(!el) {
+      G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+	     << "  ERROR: elements " << elm[i] << " is not found"
+	     << G4endl;
+      G4Exception("G4NistMaterialBuilder::ConstructNewMaterial: Fail to construct material");
+      return 0;
+    }
+    AddElementByAtomCount(G4int(el->GetZ()), nbAtoms[i]);
   }
 
   return BuildMaterial(name, isotopes);
@@ -258,8 +273,15 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
 
   for (G4int i=0; i<nm; ++i) {
-    G4int Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
-    AddElementByWeightFraction(Z, w[i]);
+    G4Element* el = elmBuilder->FindOrBuildElement(elm[i]);
+    if(!el) {
+      G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+	     << "  ERROR: elements " << elm[i] << " is not found"
+	     << G4endl;
+      G4Exception("G4NistMaterialBuilder::ConstructNewMaterial: Fail to construct material");
+      return 0;
+    }
+    AddElementByWeightFraction(G4int(el->GetZ()), w[i]);
   }
   
   return BuildMaterial(name, isotopes);    
@@ -317,10 +339,17 @@ G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
 			
   if (nc > 0) {
     G4int k = indexes[idx];
-    for (G4int j=0; j<nc; j++) {
+    for (G4int j=0; j<nc; ++j) {
       G4int Z = elements[k+j];
-      G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
-      mat->AddElement(elm,fractions[k+j]);
+      G4Element* el = elmBuilder->FindOrBuildElement(Z, isotopes);
+      if(!el) {
+	G4cout << "G4NistMaterialBuilder::ConstructNewGasMaterial:"
+	       << "  ERROR: element Z= " << Z << " is not found"
+	       << G4endl;
+	G4Exception("G4NistMaterialBuilder::ConstructNewGasMaterial: Fail to construct material");
+	return 0;
+      }
+      mat->AddElement(el,fractions[k+j]);
     }
   }
 
@@ -435,7 +464,7 @@ void G4NistMaterialBuilder::DumpMix(G4int i)
   if (nc > 1) {
     G4int imin = indexes[i];
     G4int imax = imin + nc;
-    for (G4int j=imin; j<imax; j++) {
+    for (G4int j=imin; j<imax; ++j) {
       G4cout << "              " << elements[j] << "     " << fractions[j] 
              << G4endl;
     }
@@ -502,9 +531,9 @@ void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
 {
   if (nCurrent != 0) {
     G4cout
-    << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : previous mixture "
-    << nMaterials << " " << names[nMaterials] << " is not yet complete!"
-    << G4endl;
+      << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : previous mixture "
+      << nMaterials << " " << names[nMaterials] << " is not yet complete!"
+      << G4endl;
   }
 
   if(nameMat == names[nMaterials-1]) {
@@ -519,8 +548,8 @@ void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
     }
   }
   G4cout << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : there is no "
-    << nameMat << " in the list of materials; ch=" << ch
-    << G4endl;
+	 << nameMat << " in the list of materials; ch=" << ch
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
