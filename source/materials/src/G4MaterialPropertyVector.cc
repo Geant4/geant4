@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.18 2010-04-22 21:15:19 gum Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.19 2010-10-25 10:50:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,28 +125,29 @@ G4MaterialPropertyVector::~G4MaterialPropertyVector()
 
 void G4MaterialPropertyVector::RemoveElement(G4double aPhotonEnergy)
 {
-  G4MPVEntry *newElement;
+  //VI: if one needs to remove an element why to create a new one?
+  //G4MPVEntry *newElement;
   G4MPVEntry *success=0;
 
-  newElement = new G4MPVEntry(aPhotonEnergy, DBL_MAX);
+  //newElement = new G4MPVEntry(aPhotonEnergy, DBL_MAX);
 
   std::vector<G4MPVEntry*>::iterator i;
-  for (i = MPV.begin(); i != MPV.end(); i++)
-  {
-    if (**i == *newElement) { success = *i; break; }
-  }
+  for (i = MPV.begin(); i != MPV.end(); ++i)
+    {
+      if((*i)->GetPhotonEnergy() == aPhotonEnergy) { success = *i; break; }
+    }
   //  success = MPV.remove(newElement);
 
   if(success == 0)
-  {
-    G4Exception("G4MaterialPropertyVector::RemoveElement()", "NotFound",
-                FatalException, "Element not found !");
-    return;
-  }
+    {
+      G4Exception("G4MaterialPropertyVector::RemoveElement()", "NotFound",
+		  FatalException, "Element not found !");
+      return;
+    }
   else
-  {
-    MPV.erase(i); // remove done here.
-  }
+    {
+      MPV.erase(i); // remove done here.
+    }
 
   NumEntries--;
 }
