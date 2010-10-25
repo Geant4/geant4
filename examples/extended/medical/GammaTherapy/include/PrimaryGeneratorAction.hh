@@ -84,7 +84,7 @@ public:
   void SetVerbose(G4int val) {verbose = val;};
   G4ThreeVector GetBeamPosition() const {return position;};
   G4ThreeVector GetBeamDirection() const {return direction;};
-  G4ThreeVector GetBeamEnergy() const {return energy;};
+//GF  *?*G4ThreeVector GetBeamEnergy() const {return energy;};
   void SetRandom(const G4String& type) {m_gauss = type;};
 
 private:
