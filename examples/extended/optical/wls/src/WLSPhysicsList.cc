@@ -57,7 +57,7 @@
 
 #include "G4RadioactiveDecayPhysics.hh"
 
-WLSPhysicsList::WLSPhysicsList(G4String physicsList) : G4VModularPhysicsList()
+WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
 {
     G4LossTableManager::Instance();
 
@@ -66,10 +66,14 @@ WLSPhysicsList::WLSPhysicsList(G4String physicsList) : G4VModularPhysicsList()
     fCutForElectron  = defaultCutValue;
     fCutForPositron  = defaultCutValue;
 
-    fMessenger = new WLSPhysicsListMessenger(this);
-
     G4PhysListFactory factory;
-    G4VModularPhysicsList* phys =factory.GetReferencePhysList(physicsList);
+    G4VModularPhysicsList* phys = NULL;
+    if (factory.IsReferencePhysList(physName)) {
+       phys = factory.GetReferencePhysList(physName);
+       if(!phys)G4Exception("WLSPhysicsList::WLSPhysicsList","InvalidSetup",
+                            FatalException,"PhysicsList does not exist");
+       fMessenger = new WLSPhysicsListMessenger(this);
+    }
 
     for (G4int i = 0; ; ++i) {
        G4VPhysicsConstructor* elem =
@@ -290,5 +294,6 @@ void WLSPhysicsList::SetVerbose(G4int verbose)
    opticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
    opticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
    opticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
+   opticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
    opticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
 }
