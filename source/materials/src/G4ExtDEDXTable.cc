@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ExtDEDXTable.cc,v 1.3 2010-10-25 08:35:26 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ===========================================================================
 // GEANT4 class source file
@@ -38,6 +40,8 @@
 // Modifications:
 // 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
 //            to interface changes in base class G4VIonDEDXTable.
+// 25.10.2010 V.Ivanchenko fixed bug in usage of iterators reported by the 
+//            Coverity tool
 //
 //
 // Class description:
@@ -313,14 +317,15 @@ G4bool G4ExtDEDXTable::RemovePhysicsVector(
   dedxMapMaterials.erase(key);
 
   // Deleting key of physics vector from elemental material map (if it exists)
+  G4IonDEDXMapElem::iterator it;
   G4IonDEDXMapElem::iterator iter_beg = dedxMapElements.begin();
   G4IonDEDXMapElem::iterator iter_end = dedxMapElements.end();
   
-  for(;iter_beg != iter_end; iter_beg++) {
+  for(it=dedxMapElements.begin(); it!=dedxMapElements.end(); ++it) {
 
-     if( (*iter_beg).second == physicsVector ) {
+     if( (*it).second == physicsVector ) {
 
-        dedxMapElements.erase(iter_beg);
+        dedxMapElements.erase(it);
      }
   }
 
@@ -411,7 +416,7 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
 
   ifilestream.open( fileName, std::ios::in );
 
-  if( !ifilestream ) {
+  if( ! ifilestream ) {
 
 #ifdef G4VERBOSE
      G4cerr << "G4ExtDEDXTable::RetrievePhysicsVector() " 
@@ -422,7 +427,7 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
      return false;
   }   
 
-  G4int nmbVectors;
+  G4int nmbVectors = 0;
 
   ifilestream >> nmbVectors;
   
@@ -445,8 +450,10 @@ G4bool G4ExtDEDXTable::RetrievePhysicsTable(
             return false; 
          }
 
-         size_t pos = line.find_first_of("#");
-         line = line.substr(0, pos);
+         std::string::size_type pos = line.find_first_of("#");
+         if(pos != std::string::npos && pos > 0) {
+	   line = line.substr(0, pos);
+	 }
       }
 
       std::istringstream headerstream( line );     
