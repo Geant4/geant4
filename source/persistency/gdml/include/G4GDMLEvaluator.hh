@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.17 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLEvaluator.hh,v 1.18 2010-10-25 10:15:41 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,6 +53,7 @@ class G4GDMLEvaluator
 
    G4GDMLEvaluator();
 
+   void Clear();
    void DefineConstant(const G4String&, G4double);
    void DefineVariable(const G4String&, G4double);
    void DefineMatrix(const G4String&, G4int, std::vector<G4double>);

@@ -24,13 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.12 2010-10-21 11:15:46 witoldp Exp $
+// $Id: G4GDMLParser.icc,v 1.13 2010-10-25 10:15:41 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLParser inline methods
 //
 // -------------------------------------------------------------------------
+
+
+inline
+void G4GDMLParser::Clear()
+{
+  reader->Clear();
+}
+
 
 inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool validate)

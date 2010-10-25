@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.23 2009-04-24 15:34:20 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.24 2010-10-25 10:15:41 witoldp Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -44,6 +44,15 @@ G4GDMLEvaluator::G4GDMLEvaluator()
    eval.clear();
    eval.setStdMath();
    eval.setSystemOfUnits(meter,kilogram,second,ampere,kelvin,mole,candela);
+}
+
+void G4GDMLEvaluator::Clear()
+{
+  eval.clear();
+  eval.setStdMath();
+  eval.setSystemOfUnits(meter,kilogram,second,ampere,kelvin,mole,candela);
+
+  variableList.clear();
 }
 
 void G4GDMLEvaluator::DefineConstant(const G4String& name, G4double value)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.62 2010-10-21 11:15:46 witoldp Exp $
+// $Id: G4GDMLParser.hh,v 1.63 2010-10-25 10:15:41 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,6 +62,10 @@ class G4GDMLParser
   ~G4GDMLParser();
      //
      // Parser constructors & destructor
+
+  inline void Clear();
+  //
+  // Clears the evaluator.
 
    inline void Read(const G4String& filename, G4bool Validate=true);
      //

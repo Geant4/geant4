@@ -29,12 +29,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4GDMLMessenger.hh"
-
 #include "G4GDMLParser.hh"
+
+#include "G4RunManager.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
+#include "G4GeometryManager.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,7 +57,8 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   ReaderCmd = new G4UIcmdWithAString("/persistency/gdml/read",this);
   ReaderCmd->SetGuidance("Read GDML file.");
   ReaderCmd->SetParameterName("filename",false);
-  
+  ReaderCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   TopVolCmd = new G4UIcmdWithAString("/persistency/gdml/topvol",this);
   TopVolCmd->SetGuidance("Set the top volume for writing the GDML file.");
   TopVolCmd->SetParameterName("topvol",false);
@@ -58,6 +66,11 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   WriterCmd = new G4UIcmdWithAString("/persistency/gdml/write",this);
   WriterCmd->SetGuidance("Write GDML file.");
   WriterCmd->SetParameterName("filename",false);
+  WriterCmd->AvailableForStates(G4State_Idle);
+
+  ClearCmd = new G4UIcmdWithoutParameter("/persistency/gdml/clear",this);
+  ClearCmd->SetGuidance("Clear geometry (before reading a new one from GDML).");
+  ClearCmd->AvailableForStates(G4State_Idle);
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,6 +79,8 @@ G4GDMLMessenger::~G4GDMLMessenger()
 {
   delete ReaderCmd;
   delete WriterCmd;
+  delete ClearCmd;
+  delete TopVolCmd;
   delete persistencyDir;
   delete gdmlDir;
 }
@@ -75,13 +90,26 @@ G4GDMLMessenger::~G4GDMLMessenger()
 void G4GDMLMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == ReaderCmd )
-    { myParser->Read(newValue);}
+    { 
+      G4GeometryManager::GetInstance()->OpenGeometry();
+      myParser->Read(newValue);
+      G4RunManager::GetRunManager()->DefineWorldVolume(myParser->GetWorldVolume());
+    }
 
   if( command == TopVolCmd )
     { topvol = G4LogicalVolumeStore::GetInstance()->GetVolume(newValue);}
    
   if( command == WriterCmd )
     { myParser->Write(newValue, topvol);}  
+
+  if( command == ClearCmd )
+    { 
+      myParser->Clear();
+      G4GeometryManager::GetInstance()->OpenGeometry();
+      G4PhysicalVolumeStore::Clean();
+      G4LogicalVolumeStore::Clean();
+      G4SolidStore::Clean();
+    }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

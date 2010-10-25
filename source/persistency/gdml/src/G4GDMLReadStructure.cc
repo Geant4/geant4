@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.65 2010-10-18 09:49:57 witoldp Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.66 2010-10-25 10:15:41 witoldp Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -916,4 +916,10 @@ GetWorldVolume(const G4String& setupName)
        setuptoPV[setupName] = pvWorld;
      }
    return pvWorld;
+}
+
+void G4GDMLReadStructure::Clear()
+{
+  eval.Clear();
+  setuptoPV.clear();
 }

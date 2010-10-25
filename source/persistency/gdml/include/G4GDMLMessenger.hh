@@ -38,6 +38,7 @@ class G4GDMLParser;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,6 +59,7 @@ class G4GDMLMessenger: public G4UImessenger
     G4UIcmdWithAString*        ReaderCmd;
     G4UIcmdWithAString*        WriterCmd;    
     G4UIcmdWithAString*        TopVolCmd;    
+    G4UIcmdWithoutParameter*   ClearCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
