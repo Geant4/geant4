@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4NistMessenger.cc,v 1.9 2009-12-03 11:09:47 vnivanch Exp $
+// $Id: G4NistMessenger.cc,v 1.10 2010-10-25 13:22:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -152,9 +151,6 @@ void G4NistMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    { manager->PrintG4Material(newValue);}
 
   if (command == g4DensCmd)
-    { if (G4Material::GetNumberOfMaterials > 0) {
-      G4IonisParamMat::GetDensityEffectData()->PrintData(newValue);
-    }
-    }
+    { G4IonisParamMat::GetDensityEffectData()->PrintData(newValue); }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
