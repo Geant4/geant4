@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.387 2010-10-15 10:40:30 gcosmo Exp $
+cvs log $Id: History,v 1.388 2010-10-25 19:03:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th October 2010  Gabriele Cosmo (config-V09-03-11)
+- Explicitly include -L$(OGLHOME)/lib -lGLU -lGL to OGLLIBS in Darwin-g++.gmk
+  to resolve dynamic link problem on Mac when opening X11 GL scene viewers.
 
 15th October 2010  Gabriele Cosmo (config-V09-03-10)
 - More refinements to Darwin-g++ to correct and simplify Qt4 setup.
