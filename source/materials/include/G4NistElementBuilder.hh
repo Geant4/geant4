@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.18 2008-08-07 10:15:16 vnivanch Exp $
+// $Id: G4NistElementBuilder.hh,v 1.19 2010-10-25 13:00:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -111,7 +111,7 @@ public:
 
   inline G4int GetMaxNumElements(); 
 
-  inline void SetVerbose   (G4int);
+  inline void SetVerbose(G4int);
 
 private:
 
@@ -142,7 +142,6 @@ private:
   G4double   sigMass       [maxAbundance];    // G4 units
   G4double   relAbundance  [maxAbundance];
 
-  G4int      limitNumElements;  // protection 
   G4int      index;
   G4int      verbose;
   G4bool     first;
@@ -156,7 +155,7 @@ private:
 inline G4double G4NistElementBuilder::GetA(G4int Z)
 {
   G4double a = 0.0;
-  if(Z>0 && Z<maxNumElements) a = atomicMass[Z];
+  if(Z>0 && Z<maxNumElements) { a = atomicMass[Z]; }
   return a;
 }
 
