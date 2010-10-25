@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4Material.cc,v 1.42 2008-08-13 16:06:42 vnivanch Exp $
+// $Id: G4Material.cc,v 1.43 2010-10-25 10:20:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,6 +72,7 @@
 
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
+#include "G4Pow.hh"
 #include <iomanip>
 
 
@@ -118,8 +118,8 @@ G4Material::G4Material(const G4String& name, G4double z,
   
   if (fState == kStateUndefined)
     {
-     if (fDensity > kGasThreshold) fState = kStateSolid;
-     else                          fState = kStateGas;
+      if (fDensity > kGasThreshold) { fState = kStateSolid; }
+      else                          { fState = kStateGas; }
     }
 
   ComputeDerivedQuantities();
@@ -138,12 +138,13 @@ G4Material::G4Material(const G4String& name, G4double density,
   InitializePointers();
     
   if (density < universe_mean_density)
-    {G4cerr << "--- Warning from G4Material::G4Material()"
-            << " define a material with density=0 is not allowed. \n"
-            << " The material " << name << " will be constructed with the"
-            << " default minimal density: " << universe_mean_density/(g/cm3) 
-            << "g/cm3" << G4endl;
-     density = universe_mean_density;
+    {
+      G4cerr << "--- Warning from G4Material::G4Material()"
+	     << " define a material with density=0 is not allowed. \n"
+	     << " The material " << name << " will be constructed with the"
+	     << " default minimal density: " << universe_mean_density/(g/cm3) 
+	     << "g/cm3" << G4endl;
+      density = universe_mean_density;
     }
         
   fDensity  = density;
@@ -161,8 +162,8 @@ G4Material::G4Material(const G4String& name, G4double density,
     
   if (fState == kStateUndefined) 
     {
-      if (fDensity > kGasThreshold) fState = kStateSolid;
-      else                          fState = kStateGas;
+      if (fDensity > kGasThreshold) { fState = kStateSolid; }
+      else                          { fState = kStateGas; }
     }
 }
 
@@ -177,6 +178,7 @@ G4Material::G4Material(__void__&)
     fMaterialPropertiesTable(0), fIndexInTable(0), 
     VecNbOfAtomsPerVolume(0), fIonisation(0), fSandiaTable(0)
 {
+  InitializePointers();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -259,12 +261,12 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
      G4double Zmol(0.), Amol(0.);
      // check sum of weights -- OK?
      G4double wtSum(0.0);
-     for (i=0;i<fNumberOfElements;i++) {
+     for (i=0; i<fNumberOfElements; ++i) {
        wtSum += fMassFractionVector[i];
        Zmol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetZ();
        Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
      }
-     if (std::abs(1.-wtSum) > perThousand) {
+     if (std::fabs(1.-wtSum) > perThousand) {
        G4cerr << "WARNING !! for " << fName << " sum of fractional masses "
               <<  wtSum << " is not 1 - results may be wrong" 
               << G4endl;
@@ -344,7 +346,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
        Zmol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetZ();
        Amol +=  fMassFractionVector[i]*(*theElementVector)[i]->GetA();
      }
-     if (std::abs(1.-wtSum) > perThousand) {
+     if (std::fabs(1.-wtSum) > perThousand) {
        G4cerr << "WARNING !! for " << fName << " sum of fractional masses "
               <<  wtSum << " is not 1 - results may be wrong" 
               << G4endl;
@@ -368,10 +370,10 @@ void G4Material::ComputeDerivedQuantities()
   // Number of atoms per volume (per element), total nb of electrons per volume
   G4double Zi, Ai;
   TotNbOfAtomsPerVolume = 0.;
-  if (VecNbOfAtomsPerVolume) delete [] VecNbOfAtomsPerVolume;
+  if (VecNbOfAtomsPerVolume) { delete [] VecNbOfAtomsPerVolume; }
   VecNbOfAtomsPerVolume = new G4double[fNumberOfElements];
   TotNbOfElectPerVolume = 0.;
-  for (size_t i=0;i<fNumberOfElements;i++) {
+  for (size_t i=0; i<fNumberOfElements; ++i) {
      Zi = (*theElementVector)[i]->GetZ();
      Ai = (*theElementVector)[i]->GetA();
      VecNbOfAtomsPerVolume[i] = Avogadro*fDensity*fMassFractionVector[i]/Ai;
@@ -382,9 +384,9 @@ void G4Material::ComputeDerivedQuantities()
   ComputeRadiationLength();
   ComputeNuclearInterLength();
 
-  if (fIonisation) delete fIonisation;
+  if (fIonisation) { delete fIonisation; }
   fIonisation  = new G4IonisParamMat(this);
-  if (fSandiaTable) delete fSandiaTable;
+  if (fSandiaTable) { delete fSandiaTable; }
   fSandiaTable = new G4SandiaTable(this);
 }
 
@@ -393,9 +395,9 @@ void G4Material::ComputeDerivedQuantities()
 void G4Material::ComputeRadiationLength()
 {
   G4double radinv = 0.0 ;
-  for (size_t i=0;i<fNumberOfElements;i++) {
+  for (size_t i=0;i<fNumberOfElements;++i) {
      radinv += VecNbOfAtomsPerVolume[i]*((*theElementVector)[i]->GetfRadTsai());
-   }
+  }
   fRadlen = (radinv <= 0.0 ? DBL_MAX : 1./radinv);
 }
 
@@ -405,7 +407,7 @@ void G4Material::ComputeNuclearInterLength()
 {
   const G4double lambda0 = 35*g/cm2;
   G4double NILinv = 0.0;
-  for (size_t i=0;i<fNumberOfElements;i++) {
+  for (size_t i=0;i<fNumberOfElements;++i) {
      NILinv +=
      VecNbOfAtomsPerVolume[i]*std::pow(((*theElementVector)[i]->GetN()),0.6666667); 
    }
@@ -425,6 +427,18 @@ void G4Material::InitializePointers()
   VecNbOfAtomsPerVolume    = 0;
   fIonisation              = 0;
   fSandiaTable             = 0;
+
+  // initilized data members
+  fDensity  = 0.0;
+  fState    = kStateUndefined;
+  fTemp     = 0.0;
+  fPressure = 0.0;
+  maxNbComponents     = 0;
+  fArrayLength        = 0;
+  TotNbOfAtomsPerVolume = 0;
+  TotNbOfElectPerVolume = 0; 
+  fRadlen = 0.0;
+  fNuclInterLen = 0.0;
 
   // Store in the static Table of Materials
   theMaterialTable.push_back(this);
