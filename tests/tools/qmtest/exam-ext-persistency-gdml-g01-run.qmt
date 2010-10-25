@@ -11,6 +11,7 @@
     <text/>
   </argument>
   <argument name="prerequisites">
+    <set>
       <tuple><text>exam-ext-persistency-gdml-g01-build</text><enumeral>PASS</enumeral></tuple>
     <set/>
   </argument>
