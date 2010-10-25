@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.16 2010-04-29 11:11:56 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.17 2010-10-25 09:11:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 {
   G4int Z = G4int(AtomNumber + 0.5);
   if (Z < 1) {
-    G4Exception (" ERROR! It is not allowed to create an Element with Z < 1" );
+    G4Exception("G4IonisParamElm: ERROR! It is not allowed to create an Element with Z<1");
   }
   G4Pow* g4pow = G4Pow::GetInstance();
 
@@ -61,26 +61,6 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
   fZZ3   = fZ3*g4pow->Z13(Z+1);
   flogZ3 = g4pow->logZ(Z)/3.;
    
-  // Parameters for energy loss by ionisation   
-  /*
-  // Mean excitation energy
-  // from "Stopping Powers for Electrons and Positrons"
-  // ICRU Report N#37, 1984  (energy in eV)
-  static double exc[100] = { 
-    21.8, 20.9,	13.3, 15.9, 15.2, 13.0,	11.7, 11.9, 11.5, 13.7,
-    13.6, 13.0,	12.8, 12.4, 11.5, 11.3,	10.2, 10.4, 10.0,  9.6,
-    10.3, 10.6,	10.7, 10.7, 10.9, 11.0,	11.0, 11.1, 11.1, 11.0,
-    10.8, 10.4,	10.5, 10.2,  9.8,  9.8,  9.8,  9.6,  9.7,  9.8,
-    10.2, 10.1, 10.0, 10.0, 10.0, 10.2, 10.0,  9.8, 10.0,  9.8,
-     9.5,  9.3,  9.3,  8.9,  8.9,  8.8,  8.8,  8.8,  9.1,  9.1,
-     9.2,  9.3,  9.2,  9.2,  9.4,  9.5,  9.7,  9.7,  9.8,  9.8,
-     9.8,  9.8,  9.8,  9.8,  9.8,  9.8,  9.8, 10.1, 10.0, 10.0,
-    10.0, 10.0,  9.9,  9.9,  9.7,  9.2,  9.5,  9.4,  9.4,  9.4,
-     9.6,  9.7,  9.7,  9.8,  9.8,  9.8,  9.8,  9.9,  9.9,  9.9 };
-
-  fMeanExcitationEnergy = fZ * exc[iz] * eV ;
-  */
-
   fMeanExcitationEnergy = 
     G4NistManager::Instance()->GetMeanIonisationEnergy(Z);
 
@@ -157,7 +137,9 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 
 G4IonisParamElm::G4IonisParamElm(__void__&)
   : fShellCorrectionVector(0)
-{}
+{
+  fZ=fZ3=fZZ3=flogZ3=fTau0=fTaul=fBetheBlochLow=fAlow=fBlow=fClow=fMeanExcitationEnergy=fVFermi=fLFactor=0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -170,6 +152,7 @@ G4IonisParamElm::~G4IonisParamElm()
 
 G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 {
+  fShellCorrectionVector = 0;
   *this = right;
 }
 
@@ -195,7 +178,7 @@ const G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
       fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
       fShellCorrectionVector[1] = right.fShellCorrectionVector[1];
       fShellCorrectionVector[2] = right.fShellCorrectionVector[2];      
-     } 
+    } 
   return *this;
 }
 

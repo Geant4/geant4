@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.38 2010-05-15 15:37:33 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.39 2010-10-25 09:11:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,6 +78,31 @@ G4IonisParamMat::G4IonisParamMat(G4Material* material)
 G4IonisParamMat::G4IonisParamMat(__void__&)
   : fMaterial(0), fShellCorrectionVector(0)
 {
+  fMeanExcitationEnergy = 0.0;
+  fLogMeanExcEnergy = 0.0;
+  fTaul = 0.0;
+  fCdensity = 0.0;
+  fMdensity = 0.0;
+  fAdensity = 0.0;
+  fX0density = 0.0;
+  fX1density = 0.0;
+  fD0density = 0.0;
+  fPlasmaEnergy = 0.0;
+  fAdjustmentFactor = 0.0;
+  fF1fluct = 0.0;          
+  fF2fluct = 0.0;                       
+  fEnergy1fluct = 0.0;
+  fLogEnergy1fluct = 0.0;
+  fEnergy2fluct = 0.0;
+  fLogEnergy2fluct = 0.0;
+  fEnergy0fluct = 0.0;
+  fRateionexcfluct = 0.0;
+  fZeff = 0.0;
+  fFermiEnergy = 0.0;
+  fLfactor = 0.0;
+  fInvA23 = 0.0;
+  fBirks = 0.0;
+  fMeanEnergyPerIon = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -97,7 +122,7 @@ void G4IonisParamMat::ComputeMeanParameters()
 
   const G4String ch = fMaterial->GetChemicalFormula();
 
-  if(ch != "") fMeanExcitationEnergy = FindMeanExcitationEnergy(ch);
+  if(ch != "") { fMeanExcitationEnergy = FindMeanExcitationEnergy(ch); }
 
   // Chemical formula defines mean excitation energy
   if(fMeanExcitationEnergy > 0.0) {
@@ -277,8 +302,7 @@ void G4IonisParamMat::ComputeDensityEffect()
 void G4IonisParamMat::ComputeFluctModel()
 {
   // compute parameters for the energy loss fluctuation model
-
-  // need an 'effective Z' ?????
+  // needs an 'effective Z' 
   G4double Zeff = 0.;
   for (size_t i=0;i<fMaterial->GetNumberOfElements();i++) {
      Zeff += (fMaterial->GetFractionVector())[i]
@@ -475,6 +499,7 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fZeff                     = right.fZeff;
       fFermiEnergy              = right.fFermiEnergy;
       fLfactor                  = right.fLfactor;
+      fInvA23                   = right.fInvA23;
       fBirks                    = right.fBirks;
       fMeanEnergyPerIon         = right.fMeanEnergyPerIon;
       fDensityData              = right.fDensityData;
