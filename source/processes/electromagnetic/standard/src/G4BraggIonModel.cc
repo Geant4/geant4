@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.28 2010-09-28 15:50:00 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.29 2010-10-25 18:23:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,7 +80,6 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
     isIon(false),
     isInitialised(false)
 {
-  if(p) SetParticle(p);
   SetHighEnergyLimit(2.0*MeV);
 
   HeMass           = 3.727417*GeV;
@@ -89,6 +88,8 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron      = G4Electron::Electron();
+  if(p) { SetParticle(p); }
+  else  { SetParticle(theElectron); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +110,7 @@ G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
                                  const G4DataVector&)
 {
-  if(p != particle) SetParticle(p);
+  if(p != particle) { SetParticle(p); }
 
   corrFactor = chargeSquare;
 

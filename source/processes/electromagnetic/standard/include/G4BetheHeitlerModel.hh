@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh,v 1.6 2007-05-22 17:34:36 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.hh,v 1.7 2010-10-25 18:23:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,14 +96,13 @@ private:
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
   G4ParticleChangeForGamma* fParticleChange;
-  G4PhysicsTable*           theCrossSectionTable; 
+  //G4PhysicsTable*           theCrossSectionTable; 
 
-  G4double                  lowGammaEnergy;
-  G4double                  highGammaEnergy;
+  // G4double                  lowGammaEnergy;
+  // G4double                  highGammaEnergy;
 
-  G4int                     nbins;
-  size_t                    indexZ[120];
-  
+  //G4int                     nbins;
+  //size_t                    indexZ[120];  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

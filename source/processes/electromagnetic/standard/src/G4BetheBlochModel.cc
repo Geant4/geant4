@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.38 2010-09-12 19:47:11 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.39 2010-10-25 18:23:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,11 +81,13 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
     isInitialised(false)
 {
   fParticleChange = 0;
+  theElectron = G4Electron::Electron();
   if(p) {
     SetGenericIon(p);
     SetParticle(p);
+  } else {
+    SetParticle(theElectron);
   }
-  theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();  
   nist = G4NistManager::Instance();
   SetLowEnergyLimit(2.0*MeV);
@@ -116,7 +118,6 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   //	 << "  isIon= " << isIon 
   //	 << G4endl;
 
-  corrFactor = chargeSquare;
   // always false before the run
   SetDeexcitationFlag(false);
 
@@ -156,6 +157,7 @@ void G4BetheBlochModel::SetupParameters()
   spin = particle->GetPDGSpin();
   G4double q = particle->GetPDGCharge()/eplus;
   chargeSquare = q*q;
+  corrFactor = chargeSquare;
   ratio = electron_mass_c2/mass;
   G4double magmom = 
     particle->GetPDGMagneticMoment()*mass/(0.5*eplus*hbar_Planck*c_squared);
