@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.14 2010-10-25 18:23:20 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.cc,v 1.15 2010-10-25 19:02:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -42,8 +42,9 @@
 // 24-06-05 Increase number of bins to 200 (V.Ivantchenko)
 // 16-11-05 replace shootBit() by G4UniformRand()  mma
 // 04-12-05 SetProposedKineticEnergy(0.) for the killed photon (mma)
-// 20-02-20 SelectRandomElement is called for any initial gamma energy 
+// 20-02-07 SelectRandomElement is called for any initial gamma energy 
 //          in order to have selected element for polarized model (VI)
+// 25-10-10 Removed unused table, added element selector (VI) 
 //
 // Class Description:
 //
@@ -57,10 +58,7 @@
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
-#include "G4DataVector.hh"
-#include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -69,27 +67,17 @@ using namespace std;
 G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
   : G4VEmModel(nam)
-  //    theCrossSectionTable(0),
-  //  nbins(10)
 {
   fParticleChange = 0;
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
-  //for(size_t j=0; j<120; ++j) { indexZ[j] = -1; } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BetheHeitlerModel::~G4BetheHeitlerModel()
-{
-  /*
-  if(theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
-    delete theCrossSectionTable;
-  }
-  */
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -98,45 +86,6 @@ void G4BetheHeitlerModel::Initialise(const G4ParticleDefinition* p,
 {
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
   InitialiseElementSelectors(p, cuts);
-
-  /*
-  if(theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
-    delete theCrossSectionTable;
-  }
-
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  size_t nvect = G4Element::GetNumberOfElements();
-  theCrossSectionTable = new G4PhysicsTable(nvect);
-  G4double emin = LowEnergyLimit();
-  G4double emax = HighEnergyLimit();
-  size_t n = nbins*G4int(log10(emax/emin));
-  if(n < 6) { n = 6; }
-  G4bool spline = G4LossTableManager::Instance()->SplineFlag(); 
-  G4double e, value;
-
-  G4PhysicsLogVector* ptrVector = new G4PhysicsLogVector(emin, emax, n);
-  ptrVector->SetSpline(spline);
-  G4PhysicsLogVector* v;
-
-  for(size_t j=0; j<nvect; ++j) { 
-
-    if(0 == j) { v = ptrVector; } 
-    else { v = G4PhysicsLogVector(&ptrVector); }   
-
-    G4double Z = (*theElementTable)[j]->GetZ();
-    G4int   iz = G4int(Z);
-    indexZ[iz] = j;
- 
-    for(size_t i=0; i<=n; ++i) {
-      e = v->Energy(i);
-      value = ComputeCrossSectionPerAtom(theGamma, e, Z);  
-      v->PutValue(i, value);
-    }
-
-    theCrossSectionTable->insert(v);
-  }
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -343,5 +292,3 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
