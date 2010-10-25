@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.23 2009-07-17 18:45:57 vnivanch Exp $
+// $Id: G4NistElementBuilder.cc,v 1.24 2010-10-25 11:07:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,7 @@ G4NistElementBuilder::G4NistElementBuilder(G4int vb):
   Initialise();
   // Atomic shells are defined only for 101 elements
   limitNumElements = 101;
-  for(G4int i=0; i<maxNumElements; i++) {elmIndex[i] = -1;}
+  for(G4int i=0; i<maxNumElements; ++i) {elmIndex[i] = -1;}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +99,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
   G4int Z = 0;
   G4Element* elm = 0;
   do {Z++;} while (Z<limitNumElements && !(symb == elmSymbol[Z]));
-  if(Z<maxNumElements) elm = FindOrBuildElement(Z, buildIsotopes);
+  if(Z<maxNumElements) { elm = FindOrBuildElement(Z, buildIsotopes); }
   return elm;
 }
 
@@ -119,7 +119,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
     // build new element
   } else {
     anElement = BuildElement(Z, buildIsotopes);
-    if(anElement) elmIndex[Z] = anElement->GetIndex();
+    if(anElement) { elmIndex[Z] = anElement->GetIndex(); }
   }  
   return anElement;
 }
@@ -129,15 +129,15 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
 G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 {
   G4Element* theElement = 0;
-  if(Z<1 || Z>=limitNumElements) return theElement;
+  if(Z<1 || Z>=limitNumElements) { return theElement; }
   G4double Zeff = (G4double)Z;
   G4double Aeff = atomicMass[Z];
   if (verbose > 1) {
     G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z]
            << ">  Z= " << Zeff
 	   << "  A= " << Aeff;
-    if(buildIsotopes) G4cout << "  with natural isotope composition" << G4endl; 
-    else              G4cout << "  isotopes are not built" << G4endl;
+    if(buildIsotopes) { G4cout << "  with natural isotope composition" << G4endl; } 
+    else              { G4cout << "  isotopes are not built" << G4endl; }
   }
   
   //build Element with its Isotopes
@@ -148,7 +148,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
     G4int idx = idxIsotopes[Z];
     std::vector<G4Isotope*> iso;
     G4Isotope* ist;
-    for (G4int i=0; i<nc; i++) {
+    for (G4int i=0; i<nc; ++i) {
        if (relAbundance[idx + i] > 0.0) {
 	 std::ostringstream os; 
 	 os << elmSymbol[Z] << n0 + i;
@@ -165,7 +165,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
     G4int ni = iso.size();
     G4double w;
     theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
-    for(G4int j=0; j<ni; j++) {
+    for(G4int j=0; j<ni; ++j) {
       w = relAbundance[idx + (iso[j])->GetN() - n0];
       ist = iso[j];
       theElement->AddIsotope(ist, w);
@@ -183,7 +183,6 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 void G4NistElementBuilder::PrintElement(G4int Z)
 {
@@ -206,13 +205,13 @@ void G4NistElementBuilder::PrintElement(G4int Z)
     G4int idx = idxIsotopes[i];
     G4int n0  = nFirstIsotope[i];
     G4cout << "             N: ";
-    for(j=0; j<nc; j++) {G4cout << n0 + j << "  ";}
+    for(j=0; j<nc; ++j) {G4cout << n0 + j << "  ";}
     G4cout << G4endl;
     G4cout << "          mass(amu): ";
-    for(j=0; j<nc; j++) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
+    for(j=0; j<nc; ++j) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
     G4cout << G4endl;
     G4cout << "     abanbance: ";
-    for(j=0; j<nc; j++) {G4cout << relAbundance[idx + j] << " ";}
+    for(j=0; j<nc; ++j) {G4cout << relAbundance[idx + j] << " ";}
     G4cout << G4endl;
   }
 }
@@ -223,18 +222,19 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
 				      const G4int& N, const G4double& A,
 				      const G4double& sA, const G4double& W)
 {
-  if (verbose > 1) 
-  G4cout << "AddElement " << name << " Z= " << Z << " nc= " << nc << G4endl;
-  
+  if (verbose > 1) { 
+    G4cout << "AddElement " << name << " Z= " << Z << " nc= " << nc << G4endl;
+  }
   if (Z >= maxNumElements) {
     G4cout << "G4NistElementBuilder::AddElement: Warning! Z= " << Z 
            << " is too big" << G4endl;
     return;
   }
   
-  if (index >= maxAbundance) {
-    G4cout << "G4NistElementBuilder::AddElement: Warning! index= " << index 
-           << " is too big" << G4endl;
+  if (index+nc >= maxAbundance) {
+    G4cout << "G4NistElementBuilder::AddElement: ERROR index= " << index
+	   << " + nc= " << nc  
+           << " is above array size " << maxAbundance << G4endl;
     return;
   }
 
@@ -246,9 +246,8 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   nFirstIsotope[Z] = (&N)[0];
   G4double ww = 0.0;
   G4double www;
-  size_t nm = nc;
 
-  for(size_t i=0; i<nm; i++) {
+  for(G4int i=0; i<nc; ++i) {
     www = 0.01*(&W)[i];
     // mass of the isotope in G4 units
     massIsotopes[index] = (&A)[i]*amu_c2 - Z*electron_mass_c2 + bindingEnergy[Z]; 
@@ -258,16 +257,16 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
     // computation of mean atomic mass of the element in atomic units
     atomicMass[Z] += www*(&A)[i];
     ww += www;
-    index++;
+    ++index;
   }
 
   if(ww != 1.0) {
     G4int idx = idxIsotopes[Z];
     atomicMass[Z] /= ww;
-    for(G4int j=0; j<nc; j++) {relAbundance[idx + j] /= ww;}
+    for(G4int j=0; j<nc; ++j) {relAbundance[idx + j] /= ww;}
   }
 
-  if (verbose > 1) {PrintElement(Z);}
+  if (verbose > 1) { PrintElement(Z); }
   else if(1 == verbose) {
     G4cout << "Nist Element  " << elmSymbol[Z]
            << "  Z= " << Z
@@ -284,7 +283,7 @@ void G4NistElementBuilder::Initialise()
   // Parameterisation from D.Lunney,J.M.Pearson,C.Thibault, 
   // Rev.Mod.Phys. 75 (2003) 1021 
   bindingEnergy[0] = 0.0;
-  for(G4int i=1; i<maxNumElements; i++) {
+  for(G4int i=1; i<maxNumElements; ++i) {
     G4double Z = G4double(i);
     bindingEnergy[i] = (14.4381*std::pow(Z,2.39) + 1.55468e-6*std::pow(Z,5.35))*eV;
   }
