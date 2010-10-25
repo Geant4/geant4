@@ -55,7 +55,7 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
-F04PhysicsList::F04PhysicsList(G4String physicsList) : G4VModularPhysicsList() 
+F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList() 
 {
     G4LossTableManager::Instance();
 
@@ -69,13 +69,16 @@ F04PhysicsList::F04PhysicsList(G4String physicsList) : G4VModularPhysicsList()
     SetVerboseLevel(1);
 
     G4PhysListFactory factory;
-    G4VModularPhysicsList* phys = 0;
+    G4VModularPhysicsList* phys = NULL;
 
-    if(factory.IsReferencePhysList(physicsList))
-      phys =factory.GetReferencePhysList(physicsList);
+    if (factory.IsReferencePhysList(physName))
+       phys =factory.GetReferencePhysList(physName);
 
     // Physics List is defined via environment variable PHYSLIST
-    if(!phys) phys = factory.ReferencePhysList();
+    if (!phys) phys = factory.ReferencePhysList();
+
+    if (!phys) G4Exception("WLSPhysicsList::WLSPhysicsList","InvalidSetup",
+                              FatalException,"PhysicsList does not exist");
 
     for (G4int i = 0; ; ++i) {
        G4VPhysicsConstructor* elem =
