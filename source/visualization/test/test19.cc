@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.32 2009-11-06 16:01:57 allison Exp $
+// $Id: test19.cc,v 1.33 2010-10-26 16:16:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 #include "globals.hh"
 //#include "SharedSolidDetectorConstruction.hh"
 #include "test19DetectorConstruction.hh"
-#include "MyPhysicsList.hh"
+#include "QGSP_BERT.hh"
 #include "MyRunAction.hh"
 #include "MyPrimaryGeneratorAction.hh"
 #include "MyEventAction.hh"
@@ -89,7 +89,7 @@ int main (int argc, char** argv) {
   // User initialization classes
   runManager -> SetUserInitialization (new test19DetectorConstruction);
   //runManager -> SetUserInitialization (new SharedSolidDetectorConstruction);
-  runManager -> SetUserInitialization (new MyPhysicsList);
+  runManager -> SetUserInitialization (new QGSP_BERT);
 
   // UserAction classes.
   runManager -> SetUserAction (new MyRunAction);
