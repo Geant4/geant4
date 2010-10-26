@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.85 2010-10-25 17:23:01 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.86 2010-10-26 11:30:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -406,7 +406,7 @@ G4double G4VMultipleScattering::GetContinuousStepLimit(
   G4GPILSelection selection = NotCandidateForSelection;
   G4double x = AlongStepGetPhysicalInteractionLength(track,previousStepSize,
 						     currentMinimalStep,
-						     currentSafety, *selection);
+						     currentSafety, &selection);
   return x;
 }
 
