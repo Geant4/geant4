@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.16 2010-10-14 15:17:48 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.17 2010-10-26 10:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,17 +90,25 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     use_completescreening(true),isInitialised(false)
 {
-  if(p) SetParticle(p);
   theGamma = G4Gamma::Gamma();
 
   minThreshold = 0.1*keV;
-  SetLowEnergyLimit(GeV);  
+  lowKinEnergy = GeV;
+  SetLowEnergyLimit(lowKinEnergy);  
 
   nist = G4NistManager::Instance();  
-  InitialiseConstants();
 
   SetLPMFlag(true);
   SetAngularDistribution(new G4ModifiedTsai());
+
+  particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
+    = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 
+    = xiLPM = phiLPM = gLPM = klpm = kp;
+
+  energyThresholdLPM = 1.e39;
+
+  InitialiseConstants();
+  if(p) { SetParticle(p); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -141,7 +149,8 @@ G4double G4eBremsstrahlungRelModel::MinEnergyCut(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
-						 const G4Material* mat, G4double kineticEnergy)
+						 const G4Material* mat, 
+						 G4double kineticEnergy)
 {
   densityFactor = mat->GetElectronDensity()*fMigdalConstant;
   lpmEnergy = mat->GetRadlen()*fLPMconstant;
@@ -171,7 +180,6 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
 
   currentZ = 0.;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh,v 1.8 2010-10-25 19:02:32 vnivanch Exp $
+// $Id: G4BetheHeitlerModel.hh,v 1.9 2010-10-26 10:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@ class G4BetheHeitlerModel : public G4VEmModel
 public:
 
   G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "Bethe-Heitler");
+		      const G4String& nam = "BetheHeitler");
  
   virtual ~G4BetheHeitlerModel();
 

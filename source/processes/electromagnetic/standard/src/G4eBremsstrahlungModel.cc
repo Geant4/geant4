@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.47 2010-10-14 15:17:48 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.cc,v 1.48 2010-10-26 10:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -91,10 +91,12 @@ G4eBremsstrahlungModel::G4eBremsstrahlungModel(const G4ParticleDefinition* p,
     LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
     isInitialised(false)
 {
-  if(p) SetParticle(p);
+  if(p) { SetParticle(p); }
   theGamma = G4Gamma::Gamma();
   minThreshold = 0.1*keV;
   SetAngularDistribution(new G4ModifiedTsai());
+  highKinEnergy = HighEnergyLimit();
+  lowKinEnergy  = LowEnergyLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -131,7 +133,7 @@ G4double G4eBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
 void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
                                         const G4DataVector& cuts)
 {
-  if(p) SetParticle(p);
+  if(p) { SetParticle(p); }
   highKinEnergy = HighEnergyLimit();
   lowKinEnergy  = LowEnergyLimit();
   const G4ProductionCutsTable* theCoupleTable=
@@ -174,8 +176,8 @@ G4double G4eBremsstrahlungModel::ComputeDEDXPerVolume(
                                                    G4double kineticEnergy,
                                                    G4double cutEnergy)
 {
-  if(!particle) SetParticle(p);
-  if(kineticEnergy < lowKinEnergy) return 0.0;
+  if(!particle) { SetParticle(p); }
+  if(kineticEnergy < lowKinEnergy) { return 0.0; }
 
   const G4double thigh = 100.*GeV;
 
@@ -274,7 +276,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDXPerVolume(
     }
     dedx += loss;
   }
-  if(dedx < 0.) dedx = 0.;
+  if(dedx < 0.) { dedx = 0.; }
   return dedx;
 }
 
@@ -415,11 +417,11 @@ G4double G4eBremsstrahlungModel::CrossSectionPerVolume(
                                                     G4double cutEnergy,
                                                     G4double maxEnergy)
 {
-  if(!particle) SetParticle(p);
+  if(!particle) { SetParticle(p); }
   G4double cross = 0.0;
   G4double tmax = min(maxEnergy, kineticEnergy);
   G4double cut  = max(cutEnergy, minThreshold);
-  if(cut >= tmax) return cross;
+  if(cut >= tmax) { return cross; }
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();

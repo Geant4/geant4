@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.89 2010-05-27 14:22:05 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.90 2010-10-26 10:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,6 +90,13 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   particle = 0;
   currentCouple = 0;
   wokvi = new G4WentzelOKandVIxSection();
+
+  currentMaterialIndex = 0;
+
+  cosTetMinNuc = 1.0;
+  cosTetMaxNuc = -1.0;
+  elecRatio = 0.0;
+  mass = proton_mass_c2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

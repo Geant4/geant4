@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.13 2010-10-14 15:17:48 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.14 2010-10-26 10:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4eBremsstrahlungRelModel : public G4VEmModel
 public:
 
   G4eBremsstrahlungRelModel(const G4ParticleDefinition* p = 0, 
-			    const G4String& nam = "eBremRel");
+			    const G4String& nam = "eBremLPM");
 
   virtual ~G4eBremsstrahlungRelModel();
 
@@ -158,8 +158,8 @@ protected:
   G4bool   isElectron;
 
 private:
+
   // consts
-  G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double fMigdalConstant;
   G4double fLPMconstant;

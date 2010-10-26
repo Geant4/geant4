@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.8 2010-10-26 10:06:12 vnivanch Exp $
+// $Id: G4PairProductionRelModel.hh,v 1.9 2010-10-26 10:35:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,7 @@ class G4PairProductionRelModel : public G4VEmModel
 public:
 
   G4PairProductionRelModel(const G4ParticleDefinition* p = 0, 
-			   const G4String& nam = "Bethe-Heitler-LPM");
+			   const G4String& nam = "BetheHeitlerLPM");
  
   virtual ~G4PairProductionRelModel();
 
