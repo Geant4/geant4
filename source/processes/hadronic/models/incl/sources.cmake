@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:02:43 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-26 09:56:00 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -62,9 +62,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_incl_cascade
         G4InclAblaVirtualData.hh
         G4InclCascadeInterface.hh
         G4InclDataDefs.hh
+        G4InclInput.hh
         G4InclLightIonInterface.hh
         G4InclRandomNumbers.hh
+        G4InclUtils.hh
         G4Ranecu.hh
+        G4VInclLogger.hh
     SOURCES
         G4Abla.cc
         G4AblaEvaporation.cc
@@ -77,7 +80,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_incl_cascade
         G4InclAblaLightIonInterface.cc
         G4InclAblaVirtualData.cc
         G4InclCascadeInterface.cc
+        G4InclInput.cc
         G4InclLightIonInterface.cc
+        G4InclUtils.cc
         G4Ranecu.cc
     GRANULAR_DEPENDENCIES
         G4baryons
@@ -87,6 +92,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_incl_cascade
         G4had_mod_man
         G4had_mod_util
         G4hadronic_deex_evaporation
+        G4hadronic_deex_fermi_breakup
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_util
