@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.31 2010-10-25 13:04:24 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.32 2010-10-26 13:16:49 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1780,6 +1780,80 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
 
 
   nNIST = nMaterials;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistMaterialBuilder::BiochemicalMaterials()
+{
+
+  // DNA_Nucleobase (Nucleobase-1H)
+  AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
+  AddElementByAtomCount("H",4 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
+
+  AddMaterial("G4_DNA_GUANINE", 1, 0, 75. ,4);
+  AddElementByAtomCount("H",4 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
+  AddElementByAtomCount("O",1 );
+
+  AddMaterial("G4_DNA_CYTOSINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 1);
+
+  AddMaterial("G4_DNA_THYMINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 5);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
+  AddMaterial("G4_DNA_URACIL", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
+
+  // DNA_Nucleoside (Nucleoside-3H)
+  AddMaterial("G4_DNA_ADENOSINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 5);
+  AddElementByAtomCount("O", 4);
+
+  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 75. ,4);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 5);
+  AddElementByAtomCount("O", 5);
+
+  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 75., 4);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 9);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 5);
+
+  AddMaterial("G4_DNA_URIDINE", 1, 0, 75., 4);
+  AddElementByAtomCount("H", 9);
+  AddElementByAtomCount("C", 9);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 6);
+
+  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 75., 4);
+  AddElementByAtomCount("H", 11);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 6);
+
+  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 71., 2);
+  AddElementByAtomCount("P", 1);
+  AddElementByAtomCount("O", 3);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
