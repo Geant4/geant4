@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.32 2010-10-26 13:16:49 antoni Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.33 2010-10-26 13:26:54 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1793,7 +1793,7 @@ void G4NistMaterialBuilder::BiochemicalMaterials()
   AddElementByAtomCount("C",5 );
   AddElementByAtomCount("N",5 );
 
-  AddMaterial("G4_DNA_GUANINE", 1, 0, 75. ,4);
+  AddMaterial("G4_DNA_GUANINE", 1, 0, 72. ,4);
   AddElementByAtomCount("H",4 );
   AddElementByAtomCount("C",5 );
   AddElementByAtomCount("N",5 );
@@ -1825,31 +1825,31 @@ void G4NistMaterialBuilder::BiochemicalMaterials()
   AddElementByAtomCount("N", 5);
   AddElementByAtomCount("O", 4);
 
-  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 75. ,4);
+  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 72. ,4);
   AddElementByAtomCount("H", 10);
   AddElementByAtomCount("C", 10);
   AddElementByAtomCount("N", 5);
   AddElementByAtomCount("O", 5);
 
-  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 75., 4);
+  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 72., 4);
   AddElementByAtomCount("H", 10);
   AddElementByAtomCount("C", 9);
   AddElementByAtomCount("N", 3);
   AddElementByAtomCount("O", 5);
 
-  AddMaterial("G4_DNA_URIDINE", 1, 0, 75., 4);
+  AddMaterial("G4_DNA_URIDINE", 1, 0, 72., 4);
   AddElementByAtomCount("H", 9);
   AddElementByAtomCount("C", 9);
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 6);
 
-  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 75., 4);
+  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 72., 4);
   AddElementByAtomCount("H", 11);
   AddElementByAtomCount("C", 10);
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 6);
 
-  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 71., 2);
+  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 72., 2);
   AddElementByAtomCount("P", 1);
   AddElementByAtomCount("O", 3);
 
