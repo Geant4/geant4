@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2010-10-25 15:05:06 gunter Exp $
+$Id: History,v 1.32 2010-10-26 12:09:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-25-11-09  G.Folger  (gtherapy-V09-03-03)
+26-10-10  V.Ivant (gtherapy-V09-03-04)
+- in PrimaryGeneratorAction.hh remove unused methods 
+
+25-10-10  G.Folger  (gtherapy-V09-03-03)
 - in PrimaryGeneratorAction.hh, comment unused definition of 
     G4ThreeVector GetBeamEnergy()
 
-21-11-09  V.Ivant (gtherapy-V09-03-02)
+21-10-10  V.Ivant (gtherapy-V09-03-02)
 - Cleanup AIDA histograms and analysis
 
 06-06-10 J.Perl (gtherapy-V09-03-01)

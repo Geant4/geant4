@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Histo.cc,v 1.10 2010-10-26 12:05:14 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   Histo
