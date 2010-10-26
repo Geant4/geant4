@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.cc,v 1.4 2009-07-26 15:51:01 vnivanch Exp $
+// $Id: G4PAIySection.cc,v 1.5 2010-10-26 09:16:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,9 @@ const G4int G4PAIySection::fMaxSplineSize = 500 ;  // Max size of output spline
 //
 
 G4PAIySection::G4PAIySection()
-{}
+{
+  fSandia = 0;
+}
 
 ////////////////////////////////////////////////////////////////////////////
 //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.52 2010-06-03 07:28:39 grichine Exp $
+// $Id: G4PAIModel.cc,v 1.53 2010-10-26 09:16:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,9 +80,7 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fTwoln10(2.0*log(10.0)),
   fBg2lim(0.0169),
   fTaulim(8.4146e-3)
-{
-  if(p) SetParticle(p);
-  
+{  
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
@@ -92,6 +90,12 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fdEdxVector        = 0;
   fLambdaVector      = 0;
   fdNdxCutVector     = 0;
+  fParticleEnergyVector = 0;
+  fSandiaIntervalNumber = 0;
+  fMatIndex = 0;
+
+  if(p) { SetParticle(p); }
+  else  { SetParticle(fElectron); }
 
   isInitialised      = false;
 }
@@ -131,7 +135,7 @@ G4PAIModel::~G4PAIModel()
 
 void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 {
-  if(fParticle == p) return;
+  if(fParticle == p) { return; }
   fParticle = p;
   fMass = fParticle->GetPDGMass();
   fSpin = fParticle->GetPDGSpin();
@@ -140,6 +144,8 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
   fLowKinEnergy = 0.2*MeV*fMass/proton_mass_c2;
   fRatio = electron_mass_c2/fMass;
   fQc = fMass/fRatio;
+  fLowestKineticEnergy  = fMass*(fLowestGamma  - 1.0);
+  fHighestKineticEnergy = fMass*(fHighestGamma - 1.0);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -147,13 +153,11 @@ void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
 void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector&)
 {
-  G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
-  if(isInitialised) return;
+  //G4cout<<"G4PAIModel::Initialise for "<<p->GetParticleName()<<G4endl;
+  if(isInitialised) { return; }
   isInitialised = true;
 
   SetParticle(p);
-  fLowestKineticEnergy  = fMass*(fLowestGamma  - 1.0);
-  fHighestKineticEnergy = fMass*(fHighestGamma - 1.0);
 
   fParticleEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
 						 fHighestKineticEnergy,
@@ -212,12 +216,13 @@ void G4PAIModel::InitialiseMe(const G4ParticleDefinition*)
 
 void G4PAIModel::ComputeSandiaPhotoAbsCof()
 { 
-  G4int i, j, numberOfElements ;
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int i, j;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4SandiaTable thisMaterialSandiaTable(fMatIndex) ;
-  numberOfElements = (*theMaterialTable)[fMatIndex]->
-                                              GetNumberOfElements();
+  G4int numberOfElements = 
+    (*theMaterialTable)[fMatIndex]->GetNumberOfElements();
+
   G4int* thisMaterialZ = new G4int[numberOfElements] ;
 
   for(i=0;i<numberOfElements;i++)  
@@ -235,20 +240,22 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
    
   fSandiaPhotoAbsCof = new G4double*[fSandiaIntervalNumber] ;
 
-  for(i=0;i<fSandiaIntervalNumber;i++)  fSandiaPhotoAbsCof[i] = new G4double[5] ;
+  for(i=0; i<fSandiaIntervalNumber; i++)  
+  {
+    fSandiaPhotoAbsCof[i] = new G4double[5];
+  }
    
   for( i = 0 ; i < fSandiaIntervalNumber ; i++ )
   {
-    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0) ; 
+    fSandiaPhotoAbsCof[i][0] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,0); 
 
     for( j = 1; j < 5 ; j++ )
     {
-      fSandiaPhotoAbsCof[i][j] = thisMaterialSandiaTable.
-	                              GetPhotoAbsorpCof(i+1,j)*
+      fSandiaPhotoAbsCof[i][j] = thisMaterialSandiaTable.GetPhotoAbsorpCof(i+1,j)*
                  (*theMaterialTable)[fMatIndex]->GetDensity() ;
     }
   }
-  // delete[] thisMaterialZ ;
+  delete[] thisMaterialZ;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -306,7 +313,7 @@ void G4PAIModel::BuildPAIonisationTable()
     }
     ionloss = fPAIySection.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-    if ( ionloss < DBL_MIN)  ionloss = DBL_MIN;
+    if ( ionloss < DBL_MIN) { ionloss = 0.0; }
     fdEdxVector->PutValue(i,ionloss) ;
 
     fPAItransferTable->insertAt(i,transferVector) ;
