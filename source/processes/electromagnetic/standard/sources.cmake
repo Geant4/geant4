@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-09-29 20:14:39 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-10-26 09:01:23 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -66,6 +66,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4IonFluctuations.hh
         G4KleinNishinaCompton.hh
         G4KleinNishinaModel.hh
+        G4ModifiedTsai.hh
         G4MollerBhabhaModel.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
@@ -120,6 +121,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4IonFluctuations.cc
         G4KleinNishinaCompton.cc
         G4KleinNishinaModel.cc
+        G4ModifiedTsai.cc
         G4MollerBhabhaModel.cc
         G4NuclearStopping.cc
         G4PAIModel.cc
