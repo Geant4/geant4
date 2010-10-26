@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 19:09:11 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-26 09:33:11 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -39,6 +39,7 @@ GEANT4_DEFINE_MODULE(NAME G4optical
     HEADERS
         G4OpAbsorption.hh
         G4OpBoundaryProcess.hh
+        G4OpMieHG.hh
         G4OpProcessSubType.hh
         G4OpRayleigh.hh
         G4OpWLS.hh
@@ -48,6 +49,7 @@ GEANT4_DEFINE_MODULE(NAME G4optical
     SOURCES
         G4OpAbsorption.cc
         G4OpBoundaryProcess.cc
+        G4OpMieHG.cc
         G4OpRayleigh.cc
         G4OpWLS.cc
         G4VWLSTimeGeneratorProfile.cc
