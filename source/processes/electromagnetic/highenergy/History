@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2010-06-04 10:23:31 vnivanch Exp $
+$Id: History,v 1.37 2010-10-26 15:40:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 October 10: V.Ivanchenko (emhighenergy-V09-03-02)
+- Fixed problem reported by the Coverity tools (mainly pedantic 
+  initialisation)
+- Added G4mplIonisationWithDeltaModel which is substituted
+  G4mplIonisationModel by default - delat-ray production is required
+  both by ATLAS and CMS 
 
 04 March 10: V.Ivanchenko (emhighenergy-V09-03-01)
 - G4ICRU73NoDeltaModel - new model derived from G4ICRU73QOModel

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.10 2010-03-28 16:45:38 vnivanch Exp $
+// $Id: G4mplIonisation.cc,v 1.11 2010-10-26 15:40:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 #include "G4mplIonisation.hh"
 #include "G4Electron.hh"
 #include "G4mplIonisationModel.hh"
+#include "G4mplIonisationWithDeltaModel.hh"
 #include "G4BohrFluctuations.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,12 +85,13 @@ G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition&)
 void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 						  const G4ParticleDefinition*)
 {
-  if(isInitialised) return;
+  if(isInitialised) { return; }
 
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
 
-  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge,"PAI");
+  G4mplIonisationWithDeltaModel* ion = 
+    new G4mplIonisationWithDeltaModel(magneticCharge,"PAI");
   ion->SetLowEnergyLimit(MinKinEnergy());
   ion->SetHighEnergyLimit(MaxKinEnergy());
   AddEmModel(0,ion,ion);

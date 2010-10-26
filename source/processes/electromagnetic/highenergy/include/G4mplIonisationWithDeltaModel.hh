@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.8 2010-10-26 15:40:03 vnivanch Exp $
+// $Id: G4mplIonisationWithDeltaModel.hh,v 1.1 2010-10-26 15:40:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4mplIonisationModel
+// File name:     G4mplIonisationWithDeltaModel
 //
 // Author:        Vladimir Ivanchenko 
 //
@@ -47,22 +47,22 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4mplIonisationModel_h
-#define G4mplIonisationModel_h 1
+#ifndef G4mplIonisationWithDeltaModel_h
+#define G4mplIonisationWithDeltaModel_h 1
 
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
 
 class G4ParticleChangeForLoss;
 
-class G4mplIonisationModel : public G4VEmModel, public G4VEmFluctuationModel
+class G4mplIonisationWithDeltaModel : public G4VEmModel, public G4VEmFluctuationModel
 {
 
 public:
 
-  G4mplIonisationModel(G4double mCharge, const G4String& nam = "mplIonisation");
+  G4mplIonisationWithDeltaModel(G4double mCharge, const G4String& nam = "mplIonisationWithDelta");
 
-  virtual ~G4mplIonisationModel();
+  virtual ~G4mplIonisationWithDeltaModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -70,6 +70,19 @@ public:
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
 					G4double cutEnergy);
+
+  virtual G4double ComputeCrossSectionPerElectron(
+                                 const G4ParticleDefinition*,
+                                 G4double kineticEnergy,
+                                 G4double cutEnergy,
+                                 G4double maxEnergy);
+
+  virtual G4double ComputeCrossSectionPerAtom(
+                                 const G4ParticleDefinition*,
+                                 G4double kineticEnergy,
+                                 G4double Z, G4double A,
+                                 G4double cutEnergy,
+                                 G4double maxEnergy);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -89,16 +102,23 @@ public:
                               G4double& tmax,
                               G4double& length);
 
+protected:
+
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+                                      G4double kinEnergy);
+
 private:
 
   void SetParticle(const G4ParticleDefinition* p);
-  G4double ComputeDEDXAhlen(const G4Material* material, G4double bg2);
+
+  G4double ComputeDEDXAhlen(const G4Material* material, G4double bg2, G4double cut);
 
   // hide assignment operator
-  G4mplIonisationModel & operator=(const  G4mplIonisationModel &right);
-  G4mplIonisationModel(const  G4mplIonisationModel&);
+  G4mplIonisationWithDeltaModel & operator=(const  G4mplIonisationWithDeltaModel &right);
+  G4mplIonisationWithDeltaModel(const  G4mplIonisationWithDeltaModel&);
 
   const G4ParticleDefinition* monopole;
+  G4ParticleDefinition* theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double mass;
