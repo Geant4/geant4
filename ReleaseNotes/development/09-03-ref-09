@@ -135,6 +135,13 @@ processes/cuts                                   procuts-V09-03-01
 --------------
 - Fixed possible case of memory leak in G4PhysicsTableHelper.
 
+processes/electromagnetic/highenergy             emhighenergy-V09-03-02
+------------------------------------
+- Added G4mplIonisationWithDeltaModel which substitutes G4mplIonisationModel
+  by default. Delta-ray production is required both by ATLAS and CMS.
+- Fixed defects reported by Coverity tool, mainly related to initialization
+  of static data.
+
 processes/electromagnetic/lowenergy              emlowen-V09-03-51
 -----------------------------------
 - Extended low energy coverage of G4DNA electron models.
@@ -145,6 +152,11 @@ processes/electromagnetic/lowenergy              emlowen-V09-03-51
   'utils' and 'standard' modules respectively.
 - Updated G4LivermoreIonisationModel to produce fluorescence AlongStep
   only if above the production cuts. Stricter check for energy conservation.
+
+processes/electromagnetic/muons                  emmuons-V09-03-02
+-------------------------------
+- Fixed defects reported by Coverity tool, mainly related to initialization
+  of static data.
 
 processes/electromagnetic/standard               emstand-V09-03-24
 ----------------------------------
