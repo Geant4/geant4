@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:53:01 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-10-26 16:42:12 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -68,6 +68,7 @@ GEANT4_DEFINE_MODULE(NAME G4emhighenergy
         G4hhIonisation.hh
         G4mplIonisation.hh
         G4mplIonisationModel.hh
+        G4mplIonisationWithDeltaModel.hh
     SOURCES
         G4AnnihiToMuPair.cc
         G4BetheBlochNoDeltaModel.cc
@@ -90,6 +91,7 @@ GEANT4_DEFINE_MODULE(NAME G4emhighenergy
         G4hhIonisation.cc
         G4mplIonisation.cc
         G4mplIonisationModel.cc
+        G4mplIonisationWithDeltaModel.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
