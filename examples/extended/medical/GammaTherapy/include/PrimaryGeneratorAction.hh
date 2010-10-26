@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorAction.hh,v 1.5 2010-10-26 12:05:14 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
 
@@ -82,9 +86,6 @@ public:
   void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
   void SetSigmaTheta(G4double val) {sigmaTheta = val;};
   void SetVerbose(G4int val) {verbose = val;};
-  G4ThreeVector GetBeamPosition() const {return position;};
-  G4ThreeVector GetBeamDirection() const {return direction;};
-//GF  *?*G4ThreeVector GetBeamEnergy() const {return energy;};
   void SetRandom(const G4String& type) {m_gauss = type;};
 
 private:
