@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.29 2010-09-15 21:54:04 kaitanie Exp $
+$Id: History,v 1.30 2010-10-26 02:47:59 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,13 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+25 October 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-03)
+--------------------------------------------------------
+- Refactored INCL input data structure to its own class G4InclInput
+  o Made data members private
+  o Access to input data only through accessor methods
+  o INCL now uses integer A and Z internally as well as in the interface
 
 14 September 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-02)
 ----------------------------------------------------------

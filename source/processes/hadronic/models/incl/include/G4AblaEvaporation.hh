@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaEvaporation.hh,v 1.2 2010-09-15 21:54:04 kaitanie Exp $
+// $Id: G4AblaEvaporation.hh,v 1.3 2010-10-26 02:47:59 kaitanie Exp $
 // Defines an interface to evaporation models of Bertini cascase (BERT)
 // based on INUCL code.
 //

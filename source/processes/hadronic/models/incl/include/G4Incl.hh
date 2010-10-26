@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.17 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4Incl.hh,v 1.18 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -39,6 +39,7 @@
 #include "G4Abla.hh"
 #include <fstream>
 #include "G4VInclLogger.hh"
+#include "G4InclInput.hh"
 
 using namespace std;
 /**
@@ -63,7 +64,7 @@ public:
    * @param mat a pointer to G4Mat structure.
    * @param varntp a pointer to G4VarNtp structure.   
    */
-  G4Incl(G4Hazard *hazard, G4Calincl *calincl, G4Ws *ws, G4Mat *mat, G4VarNtp *varntp);
+  G4Incl(G4Hazard *hazard, G4InclInput *calincl, G4Ws *ws, G4Mat *mat, G4VarNtp *varntp);
 
   /**
    * Constructor for private unit testing purposes.
@@ -114,7 +115,7 @@ public:
   void setSaxwData(G4Saxw *newSaxw);
   void setSpl2Data(G4Spl2 *newSpl2);
   void setMatData(G4Mat *newMat);
-  void setInput(G4Calincl *newCalincl);
+  void setInput(G4InclInput *newCalincl);
   void setLightNucData(G4LightNuc *newLightNuc);
   void setLightGausNucData(G4LightGausNuc *newLightGausNuc);
   void setBl1Data(G4Bl1 *newBl1);
@@ -142,12 +143,12 @@ public:
   /**
    * Process one event with INCL4 only.
    */ 
-  void processEventIncl();
+  void processEventIncl(G4InclInput *input);
 
   /**
    * Process one event with INCL4 and built-in ABLA evaporation and fission.
    */ 
-  void processEventInclAbla(G4int eventnumber);
+  void processEventInclAbla(G4InclInput *input, G4int eventnumber);
 
 public: // Methods used to initialize INCL
   /**
@@ -573,7 +574,7 @@ public: // Main INCL routines
    * Nuclear radius
    * @param A mass number (double parameter)
    */
-  G4double radius(G4double A);
+  G4double radius(G4int A);
     
   /** Parametrisation de la section efficace de réaction calculée par incl4.1
    * iprojo=1 proton incident, iprojo=2, neutron incident).
@@ -723,9 +724,9 @@ public: // Utilities
   G4LightNuc *light_nuc;
 
   /**
-   * G4Calincl
+   * INCL input data structure
    */
-  G4Calincl *calincl;
+  G4InclInput *calincl;
 
   /**
    * G4Mat

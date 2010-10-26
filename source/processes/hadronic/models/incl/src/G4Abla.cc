@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.21 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.22 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -132,7 +132,7 @@ void G4Abla::registerLogger(G4VInclLogger *theLogger) {
 // work. Maybe there is a way to obtain this information from
 // G4Fragment?
 
-void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMass, G4double excitationEnergy,
+void G4Abla::breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4double excitationEnergy,
 		       G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
 		       G4int eventnumber)
 {
@@ -201,8 +201,8 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
   G4int inttype = 0;
   G4double esrem = excitationEnergy;
   
-  G4double aprf = nucleusA;
-  G4double zprf = nucleusZ;
+  G4double aprf = (double) nucleusA;
+  G4double zprf = (double) nucleusZ;
   G4double mcorem = nucleusMass;
   G4double ee = excitationEnergy;
   G4double jprf = angularMomentum; // actually root-mean-squared

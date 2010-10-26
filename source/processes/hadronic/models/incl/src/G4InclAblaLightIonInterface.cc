@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.12 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.13 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -78,7 +78,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
   //  const G4bool useFermiBreakup = false;
   G4int maxTries = 200;
 
-  G4int particleI, n = 0;
+  G4int particleI;
 
   G4int baryonNumberBalanceInINCL = 0;
   G4int chargeNumberBalanceInINCL = 0;
@@ -132,13 +132,13 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       swappedProjectileParticle.Set4Momentum(swapped4Momentum);
       const G4HadProjectile swappedProjectile(swappedProjectileParticle);
       //  G4cout <<"New projectile kinE = " << swappedProjectile.GetKineticEnergy() / MeV << G4endl;
-      calincl = new G4Calincl(swappedProjectile, swappedTarget, true);
+      calincl = new G4InclInput(swappedProjectile, swappedTarget, true);
     } else {
       G4cout <<"Badly defined target after swapping. Falling back to normal (non-swapped) mode." << G4endl;
-      calincl = new G4Calincl(aTrack, theNucleus);
+      calincl = new G4InclInput(aTrack, theNucleus, false);
     }
   } else {
-    calincl = new G4Calincl(aTrack, theNucleus);
+    calincl = new G4InclInput(aTrack, theNucleus, false);
   }
 
   G4double eKin;
@@ -178,7 +178,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
                            pionMinus = 5, deuteron = 6, triton = 7, he3 = 8, he4 = 9,
                            c12 = -12}; // Carbon beam support.
 
-  G4int bulletType = calincl->getBulletType();
+  G4int bulletType = calincl->bulletType();
   chargeNumberBalanceInINCL = calincl->targetZ();
   baryonNumberBalanceInINCL = calincl->targetA();
 
@@ -209,8 +209,8 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     chargeNumberBalanceInINCL += 6;
     baryonNumberBalanceInINCL += 12;
   } if(bulletType == -666) {
-    chargeNumberBalanceInINCL += calincl->extendedProjectileZ;
-    baryonNumberBalanceInINCL += calincl->extendedProjectileA;
+    chargeNumberBalanceInINCL += calincl->extendedProjectileZ();
+    baryonNumberBalanceInINCL += calincl->extendedProjectileA();
   }
 
   // Check wheter the input is acceptable.
@@ -223,8 +223,8 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     varntp->ntrack = 0;
 
     mat->nbmat = 1;
-    mat->amat[0] = int(calincl->f[0]);
-    mat->zmat[0] = int(calincl->f[1]);
+    mat->amat[0] = int(calincl->targetA());
+    mat->zmat[0] = int(calincl->targetA());
 
     incl->setInput(calincl);
     incl->initIncl(true);
@@ -234,7 +234,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       if(verboseLevel > 1) {
         G4cout <<"G4InclAblaLightIonInterface: Try number = " << nTries << G4endl; 
       }
-      incl->processEventInclAbla(eventNumber);
+      incl->processEventInclAbla(calincl, eventNumber);
 
       if(verboseLevel > 1) {
         G4cout <<"G4InclAblaLightIonInterface: number of tracks = " <<  varntp->ntrack <<G4endl;
@@ -245,43 +245,22 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       /**
        * Diagnostic output
        */
-      G4cout <<"G4InclAblaLightIonInterface: Bullet type: " << bulletType << G4endl;
+      G4cout <<"G4InclAblaLightIonInterface: Bullet type: " << calincl->bulletType() << G4endl;
       G4cout <<"G4Incl4AblaCascadeInterface: Bullet energy: " << calincl->bulletE() << " MeV" << G4endl;
       if(bulletType == -666) {
-	G4cout <<"   Extended projectile: A = " << calincl->extendedProjectileA
-	       <<" Z = " << calincl->extendedProjectileZ << G4endl;
+	G4cout <<"   Extended projectile: A = " << calincl->extendedProjectileA()
+	       <<" Z = " << calincl->extendedProjectileZ() << G4endl;
       }
 
       G4cout <<"G4InclAblaLightIonInterface: Target A:  " << calincl->targetA() << G4endl;
       G4cout <<"G4InclAblaLightIonInterface: Target Z:  " << calincl->targetZ() << G4endl;
 
       if(verboseLevel > 3) {
-        diagdata <<"G4InclAblaLightIonInterface: Bullet type: " << bulletType << G4endl;
+        diagdata <<"G4InclAblaLightIonInterface: Bullet type: " << calincl->bulletType() << G4endl;
         diagdata <<"G4InclAblaLightIonInterface: Bullet energy: " << calincl->bulletE() << " MeV" << G4endl;
         
         diagdata <<"G4InclAblaLightIonInterface: Target A:  " << calincl->targetA() << G4endl;
         diagdata <<"G4InclAblaLightIonInterface: Target Z:  " << calincl->targetZ() << G4endl;
-      }
-
-      for(particleI = 0; particleI < varntp->ntrack; particleI++) {
-        G4cout << n                       << " " << calincl->f[6]             << " " << calincl->f[2] << " ";
-        G4cout << varntp->massini         << " " << varntp->mzini             << " ";
-        G4cout << varntp->exini           << " " << varntp->mulncasc          << " " << varntp->mulnevap          << " " << varntp->mulntot << " ";
-        G4cout << varntp->bimpact         << " " << varntp->jremn             << " " << varntp->kfis              << " " << varntp->estfis << " ";
-        G4cout << varntp->izfis           << " " << varntp->iafis             << " " << varntp->ntrack            << " " << varntp->itypcasc[particleI] << " ";
-        G4cout << varntp->avv[particleI]  << " " << varntp->zvv[particleI]    << " " << varntp->enerj[particleI]  << " ";
-        G4cout << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " << varntp->philab[particleI] << G4endl;
-        // For diagnostic output
-        if(verboseLevel > 3) {
-          diagdata << n                       << " " << calincl->f[6]             << " " << calincl->f[2] << " ";
-          diagdata << varntp->massini         << " " << varntp->mzini             << " ";
-          diagdata << varntp->exini           << " " << varntp->mulncasc          << " " << varntp->mulnevap          << " " << varntp->mulntot << " ";
-          diagdata << varntp->bimpact         << " " << varntp->jremn             << " " << varntp->kfis              << " " << varntp->estfis << " ";
-          diagdata << varntp->izfis           << " " << varntp->iafis             << " " << varntp->ntrack            << " ";
-	  diagdata                                                                       << varntp->itypcasc[particleI] << " ";
-          diagdata << varntp->avv[particleI]  << " " << varntp->zvv[particleI]    << " " << varntp->enerj[particleI]  << " ";
-          diagdata << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " << varntp->philab[particleI] << G4endl;
-        }
       }
     }
 

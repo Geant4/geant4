@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaEvaporation.cc,v 1.5 2010-09-15 21:54:04 kaitanie Exp $
+// $Id: G4AblaEvaporation.cc,v 1.6 2010-10-26 02:47:59 kaitanie Exp $
 //
 #include <numeric>
 // #include "G4IonTable.hh"

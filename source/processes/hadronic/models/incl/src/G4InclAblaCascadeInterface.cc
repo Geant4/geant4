@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.14 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.15 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -46,7 +46,7 @@ G4InclAblaCascadeInterface::G4InclAblaCascadeInterface(const G4String& nam)
   hazard->ial = (*table_entry);
 
   varntp = new G4VarNtp();
-  calincl = new G4Calincl();
+  calincl = 0;
   ws = new G4Ws();
   mat = new G4Mat();
   incl = new G4Incl(hazard, calincl, ws, mat, varntp);
@@ -61,7 +61,6 @@ G4InclAblaCascadeInterface::~G4InclAblaCascadeInterface()
 {
   delete hazard;
   delete varntp;
-  delete calincl;
   delete ws;
   delete mat;
   delete incl;
@@ -71,8 +70,7 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
 {
   G4int maxTries = 200;
 
-  G4int particleI, n = 0;
-
+  G4int particleI;
   G4int bulletType = 0;
 
   // Print diagnostic messages: 0 = silent, 1 and 2 = verbose
@@ -89,15 +87,9 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
     G4cout <<"G4InclAblaCascadeInterface: Now processing INCL4 event number:" << eventNumber << G4endl;
   }
 
-  // INCL4 needs the energy in units MeV
-  G4double bulletE = aTrack.GetKineticEnergy() * MeV;
-
 #ifdef DEBUGINCL
   G4cout <<"Bullet energy = " << bulletE / MeV << G4endl;
 #endif
-
-  G4int targetA = theNucleus.GetA_asInt();
-  G4int targetZ = theNucleus.GetZ_asInt();
 
   G4double eKin;
   G4double momx = 0.0, momy = 0.0, momz = 0.0;
@@ -120,16 +112,11 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
 
   theResult.Clear(); // Make sure the output data structure is clean.
 
-  // Map Geant4 particle types to corresponding INCL4 types.
-  enum bulletParticleType {nucleus = 0, proton = 1, neutron = 2, pionPlus = 3, pionZero = 4, 
-                           pionMinus = 5, deuteron = 6, triton = 7, he3 = 8, he4 = 9};
+  calincl = new G4InclInput(aTrack, theNucleus, false);
+  incl->setInput(calincl);
 
-  // Coding particles for use with INCL4 and ABLA 
-  if (aTrack.GetDefinition() ==    G4Proton::Proton()    ) bulletType = proton;
-  if (aTrack.GetDefinition() ==   G4Neutron::Neutron()   ) bulletType = neutron;
-  if (aTrack.GetDefinition() ==  G4PionPlus::PionPlus()  ) bulletType = pionPlus;
-  if (aTrack.GetDefinition() == G4PionMinus::PionMinus() ) bulletType = pionMinus;
-  if (aTrack.GetDefinition() ==  G4PionZero::PionZero()  ) bulletType = pionZero;
+  G4InclInput::printProjectileTargetInfo(aTrack, theNucleus);
+  calincl->printInfo();
 
 #ifdef DEBUGINCL
   G4int baryonBullet = 0, chargeBullet = 0;
@@ -146,19 +133,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
   G4cout <<"Energy in the beginning = " << labv.e() / MeV << G4endl;
 #endif
 
- for(int i = 0; i < 15; i++) {
-   calincl->f[i] = 0.0; // Initialize INCL input data
- }
-
   // Check wheter the input is acceptable.
-  if((bulletType != 0) && ((targetA != 1) && (targetZ != 1))) {
-    calincl->f[0] = targetA;    // Target mass number
-    calincl->f[1] = targetZ;    // Charge number
-    calincl->f[6] = bulletType; // Type
-    calincl->f[2] = bulletE;    // Energy [MeV]
-    calincl->f[5] = 1.0;        // Time scaling
-    calincl->f[4] = 45.0;       // Nuclear potential
-
+  if((calincl->bulletType() != 0) && ((calincl->targetA() != 1) && (calincl->targetZ() != 1))) {
     ws->nosurf = -2;  // Nucleus surface, -2 = Woods-Saxon 
     ws->xfoisa = 8;
     ws->npaulstr = 0;
@@ -167,8 +143,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
     varntp->ntrack = 0;
 
     mat->nbmat = 1;
-    mat->amat[0] = int(calincl->f[0]);
-    mat->zmat[0] = int(calincl->f[1]);
+    mat->amat[0] = int(calincl->targetA());
+    mat->zmat[0] = int(calincl->targetZ());
 
     incl->initIncl(true);
 
@@ -177,7 +153,7 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       if(verboseLevel > 1) {
         G4cout <<"G4InclAblaCascadeInterface: Try number = " << nTries << G4endl; 
       }
-      incl->processEventInclAbla(eventNumber);
+      incl->processEventInclAbla(calincl, eventNumber);
 
       if(verboseLevel > 1) {
         G4cout <<"G4InclAblaCascadeInterface: number of tracks = " <<  varntp->ntrack <<G4endl;
@@ -188,40 +164,20 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       /**
        * Diagnostic output
        */
-      G4cout <<"G4InclAblaCascadeInterface: Bullet type: " << bulletType << G4endl;
-      G4cout <<"G4Incl4AblaCascadeInterface: Bullet energy: " << bulletE << " MeV" << G4endl;
+      G4cout <<"G4InclAblaCascadeInterface: Bullet type: " << calincl->bulletType() << G4endl;
+      G4cout <<"G4Incl4AblaCascadeInterface: Bullet energy: " << calincl->bulletE() << " MeV" << G4endl;
 
-      G4cout <<"G4InclAblaCascadeInterface: Target A:  " << targetA << G4endl;
-      G4cout <<"G4InclAblaCascadeInterface: Target Z:  " << targetZ << G4endl;
+      G4cout <<"G4InclAblaCascadeInterface: Target A:  " << calincl->targetA() << G4endl;
+      G4cout <<"G4InclAblaCascadeInterface: Target Z:  " << calincl->targetZ() << G4endl;
 
       if(verboseLevel > 3) {
-        diagdata <<"G4InclAblaCascadeInterface: Bullet type: " << bulletType << G4endl;
-        diagdata <<"G4InclAblaCascadeInterface: Bullet energy: " << bulletE << " MeV" << G4endl;
+        diagdata <<"G4InclAblaCascadeInterface: Bullet type: " << calincl->bulletType() << G4endl;
+        diagdata <<"G4InclAblaCascadeInterface: Bullet energy: " << calincl->bulletE() << " MeV" << G4endl;
         
-        diagdata <<"G4InclAblaCascadeInterface: Target A:  " << targetA << G4endl;
-        diagdata <<"G4InclAblaCascadeInterface: Target Z:  " << targetZ << G4endl;
+        diagdata <<"G4InclAblaCascadeInterface: Target A:  " << calincl->targetA() << G4endl;
+        diagdata <<"G4InclAblaCascadeInterface: Target Z:  " << calincl->targetZ() << G4endl;
       }
 
-      for(particleI = 0; particleI < varntp->ntrack; particleI++) {
-        G4cout << n                       << " " << calincl->f[6]             << " " << calincl->f[2] << " ";
-        G4cout << varntp->massini         << " " << varntp->mzini             << " ";
-        G4cout << varntp->exini           << " " << varntp->mulncasc          << " " << varntp->mulnevap          << " " << varntp->mulntot << " ";
-        G4cout << varntp->bimpact         << " " << varntp->jremn             << " " << varntp->kfis              << " " << varntp->estfis << " ";
-        G4cout << varntp->izfis           << " " << varntp->iafis             << " " << varntp->ntrack            << " " << varntp->itypcasc[particleI] << " ";
-        G4cout << varntp->avv[particleI]  << " " << varntp->zvv[particleI]    << " " << varntp->enerj[particleI]  << " ";
-        G4cout << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " << varntp->philab[particleI] << G4endl;
-        // For diagnostic output
-        if(verboseLevel > 3) {
-          diagdata << n                       << " " << calincl->f[6]             << " " << calincl->f[2] << " ";
-          diagdata << varntp->massini         << " " << varntp->mzini             << " ";
-          diagdata << varntp->exini           << " " << varntp->mulncasc          << " " << varntp->mulnevap          << " " << varntp->mulntot << " ";
-          diagdata << varntp->bimpact         << " " << varntp->jremn             << " " << varntp->kfis              << " " << varntp->estfis << " ";
-          diagdata << varntp->izfis           << " " << varntp->iafis             << " " << varntp->ntrack            << " ";
-	  diagdata                                                                       << varntp->itypcasc[particleI] << " ";
-          diagdata << varntp->avv[particleI]  << " " << varntp->zvv[particleI]    << " " << varntp->enerj[particleI]  << " ";
-          diagdata << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " << varntp->philab[particleI] << G4endl;
-        }
-      }
     }
 
     // Check whether a valid cascade was produced.
@@ -234,19 +190,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
 
       theResult.SetStatusChange(stopAndKill);
       
-      if(bulletType == proton) {
-        aParticleDefinition = G4Proton::ProtonDefinition();
-      } else if(bulletType == neutron) {
-        aParticleDefinition = G4Neutron::NeutronDefinition();
-      } else if(bulletType == pionPlus) {
-        aParticleDefinition = G4PionPlus::PionPlusDefinition();
-      } else if(bulletType == pionZero) {
-        aParticleDefinition = G4PionZero::PionZeroDefinition();
-      } else if(bulletType == pionMinus) {
-        aParticleDefinition = G4PionMinus::PionMinusDefinition();
-      } else { // Projectile was not regognized
-	aParticleDefinition = 0;
-      }
+      G4int bulletType = calincl->bulletType();
+      aParticleDefinition = G4InclInput::getParticleDefinition(bulletType);
 
       if(aParticleDefinition != 0) {
 	cascadeParticle = new G4DynamicParticle();
@@ -576,26 +521,26 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
       }
     }
 
-    if((targetA == 1) && (targetZ == 1)) { // Unsupported target
+    if((calincl->targetA() == 1) && (calincl->targetZ() == 1)) { // Unsupported target
       if(verboseLevel > 1) {
 	G4cout <<"Unsupported target: " << G4endl;
-	G4cout <<"Target A: " << targetA << G4endl;
-	G4cout <<"TargetZ: " << targetZ << G4endl;
+	G4cout <<"Target A: " << calincl->targetA() << G4endl;
+	G4cout <<"TargetZ: " << calincl->targetZ() << G4endl;
       }
       if(verboseLevel > 3) {
         diagdata <<"Unsupported target: " << G4endl;
-        diagdata <<"Target A: " << targetA << G4endl;
-       diagdata <<"TargetZ: " << targetZ << G4endl;
+        diagdata <<"Target A: " << calincl->targetA() << G4endl;
+	diagdata <<"TargetZ: " << calincl->targetZ() << G4endl;
       }
     }
 
-    if(bulletE < 100) { // INCL does not support E < 100 MeV.
+    if(calincl->bulletE() < 100) { // INCL does not support E < 100 MeV.
       if(verboseLevel > 1) {
-	G4cout <<"Unsupported bullet energy: " << bulletE << " MeV. (Lower limit is 100 MeV)." << G4endl;
+	G4cout <<"Unsupported bullet energy: " << calincl->bulletE() << " MeV. (Lower limit is 100 MeV)." << G4endl;
 	G4cout <<"WARNING: Returning the original bullet with original energy back to Geant4." << G4endl;
       }
       if(verboseLevel > 3) {
-        diagdata <<"Unsupported bullet energy: " << bulletE << " MeV. (Lower limit is 100 MeV)." << G4endl;
+        diagdata <<"Unsupported bullet energy: " << calincl->bulletE() << " MeV. (Lower limit is 100 MeV)." << G4endl;
       }
     }
 
@@ -605,6 +550,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
   }
 
   delete fermiBreakUp;
+  delete calincl;
+  calincl = 0;
   return &theResult;
 } 
 

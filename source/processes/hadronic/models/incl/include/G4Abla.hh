@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.hh,v 1.12 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4Abla.hh,v 1.13 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -105,7 +105,7 @@ public:
    * @param momZ momentum z-component
    * @param eventnumber number of the event
    */
-  void breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMass, G4double excitationEnergy,
+  void breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4double excitationEnergy,
 		 G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
 		 G4int eventnumber);
 

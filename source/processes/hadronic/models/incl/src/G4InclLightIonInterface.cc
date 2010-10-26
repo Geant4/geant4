@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.cc,v 1.11 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4InclLightIonInterface.cc,v 1.12 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -42,7 +42,7 @@ G4InclLightIonInterface::G4InclLightIonInterface()
   hazard->ial = (*table_entry);
 
   varntp = new G4VarNtp();
-  calincl = new G4Calincl();
+  calincl = 0;
   ws = new G4Ws();
   mat = new G4Mat();
   incl = new G4Incl(hazard, calincl, ws, mat, varntp);
@@ -64,9 +64,8 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
 {
   G4int maxTries = 200;
 
-  G4int particleI, n = 0;
-
   G4int bulletType = 0;
+  G4int particleI;
 
   // Print diagnostic messages: 0 = silent, 1 and 2 = verbose
   verboseLevel = 0;
@@ -115,19 +114,10 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
   if (aTrack.GetDefinition() == G4He3::He3()             ) bulletType = he3;
   if (aTrack.GetDefinition() == G4Alpha::Alpha()         ) bulletType = he4;
 
-  for(int i = 0; i < 15; i++) {
-    calincl->f[i] = 0.0; // Initialize INCL input data
-  }
+  calincl = new G4InclInput();
 
   // Check wheter the input is acceptable.
   if((bulletType != 0) && ((targetA != 1) && (targetZ != 1))) {
-    calincl->f[0] = targetA;    // Target mass number
-    calincl->f[1] = targetZ;    // Charge number
-    calincl->f[6] = bulletType; // Type
-    calincl->f[2] = bulletE;    // Energy [MeV]
-    calincl->f[5] = 1.0;        // Time scaling
-    calincl->f[4] = 45.0;       // Nuclear potential
-
     ws->nosurf = -2;  // Nucleus surface, -2 = Woods-Saxon 
     ws->xfoisa = 8;
     ws->npaulstr = 0;
@@ -136,8 +126,8 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     varntp->ntrack = 0;
 
     mat->nbmat = 1;
-    mat->amat[0] = int(calincl->f[0]);
-    mat->zmat[0] = int(calincl->f[1]);
+    mat->amat[0] = int(calincl->targetA());
+    mat->zmat[0] = int(calincl->targetZ());
 
     incl->initIncl(true);
 
@@ -146,7 +136,7 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
       if(verboseLevel > 1) {
         G4cout <<"G4InclLightIonInterface: Try number = " << nTries << G4endl; 
       }
-      incl->processEventIncl();
+      incl->processEventIncl(calincl);
 
       if(verboseLevel > 1) {
         G4cout <<"G4InclLightIonInterface: number of tracks = " <<  varntp->ntrack <<G4endl;
@@ -169,27 +159,6 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
         
         diagdata <<"G4InclLightIonInterface: Target A:  " << targetA << G4endl;
         diagdata <<"G4InclLightIonInterface: Target Z:  " << targetZ << G4endl;
-      }
-
-      for(particleI = 0; particleI < varntp->ntrack; particleI++) {
-        G4cout << n                       << " " << calincl->f[6]             << " " << calincl->f[2] << " ";
-        G4cout << varntp->massini         << " " << varntp->mzini             << " ";
-        G4cout << varntp->exini           << " " << varntp->mulncasc          << " " << varntp->mulnevap          << " " << varntp->mulntot << " ";
-        G4cout << varntp->bimpact         << " " << varntp->jremn             << " " << varntp->kfis              << " " << varntp->estfis << " ";
-        G4cout << varntp->izfis           << " " << varntp->iafis             << " " << varntp->ntrack            << " " << varntp->itypcasc[particleI] << " ";
-        G4cout << varntp->avv[particleI]  << " " << varntp->zvv[particleI]    << " " << varntp->enerj[particleI]  << " ";
-        G4cout << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " << varntp->philab[particleI] << G4endl;
-        // For diagnostic output
-        if(verboseLevel > 3) {
-          diagdata << n                       << " " << calincl->f[6]             << " " << calincl->f[2] << " ";
-          diagdata << varntp->massini         << " " << varntp->mzini             << " ";
-          diagdata << varntp->exini           << " " << varntp->mulncasc          << " " << varntp->mulnevap          << " " << varntp->mulntot << " ";
-          diagdata << varntp->bimpact         << " " << varntp->jremn             << " " << varntp->kfis              << " " << varntp->estfis << " ";
-          diagdata << varntp->izfis           << " " << varntp->iafis             << " " << varntp->ntrack            << " ";
-	  diagdata                                                                       << varntp->itypcasc[particleI] << " ";
-          diagdata << varntp->avv[particleI]  << " " << varntp->zvv[particleI]    << " " << varntp->enerj[particleI]  << " ";
-          diagdata << varntp->plab[particleI] << " " << varntp->tetlab[particleI] << " " << varntp->philab[particleI] << G4endl;
-        }
       }
     }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.31 2010-09-15 21:54:04 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.32 2010-10-26 02:47:59 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -86,7 +86,7 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
   randomGenerator = new G4InclGeant4Random();
 }
 
-G4Incl::G4Incl(G4Hazard *aHazard, G4Calincl *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
+G4Incl::G4Incl(G4Hazard *aHazard, G4InclInput *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
 {
   verboseLevel = 0;
 
@@ -308,7 +308,7 @@ void G4Incl::setSpl2Data(G4Spl2 *newSpl2)
   spl2 = newSpl2;
 }
 
-void G4Incl::setInput(G4Calincl *newCalincl)
+void G4Incl::setInput(G4InclInput *newCalincl)
 {
   calincl = newCalincl;
 }
@@ -382,8 +382,14 @@ void G4Incl::setKindData(G4Kind *newKind)
  * INCL main routines for event processing.
  */
 
-void G4Incl::processEventIncl()
+void G4Incl::processEventIncl(G4InclInput *input)
 {
+  if(input == 0) {
+    G4cerr <<"G4Incl fatal error: NULL pointer passed as input!" << G4endl;
+    return;
+  }
+  calincl = input;
+
   const G4double uma = 931.4942;
   const G4double melec = 0.511;
 
@@ -395,78 +401,75 @@ void G4Incl::processEventIncl()
   G4double ap = 0.0, zp = 0.0, mprojo = 0.0, pbeam = 0.0;
 
   varntp->clear();
-  if(calincl->f[6] == 3.0) { // pi+ 
+  if(calincl->bulletType() == 3) { // pi+ 
     mprojo = 139.56995;
     ap = 0.0;
     zp = 1.0;
   }
 
-  if(calincl->f[6] == 4.0) { // pi0
+  if(calincl->bulletType() == 4) { // pi0
     mprojo = 134.9764;
     ap = 0.0;
     zp = 0.0;
   }
 
-  if(calincl->f[6] == 5.0) { // pi-
+  if(calincl->bulletType() == 5) { // pi-
     mprojo = 139.56995;
     ap = 0.0;
     zp = -1.0;
   }
 
   // Coulomb en entree seulement pour les particules ci-dessous.
-  if(calincl->f[6] == 1.0) { // proton
+  if(calincl->bulletType() == 1) { // proton
     mprojo = 938.27231;
     ap = 1.0;
     zp = 1.0;
   }
   
-  if(calincl->f[6] == 2.0) { // neutron  
+  if(calincl->bulletType() == 2) { // neutron  
     mprojo = 939.56563;
     ap = 1.0;
     zp = 0.0;
   }
   
-  if(calincl->f[6] == 6.0) { // deuteron
+  if(calincl->bulletType() == 6) { // deuteron
     mprojo = 1875.61276;
     ap = 2.0;
     zp = 1.0;
   }
   
-  if(calincl->f[6] == 7.0) { // triton
+  if(calincl->bulletType() == 7) { // triton
     mprojo = 2808.95;
     ap = 3.0;
     zp = 1.0;
   }
   
-  if(calincl->f[6] == 8.0) { // He3
+  if(calincl->bulletType() == 8) { // He3
     mprojo = 2808.42;
     ap = 3.0;
     zp = 2.0;
   }
 
-  if(calincl->f[6] == 9.0) { // Alpha
+  if(calincl->bulletType() == 9) { // Alpha
     mprojo = 3727.42;
     ap = 4.0;
     zp = 2.0;
   }
 
-  if(calincl->f[6] == -12.0) { // Carbon
+  if(calincl->bulletType() == -12) { // Carbon
     mprojo = 12.0 * 938.27231;
     ap = 12.0;
     zp = 6.0;
-  } else if(calincl->f[6] == -666) { // Generic extended ion projectile
-    mprojo = calincl->extendedProjectileA * 938.27231;
-    ap = calincl->extendedProjectileA;
-    zp = calincl->extendedProjectileZ;
+  } else if(calincl->bulletType() == -666) { // Generic extended ion projectile
+    mprojo = calincl->extendedProjectileA() * 938.27231;
+    ap = calincl->extendedProjectileA();
+    zp = calincl->extendedProjectileZ();
   }
 
-  pbeam = std::sqrt(calincl->f[2]*(calincl->f[2] + 2.0*mprojo));         
+  pbeam = std::sqrt(calincl->bulletE()*(calincl->bulletE() + 2.0*mprojo));         
 
-  G4double at = calincl->f[0];
+  G4double at = calincl->targetA();
        
-  calincl->f[3] = 0.0;    // seuil sortie proton
-  calincl->f[7] = 0.0;    // seuil sortie neutron
-
   G4int ibert = 1;
 
   G4int nopart = 0;
@@ -486,8 +489,8 @@ void G4Incl::processEventIncl()
   G4double probaTrans = 0.0;
   G4double rndm = 0.0;
 
-  if((calincl->f[6] == 1.0) || (calincl->f[6] >= 6.0)) {
-    probaTrans = coulombTransm(calincl->f[2],ap,zp,calincl->f[0],calincl->f[1]);
+  if((calincl->bulletType() == 1) || (calincl->bulletType() >= 6)) {
+    probaTrans = coulombTransm(calincl->bulletE(),ap,zp,calincl->targetA(),calincl->targetZ());
     standardRandom(&rndm, &(hazard->ial));
     if(rndm <= (1.0 - probaTrans)) {
       varntp->ntrack = -1;
@@ -535,9 +538,9 @@ void G4Incl::processEventIncl()
    * -from energy balance (input - all emitted energies)
    * -following the approximations of the cugnon code (esrem...)
    */
-  G4double f0 = calincl->f[0];
-  G4double f1 = calincl->f[1];
-  G4double f2 = calincl->f[2];
+  G4double f0 = calincl->targetA();
+  G4double f1 = calincl->targetZ();
+  G4double f2 = calincl->bulletE();
   G4double mcorem = mprojo + f2 + abla->pace2(f0, f1) + f0 * uma - f1 * melec;
 
   G4double pxbil = 0.0;
@@ -735,8 +738,15 @@ void G4Incl::processEventIncl()
 }
 
 
-void G4Incl::processEventInclAbla(G4int eventnumber)
+void G4Incl::processEventInclAbla(G4InclInput *input, G4int eventnumber)
 {
+  //G4cout <<"Starting event " << eventnumber << G4endl;
+  if(input == 0) {
+    G4cerr <<"G4Incl fatal error: NULL pointer passed as input!" << G4endl;
+    return;
+  }
+  calincl = input;
+
   const G4double uma = 931.4942;
   const G4double melec = 0.511;
   const G4double fmp = 938.2796;
@@ -750,22 +760,21 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 
   varntp->clear();
 
-  if(calincl->f[6] == -12) {
-    be->ia_be = std::abs(calincl->f[6]);
+  if(calincl->bulletType() == -12) {
+    be->ia_be = std::abs(calincl->bulletType());
     be->iz_be = 6;
-  } else if(calincl->f[6] == -666) {
-    be->iz_be = calincl->extendedProjectileZ;
-    be->ia_be = calincl->extendedProjectileA;
+  } else if(calincl->bulletType() == -666) {
+    be->iz_be = calincl->extendedProjectileZ();
+    be->ia_be = calincl->extendedProjectileA();
   }
 
-  if(calincl->isExtendedProjectile == false && calincl->f[6] < -max_a_proj) {
-  //  if(calincl->f[6] < -max_a_proj) {
+  if(calincl->isExtendedProjectile() == false && calincl->bulletType() < -max_a_proj) {
+  //  if(calincl->bulletType() < -max_a_proj) {
     G4cout <<"max a of composite projectile is: " << max_a_proj << G4endl;
     exit(0);
   }
-  if(calincl->f[6] < 0.) {
-    calincl->f[11] = 10;
-    calincl->f[6] = std::floor(calincl->f[6] + 0.1);
+  if(calincl->bulletType() < 0) {
+    //    calincl->bulletType() = std::floor(calincl->bulletType() + 0.1); WTF???
     be->pms_be=100.;
     G4int i_tabled=0;
     if(be->iz_be == 3 && be->ia_be == 6) {
@@ -812,7 +821,8 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
       be->rms_be=2.44;
       be->bind_be=92.17;
       i_tabled=1;
-    } else if(be->iz_be == 6 && calincl->f[6] == -12) { // Special Carbon case
+    } else if(be->iz_be == 6 && calincl->bulletType() == -12) { // Special Carbon case
+      G4cout <<"Carbon 12 (special) selected." << G4endl;
       be->rms_be=2.44;
       be->bind_be=92.17;
       i_tabled=1;
@@ -841,36 +851,36 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
     //    G4cout <<"binding energy (mev):" << be->bind_be << G4endl;
     //    G4cout <<"fermi-breakup dresner below a=" << calincl->f[11] << G4endl;
   }      
-  //  G4cout <<"Target Mass and Charge: " << calincl->f[0] << " " << calincl->f[1] << G4endl;
-  calincl->f[10] = 0; // No clusters
+  //  G4cout <<"Target Mass and Charge: " << calincl->targetA() << " " << calincl->targetZ() << G4endl;
+  //  calincl->f[10] = 0; // No clusters
 
-  if(calincl->f[6] == -12) {  // C12 special case
-    mprojo=fmp*std::abs(calincl->f[6]) - be->bind_be;
-    pbeam=std::sqrt(calincl->f[2]*(calincl->f[2]+2.*mprojo));
-    ap=std::abs(calincl->f[6]);
+  if(calincl->bulletType() == -12) {  // C12 special case
+    mprojo=fmp*std::abs(calincl->bulletType()) - be->bind_be;
+    pbeam=std::sqrt(calincl->bulletE()*(calincl->bulletE()+2.*mprojo));
+    ap=std::abs(calincl->bulletType());
     zp=be->iz_be;
-  } else if(calincl->f[6] == -666) { // Generic extended projectile
+  } else if(calincl->bulletType() == -666) { // Generic extended projectile
     mprojo=fmp*be->ia_be - be->bind_be;
-    pbeam=std::sqrt(calincl->f[2]*(calincl->f[2]+2.*mprojo));
+    pbeam=std::sqrt(calincl->bulletE()*(calincl->bulletE()+2.*mprojo));
     ap=be->ia_be;
     zp=be->iz_be;
   }
   // pi+
-  if(calincl->f[6] == 3.0) { 
+  if(calincl->bulletType() == 3) { 
     mprojo = 139.56995;
     ap = 0.0;
     zp = 1.0;
   }
 
   // pi0
-  if(calincl->f[6] == 4.0) {
+  if(calincl->bulletType() == 4) {
     mprojo = 134.9764;
     ap = 0.0;
     zp = 0.0;
   }
 
   // pi-
-  if(calincl->f[6] == 5.0) {
+  if(calincl->bulletType() == 5) {
     mprojo = 139.56995;
     ap = 0.0;
     zp = -1.0;
@@ -879,61 +889,58 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
   // coulomb en entree seulement pour les particules ci-dessous
 
   // proton
-  if(calincl->f[6] == 1.0) {
+  if(calincl->bulletType() == 1) {
     mprojo = 938.27231;
     ap = 1.0;
     zp = 1.0;
   }
 
   // neutron  
-  if(calincl->f[6] == 2.0) {
+  if(calincl->bulletType() == 2) {
     mprojo = 939.56563;
     ap = 1.0;
     zp = 0.0;
   }
 
   // deuteron
-  if(calincl->f[6] == 6.0) {
+  if(calincl->bulletType() == 6) {
     mprojo = 1875.61276;
     ap = 2.0;
     zp = 1.0;
   }
 
   // triton
-  if(calincl->f[6] == 7.0) {
+  if(calincl->bulletType() == 7) {
     mprojo = 2808.95;
     ap = 3.0;
     zp = 1.0;
   }
 
   // He3
-  if(calincl->f[6] == 8.0) {
+  if(calincl->bulletType() == 8) {
     mprojo = 2808.42;
     ap = 3.0;
     zp = 2.0;
   }
 
   // Alpha
-  if(calincl->f[6] == 9.0) {
+  if(calincl->bulletType() == 9) {
     mprojo = 3727.42;
     ap = 4.0;
     zp = 2.0;
   }
 
   // Carbon
-  if(calincl->f[6] == -12.0) {
+  if(calincl->bulletType() == -12) {
     mprojo = 6.0*938.27231 + 6.0*939.56563;
     ap = 12.0;
     zp = 6.0;
   }
 
-  pbeam = std::sqrt(calincl->f[2]*(calincl->f[2] + 2.0*mprojo));         
+  pbeam = std::sqrt(calincl->bulletE()*(calincl->bulletE() + 2.0*mprojo));         
 
-  G4double at = calincl->f[0];
+  G4double at = calincl->targetA();
        
-  calincl->f[3] = 0.0;    //     !seuil sortie proton
-  calincl->f[7] = 0.0;  //       !seuil sortie neutron
-
   G4int ibert = 1;
 
   G4int nopart = 0;
@@ -953,9 +960,9 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
   G4double probaTrans = 0.0;
   G4double rndm = 0.0;
 
-  if((calincl->f[6] == 1.0) || (calincl->f[6] >= 6.0)) {
-    //    probaTrans = coulombTransm(calincl->f[2],apro,zpro,calincl->f[0],calincl->f[1]);
-    probaTrans = coulombTransm(calincl->f[2],ap,zp,calincl->f[0],calincl->f[1]);
+  if((calincl->bulletType() == 1) || (calincl->bulletType() >= 6)) {
+    //    probaTrans = coulombTransm(calincl->bulletE(),apro,zpro,calincl->targetA(),calincl->targetZ());
+    probaTrans = coulombTransm(calincl->bulletE(),ap,zp,calincl->targetA(),calincl->targetZ());
     standardRandom(&rndm, &(hazard->ial));
     if(rndm <= (1.0 - probaTrans)) {
       varntp->ntrack = -1;
@@ -1024,8 +1031,8 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
   //                -from the output of the cascade and the canonic mass
   //                -from energy balance (input - all emitted energies)
   //                -following the approximations of the cugnon code (esrem...)
-  G4double mcorem = mprojo + calincl->f[2] + abla->pace2(double(calincl->f[0]),double(calincl->f[1]))
-    + calincl->f[0]*uma - calincl->f[1]*melec;
+  G4double mcorem = mprojo + calincl->bulletE() + abla->pace2(double(calincl->targetA()),double(calincl->targetZ()))
+    + calincl->targetA()*uma - calincl->targetZ()*melec;
 
   G4double pxbil = 0.0;
   G4double pybil = 0.0;
@@ -1205,7 +1212,7 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
     pzbil = pzbil + pzrem;
 
     // If on purpose, add here the spectator nuclei:	
-    if(calincl->f[6] < 0. && ps->a_projspec != 0) {
+    if(calincl->bulletType() < 0 && ps->a_projspec != 0) {
       pxbil=pxbil+ps->p1_projspec;
       pybil=pybil+ps->p2_projspec;
       pzbil=pzbil+ps->p3_projspec;
@@ -1282,7 +1289,7 @@ void G4Incl::processEventInclAbla(G4int eventnumber)
 	G4cout <<"G4Incl: Done extracting..." << G4endl;
       }
     }
-    if(calincl->f[6] < 0 && useProjSpect && !useFermiBreakup) { // If we use projectile spectators for carbon but no fermi breakup
+    if(calincl->bulletType() < 0 && useProjSpect && !useFermiBreakup) { // If we use projectile spectators for carbon but no fermi breakup
       // Evaporation/fission:
       evaporationResult->ntrack = 0;
       //      G4cout <<"Warning: Using ABLA to de-excite projectile spectator..." << G4endl;
@@ -1367,10 +1374,6 @@ void G4Incl::initIncl(G4bool initRandomSeed)
 
   // valeur pour avoir v-test=2 h**3 (avec pbl=200)
   rbl = 3.1848;
-
-  if(int(calincl->f[10]+0.1) != 0) {
-    G4cout <<" calculation of light clusters selected: " << calincl->f[10] << G4endl;
-  }
 
   // preparation of 19 other seeds (can also be initialized from outside):
   if(initRandomSeed) {
@@ -1960,6 +1963,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 		 G4double *erecrem_p, G4double *alrem_p, G4double *berem_p, G4double *garem_p,
 		 G4double *bimpact_p, G4int *l_p, G4double *xjrem, G4double *yjrem, G4double *zjrem)
 {
+  //  G4cout <<"Now in pnu..." << G4endl;
   //  G4cout <<"(clean-up)" << G4endl;
   G4int npenter = 0;
   G4int nnenter = 0;
@@ -2631,20 +2635,20 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   }
 
   G4double beproj = 0.;
-  bl3->ia2 = G4int(std::floor(calincl->f[0] + 0.1)); // f(1)->f[0] and so on..., calincl added
-  G4int iz2 = G4int(std::floor(calincl->f[1] + 0.1));
+  bl3->ia2 = calincl->targetA(); // f(1)->f[0] and so on..., calincl added
+  G4int iz2 = calincl->targetZ();
   G4double r02 = 1.12;
-  kindstruct->kindf7 = int(std::floor(calincl->f[6] + 0.1));
+  kindstruct->kindf7 = calincl->bulletType();
   if(kindstruct->kindf7 < 0) kindstruct->kindf7 = kindstruct->kindf7-1;
-  G4int kclst = int(calincl->f[10]+0.1);
+  G4int kclst = calincl->getClusterOption();
 
-  //  G4cout <<"Projectile kind = " << kindstruct->kindf7 << G4endl;
+  // G4cout <<"Projectile kind = " << kindstruct->kindf7 << G4endl;
 
   G4int iz1 = 0;
   G4double fmpinc = 0.0;
   G4double rms1 = 0.0;
   G4double pf1 = 0.0;
-  G4double tlab = calincl->f[2];;
+  G4double tlab = calincl->bulletE();;
 
   if(kindstruct->kindf7 > 0) {
     bl3->ia1 = ia1t[G4int(kindstruct->kindf7)-1]; // In the C++ version indices start from 0
@@ -2655,7 +2659,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   } else {
    // Starting values for carbon beams:
-    if(kindstruct->kindf7 == -13) { // Handle Carbon-12 as a special case
+    if(kindstruct->kindf7 == -12) { // Handle Carbon-12 as a special case
       bl3->ia1 = std::abs(kindstruct->kindf7 + 1);
       // check here that kindf7 is -a and ia1 is a of the projectile.
       //  			write(6,*) 'kindf7,ia1:',kindf7,ia1
@@ -2664,14 +2668,17 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
       fmpinc=bl3->ia1*fmp - be->bind_be;
       rms1=be->rms_be;
       pf1=be->pms_be;
-      ia_breakup=int(calincl->f[11]+0.1);
+      ia_breakup = 10; // Stopping threshold for the cascade in case of light nuclei
+      //      ia_breakup=calincl->getCascadeStoppingAThreshold();
     } else { // For extended projectiles
-      bl3->ia1 = calincl->extendedProjectileA;
+      bl3->ia1 = calincl->extendedProjectileA();
+      be->ia_be = calincl->extendedProjectileA();
       iz1=be->iz_be;
       fmpinc=bl3->ia1*fmp - be->bind_be;
       rms1=be->rms_be;
       pf1=be->pms_be;
-      ia_breakup=int(calincl->f[11]+0.1);      
+      ia_breakup = 10; // Stopping threshold for the cascade in case of light nuclei
+      //      ia_breakup=calincl->getCascadeStoppingAThreshold();
     }
   }
 
@@ -2688,7 +2695,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   G4int k6 = 0;
 
   // material number:      
-  saxw->imat = G4int(std::floor(calincl->f[8] + 0.5)); // f(9) -> f[8]
+  saxw->imat = 0;
   // espace de phases test (r et p) pour pauli: 
   // valeur recommandee par j.c. v-test=0.589 h**3:
   //  G4double rbl = 2.0;
@@ -2706,7 +2713,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
   tem[0] = 100000.0;  // tem(1) -> tem[0]
   // temfin (time at which the inc is stopped), tmax5 defined after chosing b
 
-  G4double v0 = calincl->f[4]; // f(5)->f[4]
+  G4double v0 = calincl->getPotential();
   G4double v1 = v0;
   bl8->rathr = 0.;
   bl8->ramass = 0.;
@@ -2915,7 +2922,7 @@ void G4Incl::pnu(G4int *ibert_p, G4int *nopart_p, G4int *izrem_p, G4int *iarem_p
 
   // deutons
   // a way to change stopping time f[5] not used here
-  factemp = calincl->f[5]; // f(6)->f[5]
+  factemp = calincl->getTimeScale();
   // attention !!! 30/04/2001 scaling time is now a multiplication factor
   temfin = temfin*factemp;
 
@@ -7811,17 +7818,18 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
     return;
   }
 
-  bl3->ia2 = int(std::floor(calincl->f[0] + 0.1)); // f(1) -> f[0]
+  //  bl3->ia2 = int(std::floor(calincl->targetA() + 0.1)); // f(1) -> f[0]
+  bl3->ia2 = calincl->targetA();
   sep = 6.8309;
 
   if(bl3->ia2 <= 4) {
     if(bl3->ia2 == 2) {
       itg = 6 - 1;
     }
-    if(bl3->ia2 == 3 && calincl->f[1] == 1) {
+    if(bl3->ia2 == 3 && calincl->targetZ() == 1) {
       itg = 7 - 1;
     }
-    if(bl3->ia2 == 3 && calincl->f[1] == 2) {
+    if(bl3->ia2 == 3 && calincl->targetZ() == 2) {
       itg = 8 - 1;
     }
     if(bl3->ia2 == 4) {
@@ -7830,29 +7838,29 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
     sep = light_gaus_nuc->vnuc[itg] - light_gaus_nuc->tfln[itg]; // :::BUG::: Off-by-one!!!
   }
 
-  if((calincl->f[2] >= 10.0) && (calincl->f[2] <= 100.0)) {
-    if(calincl->f[6] == 1.0) {
+  if((calincl->bulletE() >= 10.0) && (calincl->bulletE() <= 100.0)) {
+    if(calincl->bulletType() == 1) {
       bl3->ia1 = int(1.0);
       iz1 = 1.0;
       G4double fmpinc = 938.2796;
-      G4double pbeam2 = calincl->f[2]*(calincl->f[2] + 2.0*fmpinc);
+      G4double pbeam2 = calincl->bulletE()*(calincl->bulletE() + 2.0*fmpinc);
       bmaxt = ws->bmax;
-      proba_trans = coulombTransm(calincl->f[2],bl3->ia1,iz1,calincl->f[0],calincl->f[1]);
-      proba = forceAbs(1,calincl->f[0],calincl->f[1],calincl->f[2],bmaxt,proba_trans);
+      proba_trans = coulombTransm(calincl->bulletE(),bl3->ia1,iz1,calincl->targetA(),calincl->targetZ());
+      proba = forceAbs(1,calincl->targetA(),calincl->targetZ(),calincl->bulletE(),bmaxt,proba_trans);
       
       standardRandom(&alea,&(hazard->igraine[4]));
       if(alea > proba) {
         return;
       }
 
-      (*iarem) = int(calincl->f[0]) + bl3->ia1;
-      (*izrem) = int(calincl->f[1]) + int(iz1);
+      (*iarem) = int(calincl->targetA()) + bl3->ia1;
+      (*izrem) = int(calincl->targetZ()) + int(iz1);
       
-      del = std::sqrt(std::pow(((calincl->f[0] + 1.0)*fmpinc + calincl->f[2]),2) - pbeam2);
+      del = std::sqrt(std::pow(((calincl->targetA() + 1.0)*fmpinc + calincl->bulletE()),2) - pbeam2);
       
-      (*erecrem) = pbeam2/((calincl->f[0] + 1.0)*fmpinc+calincl->f[2] + del);
+      (*erecrem) = pbeam2/((calincl->targetA() + 1.0)*fmpinc+calincl->bulletE() + del);
 
-      (*esrem) = calincl->f[2] + sep - (*erecrem);
+      (*esrem) = calincl->bulletE() + sep - (*erecrem);
 
       (*alrem) = 0.00001;
       (*berem) = 0.0;
@@ -7861,28 +7869,28 @@ void G4Incl::forceAbsor(G4int *nopart, G4int *iarem, G4int *izrem, G4double *esr
       (*nopart) = 0;
       return;
     }
-    else if((calincl->f[6] == 2) && (calincl->f[2] >= 20.0)) {
+    else if((calincl->bulletType() == 2) && (calincl->bulletE() >= 20.0)) {
       bl3->ia1 = int(1.0);
       iz1 = 0.0;
       G4double fmpinc = 938.2796;
-      G4double pbeam2 = calincl->f[2]*(calincl->f[2] + 2.0*fmpinc);
+      G4double pbeam2 = calincl->bulletE()*(calincl->bulletE() + 2.0*fmpinc);
       bmaxt = ws->bmax;
-      proba_trans = coulombTransm(calincl->f[2],bl3->ia1,iz1,calincl->f[0],calincl->f[1]);
-      proba = forceAbs(1,calincl->f[0],calincl->f[1],calincl->f[2],bmaxt,proba_trans);
+      proba_trans = coulombTransm(calincl->bulletE(),bl3->ia1,iz1,calincl->targetA(),calincl->targetZ());
+      proba = forceAbs(1,calincl->targetA(),calincl->targetZ(),calincl->bulletE(),bmaxt,proba_trans);
       
       standardRandom(&alea,&(hazard->igraine[4]));
       if(alea > proba) {
         return;
       }
 
-      (*iarem) = int(calincl->f[0]) + bl3->ia1;
-      (*izrem) = int(calincl->f[1]) + int(iz1);
+      (*iarem) = int(calincl->targetA()) + bl3->ia1;
+      (*izrem) = int(calincl->targetZ()) + int(iz1);
       
-      del = std::sqrt(std::pow(((calincl->f[0]+1.)*fmpinc+calincl->f[2]),2)-pbeam2);
+      del = std::sqrt(std::pow(((calincl->targetA()+1.)*fmpinc+calincl->bulletE()),2)-pbeam2);
       
-      (*erecrem) = pbeam2/((calincl->f[0] + 1.0)*fmpinc + calincl->f[2] + del);
+      (*erecrem) = pbeam2/((calincl->targetA() + 1.0)*fmpinc + calincl->bulletE() + del);
 
-      (*esrem) = calincl->f[2] + sep - (*erecrem);
+      (*esrem) = calincl->bulletE() + sep - (*erecrem);
 
       (*alrem) = 0.00001;
       (*berem) = 0.0;
@@ -8204,7 +8212,7 @@ G4double G4Incl::safeExp(G4double x)
   return std::exp(x);
 }
 
-G4double G4Incl::radius(G4double A)
+G4double G4Incl::radius(G4int A)
 {                                               
   const G4double dp1 = 1.0, dp3 = 3.0; 
   const G4double dp5 = 5.0, dpth = dp1/dp3;
@@ -8218,7 +8226,8 @@ G4double G4Incl::radius(G4double A)
 				 2.900,3.040,2.969,2.94,3.075,3.11,3.06};
              
   G4double fact = std::sqrt(dp5/dp3);                                                
-  G4int ia = int(std::floor(A+0.4));                                                        
+  //  G4int ia = int(std::floor(A+0.4));                                                        
+  G4int ia = A;
   G4double result = fact * (0.84 * std::pow(A,dpth) + 0.55);                               
   for(G4int i = 0; i < naSize; i++) {
     if (ia == na[i]) {
