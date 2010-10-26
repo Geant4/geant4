@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-09-29 20:12:08 bmorgan Exp $
+# $Id: sources.cmake,v 1.3 2010-10-26 09:06:48 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -183,7 +183,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEnergyPolarizedCompton.hh
         G4LowEnergyPolarizedRayleigh.hh
         G4LowEnergyRayleigh.hh
-        G4ModifiedTsai.hh
         G4OrlicLiCrossSection.hh
         G4PaulKCrossSection.hh
         G4Penelope08ComptonModel.hh
@@ -227,7 +226,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4ShellEMDataSet.hh
         G4ShellVacancy.hh
         G4teoCrossSection.hh
-        G4VBremAngularDistribution.hh
         G4VCrossSectionHandler.hh
         G4VDataSetAlgorithm.hh
         G4VecpssrKModel.hh
@@ -380,7 +378,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LowEnergyPolarizedCompton.cc
         G4LowEnergyPolarizedRayleigh.cc
         G4LowEnergyRayleigh.cc
-        G4ModifiedTsai.cc
         G4OrlicLiCrossSection.cc
         G4PaulKCrossSection.cc
         G4Penelope08ComptonModel.cc
@@ -421,7 +418,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4ShellEMDataSet.cc
         G4ShellVacancy.cc
         G4teoCrossSection.cc
-        G4VBremAngularDistribution.cc
         G4VCrossSectionHandler.cc
         G4VecpssrKModel.cc
         G4VecpssrLiModel.cc
