@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-09-29 20:49:33 bmorgan Exp $
+# $Id: sources.cmake,v 1.4 2010-10-26 09:45:09 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -62,6 +62,8 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableManager.hh
         G4MscStepLimitType.hh
         G4VAtomDeexcitation.hh
+        G4VBremAngularDistribution.hh
+        G4VEmAngularDistribution.hh
         G4VEmFluctuationModel.hh
         G4VEmModel.hh
         G4VEmProcess.hh
@@ -87,6 +89,8 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4LossTableBuilder.cc
         G4LossTableManager.cc
         G4VAtomDeexcitation.cc
+        G4VBremAngularDistribution.cc
+        G4VEmAngularDistribution.cc
         G4VEmFluctuationModel.cc
         G4VEmModel.cc
         G4VEmProcess.cc
