@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.10 2010-06-01 13:34:21 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.11 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
       FormFactor[j] = constn*x*x;
     } 
   }
+  currentMaterial = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

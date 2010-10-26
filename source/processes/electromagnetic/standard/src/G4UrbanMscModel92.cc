@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel92.cc,v 1.1 2009-11-01 13:05:01 vnivanch Exp $
+// $Id: G4UrbanMscModel92.cc,v 1.2 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,6 +165,14 @@ G4UrbanMscModel92::G4UrbanMscModel92(const G4String& nam)
   inside        = false;  
   insideskin    = false;
 
+  skindepth = skin*stepmin;
+
+  mass = proton_mass_c2;
+  charge = ChargeSquare = 1.0;
+  currentKinEnergy = currentRadLength = lambda0 = lambdaeff = tPathLength 
+    = zPathLength = par1 = par2 = par3 = 0;
+
+  currentMaterialIndex = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

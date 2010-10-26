@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc,v 1.2 2010-09-28 15:50:00 vnivanch Exp $
+// $Id: G4alphaIonisation.cc,v 1.3 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,6 +72,7 @@ G4alphaIonisation::G4alphaIonisation(const G4String& name)
   //  SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
+  eth = 8*MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.5 2010-06-25 09:41:44 gunter Exp $
+// $Id: G4UrbanMscModel93.cc,v 1.6 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -164,6 +164,13 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
+
+  skindepth = skin*stepmin;
+
+  mass = proton_mass_c2;
+  charge = ChargeSquare = 1.0;
+  currentKinEnergy = currentRadLength = lambda0 = lambdaeff = tPathLength 
+    = zPathLength = par1 = par2 = par3 = 0;
 
 }
 

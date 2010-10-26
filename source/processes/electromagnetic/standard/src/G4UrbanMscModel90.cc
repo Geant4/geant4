@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.cc,v 1.13 2009-04-10 18:10:58 vnivanch Exp $
+// $Id: G4UrbanMscModel90.cc,v 1.14 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -92,6 +92,15 @@ G4UrbanMscModel90::G4UrbanMscModel90(const G4String& nam)
   theManager    = G4LossTableManager::Instance(); 
   inside        = false;  
   insideskin    = false;
+
+  skindepth = skin*stepmin;
+
+  mass = proton_mass_c2;
+  charge = 1.0;
+  currentKinEnergy = currentRange = currentRadLength = masslimite = masslimitmu 
+    = lambda0 = lambdaeff = tPathLength = zPathLength = par1 = par2 = par3 = 0;
+
+  currentMaterialIndex = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,7 +113,7 @@ G4UrbanMscModel90::~G4UrbanMscModel90()
 void G4UrbanMscModel90::Initialise(const G4ParticleDefinition* p,
 				   const G4DataVector&)
 {
-  skindepth     = skin*stepmin;
+  skindepth = skin*stepmin;
   if(isInitialized) return;
 
   // set values of some data members

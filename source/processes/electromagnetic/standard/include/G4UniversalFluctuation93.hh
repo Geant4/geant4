@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation93.hh,v 1.1 2010-06-14 11:32:41 vnivanch Exp $
+// $Id: G4UniversalFluctuation93.hh,v 1.2 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,7 +66,7 @@ class G4UniversalFluctuation93 : public G4VEmFluctuationModel
 
 public:
 
-  G4UniversalFluctuation93(const G4String& nam = "UniFluc");
+  G4UniversalFluctuation93(const G4String& nam = "UniFluc93");
 
   virtual ~G4UniversalFluctuation93();
 

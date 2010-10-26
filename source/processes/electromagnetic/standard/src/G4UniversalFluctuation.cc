@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.27 2010-08-12 11:05:24 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.28 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,6 +90,9 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
 {
   lastMaterial = 0;
 
+  particleMass = chargeSquare = ipotFluct = electronDensity = f1Fluct = f2Fluct 
+    = e1Fluct = e2Fluct = e1LogFluct = e2LogFluct = ipotLogFluct = e0 = esmall 
+    = e1 = e2 = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,10 +125,9 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   // shortcut for very very small loss (out of validity of the model)
   //
-  if (meanLoss < minLoss)
-    return meanLoss;
+  if (meanLoss < minLoss) { return meanLoss; }
 
-  if(!particle) InitialiseMe(dp->GetDefinition());
+  if(!particle) { InitialiseMe(dp->GetDefinition()); }
 
   G4double tau   = dp->GetKineticEnergy()/particleMass;
   G4double gam   = tau + 1.0;

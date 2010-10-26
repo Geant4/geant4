@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.60 2010-06-01 11:13:31 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.61 2010-10-26 10:06:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,10 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   theManager = G4LossTableManager::Instance();
   fG4pow = G4Pow::GetInstance();
   wokvi = new G4WentzelOKandVIxSection();
+
+  preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange = xtsec = 0;
+  currentMaterialIndex = 0;
+  cosThetaMax = cosTetMaxNuc = 1.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
