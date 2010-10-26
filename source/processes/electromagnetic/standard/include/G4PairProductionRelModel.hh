@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh,v 1.6 2010-10-14 15:17:48 vnivanch Exp $
+// $Id: G4PairProductionRelModel.hh,v 1.7 2010-10-26 09:06:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -63,7 +63,7 @@ class G4PairProductionRelModel : public G4VEmModel
 public:
 
   G4PairProductionRelModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "Bethe-Heitler");
+			   const G4String& nam = "Bethe-Heitler-Rel");
  
   virtual ~G4PairProductionRelModel();
 
@@ -87,7 +87,7 @@ public:
                                 const G4Material*,G4double);
 
   // * fast inline functions *
-  inline void SetCurrentElement(const G4double);
+  inline void SetCurrentElement(G4double /*Z*/);
 
   // set / get methods
   inline void SetLPMconstant(G4double val);
@@ -124,13 +124,6 @@ protected:
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
   G4ParticleChangeForGamma* fParticleChange;
-  G4PhysicsTable*           theCrossSectionTable; 
-
-  G4double                  lowGammaEnergy;
-  G4double                  highGammaEnergy;
-
-  G4int                     nbins;
-  size_t                    indexZ[120];
 
   G4double fLPMconstant;
   G4bool   fLPMflag;
@@ -192,7 +185,7 @@ G4bool G4PairProductionRelModel::LPMflag() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4PairProductionRelModel::SetCurrentElement(const G4double Z)
+inline void G4PairProductionRelModel::SetCurrentElement(G4double Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
