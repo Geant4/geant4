@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.33 2010-10-26 13:26:54 antoni Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.34 2010-10-26 16:25:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -380,16 +380,22 @@ void G4NistMaterialBuilder::SetVerbose(G4int val)
 
 void G4NistMaterialBuilder::ListMaterials(const G4String& mnam)
 {
-  if (mnam == "simple")        { ListNistSimpleMaterials(); }
-  else if (mnam == "compound") { ListNistCompoundMaterials(); }
-  else if (mnam == "hep")      { ListHepMaterials(); }
-  else if (mnam == "space")    { ListSpaceMaterials(); }
+  if (mnam == "simple")           { ListNistSimpleMaterials(); }
+  else if (mnam == "compound")    { ListNistCompoundMaterials(); }
+  else if (mnam == "hep")         { ListHepMaterials(); }
+  else if (mnam == "space")       { ListSpaceMaterials(); }
+  else if (mnam == "biochemical") { ListBioChemicalMaterials(); }
 
   else if (mnam == "all") {
     ListNistSimpleMaterials();
     ListNistCompoundMaterials();
     ListHepMaterials();
     ListSpaceMaterials();
+    ListBioChemicalMaterials();
+
+  } else {
+    G4cout << "### G4NistMaterialBuilder::ListMaterials: Warning " 
+	   << mnam << " list is not known" << G4endl;
   }
 }
 
@@ -440,7 +446,20 @@ void G4NistMaterialBuilder::ListSpaceMaterials()
   G4cout << "=======================================================" << G4endl;
   G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
   G4cout << "=======================================================" << G4endl;
-  for (G4int i=nHEP; i<nMaterials; ++i) {DumpMix(i);}
+  for (G4int i=nHEP; i<nSpace; ++i) {DumpMix(i);}
+  G4cout << "=======================================================" << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistMaterialBuilder::ListBioChemicalMaterials()
+{
+  G4cout << "=======================================================" << G4endl;
+  G4cout << "###          Bio-Chemical Materials                  ##" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  for (G4int i=nSpace; i<nMaterials; ++i) {DumpMix(i);}
   G4cout << "=======================================================" << G4endl;
 }
 
@@ -640,6 +659,7 @@ void G4NistMaterialBuilder::Initialise()
   NistCompoundMaterials();
   HepAndNuclearMaterials();
   SpaceMaterials();
+  BioChemicalMaterials();
 
   if (verbose > 1) { ListMaterials("all"); }
 }
@@ -1778,82 +1798,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);
 
-
   nNIST = nMaterials;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4NistMaterialBuilder::BiochemicalMaterials()
-{
-
-  // DNA_Nucleobase (Nucleobase-1H)
-  AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
-  AddElementByAtomCount("H",4 );
-  AddElementByAtomCount("C",5 );
-  AddElementByAtomCount("N",5 );
-
-  AddMaterial("G4_DNA_GUANINE", 1, 0, 72. ,4);
-  AddElementByAtomCount("H",4 );
-  AddElementByAtomCount("C",5 );
-  AddElementByAtomCount("N",5 );
-  AddElementByAtomCount("O",1 );
-
-  AddMaterial("G4_DNA_CYTOSINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 4);
-  AddElementByAtomCount("C", 4);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 1);
-
-  AddMaterial("G4_DNA_THYMINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 5);
-  AddElementByAtomCount("C", 5);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 2);
-
-  AddMaterial("G4_DNA_URACIL", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 4);
-  AddElementByAtomCount("C", 4);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 2);
-
-
-  // DNA_Nucleoside (Nucleoside-3H)
-  AddMaterial("G4_DNA_ADENOSINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 4);
-
-  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 72. ,4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 5);
-
-  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 5);
-
-  AddMaterial("G4_DNA_URIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 9);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 6);
-
-  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 11);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 6);
-
-  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 72., 2);
-  AddElementByAtomCount("P", 1);
-  AddElementByAtomCount("O", 3);
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1909,7 +1854,6 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
 void G4NistMaterialBuilder::SpaceMaterials()
 {
   // density in g/cm3
-
   AddMaterial("G4_KEVLAR" , 1.44, 0, 0.0, 4);
   AddElementByAtomCount("C", 14);
   AddElementByAtomCount("H", 10);
@@ -1925,6 +1869,79 @@ void G4NistMaterialBuilder::SpaceMaterials()
   AddElementByAtomCount("C", 4);
   AddElementByAtomCount("H", 5);
   AddElementByAtomCount("Cl", 1);
+
+  nSpace = nMaterials;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4NistMaterialBuilder::BioChemicalMaterials()
+{
+  // DNA_Nucleobase (Nucleobase-1H)
+  AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
+  AddElementByAtomCount("H",4 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
+
+  AddMaterial("G4_DNA_GUANINE", 1, 0, 72. ,4);
+  AddElementByAtomCount("H",4 );
+  AddElementByAtomCount("C",5 );
+  AddElementByAtomCount("N",5 );
+  AddElementByAtomCount("O",1 );
+
+  AddMaterial("G4_DNA_CYTOSINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 1);
+
+  AddMaterial("G4_DNA_THYMINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 5);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
+  AddMaterial("G4_DNA_URACIL", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 4);
+  AddElementByAtomCount("C", 4);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 2);
+
+  // DNA_Nucleoside (Nucleoside-3H)
+  AddMaterial("G4_DNA_ADENOSINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 5);
+  AddElementByAtomCount("O", 4);
+
+  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 72. ,4);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 5);
+  AddElementByAtomCount("O", 5);
+
+  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 9);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 5);
+
+  AddMaterial("G4_DNA_URIDINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 9);
+  AddElementByAtomCount("C", 9);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 6);
+
+  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 72., 4);
+  AddElementByAtomCount("H", 11);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 6);
+
+  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 72., 2);
+  AddElementByAtomCount("P", 1);
+  AddElementByAtomCount("O", 3);
+
 }
 
 

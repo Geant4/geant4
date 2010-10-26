@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.16 2010-04-29 11:11:56 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.hh,v 1.17 2010-10-26 16:25:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistMaterialBuilder_h
@@ -126,6 +126,7 @@ public:
   void ListNistCompoundMaterials();
   void ListHepMaterials();
   void ListSpaceMaterials();
+  void ListBioChemicalMaterials();
 
   // access to the list of names of Geant4 predefined materials
   //
@@ -142,6 +143,7 @@ private:
   void NistCompoundMaterials();
   void HepAndNuclearMaterials();
   void SpaceMaterials();
+  void BioChemicalMaterials();
 
   // add parameters of material from NIST DB to internal vectors
   // density in g/cm3, mean ionisation potential in eV
@@ -180,6 +182,7 @@ private:
   G4int                  nElementary;
   G4int                  nNIST;
   G4int                  nHEP;
+  G4int                  nSpace;
 
   std::vector<G4String>  names;
   std::vector<G4String>  chFormulas;
