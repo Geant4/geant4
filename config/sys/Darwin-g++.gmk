@@ -79,10 +79,10 @@ ifeq ($(G4SYSTEM),Darwin-g++)
         ifeq ($(DARWIN_VERSION),10)
         # the following lines are for building on MacOSX > 10.5
           OGLLIBS := -F/System/Library/Frameworks -framework OpenGL -framework AGL -L$(OGLHOME)/lib -lGLU -lGL
-        else
-          OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
         endif
       endif
+    else
+      OGLLIBS := -L$(OGLHOME)/lib -lGLU -lGL
     endif
   endif
 
