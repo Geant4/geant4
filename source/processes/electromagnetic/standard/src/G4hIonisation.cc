@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.85 2010-06-04 09:22:14 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.86 2010-10-26 10:42:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,6 +115,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
   SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
+  eth = 2*MeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
