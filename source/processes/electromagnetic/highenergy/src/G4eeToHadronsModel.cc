@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.9 2008-07-10 18:06:39 vnivanch Exp $
+// $Id: G4eeToHadronsModel.cc,v 1.10 2010-10-26 14:15:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,6 +75,12 @@ G4eeToHadronsModel::G4eeToHadronsModel(G4Vee2hadrons* m, G4int ver,
     verbose(ver)
 {
   theGamma = G4Gamma::Gamma();
+  highKinEnergy = HighEnergyLimit();
+  lowKinEnergy  = LowEnergyLimit();
+  emin = lowKinEnergy;
+  emax = highKinEnergy;
+  peakKinEnergy = highKinEnergy;
+  epeak = emax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -91,7 +97,7 @@ G4eeToHadronsModel::~G4eeToHadronsModel()
 void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
                                     const G4DataVector&)
 {
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   isInitialised  = true;
 
   // Lab system

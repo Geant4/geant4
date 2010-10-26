@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.10 2010-06-04 10:23:31 vnivanch Exp $
+// $Id: G4hhIonisation.cc,v 1.11 2010-10-26 14:15:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,24 +101,25 @@ G4double G4hhIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
 void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
                                                  const G4ParticleDefinition* bpart)
 {
-  if(isInitialised) return;
+  if(isInitialised) { return; }
 
   theParticle = part;
-  if(bpart) G4cout << "G4hhIonisation::InitialiseEnergyLossProcess WARNING: no "
-                   << "base particle should be defined for the process "
-		   << GetProcessName() << G4endl;
-
+  if(bpart) { 
+    G4cout << "G4hhIonisation::InitialiseEnergyLossProcess WARNING: no "
+	   << "base particle should be defined for the process "
+	   << GetProcessName() << G4endl; 
+  }
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
   //G4double q = theParticle->GetPDGCharge();
   mass  = theParticle->GetPDGMass();
   ratio = electron_mass_c2/mass;
-  eth = 2.0*MeV*mass/proton_mass_c2;
+  G4double eth = 2*MeV*mass/proton_mass_c2;
   flucModel = new G4BohrFluctuations();
 
   G4int nm = 1;
 
-  minKinEnergy = MinKinEnergy();
+  G4double minKinEnergy = MinKinEnergy();
 
   if(eth > minKinEnergy) {
     G4VEmModel* em;

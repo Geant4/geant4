@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc,v 1.7 2008-10-16 14:29:48 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.cc,v 1.8 2010-10-26 14:15:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -52,6 +52,7 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
     CrossSecFactor(1.)
 { 
   SetProcessSubType(15);
+  MeanFreePath = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
