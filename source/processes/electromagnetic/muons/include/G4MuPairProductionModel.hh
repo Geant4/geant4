@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.28 2009-02-20 14:48:16 vnivanch Exp $
+// $Id: G4MuPairProductionModel.hh,v 1.29 2010-10-26 13:52:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,7 +79,6 @@ public:
   virtual ~G4MuPairProductionModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
 			
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
@@ -171,15 +170,15 @@ private:
   G4int ntdat;
   G4int nbiny;
   size_t nmaxElements;
-  static G4double zdat[5],adat[5],tdat[8];
-  G4double ya[1001],proba[5][8][1001];
+  static G4double zdat[5], adat[5], tdat[8];
+  G4double ya[1001], proba[5][8][1001];
 
   G4double ymin;
   G4double ymax;
   G4double dy;
 
   G4bool  samplingTablesAreFilled;
-  std::vector<G4double>   partialSum;
+  std::vector<G4double> partialSum;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
