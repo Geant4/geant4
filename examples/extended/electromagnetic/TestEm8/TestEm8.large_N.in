@@ -12,16 +12,14 @@
 /testem/phys/addPhysics  pai
 #/testem/phys/addPhysics  standard
 #
-#  hist file name
-#
-/testem/histo/fileName testem8ln
-#
 /testem/phys/setNbinsE 20
 /testem/phys/setMaxE 0.060  MeV  
 #
 /run/initialize
 #
-#/gun/particle e-
+/run/setCut  1 mm
+/run/setCutForRegion GasDetector 0.2 mm
+/run/particle/dumpCutValues
 #
 /gun/particle proton
 #

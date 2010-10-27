@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.20 2010-09-08 09:12:10 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.21 2010-10-27 14:52:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -80,9 +80,9 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   cutForPositron  = defaultCutValue;
   cutForProton    = defaultCutValue;
 
-  stepMaxProcess  = 0;
-
   pMessenger = new PhysicsListMessenger(this);
+
+  stepMaxProcess = new StepMax();
 
   // Decay Physics is always defined
   generalPhysicsList = new G4DecayPhysics();
@@ -187,7 +187,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
-  stepMaxProcess = new StepMax();
 
   theParticleIterator->reset();
   while ((*theParticleIterator)())

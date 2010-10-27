@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2010-10-27 14:52:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -57,19 +57,19 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   GasMaterCmd->SetGuidance("Select material of the detector.");
   GasMaterCmd->SetParameterName("gmat",true);
   GasMaterCmd->SetDefaultValue("Argon");
-  GasMaterCmd->AvailableForStates(G4State_Idle);
+  GasMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   WindowMaterCmd = new G4UIcmdWithAString("/testem/setWindowMat",this);
   WindowMaterCmd->SetGuidance("Select material of the window.");
   WindowMaterCmd->SetParameterName("wmat",true);
   WindowMaterCmd->SetDefaultValue("Mylar");
-  WindowMaterCmd->AvailableForStates(G4State_Idle);
+  WindowMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   WorldMaterCmd = new G4UIcmdWithAString("/testem/setWorldMat",this);
   WorldMaterCmd->SetGuidance("Select material of the world.");
   WorldMaterCmd->SetParameterName("worldmat",true);
   WorldMaterCmd->SetDefaultValue("empty");
-  WorldMaterCmd->AvailableForStates(G4State_Idle);
+  WorldMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   GasThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/setGasThick",this);
   GasThickCmd->SetGuidance("Set thickness of the detector");
@@ -77,7 +77,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   GasThickCmd->SetUnitCategory("Length");
   GasThickCmd->SetDefaultUnit("mm");
   GasThickCmd->SetRange("SizeZ>0.");
-  GasThickCmd->AvailableForStates(G4State_Idle);
+  GasThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   GasRadCmd = new G4UIcmdWithADoubleAndUnit("/testem/setGasRad",this);
   GasRadCmd->SetGuidance("Set radius of the detector");
@@ -85,7 +85,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   GasRadCmd->SetUnitCategory("Length");
   GasRadCmd->SetDefaultUnit("mm");
   GasRadCmd->SetRange("SizeR>0.");
-  GasRadCmd->AvailableForStates(G4State_Idle);
+  GasRadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   WinThickCmd = new G4UIcmdWithADoubleAndUnit("/testem/setWindowThick",this);
   WinThickCmd->SetGuidance("Set thickness of the window");
@@ -93,7 +93,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   WinThickCmd->SetUnitCategory("Length");
   WinThickCmd->SetDefaultUnit("mm");
   WinThickCmd->SetRange("delta>0.");
-  WinThickCmd->AvailableForStates(G4State_Idle);
+  WinThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   ionCmd = new G4UIcmdWithADoubleAndUnit("/testem/setPairEnergy",this);
   ionCmd->SetGuidance("Set energy per electron-ion pair for detector");
@@ -101,7 +101,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   ionCmd->SetUnitCategory("Energy");
   ionCmd->SetDefaultUnit("eV");
   ionCmd->SetRange("en>0.");
-  ionCmd->AvailableForStates(G4State_Idle);
+  ionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
 }
 

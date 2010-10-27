@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.1 2010-09-08 11:23:53 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2010-10-27 14:52:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -312,7 +312,8 @@ void DetectorConstruction::SetGasMaterial(const G4String& name)
   // create the material by its name
   if(!mat) { mat = G4NistManager::Instance()->FindOrBuildMaterial(name); }
 
-  if (mat) {
+  if (mat && mat != fGasMat) {
+    G4cout << "### New target material: " << mat->GetName() << G4endl;
     fGasMat = mat;
     if(fLogicDet) { 
       fLogicDet->SetMaterial(mat); 
@@ -331,7 +332,8 @@ void DetectorConstruction::SetContainerMaterial(const G4String& name)
   // create the material by its name
   if(!mat) { mat = G4NistManager::Instance()->FindOrBuildMaterial(name); }
 
-  if (mat) {
+  if (mat && mat != fWindowMat) {
+    G4cout << "### New material for container: " << mat->GetName() << G4endl;
     fWindowMat = mat;
     if(fLogicWind) { 
       fLogicWind->SetMaterial(mat); 
@@ -350,7 +352,8 @@ void DetectorConstruction::SetWorldMaterial(const G4String& name)
   // create the material by its name
   if(!mat) { mat = G4NistManager::Instance()->FindOrBuildMaterial(name); }
 
-  if (mat) {
+  if (mat && mat != fWorldMaterial) {
+    G4cout << "### New World material: " << mat->GetName() << G4endl;
     fWorldMaterial = mat;
     if(fLogicWorld) { 
       fLogicWorld->SetMaterial(mat); 

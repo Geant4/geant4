@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2010-09-28 19:07:32 vnivanch Exp $
+$Id: History,v 1.40 2010-10-27 14:52:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-10-10 V.Ivant (testem8-V09-03-06)
+- DetectorConstruction - added more printout
+- DetectorMessenger - fixed state (added G4State_PreInit)
+- PhysicsList - fixed UI commands for step limiter
 
 28-09-10 V.Ivant (testem8-V09-03-05)
 - GNUmakefile - added histclean option 
