@@ -299,6 +299,8 @@ examples                                         examples-V09-03-09
   o Fixed compilation warning; occurs only if G4ANALYSIS_USE not set.
 - extended/field/field04 (fieldex04-V09-03-02)
   o Included Mie scattering process and updated usage of G4PhysListFactory.
+- examples/extended/geometry/olap (olapex-V09-03-02)
+  o Fixed compilation warnings for unused parameters.
 - extended/hadronic/Hadr00 (exhadr00-V09-03-04)
   o Cleanup AIDA interface.
 - extended/hadronic/Hadr01 (exhadr01-V09-03-09)
