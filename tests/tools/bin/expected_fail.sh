@@ -111,7 +111,7 @@ EXPECTED_FAIL test29-run \
 #	x86_64-slc5-gcc43-dbg
 
 #newly in  testing Jul 2010, fail to run for graphics so far....
-EXPECTED_FAIL test201-run \
+NotRun-eXPECTED_FAIL test201-run \
 	slc4_amd64_gcc34	\
 	slc4_amd64_gcc34_dbg	\
 	slc4_ia32_gcc34		\
@@ -133,7 +133,7 @@ EXPECTED_FAIL test202-build \
 	i686-winxp-vc9-dbg
 	
 #newly in  testing Jul 2010, fail to run for graphics so far....
-EXPECTED_FAIL test202-run \
+NotRun-eXPECTED_FAIL test202-run \
 	slc4_amd64_gcc34	\
 	slc4_amd64_gcc34_dbg	\
 	slc4_ia32_gcc34		\
