@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.icc,v 1.23 2010-10-19 10:18:01 gcosmo Exp $
+// $Id: G4NavigationLevel.icc,v 1.24 2010-10-27 07:34:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                        
 // ----------------------------------------------------------------------
 
-#if defined G4ALLOC_EXPORT
+#if defined G4GEOM_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;

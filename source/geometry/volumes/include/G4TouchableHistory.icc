@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.icc,v 1.14 2010-10-19 10:18:01 gcosmo Exp $
+// $Id: G4TouchableHistory.icc,v 1.15 2010-10-27 07:34:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4TouchableHistory inline implementation
 // ----------------------------------------------------------------------
 
-#if defined G4ALLOC_EXPORT
+#if defined G4GEOM_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
