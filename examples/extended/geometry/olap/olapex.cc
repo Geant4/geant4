@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: olapex.cc,v 1.4 2010-05-12 20:38:24 allison Exp $
+// $Id: olapex.cc,v 1.5 2010-10-27 10:40:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,14 +70,13 @@ int main(int argc,char** argv) {
 
   G4RunManager * runManager = new G4RunManager;
   
-  // particle-generator must be the first useraction!!!
-  runManager->SetUserAction(new OlapGenerator);
-  
   // put the user-geometry here
   G4VUserDetectorConstruction * origGeom = new RandomDetector(0);
   OlapDetConstr * olapGeom = new OlapDetConstr(origGeom);
   runManager->SetUserInitialization(olapGeom);
+
   runManager->SetUserInitialization(new OlapPhysicsList); 
+  runManager->SetUserAction(new OlapGenerator);
   
   // initialize G4
   runManager->Initialize();
