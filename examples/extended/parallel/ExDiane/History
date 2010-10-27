@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2010-06-06 05:06:03 perl Exp $
+$Id: History,v 1.9 2010-10-27 12:24:37 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.8 2010-06-06 05:06:03 perl Exp $
 
                       Category History file
                       ---------------------
+
+27.10.2010 - Gunter Folger (ExDiane-V09-03-01)
+- Use new MultipliScattering class; code still uses old lowE EM classes
 
 03.06.2010 - Joseph Perl (ExDiane-V09-03-00)
 - Updated vis usage
