@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2010-10-19 09:54:03 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2010-10-27 08:10:13 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -DG4ALLOC_EXPORT
+CPPFLAGS += -DG4DIGI_ALLOC_EXPORT
 CPPFLAGS += \
 	    -I$(G4BASE)/global/HEPRandom/include \
 	    -I$(G4BASE)/global/management/include \

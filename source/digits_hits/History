@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2010-10-19 09:56:03 gcosmo Exp $
+$Id: History,v 1.46 2010-10-27 08:10:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 27, 2010, G.Cosmo (digits_hits-V09-03-03)
+- Restored DLL setup as originally. Withdrawn DLL setup changes in last tag.
 
 Oct 19, 2010, G.Cosmo (digits_hits-V09-03-02)
 - Replaced G4DIGI_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
