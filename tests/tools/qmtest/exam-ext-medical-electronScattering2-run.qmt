@@ -5,14 +5,14 @@
     <text>.*</text>
   </argument>
   <argument name="timeout">
-    <integer>300</integer>
+    <integer>3000</integer>
   </argument>
   <argument name="stdout">
     <text/>
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-ext-hadronic-hadr00-build</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-ext-medical-electronScattering-build2</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
@@ -25,7 +25,9 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/hadronic/Hadr00;$G4BIN/$G4SYSTEM/hadr00 hadr00.in</text>
+    <text>cd
+   
+$G4INSTALL/examples/extended/medical/electronScattering2;$G4BIN/$G4SYSTEM/electronScattering2 ??.in</text>
   </argument>
   <argument name="stderr">
     <text/>

@@ -12,7 +12,7 @@
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-ext-hadronic-hadr00-build</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-ext-field-field05-build</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/hadronic/Hadr00;$G4BIN/$G4SYSTEM/hadr00 hadr00.in</text>
+    <text>cd $G4INSTALL/examples/extended/field/field04;$G4BIN/$G4SYSTEM/field05 field05.in</text>
   </argument>
   <argument name="stderr">
     <text/>

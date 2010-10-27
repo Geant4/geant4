@@ -5,7 +5,7 @@
     <text>.*</text>
   </argument>
   <argument name="timeout">
-    <integer>3000</integer>
+    <integer>300</integer>
   </argument>
   <argument name="stdout">
     <text/>

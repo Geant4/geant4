@@ -68,19 +68,25 @@
       <text>exam-ext-eventgenerator-particleGun-r2-run</text>
       <text>exam-ext-eventgenerator-particleGun-r3-run</text>
       <text>exam-ext-eventgenerator-particleGun-r4-run</text>
+      <text>exam-ext-exoticphysics-monopole-runr</text>
       <text>exam-ext-field-field01-run</text>
       <text>exam-ext-field-field02-run</text>
       <text>exam-ext-field-field03-run</text>
       <text>exam-ext-field-field04-run</text>
+      <text>exam-ext-field-field05-run</text>
       <text>exam-ext-g3tog4-clgeometry-run</text>
       <text>exam-ext-g3tog4-cltog4-run</text>
+      <text>exam-ext-hadronic-hadr00-run</text>
       <text>exam-ext-hadronic-hadr01-run</text>
+      <text>exam-ext-medical-dicom-run</text>
       <text>exam-ext-medical-electronScattering-run</text>
       <text>exam-ext-medical-fanocavity-run</text>
       <text>exam-ext-medical-fanocavity2-run</text>
       <text>exam-ext-medical-gammatherapy-run</text>
       <text>exam-ext-optical-lxe-run</text>
       <text>exam-ext-optical-wls-run</text>
+      <text>exam-ext-parallel-exdiane-run</text>
+      <text>exam-ext-parameterisations-gflash-run</text>
       <text>exam-ext-persistency-gdml-g01-run</text>
       <text>exam-ext-persistency-gdml-g04-run</text>
       <text>exam-ext-polarisation-pol01-run</text>

@@ -38,19 +38,26 @@
       <text>exam-ext-errorpropagation-build</text>
       <text>exam-ext-eventgenerator-exgps-build</text>
       <text>exam-ext-eventgenerator-particleGun-build</text>
+      <text>exam-ext-exoticphysics-monopole-build</text>
       <text>exam-ext-field-field01-build</text>
       <text>exam-ext-field-field02-build</text>
       <text>exam-ext-field-field03-build</text>
       <text>exam-ext-field-field04-build</text>
+      <text>exam-ext-field-field05-build</text>
       <text>exam-ext-g3tog4-cltog4-build</text>
       <text>exam-ext-g3tog4-clgeometry-build</text>
+      <text>exam-ext-hadronic-hadr00-build</text>
       <text>exam-ext-hadronic-hadr01-build</text>
+      <text>exam-ext-medical-dicom-build</text>
       <text>exam-ext-medical-electronScattering-build</text>
+      <text>exam-ext-medical-electronScattering2-build</text>
       <text>exam-ext-medical-fanocavity-build</text>
       <text>exam-ext-medical-fanocavity2-build</text>
       <text>exam-ext-medical-gammatherapy-build</text>
       <text>exam-ext-optical-lxe-build</text>
       <text>exam-ext-optical-wls-build</text>
+      <text>exam-ext-parallel-exdiane-build</text>
+      <text>exam-ext-parameterisations-gflash-build</text>
       <text>exam-ext-persistency-gdml-g01-build</text>
       <text>exam-ext-persistency-gdml-g02-build</text>
       <text>exam-ext-persistency-gdml-g03-build</text>
