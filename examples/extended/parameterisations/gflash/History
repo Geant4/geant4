@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-06-06 05:09:17 perl Exp $
+$Id: History,v 1.6 2010-10-27 12:35:25 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-October 2010, Gunter Folger   (exgflash-V09-03-01)
+- Migrate to new MultipleScattering classes
+- fix compilation warning in ExGflashHit.hh on unused variable
 
 June 4, 2010, J.Perl (exgflash-V09-03-00)
 - Update vis usage
