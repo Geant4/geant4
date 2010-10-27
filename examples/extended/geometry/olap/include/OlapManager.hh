@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManager.hh,v 1.4 2006-06-29 17:22:08 gunter Exp $
+// $Id: OlapManager.hh,v 1.5 2010-10-27 10:25:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,7 @@ public:
    void registerNotification(OlapNotify*n) { theNotifs.insert(n); }
    void notifyNewWorld(G4LogicalVolume*);
    void notifyOlaps(const std::vector<OlapInfo*> &);
-   void deRegisterNotification(OlapNotify*n) { ; }
+   void deRegisterNotification(OlapNotify*) { ; }
    // FIXME: handle completly different in next redesign!
    std::map<G4LogicalVolume *, G4bool> NoOlapMap; 
 

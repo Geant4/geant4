@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.hh,v 1.4 2010-10-27 10:25:26 gcosmo Exp $
+// $Id: OlapEventAction.hh,v 1.5 2010-10-27 10:29:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,8 +57,9 @@ public:
 	    G4ThreeVector & p1,
 	    G4ThreeVector & p2,
 	    G4int a=0,
-	    G4LogicalVolume*) :
-	    hist1(h1), hist2(h2), v1(p1), v2(p2),axis(a) 
+	    G4LogicalVolume* original=0) :
+	    hist1(h1), hist2(h2), v1(p1), v2(p2),axis(a),
+            originalMother(original)
 	    {};
    
    ~OlapInfo();
