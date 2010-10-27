@@ -75,6 +75,12 @@ interfaces                                       interfaces-V09-03-12
 - G4UIQt: fixed bug on helpTree view; removed message about empty viewer.
   Fixed compilation warnings on Qt4.
 
+materials                                        materials-V09-03-09
+---------
+- Added DNA biochemical materials. Added G4_CYTOSINE, G4_THYMINE, G4_URACIL.
+- Fixed defects reported by Coverity tool, mainly related to initialization
+  of static data. Adopt G4 types wherever necessary. Some code formatting.
+
 particles                                        particles-V09-03-13
 ---------
 - Updated mass/width of muons, taus, mesons, and baryons to PDG-2010.
