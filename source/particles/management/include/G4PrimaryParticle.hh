@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.7 2010-10-19 12:44:06 gcosmo Exp $
+// $Id: G4PrimaryParticle.hh,v 1.8 2010-10-27 07:47:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -210,7 +210,7 @@ class G4PrimaryParticle
       }
 };
 
-#if defined G4ALLOC_EXPORT
+#if defined G4PARTICLES_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;

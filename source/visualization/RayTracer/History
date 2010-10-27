@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2010-10-19 12:52:36 gcosmo Exp $
+$Id: History,v 1.66 2010-10-27 08:00:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+27th October 2010  Gabriele Cosmo (raytracer-V09-03-04)
+- Restored DLL setup as originally. Withdrawn changes in last tag.
 
 19th October 2010  Gabriele Cosmo (raytracer-V09-03-03)
 - Replaced G4VIS_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported

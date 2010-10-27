@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2010-10-19 09:33:35 gcosmo Exp $
+$Id: History,v 1.146 2010-10-27 07:57:21 gcosmo Exp $
 $Name: not supported by cvs2svn $ 
 -------------------------------------------------------------------
 
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 October 2010 Gabriele Cosmo (tracking-V09-03-08)
+- Restored DLL setup as originally. Withdrawn changes in last tag.
 
 19 October 2010 Gabriele Cosmo (tracking-V09-03-07)
 - Replaced G4TRACKING_ALLOC_EXPORT flag with G4ALLOC_EXPORT for DLL exported
