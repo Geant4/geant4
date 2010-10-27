@@ -32,15 +32,12 @@ config                                           config-V09-03-11
 - Force definition of LDFLAGS in architecture.gmk to avoid occasional fatal
   clashes with settings in user's environment.
 
-event                                            event-V09-03-05
+event                                            event-V09-03-06
 -----
-- Replaced G4EVENT_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-  exported symbols.
+- Restored original DLL setup. No functional changes.
 
 geometry                                         geometry-V09-03-00
 --------
-- Replaced G4GEOM_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-  exported symbols.
 - management (geommng-V09-03-05)
   o Added Clone() virtual method to G4VSolid, to return a pointer to a
     dynamically allocated copy of the solid. To be used by Geant4-MT.
@@ -53,7 +50,7 @@ geometry                                         geometry-V09-03-00
   o Implemented Clone() virtual method for all solids, returning a pointer
     to a dynamically allocated copy of the solid. To be used by Geant4-MT.
 
-global                                           global-V09-03-19
+global                                           global-V09-03-20
 ------
 - Added class G4ConvergenceTester, moved from extended example N03Con,
   implementing a facility for estimating the quality of the simulation,
@@ -67,7 +64,7 @@ global                                           global-V09-03-19
 - Added dummy initialization of members in constructors for classes
   G4SliceTimer, G4ErrorPropagatorData.
 - Modified FPE handler to get correct SIGINFO data for error messages.
-- Replaced G4IOS_EXPORT flag with unified G4ALLOC_EXPORT for DLL
+- Replaced G4IOS_EXPORT flag with G4IOS_ALLOC_EXPORT for DLL
   exported symbols.
 
 interfaces                                       interfaces-V09-03-12
@@ -81,7 +78,7 @@ materials                                        materials-V09-03-09
 - Fixed defects reported by Coverity tool, mainly related to initialization
   of static data. Adopt G4 types wherever necessary. Some code formatting.
 
-particles                                        particles-V09-03-13
+particles                                        particles-V09-03-14
 ---------
 - Updated mass/width of muons, taus, mesons, and baryons to PDG-2010.
 - Removed anti_nuclei from shortlived; added anti_nuclei classes inside
@@ -95,8 +92,6 @@ particles                                        particles-V09-03-13
 - Added methods IsLightAntiIon() and GetLightAntiIon() to G4IonTable.
 - Modified reporttParticleTable().
 - Modified G4ParticleDefiniton::Dump() to print AtomicNumber/Mass.
-- Replaced G4PARTICLES_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-  exported symbols.
 
 persistency/ascii                                ascii-V09-03-02
 -----------------
@@ -247,26 +242,21 @@ processes/optical                                op-V09-03-05
 - Implemented Henyey-Greenstein phase functions.
 - Fix for long-standing problem report #207.
 
-run                                              run-V09-03-04
+run                                              run-V09-03-05
 ---
-- Replaced G4RUN_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-  exported symbols.
+- Restored original DLL setup. No functional changes.
 
-track                                            track-V09-03-07
+track                                            track-V09-03-08
 -----
 - Added method GetSecondaryInCurrentStep() in G4Step, providing the list of
   secondaries in the current step.
 - G4Step::GetSecondary() gives back a 'const G4TrackVector*', while
   G4Step::GetfSecondary() gives back non-const pointer
-- Replaced G4TRACK_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-  exported symbols.
 
-tracking                                         tracking-V09-03-07
+tracking                                         tracking-V09-03-08
 --------
 - Modified G4SteppingManager::GetSecondary() to return a
   'const G4TrackVector*'.
-- Replaced G4TRACKING_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-  exported symbols.
 
 visualization                                    vis-V09-03-09
 -------------
@@ -280,9 +270,6 @@ visualization                                    vis-V09-03-09
   o Many improvements to Qt.
 - OpenInventor, XXX:
   o Improved kernel visit trigger.
-- RayTracer (raytracer-V09-03-03)
-  o Replaced G4VIS_ALLOC_EXPORT flag with unified G4ALLOC_EXPORT for DLL
-    exported symbols.
 
 data
 ----
