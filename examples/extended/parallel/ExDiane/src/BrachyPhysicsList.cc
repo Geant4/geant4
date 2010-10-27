@@ -32,7 +32,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.3 2006-06-29 17:33:29 gunter Exp $
+// $Id: BrachyPhysicsList.cc,v 1.4 2010-10-27 12:25:07 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhysicsList.hh"
@@ -92,7 +92,7 @@ void BrachyPhysicsList::ConstructProcess()
   ConstructEM();
 }
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 // gamma
 #include "G4LowEnergyRayleigh.hh" 
 #include "G4LowEnergyPhotoElectric.hh"
@@ -130,13 +130,13 @@ void BrachyPhysicsList::ConstructEM()
       loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
       loweBrem -> SetAngularGenerator("tsai");
     
-      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager -> AddProcess(new G4eMultipleScattering, -1, 1,1);
       pmanager -> AddProcess(loweIon,     -1, 2,2);
       pmanager -> AddProcess(loweBrem,    -1,-1,3);      
       
     } else if (particleName == "e+") {
       //positron      
-      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager -> AddProcess(new G4eMultipleScattering, -1, 1,1);
       pmanager -> AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager -> AddProcess(new G4eplusAnnihilation,   0,-1,4);      
