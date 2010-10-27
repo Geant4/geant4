@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.17 2010-10-19 12:25:10 gcosmo Exp $
+// $Id: G4strstreambuf.hh,v 1.18 2010-10-27 07:40:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ====================================================================
 //
@@ -40,7 +40,7 @@
 
 class G4strstreambuf;
 
-#if defined G4ALLOC_EXPORT
+#if defined G4IOS_ALLOC_EXPORT
 extern G4DLLEXPORT G4strstreambuf G4coutbuf;
 extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
 #else
