@@ -194,12 +194,8 @@ processes/electromagnetic/xrays                  xrays-V09-03-03
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-03-12)
-  o Migration to integer Z and A in all cross section data sets; replaced
-    IsZAApplicable() with IsIsoApplicable() and GetIsoZACrossSection() with
-    GetZandACrossSection().
-  o G4VComponentCrossSection: use G4ParticleDefinition and kinetic energy
-    instead of G4DynamicParticle.
+- models/abrasion (had-abrasion-V09-03-00)
+  o Removed several unused #includes in G4WilsonAbrasionModel source.
 - models/cascade (hadr-casc-V09-03-84)
   o Major reorganization of G4NucleiModel::generateModel() code.
     Added scaling factors ("units") for nuclear radii and cross-sections,
@@ -215,7 +211,7 @@ processes/hadronic
     passing and copying of vectors; fill NuclearLevel directly by Manager.
     Modified G4ContinuumGammaTransition accordingly.
   o G4DiscreteGammaTransition: use const-ref for G4NuclerLevel data member.
-- models/incl (hadr-incl-V09-03-03)
+- models/incl (hadr-incl-V09-03-04)
   o Refactored INCL input data structure to use a new class G4InclInput
   o Access to input data only through accessor methods.
   o INCL now uses integer A and Z internally as well as in the interface.
@@ -291,6 +287,10 @@ examples                                         examples-V09-03-09
   o Fixed compilation error on Windows.
 - extended/electromagnetic/TestEm7 (testem7-V09-03-06)
   o PhysListEmStandardNR: removed obsolete set of nuclear stopping flag.
+- extended/electromagnetic/TestEm8 (testem8-V09-03-06)
+  o DetectorConstruction: added more printout.
+  o DetectorMessenger: fixed state; added G4State_PreInit.
+  o PhysicsList: fixed UI commands for step limiter.
 - extended/electromagnetic/TestEm14 (testem14-V09-03-04)
 - extended/electromagnetic/TestEm16 (testem16-V09-03-03)
   o SteppingAction: use const pointers for step/track objects.
@@ -307,6 +307,8 @@ examples                                         examples-V09-03-09
   o PhysicsList: removed TRV physics lists and cleanup elastic.
     Removed unused headers and double definition of QGSP_BIC_EMY.
   o Histo: use default options for AIDA.
+- extended/medical/electronScattering2 (exampleES2-V09-03-01)
+  o Fixed compilation warning in ElectronBenchmarkDetector.
 - extended/medical/fanoCavity (fano-V09-03-04)
 - extended/medical/fanoCavity2 (fano2-V09-03-04)
   o Corrected initialisation of 3-vector in constructor.
@@ -316,6 +318,11 @@ examples                                         examples-V09-03-09
   o Cleanup AIDA histograms and analysis.
 - extended/optical/wls (WLS-V09-03-03)
   o Included Mie scattering process and updated usage of G4PhysListFactory.
+- extended/parallel/ExDiane (ExDiane-V09-03-01)
+  o Migrated to use particle-based multiple-scattering processes.
+- extended/parameterisations/gflash (exgflash-V09-03-02)
+  o Added default production cut to region crystals to shut down
+    warning on stderr. Fixed also some compilation warnings
 - extended/persistency/gdml (gdmlEx-V09-03-00)
 - extended/persistency/gdml/G01 (G01-V09-03-05)
   o Introduced G4UIExecutive.
@@ -340,6 +347,8 @@ examples                                         examples-V09-03-09
 tests                                            tests-V09-03-09
 -----
 - Updated reference outputs and tools.
+- test19 (test19-V09-03-07)
+  o Fixed usage of G4ThreeVector.
 - test30 (test30-V09-03-07)
   o Updated according to interface change for projectile ions.
   o Fixed target mass for CHIPS.
