@@ -376,7 +376,7 @@ int main()
   G4RunManager* runManager = new G4RunManager;
   runManager->SetUserInitialization(new Test19PhysicsList);
   Test19MagneticField* fpMagField = new Test19MagneticField();
-  G4double fieldValue=10.*tesla/3.;  // For all tests the B-field=(3.333*tesla, 0., 0.) 
+  G4ThreeVector fieldValue(10.*tesla/3.,0.,0.);  // For all tests the B-field=(3.333*tesla, 0., 0.) 
   fpMagField->SetFieldValue(fieldValue);
   G4StateManager::GetStateManager()->SetNewState(G4State_Init); // To let create ions
 #ifdef debug
