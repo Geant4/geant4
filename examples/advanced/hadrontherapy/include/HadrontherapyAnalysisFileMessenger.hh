@@ -70,7 +70,7 @@ private:
    */ 
   G4UIcmdWithABool *secondariesCmd; 
 #ifdef G4ANALYSIS_USE_ROOT
-  G4UIcmdWithAString *FileNameCmd;
+  G4UIcmdWithAString *FileNameCmd, *DoseMatrixCmd;
 #endif
 };
 

@@ -46,6 +46,11 @@ HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(Hadronthe
   secondariesCmd -> SetGuidance("Set if dose/fluence for the secondaries are written"); 
   secondariesCmd -> AvailableForStates(G4State_Idle, G4State_PreInit);
 
+  DoseMatrixCmd = new G4UIcmdWithAString("/analysis/writeDoseFile",this);
+  DoseMatrixCmd->SetGuidance("Write the ASCII filename for the dose-fluence");
+  DoseMatrixCmd->SetDefaultValue("Dose.out");
+  DoseMatrixCmd->SetParameterName("choice",true); 
+
   // With this messenger you can:
   // give a name to the generated .root file
   // One can use this messenger to define a different .root file name other then the default one 
@@ -56,12 +61,14 @@ HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(Hadronthe
   FileNameCmd->SetParameterName("choice",true); ///<doc did not say what second boolean really does
   FileNameCmd->AvailableForStates(G4State_Idle,G4State_PreInit);
 #endif
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
 {
   delete secondariesCmd; 
+  delete DoseMatrixCmd; 
 #ifdef G4ANALYSIS_USE_ROOT
   delete FileNameCmd;
 #endif
@@ -72,14 +79,25 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
 { 
     if (command == secondariesCmd)
     {
-      if (HadrontherapyMatrix::GetInstance())
-	  HadrontherapyMatrix::GetInstance() -> secondaries = secondariesCmd -> GetNewBoolValue(newValue);
+	if (HadrontherapyMatrix::GetInstance())
+	    HadrontherapyMatrix::GetInstance() -> secondaries = secondariesCmd -> GetNewBoolValue(newValue);
     }
-#ifdef G4ANALYSIS_USE_ROOT
-    if (command == FileNameCmd)
-    {
-	AnalysisManager->SetAnalysisFileName(newValue);
-    }
-#endif
-}
 
+    else if (command == DoseMatrixCmd) // Filename can be passed here TODO 
+    { 
+	if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
+	{
+	    pMatrix -> TotalEnergyDeposit(); 
+	    pMatrix -> StoreDoseFluenceAscii(newValue);
+#ifdef G4ANALYSIS_USE_ROOT
+	    pMatrix -> StoreDoseFluenceRoot();
+#endif
+	}
+#ifdef G4ANALYSIS_USE_ROOT
+	else if (command == FileNameCmd)
+	{
+	    AnalysisManager->SetAnalysisFileName(newValue);
+	}
+#endif
+    }
+}

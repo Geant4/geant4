@@ -103,7 +103,7 @@ public:
   void StoreDoseData();
 
   // Store all data (except the total dose) to ONE filename
-  void StoreDoseFluenceAscii();
+  void StoreDoseFluenceAscii(G4String filename = "");
 
 #ifdef G4ANALYSIS_USE_ROOT
   void StoreDoseFluenceRoot();

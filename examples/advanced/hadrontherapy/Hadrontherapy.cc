@@ -203,6 +203,17 @@ int main(int argc ,char ** argv)
   delete session;
 	
   // Job termination
+    // Store dose & fluence data to ASCII & ROOT files 
+    if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
+    {
+	pMatrix -> TotalEnergyDeposit(); 
+//	pMatrix -> StoreDoseFluenceAscii();
+#ifdef G4ANALYSIS_USE_ROOT
+        pMatrix -> StoreDoseFluenceRoot();
+#endif
+    }
+
+
 #ifdef G4ANALYSIS_USE_ROOT
   HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
 #endif

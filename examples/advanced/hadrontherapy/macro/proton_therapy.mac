@@ -91,7 +91,7 @@
 #/analysis/secondaries true 
 
 /run/beamOn 5000
-
+/analysis/writeDoseFile 
 #########################
 # Move the generated .root & .out
 # files into the

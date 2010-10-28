@@ -7,6 +7,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+28.10.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-08
+	   - Added a messenger to store dose data,
+	     the related macro command is: /analysis/writeDoseFile [filename] 
 
 20.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-07
 	    - Improved and updated some classes comments

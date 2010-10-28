@@ -90,7 +90,7 @@ HadrontherapyMatrix::~HadrontherapyMatrix()
 {
     delete[] matrix;
     delete[] hitTrack;
-		// clear fluences/dose data
+    // free fluences/dose data memory
     Clear();
 }
 
@@ -109,7 +109,9 @@ void HadrontherapyMatrix::Clear()
 // Initialise the elements of the matrix to zero
 void HadrontherapyMatrix::Initialize()
 { 
+    // Clear ions store
     Clear();
+    // Clear dose
     for(int i=0;i<numberOfVoxelAlongX*numberOfVoxelAlongY*numberOfVoxelAlongZ;i++)
     {
 		matrix[i] = 0;
@@ -273,8 +275,9 @@ void HadrontherapyMatrix::StoreDoseData()
 	// Store dose for all ions into a single file and into ntuples.
 	// Please note that this function is called via messenger commands
 	// defined in the HadrontherapyAnalysisFileMessenger.cc class file
-void HadrontherapyMatrix::StoreDoseFluenceAscii()
+void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 {
+    if (file) this -> filename = file;
     // Sort like periodic table
     std::sort(ionStore.begin(), ionStore.end());
 #define width 15L
