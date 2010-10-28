@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2010-10-20 00:51:21 gum Exp $
+$Id: History,v 1.75 2010-10-28 23:30:06 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 October 10: P. Gumplinger (xrays-V09-03-04)
+- several small corrections to the previous implementation of G4Scintillation
 
 19 October 10: P. Gumplinger (xrays-V09-03-03)
 - G4Scintillation: allow for the light yield to be a function of
