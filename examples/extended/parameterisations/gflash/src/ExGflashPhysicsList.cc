@@ -34,6 +34,8 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 #include "G4ios.hh"
 #include <iomanip>   
 
@@ -336,6 +338,10 @@ void ExGflashPhysicsList::SetCuts()
  
  
   DumpCutValuesTable();
+// set cuts for region crystals with default Cuts
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion("crystals");
+  region->SetProductionCuts(
+          G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 }
 
 
