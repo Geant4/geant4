@@ -276,6 +276,12 @@ void G4OpticalPhysics::AddScintillationSaturation(G4EmSaturation* saturation)
     fScintillationProcess->AddSaturation(saturation);
 }
 
+void G4OpticalPhysics::SetScintillationByParticleType(G4bool scintillationByParticleType)
+{
+  if (fScintillationProcess)
+     fScintillationProcess->SetScintillationByParticleType(scintillationByParticleType);
+}
+
 void G4OpticalPhysics::SetTrackSecondariesFirst(G4bool trackSecondariesFirst)
 {
   fTrackSecondariesFirst = trackSecondariesFirst;

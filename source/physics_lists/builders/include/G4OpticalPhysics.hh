@@ -108,7 +108,9 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetOpticalSurfaceModel(G4OpticalSurfaceModel );
 
     void SetWLSTimeProfile(G4String );
+    void SetScintillationByParticleType(G4bool );
     void AddScintillationSaturation(G4EmSaturation* );
+
 
     void SetTrackSecondariesFirst(G4bool );
 
