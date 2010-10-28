@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2010-06-24 15:36:24 mkossov Exp $
+$Id: History,v 1.19 2010-10-28 13:00:28 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 28th, 2010 Gunter Folger   (test19-V09-03-07)
+- trivial fix for CLHEP 2.1.x in test19.cc
 
 Jun 24th, 2010  Mikhail Kossov (test19-V09-03-06)
 - base version for the test group (with harpcdp)
