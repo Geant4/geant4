@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.19 2010-10-20 00:52:18 gum Exp $
+// $Id: G4Scintillation.hh,v 1.20 2010-10-28 23:24:17 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -185,11 +185,12 @@ public: // With description
         void AddSaturation(G4EmSaturation* sat) { emSaturation = sat; }
         // Adds Birks Saturation to the process.
 
+        void RemoveSaturation() { emSaturation = NULL; }
+
         G4EmSaturation* GetSaturation() const { return emSaturation; }
         // Returns the Birks Saturation.
 
-        void SetScintillationByParticleType(const G4bool scintType)
-        { scintillationByParticleType = scintType; }
+        void SetScintillationByParticleType(const G4bool );
         // Called by the user to set the scintillation yield as a function
         // of energy deposited by particle type
 
