@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.33 2010-10-20 00:52:35 gum Exp $
+// $Id: G4Scintillation.cc,v 1.34 2010-10-28 23:28:37 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -232,7 +232,8 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                GetProperty("C12SCINTILLATIONYIELD");
 
            // Electrons
-           else if(pDef==G4Electron::ElectronDefinition())
+           else if(pDef==G4Electron::ElectronDefinition() ||
+                   pDef==G4Gamma::GammaDefinition())
              Scint_Yield_Vector = aMaterialPropertiesTable->
                GetProperty("ELECTRONSCINTILLATIONYIELD");
 
@@ -257,14 +258,16 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
            // Obtain the scintillation yield using the total energy
            // deposited by the particle in this step.
-           // Units: # scintillation photons
+
+           // Units: [# scintillation photons]
            ScintillationYield = Scint_Yield_Vector->
                                             GetProperty(TotalEnergyDeposit);
         } else {
            // The default linear scintillation process
            G4double ScintillationYield = aMaterialPropertiesTable->
                                       GetConstProperty("SCINTILLATIONYIELD");
-           // Units: # scintillation photons / MeV
+
+           // Units: [# scintillation photons / MeV]
            ScintillationYield *= YieldFactor;
         }
 
@@ -279,15 +282,16 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double MeanNumberOfPhotons;
 
-        if (emSaturation) {
+        // Birk's correction via emSaturation and specifying scintillation by
+        // by particle type are physically mutually exclusive
+
+        if (scintillationByParticleType)
+           MeanNumberOfPhotons = ScintillationYield;
+        else if (emSaturation)
            MeanNumberOfPhotons = ScintillationYield*
                               (emSaturation->VisibleEnergyDeposition(&aStep));
-        } else {
-           if (scintillationByParticleType)
-             MeanNumberOfPhotons = ScintillationYield;
-           else
-             MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
-        }
+        else
+           MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
 
         G4int NumPhotons;
 
@@ -670,6 +674,19 @@ void G4Scintillation::BuildThePhysicsTable()
         theSlowIntegralTable->insertAt(i,bPhysicsOrderedFreeVector);
 
 	}
+}
+
+// Called by the user to set the scintillation yield as a function
+// of energy deposited by particle type
+
+void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
+{
+        if (emSaturation) {
+           G4Exception("G4Scintillation::SetScintillationByParticleType", "Redefinition",
+                       JustWarning, "Birks Saturation is replaced by ScintillationByParticleType!");
+           RemoveSaturation();
+        }
+        scintillationByParticleType = scintType;
 }
 
 // GetMeanFreePath
