@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.9 2010-10-26 02:47:59 kaitanie Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.10 2010-10-28 15:35:50 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -91,7 +91,7 @@ public:
 
   void clear() {
     for(G4int i = 0; i < 21; i++) tab[i] = 0.0;
-    for(G4int i = 0; i < 61; i++) n_projspec[i] = 0.0;
+    for(G4int i = 0; i < 61; i++) n_projspec[i] = 0;
     a_projspec = 0;
     z_projspec = 0;
     m_projspec = 0.0;
