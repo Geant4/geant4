@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.20 2010-10-28 23:24:17 gum Exp $
+// $Id: G4Scintillation.hh,v 1.21 2010-10-28 23:29:21 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -186,6 +186,7 @@ public: // With description
         // Adds Birks Saturation to the process.
 
         void RemoveSaturation() { emSaturation = NULL; }
+        // Removes the Birks Saturation from the process.
 
         G4EmSaturation* GetSaturation() const { return emSaturation; }
         // Returns the Birks Saturation.
