@@ -68,7 +68,7 @@
       <text>exam-ext-eventgenerator-particleGun-r2-run</text>
       <text>exam-ext-eventgenerator-particleGun-r3-run</text>
       <text>exam-ext-eventgenerator-particleGun-r4-run</text>
-      <text>exam-ext-exoticphysics-monopole-runr</text>
+      <text>exam-ext-exoticphysics-monopole-run</text>
       <text>exam-ext-field-field01-run</text>
       <text>exam-ext-field-field02-run</text>
       <text>exam-ext-field-field03-run</text>
@@ -76,6 +76,7 @@
       <text>exam-ext-field-field05-run</text>
       <text>exam-ext-g3tog4-clgeometry-run</text>
       <text>exam-ext-g3tog4-cltog4-run</text>
+      <text>exam-ext-geometry-olap-run</text>
       <text>exam-ext-hadronic-hadr00-run</text>
       <text>exam-ext-hadronic-hadr01-run</text>
       <text>exam-ext-medical-dicom-run</text>

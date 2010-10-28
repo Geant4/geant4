@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/field/field04;$G4BIN/$G4SYSTEM/field05 field05.in</text>
+    <text>cd $G4INSTALL/examples/extended/field/field05;$G4BIN/$G4SYSTEM/field05 field05.in</text>
   </argument>
   <argument name="stderr">
     <text/>
