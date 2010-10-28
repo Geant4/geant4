@@ -322,7 +322,7 @@ void ElectronBenchmarkDetector::CreateScorer(G4LogicalVolume* worldLog){
 	
 	G4VSolid* scorerRingSolid = new G4Tubs("scorerRingSolid", 0.*cm, fRadOverall, halfThicknessScorer, 0.*deg, 360.*deg);
 	fScorerRingLog = new G4LogicalVolume(scorerRingSolid, G4Material::GetMaterial("G4_AIR"), "scorerRingLog");
-	new G4PVReplica("ScorerRing",fScorerRingLog,scorerLog,kRho,fRadOverall/fWidthScorerRing,fWidthScorerRing); 
+	new G4PVReplica("ScorerRing",fScorerRingLog,scorerLog,kRho,G4int(fRadOverall/fWidthScorerRing),fWidthScorerRing); 
 }
 
 
