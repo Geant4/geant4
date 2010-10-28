@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.25 2010-10-11 13:54:59 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.26 2010-10-28 17:30:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -59,11 +59,6 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4LorentzVector.hh"
-
-#ifdef PRECOMPOUND_TEST
-G4Fragment G4PreCompoundModel::theInitialFragmentForTest;
-std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
-#endif
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value) 
   : G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
@@ -118,53 +113,20 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
 
   // prepare fragment
   G4Fragment anInitialState(A + Ap, Z + Zp, p);
-  anInitialState.SetNumberOfParticles(2);
-  anInitialState.SetNumberOfHoles(1);
-  anInitialState.SetNumberOfCharged(1);
+  anInitialState.SetNumberOfExcitedParticle(Ap, Zp);
+  anInitialState.SetNumberOfHoles(Ap,Zp);
   anInitialState.SetCreationTime(thePrimary.GetGlobalTime());
-  /*
-  // Number of Excited Particles
-  anInitialState.SetNumberOfParticles(1+thePrimary.GetDefinition()->GetBaryonNumber());
-  
-  // Number of Charged Excited Particles
-  // JMQ/AH modify number of charged particles with probability of the Z/A ratio of the nucleus:
-  //  if(G4UniformRand() <= aZ/anA) BUG! - integer arithmetic
-  if(G4UniformRand() <= (static_cast<G4double>(aZ))/(static_cast<G4double>(anA))) 
-      anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 1);
-  else
-      anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01));
-    
-//AH     anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDefinition()->GetPDGCharge()+.01) + 
-//AH 				    static_cast<G4int>(0.5+G4UniformRand()));
-
-  // Number of Holes 
-  anInitialState.SetNumberOfHoles(1);
-  */
   
   // call excitation handler
-  //  const G4Fragment aFragment(anInitialState);
   G4ReactionProductVector * result = DeExcite(anInitialState);
 
-#ifdef PRECOMPOUND_TEST
-  for (std::vector<G4String*>::iterator icm = theCreatorModels.begin(); 
-       icm != theCreatorModels.end(); ++icm )
-    {
-      delete (*icm);
-    }
-  theCreatorModels.clear();
-#endif
   // fill particle change
   theResult.Clear();
   theResult.SetStatusChange(stopAndKill);
   for(G4ReactionProductVector::iterator i= result->begin(); i != result->end(); ++i)
     {
       G4DynamicParticle * aNew = 
-	new G4DynamicParticle((*i)->GetDefinition(),
-			      (*i)->GetTotalEnergy(),
-			      (*i)->GetMomentum());
-#ifdef PRECOMPOUND_TEST
-      theCreatorModels.push_back(new G4String((*i)->GetCreatorModel()));
-#endif
+	new G4DynamicParticle((*i)->GetDefinition(),(*i)->GetMomentum());
       delete (*i);
       theResult.AddSecondary(aNew);
     }
