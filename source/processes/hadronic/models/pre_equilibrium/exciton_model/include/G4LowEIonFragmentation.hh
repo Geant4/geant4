@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
+// $Id: G4LowEIonFragmentation.hh,v 1.7 2010-10-28 17:34:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.6 2010-08-20 07:42:19 vnivanch Exp $
+// $Id: G4LowEIonFragmentation.hh,v 1.7 2010-10-28 17:34:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ClassName:   G4LowEIonFragmentation
@@ -46,7 +46,8 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4ExcitationHandler.hh"
-#include "G4Fancy3DNucleus.hh"
+
+class G4ParticleDefinition;
 
 class G4LowEIonFragmentation : public G4HadronicInteraction
 {
@@ -66,7 +67,7 @@ public:
     //    clog << "area/millibarn = "<<area/millibarn<<G4endl;
     //    clog << "hits = "<<hits<<G4endl;
     //    clog << "totalTries = "<<totalTries<<G4endl;
-    return area*static_cast<G4double>(hits)/static_cast<G4double>(totalTries)/millibarn;
+    return area*hits/(static_cast<G4double>(totalTries)*CLHEP::millibarn);
   }
 
 private:  
@@ -79,6 +80,7 @@ private:
   // Members
   
   G4HadFinalState theResult;
+  const G4ParticleDefinition* proton;
    
   G4PreCompoundModel * theModel;
   G4ExcitationHandler * theHandler;

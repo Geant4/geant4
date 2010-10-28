@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LowEIonFragmentation.cc,v 1.7 2010-09-08 16:38:09 gunter Exp $
+// $Id: G4LowEIonFragmentation.cc,v 1.8 2010-10-28 17:34:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -35,8 +35,13 @@
 // Modified:
 // 02 Jun 2010 M. A. Cortes Giraldo fix: particlesFromTarget must be 
 //                     accounted for as particles of initial compound nucleus
+// 28 Oct 2010 V.Ivanchenko complete migration to integer Z and A; 
+//                          use updated G4Fragment methods
 
 #include "G4LowEIonFragmentation.hh"
+#include "G4Fancy3DNucleus.hh"
+#include "G4Proton.hh"
+#include "G4NucleiProperties.hh"
 #include <algorithm>
 
 G4int G4LowEIonFragmentation::hits = 0;
@@ -47,12 +52,14 @@ G4LowEIonFragmentation::G4LowEIonFragmentation(G4ExcitationHandler * const value
 {
   theHandler = value;
   theModel = new G4PreCompoundModel(theHandler);
+  proton = G4Proton::Proton();
 }
 
 G4LowEIonFragmentation::G4LowEIonFragmentation() 
 {
   theHandler = new G4ExcitationHandler;
   theModel = new G4PreCompoundModel(theHandler);
+  proton = G4Proton::Proton();
 }
 
 G4LowEIonFragmentation::~G4LowEIonFragmentation() 
@@ -75,7 +82,7 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 
   // Get Projectile A, Z
   G4int aProjectileA = thePrimary.GetDefinition()->GetBaryonNumber();
-  G4int aProjectileZ = G4lrint(thePrimary.GetDefinition()->GetPDGCharge());
+  G4int aProjectileZ = G4lrint(thePrimary.GetDefinition()->GetPDGCharge()/eplus);
 
   // Get Maximum radius of both
   
@@ -104,14 +111,14 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     }
     while(x*x + y*y > 1);
     impactParameter = std::sqrt(x*x+y*y)*(targetOuterRadius+projectileOuterRadius);
-    totalTries++;
+    ++totalTries;
     area = pi*(targetOuterRadius+projectileOuterRadius)*
               (targetOuterRadius+projectileOuterRadius);
     G4double projectileHorizon = impactParameter-targetOuterRadius; 
     
     // Empirical boundary transparency.
     G4double empirical = G4UniformRand();
-    if(projectileHorizon/projectileOuterRadius>empirical) continue;
+    if(projectileHorizon > empirical*projectileOuterRadius) { continue; }
     
     // Calculate the number of nucleons involved in collision
     // From projectile
@@ -121,15 +128,15 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
       if(pNucleon->GetPosition().y()>projectileHorizon)
       {
         // We have one
-        particlesFromProjectile++;
-        if(pNucleon->GetParticleType()==G4Proton::ProtonDefinition()) 
+        ++particlesFromProjectile;
+        if(pNucleon->GetParticleType() == proton) 
         {
-          chargedFromProjectile++;
+          ++chargedFromProjectile;
         } 
       }
     }
   }
-  hits++;
+  ++hits;
 
   // From target:
   G4double targetHorizon = impactParameter-projectileOuterRadius;
@@ -141,94 +148,84 @@ ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
     if(pNucleon->GetPosition().y()>targetHorizon)
     {
       // We have one
-      particlesFromTarget++;
-      if(pNucleon->GetParticleType()==G4Proton::ProtonDefinition()) 
+      ++particlesFromTarget;
+      if(pNucleon->GetParticleType() == proton) 
       {
-        chargedFromTarget++;
+        ++chargedFromTarget;
       }
     }
   }
   
-  // Energy sharing between projectile and target. Note that this is a quite simplistic kinetically.
-  G4ThreeVector exciton3Momentum = thePrimary.Get4Momentum().vect();
-  exciton3Momentum *= particlesFromProjectile/aProjectileA;
+  // Energy sharing between projectile and target. 
+  // Note that this is a quite simplistic kinetically.
+  G4ThreeVector momentum = thePrimary.Get4Momentum().vect();
+  G4double w = (G4double)particlesFromProjectile/(G4double)aProjectileA;
   
-  G4double compoundEnergy = thePrimary.GetTotalEnergy()*particlesFromProjectile/aProjectileA;  
-  G4double targetMass = G4ParticleTable::GetParticleTable()
-                        ->GetIonTable()->GetIonMass(aTargetZ, aTargetA);
-  compoundEnergy += targetMass;
-  G4LorentzVector fragment4Momentum(exciton3Momentum, compoundEnergy);
+  G4double projTotEnergy = thePrimary.GetTotalEnergy();  
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(aTargetA, aTargetZ);
+  G4LorentzVector fragment4Momentum(momentum*w, projTotEnergy*w + targetMass);
  
   // take the nucleons and fill the Fragments
-  G4Fragment anInitialState;
-  anInitialState.SetZandA_asInt(aTargetZ+chargedFromProjectile,
-  				aTargetA+particlesFromProjectile);
+  G4Fragment anInitialState(aTargetA+particlesFromProjectile,
+			    aTargetZ+chargedFromProjectile,
+  			    fragment4Momentum);
   // M.A. Cortes fix
   //anInitialState.SetNumberOfParticles(particlesFromProjectile);
-  anInitialState.SetNumberOfParticles(particlesFromProjectile+particlesFromTarget);
-  anInitialState.SetNumberOfHoles(particlesFromTarget);
-  anInitialState.SetNumberOfCharged(chargedFromProjectile + chargedFromTarget);
-  anInitialState.SetMomentum(fragment4Momentum);
+  anInitialState.SetNumberOfExcitedParticle(particlesFromProjectile+particlesFromTarget,
+					    chargedFromProjectile + chargedFromTarget);
+  anInitialState.SetNumberOfHoles(particlesFromProjectile+particlesFromTarget,
+				  chargedFromProjectile + chargedFromTarget);
+  G4double time = thePrimary.GetGlobalTime();
+  anInitialState.SetCreationTime(time);
 
   // Fragment the Fragment using Pre-compound
-  G4ReactionProductVector* thePreCompoundResult;
-  thePreCompoundResult = theModel->DeExcite(anInitialState);
+  G4ReactionProductVector* thePreCompoundResult = theModel->DeExcite(anInitialState);
   
   // De-excite the projectile using ExcitationHandler
-  
   G4ReactionProductVector * theExcitationResult = 0; 
-  if(particlesFromProjectile != aProjectileA)
+  if(particlesFromProjectile < aProjectileA)
   {
-    G4ThreeVector residual3Momentum = thePrimary.Get4Momentum().vect();
-    residual3Momentum -= exciton3Momentum;
-    G4double residualEnergy = thePrimary.GetTotalEnergy()*(1.-particlesFromProjectile/aProjectileA);
-    G4LorentzVector residual4Momentum(residual3Momentum, residualEnergy);  
+    G4LorentzVector residual4Momentum(momentum*(1.0-w), projTotEnergy*(1.0-w));  
  
-    G4Fragment initialState2;
-    initialState2.SetZandA_asInt(aProjectileZ-chargedFromProjectile,
-    				 aProjectileA-particlesFromProjectile);
-    initialState2.SetNumberOfHoles(static_cast<G4int>((aProjectileA-particlesFromProjectile)/2.0));
-    initialState2.SetNumberOfParticles(static_cast<G4int>((aProjectileZ-chargedFromProjectile)/2.0));
-    initialState2.SetNumberOfCharged(static_cast<G4int>((aProjectileZ-chargedFromProjectile)/2.0));
+    G4Fragment initialState2(aProjectileA-particlesFromProjectile,
+			     aProjectileZ-chargedFromProjectile,
+			     residual4Momentum );
 
+    // half of particles are excited (?!)
+    G4int pinit = (aProjectileA-particlesFromProjectile)/2;
+    G4int cinit = (aProjectileZ-chargedFromProjectile)/2;
 
-    initialState2.SetMomentum(residual4Momentum);
+    initialState2.SetNumberOfExcitedParticle(pinit,cinit);
+    initialState2.SetNumberOfHoles(pinit,cinit);
+    initialState2.SetCreationTime(time);
+
     theExcitationResult = theHandler->BreakItUp(initialState2);
   }
 
-  // Fill the particle change
-  G4int nSecondaries = 0;
-  if(theExcitationResult) nSecondaries+=theExcitationResult->size();
-  if(thePreCompoundResult) nSecondaries+=thePreCompoundResult->size();
+  // Fill the particle change and clear intermediate vectors
+  G4int nexc = 0;
+  G4int npre = 0;
+  if(theExcitationResult)  { nexc = theExcitationResult->size(); }
+  if(thePreCompoundResult) { npre = thePreCompoundResult->size();}
   
-  unsigned int k;
-  if(theExcitationResult!=0)
-  {
-    for(k=0; k<theExcitationResult->size(); k++)
-    {
-      G4DynamicParticle* p0 = new G4DynamicParticle;
-      p0->SetDefinition( theExcitationResult->operator[](k)->GetDefinition() );
-      p0->SetMomentum( theExcitationResult->operator[](k)->GetMomentum() );
-      theResult.AddSecondary(p0);
+  if(nexc > 0) {
+    for(G4int k=0; k<nexc; ++k) {
+      G4ReactionProduct* p = (*theExcitationResult)[k];
+      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),p->GetMomentum()));
+      delete p;
     }
   }
   
-  for(k=0; k<thePreCompoundResult->size(); k++)
-  {
-    G4DynamicParticle* p0 = new G4DynamicParticle;
-    p0->SetDefinition(thePreCompoundResult->operator[](k)->GetDefinition());
-    p0->SetMomentum(thePreCompoundResult->operator[](k)->GetMomentum());
-    theResult.AddSecondary(p0);
+  if(npre > 0) {
+    for(G4int k=0; k<npre; ++k) {
+      G4ReactionProduct* p = (*thePreCompoundResult)[k];
+      theResult.AddSecondary(new G4DynamicParticle(p->GetDefinition(),p->GetMomentum()));
+      delete p;
+    }
   }
   
-  // clean up
-  std::for_each(thePreCompoundResult->begin(), thePreCompoundResult->end(), DeleteReactionProduct());
-  if(theExcitationResult) 
-  {
-    std::for_each(theExcitationResult->begin(), theExcitationResult->end(), DeleteReactionProduct());
-  }
   delete thePreCompoundResult;
-  if(theExcitationResult) delete theExcitationResult;
+  delete theExcitationResult;
 
   // return the particle change
   return &theResult;
