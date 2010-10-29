@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.hh,v 1.34 2010-10-20 23:51:07 mkelsey Exp $
+// $Id: G4NucleiModel.hh,v 1.35 2010-10-29 14:24:50 mkelsey Exp $
 // GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100319  M. Kelsey -- Remove "using" directory and unnecessary #includes,
@@ -232,8 +232,6 @@ private:
   // Parameters for nuclear structure
   static const G4double skinDepth;
   static const G4double radiusScale;
-  static const G4double radiusScale1;	// Coefficients for two-parameter fit
-  static const G4double radiusScale2;	//   R = 1.16*cbrt(A) - 1.3456/cbrt(A)
   static const G4double radiusForSmall;
   static const G4double fermiMomentum;
   static const G4double alfa3[3], alfa6[6];
@@ -244,8 +242,6 @@ private:
 
   // FIXME:  We should not be using this!
   static const G4double piTimes4thirds;
-  static const G4double crossSectionUnits;
-  static const G4double radiusUnits;
 
   // Total cross sections (for kaons and hyperons only)
   static const G4double kpPtot[30];

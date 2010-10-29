@@ -22,7 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-// $Id: G4NucleiModel.cc,v 1.93 2010-10-20 23:51:07 mkelsey Exp $
+// $Id: G4NucleiModel.cc,v 1.94 2010-10-29 14:24:50 mkelsey Exp $
 // Geant4 tag: $Name: not supported by cvs2svn $
 //
 // 20100112  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
@@ -74,10 +74,6 @@
 // 20101019  M. Kelsey -- CoVerity reports: unitialized constructor, dtor leak
 // 20101020  M. Kelsey -- Bug fixes to refactoring changes (5 Oct).  Back out
 //		worthToPropagate() changes for better regression testing.
-// 20101020  M. Kelsey -- Re-activate worthToPropagate() changes.
-// 20101025  M. Kelsey -- Add crossSectionUnits and radiusUnits scale factors,
-//		use "theoretical" numbers for radii etc., multipled by scale
-//		factor
 
 #include "G4NucleiModel.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -106,25 +102,11 @@ using namespace G4InuclSpecialFunctions;
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
-// Scaling factors for radii and cross-sections, currently different!
-const G4double G4NucleiModel::crossSectionUnits = millibarn/millibarn;
-const G4double G4NucleiModel::radiusUnits = sqrt(8)*fermi/fermi;
-
 // Parameters for nuclear structure (actual vs. "should be" in fm and GeV)
-const G4double G4NucleiModel::skinDepth = 0.61*radiusUnits;
-
-const G4double G4NucleiModel::radiusScale = 1.2*radiusUnits;	// 1.2 fm [*cbrt(A)]
-const G4double G4NucleiModel::radiusScale1 = 1.16*radiusUnits;	// [*cbrt(A)]
-const G4double G4NucleiModel::radiusScale2 = -1.3456*radiusUnits;	// [/cbrt(A)]
-
-const G4double G4NucleiModel::radiusForSmall = 2.83*radiusUnits;	// 0.72 fm/B.E.
-
-// New binding-energy calculation
-/*****
-const G4double G4NucleiModel::radiusForSmall = 0.72*radiusUnits;	// per bindingEnergy()
-*****/
-
-const G4double G4NucleiModel::fermiMomentum = 0.683*radiusUnits;	// 0.61 GeV fm
+const G4double G4NucleiModel::skinDepth = 1.7234;	// 0.61 fm
+const G4double G4NucleiModel::radiusScale = 3.3836;	// 1.2 fm [*cbrt(A)]
+const G4double G4NucleiModel::radiusForSmall = 8.0;	// R_p = 0.8768 fm
+const G4double G4NucleiModel::fermiMomentum = 1.932;	// 0.61 GeV fm
 
 // Zone boundaries as fraction of nuclear radius (from outside in)
 const G4double G4NucleiModel::alfa3[3] = { 0.7, 0.3, 0.01 };
@@ -137,7 +119,7 @@ const G4double G4NucleiModel::kaon_vp = -0.015;		// WHY NEGATIVE?
 const G4double G4NucleiModel::hyperon_vp = 0.030;
 
 // FIXME:  We should not be using this!
-const G4double G4NucleiModel::piTimes4thirds = 4.188790204786;
+const G4double G4NucleiModel::piTimes4thirds = 4.189; // 4.188790204786;
 
 
 // Constructors
@@ -197,19 +179,7 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   protonNumber = Z;
   reset();
 
-  G4double nuclearRadius;		// Nuclear radius computed from A
-  if (A > 4)
-    nuclearRadius = radiusScale*G4cbrt(A);
-  else if (A == 4)
-    nuclearRadius = 0.7*radiusForSmall;
-  else
-    nuclearRadius = radiusForSmall;
-  /***** NEW CALCULATIONS
-  if (A > 4)
-    nuclearRadius = radiusScale1*G4cbrt(A) + radiusScale2/G4cbrt(A);
-  else
-    nuclearRadius = radiusForSmall * bindingEnergy(A,Z);
-  *****/
+  G4double nuclearRadius = radiusScale*G4cbrt(A);	// Nuclear radius
 
   // This will be used to pre-allocate lots of arrays below
   number_of_zones = (A < 5) ? 1 : (A < 100) ? 3 : 6;
@@ -265,7 +235,9 @@ G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
   G4double skinDecay = std::exp(-skinRatio);    
 
   if (A < 5) {			// Light ions treated as simple balls
-    zone_radii.push_back(nuclearRadius);
+    G4double smallRad = radiusForSmall;
+    if (A == 4) smallRad *= 0.7;	// Alpha is most tightly bound
+    zone_radii.push_back(smallRad);
     ur[0] = 0.;
     ur[1] = 1.;
   } else if (A < 12) {		// Small nuclei have Gaussian potential
@@ -406,7 +378,7 @@ G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
   if (verboseLevel > 2 && itry == itry_max)
     G4cout << " zoneIntegralWoodsSaxon-> n iter " << itry_max << G4endl;
 
-  G4double skinDepth3 = skinDepth*skinDepth*skinDepth;
+  G4double skinDepth3 = 5.11864; //*** skinDepth*skinDepth*skinDepth;
 
   return skinDepth3 * (fun + skinRatio*skinRatio*std::log((1.0 + std::exp(-r1)) / (1.0 + std::exp(-r2))));
 }
@@ -616,7 +588,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     dummy_convertor.setTarget(particle.getMomentum(), particle.getMass());
     G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
     
-    G4double csec = crossSectionUnits * totalCrossSection(ekin, ptype * ip);
+    G4double csec = totalCrossSection(ekin, ptype * ip);
     
     if(verboseLevel > 2) {
       G4cout << " ip " << ip << " ekin " << ekin << " csec " << csec << G4endl;
@@ -1070,17 +1042,19 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
 
   G4bool worth = true;
 
+  // NOTE:  Temporarily backing out changes flagged "***" below
+
   if (cparticle.reflectedNow()) {	// Just reflected -- keep going?
     G4int zone = cparticle.getCurrentZone();
     G4int ip = cparticle.getParticle().type();
 
     G4double ekin_cut = (cparticle.getParticle().nucleon()) ?
-      getFermiKinetic(ip, zone) : getPotential(ip, zone);
+      getFermiKinetic(ip, zone) : 0.;	//*** getPotential(ip, zone);
 
     worth = cparticle.getParticle().getKineticEnergy()/ekin_scale > ekin_cut;
 
     if (verboseLevel > 3) {
-      G4cout << " type=" << ip
+      G4cout //*** << " type=" << ip
 	     << " ekin=" << cparticle.getParticle().getKineticEnergy()
 	     << " potential=" << ekin_cut
 	     << " : worth? " << worth << G4endl;
@@ -1541,6 +1515,9 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
     return 0.;
   }
 
+  // was 0.2 since the beginning, then changed to 1.0 
+  // now 0.1 to convert from mb to fm**2
+  const G4double corr_fac = 1.0;
   G4double csec = 0.0;
   
   if (ke < 0.3) {
@@ -1553,10 +1530,12 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
   if (csec < 0.0) csec = 0.0;
 
   if (verboseLevel > 2) {
-    G4cout << " ekin " << ke << " abs. csec " << csec << " mb" << G4endl;   
+    G4cout << " ekin " << ke << " abs. csec " << corr_fac * csec << G4endl;   
   }
 
-  return crossSectionUnits * csec;
+  csec *= corr_fac;
+
+  return csec;
 }
 
 G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
@@ -1570,43 +1549,42 @@ G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
   static G4CascadeInterpolator<NBINS> interp(keScale);
 
   // Pion and nucleon scattering cross-sections are available elsewhere
-  G4double xsec = 0.;
   switch (rtype) {
-  case pro*pro: xsec = G4CascadePPChannel::getCrossSection(ke); break;
-  case pro*neu: xsec = G4CascadeNPChannel::getCrossSection(ke); break;
-  case pip*pro: xsec = G4CascadePiPlusPChannel::getCrossSection(ke); break;
-  case neu*neu: xsec = G4CascadeNNChannel::getCrossSection(ke); break;
-  case pim*pro: xsec = G4CascadePiMinusPChannel::getCrossSection(ke); break;
-  case pip*neu: xsec = G4CascadePiPlusNChannel::getCrossSection(ke); break;
-  case pi0*pro: xsec = G4CascadePiZeroPChannel::getCrossSection(ke); break;
-  case pim*neu: xsec = G4CascadePiMinusNChannel::getCrossSection(ke); break;
-  case pi0*neu: xsec = G4CascadePiZeroNChannel::getCrossSection(ke); break;
+  case pro*pro: return G4CascadePPChannel::getCrossSection(ke); break;
+  case pro*neu: return G4CascadeNPChannel::getCrossSection(ke); break;
+  case pip*pro: return G4CascadePiPlusPChannel::getCrossSection(ke); break;
+  case neu*neu: return G4CascadeNNChannel::getCrossSection(ke); break;
+  case pim*pro: return G4CascadePiMinusPChannel::getCrossSection(ke); break;
+  case pip*neu: return G4CascadePiPlusNChannel::getCrossSection(ke); break;
+  case pi0*pro: return G4CascadePiZeroPChannel::getCrossSection(ke); break;
+  case pim*neu: return G4CascadePiMinusNChannel::getCrossSection(ke); break;
+  case pi0*neu: return G4CascadePiZeroNChannel::getCrossSection(ke); break;
     // Remaining channels are handled locally until arrays are moved
   case kpl*pro:			     
-  case k0*neu:  xsec = interp.interpolate(ke, kpPtot); break;
+  case k0*neu:  return interp.interpolate(ke, kpPtot); break;
   case kmi*pro:			     
-  case k0b*neu: xsec = interp.interpolate(ke, kmPtot); break;
+  case k0b*neu: return interp.interpolate(ke, kmPtot); break;
   case kpl*neu:			     
-  case k0*pro:  xsec = interp.interpolate(ke, kpNtot); break;
+  case k0*pro:  return interp.interpolate(ke, kpNtot); break;
   case kmi*neu:			     
-  case k0b*pro: xsec = interp.interpolate(ke, kmNtot); break;
+  case k0b*pro: return interp.interpolate(ke, kmNtot); break;
   case lam*pro:			     
   case lam*neu:			     
   case s0*pro:			     
-  case s0*neu:  xsec = interp.interpolate(ke, lPtot); break;
+  case s0*neu:  return interp.interpolate(ke, lPtot); break;
   case sp*pro:			     
-  case sm*neu:  xsec = interp.interpolate(ke, spPtot); break;
+  case sm*neu:  return interp.interpolate(ke, spPtot); break;
   case sm*pro:			     
-  case sp*neu:  xsec = interp.interpolate(ke, smPtot); break;
+  case sp*neu:  return interp.interpolate(ke, smPtot); break;
   case xi0*pro:			     
-  case xim*neu: xsec = interp.interpolate(ke, xi0Ptot); break;
+  case xim*neu: return interp.interpolate(ke, xi0Ptot); break;
   case xim*pro:			     
-  case xi0*neu: xsec = interp.interpolate(ke, ximPtot); break;
+  case xi0*neu: return interp.interpolate(ke, ximPtot); break;
   default:
     G4cout << " unknown collison type = " << rtype << G4endl; 
   }
 
-  return crossSectionUnits * xsec;
+  return 0.;		// Failure
 }
 
 // Initialize cross-section interpolation tables

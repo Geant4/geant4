@@ -1,4 +1,4 @@
-$Id: History,v 1.203 2010-10-22 20:41:05 mkelsey Exp $
+$Id: History,v 1.204 2010-10-29 14:24:49 mkelsey Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -14,6 +14,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+29 October 2010 Michael Kelsey (hadr-casc-V09-03-85)
+----------------------------------------------------
+- G4NucleiModel:  Bring tagged version kelsey-20101020 (refactoring) to HEAD
+  and tag for 9.4 release.  This is the last substantive modification to be
+  included; validated by direct |diff|ing of output vs. V09-03-84 code.
 
 22 October 2010 Michael Kelsey (hadr-casc-V09-03-84)
 ----------------------------------------------------
