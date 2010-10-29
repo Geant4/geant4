@@ -14,19 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-<<<<<<< History
-29 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-21)
+29 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-22)
 ----------------------------------------------------------
 - Fixed problems reported by the Coveruty tool (mainly pedantic
   initialisation); moved constructors and destructors to source
 
-=======
 12 October 2010 Dennis Wright (hadr-deex-V09-03-21)
 ---------------------------------------------------
 - add Luciano Pandola's README file explaining the photo-evaporation
   data files
 
->>>>>>> 1.116
 11 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-20)
 ----------------------------------------------------------
 
