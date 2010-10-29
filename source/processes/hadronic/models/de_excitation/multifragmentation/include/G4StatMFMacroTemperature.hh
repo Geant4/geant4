@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.hh,v 1.4 2010-04-16 17:04:08 vnivanch Exp $
+// $Id: G4StatMFMacroTemperature.hh,v 1.5 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -70,15 +70,15 @@ private:
 
 public:
 
-    G4double GetMeanMultiplicity(void) const {return _MeanMultiplicity;}
+    inline G4double GetMeanMultiplicity(void) const {return _MeanMultiplicity;}
 	
-    G4double GetChemicalPotentialMu(void) const {return _ChemPotentialMu;}
+    inline G4double GetChemicalPotentialMu(void) const {return _ChemPotentialMu;}
 
-    G4double GetChemicalPotentialNu(void) const {return _ChemPotentialNu;}
+    inline G4double GetChemicalPotentialNu(void) const {return _ChemPotentialNu;}
 
-    G4double GetTemperature(void) const {return _MeanTemperature;}
+    inline G4double GetTemperature(void) const {return _MeanTemperature;}
 
-    G4double GetEntropy(void) const {return _MeanEntropy;}
+    inline G4double GetEntropy(void) const {return _MeanEntropy;}
 
     G4double CalcTemperature(void);
 

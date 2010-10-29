@@ -35,43 +35,18 @@
 
 G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     G4EvaporationProbability(3,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{
+{}
 
-}
+G4TritonEvaporationProbability::~G4TritonEvaporationProbability()
+{}
 
-G4TritonEvaporationProbability::G4TritonEvaporationProbability(const G4TritonEvaporationProbability &) : G4EvaporationProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4TritonEvaporationProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4TritonEvaporationProbability & G4TritonEvaporationProbability::
-operator=(const G4TritonEvaporationProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4TritonEvaporationProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4TritonEvaporationProbability::operator==(const G4TritonEvaporationProbability &) const
-{
-    return false;
-}
-
-G4bool G4TritonEvaporationProbability::operator!=(const G4TritonEvaporationProbability &) const
-{
-    return true;
-}
-
-   G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
+G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
   { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
 	
-  G4double G4TritonEvaporationProbability::CalcBetaParam(const G4Fragment & ) 
+G4double G4TritonEvaporationProbability::CalcBetaParam(const G4Fragment & ) 
   { return 0.0; }
 
-G4double G4TritonEvaporationProbability::CCoeficient(const G4double aZ) 
+G4double G4TritonEvaporationProbability::CCoeficient(G4double aZ) 
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
@@ -99,7 +74,8 @@ G4double G4TritonEvaporationProbability::CCoeficient(const G4double aZ)
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
-G4double G4TritonEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double 
+G4TritonEvaporationProbability::CrossSection(const  G4Fragment & fragment, G4double K)
 {
   theA=GetA();
   theZ=GetZ();
@@ -130,7 +106,7 @@ G4double G4TritonEvaporationProbability::CrossSection(const  G4Fragment & fragme
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4TritonEvaporationProbability::GetOpt12(const  G4double K)
+G4double G4TritonEvaporationProbability::GetOpt12(G4double K)
 {
 
   G4double Kc=K;
@@ -173,7 +149,7 @@ G4double G4TritonEvaporationProbability::GetOpt12(const  G4double K)
 }
 
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
-G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
+G4double G4TritonEvaporationProbability::GetOpt34(G4double K)
 //     ** t from o.m. of hafele, flynn et al
 {
   

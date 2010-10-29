@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc,v 1.13 2010-05-17 11:47:43 flei Exp $
+// $Id: G4PhotonEvaporation.cc,v 1.14 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -74,11 +74,12 @@ G4PhotonEvaporation::G4PhotonEvaporation()
    _eOccupancy(0), _vShellNumber(-1),_gammaE(0.)
 { 
   _probAlgorithm = new G4E1Probability;
-  _discrDeexcitation = new G4DiscreteGammaDeexcitation;
+  G4DiscreteGammaDeexcitation* p = new G4DiscreteGammaDeexcitation();
+  p->SetICM(false);
+  _discrDeexcitation = p;
   _contDeexcitation = new G4ContinuumGammaDeexcitation;
-  (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(false);
+  _nucleus = 0;
 }
-
 
 G4PhotonEvaporation::~G4PhotonEvaporation()
 { 
@@ -86,7 +87,6 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
   delete _discrDeexcitation;
   delete _contDeexcitation;
 }
-
 
 void G4PhotonEvaporation::Initialize(const G4Fragment& fragment)
 {

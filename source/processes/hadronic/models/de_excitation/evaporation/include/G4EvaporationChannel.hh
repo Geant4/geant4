@@ -23,6 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4EvaporationChannel.hh,v 1.9 2010-10-29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 //J.M. Quesada (August2008). Based on:
 //
 // Hadronic Process: Nuclear De-excitations
@@ -55,9 +59,7 @@ class G4EvaporationChannel : public G4VEvaporationChannel
 {
 public:
   // constructor
-
-
-  G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
+  G4EvaporationChannel(G4int theA, G4int theZ, const G4String & aName,
 		       G4VEmissionProbability * aEmissionStrategy,
 	               G4VCoulombBarrier * aCoulombBarrier);
 public:
@@ -69,12 +71,10 @@ public:
 
   void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
   {theCoulombBarrierPtr = aCoulombBarrier;} 
-  
-
-  
+    
 protected:
   // default constructor
-  G4EvaporationChannel() {};
+  G4EvaporationChannel();
   
 private:
   // copy constructor
@@ -113,7 +113,7 @@ private:
   G4double CalcMaximalKineticEnergy(const G4double U);
 
   // Samples fragment kinetic energy.
-    G4double  GetKineticEnergy(const G4Fragment & aFragment);
+  G4double  GetKineticEnergy(const G4Fragment & aFragment);
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(const G4double Magnitude  = 1.0);

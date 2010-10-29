@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.cc,v 1.7 2010-04-27 14:00:40 vnivanch Exp $
+// $Id: G4VEvaporation.cc,v 1.8 2010-10-29 17:35:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -32,7 +32,7 @@
 
 #include "G4VEvaporation.hh"
 
-G4VEvaporation::G4VEvaporation() 
+G4VEvaporation::G4VEvaporation():OPTxs(3),useSICB(false)
 {}
 
 G4VEvaporation::~G4VEvaporation() 

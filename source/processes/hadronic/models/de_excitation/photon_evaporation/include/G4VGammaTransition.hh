@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VGammaTransition.hh,v 1.3 2010-10-29 17:35:04 vnivanch Exp $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -43,7 +44,7 @@
 // -------------------------------------------------------------------
 
 #ifndef G4VGAMMATRANSITION_HH
-#define G4VGAMMATRANSITION_HH
+#define G4VGAMMATRANSITION_HH 1
 
 #include "globals.hh"
 
@@ -51,9 +52,9 @@ class G4VGammaTransition
 {
 public:
 
-  G4VGammaTransition() {};
+  G4VGammaTransition();
 
-  virtual ~G4VGammaTransition() {};
+  virtual ~G4VGammaTransition();
   
   virtual void SelectGamma() = 0;
   virtual G4double GetGammaEnergy() = 0;

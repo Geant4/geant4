@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc,v 1.8 2010-04-16 17:04:08 vnivanch Exp $
+// $Id: G4StatMFMacroTemperature.cc,v 1.9 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -38,6 +38,7 @@
 // 16.04.10 V.Ivanchenko improved logic of solving equation for tempetature
 //          to protect code from rare unwanted exception; moved constructor 
 //          and destructor to source  
+// 28.10.10 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4StatMFMacroTemperature.hh"
 
@@ -53,37 +54,12 @@ G4StatMFMacroTemperature::G4StatMFMacroTemperature(const G4double anA, const G4d
   _MeanTemperature(0.0),
   _ChemPotentialMu(0.0),
   _ChemPotentialNu(0.0),
+  _MeanEntropy(0.0),
   _theClusters(ClusterVector) 
-{}
-
-G4StatMFMacroTemperature::G4StatMFMacroTemperature() 
 {}
 	
 G4StatMFMacroTemperature::~G4StatMFMacroTemperature() 
 {}
-
-// operators definitions
-G4StatMFMacroTemperature & 
-G4StatMFMacroTemperature::operator=(const G4StatMFMacroTemperature & ) 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator= meant to not be accessable");
-    return *this;
-}
-
-G4bool G4StatMFMacroTemperature::operator==(const G4StatMFMacroTemperature & ) const 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator== meant to not be accessable");
-    return false;
-}
-
-
-G4bool G4StatMFMacroTemperature::operator!=(const G4StatMFMacroTemperature & ) const 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroTemperature::operator!= meant to not be accessable");
-    return true;
-}
-
-
 
 
 G4double G4StatMFMacroTemperature::CalcTemperature(void) 

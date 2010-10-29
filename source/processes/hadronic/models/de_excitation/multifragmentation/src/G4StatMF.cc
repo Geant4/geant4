@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.6 2008-07-25 11:20:47 vnivanch Exp $
+// $Id: G4StatMF.cc,v 1.7 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -80,8 +80,8 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
   // 	G4FragmentVector * theResult = new G4FragmentVector;
 
   if (theFragment.GetExcitationEnergy() <= 0.0) {
-    G4FragmentVector * theResult = new G4FragmentVector;
-    theResult->push_back(new G4Fragment(theFragment));
+    //G4FragmentVector * theResult = new G4FragmentVector;
+    //theResult->push_back(new G4Fragment(theFragment));
     return 0;
   }
 

@@ -35,45 +35,18 @@
 
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
     G4EvaporationProbability(1,0,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{
-  
-}
+{}
 
+G4NeutronEvaporationProbability::~G4NeutronEvaporationProbability()
+{}
 
-G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &) : G4EvaporationProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronEvaporationProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4NeutronEvaporationProbability & G4NeutronEvaporationProbability::
-operator=(const G4NeutronEvaporationProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronEvaporationProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4NeutronEvaporationProbability::operator==(const G4NeutronEvaporationProbability &) const
-{
-    return false;
-}
-
-G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationProbability &) const
-{
-    return true;
-}
-
- G4double G4NeutronEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
+G4double G4NeutronEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
   { return 0.76+2.2/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);}
 
 	
-  G4double G4NeutronEvaporationProbability::CalcBetaParam(const G4Fragment &  fragment) 
+G4double G4NeutronEvaporationProbability::CalcBetaParam(const G4Fragment &  fragment) 
   { return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0) - 0.05)*MeV/
       CalcAlphaParam(fragment); }
-
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -81,7 +54,8 @@ G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationPro
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4NeutronEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double 
+G4NeutronEvaporationProbability::CrossSection(const  G4Fragment & fragment, G4double K)
 { 
   theA=GetA();
   theZ=GetZ();
@@ -107,15 +81,10 @@ G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationPro
   }
 }
 
-
-
-
-
-
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4NeutronEvaporationProbability::GetOpt12(const  G4double K)
+G4double G4NeutronEvaporationProbability::GetOpt12(G4double K)
 {
 
   G4double Kc=K;
@@ -148,7 +117,7 @@ G4double G4NeutronEvaporationProbability::GetOpt12(const  G4double K)
 
 
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
-G4double G4NeutronEvaporationProbability::GetOpt34(const  G4double K)
+G4double G4NeutronEvaporationProbability::GetOpt34(G4double K)
 {
 
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;

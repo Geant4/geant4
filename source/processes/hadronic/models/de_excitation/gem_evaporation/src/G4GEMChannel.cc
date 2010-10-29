@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.cc,v 1.10 2009-10-08 07:55:39 vnivanch Exp $
+// $Id: G4GEMChannel.cc,v 1.11 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -39,23 +39,23 @@
 
 #include "G4GEMChannel.hh"
 #include "G4PairingCorrection.hh"
-
-
-G4GEMChannel::G4GEMChannel(const G4int theA, const G4int theZ,
+/*
+G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ,
                            G4GEMProbability * aEmissionStrategy,
                            G4VCoulombBarrier * aCoulombBarrier):
-    A(theA),
-    Z(theZ),
-    theEvaporationProbabilityPtr(aEmissionStrategy),
-    theCoulombBarrierPtr(aCoulombBarrier),
-    EmissionProbability(0.0),
-    MaximalKineticEnergy(-1000.0)
+  A(theA),
+  Z(theZ),
+  theEvaporationProbabilityPtr(aEmissionStrategy),
+  theCoulombBarrierPtr(aCoulombBarrier),
+  EmissionProbability(0.0),
+  MaximalKineticEnergy(-1000.0)
 { 
-    theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
-    MyOwnLevelDensity = true;
+  theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
+  MyOwnLevelDensity = true;
 }
+*/
 
-G4GEMChannel::G4GEMChannel(const G4int theA, const G4int theZ, const G4String & aName,
+G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
                            G4GEMProbability * aEmissionStrategy,
                            G4VCoulombBarrier * aCoulombBarrier) :
   G4VEvaporationChannel(aName),
@@ -70,38 +70,18 @@ G4GEMChannel::G4GEMChannel(const G4int theA, const G4int theZ, const G4String & 
   MyOwnLevelDensity = true;
 }
 
+
+G4GEMChannel::G4GEMChannel() {}
+
 G4GEMChannel::~G4GEMChannel()
 {
-    if (MyOwnLevelDensity) delete theLevelDensityPtr;
-}
-
-G4GEMChannel::G4GEMChannel(const G4GEMChannel & ) : G4VEvaporationChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4GEMChannel::copy_costructor meant to not be accessable");
-}
-
-const G4GEMChannel & G4GEMChannel::operator=(const G4GEMChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4GEMChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4bool G4GEMChannel::operator==(const G4GEMChannel & right) const 
-{
-    return (this == (G4GEMChannel *) &right);
-    //  return false;
-}
-
-G4bool G4GEMChannel::operator!=(const G4GEMChannel & right) const 
-{
-    return (this != (G4GEMChannel *) &right);
-    //  return true;
+  if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
 }
 
 void G4GEMChannel::Initialize(const G4Fragment & fragment)
 {
-  G4int anA = static_cast<G4int>(fragment.GetA());
-  G4int aZ = static_cast<G4int>(fragment.GetZ());
+  G4int anA = fragment.GetA_asInt();
+  G4int aZ  = fragment.GetZ_asInt();
   AResidual = anA - A;
   ZResidual = aZ - Z;
   //G4cout << "G4GEMChannel::Initialize: Z= " << aZ << " A= " << anA
@@ -117,7 +97,6 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
     } 
   else 
     {
-
       // Effective excitation energy
       // JMQ 071009: pairing in ExEnergy should be the one of parent compound nucleus 
       // FIXED the bug causing reported crash by VI (negative Probabilities 
@@ -181,9 +160,6 @@ G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
     G4LorentzVector EvaporatedMomentum(momentum,EvaporatedEnergy);
     EvaporatedMomentum.boost(theNucleus.GetMomentum().boostVector());
     G4Fragment * EvaporatedFragment = new G4Fragment(A,Z,EvaporatedMomentum);
-#ifdef PRECOMPOUND_TEST
-    EvaporatedFragment->SetCreatorModel(G4String("G4Evaporation"));
-#endif
     // ** And now the residual nucleus ** 
     G4double theExEnergy = theNucleus.GetExcitationEnergy();
     G4double theMass = G4ParticleTable::GetParticleTable()->

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporation.hh,v 1.6 2010-04-27 14:00:40 vnivanch Exp $
+// $Id: G4VEvaporation.hh,v 1.7 2010-10-29 17:35:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -65,9 +65,10 @@ public:
   inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
   // for superimposed Coulomb Barrier for inverse cross sections 	
   inline void UseSICB(G4bool use) { useSICB = use; }	
+
 protected:
-   G4int OPTxs;
-   G4bool useSICB;
+  G4int OPTxs;
+  G4bool useSICB;
 
 };
 

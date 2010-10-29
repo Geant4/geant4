@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.12 2010-05-03 16:49:19 vnivanch Exp $
+// $Id: G4CompetitiveFission.cc,v 1.13 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -56,10 +56,6 @@ G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
     LevelDensityParameter = 0.0;
 }
 
-G4CompetitiveFission::G4CompetitiveFission(const G4CompetitiveFission &) : G4VEvaporationChannel()
-{
-}
-
 G4CompetitiveFission::~G4CompetitiveFission()
 {
     if (MyOwnFissionBarrier) delete theFissionBarrierPtr;
@@ -69,29 +65,10 @@ G4CompetitiveFission::~G4CompetitiveFission()
     if (MyOwnLevelDensity) delete theLevelDensityPtr;
 }
 
-const G4CompetitiveFission & G4CompetitiveFission::operator=(const G4CompetitiveFission &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::operator= meant to not be accessable");
-    return *this;
-}
-
-G4bool G4CompetitiveFission::operator==(const G4CompetitiveFission &right) const
-{
-    return (this == (G4CompetitiveFission *) &right);
-}
-
-G4bool G4CompetitiveFission::operator!=(const G4CompetitiveFission &right) const
-{
-    return (this != (G4CompetitiveFission *) &right);
-}
-
-
-
-
 void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
 {
-    G4int anA = static_cast<G4int>(fragment.GetA());
-    G4int aZ = static_cast<G4int>(fragment.GetZ());
+    G4int anA = fragment.GetA_asInt();
+    G4int aZ  = fragment.GetZ_asInt();
     G4double ExEnergy = fragment.GetExcitationEnergy() - 
 	   G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(anA,aZ);
   
@@ -119,9 +96,9 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 {
     // Nucleus data
     // Atomic number of nucleus
-    G4int A = static_cast<G4int>(theNucleus.GetA());
+    G4int A = theNucleus.GetA_asInt();
     // Charge of nucleus
-    G4int Z = static_cast<G4int>(theNucleus.GetZ());
+    G4int Z = theNucleus.GetZ_asInt();
     //   Excitation energy (in MeV)
     G4double U = theNucleus.GetExcitationEnergy() - 
 	G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
@@ -132,9 +109,8 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 	return theResult;
     }
 
-
     // Atomic Mass of Nucleus (in MeV)
-    G4double M = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
+    G4double M = theNucleus.GetGroundStateMass();
 
     // Nucleus Momentum
     G4LorentzVector theNucleusMomentum = theNucleus.GetMomentum();
@@ -252,14 +228,8 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 
     // Create Fragments
     G4Fragment * Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
-    if (!Fragment1) throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakItUp: Can't create Fragment1! ");
     G4Fragment * Fragment2 = new G4Fragment( A2, Z2, FourMomentum2);
-    if (!Fragment2) throw G4HadronicException(__FILE__, __LINE__, "G4CompetitiveFission::BreakItUp: Can't create Fragment2! ");
 
-#ifdef PRECOMPOUND_TEST
-    Fragment1->SetCreatorModel(G4String("G4CompetitiveFission"));
-    Fragment2->SetCreatorModel(G4String("G4CompetitiveFission"));
-#endif
     // Create Fragment Vector
     G4FragmentVector * theResult = new G4FragmentVector;
 
@@ -272,8 +242,6 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 
     return theResult;
 }
-
-
 
 G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionParameters & theParam)
     // Calculates the atomic number of a fission product
@@ -336,11 +304,6 @@ G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionPa
     return static_cast<G4int>(m+0.5);
 }
 
-
-
-
-
-
 G4double G4CompetitiveFission::MassDistribution(const G4double x, const G4double A, 
 						const G4FissionParameters & theParam)
     // This method gives mass distribution F(x) = F_{asym}(x)+w*F_{sym}(x)
@@ -363,9 +326,6 @@ G4double G4CompetitiveFission::MassDistribution(const G4double x, const G4double
     else return theParam.GetW()*Xsym+Xasym;
 }
 
-
-
-
 G4int G4CompetitiveFission::FissionCharge(const G4double A,
 					  const G4double Z,
 					  const G4double Af)
@@ -386,9 +346,6 @@ G4int G4CompetitiveFission::FissionCharge(const G4double A,
     //  return static_cast<G4int>(theZ+0.5);
     return static_cast<G4int>(theZ+0.5);
 }
-
-
-
 
 G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4double Z,
 						    const G4double Af1, const G4double /*Zf1*/,
@@ -476,10 +433,6 @@ G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4do
     return KineticEnergy;
 }
 
-
-
-
-
 G4double G4CompetitiveFission::AsymmetricRatio(const G4double A,const G4double A11)
 {
     const G4double B1 = 23.5;
@@ -502,10 +455,6 @@ G4double G4CompetitiveFission::Ratio(const G4double A,const G4double A11,
     else return 1.0-B1*(10.0/A)*(10.0/A)-2.0*(10.0/A)*B1*((A11-A00-10.0)/A);
 }
 
-
-
-
-
 G4ThreeVector G4CompetitiveFission::IsotropicVector(const G4double Magnitude)
     // Samples a isotropic random vectorwith a magnitud given by Magnitude.
     // By default Magnitude = 1.0
@@ -518,7 +467,6 @@ G4ThreeVector G4CompetitiveFission::IsotropicVector(const G4double Magnitude)
 			 Magnitude*CosTheta);
     return Vector;
 }
-
 
 #ifdef debug
 void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,

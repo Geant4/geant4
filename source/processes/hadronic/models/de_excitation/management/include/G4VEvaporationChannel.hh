@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh,v 1.6 2010-05-11 11:16:04 vnivanch Exp $
+// $Id: G4VEvaporationChannel.hh,v 1.7 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -51,16 +51,6 @@ public:
   G4VEvaporationChannel(const G4String & aName = "Anonymous");
   virtual ~G4VEvaporationChannel();
 
-private:
-
-  G4VEvaporationChannel(const G4VEvaporationChannel & right);
-  const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
-
-public:
-
-  G4bool operator==(const G4VEvaporationChannel & right) const;
-  G4bool operator!=(const G4VEvaporationChannel & right) const;
-
   virtual void Initialize(const G4Fragment & fragment) = 0;
 
   // return emitted fragment, initial fragment is modified
@@ -77,8 +67,8 @@ public:
 
   virtual G4double GetEmissionProbability(void) const = 0;
 
-  G4String GetName() const {return Name;}
-  void SetName(const G4String & aName) { Name = aName;}
+  inline G4String GetName() const {return Name;}
+  inline void SetName(const G4String & aName) { Name = aName;}
 
   // for cross section selection
   inline void SetOPTxs(G4int opt) { OPTxs = opt; }
@@ -92,6 +82,11 @@ protected:
 
 private:
   G4String Name;
+
+  G4VEvaporationChannel(const G4VEvaporationChannel & right);
+  const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
+  G4bool operator==(const G4VEvaporationChannel & right) const;
+  G4bool operator!=(const G4VEvaporationChannel & right) const;
 
 };
 

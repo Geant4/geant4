@@ -24,44 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.7 2009-03-04 11:05:02 gcosmo Exp $
+// $Id: G4VEmissionProbability.cc,v 1.8 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+// Modifications:
+// 28.10.2010 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4VEmissionProbability.hh"
 #include "G4HadronicException.hh"
 
 
-G4VEmissionProbability::G4VEmissionProbability() {}
-G4VEmissionProbability::~G4VEmissionProbability() {}
+G4VEmissionProbability::G4VEmissionProbability():OPTxs(3),useSICB(false) 
+{}
 
+G4VEmissionProbability::~G4VEmissionProbability() 
+{}
 
-G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::copy_constructor meant to not be accessable");
-}
-
-
-const G4VEmissionProbability & G4VEmissionProbability::operator=(const G4VEmissionProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4VEmissionProbability::operator==(const G4VEmissionProbability &) const
-{
-    return false;
-}
-
-G4bool G4VEmissionProbability::operator!=(const G4VEmissionProbability &) const
-{
-    return true;
-}
 
 
 

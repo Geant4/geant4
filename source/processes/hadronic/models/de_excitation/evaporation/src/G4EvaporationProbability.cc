@@ -43,57 +43,57 @@ using namespace std;
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
-
-G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbability &) : G4VEmissionProbability()
+G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ, 
+						   G4double aGamma,
+						   G4VCoulombBarrier * aCoulombBarrier) 
+  : theA(anA),
+    theZ(aZ),
+    Gamma(aGamma),
+    theCoulombBarrierptr(aCoulombBarrier) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationProbability::copy_constructor meant to not be accessable");
+  theEvapLDPptr = new G4EvaporationLevelDensityParameter;
 }
 
-
-
-
-const G4EvaporationProbability & G4EvaporationProbability::
-operator=(const G4EvaporationProbability &)
+G4EvaporationProbability::G4EvaporationProbability()
+  : theA(0),
+    theZ(0),
+    Gamma(0.0),
+    theCoulombBarrierptr(0) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationProbability::operator= meant to not be accessable");
-    return *this;
+  theEvapLDPptr = new G4EvaporationLevelDensityParameter;
 }
 
-
-G4bool G4EvaporationProbability::operator==(const G4EvaporationProbability &) const
+G4EvaporationProbability::~G4EvaporationProbability() 
 {
-    return false;
-}
-
-G4bool G4EvaporationProbability::operator!=(const G4EvaporationProbability &) const
-{
-    return true;
+  if (theEvapLDPptr != 0) { delete theEvapLDPptr; }
 }
   
-G4double G4EvaporationProbability::EmissionProbability(const G4Fragment & fragment, const G4double anEnergy)
+G4double 
+G4EvaporationProbability::EmissionProbability(const G4Fragment & fragment, G4double anEnergy)
 {
-    G4double EmissionProbability = 0.0;
-    G4double MaximalKineticEnergy = anEnergy;
+  G4double EmissionProbability = 0.0;
+  G4double MaximalKineticEnergy = anEnergy;
 
-    if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
-	EmissionProbability = CalculateProbability(fragment, MaximalKineticEnergy);
+  if (MaximalKineticEnergy > 0.0 && fragment.GetExcitationEnergy() > 0.0) {
+    EmissionProbability = CalculateProbability(fragment, MaximalKineticEnergy);
 
-    }
-    return EmissionProbability;
+  }
+  return EmissionProbability;
 }
 
 ////////////////////////////////////
 
 // Computes the integrated probability of evaporation channel
-G4double G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy)
+G4double 
+G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment, 
+					       G4double MaximalKineticEnergy)
 {
-    G4double ResidualA = fragment.GetA() - theA;
-    G4double ResidualZ = fragment.GetZ() - theZ;
-    G4double U = fragment.GetExcitationEnergy();
+  G4double ResidualA = fragment.GetA() - theA;
+  G4double ResidualZ = fragment.GetZ() - theZ;
+  G4double U = fragment.GetExcitationEnergy();
    
- if (OPTxs==0) {
+  if (OPTxs==0) {
 
-	
     G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
 
 
@@ -211,12 +211,10 @@ IntegrateEmissionProbability(const G4Fragment & fragment, const G4double & Low, 
 /////////////////////////////////////////////////////////
 //New method (OPT=1,2,3,4)
 
-G4double G4EvaporationProbability::ProbabilityDistributionFunction( const G4Fragment & fragment, const G4double K)
+G4double 
+G4EvaporationProbability::ProbabilityDistributionFunction( const G4Fragment & fragment, 
+							   G4double K)
 { 
-
- 
-
-
   G4double ResidualA = fragment.GetA() - theA;
   G4double ResidualZ = fragment.GetZ() - theZ;  
   G4double U = fragment.GetExcitationEnergy();

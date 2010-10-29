@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DiscreteGammaTransition.cc,v 1.11 2010-10-29 17:35:04 vnivanch Exp $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -69,7 +70,9 @@
 
 G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level): 
   _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
-{ }
+{ 
+  _levelManager = 0;
+}
 
 //JMQ: now A is also needed in the constructor
 //G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z): 
@@ -77,6 +80,7 @@ G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level
   _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false), _gammaEnergy(0.), 
   _level(level), _excitation(0.),  _gammaCreationTime(0.),_A(A),_Z(Z)
 {
+  _levelManager = 0;
   _verbose = 0;
   //JMQ: added tolerence in the mismatch
   _tolerance = CLHEP::keV;

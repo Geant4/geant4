@@ -149,6 +149,7 @@ G4WilsonAblationModel::G4WilsonAblationModel()
 //
   OPTxs   = 3;
   useSICB = false;
+  fragmentVector = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //

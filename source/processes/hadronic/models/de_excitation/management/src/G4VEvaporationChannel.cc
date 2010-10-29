@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.cc,v 1.6 2010-04-25 18:43:08 vnivanch Exp $
+// $Id: G4VEvaporationChannel.cc,v 1.7 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -33,36 +33,16 @@
 // 24.04.2010 (V.Ivanchenko) moved constructor and destructor to source; added two
 //                          new virtual methods EmittedFragment(s) to allow more optimal
 //                          work with G4Fragment objects; removed unnecesary exceptions
+// 28.10.2010 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4VEvaporationChannel.hh"
-#include "G4HadronicException.hh"
 
 G4VEvaporationChannel::G4VEvaporationChannel(const G4String & aName) 
-  : Name(aName) 
+  :OPTxs(3),useSICB(false),Name(aName) 
 {}
 
 G4VEvaporationChannel::~G4VEvaporationChannel() 
 {}
-
-//G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &)
-//{
-// throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::copy_constructor meant to not be accessable");
-//}
-//const G4VEvaporationChannel & G4VEvaporationChannel::operator=(const G4VEvaporationChannel &)
-//{
-//  throw G4HadronicException(__FILE__, __LINE__, "G4VEvaporationChannel::operator= meant to not be accessable");
-//  return *this;
-//}
-
-G4bool G4VEvaporationChannel::operator==(const G4VEvaporationChannel &right) const
-{
-  return (this == (G4VEvaporationChannel *) &right);
-}
-
-G4bool G4VEvaporationChannel::operator!=(const G4VEvaporationChannel &right) const
-{
-  return (this != (G4VEvaporationChannel *) &right);
-}
 
 G4Fragment* G4VEvaporationChannel::EmittedFragment(G4Fragment*)
 {

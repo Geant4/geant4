@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh,v 1.3 2006-06-29 20:13:19 gunter Exp $
+// $Id: G4CompetitiveFission.hh,v 1.4 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -57,9 +57,7 @@ public:
 
 private:
   G4CompetitiveFission(const G4CompetitiveFission &right);
-
   const G4CompetitiveFission & operator=(const G4CompetitiveFission &right);
-public:
   G4bool operator==(const G4CompetitiveFission &right) const;
   G4bool operator!=(const G4CompetitiveFission &right) const;
 

@@ -35,40 +35,18 @@
 
 G4ProtonEvaporationProbability::G4ProtonEvaporationProbability() :
     G4EvaporationProbability(1,1,2,&theCoulombBarrier) // A,Z,Gamma,&theCoulombBarrier
-{
-   
-}
+{}
 
-G4ProtonEvaporationProbability::G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &) : G4EvaporationProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationProbability::copy_constructor meant to not be accessable");
-}
+G4ProtonEvaporationProbability::~G4ProtonEvaporationProbability() 
+{}
 
-const G4ProtonEvaporationProbability & G4ProtonEvaporationProbability::
-operator=(const G4ProtonEvaporationProbability &)
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4ProtonEvaporationProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4ProtonEvaporationProbability::operator==(const G4ProtonEvaporationProbability &) const
-{
-    return false;
-}
-
-G4bool G4ProtonEvaporationProbability::operator!=(const G4ProtonEvaporationProbability &) const
-{
-    return true;
-}
-
-  G4double G4ProtonEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
+G4double G4ProtonEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment) 
   { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
 	
-  G4double G4ProtonEvaporationProbability::CalcBetaParam(const G4Fragment & )  
+G4double G4ProtonEvaporationProbability::CalcBetaParam(const G4Fragment & )  
   { return 0.0; }
 
-  G4double G4ProtonEvaporationProbability::CCoeficient(const G4double aZ) 
+G4double G4ProtonEvaporationProbability::CCoeficient(const G4double aZ) 
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
@@ -96,7 +74,8 @@ G4bool G4ProtonEvaporationProbability::operator!=(const G4ProtonEvaporationProba
 //OPT=2,4 Wellisch's parameterization 
 //OPT=3 Kalbach's parameterization
 // 
-G4double G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double 
+G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragment, G4double K)
 {
 //  G4cout<<" In G4ProtonEVaporationProbability OPTxs="<<OPTxs<<G4endl;
 //  G4cout<<" In G4ProtonEVaporationProbability useSICB="<<useSICB<<G4endl;
@@ -128,7 +107,7 @@ G4double G4ProtonEvaporationProbability::CrossSection(const  G4Fragment & fragme
 //********************* OPT=1 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4ProtonEvaporationProbability::GetOpt1(const  G4double K)
+G4double G4ProtonEvaporationProbability::GetOpt1(G4double K)
 {
   G4double Kc=K; 
 
@@ -171,7 +150,7 @@ G4double G4ProtonEvaporationProbability::GetOpt1(const  G4double K)
 
 //************* OPT=2 : Wellisch's proton reaction cross section ************************ 
 
-G4double G4ProtonEvaporationProbability::GetOpt2(const  G4double K)
+G4double G4ProtonEvaporationProbability::GetOpt2(G4double K)
 {
 
   G4double rnpro,rnneu,eekin,ekin,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0);
@@ -218,7 +197,7 @@ G4double G4ProtonEvaporationProbability::GetOpt2(const  G4double K)
 
 
 // *********** OPT=3 : Kalbach's cross sections (from PRECO code)*************
-G4double G4ProtonEvaporationProbability::GetOpt3(const  G4double K)
+G4double G4ProtonEvaporationProbability::GetOpt3(G4double K)
 {
 //     ** p from  becchetti and greenlees (but modified with sub-barrier
 //     ** correction function and xp2 changed from -449)

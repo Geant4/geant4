@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4EvaporationChannel.cc,v 1.13 2010-10-29 17:35:03 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -39,8 +41,7 @@
 #include "G4PairingCorrection.hh"
 
 
-
-G4EvaporationChannel::G4EvaporationChannel(const G4int anA, const G4int aZ, const G4String & aName,
+G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, const G4String & aName,
 					   G4VEmissionProbability * aEmissionStrategy,
                                            G4VCoulombBarrier * aCoulombBarrier):
     G4VEvaporationChannel(aName),
@@ -51,8 +52,25 @@ G4EvaporationChannel::G4EvaporationChannel(const G4int anA, const G4int aZ, cons
     EmissionProbability(0.0),
     MaximalKineticEnergy(-1000.0)
 { 
-    theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
-//    MyOwnLevelDensity = true;  
+  ResidualA = 0;
+  ResidualZ = 0;
+  CoulombBarrier=0.0;
+  theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
+}
+
+G4EvaporationChannel::G4EvaporationChannel():
+    G4VEvaporationChannel(""),
+    theA(0),
+    theZ(0),
+    theEvaporationProbabilityPtr(0),
+    theCoulombBarrierPtr(0),
+    EmissionProbability(0.0),
+    MaximalKineticEnergy(-1000.0)
+{ 
+  ResidualA = 0;
+  ResidualZ = 0;
+  CoulombBarrier=0.0;
+  theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
 }
 
 G4EvaporationChannel::~G4EvaporationChannel()
@@ -60,35 +78,6 @@ G4EvaporationChannel::~G4EvaporationChannel()
   delete theLevelDensityPtr;
 }
 
-G4EvaporationChannel::G4EvaporationChannel(const G4EvaporationChannel & ) : G4VEvaporationChannel()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationChannel::copy_costructor meant to not be accessable");
-}
-
-const G4EvaporationChannel & G4EvaporationChannel::operator=(const G4EvaporationChannel & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4EvaporationChannel::operator= meant to not be accessable");
-    return *this;
-}
-
-G4bool G4EvaporationChannel::operator==(const G4EvaporationChannel & right) const 
-{
-    return (this == (G4EvaporationChannel *) &right);
-    //  return false;
-}
-
-G4bool G4EvaporationChannel::operator!=(const G4EvaporationChannel & right) const 
-{
-    return (this != (G4EvaporationChannel *) &right);
-    //  return true;
-}
-
-//void G4EvaporationChannel::SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
-//  {
-//    if (MyOwnLevelDensity) delete theLevelDensityPtr;
-//    theLevelDensityPtr = aLevelDensity;
-//    MyOwnLevelDensity = false;
-//  }
 
 void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 {
@@ -97,9 +86,8 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
   // for superimposed Coulomb Barrier for inverse cross sections
   theEvaporationProbabilityPtr->UseSICB(useSICB);
   
-  
-  G4int FragmentA = static_cast<G4int>(fragment.GetA());
-  G4int FragmentZ = static_cast<G4int>(fragment.GetZ());
+  G4int FragmentA = fragment.GetA_asInt();
+  G4int FragmentZ = fragment.GetZ_asInt();
   ResidualA = FragmentA - theA;
   ResidualZ = FragmentZ - theZ;
   

@@ -35,45 +35,18 @@
 
 G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
     G4EvaporationProbability(4,2,1,&theCoulombBarrier) // A,Z,Gamma,&theCoumlombBarrier
-{
-	
-}
+{}
 
+G4AlphaEvaporationProbability::~G4AlphaEvaporationProbability()
+{}
 
-G4AlphaEvaporationProbability::G4AlphaEvaporationProbability(const G4AlphaEvaporationProbability &): G4EvaporationProbability()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4AlphaEvaporationProbability::copy_constructor meant to not be accessable");
-}
-
-
-
-
-const G4AlphaEvaporationProbability & G4AlphaEvaporationProbability::
-operator=(const G4AlphaEvaporationProbability &) 
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4AlphaEvaporationProbability::operator= meant to not be accessable");
-    return *this;
-}
-
-
-G4bool G4AlphaEvaporationProbability::operator==(const G4AlphaEvaporationProbability &) const
-{
-    return false;
-}
-
-G4bool G4AlphaEvaporationProbability::operator!=(const G4AlphaEvaporationProbability &) const
-{
-    return true;
-}
-
-
- G4double G4AlphaEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment)  
+G4double G4AlphaEvaporationProbability::CalcAlphaParam(const G4Fragment & fragment)  
   { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
 	
- G4double G4AlphaEvaporationProbability::CalcBetaParam(const G4Fragment &) 
+G4double G4AlphaEvaporationProbability::CalcBetaParam(const G4Fragment &) 
   { return 0.0; }
 
-G4double G4AlphaEvaporationProbability::CCoeficient(const G4double aZ) 
+G4double G4AlphaEvaporationProbability::CCoeficient(G4double aZ) 
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
@@ -103,8 +76,8 @@ G4double G4AlphaEvaporationProbability::CCoeficient(const G4double aZ)
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
-G4double G4AlphaEvaporationProbability::CrossSection(const  G4Fragment & fragment, 
-						     const  G4double K)
+G4double 
+G4AlphaEvaporationProbability::CrossSection(const G4Fragment & fragment, G4double K)
 {
   theA=GetA();
   theZ=GetZ();
@@ -137,7 +110,7 @@ G4double G4AlphaEvaporationProbability::CrossSection(const  G4Fragment & fragmen
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
-G4double G4AlphaEvaporationProbability::GetOpt12(const  G4double K)
+G4double G4AlphaEvaporationProbability::GetOpt12(G4double K)
 {
 // c     ** alpha from huizenga and igo
   G4double Kc=K;
@@ -179,7 +152,7 @@ G4double G4AlphaEvaporationProbability::GetOpt12(const  G4double K)
 }
 
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
-G4double G4AlphaEvaporationProbability::GetOpt34(const  G4double K)
+G4double G4AlphaEvaporationProbability::GetOpt34(G4double K)
 // c     ** alpha from huizenga and igo
 {
   

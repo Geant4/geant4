@@ -42,7 +42,7 @@ public:
   // Only available constructor
   G4ProtonEvaporationProbability();
 
-  ~G4ProtonEvaporationProbability() {}
+  ~G4ProtonEvaporationProbability();
 private:  
   // Copy constructor
   G4ProtonEvaporationProbability(const G4ProtonEvaporationProbability &right);
@@ -51,22 +51,20 @@ private:
   G4bool operator==(const G4ProtonEvaporationProbability &right) const;
   G4bool operator!=(const G4ProtonEvaporationProbability &right) const;
 
-
 private:
 
-  virtual G4double CrossSection(const  G4Fragment & fragment, const  G4double K);
+  virtual G4double CrossSection(const  G4Fragment & fragment, G4double K);
 
-  G4double GetOpt0(const G4double K);
-  G4double GetOpt1(const G4double K);
-  G4double GetOpt2(const G4double K);
-  G4double GetOpt3(const G4double K);
+  G4double GetOpt0(G4double K);
+  G4double GetOpt1(G4double K);
+  G4double GetOpt2(G4double K);
+  G4double GetOpt3(G4double K);
 
-  
- virtual G4double CalcAlphaParam(const G4Fragment & fragment)  ;
+  virtual G4double CalcAlphaParam(const G4Fragment & fragment)  ;
  
- virtual G4double CalcBetaParam(const G4Fragment & fragment) ;
+  virtual G4double CalcBetaParam(const G4Fragment & fragment) ;
  
-  G4double CCoeficient(const G4double aZ) ;
+  G4double CCoeficient(G4double aZ) ;
   
 //data members
 

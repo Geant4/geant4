@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.15 2010-05-10 07:20:40 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.16 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -75,8 +75,8 @@ G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation()
 G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 {
   G4Fragment* nucleus = GetNucleus();
-  G4int A = static_cast<G4int>(nucleus->GetA());
-  G4int Z = static_cast<G4int>(nucleus->GetZ());
+  G4int A = nucleus->GetA_asInt();
+  G4int Z = nucleus->GetZ_asInt();
   //  _verbose =2;
   //  G4cout << "G4DiscreteGammaDeexcitation::CreateTransition: " << nucleus << G4endl;
   if (_nucleusA != A || _nucleusZ != Z) 
@@ -179,19 +179,22 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
   
   if (canDo) {
     const G4NuclearLevel* level = _levelManager->NearestLevel(excitation);  
-    if (level != 0) {  
-      if (level->HalfLife() > _max_hl && !_rdm ) canDo = false;
+    if (!level) { 
+      canDo = false; 
+ 
     } else {
-      canDo = false;
-    }
-    if (_verbose > 0) {
-      G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition -  Halflife " 
-	     << level->HalfLife() << ", Calling from RDM " 
-	     << (_rdm ? " True " : " False ")  << ", Max-HL = " <<  _max_hl << G4endl;
+      if (level->HalfLife() > _max_hl && !_rdm ) { canDo = false; }
+      
+      if (_verbose > 0) {
+	G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition -  Halflife " 
+	       << level->HalfLife() << ", Calling from RDM " 
+	       << (_rdm ? " True " : " False ")  << ", Max-HL = " <<  _max_hl 
+	       << G4endl;
+      }
     }
   }
   if (_verbose > 0) {
-    G4cout <<"G4DiscreteGammaDeexcitation::CanDoTransition - CanDo:" 
+    G4cout <<"G4DiscreteGammaDeexcitation::CanDoTransition - CanDo: " 
 	   <<  (canDo ? " True " : " False ")  << G4endl; 
   }
   

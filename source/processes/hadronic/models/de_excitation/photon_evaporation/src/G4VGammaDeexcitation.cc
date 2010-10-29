@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.18 2010-06-25 09:46:13 gunter Exp $
+// $Id: G4VGammaDeexcitation.cc,v 1.19 2010-10-29 17:35:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -73,7 +73,9 @@
 
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
-{ }
+{ 
+  _nucleus = 0;
+}
 
 G4VGammaDeexcitation::~G4VGammaDeexcitation()
 { 
