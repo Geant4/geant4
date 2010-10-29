@@ -73,6 +73,8 @@ G4MuonRadiativeDecayChannelWithSpin::
     }
 #endif
   }
+  EMMU  = 0.*MeV;
+  EMASS = 0.*MeV;
 }
 
 G4MuonRadiativeDecayChannelWithSpin::~G4MuonRadiativeDecayChannelWithSpin()

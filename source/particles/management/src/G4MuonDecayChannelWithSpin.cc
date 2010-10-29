@@ -42,6 +42,7 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 
 #include "Randomize.hh"
+
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
@@ -49,6 +50,8 @@ G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4String& theParent
 						       G4double        theBR)
                            : G4MuonDecayChannel(theParentName,theBR)
 {
+  EMMU  = 0.*MeV;
+  EMASS = 0.*MeV;
 }
 
 G4MuonDecayChannelWithSpin::~G4MuonDecayChannelWithSpin()
