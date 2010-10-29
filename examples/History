@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2010-10-01 14:02:42 gcosmo Exp $
+$Id: History,v 1.163 2010-10-29 13:21:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th October 2010  Gabriele Cosmo (examples-V09-03-09)
+- Updated reference outputs according to reference tag geant4-09-03-ref-09.
+- Includes tags: microbeam-V09-03-07, microdosimetry-V09-03-07, exgps-V09-03-03,
+                 nanobeam-V09-03-03, exampleN03Con-V09-03-02, testem7-V09-03-06,
+                 ReverseMC01-V09-03-03, testem8-V09-03-06, testem14-V09-03-04,
+                 testem16-V09-03-03, fieldex04-V09-03-02, olapex-V09-03-02,
+                 exhadr00-V09-03-04, exhadr01-V09-03-09, exampleES2-V09-03-01,
+                 fano-V09-03-04, fano2-V09-03-04, gtherapy-V09-03-04,
+                 LXe-V09-03-01, WLS-V09-03-03, ExDiane-V09-03-01, G01-V09-03-05,
+                 exgflash-V09-03-02, gdmlEx-V09-03-00, G02-V09-03-01,
+                 G03-V09-03-04, G04-V09-03-01, rdecay01-V09-03-02,
+                 exampleN03-V09-03-03, exampleN06-V09-03-01.
 
 1st October 2010  Gabriele Cosmo (examples-V09-03-08)
 - Updated reference outputs according to reference tag geant4-09-03-ref-08.
