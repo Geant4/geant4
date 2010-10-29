@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.1 2010-10-01 07:19:00 gcosmo Exp $
+cvs log $Id: History,v 1.2 2010-10-29 11:44:39 bmorgan Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 29th 2010 - B. Morgan
+- Install.g4cmake: Added as installation guide for using CMake.
 
 October 1st, 2010 - B.Morgan (cmake-V09-03-00)
 - Created. First Alpha version of CMake build system.
