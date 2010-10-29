@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.19 2010-10-25 10:50:03 vnivanch Exp $
+// $Id: G4MaterialPropertyVector.cc,v 1.20 2010-10-29 23:44:43 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,18 +125,13 @@ G4MaterialPropertyVector::~G4MaterialPropertyVector()
 
 void G4MaterialPropertyVector::RemoveElement(G4double aPhotonEnergy)
 {
-  //VI: if one needs to remove an element why to create a new one?
-  //G4MPVEntry *newElement;
   G4MPVEntry *success=0;
-
-  //newElement = new G4MPVEntry(aPhotonEnergy, DBL_MAX);
 
   std::vector<G4MPVEntry*>::iterator i;
   for (i = MPV.begin(); i != MPV.end(); ++i)
     {
       if((*i)->GetPhotonEnergy() == aPhotonEnergy) { success = *i; break; }
     }
-  //  success = MPV.remove(newElement);
 
   if(success == 0)
     {
