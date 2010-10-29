@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-08    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,18 +13,18 @@
 
 ***** Table : Nb of materials = 4 *****
 
- Material:     Lead     density: 10.976 g/cm3   RadL:   5.803 mm   Nucl.Int.Length:  18.869 cm   Imean: 823.000 eV 
+ Material:     Lead     density: 10.976 g/cm3   RadL:   5.803 mm   Nucl.Int.Length:  18.881 cm   Imean: 823.000 eV 
    --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.20 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: Scintillator     density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.639 cm   Imean:  65.944 eV 
+ Material: Scintillator     density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.748 cm   Imean:  65.944 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  92.24 %  ElmAbundance  50.00 %
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   7.76 %  ElmAbundance  50.00 %
 
- Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
- Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.943 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
@@ -148,7 +148,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=26.39s Real=26.79s Sys=0.27s
+  User=25s Real=25.37s Sys=0.27s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -171,34 +171,34 @@ Run Summary
 
              visible Energy          (rms/mean)        total Energy           (rms/mean)
 
-   layer 0: 838.73 keV +- 2.487 MeV  (3e+02 %)     9.2829 MeV +- 5.991 MeV  ( 65 %)
-   layer 1: 800.74 keV +- 1.514 MeV  (1.9e+02 %)     8.1699 MeV +- 5.344 MeV  ( 65 %)
-   layer 2: 783.53 keV +- 1.328 MeV  (1.7e+02 %)     8.5728 MeV +- 5.396 MeV  ( 63 %)
-   layer 3: 779.45 keV +- 1.332 MeV  (1.7e+02 %)     8.1868 MeV +- 5.266 MeV  ( 64 %)
-   layer 4: 790.84 keV +- 1.472 MeV  (1.9e+02 %)     8.6176 MeV +- 6.788 MeV  ( 79 %)
-   layer 5: 799.85 keV +- 1.736 MeV  (2.2e+02 %)      8.144 MeV +- 5.341 MeV  ( 66 %)
-   layer 6: 779.03 keV +- 1.115 MeV  (1.4e+02 %)      8.506 MeV +- 5.178 MeV  ( 61 %)
-   layer 7: 797.73 keV +-  1.49 MeV  (1.9e+02 %)     8.2248 MeV +- 5.359 MeV  ( 65 %)
-   layer 8: 788.77 keV +- 1.424 MeV  (1.8e+02 %)     8.6395 MeV +-   5.8 MeV  ( 67 %)
-   layer 9:  782.1 keV +- 1.552 MeV  (2e+02 %)     8.1987 MeV +- 5.487 MeV  ( 67 %)
-   layer 10: 815.95 keV +- 1.878 MeV  (2.3e+02 %)     8.5575 MeV +- 5.604 MeV  ( 65 %)
-   layer 11:    785 keV +-  1.19 MeV  (1.5e+02 %)     8.1865 MeV +- 5.909 MeV  ( 72 %)
-   layer 12: 804.62 keV +- 1.803 MeV  (2.2e+02 %)      8.537 MeV +- 5.443 MeV  ( 64 %)
-   layer 13: 798.84 keV +- 1.486 MeV  (1.9e+02 %)     8.1371 MeV +- 4.788 MeV  ( 59 %)
-   layer 14: 806.48 keV +- 1.635 MeV  (2e+02 %)     7.5594 MeV +-  4.45 MeV  ( 59 %)
-   layer 15: 772.87 keV +- 992.2 keV  (1.3e+02 %)     9.0402 MeV +- 5.311 MeV  ( 59 %)
-   layer 16: 809.91 keV +- 1.508 MeV  (1.9e+02 %)     8.4741 MeV +- 4.844 MeV  ( 57 %)
-   layer 17: 779.88 keV +- 1.358 MeV  (1.7e+02 %)     7.3305 MeV +- 4.155 MeV  ( 57 %)
+   layer 0: 808.53 keV +- 2.004 MeV  (2.5e+02 %)      9.285 MeV +- 5.997 MeV  ( 65 %)
+   layer 1: 796.56 keV +- 1.721 MeV  (2.2e+02 %)     8.1529 MeV +- 5.267 MeV  ( 65 %)
+   layer 2: 787.46 keV +- 1.408 MeV  (1.8e+02 %)     8.6034 MeV +- 5.583 MeV  ( 65 %)
+   layer 3:  782.2 keV +- 1.535 MeV  (2e+02 %)      8.202 MeV +- 5.314 MeV  ( 65 %)
+   layer 4: 787.51 keV +- 1.228 MeV  (1.6e+02 %)     8.6625 MeV +- 7.057 MeV  ( 81 %)
+   layer 5: 803.32 keV +- 1.743 MeV  (2.2e+02 %)     8.1904 MeV +- 5.929 MeV  ( 72 %)
+   layer 6: 782.69 keV +- 1.131 MeV  (1.4e+02 %)     8.4748 MeV +-  5.19 MeV  ( 61 %)
+   layer 7: 777.24 keV +- 1.365 MeV  (1.8e+02 %)     8.2024 MeV +- 5.343 MeV  ( 65 %)
+   layer 8: 794.23 keV +- 1.633 MeV  (2.1e+02 %)     8.6353 MeV +- 6.325 MeV  ( 73 %)
+   layer 9: 763.92 keV +- 1.331 MeV  (1.7e+02 %)     8.1729 MeV +- 5.202 MeV  ( 64 %)
+   layer 10:  810.2 keV +- 1.678 MeV  (2.1e+02 %)     8.5538 MeV +-   5.6 MeV  ( 65 %)
+   layer 11: 778.29 keV +- 1.235 MeV  (1.6e+02 %)     8.1462 MeV +- 5.592 MeV  ( 69 %)
+   layer 12: 774.77 keV +- 1.197 MeV  (1.5e+02 %)     8.4971 MeV +- 5.168 MeV  ( 61 %)
+   layer 13:    780 keV +- 1.253 MeV  (1.6e+02 %)     8.1651 MeV +- 5.023 MeV  ( 62 %)
+   layer 14: 800.07 keV +- 1.561 MeV  (2e+02 %)     7.5229 MeV +- 4.349 MeV  ( 58 %)
+   layer 15: 768.37 keV +- 1.012 MeV  (1.3e+02 %)     8.9977 MeV +- 5.134 MeV  ( 57 %)
+   layer 16: 783.73 keV +- 1.156 MeV  (1.5e+02 %)     8.4208 MeV +- 4.676 MeV  ( 56 %)
+   layer 17: 770.62 keV +- 1.177 MeV  (1.5e+02 %)     7.2962 MeV +- 4.271 MeV  ( 59 %)
 
-   total calor : 14.314 MeV +- 6.631 MeV  ( 46 %)     150.37 MeV +- 22.97 MeV  ( 15 %)
+   total calor :  14.15 MeV +- 6.028 MeV  ( 43 %)     150.18 MeV +- 23.33 MeV  ( 16 %)
 ------------------------------------------------------------
 
-   Leakage : 849.63 MeV +- 22.97 MeV
-   Eleak/Ebeam =  85 %  ( forward =84.9 %;   backward =0.016 %;   lateral =0.0353 %)
+   Leakage : 849.82 MeV +- 23.33 MeV
+   Eleak/Ebeam =  85 %  ( forward =84.9 %;   backward =0.0291 %;   lateral =0.0416 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1267800639, 243507081
+ Current couple of seeds = 1711531853, 1291796812
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

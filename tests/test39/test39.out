@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-08    (25-June-2010)
+ Geant4 version Name: geant4-09-03-ref-09    (25-June-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -17,23 +17,23 @@ Test39:-->Material(13,14):Aluminum,Al; index=1
 Test39:-->Material(82,126):Lead,Pb; index=2
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=211,P=1.000000e+02 MeV/c, =>> 1 of 90
-Test39: Mt=9.382720e+02, Mp=1.395700e+02, tmt=3.014366e-02, E=1.716968e+02
+Test39: Mt=9.382720e+02, Mp=1.395701e+02, tmt=3.014364e-02, E=1.716969e+02
 Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
-Test39: t=9.900892e-04 ,dsig/dt=1.859998e+02
-Test39: t=3.882246e-03 ,dsig/dt=2.049400e+02
-Test39: t=1.522270e-02 ,dsig/dt=1.995202e+02
+Test39: t=9.900891e-04 ,dsig/dt=1.859999e+02
+Test39: t=3.882244e-03 ,dsig/dt=2.049401e+02
+Test39: t=1.522269e-02 ,dsig/dt=1.995203e+02
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=211,P=1.000000e+02 MeV/c, =>> 2 of 90
-Test39: Mt=2.512651e+04, Mp=1.395700e+02, tmt=8.072338e-01, E=1.716968e+02
+Test39: Mt=2.512651e+04, Mp=1.395701e+02, tmt=8.072333e-01, E=1.716969e+02
 Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.712543e-03 ,dsig/dt=5.546450e+03
-Test39: t=2.009022e-02 ,dsig/dt=1.786102e+03
-Test39: t=2.356827e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.009021e-02 ,dsig/dt=1.786102e+03
+Test39: t=2.356826e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=211,P=1.000000e+02 MeV/c, =>> 3 of 90
-Test39: Mt=1.936877e+05, Mp=1.395700e+02, tmt=6.222562e+00, E=1.716968e+02
+Test39: Mt=1.936877e+05, Mp=1.395701e+02, tmt=6.222558e+00, E=1.716969e+02
 Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.725613e+04
@@ -41,23 +41,23 @@ Test39: t=2.236068e-02 ,dsig/dt=7.267178e+03
 Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=211,P=1.000000e+03 MeV/c, =>> 4 of 90
-Test39: Mt=9.382720e+02, Mp=1.395700e+02, tmt=8.164120e-01, E=1.009693e+03
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=9.382720e+02, Mp=1.395701e+02, tmt=8.164119e-01, E=1.009693e+03
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.715773e-03 ,dsig/dt=1.696824e+01
 Test39: t=2.020411e-02 ,dsig/dt=1.690680e+01
 Test39: t=2.379137e-01 ,dsig/dt=1.121210e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=211,P=1.000000e+03 MeV/c, =>> 5 of 90
-Test39: Mt=2.512651e+04, Mp=1.395700e+02, tmt=2.186315e+01, E=1.009693e+03
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=2.512651e+04, Mp=1.395701e+02, tmt=2.186315e+01, E=1.009693e+03
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.632492e+04
 Test39: t=2.236068e-02 ,dsig/dt=2.736531e+03
 Test39: t=2.817269e-01 ,dsig/dt=5.394034e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=211,P=1.000000e+03 MeV/c, =>> 6 of 90
-Test39: Mt=1.936877e+05, Mp=1.395700e+02, tmt=1.685321e+02, E=1.009693e+03
+Test39: Mt=1.936877e+05, Mp=1.395701e+02, tmt=1.685321e+02, E=1.009693e+03
 Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.001836e+05
@@ -65,7 +65,7 @@ Test39: t=2.236068e-02 ,dsig/dt=7.992236e+03
 Test39: t=2.817269e-01 ,dsig/dt=1.542873e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=211,P=1.000000e+04 MeV/c, =>> 7 of 90
-Test39: Mt=9.382720e+02, Mp=1.395700e+02, tmt=9.252679e+00, E=1.000097e+04
+Test39: Mt=9.382720e+02, Mp=1.395701e+02, tmt=9.252679e+00, E=1.000097e+04
 Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=4.024138e+01
@@ -73,16 +73,16 @@ Test39: t=2.236068e-02 ,dsig/dt=3.224368e+01
 Test39: t=2.817269e-01 ,dsig/dt=5.856921e+00
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=211,P=1.000000e+04 MeV/c, =>> 8 of 90
-Test39: Mt=2.512651e+04, Mp=1.395700e+02, tmt=2.477826e+02, E=1.000097e+04
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=2.512651e+04, Mp=1.395701e+02, tmt=2.477826e+02, E=1.000097e+04
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.082777e+04
 Test39: t=2.236068e-02 ,dsig/dt=1.980225e+03
 Test39: t=2.817269e-01 ,dsig/dt=7.202743e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=211,P=1.000000e+04 MeV/c, =>> 9 of 90
-Test39: Mt=1.936877e+05, Mp=1.395700e+02, tmt=1.910032e+03, E=1.000097e+04
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39: Mt=1.936877e+05, Mp=1.395701e+02, tmt=1.910032e+03, E=1.000097e+04
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.007220e+05
 Test39: t=2.236068e-02 ,dsig/dt=2.204594e+03
@@ -90,7 +90,7 @@ Test39: t=2.817269e-01 ,dsig/dt=3.854587e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=2112,P=1.000000e+02 MeV/c, =>> 10 of 90
 Test39: Mt=9.382720e+02, Mp=9.395654e+02, tmt=4.979057e-03, E=9.448720e+02
-Test39:CalculationTimePerEvent=5.000000e-06 s
+Test39:CalculationTimePerEvent=6.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=7.333864e-04 ,dsig/dt=1.281455e+05
 Test39: t=1.577824e-03 ,dsig/dt=1.341385e+05
@@ -98,7 +98,7 @@ Test39: t=3.394566e-03 ,dsig/dt=1.381568e+05
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=2112,P=1.000000e+02 MeV/c, =>> 11 of 90
 Test39: Mt=2.512651e+04, Mp=9.395654e+02, tmt=1.333369e-01, E=9.448720e+02
-Test39:CalculationTimePerEvent=5.000000e-06 s
+Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.268528e-03 ,dsig/dt=8.648704e+04
 Test39: t=8.165075e-03 ,dsig/dt=6.857347e+04
@@ -106,7 +106,7 @@ Test39: t=5.255576e-02 ,dsig/dt=1.842511e+03
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=2112,P=1.000000e+02 MeV/c, =>> 12 of 90
 Test39: Mt=1.936877e+05, Mp=9.395654e+02, tmt=1.027828e+00, E=9.448720e+02
-Test39:CalculationTimePerEvent=5.000000e-06 s
+Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.438483e+05
 Test39: t=2.236068e-02 ,dsig/dt=6.323845e+04
@@ -114,7 +114,7 @@ Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=2112,P=1.000000e+03 MeV/c, =>> 13 of 90
 Test39: Mt=9.382720e+02, Mp=9.395654e+02, tmt=4.058778e-01, E=1.372145e+03
-Test39:CalculationTimePerEvent=5.400000e-05 s
+Test39:CalculationTimePerEvent=5.700000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.527124e-03 ,dsig/dt=6.680747e+01
 Test39: t=1.424566e-02 ,dsig/dt=7.224182e+01
@@ -122,7 +122,7 @@ Test39: t=1.328896e-01 ,dsig/dt=4.629480e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=2112,P=1.000000e+03 MeV/c, =>> 14 of 90
 Test39: Mt=2.512651e+04, Mp=9.395654e+02, tmt=1.086923e+01, E=1.372145e+03
-Test39:CalculationTimePerEvent=5.300000e-05 s
+Test39:CalculationTimePerEvent=5.500000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.699182e+04
 Test39: t=2.236068e-02 ,dsig/dt=2.941789e+03
@@ -146,7 +146,7 @@ Test39: t=2.817269e-01 ,dsig/dt=1.293491e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=2112,P=1.000000e+04 MeV/c, =>> 17 of 90
 Test39: Mt=2.512651e+04, Mp=9.395654e+02, tmt=2.287637e+02, E=1.004404e+04
-Test39:CalculationTimePerEvent=5.000000e-06 s
+Test39:CalculationTimePerEvent=6.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.043662e+04
 Test39: t=2.236068e-02 ,dsig/dt=3.719555e+03
@@ -154,7 +154,7 @@ Test39: t=2.817269e-01 ,dsig/dt=1.173643e+01
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=2112,P=1.000000e+04 MeV/c, =>> 18 of 90
 Test39: Mt=1.936877e+05, Mp=9.395654e+02, tmt=1.763425e+03, E=1.004404e+04
-Test39:CalculationTimePerEvent=5.000000e-06 s
+Test39:CalculationTimePerEvent=6.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=3.729560e+05
 Test39: t=2.236068e-02 ,dsig/dt=4.348289e+03
@@ -178,7 +178,7 @@ Test39: t=5.261579e-02 ,dsig/dt=4.603627e+02
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=2212,P=1.000000e+02 MeV/c, =>> 21 of 90
 Test39: Mt=1.936877e+05, Mp=9.382720e+02, tmt=1.029236e+00, E=9.435859e+02
-Test39:CalculationTimePerEvent=5.000000e-06 s
+Test39:CalculationTimePerEvent=6.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=9.545125e+04
 Test39: t=2.236068e-02 ,dsig/dt=4.113834e+04
@@ -233,23 +233,23 @@ Test39: t=2.236068e-02 ,dsig/dt=4.592303e+03
 Test39: t=2.817269e-01 ,dsig/dt=7.342021e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-211,P=1.000000e+02 MeV/c, =>> 28 of 90
-Test39: Mt=9.382720e+02, Mp=1.395700e+02, tmt=3.014366e-02, E=1.716968e+02
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=9.382720e+02, Mp=1.395701e+02, tmt=3.014364e-02, E=1.716969e+02
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
-Test39: t=9.900892e-04 ,dsig/dt=4.996329e+01
-Test39: t=3.882246e-03 ,dsig/dt=5.400926e+01
-Test39: t=1.522270e-02 ,dsig/dt=5.150916e+01
+Test39: t=9.900891e-04 ,dsig/dt=4.996330e+01
+Test39: t=3.882244e-03 ,dsig/dt=5.400928e+01
+Test39: t=1.522269e-02 ,dsig/dt=5.150917e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=-211,P=1.000000e+02 MeV/c, =>> 29 of 90
-Test39: Mt=2.512651e+04, Mp=1.395700e+02, tmt=8.072338e-01, E=1.716968e+02
+Test39: Mt=2.512651e+04, Mp=1.395701e+02, tmt=8.072333e-01, E=1.716969e+02
 Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.712543e-03 ,dsig/dt=5.544739e+03
-Test39: t=2.009022e-02 ,dsig/dt=1.790224e+03
-Test39: t=2.356827e-01 ,dsig/dt=0.000000e+00
+Test39: t=2.009021e-02 ,dsig/dt=1.790224e+03
+Test39: t=2.356826e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=-211,P=1.000000e+02 MeV/c, =>> 30 of 90
-Test39: Mt=1.936877e+05, Mp=1.395700e+02, tmt=6.222562e+00, E=1.716968e+02
+Test39: Mt=1.936877e+05, Mp=1.395701e+02, tmt=6.222558e+00, E=1.716969e+02
 Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.709309e+04
@@ -257,31 +257,31 @@ Test39: t=2.236068e-02 ,dsig/dt=7.286756e+03
 Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-211,P=1.000000e+03 MeV/c, =>> 31 of 90
-Test39: Mt=9.382720e+02, Mp=1.395700e+02, tmt=8.164120e-01, E=1.009693e+03
-Test39:CalculationTimePerEvent=6.000000e-06 s
+Test39: Mt=9.382720e+02, Mp=1.395701e+02, tmt=8.164119e-01, E=1.009693e+03
+Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.715773e-03 ,dsig/dt=2.669640e+01
 Test39: t=2.020411e-02 ,dsig/dt=3.137971e+01
 Test39: t=2.379137e-01 ,dsig/dt=2.192341e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=-211,P=1.000000e+03 MeV/c, =>> 32 of 90
-Test39: Mt=2.512651e+04, Mp=1.395700e+02, tmt=2.186315e+01, E=1.009693e+03
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=2.512651e+04, Mp=1.395701e+02, tmt=2.186315e+01, E=1.009693e+03
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.558085e+04
 Test39: t=2.236068e-02 ,dsig/dt=2.805708e+03
 Test39: t=2.817269e-01 ,dsig/dt=7.309498e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=-211,P=1.000000e+03 MeV/c, =>> 33 of 90
-Test39: Mt=1.936877e+05, Mp=1.395700e+02, tmt=1.685321e+02, E=1.009693e+03
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=1.936877e+05, Mp=1.395701e+02, tmt=1.685321e+02, E=1.009693e+03
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.050752e+05
 Test39: t=2.236068e-02 ,dsig/dt=7.876158e+03
 Test39: t=2.817269e-01 ,dsig/dt=3.576442e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-211,P=1.000000e+04 MeV/c, =>> 34 of 90
-Test39: Mt=9.382720e+02, Mp=1.395700e+02, tmt=9.252679e+00, E=1.000097e+04
+Test39: Mt=9.382720e+02, Mp=1.395701e+02, tmt=9.252679e+00, E=1.000097e+04
 Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=4.394274e+01
@@ -289,7 +289,7 @@ Test39: t=2.236068e-02 ,dsig/dt=3.500282e+01
 Test39: t=2.817269e-01 ,dsig/dt=6.875984e+00
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=-211,P=1.000000e+04 MeV/c, =>> 35 of 90
-Test39: Mt=2.512651e+04, Mp=1.395700e+02, tmt=2.477826e+02, E=1.000097e+04
+Test39: Mt=2.512651e+04, Mp=1.395701e+02, tmt=2.477826e+02, E=1.000097e+04
 Test39:CalculationTimePerEvent=7.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.074328e+04
@@ -297,8 +297,8 @@ Test39: t=2.236068e-02 ,dsig/dt=2.000403e+03
 Test39: t=2.817269e-01 ,dsig/dt=6.794844e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=-211,P=1.000000e+04 MeV/c, =>> 36 of 90
-Test39: Mt=1.936877e+05, Mp=1.395700e+02, tmt=1.910032e+03, E=1.000097e+04
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39: Mt=1.936877e+05, Mp=1.395701e+02, tmt=1.910032e+03, E=1.000097e+04
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.973283e+05
 Test39: t=2.236068e-02 ,dsig/dt=2.314691e+03
@@ -306,7 +306,7 @@ Test39: t=2.817269e-01 ,dsig/dt=5.601257e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=321,P=1.000000e+02 MeV/c, =>> 37 of 90
 Test39: Mt=9.382720e+02, Mp=4.936770e+02, tmt=9.407365e-03, E=5.037033e+02
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=8.154293e-04 ,dsig/dt=2.518634e+02
 Test39: t=2.168797e-03 ,dsig/dt=2.630484e+02
@@ -322,7 +322,7 @@ Test39: t=8.930747e-02 ,dsig/dt=2.762186e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=321,P=1.000000e+02 MeV/c, =>> 39 of 90
 Test39: Mt=1.936877e+05, Mp=4.936770e+02, tmt=1.941964e+00, E=5.037033e+02
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=7.755734e+03
 Test39: t=2.236068e-02 ,dsig/dt=3.251068e+03
@@ -330,7 +330,7 @@ Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=321,P=1.000000e+03 MeV/c, =>> 40 of 90
 Test39: Mt=9.382720e+02, Mp=4.936770e+02, tmt=5.831770e-01, E=1.115221e+03
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.622215e-03 ,dsig/dt=2.107777e+01
 Test39: t=1.707596e-02 ,dsig/dt=1.621769e+01
@@ -362,7 +362,7 @@ Test39: t=2.817269e-01 ,dsig/dt=3.937374e+00
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=321,P=1.000000e+04 MeV/c, =>> 44 of 90
 Test39: Mt=2.512651e+04, Mp=4.936770e+02, tmt=2.391667e+02, E=1.001218e+04
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=8.900976e+03
 Test39: t=2.236068e-02 ,dsig/dt=1.656636e+03
@@ -370,7 +370,7 @@ Test39: t=2.817269e-01 ,dsig/dt=5.409662e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=321,P=1.000000e+04 MeV/c, =>> 45 of 90
 Test39: Mt=1.936877e+05, Mp=4.936770e+02, tmt=1.843616e+03, E=1.001218e+04
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.784850e+05
 Test39: t=2.236068e-02 ,dsig/dt=2.102531e+03
@@ -386,7 +386,7 @@ Test39: t=5.768351e-03 ,dsig/dt=9.691023e+03
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=-321,P=1.000000e+02 MeV/c, =>> 47 of 90
 Test39: Mt=2.512651e+04, Mp=4.936770e+02, tmt=2.519250e-01, E=5.037033e+02
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.410437e-03 ,dsig/dt=4.156768e+04
 Test39: t=1.122330e-02 ,dsig/dt=2.426708e+04
@@ -402,7 +402,7 @@ Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-321,P=1.000000e+03 MeV/c, =>> 49 of 90
 Test39: Mt=9.382720e+02, Mp=4.936770e+02, tmt=5.831770e-01, E=1.115221e+03
-Test39:CalculationTimePerEvent=7.000000e-06 s
+Test39:CalculationTimePerEvent=8.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.622215e-03 ,dsig/dt=3.198197e+01
 Test39: t=1.707596e-02 ,dsig/dt=4.011799e+01
@@ -426,7 +426,7 @@ Test39: t=2.817269e-01 ,dsig/dt=2.427902e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-321,P=1.000000e+04 MeV/c, =>> 52 of 90
 Test39: Mt=9.382720e+02, Mp=4.936770e+02, tmt=8.930944e+00, E=1.001218e+04
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.777100e+01
 Test39: t=2.236068e-02 ,dsig/dt=2.182518e+01
@@ -460,7 +460,7 @@ Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=310,P=1.000000e+02 MeV/c, =>> 56 of 90
 Test39: Mt=2.512651e+04, Mp=4.976140e+02, tmt=2.499711e-01, E=5.075625e+02
 *Warning*G4QKaonMinusElaCS::GetCS:*>Found pPDG=310 ==> CS=0
-Test39:CalculationTimePerEvent=9.000000e-06 s
+Test39:CalculationTimePerEvent=1.000000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.408607e-03 ,dsig/dt=0.000000e+00
 Test39: t=1.117969e-02 ,dsig/dt=0.000000e+00
@@ -478,7 +478,7 @@ Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=310,P=1.000000e+03 MeV/c, =>> 58 of 90
 Test39: Mt=9.382720e+02, Mp=4.976140e+02, tmt=5.811234e-01, E=1.116969e+03
 *Warning*G4QKaonMinusElaCS::GetCS:*>Found pPDG=310 ==> CS=0
-Test39:CalculationTimePerEvent=9.000000e-06 s
+Test39:CalculationTimePerEvent=1.000000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.621261e-03 ,dsig/dt=0.000000e+00
 Test39: t=1.704587e-02 ,dsig/dt=0.000000e+00
@@ -505,7 +505,7 @@ Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=310,P=1.000000e+04 MeV/c, =>> 61 of 90
 Test39: Mt=9.382720e+02, Mp=4.976140e+02, tmt=8.927432e+00, E=1.001237e+04
 *Warning*G4QKaonMinusElaCS::GetCS:*>Found pPDG=310 ==> CS=0
-Test39:CalculationTimePerEvent=1.000000e-05 s
+Test39:CalculationTimePerEvent=1.100000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=0.000000e+00
 Test39: t=2.236068e-02 ,dsig/dt=0.000000e+00
@@ -531,7 +531,7 @@ Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=3122,P=1.000000e+02 MeV/c, =>> 64 of 90
 Test39: Mt=9.382720e+02, Mp=1.115683e+03, tmt=4.196510e-03, E=1.120156e+03
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=7.127815e-04 ,dsig/dt=3.391473e+04
 Test39: t=1.448536e-03 ,dsig/dt=3.690612e+04
@@ -563,7 +563,7 @@ Test39: t=1.199565e-01 ,dsig/dt=3.475771e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=3122,P=1.000000e+03 MeV/c, =>> 68 of 90
 Test39: Mt=2.512651e+04, Mp=1.115683e+03, tmt=9.612534e+00, E=1.498248e+03
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.847019e+04
 Test39: t=2.236068e-02 ,dsig/dt=3.271750e+03
@@ -579,7 +579,7 @@ Test39: t=2.817269e-01 ,dsig/dt=3.601917e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=3122,P=1.000000e+04 MeV/c, =>> 70 of 90
 Test39: Mt=9.382720e+02, Mp=1.115683e+03, tmt=8.394121e+00, E=1.006204e+04
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=4.274736e+01
 Test39: t=2.236068e-02 ,dsig/dt=3.303635e+01
@@ -603,7 +603,7 @@ Test39: t=2.817269e-01 ,dsig/dt=7.739964e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=3222,P=1.000000e+02 MeV/c, =>> 73 of 90
 Test39: Mt=9.382720e+02, Mp=1.189370e+03, tmt=3.937461e-03, E=1.193567e+03
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=7.052521e-04 ,dsig/dt=3.767175e+04
 Test39: t=1.403115e-03 ,dsig/dt=3.961470e+04
@@ -643,7 +643,7 @@ Test39: t=2.817269e-01 ,dsig/dt=7.884068e+00
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=3222,P=1.000000e+03 MeV/c, =>> 78 of 90
 Test39: Mt=1.936877e+05, Mp=1.189370e+03, tmt=7.060471e+01, E=1.553899e+03
-Test39:CalculationTimePerEvent=9.000000e-06 s
+Test39:CalculationTimePerEvent=1.000000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.297739e+05
 Test39: t=2.236068e-02 ,dsig/dt=4.969391e+03
@@ -651,7 +651,7 @@ Test39: t=2.817269e-01 ,dsig/dt=1.319495e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=3222,P=1.000000e+04 MeV/c, =>> 79 of 90
 Test39: Mt=9.382720e+02, Mp=1.189370e+03, tmt=8.332899e+00, E=1.007048e+04
-Test39:CalculationTimePerEvent=8.000000e-06 s
+Test39:CalculationTimePerEvent=9.000000e-06 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=4.087948e+01
 Test39: t=2.236068e-02 ,dsig/dt=3.276087e+01
@@ -675,7 +675,7 @@ Test39: t=2.817269e-01 ,dsig/dt=5.183048e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-2212,P=1.000000e+02 MeV/c, =>> 82 of 90
 Test39: Mt=9.382720e+02, Mp=9.382720e+02, tmt=4.985881e-03, E=9.435859e+02
-Test39:CalculationTimePerEvent=1.000000e-05 s
+Test39:CalculationTimePerEvent=1.100000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=7.335538e-04 ,dsig/dt=8.748028e+03
 Test39: t=1.578905e-03 ,dsig/dt=8.179218e+03
@@ -699,7 +699,7 @@ Test39: t=2.817269e-01 ,dsig/dt=0.000000e+00
 Test39: Material=Hydrogen, Element[0]=Hydrogen,A[0]=1 is selected.
 Test39:*NewRun* Targ=90001000,Proj=-2212,P=1.000000e+03 MeV/c, =>> 85 of 90
 Test39: Mt=9.382720e+02, Mp=9.382720e+02, tmt=4.062606e-01, E=1.371260e+03
-Test39:CalculationTimePerEvent=1.000000e-05 s
+Test39:CalculationTimePerEvent=1.100000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.527364e-03 ,dsig/dt=9.380081e+01
 Test39: t=1.425238e-02 ,dsig/dt=9.626432e+01
@@ -715,7 +715,7 @@ Test39: t=2.817269e-01 ,dsig/dt=1.101319e+01
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=-2212,P=1.000000e+03 MeV/c, =>> 87 of 90
 Test39: Mt=1.936877e+05, Mp=9.382720e+02, tmt=8.386446e+01, E=1.371260e+03
-Test39:CalculationTimePerEvent=1.000000e-05 s
+Test39:CalculationTimePerEvent=1.200000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=1.971434e+05
 Test39: t=2.236068e-02 ,dsig/dt=7.413013e+03
@@ -731,7 +731,7 @@ Test39: t=2.817269e-01 ,dsig/dt=1.401890e+01
 Test39: Material=Aluminum, Element[0]=Aluminum,A[0]=27 is selected.
 Test39:*NewRun* Targ=90013014,Proj=-2212,P=1.000000e+04 MeV/c, =>> 89 of 90
 Test39: Mt=2.512651e+04, Mp=9.382720e+02, tmt=2.287931e+02, E=1.004392e+04
-Test39:CalculationTimePerEvent=1.000000e-05 s
+Test39:CalculationTimePerEvent=1.100000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.129679e+04
 Test39: t=2.236068e-02 ,dsig/dt=3.686136e+03
@@ -739,7 +739,7 @@ Test39: t=2.817269e-01 ,dsig/dt=1.078880e+01
 Test39: Material=Lead, Element[0]=Lead,A[0]=208 is selected.
 Test39:*NewRun* Targ=90082126,Proj=-2212,P=1.000000e+04 MeV/c, =>> 90 of 90
 Test39: Mt=1.936877e+05, Mp=9.382720e+02, tmt=1.763652e+03, E=1.004392e+04
-Test39:CalculationTimePerEvent=1.100000e-05 s
+Test39:CalculationTimePerEvent=1.200000e-05 s
 Test39: g=1.000000e+00 mTG=0.000000e+00 bTG=0.000000e+00 0=0.000000e+00 1=0.000000e+00 b=0.000000e+00
 Test39: t=1.774768e-03 ,dsig/dt=2.701134e+05
 Test39: t=2.236068e-02 ,dsig/dt=3.121279e+03
