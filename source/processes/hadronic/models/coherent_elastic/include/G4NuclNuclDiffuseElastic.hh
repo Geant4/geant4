@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.16 2010-10-24 13:59:44 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.17 2010-10-29 09:25:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -229,6 +229,7 @@ public:
 
   G4double ProfileNear(G4double theta);
   G4double ProfileFar(G4double theta);
+  G4double Profile(G4double theta);
 
   G4complex PhaseNear(G4double theta);
   G4complex PhaseFar(G4double theta);
@@ -245,7 +246,8 @@ public:
   G4complex AmplitudeSim(G4double theta);
   G4double  AmplitudeSimMod2(G4double theta);
 
-  G4double  GetElCoulRatioSim(G4double theta);
+  G4double  GetRatioSim(G4double theta);
+  G4double  GetRatioGen(G4double theta);
   
 
   G4complex AmplitudeGla(G4double theta);
@@ -280,6 +282,7 @@ public:
   void SetCofFar(G4double pa){fCofFar = pa;};
   void SetEtaRatio(G4double pa){fEtaRatio = pa;};
   void SetMaxL(G4int l){fMaxL = l;};
+  void SetNuclearRadiusCof(G4double r){fNuclearRadiusCof = r;};
 
 private:
 
@@ -317,6 +320,7 @@ private:
   G4double fNuclearRadius2;
   G4double fNuclearRadius;
   G4double fNuclearRadiusSquare;
+  G4double fNuclearRadiusCof;
 
   G4double fBeta;
   G4double fZommerfeld;
@@ -568,8 +572,12 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateAm( G4double momentum, G4dou
 
 inline  G4double G4NuclNuclDiffuseElastic::CalculateNuclearRad( G4double A)
 {
-  G4double r0, radius;
+  G4double r0 = 1.*fermi, radius;
+  // r0 *= 1.12;
+  // r0 *= 1.44;
+  r0 *= fNuclearRadiusCof;
 
+  /*
   if( A < 50. )
   {
     if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
@@ -583,6 +591,9 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateNuclearRad( G4double A)
 
     radius = r0*std::pow(A, 0.27); // 0.27);
   }
+  */
+  radius = r0*std::pow(A, 1./3.);
+
   return radius;
 }
 
@@ -1103,6 +1114,25 @@ inline   G4double G4NuclNuclDiffuseElastic::ProfileFar(G4double theta)
 //
 //
 
+inline   G4double G4NuclNuclDiffuseElastic::Profile(G4double theta)
+{
+  G4double dTheta = fRutherfordTheta - theta;
+  G4double result = 0., argument = 0.;
+
+  if(std::abs(dTheta) < 0.001) result = 1.;
+  else
+  {
+    argument = fProfileDelta*dTheta;
+    result   = pi*argument;
+    result  /= std::sinh(pi*argument);
+  }
+  return result;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+//
+
 inline   G4complex G4NuclNuclDiffuseElastic::PhaseNear(G4double theta)
 {
   G4double twosigma = 2.*fCoulombPhase0; 
@@ -1284,22 +1314,60 @@ inline G4complex G4NuclNuclDiffuseElastic::AmplitudeSim(G4double theta)
 
   return out;
 }
+
 /////////////////////////////////////////////////////////////////
 //
 //
 
-inline G4double G4NuclNuclDiffuseElastic::GetElCoulRatioSim(G4double theta)
+inline G4double G4NuclNuclDiffuseElastic::GetRatioSim(G4double theta)
 {
   G4double sinThetaR  = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
   G4double dTheta     = 0.5*(theta - fRutherfordTheta);
   G4double sindTheta  = std::sin(dTheta);
 
   G4double order      = std::sqrt(fProfileLambda/sinThetaR/pi)*2.*sindTheta;
-  
+  // G4cout<<"order = "<<order<<G4endl;  
   G4double cosFresnel = 0.5 - GetCint(order);  
   G4double sinFresnel = 0.5 - GetSint(order);  
 
   G4double out = 0.5*( cosFresnel*cosFresnel + sinFresnel*sinFresnel );
+
+  return out;
+}
+
+/////////////////////////////////////////////////////////////////
+//
+// The ratio el/ruth for smooth nuckeus profile
+
+inline G4double G4NuclNuclDiffuseElastic::GetRatioGen(G4double theta)
+{
+  G4double sinThetaR  = 2.*fHalfRutThetaTg/(1. + fHalfRutThetaTg2);
+  G4double dTheta     = 0.5*(theta - fRutherfordTheta);
+  G4double sindTheta  = std::sin(dTheta);
+
+  G4double prof       = Profile(theta);
+  G4double prof2      = prof*prof;
+  // G4double profmod    = std::abs(prof);
+  G4double order      = std::sqrt(fProfileLambda/sinThetaR/pi)*2.*sindTheta;
+
+  order = std::abs(order); // since sin changes sign!
+  // G4cout<<"order = "<<order<<G4endl; 
+ 
+  G4double cosFresnel = GetCint(order);  
+  G4double sinFresnel = GetSint(order);  
+
+  G4double out;
+
+  if ( theta <= fRutherfordTheta )
+  {
+    out  = 1. + 0.5*( (0.5-cosFresnel)*(0.5-cosFresnel)+(0.5-sinFresnel)*(0.5-sinFresnel) )*prof2; 
+    out += ( cosFresnel + sinFresnel - 1. )*prof;
+  }
+  else
+  {
+    out = 0.5*( (0.5-cosFresnel)*(0.5-cosFresnel)+(0.5-sinFresnel)*(0.5-sinFresnel) )*prof2;
+  }
+
   return out;
 }
 
@@ -1430,7 +1498,8 @@ inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition*
     fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
     fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
   }
-  fProfileLambda = lambda*std::sqrt(1.-2*fZommerfeld/lambda);
+  G4cout<<"fZommerfeld = "<<fZommerfeld<<G4endl;
+  fProfileLambda = lambda; // *std::sqrt(1.-2*fZommerfeld/lambda);
   G4cout<<"fProfileLambda = "<<fProfileLambda<<G4endl;
   fProfileDelta  = fCofDelta*fProfileLambda;
   fProfileAlpha  = fCofAlpha*fProfileLambda;

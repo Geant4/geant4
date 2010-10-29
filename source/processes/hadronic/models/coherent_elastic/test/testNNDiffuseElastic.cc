@@ -112,7 +112,7 @@ int main()
   G4int choice;
   // G4cin >> choice;
 
-  choice = 8;
+  choice = 92;
 
 
   switch (choice)
@@ -232,10 +232,10 @@ int main()
   G4StateManager* g4State = G4StateManager::GetStateManager();
   if(! g4State->SetNewState(G4State_Init) ); 
 
-  // C
+  // C, O
 
-  G4int Z1 = 6;
-  G4int A1 = 12;
+  G4int Z1 = 18;
+  G4int A1 = 40;
 
   G4DecayPhysics decays;
   decays.ConstructParticle();
@@ -299,7 +299,10 @@ int main()
 
   // G4double kinEnergy = std::sqrt(momentum*momentum + pMass*pMass) - pMass;
 
-  G4double kinEnergy = 168.*MeV;
+  // G4double kinEnergy = 168.*MeV;
+  // G4double kinEnergy = 125.3*MeV;
+  // G4double kinEnergy = 170.1*MeV;
+  G4double kinEnergy = 340.*MeV;
 
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
@@ -348,13 +351,18 @@ int main()
   G4double rad, rad2;
   
   const G4int kAngle = 100; // number of angles
-  G4double thetaMin = 15.*degree;
-  dData = 30.*degree/kAngle;
+  G4double thetaMin = 20.*degree;
+  dData = 45.*degree/kAngle;
 
-  nndiffelastic->SetCofLambda(1.01);  // 1.01, 
-  nndiffelastic->SetCofDelta(0.095);   // 0.092
+  nndiffelastic->SetCofLambda(1.0);  // 1.01, 
+
+  nndiffelastic->SetCofDelta(0.04);   // 0.092
+
+  nndiffelastic->SetNuclearRadiusCof(1.);   
+
+
   nndiffelastic->SetCofAlpha(0.095);   // 0.092
-  nndiffelastic->SetCofPhase(1.03);   
+  nndiffelastic->SetCofPhase(1.0);   
   nndiffelastic->SetCofFar(1.0);    
   // nndiffelastic->SetEtaRatio(1.40);   // 1
 
@@ -379,7 +387,9 @@ int main()
 
     // distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeSimMod2(thetaCMS);
-    distrXsc[k] = nndiffelastic->CoulombAmplitudeMod2(thetaCMS)*nndiffelastic->GetElCoulRatioSim(thetaCMS);
+    // distrXsc[k] = nndiffelastic->CoulombAmplitudeMod2(thetaCMS)*nndiffelastic->GetRatioGen(thetaCMS);
+    // distrXsc[k] = nndiffelastic->GetRatioSim(thetaCMS);
+    distrXsc[k] = nndiffelastic->GetRatioGen(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGlaMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGGMod2(thetaCMS);
 
@@ -387,13 +397,12 @@ int main()
     rad2 = rad*rad;
 
     distrDif[k] /= rad2;
-    distrXsc[k] /= rad2;
+    // distrXsc[k] /= rad2;
 
     G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
     writef <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
   
   }
-
 
 
 
