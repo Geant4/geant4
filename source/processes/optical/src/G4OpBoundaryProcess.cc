@@ -119,6 +119,9 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         kCarTolerance = G4GeometryTolerance::GetInstance()
                         ->GetSurfaceTolerance();
 
+        iTE = iTM = 0;
+        thePhotonMomentum = 0.;
+        Rindex1 = Rindex2 = cost1 = cost2 = sint1 = sint2 = 0.;
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
