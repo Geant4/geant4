@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.18 2010-10-21 23:16:46 gum Exp $
+// $Id: G4OpRayleigh.cc,v 1.19 2010-10-29 23:18:35 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -226,8 +226,7 @@ void G4OpRayleigh::BuildThePhysicsTable()
 
         for (G4int i=0 ; i < numOfMaterials; i++)
         {
-            G4PhysicsOrderedFreeVector* ScatteringLengths =
-                                new G4PhysicsOrderedFreeVector();
+            G4PhysicsOrderedFreeVector* ScatteringLengths = NULL;
 
             G4MaterialPropertiesTable *aMaterialPropertiesTable =
                          (*theMaterialTable)[i]->GetMaterialPropertiesTable();
@@ -246,7 +245,7 @@ void G4OpRayleigh::BuildThePhysicsTable()
 
                    DefaultWater = true;
 
-		   ScatteringLengths =
+                   ScatteringLengths =
 		   RayleighAttenuationLengthGenerator(aMaterialPropertiesTable);
                 }
               }
