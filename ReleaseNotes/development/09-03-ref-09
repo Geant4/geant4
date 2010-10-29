@@ -211,7 +211,7 @@ processes/hadronic
     passing and copying of vectors; fill NuclearLevel directly by Manager.
     Modified G4ContinuumGammaTransition accordingly.
   o G4DiscreteGammaTransition: use const-ref for G4NuclerLevel data member.
-- models/incl (hadr-incl-V09-03-04)
+- models/incl (hadr-incl-V09-03-05)
   o Refactored INCL input data structure to use a new class G4InclInput
   o Access to input data only through accessor methods.
   o INCL now uses integer A and Z internally as well as in the interface.
