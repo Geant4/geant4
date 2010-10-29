@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th Oct 2010 Peter Gumplinger (op-V09-03-06)
+              Fix minor Coverty Errors
+
 22th Oct 2010 Peter Gumplinger (op-V09-03-05)
               Add Mie Scattering of Optical Photons
               Thanks to Xin Qian (Kellogg Radiation Lab of Caltech)
