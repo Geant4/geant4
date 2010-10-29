@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.13 2010-10-26 02:47:59 kaitanie Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.14 2010-10-29 06:48:43 gunter Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -412,7 +412,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 
     // Spectator nucleus Fermi break-up
     if(useFermiBreakup && useProjectileSpectator && varntp->masp > 1) {
-      baryonNumberBalanceInINCL -= varntp->masp;
+      baryonNumberBalanceInINCL -= G4int(varntp->masp);
       G4double nuclearMass = G4NucleiProperties::GetNuclearMass(G4int(varntp->masp), G4int(varntp->mzsp)) + varntp->exsp * MeV;
       // Use momentum scaling to compensate for different masses in G4 and INCL:
       G4double momentumScaling = G4InclUtils::calculate4MomentumScaling(G4int(varntp->masp),
@@ -427,9 +427,9 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 			 varntp->spectatorT * MeV + nuclearMass);
       // Four-momentum, baryon number and charge balance:
       G4LorentzVector fourMomentumBalance = p4;
-      G4int baryonNumberBalance = varntp->masp;
-      chargeNumberBalanceInINCL -= varntp->mzsp;
-      G4int chargeBalance = varntp->mzsp;
+      G4int baryonNumberBalance = G4int(varntp->masp);
+      chargeNumberBalanceInINCL -= G4int(varntp->mzsp);
+      G4int chargeBalance = G4int(varntp->mzsp);
 
       G4LorentzRotation toFragmentZ;
       // Assume that Fermi breakup uses Z as the direction of the projectile
@@ -508,8 +508,8 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 
     // Finally do Fermi break-up if needed
     if(varntp->needsFermiBreakup && varntp->massini > 0) {
-      baryonNumberBalanceInINCL -= varntp->massini;
-      chargeNumberBalanceInINCL -= varntp->mzini;
+      baryonNumberBalanceInINCL -= G4int(varntp->massini);
+      chargeNumberBalanceInINCL -= G4int(varntp->mzini);
       // Call Fermi Break-up
       G4double nuclearMass = G4NucleiProperties::GetNuclearMass(G4int(varntp->massini), G4int(varntp->mzini)) + varntp->exini * MeV;
       G4LorentzVector fragmentMomentum(varntp->pxrem * MeV, varntp->pyrem * MeV, varntp->pzrem * MeV,
@@ -526,8 +526,8 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 
       // For four-momentum, baryon number and charge conservation check:
       G4LorentzVector fourMomentumBalance = p4;
-      G4int baryonNumberBalance = varntp->massini;
-      G4int chargeBalance = varntp->mzini;
+      G4int baryonNumberBalance = G4int(varntp->massini);
+      G4int chargeBalance = G4int(varntp->mzini);
 
       G4LorentzRotation toFragmentZ;
       toFragmentZ.rotateZ(-p4.theta());

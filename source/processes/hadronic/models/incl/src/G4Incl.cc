@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.32 2010-10-26 02:47:59 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.33 2010-10-29 06:48:43 gunter Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1064,7 +1064,7 @@ void G4Incl::processEventInclAbla(G4InclInput *input, G4int eventnumber)
       // Spectators of composite projectiles (7/2006, AB)
       // (kind is negative in that case)
       if(kind[j] <= 0) { // Particle is a projectile spectator that comes directly from the cascade
-	kind[j] = -1.0 * kind[j];
+	kind[j] *= -1;
 	varntp->itypcasc[j]=-1;
 	//	G4cout <<"Spectator registered!" << G4endl;
 	//	continue;
@@ -1255,7 +1255,7 @@ void G4Incl::processEventInclAbla(G4InclInput *input, G4int eventnumber)
       varntp->needsFermiBreakup = false;
       // Evaporation/fission:
       evaporationResult->ntrack = 0;
-      abla->breakItUp(varntp->massini, varntp->mzini, mcorem, varntp->exini, varntp->jremn,
+      abla->breakItUp(G4int(varntp->massini), G4int(varntp->mzini), mcorem, varntp->exini, varntp->jremn,
       		      erecrem, pxrem, pyrem, pzrem, eventnumber);
 
       if(verboseLevel > 2) {
@@ -1293,7 +1293,7 @@ void G4Incl::processEventInclAbla(G4InclInput *input, G4int eventnumber)
       // Evaporation/fission:
       evaporationResult->ntrack = 0;
       //      G4cout <<"Warning: Using ABLA to de-excite projectile spectator..." << G4endl;
-      abla->breakItUp(varntp->masp, varntp->mzsp, ps->m_projspec, varntp->exsp, 0.0,
+      abla->breakItUp(G4int(varntp->masp), G4int(varntp->mzsp), ps->m_projspec, varntp->exsp, 0.0,
       		      ps->t_projspec, ps->p1_projspec, ps->p1_projspec, ps->p1_projspec, eventnumber);
 
       if(verboseLevel > 2) {
@@ -7958,8 +7958,8 @@ G4double G4Incl::xabs2(G4double zp, G4double ap, G4double zt, G4double at, G4dou
   if ((nint(ap*at) == 1) || (nint(zp+zt) == 1)) {                    
     return dp0;
   }
-  G4double rp = radius(ap);                                                     
-  G4double rt = radius(at);                                                     
+  G4double rp = radius(G4int(ap));                                                     
+  G4double rt = radius(G4int(at));                                                     
   G4double vp = (dp1 + dpth)*dppi*std::pow(rp,3);                                          
   G4double vt = (dp1 + dpth)*dppi*std::pow(rt,3);                                          
   G4double density = dph*((ap/vp) + (at/vt));                                     

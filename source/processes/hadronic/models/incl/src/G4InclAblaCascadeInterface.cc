@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.15 2010-10-26 02:47:59 kaitanie Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.16 2010-10-29 06:48:43 gunter Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -377,8 +377,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
 
       // For four-momentum, baryon number and charge conservation check:
       G4LorentzVector fourMomentumBalance = p4;
-      G4int baryonNumberBalance = varntp->massini;
-      G4int chargeBalance = varntp->mzini;
+      G4int baryonNumberBalance = G4int(varntp->massini);
+      G4int chargeBalance = G4int(varntp->mzini);
 
       G4LorentzRotation toFragmentZ;
       toFragmentZ.rotateZ(-p4.theta());
