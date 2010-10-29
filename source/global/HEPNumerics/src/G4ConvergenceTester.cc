@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.cc,v 1.3 2010-10-15 12:49:23 gcosmo Exp $
+// $Id: G4ConvergenceTester.cc,v 1.4 2010-10-29 21:15:13 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Convergence Tests for Monte Carlo results.
@@ -178,7 +178,7 @@ void G4ConvergenceTester::calStat()
       {
          largest = it->second;
          largest_score_happened = it->first;
-         spend_time_of_largest = cpu_time [ it->first ] - cpu_time [ it->first - 1 ];
+         spend_time_of_largest = cpu_time [ it->first+1 ] - cpu_time [ it->first ];
       }
    }
 
