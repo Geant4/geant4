@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.14 2010-10-07 13:51:31 kurasige Exp $
+// $Id: G4ProcessTable.cc,v 1.15 2010-10-30 07:51:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,6 +120,7 @@ void  G4ProcessTable::DeleteMessenger()
 //////////////////////////
 G4ProcessTable & G4ProcessTable::operator=(const G4ProcessTable &right)
 {
+  verboseLevel = right.verboseLevel;
 #ifdef G4VERBOSE
   if (verboseLevel>0){
     G4cout << "--  G4ProcessTable assignment operator  --" << G4endl;

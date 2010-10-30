@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessAttribute.cc,v 1.5 2006-06-29 21:08:08 gunter Exp $
+// $Id: G4ProcessAttribute.cc,v 1.6 2010-10-30 07:51:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,12 @@ G4ProcessAttribute::G4ProcessAttribute():
 {
   pProcess = 0;
   idxProcessList = -1;
+  // clear 
+  for (G4int idx=0; idx<G4ProcessManager::SizeOfProcVectorArray; idx++){
+    idxProcVector[idx] = -1;
+    ordProcVector[idx] = -1;
+  }
 }
-
 // copy constructor //////////////////////////
 G4ProcessAttribute::G4ProcessAttribute(const G4ProcessAttribute &right)
          :isActive(true)
