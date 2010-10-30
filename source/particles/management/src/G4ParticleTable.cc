@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.36 2010-05-20 01:01:07 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.37 2010-10-30 07:55:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -115,6 +115,9 @@ G4ParticleTable::~G4ParticleTable()
 
 ////////////////////
 G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
+  :verboseLevel(1),fParticleMessenger(0),
+   noName(" "),
+   readyToUse(false)
 {
   G4Exception("G4ParticleTable::G4ParticleTable()",
 	      "illegal constructor call", JustWarning,

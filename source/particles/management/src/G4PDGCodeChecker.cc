@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.14 2010-10-11 03:33:56 kurasige Exp $
+// $Id: G4PDGCodeChecker.cc,v 1.15 2010-10-30 07:55:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,9 +42,18 @@
 
 /////////////
 G4PDGCodeChecker::G4PDGCodeChecker()
+  :code(0),theParticleType(""),
+   thePDGiSpin(0),higherSpin(0),
+   exotic(0),radial(0),multiplet(0),
+   quark1(0),quark2(0),quark3(0),spin(0)
 {
-  code = 0;
   verboseLevel = 1;
+  // clear QuarkContents
+  G4int flavor;
+  for (flavor=0; flavor<NumberOfQuarkFlavor; flavor++){
+    theQuarkContent[flavor] =0;
+    theAntiQuarkContent[flavor] =0;
+  }
 }
 
 /////////////

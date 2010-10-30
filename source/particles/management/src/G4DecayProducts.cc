@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.18 2010-05-20 01:01:07 kurasige Exp $
+// $Id: G4DecayProducts.cc,v 1.19 2010-10-30 07:55:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,18 +50,30 @@ G4Allocator<G4DecayProducts> aDecayProductsAllocator;
 G4DecayProducts::G4DecayProducts()
                 :numberOfProducts(0),theParentParticle(0)
 { 
-
+  //clear theProductVector
+  for (size_t i=0;i<MaxNumberOfProducts; i+=1){
+    theProductVector[i]=0; 
+  }
 }
 
 G4DecayProducts::G4DecayProducts(const G4DynamicParticle &aParticle)
-                :numberOfProducts(0),theParentParticle(0)
+  :numberOfProducts(0),theParentParticle(0)
 {
   theParentParticle = new G4DynamicParticle(aParticle);
+  //clear theProductVector
+  for (size_t i=0;i<MaxNumberOfProducts; i+=1){
+    theProductVector[i]=0; 
+  }
 }
 
 G4DecayProducts::G4DecayProducts(const G4DecayProducts &right) 
                 :numberOfProducts(0)
 {
+  //clear theProductVector
+  for (size_t i=0;i<MaxNumberOfProducts; i+=1){
+    theProductVector[i]=0; 
+  }
+
   // copy parent (Deep Copy)
   theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
