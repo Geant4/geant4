@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaTransition.hh,v 1.4 2010-10-30 16:16:05 vnivanch Exp $
+// $Id: G4VGammaTransition.cc,v 1.1 2010-10-30 16:16:05 vnivanch Exp $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -32,55 +32,15 @@
 //
 //      File name:     G4VGammaTransition
 //
-//      Author:        Maria Grazia Pia (pia@genova.infn.it)
-// 
-//      Creation date: 23 October 1998
+//      Author V.Ivanchenko 30 October 2010
 //
-//      Modifications: 
-//
-// 15.04.1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
-//             Added creation time evaluation for products of evaporation
-// 30.10.2010  V.Ivanchenko moved constructor and destructor to the source
-//      
 // -------------------------------------------------------------------
 
-#ifndef G4VGAMMATRANSITION_HH
-#define G4VGAMMATRANSITION_HH 1
+#include "G4VGammaTransition.hh"
 
-#include "globals.hh"
+G4VGammaTransition::G4VGammaTransition():_verbose(0) 
+{}
 
-class G4VGammaTransition 
-{
-public:
-
-  G4VGammaTransition();
-
-  virtual ~G4VGammaTransition();
+G4VGammaTransition::~G4VGammaTransition() 
+{}
   
-  virtual void SelectGamma() = 0;
-  virtual G4double GetGammaEnergy() = 0;
-  virtual G4double GetGammaCreationTime() = 0;
-
-  virtual void SetEnergyFrom(const G4double energy) = 0;
-
-private:  
-
-  G4VGammaTransition(const G4VGammaTransition &right);
-  
-  const G4VGammaTransition& operator=(const G4VGammaTransition &right);
-  G4bool operator==(const G4VGammaTransition &right) const;
-  G4bool operator!=(const G4VGammaTransition &right) const;
-  
-protected:
-
-  G4int _verbose;
-
-};
-
-
-#endif
-
-
-
-
-
