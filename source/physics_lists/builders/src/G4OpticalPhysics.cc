@@ -154,6 +154,7 @@ void G4OpticalPhysics::ConstructProcess()
      o << "Optical Photon without a Process Manager";
      G4Exception("G4OpticalPhysics::ConstructProcess()","",
                   FatalException,o.str().c_str());
+     return;
   }
 
   pManager->AddDiscreteProcess(fOpAbsorptionProcess);
