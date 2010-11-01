@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.cc,v 1.4 2010-10-29 21:15:13 tkoi Exp $
+// $Id: G4ConvergenceTester.cc,v 1.5 2010-11-01 13:55:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Convergence Tests for Monte Carlo results.
@@ -49,7 +49,7 @@ G4ConvergenceTester::G4ConvergenceTester()
    r2eff(0.), r2int(0.), shift(0.), vov(0.), fom(0.), largest(0.),
    largest_score_happened(0), mean_1(0.), var_1(0.), sd_1(0.), r_1(0.),
    shift_1(0.), vov_1(0.), fom_1(0.), noBinOfHistory(16), slope(0.),
-   noBinOfPDF(10), noPass(0), noTotal(0)
+   noBinOfPDF(10), minimizer(0), noPass(0), noTotal(0)
 {
    nonzero_histories.clear();
    largest_scores.clear();

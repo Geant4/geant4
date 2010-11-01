@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimplexDownhill.hh,v 1.3 2007-06-21 15:04:12 gunter Exp $
+// $Id: G4SimplexDownhill.hh,v 1.4 2010-11-01 13:55:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -53,7 +53,8 @@ class G4SimplexDownhill
    public: // with description
 
       G4SimplexDownhill( T* tp , G4int n )
-      { target = tp; init(); numberOfVariable = n; }
+        : currentValue(0.), target(tp), numberOfVariable(n)
+      { init(); }
 
       ~G4SimplexDownhill();
 
