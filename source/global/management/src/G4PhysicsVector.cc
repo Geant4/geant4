@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.48 2010-10-01 16:36:31 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.49 2010-11-01 13:55:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -207,6 +207,14 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     G4int siz=0;
     fIn >> siz;
     if (fIn.fail())  { return false; }
+    if (siz<=0)
+    {
+#ifdef G4VERBOSE  
+      G4cerr << "G4PhysicsVector::Retrieve():";
+      G4cerr << " Invalid vector size: " << siz << G4endl;
+#endif
+      return false;
+    }
 
     binVector.reserve(siz);
     dataVector.reserve(siz);

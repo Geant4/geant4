@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.11 2010-10-01 16:36:31 gcosmo Exp $
+// $Id: G4DataVector.cc,v 1.12 2010-11-01 13:55:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,7 +95,15 @@ G4bool G4DataVector::Retrieve(std::ifstream& fIn, G4bool ascii)
     // contents
     fIn >> sizeV;
     if (fIn.fail())  { return false; }
-    
+    if (sizeV<=0)
+    {
+#ifdef G4VERBOSE  
+      G4cerr << "G4DataVector::Retrieve():";
+      G4cerr << " Invalid vector size: " << sizeV << G4endl;
+#endif
+      return false;
+    }
+
     reserve(sizeV);
     for(G4int i = 0; i < sizeV ; i++)
     {
