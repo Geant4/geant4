@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.24 2010-04-29 11:11:56 vnivanch Exp $
+// $Id: G4NistManager.hh,v 1.25 2010-11-01 18:43:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,7 @@
 // 28.07.07 V.Ivanchneko make simple methods inline
 // 28.10.07 V.Ivanchneko add state, T, P to maetrial build
 // 29.04.10 V.Ivanchneko add GetMeanIonisationEnergy method 
+// 01.11.10 V.Ivanchneko add G4Pow for fast computations  
 //
 // Class Description:
 //
@@ -70,6 +71,7 @@
 #include "G4Material.hh"
 #include "G4NistElementBuilder.hh"
 #include "G4NistMaterialBuilder.hh"
+#include "G4Pow.hh"
 
 class G4NistMessenger;
 
@@ -243,8 +245,7 @@ private:
   G4NistManager();
   static G4NistManager* instance;
 
-  G4double POWERZ13[256];
-  G4double LOGA[256];
+  G4Pow* g4pow;
   G4double POWERA27[101];
   G4double LOGAZ[101];
   
@@ -476,20 +477,16 @@ const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistManager::GetZ13(G4double Z)
+inline G4double G4NistManager::GetZ13(G4double A)
 {
-  G4int iz = G4int(Z);
-  G4double x = (Z - G4double(iz))/(3.0*Z);
-  if(iz > 255) iz = 255;
-  else if(iz < 0) iz = 0;
-  return POWERZ13[iz]*(1.0 + x);
+  return g4pow->A13(A);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4NistManager::GetZ13(G4int Z)
 {
-  return POWERZ13[Z];
+  return g4pow->Z13(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -497,7 +494,7 @@ inline G4double G4NistManager::GetZ13(G4int Z)
 inline G4double G4NistManager::GetA27(G4int Z)
 {
   G4double res = 0.0;
-  if(Z < 101) res = POWERA27[Z]; 
+  if(Z < 101) { res = POWERA27[Z]; } 
   return res;
 }
 
@@ -505,20 +502,14 @@ inline G4double G4NistManager::GetA27(G4int Z)
 
 inline G4double G4NistManager::GetLOGZ(G4int Z)
 {
-  G4double res = 0.0;
-  if(Z < 256) res = LOGA[Z];
-  return res;
+  return g4pow->logZ(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4NistManager::GetLOGA(G4double A)
 {
-  G4int ia = G4int(A);
-  G4double x = (A - G4double(ia))/A;
-  if(ia > 255) ia = 255;
-  else if(ia < 0) ia = 0;
-  return LOGA[ia] + x*(1.0 - 0.5*x);
+  return g4pow->logA(A);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -526,7 +517,7 @@ inline G4double G4NistManager::GetLOGA(G4double A)
 inline G4double G4NistManager::GetLOGA(G4int Z)
 {
   G4double res = 0.0;
-  if(Z < 101) res = LOGAZ[Z]; 
+  if(Z < 101) { res = LOGAZ[Z]; } 
   return res;
 }
 
