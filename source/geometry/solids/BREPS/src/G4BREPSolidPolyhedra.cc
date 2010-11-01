@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.39 2010-10-20 09:14:11 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.40 2010-11-01 16:43:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -122,6 +122,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     G4Exception( "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra()",
                  "Notification", JustWarning,
                  "Construction Error. z_values[0] must be equal to z_start!" );
+    if( num_z_planes <= 0 )  { constructorParams.z_values = new G4double[1]; }
     constructorParams.z_values[0]= z_start; 
   }
 

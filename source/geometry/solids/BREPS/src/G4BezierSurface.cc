@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BezierSurface.cc,v 1.13 2010-09-06 16:02:12 gcosmo Exp $
+// $Id: G4BezierSurface.cc,v 1.14 2010-11-01 16:43:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -399,7 +399,7 @@ void G4BezierSurface::ClipSurface()
       ch_ptr = new G4ConvexHull(a/(col_size - 1.0),1.0e8,-1.0e8);
       if(! a) 
       {
-	ch_first=ch_ptr;ch_tmp=ch_ptr;
+	ch_first=ch_ptr; delete ch_tmp;
       }
       else ch_tmp->SetNextHull(ch_ptr);
       
@@ -490,8 +490,7 @@ void G4BezierSurface::ClipSurface()
 	ch_ptr = new G4ConvexHull(n/(row_size - 1.0),1.0e8,-1.0e8);
 	if(!n) 
 	{
-	  ch_first=ch_ptr;
-	  ch_tmp=ch_ptr;
+	  ch_first=ch_ptr; delete ch_tmp;
 	}
 	else ch_tmp->SetNextHull(ch_ptr);
 	
@@ -561,7 +560,8 @@ void G4BezierSurface::ClipSurface()
     if (smin <= 0.0)  smin = 0.0;
     if (smax >= 1.0)  smax = 1.0;
     
-    if ( Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax())) smin = 0.0;
+    if ( (ch_ptr)
+      && (Sign(ch_ptr->GetMin()) != Sign(ch_ptr->GetMax()))) smin = 0.0;
     
     i = Sign(ch_tmp->GetMin()); // ch_tmp points to last nvex()_hull in List
     j = Sign(ch_tmp->GetMax());

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.41 2010-10-20 09:14:11 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.42 2010-11-01 16:43:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -151,6 +151,8 @@ void G4BREPSolid::Initialize()
     // Convert concave planes to convex
     //
     ShortestDistance= kInfinity;
+    if (!SurfaceVec) { return; }
+
     IsBox();
     CheckSurfaceNormals();
     
