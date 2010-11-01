@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.17 2010-10-25 09:11:14 vnivanch Exp $
+// $Id: G4IonisParamElm.cc,v 1.18 2010-11-01 18:18:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,7 +138,8 @@ G4IonisParamElm::G4IonisParamElm(G4double AtomNumber)
 G4IonisParamElm::G4IonisParamElm(__void__&)
   : fShellCorrectionVector(0)
 {
-  fZ=fZ3=fZZ3=flogZ3=fTau0=fTaul=fBetheBlochLow=fAlow=fBlow=fClow=fMeanExcitationEnergy=fVFermi=fLFactor=0.0;
+  fZ=fZ3=fZZ3=flogZ3=fTau0=fTaul=fBetheBlochLow=fAlow=fBlow=fClow
+    =fMeanExcitationEnergy=fVFermi=fLFactor=0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -173,6 +174,8 @@ const G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
       fBlow                  = right.fBlow;
       fClow                  = right.fClow;
       fMeanExcitationEnergy  = right.fMeanExcitationEnergy;
+      fVFermi                = right.fVFermi;
+      fLFactor               = right.fLFactor;
       if (fShellCorrectionVector) { delete [] fShellCorrectionVector; } 
       fShellCorrectionVector = new G4double[3];            
       fShellCorrectionVector[0] = right.fShellCorrectionVector[0];

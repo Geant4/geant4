@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.34 2010-10-26 16:25:24 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.35 2010-11-01 18:18:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,6 +61,7 @@
 
 #include "G4NistMaterialBuilder.hh"
 #include "G4NistElementBuilder.hh"
+#include "G4Element.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.39 2010-10-25 09:11:14 vnivanch Exp $
+// $Id: G4IonisParamMat.cc,v 1.40 2010-11-01 18:18:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,7 +139,7 @@ void G4IonisParamMat::ComputeMeanParameters()
     fMeanExcitationEnergy = std::exp(fLogMeanExcEnergy);
   }
 
-  fShellCorrectionVector = new G4double[3]; //[3]
+  fShellCorrectionVector = new G4double[3]; 
 
   for (G4int j=0; j<=2; j++)
   {
@@ -175,7 +175,7 @@ void G4IonisParamMat::ComputeDensityEffect()
 					fMaterial->GetState());
   }
 
-  //G4cout << "DensityEffect for " << fMaterial->GetName() << "  " << idx << G4endl; 
+  //G4cout<<"DensityEffect for "<<fMaterial->GetName()<<"  "<< idx << G4endl; 
 
   if(idx >= 0) {
 
@@ -456,12 +456,15 @@ G4IonisParamMat::~G4IonisParamMat()
   if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
   if (fDensityData) { delete fDensityData; }
   fDensityData = 0;
+  fShellCorrectionVector = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamMat::G4IonisParamMat(const G4IonisParamMat& right)
 {
+  fShellCorrectionVector = 0;
+  fMaterial = 0;
   *this = right;
 }
 
@@ -474,7 +477,7 @@ const G4IonisParamMat& G4IonisParamMat::operator=(const G4IonisParamMat& right)
       fMaterial                 = right.fMaterial;
       fMeanExcitationEnergy     = right.fMeanExcitationEnergy;
       fLogMeanExcEnergy         = right.fLogMeanExcEnergy;
-      if (fShellCorrectionVector) delete [] fShellCorrectionVector;      
+      if(fShellCorrectionVector){ delete [] fShellCorrectionVector; }      
       fShellCorrectionVector    = new G4double[3];             
       fShellCorrectionVector[0] = right.fShellCorrectionVector[0];
       fShellCorrectionVector[1] = right.fShellCorrectionVector[1];

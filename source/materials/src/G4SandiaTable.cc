@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SandiaTable.cc,v 1.35 2010-10-25 15:16:02 vnivanch Exp $
+// $Id: G4SandiaTable.cc,v 1.36 2010-11-01 18:18:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -67,13 +67,14 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
   for (G4int Z=1; Z<101; ++Z) {
     fCumulInterval[Z] = fCumulInterval[Z-1] + fNbOfIntervals[Z];
   }
-  //compute macroscopic Sandia coefs for a material   
-  ComputeMatSandiaMatrix();
   
   //initialisation of fnulcof
   fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;
 
   fMaxInterval = 0;
+
+  //compute macroscopic Sandia coefs for a material   
+  ComputeMatSandiaMatrix();
 }
 							
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -84,6 +85,9 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 G4SandiaTable::G4SandiaTable(__void__&)
   : fMaterial(0),fMatSandiaMatrix(0),fMatSandiaMatrixPAI(0),fPhotoAbsorptionCof(0)
 {
+  fnulcof[0] = fnulcof[1] = fnulcof[2] = fnulcof[3] = 0.;
+  fMaxInterval = 0;
+  fMatNbOfIntervals = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
