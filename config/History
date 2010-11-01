@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.389 2010-10-26 10:29:40 gcosmo Exp $
+cvs log $Id: History,v 1.390 2010-11-01 08:15:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st November 2010  Gabriele Cosmo (config-V09-03-12)
+- Restore positional qualifier for LDFLAGS in architecture.gmk to allow for
+  explicit settings in user applications.
 
 26th October 2010  Gabriele Cosmo (config-V09-03-11)
 - Explicitly include -L$(OGLHOME)/lib -lGLU -lGL to OGLLIBS in Darwin-g++.gmk
