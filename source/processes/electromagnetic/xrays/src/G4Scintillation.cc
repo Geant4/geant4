@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.34 2010-10-28 23:28:37 gum Exp $
+// $Id: G4Scintillation.cc,v 1.35 2010-11-01 23:50:05 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -226,26 +226,29 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
              Scint_Yield_Vector = aMaterialPropertiesTable->
                GetProperty("ALPHASCINTILLATIONYIELD");
 
-           // Carbon-12 ions
-           else if(pDef->GetParticleName()=="C12[0.0]")
+           // Carbon-12/13 ions
+           else if(pDef->GetParticleName()=="C12[0.0]" ||
+                   pDef->GetParticleName()=="C13[0.0]")
              Scint_Yield_Vector = aMaterialPropertiesTable->
                GetProperty("C12SCINTILLATIONYIELD");
 
-           // Electrons
+           // Electrons : account for energy always attributed to gamma
+           // by standard PhotoElectricEffect
            else if(pDef==G4Electron::ElectronDefinition() ||
                    pDef==G4Gamma::GammaDefinition())
              Scint_Yield_Vector = aMaterialPropertiesTable->
                GetProperty("ELECTRONSCINTILLATIONYIELD");
 
-           // Bail out if the Scint_Yield_Vector cannot be found
-           if (!Scint_Yield_Vector) {
-             G4cerr << "G4Scintillation::PostStepDoIt(): "
-                    << "Request for scintillation yield for energy deposit and particle type without correct entry in MaterialPropertiesTable"
-                    << G4endl;
-             G4Exception("G4Scintillation::PostStepDoIt",
-                         "No correct entry in MaterialPropertiesTable",
-                         FatalException,"Missing MaterialPropertiesTable entry.");
-           }
+           // All other particles are assigned the ELECTRONSCINTILLATIONYIELD
+           else
+             Scint_Yield_Vector = aMaterialPropertiesTable->
+               GetProperty("ELECTRONSCINTILLATIONYIELD");
+
+           // If the user has not supplied the yield for a listed
+           // particle type, the ELECTRONSCINTILLATIONYIELD is used
+           if (!Scint_Yield_Vector)
+             Scint_Yield_Vector = aMaterialPropertiesTable->
+               GetProperty("ELECTRONSCINTILLATIONYIELD");
 
            if (verboseLevel>1) {
              G4cout << "\n"
