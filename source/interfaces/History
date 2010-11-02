@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2010-10-08 10:14:53 lgarnier Exp $
+$Id: History,v 1.157 2010-11-02 17:39:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8, October L. Garnier
-- G4UIQt : Fiw problem with redraw of help tree
+8, October L. Garnier  (interfaces-V09-03-13)
+- G4UIQt : Fiw problem with redraw of help tree.
 
 6, October J. Allison  (interfaces-V09-03-12)
 - G4UIQt : Remove message about empty viewer (comment out
