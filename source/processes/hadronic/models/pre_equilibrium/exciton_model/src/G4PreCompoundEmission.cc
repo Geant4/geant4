@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc,v 1.32 2010-09-01 15:11:10 vnivanch Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.33 2010-11-02 17:33:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -109,6 +109,10 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
 	     << aFragment << G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "");
     }
+
+  //G4cout << "Chosen fragment: " << G4endl;
+  //G4cout << *thePreFragment << G4endl;
+
   // Kinetic Energy of emitted fragment
   G4double kinEnergyOfEmittedFragment = thePreFragment->GetKineticEnergy(aFragment);
   if(kinEnergyOfEmittedFragment < 0.0) { kinEnergyOfEmittedFragment = 0.0; }
@@ -118,7 +122,6 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   
   // Mass of emittef fragment
   G4double EmittedMass = thePreFragment->GetNuclearMass();
-  
   // Now we can calculate the four momentum 
   // both options are valid and give the same result but 2nd one is faster
   G4LorentzVector Emitted4Momentum(theFinalMomentum,

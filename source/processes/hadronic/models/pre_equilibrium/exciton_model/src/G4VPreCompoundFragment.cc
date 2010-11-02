@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.14 2010-11-02 11:27:27 vnivanch Exp $
+// $Id: G4VPreCompoundFragment.cc,v 1.15 2010-11-02 17:33:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // J. M. Quesada (August 2008).  Based  on previous work by V. Lara
@@ -72,17 +72,8 @@ operator << (std::ostream &out, const G4VPreCompoundFragment *theFragment)
   out 
     << "PreCompoundModel Emitted Fragment: A = " 
     << std::setprecision(3) << theFragment->theA 
-    << ", Z = " << std::setprecision(3) << theFragment->theZ;
-    out.setf(std::ios::scientific,std::ios::floatfield);
-    //   out
-    //     << ", U = " << theFragment->theExcitationEnergy/MeV 
-    //     << " MeV" << endl
-    //     << "          P = (" 
-    //     << theFragment->theMomentum.x()/MeV << ","
-    //     << theFragment->theMomentum.y()/MeV << ","
-    //     << theFragment->theMomentum.z()/MeV 
-    //     << ") MeV   E = " 
-    //     << theFragment->theMomentum.t()/MeV << " MeV";
+    << ", Z = " << std::setprecision(3) << theFragment->theZ
+    << " Mass(GeV)= " << theFragment->theMass/CLHEP::GeV;
     
     out.setf(old_floatfield,std::ios::floatfield);
     return out;
@@ -122,7 +113,6 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
   // Compute Maximal Kinetic Energy which can be carried by fragments 
   // after separation - the true assimptotic value
   G4double Ecm  = aFragment.GetMomentum().m();
-  G4double rm = theRestNucleusMass;
-  G4double em = theMass;
-  theMaximalKineticEnergy = ((Ecm - rm)*(Ecm + rm) + em*em)/(2.0*m) - em;
+  theMaximalKineticEnergy = 
+    ((Ecm-theRestNucleusMass)*(Ecm+theRestNucleusMass) + theMass*theMass)/(2.0*Ecm)-theMass;
 }

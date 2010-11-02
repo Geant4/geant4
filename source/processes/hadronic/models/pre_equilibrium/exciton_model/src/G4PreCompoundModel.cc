@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.26 2010-10-28 17:30:54 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.27 2010-11-02 17:33:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -99,6 +99,7 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
 	  << primary->GetParticleName() <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
   }
+
   G4int Zp = 0;
   G4int Ap = 1;
   if(primary == proton) { Zp = 1; }
@@ -106,10 +107,13 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
   G4int A = theNucleus.GetA_asInt();
   G4int Z = theNucleus.GetZ_asInt();
 
+  //G4cout << "### G4PreCompoundModel::ApplyYourself: A= " << A << " Z= " << Z
+  //	 << " Ap= " << Ap << " Zp= " << Zp << G4endl; 
   // 4-Momentum
   G4LorentzVector p = thePrimary.Get4Momentum();
   G4double mass = G4NucleiProperties::GetNuclearMass(A, Z);
   p += G4LorentzVector(0.0,0.0,0.0,mass);
+  //G4cout << "Primary 4-mom " << p << "  mass= " << mass << G4endl;
 
   // prepare fragment
   G4Fragment anInitialState(A + Ap, Z + Zp, p);
@@ -161,6 +165,9 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     //G4cout<<"Fragment number .. "<<fragment<<G4endl;
     
     // Initialize fragment according with the nucleus parameters
+    //G4cout << "### Loop over fragment" << G4endl;
+    //G4cout << aFragment << G4endl;
+
     theEmission->Initialize(aFragment);
     
     G4double g = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
@@ -215,7 +222,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       G4double P1 = theTransition->GetTransitionProb1();
       G4double P2 = theTransition->GetTransitionProb2();
       G4double P3 = theTransition->GetTransitionProb3();
-      //G4cout<<"P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
+      //G4cout<<"#0 P1="<<P1<<" P2="<<P2<<"  P3="<<P3<<G4endl;
       
       //J.M. Quesada (May. 08). Physical criterium (lamdas)  PREVAILS over 
       //                        approximation (critical exciton number)
@@ -227,7 +234,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	  G4double TotalEmissionProbability = 
 	    theEmission->GetTotalProbability(aFragment);
 	  //
-	  //  G4cout<<"TotalEmissionProbability="<<TotalEmissionProbability<<G4endl;
+	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability<<" Nex= " 
+	  //	<<aFragment.GetNumberOfExcitons()<<G4endl;
 	  //
 	  // Check if number of excitons is greater than 0
 	  // else perform equilibrium emission
@@ -246,6 +254,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	  // Select subprocess
 	  if (TotalProbability*G4UniformRand() > TotalEmissionProbability) 
 	    {
+	      //G4cout<<"#2 Transition"<<G4endl; 
 	      // It will be transition to state with a new number of excitons
 	      ThereIsTransition = true;		
 	      // Perform the transition
@@ -253,6 +262,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	    } 
 	  else 
 	    {
+	      //G4cout<<"#3 Emission"<<G4endl; 
 	      // It will be fragment emission
 	      ThereIsTransition = false;
 	      Result->push_back(theEmission->PerformEmission(aFragment));
@@ -260,6 +270,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	} 
       else 
 	{
+	  //G4cout<<"#4 EquilibriumEmission"<<G4endl; 
 	  PerformEquilibriumEmission(aFragment,Result);
 	  return Result;
 	}

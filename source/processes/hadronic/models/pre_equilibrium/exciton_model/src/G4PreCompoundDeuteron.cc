@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundDeuteron.cc,v 1.8 2010-11-02 11:27:27 vnivanch Exp $
+// $Id: G4PreCompoundDeuteron.cc,v 1.9 2010-11-02 17:33:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,13 +47,11 @@
 G4PreCompoundDeuteron::G4PreCompoundDeuteron()
   : G4PreCompoundIon(G4Deuteron::Deuteron(), &theDeuteronCoulombBarrier)
 {
-  ResidualA = GetRestA();
-  ResidualZ = GetRestZ(); 
   theA = GetA();
   theZ = GetZ();
-  ResidualAthrd = ResidualA13();
-  FragmentAthrd = ResidualAthrd;
-  FragmentA = theA + ResidualA;
+  ResidualA = ResidualZ = 0; 
+  ResidualAthrd = FragmentAthrd = 0.0;
+  FragmentA = theA;
 }
 
 G4PreCompoundDeuteron::~G4PreCompoundDeuteron()
@@ -69,7 +67,7 @@ G4double G4PreCompoundDeuteron::CoalescenceFactor(G4int A)
   return 16.0/G4double(A);
 }    
 
-G4double G4PreCompoundDeuteron::GetRj(G4int nParticles, const G4int nCharged)
+G4double G4PreCompoundDeuteron::GetRj(G4int nParticles, G4int nCharged)
 {
   G4double rj = 0.0;
   if(nCharged >=1 && (nParticles-nCharged) >=1) {
