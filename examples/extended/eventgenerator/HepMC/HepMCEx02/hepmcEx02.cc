@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: hepmcEx02.cc,v 1.6 2010-05-24 05:32:22 kmura Exp $
+// $Id: hepmcEx02.cc,v 1.7 2010-11-02 15:10:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,8 +34,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "H02DetectorConstruction.hh"
 #include "QGSP.hh"
