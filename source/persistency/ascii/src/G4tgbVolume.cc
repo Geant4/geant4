@@ -166,7 +166,11 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
       {
         return;
       }
-    } 
+    }
+    else
+    {
+      return;
+    }
   } 
   //--- Construct PhysVol
   G4VPhysicalVolume* physvol = ConstructG4PhysVol( place, logvol, parentLV );

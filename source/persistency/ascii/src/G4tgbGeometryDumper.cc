@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.14 2010-10-13 15:20:01 gcosmo Exp $
+// $Id: G4tgbGeometryDumper.cc,v 1.15 2010-11-02 11:13:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -647,6 +647,12 @@ G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid,
 
   } else if (solidType == "REFLECTEDSOLID") {
     G4ReflectedSolid* solidrefl = dynamic_cast<G4ReflectedSolid*>(solid);
+    if (!solidrefl)
+    {
+      G4Exception("G4tgbGeometryDumper::DumpSolid()",
+                  "InvalidType", FatalException, "Invalid reflected solid!");
+      return solidName;
+    }
     G4VSolid* solidori = solidrefl->GetConstituentMovedSolid();
     DumpSolid( solidori );
   }
