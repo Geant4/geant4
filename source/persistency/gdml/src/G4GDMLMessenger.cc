@@ -24,29 +24,29 @@
 // ********************************************************************
 //
 //
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// $Id: G4GDMLMessenger.cc,v 1.3 2010-11-02 11:44:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLMessenger Implementation
+//
+// -------------------------------------------------------------------------
 
 #include "G4GDMLMessenger.hh"
 #include "G4GDMLParser.hh"
 
+#include "globals.hh"
 #include "G4RunManager.hh"
-
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
-#include "globals.hh"
 #include "G4GeometryManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
-  :myParser(myPars), topvol(0)
+  : myParser(myPars), topvol(0)
 { 
   persistencyDir = new G4UIdirectory("/persistency/");
   persistencyDir->SetGuidance("UI commands specific to persistency.");
@@ -71,9 +71,7 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   ClearCmd = new G4UIcmdWithoutParameter("/persistency/gdml/clear",this);
   ClearCmd->SetGuidance("Clear geometry (before reading a new one from GDML).");
   ClearCmd->AvailableForStates(G4State_Idle);
- }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+}
 
 G4GDMLMessenger::~G4GDMLMessenger()
 {
@@ -85,31 +83,31 @@ G4GDMLMessenger::~G4GDMLMessenger()
   delete gdmlDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4GDMLMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if( command == ReaderCmd )
-    { 
-      G4GeometryManager::GetInstance()->OpenGeometry();
-      myParser->Read(newValue);
-      G4RunManager::GetRunManager()->DefineWorldVolume(myParser->GetWorldVolume());
-    }
+  { 
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    myParser->Read(newValue);
+    G4RunManager::GetRunManager()->DefineWorldVolume(myParser->GetWorldVolume());
+  }
 
   if( command == TopVolCmd )
-    { topvol = G4LogicalVolumeStore::GetInstance()->GetVolume(newValue);}
+  {
+    topvol = G4LogicalVolumeStore::GetInstance()->GetVolume(newValue);
+  }
    
   if( command == WriterCmd )
-    { myParser->Write(newValue, topvol);}  
+  {
+    myParser->Write(newValue, topvol);
+  }  
 
   if( command == ClearCmd )
-    { 
-      myParser->Clear();
-      G4GeometryManager::GetInstance()->OpenGeometry();
-      G4PhysicalVolumeStore::Clean();
-      G4LogicalVolumeStore::Clean();
-      G4SolidStore::Clean();
-    }  
+  { 
+    myParser->Clear();
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::Clean();
+    G4LogicalVolumeStore::Clean();
+    G4SolidStore::Clean();
+  }  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

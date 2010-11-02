@@ -24,8 +24,19 @@
 // ********************************************************************
 //
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// $Id: G4GDMLMessenger.hh,v 1.3 2010-11-02 11:44:15 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// class G4GDMLMessenger
+//
+// Class description:
+//
+// GDML UI messenger.
+
+// History:
+// - Created.                                  Witold Pokorski, October 2010
+// -------------------------------------------------------------------------
 
 #ifndef G4GDMLMessenger_h
 #define G4GDMLMessenger_h 1
@@ -40,17 +51,17 @@ class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class G4GDMLMessenger: public G4UImessenger
+class G4GDMLMessenger : public G4UImessenger
 {
-  public:
-  G4GDMLMessenger(G4GDMLParser*);
+  public:  // with description
+
+    G4GDMLMessenger(G4GDMLParser*);
    ~G4GDMLMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
+
     G4GDMLParser* myParser;
     G4LogicalVolume* topvol;
     
@@ -62,7 +73,4 @@ class G4GDMLMessenger: public G4UImessenger
     G4UIcmdWithoutParameter*   ClearCmd;    
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
