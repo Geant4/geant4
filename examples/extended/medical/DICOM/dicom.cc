@@ -40,15 +40,17 @@
 
 #include "globals.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
 #include "G4RunManager.hh"
-#include "G4UItcsh.hh"
 #include "Randomize.hh"
 
 #include "DicomPhysicsList.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "RegularDicomDetectorConstruction.hh"
@@ -90,20 +92,24 @@ int main(int argc,char** argv)
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
   if (argc==1)
     {
-      G4UIsession* session = new G4UIterminal(new G4UItcsh);
-      UI->ApplyCommand("/control/execute vis.mac");
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
 
   delete runManager;
