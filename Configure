@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.133 2010-06-24 15:24:11 bmorgan Exp $
+# $Id: Configure,v 1.134 2010-11-02 16:39:45 bmorgan Exp $
 #
-# Generated on Thu Jun 24 16:21:02 BST 2010 [metaconfig 3.0 PL70]
+# Generated on Tue Nov  2 16:37:42 GMT 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -252,6 +252,7 @@ g4_gmake_version=''
 g4_make=''
 g4_make_version=''
 g4make=''
+g4make_jobs=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
 g4w_use_zlib=''
@@ -349,6 +350,7 @@ g4vis_use_openglqt='n'
 g4lib_build_gdml='n'
 #INITIALIZE G4MAKE
 g4make=""
+g4make_jobs=1
 #END G4MAKE INITIALIZATION
 #INITIALIZE G3TOG4 OPTIONS
 g4wlib_build_g3tog4='n'
@@ -3720,6 +3722,29 @@ EOM`
 fi
 
 
+#
+# As we now have a suitable make, query the user for how many parallel jobs
+# they want to launch. Make sure they give a sensible response (n>0)
+#
+g4_sensible_job_number="no"
+
+while test "x$g4_sensible_job_number" = "xno" ; do
+    g4message="How many parallel jobs should make launch?"
+    dflt=$g4make_jobs
+    rp=$g4message
+    . ./myread
+    gans="$ans"
+
+    # Check that response is reasonable
+    if test $gans -gt 0 ; then
+        echo "Checking that $gans is a valid number... yes"
+        g4make_jobs=$gans
+        g4_sensible_job_number="yes"
+    else
+        echo "Checking that $gans is a valid number... no"
+    fi
+done
+
 
 echo " "
 echo "*CHECKS FOR REQUIRED EXTERNAL PACKAGE CLHEP*"
@@ -5902,6 +5927,7 @@ g4lib_use_granular='$g4lib_use_granular'
 g4lib_use_shared='$g4lib_use_shared'
 g4lib_use_static='$g4lib_use_static'
 g4make='$g4make'
+g4make_jobs='$g4make_jobs'
 g4neutronhpcrosssections='$g4neutronhpcrosssections'
 g4neutronxsdata='$g4neutronxsdata'
 g4osname='$g4osname'
