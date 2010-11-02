@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm0.cc,v 1.6 2010-05-17 20:37:52 maire Exp $
+// $Id: TestEm0.cc,v 1.7 2010-11-02 15:00:31 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,8 +32,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
