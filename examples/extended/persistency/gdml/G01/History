@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2010-10-16 10:51:24 allison Exp $
+$Id: History,v 1.19 2010-11-02 10:47:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 18th, 2010  Witold Pokorski  G01-V09-03-06
+- Use world volume for tracking to dump to GDML file.
 
 October 16th, 2010  John Allison  G01-V09-03-05
 - Introduced G4UIExecutive.
