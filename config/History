@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.390 2010-11-01 08:15:17 gcosmo Exp $
+cvs log $Id: History,v 1.391 2010-11-02 09:23:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd November 2010  Gabriele Cosmo (config-V09-03-13)
+- Replace use of strcat() with more secure strncat() in liblist.c, and
+  protected uses of strcpy().
 
 1st November 2010  Gabriele Cosmo (config-V09-03-12)
 - Restore positional qualifier for LDFLAGS in architecture.gmk to allow for
