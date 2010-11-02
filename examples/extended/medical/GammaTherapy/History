@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2010-10-26 12:09:14 vnivanch Exp $
+$Id: History,v 1.33 2010-11-02 16:10:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-11-10  J.Allison (gtherapy-V09-03-05)
+- Introduced G4UIExecutive.
 
 26-10-10  V.Ivant (gtherapy-V09-03-04)
 - in PrimaryGeneratorAction.hh remove unused methods 
