@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2010-10-14 16:19:57 gcosmo Exp $
+$Id: History,v 1.124 2010-11-02 10:41:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Nov 2010 Gabriele Cosmo (gdml-V09-03-07)
+- Fixed minor left Coverity reports.
+- Some code cleanup and updated CMake scripts.
+
+25 Oct 2010 Witold Pokorski
+- New class G4GDMLMessenger instantiated with G4GDMLParser and defining
+  UI commands for importing and exporting GDML files, through the various
+  options the parser provides.
+- Corrected GetWorldVolume() in G4GDMLReadStructure, to make use of structure
+  stored in memory in case geometry is already imported.
 
 14 Oct 2010 Gabriele Cosmo (gdml-V09-03-06)
 - Fixed dummy initialisation of members in constructors in classes
