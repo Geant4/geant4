@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.66 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLReadStructure.cc,v 1.67 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLReadStructure Implementation
@@ -399,6 +399,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
 
    if (pAssembly)   // Fill assembly structure
    {
+     if (!logvol) { return; }
      pAssembly->AddPlacedVolume(logvol, transform);
    }
    else             // Generate physical volume tree or do assembly imprint
@@ -409,6 +410,7 @@ PhysvolRead(const xercesc::DOMElement* const physvolElement,
      }
      else
      {
+       if (!logvol) { return; }
        G4String pv_name = logvol->GetName() + "_PV";
        G4PhysicalVolumesPair pair = G4ReflectionFactory::Instance()
          ->Place(transform,pv_name,logvol,pMotherLogical,false,0,check);
@@ -907,14 +909,15 @@ GetWorldVolume(const G4String& setupName)
    G4VPhysicalVolume* pvWorld = 0;
 
    if(setuptoPV[setupName])
-     {
-       pvWorld = setuptoPV[setupName];
-     }
+   {
+     pvWorld = setuptoPV[setupName];
+   }
    else
-     {
-       pvWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,volume->GetName()+"_PV",0,0,0);
-       setuptoPV[setupName] = pvWorld;
-     }
+   {
+     pvWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),volume,
+                                 volume->GetName()+"_PV",0,0,0);
+     setuptoPV[setupName] = pvWorld;
+   }
    return pvWorld;
 }
 

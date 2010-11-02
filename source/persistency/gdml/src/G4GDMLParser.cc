@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.15 2010-10-18 14:53:37 witoldp Exp $
+// $Id: G4GDMLParser.cc,v 1.16 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,6 @@ G4GDMLParser::G4GDMLParser()
 {
   reader = new G4GDMLReadStructure;
   writer = new G4GDMLWriteStructure;
-
   messenger = new G4GDMLMessenger(this);
 
   xercesc::XMLPlatformUtils::Initialize();
@@ -67,4 +66,5 @@ G4GDMLParser::~G4GDMLParser()
   xercesc::XMLPlatformUtils::Terminate();
   if (!urcode) { delete reader; }
   if (!uwcode) { delete writer; }
+  delete messenger;
 }

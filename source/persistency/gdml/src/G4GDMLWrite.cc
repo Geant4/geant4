@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.56 2010-10-14 16:19:40 gcosmo Exp $
+// $Id: G4GDMLWrite.cc,v 1.57 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLWrite Implementation
@@ -46,6 +46,7 @@ G4bool G4GDMLWrite::addPointerToName = true;
 
 G4GDMLWrite::G4GDMLWrite() : doc(0), extElement(0)
 {
+  xercesc::XMLString::transcode("",tempStr,99);
 }
 
 G4GDMLWrite::~G4GDMLWrite()

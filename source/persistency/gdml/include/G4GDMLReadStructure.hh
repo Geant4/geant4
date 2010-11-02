@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.31 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLReadStructure.hh,v 1.32 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,13 +68,13 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4GDMLReadStructure();
    virtual ~G4GDMLReadStructure();
 
-   void Clear();
    G4VPhysicalVolume* GetPhysvol(const G4String&) const;
    G4LogicalVolume* GetVolume(const G4String&) const;
    G4AssemblyVolume* GetAssembly(const G4String&) const;
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume*) const;
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
    const G4GDMLAuxMapType* GetAuxMap() const;
+   void Clear();   // Clears internal map and evaluator
 
    virtual void VolumeRead(const xercesc::DOMElement* const);
    virtual void Volume_contentRead(const xercesc::DOMElement* const);

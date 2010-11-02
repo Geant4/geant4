@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.63 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLParser.hh,v 1.64 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,10 +63,6 @@ class G4GDMLParser
      //
      // Parser constructors & destructor
 
-  inline void Clear();
-  //
-  // Clears the evaluator.
-
    inline void Read(const G4String& filename, G4bool Validate=true);
      //
      // Imports geometry with world-volume, specified by the GDML filename
@@ -97,7 +93,8 @@ class G4GDMLParser
      // starting from 'pvol' as top volume. Uniqueness of stored entities
      // is guaranteed by storing pointer-references by default.
      // Alternative path for the schema location can be specified; by default
-     // the URL to the GDML web site is used.
+     // the URL to the GDML web site is used. Same as method above except
+     // that the logical volume is provided here.
 
    inline G4LogicalVolume* ParseST(const G4String& name,
                                          G4Material* medium,
@@ -124,6 +121,7 @@ class G4GDMLParser
    inline const G4GDMLAuxMapType* GetAuxMap() const;
    inline void StripNamePointers() const;
    inline void SetOverlapCheck(G4bool);
+   inline void Clear();                  // Clears the evaluator
 
    // Methods for Writer
    //

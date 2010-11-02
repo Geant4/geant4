@@ -24,21 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.13 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLParser.icc,v 1.14 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4GDMLParser inline methods
 //
 // -------------------------------------------------------------------------
-
-
-inline
-void G4GDMLParser::Clear()
-{
-  reader->Clear();
-}
-
 
 inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool validate)
@@ -64,12 +56,12 @@ void G4GDMLParser::Write(const G4String& filename,
   if (!pvol)
   {
     lvol = G4TransportationManager::GetTransportationManager()->
-      GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+           GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
   }
   else
-    {
-      lvol = pvol->GetLogicalVolume();
-    }
+  {
+    lvol = pvol->GetLogicalVolume();
+  }
 
   writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
@@ -85,7 +77,7 @@ void G4GDMLParser::Write(const G4String& filename,
   if (!lvol)
   {
     lvol = G4TransportationManager::GetTransportationManager()->
-      GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
+           GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume();
   }
   writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
@@ -184,6 +176,11 @@ void G4GDMLParser::StripNamePointers() const
 inline void G4GDMLParser::SetOverlapCheck(G4bool flag)
 {
   reader->OverlapCheck(flag);
+}
+
+inline void G4GDMLParser::Clear()
+{
+  reader->Clear();
 }
 
 //

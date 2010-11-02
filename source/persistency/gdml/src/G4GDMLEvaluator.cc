@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.24 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.25 2010-11-02 10:39:27 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -161,11 +161,12 @@ G4String G4GDMLEvaluator::SolveBrackets(const G4String& in)
 
    if (open==close) { return in; }
 
-   if (open>close)
+   if ((open>close) || (open<0) || (close<0))
    {
      G4String error_msg = "Bracket mismatch: " + in;
      G4Exception("G4GDMLEvaluator::SolveBrackets()", "InvalidExpression",
                  FatalException, error_msg);
+     return in;
    }
 
    std::string::size_type begin = open;
