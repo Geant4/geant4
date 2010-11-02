@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:50:21 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-02 10:40:06 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -34,11 +34,13 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
@@ -50,6 +52,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4gdml
     HEADERS
         G4GDMLEvaluator.hh
+        G4GDMLMessenger.hh
         G4GDMLParameterisation.hh
         G4GDMLParser.hh
         G4GDMLParser.icc
@@ -70,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4STRead.hh
     SOURCES
         G4GDMLEvaluator.cc
+        G4GDMLMessenger.cc
         G4GDMLParameterisation.cc
         G4GDMLParser.cc
         G4GDMLRead.cc
@@ -102,6 +106,7 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4materials
         G4navigation
         G4partman
+        G4procman
         G4run
         G4specsolids
         G4track
@@ -116,6 +121,7 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4intercoms
         G4materials
         G4particles
+        G4processes
         G4run
         G4track
         G4tracking
