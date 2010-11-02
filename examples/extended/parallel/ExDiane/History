@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2010-10-27 12:24:37 stesting Exp $
+$Id: History,v 1.10 2010-11-02 16:48:37 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.9 2010-10-27 12:24:37 stesting Exp $
 
                       Category History file
                       ---------------------
+
+02.11.2010 - John Allison  (ExDiane-V09-03-02)
+- Removed references to Vis and UI managers/exectives.  Not used.
+  See novice examples if you ever need to use.
 
 27.10.2010 - Gunter Folger (ExDiane-V09-03-01)
 - Use new MultipliScattering class; code still uses old lowE EM classes

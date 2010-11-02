@@ -42,16 +42,7 @@
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "BrachyFactoryIr.hh"
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
@@ -118,7 +109,7 @@ G4bool BrachySimulation::initialize(int ,char** )
 }
 void BrachySimulation::executeMacro(std::string macroFileName)
 {
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   // Batch mode
 
@@ -128,10 +119,10 @@ void BrachySimulation::executeMacro(std::string macroFileName)
 
   std::string command = "/control/execute ";
 
-  if(!UI)
+  if(!UImanager)
     G4cout << "FATAL ERROR: UI pointer does not exist" << G4endl;
   else
-    UI -> ApplyCommand(command+fileName);    
+    UImanager -> ApplyCommand(command+fileName);    
 }
 std::string  BrachySimulation::getOutputFilename()
 {
