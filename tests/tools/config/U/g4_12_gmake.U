@@ -136,10 +136,10 @@ while test "x$g4_sensible_job_number" = "xno" ; do
     dflt=$g4make_jobs
     rp=$g4message
     . ./myread
-    gans=$ans
+    gans="$ans"
 
     # Check that response is reasonable
-    if test (($gans > 0)) ; then
+    if test $gans -gt 0 ; then
         echo "Checking that $gans is a valid number... yes"
         g4make_jobs=$gans
         g4_sensible_job_number="yes"
@@ -147,7 +147,4 @@ while test "x$g4_sensible_job_number" = "xno" ; do
         echo "Checking that $gans is a valid number... no"
     fi
 done
-
-    
-
 
