@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundHe3.cc,v 1.7 2010-08-28 15:16:55 vnivanch Exp $
+// $Id: G4PreCompoundHe3.cc,v 1.8 2010-11-02 11:27:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,7 +46,15 @@
 
 G4PreCompoundHe3::G4PreCompoundHe3()
   : G4PreCompoundIon(G4He3::He3(), &theHe3CoulombBarrier)
-{}
+{
+  ResidualA = GetRestA();
+  ResidualZ = GetRestZ(); 
+  theA = GetA();
+  theZ = GetZ();
+  ResidualAthrd = ResidualA13();
+  FragmentAthrd = ResidualAthrd;
+  FragmentA = theA + ResidualA;
+}
 
 G4PreCompoundHe3::~G4PreCompoundHe3()
 {}
