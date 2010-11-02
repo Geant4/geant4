@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.hh,v 1.4 2006-06-29 18:36:06 gunter Exp $
+// $Id: G4NormalNavigation.hh,v 1.5 2010-11-02 13:41:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,6 +98,27 @@ class G4NormalNavigation
       // verifications and more strict correctness conditions.
       // Is effective only with G4VERBOSE set.
 
+  private:  // Logging functions
+
+    void PreComputeStepLog  (const G4VPhysicalVolume* motherPhysical,
+                                   G4double motherSafety,
+                             const G4ThreeVector& localPoint);
+    void AlongComputeStepLog(const G4VSolid* sampleSolid,
+                             const G4ThreeVector& samplePoint,
+                             const G4ThreeVector& sampleDirection,
+                             const G4ThreeVector& localDirection,
+                                   G4double sampleSafety,
+                                   G4double sampleStep,
+                                   G4double ourStep);
+    void PostComputeStepLog (const G4VSolid* motherSolid,
+                             const G4ThreeVector& localPoint,
+                             const G4ThreeVector& localDirection,
+                                   G4double motherStep,
+                                   G4double motherSafety);
+    void ComputeSafetyLog   (const G4VSolid* solid,
+                             const G4ThreeVector& point,
+                                   G4double safety,
+                                   G4bool banner);
   private:
 
     G4bool fCheck; 
