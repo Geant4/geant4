@@ -23,6 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DecayStrongResonances.cc,v 1.2 2010-11-02 17:57:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4DecayStrongResonances
+//
+// Modified:  
+// 02.11.2010 V.Ivanchenko moved constructor and destructor to source
+//
 
 #include "G4DecayStrongResonances.hh"
 
@@ -30,8 +42,15 @@
 
 #include <algorithm>
 
+G4DecayStrongResonances::G4DecayStrongResonances()
+{}
 
-G4ReactionProductVector* G4DecayStrongResonances::Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* )
+G4DecayStrongResonances::~G4DecayStrongResonances()
+{}
+
+G4ReactionProductVector* 
+G4DecayStrongResonances::Propagate(G4KineticTrackVector* theSecondaries, 
+				   G4V3DNucleus* )
 {
      // decay the strong resonances
      //static int call_count = 0;

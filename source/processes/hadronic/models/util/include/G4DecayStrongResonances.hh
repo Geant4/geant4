@@ -23,6 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4DecayStrongResonances.hh,v 1.9 2010-11-02 17:57:38 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4DecayStrongResonances
+//
+// Modified:  
+// 02.11.2010 V.Ivanchenko moved constructor and destructor to source; 
+//                         removed unused variable
 
 #ifndef G4DecayStrongResonances_h
 #define G4DecayStrongResonances_h 1
@@ -35,14 +47,12 @@ class G4V3DNucleus;
 class G4DecayStrongResonances
 {
 public:
-   G4DecayStrongResonances(){}      
-   ~G4DecayStrongResonances(){}
+  G4DecayStrongResonances();
+  ~G4DecayStrongResonances();
 
 private:
    G4int operator==(G4DecayStrongResonances& right) {return (this == &right);}
    G4int operator!=(G4DecayStrongResonances& right) {return (this != &right);}
-   
-   G4double theEnergy;
       
 public:
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
