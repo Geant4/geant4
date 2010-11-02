@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.26 2010-10-20 08:54:18 gcosmo Exp $
+// $Id: G4TessellatedSolid.cc,v 1.27 2010-11-02 11:29:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -152,8 +152,6 @@ G4TessellatedSolid::~G4TessellatedSolid ()
 G4TessellatedSolid::G4TessellatedSolid (const G4TessellatedSolid &s)
   : G4VSolid(s), fpPolyhedron(0)
 {
-  if (&s == this) { return; }
-
   dirTolerance = 1.0E-14;
   
   geometryType = "G4TessellatedSolid";
