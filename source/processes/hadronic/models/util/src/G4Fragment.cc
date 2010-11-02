@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.21 2010-09-28 16:06:32 vnivanch Exp $
+// $Id: G4Fragment.cc,v 1.22 2010-11-02 17:55:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -216,12 +216,11 @@ void G4Fragment::ExcitationEnergyWarning()
 {
   if (theExcitationEnergy < -10 * CLHEP::eV) {
     ++errCount;
-    if ( errCount <= 10 ) {
-      G4cout << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy = "
-	     << theExcitationEnergy/CLHEP::MeV << " MeV for A = " 
-	     << theA << " and Z= " << theZ << G4endl;
+    if ( errCount <= 1 ) {
+      G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
+      G4cout << *this << G4endl;
       if( errCount == 10 ) {
-	G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0!";
+	G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0  10 times!";
 	throw G4HadronicException(__FILE__, __LINE__, text);
       }
     }
