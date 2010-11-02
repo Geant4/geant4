@@ -68,8 +68,6 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     G4OpticalPhysics(G4int verbose, const G4String& name);
     virtual ~G4OpticalPhysics();
 
-  protected:
-
     // construct particle and physics
     virtual void ConstructParticle();
     virtual void ConstructProcess();
