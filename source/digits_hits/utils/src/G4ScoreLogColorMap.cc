@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.9 2010-08-31 09:49:14 akimura Exp $
+// $Id: G4ScoreLogColorMap.cc,v 1.10 2010-11-03 19:31:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -49,13 +49,14 @@ G4ScoreLogColorMap::G4ScoreLogColorMap(G4String mName)
 G4ScoreLogColorMap::~G4ScoreLogColorMap()
 {;}
 
+#include "G4UIcommand.hh"
 void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
 {
   G4bool lmin = true, lmax = true, lval = true;
   if(fMinVal < 0.) {
     lmin = false;
     G4String message = "    The min. value (fMinVal) is negative. : ";
-    message += fMinVal;
+    message += G4UIcommand::ConvertToString(fMinVal);
     G4Exception("G4ScoreLogColorMap::GetMapColor()",
 		"DigiHitsUtilsScoreLogColorMap000", JustWarning,
 		message);
@@ -63,7 +64,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
   if(fMaxVal < 0.) {
     lmax = false;
     G4String message = "    The max. value (fMaxVal) is negative. : ";
-    message += fMaxVal;
+    message += G4UIcommand::ConvertToString(fMaxVal);
     G4Exception("G4ScoreLogColorMap::GetMapColor()",
 		"DigiHitsUtilsScoreLogColorMap001", JustWarning,
 		message);
@@ -79,7 +80,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
   if(val < 0.) {
     lval = false;
     G4String message = "     'val' (first argument) is negative : ";
-    message += fMaxVal;
+    message += G4UIcommand::ConvertToString(fMaxVal);
     G4Exception("G4ScoreLogColorMap::GetMapColor()",
 		"DigiHitsUtilsScoreLogColorMap002", JustWarning,
 		message);
