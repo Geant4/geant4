@@ -24,9 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.7 2010-07-22 22:17:25 taso Exp $
+// $Id: G4ScoreQuantityMessengerQCmd.cc,v 1.8 2010-11-03 08:29:02 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ---------------------------------------------------------------------
+// Modifications
+// 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -196,18 +199,19 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qPassCellCurrCmd = new G4UIcommand("/score/quantity/passageCellCurrent",this);
   qPassCellCurrCmd->SetGuidance("Passage cell current scorer.");
   qPassCellCurrCmd->
-  SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag unit");
+    SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag");
+    //SetGuidance("[usage] /score/quantiy/passageCellCurrent qname wflag unit");
   qPassCellCurrCmd->SetGuidance("  qname  :(String) scorer name");
   qPassCellCurrCmd->SetGuidance("  wflag  :(Bool) weighted");
-  qPassCellCurrCmd->SetGuidance("  unit  :(Bool) unit");
+  //qPassCellCurrCmd->SetGuidance("  unit  :(Bool) unit");
   param = new G4UIparameter("qname",'s',false);
   qPassCellCurrCmd->SetParameter(param);
   param = new G4UIparameter("wflag",'b',true);
   param->SetDefaultValue("true");
   qPassCellCurrCmd->SetParameter(param);
-  param = new G4UIparameter("unit",'s',true);
-  param->SetDefaultValue("parcm2");
-  qPassCellCurrCmd->SetParameter(param);
+  //param = new G4UIparameter("unit",'s',true);
+  //param->SetDefaultValue("parcm2");
+  //qPassCellCurrCmd->SetParameter(param);
   //
   qPassTrackLengthCmd = new G4UIcommand("/score/quantity/passageTrackLength",this);
   qPassTrackLengthCmd->SetGuidance("Passage track length scorer.");

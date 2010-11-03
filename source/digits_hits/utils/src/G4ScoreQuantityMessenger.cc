@@ -24,9 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.cc,v 1.9 2010-07-22 22:17:10 taso Exp $
+// $Id: G4ScoreQuantityMessenger.cc,v 1.10 2010-11-03 08:28:42 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// ---------------------------------------------------------------------
+// Modifications
+// 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -270,7 +273,7 @@ void G4ScoreQuantityMessenger::SetNewValue(G4UIcommand * command,G4String newVal
 	  if( CheckMeshPS(mesh,token[0]) ) {
 	      G4PSPassageCellCurrent* ps = new G4PSPassageCellCurrent3D(token[0]);
 	      ps->Weighted(StoB(token[1]));
-	      ps->SetUnit(token[2]);
+	      //ps->SetUnit(token[2]);
 	      mesh->SetPrimitiveScorer(ps);
 	  }
       } else if(command== qPassTrackLengthCmd){
