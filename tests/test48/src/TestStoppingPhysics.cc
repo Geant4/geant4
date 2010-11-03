@@ -51,7 +51,7 @@
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4DecayPhysics.hh"
+// #include "G4DecayPhysics.hh"
 
 #include "G4MuonMinus.hh"
 #include "G4PionMinus.hh"
@@ -63,10 +63,12 @@
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4LeptonConstructor.hh"
+#include "G4BosonConstructor.hh"
 
 #include "G4MuonMinusCaptureAtRest.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
+
 //
 // there're 2 alternative implementations of the pi- absorbtion at rest
 // the former was widely used in a variety of physics lists until replaced
@@ -104,8 +106,8 @@ TestStoppingPhysics::~TestStoppingPhysics()
 void TestStoppingPhysics::Initialise()
 {
 
-  //G4DecayPhysics dp;
-  //dp.ConstructParticle();
+  //G4DecayPhysics pDecayPhysics;
+  //pDecayPhysics.ConstructParticle();
   
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
@@ -118,6 +120,9 @@ void TestStoppingPhysics::Initialise()
   
   G4LeptonConstructor pLeptonConstructor;
   pLeptonConstructor.ConstructParticle();
+  
+  G4BosonConstructor pBosonConstructor;
+  pBosonConstructor.ConstructParticle();
   
   theProcess = 0;
   
