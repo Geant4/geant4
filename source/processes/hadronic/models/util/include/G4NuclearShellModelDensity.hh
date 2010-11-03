@@ -39,7 +39,7 @@ class G4NuclearShellModelDensity : public G4VNuclearDensity
 {
 
   public:
-    G4NuclearShellModelDensity(G4double anA, G4double aZ);
+    G4NuclearShellModelDensity(G4int anA, G4int aZ);
     ~G4NuclearShellModelDensity();
     
     G4double GetRelativeDensity(const G4ThreeVector & aPosition) const;
