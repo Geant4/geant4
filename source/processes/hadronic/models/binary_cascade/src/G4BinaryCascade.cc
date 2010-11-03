@@ -1562,7 +1562,11 @@ void G4BinaryCascade::StepParticlesOut()
       {
 	  nsec++;
 	  G4double tStep(0), tdummy(0); 
-	  ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep);
+	  if ( ! ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep) );
+	  {
+             PrintKTVector(&theSecondaryList, std::string(" state ERROR....."));
+             throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
+          }
 #ifdef debug_BIC_StepParticlesOut
 	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
 	         << " " <<kt->GetDefinition()->GetParticleName() 
