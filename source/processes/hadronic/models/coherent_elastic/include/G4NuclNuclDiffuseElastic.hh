@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.18 2010-11-03 10:35:17 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.19 2010-11-03 14:29:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -250,6 +250,8 @@ public:
 
   G4double  GetRatioSim(G4double theta);
   G4double  GetRatioGen(G4double theta);
+  
+  G4double  GetFresnelDiffuseXsc(G4double theta);
   
 
   G4complex AmplitudeGla(G4double theta);
@@ -1357,7 +1359,7 @@ inline G4double G4NuclNuclDiffuseElastic::GetRatioSim(G4double theta)
 
 /////////////////////////////////////////////////////////////////
 //
-// The ratio el/ruth for smooth nuckeus profile
+// The ratio el/ruth for Fresnel smooth nucleus profile
 
 inline G4double G4NuclNuclDiffuseElastic::GetRatioGen(G4double theta)
 {
@@ -1391,7 +1393,17 @@ inline G4double G4NuclNuclDiffuseElastic::GetRatioGen(G4double theta)
   return out;
 }
 
+/////////////////////////////////////////////////////////////////
+//
+// The xsc for Fresnel smooth nucleus profile
 
+inline G4double G4NuclNuclDiffuseElastic::GetFresnelDiffuseXsc(G4double theta)
+{
+  G4double ratio   = GetRatioGen(theta);
+  G4double ruthXsc = GetRutherfordXsc(theta);
+  G4double xsc     = ratio*ruthXsc;
+  return xsc;
+}
 
 
 

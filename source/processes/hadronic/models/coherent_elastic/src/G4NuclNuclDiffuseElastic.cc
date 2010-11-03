@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc,v 1.2 2009-04-10 13:22:25 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.cc,v 1.3 2010-11-03 14:29:21 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -169,14 +169,20 @@ void G4NuclNuclDiffuseElastic::Initialise()
   // fEnergyVector = new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
-
   size_t jEl, numOfEl = G4Element::GetNumberOfElements();
+
+  // projectile radius
+
+  G4double A1 = G4double( fParticle->GetBaryonNumber() );
+  G4double R1 = CalculateNuclearRad(A1);
 
   for(jEl = 0 ; jEl < numOfEl; ++jEl) // application element loop
   {
     fAtomicNumber = (*theElementTable)[jEl]->GetZ();     // atomic number
     fAtomicWeight = (*theElementTable)[jEl]->GetN();     // number of nucleons
+
     fNuclearRadius = CalculateNuclearRad(fAtomicWeight);
+    fNuclearRadius += R1;
 
     if(verboseLevel > 0) 
     {   
@@ -1148,6 +1154,7 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
       a           = partMom/m1;         // beta*gamma for m1
       fBeta       = a/std::sqrt(1+a*a);
       fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+      fRutherfordRatio = fZommerfeld/fWaveVector; 
       fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
     }
     G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(fAngleBin-1);
@@ -1177,7 +1184,7 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
       // if( ( alpha2 > alphaCoulomb ) && z ) fAddCoulomb = true;
       if( ( alpha1 < alphaCoulomb ) && z ) fAddCoulomb = false;
 
-      delta = integral.Legendre10(this, &G4NuclNuclDiffuseElastic::GetIntegrandFunction, alpha1, alpha2);
+      delta = integral.Legendre10(this, &G4NuclNuclDiffuseElastic::GetFresnelDiffuseXsc, alpha1, alpha2);
       // delta = integral.Legendre96(this, &G4NuclNuclDiffuseElastic::GetIntegrandFunction, alpha1, alpha2);
 
       sum += delta;
