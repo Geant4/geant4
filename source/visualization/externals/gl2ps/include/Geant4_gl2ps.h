@@ -26,7 +26,7 @@
 #ifndef Geant4_gl2ps_h
 #define Geant4_gl2ps_h
 
-// gl2ps-1.3.3
+// gl2ps-1.3.5
 // The gl2ps code is prefixed by Geant4_ in order
 // to avoid clashes with other gl2ps code that may come at link
 // time from other channels.

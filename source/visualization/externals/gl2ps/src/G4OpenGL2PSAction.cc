@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGL2PSAction.cc,v 1.5 2010-04-26 16:28:18 lgarnier Exp $
+// $Id: G4OpenGL2PSAction.cc,v 1.6 2010-11-03 16:40:34 lgarnier Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,7 +138,9 @@ void G4OpenGL2PSAction::G4gl2psBegin(
 {
   if(!fFile) return;
   int options = GL2PS_OCCLUSION_CULL | 
-     GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
+    GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
+//   int options = GL2PS_OCCLUSION_CULL | 
+//      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
   int sort = GL2PS_BSP_SORT;
   //int sort = GL2PS_SIMPLE_SORT;
   GLint buffsize = 0;
