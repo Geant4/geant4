@@ -2466,7 +2466,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
 //    G4cout << G4endl;
     }
     size_t current(0);
-    for(current=0; current<secs->size(); current++)
+    for(current=0; secs && current<secs->size(); current++)
     {
       if((*secs)[current]->GetDefinition()->IsShortLived())
       {
