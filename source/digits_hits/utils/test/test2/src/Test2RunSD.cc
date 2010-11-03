@@ -23,57 +23,68 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: Test2RunSD.cc,v 1.1 2010-11-03 08:48:57 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 
-#ifndef Test2PhantomSD_h
-#define Test2PhantomSD_h 1
+#include "Test2RunSD.hh"
+#include "G4Event.hh"
+#include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
 
-#include "G4VSensitiveDetector.hh"
+#define NPRIM 7
+
+Test2RunSD::Test2RunSD(const G4String& detName, const G4String& hcname,
+		       std::vector<G4String>& hcnameVec) {
+
+  G4SDManager * SDMan = G4SDManager::GetSDMpointer();
+  SDMan->SetVerboseLevel(1);
+  //
+  G4String fullname = detName+"/"+hcname;
+  fSdID =  SDMan->GetCollectionID(fullname);
+  if ( fSdID >=0 ) HitSum = new Test2SDHitSum(detName,hcnameVec);
+  G4cout << "ASO " << fullname <<" "<<fSdID<< G4endl;
+}
+
+Test2RunSD::~Test2RunSD() {
+  if ( HitSum ) delete HitSum;
+}
+
 #include "Test2PhantomHit.hh"
-#include "G4StepStatus.hh"
-#include "G4Track.hh"
-#include "G4VSolid.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4UnitsTable.hh"
-#include "G4GeometryTolerance.hh"
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
-class G4VSolid;
+void Test2RunSD::RecordEvent(const G4Event* evt) {
 
-class Test2PhantomSD : public G4VSensitiveDetector {
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  if(!HCE) return;
+  numberOfEvent++;
 
-public:
-  Test2PhantomSD(G4String name, G4int segment[3]);
-  ~Test2PhantomSD();
+  if ( fSdID >= 0 ){
+    Test2PhantomHitsCollection * phantomHC = 
+      (Test2PhantomHitsCollection*)(HCE->GetHC(fSdID));
+    if(phantomHC) {
+      G4int nent = phantomHC->entries();
+      for(G4int i = 0; i < nent; i++) {
+	Test2PhantomHit * sdHit = (Test2PhantomHit*)(phantomHC->GetHit(i));
+	HitSum->Analyze(sdHit);
+      }
+    }
+  }
+}
 
-  void Initialize(G4HCofThisEvent * HCE);
-  G4bool ProcessHits(G4Step * aStep, G4TouchableHistory * ROhist);
-  void EndOfEvent(G4HCofThisEvent * HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
+void Test2RunSD::DumpQuantitiesToFile(){
+  if ( fSdID >= 0 ){
+    HitSum->DumpQuantitiesToFile();
+  }
+}
 
-private:
-  G4VSolid* GetSolid(G4Step* aStep);
-  G4double GetVolume(G4Step* aStep);
-  G4double GetArea(G4Step* aStep);
-  G4int IsSelectedSurface(G4Step* aStep);
-  G4bool IsPassed(G4Step* aStep);
-  G4double GetAngleFactor(G4Step* aStep,G4int dirFlag);
-  G4bool IsSecondary(G4Step* aStep);
-  G4bool IsEnterOrFirstStep(G4Step* aStep);  
-  G4bool IsExit(G4Step* aStep);
-
-private:
-  Test2PhantomHitsCollection * fPhantomCollection;
-  G4int nSegment[3];
-
-  G4int fCurrentTrkID;
-  G4double fCellTrack;
-
-};
-
-#endif
+G4double Test2RunSD::GetTotal(G4int i) const
+{
+  if ( fSdID >= 0 ){
+    G4double total = 0.;
+    total = HitSum->GetTotal(i);
+    return total;
+  }
+  return 0.0;
+}
 

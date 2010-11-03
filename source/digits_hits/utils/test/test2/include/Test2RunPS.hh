@@ -23,56 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: Test2RunPS.hh,v 1.1 2010-11-03 08:48:57 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 
-#ifndef Test2PhantomSD_h
-#define Test2PhantomSD_h 1
+#ifndef Test2RunPS_h
+#define Test2RunPS_h 1
 
-#include "G4VSensitiveDetector.hh"
-#include "Test2PhantomHit.hh"
-#include "G4StepStatus.hh"
-#include "G4Track.hh"
-#include "G4VSolid.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4UnitsTable.hh"
-#include "G4GeometryTolerance.hh"
+#include "globals.hh"
+#include "G4Run.hh"
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
-class G4VSolid;
+#include <vector>
 
-class Test2PhantomSD : public G4VSensitiveDetector {
+#include "G4THitsMap.hh"
+
+class G4Event;
+
+class Test2RunPS : public G4Run
+{
+public:
+  Test2RunPS(G4String& detName,std::vector<G4String>& hcnameVec);
+  virtual ~Test2RunPS();
 
 public:
-  Test2PhantomSD(G4String name, G4int segment[3]);
-  ~Test2PhantomSD();
+  virtual void RecordEvent(const G4Event*);
 
-  void Initialize(G4HCofThisEvent * HCE);
-  G4bool ProcessHits(G4Step * aStep, G4TouchableHistory * ROhist);
-  void EndOfEvent(G4HCofThisEvent * HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
+public:
+  G4double GetTotal(G4int i) const;
+  void     DumpQuantitiesToFile();
+  void     DumpQuantitiyToFile(G4int i);
 
 private:
-  G4VSolid* GetSolid(G4Step* aStep);
-  G4double GetVolume(G4Step* aStep);
-  G4double GetArea(G4Step* aStep);
-  G4int IsSelectedSurface(G4Step* aStep);
-  G4bool IsPassed(G4Step* aStep);
-  G4double GetAngleFactor(G4Step* aStep,G4int dirFlag);
-  G4bool IsSecondary(G4Step* aStep);
-  G4bool IsEnterOrFirstStep(G4Step* aStep);  
-  G4bool IsExit(G4Step* aStep);
+  G4double GetTotal(const G4THitsMap<G4double>* map) const;
+  void     DumpQuantitiyToFile(const G4THitsMap<G4double> *map, 
+			       G4String& fileName);
 
 private:
-  Test2PhantomHitsCollection * fPhantomCollection;
-  G4int nSegment[3];
-
-  G4int fCurrentTrkID;
-  G4double fCellTrack;
-
+  G4String              DTName;
+  std::vector<G4String> HCName;
+  std::vector<G4int> CollID;
+  std::vector<G4THitsMap<G4double>*> MapSum;
+  
 };
 
 #endif

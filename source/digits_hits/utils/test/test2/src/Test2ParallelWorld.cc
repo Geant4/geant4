@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: Test2ParallelWorld.cc,v 1.3 2010-09-02 11:10:30 akimura Exp $
+// $Id: Test2ParallelWorld.cc,v 1.4 2010-11-03 08:48:57 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 #include "Test2ParallelWorld.hh"
+#include "Test2GeometryConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -43,11 +44,15 @@
 
 
 Test2ParallelWorld::Test2ParallelWorld(G4String worldName)
-  :G4VUserParallelWorld(worldName), fbConstructed(false)
+  :G4VUserParallelWorld(worldName), fbConstructed(false),
+   SDC(0),PSC(0),fSensitivityType(0)
 {;}
 
 Test2ParallelWorld::~Test2ParallelWorld()
-{;}
+{
+  if(SDC) delete SDC;
+  if(PSC) delete PSC;
+}
 
 void Test2ParallelWorld::Construct() {
 
@@ -55,7 +60,18 @@ void Test2ParallelWorld::Construct() {
   { 
     fbConstructed = true;
     SetupGeometry();
-    SetupDetectors();
+    switch ( fSensitivityType ){
+    case 0:
+      break;
+    case 1:
+      SetupPSDetectors();
+      break;
+    case 2:
+      SetupSDDetectors();
+      break;
+    default:
+      break;
+    }
   }
 }
 
@@ -65,122 +81,42 @@ void Test2ParallelWorld::SetupGeometry()
   // World
   //
   G4VPhysicalVolume * ghostWorld = GetWorld();
-  G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
 
+  G4cout << "Test2ParallelWorld::SetupGeometry"<<G4endl;
   //                               
   // 3D nested phantom
   //
   // parameters
-  G4double phantomSize[3] = {1.*m, 1.*m, 1.*m};
-  G4int nSegment[3] = {30, 30, 30};
+  phantomSize[0] = 1.*m;
+  phantomSize[1] = 1.*m;
+  phantomSize[2] = 1.*m;
+  nSegment[0] = 10;
+  nSegment[1] = 10;
+  nSegment[2] = 10;
 
-  //  phantom box
-  G4VSolid * phantomSolid = new G4Box("PhantomBoxParallel", phantomSize[0], 
-				      phantomSize[1], phantomSize[2]);
-  G4LogicalVolume* phantomLogical = new G4LogicalVolume(phantomSolid, 0,
-							"Phantom");
-  new G4PVPlacement(0, G4ThreeVector(), phantomLogical, "PhantomParallel",
-		    worldLogical, false, 0);
-
-  G4String layerName[3] = {"layerX", "layerY", "layerZ"};
-  G4VSolid * layerSolid[3];
-
-
-  // replication along X
-  layerSolid[0] = new G4Box(layerName[0],
-			    phantomSize[0]/nSegment[0],
-			    phantomSize[1],
-			    phantomSize[2]);
-  fLayerLogical[0] = new G4LogicalVolume(layerSolid[0], 0, layerName[0]);
-  new G4PVReplica(layerName[0], fLayerLogical[0], phantomLogical, kXAxis,
-		  nSegment[0], phantomSize[0]/nSegment[0]*2.);
-
-  // replication along Y
-  layerSolid[1] = new G4Box(layerName[1],
-			    phantomSize[0]/nSegment[0],
-			    phantomSize[1]/nSegment[1],
-			    phantomSize[2]);
-  fLayerLogical[1] = new G4LogicalVolume(layerSolid[1], 0, layerName[1]);
-  new G4PVReplica(layerName[1], fLayerLogical[1], fLayerLogical[0], kYAxis,
-		  nSegment[1], phantomSize[1]/nSegment[1]*2.);
-
-  // replication along Z
-  layerSolid[2] = new G4Box(layerName[2],
-			    phantomSize[0]/nSegment[0],
-			    phantomSize[1]/nSegment[1],
-			    phantomSize[2]/nSegment[2]);
-  fLayerLogical[2] = new G4LogicalVolume(layerSolid[2], 0, layerName[2]);
-  fPhantomPhys = new G4PVDivision(layerName[2], fLayerLogical[2],
-				  fLayerLogical[1], kZAxis,
-				  nSegment[2], 0.);
-
-  //                                        
-  // Visualization attributes
-  //
-  //  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
-  G4VisAttributes * invisatt = new G4VisAttributes(G4Colour(.0,.0,.0));
-  invisatt->SetVisibility(false);
-  phantomLogical->SetVisAttributes(invisatt);
-  fLayerLogical[0]->SetVisAttributes(invisatt);
-  fLayerLogical[1]->SetVisAttributes(invisatt);
-  G4VisAttributes * visatt = new G4VisAttributes(G4Colour(1.,.7,.7));
-  visatt->SetVisibility(true);
-  fLayerLogical[2]->SetVisAttributes(visatt);
+  GEOM = 
+    new Test2GeometryConstruction(phantomSize,NULL,nSegment);
+  fWorldPhys = GEOM->ConstructGeometry(ghostWorld);
 
 }
 
 
 #include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSTrackLength.hh"
-#include "G4PSNofStep.hh"
-#include "G4SDParticleFilter.hh"
+#include "Test2SDConstruction.hh"
 
-void Test2ParallelWorld::SetupDetectors() {
-  //
-  // primitive scorers
-  //
-  G4SDManager * sdManager = G4SDManager::GetSDMpointer();
-  sdManager->SetVerboseLevel(1);
+void Test2ParallelWorld::SetupSDDetectors() {
+  G4LogicalVolume* phantomLogical = GEOM->GetSensitiveLogical();
 
-  G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector("ScoringWorld");
+  SDC = new Test2SDConstruction("ParallelWorldSD",nSegment);
+  SDC->SetupSensitivity(phantomLogical);
+}
 
-  // filters
-  G4String filterName, particleName;
-  G4SDParticleFilter* gammaFilter
-    = new G4SDParticleFilter(filterName="gammaFilter",particleName="gamma");
-  G4SDParticleFilter* electronFilter
-    = new G4SDParticleFilter(filterName="electronFilter",particleName="e-");
-  G4SDParticleFilter* positronFilter
-    = new G4SDParticleFilter(filterName="positronFilter",particleName="e+");
+#include "Test2PSConstruction.hh"
 
-  // primitive scorers
-  G4VPrimitiveScorer* primitive;
-  primitive = new G4PSEnergyDeposit("eDep");
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSTrackLength("trackLengthGamma");
-  primitive->SetFilter(gammaFilter);
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSTrackLength("trackLengthElec");
-  primitive->SetFilter(electronFilter);
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSTrackLength("trackLengthPosi");
-  primitive->SetFilter(positronFilter);
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSNofStep("nStepGamma");
-  primitive->SetFilter(gammaFilter);
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSNofStep("nStepElec");
-  primitive->SetFilter(electronFilter);
-  det->RegisterPrimitive(primitive);
-  primitive = new G4PSNofStep("nStepPosi");
-  primitive->SetFilter(positronFilter);
-  det->RegisterPrimitive(primitive);
+void Test2ParallelWorld::SetupPSDetectors() {
+  G4LogicalVolume* phantomLogical = GEOM->GetSensitiveLogical();
 
-  sdManager->AddNewDetector(det);
-  fLayerLogical[2]->SetSensitiveDetector(det);
-  sdManager->SetVerboseLevel(0);
+  PSC = new Test2PSConstruction("ParallelWorldPS",nSegment);
+  PSC->SetupSensitivity(phantomLogical);
 }
 

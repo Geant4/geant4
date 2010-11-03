@@ -32,12 +32,29 @@
 G4Allocator<Test2PhantomHit> Test2PhantomHitAllocator;
 
 Test2PhantomHit::Test2PhantomHit() {
-  ;
+fSegment[0]=1;
+fSegment[1]=1;
+fSegment[2]=1;
 }
 
-Test2PhantomHit::Test2PhantomHit(G4int & x, G4int & y, G4int & z)
-  : fXCellID(x), fYCellID(y), fZCellID(z) {
-  ;
+Test2PhantomHit::Test2PhantomHit(G4int & x, G4int & y, G4int & z,
+				 G4int segment[3])
+  : fXCellID(x), fYCellID(y), fZCellID(z){
+  fSegment[0]=segment[0];
+  fSegment[1]=segment[1];
+  fSegment[2]=segment[2];
+
+  fEdep = 0.0;
+  fDose = 0.0;
+  fTrackLength = 0.0;
+  flatSurfCurr=0.0;
+  passageCellCurr = 0.0;
+  flatSurfaceFlux = 0.0;
+  cellFlux = 0.0;
+  passageCellFlux = 0.0;
+  noOfSecondary = 0.0;
+  cellCharge = 0.0;
+
 }
 
 Test2PhantomHit::~Test2PhantomHit() {
@@ -50,6 +67,9 @@ Test2PhantomHit::Test2PhantomHit(const Test2PhantomHit & right)
   fXCellID = right.fXCellID;
   fYCellID = right.fYCellID;
   fZCellID = right.fZCellID;
+  fSegment[0] = right.fSegment[0];
+  fSegment[1] = right.fSegment[1];
+  fSegment[2] = right.fSegment[2];
   fEdep = right.fEdep;
   fTrackLength = right.fTrackLength;
   fParticleName = right.fParticleName;
@@ -60,12 +80,16 @@ const Test2PhantomHit & Test2PhantomHit::operator=(const Test2PhantomHit & right
   fXCellID = right.fXCellID;
   fYCellID = right.fYCellID;
   fZCellID = right.fZCellID;
+  fSegment[0] = right.fSegment[0];
+  fSegment[1] = right.fSegment[1];
+  fSegment[2] = right.fSegment[2];
   fEdep = right.fEdep;
   fTrackLength = right.fTrackLength;
   fParticleName = right.fParticleName;
 
   return *this;
 }
+
 
 G4int Test2PhantomHit::operator==(const Test2PhantomHit &right) const {
 

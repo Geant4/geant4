@@ -23,57 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
 
-#ifndef Test2PhantomSD_h
-#define Test2PhantomSD_h 1
+#include "Test2SDConstruction.hh"
 
-#include "G4VSensitiveDetector.hh"
-#include "Test2PhantomHit.hh"
-#include "G4StepStatus.hh"
-#include "G4Track.hh"
-#include "G4VSolid.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4UnitsTable.hh"
-#include "G4GeometryTolerance.hh"
+#include "G4LogicalVolume.hh"
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
-class G4VSolid;
+Test2SDConstruction::Test2SDConstruction(const G4String& name,G4int Segment[3])
+  :fname(name)
+{
+  nSegment[0] = Segment[0];
+  nSegment[1] = Segment[1];
+  nSegment[2] = Segment[2];
+}
 
-class Test2PhantomSD : public G4VSensitiveDetector {
+Test2SDConstruction::~Test2SDConstruction()
+{;}
 
-public:
-  Test2PhantomSD(G4String name, G4int segment[3]);
-  ~Test2PhantomSD();
 
-  void Initialize(G4HCofThisEvent * HCE);
-  G4bool ProcessHits(G4Step * aStep, G4TouchableHistory * ROhist);
-  void EndOfEvent(G4HCofThisEvent * HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
+#include "G4SDManager.hh"
+#include "Test2PhantomSD.hh"
+void Test2SDConstruction::SetupSensitivity(G4LogicalVolume* logVol) {
+  //
+  // sensitive detectors
+  //
+  G4SDManager * sdManager = G4SDManager::GetSDMpointer();
+  sdManager->SetVerboseLevel(1);
 
-private:
-  G4VSolid* GetSolid(G4Step* aStep);
-  G4double GetVolume(G4Step* aStep);
-  G4double GetArea(G4Step* aStep);
-  G4int IsSelectedSurface(G4Step* aStep);
-  G4bool IsPassed(G4Step* aStep);
-  G4double GetAngleFactor(G4Step* aStep,G4int dirFlag);
-  G4bool IsSecondary(G4Step* aStep);
-  G4bool IsEnterOrFirstStep(G4Step* aStep);  
-  G4bool IsExit(G4Step* aStep);
+  G4String phantomSDName = fname;
+  Test2PhantomSD * phantomSD = new Test2PhantomSD(phantomSDName,nSegment);
+  sdManager->AddNewDetector(phantomSD);
+  logVol->SetSensitiveDetector(phantomSD);
 
-private:
-  Test2PhantomHitsCollection * fPhantomCollection;
-  G4int nSegment[3];
+  sdManager->SetVerboseLevel(0);
 
-  G4int fCurrentTrkID;
-  G4double fCellTrack;
-
-};
-
-#endif
-
+}

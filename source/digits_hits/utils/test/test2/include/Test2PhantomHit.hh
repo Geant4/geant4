@@ -37,7 +37,7 @@
 class Test2PhantomHit : public G4VHit {
 public:
   Test2PhantomHit();
-  Test2PhantomHit(G4int & x, G4int & y, G4int & z);
+  Test2PhantomHit(G4int & x, G4int & y, G4int & z,G4int segment[3]);
   ~Test2PhantomHit();
   Test2PhantomHit(const Test2PhantomHit & right);
   const Test2PhantomHit & operator=(const Test2PhantomHit & right);
@@ -50,9 +50,19 @@ public:
 
 private:
   G4int fXCellID, fYCellID, fZCellID;
+  G4int fSegment[3];
   G4double fEdep;
+  G4double fDose;
   G4double fTrackLength;
   G4String fParticleName;
+
+  G4double flatSurfCurr;
+  G4double passageCellCurr;
+  G4double flatSurfaceFlux;
+  G4double cellFlux;
+  G4double passageCellFlux;
+  G4double noOfSecondary;
+  G4double cellCharge;
 
 public:
   inline void SetCellID(G4int x, G4int y, G4int z) {
@@ -63,14 +73,34 @@ public:
   inline G4int GetX() { return fXCellID; }
   inline G4int GetY() { return fYCellID; }
   inline G4int GetZ() { return fZCellID; }
+  inline G4int GetID();
   inline void SetEdep(G4double de) { fEdep = de; }
   inline void AddEdep(G4double de) { fEdep += de; }
   inline G4double GetEdep() { return fEdep; }
+  inline void SetDose(G4double dose) { fDose = dose; }
+  inline void AddDose(G4double dose) { fDose += dose; }
+  inline G4double GetDose() { return fDose; }
   inline void SetTrackLength(G4double tl) { fTrackLength = tl; }
   inline void AddTrackLength(G4double tl) { fTrackLength += tl; }
   inline G4double GetTrackLength() { return fTrackLength; }
   inline void SetParticleName(G4String pn) { fParticleName = pn; }
   inline G4String GetParticleName() { return fParticleName; }
+
+  inline void SetFlatSurfaceCurrent(G4double v){ flatSurfCurr=v; }
+  inline void SetPassageCellCurrent(G4double v){ passageCellCurr=v;}
+  inline void SetFlatSurfaceFlux(G4double v){  flatSurfaceFlux=v; }
+  inline void SetCellFlux(G4double v) {  cellFlux=v; }
+  inline void SetPassageCellFlux(G4double v){  passageCellFlux=v; }
+  inline void SetNofSecondary(G4double v){  noOfSecondary=v; }
+  inline void SetCellCharge(G4double v){  cellCharge=v; }
+
+  inline G4double GetFlatSurfaceCurrent(){ return flatSurfCurr; }
+  inline G4double GetPassageCellCurrent(){ return passageCellCurr;}
+  inline G4double GetFlatSurfaceFlux(){ return flatSurfaceFlux; }
+  inline G4double GetCellFlux() { return cellFlux; }
+  inline G4double GetPassageCellFlux(){ return passageCellFlux; }
+  inline G4double GetNofSecondary(){ return noOfSecondary; }
+  inline G4double GetCellCharge(){ return cellCharge; }
 };
 
 typedef G4THitsCollection<Test2PhantomHit> Test2PhantomHitsCollection;
@@ -87,6 +117,9 @@ inline void Test2PhantomHit::operator delete(void *aHit) {
   Test2PhantomHitAllocator.FreeSingle((Test2PhantomHit*) aHit);
 }
 
+inline G4int Test2PhantomHit::GetID(){
+  return fXCellID*fSegment[1]*fSegment[2]+fYCellID*fSegment[2]+fZCellID;
+}
 #endif
 
 

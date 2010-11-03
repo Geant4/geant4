@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2DetectorConstruction.hh,v 1.2 2010-09-01 08:03:10 akimura Exp $
+// $Id: Test2DetectorConstruction.hh,v 1.3 2010-11-03 08:48:57 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,10 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+
+#include "Test2GeometryConstruction.hh"
+#include "Test2SDConstruction.hh"
+#include "Test2PSConstruction.hh"
 
 class G4VPhysicalVolume;
 class G4Material;
@@ -47,20 +51,35 @@ class Test2DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+
+  public:
+    void SetSensitivityType(G4int type)
+  { fSensitivityType = type; }
+
      
   private:
     void DefineMaterials();
     void SetupGeometry();
-    void SetupDetectors();
+    void SetupSDDetectors();
+    void SetupPSDetectors();
 
   private:
     G4Material* fAirMat;
     G4Material* fWaterMat;
     G4VPhysicalVolume* fWorldPhys;
-    G4VPhysicalVolume* fPhantomPhys;
-    G4LogicalVolume * fLayerLogical[3];
+  //G4VPhysicalVolume* fPhantomPhys;
+  // G4LogicalVolume * fLayerLogical[3];
+    G4double phantomSize[3];
+    G4int nSegment[3];
 
     G4bool fbConstructed;
+
+    Test2GeometryConstruction* GEOM;
+    Test2SDConstruction* SDC;
+    Test2PSConstruction* PSC;
+
+    G4int  fSensitivityType;    // 0 None, 1 SD, 2 PS
+
 };
 
 #endif

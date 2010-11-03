@@ -24,56 +24,41 @@
 // ********************************************************************
 //
 
-#ifndef Test2PhantomSD_h
-#define Test2PhantomSD_h 1
+#ifndef Test2SDHitSum_h
+#define Test2SDHitSum_h 1
 
-#include "G4VSensitiveDetector.hh"
 #include "Test2PhantomHit.hh"
-#include "G4StepStatus.hh"
-#include "G4Track.hh"
-#include "G4VSolid.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4UnitsTable.hh"
-#include "G4GeometryTolerance.hh"
+#include "G4THitsMap.hh"
+#include <vector>
 
 class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
-class G4VSolid;
 
-class Test2PhantomSD : public G4VSensitiveDetector {
+class Test2SDHitSum {
 
 public:
-  Test2PhantomSD(G4String name, G4int segment[3]);
-  ~Test2PhantomSD();
+  Test2SDHitSum(const G4String& detName,
+		std::vector<G4String>& hcnameVec);
+  ~Test2SDHitSum();
 
-  void Initialize(G4HCofThisEvent * HCE);
-  G4bool ProcessHits(G4Step * aStep, G4TouchableHistory * ROhist);
-  void EndOfEvent(G4HCofThisEvent * HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
+  void Analyze(Test2PhantomHit* hc);
+  G4double GetTotal(G4int i) const;
 
-private:
-  G4VSolid* GetSolid(G4Step* aStep);
-  G4double GetVolume(G4Step* aStep);
-  G4double GetArea(G4Step* aStep);
-  G4int IsSelectedSurface(G4Step* aStep);
-  G4bool IsPassed(G4Step* aStep);
-  G4double GetAngleFactor(G4Step* aStep,G4int dirFlag);
-  G4bool IsSecondary(G4Step* aStep);
-  G4bool IsEnterOrFirstStep(G4Step* aStep);  
-  G4bool IsExit(G4Step* aStep);
+  void     DumpQuantitiesToFile();
+  void     DumpQuantitiyToFile(G4int i);
 
 private:
-  Test2PhantomHitsCollection * fPhantomCollection;
-  G4int nSegment[3];
+  G4double GetTotal(const G4THitsMap<G4double>* map) const;
+  void     DumpQuantitiyToFile(const G4THitsMap<G4double> *map, 
+			       G4String& fileName);
 
-  G4int fCurrentTrkID;
-  G4double fCellTrack;
+private:
+  G4String              DTName;
+  std::vector<G4String> HCName;
+  std::vector<G4THitsMap<G4double>*> MapSum;
+  
 
 };
-
 #endif
 

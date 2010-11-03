@@ -23,56 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id: Test2PSConstruction.hh,v 1.1 2010-11-03 08:48:57 taso Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 
-#ifndef Test2PhantomSD_h
-#define Test2PhantomSD_h 1
+#ifndef Test2PSConstruction_h
+#define Test2PSConstruction_h 1
 
-#include "G4VSensitiveDetector.hh"
-#include "Test2PhantomHit.hh"
-#include "G4StepStatus.hh"
-#include "G4Track.hh"
-#include "G4VSolid.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4UnitsTable.hh"
-#include "G4GeometryTolerance.hh"
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
-class G4VSolid;
+class G4VPhysicalVolume;
+class G4Material;
+class G4LogicalVolume;
 
-class Test2PhantomSD : public G4VSensitiveDetector {
+class Test2PSConstruction 
+{
+  public:
+    Test2PSConstruction(const G4String& name, G4int Segment[3]);
+    virtual ~Test2PSConstruction();
 
-public:
-  Test2PhantomSD(G4String name, G4int segment[3]);
-  ~Test2PhantomSD();
-
-  void Initialize(G4HCofThisEvent * HCE);
-  G4bool ProcessHits(G4Step * aStep, G4TouchableHistory * ROhist);
-  void EndOfEvent(G4HCofThisEvent * HCE);
-  void clear();
-  void DrawAll();
-  void PrintAll();
-
-private:
-  G4VSolid* GetSolid(G4Step* aStep);
-  G4double GetVolume(G4Step* aStep);
-  G4double GetArea(G4Step* aStep);
-  G4int IsSelectedSurface(G4Step* aStep);
-  G4bool IsPassed(G4Step* aStep);
-  G4double GetAngleFactor(G4Step* aStep,G4int dirFlag);
-  G4bool IsSecondary(G4Step* aStep);
-  G4bool IsEnterOrFirstStep(G4Step* aStep);  
-  G4bool IsExit(G4Step* aStep);
-
-private:
-  Test2PhantomHitsCollection * fPhantomCollection;
-  G4int nSegment[3];
-
-  G4int fCurrentTrkID;
-  G4double fCellTrack;
-
+  public:
+    void SetupSensitivity(G4LogicalVolume* logVol);
+ 
+  protected:
+    G4String fname;
+    G4int  nSegment[3];
+  //G4int  nDepth[3];
 };
 
 #endif

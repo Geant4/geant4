@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test2Run.hh,v 1.3 2010-09-01 12:56:56 akimura Exp $
+// $Id: Test2Run.hh,v 1.4 2010-11-03 08:48:57 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,8 @@
 #include "globals.hh"
 #include "G4Run.hh"
 
-#include "G4THitsMap.hh"
+#include "Test2RunSD.hh"
+#include "Test2RunPS.hh"
 
 class G4Event;
 
@@ -47,33 +48,18 @@ public:
 public:
   virtual void RecordEvent(const G4Event*);
 
-private:
-  G4double GetTotal(const G4THitsMap<G4double> &map) const;
-
-private:
-  //-- primitive scorers
-  // Maps for accumulation
-  // mapSum[7]
-  //  i = 0 : eDep
-  //  i = 1 : trackLengthGamma
-  //  i = 2 : trackLengthElec
-  //  i = 3 : trackLengthPosi
-  //  i = 4 : nStepGamma
-  //  i = 5 : nStepElec
-  //  i = 6 : nStepPosi
-  G4THitsMap<G4double> mapSum[7];
-  G4int colIDSum[7];
-  
-  //-- traditional sensitive detetector
-  G4int fSdID;
-  G4double fSdQuantities[7]; // The indices are the same ones as the above primitive scorers
-
 public:
-  inline G4double GetTotal(G4int i) const
-  { return GetTotal(mapSum[i]); }
+  inline Test2RunSD* GetMassRunSD() const{ return MassRunSD; }
+  inline Test2RunSD* GetParaRunSD() const{ return ParaRunSD; }
+  inline Test2RunPS* GetMassRunPS() const{ return MassRunPS; }
+  inline Test2RunPS* GetParaRunPS() const{ return ParaRunPS; }
+  void DumpQuantitiesToFile();
 
-  inline G4double GetSdQuantity(G4int i) const {return fSdQuantities[i];}
+private:
+  Test2RunSD* MassRunSD;
+  Test2RunSD* ParaRunSD;
+  Test2RunPS* MassRunPS;
+  Test2RunPS* ParaRunPS;
+
 };
-
 #endif
-

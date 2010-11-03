@@ -24,43 +24,58 @@
 // ********************************************************************
 //
 //
-// $Id: Test2Run.cc,v 1.4 2010-09-02 11:10:30 akimura Exp $
+// $Id: Test2Run.cc,v 1.5 2010-11-03 08:48:57 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
 #include "Test2Run.hh"
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4SDManager.hh"
 
-#define NPRIM 7
-
 Test2Run::Test2Run() {
 
-  G4String detName = "ScoringWorld";
-  G4String primNameSum[NPRIM] = {"eDep",
-				 "trackLengthGamma",
-				 "trackLengthElec",
-				 "trackLengthPosi",
-				 "nStepGamma",
-				 "nStepElec",
-				 "nStepPosi"};
-  G4SDManager * SDMan = G4SDManager::GetSDMpointer();
-  SDMan->SetVerboseLevel(1);
-  G4String fullName;
-  for(G4int i = 0; i < NPRIM; i++) {
-    fullName = detName+"/"+primNameSum[i];
-    colIDSum[i] = SDMan->GetCollectionID(fullName);
+  G4String detMassSD = "MassWorldSD";
+  G4String detParaSD = "ParallelWorldSD";
+  G4String hcname    = "PhantomCollection";
+  //
+  G4String detMassPS = "MassWorldPS";
+  G4String detParaPS = "ParallelWorldPS";
+  G4String primNameSum[16] = {"eDep",
+			     "trackLengthGamma",
+			     "trackLengthElec",
+			     "trackLengthPosi",
+			     "nStepGamma",
+			     "nStepElec",
+			     "nStepPosi",
+			     "PassageTrackLength",
+			     "DoseDeposit",
+			     "FlatSurfaceCurrent",
+			     "PassageCellCurrent",
+			     "FlatSurfaceFlux",
+			     "CellFlux",
+			     "PassageCellFlux",
+			     "NofSecondary",
+			     "CellCharge" };
+
+  std::vector<G4String> prim;
+  for ( G4int i = 0; i < 16; i++){
+    prim.push_back(primNameSum[i]);
   }
 
-  //
-  fSdID =  SDMan->GetCollectionID(fullName="PhantomCollection");
-  for(G4int i = 0; i < NPRIM; i++) {
-    fSdQuantities[i] = 0.;
-  }
+  MassRunSD = new Test2RunSD(detMassSD,hcname,prim);
+  ParaRunSD = new Test2RunSD(detParaSD,hcname,prim);
+
+  MassRunPS = new Test2RunPS(detMassPS,prim);
+  ParaRunPS = new Test2RunPS(detParaPS,prim);
+
 }
 
-Test2Run::~Test2Run() {;}
+Test2Run::~Test2Run() {
+  if ( MassRunSD ) delete MassRunSD;
+  if ( ParaRunSD ) delete ParaRunSD;
+  if ( MassRunPS ) delete MassRunPS;
+  if ( ParaRunPS ) delete ParaRunPS;
+}
 
 #include "Test2PhantomHit.hh"
 
@@ -69,45 +84,16 @@ void Test2Run::RecordEvent(const G4Event* evt) {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
   numberOfEvent++;
-  for(G4int i = 0; i < NPRIM; i++) {
-    G4THitsMap<G4double>* evtMap = (G4THitsMap<G4double>*)(HCE->GetHC(colIDSum[i]));
-    mapSum[i] += *evtMap;
-  }
 
-  Test2PhantomHitsCollection * phantomHC = (Test2PhantomHitsCollection*)(HCE->GetHC(fSdID));
-  if(phantomHC) {
-    G4int nent = phantomHC->entries();
-    for(G4int i = 0; i < nent; i++) {
-      Test2PhantomHit * sdHit = (Test2PhantomHit*)(phantomHC->GetHit(i));
-      fSdQuantities[0] += sdHit->GetEdep();
-      if(sdHit->GetParticleName() == "gamma") {
-	fSdQuantities[1] += sdHit->GetTrackLength();
-	fSdQuantities[4] += 1;      // including zero steps
-      } else if(sdHit->GetParticleName() == "e-") {
-	fSdQuantities[2] += sdHit->GetTrackLength();
-	fSdQuantities[5] += 1;      // including zero steps
-      } else if(sdHit->GetParticleName() == "e+") {
-	fSdQuantities[3] += sdHit->GetTrackLength();
-	fSdQuantities[6] += 1;      // including zero steps
-      }
-      /*
-      G4cout << sdHit->GetEdep() << " at "
-	     << sdHit->GetX() << ", " << sdHit->GetY() << ", " << sdHit->GetZ()
-	     << G4endl;
-      */
-    }
-  }
+  MassRunSD->RecordEvent(evt);
+  ParaRunSD->RecordEvent(evt);
+  MassRunPS->RecordEvent(evt);
+  ParaRunPS->RecordEvent(evt);
 }
 
-G4double Test2Run::GetTotal(const G4THitsMap<G4double> &map) const
-{
-  G4double total = 0.;
-  std::map<G4int,G4double*>::iterator itr = map.GetMap()->begin();
-  for(; itr != map.GetMap()->end(); itr++) {
-    total += *(itr->second);
-  }
-  return total;
+void Test2Run::DumpQuantitiesToFile() {
+  MassRunSD->DumpQuantitiesToFile();
+  ParaRunSD->DumpQuantitiesToFile();
+  MassRunPS->DumpQuantitiesToFile();
+  ParaRunPS->DumpQuantitiesToFile();
 }
-
-
-  

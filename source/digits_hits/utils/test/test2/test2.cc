@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: test2.cc,v 1.2 2010-09-01 08:03:10 akimura Exp $
+// $Id: test2.cc,v 1.3 2010-11-03 08:48:57 taso Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,10 +55,16 @@ int main(int argc,char** argv)
 
  // Set mandatory initialization classes
  //
+ // Sensitivity Type = 0 none
+ //                    1 PrimitiveScorer
+ //                    2 SensitiveDetector
  // mass world
- G4VUserDetectorConstruction* detector = new Test2DetectorConstruction;
+ Test2DetectorConstruction* detector = new Test2DetectorConstruction;
+ detector->SetSensitivityType(2);
+ Test2ParallelWorld* parallel = new Test2ParallelWorld("ParallelScoringWorld");
+ parallel->SetSensitivityType(1);
  // parallel world
- detector->RegisterParallelWorld(new Test2ParallelWorld("ParallelScoringWorld"));
+ detector->RegisterParallelWorld(parallel);
  runManager->SetUserInitialization(detector);
 
   //
