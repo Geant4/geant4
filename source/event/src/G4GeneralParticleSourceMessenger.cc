@@ -648,6 +648,10 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   interceptCmd1->SetGuidance("Sets the intercept for Lin distributions (in MeV)");
   interceptCmd1->SetParameterName("intercept",true,true);
 
+  arbeintCmd1 = new G4UIcmdWithADouble("/gps/ene/biasAlpha",this);
+  arbeintCmd1->SetGuidance("Set the power-law index for the energy sampling distri. )");
+  arbeintCmd1->SetParameterName("arbeint",true,true);
+
   calculateCmd1 = new G4UIcmdWithoutParameter("/gps/ene/calculate",this);
   calculateCmd1->SetGuidance("Calculates the distributions for Cdg and BBody");
 
@@ -746,6 +750,10 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   histpointCmd1->SetGuidance("Enter: Ehi Weight");
   histpointCmd1->SetParameterName("Ehi","Weight","Junk",true,true);
   histpointCmd1->SetRange("Ehi >= 0. && Weight >= 0.");
+
+  histfileCmd1 = new G4UIcmdWithAString("/gps/hist/file",this);
+  histfileCmd1->SetGuidance("import the arb energy hist in an ASCII file");
+  histfileCmd1->SetParameterName("HistFile",true,true);
 
   arbintCmd1 = new G4UIcmdWithAString("/gps/hist/inter",this);
   arbintCmd1->SetGuidance("Sets the interpolation method for arbitrary distribution.");
@@ -869,6 +877,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete ezeroCmd1;
   delete gradientCmd1;
   delete interceptCmd1;
+  delete arbeintCmd1;
   delete calculateCmd1;
   delete energyspecCmd1;
   delete diffspecCmd1;
@@ -881,6 +890,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete histnameCmd1;
   delete resethistCmd1;
   delete histpointCmd1;
+  delete histfileCmd1;
   delete arbintCmd1;
 
   delete verbosityCmd;
@@ -1504,6 +1514,10 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     {
       fParticleGun->GetEneDist()->SetInterCept(interceptCmd1->GetNewDoubleValue(newValues));
     }
+  else if(command == arbeintCmd1)
+     {
+       fParticleGun->GetEneDist()->SetEnergyBiasAlpha(arbeintCmd1->GetNewDoubleValue(newValues));
+     }
   else if(command == calculateCmd1)
     {
       fParticleGun->GetEneDist()->Calculate();

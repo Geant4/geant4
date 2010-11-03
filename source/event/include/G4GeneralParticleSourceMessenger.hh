@@ -211,6 +211,7 @@ private: //commands
   G4UIcmdWithADouble         *ezeroCmd1;
   G4UIcmdWithADouble         *gradientCmd1;
   G4UIcmdWithADouble         *interceptCmd1;
+  G4UIcmdWithADouble         *arbeintCmd1;
   G4UIcmdWithoutParameter    *calculateCmd1;
   G4UIcmdWithABool           *energyspecCmd1;
   G4UIcmdWithABool           *diffspecCmd1;
@@ -236,6 +237,7 @@ private: //commands
   G4UIcmdWithAString         *resethistCmd;
   // old ones, will be removed soon
   G4UIcmdWith3Vector         *histpointCmd1;
+  G4UIcmdWithAString         *histfileCmd1;
   G4UIcmdWithAString         *histnameCmd1;
   G4UIcmdWithAString         *arbintCmd1;
   G4UIcmdWithAString         *resethistCmd1;
