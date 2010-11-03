@@ -22,6 +22,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
+
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
 #include "G4PionMinus.hh"
@@ -65,9 +66,6 @@ int main(int argc, char** argv) {
   G4Material* material = 0;
   G4int  verbose  = 0; 
 
-  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
-  partTable->SetReadiness();
-
   // Track
   G4ThreeVector aPosition  = G4ThreeVector(0.,0.,0.);
   G4double      aTime      = 0. ;
@@ -90,12 +88,19 @@ int main(int argc, char** argv) {
   }
 
   //--------- Materials definition ---------
-
+  //
   MaterialsList*  mate = new MaterialsList();
+  
+  // physics needs to be initialized before the 1st use of particle table,
+  // because it constructs particles - otherwise the table is just empty
+  //
   TestStoppingPhysics*   phys = new TestStoppingPhysics();
 
-  // Geometry
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
 
+  // Geometry
+  //
   G4Box* sFrame = new G4Box ("Box", 100.0*cm, 100.0*cm, 100.0*cm);
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
@@ -209,14 +214,14 @@ int main(int argc, char** argv) {
 
     // Create a DynamicParticle
     G4DynamicParticle dParticle(part,aDirection,energy);
-/*
-    G4VCrossSectionDataSet* cs = 0;
+
+    // G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
     // for stopping code, it's a nonsense because it's only there for part.code=16
     cross_sec = (G4HadronCrossSections::Instance())->
                 GetCaptureCrossSection(&dParticle, elm);
     cross_sec /= millibarn;
-*/
+
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
 
@@ -252,9 +257,11 @@ int main(int argc, char** argv) {
     // OK, we're almost done with prep work
     // final step: book histo's
     //
+
     TestStoppingHisto histo(namePart, nameMat, nameGen); 
                        // ?? better object than a pointer because it's done per run;
                        // so make the life cycle be run only, rather than delete ??
+
     
     G4Timer* timer = new G4Timer();
     timer->Start();

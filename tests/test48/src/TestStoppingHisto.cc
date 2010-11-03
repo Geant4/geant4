@@ -50,6 +50,7 @@ void TestStoppingHisto::InitHistoGeneral()
    fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), 15, 0., 15. ) );
    fHisto.push_back( new TH1F( "NChargesPions", fHistoTitle.c_str(), 15, 0., 15. ) ) ;
    fHisto.push_back( new TH1F( "NPi0s", fHistoTitle.c_str(), 15, 0., 15. ) );
+   fHisto.push_back( new TH1F( "NGammas", fHistoTitle.c_str(), 15, 0., 15. ) );
    fHisto.push_back( new TH1F( "NKaons", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "NNeutrons", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "ChargedSecondaryMomentum", fHistoTitle.c_str(), 50, 0., 1. ) );
@@ -71,6 +72,7 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
    int NChSec    = 0;
    int NPions    = 0;
    int NChPions  = 0;
+   int NGammas   = 0;
    int NKaons    = 0;
    int NNeutrons = 0;
       
@@ -83,7 +85,7 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
 	if ( sec->GetCharge() != 0 ) 
 	{
 	   NChSec++;
-	   fHisto[7]->Fill( (sec->GetTotalMomentum()/GeV) );
+	   fHisto[8]->Fill( (sec->GetTotalMomentum()/GeV) );
 	}
 	
 	const G4String& pname = sec->GetDefinition()->GetParticleName();
@@ -93,8 +95,13 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
 	   NPions++;
 	   if ( pname != "pi0" )
 	   {
-	      fHisto[8]->Fill( (sec->GetTotalMomentum()/GeV) );
+	      fHisto[9]->Fill( (sec->GetTotalMomentum()/GeV) );
 	   }
+	}
+	
+	if ( pname == "gamma" || pname == "photon" )
+	{
+	   NGammas++;
 	}
 	
 	if ( pname == "neutron" )
@@ -102,7 +109,7 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
 	   NNeutrons++;
 	   if ( fBeam == "pi-" )
 	   {
-	      fHisto[10]->Fill( (sec->GetKineticEnergy()/MeV) );
+	      fHisto[11]->Fill( (sec->GetKineticEnergy()/MeV) );
 	   }
 	}
 	
@@ -111,7 +118,7 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
 	   NKaons++;
 	   if ( pname == "kaon+" || pname == "kaon-" )
 	   {
-	      fHisto[9]->Fill( (sec->GetTotalMomentum()/GeV) );
+	      fHisto[10]->Fill( (sec->GetTotalMomentum()/GeV) );
 	   }
 	}	
    }
@@ -120,8 +127,9 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
    fHisto[2]->Fill( (double)NPions );
    fHisto[3]->Fill( (double)NChPions );
    fHisto[4]->Fill( (double)(NPions-NChPions) );
-   fHisto[5]->Fill( (double)NKaons );
-   fHisto[6]->Fill( (double)NNeutrons );
+   fHisto[5]->Fill( (double)NGammas ); 
+   fHisto[6]->Fill( (double)NKaons );
+   fHisto[7]->Fill( (double)NNeutrons );
    
    return;
    

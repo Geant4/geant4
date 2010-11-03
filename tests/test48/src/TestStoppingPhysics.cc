@@ -61,16 +61,24 @@
 
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4LeptonConstructor.hh"
 
 #include "G4MuonMinusCaptureAtRest.hh"
 #include "G4AntiProtonAnnihilationAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
+//
 // there're 2 alternative implementations of the pi- absorbtion at rest
 // the former was widely used in a variety of physics lists until replaced
 // by the chips-bound code, while the later has not been used/test at all
+//
 #include "G4PionMinusAbsorptionAtRest.hh"
 #include "G4PiMinusAbsorptionAtRest.hh"
+//
+// another "duplicate"
+//
 #include "G4KaonMinusAbsorption.hh"
+#include "G4KaonMinusAbsorptionAtRest.hh"
 
 // chips code
 #include "G4QCaptureAtRest.hh"
@@ -95,9 +103,26 @@ TestStoppingPhysics::~TestStoppingPhysics()
 
 void TestStoppingPhysics::Initialise()
 {
+
   //G4DecayPhysics dp;
   //dp.ConstructParticle();
+  
+  G4MesonConstructor pMesonConstructor;
+  pMesonConstructor.ConstructParticle();
+
+  G4BaryonConstructor pBaryonConstructor;
+  pBaryonConstructor.ConstructParticle();  
+  
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
+  
+  G4LeptonConstructor pLeptonConstructor;
+  pLeptonConstructor.ConstructParticle();
+  
   theProcess = 0;
+  
+  return;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -111,12 +136,6 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
   theProcess = 0;
 
   G4ProcessManager* man = 0;
-
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();  
     
   if (part_name == "anti_proton")   
   {
@@ -167,7 +186,15 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
     }
     else if ( part_name == "kaon-")
     {
-       theProcess = new G4KaonMinusAbsorption();
+       if (gen_name == "stopping" )
+       {
+          theProcess = new G4KaonMinusAbsorption();
+       }
+       else
+       {
+          // another "duplicate" (but NOT by M.G.P.)
+	  theProcess = new G4KaonMinusAbsorptionAtRest();
+       }
     }
   } 
   else if(gen_name == "CHIPS") 

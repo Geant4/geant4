@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2009-06-25 17:39:52 yarba Exp $
+# $Id: GNUmakefile,v 1.2 2010-11-03 17:30:47 yarba Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -18,7 +18,9 @@ all: lib bin
 include $(G4INSTALL)/config/architecture.gmk
 #include misc/architecture.gmk
 
+#CPPFLAGS += -I$(G4WORKDIR)/source/particles/management/include
 CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
+#LDFLAGS  += -L$(G4LIBDIR)
 LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
 
 include $(G4INSTALL)/config/binmake.gmk

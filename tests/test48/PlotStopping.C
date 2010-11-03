@@ -22,11 +22,13 @@
 #include "TLegend.h"
 
 const int NModels=2;
-const int NModelsPiMinus=3;
+
+const int NModelsPiMinus=2;
+// const int NModelsPiMinus=3;
 
 //
-// std::string Models[2]  = { "CHIPS", "stopping" };
-std::string Models[3] = { "CHIPS", "stopping", "stopping-alt" };
+std::string Models[2]  = { "CHIPS", "stopping" };
+// std::string Models[3] = { "CHIPS", "stopping", "stopping-alt" };
 
 int         ColorModel[3]    = {1, 2, 3};
 int         SymbModel[3]     = {24, 29, 25};
@@ -138,9 +140,31 @@ void plotPiMinus( std::string target )
 
 }
 
+void plotKMinus( std::string target )
+{
+
+   TCanvas *myc = new TCanvas("myc","",800,600);
+   //myc->SetLogx(1);
+   //myc->SetLogy(1);
+
+   myc->Divide(2,2);
+   
+   myc->cd(1); // gPad->SetLogx(1); gPad->SetLogy(1);
+   drawKMinus( target, "NSecondaries" );
+   myc->cd(2); // gPad->SetLogx(1); gPad->SetLogy(1);
+   drawKMinus( target, "NChargedSecondaries" );
+   myc->cd(3);
+   drawKMinus( target, "ChargedSecondaryMomentum" );
+   myc->cd(4);
+   drawKMinus( target, "ChargedPionMomentum" );
+
+   return;
+
+}
+
 void drawPiMinus( std::string target )
 {
-   
+      
    int TargetID = -1;
    
    for ( int i=0; i<NTargetsMadey; i++ )
@@ -208,6 +232,70 @@ void drawPiMinus( std::string target )
 
 }
 
+void drawKMinus( std::string target, std::string histo )
+{
+
+   int TargetID = -1;
+   
+   for ( int i=0; i<NTargetsMadey; i++ )
+   {
+      if ( TargetsMadey[i] == target ) 
+      {
+         TargetID = i;
+	 break;
+      }
+   }
+      
+   if ( TargetID == -1 || TargetID >= NTargetsMadey )
+   {
+      std::cout << " Invalid Target: " << target << std::endl;
+      return;
+   }
+   
+   TH1F* hi[NModelsPiMinus];
+      
+   double ymin = 10000.; // something big... don't know if I can use FLT_MAX
+   double ymax = -1. ;
+   for ( int m=0; m<NModelsPiMinus; m++ )
+   {
+      std::string histofile = "kminus" + TargetsMadey[TargetID] + Models[m];
+      histofile += ".root";
+      TFile* f = new TFile( histofile.c_str() );
+      hi[m] = (TH1F*)f->Get( histo.c_str() );
+      // turn off the stats pad; use this space to draw color codes, etc.
+      hi[m]->SetStats(0);
+      hi[m]->SetLineColor(ColorModel[m]);
+      hi[m]->SetLineWidth(2);
+      // hi[m]->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
+      // hi[m]->GetYaxis()->SetTitle("Number of neutrons per MeV");
+      int nx = hi[m]->GetNbinsX();
+      for (int k=1; k <= nx; k++) {
+	double yy = hi[m]->GetBinContent(k);
+	if ( yy > ymax ) ymax = yy;
+	if ( yy < ymin && yy > 0. ) ymin = yy;
+      }
+      if ( m == 0 ) hi[m]->Draw();
+      else hi[m]->Draw("same");
+   }
+   
+   // std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
+   
+   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+   
+   for ( int m=0; m<NModelsPiMinus; m++ )
+   {
+      hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*1.5); // hi[m]->SetTitle("");
+      leg->AddEntry( hi[m], Models[m].c_str(), "L" );
+   }
+      
+   leg->Draw();
+   leg->SetFillColor(kWhite);
+
+   return ;
+
+}
+
+
 void plotAntiProton( std::string target )
 {
 
@@ -261,11 +349,18 @@ void plotAntiProton( std::string target )
       else hi_mult[m]->Draw("same");      
    }
    
+   TLegend* leg1 = new TLegend(0.6, 0.70, 0.9, 0.9);
+   TLegend* leg2 = new TLegend(0.6, 0.70, 0.9, 0.9);
+
    for ( int m=0; m<NModels; m++ )
    {
       //hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*10.);
-      hi_mom[m]->GetYaxis()->SetRangeUser(ymin_mom,ymax_mom*1.1);
+      hi_mom[m]->GetYaxis()->SetRangeUser(ymin_mom,ymax_mom*1.4);
+      hi_mom[m]->SetStats(0);
+      leg1->AddEntry( hi_mom[m], Models[m].c_str(), "L" );
       hi_mult[m]->GetYaxis()->SetRangeUser(ymin_mult,ymax_mult*1.1);
+      hi_mult[m]->SetStats(0);
+      leg2->AddEntry( hi_mult[m], Models[m].c_str(), "L" );
    }
    
    readAntiProton();
@@ -274,12 +369,23 @@ void plotAntiProton( std::string target )
    TGraph*  gr2 = new TGraphErrors(NPointsPbar_PionMult,MultX,MultValue,0,MultError);
    gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
    gr1->SetMarkerSize(1.6);
+   
    gr2->SetMarkerColor(4);  gr2->SetMarkerStyle(22);
    gr2->SetMarkerSize(1.6);
+   
    myc->cd(1);
-   gr1->Draw("p");   
+   gr1->Draw("p"); 
+   leg1->AddEntry(gr1, "exp.data", "p");
+   leg1->Draw();
+   leg1->SetFillColor(kWhite);
+     
    myc->cd(2);
    gr2->Draw("p");
+   leg2->AddEntry(gr2, "exp.data", "p");
+   leg2->Draw();
+   leg2->SetFillColor(kWhite);
+   
+   myc->cd();
 
    return;
 

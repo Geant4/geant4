@@ -2,17 +2,17 @@
 0
 #rad
 #events
-1000000
+10000
 //--------Proton_processes
 #particle
-anti_proton
+kaon-
 #position(mm)
 0. 0. 0.
 #direction
 0. 0. 1.
 //--------
 #material
-H
+Pb
 #momentum(MeV/c)
 0.0
 // ---
@@ -21,5 +21,8 @@ CHIPS
 #run
 #generator
 stopping
+#run
+#generator
+stopping-alt
 #run
 #exit

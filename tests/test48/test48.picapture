@@ -2,7 +2,7 @@
 0
 #rad
 #events
-10000
+1000000
 //--------Proton_processes
 #particle
 pi-
@@ -12,7 +12,7 @@ pi-
 0. 0. 1.
 //--------
 #material
-Cu
+C
 #momentum(MeV/c)
 0.0
 // ---
@@ -22,6 +22,7 @@ CHIPS
 #generator
 stopping
 #run
+#exit
 #generator
 stopping-alt
 #run
