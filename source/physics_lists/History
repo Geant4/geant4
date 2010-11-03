@@ -1,4 +1,4 @@
-q$Id: History,v 1.157 2010-11-03 00:44:43 gum Exp $
+q$Id: History,v 1.158 2010-11-03 16:54:43 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-11-2010, P.Gumplinger                (phys-lists-V09-03-34)
+-  correctly implement the new option SetScintillationByParticleType
+   in G4OpticalPhysics
+
 02-11-2010, P.Gumplinger                (phys-lists-V09-03-33)
 -  Make ConstructProcess and ConstructParticle methods public
-   in G4OpticalPhysics and correctly implement the new option
-   SetScintillationByParticleType
+   in G4OpticalPhysics
 
 28-10-2010, P.Gumplinger                (phys-lists-V09-03-32)
 -  Add SetScintillationByParticleTypeCmd and associated methods
