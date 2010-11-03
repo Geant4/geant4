@@ -59,7 +59,8 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose)
     fExcitationRatio(0.0),
     fSurfaceModel(unified),
     fProfile("delta"),
-    fTrackSecondariesFirst(true)
+    fTrackSecondariesFirst(true),
+    fScintillationByParticleType(false)
 {
   verboseLevel = verbose;
   fMessenger = new G4OpticalPhysicsMessenger(this);
@@ -82,7 +83,8 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fExcitationRatio(0.0),
     fSurfaceModel(unified),
     fProfile("delta"),
-    fTrackSecondariesFirst(true)
+    fTrackSecondariesFirst(true),
+    fScintillationByParticleType(false)
 {
   verboseLevel = verbose;
   fMessenger = new G4OpticalPhysicsMessenger(this);
@@ -167,6 +169,7 @@ void G4OpticalPhysics::ConstructProcess()
   fScintillationProcess->SetScintillationYieldFactor(fYieldFactor);
   fScintillationProcess->SetScintillationExcitationRatio(fExcitationRatio);
   fScintillationProcess->SetTrackSecondariesFirst(fTrackSecondariesFirst);
+  fScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
 
   // Use Birks Correction in the Scintillation process
 
@@ -279,6 +282,8 @@ void G4OpticalPhysics::AddScintillationSaturation(G4EmSaturation* saturation)
 
 void G4OpticalPhysics::SetScintillationByParticleType(G4bool scintillationByParticleType)
 {
+  fScintillationByParticleType = scintillationByParticleType;
+
   if (fScintillationProcess)
      fScintillationProcess->SetScintillationByParticleType(scintillationByParticleType);
 }

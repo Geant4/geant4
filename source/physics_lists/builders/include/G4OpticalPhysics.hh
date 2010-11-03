@@ -150,6 +150,11 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// option to track secondaries before finishing their parent track
     G4bool                      fTrackSecondariesFirst;
 
+    /// option to  allow for the light yield to be a function of
+    /// particle type and deposited energy in case of non-linear
+    /// light emission in scintillators
+    G4bool                      fScintillationByParticleType;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
