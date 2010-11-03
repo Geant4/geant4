@@ -13,6 +13,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 Nov 2010,  G.Folger		         had-binary-V09-03-03
+- Fix coverity warnings
+   - in Propagate(), mem leak for products
+   - in StepParticlesOut, check return code of GetSphereInter....
+   - Scatter1H1(0 always check secs 
+
 8 Sep 2010, G.Folger		         had-binary-V09-03-02
 - Binary{LightIon}Cascade: use integer (A,Z) interface of nucleus
 - *Field.cc: use integer A,Z from G4V3DNucleus, and for G4FermiMomentum
