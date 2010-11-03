@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.35 2010-11-01 18:18:57 vnivanch Exp $
+// $Id: G4NistMaterialBuilder.cc,v 1.36 2010-11-03 18:08:12 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1942,6 +1942,41 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 72., 2);
   AddElementByAtomCount("P", 1);
   AddElementByAtomCount("O", 3);
+
+  AddMaterial("G4_DNA_A", 1, 0, 72., 5);  //Adenine base
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 5);
+  AddElementByAtomCount("O", 7);
+  AddElementByAtomCount("P", 1);
+
+  AddMaterial("G4_DNA_G", 1, 0, 72. ,5); //Guanine base 
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 5);
+  AddElementByAtomCount("O", 8);
+  AddElementByAtomCount("P", 1);
+
+  AddMaterial("G4_DNA_C", 1, 0, 72., 5); // Cytosine base
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 9);
+  AddElementByAtomCount("N", 3);
+  AddElementByAtomCount("O", 8);
+  AddElementByAtomCount("P", 1);
+
+  AddMaterial("G4_DNA_U", 1, 0, 72., 5); // Uracil base
+  AddElementByAtomCount("H", 9);
+  AddElementByAtomCount("C", 9);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 9);
+  AddElementByAtomCount("P", 1);
+
+  AddMaterial("G4_DNA_MU", 1, 0, 72., 5);  // MethaUracil base
+  AddElementByAtomCount("H", 11);
+  AddElementByAtomCount("C", 10);
+  AddElementByAtomCount("N", 2);
+  AddElementByAtomCount("O", 9);
+  AddElementByAtomCount("P", 1);
 
 }
 
