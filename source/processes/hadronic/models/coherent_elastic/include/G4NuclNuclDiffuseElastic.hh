@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.17 2010-10-29 09:25:14 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.18 2010-11-03 10:35:17 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -138,6 +138,8 @@ public:
                                  G4double theta, 
 			         G4double momentum, 
 				 G4double Z         );
+
+  G4double GetRutherfordXsc(     G4double theta       );
 
   G4double GetInvCoulombElasticXsc( const G4ParticleDefinition* particle, 
                                  G4double tMand, 
@@ -312,6 +314,7 @@ private:
   std::vector<G4String> fElementNameVector;
 
   const G4ParticleDefinition* fParticle;
+
   G4double fWaveVector;
   G4double fAtomicWeight;
   G4double fAtomicNumber;
@@ -324,6 +327,7 @@ private:
 
   G4double fBeta;
   G4double fZommerfeld;
+  G4double fRutherfordRatio;
   G4double fAm;
   G4bool   fAddCoulomb;
 
@@ -599,7 +603,7 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateNuclearRad( G4double A)
 
 ////////////////////////////////////////////////////////////////////
 //
-// return Coulomb scattering differential xsc with Wentzel correction  
+// return Coulomb scattering differential xsc with Wentzel correction. Test function  
 
 inline  G4double G4NuclNuclDiffuseElastic::GetCoulombElasticXsc( const G4ParticleDefinition* particle, 
                                  G4double theta, 
@@ -616,6 +620,22 @@ inline  G4double G4NuclNuclDiffuseElastic::GetCoulombElasticXsc( const G4Particl
   G4double ch            = 0.5*n/k;
   G4double ch2           = ch*ch;
   G4double xsc           = ch2/(sinHalfTheta2+am)/(sinHalfTheta2+am);
+
+  return xsc;
+}
+
+////////////////////////////////////////////////////////////////////
+//
+// return Rutherford scattering differential xsc with Wentzel correction. For Sampling.  
+
+inline  G4double G4NuclNuclDiffuseElastic::GetRutherfordXsc(   G4double theta  )
+{
+  G4double sinHalfTheta  = std::sin(0.5*theta);
+  G4double sinHalfTheta2 = sinHalfTheta*sinHalfTheta;
+
+  G4double ch2           = fRutherfordRatio*fRutherfordRatio;
+
+  G4double xsc           = ch2/(sinHalfTheta2+fAm)/(sinHalfTheta2+fAm);
 
   return xsc;
 }
@@ -1496,6 +1516,7 @@ inline void G4NuclNuclDiffuseElastic::InitParameters(const G4ParticleDefinition*
     a           = partMom/m1; // beta*gamma for m1
     fBeta       = a/std::sqrt(1+a*a);
     fZommerfeld = CalculateZommerfeld( fBeta, z, fAtomicNumber);
+    fRutherfordRatio = fZommerfeld/fWaveVector; 
     fAm         = CalculateAm( partMom, fZommerfeld, fAtomicNumber);
   }
   G4cout<<"fZommerfeld = "<<fZommerfeld<<G4endl;

@@ -404,6 +404,18 @@ int main()
   
   }
 
+  for( k = 0; k < kAngle; k++) 
+  {
+    thetaLab[k] = k*dData + thetaMin;
+    thetaCMS    = thetaLab[k];
+
+    distrXsc[k] = nndiffelastic->GetRutherfordXsc(thetaCMS);
+
+    distrDif[k] = diffelastic->GetCoulombElasticXsc(theParticleDefinition, thetaCMS, ptot, Z); 
+
+    G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]-distrXsc[k]<<G4endl;
+
+  }
 
 
   G4cout <<G4endl<< " elastic cross section for " <<
