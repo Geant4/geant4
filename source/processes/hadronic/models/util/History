@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2010-11-03 17:35:52 gunter Exp $
+$Id: History,v 1.45 2010-11-03 17:37:57 gunter Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,9 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+3 Nov 2010 Gunter Folger 			hadr-mod-util-V09-03-07
+- G4Nuclear...Density: migrate to integer A&Z
+
 3 Nov 2010 Gunter Folger 			hadr-mod-util-V09-03-06
 - G4KineticTrack: fix coverity warnings of memory leak
-- G4Nuclear...Density: migrate to integer A&Z
 
 02 Nov 2010 Vladimir Ivanchenko hadr-mod-util-V09-03-05
 - G4Fragment - improved printout of negative excitation energy
