@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornIonisationModel.cc,v 1.17 2010-10-17 11:28:51 sincerti Exp $
+// $Id: G4DNABornIonisationModel.cc,v 1.18 2010-11-03 12:22:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -375,20 +375,26 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     G4ThreeVector deltaDirection(dirX,dirY,dirZ);
     deltaDirection.rotateUz(primaryDirection);
 
-    G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
+    if (particle->GetDefinition() == G4Electron::ElectronDefinition())
+    {
+      G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
 
-    G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
-    G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
-    G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-    G4double finalMomentum = std::sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
-    finalPx /= finalMomentum;
-    finalPy /= finalMomentum;
-    finalPz /= finalMomentum;
+      G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
+      G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
+      G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
+      G4double finalMomentum = std::sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
+      finalPx /= finalMomentum;
+      finalPy /= finalMomentum;
+      finalPz /= finalMomentum;
     
-    G4ThreeVector direction;
-    direction.set(finalPx,finalPy,finalPz);
+      G4ThreeVector direction;
+      direction.set(finalPx,finalPy,finalPz);
     
-    fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
+      fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
+    }
+    
+    else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection) ;
+    
     fParticleChangeForGamma->SetProposedKineticEnergy(k-bindingEnergy-secondaryKinetic);
     fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
 

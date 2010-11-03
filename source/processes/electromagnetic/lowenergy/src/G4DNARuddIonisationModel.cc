@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc,v 1.19 2010-10-17 11:28:51 sincerti Exp $
+// $Id: G4DNARuddIonisationModel.cc,v 1.20 2010-11-03 12:22:36 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -464,6 +464,8 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       G4ThreeVector deltaDirection(dirX,dirY,dirZ);
       deltaDirection.rotateUz(primaryDirection);
 
+      // Ignored for ions on electrons
+      /*
       G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
 
       G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
@@ -478,6 +480,9 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       direction.set(finalPx,finalPy,finalPz);
 
       fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
+      */
+      fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
+
       fParticleChangeForGamma->SetProposedKineticEnergy(k-bindingEnergy-secondaryKinetic);
       fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy);
 
