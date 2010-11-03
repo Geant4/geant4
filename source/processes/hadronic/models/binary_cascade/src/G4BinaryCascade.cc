@@ -277,6 +277,16 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 #ifdef debug_BIC_Propagate
    G4cout << "G4BinaryCascade Propagate starting -------------------------------------------------------" <<G4endl;
 #endif
+
+   // *GF* FIXME ? in propagate mode this test is wrong! Could be in Apply....
+  if(nucleus->GetMassNumber() == 1) // 1H1 is special case
+  {
+      #ifdef debug_BIC_Propagate
+	  G4cout << " special case 1H1.... " << G4endl;
+      #endif
+     return Propagate1H1(secondaries,nucleus);
+  }
+
   G4ReactionProductVector * products = new G4ReactionProductVector;
   the3DNucleus = nucleus;
   theOuterRadius = the3DNucleus->GetOuterRadius();
@@ -288,15 +298,6 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
   std::vector<G4KineticTrack *>::iterator iter;
-
-   // *GF* FIXME ? in propagate mode this test is wrong! Could be in Apply....
-  if(nucleus->GetMassNumber() == 1) // 1H1 is special case
-  {
-      #ifdef debug_BIC_Propagate
-	  G4cout << " special case 1H1.... " << G4endl;
-      #endif
-     return Propagate1H1(secondaries,nucleus);
-  }
 
   BuildTargetList();
 
