@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigatorSafety.cc,v 1.4 2010-06-04 16:40:02 japost Exp $
+// $Id: testG4NavigatorSafety.cc,v 1.5 2010-11-03 10:52:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,9 +88,14 @@ G4VPhysicalVolume* BuildGeometry()
 
   G4int row,column;
 
-  G4Box *worldBox = new G4Box ("World Box",kWorldhsize,kWorldhsize,kWorldhsize);
+  // Solids          ==============================
+  G4Box  *worldBox = new G4Box ("World Box",kWorldhsize,kWorldhsize,kWorldhsize);
     // World box
 
+  G4Box  *calBox = new G4Box ("Cal Box",kBoxDx,kBoxDy,kBoxDz);
+  G4Tubs *calTube = new G4Tubs("Cal Tube",0,kTubeRadius,kTubeHalfHeight,0,360);
+
+  // Logical Volumes ------------------------------
   G4LogicalVolume *myWorldLog=
     new G4LogicalVolume(worldBox,0,"World",0,0,0);
     // Logical with no material,field, sensitive detector or user limits
@@ -98,9 +103,6 @@ G4VPhysicalVolume* BuildGeometry()
   G4PVPlacement *myWorldPhys=
     new G4PVPlacement(0,G4ThreeVector(0,0,0),"World",myWorldLog,0,false,0);
     // World physical volume
-
-  G4Box *calBox = new G4Box ("Cal Box",kBoxDx,kBoxDy,kBoxDz);
-  G4Tubs *calTube = new G4Tubs("Cal Tube",0,kTubeRadius,kTubeHalfHeight,0,360);
 
   G4LogicalVolume *myDetectorLog=
     new G4LogicalVolume(calBox,0,"DetectorLog",0,0,0);
@@ -136,7 +138,7 @@ G4VPhysicalVolume* BuildGeometry()
                         tname,calTubLog,myDetectorPhys,false,copyNo++);
     }
   }
-  return myDetectorPhys;
+  return myWorldPhys;
 }
 
 void generatePoints(G4int n)
@@ -157,6 +159,7 @@ void computeApproxSafeties(G4VPhysicalVolume *pTopNode)
   std::vector<G4ThreeVector>::const_iterator pos;
   for (pos=kPoints.begin(); pos!=kPoints.end(); pos++)
   {
+    myNav.LocateGlobalPointAndSetup(*pos); 
     G4double safety = myNav.ComputeSafety(*pos);
     std::pair<G4double,G4double> s(safety,0.);
     kSafeties.push_back(s);
@@ -166,17 +169,38 @@ void computeApproxSafeties(G4VPhysicalVolume *pTopNode)
 void computeExactSafeties(G4VPhysicalVolume *pTopNode)
 {
   G4int i=0;
+  G4VPhysicalVolume *pPhysVol=0;
+
   MyNavigator myNav;
+  myNav.SetWorldVolume(pTopNode);
 
   // Enable use of Best Safety Estimate -- ie as exact as solids allow
-  myNav->UseBestSafety( true ); 
+  myNav.UseBestSafety( true ); 
 
-  myNav.SetWorldVolume(pTopNode);
+  myNav.SetVerboseLevel( 1 ); 
+  myNav.CheckMode( true ); 
+
+  G4ThreeVector  center( 0., 0., 0. ); 
+  G4cout << " Trial point= " << center << G4endl;
+  pPhysVol= myNav.LocateGlobalPointAndSetup( center ); 
+  G4ThreeVector saf= myNav.ComputeSafety( center );  
+
   std::vector<G4ThreeVector>::const_iterator pos;
   for (pos=kPoints.begin(); pos!=kPoints.end(); pos++)
   {
-    G4double safety = myNav.ComputeExactSafety(*pos);
+    G4cout << " Trial point= " << *pos << G4endl;
+    // Relocate point
+    pPhysVol= myNav.LocateGlobalPointAndSetup(*pos); 
+
+    G4cout << G4endl;
+    G4cout << " ============================================== " << G4endl;
+    G4cout << " Calculating 'exact' safety for " << *pos << G4endl;
+    G4double safety = myNav.ComputeSafety(*pos);
     kSafeties[i].second = safety;
+
+    G4cout << " Old   safety = " << kSafeties[i].first << G4endl;
+    G4cout << " Exact safety = " << safety << G4endl;
+
     i++;
   }
   compare = true;
@@ -211,8 +235,8 @@ void compareSafeties()
                << " - Exact safety: " << kSafeties[i].second << G4endl;
         diffs++;
       }
-      G4cout << "Total differences: " << diffs << G4endl;
     }
+    G4cout << "Total number of differences: " << diffs << G4endl;
   }
 }
 
@@ -243,13 +267,18 @@ int main(int argc, char* argv[])
 
   G4VPhysicalVolume *myTopNode;
   myTopNode=BuildGeometry();  // Build the geometry
-  G4GeometryManager::GetInstance()->CloseGeometry();  // Voxelise the geometry
+  // Do not close the geometry --> the voxels will limit safety
 
   timer.Start();
 
   generatePoints(iter);
+
   computeApproxSafeties(myTopNode);
+
+  G4GeometryManager::GetInstance()->CloseGeometry();  // Voxelise the geometry
   computeExactSafeties(myTopNode);
+
+  // Check
   compareSafeties();
 
   timer.Stop();
