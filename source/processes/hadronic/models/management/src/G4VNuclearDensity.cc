@@ -24,13 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.cc,v 1.3 2006-06-29 20:46:09 gunter Exp $
+// $Id: G4VNuclearDensity.cc,v 1.4 2010-11-03 17:24:34 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4VNuclearDensity.hh"
 
-G4VNuclearDensity::G4VNuclearDensity() {}
+G4VNuclearDensity::G4VNuclearDensity() :
+  rho0(0.) 
+  {}
 
 G4VNuclearDensity::~G4VNuclearDensity() {}
     
