@@ -13,6 +13,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+29 Oct 2010 F.Lei
+- Added G4RadioactivityTable.hh .cc files for tallying the accumulated radioactivitties in VR mode
+- Added in G4RadioactiveDecay.hh:
+	std::vector<G4RadioactivityTable*> GetTheRadioactivityTables() {return theRadioactivityTables;}
+	// this is how the radioactivity tables can be retrieved by the user
+	std::vector<G4RadioactivityTable*>	theRadioactivityTables;
+	std::map<G4int,G4int>		  decayWindows;
+- In G4RadioactiveDecay.cc:
+	starting line 1291: changes need to setup the radioactivity tables
+	line 1624: include the track weight in the weight calculation
+	line 1627: add the rate to the radioactivity tables
+- improved formatting of all the class files
+	
 
 11 Oct 2010 F. Lei (radioactive_decay-V09-03-01)
 
