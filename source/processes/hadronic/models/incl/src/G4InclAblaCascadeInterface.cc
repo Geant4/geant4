@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.cc,v 1.16 2010-10-29 06:48:43 gunter Exp $ 
+// $Id: G4InclAblaCascadeInterface.cc,v 1.17 2010-11-03 22:04:51 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -115,8 +115,8 @@ G4HadFinalState* G4InclAblaCascadeInterface::ApplyYourself(const G4HadProjectile
   calincl = new G4InclInput(aTrack, theNucleus, false);
   incl->setInput(calincl);
 
-  G4InclInput::printProjectileTargetInfo(aTrack, theNucleus);
-  calincl->printInfo();
+  //  G4InclInput::printProjectileTargetInfo(aTrack, theNucleus);
+  //  calincl->printInfo();
 
 #ifdef DEBUGINCL
   G4int baryonBullet = 0, chargeBullet = 0;

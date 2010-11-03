@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.22 2010-10-26 02:47:59 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.23 2010-11-03 22:04:51 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -2841,9 +2841,9 @@ G4double G4Abla::bipol(int iflag, G4double y)
 
   i = idint(y/(2.0e-02)) + 1;
     
-  if(i >= bsbkSize) {
+  if((i + 1) >= bsbkSize) {
     if(verboseLevel > 2) {
-      G4cout <<"G4Abla error: index i = " << i << " is greater than array size permits." << G4endl;
+      G4cout <<"G4Abla error: index " << i + 1 << " is greater than array size permits." << G4endl;
     }
     bipolResult = 0.0;
   }

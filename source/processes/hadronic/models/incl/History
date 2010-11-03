@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.32 2010-10-29 06:54:23 gunter Exp $
+$Id: History,v 1.33 2010-11-03 22:04:51 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -16,7 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+03 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-06)
+---------------------------------------------------------
+- Fixed insufficient array index safeguard in ABLA
+- Silenced debugging output printed by G4InclAblaCascadeInterface
+
 29 October 2010 - Gunter Folger (hadr-incl-V09-03-05)
+-----------------------------------------------------
 - Fixed several more compilation warnings for conversion of double to int
    in  G4Incl.cc, G4InclAblaCascadeInterface.cc, and G4InclAblaLightIonInterface.cc.
 
