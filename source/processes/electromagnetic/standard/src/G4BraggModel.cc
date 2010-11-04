@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.27 2010-10-25 18:23:36 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.28 2010-11-04 17:30:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,7 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   lowestKinEnergy  = 1.0*keV;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron = G4Electron::Electron();
+  expStopPower125 = 0.0;
 
   corr = G4LossTableManager::Instance()->EmCorrections();
   if(p) { SetParticle(p); }

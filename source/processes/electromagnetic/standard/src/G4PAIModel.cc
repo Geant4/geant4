@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc,v 1.53 2010-10-26 09:16:50 vnivanch Exp $
+// $Id: G4PAIModel.cc,v 1.54 2010-11-04 17:30:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,6 +93,7 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fParticleEnergyVector = 0;
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
+  fDeltaCutInKinEnergy = 0.0;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }

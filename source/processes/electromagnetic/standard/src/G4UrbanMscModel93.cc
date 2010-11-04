@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.6 2010-10-26 10:06:12 vnivanch Exp $
+// $Id: G4UrbanMscModel93.cc,v 1.7 2010-11-04 17:30:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,6 +172,7 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   currentKinEnergy = currentRadLength = lambda0 = lambdaeff = tPathLength 
     = zPathLength = par1 = par2 = par3 = 0;
 
+  currentMaterialIndex = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -185,7 +186,8 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
 				   const G4DataVector&)
 {
   skindepth = skin*stepmin;
-  if(isInitialized) return;
+
+  if(isInitialized) { return; }
   // set values of some data members
   SetParticle(p);
 
@@ -466,16 +468,16 @@ G4double G4UrbanMscModel93::ComputeTruePathLengthLimit(
   lambda0 = GetLambda(currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) return tPathLength;            
+  if(inside) { return tPathLength; }            
   
-  if(tPathLength > currentRange) tPathLength = currentRange;
+  if(tPathLength > currentRange) { tPathLength = currentRange; }
 
   presafety = sp->GetSafety();
 
- // G4cout << "G4Urban2::StepLimit tPathLength= " 
- // 	 <<tPathLength<<" safety= " << presafety
- //        << " range= " <<currentRange<< " lambda= "<<lambda0
- // 	 << " Alg: " << steppingAlgorithm <<G4endl;
+  // G4cout << "G4Urban2::StepLimit tPathLength= " 
+  // 	 <<tPathLength<<" safety= " << presafety
+  //        << " range= " <<currentRange<< " lambda= "<<lambda0
+  // 	 << " Alg: " << steppingAlgorithm <<G4endl;
 
   // far from geometry boundary
   if(currentRange < presafety)

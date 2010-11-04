@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.hh,v 1.1 2007-10-01 17:45:14 vnivanch Exp $
+// $Id: G4PAIySection.hh,v 1.2 2010-11-04 17:30:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,27 +109,27 @@ public:
 	 
   // Inline access functions
 
-  G4int GetNumberOfGammas() const { return fNumberOfGammas ; }
+  inline G4int GetNumberOfGammas() const { return fNumberOfGammas ; }
 	  
-  G4int GetSplineSize() const { return fSplineNumber ; }
+  inline G4int GetSplineSize() const { return fSplineNumber ; }
 	  
-  G4int GetIntervalNumber() const { return fIntervalNumber ; }
+  inline G4int GetIntervalNumber() const { return fIntervalNumber ; }
 
-  G4double GetEnergyInterval(G4int i){ return fEnergyInterval[i] ; } 
+  inline G4double GetEnergyInterval(G4int i){ return fEnergyInterval[i] ; } 
 
-  G4double GetDifPAIySection(G4int i){ return fDifPAIySection[i] ; } 
-  G4double GetPAIdNdxCrenkov(G4int i){ return fdNdxCerenkov[i] ; } 
-  G4double GetPAIdNdxPlasmon(G4int i){ return fdNdxPlasmon[i] ; } 
+  inline G4double GetDifPAIySection(G4int i){ return fDifPAIySection[i] ; } 
+  inline G4double GetPAIdNdxCrenkov(G4int i){ return fdNdxCerenkov[i] ; } 
+  inline G4double GetPAIdNdxPlasmon(G4int i){ return fdNdxPlasmon[i] ; } 
 	  
-  G4double GetMeanEnergyLoss() const {return fIntegralPAIySection[0] ; }
-  G4double GetMeanCerenkovLoss() const {return fIntegralCerenkov[0] ; }
-  G4double GetMeanPlasmonLoss() const {return fIntegralPlasmon[0] ; }
+  inline G4double GetMeanEnergyLoss() const {return fIntegralPAIySection[0] ; }
+  inline G4double GetMeanCerenkovLoss() const {return fIntegralCerenkov[0] ; }
+  inline G4double GetMeanPlasmonLoss() const {return fIntegralPlasmon[0] ; }
 
-  G4double GetNormalizationCof() const { return fNormalizationCof ; }
+  inline G4double GetNormalizationCof() const { return fNormalizationCof ; }
           
   inline G4double GetPAItable(G4int i,G4int j) const ;
 
-  inline G4double    GetLorentzFactor(G4int i) const ;
+  inline G4double GetLorentzFactor(G4int i) const ;
 	  	  
   inline G4double GetSplineEnergy(G4int i) const ;
 	  
@@ -184,7 +184,7 @@ private :
 
   G4double   fPAItable[500][112] ;         // Output array
 
-} ;    
+};
 
 ////////////////  Inline methods //////////////////////////////////
 //

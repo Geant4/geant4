@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc,v 1.17 2010-10-26 10:35:22 vnivanch Exp $
+// $Id: G4eBremsstrahlungRelModel.cc,v 1.18 2010-11-04 17:30:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -103,7 +103,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
 
   particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
     = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 
-    = xiLPM = phiLPM = gLPM = klpm = kp;
+    = xiLPM = phiLPM = gLPM = klpm = kp = 0.0;
 
   energyThresholdLPM = 1.e39;
 

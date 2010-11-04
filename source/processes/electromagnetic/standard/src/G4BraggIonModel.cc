@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.29 2010-10-25 18:23:36 vnivanch Exp $
+// $Id: G4BraggIonModel.cc,v 1.30 2010-11-04 17:30:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -88,6 +88,7 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron      = G4Electron::Electron();
+  corrFactor       = 1.0;
   if(p) { SetParticle(p); }
   else  { SetParticle(theElectron); }
 }
