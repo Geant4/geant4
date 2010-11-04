@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VoxelSafety.hh,v 1.1 2010-06-04 16:37:16 japost Exp $
+// $Id: G4VoxelSafety.hh,v 1.2 2010-11-04 17:32:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VoxelSafety
@@ -72,8 +72,8 @@ class G4VoxelSafety
 			    const G4VPhysicalVolume& currentPhysical, 
 			          G4double           maxLength=DBL_MAX );
 
-    inline G4int GetVerboseLevel() const;
-    inline void  SetVerboseLevel(G4int level);
+    inline G4int GetVerboseLevel() const { return fVerbose; } 
+    inline void  SetVerboseLevel(G4int level) { fVerbose= level; } 
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 
