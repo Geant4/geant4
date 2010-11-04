@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.icc,v 1.6 2010-11-04 08:57:56 gcosmo Exp $
+// $Id: G4VoxelNavigation.icc,v 1.7 2010-11-04 17:38:17 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,9 +66,9 @@ G4VoxelNavigation::VoxelLocate( G4SmartVoxelHeader* pHead,
       targetNodeNo = 0;
     }
     else if ( targetNodeNo>=targetHeaderNoSlices )
-         {
-           targetNodeNo = targetHeaderNoSlices-1;
-         }
+    {
+      targetNodeNo = targetHeaderNoSlices-1;
+    }
     // Stack info for stepping
     //
     fVoxelAxisStack[fVoxelDepth] = targetHeaderAxis;
@@ -169,16 +169,6 @@ inline
 G4int G4VoxelNavigation::GetVerboseLevel() const
 {
   return fLogger->GetVerboseLevel();
-}
-
-// ********************************************************************
-// SetVerboseLevel
-// ********************************************************************
-//
-inline
-void  G4VoxelNavigation::SetVerboseLevel(G4int level)
-{
-  fLogger->SetVerboseLevel(level);
 }
 
 // ********************************************************************
