@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.11 2010-11-04 08:57:56 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.12 2010-11-04 17:29:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,6 +51,7 @@ G4VoxelNavigation::G4VoxelNavigation()
     fVoxelHeaderStack(kNavigatorVoxelStackMax,(G4SmartVoxelHeader*)0),
     fVoxelNode(0), fCheck(false), fBestSafety(false)
 {
+  fpVoxelSafety = new G4VoxelSafety (); 
   fLogger = new G4NavigationLogger("G4VoxelNavigation");
 }
 
@@ -60,6 +61,7 @@ G4VoxelNavigation::G4VoxelNavigation()
 //
 G4VoxelNavigation::~G4VoxelNavigation()
 {
+  delete fpVoxelSafety;
   delete fLogger;
 }
 
@@ -562,7 +564,7 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 
   if( fBestSafety )
   { 
-    return fpVoxelSafety.ComputeSafety( localPoint,*motherPhysical,maxLength );
+    return fpVoxelSafety->ComputeSafety( localPoint,*motherPhysical,maxLength );
   }
 
   //
@@ -619,4 +621,14 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     ourSafety = voxelSafety;
   }
   return ourSafety;
+}
+
+// ********************************************************************
+// SetVerboseLevel
+// ********************************************************************
+//
+void  G4VoxelNavigation::SetVerboseLevel(G4int level)
+{
+  fLogger->SetVerboseLevel(level);
+  fpVoxelSafety->SetVerboseLevel( level ); 
 }
