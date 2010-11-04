@@ -1,4 +1,4 @@
-$Id: History,v 1.513 2010-10-26 10:45:31 vnivanch Exp $
+$Id: History,v 1.514 2010-11-04 17:31:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 November 2010: V.Ivant (emstand-V09-03-25)
+- Fixed warnings of the Coverity tool (pedantic initialisation);
+
 26 October 2010: V.Ivant (emstand-V09-03-24)
-- Fixed problem reported by the Coverity tools (mainly pedantic 
+- Fixed problem reported by the Coverity tool (mainly pedantic 
   initialisation);
 - G4BetheHeitlerModel, G4PairProductionRelModel - removed unused 
   internal table of cross section
