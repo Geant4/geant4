@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.20 2010-10-26 13:52:32 vnivanch Exp $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.21 2010-11-04 12:40:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -88,6 +88,12 @@ G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
   mass = charge2 = electronDensity = radLength = bg2 = beta2 
     = kineticEnergy = tmax = 0;
   gam = 1.0;
+
+  dedxElectron = dedxPositron = dedxProton = rangeElectron 
+    = rangePositron = rangeProton = invRangeElectron = invRangePositron 
+    = invRangeProton = mscElectron = dedxMuon = rangeMuon = invRangeMuon = 0;
+  cuts = 0;
+  electron = positron = proton = muonPlus = muonMinus = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -98,12 +104,15 @@ G4EnergyLossForExtrapolator:: ~G4EnergyLossForExtrapolator()
   delete dedxElectron;
   delete dedxPositron;
   delete dedxProton;
+  delete dedxMuon;
   delete rangeElectron;
   delete rangePositron;
   delete rangeProton;
+  delete rangeMuon;
   delete invRangeElectron;
   delete invRangePositron;
   delete invRangeProton;
+  delete invRangeMuon;
   delete mscElectron;
   delete cuts;
 }
