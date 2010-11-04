@@ -1,4 +1,4 @@
-$Id: History,v 1.143 2010-09-06 09:49:30 gcosmo Exp $
+$Id: History,v 1.144 2010-11-04 18:24:44 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November  4th, 2010 - J.Apostolakis, G.Cosmo  logger-safety-1
+--------------------------------------------
+- Added new Logger for verbosity
+- Added prototype class for exact Safety.
 
 September 6th, 2010 - G.Cosmo (geomnav-V09-03-04)
 -----------------------------
