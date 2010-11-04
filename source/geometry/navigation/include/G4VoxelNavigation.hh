@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.7 2010-11-04 08:57:56 gcosmo Exp $
+// $Id: G4VoxelNavigation.hh,v 1.8 2010-11-04 12:13:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,8 @@
 #include "G4ThreeVector.hh"
 
 #include "G4BlockingList.hh"
-#include "G4VoxelSafety.hh"
+
+class G4VoxelSafety; 
 
 // Required for inline implementation
 //
@@ -99,7 +100,7 @@ class G4VoxelNavigation
                                     const G4double pMaxLength=DBL_MAX );
 
     inline G4int GetVerboseLevel() const;
-    inline void  SetVerboseLevel(G4int level);
+    void  SetVerboseLevel(G4int level);
       // Get/Set Verbose(ness) level.
       // [if level>0 && G4VERBOSE, printout can occur]
 
@@ -180,8 +181,8 @@ class G4VoxelNavigation
     //  END Voxel Stack information
     //
 
-    G4VoxelSafety  fpVoxelSafety;
-      // Helper object for Voxel Safety
+    G4VoxelSafety  *fpVoxelSafety;
+    //  Helper object for Voxel Safety
 
     G4bool fCheck;
     G4bool fBestSafety; 
