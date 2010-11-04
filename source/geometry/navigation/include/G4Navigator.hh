@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.30 2010-06-04 16:40:02 japost Exp $
+// $Id: G4Navigator.hh,v 1.31 2010-11-04 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -286,6 +286,7 @@ class G4Navigator
     // Enable best-possible evaluation of isotropic safety
 
  protected:  // with description
+
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
     // vector in world coordinate system.
@@ -312,6 +313,12 @@ class G4Navigator
     // o Reset volumes
     // o Recompute transforms and/or solids of replicated/parameterised
     //   volumes.
+
+ private:
+
+  void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
+                            G4double moveLenSq) const;
+    // Log and checks for steps larger than the tolerance
 
  protected:  // without description
 

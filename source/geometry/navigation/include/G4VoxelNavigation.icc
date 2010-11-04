@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.icc,v 1.5 2010-06-04 16:40:02 japost Exp $
+// $Id: G4VoxelNavigation.icc,v 1.6 2010-11-04 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,7 +168,7 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
 inline
 G4int G4VoxelNavigation::GetVerboseLevel() const
 {
-  return fVerbose;
+  return fLogger->GetVerboseLevel();
 }
 
 // ********************************************************************
@@ -178,7 +178,7 @@ G4int G4VoxelNavigation::GetVerboseLevel() const
 inline
 void  G4VoxelNavigation::SetVerboseLevel(G4int level)
 {
-  fVerbose = level;
+  fLogger->SetVerboseLevel(level);
 }
 
 // ********************************************************************
@@ -191,10 +191,12 @@ void  G4VoxelNavigation::CheckMode(G4bool mode)
   fCheck = mode;
 }
 
-// 
+// ********************************************************************
+// EnableBestSafety
+// ********************************************************************
 //
+inline
 void  G4VoxelNavigation::EnableBestSafety(G4bool flag)
 {
-  fBestSafety= flag;
-  G4cout << " Setting 'BestSafety' mode flag to " << flag << G4endl;
+  fBestSafety = flag;
 }

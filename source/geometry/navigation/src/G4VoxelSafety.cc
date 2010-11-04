@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelSafety.cc,v 1.2 2010-11-03 12:07:10 japost Exp $
+// $Id: G4VoxelSafety.cc,v 1.3 2010-11-04 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Author:  John Apostolakis
@@ -112,7 +112,7 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
 #ifdef G4VERBOSE
   if(( fCheck ) && ( fVerbose == 1 ))
   {
-    G4cout << "*** G4VoxelNavigation::ComputeSafety(): ***" << G4endl
+    G4cout << "*** G4VoxelSafety::ComputeSafety(): ***" << G4endl
            << "    Invoked DistanceToOut(p) for mother solid: "
            << motherSolid->GetName()
            << ". Solid replied: " << motherSafety << G4endl
@@ -171,7 +171,7 @@ SafetyForVoxelNode( G4SmartVoxelNode    *curVoxelNode,
 	if(( fCheck ) && ( fVerbose == 1 ))
 	{
 	  // ReportSolidSafetyToIn( MethodName, solid, value, point ); 
-	  G4cout << "*** G4VoxelSafety::SafetyForVoxelNode : ***" << G4endl
+	  G4cout << "*** G4VoxelSafety::SafetyForVoxelNode(): ***" << G4endl
 		 << "    Invoked DistanceToIn(p) for daughter solid: "
 		 << ptrSolid->GetName()
 		 << ". Solid replied: " << sampleSafety << G4endl

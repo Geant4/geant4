@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.6 2010-06-04 16:40:02 japost Exp $
+// $Id: G4VoxelNavigation.hh,v 1.7 2010-11-04 08:57:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 
 #include "geomdefs.hh"
 #include "G4NavigationHistory.hh"
+#include "G4NavigationLogger.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -120,6 +121,32 @@ class G4VoxelNavigation
     G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
 					const G4ThreeVector& localPoint ) const;
 
+  private:  // Logging functions
+
+    void PreComputeStepLog  (const G4VPhysicalVolume* motherPhysical,
+                                   G4double motherSafety,
+                             const G4ThreeVector& localPoint);
+    void AlongComputeStepLog(const G4VSolid* sampleSolid,
+                             const G4ThreeVector& samplePoint,
+                             const G4ThreeVector& sampleDirection,
+                             const G4ThreeVector& localDirection,
+                                   G4double sampleSafety,
+                                   G4double sampleStep);
+    void PostComputeStepLog (const G4VSolid* motherSolid,
+                             const G4ThreeVector& localPoint,
+                             const G4ThreeVector& localDirection,
+                                   G4double motherStep,
+                                   G4double motherSafety);
+    void ComputeSafetyLog   (const G4VSolid* solid,
+                             const G4ThreeVector& point,
+                                   G4double safety,
+                                   G4bool banner);
+    inline void PrintDaughterLog (const G4VSolid* sampleSolid,
+                                  const G4ThreeVector& samplePoint,
+                                        G4double sampleSafety,
+                                        G4double sampleStep);   
+  protected:
+
     G4BlockingList fBList;
       // Blocked volumes
 
@@ -154,12 +181,13 @@ class G4VoxelNavigation
     //
 
     G4VoxelSafety  fpVoxelSafety;
-    //  Helper object for Voxel Safety
+      // Helper object for Voxel Safety
 
     G4bool fCheck;
-    G4int  fVerbose;
-    G4bool   fBestSafety; 
-    G4double kCarTolerance;
+    G4bool fBestSafety; 
+
+    G4NavigationLogger* fLogger;
+      // Verbosity logger
 };
 
 #include "G4VoxelNavigation.icc"
