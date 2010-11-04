@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh,v 1.4 2010-05-19 10:21:16 vnivanch Exp $
+// $Id: G4GEMProbability.hh,v 1.5 2010-11-04 10:27:48 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -59,7 +59,7 @@ public:
   G4GEMProbability();
 
   // Only available constructor
-  G4GEMProbability(const G4int anA, const G4int aZ, const G4double aSpin);
+  G4GEMProbability(G4int anA, G4int aZ, G4double aSpin);
     
   virtual ~G4GEMProbability();
 
@@ -113,10 +113,6 @@ protected:
     ExcitationLifetimes = anExcitationLifetimesPtr;
   }
 
-  inline void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-  {
-    theCoulombBarrierPtr = aCoulombBarrier;
-  }
 
 private:
 
@@ -129,19 +125,19 @@ private:
     
 public:
 
-  G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy);
+  G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
   
 private:
 
-  G4double CalcProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy,
-			   const G4double V);
+  G4double CalcProbability(const G4Fragment & fragment, G4double MaximalKineticEnergy,
+			   G4double V);
 
-  virtual G4double CCoeficient(const G4double ) const;
+  virtual G4double CCoeficient(G4double ) const;
 
-  inline G4double I0(const G4double t);
-  inline G4double I1(const G4double t, const G4double tx);
-  inline G4double I2(const G4double s, const G4double sx);
-  G4double I3(const G4double s, const G4double sx);
+  inline G4double I0(G4double t);
+  inline G4double I1(G4double t, G4double tx);
+  inline G4double I2(G4double s, G4double sx);
+  G4double I3(G4double s, G4double sx);
     
   // Data Members
 
@@ -173,18 +169,18 @@ private:
     
 };
 
-inline G4double G4GEMProbability::I0(const G4double t)
+inline G4double G4GEMProbability::I0(G4double t)
 {
   return std::exp(t) - 1.0;
 }
 
-inline G4double G4GEMProbability::I1(const G4double t, const G4double tx)
+inline G4double G4GEMProbability::I1(G4double t, G4double tx)
 {
   return (t - tx + 1.0)*std::exp(tx) - t - 1.0;
 }
 
 
-inline G4double G4GEMProbability::I2(const G4double s, const G4double sx)
+inline G4double G4GEMProbability::I2(G4double s, G4double sx)
 {
   G4double S = 1.0/std::sqrt(s);
   G4double Sx = 1.0/std::sqrt(sx);
