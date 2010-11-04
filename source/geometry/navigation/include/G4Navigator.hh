@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.31 2010-11-04 08:57:56 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.32 2010-11-04 17:36:17 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -313,6 +313,9 @@ class G4Navigator
     // o Reset volumes
     // o Recompute transforms and/or solids of replicated/parameterised
     //   volumes.
+
+ public:  // no description
+   void UseBestSafety( G4bool useIt ); //  Transitional method -- try to use best estimate of Safety
 
  private:
 

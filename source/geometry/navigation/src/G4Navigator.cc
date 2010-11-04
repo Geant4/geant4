@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.41 2010-11-04 08:57:56 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.42 2010-11-04 17:36:17 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -1311,6 +1311,11 @@ void  G4Navigator::PrintState() const
   }
   G4cout.precision(oldcoutPrec);
 }
+
+void G4Navigator::UseBestSafety( G4bool useFlag )
+{
+  fvoxelNav.EnableBestSafety( useFlag );
+} 
 
 // ********************************************************************
 // ComputeStepLog
