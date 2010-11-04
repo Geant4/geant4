@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.12 2010-11-04 17:29:52 japost Exp $
+// $Id: G4VoxelNavigation.cc,v 1.13 2010-11-04 18:18:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,10 +49,10 @@ G4VoxelNavigation::G4VoxelNavigation()
     fVoxelSliceWidthStack(kNavigatorVoxelStackMax,0.),
     fVoxelNodeNoStack(kNavigatorVoxelStackMax,0),
     fVoxelHeaderStack(kNavigatorVoxelStackMax,(G4SmartVoxelHeader*)0),
-    fVoxelNode(0), fCheck(false), fBestSafety(false)
+    fVoxelNode(0), fpVoxelSafety(0), fCheck(false), fBestSafety(false)
 {
-  fpVoxelSafety = new G4VoxelSafety (); 
   fLogger = new G4NavigationLogger("G4VoxelNavigation");
+  fpVoxelSafety = new G4VoxelSafety (); 
 }
 
 // ********************************************************************
@@ -629,6 +629,6 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
 //
 void  G4VoxelNavigation::SetVerboseLevel(G4int level)
 {
-  fLogger->SetVerboseLevel(level);
-  fpVoxelSafety->SetVerboseLevel( level ); 
+  if( fLogger )       fLogger->SetVerboseLevel(level);
+  if( fpVoxelSafety)  fpVoxelSafety->SetVerboseLevel( level ); 
 }
