@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: cltog4.cc,v 1.7 2010-11-02 16:25:02 allison Exp $
+// $Id: cltog4.cc,v 1.8 2010-11-04 21:47:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIExecutive.hh"
 
 int main(int argc, char** argv)
 {
@@ -106,9 +107,6 @@ int main(int argc, char** argv)
   if(!batch_mode) {
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
       ui->SessionStart();
       delete ui;
 #endif

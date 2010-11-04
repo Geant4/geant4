@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.8 2010-11-02 16:25:02 allison Exp $
+// $Id: clGeometry.cc,v 1.9 2010-11-04 21:47:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,16 +142,14 @@ int main(int argc, char** argv)
     
   if(!batch_mode) {
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+    UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
-      ui->SessionStart();
-      delete ui;
+    ui->SessionStart();
+    delete ui;
 #endif
-    }
-  }
-  else {
+  } else {
     // Batch mode
     G4String command = "/control/execute ";
     UImanager->ApplyCommand(command+macroFile);
@@ -162,28 +160,3 @@ int main(int argc, char** argv)
   delete RunManager;
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
