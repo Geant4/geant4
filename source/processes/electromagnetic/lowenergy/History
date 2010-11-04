@@ -1,4 +1,4 @@
-$Id: History,v 1.461 2010-11-04 12:21:48 vnivanch Exp $
+$Id: History,v 1.462 2010-11-04 14:52:17 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-            G4IonParametrisedLossModel - (VI) moved few virtual methods from
+04.11.2010, S. Incerti, tag emlowen-V09-03-54
+            - removed warnings in Rudd ionization classes (SI)
+            - G4IonParametrisedLossModel - (VI) moved few virtual methods from
             inline to source, minor cleanup of initialisation  
 
 03.11.2010, S. Incerti, tag emlowen-V09-03-53

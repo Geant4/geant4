@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.cc,v 1.2 2010-11-03 12:22:36 sincerti Exp $
+// $Id: G4DNARuddIonisationExtendedModel.cc,v 1.3 2010-11-04 14:52:17 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -565,11 +565,13 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
   {
       G4ParticleDefinition* definition = particle->GetDefinition();
       G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
+      /*
       G4double particleMass = definition->GetPDGMass();
       G4double totalEnergy = k + particleMass;
       G4double pSquare = k*(totalEnergy+particleMass);
       G4double totalMomentum = std::sqrt(pSquare);
-
+      */
+      
       G4int ionizationShell = RandomSelect(k,particleName);
 
       G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
