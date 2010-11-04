@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.56 2010-10-25 17:23:01 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.57 2010-11-04 12:55:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -101,6 +101,8 @@ G4EmCalculator::G4EmCalculator()
   loweModel          = 0;
   chargeSquare       = 1.0;
   massRatio          = 1.0;
+  mass               = 0.0;
+  currentCut         = 0.0;
   currentParticleName= "";
   currentMaterialName= "";
   currentName        = "";

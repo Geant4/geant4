@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.hh,v 1.1 2010-10-14 16:34:04 vnivanch Exp $
+// $Id: G4VEmAngularDistribution.hh,v 1.2 2010-11-04 12:55:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,7 +52,6 @@
 #define G4VEmAngularDistribution_h 1
 
 #include "globals.hh"
-#include "G4VEmAngularDistribution.hh"
 
 class G4VEmAngularDistribution
 {

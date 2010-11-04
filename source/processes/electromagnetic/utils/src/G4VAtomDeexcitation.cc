@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.2 2010-10-14 16:27:35 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.cc,v 1.3 2010-11-04 12:55:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,6 +67,7 @@ G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname,
   activeZ.resize(93, false);
   vdyn.reserve(5);
   secVect.reserve(5);
+  theCoupleTable = 0;
 }
 
 G4VAtomDeexcitation::~G4VAtomDeexcitation()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.104 2010-10-25 17:23:01 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.105 2010-11-04 12:55:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -599,7 +599,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   }
 
   G4int n_dedx = t_list.size();
-  if (!n_dedx) {
+  if (0 == n_dedx || !em) {
     G4cout << "G4LossTableManager WARNING: no DEDX processes for " 
 	   << aParticle->GetParticleName() << G4endl;
     return 0;
