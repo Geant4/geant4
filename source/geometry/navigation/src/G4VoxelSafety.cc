@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelSafety.cc,v 1.3 2010-11-04 08:57:56 gcosmo Exp $
+// $Id: G4VoxelSafety.cc,v 1.4 2010-11-04 11:53:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Author:  John Apostolakis
@@ -76,19 +76,13 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
 			     const G4VPhysicalVolume& currentPhysical,
 			           G4double           maxLength)
 {
-  // G4VPhysicalVolume *samplePhysical;
   G4LogicalVolume *motherLogical;
   G4VSolid *motherSolid;
   G4SmartVoxelHeader *motherVoxelHeader;
   G4double motherSafety, ourSafety;
-  G4int localNoDaughters;  // , sampleNo;
-  // G4SmartVoxelNode *curVoxelNode;
-  // G4int    curNoVolumes, contentNo;
+  G4int localNoDaughters; 
   G4double daughterSafety;
 
-  G4cout << "*** G4VoxelSafety::ComputeSafety(): ***" << G4endl; 
-
-  // motherPhysical = history.GetTopVolume();
   motherLogical = currentPhysical.GetLogicalVolume();
   fpMotherLogical= motherLogical;   // For use by the other methods
   motherSolid = motherLogical->GetSolid();
@@ -98,9 +92,12 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
   EInside  insideMother= motherSolid->Inside(localPoint); 
   if( insideMother != kInside  ) { 
     if( insideMother == kOutside ) {
-      G4cerr << " G4VoxelSafety>  Location for safety is Outside current volume. " << G4endl;
+      G4cerr << " G4VoxelSafety>  Location is Outside current volume. " << G4endl;
       G4cerr << "     The approximate distance to the solid (safety from outside ) is " 
 	     << motherSolid->DistanceToIn( localPoint ) << G4endl; 
+      G4Exception("G4VoxelSafety::ComputeSafety()", 
+		  "IllegalLocationForSafetyCall", FatalException,
+		  "Method called for location outside current Volume.");
     }
     return 0.0;
   }   
@@ -218,7 +215,9 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
   G4SmartVoxelProxy *sampleProxy;
   EAxis    targetHeaderAxis;
   G4double targetHeaderMin, targetHeaderNodeWidth;
-  G4int    targetHeaderNoSlices, targetNodeNo;
+  G4int    targetHeaderNoSlices;
+  G4int    targetNodeNo;
+
   G4double minSafety= DBL_MAX; 
  
   // fVoxelDepth  set by ComputeSafety or previous level call
@@ -229,20 +228,28 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
   targetHeaderNodeWidth = (targetVoxelHeader->GetMaxExtent()-targetHeaderMin)
                           / targetHeaderNoSlices;
 
+  // pointNodeNo = G4int( (localPoint(targetHeaderAxis)-targetHeaderMin)
+  //  			  / targetHeaderNodeWidth);
+
   // Stack info for stepping
   //
   fVoxelAxisStack[fVoxelDepth] = targetHeaderAxis;
   fVoxelNoSlicesStack[fVoxelDepth] = targetHeaderNoSlices;
   fVoxelSliceWidthStack[fVoxelDepth] = targetHeaderNodeWidth;
-  fVoxelNodeNoStack[fVoxelDepth] = targetNodeNo;
+  //  fVoxelNodeNoStack[fVoxelDepth] = targetNodeNo;
+
   fVoxelHeaderStack[fVoxelDepth] = pHeader;
-  
-  G4cout << G4endl;
-  G4cout << "**** G4VoxelSafety::SafetyForVoxelHeader  " << G4endl;
-  G4cout << "   Depth            = " << fVoxelDepth ; // << G4endl;
-  G4cout << "   Number of Slices = " << targetHeaderNoSlices ; // << G4endl;
-  G4cout << "   Header (address) = " << targetVoxelHeader << G4endl;
-  G4int  numSlicesCheck= targetHeaderNoSlices; 
+
+#ifdef G4VERBOSE  
+  if( fVerbose > 2 ){ 
+    G4cout << G4endl;
+    G4cout << "**** G4VoxelSafety::SafetyForVoxelHeader  " << G4endl;
+    G4cout << "   Depth            = " << fVoxelDepth ; // << G4endl;
+    G4cout << "   Number of Slices = " << targetHeaderNoSlices ; // << G4endl;
+    G4cout << "   Header (address) = " << targetVoxelHeader << G4endl;
+  }
+#endif 
+  // G4int  numSlicesCheck= targetHeaderNoSlices; 
 
   // G4cout << "---> Current Voxel Header has " << *targetVoxelHeader << G4endl;
 
@@ -252,48 +259,38 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
 
      sampleProxy = targetVoxelHeader->GetSlice(targetNodeNo);
 
-     // G4cout << " -Checking node " << targetNodeNo; 
-     //        << " is proxy with address " << sampleProxy; //  << G4endl;
-
      if ( sampleProxy->IsNode() ) 
      {
 	targetVoxelNode = sampleProxy->GetNode();
-	// G4cout << " -- It is a Node " << G4endl;
 
 	// Deal with the node here [ i.e. the last level ] 
 	nodeSafety= SafetyForVoxelNode( targetVoxelNode, localPoint); 
-        if( targetHeaderNoSlices != numSlicesCheck ) 
-	  G4cerr << "Number of slices changed - to " << targetHeaderNoSlices << G4endl;
+
         minSafety= std::min( minSafety, nodeSafety ); 
      }
      else  
      {
         G4SmartVoxelHeader *pNewVoxelHeader = sampleProxy->GetHeader();
 	fVoxelDepth++;
-	// Recurse to deal with lower levels
-	// G4cout << " -- It is a Header " << G4endl;
 
-        // G4cout << " Increased  fVoxelDepth to " << fVoxelDepth << G4endl;
-	G4cout << "  Recurse to deal with next lower level, fVoxelDepth= " 
-	       << fVoxelDepth << G4endl;
-	
+	// Recurse to deal with lower levels
 	levelSafety= SafetyForVoxelHeader( pNewVoxelHeader, localPoint); 
         fVoxelDepth--; 
-
-        G4cout << "  Returned from SafetyForVoxelHeader. Depth=  "
-	       << fVoxelDepth << G4endl;
-        // G4cout << "  Decreased  fVoxelDepth to " << fVoxelDepth << G4endl;
-	// G4cout << "  Header (address)= " << targetVoxelHeader << G4endl;
 
 	minSafety= std::min( minSafety, levelSafety );
      }
 
   } 
-  G4cout << " Ended for targetNodeNo -- checked "
-	 << targetHeaderNoSlices << " slices" << G4endl;
-  G4cout << " ===== Returning from SafetyForVoxelHeader " 
-	 << "  Depth= " << fVoxelDepth << G4endl
-	 << G4endl;  
+
+#ifdef G4VERBOSE
+  if( fVerbose > 2 ) { 
+    G4cout << " Ended for targetNodeNo -- checked "
+	   << targetHeaderNoSlices << " slices" << G4endl;
+    G4cout << " ===== Returning from SafetyForVoxelHeader " 
+	   << "  Depth= " << fVoxelDepth << G4endl
+	   << G4endl;  
+  }
+#endif
 
   return minSafety;
 }
