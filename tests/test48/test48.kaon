@@ -12,7 +12,7 @@ kaon-
 0. 0. 1.
 //--------
 #material
-Pb
+Al
 #momentum(MeV/c)
 0.0
 // ---

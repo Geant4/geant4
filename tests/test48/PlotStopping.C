@@ -147,16 +147,18 @@ void plotKMinus( std::string target )
    //myc->SetLogx(1);
    //myc->SetLogy(1);
 
-   myc->Divide(2,2);
+   myc->Divide(3,2);
    
    myc->cd(1); // gPad->SetLogx(1); gPad->SetLogy(1);
    drawKMinus( target, "NSecondaries" );
    myc->cd(2); // gPad->SetLogx(1); gPad->SetLogy(1);
    drawKMinus( target, "NChargedSecondaries" );
    myc->cd(3);
-   drawKMinus( target, "ChargedSecondaryMomentum" );
+   drawKMinus( target, "NNeutrons" );
    myc->cd(4);
-   drawKMinus( target, "ChargedPionMomentum" );
+   drawKMinus( target, "ChargeOfSecondary" );
+   myc->cd(5);
+   drawKMinus( target, "ChargedSecondaryMomentum" );
 
    return;
 
@@ -266,7 +268,7 @@ void drawKMinus( std::string target, std::string histo )
       hi[m]->SetStats(0);
       hi[m]->SetLineColor(ColorModel[m]);
       hi[m]->SetLineWidth(2);
-      // hi[m]->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
+      hi[m]->GetXaxis()->SetTitle( histo.c_str() );
       // hi[m]->GetYaxis()->SetTitle("Number of neutrons per MeV");
       int nx = hi[m]->GetNbinsX();
       for (int k=1; k <= nx; k++) {

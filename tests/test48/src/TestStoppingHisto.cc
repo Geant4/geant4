@@ -51,11 +51,11 @@ void TestStoppingHisto::InitHistoGeneral()
    fHisto.push_back( new TH1F( "NChargesPions", fHistoTitle.c_str(), 15, 0., 15. ) ) ;
    fHisto.push_back( new TH1F( "NPi0s", fHistoTitle.c_str(), 15, 0., 15. ) );
    fHisto.push_back( new TH1F( "NGammas", fHistoTitle.c_str(), 15, 0., 15. ) );
-   fHisto.push_back( new TH1F( "NKaons", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "NNeutrons", fHistoTitle.c_str(), 25, 0., 25. ) );
    fHisto.push_back( new TH1F( "ChargedSecondaryMomentum", fHistoTitle.c_str(), 50, 0., 1. ) );
    fHisto.push_back( new TH1F( "ChargedPionMomentum", fHistoTitle.c_str(), 50, 0., 1. ) );
-   fHisto.push_back( new TH1F( "ChargedKaonMomentum", fHistoTitle.c_str(), 50, 0., 1. ) ); 
+   fHisto.push_back( new TH1F( "PDGIDSecondaries", fHistoTitle.c_str(), 5000, 0., 5000. ) );
+   fHisto.push_back( new TH1F( "ChargeOfSecondary", fHistoTitle.c_str(), 30, -15., 15. ) ) ;
    
    return;
    
@@ -82,20 +82,27 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
    {
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
 	
+	fHisto[10]->Fill( (float)(sec->GetCharge()) );
+	
 	if ( sec->GetCharge() != 0 ) 
 	{
 	   NChSec++;
-	   fHisto[8]->Fill( (sec->GetTotalMomentum()/GeV) );
+	   fHisto[7]->Fill( (sec->GetTotalMomentum()/GeV) );
 	}
 	
 	const G4String& pname = sec->GetDefinition()->GetParticleName();
+
+	float pdgid = (float)(sec->GetPDGcode());
+	if ( pdgid > 4999. ) pdgid = 4999.;
+	fHisto[9]->Fill( pdgid );
+	
 	
 	if ( pname == "pi-" || pname == "pi+" || pname == "pi0" )
 	{
 	   NPions++;
 	   if ( pname != "pi0" )
 	   {
-	      fHisto[9]->Fill( (sec->GetTotalMomentum()/GeV) );
+	      fHisto[8]->Fill( (sec->GetTotalMomentum()/GeV) );
 	   }
 	}
 	
@@ -123,13 +130,12 @@ void TestStoppingHisto::FillEvt( G4VParticleChange* aChange )
 	}	
    }
    
-   fHisto[1]->Fill( (double)NChSec );
-   fHisto[2]->Fill( (double)NPions );
-   fHisto[3]->Fill( (double)NChPions );
-   fHisto[4]->Fill( (double)(NPions-NChPions) );
-   fHisto[5]->Fill( (double)NGammas ); 
-   fHisto[6]->Fill( (double)NKaons );
-   fHisto[7]->Fill( (double)NNeutrons );
+   if ( NChSec > 0 )            fHisto[1]->Fill( (double)NChSec );
+   if ( NPions > 0 )            fHisto[2]->Fill( (double)NPions );
+   if ( NChPions > 0 )          fHisto[3]->Fill( (double)NChPions );
+   if ( (NPions-NChPions) > 0 ) fHisto[4]->Fill( (double)(NPions-NChPions) );
+   if ( NGammas > 0 )           fHisto[5]->Fill( (double)NGammas ); 
+   if ( NNeutrons > 0 )         fHisto[6]->Fill( (double)NNeutrons );
    
    return;
    
