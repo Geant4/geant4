@@ -111,7 +111,7 @@
 /gun/ion 6 12 2
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+#/run/beamOn 20
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -127,7 +127,7 @@
 /gun/ion 6 12 2
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H2O
-/run/beamOn 20
+#/run/beamOn 20
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -144,7 +144,7 @@
 /gun/ion 6 12 2
 /gun/energy 200 MeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+#/run/beamOn 20
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
