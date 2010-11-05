@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.95 2010-06-01 16:08:15 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.96 2010-11-05 16:00:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -263,10 +263,12 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
     dynamic_cast<G4TrajectoriesModel*>(fpModel);
   if (!trajectoriesModel) G4Exception
     ("G4VSceneHandler::AddCompound(const G4VTrajectory&): Not a G4TrajectoriesModel.");
-  if (trajectoriesModel->IsDrawingModeSet()) {
-    traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
-  } else {
-    traj.DrawTrajectory();
+  else {
+    if (trajectoriesModel->IsDrawingModeSet()) {
+      traj.DrawTrajectory(trajectoriesModel->GetDrawingMode());
+    } else {
+      traj.DrawTrajectory();
+    }
   }
 }
 

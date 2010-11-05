@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.37 2010-09-03 15:57:05 gcosmo Exp $
+// $Id: G4ViewParameters.cc,v 1.38 2010-11-05 16:00:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,7 @@ G4ViewParameters::G4ViewParameters ():
   fAllValues(0x000F),
   fXNegative(0x0010),
   fYNegative(0x0020),
+  fGeometryMask(0),
   fDrawingStyle (wireframe),
   fAuxEdgeVisible (false),
   fRepStyle (polyhedron),
