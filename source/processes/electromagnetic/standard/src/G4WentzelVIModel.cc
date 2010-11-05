@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.62 2010-11-05 19:10:51 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.63 2010-11-05 19:15:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -234,7 +234,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   tlimit = std::max(tlimit, tlimitminfix);
 
   // step limit in infinite media
-  tlimit = std::min(tlimit, 10*facgeom*currentMaterial->GetRadlen());
+  tlimit = std::min(tlimit, 50*currentMaterial->GetRadlen()/facgeom);
 
   //compute geomlimit and force few steps within a volume
   if (steppingAlgorithm == fUseDistanceToBoundary && stepStatus == fGeomBoundary)
