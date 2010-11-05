@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.67 2010-05-11 11:16:51 allison Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.68 2010-11-05 15:19:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -474,11 +474,12 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 
   if (daughtersToBeDrawn) {
     for (G4int iDaughter = 0; iDaughter < nDaughters; iDaughter++) {
-      G4VPhysicalVolume* pVPV = pLV -> GetDaughter (iDaughter);
+      // Store daughter pVPV in local variable ready for recursion...
+      G4VPhysicalVolume* pDaughterVPV = pLV -> GetDaughter (iDaughter);
       // Descend the geometry structure recursively...
       fCurrentDepth++;
       VisitGeometryAndGetVisReps
-	(pVPV, requestedDepth - 1, theNewAT, sceneHandler);
+	(pDaughterVPV, requestedDepth - 1, theNewAT, sceneHandler);
       fCurrentDepth--;
     }
   }
