@@ -12,7 +12,7 @@
   </argument>
   <argument name="prerequisites">
     <set>
-      <tuple><text>exam-ext-geometry-olap-build</text><enumeral>PASS</enumeral></tuple>
+      <tuple><text>exam-ext-runandevent-re03-build</text><enumeral>PASS</enumeral></tuple>
     </set>
   </argument>
   <argument name="stdin">
@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/geometry/olap;$G4BIN/$G4SYSTEM/olap</text>
+    <text>cd $G4INSTALL/examples/extended/runAndEvent/RE03;$G4BIN/$G4SYSTEM/RE03 run3.mac</text>
   </argument>
   <argument name="stderr">
     <text/>

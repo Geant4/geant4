@@ -42,7 +42,7 @@
       <text>exam-ext-analysis-a01-run</text>
       <text>exam-ext-analysis-n03con-run</text>
       <text>exam-ext-biasing-b01-run</text>
-      <text>exam-ext-biasing-ReverseMC01-build</text>
+      <text>exam-ext-biasing-ReverseMC01-run</text>
       <text>exam-ext-electromagnetic-testem0-run</text>
       <text>exam-ext-electromagnetic-testem1-run</text>
       <text>exam-ext-electromagnetic-testem10-run</text>
@@ -90,9 +90,21 @@
       <text>exam-ext-parameterisations-gflash-run</text>
       <text>exam-ext-persistency-gdml-g01-run</text>
       <text>exam-ext-persistency-gdml-g04-run</text>
+      <text>exam-ext-persistency-p03-run</text>
       <text>exam-ext-polarisation-pol01-run</text>
       <text>exam-ext-radioactivedecay-rdecay01-run</text>
       <text>exam-ext-radioactivedecay-rdecay02-run</text>
+      <text>exam-ext-runandevent-re01-run</text>
+      <text>exam-ext-runandevent-re02-run</text>
+      <text>exam-ext-runandevent-re02-run3-run</text>
+      <text>exam-ext-runandevent-re02-run4-run</text>
+      <text>exam-ext-runandevent-re03-run1-run</text>
+      <text>exam-ext-runandevent-re03-run2-run</text>
+      <text>exam-ext-runandevent-re03-run3-run</text>
+      <text>exam-ext-runandevent-re03-run4-run</text>
+      <text>exam-ext-visualization-uservisaction-run1-run</text>
+      <text>exam-ext-visualization-uservisaction-run2-run</text>
+      <text>exam-ext-visualization-uservisaction-uva-run</text>
       <text>exam-nov-n01-run</text>
       <text>exam-nov-n02-run</text>
       <text>exam-nov-n03-run</text>

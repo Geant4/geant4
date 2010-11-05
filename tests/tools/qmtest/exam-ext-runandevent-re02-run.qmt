@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/runAndEvent/RE02;$G4BIN/$G4SYSTEM/exampleRE02 run1.mac</text>
+    <text>cd $G4INSTALL/examples/extended/runAndEvent/RE02;$G4BIN/$G4SYSTEM/exampleRE02 run.mac</text>
   </argument>
   <argument name="stderr">
     <text/>

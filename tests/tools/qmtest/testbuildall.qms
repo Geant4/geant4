@@ -63,9 +63,16 @@
       <text>exam-ext-persistency-gdml-g02-build</text>
       <text>exam-ext-persistency-gdml-g03-build</text>
       <text>exam-ext-persistency-gdml-g04-build</text>
+      <text>exam-ext-persistency-p03-build</text>
       <text>exam-ext-polarisation-pol01-build</text> 
       <text>exam-ext-radioactivedecay-rdecay01-build</text>
       <text>exam-ext-radioactivedecay-rdecay02-build</text>
+      <text>exam-ext-runandevent-re01-build</text>
+      <text>exam-ext-runandevent-re02-build</text>
+      <text>exam-ext-runandevent-re03-build</text>
+      <text>exam-ext-visualization-perspective-build</text>
+      <text>exam-ext-visualization-standalone-build</text>
+      <text>exam-ext-visualization-uservisaction-build</text>
       <text>exam-nov-n01-build</text>
       <text>exam-nov-n02-build</text>
       <text>exam-nov-n03-build</text>
