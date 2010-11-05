@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.hh,v 1.5 2010-11-04 10:27:48 vnivanch Exp $
+// $Id: G4GEMProbability.hh,v 1.6 2010-11-05 14:42:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -41,7 +41,6 @@
 
 #ifndef G4GEMProbability_h
 #define G4GEMProbability_h 1
-
 
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
@@ -112,7 +111,6 @@ protected:
   {
     ExcitationLifetimes = anExcitationLifetimesPtr;
   }
-
 
 private:
 
