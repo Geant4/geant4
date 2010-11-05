@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.52 2010-10-08 12:41:52 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.53 2010-11-05 15:57:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -312,11 +312,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandProjection->SetParameter(parameter);
   parameter = new G4UIparameter("field-half-angle",'d',omitable = true);
   parameter->SetDefaultValue(30.);
-  parameter->SetCurrentAsDefault(true);
+  //parameter->SetCurrentAsDefault(true);
   fpCommandProjection->SetParameter(parameter);
   parameter = new G4UIparameter("unit",'s',omitable = true);
   parameter->SetDefaultValue("deg");
-  parameter->SetCurrentAsDefault(true);
+  //parameter->SetCurrentAsDefault(true);
   fpCommandProjection->SetParameter(parameter);
 
   fpCommandSectionPlane = new G4UIcommand("/vis/viewer/set/sectionPlane",this);
