@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc,v 1.61 2010-10-26 10:06:12 vnivanch Exp $
+// $Id: G4WentzelVIModel.cc,v 1.62 2010-11-05 19:10:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -189,11 +189,20 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 
   // pre step
   G4double presafety = sp->GetSafety();
+  // far from geometry boundary
+  if(currentRange < presafety) {
+    inside = true;  
+    return tlimit;
+  }
 
   // compute presafety again if presafety <= 0 and no boundary
   // i.e. when it is needed for optimization purposes
   if(stepStatus != fGeomBoundary && presafety < tlimitminfix) {
     presafety = ComputeSafety(sp->GetPosition(), tlimit); 
+    if(currentRange < presafety) {
+      inside = true;  
+      return tlimit;
+    }
   }
   /*
   G4cout << "e(MeV)= " << preKinEnergy/MeV
@@ -203,11 +212,6 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 	 << " L0(mm^-1)= " << lambdaeff*mm 
 	 <<G4endl;
   */
-  // far from geometry boundary
-  if(currentRange < presafety) {
-    inside = true;  
-    return tlimit;
-  }
 
   // natural limit for high energy
   G4double rlimit = std::max(facrange*currentRange, 
@@ -230,7 +234,15 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   tlimit = std::max(tlimit, tlimitminfix);
 
   // step limit in infinite media
-  tlimit = std::min(tlimit, 20*currentMaterial->GetRadlen());
+  tlimit = std::min(tlimit, 10*facgeom*currentMaterial->GetRadlen());
+
+  //compute geomlimit and force few steps within a volume
+  if (steppingAlgorithm == fUseDistanceToBoundary && stepStatus == fGeomBoundary)
+    {
+      G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
+      tlimit = std::min(tlimit, geomlimit/facgeom);
+    } 
+
   /*  
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
 	 << " L0= " << lambdaeff << " R= " << currentRange
