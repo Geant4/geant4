@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.18 2009-05-14 16:38:23 lgarnier Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.19 2010-11-05 06:25:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
@@ -40,6 +40,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4VisManager.hh"
 #include <sstream>
 
@@ -178,6 +179,14 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameter->SetDefaultValue(0.);
   fpCommandDisplayLightFront->SetParameter(parameter);
 
+  fpCommandDisplayListLimit =
+    new G4UIcmdWithAnInteger("/vis/ogl/set/displayListLimit", this);
+  fpCommandDisplayListLimit->SetGuidance
+    ("Set/reset display list limit (to avoid memory exhaustion).");
+  fpCommandDisplayListLimit->SetParameterName
+    ("displayListLimit", omitable = true);
+  fpCommandDisplayListLimit->SetDefaultValue(50000);
+
   fpCommandEndTime =
     new G4UIcommand("/vis/ogl/set/endTime", this);
   fpCommandEndTime->SetGuidance("Set end and range of track time.");
@@ -240,6 +249,7 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpCommandStartTime;
   delete fpCommandFade;
   delete fpCommandEndTime;
+  delete fpCommandDisplayListLimit;
   delete fpCommandDisplayLightFront;
   delete fpCommandDisplayHeadTime;
   delete fpDirectorySet;
@@ -321,8 +331,8 @@ void G4OpenGLViewerMessenger::SetNewValue
     {
       G4cout <<
   "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type OGLS."
-  "\n  The time slice viewing feature is only implemented for OGL Stored"
-  "\n  viewers at present.  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
+  "\n  This feature is only implemented for OGL Stored viewers."
+  "\n  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
 	     << G4endl;
       return;
     }
@@ -413,6 +423,35 @@ void G4OpenGLViewerMessenger::SetNewValue
       return;
     }
 
+  G4OpenGLSceneHandler* pOGLSceneHandler =
+    dynamic_cast<G4OpenGLSceneHandler*>(pViewer->GetSceneHandler());
+
+  if (!pOGLSceneHandler) {
+    G4cout <<
+  "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
+  "\n  OGL.  Use \"/vis/sceneHandler/select\" or \"/vis/open\"."
+           << G4endl;
+    return;
+  }
+
+  G4OpenGLStoredSceneHandler* pOGLSSceneHandler =
+    dynamic_cast<G4OpenGLStoredSceneHandler*>(pViewer->GetSceneHandler());
+
+  if (!pOGLSSceneHandler) {
+    G4cout <<
+  "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
+  "\n  OGLS (Stored).  This feature is only implemented for OGL Stored"
+  "\n  scene handlers.  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
+           << G4endl;
+    return;
+  }
+
+  if (command == fpCommandDisplayListLimit)
+    {
+      G4int displayListLimit =
+	fpCommandDisplayListLimit->GetNewIntValue(newValue);
+      pOGLSSceneHandler->SetDisplayListLimit(displayListLimit);
+    }
 }
 
 #endif

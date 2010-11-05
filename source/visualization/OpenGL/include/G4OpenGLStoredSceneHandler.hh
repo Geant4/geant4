@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.28 2009-02-04 16:48:40 lgarnier Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.29 2010-11-05 06:25:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,9 @@ public:
   void ClearStore ();
   void ClearTransientStore ();
 
+  static G4int GetDisplayListLimit() {return fDisplayListLimit;}
+  static void SetDisplayListLimit(G4int lim) {fDisplayListLimit = lim;}
+
 protected:
 
   void RequestPrimitives (const G4VSolid& solid);
@@ -76,7 +79,9 @@ protected:
 
   static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
   G4int            fDisplayListId;  // Workspace.
-  G4bool  fMemoryForDisplayLists;   // avoid memory overflow
+  G4bool fMemoryForDisplayLists;    // avoid memory overflow
+  static G4int fDisplayListLimit;   // avoid memory overflow
+  static G4int fDisplayListBase;    // avoid memory overflow
   G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.

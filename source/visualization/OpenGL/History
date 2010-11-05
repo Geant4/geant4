@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010-10-08 14:02:16 allison Exp $
+$Id: History,v 1.187 2010-11-05 06:25:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th November 2010  John Allison
+- G4OpenGLStoredSceneHandler, G4OpenGLViewerMessenger:
+  o Introduced a display list limit to avoid memory exhaustion.
+  o Introduced /vis/ogl/set/displayListLimit.
 
 8th October 2010  Laurent Garnier
 - G4OpenGQtViewer.cc:

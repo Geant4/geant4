@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.42 2010-06-03 08:23:02 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.43 2010-11-05 06:25:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,11 +105,15 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
-    if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
+    if (glGetError() == GL_OUT_OF_MEMORY ||
+	fDisplayListId > fDisplayListLimit + fDisplayListBase) {
       G4cout <<
 	"********************* WARNING! ********************"
-	"\nUnable to allocate any more display lists in OpenGL."
-	"\n     Continuing drawing in IMMEDIATE MODE."
+	"\n  Display list limit reached in OpenGL."
+	"\n  Continuing drawing in IMMEDIATE MODE."
+	"\n  Current limit: "
+	     << fDisplayListLimit <<
+	".  Change with \"/vis/ogl/set/displayListLimit\"."
 	"\n***************************************************"
 	     << G4endl;
       fMemoryForDisplayLists = false;
@@ -350,6 +354,8 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
+
+  fDisplayListBase = fDisplayListId;
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
@@ -360,6 +366,8 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
   for (size_t i = 0; i < fTOList.size (); i++)
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
+
+  fDisplayListBase = fDisplayListId;
 
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
@@ -461,5 +469,9 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
+
+G4int G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
+
+G4int G4OpenGLStoredSceneHandler::fDisplayListBase = 0;
 
 #endif
