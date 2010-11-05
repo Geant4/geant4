@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.28 2010-11-04 17:30:31 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.29 2010-11-05 19:27:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -555,15 +555,14 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
   G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
   ionloss = slow*shigh*fac / (slow + shigh) ;     
   
-  if ( ionloss < 0.0) ionloss = 0.0 ;
+  if ( ionloss < 0.0) { ionloss = 0.0; }
   
   return ionloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggModel::DEDX(const G4Material* material,
-                                  G4double kineticEnergy) 
+G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy) 
 {
   G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements();
@@ -581,7 +580,7 @@ G4double G4BraggModel::DEDX(const G4Material* material,
     eloss = StoppingPower(material, kineticEnergy)*
                           material->GetDensity()/amu;
 
-  // pure material
+  // Pure material ICRU49 paralmeterisation
   } else if(1 == numberOfElements) {
 
     G4double z = material->GetZ();
@@ -592,12 +591,12 @@ G4double G4BraggModel::DEDX(const G4Material* material,
   // Experimental data exist only for kinetic energy 125 keV
   } else if( MolecIsInZiegler1988(material) ) { 
 
-  // Cycle over elements - calculation based on Bragg's rule 
+    // Loop over elements - calculation based on Bragg's rule 
     G4double eloss125 = 0.0 ;
     const G4ElementVector* theElementVector =
                            material->GetElementVector();
   
-    //  loop for the elements in the material
+    //  Loop for the elements in the material
     for (G4int i=0; i<numberOfElements; i++) {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
@@ -636,7 +635,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   
   G4String myFormula = G4String(" ") ;
   const G4String chFormula = material->GetChemicalFormula() ;
-  if (myFormula == chFormula ) return false ;
+  if (myFormula == chFormula ) { return false; }
   
   //  There are no evidence for difference of stopping power depended on
   //  phase of the compound except for water. The stopping power of the 
