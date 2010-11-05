@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010-11-04 11:03:51 vnivanch Exp $
+$Id: History,v 1.187 2010-11-05 15:07:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-11-10 V.Ivanchenko (materials-V09-03-12)
+- Removed obsolete unused data classes G4IronStoppingICRU73, 
+  G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73,
+  data are uploaded from G4LEDATA
 
 04-11-10 V.Ivanchenko (materials-V09-03-11)
 - G4NistMaterialBuilder - added few DNA materials
