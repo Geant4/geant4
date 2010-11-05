@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2010-11-05 15:21:33 gunter Exp $
+$Id: History,v 1.69 2010-11-05 15:22:12 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,7 +12,7 @@ $Id: History,v 1.68 2010-11-05 15:21:33 gunter Exp $
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3-Nov-2010, G.Folger                (testtools-QMtest-V09-03-19)
+3/5-Nov-2010, G.Folger                (testtools-QMtest-V09-03-19)
 - fix typo in olap-run
 - fix type in testrunall.qms, ReverseMC01-build was used wrongly
 - enable test for extended/persistency/p03
