@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.53 2010-06-11 09:02:14 gcosmo Exp $
+// $Id: G4RunManager.hh,v 1.54 2010-11-05 19:02:54 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -79,6 +79,7 @@ class G4UserTrackingAction;
 class G4UserSteppingAction;
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 class G4Region;
 class G4Timer;
 class G4RunMessenger;
@@ -388,6 +389,17 @@ class G4RunManager
       G4cerr << "CutOffHasBeenModified becomes obsolete." << G4endl;
       G4cerr << "It is safe to remove invoking this method." << G4endl;
     }  
+
+  public: // with description
+    void ReOptimizeMother(G4VPhysicalVolume*);
+    //  This method may be used if the orientation and/or size of this
+    // particular physical volume has been modified while rest of the
+    // geometries in the world has not been changed. This avoids the
+    // full re-optimization of the entire geometry tree which is forced
+    // if GeometryHasBeenModified() method is invoked.
+
+    void ReOptimizeLogicalVolume(G4LogicalVolume*);
+    //  Same as above, but the mother logical volume is specified.
 
   public:
     inline void SetVerboseLevel(G4int vl)
