@@ -14,12 +14,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 7th, 2010  G.Cosmo (exampleP03-V09-03-01)
-------------------------
+7 November 2010  G.Cosmo (exampleP03-V09-03-02)
+--------------------------
+- Synchronized files on the HEAD and restored original version.
+- Corrected README.
+
+7 June 2010  G.Cosmo (exampleP03-V09-03-01)
+----------------------
 - Do NOT tag the HEAD...
 
-June 4th, 2010  J.Perl (exampleP03-V09-03-00)
------------------------
+4 June 2010  J.Perl (exampleP03-V09-03-00)
+---------------------
 - Updated vis usage.
 
 19 November 2009 - P Arce (exampleP03-V09-02-02)
