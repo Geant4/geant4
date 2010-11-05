@@ -49,6 +49,8 @@
 
 #include "G4SPSEneDistribution.hh"
 
+
+
 G4SPSEneDistribution::G4SPSEneDistribution() {
 	//
 	// Initialise all variables
@@ -155,7 +157,7 @@ void G4SPSEneDistribution::ArbEnergyHisto(G4ThreeVector input) {
 
 void G4SPSEneDistribution::ArbEnergyHisto(G4String filename) {
 	std::ifstream infile ( filename, std::ios::in );
-	if ( !infile ) G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,  "Unable to open the ASCII file" );
+	if ( !infile ) G4Exception("Unable to open the histo ASCII file" );
 	G4double ehi, val;
 	while (infile >> ehi >> val ) {
 		ArbEnergyH.InsertValues(ehi, val);
@@ -719,7 +721,7 @@ void G4SPSEneDistribution::GenerateLinearEnergies(G4bool bArb = false) {
 
 void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false) {
 	// Method to generate particle energies distributed as
-	// a powerlaw
+	// a power-law
 
 	G4double rndm;
 	G4double emina, emaxa;
@@ -735,7 +737,7 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false) {
 	if (alpha != -1.) {
 		particle_energy = ((rndm * (emaxa - emina)) + emina);
 		particle_energy = std::pow(particle_energy, (1. / (alpha + 1.)));
-	} else if (alpha == -1.) {
+	} else {
 		particle_energy = (std::log(Emin) + rndm * (std::log(Emax) - std::log(
 				Emin)));
 		particle_energy = std::exp(particle_energy);
@@ -1179,19 +1181,19 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a) {
 
 G4double G4SPSEneDistribution::GetProbability(G4double ene) {
 	G4double prob = 1.;
-	while ((EnergyDisType == "Arb") ? (ene < ArbEmin
-			|| ene > ArbEmax) : (ene < Emin
-			|| ene > Emax)) {
+	//	while ((EnergyDisType == "Arb") ? (ene >= ArbEmin
+	//		&& ene <= ArbEmax) : (ene >= Emin
+	//		&& ene <= Emax)) {
 		if (EnergyDisType == "Lin")
-			prob = cerpt + grad*ene;
+			prob = cept + grad*ene;
 		else if (EnergyDisType == "Pow")
-			prob = std::power(ene,alpha);
+			prob = std::pow(ene,alpha);
 		else if (EnergyDisType == "Exp")
 			prob = std::exp(-ene/Ezero);
 		else if (EnergyDisType == "Arb")
 			prob = ArbEInt->CubicSplineInterpolation(ene);
 		else
 			G4cout << "Error: EnergyDisType not supported" << G4endl;
-	}
+		//}
 	return prob;
 }

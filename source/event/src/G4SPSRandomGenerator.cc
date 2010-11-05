@@ -506,7 +506,7 @@ G4double G4SPSRandomGenerator::GenRandEnergy() {
 				vals[ii] = EnergyBiasH(size_t(ii)) + vals[ii - 1];
 				sum = sum + EnergyBiasH(size_t(ii));
 			}
-
+			IPDFEnergyBiasH = ZeroPhysVector;
 			for (ii = 0; ii < maxbin; ii++) {
 				vals[ii] = vals[ii] / sum;
 				IPDFEnergyBiasH.InsertValues(bins[ii], vals[ii]);

@@ -244,6 +244,8 @@ public:
 	;
 
 	G4double GenerateOne(G4ParticleDefinition*);
+	G4double GetProbability (G4double);
+
 
 private:
 	void LinearInterpolation();
@@ -269,7 +271,6 @@ private:
 	// converts energy per nucleon to energy.
 	void ConvertEPNToEnergy();
 
-	G4double GetProbability (G4double);
 
 private:
 

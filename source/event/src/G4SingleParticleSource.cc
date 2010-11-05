@@ -117,11 +117,13 @@ void G4SingleParticleSource::SetEnergyBiasAlpha(G4double al) {
 		emin = eneGenerator->GetArbEmin();
 	}
 	G4double de = (emax-emin)/100.;
-	for (G4int i = 0; i< 101; i++) {
-		G4double ei = de*i;
-		prob = std::power(ei,al)/eneGenerator->GetProbability(ei);
-		biasRndm->SetEnergyBias(G4Threevector(ei,prob,0.));
+	for (G4int i = 0; i< 100; i++) {
+		G4double ei = de*i+emin;
+		G4double prob =std::pow(ei,al)/eneGenerator->GetProbability(ei);
+		biasRndm->SetEnergyBias(G4ThreeVector(ei/emax,prob,0.));
 	}
+	biasRndm->SetEnergyBias(G4ThreeVector(1.,0.,0.));
+
 }
 
 void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
