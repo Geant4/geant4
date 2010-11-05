@@ -139,12 +139,6 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
     if( place && parentLV ) G4cout << "   place in LV " << parentLV->GetName() << G4endl;
   }
 #endif
-  if (!( place && parentLV ))
-  {
-    G4Exception("G4tgbVolume::ConstructG4Volumes()",
-                "InvalidSetup", FatalException, "NULL pointer for parentLV");
-    return;
-  }
   G4tgbVolumeMgr* g4vmgr = G4tgbVolumeMgr::GetInstance();
   G4LogicalVolume* logvol = g4vmgr->FindG4LogVol( GetName() );
   G4bool bFirstCopy = false;
