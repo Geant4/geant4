@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.393 2010-11-02 17:11:21 gcosmo Exp $
+cvs log $Id: History,v 1.394 2010-11-05 08:20:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th November 2010  Mike Kelsey (config-V09-03-14)
+- Fixed typo in OGLLIBS definition for MacOSX Leopard.
 
 2nd November 2010  Gabriele Cosmo (config-V09-03-13)
 - Replace use of strcat() with more secure strncat() in liblist.c, and
