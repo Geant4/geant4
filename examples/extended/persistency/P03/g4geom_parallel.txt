@@ -1,6 +1,0 @@
-:ROTM RM00 0 0 0
-:VOLU mybox BOX 5. 5. 5. G4_AIR  // material is not taken into account in parallel world
-:PLACE mybox 1 world RM00 0. 0. 0. 
-:PLACE mybox 2 world RM00 0. 0. 15. 
-
-

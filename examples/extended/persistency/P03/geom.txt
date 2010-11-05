@@ -4,9 +4,8 @@
 :MIXT Air 0.001214 2
    Nitrogen 0.75
    Oxygen 0.25
-:MATE_MEE Air 85.0398*eV
+:MATE_MEE Air 85.0729*eV
 :VOLU world world Air
-:SOLID "my tube" TUBS 0 10 20 0 360 
 :ISOT H1 1 1 1.00783 
 :ISOT H2 1 2 2.0141 
 :ELEM_FROM_ISOT H H 2
@@ -22,11 +21,10 @@
 :MIXT G4_WATER 1 2
    H 0.111894
    O 0.888106
-:MATE_MEE G4_WATER 75*eV
-:VOLU "my tube" "my tube" G4_WATER
+:MATE_MEE G4_WATER 78*eV
+:VOLU "my tube" world G4_WATER
 :ROTM RM0 90 0 90 90 0 0
 :PLACE "my tube" 1 world RM0 0 0 5
-:SOLID sphere ORB 5 
 :ISOT C12 6 12 12 
 :ISOT C13 6 13 13.0034 
 :ELEM_FROM_ISOT C C 2
@@ -50,5 +48,5 @@
    O 0.231781
    Ar 0.012827
 :MATE_MEE G4_AIR 85.7*eV
-:VOLU sphere sphere G4_AIR
+:VOLU sphere world G4_AIR
 :PLACE sphere 1 "my tube" RM0 0 1 10

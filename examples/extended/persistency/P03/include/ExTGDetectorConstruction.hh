@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ExTGDetectorConstruction.hh,v 1.3 2009-05-15 16:34:19 arce Exp $
+// $Id: ExTGDetectorConstruction.hh,v 1.4 2010-11-05 08:52:34 gcosmo Exp $
 //
 // ---------------------------------------------------------------------------
 
@@ -34,7 +34,6 @@
 #include "G4VUserDetectorConstruction.hh"
 
 class G4tgrMessenger;
-class G4tgrVolume;
 
 class ExTGDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -46,11 +45,8 @@ class ExTGDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* Construct();
 
   private:
-    void ConstructParallelWorlds();
 
     G4tgrMessenger* messenger;
-    const G4tgrVolume* theTgrVoltop;
-
 };
 
 #endif

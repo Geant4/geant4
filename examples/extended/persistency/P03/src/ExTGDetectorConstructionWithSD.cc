@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGDetectorConstructionWithSD.cc,v 1.2 2008-12-18 12:56:52 gunter Exp $
+// $Id: ExTGDetectorConstructionWithSD.cc,v 1.3 2010-11-05 08:52:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------------------

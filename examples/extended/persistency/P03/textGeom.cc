@@ -29,9 +29,7 @@
 #include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGDetectorConstructionWithCpp.hh"
 #include "ExTGDetectorConstructionWithCuts.hh"
-#include "ExTGDetectorConstructionWithParallel.hh"
 #include "ExTGPhysicsList.hh"
-#include "ExTGPhysicsListWithParallel.hh"
 #include "ExTGPrimaryGeneratorAction.hh"
 #include "ExTGRunAction.hh"
 
