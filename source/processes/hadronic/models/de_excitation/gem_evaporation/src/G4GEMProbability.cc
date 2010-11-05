@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.cc,v 1.14 2010-11-04 10:27:48 vnivanch Exp $
+// $Id: G4GEMProbability.cc,v 1.15 2010-11-05 14:43:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -64,7 +64,7 @@ G4GEMProbability:: G4GEMProbability() :
   fPairCorr = G4PairingCorrection::GetInstance();
 }
 
-G4GEMProbability:: G4GEMProbability(const G4int anA, const G4int aZ, const G4double aSpin) : 
+G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
   theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0),
   ExcitationEnergies(0), ExcitationSpins(0), ExcitationLifetimes(0), Normalization(1.0)
 {
@@ -145,8 +145,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   
   G4double Alpha = CalcAlphaParam(fragment);
   G4double Beta = CalcBetaParam(fragment);
-  
-  
+    
   //                       ***RESIDUAL***
   //JMQ (September 2009) the following quantities refer to the RESIDUAL:
   
@@ -158,21 +157,19 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double Ex = Ux + delta0;
   G4double T  = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
   //JMQ fixed bug in units
-  G4double E0 = Ex - T*(std::log(T/MeV) - std::log(a*MeV)/4.0 - 1.25*std::log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+  G4double E0 = Ex - T*(std::log(T/MeV) - std::log(a*MeV)/4.0 
+	- 1.25*std::log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
   //                      ***end RESIDUAL ***
   
   //                       ***PARENT***
   //JMQ (September 2009) the following quantities refer to the PARENT:
      
-  G4double deltaCN=fPairCorr->GetPairingCorrection(A, Z);				       
-  G4double aCN = theEvapLDPptr->LevelDensityParameter(A, Z, U-deltaCN);
-  G4double UxCN = (2.5 + 150.0/G4double(A))*MeV;
-  G4double ExCN = UxCN + deltaCN;
-  G4double TCN = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
-  //JMQ fixed bug in units
-  G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 
-			      - 1.25*std::log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
-  //                       ***end PARENT***
+  G4double deltaCN = fPairCorr->GetPairingCorrection(A, Z);				       
+  G4double aCN     = theEvapLDPptr->LevelDensityParameter(A, Z, U-deltaCN);
+  G4double UxCN    = (2.5 + 150.0/G4double(A))*MeV;
+  G4double ExCN    = UxCN + deltaCN;
+  G4double TCN     = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
+  //	                 ***end PARENT***
 
   G4double Width;
   G4double InitialLevelDensity;
@@ -231,25 +228,26 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double GeometricalXS = pi*Rb*Rb; 
   //end of JMQ fix on Rb by 190709
   
-
-
   //JMQ 160909 fix: initial level density must be calculated according to the 
   // conditions at the initial compound nucleus 
   // (it has been removed from previous "if" for the residual) 
 
   if ( U < ExCN ) 
     {
+      //JMQ fixed bug in units
+      //VI moved the computation here
+      G4double E0CN = ExCN - TCN*(std::log(TCN/MeV) - std::log(aCN*MeV)/4.0 
+				  - 1.25*std::log(UxCN/MeV) + 2.0*std::sqrt(aCN*UxCN));
       InitialLevelDensity = (pi/12.0)*std::exp((U-E0CN)/TCN)/TCN;
     } 
   else 
     {
-      //        InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(aCN*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
+      //InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(aCN*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
       //VI speedup
       G4double x  = U-deltaCN;
-      InitialLevelDensity = (pi/12.0)*std::exp(2*std::sqrt(std::sqrt(aCN/x)/x));
+      G4double x1 = std::sqrt(aCN*x);
+      InitialLevelDensity = (pi/12.0)*std::exp(2*x1)/(x*std::sqrt(x1));
     }
-  //
-
 
   //JMQ 190709 BUG : pi instead of sqrt(pi) must be here according to Furihata's report:
   //    Width *= std::sqrt(pi)*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
