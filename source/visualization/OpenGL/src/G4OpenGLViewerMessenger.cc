@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.19 2010-11-05 06:25:23 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.20 2010-11-06 12:08:13 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
@@ -183,9 +183,9 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     new G4UIcmdWithAnInteger("/vis/ogl/set/displayListLimit", this);
   fpCommandDisplayListLimit->SetGuidance
     ("Set/reset display list limit (to avoid memory exhaustion).");
-  fpCommandDisplayListLimit->SetParameterName
-    ("displayListLimit", omitable = true);
+  fpCommandDisplayListLimit->SetParameterName("limit", omitable = true);
   fpCommandDisplayListLimit->SetDefaultValue(50000);
+  fpCommandDisplayListLimit->SetRange("limit>=10000");
 
   fpCommandEndTime =
     new G4UIcommand("/vis/ogl/set/endTime", this);
