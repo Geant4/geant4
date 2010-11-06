@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.82 2010-06-03 10:17:44 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.83 2010-11-06 18:03:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -306,7 +306,7 @@ void G4VisCommandSceneAddEventID::EventID::operator()
 	nEvents = currentRun->GetNumberOfEventToBeProcessed();
       } else {
 	const std::vector<const G4Event*>* events =
-	  currentRun? currentRun->GetEventVector(): 0;
+	  currentRun->GetEventVector();
 	if (events) nEvents = events->size();
       }
       if (eventID < nEvents - 1) return;  // Not last event.
