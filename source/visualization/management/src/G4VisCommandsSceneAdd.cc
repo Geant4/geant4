@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.83 2010-11-06 18:03:22 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.84 2010-11-06 18:34:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -1589,8 +1589,8 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
   model->SetGlobalTag("Vis User Action");
   model->SetExtent(extent);
   const G4String& currentSceneName = pScene -> GetName ();
-  pScene -> AddRunDurationModel (model, warn);
-  if (verbosity >= G4VisManager::confirmations) {
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful && verbosity >= G4VisManager::confirmations) {
     G4cout << "User Vis Action added to scene \""
 	   << currentSceneName << "\"";
     if (verbosity >= G4VisManager::parameters) {
