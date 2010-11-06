@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.43 2010-11-05 06:25:23 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.44 2010-11-06 12:09:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,6 @@ G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler
 (G4VGraphicsSystem& system,
  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
-fMemoryForDisplayLists (true),
 fAddPrimitivePreambleNestingDepth (0),
 fTopPODL (0)
 {}
@@ -356,6 +355,8 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   fTOList.clear ();
 
   fDisplayListBase = fDisplayListId;
+  fMemoryForDisplayLists = true;
+
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
@@ -368,6 +369,7 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
   fTOList.clear ();
 
   fDisplayListBase = fDisplayListId;
+  fMemoryForDisplayLists = true;
 
   // Make sure screen corresponds to graphical database...
   if (fpViewer) {
@@ -470,8 +472,9 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
 
-G4int G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
-
-G4int G4OpenGLStoredSceneHandler::fDisplayListBase = 0;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
+G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListBase = 0;
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.29 2010-11-05 06:25:23 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.30 2010-11-06 12:09:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,11 +77,12 @@ protected:
   void AddPrimitivePreamble(const G4Visible& visible);
   void AddPrimitivePostamble();
 
-  static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
-  G4int            fDisplayListId;  // Workspace.
-  G4bool fMemoryForDisplayLists;    // avoid memory overflow
-  static G4int fDisplayListLimit;   // avoid memory overflow
-  static G4int fDisplayListBase;    // avoid memory overflow
+  static G4int  fSceneIdCount;   // static counter for OpenGLStored scenes.
+  // Display list management.  All static since there's only one OGL store.
+  static G4int  fDisplayListId;  // Workspace.
+  static G4bool fMemoryForDisplayLists;  // avoid memory overflow
+  static G4int  fDisplayListLimit;       // avoid memory overflow
+  static G4int  fDisplayListBase;        // avoid memory overflow
   G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
