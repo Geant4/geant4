@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.32 2010-05-30 10:28:02 allison Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.33 2010-11-07 22:29:30 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -143,17 +143,12 @@ private:
 			 const G4Visible visible);
   void CheckFileOpen();
   int fileCounter;
-  char fileDir[256]; 
-  char fileName[256];
-  G4bool fileOverwrite;
-  G4bool cullInvisibleObjects;
   G4bool haveVisible;
   G4bool inPrimitives2D;
   G4bool warnedAbout3DText;
   G4bool warnedAbout2DMarkers;
   G4bool drawingTraj;
   G4bool doneInitTraj;
-  G4bool drawTrajPts;
   G4bool drawingHit;
   G4bool doneInitHit;
   
