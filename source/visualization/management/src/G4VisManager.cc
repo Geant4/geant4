@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.129 2010-06-03 10:16:11 allison Exp $
+// $Id: G4VisManager.cc,v 1.130 2010-11-07 11:14:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1060,7 +1060,13 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
 	       << G4endl;
       }
     }
-    IsValidView ();  // Checks.
+    if (!IsValidView ()) {
+      if (fVerbosity >= warnings) {
+	G4cout <<
+  "WARNING: Problem setting scene handler - please report circumstances."
+	       << G4endl;
+      }
+    }
   }
   else {
     fpViewer = 0;
@@ -1083,7 +1089,13 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
-  IsValidView ();  // Checks.
+  if (!IsValidView ()) {
+    if (fVerbosity >= warnings) {
+      G4cout <<
+	"WARNING: Problem setting viewer - please report circumstances."
+	     << G4endl;
+    }
+  }
 }
 
 void G4VisManager::RegisterMessengers () {

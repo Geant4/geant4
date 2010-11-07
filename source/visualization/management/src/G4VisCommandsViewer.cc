@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.76 2010-05-29 21:20:20 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.77 2010-11-07 11:14:07 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -437,6 +437,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
   cloneName = cloneName.strip (G4String::both, ' ');
   cloneName = cloneName.strip (G4String::both, '"');
 
+  G4bool errorWhileNaming = false;
   if (cloneName == "none") {
     G4int subID = 0;
     do {
@@ -449,9 +450,22 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
 	  G4String::npos) {
 	cloneName.insert(nextSpacePosition, oss.str());
       } else {
-	cloneName.insert(cloneName.find(' '), oss.str());
+	G4String::size_type spacePosition = cloneName.find(' ');
+	if (spacePosition != G4String::npos)
+	  cloneName.insert(spacePosition, oss.str());
+	else
+	  errorWhileNaming = true;
       }
-    } while (fpVisManager -> GetViewer (cloneName));
+    } while (!errorWhileNaming && fpVisManager -> GetViewer (cloneName));
+  }
+
+  if (errorWhileNaming) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: While naming clone viewer \"" << cloneName
+	     << "\"."
+	     << G4endl;
+    }
+    return;
   }
 
   if (fpVisManager -> GetViewer (cloneName)) {
@@ -1406,22 +1420,13 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  if (viewer) {
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Viewer \"" << viewer -> GetName () << "\"";
-      G4cout << " post-processing triggered." << G4endl;
-    }
-    viewer -> ShowView ();
-    // Assume future need to "refresh" transients...
-    sceneHandler -> SetMarkForClearingTransientStore(true);
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << viewer -> GetName () << "\"";
+    G4cout << " post-processing triggered." << G4endl;
   }
-  else {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Viewer \"" << updateName << "\"";
-      G4cout << " not found - \"/vis/viewer/list\""
-	"\n  to see possibilities." << G4endl;
-    }
-  }
+  viewer -> ShowView ();
+  // Assume future need to "refresh" transients...
+  sceneHandler -> SetMarkForClearingTransientStore(true);
 }
 
 ////////////// /vis/viewer/zoom and zoomTo ////////////////////////////
