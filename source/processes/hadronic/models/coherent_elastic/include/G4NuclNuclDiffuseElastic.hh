@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.19 2010-11-03 14:29:21 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.20 2010-11-07 12:15:54 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1091,7 +1091,7 @@ inline  void G4NuclNuclDiffuseElastic::CalculateRutherfordAnglePar()
   fHalfRutThetaTg   = fZommerfeld/fProfileLambda;  // (fWaveVector*fNuclearRadius);
   fRutherfordTheta  = 2.*std::atan(fHalfRutThetaTg);
   fHalfRutThetaTg2  = fHalfRutThetaTg*fHalfRutThetaTg;
-  G4cout<<"fRutherfordTheta = "<<fRutherfordTheta/degree<<" degree"<<G4endl;
+  // G4cout<<"fRutherfordTheta = "<<fRutherfordTheta/degree<<" degree"<<G4endl;
 
 }
 
