@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParN04.cc,v 1.7 2010-06-04 17:58:50 vnivanch Exp $
+// $Id: ParN04.cc,v 1.8 2010-11-07 11:34:05 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,8 +35,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "ExN04DetectorConstruction.hh"
 #include "QGSP_BERT.hh"
@@ -50,6 +48,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 #include "ParTopC.icc"
@@ -108,16 +110,12 @@ int main(int argc,char** argv)
 
   if(argc==1)  // Define (G)UI terminal for interactive mode
   {
-    // G4UIterminal is a (dumb) terminal
-    //
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);      
-#else
-    G4UIsession* session = new G4UIterminal();
-#endif    
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     UImanager->ApplyCommand("/control/execute vis.mac");
-    session->SessionStart();
-    delete session;
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else  // Batch mode
   {
