@@ -3331,7 +3331,7 @@ static void gl2psPrintTeXFooter(void)
           (gl2ps->options & GL2PS_LANDSCAPE) ? "}" : "");
 }
 
-static void gl2psPrintTeXBeginViewport(GLint viewport[4])
+static void gl2psPrintTeXBeginViewport(GLint[4])
 {
   glRenderMode(GL_FEEDBACK);
   
@@ -5031,7 +5031,11 @@ static void gl2psEndSVGLine(void)
   }
 }
 
+#if defined(GL2PS_HAVE_LIBPNG)
 static void gl2psPrintSVGPixmap(GLfloat x, GLfloat y, GL2PSimage *pixmap)
+#else
+static void gl2psPrintSVGPixmap(GLfloat, GLfloat, GL2PSimage*)
+#endif
 {
 #if defined(GL2PS_HAVE_LIBPNG)
   GL2PSlist *png;
