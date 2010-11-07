@@ -342,7 +342,7 @@ int main()
 
 
   G4double dData, thetaLab[200];
-  G4double distrDif[200], distrXsc[200];
+  G4double distrDif[200], distrRut[200], distrXsc[200];
 
   for( k = 0; k < 200; k++) distrDif[k] = 0.;
 
@@ -395,6 +395,7 @@ int main()
     // distrXsc[k] = nndiffelastic->GetRatioGen(thetaCMS);
 
     distrXsc[k] = nndiffelastic->GetFresnelDiffuseXsc(thetaCMS);
+    distrRut[k] = nndiffelastic->GetRutherfordXsc(thetaCMS);
 
     // distrXsc[k] = nndiffelastic->AmplitudeGlaMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGGMod2(thetaCMS);
@@ -406,7 +407,7 @@ int main()
     // distrXsc[k] /= rad2;
 
     // G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
-    writef <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+    // writef <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
   
   }
 
@@ -467,20 +468,27 @@ int main()
 
   // Normalisation
 
-  G4double sumXsc = 0., sumDif = 0., sumRatio = 1., reldiff;
+  G4double sumXsc = 0., sumRut = 0., sumDif = 0., sumRatio = 1., sumRutRat = 1., reldiff;
 
   for( k = 15; k < kAngle; k++) 
   {
     sumXsc += distrXsc[k];
+    sumRut += distrRut[k];
     sumDif += distrDif[k]; 
   }
-  if(sumXsc) sumRatio = sumDif/sumXsc;
-
+  if(sumXsc) 
+  {
+    sumRatio = sumRut/sumXsc;
+    sumRutRat = sumRut/sumDif;
+  }
   for( k = 0; k < kAngle; k++) 
   {
     distrXsc[k] *= sumRatio;
+    distrDif[k] *= sumRutRat;
     reldiff = 200.*(distrDif[k]-distrXsc[k])/(distrDif[k]+distrXsc[k]);
-    G4cout <<k<<"\t"<<thetaLab[k]/degree<<"\t"<<distrXsc[k]<<"\t"<<distrDif[k]<<"\t"<<reldiff<<" %"<<G4endl;
+    // G4cout <<k<<"\t"<<thetaLab[k]/degree<<"\t"<<distrXsc[k]<<"\t"<<distrDif[k]<<"\t"<<reldiff<<" %"<<G4endl;
+    G4cout <<k<<"\t"<<thetaLab[k]/degree<<"\t"<<distrXsc[k]/distrRut[k]<<"\t"<<distrDif[k]/distrRut[k]<<G4endl;
+    writef <<thetaLab[k]/degree<<"\t"<<distrXsc[k]/distrRut[k]<<"\t"<<distrDif[k]/distrRut[k]<<G4endl;
     // G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<2.*(distrDif[k]-distrXsc[k])/(distrDif[k]+distrXsc[k])<<G4endl;
   }
 
