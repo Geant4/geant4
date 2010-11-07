@@ -69,11 +69,8 @@ using namespace std;
 int main()
 {
 
-  G4int k; // i, j, iMax;
+  G4int k, i, iMax, iMod; // i, j, iMax;
   // G4double x;
-
-  G4DiffuseElastic* diffelastic = new G4DiffuseElastic();
-  G4NuclNuclDiffuseElastic* nndiffelastic = new G4NuclNuclDiffuseElastic();
 
   /*
   std::ofstream writeb("bessel.dat", std::ios::out ) ;
@@ -307,7 +304,7 @@ int main()
   G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
                                               G4ParticleMomentum(0.,0.,1.),
                                               kinEnergy);
-  // G4double m1 = theParticleDefinition->GetPDGMass();
+  G4double m1 = theParticleDefinition->GetPDGMass();
   G4double plab = theDynamicParticle->GetTotalMomentum();
   G4cout <<"lab momentum, plab = "<<plab/GeV<<" GeV"<<G4endl;
   G4double plabLowLimit = 20.0*MeV;
@@ -330,7 +327,8 @@ int main()
 
   G4ThreeVector p1   = lv1.vect();
   G4double      ptot = p1.mag();
-  G4cout <<"cms momentum, ptot = "<<ptot/GeV<<" GeV"<<G4endl;
+  G4cout <<"cms momentum, ptot = "<<ptot/MeV<<" MeV"<<G4endl;
+  G4cout <<"cms Tkin = "<<std::sqrt(ptot*ptot+m1*m1)-m1<<" MeV"<<G4endl;
 
   // Choose generator
 
@@ -346,6 +344,8 @@ int main()
   G4double dData, thetaLab[200];
   G4double distrDif[200], distrXsc[200];
 
+  for( k = 0; k < 200; k++) distrDif[k] = 0.;
+
   G4double thetaCMS;
 
   G4double rad, rad2;
@@ -353,6 +353,9 @@ int main()
   const G4int kAngle = 100; // number of angles
   G4double thetaMin = 20.*degree;
   dData = 45.*degree/kAngle;
+
+  G4DiffuseElastic* diffelastic = new G4DiffuseElastic(theParticleDefinition);
+  G4NuclNuclDiffuseElastic* nndiffelastic = new G4NuclNuclDiffuseElastic(theParticleDefinition);
 
   nndiffelastic->SetCofLambda(1.0);  // 1.01, 
 
@@ -375,7 +378,7 @@ int main()
 
   std::ofstream writef("angle.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
-
+  
   writef<<kAngle<<G4endl;
 
   for( k = 0; k < kAngle; k++) 
@@ -383,26 +386,32 @@ int main()
     thetaLab[k] = k*dData + thetaMin;
     thetaCMS    = thetaLab[k];
     
-    distrDif[k] = diffelastic->GetDiffuseElasticSumXsc(theParticleDefinition, thetaCMS, ptot, A, Z); 
+    // distrDif[k] = diffelastic->GetDiffuseElasticSumXsc(theParticleDefinition, thetaCMS, ptot, A, Z); 
 
     // distrXsc[k] = nndiffelastic->AmplitudeMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeSimMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->CoulombAmplitudeMod2(thetaCMS)*nndiffelastic->GetRatioGen(thetaCMS);
     // distrXsc[k] = nndiffelastic->GetRatioSim(thetaCMS);
-    distrXsc[k] = nndiffelastic->GetRatioGen(thetaCMS);
+    // distrXsc[k] = nndiffelastic->GetRatioGen(thetaCMS);
+
+    distrXsc[k] = nndiffelastic->GetFresnelDiffuseXsc(thetaCMS);
+
     // distrXsc[k] = nndiffelastic->AmplitudeGlaMod2(thetaCMS);
     // distrXsc[k] = nndiffelastic->AmplitudeGGMod2(thetaCMS);
 
     rad = diffelastic->GetNuclearRadius();
     rad2 = rad*rad;
 
-    distrDif[k] /= rad2;
+    // distrDif[k] /= rad2;
     // distrXsc[k] /= rad2;
 
-    G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
+    // G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
     writef <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]<<"\t"<<distrXsc[k]<<G4endl;
   
   }
+
+  /* 
+  // Check of integrand function for sampling
 
   for( k = 0; k < kAngle; k++) 
   {
@@ -416,7 +425,64 @@ int main()
     G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<distrDif[k]-distrXsc[k]<<G4endl;
 
   }
+  */
 
+
+  // Check sampling. Initialisation?
+
+  G4double tDif, thetaLabDif, thetaCmsDif;
+
+  iMax = 1000000;   // numberOfExpPoints;
+  // iMax = 1;   // numberOfExpPoints;
+  iMod = iMax/10;
+  // writes << iMax  << G4endl;
+  G4cout << iMax  << G4endl;
+
+  G4cout <<"Start Sampling ... "<<G4endl;
+
+  
+  for( i = 0; i < iMax; i++ )
+  {
+  
+           
+    // tDif = nndiffelastic->SampleTableT(theParticleDefinition, ptot, Z, A);
+    // thetaLabDif =  SampleThetaLab( theDynamicParticle, m2, tDif );
+    // thetaLabDif = tDif;
+    // tDif = nndiffelastic->SampleT(theParticleDefinition, ptot, A);
+
+    thetaCmsDif = nndiffelastic->SampleTableThetaCMS( theParticleDefinition, ptot, Z, A); 
+    // G4cout<<thetaCmsDif/degree<<", ";
+    // thetaLabDif = nndiffelastic->ThetaCMStoThetaLab(theDynamicParticle, m2, thetaCmsDif);
+    
+    for( k = 0; k < kAngle; k++)
+    {
+      if( thetaCmsDif <= thetaLab[k] )
+      {
+        distrDif[k] += 1.;
+        break;
+      }
+    }       
+    if (i%iMod == 0) G4cout <<"done = "<<100.*G4double(i)/G4double(iMax)<<" %"<<G4endl;
+  }
+
+  // Normalisation
+
+  G4double sumXsc = 0., sumDif = 0., sumRatio = 1., reldiff;
+
+  for( k = 15; k < kAngle; k++) 
+  {
+    sumXsc += distrXsc[k];
+    sumDif += distrDif[k]; 
+  }
+  if(sumXsc) sumRatio = sumDif/sumXsc;
+
+  for( k = 0; k < kAngle; k++) 
+  {
+    distrXsc[k] *= sumRatio;
+    reldiff = 200.*(distrDif[k]-distrXsc[k])/(distrDif[k]+distrXsc[k]);
+    G4cout <<k<<"\t"<<thetaLab[k]/degree<<"\t"<<distrXsc[k]<<"\t"<<distrDif[k]<<"\t"<<reldiff<<" %"<<G4endl;
+    // G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<2.*(distrDif[k]-distrXsc[k])/(distrDif[k]+distrXsc[k])<<G4endl;
+  }
 
   G4cout <<G4endl<< " elastic cross section for " <<
             theParticleDefinition->GetParticleName() <<
