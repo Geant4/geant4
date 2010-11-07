@@ -1,4 +1,4 @@
-$Id: History,v 1.188 2010-11-06 12:12:42 allison Exp $
+$Id: History,v 1.189 2010-11-07 10:31:25 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th November 2010  John Allison
+- G4OpenGLViewerMessenger.cc:
+  o Improved messages.
+
 6th November 2010  John Allison
-- G4OpenGLViewerMessenger.cc: displayListLimit>=10000.
+- G4OpenGLViewerMessenger.cc:
+  o displayListLimit>=10000.
 - G4OpenGLStoredSceneHandler:
   o Made all display list management variables static.
   o Bug fix: reset fMemoryForDisplayLists flag.

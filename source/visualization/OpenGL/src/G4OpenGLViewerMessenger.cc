@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.20 2010-11-06 12:08:13 allison Exp $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.21 2010-11-07 10:31:26 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
@@ -279,7 +279,9 @@ void G4OpenGLViewerMessenger::SetNewValue
   if (!pOGLViewer) {
     G4cout <<
       "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type"
-      "\n  OGL.  Use \"/vis/viewer/select\" or \"/vis/open\"."
+      "\n  OGL.  (It is \""
+	   << pViewer->GetName() <<
+      "\".)\n  Use \"/vis/viewer/select\" or \"/vis/open\"."
            << G4endl;
     return;
   }
@@ -331,6 +333,7 @@ void G4OpenGLViewerMessenger::SetNewValue
     {
       G4cout <<
   "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type OGLS."
+  "\n  (It is \"" << pViewer->GetName() << "\".)"
   "\n  This feature is only implemented for OGL Stored viewers."
   "\n  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
 	     << G4endl;
@@ -423,13 +426,28 @@ void G4OpenGLViewerMessenger::SetNewValue
       return;
     }
 
+  G4VSceneHandler* pSceneHandler = pViewer->GetSceneHandler();
+
+  if (!pSceneHandler) {
+    G4cout <<
+  "G4OpenGLViewerMessenger::SetNewValue: This viewer has no scene handler."
+  "\n  Shouldn't happen - please report circumstances."
+  "\n  (Viewer is \"" << pViewer->GetName() << "\".)"
+  "\n  Try \"/vis/open\", or similar, to get one."
+           << G4endl;
+    return;
+  }
+
   G4OpenGLSceneHandler* pOGLSceneHandler =
-    dynamic_cast<G4OpenGLSceneHandler*>(pViewer->GetSceneHandler());
+    dynamic_cast<G4OpenGLSceneHandler*>(pSceneHandler);
 
   if (!pOGLSceneHandler) {
     G4cout <<
   "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
-  "\n  OGL.  Use \"/vis/sceneHandler/select\" or \"/vis/open\"."
+  "\n  OGL.  (Viewer is \"" << pViewer->GetName() << "\".)"
+  "\n  (Scene handler is \"" << pSceneHandler->GetName() << "\".)"
+  "\n  Use \"/vis/sceneHandler/list\" and \"/vis/sceneHandler/select\""
+  "\n  or \"/vis/open\"."
            << G4endl;
     return;
   }
@@ -440,7 +458,9 @@ void G4OpenGLViewerMessenger::SetNewValue
   if (!pOGLSSceneHandler) {
     G4cout <<
   "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
-  "\n  OGLS (Stored).  This feature is only implemented for OGL Stored"
+  "\n  OGLS (Stored).  (Viewer is \"" << pViewer->GetName() << "\".)"
+  "\n  (Scene handler is \"" << pSceneHandler->GetName() << "\".)"
+  "\n  This feature is only implemented for OGL Stored"
   "\n  scene handlers.  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
            << G4endl;
     return;
