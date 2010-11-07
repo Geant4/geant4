@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.26 2010-05-30 11:30:49 allison Exp $
+// $Id: G4VisExecutive.icc,v 1.27 2010-11-07 11:14:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,9 +92,10 @@
 #include "G4VRML2.hh"
 #endif
 
-  G4VisExecutive::G4VisExecutive (const G4String& verbosityString):
-    G4VisManager(verbosityString)	
-  {}
+inline
+G4VisExecutive::G4VisExecutive (const G4String& verbosityString):
+  G4VisManager(verbosityString)	
+{}
 
 // The inline keyword prevents the compiler making an external
 // reference even though they cannot actually be inlined since they
