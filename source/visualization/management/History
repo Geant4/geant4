@@ -1,4 +1,4 @@
-$Id: History,v 1.156 2010-11-05 16:00:11 allison Exp $
+$Id: History,v 1.157 2010-11-07 11:14:49 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -26,6 +26,13 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+7th November 2010  John Allison  (visman-V09-03-14)
+- G4VisExecutive.icc: Inlined constructor.
+- G4Vismanager.cc: Fixed Coverity warning.
+- G4VisCommandsViewer.cc: Fixed Coverity warning.
+
+6th November 2010  John Allison
+- G4VisCommandsSceneAdd.cc: Fixed Coverity warning.
 
 5th November 2010  John Allison  (visman-V09-03-13)
 - G4VSceneHandler.cc and G4ViewParameters.cc:
