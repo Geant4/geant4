@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 November 2010  J.Allison (exampleP03-V09-03-03)
+--------------------------
+- Introduced G4UIExecutive.
+
 7 November 2010  G.Cosmo (exampleP03-V09-03-02)
 --------------------------
 - Synchronized files on the HEAD and restored original version.
