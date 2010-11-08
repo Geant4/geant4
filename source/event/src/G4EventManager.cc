@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.31 2010-06-12 04:07:45 asaim Exp $
+// $Id: G4EventManager.cc,v 1.32 2010-11-08 21:31:35 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -290,6 +290,7 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadyS
           pp->SetTrackID(trackIDCounter);
         }
       }
+      newTrack->SetOriginTouchableHandle(newTrack->GetTouchableHandle());
       trackContainer->PushOneTrack( newTrack );
 #ifdef G4VERBOSE
       if ( verboseLevel > 1 )
