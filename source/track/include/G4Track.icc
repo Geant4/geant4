@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.20 2010-10-27 07:53:29 gcosmo Exp $
+// $Id: G4Track.icc,v 1.21 2010-11-08 21:25:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -178,6 +178,20 @@
      fpNextTouchable = apValue;
    }
 
+   inline const  G4VTouchable* G4Track::GetOriginTouchable() const 
+   {
+     return fpOriginTouchable();
+   }
+
+   inline const  G4TouchableHandle& G4Track::GetOriginTouchableHandle() const 
+   {
+     return fpOriginTouchable;
+   }
+
+   inline void G4Track::SetOriginTouchableHandle( const G4TouchableHandle& apValue)
+   {
+     fpOriginTouchable = apValue;
+   }
 
 // kinetic energy
    inline G4double G4Track::GetKineticEnergy() const

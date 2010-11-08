@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.22 2010-08-11 17:11:54 kurasige Exp $
+// $Id: G4Track.hh,v 1.23 2010-11-08 21:25:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -156,6 +156,10 @@ public: // With description
    const G4TouchableHandle& GetNextTouchableHandle() const;
    void SetNextTouchableHandle( const G4TouchableHandle& apValue);
 
+   const G4VTouchable*      GetOriginTouchable() const;
+   const G4TouchableHandle& GetOriginTouchableHandle() const;
+   void SetOriginTouchableHandle( const G4TouchableHandle& apValue);
+
   // energy
    G4double GetKineticEnergy() const;
    void SetKineticEnergy(const G4double aValue);
@@ -253,6 +257,7 @@ public: // With description
 
    G4TouchableHandle fpTouchable;
    G4TouchableHandle fpNextTouchable;
+   G4TouchableHandle fpOriginTouchable;
   // Touchable Handle
 
    G4DynamicParticle* fpDynamicParticle;
