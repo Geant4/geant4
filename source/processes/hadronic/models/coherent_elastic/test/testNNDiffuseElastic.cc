@@ -379,7 +379,7 @@ int main()
   std::ofstream writef("angle.dat", std::ios::out ) ;
   writef.setf( std::ios::scientific, std::ios::floatfield );
   
-  writef<<kAngle<<G4endl;
+  // writef<<kAngle<<G4endl;
 
   for( k = 0; k < kAngle; k++) 
   {
@@ -468,27 +468,36 @@ int main()
 
   // Normalisation
 
-  G4double sumXsc = 0., sumRut = 0., sumDif = 0., sumRatio = 1., sumRutRat = 1., reldiff;
+  G4double sumXsc = 0., sumRut = 0., sumDif = 0., sumRatio = 1., sumRutRat = 1., sumXscDifRat = 1., reldiff;
 
-  for( k = 15; k < kAngle; k++) 
+  G4int kMin = 15;
+
+  for( k = kMin; k < kAngle; k++) 
   {
     sumXsc += distrXsc[k];
     sumRut += distrRut[k];
     sumDif += distrDif[k]; 
   }
-  if(sumXsc) 
+  if(sumXsc && sumDif) 
   {
     sumRatio = sumRut/sumXsc;
     sumRutRat = sumRut/sumDif;
+    sumXscDifRat = sumXsc/sumDif;   
   }
-  for( k = 0; k < kAngle; k++) 
+
+  writef<<kAngle-kMin<<G4endl;  
+
+  for( k = kMin; k < kAngle; k++) 
   {
-    distrXsc[k] *= sumRatio;
-    distrDif[k] *= sumRutRat;
+    // distrXsc[k] *= sumRatio;
+    distrDif[k] *= sumXscDifRat;
     reldiff = 200.*(distrDif[k]-distrXsc[k])/(distrDif[k]+distrXsc[k]);
     // G4cout <<k<<"\t"<<thetaLab[k]/degree<<"\t"<<distrXsc[k]<<"\t"<<distrDif[k]<<"\t"<<reldiff<<" %"<<G4endl;
+
     G4cout <<k<<"\t"<<thetaLab[k]/degree<<"\t"<<distrXsc[k]/distrRut[k]<<"\t"<<distrDif[k]/distrRut[k]<<G4endl;
+
     writef <<thetaLab[k]/degree<<"\t"<<distrXsc[k]/distrRut[k]<<"\t"<<distrDif[k]/distrRut[k]<<G4endl;
+
     // G4cout <<thetaLab[k]/degree<<"\t"<<"\t"<<2.*(distrDif[k]-distrXsc[k])/(distrDif[k]+distrXsc[k])<<G4endl;
   }
 
