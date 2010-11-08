@@ -25,15 +25,6 @@
 //
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#ifdef G4UI_USE_GAG
-#include "G4UIGAG.hh"
-#endif
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif 
-
 
 #include "exrdmDetectorConstruction.hh"
 #include "exrdmPhysicsList.hh"
@@ -46,6 +37,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -70,23 +65,7 @@ int main(int argc,char** argv)
   runManager->SetUserAction(new exrdmRunAction);
   runManager->SetUserAction(new exrdmEventAction);
   runManager->SetUserAction(new exrdmSteppingAction);
-  //
-  //
-  G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-#ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,argv);
-#else           
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
-#endif
-    }
- 
+
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -98,17 +77,21 @@ int main(int argc,char** argv)
   //  runManager->Initialize();
 
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-  if (session)   // Define UI session for interactive mode.
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  if (argc == 1)   // Define UI session for interactive mode.
     {
-      session->SessionStart();
-      delete session;
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
   
   // job termination
