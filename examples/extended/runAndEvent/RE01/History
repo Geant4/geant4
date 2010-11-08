@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-11-08 17:42:28 allison Exp $
+$Id: History,v 1.8 2010-11-08 22:16:28 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov. 08, 2010 M.Asai (exampleRE01-V09-03-03)
+- Fix warning message in RE01Trajectory class.
 
 Nov. 08, 2010 J.Allison (exampleRE01-V09-03-02)
 - Introduced G4UIExecutive.
