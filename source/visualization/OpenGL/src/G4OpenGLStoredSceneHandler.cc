@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.44 2010-11-06 12:09:41 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.45 2010-11-08 15:27:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,15 +105,14 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
   if (fMemoryForDisplayLists) {
     fDisplayListId = glGenLists (1);
     if (glGetError() == GL_OUT_OF_MEMORY ||
-	fDisplayListId > fDisplayListLimit + fDisplayListBase) {
+	fDisplayListId > fDisplayListLimit) {
       G4cout <<
-	"********************* WARNING! ********************"
-	"\n  Display list limit reached in OpenGL."
-	"\n  Continuing drawing in IMMEDIATE MODE."
-	"\n  Current limit: "
-	     << fDisplayListLimit <<
-	".  Change with \"/vis/ogl/set/displayListLimit\"."
-	"\n***************************************************"
+  "********************* WARNING! ********************"
+  "\n*  Display list limit reached in OpenGL."
+  "\n*  Continuing drawing WITHOUT STORING. Scene only partially refreshable."
+  "\n*  Current limit: " << fDisplayListLimit <<
+  ".  Change with \"/vis/ogl/set/displayListLimit\"."
+  "\n***************************************************"
 	     << G4endl;
       fMemoryForDisplayLists = false;
     }
@@ -354,9 +353,7 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
 
-  fDisplayListBase = fDisplayListId;
   fMemoryForDisplayLists = true;
-
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
@@ -368,7 +365,6 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
     glDeleteLists(fTOList[i].fDisplayListId, 1);
   fTOList.clear ();
 
-  fDisplayListBase = fDisplayListId;
   fMemoryForDisplayLists = true;
 
   // Make sure screen corresponds to graphical database...
@@ -475,6 +471,5 @@ G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
 G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
 G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
 G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
-G4int  G4OpenGLStoredSceneHandler::fDisplayListBase = 0;
 
 #endif

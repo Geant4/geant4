@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.30 2010-11-06 12:09:41 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.31 2010-11-08 15:27:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,6 @@ protected:
   static G4int  fDisplayListId;  // Workspace.
   static G4bool fMemoryForDisplayLists;  // avoid memory overflow
   static G4int  fDisplayListLimit;       // avoid memory overflow
-  static G4int  fDisplayListBase;        // avoid memory overflow
   G4int fAddPrimitivePreambleNestingDepth;
   
   // PODL = Persistent Object Display List.
