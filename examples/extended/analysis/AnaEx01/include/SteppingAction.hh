@@ -24,52 +24,37 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.9 2006-06-29 16:33:15 gunter Exp $
+// $Id: SteppingAction.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#ifndef AnaEx01AnalysisManager_h
-#define AnaEx01AnalysisManager_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4ANALYSIS_USE
+#ifndef SteppingAction_h
+#define SteppingAction_h 1
 
-class G4Run;
-class G4Event;
-class G4Step;
+#include "G4UserSteppingAction.hh"
 
-namespace AIDA {
-  class IAnalysisFactory;
-  class ITree;
-  class IHistogram1D;
-  class ITuple;
-}
+class DetectorConstruction;
+class EventAction;
 
-class AnaEx01AnalysisManager {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class SteppingAction : public G4UserSteppingAction
+{
 public:
-  AnaEx01AnalysisManager(AIDA::IAnalysisFactory*);
-  virtual ~AnaEx01AnalysisManager();
-public:
-  virtual void BeginOfRun(const G4Run*); 
-  virtual void EndOfRun(const G4Run*); 
-  virtual void BeginOfEvent(const G4Event*); 
-  virtual void EndOfEvent(const G4Event*); 
-  virtual void Step(const G4Step*);
+  SteppingAction(DetectorConstruction*, EventAction*);
+  virtual ~SteppingAction();
+
+  void UserSteppingAction(const G4Step*);
+    
 private:
-  int fCalorimeterCollID;                
-  AIDA::IAnalysisFactory* fAIDA;
-  AIDA::ITree* fTree;
-  AIDA::IHistogram1D* fEAbs;
-  AIDA::IHistogram1D* fLAbs;
-  AIDA::IHistogram1D* fEGap;
-  AIDA::IHistogram1D* fLGap;
-  AIDA::ITuple* fTuple;
+  DetectorConstruction* detector;
+  EventAction*          eventaction;  
 };
 
-#else
-
-class AnaEx01AnalysisManager;
-
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

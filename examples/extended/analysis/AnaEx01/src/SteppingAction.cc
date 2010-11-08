@@ -24,50 +24,49 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01DetectorMessenger.hh,v 1.4 2006-06-29 16:33:25 gunter Exp $
+// $Id: SteppingAction.cc,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "SteppingAction.hh"
 
-#ifndef AnaEx01DetectorMessenger_h
-#define AnaEx01DetectorMessenger_h 1
+#include "DetectorConstruction.hh"
+#include "EventAction.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4Step.hh"
 
-class AnaEx01DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+SteppingAction::SteppingAction(DetectorConstruction* det,
+                                         EventAction* evt)
+:detector(det), eventaction(evt)					 
+{ }
 
-class AnaEx01DetectorMessenger: public G4UImessenger
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  public:
-    AnaEx01DetectorMessenger(AnaEx01DetectorConstruction* );
-   ~AnaEx01DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    AnaEx01DetectorConstruction* AnaEx01Detector;
-    
-    G4UIdirectory*             AnaEx01detDir;
-    G4UIcmdWithAString*        AbsMaterCmd;
-    G4UIcmdWithAString*        GapMaterCmd;
-    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* GapThickCmd;
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
-    G4UIcmdWithAnInteger*      NbLayersCmd;    
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
-};
+  // get volume of the current step
+  G4VPhysicalVolume* volume 
+  = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+  
+  // collect energy and track length step by step
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  
+  G4double stepl = 0.;
+  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
+    stepl = aStep->GetStepLength();
+      
+  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
+  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
+}
 
-#endif
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

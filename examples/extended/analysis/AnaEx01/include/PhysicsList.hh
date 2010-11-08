@@ -24,27 +24,44 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01SteppingAction.cc,v 1.7 2006-06-29 16:34:03 gunter Exp $
+// $Id: PhysicsList.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#ifdef G4ANALYSIS_USE
-#include "AnaEx01AnalysisManager.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
+
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class PhysicsList: public G4VUserPhysicsList
+{
+public:
+  PhysicsList();
+  virtual ~PhysicsList();
+
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
+ 
+  void SetCuts();
+   
+private:
+
+  // these methods Construct physics processes and register them
+  void ConstructDecay();
+  void ConstructEM();
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-#include "AnaEx01SteppingAction.hh"
-
-AnaEx01SteppingAction::AnaEx01SteppingAction(
- AnaEx01AnalysisManager* aAnalysisManager
-):fAnalysisManager(aAnalysisManager){}
-
-AnaEx01SteppingAction::~AnaEx01SteppingAction(){}
-void AnaEx01SteppingAction::UserSteppingAction(const G4Step* aStep){
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->Step(aStep);
-#endif
-}
 
 
 

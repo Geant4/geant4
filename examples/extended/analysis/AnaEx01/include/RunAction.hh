@@ -24,64 +24,47 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01PhysicsList.hh,v 1.4 2006-06-29 16:33:29 gunter Exp $
+// $Id: RunAction.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef AnaEx01PhysicsList_h
-#define AnaEx01PhysicsList_h 1
+#ifndef RunAction_h
+#define RunAction_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class AnaEx01PhysicsList: public G4VUserPhysicsList
+class G4Run;
+class HistoManager;
+
+class RunAction : public G4UserRunAction
 {
-  public:
-    AnaEx01PhysicsList();
-   ~AnaEx01PhysicsList();
+public:
+  RunAction(HistoManager*);
+  virtual ~RunAction();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
-
-  public:
-    // Set/Get cut values 
-    void      SetCutForGamma(G4double);
-    void      SetCutForElectron(G4double);
-    void      SetCutForProton(G4double);           
-    G4double  GetCutForGamma() const;
-    G4double  GetCutForElectron() const;
-    G4double  GetCutForProton() const;
+  void BeginOfRunAction(const G4Run*);
+  void   EndOfRunAction(const G4Run*);
     
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+  void fillPerEvent(G4double, G4double, G4double, G4double); 
 
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
+private:
+  HistoManager* histoManager;
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForProton;
-    G4double currentDefaultCut;
+  G4double sumEAbs, sum2EAbs;
+  G4double sumEGap, sum2EGap;
+    
+  G4double sumLAbs, sum2LAbs;
+  G4double sumLGap, sum2LGap;    
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
 

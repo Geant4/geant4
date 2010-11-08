@@ -24,121 +24,115 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01DetectorMessenger.cc,v 1.5 2006-06-29 16:33:51 gunter Exp $
+// $Id: DetectorMessenger.cc,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "AnaEx01DetectorMessenger.hh"
+#include "DetectorMessenger.hh"
 
-#include "AnaEx01DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-AnaEx01DetectorMessenger::AnaEx01DetectorMessenger(AnaEx01DetectorConstruction * AnaEx01Det)
-:AnaEx01Detector(AnaEx01Det)
+DetectorMessenger::DetectorMessenger( DetectorConstruction* Det)
+:Detector(Det)
 { 
-  AnaEx01detDir = new G4UIdirectory("/calor/");
-  AnaEx01detDir->SetGuidance("AnaEx01 detector control.");
-      
-  AbsMaterCmd = new G4UIcmdWithAString("/calor/setAbsMat",this);
+  N03Dir = new G4UIdirectory("/N03/");
+  N03Dir->SetGuidance("UI commands of this example");
+  
+  detDir = new G4UIdirectory("/N03/det/");
+  detDir->SetGuidance("detector control");
+       
+  AbsMaterCmd = new G4UIcmdWithAString("/N03/det/setAbsMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(G4State_Idle);
+  AbsMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  GapMaterCmd = new G4UIcmdWithAString("/calor/setGapMat",this);
+  GapMaterCmd = new G4UIcmdWithAString("/N03/det/setGapMat",this);
   GapMaterCmd->SetGuidance("Select Material of the Gap.");
   GapMaterCmd->SetParameterName("choice",false);
-  GapMaterCmd->AvailableForStates(G4State_Idle);
+  GapMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
-  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
+  AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("Size",false);
   AbsThickCmd->SetRange("Size>=0.");
   AbsThickCmd->SetUnitCategory("Length");
-  AbsThickCmd->AvailableForStates(G4State_Idle);
+  AbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  GapThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setGapThick",this);
+  GapThickCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setGapThick",this);
   GapThickCmd->SetGuidance("Set Thickness of the Gap");
   GapThickCmd->SetParameterName("Size",false);
   GapThickCmd->SetRange("Size>=0.");
   GapThickCmd->SetUnitCategory("Length");  
-  GapThickCmd->AvailableForStates(G4State_Idle);
+  GapThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSizeYZ",this);
+  SizeYZCmd = new G4UIcmdWithADoubleAndUnit("/N03/det/setSizeYZ",this);
   SizeYZCmd->SetGuidance("Set tranverse size of the calorimeter");
   SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
   SizeYZCmd->SetUnitCategory("Length");    
-  SizeYZCmd->AvailableForStates(G4State_Idle);
+  SizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
+  NbLayersCmd = new G4UIcmdWithAnInteger("/N03/det/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
   NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
-  NbLayersCmd->AvailableForStates(G4State_Idle);
+  NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  UpdateCmd = new G4UIcmdWithoutParameter("/N03/det/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
-      
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-AnaEx01DetectorMessenger::~AnaEx01DetectorMessenger()
+DetectorMessenger::~DetectorMessenger()
 {
   delete NbLayersCmd;
   delete AbsMaterCmd; delete GapMaterCmd;
   delete AbsThickCmd; delete GapThickCmd;
   delete SizeYZCmd;   delete UpdateCmd;
-  delete MagFieldCmd;
-  delete AnaEx01detDir;
+  delete detDir;
+  delete N03Dir;  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnaEx01DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == AbsMaterCmd )
-   { AnaEx01Detector->SetAbsorberMaterial(newValue);}
+   { Detector->SetAbsorberMaterial(newValue);}
    
   if( command == GapMaterCmd )
-   { AnaEx01Detector->SetGapMaterial(newValue);}
+   { Detector->SetGapMaterial(newValue);}
   
   if( command == AbsThickCmd )
-   { AnaEx01Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetAbsorberThickness(AbsThickCmd
+                                               ->GetNewDoubleValue(newValue));}
    
   if( command == GapThickCmd )
-   { AnaEx01Detector->SetGapThickness(GapThickCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetGapThickness(GapThickCmd->GetNewDoubleValue(newValue));}
    
   if( command == SizeYZCmd )
-   { AnaEx01Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
    
   if( command == NbLayersCmd )
-   { AnaEx01Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
+   { Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
   
   if( command == UpdateCmd )
-   { AnaEx01Detector->UpdateGeometry(); }
-
-  if( command == MagFieldCmd )
-   { AnaEx01Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+   { Detector->UpdateGeometry(); }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

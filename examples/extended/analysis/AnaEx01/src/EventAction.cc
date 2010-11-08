@@ -24,45 +24,68 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01PrimaryGeneratorAction.hh,v 1.4 2006-06-29 16:33:31 gunter Exp $
+// $Id: EventAction.cc,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef AnaEx01PrimaryGeneratorAction_h
-#define AnaEx01PrimaryGeneratorAction_h 1
+#include "EventAction.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
+#include "RunAction.hh"
+#include "HistoManager.hh"
 
-class G4ParticleGun;
-class G4Event;
-class AnaEx01DetectorConstruction;
-class AnaEx01PrimaryGeneratorMessenger;
+#include "G4Event.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class AnaEx01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+EventAction::EventAction(RunAction* run, HistoManager* histo)
+:runAct(run),histoManager(histo)
 {
-  public:
-    AnaEx01PrimaryGeneratorAction(AnaEx01DetectorConstruction*);    
-   ~AnaEx01PrimaryGeneratorAction();
+ printModulo = 100; }
 
-  public:
-    void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  private:
-    G4ParticleGun*                particleGun;	  //pointer a to G4 service class
-    AnaEx01DetectorConstruction*    AnaEx01Detector;  //pointer to the geometry
-    
-    AnaEx01PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	  //flag for a random impact point       
-};
+EventAction::~EventAction()
+{ }
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void EventAction::BeginOfEventAction(const G4Event* evt)
+{  
+  G4int evtNb = evt->GetEventID();
+  if (evtNb%printModulo == 0) 
+    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+ 
+ // initialisation per event
+ EnergyAbs = EnergyGap = 0.;
+ TrackLAbs = TrackLGap = 0.;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::EndOfEventAction(const G4Event*)
+{
+  //accumulates statistic
+  //
+  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
+  
+  //fill histograms
+  //
+  histoManager->FillHisto(1, EnergyAbs);
+  histoManager->FillHisto(2, EnergyGap);
+  histoManager->FillHisto(3, TrackLAbs);
+  histoManager->FillHisto(4, TrackLGap);
+  
+  //fill ntuple
+  //
+  histoManager->FillNtuple(0, EnergyAbs);
+  histoManager->FillNtuple(1, EnergyGap);
+  histoManager->FillNtuple(2, TrackLAbs);
+  histoManager->FillNtuple(3, TrackLGap);
+  histoManager->AddRowNtuple();  
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

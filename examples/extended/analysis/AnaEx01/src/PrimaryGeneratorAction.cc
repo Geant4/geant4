@@ -24,32 +24,59 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01EventAction.cc,v 1.6 2006-06-29 16:33:53 gunter Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4ANALYSIS_USE
-#include "AnaEx01AnalysisManager.hh"
-#endif
+#include "PrimaryGeneratorAction.hh"
 
-#include "AnaEx01EventAction.hh"
+#include "DetectorConstruction.hh"
 
-AnaEx01EventAction::AnaEx01EventAction(
- AnaEx01AnalysisManager* aAnalysisManager
-):fAnalysisManager(aAnalysisManager){}
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 
-AnaEx01EventAction::~AnaEx01EventAction(){}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void AnaEx01EventAction::BeginOfEventAction(const G4Event* aEvent){
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->BeginOfEvent(aEvent);
-#endif
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
+:Detector(DC)
+{
+  G4int n_particle = 1;
+  particleGun  = new G4ParticleGun(n_particle);
+
+  // default particle kinematic
+
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  G4ParticleDefinition* particle
+                    = particleTable->FindParticle(particleName="e-");
+  particleGun->SetParticleDefinition(particle);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  particleGun->SetParticleEnergy(500.*MeV);
+  G4double position = -0.5*(Detector->GetWorldSizeX());
+  particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+
 }
 
-void AnaEx01EventAction::EndOfEventAction(const G4Event* aEvent) {
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->EndOfEvent(aEvent);
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
+{
+  delete particleGun;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  //this function is called at the begining of event
+  // 
+  particleGun->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

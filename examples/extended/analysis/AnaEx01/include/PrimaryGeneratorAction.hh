@@ -24,28 +24,41 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01RunAction.hh,v 1.6 2006-06-29 16:33:36 gunter Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#ifndef AnaEx01RunAction_h
-#define AnaEx01RunAction_h
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4UserRunAction.hh"
+#ifndef PrimaryGeneratorAction_h
+#define PrimaryGeneratorAction_h 1
 
-class AnaEx01AnalysisManager;
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
-class AnaEx01RunAction : public G4UserRunAction {
+class G4ParticleGun;
+class G4Event;
+class DetectorConstruction;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
 public:
-  AnaEx01RunAction(AnaEx01AnalysisManager* = 0);
-  ~AnaEx01RunAction();
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);  
+  PrimaryGeneratorAction(DetectorConstruction*);    
+  virtual ~PrimaryGeneratorAction();
+
+  void GeneratePrimaries(G4Event*);
+
 private:
-  AnaEx01AnalysisManager* fAnalysisManager;
+  G4ParticleGun*           particleGun;	 //pointer a to G4  class
+  DetectorConstruction*    Detector;     //pointer to the geometry
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+
 

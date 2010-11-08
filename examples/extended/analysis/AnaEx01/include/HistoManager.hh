@@ -23,39 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: AnaEx01SteppingVerbose.hh,v 1.4 2006-06-29 16:33:40 gunter Exp $
+// $Id: HistoManager.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//  
-//---------------------------------------------------------------
-//
-// AnaEx01SteppingVerbose.hh
-//
-// Description:
-//   This class manages the verbose outputs in G4SteppingManager. 
-//   It inherits from G4SteppingVerbose   
-//
-//---------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class AnaEx01SteppingVerbose;
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#ifndef AnaEx01SteppingVerbose_h
-#define AnaEx01SteppingVerbose_h 1
+#include "globals.hh"
 
-#include "G4SteppingVerbose.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class AnaEx01SteppingVerbose : public G4SteppingVerbose {
-public:   
-// Constructor/Destructor
-  AnaEx01SteppingVerbose();
- ~AnaEx01SteppingVerbose();
-//
-  void StepInfo();
-  void TrackingStarted();
-//
+namespace AIDA {
+ class IAnalysisFactory;
+ class ITree;
+ class IHistogram1D;
+ class ITuple;
+} 
+  const G4int MaxHisto = 5;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class HistoManager
+{
+  public:
+  
+    HistoManager();
+   ~HistoManager();
+   
+    void book();
+    void save();
+
+    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
+    void Normalize(G4int id, G4double fac);    
+
+    void FillNtuple(G4int column, G4double value);
+    void AddRowNtuple();
+    
+    void PrintStatistic();
+        
+  private:
+  
+    AIDA::IAnalysisFactory*  af;        
+    AIDA::ITree*             tree;
+    
+    AIDA::IHistogram1D*      histo[MaxHisto];            
+    AIDA::ITuple*      	     ntupl;    
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+

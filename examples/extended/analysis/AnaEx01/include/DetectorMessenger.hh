@@ -24,65 +24,52 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01CalorHit.cc,v 1.6 2006-06-29 16:33:44 gunter Exp $
+// $Id: DetectorMessenger.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "AnaEx01CalorHit.hh"
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
 
-G4Allocator<AnaEx01CalorHit> AnaEx01CalorHitAllocator;
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
 
-AnaEx01CalorHit::AnaEx01CalorHit()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class DetectorMessenger: public G4UImessenger
 {
-   EdepAbs = 0.; TrackLengthAbs = 0.;
-   EdepGap = 0.; TrackLengthGap = 0.;
-}
+  public:
+    DetectorMessenger(DetectorConstruction* );
+   ~DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    DetectorConstruction* Detector;
+    
+    G4UIdirectory*             N03Dir;
+    G4UIdirectory*             detDir;
+    G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithAString*        GapMaterCmd;
+    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* GapThickCmd;
+    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
+    G4UIcmdWithAnInteger*      NbLayersCmd;    
+    G4UIcmdWithoutParameter*   UpdateCmd;
+};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-AnaEx01CalorHit::~AnaEx01CalorHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-AnaEx01CalorHit::AnaEx01CalorHit(const AnaEx01CalorHit& right)
-  : G4VHit(right)
-{
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-const AnaEx01CalorHit& AnaEx01CalorHit::operator=(const AnaEx01CalorHit& right)
-{
-  EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
-  EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-int AnaEx01CalorHit::operator==(const AnaEx01CalorHit& right) const
-{
-  return (this==&right) ? 1 : 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void AnaEx01CalorHit::Draw()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void AnaEx01CalorHit::Print()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#endif
 

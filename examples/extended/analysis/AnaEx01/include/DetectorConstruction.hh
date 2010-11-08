@@ -24,16 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01DetectorConstruction.hh,v 1.4 2006-06-29 16:33:22 gunter Exp $
+// $Id: DetectorConstruction.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef AnaEx01DetectorConstruction_h
-#define AnaEx01DetectorConstruction_h 1
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -42,18 +42,16 @@ class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
-class G4UniformMagField;
-class AnaEx01DetectorMessenger;
-class AnaEx01CalorimeterSD;
+class DetectorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class AnaEx01DetectorConstruction : public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
   
-    AnaEx01DetectorConstruction();
-   ~AnaEx01DetectorConstruction();
+    DetectorConstruction();
+   ~DetectorConstruction();
 
   public:
      
@@ -65,8 +63,6 @@ class AnaEx01DetectorConstruction : public G4VUserDetectorConstruction
      
      void SetCalorSizeYZ(G4double);          
      void SetNbOfLayers (G4int);   
-      
-     void SetMagField(G4double);
      
      G4VPhysicalVolume* Construct();
 
@@ -132,10 +128,7 @@ class AnaEx01DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   logicGap;      //pointer to the logical Gap
      G4VPhysicalVolume* physiGap;      //pointer to the physical Gap
      
-     G4UniformMagField* magField;      //pointer to the magnetic field
-     
-     AnaEx01DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     AnaEx01CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
+     DetectorMessenger* detectorMessenger;  //pointer to the Messenger
       
   private:
     
@@ -144,9 +137,9 @@ class AnaEx01DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void AnaEx01DetectorConstruction::ComputeCalorParameters()
+inline void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
      LayerThickness = AbsorberThickness + GapThickness;
@@ -154,6 +147,8 @@ inline void AnaEx01DetectorConstruction::ComputeCalorParameters()
      
      WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -24,32 +24,49 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01RunAction.cc,v 1.7 2006-06-29 16:34:01 gunter Exp $
+// $Id: EventAction.hh,v 1.1 2010-11-08 10:38:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-#ifdef G4ANALYSIS_USE
-#include "AnaEx01AnalysisManager.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef EventAction_h
+#define EventAction_h 1
+
+#include "G4UserEventAction.hh"
+#include "globals.hh"
+
+class RunAction;
+class HistoManager;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class EventAction : public G4UserEventAction
+{
+public:
+  EventAction(RunAction*, HistoManager*);
+  virtual ~EventAction();
+
+  void  BeginOfEventAction(const G4Event*);
+  void    EndOfEventAction(const G4Event*);
+    
+  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
+  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+    
+private:
+   RunAction*    runAct;
+   HistoManager* histoManager;
+      
+   G4double  EnergyAbs, EnergyGap;
+   G4double  TrackLAbs, TrackLGap;
+                     
+   G4int     printModulo;                             
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
 
-#include "AnaEx01RunAction.hh"
-
-AnaEx01RunAction::AnaEx01RunAction(
- AnaEx01AnalysisManager* aAnalysisManager
-):fAnalysisManager(aAnalysisManager){}
-
-AnaEx01RunAction::~AnaEx01RunAction(){}
-
-void AnaEx01RunAction::BeginOfRunAction(const G4Run* aRun) {
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->BeginOfRun(aRun);
-#endif
-}
-
-void AnaEx01RunAction::EndOfRunAction(const G4Run* aRun){
-#ifdef G4ANALYSIS_USE
-  if(fAnalysisManager) fAnalysisManager->EndOfRun(aRun);
-#endif
-}
-
+    
