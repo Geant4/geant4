@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc,v 1.6 2010-10-08 09:21:02 sincerti Exp $
+// $Id: G4EmDNAPhysics.cc,v 1.7 2010-11-08 08:37:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmDNAPhysics.hh"
@@ -129,10 +129,10 @@ void G4EmDNAPhysics::ConstructProcess()
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic();
-      theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
+      theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());
       
       // or alternative model
-      // theDNAElasticProcess->SetModel(new G4DNAChampionElasticModel());     
+      // theDNAElasticProcess->SetModel(new G4DNAScreenedRutherfordElasticModel());
       
       pmanager->AddDiscreteProcess(theDNAElasticProcess);
 

@@ -1,4 +1,4 @@
-q$Id: History,v 1.158 2010-11-03 16:54:43 gum Exp $
+q$Id: History,v 1.159 2010-11-08 08:37:22 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-11-2010, S.Incerti                   (phys-lists-V09-03-35)
+-  switched elastic model in G4DNA physics builder
 
 03-11-2010, P.Gumplinger                (phys-lists-V09-03-34)
 -  correctly implement the new option SetScintillationByParticleType
