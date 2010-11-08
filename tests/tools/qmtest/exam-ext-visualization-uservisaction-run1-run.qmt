@@ -25,7 +25,9 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/visualization/userVisAction;$G4BIN/$G4SYSTEM/userVisAction run1.in</text>
+    <text>cd
+   
+$G4INSTALL/examples/extended/visualization/userVisAction;$G4BIN/$G4SYSTEM/userVisAction run1.mac</text>
   </argument>
   <argument name="stderr">
     <text/>
