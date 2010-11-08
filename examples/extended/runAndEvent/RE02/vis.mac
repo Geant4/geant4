@@ -5,6 +5,7 @@
 # Sets some default verbose
 #
 /control/verbose 2
+/vis/verbose confirmations
 /run/verbose 2
 #/tracking/verbose 2
 #
@@ -36,6 +37,9 @@
 #
 # Specify zoom value:
 /vis/viewer/zoom 1.4
+#
+# Make all invisible - final voxels will be drawn with computed vis attrubutes
+#/vis/geometry/set/visibility Phantom -1 false
 #
 # Specify style (surface or wireframe):
 #/vis/viewer/set/style wireframe
@@ -70,6 +74,9 @@
 # To superimpose all of the events from a given run:
 /vis/scene/endOfEventAction accumulate
 #
+/vis/viewer/set/targetPoint 0 100 0 mm
+/vis/viewer/zoomTo 10000000
+#
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
@@ -78,4 +85,3 @@
 #/vis/viewer/flush
 #
 /run/beamOn 100
-
