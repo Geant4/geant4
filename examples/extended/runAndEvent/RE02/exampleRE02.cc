@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleRE02.cc,v 1.4 2010-11-08 17:57:24 allison Exp $
+// $Id: exampleRE02.cc,v 1.5 2010-11-08 18:48:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,6 @@ int main(int argc,char** argv) {
   if(argc==1)
   // Define (G)UI terminal for interactive mode  
   { 
-    // G4UIterminal is a (dumb) terminal.
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     UI->ApplyCommand("/control/execute vis.mac");    
     ui->SessionStart();
