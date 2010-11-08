@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2010-11-08 17:57:24 allison Exp $
+$Id: History,v 1.8 2010-11-08 22:32:25 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 8th, 2010  M.Asai (exampleRE02-V09-03-03)
+- Fixing warning messages.
 
 November 8th, 2010  John Allison (exampleRE02-V09-03-02)
 - Introduced G4UIExecutive.

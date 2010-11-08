@@ -69,7 +69,7 @@ RE02NestedPhantomParameterisation::~RE02NestedPhantomParameterisation(){
 //
 // Material assignment to geometry.
 //
-G4Material* RE02NestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume* currentVol,
+G4Material* RE02NestedPhantomParameterisation::ComputeMaterial(G4VPhysicalVolume* /*currentVol*/,
 							 const G4int copyNo, 
 							 const G4VTouchable* parentTouch)
 {

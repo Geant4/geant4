@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE02DetectorConstruction.cc,v 1.3 2006-11-18 01:37:23 asaim Exp $
+// $Id: RE02DetectorConstruction.cc,v 1.4 2010-11-08 22:32:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -392,7 +392,7 @@ RE02DetectorConstruction::~RE02DetectorConstruction()
   G4VisAttributes* YRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
   logYRep->SetVisAttributes(YRepVisAtt);
   G4VisAttributes* XRepVisAtt = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
-  logXRep->SetVisAttributes(YRepVisAtt);
+  logXRep->SetVisAttributes(XRepVisAtt);
   
   // Skip the visualization for those voxels.
   logicPhantomSens->SetVisAttributes(G4VisAttributes::Invisible);
