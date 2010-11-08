@@ -1516,7 +1516,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     }
   else if(command == arbeintCmd1)
     {
-      fParticleGun->SetEnergyBiasAlpha(arbeintCmd1->GetNewDoubleValue(newValues));
+      fParticleGun->GetEneDist()->SetBiasAlpha(arbeintCmd1->GetNewDoubleValue(newValues));
     }
   else if(command == calculateCmd1)
     {

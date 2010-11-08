@@ -144,8 +144,6 @@ public:
 	;
 
 	// Set the verbosity level.
-
-	void SetEnergyBiasAlpha(G4double);
 	void SetVerbosity(G4int);
 
 	// Set the particle species

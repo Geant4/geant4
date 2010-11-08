@@ -49,23 +49,24 @@
 
 #include "G4SPSEneDistribution.hh"
 
-
-
 G4SPSEneDistribution::G4SPSEneDistribution() {
 	//
 	// Initialise all variables
 	particle_energy = 1.0 * MeV;
 
 	EnergyDisType = "Mono";
+	weight = 1.;
 	MonoEnergy = 1 * MeV;
 	Emin = 0.;
 	Emax = 1.e30;
 	alpha = 0.;
+	biasedalpha = 0.;
 	Ezero = 0.;
 	SE = 0.;
 	Temp = 0.;
 	grad = 0.;
 	cept = 0.;
+	Biased = false; // not biased
 	EnergySpec = true; // true - energy spectra, false - momentum spectra
 	DiffSpec = true; // true - differential spec, false integral spec
 	IntType = "NULL"; // Interpolation type
@@ -116,6 +117,11 @@ void G4SPSEneDistribution::SetAlpha(G4double alp) {
 	alpha = alp;
 }
 
+void G4SPSEneDistribution::SetBiasedAlpha(G4double alp) {
+	biasalpha = alp;
+	Biased = true;
+}
+
 void G4SPSEneDistribution::SetTemp(G4double tem) {
 	Temp = tem;
 }
@@ -156,10 +162,11 @@ void G4SPSEneDistribution::ArbEnergyHisto(G4ThreeVector input) {
 }
 
 void G4SPSEneDistribution::ArbEnergyHisto(G4String filename) {
-	std::ifstream infile ( filename, std::ios::in );
-	if ( !infile ) G4Exception("Unable to open the histo ASCII file" );
+	std::ifstream infile(filename, std::ios::in);
+	if (!infile)
+		G4Exception("Unable to open the histo ASCII file");
 	G4double ehi, val;
-	while (infile >> ehi >> val ) {
+	while (infile >> ehi >> val) {
 		ArbEnergyH.InsertValues(ehi, val);
 	}
 }
@@ -384,7 +391,7 @@ void G4SPSEneDistribution::LinearInterpolation() {
 		IPDFArbEnergyH.InsertValues(Arb_x[i], Arb_Cum_Area[i]);
 		i++;
 	}
-	
+
 	// now the ArbEInt
 	ArbEInt = new G4DataInterpolation(Arb_x, Arb_y, maxi, 1e30, 1e30);
 
@@ -655,7 +662,7 @@ void G4SPSEneDistribution::SplineInterpolation() {
 
 	// now the ArbEInt
 	ArbEInt = new G4DataInterpolation(Arb_x, Arb_y, maxi, 1e30, 1e30);
-	
+
 	if (verbosityLevel > 1) {
 		G4cout << SplineInt << G4endl;
 		G4cout << SplineInt->LocateArgument(1.0) << G4endl;
@@ -742,6 +749,32 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false) {
 				Emin)));
 		particle_energy = std::exp(particle_energy);
 	}
+	if (verbosityLevel >= 1)
+		G4cout << "Energy is " << particle_energy << G4endl;
+}
+
+void G4SPSEneDistribution::GenerateBiasPowEnergies() {
+	// Method to generate particle energies distributed as
+	// in biased power-law and calculate its weight
+
+	G4double rndm;
+	G4double emina, emaxa;
+
+	emina = std::pow(Emin, alpha + 1);
+	emaxa = std::pow(Emax, alpha + 1);
+
+	rndm = eneRndm->GenRandEnergy();
+
+	if (biasalpha != -1.) {
+		particle_energy = ((rndm * (emaxa - emina)) + emina);
+		particle_energy = std::pow(particle_energy, (1. / (biasalpha + 1.)));
+	} else {
+		particle_energy = (std::log(Emin) + rndm * (std::log(Emax) - std::log(
+				Emin)));
+		particle_energy = std::exp(particle_energy);
+	}
+	weight = GetProbability(particle_energy) / std::pow(particle_energy);
+
 	if (verbosityLevel >= 1)
 		G4cout << "Energy is " << particle_energy << G4endl;
 }
@@ -1148,33 +1181,38 @@ void G4SPSEneDistribution::ReSetHist(G4String atype) {
 G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a) {
 	particle_definition = a;
 	particle_energy = -1.;
+
 	while ((EnergyDisType == "Arb") ? (particle_energy < ArbEmin
 			|| particle_energy > ArbEmax) : (particle_energy < Emin
 			|| particle_energy > Emax)) {
-		if (EnergyDisType == "Mono")
-			GenerateMonoEnergetic();
-		else if (EnergyDisType == "Lin")
-			GenerateLinearEnergies();
-		else if (EnergyDisType == "Pow")
-			GeneratePowEnergies();
-		else if (EnergyDisType == "Exp")
-			GenerateExpEnergies();
-		else if (EnergyDisType == "Gauss")
-			GenerateGaussEnergies();
-		else if (EnergyDisType == "Brem")
-			GenerateBremEnergies();
-		else if (EnergyDisType == "Bbody")
-			GenerateBbodyEnergies();
-		else if (EnergyDisType == "Cdg")
-			GenerateCdgEnergies();
-		else if (EnergyDisType == "User")
-			GenUserHistEnergies();
-		else if (EnergyDisType == "Arb")
-			GenArbPointEnergies();
-		else if (EnergyDisType == "Epn")
-			GenEpnHistEnergies();
-		else
-			G4cout << "Error: EnergyDisType has unusual value" << G4endl;
+		if (Biased) {
+			GenerateBiasPowEnergies();
+		} else {
+			if (EnergyDisType == "Mono")
+				GenerateMonoEnergetic();
+			else if (EnergyDisType == "Lin")
+				GenerateLinearEnergies();
+			else if (EnergyDisType == "Pow")
+				GeneratePowEnergies();
+			else if (EnergyDisType == "Exp")
+				GenerateExpEnergies();
+			else if (EnergyDisType == "Gauss")
+				GenerateGaussEnergies();
+			else if (EnergyDisType == "Brem")
+				GenerateBremEnergies();
+			else if (EnergyDisType == "Bbody")
+				GenerateBbodyEnergies();
+			else if (EnergyDisType == "Cdg")
+				GenerateCdgEnergies();
+			else if (EnergyDisType == "User")
+				GenUserHistEnergies();
+			else if (EnergyDisType == "Arb")
+				GenArbPointEnergies();
+			else if (EnergyDisType == "Epn")
+				GenEpnHistEnergies();
+			else
+				G4cout << "Error: EnergyDisType has unusual value" << G4endl;
+		}
 	}
 	return particle_energy;
 }
@@ -1184,16 +1222,16 @@ G4double G4SPSEneDistribution::GetProbability(G4double ene) {
 	//	while ((EnergyDisType == "Arb") ? (ene >= ArbEmin
 	//		&& ene <= ArbEmax) : (ene >= Emin
 	//		&& ene <= Emax)) {
-		if (EnergyDisType == "Lin")
-			prob = cept + grad*ene;
-		else if (EnergyDisType == "Pow")
-			prob = std::pow(ene,alpha);
-		else if (EnergyDisType == "Exp")
-			prob = std::exp(-ene/Ezero);
-		else if (EnergyDisType == "Arb")
-			prob = ArbEInt->CubicSplineInterpolation(ene);
-		else
-			G4cout << "Error: EnergyDisType not supported" << G4endl;
-		//}
+	if (EnergyDisType == "Lin")
+		prob = cept + grad * ene;
+	else if (EnergyDisType == "Pow")
+		prob = std::pow(ene, alpha);
+	else if (EnergyDisType == "Exp")
+		prob = std::exp(-ene / Ezero);
+	else if (EnergyDisType == "Arb")
+		prob = ArbEInt->CubicSplineInterpolation(ene);
+	else
+		G4cout << "Error: EnergyDisType not supported" << G4endl;
+	//}
 	return prob;
 }

@@ -173,6 +173,7 @@ public:
 	;
 	void SetMonoEnergy(G4double);
 	void SetAlpha(G4double);
+	void SetBiasAlpha(G4double);
 	void SetTemp(G4double);
 	void SetBeamSigmaInE(G4double);
 	void SetEzero(G4double);
@@ -204,6 +205,9 @@ public:
 	}
 	;
 	//x
+	G4double GetWeight() {
+		return weight;
+	}
 
 	G4double GetMonoEnergy() {
 		return MonoEnergy;
@@ -260,6 +264,7 @@ private:
 	void GenerateMonoEnergetic();
 	void GenerateLinearEnergies(G4bool);
 	void GeneratePowEnergies(G4bool);
+	void GenerateBiasPowEnergies();
 	void GenerateExpEnergies(G4bool);
 	void GenerateGaussEnergies();
 	void GenerateBremEnergies();
@@ -275,11 +280,14 @@ private:
 private:
 
 	G4String EnergyDisType; // energy dis type Variable  - Mono,Lin,Exp,etc
+	G4double weight; // particle weight
 	G4double MonoEnergy; //Mono-energteic energy
 	G4double SE; // Standard deviation for Gaussion distrbution in energy
 	G4double Emin, Emax; // emin and emax
 	G4double alpha, Ezero, Temp; // alpha (pow), E0 (exp) and Temp (bbody,brem)
+	G4double biasalpha; // biased power index
 	G4double grad, cept; // gradient and intercept for linear spectra
+	G4bool Biased; // true - biased to power-law
 	G4bool EnergySpec; // true - energy spectra, false - momentum spectra
 	G4bool DiffSpec; // true - differential spec, false integral spec
 	G4bool ApplyRig; // false no rigidity cutoff, true then apply one

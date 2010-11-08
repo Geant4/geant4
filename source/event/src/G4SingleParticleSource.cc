@@ -107,25 +107,6 @@ void G4SingleParticleSource::SetParticleDefinition(
 	particle_charge = particle_definition->GetPDGCharge();
 }
 
-void G4SingleParticleSource::SetEnergyBiasAlpha(G4double al) {
-
-	G4String eneType = eneGenerator->GetEnergyDisType();
-	G4double emax = eneGenerator->GetEmax();
-	G4double emin = eneGenerator->GetEmin();
-	if (eneType == "Arb") {
-		emax = eneGenerator->GetArbEmax();
-		emin = eneGenerator->GetArbEmin();
-	}
-	G4double de = (emax-emin)/100.;
-	for (G4int i = 0; i< 100; i++) {
-		G4double ei = de*i+emin;
-		G4double prob =std::pow(ei,al)/eneGenerator->GetProbability(ei);
-		biasRndm->SetEnergyBias(G4ThreeVector(ei/emax,prob,0.));
-	}
-	biasRndm->SetEnergyBias(G4ThreeVector(1.,0.,0.));
-
-}
-
 void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
 	if (particle_definition == NULL)
 		return;
@@ -172,7 +153,7 @@ void G4SingleParticleSource::GeneratePrimaryVertex(G4Event *evt) {
 		particle->SetPolarization(particle_polarization.x(),
 				particle_polarization.y(), particle_polarization.z());
 		// Set bweight equal to the multiple of all non-zero weights
-		particle_weight = biasRndm->GetBiasWeight();
+		particle_weight = eneGenerator->GetWeight()*biasRndm->GetBiasWeight();
 		// pass it to primary particle
 		particle->SetWeight(particle_weight);
 
