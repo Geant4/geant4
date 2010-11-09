@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.36 2010-11-03 19:23:48 gum Exp $
+// $Id: G4Scintillation.cc,v 1.37 2010-11-09 21:51:50 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -281,7 +281,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                                             GetProperty(TotalEnergyDeposit);
         } else {
            // The default linear scintillation process
-           G4double ScintillationYield = aMaterialPropertiesTable->
+           ScintillationYield = aMaterialPropertiesTable->
                                       GetConstProperty("SCINTILLATIONYIELD");
 
            // Units: [# scintillation photons / MeV]
