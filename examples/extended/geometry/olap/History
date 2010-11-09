@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2010-10-27 10:41:33 gcosmo Exp $
+$Id: History,v 1.16 2010-11-09 07:26:28 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 9th, 2010  G.Folger   - olapex-V09-03-02
+- add simple batch.mac to use in testing
 
 October 27th, 2010  G.Cosmo - olapex-V09-03-02
 - Set primary-generator action after physics-list to run-manager.
