@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2010-10-25 13:29:24 gunter Exp $
+$Id: History,v 1.38 2010-11-09 20:10:13 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-2011 M.Asai (fano-V09-03-05)
+- Fix AIDA file option.
 
 25-10-2010 G.Folger  (fano-V09-03-04)
 - Correct initialisation of directinIn in ctor; needed by clhep 2.1...
