@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_det.cc,v 1.2 2010-11-07 14:00:37 allison Exp $
+// $Id: gdml_det.cc,v 1.3 2010-11-09 10:34:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -37,7 +37,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIsession.hh"
 
 #include "G4LogicalVolumeStore.hh"
 #include "G4TransportationManager.hh"
