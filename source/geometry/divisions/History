@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2010-09-06 09:28:39 gcosmo Exp $
+$Id: History,v 1.34 2010-11-09 19:36:07 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November, 9th, 2010         M.Asai
+- Introducing G4ReplicatedSlice, which allows gaps in between
+  divided daghters.
 
 September, 6th, 2010         G.Cosmo (geomdiv-V09-03-01)
 - Removed obvious else statement in constructors of G4PVDivision.
