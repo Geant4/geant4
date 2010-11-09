@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2010-10-13 13:50:45 vnivanch Exp $
+$Id: History,v 1.16 2010-11-09 20:56:00 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-10 M.Asai (testem16-V09-03-04)
+- Fix AIDA file option.
 
 13-10-10 V.Ivanchenko (testem16-V09-03-03)
 - SteppingAction - use const pointers for step/track objects;

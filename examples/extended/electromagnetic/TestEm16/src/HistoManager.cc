@@ -52,7 +52,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "testem16";
   fileType    = "root";
-  fileOption  = "--noErrors export=root uncompress";
+  fileOption  = "";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
