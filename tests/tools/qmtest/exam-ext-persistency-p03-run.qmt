@@ -25,7 +25,7 @@
     <set/>
   </argument>
   <argument name="command">
-    <text>cd $G4INSTALL/examples/extended/persistency/P03;$G4BIN/$G4SYSTEM/textGeom run.mac</text>
+    <text>cd $G4INSTALL/examples/extended/persistency/P03;$G4BIN/$G4SYSTEM/textGeom batch.mac</text>
   </argument>
   <argument name="stderr">
     <text/>
