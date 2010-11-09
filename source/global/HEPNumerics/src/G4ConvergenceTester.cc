@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConvergenceTester.cc,v 1.5 2010-11-01 13:55:17 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Convergence Tests for Monte Carlo results.
 //
@@ -49,7 +47,7 @@ G4ConvergenceTester::G4ConvergenceTester()
    r2eff(0.), r2int(0.), shift(0.), vov(0.), fom(0.), largest(0.),
    largest_score_happened(0), mean_1(0.), var_1(0.), sd_1(0.), r_1(0.),
    shift_1(0.), vov_1(0.), fom_1(0.), noBinOfHistory(16), slope(0.),
-   noBinOfPDF(10), minimizer(0), noPass(0), noTotal(0)
+   noBinOfPDF(10), minimizer(0), noPass(0), noTotal(8)
 {
    nonzero_histories.clear();
    largest_scores.clear();
@@ -461,7 +459,14 @@ void G4ConvergenceTester::check_stat_history()
       G4cout << "r does not follow 1/std::sqrt(N)" << G4endl; 
    }
 
-   G4cout << "r is monotonically decrease " << is_monotonically_decrease( second_ally ) << G4endl;
+   if (  is_monotonically_decrease( second_ally ) == true ) 
+   {
+      G4cout << "r is monotonically decrease " << G4endl;
+   }
+   else
+   {
+      G4cout << "r is NOT monotonically decrease " << G4endl;
+   }
 
    if ( r_history.back() < 0.1 )  
    {
@@ -493,7 +498,15 @@ void G4ConvergenceTester::check_stat_history()
    {
       G4cout << "VOV does not follow 1/std::sqrt(N)" << G4endl; 
    }
-   G4cout << "VOV is monotonically decrease " << is_monotonically_decrease( second_ally ) << G4endl;
+
+   if ( is_monotonically_decrease( second_ally ) == true )
+   {
+      G4cout << "VOV is monotonically decrease " << G4endl;
+   }
+   else
+   {
+      G4cout << "VOV is NOT monotonically decrease " << G4endl;
+   }
 
 // FOM
 
@@ -557,6 +570,7 @@ G4double G4ConvergenceTester::calc_Pearson_r ( G4int N , std::vector<G4double> f
 
 G4bool G4ConvergenceTester::is_monotonically_decrease ( std::vector<G4double> ally )
 {
+
    std::vector<G4double>::iterator it;
    for ( it = ally.begin() ; it != ally.end() - 1 ; it++ )
    {
@@ -684,10 +698,12 @@ G4double G4ConvergenceTester::slope_fitting_function ( std::vector< G4double > x
       //if ( 1/a * ( 1 + k * f_xi [ i ] / a ) < 0 )
       if ( ( 1 + k * f_xi [ i ] / a ) < 0 )
       {
-         //return 3.402823466e+38;  // FLOAT_MAX
          y +=3.402823466e+38;  // FLOAT_MAX 
       }
-      y += ( f_yi [ i ] - 1/a*std::pow ( ( 1 + k * f_xi [ i ] / a ) , - 1/k - 1 ) ) * ( f_yi [ i ] - 1/a*std::pow ( ( 1 + k * f_xi [ i ] / a ) , - 1/k - 1 ) );
+      else 
+      {
+         y += ( f_yi [ i ] - 1/a*std::pow (  1 + k * f_xi [ i ] / a , - 1/k - 1 ) ) * ( f_yi [ i ] - 1/a*std::pow ( 1 + k * f_xi [ i ] / a , - 1/k - 1 ) );
+      }
    }
 //   G4cout << "y = " << y << G4endl;
 
