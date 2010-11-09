@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.25 2010-02-22 15:41:29 maire Exp $
+// $Id: RunAction.cc,v 1.26 2010-11-09 21:25:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +111,7 @@ void RunAction::bookHisto()
   histoName[1] = histoName[0] + "." + histoType;  
   G4bool readOnly  = false;
   G4bool createNew = true;
-  G4String options = "--noErrors export=root uncompress";
+  G4String options = "";
   AIDA::ITreeFactory* tf  = af->createTreeFactory();  
   tree = tf->create(histoName[1], histoType, readOnly, createNew, options);
   delete tf;
