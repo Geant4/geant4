@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.40 2010-07-27 01:44:54 akimura Exp $
+// $Id: G4VScoringMesh.hh,v 1.41 2010-11-09 00:29:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,9 +80,9 @@ class G4VScoringMesh
   // dump information of primitive socrers registered in this mesh
   void Dump();
   // draw a projected quantity on a current viewer
-  inline void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
+  void DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg=111);
   // draw a column of a quantity on a current viewer
-  inline void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
+  void DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
   // draw a projected quantity on a current viewer
   virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
   // draw a column of a quantity on a current viewer
@@ -202,32 +202,6 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
       map->PrintAllHits();
     }
     G4cout << G4endl;
-  }
-}
-
-void G4VScoringMesh::DrawMesh(G4String psName,G4VScoreColorMap* colorMap,G4int axflg)
-{
-  fDrawPSName = psName;
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end()) {
-    fDrawUnit = GetPSUnit(psName);
-    fDrawUnitValue = GetPSUnitValue(psName);
-    Draw(fMapItr->second->GetMap(), colorMap,axflg);
-  } else {
-    G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
-  }
-}
-
-void G4VScoringMesh::DrawMesh(G4String psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap)
-{
-  fDrawPSName = psName;
-  std::map<G4String, G4THitsMap<G4double>* >::const_iterator fMapItr = fMap.find(psName);
-  if(fMapItr!=fMap.end()) {
-    fDrawUnit = GetPSUnit(psName);
-    fDrawUnitValue = GetPSUnitValue(psName);
-    DrawColumn(fMapItr->second->GetMap(),colorMap,idxPlane,iColumn);
-  } else {
-    G4cerr << "Scorer <" << psName << "> is not defined. Method ignored." << G4endl;
   }
 }
 
