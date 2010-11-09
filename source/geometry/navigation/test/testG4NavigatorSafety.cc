@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4NavigatorSafety.cc,v 1.5 2010-11-03 10:52:49 japost Exp $
+// $Id: testG4NavigatorSafety.cc,v 1.6 2010-11-09 10:48:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,7 +63,6 @@
 // Parameters for building a tubular calorimeter:
 // an array of interlocking complete tubes inside a box
 //
-static const G4double kWorldhsize = 100*mm;
 static const G4double kTubeHalfHeight = 10*mm;
 static const G4double kTubeRadius = 5*mm;
 static const G4double kTubeNoRow = 10;
@@ -73,6 +72,9 @@ static const G4double kBoxDx=kTubeNoRow*kTubeRadius;
 static const G4double yDelta=2.0*kTubeRadius*std::sin(pi/3.0);
 static const G4double kBoxDy=(kTubeNoColumn-1)*yDelta*0.5+kTubeRadius;
 static const G4double kBoxDz=kTubeHalfHeight;
+static const G4double kWorldhxsize = kBoxDx+0.1*mm;
+static const G4double kWorldhysize = kBoxDy+0.1*mm;
+static const G4double kWorldhzsize = kBoxDz+0.1*mm;
 
 G4bool compare = false;
 std::vector<G4ThreeVector> kPoints;
@@ -89,7 +91,7 @@ G4VPhysicalVolume* BuildGeometry()
   G4int row,column;
 
   // Solids          ==============================
-  G4Box  *worldBox = new G4Box ("World Box",kWorldhsize,kWorldhsize,kWorldhsize);
+  G4Box  *worldBox = new G4Box ("World Box",kWorldhxsize,kWorldhysize,kWorldhzsize);
     // World box
 
   G4Box  *calBox = new G4Box ("Cal Box",kBoxDx,kBoxDy,kBoxDz);
@@ -145,9 +147,9 @@ void generatePoints(G4int n)
 {
   for (int i=0; i<n; i++)
   {
-    G4ThreeVector p(CLHEP::RandFlat::shoot(-kWorldhsize,kWorldhsize),
-                    CLHEP::RandFlat::shoot(-kWorldhsize,kWorldhsize),
-                    CLHEP::RandFlat::shoot(-kWorldhsize,kWorldhsize));
+    G4ThreeVector p(CLHEP::RandFlat::shoot(-kWorldhxsize,kWorldhxsize),
+                    CLHEP::RandFlat::shoot(-kWorldhysize,kWorldhysize),
+                    CLHEP::RandFlat::shoot(-kWorldhzsize,kWorldhzsize));
     kPoints.push_back(p);
   }
 }
@@ -183,7 +185,7 @@ void computeExactSafeties(G4VPhysicalVolume *pTopNode)
   G4ThreeVector  center( 0., 0., 0. ); 
   G4cout << " Trial point= " << center << G4endl;
   pPhysVol= myNav.LocateGlobalPointAndSetup( center ); 
-  G4ThreeVector saf= myNav.ComputeSafety( center );  
+  // G4double saf= myNav.ComputeSafety( center );  
 
   std::vector<G4ThreeVector>::const_iterator pos;
   for (pos=kPoints.begin(); pos!=kPoints.end(); pos++)
