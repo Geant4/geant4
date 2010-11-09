@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.4 2010-06-04 19:03:36 vnivanch Exp $
+// $Id: RunAction.cc,v 1.5 2010-11-09 21:33:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,7 +104,7 @@ void RunAction::bookHisto()
 	G4String fName   = fname;
   fName += ".";
   fName += ftype;
-  G4String option  = "--noErrors uncompress";
+  G4String option  = "";
   tree = tf->create(fName,ftype, readOnly, createNew, option);
 
   // Create a histogram factory, whose histograms will be handled by the tree
