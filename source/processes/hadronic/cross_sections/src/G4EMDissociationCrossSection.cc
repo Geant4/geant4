@@ -55,8 +55,10 @@
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
 //
-// 30. May 2005, J.P. Wellisch removed a compilation warning on gcc 3.4 for 
+// 30 May 2005, J.P. Wellisch removed a compilation warning on gcc 3.4 for 
 //               geant4 7.1.
+// 09 November 2010, V.Ivanchenko make class applicable for Hydrogen but 
+//                   set cross section for Hydrogen to zero  
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //////////////////////////////////////////////////////////////////////////////
@@ -96,7 +98,7 @@ G4EMDissociationCrossSection::~G4EMDissociationCrossSection()
 //
 G4bool
 G4EMDissociationCrossSection::IsIsoApplicable(const G4DynamicParticle* theDynamicParticle,
-                                              G4int /*ZZ*/, G4int AA)
+                                              G4int /*ZZ*/, G4int/* AA*/)
 {
 //
 // The condition for the applicability of this class is that the projectile
@@ -106,7 +108,7 @@ G4EMDissociationCrossSection::IsIsoApplicable(const G4DynamicParticle* theDynami
 // Z, the probability of the EMD process is, I think, VERY small.
 //
   if (G4ParticleTable::GetParticleTable()->GetIonTable()->
-    IsIon(theDynamicParticle->GetDefinition()) && AA > 1)
+      IsIon(theDynamicParticle->GetDefinition()) /*&& AA > 1*/)
     return true;
   else
     return false;
@@ -126,6 +128,9 @@ G4double G4EMDissociationCrossSection::GetCrossSection
 {
   G4int nIso = theElement->GetNumberOfIsotopes();
   G4double crossSection = 0;
+
+  // VI protection for Hydrogen
+  if(theElement->GetZ() < 1.5) { return crossSection; }
      
   if (nIso) {
     G4double sig;
@@ -155,6 +160,9 @@ G4double
 G4EMDissociationCrossSection::GetZandACrossSection(const G4DynamicParticle *theDynamicParticle,
                                                    G4int ZZ, G4int AA, G4double /*temperature*/)
 {
+  // VI protection for Hydrogen
+  if(ZZ <= 1) { return 0.0; }
+
 //
 // Get relevant information about the projectile and target (A, Z) and
 // velocity of the projectile.
