@@ -26,10 +26,6 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
 #ifdef G4ANALYSIS_USE
 #include "exGPSAnalysisManager.hh"
 #endif

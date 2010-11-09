@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09/11/2010 - J.Allison (exgps-V09-03-04)
+- Removed #include G4UIXm.hh (causes conflict with G4UIExecutive.hh)
+
 22/10/2010 - G.Folger (exgps-V09-03-03)
 - Correct exgps_batch.in removing Vis 
 
