@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelSafety.cc,v 1.5 2010-11-04 11:58:40 japost Exp $
+// $Id: G4VoxelSafety.cc,v 1.6 2010-11-09 10:53:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Author:  John Apostolakis
@@ -225,7 +225,7 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
   EAxis    targetHeaderAxis;
   G4double targetHeaderMin, targetHeaderNodeWidth;
   G4int    targetHeaderNoSlices;
-  G4int    targetNodeNo,  pointNodeNo;
+  G4int    targetNodeNo;
   // G4int    minCurNodeNoDelta, maxCurNodeNoDelta;
 
   G4double minSafety= DBL_MAX; 
