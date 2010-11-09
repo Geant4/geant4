@@ -125,7 +125,7 @@ void exrdmHisto::book()
   // Creating a tree mapped to a new aida file.
   G4String fileName = histName + "." + histType;
   if (histType == "root") fileName = histName + "_aida." + histType;
-  tree = tf->create(fileName,histType,false,true,"compress=yes");
+  tree = tf->create(fileName,histType,false,true,"");
   delete tf;
   if(!tree) { 
     G4cout << "ERROR: Tree store " << histName  << " is not created!" << G4endl; 
