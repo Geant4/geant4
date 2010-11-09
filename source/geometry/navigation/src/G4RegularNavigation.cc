@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.11 2010-09-03 16:29:43 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.12 2010-11-09 15:43:15 arce Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -327,14 +327,14 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
   // Check that track is not on the surface and check that track is not
   // exiting the voxel parent volume
   //
-  if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid, localPoint,
+  /*  if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid, localPoint,
           globalDirection, history.GetTopTransform(), pLocatedOnEdge) 
      || G4AuxiliaryNavServices::CheckPointExiting(pSolid, localPoint,
-          globalDirection, history.GetTopTransform() ) )
+     globalDirection, history.GetTopTransform() ) ) */
   {
   }
   else
-  {
+  { */
     // Enter this daughter
     //
     replicaNo = pParam->GetReplicaNo( localPoint, localDir );
@@ -359,7 +359,7 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
     pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
                              pPhysical, &parentTouchable) );
     return true;
-  }
+    //  }
 
-  return false;
+    //  return false;
 }

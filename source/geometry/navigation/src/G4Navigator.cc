@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.42 2010-11-04 17:36:17 japost Exp $
+// $Id: G4Navigator.cc,v 1.43 2010-11-09 15:43:15 arce Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -195,7 +195,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
               fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
               break;
             case kParameterised:
-              if( fBlockedPhysicalVolume->GetRegularStructureId() != 1 )
+              if( fBlockedPhysicalVolume->GetRegularStructureId() == 0 )
               {
                 G4VSolid *pSolid;
                 G4VPVParameterisation *pParam;
@@ -692,7 +692,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
         }
         else
         {
-          if( motherPhysical->GetRegularStructureId() != 1 )
+          if( motherPhysical->GetRegularStructureId() == 0 )
           {
             Step = fnormalNav.ComputeStep(fLastLocatedPointLocal,
                                           localDirection,
@@ -719,7 +719,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
             // of the container volume). Then LocateGlobalPointAndSetup() has
             // reset the history topvolume to world.
             //
-            if(fHistory.GetTopVolume()->GetRegularStructureId() != 1 )
+            if(fHistory.GetTopVolume()->GetRegularStructureId() == 0 )
             { 
               G4Exception("G4Navigator::ComputeStep()",
                           "Bad-location-of-point", JustWarning,
