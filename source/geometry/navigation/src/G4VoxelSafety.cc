@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelSafety.cc,v 1.7 2010-11-09 16:34:13 japost Exp $
+// $Id: G4VoxelSafety.cc,v 1.8 2010-11-09 18:03:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Author:  John Apostolakis
@@ -131,7 +131,7 @@ G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
   fBlockList.Enlarge(localNoDaughters);
   fBlockList.Reset();
 
-  fVoxelDepth = 0;  // Resets the depth -- must be done for next method
+  fVoxelDepth = -1;  // Resets the depth -- must be done for next method
   daughterSafety= SafetyForVoxelHeader( motherVoxelHeader, localPoint ); 
 
   ourSafety= std::min( motherSafety, daughterSafety ); 
@@ -230,6 +230,7 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
 
   G4double minSafety= DBL_MAX; 
  
+  fVoxelDepth++;
   // fVoxelDepth  set by ComputeSafety or previous level call
 
   targetHeaderAxis =      targetVoxelHeader->GetAxis();
@@ -273,13 +274,17 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
 
   // G4cout << "---> Current Voxel Header has " << *targetVoxelHeader << G4endl;
 
+  // targetVoxelHeader->GetMaxEquivalentSliceNo()+1;
+  // targetVoxelHeader->GetMinEquivalentSliceNo()-1;
+
   G4int nextUp=   pointNodeNo+1;
   G4int nextDown= pointNodeNo-1; 
     // Ignore equivalents for now
   G4int nextNode= pointNodeNo;
 
   for( targetNodeNo= pointNodeNo; 
-       (targetNodeNo<targetHeaderNoSlices) && (targetNodeNo>=0); 
+                 //   (targetNodeNo<targetHeaderNoSlices) && 
+       (targetNodeNo>=0); 
        targetNodeNo= nextNode
      )
   {
@@ -305,15 +310,15 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
      else  
      {
         G4SmartVoxelHeader *pNewVoxelHeader = sampleProxy->GetHeader();
-	fVoxelDepth++;
+	// fVoxelDepth++;
 
 	G4cout << " -- It is a Header " << G4endl;
 	G4cout << "  Recurse to deal with next level, fVoxelDepth= " 
-	       << fVoxelDepth << G4endl;
+	       << fVoxelDepth+1 << G4endl;
 	
 	// Recurse to deal with lower levels
 	levelSafety= SafetyForVoxelHeader( pNewVoxelHeader, localPoint); 
-        fVoxelDepth--;
+        // fVoxelDepth--;
 
         // G4cout << "  Returned from SafetyForVoxelHeader. Depth=  "
 	//        << fVoxelDepth << G4endl;
@@ -355,5 +360,8 @@ G4VoxelSafety::SafetyForVoxelHeader( G4SmartVoxelHeader* pHeader,
   }
 #endif
 
+  // Go back one level
+  fVoxelDepth--; 
+  
   return minSafety;
 }
