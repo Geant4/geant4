@@ -15,6 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 9 November 2010  G.Folger  (exampleP03-V09-03-04)
+--------------------------
 - add batch.mac as copy of run.mac, replacing use of OGL vis driver by ASCII
 
 8 November 2010  J.Allison (exampleP03-V09-03-03)
