@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc,v 1.4 2010-11-07 12:14:38 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.cc,v 1.5 2010-11-09 09:04:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -65,7 +65,7 @@
 G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic() 
   : G4HadronicInteraction(), fParticle(0)
 {
-  SetMinEnergy( 0.01*GeV );
+  SetMinEnergy( 50*MeV );
   SetMaxEnergy( 1.*TeV );
   verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  
@@ -96,6 +96,10 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
   fZommerfeld = 0.;
   fAm = 0.;
   fAddCoulomb = false;
+  // Ranges of angle table relative to current Rutherford (Coulomb grazing) angle
+
+  fCofAlphaMax     = 1.5;
+  fCofAlphaCoulomb = 0.5;
 
   fProfileDelta  = 1.;
   fProfileAlpha   = 0.5;
@@ -141,6 +145,15 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic(const G4ParticleDefinition* a
   fZommerfeld = 0.;
   fAm = 0.;
   fAddCoulomb = false;
+
+  // Ranges of angle table relative to current Rutherford (Coulomb grazing) angle
+
+  fCofAlphaMax     = 1.5;
+  fCofAlphaCoulomb = 0.5;
+
+  fProfileDelta  = 1.;
+  fProfileAlpha   = 0.5;
+
   // Initialise();
 }
 
@@ -1173,12 +1186,12 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
 
     CalculateRutherfordAnglePar();
 
-    alphaMax = fRutherfordTheta*1.5;
+    alphaMax = fRutherfordTheta*fCofAlphaMax;
 
     if(alphaMax > pi) alphaMax = pi;
 
 
-    alphaCoulomb = fRutherfordTheta*0.5;
+    alphaCoulomb = fRutherfordTheta*fCofAlphaCoulomb;
 
     // G4cout<<"alphaCoulomb = "<<alphaCoulomb/degree<<"; alphaMax = "<<alphaMax/degree<<G4endl;
 

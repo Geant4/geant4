@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclNuclDiffuseElastic.hh,v 1.20 2010-11-07 12:15:54 grichine Exp $
+// $Id: G4NuclNuclDiffuseElastic.hh,v 1.21 2010-11-09 09:04:29 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -280,13 +280,20 @@ public:
   void SetProfileDelta(G4double pd) {fProfileDelta = pd;};
   void SetProfileAlpha(G4double pa){fProfileAlpha = pa;};
   void SetCofLambda(G4double pa){fCofLambda = pa;};
+
   void SetCofAlpha(G4double pa){fCofAlpha = pa;};
+  void SetCofAlphaMax(G4double pa){fCofAlphaMax = pa;};
+  void SetCofAlphaCoulomb(G4double pa){fCofAlphaCoulomb = pa;};
+
   void SetCofDelta(G4double pa){fCofDelta = pa;};
   void SetCofPhase(G4double pa){fCofPhase = pa;};
   void SetCofFar(G4double pa){fCofFar = pa;};
   void SetEtaRatio(G4double pa){fEtaRatio = pa;};
   void SetMaxL(G4int l){fMaxL = l;};
   void SetNuclearRadiusCof(G4double r){fNuclearRadiusCof = r;};
+
+  G4double GetCofAlphaMax(){return fCofAlphaMax;};
+  G4double GetCofAlphaCoulomb(){return fCofAlphaCoulomb;};
 
 private:
 
@@ -347,6 +354,9 @@ private:
   G4double fCofDelta;
   G4double fCofPhase;
   G4double fCofFar;
+
+  G4double fCofAlphaMax;
+  G4double fCofAlphaCoulomb;
 
   G4int    fMaxL;
   G4double fSumSigma;
