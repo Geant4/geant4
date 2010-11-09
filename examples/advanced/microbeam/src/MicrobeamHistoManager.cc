@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MicrobeamHistoManager.cc,v 1.1 2010-10-07 14:03:11 sincerti Exp $
+// $Id: MicrobeamHistoManager.cc,v 1.2 2010-11-09 23:27:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ MicrobeamHistoManager::MicrobeamHistoManager()
  
   fileName[0] = "microbeam";
   fileType    = "root";
-  fileOption  = "--noErrors export=root uncompress";
+  fileOption  = "";
   ntupl0=0;
   ntupl1=0;
   ntupl2=0;

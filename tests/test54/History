@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-04-13 09:14:30 vnivanch Exp $
+$Id: History,v 1.5 2010-11-09 23:48:20 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-10  M.Asai (test54-V09-03-01)
+- Fix AIDA file option.
 
 13-04-10  V.Ivanchenko (test54-V09-03-00)
 - Removed old obsolete low-energy builders

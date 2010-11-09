@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2010-10-08 10:01:35 sincerti Exp $
+$Id: History,v 1.22 2010-11-09 23:31:59 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.21 2010-10-08 10:01:35 sincerti Exp $
 
                        Package History file
                        --------------------
+
+09 November 2010 - M. Asai - microdosimetry-V09-03-08
+- Fix AIDA file option.
 
 08 October 2010 - S. Incerti - microdosimetry-V09-03-07
 - added H excitation

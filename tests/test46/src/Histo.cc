@@ -60,7 +60,7 @@ Histo::Histo()
   verbose    = 0;
   histName   = "test46";
   histType   = "root";
-  option     = "--noErrors uncompress";
+  option     = "";
   nHisto     = 0;
   defaultAct = 1;
   tupleName  = "tuple9";

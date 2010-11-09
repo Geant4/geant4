@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2010-10-09 16:30:27 sincerti Exp $
+$Id: History,v 1.11 2010-11-09 23:36:31 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.10 2010-10-09 16:30:27 sincerti Exp $
 
                        Package History file
                        --------------------
+
+09 November 2010 - tag nanobeam-V09-03-04 - M. Asai
+- Fix AIDA file option.
 
 09 October 2010 - tag nanobeam-V09-03-03 - S. Incerti
 - corrected removal of ROOT file in Nanobeam.cc

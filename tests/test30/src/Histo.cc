@@ -98,7 +98,7 @@ void Histo::book()
   AIDA::ITreeFactory* tf = af->createTreeFactory();
 
   // Creating a tree mapped to a new hbook file.
-  tree = tf->create(nam,histType,false,true,"--noErrors uncompress");
+  tree = tf->create(nam,histType,false,true,"");
   delete tf;
   if(tree) {
     G4cout << "Tree store  : <" << tree->storeName() << ">" << G4endl;

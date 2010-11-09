@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-03-03  09 November 2010 M.Asai
+- Fix AIDA file option.
+
 test35-V09-03-02  28 June 2010 V.Ivanchenko
 - make backward compatibility between old and new scripts
 

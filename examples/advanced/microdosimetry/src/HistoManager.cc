@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.1 2010-10-06 14:39:41 sincerti Exp $
+// $Id: HistoManager.cc,v 1.2 2010-11-09 23:31:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "microdosimetry";
   fileType    = "root";
-  fileOption  = "--noErrors export=root uncompress";
+  fileOption  = "export=root";
   ntupl0=0;
   
 }

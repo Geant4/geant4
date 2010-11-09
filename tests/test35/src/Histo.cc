@@ -91,7 +91,7 @@ void Histo::book()
   //  G4String nam = histName + "." + histType;
   G4String nam = histName;
 
-  tree = tf->create(nam,histType,false,true,"--noErrors uncompress");
+  tree = tf->create(nam,histType,false,true,"");
   delete tf;
   if(tree) {
     G4cout << "Tree store  : " << tree->storeName() << G4endl;

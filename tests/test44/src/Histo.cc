@@ -60,7 +60,7 @@ Histo::Histo()
   verbose    = 0;
   histName   = "test44";
   histType   = "xml";
-  option     = "--noErrors uncompress";
+  option     = "";
   nHisto     = 0;
   defaultAct = true;
   tupleName  = "tuple";

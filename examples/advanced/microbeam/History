@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.29 2010-10-07 14:03:11 sincerti Exp $
+$Id: History,v 1.30 2010-11-09 23:27:56 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.29 2010-10-07 14:03:11 sincerti Exp $
 
                        Package History file
                        --------------------
+
+09 November 2010 - M. Asai - tag microbeam-V09-03-08
+- Fix AIDA file option.
 
 07 October 2010 - S. Incerti - tag microbeam-V09-03-07
 - Updated for use of AIDA fof histograms.
