@@ -13,16 +13,20 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+10 Nov 2010  Dennis Wright                  (hadr-chips-frag-V09-03-07)
+-----------------------------------------------------------------------
+Previous tag was already used - retag
+
 10 Nov 2010  Dennis Wright                       (hadr-chips-V09-03-07)
 -----------------------------------------------------------------------
 Bring up to geant4-09-03-ref-09 and tag
 
 19-Jun-2010 M.Kosov                             (hadr-chips-V09-03-06)
------------------------------------------------------------------------
+----------------------------------------------------------------------
 Mutual CHIPS tag for the G4-9-4-beta debugging
 
-11-Jun-2010 M.Kosov                           (hadr-chips-frag-V09-03-05)
---------------------------------------------------------------------------
+11-Jun-2010 M.Kosov                         (hadr-chips-frag-V09-03-05)
+-----------------------------------------------------------------------
 Trap and cure for the bug: return to vacuum what appeared from vacuum
 
 1-Apr-2010 M.Kosov                            (hadr-chips-frag-V09-03-04)
