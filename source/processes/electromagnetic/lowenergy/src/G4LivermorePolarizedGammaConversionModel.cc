@@ -131,10 +131,7 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
     
   if(isInitialised) return;
 
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
     
   isInitialised = true;
 }
