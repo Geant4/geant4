@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2010-09-03 16:01:38 gcosmo Exp $
+$Id: History,v 1.15 2010-11-10 23:53:23 akimura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+11 November 2010  Akinori Kimura
+- Replaced G4cerr with G4cout and added the following line before G4cout.
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 
 3rd September 2010  John Allison  (gMocren-V09-03-04)
 - Added missing inclusion of <sstream> header in G4GMocrenFileSceneHandler.cc.

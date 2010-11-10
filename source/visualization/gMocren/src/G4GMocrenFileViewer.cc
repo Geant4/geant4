@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.cc,v 1.3 2009-12-03 11:44:42 akimura Exp $
+// $Id: G4GMocrenFileViewer.cc,v 1.4 2010-11-10 23:53:23 akimura Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,7 @@
 #include <cstring>
 #include <cassert>
 
+#include "G4VisManager.hh"
 #include "G4Scene.hh"
 #include "G4Vector3D.hh"
 #include "G4VisExtent.hh"
@@ -92,7 +93,8 @@ G4GMocrenFileViewer::~G4GMocrenFileViewer ()
 void G4GMocrenFileViewer::SetView () 
 {
   if(GFDEBUG)
-    G4cerr << "***** G4GMocrenFileViewer::SetView(): No effects" << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** G4GMocrenFileViewer::SetView(): No effects" << G4endl;
 
   // Do nothing, since DAWN is running as a different process.
   // SendViewParameters () will do this job instead.
@@ -104,7 +106,8 @@ void
 G4GMocrenFileViewer::ClearView( void )
 {
   if(GFDEBUG)
-    G4cerr << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
 
   //if(kSceneHandler.kGddDest) {
     //kSceneHandler.kGddDest.close();
@@ -120,7 +123,8 @@ G4GMocrenFileViewer::ClearView( void )
 void G4GMocrenFileViewer::DrawView () 
 {
   if(GFDEBUG)
-    G4cerr << "***** G4GMocrenFileViewer::DrawView () " << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** G4GMocrenFileViewer::DrawView () " << G4endl;
 
   //----- 
   kSceneHandler.GFBeginModeling() ;
@@ -139,7 +143,8 @@ void G4GMocrenFileViewer::DrawView ()
 void G4GMocrenFileViewer::ShowView( void )
 {
   if(GFDEBUG)
-    G4cerr << "***** G4GMocrenFileViewer::ShowView () " << G4endl;
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+      G4cout << "***** G4GMocrenFileViewer::ShowView () " << G4endl;
 
   if( kSceneHandler.GFIsInModeling() ) 
     {
