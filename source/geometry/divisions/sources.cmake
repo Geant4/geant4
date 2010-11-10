@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:41:02 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-10 11:27:53 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -40,6 +40,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomdivision
         G4ParameterisationPolyhedra.hh
         G4ParameterisationTrd.hh
         G4ParameterisationTubs.hh
+        G4ReplicatedSlice.hh
         G4VDivisionParameterisation.hh
         G4VDivisionParameterisation.icc
     SOURCES
@@ -52,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomdivision
         G4ParameterisationPolyhedra.cc
         G4ParameterisationTrd.cc
         G4ParameterisationTubs.cc
+        G4ReplicatedSlice.cc
         G4VDivisionParameterisation.cc
     GRANULAR_DEPENDENCIES
         G4csg
