@@ -24,16 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicatedSlice.hh,v 1.1 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4ReplicatedSlice.hh,v 1.2 2010-11-10 09:15:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4ReplicatedSlice
 //
 // Class description:
 //
-// Represents many touchable detector elements differing only in their
-// positioning. The elements' positions are calculated by means of a simple
-// linear formula.
+// G4ReplicatedSlice represents many touchable detector elements differing
+// only in their positioning. The elements' positions are calculated by means
+// of a simple linear formula.
 // 
 // Division may occur along:
 //
@@ -74,61 +74,61 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
   public:  // with description
     
     G4ReplicatedSlice(const G4String& pName,
-                       G4LogicalVolume* pLogical,
-                       G4LogicalVolume* pMotherLogical,
-                 const EAxis pAxis,
-                 const G4int nReplicas,
-                 const G4double width,
-                 const G4double half_gap,
-                 const G4double offset );
+                            G4LogicalVolume* pLogical,
+                            G4LogicalVolume* pMotherLogical,
+                      const EAxis pAxis,
+                      const G4int nReplicas,
+                      const G4double width,
+                      const G4double half_gap,
+                      const G4double offset );
       // Constructor with number of divisions and width
 
     G4ReplicatedSlice(const G4String& pName,
-                       G4LogicalVolume* pLogical,
-                       G4LogicalVolume* pMotherLogical,
-                 const EAxis pAxis,
-                 const G4int nReplicas,
-                 const G4double half_gap,
-                 const G4double offset );
+                            G4LogicalVolume* pLogical,
+                            G4LogicalVolume* pMotherLogical,
+                      const EAxis pAxis,
+                      const G4int nReplicas,
+                      const G4double half_gap,
+                      const G4double offset );
       // Constructor with number of divisions 
 
     G4ReplicatedSlice(const G4String& pName,
-                       G4LogicalVolume* pLogical,
-                       G4LogicalVolume* pMotherLogical,
-                 const EAxis pAxis,
-                 const G4double width,
-                 const G4double half_gap,
-                 const G4double offset );
+                            G4LogicalVolume* pLogical,
+                            G4LogicalVolume* pMotherLogical,
+                      const EAxis pAxis,
+                      const G4double width,
+                      const G4double half_gap,
+                      const G4double offset );
       // Constructor with width
 
   public:  // without description
 
     G4ReplicatedSlice(const G4String& pName,
-                       G4LogicalVolume* pLogical,
-                       G4VPhysicalVolume* pMotherPhysical,
-                 const EAxis pAxis,
-                 const G4int nReplicas,
-                 const G4double width,
-                 const G4double half_gap,
-                 const G4double offset);
+                            G4LogicalVolume* pLogical,
+                            G4VPhysicalVolume* pMotherPhysical,
+                      const EAxis pAxis,
+                      const G4int nReplicas,
+                      const G4double width,
+                      const G4double half_gap,
+                      const G4double offset);
       // Constructor in mother physical volume
 
     G4ReplicatedSlice(const G4String& pName,
-                       G4LogicalVolume* pLogical,
-                       G4VPhysicalVolume* pMotherPhysical,
-                 const EAxis pAxis,
-                 const G4int nReplicas,
-                 const G4double half_gap,
-                 const G4double offset );
+                            G4LogicalVolume* pLogical,
+                            G4VPhysicalVolume* pMotherPhysical,
+                      const EAxis pAxis,
+                      const G4int nReplicas,
+                      const G4double half_gap,
+                      const G4double offset );
       // Constructor with number of divisions 
 
     G4ReplicatedSlice(const G4String& pName,
-                       G4LogicalVolume* pLogical,
-                       G4VPhysicalVolume* pMotherPhysical,
-                 const EAxis pAxis,
-                 const G4double width,
-                 const G4double half_gap,
-                 const G4double offset );
+                            G4LogicalVolume* pLogical,
+                            G4VPhysicalVolume* pMotherPhysical,
+                      const EAxis pAxis,
+                      const G4double width,
+                      const G4double half_gap,
+                      const G4double offset );
       // Constructor with width
 
   public:  // with description
@@ -152,7 +152,7 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
 
     G4bool IsRegularStructure() const; 
     G4int  GetRegularStructureId() const; 
-      // Methods to identify volume that can have revised 'regular' navigation.
+      // Methods to identify volume that can apply 'regular' navigation.
       // Currently divisions do not qualify for this.
 
   private:
@@ -166,19 +166,21 @@ class G4ReplicatedSlice : public G4VPhysicalVolume
                                       G4LogicalVolume* pMotherLogical,
                                 const G4LogicalVolume* pLogical );
 
-    void SetParameterisation( G4LogicalVolume* motherLogical,
-                        const EAxis pAxis,
-                        const G4int nReplicas,
-                        const G4double width,
-                        const G4double half_gap,
-                        const G4double offset, 
-                              DivisionType divType );
+    void SetParameterisation(       G4LogicalVolume* motherLogical,
+                              const EAxis pAxis,
+                              const G4int nReplicas,
+                              const G4double width,
+                              const G4double half_gap,
+                              const G4double offset, 
+                                    DivisionType divType );
+
     void ErrorInAxis( EAxis axis, G4VSolid* solid );
 
   private:
 
     G4ReplicatedSlice(const G4ReplicatedSlice&);
     const G4ReplicatedSlice& operator=(const G4ReplicatedSlice&);
+      // Private copy constructor and assignment operator.
 
   protected:
 

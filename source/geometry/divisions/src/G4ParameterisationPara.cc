@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.cc,v 1.12 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4ParameterisationPara.cc,v 1.13 2010-11-10 09:16:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPara Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
-// 21.04.10 - M.Asai, Add "half_gap"
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationPara.hh"
@@ -162,7 +162,7 @@ ComputeDimensions(G4Para& para, const G4int,
   G4Para* msol = (G4Para*)(fmotherSolid);
 
   //---- Get
-  G4double pDx = fwidth/2. - half_gap;
+  G4double pDx = fwidth/2. - fhgap;
   G4double pDy = msol->GetYHalfLength();
   G4double pDz = msol->GetZHalfLength();
   G4double pAlpha = std::atan(msol->GetTanAlpha());
@@ -265,7 +265,7 @@ ComputeDimensions(G4Para& para, const G4int,
 
   //---- Get
   G4double pDx = msol->GetXHalfLength();
-  G4double pDy = fwidth/2. - half_gap;
+  G4double pDy = fwidth/2. - fhgap;
   G4double pDz = msol->GetZHalfLength();
   G4double pAlpha = std::atan(msol->GetTanAlpha());
   G4double pTheta = msol->GetSymAxis().theta();
@@ -366,7 +366,7 @@ ComputeDimensions(G4Para& para, const G4int,
   //---- Get
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = msol->GetYHalfLength();
-  G4double pDz = fwidth/2. - half_gap;
+  G4double pDz = fwidth/2. - fhgap;
   G4double pAlpha = std::atan(msol->GetTanAlpha());
   G4double pTheta = msol->GetSymAxis().theta();
   G4double pPhi = msol->GetSymAxis().phi();

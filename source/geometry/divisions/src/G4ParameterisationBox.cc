@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.cc,v 1.11 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4ParameterisationBox.cc,v 1.12 2010-11-10 09:15:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationBox Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
-// 21.04.10 - M.Asai, Add "half_gap"
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationBox.hh"
@@ -61,8 +61,6 @@ G4VParameterisationBox( EAxis axis, G4int nDiv, G4double width,
     fmotherSolid = msol;
     fReflectedSolid = true;
   }    
-
-  half_gap = 0.;
 }
 
 //--------------------------------------------------------------------------
@@ -154,7 +152,7 @@ ComputeDimensions( G4Box& box, const G4int,
 {
   G4Box* msol = (G4Box*)(fmotherSolid);
 
-  G4double pDx = fwidth/2. - half_gap;
+  G4double pDx = fwidth/2. - fhgap;
   G4double pDy = msol->GetYHalfLength();
   G4double pDz = msol->GetZHalfLength();
 
@@ -256,7 +254,7 @@ ComputeDimensions( G4Box& box, const G4int,
   G4Box* msol = (G4Box*)(fmotherSolid);
 
   G4double pDx = msol->GetXHalfLength();
-  G4double pDy = fwidth/2. - half_gap;
+  G4double pDy = fwidth/2. - fhgap;
   G4double pDz = msol->GetZHalfLength();
 
   box.SetXHalfLength( pDx );
@@ -358,7 +356,7 @@ ComputeDimensions( G4Box& box, const G4int,
 
   G4double pDx = msol->GetXHalfLength();
   G4double pDy = msol->GetYHalfLength();
-  G4double pDz = fwidth/2. - half_gap;
+  G4double pDz = fwidth/2. - fhgap;
 
   box.SetXHalfLength( pDx );
   box.SetYHalfLength( pDy );

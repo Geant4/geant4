@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicatedSlice.cc,v 1.1 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4ReplicatedSlice.cc,v 1.2 2010-11-10 09:16:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -43,61 +43,57 @@
 
 //--------------------------------------------------------------------------
 G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
-                                 G4LogicalVolume* pLogical,
-                                 G4LogicalVolume* pMotherLogical,
-                           const EAxis pAxis,
-                           const G4int nDivs,
-                           const G4double width,
-                           const G4double half_gap,
-                           const G4double offset )
-:G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
- fcopyNo(-1)
+                                           G4LogicalVolume* pLogical,
+                                           G4LogicalVolume* pMotherLogical,
+                                     const EAxis pAxis,
+                                     const G4int nDivs,
+                                     const G4double width,
+                                     const G4double half_gap,
+                                     const G4double offset )
+  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
 {
   CheckAndSetParameters(pAxis, nDivs, width, half_gap, offset,
-                         DivNDIVandWIDTH, pMotherLogical, pLogical);
+                        DivNDIVandWIDTH, pMotherLogical, pLogical);
 }
 
 //--------------------------------------------------------------------------
 G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
-                                 G4LogicalVolume* pLogical,
-                                 G4LogicalVolume* pMotherLogical,
-                           const EAxis pAxis,
-                           const G4int nDivs,
-                           const G4double half_gap,
-                           const G4double offset )
-:G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
- fcopyNo(-1)
+                                           G4LogicalVolume* pLogical,
+                                           G4LogicalVolume* pMotherLogical,
+                                     const EAxis pAxis,
+                                     const G4int nDivs,
+                                     const G4double half_gap,
+                                     const G4double offset )
+  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
 {
   CheckAndSetParameters(pAxis, nDivs, 0., half_gap, offset,
-                         DivNDIV, pMotherLogical, pLogical);
+                        DivNDIV, pMotherLogical, pLogical);
 }
 
 //--------------------------------------------------------------------------
 G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
-                                 G4LogicalVolume* pLogical,
-                                 G4LogicalVolume* pMotherLogical,
-                           const EAxis pAxis,
-                           const G4double width,
-                           const G4double half_gap,
-                           const G4double offset )
-:G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
- fcopyNo(-1)
+                                           G4LogicalVolume* pLogical,
+                                           G4LogicalVolume* pMotherLogical,
+                                     const EAxis pAxis,
+                                     const G4double width,
+                                     const G4double half_gap,
+                                     const G4double offset )
+  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
 {
   CheckAndSetParameters(pAxis, 0, width, half_gap, offset,
-                         DivWIDTH, pMotherLogical, pLogical);
+                        DivWIDTH, pMotherLogical, pLogical);
 }
 
 //--------------------------------------------------------------------------
 G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
-                                 G4LogicalVolume* pLogical,
-                                 G4VPhysicalVolume* pMotherPhysical,
-                           const EAxis pAxis,
-                           const G4int nDivs,
-                           const G4double width,
-                           const G4double half_gap,
-                           const G4double offset )
-:G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
- fcopyNo(-1)
+                                           G4LogicalVolume* pLogical,
+                                           G4VPhysicalVolume* pMotherPhysical,
+                                     const EAxis pAxis,
+                                     const G4int nDivs,
+                                     const G4double width,
+                                     const G4double half_gap,
+                                     const G4double offset )
+  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
 {
   CheckAndSetParameters(pAxis, nDivs, width, half_gap, offset,
       DivNDIVandWIDTH, pMotherPhysical->GetLogicalVolume(), pLogical);
@@ -105,14 +101,13 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
 
 //--------------------------------------------------------------------------
 G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
-                                 G4LogicalVolume* pLogical,
-                                 G4VPhysicalVolume* pMotherPhysical,
-                           const EAxis pAxis,
-                           const G4int nDivs,
-                           const G4double half_gap,
-                           const G4double offset )
-:G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
- fcopyNo(-1)
+                                           G4LogicalVolume* pLogical,
+                                           G4VPhysicalVolume* pMotherPhysical,
+                                     const EAxis pAxis,
+                                     const G4int nDivs,
+                                     const G4double half_gap,
+                                     const G4double offset )
+  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
 {
   CheckAndSetParameters(pAxis, nDivs, 0., half_gap, offset,
       DivNDIV, pMotherPhysical->GetLogicalVolume(), pLogical);
@@ -120,14 +115,13 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
 
 //--------------------------------------------------------------------------
 G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
-                                 G4LogicalVolume* pLogical,
-                                 G4VPhysicalVolume* pMotherPhysical,
-                           const EAxis pAxis,
-                           const G4double width,
-                           const G4double half_gap,
-                           const G4double offset )
-:G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
- fcopyNo(-1)
+                                           G4LogicalVolume* pLogical,
+                                           G4VPhysicalVolume* pMotherPhysical,
+                                     const EAxis pAxis,
+                                     const G4double width,
+                                     const G4double half_gap,
+                                     const G4double offset )
+  : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fcopyNo(-1)
 {
   CheckAndSetParameters(pAxis, 0, width, half_gap, offset,
       DivWIDTH, pMotherPhysical->GetLogicalVolume(), pLogical);
@@ -136,25 +130,25 @@ G4ReplicatedSlice::G4ReplicatedSlice(const G4String& pName,
 //--------------------------------------------------------------------------
 void
 G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
-                                     const G4int nDivs,
-                                     const G4double width,
-                                     const G4double half_gap,
-                                     const G4double offset, 
-                                           DivisionType divType,
-                                           G4LogicalVolume* pMotherLogical,
-                                     const G4LogicalVolume* pLogical )
+                                          const G4int nDivs,
+                                          const G4double width,
+                                          const G4double half_gap,
+                                          const G4double offset, 
+                                                DivisionType divType,
+                                                G4LogicalVolume* pMotherLogical,
+                                          const G4LogicalVolume* pLogical )
 {
   if(!pMotherLogical)
   {
-    G4String message_1 =
-      "NULL pointer specified as mother! Volume: " + GetName();
+    G4String message_1 = "NULL pointer specified as mother! Volume: "
+                       + GetName();
     G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "InvalidSetup",
                 FatalException, message_1);
   }
   if(pLogical == pMotherLogical)
   {
-    G4String message_2 =
-      "Cannot place a volume inside itself! Volume: " + GetName();
+    G4String message_2 = "Cannot place a volume inside itself! Volume: "
+                       + GetName();
     G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "InvalidSetup",
                 FatalException, message_2);
   }
@@ -167,9 +161,9 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   G4String dsolType = pLogical->GetSolid()->GetEntityType();
   if( msolType != dsolType && ( msolType != "G4Trd" || dsolType != "G4Trap" ) )
   {
-    G4String message =
-      "Incorrect solid type for division of volume " + GetName()
-    + "    It is: " + msolType + ", while it should be: " + dsolType;
+    G4String message = "Incorrect solid type for division of volume "
+                     + GetName() + "    It is: " + msolType
+                     + ", while it should be: " + dsolType;
     G4Exception("G4ReplicatedSlice::CheckAndSetParameters()",
                 "IllegalConstruct", FatalException, message );
   }
@@ -192,7 +186,6 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
     G4Exception("G4ReplicatedSlice::G4ReplicatedSlice()", "IllegalConstruct",
                 FatalException, "Illegal number of replicas!");
   }
-
   if( divType != DivNDIV)
   {
     fwidth = fparam->GetWidth();
@@ -246,7 +239,6 @@ G4ReplicatedSlice::CheckAndSetParameters( const EAxis pAxis,
   //
   G4RotationMatrix *pRMat = new G4RotationMatrix();
   SetRotation(pRMat);
-  
 }
 
 //--------------------------------------------------------------------------
@@ -299,10 +291,10 @@ G4VPVParameterisation* G4ReplicatedSlice::GetParameterisation() const
 
 //--------------------------------------------------------------------------
 void G4ReplicatedSlice::GetReplicationData(EAxis& axis,
-                                      G4int& nDivs,
-                                      G4double& width,
-                                      G4double& offset,
-                                      G4bool& consuming ) const
+                                           G4int& nDivs,
+                                           G4double& width,
+                                           G4double& offset,
+                                           G4bool& consuming ) const
 {
   axis=faxis;
   nDivs=fnReplicas;
@@ -314,12 +306,12 @@ void G4ReplicatedSlice::GetReplicationData(EAxis& axis,
 
 //--------------------------------------------------------------------------
 void G4ReplicatedSlice::SetParameterisation( G4LogicalVolume* motherLogical,
-                                  const EAxis axis,
-                                  const G4int nDivs,
-                                  const G4double width,
-                                  const G4double half_gap,
-                                  const G4double offset,
-                                        DivisionType divType )
+                                       const EAxis axis,
+                                       const G4int nDivs,
+                                       const G4double width,
+                                       const G4double half_gap,
+                                       const G4double offset,
+                                             DivisionType divType )
 {
   G4VSolid* mSolid = motherLogical->GetSolid();
   G4String mSolidType = mSolid->GetEntityType();
@@ -529,6 +521,7 @@ void G4ReplicatedSlice::ErrorInAxis( EAxis axis, G4VSolid* solid )
   G4Exception("G4ReplicatedSlice::ErrorInAxis()", "IllegalConstruct",
               FatalException, error);
 }
+
 // The next methods are for specialised repeated volumes 
 //     (replicas, parameterised vol.) which are completely regular.
 // Currently this is not applicable to divisions  ( J.A. Nov 2005 )
@@ -547,9 +540,3 @@ G4int G4ReplicatedSlice::GetRegularStructureId() const
 {
   return 0;  
 }           
-// This is for specialised repeated volumes (replicas, parameterised vol.)
-
-G4ReplicatedSlice::G4ReplicatedSlice(const G4ReplicatedSlice&)
-:G4VPhysicalVolume(0,G4ThreeVector(),G4String(),0,0) {;}
-const G4ReplicatedSlice& G4ReplicatedSlice::operator=(const G4ReplicatedSlice&) { return *this; }
-

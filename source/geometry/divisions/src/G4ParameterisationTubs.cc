@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.9 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4ParameterisationTubs.cc,v 1.10 2010-11-10 09:16:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTubs Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
-// 21.04.10 - M.Asai, Add "half_gap"
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationTubs.hh"
@@ -156,8 +156,8 @@ ComputeDimensions( G4Tubs& tubs, const G4int copyNo,
 {
   G4Tubs* msol = (G4Tubs*)(fmotherSolid);
 
-  G4double pRMin = msol->GetInnerRadius() + foffset + fwidth * copyNo + half_gap;
-  G4double pRMax = msol->GetInnerRadius() + foffset + fwidth * (copyNo+1) - half_gap;
+  G4double pRMin = msol->GetInnerRadius() + foffset + fwidth * copyNo + fhgap;
+  G4double pRMax = msol->GetInnerRadius() + foffset + fwidth * (copyNo+1) - fhgap;
   G4double pDz = msol->GetZHalfLength();
   //- already rotated  G4double pSR = foffset + copyNo*fwidth;
   G4double pSPhi = msol->GetStartPhiAngle();
@@ -269,8 +269,8 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   G4double pRMax = msol->GetOuterRadius();
   G4double pDz = msol->GetZHalfLength();
   //----- already rotated in 'ComputeTransformation'
-  G4double pSPhi = msol->GetStartPhiAngle() + half_gap;
-  G4double pDPhi = fwidth - 2.*half_gap;
+  G4double pSPhi = msol->GetStartPhiAngle() + fhgap;
+  G4double pDPhi = fwidth - 2.*fhgap;
 
   tubs.SetInnerRadius( pRMin );
   tubs.SetOuterRadius( pRMax );
@@ -379,7 +379,7 @@ ComputeDimensions( G4Tubs& tubs, const G4int,
   G4double pRMin = msol->GetInnerRadius();
   G4double pRMax = msol->GetOuterRadius();
   //  G4double pDz = msol->GetZHalfLength() / GetNoDiv();
-  G4double pDz = fwidth/2. - half_gap;
+  G4double pDz = fwidth/2. - fhgap;
   G4double pSPhi = msol->GetStartPhiAngle();
   G4double pDPhi = msol->GetDeltaPhiAngle();
 

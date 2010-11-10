@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.18 2010-07-02 10:52:18 gcosmo Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.19 2010-11-10 09:16:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
-// 21.04.10 - M.Asai, Add "half_gap"
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4ParameterisationTrd.hh"
@@ -185,7 +185,7 @@ ComputeDimensions( G4Trd& trd, const G4int, const G4VPhysicalVolume* ) const
   G4double pDy1 = msol->GetYHalfLength1();
   G4double pDy2 = msol->GetYHalfLength2();
   G4double pDz = msol->GetZHalfLength();
-  G4double pDx = fwidth/2. - half_gap;
+  G4double pDx = fwidth/2. - fhgap;
   
   trd.SetAllParameters ( pDx, pDx, pDy1, pDy2, pDz );
 
@@ -236,8 +236,8 @@ ComputeDimensions( G4Trap& trap, const G4int copyNo, const G4VPhysicalVolume* ) 
 			  pDx2,
 			  alp,
 			  pDy2,
-			  pDx1 - half_gap,
-			  pDx2 - half_gap * pDx2/pDx1,
+			  pDx1 - fhgap,
+			  pDx2 - fhgap * pDx2/pDx1,
 			  alp);
 
 #ifdef G4DIVDEBUG
@@ -373,7 +373,7 @@ ComputeDimensions(G4Trd& trd, const G4int, const G4VPhysicalVolume*) const
   G4double pDx1 = msol->GetXHalfLength1();
   G4double pDx2 = msol->GetXHalfLength2();
   G4double pDz = msol->GetZHalfLength();
-  G4double pDy = fwidth/2. - half_gap;
+  G4double pDy = fwidth/2. - fhgap;
  
   trd.SetAllParameters ( pDx1, pDx2, pDy, pDy, pDz );
 
@@ -504,13 +504,13 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   G4double DDx = (msol->GetXHalfLength2() - msol->GetXHalfLength1() );
   G4double pDy1 = msol->GetYHalfLength1();
   G4double DDy = (msol->GetYHalfLength2() - msol->GetYHalfLength1() );
-  G4double pDz = fwidth/2. - half_gap;
+  G4double pDz = fwidth/2. - fhgap;
   G4double zLength = 2*msol->GetZHalfLength();
  
-  trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth+half_gap)/zLength,
-                        pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth-half_gap)/zLength, 
-                        pDy1+DDy*(OffsetZ()+copyNo*fwidth+half_gap)/zLength,
-                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth-half_gap)/zLength, pDz );
+  trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth+fhgap)/zLength,
+                        pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength, 
+                        pDy1+DDy*(OffsetZ()+copyNo*fwidth+fhgap)/zLength,
+                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth-fhgap)/zLength, pDz );
 
 #ifdef G4DIVDEBUG
   if( verbose >= 1 )

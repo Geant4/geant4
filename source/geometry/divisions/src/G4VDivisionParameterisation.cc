@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.15 2010-04-22 00:40:46 asaim Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.16 2010-11-10 09:16:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
 //
 // 26.05.03 - P.Arce, Initial version
 // 08.04.04 - I.Hrivnacova, Implemented reflection
-// 21.04.10 - M.Asai, Add "half_gap"
+// 21.04.10 - M.Asai, Added gaps
 // --------------------------------------------------------------------
 
 #include "G4VDivisionParameterisation.hh" 
@@ -50,7 +50,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
                              DivisionType divType, G4VSolid* motherSolid )
   : faxis(axis), fnDiv( nDiv), fwidth(step), foffset(offset),
     fDivisionType(divType), fmotherSolid( motherSolid ), fReflectedSolid(false),
-    fDeleteSolid(false) 
+    fDeleteSolid(false), theVoluFirstCopyNo(1), fhgap(0.)
 {
 #ifdef G4DIVDEBUG
   if (verbose >= 1)
@@ -61,11 +61,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
            << " step " << fwidth << " = " << step << G4endl;
   }
 #endif
-
-  theVoluFirstCopyNo = 1;
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-
-  half_gap = 0.;
 }
 
 //--------------------------------------------------------------------------
