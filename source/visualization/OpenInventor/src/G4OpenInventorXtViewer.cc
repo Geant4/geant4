@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.25 2009-09-18 12:48:43 lgarnier Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.26 2010-11-10 17:53:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -64,6 +64,7 @@
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
+#include "G4VisManager.hh"
 
 G4OpenInventorXtViewer::G4OpenInventorXtViewer(
  G4OpenInventorSceneHandler& sceneHandler
@@ -74,7 +75,8 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
 ,fHelpForm(0)
 ,fHelpText(0)
 {
-  G4cout << "Window name: " << fName << G4endl;
+  if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
+    G4cout << "Window name: " << fName << G4endl;
 }
 
 
