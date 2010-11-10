@@ -748,7 +748,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   histpointCmd1 = new G4UIcmdWith3Vector("/gps/hist/point",this);
   histpointCmd1->SetGuidance("Allows user to define a histogram");
   histpointCmd1->SetGuidance("Enter: Ehi Weight");
-  histpointCmd1->SetParameterName("Ehi","Weight","Junk",false,false);
+  histpointCmd1->SetParameterName("Ehi","Weight","Junk",true,true);
   histpointCmd1->SetRange("Ehi >= 0. && Weight >= 0.");
 
   histfileCmd1 = new G4UIcmdWithAString("/gps/hist/file",this);
@@ -1537,7 +1537,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   else if(command == histfileCmd1)
     {
       histtype = "arb";
-      fParticleGun->GetEneDist()->ArbEnergyHisto(newValues);
+      fParticleGun->GetEneDist()->ArbEnergyHistoFile(newValues);
     }
   else if(command == histpointCmd1)
     {

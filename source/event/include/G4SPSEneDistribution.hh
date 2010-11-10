@@ -181,7 +181,7 @@ public:
 	void SetInterCept(G4double);
 	void UserEnergyHisto(G4ThreeVector);
 	void ArbEnergyHisto(G4ThreeVector);
-	void ArbEnergyHisto(G4String);
+	void ArbEnergyHistoFile(G4String);
 	void EpnEnergyHisto(G4ThreeVector);
 
 	void InputEnergySpectra(G4bool);
@@ -287,7 +287,8 @@ private:
 	G4double alpha, Ezero, Temp; // alpha (pow), E0 (exp) and Temp (bbody,brem)
 	G4double biasalpha; // biased power index
 	G4double grad, cept; // gradient and intercept for linear spectra
-	G4bool Biased; // true - biased to power-law
+        G4double prob_norm; // normalisation factor use in calculate the probability 
+        G4bool Biased; // true - biased to power-law
 	G4bool EnergySpec; // true - energy spectra, false - momentum spectra
 	G4bool DiffSpec; // true - differential spec, false integral spec
 	G4bool ApplyRig; // false no rigidity cutoff, true then apply one
@@ -316,8 +317,8 @@ private:
 
 	G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
 
-	G4DataInterpolation *SplineInt; // holds Spline stuff
-	G4DataInterpolation *ArbEInt; // for Arb energy probability
+	G4DataInterpolation *SplineInt[1024]; // holds Spline stuff required for sampling
+	G4DataInterpolation *Splinetemp; // holds a temp Spline used for calculating area
 
 };
 

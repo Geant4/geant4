@@ -1,4 +1,4 @@
-$Id: History,v 1.139 2010-11-08 23:22:57 asaim Exp $
+$Id: History,v 1.140 2010-11-10 09:44:50 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,12 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Novemver 10th, 2010, F.Lei (event-V09-03-08)
+- User can now specify arbitrary energy distribution by supplying the data points
+  in a 2-column (energy<in MeV> and flux) ASCII file, via the UI command
+   /gps/hist/file your_file_name
+- Further update of the auto energy biasing implementation
+- Bug fix (new implementation) in the Spline interpolation implementation
+- Bug fix in the Logarithm interpolation implementation (alpha = -1 case).   
 
 November 8th, 2010, M.Asai (event-V09-03-07)
 - Setting touchable history of the origin to G4Track.
 
 November 2nd, 2010, F.Lei 
-- Implemented concrete destructor for G4SPSEneDistribution (bug #1141)
+- Implemented concrete destructor for G4SPSEneDistribution (bug #1149)
 - Added automatic energy biasing scheme. Users now can bias the energy distribution
   sampling to a given power-law distribution (index alpha) via the UI command  
     /gps/ene/biasAlpha alpha

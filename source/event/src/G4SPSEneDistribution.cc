@@ -60,7 +60,8 @@ G4SPSEneDistribution::G4SPSEneDistribution() {
 	Emin = 0.;
 	Emax = 1.e30;
 	alpha = 0.;
-	biasedalpha = 0.;
+	biasalpha = 0.;
+        prob_norm = 1.0;
 	Ezero = 0.;
 	SE = 0.;
 	Temp = 0.;
@@ -117,7 +118,7 @@ void G4SPSEneDistribution::SetAlpha(G4double alp) {
 	alpha = alp;
 }
 
-void G4SPSEneDistribution::SetBiasedAlpha(G4double alp) {
+void G4SPSEneDistribution::SetBiasAlpha(G4double alp) {
 	biasalpha = alp;
 	Biased = true;
 }
@@ -161,7 +162,7 @@ void G4SPSEneDistribution::ArbEnergyHisto(G4ThreeVector input) {
 	ArbEnergyH.InsertValues(ehi, val);
 }
 
-void G4SPSEneDistribution::ArbEnergyHisto(G4String filename) {
+void G4SPSEneDistribution::ArbEnergyHistoFile(G4String filename) {
 	std::ifstream infile(filename, std::ios::in);
 	if (!infile)
 		G4Exception("Unable to open the histo ASCII file");
@@ -290,8 +291,8 @@ void G4SPSEneDistribution::ArbInterpolate(G4String IType) {
 	if (EnergyDisType != "Arb")
 		G4cout << "Error: this is for arbitrary distributions" << G4endl;
 	IntType = IType;
-	ArbEmax = Emax;
-	ArbEmin = Emin;
+	ArbEmax = ArbEnergyH.GetMaxLowEdgeEnergy();
+	ArbEmin = ArbEnergyH.GetMinLowEdgeEnergy();
 
 	// Now interpolate points
 	if (IntType == "Lin")
@@ -392,8 +393,8 @@ void G4SPSEneDistribution::LinearInterpolation() {
 		i++;
 	}
 
-	// now the ArbEInt
-	ArbEInt = new G4DataInterpolation(Arb_x, Arb_y, maxi, 1e30, 1e30);
+	// now scale the ArbEnergyH, needed by Probability()
+	ArbEnergyH.ScaleVector(1., 1./sum);
 
 	if (verbosityLevel >= 1) {
 		G4cout << "Leaving LinearInterpolation" << G4endl;
@@ -484,8 +485,12 @@ void G4SPSEneDistribution::LogInterpolation() {
 				/ (std::log10(Arb_x[i]) - std::log10(Arb_x[i - 1]));
 		Arb_Const[i] = Arb_y[i] / (std::pow(Arb_x[i], Arb_alpha[i]));
 		alp = Arb_alpha[i] + 1;
-		Area_seg[i] = (Arb_Const[i] / alp) * (std::pow(Arb_x[i], alp)
+		if (alp == 0.) {
+		  Area_seg[i] =	Arb_Const[i] * (std::log(Arb_x[i]) - std::log(Arb_x[i - 1])); 
+		} else {
+		  Area_seg[i] = (Arb_Const[i] / alp) * (std::pow(Arb_x[i], alp)
 				- std::pow(Arb_x[i - 1], alp));
+		}
 		sum = sum + Area_seg[i];
 		Arb_Cum_Area[i] = Arb_Cum_Area[i - 1] + Area_seg[i];
 		if (verbosityLevel == 2)
@@ -500,8 +505,8 @@ void G4SPSEneDistribution::LogInterpolation() {
 		i++;
 	}
 
-	// now the ArbEInt
-	ArbEInt = new G4DataInterpolation(Arb_x, Arb_y, maxi, 1e30, 1e30);
+	// now scale the ArbEnergyH, needed by Probability()
+	ArbEnergyH.ScaleVector(1., 1./sum);
 
 	if (verbosityLevel >= 1)
 		G4cout << "Leaving LogInterpolation " << G4endl;
@@ -587,8 +592,8 @@ void G4SPSEneDistribution::ExpInterpolation() {
 		i++;
 	}
 
-	// now the ArbEInt
-	ArbEInt = new G4DataInterpolation(Arb_x, Arb_y, maxi, 1e30, 1e30);
+	// now scale the ArbEnergyH, needed by Probability()
+	ArbEnergyH.ScaleVector(1., 1./sum);
 
 	if (verbosityLevel >= 1)
 		G4cout << "Leaving ExpInterpolation " << G4endl;
@@ -598,8 +603,13 @@ void G4SPSEneDistribution::SplineInterpolation() {
 	// Interpolation using Splines.
 	// Create Normalised arrays, make x 0->1 and y hold
 	// the function (Energy)
-	G4double Arb_x[1024], Arb_y[1024];
+        // 
+        // Current method based on the above will not work in all cases. 
+        // new method is implemented below.
+  
+	G4double sum, Arb_x[1024], Arb_y[1024], Arb_Cum_Area[1024];
 	G4int i, count;
+
 	G4int maxi = ArbEnergyH.GetVectorLength();
 	for (i = 0; i < maxi; i++) {
 		Arb_x[i] = ArbEnergyH.GetLowEdgeEnergy(size_t(i));
@@ -637,38 +647,49 @@ void G4SPSEneDistribution::SplineInterpolation() {
 			}
 		}
 	}
+
 	//
-	for (i = 1; i < maxi; i++)
-		Arb_y[i] += Arb_y[i - 1];
+	i = 1;
+	Arb_Cum_Area[0] = 0.;
+	sum = 0.;
+	Splinetemp = new G4DataInterpolation(Arb_x, Arb_y, maxi, 0., 0.);
+	G4double ei[101],prob[101];
+	while (i < maxi) {
+	  // 100 step per segment for the integration of area
+	  G4double de = (Arb_x[i] - Arb_x[i - 1])/100.;
+	  G4double area = 0.;
 
-	for (i = 0; i < maxi; i++)
-		Arb_y[i] /= Arb_y[maxi - 1];
-	// now Arb_y is accumulated normalised probabilities
-	/*  for(i=0; i<maxi;i++) {
-	 if(verbosityLevel >1)
-	 G4cout << i <<" "<< Arb_x[i] << " " << Arb_y[i] << G4endl;
-	 IPDFArbEnergyH.InsertValues(Arb_x[i], Arb_y[i]);
-	 }
-	 Emax = IPDFArbEnergyH.GetLowEdgeEnergy(IPDFArbEnergyH.GetVectorLength()-1);
-	 Emin = IPDFArbEnergyH.GetLowEdgeEnergy(0);
-	 */
-	// Should now have normalised cumulative probabilities in Arb_y
-	// and energy values in Arb_x.
-	// maxi = maxi + 1;
-	// Put y into x and x into y. The spline interpolation will then
-	// go through x-axis to find where to interpolate (cum probability)
-	// then generate a y (which will now be energy).
-	SplineInt = new G4DataInterpolation(Arb_y, Arb_x, maxi, 1e30, 1e30);
+	  for (count = 0; count < 101; count++) {
+	    ei[count] = Arb_x[i - 1] + de*count ;
+	    prob[count] =  Splinetemp->CubicSplineInterpolation(ei[count]);
+	    if (prob[count] < 0.) { 
+	      G4cout <<   "Warning: G4DataInterpolation returns value < 0  " << prob[count] <<" "<<ei[count]<< G4endl;
+	      G4Exception("         Please use an alternative method, e.g. Lin, for interpolation");
+	    }
+	    area += prob[count]*de;
+	  }
+	  Arb_Cum_Area[i] = Arb_Cum_Area[i - 1] + area;
+	  sum += area; 
 
-	// now the ArbEInt
-	ArbEInt = new G4DataInterpolation(Arb_x, Arb_y, maxi, 1e30, 1e30);
+	  prob[0] = prob[0]/(area/de);
+	  for (count = 1; count < 100; count++)
+	    prob[count] = prob[count-1] + prob[count]/(area/de);
 
-	if (verbosityLevel > 1) {
-		G4cout << SplineInt << G4endl;
-		G4cout << SplineInt->LocateArgument(1.0) << G4endl;
+	  SplineInt[i] = new G4DataInterpolation(prob, ei, 101, 0., 0.);
+	  // note i start from 1!
+	  i++;
 	}
+	i = 0;
+	while (i < maxi) {
+		Arb_Cum_Area[i] = Arb_Cum_Area[i] / sum; // normalisation
+		IPDFArbEnergyH.InsertValues(Arb_x[i], Arb_Cum_Area[i]);
+		i++;
+	}
+	// now scale the ArbEnergyH, needed by Probability()
+	ArbEnergyH.ScaleVector(1., 1./sum);
+
 	if (verbosityLevel > 0)
-		G4cout << "Leaving SplineInterpolation " << G4endl;
+	  G4cout << "Leaving SplineInterpolation " << G4endl;
 }
 
 void G4SPSEneDistribution::GenerateMonoEnergetic() {
@@ -757,23 +778,33 @@ void G4SPSEneDistribution::GenerateBiasPowEnergies() {
 	// Method to generate particle energies distributed as
 	// in biased power-law and calculate its weight
 
-	G4double rndm;
-	G4double emina, emaxa;
+        G4double rndm;
+	G4double emina, emaxa, emin, emax;
 
-	emina = std::pow(Emin, alpha + 1);
-	emaxa = std::pow(Emax, alpha + 1);
+	G4double normal = 1. ;
+
+	emin = Emin;
+	emax = Emax;
+	//	if (EnergyDisType == "Arb") { 
+	//  emin = ArbEmin;
+	//  emax = ArbEmax;
+	//}
 
 	rndm = eneRndm->GenRandEnergy();
 
 	if (biasalpha != -1.) {
+	        emina = std::pow(emin, biasalpha + 1);
+	        emaxa = std::pow(emax, biasalpha + 1);
 		particle_energy = ((rndm * (emaxa - emina)) + emina);
 		particle_energy = std::pow(particle_energy, (1. / (biasalpha + 1.)));
+		normal = 1./(1+biasalpha) * (emaxa - emina);
 	} else {
-		particle_energy = (std::log(Emin) + rndm * (std::log(Emax) - std::log(
-				Emin)));
+		particle_energy = (std::log(emin) + rndm * (std::log(emax) - std::log(
+				emin)));
 		particle_energy = std::exp(particle_energy);
+		normal = std::log(emax) - std::log(emin) ;
 	}
-	weight = GetProbability(particle_energy) / std::pow(particle_energy);
+	weight = GetProbability(particle_energy) / (std::pow(particle_energy,biasalpha)/normal);
 
 	if (verbosityLevel >= 1)
 		G4cout << "Energy is " << particle_energy << G4endl;
@@ -1009,56 +1040,52 @@ void G4SPSEneDistribution::GenArbPointEnergies() {
 		G4cout << "In GenArbPointEnergies" << G4endl;
 	G4double rndm;
 	rndm = eneRndm->GenRandEnergy();
-	if (IntType != "Spline") {
-		//      IPDFArbEnergyH.DumpValues();
-		// Find the Bin
-		// have x, y, no of points, and cumulative area distribution
-		G4int nabove, nbelow = 0, middle;
-		nabove = IPDFArbEnergyH.GetVectorLength();
-		//      G4cout << nabove << G4endl;
-		// Binary search to find bin that rndm is in
-		while (nabove - nbelow > 1) {
-			middle = (nabove + nbelow) / 2;
-			if (rndm == IPDFArbEnergyH(size_t(middle)))
-				break;
-			if (rndm < IPDFArbEnergyH(size_t(middle)))
-				nabove = middle;
-			else
-				nbelow = middle;
-		}
-		if (IntType == "Lin") {
-			Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-			Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-			grad = Arb_grad[nbelow + 1];
-			cept = Arb_cept[nbelow + 1];
-			//	  G4cout << rndm << " " << Emax << " " << Emin << " " << grad << " " << cept << G4endl;
-			GenerateLinearEnergies(true);
-		} else if (IntType == "Log") {
-			Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-			Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-			alpha = Arb_alpha[nbelow + 1];
-			//	  G4cout << rndm << " " << Emax << " " << Emin << " " << alpha << G4endl;
-			GeneratePowEnergies(true);
-		} else if (IntType == "Exp") {
-			Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-			Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-			Ezero = Arb_ezero[nbelow + 1];
-			//	  G4cout << rndm << " " << Emax << " " << Emin << " " << Ezero << G4endl;
-			GenerateExpEnergies(true);
-		}
+	//      IPDFArbEnergyH.DumpValues();
+	// Find the Bin
+	// have x, y, no of points, and cumulative area distribution
+	G4int nabove, nbelow = 0, middle;
+	nabove = IPDFArbEnergyH.GetVectorLength();
+	//      G4cout << nabove << G4endl;
+	// Binary search to find bin that rndm is in
+	while (nabove - nbelow > 1) {
+	  middle = (nabove + nbelow) / 2;
+	  if (rndm == IPDFArbEnergyH(size_t(middle)))
+	    break;
+	  if (rndm < IPDFArbEnergyH(size_t(middle)))
+	    nabove = middle;
+	  else
+	    nbelow = middle;
+	}
+	if (IntType == "Lin") {
+	  Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+	  grad = Arb_grad[nbelow + 1];
+	  cept = Arb_cept[nbelow + 1];
+	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << grad << " " << cept << G4endl;
+	  GenerateLinearEnergies(true);
+	} else if (IntType == "Log") {
+	  Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+	  alpha = Arb_alpha[nbelow + 1];
+	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << alpha << G4endl;
+	  GeneratePowEnergies(true);
+	} else if (IntType == "Exp") {
+	  Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+	  Ezero = Arb_ezero[nbelow + 1];
+	  //	  G4cout << rndm << " " << Emax << " " << Emin << " " << Ezero << G4endl;
+	  GenerateExpEnergies(true);
 	} else if (IntType == "Spline") {
-		if (verbosityLevel > 1)
-			G4cout << "IntType = Spline " << rndm << G4endl;
-		// in SplineInterpolation created SplineInt
-		// Now generate a random number put it into CubicSplineInterpolation
-		// and you should get out an energy!?!
-		particle_energy = -1e100;
-		while (particle_energy < Emin || particle_energy > Emax) {
-			particle_energy = SplineInt->CubicSplineInterpolation(rndm);
-			rndm = eneRndm->GenRandEnergy();
-		}
-		if (verbosityLevel >= 1)
-			G4cout << "Energy is " << particle_energy << G4endl;
+	  Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+	  Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+	  particle_energy = -1e100;
+	  rndm = eneRndm->GenRandEnergy();
+	  while (particle_energy < Emin || particle_energy > Emax) {
+	    particle_energy = SplineInt[nbelow+1]->CubicSplineInterpolation(rndm);
+	    rndm = eneRndm->GenRandEnergy();
+	  }
+	  if (verbosityLevel >= 1)
+	    G4cout << "Energy is " << particle_energy << G4endl;
 	} else
 		G4cout << "Error: IntType unknown type" << G4endl;
 }
@@ -1219,19 +1246,47 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a) {
 
 G4double G4SPSEneDistribution::GetProbability(G4double ene) {
 	G4double prob = 1.;
-	//	while ((EnergyDisType == "Arb") ? (ene >= ArbEmin
-	//		&& ene <= ArbEmax) : (ene >= Emin
-	//		&& ene <= Emax)) {
-	if (EnergyDisType == "Lin")
-		prob = cept + grad * ene;
-	else if (EnergyDisType == "Pow")
-		prob = std::pow(ene, alpha);
-	else if (EnergyDisType == "Exp")
-		prob = std::exp(-ene / Ezero);
-	else if (EnergyDisType == "Arb")
-		prob = ArbEInt->CubicSplineInterpolation(ene);
+
+	if (EnergyDisType == "Lin") {
+	  if (prob_norm == 1.) {
+	    prob_norm = 0.5*grad*Emax*Emax + cept*Emax - 0.5*grad*Emin*Emin - cept*Emin;
+	  }
+	  prob = cept + grad * ene;
+	  prob /= prob_norm;
+	}
+	else if (EnergyDisType == "Pow") {
+	  if (prob_norm == 1.) {
+	    if (alpha != -1.) {
+	      G4double emina = std::pow(Emin, alpha + 1);
+	      G4double emaxa = std::pow(Emax, alpha + 1);
+	      prob_norm = 1./(1.+alpha) * (emaxa - emina);
+	    } else {
+	      prob_norm = std::log(Emax) - std::log(Emin) ;
+	    }
+	  }
+	  prob = std::pow(ene, alpha)/prob_norm;
+	}
+	else if (EnergyDisType == "Exp"){
+	  if (prob_norm == 1.) {
+	    prob_norm = -Ezero*(std::exp(-Emax/Ezero) - std::exp(Emin/Ezero));
+	  }  
+	  prob = std::exp(-ene / Ezero);
+	  prob /= prob_norm;
+	}
+	else if (EnergyDisType == "Arb") {
+	  prob = ArbEnergyH.Value(ene);
+	  //  prob = ArbEInt->CubicSplineInterpolation(ene);
+	  //G4double deltaY;
+	  //prob = ArbEInt->PolynomInterpolation(ene, deltaY);
+	  if (prob <= 0.) {
+	    //G4cout << " Warning:G4SPSEneDistribution::GetProbability: prob<= 0. "<<prob <<" "<<ene << " " <<deltaY<< G4endl;
+	    G4cout << " Warning:G4SPSEneDistribution::GetProbability: prob<= 0. "<<prob <<" "<<ene << G4endl;
+	    prob = 1e-30;
+	  }
+	  // already normalised
+	}
 	else
 		G4cout << "Error: EnergyDisType not supported" << G4endl;
-	//}
+       
 	return prob;
 }
