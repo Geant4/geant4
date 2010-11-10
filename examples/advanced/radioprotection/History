@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.26 2010-06-07 05:19:47 perl Exp $
+$Id: History,v 1.27 2010-11-10 00:18:04 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.26 2010-06-07 05:19:47 perl Exp $
 
                       Category History file
                       ---------------------
+
+09.11.2010 M.Asai, tag radioprotection-V09-03-02
+           Fix AIDA file option
 
 06.06.2010 J. Perl, tag radioprotection-V09-03-01
 	   Remove unused variable in EventAction	

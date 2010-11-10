@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2010-11-09 17:16:19 allison Exp $
+$Id: History,v 1.9 2010-11-10 00:15:41 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.8 2010-11-09 17:16:19 allison Exp $
 
                           History file
                           ------------
+
+09.11.2010   Makoto Asai, Tag: gammaraytel-V09-03-02
+             Fix AIDA file option.
+
 09.11.2010   John Allison, Tag: gammaraytel-V09-03-01
              Introduce G4UIExecutive.
 

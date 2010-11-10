@@ -25,7 +25,7 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.21 2006-06-29 15:56:07 gunter Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.22 2010-11-10 00:15:42 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -91,7 +91,7 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 
       //      tree = treeFactory->create("gammaraytel.hbook", "hbook", false, false);
       // (hbook implementation)
-      tree = treeFactory->create("gammaraytel.aida","xml",false,true,"uncompress");
+      tree = treeFactory->create("gammaraytel.aida","xml",false,true,"");
       if(tree) {
 	// Get a tuple factory :
 	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);

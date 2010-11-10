@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.29 2010-06-07 10:08:39 gcosmo Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.30 2010-11-10 00:21:03 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -97,7 +97,7 @@ Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
 void Tst50AnalysisManager::book(G4String name) 
 {
   theTree = treeFact -> create(name + "output" + ".xml",
-                               "xml",false, true,"uncompress");
+                               "xml",false, true,"");
   
   //Create the factories for dataPoint and histograms
   dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
