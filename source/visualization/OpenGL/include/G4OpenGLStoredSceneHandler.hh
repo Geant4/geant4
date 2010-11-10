@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.31 2010-11-08 15:27:36 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.32 2010-11-10 17:10:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,6 +86,7 @@ protected:
   
   // PODL = Persistent Object Display List.
   GLint  fTopPODL;                  // List which calls the other PODLs.
+  // PO = Persistent Object, i.e., run-durantion object, e.g., geometry.
   struct PO {
     PO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
@@ -94,7 +95,7 @@ protected:
   };
   std::vector<PO> fPOList; 
   
-  // TO = Transparent Object.
+  // TO = Transient Object, e.g., trajectories.
   struct TO {
     TO(G4int id, const G4Transform3D& tr = G4Transform3D());
     G4int fDisplayListId;
