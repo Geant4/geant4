@@ -81,8 +81,7 @@ B -&gt; A:
 [2]:  ins=[s]  PVName=[Child_2:2] Type=[N] P=(324.002,771.552,1287.91) R=[36.9752,27.0412,119.108,93.9967,-152.906,63.304]  G4Box: x/2=1666.67 y/2=1666.67 z/2=1666.67 
 
 
--------------------------------------
-    </text>
+-------------------------------------</text>
   </argument>
   <argument name="stdout">
     <text/>
@@ -103,9 +102,6 @@ B -&gt; A:
   </argument>
   <argument name="command">
     <text>cd $G4INSTALL/examples/extended/geometry/olap;$G4BIN/$G4SYSTEM/olapex batch.mac</text>
-  </argument>
-  <argument name="stderr">
-    <text/>
   </argument>
   <argument name="resources">
     <set/>
