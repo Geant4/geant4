@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2010-11-10 14:07:25 gunter Exp $
+$Id: History,v 1.74 2010-11-10 18:16:38 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.73 2010-11-10 14:07:25 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-Nov-2010, G.Folger                 (testtools-QMtest-V09-03-23)
+- fix ...-olap-run 
 
 9-Nov-2010, G.Folger                  (testtools-QMtest-V09-03-22)
 - remove parallel/ExDiane, example no longer supported.
