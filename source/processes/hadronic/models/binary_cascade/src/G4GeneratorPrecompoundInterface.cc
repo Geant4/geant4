@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GeneratorPrecompoundInterface.cc,v 1.10 2010-08-31 16:16:51 vnivanch Exp $
+// $Id: G4GeneratorPrecompoundInterface.cc,v 1.11 2010-11-10 17:04:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -49,7 +49,7 @@
 #include "G4ExcitationHandler.hh"
 
 G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface(G4VPreCompoundModel* p) 
-  : CaptureThreshold(80*MeV)
+  : CaptureThreshold(10*MeV)
 {
   proton = G4Proton::Proton();
   neutron = G4Neutron::Neutron();
