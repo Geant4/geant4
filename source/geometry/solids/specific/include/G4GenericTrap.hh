@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.11 2010-10-20 08:54:18 gcosmo Exp $
+// $Id: G4GenericTrap.hh,v 1.12 2010-11-10 08:54:10 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -155,6 +155,8 @@ class G4GenericTrap : public G4VSolid
     G4bool  ComputeIsTwisted() ;
     G4bool  CheckOrder(const std::vector<G4TwoVector>& vertices) const;
     G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
+                          const G4TwoVector& c, const G4TwoVector& d) const;
+    G4bool  IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b, 
                           const G4TwoVector& c, const G4TwoVector& d) const;
     G4ThreeVectorList* CreateRotatedVertices(const 
                          G4AffineTransform& pTransform) const;
