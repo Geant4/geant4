@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.29 2010-11-10 09:17:58 tnikitin Exp $
+// $Id: G4TwistedTubs.cc,v 1.30 2010-11-10 10:00:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -386,7 +386,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   G4ClippablePolygon endPoly1, endPoly2;
   
   G4double phimax   = maxphi + 0.5*fDPhi;
-  if( phimax > pi/2) phimax = pi-phimax;
+  if ( phimax > pi/2)  { phimax = pi-phimax; }
   G4double phimin   = - phimax;
 
   G4ThreeVector v0, v1, v2, v3, v4, v5, v6;   // -ve phi verticies for polygon

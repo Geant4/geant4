@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc,v 1.18 2010-11-10 08:54:21 tnikitin Exp $
+// $Id: G4GenericTrap.cc,v 1.19 2010-11-10 10:00:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,8 +75,8 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
 {
   // General constructor
   const G4double min_length=5*1.e-6;
-  G4double length;
-  G4int k;
+  G4double length = 0.;
+  G4int k=0;
   G4String errorDescription = "InvalidSetup in \" ";
   errorDescription += name;
   errorDescription += "\""; 
@@ -91,10 +91,10 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
   
   // Check dZ
   // 
-  if(hz < kCarTolerance){
+  if (hz < kCarTolerance)
+  {
      G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
                 FatalException, "dZ is too small or negative");
-
   }           
  
   // Check Ordering and Copy vertices 
@@ -113,21 +113,21 @@ G4GenericTrap::G4GenericTrap( const G4String& name, G4double hz,
   // 
   for (G4int j=0; j < 2; j++)
   {
-   
-    for (G4int i=1; i<4; ++i) {
-         k = j*4+i;
-         length = (fVertices[k]-fVertices[k-1]).mag();
-         if(( length < min_length)&&( length>kCarTolerance ) ){
-           G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
-           JustWarning, "length segment is too small, vertices will be collapsed");
-           G4cerr<<"Distance between "<<fVertices[k-1]<<" and "<<fVertices[k]<<
-	     " is only "<<length<<G4endl;
- 
-           fVertices[k]=fVertices[k-1];
-        }
+    for (G4int i=1; i<4; ++i)
+    {
+      k = j*4+i;
+      length = (fVertices[k]-fVertices[k-1]).mag();
+      if ( ( length < min_length) && ( length > kCarTolerance ) )
+      {
+        G4Exception("G4GenericTrap::G4GenericTrap()", errorDescription,
+                    JustWarning,
+                    "Length segment is too small, vertices will be collapsed");
+        G4cerr << "Distance between " << fVertices[k-1] << " and "
+               << fVertices[k] << " is only " << length << " mm !" << G4endl; 
+        fVertices[k]=fVertices[k-1];
+      }
     }
   }
-
 
   // Compute Twist
   //
@@ -1598,20 +1598,24 @@ G4bool G4GenericTrap::ComputeIsTwisted()
     twisted = true;
     SetTwistAngle(i,twist_angle);
 
-    //Check on big angles, potentially navigation problem
+    // Check on big angles, potentially navigation problem
 
-     twist_angle=std::acos((dx1*dx2 + dy1*dy2)/
-               (std::sqrt(dx1*dx1+dy1*dy1)*std::sqrt(dx2*dx2+dy2*dy2)));
+    twist_angle = std::acos( (dx1*dx2 + dy1*dy2)
+                           / (std::sqrt(dx1*dx1+dy1*dy1)
+                             * std::sqrt(dx2*dx2+dy2*dy2)) );
    
-    if( std::fabs(twist_angle) > 0.5*pi+kCarTolerance ){
-     G4String errorDescription = "WarningSetup in \"";
-     errorDescription += GetName();
-     errorDescription += "\"";
-     G4cerr<<"TwistANGLE="<<twist_angle<<"*rad  for lateral plane N="<<i<<G4endl;
-     G4Exception("G4GenericTrap::ComputeIsTwisted()", errorDescription,
-                 JustWarning,"Twisted Angle is bigger than 90 degrees, potential problem of malformed Solid ");
+    if ( std::fabs(twist_angle) > 0.5*pi+kCarTolerance )
+    {
+      G4String errorDescription = "WarningSetup in \"";
+      errorDescription += GetName();
+      errorDescription += "\"";
+      G4String errorMessage = "Twisted Angle is bigger than 90 degrees.\n";
+      errorMessage += " Potential problem of malformed Solid !";
+      G4cerr << "TwistANGLE= " << twist_angle
+             << "*rad  for lateral plane N= " << i << G4endl;
+      G4Exception("G4GenericTrap::ComputeIsTwisted()", errorDescription,
+                  JustWarning, errorMessage);
     }
-
   }
 
   return twisted;
@@ -1659,24 +1663,24 @@ G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
    // Check for illegal crossings
    //
    G4bool illegal_cross = false;
-     illegal_cross = IsSegCrossingZ(vertices[0],vertices[4],
-                                 vertices[1],vertices[5]);
+   illegal_cross = IsSegCrossingZ(vertices[0],vertices[4],
+                                  vertices[1],vertices[5]);
      
    if (!illegal_cross)
    {
      illegal_cross = IsSegCrossingZ(vertices[2],vertices[6],
-                                   vertices[3],vertices[7]);
+                                    vertices[3],vertices[7]);
    }
-   //+/- dZ planes
+   // +/- dZ planes
    if (!illegal_cross)
    {
-   illegal_cross = IsSegCrossing(vertices[0],vertices[1],
-                                 vertices[2],vertices[3]);
+     illegal_cross = IsSegCrossing(vertices[0],vertices[1],
+                                   vertices[2],vertices[3]);
    }
    if (!illegal_cross)
    {
-   illegal_cross = IsSegCrossing(vertices[0],vertices[3],
-                                 vertices[1],vertices[2]);
+     illegal_cross = IsSegCrossing(vertices[0],vertices[3],
+                                   vertices[1],vertices[2]);
    }
    if (!illegal_cross)
    {
@@ -1685,8 +1689,8 @@ G4bool G4GenericTrap::CheckOrder(const std::vector<G4TwoVector>& vertices) const
    }
    if (!illegal_cross)
    {
-   illegal_cross = IsSegCrossing(vertices[4],vertices[7],
-                                 vertices[5],vertices[6]);
+     illegal_cross = IsSegCrossing(vertices[4],vertices[7],
+                                   vertices[5],vertices[6]);
    }
 
    if (illegal_cross)
@@ -1809,13 +1813,13 @@ G4GenericTrap::IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b,
 
 G4bool
 G4GenericTrap::IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b, 
-                             const G4TwoVector& c, const G4TwoVector& d) const
+                              const G4TwoVector& c, const G4TwoVector& d) const
 { 
   // Check if segments [A,B] and [C,D] are crossing when
   // A and C are on -dZ and B and D are on +dZ
 
-  //Calculate the Intersection point between two lines in 3D
- 
+  // Calculate the Intersection point between two lines in 3D
+  //
   G4ThreeVector temp1,temp2;
   G4ThreeVector v1,v2,p1,p2,p3,p4,dv;
   G4double s,det;
@@ -1826,30 +1830,32 @@ G4GenericTrap::IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b,
   v1=p3-p1;
   v2=p4-p2;
   dv=p2-p1;
-  //In case of Collapsed Vertices No crossing
+
+  // In case of Collapsed Vertices No crossing
+  //
   if( (std::fabs(dv.x()) < kCarTolerance )&&
-      (std::fabs(dv.y()) < kCarTolerance ) ) return false;
+      (std::fabs(dv.y()) < kCarTolerance ) )  { return false; }
     
-  if((std::fabs((p4-p3).x()) < kCarTolerance )&&
-      (std::fabs((p4-p3).y()) < kCarTolerance ) ) return false;
+  if( (std::fabs((p4-p3).x()) < kCarTolerance )&&
+      (std::fabs((p4-p3).y()) < kCarTolerance ) )  { return false; }
  
   // First estimate if Intersection is possible( if det is 0)
-
-   det=dv.x()*v1.y()*v2.z()+dv.y()*v1.z()*v2.x()-
-   dv.x()*v1.z()*v2.y()-dv.y()*v1.x()*v2.z();
+  //
+  det = dv.x()*v1.y()*v2.z()+dv.y()*v1.z()*v2.x()
+      - dv.x()*v1.z()*v2.y()-dv.y()*v1.x()*v2.z();
    
-   if(std::fabs(det)<kCarTolerance){//Intersection
-      temp1=v1.cross(v2);
-      temp2=(p2-p1).cross(v2);
-      if(temp1.dot(temp2) < 0) return false;//intersection s will be negative
-      s=temp1.mag();
+  if (std::fabs(det)<kCarTolerance)  //Intersection
+  {
+    temp1 = v1.cross(v2);
+    temp2 = (p2-p1).cross(v2);
+    if (temp1.dot(temp2) < 0)  { return false; } // intersection negative
+    s = temp1.mag();
 
-      if( s < kCarTolerance ) return false;//parallel lines
-      s= ((dv).cross(v2)).mag()/s;
+    if ( s < kCarTolerance )  { return false; }  // parallel lines
+    s = ((dv).cross(v2)).mag()/s;
    
-      if(s < 1.-kCarTolerance) return true;
- 
-   }
+    if(s < 1.-kCarTolerance)  { return true; }
+  }
   return false;
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh,v 1.12 2010-11-10 08:54:10 tnikitin Exp $
+// $Id: G4GenericTrap.hh,v 1.13 2010-11-10 10:00:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -157,7 +157,7 @@ class G4GenericTrap : public G4VSolid
     G4bool  IsSegCrossing(const G4TwoVector& a, const G4TwoVector& b, 
                           const G4TwoVector& c, const G4TwoVector& d) const;
     G4bool  IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b, 
-                          const G4TwoVector& c, const G4TwoVector& d) const;
+                           const G4TwoVector& c, const G4TwoVector& d) const;
     G4ThreeVectorList* CreateRotatedVertices(const 
                          G4AffineTransform& pTransform) const;
     void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
