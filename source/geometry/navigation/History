@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2010-11-10 14:07:31 gcosmo Exp $
+$Id: History,v 1.147 2010-11-10 15:19:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,8 +19,10 @@ committal in the CVS repository !
 
 November 10th, 2010 - G.Cosmo (geomnav-V09-03-05)
 -----------------------------
-- Reduced trials for zero steps from 10 to 3 for activating tolerance push.
-- Added possibility to switch off push verbosity; also added related UI command.
+- Reduced trials for zero steps from 10 to 3 for activating tolerance push
+  in G4Navigator.
+- Added possibility to switch off push notifications in G4Navigator; also
+  added related UI command.
 
 November 9th, 2010 - P.Arce
 ---------------------------
