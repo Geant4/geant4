@@ -16,7 +16,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
-23-Jun-2010 M.Kosov                           (hadr-chips-body-V09-03-13) 
+10 Nov 2010 Dennis Wright                   (hadr-chips-body-V09-03-14) 
+-----------------------------------------------------------------------
+Bring up to geant4-09-03-ref-09 and tag
+ 
+23-Jun-2010 M.Kosov                         (hadr-chips-body-V09-03-13) 
 -----------------------------------------------------------------------
 Using HARP data a big bug is fixed, which influences CHIPS physics
 
