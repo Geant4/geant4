@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.45 2010-11-08 15:27:36 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.46 2010-11-10 17:11:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -335,6 +335,8 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
 
+  //G4cout << "G4OpenGLStoredSceneHandler::ClearStore" << G4endl;
+
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
   // Delete OpenGL permanent display lists.
@@ -357,6 +359,8 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
 }
 
 void G4OpenGLStoredSceneHandler::ClearTransientStore () {
+
+  //G4cout << "G4OpenGLStoredSceneHandler::ClearTransientStore" << G4endl;
 
   G4VSceneHandler::ClearTransientStore ();
 
