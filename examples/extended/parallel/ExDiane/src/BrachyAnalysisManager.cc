@@ -32,7 +32,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.3 2006-06-29 17:32:37 gunter Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.4 2010-11-10 00:10:07 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -67,7 +67,7 @@ BrachyAnalysisManager::BrachyAnalysisManager() :
   //parameters for the TreeFactory
  
   std::string fileName = "brachytherapy.xml";
-  theTree = treeFact -> create(fileName,"xml",false, true, "uncompressed");
+  theTree = treeFact -> create(fileName,"xml",false, true, "");
 
   delete treeFact;
  

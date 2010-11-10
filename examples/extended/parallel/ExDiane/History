@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2010-11-02 16:48:37 allison Exp $
+$Id: History,v 1.11 2010-11-10 00:10:07 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.10 2010-11-02 16:48:37 allison Exp $
 
                       Category History file
                       ---------------------
+
+09.11.2010 - Makoto Asai (ExDiane-V09-03-03)
+- Fix AIDA file option.
 
 02.11.2010 - John Allison  (ExDiane-V09-03-02)
 - Removed references to Vis and UI managers/exectives.  Not used.
