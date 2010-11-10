@@ -25,7 +25,8 @@
 #
 # commands below are independent of gps
 #
-/analysis/filename test33.aida
+/analysis/filetype root
+/analysis/filename test33.root
 /analysis/maxeng 800 MeV
 /analysis/mineng 200 MeV
 /analysis/maxpos 10 cm 

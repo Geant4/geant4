@@ -10,15 +10,15 @@
   c1->SetLogy();
 
   // histogram for energy spectra
-  int n = 31;
-  float bin[31];
+  int n = 41;
+  float bin[41];
   
   for (int i = 0; i < n; i++) {
-    bin[i] =pow(10,(-1+0.1*i));
+    bin[i] =pow(10,(-2+0.1*i));
   }
   //
-  TH1 *h_1 = new TH1D("unbiased","Unbiased",30,bin);
-  TH1 *h_2 = new TH1D("biased","Biased",30,bin);
+  TH1 *h_1 = new TH1D("unbiased","Source spectrum",40,bin);
+  TH1 *h_2 = new TH1D("biased","Source spectrum",40,bin);
   input_file_1->cd();
   input_file_1->ls();
   // get the tuple t1
@@ -32,7 +32,6 @@
     //    cout << energy << " " << weight << endl;
     h_1->Fill(energy,weight);
   }
-  h_1->Draw() ;
   input_file_2->cd();
   TTree *t2 = (TTree *) input_file_2->Get("MyTuple");
   t2->SetBranchAddress("Energy", &energy);
@@ -42,8 +41,12 @@
     t2.GetEntry(i);
     h_2->Fill(energy,weight);
   }
-  h_2->Draw("same") ;
-  //  c1->Update();
+  //  h_2->SetFillColor(kRed);
+  h_2->SetLineStyle(kDashed);
+  h_2->SetLineColor(kBlue);
+  h_2->Draw();
+  h_1->Draw("same") ;
+  c1->Update();
   c1->Print("./test35.png");
   
   input_file_1->Close();
