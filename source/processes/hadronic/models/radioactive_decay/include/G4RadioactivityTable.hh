@@ -25,7 +25,7 @@
 //
 #ifndef G4RadioactivityTable_h
 #define G4RadioactivityTable_h 1
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4RadioactivityTable.hh
 //
@@ -36,7 +36,7 @@
 // Customer:            ESA/ESTEC, NOORDWIJK
 // Contract:            12115/96/JG/NL Work Order No. 3
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------.
@@ -44,20 +44,20 @@
 // 29 October 2010, F Lei, QinetiQ, UK
 // First created     
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
-//
+///////////////////////////////////////////////////////////////////////////////
+
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 
 #include <map>
 
-////////////////////////////////////////////////////////////////////////////////
-//
+
 class G4RadioactivityTable
 {
   // class description
-  //   G4RadioactivityTable is the table of the radioactive isotopes and their activities.
-  //   It is used in the variance reduction mode to recorde the induced radioactivity in the RDM sensitive volumes.
+  // G4RadioactivityTable is the table of the radioactive isotopes and their
+  // activities.  It is used in the variance reduction mode to recorde the 
+  // induced radioactivity in the RDM sensitive volumes.
   // class description - end
 
 public:
@@ -76,7 +76,7 @@ public:
 public:
   // with description
   //
-  Void AddIsotope( G4int, G4int, G4double, G4double);
+  void AddIsotope( G4int, G4int, G4double, G4double);
   // Add an isotope (A,Z,E) of rate to the table.
   //   Z: Atomic Number
   //   A: Atomic Mass

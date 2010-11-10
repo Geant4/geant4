@@ -42,47 +42,45 @@
 // 29 October 2010, F. Lei QinetiQ UK
 // first release.
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
-//
+
 
 #include "G4RadioactivityTable.hh"
 
+#include <map>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
 G4RadioactivityTable::G4RadioactivityTable()
 {
   fRadioactivity.clear();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+
 G4RadioactivityTable::~G4RadioactivityTable()
 {
   fRadioactivity.clear(); 
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4int G4RadioactivityTable::Entries() const
 {
   return (G4int) fRadioactivity.size();
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-Void G4RadioactivityTable::AddIsotope(G4int Z, G4int A, G4double E, G4double rate)
+
+
+void
+G4RadioactivityTable::AddIsotope(G4int Z, G4int A, G4double E, G4double rate)
 {
-	map<G4ThreeVector,G4double>::iterator it;
-	it = fRadioactivity.find(G4ThreeVector(Z,A,E));
-	if (it == fRadioactivity.end()) {
-		fRadioactivity[G4ThreeVector(Z,A,E)] = rate;
-	} else {
-		fRadioactivity[G4ThreeVector(Z.A,E)] += rate;
-	}
+  std::map<G4ThreeVector,G4double>::iterator it;
+  it = fRadioactivity.find(G4ThreeVector(Z,A,E));
+  if (it == fRadioactivity.end()) {
+    fRadioactivity[G4ThreeVector(Z,A,E)] = rate;
+  } else {
+    fRadioactivity[G4ThreeVector(Z,A,E)] += rate;
+  }
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+
+
 G4double G4RadioactivityTable::GetRate(G4int Z, G4int A, G4double E)
 {
     return fRadioactivity[G4ThreeVector(Z,A,E)];
