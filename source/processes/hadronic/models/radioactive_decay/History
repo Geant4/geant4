@@ -13,7 +13,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-29 Oct 2010 F.Lei
+
+10 November 2010  Dennis Wright (radioactive_decay-V09-03-02)
+-------------------------------------------------------------
+- G4RadioactiveDecay.cc : replaced incorrect use of "->" with "." for G4Track
+  in DecayIt(const G4Track&, )
+
+- G4RadioactivityTable.cc : add include file for <map> and replace map
+  with std::map in method AddIsotope
+
+29 Oct 2010 F. Lei
+------------------
 - Added G4RadioactivityTable.hh .cc files for tallying the accumulated radioactivitties in VR mode
 - Added in G4RadioactiveDecay.hh:
 	std::vector<G4RadioactivityTable*> GetTheRadioactivityTables() {return theRadioactivityTables;}
