@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.hh,v 1.6 2010-07-22 07:36:50 taso Exp $
+// $Id: G4VPrimitiveScorer.hh,v 1.7 2010-11-10 16:38:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -79,9 +79,9 @@ class G4VPrimitiveScorer
       // These five methods are exactly identical to those in G4VSensitiveDetector.
       // These methods are invoked by G4SDManager through G4MultiFunctionalDetector.
 
-       virtual void SetUnit(const G4String& unit)=0;
-       G4String GetUnit() const { return unitName;}
-       G4double  GetUnitValue() const { return unitValue;}
+       void SetUnit(const G4String& unit) { unitName = unit; }
+       const G4String& GetUnit() const { return unitName; }
+       G4double  GetUnitValue() const { return unitValue; }
 
   protected:
      void CheckAndSetUnit(const G4String& unit,const G4String& category);
