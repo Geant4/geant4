@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option2.cc,v 1.27 2010-10-10 15:18:34 vnivanch Exp $
+// $Id: G4EmStandardPhysics_option2.cc,v 1.28 2010-11-10 19:29:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -67,7 +67,9 @@
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
+#include "G4eBremsstrahlungModel.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4Generator2BS.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -173,27 +175,35 @@ void G4EmStandardPhysics_option2::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
-      msc->SetRangeFactor(0.04);
+      //msc->AddEmModel(0, new G4WentzelVIModel());
+      //msc->SetRangeFactor(0.04);
       //msc->AddEmModel(0, new G4UrbanMscModel93());
       //      msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);
+      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      G4eBremsstrahlungModel* br = new G4eBremsstrahlungModel();
+      br->SetAngularDistribution(new G4Generator2BS());
+      brem->SetEmModel(br);
+      pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering());
+      pmanager->AddProcess(brem,   -1, 3, 3);
+      //pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       //msc->AddEmModel(0, new G4UrbanMscModel93());
-      msc->AddEmModel(0, new G4WentzelVIModel());
-      msc->SetRangeFactor(0.04);
+      //msc->AddEmModel(0, new G4WentzelVIModel());
+      //msc->SetRangeFactor(0.04);
       // msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
-      pmanager->AddProcess(msc,                       -1, 1, 1);
+      G4eBremsstrahlung* brem = new G4eBremsstrahlung();
+      G4eBremsstrahlungModel* br = new G4eBremsstrahlungModel();
+      br->SetAngularDistribution(new G4Generator2BS());
+      brem->SetEmModel(br);
+      pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,     -1,-3, 3);
+      pmanager->AddProcess(brem,   -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering());
+      //pmanager->AddDiscreteProcess(new G4CoulombScattering());
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {

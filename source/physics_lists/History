@@ -1,4 +1,4 @@
-q$Id: History,v 1.159 2010-11-08 08:37:22 sincerti Exp $
+q$Id: History,v 1.160 2010-11-10 19:29:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-11-2010, V.Ivanchenko                (phys-lists-V09-03-36)
+- G4EmStandardPhysics_option2 - added BS angular generator for
+    bremsstrahlung, use default msc model for e+-
+- G4EmStandardPhysics_option3 - comment out Raylaigh to have better
+    CPU performance
+- G4EmLivermorePolarizedPhysics - F.Longo provided updated
+    models
 
 08-11-2010, S.Incerti                   (phys-lists-V09-03-35)
 -  switched elastic model in G4DNA physics builder
