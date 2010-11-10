@@ -41,7 +41,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: testDoubleExp.cc,v 1.5 2009-06-12 10:43:45 mantero Exp $
+// $Id: testDoubleExp.cc,v 1.6 2010-11-10 00:29:46 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -107,7 +107,7 @@ int main()
 
 
        // Creating a tree in uncompress XML
-       AIDA::ITree* tree = treeFactory->create(fileName,"xml",0,1,"uncompress"); // output file
+       AIDA::ITree* tree = treeFactory->create(fileName,"xml",0,1,""); // output file
        // Creating a data point set  factory, which will be handled by the tree
        AIDA::IDataPointSetFactory* dataPointSetFactory = analysisFactory->createDataPointSetFactory(*tree);
        // Creating a 2 D data point set
