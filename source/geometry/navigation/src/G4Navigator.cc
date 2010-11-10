@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.43 2010-11-09 15:43:15 arce Exp $
+// $Id: G4Navigator.cc,v 1.44 2010-11-10 11:20:11 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -46,12 +46,12 @@
 //
 G4Navigator::G4Navigator()
   : fWasLimitedByGeometry(false), fVerbose(0),
-    fTopPhysical(0), fCheck(false), fPushed(false)
+    fTopPhysical(0), fCheck(false), fPushed(false), fWarnPush(true)
 {
   fActive= false; 
   ResetStackAndState();
 
-  fActionThreshold_NoZeroSteps  = 10; 
+  fActionThreshold_NoZeroSteps  = 3; 
   fAbandonThreshold_NoZeroSteps = 25; 
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
@@ -854,7 +854,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
        //
        Step += 0.9*kCarTolerance;
 #ifdef G4VERBOSE
-       if (!fPushed)
+       if ((!fPushed) && (fWarnPush))
        {
          G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
                 << "          Track stuck, not moving for " 
@@ -1311,11 +1311,6 @@ void  G4Navigator::PrintState() const
   }
   G4cout.precision(oldcoutPrec);
 }
-
-void G4Navigator::UseBestSafety( G4bool useFlag )
-{
-  fvoxelNav.EnableBestSafety( useFlag );
-} 
 
 // ********************************************************************
 // ComputeStepLog

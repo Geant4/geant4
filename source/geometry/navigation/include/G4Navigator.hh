@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.32 2010-11-04 17:36:17 japost Exp $
+// $Id: G4Navigator.hh,v 1.33 2010-11-10 11:20:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -240,7 +240,9 @@ class G4Navigator
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
     // Is effective only with G4VERBOSE set.
-  inline G4bool IsCheckModeActive() { return fCheck; } 
+  inline G4bool IsCheckModeActive() const;
+  inline void   SetPushVerbosity(G4bool mode);
+    // Set/unset verbosity for pushed tracks (default is true).
 
   void PrintState() const;
     // Print the internal state of the Navigator (for debugging).
@@ -262,16 +264,12 @@ class G4Navigator
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
 
-  // inline 
   void SetSavedState(); 
-  // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
-  //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
-  // inline 
+    // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
+    //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
   void RestoreSavedState(); 
     // Copy aspects of the state, to enable a non-state changing
     //  call to ComputeStep
-
- public:  // with description
 
   inline G4ThreeVector GetCurrentLocalCoordinate() const;
     // Return the local coordinate of the point in the reference system
@@ -282,7 +280,7 @@ class G4Navigator
   inline G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
 
-  inline void          EnableBestSafety( G4bool value= false );
+  inline void EnableBestSafety( G4bool value= false );
     // Enable best-possible evaluation of isotropic safety
 
  protected:  // with description
@@ -313,9 +311,6 @@ class G4Navigator
     // o Reset volumes
     // o Recompute transforms and/or solids of replicated/parameterised
     //   volumes.
-
- public:  // no description
-   void UseBestSafety( G4bool useIt ); //  Transitional method -- try to use best estimate of Safety
 
  private:
 
@@ -446,8 +441,8 @@ class G4Navigator
   //
   G4bool fCheck;
     // Check-mode flag  [if true, more strict checks are performed].
-  G4bool fPushed;
-    // Push flag  [if true, means a stuck particle has been pushed].
+  G4bool fPushed, fWarnPush;
+    // Push flags  [if true, means a stuck particle has been pushed].
 
   // Helpers/Utility classes
   //

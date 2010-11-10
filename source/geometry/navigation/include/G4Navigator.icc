@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.16 2010-06-04 16:40:02 japost Exp $
+// $Id: G4Navigator.icc,v 1.17 2010-11-10 11:20:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -449,6 +449,26 @@ void  G4Navigator::CheckMode(G4bool mode)
 }
 
 // ********************************************************************
+// IsCheckModeActive
+// ********************************************************************
+//
+inline
+G4bool G4Navigator::IsCheckModeActive() const
+{
+  return fCheck;
+}
+
+// ********************************************************************
+// SetPushVerbosity
+// ********************************************************************
+//
+inline
+void G4Navigator::SetPushVerbosity(G4bool mode)
+{
+  fWarnPush = mode;
+}
+
+// ********************************************************************
 // SeverityOfZeroStepping
 //
 // Reports on severity of error in case Navigator is stuck
@@ -485,9 +505,11 @@ G4int G4Navigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const
   return severity;
 }
 
-
+// ********************************************************************
+// EnableBestSafety
+// ********************************************************************
+//
 inline void G4Navigator::EnableBestSafety( G4bool value )
 {
   fvoxelNav.EnableBestSafety( value );
-  // fparamNav.EnableBestSafety( value ); 
 }
