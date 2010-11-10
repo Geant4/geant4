@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.22 2010-10-18 23:52:04 kurasige Exp $
+// $Id: G4Step.icc,v 1.23 2010-11-10 08:42:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -153,8 +153,6 @@ inline
    //This method is called at the beggining of each step 
    *(fpPreStepPoint) = *(fpPostStepPoint);
    fpPostStepPoint->SetStepStatus(fUndefined);
-   // clear secondary in current
-   fSecondary->secondaryInCurrent.clear();
 }
 
 
@@ -211,9 +209,6 @@ inline
    fpPreStepPoint->SetCharge(fpTrack->GetDynamicParticle()->GetCharge()); 
    fpPreStepPoint->SetWeight(fpTrack->GetWeight());
    
-   // clear secondary in current	
-   fSecondary->secondaryInCurrent.clear();
- 
    (*fpPostStepPoint) = (*fpPreStepPoint);
  }
 
@@ -245,12 +240,6 @@ inline
 
    // set velocity 
    fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
-}
-
-inline   
- const std::vector<const G4Track*>* G4Step::GetSecondaryInCurrentStep() const 
-{
-  return  &fSecondary->secondaryInCurrent;
 }
 
 inline const G4TrackVector* G4Step::GetSecondary() const  

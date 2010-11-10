@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackVector.hh,v 1.3 2010-10-18 23:52:04 kurasige Exp $
+// $Id: G4TrackVector.hh,v 1.4 2010-11-10 08:42:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -50,30 +50,7 @@ class G4Track;
 class G4Step;
 
 
-///////////////////////////////////////////////////
-//typedef std::vector<G4Track*> G4TrackVector;
-///////////////////////////////////////////////////
-class  G4TrackVector : public  std::vector<G4Track*>
-{
-  typedef G4Track* T;
-
-  // this class is used by G4Step!!!
-  friend class G4Step;
-  private:
-  std::vector<const G4Track*> secondaryInCurrent;
-  
-
-  public:
-  virtual ~G4TrackVector(){
-             secondaryInCurrent.clear();
-          }
-   
-  void push_back( const T& x){
-                std::vector<G4Track*>::push_back(x);
-                secondaryInCurrent.push_back(x);
-       }
-
-};
+typedef std::vector<G4Track*> G4TrackVector;
 
 
 #endif

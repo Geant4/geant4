@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.22 2010-10-18 23:52:04 kurasige Exp $
+// $Id: G4Step.hh,v 1.23 2010-11-10 08:42:47 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -197,9 +197,6 @@ class G4Step
 
 // Secondary buckets
 public:
-   // secodaries in the current step
-   const std::vector<const G4Track*>* GetSecondaryInCurrentStep() const; 
-  
    // NOTE: Secondary bucket of the Step contains  
    //       all secondaries during tracking the current track 
    //       (i.e. NOT secondaries produced in the current step)
