@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.28 2010-10-20 08:54:19 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.29 2010-11-10 09:17:58 tnikitin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -386,6 +386,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   G4ClippablePolygon endPoly1, endPoly2;
   
   G4double phimax   = maxphi + 0.5*fDPhi;
+  if( phimax > pi/2) phimax = pi-phimax;
   G4double phimin   = - phimax;
 
   G4ThreeVector v0, v1, v2, v3, v4, v5, v6;   // -ve phi verticies for polygon
@@ -397,7 +398,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
   
   G4double cosPhi = std::cos(phimin);
   G4double sinPhi = std::sin(phimin);
-
+ 
   // Outer hyperbolic surface  
 
   v0 = transform.TransformPoint( 
@@ -454,7 +455,7 @@ G4bool G4TwistedTubs::CalculateExtent( const EAxis              axis,
 
   cosPhi = std::cos(phimax);
   sinPhi = std::sin(phimax);
-  
+   
   // Outer hyperbolic surface  
   
   w0 = transform.TransformPoint(
