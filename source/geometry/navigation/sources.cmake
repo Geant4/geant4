@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.1 2010-09-29 18:41:55 bmorgan Exp $
+# $Id: sources.cmake,v 1.2 2010-11-10 11:24:46 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -52,12 +52,14 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4GeometryMessenger.hh
         G4MultiLevelLocator.hh
         G4MultiNavigator.hh
+        G4NavigationLogger.hh
         G4Navigator.hh
         G4Navigator.icc
         G4NormalNavigation.hh
         G4NormalNavigation.icc
         G4ParameterisedNavigation.hh
         G4ParameterisedNavigation.icc
+        G4PartialPhantomParameterisation.hh
         G4PathFinder.hh
         G4PhantomParameterisation.hh
         G4PhantomParameterisation.icc
@@ -75,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4VIntersectionLocator.icc
         G4VoxelNavigation.hh
         G4VoxelNavigation.icc
+        G4VoxelSafety.hh
     SOURCES
         G4AuxiliaryNavServices.cc
         G4BrentLocator.cc
@@ -91,9 +94,11 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4GeometryMessenger.cc
         G4MultiLevelLocator.cc
         G4MultiNavigator.cc
+        G4NavigationLogger.cc
         G4Navigator.cc
         G4NormalNavigation.cc
         G4ParameterisedNavigation.cc
+        G4PartialPhantomParameterisation.cc
         G4PathFinder.cc
         G4PhantomParameterisation.cc
         G4PropagatorInField.cc
@@ -105,6 +110,7 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4TransportationManager.cc
         G4VIntersectionLocator.cc
         G4VoxelNavigation.cc
+        G4VoxelSafety.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
         G4globman
