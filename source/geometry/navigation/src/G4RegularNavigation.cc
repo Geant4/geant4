@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.12 2010-11-09 15:43:15 arce Exp $
+// $Id: G4RegularNavigation.cc,v 1.13 2010-11-10 11:20:45 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -324,42 +324,28 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
     localDir = G4ThreeVector(0.,0.,0.);
   }
 
-  // Check that track is not on the surface and check that track is not
-  // exiting the voxel parent volume
+  // Enter this daughter
   //
-  /*  if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid, localPoint,
-          globalDirection, history.GetTopTransform(), pLocatedOnEdge) 
-     || G4AuxiliaryNavServices::CheckPointExiting(pSolid, localPoint,
-     globalDirection, history.GetTopTransform() ) ) */
+  replicaNo = pParam->GetReplicaNo( localPoint, localDir );
+
+  if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxel()) )
   {
+    return false;
   }
-  else
-  { */
-    // Enter this daughter
-    //
-    replicaNo = pParam->GetReplicaNo( localPoint, localDir );
 
-    if( replicaNo < 0 || replicaNo >= G4int(pParam->GetNoVoxel()) )
-    {
-      return false;
-    }
+  // Set the correct copy number in physical
+  //
+  pPhysical->SetCopyNo(replicaNo);
+  pParam->ComputeTransformation(replicaNo,pPhysical);
 
-    // Set the correct copy number in physical
-    //
-    pPhysical->SetCopyNo(replicaNo);
-    pParam->ComputeTransformation(replicaNo,pPhysical);
+  history.NewLevel(pPhysical, kParameterised, replicaNo );
+  localPoint = history.GetTopTransform().TransformPoint(globalPoint);
 
-    history.NewLevel(pPhysical, kParameterised, replicaNo );
-    localPoint = history.GetTopTransform().TransformPoint(globalPoint);
-
-    // Set the correct solid and material in Logical Volume
-    //
-    G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
+  // Set the correct solid and material in Logical Volume
+  //
+  G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
       
-    pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
-                             pPhysical, &parentTouchable) );
-    return true;
-    //  }
-
-    //  return false;
+  pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo,
+                           pPhysical, &parentTouchable) );
+  return true;
 }

@@ -24,6 +24,10 @@
 // ********************************************************************
 //
 //
+// $Id: G4PartialPhantomParameterisation.hh,v 1.2 2010-11-10 11:20:45 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
 // class G4PartialPhantomParameterisation
 //
 // Class description:
@@ -58,13 +62,13 @@ class G4PartialPhantomParameterisation : public G4PhantomParameterisation
     G4PartialPhantomParameterisation();
    ~G4PartialPhantomParameterisation();
 
-    virtual void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
+    void ComputeTransformation(const G4int, G4VPhysicalVolume *) const;
   
-    virtual G4Material* ComputeMaterial(const G4int repNo, 
-                                              G4VPhysicalVolume *currentVol,
-                                        const G4VTouchable *parentTouch=0);
+    G4Material* ComputeMaterial(const G4int repNo, 
+                                      G4VPhysicalVolume *currentVol,
+                                const G4VTouchable *parentTouch=0);
 
-    virtual G4int GetReplicaNo( const G4ThreeVector& localPoint,
+    G4int GetReplicaNo( const G4ThreeVector& localPoint,
                         const G4ThreeVector& localDir );
       // Get the voxel number corresponding to the point in the container
       // frame. Use 'localDir' to avoid precision problems at the surfaces.
