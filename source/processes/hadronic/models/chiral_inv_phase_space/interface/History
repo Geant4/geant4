@@ -12,6 +12,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10-Nov-2010 V.Ivanchenko                       (hadr-chips-inter-V09-03-02)
+---------------------------------------------------------------------------
+- G4ElectroNuclearReaction - cross section classes are included by pointer 
+  and not by value, this should not change any result but providing
+  clear siquence of removel of cross sections after execution 
+  (fixed old problem reported in HyperNews)
+
 13-Sep-2010 A. Dotti                           (hadr-chips-inter-V09-03-01)
 ---------------------------------------------------------------------------
 - Fix in G4ChiralInvariantPhaseSpace to catch previously un-handled exceptions
