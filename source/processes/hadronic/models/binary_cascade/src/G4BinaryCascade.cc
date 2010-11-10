@@ -1068,9 +1068,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
      PrintKTVector(&debug,std::string("primay- ..."));
      PrintKTVector(&target_collection,std::string("... targets"));
 //*GF*     throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCasacde::ApplyCollision()");
-#else
-     return false;
 #endif
+     return false;
   }
 
   G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
@@ -1118,6 +1117,8 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   G4KineticTrackVector * products=0;
   products = collision->GetFinalState();
 
+  G4bool lateParticleCollision= (!haveTarget) && products && products->size() == 1;
+
   #ifdef debug_BIC_ApplyCollision
         G4bool havePion=false;
         for ( std::vector<G4KineticTrack *>::iterator i =products->begin(); i != products->end(); i++)
@@ -1139,10 +1140,9 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 	   }
 	   PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
       }  
-   #endif
-     G4bool lateParticleCollision= (!haveTarget) && products && products->size() == 1;
 	//  if ( lateParticleCollision ) G4cout << " Added late particle--------------------------"<<G4endl;
 	//  if ( lateParticleCollision && products ) PrintKTVector(products, " reaction products");
+   #endif
 //****************************************  
 
   // reset primary to initial state
@@ -1561,16 +1561,18 @@ void G4BinaryCascade::StepParticlesOut()
       if( kt->GetState() == G4KineticTrack::inside ) 
       {
 	  nsec++;
-	  G4double tStep(0), tdummy(0); 
-	  if ( ! ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep) );
-	  {
-             PrintKTVector(&theSecondaryList, std::string(" state ERROR....."));
-             throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
-          }
+	  G4double tStep(0), tdummy(0);
+	  G4bool intersect = 
+	       (G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep) ); 
 #ifdef debug_BIC_StepParticlesOut
 	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
 	         << " " <<kt->GetDefinition()->GetParticleName() 
 		 << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
+	  if ( ! intersect );
+	  {
+             PrintKTVector(&theSecondaryList, std::string(" state ERROR....."));
+             throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
+          }
 #endif
 	  if(tStep<minTimeStep && tStep> 0 )
 	  {
@@ -2720,6 +2722,7 @@ void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision,
   PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
   PrintKTVector(products,std::string(" Scatterer products"));
   
+#ifdef dontUse
   G4double thisExcitation(0);
 //  excitation energy from this collision
 //  initial state:
@@ -2793,7 +2796,7 @@ void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision,
 	 <<  currentInitialEnergy - final - mass_out
 	 << G4endl;
    currentInitialEnergy-=final;	 
-
+#endif
 }
 
 //----------------------------------------------------------------------------
