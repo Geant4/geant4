@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.11 2010-10-10 15:18:34 vnivanch Exp $
+// $Id: G4EmLivermorePolarizedPhysics.cc,v 1.12 2010-11-10 17:33:02 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
@@ -36,13 +36,13 @@
 // gamma
 
 #include "G4PhotoElectricEffect.hh"
-#include "G4LivermorePhotoElectricModel.hh"
+#include "G4LivermorePolarizedPhotoElectricModel.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4LivermorePolarizedComptonModel.hh"
 
 #include "G4GammaConversion.hh"
-#include "G4LivermoreGammaConversionModel.hh"
+#include "G4LivermorePolarizedGammaConversionModel.hh"
 
 #include "G4RayleighScattering.hh" 
 #include "G4LivermorePolarizedRayleighModel.hh"
@@ -190,7 +190,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+      G4LivermorePolarizedPhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePolarizedPhotoElectricModel();
       theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
@@ -202,7 +202,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
+      G4LivermorePolarizedGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermorePolarizedGammaConversionModel();
       theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
       theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
       pmanager->AddDiscreteProcess(theGammaConversion);
