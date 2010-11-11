@@ -30,6 +30,7 @@
 // 080801 Give a warning message for irregular mass value in data file by T. Koi
 //        Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+// 101111 Add Special treatment for Be9(n,2n)Be8(2a) case by T. Koi
 //
 #include "G4NeutronHPInelasticBaseFS.hh"
 #include "G4Nucleus.hh"
@@ -165,6 +166,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
                                            G4ParticleDefinition ** theDefs, 
                                            G4int nDef)
 {
+
+G4cout << "G4NeutronHPInelasticBaseFS::BaseApply" << G4endl;
 
 // prepare neutron
   theResult.Clear();
@@ -359,7 +362,10 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
   }
   else if(theEnergyAngData!=0)
   {
+
+G4cout << "TKDB check 0" << G4endl;
     G4double theGammaEnergy = theEnergyAngData->GetTotalMeanEnergy();
+G4cout << "TKDB check 0 theEnergyAngData->GetTotalMeanEnergy() = " << theEnergyAngData->GetTotalMeanEnergy() << G4endl;
     G4double anEnergy = boosted.GetKineticEnergy();
     theGammaEnergy = anEnergy-theGammaEnergy;
     theGammaEnergy += theNuclearMassDifference;
@@ -370,6 +376,7 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
     G4double eBindT = G4NucleiProperties::GetBindingEnergy(3,1);
     G4double eBindHe3 = G4NucleiProperties::GetBindingEnergy(3,2);
     G4double eBindA = G4NucleiProperties::GetBindingEnergy(4,2);
+    G4int ia=0;
     for(i=0; i<tmpHadrons->size(); i++)
     {
       if(tmpHadrons->operator[](i)->GetDefinition() == G4Neutron::Neutron())
@@ -395,9 +402,25 @@ if ( targetMass == 0 ) G4cout << "080731a It looks like something wrong value in
       else if(tmpHadrons->operator[](i)->GetDefinition() == G4Alpha::Alpha())
       {
         eBindProducts+=eBindA;
+        ia++; 
       }
     }
+
     theGammaEnergy += eBindProducts;
+
+//101111 
+//Special treatment for Be9 + n -> 2n + Be8 -> 2n + a + a
+if ( (G4int)(theBaseZ+eps) == 4 && (G4int)(theBaseA+eps) == 9 )
+{
+   // This only valid for G4NDL3.13,,,
+   if ( std::abs( theNuclearMassDifference -   
+        ( G4NucleiProperties::GetBindingEnergy( 8 , 4 ) -
+        G4NucleiProperties::GetBindingEnergy( 9 , 4 ) ) ) < 1*keV 
+      && ia == 2 )
+   {
+      theGammaEnergy -= (2*eBindA);
+   }
+}
     
     G4ReactionProductVector * theOtherPhotons = 0;
     G4int iLevel;
