@@ -151,6 +151,14 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 							G4Nucleus & aNucleus)
 {
   static G4int eventcounter=0;
+  
+//   if ( eventcounter == 0 ) {
+//      SetEpReportLevel(3);   // report non conservation with model etc.
+//      G4double relativeLevel = 1*perCent;
+//      G4double absoluteLevel = 2*MeV;
+//      SetEnergyMomentumCheckLevels(relativeLevel,absoluteLevel); 
+//   }
+  
   //if(eventcounter == 100*(eventcounter/100) )
   eventcounter++;
   if(getenv("BCDEBUG") ) G4cerr << " ######### Binary Cascade Reaction number starts ######### "<<eventcounter<<G4endl;
@@ -1563,7 +1571,7 @@ void G4BinaryCascade::StepParticlesOut()
 	  nsec++;
 	  G4double tStep(0), tdummy(0);
 	  G4bool intersect = 
-	       (G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep) ); 
+	       ((G4RKPropagation*)thePropagator)->GetSphereIntersectionTimes(kt,tdummy,tStep); 
 #ifdef debug_BIC_StepParticlesOut
 	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
 	         << " " <<kt->GetDefinition()->GetParticleName() 
@@ -1574,7 +1582,7 @@ void G4BinaryCascade::StepParticlesOut()
              throw G4HadronicException(__FILE__, __LINE__, "G4BinaryCascade::StepParticlesOut() particle not in nucleus");
           }
 #endif
-	  if(tStep<minTimeStep && tStep> 0 )
+	  if(intersect && tStep<minTimeStep && tStep> 0 )
 	  {
 	    minTimeStep = tStep;
 	  }
@@ -2714,7 +2722,6 @@ void G4BinaryCascade::PrintWelcomeMessage()
 void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision, 
                                           G4KineticTrackVector * products)
 {
-  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
 
   G4KineticTrackVector debug1;
   debug1.push_back(collision->GetPrimary());
@@ -2729,6 +2736,8 @@ void G4BinaryCascade::DebugApplyCollision(G4CollisionInitialState * collision,
   G4double initial(0);
   G4KineticTrack * kt=collision->GetPrimary();
   initial +=  kt->Get4Momentum().e();
+
+  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
   
   initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
   initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
