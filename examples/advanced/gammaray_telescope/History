@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2010-11-10 00:15:41 asaim Exp $
+$Id: History,v 1.10 2010-11-11 17:28:25 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,10 @@ $Id: History,v 1.9 2010-11-10 00:15:41 asaim Exp $
                           History file
                           ------------
 
+11.11.2010   Gunter Folger,  Tag: gammaraytel-V09-03-03
+	     Use new G4MultipleScattering classes
+	     Correct initialisation of G4ThreeVector
+	     
 09.11.2010   Makoto Asai, Tag: gammaraytel-V09-03-02
              Fix AIDA file option.
 

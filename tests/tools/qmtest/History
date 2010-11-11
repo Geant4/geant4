@@ -1,4 +1,4 @@
-$Id: History,v 1.74 2010-11-10 18:16:38 gunter Exp $
+$Id: History,v 1.75 2010-11-11 17:32:21 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,6 +11,9 @@ $Id: History,v 1.74 2010-11-10 18:16:38 gunter Exp $
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-Nov-2010, G.Folger                 (testtools-QMtest-V09-03-24)
+- build advanced example gammaraytel; do not run, crashes on exit
 
 10-Nov-2010, G.Folger                 (testtools-QMtest-V09-03-23)
 - fix ...-olap-run 
