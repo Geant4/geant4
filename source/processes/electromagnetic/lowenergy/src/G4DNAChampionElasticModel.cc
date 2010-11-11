@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.15 2010-10-17 11:28:51 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.cc,v 1.16 2010-11-11 22:32:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,9 +40,8 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
 :G4VEmModel(nam),isInitialised(false)
 {
 
-  killBelowEnergy = 0.025*eV; // Minimum e- energy for energy loss by excitation
+  killBelowEnergy = 4*eV; 
   lowEnergyLimit = 0 * eV; 
-  lowEnergyLimitOfModel = 0.025 * eV; 
   highEnergyLimit = 1. * MeV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
@@ -63,6 +62,7 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
            << highEnergyLimit / MeV << " MeV"
            << G4endl;
   }
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -218,7 +218,7 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* mate
   if (ekin < highEnergyLimit)
   {
       //SI : XS must not be zero otherwise sampling of secondaries method ignored
-      if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
+      if (ekin < killBelowEnergy) return DBL_MAX;
       //      
       
 	std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;

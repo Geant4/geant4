@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh,v 1.3 2010-04-08 17:30:16 sincerti Exp $
+// $Id: G4DNAChampionElasticModel.hh,v 1.4 2010-11-11 22:32:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,6 +61,9 @@ public:
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
+				 
+  inline void SetKillBelowThreshold (G4double threshold);		 
+  G4double GetKillBelowThreshold () { return killBelowEnergy; }		 
 
 protected:
 
@@ -70,7 +73,6 @@ private:
 
   G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
-  G4double lowEnergyLimitOfModel;  
   G4double highEnergyLimit; 
   G4bool isInitialised;
   G4int verboseLevel;
@@ -124,6 +126,18 @@ private:
   G4DNAChampionElasticModel(const  G4DNAChampionElasticModel&);
 
 };
+
+
+inline void G4DNAChampionElasticModel::SetKillBelowThreshold (G4double threshold) 
+{ 
+    killBelowEnergy = threshold; 
+    
+    if (threshold < 1*eV)
+     G4Exception ("*** WARNING : the G4DNAChampionElasticModel class is not validated below 1 eV !","",JustWarning,"") ;
+    
+    if (threshold < 0.025*eV) threshold = 0.025*eV;
+             
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

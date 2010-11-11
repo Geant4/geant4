@@ -1,4 +1,4 @@
-$Id: History,v 1.463 2010-11-10 19:38:46 vnivanch Exp $
+$Id: History,v 1.464 2010-11-11 22:32:22 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11.11.2010, S. Incerti, tag emlowen-V09-03-56
+            Added new control of low energy limit of G4DNA e- models
+            Energy ranges adapted accordingly.
 
 10.11.2010, V. Ivanchenko, tag emlowen-V09-03-55
             F.Longo and G.Depaiola provided new models:

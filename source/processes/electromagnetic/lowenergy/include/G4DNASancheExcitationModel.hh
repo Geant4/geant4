@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh,v 1.1 2010-09-08 13:46:45 sincerti Exp $
+// $Id: G4DNASancheExcitationModel.hh,v 1.2 2010-11-11 22:32:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -67,12 +67,15 @@ public:
 
   G4double PartialCrossSection(G4double energy,G4int level);
 
+  inline void SetLowEnergyLimit (G4double /*threshold*/);		 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
 
+  G4double killBelowEnergy;  
   G4double lowEnergyLimit;  
   G4double highEnergyLimit; 
   G4bool isInitialised;
@@ -100,6 +103,13 @@ private:
   G4DNASancheExcitationModel(const  G4DNASancheExcitationModel&);
 
 };
+
+inline void G4DNASancheExcitationModel::SetLowEnergyLimit (G4double threshold) 
+{ 
+    lowEnergyLimit = threshold;
+    if (lowEnergyLimit < 2*eV)
+     G4Exception ("*** WARNING : the G4DNASancheExcitationModel class is not validated below 2 eV !","",JustWarning,"") ;   
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

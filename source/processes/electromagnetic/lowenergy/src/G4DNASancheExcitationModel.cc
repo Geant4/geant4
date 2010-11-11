@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc,v 1.3 2010-09-15 17:53:25 sincerti Exp $
+// $Id: G4DNASancheExcitationModel.cc,v 1.4 2010-11-11 22:32:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,7 +42,7 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
 :G4VEmModel(nam),isInitialised(false)
 {
 
-  lowEnergyLimit = 0.025 * eV; 
+  lowEnergyLimit = 2 * eV; 
   highEnergyLimit = 100 * eV;
   SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);

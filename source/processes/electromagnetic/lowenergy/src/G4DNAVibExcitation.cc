@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAVibExcitation.cc,v 1.1 2010-09-08 13:46:45 sincerti Exp $
+// $Id: G4DNAVibExcitation.cc,v 1.2 2010-11-11 22:32:22 sincerti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4DNAVibExcitation.hh"
@@ -65,7 +65,7 @@ void G4DNAVibExcitation::InitialiseProcess(const G4ParticleDefinition* p)
     if(name == "e-")
     { 
       if(!Model()) SetModel(new G4DNASancheExcitationModel);
-      Model()->SetLowEnergyLimit(0.025*eV);
+      Model()->SetLowEnergyLimit(2*eV);
       Model()->SetHighEnergyLimit(100*eV);
 
       AddEmModel(1, Model());
