@@ -1,4 +1,4 @@
-$Id: History,v 1.147 2010-11-10 15:19:18 gcosmo Exp $
+$Id: History,v 1.148 2010-11-11 10:17:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 11th, 2010 - G.Cosmo (geomnav-V09-03-06)
+-----------------------------
+- Set trials for zero steps to 5 before activating push in G4Navigator;
+  increased unit value to 100 times kCarTolerance to make push more effective.
 
 November 10th, 2010 - G.Cosmo (geomnav-V09-03-05)
 -----------------------------
