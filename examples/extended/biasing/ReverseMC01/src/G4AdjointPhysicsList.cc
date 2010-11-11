@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhysicsList.cc,v 1.2 2009-11-27 14:43:25 ldesorgh Exp $
+// $Id: G4AdjointPhysicsList.cc,v 1.3 2010-11-11 14:39:42 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -45,7 +45,7 @@ G4AdjointPhysicsList::G4AdjointPhysicsList():  G4VUserPhysicsList()
  defaultCutValue = 1.0*mm;
  SetVerboseLevel(1);
  theeminusIonisation =0;
- 
+ thepIonisation =0;
  
  use_eionisation = true;
  use_pionisation = false;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RMC01AnalysisManager.cc,v 1.6 2010-10-21 14:38:03 gunter Exp $
+// $Id: RMC01AnalysisManager.cc,v 1.7 2010-11-11 14:39:42 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //////////////////////////////////////////////////////////////
@@ -325,7 +325,7 @@ void RMC01AnalysisManager::EndOfEvent(const G4Event* anEvent)
    
    
    
-   if (nb_event>0 && stop_run_if_precision_reached && precision_to_reach >relative_error) {
+   if (nb_event>100 && stop_run_if_precision_reached && precision_to_reach >relative_error) {
 		G4cout<<precision_to_reach*100.<<"%  Precision reached!"<<std::endl;
 		theTimer->Stop();
 		elapsed_time+=theTimer->GetRealElapsed();
@@ -623,7 +623,7 @@ void RMC01AnalysisManager::ComputeMeanEdepAndError(const G4Event* anEvent,G4doub
    }
    
    //error computation
-   if (nb_event>0) {
+   if (nb_event>1) {
    	  mean = accumulated_edep/nb_event;
 	  G4double mean_x2 =accumulated_edep2/nb_event;
   	  error = factor*std::sqrt(mean_x2-mean*mean)/std::sqrt(G4double(nb_event));
