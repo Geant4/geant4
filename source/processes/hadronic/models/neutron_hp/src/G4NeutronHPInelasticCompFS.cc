@@ -40,6 +40,7 @@
 // 100406 "nothingWasKnownOnHadron=1" then sample mu isotropic in CM 
 //        add two_body_reaction
 // 100909 add safty 
+// 101111 add safty for _nat_ data case in Binary reaction, but break conservation  
 //
 #include "G4NeutronHPInelasticCompFS.hh"
 #include "G4Nucleus.hh"
@@ -680,7 +681,17 @@ void G4NeutronHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G4
    G4double A = targ->GetDefinition()->GetPDGMass() / proj->GetDefinition()->GetPDGMass();
    G4double AA = hadron->GetDefinition()->GetPDGMass() / proj->GetDefinition()->GetPDGMass(); 
    G4double E1 = proj->GetKineticEnergy();
-   G4double beta = std::sqrt ( A*(A+1-AA)/AA*(1+(1+A)/A*Q/E1) );
+
+// 101111
+// In _nat_ data (Q+E1) could become negative value, following line is safty for this case.
+   //if ( (Q+E1) < 0 ) 
+   if ( ( 1 + (1+A)/A*Q/E1 ) < 0 ) 
+   {
+// 1.0e-6 eV is additional safty for numeric precision 
+      Q = -( A/(1+A)*E1 ) + 1.0e-6*eV;
+   }
+
+   G4double beta = std::sqrt ( A*(A+1-AA)/AA*( 1 + (1+A)/A*Q/E1 ) );
    G4double gamma = AA/(A+1-AA)*beta;
    G4double E3 = AA/std::pow((1+A),2)*(beta*beta+1+2*beta*mu)*E1;
    G4double omega3 = (1+beta*mu)/std::sqrt(beta*beta+1+2*beta*mu);
