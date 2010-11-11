@@ -29,8 +29,6 @@
 // 05.03.07 V.Ivanchenko - use G4NucleonNuclearCrossSection
 // 06.03.07 V.Ivanchenko - add Initialise function
 //
-//
-
 
 #include "G4UElasticCrossSection.hh"
 
@@ -47,20 +45,19 @@
 #include "G4PionMinus.hh"
 #include "G4NistManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UElasticCrossSection::G4UElasticCrossSection(const G4ParticleDefinition*) 
 {
   verboseLevel = 0;
   hasGlauber = false;
   thEnergy   = 90.*GeV;
+  for (G4int i = 0; i < 93; i++) theFac[i] = 0.0;
   fGlauber   = new G4GlauberGribovCrossSection();
   fGheisha   = G4HadronCrossSections::Instance();
   fNucleon   = 0;
   fUPi       = 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UElasticCrossSection::~G4UElasticCrossSection()
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.cc,v 1.8 2010-10-12 06:03:37 dennis Exp $
+// $Id: G4BGGPionElasticXS.cc,v 1.9 2010-11-11 01:52:53 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,7 +38,6 @@
 // Creation date: 01.10.2003
 // Modifications:
 //
-//
 // -------------------------------------------------------------------
 //
 
@@ -50,13 +49,16 @@
 #include "G4PionMinus.hh"
 #include "G4NistManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition*) 
 {
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
   fLowEnergy = 20.*MeV;
+  for (G4int i = 0; i < 93; i++) {
+    theGlauberFac[i] = 0.0;
+    theCoulombFac[i] = 0.0;
+  }
   fPion = 0;
   fGlauber = 0;
   fHadron  = 0;
@@ -65,7 +67,6 @@ G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition*)
   isInitialized = false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BGGPionElasticXS::~G4BGGPionElasticXS()
 {
@@ -74,7 +75,6 @@ G4BGGPionElasticXS::~G4BGGPionElasticXS()
   delete fHadron;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double
 G4BGGPionElasticXS::GetZandACrossSection(const G4DynamicParticle* dp, 

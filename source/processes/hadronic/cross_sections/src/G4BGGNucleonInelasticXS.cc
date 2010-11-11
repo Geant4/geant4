@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonInelasticXS.cc,v 1.9 2010-10-12 06:16:19 dennis Exp $
+// $Id: G4BGGNucleonInelasticXS.cc,v 1.10 2010-11-11 01:51:31 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,10 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
   fLowEnergy = 20.*MeV;
+  for (G4int i = 0; i < 93; i++) {
+    theGlauberFac[i] = 0.0;
+    theCoulombFac[i] = 0.0;
+  }
   fNucleon = 0;
   fGlauber = 0;
   fHadron  = 0;

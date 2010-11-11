@@ -92,7 +92,8 @@ class G4HadronCrossSections
 public:
 
    G4HadronCrossSections()
-     : prevParticleDefinition(0), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
+     : prevParticleDefinition(0), prevElement(0), lastEkx(0.),
+       lastEkxPower(0.), verboseLevel(0)
    {}
 
    ~G4HadronCrossSections()

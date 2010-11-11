@@ -36,8 +36,7 @@
 #include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
+///////////////////////////////////////////////////////////////////////////////
 //
 
 const G4double G4GlauberGribovCrossSection::fNeutronBarCorrectionTot[93] = {
@@ -217,16 +216,15 @@ const G4double G4GlauberGribovCrossSection::fPionMinusBarCorrectionIn[93] = {
 };
 
 
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
+//////////////////////////////////////////////////////////////////////////////
 //
 
 G4GlauberGribovCrossSection::G4GlauberGribovCrossSection() 
 : fUpperLimit( 100000 * GeV ),
   fLowerLimit( 3 * GeV ),
-  fRadiusConst( 1.08*fermi )  // 1.1, 1.3 ?
+  fRadiusConst( 1.08*fermi ),  // 1.1, 1.3 ?
+  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
+  fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();

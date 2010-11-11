@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // 14.03.07 V. Grichine - first implementation
 //
 
@@ -37,7 +36,8 @@
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
 : fUpperLimit( 10000 * GeV ),
-  fLowerLimit( 0.03 * MeV )
+  fLowerLimit( 0.03 * MeV ),
+  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -71,17 +71,9 @@ G4HadronNucleonXsc::G4HadronNucleonXsc()
   theHe3      = G4He3::He3();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-//
 
 G4HadronNucleonXsc::~G4HadronNucleonXsc()
 {}
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-//
-//
 
 
 G4bool 

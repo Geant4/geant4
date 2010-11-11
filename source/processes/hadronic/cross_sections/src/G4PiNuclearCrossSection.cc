@@ -300,8 +300,9 @@
   2550, 2510, 2430, 2270, 2130, 2060, 2000, 1970, 1950, 1950, 1960, 1960, 
   1970, 1980, 1950, 1978, 1830, 1780};
 
- G4PiNuclearCrossSection::
- G4PiNuclearCrossSection()
+
+G4PiNuclearCrossSection::G4PiNuclearCrossSection()
+  : fTotalXsc(0.0), fElasticXsc(0.0)
  {
    thePimData.push_back(new G4PiData(he_t,   he_in,  e1, 38));
    thePipData.push_back(new G4PiData(he_t,   he_in,  e1, 38));

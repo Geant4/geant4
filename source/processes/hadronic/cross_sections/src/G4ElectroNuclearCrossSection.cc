@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.30 2010-10-14 05:25:22 dennis Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.31 2010-11-11 01:51:54 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -2404,33 +2404,45 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 {
-  // @@ All constants are the copy of that from GetCrossSection funct. => Make them general.
-  static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
+  // All constants are the copy of that from GetCrossSection funct.
+  //  => Make them general.
+  static const G4int nE=336; // !!  If you change this, change it in 
+                             //     GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
   static const G4double EMi=2.0612;          // Minimum Energy
   static const G4double EMa=50000.;          // Maximum Energy
-  static const G4double lEMi=std::log(EMi);       // Minimum logarithmic Energy
-  static const G4double lEMa=std::log(EMa);       // Maximum logarithmic Energy
+  static const G4double lEMi=std::log(EMi);  // Minimum logarithmic Energy
+  static const G4double lEMa=std::log(EMa);  // Maximum logarithmic Energy
   static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in Energy
   static const G4double mel=0.5109989;       // Mass of electron in MeV
-  static const G4double lmel=std::log(mel);       // Log of electron mass
-  G4double phLE=0.;                     // Prototype of the std::log(nu=E_gamma)
-  G4double Y[nE];                       // Prepare the array for randomization
+  static const G4double lmel=std::log(mel);  // Log of electron mass
+  G4double phLE=0.;                   // Prototype of the std::log(nu=E_gamma)
+  G4double Y[nE] = {0.0};             // Prepare the array for randomization
+
 #ifdef debug
-  G4cout<<"G4ElectroNuclearCrossSection::GetEguPhotE:B="<<lastF<<",l="<<lastL<<",J1="<<lastJ1[lastL]
-        <<",J2="<<lastJ2[lastL]<<",J3="<<lastJ3[lastL]<<",S="<<lastSig<<",E="<<lastE<<G4endl;
+  G4cout << "G4ElectroNuclearCrossSection::GetEguPhotE:B="
+         << lastF<<",l=" << lastL << ",J1=" << lastJ1[lastL]
+         << ",J2=" << lastJ2[lastL] << ",J3=" << lastJ3[lastL] << ",S="
+         << lastSig << ",E=" << lastE << G4endl;
 #endif
-  G4double lastLE=lastG+lmel;           // recover std::log(eE) from the gamma (lastG)
+
+  G4double lastLE=lastG+lmel;   // recover std::log(eE) from the gamma (lastG)
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
-  for(G4int i=lastF;i<=lastL;i++) Y[i]=dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
-  // @@ Tempory IF of H.P.: delete it if the *HP* err message does not show up M.K.@@
+  for (G4int i=lastF;i<=lastL;i++)
+    Y[i] = dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
+
+  // Tempory IF of H.P.: delete it if the *HP* err message does not 
+  // show up M.K.
   if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
   {
-    G4cerr<<"*HP*G4ElNucCS::GetEqPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<">"<<mL<<G4endl;
-    return 3.0*MeV; // quick and dirty workaround @@@ HP. (now can be not necessary M.K.)
+    G4cerr << "*HP*G4ElNucCS::GetEqPhotE:S=" << lastSig <<">" << Y[lastL]
+           << ",l=" << lastL << ">" << mL << G4endl;
+    return 3.0*MeV; // quick and dirty workaround @@@ HP.
+                    // (now can be not necessary M.K.)
   }
-  G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it is in the funct. region
+  G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it
+                                        // is in the funct. region
 #ifdef debug
   G4cout<<"G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: "<<ris<<",Y="<<Y[lastL]<<G4endl;
 #endif
