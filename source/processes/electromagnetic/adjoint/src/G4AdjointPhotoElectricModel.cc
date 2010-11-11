@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhotoElectricModel.cc,v 1.5 2009-12-16 17:50:05 gunter Exp $
+// $Id: G4AdjointPhotoElectricModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointPhotoElectricModel.hh"
@@ -210,6 +210,14 @@ G4double G4AdjointPhotoElectricModel::AdjointCrossSection(const G4MaterialCutsCo
   return totBiasedAdjointCS;
 
   
+}
+////////////////////////////////////////////////////////////////////////////////
+//			
+
+G4double G4AdjointPhotoElectricModel::GetAdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				G4double electronEnergy,
+				G4bool IsScatProjToProjCase)
+{	return AdjointCrossSection(aCouple,electronEnergy,IsScatProjToProjCase);
 }
 ////////////////////////////////////////////////////////////////////////////////
 //			

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointIonIonisationModel.cc,v 1.2 2009-11-20 10:31:20 ldesorgh Exp $
+// $Id: G4AdjointIonIonisationModel.cc,v 1.3 2010-11-11 11:51:56 ldesorgh Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4AdjointIonIonisationModel.hh"
@@ -314,6 +314,7 @@ void G4AdjointIonIonisationModel::DefineProjectileProperty()
     
     mass = theDirectPrimaryPartDef->GetPDGMass();
     massRatio= G4GenericIon::GenericIon()->GetPDGMass()/mass;
+    mass_ratio_projectile = massRatio;
     spin = theDirectPrimaryPartDef->GetPDGSpin();
     G4double q = theDirectPrimaryPartDef->GetPDGCharge()/eplus;
     chargeSquare = q*q;
