@@ -15,6 +15,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 
+11 November 2010  Dennis Wright (hadr-cross-V09-03-14)
+------------------------------------------------------
+Back out memory leak fixes of G4NeutronElasticXS.cc and G4NeutronInelasticXS.cc
+Not a memory leak after all.
+
 10 November 2010  Dennis Wright (hadr-cross-V09-03-13)
 ------------------------------------------------------
 NOTE: this tag deals exclusively with fixes of CoVerity-identified 
