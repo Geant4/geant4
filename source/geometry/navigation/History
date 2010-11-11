@@ -1,4 +1,4 @@
-$Id: History,v 1.148 2010-11-11 10:17:47 gcosmo Exp $
+$Id: History,v 1.149 2010-11-11 16:16:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 12th, 2010 - G.Cosmo (geomnav-V09-03-07)
+-----------------------------
+- Cleared compilation warnings for unused parameters; temporarily commented out.
 
 November 11th, 2010 - G.Cosmo (geomnav-V09-03-06)
 -----------------------------
