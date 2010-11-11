@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc,v 1.7 2010-11-11 01:57:58 dennis Exp $
+// $Id: G4NeutronInelasticXS.cc,v 1.8 2010-11-11 21:39:26 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -199,6 +199,9 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
   }
 
+  const G4Element* Elem = 
+    G4NistManager::Instance()->FindOrBuildElement(Z, true);
+
   // upload data from file
   data[Z] = new G4PhysicsLogVector();
 
@@ -224,10 +227,7 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       fNucleon->GetHadronNucleonXscPDG(dynParticle, proton);
       sig2 = fNucleon->GetInelasticHadronNucleonXsc();
     } else {
-      const G4Element* Elem = 
-         G4NistManager::Instance()->FindOrBuildElement(Z, true);
       ggXsection->GetCrossSection(dynParticle, Elem);
-      delete Elem;
       sig2 = ggXsection->GetInelasticGlauberGribovXsc();
     }
     if(sig2 > 0.) { coeff[Z] = sig1/sig2; }
