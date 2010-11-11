@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelSafety.cc,v 1.8 2010-11-09 18:03:46 japost Exp $
+// $Id: G4VoxelSafety.cc,v 1.9 2010-11-11 16:15:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Author:  John Apostolakis
@@ -74,7 +74,7 @@ G4VoxelSafety::~G4VoxelSafety()
 G4double
 G4VoxelSafety::ComputeSafety(const G4ThreeVector&     localPoint,
 			     const G4VPhysicalVolume& currentPhysical,
-			           G4double           maxLength)
+			           G4double ) //          maxLength)
 {
   // G4VPhysicalVolume *samplePhysical;
   G4LogicalVolume *motherLogical;

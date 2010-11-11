@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularNavigation.cc,v 1.13 2010-11-10 11:20:45 gcosmo Exp $
+// $Id: G4RegularNavigation.cc,v 1.14 2010-11-11 16:15:00 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4RegularNavigation implementation
@@ -290,7 +290,7 @@ G4RegularNavigation::LevelLocate( G4NavigationHistory& history,
                                   const G4int ,
                                   const G4ThreeVector& globalPoint,
                                   const G4ThreeVector* globalDirection,
-                                  const G4bool pLocatedOnEdge, 
+                                  const G4bool, // pLocatedOnEdge, 
                                   G4ThreeVector& localPoint )
 {
   G4VPhysicalVolume *motherPhysical, *pPhysical;
