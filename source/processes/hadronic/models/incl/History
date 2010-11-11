@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.33 2010-11-03 22:04:51 kaitanie Exp $
+$Id: History,v 1.34 2010-11-11 23:36:11 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,15 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+11 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-07)
+---------------------------------------------------------
+- Fixed some minor variable initialization issues reported by Coverity
+- Updated interfaces:
+  o INCL + built-in ABLA de-excitation: G4InclAblaCascadeInterface and
+  G4InclAblaLightIonInterface
+  o INCL + PreCompound model: G4InclCascadeInterface and
+  G4InclLightIonInterface
 
 03 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-06)
 ---------------------------------------------------------

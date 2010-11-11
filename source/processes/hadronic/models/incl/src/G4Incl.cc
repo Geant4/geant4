@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.33 2010-10-29 06:48:43 gunter Exp $ 
+// $Id: G4Incl.cc,v 1.34 2010-11-11 23:36:11 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -384,6 +384,7 @@ void G4Incl::setKindData(G4Kind *newKind)
 
 void G4Incl::processEventIncl(G4InclInput *input)
 {
+  //G4cout <<"Starting event " << eventnumber << G4endl;
   if(input == 0) {
     G4cerr <<"G4Incl fatal error: NULL pointer passed as input!" << G4endl;
     return;
@@ -392,78 +393,192 @@ void G4Incl::processEventIncl(G4InclInput *input)
 
   const G4double uma = 931.4942;
   const G4double melec = 0.511;
+  const G4double fmp = 938.2796;
 
-  G4double   pcorem = 0.0;
-  G4double   pxrem = 0.0;
-  G4double   pyrem = 0.0;
-  G4double   pzrem = 0.0;
+  G4double pcorem = 0.0;
+  G4double pxrem = 0.0;
+  G4double pyrem = 0.0;
+  G4double pzrem = 0.0;
 
   G4double ap = 0.0, zp = 0.0, mprojo = 0.0, pbeam = 0.0;
 
   varntp->clear();
-  if(calincl->bulletType() == 3) { // pi+ 
+
+  if(calincl->bulletType() == -12) {
+    be->ia_be = std::abs(calincl->bulletType());
+    be->iz_be = 6;
+  } else if(calincl->bulletType() == -666) {
+    be->iz_be = calincl->extendedProjectileZ();
+    be->ia_be = calincl->extendedProjectileA();
+  }
+
+  if(calincl->isExtendedProjectile() == false && calincl->bulletType() < -max_a_proj) {
+  //  if(calincl->bulletType() < -max_a_proj) {
+    G4cout <<"max a of composite projectile is: " << max_a_proj << G4endl;
+    exit(0);
+  }
+  if(calincl->bulletType() < 0) {
+    //    calincl->bulletType() = std::floor(calincl->bulletType() + 0.1); WTF???
+    be->pms_be=100.;
+    G4int i_tabled=0;
+    if(be->iz_be == 3 && be->ia_be == 6) {
+      be->rms_be=2.56;
+      be->bind_be=32.0;
+      i_tabled=1;
+    } else if(be->iz_be == 3 && be->ia_be == 7) { // TODO: Check the values!
+      be->rms_be=2.56;
+      be->bind_be=32.0;
+      i_tabled=1;
+    } else if(be->iz_be == 3 && be->ia_be == 8) {
+      be->rms_be=2.40;
+      be->bind_be=39.25;
+      i_tabled=1;
+    } else if(be->iz_be == 4 && be->ia_be == 7) {
+      be->rms_be=2.51;
+      be->bind_be=58.17;
+      i_tabled=1;
+    } else if(be->iz_be == 4 && be->ia_be == 9) {
+      be->rms_be=2.51;
+      be->bind_be=58.17;
+      i_tabled=1;
+    } else if(be->iz_be == 4 && be->ia_be == 10) {
+      be->rms_be=2.45;
+      be->bind_be=64.75;
+      i_tabled=1;
+    } else if(be->iz_be == 5 && be->ia_be == 10) {
+      be->rms_be=2.45;
+      be->bind_be=64.75;
+      i_tabled=1;
+    } else if(be->iz_be == 5 && be->ia_be == 11) {
+      be->rms_be=2.40;
+      be->bind_be=76.21;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && be->ia_be == 9) { // TODO: Check the values!
+      be->rms_be=2.44;
+      be->bind_be=92.17;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && be->ia_be == 10) { // TODO: Check the values!
+      be->rms_be=2.44;
+      be->bind_be=92.17;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && be->ia_be == 11) { // TODO: Check the values!
+      be->rms_be=2.44;
+      be->bind_be=92.17;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && calincl->bulletType() == -12) { // Special Carbon case
+      G4cout <<"Carbon 12 (special) selected." << G4endl;
+      be->rms_be=2.44;
+      be->bind_be=92.17;
+      i_tabled=1;
+    } else if(be->iz_be == 6 && be->ia_be == 12) {
+      be->rms_be=2.44;
+      be->bind_be=92.17;
+      i_tabled=1;
+    } else if(be->iz_be == 7 && be->ia_be == 16) {
+      be->rms_be=2.73;
+      be->bind_be=127.62;
+      i_tabled=1;
+    } else {
+      G4cout <<"Warning: No rms and binding for projectile ion A = " << be->ia_be << " Z = " << be->iz_be << G4endl;
+      be->rms_be=2.44;
+      be->bind_be=92.17;
+      G4cout <<"Warning: Using probably bad values rms = " << be->rms_be << " binding = " << be->bind_be << G4endl;
+      i_tabled=1;      
+    }
+      
+    if(i_tabled == 0) {
+      G4cout <<"This heavy ion (a,z)= " << be->ia_be << " " << be->iz_be << " is not defined as beam in INCL" << G4endl;
+      exit(0);
+    }
+      
+    //    G4cout <<"z projectile, rms_r, rms_p (gaussian model)" << be->iz_be << " " << be->rms_be << " " << be->pms_be << G4endl;
+    //    G4cout <<"binding energy (mev):" << be->bind_be << G4endl;
+    //    G4cout <<"fermi-breakup dresner below a=" << calincl->f[11] << G4endl;
+  }      
+  //  G4cout <<"Target Mass and Charge: " << calincl->targetA() << " " << calincl->targetZ() << G4endl;
+  //  calincl->f[10] = 0; // No clusters
+
+  if(calincl->bulletType() == -12) {  // C12 special case
+    mprojo=fmp*std::abs(calincl->bulletType()) - be->bind_be;
+    pbeam=std::sqrt(calincl->bulletE()*(calincl->bulletE()+2.*mprojo));
+    ap=std::abs(calincl->bulletType());
+    zp=be->iz_be;
+  } else if(calincl->bulletType() == -666) { // Generic extended projectile
+    mprojo=fmp*be->ia_be - be->bind_be;
+    pbeam=std::sqrt(calincl->bulletE()*(calincl->bulletE()+2.*mprojo));
+    ap=be->ia_be;
+    zp=be->iz_be;
+  }
+  // pi+
+  if(calincl->bulletType() == 3) { 
     mprojo = 139.56995;
     ap = 0.0;
     zp = 1.0;
   }
 
-  if(calincl->bulletType() == 4) { // pi0
+  // pi0
+  if(calincl->bulletType() == 4) {
     mprojo = 134.9764;
     ap = 0.0;
     zp = 0.0;
   }
 
-  if(calincl->bulletType() == 5) { // pi-
+  // pi-
+  if(calincl->bulletType() == 5) {
     mprojo = 139.56995;
     ap = 0.0;
     zp = -1.0;
   }
 
-  // Coulomb en entree seulement pour les particules ci-dessous.
-  if(calincl->bulletType() == 1) { // proton
+  // coulomb en entree seulement pour les particules ci-dessous
+
+  // proton
+  if(calincl->bulletType() == 1) {
     mprojo = 938.27231;
     ap = 1.0;
     zp = 1.0;
   }
-  
-  if(calincl->bulletType() == 2) { // neutron  
+
+  // neutron  
+  if(calincl->bulletType() == 2) {
     mprojo = 939.56563;
     ap = 1.0;
     zp = 0.0;
   }
-  
-  if(calincl->bulletType() == 6) { // deuteron
+
+  // deuteron
+  if(calincl->bulletType() == 6) {
     mprojo = 1875.61276;
     ap = 2.0;
     zp = 1.0;
   }
-  
-  if(calincl->bulletType() == 7) { // triton
+
+  // triton
+  if(calincl->bulletType() == 7) {
     mprojo = 2808.95;
     ap = 3.0;
     zp = 1.0;
   }
-  
-  if(calincl->bulletType() == 8) { // He3
+
+  // He3
+  if(calincl->bulletType() == 8) {
     mprojo = 2808.42;
     ap = 3.0;
     zp = 2.0;
   }
 
-  if(calincl->bulletType() == 9) { // Alpha
+  // Alpha
+  if(calincl->bulletType() == 9) {
     mprojo = 3727.42;
     ap = 4.0;
     zp = 2.0;
   }
 
-  if(calincl->bulletType() == -12) { // Carbon
-    mprojo = 12.0 * 938.27231;
+  // Carbon
+  if(calincl->bulletType() == -12) {
+    mprojo = 6.0*938.27231 + 6.0*939.56563;
     ap = 12.0;
     zp = 6.0;
-  } else if(calincl->bulletType() == -666) { // Generic extended ion projectile
-    mprojo = calincl->extendedProjectileA() * 938.27231;
-    ap = calincl->extendedProjectileA();
-    zp = calincl->extendedProjectileZ();
   }
 
   pbeam = std::sqrt(calincl->bulletE()*(calincl->bulletE() + 2.0*mprojo));         
@@ -481,15 +596,16 @@ void G4Incl::processEventIncl(G4InclInput *input)
   G4double garem = 0.0;
   G4double bimpac = 0.0;
   G4int jrem = 0;
+  G4double xjrem = 0.0, yjrem = 0.0, zjrem = 0.0;
   G4double alrem = 0.0;
 
-  /**
-   * Coulomb barrier treatment.
-   */
+  // Coulomb barrier
+  
   G4double probaTrans = 0.0;
   G4double rndm = 0.0;
 
   if((calincl->bulletType() == 1) || (calincl->bulletType() >= 6)) {
+    //    probaTrans = coulombTransm(calincl->bulletE(),apro,zpro,calincl->targetA(),calincl->targetZ());
     probaTrans = coulombTransm(calincl->bulletE(),ap,zp,calincl->targetA(),calincl->targetZ());
     standardRandom(&rndm, &(hazard->ial));
     if(rndm <= (1.0 - probaTrans)) {
@@ -498,63 +614,111 @@ void G4Incl::processEventIncl(G4InclInput *input)
     }
   }
 
-  /**
-   * Call the actual INCL routine.
-   */
-
+  //  G4cout <<"Before PNU:" << G4endl;
   //  randomGenerator->printSeeds();
-  G4double jremx, jremy, jremz;
-  pnu(&ibert, &nopart,&izrem,&iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,&jrem,
-      &jremx, &jremy, &jremz);
-  forceAbsor(&nopart, &iarem, &izrem, &esrem, &erecrem, &alrem, &berem, &garem, &jrem);
-  G4double aprf = double(iarem); // mass number of the prefragment
-  G4double jprf = 0.0;           // angular momentum of the prefragment
+  // Call the actual INCL routine:
+  pnu(&ibert, &nopart,&izrem,&iarem,&esrem,&erecrem,&alrem,&berem,&garem,&bimpac,
+      &jrem, &xjrem, &yjrem, &zjrem);
+  //  G4cout <<"After PNU:" << G4endl;
+  //  randomGenerator->printSeeds();
+  G4double mrem = int(zjrem/197.328); // CHECK
+  if (mrem > jrem) mrem=jrem;
+  if (mrem < -jrem) mrem=-jrem;
 
-  // Mean angular momentum of prefragment.                                  
-  jprf = 0.165 * std::pow(at,(2.0/3.0)) * aprf * (at - aprf) / (at - 1.0);                               
+//   nopart=1;
+//   kind[0]=1;
+//   ep[0]=799.835;
+//   alpha[0]=0.08716;
+//   beta[0]=0.;
+//   gam[0]=0.99619;
+//   izrem=82;
+//   iarem=208;
+//   esrem=200.;
+//   erecrem=0.18870;
+//   alrem=-0.47101;
+//   berem=0.;
+//   garem=0.88213;
+//   bimpac=2.;
+  forceAbsor(&nopart, &iarem, &izrem, &esrem, &erecrem, &alrem, &berem, &garem, &jrem);
+  G4double aprf = double(iarem);    // mass number of the prefragment
+  G4double jprf = 0.0;                // angular momentum of the prefragment
+
+  // Mean angular momentum of prefragment                                  
+  jprf = 0.165 * std::pow(at,(2.0/3.0)) * aprf*(at - aprf)/(at - 1.0);                               
   if (jprf < 0) {
     jprf = 0.0;
   }
 
-  // Reference M. de Jong, Ignatyuk, Schmidt Nuc. Phys A 613, p442, 7th line
+  // check m.de jong, ignatyuk, schmidt nuc.phys a 613, pg442, 7th line
   jprf = std::sqrt(2*jprf);
+
   jprf = jrem;
-  varntp->jremn = jrem; // Copy jrem to output tuple.
+  varntp->jremn = jrem;      // jrem copie dans le ntuple
 
-  G4double numpi = 0;  // Number  of pions.
-  G4double multn = 0;  // Number (multiplicity) of neutrons.
-  G4double multp = 0;  // Number (multiplicity) of protons.
+  G4double numpi = 0;  // compteurs de pions, neutrons protons
+  G4double multn = 0; 
+  G4double multp = 0;
 
-  // Ecriture dans le ntuple des particules de cascade (sauf remnant).      
-  varntp->ntrack = nopart; // Nombre de particules pour ce tir.
+  // ecriture dans le ntuple des particules de cascade (sauf remnant)      
+  varntp->ntrack = nopart;          // nombre de particules pour ce tir
+  if(varntp->ntrack >= VARNTPSIZE) {
+    if(verboseLevel > 2) {
+      G4cout <<"G4Incl error: Output data structure not big enough." << G4endl;
+    }
+  }
   varntp->massini = iarem;
   varntp->mzini = izrem;
   varntp->exini = esrem;
   varntp->bimpact = bimpac;
   
-  /**
-   * Three ways to compute the mass of the remnant: 
-   * -from the output of the cascade and the canonic mass
-   * -from energy balance (input - all emitted energies)
-   * -following the approximations of the cugnon code (esrem...)
-   */
-  G4double f0 = calincl->targetA();
-  G4double f1 = calincl->targetZ();
-  G4double f2 = calincl->bulletE();
-  G4double mcorem = mprojo + f2 + abla->pace2(f0, f1) + f0 * uma - f1 * melec;
+  //  three ways to compute the mass of the remnant: 
+  //                -from the output of the cascade and the canonic mass
+  //                -from energy balance (input - all emitted energies)
+  //                -following the approximations of the cugnon code (esrem...)
+  G4double mcorem = mprojo + calincl->bulletE() + abla->pace2(double(calincl->targetA()),double(calincl->targetZ()))
+    + calincl->targetA()*uma - calincl->targetZ()*melec;
 
   G4double pxbil = 0.0;
   G4double pybil = 0.0;
   G4double pzbil = 0.0;         
 
   if(nopart > -1) {
-    for(G4int j = 0; j < nopart; j++) {
-      varntp->itypcasc[j] = 1;
+    // Fill the projectile spectator variables
+    varntp->masp = ps->a_projspec;
+    varntp->mzsp = ps->z_projspec;
+    varntp->exsp = ps->ex_projspec;
+    varntp->spectatorP1 = ps->p1_projspec;
+    varntp->spectatorP2 = ps->p2_projspec;
+    varntp->spectatorP3 = ps->p3_projspec;
+    varntp->spectatorT = ps->t_projspec;
+    for(G4int j = 0; j <= nopart; j++) {
+      if(ep[j] < 0.0) { // Workaround to avoid negative energies (and taking std::sqrt of a negative number).
+	G4cout <<"G4Incl: Not registering particle with energy: " << ep[j] << G4endl;
+	continue;
+      }
+      if(kind[j] == 0) continue; // Empty particle rows are sometimes produced by lurking indexing problems. We can simply skip those "bad" entries...
+      if(gam[j] > CLHEP::pi) {
+	if(verboseLevel > 2) {
+	  G4cout <<"G4Incl: Just avoided floating point exception by using an ugly hack..." << G4endl;
+	}
+	continue; // Avoid floating point exception
+      }
+
+      varntp->itypcasc[j] = 1; // Particle was produced by the cascade
+      // Spectators of composite projectiles (7/2006, AB)
+      // (kind is negative in that case)
+      if(kind[j] <= 0) { // Particle is a projectile spectator that comes directly from the cascade
+	kind[j] *= -1;
+	varntp->itypcasc[j]=-1;
+	//	G4cout <<"Spectator registered!" << G4endl;
+	//	continue;
+      }
+	
       // kind(): 1=proton, 2=neutron, 3=pi+, 4=pi0, 5=pi -      
       if(kind[j] == 1) { 
 	varntp->avv[j] = 1;
 	varntp->zvv[j] = 1;
-	varntp->plab[j] = std::sqrt(ep[j] * (ep[j] + 1876.5592)); // cugnon
+	varntp->plab[j] = std::sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
 	multp = multp + 1;
 	mcorem = mcorem - ep[j] - 938.27231;
 	if(verboseLevel > 3) {
@@ -567,7 +731,6 @@ void G4Incl::processEventIncl(G4InclInput *input)
 	varntp->avv[j] = 1;
 	varntp->zvv[j] = 0;
 	varntp->plab[j] = std::sqrt(ep[j]*(ep[j]+1876.5592)); // cugnon
-	//varntp->plab[j] = std::sqrt(ep[j] * (ep[j] + 1879.13126)); // PK mass check
 	multn = multn + 1;
 	mcorem = mcorem - ep[j] - 939.56563;
 	if(verboseLevel > 3) {
@@ -575,7 +738,7 @@ void G4Incl::processEventIncl(G4InclInput *input)
 	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
 	}
       }
-
+      
       if(kind[j] == 3) { 
 	varntp->avv[j] = -1;
 	varntp->zvv[j] = 1;
@@ -655,7 +818,7 @@ void G4Incl::processEventIncl(G4InclInput *input)
 	numpi = numpi + 1;
 	mcorem = mcorem - ep[j] - 3724.818;
 	if(verboseLevel > 3) {
-	  G4cout <<"G4Incl: He4 produced! " << G4endl;
+	  G4cout <<"G4Incl: He3 produced! " << G4endl;
 	  G4cout <<"G4Incl: Momentum: "<< varntp->plab[j] << G4endl;
 	}
       }
@@ -668,28 +831,38 @@ void G4Incl::processEventIncl(G4InclInput *input)
       pzbil = pzbil + varntp->plab[j]*gam[j];
 
       if(verboseLevel > 3) {
-	G4cout <<"Momentum: " << varntp->plab[j] << G4endl;
-	G4cout <<"Theta: " << varntp->tetlab[j] << G4endl;
-	G4cout <<"Phi: " << varntp->philab[j] << G4endl;
+	G4cout <<"Momentum: " << varntp->plab[j]   << G4endl;
+	G4cout <<"Theta: "    << varntp->tetlab[j] << G4endl;
+	G4cout <<"Phi: "      << varntp->philab[j] << G4endl;
       }
     }
 
     // calcul de la masse (impulsion) du remnant coherente avec la conservation d'energie:
-    pcorem=std::sqrt(erecrem*(erecrem +2.*938.2796*iarem));   // cugnon
-    mcorem = 938.2796*iarem;                               // cugnon
-                
+    pcorem = std::sqrt(erecrem*(erecrem + 2.0 * 938.2796 * iarem));   // cugnon
+    mcorem = 938.2796 * iarem;                               // cugnon
+    varntp->pcorem = pcorem;
+    varntp->mcorem = mcorem;
     // Note: Il faut negliger l'energie d'excitation (ESREM) pour que le bilan 
     // d'impulsion soit correct a la sortie de la cascade.....et prendre la
     // masse MCOREM comme ci-dessus (fausse de ~1GeV par rapport aux tables...)        
-    pxrem=pcorem*alrem;
-    pyrem=pcorem*berem;
-    pzrem=pcorem*garem;
-        
-    pxbil=pxbil+pxrem;
-    pybil=pybil+pyrem;
-    pzbil=pzbil+pzrem;
+    pxrem = pcorem * alrem;
+    pyrem = pcorem * berem;
+    pzrem = pcorem * garem;
+    varntp->pxrem = pxrem;
+    varntp->pyrem = pyrem;
+    varntp->pzrem = pzrem;
+    pxbil = pxbil + pxrem;
+    pybil = pybil + pyrem;
+    pzbil = pzbil + pzrem;
 
-    if((std::fabs(pzbil-pbeam) > 5.0) || (std::sqrt(std::pow(pxbil,2)+std::pow(pybil,2)) >= 3.0)) {
+    // If on purpose, add here the spectator nuclei:	
+    if(calincl->bulletType() < 0 && ps->a_projspec != 0) {
+      pxbil=pxbil+ps->p1_projspec;
+      pybil=pybil+ps->p2_projspec;
+      pzbil=pzbil+ps->p3_projspec;
+    }
+
+    if((std::fabs(pzbil - pbeam) > 5.0) || (std::sqrt(std::pow(pxbil,2) + std::pow(pybil,2)) >= 3.0)) {
       if(verboseLevel > 3) {
 	G4cout <<"Bad momentum conservation after INCL:" << G4endl;
 	G4cout <<"delta Pz = " << std::fabs(pzbil - pbeam) << G4endl;
@@ -703,37 +876,37 @@ void G4Incl::processEventIncl(G4InclInput *input)
     varntp->izfis = 0;
     varntp->iafis = 0;
 
-    //  varntp->ntrack = varntp->ntrack + 1;  // on recopie le remnant dans le ntuple
+    // on recopie le remnant dans le ntuple
+    varntp->ntrack = varntp->ntrack + 1;
     varntp->massini = iarem;
     varntp->mzini = izrem;
     varntp->exini = esrem;
-    varntp->itypcasc[varntp->ntrack] = 1;
-    varntp->avv[varntp->ntrack] = iarem;
-    varntp->zvv[varntp->ntrack]= izrem;
-    varntp->plab[varntp->ntrack] = pcorem;
-    varntp->enerj[varntp->ntrack] = std::sqrt(std::pow(pcorem,2) + std::pow(mcorem,2)) - mcorem;
-    varntp->tetlab[varntp->ntrack] = 180.0*std::acos(garem)/3.141592654;
-    varntp->philab[varntp->ntrack] = 180.0*std::atan2(berem,alrem)/3.141592654;
-    varntp->ntrack++;
-    varntp->mulncasc = varntp->ntrack;
-    varntp->mulnevap = 0;
-    varntp->mulntot = varntp->mulncasc + varntp->mulnevap;
-    if(verboseLevel > 3) {
-      G4cout <<"G4Incl: Returning nucleus fragment. " << G4endl;
-      G4cout <<"G4Incl: Fragment A = " << varntp->avv[varntp->ntrack] << " Z = " << varntp->zvv[varntp->ntrack] << G4endl;
-      G4cout <<"Energy: " << varntp->enerj[varntp->ntrack] << G4endl;
-      G4cout <<"Momentum: " << varntp->plab[varntp->ntrack] << G4endl;
-      G4cout <<"Theta: " << varntp->tetlab[varntp->ntrack] << G4endl;
-      G4cout <<"Phi: " << varntp->philab[varntp->ntrack] << G4endl;
-    }
+    varntp->pxrem = pxrem;
+    varntp->pyrem = pyrem;
+    varntp->pzrem = pzrem;
+    varntp->mcorem = mcorem;
+    varntp->erecrem = pcorem;
+    varntp->erecrem = erecrem;
+
+#ifdef G4INCLDEBUG
+    theLogger->fillHistogram1D("bimpact", varntp->bimpact);
+#endif
+
+#ifdef G4INCLDEBUG
+    theLogger->fillHistogram1D("mzini", varntp->mzini);
+#endif
   }
-  else {
-    if(nopart == -2) {
-      varntp->ntrack = -2; //FIX: Error flag to remove events containing unphysical events (Ekin > Ebullet).
-    }
-    else {
-      varntp->ntrack = -1;
-    }
+  if(nopart == -2) {
+    varntp->ntrack = -2; //FIX: Error flag to remove events containing unphysical events (Ekin > Ebullet).
+    evaporationResult->ntrack = -2; //FIX: Error flag to remove events containing unphysical events (Ekin > Ebullet).
+  }
+  else if(nopart == -1) {
+    varntp->ntrack = -1;
+    evaporationResult->ntrack = -1;
+  }
+  if(verboseLevel > 2) {
+    G4cout << __FILE__ << ":" << __LINE__ << "Dump varntp after combining: " << G4endl;
+    varntp->dump();
   }
 }
 

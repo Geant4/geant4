@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2010-10-26 02:47:58 kaitanie Exp $
+# $Id: GNUmakefile,v 1.12 2010-11-11 23:36:11 kaitanie Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -35,8 +35,14 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	    -I$(G4BASE)/processes/hadronic/models/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include/ \
 	    -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

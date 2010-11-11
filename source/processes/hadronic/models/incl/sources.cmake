@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-10-26 09:56:00 gcosmo Exp $
+# $Id: sources.cmake,v 1.3 2010-11-11 23:36:11 kaitanie Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -36,8 +36,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/processes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
