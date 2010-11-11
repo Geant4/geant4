@@ -45,6 +45,7 @@
 #include "G4HadronicException.hh"
  
 G4Nucleus::G4Nucleus()
+  : theA(0), theZ(0), aEff(0.0), zEff(0)
 {
   pnBlackTrackEnergy = 0.0;
   dtaBlackTrackEnergy = 0.0;

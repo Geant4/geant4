@@ -26,6 +26,11 @@
 #include "G4HadronicWhiteBoard.hh"
 
 
+G4HadronicWhiteBoard::G4HadronicWhiteBoard()
+  : theProjectile(0), theDef(0), theName(0)
+{}
+
+
 G4HadronicWhiteBoard & G4HadronicWhiteBoard::Instance()
 {
   static G4HadronicWhiteBoard theInstance;

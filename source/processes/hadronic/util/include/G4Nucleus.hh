@@ -75,7 +75,11 @@
          aEff=right.aEff;  
          zEff=right.zEff;  
          pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
-         dtaBlackTrackEnergy=right.dtaBlackTrackEnergy; 
+         dtaBlackTrackEnergy=right.dtaBlackTrackEnergy;
+         pnBlackTrackEnergyfromAnnihilation =
+                      right.pnBlackTrackEnergyfromAnnihilation; 
+         dtaBlackTrackEnergyfromAnnihilation =
+                      right.dtaBlackTrackEnergyfromAnnihilation; 
          theTemp = right.theTemp;
 	 excitationEnergy = right.excitationEnergy;
 	 momentum = right.momentum;
