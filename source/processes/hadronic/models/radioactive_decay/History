@@ -13,6 +13,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11 November 2010  F.Lei
+- further updates to G4RadioactivityTable.hh .cc and G4RadioactiveDecay.hh .cc
 
 10 November 2010  Dennis Wright (radioactive_decay-V09-03-02)
 -------------------------------------------------------------

@@ -63,7 +63,6 @@
 #include "G4RadioactivityTable.hh"
 
 #include <vector>
-#include <map>
 
 
 //class G4UserlimitsForRD;
@@ -159,8 +158,8 @@ public: // with description
 	// used in VR decay mode only 
 	//
 
-	std::vector<G4RadioactivityTable*> GetTheRadioactivityTables() {return theRadioactivityTables;}
-	// return the vector of G4Radioactivity pointers
+	std::vector<G4RadioactivityTable> GetTheRadioactivityTables() {return theRadioactivityTables;}
+	// return the vector of G4Radioactivity map
 	// should be used in VR mode only
 
 	G4DecayTable *LoadDecayTable (G4ParticleDefinition & theParentNucleus);
@@ -272,8 +271,8 @@ private:
 	G4RadioactiveDecayRateTable   theDecayRateTableVector;
 
 	// for the radioactivity tables
-	std::vector<G4RadioactivityTable*>	theRadioactivityTables;
-	std::map<G4int,G4int>		  decayWindows;
+	std::vector<G4RadioactivityTable>	theRadioactivityTables;
+	G4int		                        decayWindows[99];
 
 	//
 	static const G4double		  levelTolerance;

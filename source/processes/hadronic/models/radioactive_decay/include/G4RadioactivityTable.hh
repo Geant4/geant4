@@ -47,9 +47,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "globals.hh"
+#include <map>
 #include "G4ThreeVector.hh"
 
-#include <map>
+using std::map;
 
 
 class G4RadioactivityTable
@@ -65,35 +66,30 @@ public:
   //
   G4RadioactivityTable ();
 
-protected:
-  // hide copy construictor as protected
-  G4RadioactivityTable(const  G4RadioactivityTable &right);
-
-public:
   // destructor
   virtual ~G4RadioactivityTable();
 
+  //  G4RadioactivityTable(const  G4RadioactivityTable &right);
+  
 public:
   // with description
   //
   void AddIsotope( G4int, G4int, G4double, G4double);
-  // Add an isotope (A,Z,E) of rate to the table.
-  //   Z: Atomic Number
-  //   A: Atomic Mass
-  //   E: Excitaion energy
-  G4double GetRate (G4int, G4int, G4double);
+  // Add an isotope (Z,A,E) of rate to the table.
+  //
+  G4double GetRate(G4int, G4int, G4double);
   // Get the rate of isotoe (Z,A,E)
   //
   G4int Entries() const;
   // Get the total number of isotope spieces in the table
   //
-  std::map<G4ThreeVector,G4double> GetTheMap();
+  map<G4ThreeVector,G4double> GetTheMap();
   // Return the stl map! Mainly for printing.
   //
 private:
-
-	std::map<G4ThreeVector,G4double>      fRadioactivity;
-
+  
+  map<G4ThreeVector,G4double> fRadioactivity;
+  
 };
 
 #endif
