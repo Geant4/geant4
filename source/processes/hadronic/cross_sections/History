@@ -14,14 +14,53 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+10 November 2010  Dennis Wright (hadr-cross-V09-03-13)
+------------------------------------------------------
+NOTE: this tag deals exclusively with fixes of CoVerity-identified 
+bugs
+
+- G4HadronCrossSections.hh : fix uninitialized variable prevElement in ctor
+
+- Initialize arrays theGlauberFac and theCoulombFac in ctors of 
+  G4BGGNucleonElasticXS.cc, G4BGGNucleonInelasticXS.cc, G4BGGPionElasticXS.cc,
+  G4BGGPionInelasticXS.cc
+
+- Initialize all elements of array Y[nE] to 0.0 in 
+  G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
+
+- Initialize fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc,
+  fDiffractionXsc, fHadronNucleonXsc to 0.0 in ctors of 
+  G4GlauberGribovCrossSection.cc, G4GGNuclNuclCrossSection.cc
+
+- Initialize fTotalXsc, fElasticXsc, fInelasticXsc, fHadronNucleonXsc to 0.0
+  in ctor of G4HadronNucleonXsc,  
+
+- fix memory leak in G4NeutronElasticXS:Initialise and
+  G4NeutronInelasticXS:Initialise :
+   const G4Element* Elem = 
+     G4Element* G4NistManager::FindOrBuildElement(G4int Z, G4bool isotopes)
+  Elem goes out of scope, so delete it
+
+- Initialize fTotalXsc, fElasticXsc to 0.0 in ctors of
+  G4NucleonNuclearCrossSection.cc, G4PiNuclearCrossSection.cc
+
+- Initialize array theFac in ctors of
+  G4UElasticCrossSection.cc, G4UInelasticCrossSection.cc
+
+
 09 November 2010 Vladimir Ivanchenko (hadr-cross-V09-03-12)
+-----------------------------------------------------------
 - G4VComponentCrossSection - use G4ParticleDefinition and kinetic 
    energy instead of G4DynamicParticle
 - G4EMDissociationCrossSection - is now applicable for Hydrogen but 
    cross section for Hydrogen is zero 
 
+
 20 October 2010 Gunter Folger (hadr-cross-V09-03-11)
+----------------------------------------------------
 - add missing inline for GetCrossSection in G4BGGPionElasticXS.hh
+
 
 15 October 2010 Dennis Wright (hadr-cross-V09-03-10)
 ----------------------------------------------------
