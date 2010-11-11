@@ -35,7 +35,7 @@
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
 //
-// + Universit.AŽé Laval, QuŽébec (QC) Canada
+// + University Laval, Quebec (QC) Canada
 //*******************************************************
 //
 //*******************************************************
@@ -148,7 +148,7 @@ G4int DicomHandler::ReadFile(FILE *dicom, char * filename2)
 	      read_undefined_nested( dicom );
 	     else{
 	      if(read_defined_nested( dicom, elementLength4 )==0){
-	       G4cerr << "Reading defined nested functin failed!" << G4endl;
+	       G4cerr << "Function read_defined_nested() failed!" << G4endl;
 	       exit(-10);	       }
 	      }
 	    } else  { 
