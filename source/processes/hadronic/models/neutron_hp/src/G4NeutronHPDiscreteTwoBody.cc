@@ -29,6 +29,7 @@
 //
 //080612 Bug fix contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #2,3
 //080709 Bug fix Sampling Legendre expansion by T. Koi   
+//101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
 //
 #include "G4NeutronHPDiscreteTwoBody.hh"
 #include "G4Gamma.hh"
@@ -110,8 +111,11 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
        theStore.SetInterpolationManager(aManager);
        for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
        {
-         theStore.SetX(i, theCoeff[it].GetCoeff(i));
-         theStore.SetY(i, theCoeff[it].GetCoeff(i));
+         //101110
+         //theStore.SetX(i, theCoeff[it].GetCoeff(i));
+         //theStore.SetY(i, theCoeff[it].GetCoeff(i));
+         theStore.SetX(i/2, theCoeff[it].GetCoeff(i));
+         theStore.SetY(i/2, theCoeff[it].GetCoeff(i+1));
 	 i++;
        }
        cosTh = theStore.Sample();
@@ -124,8 +128,11 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
        theStore.SetInterpolationManager(aManager);
        for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
        {
-         theStore.SetX(i, theCoeff[it].GetCoeff(i));
-         theStore.SetY(i, theCoeff[it].GetCoeff(i));
+         //101110
+         //theStore.SetX(i, theCoeff[it].GetCoeff(i));
+         //theStore.SetY(i, theCoeff[it].GetCoeff(i));
+         theStore.SetX(i/2, theCoeff[it].GetCoeff(i));
+         theStore.SetY(i/2, theCoeff[it].GetCoeff(i+1));
 	 i++;
        }
        cosTh = theStore.Sample(); 
@@ -160,8 +167,11 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
          theBuff1.SetInterpolationManager(aManager1);
 	 for(i=0;i<theCoeff[it-1].GetNumberOfPoly(); i++)
 	 {
-           theBuff1.SetX(i, theCoeff[it-1].GetCoeff(i));
-           theBuff1.SetY(i, theCoeff[it-1].GetCoeff(i));
+           //101110
+           //theBuff1.SetX(i, theCoeff[it-1].GetCoeff(i));
+           //theBuff1.SetY(i, theCoeff[it-1].GetCoeff(i));
+           theBuff1.SetX(i/2, theCoeff[it-1].GetCoeff(i));
+           theBuff1.SetY(i/2, theCoeff[it-1].GetCoeff(i+1));
 	   i++;
 	 }
 	 G4NeutronHPVector theBuff2;
@@ -170,8 +180,10 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
          theBuff2.SetInterpolationManager(aManager2);
 	 for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
 	 {
+           //theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
+           //theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
            theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
-           theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
+           theBuff2.SetY(i, theCoeff[it].GetCoeff(i+1));
 	   i++;
 	 }
 
@@ -214,8 +226,11 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
          theBuff1.SetInterpolationManager(aManager1);
 	 for(i=0;i<theCoeff[it-1].GetNumberOfPoly(); i++)
 	 {
-           theBuff1.SetX(i, theCoeff[it-1].GetCoeff(i));
-           theBuff1.SetY(i, theCoeff[it-1].GetCoeff(i));
+           //101110
+           //theBuff1.SetX(i, theCoeff[it-1].GetCoeff(i));
+           //theBuff1.SetY(i, theCoeff[it-1].GetCoeff(i));
+           theBuff1.SetX(i/2, theCoeff[it-1].GetCoeff(i));
+           theBuff1.SetY(i/2, theCoeff[it-1].GetCoeff(i+1));
 	   i++;
 	 }
 	 
@@ -225,8 +240,11 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
          theBuff2.SetInterpolationManager(aManager2);
 	 for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
 	 {
-           theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
-           theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
+           //101110
+           //theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
+           //theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
+           theBuff2.SetX(i/2, theCoeff[it].GetCoeff(i));
+           theBuff2.SetY(i/2, theCoeff[it].GetCoeff(i+1));
 	   i++;
 	 }
 
