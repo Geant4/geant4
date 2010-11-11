@@ -25,7 +25,7 @@
 //
 //#define VERBOSE_DOSEDEP
 //
-// $Id: G4PSDoseDeposit_RegNav.cc,v 1.4 2009-12-16 17:54:21 gunter Exp $
+// $Id: G4PSDoseDeposit_RegNav.cc,v 1.5 2010-11-11 11:17:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4PSDoseDeposit_RegNav
@@ -71,10 +71,10 @@ G4bool G4PSDoseDeposit_RegNav::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4bool verbose = 1;
 #endif
 
- if( aStep == 0 ) return FALSE; // it is 0 when called by GmScoringMgr after last event
+ if( aStep == 0 ) return FALSE; // it is 0 when called by ScoringMgr after last event
 
 #ifdef VERBOSE_DOSEDEP
- if( verbose ) G4cout << "GmG4PSDoseDeposit::FillScorer totalEdepo " << aStep->GetTotalEnergyDeposit() 
+ if( verbose ) G4cout << "G4PSDoseDeposit totalEdepo " << aStep->GetTotalEnergyDeposit() 
 		      << " Nsteps " << G4RegularNavigationHelper::theStepLengths.size() << G4endl;
 #endif
   //----- Do not distribute dose in voxels 
@@ -87,7 +87,7 @@ G4bool G4PSDoseDeposit_RegNav::ProcessHits(G4Step* aStep,G4TouchableHistory*)
     G4int  index = GetIndex(aStep);
     EvtMap->add(index,dose); 
 #ifdef VERBOSE_DOSEDEP
-    if( verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer  RN: energy lost " << dose << " index " << index << G4endl;
+    if( verbose) G4cout  << "G4PSDoseDeposit RN: energy lost " << dose << " index " << index << G4endl;
 #endif
   } else {
     //----- Distribute dose in voxels 
@@ -107,14 +107,13 @@ G4bool G4PSDoseDeposit_RegNav::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       G4double sl = rnsl[ii].second;
       slSum += sl;
 #ifdef VERBOSE_DOSEDEP
-      if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii << " RN: it\
-er1 step length geom " << sl << G4endl;
+      if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter1 step length geom " << sl << G4endl;
 #endif
     }
     
 #ifdef VERBOSE_DOSEDEP
     if( verbose )
-      G4cout << "GmG4PSDoseDeposit RN:  step length geom TOTAL " << slSum 
+      G4cout << "G4PSDoseDeposit RN:  step length geom TOTAL " << slSum 
 	     << " true TOTAL " << stepLength 
 	     << " ratio " << stepLength/slSum 
 	     << " Energy " << aStep->GetPreStepPoint()->GetKineticEnergy() 
@@ -129,7 +128,7 @@ er1 step length geom " << sl << G4endl;
 	G4double doseStep = dose * sl/slSum; //divide dose along steps, proportional to step lengthr
 	G4double dosewei = doseStep*wei;
 #ifdef VERBOSE_DOSEDEP
-	if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii 
+	if(verbose) G4cout  << "G4PSDoseDeposit "<< ii 
 			    << " dose " << dosewei 
 			    << " in " << index << G4endl;
 #endif
@@ -149,7 +148,7 @@ er1 step length geom " << sl << G4endl;
 	}
 	
 	for( ii = 0; ii < rnsl.size(); ii++ ){
-	  G4cout  << "GmG4PSDoseDeposit::FillScorer "<< ii
+	  G4cout  << "G4PSDoseDeposit "<< ii
 		  << " RN: iter0 corrected energy lost " << aStep->GetTotalEnergyDeposit()*rnsl[ii].second/slSum  
 		  << G4endl;
 	}
@@ -157,7 +156,7 @@ er1 step length geom " << sl << G4endl;
 #endif
       G4double slRatio = stepLength/slSum;
 #ifdef VERBOSE_DOSEDEP
-      if(verbose) G4cout << "GmG4PSDoseDeposit::FillScorer  RN: iter" << iiter << " step ratio " << slRatio << G4endl;
+      if(verbose) G4cout << "G4PSDoseDeposit RN: iter" << iiter << " step ratio " << slRatio << G4endl;
 #endif
       
       //--- energy at each interaction
@@ -172,7 +171,7 @@ er1 step length geom " << sl << G4endl;
 	    G4double sl = rnsl[ii].second;
 	    stepLengths.push_back( sl * slRatio );
 #ifdef VERBOSE_DOSEDEP
-	    if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii << " RN: iter" << iiter << " corrected step length " << sl*slRatio << G4endl;
+	    if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter" << iiter << " corrected step length " << sl*slRatio << G4endl;
 #endif
 	  }
 	  
@@ -185,7 +184,7 @@ er1 step length geom " << sl << G4endl;
 	    G4double elost = stepLengths[ii] * dEdx;
 	    
 #ifdef VERBOSE_DOSEDEP
-	    if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii << " RN: iter1 energy lost "  << elost 
+	    if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter1 energy lost "  << elost 
 				<< " energy at interaction " << kinEnergyPre 
 				<< " = stepLength " << stepLengths[ii] 
 				<< " * dEdx " << dEdx << G4endl;
@@ -207,7 +206,7 @@ er1 step length geom " << sl << G4endl;
 	    kinEnergyPre -= kinELost[ii];
 	    
 #ifdef VERBOSE_DOSEDEP
-	    if(verbose) G4cout << "GmG4PSDoseDeposit::FillScorer" << ii 
+	    if(verbose) G4cout << "G4PSDoseDeposit " << ii 
 			       << " RN: iter" << iiter << " step length geom " << stepLengths[ii] 
 			       << " geom2true " << rnsl[ii].second / stepLengths[ii]  << G4endl;
 #endif
@@ -218,12 +217,12 @@ er1 step length geom " << sl << G4endl;
 	  //Correct step lengths so that they sum the total step length
 	  G4double slratio = aStep->GetStepLength()/slSum;
 #ifdef VERBOSE_DOSEDEP
-	  if(verbose) G4cout << "GmG4PSDoseDeposit::FillScorer" << ii << " RN: iter" << iiter << " step ratio " << slRatio << G4endl;
+	  if(verbose) G4cout << "G4PSDoseDeposit " << ii << " RN: iter" << iiter << " step ratio " << slRatio << G4endl;
 #endif
 	  for( ii = 0; ii < rnsl.size(); ii++ ){
 	    stepLengths[ii] *= slratio;
 #ifdef VERBOSE_DOSEDEP
-	    if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii << " RN: iter" << iiter << " corrected step length " << stepLengths[ii] << G4endl;
+	    if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter" << iiter << " corrected step length " << stepLengths[ii] << G4endl;
 #endif
 	    }
 	  
@@ -238,7 +237,7 @@ er1 step length geom " << sl << G4endl;
 	    }
 	    G4double elost = stepLengths[ii] * dEdx;
 #ifdef VERBOSE_DOSEDEP
-	    if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii << " RN: iter" << iiter << " energy lost " << elost 
+	    if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter" << iiter << " energy lost " << elost 
 				<< " energy at interaction " << kinEnergyPre 
 				<< " = stepLength " << stepLengths[ii] 
 				<< " * dEdx " << dEdx << G4endl;
@@ -254,7 +253,7 @@ er1 step length geom " << sl << G4endl;
 	G4double enerRatio = (aStep->GetTotalEnergyDeposit()/totalELost);
 	
 #ifdef VERBOSE_DOSEDEP
-	if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii << " RN: iter" << iiter << " energy ratio " << enerRatio << G4endl;
+	if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter" << iiter << " energy ratio " << enerRatio << G4endl;
 #endif
 	
 #ifdef VERBOSE_DOSEDEP
@@ -264,7 +263,7 @@ er1 step length geom " << sl << G4endl;
 	  kinELost[ii] *= enerRatio;
 #ifdef VERBOSE_DOSEDEP
 	  elostTot += kinELost[ii];
-	  if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer "<< ii << " RN: iter" << iiter << " corrected energy lost " << kinELost[ii] 
+	  if(verbose) G4cout  << "G4PSDoseDeposit "<< ii << " RN: iter" << iiter << " corrected energy lost " << kinELost[ii] 
 			      << " orig elost " << kinELost[ii]/enerRatio 
 			      << " energy before interaction " << kinEnergyPreOrig-elostTot+kinELost[ii]
 			      << " energy after interaction " << kinEnergyPreOrig-elostTot
@@ -284,7 +283,7 @@ er1 step length geom " << sl << G4endl;
 	G4double dosewei = dose*wei;
 	G4int index = rnsl[ii].first;
 #ifdef VERBOSE_DOSEDEP
-	if(verbose) G4cout  << "GmG4PSDoseDeposit::FillScorer"<< ii 
+	if(verbose) G4cout  << "G4PSDoseDeposit "<< ii 
 			    << " dose " << dosewei
 			    << " in " << index
 			    << " RN: deposited energy " << kinELost[ii]*wei 
@@ -299,7 +298,7 @@ er1 step length geom " << sl << G4endl;
 #ifdef VERBOSE_DOSEDEP
       if(verbose) {
 	//      G4cout << "DOSE-DOSESUM " << (dose-dosesum)/dose << " DOSE " << dose << " DOSESUM " << dosesum << G4endl;
-	if( (dose-dosesum)/dose > 1.E-9 ) G4cout << ScoringVerb(debugVerb) << "GmG4PSDoseDeposit::FillScorer"<< "ERRORDOSE-DOSESUM " << (dose-dosesum)/dose << " DOSE " << dose << " DOSESUM " << dosesum << G4endl;
+	if( (dose-dosesum)/dose > 1.E-9 ) G4cout << ScoringVerb(debugVerb) << "G4PSDoseDeposit "<< "ERRORDOSE-DOSESUM " << (dose-dosesum)/dose << " DOSE " << dose << " DOSESUM " << dosesum << G4endl;
       }
 #endif
     }
@@ -361,7 +360,7 @@ G4PhantomParameterisation* G4PSDoseDeposit_RegNav::GetPhantomParam(G4bool mustEx
     }
   }
   
-  if( !paramreg && mustExist ) G4Exception("GmRegularParamUtils::GetPhantomParam:  No G4PhantomParameterisation found ");
+  if( !paramreg && mustExist ) G4Exception("G4PSDoseDeposit::GetPhantomParam():  No G4PhantomParameterisation found ");
   
   return paramreg;
   
