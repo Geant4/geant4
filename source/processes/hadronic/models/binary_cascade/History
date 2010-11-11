@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 Nov 2010, G.Folger		         had-binary-V09-03-05
+- fix compilation errors and warnings in G4BinaryCascade.
+
 10 Nov 2010, G.Folger		         had-binary-V09-03-04
 - *** lower CaptureThreshold in G4GeneratorPrecompoundInterface.cc 
        from 80 to 10 MeV. 
