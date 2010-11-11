@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2010-11-11 17:28:25 gunter Exp $
+$Id: History,v 1.11 2010-11-11 17:43:55 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,6 +12,8 @@ $Id: History,v 1.10 2010-11-11 17:28:25 gunter Exp $
 11.11.2010   Gunter Folger,  Tag: gammaraytel-V09-03-03
 	     Use new G4MultipleScattering classes
 	     Correct initialisation of G4ThreeVector
+	     Use predefined physics list in place of old style 
+	       GammaRayPhysics; latter crashes on exit.
 	     
 09.11.2010   Makoto Asai, Tag: gammaraytel-V09-03-02
              Fix AIDA file option.
