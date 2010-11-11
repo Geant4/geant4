@@ -31,6 +31,10 @@
 #include "exrdmAnalysisManager.hh"
 #include "G4UnitsTable.hh"
 #include "exrdmHisto.hh"
+#include "G4ProcessTable.hh"
+#include "G4RadioactiveDecay.hh"
+
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -122,9 +126,31 @@ void exrdmAnalysisManager::BeginOfRun()
 
 void exrdmAnalysisManager::EndOfRun()
 {
-  histo->save();  
-}
+  histo->save();
+  G4cout << "exrdmAnalysisManager: Histograms have been saved!" << G4endl;
 
+  // Output the induced radioactivities
+  //   in VR mode only
+  //
+  G4ProcessTable *pTable = G4ProcessTable::GetProcessTable();
+  G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *) pTable->FindProcess("RadioactiveDecay", "GenericIon");
+  if (rDecay != NULL) {
+    if (!rDecay->IsAnalogueMonteCarlo()) {
+      std::ofstream outfile ("./activities.data", std::ios::out );
+      std::vector<G4RadioactivityTable> theTables =  rDecay->GetTheRadioactivityTables();
+      for (size_t i = 0 ; i < theTables.size(); i++) {
+	outfile << "Radioactivities in decay window no. " << i << G4endl;
+	outfile << "Z \tA \tE \tActivity "<< G4endl;
+	map<G4ThreeVector,G4double> aMap = theTables[i].GetTheMap();
+	map<G4ThreeVector,G4double>::iterator iter;
+	for(iter=aMap.begin(); iter != aMap.end(); iter++)
+	  outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"<< iter->first.z() << "\t" << iter->second << G4endl;
+	outfile << G4endl;
+      }
+      outfile.close();
+    }
+  }
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void exrdmAnalysisManager::BeginOfEvent()
