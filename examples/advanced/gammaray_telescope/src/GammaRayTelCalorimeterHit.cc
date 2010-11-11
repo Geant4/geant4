@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterHit.cc,v 1.4 2006-06-29 15:56:17 gunter Exp $
+// $Id: GammaRayTelCalorimeterHit.cc,v 1.5 2010-11-11 17:25:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -50,7 +50,7 @@ GammaRayTelCalorimeterHit::GammaRayTelCalorimeterHit()
   CALBarNumber = 0;
   CALPlaneNumber = 0;
   IsCALPlane = 0;
-  pos = 0.;
+  pos = G4ThreeVector(0.,0.,0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
