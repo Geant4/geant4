@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.44 2010-11-10 11:20:11 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.45 2010-11-11 10:17:32 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -51,7 +51,7 @@ G4Navigator::G4Navigator()
   fActive= false; 
   ResetStackAndState();
 
-  fActionThreshold_NoZeroSteps  = 3; 
+  fActionThreshold_NoZeroSteps  = 5; 
   fAbandonThreshold_NoZeroSteps = 25; 
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
@@ -852,7 +852,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     {
        // Act to recover this stuck track. Pushing it along direction
        //
-       Step += 0.9*kCarTolerance;
+       Step += 100*kCarTolerance;
 #ifdef G4VERBOSE
        if ((!fPushed) && (fWarnPush))
        {
