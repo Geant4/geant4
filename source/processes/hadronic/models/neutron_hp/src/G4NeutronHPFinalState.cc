@@ -26,6 +26,7 @@
 //
 //080721 Create adjust_final_state method by T. Koi
 //080801 Residual reconstruction with theNDLDataA,Z (A, Z, and momentum are adjusted) by T. Koi
+//101110 Set lower limit for gamma energy(1keV) by T. Koi
 
 #include "G4NeutronHPFinalState.hh"
 
@@ -36,6 +37,8 @@
 
 void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 {
+
+   G4double minimum_energy = 1*keV;
 
    if ( adjustResult != true ) return;
 
@@ -174,7 +177,8 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
    {
 
       // Adjust p
-      if ( dif_4p.v().mag() < 1*MeV )
+      //if ( dif_4p.v().mag() < 1*MeV )
+      if ( minimum_energy < dif_4p.v().mag() && dif_4p.v().mag() < 1*MeV )
       {
 
          nSecondaries += 1;
@@ -183,7 +187,7 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       }
       else
       {
-         //G4cout << "HP_DB Difference in dif_p is too large (>1MeV) to adjust, so that give up tuning" << G4endl;
+         //G4cout << "HP_DB Difference in dif_p is too large (>1MeV) or too small(<1keV) to adjust, so that give up tuning" << G4endl;
       }
 
    }
@@ -212,13 +216,21 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
       nSecondaries += 2;
       G4double e1 = ( dif_4p.e() -dif_4p.v().mag() ) / 2;
-      G4double costh = 2.*G4UniformRand()-1.;
-      G4double phi = twopi*G4UniformRand();
-      G4ThreeVector dir( std::sin(std::acos(costh))*std::cos(phi), 
-                         std::sin(std::acos(costh))*std::sin(phi),
-                         costh);
-      theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ) );    
-      theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ) );    
+      
+      if ( minimum_energy < e1 )  
+      {
+         G4double costh = 2.*G4UniformRand()-1.;
+         G4double phi = twopi*G4UniformRand();
+         G4ThreeVector dir( std::sin(std::acos(costh))*std::cos(phi), 
+                            std::sin(std::acos(costh))*std::sin(phi),
+                            costh);
+         theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , e1*dir ) );    
+         theResult.AddSecondary ( new G4DynamicParticle ( G4Gamma::Gamma() , -e1*dir ) );    
+      }
+      else
+      {
+         //G4cout << "HP_DB Difference is too small(<1keV) to adjust, so that neglect it" << G4endl;
+      }
 
    }
    else    //dif_e < 0
