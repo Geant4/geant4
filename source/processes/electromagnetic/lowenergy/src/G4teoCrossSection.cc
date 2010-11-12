@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4teoCrossSection.cc,v 1.6 2010-06-06 23:40:35 mantero Exp $
+//$Id: G4teoCrossSection.cc,v 1.7 2010-11-12 18:09:44 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         

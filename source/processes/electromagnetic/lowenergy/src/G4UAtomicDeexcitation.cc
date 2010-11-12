@@ -6,7 +6,7 @@
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * include a list of copyright holders.                            *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
@@ -23,43 +23,92 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4AtomicDeexcitation.cc,v 1.11 
+// $Id: G4UAtomicDeexcitation.cc,v 1.11 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
+// -------------------------------------------------------------------
 //
-// History:
-// -----------
+// Geant4 Class file
 //  
-//  16 Sept 2001  First committed to cvs
-//  12 Sep  2003  Bug in auger production fixed
+// Authors: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
+//
+// Created 22 April 2010 from old G4UAtomicDeexcitation class 
+//
+// Modified:
+// ---------
+//  
+//
+// -------------------------------------------------------------------
+//
+// Class description:
+// Implementation of atomic deexcitation 
 //
 // -------------------------------------------------------------------
 
-#include "G4AtomicDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4FluoTransition.hh"
 
-G4AtomicDeexcitation::G4AtomicDeexcitation():
-  minGammaEnergy(100.*eV),
-  minElectronEnergy(100.*eV),
-  fAuger(false)
+using namespace std;
+
+G4UAtomicDeexcitation::G4UAtomicDeexcitation():
+  G4VAtomDeexcitation("UAtomDeexcitation"),
+  minGammaEnergy(DBL_MAX), 
+  minElectronEnergy(DBL_MAX)
+{
+  SetAugerActive(false);
+
+  // initializing PIXE
+
+  SetPIXEActive(true);
+  if ( !PIXECrossSectionModel()) {
+    SetPIXECrossSectionModel("ECPSSR_Analytical");
+  }
+
+  if (PIXECrossSectionModel() == "ECPSSR_Analytical") {
+    PIXEshellCS = new G4teoCrossSection("analytical");
+  }
+
+  else if (PIXECrossSectionModel() == "empirical") {
+    PIXEshellCS = new G4empCrossSection;
+  }
+  else {SetPIXEActive(false);}
+
+}
+
+G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 {}
 
-G4AtomicDeexcitation::~G4AtomicDeexcitation()
+void G4UAtomicDeexcitation::InitialiseForNewRun()
+{
+  transitionManager = G4AtomicTransitionManager::Instance();
+}
+
+void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
 {}
 
-std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int givenShellId)
-{ 
+const G4AtomicShell* 
+G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
+{
+  return transitionManager->Shell(Z, G4int(shell));
+}
 
-  std::vector<G4DynamicParticle*>* vectorOfParticles;
-  
-  vectorOfParticles = new std::vector<G4DynamicParticle*>;
+void G4UAtomicDeexcitation::GenerateParticles(
+		      std::vector<G4DynamicParticle*>* vectorOfParticles,  
+		      const G4AtomicShell* atomicShell, 
+		      G4int Z,
+		      G4double gammaCut,
+		      G4double eCut)
+{
+  // Defined initial conditions
+  G4int givenShellId = atomicShell->ShellId();
+  minGammaEnergy = gammaCut;
+  minElectronEnergy = eCut;
+
+  // generation secondaries
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
@@ -84,7 +133,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 	    }
 	  else
 	    {
-	      G4Exception("G4AtomicDeexcitation: starting shell uncorrect: check it");
+	      G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
 	    }
 	}
       else 
@@ -102,32 +151,62 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
 	    }
 	  else
 	    {
-	      G4Exception("G4AtomicDeexcitation: starting shell uncorrect: check it");
+	      G4Exception("G4UAtomicDeexcitation: starting shell uncorrect: check it");
 	    }
 	}
       counter++;
-      if (aParticle != 0) {vectorOfParticles->push_back(aParticle);}
+      if (aParticle != 0) 
+	{
+	  vectorOfParticles->push_back(aParticle);
+	  //	  G4cout << "FLUO!" << G4endl; //debug
+	}
       else {provShellId = -2;}
     }
   
   // Look this in a particular way: only one auger emitted! // ????
   while (provShellId > -2); 
-  
-  if (vectorOfParticles->size() > 0) {
-    G4cout << " DEEXCITATION!" << G4endl;
-  }
-  return vectorOfParticles;
 }
 
-G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
+G4double 
+G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
+			       const G4ParticleDefinition* pdef, 
+			       G4int Z /*Z*/, 
+			       G4AtomicShellEnumerator shellEnum/*shell*/,
+			       G4double kineticEnergy/*kinE*/)
 {
-  if (shellId <=0 ) 
-    {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
 
+  std::vector<G4double> atomXSs =  PIXEshellCS->GetCrossSection(Z,kineticEnergy,pdef->GetPDGMass(),0);
+
+  return atomXSs[shellEnum];
+}
+
+void G4UAtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
+{
+  minGammaEnergy = cut;
+}
+
+void G4UAtomicDeexcitation::SetCutForAugerElectrons(G4double cut)
+{
+  minElectronEnergy = cut;
+}
+
+G4double 
+G4UAtomicDeexcitation::ComputeShellIonisationCrossSectionPerAtom(
+                               const G4ParticleDefinition*, 
+			       G4int /*Z*/, 
+			       G4AtomicShellEnumerator /*shell*/,
+			       G4double /*kinE*/)
+{
+  return 0.0;
+}
+
+G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
+{
+  if (shellId <=0 ) {
+    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+  }
   G4bool fluoTransitionFoundFlag = false;
   
-  const G4AtomicTransitionManager*  transitionManager = 
-        G4AtomicTransitionManager::Instance();
   G4int provShellId = -1;
   G4int shellNum = 0;
   G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);  
@@ -191,21 +270,16 @@ G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
   return provShellId;
 }
 
-G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z, 
-							      G4int shellId,
-							      G4int provShellId )
+G4DynamicParticle* 
+G4UAtomicDeexcitation::GenerateFluorescence(G4int Z, G4int shellId,
+					    G4int provShellId )
 { 
-
-
-  const G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
-  //  G4int provenienceShell = provShellId;
-
   //isotropic angular distribution for the outcoming photon
   G4double newcosTh = 1.-2.*G4UniformRand();
-  G4double  newsinTh = std::sqrt(1.-newcosTh*newcosTh);
+  G4double newsinTh = std::sqrt((1.-newcosTh)*(1. + newcosTh));
   G4double newPhi = twopi*G4UniformRand();
   
-  G4double xDir =  newsinTh*std::sin(newPhi);
+  G4double xDir = newsinTh*std::sin(newPhi);
   G4double yDir = newsinTh*std::cos(newPhi);
   G4double zDir = newcosTh;
   
@@ -245,6 +319,8 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
   G4double transitionEnergy = transitionManager->
     ReachableShell(Z,shellNum)->TransitionEnergy(index);
   
+  if (transitionEnergy < minGammaEnergy) return 0;
+
   // This is the shell where the new vacancy is: it is the same
   // shell where the electron came from
   newShellId = transitionManager->
@@ -257,25 +333,18 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
   return newPart;
 }
 
-G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
+G4DynamicParticle* G4UAtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 {
-  if(!fAuger) return 0;
-  
+  if(!IsAugerActive()) { return 0; }
 
-  const G4AtomicTransitionManager*  transitionManager = 
-        G4AtomicTransitionManager::Instance();
-
-
-
-  if (shellId <=0 ) 
-    {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
-  
+  if (shellId <=0 ) {
+    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+  }
   // G4int provShellId = -1;
   G4int maxNumOfShells = transitionManager->NumberOfReachableAugerShells(Z);  
   
   const G4AugerTransition* refAugerTransition = 
         transitionManager->ReachableAugerShell(Z,maxNumOfShells-1);
-
 
   // This loop gives to shellNum the value of the index of shellId
   // in the vector storing the list of the vacancies in the variuos shells 
@@ -285,7 +354,6 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
   // G4int p = refAugerTransition->FinalShellId();
 
   G4int shellNum = 0;
-
 
   if ( shellId <= refAugerTransition->FinalShellId() ) 
     //"FinalShellId" is final from the point of view of the elctron who makes the transition, 
@@ -297,8 +365,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	  shellNum++;
  	  if(shellNum == maxNumOfShells)
  	    {
-
- 	      //G4Exception("G4AtomicDeexcitation: No Auger transition found");
+ 	      //G4Exception("G4UAtomicDeexcitation: No Auger transition found");
 	      return 0;
  	    }
 	}
@@ -420,7 +487,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       // and the id of the shell, from which the transition e- come (transitionRandomShellid)
       // If no Transition has been found, 0 is returned.  
 
-      if (!foundFlag) {return 0;}      
+      if (!foundFlag) {return 0;} 
       
       // Isotropic angular distribution for the outcoming e-
       G4double newcosTh = 1.-2.*G4UniformRand();
@@ -443,43 +510,19 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	G4cout << "transitionShellId: " << transitionRandomShellId << G4endl;
       */
       
+      if (transitionEnergy < minElectronEnergy) return 0;
+
       // This is the shell where the new vacancy is: it is the same
       // shell where the electron came from
       newShellId = transitionRandomShellId;
       
-      
-      G4DynamicParticle* newPart = new G4DynamicParticle(G4Electron::Electron(), 
-							 newElectronDirection,
-							 transitionEnergy);
-      return newPart;
-
+      return new G4DynamicParticle(G4Electron::Electron(), 
+				   newElectronDirection,
+				   transitionEnergy);
     }
   else 
     {
-      //G4Exception("G4AtomicDeexcitation: no auger transition found");
+      //G4Exception("G4UAtomicDeexcitation: no auger transition found");
       return 0;
     }
-  
 }
-
-void G4AtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
-{
-  minGammaEnergy = cut;
-}
-
-void G4AtomicDeexcitation::SetCutForAugerElectrons(G4double cut)
-{
-  minElectronEnergy = cut;
-}
-
-void G4AtomicDeexcitation::ActivateAugerElectronProduction(G4bool val)
-{
-  fAuger = val;
-}
-
-
-
-
-
-
-

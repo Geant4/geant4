@@ -87,7 +87,7 @@
 #include "G4hIonEffChargeSquare.hh"
 #include "G4IonChuFluctuationModel.hh"
 #include "G4IonYangFluctuationModel.hh"
-#include "G4AtomicDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
 #include "G4MaterialCutsCouple.hh"
 #include <map>
 
@@ -313,7 +313,7 @@ private:
   G4double initialMass;  // mass to calculate Lambda tables
   G4double fBarkas;
 
-  G4AtomicDeexcitation deexcitationManager;
+  G4UAtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;
   G4VhShellCrossSection* shellCS;
   std::vector<G4VEMDataSet*> zFluoDataVector;

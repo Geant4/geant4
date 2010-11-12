@@ -173,6 +173,10 @@ void G4hLowEnergyIonisation::InitializeMe()
 
   shellCS = new G4teoCrossSection("analytical");
 
+  deexcitationManager.InitialiseForNewRun();
+  deexcitationManager.SetAugerActive(false);
+  deexcitationManager.SetPIXEActive(true);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -989,6 +993,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
 
   if(newpart != 0) {
 
+    //    G4cout << "AlongStep DEEXCTATION!!!" << G4endl; //debug 
     size_t nSecondaries = newpart->size();
     aParticleChange.SetNumberOfSecondaries(nSecondaries);
     G4Track* newtrack = 0;
@@ -1295,11 +1300,11 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 	  && (bindingEnergy >= minGammaEnergy
 	      ||  bindingEnergy >= minElectronEnergy) ) {
 	
-	G4int shellId = atomicShell->ShellId();
-	secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
+	//	G4int shellId = atomicShell->ShellId();
+	deexcitationManager.GenerateParticles(secondaryVector, atomicShell, Z, minGammaEnergy, minElectronEnergy);
 	
 	if (secondaryVector != 0) {
-	  
+	  // debug	  G4cout << "DEEXCTATION!!!" << G4endl; //debug  
 	  nSecondaries = secondaryVector->size();
 	  for (size_t i = 0; i<nSecondaries; i++) {
 	    
@@ -1449,15 +1454,15 @@ std::vector<G4DynamicParticle*>* G4hLowEnergyIonisation::DeexciteAtom(const G4Ma
   if(stop) return 0;
 
   // create vector of tracks of secondary particles
-
+  
   std::vector<G4DynamicParticle*>* partVector =
          new std::vector<G4DynamicParticle*>;
-  std::vector<G4DynamicParticle*>* secVector = 0;
+  std::vector<G4DynamicParticle*>* secVector = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
   G4double e, tkin, grej;
   G4ThreeVector position;
-  G4int shell, shellId;
+  G4int shell;
 
   // sample secondaries
 
@@ -1480,41 +1485,44 @@ std::vector<G4DynamicParticle*>* G4hLowEnergyIonisation::DeexciteAtom(const G4Ma
           grej = 1.0 - beta2 * tkin/tmax;
 
         } while( G4UniformRand() > grej );
-
+	
         shell = shellCS->SelectRandomShell(Z,incidentEnergy,hMass,tkin);
-
-        shellId = transitionManager->Shell(Z, shell)->ShellId();
+	
+	//        shellId = transitionManager->Shell(Z, shell)->ShellId();
         G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
-
-        if (maxE>minGammaEnergy || maxE>minElectronEnergy ) {
-          secVector = deexcitationManager.GenerateParticles(Z, shellId);
-	} else {
-          secVector = 0;
-	}
-
-        if (secVector) {
-
-          for (size_t l = 0; l<secVector->size(); l++) {
-
-            aSecondary = (*secVector)[l];
-            if(aSecondary) {
-
-              e = aSecondary->GetKineticEnergy();
-              type = aSecondary->GetDefinition();
-              if ( etot + e <= eLoss &&
-                   ( (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
-                   (type == G4Electron::Electron() && e > minElectronEnergy) ) ) {
-
-                     etot += e;
-                     partVector->push_back(aSecondary);
-
-	      } else {
-                     delete aSecondary;
-	      }
-	    }
+	
+        if (maxE>minGammaEnergy || maxE>minElectronEnergy ) 
+	  {
+          deexcitationManager.GenerateParticles(secVector, transitionManager->Shell(Z, shell), Z, minGammaEnergy, minElectronEnergy);
 	  }
-          delete secVector;
-	}
+
+	  if (!(secVector->empty())) {
+	    size_t secN = secVector->size();
+	    for (size_t l = 0; l<secN; l++) {
+	      
+	      aSecondary = (*secVector)[l];
+	      if(aSecondary) {
+		
+		e = aSecondary->GetKineticEnergy();
+		type = aSecondary->GetDefinition();
+		if ( etot + e <= eLoss &&
+		     ( (type == G4Gamma::Gamma() && e > minGammaEnergy ) ||
+		       (type == G4Electron::Electron() && e > minElectronEnergy) ) ) 
+		  {
+		    etot += e;
+		    partVector->push_back(aSecondary);  
+		  } 
+		else 
+		  {
+		    delete aSecondary;
+		  }
+		aSecondary = 0;
+	      }
+	      (*secVector)[l] = 0;
+	    }
+	    
+	    //	    delete secVector;
+	  }
       }
     }
   }
@@ -2012,7 +2020,7 @@ void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 
 void G4hLowEnergyIonisation::ActivateAugerElectronProduction(G4bool val)
 {
-  deexcitationManager.ActivateAugerElectronProduction(val);
+  deexcitationManager.SetAugerActive(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

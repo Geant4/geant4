@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.2 2010-06-25 09:41:15 gunter Exp $
+//$Id: G4AnalyticalEcpssrLiCrossSection.cc,v 1.3 2010-11-12 18:09:44 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
