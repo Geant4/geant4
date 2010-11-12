@@ -501,6 +501,9 @@ G4DynamicParticle* G4KaonMinusAbsorptionAtRest::SigmaLambdaConversion(G4DynamicP
 
   default: 
     sigmaLambdaConversionRate = 0.;
+    // Add dummy particles to avoid possibility of passing NULL pointers
+    inNucleonDef   = G4Proton::Proton();
+    outNucleonDef  = G4Proton::Proton();
   }
   
   if (ranflat >= sigmaLambdaConversionRate) return 0;

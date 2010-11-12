@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.55 2010-09-20 12:53:00 gunter Exp $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.56 2010-11-12 06:52:01 dennis Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   G4MuonMinusCaptureAtRest physics process
@@ -248,7 +248,7 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
   G4int iz = G4int(targetZ);
   G4int ia = G4int(targetA);
 
-  // proton as a target
+  // p, d, t, 3He or alpha as target
   if(iz <= 2) {
 
     if(ia > 1) {
@@ -258,10 +258,13 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
 	availableEnergy -= 2.0*neutron_mass_c2;
       } else if(iz == 2) {
         G4ParticleDefinition* pd = 0;
-	if(ia == 3) pd = G4Deuteron::Deuteron();
-	if(ia == 4) pd = G4Triton::Triton();
-        else 
+	if (ia == 3) {
+          pd = G4Deuteron::Deuteron();
+        } else if(ia == 4) {
+          pd = G4Triton::Triton();
+        } else { 
 	  pd = G4ParticleTable::GetParticleTable()->FindIon(1,ia-1,0,1);
+        }
 
 	//	G4cout << "Extra " << pd->GetParticleName() << G4endl;
 	availableEnergy -= pd->GetPDGMass();

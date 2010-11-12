@@ -208,9 +208,9 @@ G4PiMinusStopMaterial* G4PiMinusAbsorptionAtRest::LoadAlgorithm(int Z)
       G4cout << "Load material algorithm " << Z << G4endl; 
     }
 
-  G4int index = 3;
-  if (Z <= 3) { index = 3;}
-  if (Z > 3 && Z<= 6) {index = 6;}
+  G4int index = 0;
+  if (Z > 0 && Z < 4) {index = 3;}
+  if (Z > 3 && Z < 7) {index = 6;}
   if (Z == 7) {index = 7;}
   if (Z >= 8 && Z<= 11) {index = 8;}
   if (Z >= 12 && Z<= 18) {index = 13;}

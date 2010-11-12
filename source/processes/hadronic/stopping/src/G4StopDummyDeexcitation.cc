@@ -41,9 +41,10 @@
 
 // Constructor
 
-G4StopDummyDeexcitation::G4StopDummyDeexcitation()
-  
-{}
+G4StopDummyDeexcitation::G4StopDummyDeexcitation()  
+{
+  _products = 0;
+}
 
 
 // Destructor

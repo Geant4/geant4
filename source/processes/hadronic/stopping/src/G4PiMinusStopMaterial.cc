@@ -53,13 +53,12 @@
 // Constructor
 
 G4PiMinusStopMaterial::G4PiMinusStopMaterial()
-  
 {
   _definitions = 0;
   _momenta = 0;
   _distributionE = 0;
   _distributionAngle = 0;
-
+  theR = 0.5;
 }
 
 
@@ -67,11 +66,10 @@ G4PiMinusStopMaterial::G4PiMinusStopMaterial()
 
 G4PiMinusStopMaterial::~G4PiMinusStopMaterial()
 {
-  //  _definitions->clear();
   if (_definitions != 0) delete _definitions;
   _definitions = 0;
 
-  for(unsigned int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
+  for (unsigned int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
   if (_momenta != 0) delete _momenta;
 
   delete _distributionE;
@@ -93,14 +91,13 @@ std::vector<G4ParticleDefinition*>* G4PiMinusStopMaterial::DefinitionVector()
 
 }
 
-std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
-								      const G4double massNucleus)
+std::vector<G4LorentzVector*>*
+G4PiMinusStopMaterial::P4Vector(const G4double binding,
+                                const G4double massNucleus)
 {
-
-  // Generate energy of direct absorption products according to experimental data
-  // The energy distribution of the two nucleons is assumed to be the same 
-  // for protons and neutrons  
-
+  // Generate energy of direct absorption products according to experimental
+  // data.  The energy distribution of the two nucleons is assumed to be the
+  // same for protons and neutrons.  
 
   G4double eKin1;
   G4double eKin2;
@@ -189,13 +186,4 @@ G4double G4PiMinusStopMaterial::RecoilEnergy(const G4double mass)
 
   return eNucleus;
 }
-
-
-
-
-
-
-
-
-
 
