@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.hh,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,29 +32,46 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03SteppingAction_h
-#define ExN03SteppingAction_h 1
+#include "PrimaryGeneratorMessenger.hh"
 
-#include "G4UserSteppingAction.hh"
-
-class ExN03DetectorConstruction;
-class ExN03EventAction;
+#include "PrimaryGeneratorAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03SteppingAction : public G4UserSteppingAction
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
+                                          PrimaryGeneratorAction* Gun)
+:Action(Gun)
 {
-  public:
-    ExN03SteppingAction(ExN03DetectorConstruction*, ExN03EventAction*);
-   ~ExN03SteppingAction();
-
-    void UserSteppingAction(const G4Step*);
-    
-  private:
-    ExN03DetectorConstruction* detector;
-    ExN03EventAction*          eventaction;  
-};
+  gunDir = new G4UIdirectory("/N03/gun/");
+  gunDir->SetGuidance("PrimaryGenerator control");
+   
+  RndmCmd = new G4UIcmdWithAString("/N03/gun/rndm",this);
+  RndmCmd->SetGuidance("Shoot randomly the incident particle.");
+  RndmCmd->SetGuidance("  Choice : on(default), off");
+  RndmCmd->SetParameterName("choice",true);
+  RndmCmd->SetDefaultValue("on");
+  RndmCmd->SetCandidates("on off");
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
+{
+  delete RndmCmd;
+  delete gunDir;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PrimaryGeneratorMessenger::SetNewValue(
+                                        G4UIcommand* command, G4String newValue)
+{ 
+  if( command == RndmCmd )
+   { Action->SetRndmFlag(newValue);}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

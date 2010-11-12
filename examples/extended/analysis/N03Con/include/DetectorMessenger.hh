@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: DetectorMessenger.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,46 +32,45 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03PrimaryGeneratorMessenger.hh"
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
 
-#include "ExN03PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
-                                          ExN03PrimaryGeneratorAction* ExN03Gun)
-:ExN03Action(ExN03Gun)
+class DetectorMessenger: public G4UImessenger
 {
-  gunDir = new G4UIdirectory("/N03/gun/");
-  gunDir->SetGuidance("PrimaryGenerator control");
-   
-  RndmCmd = new G4UIcmdWithAString("/N03/gun/rndm",this);
-  RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on(default), off");
-  RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("on");
-  RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
+  public:
+    DetectorMessenger(DetectorConstruction* );
+   ~DetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    DetectorConstruction* Detector;
+    
+    G4UIdirectory*             N03Dir;
+    G4UIdirectory*             detDir;
+    G4UIcmdWithAString*        AbsMaterCmd;
+    G4UIcmdWithAString*        GapMaterCmd;
+    G4UIcmdWithADoubleAndUnit* AbsThickCmd;
+    G4UIcmdWithADoubleAndUnit* GapThickCmd;
+    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
+    G4UIcmdWithAnInteger*      NbLayersCmd;    
+    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PrimaryGeneratorMessenger::~ExN03PrimaryGeneratorMessenger()
-{
-  delete RndmCmd;
-  delete gunDir;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03PrimaryGeneratorMessenger::SetNewValue(
-                                        G4UIcommand* command, G4String newValue)
-{ 
-  if( command == RndmCmd )
-   { ExN03Action->SetRndmFlag(newValue);}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
 

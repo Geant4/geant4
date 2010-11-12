@@ -24,50 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: SteppingVerbose.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03EventActionMessenger.hh"
+class SteppingVerbose;
 
-#include "ExN03EventAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
+#ifndef SteppingVerbose_h
+#define SteppingVerbose_h 1
+
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
-:eventAction(EvAct)
+class SteppingVerbose : public G4SteppingVerbose
 {
-  eventDir = new G4UIdirectory("/N03/event/");
-  eventDir->SetGuidance("event control");
-   
-  PrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-}
+ public:   
+
+   SteppingVerbose();
+  ~SteppingVerbose();
+
+   void StepInfo();
+   void TrackingStarted();
+
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventActionMessenger::~ExN03EventActionMessenger()
-{
-  delete PrintCmd;
-  delete eventDir;   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03EventActionMessenger::SetNewValue(
-                                        G4UIcommand* command,G4String newValue)
-{ 
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

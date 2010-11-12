@@ -24,51 +24,52 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.cc,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: RunAction.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03RunAction.hh"
+#include "RunAction.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4ConvergenceTester.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03RunAction::ExN03RunAction()
+RunAction::RunAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03RunAction::~ExN03RunAction()
+RunAction::~RunAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run* aRun)
 { 
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   //inform the runManager to save random number seed
-  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+    
   //initialize cumulative quantities
   //
   sumEAbs = sum2EAbs =sumEGap = sum2EGap = 0.;
-  sumLAbs = sum2LAbs =sumLGap = sum2LGap = 0.; 
+  sumLAbs = sum2LAbs =sumLGap = sum2LGap = 0.;
 
-   Eabs_tally = new G4ConvergenceTester();
-   Egap_tally = new G4ConvergenceTester();
-   Labs_tally = new G4ConvergenceTester();
-   Lgap_tally = new G4ConvergenceTester();
+  Eabs_tally = new G4ConvergenceTester();
+  Egap_tally = new G4ConvergenceTester();
+  Labs_tally = new G4ConvergenceTester();
+  Lgap_tally = new G4ConvergenceTester();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::fillPerEvent(G4double EAbs, G4double EGap,
+void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
                                   G4double LAbs, G4double LGap)
 {
   //accumulate statistic
@@ -77,17 +78,17 @@ void ExN03RunAction::fillPerEvent(G4double EAbs, G4double EGap,
   sumEGap += EGap;  sum2EGap += EGap*EGap;
   
   sumLAbs += LAbs;  sum2LAbs += LAbs*LAbs;
-  sumLGap += LGap;  sum2LGap += LGap*LGap;  
+  sumLGap += LGap;  sum2LGap += LGap*LGap;
 
-   Eabs_tally->AddScore( EAbs ); 
-   Egap_tally->AddScore( EGap ); 
-   Labs_tally->AddScore( LAbs ); 
-   Lgap_tally->AddScore( LGap ); 
+  Eabs_tally->AddScore( EAbs ); 
+  Egap_tally->AddScore( EGap ); 
+  Labs_tally->AddScore( LAbs ); 
+  Lgap_tally->AddScore( LGap );     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03RunAction::EndOfRunAction(const G4Run* aRun)
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;
@@ -126,18 +127,17 @@ void ExN03RunAction::EndOfRunAction(const G4Run* aRun)
      << "\n mean trackLength in Gap      : " << G4BestUnit(sumLGap,"Length")
      << " +- "                               << G4BestUnit(rmsLGap,"Length")
      << "\n------------------------------------------------------------\n"
-     << G4endl;   
+     << G4endl;
 
-   Eabs_tally->ShowResult();
-   Eabs_tally->ShowHistory();
-   Egap_tally->ShowResult();
-   Egap_tally->ShowHistory();
+  Eabs_tally->ShowResult();
+  Eabs_tally->ShowHistory();
+  Egap_tally->ShowResult();
+  Egap_tally->ShowHistory();
 
-   Labs_tally->ShowResult();
-   Labs_tally->ShowHistory();
-   Lgap_tally->ShowResult();
-   Lgap_tally->ShowHistory();
-
+  Labs_tally->ShowResult();
+  Labs_tally->ShowHistory();
+  Lgap_tally->ShowResult();
+  Lgap_tally->ShowHistory();     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.cc,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: DetectorMessenger.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,9 +32,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03DetectorMessenger.hh"
+#include "DetectorMessenger.hh"
 
-#include "ExN03DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -43,9 +43,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03DetectorMessenger::ExN03DetectorMessenger(
-                                           ExN03DetectorConstruction* ExN03Det)
-:ExN03Detector(ExN03Det)
+DetectorMessenger::DetectorMessenger(
+                                           DetectorConstruction* Det)
+:Detector(Det)
 { 
   N03Dir = new G4UIdirectory("/N03/");
   N03Dir->SetGuidance("UI commands of this example");
@@ -106,7 +106,7 @@ ExN03DetectorMessenger::ExN03DetectorMessenger(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03DetectorMessenger::~ExN03DetectorMessenger()
+DetectorMessenger::~DetectorMessenger()
 {
   delete NbLayersCmd;
   delete AbsMaterCmd; delete GapMaterCmd;
@@ -119,32 +119,32 @@ ExN03DetectorMessenger::~ExN03DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == AbsMaterCmd )
-   { ExN03Detector->SetAbsorberMaterial(newValue);}
+   { Detector->SetAbsorberMaterial(newValue);}
    
   if( command == GapMaterCmd )
-   { ExN03Detector->SetGapMaterial(newValue);}
+   { Detector->SetGapMaterial(newValue);}
   
   if( command == AbsThickCmd )
-   { ExN03Detector->SetAbsorberThickness(AbsThickCmd
+   { Detector->SetAbsorberThickness(AbsThickCmd
                                                ->GetNewDoubleValue(newValue));}
    
   if( command == GapThickCmd )
-   { ExN03Detector->SetGapThickness(GapThickCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetGapThickness(GapThickCmd->GetNewDoubleValue(newValue));}
    
   if( command == SizeYZCmd )
-   { ExN03Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
    
   if( command == NbLayersCmd )
-   { ExN03Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
+   { Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
   
   if( command == UpdateCmd )
-   { ExN03Detector->UpdateGeometry(); }
+   { Detector->UpdateGeometry(); }
 
   if( command == MagFieldCmd )
-   { ExN03Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03RunAction.hh,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: EventAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,43 +32,44 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03RunAction_h
-#define ExN03RunAction_h 1
+#ifndef EventAction_h
+#define EventAction_h 1
 
-#include "G4ConvergenceTester.hh"
-#include "G4UserRunAction.hh"
+#include "G4UserEventAction.hh"
 #include "globals.hh"
+
+class RunAction;
+class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
-
-class ExN03RunAction : public G4UserRunAction
+class EventAction : public G4UserEventAction
 {
-  public:
-    ExN03RunAction();
-   ~ExN03RunAction();
+public:
+  EventAction(RunAction*);
+  virtual ~EventAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+  void  BeginOfEventAction(const G4Event*);
+  void    EndOfEventAction(const G4Event*);
     
-    void fillPerEvent(G4double, G4double, G4double, G4double); 
-
-  private:
-    G4double sumEAbs, sum2EAbs;
-    G4double sumEGap, sum2EGap;
+  void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
+  void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
+                     
+  void SetPrintModulo(G4int    val)  {printModulo = val;};
     
-    G4double sumLAbs, sum2LAbs;
-    G4double sumLGap, sum2LGap;    
-
-    G4ConvergenceTester* Eabs_tally; 
-    G4ConvergenceTester* Egap_tally; 
-    G4ConvergenceTester* Labs_tally; 
-    G4ConvergenceTester* Lgap_tally; 
+private:
+   RunAction*  runAct;
+   
+   G4double  EnergyAbs, EnergyGap;
+   G4double  TrackLAbs, TrackLGap;
+                     
+   G4int     printModulo;
+                             
+   EventActionMessenger*  eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

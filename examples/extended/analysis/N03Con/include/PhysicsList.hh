@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.2 2010-03-31 21:43:48 tkoi Exp $
+// $Id: PhysicsList.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,19 +32,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03PhysicsList_h
-#define ExN03PhysicsList_h 1
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03PhysicsList: public G4VUserPhysicsList
+class PhysicsList: public G4VUserPhysicsList
 {
 public:
-  ExN03PhysicsList();
-  virtual ~ExN03PhysicsList();
+  PhysicsList();
+  virtual ~PhysicsList();
 
   // Construct particle and physics
   void ConstructParticle();

@@ -24,32 +24,38 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingVerbose.hh,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: EventActionMessenger.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class ExN03SteppingVerbose;
-
-#ifndef ExN03SteppingVerbose_h
-#define ExN03SteppingVerbose_h 1
-
-#include "G4SteppingVerbose.hh"
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03SteppingVerbose : public G4SteppingVerbose
+#ifndef EventActionMessenger_h
+#define EventActionMessenger_h 1
+
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class EventAction;
+class G4UIdirectory;
+class G4UIcmdWithAnInteger;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class EventActionMessenger: public G4UImessenger
 {
- public:   
-
-   ExN03SteppingVerbose();
-  ~ExN03SteppingVerbose();
-
-   void StepInfo();
-   void TrackingStarted();
-
+public:
+  EventActionMessenger(EventAction*);
+  virtual ~EventActionMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+  EventAction*          eventAction;
+  G4UIdirectory*        eventDir;   
+  G4UIcmdWithAnInteger* PrintCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

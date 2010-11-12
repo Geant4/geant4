@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.hh,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: SteppingAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,33 +32,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03PrimaryGeneratorMessenger_h
-#define ExN03PrimaryGeneratorMessenger_h 1
+#ifndef SteppingAction_h
+#define SteppingAction_h 1
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include "G4UserSteppingAction.hh"
 
-class ExN03PrimaryGeneratorAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
+class DetectorConstruction;
+class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03PrimaryGeneratorMessenger: public G4UImessenger
+class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    ExN03PrimaryGeneratorMessenger(ExN03PrimaryGeneratorAction*);
-   ~ExN03PrimaryGeneratorMessenger();
+public:
+  SteppingAction(DetectorConstruction*, EventAction*);
+  virtual ~SteppingAction();
+
+  void UserSteppingAction(const G4Step*);
     
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    ExN03PrimaryGeneratorAction* ExN03Action;
-    G4UIdirectory*               gunDir; 
-    G4UIcmdWithAString*          RndmCmd;
+private:
+  DetectorConstruction* detector;
+  EventAction*          eventaction;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

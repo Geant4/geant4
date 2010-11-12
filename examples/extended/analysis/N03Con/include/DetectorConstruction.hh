@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.hh,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: DetectorConstruction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,8 +32,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03DetectorConstruction_h
-#define ExN03DetectorConstruction_h 1
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -43,16 +43,16 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
-class ExN03DetectorMessenger;
+class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03DetectorConstruction : public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
   
-    ExN03DetectorConstruction();
-   ~ExN03DetectorConstruction();
+    DetectorConstruction();
+   ~DetectorConstruction();
 
   public:
      
@@ -133,7 +133,7 @@ class ExN03DetectorConstruction : public G4VUserDetectorConstruction
      
      G4UniformMagField* magField;      //pointer to the magnetic field
      
-     ExN03DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+     DetectorMessenger* detectorMessenger;  //pointer to the Messenger
       
   private:
     
@@ -144,7 +144,7 @@ class ExN03DetectorConstruction : public G4VUserDetectorConstruction
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void ExN03DetectorConstruction::ComputeCalorParameters()
+inline void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
      LayerThickness = AbsorberThickness + GapThickness;

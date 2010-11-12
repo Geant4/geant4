@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.hh,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,32 +32,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03EventActionMessenger_h
-#define ExN03EventActionMessenger_h 1
+#ifndef PrimaryGeneratorMessenger_h
+#define PrimaryGeneratorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
-class ExN03EventAction;
+class PrimaryGeneratorAction;
 class G4UIdirectory;
-class G4UIcmdWithAnInteger;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03EventActionMessenger: public G4UImessenger
+class PrimaryGeneratorMessenger: public G4UImessenger
 {
-  public:
-    ExN03EventActionMessenger(ExN03EventAction*);
-   ~ExN03EventActionMessenger();
+public:
+  PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
+  virtual ~PrimaryGeneratorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    ExN03EventAction*     eventAction;
-    G4UIdirectory*        eventDir;   
-    G4UIcmdWithAnInteger* PrintCmd;    
+private:
+  PrimaryGeneratorAction* Action;
+  G4UIdirectory*          gunDir; 
+  G4UIcmdWithAString*     RndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

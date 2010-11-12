@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorAction.hh,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: PrimaryGeneratorAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,35 +32,34 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03PrimaryGeneratorAction_h
-#define ExN03PrimaryGeneratorAction_h 1
+#ifndef PrimaryGeneratorAction_h
+#define PrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
 class G4ParticleGun;
 class G4Event;
-class ExN03DetectorConstruction;
-class ExN03PrimaryGeneratorMessenger;
+class DetectorConstruction;
+class PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    ExN03PrimaryGeneratorAction(ExN03DetectorConstruction*);    
-   ~ExN03PrimaryGeneratorAction();
+public:
+  PrimaryGeneratorAction(DetectorConstruction*);    
+  virtual ~PrimaryGeneratorAction();
 
-  public:
-    void GeneratePrimaries(G4Event*);
-    void SetRndmFlag(G4String val) { rndmFlag = val;}
+  void GeneratePrimaries(G4Event*);
+  void SetRndmFlag(G4String val) { rndmFlag = val;}
 
-  private:
-    G4ParticleGun*                particleGun;	  //pointer a to G4  class
-    ExN03DetectorConstruction*    ExN03Detector;  //pointer to the geometry
+private:
+  G4ParticleGun*           particleGun;	 //pointer a to G4  class
+  DetectorConstruction*    Detector;     //pointer to the geometry
     
-    ExN03PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-    G4String                      rndmFlag;	  //flag for a rndm impact point
+  PrimaryGeneratorMessenger* gunMessenger;   //messenger of this class
+  G4String                   rndmFlag;	     //flag for a rndm impact point
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

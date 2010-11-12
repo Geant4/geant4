@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.1 2007-05-26 00:18:27 tkoi Exp $
+// $Id: RunAction.hh,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,45 +32,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef ExN03EventAction_h
-#define ExN03EventAction_h 1
+#ifndef RunAction_h
+#define RunAction_h 1
 
-#include "G4UserEventAction.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
-
-class ExN03RunAction;
-class ExN03EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN03EventAction : public G4UserEventAction
-{
- public:
-   ExN03EventAction(ExN03RunAction*);
-  ~ExN03EventAction();
+class G4Run;
+class G4ConvergenceTester;
 
- public:
-   void  BeginOfEventAction(const G4Event*);
-   void    EndOfEventAction(const G4Event*);
+class RunAction : public G4UserRunAction
+{
+public:
+  RunAction();
+  virtual ~RunAction();
+
+  void BeginOfRunAction(const G4Run*);
+  void   EndOfRunAction(const G4Run*);
     
-   void AddAbs(G4double de, G4double dl) {EnergyAbs += de; TrackLAbs += dl;};
-   void AddGap(G4double de, G4double dl) {EnergyGap += de; TrackLGap += dl;};
-                     
-   void SetPrintModulo(G4int    val)  {printModulo = val;};
+  void fillPerEvent(G4double, G4double, G4double, G4double); 
+
+private:
+  G4double sumEAbs, sum2EAbs;
+  G4double sumEGap, sum2EGap;
     
- private:
-   ExN03RunAction*  runAct;
-   
-   G4double  EnergyAbs, EnergyGap;
-   G4double  TrackLAbs, TrackLGap;
-                     
-   G4int     printModulo;
-                             
-   ExN03EventActionMessenger*  eventMessenger;
+  G4double sumLAbs, sum2LAbs;
+  G4double sumLGap, sum2LGap;
+
+  G4ConvergenceTester* Eabs_tally; 
+  G4ConvergenceTester* Egap_tally; 
+  G4ConvergenceTester* Labs_tally; 
+  G4ConvergenceTester* Lgap_tally;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    

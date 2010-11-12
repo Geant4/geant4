@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.cc,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: EventActionMessenger.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,47 +32,42 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03SteppingAction.hh"
+#include "EventActionMessenger.hh"
 
-#include "ExN03DetectorConstruction.hh"
-#include "ExN03EventAction.hh"
-
-#include "G4Step.hh"
-
-////#include "G4RunManager.hh"
+#include "EventAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03SteppingAction::ExN03SteppingAction(ExN03DetectorConstruction* det,
-                                         ExN03EventAction* evt)
-:detector(det), eventaction(evt)					 
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN03SteppingAction::~ExN03SteppingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03SteppingAction::UserSteppingAction(const G4Step* aStep)
+EventActionMessenger::EventActionMessenger(EventAction* EvAct)
+:eventAction(EvAct)
 {
-  // get volume of the current step
-  G4VPhysicalVolume* volume 
-  = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-  
-  // collect energy and track length step by step
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  
-  G4double stepl = 0.;
-  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
-    stepl = aStep->GetStepLength();
-      
-  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
-  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
-  
-  //example of saving random number seed of this event, under condition
-  //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 
+  eventDir = new G4UIdirectory("/N03/event/");
+  eventDir->SetGuidance("event control");
+   
+  PrintCmd = new G4UIcmdWithAnInteger("/N03/event/printModulo",this);
+  PrintCmd->SetGuidance("Print events modulo n");
+  PrintCmd->SetParameterName("EventNb",false);
+  PrintCmd->SetRange("EventNb>0");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EventActionMessenger::~EventActionMessenger()
+{
+  delete PrintCmd;
+  delete eventDir;   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventActionMessenger::SetNewValue(
+                                        G4UIcommand* command,G4String newValue)
+{ 
+  if(command == PrintCmd)
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

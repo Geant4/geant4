@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.2 2010-03-31 21:43:48 tkoi Exp $
+// $Id: PhysicsList.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03PhysicsList.hh"
+#include "PhysicsList.hh"
 
 #include "G4ProcessManager.hh"
 
@@ -45,7 +45,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
+PhysicsList::PhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*mm;
   SetVerboseLevel(1);
@@ -53,12 +53,12 @@ ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PhysicsList::~ExN03PhysicsList()
+PhysicsList::~PhysicsList()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03PhysicsList::ConstructParticle()
+void PhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -83,7 +83,7 @@ void ExN03PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03PhysicsList::ConstructProcess()
+void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
@@ -115,7 +115,7 @@ void ExN03PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03PhysicsList::ConstructEM()
+void PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -184,7 +184,7 @@ void ExN03PhysicsList::ConstructEM()
 
 #include "G4Decay.hh"
 
-void ExN03PhysicsList::ConstructDecay()
+void PhysicsList::ConstructDecay()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
@@ -203,10 +203,10 @@ void ExN03PhysicsList::ConstructDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03PhysicsList::SetCuts()
+void PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
-    G4cout << "ExN03PhysicsList::SetCuts:";
+    G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.1 2007-05-26 00:18:28 tkoi Exp $
+// $Id: SteppingAction.cc,v 1.1 2010-11-12 19:16:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,77 +32,47 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "ExN03EventAction.hh"
+#include "SteppingAction.hh"
 
-#include "ExN03RunAction.hh"
-#include "ExN03EventActionMessenger.hh"
+#include "DetectorConstruction.hh"
+#include "EventAction.hh"
 
-#include "G4Event.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
-#include "G4UnitsTable.hh"
+#include "G4Step.hh"
 
-#include "Randomize.hh"
-#include <iomanip>
+////#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03EventAction::ExN03EventAction(ExN03RunAction* run)
-:runAct(run),printModulo(1),eventMessenger(0)
+SteppingAction::SteppingAction(DetectorConstruction* det,
+                                         EventAction* evt)
+:detector(det), eventaction(evt)					 
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  eventMessenger = new ExN03EventActionMessenger(this);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN03EventAction::~ExN03EventAction()
-{
-  delete eventMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
-{  
- G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0) { 
-   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-   CLHEP::HepRandom::showEngineStatus();
- }
- 
- // initialisation per event
- EnergyAbs = EnergyGap = 0.;
- TrackLAbs = TrackLGap = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExN03EventAction::EndOfEventAction(const G4Event* evt)
-{
-  //accumulates statistic
-  //
-  runAct->fillPerEvent(EnergyAbs, EnergyGap, TrackLAbs, TrackLGap);
+  // get volume of the current step
+  G4VPhysicalVolume* volume 
+  = aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
   
-  //print per event (modulo n)
-  //
-  G4int evtNb = evt->GetEventID();
-  if (evtNb%printModulo == 0) {
-    G4cout << "---> End of event: " << evtNb << G4endl;	
-
-    G4cout
-       << "   Absorber: total energy: " << std::setw(7)
-                                        << G4BestUnit(EnergyAbs,"Energy")
-       << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(TrackLAbs,"Length")
-       << G4endl
-       << "        Gap: total energy: " << std::setw(7)
-                                        << G4BestUnit(EnergyGap,"Energy")
-       << "       total track length: " << std::setw(7)
-                                        << G4BestUnit(TrackLGap,"Length")
-       << G4endl;
-	  
-  }  
-}  
+  // collect energy and track length step by step
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  
+  G4double stepl = 0.;
+  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
+    stepl = aStep->GetStepLength();
+      
+  if (volume == detector->GetAbsorber()) eventaction->AddAbs(edep,stepl);
+  if (volume == detector->GetGap())      eventaction->AddGap(edep,stepl);
+  
+  //example of saving random number seed of this event, under condition
+  //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent(); 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
