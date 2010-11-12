@@ -38,6 +38,7 @@
 // 090514 Fix bug in IC electron emission case 
 //        Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 //        But it looks like never cause real effect in G4NDL3.13 (at least Natural elements) TK
+// 101111 Change warning message for "repFlag == 2 && isoFlag != 1" case 
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
@@ -123,7 +124,7 @@ void G4NeutronHPPhotonDist::InitAngular(std::ifstream & aDataFile)
   aDataFile >> isoFlag;
   if (isoFlag != 1)
   {
-if ( repFlag == 2 ) G4cout << "TKDB repFlag == 2 && isoFlag !=1  " << G4endl;
+if ( repFlag == 2 ) G4cout << "G4NeutronHPPhotonDist: repFlag == 2 && isoFlag != 1 is unexpected! If you use G4ND3.x, then please report to Geant4 Hyper News. Thanks." << G4endl;
     aDataFile >> tabulationType >> nDiscrete2 >> nIso;
 //080731
       if ( theGammas != NULL && nDiscrete2 != nDiscrete ) G4cout << "080731c G4NeutronHPPhotonDist nDiscrete2 != nDiscrete, It looks like something wrong in your NDL files. Please update the latest. If you still have this messages after the update, then please report to Geant4 Hyper News." << G4endl;
