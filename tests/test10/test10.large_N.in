@@ -65,8 +65,8 @@
 /run/beamOn 25
 #
 # EllipticalCone
-/mydet/SelectDetector EllipticalCone
-/run/beamOn 25
+#/mydet/SelectDetector EllipticalCone
+#/run/beamOn 25
 #
 # Tet
 /mydet/SelectDetector Tet
