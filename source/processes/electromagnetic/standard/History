@@ -1,4 +1,4 @@
-$Id: History,v 1.515 2010-11-05 19:15:09 vnivanch Exp $
+$Id: History,v 1.516 2010-11-12 19:43:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2010: V.Ivant (emstand-V09-03-26)
+- G4IonCoulombCrossSection and G4IonCoulombScatteringModel -
+  new model of single scattering of ions (C.Consolandi)
+- G4BetheBlochModel - Shell corrections factor according to ICRU'49 
+                      (returned back to version of 9.3)
 - G4WentzelVIModel - added usage of geometry factor and the option
   UseDistanceToBoundary; 
 
