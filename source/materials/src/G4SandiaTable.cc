@@ -23,8 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SandiaTable.cc,v 1.36 2010-11-01 18:18:57 vnivanch Exp $
+
+// $Id: G4SandiaTable.cc,v 1.37 2010-11-12 14:55:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -104,7 +106,7 @@ G4SandiaTable::~G4SandiaTable()
   }
   if(fPhotoAbsorptionCof)
   {
-    delete [] fPhotoAbsorptionCof ;
+    delete [] fPhotoAbsorptionCof;
   }
 }
 
@@ -264,7 +266,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
     }  
   fMaxInterval = MaxIntervals + 2;
 
-  //  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl ;
+  //  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;
  
   G4double* fPhotoAbsorptionCof0 = new G4double[fMaxInterval];
   G4double* fPhotoAbsorptionCof1 = new G4double[fMaxInterval];
@@ -272,136 +274,136 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   G4double* fPhotoAbsorptionCof3 = new G4double[fMaxInterval];
   G4double* fPhotoAbsorptionCof4 = new G4double[fMaxInterval];
 
-  for(c = 0 ; c<fMaxInterval ; c++)   // just in case
+  for(c = 0; c<fMaxInterval; c++)   // just in case
   {
-    fPhotoAbsorptionCof0[c] = 0. ;
-    fPhotoAbsorptionCof1[c] = 0. ;
-    fPhotoAbsorptionCof2[c] = 0. ;
-    fPhotoAbsorptionCof3[c] = 0. ;
-    fPhotoAbsorptionCof4[c] = 0. ;
+    fPhotoAbsorptionCof0[c] = 0.;
+    fPhotoAbsorptionCof1[c] = 0.;
+    fPhotoAbsorptionCof2[c] = 0.;
+    fPhotoAbsorptionCof3[c] = 0.;
+    fPhotoAbsorptionCof4[c] = 0.;
   }
-  c = 1 ;
+  c = 1;
 
-  for(i = 0 ; i < noElm ; i++)
+  for(i = 0; i < noElm; i++)
   {
-    G4double I1 = fIonizationPotentials[Z[i]]*keV ;  // First ionization
-    n1 = 1 ;                                     // potential in keV
+    G4double I1 = fIonizationPotentials[Z[i]]*keV;  // First ionization
+    n1 = 1;                                     // potential in keV
  
-    for(j = 1 ; j < Z[i] ; j++)
+    for(j = 1; j < Z[i]; j++)
     {
-      n1 += fNbOfIntervals[j] ;
+      n1 += fNbOfIntervals[j];
     }
-    G4int n2 = n1 + fNbOfIntervals[Z[i]] ;
+    G4int n2 = n1 + fNbOfIntervals[Z[i]];
     
-    for(k1 = n1 ; k1 < n2 ; k1++)
+    for(k1 = n1; k1 < n2; k1++)
     {
       if(I1  > fSandiaTable[k1][0])
       {
-	 continue ;    // no ionization for energies smaller than I1 (first
+	 continue;    // no ionization for energies smaller than I1 (first
       }		       // ionisation potential)		     
-      break ;
+      break;
     }
-    G4int flag = 0 ;
+    G4int flag = 0;
     
-    for(c1 = 1 ; c1 < c ; c1++)
+    for(c1 = 1; c1 < c; c1++)
     {
       if(fPhotoAbsorptionCof0[c1] == I1) // this value already has existed
       {
-	flag = 1 ;                      
-	break ;                         
+	flag = 1;                      
+	break;                         
       }
     }
     if(flag == 0)
     {
-      fPhotoAbsorptionCof0[c] = I1 ;
-      c++ ;
+      fPhotoAbsorptionCof0[c] = I1;
+      c++;
     }
-    for(k2 = k1 ; k2 < n2 ; k2++)
+    for(k2 = k1; k2 < n2; k2++)
     {
-      flag = 0 ;
+      flag = 0;
 
-      for(c1 = 1 ; c1 < c ; c1++)
+      for(c1 = 1; c1 < c; c1++)
       {
         if(fPhotoAbsorptionCof0[c1] == fSandiaTable[k2][0])
         {
-	  flag = 1 ;
- 	  break ;
+	  flag = 1;
+ 	  break;
         }
       }
       if(flag == 0)
       {
-        fPhotoAbsorptionCof0[c] = fSandiaTable[k2][0] ;
-	c++ ;
+        fPhotoAbsorptionCof0[c] = fSandiaTable[k2][0];
+	c++;
       }
     }       
   }   // end for(i)
 
   // sort out
-  for(i = 1; i < c ; i++ ) 
+  for(i = 1; i < c; i++ ) 
     {
-      for(j = i + 1 ; j < c;  j++ )
+      for(j = i + 1; j < c;  j++ )
 	{
 	  if(fPhotoAbsorptionCof0[i] > fPhotoAbsorptionCof0[j]) 
 	    {
 	      G4double tmp = fPhotoAbsorptionCof0[i];
 	      fPhotoAbsorptionCof0[i] = fPhotoAbsorptionCof0[j];
-	      fPhotoAbsorptionCof0[j] = tmp ;
+	      fPhotoAbsorptionCof0[j] = tmp;
 	    }
 	}
     }
   
-  fMaxInterval = c ;
+  fMaxInterval = c;
  
   const G4double* fractionW = fMaterial->GetFractionVector();
    
-  for(i = 0 ; i < noElm; i++)
+  for(i = 0; i < noElm; i++)
     {
-      n1 = 1 ;
-      G4double I1 = fIonizationPotentials[Z[i]]*keV ;
+      n1 = 1;
+      G4double I1 = fIonizationPotentials[Z[i]]*keV;
 
-      for(j = 1 ; j < Z[i] ; j++)
+      for(j = 1; j < Z[i]; j++)
 	{
-	  n1 += fNbOfIntervals[j] ;
+	  n1 += fNbOfIntervals[j];
 	}
-      G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1 ;
+      G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1;
 
-      for(k = n1 ; k < n2 ; k++)
+      for(k = n1; k < n2; k++)
 	{
 	  G4double B1 = fSandiaTable[k][0];
 	  G4double B2 = fSandiaTable[k+1][0];
-	  for(G4int c = 1 ; c < fMaxInterval-1 ; c++)
+	  for(G4int c = 1; c < fMaxInterval-1; c++)
 	    {
 	      G4double E1 = fPhotoAbsorptionCof0[c];
 	      G4double E2 = fPhotoAbsorptionCof0[c+1];
 	      if(B1 > E1 || B2 < E2 || E1 < I1)
 		{
-		  continue ;
+		  continue;
 		}
-	      fPhotoAbsorptionCof1[c] += fSandiaTable[k][1]*fractionW[i] ;
-	      fPhotoAbsorptionCof2[c] += fSandiaTable[k][2]*fractionW[i] ;
-	      fPhotoAbsorptionCof3[c] += fSandiaTable[k][3]*fractionW[i] ;
-	      fPhotoAbsorptionCof4[c] += fSandiaTable[k][4]*fractionW[i] ;
+	      fPhotoAbsorptionCof1[c] += fSandiaTable[k][1]*fractionW[i];
+	      fPhotoAbsorptionCof2[c] += fSandiaTable[k][2]*fractionW[i];
+	      fPhotoAbsorptionCof3[c] += fSandiaTable[k][3]*fractionW[i];
+	      fPhotoAbsorptionCof4[c] += fSandiaTable[k][4]*fractionW[i];
 	    }  
 	}   
       // Last interval
-      fPhotoAbsorptionCof1[fMaxInterval-1] += fSandiaTable[k][1]*fractionW[i] ;
-      fPhotoAbsorptionCof2[fMaxInterval-1] += fSandiaTable[k][2]*fractionW[i] ;
-      fPhotoAbsorptionCof3[fMaxInterval-1] += fSandiaTable[k][3]*fractionW[i] ;
-      fPhotoAbsorptionCof4[fMaxInterval-1] += fSandiaTable[k][4]*fractionW[i] ;
+      fPhotoAbsorptionCof1[fMaxInterval-1] += fSandiaTable[k][1]*fractionW[i];
+      fPhotoAbsorptionCof2[fMaxInterval-1] += fSandiaTable[k][2]*fractionW[i];
+      fPhotoAbsorptionCof3[fMaxInterval-1] += fSandiaTable[k][3]*fractionW[i];
+      fPhotoAbsorptionCof4[fMaxInterval-1] += fSandiaTable[k][4]*fractionW[i];
     }     // for(i)
   
-  c = 0 ;     // Deleting of first intervals where all coefficients = 0
+  c = 0;     // Deleting of first intervals where all coefficients = 0
 
   do                        
     {
-      c++ ;
+      c++;
 
       if( fPhotoAbsorptionCof1[c] != 0.0 ||
 	  fPhotoAbsorptionCof2[c] != 0.0 ||
 	  fPhotoAbsorptionCof3[c] != 0.0 || 
-	  fPhotoAbsorptionCof4[c] != 0.0     )  continue ;
+	  fPhotoAbsorptionCof4[c] != 0.0     )  continue;
        
-      for(jj = 2 ; jj < fMaxInterval ; jj++)
+      for(jj = 2; jj < fMaxInterval; jj++)
 	{
 	  fPhotoAbsorptionCof0[jj-1] = fPhotoAbsorptionCof0[jj];
 	  fPhotoAbsorptionCof1[jj-1] = fPhotoAbsorptionCof1[jj];
@@ -409,10 +411,10 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 	  fPhotoAbsorptionCof3[jj-1] = fPhotoAbsorptionCof3[jj];
 	  fPhotoAbsorptionCof4[jj-1] = fPhotoAbsorptionCof4[jj];
 	}
-      fMaxInterval-- ;
-      c-- ;
+      fMaxInterval--;
+      c--;
     }
-  while(c < fMaxInterval - 1) ;
+  while(c < fMaxInterval - 1);
   	
   // create the sandia matrix for this material
     
@@ -452,9 +454,15 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 
 G4SandiaTable::G4SandiaTable(G4int matIndex)
 { 
-  fMatSandiaMatrix = 0 ; 
+  fMaterial           = 0;
+  fMatNbOfIntervals   = 0;
+  fMatSandiaMatrix    = 0; 
   fMatSandiaMatrixPAI = 0;
-  fPhotoAbsorptionCof = 0 ;
+  fPhotoAbsorptionCof = 0;
+
+ 
+  fMaxInterval        = 0;
+  fVerbose            = 0;  
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   size_t numberOfMat = G4Material::GetNumberOfMaterials();
@@ -480,14 +488,11 @@ void
 G4SandiaTable::SandiaSort(G4double** da ,
  			  G4int sz )
 {
-   for(G4int i = 1 ;i < sz ; i++ ) 
+   for(G4int i = 1;i < sz; i++ ) 
    {
-     for(G4int j = i + 1 ;j < sz ; j++ )
+     for(G4int j = i + 1;j < sz; j++ )
      {
-       if(da[i][0] > da[j][0]) 
-       {
-	  SandiaSwap(da,i,j) ;
-       }
+       if(da[i][0] > da[j][0])   SandiaSwap(da,i,j);      
      }
    }
 }
@@ -501,89 +506,84 @@ G4int
 G4SandiaTable::SandiaIntervals(G4int Z[],
 			       G4int el )
 {
-  G4int c,i ;
+  G4int c,  i, flag = 0, n1 = 1;
+  G4int j, c1, k1, k2;
+  G4double I1;
+  fMaxInterval = 0;
 
-  fMaxInterval = 0 ;
+  for( i = 0; i < el; i++ )  fMaxInterval += fNbOfIntervals[ Z[i] ]; 
 
-  for(i=0;i<el;i++)
+  fMaxInterval += 2;
+
+  if( fVerbose > 0 ) G4cout<<"begin sanInt, fMaxInterval = "<<fMaxInterval<<G4endl;
+
+  fPhotoAbsorptionCof = new G4double* [fMaxInterval];
+
+  for( i = 0; i < fMaxInterval; i++ )   fPhotoAbsorptionCof[i] = new G4double[5];
+ 
+  //  for(c = 0; c < fIntervalLimit; c++)   // just in case
+
+  for( c = 0; c < fMaxInterval; c++ )     fPhotoAbsorptionCof[c][0] = 0.;
+  
+  c = 1;
+
+  for( i = 0; i < el; i++ )
   {
-    fMaxInterval += fNbOfIntervals[Z[i]] ; 
-  }
-  fMaxInterval += 2 ;
+    I1 = fIonizationPotentials[ Z[i] ]*keV;  // First ionization
+    n1 = 1;                                  // potential in keV
 
-//  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl ;
-
-  fPhotoAbsorptionCof = new G4double* [fMaxInterval] ;
-
-  for(i = 0 ; i < fMaxInterval ; i++)  
-  {
-     fPhotoAbsorptionCof[i] = new G4double[5] ;
-  }
-
-
-  //  for(c = 0 ; c < fIntervalLimit ; c++)   // just in case
-
-  for(c = 0 ; c < fMaxInterval ; c++)   // just in case
-  {
-     fPhotoAbsorptionCof[c][0] = 0. ;
-  }
-  c = 1 ;
-  for(i = 0 ; i < el ; i++)
-  {
-    G4double I1 = fIonizationPotentials[Z[i]]*keV ;  // First ionization
-    G4int n1 = 1 ;                                     // potential in keV
-    G4int j, c1, k1, k2 ;
-    for(j = 1 ; j < Z[i] ; j++)
-    {
-      n1 += fNbOfIntervals[j] ;
-    }
-    G4int n2 = n1 + fNbOfIntervals[Z[i]] ;
+    for( j = 1; j < Z[i]; j++ )  n1 += fNbOfIntervals[j];
     
-    for(k1 = n1 ; k1 < n2 ; k1++)
+    G4int n2 = n1 + fNbOfIntervals[Z[i]];
+    
+    for( k1 = n1; k1 < n2; k1++ )
     {
-      if(I1  > fSandiaTable[k1][0])
+      if( I1  > fSandiaTable[k1][0] )
       {
-	 continue ;    // no ionization for energies smaller than I1 (first
+	 continue;    // no ionization for energies smaller than I1 (first
       }		       // ionisation potential)		     
-      break ;
+      break;
     }
-    G4int flag = 0 ;
+    flag = 0;
     
-    for(c1 = 1 ; c1 < c ; c1++)
+    for( c1 = 1; c1 < c; c1++ )
     {
-      if(fPhotoAbsorptionCof[c1][0] == I1) // this value already has existed
+      if( fPhotoAbsorptionCof[c1][0] == I1 ) // this value already has existed
       {
-	flag = 1 ;                      
-	break ;                         
+	flag = 1;                      
+	break;                         
       }
     }
-    if(flag == 0)
+    if( flag == 0 )
     {
-      fPhotoAbsorptionCof[c][0] = I1 ;
-      c++ ;
+      fPhotoAbsorptionCof[c][0] = I1;
+      c++;
     }
-    for(k2 = k1 ; k2 < n2 ; k2++)
+    for( k2 = k1; k2 < n2; k2++ )
     {
-      flag = 0 ;
-      for(c1 = 1 ; c1 < c ; c1++)
+      flag = 0;
+
+      for( c1 = 1; c1 < c; c1++ )
       {
-        if(fPhotoAbsorptionCof[c1][0] == fSandiaTable[k2][0])
+        if( fPhotoAbsorptionCof[c1][0] == fSandiaTable[k2][0] )
         {
-	  flag = 1 ;
- 	  break ;
+	  flag = 1;
+ 	  break;
         }
       }
-      if(flag == 0)
+      if( flag == 0 )
       {
-        fPhotoAbsorptionCof[c][0] = fSandiaTable[k2][0] ;
-	c++ ;
+        fPhotoAbsorptionCof[c][0] = fSandiaTable[k2][0];
+	if( fVerbose > 0 ) G4cout<<"sanInt, c = "<<c<<", E_c = "<<fPhotoAbsorptionCof[c][0]<<G4endl;
+	c++;
       }
     }       
   }   // end for(i)
   
-  SandiaSort(fPhotoAbsorptionCof,c) ;
-  fMaxInterval = c ;
-  return c ;
+  SandiaSort(fPhotoAbsorptionCof,c);
+  fMaxInterval = c;
+  if( fVerbose > 0 ) G4cout<<"end SanInt, fMaxInterval = "<<fMaxInterval<<G4endl;
+  return c;
 }   
 
 ///////////////////////////////////////////////////////////////////////
@@ -597,70 +597,76 @@ G4SandiaTable::SandiaMixing(         G4int Z[],
 			             G4int el,
 			             G4int mi     )
 {
-   G4int i;
+  G4int i, j, n1, k, c=1, jj, kk;
+  G4double I1, B1, B2, E1, E2;
    
-   for(i = 0 ; i < mi ; i++)
-   {
-      for(G4int j = 1 ; j < 5 ; j++) fPhotoAbsorptionCof[i][j] = 0. ;
-   }
-   for(i = 0 ; i < el ; i++)
-   {
-      G4int n1 = 1 ;
-      G4int j, k ;
-      G4double I1 = fIonizationPotentials[Z[i]]*keV ;
-      for(j = 1 ; j < Z[i] ; j++)
-      {
-         n1 += fNbOfIntervals[j] ;
-      }
-      G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1 ;
+  for( i = 0; i < mi; i++ )
+  {
+    for( j = 1; j < 5; j++ ) fPhotoAbsorptionCof[i][j] = 0.;
+  }
+  for( i = 0; i < el; i++ )
+  {
+    n1 = 1;
+    I1 = fIonizationPotentials[Z[i]]*keV;
 
-      for(k = n1 ; k < n2 ; k++)
-      {
-         G4double B1 = fSandiaTable[k][0] ;
-         G4double B2 = fSandiaTable[k+1][0] ;
-         for(G4int c = 1 ; c < mi-1 ; c++)
-         {
-            G4double E1 = fPhotoAbsorptionCof[c][0] ;
-            G4double E2 = fPhotoAbsorptionCof[c+1][0] ;
-            if(B1 > E1 || B2 < E2 || E1 < I1)
-	    {
-	       continue ;
-	    }
-	    for(j = 1 ; j < 5 ; j++)
-  	    {
-               fPhotoAbsorptionCof[c][j] += fSandiaTable[k][j]*fractionW[i] ;
- 	    }
-	  }  
-       }   
-       for(j = 1 ; j < 5 ; j++)   // Last interval
-       {
-          fPhotoAbsorptionCof[mi-1][j] += fSandiaTable[k][j]*fractionW[i] ;
-       }
-    }     // for(i)
-    G4int c = 0 ;     // Deleting of first intervals where all coefficients = 0
-    do                        
+    for( j = 1; j < Z[i]; j++ )   n1 += fNbOfIntervals[j];
+      
+    G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1;
+
+    for( k = n1; k < n2; k++ )
     {
-       c++ ;
-       if( fPhotoAbsorptionCof[c][1] != 0.0 ||
-	   fPhotoAbsorptionCof[c][2] != 0.0 ||
-	   fPhotoAbsorptionCof[c][3] != 0.0 || 
-	   fPhotoAbsorptionCof[c][4] != 0.0     )
-       {
-	  continue ;
-       }
-       for(G4int jj = 2 ; jj < mi ; jj++)
-       {
-	  for(G4int kk = 0 ; kk < 5 ; kk++)
+      B1 = fSandiaTable[k][0];
+      B2 = fSandiaTable[k+1][0];
+
+      for( c = 1; c < mi-1; c++ )
+      {
+        E1 = fPhotoAbsorptionCof[c][0];
+        E2 = fPhotoAbsorptionCof[c+1][0];
+
+        if( B1 > E1 || B2 < E2 || E1 < I1 )   continue;
+	    
+	for( j = 1; j < 5; j++ ) 
+	{
+          fPhotoAbsorptionCof[c][j] += fSandiaTable[k][j]*fractionW[i];
+          if( fVerbose > 0 )
 	  {
-	     fPhotoAbsorptionCof[jj-1][kk]= fPhotoAbsorptionCof[jj][kk] ;
+	    G4cout<<"c="<<c<<"; j="<<j<<"; fST="<<fSandiaTable[k][j]<<"; frW="<<fractionW[i]<<G4endl;
 	  }
-       }
-       mi-- ;
-       c-- ;
+	}	    
+      }  
+    }   
+    for( j = 1; j < 5; j++ )   // Last interval
+    {
+      fPhotoAbsorptionCof[mi-1][j] += fSandiaTable[k][j]*fractionW[i];
+      if( fVerbose > 0 )
+      {
+	G4cout<<"mi-1="<<mi-1<<"; j="<<j<<"; fST="<<fSandiaTable[k][j]<<"; frW="<<fractionW[i]<<G4endl;
+      }
     }
-    while(c < mi - 1) ;
+  }     // for(i)
+  c = 0;     // Deleting of first intervals where all coefficients = 0
+
+  do                        
+  {
+    c++;
+
+    if( fPhotoAbsorptionCof[c][1] != 0.0 ||
+	fPhotoAbsorptionCof[c][2] != 0.0 ||
+        fPhotoAbsorptionCof[c][3] != 0.0 || 
+	fPhotoAbsorptionCof[c][4] != 0.0     )  continue;
+       
+    for( jj = 2; jj < mi; jj++ )
+    {
+      for( kk = 0; kk < 5; kk++ ) fPhotoAbsorptionCof[jj-1][kk] = fPhotoAbsorptionCof[jj][kk];	  
+    }
+    mi--;
+    c--;
+  }
+  while( c < mi - 1 );
+
+  if( fVerbose > 0 ) G4cout<<"end SanMix, mi = "<<mi<<G4endl;
     
-    return mi ;
+  return mi;
 }  
 
 ////////////////////////////////////////////////////////////////////////////
@@ -682,149 +688,149 @@ void G4SandiaTable::ComputeMatTable()
     Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
     MaxIntervals += fNbOfIntervals[Z[elm]];
   }  
-  fMaxInterval = 0 ;
+  fMaxInterval = 0;
 
-  for(i = 0; i < noElm; i++)  fMaxInterval += fNbOfIntervals[Z[i]] ; 
+  for(i = 0; i < noElm; i++)  fMaxInterval += fNbOfIntervals[Z[i]]; 
   
-  fMaxInterval += 2 ;
+  fMaxInterval += 2;
 
-//  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl ;
+//  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;
 
-  fPhotoAbsorptionCof = new G4double* [fMaxInterval] ;
+  fPhotoAbsorptionCof = new G4double* [fMaxInterval];
 
-  for(i = 0 ; i < fMaxInterval ; i++)  
+  for(i = 0; i < fMaxInterval; i++)  
   {
-     fPhotoAbsorptionCof[i] = new G4double[5] ;
+     fPhotoAbsorptionCof[i] = new G4double[5];
   }
 
-  //  for(c = 0 ; c < fIntervalLimit ; c++)   // just in case
+  //  for(c = 0; c < fIntervalLimit; c++)   // just in case
 
-  for(c = 0 ; c < fMaxInterval ; c++)   // just in case
+  for(c = 0; c < fMaxInterval; c++)   // just in case
   {
-     fPhotoAbsorptionCof[c][0] = 0. ;
+     fPhotoAbsorptionCof[c][0] = 0.;
   }
-  c = 1 ;
+  c = 1;
 
-  for(i = 0 ; i < noElm ; i++)
+  for(i = 0; i < noElm; i++)
   {
-    G4double I1 = fIonizationPotentials[Z[i]]*keV ;  // First ionization
-    n1 = 1 ;                                     // potential in keV
+    G4double I1 = fIonizationPotentials[Z[i]]*keV;  // First ionization
+    n1 = 1;                                     // potential in keV
  
-    for(j = 1 ; j < Z[i] ; j++)
+    for(j = 1; j < Z[i]; j++)
     {
-      n1 += fNbOfIntervals[j] ;
+      n1 += fNbOfIntervals[j];
     }
-    G4int n2 = n1 + fNbOfIntervals[Z[i]] ;
+    G4int n2 = n1 + fNbOfIntervals[Z[i]];
     
-    for(k1 = n1 ; k1 < n2 ; k1++)
+    for(k1 = n1; k1 < n2; k1++)
     {
       if(I1  > fSandiaTable[k1][0])
       {
-	 continue ;    // no ionization for energies smaller than I1 (first
+	 continue;    // no ionization for energies smaller than I1 (first
       }		       // ionisation potential)		     
-      break ;
+      break;
     }
-    G4int flag = 0 ;
+    G4int flag = 0;
     
-    for(c1 = 1 ; c1 < c ; c1++)
+    for(c1 = 1; c1 < c; c1++)
     {
       if(fPhotoAbsorptionCof[c1][0] == I1) // this value already has existed
       {
-	flag = 1 ;                      
-	break ;                         
+	flag = 1;                      
+	break;                         
       }
     }
     if(flag == 0)
     {
-      fPhotoAbsorptionCof[c][0] = I1 ;
-      c++ ;
+      fPhotoAbsorptionCof[c][0] = I1;
+      c++;
     }
-    for(k2 = k1 ; k2 < n2 ; k2++)
+    for(k2 = k1; k2 < n2; k2++)
     {
-      flag = 0 ;
+      flag = 0;
 
-      for(c1 = 1 ; c1 < c ; c1++)
+      for(c1 = 1; c1 < c; c1++)
       {
         if(fPhotoAbsorptionCof[c1][0] == fSandiaTable[k2][0])
         {
-	  flag = 1 ;
- 	  break ;
+	  flag = 1;
+ 	  break;
         }
       }
       if(flag == 0)
       {
-        fPhotoAbsorptionCof[c][0] = fSandiaTable[k2][0] ;
-	c++ ;
+        fPhotoAbsorptionCof[c][0] = fSandiaTable[k2][0];
+	c++;
       }
     }       
   }   // end for(i)
   
-  SandiaSort(fPhotoAbsorptionCof,c) ;
-  fMaxInterval = c ;
+  SandiaSort(fPhotoAbsorptionCof,c);
+  fMaxInterval = c;
  
   const G4double* fractionW = fMaterial->GetFractionVector();
    
-  for(i = 0 ; i < fMaxInterval ; i++)
+  for(i = 0; i < fMaxInterval; i++)
   {
-      for(j = 1 ; j < 5 ; j++) fPhotoAbsorptionCof[i][j] = 0.;
+      for(j = 1; j < 5; j++) fPhotoAbsorptionCof[i][j] = 0.;
   }
-  for(i = 0 ; i < noElm; i++)
+  for(i = 0; i < noElm; i++)
   {
-      n1 = 1 ;
-      G4double I1 = fIonizationPotentials[Z[i]]*keV ;
+      n1 = 1;
+      G4double I1 = fIonizationPotentials[Z[i]]*keV;
 
-      for(j = 1 ; j < Z[i] ; j++)
+      for(j = 1; j < Z[i]; j++)
       {
-         n1 += fNbOfIntervals[j] ;
+         n1 += fNbOfIntervals[j];
       }
-      G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1 ;
+      G4int n2 = n1 + fNbOfIntervals[Z[i]] - 1;
 
-      for(k = n1 ; k < n2 ; k++)
+      for(k = n1; k < n2; k++)
       {
-         G4double B1 = fSandiaTable[k][0] ;
-         G4double B2 = fSandiaTable[k+1][0] ;
-         for(G4int c = 1 ; c < fMaxInterval-1 ; c++)
+         G4double B1 = fSandiaTable[k][0];
+         G4double B2 = fSandiaTable[k+1][0];
+         for(G4int c = 1; c < fMaxInterval-1; c++)
          {
-            G4double E1 = fPhotoAbsorptionCof[c][0] ;
-            G4double E2 = fPhotoAbsorptionCof[c+1][0] ;
+            G4double E1 = fPhotoAbsorptionCof[c][0];
+            G4double E2 = fPhotoAbsorptionCof[c+1][0];
             if(B1 > E1 || B2 < E2 || E1 < I1)
 	    {
-	       continue ;
+	       continue;
 	    }
-	    for(j = 1 ; j < 5 ; j++)
+	    for(j = 1; j < 5; j++)
   	    {
-               fPhotoAbsorptionCof[c][j] += fSandiaTable[k][j]*fractionW[i] ;
+               fPhotoAbsorptionCof[c][j] += fSandiaTable[k][j]*fractionW[i];
  	    }
 	  }  
        }   
-       for(j = 1 ; j < 5 ; j++)   // Last interval
+       for(j = 1; j < 5; j++)   // Last interval
        {
-          fPhotoAbsorptionCof[fMaxInterval-1][j] += fSandiaTable[k][j]*fractionW[i] ;
+          fPhotoAbsorptionCof[fMaxInterval-1][j] += fSandiaTable[k][j]*fractionW[i];
        }
   }     // for(i)
 
-  c = 0 ;     // Deleting of first intervals where all coefficients = 0
+  c = 0;     // Deleting of first intervals where all coefficients = 0
 
   do                        
   {
-    c++ ;
+    c++;
 
     if( fPhotoAbsorptionCof[c][1] != 0.0 ||
 	fPhotoAbsorptionCof[c][2] != 0.0 ||
 	fPhotoAbsorptionCof[c][3] != 0.0 || 
-	fPhotoAbsorptionCof[c][4] != 0.0     )  continue ;
+	fPhotoAbsorptionCof[c][4] != 0.0     )  continue;
        
-    for(jj = 2 ; jj < fMaxInterval ; jj++)
+    for(jj = 2; jj < fMaxInterval; jj++)
     {
-      for(kk = 0 ; kk < 5 ; kk++)
+      for(kk = 0; kk < 5; kk++)
       {
-	     fPhotoAbsorptionCof[jj-1][kk]= fPhotoAbsorptionCof[jj][kk] ;
+	     fPhotoAbsorptionCof[jj-1][kk]= fPhotoAbsorptionCof[jj][kk];
       }
     }
-    fMaxInterval-- ;
-    c-- ;
+    fMaxInterval--;
+    c--;
   }
-  while(c < fMaxInterval - 1) ;
+  while(c < fMaxInterval - 1);
   	
   // create the sandia matrix for this material
     
@@ -836,13 +842,13 @@ void G4SandiaTable::ComputeMatTable()
   }	         	
   for (i = 0; i < fMaxInterval; i++)
   {
-    for(j = 0 ; j < 5 ; j++)
+    for(j = 0; j < 5; j++)
     {
       (*(*fMatSandiaMatrix)[i])[j] = fPhotoAbsorptionCof[i+1][j];
     }     
   }	         	    
   delete [] Z;
-  return ;
+  return;
 }  
 
 //     G4SandiaTable class -- end of implementation file

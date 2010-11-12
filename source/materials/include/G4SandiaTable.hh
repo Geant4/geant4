@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.21 2007-10-02 10:13:33 vnivanch Exp $
+// $Id: G4SandiaTable.hh,v 1.22 2010-11-12 14:55:41 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -81,6 +81,8 @@ public:  // with description
   inline G4double* GetSandiaCofForMaterialPAI(G4double energy);
   inline G4double  GetSandiaMatTablePAI(G4int,G4int);
   inline G4OrderedTable*  GetSandiaMatrixPAI();
+
+  void SetVerbose(G4int ver){fVerbose = ver;};
 
 public:  // without description
 
@@ -164,6 +166,8 @@ private:
   G4double** fPhotoAbsorptionCof ;	// SandiaTable  for mixture
 
   G4int fMaxInterval ;
+  G4int fVerbose;
+  
 
 //
 //
