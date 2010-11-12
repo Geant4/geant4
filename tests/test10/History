@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2010-11-12 09:00:53 tnikitin Exp $
+$Id: History,v 1.25 2010-11-12 13:49:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,11 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nov 12, 2010  Tatiana Nikitina
+
+Nov 12, 2010  Tatiana Nikitina (test10-V09-03-01)
 - Added missing Solids in test10:
   BooleanSolid(Union,Sustraction,Intersection),
   G4Ellipsoid, G4EllipticalCone, G4EllipticalTube, G4Tet, 
-  G4TessellatedSolid,G4ExtrudedSolid, G4TwistedTubs
+  G4TessellatedSolid, G4ExtrudedSolid, G4TwistedTubs.
 
 Jun 04, 2010  Tatiana Nikitina (test10-V09-03-00)
 - Added G4GenericTrap solid to the test suite.
