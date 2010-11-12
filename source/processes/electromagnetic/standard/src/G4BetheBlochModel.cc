@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.40 2010-11-04 17:30:31 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.41 2010-11-12 18:37:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -276,8 +276,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // shell correction
-  //dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);
-  dedx -= corr->ShellCorrection(p,material,kineticEnergy);
+  dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);
 
   // now compute the total ionization loss
   dedx *= twopi_mc2_rcl2*chargeSquare*eDensity/beta2;
