@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.22 2010-11-09 23:31:59 asaim Exp $
+$Id: History,v 1.23 2010-11-12 00:16:43 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.22 2010-11-09 23:31:59 asaim Exp $
 
                        Package History file
                        --------------------
+
+12 November 2010 - S. Incerti -  microdosimetry-V09-03-09
+- Modified energy limit of Sanche vib excitation for e-
 
 09 November 2010 - M. Asai - microdosimetry-V09-03-08
 - Fix AIDA file option.
