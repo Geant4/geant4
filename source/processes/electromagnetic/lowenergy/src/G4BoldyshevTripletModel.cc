@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BoldyshevTripletModel.cc,v 1.1 2010-11-10 17:09:16 flongo Exp $
+// $Id: G4BoldyshevTripletModel.cc,v 1.2 2010-11-12 16:48:13 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -256,7 +256,9 @@ void G4BoldyshevTripletModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   
   // Depaola (2004) suggested distribution for e+e- energy
   
-  G4double t = 0.5*asinh(momentumThreshold_N);
+  //  G4double t = 0.5*asinh(momentumThreshold_N);
+  G4double t = 0.5*log(momentumThreshold_N + sqrt(momentumThreshold_N*momentumThreshold_N+1));
+
   G4double J1 = 0.5*(t*cosh(t)/sinh(t) - log(2.*sinh(t)));
   G4double J2 = (-2./3.)*log(2.*sinh(t)) + t*cosh(t)/sinh(t) + (sinh(t)-t*pow(cosh(t),3))/(3.*pow(sinh(t),2));
   G4double b = 2.*(J2-J1)/J1;
