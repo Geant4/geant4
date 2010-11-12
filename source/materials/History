@@ -1,4 +1,4 @@
-$Id: History,v 1.187 2010-11-05 15:07:51 vnivanch Exp $
+$Id: History,v 1.188 2010-11-12 15:05:27 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-11-10 V.Grichine Bug fix in G4SandiaTable::SandiaMixing adding fVerbose and 
+         variable initialisation      
 05-11-10 V.Ivanchenko (materials-V09-03-12)
 - Removed obsolete unused data classes G4IronStoppingICRU73, 
   G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73,
