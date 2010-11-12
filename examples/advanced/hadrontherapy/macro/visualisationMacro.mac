@@ -30,7 +30,7 @@
 # Visualisation 
 #
 /vis/scene/create
-/vis/open OGL
+/vis/open OGLIX
 #/vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1

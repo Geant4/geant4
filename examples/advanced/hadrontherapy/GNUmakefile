@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2010-05-18 11:14:39 cirrone Exp $
+# $Id: GNUmakefile,v 1.18 2010-11-12 14:50:02 cirrone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -22,7 +22,7 @@ include $(G4INSTALL)/config/architecture.gmk
 ifdef G4ANALYSIS_USE_ROOT   # If we have ROOT
 CPPFLAGS += -DG4ANALYSIS_USE_ROOT
 CPPFLAGS += $(shell root-config --cflags)
-LDFLAGS  += $(shell root-config --glibs)
+EXTRALIBS  += $(shell root-config --glibs)
 endif
 
 include $(G4INSTALL)/config/binmake.gmk

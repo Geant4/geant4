@@ -154,54 +154,32 @@ int main(int argc ,char ** argv)
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
-	
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-	
-  // Batch mode: in this configuration, i.e. when the User explicitly call a macro file,
-  // the program run and, at the end, authomatically call the exit state.
-  // With a such configuration, it is possible to send in background a simulation
-  // and correctly get the output file.
-  G4UIsession* session = 0;
-  if (argc!=1)   
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI -> ApplyCommand(command+fileName);
-#if defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-      // Only if the User Interface is needed!
-      //session -> SessionStart();
+      UImanager->ApplyCommand(command+fileName);    
     }
-  else  // interactive mode : define visualization UI terminal
-    {
-		
-      // If the enviroment variable for the TCSH terminal is active, it is used and the
-      // defaultMacro.mac file is executed
-#if defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);
-      UI->ApplyCommand("/control/execute defaultMacro.mac");
-      session -> SessionStart();
-		
-      // Alternatively (if G4UI_USE_TCSH is not defined)  the program search for the
-      // G4UI_USE_QT variable. It starts a graphical user interface based on the QT libraries
-      // In the following case the GUI.mac file is also executed
-#elif defined(G4UI_USE_QT)
-      session = new G4UIQt(argc,argv);
-      UI->ApplyCommand("/control/execute macro/GUI.mac");      
-      session -> SessionStart();
-      // As final option, the basic user interface terminal is opened
-#else
-      session = new G4UIterminal();
-		
-      UI -> ApplyCommand("/control/execute defaultMacro.mac");
-      session -> SessionStart();
+
+  else
+    {  // interactive mode : define UI session
+      
+#ifdef G4UI_USE
+#warning prova
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+      
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
 #endif
+#endif 
+      if (ui->IsGUI())
+      G4cout << "!!!!!!!!!!  SONO IN G4VIS_USE 2   "<< G4endl; 
+      ui->SessionStart();
+      delete ui;
     }
-  delete session;
-	
+ 
   // Job termination
     // Store dose & fluence data to ASCII & ROOT files 
     if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
@@ -218,12 +196,13 @@ int main(int argc ,char ** argv)
   HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
 #endif
 
-#ifdef G4UI_USE
-  G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-  ui->SessionStart();
-  delete ui;
-#endif
-  
+  /*
+    #ifdef G4UI_USE
+    G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+    ui->SessionStart();
+    delete ui;
+    #endif
+  */
   delete geometryMessenger;
   delete geometryController;
   delete pInteraction; 

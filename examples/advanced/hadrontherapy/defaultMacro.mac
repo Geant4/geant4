@@ -38,7 +38,7 @@
 # Visualisation 
 #
 /vis/scene/create
-#/vis/open OGLIX
+/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
@@ -79,10 +79,8 @@
 # If secondaries dose/fluence are needed
 #/analysis/secondaries true 
 
-/run/beamOn 100000
+/run/beamOn 100
 
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
-
-/run/beamOn 1000
 
