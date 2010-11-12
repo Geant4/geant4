@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Tst10DetectorConstruction.cc,v 1.16 2010-06-03 19:56:34 tnikitin Exp $
+// $Id: Tst10DetectorConstruction.cc,v 1.17 2010-11-12 09:01:28 tnikitin Exp $
 // ------------------------------------------------------------
 //  GEANT 4 class header file 
 //
@@ -50,12 +50,24 @@
 #include "G4Paraboloid.hh"
 #include "G4Torus.hh"
 #include "G4Trd.hh"
+#include "G4Tet.hh"
 #include "G4GenericTrap.hh"
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrap.hh"
 #include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4ExtrudedSolid.hh"
+#include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4EllipticalTube.hh"
+#include "G4UnionSolid.hh"
+#include "G4IntersectionSolid.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4TriangularFacet.hh"
+#include "G4QuadrangularFacet.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4OpticalSurface.hh"
 #include "G4LogicalVolume.hh"
@@ -112,6 +124,9 @@ G4VPhysicalVolume*
 Tst10DetectorConstruction::SelectDetector( const G4String& val )
 {
   //------------------- A Volume ----------------------
+
+  G4Box* b1 = new G4Box ( "b1", 10*cm, 5*cm, 10*cm );
+  G4Box* b2 = new G4Box ( "b2",  5*cm, 5*mm,  5*cm );
 
   if (val == "Sphere")
     aVolume = new G4Sphere ( "aSphere", 8.0*cm, 10.0*cm, 
@@ -189,6 +204,108 @@ Tst10DetectorConstruction::SelectDetector( const G4String& val )
 				   -50*deg        // tilt angle at +pDz
 				   ) ;
   }
+  else if ( val == "TwistedTubs")
+  {
+    aVolume = new G4TwistedTubs("aTwistedTubs",10.*deg,1*cm,2*cm,4*cm,171.*deg);
+
+  }
+  else if (val == "Ellipsoid")
+  {
+    aVolume = new G4Ellipsoid("aEllipsoid",7.*cm,9.*cm,8.*cm); 
+  }
+  else if (val == "EllipticalTube")
+  {
+    aVolume = new G4EllipticalTube("aEllipticalTube",3.*cm,7.*cm,10.*cm);
+  }
+  else if (val == "EllipticalCone")
+  {
+    aVolume = new G4EllipticalCone("aEllipticalCone",2*mm,1*mm,10*cm,5*cm );
+  }
+  else if (val == "Tet")
+  {
+   G4ThreeVector anchor = G4ThreeVector(0, 0, 0);
+   G4ThreeVector     p2 = G4ThreeVector(10*cm, 5*cm , 0);
+   G4ThreeVector     p3 = G4ThreeVector(5*cm,10*cm,0);
+   G4ThreeVector     p4 = G4ThreeVector(5*cm,5*cm  ,10*cm);
+   
+    aVolume = new G4Tet("aTet",anchor,p2,p3,p4);
+  }
+  else if(val == "TessellatedSolid")
+  { 
+    G4double targetSize = 10.*cm;
+    G4TessellatedSolid* aVolume1 = new G4TessellatedSolid("aTessellatedSolid");
+    G4TriangularFacet *facet1 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet2 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet3 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet4 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4QuadrangularFacet *facet5 = new
+    G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     ABSOLUTE);
+
+    aVolume1->AddFacet((G4VFacet*) facet1);
+    aVolume1->AddFacet((G4VFacet*) facet2);
+    aVolume1->AddFacet((G4VFacet*) facet3);
+    aVolume1->AddFacet((G4VFacet*) facet4);
+    aVolume1->AddFacet((G4VFacet*) facet5);
+  
+    aVolume1->SetSolidClosed(true);
+
+    aVolume = aVolume1;
+
+  }
+  else if (val == "ExtrudedSolid")
+  {
+   std::vector<G4TwoVector> polygon;
+   polygon.push_back(G4TwoVector(-3.*cm, -3.0*cm));
+   polygon.push_back(G4TwoVector(-3.*cm,  3.0*cm));
+   polygon.push_back(G4TwoVector( 3.*cm,  3.0*cm));
+   polygon.push_back(G4TwoVector( 3.*cm, -3.0*cm));
+   polygon.push_back(G4TwoVector( 1.5*cm, -3.0*cm));
+   polygon.push_back(G4TwoVector( 1.5*cm,  1.5*cm));
+   polygon.push_back(G4TwoVector(-1.5*cm,  1.5*cm));
+   polygon.push_back(G4TwoVector(-1.5*cm, -3.0*cm));
+  
+   std::vector<G4ExtrudedSolid::ZSection> zsections;
+   zsections.push_back(G4ExtrudedSolid::ZSection(-4.0*cm, G4TwoVector(-2.0*cm, 1.0*cm), 1.5));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 1.0*cm, G4TwoVector(  0*cm,  0*cm), 0.5));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 1.5*cm, G4TwoVector(  0*cm,  0*cm), 0.7));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 4.0*cm, G4TwoVector( 2.0*cm, 2.0*cm), 0.9));
+
+   aVolume = new G4ExtrudedSolid("aExtrudedSolid", polygon, zsections);
+  }
+  else if (val == "UnionSolid") 
+  {         
+    aVolume = new G4UnionSolid("aUnionSolid",b1,b2);
+  
+  }
+  else if (val == "IntersectionSolid") 
+  {         
+    aVolume = new G4IntersectionSolid("aIntersectionSolid",b1,b2);
+  }
+  else if (val == "SubtractionSolid") 
+  {         
+    aVolume = new G4SubtractionSolid("aSubstractionSolid",b1,b2);
+  }
+  
   else
   {
     G4Exception("Tst10DetectorConstruction::SelectDetector() - Invalid shape!");

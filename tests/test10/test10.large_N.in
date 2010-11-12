@@ -56,6 +56,42 @@
 /mydet/SelectDetector Polycone
 /run/beamOn 25
 #
+# Ellipsoid
+/mydet/SelectDetector Ellipsoid
+/run/beamOn 25
+#
+# EllipticalTube
+/mydet/SelectDetector EllipticalTube
+/run/beamOn 25
+#
+# EllipticalCone
+/mydet/SelectDetector EllipticalCone
+/run/beamOn 25
+#
+# Tet
+/mydet/SelectDetector Tet
+/run/beamOn 25
+#
+# TessellatedSolid
+/mydet/SelectDetector TessellatedSolid
+/run/beamOn 25
+#
+# ExtrudedSolid
+/mydet/SelectDetector ExtrudedSolid
+/run/beamOn 25
+#
+# UnionSolid
+/mydet/SelectDetector UnionSolid
+/run/beamOn 25
+#
+# IntersectionSolid
+/mydet/SelectDetector IntersectionSolid
+/run/beamOn 25
+#
+# SubtractionSolid
+/mydet/SelectDetector SubtractionSolid
+/run/beamOn 25
+#
 # TwistedTrap
 /mydet/SelectDetector TwistedTrap
 /run/beamOn 5
@@ -70,4 +106,7 @@
 #
 # TwistedBox
 /mydet/SelectDetector TwistedBox
+/run/beamOn 5
+# TwistedTubs
+/mydet/SelectDetector TwistedTubs
 /run/beamOn 5
