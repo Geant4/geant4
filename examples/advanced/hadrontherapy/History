@@ -8,11 +8,14 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
-12.11.200 G.A.P.Cirrone; Tag: harontherapy-V09-03-08
-            -Main file adapted to the G4UIExecutive class
+12.11.2010 G.A.P.Cirrone; Tag: harontherapy-V09-03-09
+	   - Updated ans cleaned macro files
+
+12.11.2010 G.A.P.Cirrone; Tag: harontherapy-V09-03-08
+           - Main file adapted to the G4UIExecutive class
 
 20.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-07
-	    - Improved and updated some classes comments
+	   - Improved and updated some classes comments
 
 19.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-06
 	   - Physics list 'QGSP_BIC_EMY' definition has been updated
