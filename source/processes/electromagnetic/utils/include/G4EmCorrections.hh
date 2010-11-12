@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.25 2010-06-04 09:28:46 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.26 2010-11-12 18:37:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -64,6 +64,7 @@ class G4VEmModel;
 class G4PhysicsVector;
 class G4IonTable;
 class G4MaterialCutsCouple;
+class G4LPhysicsFreeVector;
 
 class G4EmCorrections
 {
@@ -227,9 +228,10 @@ private:
   G4double     CL[26][28];
   G4double     HM[53];
   G4double     HN[31];
-  G4double     MSH[93];
-  G4double     TAU[93];
   G4double     Z23[100];
+
+  G4LPhysicsFreeVector* ThetaK;
+  G4LPhysicsFreeVector* ThetaL;
 
   std::vector<const G4Material*> currmat;
   std::vector<G4double>          thcorr[100];
