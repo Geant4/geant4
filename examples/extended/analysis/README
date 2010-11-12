@@ -13,3 +13,10 @@ A01
 ---
 
  Rather complete example dedicaced to Jaida/Jas3 and HepRep
+ 
+N03Con
+------
+
+ N03Con shows how to use the statistical tool G4ConvergenceTester.
+ It does not make histograms.
+ It has the same geometry as N03 and AnaEx01.
