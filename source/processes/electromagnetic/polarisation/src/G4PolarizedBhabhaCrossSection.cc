@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.5 2007-11-01 17:32:34 schaelic Exp $
+// $Id: G4PolarizedBhabhaCrossSection.cc,v 1.6 2010-11-12 10:38:56 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -53,7 +53,7 @@
 
 #include "G4PolarizedBhabhaCrossSection.hh"
 
-G4PolarizedBhabhaCrossSection::G4PolarizedBhabhaCrossSection()
+G4PolarizedBhabhaCrossSection::G4PolarizedBhabhaCrossSection() : phi0(1.)
 {
 }
 G4PolarizedBhabhaCrossSection::~G4PolarizedBhabhaCrossSection()

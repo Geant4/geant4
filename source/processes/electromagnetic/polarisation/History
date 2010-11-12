@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2010-09-03 16:35:39 gcosmo Exp $
+$Id: History,v 1.22 2010-11-12 10:38:56 schaelic Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 November 10: A.Schaelicke (empolar-V09-03-02)
+- Resolved: Warning messages of Coverity 
 
 3 September 10: G.Cosmo (empolar-V09-03-01) 
 - Fixed signature to G4VPolarizedCrossSection::TotalXSection() in source file.

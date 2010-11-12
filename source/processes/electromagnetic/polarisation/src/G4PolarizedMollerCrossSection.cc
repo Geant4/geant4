@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerCrossSection.cc,v 1.5 2007-11-01 17:32:34 schaelic Exp $
+// $Id: G4PolarizedMollerCrossSection.cc,v 1.6 2010-11-12 10:38:56 schaelic Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //
@@ -49,7 +49,8 @@
 
 #include "G4PolarizedMollerCrossSection.hh"
 
-G4PolarizedMollerCrossSection::G4PolarizedMollerCrossSection()
+G4PolarizedMollerCrossSection::G4PolarizedMollerCrossSection() :
+  phi0(0.)
 {
   SetXmax(.5);
 }
