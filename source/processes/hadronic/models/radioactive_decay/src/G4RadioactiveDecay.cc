@@ -154,14 +154,17 @@ G4RadioactiveDecay::G4RadioactiveDecay (const G4String& processName)
   //
   NSourceBin  = 1;
   SBin[0]     = 0.* s;
-  SBin[1]     = 1e10 * s;
+  SBin[1]     = 1.* s;
   SProfile[0] = 1.;
   SProfile[1] = 1.;
   NDecayBin   = 1;
-  DBin[0]     = 9.9e9 * s ;
-  DBin[1]     = 1e10 * s;
+  DBin[0]     = 0. * s ;
+  DBin[1]     = 1. * s;
   DProfile[0] = 1.;
   DProfile[1] = 0.;
+  decayWindows[0] = 0;
+  G4RadioactivityTable rTable;
+  theRadioactivityTables.push_back(rTable);
   NSplit      = 1;
   AnalogueMC  = true ;
   FBeta       = false ;
@@ -1294,6 +1297,7 @@ void G4RadioactiveDecay::SetDecayBias(G4String filename)
   G4double bin, flux;
   G4int dWindows = 0;
   for (G4int i = 0; i<99; i++) decayWindows[i] = -1;
+  theRadioactivityTables.clear();
   NDecayBin = -1;
   while (infile >> bin >> flux ) {
     NDecayBin++;
