@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.59 2010-11-12 18:37:16 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.60 2010-11-13 19:06:57 bagoulia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -577,6 +577,11 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
 
     G4double Z = (*theElementVector)[i]->GetZ();
     G4int iz = G4int(Z);
+    if(iz == 47) {
+      BarkasTerm += atomDensity[i]*0.006812*std::pow(beta,-0.9);
+    } else if(Z >= 64) {
+      BarkasTerm += atomDensity[i]*0.002833*std::pow(beta,-1.2);
+    } else {    
 
     G4double X = ba2 / Z;
     G4double b = 1.3;
@@ -604,6 +609,7 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
     //    G4cout << "i= " << i << " b= " << b << " W= " << W 
     // << " Z= " << Z << " X= " << X << " val= " << val<< G4endl;
     BarkasTerm += val*atomDensity[i] / (std::sqrt(Z*X)*X);
+    }
   }
 
   BarkasTerm *= 1.29*charge/material->GetTotNbOfAtomsPerVolume();
