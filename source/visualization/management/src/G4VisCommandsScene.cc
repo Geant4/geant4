@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.69 2010-11-10 10:37:21 lgarnier Exp $
+// $Id: G4VisCommandsScene.cc,v 1.70 2010-11-13 10:52:00 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -540,9 +540,6 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
     if (aScene) {
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
-	// Clear store and force a rebuild of graphical database...
-	//aSceneHandler -> ClearStore (); // Not nec??  Done below
-	//with NeedKernelVisit and DrawView.  JA.
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
@@ -553,9 +550,19 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	    fpVisManager -> SetCurrentViewer(aViewer);
 	    fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
 	    fpVisManager -> SetCurrentScene(aScene);
-	    // Re-draw, forcing rebuild of graphics database, if any...
-            aSceneHandler->ClearTransientStore();
- 	    aViewer -> NeedKernelVisit();
+	    // ClearTransientStore.  This clears the transient, e.g.,
+	    // trajectories part of the store/graphical database but
+	    // also re-draws the permanent part (detector) and thus
+	    // has the effect of clearing trajectories from the view.
+	    // This should not be necessary since NeedKernelVisit,
+	    // ClearView and DrawView should have the effect of
+	    // deleting the whole store and re-creating it, then
+	    // clearing and re-drawing.  But ClearView does not seem
+	    // to work for all viewers.  If it's a problem for you,
+	    // uncomment the next line.
+	    //aSceneHandler->ClearTransientStore();
+	    // Now, force rebuild of graphical database, if any, and re-draw.
+	    aViewer -> NeedKernelVisit();
 	    aViewer -> SetView ();
 	    aViewer -> ClearView ();
 	    aViewer -> DrawView ();
