@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UrbanMscModel93.cc,v 1.7 2010-11-04 17:30:32 vnivanch Exp $
+// $Id: G4UrbanMscModel93.cc,v 1.8 2010-11-13 18:46:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -190,6 +190,13 @@ void G4UrbanMscModel93::Initialise(const G4ParticleDefinition* p,
   if(isInitialized) { return; }
   // set values of some data members
   SetParticle(p);
+
+  if(p->GetPDGMass() > MeV) {
+    G4cout << "### WARNING: G4UrbanMscModel93 model is used for " 
+	   << p->GetParticleName() << " !!! " << G4endl;
+    G4cout << "###          This model should be used only for e+-" 
+	   << G4endl
+  }
 
   fParticleChange = GetParticleChangeForMSC();
   InitialiseSafetyHelper();

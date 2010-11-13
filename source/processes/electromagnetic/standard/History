@@ -1,4 +1,4 @@
-$Id: History,v 1.516 2010-11-12 19:43:18 vnivanch Exp $
+$Id: History,v 1.517 2010-11-13 18:46:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 November 2010: V.Ivant (emstand-V09-03-27)
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 - added
+  warning messages;
+- G4WentzelOKandVIxSection - fixed computation of nuclear formfactor
+- G4eCoulombScatteringModel - fixed computation of nuclear recoil
 
 12 November 2010: V.Ivant (emstand-V09-03-26)
 - G4IonCoulombCrossSection and G4IonCoulombScatteringModel -
