@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.75 2010-06-01 16:08:15 allison Exp $
+// $Id: G4VisManager.hh,v 1.76 2010-11-13 10:54:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -449,7 +449,7 @@ private:
   G4GraphicsSystemList  fAvailableGraphicsSystems;
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
-  static Verbosity             fVerbosity;
+  static Verbosity            fVerbosity;
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
