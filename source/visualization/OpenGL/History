@@ -1,4 +1,4 @@
-$Id: History,v 1.192 2010-11-10 17:57:16 allison Exp $
+$Id: History,v 1.193 2010-11-13 10:28:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th November 2010  John Allison  (opengl-V09-03-10)
+- Tagged.
 
 10th November 2010  John Allison
 - G4OpenGLStoredSceneHandler.cc: Added commented out debug lines.
