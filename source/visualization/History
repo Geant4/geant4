@@ -1,4 +1,4 @@
-$Id: History,v 1.491 2010-11-13 11:35:43 allison Exp $
+$Id: History,v 1.492 2010-11-13 19:48:56 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+13th November 2010  Joseph Perl ((vis-V09-03-12)
+- Global Vis Tag. Candidate for Geant4 release 9.4
 
 13th November 2010  John Allison
 - opengl-V09-03-10: Added verbosity control.
