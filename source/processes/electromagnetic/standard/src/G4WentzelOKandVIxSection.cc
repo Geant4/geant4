@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc,v 1.12 2010-11-04 17:30:32 vnivanch Exp $
+// $Id: G4WentzelOKandVIxSection.cc,v 1.13 2010-11-13 18:45:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -301,8 +301,8 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   G4double w2 = 1. - cost2 + screenZ;
   G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
   if(factB > 0.0 || formf > 0.0 || factD > 0.01) {
-    G4double grej = (1. - z1*factB)/
-      ( (1.0 + z1*factD)*(1.0 + formf*z1)*(1.0 + formf*z1) );
+    G4double form =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
+    G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*formf*form );
     if( G4UniformRand() > grej ) { return v; }
   }  
   G4double cost = 1.0 - z1;

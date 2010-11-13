@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.90 2010-10-26 10:35:22 vnivanch Exp $
+// $Id: G4eCoulombScatteringModel.cc,v 1.91 2010-11-13 18:45:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -218,7 +218,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   // recoil sampling assuming a small recoil
   // and first order correction to primary 4-momentum
   G4double mom2 = wokvi->GetMomentumSquare();
-  G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 + cost));
+  G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 - cost));
   G4double finalT = kinEnergy - trec; 
   //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
   if(finalT <= lowEnergyLimit) { 
