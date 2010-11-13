@@ -45,11 +45,24 @@ public:
   G4InclInput() {
     isExtended = false;
     breakupThreshold = 10;
+    fTargetA = 0;
+    fTargetZ = 0;
+    fBulletType = 0;
+    fBulletE = 0.0;
+    fTimeScale = 1.0;
+    fNuclearPotential = 45.0; // Nuclear potential
+    icoup = 0;
+    
+    theExtendedProjectileA = 0;
+    theExtendedProjectileZ = 0;
+    isExtended = false;
 
     fMinProtonE = 0.0;
     fNuclearPotential = 45.0;
     fTimeScale = 1.0;
     fMinNeutronEnergy = 0.0;
+
+    usingInverseKinematics = false;
   };
 
   G4InclInput(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus, G4bool inverseKinematics);

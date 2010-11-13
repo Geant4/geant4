@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.cc,v 1.34 2010-11-11 23:36:11 kaitanie Exp $ 
+// $Id: G4Incl.cc,v 1.35 2010-11-13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -56,6 +56,7 @@ G4Incl::G4Incl()
 
   randomGenerator = new G4InclGeant4Random();
   //  randomGenerator = new G4Ranecu();
+  clearState();
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
@@ -84,6 +85,7 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4Dton *aDton, G4Saxw *aSaxw, G4Ws *aWs)
 
   //  randomGenerator = new G4Ranecu();
   randomGenerator = new G4InclGeant4Random();
+  clearState();
 }
 
 G4Incl::G4Incl(G4Hazard *aHazard, G4InclInput *aCalincl, G4Ws *aWs, G4Mat *aMat, G4VarNtp *aVarntp)
@@ -148,10 +150,16 @@ G4Incl::G4Incl(G4Hazard *aHazard, G4InclInput *aCalincl, G4Ws *aWs, G4Mat *aMat,
   abla->initEvapora();
 
   theLogger = 0;
+  clearState();
 }
 
 G4Incl::~G4Incl()
 {
+  delete be;
+  delete ps;
+  delete fermi;
+  delete qvp;
+
   delete randomGenerator;
   delete light_gaus_nuc;
   delete light_nuc;
@@ -9016,6 +9024,19 @@ G4int G4Incl::idnint(G4double a)
   }
 }
 
+// Initialization helper
+void G4Incl::clearState() {
+  G4int epSize = 300;
+  for(G4int i = 0; i < epSize; ++i) {
+    kind[i] = 0;
+    ep[i] = 0.0;
+    alpha[i] = 0.0;
+    beta[i] = 0.0;
+    gam[i] = 0.0;
+  }
+  inside_step = 0;
+}
+
 // C------------------------------------------------------------------------
 // C Logging
 // C
@@ -9095,6 +9116,11 @@ void G4Incl::print_one_avatar(G4int index)
 //       COMMON/BL1/P1(300),P2(300),P3(300),EPS(300),IND1(300),IND2(300),TA
 //       COMMON/BL2/CROIS(19900),K,IND(20000),JND(20000) 
 //       COMMON/BL3/R1,R2,X1(300),X2(300),X3(300),IA1,IA2,RAB2             P-N22270
+
+  if(index < 0) {
+    G4cout <<";; Error! index < 0! index = " << index << G4endl;
+    return;
+  }
 
   G4int i_ind1 = bl1->ind1[bl2->ind[index]];
   //  G4int i_ind2 = bl1->ind2[bl2->ind[index]];

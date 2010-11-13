@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.10 2010-10-28 15:35:50 gcosmo Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.11 2010-11-13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -62,7 +62,17 @@ public:
  */
 class G4QuadvectProjo {
 public:
-  G4QuadvectProjo() {};
+  G4QuadvectProjo() {
+    for(G4int i = 0; i < max_a_proj; ++i) {
+      eps_c[i] = 0.0;
+      t_c[i] = 0.0;
+      p3_c[i] = 0.0;
+      p1_s[i] = 0.0;
+      p2_s[i] = 0.0;
+      p3_s[i] = 0.0;
+    }
+  };
+
   ~G4QuadvectProjo() {};
 
   G4double eps_c[max_a_proj],p3_c[max_a_proj],
@@ -72,7 +82,11 @@ public:
 
 class G4VBe {
 public:
-  G4VBe() {};
+  G4VBe()
+    :ia_be(0), iz_be(0),
+     rms_be(0.0), pms_be(0.0), bind_be(0.0)
+  { };
+
   ~G4VBe() {};
 
   G4int ia_be, iz_be;
@@ -86,6 +100,7 @@ class G4InclProjSpect {
 public:
   G4InclProjSpect() {
     //    G4cout <<"Projectile spectator data structure created!" << G4endl;
+    clear();
   };
   ~G4InclProjSpect() {};
 
@@ -94,163 +109,18 @@ public:
     for(G4int i = 0; i < 61; i++) n_projspec[i] = 0;
     a_projspec = 0;
     z_projspec = 0;
-    m_projspec = 0.0;
+    t_projspec = 0.0;
     ex_projspec = 0.0;
     p1_projspec = 0.0;
     p2_projspec = 0.0;
     p3_projspec = 0.0;
+    m_projspec = 0.0;
   };
 
   G4double tab[21];
   G4int n_projspec[61];
   G4int a_projspec,z_projspec;
   G4double ex_projspec,t_projspec, p1_projspec, p2_projspec, p3_projspec, m_projspec;
-};
-
-#define FSIZE 15
-/**
- * Initial values of a hadronic cascade problem.
- */
-class G4Calincl {
-public:
-  G4Calincl() {
-    isExtendedProjectile = false;
-  };
-
-  G4Calincl(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus, G4bool inverseKinematics = false) {
-    for(int i = 0; i < 15; i++) {
-      f[i] = 0.0; // Initialize INCL input data
-    }
-
-    usingInverseKinematics = inverseKinematics;
-
-    f[0] = theNucleus.GetA_asInt(); // Target mass number
-    f[1] = theNucleus.GetZ_asInt(); // Target charge number
-    f[6] = getBulletType(aTrack.GetDefinition()); // Projectile type (INCL particle code)
-    f[2] = aTrack.GetKineticEnergy() / MeV; // Projectile energy (total, in MeV)
-    f[5] = 1.0; // Time scaling
-    f[4] = 45.0; // Nuclear potential
-    setExtendedProjectileInfo(aTrack.GetDefinition());
-    //    G4cout <<"Projectile type = " << f[6] << G4endl;
-    //    G4cout <<"Energy = " << f[2] << G4endl;
-    //    G4cout <<"Target A = " << f[0] << " Z = " << f[1] << G4endl;
-  };
-
-  ~G4Calincl() {};
-  
-  static void printProjectileTargetInfo(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
-    G4cout <<"Projectile = " << aTrack.GetDefinition()->GetParticleName() << G4endl;
-    G4cout <<"    four-momentum: " << aTrack.Get4Momentum() << G4endl;
-    G4cout <<"Energy = " << aTrack.GetKineticEnergy() / MeV << G4endl;
-    G4cout <<"Target A = " << theNucleus.GetA_asInt() << " Z = " << theNucleus.GetZ_asInt() << G4endl;
-  }
-
-  static G4bool canUseInverseKinematics(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) {
-    G4int targetA = theNucleus.GetA_asInt();
-    const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
-    G4int projectileA = projectileDef->GetAtomicMass();
-    //    G4int projectileZ = projectileDef->GetAtomicNumber();
-    if(targetA > 0 && targetA < 18 && (projectileDef != G4Proton::Proton() &&
-				       projectileDef != G4Neutron::Neutron() &&
-				       projectileDef != G4PionPlus::PionPlus() &&
-				       projectileDef != G4PionZero::PionZero() &&
-				       projectileDef != G4PionMinus::PionMinus()) &&
-       projectileA > 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  G4double bulletE() {
-    return f[2];
-  }
-
-  G4int getBulletType() {
-    return G4int(f[6]);
-  };
-
-  void setExtendedProjectileInfo(const G4ParticleDefinition *pd) {
-    if(getBulletType(pd) == -666) {
-      extendedProjectileA = pd->GetAtomicMass();
-      extendedProjectileZ = pd->GetAtomicNumber();
-      isExtendedProjectile = true;
-    } else {
-      isExtendedProjectile = false;
-    }
-  };
-
-  G4int getBulletType(const G4ParticleDefinition *pd) {
-    G4ParticleTable *pt = G4ParticleTable::GetParticleTable();
-
-    if(pd == G4Proton::Proton()) {
-      return 1;
-    } else if(pd == G4Neutron::Neutron()) {
-      return 2;
-    } else if(pd == G4PionPlus::PionPlus()) {
-      return 3;
-    } else if(pd == G4PionMinus::PionMinus()) {
-      return 5;
-    } else if(pd == G4PionZero::PionZero()) {
-      return 4;
-    } else if(pd == G4Deuteron::Deuteron()) {
-      return 6;
-    } else if(pd == G4Triton::Triton()) {
-      return 7;
-    } else if(pd == G4He3::He3()) {
-      return 8;
-    } else if(pd == G4Alpha::Alpha()) {
-      return 9;
-    } else if(pd == pt->GetIon(6, 12, 0.0)) { // C12 special case. This should be phased-out in favor of "extended projectile"
-      return -12;
-    } else { // Is this extended projectile?
-      G4int A = pd->GetAtomicMass();
-      G4int Z = pd->GetAtomicNumber();
-      if(A > 4 && A <= 16 && Z > 2 && Z <= 8) { // Ions from Lithium to Oxygen
-	return -666; // Code of an extended projectile
-      }
-    }
-    G4cout <<"Error! Projectile " << pd->GetParticleName() << " not defined!" << G4endl;
-    return 0;
-  };
-
-  G4bool isInverseKinematics() {
-    return usingInverseKinematics;
-  };
-
-  G4double targetA() { return f[0]; };
-  G4double targetZ() { return f[1]; };
-
-  G4int extendedProjectileA;
-  G4int extendedProjectileZ;
-  G4bool isExtendedProjectile;
-
-  /**
-   * Here f is an array containing the following initial values:
-   * - f[0] : target mass number
-   * - f[1] : target charge number
-   * - f[2] : bullet energy
-   * - f[3] : minimum proton energy to leave the target (default: 0.0)
-   * - f[4] : nuclear potential (default: 45.0 MeV)
-   * - f[5] : time scale (default: 1.0)
-   * - f[6] : bullet type (1: proton, 2: neutron, 3: pi+, 4: pi0 5: pi-, 6:H2, 7: H3, 8: He3, 9: He4
-   * - f[7] : minimum neutron energy to leave the target (default: 0.0)
-   * - f[8] : target material identifier (G4Mat)
-   * - f[9] : not used
-   * - f[10] : not used
-   * - f[11] : not used
-   * - f[12] : not used
-   * - f[13] : not used
-   * - f[14] : not used
-   */
-  G4double f[FSIZE];
-
-  /**
-   * Number of events to be processed.
-   */
-  G4int icoup;
-
-  G4bool usingInverseKinematics;
 };
 
 #define IGRAINESIZE 19
@@ -261,7 +131,13 @@ public:
  */
 class G4Hazard{
 public:
-  G4Hazard() {};
+  G4Hazard() {
+    ial = 0;
+    for(G4int i = 0; i < IGRAINESIZE; ++i) {
+      igraine[i] = 0;
+    }
+  };
+
   ~G4Hazard() {};
 
   /**
@@ -282,7 +158,21 @@ public:
  */
 class G4Mat {
 public:
-  G4Mat() { };
+  G4Mat() {
+    nbmat = 0;
+
+    for(G4int i = 0; i < MATSIZE; ++i) {
+      zmat[i] = 0;
+      amat[i] = 0;
+    }
+
+    for(G4int i = 0; i < MATGEOSIZE; ++i) {
+      for(G4int j = 0; j < MATSIZE; ++j) {
+	bmax_geo[i][j] = 0;
+      }
+    }
+};
+
   ~G4Mat() { };
 
   /**
@@ -312,7 +202,16 @@ public:
  */
 class G4LightGausNuc {
 public:
-  G4LightGausNuc() {};
+  G4LightGausNuc() {
+    for(G4int i = 0; i < LGNSIZE; ++i) {
+      rms1t[i] = 0.0;
+      pf1t[i] = 0.0;
+      pfln[i] = 0.0;
+      tfln[i] = 0.0;
+      vnuc[i] = 0.0;
+    }
+  };
+
   ~G4LightGausNuc() {};
   
   G4double rms1t[LGNSIZE];
@@ -328,7 +227,13 @@ public:
  */
 class G4LightNuc {
 public:
-  G4LightNuc() {};
+  G4LightNuc() {
+    for(G4int i = 0; i < LNSIZE; ++i) {
+      r[i] = 0.0;
+      a[i] = 0.0;
+    }
+  };
+
   ~G4LightNuc() {};
 
   /**
@@ -390,7 +295,16 @@ class G4Ws {
 public:
   G4Ws() {
     fneck = 0.0;
+    r0 = 0.0;
+    adif = 0.0;
+    rmaxws = 0.0;
+    drws = 0.0;
+    nosurf = 0.0;
+    xfoisa = 0.0;
+    bmax = 0.0;
+    npaulstr = 0.0;
   };
+
   ~G4Ws() {};
   
   /**
@@ -452,7 +366,14 @@ public:
  */
 class G4Dton {
 public:
-  G4Dton() {};
+  G4Dton() {
+    fn = 0.0;
+    for(G4int i = 0; i < DTONSIZE; ++i) {
+      c[i] = 0.0;
+      d[i] = 0.0;
+    }
+  };
+
   ~G4Dton() {};
   
   G4double c[DTONSIZE];
@@ -821,7 +742,10 @@ public:
 #define VARNTPSIZE 301
 class G4VarNtp {
 public:
-  G4VarNtp() {};
+  G4VarNtp() {
+    clear();
+  };
+
   ~G4VarNtp() {};
 
   /**

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclLightIonInterface.cc,v 1.13 2010-11-11 23:36:11 kaitanie Exp $ 
+// $Id: G4InclLightIonInterface.cc,v 1.14 2010-11-13 00:08:36 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -108,15 +108,11 @@ G4HadFinalState* G4InclLightIonInterface::ApplyYourself(const G4HadProjectile& a
     G4cout <<"G4InclLightIonInterface: Now processing INCL4 event number:" << eventNumber << G4endl;
   }
 
-  if(verboseLevel > 1) {
-    G4Calincl::printProjectileTargetInfo(aTrack, theNucleus);
-  }
-
   // Inverse kinematics for targets with Z = 1 and A = 1
   //  if(false) {
   G4LorentzRotation toBreit = aTrack.Get4Momentum().boostVector();
 
-  if(theNucleus.GetZ_asInt() == 1 && theNucleus.GetA_asInt() == 1 && G4Calincl::canUseInverseKinematics(aTrack, theNucleus)) {
+  if(theNucleus.GetZ_asInt() == 1 && theNucleus.GetA_asInt() == 1 && G4InclInput::canUseInverseKinematics(aTrack, theNucleus)) {
     G4ParticleDefinition *oldTargetDef = theTableOfParticles->GetIon(theNucleus.GetA_asInt(), theNucleus.GetZ_asInt(), 0.0);
     const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
 

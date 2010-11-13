@@ -10,6 +10,10 @@ G4InclInput::G4InclInput(const G4HadProjectile &aTrack, const G4Nucleus &theNucl
   fTimeScale = 1.0; // Time scaling
   fNuclearPotential = 45.0; // Nuclear potential
   setExtendedProjectileInfo(aTrack.GetDefinition());
+  icoup = 0;
+  breakupThreshold = 10;
+  fMinNeutronEnergy = 0.0;
+  fMinProtonE = 0.0;
 }
 
 G4InclInput::~G4InclInput() {}
