@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.14 2010-05-11 11:58:18 allison Exp $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.15 2010-11-14 22:13:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
@@ -44,40 +44,44 @@
 namespace G4TrajectoryDrawerUtils {
 
 
-  void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
-		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints) 
+  void GetPoints(const G4VTrajectory& traj,
+		 G4Polyline& trajectoryLine,
+                 G4Polymarker& auxiliaryPoints,
+		 G4Polymarker& stepPoints) 
   {
+    // Keep positions.  Don't store unless first or different.
+    std::vector<G4ThreeVector> positions;
+
     for (G4int i=0; i<traj.GetPointEntries(); i++) {
+
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
-      
-      const std::vector<G4ThreeVector>* auxiliaries
-	= aTrajectoryPoint->GetAuxiliaryPoints();
-      
-      if (0 != auxiliaries) {
-	for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
-	  const G4ThreeVector pos((*auxiliaries)[iAux]);
-          if (trajectoryLine.size() >0) {
-            if (pos != trajectoryLine[trajectoryLine.size()-1]) {
-              trajectoryLine.push_back(pos);
-              auxiliaryPoints.push_back(pos);
-            }
-          } else {
-            trajectoryLine.push_back(pos);
-            auxiliaryPoints.push_back(pos);
-          }
-        }
+      const G4ThreeVector& trajectoryPointPosition =
+	aTrajectoryPoint->GetPosition();
+
+      // Only store if first or if different
+      if (positions.size() == 0 ||
+	  trajectoryPointPosition != positions[positions.size()-1]) {
+
+	const std::vector<G4ThreeVector>* auxiliaries
+	  = aTrajectoryPoint->GetAuxiliaryPoints();
+	if (0 != auxiliaries) {
+	  for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
+	    const G4ThreeVector& auxPointPosition = (*auxiliaries)[iAux];
+	    if (positions.size() == 0 ||
+		auxPointPosition != positions[positions.size()-1]) {
+	      // Only store if first or if different
+	      positions.push_back(trajectoryPointPosition);
+	      trajectoryLine.push_back(auxPointPosition);
+	      auxiliaryPoints.push_back(auxPointPosition);
+	    }
+	  }
+	}
+
+	positions.push_back(trajectoryPointPosition);
+	trajectoryLine.push_back(trajectoryPointPosition);
+	stepPoints.push_back(trajectoryPointPosition);
       }
-      const G4ThreeVector pos(aTrajectoryPoint->GetPosition());
-      if (trajectoryLine.size() >0) {
-        if (pos != trajectoryLine[trajectoryLine.size()-1]) {
-          trajectoryLine.push_back(pos);
-          stepPoints.push_back(pos);
-        }
-      } else {
-        trajectoryLine.push_back(pos);
-        stepPoints.push_back(pos);
-      }
-    }
+    }    
   }
 
   /***
@@ -156,71 +160,88 @@ namespace G4TrajectoryDrawerUtils {
     // GetPoints.  If not, assume that the time information is
     // invalid.
 
+    // Memory for last trajectory point position for auxiliary point
+    // algorithm.  There are no auxiliary points for the first
+    // trajectory point, so its initial value is immaterial.
     G4ThreeVector lastTrajectoryPointPosition;
+
+    // Keep positions.  Don't store unless first or different.
+    std::vector<G4ThreeVector> positions;
+
     for (G4int i=0; i<traj.GetPointEntries(); i++) {
+
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
-
-      // Pre- and Post-Point times from the trajectory point...
-      G4double trajectoryPointPreTime = -std::numeric_limits<double>::max();
-      G4double trajectoryPointPostTime = std::numeric_limits<double>::max();
-      std::vector<G4AttValue>* trajectoryPointAttValues =
-        aTrajectoryPoint->CreateAttValues();
-      if (!trajectoryPointAttValues) {
-	G4cout << "G4TrajectoryDrawerUtils::GetTimes: no att values."
-	       << G4endl;
-	return;
-      } else {
-	G4bool foundPreTime = false, foundPostTime = false;
-        for (std::vector<G4AttValue>::iterator i =
-               trajectoryPointAttValues->begin();
-             i != trajectoryPointAttValues->end(); ++i) {
-          if (i->GetName() == "PreT") {
-            trajectoryPointPreTime =
-              G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-	    foundPreTime = true;
-          }
-          if (i->GetName() == "PostT") {
-            trajectoryPointPostTime =
-	      G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
-	    foundPostTime = true;
-          }
-        }
-	if (!foundPreTime || !foundPostTime) {
-	  static G4bool warnedTimesNotFound = false;
-	  if (!warnedTimesNotFound) {
-	    G4cout <<
-	      "WARNING: G4TrajectoryDrawerUtils::GetTimes: times not found."
-		   << G4endl;
-	    warnedTimesNotFound = true;
-	  }
-	  return;
-	}
-      }
-      
       const G4ThreeVector& trajectoryPointPosition =
-	aTrajectoryPoint->GetPosition();
+        aTrajectoryPoint->GetPosition();
 
-      const std::vector<G4ThreeVector>* auxiliaries
-	= aTrajectoryPoint->GetAuxiliaryPoints();
-      
-      if (0 != auxiliaries) {
-	for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
-	  // Interpolate time for auxiliary points...
-	  const G4ThreeVector pos((*auxiliaries)[iAux]);
-	  G4double s1 = (pos - lastTrajectoryPointPosition).mag();
-	  G4double s2 = (trajectoryPointPosition - pos).mag();
-	  G4double t = trajectoryPointPreTime +
-	    (trajectoryPointPostTime - trajectoryPointPreTime) *
-	    (s1 / (s1 + s2));
-	  trajectoryLineTimes.push_back(t);
-	  auxiliaryPointTimes.push_back(t);
+      // Only store if first or if different
+      if (positions.size() == 0 ||
+	  trajectoryPointPosition != positions[positions.size()-1]) {
+
+	// Pre- and Post-Point times from the trajectory point...
+	G4double trajectoryPointPreTime = -std::numeric_limits<double>::max();
+	G4double trajectoryPointPostTime = std::numeric_limits<double>::max();
+	std::vector<G4AttValue>* trajectoryPointAttValues =
+	  aTrajectoryPoint->CreateAttValues();
+	if (!trajectoryPointAttValues) {
+	  G4cout << "G4TrajectoryDrawerUtils::GetTimes: no att values."
+		 << G4endl;
+	  return;
+	} else {
+	  G4bool foundPreTime = false, foundPostTime = false;
+	  for (std::vector<G4AttValue>::iterator i =
+		 trajectoryPointAttValues->begin();
+	       i != trajectoryPointAttValues->end(); ++i) {
+	    if (i->GetName() == "PreT") {
+	      trajectoryPointPreTime =
+		G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+	      foundPreTime = true;
+	    }
+	    if (i->GetName() == "PostT") {
+	      trajectoryPointPostTime =
+		G4UIcommand::ConvertToDimensionedDouble(i->GetValue());
+	      foundPostTime = true;
+	    }
+	  }
+	  if (!foundPreTime || !foundPostTime) {
+	    static G4bool warnedTimesNotFound = false;
+	    if (!warnedTimesNotFound) {
+	      G4cout <<
+		"WARNING: G4TrajectoryDrawerUtils::GetTimes: times not found."
+		     << G4endl;
+	      warnedTimesNotFound = true;
+	    }
+	    return;
+	  }
 	}
+
+	const std::vector<G4ThreeVector>* auxiliaries
+	  = aTrajectoryPoint->GetAuxiliaryPoints();
+	if (0 != auxiliaries) {
+	  for (size_t iAux=0; iAux<auxiliaries->size(); ++iAux) {
+	    // Interpolate time for auxiliary points...
+	    const G4ThreeVector& auxPointPosition = (*auxiliaries)[iAux];
+	    G4double s1 = (auxPointPosition - lastTrajectoryPointPosition).mag();
+	    G4double s2 = (trajectoryPointPosition - auxPointPosition).mag();
+	    G4double t = trajectoryPointPreTime +
+	      (trajectoryPointPostTime - trajectoryPointPreTime) *
+	      (s1 / (s1 + s2));
+	    // Only store if first or if different
+	    if (positions.size() == 0 ||
+		auxPointPosition != positions[positions.size()-1]) {
+	      positions.push_back(trajectoryPointPosition);
+	      trajectoryLineTimes.push_back(t);
+	      auxiliaryPointTimes.push_back(t);
+	    }
+	  }
+	}
+
+	positions.push_back(trajectoryPointPosition);
+	trajectoryLineTimes.push_back(trajectoryPointPostTime);
+	stepPointTimes.push_back(trajectoryPointPostTime);
+
+	lastTrajectoryPointPosition = trajectoryPointPosition;
       }
-
-      trajectoryLineTimes.push_back(trajectoryPointPostTime);
-      stepPointTimes.push_back(trajectoryPointPostTime);
-
-      lastTrajectoryPointPosition = trajectoryPointPosition;
     }    
   }
 
