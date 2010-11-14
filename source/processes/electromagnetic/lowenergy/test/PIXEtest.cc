@@ -29,7 +29,7 @@
 //
 // File name: PIXEtest
 //
-// Author:    Simona Saliceti (simona.saliceti@ge.infn.it)
+// Author:    Alfonso Mantero  (alfonso.mantero@ge.infn.it)
 // 
 // History:
 // --------
@@ -42,7 +42,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: PIXEtest.cc,v 1.4 2010-06-25 09:41:32 gunter Exp $
+// $Id: PIXEtest.cc,v 1.5 2010-11-14 20:08:35 mantero Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"

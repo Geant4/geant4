@@ -1,4 +1,4 @@
-$Id: History,v 1.467 2010-11-12 18:09:44 mantero Exp $
+$Id: History,v 1.468 2010-11-14 20:08:02 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+12.11.2010, A.Mantero, tag emlowen-V09-03-60
+	    minor fixes and added a test for G4UAtomicDeexcitation
+	    in test subdir
 
 12.11.2010, A.Mantero, tag emlowen-V09-03-59
 	    Creation of G4UAtomicDeexcitation class,

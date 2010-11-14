@@ -61,22 +61,6 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
 {
   SetAugerActive(false);
 
-  // initializing PIXE
-
-  SetPIXEActive(true);
-  if ( !PIXECrossSectionModel()) {
-    SetPIXECrossSectionModel("ECPSSR_Analytical");
-  }
-
-  if (PIXECrossSectionModel() == "ECPSSR_Analytical") {
-    PIXEshellCS = new G4teoCrossSection("analytical");
-  }
-
-  else if (PIXECrossSectionModel() == "empirical") {
-    PIXEshellCS = new G4empCrossSection;
-  }
-  else {SetPIXEActive(false);}
-
 }
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
@@ -85,6 +69,23 @@ G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
   transitionManager = G4AtomicTransitionManager::Instance();
+
+  // initializing PIXE
+  
+  SetPIXEActive(true);
+  if ( !PIXECrossSectionModel()) {
+    SetPIXECrossSectionModel("ECPSSR_Analytical");
+  }
+  
+  if (PIXECrossSectionModel() == "ECPSSR_Analytical") {
+    PIXEshellCS = new G4teoCrossSection("analytical");
+  }
+  
+  else if (PIXECrossSectionModel() == "empirical") {
+    PIXEshellCS = new G4empCrossSection;
+  }
+  else {SetPIXEActive(false);}
+
 }
 
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)

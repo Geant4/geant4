@@ -112,10 +112,12 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
   
   // Look this in a particular way: only one auger emitted! // ????
   while (provShellId > -2); 
-  
-  if (vectorOfParticles->size() > 0) {
-    G4cout << " DEEXCITATION!" << G4endl;
-  }
+
+  // debug  
+  // if (vectorOfParticles->size() > 0) {
+  //   G4cout << " DEEXCITATION!" << G4endl;
+  // }
+
   return vectorOfParticles;
 }
 
