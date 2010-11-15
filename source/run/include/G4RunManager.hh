@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.54 2010-11-05 19:02:54 asaim Exp $
+// $Id: G4RunManager.hh,v 1.55 2010-11-15 09:49:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -391,14 +391,14 @@ class G4RunManager
     }  
 
   public: // with description
-    void ReOptimizeMother(G4VPhysicalVolume*);
+    void ReOptimizeMotherOf(G4VPhysicalVolume*);
     //  This method may be used if the orientation and/or size of this
     // particular physical volume has been modified while rest of the
     // geometries in the world has not been changed. This avoids the
     // full re-optimization of the entire geometry tree which is forced
     // if GeometryHasBeenModified() method is invoked.
 
-    void ReOptimizeLogicalVolume(G4LogicalVolume*);
+    void ReOptimize(G4LogicalVolume*);
     //  Same as above, but the mother logical volume is specified.
 
   public:

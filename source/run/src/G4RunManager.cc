@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.112 2010-11-05 19:02:54 asaim Exp $
+// $Id: G4RunManager.cc,v 1.113 2010-11-15 09:49:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -556,13 +556,13 @@ void G4RunManager::UpdateScoring()
 #include "G4LogicalVolume.hh"
 #include "G4SmartVoxelHeader.hh"
 
-void G4RunManager::ReOptimizeMother(G4VPhysicalVolume* pPhys)
+void G4RunManager::ReOptimizeMotherOf(G4VPhysicalVolume* pPhys)
 {
   G4LogicalVolume* pMotherL = pPhys->GetMotherLogical();
-  if(pMotherL) ReOptimizeLogicalVolume(pMotherL);
+  if(pMotherL) ReOptimize(pMotherL);
 }
 
-void G4RunManager::ReOptimizeLogicalVolume(G4LogicalVolume* pLog)
+void G4RunManager::ReOptimize(G4LogicalVolume* pLog)
 {
   G4SmartVoxelHeader* header = pLog->GetVoxelHeader();
   delete header;
