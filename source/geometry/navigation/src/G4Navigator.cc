@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.45 2010-11-11 10:17:32 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.46 2010-11-15 14:03:27 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -51,7 +51,7 @@ G4Navigator::G4Navigator()
   fActive= false; 
   ResetStackAndState();
 
-  fActionThreshold_NoZeroSteps  = 5; 
+  fActionThreshold_NoZeroSteps  = 10; 
   fAbandonThreshold_NoZeroSteps = 25; 
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
