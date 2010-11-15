@@ -50,23 +50,17 @@ G4EvaporationProbability::G4EvaporationProbability(G4int anA, G4int aZ,
     theZ(aZ),
     Gamma(aGamma),
     theCoulombBarrierptr(aCoulombBarrier) 
-{
-  theEvapLDPptr = new G4EvaporationLevelDensityParameter;
-}
+{}
 
 G4EvaporationProbability::G4EvaporationProbability()
   : theA(0),
     theZ(0),
     Gamma(0.0),
     theCoulombBarrierptr(0) 
-{
-  theEvapLDPptr = new G4EvaporationLevelDensityParameter;
-}
+{}
 
 G4EvaporationProbability::~G4EvaporationProbability() 
-{
-  if (theEvapLDPptr != 0) { delete theEvapLDPptr; }
-}
+{}
   
 G4double 
 G4EvaporationProbability::EmissionProbability(const G4Fragment & fragment, G4double anEnergy)
@@ -88,43 +82,39 @@ G4double
 G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment, 
 					       G4double MaximalKineticEnergy)
 {
-  G4double ResidualA = fragment.GetA() - theA;
-  G4double ResidualZ = fragment.GetZ() - theZ;
+  G4int ResidualA = fragment.GetA_asInt() - theA;
+  G4int ResidualZ = fragment.GetZ_asInt() - theZ;
   G4double U = fragment.GetExcitationEnergy();
    
   if (OPTxs==0) {
 
-    G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
+    G4double NuclearMass = fragment.ComputeGroundStateMass(theZ,theA);
 
+    G4double delta0 = fPairCorr->GetPairingCorrection(fragment.GetA_asInt(),
+						      fragment.GetZ_asInt());
 
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
-									       static_cast<G4int>(fragment.GetZ()));
-
-    G4double SystemEntropy = 2.0*std::sqrt(theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
-									   static_cast<G4int>(fragment.GetZ()),U)*
-				      (U-delta0));
+    G4double SystemEntropy = 2.0*std::sqrt(
+      theEvapLDPptr->LevelDensityParameter(fragment.GetA_asInt(),fragment.GetZ_asInt(),U)*
+      (U-delta0));
 								  
-
-    G4double RN = 1.5*fermi;
+    const G4double RN = 1.5*fermi;
 
     G4double Alpha = CalcAlphaParam(fragment);
     G4double Beta = CalcBetaParam(fragment);
 	
     G4double Rmax = MaximalKineticEnergy;
-    G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),
-						      static_cast<G4int>(ResidualZ),
-						      Rmax);
-    G4double GlobalFactor = static_cast<G4double>(Gamma) * (Alpha/(a*a)) *
-	(NuclearMass*RN*RN*std::pow(ResidualA,2./3.))/
-	(2.*pi* hbar_Planck*hbar_Planck);
+    G4double a = theEvapLDPptr->LevelDensityParameter(ResidualA,ResidualZ,Rmax);
+    G4double GlobalFactor = Gamma * Alpha/(a*a) *
+	(NuclearMass*RN*RN*fG4pow->Z23(ResidualA))/
+	(twopi* hbar_Planck*hbar_Planck);
     G4double Term1 = (2.0*Beta*a-3.0)/2.0 + Rmax*a;
     G4double Term2 = (2.0*Beta*a-3.0)*std::sqrt(Rmax*a) + 2.0*a*Rmax;
 	
     G4double ExpTerm1 = 0.0;
-    if (SystemEntropy <= 600.0) ExpTerm1 = std::exp(-SystemEntropy);
+    if (SystemEntropy <= 600.0) { ExpTerm1 = std::exp(-SystemEntropy); }
 	
     G4double ExpTerm2 = 2.*std::sqrt(a*Rmax) - SystemEntropy;
-    if (ExpTerm2 > 700.0) ExpTerm2 = 700.0;
+    if (ExpTerm2 > 700.0) { ExpTerm2 = 700.0; }
     ExpTerm2 = std::exp(ExpTerm2);
 	
     G4double Width = GlobalFactor*(Term1*ExpTerm1 + Term2*ExpTerm2);
@@ -133,25 +123,25 @@ G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment,
              
  } else if (OPTxs==1 || OPTxs==2 ||OPTxs==3 || OPTxs==4) {
 
-   G4double limit;
-   if (useSICB) limit=theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U);
-   else limit=0.;
+   G4double limit = 0.;
+   if (useSICB) {
+     limit=theCoulombBarrierptr->GetCoulombBarrier(ResidualA,ResidualZ,U);
+   }
 
-   if (MaximalKineticEnergy <= limit)  return 0.0;
+   if (MaximalKineticEnergy <= limit) { return 0.0; }
 
-
-   // if Coulomb barrier cutoff is superimposed for all cross sections the limit is the Coulomb Barrier
+   // if Coulomb barrier cutoff is superimposed for all cross sections 
+   // then the limit is the Coulomb Barrier
    G4double LowerLimit= limit;
 
-   //  MaximalKineticEnergy: asimptotic value (already accounted for in G4EvaporationChannel)     
+   //MaximalKineticEnergy: asimptotic value (already accounted for in G4EvaporationChannel)     
 
    G4double UpperLimit = MaximalKineticEnergy;
-
 
    G4double Width = IntegrateEmissionProbability(fragment,LowerLimit,UpperLimit);
 
    return Width;
- } else{
+ } else {
    std::ostringstream errOs;
    errOs << "Bad option for cross sections at evaporation"  <<G4endl;
    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
@@ -162,9 +152,9 @@ G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment,
 /////////////////////////////////////////////////////////////////////
 
 G4double G4EvaporationProbability::
-IntegrateEmissionProbability(const G4Fragment & fragment, const G4double & Low, const G4double & Up )
+IntegrateEmissionProbability(const G4Fragment & fragment, 
+			     const G4double & Low, const G4double & Up )
 {
-
   static const G4int N = 10;
   // 10-Points Gauss-Legendre abcisas and weights
   static const G4double w[N] = {
@@ -215,34 +205,37 @@ G4double
 G4EvaporationProbability::ProbabilityDistributionFunction( const G4Fragment & fragment, 
 							   G4double K)
 { 
-  G4double ResidualA = fragment.GetA() - theA;
-  G4double ResidualZ = fragment.GetZ() - theZ;  
+  G4int ResidualA = fragment.GetA_asInt() - theA;
+  G4int ResidualZ = fragment.GetZ_asInt() - theZ;  
   G4double U = fragment.GetExcitationEnergy();
 
-  //        if(K <= theCoulombBarrierptr->GetCoulombBarrier(G4lrint(ResidualA),G4lrint(ResidualZ),U)) return 0.0;   
+  // if(K <= theCoulombBarrierptr->GetCoulombBarrier(ResidualA,ResidualZ,U)) return 0.0;
 
-  G4double delta1 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ));
-
+  G4double delta1 = fPairCorr->GetPairingCorrection(ResidualA,ResidualZ);
  
-  G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
+  G4double delta0 = fPairCorr->GetPairingCorrection(fragment.GetA_asInt(),
+						    fragment.GetZ_asInt());
 
   
-  G4double ParticleMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
+  G4double ParticleMass = fragment.ComputeGroundStateMass(theZ,theA);
+  G4double ResidualMass = fragment.ComputeGroundStateMass(ResidualZ,ResidualA);
 
-  G4double theSeparationEnergy= G4NucleiProperties::GetMassExcess(static_cast<G4int>(theA),static_cast<G4int>(theZ)) +
-    G4NucleiProperties::GetMassExcess(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ)) -
-    G4NucleiProperties::GetMassExcess(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()));
+  G4double theSeparationEnergy = ParticleMass + ResidualMass 
+    - fragment.GetGroundStateMass();
 
-  G4double a0 = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),static_cast<G4int>(fragment.GetZ()),U - delta0);
+  G4double a0 = theEvapLDPptr->LevelDensityParameter(fragment.GetA_asInt(),
+						     fragment.GetZ_asInt(),
+						     U - delta0);
 
-  G4double a1 = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),static_cast<G4int>(ResidualZ),U - theSeparationEnergy - delta1);
+  G4double a1 = theEvapLDPptr->LevelDensityParameter(ResidualA, ResidualZ,
+						     U - theSeparationEnergy - delta1);
   
   
-  G4double E0=U-delta0;
+  G4double E0 = U - delta0;
 
-  G4double E1=U-theSeparationEnergy-delta1-K;
+  G4double E1 = U - theSeparationEnergy - delta1 - K;
 
-  if (E1<0.) return 0.;
+  if (E1<0.) { return 0.; }
 
   //JMQ 14/02/09 BUG fixed: hbarc should be in the denominator instead of hbar_Planck 
   //Without 1/hbar_Panck remains as a width
