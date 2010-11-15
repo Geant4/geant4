@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.36 2010-09-20 15:50:46 vuzhinsk Exp $
+// $Id: G4FTFModel.cc,v 1.37 2010-11-15 10:02:38 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -98,9 +98,13 @@ int G4FTFModel::operator!=(const G4FTFModel &right) const
 void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile)
 {
 	theProjectile = aProjectile;  
+//G4cout<<"FTF init Pro "<<theProjectile.GetMass()<<" "<<theProjectile.GetMomentum()<<G4endl;
+//G4cout<<"FTF init A Z "<<aNucleus.GetA_asInt()<<" "<<aNucleus.GetZ_asInt()<<G4endl;
+//G4cout<<"             "<<aNucleus.GetN()<<" "<<aNucleus.GetZ()<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
 
 	theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt()); 
-
+//G4cout<<"End nucl init"<<G4endl;
 // ----------- N-mass number Z-charge -------------------------
 
 // --- cms energy
@@ -110,8 +114,11 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
 
       if( theParameters != 0 ) delete theParameters;
       theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
-                                          aNucleus.GetN(),aNucleus.GetZ(),
+                                          aNucleus.GetA_asInt(),aNucleus.GetZ_asInt(),
                                           s);
+//      theParameters = new G4FTFParameters(theProjectile.GetDefinition(),
+//                                          aNucleus.GetN(),aNucleus.GetZ(),
+//                                          s);
 
 //theParameters->SetProbabilityOfElasticScatt(0.); 
 //G4cout<<theParameters->GetProbabilityOfElasticScatt()<<G4endl;
@@ -297,6 +304,7 @@ G4bool G4FTFModel::PutOnMassShell()
         G4Nucleon * aNucleon;
         G4int ResidualMassNumber=theNucleus->GetMassNumber();
         G4int ResidualCharge    =theNucleus->GetCharge();
+
         ResidualExcitationEnergy=0.;
 	G4LorentzVector PnuclearResidual(0.,0.,0.,0.);
 
@@ -339,7 +347,7 @@ G4bool G4FTFModel::PutOnMassShell()
         }
  
 //      ResidualMass +=ResidualExcitationEnergy; // Will be given after checks
-//G4cout<<"SumMasses End ResidualMass "<<SumMasses<<" "<<ResidualMass<<G4endl;
+//G4cout<<"SumMasses And ResidualMass "<<SumMasses<<" "<<ResidualMass<<G4endl;
         SumMasses += ResidualMass;
 //G4cout<<"SumMasses + ResM "<<SumMasses<<G4endl;
 //G4cout<<"Psum "<<Psum<<G4endl;
@@ -547,6 +555,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
         Pprojectile.transform(toLab);       // The work with the projectile
         primary->Set4Momentum(Pprojectile); // is finished at the moment.
+//G4cout<<"Final proj mom "<<primary->Get4Momentum()<<G4endl;
 
 //-------------------------------------------------------------
         G4ThreeVector Residual3Momentum(0.,0.,1.);
@@ -577,19 +586,26 @@ G4bool G4FTFModel::PutOnMassShell()
            
         }   // end of for(G4int i=0; i < NumberOfInvolvedNucleon; i++ )
 
+//G4cout<<"ResidualMassNumber and Mom "<<ResidualMassNumber<<" "<<Residual3Momentum<<G4endl;
         G4double Mt2Residual=sqr(ResidualMass) +
                                  sqr(Residual3Momentum.x())+sqr(Residual3Momentum.y());
-
-        G4double PzResidual=-WminusTarget*Residual3Momentum.z()/2. + 
+//==========================
+//G4cout<<"WminusTarget Residual3Momentum.z() "<<WminusTarget<<" "<<Residual3Momentum.z()<<G4endl;
+        G4double PzResidual=0.;
+        G4double EResidual =0.;
+        if(ResidualMassNumber != 0)
+        {
+         PzResidual=-WminusTarget*Residual3Momentum.z()/2. + 
                              Mt2Residual/(2.*WminusTarget*Residual3Momentum.z());
-        G4double EResidual = WminusTarget*Residual3Momentum.z()/2. + 
+         EResidual = WminusTarget*Residual3Momentum.z()/2. + 
                              Mt2Residual/(2.*WminusTarget*Residual3Momentum.z());
-
+        }
+//==========================
         Residual4Momentum.setPx(Residual3Momentum.x());
         Residual4Momentum.setPy(Residual3Momentum.y());
         Residual4Momentum.setPz(PzResidual); 
         Residual4Momentum.setE(EResidual);
-
+//G4cout<<"Residual4Momentum "<<Residual4Momentum<<G4endl;
         Residual4Momentum.transform(toLab);
 //-------------------------------------------------------------
  return true;
