@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.3 2010-10-26 09:06:48 gcosmo Exp $
+# $Id: sources.cmake,v 1.4 2010-11-15 08:24:43 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -50,6 +50,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4AtomicTransitionManager.hh
         G4AugerData.hh
         G4AugerTransition.hh
+        G4BoldyshevTripletModel.hh
         G4BremsstrahlungCrossSectionHandler.hh
         G4BremsstrahlungParameters.hh
         G4CompositeEMDataSet.hh
@@ -98,6 +99,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4DNAMoleculeManager.hh
         G4DNAProcess.hh
         G4DNAProcess.icc
+        G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
@@ -167,7 +169,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreBremsstrahlungModel.hh
         G4LivermoreComptonModel.hh
         G4LivermoreGammaConversionModel.hh
+        G4LivermoreGammaConversionModelRC.hh
         G4LivermoreIonisationModel.hh
+        G4LivermoreNuclearGammaConversionModel.hh
         G4LivermorePhotoElectricModel.hh
         G4LivermorePolarizedComptonModel.hh
         G4LivermorePolarizedGammaConversionModel.hh
@@ -226,6 +230,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4ShellEMDataSet.hh
         G4ShellVacancy.hh
         G4teoCrossSection.hh
+        G4UAtomicDeexcitation.hh
         G4VCrossSectionHandler.hh
         G4VDataSetAlgorithm.hh
         G4VecpssrKModel.hh
@@ -252,6 +257,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4AtomicTransitionManager.cc
         G4AugerData.cc
         G4AugerTransition.cc
+        G4BoldyshevTripletModel.cc
         G4BremsstrahlungCrossSectionHandler.cc
         G4BremsstrahlungParameters.cc
         G4CompositeEMDataSet.cc
@@ -297,6 +303,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4DNAIonisation.cc
         G4DNAMeltonAttachmentModel.cc
         G4DNAMillerGreenExcitationModel.cc
+        G4DNARuddIonisationExtendedModel.cc
         G4DNARuddIonisationModel.cc
         G4DNASancheExcitationModel.cc
         G4DNAScreenedRutherfordElasticModel.cc
@@ -362,7 +369,9 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreBremsstrahlungModel.cc
         G4LivermoreComptonModel.cc
         G4LivermoreGammaConversionModel.cc
+        G4LivermoreGammaConversionModelRC.cc
         G4LivermoreIonisationModel.cc
+        G4LivermoreNuclearGammaConversionModel.cc
         G4LivermorePhotoElectricModel.cc
         G4LivermorePolarizedComptonModel.cc
         G4LivermorePolarizedGammaConversionModel.cc
@@ -418,6 +427,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4ShellEMDataSet.cc
         G4ShellVacancy.cc
         G4teoCrossSection.cc
+        G4UAtomicDeexcitation.cc
         G4VCrossSectionHandler.cc
         G4VecpssrKModel.cc
         G4VecpssrLiModel.cc
