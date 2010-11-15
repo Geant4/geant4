@@ -23,13 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4ShellCorrection.cc,v 1.6 2009-11-30 10:33:33 gcosmo Exp $
+// $Id: G4ShellCorrection.cc,v 1.7 2010-11-15 11:47:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
-
+// 
 
 #include "G4ShellCorrection.hh"
 
@@ -49,7 +48,9 @@ G4ShellCorrection::~G4ShellCorrection()
 
 G4ShellCorrection* G4ShellCorrection::GetInstance()
 {
-  static G4ShellCorrection theCorrections;
-  if (!theInstance)  { theInstance = &theCorrections; }
+  if (!theInstance)  { 
+    static G4ShellCorrection theCorrections;
+    theInstance = &theCorrections; 
+  }
   return theInstance;
 }   
