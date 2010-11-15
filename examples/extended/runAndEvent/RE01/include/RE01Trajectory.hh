@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: RE01Trajectory.hh,v 1.5 2010-11-08 22:16:28 asaim Exp $
+// $Id: RE01Trajectory.hh,v 1.6 2010-11-15 22:29:57 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -88,7 +88,7 @@ class RE01Trajectory : public G4VTrajectory
 
    G4ParticleDefinition* GetParticleDefinition();
 
-   inline const G4int GetTrackStatus() const
+   inline const G4int& GetTrackStatus() const
    { return fTrackStatus; }
    inline const G4ThreeVector& GetVertexPosition() const
    { return vertexPosition; }
