@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronCoulombBarrier.cc,v 1.5 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4NeutronCoulombBarrier.cc,v 1.6 2010-11-15 12:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -33,25 +33,7 @@
 
 #include "G4NeutronCoulombBarrier.hh"
 
-G4NeutronCoulombBarrier::G4NeutronCoulombBarrier(const G4NeutronCoulombBarrier & ) : G4CoulombBarrier()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronCoulombBarrier::copy_constructor meant to not be accessable.");
-}
+G4NeutronCoulombBarrier::G4NeutronCoulombBarrier() : G4CoulombBarrier(1,0) {}
+G4NeutronCoulombBarrier::~G4NeutronCoulombBarrier() {}
 
-
-const G4NeutronCoulombBarrier & G4NeutronCoulombBarrier::operator=(const G4NeutronCoulombBarrier & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4NeutronCoulombBarrier::operator= meant to not be accessable.");
-    return *this;
-}
-
-G4bool G4NeutronCoulombBarrier::operator==(const G4NeutronCoulombBarrier & ) const 
-{
-    return false;
-}
-
-G4bool G4NeutronCoulombBarrier::operator!=(const G4NeutronCoulombBarrier & ) const 
-{
-    return true;
-}
 

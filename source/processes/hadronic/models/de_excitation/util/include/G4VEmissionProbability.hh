@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
+// $Id: G4VEmissionProbability.hh,v 1.6 2010-11-15 12:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -42,6 +42,10 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
+
+class G4Pow;
+class G4PairingCorrection;
+class G4EvaporationLevelDensityParameter;
 
 class G4VEmissionProbability 
 {
@@ -63,9 +67,14 @@ public:
   inline void SetOPTxs(G4int opt) { OPTxs = opt; }
   // for superimposed Coulomb Barrier for inverse cross sections 	
   inline void UseSICB(G4bool use) { useSICB = use; }	
+
 protected:
-   G4int OPTxs;
-   G4bool useSICB;
+  G4int OPTxs;
+  G4bool useSICB;
+
+  G4Pow*   fG4pow;
+  G4PairingCorrection* fPairCorr;
+  G4EvaporationLevelDensityParameter * theEvapLDPptr;
 
 };
 

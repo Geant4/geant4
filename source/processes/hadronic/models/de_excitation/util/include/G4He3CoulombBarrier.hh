@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3CoulombBarrier.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
+// $Id: G4He3CoulombBarrier.hh,v 1.6 2010-11-15 12:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -39,19 +39,19 @@
 class G4He3CoulombBarrier : public G4CoulombBarrier
 {
 public:
-	G4He3CoulombBarrier() : G4CoulombBarrier(3,2) {}
-	~G4He3CoulombBarrier() {}
+
+  G4He3CoulombBarrier();
+  virtual ~G4He3CoulombBarrier();
 
 private:
-	G4He3CoulombBarrier(const G4He3CoulombBarrier & right);
 
-	const G4He3CoulombBarrier & operator=(const G4He3CoulombBarrier & right);
-	G4bool operator==(const G4He3CoulombBarrier & right) const;
-	G4bool operator!=(const G4He3CoulombBarrier & right) const;
+  G4He3CoulombBarrier(const G4He3CoulombBarrier & right);
+
+  const G4He3CoulombBarrier & operator=(const G4He3CoulombBarrier & right);
+  G4bool operator==(const G4He3CoulombBarrier & right) const;
+  G4bool operator!=(const G4He3CoulombBarrier & right) const;
   
-private:
-
-	G4double BarrierPenetrationFactor(const G4double aZ) const;
+  virtual G4double BarrierPenetrationFactor(G4double aZ) const;
 
 };
 

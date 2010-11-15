@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TritonCoulombBarrier.cc,v 1.5 2008-09-19 13:32:54 ahoward Exp $
+// $Id: G4TritonCoulombBarrier.cc,v 1.6 2010-11-15 12:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -33,30 +32,10 @@
 
 #include "G4TritonCoulombBarrier.hh"
 
-G4TritonCoulombBarrier::G4TritonCoulombBarrier(const G4TritonCoulombBarrier & ) : G4CoulombBarrier()
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4TritonCoulombBarrier::copy_constructor meant to not be accessable.");
-}
+G4TritonCoulombBarrier::G4TritonCoulombBarrier() : G4CoulombBarrier(3,1) {}
+G4TritonCoulombBarrier::~G4TritonCoulombBarrier() {}
 
-
-const G4TritonCoulombBarrier & G4TritonCoulombBarrier::operator=(const G4TritonCoulombBarrier & )
-{
-    throw G4HadronicException(__FILE__, __LINE__, "G4TritonCoulombBarrier::operator= meant to not be accessable.");
-    return *this;
-}
-
-G4bool G4TritonCoulombBarrier::operator==(const G4TritonCoulombBarrier & ) const 
-{
-    return false;
-}
-
-G4bool G4TritonCoulombBarrier::operator!=(const G4TritonCoulombBarrier & ) const 
-{
-    return true;
-}
-
-
-G4double G4TritonCoulombBarrier::BarrierPenetrationFactor(const G4double aZ) const
+G4double G4TritonCoulombBarrier::BarrierPenetrationFactor(G4double aZ) const
 {
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander

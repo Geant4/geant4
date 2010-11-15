@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4DeuteronCoulombBarrier.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
+// $Id: G4DeuteronCoulombBarrier.hh,v 1.6 2010-11-15 12:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -39,19 +38,19 @@
 class G4DeuteronCoulombBarrier : public G4CoulombBarrier
 {
 public:
-	G4DeuteronCoulombBarrier() : G4CoulombBarrier(2,1) {}
-	~G4DeuteronCoulombBarrier() {}
+
+  G4DeuteronCoulombBarrier();
+  virtual ~G4DeuteronCoulombBarrier();
 
 private:
-	G4DeuteronCoulombBarrier(const G4DeuteronCoulombBarrier & right);
 
-	const G4DeuteronCoulombBarrier & operator=(const G4DeuteronCoulombBarrier & right);
-	G4bool operator==(const G4DeuteronCoulombBarrier & right) const;
-	G4bool operator!=(const G4DeuteronCoulombBarrier & right) const;
+  G4DeuteronCoulombBarrier(const G4DeuteronCoulombBarrier & right);
+
+  const G4DeuteronCoulombBarrier & operator=(const G4DeuteronCoulombBarrier & right);
+  G4bool operator==(const G4DeuteronCoulombBarrier & right) const;
+  G4bool operator!=(const G4DeuteronCoulombBarrier & right) const;
   
-private:
-
-	G4double BarrierPenetrationFactor(const G4double aZ) const;
+  virtual G4double BarrierPenetrationFactor(G4double aZ) const;
 
 };
 
