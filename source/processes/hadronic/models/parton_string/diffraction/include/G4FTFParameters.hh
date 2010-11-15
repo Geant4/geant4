@@ -26,7 +26,7 @@
 #ifndef G4FTFParameters_h
 #define G4FTFParameters_h 1
 //
-// $Id: G4FTFParameters.hh,v 1.8 2010-09-20 15:50:46 vuzhinsk Exp $
+// $Id: G4FTFParameters.hh,v 1.9 2010-11-15 10:05:19 vuzhinsk Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Proton.hh"
@@ -34,9 +34,12 @@ class G4FTFParameters
 {
 
   public:
-  	G4FTFParameters(const G4ParticleDefinition * , G4double theA, 
-                                                       G4double theZ, 
+  	G4FTFParameters(const G4ParticleDefinition * , G4int theA, 
+                                                       G4int theZ, 
                                                        G4double s);
+//  	G4FTFParameters(const G4ParticleDefinition * , G4double theA, 
+//                                                       G4double theZ, 
+//                                                       G4double s);
 
 	~G4FTFParameters();
 
@@ -62,6 +65,7 @@ class G4FTFParameters
         void SetMagQuarkExchange(const G4double aValue);
         void SetSlopeQuarkExchange(const G4double aValue);
         void SetDeltaProbAtQuarkExchange(const G4double aValue);
+        void SetProbOfSameQuarkExchange(const G4double aValue);
 
         void SetProjMinDiffMass(const G4double aValue);
         void SetProjMinNonDiffMass(const G4double aValue);
@@ -111,6 +115,7 @@ class G4FTFParameters
         G4double GetMagQuarkExchange();
         G4double GetSlopeQuarkExchange();
         G4double GetDeltaProbAtQuarkExchange();
+        G4double GetProbOfSameQuarkExchange();
 
         G4double GetProjMinDiffMass();
         G4double GetProjMinNonDiffMass();
@@ -160,6 +165,7 @@ class G4FTFParameters
         G4double MagQuarkExchange;
         G4double SlopeQuarkExchange;
         G4double DeltaProbAtQuarkExchange;
+        G4double ProbOfSameQuarkExchange;
 
         G4double ProjMinDiffMass;
         G4double ProjMinNonDiffMass;
@@ -235,6 +241,8 @@ inline  void G4FTFParameters::SetSlopeQuarkExchange(const G4double aValue)
              {SlopeQuarkExchange = aValue;}
 inline  void G4FTFParameters::SetDeltaProbAtQuarkExchange(const G4double aValue)
              {DeltaProbAtQuarkExchange = aValue;}
+inline void G4FTFParameters::SetProbOfSameQuarkExchange(const G4double aValue)
+             {ProbOfSameQuarkExchange = aValue;}
 
 inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
              {ProjMinDiffMass = aValue*GeV;}
@@ -330,9 +338,9 @@ inline  G4double G4FTFParameters::GetAvaragePt2ofElasticScattering()
 // --------- Get parameters of excitations ---------------------------
 inline  G4double G4FTFParameters::GetMagQuarkExchange()       {return MagQuarkExchange;}
 inline  G4double G4FTFParameters::GetSlopeQuarkExchange()     {return SlopeQuarkExchange;}
-inline  G4double G4FTFParameters::GetDeltaProbAtQuarkExchange()
-                                                              {return DeltaProbAtQuarkExchange;}
-
+inline  G4double G4FTFParameters::GetDeltaProbAtQuarkExchange(){return
+                                                                DeltaProbAtQuarkExchange;}
+inline  G4double G4FTFParameters::GetProbOfSameQuarkExchange(){return ProbOfSameQuarkExchange;}
 
 inline  G4double G4FTFParameters::GetProjMinDiffMass()        {return ProjMinDiffMass;}
 inline  G4double G4FTFParameters::GetProjMinNonDiffMass()     {return ProjMinNonDiffMass;}
