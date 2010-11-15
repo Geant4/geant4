@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CookPairingCorrections.cc,v 1.6 2009-11-30 10:33:33 gcosmo Exp $
+// $Id: G4CookPairingCorrections.cc,v 1.7 2010-11-15 16:09:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -77,7 +77,9 @@ G4CookPairingCorrections::~G4CookPairingCorrections()
 
 G4CookPairingCorrections* G4CookPairingCorrections::GetInstance()
 {
-  static G4CookPairingCorrections theCorrections;
-  if (!theInstance)  { theInstance = &theCorrections; }
+  if (!theInstance)  { 
+    static G4CookPairingCorrections theCorrections;
+    theInstance = &theCorrections; 
+  }
   return theInstance;
 }

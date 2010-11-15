@@ -34,36 +34,10 @@
 #include "G4ConstantLevelDensityParameter.hh"
 #include "G4HadronicException.hh"
 
-G4ConstantLevelDensityParameter::
-G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter& ) :
- G4VLevelDensityParameter(),  EvapLevelDensityParameter(0.125*(1./MeV))
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ConstantLevelDensityParameter::copy_constructor meant to not be accessable");
-}
+G4ConstantLevelDensityParameter::G4ConstantLevelDensityParameter() 
+  :  EvapLevelDensityParameter(0.125/MeV) 
+{}
 
 G4ConstantLevelDensityParameter::~G4ConstantLevelDensityParameter()
-{
-}
-
-const G4ConstantLevelDensityParameter & G4ConstantLevelDensityParameter::
-operator=(const G4ConstantLevelDensityParameter &)
-{
-  throw G4HadronicException(__FILE__, __LINE__, "G4ConstantLevelDensityParameter::operator= meant to not be accessable");
-  return *this;
-}
-
-
-G4bool G4ConstantLevelDensityParameter::operator==(const G4ConstantLevelDensityParameter &) const
-{
-  return false;
-}
-
-G4bool G4ConstantLevelDensityParameter::operator!=(const G4ConstantLevelDensityParameter &) const
-{
-  return true;
-}
-
-
-
-
+{}
 

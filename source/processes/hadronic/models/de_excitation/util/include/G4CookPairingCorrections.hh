@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CookPairingCorrections.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
+// $Id: G4CookPairingCorrections.hh,v 1.6 2010-11-15 16:09:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -51,12 +51,12 @@ public:
 
   ~G4CookPairingCorrections();
 
-  G4double GetParingCorrection(const G4int A, const G4int Z) const {
+  G4double GetParingCorrection(G4int A, G4int Z) const {
     return GetPairingZ(Z) + GetPairingN(A-Z);
   }
 
 
-  G4double GetPairingZ(const G4int Z) const {
+  G4double GetPairingZ(G4int Z) const {
     if ( this->IsInTableThisZ(Z) ) return PairingZTable[Z-ZTableMin]*MeV;
     else {
 #ifdef verbose

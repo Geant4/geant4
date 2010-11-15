@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.hh,v 1.5 2009-03-04 11:05:02 gcosmo Exp $
+// $Id: G4EvaporationLevelDensityParameter.hh,v 1.6 2010-11-15 16:09:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -57,11 +57,12 @@ private:
   G4bool operator!=(const G4EvaporationLevelDensityParameter &right) const;
   
 public:
-  G4double LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const;
+
+  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const;
 
 private:
 
-  G4double ShellCorrection(const G4int Z, const G4int N) const
+  inline G4double ShellCorrection(G4int Z, G4int N) const
   { 
     G4CameronTruranHilfShellCorrections* SPtr = G4CameronTruranHilfShellCorrections::GetInstance();
     return SPtr->GetShellZ(Z) + SPtr->GetShellN(N);
