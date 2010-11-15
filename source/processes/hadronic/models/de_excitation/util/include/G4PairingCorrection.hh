@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PairingCorrection.hh,v 1.7 2010-11-15 12:38:51 vnivanch Exp $
+// $Id: G4PairingCorrection.hh,v 1.8 2010-11-15 12:39:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -53,9 +53,9 @@ public:
   
   ~G4PairingCorrection();
 
-  G4double GetPairingCorrection(G4int A, G4int Z) const
+  G4double GetPairingCorrection(G4int A, G4int Z) const;
 
-  G4double GetFissionPairingCorrection(G4int A, G4int Z) const 
+  G4double GetFissionPairingCorrection(G4int A, G4int Z) const;
 
 private:
 

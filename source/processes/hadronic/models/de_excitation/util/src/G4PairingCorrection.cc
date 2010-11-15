@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairingCorrection.cc,v 1.7 2010-11-15 12:38:42 vnivanch Exp $
+// $Id: G4PairingCorrection.cc,v 1.8 2010-11-15 12:41:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -65,8 +65,8 @@ G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
     PCorrection = theCameronGilbertPairingCorrections->GetPairingCorrection(A,Z);
   else {
     const G4double PairingConstant = 12.0*MeV;
-    G4double Pair = (1 - Z + 2*(Z/2) + (1 - N + 2*(N/2));
-      PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
+    G4double Pair = (1 - Z + 2*(Z/2)) + (1 - N + 2*(N/2));
+    PCorrection = Pair*PairingConstant/std::sqrt(static_cast<G4double>(A));
   }
   return std::max(PCorrection,0.0);
 }
