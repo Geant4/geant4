@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.9 2010-11-15 12:44:06 vnivanch Exp $
+// $Id: G4VEmissionProbability.cc,v 1.10 2010-11-15 20:30:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -34,9 +34,6 @@
 // 28.10.2010 V.Ivanchenko defined members in constructor and cleaned up
 
 #include "G4VEmissionProbability.hh"
-#include "G4PairingCorrection.hh"
-#include "G4EvaporationLevelDensityParameter.hh"
-#include "G4Pow.hh"
 
 G4VEmissionProbability::G4VEmissionProbability():OPTxs(3),useSICB(false) 
 {

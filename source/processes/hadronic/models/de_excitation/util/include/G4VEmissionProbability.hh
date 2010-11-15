@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.hh,v 1.6 2010-11-15 12:44:06 vnivanch Exp $
+// $Id: G4VEmissionProbability.hh,v 1.7 2010-11-15 20:30:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -42,10 +42,9 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
-
-class G4Pow;
-class G4PairingCorrection;
-class G4EvaporationLevelDensityParameter;
+#include "G4PairingCorrection.hh"
+#include "G4EvaporationLevelDensityParameter.hh"
+#include "G4Pow.hh"
 
 class G4VEmissionProbability 
 {
