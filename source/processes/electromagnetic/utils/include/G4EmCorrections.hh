@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.26 2010-11-12 18:37:16 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.27 2010-11-15 19:18:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -191,8 +191,6 @@ private:
   G4EmCorrections & operator=(const G4EmCorrections &right);
   G4EmCorrections(const G4EmCorrections&);
 
-  G4double     engBarkas[47];
-  G4double     corBarkas[47];
   G4double     ed[104];
   G4double     a[104];
   G4double     theZieglerFactor;
@@ -230,6 +228,7 @@ private:
   G4double     HN[31];
   G4double     Z23[100];
 
+  G4LPhysicsFreeVector* BarkasCorr;
   G4LPhysicsFreeVector* ThetaK;
   G4LPhysicsFreeVector* ThetaL;
 
