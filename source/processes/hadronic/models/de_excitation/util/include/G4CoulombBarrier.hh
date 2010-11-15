@@ -24,11 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.hh,v 1.7 2010-11-15 12:44:06 vnivanch Exp $
+// $Id: G4CoulombBarrier.hh,v 1.8 2010-11-15 13:23:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
+//
+// 15-11-2010 V.Ivanchenko cleanup 
 
 #ifndef G4CoulombBarrier_h
 #define G4CoulombBarrier_h 1
@@ -42,6 +44,7 @@ class G4CoulombBarrier : public G4VCoulombBarrier
 {
 
 public:
+
   G4CoulombBarrier();
   G4CoulombBarrier(G4int anA, G4int aZ);
   virtual ~G4CoulombBarrier();
