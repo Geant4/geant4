@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.134 2010-11-02 16:39:45 bmorgan Exp $
+# $Id: Configure,v 1.135 2010-11-15 12:06:53 bmorgan Exp $
 #
-# Generated on Tue Nov  2 16:37:42 GMT 2010 [metaconfig 3.0 PL70]
+# Generated on Mon Nov 15 12:05:15 GMT 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3174,7 +3174,7 @@ if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" ; then
 		#
 		while test 1 = 1  ; do
 			g4message="Do you want to build static libraries too?"
-			dflt=n
+			dflt=$g4lib_build_static
 			rp=$g4message
 			. ./myread
 			gans=$ans
@@ -3214,15 +3214,15 @@ if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4s
 	gans=$ans
 
 	case $gans in
-	n*|N*) 
+	n*|N*)
+        # If global libs not wanted, we must force build and use of granular 
 		g4global=n
 		g4granular=y
 		g4lib_use_granular=y
 		;;
 	y*|Y*) 
+        # If we do want global libs, leave granular alone to preserve default settings
 		g4global=y
-		g4granular=n
-		g4lib_use_granular=n
 		;;
 	esac
 
@@ -3238,7 +3238,9 @@ if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" -a "X$g4s
 
 		case $gans in
 		n*|N*) 
+            # If granular libraries not built, also force use_granular to no
 			g4granular=n
+            g4lib_use_granular=n
 			;;
 		y*|Y*) 
 			g4granular=y
