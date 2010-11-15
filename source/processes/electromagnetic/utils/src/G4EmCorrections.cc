@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.62 2010-11-15 19:18:34 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.63 2010-11-15 19:23:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -124,7 +124,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 
   G4double sum = (2.0*(Barkas + Bloch) + Mott);
 
-  if(verbose > -1) {
+  if(verbose > 1) {
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
 	   << " Bloch= " << Bloch << " Mott= " << Mott 
 	   << " Sum= " << sum << " q2= " << q2 << G4endl; 
