@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.22 2010-11-16 10:19:22 tnikitin Exp $
+// $Id: G4EllipticalCone.cc,v 1.23 2010-11-16 11:46:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4EllipticalCone class
@@ -623,22 +623,25 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   G4double plus  = (-B+std::sqrt(discr))/(2.*A);
   G4double minus = (-B-std::sqrt(discr))/(2.*A);
  
-  //Special case::Point on Surface, Check norm.dot(v)
+  // Special case::Point on Surface, Check norm.dot(v)
 
-  if ( ( std::fabs(plus) < halfTol )||( std::fabs(minus) < halfTol ) ){
-       
-      G4ThreeVector truenorm(p.x()/(xSemiAxis*xSemiAxis),
-                             p.y()/(ySemiAxis*ySemiAxis),
-                             -( p.z() - zheight ));
-      if ( truenorm*v >= 0){   //  going outside the solid from surface
- 	   return kInfinity;
-      }else{
-           return 0;
-      }
+  if ( ( std::fabs(plus) < halfTol )||( std::fabs(minus) < halfTol ) )
+  {
+    G4ThreeVector truenorm(p.x()/(xSemiAxis*xSemiAxis),
+                           p.y()/(ySemiAxis*ySemiAxis),
+                           -( p.z() - zheight ));
+    if ( truenorm*v >= 0)  //  going outside the solid from surface
+    {
+      return kInfinity;
+    }
+    else
+    {
+      return 0;
+    }
   }
 
- //  G4double lambda   = std::fabs(plus) < std::fabs(minus) ? plus : minus;  
- G4double lambda = 0;
+  // G4double lambda = std::fabs(plus) < std::fabs(minus) ? plus : minus;  
+  G4double lambda = 0;
 
   if ( minus > halfTol && minus < distMin ) 
   {
@@ -816,18 +819,21 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
 
     if ( std::fabs(lambda) < distMin )
     {
-      if( std::fabs(lambda) > 0.5*kCarTolerance){
-          distMin  = std::fabs(lambda);
+      if( std::fabs(lambda) > 0.5*kCarTolerance)
+      {
+        distMin  = std::fabs(lambda);
+        surface  = kCurvedSurf;
+      }
+      else  // Point is On the Surface, Check Normal
+      {
+        G4ThreeVector truenorm(p.x()/(xSemiAxis*xSemiAxis),
+                               p.y()/(ySemiAxis*ySemiAxis),
+                               -( p.z() - zheight ));
+        if( truenorm.dot(v) > 0 )
+        {
+          distMin  = 0.0;
           surface  = kCurvedSurf;
-      } else { //Point is On the Surface, Check Normal
-	  G4ThreeVector truenorm(p.x()/(xSemiAxis*xSemiAxis),
-                           p.y()/(ySemiAxis*ySemiAxis),
-                            -( p.z() - zheight ));
-          
-          if( truenorm.dot(v) > 0 ){
-              distMin  = 0.0;
-              surface  = kCurvedSurf;
-          }
+        }
       } 
     }
   }
@@ -854,12 +860,11 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
         case kCurvedSurf:
         {
           G4ThreeVector pexit = p + distMin*v;
-          G4ThreeVector truenorm(pexit.x()/(xSemiAxis*xSemiAxis),
-                                 pexit.y()/(ySemiAxis*ySemiAxis),
-                                 -( pexit.z() - zheight ) );
+          G4ThreeVector truenorm( pexit.x()/(xSemiAxis*xSemiAxis),
+                                  pexit.y()/(ySemiAxis*ySemiAxis),
+                                  -( pexit.z() - zheight ) );
           truenorm /= truenorm.mag();
           *n= truenorm;
-         
         } 
         break;
 
@@ -886,7 +891,8 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
     }
   }
 
-  if(distMin<0.5*kCarTolerance)distMin=0;
+  if (distMin<0.5*kCarTolerance) { distMin=0; }
+
   return distMin;
 }
 
