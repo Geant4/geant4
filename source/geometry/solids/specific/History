@@ -1,4 +1,4 @@
-$Id: History,v 1.183 2010-11-16 11:46:26 gcosmo Exp $
+$Id: History,v 1.184 2010-11-16 11:48:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 16-Nov-2010  T.Nikitina (geom-specific-V09-03-19)
-- Fixes in DitanceToIn(p,v) and DistanceToOut(p,v) for correct handeling of
-  point on the Surface, correct formula for SurfaceNormal(p).
+- G4EllipticalCone: fixes in DistanceToIn(p,v) and DistanceToOut(p,v) for
+  correct handling of point on the surface.
+  Corrected formula for SurfaceNormal(p).
 
 10-Nov-2010  T.Nikitina (geom-specific-V09-03-18)
 - Added checks on crossing of vertices and too big twisted angle in
