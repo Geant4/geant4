@@ -69,8 +69,9 @@ private:
    * Constructor requires command name and messenger class(this).
    */ 
   G4UIcmdWithABool *secondariesCmd; 
+  G4UIcmdWithAString *DoseMatrixCmd;
 #ifdef G4ANALYSIS_USE_ROOT
-  G4UIcmdWithAString *FileNameCmd, *DoseMatrixCmd;
+  G4UIcmdWithAString *FileNameCmd;
 #endif
 };
 
