@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFissionSimfis18.cc,v 1.3 2008-11-06 08:42:00 gcosmo Exp $
+// $Id: G4AblaFissionSimfis18.cc,v 1.4 2010-11-16 16:28:57 gcosmo Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -1411,9 +1411,8 @@ void G4AblaFissionSimfis18::fissionDistri(G4double &a,G4double &z,G4double &e,
   }
 }
 
-void G4AblaFissionSimfis18::standardRandom(G4double *rndm, G4long *seed)
+void G4AblaFissionSimfis18::standardRandom(G4double *rndm, G4long*)
 {
-  (*seed) = (*seed); // Avoid warning during compilation.
   // Use Geant4 G4UniformRand
   (*rndm) = randomGenerator->getRandom();
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.25 2010-11-13 00:08:36 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.26 2010-11-16 16:28:56 gcosmo Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -3703,9 +3703,8 @@ void G4Abla::rotab(G4double R[4][4], G4double pin[4], G4double pout[4])
 // the future the random number generation must be factored into its
 // own class
 
-void G4Abla::standardRandom(G4double *rndm, G4long *seed)
+void G4Abla::standardRandom(G4double *rndm, G4long*)
 {
-  (*seed) = (*seed); // Avoid warning during compilation.
   // Use Geant4 G4UniformRand
   (*rndm) = randomGenerator->getRandom();
 }
