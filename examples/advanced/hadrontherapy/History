@@ -8,6 +8,11 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+16.11.2010 J.Allison; Tag: hadrontherapy-V09-03-10
+	   - Corrected use of G4UIExecutive.
+	   - Fixed bug in HadrontherapyAnalysisFileMessenger.hh for case
+             of G4ANALYSIS_USE_ROOT not set.
+
 12.11.2010 G.A.P.Cirrone; Tag: harontherapy-V09-03-09
 	   - Updated ans cleaned macro files
 
