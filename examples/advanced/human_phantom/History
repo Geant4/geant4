@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2010-06-06 06:20:14 perl Exp $
+$Id: History,v 1.29 2010-11-16 15:29:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 16, 2010, J.Allison, tag: human_phantom-V09-03-03
+- phantom.cc: Introduced G4UIExecutive.
+- G4HumanPhantomPhysicsList.cc:
+  o Removed redundant #include "G4MultipleScattering.hh"
 
 June 4, 2010, J.Perl, tag: human_phantom-V09-03-02
 - Updated vis usage
