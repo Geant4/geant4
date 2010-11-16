@@ -57,8 +57,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyDetectorSD.hh"
@@ -78,27 +76,14 @@
 #include "G4ScoringManager.hh"
 #include "IAEAScoreWriter.hh"
 
-#if defined(G4UI_USE_TCSH)
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#endif
-
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
-
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE_QT
-#include "G4UIQt.hh"
-#include "G4Qt.hh"
 #endif
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc ,char ** argv)
@@ -169,15 +154,14 @@ int main(int argc ,char ** argv)
 #ifdef G4UI_USE
 #warning prova
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      
 #ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
 #endif
-#endif 
       if (ui->IsGUI())
-      G4cout << "!!!!!!!!!!  SONO IN G4VIS_USE 2   "<< G4endl; 
+	UImanager->ApplyCommand("/control/execute macro/GUIPersonalisation.mac");
       ui->SessionStart();
       delete ui;
+#endif 
     }
  
   // Job termination
@@ -191,18 +175,14 @@ int main(int argc ,char ** argv)
 #endif
     }
 
-
 #ifdef G4ANALYSIS_USE_ROOT
   HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
 #endif
 
-  /*
-    #ifdef G4UI_USE
-    G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
-    ui->SessionStart();
-    delete ui;
-    #endif
-  */
+#ifdef G4VIS_USE
+  delete visManager;
+#endif                
+
   delete geometryMessenger;
   delete geometryController;
   delete pInteraction; 
