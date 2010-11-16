@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh,v 1.11 2010-10-29 17:35:03 vnivanch Exp $
+// $Id: G4EvaporationProbability.hh,v 1.12 2010-11-16 09:48:58 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -70,9 +70,9 @@ private:
   
 public:
 
- G4double ProbabilityDistributionFunction( const G4Fragment & aFragment, G4double K);
+  G4double ProbabilityDistributionFunction( const G4Fragment & aFragment, G4double K);
 
- G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
+  G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
 
 private:
 
@@ -91,10 +91,7 @@ protected:
 
 private:
 
-  // Data Members
-
-  G4VLevelDensityParameter * theEvapLDPptr;
-	
+  // Data Members	
   G4int theA;
   G4int theZ;
 
