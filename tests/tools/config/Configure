@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.50 2010-11-15 12:05:53 bmorgan Exp $
+# $Id: Configure,v 1.51 2010-11-16 12:28:24 bmorgan Exp $
 #
-# Generated on Mon Nov 15 12:05:15 GMT 2010 [metaconfig 3.0 PL70]
+# Generated on Tue Nov 16 12:28:38 GMT 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3289,8 +3289,8 @@ esac
 
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.13'
-g4data_g4ndl_version='G4NDL3.13'
+g4data_g4emlow_version='G4EMLOW6.19'
+g4data_g4ndl_version='G4NDL3.14'
 g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
 g4data_neutronxs_version='G4NEUTRONXS1.0'

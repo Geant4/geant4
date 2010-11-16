@@ -32,8 +32,8 @@
 ?S.
 g4data_photonevaporation_version='PhotonEvaporation2.0'
 g4data_radioactivedecay_version='RadioactiveDecay3.2'
-g4data_g4emlow_version='G4EMLOW6.13'
-g4data_g4ndl_version='G4NDL3.13'
+g4data_g4emlow_version='G4EMLOW6.19'
+g4data_g4ndl_version='G4NDL3.14'
 g4data_g4abla_version='G4ABLA3.0'
 g4data_realsurface_version='RealSurface1.0'
 g4data_neutronxs_version='G4NEUTRONXS1.0'
