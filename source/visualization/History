@@ -1,4 +1,4 @@
-$Id: History,v 1.492 2010-11-13 19:48:56 perl Exp $
+$Id: History,v 1.493 2010-11-16 01:58:41 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th November 2010  Joseph Perl (vis-V09-03-13)
+- Global Vis Tag. Candidate for Geant4 release 9.4
+- modeling-V09-03-05 - Fix for time-slicing problem.
 
 13th November 2010  Joseph Perl ((vis-V09-03-12)
 - Global Vis Tag. Candidate for Geant4 release 9.4
