@@ -218,7 +218,11 @@ void G4LivermorePolarizedPhotoElectricModel::SampleSecondaries(std::vector<G4Dyn
 
   // Select randomly one element in the current material
 
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+  //  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy);
+
+  const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+  const G4Element* elm = SelectRandomAtom(couple->GetMaterial(),particle,photonEnergy);
+  G4int Z = (G4int)elm->GetZ();
 
   // Select the ionised shell in the current atom according to shell cross sections
 
