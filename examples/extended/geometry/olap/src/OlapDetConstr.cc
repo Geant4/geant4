@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapDetConstr.cc,v 1.4 2006-06-29 17:22:52 gunter Exp $
+// $Id: OlapDetConstr.cc,v 1.5 2010-11-16 14:34:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -529,7 +529,7 @@ void OlapDetConstr::DeleteNewWorld()
    
    if (nr==0)
    {
-     G4cerr << "OlapDetConstr::DeleteNewWorld(): no daughter in NewWorld!"
+     G4cout << "OlapDetConstr::DeleteNewWorld(): no daughter in NewWorld!"
             << G4endl << G4endl;
      return;
    }  
