@@ -137,11 +137,14 @@ void G4LivermorePolarizedPhotoElectricModel::Initialise(const G4ParticleDefiniti
     
   if(isInitialised) return;
 
-  if(pParticleChange)
+  /*  if(pParticleChange)
     fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForGamma();
+  */
     
+  fParticleChange = GetParticleChangeForGamma();
+  
   isInitialised = true;
 }
 
