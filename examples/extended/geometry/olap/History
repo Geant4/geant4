@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2010-11-09 07:26:49 gunter Exp $
+$Id: History,v 1.18 2010-11-16 14:34:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 16th, 2010  G.Cosmo   - olapex-V09-03-04
+- Fixed uninitialised data in OlapInfo, causing undefined behavior.
+- OlapDetConstr: moved printout for no daughter in world to cout.
 
 November 9th, 2010  G.Folger   - olapex-V09-03-03
 - add simple batch.mac to use in testing
