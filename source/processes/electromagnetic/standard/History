@@ -1,4 +1,4 @@
-$Id: History,v 1.517 2010-11-13 18:46:07 vnivanch Exp $
+$Id: History,v 1.518 2010-11-16 10:18:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 November 2010: V.Ivant (emstand-V09-03-28)
+- G4ICRU73QOModel (A.Bagulya) - fine tuning for 9.4
 
 13 November 2010: V.Ivant (emstand-V09-03-27)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 - added
