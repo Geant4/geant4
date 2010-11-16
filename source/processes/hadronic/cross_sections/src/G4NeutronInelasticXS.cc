@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc,v 1.8 2010-11-11 21:39:26 dennis Exp $
+// $Id: G4NeutronInelasticXS.cc,v 1.9 2010-11-16 12:47:46 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // Modifications:
 //
 
+#include "G4HadronicException.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4Neutron.hh"
 #include "G4DynamicParticle.hh"
@@ -208,15 +209,22 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   std::ostringstream ost;
   ost << path << "/inelast" << Z ;
   std::ifstream filein(ost.str().c_str());
+
   if (!(filein)) {
-    G4cout << " file " << ost << "  is not opened" << G4endl;
+    G4cout << " file " << ost.str() 
+	   << "  is not opened by G4NeutronInelasticXS" << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, 
+			      "G4NeutronElasticXS: no data sets registered");
+    return;
   }else{
     if(verboseLevel > 1) {
-      G4cout << ost << " is opened" << G4endl;
+      G4cout << "file " << ost.str() 
+	     << " is opened by G4NeutronInelasticXS" << G4endl;
     }
+    
     // retrieve data from DB
     data[Z]->Retrieve(filein, true);
-
+    
     // smooth transition 
     size_t n      = data[Z]->GetVectorLength() - 1;
     G4double emax = data[Z]->Energy(n);

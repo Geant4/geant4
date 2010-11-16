@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.5 2010-10-15 22:36:13 dennis Exp $
+// $Id: G4NeutronCaptureXS.cc,v 1.6 2010-11-16 12:47:46 antoni Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // Modifications:
 //
 
+#include "G4HadronicException.hh"
 #include "G4NeutronCaptureXS.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
@@ -178,12 +179,17 @@ G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
   ost << path << "/cap" << Z ;
   std::ifstream filein(ost.str().c_str());
   if (!(filein)) {
-    G4cout << " file " << ost << "  is not opened" << G4endl;
+    G4cout << ost.str() << "  is not opened by G4NeutronCaptureXS" << G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, 
+     "G4NeutronCaptureXS: no data sets registered");
+    return;
   }else{
     if(verboseLevel > 1) {
-      G4cout << ost << " is opened" << G4endl;
+      G4cout << "file " << ost.str() 
+	     << " is opened by G4NeutronCaptureXS" << G4endl;
     }
     // retrieve data from DB
     data[Z]->Retrieve(filein, true);
   } 
 }
+ 
