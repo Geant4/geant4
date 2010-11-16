@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: AXPETDetectorConstruction.cc,v 1.1 2008-09-03 13:34:03 gcosmo Exp $
+// $Id: AXPETDetectorConstruction.cc,v 1.2 2010-11-16 13:35:53 tnikitin Exp $
 // ------------------------------------------------------------
 // Geant4 class implementation file
 //
@@ -51,6 +51,9 @@
 #include "G4Trap.hh"
 #include "G4Trd.hh"
 #include "G4Tet.hh"
+#include "G4GenericTrap.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4ExtrudedSolid.hh"
 
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
@@ -59,6 +62,10 @@
 #include "G4TwistedBox.hh"
 #include "G4TwistedTrd.hh"
 #include "G4TwistedTrap.hh"
+
+#include "G4TwoVector.hh"
+#include "G4TriangularFacet.hh"
+#include "G4QuadrangularFacet.hh"
 
 #include "G4BooleanSolid.hh"
 #include "G4DisplacedSolid.hh"
@@ -487,10 +494,12 @@ else if (val == "Q6Shell")
 
   else if ( val == "Tet" ) 
   {
-
-      G4ThreeVector pzero(0,0,0);
-      G4ThreeVector pnt1(1.,0.,0.),pnt2(0,1.,0.), pnt3(0,0.,1.);
-      G4Tet   t1( "aTet", pzero, pnt1, pnt2, pnt3);
+    G4ThreeVector anchor = G4ThreeVector(  0,    0, 0);
+    G4ThreeVector     p2 = G4ThreeVector(1.0,  0.5, 0);
+    G4ThreeVector     p3 = G4ThreeVector(0.5,  1.0, 0);
+    G4ThreeVector     p4 = G4ThreeVector(0.5,  0.5, 1.0);
+   
+    aVolume = new G4Tet("aTet",anchor,p2,p3,p4);
   }
   else if ( val == "Trap") 
   {
@@ -538,6 +547,116 @@ else if (val == "Q6Shell")
 				   3.5) ;  // zheight
 
   }
+
+ else if (val == "TwistedBox")
+  {
+    aVolume = new G4TwistedBox("aTwistedBox",40*deg,0.5,1.0,1.5);
+  }
+  else if (val == "TwistedTrd")
+  { 
+    aVolume = new G4TwistedTrd("aTwistedTrd",0.5,1.0,0.8,1.5,1.8,20*deg);
+  }
+  else if (val == "TwistedTrap")
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap",40*deg,0.5,1.0,0.8,1.5);
+  }
+  else if ( val == "TwistedTrap2") 
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap2",
+				   20*deg,    // twist angle
+				   0.80,         // half z length
+				   10*deg,      // direction between end planes
+				   40*deg,        // defined by polar and azimutal angles.
+				   0.8,        // half y length at -pDz
+				   1.1,        // half x length at -pDz,-pDy
+				   1.6,        // half x length at -pDz,+pDy
+				   0.8,        // half y length at +pDz
+				   1.1,         // half x length at +pDz,-pDy
+				   1.6,        // half x length at +pDz,+pDy
+				   -50*deg        // tilt angle at +pDz
+				   ) ;
+  }
+  else if ( val == "TwistedTubs")
+  {
+    aVolume = new G4TwistedTubs("aTwistedTubs",10.*deg,1.0,2.,4.,171.*deg);
+
+  }
+ else if (val == "GenericTrap" ){
+   std::vector<G4TwoVector> vertices;
+   vertices.push_back(G4TwoVector( -4.5, -4.5));
+   vertices.push_back(G4TwoVector( -4.5,  4.5));
+   vertices.push_back(G4TwoVector(  4.5,  4.5));
+   vertices.push_back(G4TwoVector(  4.5, -4.5));
+   vertices.push_back(G4TwoVector( -3.5, -3.5));
+   vertices.push_back(G4TwoVector( -3.5,  3.5));
+   vertices.push_back(G4TwoVector(  3.5,  3.5));
+   vertices.push_back(G4TwoVector(  3.5, -2.5));     
+   aVolume = new G4GenericTrap("aGenTrd",4.,vertices);
+  }
+else if(val == "TessellatedSolid")
+  { 
+    G4double targetSize = 2.;
+    G4TessellatedSolid* aVolume1 = new G4TessellatedSolid("aTessellatedSolid");
+    G4TriangularFacet *facet1 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet2 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet3 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet4 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4QuadrangularFacet *facet5 = new
+    G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     ABSOLUTE);
+
+    aVolume1->AddFacet((G4VFacet*) facet1);
+    aVolume1->AddFacet((G4VFacet*) facet2);
+    aVolume1->AddFacet((G4VFacet*) facet3);
+    aVolume1->AddFacet((G4VFacet*) facet4);
+    aVolume1->AddFacet((G4VFacet*) facet5);
+  
+    aVolume1->SetSolidClosed(true);
+
+    aVolume = aVolume1;
+
+  }
+  else if (val == "ExtrudedSolid")
+  {
+   std::vector<G4TwoVector> polygon;
+   polygon.push_back(G4TwoVector(-3., -3.0));
+   polygon.push_back(G4TwoVector(-3.,  3.0));
+   polygon.push_back(G4TwoVector( 3.,  3.0));
+   polygon.push_back(G4TwoVector( 3., -3.0));
+   polygon.push_back(G4TwoVector( 1.5, -3.0));
+   polygon.push_back(G4TwoVector( 1.5,  1.5));
+   polygon.push_back(G4TwoVector(-1.5,  1.5));
+   polygon.push_back(G4TwoVector(-1.5, -3.0));
+  
+   std::vector<G4ExtrudedSolid::ZSection> zsections;
+   zsections.push_back(G4ExtrudedSolid::ZSection(-4.0, G4TwoVector(-2.0, 1.0), 1.5));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 1.0, G4TwoVector(  0,  0), 0.5));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 1.5, G4TwoVector(  0,  0), 0.7));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 4.0, G4TwoVector( 2.0, 2.0), 0.9));
+
+   aVolume = new G4ExtrudedSolid("aExtrudedSolid", polygon, zsections);
+  }
+
+
   else
     { G4cout <<"DetectorConstruction tried to select "<<val<<G4endl;
     G4Exception("DetectorConstruction::SelectDetector() - Invalid shape!");

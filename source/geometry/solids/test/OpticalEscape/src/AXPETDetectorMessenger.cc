@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: AXPETDetectorMessenger.cc,v 1.1 2008-09-03 13:34:03 gcosmo Exp $
+// $Id: AXPETDetectorMessenger.cc,v 1.2 2010-11-16 13:36:00 tnikitin Exp $
 // ------------------------------------------------------------
 // Geant4 class implementation file
 //
@@ -55,7 +55,7 @@ AXPETDetectorMessenger::AXPETDetectorMessenger(AXPETDetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Tubs");
 
- selDetCmd->SetCandidates("Trap Trd Tet Sphere HalfSphere HollowSphere HalfHollowSphere  Ring Shell Orb Box Cons manyCons Tubs Hype Torus Para Paraboloid Polycone PolyconeGen PolyconeGenComplex Polyhedra PolyhedraGen PolyhedraGenComplex BREPBox Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 Ellipsoid EllipticalCone EllipticalTube");
+ selDetCmd->SetCandidates("Trap Trd Tet Sphere HalfSphere HollowSphere HalfHollowSphere  Ring Shell Orb Box Cons manyCons Tubs Hype Torus Para Paraboloid Polycone PolyconeGen PolyconeGenComplex Polyhedra PolyhedraGen PolyhedraGenComplex BREPBox Trd b1Ib2 b1Ub2 b1Sb2 b1Ub1 b1Ib1 b1Sb1 Ellipsoid EllipticalCone EllipticalTube Tet GenericTrap TwistedBox TwistedTrd TwistedTrap TwistedTubs TessellatedSolid ExtrudedSolid");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   rotXCmd = new G4UIcmdWithADouble("/mydet/RotateX",this);
