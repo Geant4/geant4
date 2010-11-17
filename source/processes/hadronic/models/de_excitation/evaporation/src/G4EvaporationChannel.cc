@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.13 2010-10-29 17:35:03 vnivanch Exp $
+// $Id: G4EvaporationChannel.cc,v 1.14 2010-11-17 12:14:59 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -39,11 +39,16 @@
 
 #include "G4EvaporationChannel.hh"
 #include "G4PairingCorrection.hh"
+#include "G4NucleiProperties.hh"
+#include "G4Pow.hh"
+#include "G4EvaporationLevelDensityParameter.hh"
+#include "Randomize.hh"
 
 
-G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, const G4String & aName,
-					   G4VEmissionProbability * aEmissionStrategy,
-                                           G4VCoulombBarrier * aCoulombBarrier):
+G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, 
+					   const G4String & aName,
+					   G4EvaporationProbability* aEmissionStrategy,
+                                           G4VCoulombBarrier* aCoulombBarrier):
     G4VEvaporationChannel(aName),
     theA(anA),
     theZ(aZ),
@@ -54,7 +59,8 @@ G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, const G4String &
 { 
   ResidualA = 0;
   ResidualZ = 0;
-  CoulombBarrier=0.0;
+  ResidualMass = CoulombBarrier=0.0;
+  EvaporatedMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
   theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
 }
 
@@ -69,7 +75,7 @@ G4EvaporationChannel::G4EvaporationChannel():
 { 
   ResidualA = 0;
   ResidualZ = 0;
-  CoulombBarrier=0.0;
+  EvaporatedMass = ResidualMass = CoulombBarrier = 0.0;
   theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
 }
 
@@ -90,11 +96,11 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
   G4int FragmentZ = fragment.GetZ_asInt();
   ResidualA = FragmentA - theA;
   ResidualZ = FragmentZ - theZ;
+  ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
   
   //Effective excitation energy
   G4double ExEnergy = fragment.GetExcitationEnergy() - 
     G4PairingCorrection::GetInstance()->GetPairingCorrection(FragmentA,FragmentZ);
-  
   
   // Only channels which are physically allowed are taken into account 
   if (ResidualA <= 0 || ResidualZ <= 0 || ResidualA < ResidualZ ||
@@ -105,9 +111,7 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
   } else {
     CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
     // Maximal Kinetic Energy
-    MaximalKineticEnergy = CalcMaximalKineticEnergy
-      (G4ParticleTable::GetParticleTable()->
-       GetIonTable()->GetNucleusMass(FragmentZ,FragmentA)+ExEnergy);
+    MaximalKineticEnergy = CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
     
     // Emission probability
     // Protection for the case Tmax<V. If not set in this way we could end up in an 
@@ -137,8 +141,6 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 {
   G4double EvaporatedKineticEnergy=GetKineticEnergy(theNucleus);
   
-  G4double EvaporatedMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
-    GetIonMass(theZ,theA);
   G4double EvaporatedEnergy = EvaporatedKineticEnergy + EvaporatedMass;
   
   G4ThreeVector momentum(IsotropicVector
@@ -151,14 +153,10 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
   EvaporatedMomentum.boost(theNucleus.GetMomentum().boostVector());
   
   G4Fragment * EvaporatedFragment = new G4Fragment(theA,theZ,EvaporatedMomentum);
-#ifdef PRECOMPOUND_TEST
-  EvaporatedFragment->SetCreatorModel(G4String("G4Evaporation"));
-#endif
+
   // ** And now the residual nucleus ** 
   G4double theExEnergy = theNucleus.GetExcitationEnergy();
-  G4double theMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
-    GetNucleusMass(static_cast<G4int>(theNucleus.GetZ()),
-                   static_cast<G4int>(theNucleus.GetA()));
+  G4double theMass = theNucleus.GetGroundStateMass();
   G4double ResidualEnergy = theMass + 
     (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
   
@@ -167,9 +165,6 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
   
   G4Fragment * ResidualFragment = new G4Fragment(ResidualA, ResidualZ, ResidualMomentum );
   
-#ifdef PRECOMPOUND_TEST
-  ResidualFragment->SetCreatorModel(G4String("ResidualNucleus"));
-#endif
   G4FragmentVector * theResult = new G4FragmentVector;
   
 #ifdef debug
@@ -198,13 +193,8 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 
 /////////////////////////////////////////
 // Calculates the maximal kinetic energy that can be carried by fragment.
-G4double G4EvaporationChannel::CalcMaximalKineticEnergy(const G4double NucleusTotalE)
+G4double G4EvaporationChannel::CalcMaximalKineticEnergy(G4double NucleusTotalE)
 {
-  G4double ResidualMass = G4ParticleTable::GetParticleTable()->
-    GetIonTable()->GetNucleusMass( ResidualZ, ResidualA );
-  G4double EvaporatedMass = G4ParticleTable::GetParticleTable()->
-    GetIonTable()->GetNucleusMass( theZ, theA );
-
   // This is the "true" assimptotic kinetic energy (from energy conservation)	
   G4double Tmax = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass - 		
                    ResidualMass*ResidualMass)/(2.0*NucleusTotalE) - EvaporatedMass;
@@ -232,10 +222,10 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
     //the Coulomb barrier.
     
     
-    if (MaximalKineticEnergy < 0.0)   
+    if (MaximalKineticEnergy < 0.0) {
       throw G4HadronicException(__FILE__, __LINE__, 
                                 "G4EvaporationChannel::CalcKineticEnergy: maximal kinetic at the Coulomb barrier is less than 0");
-    
+    }
     G4double Rb = 4.0*theLevelDensityPtr->
       LevelDensityParameter(ResidualA+theA,ResidualZ+theZ,MaximalKineticEnergy)*
       MaximalKineticEnergy;
@@ -250,8 +240,8 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
       G4double Q1 = 1.0;
       G4double Q2 = 1.0;
       if (theZ == 0) { // for emitted neutron
-        G4double Beta = (2.12/std::pow(G4double(ResidualA),2./3.) - 0.05)*MeV/
-          (0.76 + 2.2/std::pow(G4double(ResidualA),1./3.));
+        G4double Beta = (2.12/G4Pow::GetInstance()->Z23(ResidualA) - 0.05)*MeV/
+          (0.76 + 2.2/G4Pow::GetInstance()->Z13(ResidualA));
         Q1 = 1.0 + Beta/(MaximalKineticEnergy);
         Q2 = Q1*std::sqrt(Q1);
       } 
@@ -274,8 +264,9 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
     G4double T(0.0);
     G4double NormalizedProbability(1.0);
     
+    /*
     // A pointer is created in order to access the distribution function.
-    G4EvaporationProbability * G4EPtemp;
+    G4EvaporationProbability * G4EPtemp = 0;
     
     if (theA==1 && theZ==0) G4EPtemp=new G4NeutronEvaporationProbability();
     else if (theA==1 && theZ==1) G4EPtemp=new G4ProtonEvaporationProbability();
@@ -292,17 +283,20 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
       //for cross section selection and superimposed Coulom Barrier for xs
       G4EPtemp->SetOPTxs(OPTxs);
       G4EPtemp->UseSICB(useSICB);
+    */
 
+    // use local pointer and not create a new one
     do
       {  
         T=V+G4UniformRand()*(Tmax-V);
-        NormalizedProbability=G4EPtemp->ProbabilityDistributionFunction(aFragment,T)/
-          (this->GetEmissionProbability());
+        NormalizedProbability = 
+	  theEvaporationProbabilityPtr->ProbabilityDistributionFunction(aFragment,T)/
+          GetEmissionProbability();
         
       }
     while (G4UniformRand() > NormalizedProbability);
-   delete G4EPtemp;
-   return T;
+    //   delete G4EPtemp;
+    return T;
   } else{
     std::ostringstream errOs;
     errOs << "Bad option for energy sampling in evaporation"  <<G4endl;
@@ -310,18 +304,18 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
   }
 }
 
-G4ThreeVector G4EvaporationChannel::IsotropicVector(const G4double Magnitude)
+G4ThreeVector G4EvaporationChannel::IsotropicVector(G4double Magnitude)
     // Samples a isotropic random vectorwith a magnitud given by Magnitude.
     // By default Magnitude = 1.0
 {
-    G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-    G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
-    G4double Phi = twopi*G4UniformRand();
-    G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-			 Magnitude*std::sin(Phi)*SinTheta,
-			 Magnitude*CosTheta);
-    return Vector;
-            }
+  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
+  G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
+  G4double Phi = twopi*G4UniformRand();
+  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
+		       Magnitude*std::sin(Phi)*SinTheta,
+		       Magnitude*CosTheta);
+  return Vector;
+}
 
 
 
