@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh,v 1.12 2010-11-16 09:48:58 vnivanch Exp $
+// $Id: G4EvaporationProbability.hh,v 1.13 2010-11-17 11:06:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -51,9 +51,9 @@ public:
 
   virtual ~G4EvaporationProbability();
 
-  inline G4double GetZ(void) const { return theZ; }
+  inline G4int GetZ(void) const { return theZ; }
 	
-  inline G4double GetA(void) const { return theA;} 
+  inline G4int GetA(void) const { return theA;} 
 
 protected:
   

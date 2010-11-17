@@ -208,10 +208,11 @@ G4EvaporationProbability::ProbabilityDistributionFunction( const G4Fragment & fr
   G4int ResidualA = fragment.GetA_asInt() - theA;
   G4int ResidualZ = fragment.GetZ_asInt() - theZ;  
   G4double U = fragment.GetExcitationEnergy();
-  G4cout << "### G4EvaporationProbability::ProbabilityDistributionFunction" << G4endl;
-  G4cout << "FragZ= " << fragment.GetZ_asInt() << " FragA= " << fragment.GetA_asInt()
-	 << " Z= " << theZ << "  A= " << theA << G4endl;
-  G4cout << "PC " << fPairCorr << "   DP " << theEvapLDPptr << G4endl;
+  //G4cout << "### G4EvaporationProbability::ProbabilityDistributionFunction" << G4endl;
+  //G4cout << "FragZ= " << fragment.GetZ_asInt() << " FragA= " << fragment.GetA_asInt()
+  //	 << " Z= " << theZ << "  A= " << theA << G4endl;
+  //G4cout << "PC " << fPairCorr << "   DP " << theEvapLDPptr << G4endl;
+
   // if(K <= theCoulombBarrierptr->GetCoulombBarrier(ResidualA,ResidualZ,U)) return 0.0;
 
   G4double delta1 = fPairCorr->GetPairingCorrection(ResidualA,ResidualZ);
