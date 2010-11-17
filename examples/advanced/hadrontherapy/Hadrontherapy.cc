@@ -172,7 +172,7 @@ int main(int argc ,char ** argv)
     if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
     {
 	pMatrix -> TotalEnergyDeposit(); 
-//	pMatrix -> StoreDoseFluenceAscii();
+	pMatrix -> StoreDoseFluenceAscii();
 #ifdef G4ANALYSIS_USE_ROOT
         pMatrix -> StoreDoseFluenceRoot();
 #endif

@@ -91,8 +91,11 @@
 #/analysis/secondary true 
 
 /run/beamOn 5000
+
 # Write dose & fluence to an ASCII file
-/analysis/writeDoseFile 
+# This is done by default at the exit of the main program
+#/analysis/writeDoseFile My_dose.out
+
 #########################
 # Move the generated .root & .out
 # files into the

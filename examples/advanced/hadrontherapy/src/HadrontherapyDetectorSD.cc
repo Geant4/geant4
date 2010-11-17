@@ -131,13 +131,19 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
 	    // ASCII files, with the dose, can be generated through the method StoreDoseData() 
 	    // into the HadrontherapyMatrix class (StoreFluenceData for fluence).
 	    // A method of the HadrontherapyMatrix class (StoreDoseFluenceAscii())
-	    // is called automatically at endOfRunAction (see HadrontherapyRunAction.cc).
+	    // is called automatically at the end of main.
 	    // It permits to store all dose/fluence data into a single plane ASCII file. 
-
-		// if (A==1 && Z==1) // primary and sec. protons 
-		if ( Z>=1 )    //  exclude e-, neutrons, gamma, ...
+	    
+	    /*
+	     * Accumulate dose for ALL particles
+	     *
+	     */
+	    // if (A==1 && Z==1) // primary and sec. protons 
+	    if ( Z>=1 )    //  exclude e-, neutrons, gamma, ...
 		    matrix -> Fill(trackID, particleDef, i, j, k, energyDeposit);
-	    // Create a hit with the information of position is in the detector     
+	    /*
+	     * Create a hit with the information of position is in the detector     
+	     */
 	    HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
 	    detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
 	    HitsCollection -> insert(detectorHit);

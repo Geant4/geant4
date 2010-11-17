@@ -277,23 +277,18 @@ void HadrontherapyMatrix::StoreDoseData()
 	// defined in the HadrontherapyAnalysisFileMessenger.cc class file
 void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 {
-    if (file) this -> filename = file;
+#define width 15L
+    filename = (file=="") ? "Dose.out":file;
     // Sort like periodic table
     std::sort(ionStore.begin(), ionStore.end());
-#define width 15L
+    G4cout << "Dose is being written to " << filename << G4endl;
     ofs.open(filename, std::ios::out);
     if (ofs.is_open())
     {
-
 	//
 	// Write the voxels index and the list of particles/ions 
 	ofs << std::setprecision(6) << std::left <<
 	    "i\tj\tk\t"; 
-/*	    
-	    G4RunManager *runManager = G4RunManager::GetRunManager();
-	    HadrontherapyPrimaryGeneratorAction *pPGA = (HadrontherapyPrimaryGeneratorAction*)runManager -> GetUserPrimaryGeneratorAction();
-	    G4String name = pPGA -> GetParticleGun() -> GetParticleDefinition() -> GetParticleName();
-*/         
 	// Total dose 
 	ofs << std::setw(width) << "Dose";
 
@@ -331,7 +326,7 @@ void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 			ofs << G4endl;
 			ofs << i << '\t' << j << '\t' << k << '\t';
 			// Total dose 
-			ofs << std::setw(width) << matrix[n]/(doseUnit); 
+			ofs << std::setw(width) << matrix[n]/doseUnit; 
 			{
 			    for (size_t l=0; l < ionStore.size(); l++)
 			    {
