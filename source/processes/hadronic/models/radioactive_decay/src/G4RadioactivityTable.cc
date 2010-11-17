@@ -91,9 +91,9 @@ G4double G4RadioactivityTable::GetRate(G4int Z, G4int A, G4double E)
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-map<G4ThreeVector,G4double>  G4RadioactivityTable::GetTheMap() 
+map<G4ThreeVector,G4double>*  G4RadioactivityTable::GetTheMap() 
 {
-  return fRadioactivity;
+  return &fRadioactivity;
 }
 ///////////////////////////////////////////////////////////////////////////////
 //

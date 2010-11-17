@@ -158,7 +158,7 @@ public: // with description
 	// used in VR decay mode only 
 	//
 
-	std::vector<G4RadioactivityTable> GetTheRadioactivityTables() {return theRadioactivityTables;}
+	std::vector<G4RadioactivityTable*> GetTheRadioactivityTables() {return theRadioactivityTables;}
 	// return the vector of G4Radioactivity map
 	// should be used in VR mode only
 
@@ -181,7 +181,10 @@ public: // with description
 	//  Returns theNucleusLimits which specifies the range of isotopes
 	//  the G4RadioactiveDecay applies.
 	//
-	inline void SetAnalogueMonteCarlo (G4bool r ) { AnalogueMC  = r; }
+	inline void SetAnalogueMonteCarlo (G4bool r ) { 
+	  AnalogueMC  = r; 
+	  if (!AnalogueMC) halflifethreshold = 1e-6*s;
+	}
 	//   Controls whether G4RadioactiveDecay runs in analogue mode or
 	//   variance reduction mode.
 	inline void SetFBeta (G4bool r ) { FBeta  = r; }
@@ -267,12 +270,12 @@ private:
 
 	G4RadioactiveDecayRate        theDecayRate;
 	G4RadioactiveDecayRates       theDecayRateVector;
-	G4RadioactiveDecayRateVector  theDecayRateTable;
-	G4RadioactiveDecayRateTable   theDecayRateTableVector;
+        G4RadioactiveDecayRateVector  theDecayRateTable;
+        G4RadioactiveDecayRateTable   theDecayRateTableVector;
 
 	// for the radioactivity tables
-	std::vector<G4RadioactivityTable>	theRadioactivityTables;
-	G4int		                        decayWindows[99];
+        std::vector<G4RadioactivityTable*>	theRadioactivityTables;
+        G4int		              decayWindows[99];
 
 	//
 	static const G4double		  levelTolerance;

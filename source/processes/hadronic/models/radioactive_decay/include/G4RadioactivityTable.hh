@@ -83,7 +83,7 @@ public:
   G4int Entries() const;
   // Get the total number of isotope spieces in the table
   //
-  map<G4ThreeVector,G4double> GetTheMap();
+  map<G4ThreeVector,G4double>*  GetTheMap();
   // Return the stl map! Mainly for printing.
   //
 private:

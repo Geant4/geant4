@@ -13,6 +13,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17 November 2010  F.Lei (radioactive_decay-V09-03-03)
+- Completed the implementation of generating the activity table in VR mode
+- Set the default h-l threshold to 1 micros in VR mode.
+- General improvement in VR mode implementation.  
+- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlThreshold are available at all states. 
+
 11 November 2010  F.Lei
 - further updates to G4RadioactivityTable.hh .cc and G4RadioactiveDecay.hh .cc
 
