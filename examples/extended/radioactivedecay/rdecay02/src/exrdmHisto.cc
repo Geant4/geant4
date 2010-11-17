@@ -51,8 +51,8 @@ exrdmHisto::exrdmHisto()
 {
   verbose    = 1;
   histName   = "exrdm";
-  histType   = "aida";
-  //histType   = "root";
+  //  histType   = "aida";
+  histType   = "root";
   nHisto     = 0;
   nTuple     = 0;
   defaultAct = 1;
@@ -423,6 +423,13 @@ void exrdmHisto::addRow(G4int i)
 void exrdmHisto::setFileName(const G4String& nam) 
 {
   histName = nam;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4String& exrdmHisto::getFileName() const
+{
+  return histName;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

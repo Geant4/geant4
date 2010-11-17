@@ -22,7 +22,7 @@
 /run/setCutForRegion Detector 50 cm
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 2
+/tracking/verbose 0
 /grdm/verbose 0
 /grdm/noVolumes
 /grdm/selectVolume Target
@@ -36,10 +36,10 @@
 #
 # Branching ratio biasing on (as default)
 /histo/fileName ne24-br-on
-/run/beamOn 1
+/run/beamOn 1000
 #
 # Branching ratio biasing off
 /histo/fileName ne24-br-off
 /grdm/BRbias 0
-/run/beamOn 1
+/run/beamOn 1000
 

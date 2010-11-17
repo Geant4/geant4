@@ -92,25 +92,25 @@ void exrdmAnalysisManager::bookHisto()
   histEMin = .0*MeV;
   histNBin = 100;
 
-  histo->add1D("10",
+  histo->add1D("H10",
     "Energy deposit (MeV) in the traget",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("11",
+  histo->add1D("H11",
     "Energy deposit (MeV) in the detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("12",
+  histo->add1D("H12",
     "Total energy spectrum (MeV) of the traget and detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("13",
+  histo->add1D("H13",
     "Coincidence spectrum (MeV) between the traget and detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("14",
+  histo->add1D("H14",
     "Anti-coincidence spectrum (MeV) in the traget",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("15",
+  histo->add1D("H15",
     "Anti-coincidence spectrum (MeV) in the detector",histNBin,histEMin,histEMax,MeV);
-  histo->add1D("16",
+  histo->add1D("H16",
 	       "Decay emission spectrum (MeV)",histNBin,histEMin,histEMax,MeV);
   // in aida these histos are indiced from 0-6
   //
-  histo->addTuple( "1", "Emitted Particles","double PID, Energy, Time, Weight" );
-  histo->addTuple( "2", "RadioIsotopes","double PID, Time, Weight" );
-  histo->addTuple( "3", "Energy Depositions","double Energy, Time, Weight" );
+  histo->addTuple( "T1", "Emitted Particles","double PID, Energy, Time, Weight" );
+  histo->addTuple( "T2", "RadioIsotopes","double PID, Time, Weight" );
+  histo->addTuple( "T3", "Energy Depositions","double Energy, Time, Weight" );
 
 }
 
@@ -120,11 +120,23 @@ void exrdmAnalysisManager::BeginOfRun()
 {
   histo->book();
   G4cout << "exrdmAnalysisManager: Histograms are booked and the run has been started" << G4endl;
+  G4ProcessTable *pTable = G4ProcessTable::GetProcessTable();
+  G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *) pTable->FindProcess("RadioactiveDecay", "GenericIon");
+  if (rDecay != NULL) {
+    if (!rDecay->IsAnalogueMonteCarlo()) {
+      std::vector<G4RadioactivityTable*> theTables =  rDecay->GetTheRadioactivityTables();
+      for (size_t i = 0 ; i < theTables.size(); i++) {
+	theTables[i]->GetTheMap()->clear();
+	G4cout << " Clear the radioactivity map: 0, new size = " << theTables[i]->GetTheMap()->size() << G4endl;  
+      }
+    }  
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmAnalysisManager::EndOfRun()
+void exrdmAnalysisManager::EndOfRun(G4int nevent)
 {
   histo->save();
   G4cout << "exrdmAnalysisManager: Histograms have been saved!" << G4endl;
@@ -136,15 +148,19 @@ void exrdmAnalysisManager::EndOfRun()
   G4RadioactiveDecay * rDecay = (G4RadioactiveDecay *) pTable->FindProcess("RadioactiveDecay", "GenericIon");
   if (rDecay != NULL) {
     if (!rDecay->IsAnalogueMonteCarlo()) {
-      std::ofstream outfile ("./activities.data", std::ios::out );
-      std::vector<G4RadioactivityTable> theTables =  rDecay->GetTheRadioactivityTables();
+      G4String fileName = histo->getFileName() + ".activity" ;
+      std::ofstream outfile (fileName, std::ios::out );
+      std::vector<G4RadioactivityTable*> theTables =  rDecay->GetTheRadioactivityTables();
       for (size_t i = 0 ; i < theTables.size(); i++) {
+	G4double rate;
 	outfile << "Radioactivities in decay window no. " << i << G4endl;
-	outfile << "Z \tA \tE \tActivity "<< G4endl;
-	map<G4ThreeVector,G4double> aMap = theTables[i].GetTheMap();
+	outfile << "Z \tA \tE \tActivity (decays/window) "<< G4endl;
+	map<G4ThreeVector,G4double> *aMap = theTables[i]->GetTheMap();
 	map<G4ThreeVector,G4double>::iterator iter;
-	for(iter=aMap.begin(); iter != aMap.end(); iter++)
-	  outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"<< iter->first.z() << "\t" << iter->second << G4endl;
+	for(iter=aMap->begin(); iter != aMap->end(); iter++)
+	  rate =  iter->second;
+	if ( rate < 0.) rate = 0.; // statically it can be < 0. but it's unphysical
+	outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"<< iter->first.z() << "\t" << rate/nevent << G4endl;
 	outfile << G4endl;
       }
       outfile.close();

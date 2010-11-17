@@ -69,11 +69,11 @@ void exrdmRunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void exrdmRunAction::EndOfRunAction(const G4Run* )
+void exrdmRunAction::EndOfRunAction(const G4Run* aRun)
 {
   // Get the analysis manager
   exrdmAnalysisManager* analysis = exrdmAnalysisManager::getInstance();
-  analysis->EndOfRun();
+  analysis->EndOfRun(aRun->GetNumberOfEvent());
  
 #ifdef G4VIS_USE
   if (G4VVisManager::GetConcreteInstance())

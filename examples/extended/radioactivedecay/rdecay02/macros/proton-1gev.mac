@@ -21,7 +21,7 @@
 /gps/particle proton 
 /gps/energy 1 GeV
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 10000
 
 
  

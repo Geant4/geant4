@@ -102,6 +102,7 @@ public:
   // Save tuple event 
 
   void setFileName(const G4String&);
+  const G4String& getFileName() const;  
 
   void setFileType(const G4String&);
   const G4String& FileType() const;

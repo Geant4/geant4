@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2010-11-11 14:05:37 flei Exp $
+$Id: History,v 1.5 2010-11-17 15:31:08 flei Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17/11/2010 - F.Lei (rdecay02-V09-03-04)
+- The radioactivity data is output in file ".activity" with the same file name as the .aida or .root files
+- Added more macros macros/u238-b.mac macros/u238.mac  macros/po201m.mac
+- rename vrml.mac to vrml.g4mac
+
 11/11/2010 - F.Lei (rdecay02-V09-03-03)
 - Updated exrdmAnalysisManager.cc to output the accumulated radioactivities in the file
   "activities.data" at the end of a run, in VR mode.

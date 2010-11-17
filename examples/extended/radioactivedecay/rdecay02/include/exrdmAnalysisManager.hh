@@ -69,7 +69,7 @@ public: // Without description
   void bookHisto();
 
   void BeginOfRun();
-  void EndOfRun();
+  void EndOfRun(G4int);
 
   void BeginOfEvent();
   void EndOfEvent();

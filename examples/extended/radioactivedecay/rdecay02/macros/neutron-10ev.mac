@@ -23,4 +23,4 @@
 /tracking/verbose 0
 /gps/particle neutron 
 /gps/energy 10 eV
-/run/beamOn 1000
+/run/beamOn 10000

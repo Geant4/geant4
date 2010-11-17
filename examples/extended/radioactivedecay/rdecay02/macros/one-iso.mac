@@ -8,7 +8,7 @@
 /run/setCutForRegion Detector 10 cm
 /run/verbose 0
 /event/verbose 0
-/tracking/verbose 2
+/tracking/verbose 1
 #/particle/select GenericIon
 #/particle/property/verbose 1 
 /grdm/BRbias 0
@@ -20,8 +20,7 @@
 #
 /gps/position 0 0 0
 /gps/energy 2. eV
-/gps/particle GenericIon
-/gps/ion 27 60 
+#/gps/particle proton
 #/gps/ion 76 187 0 257.17
 #/gps/ion 11 24 0 472
 #/gps/ion 81 207 0 1348.2
