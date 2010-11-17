@@ -40,7 +40,7 @@
 #include "CLHEP/Random/RanluxEngine.h" 
 
 //a pre-built physics list
-#include "QGSP_EMV.hh"
+#include "QGSP_BERT_EMV.hh"
 
 //My includes
 #include "DetectorConstruction.hh"
@@ -68,7 +68,7 @@ int main(int argc,char** argv)
 
 
   	//Set mandatory initialization and user action classes
- 	runManager->SetUserInitialization(new QGSP_EMV);
+ 	runManager->SetUserInitialization(new QGSP_BERT_EMV);
        
   	runManager->SetUserInitialization(new DetectorConstruction);
   	runManager->SetUserAction(new PrimaryGeneratorAction);

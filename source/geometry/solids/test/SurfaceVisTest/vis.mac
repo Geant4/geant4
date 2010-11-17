@@ -22,7 +22,7 @@
 /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
 
 #DrawSurface Points
-/rndm/numPoints 1000
+/rndm/numPoints 100000
 
 # (if you prefer not refreshing each event, uncomment next line)
 # /vis/scene/endOfEventAction accumulate
@@ -43,6 +43,63 @@
 #/rndm/numPoints 100
 
 #to draw Points On the Surface
+/run/beamOn 1
+/mydet/SelectDetector Sphere
+/run/beamOn 1
+/mydet/SelectDetector Shell
+/run/beamOn 1
+/mydet/SelectDetector Ellipsoid
+/run/beamOn 1
+/mydet/SelectDetector Tubs
+/run/beamOn 1
+/mydet/SelectDetector Cons
+/run/beamOn 1
+/mydet/SelectDetector Polycone
+/run/beamOn 1
+/mydet/SelectDetector Polyhedra
+/run/beamOn 1
+/mydet/SelectDetector Para
+/run/beamOn 1
+/mydet/SelectDetector Torus
+/run/beamOn 1
+/mydet/SelectDetector Box
+/run/beamOn 1
+/mydet/SelectDetector Orb
+/run/beamOn 1
+/mydet/SelectDetector EllipticalTube
+/run/beamOn 1
+/mydet/SelectDetector EllipticalCone
+/run/beamOn 1
+/mydet/SelectDetector Hype
+/run/beamOn 1
+/mydet/SelectDetector Trap
+/run/beamOn 1
+/mydet/SelectDetector Trd
+/run/beamOn 1
+#Infinite Loop
+#/mydet/SelectDetector Tet
+#/run/beamOn 1
+/mydet/SelectDetector GenericTrap
+/run/beamOn 1
+/mydet/SelectDetector Paraboloid
+/run/beamOn 1
+/mydet/SelectDetector TessellatedSolid
+/run/beamOn 1
+/mydet/SelectDetector ExtrudedSolid
+/run/beamOn 1
+/mydet/SelectDetector TwistedBox
+/run/beamOn 1
+/mydet/SelectDetector TwistedTrd
+/run/beamOn 1
+/mydet/SelectDetector TwistedTrap
+/run/beamOn 1
+/mydet/SelectDetector TwistedTubs
+/run/beamOn 1
+/mydet/SelectDetector b1Ub2
+/run/beamOn 1
+/mydet/SelectDetector b1Ib2
+/run/beamOn 1
+/mydet/SelectDetector b1Sb2
 /run/beamOn 1
 
 

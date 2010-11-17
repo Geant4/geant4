@@ -50,6 +50,9 @@
 #include "G4Trap.hh"
 #include "G4Trd.hh"
 #include "G4Tet.hh"
+#include "G4GenericTrap.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4ExtrudedSolid.hh"
 
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
@@ -67,6 +70,9 @@
 #include "G4ReflectedSolid.hh"
 
 #include "G4BREPSolidBox.hh"
+#include "G4TwoVector.hh"
+#include "G4TriangularFacet.hh"
+#include "G4QuadrangularFacet.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -496,11 +502,16 @@ else if (val == "Q6Shell")
 
   else if ( val == "Tet" ) 
   {
-
+    //   G4ThreeVector anchor = G4ThreeVector(0, 0, 0);
+    //G4ThreeVector     p2 = G4ThreeVector(10*cm, 5*cm , 0);
+    //G4ThreeVector     p3 = G4ThreeVector(5*cm,10*cm,0);
+    //G4ThreeVector     p4 = G4ThreeVector(5*cm,5*cm  ,10*cm);
+   
+    //aVolume = new G4Tet("aTet",anchor,p2,p3,p4);
       G4ThreeVector pzero(0,0,0);
       G4ThreeVector pnt1(10.*cm,0.*cm,0.*cm),pnt2(5.0*cm,10.*cm,0.*cm), pnt3(5.*cm,5.*cm,10.*cm);
       G4bool  goodTet;
-      G4Tet   t1( "aTet", pzero, pnt1, pnt2, pnt3, &goodTet);
+      aVolume= new G4Tet( "aTet", pzero, pnt1, pnt2, pnt3, &goodTet);
   }
   else if ( val == "Trap") 
   {
@@ -546,6 +557,114 @@ else if (val == "Q6Shell")
 				   2*cm,   // xSemiAxis
 				   5*cm,   // ySemiAxis
 				   35*cm) ;  // zheight
+
+  }
+  else if (val == "GenericTrap" ){
+   std::vector<G4TwoVector> vertices;
+   vertices.push_back(G4TwoVector( -4.5*cm, -4.5*cm));
+   vertices.push_back(G4TwoVector( -4.5*cm,  4.5*cm));
+   vertices.push_back(G4TwoVector(  4.5*cm,  4.5*cm));
+   vertices.push_back(G4TwoVector(  4.5*cm, -4.5*cm));
+   vertices.push_back(G4TwoVector( -3.5*cm, -3.5*cm));
+   vertices.push_back(G4TwoVector( -3.5*cm,  3.5*cm));
+   vertices.push_back(G4TwoVector(  3.5*cm,  3.5*cm));
+   vertices.push_back(G4TwoVector(  3.5*cm, -2.5*cm));     
+   aVolume = new G4GenericTrap("aGenTrd",14.*cm,vertices);
+  }
+
+ else if(val == "TessellatedSolid")
+  { 
+    G4double targetSize = 10.*cm;
+    G4TessellatedSolid* aVolume1 = new G4TessellatedSolid("aTessellatedSolid");
+    G4TriangularFacet *facet1 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet2 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet3 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4TriangularFacet *facet4 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(        0.0,        0.0,+targetSize),
+                     ABSOLUTE);
+    G4QuadrangularFacet *facet5 = new
+    G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                     G4ThreeVector(-targetSize,+targetSize,        0.0),
+                     G4ThreeVector(+targetSize,+targetSize,        0.0),
+                     G4ThreeVector(+targetSize,-targetSize,        0.0),
+                     ABSOLUTE);
+
+    aVolume1->AddFacet((G4VFacet*) facet1);
+    aVolume1->AddFacet((G4VFacet*) facet2);
+    aVolume1->AddFacet((G4VFacet*) facet3);
+    aVolume1->AddFacet((G4VFacet*) facet4);
+    aVolume1->AddFacet((G4VFacet*) facet5);
+  
+    aVolume1->SetSolidClosed(true);
+
+    aVolume = aVolume1;
+
+  }
+  else if (val == "ExtrudedSolid")
+  {
+   std::vector<G4TwoVector> polygon;
+   polygon.push_back(G4TwoVector(-3.*cm, -3.0*cm));
+   polygon.push_back(G4TwoVector(-3.*cm,  3.0*cm));
+   polygon.push_back(G4TwoVector( 3.*cm,  3.0*cm));
+   polygon.push_back(G4TwoVector( 3.*cm, -3.0*cm));
+   polygon.push_back(G4TwoVector( 1.5*cm, -3.0*cm));
+   polygon.push_back(G4TwoVector( 1.5*cm,  1.5*cm));
+   polygon.push_back(G4TwoVector(-1.5*cm,  1.5*cm));
+   polygon.push_back(G4TwoVector(-1.5*cm, -3.0*cm));
+  
+   std::vector<G4ExtrudedSolid::ZSection> zsections;
+   zsections.push_back(G4ExtrudedSolid::ZSection(-4.0*cm, G4TwoVector(-2.0*cm, 1.0*cm), 1.5));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 1.0*cm, G4TwoVector(  0*cm,  0*cm), 0.5));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 1.5*cm, G4TwoVector(  0*cm,  0*cm), 0.7));
+   zsections.push_back(G4ExtrudedSolid::ZSection( 4.0*cm, G4TwoVector( 2.0*cm, 2.0*cm), 0.9));
+
+   aVolume = new G4ExtrudedSolid("aExtrudedSolid", polygon, zsections);
+  }
+   else if (val == "TwistedBox")
+  {
+    aVolume = new G4TwistedBox("aTwistedBox",40*deg,5*cm,10*cm,15*cm);
+  }
+  else if (val == "TwistedTrd")
+  { 
+    aVolume = new G4TwistedTrd("aTwistedTrd",5*cm,10*cm,8*cm,15*cm,18*cm,20*deg);
+  }
+  else if (val == "TwistedTrap")
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap",40*deg,5*cm,10*cm,8*cm,15*cm);
+  }
+  else if ( val == "TwistedTrap2") 
+  {
+    aVolume = new G4TwistedTrap("aTwistedTrap2",
+				   20*deg,    // twist angle
+				   80*cm,         // half z length
+				   10*deg,      // direction between end planes
+				   40*deg,        // defined by polar and azimutal angles.
+				   8*cm,        // half y length at -pDz
+				   11*cm,        // half x length at -pDz,-pDy
+				   16*cm,        // half x length at -pDz,+pDy
+				   8*cm,        // half y length at +pDz
+				   11*cm,         // half x length at +pDz,-pDy
+				   16*cm,        // half x length at +pDz,+pDy
+				   -50*deg        // tilt angle at +pDz
+				   ) ;
+  }
+  else if ( val == "TwistedTubs")
+  {
+    aVolume = new G4TwistedTubs("aTwistedTubs",10.*deg,1*cm,2*cm,4*cm,171.*deg);
 
   }
   else
