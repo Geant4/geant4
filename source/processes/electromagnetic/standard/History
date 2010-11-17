@@ -1,4 +1,4 @@
-$Id: History,v 1.518 2010-11-16 10:18:42 vnivanch Exp $
+$Id: History,v 1.519 2010-11-17 10:47:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16 November 2010: V.Ivant (emstand-V09-03-28)
-- G4ICRU73QOModel (A.Bagulya) - fine tuning for 9.4
+17 November 2010: V.Ivant (emstand-V09-03-28)
+- G4ICRU73QOModel (A.Bagulya) - fine tuning for 9.4, low limit is
+  reduced from 10 keV to 5 keV
 
 13 November 2010: V.Ivant (emstand-V09-03-27)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 - added

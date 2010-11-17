@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc,v 1.4 2010-11-16 09:45:05 bagoulia Exp $
+// $Id: G4ICRU73QOModel.cc,v 1.5 2010-11-17 10:47:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,7 +68,7 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
   if(p) SetParticle(p);
   SetHighEnergyLimit(10.0*MeV);
 
-  lowestKinEnergy  = 10.0*keV;
+  lowestKinEnergy  = 5.0*keV;
 
   sizeL0 = 67;
   sizeL1 = 22;
@@ -200,7 +200,7 @@ G4double G4ICRU73QOModel::ComputeDEDXPerVolume(const G4Material* material,
     dedx += chargeSquare*( log(x) + (1.0 - x)*beta2 ) * twopi_mc2_rcl2
           * material->GetElectronDensity()/beta2;
   }
-
+  if(dedx < 0.0) { dedx = 0.0; }
   return dedx;
 }
 
