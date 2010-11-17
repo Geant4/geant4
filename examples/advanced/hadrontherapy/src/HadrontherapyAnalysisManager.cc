@@ -329,8 +329,8 @@ void HadrontherapyAnalysisManager::FillKineticEnergyPrimaryNTuple(G4int i, G4int
 	/////////////////////////////////////////////////////////////////////////////
 	// This function is called only if ROOT is activated.
 	// It is called by the HadrontherapyMatric.cc class file and it is used to create two ntuples containing 
-	// the total energy deposited and the fluence values, in each voxel and per any particle (primary beam
-	// and secondaries ) 
+	// the total energy deposited and the fluence values, in each voxel and per any particle (primary 
+	// and secondary particles beam) 
 void HadrontherapyAnalysisManager::FillVoxelFragmentTuple(G4int i, G4int j, G4int k, G4int A, G4double Z, G4double energy, G4double fluence)
 {
 		// Fill the ntuple containing the voxel, mass and atomic number and the energy deposited

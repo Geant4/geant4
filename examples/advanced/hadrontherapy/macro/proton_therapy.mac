@@ -87,10 +87,11 @@
 # Default material is liquid water (G4_WATER)
 #/changePhantom/material G4_Pb
 
-# If secondaries dose/fluence are needed
-#/analysis/secondaries true 
+# Only if secondary particles dose & fluence are needed
+#/analysis/secondary true 
 
 /run/beamOn 5000
+# Write dose & fluence to an ASCII file
 /analysis/writeDoseFile 
 #########################
 # Move the generated .root & .out

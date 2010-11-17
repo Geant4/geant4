@@ -40,14 +40,15 @@
 HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager* amgr)
 :AnalysisManager(amgr)
 {  
-  secondariesCmd = new G4UIcmdWithABool("/analysis/secondaries",this);
-  secondariesCmd -> SetParameterName("secondaries", true);
-  secondariesCmd -> SetDefaultValue("true");
-  secondariesCmd -> SetGuidance("Set if dose/fluence for the secondaries are written"); 
-  secondariesCmd -> AvailableForStates(G4State_Idle, G4State_PreInit);
+  secondaryCmd = new G4UIcmdWithABool("/analysis/secondary",this);
+  secondaryCmd -> SetParameterName("secondary", true);
+  secondaryCmd -> SetDefaultValue("true");
+  secondaryCmd -> SetGuidance("Set if dose/fluence for the secondary particles will be written" 
+				"\n[usage]: /analysis/secondary [true/false]"); 
+  secondaryCmd -> AvailableForStates(G4State_Idle, G4State_PreInit);
 
   DoseMatrixCmd = new G4UIcmdWithAString("/analysis/writeDoseFile",this);
-  DoseMatrixCmd->SetGuidance("Write the ASCII filename for the dose-fluence");
+  DoseMatrixCmd->SetGuidance("Write the dose/fluence to an ASCII file");
   DoseMatrixCmd->SetDefaultValue("Dose.out");
   DoseMatrixCmd->SetParameterName("choice",true); 
 
@@ -67,7 +68,7 @@ HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(Hadronthe
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
 {
-  delete secondariesCmd; 
+  delete secondaryCmd; 
   delete DoseMatrixCmd; 
 #ifdef G4ANALYSIS_USE_ROOT
   delete FileNameCmd;
@@ -77,10 +78,12 @@ HadrontherapyAnalysisFileMessenger::~HadrontherapyAnalysisFileMessenger()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
-    if (command == secondariesCmd)
+    if (command == secondaryCmd)
     {
 	if (HadrontherapyMatrix::GetInstance())
-	    HadrontherapyMatrix::GetInstance() -> secondaries = secondariesCmd -> GetNewBoolValue(newValue);
+	{
+	    HadrontherapyMatrix::GetInstance() -> secondary = secondaryCmd -> GetNewBoolValue(newValue);
+	}
     }
 
     else if (command == DoseMatrixCmd) // Filename can be passed here TODO 
@@ -93,11 +96,12 @@ void HadrontherapyAnalysisFileMessenger::SetNewValue(G4UIcommand* command, G4Str
 	    pMatrix -> StoreDoseFluenceRoot();
 #endif
 	}
-#ifdef G4ANALYSIS_USE_ROOT
-	else if (command == FileNameCmd)
-	{
-	    AnalysisManager->SetAnalysisFileName(newValue);
-	}
-#endif
     }
+#ifdef G4ANALYSIS_USE_ROOT
+    else if (command == FileNameCmd)
+    {
+	AnalysisManager->SetAnalysisFileName(newValue);
+    }
+#endif
 }
+

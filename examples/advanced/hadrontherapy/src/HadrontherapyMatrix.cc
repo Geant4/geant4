@@ -43,7 +43,7 @@
 // Units definition: CLHEP/Units/SystemOfUnits.h
 //
 HadrontherapyMatrix* HadrontherapyMatrix::instance = NULL;
-G4bool HadrontherapyMatrix::secondaries = false;
+G4bool HadrontherapyMatrix::secondary = false;
 	// Only return a pointer to matrix
 HadrontherapyMatrix* HadrontherapyMatrix::GetInstance() 
 {
@@ -151,7 +151,7 @@ G4bool HadrontherapyMatrix::Fill(G4int trackID,
 				 G4double energyDeposit,
 				 G4bool fluence) 
 {
-    if (energyDeposit <=0. && !fluence || !secondaries) return false;
+    if (energyDeposit <=0. && !fluence || !secondary) return false;
     // Get Particle Data Group particle ID 
     G4int PDGencoding = particleDef -> GetPDGEncoding();
     PDGencoding -= PDGencoding%10;

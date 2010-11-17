@@ -70,7 +70,7 @@ public:
   // Make & Get instance
   static HadrontherapyMatrix* GetInstance(G4int nX, G4int nY, G4int nZ, G4double mass);
 
-  static G4bool secondaries;
+  static G4bool secondary;
   // Full list of generated nuclides
   void PrintNuclides(); 
   // Hit array marker (useful to avoid multiple counts of fluence)
@@ -134,7 +134,7 @@ private:
 
   // Dose&fluence data store 
   std::vector <ion> ionStore;
-  // want secondaries?
+  // want secondary particles?
   G4double doseUnit;
 };
 #endif

@@ -149,7 +149,7 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 	}         
     }
 
-    // Retrieve information about the secondaries originated in the phantom
+    // Retrieve information about the secondary particles originated in the phantom
 
     G4SteppingManager*  steppingManager = fpSteppingManager;
 

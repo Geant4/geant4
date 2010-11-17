@@ -13,10 +13,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 	   - Fixed bug in HadrontherapyAnalysisFileMessenger.hh for case
              of G4ANALYSIS_USE_ROOT not set.
 
-12.11.2010 G.A.P.Cirrone; Tag: harontherapy-V09-03-09
+12.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-09
 	   - Updated ans cleaned macro files
 
-12.11.2010 G.A.P.Cirrone; Tag: harontherapy-V09-03-08
+12.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-08
            - Main file adapted to the G4UIExecutive class
 
 20.10.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-07
@@ -53,9 +53,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 	   - Removed AIDA and variables: G4_ANALYSIS_USE and ANALYSIS_USE.
 	   - Improved the commands to modify phantom/detector geometry
 	   - Added a command to set cuts just only in the detector: /physic/setDetectorCuts
-	   - Added the possibility to store dose & fluence for all secondaries
+	   - Added the possibility to store dose & fluence for all secondary particles
 	     produced in the same ASCII file. This feature can be switched on by the macro
-	     command: /analysis/secondaries true.
+	     command: /analysis/secondary true/false.
 	     
 
 16.12.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-42
