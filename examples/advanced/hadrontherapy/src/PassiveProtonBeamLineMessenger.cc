@@ -1,31 +1,22 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-// This is the *basic* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
-// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
+    // **************************************************************************************
+    //
+    // HADRONTHERAPY:  a Geant4-based application for proton/ion-therapy studies
+    // _________________________________________________________________________
+    //
+    // This is the FULL version of the Hadrontherapy application.
+    // It is based on the Geant4 toolkit classes and released under the GPL3 license.
+    //
+    // Its basic version is released and maintained inside the Geant4 code
+    // as Advanced Example.
+    //
+	// To compile and run Hadrontherapy you only require the installation of Geant4 and,
+	// if you wish, the ROOT ananlysis program.
+    //
+    // For more information see the documentation at http://sites.google.com/site/hadrontherapy/
+    // or contact cirrone@lns.infn.it
+    //
+    // **************************************************************************************
+
 
 #include "PassiveProtonBeamLineMessenger.hh"
 #include "PassiveProtonBeamLine.hh"
@@ -34,17 +25,17 @@
 #include "G4UIcmdWithAString.hh"
 
 
-PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
+   PassiveProtonBeamLineMessenger::PassiveProtonBeamLineMessenger(PassiveProtonBeamLine* beamLine)
   :passiveProton(beamLine)
 
 {
-  changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
-  changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
+	changeTheBeamLineDir = new G4UIdirectory("/ChangeBeamLine/");
+	changeTheBeamLineDir -> SetGuidance("Command to change the transport beam line");
 	
-  changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
-  changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
-  changeTheBeamLineNameCmd -> SetParameterName("List",false);
-  changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
+    changeTheBeamLineNameCmd = new G4UIcmdWithAString("/ChangeBeamLine/beamLineName",this);
+	changeTheBeamLineNameCmd -> SetGuidance("Insert the name of the beam line you want simulate");
+	changeTheBeamLineNameCmd -> SetParameterName("List",false);
+	changeTheBeamLineNameCmd -> AvailableForStates(G4State_PreInit); 
 	
   modulatorDir = new G4UIdirectory("/modulator/");
   modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
@@ -148,33 +139,33 @@ void PassiveProtonBeamLineMessenger::SetNewValue(G4UIcommand* command,G4String n
 { 
   if( command == modulatorAngleCmd )
     { passiveProton -> SetModulatorAngle
-	(modulatorAngleCmd -> GetNewDoubleValue(newValue));}
+           (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == rangeShifterMatCmd )
     { passiveProton -> SetRSMaterial(newValue);}
 
   else if( command == rangeShifterXSizeCmd )
     { passiveProton -> SetRangeShifterXSize
-	(rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
+            (rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == rangeShifterXPositionCmd )
     { passiveProton -> SetRangeShifterXPosition
-	(rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
+                  (rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == firstScatteringFoilXSizeCmd )
     { passiveProton -> SetFirstScatteringFoilXSize
-	(firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
+                  (firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == secondScatteringFoilXSizeCmd )
     { passiveProton -> SetSecondScatteringFoilXSize
-	(secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
+                  (secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == outerRadiusStopperCmd )
     { passiveProton -> SetOuterRadiusStopper(
-					     outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
+                    outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
 
   else if( command == innerRadiusFinalCollimatorCmd )
     { passiveProton -> SetInnerRadiusFinalCollimator
-	(innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
+                  (innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
 }
 

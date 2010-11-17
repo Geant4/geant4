@@ -172,8 +172,11 @@ private:
   G4Box* firstScatteringFoil;
   G4VPhysicalVolume* physiFirstScatteringFoil;
   G4VPhysicalVolume* physiKaptonWindow;
+
   G4Tubs* solidStopper;
   G4VPhysicalVolume* physiStopper; 
+  G4LogicalVolume* logicStopper;
+
   G4Box* secondScatteringFoil;  
   G4VPhysicalVolume* physiSecondScatteringFoil;  
   G4VPhysicalVolume* physiFirstCollimator;  
@@ -295,7 +298,9 @@ private:
   G4VPhysicalVolume* physiSecondMonitorLayer4;
   G4VPhysicalVolume* physiNozzleSupport;
   G4VPhysicalVolume* physiHoleNozzleSupport; 
-  G4VPhysicalVolume* physiSecondHoleNozzleSupport;
+  G4VPhysicalVolume* physiBrassTube;
+  G4VPhysicalVolume* physiBrassTube2;
+  G4VPhysicalVolume* physiBrassTube3;
   G4Tubs* solidFinalCollimator; 
   G4VPhysicalVolume* physiFinalCollimator; 
   
@@ -334,7 +339,10 @@ private:
   G4Material* MOPISecondKaptonLayerMaterial;
   G4Material* nozzleSupportMaterial;
   G4Material* holeNozzleSupportMaterial;
-  G4Material* seconHoleNozzleSupportMaterial;
+
+  G4Material* brassTubeMaterial;
+  G4Material* brassTube2Material;
+  G4Material* brassTube3Material;
   G4Material* finalCollimatorMaterial;
 };
 #endif

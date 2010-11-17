@@ -1,31 +1,22 @@
+// **************************************************************************************
 //
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
-// This is the *basic* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+// HADRONTHERAPY:  a Geant4-based application for proton/ion-therapy studies
+// _________________________________________________________________________
 //
-// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
+// This is the FULL version of the Hadrontherapy application.
+// It is based on the Geant4 toolkit classes and released under the GPL3 license.
+//
+// Its basic version is released and maintained inside the Geant4 code
+// as Advanced Example.
+//
+// To compile and run Hadrontherapy you only require the installation of Geant4 and,
+// if you wish, the ROOT ananlysis program.
+//
+// For more information see the documentation at http://sites.google.com/site/hadrontherapy/
+// or contact cirrone@lns.infn.it
+//
+// **************************************************************************************
+
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -61,8 +52,8 @@ PassiveProtonBeamLine::PassiveProtonBeamLine():
   physiFirstMonitorLayer3(0), physiFirstMonitorLayer4(0),
   physiSecondMonitorLayer1(0), physiSecondMonitorLayer2(0),
   physiSecondMonitorLayer3(0), physiSecondMonitorLayer4(0),
-  physiNozzleSupport(0), physiHoleNozzleSupport(0),
-  physiSecondHoleNozzleSupport(0),
+  physiNozzleSupport(0), //physiHoleNozzleSupport(0),
+  physiBrassTube(0),
   solidFinalCollimator(0),
   physiFinalCollimator(0)
 {
@@ -144,7 +135,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
 
   // VACUUM PIPE: first track of the beam line is inside vacuum;
   // The PIPE contains the FIRST SCATTERING FOIL and the KAPTON WINDOW
-  G4double defaultVacuumZoneXSize = 80.5325 *mm;
+  G4double defaultVacuumZoneXSize = 100.0 *mm;
   vacuumZoneXSize = defaultVacuumZoneXSize;
 
   G4double defaultVacuumZoneYSize = 52.5 *mm;
@@ -153,7 +144,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultVacuumZoneZSize = 52.5 *mm;
   vacuumZoneZSize = defaultVacuumZoneZSize;
 
-  G4double defaultVacuumZoneXPosition = -2650.0475 *mm;
+  G4double defaultVacuumZoneXPosition = -3010.0 *mm;
   vacuumZoneXPosition = defaultVacuumZoneXPosition;
 
   // FIRST SCATTERING FOIL: a thin foil performing a first scattering
@@ -167,11 +158,11 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultFirstScatteringFoilZSize = 52.5   *mm;
   firstScatteringFoilZSize = defaultFirstScatteringFoilZSize;
 
-  G4double defaultFirstScatteringFoilXPosition = -39.525 *mm;
+  G4double defaultFirstScatteringFoilXPosition = 0.0 *mm;
   firstScatteringFoilXPosition = defaultFirstScatteringFoilXPosition;
 
   // KAPTON WINDOW: it prmits the passage of the beam from vacuum to air
-  G4double defaultKaptonWindowXSize = 0.025*mm;
+  G4double defaultKaptonWindowXSize = 0.010*mm;
   kaptonWindowXSize = defaultKaptonWindowXSize;
 
   G4double defaultKaptonWindowYSize = 5.25*cm;
@@ -180,7 +171,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultKaptonWindowZSize = 5.25*cm;
   kaptonWindowZSize = defaultKaptonWindowZSize;
 
-  G4double defaultKaptonWindowXPosition = 80.5075*mm;
+  G4double defaultKaptonWindowXPosition = 100.0*mm - defaultKaptonWindowXSize;
   kaptonWindowXPosition = defaultKaptonWindowXPosition;
 
   // STOPPER: is a small cylinder able to stop the central component
@@ -198,7 +189,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultSpanningAngleStopper = 360.*deg;
   spanningAngleStopper = defaultSpanningAngleStopper;
 
-  G4double defaultStopperXPosition = -2575.0 *mm;
+  G4double defaultStopperXPosition = -2705.0 *mm;
   stopperXPosition = defaultStopperXPosition;
 
   G4double defaultStopperYPosition = 0.*m;
@@ -222,7 +213,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultSecondScatteringFoilZSize = 52.5   *mm;
   secondScatteringFoilZSize = defaultSecondScatteringFoilZSize;
 
-  G4double defaultSecondScatteringFoilXPosition = -2402.5 *mm;
+  G4double defaultSecondScatteringFoilXPosition = defaultStopperXPosition + defaultHeightStopper + defaultSecondScatteringFoilXSize;
   secondScatteringFoilXPosition = defaultSecondScatteringFoilXPosition;
 
   G4double defaultSecondScatteringFoilYPosition =  0 *mm;
@@ -265,10 +256,10 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultMOPIMotherVolumeXSize = 12127.0 *um;
   MOPIMotherVolumeXSize = defaultMOPIMotherVolumeXSize;
 
-  G4double defaultMOPIMotherVolumeYSize = 60.0 *cm;
+  G4double defaultMOPIMotherVolumeYSize = 40.0 *cm;
   MOPIMotherVolumeYSize = defaultMOPIMotherVolumeYSize;
 
-  G4double defaultMOPIMotherVolumeZSize = 60.0 *cm;
+  G4double defaultMOPIMotherVolumeZSize = 40.0 *cm;
   MOPIMotherVolumeZSize = defaultMOPIMotherVolumeZSize;
 
   G4double defaultMOPIMotherVolumeXPosition = -1000.0 *mm;
@@ -502,13 +493,14 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
 
   // material of the final nozzle
   nozzleSupportMaterial = PMMANist;
-  holeNozzleSupportMaterial = brass;
-  seconHoleNozzleSupportMaterial = airNist;
+  brassTubeMaterial = brassTube2Material = brassTube3Material = brass;
+  holeNozzleSupportMaterial = airNist;
 
   // Material of the final collimator
   finalCollimatorMaterial = brass;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
 { 
   // -----------------------------
@@ -539,7 +531,7 @@ void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
   // Components of the Passive Proton Beam Line
   HadrontherapyBeamLineSupport();
   HadrontherapyBeamScatteringFoils();
-  HadrontherapyRangeShifter();
+  //HadrontherapyRangeShifter();
   HadrontherapyBeamCollimators();
   HadrontherapyBeamMonitoring();
   HadrontherapyMOPIDetector();
@@ -549,8 +541,8 @@ void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
   // The following lines construc a typical modulator wheel inside the Passive Beam line.
   // Please remember to set the nodulator material (default is air, i.e. no modulator!) 
   // in the HadrontherapyModulator.cc file
-  modulator = new HadrontherapyModulator();
-  modulator -> BuildModulator(physicalTreatmentRoom);
+  // modulator = new HadrontherapyModulator();
+  // modulator -> BuildModulator(physicalTreatmentRoom);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -594,7 +586,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
   const G4double beamLineCoverZSize = 10.*mm; 
 
   const G4double beamLineCoverXPosition = -1745.09 *mm;
-  const G4double beamLineCoverYPosition = -980.*mm; 
+  const G4double beamLineCoverYPosition = -1000.*mm; 
   const G4double beamLineCoverZPosition = 600.*mm;
 
   G4Box* beamLineCover = new G4Box("BeamLineCover",
@@ -627,7 +619,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
 					  physicalTreatmentRoom, 
 					  false, 
 					  0);
-
 
   logicBeamLineCover -> SetVisAttributes(blue);
 }
@@ -693,16 +684,27 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   // Matrix definition for a 90 deg rotation with respect to Y axis
   G4RotationMatrix rm;
   rm.rotateY(phi);
-
-  solidStopper = new G4Tubs("Stopper", innerRadiusStopper,outerRadiusStopper,heightStopper, 
-			    startAngleStopper,spanningAngleStopper);
   
-  G4LogicalVolume* logicStopper = new G4LogicalVolume(solidStopper, stopperMaterial, "Stopper", 0, 0, 0);
+  solidStopper = new G4Tubs("Stopper", 
+			    innerRadiusStopper, 
+			    outerRadiusStopper,
+			    heightStopper, 
+			    startAngleStopper,
+			    spanningAngleStopper);
+  
+  logicStopper = new G4LogicalVolume(solidStopper, 
+				     stopperMaterial, 
+				     "Stopper", 
+				     0, 0, 0);
   
   physiStopper = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(stopperXPosition, 
 								   stopperYPosition, 
 								   stopperZPosition)),
-				   "Stopper", logicStopper, physicalTreatmentRoom, false, 0);
+				   "Stopper", 
+				   logicStopper, 
+				   physicalTreatmentRoom, 
+				   false, 
+				   0);
  
   logicStopper -> SetVisAttributes(red);
 
@@ -725,8 +727,11 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
   physiSecondScatteringFoil = new G4PVPlacement(0, G4ThreeVector(secondScatteringFoilXPosition,
 								 secondScatteringFoilYPosition,
 								 secondScatteringFoilZPosition),
-						"SeconScatteringFoil", logicSecondScatteringFoil, 
-						physicalTreatmentRoom, false, 0);
+						"SeconScatteringFoil", 
+						logicSecondScatteringFoil, 
+						physicalTreatmentRoom, 
+						false, 
+						0);
   
   logicSecondScatteringFoil -> SetVisAttributes(skyBlue);
 }
@@ -768,7 +773,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   const G4double firstCollimatorYSize = 100.*mm;
   const G4double firstCollimatorZSize = 100.*mm;
 
-  const G4double firstCollimatorXPosition = -2373.00*mm;
+  const G4double firstCollimatorXPosition = -2673.00*mm;
   const G4double firstCollimatorYPosition = 0.*mm;
   const G4double firstCollimatorZPosition = 0.*mm;
 
@@ -824,7 +829,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   // SECOND COLLIMATOR //
   //-------------------//
   // It is a slab of PMMA with an hole in its center
-  const G4double secondCollimatorXPosition = -1608.00*mm;
+  const G4double secondCollimatorXPosition = -1900.00*mm;
   const G4double secondCollimatorYPosition =  0*mm;
   const G4double secondCollimatorZPosition =  0*mm;
 
@@ -860,7 +865,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   const G4double firstCollimatorModulatorYSize = 200.*mm;
   const G4double firstCollimatorModulatorZSize = 200.*mm;
    
-  const G4double firstCollimatorModulatorXPosition = -2223.00*mm;
+  const G4double firstCollimatorModulatorXPosition = -2523.00*mm;
   const G4double firstCollimatorModulatorYPosition = 0.*mm;
   const G4double firstCollimatorModulatorZPosition = 0.*mm;
 
@@ -913,7 +918,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
   const G4double secondCollimatorModulatorYSize = 200.*mm;
   const G4double secondCollimatorModulatorZSize = 200.*mm;
   
-  const G4double secondCollimatorModulatorXPosition = -1653.00 *mm;
+  const G4double secondCollimatorModulatorXPosition = -1953.00 *mm;
   
   const G4double secondCollimatorModulatorYPosition = 0.*mm;
   const G4double secondCollimatorModulatorZPosition = 0.*mm;
@@ -1268,7 +1273,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
   G4RotationMatrix rm;               
   rm.rotateY(phi);
 
-  G4Box* solidNozzleSupport = new G4Box("NozzlSupport", 
+  G4Box* solidNozzleSupport = new G4Box("NozzleSupport", 
 					nozzleSupportXSize, 
 					nozzleSupportYSize, 
 					nozzleSupportZSize);
@@ -1286,66 +1291,145 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 
   logicNozzleSupport -> SetVisAttributes(yellow);
 
-  // -------------------//
-  //     BRASS TUBE     //
-  // -------------------//
-  const G4double innerRadiusHoleNozzleSupport = 18.*mm;
-  const G4double outerRadiusHoleNozzleSupport = 21.5 *mm;
-  const G4double hightHoleNozzleSupport = 185.*mm;
+
+ 
+  //------------------------------------//
+  // HOLE IN THE SUPPORT                //
+  //------------------------------------//
+  const G4double innerRadiusHoleNozzleSupport = 0.*mm;
+  const G4double outerRadiusHoleNozzleSupport = 21.5*mm;
+  const G4double hightHoleNozzleSupport = 29.5 *mm;
   const G4double startAngleHoleNozzleSupport = 0.*deg;
   const G4double spanningAngleHoleNozzleSupport = 360.*deg;
 
-  const G4double holeNozzleSupportXPosition = -272.0 *mm;
- 
-  G4Tubs* solidHoleNozzleSupport = new G4Tubs("HoleNozzleSupport", 
-					      innerRadiusHoleNozzleSupport, 
-					      outerRadiusHoleNozzleSupport,
-					      hightHoleNozzleSupport, 
-					      startAngleHoleNozzleSupport, 
-					      spanningAngleHoleNozzleSupport);
+  G4Tubs* solidHoleNozzleSupport = new G4Tubs("HoleNozzleSupport",
+						    innerRadiusHoleNozzleSupport,
+						    outerRadiusHoleNozzleSupport, 
+						    hightHoleNozzleSupport,
+						    startAngleHoleNozzleSupport, 
+						    spanningAngleHoleNozzleSupport);
 
   G4LogicalVolume* logicHoleNozzleSupport = new G4LogicalVolume(solidHoleNozzleSupport, 
-								holeNozzleSupportMaterial, 
-								"HoleNozzleSupport", 
-								0, 0, 0);
+								holeNozzleSupportMaterial,
+								"HoleNozzleSupport",
+								0, 
+								0,
+								0);
 
-  physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector(holeNozzleSupportXPosition,
-									     0., 0.)),
-					     "HoleNozzleSupport", logicHoleNozzleSupport, physicalTreatmentRoom, false, 0); 
-
-  logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
   
-  //------------------------------------//
-  // HOLE OF THE BRASS TUBE             //
-  //------------------------------------//
-  const G4double innerRadiusSecondHoleNozzleSupport = 0.*mm;
-  const G4double outerRadiusSecondHoleNozzleSupport = 18.*mm;
-  const G4double hightSecondHoleNozzleSupport = 29.5 *mm;
-  const G4double startAngleSecondHoleNozzleSupport = 0.*deg;
-  const G4double spanningAngleSecondHoleNozzleSupport = 360.*deg;
-
-  G4Tubs* solidSecondHoleNozzleSupport = new G4Tubs("SecondHoleNozzleSupport",
-						    innerRadiusSecondHoleNozzleSupport,
-						    outerRadiusSecondHoleNozzleSupport, 
-						    hightSecondHoleNozzleSupport,
-						    startAngleSecondHoleNozzleSupport, 
-						    spanningAngleSecondHoleNozzleSupport);
-
-  G4LogicalVolume* logicSecondHoleNozzleSupport = new G4LogicalVolume(solidSecondHoleNozzleSupport, 
-								      seconHoleNozzleSupportMaterial,
-								      "SecondHoleNozzleSupport",
-								      0, 
-								      0,
-								      0);
-
-  physiSecondHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
-						   "SecondHoleNozzleSupport",
-						   logicSecondHoleNozzleSupport, 
-						   physiNozzleSupport, 
-						   false, 0); 
-
-
+  physiHoleNozzleSupport = new G4PVPlacement(G4Transform3D(rm, G4ThreeVector()), 
+  						   "HoleNozzleSupport",
+  						   logicHoleNozzleSupport, 
+  						   physiNozzleSupport, 
+  						   false, 0);
+  
   logicHoleNozzleSupport -> SetVisAttributes(darkOrange3); 
+
+  // ---------------------------------//
+  //     BRASS TUBE 1 (phantom side)    //
+  // ---------------------------------//
+  const G4double innerRadiusBrassTube= 18.*mm;
+  const G4double outerRadiusBrassTube = 21.5 *mm;
+  const G4double hightBrassTube = 140.5*mm;
+  const G4double startAngleBrassTube = 0.*deg;
+  const G4double spanningAngleBrassTube = 360.*deg;
+
+  const G4double brassTubeXPosition = -227.5 *mm;
+ 
+  G4Tubs* solidBrassTube = new G4Tubs("BrassTube", 
+				      innerRadiusBrassTube, 
+				      outerRadiusBrassTube,
+				      hightBrassTube, 
+				      startAngleBrassTube, 
+				      spanningAngleBrassTube);
+
+  G4LogicalVolume* logicBrassTube = new G4LogicalVolume(solidBrassTube, 
+							brassTubeMaterial, 
+							"BrassTube", 
+							0, 0, 0);
+
+  physiBrassTube = new G4PVPlacement(G4Transform3D(rm, 
+						   G4ThreeVector(brassTubeXPosition,
+								 0., 
+								 0.)),
+				     "BrassTube", 
+				     logicBrassTube, 
+				     physicalTreatmentRoom,
+				     false, 
+				     0); 
+
+  logicBrassTube -> SetVisAttributes(darkOrange3);
+ 
+  // ----------------------------------------------//
+  //     BRASS TUBE 2 (inside the PMMA support)    //
+  // ----------------------------------------------//
+  const G4double innerRadiusBrassTube2= 18.*mm;
+  const G4double outerRadiusBrassTube2 = 21.5 *mm;
+  const G4double hightBrassTube2 = 29.5*mm;
+  const G4double startAngleBrassTube2 = 0.*deg;
+  const G4double spanningAngleBrassTube2 = 360.*deg;
+
+  const G4double brassTube2XPosition = -227.5 *mm;
+ 
+  G4Tubs* solidBrassTube2 = new G4Tubs("BrassTube2", 
+				      innerRadiusBrassTube2, 
+				      outerRadiusBrassTube2,
+				      hightBrassTube2, 
+				      startAngleBrassTube2, 
+				      spanningAngleBrassTube2);
+
+  G4LogicalVolume* logicBrassTube2 = new G4LogicalVolume(solidBrassTube2, 
+							brassTube2Material, 
+							"BrassTube2", 
+							0, 0, 0);
+
+  physiBrassTube2 = new G4PVPlacement(G4Transform3D(rm, 
+						   G4ThreeVector(0,
+								 0., 
+								 0.)),
+				     "BrassTube2", 
+				     logicBrassTube2, 
+				     physiNozzleSupport,
+				     false, 
+				     0); 
+
+  logicBrassTube2 -> SetVisAttributes(darkOrange3);
+
+
+ // --------------------------------------//
+  //     BRASS TUBE 3 (beam line side)    //
+  // -------------------------------------//
+  const G4double innerRadiusBrassTube3= 18.*mm;
+  const G4double outerRadiusBrassTube3 = 21.5 *mm;
+  const G4double hightBrassTube3 = 10.0 *mm;
+  const G4double startAngleBrassTube3 = 0.*deg;
+  const G4double spanningAngleBrassTube3 = 360.*deg;
+
+  const G4double brassTube3XPosition = -437 *mm;
+ 
+  G4Tubs* solidBrassTube3 = new G4Tubs("BrassTube3", 
+				      innerRadiusBrassTube3, 
+				      outerRadiusBrassTube3,
+				      hightBrassTube3, 
+				      startAngleBrassTube3, 
+				      spanningAngleBrassTube3);
+
+  G4LogicalVolume* logicBrassTube3 = new G4LogicalVolume(solidBrassTube3, 
+							brassTube3Material, 
+							"BrassTube3", 
+							0, 0, 0);
+
+  physiBrassTube3 = new G4PVPlacement(G4Transform3D(rm, 
+						   G4ThreeVector(brassTube3XPosition,
+								 0., 
+								 0.)),
+				     "BrassTube3", 
+				     logicBrassTube3, 
+				     physicalTreatmentRoom,
+				     false, 
+				     0); 
+
+  logicBrassTube3 -> SetVisAttributes(darkOrange3);
 }
 
 /////////////////////////////////////////////////////////////////////////////
