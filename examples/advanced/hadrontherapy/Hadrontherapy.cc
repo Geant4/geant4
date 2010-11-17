@@ -136,26 +136,29 @@ int main(int argc ,char ** argv)
 	
 #ifdef G4VIS_USE
   // Visualization manager
+  G4cout << "  SONO DENTRO G4VIS_USE  " << G4endl;
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
-
+	
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   if (argc!=1)   // batch mode
     {
+      
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);    
+     
     }
-
   else
     {  // interactive mode : define UI session
-      
+
+       
 #ifdef G4UI_USE
-#warning prova
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
       UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
+
 #endif
       if (ui->IsGUI())
 	UImanager->ApplyCommand("/control/execute macro/GUIPersonalisation.mac");
@@ -163,7 +166,7 @@ int main(int argc ,char ** argv)
       delete ui;
 #endif 
     }
- 
+
   // Job termination
     // Store dose & fluence data to ASCII & ROOT files 
     if ( HadrontherapyMatrix * pMatrix = HadrontherapyMatrix::GetInstance() )
@@ -179,9 +182,11 @@ int main(int argc ,char ** argv)
   HadrontherapyAnalysisManager::GetInstance() -> flush();     // Finalize the root file 
 #endif
 
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif                
+
 
   delete geometryMessenger;
   delete geometryController;
