@@ -7,7 +7,7 @@
 
 /run/initialize
 # Use this open statement to create an OpenGL view:
-/vis/open OGLIX 600x600-0+0
+/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
