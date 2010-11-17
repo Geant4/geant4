@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.hh,v 1.5 2010-10-07 12:31:00 mkelsey Exp $
+// $Id: G4DiscreteGammaTransition.hh,v 1.6 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -80,26 +80,26 @@ public:
 
   // Constructor
   G4DiscreteGammaTransition(const G4NuclearLevel& level);
-//JMQ 180410
-//  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
+  //JMQ 180410
+  //  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
   G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A);
 
   // Destructor
-  ~G4DiscreteGammaTransition();
+  virtual ~G4DiscreteGammaTransition();
 
   // Functions
 
 public:
 
-  virtual void SetEnergyFrom(const G4double energy);
+  virtual void SetEnergyFrom(G4double energy);
   virtual G4double GetGammaEnergy();
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();
 
-  void SetICM(G4bool ic) { _icm = ic;};
-  G4double GetBondEnergy () {return _bondE;};
-  G4int GetOrbitNumber () {return _orbitE;};
-  G4bool IsAGamma() {return _aGamma;};
+  inline void SetICM(G4bool ic) { _icm = ic;};
+  inline G4double GetBondEnergy () {return _bondE;};
+  inline G4int GetOrbitNumber () {return _orbitE;};
+  inline G4bool IsAGamma() {return _aGamma;};
  
 private:
   

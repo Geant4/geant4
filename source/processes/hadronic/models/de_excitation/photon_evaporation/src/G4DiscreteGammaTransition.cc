@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaTransition.cc,v 1.11 2010-10-29 17:35:04 vnivanch Exp $
+// $Id: G4DiscreteGammaTransition.cc,v 1.12 2010-11-17 19:17:17 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -253,7 +254,7 @@ G4double G4DiscreteGammaTransition::GetGammaCreationTime()
   return _gammaCreationTime;
 }
 
-void G4DiscreteGammaTransition::SetEnergyFrom(const G4double energy)
+void G4DiscreteGammaTransition::SetEnergyFrom(G4double energy)
 {
   _excitation = energy;
 }

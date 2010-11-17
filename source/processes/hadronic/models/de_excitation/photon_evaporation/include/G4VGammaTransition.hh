@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaTransition.hh,v 1.5 2010-11-17 16:50:53 vnivanch Exp $
+// $Id: G4VGammaTransition.hh,v 1.6 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@ public:
   virtual G4double GetGammaEnergy() = 0;
   virtual G4double GetGammaCreationTime() = 0;
 
-  virtual void SetEnergyFrom(const G4double energy) = 0;
+  virtual void SetEnergyFrom(G4double energy) = 0;
 
 private:  
 

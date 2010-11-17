@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ContinuumGammaDeexcitation.cc,v 1.7 2010-04-30 16:08:03 vnivanch Exp $
+// $Id: G4ContinuumGammaDeexcitation.cc,v 1.8 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -66,18 +66,16 @@
 
 G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation()
   : _nucleusZ(0), _nucleusA(0), _levelManager(0)
-{ }
-
+{}
 
 G4ContinuumGammaDeexcitation::~G4ContinuumGammaDeexcitation() 
-{ }
-
+{}
 
 G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 {
   G4Fragment* nucleus = GetNucleus();
-  G4int Z = static_cast<G4int>(nucleus->GetZ());
-  G4int A = static_cast<G4int>(nucleus->GetA());
+  G4int Z = nucleus->GetZ_asInt();
+  G4int A = nucleus->GetA_asInt();
   G4double excitation = nucleus->GetExcitationEnergy();
 
   if (_nucleusA != A || _nucleusZ != Z)
@@ -90,7 +88,8 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
   if (_verbose > 1) {
     G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << G4endl;
   }
-  G4VGammaTransition* gt =  new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
+  G4VGammaTransition* gt =  
+    new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
 
   return gt;
 }
@@ -98,8 +97,9 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 
 G4bool G4ContinuumGammaDeexcitation::CanDoTransition() 
 {
-  //JMQ: far too small, creating sometimes continuum gammas instead of the right discrete ones
-  // (when excitation energy is slightly over maximum discrete  energy): changed
+  //JMQ: far too small, creating sometimes continuum gammas instead 
+  //     of the right discrete ones (when excitation energy is slightly 
+  //     over maximum discrete  energy): changed
   //  G4double tolerance = 10*eV;
   const G4double tolerance = CLHEP::keV;
 
@@ -115,9 +115,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition()
   G4Fragment* nucleus = GetNucleus();
   G4double excitation = nucleus->GetExcitationEnergy();
 
-  //  G4int A = (G4int)nucleus->GetA();
-  // G4int Z = (G4int)nucleus->GetZ();
-  if (_nucleusA<2 || _nucleusZ<3)
+  if (_nucleusZ < 2 || _nucleusA < 3)
     {
       if (_verbose > 1) { 
 	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition - n/p/H"

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.cc,v 1.19 2010-10-29 17:35:04 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.cc,v 1.20 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -155,8 +155,8 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   // select secondary
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
 
-  G4DiscreteGammaTransition* dtransition = 0; 
-  dtransition = dynamic_cast <G4DiscreteGammaTransition*> (_transition);
+  G4DiscreteGammaTransition* dtransition = 
+    dynamic_cast <G4DiscreteGammaTransition*> (_transition);
   if ( dtransition && !( dtransition->IsAGamma()) ) { 
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   

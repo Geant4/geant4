@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.hh,v 1.4 2010-04-25 18:43:21 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.hh,v 1.5 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -83,11 +83,11 @@ public:
 
   virtual G4bool CanDoTransition();
 
-  void SetICM(G4bool hl) { _icm = hl; };
+  inline void SetICM(G4bool hl) { _icm = hl; };
 
-  void SetRDM(G4bool hl) { _rdm = hl; };
+  inline void SetRDM(G4bool hl) { _rdm = hl; };
   
-  void SetHL(G4double hl) { _max_hl = hl; };
+  inline void SetHL(G4double hl) { _max_hl = hl; };
 
 private:
 

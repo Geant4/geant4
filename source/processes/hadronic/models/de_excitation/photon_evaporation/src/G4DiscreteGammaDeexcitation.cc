@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiscreteGammaDeexcitation.cc,v 1.16 2010-10-29 17:35:04 vnivanch Exp $
+// $Id: G4DiscreteGammaDeexcitation.cc,v 1.17 2010-11-17 19:17:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -162,7 +162,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition()
 	  << G4endl;
       }
     } else { 
-      if (excitation > _levelManager->MaxLevelEnergy() + _tolerance) canDo = false;
+      if (excitation > _levelManager->MaxLevelEnergy() + _tolerance) { canDo = false; }
       //if (excitation < _levelManager->MinLevelEnergy() - _tolerance) canDo = false;  
       // The following is a protection to avoid looping in case of elements with very low
       // ensdf levels
