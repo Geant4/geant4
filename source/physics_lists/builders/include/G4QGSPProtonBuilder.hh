@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.hh,v 1.6 2010-06-15 11:03:35 vnivanch Exp $
+// $Id: G4QGSPProtonBuilder.hh,v 1.7 2010-11-17 17:12:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -59,8 +59,6 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
 #include "G4ProjectileDiffractiveChannel.hh"
-
-#include "G4ProtonInelasticCrossSection.hh"
 
 class G4QGSPProtonBuilder : public G4VProtonBuilder
 {

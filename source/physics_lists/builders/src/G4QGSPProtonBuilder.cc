@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.cc,v 1.6 2010-06-15 11:03:35 vnivanch Exp $
+// $Id: G4QGSPProtonBuilder.cc,v 1.7 2010-11-17 17:12:28 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -42,6 +42,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProtonInelasticCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
 G4QGSPProtonBuilder::
 G4QGSPProtonBuilder(G4bool quasiElastic, G4bool projectileDiffraction) 
@@ -77,7 +78,8 @@ void G4QGSPProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
  {
    // G4cout << "adding inelastic Proton in QGSP" << G4endl;
-   aP->AddDataSet(new G4ProtonInelasticCrossSection());  
+   aP->AddDataSet(new G4CrossSectionPairGG(
+   		new G4ProtonInelasticCrossSection(), 91*GeV));  
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
