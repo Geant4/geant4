@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronRadCapture.cc,v 1.5 2010-09-09 15:40:48 vnivanch Exp $
+// $Id: G4NeutronRadCapture.cc,v 1.6 2010-11-17 16:21:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,6 +44,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4He3.hh"
@@ -107,14 +108,15 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     G4ParticleDefinition* theDef = 0;
 
     lv1 -= lv2; 
-    if(Z > 2 || A > 4) 
-      {
-	theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
-      }
-    else if (Z == 1 && A == 2) {theDef = G4Deuteron::Deuteron();}
+    if      (Z == 1 && A == 2) {theDef = G4Deuteron::Deuteron();}
     else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
     else if (Z == 2 && A == 3) {theDef = G4He3::He3();}
     else if (Z == 2 && A == 4) {theDef = G4Alpha::Alpha();}
+    else  
+      {
+	theDef = 
+	  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
+      }
 
     if (verboseLevel > 1) {
       G4cout << "Gamma 4-mom: " << lv2 << "   " 
@@ -154,7 +156,8 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
 	if(0 == Z && 0 == A) {theDef =  f->GetParticleDefinition();}
 	else
 	  {
-	    theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+	    theDef = 
+	      G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
 	  }
 
 	if (verboseLevel > 1) {

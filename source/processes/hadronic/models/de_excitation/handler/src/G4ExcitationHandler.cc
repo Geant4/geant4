@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc,v 1.39 2010-05-18 15:46:11 vnivanch Exp $
+// $Id: G4ExcitationHandler.cc,v 1.40 2010-11-17 16:20:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -61,6 +61,11 @@
 #include "globals.hh"
 #include "G4LorentzVector.hh"
 #include "G4NistManager.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
+#include "G4IonConstructor.hh" 
+#include "G4ParticleTypes.hh"
+
 #include <list>
 
 G4ExcitationHandler::G4ExcitationHandler():
@@ -69,12 +74,11 @@ G4ExcitationHandler::G4ExcitationHandler():
   // since no interface (for external activation via macro input file) is still available.
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4.0*GeV),
   //  maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(3.0*MeV),
-  //maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   minExcitation(CLHEP::keV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true),OPTxs(3),useSICB(false)
 {                                                                          
-  theTableOfParticles = G4ParticleTable::GetParticleTable();
+  theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
   
   theEvaporation = new G4Evaporation;
   theMultiFragmentation = new G4StatMF;
@@ -334,7 +338,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
       } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
 	theKindOfFragment = G4Alpha::AlphaDefinition();;
       } else {
-	theKindOfFragment = theTableOfParticles->FindIon(theFragmentZ,theFragmentA,0,theFragmentZ);
+	theKindOfFragment = 
+	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,0.0);
       }
       if (theKindOfFragment != 0) 
 	{
@@ -349,8 +354,6 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment & theI
 
   return theReactionProductVector;
 }
-
-
 
 G4ReactionProductVector * 
 G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
@@ -398,7 +401,8 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
     } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
       theKindOfFragment = theAlpha;
     } else {
-      theKindOfFragment = theTableOfParticles->FindIon(theFragmentZ,theFragmentA,0,theFragmentZ);
+      theKindOfFragment = 
+	theTableOfIons->GetIon(theFragmentZ,theFragmentA,0.0);
     }
     if (theKindOfFragment != 0) 
       {
@@ -406,9 +410,6 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
 	theNew->SetMomentum(theFragmentMomentum.vect());
 	theNew->SetTotalEnergy(theFragmentMomentum.e());
 	theNew->SetFormationTime((*i)->GetCreationTime());
-#ifdef PRECOMPOUND_TEST
-	theNew->SetCreatorModel((*i)->GetCreatorModel());
-#endif
 	theReactionProductVector->push_back(theNew);
       }
   }
@@ -457,19 +458,19 @@ void G4ExcitationHandler::CheckConservation(const G4Fragment & theInitialState,
     G4LorentzVector tmp = (*h)->GetMomentum();
     ProductsEnergy += tmp.e();
     ProductsMomentum += tmp.vect();
-    ProductsA += static_cast<G4int>((*h)->GetA());
-    ProductsZ += static_cast<G4int>((*h)->GetZ());
+    ProductsA += (*h)->GetA_asInt();
+    ProductsZ += (*h)->GetZ_asInt();
   }
   
-  if (ProductsA != theInitialState.GetA()) {
+  if (ProductsA != theInitialState.GetA_asInt()) {
     G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4ExcitationHandler.cc: Barionic Number Conservation test for deexcitation fragments" 
 	   << G4endl; 
-    G4cout << "Initial A = " << theInitialState.GetA() 
+    G4cout << "Initial A = " << theInitialState.GetA_asInt() 
 	   << "   Fragments A = " << ProductsA << "   Diference --> " 
 	   << theInitialState.GetA() - ProductsA << G4endl;
   }
-  if (ProductsZ != theInitialState.GetZ()) {
+  if (ProductsZ != theInitialState.GetZ_asInt()) {
     G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
     G4cout << "G4ExcitationHandler.cc: Charge Conservation test for deexcitation fragments" 
 	   << G4endl; 

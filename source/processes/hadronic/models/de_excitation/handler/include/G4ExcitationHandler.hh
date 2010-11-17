@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh,v 1.12 2010-04-27 14:00:23 vnivanch Exp $
+// $Id: G4ExcitationHandler.hh,v 1.13 2010-11-17 16:20:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -58,14 +58,13 @@
 #include "G4DynamicParticle.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
 // needed for default models
 #include "G4Evaporation.hh"
 #include "G4StatMF.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4IonConstructor.hh" 
+
+class G4IonTable;
 
 class G4ExcitationHandler 
 {
@@ -140,7 +139,7 @@ private:
   G4double minEForMultiFrag;
   G4double minExcitation;
 
-  G4ParticleTable *theTableOfParticles;
+  G4IonTable* theTableOfIons;
 
   G4bool MyOwnEvaporationClass;
   G4bool MyOwnMultiFragmentationClass;  
