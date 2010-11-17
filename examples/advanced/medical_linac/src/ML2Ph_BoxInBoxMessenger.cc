@@ -53,7 +53,7 @@ CML2Ph_BoxInBoxMessenger::CML2Ph_BoxInBoxMessenger(CML2Ph_BoxInBox *Ph_BoxInBox)
 CML2Ph_BoxInBoxMessenger::~CML2Ph_BoxInBoxMessenger(void)
 {
 }
-// void CML2Ph_BoxInBoxMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
-// {
-// 
-// }
+void CML2Ph_BoxInBoxMessenger::SetNewValue(G4UIcommand* cmd, G4String newValue)
+ {
+ 
+ }
