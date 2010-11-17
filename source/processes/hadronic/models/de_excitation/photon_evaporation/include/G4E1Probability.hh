@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4E1Probability.hh,v 1.5 2010-05-19 10:21:44 vnivanch Exp $
+// $Id: G4E1Probability.hh,v 1.6 2010-11-17 17:59:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -56,8 +56,8 @@ public:
 
   virtual ~G4E1Probability();
 
-  G4double EmissionProbability(const G4Fragment& frag, const G4double excite);
-  G4double EmissionProbDensity(const G4Fragment& frag, const G4double ePhoton);
+  G4double EmissionProbability(const G4Fragment& frag, G4double excite);
+  G4double EmissionProbDensity(const G4Fragment& frag, G4double ePhoton);
 
 private:
 
@@ -68,9 +68,8 @@ private:
   G4bool operator!=(const G4E1Probability& right) const;
 
   // Integrator (simple Gaussian quadrature)
-  G4double EmissionIntegration(const G4Fragment& frag, const G4double excite,
-                               const G4double lowLim, const G4double upLim,
-                               const G4int numIters);
+  G4double EmissionIntegration(const G4Fragment& frag,
+                               G4double lowLim, G4double upLim);
 
   // members
   G4Pow*   fG4pow;

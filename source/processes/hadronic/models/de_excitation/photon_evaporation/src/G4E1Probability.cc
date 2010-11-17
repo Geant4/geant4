@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4E1Probability.cc,v 1.9 2010-05-25 10:47:24 vnivanch Exp $
+// $Id: G4E1Probability.cc,v 1.10 2010-11-17 17:59:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------
@@ -36,11 +35,12 @@
 // Modifications:
 // 18.05.2010 V.Ivanchenko trying to speedup the most slow method
 //            by usage of G4Pow, integer A and introduction of const members
-//
+// 17.11.2010 V.Ivanchenko perform general cleanup and simplification
+//            of integration method; low-limit of integration is defined
+//            by gamma energy or is zero (was always zero before)
 //
 
 #include "G4E1Probability.hh"
-//#include "G4ConstantLevelDensityParameter.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
 
@@ -62,7 +62,7 @@ G4E1Probability::~G4E1Probability()
 //
 
 G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag, 
-					      const G4double gammaE)
+					      G4double gammaE)
 {
 
   // Calculate the probability density here
@@ -76,8 +76,9 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 
   G4int Afrag = frag.GetA_asInt();
   G4double Uexcite = frag.GetExcitationEnergy();
+  G4double U = std::max(0.0,Uexcite-gammaE);
 
-  if( (Uexcite-gammaE) < 0.0 || gammaE < 0) { return theProb; }
+  if(gammaE < 0.0) { return theProb; }
 
   // Need a level density parameter.
   // For now, just use the constant approximation (not reliable near magic
@@ -88,11 +89,8 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   //  G4double levelDensBef = std::exp(2*std::sqrt(aLevelDensityParam*Uexcite));
   //  G4double levelDensAft = std::exp(2*std::sqrt(aLevelDensityParam*(Uexcite-gammaE)));
   // VI reduce number of calls to exp 
-  G4double levelDens = 1.0;
-  if( aLevelDensityParam > 0.0 ) {
-    levelDens = std::exp(2*(std::sqrt(aLevelDensityParam*(Uexcite-gammaE)) 
-      - std::sqrt(aLevelDensityParam*Uexcite))); 
-  }
+  G4double levelDens = 
+    std::exp(2*(std::sqrt(aLevelDensityParam*U)-std::sqrt(aLevelDensityParam*Uexcite)));
   // Now form the probability density
 
   // Define constants for the photoabsorption cross-section (the reverse
@@ -139,72 +137,47 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
 }
 
 G4double G4E1Probability::EmissionProbability(const G4Fragment& frag, 
-                                                 const G4double gammaE)
+                                              G4double gammaE)
 {
-
   // From nuclear fragment properties and the excitation energy, calculate
   // the probability for photon evaporation down to last ground level.
   // fragment = nuclear fragment BEFORE de-excitation
 
-  G4double theProb = 0.0;
-
-  G4double Uafter = 0.0;
-  const G4double Uexcite = frag.GetExcitationEnergy();
-
-  G4double normC = 3.0;
-
-  const G4double upperLim = Uexcite;
-  const G4double lowerLim = Uafter;
-  const G4int numIters = 100;
-
-  // Fall-back is a uniform random number
-
-  //G4double uniformNum = G4UniformRand();
-  //theProb = uniformNum;
+  G4double upperLim = frag.GetExcitationEnergy();
+  G4double lowerLim = std::max(0.0, upperLim - gammaE);
+  if( upperLim - lowerLim <= CLHEP::keV ) { return 0.0; } 
 
   // Need to integrate EmissionProbDensity from lowerLim to upperLim 
-  // and multiply by normC
+  // and multiply by factor 3 (?!)
 
-  G4double integ = normC *
-           EmissionIntegration(frag,gammaE,lowerLim,upperLim,numIters);
-  if(integ > 0.0) theProb = integ/(upperLim-lowerLim);
+  G4double integ = 3 * EmissionIntegration(frag,lowerLim,upperLim);
 
-  return theProb;
+  return integ;
 
 }
 
 G4double G4E1Probability::EmissionIntegration(const G4Fragment& frag, 
-                             const G4double ,
-                             const G4double lowLim, const G4double upLim,
-                             const G4int numIters)
+					      G4double lowLim, G4double upLim)
 
 {
+  // Simple integration
+  // VI replace by direct integration over 100 point
 
-  // Simple Gaussian quadrature integration
+  const G4int numIters = 100;
+  G4double Step = (upLim-lowLim)/G4double(numIters);
 
-  G4double x;
-  G4double root3 = 1.0/std::sqrt(3.0);
+  G4double res = 0.0;
+  G4double x = lowLim - 0.5*Step;
 
-  G4double Step = (upLim-lowLim)/(2.0*numIters);
-  G4double Delta = Step*root3;
-
-  G4double mean = 0.0;
-
-  G4double theInt = 0.0;
-
-  for(G4int i = 0; i < numIters; i++) {
-
-    x = (2*i + 1)*Step;
-    G4double E1ProbDensityA = EmissionProbDensity(frag,x+Delta);
-    G4double E1ProbDensityB = EmissionProbDensity(frag,x-Delta);
-
-    mean += E1ProbDensityA + E1ProbDensityB;
-
+  for(G4int i = 0; i < numIters; ++i) {
+    x += Step;
+    res += EmissionProbDensity(frag, x);
   }
 
-  if(mean*Step > 0.0) theInt = mean*Step;
+  if(res > 0.0) { res /= G4double(numIters); }
+  else { res = 0.0; }
 
-  return theInt;
+  return res;
 
 }
 
