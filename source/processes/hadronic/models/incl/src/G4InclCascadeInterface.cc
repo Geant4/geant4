@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclCascadeInterface.cc,v 1.14 2010-11-13 00:08:36 kaitanie Exp $ 
+// $Id: G4InclCascadeInterface.cc,v 1.15 2010-11-17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -429,6 +429,9 @@ G4HadFinalState* G4InclCascadeInterface::ApplyYourself(const G4HadProjectile& aT
 	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
 	}
       }
+      delete thePrecoResult;
+      thePrecoResult = 0;
+
       if(verboseLevel > 1 && std::abs(fourMomentumBalance.mag() / MeV) > 0.1 * MeV) { 
 	G4cout <<"Four-momentum balance after remnant nucleus Fermi break-up:" << G4endl;
 	G4cout <<"Magnitude: " << fourMomentumBalance.mag() / MeV << " MeV" << G4endl;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.11 2010-11-13 00:08:36 kaitanie Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.12 2010-11-17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -254,7 +254,17 @@ public:
  */
 class G4Saxw {
 public:
-  G4Saxw() {};
+  G4Saxw() {
+    for(G4int i = 0; i < SAXWROWS; ++i) {
+      for(G4int j = 0; j < SAXWCOLS; ++j) {
+	x[i][j] = 0.0;
+	y[i][j] = 0.0;
+	s[i][j] = 0.0;
+      }
+    }
+    imat = 0; n = 0; k = 0;
+  };
+
   ~G4Saxw() {};
   
   /**
@@ -389,7 +399,14 @@ public:
  */
 class G4Spl2 {
 public:
-  G4Spl2() {};
+  G4Spl2() {
+    for(G4int i = 0; i < SPL2SIZE; ++i) {
+      x[i] = 0.0; y[i] = 0.0;
+      a[i] = 0.0; b[i] = 0.0; c[i] = 0.0;
+    }
+    n = 0;
+  };
+
   ~G4Spl2() {};
   
   G4double x[SPL2SIZE];
@@ -411,7 +428,14 @@ public:
  */
 class G4Bl1 {
 public:
-  G4Bl1() {};
+  G4Bl1() {
+    ta = 0.0;
+    for(G4int i = 0; i < BL1SIZE; ++i) {
+      p1[i] = 0.0; p2[i] = 0.0; p3[i] = 0.0; eps[i] = 0.0;
+      ind1[i] = 0; ind2[i] = 0;
+    }
+  };
+
   ~G4Bl1() {};
   
   G4double p1[BL1SIZE],p2[BL1SIZE],p3[BL1SIZE];
@@ -430,14 +454,21 @@ public:
   }
 };
 
-#define BL2CROISSIZE 19900
-#define BL2INDSIZE 19900
+#define BL2SIZE 19900
 /**
  * 
  */
 class G4Bl2 {
 public:
-  G4Bl2() {};
+  G4Bl2() {
+    k = 0;
+    for(G4int i = 0; i < BL2SIZE; ++i) {
+      crois[i] = 0.0;
+      ind[i] = 0;
+      jnd[i] = 0;
+    }    
+  };
+
   ~G4Bl2() {};
   
   void dump() {
@@ -453,7 +484,7 @@ public:
   /**
    * 
    */
-  G4double crois[BL2CROISSIZE];
+  G4double crois[BL2SIZE];
 
   /**
    *
@@ -463,12 +494,12 @@ public:
   /**
    *
    */
-  G4int ind[BL2INDSIZE];
+  G4int ind[BL2SIZE];
 
   /**
    *
    */
-  G4int jnd[BL2INDSIZE];
+  G4int jnd[BL2SIZE];
 };
 
 //#define BL3SIZE 300
@@ -478,7 +509,16 @@ public:
  */
 class G4Bl3 {
 public:
-  G4Bl3() {};
+  G4Bl3() {
+    r1 = 0.0; r2 = 0.0;
+    ia1 = 0; ia2 = 0;
+    rab2 = 0.0;
+
+    for(G4int i = 0; i < BL3SIZE; ++i) {
+      x1[i] = 0.0; x2[i] = 0.0; x3[i] = 0.0;
+    }
+  };
+
   ~G4Bl3() {};
   
   /**
@@ -519,7 +559,10 @@ public:
  */
 class G4Bl4 {
 public:
-  G4Bl4() {};
+  G4Bl4()
+    :tmax5(0.0)
+  {};
+
   ~G4Bl4() {};
 
   /**
@@ -535,7 +578,13 @@ public:
  */
 class G4Bl5 {
 public:
-  G4Bl5() {};
+  G4Bl5() {
+    for(G4int i = 0; i < BL5SIZE; ++i) {
+      tlg[i] = 0.0;
+      nesc[i] = 0;
+    }
+  };
+
   ~G4Bl5() {};
   
   /**
@@ -554,7 +603,10 @@ public:
  */
 class G4Bl6 {
 public:
-  G4Bl6() {};
+  G4Bl6()
+    :xx10(0.0), isa(0.0)
+  {};
+
   ~G4Bl6() {};
   
   /**
@@ -573,7 +625,10 @@ public:
  */
 class G4Bl8 {
 public:
-  G4Bl8() {};
+  G4Bl8()
+    :rathr(0.0), ramass(0.0)
+  {};
+
   ~G4Bl8() {};
 
   /**
@@ -597,6 +652,9 @@ public:
   G4Bl9() {
     l1 = 0;
     l2 = 0;
+    for(G4int i = 0; i < BL9SIZE; ++i) {
+      hel[i] = 0.0;
+    }
   };
   ~G4Bl9() {};
 
@@ -616,7 +674,9 @@ public:
  */
 class G4Bl10 {
 public:
-  G4Bl10() {};
+  G4Bl10()
+    :ri4(0.0), rs4(0.0), r2i(0.0), r2s(0.0), pdummy(0.0), pf(0.0)
+  {};
   ~G4Bl10() {};
 
   /**
@@ -630,7 +690,9 @@ public:
  */
 class G4Kind {
 public:
-  G4Kind() {};
+  G4Kind()
+    :kindf7(0)
+  {};
   ~G4Kind() {};
 
   /**
@@ -690,7 +752,40 @@ public:
  */
 class G4VarAvat {
 public:
-  G4VarAvat() {};
+  G4VarAvat() {
+    kveux = 0;
+    bavat = 0.0;
+    nopartavat = 0; ncolavat = 0;
+    nb_avat = 0;
+
+    for(G4int i = 0; i < VARSIZE; ++i) {
+      r1_in[i] = 0.0;
+      r1_first_avat[i] = 0.0;
+    }
+
+    for(G4int i = 0; i < VAEPSSIZE; ++i) {
+      epsd[i] = 0.0;
+      eps2[i] = 0.0;
+      eps4[i] = 0.0;
+      eps6[i] = 0.0;
+      epsf[i] = 0.0;
+    }
+
+    for(G4int i = 0; i < VAAVM; ++i) {
+      timeavat[i] = 0.0;
+      l1avat[i] = 0.0;
+      l2avat[i] = 0.0;
+      jpartl1[i] = 0.0;
+      jpartl2[i] = 0.0;
+      del1avat[i] = 0.0;
+      del2avat[i] = 0.0;
+      energyavat[i] = 0.0;
+      bloc_paul[i] = 0.0;
+      bloc_cdpp[i] = 0.0;
+      go_out[i] = 0.0;
+    }
+  };
+
   ~G4VarAvat() {};
 
   /**
@@ -757,7 +852,7 @@ public:
     projEnergy = 0.0;
     targetA = 0;
     targetZ = 0;
-    masp = 0.0; mzsp = 0.0; exsp = 0.0;
+    masp = 0.0; mzsp = 0.0; exsp = 0.0; mrem = 0.0;
     // To be deleted?
     spectatorA = 0;
     spectatorZ = 0;
@@ -1113,7 +1208,12 @@ private:
  */
 class G4Paul {
 public:
-  G4Paul() {};
+  G4Paul()
+    :ct0(0.0), ct1(0.0), ct2(0.0), ct3(0.0), ct4(0.0), ct5(0.0), ct6(0.0),
+     pr(0.0), pr2(0.0), xrr(0.0), xrr2(0.0),
+     cp0(0.0), cp1(0.0), cp2(0.0), cp3(0.0), cp4(0.0), cp5(0.0), cp6(0.0)
+  {};
+
   ~G4Paul() {};
   
   /**

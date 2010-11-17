@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History,v 1.36 2010-11-16 16:30:55 gcosmo Exp $
+$Id: History,v 1.37 2010-11-17 20:19:09 kaitanie Exp $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,14 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+17 November 2010 - Pekka Kaitaniemi (hadr-incl-V09-03-10)
+---------------------------------------------------------
+- Fixed several issues reported by Coverity:
+  o Fix: Fragment vector and Fermi break-up related emory leaks in
+  INCL/ABLA interfaces
+  o Initialize INCL internal variables properly
+  o Check array boundaries in datafile reader
 
 16 November 2010 - Gabriele Cosmo (hadr-incl-V09-03-09)
 -------------------------------------------------------

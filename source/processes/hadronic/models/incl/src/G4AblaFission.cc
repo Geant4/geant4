@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AblaFission.cc,v 1.4 2010-11-16 16:28:57 gcosmo Exp $
+// $Id: G4AblaFission.cc,v 1.5 2010-11-17 20:19:09 kaitanie Exp $
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -35,6 +35,8 @@
 
 G4AblaFission::G4AblaFission()
 {
+  hazard = 0;
+  randomGenerator = 0;
 }
 
 G4AblaFission::G4AblaFission(G4Hazard *hzr, G4InclRandomInterface *rndm)

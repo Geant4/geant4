@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.15 2010-11-13 00:08:36 kaitanie Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.16 2010-11-17 20:19:09 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -110,11 +110,12 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     G4ParticleDefinition *oldTargetDef = theTableOfParticles->GetIon(theNucleus.GetA_asInt(), theNucleus.GetZ_asInt(), 0.0);
     const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
 
+    if(oldProjectileDef != 0 && oldTargetDef != 0) {
     G4int oldTargetA = oldTargetDef->GetAtomicMass();
     G4int newTargetA = oldProjectileDef->GetAtomicMass();
     G4int newTargetZ = oldProjectileDef->GetAtomicNumber();
 
-    if(newTargetA > 0 && newTargetZ > 0 && oldTargetDef != 0 && oldProjectileDef != 0) {
+    if(newTargetA > 0 && newTargetZ > 0) {
       G4Nucleus swappedTarget(oldProjectileDef->GetAtomicMass(), oldProjectileDef->GetAtomicNumber());
 
       //      G4cout <<"Original projectile kinE = " << aTrack.GetKineticEnergy() / MeV << G4endl;
@@ -132,6 +133,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     } else {
       G4cout <<"Badly defined target after swapping. Falling back to normal (non-swapped) mode." << G4endl;
       calincl = new G4InclInput(aTrack, theNucleus, false);
+    }
     }
   } else {
     calincl = new G4InclInput(aTrack, theNucleus, false);
@@ -484,6 +486,9 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
 	}
       }
+      delete theSpectatorFermiBreakupResult;
+      theSpectatorFermiBreakupResult = 0;
+
       if(std::abs(fourMomentumBalance.mag() / MeV) > 0.1 * MeV) { 
 	G4cout <<"Four-momentum balance after spectator nucleus Fermi break-up:" << G4endl;
 	G4cout <<"Magnitude: " << fourMomentumBalance.mag() / MeV << " MeV" << G4endl;
@@ -583,6 +588,9 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
 	  G4cout <<" momentum = " << (*fragment)->GetMomentum().mag() / MeV << " MeV" << G4endl;
 	}
       }
+      delete theFermiBreakupResult;
+      theFermiBreakupResult = 0;
+
       if(std::abs(fourMomentumBalance.mag() / MeV) > 0.1 * MeV) { 
 	G4cout <<"Four-momentum balance after remnant nucleus Fermi break-up:" << G4endl;
 	G4cout <<"Magnitude: " << fourMomentumBalance.mag() / MeV << " MeV" << G4endl;
@@ -692,6 +700,7 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
     theResult.AddSecondary((*i));
   }
 
+  delete fermiBreakUp;
   delete calincl;
   calincl = 0;
   return &theResult;
