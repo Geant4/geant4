@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-23)
+----------------------------------------------------------
+- utils, management, evaporation - integer Z and A, constructors
+   moved to src, usage of G4Pow, general cleanup
+- G4EvaporationChannel - removed new and delete of probability objects 
+  at each to the class, use instead local G4EvaporationProbability
+  of the channel
+
 29 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-22)
 ----------------------------------------------------------
 - Fixed problems reported by the Coveruty tool (mainly pedantic
