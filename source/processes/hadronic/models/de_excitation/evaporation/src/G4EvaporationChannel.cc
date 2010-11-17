@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.15 2010-11-17 12:19:08 vnivanch Exp $
+// $Id: G4EvaporationChannel.cc,v 1.16 2010-11-17 12:30:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -84,7 +84,6 @@ G4EvaporationChannel::~G4EvaporationChannel()
 {
   delete theLevelDensityPtr;
 }
-
 
 void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 {
@@ -264,7 +263,8 @@ G4double G4EvaporationChannel::GetKineticEnergy(const G4Fragment & aFragment)
     G4double Tmax=MaximalKineticEnergy;
     G4double T(0.0);
     G4double NormalizedProbability(1.0);
-    
+
+    // This is very ineffective - create new objects at each call to the method    
     /*
     // A pointer is created in order to access the distribution function.
     G4EvaporationProbability * G4EPtemp = 0;
