@@ -9,7 +9,7 @@
 /process/inactivate nuclearStopping
 
 # Uncomment this line of you want visualization
-#/control/execute vis.mac
+/control/execute vis.mac
 
 /tracking/verbose 0
 /run/verbose 0

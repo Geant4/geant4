@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.30 2010-11-09 23:27:56 asaim Exp $
+$Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History,v 1.30 2010-11-09 23:27:56 asaim Exp $
 
                        Package History file
                        --------------------
+
+16 November 2010 - J. Allison - tag microbeam-V09-03-09
+- Microbeam.cc: Introduced G4UIExecutive.
+- MicrobeamRunAction.cc:
+  o Removed /vis/viewer/update.  (Issued by vis manager at end of run anyway.)
+- vis.mac: Added:
+  # Specify target point (so a viewpoint rotation keeps it in view)
+  /vis/viewer/set/targetPoint -1461.42 0.0 -386.51 mm
 
 09 November 2010 - M. Asai - tag microbeam-V09-03-08
 - Fix AIDA file option.
