@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLRead.cc,v 1.49 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLRead.cc,v 1.50 2010-11-17 10:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead Implementation
@@ -271,7 +271,8 @@ void G4GDMLRead::ExtensionRead(const xercesc::DOMElement* const)
 
 void G4GDMLRead::Read(const G4String& fileName,
                             G4bool validation,
-                            G4bool isModule)
+                            G4bool isModule,
+                            G4bool strip)
 {
    if (isModule)
    {
@@ -360,6 +361,6 @@ void G4GDMLRead::Read(const G4String& fileName,
    else
    {
       G4cout << "G4GDML: Reading '" << fileName << "' done!" << G4endl;
-      StripNames();
+      if (strip)  { StripNames(); }
    }
 }

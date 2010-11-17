@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.16 2010-11-02 10:39:27 gcosmo Exp $
+// $Id: G4GDMLParser.cc,v 1.17 2010-11-17 10:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 #include "G4GDMLParser.hh"
 
 G4GDMLParser::G4GDMLParser()
-  : urcode(false), uwcode(false)
+  : urcode(false), uwcode(false), strip(true)
 {
   reader = new G4GDMLReadStructure;
   writer = new G4GDMLWriteStructure;

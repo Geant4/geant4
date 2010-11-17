@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.14 2010-11-02 10:39:27 gcosmo Exp $
+// $Id: G4GDMLParser.icc,v 1.15 2010-11-17 10:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,7 +35,7 @@
 inline 
 void G4GDMLParser::Read(const G4String& filename, G4bool validate)
 {   
-  reader->Read(filename,validate,false);
+  reader->Read(filename,validate,false,strip);
 }
 
 inline 
@@ -171,6 +171,11 @@ inline
 void G4GDMLParser::StripNamePointers() const
 {
   reader->StripNames();
+}
+
+inline void G4GDMLParser::SetStripFlag(G4bool flag)
+{
+  strip = flag;
 }
 
 inline void G4GDMLParser::SetOverlapCheck(G4bool flag)

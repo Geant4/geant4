@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.64 2010-11-02 10:39:27 gcosmo Exp $
+// $Id: G4GDMLParser.hh,v 1.65 2010-11-17 10:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,6 +120,7 @@ class G4GDMLParser
    inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(G4LogicalVolume* logvol) const;
    inline const G4GDMLAuxMapType* GetAuxMap() const;
    inline void StripNamePointers() const;
+   inline void SetStripFlag(G4bool);
    inline void SetOverlapCheck(G4bool);
    inline void Clear();                  // Clears the evaluator
 
@@ -134,7 +135,7 @@ class G4GDMLParser
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
    G4GDMLMessenger* messenger;
-   G4bool urcode, uwcode;
+   G4bool urcode, uwcode, strip;
 
 };
 

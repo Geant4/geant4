@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLRead.hh,v 1.32 2010-10-25 10:15:41 witoldp Exp $
+// $Id: G4GDMLRead.hh,v 1.33 2010-11-17 10:47:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4GDMLRead
@@ -114,7 +114,8 @@ class G4GDMLRead
      //
      // More pure virtual methods implemented in the reader plugin.
 
-   void Read(const G4String&, G4bool validation, G4bool isModule);
+   void Read(const G4String&, G4bool validation,
+             G4bool isModule, G4bool strip=true);
      //
      // Main method for reading GDML files.
 
