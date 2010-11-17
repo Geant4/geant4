@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaDeexcitation.hh,v 1.8 2010-04-28 14:22:40 vnivanch Exp $
+// $Id: G4VGammaDeexcitation.hh,v 1.9 2010-11-17 16:50:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@
 //
 
 #ifndef G4VGAMMADEEXCITATION_HH
-#define G4VGAMMADEEXCITATION_HH
+#define G4VGAMMADEEXCITATION_HH 1
 
 #include "globals.hh"
 #include "G4VGammaTransition.hh"
@@ -97,11 +97,11 @@ public:
 
   inline void Initialize();
 
-  void SetEO(G4ElectronOccupancy eo) { _electronO = eo; };
-  void SetVaccantSN( G4int val ) { _vSN = val;};
+  inline void SetEO(G4ElectronOccupancy eo) { _electronO = eo; };
+  inline void SetVaccantSN( G4int val ) { _vSN = val;};
   
-  G4ElectronOccupancy GetEO() { return _electronO; };    
-  G4int GetVacantSN() {return _vSN;};
+  inline G4ElectronOccupancy GetEO() { return _electronO; };    
+  inline G4int GetVacantSN() {return _vSN;};
 
 protected:
 

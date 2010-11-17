@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.cc,v 1.13 2010-10-10 23:01:39 mkelsey Exp $
+// $Id: G4NuclearLevelManager.cc,v 1.14 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -62,7 +64,7 @@ G4NuclearLevelManager::G4NuclearLevelManager():
     _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
 { }
 
-G4NuclearLevelManager::G4NuclearLevelManager(const G4int Z, const G4int A, const G4String& filename) :
+G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A, const G4String& filename) :
     _nucleusA(A), _nucleusZ(Z), _fileName(filename), _validity(false), 
     _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
 { 
@@ -77,7 +79,7 @@ G4NuclearLevelManager::~G4NuclearLevelManager()
   ClearLevels();
 }
 
-void G4NuclearLevelManager::SetNucleus(const G4int Z, const G4int A, const G4String& filename)
+void G4NuclearLevelManager::SetNucleus(G4int Z, G4int A, const G4String& filename)
 {
   if (A <= 0 || Z <= 0 || Z > A )
     throw G4HadronicException(__FILE__, __LINE__, "==== G4NuclearLevelManager ==== (Z,A) <0, or Z>A");
@@ -91,14 +93,15 @@ void G4NuclearLevelManager::SetNucleus(const G4int Z, const G4int A, const G4Str
     }
 }
 
-const G4NuclearLevel* G4NuclearLevelManager::GetLevel(int i) const {
+const G4NuclearLevel* G4NuclearLevelManager::GetLevel(G4int i) const {
   return (i>=0 && i<NumberOfLevels()) ? (*_levels)[i] : 0;
 }
 
 
 const G4NuclearLevel* 
-G4NuclearLevelManager::NearestLevel(const G4double energy, 
-				    const G4double eDiffMax) const {
+G4NuclearLevelManager::NearestLevel(G4double energy, 
+				    G4double eDiffMax) const 
+{
   if (NumberOfLevels() <= 0) return 0;
 
   G4int iNear = -1;
@@ -143,7 +146,8 @@ const G4NuclearLevel* G4NuclearLevelManager::LowestLevel() const
 }
 
 
-G4bool G4NuclearLevelManager::Read(std::ifstream& dataFile) {
+G4bool G4NuclearLevelManager::Read(std::ifstream& dataFile) 
+{
   G4bool goodRead = ReadDataLine(dataFile);
   
   if (goodRead) ProcessDataLine();
@@ -186,15 +190,16 @@ G4bool G4NuclearLevelManager::ReadDataLine(std::ifstream& dataFile) {
 }
 
 G4bool 
-G4NuclearLevelManager::ReadDataItem(std::istream& dataFile, G4double& x) {
+G4NuclearLevelManager::ReadDataItem(std::istream& dataFile, G4double& x) 
+{
   G4bool okay = (dataFile >> buffer);		// Get next token
   if (okay) x = strtod(buffer, NULL);
 
   return okay;
 }
 
-
-void G4NuclearLevelManager::ProcessDataLine() {
+void G4NuclearLevelManager::ProcessDataLine() 
+{
   const G4double minProbability = 1e-8;
   
   // Assign units for dimensional quantities
@@ -258,7 +263,6 @@ void G4NuclearLevelManager::ClearLevels()
   _levels = 0;
 }
 
-
 void G4NuclearLevelManager::MakeLevels()
 {
   _validity = false;
@@ -303,7 +307,8 @@ void G4NuclearLevelManager::MakeLevels()
 }
 
 G4NuclearLevel* 
-G4NuclearLevelManager::UseLevelOrMakeNew(G4NuclearLevel* level) {
+G4NuclearLevelManager::UseLevelOrMakeNew(G4NuclearLevel* level) 
+{
   if (level && _levelEnergy == level->Energy()) return level;	// No change
 
   if (level) FinishLevel(level);	// Save what we have up to now
@@ -312,7 +317,8 @@ G4NuclearLevelManager::UseLevelOrMakeNew(G4NuclearLevel* level) {
   return new G4NuclearLevel(_levelEnergy, _halfLife, _angularMomentum);
 }
 
-void G4NuclearLevelManager::AddDataToLevel(G4NuclearLevel* level) {
+void G4NuclearLevelManager::AddDataToLevel(G4NuclearLevel* level) 
+{
   if (!level) return;		// Sanity check
 
   level->_energies.push_back(_gammaEnergy);
@@ -331,7 +337,8 @@ void G4NuclearLevelManager::AddDataToLevel(G4NuclearLevel* level) {
   level->_totalCC.push_back(_totalCC);
 }
 
-void G4NuclearLevelManager::FinishLevel(G4NuclearLevel* level) {
+void G4NuclearLevelManager::FinishLevel(G4NuclearLevel* level) 
+{
   if (!level || !_levels) return;		// Sanity check
 
   level->Finalize();
@@ -352,7 +359,6 @@ void G4NuclearLevelManager::PrintAll()
   for (G4int i=0; i<nLevels; i++)
     GetLevel(i)->PrintAll();
 }
-
 
 G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 {

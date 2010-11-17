@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevel.hh,v 1.5 2010-10-29 17:35:04 vnivanch Exp $
+// $Id: G4NuclearLevel.hh,v 1.6 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //

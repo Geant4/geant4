@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh,v 1.7 2010-05-11 11:22:14 vnivanch Exp $
+// $Id: G4PhotonEvaporation.hh,v 1.8 2010-11-17 16:50:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@
 // -------------------------------------------------------------------
 
 #ifndef G4PHOTONEVAPORATION_HH
-#define G4PHOTONEVAPORATION_HH
+#define G4PHOTONEVAPORATION_HH 1
 
 #include "globals.hh"
 #include "G4VEvaporationChannel.hh"

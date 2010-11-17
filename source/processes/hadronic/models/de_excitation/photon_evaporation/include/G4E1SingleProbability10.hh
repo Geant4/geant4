@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4E1SingleProbability10.hh,v 1.3 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 
@@ -39,16 +41,14 @@ class G4E1SingleProbability10 : public G4VEmissionProbability
 
 public:
 
-  G4E1SingleProbability10() {};
+  G4E1SingleProbability10();
 
   ~G4E1SingleProbability10();
 
-  G4double EmissionProbability(const G4Fragment& frag, const G4double excite);
-  G4double EmissionProbDensity(const G4Fragment& frag, const G4double ePhoton);
+  G4double EmissionProbability(const G4Fragment& frag, G4double excite);
+  G4double EmissionProbDensity(const G4Fragment& frag, G4double ePhoton);
 
 private:
-
-  // G4E1SingleProbability10() {};
 
   G4E1SingleProbability10(const G4E1SingleProbability10& right);
 
@@ -59,11 +59,9 @@ private:
 
   // Integrator (simple Gaussian quadrature)
 
-  G4double EmissionIntegration(const G4Fragment& frag, const G4double excite,
-                               const G4double lowLim, const G4double upLim,
-                               const G4int numIters);
-
-  // G4VLevelDensityParameter* _levelDensity; // Don't need this
+  G4double EmissionIntegration(const G4Fragment& frag, G4double excite,
+                               G4double lowLim, G4double upLim,
+                               G4int numIters);
 
 };
 

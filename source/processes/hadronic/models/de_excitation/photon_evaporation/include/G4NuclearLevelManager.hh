@@ -23,7 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelManager.hh,v 1.5 2010-10-10 23:01:39 mkelsey Exp $
+// $Id: G4NuclearLevelManager.hh,v 1.6 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
@@ -50,7 +52,7 @@
 // -------------------------------------------------------------------
 
 #ifndef G4NUCLEARLEVELMANAGER_HH
-#define G4NUCLEARLEVELMANAGER_HH
+#define G4NUCLEARLEVELMANAGER_HH 1
 
 #include "globals.hh"
 #include "G4PtrLevelVector.hh"
@@ -65,21 +67,21 @@ class G4NuclearLevelManager
 public:
 
   G4NuclearLevelManager();
-  G4NuclearLevelManager(const G4int Z, const G4int A, const G4String& filename);
+  G4NuclearLevelManager(G4int Z, G4int A, const G4String& filename);
   G4NuclearLevelManager(const G4NuclearLevelManager & right);  
 
   ~G4NuclearLevelManager();
   
-  void SetNucleus(const G4int Z, const G4int A, const G4String& filename);
+  void SetNucleus(G4int Z, G4int A, const G4String& filename);
 
-  G4bool IsValid() const { return _validity; }
+  inline G4bool IsValid() const { return _validity; }
 
-  G4int NumberOfLevels() const { return (_levels ? _levels->size() : 0); }
+  inline G4int NumberOfLevels() const { return (_levels ? _levels->size() : 0); }
 
   const G4NuclearLevel* GetLevel(G4int i) const;
 
-  const G4NuclearLevel* NearestLevel(const G4double energy,
-				     const G4double eDiffMax=9999.*GeV) const;
+  const G4NuclearLevel* NearestLevel(G4double energy,
+				     G4double eDiffMax=9999.*GeV) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;

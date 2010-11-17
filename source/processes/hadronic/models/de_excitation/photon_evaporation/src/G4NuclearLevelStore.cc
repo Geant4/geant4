@@ -23,78 +23,85 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearLevelStore.cc,v 1.4 2010-10-07 07:50:13 mkelsey Exp $
+// $Id: G4NuclearLevelStore.cc,v 1.5 2010-11-17 16:50:53 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 20101006  M. Kelsey -- Drop static data members.
+// 06-10-2010 M. Kelsey -- Drop static data members.
+// 17-11-2010 V. Ivanchenko - make as a classical singleton. 
 
 #include "G4NuclearLevelStore.hh"
 #include <sstream>
 
+G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
+
 G4NuclearLevelStore* G4NuclearLevelStore::GetInstance()
 {
-  static G4NuclearLevelStore theInstance;
-  return &theInstance;
+  if(!theInstance) {
+    static G4NuclearLevelStore store;
+    theInstance = &store;
+  }
+  return theInstance;
 }
 
 G4NuclearLevelStore::G4NuclearLevelStore()
 {
-    char* env = getenv("G4LEVELGAMMADATA");
-    if (env == 0) 
+  char* env = getenv("G4LEVELGAMMADATA");
+  if (env == 0) 
     {
-	G4cout << "G4NuclarLevelStore: please set the G4LEVELGAMMADATA environment variable\n";
-	dirName = "";
+      G4cout << "G4NuclarLevelStore: please set the G4LEVELGAMMADATA environment variable\n";
+      dirName = "";
     }
-    else
+  else
     {
-	dirName = env;
-	dirName += '/';
+      dirName = env;
+      dirName += '/';
     }
 }
-
 
 G4NuclearLevelStore::~G4NuclearLevelStore()
 {
-    ManagersMap::iterator i;
-    for (i = theManagers.begin(); i != theManagers.end(); ++i)
-      delete i->second;
+  ManagersMap::iterator i;
+  for (i = theManagers.begin(); i != theManagers.end(); ++i)
+    delete i->second;
 }
 
 G4String 
-G4NuclearLevelStore::GenerateFilename(const G4int Z, const G4int A) const {
-    std::ostringstream streamName; 
-    streamName << 'z' << Z << ".a" << A;
-    G4String name(streamName.str());
-    return name;
+G4NuclearLevelStore::GenerateFilename(G4int Z, G4int A) const 
+{
+  std::ostringstream streamName; 
+  streamName << 'z' << Z << ".a" << A;
+  G4String name(streamName.str());
+  return name;
 }
 
-
 G4NuclearLevelManager* 
-G4NuclearLevelStore::GetManager(const G4int Z, const G4int A) {
-    G4NuclearLevelManager * result = 0; 
-    if (A < 1 || Z < 1 || A < Z)
+G4NuclearLevelStore::GetManager(G4int Z, G4int A) 
+{
+  G4NuclearLevelManager * result = 0; 
+  if (A < 1 || Z < 1 || A < Z)
     {
 	G4cerr << "G4NuclearLevelStore::GetManager: Wrong values Z = " << Z 
 	       << " A = " << A << '\n';
 	return result;
     }
 
-    // Generate the key = filename
-    G4int key = GenerateKey(Z,A);
+  // Generate the key = filename
+  G4int key = GenerateKey(Z,A);
     
-    // Check if already exists that key
-    ManagersMap::iterator idx = theManagers.find(key);
-    // If doesn't exists then create it
-    if ( idx == theManagers.end() )
+  // Check if already exists that key
+  ManagersMap::iterator idx = theManagers.find(key);
+  // If doesn't exists then create it
+  if ( idx == theManagers.end() )
     {
-        G4String file = GenerateFilename(Z,A);
-        result = new G4NuclearLevelManager(Z,A,dirName + file);
-        theManagers.insert(std::make_pair(key,result));
+      G4String file = GenerateFilename(Z,A);
+      result = new G4NuclearLevelManager(Z,A,dirName + file);
+      theManagers.insert(std::make_pair(key,result));
     }
-    // But if it exists...
-    else
+  // But if it exists...
+  else
     {
-	result = idx->second;
+      result = idx->second;
     }
     
-    return result; 
+  return result; 
 }
