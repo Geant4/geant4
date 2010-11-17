@@ -157,10 +157,11 @@ void exrdmAnalysisManager::EndOfRun(G4int nevent)
 	outfile << "Z \tA \tE \tActivity (decays/window) "<< G4endl;
 	map<G4ThreeVector,G4double> *aMap = theTables[i]->GetTheMap();
 	map<G4ThreeVector,G4double>::iterator iter;
-	for(iter=aMap->begin(); iter != aMap->end(); iter++)
-	  rate =  iter->second;
-	if ( rate < 0.) rate = 0.; // statically it can be < 0. but it's unphysical
-	outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"<< iter->first.z() << "\t" << rate/nevent << G4endl;
+	for(iter=aMap->begin(); iter != aMap->end(); iter++) {
+	  rate = iter->second;
+	  if ( rate < 0.) rate = 0.; // statically it can be < 0. but it's unphysical
+	  outfile << iter->first.x() <<"\t"<< iter->first.y() <<"\t"<< iter->first.z() << "\t" << rate/nevent << G4endl;
+	}
 	outfile << G4endl;
       }
       outfile.close();
