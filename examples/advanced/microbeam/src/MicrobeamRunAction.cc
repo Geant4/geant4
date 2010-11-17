@@ -24,10 +24,9 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamRunAction.cc,v 1.7 2010-10-07 14:03:11 sincerti Exp $
+// $Id: MicrobeamRunAction.cc,v 1.8 2010-11-17 20:37:42 allison Exp $
 // -------------------------------------------------------------------
 
-#include "G4VVisManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -92,9 +91,6 @@ void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 
 void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
 {     
-  //drawing
-  if (G4VVisManager::GetConcreteInstance()) G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-       
   // save Rndm status
   if (saveRndm == 1)
   { 
