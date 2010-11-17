@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNeutron.cc,v 1.6 2010-11-02 11:27:27 vnivanch Exp $
+// $Id: G4PreCompoundNeutron.cc,v 1.7 2010-11-17 11:06:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,7 +108,7 @@ G4double G4PreCompoundNeutron::GetBeta()
   return (2.12/(ResidualAthrd*ResidualAthrd)-0.05)*MeV/GetAlpha();
 }
 
-//********************* OPT=1,2 : Chatterjee's cross section *******************
+//********************* OPT=1,2 : Chatterjee's cross section ***************
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
 G4double G4PreCompoundNeutron::GetOpt12(G4double K)
@@ -120,27 +120,27 @@ G4double G4PreCompoundNeutron::GetOpt12(G4double K)
   // JMQ  xsec is set constat above limit of validity
   if (K > 50*MeV) { Kc = 50*MeV; }
 
- G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
+  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
 
- landa0 = 18.57;
- landa1 = -22.93;
- mu0 = 381.7;
- mu1 = 24.31;
- nu0 = 0.172;
- nu1 = -15.39;
- nu2 = 804.8;
- landa = landa0/ResidualAthrd + landa1;
- mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
- nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
- xs=landa*Kc + mu + nu/Kc;
- if (xs <= 0.0 ){
-   std::ostringstream errOs;
-   G4cout<<"WARNING:  NEGATIVE OPT=1 neutron cross section "<<G4endl;     
-   errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
-   errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
-   throw G4HadronicException(__FILE__, __LINE__, errOs.str());
+  landa0 = 18.57;
+  landa1 = -22.93;
+  mu0 = 381.7;
+  mu1 = 24.31;
+  nu0 = 0.172;
+  nu1 = -15.39;
+  nu2 = 804.8;
+  landa = landa0/ResidualAthrd + landa1;
+  mu = mu0*ResidualAthrd + mu1*ResidualAthrd*ResidualAthrd;
+  nu = nu0*ResidualAthrd*ResidualA + nu1*ResidualAthrd*ResidualAthrd + nu2 ;
+  xs=landa*Kc + mu + nu/Kc;
+  if (xs <= 0.0 ){
+    std::ostringstream errOs;
+    G4cout<<"WARNING:  NEGATIVE OPT=1 neutron cross section "<<G4endl;     
+    errOs << "RESIDUAL: Ar=" << ResidualA << " Zr=" << ResidualZ <<G4endl;
+    errOs <<"  xsec("<<Kc<<" MeV) ="<<xs <<G4endl;
+    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
               }
- return xs;
+  return xs;
 }
 
 // *********** OPT=3,4 : Kalbach's cross sections (from PRECO code)*************
@@ -207,7 +207,7 @@ G4double G4PreCompoundNeutron::GetOpt34(G4double K)
   elab = K * FragmentA / G4double(ResidualA);
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
-    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; }                
+    if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; } 
   }              //end for E<Ec
   else {           //start for  E>Ec
     sig = (landa*elab+mu+nu/elab) * signor;

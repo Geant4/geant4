@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundHe3.cc,v 1.8 2010-11-02 11:27:27 vnivanch Exp $
+// $Id: G4PreCompoundHe3.cc,v 1.9 2010-11-17 11:06:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -222,7 +222,7 @@ G4double G4PreCompoundHe3::GetOpt34(const  G4double K)
   // to 0 bellow minimum
   //  if (cut < 0.) ecut2 = ecut - 2.;
   if (cut < 0.) { ecut2 = ecut; }
-  elab = K * FragmentA / ResidualA;
+  elab = K * FragmentA /G4double(ResidualA);
   sig = 0.;
   
   if (elab <= ec) { //start for E<Ec

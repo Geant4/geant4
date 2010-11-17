@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundProton.cc,v 1.7 2010-11-02 11:27:27 vnivanch Exp $
+// $Id: G4PreCompoundProton.cc,v 1.8 2010-11-17 11:06:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -187,12 +187,12 @@ G4double G4PreCompoundProton::GetOpt2(G4double K)
   xine_th= 1.e+31*fac*fac2*(1.+ResidualAthrd-fac1);
   xine_th=(1.-0.15*std::exp(-ekin))*xine_th/(1.00-0.0007*ResidualA);	
   ff1=0.70-0.0020*ResidualA;
-  ff2=1.00+1/ResidualA;
-  ff3=0.8+18/ResidualA-0.002*ResidualA;
+  ff2=1.00+1/G4double(ResidualA);
+  ff3=0.8+18/G4double(ResidualA)-0.002*ResidualA;
   fac=1.-(1./(1.+std::exp(-8.*ff1*(std::log10(ekin)+1.37*ff2))));
   xine_th=xine_th*(1.+ff3*fac);
-  ff1=1.-1/ResidualA-0.001*ResidualA;
-  ff2=1.17-2.7/ResidualA-0.0014*ResidualA;
+  ff1=1.-1/G4double(ResidualA)-0.001*ResidualA;
+  ff2=1.17-2.7/G4double(ResidualA)-0.0014*ResidualA;
   fac=-8.*ff1*(std::log10(ekin)+2.0*ff2);
   fac=1./(1.+std::exp(fac));
   xine_th=xine_th*fac;            
@@ -238,8 +238,8 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   G4double	flow = 1.e-18;
   G4double       spill= 1.e+18; 
    
-  if (ResidualA <= 60.)  { signor = 0.92; }
-  else if (ResidualA < 100.) { signor = 0.8 + ResidualA*0.002; }
+  if (ResidualA <= 60)      { signor = 0.92; }
+  else if (ResidualA < 100) { signor = 0.8 + ResidualA*0.002; }
   
   ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
   ecsq = ec * ec;
@@ -268,7 +268,7 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   // to 0 bellow minimum
   //  if (cut < 0.) ecut2 = ecut - 2.;
   if (cut < 0.) { ecut2 = ecut; }
-  elab = K * FragmentA / ResidualA;
+  elab = K * FragmentA /G4double(ResidualA);
   sig = 0.;
   if (elab <= ec) { //start for E<Ec 
     if (elab > ecut2) { sig = (p*elab*elab+a*elab+b) * signor; }
