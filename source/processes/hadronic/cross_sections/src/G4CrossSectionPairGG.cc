@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc,v 1.3 2010-11-17 15:40:18 gunter Exp $
+// $Id: G4CrossSectionPairGG.cc,v 1.4 2010-11-17 16:52:10 gunter Exp $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -108,7 +108,7 @@ G4double G4CrossSectionPairGG::GetZandACrossSection(const G4DynamicParticle* aPa
     std::vector<ParticleXScale>::iterator iter;
     iter=scale_factors.begin();
     G4ParticleDefinition * pDef=aParticle->GetDefinition();
-    while ( iter !=scale_factors.end() && (*iter).first != pDef ) {}
+    while ( iter !=scale_factors.end() && (*iter).first != pDef ) {++iter;}
     
     
     G4double Ekin=aParticle->GetKineticEnergy();
@@ -139,7 +139,7 @@ void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef)
     G4ParticleDefinition * myDef=const_cast<G4ParticleDefinition*>(&pDef);
     std::vector<ParticleXScale>::iterator iter;
     iter=scale_factors.begin();
-    while ( iter !=scale_factors.end() && *(*iter).first != pDef ) {}
+    while ( iter !=scale_factors.end() && (*iter).first != myDef ) {++iter;}
 
     //  new particle, initialise
     
