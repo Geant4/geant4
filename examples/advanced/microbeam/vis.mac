@@ -24,6 +24,9 @@
 # Specify viewpoint:
 /vis/viewer/set/viewpointVector 400 0 105.79
 #
+# Specify target point (so a viewpoint rotation keeps it in view)
+/vis/viewer/set/targetPoint -1461.42 0.0 -386.51 mm
+#
 # Specify zoom value:
 /vis/viewer/zoom 2000000.
 #
