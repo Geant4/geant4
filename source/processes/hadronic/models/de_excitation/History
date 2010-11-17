@@ -16,7 +16,7 @@ code and to keep track of all tags.
 
 17 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-24)
 ----------------------------------------------------------
-- photon_evaporation - integer Z and A, constructors
+- photon_evaporation, fission - integer Z and A, constructors
    moved to src, usage of G4Pow, general cleanup
 - G4ContinuumGammaTransition - use exponential law for sampling of 
                                decay time
