@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.14 2010-11-17 12:14:59 vnivanch Exp $
+// $Id: G4EvaporationChannel.cc,v 1.15 2010-11-17 12:19:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -31,11 +31,13 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-// Modif (03 September 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
-// JMQ (06 September 2008) Also external choices have been added for 
-// superimposed Coulomb barrier (if useSICB is set true, by default is false) 
-
+// Modified:
+// 03-09-2008 J.M. Quesada for external choice of inverse cross section option
+// 06-09-2008 J.M. Quesada Also external choices have been added for superimposed 
+//                 Coulomb barrier (if useSICB is set true, by default is false) 
+// 17-11-2010 V.Ivanchenko in constructor replace G4VEmissionProbability by 
+//            G4EvaporationProbability and do not new and delete probability
+//            object at each call; use G4Pow
 
 #include "G4EvaporationChannel.hh"
 #include "G4PairingCorrection.hh"
@@ -43,7 +45,6 @@
 #include "G4Pow.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "Randomize.hh"
-
 
 G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ, 
 					   const G4String & aName,

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.hh,v 1.10 2010-11-17 12:14:59 vnivanch Exp $
+// $Id: G4EvaporationChannel.hh,v 1.11 2010-11-17 12:19:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,7 +32,9 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+// 17-11-2010 V.Ivanchenko in constructor replace G4VEmissionProbability by 
+//            G4EvaporationProbability and do not new and delete probability
+//            object at each call; use G4Pow
 
 #ifndef G4EvaporationChannel_h
 #define G4EvaporationChannel_h 1
