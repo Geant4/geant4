@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: load_gdml.cc,v 1.12 2010-10-18 14:55:55 witoldp Exp $
+// $Id: load_gdml.cc,v 1.13 2010-11-17 10:55:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,6 +70,10 @@ int main(int argc,char **argv)
    }
 
    G4GDMLParser parser;
+
+// Uncomment the following if wish to avoid names stripping
+// parser.SetStripFlag(false);
+
    parser.Read(argv[1]);
    
    if (argc>4)
