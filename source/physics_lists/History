@@ -1,4 +1,4 @@
-q$Id: History,v 1.160 2010-11-10 19:29:33 vnivanch Exp $
+q$Id: History,v 1.161 2010-11-17 17:12:33 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-11-2010, G.Folger                    (phys-lists-V09-03-37)
+- in builders G4QGSP{Proton, Neutron,Pik}Builder, use crosssection with
+   relativistic rise, using a combination of previously used cross section 
+   and G4GlauberGribovCrossSection above 91 GeV.
 
 10-11-2010, V.Ivanchenko                (phys-lists-V09-03-36)
 - G4EmStandardPhysics_option2 - added BS angular generator for
