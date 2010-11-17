@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc,v 1.2 2010-11-17 15:36:31 gunter Exp $
+// $Id: G4CrossSectionPairGG.cc,v 1.3 2010-11-17 15:40:18 gunter Exp $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -48,7 +48,7 @@ G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet * low,
 	ETransition(Etransit)		    
 {
     theHighX=new G4GlauberGribovCrossSection();
-    verboseLevel=2;
+    verboseLevel=0;
 }
 
 G4CrossSectionPairGG::~G4CrossSectionPairGG()
