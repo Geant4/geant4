@@ -53,41 +53,42 @@
 #include "G4Timer.hh"
 	
 
-#include "G4UIterminal.hh"
-#ifdef G4UI_USE_XM
-	#include "G4UIXm.hh"
-#endif
 #ifdef G4VIS_USE
 	#include "G4VisExecutive.hh"
 #endif
 
+#ifdef G4UI_USE
+	#include "G4UIExecutive.hh"
+#endif
 
 
-void visio()
+
+void visio(int argc, char* argv[])
 {
-	G4UIsession *session=0;
-	session=new G4UIterminal();
-	#ifdef G4VIS_USE
-		G4VisManager * visManager=new G4VisExecutive;
-		visManager->Initialize();
-	#endif
-		G4UImanager *UI=G4UImanager::GetUIpointer();
-		if (session)
-		{
-			UI->ApplyCommand("/control/execute vis.mac");
-			session->SessionStart();
-			delete session;
-		}
+#ifdef G4VIS_USE
+        G4VisManager * visManager=new G4VisExecutive;
+	visManager->Initialize();
+#endif
+
+	G4UImanager *UImanager=G4UImanager::GetUIpointer();
+#ifdef G4UI_USE
+	G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+	UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+	ui->SessionStart();
+	delete ui;
+#endif
 
 #ifdef G4VIS_USE
- delete visManager;
+  delete visManager;
 #endif
 }
 
 
 int main(int argc, char* argv[])
 {
-	CML2CInputData *myInputData;
+        CML2CInputData *myInputData;
 	myInputData=new CML2CInputData();
 	if (argc==1)
 	{
@@ -116,9 +117,9 @@ int main(int argc, char* argv[])
 		CML2PrimaryGenerationAction *gun;
 		gun = new CML2PrimaryGenerationAction(&myInputData->inputData.primaryParticleData);
 
-		G4UImanager* UI = G4UImanager::GetUIpointer();
+		G4UImanager* UImanager = G4UImanager::GetUIpointer();
 		G4String command = "/control/execute ";
-		UI->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData); 
+		UImanager->ApplyCommand(command+myInputData->inputData.generalData.StartFileInputData); 
 // initialize the primary generator according to the choosen particle source
 		gun->design();
 
@@ -148,7 +149,7 @@ int main(int argc, char* argv[])
 		G4bool bAgain=true;
 		if (myInputData->bOnlyVisio)
 		{
-			visio();
+		  visio(argc, argv);
 		}
 		else
 		{
