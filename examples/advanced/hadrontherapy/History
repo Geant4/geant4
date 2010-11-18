@@ -8,6 +8,11 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+18.11.2010 S.E.Mazzaglia; Tag: hadrontherapy-V09-03-12
+	   - Updated Matrix class
+	   - Changed the macro command name to store secondary particles to: /analysis/secondary <true/false>
+	   - Added a macro command to store dose between runs: /analysis/writeDoseFile <filename>
+
 18.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-11
 	   - Removed redundant macro files
 	   - Improved physics class
@@ -60,7 +65,7 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 	   - Added a command to set cuts just only in the detector: /physic/setDetectorCuts
 	   - Added the possibility to store dose & fluence for all secondary particles
 	     produced in the same ASCII file. This feature can be switched on by the macro
-	     command: /analysis/secondary true/false.
+	     command: /analysis/secondaries true/false.
 	     
 
 16.12.2009 S.E.Mazzaglia; Tag: hadrontherapy-V09-02-42
