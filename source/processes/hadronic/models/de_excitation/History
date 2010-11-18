@@ -17,13 +17,13 @@ code and to keep track of all tags.
 18 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-25)
 ----------------------------------------------------------
 G4GEMChannel - cleanup: integer Z,A; G4Pow; use the same formulas as in
-  G4GEMEmmision probability class 
+  G4GEMProbability class 
 
 17 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-24)
 ----------------------------------------------------------
 - photon_evaporation, fission - integer Z and A, constructors
    moved to src, usage of G4Pow, general cleanup
-- G4ContinuumGammaTransition - use exponential law for sampling of 
+- G4ContiniumGammaTransition - use exponential law for sampling of 
                                decay time
 - removed unused classes: G4DummyProbability, G4E1ProbabilityXXX,
   G4E1SingleProbabilityXXX, where XXX=001,01,1,10,100 - these classes
