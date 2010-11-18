@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc,v 1.16 2010-11-17 12:30:13 vnivanch Exp $
+// $Id: G4EvaporationChannel.cc,v 1.17 2010-11-18 10:21:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //J.M. Quesada (August2008). Based on:
@@ -96,7 +96,8 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
   G4int FragmentZ = fragment.GetZ_asInt();
   ResidualA = FragmentA - theA;
   ResidualZ = FragmentZ - theZ;
-  ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
+  //G4cout << "G4EvaporationChannel::Initialize Z= " << theZ << " A= " << theA 
+  //	 << " FragZ= " << FragmentZ << " FragA= " << FragmentA << G4endl;
   
   //Effective excitation energy
   G4double ExEnergy = fragment.GetExcitationEnergy() - 
@@ -105,10 +106,11 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
   // Only channels which are physically allowed are taken into account 
   if (ResidualA <= 0 || ResidualZ <= 0 || ResidualA < ResidualZ ||
       (ResidualA == ResidualZ && ResidualA > 1) || ExEnergy <= 0.0) {
-    CoulombBarrier=0.0;
+    CoulombBarrier=ResidualMass =0.0;
     MaximalKineticEnergy = -1000.0*MeV;
     EmissionProbability = 0.0;
   } else {
+    ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
     CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
     // Maximal Kinetic Energy
     MaximalKineticEnergy = CalcMaximalKineticEnergy(fragment.GetGroundStateMass()+ExEnergy);
@@ -133,6 +135,7 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
         EmissionProbability(fragment, MaximalKineticEnergy);
     }
   }
+  //G4cout << "G4EvaporationChannel:: probability= " << EmissionProbability << G4endl; 
   
   return;
 }
