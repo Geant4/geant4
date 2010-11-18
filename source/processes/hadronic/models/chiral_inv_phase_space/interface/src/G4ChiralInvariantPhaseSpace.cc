@@ -71,8 +71,8 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
 				  ->GetPDGEncoding();
   
   //target properties needed in constructor of quasmon
-  G4int targetZ = G4int(aTargetNucleus.GetZ()+0.5);
-  G4int targetA = G4int(aTargetNucleus.GetN()+0.5);
+  G4int targetZ = aTargetNucleus.GetZ_asInt();
+  G4int targetA = aTargetNucleus.GetA_asInt();
   G4int targetPDGCode = 90000000 + 1000*targetZ + (targetA-targetZ);
   // NOT NECESSARY ______________
   G4double targetMass = G4ParticleTable::GetParticleTable()->GetIonTable()
