@@ -7,6 +7,15 @@
   <argument name="timeout">
     <integer>3000</integer>
   </argument>
+  <argument name="stderr">
+    <text>Warning : Region &lt;TrackerRegion&gt; does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region &lt;CalorimeterRegion&gt; does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.</text>
+  </argument>
+  <argument name="resources">
   <argument name="stdout">
     <text/>
   </argument>
@@ -26,9 +35,6 @@
   </argument>
   <argument name="command">
     <text>cd $G4INSTALL/examples/extended/runAndEvent/RE01;$G4BIN/$G4SYSTEM/RE01 sample.in</text>
-  </argument>
-  <argument name="stderr">
-    <text/>
   </argument>
   <argument name="resources">
     <set/>
