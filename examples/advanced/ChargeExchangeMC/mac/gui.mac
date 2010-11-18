@@ -1,0 +1,15 @@
+/gui/addMenu run Run
+/gui/addButton run "Collect all events" "/control/execute mac/setup_all_events.mac"
+/gui/addButton run "Collect interaction events" "/control/execute mac/setup_interaction_events.mac"
+/gui/addButton run "Collect trigger events" "/control/execute mac/setup_trigger_events.mac"
+/gui/addButton run "Run 1 event" "/run/beamOn 1"
+/gui/addButton run "Run 5 events" "/run/beamOn 5"
+/gui/addButton run "Run 10 events" "/run/beamOn 10"
+/gui/addButton run "Run 100 events" "/run/beamOn 100"
+
+/gui/addMenu viewer Viewer
+/gui/addButton viewer "Draw world" "/control/execute mac/visQt.mac"
+#/gui/addButton viewer "Draw world (OI)" "/control/execute mac/visOI.mac"
+/gui/addButton viewer "Set style solid" "/vis/viewer/set/style solid"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
+/gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"

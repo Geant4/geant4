@@ -1,0 +1,41 @@
+###################################################
+# Visualization of detector geometry and events  
+###################################################
+
+/tracking/storeTrajectory 1
+/tracking/verbose 0
+
+/vis/scene/create
+/vis/scene/add/volume WorldVisible
+
+# Create a scene handler for a specific graphics system
+/vis/open OIX 600x600-0+0
+
+# draw scene
+/vis/viewer/zoom 1.4
+/vis/viewer/set/viewpointThetaPhi 90 90 deg
+/vis/viewer/set/style wireframe
+/vis/viewer/set/hiddenMarker false
+
+/vis/geometry/set/visibility all -1 true
+/vis/geometry/set/colour vMonitor -1 0.4 1.0 0.6
+/vis/geometry/set/colour vMonitorBack -1 0.4 1.0 0.6
+/vis/geometry/set/colour vTargetInnerCover -1 0.4 1.0 0.6
+
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/select drawByParticleID-0
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA gamma 0.8 0.8 1.0 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA neutron 0.5 0.5 0.2 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA pi- 1.0 0.0 0.0 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA e- 0.3 0.3 0.8 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA e+ 0.8 0.3 0.3 1
+
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+#/vis/scene/add/axes
+
+/cexmc/vis/drawTrajMarkers false
+
+/vis/viewer/flush
+
+/vis/scene/endOfEventAction accumulate 10

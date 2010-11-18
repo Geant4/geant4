@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+use Getopt::Std;
+
+our  $PreinitMacroDef = "preinit.mac";
+our  $InitMacroDef = "init.mac";
+our  $OverrideOpt = "";
+
+sub  PrintUsage
+{
+    print "Usage: [-p preinit_macro] [-m init_macro] job_id\n";
+    print "\tDefault preinit_macro is '$PreinitMacroDef', ";
+    print "init_macro is '$InitMacroDef'\n";
+    print "\tUse '-y' to override existing project\n";
+}
+
+sub VERSION_MESSAGE
+{
+    PrintUsage;
+    exit 0;
+}
+
+getopts( "m:p:y" );
+
+unless ( $ARGV[ 0 ] )
+{
+    PrintUsage;
+    exit 1;
+}
+
+$opt_p ||= $PreinitMacroDef;
+$opt_m ||= $InitMacroDef;
+$OverrideOpt = "-y" if $opt_y;
+
+open ( JOBFILE, "> cexmc_$ARGV[ 0 ].job" ) or die $!;
+print JOBFILE "#!/bin/sh\n";
+print JOBFILE "CEXMC_PROJECTS_DIR=" . $ENV{ 'CEXMC_PROJECTS_DIR' } . "\n";
+print JOBFILE "PATH=" . $ENV{ 'PATH' } . "\n";
+print JOBFILE "LD_LIBRARY_PATH=" . $ENV{ 'LD_LIBRARY_PATH' } . "\n";
+print JOBFILE "cexmc -p$opt_p -m$opt_m $OverrideOpt -w$ARGV[ 0 ]\n";
+
+close (JOBFILE) or die $!;

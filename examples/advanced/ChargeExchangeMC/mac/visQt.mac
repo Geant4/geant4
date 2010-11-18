@@ -1,0 +1,59 @@
+###################################################
+# Visualization of detector geometry and events  
+###################################################
+
+/tracking/storeTrajectory 1
+/tracking/verbose 0
+
+/vis/scene/create
+/vis/scene/add/volume WorldVisible
+
+# Create a scene handler for Qt OpenGL graphics
+/vis/open OGLSQt 600x600-0+0
+/vis/ogl/set/transparency true
+
+# draw scene
+/vis/viewer/zoom 2.0
+/vis/viewer/set/viewpointThetaPhi 60 45 deg
+/vis/viewer/set/style surface
+/vis/viewer/set/culling density
+/vis/viewer/set/edge true
+/vis/viewer/set/auxiliaryEdge false
+/vis/viewer/set/lightsMove cam
+/vis/viewer/set/hiddenMarker false
+
+/vis/geometry/set/forceWireframe vWorldVisible 0 true
+/vis/geometry/set/forceWireframe vCalorimeter 0 true
+/vis/geometry/set/forceWireframe vCrystalRow 0 true
+/vis/geometry/set/colour all 0 ! ! ! 0.5
+/vis/geometry/set/colour vCrystal 0 0.9 0.7 0.7 0.2
+/vis/geometry/set/colour vMonitor -1 0.4 1.0 0.6 0.2
+/vis/geometry/set/colour vVetoCounter 0 0.4 1.0 0.6 0.2
+/vis/geometry/set/colour vMonitorBack -1 0.4 1.0 0.6 0.0
+/vis/geometry/set/colour vTargetOuterCover -1 0.2 0.8 0.6 0.2
+/vis/geometry/set/colour vTarget 0 0.4 1.0 0.6 0.2
+/vis/geometry/set/colour vInnerCuprumRing 0 0.8 0.5 0.0 0.3
+/vis/geometry/set/colour vTargetColumn 0 0.8 0.7 0.7 0.5
+/vis/geometry/set/colour vTargetInnerColumn 0 0.8 0.7 0.7 0.5
+/vis/geometry/set/colour vOuterFerrumRing 0 0.8 0.7 0.7 0.5
+/vis/geometry/set/colour vInnerFerrumRing 0 0.8 0.7 0.7 0.5
+/vis/geometry/set/colour vTargetWindow 0 0.8 0.7 0.7 0.5
+/vis/geometry/set/colour vTargetWindowCap 0 0.8 0.7 0.7 0.5
+
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/select drawByParticleID-0
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA gamma 0.8 0.8 1.0 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA neutron 0.5 0.5 0.2 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA pi- 1.0 0.0 0.0 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA e- 0.3 0.3 0.8 1
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA e+ 0.8 0.3 0.3 1
+
+#/vis/scene/add/trajectories
+#/vis/scene/add/hits
+#/vis/scene/add/axes
+
+/cexmc/vis/drawTrajMarkers false
+
+/vis/viewer/flush
+
+/vis/scene/endOfEventAction accumulate 10

@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- also schema located at "/usr/local/share/GDML_3_0_0/schema/gdml.xsd -->
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+    xsi:noNamespaceSchemaLocation=
+    "http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <!-- id: 'lht.gdml', geometry of liquid hydrogen target -->
+
+    <define> 
+        <!-- all length values in cm and angles in deg! -->
+        <constant name="FullCircle" value="360.0"/>
+        <!-- we define EPSILON to struggle with Geant4 -->
+        <!-- geometry definition glitches. Use with care! -->
+        <!-- fixed in Geant 4.9.3 ? -->
+        <constant name="EPSILON" value="0.0"/>
+        <constant name="LENGTHMAKER" value="2.0"/>
+
+        <constant name="NCrystalsHor" value="6"/>
+        <constant name="NCrystalsVert" value="4"/>
+
+        <!-- sensitive detector roles; -->
+        <!-- a single logical volume may have only one detector role, -->
+        <!-- for example vMonitor may not have MonitorRole and TargetRole -->
+        <!-- simultaneously -->
+        <constant name="MonitorRole" value="0"/>
+        <constant name="VetoCounterRole" value="1"/>
+        <constant name="CalorimeterRole" value="2"/>
+        <constant name="TargetRole" value="3"/>
+
+        <!-- region types -->
+        <constant name="CalorimeterRegion" value="0"/>
+
+        <!-- special volumes -->
+        <constant name="MonitorVolume" value="0"/>
+        <constant name="VetoCounterVolume" value="1"/>
+        <constant name="CalorimeterVolume" value="2"/>
+        <constant name="TargetVolume" value="3"/>
+
+
+        <!-- these values are supposed to be changed -->
+        <constant name="MonitorPosZ" value="-34.0"/>
+        <constant name="MonitorBackPosZ" value="140.0"/>
+        <constant name="TargetRotZ" value="40.0"/>
+        <constant name="TargetColumn1Angle" value="25.0"/>
+        <constant name="TargetColumn2Angle" value="-110.0"/>
+        <constant name="TargetColumn3Angle" value="120.0"/>
+        <constant name="CalorimeterLeftDistance" value="60.0"/>
+        <constant name="CalorimeterLeftAngle" value="65.0"/>
+        <constant name="CalorimeterLeftVertShift" value="0.0"/>
+        <constant name="CalorimeterRightDistance" value="60.0"/>
+        <constant name="CalorimeterRightAngle" value="65.0"/>
+        <constant name="CalorimeterRightVertShift" value="0.0"/>
+
+
+        <!-- these values can be changed -->
+        <constant name="WorldLength" value="300.0"/>
+        <constant name="WorldHeight" value="50.0"/>
+        <constant name="WorldWidth" value="300.0"/>
+        <constant name="TargetPosX" value="0.0"/>
+        <constant name="TargetPosY" value="0.0"/>
+        <constant name="TargetPosZ" value="0.0"/>
+        <constant name="TargetRadius" value="5.0"/>
+        <constant name="TargetHeight" value="10.0"/>
+        <constant name="TargetInnerCoverThickness" value="0.01"/>
+        <constant name="TargetOuterCoverThickness" value="0.02"/>
+        <constant name="TargetOuterCoverRadius" value="15.0"/>
+        <constant name="MonitorLength" value="0.25"/>
+        <constant name="MonitorHeight" value="4.0"/>
+        <constant name="MonitorWidth" value="6.0"/>
+        <constant name="MonitorBackLength" value="2.0"/>
+        <constant name="MonitorBackHeight" value="WorldHeight"/>
+        <constant name="MonitorBackWidth" value="25.0"/>
+        <constant name="CrystalLength" value="30.0"/>
+        <constant name="CrystalHeight" value="6.0"/>
+        <constant name="CrystalWidth" value="6.0"/>
+        <constant name="CalorimeterLength" value="CrystalLength"/>
+        <constant name="CalorimeterHeight"
+            value="CrystalHeight * NCrystalsVert"/>
+        <constant name="CalorimeterWidth"
+            value="CrystalWidth * NCrystalsHor"/>
+        <constant name="VetoCounterWidth" value="CalorimeterWidth"/>
+        <constant name="VetoCounterHeight" value="25.0"/>
+        <constant name="VetoCounterThickness" value="0.5"/>
+        <constant name="TargetColumnRadius" value="0.85"/>
+        <constant name="OuterFerrumRingThickness" value="1.2"/>
+        <constant name="OuterFerrumRingHeight" value="3.0"/>
+        <constant name="OuterFerrumRingGauge" value="5.0"/>
+        <constant name="InnerFerrumRingThickness" value="1.0"/>
+        <constant name="InnerFerrumRingHeight" value="10.0"/>
+        <constant name="InnerFerrumRingGauge" value="5.0"/>
+        <constant name="InnerCuprumRingInnerRadius" value="11.6"/>
+        <constant name="InnerCuprumRingThickness" value="0.2"/>
+        <constant name="InnerCuprumRingHeight" value="5.0"/>
+        <constant name="InnerCuprumRingGauge" value="5.0"/>
+        <constant name="TargetWindowRadius" value="5.5"/>
+        <constant name="TargetWindowLength" value="7.4"/>
+        <constant name="TargetWindowHoleRadius" value="5.0"/>
+        <constant name="TargetWindowCapRadius" value="7.3"/>
+        <constant name="TargetWindowCapLength" value="2.4"/>
+        <constant name="TargetWindowEntranceOffset" value="1.2"/>
+        <constant name="TargetWindowMylarCoverLength" value="0.01"/>
+        <constant name="TargetWindowAluminiumCoverLength" value="1.39"/>
+        <constant name="TargetColumnDistance" value="18.6"/>
+        <constant name="TargetInnerColumnInnerRadius" value="0.5"/>
+        <constant name="TargetInnerColumnOuterRadius" value="1.2"/>
+        <constant name="TargetInnerColumnDistance" value="14.5"/>
+        <constant name="TargetInnerColumnAngle" value="25.7"/>
+
+        <constant name="VetoCounterDistanceToCalorimeter" value="1.0"/>
+        <constant name="VetoCounterLeftDistance"
+            value="CalorimeterLeftDistance - VetoCounterDistanceToCalorimeter"/>
+        <constant name="VetoCounterRightDistance"
+            value="CalorimeterRightDistance - VetoCounterDistanceToCalorimeter"/>
+
+        <!-- if TargetColumnsRotWithTarget is 1 then target columns -->
+        <!-- will rotate together with target, if its value is 0 -->
+        <!-- then they are rotated independently. Change with care !-->
+        <constant name="TargetColumnsRotWithTarget" value="0"/>
+
+
+        <!-- do not change values and definitions below -->
+        <constant name="TargetWindowDistanceDebugShift" value="0.0"/>
+        <constant name="TargetWindowEntranceDebugShift" value="0.0"/>
+        <constant name="TargetWindowCuttingShift" value="1.0"/>
+        <constant name="TargetWindowDistance"
+            value="TargetWindowLength/2 - TargetWindowCuttingShift + TargetOuterCoverRadius"/>
+        <constant name="TargetWindowCapDistance"
+            value="TargetWindowDistance + TargetWindowLength/2 - TargetWindowCapLength/2"/>
+        <constant name="TargetWindowDebugDistance"
+            value="TargetWindowDistance + TargetWindowDistanceDebugShift"/>
+        <constant name="TargetWindowEntranceDistance"
+            value="TargetWindowDebugDistance + TargetWindowLength/2 - TargetWindowEntranceOffset + TargetWindowEntranceDebugShift"/>
+        <constant name="TargetWindowCoverThickness"
+            value="TargetWindowMylarCoverLength + TargetWindowAluminiumCoverLength"/>
+
+        <!-- positions and rotations -->
+        <position name="MonitorPos" x="0.0" y="0.0" z="MonitorPosZ" unit="cm"/>
+        <position name="MonitorBackPos" x="0.0" y="0.0" z="MonitorBackPosZ" unit="cm"/>
+        <position name="TargetPos" x="TargetPosX" y="TargetPosY" z="TargetPosZ"
+            unit="cm"/>
+        <rotation name="TargetRot" x="90.0" y="0.0" z="-TargetRotZ" unit="deg"/>
+        <position name="CalorimeterLeftPos"
+            x="(CalorimeterLeftDistance + CalorimeterLength/2) * sin(CalorimeterLeftAngle/180*pi)"
+            y="CalorimeterLeftVertShift"
+            z="(CalorimeterLeftDistance + CalorimeterLength/2) * cos(CalorimeterLeftAngle/180*pi)"
+            unit="cm"/>
+        <rotation name="CalorimeterLeftRot" x="0.0" y="-CalorimeterLeftAngle" z="0.0" unit="deg"/>
+        <position name="CalorimeterRightPos"
+            x="- (CalorimeterRightDistance + CalorimeterLength/2) * sin(CalorimeterRightAngle/180*pi)"
+            y="CalorimeterRightVertShift"
+            z="(CalorimeterRightDistance + CalorimeterLength/2) * cos(CalorimeterRightAngle/180*pi)"
+            unit="cm"/>
+        <rotation name="CalorimeterRightRot" x="0.0" y="CalorimeterRightAngle" z="0.0" unit="deg"/>
+        <position name="VetoCounterLeftPos"
+            x="VetoCounterLeftDistance * sin(CalorimeterLeftAngle/180*pi)"
+            y="CalorimeterLeftVertShift"
+            z="VetoCounterLeftDistance * cos(CalorimeterLeftAngle/180*pi)"
+            unit="cm"/>
+        <position name="VetoCounterRightPos"
+            x="- VetoCounterRightDistance * sin(CalorimeterRightAngle/180*pi)"
+            y="CalorimeterRightVertShift"
+            z="VetoCounterRightDistance * cos(CalorimeterRightAngle/180*pi)"
+            unit="cm"/>
+        <position name="TargetColumn1Pos"
+            x="TargetPosX + TargetColumnDistance * sin((TargetColumn1Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn1Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            unit="cm"/>
+        <position name="TargetColumn2Pos"
+            x="TargetPosX + TargetColumnDistance * sin((TargetColumn2Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn2Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            unit="cm"/>
+        <position name="TargetColumn3Pos"
+            x="TargetPosX + TargetColumnDistance * sin((TargetColumn3Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ + TargetColumnDistance * cos((TargetColumn3Angle + TargetRotZ * TargetColumnsRotWithTarget)/180*pi)"
+            unit="cm"/>
+        <position name="TargetInnerColumn1Pos"
+            x="TargetInnerColumnDistance * sin(TargetInnerColumnAngle/180*pi)"
+            y="TargetInnerColumnDistance * cos(TargetInnerColumnAngle/180*pi)"
+            z="0" unit="cm"/>
+        <position name="TargetInnerColumn2Pos"
+            x="TargetInnerColumnDistance * sin(-TargetInnerColumnAngle/180*pi)"
+            y="TargetInnerColumnDistance * cos(-TargetInnerColumnAngle/180*pi)"
+            z="0" unit="cm"/>
+        <position name="OuterFerrumRingUpperPos" x="TargetPosX"
+            y="TargetPosY + OuterFerrumRingGauge + OuterFerrumRingHeight/2"
+            z="TargetPosZ" unit="cm"/>
+        <position name="OuterFerrumRingLowerPos" x="TargetPosX"
+            y="TargetPosY - OuterFerrumRingGauge - OuterFerrumRingHeight/2"
+            z="TargetPosZ" unit="cm"/>
+        <position name="InnerFerrumRingUpperPos" x="TargetPosX"
+            y="TargetPosY + InnerFerrumRingGauge + InnerFerrumRingHeight/2"
+            z="TargetPosZ" unit="cm"/>
+        <position name="InnerFerrumRingLowerPos" x="TargetPosX"
+            y="TargetPosY - InnerFerrumRingGauge - InnerFerrumRingHeight/2"
+            z="TargetPosZ" unit="cm"/>
+        <position name="InnerCuprumRingUpperPos" x="TargetPosX"
+            y="TargetPosY + InnerCuprumRingGauge + InnerCuprumRingHeight/2"
+            z="TargetPosZ" unit="cm"/>
+        <position name="InnerCuprumRingLowerPos" x="TargetPosX"
+            y="TargetPosY - InnerCuprumRingGauge - InnerCuprumRingHeight/2"
+            z="TargetPosZ" unit="cm"/>
+        <position name="TargetWindowCutPos1" x="0.0" y="0.0" z="TargetWindowDistance"
+            unit="cm"/>
+        <position name="TargetWindowCutPos2" x="0.0"
+            y="OuterFerrumRingGauge + OuterFerrumRingHeight/2"
+            z="TargetWindowDistance" unit="cm"/>
+        <position name="TargetWindowCutPos3" x="0.0"
+            y="-OuterFerrumRingGauge - OuterFerrumRingHeight/2"
+            z="TargetWindowDistance" unit="cm"/>
+        <rotation name="TargetWindowCutRot" x="90.0" y="0.0" z="0.0" unit="deg"/>
+        <position name="TargetOuterCoverCutPos" x="0.0"
+            y="TargetWindowDistance" z="0.0" unit="cm"/>
+        <rotation name="TargetOuterCoverCutRot" x="90.0" y="0.0" z="0.0" unit="deg"/>
+        <position name="TargetWindowPos"
+            x="TargetPosX - TargetWindowDebugDistance * sin(TargetRotZ/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ - TargetWindowDebugDistance * cos(TargetRotZ/180*pi)"
+            unit="cm"/>
+        <rotation name="TargetWindowRot" x="0.0" y="-TargetRotZ" z="0.0" unit="deg"/>
+        <position name="TargetWindowMylarCoverPos"
+            x="TargetPosX - (TargetWindowEntranceDistance - TargetWindowCoverThickness/2) * sin(TargetRotZ/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ - (TargetWindowEntranceDistance - TargetWindowCoverThickness/2) * cos(TargetRotZ/180*pi)"
+            unit="cm"/>
+        <position name="TargetWindowAluminiumCoverPos"
+            x="TargetPosX - TargetWindowEntranceDistance * sin(TargetRotZ/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ - TargetWindowEntranceDistance * cos(TargetRotZ/180*pi)"
+            unit="cm"/>
+        <position name="TargetWindowCapPos"
+            x="TargetPosX - (TargetWindowCapDistance + TargetWindowDistanceDebugShift) * sin(TargetRotZ/180*pi)"
+            y="TargetPosY"
+            z="TargetPosZ - (TargetWindowCapDistance + TargetWindowDistanceDebugShift) * cos(TargetRotZ/180*pi)"
+            unit="cm"/>
+        <position name="TargetVacuumUnionPos" x="0.0"
+            y="TargetWindowDistance - TargetWindowEntranceOffset -TargetWindowCoverThickness/2"
+            z="0.0" unit="cm"/>
+    </define> 
+
+    <materials>
+        <element name="Hydrogen" formula="H" Z="1">
+            <atom value="1"/>
+        </element>
+        <element name="Carbon" formula="C" Z="6">
+            <atom value="12"/>
+        </element>
+        <material name="Scintillator" formula="scintillator" state="solid">
+            <D value="1.05"/>
+            <fraction n="0.084" ref="Hydrogen"/>
+            <fraction n="0.916" ref="Carbon"/>
+        </material>
+        <element name="Iodine" formula="I" Z="53">
+            <atom value="126.9"/>
+        </element>
+        <element name="Caesium" formula="Cs" Z="55">
+            <atom value="132.9"/>
+        </element>
+        <material name="CsI_Crystal" formula="CsI" state="solid">
+            <D value="4.5"/>
+            <fraction n="0.488" ref="Iodine"/>
+            <fraction n="0.512" ref="Caesium"/>
+        </material>
+    </materials>
+
+    <solids>
+        <box name="sWorld" x="WorldWidth" y="WorldHeight" z="WorldLength"
+            lunit="cm"/>
+        <box name="sMonitor" x="MonitorWidth" y="MonitorHeight"
+            z="MonitorLength" lunit="cm"/>
+        <box name="sMonitorBack" x="MonitorBackWidth" y="MonitorBackHeight"
+            z="MonitorBackLength" lunit="cm"/>
+        <tube name="sTargetOuterCoverStub0" rmin="TargetOuterCoverRadius"
+            rmax="TargetOuterCoverRadius + TargetOuterCoverThickness"
+            z="TargetHeight" deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sTargetVacuumSpaceStub"
+            rmin="TargetRadius + TargetInnerCoverThickness"
+            rmax="TargetOuterCoverRadius"
+            z="TargetHeight" deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sTargetInnerCover" rmin="0"
+            rmax="TargetRadius + TargetInnerCoverThickness"
+            z="TargetHeight + TargetInnerCoverThickness * 2"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sTarget" rmin="0" rmax="TargetRadius" z="TargetHeight"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sTargetColumn" rmin="0" rmax="TargetColumnRadius"
+            z="TargetHeight" deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sTargetInnerColumn" rmin="TargetInnerColumnInnerRadius"
+            rmax="TargetInnerColumnOuterRadius" z="TargetHeight"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sOuterFerrumRing" rmin="TargetOuterCoverRadius"
+            rmax="TargetOuterCoverRadius + OuterFerrumRingThickness"
+            z="OuterFerrumRingHeight" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+        <tube name="sInnerFerrumRing"
+            rmin="TargetOuterCoverRadius - InnerFerrumRingThickness"
+            rmax="TargetOuterCoverRadius" z="InnerFerrumRingHeight"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <tube name="sInnerCuprumRing"
+            rmin="InnerCuprumRingInnerRadius"
+            rmax="InnerCuprumRingInnerRadius + InnerCuprumRingThickness"
+            z="InnerCuprumRingHeight" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+        <box name="sCrystalRow" x="CrystalWidth*NCrystalsHor" y="CrystalHeight"
+            z="CrystalLength" lunit="cm"/>
+        <box name="sCrystal" x="CrystalWidth" y="CrystalHeight"
+            z="CrystalLength" lunit="cm"/>
+        <box name="sCalorimeter" x="CalorimeterWidth" y="CalorimeterHeight"
+            z="CalorimeterLength" lunit="cm"/>
+        <box name="sVetoCounter" x="VetoCounterWidth" y="VetoCounterHeight"
+            z="VetoCounterThickness" lunit="cm"/>
+        <tube name="sTargetWindowStub0" rmin="0" rmax="TargetWindowRadius"
+            z="TargetWindowLength" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+        <tube name="sTargetWindowLongHole" rmin="0" rmax="TargetWindowHoleRadius"
+            z="TargetWindowLength + LENGTHMAKER" deltaphi="FullCircle"
+            aunit="deg" lunit="cm"/>
+        <tube name="sTargetWindowHole" rmin="0" rmax="TargetWindowHoleRadius"
+            z="TargetWindowLength" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+        <subtraction name="sTargetWindowStub1">
+            <first ref="sTargetWindowStub0"/>
+            <second ref="sTargetWindowLongHole"/>
+        </subtraction>
+        <tube name="sTargetOuterCoverWholeCylinder" rmin="0"
+            rmax="TargetOuterCoverRadius + TargetOuterCoverThickness"
+            z="TargetHeight" deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <subtraction name="sTargetWindowStub2">
+            <first ref="sTargetWindowStub1"/>
+            <second ref="sTargetOuterCoverWholeCylinder"/>
+            <positionref ref="TargetWindowCutPos1"/>
+            <rotationref ref="TargetWindowCutRot"/>
+        </subtraction>
+        <tube name="sOuterFerrumRingWholeCylinder" rmin="0"
+            rmax="TargetOuterCoverRadius + OuterFerrumRingThickness + EPSILON"
+            z="OuterFerrumRingHeight + EPSILON" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+        <subtraction name="sTargetWindowStub3">
+            <first ref="sTargetWindowStub2"/>
+            <second ref="sOuterFerrumRingWholeCylinder"/>
+            <positionref ref="TargetWindowCutPos2"/>
+            <rotationref ref="TargetWindowCutRot"/>
+        </subtraction>
+        <subtraction name="sTargetWindow">
+            <first ref="sTargetWindowStub3"/>
+            <second ref="sOuterFerrumRingWholeCylinder"/>
+            <positionref ref="TargetWindowCutPos3"/>
+            <rotationref ref="TargetWindowCutRot"/>
+        </subtraction>
+        <tube name="sTargetWindowCap" rmin="TargetWindowRadius"
+            rmax="TargetWindowCapRadius" z="TargetWindowCapLength"
+            deltaphi="FullCircle" aunit="deg" lunit="cm"/>
+        <subtraction name="sTargetOuterCover">
+            <first ref="sTargetOuterCoverStub0"/>
+            <second ref="sTargetWindowLongHole"/>
+            <positionref ref="TargetOuterCoverCutPos"/>
+            <rotationref ref="TargetOuterCoverCutRot"/>
+        </subtraction>
+        <union name="sTargetVacuumSpace">
+            <first ref="sTargetVacuumSpaceStub"/>
+            <second ref="sTargetWindowHole"/>
+            <positionref ref="TargetVacuumUnionPos"/>
+            <rotationref ref="TargetOuterCoverCutRot"/>
+        </union>
+        <tube name="sTargetWindowMylarCover" rmin="0" rmax="TargetWindowHoleRadius"
+            z="TargetWindowMylarCoverLength" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+        <tube name="sTargetWindowAluminiumCover" rmin="0" rmax="TargetWindowHoleRadius"
+            z="TargetWindowAluminiumCoverLength" deltaphi="FullCircle" aunit="deg"
+            lunit="cm"/>
+    </solids>
+
+    <structure>
+        <volume name="vMonitor">
+            <materialref ref="Scintillator"/>
+            <solidref ref="sMonitor"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="MonitorVolume"/>
+            <auxiliary auxtype="EnergyDepositDetector" auxvalue="MonitorRole"/>
+            <auxiliary auxtype="TrackPointsDetector" auxvalue="MonitorRole"/>
+        </volume>
+        <volume name="vMonitorBack">
+            <materialref ref="Scintillator"/>
+            <solidref ref="sMonitorBack"/>
+        </volume>
+        <volume name="vTarget">
+            <materialref ref="G4_lH2"/>
+            <solidref ref="sTarget"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="TargetVolume"/>
+            <auxiliary auxtype="TrackPointsDetector" auxvalue="TargetRole"/>
+        </volume>
+        <volume name="vTargetInnerCover">
+            <materialref ref="G4_Al"/>
+            <solidref ref="sTargetInnerCover"/>
+            <physvol name="Target">
+                <volumeref ref="vTarget"/>
+            </physvol>
+        </volume>
+        <volume name="vTargetColumn">
+            <materialref ref="G4_Fe"/>
+            <solidref ref="sTargetColumn"/>
+        </volume>
+        <volume name="vTargetInnerColumn">
+            <materialref ref="G4_Fe"/>
+            <solidref ref="sTargetInnerColumn"/>
+        </volume>
+        <volume name="vTargetVacuumSpace">
+            <materialref ref="G4_Galactic"/>
+            <solidref ref="sTargetVacuumSpace"/>
+            <!-- do not place them - still have wrong positions! -->
+            <!--<physvol name="TargetInnnerColumn1">-->
+                <!--<volumeref ref="vTargetInnerColumn"/>-->
+                <!--<positionref ref="TargetInnerColumn1Pos"/>-->
+            <!--</physvol>-->
+            <!--<physvol name="TargetInnnerColumn2">-->
+                <!--<volumeref ref="vTargetInnerColumn"/>-->
+                <!--<positionref ref="TargetInnerColumn2Pos"/>-->
+            <!--</physvol>-->
+        </volume>
+        <volume name="vTargetOuterCover">
+            <materialref ref="G4_MYLAR"/>
+            <solidref ref="sTargetOuterCover"/>
+        </volume>
+        <volume name="vCrystal">
+            <materialref ref="CsI_Crystal"/>
+            <solidref ref="sCrystal"/>
+            <auxiliary auxtype="EnergyDepositDetector"
+                       auxvalue="CalorimeterRole"/>
+            <auxiliary auxtype="TrackPointsDetector"
+                       auxvalue="CalorimeterRole"/>
+        </volume>
+        <volume name="vCrystalRow">
+            <materialref ref="G4_AIR"/>
+            <solidref ref="sCrystalRow"/>
+            <replicavol number="NCrystalsHor">
+                <volumeref ref="vCrystal"/>
+                <replicate_along_axis>
+                    <direction x="1"/>
+                    <width value="CrystalWidth" unit="cm"/>
+                    <offset value="0" unit="cm"/>
+                </replicate_along_axis>
+            </replicavol>
+        </volume>
+        <volume name="vCalorimeter">
+            <materialref ref="G4_AIR"/>
+            <solidref ref="sCalorimeter"/>
+            <replicavol number="NCrystalsVert">
+                <volumeref ref="vCrystalRow"/>
+                <replicate_along_axis>
+                    <direction y="1"/>
+                    <width value="CrystalHeight" unit="cm"/>
+                    <offset value="0" unit="cm"/>
+                </replicate_along_axis>
+            </replicavol>
+            <auxiliary auxtype="SpecialVolume" auxvalue="CalorimeterVolume"/>
+            <auxiliary auxtype="SensitiveRegion" auxvalue="CalorimeterRegion"/>
+        </volume>
+        <volume name="vVetoCounter">
+            <materialref ref="Scintillator"/>
+            <solidref ref="sVetoCounter"/>
+            <auxiliary auxtype="SpecialVolume" auxvalue="VetoCounterVolume"/>
+            <auxiliary auxtype="EnergyDepositDetector"
+                       auxvalue="VetoCounterRole"/>
+            <auxiliary auxtype="TrackPointsDetector"
+                       auxvalue="VetoCounterRole"/>
+        </volume>
+        <volume name="vOuterFerrumRing">
+            <materialref ref="G4_Fe"/>
+            <solidref ref="sOuterFerrumRing"/>
+        </volume>
+        <volume name="vInnerFerrumRing">
+            <materialref ref="G4_Fe"/>
+            <solidref ref="sInnerFerrumRing"/>
+        </volume>
+        <volume name="vInnerCuprumRing">
+            <materialref ref="G4_Cu"/>
+            <solidref ref="sInnerCuprumRing"/>
+        </volume>
+        <volume name="vTargetWindow">
+            <materialref ref="G4_Fe"/>
+            <solidref ref="sTargetWindow"/>
+        </volume>
+        <volume name="vTargetWindowCap">
+            <materialref ref="G4_Fe"/>
+            <solidref ref="sTargetWindowCap"/>
+        </volume>
+        <volume name="vTargetWindowMylarCover">
+            <materialref ref="G4_MYLAR"/>
+            <solidref ref="sTargetWindowMylarCover"/>
+        </volume>
+        <volume name="vTargetWindowAluminiumCover">
+            <materialref ref="G4_Al"/>
+            <solidref ref="sTargetWindowAluminiumCover"/>
+        </volume>
+        <volume name="vWorldVisible">
+            <materialref ref="G4_AIR"/>
+            <solidref ref="sWorld"/>
+            <physvol name="TargetOuterCover">
+                <volumeref ref="vTargetOuterCover"/>
+                <positionref ref="TargetPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="TargetVacuumSpace">
+                <volumeref ref="vTargetVacuumSpace"/>
+                <positionref ref="TargetPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="TargetInnerCover">
+                <volumeref ref="vTargetInnerCover"/>
+                <positionref ref="TargetPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="TargetColumn1">
+                <volumeref ref="vTargetColumn"/>
+                <positionref ref="TargetColumn1Pos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="TargetColumn2">
+                <volumeref ref="vTargetColumn"/>
+                <positionref ref="TargetColumn2Pos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="TargetColumn3">
+                <volumeref ref="vTargetColumn"/>
+                <positionref ref="TargetColumn3Pos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="OuterFerrumRingUpper">
+                <volumeref ref="vOuterFerrumRing"/>
+                <positionref ref="OuterFerrumRingUpperPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="OuterFerrumRingLower">
+                <volumeref ref="vOuterFerrumRing"/>
+                <positionref ref="OuterFerrumRingLowerPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="InnerFerrumRingUpper">
+                <volumeref ref="vInnerFerrumRing"/>
+                <positionref ref="InnerFerrumRingUpperPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="InnerFerrumRingLower">
+                <volumeref ref="vInnerFerrumRing"/>
+                <positionref ref="InnerFerrumRingLowerPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="InnerCuprumRingUpper">
+                <volumeref ref="vInnerCuprumRing"/>
+                <positionref ref="InnerCuprumRingUpperPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="InnerCuprumRingLower">
+                <volumeref ref="vInnerCuprumRing"/>
+                <positionref ref="InnerCuprumRingLowerPos"/>
+                <rotationref ref="TargetRot"/>
+            </physvol>
+            <physvol name="TargetWindow">
+                <volumeref ref="vTargetWindow"/>
+                <positionref ref="TargetWindowPos"/>
+                <rotationref ref="TargetWindowRot"/>
+            </physvol>
+            <physvol name="TargetWindowCap">
+                <volumeref ref="vTargetWindowCap"/>
+                <positionref ref="TargetWindowCapPos"/>
+                <rotationref ref="TargetWindowRot"/>
+            </physvol>
+            <physvol name="TargetWindowMylarCover">
+                <volumeref ref="vTargetWindowMylarCover"/>
+                <positionref ref="TargetWindowMylarCoverPos"/>
+                <rotationref ref="TargetWindowRot"/>
+            </physvol>
+            <physvol name="TargetWindowAluminiumCover">
+                <volumeref ref="vTargetWindowAluminiumCover"/>
+                <positionref ref="TargetWindowAluminiumCoverPos"/>
+                <rotationref ref="TargetWindowRot"/>
+            </physvol>
+            <physvol name="Monitor">
+                <volumeref ref="vMonitor"/>
+                <positionref ref="MonitorPos"/>
+            </physvol>
+            <!--<physvol name="MonitorBack">-->
+                <!--<volumeref ref="vMonitorBack"/>-->
+                <!--<positionref ref="MonitorBackPos"/>-->
+            <!--</physvol>-->
+            <physvol name="CalorimeterLeft">
+                <volumeref ref="vCalorimeter"/>
+                <positionref ref="CalorimeterLeftPos"/>
+                <rotationref ref="CalorimeterLeftRot"/>
+            </physvol>
+            <physvol name="CalorimeterRight">
+                <volumeref ref="vCalorimeter"/>
+                <positionref ref="CalorimeterRightPos"/>
+                <rotationref ref="CalorimeterRightRot"/>
+            </physvol>
+            <physvol name="VetoCounterLeft">
+                <volumeref ref="vVetoCounter"/>
+                <positionref ref="VetoCounterLeftPos"/>
+                <rotationref ref="CalorimeterLeftRot"/>
+            </physvol>
+            <physvol name="VetoCounterRight">
+                <volumeref ref="vVetoCounter"/>
+                <positionref ref="VetoCounterRightPos"/>
+                <rotationref ref="CalorimeterRightRot"/>
+            </physvol>
+        </volume>
+        <volume name="World">
+            <materialref ref="G4_AIR"/>
+            <solidref ref="sWorld"/>
+            <physvol name="WorldVisible">
+                <volumeref ref="vWorldVisible"/>
+            </physvol>
+        </volume>
+    </structure>
+
+    <setup version="1.0" name="Default">
+        <world ref="World"/>
+    </setup>
+
+</gdml>
+

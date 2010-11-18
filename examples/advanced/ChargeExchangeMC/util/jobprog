@@ -1,0 +1,55 @@
+#!/bin/sh
+# shows job progress at gridengine queues
+
+CEXMC_PREFIX=cexmc_
+
+qstat -u $USER
+
+jobids=`qstat -u $USER | sed '1,2d' | grep $CEXMC_PREFIX | awk '{print $1}'`
+jobbasenames=`qstat -u $USER -r | grep 'Full jobname' | grep $CEXMC_PREFIX | \
+              awk '{print $3}'`
+jobnames=""
+
+i=1
+for jobbasename in $jobbasenames ; do
+    jobnames=$jobnames' '$jobbasename.o`echo $jobids | awk "{print \\$$i}"`
+    (( ++i ))
+done
+
+i=1
+echo ---------------
+for job in $jobnames ; do
+    msgperc="N/A"
+    fdbsize="N/A"
+    edbsize="N/A"
+    countPolicy=""
+    ordered=""
+    current=""
+    if [ -e "$job" ] ; then
+        countPolicy=`head -120 "$job" | \
+                     awk '/^\/cexmc\/run\/eventCountPolicy/ {print $2}'`
+        if [[ -z "$countPolicy" || "$countPolicy" = "all" ]] ; then
+            ordered=`head -120 "$job" | awk '/^\/run\/beamOn/ {print $2}'`
+            current=`tail -120 "$job" | grep ^Event | tail -1 | \
+                     awk '{print $2}'`
+        fi
+    fi
+    if [ -z "$current" ] ; then
+        current=0
+    fi
+    if [ -n "$ordered" ] ; then
+        msgperc=$(( current * 100 / ordered ))%
+    fi
+    jobbasename=`echo $jobbasenames | awk "{print \\$$i}"`
+    jobbasename=${jobbasename/$CEXMC_PREFIX/}
+    jobbasename=${jobbasename/\.job/}
+    if [ -e $CEXMC_PROJECTS_DIR/$jobbasename.fdb ] ; then
+        fdbsize=`du -sh $CEXMC_PROJECTS_DIR/$jobbasename.fdb | awk '{print $1}'`
+    fi
+    if [ -e $CEXMC_PROJECTS_DIR/$jobbasename.edb ] ; then
+        edbsize=`du -sh $CEXMC_PROJECTS_DIR/$jobbasename.edb | awk '{print $1}'`
+    fi
+    echo $job:  $msgperc,    fdb: $fdbsize, edb: $edbsize
+    (( ++i ))
+done
+
