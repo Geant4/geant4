@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.171 2010-10-15 10:22:13 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.172 2010-11-18 21:36:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -575,7 +575,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(isIonisation) { 
     fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
     atomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-    if(atomDeexcitation) { useDeexcitation = true; }
+    if(atomDeexcitation) { 
+      if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
+    }
   }
 
   if(1 < verboseLevel) {
@@ -1349,7 +1351,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   }
 
   SelectModel(postStepScaledEnergy);
-  if(useDeexcitation) {
+  if(useDeexcitation && !atomDeexcitation) { 
     currentModel->SetDeexcitationFlag(idxDERegions[currentMaterialIndex]);
   }
 

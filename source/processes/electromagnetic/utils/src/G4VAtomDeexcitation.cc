@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.3 2010-11-04 12:55:09 vnivanch Exp $
+// $Id: G4VAtomDeexcitation.cc,v 1.4 2010-11-18 21:36:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,13 +82,17 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
   // Define list of regions
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
-  size_t nRegions = regionStore->size();
+  size_t nRegions = activeRegions.size();
 
   // There is no active regions
-  if(0 == nRegions) { return; }
+  if(0 == nRegions) {
+    SetDeexcitationActiveRegion("World");
+    nRegions = 1;
+  }
 
   if(0 < verbose) {
-    G4cout << "### ================ Deexcitation model " << name 
+    G4cout << G4endl;
+    G4cout << "### ===  Deexcitation model " << name 
 	   << " is activated for regions:" << G4endl;  
   }
 
@@ -97,7 +101,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     const G4Region* reg = regionStore->GetRegion(activeRegions[j], false);
     const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
     if(0 < verbose) {
-      G4cout << "###                   " << activeRegions[j] << G4endl;  
+      G4cout << "          " << activeRegions[j] << G4endl;  
     }
   
     for(size_t i=0; i<numOfCouples; ++i) {
@@ -117,8 +121,8 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     }
   }
 
-  if(0 < verbose) {
-    G4cout << "### ================ PIXE model " << namePIXE 
+  if(0 < verbose && "" != namePIXE) {
+    G4cout << "### ===  PIXE model: " << namePIXE 
 	   << G4endl;  
   }
 
