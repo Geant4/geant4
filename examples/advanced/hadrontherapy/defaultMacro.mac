@@ -27,7 +27,7 @@
 /Physics/addPhysics Neutron_tracking_cut
 /Physics/addPhysics binary                              # Hadronic inelastic model
 
-#/Physics/addPhysics local_ion_ion_inelastic            # Hadronic inelastic model for ions (local physic list)
+#/Physics/addPhysics local_ion_ion_inelastic            # Optional Hadronic inelastic model for ions (local physic list)
 
 ##########################
 # Initialisation procedure
@@ -48,6 +48,7 @@
 
 ##########################
 # Definition of the GUI
+# It will work only if the QT GUI interface is active
 #
 /control/execute macro/GUIPersonalisation.mac
 ##########################
@@ -58,7 +59,7 @@
 /Physics/setDetectorCuts 0.01 mm
 
 # Set cuts OUTSIDE the detector 
-/Physics/setCuts 0.01 mm
+/Physics/setCuts 1 mm
 
 /Step/waterPhantomStepMax 0.01 mm 
 

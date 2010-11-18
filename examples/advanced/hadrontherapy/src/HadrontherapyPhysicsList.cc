@@ -27,37 +27,36 @@
 //
 // To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
-// This class provides all the physic models that can be activated inside Hadrontherapy;
-// Each model can be setted via macro commands;
-// Inside Hadrontherapy the models can be activate with three different complementar methods:
+// Physics models in Hadrontherapy, following the Geant4 organisation, can be definided using three different approaches:
+// 1. Activating one of the 'Reference Physics Lists' that are already prepared by
+//    the Geant4 Collaboration and are contained in the $G4INSTALL/source/physics_lists/lists folder
+//    The 'Reference Physics Lists' can be activated setting a specific enviroment variable to the name
+//    of the physics. For example if the QGSP_BIC Reference Physics Lists must be activated the User 
+//    must set export PHYSLIST=QGSP_BIC (or setenv PHYSLIST QGSP_BIC).
+//    A 'Reference Physics Lists' contains all the physics process necessary to a particle transport
+//    If the User set the PHYSLIST variable Hadrontherapy will start with the defaultMacroWithReferencePhysicsList.mac
+//    macro. See this macro file for more details
 //
-//    For Hadrontherapy we suggest the use of:
+// 2. Activating the 'Builders' already prepared by
+//    the Geant4 Collaboration and contained in the $G4INSTALL/source/physics_lists/builder folder.
+//    Each builder is specific of a given model. There are builders for the electromagnetic processes, for the
+//    hadronic one, etc.
+//    If the PHYSLIST variable is not defined Hadrontherapy starts with the defaultMacro.mac where the single builders
+//    are activated for the various processes of interest.
+//    Each builder is activated with the /Physics/addPhysics <nome builder> command
 //
-//    /Physic/addPhysics/emstandard_option3 (electromagnetic model)
-//    /Physic/addPhysics/QElastic (hadronic elastic model)
-//    /Physic/addPhysics/binary (hadronic inelastic models for proton and neutrons)
-//    /Physic/addPhysics/binary_ion (hadronic inelastic models for ions)
+// 3. Defining a specific 'local' physics list. In Hadrontherapy two loca physics list are defined 
+//    (LocalINCLIonIonInelasticPhysic.cc and LocalIonIonInelasticPhysic.cc) where models for the 
+//    ion-ion interactions are activated.
+//    'Local' physics can be activated using the /Physics/addPhysics <nome builder> command
+//    (see the defaultMacro.mac to se an example).
 //
-// or alternatevely write only the following command in the macro file to activate
-// a Reference physics list containing all the processes:
+//    ******       SUGGESTED PHYSICS       *********
 //
-//    /Physics/addPhysics QGSP_BIC_EMY 
-//
-//    Example of the use of physics lists can be found in the macro files included in the
-//    'macro' folder .
-//
-// 3. Use of a *local* physics. In this case the models are implemented in local files
-//    contained in the Hadrontherapy folder. The use of local physic is recommended
-//    to more expert Users.
-//    We provide as local, only the LocalStandardICRU73EmPhysic.cc (an Elecromagnetic
-//    implementation containing the new ICRU73 data table for ions stopping powers)
-//    and the LocalIonIonInelasticPhysic.cc (physic list to use for the ion-ion interaction
-//    case)
-//    The *local* physics can be activated with the same /Physic/addPhysics <nameOfPhysic> command;
-//
-//    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND THE USE OF THE MACROS:
-//    proton_therapy.mac: for proton beams;
-//    ion_therapy.mac   : for ion beams;
+//    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND: 
+//    1. The use of the macro 'hadron_therapy.mac', or
+//    2. the QGSP_BIC_EMY Reference Physics Lists (define the PHYSLIST eviroment variable):
+//       export PHYSLIST=QGSP_BIC_EMY
  
 #include "G4RunManager.hh"
 #include "G4Region.hh"
@@ -263,7 +262,6 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
     // The following is the construction of the QGSP_BIC_EMY Reference physics list 
     // reconstructed here like a builder: it should be identical to the
     // one contained inside the $G4INSTALL/physics_lists/lists folder
-    
   } else if (name == "QGSP_BIC_EMY") {
     AddPhysicsList("emstandard_opt3");
     hadronPhys.push_back( new G4EmExtraPhysics());

@@ -34,6 +34,7 @@
 
 ##########################
 # Definition of the GUI
+## It will work only if the QT GUI interface is active
 #
 /control/execute macro/GUIPersonalisation.mac
 
@@ -44,12 +45,12 @@
 # Set cuts ONLY inside the detector
 #/Physics/setDetectorCuts 0.01 mm
 
-# Set cuts OUTSIDE the detector 
+# Definition of the production cuts
 #/run/setCut 0.01 mm
-/run/setCutForAGivenParticle e- 0.01 mm
-/run/setCutForAGivenParticle e+ 0.01 mm
-/run/setCutForAGivenParticle gamma 0.01 mm
-/run/setCutForAGivenParticle proton 0.01 mm
+/run/setCutForAGivenParticle e- 1 mm
+/run/setCutForAGivenParticle e+ 1 mm
+/run/setCutForAGivenParticle gamma 1 mm
+/run/setCutForAGivenParticle proton 1 mm
 /run/setCutForRegion DetectorLog 0.01 mm
 
 #/Step/waterPhantomStepMax 0.01 mm 
