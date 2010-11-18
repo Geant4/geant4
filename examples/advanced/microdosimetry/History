@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.23 2010-11-12 00:16:43 sincerti Exp $
+$Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.23 2010-11-12 00:16:43 sincerti Exp $
 
                        Package History file
                        --------------------
+
+18 November 2010 - J. Allison -  microdosimetry-V09-03-10
+- Introduced G4UIExecutive.
 
 12 November 2010 - S. Incerti -  microdosimetry-V09-03-09
 - Modified energy limit of Sanche vib excitation for e-

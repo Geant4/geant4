@@ -24,18 +24,20 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microdosimetry.cc,v 1.4 2010-10-06 14:39:41 sincerti Exp $
+// $Id: Microdosimetry.cc,v 1.5 2010-11-18 11:48:21 allison Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+  #include "G4UIExecutive.hh"
 #endif
 
 #include "DetectorConstruction.hh"
@@ -81,24 +83,22 @@ int main(int argc,char** argv)
   system ("rm -rf microbeam.root");  
     
   // Get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
   if (argc==1)   // Define UI session for interactive mode.
   { 
-#ifdef _WIN32
-    G4UIsession * session = new G4UIterminal();
-#else
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute microdosimetry.mac");     
+    ui->SessionStart();
+    delete ui;
 #endif
-    UI->ApplyCommand("/control/execute microdosimetry.mac");    
-    session->SessionStart();
-    delete session;
   }
   else           // Batch mode
   { 
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+fileName);
   }
 
 #ifdef G4VIS_USE
