@@ -91,11 +91,7 @@ int main(int argc ,char ** argv)
   // Set the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
         
-  // Only if an initial random seed is needed
-  // G4int seed = time(0);
-  // CLHEP::HepRandom::setTheSeed(seed);
-	
-  G4RunManager* runManager = new G4RunManager;
+   G4RunManager* runManager = new G4RunManager;
   // Geometry controller is responsible for instantiating the
   // geometries. All geometry specific setup tasks are now in class
   // HadrontherapyGeometryController.
@@ -136,7 +132,6 @@ int main(int argc ,char ** argv)
 	
 #ifdef G4VIS_USE
   // Visualization manager
-  G4cout << "  SONO DENTRO G4VIS_USE  " << G4endl;
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 #endif 
@@ -161,7 +156,7 @@ int main(int argc ,char ** argv)
 
 #endif
       if (ui->IsGUI())
-	UImanager->ApplyCommand("/control/execute macro/GUIPersonalisation.mac");
+	//	UImanager->ApplyCommand("/control/execute defaultMacro.mac");
       ui->SessionStart();
       delete ui;
 #endif 

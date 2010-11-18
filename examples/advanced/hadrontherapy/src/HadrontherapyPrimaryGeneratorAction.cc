@@ -81,7 +81,7 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution
   
-  G4double defaultX0 = -2700.0 *mm;
+  G4double defaultX0 = -3000.0 *mm;
   X0 = defaultX0;
 
   G4double defaultY0 = 0.0 *mm;  

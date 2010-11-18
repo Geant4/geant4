@@ -8,6 +8,11 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+18.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-11
+	   - Removed redundant macro files
+	   - Improved physics class
+	   - Corrected position of primary proton beam
+
 16.11.2010 J.Allison; Tag: hadrontherapy-V09-03-10
 	   - Corrected use of G4UIExecutive.
 	   - Fixed bug in HadrontherapyAnalysisFileMessenger.hh for case

@@ -18,16 +18,16 @@
 ##########################
 # Set of the physic models
 #
-#/physic/addPhysics standard_opt3                       # Electromagnetic model
-#/physic/addPhysics elastic                             # Hadronic elastic model
-#/physic/addPhysics binary                              # Hadronic inelastic model
-#/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+/Physics/addPhysics emstandard_opt3                       # Electromagnetic model
+/Physics/addPhysics elastic                             # Hadronic elastic model
+/Physics/addPhysics binary                              # Hadronic inelastic model
+/Physics/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
 
 #
 # Or alternatively:
 #
-/Physics/addPhysics QGSP_BIC_EMY
-#/Physics/addPhysics radioactive_decay
+#/Physics/addPackage QGSP_BIC
+/Physics/addPhysics radioactive_decay
 
 ##########################
 # Initialisation procedure
@@ -65,7 +65,7 @@
 /gun/particle proton
 /beam/energy/meanEnergy 62 MeV
 /beam/energy/sigmaEnergy 400 keV
-/beam/position/Xposition -2700 mm
+/beam/position/Xposition -3000 mm
 
 #########################
 # Display the event number
@@ -79,7 +79,6 @@
 # If secondary particles dose & fluence are needed
 #/analysis/secondary true 
 
-/run/beamOn 100
 
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
