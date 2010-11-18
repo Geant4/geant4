@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc,v 1.18 2010-06-02 09:33:16 gunter Exp $
+// $Id: G4CrossSectionDataStore.cc,v 1.19 2010-11-18 10:32:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -110,7 +110,7 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
     return DBL_MIN;
   }
   for (G4int i = NDataSetList-1; i >= 0; i--) {
-    if (DataSetList[i]->IsZAApplicable(aParticle, anIsotope->GetZ(), anIsotope->GetN()))
+    if (DataSetList[i]->IsIsoApplicable(aParticle, anIsotope->GetZ(), anIsotope->GetN()))
       return DataSetList[i]->GetIsoCrossSection(aParticle,anIsotope,aTemperature);
   }
   throw G4HadronicException(__FILE__, __LINE__, 
@@ -143,8 +143,8 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* aParticle,
     return DBL_MIN;
   }
   for (G4int i = NDataSetList-1; i >= 0; i--) {
-      if (DataSetList[i]->IsZAApplicable(aParticle, Z, A))
-      return DataSetList[i]->GetIsoZACrossSection(aParticle,Z,A,aTemperature);
+      if (DataSetList[i]->IsIsoApplicable(aParticle, Z, A))
+      return DataSetList[i]->GetZandACrossSection(aParticle,Z,A,aTemperature);
   }
   throw G4HadronicException(__FILE__, __LINE__, 
                       "G4CrossSectionDataStore: no applicable data set found "
@@ -229,7 +229,7 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
       G4double* abundVector = anElement->GetRelativeAbundanceVector();
       G4bool elementXS = false;
       for (i = 0; i<nIsoPerElement; i++) {
-	if (inCharge->IsZAApplicable(particle, ZZ,(*isoVector)[i]->GetN())) {
+	if (inCharge->IsIsoApplicable(particle, ZZ,(*isoVector)[i]->GetN())) {
 	  iso_xs = inCharge->GetIsoCrossSection(particle, (*isoVector)[i], aTemp);
 	} else if (elementXS == false) {
 	  iso_xs = inCharge->GetCrossSection(particle, anElement, aTemp);
@@ -266,8 +266,8 @@ G4Element* G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* particl
 
       for (i = 0; i<nIso; i++) {
         AA = theDefaultIsotopes.GetIsotopeNucleonCount(index+i);
-	if (inCharge->IsZAApplicable(particle, ZZ, AA )) {
-	  iso_xs = inCharge->GetIsoZACrossSection(particle, ZZ, AA, aTemp);
+	if (inCharge->IsIsoApplicable(particle, ZZ, AA )) {
+	  iso_xs = inCharge->GetZandACrossSection(particle, ZZ, AA, aTemp);
 	} else if (elementXS == false) {
 	  iso_xs = inCharge->GetCrossSection(particle, anElement, aTemp);
 	  elementXS = true;
