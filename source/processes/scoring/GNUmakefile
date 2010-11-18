@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2006-11-28 16:47:59 ahoward Exp $
+# $Id: GNUmakefile,v 1.4 2010-11-18 11:57:41 japost Exp $
 # ------------------------------------------------------------
 # GNUmakefile for scoring process library.  
 # ------------------------------------------------------------
@@ -23,6 +23,7 @@ CPPFLAGS += \
 	    -I$(G4BASE)/track/include \
 	    -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
+            -I$(G4BASE)/processes/electromagnetic/muons/include \
             -I$(G4BASE)/processes/cuts/include \
 	    -I$(G4BASE)/particles/management/include \
 	    -I$(G4BASE)/materials/include \
