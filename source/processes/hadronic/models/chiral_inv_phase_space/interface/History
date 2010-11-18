@@ -12,6 +12,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18-Nov-2010 J.Apostolakis                      (hadr-chips-inter-V09-03-03)
+---------------------------------------------------------------------------
+- G4ChiralInvariantPhaseSpace.cc: Change to use integer value of Z and A.
+
 10-Nov-2010 V.Ivanchenko                       (hadr-chips-inter-V09-03-02)
 ---------------------------------------------------------------------------
 - G4ElectroNuclearReaction - cross section classes are included by pointer 
