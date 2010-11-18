@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronInelasticXS.cc,v 1.9 2010-11-16 12:47:46 antoni Exp $
+// $Id: G4NeutronInelasticXS.cc,v 1.10 2010-11-18 12:59:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -135,7 +135,6 @@ G4NeutronInelasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
   return xs;
 }
 
-
 void 
 G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
@@ -174,8 +173,7 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 
 void 
 G4NeutronInelasticXS::DumpPhysicsTable(const G4ParticleDefinition&)
-{
-}
+{}
 
 void 
 G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp, 
@@ -200,8 +198,7 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
   }
 
-  const G4Element* Elem = 
-    G4NistManager::Instance()->FindOrBuildElement(Z, true);
+  G4int Amean = G4int(G4NistManager::Instance()->GetAtomicMassAmu(Z)+0.5);
 
   // upload data from file
   data[Z] = new G4PhysicsLogVector();
@@ -235,7 +232,7 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       fNucleon->GetHadronNucleonXscPDG(dynParticle, proton);
       sig2 = fNucleon->GetInelasticHadronNucleonXsc();
     } else {
-      ggXsection->GetCrossSection(dynParticle, Elem);
+      ggXsection->GetZandACrossSection(dynParticle, Z, Amean);
       sig2 = ggXsection->GetInelasticGlauberGribovXsc();
     }
     if(sig2 > 0.) { coeff[Z] = sig1/sig2; }

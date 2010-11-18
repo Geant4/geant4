@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.6 2010-11-16 12:47:46 antoni Exp $
+// $Id: G4NeutronCaptureXS.cc,v 1.7 2010-11-18 12:59:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,6 @@ G4NeutronCaptureXS::IsIsoApplicable(const G4DynamicParticle*,
   return false;
 }
 
-
 G4double 
 G4NeutronCaptureXS::GetCrossSection(const G4DynamicParticle* aParticle,
 				    const G4Element* elm,
@@ -116,7 +115,6 @@ G4NeutronCaptureXS::GetCrossSection(const G4DynamicParticle* aParticle,
   return xs;
 }
 
-
 void 
 G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 {
@@ -126,7 +124,6 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
   if(isInitialized || p.GetParticleName() != "neutron") { return; }
   isInitialized = true;
-
 
   // check environment variable 
   // Build the complete string identifying the file with the data set
@@ -153,7 +150,6 @@ G4NeutronCaptureXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 void 
 G4NeutronCaptureXS::DumpPhysicsTable(const G4ParticleDefinition&)
 {}
-
 
 void 
 G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
@@ -185,7 +181,7 @@ G4NeutronCaptureXS::Initialise(G4int Z, const char* p)
     return;
   }else{
     if(verboseLevel > 1) {
-      G4cout << "file " << ost.str() 
+      G4cout << "File " << ost.str() 
 	     << " is opened by G4NeutronCaptureXS" << G4endl;
     }
     // retrieve data from DB
