@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.hh,v 1.2 2010-11-17 15:36:31 gunter Exp $
+// $Id: G4CrossSectionPairGG.hh,v 1.3 2010-11-18 11:01:01 gunter Exp $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -63,9 +63,6 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
   G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* element)
   { return IsIsoApplicable(particle, G4lrint(element->GetZ()), G4lrint(element->GetN())); }  
 
-  G4bool IsZAApplicable(const G4DynamicParticle* particle,
-                        G4double ZZ, G4double AA);
-
   G4bool IsIsoApplicable(const G4DynamicParticle*, G4int Z, G4int N);
 
   G4double GetCrossSection(const G4DynamicParticle* particle, 
@@ -73,10 +70,6 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
                            G4double temperature)
          { return GetZandACrossSection(particle, G4lrint(element->GetZ()), 
                                 G4lrint(element->GetN()), temperature);    }
-
-  G4double GetIsoZACrossSection(const G4DynamicParticle* particle,
-                                G4double ZZ, G4double AA,
-                                G4double /*aTemperature*/);
 
   G4double GetZandACrossSection(const G4DynamicParticle*, G4int Z,
 				G4int A, G4double aTemperature = 0.);

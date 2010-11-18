@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc,v 1.4 2010-11-17 16:52:10 gunter Exp $
+// $Id: G4CrossSectionPairGG.cc,v 1.5 2010-11-18 11:01:01 gunter Exp $
 // $ GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Class G4CrossSectionPairGG
@@ -58,25 +58,6 @@ G4CrossSectionPairGG::~G4CrossSectionPairGG()
 //    delete theHighX;
 }
 
-
-G4bool G4CrossSectionPairGG::IsZAApplicable(const G4DynamicParticle* aParticle,
-                      G4double ZZ, G4double AA)
-{
-    G4cerr << "G4CrossSectionPairGG::IsZAApplicable() is obsolete method"<<G4endl;
-    return IsIsoApplicable(aParticle, G4lrint(ZZ), G4lrint(AA));
-/*    G4bool isApplicable(false);
-    G4double Ekin=particle->GetKineticEnergy();
-    if (Ekin < ETransition ) 
-    {
-      isApplicable = theLowX->IsZAApplicable(particle,ZZ,AA);
-    } else {
-      isApplicable = theHighX->IsZAApplicable(particle,ZZ,AA);
-    }
-    
-    return isApplicable;    
-*/
-}
-
 G4bool G4CrossSectionPairGG::IsIsoApplicable(const G4DynamicParticle* aParticle,
                       G4int ZZ, G4int AA)
 {
@@ -90,14 +71,6 @@ G4bool G4CrossSectionPairGG::IsIsoApplicable(const G4DynamicParticle* aParticle,
     }
     
     return isApplicable;    
-}
-
-G4double G4CrossSectionPairGG::GetIsoZACrossSection(const G4DynamicParticle* aParticle,
-                              G4double ZZ, G4double AA,
-                              G4double aTemperature)
-{
-    G4cerr << "G4CrossSectionPairGG::GetIsoZACrossSection() is obsolete method"<<G4endl;
-    return GetZandACrossSection(aParticle, G4lrint(ZZ), G4lrint(AA), aTemperature);
 }
 
 G4double G4CrossSectionPairGG::GetZandACrossSection(const G4DynamicParticle* aParticle,
