@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.9 2010-07-05 13:39:11 vnivanch Exp $
+// $Id: G4VCrossSectionDataSet.cc,v 1.10 2010-11-18 10:33:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,19 +54,28 @@ G4VCrossSectionDataSet::~G4VCrossSectionDataSet()
   G4CrossSectionDataSetRegistry::Instance()->DeRegister(this);
 }
 
-// Override thess methods to test for particle and isotope applicability
+// Override these methods to test for particle and isotope applicability
 G4bool 
 G4VCrossSectionDataSet::IsZAApplicable(const G4DynamicParticle*,
                                        G4double /*ZZ*/, G4double /*AA*/)
-{
+{ //obsolete method, should not be used
+  static G4bool onceOnly(true);
+  if ( onceOnly )
+  {
+      G4cerr << 
+      "G4VCrossSectionDataSet::IsZAApplicable() is obsolete, invoked by " 
+      <<  GetName() << G4endl;
+      onceOnly=false;
+  }
   return true;
 }
 
 G4bool 
-G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle*,
-					G4int /*Z*/, G4int /*A*/)
+G4VCrossSectionDataSet::IsIsoApplicable(const G4DynamicParticle* aPart,
+					G4int Z, G4int A)
 {
-  return true;
+//  return true;
+    return IsZAApplicable(aPart, Z, A);
 }
 
 G4double 
@@ -85,14 +94,23 @@ G4double
 G4VCrossSectionDataSet::GetIsoZACrossSection(const G4DynamicParticle*,
                                              G4double /*ZZ*/, G4double AA,
                                              G4double /*aTemperature*/)
-{
+{ //obsolete method, should not be used
+  static G4bool onceOnly(true);
+  if ( onceOnly )
+  {
+      G4cerr << 
+      "G4VCrossSectionDataSet::GetIsoZACrossSection() is obsolete, invoked by " 
+      <<  GetName() << G4endl;
+      onceOnly=false;
+  }
   return 62*G4Pow::GetInstance()->A23(AA)*millibarn;
 }
 
 G4double 
-G4VCrossSectionDataSet::GetZandACrossSection(const G4DynamicParticle*,
-                                             G4int /*Z*/, G4int N,
-                                             G4double /*aTemperature*/)
+G4VCrossSectionDataSet::GetZandACrossSection(const G4DynamicParticle* aPart,
+                                             G4int Z, G4int N,
+                                             G4double aTemperature)
 {
-  return 62*G4Pow::GetInstance()->Z23(N)*millibarn;
+//GF  return 62*G4Pow::GetInstance()->Z23(N)*millibarn;
+  return GetIsoZACrossSection(aPart, G4double(Z), G4double(N), aTemperature);
 }
