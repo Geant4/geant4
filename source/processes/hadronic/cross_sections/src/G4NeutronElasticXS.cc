@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronElasticXS.cc,v 1.10 2010-11-18 12:59:26 vnivanch Exp $
+// $Id: G4NeutronElasticXS.cc,v 1.11 2010-11-18 13:03:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,6 +102,7 @@ G4NeutronElasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
 
   G4int Z = G4int(elm->GetZ());
   if(Z < 1 || Z > maxZ) { return xs; }
+  G4int Amean = G4int(G4NistManager::Instance()->GetAtomicMassAmu(Z)+0.5);
   G4PhysicsVector* pv = data[Z];
   //  G4cout  << "G4NeutronElasticXS::GetCrossSection e= " << ekin << " Z= " << Z << G4endl;
 
@@ -124,7 +125,7 @@ G4NeutronElasticXS::GetCrossSection(const G4DynamicParticle* aParticle,
     fNucleon->GetHadronNucleonXscPDG(aParticle, proton);
     xs = coeff[1]*fNucleon->GetElasticHadronNucleonXsc();
   } else {          
-    ggXsection->GetCrossSection(aParticle, elm);
+    ggXsection->GetZandACrossSection(aParticle, Z, Amean);
     xs = coeff[Z]*ggXsection->GetElasticGlauberGribovXsc();
   }
 
