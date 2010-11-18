@@ -55,12 +55,17 @@ binding                         Histograming                histograms in Qt
 The persistency module is compatible with a pretty old boost::serialize version
 (compilation was tested under Scientific Linux 4.8 with gcc 3.4.6 and boost
 version 1.32). Custom filter requires a newer boost as far as it uses modern
-boost::spirit library which requires boost version 1.37 and higher.
+boost::spirit library which requires boost version 1.37 and higher. If you do
+not want to (or cannot) use Custom filter then comment line which contains macro
+-DCEXMC_USE_CUSTOM_FILTER in the makefile.
 Presence of CERN ROOT libraries is tested automatically in the makefile, but you
 can disable or enable the dedicated flag manually.
 Compilation of visualization modules and interactive sessions also depends on
 whether standard Geant4 macros like G4VIS_USE, G4UI_USE, G4UI_USE_TCSH and
 G4UI_USE_QT have been set.
+If boost is installed in a special path in your system then you may need to
+properly set environment variables BOOST_INCLUDE_PATH and BOOST_LIBRARY_PATH
+which denote directories where boost include files and libraries are located.
 
 ------> Run modes
 

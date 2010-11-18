@@ -61,7 +61,7 @@ namespace  CexmcCustomFilter
         {
             action = KeepTPT;
             expression.children.clear();
-            expression.type = Uninitialized;
+            expression.type = Operator( Uninitialized );
         }
 
         Action   action;
@@ -169,9 +169,9 @@ namespace  CexmcCustomFilter
 
         identifier %= lexeme[ alpha >> *( alnum | lit( '_' ) ) ];
 
-        primary_expr = function1[ op( _val, _1 ) ] |
-               lit( '(' ) >> expression[ op( _val, _1 ) ] >> lit( ')' ) |
-               leaf_operand[ _val = _1 ];
+        primary_expr = function1[ _val = _1 ] |
+                lit( '(' ) >> expression[ op( _val, _1 ) ] >> lit( ')' ) |
+                leaf_operand[ _val = _1 ];
 
         leaf_operand %= constant | variable;
 
@@ -186,11 +186,11 @@ namespace  CexmcCustomFilter
                     [ op( _val, _2, _1 ) ];
 
         or_expr = ( and_expr >> lit( '|' ) >> or_expr )
-                  [ op( _val, _1, _2, Or ) ] |
+                  [ op( _val, _1, _2, Operator( Or, 1 ) ) ] |
                   and_expr[ _val = _1 ];
 
         and_expr = ( relation >> lit( '&' ) >> and_expr )
-                   [ op( _val, _1, _2, And ) ] |
+                   [ op( _val, _1, _2, Operator( And, 2 ) ) ] |
                    relation[ _val = _1 ];
 
         relation = ( addition >> rel_op >> addition )
@@ -208,18 +208,21 @@ namespace  CexmcCustomFilter
         unary_expr = ( unary_op >> primary_expr )[ op( _val, _2, _1 ) ] |
                      primary_expr[ _val = _1 ];
 
-        unary_op = lit( '-' )[ _val = UMinus ] | lit( '!' )[ _val = Not ];
+        unary_op = lit( '-' )[ _val = Operator( UMinus, 6, true ) ] |
+                   lit( '!' )[ _val = Operator( Not, 6, true ) ];
 
-        mult_op = lit( '*' )[ _val = Mult ] | lit( '/' )[ _val = Div ];
+        mult_op = lit( '*' )[ _val = Operator( Mult, 5 ) ] |
+                  lit( '/' )[ _val = Operator( Div, 5 ) ];
 
-        add_op = lit( '+' )[ _val = Plus ] | lit( '-' )[ _val = Minus ];
+        add_op = lit( '+' )[ _val = Operator( Plus, 4 ) ] |
+                 lit( '-' )[ _val = Operator( Minus, 4 ) ];
 
-        rel_op = lit( "<=" )[ _val = LessEq ] |
-                 lit( ">=" )[ _val = MoreEq ] |
-                 lit( "!=" )[ _val = NotEq ] |
-                 lit( '<' )[ _val = Less ] |
-                 lit( '>' )[ _val = More ] |
-                 lit( '=' )[ _val = Eq ];
+        rel_op = lit( "<=" )[ _val = Operator( LessEq, 3 ) ] |
+                 lit( ">=" )[ _val = Operator( MoreEq, 3 ) ] |
+                 lit( "!=" )[ _val = Operator( NotEq, 3 ) ] |
+                 lit( '<' )[ _val = Operator( Less, 3 ) ] |
+                 lit( '>' )[ _val = Operator( More, 3 ) ] |
+                 lit( '=' )[ _val = Operator( Eq, 3 ) ];
     }
 }
 

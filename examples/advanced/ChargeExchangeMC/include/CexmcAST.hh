@@ -30,7 +30,7 @@ namespace  CexmcAST
     using boost::variant;
     using boost::recursive_wrapper;
 
-    enum  Operator
+    enum  OperatorType
     {
         Uninitialized,
         Top,
@@ -51,15 +51,18 @@ namespace  CexmcAST
     };
 
 
-    struct  OperatorPriority
+    struct  Operator
     {
-        static bool  IsLessThan( Operator  left, Operator  right )
-        {
-            return priority[ left ] < priority[ right ];
-        }
+        Operator( OperatorType  type = Uninitialized, int  priority = 0,
+                  bool  hasRLAssoc = false ) :
+            type( type ), priority( priority ), hasRLAssoc( hasRLAssoc )
+        {}
 
-        static const int  priority[];
-            
+        OperatorType  type;
+
+        int           priority;
+
+        bool          hasRLAssoc;
     };
 
 
@@ -95,7 +98,7 @@ namespace  CexmcAST
 
     struct  Subtree
     {
-        Subtree() : type ( Uninitialized ), hasRLAssoc( false )
+        Subtree() : type ( Operator( Uninitialized ) )
         {}
 
         void  Print( int  level = 0 ) const;
@@ -105,8 +108,6 @@ namespace  CexmcAST
         std::vector< Node >  children;
 
         NodeType             type;
-
-        bool                 hasRLAssoc;
 
         static const int     printIndent = 4;
     };

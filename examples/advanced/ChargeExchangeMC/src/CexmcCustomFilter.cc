@@ -45,7 +45,7 @@ namespace  CexmcCustomFilter
         }
         catch( const boost::bad_get & )
         {
-            ast.type = Top;
+            ast.type = Operator( Top );
             ast.children.push_back( node );
         }
     }
@@ -67,26 +67,55 @@ namespace  CexmcCustomFilter
             return;
         }
 
-        bool        hasLessPriorityThanRightOp( false );
+        bool        haveSamePriorities( false );
         Operator *  rightOp( boost::get< Operator >( &astRight->type ) );
 
         if ( rightOp )
-        {
-            hasLessPriorityThanRightOp = OperatorPriority::IsLessThan(
-                                                            value, *rightOp );
-        }
+            haveSamePriorities = value.priority == rightOp->priority;
 
-        if ( astRight->hasRLAssoc || hasLessPriorityThanRightOp )
+        if ( value.hasRLAssoc || ! haveSamePriorities )
         {
             ast.children.push_back( right );
             return;
         }
-        ast.children.push_back( astRight->children[ 0 ] );
+
+        Subtree *  astDeepestRight( astRight );
+
+        /* propagate left binary operators with LR associativity (i.e. all in
+         * our grammar) deep into the AST until any operator with a different
+         * priority (which includes operators in parentheses that have priority
+         * 0) or a unary operator or a function occured */
+        while ( true )
+        {
+            Subtree * candidate = boost::get< Subtree >(
+                                            &astDeepestRight->children[ 0 ] );
+            if ( ! candidate )
+                break;
+
+            if ( candidate->children.size() < 2 )
+                break;
+
+            bool        haveSamePriorities( false );
+            Operator *  candidateOp( boost::get< Operator >(
+                                                        &candidate->type ) );
+
+            if ( candidateOp )
+                haveSamePriorities = value.priority == candidateOp->priority;
+
+            /* FIXME: what to do if candidate has RL association? Our grammar is
+             * not a subject of this issue; probably no grammar is a subject */
+            if ( ! haveSamePriorities )
+                break;
+
+            astDeepestRight = candidate;
+        }
+
         Subtree    astResult;
-        astResult.children.push_back( self );
-        astResult.children.push_back( astRight->children[ 1 ] );
-        astResult.type = astRight->type;
-        self = astResult;
+        astResult.children.push_back( ast.children[ 0 ] );
+        astResult.children.push_back( astDeepestRight->children[ 0 ] );
+        astResult.type = value;
+        astDeepestRight->children[ 0 ] = astResult;
+        self = right;
     }
 
 
@@ -105,8 +134,13 @@ namespace  CexmcCustomFilter
 
         Subtree *  ast( boost::get< Subtree >( &self ) );
 
-        if ( ast )
-            ast->hasRLAssoc = true;
+        if ( ! ast )
+            return;
+
+        Operator *  op( boost::get< Operator >( &ast->type ) );
+
+        if ( op )
+            op->priority = 0;
     }
 
 

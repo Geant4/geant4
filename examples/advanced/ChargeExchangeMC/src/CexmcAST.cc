@@ -30,10 +30,6 @@
 
 namespace  CexmcAST
 {
-    const int OperatorPriority::priority[] =
-                { 0, 0, 6, 6, 5, 5, 4, 4, 3, 3, 3, 3, 3, 3, 2, 1 };
-
-
     void Subtree::Print( int  level ) const
     {
         static const std::string  opId[] =
@@ -45,7 +41,7 @@ namespace  CexmcAST
 
         if ( op )
         {
-            value << "-op- " << opId[ *op ];
+            value << "-op- " << opId[ op->type ];
         }
         else
         {
@@ -158,7 +154,7 @@ namespace  CexmcAST
                     }
                 }
 
-                switch ( *op )
+                switch ( op->type )
                 {
                 case And :
                 case Or :
@@ -180,7 +176,7 @@ namespace  CexmcAST
                     break;
                 }
 
-                switch ( *op )
+                switch ( op->type )
                 {
                 case Uninitialized :
                     return 1;
