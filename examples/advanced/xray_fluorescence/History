@@ -1,4 +1,4 @@
-# $Id: History,v 1.10 2010-06-06 06:25:35 perl Exp $
+# $Id: History,v 1.11 2010-11-18 19:20:21 allison Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-11-2010 John Allison, Tag: XrayFluo-V09-03-01
+- Introduced G4UIExecutive.
 
 03-06-2010 Joseph Perl, Tag: XrayFluo-V09-03-00
 - Updated vis usage

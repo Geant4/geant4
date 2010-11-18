@@ -36,14 +36,12 @@
 // -------------------------------------------------------------------
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#ifdef G4UI_USE_XM
-#include "G4UIXm.hh"
-#endif
 #include "Randomize.hh"
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoPlaneDetectorConstruction.hh"
@@ -132,26 +130,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   }
 
 
-
   runManager->SetUserInitialization(xrayList);
-  
-  G4UIsession* session=0;
-  
-  if (argc==1)   // Define UI session for interactive mode.
-    {
-      // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
-      session = new G4UIXm(argc,&argv[1]);
-#else           
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
-#endif
-#endif
-    }
-
-
   
 #ifdef G4VIS_USE
   //visualization manager
@@ -200,24 +179,26 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   runManager->Initialize();
   
   // get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
-  if (session)   // Define UI session for interactive mode.
+  if (argc == 1)   // Define UI session for interactive mode.
     {
-      // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute initInter.mac");    
-#ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
-      UI->ApplyCommand("/control/execute gui.mac");
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute initInter.mac");     
 #endif
-      session->SessionStart();
-      delete session;
+      if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");     
+      ui->SessionStart();
+      delete ui;
+#endif
     }
   else           // Batch mode
     { 
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+      UImanager->ApplyCommand(command+fileName);
     }
   
   // job termination
