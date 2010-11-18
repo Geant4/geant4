@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.27 2010-11-10 00:18:04 asaim Exp $
+$Id: History,v 1.28 2010-11-18 16:23:42 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.27 2010-11-10 00:18:04 asaim Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 J.Allison, tag radioprotection-V09-03-03
+           Introduce G4UIExecutive.
 
 09.11.2010 M.Asai, tag radioprotection-V09-03-02
            Fix AIDA file option
