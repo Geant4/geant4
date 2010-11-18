@@ -40,6 +40,7 @@
 
 #include <CLHEP/Units/PhysicalConstants.h>  // pi, fermi,..
 
+#include "globals.hh"
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
 #include "G4AntiNeutron.hh"
@@ -60,47 +61,50 @@ public:
   G4ComponentAntiNuclNuclearXS ();
   virtual ~G4ComponentAntiNuclNuclearXS ();
    
-
-virtual 
-  G4double ComputeTotalCrossSection(const G4DynamicParticle* aParticle,
-                                    G4int Z, G4double A);
-
-  G4double GetTotalZandACrossSection(const G4DynamicParticle* aParticle, 
-				G4int Z, G4int A )
-{ return ComputeTotalCrossSection(aParticle, Z, (G4double) A);  };
-
+virtual
+  G4double GetTotalZandACrossSection(const G4ParticleDefinition* aParticle,
+				     G4double kinEnergy,
+				     G4int Z, G4int A);
 
 virtual
-G4double ComputeInelasticCrossSection(const G4DynamicParticle* aParticle,
-                                        G4int Z, G4double A);
-
-G4double GetInelasticZandACrossSection(const G4DynamicParticle* aParticle,
-                                         G4int Z, G4int A)
-{return ComputeInelasticCrossSection(aParticle, Z, (G4double) A); };
-
+  G4double ComputeTotalCrossSection(const G4ParticleDefinition* aParticle,
+				    G4double kinEnergy, 
+				    G4int Z, G4double A);
 
 virtual
- G4double ComputeElasticCrossSection(const G4DynamicParticle* aParticle,
-                                      G4int Z, G4double A);
+  G4double GetInelasticZandACrossSection(const G4ParticleDefinition* aParticle,
+					 G4double kinEnergy, 
+					 G4int Z, G4int A);
 
-G4double GetElasticZandACrossSection(const G4DynamicParticle* aParticle,
-                                       G4int Z, G4int A)
-{ return ComputeElasticCrossSection( aParticle, Z, (G4double) A); };
-   
+virtual
+  G4double ComputeInelasticCrossSection(const G4ParticleDefinition* aParticle,
+				      G4double kinEnergy, 
+				      G4int Z, G4double A);
+
+virtual
+  G4double ComputeElasticCrossSection(const G4ParticleDefinition* aParticle,
+				      G4double kinEnergy, 
+				      G4int Z, G4double A);
+
+virtual
+  G4double GetElasticZandACrossSection(const G4ParticleDefinition* aParticle,
+				       G4double kinEnergy, 
+				       G4int Z, G4int A);
+ 
 virtual
  void BuildPhysicsTable(const G4ParticleDefinition&)
  {}
 
 virtual
  void DumpPhysicsTable(const G4ParticleDefinition&) 
- {G4cout << "G4AntiNuclNuclearCrossSection: uses Glauber approach"<<G4endl;}
+ {}
 
 // Method for calculation of Anti-Hadron Nucleon Total Cross-section
-G4double GetAntiHadronNucleonTotCrSc(const G4DynamicParticle* aParticle);
+G4double GetAntiHadronNucleonTotCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
 
 
 // Method for calculation of Anti-Hadron Nucleon Elastic Cross-section
-G4double GetAntiHadronNucleonElCrSc(const G4DynamicParticle* aParticle);
+G4double GetAntiHadronNucleonElCrSc(const G4ParticleDefinition* aParticle, G4double kinEnergy);
 
 
 private:
