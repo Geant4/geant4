@@ -102,7 +102,7 @@ int main(int argc,char** argv) {
 #ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     if (ui->IsGUI())
-      // Customize the G4UIXm menubar with a macro file :
+      // Customize the menubar with a macro file :
       UImanager->ApplyCommand("/control/execute gui.mac");     
     G4cout <<" Run initializing ..."<<G4endl;
     UImanager->ApplyCommand("/process/verbose 0");
