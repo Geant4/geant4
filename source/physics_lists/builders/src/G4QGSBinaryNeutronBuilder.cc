@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBinaryNeutronBuilder.cc,v 1.3 2009-03-31 11:03:50 vnivanch Exp $
+// $Id: G4QGSBinaryNeutronBuilder.cc,v 1.4 2010-11-18 14:52:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -41,6 +41,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4CrossSectionPairGG.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
 G4QGSBinaryNeutronBuilder::
@@ -99,6 +100,7 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4NeutronInelasticCrossSection);  
+  aP->AddDataSet(new G4CrossSectionPairGG(
+  		new G4NeutronInelasticCrossSection(), 91*GeV));  
 }
 

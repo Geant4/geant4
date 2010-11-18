@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFPPiKBuilder.hh,v 1.5 2010-06-15 11:03:35 vnivanch Exp $
+// $Id: G4FTFPPiKBuilder.hh,v 1.6 2010-11-18 14:52:22 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -57,7 +57,7 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
 
-#include "G4PiNuclearCrossSection.hh"
+#include "G4VCrossSectionDataSet.hh"
 
 class G4FTFPPiKBuilder : public G4VPiKBuilder
 {
@@ -87,7 +87,7 @@ class G4FTFPPiKBuilder : public G4VPiKBuilder
     G4LundStringFragmentation * theLund;
     G4ExcitationHandler * theHandler;
 
-    G4PiNuclearCrossSection* thePiData;
+    G4VCrossSectionDataSet* thePiData;
     G4double theMin;
     G4double theMax;
 
