@@ -129,7 +129,7 @@ private:
 
   G4double* matrix;
   G4int* hitTrack;
-  G4String filename;
+  G4String stdFile, filename;
   std::ofstream ofs;
 
   // Dose&fluence data store 

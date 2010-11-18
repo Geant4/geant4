@@ -71,15 +71,17 @@
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 1000
+/event/printEventNumber 100
 
 #########################
 # Start of the run
 #
 # If secondary particles dose & fluence are needed
 #/analysis/secondary true 
+# Default material is water liquid
+#/changePhantom/material G4_PLEXIGLASS
 
-
+/run/beamOn 300
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 
