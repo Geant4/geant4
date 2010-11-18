@@ -1,4 +1,4 @@
-$Id: README,v 1.31 2010-06-07 13:20:14 gcosmo Exp $
+$Id: README,v 1.32 2010-11-18 17:58:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -79,6 +79,7 @@ test52 ## EM low-energy (standard, low-energy, Penelope)
 test53 ## EM low-energy Penelope
 test54 ## EM low-energy Livermore
 test55 ## ICRU 73-based ionization model (G4IonParametrisedLossModel)
+test58 ## Ion single scattering in Silicon and other absorbers
 test60 ## Geant4-DNA LowE migrated processes.
 test61 ## QMD hadronic model.
 test62 ## INCL/ABLA hadronic model.
