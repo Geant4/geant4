@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.12 2010-08-16 07:14:44 kurasige Exp $
+// $Id: QGSP.icc,v 1.13 2010-11-18 14:57:44 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -85,8 +85,6 @@ template<class T> TQGSP<T>::TQGSP(G4int ver):  T()
 
   G4WarnPLStatus obs;
   obs.Replaced("QGSP", "QGSP_BERT");
-  G4cerr << "If you need to use QGSP, please edit QGSP.icc and remove G4Exception" << G4endl; 
-  G4Exception(" Crash for usage of replaced physics list");
   
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver) );
