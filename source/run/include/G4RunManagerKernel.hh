@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.10 2010-06-11 09:02:55 gcosmo Exp $
+// $Id: G4RunManagerKernel.hh,v 1.11 2010-11-18 13:46:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -190,7 +190,9 @@ class G4RunManagerKernel
     { numberOfParallelWorld = i; }
 
   private:
+    void CheckRegularGeometry();
     G4bool ConfirmCoupledTransportation();
+    void SetScoreSplitter();
 };
 
 #endif

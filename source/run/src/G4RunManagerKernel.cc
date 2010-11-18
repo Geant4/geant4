@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.49 2010-07-21 14:21:19 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.50 2010-11-18 13:46:06 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -325,7 +325,11 @@ G4bool G4RunManagerKernel::RunInitialization()
   UpdateRegion();
   BuildPhysicsTables();
 
-  if(geometryNeedsToBeClosed) ResetNavigator();
+  if(geometryNeedsToBeClosed)
+  {
+    ResetNavigator();
+    CheckRegularGeometry();
+  }
  
   GetPrimaryTransformer()->CheckUnknown();
 
@@ -503,6 +507,23 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   }
 }
 
+#include "G4LogicalVolumeStore.hh"
+void G4RunManagerKernel::CheckRegularGeometry()
+{
+  G4LogicalVolumeStore* store = G4LogicalVolumeStore::GetInstance();
+  for(G4LogicalVolumeStore::iterator pos=store->begin(); pos!=store->end(); pos++)
+  {
+    if((*pos)&&((*pos)->GetNoDaughters()==1))
+    {
+      if((*pos)->GetDaughter(0)->IsRegularStructure())
+      {
+        SetScoreSplitter();
+        return;
+      }
+    }
+  }
+}
+        
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -522,5 +543,27 @@ G4bool G4RunManagerKernel::ConfirmCoupledTransportation()
     return ( (p->GetProcessName()) == "CoupledTransportation" );
   }
   return false;
+}
+
+#include "G4ScoreSplittingProcess.hh"
+//#include "G4ParallelWorldScoringProcess.hh"
+void G4RunManagerKernel::SetScoreSplitter()
+{
+  G4ScoreSplittingProcess* pSplitter = new G4ScoreSplittingProcess();
+//  G4ParallelWorldScoringProcess* pSplitter = new G4ParallelWorldScoringProcess("Temp");
+  G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
+  theParticleIterator->reset();
+  if((*theParticleIterator)())
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    pmanager->AddDiscreteProcess(pSplitter);
+  }
+
+  if(verboseLevel>0) 
+  {
+    G4cout << "G4RunManagerKernel -- G4ScoreSplittingProcess is appended to all particles." << G4endl;
+  }
 }
 
