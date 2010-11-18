@@ -16,20 +16,6 @@
 /event/verbose 0
 
 ##########################
-# Set of the physic models
-#
-#/Physics/addPhysics emstandard_opt3                       # Electromagnetic model
-#/Physics/addPhysics elastic                             # Hadronic elastic model
-#/Physics/addPhysics binary                              # Hadronic inelastic model
-#/Physics/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
-
-#
-# Or alternatively:
-#
-#/Physics/addPackage QGSP_BIC
-#/Physics/addPhysics radioactive_decay
-
-##########################
 # Initialisation procedure
 #
 /run/initialize
@@ -51,12 +37,17 @@
 # Suggested values of cut and step:
 #
 # Set cuts ONLY inside the detector
-/Physics/setDetectorCuts 0.01 mm
+#/Physics/setDetectorCuts 0.01 mm
 
 # Set cuts OUTSIDE the detector 
-/Physics/setCuts 0.01 mm
+#/run/setCut 0.01 mm
+/run/setCutForAGivenParticle e- 0.01 mm
+/run/setCutForAGivenParticle e+ 0.01 mm
+/run/setCutForAGivenParticle gamma 0.01 mm
+/run/setCutForAGivenParticle proton 0.01 mm
+/run/setCutForRegion DetectorLog 0.01 mm
 
-/Step/waterPhantomStepMax 0.01 mm 
+#/Step/waterPhantomStepMax 0.01 mm 
 
 #########################
 # Set the primary particle type,
@@ -81,7 +72,7 @@
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 300
+/run/beamOn 100
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 

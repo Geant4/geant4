@@ -1,22 +1,31 @@
-// **************************************************************************************
+///
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+// This is the *basic* version of Hadrontherapy, a Geant4-based application
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 //
-// HADRONTHERAPY:  a Geant4-based application for proton/ion-therapy studies
-// _________________________________________________________________________
-//
-// This is the FULL version of the Hadrontherapy application.
-// It is based on the Geant4 toolkit classes and released under the GPL3 license.
-//
-// Its basic version is released and maintained inside the Geant4 code
-// as Advanced Example.
-//
-// To compile and run Hadrontherapy you only require the installation of Geant4 and,
-// if you wish, the ROOT ananlysis program.
-//
-// For more information see the documentation at http://sites.google.com/site/hadrontherapy/
-// or contact cirrone@lns.infn.it
-//
-// **************************************************************************************
-
+// To obtain the full version visit the pages: http://sites.google.com/site/hadrontherapy/
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -236,7 +245,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   G4double defaultRangeShifterZSize = 176. *mm; 
   rangeShifterZSize = defaultRangeShifterZSize;
 
-  G4double defaultRangeShifterXPosition = -2123.0 *mm;
+  G4double defaultRangeShifterXPosition = -2393.0 *mm;
   rangeShifterXPosition = defaultRangeShifterXPosition; 
 
   G4double defaultRangeShifterYPosition = 0. *mm;
@@ -531,7 +540,7 @@ void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
   // Components of the Passive Proton Beam Line
   HadrontherapyBeamLineSupport();
   HadrontherapyBeamScatteringFoils();
-  //HadrontherapyRangeShifter();
+  HadrontherapyRangeShifter();
   HadrontherapyBeamCollimators();
   HadrontherapyBeamMonitoring();
   HadrontherapyMOPIDetector();
@@ -541,8 +550,8 @@ void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
   // The following lines construc a typical modulator wheel inside the Passive Beam line.
   // Please remember to set the nodulator material (default is air, i.e. no modulator!) 
   // in the HadrontherapyModulator.cc file
-  // modulator = new HadrontherapyModulator();
-  // modulator -> BuildModulator(physicalTreatmentRoom);
+  modulator = new HadrontherapyModulator();
+  modulator -> BuildModulator(physicalTreatmentRoom);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1369,7 +1378,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
   const G4double startAngleBrassTube2 = 0.*deg;
   const G4double spanningAngleBrassTube2 = 360.*deg;
 
-  const G4double brassTube2XPosition = -227.5 *mm;
+  //  const G4double brassTube2XPosition = -227.5 *mm;
  
   G4Tubs* solidBrassTube2 = new G4Tubs("BrassTube2", 
 				      innerRadiusBrassTube2, 

@@ -147,7 +147,7 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   G4double hightOfTheTube = 0.03*cm;
 
   // Mother of the modulator wheel  
-  G4ThreeVector positionMotherMod = G4ThreeVector(-1960.50 *mm, 30 *mm, 50 *mm);
+  G4ThreeVector positionMotherMod = G4ThreeVector(-2160.50 *mm, 30 *mm, 50 *mm);
  
   G4Box* solidMotherMod = new G4Box("MotherMod", 12 *cm, 12 *cm, 12 *cm);
  

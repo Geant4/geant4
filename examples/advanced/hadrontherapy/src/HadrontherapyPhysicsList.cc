@@ -139,22 +139,6 @@ HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyPhysicsList::AddPackage(const G4String& name)
-{
-  G4PhysListFactory factory;
-  G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
-  G4int i=0;
-  const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
-  G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
-  while (elem !=0)
-    {
-      RegisterPhysics(tmp);
-      elem= phys->GetPhysics(++i) ;
-      tmp = const_cast<G4VPhysicsConstructor*> (elem);
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsList::ConstructParticle()
 {
   decPhysicsList->ConstructParticle();

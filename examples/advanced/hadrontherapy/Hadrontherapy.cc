@@ -57,6 +57,8 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
 #include "HadrontherapyEventAction.hh"
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyDetectorSD.hh"
@@ -111,8 +113,27 @@ int main(int argc ,char ** argv)
   G4ScoringManager::GetScoringManager();
 	
   // Initialize the physics 
-  runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
-	
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys = 0;
+  G4String physName = "";
+
+  // Physics List name defined via environment variable
+  char* path = getenv("PHYSLIST");
+  if (path) { physName = G4String(path); }
+
+ if(factory.IsReferencePhysList(physName)) 
+    {
+      phys = factory.GetReferencePhysList(physName);
+    } 
+
+  if(!phys) { phys = new HadrontherapyPhysicsList(); }
+
+  runManager->SetUserInitialization(phys);
+
+
+  
+  //  runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
+
   // Initialize the primary particles
   HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
   runManager -> SetUserAction(pPrimaryGenerator);
@@ -152,8 +173,15 @@ int main(int argc ,char ** argv)
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
-
+      if(factory.IsReferencePhysList(physName)) 
+	{
+	  UImanager->ApplyCommand("/control/execute defaultMacroWithReferencePhysicsList.mac");
+	}
+      else
+	{
+	  UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
+	}
+      
 #endif
       if (ui->IsGUI())
 	//	UImanager->ApplyCommand("/control/execute defaultMacro.mac");
