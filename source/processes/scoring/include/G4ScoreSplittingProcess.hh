@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreSplittingProcess.hh,v 1.1 2010-11-18 11:56:50 japost Exp $
+// $Id: G4ScoreSplittingProcess.hh,v 1.2 2010-11-18 18:22:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,8 @@ class G4EnergySplitter;
 #include "G4VProcess.hh"
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"
+class G4TouchableHistory;
+// #include "G4TouchableHistory.hh"
 
 //------------------------------------------
 //
@@ -129,11 +131,14 @@ public: // with description
   G4VParticleChange* PostStepDoIt(const G4Track& ,const G4Step& );
 
 private:
-  void CopyStep(const G4Step & step);
+  G4TouchableHistory* CreateTouchableForSubStep( G4int newVoxelNum, G4ThreeVector newPosition ); 
+
+private:
+  void CopyStepStart(const G4Step & step);
 
   G4Step * fSplitStep;
-  G4StepPoint * fSplitPreStepPoint;
-  G4StepPoint * fSplitPostStepPoint;
+  G4StepPoint *fSplitPreStepPoint;
+  G4StepPoint *fSplitPostStepPoint;
 
   G4VParticleChange aDummyParticleChange;
   G4ParticleChange xParticleChange;
@@ -144,11 +149,16 @@ private:
   // -------------------------------
   // Touchables for the Split Step
   // -------------------------------
-  G4TouchableHandle    fOldSplitTouchable;
-  G4TouchableHandle    fNewSplitTouchable;
-  G4FieldTrack         fFieldTrack;
-  G4double             fSplitSafety;
-  G4bool               fOnBoundary;
+  G4TouchableHandle    fOldTouchableH;
+  G4TouchableHandle    fNewTouchableH;
+
+  // Memory of Touchables of full step
+  G4TouchableHandle    fInitialTouchableH;
+  G4TouchableHandle    fFinalTouchableH;
+
+  // G4FieldTrack         fFieldTrack;
+  // G4double             fSplitSafety;
+  // G4bool               fOnBoundary;
 
   G4EnergySplitter     *fpEnergySplitter; 
 
