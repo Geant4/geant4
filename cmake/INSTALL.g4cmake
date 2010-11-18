@@ -3,7 +3,7 @@
 #
 # 29th October Ben Morgan
 #
-# $Id: INSTALL.g4cmake,v 1.1 2010-10-29 11:43:26 bmorgan Exp $
+# $Id: INSTALL.g4cmake,v 1.2 2010-11-18 14:34:04 gcosmo Exp $
 #
 # Install guide for the Geant4 CMake Buildsystem
 #
@@ -31,7 +31,7 @@ http://www.cmake.org/cmake/help/help.html
 
 In addition to CMake the standard list of Geant4 prerequisites are needed:
 
-CLHEP 2.0.4.5
+- CLHEP library, version as supported by the Geant4 release in use.
 
 
 1.2 Currently Supported Platforms
@@ -68,7 +68,7 @@ You should obtain the Geant4 sources as usual, either via an archive file
 of the sources, or via checkout from the Geant4 repository. Unpack the archive,
 or checkout the repository to a location of your choice, e.g.
 
-/path/to/geant4-9.3
+/path/to/geant4.9.4
 
 We call this directory the "source tree". In CMake, we enforce an "out of
 source" build so that the buildscripts created by CMake do not mix with the
@@ -82,8 +82,8 @@ on where the build tree should be. For these reasons, we recommmend creating
 your build tree directory alongside the source tree, e.g. using our location
 from above
 
-/path/to/geant4-9.3
-/path/to/geant4-9.3-build
+/path/to/geant4.9.4
+/path/to/geant4.9.4-build
 
 You are of course free to experiment here, but the above is the recommended way.
 
@@ -108,13 +108,13 @@ Our first step is therefore to move into the build tree directory and then run
 CMake, pointing it to the source tree, i.e. (NB '$' denotes the prompt, not a
 literal '$')
 
-$ cd /path/to/geant4-9.3-build
-$ cmake ../geant4-9.3
+$ cd /path/to/geant4.9.4-build
+$ cmake ../geant4.9.4
 
 The cmake command is the basic command line interface. All being well, you will
 see some output like (platform dependent!):
 
-$ cmake ../geant4-9.3
+$ cmake ../geant4.9.4
 -- The C compiler identification is GNU
 -- The CXX compiler identification is GNU
 -- Check for working C compiler: /usr/bin/gcc
@@ -159,13 +159,13 @@ All being well, you should then see the output
 
 
 -- setting default compiler flags for CXX
--- Found CLHEP version: CLHEP 2.0.4.5
+-- Found CLHEP version: CLHEP 2.1.0.1
 -- Found CLHEP: TRUE
 -- The following Geant4 features are enabled:
 
 -- Configuring done
 -- Generating done
--- Build files have been written to: /path/to/geant4-9.3-build
+-- Build files have been written to: /path/to/geant4.9.4-build
 
 
 Depending on the speed of your system and filesystem, there may be pauses at
@@ -197,7 +197,7 @@ Geant4 will be installed in /usr/local
 These options can be tweaked by passing command line arguments to cmake, e.g
 to change the install location, we can do
 
-$ cmake -DCMAKE_INSTALL_PREFIX=/path/to/my/geant4/install ../geant4-9.3
+$ cmake -DCMAKE_INSTALL_PREFIX=/path/to/my/geant4/install ../geant4.9.4
 
 
 However, as the list of options is quite large, it is recommended in this
@@ -293,24 +293,24 @@ one build directory per configuration of Geant4 you wish to build.
 For instance, if I wanted to build global libraries and also test granular
 libraries, I would have my source tree
 
-/path/to/geant4-9.3
+/path/to/geant4.9.4
 
 and two build trees
 
-/path/to/geant4-9.3-global
-/path/to/geant4-9.3-granular
+/path/to/geant4.9.4-global
+/path/to/geant4.9.4-granular
 
 
 I would then set the builds up as
 
-$ cd /path/to/geant4-9.3-global
-$ cmake ../geant4-9.3
+$ cd /path/to/geant4.9.4-global
+$ cmake ../geant4.9.4
 $ make
 
 and
 
-$ cd /path/to/geant4-9.3-granular
-$ cmake -DGEANT4_BUILD_GRANULAR_LIBS ../geant4-9.3
+$ cd /path/to/geant4.9.4-granular
+$ cmake -DGEANT4_BUILD_GRANULAR_LIBS ../geant4.9.4
 $ make
 
 
@@ -327,58 +327,3 @@ Whilst this means more disk space is taken, it has two key advantages
    can have one working copy of Geant4, and then many build trees referring
    to this, one for each configuration you wish to test, e.g. debugging vs
    optimization.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
