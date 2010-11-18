@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.22 2010-06-06 06:25:02 perl Exp $
+$Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History,v 1.22 2010-06-06 06:25:02 perl Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 - J.Allison (DMX-V09-03-02)
+           - DMX.cc: Introduce G4UIExecutive.
+	   - initInter.mac: Improve vis commands.  (Note: With the
+             introduction of /vis/scene/add/trajectories, it is no
+             longer necessary to draw them in EndOfEventAction.  The
+             corresponding locall commands can also be removed.)
 
 03.06.2010 - J.Perl (DMX-V09-03-01)
              Change /vis/open OGLxxx to /vis/open OGL
