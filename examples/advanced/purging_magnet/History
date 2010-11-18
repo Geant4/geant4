@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2010-06-07 05:18:38 perl Exp $
+$Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.12 2010-06-07 05:18:38 perl Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 - John Allison (purtag-V09-03-02)
+- PurgMag.cc: Introduced G4UIExecutive.
+- PurgMagPhysicsList.cc: Fixed G4MultipleScattering.
+
 03.06.2010 - Joseph Perl (purtag-V09-03-01)
 - Remove unused variable in EventAction
 
