@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.19 2010-06-06 06:24:26 perl Exp $
+$Id: History,v 1.20 2010-11-18 16:54:23 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.19 2010-06-06 06:24:26 perl Exp $
 
                       Category History file
                       ---------------------
+
+18.11.2010 - J.Allison (Rich-V09-03-03)
+	     RichTbSim.cc: Tidied up use of G4UIExecutive.
+	     RichTbVis0.mac, macro/gui.mac: Improved. 
 
 03.06.2010 - J.Perl (Rich-V09-03-02)
              Updated vis usage
