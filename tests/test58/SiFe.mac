@@ -1,0 +1,30 @@
+# $Id: SiFe.mac,v 1.1 2010-11-18 18:01:20 vnivanch Exp $
+#
+# macro file for test58.cc
+#
+/control/verbose 2
+/run/verbose 2
+#/tracking/verbose 1
+#
+/testem/det/setAbsMat   G4_Fe
+/testem/det/setAbsThick 100 um
+/testem/det/setAbsYZ    1 cm
+#
+/testem/phys/setTh 21 eV
+/testem/phys/addPhysics  standardISS
+#
+/testem/phys/setCuts 1 km
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle ion
+############## Iron
+/gun/ion 26 56
+#
+#
+#
+/gun/energy  1120  MeV 
+/testem/stack/killSecondaries
+/run/beamOn 100
+

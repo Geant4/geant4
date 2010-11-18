@@ -1,0 +1,37 @@
+
+    =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            test58
+                            ------
+                     Author: Cristina Consolandi
+		     date:   10/11/2010 	 	
+
+ The purpose of this test is to validate the G4IonCoulombScatteringModel
+  & G4IonCoulombCrossSection classes. These classes are suitable to simulate
+  single Coulomb scattering of protons, alpha particles and heavy ions in all
+  target materials form 50-100 keV/nucleon to 10 TeV. These classes are in
+  the PHYSICS list "PhysListEmStandardSS". The default GEOMETRY consists of
+  a silicon target (100um x 1cm x 1cm) immerse in the Galactic medium.
+  Default PARTICLEGUN has a 10 MeV proton.
+  In "StackingAction" the method "DamageEnergy" is implemented in order to
+  calculate the fraction of energy which goes into non-ionizing-energy-loss
+  (NIEL) of the primary konck-on atom (PKA)
+
+  The OUTPUT statistics is for PRIMARY PARTICLE only.
+  At the end of RUN the following information are obtained:
+
+  1) Total track length in absorber.
+  2) Mean Number of Steps in absorber.
+  3) Mean Free Path in absorber.
+  3) Mean Cross Section.
+  4) Mean scattering angle.
+  5) Total energy deposit in absorber.
+  6) Nuclear energy deposit in absorber.
+  7) NIEL in absorber.
+  8) Total Number of primary knock-on atoms: PKA
+  9) Mean Kinetic Energy of PKA
+  10)Total Frenkel-pairs Concentration (FP)
+
+
