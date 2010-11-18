@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.16 2009-09-22 16:21:46 vnivanch Exp $
+// $Id: G4ChargeExchange.cc,v 1.17 2010-11-18 22:49:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,11 +92,8 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   const G4HadProjectile* aParticle = &aTrack;
   G4double ekin = aParticle->GetKineticEnergy();
 
-  G4double aTarget = targetNucleus.GetN();
-  G4double zTarget = targetNucleus.GetZ();
-
-  G4int Z = static_cast<G4int>(zTarget+0.5);
-  G4int A = static_cast<G4int>(aTarget+0.5);
+  G4int A = targetNucleus.GetN_asInt();
+  G4int Z = targetNucleus.GetZ_asInt();
 
   if(ekin <= lowestEnergyLimit || A < 3) {
     theParticleChange.SetEnergyChange(ekin);
@@ -160,7 +157,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     else  theSecondary = theK0L;
     Z--;
   } else if(theParticle == theK0S || theParticle == theK0L) {
-    if(G4UniformRand()*aTarget < zTarget) {
+    if(G4UniformRand()*A < G4double(Z)) {
       theSecondary = theKPlus;
       Z--;
     } else {
@@ -175,7 +172,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
     Z--;
   } else if(theParticle == theL) {
     G4double x = G4UniformRand();
-    if(G4UniformRand()*aTarget < zTarget) {
+    if(G4UniformRand()*A < G4double(Z)) {
       if(x < 0.2) {
         theSecondary = theS0;
       } else if (x < 0.4) {
@@ -226,8 +223,10 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   else if (Z == 1 && A == 3) theDef = theT;
   else if (Z == 2 && A == 3) theDef = theHe3;
   else if (Z == 2 && A == 4) theDef = theA;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
-
+  else {
+    theDef = 
+      G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0.0);
+  }
   G4double m11 = theSecondary->GetPDGMass();
   G4double m21 = theDef->GetPDGMass();
   if(theRecoil)  m21 += theRecoil->GetPDGMass();
@@ -250,7 +249,7 @@ G4HadFinalState* G4ChargeExchange::ApplyYourself(
   G4double tmax = 4.0*ptot*ptot;
   G4double g2 = GeV*GeV; 
 
-  G4double t = g2*SampleT(tmax/g2,aTarget);
+  G4double t = g2*SampleT(tmax/g2, A);
 
   if(verboseLevel>1)
     G4cout <<"## G4ChargeExchange t= " << t << " tmax= " << tmax

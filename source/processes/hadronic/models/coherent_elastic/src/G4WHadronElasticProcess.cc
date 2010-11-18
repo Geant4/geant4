@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WHadronElasticProcess.cc,v 1.3 2010-01-13 15:42:06 mkossov Exp $
+// $Id: G4WHadronElasticProcess.cc,v 1.4 2010-11-18 22:49:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Hadron Elastic Scattering Process 
@@ -46,8 +46,6 @@
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronElasticDataSet.hh"
 #include "G4VQCrossSection.hh"
-//#include "G4QElasticCrossSection.hh"
-//#include "G4QCHIPSWorld.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4IsotopeVector.hh"
