@@ -278,7 +278,6 @@ void HadrontherapyMatrix::StoreDoseData()
 	// defined in the HadrontherapyAnalysisFileMessenger.cc class file
 void HadrontherapyMatrix::StoreDoseFluenceAscii(G4String file)
 {
-    std::cout << "***************** STO qui!!!!!!!!!\n";
 #define width 15L
     filename = (file=="") ? stdFile:file;
     // Sort like periodic table
