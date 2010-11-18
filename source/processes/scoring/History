@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2008-09-07 17:12:38 asaim Exp $
+$Id: History,v 1.19 2010-11-18 18:26:08 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 18, 2010 J.Apostolakis (working towards procscore-V09-03-00)
+- Added G4EnergySplitter (created by Pedro Arce) 
+   and  G4ScoreSplittingProcess (by JA, after discussion with Makoto)
 
 September 7th, 2008 M.Asai (procscore-V09-01-01)
 - Correction of incorrect modification in the previous tag.
