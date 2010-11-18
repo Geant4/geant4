@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc,v 1.28 2010-11-18 12:08:48 vnivanch Exp $
+// $Id: G4PreCompoundModel.cc,v 1.29 2010-11-18 15:23:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -120,10 +120,13 @@ G4HadFinalState* G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePr
 
   // projectile and target nucleons
   // Add nucleon on which interaction happens
-  ++Ap;
-  if(A*G4UniformRand() <= G4double(Z)) { Zp += 1; }
-  anInitialState.SetNumberOfExcitedParticle(Ap, Zp);
-  anInitialState.SetNumberOfHoles(Ap,Zp);
+  //++Ap;
+  //if(A*G4UniformRand() <= G4double(Z)) { Zp += 1; }
+  anInitialState.SetNumberOfExcitedParticle(2, 1);
+  anInitialState.SetNumberOfHoles(1,0);
+  //  anInitialState.SetNumberOfExcitedParticle(Ap, Zp);
+  // anInitialState.SetNumberOfHoles(Ap,Zp);
+
   anInitialState.SetCreationTime(thePrimary.GetGlobalTime());
   
   // call excitation handler
