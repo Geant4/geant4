@@ -1590,12 +1590,15 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
 	    
 	    // calculate the first part of the weight function
 	    
-	    G4double weight1 = 1./DProfile[nbin-1] 
-	      *(DBin[nbin]-DBin[nbin-1])/NSplit;
-	    if (nbin > 1) {
+	    G4double weight1 = 1.; 
+	    if (nbin == 1) {
+	      weight1 = 1./DProfile[nbin-1] 
+		*(DBin[nbin]-DBin[nbin-1])/NSplit;
+	    } else if (nbin > 1) {
 	      weight1 = 1./(DProfile[nbin]-DProfile[nbin-2])
 		*(DBin[nbin]-DBin[nbin-1])/NSplit;
 	    }
+
 	    // it should be calculated in seconds
 	    weight1 /= s ;
 	    

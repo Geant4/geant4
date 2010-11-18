@@ -13,7 +13,7 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-18 November 2010  F.Lei (radioactive_decay-V09-03-03)
+18 November 2010  F.Lei (radioactive_decay-V09-03-04)
 - src/G4RadioactiveDecay.cc:1593 get rid of the compalition warning with gcc4.5.1
 
 17 November 2010  F.Lei (radioactive_decay-V09-03-03)
