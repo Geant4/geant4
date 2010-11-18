@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.6 2010-10-29 17:35:04 vnivanch Exp $
+// $Id: G4GEMChannel.hh,v 1.7 2010-11-18 16:21:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -47,34 +47,19 @@
 
 //#define debug
 
+class G4Pow;
+
 class G4GEMChannel : public G4VEvaporationChannel
 {
 public:
-  // Available constructors
-  /*
-  G4GEMChannel(G4int theA, G4int theZ,
-	       G4GEMProbability * aEmissionStrategy,
-	       G4VCoulombBarrier * aCoulombBarrier);
-  */
-  
+
   G4GEMChannel(const G4int theA, const G4int theZ, const G4String & aName,
 	       G4GEMProbability * aEmissionStrategy,
 	       G4VCoulombBarrier * aCoulombBarrier);
-  /*    
-    G4GEMChannel(const G4int theA, const G4int theZ, const G4String * aName,
-                 G4GEMProbability * aEmissionStrategy,
-                 G4VCoulombBarrier * aCoulombBarrier);
-  */
 
   // destructor
-  ~G4GEMChannel();
-  
-  //inline void SetEmissionStrategy(G4GEMProbability * aEmissionStrategy)
-  //{ theEvaporationProbabilityPtr = aEmissionStrategy; }
-  
-  //inline void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-  //{ theCoulombBarrierPtr = aCoulombBarrier; }
-  
+  virtual ~G4GEMChannel();
+    
   void Initialize(const G4Fragment & fragment);
 
   G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
@@ -126,6 +111,11 @@ private:
     
   // Charge
   G4int Z;
+
+  G4double EvaporatedMass;
+  G4double ResidualMass;
+
+  G4Pow* fG4pow;
     
   // For evaporation probability calcualtion
   G4GEMProbability * theEvaporationProbabilityPtr;
@@ -145,16 +135,18 @@ private:
   // the atomic number, charge and excitation energy of nucleus.
     
   // Residual Atomic Number
-  G4int AResidual;
+  G4int ResidualA;
 
   // Residual Charge
-  G4int ZResidual;
+  G4int ResidualZ;
     
   // Emission Probability
   G4double EmissionProbability;
 
   // Maximal Kinetic Energy that can be carried by fragment
   G4double MaximalKineticEnergy;
+
+
 };
 
 
