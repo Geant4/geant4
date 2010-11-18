@@ -18,16 +18,16 @@
 ##########################
 # Set of the physic models
 #
-#/Physics/addPhysics emstandard_opt3                       # Electromagnetic model
-#/Physics/addPhysics elastic                             # Hadronic elastic model
-#/Physics/addPhysics binary                              # Hadronic inelastic model
-#/Physics/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
+/Physics/addPhysics emstandard_opt3                     # Electromagnetic model
+/Physics/addPhysics Em_extra_physics			
+/Physics/addPhysics Elastic                             # Hadronic elastic model
+/Physics/addPhysics decay
+/Physics/addPhysics radioactive_decay
+/Physics/addPhysics Stopping_physics
+/Physics/addPhysics Neutron_tracking_cut
+/Physics/addPhysics binary                              # Hadronic inelastic model
 
-#
-# Or alternatively:
-#
-#/Physics/addPackage QGSP_BIC
-#/Physics/addPhysics radioactive_decay
+#/Physics/addPhysics local_ion_ion_inelastic            # Hadronic inelastic model for ions (local physic list)
 
 ##########################
 # Initialisation procedure
@@ -46,6 +46,10 @@
 /vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate
 
+##########################
+# Definition of the GUI
+#
+/control/execute macro/GUIPersonalisation.mac
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
@@ -81,7 +85,7 @@
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 300
+/run/beamOn 100
 # Create the SimulationOutputs/proton/BraggPeak directory before to use the following command
 # /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
 

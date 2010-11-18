@@ -8,6 +8,11 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+18.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-14
+	   - Removed the macro 'GUI.mac' contained in the macro folder: the GUI personalisation
+	     are contained in the 'GUIPersonalisation.mac' file that runs
+	     when the default macro files are called
+
 18.11.2010 G.A.P.Cirrone; Tag: hadrontherapy-V09-03-13
 	   - Deleted the addPackage command. Now the Reference Physics lists
 	     can be activated setting the enviroment variable PHYSLIST to

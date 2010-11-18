@@ -33,6 +33,11 @@
 /vis/scene/endOfEventAction accumulate
 
 ##########################
+# Definition of the GUI
+#
+/control/execute macro/GUIPersonalisation.mac
+
+##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 #

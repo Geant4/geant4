@@ -180,11 +180,11 @@ int main(int argc ,char ** argv)
       else
 	{
 	  UImanager->ApplyCommand("/control/execute defaultMacro.mac");  
+	  ui->SessionStart();
 	}
       
 #endif
       if (ui->IsGUI())
-	//	UImanager->ApplyCommand("/control/execute defaultMacro.mac");
       ui->SessionStart();
       delete ui;
 #endif 
