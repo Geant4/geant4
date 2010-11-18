@@ -1,9 +1,9 @@
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 600x600-0+0
+/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
-/vis/open DAWNFILE
+#/vis/open DAWNFILE
 #
 # Use this open statement to create a .heprep file suitable for
 # viewing in HepRApp:
@@ -23,6 +23,7 @@
 #
 # Specify view angle:
 /vis/viewer/set/viewpointThetaPhi -90. -90.
+/vis/viewer/set/upVector 1 0 0
 #/vis/camera/viewpoint 270 0
 #
 # Specify zoom value:
