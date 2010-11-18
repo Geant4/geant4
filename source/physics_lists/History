@@ -1,4 +1,4 @@
-q$Id: History,v 1.161 2010-11-17 17:12:33 gunter Exp $
+q$Id: History,v 1.162 2010-11-18 14:55:28 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-11-2010, G.Folger                    (phys-lists-V09-03-38)
+- use crosssection with relativistic rise also in all G4QGSBinary, FTFP and
+   FTFBinary builders. 
 
 17-11-2010, G.Folger                    (phys-lists-V09-03-37)
 - in builders G4QGSP{Proton, Neutron,Pik}Builder, use crosssection with
