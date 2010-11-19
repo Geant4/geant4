@@ -1,4 +1,4 @@
-# $Id: cms10gev.mac,v 1.5 2008-09-24 10:38:46 vnivanch Exp $
+# $Id: cms10gev.mac,v 1.6 2010-11-19 16:09:59 vnivanch Exp $
 #
 # Macro file for "TestEm9.cc" 
 #
@@ -13,7 +13,8 @@
 /testem/det/EcalWidth   22 mm
 #
 #/testem/phys/addPhysics  emstandard_opt2
-/testem/phys/addPhysics  standardLPM
+/testem/phys/addPhysics  emstandard_opt1
+/process/em/applyCuts      true
 #
 /testem/phys/setCuts 1 mm
 /testem/phys/VertexCuts 0.01 mm
