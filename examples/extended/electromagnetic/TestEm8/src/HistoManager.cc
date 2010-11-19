@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2010-09-08 11:23:53 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.4 2010-11-19 10:15:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -157,14 +157,19 @@ void HistoManager::EndOfRun()
 	 << " ====== " << G4endl ;
   G4cout << " bin nb      Elow      entries     normalized " << G4endl;
 
-  std::ofstream fileOut("distribution.out", std::ios::out ) ;
+  std::ofstream fileOut("distribution.out", std::ios::out );
   fileOut.setf( std::ios::scientific, std::ios::floatfield );
 
-  x1 = 0.0; 
-  for(G4int j=0; j<nBinsE; ++j) {
+  x1 = 0.0;
+
+  fileOut<<nBinsE<<G4endl;
+ 
+  for(G4int j=0; j<nBinsE; ++j) 
+  {
     G4cout << std::setw(5) << j << std::setw(10) << x1/keV 
 	   << std::setw(12) << Egas[j] << std::setw(12) << Egas[j]*norm 
 	   << G4endl ;
+    fileOut << x1/keV << "\t" << Egas[j] << G4endl;
     x1 += de;
   }
   G4cout.precision(prec);
