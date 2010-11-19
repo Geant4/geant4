@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-// $Id: G4SandiaTable.cc,v 1.37 2010-11-12 14:55:41 grichine Exp $
+// $Id: G4SandiaTable.cc,v 1.38 2010-11-19 14:52:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //
@@ -64,8 +64,16 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
   fMatSandiaMatrixPAI = 0;
   fPhotoAbsorptionCof = 0;
 
+  fMatNbOfIntervals   = 0;
+
+ 
+  fMaxInterval        = 0;
+  fVerbose            = 1;  
+
   //build the CumulInterval array
+
   fCumulInterval[0] = 1;
+
   for (G4int Z=1; Z<101; ++Z) {
     fCumulInterval[Z] = fCumulInterval[Z-1] + fNbOfIntervals[Z];
   }
@@ -77,6 +85,7 @@ G4SandiaTable::G4SandiaTable(G4Material* material)
 
   //compute macroscopic Sandia coefs for a material   
   ComputeMatSandiaMatrix();
+  // ComputeMatSandiaMatrixPAI();
 }
 							
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -246,6 +255,18 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   delete [] Z;
   delete [] tmp1;
   delete [] tmp2;
+
+  if ( fVerbose > 0 )
+  {
+    G4cout<<fMaterial->GetName()<<G4endl;
+
+    for( G4int i = 0; i <= interval2; i++)
+    {
+      G4cout<<i<<"\t"<<GetSandiaMatTablePAI(i,0)/eV<<"\t"<<this->GetSandiaMatTablePAI(i,1)
+       <<"\t"<<this->GetSandiaMatTablePAI(i,2)<<"\t"<<this->GetSandiaMatTablePAI(i,3)
+       <<"\t"<<this->GetSandiaMatTablePAI(i,4)<<G4endl;
+    }   
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
