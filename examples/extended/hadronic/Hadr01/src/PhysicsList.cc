@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.36 2010-10-25 16:15:08 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.37 2010-11-19 20:12:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /////////////////////////////////////////////////////////////////////////
@@ -52,13 +52,12 @@
 #include "G4EmPenelopePhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronElasticPhysicsXS.hh"
-#include "G4HadronElasticPhysics93.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsLHEP.hh"
-#include "G4HadronHElasticPhysics.hh"
 #include "G4HadronQElasticPhysics.hh"
 #include "G4ChargeExchangePhysics.hh"
 #include "G4NeutronTrackingCut.hh"
+#include "G4NeutronCrossSectionXS.hh"
 #include "G4QStoppingPhysics.hh"
 #include "G4LHEPStoppingPhysics.hh"
 #include "G4IonBinaryCascadePhysics.hh"
@@ -66,13 +65,11 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
 
-#include "HadronPhysicsFTFP.hh"
 #include "HadronPhysicsFTFP_BERT.hh"
 #include "HadronPhysicsFTF_BIC.hh"
 #include "HadronPhysicsLHEP.hh"
 #include "HadronPhysicsLHEP_EMV.hh"
 #include "G4HadronInelasticQBBC.hh"
-#include "HadronPhysicsQGSC.hh"
 #include "HadronPhysicsQGSC_BERT.hh"
 #include "HadronPhysicsQGSP.hh"
 #include "HadronPhysicsQGSP_BERT.hh"
@@ -192,6 +189,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList0();
     hadronPhys.push_back( new HadronPhysicsFTF_BIC());
+    hadronPhys.push_back( new G4NeutronCrossSectionXS(verboseLevel));
 
   } else if (name == "LHEP") {
 
@@ -207,25 +205,18 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QBBC") {
 
     AddPhysicsList("emstandard_opt2");
-    SetBuilderList3(name);
+    SetBuilderList3();
     hadronPhys.push_back( new G4HadronInelasticQBBC());
-
-  } else if (name == "QBBC_XGG") {
-
-    AddPhysicsList("emstandard_opt2");
-    SetBuilderList3(name);
-    hadronPhys.push_back( new G4HadronInelasticQBBC(name,verboseLevel));
-
-  } else if (name == "QBBC_XGGSN") {
-
-    AddPhysicsList("emstandard_opt2");
-    SetBuilderList3(name);
-    hadronPhys.push_back( new G4HadronInelasticQBBC(name,verboseLevel));
 
   } else if (name == "QGSC_BERT") {
 
     SetBuilderList4();
     hadronPhys.push_back( new HadronPhysicsQGSC_BERT());
+
+  } else if (name == "QGSP") {
+
+    SetBuilderList1();
+    hadronPhys.push_back( new HadronPhysicsQGSP());
 
   } else if (name == "QGSP_BERT") {
 
@@ -267,6 +258,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList0();
     hadronPhys.push_back( new HadronPhysicsQGS_BIC());
+    hadronPhys.push_back( new G4NeutronCrossSectionXS(verboseLevel));
 
   } else if (name == "QGSP_BIC_HP") {
 
@@ -323,18 +315,10 @@ void PhysicsList::SetBuilderList2(G4bool addStopping)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void PhysicsList::SetBuilderList3(const G4String& type)
+void PhysicsList::SetBuilderList3()
 {
   hadronPhys.push_back( new G4EmExtraPhysics(verboseLevel));
-  if(type == "QBBC") {
-    RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
-  } else if(type == "QBBC_XGG") {
-    RegisterPhysics( new G4HadronElasticPhysics(verboseLevel) );
-  } else if(type == "QBBC_XGGSN") {
-    RegisterPhysics( new G4HadronElasticPhysics93(verboseLevel) );
-  } else if(type == "QBBC_HP") {
-    RegisterPhysics( new G4HadronElasticPhysicsHP(verboseLevel) );
-  }
+  RegisterPhysics( new G4HadronElasticPhysicsXS(verboseLevel) );
   hadronPhys.push_back( new G4QStoppingPhysics(verboseLevel));
   hadronPhys.push_back( new G4IonBinaryCascadePhysics(verboseLevel));
   hadronPhys.push_back( new G4NeutronTrackingCut(verboseLevel));
@@ -407,7 +391,7 @@ void PhysicsList::List()
 {
   G4cout << "### PhysicsLists available: FTFP_BERT FTFP_BERT_EMV FTFP_BERT_EMX FTF_BIC"
 	 << G4endl;
-  G4cout << "                            LHEP LHEP_EMV QBBC QBBC_XGG QBBC_XGGSN"
+  G4cout << "                            LHEP LHEP_EMV QBBC QGS_BIC QGSP"
 	 << G4endl; 
   G4cout << "                            QGSC_BERT QGSP_BERT QGSP_BERT_EMV QGSP_BIC_EMY"
 	 << G4endl; 
